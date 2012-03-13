@@ -33,6 +33,7 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.AlertDialog;
+import android.app.ProfileManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -147,6 +148,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
     //Also true if we've activated a phone call, either emergency dialing or incoming
     //This resets when the phone is turned off with no current call
     private boolean mHasOverlay;
+
+    // We can use the profile manager to override security
+    private ProfileManager mProfileManager;
 
 
     /**
@@ -309,6 +313,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
         mLockPatternUtils = lockPatternUtils;
         mWindowController = controller;
         mHasOverlay = false;
+        mProfileManager = (ProfileManager) context.getSystemService("profile");
 
         mUpdateMonitor.registerInfoCallback(this);
 
@@ -819,6 +824,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
     }
 
     private boolean isSecure() {
+        if (mProfileManager.getActiveProfile().isScreenLockDisabled()) {
+            return false;
+        }
         UnlockMode unlockMode = getUnlockMode();
         boolean secure = false;
         switch (unlockMode) {

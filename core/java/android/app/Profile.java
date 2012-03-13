@@ -64,6 +64,8 @@ public final class Profile implements Parcelable {
 
     private Map<Integer, ConnectionSettings> connections = new HashMap<Integer, ConnectionSettings>();
 
+    private boolean mScreenLockDisabled = false;
+
     /** @hide */
     public static final Parcelable.Creator<Profile> CREATOR = new Parcelable.Creator<Profile>() {
         public Profile createFromParcel(Parcel in) {
@@ -148,6 +150,7 @@ public final class Profile implements Parcelable {
                 streams.values().toArray(new Parcelable[streams.size()]), flags);
         dest.writeParcelableArray(
                 connections.values().toArray(new Parcelable[connections.size()]), flags);
+        dest.writeInt(mScreenLockDisabled ? 1 : 0);
     }
 
     /** @hide */
@@ -173,6 +176,7 @@ public final class Profile implements Parcelable {
             ConnectionSettings connection = (ConnectionSettings) parcel;
             connections.put(connection.getConnectionId(), connection);
         }
+        mScreenLockDisabled = in.readInt() == 1;
     }
 
     public String getName() {
@@ -216,6 +220,15 @@ public final class Profile implements Parcelable {
 
     public void setConditionalType() {
         mProfileType = CONDITIONAL_TYPE;
+        mDirty = true;
+    }
+
+    public boolean isScreenLockDisabled() {
+        return mScreenLockDisabled;
+    }
+
+    public void setScreenLockDisabled(boolean disableScreenLock) {
+        mScreenLockDisabled = disableScreenLock;
         mDirty = true;
     }
 
@@ -263,6 +276,10 @@ public final class Profile implements Parcelable {
         builder.append("<statusbar>");
         builder.append(getStatusBarIndicator() ? "yes" : "no");
         builder.append("</statusbar>\n");
+
+        builder.append("<screen-lock-disabled>");
+        builder.append(isScreenLockDisabled() ? "yes" : "no");
+        builder.append("</screen-lock-disabled>");
 
         for (ProfileGroup pGroup : profileGroups.values()) {
             pGroup.getXmlString(builder, context);
@@ -320,10 +337,13 @@ public final class Profile implements Parcelable {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if (name.equals("statusbar")) {
-                    profile.setStatusBarIndicator(xpp.nextText() == "yes");
+                    profile.setStatusBarIndicator(xpp.nextText().equals("yes"));
                 }
                 if (name.equals("profiletype")) {
-                    profile.setProfileType(xpp.nextText() == "toggle" ? TOGGLE_TYPE : CONDITIONAL_TYPE);
+                    profile.setProfileType(xpp.nextText().equals("toggle") ? TOGGLE_TYPE : CONDITIONAL_TYPE);
+                }
+                if (name.equals("screen-lock-disabled")) {
+                    profile.setScreenLockDisabled(xpp.nextText().equals("yes"));
                 }
                 if (name.equals("profileGroup")) {
                     ProfileGroup pg = ProfileGroup.fromXml(xpp, context);
