@@ -24,6 +24,8 @@ import com.android.internal.widget.LockPatternUtils;
 import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.Profile;
+import android.app.ProfileManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -265,6 +267,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     private int mLockSoundStreamId;
     private int mMasterStreamMaxVolume;
 
+    private ProfileManager mProfileManager;
+
     public KeyguardViewMediator(Context context, PhoneWindowManager callback,
             LocalPowerManager powerManager) {
         mContext = context;
@@ -282,6 +286,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                 PowerManager.PARTIAL_WAKE_LOCK,
                 "keyguardWakeAndHandOff");
         mWakeAndHandOff.setReferenceCounted(false);
+
+        mProfileManager = (ProfileManager) context.getSystemService(Context.PROFILE_SERVICE);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DELAYED_KEYGUARD_ACTION);
@@ -606,6 +612,12 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
         // if the keyguard is already showing, don't bother
         if (mKeyguardViewManager.isShowing()) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because it is already showing");
+            return;
+        }
+
+        // if the current profile has disabled us, don't show
+        if (mProfileManager.getActiveProfile().getScreenLockMode() == Profile.LockMode.DISABLE) {
+            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because of profile override");
             return;
         }
 
