@@ -164,6 +164,42 @@ AudioTrack::~AudioTrack()
     }
 }
 
+#ifdef USE_KINETO_COMPATIBILITY
+// another hack, this time for a Froyo-compatible AudioTrack::set method
+extern "C" status_t _ZN7android10AudioTrack3setEijiiijPFviPvS1_ES1_iRKNS_2spINS_7IMemoryEEEbi(
+        AudioTrack *This,
+        int streamType,
+        uint32_t sampleRate,
+        int format,
+        int channels,
+        int frameCount,
+        uint32_t flags,
+        AudioTrack::callback_t cbf,
+        void* user,
+        int notificationFrames,
+        const sp<IMemory>& sharedBuffer,
+        bool threadCanCallJava,
+        int sessionId);
+extern "C" status_t _ZN7android10AudioTrack3setEijiiijPFviPvS1_ES1_iRKNS_2spINS_7IMemoryEEEb(
+        AudioTrack *This,
+        int streamType,
+        uint32_t sampleRate,
+        int format,
+        int channels,
+        int frameCount,
+        uint32_t flags,
+        AudioTrack::callback_t cbf,
+        void* user,
+        int notificationFrames,
+        const sp<IMemory>& sharedBuffer,
+        bool threadCanCallJava)
+{
+    return _ZN7android10AudioTrack3setEijiiijPFviPvS1_ES1_iRKNS_2spINS_7IMemoryEEEbi(
+        This, streamType, sampleRate, format, channels, frameCount, flags, cbf,
+        user, notificationFrames, sharedBuffer, threadCanCallJava, 0);
+}
+#endif
+
 status_t AudioTrack::set(
         int streamType,
         uint32_t sampleRate,
