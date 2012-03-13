@@ -146,6 +146,40 @@ AudioRecord::~AudioRecord()
     }
 }
 
+#ifdef USE_KINETO_COMPATIBILITY
+// another hack, this time for a Froyo-compatible AudioRecord::set method
+extern "C" status_t _ZN7android11AudioRecord3setEijijijPFviPvS1_ES1_ibi(
+        AudioRecord *This,
+        int inputSource,
+        uint32_t sampleRate,
+        int format,
+        uint32_t channels,
+        int frameCount,
+        uint32_t flags,
+        AudioRecord::callback_t,
+        void* user,
+        int notificationFrames,
+        bool threadCanCallJava,
+        int sessionId);
+extern "C" status_t _ZN7android11AudioRecord3setEijijijPFviPvS1_ES1_ib(
+        AudioRecord *This,
+        int inputSource,
+        uint32_t sampleRate,
+        int format,
+        uint32_t channels,
+        int frameCount,
+        uint32_t flags,
+        AudioRecord::callback_t cbf,
+        void* user,
+        int notificationFrames,
+        bool threadCanCallJava)
+{
+    return _ZN7android11AudioRecord3setEijijijPFviPvS1_ES1_ibi(
+        This, inputSource, sampleRate, format, channels, frameCount,
+        flags, cbf, user, notificationFrames, threadCanCallJava, 0);
+}
+#endif
+
 status_t AudioRecord::set(
         int inputSource,
         uint32_t sampleRate,
