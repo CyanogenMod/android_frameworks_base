@@ -64,6 +64,15 @@ public final class Profile implements Parcelable, Comparable {
 
     private Map<Integer, ConnectionSettings> connections = new HashMap<Integer, ConnectionSettings>();
 
+    private int mScreenLockMode = LockMode.DEFAULT;
+
+    /** @hide */
+    public static class LockMode {
+        public static final int DEFAULT = 0;
+        public static final int INSECURE = 1;
+        public static final int DISABLE = 2;
+    }
+
     /** @hide */
     public static final Parcelable.Creator<Profile> CREATOR = new Parcelable.Creator<Profile>() {
         public Profile createFromParcel(Parcel in) {
@@ -159,6 +168,7 @@ public final class Profile implements Parcelable, Comparable {
                 streams.values().toArray(new Parcelable[streams.size()]), flags);
         dest.writeParcelableArray(
                 connections.values().toArray(new Parcelable[connections.size()]), flags);
+        dest.writeInt(mScreenLockMode);
     }
 
     /** @hide */
@@ -184,6 +194,7 @@ public final class Profile implements Parcelable, Comparable {
             ConnectionSettings connection = (ConnectionSettings) parcel;
             connections.put(connection.getConnectionId(), connection);
         }
+        mScreenLockMode = in.readInt();
     }
 
     public String getName() {
@@ -227,6 +238,19 @@ public final class Profile implements Parcelable, Comparable {
 
     public void setConditionalType() {
         mProfileType = CONDITIONAL_TYPE;
+        mDirty = true;
+    }
+
+    public int getScreenLockMode() {
+        return mScreenLockMode;
+    }
+
+    public void setScreenLockMode(int screenLockMode) {
+        if (screenLockMode < LockMode.DEFAULT || screenLockMode > LockMode.INSECURE) {
+            mScreenLockMode = LockMode.DEFAULT;
+        } else {
+            mScreenLockMode = screenLockMode;
+        }
         mDirty = true;
     }
 
@@ -274,6 +298,10 @@ public final class Profile implements Parcelable, Comparable {
         builder.append("<statusbar>");
         builder.append(getStatusBarIndicator() ? "yes" : "no");
         builder.append("</statusbar>\n");
+
+        builder.append("<screen-lock-mode>");
+        builder.append(mScreenLockMode);
+        builder.append("</screen-lock-mode>");
 
         for (ProfileGroup pGroup : profileGroups.values()) {
             pGroup.getXmlString(builder, context);
@@ -331,10 +359,13 @@ public final class Profile implements Parcelable, Comparable {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if (name.equals("statusbar")) {
-                    profile.setStatusBarIndicator(xpp.nextText() == "yes");
+                    profile.setStatusBarIndicator(xpp.nextText().equals("yes"));
                 }
                 if (name.equals("profiletype")) {
-                    profile.setProfileType(xpp.nextText() == "toggle" ? TOGGLE_TYPE : CONDITIONAL_TYPE);
+                    profile.setProfileType(xpp.nextText().equals("toggle") ? TOGGLE_TYPE : CONDITIONAL_TYPE);
+                }
+                if (name.equals("screen-lock-mode")) {
+                    profile.setScreenLockMode(Integer.valueOf(xpp.nextText()));
                 }
                 if (name.equals("profileGroup")) {
                     ProfileGroup pg = ProfileGroup.fromXml(xpp, context);
