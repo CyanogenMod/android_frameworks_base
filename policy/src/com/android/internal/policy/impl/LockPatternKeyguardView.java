@@ -33,6 +33,8 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.AlertDialog;
+import android.app.Profile;
+import android.app.ProfileManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -147,6 +149,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
     //Also true if we've activated a phone call, either emergency dialing or incoming
     //This resets when the phone is turned off with no current call
     private boolean mHasOverlay;
+
+    // We can use the profile manager to override security
+    private ProfileManager mProfileManager;
 
 
     /**
@@ -309,6 +314,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
         mLockPatternUtils = lockPatternUtils;
         mWindowController = controller;
         mHasOverlay = false;
+        mProfileManager = (ProfileManager) context.getSystemService(Context.PROFILE_SERVICE);
 
         mUpdateMonitor.registerInfoCallback(this);
 
@@ -823,7 +829,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
         boolean secure = false;
         switch (unlockMode) {
             case Pattern:
-                secure = mLockPatternUtils.isLockPatternEnabled();
+                secure = mLockPatternUtils.isLockPatternEnabled() &&
+                        mProfileManager.getActiveProfile().getScreenLockMode() != Profile.LockMode.INSECURE;
                 break;
             case SimPin:
                 secure = mUpdateMonitor.getSimState() == IccCard.State.PIN_REQUIRED;
@@ -835,7 +842,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
                 secure = true;
                 break;
             case Password:
-                secure = mLockPatternUtils.isLockPasswordEnabled();
+                secure = mLockPatternUtils.isLockPasswordEnabled() &&
+                        mProfileManager.getActiveProfile().getScreenLockMode() != Profile.LockMode.INSECURE;
                 break;
             default:
                 throw new IllegalStateException("unknown unlock mode " + unlockMode);

@@ -318,6 +318,11 @@ public class ProfileManagerService extends IProfileManager.Stub {
             /* no need to set mDirty, if the profile was actually changed,
              * it's marked as dirty by itself */
             persistIfDirty();
+
+            // Also update we changed the active profile
+            if (mActiveProfile != null && mActiveProfile.getUuid().equals(profile.getUuid())) {
+                setActiveProfile(profile, true);
+            }
         }
     }
 
