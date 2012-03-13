@@ -110,12 +110,14 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     // Below four are related with tactile feedback...
     // A flag to indicate if tactile feedback is supported.
     private boolean mTactileFeedbackEnabled = false;
-    // Vibrator pattern for creating a tactile bump
-    private static final long[] DEFAULT_VIBE_PATTERN = {0, 1, 40, 41};
+    // Vibrator pattern for swipe start
+    private static final long[] START_VIBE_PATTERN = {0, 1, 20, 21};
+    // Vibrator pattern for invalid/incorrect swipes
+    private static final long[] INCORRECT_VIBE_PATTERN = {0, 100, 125, 100};
+    // Vibrator pattern for correct swipes
+    private static final long[] CORRECT_VIBE_PATTERN = {0, 50, 125, 250};
     // Vibrator for creating tactile feedback
     private Vibrator vibe;
-    // Vibration pattern, either default or customized
-    private long[] mVibePattern;
 
     private String mDateFormatString;
 
@@ -355,12 +357,6 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
             }
         });
 
-        if (mTactileFeedbackEnabled) {
-            // allow vibration pattern to be customized
-            if (DEBUG) Log.d(TAG, "Load vibration pattern");
-            mVibePattern = loadVibratePattern(com.android.internal.R.array.config_virtualKeyVibePattern);
-        }
-
         // assume normal footer mode for now
         updateFooter(FooterMode.Normal);
 
@@ -474,24 +470,6 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     private void refreshTimeAndDateDisplay() {
         mDate.setText(DateFormat.format(mDateFormatString, new Date()));
-    }
-
-    private long[] loadVibratePattern(int id) {
-        int[] pattern = null;
-        try {
-            pattern = getResources().getIntArray(id);
-        } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Vibrate pattern missing, using default", e);
-        }
-        if (pattern == null) {
-            return DEFAULT_VIBE_PATTERN;
-        }
-
-        long[] tmpPattern = new long[pattern.length];
-        for (int i = 0; i < pattern.length; i++) {
-            tmpPattern[i] = pattern[i];
-        }
-        return tmpPattern;
     }
 
     @Override
@@ -1105,7 +1083,9 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         }
 
         if (target.equals("swipe_good")) {
-               runOnUiThread(new Runnable() {
+            if (mTactileFeedbackEnabled) vibe.vibrate(CORRECT_VIBE_PATTERN, -1);
+
+            runOnUiThread(new Runnable() {
                 public void run() {
                     toast(getContext().getString(R.string.keyguard_finger_match));
                 }
@@ -1117,6 +1097,8 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         /* we've already displayed the feedback, so we don't want to worry */
         /* about an additional message.                                    */
         if (target.equals("swipe_bad")) {
+            if (mTactileFeedbackEnabled) vibe.vibrate(INCORRECT_VIBE_PATTERN, -1);
+
             if (!mbInvalidSwipe) {
                 // Update the total failed attempts.
                 mTotalFailedPatternAttempts++;
@@ -1210,23 +1192,18 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         if (target.matches("[CD][1-9]0?$")) return;
 
         /* if the target is please_swipe, remove the user prompt */
-        if (target.equals("please_swipe"))
-        {
+        if (target.equals("please_swipe")) {
+            if (mTactileFeedbackEnabled) vibe.vibrate(START_VIBE_PATTERN, -1);
+
             runOnUiThread(new Runnable() {
                 public void run() {
-                      mUserPrompt.setText("");
+                    mUserPrompt.setText("");
                     /**
                      * acquire the handoff lock that will keep the cpu running. this will
                      * be released once the fingerprint keyguard has set the next verification
                      * up and poked the mWakelock of itself (not the one of the KeyguradViewMediator).
                      */
                     mHandOffWakeLock.acquire();
-
-                    if (mTactileFeedbackEnabled) {
-                        // Generate tactile feedback
-                        if (DEBUG) Log.d(TAG,"Finger on vibration");
-                        vibe.vibrate(mVibePattern, -1);
-                    }
                 }
             });
             return;
