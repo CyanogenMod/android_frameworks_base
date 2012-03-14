@@ -1265,9 +1265,28 @@
     <string name="silent_mode_ring">着信音 ON</string>
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">再起動</string>
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">プロファイル選択</string>
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_preventpower">電源キーを保護</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_preventpower">アプリケーションが電源キーを置き換えるのを許可する</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">デフォルト</string>
+    <string name="profileNameWork">仕事</string>
+    <string name="profileNameHome">自宅</string>
+    <string name="profileNameSilent">サイレント</string>
+    <string name="profileNameNight">夜</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">電話</string>
+    <string name="profileGroupCalendar">カレンダー</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Eメール</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">その他</string>
 
 </resources>
