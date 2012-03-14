@@ -180,6 +180,25 @@ static void setIntField(JNIEnv* env, jobject obj, const char* path, jfieldID fie
     env->SetIntField(obj, fieldID, value);
 }
 
+static void setPercentageField(JNIEnv* env, jobject obj, const char* path, jfieldID fieldID)
+{
+    const int SIZE = 128;
+    char buf[SIZE];
+
+    jint value = 0;
+    if (readFromFile(path, buf, SIZE) > 0) {
+        value = atoi(buf);
+    }
+    /* sanity check for buggy drivers that provide bogus values, e.g. 103% */
+    if (value < 0) {
+        value = 0;
+    } else if (value > 100) {
+        value = 100;
+    }
+
+    env->SetIntField(obj, fieldID, value);
+}
+
 static void setVoltageField(JNIEnv* env, jobject obj, const char* path, jfieldID fieldID)
 {
     const int SIZE = 128;
@@ -200,7 +219,7 @@ static void android_server_BatteryService_update(JNIEnv* env, jobject obj)
     setBooleanField(env, obj, gPaths.usbOnlinePath, gFieldIds.mUsbOnline);
     setBooleanField(env, obj, gPaths.batteryPresentPath, gFieldIds.mBatteryPresent);
     
-    setIntField(env, obj, gPaths.batteryCapacityPath, gFieldIds.mBatteryLevel);
+    setPercentageField(env, obj, gPaths.batteryCapacityPath, gFieldIds.mBatteryLevel);
     setVoltageField(env, obj, gPaths.batteryVoltagePath, gFieldIds.mBatteryVoltage);
     setIntField(env, obj, gPaths.batteryTemperaturePath, gFieldIds.mBatteryTemperature);
     
