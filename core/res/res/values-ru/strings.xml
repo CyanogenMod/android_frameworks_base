@@ -138,11 +138,12 @@
     <string name="screen_lock" msgid="799094655496098153">"Блокировка экрана"</string>
     <string name="power_off" msgid="4266614107412865048">"Выключение"</string>
     <!-- Button to reboot the phone, within the Phone Options dialog -->
-    <string name="reboot_system" product="tablet">Перезагрузить планшетный ПК</string>
-    <string name="reboot_system" product="default">Перезагрузить телефон</string>
+    <string name="reboot_system" product="tablet">Перезагрузка планшетного ПК</string>
+    <string name="reboot_system" product="default">Перезагрузка телефона</string>
 
     <!-- label for item that screenshots in phone options dialog -->
     <string name="global_action_screenshot">Скриншот</string>
+    <string name="global_action_reboot">Перезагрузка</string>
 
     <!-- Button to reboot the phone, within the Reboot Options dialog -->
     <string name="reboot_reboot">Перезагрузка</string>
@@ -151,6 +152,8 @@
     <string name="reboot_progress">Перезагрузка\u2026</string>
     <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
     <string name="reboot_confirm">Ваш телефон будет перезагружен</string>
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">Выбрать профиль</string>
 
     <!-- Spoken description for ringer silent option. [CHAR LIMIT=NONE] -->
     <string name="silent_mode_silent">Звонок выключен</string>
@@ -1248,5 +1251,19 @@
 
     <!--Application killed toast -->
     <string name="app_killed_message">Приложения закрыты</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">По умолчанию</string>
+    <string name="profileNameWork">Работа</string>
+    <string name="profileNameHome">Дом</string>
+    <string name="profileNameSilent">Без звука</string>
+    <string name="profileNameNight">Ночь</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Телефон</string>
+    <string name="profileGroupCalendar">Календарь</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Другой</string>
 
 </resources>
