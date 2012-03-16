@@ -383,6 +383,11 @@ bool BootAnimation::movie()
             descMap->getDataLength());
     char const* s = desString.string();
 
+    char textureCacheLimit[PROPERTY_VALUE_MAX];
+    property_get("ro.sys.bootanimcaches", textureCacheLimit, "10485760"); // 10M
+
+    int maxTexturesSize = atoi(textureCacheLimit);
+
     Animation animation;
 
     // Parse the description file
@@ -471,16 +476,17 @@ bool BootAnimation::movie()
     for (int i=0 ; i<pcount && !exitPending() ; i++) {
         const Animation::Part& part(animation.parts[i]);
         const size_t fcount = part.frames.size();
-        const int noTextureCache = ((animation.width * animation.height * fcount) >
-                                 48 * 1024 * 1024) ? 1 : 0;
+        int cacheUsed = 0;
 
         glBindTexture(GL_TEXTURE_2D, 0);
 
         for (int r=0 ; !part.count || r<part.count ; r++) {
             for (int j=0 ; j<fcount && !exitPending(); j++) {
                 const Animation::Frame& frame(part.frames[j]);
+                if (j == 0) cacheUsed = 0;
 
-                if (r > 0 && !noTextureCache) {
+                cacheUsed += frame.map->getDataLength();
+                if (r > 0 && cacheUsed < maxTexturesSize) {
                     glBindTexture(GL_TEXTURE_2D, frame.tid);
                 } else {
                     if (part.count != 1) {
@@ -515,16 +521,19 @@ bool BootAnimation::movie()
                 long wait = ns2us(frameDuration);
                 if (wait > 0)
                     usleep(wait);
-                if (noTextureCache)
+                if (cacheUsed >= maxTexturesSize) {
                     glDeleteTextures(1, &frame.tid);
+                }
             }
             usleep(part.pause * ns2us(frameDuration));
         }
 
         // free the textures for this part
-        if (part.count != 1 && !noTextureCache) {
-            for (int j=0 ; j<fcount ; j++) {
+        if (part.count != 1) {
+            int frameTot = 0;
+            for (int j=0 ; j<fcount && frameTot < maxTexturesSize ; j++) {
                 const Animation::Frame& frame(part.frames[j]);
+                frameTot += frame.map->getDataLength();
                 glDeleteTextures(1, &frame.tid);
             }
         }
