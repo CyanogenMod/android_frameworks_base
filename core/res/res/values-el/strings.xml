@@ -36,6 +36,17 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Πρόβλημα σύνδεσης ή μη έγκυρος κώδικας MMI."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Η λειτουργία περιορίζεται μόνο σε καθορισμένους αριθμούς κλήσης."</string>
+    <string name="profileNameDefault">Προεπιλογή</string>
+    <string name="profileNameWork">Εργασία</string>
+    <string name="profileNameHome">Οικία</string>
+    <string name="profileNameSilent">Αθόρυβο</string>
+    <string name="profileNameNight">Νύχτα</string>
+    <string name="profileGroupPhone">Τηλέφωνο</string>
+    <string name="profileGroupCalendar">Ημερολόγιο</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Άλλο</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Η υπηρεσία ενεργοποιήθηκε."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Η υπηρεσία ενεργοποιήθηκε για:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Η υπηρεσία έχει απενεργοποιηθεί."</string>
@@ -158,6 +169,7 @@
     <string name="global_action_lock" msgid="2844945191792119712">"Κλείδωμα οθόνης"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Απενεργοποίηση"</string>
     <string name="global_action_reboot">Επανεκκίνηση</string>
+    <string name="global_action_choose_profile">Προφίλ</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Λειτουργία σίγασης"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ο ήχος είναι απενεργοποιημένος"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ο ήχος είναι ενεργοποιημένος"</string>
