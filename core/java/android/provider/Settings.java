@@ -1938,7 +1938,7 @@ public final class Settings {
          * Which custom LED values to use for the notification pulse LED.
          * @hide
          */
-        public static final String NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES = "notification_light_pulse_custom_enable";
+        public static final String NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES = "notification_light_pulse_custom_values";
 
         /**
          * Show pointer location on screen?
