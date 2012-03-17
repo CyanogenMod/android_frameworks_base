@@ -106,7 +106,7 @@ SurfaceFlinger::SurfaceFlinger()
         mLastTransactionTime(0),
         mBootFinished(false),
 #ifdef QCOM_HDMI_OUT
-        mHDMIOutput(EXT_DISPLAY_OFF),
+        mExtDispOutput(EXT_DISPLAY_OFF),
 #endif
 #ifdef QCOM_HARDWARE
         mCanSkipComposition(false),
@@ -428,10 +428,11 @@ bool SurfaceFlinger::threadLoop()
     //Necessary for race-free overlay channel management.
     //Must always be held only after handleConsoleEvents() since
     //that could enable / disable HDMI based on suspend resume
-    Mutex::Autolock _l(mHDMILock);
+    Mutex::Autolock _l(mExtDispLock);
 #else
     // if we're in a global transaction, don't do anything.
 #endif
+
     const uint32_t mask = eTransactionNeeded | eTraversalNeeded;
     uint32_t transactionFlags = peekTransactionFlags(mask);
     if (UNLIKELY(transactionFlags)) {
@@ -524,7 +525,7 @@ void SurfaceFlinger::handleConsoleEvents()
     if (what & eConsoleAcquired) {
         hw.acquireScreen();
 #ifdef QCOM_HDMI_OUT
-        updateHwcHDMI(mHDMIOutput);
+        updateHwcExternalDisplay(mExtDispOutput);
 #endif
         // this is a temporary work-around, eventually this should be called
         // by the power-manager
@@ -535,7 +536,7 @@ void SurfaceFlinger::handleConsoleEvents()
         if (hw.isScreenAcquired()) {
             hw.releaseScreen();
 #ifdef QCOM_HDMI_OUT
-            updateHwcHDMI(false);
+            updateHwcExternalDisplay(false);
 #endif
         }
     }
@@ -1395,20 +1396,26 @@ int SurfaceFlinger::setOrientation(DisplayID dpy,
 }
 
 #ifdef QCOM_HDMI_OUT
-void SurfaceFlinger::updateHwcHDMI(bool enable)
+void SurfaceFlinger::updateHwcExternalDisplay(int externaltype)
 {
     invalidateHwcGeometry();
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
     HWComposer& hwc(hw.getHwComposer());
-    hwc.enableHDMIOutput(enable);
+    hwc.enableHDMIOutput(externaltype);
 }
 
-void SurfaceFlinger::enableHDMIOutput(int enable)
+void SurfaceFlinger::enableExternalDisplay(int disp_type, int externaltype)
 {
-    Mutex::Autolock _l(mHDMILock);
-    mHDMIOutput = enable;
-    updateHwcHDMI(enable);
-    signalEvent();
+    Mutex::Autolock _l(mExtDispLock);
+    external_display_state newState = handleEventHDMI(
+                                        (external_display_type)disp_type,
+                                        (external_display_state)externaltype,
+                                        (external_display_state)mExtDispOutput);
+    if(newState != mExtDispOutput) {
+        mExtDispOutput = (int) newState;
+        updateHwcExternalDisplay(mExtDispOutput);
+        signalEvent();
+    }
 }
 
 void SurfaceFlinger::setActionSafeWidthRatio(float asWidthRatio){
