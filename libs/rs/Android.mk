@@ -137,6 +137,10 @@ LOCAL_C_INCLUDES += frameworks/compile/libbcc/include
 
 LOCAL_CFLAGS += -Werror -Wall -Wno-unused-parameter -Wno-unused-variable
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+    LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
+
 LOCAL_LDLIBS := -lpthread -ldl
 LOCAL_MODULE:= libRS
 LOCAL_MODULE_TAGS := optional

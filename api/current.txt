@@ -10811,6 +10811,8 @@ package android.media {
     ctor public MediaRecorder();
     method public static final int getAudioSourceMax();
     method public int getMaxAmplitude() throws java.lang.IllegalStateException;
+    method public void native_start() throws java.lang.IllegalStateException;
+    method public void native_stop() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
     method public void release();
     method public void reset();
