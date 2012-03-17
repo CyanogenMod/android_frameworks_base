@@ -38,7 +38,7 @@
 #include <utils/Errors.h>
 #include <utils/Log.h>
 #include <utils/String16.h>
-
+#include <system/camera.h>
 #include "CameraService.h"
 #include "CameraHardwareInterface.h"
 
@@ -788,7 +788,6 @@ status_t CameraService::Client::cancelAutoFocus() {
 
 // take a picture - image is returned in callback
 status_t CameraService::Client::takePicture(int msgType) {
-    char prop[PROPERTY_VALUE_MAX];
     LOG1("takePicture (pid %d): 0x%x", getCallingPid(), msgType);
 
     Mutex::Autolock lock(mLock);
@@ -812,12 +811,8 @@ status_t CameraService::Client::takePicture(int msgType) {
                            CAMERA_MSG_COMPRESSED_IMAGE);
     disableMsgType(CAMERA_MSG_PREVIEW_METADATA);
     enableMsgType(picMsgType);
-    memset(prop, 0, sizeof(prop));
-    property_get("persist.camera.snapshot.number", prop, "0");
-    mburstCnt = atoi(prop);
-    if (!mburstCnt) {
-        mburstCnt = mHardware->getParameters().getInt("num-snaps-per-shutter");
-    }
+    mburstCnt = mHardware->getParameters().getInt("num-snaps-per-shutter");
+    if(mburstCnt <= 0) mburstCnt = 1;
     LOG1("mburstCnt = %d", mburstCnt);
     return mHardware->takePicture();
 }
@@ -1030,7 +1025,7 @@ void CameraService::Client::dataCallback(int32_t msgType,
 
     if (dataPtr == 0 && metadata == NULL) {
         LOGE("Null data returned in data callback");
-        client->handleGenericNotify(CAMERA_MSG_ERROR, UNKNOWN_ERROR, 0);
+        client->handleGenericNotify(CAMERA_MSG_ERROR, CAMERA_ERROR_UNKNOWN, 0);
         return;
     }
 
