@@ -1249,7 +1249,7 @@
     <string name="wildcardProfile">Outro</string>
 
     <!-- label for item that reboots the phone in phone options dialog -->
-    <string name="global_action_choose_profile">Escolher perfil</string>
+    <string name="global_action_choose_profile">Perfil</string>
 
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system" product="tablet">Reiniciar tablet</string>
