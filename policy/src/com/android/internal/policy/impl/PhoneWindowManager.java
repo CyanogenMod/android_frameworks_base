@@ -2856,16 +2856,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             result = 0;
 
             final boolean isWakeKey = (policyFlags
-                    & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
-                    || (((keyCode == KeyEvent.KEYCODE_VOLUME_UP) || (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN))
-                            && mVolumeWakeScreen && !isScreenOn);
+                    & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0;
+
 
             if (down && isWakeKey) {
                 if (keyguardActive) {
                     // If the keyguard is showing, let it decide what to do with the wake key.
                     mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode,
                             mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED);
-                } else {
+                } else if ((keyCode != KeyEvent.KEYCODE_VOLUME_UP) && (keyCode != KeyEvent.KEYCODE_VOLUME_DOWN)) {
                     // Otherwise, wake the device ourselves.
                     result |= ACTION_POKE_USER_ACTIVITY;
                 }
@@ -2992,6 +2991,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     keyCode = KeyEvent.KEYCODE_POWER;
                     mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode,
                             mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED);
+                } else {
+                    result |= ACTION_POKE_USER_ACTIVITY;
+                    break;
                 }
             }
 
