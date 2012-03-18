@@ -1231,7 +1231,7 @@
     <string name="launchBrowserDefault" msgid="2057951947297614725">"브라우저를 실행하시겠습니까?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"통화를 수락하시겠습니까?"</string>
     <!--Application killed toast -->
-    <string name="app_killed_message">어플리케이션 종료됨</string>
+    <string name="app_killed_message">애플리케이션 종료됨</string>
 
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system" product="tablet">태블릿 다시 시작</string>
@@ -1268,6 +1268,28 @@
     <string name="permlab_preventpower">전원 버튼 작동 제한</string>
 
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_preventpower">어플리케이션이 전원 버튼의 작동을 제한 할 수 있도록 허용합니다.</string>
+    <string name="permdesc_preventpower">애플리케이션이 전원 버튼의 작동을 제한 할 수 있도록 허용합니다.</string>
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">다시 시작</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">기본</string>
+    <string name="profileNameWork">직장</string>
+    <string name="profileNameHome">집</string>
+    <string name="profileNameSilent">음소거</string>
+    <string name="profileNameNight">밤</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">전화</string>
+    <string name="profileGroupCalendar">달력</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">이메일</string>
+    <string name="profileGroupSMS">메시지</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">기타</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">프로필 선택</string>
 
 </resources>
