@@ -382,4 +382,8 @@ public class WifiNative {
     public static String p2pPeer(String deviceAddress) {
         return doStringCommand("P2P_PEER " + deviceAddress);
     }
+
+    public static String p2pCustomCommand(String command) {
+        return doStringCommand(command);
+    }
 }

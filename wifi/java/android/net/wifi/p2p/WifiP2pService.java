@@ -380,6 +380,15 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                 case WifiP2pManager.REQUEST_PEERS:
                     replyToMessage(message, WifiP2pManager.RESPONSE_PEERS, mPeers);
                     break;
+                case WifiP2pManager.REQUEST_CUSTOM_STRING:
+                    WifiP2pConfig config = (WifiP2pConfig)message.obj;
+                    String cmd = config.deviceAddress;//hack
+                    loge("Custom command " + cmd );
+                    String cmdResponse = WifiNative.p2pCustomCommand(cmd);
+                    loge("Custom command response " + cmdResponse );
+                    config.deviceAddress = cmdResponse;
+                    replyToMessage(message, WifiP2pManager.RESPONSE_CUSTOM_STRING, config);
+                    break;
                 case WifiP2pManager.REQUEST_CONNECTION_INFO:
                     replyToMessage(message, WifiP2pManager.RESPONSE_CONNECTION_INFO, mWifiP2pInfo);
                     break;
@@ -460,6 +469,9 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
             if (!WifiNative.stopSupplicant()) {
                 loge("Failed to stop supplicant, issue kill");
                 WifiNative.killSupplicant();
+            }
+            if(WifiNative.unloadDriver()) {
+                Slog.e(TAG, "Unload Driver Successful");
             }
         }
 
@@ -593,6 +605,14 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                         mNwService.setInterfaceDown(mInterface);
                     } catch (Exception e) {
                         if (DBG) Slog.w(TAG, "Unable to bring down wlan interface: " + e);
+                    }
+
+                    if (mWifiState != WifiManager.WIFI_STATE_ENABLED){
+                        WifiNative.loadDriver();
+                    }
+                    else{
+                        Slog.w(TAG, "Stopping Wifi Supplicant");
+                        WifiNative.stopSupplicant();
                     }
 
                     if (WifiNative.startP2pSupplicant()) {
@@ -932,7 +952,7 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                 case WifiMonitor.AP_STA_CONNECTED_EVENT:
                     //After a GO setup, STA connected event comes with interface address
                     String interfaceAddress = (String) message.obj;
-                    String deviceAddress = getDeviceAddress(interfaceAddress);
+                    String deviceAddress = interfaceAddress;
                     if (deviceAddress != null) {
                         mGroup.addClient(deviceAddress);
                         updateDeviceStatus(deviceAddress, WifiP2pDevice.CONNECTED);
@@ -944,7 +964,7 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                     break;
                 case WifiMonitor.AP_STA_DISCONNECTED_EVENT:
                     interfaceAddress = (String) message.obj;
-                    deviceAddress = getDeviceAddress(interfaceAddress);
+                    deviceAddress = interfaceAddress;
                     if (deviceAddress != null) {
                         updateDeviceStatus(deviceAddress, WifiP2pDevice.AVAILABLE);
                         if (mGroup.removeClient(deviceAddress)) {
@@ -1004,7 +1024,7 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                         mDhcpStateMachine.quit();
                         mDhcpStateMachine = null;
                     }
-
+                    clearInterfaceAddress(mGroup.getInterface());
                     mGroup = null;
                     if (changed) sendP2pPeersChangedBroadcast();
                     transitionTo(mInactiveState);
@@ -1133,6 +1153,23 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
         }
 
         logd("Stopped Dhcp server");
+    }
+
+    private void clearInterfaceAddress(String mInterfaceName) {
+        InterfaceConfiguration ifcg = null;
+
+        Slog.e(TAG,"Clear the interface config to allow dhcp correctly configure new ip settings");
+        try {
+            ifcg = mNwService.getInterfaceConfig(mInterfaceName);
+            if (ifcg != null) {
+                ifcg.addr = new LinkAddress(NetworkUtils.numericToInetAddress(
+                            "0.0.0.0"), 0);
+                mNwService.setInterfaceConfig(mInterfaceName, ifcg);
+            }
+        } catch (Exception e) {
+            loge("Error resetting interface " + mInterfaceName + ", :" + e);
+        }
+
     }
 
     private void notifyP2pEnableFailure() {
