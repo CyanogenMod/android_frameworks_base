@@ -413,6 +413,9 @@
     <!-- Close low battery warning when battery level reaches this value -->
     <integer name="config_lowBatteryCloseWarningLevel">20</integer>
 
+    <!-- Asus dock compatibility disabled by default -->
+    <bool name="config_batteryHasAsusDock">false</bool>
+
     <!-- Default color for notification LED. -->
     <color name="config_defaultNotificationColor">#ff00ff00</color>
 
