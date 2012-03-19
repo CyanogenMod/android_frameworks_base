@@ -1487,7 +1487,7 @@ public class PhoneNumberUtils
             phoneNumber = phoneNumber.substring(CLIR_OFF.length() - 1);
         }
 
-	StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         int len = phoneNumber.length();
         for (int i = 0; i < len; i++) {
             char c = phoneNumber.charAt(i);
