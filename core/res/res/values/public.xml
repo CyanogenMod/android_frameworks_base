@@ -2028,4 +2028,7 @@
   <public type="style" name="Widget.DeviceDefault.CheckedTextView" id="0x010301db" />
   <public type="style" name="Widget.DeviceDefault.Light.CheckedTextView" id="0x010301dc" />
 
+  <!-- config.xml entries -->
+  <java-symbol type="bool" name="config_hasDockBattery" />
+
 </resources>

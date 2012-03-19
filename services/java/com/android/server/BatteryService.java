@@ -119,6 +119,10 @@ public final class BatteryService extends Binder {
     private boolean mBatteryLevelCritical;
     /* End native fields. */
 
+    private int mDockBatteryStatus;
+    private int mDockBatteryLevel;
+    private String mDockBatteryPresent;
+
     private int mLastBatteryStatus;
     private int mLastBatteryHealth;
     private boolean mLastBatteryPresent;
@@ -133,6 +137,8 @@ public final class BatteryService extends Binder {
     private int mLowBatteryWarningLevel;
     private int mLowBatteryCloseWarningLevel;
     private int mShutdownBatteryTemperature;
+
+    private boolean mHasDockBattery;
 
     private int mPlugType;
     private int mLastPlugType = -1; // Extra state so we can detect first run
@@ -173,6 +179,9 @@ public final class BatteryService extends Binder {
                 com.android.internal.R.integer.config_lowBatteryCloseWarningLevel);
         mShutdownBatteryTemperature = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_shutdownBatteryTemperature);
+
+        mHasDockBattery = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_hasDockBattery);
 
         mPowerSupplyObserver.startObserving("SUBSYSTEM=power_supply");
 
@@ -506,6 +515,23 @@ public final class BatteryService extends Binder {
                     ", AC powered:" + mAcOnline + ", USB powered:" + mUsbOnline +
                     ", Wireless powered:" + mWirelessOnline +
                     ", icon:" + icon  + ", invalid charger:" + mInvalidCharger);
+        }
+
+        if (mHasDockBattery){
+            intent.putExtra(BatteryManager.EXTRA_DOCK_STATUS, mDockBatteryStatus);
+            intent.putExtra(BatteryManager.EXTRA_DOCK_LEVEL, mDockBatteryLevel);
+            intent.putExtra(BatteryManager.EXTRA_DOCK_AC_ONLINE, false);
+        }
+
+        if (false) {
+            Slog.d(TAG, "level:" + mBatteryLevel +
+                    " scale:" + BATTERY_SCALE + " status:" + mBatteryStatus +
+                    " health:" + mBatteryHealth +  " present:" + mBatteryPresent +
+                    " voltage: " + mBatteryVoltage +
+                    " temperature: " + mBatteryTemperature +
+                    " technology: " + mBatteryTechnology +
+                    " AC powered:" + mAcOnline + " USB powered:" + mUsbOnline +
+                    " icon:" + icon  + " invalid charger:" + mInvalidCharger);
         }
 
         mHandler.post(new Runnable() {
