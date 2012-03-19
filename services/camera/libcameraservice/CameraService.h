@@ -182,7 +182,9 @@ private:
         int                             mPreviewCallbackFlag;
         int                             mOrientation;     // Current display orientation
         bool                            mPlayShutterSound;
-
+#ifdef QCOM_HARDWARE
+        bool                            mFaceDetection;
+#endif
         // Ensures atomicity among the public methods
         mutable Mutex                   mLock;
         // This is a binder of Surface or SurfaceTexture.
