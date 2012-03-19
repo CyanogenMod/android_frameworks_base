@@ -124,6 +124,9 @@ void LayerScreenshot::onDraw(const Region& clip) const
         }
 
         glColor4f(0, 0, 0, alpha);
+        if(hw.getFormat() == PIXEL_FORMAT_RGB_565) {
+            glEnable(GL_DITHER);
+        }
 
         glDisable(GL_TEXTURE_EXTERNAL_OES);
         glEnable(GL_TEXTURE_2D);
@@ -148,6 +151,9 @@ void LayerScreenshot::onDraw(const Region& clip) const
         glDisable(GL_BLEND);
         glDisable(GL_TEXTURE_2D);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        if(hw.getFormat() == PIXEL_FORMAT_RGB_565) {
+            glDisable(GL_DITHER);
+        }
     }
 }
 
