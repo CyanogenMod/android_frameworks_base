@@ -41,6 +41,10 @@ ifeq ($(WITH_MALLOC_LEAK_CHECK),true)
     LOCAL_CFLAGS += -DMALLOC_LEAK_CHECK
 endif
 
+ifeq ($(TARGET_HAS_DOCK_BATTERY),true)
+    LOCAL_CFLAGS += -DHAS_DOCK_BATTERY
+endif
+
 LOCAL_MODULE:= libandroid_servers
 
 include $(BUILD_SHARED_LIBRARY)
