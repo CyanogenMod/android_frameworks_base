@@ -1089,6 +1089,9 @@
          the GPU to handle. -->
     <integer name="config_wallpaperMaxWidth">-1</integer>
 
+    <!-- Asus dock compatibility disabled by default -->
+    <bool name="config_hasDockBattery">false</bool>
+
     <!-- LUN file to be used by legacy USB manager.
          The existence of this file will be used to determine in the
          legacy USB manager should be started. -->
