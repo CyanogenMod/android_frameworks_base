@@ -114,6 +114,9 @@ public class StatusBarPolicy {
     private static final boolean SHOW_LOW_BATTERY_WARNING = true;
     private static final boolean SHOW_BATTERY_WARNINGS_IN_CALL = true;
 
+    //alarm
+    private boolean mAlarmSet = false;
+
     // phone
     private TelephonyManager mPhone;
     private int mPhoneSignalIconId;
@@ -615,6 +618,8 @@ public class StatusBarPolicy {
 
     private boolean mShowHeadset;
 
+    private boolean mShowAlarmIcon;
+
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -630,6 +635,9 @@ public class StatusBarPolicy {
 
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.STATUS_BAR_HEADSET), false, this);
+
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.STATUS_BAR_ALARM), false, this);
         }
 
         @Override public void onChange(boolean selfChange) {
@@ -794,8 +802,10 @@ public class StatusBarPolicy {
     }
 
     private final void updateAlarm(Intent intent) {
-        boolean alarmSet = intent.getBooleanExtra("alarmSet", false);
-        mService.setIconVisibility("alarm_clock", alarmSet);
+        mAlarmSet = intent.getBooleanExtra("alarmSet", false);
+        mShowAlarmIcon = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_ALARM, 1) == 1);
+        mService.setIconVisibility("alarm_clock", mAlarmSet && mShowAlarmIcon);
     }
 
     private final void updateSyncState(Intent intent) {
@@ -1674,6 +1684,10 @@ public class StatusBarPolicy {
         mShowHeadset = (Settings.System.getInt(resolver,
                 Settings.System.STATUS_BAR_HEADSET, 1) == 1);
         mService.setIconVisibility("headset", mShowHeadset && mHeadsetPlugged);
+
+        mShowAlarmIcon = (Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_ALARM, 1) == 1);
+        mService.setIconVisibility("alarm_clock", mAlarmSet && mShowAlarmIcon);
 
         // 0 will hide the cmsignaltext and show the signal bars
         mShowCmSignal = Settings.System.getInt(mContext.getContentResolver(),
