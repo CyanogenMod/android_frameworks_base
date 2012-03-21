@@ -615,6 +615,8 @@ public class StatusBarPolicy {
 
     private boolean mShowHeadset;
 
+    private boolean mShowAlarmIcon;
+
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -795,7 +797,9 @@ public class StatusBarPolicy {
 
     private final void updateAlarm(Intent intent) {
         boolean alarmSet = intent.getBooleanExtra("alarmSet", false);
-        mService.setIconVisibility("alarm_clock", alarmSet);
+        mShowAlarmIcon = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_ALARM, 1) == 1);
+        mService.setIconVisibility("alarm_clock", alarmSet && mShowAlarmIcon);
     }
 
     private final void updateSyncState(Intent intent) {
