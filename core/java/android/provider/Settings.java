@@ -2719,6 +2719,12 @@ public final class Settings {
         public static final String LOCKSCREEN_ALWAYS_BATTERY = "lockscreen_always_battery";
 
         /**
+         * Whether to toggle the flashlight when HOME button is long pressed while at the lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_LONG_HOME_ACTION = "lockscreen_flashlight";
+
+        /**
          * Whether to show the next calendar event
          * @hide
          */
