@@ -1258,7 +1258,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             return;
         }
 
-        for (String packageValuesString : customLedValuesString.split("|")) {
+        for (String packageValuesString : customLedValuesString.split("\\|")) {
             String[] packageValues = packageValuesString.split("=");
             if (packageValues.length != 2) {
                 Log.e(TAG, "Error parsing custom led values for unknown package");
