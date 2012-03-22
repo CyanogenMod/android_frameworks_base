@@ -17,6 +17,7 @@
 #define LOG_TAG "Parcel"
 //#define LOG_NDEBUG 0
 
+#define _INTERNAL_BINDER_PARCEL_
 #include <binder/Parcel.h>
 
 #include <binder/IPCThreadState.h>
@@ -447,6 +448,12 @@ status_t Parcel::appendFrom(const Parcel *parcel, size_t offset, size_t len)
     return err;
 }
 
+extern "C" Parcel *_ZN7android6Parcel10appendFromEPKS0_jj(Parcel *This, const Parcel *parcel, size_t offset, size_t len);
+extern "C" Parcel *_ZN7android6Parcel10appendFromEPS0_jj(Parcel *This, Parcel *parcel, size_t offset, size_t len)
+{
+    return _ZN7android6Parcel10appendFromEPKS0_jj(This, parcel, offset, len);
+}
+
 bool Parcel::pushAllowFds(bool allowFds)
 {
     const bool origValue = mAllowFds;
@@ -478,9 +485,15 @@ status_t Parcel::writeInterfaceToken(const String16& interface)
     return writeString16(interface);
 }
 
+bool Parcel::enforceInterface(const String16& interface) const
+{
+	return enforceInterface(interface,NULL);
+}
+
+
 bool Parcel::checkInterface(IBinder* binder) const
 {
-    return enforceInterface(binder->getInterfaceDescriptor());
+    return enforceInterface(binder->getInterfaceDescriptor(),NULL);
 }
 
 bool Parcel::enforceInterface(const String16& interface,
