@@ -514,6 +514,9 @@ void HDMIDaemon::setResolution(int ID)
     struct fb_var_screeninfo info;
     if (!openFramebuffer())
         return;
+#ifdef FORCE_AUTO_RESOLUTION
+    ID = 0;
+#endif
     //If its a valid mode and its a new ID - update var_screeninfo
     if ((isValidMode(ID)) && mCurrentID != ID) {
         const struct disp_mode_timing_type *mode = &supported_video_mode_lut[0];
