@@ -23,6 +23,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.ParcelUuid;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -78,6 +79,12 @@ public class NotificationGroup implements Parcelable {
 
     public String getName() {
         return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
+        mNameResId = -1;
+        mDirty = true;
     }
 
     public UUID getUuid() {
