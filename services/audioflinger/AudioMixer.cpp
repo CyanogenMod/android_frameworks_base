@@ -32,6 +32,10 @@
 
 #include "AudioMixer.h"
 
+#if defined(__ARM_HAVE_NEON)
+#include <arm_neon.h>
+#endif
+
 namespace android {
 // ----------------------------------------------------------------------------
 
@@ -847,7 +851,18 @@ void AudioMixer::track__16BitsMono(track_t* t, int32_t* out, size_t frameCount, 
 
 void AudioMixer::ditherAndClamp(int32_t* out, int32_t const *sums, size_t c)
 {
+#if defined(__ARM_HAVE_NEON)
+    for (size_t i=0; i<(c>>1); i++) {
+        int16x4_t clamped_vec = vqshrn_n_s32(vld1q_s32(sums), 12);
+        vst1_s16((int16_t*)out, clamped_vec);
+        sums += 4;
+        out += 2;
+    }
+    /* the remaining */
+    for (size_t i=0; i<(c&1); i++) {
+#else
     for (size_t i=0 ; i<c ; i++) {
+#endif
         int32_t l = *sums++;
         int32_t r = *sums++;
         int32_t nl = l >> 12;
