@@ -1,6 +1,7 @@
 /* //device/libs/android_runtime/android_os_Power.cpp
 **
 ** Copyright 2006, The Android Open Source Project
+** Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -85,6 +86,12 @@ static void android_os_Power_reboot(JNIEnv *env, jobject clazz, jstring reason)
     jniThrowIOException(env, errno);
 }
 
+static int
+SetUnstableMemoryState(JNIEnv *env, jobject clazz, jboolean on)
+{
+    return set_unstable_memory_state(on);
+}
+
 static JNINativeMethod method_table[] = {
     { "acquireWakeLock", "(ILjava/lang/String;)V", (void*)acquireWakeLock },
     { "releaseWakeLock", "(Ljava/lang/String;)V", (void*)releaseWakeLock },
@@ -92,6 +99,7 @@ static JNINativeMethod method_table[] = {
     { "setScreenState", "(Z)I", (void*)setScreenState },
     { "shutdown", "()V", (void*)android_os_Power_shutdown },
     { "rebootNative", "(Ljava/lang/String;)V", (void*)android_os_Power_reboot },
+    { "SetUnstableMemoryState",  "(Z)I", (void*)SetUnstableMemoryState},
 };
 
 int register_android_os_Power(JNIEnv *env)

@@ -142,9 +142,6 @@ SurfaceTexture::SurfaceTexture(GLuint tex, bool allowSynchronousMode,
     mUseFenceSync(false),
 #endif
     mTexTarget(texTarget),
-#ifdef QCOM_HARDWARE
-    mReqSize(0),
-#endif
     mFrameCounter(0) {
     // Choose a name using the PID and a process-unique ID.
     mName = String8::format("unnamed-%d-%d", getpid(), createProcessUniqueId());
@@ -524,9 +521,7 @@ status_t SurfaceTexture::dequeueBuffer(int *outBuf, uint32_t w, uint32_t h,
             if (updateFormat) {
                 mPixelFormat = format;
             }
-#ifdef QCOM_HARDWARE
-	    checkBuffer((native_handle_t *)graphicBuffer->handle, mReqSize, usage);
-#endif
+
             mSlots[buf].mGraphicBuffer = graphicBuffer;
             mSlots[buf].mRequestBufferCalled = false;
             mSlots[buf].mFence = EGL_NO_SYNC_KHR;
@@ -804,17 +799,18 @@ status_t SurfaceTexture::disconnect(int api) {
 #ifdef QCOM_HARDWARE
 status_t SurfaceTexture::performQcomOperation(int operation, int arg1, int arg2, int arg3)
 {
-     ST_LOGV("SurfaceTexture::performQcomOperation operation=%d", operation);
+    ST_LOGV("SurfaceTexture::performQcomOperation operation=%d", operation);
 
-     switch(operation) {
-        case NATIVE_WINDOW_SET_BUFFERS_SIZE:
-            mReqSize = arg1;
-            break;
-        case NATIVE_WINDOW_UPDATE_BUFFERS_GEOMETRY:
+    switch(operation) {
+        case NATIVE_WINDOW_SET_BUFFERS_SIZE: {
+            int size = arg1;
+            mGraphicBufferAlloc->setGraphicBufferSize(size);
+        } break;
+        case NATIVE_WINDOW_UPDATE_BUFFERS_GEOMETRY: {
             mNextBufferInfo.width = arg1;
             mNextBufferInfo.height = arg2;
             mNextBufferInfo.format = arg3;
-            break;
+        } break;
         default: return BAD_VALUE;
      };
      return OK;
@@ -838,7 +834,11 @@ status_t SurfaceTexture::setScalingMode(int mode) {
     return OK;
 }
 
+#ifdef QCOM_HARDWARE
+status_t SurfaceTexture::updateTexImage(bool avoidBindTexture) {
+#else
 status_t SurfaceTexture::updateTexImage() {
+#endif
     ST_LOGV("updateTexImage");
     Mutex::Autolock lock(mMutex);
 
@@ -857,10 +857,10 @@ status_t SurfaceTexture::updateTexImage() {
         EGLImageKHR image = mSlots[buf].mEglImage;
         EGLDisplay dpy = eglGetCurrentDisplay();
 #ifdef QCOM_HARDWARE
-	if (isGPUSupportedFormat(mSlots[buf].mGraphicBuffer->format)) {
-            // Update the GL texture object.
-            EGLImageKHR image = mSlots[buf].mEglImage;
-#else
+        if (isGPUSupportedFormat(mSlots[buf].mGraphicBuffer->format) &&
+            ((avoidBindTexture == false) ||
+            (isGPUSupportedFormatInHW(mSlots[buf].mGraphicBuffer->format)))) {
+#endif
         if (image == EGL_NO_IMAGE_KHR) {
             if (mSlots[buf].mGraphicBuffer == 0) {
                 ST_LOGE("buffer at slot %d is null", buf);
@@ -869,19 +869,7 @@ status_t SurfaceTexture::updateTexImage() {
             image = createImage(dpy, mSlots[buf].mGraphicBuffer);
             mSlots[buf].mEglImage = image;
             mSlots[buf].mEglDisplay = dpy;
-#endif
             if (image == EGL_NO_IMAGE_KHR) {
-#ifdef QCOM_HARDWARE
-		EGLDisplay dpy = eglGetCurrentDisplay();
-                if (mSlots[buf].mGraphicBuffer == 0) {
-                    ST_LOGE("buffer at slot %d is null", buf);
-                    return BAD_VALUE;
-                }
-                image = createImage(dpy, mSlots[buf].mGraphicBuffer);
-                mSlots[buf].mEglImage = image;
-                mSlots[buf].mEglDisplay = dpy;
-                if (image == EGL_NO_IMAGE_KHR) {
-#endif
                 // NOTE: if dpy was invalid, createImage() is guaranteed to
                 // fail. so we'd end up here.
                 return -EINVAL;
@@ -906,7 +894,7 @@ status_t SurfaceTexture::updateTexImage() {
             return -EINVAL;
         }
 #ifdef QCOM_HARDWARE
-      }
+        }
 #endif
         if (mCurrentTexture != INVALID_BUFFER_SLOT) {
             if (mUseFenceSync) {

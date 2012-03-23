@@ -567,7 +567,7 @@ nAllocationElementData1D(JNIEnv *_env, jobject _this, RsContext con, jint alloc,
     jint len = _env->GetArrayLength(data);
     LOG_API("nAllocationElementData1D, con(%p), alloc(%p), offset(%i), comp(%i), len(%i), sizeBytes(%i)", con, (RsAllocation)alloc, offset, compIdx, len, sizeBytes);
     jbyte *ptr = _env->GetByteArrayElements(data, NULL);
-    rsAllocation1DElementData(con, (RsAllocation)alloc, offset, lod, ptr, compIdx, sizeBytes);
+    rsAllocation1DElementData(con, (RsAllocation)alloc, offset, lod, ptr, sizeBytes, compIdx);
     _env->ReleaseByteArrayElements(data, ptr, JNI_ABORT);
 }
 

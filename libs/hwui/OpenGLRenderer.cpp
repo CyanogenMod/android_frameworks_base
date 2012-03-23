@@ -170,10 +170,15 @@ void OpenGLRenderer::prepareDirty(float left, float top, float right, float bott
     glScissor(left, mSnapshot->height - bottom, right - left, bottom - top);
     mSnapshot->setClip(left, top, right, bottom);
 
+#ifdef QCOM_HARDWARE
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+#else
     if (!opaque) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
     }
+#endif
 }
 
 void OpenGLRenderer::finish() {

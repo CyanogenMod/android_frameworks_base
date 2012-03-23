@@ -93,6 +93,7 @@ status_t HWComposer::createWorkList(size_t numLayers) {
             free(mList);
             size_t size = sizeof(hwc_layer_list) + numLayers*sizeof(hwc_layer_t);
             mList = (hwc_layer_list_t*)malloc(size);
+            memset(mList, 0, size);
             mCapacity = numLayers;
         }
         mList->flags = HWC_GEOMETRY_CHANGED;

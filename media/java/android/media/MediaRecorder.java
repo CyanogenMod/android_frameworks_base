@@ -22,6 +22,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
+import android.app.Application;
+import android.app.ActivityThread;
+import android.content.Context;
+import android.content.Intent;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -76,8 +80,10 @@ public class MediaRecorder
         System.loadLibrary("media_jni");
         native_init();
     }
-    private final static String TAG = "MediaRecorder";
 
+    private final static String TAG = "MediaRecorder";
+    private final static String IOBUSY_VOTE = "com.android.server.CpuGovernorService.action.IOBUSY_VOTE";
+    private final static String IOBUSY_UNVOTE = "com.android.server.CpuGovernorService.action.IOBUSY_UNVOTE";
     // The two fields below are accessed by native methods
     @SuppressWarnings("unused")
     private int mNativeContext;
@@ -654,7 +660,7 @@ public class MediaRecorder
      * @throws IllegalStateException if it is called before
      * prepare().
      */
-    public native void start() throws IllegalStateException;
+    public native void native_start() throws IllegalStateException;
 
     /**
      * Stops recording. Call this after start(). Once recording is stopped,
@@ -668,7 +674,35 @@ public class MediaRecorder
      *
      * @throws IllegalStateException if it is called before start()
      */
-    public native void stop() throws IllegalStateException;
+    public native void native_stop() throws IllegalStateException;
+
+    public void start() throws IllegalStateException {
+        try {
+            Application application = ActivityThread.systemMain().getApplication();
+            Intent ioBusyVoteIntent = new Intent(IOBUSY_VOTE);
+            // Vote for io_is_busy to be turned off.
+            ioBusyVoteIntent.putExtra("com.android.server.CpuGovernorService.voteType", 0);
+            application.sendBroadcast(ioBusyVoteIntent);
+        } catch (Exception exception) {
+            Log.e(TAG, "Unable to vote to turn io_is_busy off.");
+        }
+
+        native_start();
+    }
+
+    public void stop() throws IllegalStateException {
+        try {
+            Application application = ActivityThread.systemMain().getApplication();
+            Intent ioBusyUnVoteIntent = new Intent(IOBUSY_UNVOTE);
+            // Remove vote for io_is_busy to be turned off.
+            ioBusyUnVoteIntent.putExtra("com.android.server.CpuGovernorService.voteType", 0);
+            application.sendBroadcast(ioBusyUnVoteIntent);
+        } catch (Exception exception) {
+            Log.e(TAG, "Unable to withdraw io_is_busy off vote.");
+        }
+
+        native_stop();
+    }
 
     /**
      * Restarts the MediaRecorder to its idle state. After calling
