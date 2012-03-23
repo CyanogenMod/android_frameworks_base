@@ -150,7 +150,6 @@
     <!-- #CM-MOD-START -->
     <string name="reboot_system" product="tablet">Tableti yeniden başlat</string>
     <string name="reboot_system" product="default">Telefonu yeniden başlat</string>
-    <string name="global_action_screenshot">Ekran görüntüsü</string>
     <string name="reboot_reboot">Yeniden başlat</string>
     <string name="reboot_recovery">Kurtar</string>
     <string name="reboot_bootloader">Bootloader</string>
@@ -179,6 +178,7 @@
     <!-- #CM-MOD-START -->
     <string name="global_action_reboot">Yeniden başlat</string>
     <string name="global_action_choose_profile">Profil</string>
+    <string name="global_action_screenshot">Ekran görüntüsü</string>
     <!-- #CM-MOD-END -->
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Sessiz mod"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ses KAPALI"</string>
@@ -929,8 +929,8 @@
     <string name="no" msgid="5141531044935541497">"İptal"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Dikkat"</string>
     <string name="loading" msgid="1760724998928255250">"Yükleniyor..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"AÇIK"</string>
-    <string name="capital_off" msgid="6815870386972805832">"KAPALI"</string>
+    <string name="capital_on">"AÇK"</string>
+    <string name="capital_off">"KPL"</string>
     <string name="whichApplication" msgid="4533185947064773386">"İşlemi şunu kullanarak tamamla"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Varsayılan olarak bu işlem için kullan."</string>
     <string name="clearDefaultHintMsg" msgid="4815455344600932173">"Giriş Ayarları &gt; Uygulamalar &gt; Uygulamaları yönet\'te varsayılanı temizleyin."</string>
