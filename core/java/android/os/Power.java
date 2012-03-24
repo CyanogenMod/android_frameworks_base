@@ -110,6 +110,7 @@ public class Power
      * Activate/DeActivate Unstable Memory block
      *
      * @param on Whether you want Activate(true) or DeActive(False)
+     * @hide
      */
     public static native int SetUnstableMemoryState(boolean on);
 }
