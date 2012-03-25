@@ -342,6 +342,16 @@ public class ProfileManagerService extends IProfileManager.Stub {
     }
 
     @Override
+    public boolean notificationGroupExistsByName(String notificationGroupName) throws RemoteException {
+        for (NotificationGroup group : mGroups.values()) {
+            if (group.getName().equalsIgnoreCase(notificationGroupName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public NotificationGroup[] getNotificationGroups() throws RemoteException {
         return mGroups.values().toArray(new NotificationGroup[mGroups.size()]);
     }

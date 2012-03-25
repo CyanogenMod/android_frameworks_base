@@ -152,7 +152,8 @@ public class ProfileManager {
             return getService().profileExistsByName(profileName);
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
-            // To be on the safe side, we'll return "true", to prevent duplicate profiles from being created.
+            // To be on the safe side, we'll return "true", to prevent duplicate profiles
+            // from being created.
             return true;
         }
     }
@@ -162,7 +163,19 @@ public class ProfileManager {
             return getService().profileExists(new ParcelUuid(profileUuid));
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
-            // To be on the safe side, we'll return "true", to prevent duplicate profiles from being created.
+            // To be on the safe side, we'll return "true", to prevent duplicate profiles
+            // from being created.
+            return true;
+        }
+    }
+
+    public boolean notificationGroupExists(String notificationGroupName) {
+        try {
+            return getService().notificationGroupExistsByName(notificationGroupName);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+            // To be on the safe side, we'll return "true", to prevent duplicate notification
+            // groups from being created.
             return true;
         }
     }
