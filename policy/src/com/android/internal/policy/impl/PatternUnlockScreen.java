@@ -18,6 +18,7 @@ package com.android.internal.policy.impl;
 
 import com.android.internal.widget.DigitalClock;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.CountDownTimer;
@@ -91,6 +92,10 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     // are we showing battery information?
     private boolean mShowingBatteryInfo = false;
+
+    // always showing battery information?
+    private boolean mLockAlwaysBattery = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_ALWAYS_BATTERY, 0) == 1);
 
     // last known plugged in state
     private boolean mPluggedIn = false;
@@ -400,24 +405,28 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
             mStatusSep.setVisibility(View.GONE);
             mStatus2.setVisibility(View.GONE);
-        } else if (mShowingBatteryInfo && mNextAlarm == null) {
+        } else if ((mShowingBatteryInfo || mLockAlwaysBattery) && mNextAlarm == null) {
             // battery only
             if (mPluggedIn) {
-              if (mUpdateMonitor.isDeviceCharged()) {
-                mStatus1.setText(getContext().getString(R.string.lockscreen_charged));
-              } else {
-                  mStatus1.setText(getContext().getString(R.string.lockscreen_plugged_in, mBatteryLevel));
-              }
-            } else {
+                mStatus1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_charging, 0, 0, 0);
+                if (mUpdateMonitor.isDeviceCharged()) {
+                    mStatus1.setText(getContext().getString(R.string.lockscreen_charged));
+                } else {
+                    mStatus1.setText(getContext().getString(R.string.lockscreen_plugged_in, mBatteryLevel));
+                }
+            } else if (mShowingBatteryInfo){
+                mStatus1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_low_battery, 0, 0, 0);
                 mStatus1.setText(getContext().getString(R.string.lockscreen_low_battery, mBatteryLevel));
+            } else {
+                mStatus1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_discharging, 0, 0, 0);
+                mStatus1.setText(getContext().getString(R.string.lockscreen_discharging, mBatteryLevel));
             }
-            mStatus1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_charging, 0, 0, 0);
 
             mStatus1.setVisibility(View.VISIBLE);
             mStatusSep.setVisibility(View.GONE);
             mStatus2.setVisibility(View.GONE);
 
-        } else if (mNextAlarm != null && !mShowingBatteryInfo) {
+        } else if (mNextAlarm != null && !(mShowingBatteryInfo || mLockAlwaysBattery)) {
             // alarm only
             mStatus1.setText(mNextAlarm);
             mStatus1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_alarm, 0, 0, 0);
@@ -425,18 +434,24 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
             mStatus1.setVisibility(View.VISIBLE);
             mStatusSep.setVisibility(View.GONE);
             mStatus2.setVisibility(View.GONE);
-        } else if (mNextAlarm != null && mShowingBatteryInfo) {
+        } else if (mNextAlarm != null && (mShowingBatteryInfo || mLockAlwaysBattery)) {
             // both battery and next alarm
             mStatus1.setText(mNextAlarm);
             mStatusSep.setText("|");
-            mStatus2.setText(getContext().getString(
-                    R.string.lockscreen_battery_short,
-                    Math.min(100, mBatteryLevel)));
             mStatus1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_alarm, 0, 0, 0);
             if (mPluggedIn) {
                 mStatus2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_charging, 0, 0, 0);
+                if (mUpdateMonitor.isDeviceCharged()) {
+                    mStatus2.setText(getContext().getString(R.string.lockscreen_charged));
+                } else {
+                    mStatus2.setText(getContext().getString(R.string.lockscreen_plugged_in, mBatteryLevel));
+                }
+            } else if (mShowingBatteryInfo){
+                mStatus2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_low_battery, 0, 0, 0);
+                mStatus2.setText(getContext().getString(R.string.lockscreen_low_battery, mBatteryLevel));
             } else {
-                mStatus2.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                mStatus2.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_discharging, 0, 0, 0);
+                mStatus2.setText(getContext().getString(R.string.lockscreen_discharging, mBatteryLevel));
             }
 
             if (mLockPatternUtils.isShowUnlockMsg()) {
