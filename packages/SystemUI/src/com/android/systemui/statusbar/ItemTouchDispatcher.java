@@ -47,14 +47,16 @@ public class ItemTouchDispatcher {
                         minDistance + " vX " + vX + " vY " + vY);
                 }
 
-                if (distance > minDistance && Math.abs(vX) > Math.abs(vY)) {
-                    mItem.finishSwipe(vX > 0);
-                    result = true;
-                } else {
-                    mItem.stopSwipe();
+                if (mItem != null) {
+                    if (distance > minDistance && Math.abs(vX) > Math.abs(vY)) {
+                        mItem.finishSwipe(vX > 0);
+                        result = true;
+                    } else {
+                        mItem.stopSwipe();
+                    }
+                    mItem = null;
                 }
 
-                mItem = null;
                 return result;
             }
         });
