@@ -1125,6 +1125,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 int error = mEgl.eglGetError();
                 switch(error) {
                 case EGL11.EGL_CONTEXT_LOST:
+                case EGL10.EGL_BAD_ALLOC:
                     return false;
                 case EGL10.EGL_BAD_NATIVE_WINDOW:
                     // The native window is bad, probably because the
