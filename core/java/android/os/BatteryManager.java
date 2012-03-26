@@ -26,6 +26,12 @@ public class BatteryManager {
      * integer containing the current status constant.
      */
     public static final String EXTRA_STATUS = "status";
+
+    /**
+     * Integer containing the current status constant for the dock battery.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_STATUS = "dock_status";
     
     /**
      * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
@@ -45,6 +51,18 @@ public class BatteryManager {
      * {@link #EXTRA_SCALE}.
      */
     public static final String EXTRA_LEVEL = "level";
+
+    /**
+     * Integer field containing the current dock battery level.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_LEVEL = "dock_level";
+
+    /**
+     * Boolean field containing the current dock battery AC status.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_AC_ONLINE = "dock_ac_online";
     
     /**
      * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
@@ -108,6 +126,21 @@ public class BatteryManager {
     public static final int BATTERY_HEALTH_OVER_VOLTAGE = 5;
     public static final int BATTERY_HEALTH_UNSPECIFIED_FAILURE = 6;
     public static final int BATTERY_HEALTH_COLD = 7;
+
+    /** @hide */
+    public static final int DOCK_STATE_UNKNOWN = 0;
+
+    /** @hide */
+    public static final int DOCK_STATE_UNDOCKED = 1;
+
+    /** @hide */
+    public static final int DOCK_STATE_CHARGING = 2;
+
+    /** @hide */
+    public static final int DOCK_STATE_DOCKED = 3;
+
+    /** @hide */
+    public static final int DOCK_STATE_DISCHARGING = 4;
 
     // values of the "plugged" field in the ACTION_BATTERY_CHANGED intent.
     // These must be powers of 2.
