@@ -1415,6 +1415,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         loadBooleanSetting(stmt, Settings.System.HAPTIC_FEEDBACK_ENABLED,
                 R.bool.def_haptic_feedback);
 
+        loadIntegerSetting(stmt, Settings.System.DOCK_USB_AUDIO_ENABLED,
+            R.integer.def_dock_usb_audio_enabled);
         loadIntegerSetting(stmt, Settings.System.DOCK_SOUNDS_ENABLED,
             R.integer.def_dock_sounds_enabled);
         loadStringSetting(stmt, Settings.System.DESK_DOCK_SOUND,

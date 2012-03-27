@@ -2638,12 +2638,17 @@ public class AudioService extends IAudioService.Stub {
                                                         "");
                         mConnectedDevices.remove(AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET);
                     } else if (state == 1 && !isConnected)  {
-                        AudioSystem.setDeviceConnectionState(
+                        // Only Route the Audio if enabled in Dock Settings
+                        if (Settings.System.getInt(mContentResolver,Settings.System.DOCK_USB_AUDIO_ENABLED, 0) == 1) {
+                            AudioSystem.setDeviceConnectionState(
                                                         AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET,
                                                         AudioSystem.DEVICE_STATE_AVAILABLE,
                                                         "");
-                        mConnectedDevices.put(
+                            mConnectedDevices.put(
                                 new Integer(AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET), "");
+                        } else {
+                            Log.v(TAG, "Broadcast Receiver: Not using USB audio by request");
+                        }
                     }
                 }
             } else if (action.equals(Intent.ACTION_HDMI_AUDIO_PLUG)) {
