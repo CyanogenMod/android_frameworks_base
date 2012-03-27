@@ -39,10 +39,13 @@ import java.io.FileNotFoundException;
 class WiredAccessoryObserver extends UEventObserver {
     private static final String TAG = WiredAccessoryObserver.class.getSimpleName();
     private static final boolean LOG = true;
-    private static final int MAX_AUDIO_PORTS = 3; /* h2w, USB Audio & hdmi */
+    private static final int MAX_AUDIO_PORTS = 4; /* h2w, dock, USB Audio & hdmi */
     private static final String uEventInfo[][] = { {"DEVPATH=/devices/virtual/switch/h2w",
                                                     "/sys/class/switch/h2w/state",
                                                     "/sys/class/switch/h2w/name"},
+                                                   {"DEVPATH=/devices/virtual/switch/dock",
+                                                    "/sys/class/switch/dock/state",
+                                                    "/sys/class/switch/dock/name"},
                                                    {"DEVPATH=/devices/virtual/switch/usb_audio",
                                                     "/sys/class/switch/usb_audio/state",
                                                     "/sys/class/switch/usb_audio/name"},
@@ -106,10 +109,21 @@ class WiredAccessoryObserver extends UEventObserver {
 
     private synchronized final void updateState(String name, int state)
     {
+        if (LOG) Slog.v(TAG, "updateState name: " + name + " state " + state);
         if (name.equals("usb_audio")) {
             switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
                            ((state == 1) ? BIT_USB_HEADSET_ANLG :
                                          ((state == 2) ? BIT_USB_HEADSET_DGTL : 0)));
+        } else if (name.equals("dock")) {
+             switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
+                           ((state == 2) ? BIT_USB_HEADSET_ANLG : 0));
+            // This sets the switchsate to 4 (for USB HEADSET - BIT_USB_HEADSET_ANLG)
+            // Looking at the other types, maybe the state that emitted should be a 1 and at 
+            //       /devices/virtual/switch/usb_audio
+            //
+            // However the we need to deal with changes at
+            //       /devices/virtual/switch/dock
+            // for this the state of 2 - means that we have a USB ANLG headset
         } else if (name.equals("hdmi")) {
             switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|
                                              BIT_USB_HEADSET_DGTL|BIT_USB_HEADSET_ANLG)) |
@@ -124,6 +138,7 @@ class WiredAccessoryObserver extends UEventObserver {
                             ((state == 1) ? BIT_HEADSET :
                                           ((state == 2) ? BIT_HEADSET_NO_MIC : 0)));
         }
+        if (LOG) Slog.v(TAG, "updateState switchState: " + switchState);
         update(name, switchState);
     }
 
@@ -230,7 +245,6 @@ class WiredAccessoryObserver extends UEventObserver {
 
     private final void sendIntent(int headset, int headsetState, int prevHeadsetState, String headsetName) {
         if ((headsetState & headset) != (prevHeadsetState & headset)) {
-
             int state = 0;
             if ((headsetState & headset) != 0) {
                 state = 1;
@@ -238,7 +252,6 @@ class WiredAccessoryObserver extends UEventObserver {
             if((headset == BIT_USB_HEADSET_ANLG) || (headset == BIT_USB_HEADSET_DGTL) ||
                (headset == BIT_HDMI_AUDIO)) {
                 Intent intent;
-
                 //  Pack up the values and broadcast them to everyone
                 if (headset == BIT_USB_HEADSET_ANLG) {
                     intent = new Intent(Intent.ACTION_USB_ANLG_HEADSET_PLUG);
