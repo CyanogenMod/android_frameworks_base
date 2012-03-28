@@ -422,7 +422,12 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         mTetheredNotification.defaults &= ~Notification.DEFAULT_SOUND;
         mTetheredNotification.flags = Notification.FLAG_ONGOING_EVENT;
         mTetheredNotification.tickerText = title;
-        mTetheredNotification.setLatestEventInfo(mContext, title, message, pi);
+        try {
+            Context c = mContext.createPackageContext("com.android.systemui", Context.CONTEXT_RESTRICTED);
+            mTetheredNotification.setLatestEventInfo(c, title, message, pi);
+        } catch(Exception e) {
+            mTetheredNotification.setLatestEventInfo(mContext, title, message, pi);
+        }
 
         notificationManager.notify(mTetheredNotification.icon, mTetheredNotification);
     }
