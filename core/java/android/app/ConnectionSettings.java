@@ -1,8 +1,10 @@
 package android.app;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.net.wimax.WimaxHelper;
 import android.os.Parcel;
@@ -22,10 +24,12 @@ public final class ConnectionSettings implements Parcelable {
     private boolean mOverride;
     private boolean mDirty;
 
+    public static final int PROFILE_CONNECTION_MOBILEDATA = 0;
     public static final int PROFILE_CONNECTION_WIFI = 1;
     public static final int PROFILE_CONNECTION_WIFIAP = 2;
     public static final int PROFILE_CONNECTION_WIMAX = 3;
     public static final int PROFILE_CONNECTION_GPS = 4;
+    public static final int PROFILE_CONNECTION_SYNC = 5;
     public static final int PROFILE_CONNECTION_BLUETOOTH = 7;
 
     /** @hide */
@@ -87,6 +91,7 @@ public final class ConnectionSettings implements Parcelable {
         BluetoothAdapter bta = BluetoothAdapter.getDefaultAdapter();
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         boolean forcedState = getValue() == 1;
         boolean currentState;
@@ -136,6 +141,22 @@ public final class ConnectionSettings implements Parcelable {
                     if (currentState != forcedState) {
                         WimaxHelper.setWimaxEnabled(context, forcedState);
                     }
+                }
+                break;
+            case PROFILE_CONNECTION_MOBILEDATA:
+                currentState = cm.getMobileDataEnabled();
+                if (forcedState && !currentState) {
+                    cm.setMobileDataEnabled(true);
+                } else if (!forcedState && currentState) {
+                    cm.setMobileDataEnabled(false);
+                }
+                break;
+            case PROFILE_CONNECTION_SYNC:
+                currentState = ContentResolver.getMasterSyncAutomatically();
+                if (forcedState && !currentState) {
+                    ContentResolver.setMasterSyncAutomatically(true);
+                } else if (!forcedState && currentState) {
+                    ContentResolver.setMasterSyncAutomatically(false);
                 }
                 break;
         }
