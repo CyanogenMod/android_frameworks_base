@@ -100,7 +100,12 @@ static int32_t getColorFormat(const char* colorFormat) {
     }
 
     if (!strcmp(colorFormat, CameraParameters::PIXEL_FORMAT_YUV420SP)) {
+#ifdef EXYNOS4210_ENHANCEMENTS
+        static const int OMX_SEC_COLOR_FormatNV12LPhysicalAddress = 0x7F000002;
+        return OMX_SEC_COLOR_FormatNV12LPhysicalAddress;
+#else
         return OMX_COLOR_FormatYUV420SemiPlanar;
+#endif
     }
 
     if (!strcmp(colorFormat, CameraParameters::PIXEL_FORMAT_YUV422I)) {
