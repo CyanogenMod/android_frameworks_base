@@ -3,6 +3,7 @@ package android.app;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.net.wimax.WimaxHelper;
 import android.os.Parcel;
@@ -22,6 +23,7 @@ public final class ConnectionSettings implements Parcelable {
     private boolean mOverride;
     private boolean mDirty;
 
+    public static final int PROFILE_CONNECTION_MOBILEDATA = 0;
     public static final int PROFILE_CONNECTION_WIFI = 1;
     public static final int PROFILE_CONNECTION_WIFIAP = 2;
     public static final int PROFILE_CONNECTION_WIMAX = 3;
@@ -87,6 +89,7 @@ public final class ConnectionSettings implements Parcelable {
         BluetoothAdapter bta = BluetoothAdapter.getDefaultAdapter();
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         boolean forcedState = getValue() == 1;
         boolean currentState;
@@ -136,6 +139,14 @@ public final class ConnectionSettings implements Parcelable {
                     if (currentState != forcedState) {
                         WimaxHelper.setWimaxEnabled(context, forcedState);
                     }
+                }
+                break;
+            case PROFILE_CONNECTION_MOBILEDATA:
+                currentState = cm.getMobileDataEnabled();
+                if (forcedState && !currentState) {
+                    cm.setMobileDataEnabled(true);
+                } else if (!forcedState && currentState) {
+                    cm.setMobileDataEnabled(false);
                 }
                 break;
         }
