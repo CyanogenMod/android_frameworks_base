@@ -1,4 +1,5 @@
 /*
+ * Portions Copyright (C) 2012 VMware, Inc. All Rights Reserved.
  * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1491,7 +1492,6 @@ status_t StagefrightRecorder::setupVideoEncoder(
         return INVALID_OPERATION;
       }
     }
-#endif
 
     /*
      * can set profile from the app as a parameter.
@@ -1542,6 +1542,7 @@ status_t StagefrightRecorder::setupVideoEncoder(
             break;
         }
     }
+#endif
 
     if (mVideoEncoderProfile != -1) {
         enc_meta->setInt32(kKeyVideoProfile, mVideoEncoderProfile);
