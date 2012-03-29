@@ -1254,12 +1254,6 @@
     <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
     <string name="reboot_confirm">端末は再起動します</string>
 
-    <!-- Spoken description for ringer silent option. [CHAR LIMIT=NONE] -->
-    <string name="silent_mode_silent">着信音 OFF</string>
-    <!-- Spoken description for ringer vibrate option. [CHAR LIMIT=NONE] -->
-    <string name="silent_mode_vibrate">着信振動</string>
-    <!-- Spoken description for ringer normal option. [CHAR LIMIT=NONE] -->
-    <string name="silent_mode_ring">着信音 ON</string>
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">再起動</string>
     <!-- label for item that reboots the phone in phone options dialog -->
