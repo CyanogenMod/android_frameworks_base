@@ -110,12 +110,21 @@ private:
         virtual status_t        sendCommand(int32_t cmd, int32_t arg1, int32_t arg2);
     private:
         friend class CameraService;
+#ifdef USE_SEC_CAMERA_CORE
+                                Client(const sp<CameraService>& cameraService,
+                                       const sp<ICameraClient>& cameraClient,
+                                       const sp<SecCameraCoreManager>& hardware,
+                                       int cameraId,
+                                       int cameraFacing,
+                                       int clientPid);
+#else
                                 Client(const sp<CameraService>& cameraService,
                                        const sp<ICameraClient>& cameraClient,
                                        const sp<CameraHardwareInterface>& hardware,
                                        int cameraId,
                                        int cameraFacing,
                                        int clientPid);
+#endif
                                 ~Client();
 
         // return our camera client
@@ -179,7 +188,11 @@ private:
         int                             mCameraId;       // immutable after constructor
         int                             mCameraFacing;   // immutable after constructor
         pid_t                           mClientPid;
+#ifdef USE_SEC_CAMERA_CORE
+        sp<SecCameraCoreManager>        mHardware;       // cleared after disconnect()
+#else
         sp<CameraHardwareInterface>     mHardware;       // cleared after disconnect()
+#endif
         int                             mPreviewCallbackFlag;
         int                             mOrientation;     // Current display orientation
         bool                            mPlayShutterSound;

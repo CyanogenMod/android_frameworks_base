@@ -40,6 +40,10 @@
 #include "CameraService.h"
 #include "CameraHardwareInterface.h"
 
+#ifdef USE_SEC_CAMERA_CORE
+#include "SecCameraCore.h"
+#endif
+
 namespace android {
 
 // ----------------------------------------------------------------------------
@@ -143,7 +147,11 @@ status_t CameraService::getCameraInfo(int cameraId,
 sp<ICamera> CameraService::connect(
         const sp<ICameraClient>& cameraClient, int cameraId) {
     int callingPid = getCallingPid();
+#ifdef USE_SEC_CAMERA_CORE
+    sp<SecCameraCoreManager> hardware = NULL;
+#else
     sp<CameraHardwareInterface> hardware = NULL;
+#endif
 
     LOG1("CameraService::connect E (pid %d, id %d)", callingPid, cameraId);
 
@@ -199,7 +207,11 @@ sp<ICamera> CameraService::connect(
     char camera_device_name[10];
     snprintf(camera_device_name, sizeof(camera_device_name), "%d", cameraId);
 
+#ifdef USE_SEC_CAMERA_CORE
+    hardware = new SecCameraCoreManager(camera_device_name);
+#else
     hardware = new CameraHardwareInterface(camera_device_name);
+#endif
     if (hardware->initialize(&mModule->common) != OK) {
         hardware.clear();
         return NULL;
@@ -337,11 +349,17 @@ void CameraService::playSound(sound_kind kind) {
 }
 
 // ----------------------------------------------------------------------------
-
+#ifdef USE_SEC_CAMERA_CORE
+CameraService::Client::Client(const sp<CameraService>& cameraService,
+        const sp<ICameraClient>& cameraClient,
+        const sp<SecCameraCoreManager>& hardware,
+        int cameraId, int cameraFacing, int clientPid) {
+#else
 CameraService::Client::Client(const sp<CameraService>& cameraService,
         const sp<ICameraClient>& cameraClient,
         const sp<CameraHardwareInterface>& hardware,
         int cameraId, int cameraFacing, int clientPid) {
+#endif
     int callingPid = getCallingPid();
     LOG1("Client::Client E (pid %d)", callingPid);
 

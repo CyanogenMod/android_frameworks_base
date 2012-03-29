@@ -19,6 +19,11 @@ LOCAL_SHARED_LIBRARIES:= \
     libgui \
     libhardware
 
+ifeq ($(BOARD_USE_SEC_CAMERA_CORE), true)
+    LOCAL_SHARED_LIBRARIES += libseccameracore
+    LOCAL_CFLAGS += -DUSE_SEC_CAMERA_CORE
+endif
+
 LOCAL_MODULE:= libcameraservice
 
 include $(BUILD_SHARED_LIBRARY)
