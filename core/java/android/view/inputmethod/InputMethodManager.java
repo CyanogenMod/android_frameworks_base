@@ -26,7 +26,6 @@ import com.android.internal.view.IInputMethodSession;
 import com.android.internal.view.InputBindResult;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -198,7 +197,31 @@ public final class InputMethodManager {
 
     static final Object mInstanceSync = new Object();
     static InputMethodManager mInstance;
-    
+
+    /**
+     * @hide Flag for IInputMethodManager.windowGainedFocus: a view in
+     * the window has input focus.
+     */
+    public static final int CONTROL_WINDOW_VIEW_HAS_FOCUS = 1<<0;
+
+    /**
+     * @hide Flag for IInputMethodManager.windowGainedFocus: the focus
+     * is a text editor.
+     */
+    public static final int CONTROL_WINDOW_IS_TEXT_EDITOR = 1<<1;
+
+    /**
+     * @hide Flag for IInputMethodManager.windowGainedFocus: this is the first
+     * time the window has gotten focus.
+     */
+    public static final int CONTROL_WINDOW_FIRST = 1<<2;
+
+    /**
+     * @hide Flag for IInputMethodManager.startInput: this is the first
+     * time the window has gotten focus.
+     */
+    public static final int CONTROL_START_INITIAL = 1<<8;
+
     final IInputMethodManager mService;
     final Looper mMainLooper;
     
@@ -216,7 +239,7 @@ public final class InputMethodManager {
     
     /**
      * Set whenever this client becomes inactive, to know we need to reset
-     * state with the IME then next time we receive focus.
+     * state with the IME the next time we receive focus.
      */
     boolean mHasBeenInactive = true;
     
@@ -242,11 +265,6 @@ public final class InputMethodManager {
      * we get around to updating things.
      */
     View mNextServedView;
-    /**
-     * True if we should restart input in the next served view, even if the
-     * view hasn't actually changed from the current serve view.
-     */
-    boolean mNextServedNeedsStart;
     /**
      * This is set when we are in the process of connecting, to determine
      * when we have actually finished.
@@ -331,11 +349,12 @@ public final class InputMethodManager {
                         mCurId = res.id;
                         mBindSequence = res.sequence;
                     }
-                    startInputInner();
+                    startInputInner(null, 0, 0, 0);
                     return;
                 }
                 case MSG_UNBIND: {
                     final int sequence = msg.arg1;
+                    boolean startInput = false;
                     synchronized (mH) {
                         if (mBindSequence == sequence) {
                             if (false) {
@@ -355,8 +374,13 @@ public final class InputMethodManager {
                             if (mServedView != null && mServedView.isFocused()) {
                                 mServedConnecting = true;
                             }
+                            if (mActive) {
+                                startInput = true;
+                            }
                         }
-                        startInputInner();
+                    }
+                    if (startInput) {
+                        startInputInner(null, 0, 0, 0);
                     }
                     return;
                 }
@@ -946,10 +970,11 @@ public final class InputMethodManager {
             mServedConnecting = true;
         }
         
-        startInputInner();
+        startInputInner(null, 0, 0, 0);
     }
     
-    void startInputInner() {
+    boolean startInputInner(IBinder windowGainingFocus, int controlFlags, int softInputMode,
+            int windowFlags) {
         final View view;
         synchronized (mH) {
             view = mServedView;
@@ -958,7 +983,7 @@ public final class InputMethodManager {
             if (DEBUG) Log.v(TAG, "Starting input: view=" + view);
             if (view == null) {
                 if (DEBUG) Log.v(TAG, "ABORT input: no served view!");
-                return;
+                return false;
             }
         }
         
@@ -971,7 +996,7 @@ public final class InputMethodManager {
             // If the view doesn't have a handler, something has changed out
             // from under us, so just bail.
             if (DEBUG) Log.v(TAG, "ABORT input: no handler for view!");
-            return;
+            return false;
         }
         if (vh.getLooper() != Looper.myLooper()) {
             // The view is running on a different thread than our own, so
@@ -979,10 +1004,10 @@ public final class InputMethodManager {
             if (DEBUG) Log.v(TAG, "Starting input: reschedule to view thread");
             vh.post(new Runnable() {
                 public void run() {
-                    startInputInner();
+                    startInputInner(null, 0, 0, 0);
                 }
             });
-            return;
+            return false;
         }
         
         // Okay we are now ready to call into the served view and have it
@@ -1002,12 +1027,14 @@ public final class InputMethodManager {
                 if (DEBUG) Log.v(TAG, 
                         "Starting input: finished by someone else (view="
                         + mServedView + " conn=" + mServedConnecting + ")");
-                return;
+                return false;
             }
-            
+
             // If we already have a text box, then this view is already
             // connected so we want to restart it.
-            final boolean initial = mCurrentTextBoxAttribute == null;
+            if (mCurrentTextBoxAttribute == null) {
+                controlFlags |= CONTROL_START_INITIAL;
+            }
             
             // Hook 'em up and let 'er rip.
             mCurrentTextBoxAttribute = tba;
@@ -1027,9 +1054,17 @@ public final class InputMethodManager {
             
             try {
                 if (DEBUG) Log.v(TAG, "START INPUT: " + view + " ic="
-                        + ic + " tba=" + tba + " initial=" + initial);
-                InputBindResult res = mService.startInput(mClient,
-                        servedContext, tba, initial, true);
+                        + ic + " tba=" + tba + " controlFlags=#"
+                        + Integer.toHexString(controlFlags));
+                InputBindResult res;
+                if (windowGainingFocus != null) {
+                    res = mService.windowGainedFocus(mClient, windowGainingFocus,
+                            controlFlags, softInputMode, windowFlags,
+                            tba, servedContext);
+                } else {
+                    res = mService.startInput(mClient,
+                            servedContext, tba, controlFlags);
+                }
                 if (DEBUG) Log.v(TAG, "Starting input: Bind result=" + res);
                 if (res != null) {
                     if (res.id != null) {
@@ -1038,7 +1073,7 @@ public final class InputMethodManager {
                     } else if (mCurMethod == null) {
                         // This means there is no input method available.
                         if (DEBUG) Log.v(TAG, "ABORT input: no input method!");
-                        return;
+                        return true;
                     }
                 }
                 if (mCurMethod != null && mCompletions != null) {
@@ -1051,6 +1086,8 @@ public final class InputMethodManager {
                 Log.w(TAG, "IME died: " + mCurId, e);
             }
         }
+
+        return true;
     }
 
     /**
@@ -1127,43 +1164,48 @@ public final class InputMethodManager {
      * @hide
      */
     public void checkFocus() {
+        if (checkFocusNoStartInput(false)) {
+            startInputInner(null, 0, 0, 0);
+        }
+    }
+
+    private boolean checkFocusNoStartInput(boolean forceNewFocus) {
         // This is called a lot, so short-circuit before locking.
-        if (mServedView == mNextServedView && !mNextServedNeedsStart) {
-            return;
+        if (mServedView == mNextServedView && !forceNewFocus) {
+            return false;
         }
 
         InputConnection ic = null;
         synchronized (mH) {
-            if (mServedView == mNextServedView && !mNextServedNeedsStart) {
-                return;
+            if (mServedView == mNextServedView && !forceNewFocus) {
+                return false;
             }
             if (DEBUG) Log.v(TAG, "checkFocus: view=" + mServedView
                     + " next=" + mNextServedView
-                    + " restart=" + mNextServedNeedsStart);
-            
-            mNextServedNeedsStart = false;
+                    + " forceNewFocus=" + forceNewFocus);
+
             if (mNextServedView == null) {
                 finishInputLocked();
                 // In this case, we used to have a focused view on the window,
                 // but no longer do.  We should make sure the input method is
                 // no longer shown, since it serves no purpose.
                 closeCurrentInput();
-                return;
+                return false;
             }
-            
+
             ic = mServedInputConnection;
-            
+
             mServedView = mNextServedView;
             mCurrentTextBoxAttribute = null;
             mCompletions = null;
             mServedConnecting = true;
         }
-        
+
         if (ic != null) {
             ic.finishComposingText();
         }
-        
-        startInputInner();
+
+        return true;
     }
     
     void closeCurrentInput() {
@@ -1172,13 +1214,14 @@ public final class InputMethodManager {
         } catch (RemoteException e) {
         }
     }
-    
+
     /**
      * Called by ViewAncestor when its window gets input focus.
      * @hide
      */
     public void onWindowFocus(View rootView, View focusedView, int softInputMode,
             boolean first, int windowFlags) {
+        boolean forceNewFocus = false;
         synchronized (mH) {
             if (DEBUG) Log.v(TAG, "onWindowFocus: " + focusedView
                     + " softInputMode=" + softInputMode
@@ -1187,20 +1230,39 @@ public final class InputMethodManager {
             if (mHasBeenInactive) {
                 if (DEBUG) Log.v(TAG, "Has been inactive!  Starting fresh");
                 mHasBeenInactive = false;
-                mNextServedNeedsStart = true;
+                forceNewFocus = true;
             }
             focusInLocked(focusedView != null ? focusedView : rootView);
         }
+
+        int controlFlags = 0;
+        if (focusedView != null) {
+            controlFlags |= CONTROL_WINDOW_VIEW_HAS_FOCUS;
+            if (focusedView.onCheckIsTextEditor()) {
+                controlFlags |= CONTROL_WINDOW_IS_TEXT_EDITOR;
+            }
+        }
+        if (first) {
+            controlFlags |= CONTROL_WINDOW_FIRST;
+        }
         
-        checkFocus();
+        if (checkFocusNoStartInput(forceNewFocus)) {
+            // We need to restart input on the current focus view.  This
+            // should be done in conjunction with telling the system service
+            // about the window gaining focus, to help make the transition
+            // smooth.
+            if (startInputInner(rootView.getWindowToken(),
+                    controlFlags, softInputMode, windowFlags)) {
+                return;
+            }
+        }
         
+        // For some reason we didn't do a startInput + windowFocusGain, so
+        // we'll just do a window focus gain and call it a day.
         synchronized (mH) {
             try {
-                final boolean isTextEditor = focusedView != null &&
-                        focusedView.onCheckIsTextEditor();
                 mService.windowGainedFocus(mClient, rootView.getWindowToken(),
-                        focusedView != null, isTextEditor, softInputMode, first,
-                        windowFlags);
+                        controlFlags, softInputMode, windowFlags, null, null);
             } catch (RemoteException e) {
             }
         }
@@ -1633,8 +1695,7 @@ public final class InputMethodManager {
         p.println("  mCurMethod=" + mCurMethod);
         p.println("  mCurRootView=" + mCurRootView);
         p.println("  mServedView=" + mServedView);
-        p.println("  mNextServedNeedsStart=" + mNextServedNeedsStart
-                + " mNextServedView=" + mNextServedView);
+        p.println("  mNextServedView=" + mNextServedView);
         p.println("  mServedConnecting=" + mServedConnecting);
         if (mCurrentTextBoxAttribute != null) {
             p.println("  mCurrentTextBoxAttribute:");

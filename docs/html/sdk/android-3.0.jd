@@ -262,8 +262,8 @@ android.content.ClipData.Item}s.</p>
 
 <p>For more information, read the <a href="{@docRoot}guide/topics/clipboard/copy-paste.html">Copy
 and Paste</a> documentation. You can also see a simple implementation of copy and paste in the <a
-href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/content/ClipboardSample.
-html">API Demos</a> and a more complete implementation in the <a
+href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/content/ClipboardSample.html">API Demos</a>
+and a more complete implementation in the <a
 href="{@docRoot}resources/samples/NotePad/index.html">Note Pad</a> application.</p>
 
 
@@ -386,7 +386,7 @@ loader for your activity or fragment.</p>
 <p>For more information, read the <a
 href="{@docRoot}guide/topics/fundamentals/loaders.html">Loaders</a> documentation. You can also see
 example code using loaders in the <a
-href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/app/FragmentListCursorLoader.html">FragmentListCursorLoader</a>
+href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/app/LoaderCursor.html">LoaderCursor</a>
 and <a
 href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/app/LoaderThrottle.html">
 LoaderThrottle</a> samples.</p>
@@ -922,7 +922,7 @@ parse mode is also compatible with the {@link org.json}'s default parser.</p>
 
 <p>The <a
 href="{@docRoot}guide/topics/manifest/uses-feature-element.html">{@code &lt;uses-feature&gt;}</a> 
-manfest element should be used to inform external entities (such as Android Market) of the set of
+manfest element should be used to inform external entities (such as Google Play) of the set of
 hardware and software features on which your application depends. In this release, Android adds the
 following new constants that applications can declare with this element:</p>
 
@@ -1119,7 +1119,7 @@ descriptor).</p>
 <li>English, New Zealand (en_NZ)</li>
 <li>English, Singapore(en_SG)</li>
 <li>English, US (en_US)</li>
-<li>English, Zimbabwe (en_ZA)</li>
+<li>English, South Africa (en_ZA)</li>
 <li>Spanish (es_ES)</li>
 <li>Spanish, US (es_US)</li>
 <li>Finnish, Finland (fi_FI)</li>

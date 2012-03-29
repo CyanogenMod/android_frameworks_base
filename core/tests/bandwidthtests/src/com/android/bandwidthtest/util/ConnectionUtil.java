@@ -44,6 +44,8 @@ import com.android.bandwidthtest.NetworkState;
 import com.android.bandwidthtest.NetworkState.StateTransitionDirection;
 import com.android.internal.util.AsyncChannel;
 
+import junit.framework.Assert;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -57,7 +59,7 @@ public class ConnectionUtil {
     private static final int WAIT_FOR_SCAN_RESULT = 10 * 1000; // 10 seconds
     private static final int WIFI_SCAN_TIMEOUT = 50 * 1000;
     public static final int SHORT_TIMEOUT = 5 * 1000;
-    public static final int LONG_TIMEOUT = 10 * 1000;
+    public static final int LONG_TIMEOUT = 5 * 60 * 1000; // 5 minutes
     private ConnectivityReceiver mConnectivityReceiver = null;
     private WifiReceiver mWifiReceiver = null;
     private DownloadReceiver mDownloadReceiver = null;
@@ -118,8 +120,14 @@ public class ConnectionUtil {
 
         initializeNetworkStates();
 
-        mWifiManager.setWifiEnabled(true);
 
+    }
+
+    /**
+     * Additional initialization needed for wifi related tests.
+     */
+    public void wifiTestInit() {
+        mWifiManager.setWifiEnabled(true);
         Log.v(LOG_TAG, "Clear Wifi before we start the test.");
         sleep(SHORT_TIMEOUT);
         removeConfiguredNetworksAndDisableWifi();
@@ -146,10 +154,10 @@ public class ConnectionUtil {
                 Log.v("ConnectivityReceiver", "onReceive() called with " + intent);
                 return;
             }
-            if (intent.hasExtra(ConnectivityManager.EXTRA_NETWORK_INFO)) {
-                mNetworkInfo = (NetworkInfo)
-                        intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
-            }
+
+            final ConnectivityManager connManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            mNetworkInfo = connManager.getActiveNetworkInfo();
 
             if (intent.hasExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO)) {
                 mOtherNetworkInfo = (NetworkInfo)
@@ -447,6 +455,17 @@ public class ConnectionUtil {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if (mNetworkInfo == null) {
+                    Log.v(LOG_TAG, "Do not have networkInfo! Force fetch of network info.");
+                    mNetworkInfo = mCM.getActiveNetworkInfo();
+                }
+                // Still null after force fetch? Maybe the network did not have time to be brought
+                // up yet.
+                if (mNetworkInfo == null) {
+                    Log.v(LOG_TAG, "Failed to force fetch networkInfo. " +
+                            "The network is still not ready. Wait for the next broadcast");
+                    continue;
+                }
                 if ((mNetworkInfo.getType() != networkType) ||
                         (mNetworkInfo.getState() != expectedState)) {
                     Log.v(LOG_TAG, "network state for " + mNetworkInfo.getType() +
@@ -525,7 +544,7 @@ public class ConnectionUtil {
     /**
      * Connect to Wi-Fi with the given configuration.
      * @param config
-     * @return true if we ar connected to a given
+     * @return true if we are connected to a given AP.
      */
     public boolean connectToWifiWithConfiguration(WifiConfiguration config) {
         //  The SSID in the configuration is a pure string, need to convert it to a quoted string.

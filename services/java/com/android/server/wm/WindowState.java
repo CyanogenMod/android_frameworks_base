@@ -238,6 +238,12 @@ final class WindowState implements WindowManagerPolicy.WindowState {
     // we can give the window focus before waiting for the relayout.
     boolean mRelayoutCalled;
 
+    // If the application has called relayout() with changes that can
+    // impact its window's size, we need to perform a layout pass on it
+    // even if it is not currently visible for layout.  This is set
+    // when in that case until the layout is done.
+    boolean mLayoutNeeded;
+
     // This is set after the Surface has been created but before the
     // window has been drawn.  During this time the surface is hidden.
     boolean mDrawPending;
@@ -1444,6 +1450,16 @@ final class WindowState implements WindowManagerPolicy.WindowState {
                     || mAnimating);
     }
 
+    public boolean isGoneForLayoutLw() {
+        final AppWindowToken atoken = mAppToken;
+        return mViewVisibility == View.GONE
+                || !mRelayoutCalled
+                || (atoken == null && mRootToken.hidden)
+                || (atoken != null && (atoken.hiddenRequested || atoken.hidden))
+                || mAttachedHidden
+                || mExiting || mDestroying;
+    }
+
     /**
      * Returns true if the window has a surface that it has drawn a
      * complete UI in to.
@@ -1718,8 +1734,9 @@ final class WindowState implements WindowManagerPolicy.WindowState {
                     pw.print(mPolicyVisibilityAfterAnim);
                     pw.print(" mAttachedHidden="); pw.println(mAttachedHidden);
         }
-        if (!mRelayoutCalled) {
-            pw.print(prefix); pw.print("mRelayoutCalled="); pw.println(mRelayoutCalled);
+        if (!mRelayoutCalled || mLayoutNeeded) {
+            pw.print(prefix); pw.print("mRelayoutCalled="); pw.print(mRelayoutCalled);
+                    pw.print(" mLayoutNeeded="); pw.println(mLayoutNeeded);
         }
         if (mSurfaceResized || mSurfaceDestroyDeferred) {
             pw.print(prefix); pw.print("mSurfaceResized="); pw.print(mSurfaceResized);

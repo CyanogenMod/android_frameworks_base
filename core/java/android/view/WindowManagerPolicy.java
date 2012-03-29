@@ -298,6 +298,11 @@ public interface WindowManagerPolicy {
         boolean isDisplayedLw();
 
         /**
+         * Is this window considered to be gone for purposes of layout?
+         */
+        boolean isGoneForLayoutLw();
+
+        /**
          * Returns true if this window has been shown on screen at some time in 
          * the past.  Must be called with the window manager lock held.
          * 
@@ -1021,6 +1026,11 @@ public interface WindowManagerPolicy {
      * Specifies whether there is an on-screen navigation bar separate from the status bar.
      */
     public boolean hasNavigationBar();
+
+    /**
+     * Lock the device now.
+     */
+    public void lockNow();
 
     /**
      * Print the WindowManagerPolicy's state into the given stream.

@@ -192,7 +192,7 @@ underlying hardware support.</p>
 declaring <code>&lt;uses-permission
 android:name="android.permission.NFC"&gt;</code> in their manifest files.</p>
 
-<p>Additionally, developers can request filtering on Android Market, such that
+<p>Additionally, developers can request filtering on Google Play, such that
 their applications are not discoverable to users whose devices do not support
 NFC. To request filtering, add
 <code>&lt;uses-feature android:name="android.hardware.nfc"
@@ -336,7 +336,7 @@ descriptor).</p>
 <li>English, New Zealand (en_NZ)</li>
 <li>English, Singapore(en_SG)</li>
 <li>English, US (en_US)</li>
-<li>English, Zimbabwe (en_ZA)</li>
+<li>English, South Africa (en_ZA)</li>
 <li>Spanish (es_ES)</li>
 <li>Spanish, US (es_US)</li>
 <li>Finnish, Finland (fi_FI)</li>

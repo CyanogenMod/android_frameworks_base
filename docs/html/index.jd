@@ -1,4 +1,5 @@
 home=true
+page.metaDescription=The official site for Android developers. Provides the Android SDK and documentation for app developers and designers.
 @jd:body
 
 
@@ -11,14 +12,13 @@ home=true
                             </div><!-- end homeTitle -->
                             <div id="announcement-block">
                             <!-- total max width is 520px -->
-                                  <img src="{@docRoot}images/home/market_icon.png"
-alt="Android Market" width="120px" style="padding:10px 53px 5px"/>
+                                  <img src="{@docRoot}images/home/play_logo.png"
+alt="Google Play" width="120px" style="padding:10px 52px"/>
                                   <div id="announcement" style="width:275px">
-    <p>We've completely redesigned Android Market for phones to make it easier to
-explore Android apps, games, and other content. Look for the new version coming to your
-Android phone!</p> <p><a
-href="http://android-developers.blogspot.com/2011/07/new-android-market-for-phones.html">Learn more
-&raquo;</a></p>
+    <p>Introducing <strong>Google Play</strong>: An integrated digital content destination where
+users buy and enjoy all of their favorite content in one place. It's the new destination for
+Android apps!</p>
+    <p><a href="http://android-developers.blogspot.com/2012/03/introducing-google-play.html">Read more &raquo;</a></p>
                                 </div> <!-- end annoucement -->
                             </div> <!-- end annoucement-block -->
                         </div><!-- end topAnnouncement -->
@@ -57,11 +57,11 @@ href="http://android-developers.blogspot.com/2011/07/new-android-market-for-phon
                                       <td colspan="2"><div class="seperator">&nbsp;</div></td>
                               </tr>
                               <tr>
-                                      <td class="imageCell"><a href="http://www.android.com/market.html"><img src="{@docRoot}assets/images/icon_market.jpg" style="padding:0" /></a></td>
+                                      <td class="imageCell"><a href="http://play.google.com/apps/publish"><img src="{@docRoot}assets/images/icon_play.png" style="padding:0" /></a></td>
                                       <td>
                                               <h2 class="green">Publish</h2>
-                                              <p>Android Market is an open service that lets you distribute your apps to handsets.</p>
-                                              <p><a href="http://market.android.com/publish">Learn more &raquo;</a></p>
+                                              <p>Google Play is an open service that lets you distribute your apps to devices.</p>
+                                              <p><a href="http://play.google.com/apps/publish">Learn more &raquo;</a></p>
                                       </td>
                               </tr>
                               <tr>
@@ -141,6 +141,20 @@ href="{@docRoot}resources/dashboard/platform-versions.html">Learn more &raquo;</
 + "href='{@docRoot}sdk/api_diff/15/changes.html'>diff report</a>. If you're new to Android, "
 + "get started with the <a href='/sdk/index.html'>SDK starter package</a>.</p>"
     },
+    
+    'plus': {
+      'layout':"imgLeft",
+      'icon':"google-plus-small.png",
+      'name':"Google+ Page",
+      'img':"google-plus.png",
+      'title':"Android Developers on Google+",
+      'desc': "<p>We now have a Google+ page for <a "
++ "href='https://plus.google.com/108967384991768947849'>+Android Developers</a>. "
++ "We'll use it to host Hangouts for developers, talk about the latest releases, "
++ "development and design tips, and much more.</p>"
++ "<div style='margin:.7em 0 0 0'><g:plus href='https://plus.google.com/108967384991768947849' "
++ "size=\"smallbadge\" width=\"275\"></g:plus></div>"
+    },
 
     'tv': {
       'layout':"imgLeft",
@@ -166,8 +180,8 @@ href="{@docRoot}resources/dashboard/platform-versions.html">Learn more &raquo;</
       'desc': "<p>Run and debug your Android applications directly on one of these "
  + "devices. Modify and rebuild the Android operating system, and flash it onto "
  + "the phone. The Android Dev Phones are carrier-independent, and available for "
- + "purchase by developers through their Android Market publisher accounts.</p><p> "
- + "<a href='http://market.android.com/publish'>Visit Android Market "
+ + "purchase by developers through their Google Play publisher accounts.</p><p> "
+ + "<a href='http://play.google.com/apps/publish'>Visit Google Play "
  + "to learn more &raquo;</a></p>"
     },
     */
@@ -185,5 +199,16 @@ href="{@docRoot}resources/dashboard/platform-versions.html">Learn more &raquo;</
 </script>
 <script type="text/javascript" src="{@docRoot}assets/carousel.js"></script>
 <script type="text/javascript">
-  initCarousel("sdk");
+  initCarousel("plus");
 </script>
+
+<script type="text/javascript" src="https://plus.google.com/108967384991768947849"
+rel="publisher"></script>
+<script type="text/javascript">
+window.___gcfg = {lang: 'en'};
+(function() 
+{var po = document.createElement("script");
+po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(po, s);
+})();</script>

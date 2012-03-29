@@ -8,15 +8,16 @@
 <ul>
 
   <li>
-    <h2><span class="en">Android Basics</span>
-        <span class="de" style="display:none">Einführung in Android</span>
-        <span class="es" style="display:none">Información básica sobre Android</span>
-        <span class="fr" style="display:none">Présentation d'Android</span>
-        <span class="it" style="display:none">Nozioni di base su Android</span>
-        <span class="ja" style="display:none">Android の基本</span>
-        <span class="zh-CN" style="display:none">Android 基础知识</span>
-        <span class="zh-TW" style="display:none">Android 簡介</span>
-    </h2>
+    <span class="heading">
+      <span class="en">Android Basics</span>
+      <span class="de" style="display:none">Einführung in Android</span>
+      <span class="es" style="display:none">Información básica sobre Android</span>
+      <span class="fr" style="display:none">Présentation d'Android</span>
+      <span class="it" style="display:none">Nozioni di base su Android</span>
+      <span class="ja" style="display:none">Android の基本</span>
+      <span class="zh-CN" style="display:none">Android 基础知识</span>
+      <span class="zh-TW" style="display:none">Android 簡介</span>
+    </span>
     <ul>
       <li><a href="<?cs var:toroot ?>guide/basics/what-is-android.html">
         <span class="en">What Is Android?</span>
@@ -46,7 +47,7 @@
   </li>
 
   <li>
-    <h2>
+    <span class="heading">
       <span class="en">Framework Topics</span>
       <span class="de" style="display:none">Framework-Themen</span>
       <span class="es" style="display:none">Temas sobre el framework</span>
@@ -55,7 +56,7 @@
       <span class="ja" style="display:none">フレームワーク トピック</span>
       <span class="zh-CN" style="display:none">框架主题</span>
       <span class="zh-TW" style="display:none">架構主題</span>
-    </h2>
+    </span>
     <ul>
       <li class="toggle-list">
         <div><a href="<?cs var:toroot ?>guide/topics/fundamentals/activities.html">
@@ -87,10 +88,24 @@
             <span class="en">Content Providers</span>
           </a></div>
           <ul>
-            <li><a href="<?cs var:toroot ?>guide/topics/providers/calendar-provider.html">
-                  <span class="en">Calendar Provider</span></a>
-                  <span class="new">new!</span>
-                </li>
+            <li>
+                <a href="<?cs var:toroot ?>guide/topics/providers/content-provider-basics.html">
+                    <span class="en">Content Provider Basics</span>
+                </a>
+                <span class="new">new!</span>
+            </li>
+            <li>
+                <a href="<?cs var:toroot ?>guide/topics/providers/content-provider-creating.html">
+                    <span class="en">Creating a Content Provider</span>
+                </a>
+                <span class="new">new!</span>
+            </li>
+            <li>
+                <a href="<?cs var:toroot ?>guide/topics/providers/calendar-provider.html">
+                    <span class="en">Calendar Provider</span>
+                </a>
+                <span class="new">new!</span>
+            </li>
           </ul>
       </li>
       <li><a href="<?cs var:toroot ?>guide/topics/intents/intents-filters.html">
@@ -116,7 +131,7 @@
               </a></li>
           <li><a href="<?cs var:toroot ?>guide/topics/ui/menus.html">
                <span class="en">Menus</span>
-              </a></li>
+              </a> <span class="new">updated</span></li>
           <li><a href="<?cs var:toroot ?>guide/topics/ui/actionbar.html">
                <span class="en">Action Bar</span>
               </a></li>
@@ -271,7 +286,8 @@
       </li>
       <li class="toggle-list">
         <div><a href="<?cs var:toroot ?>guide/topics/renderscript/index.html">
-          <span class="en">RenderScript</span></a>
+          <span class="en">Renderscript</span></a>
+          <span class="new">updated</span>
         </div>
         <ul>
           <li><a href="<?cs var:toroot ?>guide/topics/renderscript/graphics.html">
@@ -280,6 +296,10 @@
           </li>
           <li><a href="<?cs var:toroot ?>guide/topics/renderscript/compute.html">
                 <span class="en">Compute</span>
+              </a>
+          </li>
+          <li><a href="<?cs var:toroot ?>guide/topics/renderscript/reference.html">
+                <span class="en">Runtime API Reference</span>
               </a>
           </li>
         </ul>
@@ -309,14 +329,25 @@
         <a href="<?cs var:toroot ?>guide/topics/clipboard/copy-paste.html">
             <span class="en">Copy and Paste</span>
         </a></li>
-  <!--<li class="toggle-list">
-        <div><a style="color:gray;">Sensors</a></div>
-          <ul>
-            <li><a style="color:gray;">Camera</a></li>
-            <li><a style="color:gray;">Compass</a></li>
-            <li><a style="color:gray;">Accelerometer</a></li>
-          </ul>
-      </li> -->
+      <li class="toggle-list">
+        <div><a href="<?cs var:toroot ?>guide/topics/sensors/index.html">
+              <span class="en">Sensors</span>
+              </a> <span class="new">new!</span></div>
+        <ul>
+          <li><a href="<?cs var:toroot ?>guide/topics/sensors/sensors_overview.html">
+              <span class="en">Sensors Overview</span>
+            </a></li>
+          <li><a href="<?cs var:toroot ?>guide/topics/sensors/sensors_motion.html">
+              <span class="en">Motion Sensors</span>
+            </a></li>
+          <li><a href="<?cs var:toroot ?>guide/topics/sensors/sensors_position.html">
+              <span class="en">Position Sensors</span>
+            </a></li>
+          <li><a href="<?cs var:toroot ?>guide/topics/sensors/sensors_environment.html">
+              <span class="en">Environment Sensors</span>
+            </a></li>
+        </ul>
+      </li>
       <li class="toggle-list">
         <div><a href="<?cs var:toroot ?>guide/topics/location/index.html">
                <span class="en">Location and Maps</span>
@@ -349,6 +380,9 @@
           <li><a href="<?cs var:toroot ?>guide/topics/nfc/advanced-nfc.html">Advanced NFC</a></li>
         </ul>
       </li>
+      <li><a href="<?cs var:toroot?>guide/topics/wireless/wifip2p.html">
+            <span class="en">Wi-Fi Direct</span></a> <span class="new">new!</span>
+          </li>
       <li class="toggle-list">
           <div><a href="<?cs var:toroot?>guide/topics/usb/index.html">
             <span class="en">USB</span></a>
@@ -411,14 +445,30 @@
 
   <li>
     <h2>
-      <span class="en">Android Market Topics</span>
+      <span class="en">Google Play Topics</span>
     </h2>
     <ul>
       <li><a href="<?cs var:toroot ?>guide/publishing/publishing.html">
-          <span class="en">Publishing on Android Market</span>
+          <span class="en">Publishing on Google Play</span>
           </a></li>
-      <li><a href="<?cs var:toroot ?>guide/publishing/licensing.html">
+      <li class="toggle-list">
+        <div><a href="<?cs var:toroot ?>guide/market/licensing/index.html">
           <span class="en">Application Licensing</span></a>
+        </div>
+        <ul>
+          <li><a href="<?cs var:toroot?>guide/market/licensing/overview.html">
+              <span class="en">Licensing Overview</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/licensing/setting-up.html">
+              <span class="en">Setting Up for Licensing</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/licensing/adding-licensing.html">
+              <span class="en">Adding Licensing to Your App</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/licensing/licensing-reference.html">
+              <span class="en">Licensing Reference</span></a>
+          </li>
+        </ul>
       </li>
       <li class="toggle-list">
         <div><a href="<?cs var:toroot?>guide/market/billing/index.html">
@@ -446,25 +496,30 @@
         </ul>
       </li>
       <li><a href="<?cs var:toroot ?>guide/appendix/market-filters.html">
-          <span class="en">Market Filters</span></a>
+          <span class="en">Filters on Google Play</span></a>
       </li>
       <li><a href="<?cs var:toroot ?>guide/market/publishing/multiple-apks.html">
           <span class="en">Multiple APK Support</span></a>
+      </li>
+      <li><a href="<?cs var:toroot ?>guide/market/expansion-files.html">
+          <span class="en">APK Expansion Files</span></a>
+          <span class="new">new!</span>
       </li>
     </ul>
   </li>
 
 
   <li>
-    <h2><span class="en">Developing</span>
-               <span class="de" style="display:none">Entwicklung</span>
-               <span class="es" style="display:none">Desarrollo</span>
-               <span class="fr" style="display:none">Développement</span>
-               <span class="it" style="display:none">Sviluppo</span>
-               <span class="ja" style="display:none">開発</span>
-               <span class="zh-CN" style="display:none">开发</span>
-               <span class="zh-TW" style="display:none">開發</span>
-    </h2>
+    <span class="heading">
+      <span class="en">Developing</span>
+      <span class="de" style="display:none">Entwicklung</span>
+      <span class="es" style="display:none">Desarrollo</span>
+      <span class="fr" style="display:none">Développement</span>
+      <span class="it" style="display:none">Sviluppo</span>
+      <span class="ja" style="display:none">開発</span>
+      <span class="zh-CN" style="display:none">开发</span>
+      <span class="zh-TW" style="display:none">開發</span>
+    </span>
     <ul>
   <!--<li><a href="">Developing for Android</a></li>
       signing, upgrading, selecting a package name, select device profile, touch, trackball, dpad available, etc. -->
@@ -650,15 +705,16 @@
   </li>
 
   <li>
-    <h2><span class="en">Publishing</span>
-        <span class="de" style="display:none">Veröffentlichung</span>
-        <span class="es" style="display:none">Publicación</span>
-        <span class="fr" style="display:none">Publication</span>
-        <span class="it" style="display:none">Pubblicazione</span>
-        <span class="ja" style="display:none">公開</span>
-        <span class="zh-CN" style="display:none">发布</span>
-        <span class="zh-TW" style="display:none">發佈</span>
-    </h2>
+    <span class="heading">
+      <span class="en">Publishing</span>
+      <span class="de" style="display:none">Veröffentlichung</span>
+      <span class="es" style="display:none">Publicación</span>
+      <span class="fr" style="display:none">Publication</span>
+      <span class="it" style="display:none">Pubblicazione</span>
+      <span class="ja" style="display:none">公開</span>
+      <span class="zh-CN" style="display:none">发布</span>
+      <span class="zh-TW" style="display:none">發佈</span>
+    </span>
     <ul>
       <li><a href="<?cs var:toroot ?>guide/publishing/publishing_overview.html">
             <span class="en">Publishing Overview</span>
@@ -700,15 +756,16 @@ applications</span>
   </li>
 
   <li>
-    <h2><span class="en">Best Practices</span>
-               <span class="de" style="display:none">Bewährte Verfahren</span>
-               <span class="es" style="display:none">Prácticas recomendadas</span>
-               <span class="fr" style="display:none">Meilleures pratiques</span>
-               <span class="it" style="display:none">Best practice</span>
-               <span class="ja" style="display:none">ベスト プラクティス</span>
-               <span class="zh-CN" style="display:none">最佳实践</span>
-               <span class="zh-TW" style="display:none">最佳實務</span>
-    </h2>
+    <span class="heading">
+      <span class="en">Best Practices</span>
+      <span class="de" style="display:none">Bewährte Verfahren</span>
+      <span class="es" style="display:none">Prácticas recomendadas</span>
+      <span class="fr" style="display:none">Meilleures pratiques</span>
+      <span class="it" style="display:none">Best practice</span>
+      <span class="ja" style="display:none">ベスト プラクティス</span>
+      <span class="zh-CN" style="display:none">最佳实践</span>
+      <span class="zh-TW" style="display:none">最佳實務</span>
+    </span>
     <ul>
       <li><a href="<?cs var:toroot ?>guide/practices/compatibility.html">
             <span class="en">Compatibility</span>
@@ -740,20 +797,20 @@ applications</span>
           <li class="toggle-list">
             <div><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design.html">
                    <span class="en">Icon Design</span>
-                 </a> <span class="new">updated</span></div>
+                 </a></div>
             <ul>
               <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_launcher.html">
                     <span class="en">Launcher Icons</span>
-                  </a> <span class="new">updated</span></li>
+                  </a></li>
               <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_menu.html">
                     <span class="en">Menu Icons</span>
                   </a></li>
               <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_action_bar.html">
                     <span class="en">Action Bar Icons</span>
-                  </a> <span class="new">new!</span></li>
+                  </a></li>
               <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_status_bar.html">
                     <span class="en">Status Bar Icons</span>
-                  </a> <span class="new">updated</span></li>
+                  </a></li>
               <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_tab.html">
                     <span class="en">Tab Icons</span>
                   </a></li>
@@ -804,8 +861,9 @@ applications</span>
   </li>
 
   <li>
-    <h2><span class="en">Web Applications</span>
-    </h2>
+    <span class="heading">
+      <span class="en">Web Applications</span>
+    </span>
     <ul>
       <li><a href="<?cs var:toroot ?>guide/webapps/index.html">
             <span class="en">Web Apps Overview</span>
@@ -826,15 +884,16 @@ applications</span>
   </li>
 
   <li>
-    <h2><span class="en">Appendix</span>
-               <span class="de" style="display:none">Anhang</span>
-               <span class="es" style="display:none">Apéndice</span>
-               <span class="fr" style="display:none">Annexes</span>
-               <span class="it" style="display:none">Appendice</span>
-               <span class="ja" style="display:none">付録</span>
-               <span class="zh-CN" style="display:none">附录</span>
-               <span class="zh-TW" style="display:none">附錄</span>
-    </h2>
+    <span class="heading">
+      <span class="en">Appendix</span>
+      <span class="de" style="display:none">Anhang</span>
+      <span class="es" style="display:none">Apéndice</span>
+      <span class="fr" style="display:none">Annexes</span>
+      <span class="it" style="display:none">Appendice</span>
+      <span class="ja" style="display:none">付録</span>
+      <span class="zh-CN" style="display:none">附录</span>
+      <span class="zh-TW" style="display:none">附錄</span>
+    </span>
     <ul>
       <li><a href="<?cs var:toroot ?>guide/appendix/api-levels.html">
             <span class="en">Android API Levels</span>

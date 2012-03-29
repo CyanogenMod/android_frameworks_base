@@ -40,9 +40,10 @@ parent.link=index.html
       <li><a href=#reusing_tip>Handle case where no activity matches</a></li>
       <li><a href=#activity_launching_tip>Consider how to launch your activities</a></li>
       <li><a href=#activities_added_to_task_tip>Allow activities to add to current task</a></li>
-      <li><a href=#notifications_get_back_tip>Notifications should let user easily get back</li>
+      <li><a href=#notifications_get_back_tip>Notifications and App Widgets should provide consistent back behavior</li>
       <li><a href=#use_notification_tip>Use the notification system</a></li>
-      <li><a href=#taking_over_back_key>Don't take over BACK key unless you absolutely need to</a></li>
+      <li><a href=#taking_over_back_key>Don't take over <em>Back</em> button unless you absolutely
+need to</a></li>
     </ol>
   </li>
 </ol>
@@ -241,8 +242,8 @@ independent of the other
   Android system keeps a linear navigation history of activities the
   user has visited. This is the <em>activity stack</em>, also known as the
   back stack. In general, when a user starts a new activity, it is added
-  to the activity stack, so that pressing BACK displays the previous
-  activity on the stack. However, the user cannot use the BACK key to go
+  to the activity stack, so that pressing <em>Back</em> displays the previous
+  activity on the stack. However, the user cannot use the <em>Back</em> button to go
   back further than the last visit to Home. The adding of an activity to
   the current stack happens whether or not that activity begins a new 
   <a href=#tasks title=task>task</a> (as long as that task was started
@@ -256,10 +257,11 @@ independent of the other
   Activities are the only things that can be added to the activity stack
   &mdash; views, windows, menus, and dialogs cannot. That is, when
   designing the navigation, if you have screen A and you want the user
-  to be able go to a subsequent screen B and then use the BACK key to go
+  to be able go to a subsequent screen B and then use the <em>Back</em> button to go
   back to screen A, then the screen A needs to be implemented as an
   activity. The one exception to this rule is if your application 
-  <a href="#taking_over_back_key">takes control of the BACK key</a> and manages the navigation
+  <a href="#taking_over_back_key">takes control of the <em>Back</em> button</a> and manages the
+navigation
 itself.
 </p>
 
@@ -287,7 +289,7 @@ itself.
   launcher, Home screen shortcut or "Recent tasks" switcher (a long
   press on Home on some devices). The user can return to a task by
   choosing the icon for its root activity the same way they started the
-  task. Once inside a task, the BACK key goes to previous activities in
+  task. Once inside a task, the <em>Back</em> button goes to previous activities in
   that task. The activity stack is made up of one or more tasks.
 </p>
 
@@ -331,7 +333,7 @@ itself.
   Browser are two applications that do this. For example, choosing an
   address in an email starts the Maps activity as a new task, and
   choosing a link in an email starts the Browser activity as a new
-  task. In these cases, the BACK key will return to the previous
+  task. In these cases, the <em>Back</em> button will return to the previous
   activity in a different task (Email), because it was not started from
   Home.
 </p>
@@ -341,7 +343,7 @@ itself.
 
 <p>
   The following examples illustrate basic principles for applications,
-  activities, the activity stack, the BACK key, tasks and intents.  It
+  activities, the activity stack, the <em>Back</em> button, tasks and intents.  It
   shows how the system responds to user actions such as starting
   activities and switching between tasks.  With most of these examples
   you can follow along, launching activities on your device as
@@ -367,19 +369,20 @@ itself.
   <img src={@docRoot}images/activity_task_design/HomeTaskBasics1a.png>
 </p>
 
-<h3 id=navigating_away_from_an_activity>Navigating Away from an Activity with BACK and HOME keys</h3>
+<h3 id=navigating_away_from_an_activity>Navigating Away from an Activity with <em>Back</em> and
+<em>Home</em> buttons</h3>
 
 <p>
   An activity can keep or lose its state depending on how the user
-  leaves the activity &mdash; by the HOME or BACK key.
+  leaves the activity &mdash; by the <em>Home</em> or <em>Back</em> button.
 </p>
 
 <p>
-  By default, pressing the BACK key finishes (destroys) the current
+  By default, pressing the <em>Back</em> button finishes (destroys) the current
   activity and displays the previous activity to the user. In the
   following figure, the user starts email by touching the Email icon in
   the Home screen, which displays a list of email messages. The user
-  scrolls down the list (changing its initial state). Pressing BACK
+  scrolls down the list (changing its initial state). Pressing <em>Back</em>
   destroys the List Messages activity and returns to the previous
   activity, which is Home. If the user re-launches Email, it would
   re-load the messages and display its initial, non-scrolled state.
@@ -390,15 +393,15 @@ itself.
 </p>
 
 <p>
-  In the above example, pressing BACK goes to Home because it was the
+  In the above example, pressing <em>Back</em> goes to Home because it was the
   last activity the user was viewing. But if the user had gotten to List
-  Message from some other activity, then pressing BACK would have
+  Message from some other activity, then pressing <em>Back</em> would have
   returned there.
 </p>
 
 <p>
   By contrast, the next figure shows the user leaving List Messages by
-  pressing HOME instead of BACK &mdash; the List Messages activity is
+  pressing <em>Home</em> instead of <em>Back</em> &mdash; the List Messages activity is
   stopped and moved to the background rather than being
   destroyed. Starting Email again from its icon would simply bring the
   List Messages activity to the foreground (changing it from stopped to
@@ -423,8 +426,8 @@ itself.
 
 <p>
   In addition, not all activities have the behavior that they are
-  destroyed when BACK is pressed. When the user starts playing music in
-  the Music application and then presses BACK, the application overrides
+  destroyed when <em>Back</em> is pressed. When the user starts playing music in
+  the Music application and then presses <em>Back</em>, the application overrides
   the normal back behavior, preventing the player activity from being
   destroyed, and continues playing music, even though its activity is no
   longer visible &mdash; as a visual substitute, the Music application
@@ -451,7 +454,7 @@ itself.
   activity to get a picture. This is a good example of re-use of the
   Gallery activity. The following figure illustrates the sequence of
   activities to do this (up to crop). This is how it's done: The user
-  chooses Contacts, selects the contact for viewing, chooses MENU &gt;
+  chooses Contacts, selects the contact for viewing, chooses <em>Menu</em> &gt;
   Edit contact and touches the picture field, which launches the Gallery
   activity. The user then chooses the picture they want, crops and saves
   it. Saving it causes the picture to be inserted into the picture field
@@ -484,12 +487,12 @@ itself.
   <b>Gallery Re-Uses Messaging for Sharing a Picture</b> - Sharing is
   another good example of one application re-using an activity from a
   different application. As shown in the following figure, the user
-  starts Gallery, picks a picture to view, chooses MENU &gt; Share, and
+  starts Gallery, picks a picture to view, chooses <em>Menu</em> &gt; Share, and
   picks "Messaging". This starts the Messaging activity, creates a new
   message and attaches the original picture to it. The user then fills
   in the "To" field, writes a short message and sends it. User focus
   remains in the Messaging program. If the user wants to go back to the
-  Gallery, they must press the BACK key. (The user can back up through
+  Gallery, they must press the <em>Back</em> button. (The user can back up through
   each activity all the way to Home.)
 </p>
 
@@ -552,7 +555,7 @@ itself.
   <ul>
     <li>
       State 2 - The user wants to do something else while they're
-      waiting, so they press HOME, which does not interrupt the map's
+      waiting, so they press <em>Home</em>, which does not interrupt the map's
       network connection and allows the map to continue loading in the
       background.
 
@@ -729,7 +732,7 @@ href="{@docRoot}guide/topics/intents/intents-filters.html">Intents and Intent Fi
         <b>Start first task.</b> You want to send a text message and attach a photo. You would choose:
 
         <p>
-          Home &gt; Messaging &gt; New message &gt; MENU &gt; Attach
+          Home &gt; Messaging &gt; New message &gt; <em>Menu</em> &gt; Attach
           &gt; Pictures. This last step launches the picture gallery
           for picking a photo. Notice that picture gallery is an
           activity in a separate application.
@@ -883,7 +886,7 @@ href="{@docRoot}guide/topics/intents/intents-filters.html">Intents and Intent Fi
   You can perform this test when initializing the user interface.
   For instance, you could disable the user control that initiates
   the Intent object, or display a message to the user that lets them go
-  to a location, such as the Market, to download its application.
+  to a location, such as Google Play, to download its application.
   In this way, your code can start the activity (using either startActivity() 
   or startActivityForResult()) only if the intent has tested to resolve
   to an activity that is actually present.
@@ -961,7 +964,7 @@ MAIN and
           address in an email message (or web page), where the Maps
           activity is started to map the location. No result from maps
           is expected to be returned to the email message; the user
-          can return by pressing the BACK key. (Such an activity is
+          can return by pressing the <em>Back</em> button. (Such an activity is
           started with {@link
           android.content.Context#startActivity(android.content.Intent)
           startActivity()}.)
@@ -1063,110 +1066,23 @@ MAIN and
 </p>
 
     
-<h3 id="notifications_get_back_tip">Notifications should let the user easily get back to the previous activity</h3>
+<h3 id="notifications_get_back_tip">Notifications and App Widgets should provide consistent back behavior</h3>
 <p>
-  Applications that are in the background or not running can have
-  services that send out notifications to the user letting them know about
-  events of interest. Two examples are Calendar, which can send out notifications of
-  upcoming events, and Email, which can send out notifications when new
-  messages arrive. One of the user interface guidelines is that when the
-  user is in activity A, gets a notification for activity B and
-  picks that notification, when they press the BACK key, they should
-  go back to activity A.&nbsp;
+  Notifications and app widgets are two common ways that a user can launch
+  your app through something besides its main icon in Launcher.  You must
+  take care when implementing these so that the user has a consistent experience
+  with the back button, not causing surprises in where they return to or the
+  state the application ends up in.
 </p>
 
 <p>
-  The following scenario shows how the activity stack should work
-  when the user responds to a notification.
-</p>
-
-<ol>
-  <li>
-    User is creating a new event in Calendar. They realize they
-    need to copy part of an email message into this event
-  </li>
-  <li>
-    The user chooses Home &gt; Gmail
-  </li>
-  <li>
-    While in Gmail, they receive a notification from Calendar for an upcoming meeting
-  </li>
-  <li>
-    So they choose that notification, which takes them to a
-    dedicated Calendar activity that displays brief details of the
-    upcoming meeting
-  </li>
-  <li>
-    The user chooses this short notice to view further details
-  </li>
-  <li>
-    When done viewing the event, the user presses the BACK
-    key. They should be taken to Gmail, which is where they were
-    when they took the notification
-  </li>
-</ol>
-
-<p>
-This behavior doesn't necessarily happen by default.
-</p>
-
-<p>
-Notifications generally happen primarily in one of two ways:
-</p>
-
-  <ul>
-    <li>
-      <b>The chosen activity is dedicated for notification only</b> -
-      For example, when the user receives a
-      Calendar notification, choosing that
-      notification starts a special activity that displays a list
-      of upcoming calendar events &mdash; this view is available only
-      from the notification, not through the Calendar's own user
-      interface. After viewing this upcoming event, to ensure that
-      the user pressing the BACK key will return to the activity
-      the user was in when they picked the notification, you would
-      make sure this dedicated activity does not have the same
-      task affinity as the Calendar or any other activity. (You do
-      this by setting task affinity to the empty string, which
-      means it has no affinity to anything.) The explanation for
-      this follows.
-
-      <p>
-      Because of the way tasks work, if the taskAffinity of the
-      dedicated activity is kept as its default, then pressing the
-      BACK key (in step 6, above) would go to Calendar, rather
-      than Gmail. The reason is that, by default, all activities
-      in a given application have the same task
-      affinity. Therefore, the task affinity of the dedicated
-      activity matches the Calendar task, which is already running
-      in step 1. This means in step 4, choosing the notification
-      brings the existing Calendar event (in step 1) forward and
-      starts the dedicated activity on top of it.  This is not
-      what you want to have happen. Setting the dedicated
-      activity's taskAffinity to empty string fixes this.
-      </p>
-    </li>
-
-    <li>
-      <b>The chosen activity is not dedicated, but always comes to
-      the foreground in its initial state</b> - For example, in
-      response to a notification, when the Gmail application comes
-      to the foreground, it always presents the list of conversations.
-      You can ensure this happens by setting a "clear top" flag in the
-      intent that the notification triggers.  This ensures that when the
-      activity is launched, it displays its initial activity, preventing
-      Gmail from coming to the foreground in whatever state the user last
-      happened to be viewing it. (To do this, you put {@link
-      android.content.Intent#FLAG_ACTIVITY_CLEAR_TOP
-      FLAG_ACTIVITY_CLEAR_TOP} in the intent you pass to startActivity()). 
-    </li>
-  </ul>
-
-<p>
-  There are other ways to handle notifications, such as bringing the
-  activity to the foreground, set to display specific data, such as
-  displaying the text message thread for the person who just sent a
-  new text message.
+  The
+  <a href="{@docRoot}guide/topics/ui/notifiers/notifications.html#HandlingNotifications">Handling
+  Notifications</a> section of the developer guide's
+  <a href="{@docRoot}guide/topics/ui/notifiers/notifications.html">Status Bar Notifications</a>
+  documentation provides an overview of how to write code to correctly handle
+  notification.  This dicussion applies equally to handling interactions with
+  app widgets.
 </p>
 
 <p>
@@ -1189,20 +1105,21 @@ Notifications generally happen primarily in one of two ways:
   convenience to respond to your message.
 </p>
 
-<h3 id=taking_over_back_key>Don't take over the BACK key unless you absolutely need to</h3>
+<h3 id=taking_over_back_key>Don't take over the <em>Back</em> button unless you absolutely need
+to</h3>
 
 <p>
   As a user navigates from one activity to the next, the system adds
   them to the activity stack. This forms a navigation history that is
-  accessible with the BACK key. Most activities are relatively limited
+  accessible with the <em>Back</em> button. Most activities are relatively limited
   in scope, with just one set of data, such as viewing a list of
   contacts, composing an email, or taking a photo. But what if your
   application is one big activity with several pages of content and
-  needs finer-grained control of the BACK key? Examples of such Google
+  needs finer-grained control of the <em>Back</em> button? Examples of such Google
   applications are the Browser, which can have several web pages open
   at once, and Maps, which can have several layers of geographic data
   to switch between. Both of these applications take control of the
-  BACK key and maintain their own internal back stacks that operate
+  <em>Back</em> button and maintain their own internal back stacks that operate
   only when these applications have focus.
 </p>
 
@@ -1211,7 +1128,7 @@ Notifications generally happen primarily in one of two ways:
   information on a map to the user: displaying the location of a
   search result, displaying locations of friends, and displaying a
   line for a street path providing direction between points. Maps
-  stores these layers in its own history so the BACK key can return to
+  stores these layers in its own history so the <em>Back</em> button can return to
   a previous layer.
 </p>
 
@@ -1222,8 +1139,8 @@ Notifications generally happen primarily in one of two ways:
   as Windows, Macintosh or Linux). For example, if you did a Google
   web search in one window of the Android Browser, clicking on a link
   in the search results displays a web page in that same window, and
-  then pressing BACK would to the search results page. Pressing
-  BACK goes to a previous window only if the current window was
+  then pressing <em>Back</em> would to the search results page. Pressing
+  <em>Back</em> goes to a previous window only if the current window was
   launched from that previous window.  If the user keeps pressing
   back, they will eventually leave the browser activity and return
   Home.

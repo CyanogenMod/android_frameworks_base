@@ -207,10 +207,10 @@ resources.</p>
 <h2 id="AlternativeResources">Providing Alternative Resources</h2>
 
 
-<div class="figure" style="width:421px">
-<img src="{@docRoot}images/resources/resource_devices_diagram2.png" height="137" alt="" />
+<div class="figure" style="width:429px">
+<img src="{@docRoot}images/resources/resource_devices_diagram2.png" height="167" alt="" />
 <p class="img-caption">
-<strong>Figure 1.</strong> Two different devices, one using alternative resources.</p>
+<strong>Figure 1.</strong> Two different devices, each using different layout resources.</p>
 </div>
 
 <p>Almost every application should provide alternative resources to support specific device
@@ -231,6 +231,9 @@ for which these resources are to be used (defined in table 2).</li>
     </ul>
     <p>You can append more than one <em>{@code &lt;qualifier&gt;}</em>. Separate each
 one with a dash.</p>
+    <p class="caution"><strong>Caution:</strong> When appending multiple qualifiers, you must
+place them in the same order in which they are listed in table 2. If the qualifiers are ordered
+wrong, the resources are ignored.</p>
   </li>
   <li>Save the respective alternative resources in this new directory. The resource files must be
 named exactly the same as the default resource files.</li>
@@ -254,20 +257,14 @@ screen density, but the filenames are exactly
 the same. This way, the resource ID that you use to reference the {@code icon.png} or {@code
 background.png} image is always the same, but Android selects the
 version of each resource that best matches the current device, by comparing the device
-configuration information with the qualifiers in the alternative resource directory name.</p>
+configuration information with the qualifiers in the resource directory name.</p>
 
 <p>Android supports several configuration qualifiers and you can
 add multiple qualifiers to one directory name, by separating each qualifier with a dash. Table 2
 lists the valid configuration qualifiers, in order of precedence&mdash;if you use multiple
-qualifiers for one resource directory, they must be added to the directory name in the order they
+qualifiers for a resource directory, you must add them to the directory name in the order they
 are listed in the table.</p>
 
-<p class="note"><strong>Note:</strong> Some configuration qualifiers were added after Android 1.0,
-so not
-all versions of Android support all the qualifiers listed in table 2. New qualifiers
-indicate the version in which they were added. To avoid any issues, always include a set of default
-resources for resources that your application uses. For more information, see the section about <a
-href="#Compatibility">Providing the Best Device Compatibility with Resources</a>.</p>
 
 <p class="table-caption" id="table2"><strong>Table 2.</strong> Configuration qualifier
 names.</p>
@@ -290,9 +287,8 @@ names.</p>
         from the SIM card in the device. For example, <code>mcc310</code> is U.S. on any carrier,
         <code>mcc310-mnc004</code> is U.S. on Verizon, and <code>mcc208-mnc00</code> is France on
         Orange.</p>
-        <p>If the device uses a radio connection (GSM phone), the MCC comes
-        from the SIM, and the MNC comes from the network to which the
-        device is connected.</p>
+        <p>If the device uses a radio connection (GSM phone), the MCC and MNC values come
+        from the SIM card.</p>
         <p>You can also use the MCC alone (for example, to include country-specific legal
 resources in your application). If you need to specify based on the language only, then use the
 <em>language and region</em> qualifier instead (discussed next). If you decide to use the MCC and
@@ -752,6 +748,17 @@ href="#KnownIssues">Known Issues</a> for more information.</p>
 </table>
 
 
+<p class="note"><strong>Note:</strong> Some configuration qualifiers have been added since Android
+1.0, so not all versions of Android support all the qualifiers. Using a new qualifier implicitly
+adds the platform version qualifier so that older devices are sure to ignore it. For example, using
+a <code>w600dp</code> qualifier will automatically include the <code>v13</code> qualifier, because
+the available-width qualifier was new in API level 13. To avoid any issues, always include a set of
+default resources (a set of resources with <em>no qualifiers</em>). For more information, see the
+section about <a href="#Compatibility">Providing the Best Device Compatibility with
+Resources</a>.</p>
+
+
+
 <h3 id="QualifierRules">Qualifier name rules</h3>
 
 <p>Here are some rules about using configuration qualifier names:</p>
@@ -1021,8 +1028,8 @@ drawables from {@code drawable-en-port}.</p>
 logic:</p>
 
 
-<div class="figure" style="width:280px">
-<img src="{@docRoot}images/resources/res-selection-flowchart.png" alt="" height="590" />
+<div class="figure" style="width:371px">
+<img src="{@docRoot}images/resources/res-selection-flowchart.png" alt="" height="471" />
 <p class="img-caption"><strong>Figure 2.</strong> Flowchart of how Android finds the
 best-matching resource.</p>
 </div>

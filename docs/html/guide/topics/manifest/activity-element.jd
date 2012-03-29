@@ -59,7 +59,7 @@ by the system and will never be run.
 
 <dt>attributes:</dt>
 <dd><dl class="attr">
-<dt><a href name="reparent"></a>{@code android:allowTaskReparenting}</dt>
+<dt><a name="reparent"></a>{@code android:allowTaskReparenting}</dt>
 <dd>Whether or not the activity can move from the task that started it to 
 the task it has an affinity for when that task is next brought to the 
 front &mdash; "{@code true}" if it can move, and "{@code false}" if it 
@@ -133,21 +133,21 @@ is meaningful only for activities that start a new task (the root activity);
 it's ignored for all other activities in the task.
 
 <p>
-When the value is "{@code true}", every time users start the task again, they 
-are brought to its root activity, regardless of what they were last doing in 
-the task and regardless of whether they used BACK or HOME to last leave it.  
-When the value is "{@code false}", the task may be cleared of activities in 
+When the value is "{@code true}", every time users start the task again, they
+are brought to its root activity regardless of what they were last doing in
+the task and regardless of whether they used the <em>Back</em> or <em>Home</em> button to
+leave it. When the value is "{@code false}", the task may be cleared of activities in
 some situations (see the 
 <code><a href="#always">alwaysRetainTaskState</a></code> attribute), but not always.  
 </p>
 
 <p>
 Suppose, for example, that someone launches activity P from the home screen, 
-and from there goes to activity Q.  The user next presses HOME, and then returns 
+and from there goes to activity Q.  The user next presses <em>Home</em>, and then returns 
 to activity P.  Normally, the user would see activity Q, since that is what they 
 were last doing in P's task.  However, if P set this flag to "{@code true}", all 
 of the activities on top of it (Q in this case) were removed when the user pressed 
-HOME and the task went to the background.  So the user sees only P when returning 
+<em>Home</em> and the task went to the background.  So the user sees only P when returning 
 to the task.
 </p>
 
@@ -272,10 +272,11 @@ is "{@code false}", it cannot be instantiated.
 </p></dd>
 
 <dt><a name="exclude"></a>{@code android:excludeFromRecents}</dt>
-<dd>Whether or not the activity should be excluded from the list of recently 
-launched activities that can be displayed to users &mdash; "{@code true}" if 
-it should be excluded, and "{@code false}" if it should be included.  
-The default value is "{@code false}".
+<dd>Whether or not the task initiated by this activity should be excluded from the list of recently
+used applications ("recent apps"). That is, when this activity is the root activity of a new task,
+this attribute determines whether the task should not appear in the list of recent apps. "{@code
+true}" if the task should be <em>excluded</em> from the list; "{@code false}" if it should be
+<em>included</em>. The default value is "{@code false}".
 </p></dd>
 
 <dt><a name="exported"></a>{@code android:exported}</dt>
@@ -306,7 +307,7 @@ attribute).
 <dd>Whether or not an existing instance of the activity should be shut down 
 (finished) whenever the user again launches its task (chooses the task on the 
 home screen) &mdash; "{@code true}" if it should be shut down, and "{@code false}" 
-if not.  The default value is "{@code false}". 
+if not. The default value is "{@code false}".
 
 <p>
 If this attribute and 
@@ -320,13 +321,15 @@ activity is ignored.  The activity is not re-parented, but destroyed.
 Activity &mdash; "{@code true}" if it should be enabled, and "{@code false}" if
 not. The default value is "{@code false}".
 
+
 <p>Starting from Android 3.0, a hardware-accelerated OpenGL renderer is
 available to applications, to improve performance for many common 2D graphics
 operations. When the hardware-accelerated renderer is enabled, most operations
 in Canvas, Paint, Xfermode, ColorFilter, Shader, and Camera are accelerated.
 This results in smoother animations, smoother scrolling, and improved
 responsiveness overall, even for applications that do not explicitly make use
-the framework's OpenGL libraries. </p>
+the framework's OpenGL libraries. Because of the increased resources required to
+enable hardware acceleration, your app will consume more RAM.</p>
 
 <p>Note that not all of the OpenGL 2D operations are accelerated. If you enable
 the hardware-accelerated renderer, test your application to ensure that it can
@@ -501,7 +504,7 @@ users and is very different from most other applications.
 
 <p>Regardless of the launch mode that you choose, make sure to test the usability
 of the activity during launch and when navigating back to it from
-other activities and tasks using the BACK key. </p>
+other activities and tasks using the <em>Back</em> button. </p>
 
 <p>For more information on launch modes and their interaction with Intent
 flags, see the 
@@ -586,9 +589,9 @@ Permissions</a>.
 </p></dd>
 
 <dt><a name="proc"></a>{@code android:process}</dt>
-<dd>The name of the process in which the activity should run.  Normally, 
+<dd>The name of the process in which the activity should run. Normally, 
 all components of an application run in the default process created for the 
-application.  It has the same name as the application package.  The <code><a href="{@docRoot}guide/topics/manifest/application-element.html">&lt;application&gt;</a></code> element's 
+application.  It has the same name as the application package. The <code><a href="{@docRoot}guide/topics/manifest/application-element.html">&lt;application&gt;</a></code> element's 
 <code><a href="{@docRoot}guide/topics/manifest/application-element.html#proc">process</a></code> 
 attribute can set a different default for all components.  But each component 
 can override the default, allowing you to spread your application across 
@@ -669,7 +672,7 @@ unspecified}" setting.</td>
 
 <p class="note"><strong>Note:</strong> When you declare one of the landscape or portrait values,
 it is considered a hard requirement for the orientation in which the activity runs. As such,
-the value you declare enables filtering by services such as Android Market so your application is
+the value you declare enables filtering by services such as Google Play so your application is
 available only to devices that support the orientation required by your activities. For
 example, if you declare either {@code "landscape"}, {@code "reverseLandscape"}, or
 {@code "sensorLandscape"}, then your application will be available only to devices that support
@@ -678,7 +681,7 @@ your application requires either portrait or landscape orientation with the <a
 href="{@docRoot}guide/topics/manifest/uses-feature-element.html">{@code &lt;uses-feature&gt;}</a>
 element. For example, <code>&lt;uses-feature
 android:name="android.hardware.screen.portrait"/></code>. This is purely a filtering behavior
-provided by Android Market (and other services that support it) and the platform itself does not
+provided by Google Play (and other services that support it) and the platform itself does not
 control whether your app can be installed when a device supports only certain orientations.</p>
 
 </dd>
@@ -705,7 +708,7 @@ activity started for the first time.
 A "{@code true}" setting ensures that the activity can be restarted in the 
 absence of retained state.  For example, the activity that displays the 
 home screen uses this setting to make sure that it does not get removed if it 
-crashes for some reason. 
+crashes for some reason.
 </p></dd>
 
 <dt><a name="aff"></a>{@code android:taskAffinity}</dt>

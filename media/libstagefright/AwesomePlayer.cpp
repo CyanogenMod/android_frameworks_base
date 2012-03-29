@@ -1948,6 +1948,10 @@ void AwesomePlayer::postCheckAudioStatusEvent(int64_t delayUs) {
         return;
     }
     mAudioStatusEventPending = true;
+    // Do not honor delay when looping in order to limit audio gap
+    if (mFlags & (LOOPING | AUTO_LOOPING)) {
+        delayUs = 0;
+    }
     mQueue.postEventWithDelay(mCheckAudioStatusEvent, delayUs);
 }
 

@@ -64,8 +64,13 @@ import android.util.AttributeSet;
  * // Start the animation (looped playback by default).
  * frameAnimation.start();
  * </pre>
- * <p>For more information, see the guide to <a
- * href="{@docRoot}guide/topics/resources/animation-resource.html">Animation Resources</a>.</p>
+ *
+ * <div class="special reference">
+ * <h3>Developer Guides</h3>
+ * <p>For more information about animating with {@code AnimationDrawable}, read the
+ * <a href="{@docRoot}guide/topics/graphics/drawable-animation.html">Drawable Animation</a>
+ * developer guide.</p>
+ * </div>
  *
  * @attr ref android.R.styleable#AnimationDrawable_visible
  * @attr ref android.R.styleable#AnimationDrawable_variablePadding
@@ -97,7 +102,12 @@ public class AnimationDrawable extends DrawableContainer implements Runnable, An
 
     /**
      * <p>Starts the animation, looping if necessary. This method has no effect
-     * if the animation is running.</p>
+     * if the animation is running. Do not call this in the {@link android.app.Activity#onCreate}
+     * method of your activity, because the {@link android.graphics.drawable.AnimationDrawable} is
+     * not yet fully attached to the window. If you want to play
+     * the animation immediately, without requiring interaction, then you might want to call it
+     * from the {@link android.app.Activity#onWindowFocusChanged} method in your activity,
+     * which will get called when Android brings your window into focus.</p>
      *
      * @see #isRunning()
      * @see #stop()

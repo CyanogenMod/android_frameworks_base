@@ -48,20 +48,21 @@ import android.view.ViewConfiguration;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import com.android.internal.R;
 
 /**
  * A widget that enables the user to select a number form a predefined range.
- * The widget presents an input filed and up and down buttons for selecting the
- * current value. Pressing/long pressing the up and down buttons increments and
- * decrements the current value respectively. Touching the input filed shows a
- * scroll wheel, tapping on which while shown and not moving allows direct edit
- * of the current value. Sliding motions up or down hide the buttons and the
- * input filed, show the scroll wheel, and rotate the latter. Flinging is
+ * The widget presents an input field and up and down buttons for selecting the
+ * current value. Pressing/long-pressing the up and down buttons increments and
+ * decrements the current value respectively. Touching the input field shows a
+ * scroll wheel, which when touched allows direct edit
+ * of the current value. Sliding gestures up or down hide the buttons and the
+ * input filed, show and rotates the scroll wheel. Flinging is
  * also supported. The widget enables mapping from positions to strings such
- * that instead the position index the corresponding string is displayed.
+ * that, instead of the position index, the corresponding string is displayed.
  * <p>
  * For an example of using this widget, see {@link android.widget.TimePicker}.
  * </p>
@@ -367,9 +368,9 @@ public class NumberPicker extends LinearLayout {
     private float mLastMotionEventY;
 
     /**
-     * Flag if to begin edit on next up event.
+     * Flag if to check for double tap and potentially start edit.
      */
-    private boolean mBeginEditOnUpEvent;
+    private boolean mCheckBeginEditOnUpEvent;
 
     /**
      * Flag if to adjust the selector wheel on next up event.
@@ -445,6 +446,11 @@ public class NumberPicker extends LinearLayout {
      * Flag whether the scoll wheel and the fading edges have been initialized.
      */
     private boolean mScrollWheelAndFadingEdgesInitialized;
+
+    /**
+     * The time of the last up event.
+     */
+    private long mLastUpEventTimeMillis;
 
     /**
      * Interface to listen for changes of the current value.
@@ -624,10 +630,6 @@ public class NumberPicker extends LinearLayout {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     mInputText.selectAll();
-                    InputMethodManager inputMethodManager = InputMethodManager.peekInstance();
-                    if (inputMethodManager != null) {
-                        inputMethodManager.showSoftInput(mInputText, 0);
-                    }
                 } else {
                     mInputText.setSelection(0, 0);
                     validateInputTextView(v);
@@ -639,6 +641,7 @@ public class NumberPicker extends LinearLayout {
         });
 
         mInputText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        mInputText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         // initialize constants
         mTouchSlop = ViewConfiguration.getTapTimeout();
@@ -773,7 +776,7 @@ public class NumberPicker extends LinearLayout {
                 removeAllCallbacks();
                 mShowInputControlsAnimator.cancel();
                 mDimSelectorWheelAnimator.cancel();
-                mBeginEditOnUpEvent = false;
+                mCheckBeginEditOnUpEvent = false;
                 mAdjustScrollerOnUpEvent = true;
                 if (mSelectorWheelState == SELECTOR_WHEEL_STATE_LARGE) {
                     mSelectorWheelPaint.setAlpha(SELECTOR_WHEEL_BRIGHT_ALPHA);
@@ -784,7 +787,7 @@ public class NumberPicker extends LinearLayout {
                         mAdjustScroller.forceFinished(true);
                         onScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
                     }
-                    mBeginEditOnUpEvent = scrollersFinished;
+                    mCheckBeginEditOnUpEvent = scrollersFinished;
                     mAdjustScrollerOnUpEvent = true;
                     hideInputControls();
                     return true;
@@ -801,7 +804,7 @@ public class NumberPicker extends LinearLayout {
                 float currentMoveY = event.getY();
                 int deltaDownY = (int) Math.abs(currentMoveY - mLastDownEventY);
                 if (deltaDownY > mTouchSlop) {
-                    mBeginEditOnUpEvent = false;
+                    mCheckBeginEditOnUpEvent = false;
                     onScrollStateChange(OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
                     setSelectorWheelState(SELECTOR_WHEEL_STATE_LARGE);
                     hideInputControls();
@@ -825,11 +828,11 @@ public class NumberPicker extends LinearLayout {
         switch (action) {
             case MotionEvent.ACTION_MOVE:
                 float currentMoveY = ev.getY();
-                if (mBeginEditOnUpEvent
+                if (mCheckBeginEditOnUpEvent
                         || mScrollState != OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     int deltaDownY = (int) Math.abs(currentMoveY - mLastDownEventY);
                     if (deltaDownY > mTouchSlop) {
-                        mBeginEditOnUpEvent = false;
+                        mCheckBeginEditOnUpEvent = false;
                         onScrollStateChange(OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
                     }
                 }
@@ -839,11 +842,20 @@ public class NumberPicker extends LinearLayout {
                 mLastMotionEventY = currentMoveY;
                 break;
             case MotionEvent.ACTION_UP:
-                if (mBeginEditOnUpEvent) {
-                    setSelectorWheelState(SELECTOR_WHEEL_STATE_SMALL);
-                    showInputControls(mShowInputControlsAnimimationDuration);
-                    mInputText.requestFocus();
-                    return true;
+                if (mCheckBeginEditOnUpEvent) {
+                    mCheckBeginEditOnUpEvent = false;
+                    final long deltaTapTimeMillis = ev.getEventTime() - mLastUpEventTimeMillis;
+                    if (deltaTapTimeMillis < ViewConfiguration.getDoubleTapTimeout()) {
+                        setSelectorWheelState(SELECTOR_WHEEL_STATE_SMALL);
+                        showInputControls(mShowInputControlsAnimimationDuration);
+                        mInputText.requestFocus();
+                        InputMethodManager inputMethodManager = InputMethodManager.peekInstance();
+                        if (inputMethodManager != null) {
+                            inputMethodManager.showSoftInput(mInputText, 0);
+                        }
+                        mLastUpEventTimeMillis = ev.getEventTime();
+                        return true;
+                    }
                 }
                 VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(1000, mMaximumFlingVelocity);
@@ -862,6 +874,7 @@ public class NumberPicker extends LinearLayout {
                 }
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
+                mLastUpEventTimeMillis = ev.getEventTime();
                 break;
         }
         return true;
@@ -1983,6 +1996,24 @@ public class NumberPicker extends LinearLayout {
         public void run() {
             changeCurrentByOne(mIncrement);
             postDelayed(this, mLongPressUpdateInterval);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public static class CustomEditText extends EditText {
+
+        public CustomEditText(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        @Override
+        public void onEditorAction(int actionCode) {
+            super.onEditorAction(actionCode);
+            if (actionCode == EditorInfo.IME_ACTION_DONE) {
+                clearFocus();
+            }
         }
     }
 }

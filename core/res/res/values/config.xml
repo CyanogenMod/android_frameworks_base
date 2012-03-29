@@ -227,6 +227,13 @@
         <item>4</item>
     </integer-array>
 
+    <!-- If the DUN connection for this CDMA device supports more than just DUN -->
+    <!-- traffic you should list them here. -->
+    <!-- If this device is not CDMA this is ignored.  If this list is empty on -->
+    <!-- a DUN-requiring CDMA device, the DUN APN will just support just DUN. -->
+    <string-array translatable="false" name="config_cdma_dun_supported_types">
+    </string-array>
+
     <!-- String containing the apn value for tethering.  May be overriden by secure settings
          TETHER_DUN_APN.  Value is a comma separated series of strings:
          "name,apn,proxy,port,username,password,server,mmsc,mmsproxy,mmsport,mcc,mnc,auth,type"
@@ -529,13 +536,13 @@
 
     <!-- Component name of the default wallpaper. This will be ImageWallpaper if not
          specified -->
-    <string name="default_wallpaper_component">@null</string>
+    <string name="default_wallpaper_component" translatable="false">@null</string>
 
     <!-- Component name of the service providing network location support. -->
-    <string name="config_networkLocationProvider">@null</string>
+    <string name="config_networkLocationProvider" translatable="false">@null</string>
 
     <!-- Component name of the service providing geocoder API support. -->
-    <string name="config_geocodeProvider">@null</string>
+    <string name="config_geocodeProvider" translatable="false">@null</string>
 
     <!-- Boolean indicating if current platform supports bluetooth SCO for off call
     use cases -->
@@ -559,7 +566,7 @@
     <integer name="config_datause_throttle_kbitsps">300</integer>
 
     <!-- The default iface on which to monitor data use -->
-    <string name="config_datause_iface">rmnet0</string>
+    <string name="config_datause_iface" translatable="false">rmnet0</string>
 
     <!-- The default reduced-datarate notification mask -->
     <!-- 2 means give warning -->
@@ -589,11 +596,11 @@
     <bool name="config_sms_capable">true</bool>
 
     <!-- IP address of the dns server to use if nobody else suggests one -->
-    <string name="config_default_dns_server">8.8.8.8</string>
+    <string name="config_default_dns_server" translatable="false">8.8.8.8</string>
 
     <!-- The default character set for GsmAlphabet -->
     <!-- Empty string means MBCS is not considered -->
-    <string name="gsm_alphabet_default_charset"></string>
+    <string name="gsm_alphabet_default_charset" translatable="false"></string>
 
     <!-- Enables SIP on WIFI only -->
     <bool name="config_sip_wifi_only">false</bool>
@@ -628,7 +635,7 @@
          OMA-TS-UAProf-V2_0-20060206-A Section 8.1.1.1. If the URL contains a '%s'
          format string then that substring will be replaced with the value of
          Build.MODEL. The format string shall not be escaped. -->
-    <string name="config_useragentprofile_url"></string>
+    <string name="config_useragentprofile_url" translatable="false"></string>
 
     <!-- When a database query is executed, the results retuned are paginated
          in pages of size (in KB) indicated by this value -->
@@ -639,7 +646,7 @@
     <bool name="config_showMenuShortcutsWhenKeyboardPresent">false</bool>
 
     <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
-    <string-array name="config_twoDigitNumberPattern">
+    <string-array name="config_twoDigitNumberPattern" translatable="false">
     </string-array>
 
     <!-- The VoiceMail default value is displayed to my own number if it is true -->
@@ -743,20 +750,26 @@
     <!-- Set and Unsets WiMAX -->
     <bool name="config_wimaxEnabled">false</bool>
     <!-- Location of the wimax framwork jar location -->
-    <string name="config_wimaxServiceJarLocation"></string>
+    <string name="config_wimaxServiceJarLocation" translatable="false"></string>
     <!-- Location of the wimax native library locaiton -->
-    <string name="config_wimaxNativeLibLocation"></string>
+    <string name="config_wimaxNativeLibLocation" translatable="false"></string>
     <!-- Name of the wimax manager class -->
-    <string name="config_wimaxManagerClassname"></string>
+    <string name="config_wimaxManagerClassname" translatable="false"></string>
     <!-- Name of the wimax service class -->
-    <string name="config_wimaxServiceClassname"></string>
+    <string name="config_wimaxServiceClassname" translatable="false"></string>
     <!-- Name of the wimax state tracker clas -->
-    <string name="config_wimaxStateTrackerClassname"></string>
+    <string name="config_wimaxStateTrackerClassname" translatable="false"></string>
 
     <!-- Base "touch slop" value used by ViewConfiguration as a
          movement threshold where scrolling should begin. -->
     <dimen name="config_viewConfigurationTouchSlop">8dp</dimen>
 
+    <!-- Array of OEM specific USB mode override config.
+         OEM can override a certain USB mode depending on ro.bootmode.
+         Specify an array of below items to set override rule.
+         [bootmode]:[original USB mode]:[USB mode used]-->
+    <integer-array translatable="false" name="config_oemUsbModeOverride">
+    </integer-array>
 
     <!-- CM CHANGES START HERE -->
 

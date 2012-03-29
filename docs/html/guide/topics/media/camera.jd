@@ -131,11 +131,11 @@ for example:
   <p>For a list of camera features, see the manifest
 <a href="{@docRoot}guide/topics/manifest/uses-feature-element.html#hw-features">Features
 Reference</a>.</p>
-  <p>Adding camera features to your manifest causes Android Market to prevent your application from
+  <p>Adding camera features to your manifest causes Google Play to prevent your application from
 being installed to devices that do not include a camera or do not support the camera features you
-specify. For more information about using feature-based filtering with Android Market, see <a
-href="{@docRoot}guide/topics/manifest/uses-feature-element.html#market-feature-filtering">Android
-Market and Feature-Based Filtering</a>.</p>
+specify. For more information about using feature-based filtering with Google Play, see <a
+href="{@docRoot}guide/topics/manifest/uses-feature-element.html#market-feature-filtering">Google
+Play and Feature-Based Filtering</a>.</p>
   <p>If your application <em>can use</em> a camera or camera feature for proper operation, but does
 not <em>require</em> it, you should specify this in the manifest by including the {@code
 android:required} attribute, and setting it to {@code false}:</p>
@@ -442,7 +442,7 @@ use or does not exist will cause your application to be shut down by the system.
 the first, back-facing camera on a device with more than one camera.</p>
 
 <h3 id="check-camera-features">Checking camera features</h3>
-<p>Once you obtain access to a camera, you can get further information about its capabilties using
+<p>Once you obtain access to a camera, you can get further information about its capabilities using
 the {@link android.hardware.Camera#getParameters() Camera.getParameters()} method and checking the
 returned {@link android.hardware.Camera.Parameters} object for supported capabilities. When using
 API Level 9 or higher, use the {@link android.hardware.Camera#getCameraInfo(int,
@@ -677,8 +677,8 @@ button {@link android.view.View.OnClickListener}.</p>
 <pre>
 // Add a listener to the Capture button
 Button captureButton = (Button) findViewById(id.button_capture);
-    captureButton.setOnClickListener(
-        new View.OnClickListener() {
+captureButton.setOnClickListener(
+    new View.OnClickListener() {
         &#64;Override
         public void onClick(View v) {
             // get an image from the camera
@@ -1037,7 +1037,7 @@ private static Uri getOutputMediaFileUri(int type){
 }
 
 /** Create a File for saving an image or video */
-private static Uri getOutputMediaFile(int type){
+private static File getOutputMediaFile(int type){
     // To be safe, you should check that the SDCard is mounted
     // using Environment.getExternalStorageState() before doing this.
 
@@ -1260,7 +1260,7 @@ supported.</p>
 
 <p>If your application requires certain camera features in order to function properly, you can
 require them through additions to your application manifest. When you declare the use of specific
-camera features, such as flash and auto-focus, the Android Market restricts your application from
+camera features, such as flash and auto-focus, Google Play restricts your application from
 being installed on devices which do not support these features. For a list of camera features that
 can be declared in your app manifest, see the manifest
 <a href="{@docRoot}guide/topics/manifest/uses-feature-element.html#hw-features"> Features

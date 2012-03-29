@@ -60,6 +60,7 @@ import android.util.PrintWriterPrinter;
 import android.util.Printer;
 import android.util.Slog;
 import android.util.Xml;
+import android.view.IWindowManager;
 import android.view.WindowManagerPolicy;
 
 import java.io.File;
@@ -96,6 +97,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     final PowerManager.WakeLock mWakeLock;
 
     IPowerManager mIPowerManager;
+    IWindowManager mIWindowManager;
 
     int mActivePasswordQuality = DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED;
     int mActivePasswordLength = 0;
@@ -506,6 +508,14 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         return mIPowerManager;
     }
 
+    private IWindowManager getWindowManager() {
+        if (mIWindowManager == null) {
+            IBinder b = ServiceManager.getService(Context.WINDOW_SERVICE);
+            mIWindowManager = IWindowManager.Stub.asInterface(b);
+        }
+        return mIWindowManager;
+    }
+
     ActiveAdmin getActiveAdminUncheckedLocked(ComponentName who) {
         ActiveAdmin admin = mAdminMap.get(who);
         if (admin != null
@@ -831,6 +841,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     static void validateQualityConstant(int quality) {
         switch (quality) {
             case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
+            case DevicePolicyManager.PASSWORD_QUALITY_BIOMETRIC_WEAK:
             case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
             case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
             case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
@@ -1648,8 +1659,11 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                     DeviceAdminInfo.USES_POLICY_FORCE_LOCK);
             long ident = Binder.clearCallingIdentity();
             try {
+                // Power off the display
                 mIPowerManager.goToSleepWithReason(SystemClock.uptimeMillis(),
                         WindowManagerPolicy.OFF_BECAUSE_OF_ADMIN);
+                // Ensure the device is locked
+                getWindowManager().lockNow();
             } catch (RemoteException e) {
             } finally {
                 Binder.restoreCallingIdentity(ident);

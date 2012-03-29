@@ -51,19 +51,13 @@ would on the emulator. Before you can start, there are just a few things to do:<
 
 <ol>
   <li>Declare your application as "debuggable" in your Android Manifest.
-    <p>In Eclipse, you can do this from the <b>Application</b> tab when viewing the Manifest
-    (on the right side, set <b>Debuggable</b> to <em>true</em>). Otherwise, in the
-<code>AndroidManifest.xml</code>
-    file, add <code>android:debuggable="true"</code> to the <code>&lt;application></code>
-element.</p>
-  </li>
-  <li>Set up your device to allow installation of non-Market applications. <p>On
-the device, go to <strong>Settings > Applications</strong> and enable 
-
-<strong>Unknown sources</strong> (on an Android 4.0 device, the setting is
-located in <strong>Settings > Security</strong>).</p>
-  
-  </li>
+    <p>When using Eclipse, you can skip this step, because running your app directly from
+the Eclipse IDE automatically enables debugging.</p>
+    <p>In the <code>AndroidManifest.xml</code> file, add <code>android:debuggable="true"</code> to
+the <code>&lt;application></code> element.</p>
+    <p class="note"><strong>Note:</strong> If you manually enable debugging in the manifest
+ file, be sure to disable it before you build for release (your published application
+should usually <em>not</em> be debuggable).</p></li>
   <li>Turn on "USB Debugging" on your device.
     <p>On the device, go to <strong>Settings > Applications > Development</strong> 
     and enable <strong>USB debugging</strong> 
@@ -72,17 +66,12 @@ located in <strong>Settings > Developer options</strong>).</p>
   </li>
   <li>Set up your system to detect your device.
     <ul>
-      <li>If you're developing on Windows, you need to install a USB driver
-      for adb. If you're using an Android Developer Phone (ADP), Nexus One, or Nexus S,
-      see the <a href="{@docRoot}sdk/win-usb.html">Google Windows USB
-      Driver</a>. Otherwise, you can find a link to the appropriate OEM driver in the
-  <a href="{@docRoot}sdk/oem-usb.html">OEM USB Drivers</a> document.</li>
+      <li>If you're developing on Windows, you need to install a USB driver for adb. For an
+installation guide and links to OEM drivers, see the <a href="{@docRoot}sdk/oem-usb.html">OEM USB
+Drivers</a> document.</li>
       <li>If you're developing on Mac OS X, it just works. Skip this step.</li>
-      
-      <li>If you're developing on Ubuntu Linux, you need to add a <a
-href="http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html">
-<code>udev</code></a> 
-rules file that contains a USB configuration for each type of device
+      <li>If you're developing on Ubuntu Linux, you need to add a
+<code>udev</code> rules file that contains a USB configuration for each type of device
 you want to use for development. In the rules file, each device manufacturer
 is identified by a unique vendor ID, as specified by the
 <code>ATTR{idVendor}</code> property. For a list of vendor IDs, see  <a
@@ -116,7 +105,7 @@ rules</a>.</p>
   </li>
 </ol>
 
-<p>You can verify that your device is connected by executing <code>adb
+<p>When plugged in over USB, can verify that your device is connected by executing <code>adb
 devices</code> from your SDK {@code platform-tools/} directory. If connected,
 you'll see the device name listed as a "device."</p>
 
@@ -145,35 +134,47 @@ above.</p>
   </tr>
   <tr>
     <td>ASUS</td>
-    <td><code>0B05</code></td>
+    <td><code>0b05</code></td>
   </tr>
   <tr>
     <td>Dell</td>
-    <td><code>413C</code></td>
+    <td><code>413c</code></td>
   </tr>
   <tr>
     <td>Foxconn</td>
     <td><code>0489</code></td>
   </tr>
   <tr>
+    <td>Fujitsu</td>
+    <td><code>04c5</code></td>
+  </tr>
+  <tr>
+    <td>Fujitsu Toshiba</td>
+    <td><code>04c5</code></td>
+  </tr>
+  <tr>
     <td>Garmin-Asus</td>
-    <td><code>091E</code></td>
+    <td><code>091e</code></td>
   </tr>
   <tr>
     <td>Google</td>
-    <td><code>18D1</code></td>
+    <td><code>18d1</code></td>
+  </tr>
+  <tr>
+    <td>Hisense</td>
+    <td><code>109b</code></td>
   </tr>
   <tr>
     <td>HTC</td>
-    <td><code>0BB4</code></td>
+    <td><code>0bb4</code></td>
   </tr>
   <tr>
     <td>Huawei</td>
-    <td><code>12D1</code></td>
+    <td><code>12d1</code></td>
   </tr>
   <tr>
     <td>K-Touch</td>
-    <td><code>24E3</code></td>
+    <td><code>24e3</code></td>
   </tr>
   <tr>
     <td>KT Tech</td>
@@ -184,8 +185,8 @@ above.</p>
     <td><code>0482</code></td>
   </tr>
   <tr>
-    <td>Lenevo</td>
-    <td><code>17EF</code></td>
+    <td>Lenovo</td>
+    <td><code>17ef</code></td>
   </tr>
   <tr>
     <td>LG</td>
@@ -193,7 +194,7 @@ above.</p>
   </tr>
   <tr>
     <td>Motorola</td>
-    <td><code>22B8</code></td>
+    <td><code>22b8</code></td>
   </tr>
   <tr>
     <td>NEC</td>
@@ -213,11 +214,11 @@ above.</p>
   </tr>
   <tr>
     <td>Pantech</td>
-    <td><code>10A9</code></td>
+    <td><code>10a9</code></td>
   </tr>
   <tr>
     <td>Pegatron</td>
-    <td><code>1D4D</code></td>
+    <td><code>1d4d</code></td>
   </tr>
   <tr>
     <td>Philips</td>
@@ -225,27 +226,35 @@ above.</p>
   </tr>
   <tr>
     <td>PMC-Sierra</td>
-    <td><code>04DA</code></td>
+    <td><code>04da</code></td>
   </tr>
   <tr>
     <td>Qualcomm</td>
-    <td><code>05C6</code></td>
+    <td><code>05c6</code></td>
   </tr>
   <tr>
     <td>SK Telesys</td>
-    <td><code>1F53</code></td>
+    <td><code>1f53</code></td>
   </tr>
   <tr>
     <td>Samsung</td>
-    <td><code>04E8</code></td>
+    <td><code>04e8</code></td>
   </tr>
   <tr>
     <td>Sharp</td>
-    <td><code>04DD</code></td>
+    <td><code>04dd</code></td>
+  </tr>
+  <tr>
+    <td>Sony</td>
+    <td><code>054c</code></td>
   </tr>
   <tr>
     <td>Sony Ericsson</td>
-    <td><code>0FCE</code></td>
+    <td><code>0fce</code></td>
+  </tr>
+  <tr>
+    <td>Teleepoch</td>
+    <td><code>2340</code></td>
   </tr>
   <tr>
     <td>Toshiba</td>
@@ -253,6 +262,6 @@ above.</p>
   </tr>
   <tr>
     <td>ZTE</td>
-    <td><code>19D2</code></td>
+    <td><code>19d2</code></td>
   </tr>
 </table>

@@ -73,8 +73,10 @@ href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/app/inde
 API Demos</a></li>
   </ol>
 
-  <h2>See also</h2>item
+  <h2>See also</h2>
   <ol>
+    <li><a
+href="{@docRoot}design/patterns/actionbar.html">Android Design: Action Bar</a></li>
     <li><a href="{@docRoot}guide/topics/ui/menus.html">Menus</a></li>
     <li><a href="{@docRoot}guide/practices/tablets-and-handsets.html">Supporting Tablets
 and Handsets</a></li>
@@ -111,9 +113,10 @@ accessible to the user in a predictable way.
 href="{@docRoot}guide/topics/ui/menus.html#OptionsMenu">options menu</a> directly in the action bar,
 as "action items." Action items can also provide an "action view," which provides an embedded
 widget for even more immediate action behaviors. Menu items that are not promoted
-to an action item are available in the overflow menu, revealed by either the device MENU button
+to an action item are available in the overflow menu, revealed by either the device <em>Menu</em>
+button
 (when available) or by an "overflow menu" button in the action bar (when the device does not
-include a MENU button).</p>
+include a <em>Menu</em> button).</p>
 </li>
 </ul>
 
@@ -122,6 +125,18 @@ include a MENU button).</p>
 href="{@docRoot}resources/samples/HoneycombGallery/index.html">Honeycomb Gallery</a> app (on a
 landscape handset), showing the logo on the left, navigation tabs, and an action item on the
 right (plus the overflow menu button).</p>
+
+<p class="note"><strong>Note:</strong> If you're looking for information about the contextual
+action bar for displaying contextual action items, see the <a
+href="{@docRoot}guide/topics/ui/menus.html#context-menu">Menu</a> guide.</p>
+
+
+<div class="design-announce">
+<p><strong>Action Bar Design</strong></p>
+  <p>For design guidelines, read Android Design's <a
+href="{@docRoot}design/patterns/actionbar.html">Action Bar</a> guide.</p>
+</div>
+
 
 
 <div class="sidebox-wrapper">
@@ -215,9 +230,10 @@ later&mdash;calling {@link android.app.Activity#getActionBar()} will return null
 href="{@docRoot}guide/topics/ui/menus.html#OptionsMenu">options menu</a>. To do this, you can
 declare that the menu item should appear in the action bar as an "action item." An action item can
 include an icon and/or a text title. If a menu item does not appear as an action item, then the
-system places it in the overflow menu. The overflow menu is revealed either by the device MENU
+system places it in the overflow menu. The overflow menu is revealed either by the device
+<em>Menu</em>
 button (if provided by the device) or an additional button in the action bar (if the device does not
-provide the MENU button).</p>
+provide the <em>Menu</em> button).</p>
 
 <div class="figure" style="width:359px">
   <img src="{@docRoot}images/ui/actionbar-item-withtext.png" height="57" alt="" />
@@ -333,7 +349,7 @@ of the following:</p>
   <li><strong>Frequently used</strong>: It's an action that your users need seven out of ten visits
 or they use it several times in a row.
     <p>Example frequent actions: "New message" in the Messaging app and
-"Search" in Android Market.</p>
+"Search" on Google Play.</p>
   </li>
 
   <li><strong>Important</strong>: It's an action that you need users to easily discover or, if it's
@@ -536,6 +552,12 @@ the email application, but presses the action bar icon to navigate up, rather th
 <p class="img-caption"><strong>Figure 6.</strong> Example behavior for UP navigation after
 entering the Email app from the People app.</p>
 
+<div class="design-announce">
+<p><strong>Navigation Design</strong></p>
+  <p>For more about how <em>Up</em> and <em>Back</em> navigation differ, read Android Design's <a
+href="{@docRoot}design/patterns/navigation.html">Navigation</a> guide.</p>
+</div>
+
 <p>To enable the icon for up navigation (which displays the "up" indicator next to the icon), call
 {@link android.app.ActionBar#setDisplayHomeAsUpEnabled setDisplayHomeAsUpEnabled(true)} on your
 {@link android.app.ActionBar}:</p>
@@ -642,7 +664,7 @@ work as designed otherwise.</p>
   <p>Adding this value requires that you set your build target to Android 4.0 or higher in order to
 compile. Older versions of Android ignore the {@code "collapseActionView"} value because they don't
 understand it. Just be sure not to use other APIs in your source code that are not supported in the
-version declared by your <a href="{@docRoot}guide/topics/manifest/uses-sdk-elementl.html#min">{@code
+version declared by your <a href="{@docRoot}guide/topics/manifest/uses-sdk-element.html#min">{@code
 minSdkVersion}</a>, unless you add the appropriate version check at runtime.</p>
 </div>
 </div>
@@ -843,8 +865,8 @@ you <em>do not</em> need to handle click events from the {@link
 android.app.Activity#onOptionsItemSelected onOptionsItemSelected()} callback method.</p>
 
 <p>For a sample using the share action provider, see
-<a href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/app/ActionBarActionProviderActivity.html"
->ActionBarActionProviderActivity</a>.
+<a href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/app/ActionBarShareActionProviderActivity.html"
+>ActionBarShareActionProviderActivity</a>.
 
 
 
@@ -1405,7 +1427,7 @@ href="#ActionView">action views</a>. (Added in API level 14.)</dd>
     &lt;/style>
 
     &lt;!-- style for the action bar tab text -->
-    &lt;style name="CustomTabTextStyle">
+    &lt;style name="CustomTabTextStyle" parent="@android:style/TextAppearance.Holo">
         &lt;item name="android:textColor">#2456c2&lt;/item>
     &lt;/style>
 &lt;/resources>
@@ -1421,8 +1443,7 @@ action bar styles you want to change without re-implementing the styles you want
 manifest file like this:</p>
 
 <pre>
-&lt;application android:theme="&#64;style/CustomActivityTheme"
-             ... />
+&lt;application android:theme="&#64;style/CustomActivityTheme" ... />
 </pre>
 
 <p>For more information about using style and theme resources in your application, read <a
@@ -1441,7 +1462,7 @@ android:backgroundStacked}. If you override these action bar styles, be sure tha
 parent action bar style such as {@link android.R.style#Widget_Holo_ActionBar
 Widget.Holo.ActionBar}.</p>
 
-<p>For example, if you want to change the action bar's background, you could use the following
+<p>For example, if you want to change the action bar's background, you can use the following
 styles:</p>
 
 <pre>
@@ -1449,14 +1470,15 @@ styles:</p>
 &lt;resources>
     &lt;!-- the theme applied to the application or activity -->
     &lt;style name="CustomActivityTheme" parent="@android:style/Theme.Holo">
-        &lt;item name="android:actionBarTabTextStyle">@style/customTabTextStyle&lt;/item>
+        &lt;item name="android:actionBarStyle">@style/MyActionBar&lt;/item>
         &lt;!-- other activity and action bar styles here -->
     &lt;/style>
 
-    &lt;!-- style for the action bar, simply to change the background -->
-    &lt;style parent="@android:style/Widget.Holo.ActionBar">
+    &lt;!-- style for the action bar backgrounds -->
+    &lt;style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
         &lt;item name="android:background">@drawable/ab_background&lt;/item>
-        &lt;item name="android:backgroundSplit">@drawable/ab_background&lt;/item>
+        &lt;item name="android:backgroundStacked">@drawable/ab_background&lt;/item>
+        &lt;item name="android:backgroundSplit">@drawable/ab_split_background&lt;/item>
     &lt;/style>
 &lt;/resources>
 </pre>

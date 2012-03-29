@@ -159,6 +159,10 @@
     <!-- no translation found for silent_mode_ring (8592241816194074353) -->
     <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Απενεργοποίηση\u2026"</string>
+    <string name="silent_mode_silent" msgid="319298163018473078">"Ειδοποίηση ήχου ανενεργή"</string>
+    <string name="silent_mode_vibrate" msgid="7072043388581551395">"Δόνηση ειδοποίησης ήχου"</string>
+    <string name="silent_mode_ring" msgid="8592241816194074353">"Ειδοποίηση ήχου ενεργή"</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Απενεργοποίηση..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Το tablet σας θα απενεργοποιηθεί."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Το τηλέφωνό σας θα απενεργοποιηθεί."</string>
     <string name="shutdown_confirm_question" msgid="6656441286856415014">"Θέλετε να γίνει τερματισμός λειτουργίας;"</string>

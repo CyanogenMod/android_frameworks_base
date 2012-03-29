@@ -197,7 +197,7 @@ accessories support, for runtime testing against connected devices</li>
 accessories, please see the related <a
 href="{@docRoot}guide/topics/usb/index.html">developer documentation</a>.</p>
 
-<p>Additionally, developers can request filtering on Android Market, such that
+<p>Additionally, developers can request filtering on Google Play, such that
 their applications are not available to users whose devices do not provide the
 appropriate accessory support. To request filtering, add the element below
 to the application manifest:</p>
@@ -296,7 +296,7 @@ descriptor).</p>
 <li>English, New Zealand (en_NZ)</li>
 <li>English, Singapore(en_SG)</li>
 <li>English, US (en_US)</li>
-<li>English, Zimbabwe (en_ZA)</li>
+<li>English, South Africa (en_ZA)</li>
 <li>Spanish (es_ES)</li>
 <li>Spanish, US (es_US)</li>
 <li>Finnish, Finland (fi_FI)</li>
