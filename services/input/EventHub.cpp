@@ -544,8 +544,17 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
     RawEvent* event = buffer;
     size_t capacity = bufferSize;
     bool awoken = false;
+    char updateProperty[PROPERTY_VALUE_MAX];
+
     for (;;) {
         nsecs_t now = systemTime(SYSTEM_TIME_MONOTONIC);
+
+        property_get("sys.force.input.update", updateProperty, "0");
+
+        if (strcmp (updateProperty,"true") == 0){
+            mNeedToReopenDevices = true;
+            property_set("sys.force.input.update", "false");
+        }
 
         // Reopen input devices if needed.
         if (mNeedToReopenDevices) {
@@ -842,6 +851,8 @@ static const int32_t GAMEPAD_KEYCODES[] = {
 
 status_t EventHub::openDeviceLocked(const char *devicePath) {
     char buffer[80];
+    char overrideName[PROPERTY_VALUE_MAX];
+    int len = 10;
 
     LOGV("Opening device: %s", devicePath);
 
@@ -853,12 +864,27 @@ status_t EventHub::openDeviceLocked(const char *devicePath) {
 
     InputDeviceIdentifier identifier;
 
+    //Get the override name (if any)
+    property_get("persist.sys.keyboard.name", overrideName, "0");
+
+    if (strchr(overrideName,'_') != NULL)
+        len = strchr(overrideName,'_')-overrideName + 1;
+
+    char nameCheck[len];
+    memset(nameCheck, 0, sizeof(nameCheck));
+    strncpy(nameCheck, overrideName, sizeof(nameCheck) - 1);
+
     // Get device name.
     if(ioctl(fd, EVIOCGNAME(sizeof(buffer) - 1), &buffer) < 1) {
         //fprintf(stderr, "could not get device name for %s, %s\n", devicePath, strerror(errno));
     } else {
         buffer[sizeof(buffer) - 1] = '\0';
-        identifier.name.setTo(buffer);
+        if(strcmp(nameCheck,buffer) == 0){
+            identifier.name.setTo(overrideName);
+            LOGI("Replacing inputName '%s' with '%s'\n", buffer, overrideName);
+        } else {
+            identifier.name.setTo(buffer);
+        }
     }
 
     // Check to see if the device is on our excluded list
