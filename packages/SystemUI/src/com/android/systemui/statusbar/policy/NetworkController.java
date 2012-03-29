@@ -945,9 +945,7 @@ public class NetworkController extends BroadcastReceiver {
                 combinedSignalIconId = mDataSignalIconId; // set by updateDataIcon()
                 mContentDescriptionCombinedSignal = mContentDescriptionDataType;
             }
-        } else {
-             mMobileActivityIconId = 0;
-        }
+        } 
 
         if (mWifiConnected) {
             if (mWifiSsid == null) {
