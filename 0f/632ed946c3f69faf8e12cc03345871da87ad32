@@ -1,0 +1,11 @@
+Change-Id: I0f632ed946c3f69faf8e12cc03345871da87ad32
+Code-Review+2: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Verified+1: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Code-Review+1: Danny Baumann <dannybaumann@web.de>
+Code-Review+1: Yanuar Harry <ai.the.smarties.physics@gmail.com>
+Code-Review+1: Burag <piterownik@gmail.com>
+Submitted-by: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Submitted-at: Fri, 30 Mar 2012 20:59:29 +0400
+Reviewed-on: http://review.cyanogenmod.com/14260
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/gingerbread
