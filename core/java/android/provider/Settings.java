@@ -1543,6 +1543,13 @@ public final class Settings {
 
 
         /**
+         * Whether to enable separate volumes for headset and speaker
+         *
+         * @hide
+         */
+        public static final String SEPARATE_HEADSET_VOLUME = "separate_headset_volume";
+
+        /**
          * Ringer mode. This is used internally, changing this value will not
          * change the ringer mode. See AudioManager.
          */
