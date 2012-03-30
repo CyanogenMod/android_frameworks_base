@@ -862,13 +862,10 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
         }
 
     }
-#ifndef QCOM_HARDWARE
-    if (!strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX, mMIME) || !strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX4, mMIME)) {
-#else
+
     if (!strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX, mMIME) ||
         !strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX4, mMIME) ||
         !strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX311, mMIME)) {
-#endif
         LOGV("Setting the QOMX_VIDEO_PARAM_DIVXTYPE params ");
         QOMX_VIDEO_PARAM_DIVXTYPE paramDivX;
         InitOMXParams(&paramDivX);
