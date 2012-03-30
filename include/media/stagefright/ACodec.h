@@ -137,6 +137,10 @@ private:
     status_t freeOutputBuffersNotOwnedByComponent();
     BufferInfo *dequeueBufferFromNativeWindow();
 
+#ifdef SAMSUNG_CODEC_SUPPORT
+    void setNativeWindowColorFormat(OMX_COLOR_FORMATTYPE &eNativeColorFormat);
+#endif
+
     BufferInfo *findBufferByID(
             uint32_t portIndex, IOMX::buffer_id bufferID,
             ssize_t *index = NULL);
