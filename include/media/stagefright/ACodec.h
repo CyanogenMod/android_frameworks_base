@@ -136,6 +136,10 @@ private:
     status_t cancelBufferToNativeWindow(BufferInfo *info);
     status_t freeOutputBuffersNotOwnedByComponent();
     BufferInfo *dequeueBufferFromNativeWindow();
+	
+#ifdef EXYNOS4210_ENHANCEMENTS
+    void setNativeWindowColorFormat(OMX_COLOR_FORMATTYPE &eNativeColorFormat);
+#endif
 
     BufferInfo *findBufferByID(
             uint32_t portIndex, IOMX::buffer_id bufferID,
