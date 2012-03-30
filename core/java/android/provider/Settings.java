@@ -1541,7 +1541,6 @@ public final class Settings {
         public static final String ALWAYS_FINISH_ACTIVITIES =
                 "always_finish_activities";
 
-
         /**
          * Ringer mode. This is used internally, changing this value will not
          * change the ringer mode. See AudioManager.
