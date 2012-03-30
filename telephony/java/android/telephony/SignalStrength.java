@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+import android.os.SystemProperties;
 
 /**
  * Contains phone signal strength related information.
@@ -459,7 +460,7 @@ public class SignalStrength implements Parcelable {
         else if (cdmaEcio >= -150) levelEcio = SIGNAL_STRENGTH_POOR;
         else levelEcio = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
-        int level = (levelDbm < levelEcio) ? levelDbm : levelEcio;
+        int level = ((levelDbm < levelEcio) || (SystemProperties.get("ro.product.name").equals("SCH-I500"))) ? levelDbm : levelEcio;
         if (DBG) log("getCdmaLevel=" + level);
         return level;
     }
