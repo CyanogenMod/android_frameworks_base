@@ -1491,7 +1491,7 @@ status_t OMXCodec::setupBitRate(int32_t bitRate) {
             &bitrateType, sizeof(bitrateType));
     CHECK_EQ(err, (status_t)OK);
 
-    bitrateType.eControlRate = OMX_Video_ControlRateVariable;
+    bitrateType.eControlRate = OMX_Video_ControlRateConstant;
     bitrateType.nTargetBitrate = bitRate;
 
     err = mOMX->setParameter(
