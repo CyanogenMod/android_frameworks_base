@@ -51,6 +51,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.provider.Settings.System;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -202,6 +203,24 @@ public class AudioService extends IAudioService.Stub {
         AudioSystem.STREAM_SYSTEM,  // STREAM_SYSTEM_ENFORCED
         AudioSystem.STREAM_VOICE_CALL, // STREAM_DTMF
         AudioSystem.STREAM_MUSIC  // STREAM_TTS
+    };
+
+    private static final String[] STREAM_VOLUME_HEADSET_SETTINGS = new String[] {
+        "AudioService.SAVED_VOICE_CALL_HEADSET_VOL",
+        "AudioService.SAVED_SYSTEM_HEADSET_VOL",
+        "AudioService.SAVED_RING_HEADSET_VOL",
+        "AudioService.SAVED_MUSIC_HEADSET_VOL",
+        "AudioService.SAVED_ALARM_HEADSET_VOL",
+        "AudioService.SAVED_NOTIFICATION_HEADSET_VOL",
+    };
+
+    private static final String[] STREAM_VOLUME_SPEAKER_SETTINGS = new String[] {
+        "AudioService.SAVED_VOICE_CALL_SPEAKER_VOL",
+        "AudioService.SAVED_SYSTEM_SPEAKER_VOL",
+        "AudioService.SAVED_RING_SPEAKER_VOL",
+        "AudioService.SAVED_MUSIC_SPEAKER_VOL",
+        "AudioService.SAVED_ALARM_SPEAKER_VOL",
+        "AudioService.SAVED_NOTIFICATION_SPEAKER_VOL",
     };
 
     private AudioSystem.ErrorCallback mAudioSystemCallback = new AudioSystem.ErrorCallback() {
@@ -2540,6 +2559,36 @@ public class AudioService extends IAudioService.Stub {
             } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
                 int state = intent.getIntExtra("state", 0);
                 int microphone = intent.getIntExtra("microphone", 0);
+
+                //Save and restore volumes for headset and speaker
+                int lastVolume;
+                if (state == 1) {
+                    for (int stream = 0; stream < STREAM_VOLUME_HEADSET_SETTINGS.length; stream++) {
+                        try {
+                            lastVolume = System.getInt(mContentResolver,
+                                    STREAM_VOLUME_HEADSET_SETTINGS[stream]);
+                        } catch (SettingNotFoundException e) {
+                            lastVolume = -1;
+                        }
+                        System.putInt(mContentResolver, STREAM_VOLUME_SPEAKER_SETTINGS[stream],
+                                getStreamVolume(stream));
+                        if (lastVolume >= 0)
+                            setStreamVolume(stream, lastVolume, 0);
+                    }
+                } else {
+                    for (int stream = 0; stream < STREAM_VOLUME_SPEAKER_SETTINGS.length; stream++) {
+                        try {
+                            lastVolume = System.getInt(mContentResolver,
+                                    STREAM_VOLUME_SPEAKER_SETTINGS[stream]);
+                        } catch (SettingNotFoundException e) {
+                            lastVolume = -1;
+                        }
+                        System.putInt(mContentResolver, STREAM_VOLUME_HEADSET_SETTINGS[stream],
+                                getStreamVolume(stream));
+                        if (lastVolume >= 0)
+                            setStreamVolume(stream, lastVolume, 0);
+                    }
+                }
 
                 synchronized (mConnectedDevices) {
                     if (microphone != 0) {
