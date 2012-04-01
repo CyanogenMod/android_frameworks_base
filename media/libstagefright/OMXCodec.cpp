@@ -1491,7 +1491,13 @@ status_t OMXCodec::setupBitRate(int32_t bitRate) {
             &bitrateType, sizeof(bitrateType));
     CHECK_EQ(err, (status_t)OK);
 
+#ifdef SAMSUNG_CODEC_SUPPORT
+    // Samsung codecs ignore the bitrate if we don't explicitly
+    // tell them that we want a constant bitrate.
+    bitrateType.eControlRate = OMX_Video_ControlRateConstant;
+#else
     bitrateType.eControlRate = OMX_Video_ControlRateVariable;
+#endif
     bitrateType.nTargetBitrate = bitRate;
 
     err = mOMX->setParameter(
