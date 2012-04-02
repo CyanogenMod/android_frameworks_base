@@ -43,10 +43,6 @@ LOCAL_C_INCLUDES :=                                                 \
 	$(TOP)/frameworks/base/media/libstagefright/rtsp                \
 	$(TOP)/external/tremolo/Tremolo \
 
-ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
-	LOCAL_CFLAGS += -DQCOM_HARDWARE
-endif
-
 LOCAL_MODULE:= libmediaplayerservice
 
 include $(BUILD_SHARED_LIBRARY)
