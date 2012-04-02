@@ -2251,6 +2251,13 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
+         * Boolean value whether to flip up and down volume key when device rotated
+         * 
+         * @hide
+         */
+        public static final String VOLUME_FOLLOW_ROTATION = "volume_follow_rotation";
+
+        /**
          * Whether to unlock the menu key.  The value is boolean (1 or 0).
          * @hide
          */
