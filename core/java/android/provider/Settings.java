@@ -1543,6 +1543,17 @@ public final class Settings {
 
 
         /**
+         * Volume Overlay Mode, This is behaviour of the volume overlay panel
+         * Defaults to 0 - which is simple
+         */
+        public static final String MODE_VOLUME_OVERLAY = "mode_volume_overlay";
+
+        public static final int VOLUME_OVERLAY_SINGLE = 0;
+        public static final int VOLUME_OVERLAY_EXPANDABLE = 1;
+        public static final int VOLUME_OVERLAY_EXPANDED = 2;
+        public static final int VOLUME_OVERLAY_NONE = 3;
+
+        /**
          * Ringer mode. This is used internally, changing this value will not
          * change the ringer mode. See AudioManager.
          */
@@ -1971,6 +1982,12 @@ public final class Settings {
          * @hide
          */
         public static final String POWER_SOUNDS_ENABLED = "power_sounds_enabled";
+
+        /**
+         * Whether to route USB Audio when docked.
+         * @hide
+         */
+        public static final String DOCK_USB_AUDIO_ENABLED = "dock_usb_audio_enabled";
 
         /**
          * Whether to play a sound for dock events.
