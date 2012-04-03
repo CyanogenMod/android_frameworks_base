@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.net.wimax.WimaxHelper;
+import android.net.ConnectivityManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -27,6 +28,7 @@ public final class ConnectionSettings implements Parcelable {
     public static final int PROFILE_CONNECTION_WIMAX = 3;
     public static final int PROFILE_CONNECTION_GPS = 4;
     public static final int PROFILE_CONNECTION_BLUETOOTH = 7;
+    public static final int PROFILE_CONNECTION_MOBILEDATA = 8;
 
     /** @hide */
     public static final Parcelable.Creator<ConnectionSettings> CREATOR = new Parcelable.Creator<ConnectionSettings>() {
@@ -87,6 +89,7 @@ public final class ConnectionSettings implements Parcelable {
         BluetoothAdapter bta = BluetoothAdapter.getDefaultAdapter();
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         boolean forcedState = getValue() == 1;
         boolean currentState;
@@ -117,6 +120,13 @@ public final class ConnectionSettings implements Parcelable {
                         wm.setWifiApEnabled(null, false);
                     }
                     wm.setWifiEnabled(forcedState);
+                }
+                break;
+            case PROFILE_CONNECTION_MOBILEDATA:
+                currentState = cm.getMobileDataEnabled();
+                if (currentState != forcedState) {
+                    // Disable/enable mobile data
+                    cm.setMobileDataEnabled(forcedState);
                 }
                 break;
             case PROFILE_CONNECTION_WIFIAP:
