@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 The Android Open Source Project
+ * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <memory.h>
@@ -976,6 +978,7 @@ static const int32_t GAMEPAD_KEYCODES[] = {
 
 status_t EventHub::openDeviceLocked(const char *devicePath) {
     char buffer[80];
+    const char *temp1 = "Button Jack";
 
     ALOGV("Opening device: %s", devicePath);
 
@@ -991,6 +994,10 @@ status_t EventHub::openDeviceLocked(const char *devicePath) {
     if(ioctl(fd, EVIOCGNAME(sizeof(buffer) - 1), &buffer) < 1) {
         //fprintf(stderr, "could not get device name for %s, %s\n", devicePath, strerror(errno));
     } else {
+        if((strstr(buffer, temp1)) != NULL) {
+            memset(buffer, 0, sizeof(buffer));
+            strlcpy(buffer, temp1, sizeof(buffer));
+        }
         buffer[sizeof(buffer) - 1] = '\0';
         identifier.name.setTo(buffer);
     }
