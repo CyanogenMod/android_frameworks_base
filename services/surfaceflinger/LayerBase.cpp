@@ -406,6 +406,7 @@ void LayerBase::clearWithOpenGL(const Region& clip, GLclampf red,
     glDisable(GL_TEXTURE_EXTERNAL_OES);
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
+    glDisable(GL_DITHER);
 
     Region::const_iterator it = clip.begin();
     Region::const_iterator const end = clip.end();
@@ -466,6 +467,12 @@ void LayerBase::drawWithOpenGL(const Region& clip) const
     texCoords[2].v = 0;
     texCoords[3].u = 1;
     texCoords[3].v = 1;
+
+    if (needsDithering()) {
+        glEnable(GL_DITHER);
+    } else {
+        glDisable(GL_DITHER);
+    }
 
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, mVertices);
@@ -529,6 +536,12 @@ void LayerBase::drawS3DUIWithOpenGL(const Region& clip) const
     texCoords[2].v = 0;
     texCoords[3].u = 1;
     texCoords[3].v = 1;
+
+    if (needsDithering()) {
+        glEnable(GL_DITHER);
+    } else {
+        glDisable(GL_DITHER);
+    }
 
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
