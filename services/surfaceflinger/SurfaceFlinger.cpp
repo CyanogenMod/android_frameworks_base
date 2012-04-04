@@ -141,6 +141,22 @@ void SurfaceFlinger::init()
     LOGI_IF(mDebugDDMS,         "DDMS debugging enabled");
 }
 
+bool SurfaceFlinger::getNeedsDithering()
+{
+   static int useDithering = -1;
+
+   if (-1 == useDithering)
+   {
+       char value[PROPERTY_VALUE_MAX];
+       property_get("persist.sys.use_dithering", value, "0");
+       useDithering = (1 == atoi(value));
+       LOGI_IF(useDithering,      "use dithering");
+   }
+
+   return (1 == useDithering);
+}
+
+
 SurfaceFlinger::~SurfaceFlinger()
 {
     glDeleteTextures(1, &mWormholeTexName);
@@ -277,7 +293,13 @@ status_t SurfaceFlinger::readyToRun()
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnable(GL_SCISSOR_TEST);
     glShadeModel(GL_FLAT);
-    glDisable(GL_DITHER);
+
+    if (SurfaceFlinger::getNeedsDithering()) {
+        glEnable(GL_DITHER);
+    } else {
+        glDisable(GL_DITHER);
+    }
+
     glDisable(GL_CULL_FACE);
 
     const uint16_t g0 = pack565(0x0F,0x1F,0x0F);
