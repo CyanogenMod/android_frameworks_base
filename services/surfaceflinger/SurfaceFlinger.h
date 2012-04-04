@@ -163,6 +163,8 @@ class SurfaceFlinger :
 public:
     static char const* getServiceName() { return "SurfaceFlinger"; }
 
+    static bool     getNeedsDithering();
+
                     SurfaceFlinger();
     virtual         ~SurfaceFlinger();
             void    init();
@@ -442,6 +444,7 @@ private:
 
    // only written in the main thread, only read in other threads
    volatile     int32_t                     mSecureFrameBuffer;
+
 };
 
 // ---------------------------------------------------------------------------

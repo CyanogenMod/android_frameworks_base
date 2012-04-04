@@ -68,6 +68,8 @@ Layer::Layer(SurfaceFlinger* flinger,
 #endif
         mProtectedByApp(false)
 {
+    mNeedsDithering = SurfaceFlinger::getNeedsDithering();
+
     mCurrentCrop.makeInvalid();
     glGenTextures(1, &mTextureName);
 #ifdef QCOM_HARDWARE
