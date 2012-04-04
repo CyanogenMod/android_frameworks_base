@@ -440,7 +440,14 @@ status_t CameraSource::checkFrameRate(
 
     // Check the actual video frame rate against the target/requested
     // video frame rate.
-    if (frameRate != -1 && (frameRateActual - frameRate) != 0) {
+    int32_t frameRateDiff = frameRateActual - frameRate;
+#ifdef POS_HTC_CAMERA
+    //HTC Cameras incorrectly report 31 fps instead of 30.
+    LOGV("CameraSource frameRateActual %d", frameRateActual);
+    frameRateDiff = frameRateDiff > 1 ? frameRateDiff : 0;
+#endif
+    LOGE("CameraSource frameRate %d", frameRate);
+    if (frameRate != -1 && (frameRateDiff) != 0) {
         LOGE("Failed to set preview frame rate to %d fps. The actual "
                 "frame rate is %d", frameRate, frameRateActual);
         return UNKNOWN_ERROR;
