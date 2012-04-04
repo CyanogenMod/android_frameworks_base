@@ -61,7 +61,11 @@ Layer::Layer(SurfaceFlinger* flinger,
         mFormat(PIXEL_FORMAT_NONE),
         mGLExtensions(GLExtensions::getInstance()),
         mOpaqueLayer(true),
+#ifdef FORCE_DITHERING
+        mNeedsDithering(true),
+#else
         mNeedsDithering(false),
+#endif
         mSecure(false),
 #ifdef QCOM_HARDWARE
         mLayerQcomFlags(0),

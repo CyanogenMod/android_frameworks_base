@@ -5,6 +5,11 @@ ifeq ($(BOARD_HAVE_CODEC_SUPPORT),SAMSUNG_CODEC_SUPPORT)
 LOCAL_CFLAGS     += -DSAMSUNG_CODEC_SUPPORT
 endif
 
+ifeq ($(BOARD_FORCE_DITHERING),true)
+LOCAL_CFLAGS     += -DFORCE_DITHERING
+endif
+
+
 LOCAL_SRC_FILES:= \
     Layer.cpp 								\
     LayerBase.cpp 							\
