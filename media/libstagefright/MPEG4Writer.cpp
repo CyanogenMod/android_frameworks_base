@@ -47,6 +47,9 @@ static const uint8_t kNalUnitTypeSeqParamSet = 0x07;
 static const uint8_t kNalUnitTypePicParamSet = 0x08;
 static const int64_t kInitialDelayTimeUs     = 700000LL;
 
+// MPEG4 uses Jan 1, 1904 as epoch, not unix epoch
+static const int64_t kTimestampConversion    = 2082844800LL;
+
 class MPEG4Writer::Track {
 public:
     Track(MPEG4Writer *owner, const sp<MediaSource> &source, size_t trackId);
@@ -223,11 +226,11 @@ private:
     void writeDrefBox();
     void writeDinfBox();
     void writeDamrBox();
-    void writeMdhdBox(time_t now);
+    void writeMdhdBox(int64_t now);
     void writeSmhdBox();
     void writeVmhdBox();
     void writeHdlrBox();
-    void writeTkhdBox(time_t now);
+    void writeTkhdBox(int64_t now);
     void writeMp4aEsdsBox();
     void writeMp4vEsdsBox();
     void writeAudioFourCCBox();
@@ -711,14 +714,14 @@ status_t MPEG4Writer::stop() {
 }
 
 void MPEG4Writer::writeMvhdBox(int64_t durationUs) {
-    time_t now = time(NULL);
+    int64_t now = time(NULL) + kTimestampConversion;
     beginBox("mvhd");
-    writeInt32(0);             // version=0, flags=0
-    writeInt32(now);           // creation time
-    writeInt32(now);           // modification time
+    writeInt32(0x01000000);    // version=1, flags=0
+    writeInt64(now);           // creation time
+    writeInt64(now);           // modification time
     writeInt32(mTimeScale);    // mvhd timescale
     int32_t duration = (durationUs * mTimeScale + 5E5) / 1E6;
-    writeInt32(duration);
+    writeInt64(duration);
     writeInt32(0x10000);       // rate: 1.0
     writeInt16(0x100);         // volume
     writeInt16(0);             // reserved
@@ -2363,7 +2366,7 @@ void MPEG4Writer::Track::writeTrackHeader(bool use32BitOffset) {
     LOGV("%s track time scale: %d",
         mIsAudio? "Audio": "Video", mTimeScale);
 
-    time_t now = time(NULL);
+    int64_t now = time(NULL) + kTimestampConversion;
     mOwner->beginBox("trak");
         writeTkhdBox(now);
         mOwner->beginBox("mdia");
@@ -2576,20 +2579,20 @@ void MPEG4Writer::Track::writeMp4vEsdsBox() {
     mOwner->endBox();  // esds
 }
 
-void MPEG4Writer::Track::writeTkhdBox(time_t now) {
+void MPEG4Writer::Track::writeTkhdBox(int64_t now) {
     mOwner->beginBox("tkhd");
     // Flags = 7 to indicate that the track is enabled, and
     // part of the presentation
-    mOwner->writeInt32(0x07);          // version=0, flags=7
-    mOwner->writeInt32(now);           // creation time
-    mOwner->writeInt32(now);           // modification time
+    mOwner->writeInt32(0x01000007);    // version=1, flags=7
+    mOwner->writeInt64(now);           // creation time
+    mOwner->writeInt64(now);           // modification time
     mOwner->writeInt32(mTrackId + 1);  // track id starts with 1
     mOwner->writeInt32(0);             // reserved
     int64_t trakDurationUs = getDurationUs();
     int32_t mvhdTimeScale = mOwner->getTimeScale();
     int32_t tkhdDuration =
         (trakDurationUs * mvhdTimeScale + 5E5) / 1E6;
-    mOwner->writeInt32(tkhdDuration);  // in mvhd timescale
+    mOwner->writeInt64(tkhdDuration);  // in mvhd timescale
     mOwner->writeInt32(0);             // reserved
     mOwner->writeInt32(0);             // reserved
     mOwner->writeInt16(0);             // layer
@@ -2645,15 +2648,15 @@ void MPEG4Writer::Track::writeHdlrBox() {
     mOwner->endBox();
 }
 
-void MPEG4Writer::Track::writeMdhdBox(time_t now) {
+void MPEG4Writer::Track::writeMdhdBox(int64_t now) {
     int64_t trakDurationUs = getDurationUs();
     mOwner->beginBox("mdhd");
-    mOwner->writeInt32(0);             // version=0, flags=0
-    mOwner->writeInt32(now);           // creation time
-    mOwner->writeInt32(now);           // modification time
+    mOwner->writeInt32(0x01000000);    // version=1, flags=0
+    mOwner->writeInt64(now);           // creation time
+    mOwner->writeInt64(now);           // modification time
     mOwner->writeInt32(mTimeScale);    // media timescale
     int32_t mdhdDuration = (trakDurationUs * mTimeScale + 5E5) / 1E6;
-    mOwner->writeInt32(mdhdDuration);  // use media timescale
+    mOwner->writeInt64(mdhdDuration);  // use media timescale
     // Language follows the three letter standard ISO-639-2/T
     // 'e', 'n', 'g' for "English", for instance.
     // Each character is packed as the difference between its ASCII value and 0x60.
