@@ -68,6 +68,11 @@ Layer::Layer(SurfaceFlinger* flinger,
 #endif
         mProtectedByApp(false)
 {
+    char value[PROPERTY_VALUE_MAX];
+    property_get("persist.sys.use_dithering", value, "0");
+    mNeedsDithering = (1 == atoi(value));
+    LOGI_IF(mNeedsDithering,      "needs dithering");
+
     mCurrentCrop.makeInvalid();
     glGenTextures(1, &mTextureName);
 #ifdef QCOM_HARDWARE
