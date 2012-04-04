@@ -613,6 +613,10 @@ public class QualcommNoSimReadyRIL extends RIL implements CommandsInterface {
         switch (stateCode) {
             case RIL_INT_RADIO_OFF:
                 radioState = CommandsInterface.RadioState.RADIO_OFF;
+                if (mIccHandler != null) {
+                    mIccThread = null;
+                    mIccHandler = null;
+                }
                 break;
             case RIL_INT_RADIO_UNAVALIABLE:
                 radioState = CommandsInterface.RadioState.RADIO_UNAVAILABLE;
