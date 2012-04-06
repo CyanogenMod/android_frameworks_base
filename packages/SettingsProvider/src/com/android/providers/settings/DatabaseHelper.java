@@ -1426,6 +1426,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         loadStringSetting(stmt, Settings.System.CAR_UNDOCK_SOUND,
             R.string.def_car_undock_sound);
 
+        loadIntegerSetting(stmt, Settings.System.MODE_VOLUME_OVERLAY,
+            R.integer.def_volume_overlay_mode);
+
         loadIntegerSetting(stmt, Settings.System.LOCKSCREEN_SOUNDS_ENABLED,
             R.integer.def_lockscreen_sounds_enabled);
         loadStringSetting(stmt, Settings.System.LOCK_SOUND,
