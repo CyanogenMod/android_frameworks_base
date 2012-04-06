@@ -3222,16 +3222,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return;
         }
         try {
-            // since audio is playing, we shouldn't have to hold a wake lock
-            // during the call, but we do it as a precaution for the rare possibility
-            // that the music stops right before we call this
-            // TODO: Actually handle MUTE.
-            mBroadcastWakeLock.acquire();
-            audioService.adjustStreamVolume(stream,
-                keycode == KeyEvent.KEYCODE_VOLUME_UP
-                            ? AudioManager.ADJUST_RAISE
-                            : AudioManager.ADJUST_LOWER,
-                    0);
+            if (keycode == KeyEvent.KEYCODE_VOLUME_MUTE) {
+                final AudioManager am = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
+                if (am == null) {
+                    Log.w(TAG, "handleVolumeKey: couldn't get AudioManager reference");
+                } else {
+                    am.toggleMute(stream);
+                }
+            } else {
+                // since audio is playing, we shouldn't have to hold a wake lock
+                // during the call, but we do it as a precaution for the rare possibility
+                // that the music stops right before we call this
+                mBroadcastWakeLock.acquire();
+                audioService.adjustStreamVolume(stream,
+                    keycode == KeyEvent.KEYCODE_VOLUME_UP
+                                ? AudioManager.ADJUST_RAISE
+                                : AudioManager.ADJUST_LOWER,
+                        0);
+            }
         } catch (RemoteException e) {
             Log.w(TAG, "IAudioService.adjustStreamVolume() threw RemoteException " + e);
         } finally {
