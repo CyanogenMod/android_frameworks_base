@@ -828,6 +828,18 @@ extern "C" bool _ZN7android11AudioSystem17isSeparatedStreamE19audio_stream_type_
     LOGD("isSeparatedStream: false");
     return false;
 }
+
+#ifdef EXYNOS4210_TABLET
+extern "C" status_t _ZN7android11AudioSystem11startOutputEiNS0_11stream_typeEi(audio_io_handle_t output, audio_stream_type_t stream)
+{
+      return AudioSystem::startOutput(output, stream);
+}
+
+extern "C" status_t _ZN7android11AudioSystem10stopOutputEiNS0_11stream_typeEi(audio_io_handle_t output, audio_stream_type_t stream)
+{
+      return AudioSystem::stopOutput(output, stream);
+}
+#endif // EXYNOS4210_TABLET
 #endif // YAMAHAPLAYER
 
 }; // namespace android
