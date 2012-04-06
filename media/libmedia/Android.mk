@@ -51,6 +51,10 @@ ifeq ($(BOARD_USE_KINETO_COMPATIBILITY),true)
 LOCAL_CFLAGS += -DUSE_KINETO_COMPATIBILITY
 endif
 
+ifeq ($(BOARD_USES_SAMSUNG_SEPARATED_STREAM),true)
+LOCAL_CFLAGS += -DUSES_SAMSUNG_SEPARATED_STREAM
+endif
+
 LOCAL_C_INCLUDES := \
     $(JNI_H_INCLUDE) \
     $(call include-path-for, graphics corecg) \

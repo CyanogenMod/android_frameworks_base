@@ -456,6 +456,9 @@ public:
     static bool isInputChannel(uint32_t channel);
     static bool isValidFormat(uint32_t format);
     static bool isLinearPCM(uint32_t format);
+#ifdef USES_SAMSUNG_SEPARATED_STREAM
+    static bool isSeperatedStream(stream_type stream);
+#endif
 
 private:
 

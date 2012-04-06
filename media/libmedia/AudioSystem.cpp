@@ -849,6 +849,13 @@ bool AudioSystem::isLinearPCM(uint32_t format)
     }
 }
 
+#ifdef USES_SAMSUNG_SEPARATED_STREAM
+bool AudioSystem::isSeperatedStream(stream_type stream)
+{
+    return false;
+}
+#endif
+
 //------------------------- AudioParameter class implementation ---------------
 
 const char *AudioParameter::keyRouting = "routing";
