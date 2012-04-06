@@ -421,7 +421,22 @@ public class AudioManager {
                         flags);
                 break;
             case KeyEvent.KEYCODE_VOLUME_MUTE:
-                // TODO: Actually handle MUTE.
+                boolean vibrate = getVibrateSetting(
+                        AudioManager.VIBRATE_TYPE_RINGER)
+                                == AudioManager.VIBRATE_SETTING_ON;
+
+                int currentMode = getRingerMode();
+
+                if (vibrate && currentMode == AudioManager.RINGER_MODE_VIBRATE
+                        || currentMode == AudioManager.RINGER_MODE_SILENT) {
+                    setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                } else {
+                    setRingerMode(vibrate ? AudioManager.RINGER_MODE_VIBRATE
+                            : AudioManager.RINGER_MODE_SILENT);
+                }
+
+                adjustSuggestedStreamVolume(ADJUST_SAME, stream,
+                        FLAG_SHOW_UI | FLAG_VIBRATE);
                 break;
         }
     }
