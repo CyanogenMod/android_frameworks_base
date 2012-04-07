@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.RegistrantList;
 import android.os.Registrant;
+import android.os.SystemProperties;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.util.Log;
@@ -405,6 +406,20 @@ public final class CallManager {
                 }
                 break;
         }
+
+        // Some samsung devices need a special parameter "realcall" set for incall audio
+        boolean mSamsungRealCall = SystemProperties.getBoolean("ro.telephony.samsung.realcall", false);
+
+        if(mSamsungRealCall == true) {
+            if (mode == AudioManager.MODE_IN_CALL) {
+                Log.d(LOG_TAG, "setAudioMode(): realcall=on");
+                audioManager.setParameters("realcall=on");
+            } else if (mode == AudioManager.MODE_NORMAL) {
+                Log.d(LOG_TAG, "setAudioMode(): realcall=off");
+                audioManager.setParameters("realcall=off");
+            }
+        }
+
         // calling audioManager.setMode() multiple times in a short period of
         // time seems to break the audio recorder in in-call mode
         if (audioManager.getMode() != mode) audioManager.setMode(mode);
