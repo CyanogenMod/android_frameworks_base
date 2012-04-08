@@ -37,6 +37,7 @@ import android.os.SystemProperties;
 import android.os.Vibrator;
 import android.os.storage.IMountService;
 import android.os.storage.IMountShutdownObserver;
+import android.provider.Settings;
 
 import com.android.internal.telephony.ITelephony;
 import android.util.Log;
@@ -54,11 +55,12 @@ public final class ShutdownThread extends Thread {
 
     // length of vibration before shutting down
     private static final int SHUTDOWN_VIBRATE_MS = 500;
-    
+    private static boolean mVibrate = true;
+
     // state tracking
     private static Object sIsStartedGuard = new Object();
     private static boolean sIsStarted = false;
-    
+
     private static boolean mReboot;
     private static String mRebootReason;
 
@@ -67,7 +69,7 @@ public final class ShutdownThread extends Thread {
 
     // static instance of this thread
     private static final ShutdownThread sInstance = new ShutdownThread();
-    
+
     private final Object mActionDoneSync = new Object();
     private boolean mActionDone;
     private Context mContext;
@@ -235,6 +237,10 @@ public final class ShutdownThread extends Thread {
                 sInstance.mScreenWakeLock = null;
             }
         }
+
+        // load vibrate setting
+        mVibrate = (Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.VIBRATE_ON_SHUTDOWN, 1) == 1);
 
         // start the thread that initiates shutdown
         sInstance.mHandler = new Handler() {
@@ -421,7 +427,7 @@ public final class ShutdownThread extends Thread {
             } catch (Exception e) {
                 Log.e(TAG, "Reboot failed, will attempt shutdown instead", e);
             }
-        } else if (SHUTDOWN_VIBRATE_MS > 0) {
+        } else if (mVibrate && SHUTDOWN_VIBRATE_MS > 0) {
             // vibrate before shutting down
             Vibrator vibrator = new Vibrator();
             try {

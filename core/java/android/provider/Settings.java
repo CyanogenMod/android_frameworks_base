@@ -2499,6 +2499,12 @@ public final class Settings {
         public static final String STATUS_BAR_HEADSET = "status_bar_headset";
 
         /**
+         * Whether to vibrate at shutdown. The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String VIBRATE_ON_SHUTDOWN = "vibrate_on_shutdown";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
