@@ -197,7 +197,36 @@ public class CarrierLabel extends TextView {
                 break;
 
             case TYPE_CUSTOM:
-                setText(mCarrierLabelCustom);
+                // If the custom carrier label contains any "$x" items then we must
+                // replace those with the proper text.
+                //  - $n = new line
+                //  - $d = default carrier text
+                //  - $p = plmn carrier text
+                //  - $s = spn carrier text
+                //
+
+                // First we create the default carrier text in case we need it.
+                StringBuilder defaultStr = new StringBuilder();
+                if (showPlmn) {
+                    if (plmn != null) {
+                        defaultStr.append(plmn);
+                    } else {
+                        defaultStr.append(mContext.getText(R.string.lockscreen_carrier_default));
+                    }
+                }
+                if (showSpn && spn != null) {
+                    if (showPlmn) {
+                        defaultStr.append('\n');
+                    }
+                    defaultStr.append(spn);
+                }
+
+                String customStr = mCarrierLabelCustom;
+                customStr = customStr.replaceAll("\\$n", "\n");
+                customStr = customStr.replaceAll("\\$d", (defaultStr != null) ? defaultStr.toString() : "");
+                customStr = customStr.replaceAll("\\$p", (plmn != null) ? plmn : "");
+                customStr = customStr.replaceAll("\\$s", (spn != null) ? spn : "");
+                setText(customStr);
                 break;
         }
     }
