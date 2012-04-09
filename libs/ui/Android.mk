@@ -66,6 +66,10 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES := \
     external/skia/include/core
 
+ifeq ($(BOARD_USES_HTC_CAMERA),true)
+    LOCAL_SRC_FILES+= OverlayHtc.cpp
+endif
+
 LOCAL_MODULE:= libui
 
 include $(BUILD_SHARED_LIBRARY)
