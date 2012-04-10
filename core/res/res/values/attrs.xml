@@ -1497,6 +1497,13 @@
         <enum name="KEYCODE_CALENDAR" value="208" />
         <enum name="KEYCODE_MUSIC" value="209" />
         <enum name="KEYCODE_CALCULATOR" value="210" />
+        <enum name="KEYCODE_TOGGLE_WIFI" value="211" />
+        <enum name="KEYCODE_TOGGLE_BT" value="212" />
+        <enum name="KEYCODE_TOGGLE_TOUCHPAD" value="213" />
+        <enum name="KEYCODE_BRIGHTNESS_DOWN" value="214" />
+        <enum name="KEYCODE_BRIGHTNESS_UP" value="215" />
+        <enum name="KEYCODE_BRIGHTNESS_AUTO" value="216" />
+        <enum name="KEYCODE_SCREENSHOT" value="217" />
     </attr>
 
     <!-- ***************************************************************** -->
