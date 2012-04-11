@@ -886,4 +886,10 @@
          the button and keyboard backlights. -->
     <bool name="config_autoBrightnessButtonKeyboard">true</bool>
 
+    <!-- Path to the library that contains a device specific key handler -->
+    <string name="config_deviceKeyHandlerLib"></string>
+
+    <!-- Name of that key handler class -->
+    <string name="config_deviceKeyHandlerClass"></string>
+
 </resources>
