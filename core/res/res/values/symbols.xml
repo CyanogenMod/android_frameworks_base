@@ -1840,6 +1840,8 @@
   <java-symbol type="bool" name="config_hasRemovableLid" />
   <java-symbol type="bool" name="config_hasDockBattery" />
   <java-symbol type="bool" name="config_noDelayInATwoDP" />
+  <java-symbol type="string" name="config_deviceKeyHandlerLib" />
+  <java-symbol type="string" name="config_deviceKeyHandlerClass" />
 
   <!-- Telephony -->
   <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
