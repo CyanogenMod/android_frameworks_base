@@ -17,6 +17,7 @@
 package com.android.internal.policy.impl;
 
 import com.android.internal.R;
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.widget.LockPatternUtils;
 
@@ -28,6 +29,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -78,6 +80,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private View mLockScreen;
     private View mUnlockScreen;
+
+    private Context mUiContext;
 
     private boolean mScreenOn = false;
     private boolean mEnableFallback = false; // assume no fallback UI until we know better
@@ -184,6 +188,12 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     private Runnable mRecreateRunnable = new Runnable() {
         public void run() {
             recreateScreens();
+        }
+    };
+
+    private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            mUiContext = null;
         }
     };
 
@@ -542,8 +552,16 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         removeCallbacks(mRecreateRunnable);
+        mContext.unregisterReceiver(mThemeChangeReceiver);
+        mUiContext = null;
         super.onDetachedFromWindow();
     }
 
@@ -836,7 +854,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 timeoutInSeconds);
         }
 
-        final AlertDialog dialog = new AlertDialog.Builder(mContext)
+        final AlertDialog dialog = new AlertDialog.Builder(getUiContext())
                 .setTitle(null)
                 .setMessage(message)
                 .setNeutralButton(R.string.ok, null)
@@ -850,6 +868,13 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         }
         mTimeoutDialog = dialog;
         dialog.show();
+    }
+
+    private Context getUiContext() {
+        if (mUiContext == null) {
+            mUiContext = ThemeUtils.createUiContext(mContext);
+        }
+        return mUiContext != null ? mUiContext : mContext;
     }
 
     private void showAlmostAtAccountLoginDialog() {
@@ -872,7 +897,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 timeoutInSeconds);
         }
 
-        final AlertDialog dialog = new AlertDialog.Builder(mContext)
+        final AlertDialog dialog = new AlertDialog.Builder(getUiContext())
                 .setTitle(null)
                 .setMessage(message)
                 .setNeutralButton(R.string.ok, null)

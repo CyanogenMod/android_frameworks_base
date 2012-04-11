@@ -72,20 +72,20 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
+    private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mUiContext = null;
+            mSimUnlockProgressDialog = null;
+        }
+    };
+
     public SimUnlockScreen(Context context, Configuration configuration,
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
             LockPatternUtils lockpatternutils) {
         super(context);
         mUpdateMonitor = updateMonitor;
         mCallback = callback;
-
-        ThemeUtils.registerThemeChangeReceiver(context, new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mUiContext = null;
-                mSimUnlockProgressDialog = null;
-            }
-        });
 
         mCreationOrientation = configuration.orientation;
         mKeyboardHidden = configuration.hardKeyboardHidden;
@@ -127,7 +127,8 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     /** {@inheritDoc} */
     public void onPause() {
-
+        mContext.unregisterReceiver(mThemeChangeReceiver);
+        mUiContext = null;
     }
 
     /** {@inheritDoc} */
@@ -141,6 +142,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mEnteredDigits = 0;
 
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+        ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
     }
 
     /** {@inheritDoc} */
