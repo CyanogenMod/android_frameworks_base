@@ -81,6 +81,14 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
     private Context mUiContext;
     private ProgressDialog mCheckingDialog;
 
+    private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mUiContext = null;
+            mCheckingDialog = null;
+        }
+    };
+
     /**
      * AccountUnlockScreen constructor.
      * @param configuration
@@ -92,14 +100,6 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
         super(context);
         mCallback = callback;
         mLockPatternUtils = lockPatternUtils;
-
-        ThemeUtils.registerThemeChangeReceiver(context, new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mUiContext = null;
-                mCheckingDialog = null;
-            }
-        });
 
         LayoutInflater.from(context).inflate(
                 R.layout.keyguard_screen_glogin_unlock, this, true);
@@ -153,7 +153,7 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
 
     /** {@inheritDoc} */
     public void onPause() {
-
+        mContext.unregisterReceiver(mThemeChangeReceiver);
     }
 
     /** {@inheritDoc} */
@@ -163,6 +163,7 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
         mPassword.setText("");
         mLogin.requestFocus();
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCall);
+        ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
     }
 
     /** {@inheritDoc} */
