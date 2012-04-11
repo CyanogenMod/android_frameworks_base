@@ -17,6 +17,7 @@
 package com.android.internal.policy.impl;
 
 import com.android.internal.R;
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.widget.LockPatternUtils;
 
@@ -28,6 +29,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -78,6 +80,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private View mLockScreen;
     private View mUnlockScreen;
+
+    private Context mUiContext;
 
     private boolean mScreenOn = false;
     private boolean mEnableFallback = false; // assume no fallback UI until we know better
@@ -221,6 +225,13 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         mLockPatternUtils = lockPatternUtils;
         mWindowController = controller;
         mTimeoutDialog = null;
+
+        ThemeUtils.registerThemeChangeReceiver(mContext, new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mUiContext = null;
+            }
+        });
 
         // By design, this situation should never happen.
         // If finger lock is in use, we should only allow the finger settings menu
@@ -836,7 +847,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 timeoutInSeconds);
         }
 
-        final AlertDialog dialog = new AlertDialog.Builder(mContext)
+        final AlertDialog dialog = new AlertDialog.Builder(getUiContext())
                 .setTitle(null)
                 .setMessage(message)
                 .setNeutralButton(R.string.ok, null)
@@ -850,6 +861,13 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         }
         mTimeoutDialog = dialog;
         dialog.show();
+    }
+
+    private Context getUiContext() {
+        if (mUiContext == null) {
+            mUiContext = ThemeUtils.createUiContext(mContext);
+        }
+        return mUiContext != null ? mUiContext : mContext;
     }
 
     private void showAlmostAtAccountLoginDialog() {
@@ -872,7 +890,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 timeoutInSeconds);
         }
 
-        final AlertDialog dialog = new AlertDialog.Builder(mContext)
+        final AlertDialog dialog = new AlertDialog.Builder(getUiContext())
                 .setTitle(null)
                 .setMessage(message)
                 .setNeutralButton(R.string.ok, null)
