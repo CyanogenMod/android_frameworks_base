@@ -127,7 +127,7 @@ status_t SurfaceTextureLayer::connect(int api,
 #endif
                 // fall through to set synchronous mode when not defaulting to
                 // async mode.
-            deafult:
+            default:
                 err = setSynchronousMode(true);
                 break;
         }

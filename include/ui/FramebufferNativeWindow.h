@@ -59,17 +59,9 @@ public:
     framebuffer_device_t const * getDevice() const { return fbDev; } 
 
 #ifdef QCOM_HDMI_OUT
-    void orientationChanged(int orientation) {
-        if (fbDev->orientationChanged)
-            fbDev->orientationChanged(fbDev, orientation);
-    }
-    void setActionSafeWidthRatio(float asWidthRatio) {
-        if (fbDev->setActionSafeWidthRatio)
-            fbDev->setActionSafeWidthRatio(fbDev, asWidthRatio);
-    }
-    void setActionSafeHeightRatio(float asHeightRatio) {
-        if (fbDev->setActionSafeHeightRatio)
-            fbDev->setActionSafeHeightRatio(fbDev, asHeightRatio);
+    void orientationChanged(int event, int orientation) {
+        if (fbDev->perform)
+            fbDev->perform(fbDev, event, orientation);
     }
 #endif
 
