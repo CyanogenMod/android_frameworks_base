@@ -176,9 +176,14 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
         StorageManager storageManager = (StorageManager)
                 mContext.getSystemService(Context.STORAGE_SERVICE);
         StorageVolume[] volumes = storageManager.getVolumeList();
+        try{
         if (volumes.length > 0) {
-            massStorageSupported = volumes[0].allowMassStorage();
+            if(Settings.Secure.getInt(mContentResolver, Settings.Secure.USB_MASS_STORAGE_ENABLED) == 1 )
+                massStorageSupported = volumes[0].allowMassStorage();
+            else
+                massStorageSupported = false;
         }
+        }catch(Exception e){}
         mUseUsbNotification = !massStorageSupported;
 
         // make sure the ADB_ENABLED setting value matches the current state
@@ -543,9 +548,9 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
                     id = com.android.internal.R.string.usb_mtp_notification_title;
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_PTP)) {
                     id = com.android.internal.R.string.usb_ptp_notification_title;
-                } else if (containsFunction(mCurrentFunctions,
-                        UsbManager.USB_FUNCTION_MASS_STORAGE)) {
-                    id = com.android.internal.R.string.usb_cd_installer_notification_title;
+                } /* else if (containsFunction(mCurrentFunctions, 
+                        UsbManager.USB_FUNCTION_MASS_STORAGE)) { // Disable this as it causes double USB settings menues when in UMS mode.
+                        id = com.android.internal.R.string.usb_cd_installer_notification_title; */
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
                     id = com.android.internal.R.string.usb_accessory_notification_title;
                 } else {
