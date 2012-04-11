@@ -792,4 +792,10 @@
 
     <!-- True if the Sym key should open the InputMethodPicker (default) -->
     <bool name="config_symKeyShowsImePicker">true</bool>
+
+    <!-- Path to the library that contains the device specifiy key handler -->
+    <string name="config_deviceKeyHandlerLib"></string>
+
+    <!-- Name of that key handler class -->
+    <string name="config_deviceKeyHandlerClass"></string>
 </resources>
