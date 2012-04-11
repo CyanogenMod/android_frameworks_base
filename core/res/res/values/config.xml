@@ -793,4 +793,10 @@
     <!-- If true, Device uses Samsung CDMA Signal Strength fix for displaying signal bars -->
     <bool name="config_SamsungCDMASignalStrength">false</bool>
 
+    <!-- Path to the library that contains the device specifiy key handler -->
+    <string name="config_deviceKeyHandlerLib"></string>
+
+    <!-- Name of that key handler class -->
+    <string name="config_deviceKeyHandlerClass"></string>
+
 </resources>
