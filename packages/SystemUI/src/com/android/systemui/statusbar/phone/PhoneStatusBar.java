@@ -95,6 +95,7 @@ import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.DockBatteryController;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.IntruderAlertView;
@@ -161,8 +162,11 @@ public class PhoneStatusBar extends BaseStatusBar {
     // These are no longer handled by the policy, because we need custom strategies for them
     BluetoothController mBluetoothController;
     BatteryController mBatteryController;
+    DockBatteryController mDockBatteryController;
     LocationController mLocationController;
     NetworkController mNetworkController;
+
+    private boolean mHasDockBattery;
 
     int mNaturalBarHeight = -1;
     int mIconSize = -1;
@@ -603,6 +607,18 @@ public class PhoneStatusBar extends BaseStatusBar {
         mBatteryController = new BatteryController(mContext);
         mBatteryController.addIconView((ImageView)mStatusBarView.findViewById(R.id.battery));
         mBatteryController.addLabelView((TextView)mStatusBarView.findViewById(R.id.battery_text));
+
+        // Dock Battery support
+        mHasDockBattery = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_hasDockBattery);
+
+        if (mHasDockBattery) {
+            mDockBatteryController = new DockBatteryController(mContext);
+            mDockBatteryController.addIconView((ImageView)mStatusBarView.findViewById(R.id.dock_battery));
+            mDockBatteryController.addLabelView(
+                    (TextView)mStatusBarView.findViewById(R.id.dock_battery_text));
+        }
+
         mNetworkController = new NetworkController(mContext);
         mBluetoothController = new BluetoothController(mContext);
         final SignalClusterView signalCluster =
