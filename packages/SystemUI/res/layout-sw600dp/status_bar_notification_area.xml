@@ -133,6 +133,12 @@
                 android:paddingLeft="4dip"
                 android:visibility="gone"
                 />
+            <ImageView
+                android:id="@+id/dock_battery"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingLeft="4dip"
+                />
             <TextView
                 android:id="@+id/battery_text"
                 android:textAppearance="@style/TextAppearance.StatusBar.Battery"
