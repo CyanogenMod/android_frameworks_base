@@ -960,4 +960,22 @@
     </plurals>
     <string name="permlab_revokePermissions">"Umožní zobrazit a změnit nepovolená oprávnění. Nelze využít v normální aplikaci."</string>
     <string name="permdesc_revokePermissions">"Umožní číst a zapisovat nepovolená oprávnění. Nelze využít v normální aplikací."</string>
+
+    <string name="keyguard_finger_please_swipe">Pro odemknutí přejeďte prstem po senzoru otisku prstů</string>
+    <string name="keyguard_finger_ui_timeout">Vypršel časový limit!</string>
+    <string name="keyguard_finger_failed_to_unlock">Odemknutí se nezdařilo!</string>
+    <string name="keyguard_finger_screen_off">Vypnutá obrazovka</string>
+    <string name="keyguard_finger_screen_on">Zapnutá obrazovka</string>
+    <string name="keyguard_finger_match">Otisk prstu souhlasí, obrazovka se odemyká\u2026</string>
+    <string name="keyguard_finger_not_match">Otisk prstu nesouhlasí\u2026</string>
+    <string name="keyguard_finger_swipe_too_far_right">Použijte střed senzoru.</string>
+    <string name="keyguard_finger_swipe_too_far_left">Použijte střed senzoru.</string>
+    <string name="keyguard_finger_swipe_too_fast">Přejetí senzoru bylo příliš rychlé.</string>
+    <string name="keyguard_finger_swipe_too_short">Přejetí senzoru bylo příliš krátké.</string>
+    <string name="keyguard_finger_swipe_too_slow">Přejetí senzoru bylo příliš pomalé.</string>
+    <string name="keyguard_finger_swipe_too_skewed">Přejetí senzoru nebylo rovnoměrné.</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">Nepodařilo se %1$d-krát identifikovat otiskem prstu.\n\nProsím zkuste to za %2$d sekund.</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">Nepodařilo se %1$d-krát identifikovat otiskem prstu. Po dalších %2$d neúspěšných pokusech o identifikaci budete vyzváni k odemknutí zařízení použití přihlášení k účtu Google.\n\nProsím zkuste to znovu zu %3$d sekund.</string>
+    <string name="lockscreen_forgot_finger_button_text">Zapomenout otisk prstu?</string>
+
 </resources>
