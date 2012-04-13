@@ -66,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Calendar;
+import java.util.Map;
 
 /** {@hide} */
 public class NotificationManagerService extends INotificationManager.Stub
@@ -106,12 +107,13 @@ public class NotificationManagerService extends INotificationManager.Stub
     private NotificationRecord mVibrateNotification;
     private Vibrator mVibrator = new Vibrator();
 
-    // for enabling and disabling notification pulse behavior
+    // for enabling and disabling notification pulse behaviour
     private boolean mScreenOn = true;
     private boolean mWasScreenOn = false;
     private boolean mInCall = false;
     private boolean mNotificationPulseEnabled;
     private HashMap<String, NotificationLedValues> mNotificationPulseCustomLedValues;
+    private Map<String, String> mPackageNameMappings;
 
     private final ArrayList<NotificationRecord> mNotificationList =
             new ArrayList<NotificationRecord>();
@@ -515,6 +517,13 @@ public class NotificationManagerService extends INotificationManager.Stub
                 com.android.internal.R.integer.config_defaultNotificationLedOff);
 
         mNotificationPulseCustomLedValues = new HashMap<String, NotificationLedValues>();
+
+        mPackageNameMappings = new HashMap<String, String>();
+        for(String mapping : resources.getStringArray(
+                com.android.internal.R.array.notification_light_package_mapping)) {
+            String[] map = mapping.split("\\|");
+            mPackageNameMappings.put(map[0], map[1]);
+        }
 
         // Don't start allowing notifications until the setup wizard has run once.
         // After that, including subsequent boots, init with notifications turned on.
@@ -1233,9 +1242,9 @@ public class NotificationManagerService extends INotificationManager.Stub
             int ledOffMS;
             NotificationLedValues ledValues = getLedValuesForNotification(mLedNotification);
             if (ledValues != null) {
-                ledARGB = ledValues.color;
-                ledOnMS = ledValues.onMS;
-                ledOffMS = ledValues.offMS;
+                ledARGB = ledValues.color != 0 ? ledValues.color : mDefaultNotificationColor;
+                ledOnMS = ledValues.onMS >= 0 ? ledValues.onMS : mDefaultNotificationLedOn;
+                ledOffMS = ledValues.offMS >= 0 ? ledValues.offMS : mDefaultNotificationLedOn;
             } else {
                 if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
                     ledARGB = mDefaultNotificationColor;
@@ -1286,7 +1295,14 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     private NotificationLedValues getLedValuesForNotification(NotificationRecord ledNotification) {
-        return mNotificationPulseCustomLedValues.get(ledNotification.pkg);
+        return mNotificationPulseCustomLedValues.get(mapPackage(ledNotification.pkg));
+    }
+
+    private String mapPackage(String pkg) {
+        if(!mPackageNameMappings.containsKey(pkg)) {
+            return pkg;
+        }
+        return mPackageNameMappings.get(pkg);
     }
 
     // lock on mNotificationList
