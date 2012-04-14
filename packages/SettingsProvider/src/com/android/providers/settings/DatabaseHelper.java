@@ -1430,7 +1430,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         loadIntegerSetting(stmt, Settings.System.MODE_VOLUME_OVERLAY,
             R.integer.def_volume_overlay_mode);
-
+        loadIntegerSetting(stmt, Settings.System.VOLUME_ADJUST_SOUNDS_ENABLED,
+            R.integer.def_volume_adjust_sounds_enabled);
         loadIntegerSetting(stmt, Settings.System.LOCKSCREEN_SOUNDS_ENABLED,
             R.integer.def_lockscreen_sounds_enabled);
         loadStringSetting(stmt, Settings.System.LOCK_SOUND,

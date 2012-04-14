@@ -71,6 +71,7 @@
     <integer name="def_lockscreen_sounds_enabled">1</integer>
     <string name="def_lock_sound" translatable="false">/system/media/audio/ui/Lock.ogg</string>
     <string name="def_unlock_sound" translatable="false">/system/media/audio/ui/Unlock.ogg</string>
+    <integer name="def_volume_adjust_sounds_enabled">1</integer>
 
     <!-- type of volume overlay - Deaults to -1 so that detection occurs on first load -->
     <integer name="def_volume_overlay_mode">-1</integer>

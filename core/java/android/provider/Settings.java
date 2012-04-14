@@ -1558,6 +1558,12 @@ public final class Settings {
         /** @hide */
         public static final int VOLUME_OVERLAY_NONE = 3;
 
+        /** Volume Adjust Sounds Enable, This is the noise made when using volume hard buttons
+        * Defaults to 1 - sounds enabled
+        * @hide
+        */
+        public static final String VOLUME_ADJUST_SOUNDS_ENABLED = "volume_adjust_sounds_enabled";
+
         /**
          * Ringer mode. This is used internally, changing this value will not
          * change the ringer mode. See AudioManager.
