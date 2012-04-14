@@ -3166,6 +3166,12 @@ public final class Settings {
          */
         public static final String TETHER_DUN_APN = "tether_dun_apn";
 
+        /** DHCP lease time for tethering in seconds {@hide} */
+        public static final String TETHER_LEASE_TIME = "tether_lease_time";
+
+        /** Default value for TETHER_LEASE_TIME {@hide} */
+        public static final int TETHER_LEASE_TIME_DEFAULT = -1;
+
         /**
          * No longer supported.
          */

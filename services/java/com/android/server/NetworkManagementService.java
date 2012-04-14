@@ -25,6 +25,7 @@ import static android.net.NetworkStats.TAG_NONE;
 import static android.net.NetworkStats.UID_ALL;
 import static android.net.TrafficStats.UID_TETHERING;
 import static android.provider.Settings.Secure.NETSTATS_ENABLED;
+import static android.provider.Settings.Secure.TETHER_LEASE_TIME;
 import static com.android.server.NetworkManagementSocketTagger.PROP_QTAGUID_ENABLED;
 
 import android.content.Context;
@@ -89,6 +90,11 @@ public class NetworkManagementService extends INetworkManagementService.Stub
      * {@link INetworkManagementEventObserver#limitReached(String, String)}.
      */
     public static final String LIMIT_GLOBAL_ALERT = "globalAlert";
+
+    /**
+     * Constant representing the default DHCP lease time
+     */
+    public static final int DEFAULT_LEASE_TIME = -1;
 
     class NetdResponseCode {
         /* Keep in sync with system/netd/ResponseCode.h */
@@ -730,14 +736,29 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     public void startTethering(String[] dhcpRange)
+            throws IllegalStateException {
+        startTethering(dhcpRange, Settings.Secure.getInt(mContext.getContentResolver(),
+            TETHER_LEASE_TIME, Settings.Secure.TETHER_LEASE_TIME_DEFAULT));
+    }
+
+    public void startTethering(String[] dhcpRange, int leaseTime)
              throws IllegalStateException {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
-        // cmd is "tether start first_start first_stop second_start second_stop ..."
-        // an odd number of addrs will fail
+
+        // cmd is "tether start first_start first_stop second_start second_stop ... [lease_time]"
+
+        // Make sure CMD_ARGS_MAX in system/core/include/sysutils/FrameworkListener.h is big
+        // enough to hold 2 (tether start) + dhcpRange.length (by default 14) + optionally
+        // 1 (lease time) = (16/17) arguments.
         String cmd = "tether start";
+
         for (String d : dhcpRange) {
             cmd += " " + d;
+        }
+
+        if (leaseTime != Settings.Secure.TETHER_LEASE_TIME_DEFAULT) {
+            cmd += " " + leaseTime;
         }
 
         try {
