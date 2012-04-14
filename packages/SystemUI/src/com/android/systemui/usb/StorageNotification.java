@@ -16,6 +16,7 @@
 
 package com.android.systemui.usb;
 
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -321,7 +322,11 @@ public class StorageNotification extends StorageEventListener {
                 Settings.Secure.ADB_ENABLED,
                 0);
 
-            if (POP_UMS_ACTIVITY_ON_CONNECT && !adbOn) {
+            KeyguardManager keyguardManager =
+                    (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+
+            if (POP_UMS_ACTIVITY_ON_CONNECT && !adbOn &&
+                !keyguardManager.isKeyguardLocked() && !keyguardManager.isKeyguardSecure()) {
                 // Pop up a full-screen alert to coach the user through enabling UMS. The average
                 // user has attached the device to USB either to charge the phone (in which case
                 // this is harmless) or transfer files, and in the latter case this alert saves
