@@ -700,6 +700,11 @@ void InputReader::requestRefreshConfiguration(uint32_t changes) {
     }
 }
 
+void InputReader::setKeyLayout(const char* deviceName, const char* keyLayout) {
+    AutoMutex _l(mLock);
+    mEventHub->setKeyLayout(deviceName, keyLayout);
+}
+
 void InputReader::dump(String8& dump) {
     AutoMutex _l(mLock);
 

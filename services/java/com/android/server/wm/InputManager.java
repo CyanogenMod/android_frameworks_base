@@ -97,6 +97,7 @@ public class InputManager implements Watchdog.Monitor {
     private static native void nativeSetShowTouches(boolean enabled);
     private static native String nativeDump();
     private static native void nativeMonitor();
+    private static native void nativeSetKeyLayout(String deviceName, String keyLayout);
     
     // Input event injection constants defined in InputDispatcher.h.
     static final int INPUT_EVENT_INJECTION_SUCCEEDED = 0;
@@ -149,9 +150,11 @@ public class InputManager implements Watchdog.Monitor {
 
         registerPointerSpeedSettingObserver();
         registerShowTouchesSettingObserver();
+        registerKeyLayoutSettingObserver();
 
         updatePointerSpeedFromSettings();
         updateShowTouchesFromSettings();
+        updateKeyLayoutFromSettings();
     }
     
     public void setDisplaySize(int displayId, int width, int height,
@@ -495,6 +498,42 @@ public class InputManager implements Watchdog.Monitor {
     public void monitor() {
         synchronized (mInputFilterLock) { }
         nativeMonitor();
+    }
+
+    private void setKeyLayout(String deviceName, String keyLayout) {
+        nativeSetKeyLayout(deviceName, keyLayout);
+    }
+
+    private void updateKeyLayoutFromSettings() {
+        String setting = getKeyLayoutSetting();
+        if (setting == null || setting.length() == 0) {
+            return;
+        }
+        String[] opts = setting.split(",", 2);
+        if (opts.length != 2) {
+            Slog.e(TAG, "Invalid layout setting " + setting);
+            return;
+        }
+        Slog.d(TAG, "changing layout " + opts[0] + " to keymap " + opts[1] + ", setting: " + setting);
+
+        setKeyLayout(opts[0], opts[1]);
+    }
+
+    private void registerKeyLayoutSettingObserver() {
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.KEYLAYOUT_OVERRIDES), true,
+                new ContentObserver(mWindowManagerService.mH) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateKeyLayoutFromSettings();
+                    }
+                });
+    }
+
+    private String getKeyLayoutSetting() {
+        String setting = Settings.System.getString(mContext.getContentResolver(),
+                Settings.System.KEYLAYOUT_OVERRIDES);
+        return setting;
     }
 
     private final class InputFilterHost implements InputFilter.Host {
