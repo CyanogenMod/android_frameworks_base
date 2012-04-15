@@ -628,6 +628,9 @@ private:
 
     virtual void wake() {
     }
+
+    virtual void setKeyLayout(const char* deviceName, const char* keyLayout) {
+    }
 };
 
 
