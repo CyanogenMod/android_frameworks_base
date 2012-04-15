@@ -77,9 +77,6 @@ public:
     virtual void onRemoved();
     virtual sp<Layer> getLayer() const { return const_cast<Layer*>(this); }
     virtual void setName(const String8& name);
-#ifdef QCOM_HARDWARE
-    virtual bool isRotated() const;
-#endif
 
     // LayerBaseClient interface
     virtual wp<IBinder> getSurfaceTextureBinder() const;

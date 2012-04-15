@@ -363,12 +363,6 @@ bool LayerBase::isOverlay() const {
     return mInOverlay;
 }
 
-#ifdef QCOM_HARDWARE
-bool LayerBase::isRotated() const {
-    return true;
-}
-#endif
-
 void LayerBase::setFiltering(bool filtering)
 {
     mFiltering = filtering;
