@@ -267,6 +267,10 @@ public:
      * The changes flag is a bitfield that indicates what has changed and whether
      * the input devices must all be reopened. */
     virtual void requestRefreshConfiguration(uint32_t changes) = 0;
+
+    /* Sets a specific input device's keyLayout to be overridden by filename.
+     */
+    virtual void setKeyLayout(const char* deviceName, const char* keyLayout) = 0;
 };
 
 
@@ -334,6 +338,8 @@ public:
             size_t numCodes, const int32_t* keyCodes, uint8_t* outFlags);
 
     virtual void requestRefreshConfiguration(uint32_t changes);
+
+    virtual void setKeyLayout(const char* deviceName, const char* keyLayout);
 
 protected:
     // These members are protected so they can be instrumented by test cases.
