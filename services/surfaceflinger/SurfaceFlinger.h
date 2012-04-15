@@ -315,9 +315,6 @@ private:
             void        handlePageFlip();
             bool        lockPageFlip(const LayerVector& currentLayers);
             void        unlockPageFlip(const LayerVector& currentLayers);
-#ifdef QCOM_HARDWARE
-            bool        isRotationCompleted();
-#endif
             void        handleWorkList();
             void        handleRepaint();
             void        postFramebuffer();

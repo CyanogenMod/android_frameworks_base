@@ -190,19 +190,6 @@ status_t Layer::setBuffers( uint32_t w, uint32_t h,
     return NO_ERROR;
 }
 
-#ifdef QCOM_HARDWARE
-bool Layer::isRotated() const {
-
-    const Layer::State& front(drawingState());
-
-    if( (front.w == front.requested_w) &&
-        (front.h == front.requested_h) ) {
-        return true;
-    }
-    return false;
-}
-#endif
-
 void Layer::setGeometry(hwc_layer_t* hwcl)
 {
     LayerBaseClient::setGeometry(hwcl);
