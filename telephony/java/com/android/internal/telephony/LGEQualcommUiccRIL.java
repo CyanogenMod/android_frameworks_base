@@ -53,6 +53,7 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
+        rr.mp.writeInt(2);
         rr.mp.writeString(pin);
         rr.mp.writeString(mAid);
 
@@ -68,6 +69,7 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
+        rr.mp.writeInt(3);
         rr.mp.writeString(puk);
         rr.mp.writeString(newPin);
         rr.mp.writeString(mAid);
@@ -84,6 +86,7 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
+        rr.mp.writeInt(2);
         rr.mp.writeString(pin);
         rr.mp.writeString(mAid);
 
@@ -99,6 +102,7 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
+        rr.mp.writeInt(3);
         rr.mp.writeString(puk);
         rr.mp.writeString(newPin2);
         rr.mp.writeString(mAid);
@@ -115,6 +119,7 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
+        rr.mp.writeInt(3);
         rr.mp.writeString(oldPin);
         rr.mp.writeString(newPin);
         rr.mp.writeString(mAid);
@@ -131,6 +136,7 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
+        rr.mp.writeInt(3);
         rr.mp.writeString(oldPin2);
         rr.mp.writeString(newPin2);
         rr.mp.writeString(mAid);
