@@ -209,6 +209,7 @@ public interface Phone {
     int NT_MODE_GSM_ONLY     = RILConstants.NETWORK_MODE_GSM_ONLY;
     int NT_MODE_WCDMA_ONLY   = RILConstants.NETWORK_MODE_WCDMA_ONLY;
     int NT_MODE_GSM_UMTS     = RILConstants.NETWORK_MODE_GSM_UMTS;
+    int NT_MODE_LTE_GSM_WCDMA= RILConstants.NETWORK_MODE_LTE_GSM_WCDMA;
 
     int NT_MODE_CDMA         = RILConstants.NETWORK_MODE_CDMA;
 
@@ -1729,6 +1730,12 @@ public interface Phone {
      * @return {@link #LTE_ON_CDMA_UNKNOWN}, {@link #LTE_ON_CDMA_FALSE} or {@link #LTE_ON_CDMA_TRUE}
      */
     public int getLteOnCdmaMode();
+
+    /**
+     * Return if the current radio is LTE on GSM
+     * @hide
+     */
+    public int getLteOnGsmMode();
 
     /**
      * TODO: Adding a function for each property is not good.

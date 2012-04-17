@@ -702,6 +702,21 @@ public class TelephonyManager {
         }
     }
 
+    /**
+     * Return if the current radio is LTE on GSM
+     * @hide
+     */
+    public int getLteOnGsmMode() {
+        try {
+            return getITelephony().getLteOnGsmMode();
+        } catch (RemoteException ex) {
+            return 0;
+        } catch (NullPointerException ex) {
+            // This could happen before phone restarts due to crashing
+            return 0;
+        }
+    }
+
     //
     //
     // Subscriber Info

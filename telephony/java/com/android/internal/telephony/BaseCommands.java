@@ -718,4 +718,21 @@ public abstract class BaseCommands implements CommandsInterface {
 
     @Override
     public void testingEmergencyCall() {}
+
+    /**
+     * @hide
+     */
+    @Override
+    public int getLteOnGsmMode() {
+        return getLteOnGsmModeStatic();
+    }
+
+    /**
+     * Return if the current radio is LTE on GSM
+     * @hide
+     */
+    public static int getLteOnGsmModeStatic() {
+        return SystemProperties.getInt(TelephonyProperties.PROPERTY_LTE_ON_GSM_DEVICE,
+                    0);
+    }
 }
