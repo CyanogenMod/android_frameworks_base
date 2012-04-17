@@ -706,7 +706,9 @@
 
     <!-- Set to true if the RSSI should always display CDMA signal strength even on EVDO -->
     <bool name="config_alwaysUseCdmaRssi">false</bool>
-
+    
+    <!-- If true, Device uses Samsung CDMA Signal Strength fix for displaying signal bars -->
+    <bool name="config_SamsungCDMASignalStrength">false</bool>
 
     <!-- If this value is true, duplicate Source/Destination port fields
          in WDP header of some carriers OMADM wap push are supported.
