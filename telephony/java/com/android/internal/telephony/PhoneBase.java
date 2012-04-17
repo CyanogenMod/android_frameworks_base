@@ -1174,6 +1174,14 @@ public abstract class PhoneBase extends Handler implements Phone {
     }
 
     /**
+     * {@hide}
+     */
+    @Override
+    public int getLteOnGsmMode() {
+        return mCM.getLteOnGsmMode();
+    }
+
+    /**
      * Sets the SIM voice message waiting indicator records.
      * @param line GSM Subscriber Profile Number, one-based. Only '1' is supported
      * @param countWaiting The number of messages waiting, if known. Use

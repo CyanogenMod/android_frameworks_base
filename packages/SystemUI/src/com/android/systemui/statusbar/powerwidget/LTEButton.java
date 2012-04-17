@@ -29,11 +29,13 @@ public class LTEButton extends PowerButton{
         int network = getCurrentPreferredNetworkMode(mView.getContext());
         switch(network) {
             case Phone.NT_MODE_GLOBAL:
+            case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_ONLY:
                 mIcon = R.drawable.stat_lte_on;
                 mState = STATE_ENABLED;
                 Settings.System.putInt(resolver, Settings.System.LTE_MODE, 1);
                 break;
-            case Phone.NT_MODE_CDMA:
+            default:
                 mIcon = R.drawable.stat_lte_off;
                 mState = STATE_DISABLED;
                 Settings.System.putInt(resolver, Settings.System.LTE_MODE, 0);
@@ -47,11 +49,13 @@ public class LTEButton extends PowerButton{
             .getSystemService(Context.TELEPHONY_SERVICE);
         int network = getCurrentPreferredNetworkMode(mView.getContext());
         ContentResolver resolver = mView.getContext().getContentResolver();
-        if (Phone.NT_MODE_GLOBAL == network) {
+        if (Phone.NT_MODE_GLOBAL == network ||
+              Phone.NT_MODE_LTE_GSM_WCDMA == network) {
             tm.toggleLTE(false);
             mState = STATE_DISABLED;
             Settings.System.putInt(resolver, Settings.System.LTE_MODE, 0);
-        } else if (Phone.NT_MODE_CDMA == network) {
+        } else if (Phone.NT_MODE_CDMA == network ||
+                     tm.getLteOnGsmMode() != 0) {
             tm.toggleLTE(true);
             mState = STATE_ENABLED;
             Settings.System.putInt(resolver, Settings.System.LTE_MODE, 1);
