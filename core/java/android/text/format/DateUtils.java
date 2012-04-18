@@ -1444,19 +1444,19 @@ public class DateUtils
         } else {
             monthFormat = MONTH_FORMAT;
         }
-        String startMonthString = startDate.format(monthFormat);
-        String startMonthDayString = startDate.format(MONTH_DAY_FORMAT);
-        String startYearString = startDate.format(YEAR_FORMAT);
-
-        String endMonthString = isInstant ? null : endDate.format(monthFormat);
-        String endMonthDayString = isInstant ? null : endDate.format(MONTH_DAY_FORMAT);
-        String endYearString = isInstant ? null : endDate.format(YEAR_FORMAT);
 
         if (startMonthNum != endMonthNum) {
             // Same year, different month.
             // Example: "October 28 - November 3"
             // or: "Wed, Oct 31 - Sat, Nov 3, 2007"
             // or: "Oct 31, 8am - Sat, Nov 3, 2007, 5pm"
+            String startMonthString = startDate.format(monthFormat);
+            String startMonthDayString = startDate.format(MONTH_DAY_FORMAT);
+            String startYearString = startDate.format(YEAR_FORMAT);
+
+            String endMonthString = isInstant ? null : endDate.format(monthFormat);
+            String endMonthDayString = isInstant ? null : endDate.format(MONTH_DAY_FORMAT);
+            String endYearString = isInstant ? null : endDate.format(YEAR_FORMAT);
 
             int index = 0;
             if (showWeekDay) index = 1;
@@ -1477,6 +1477,14 @@ public class DateUtils
 
         if (startDay != endDay) {
             // Same month, different day.
+            String startMonthString = startDate.format(monthFormat);
+            String startMonthDayString = startDate.format(MONTH_DAY_FORMAT);
+            String startYearString = startDate.format(YEAR_FORMAT);
+
+            String endMonthString = isInstant ? null : endDate.format(monthFormat);
+            String endMonthDayString = isInstant ? null : endDate.format(MONTH_DAY_FORMAT);
+            String endYearString = isInstant ? null : endDate.format(YEAR_FORMAT);
+
             int index = 0;
             if (showWeekDay) index = 1;
             if (showYear) index += 2;
