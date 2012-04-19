@@ -136,7 +136,8 @@ public class BluetoothService extends IBluetooth.Stub {
     private static final ParcelUuid[] RFCOMM_UUIDS = {
             BluetoothUuid.Handsfree,
             BluetoothUuid.HSP,
-            BluetoothUuid.ObexObjectPush };
+            BluetoothUuid.ObexObjectPush,
+            BluetoothUuid.MessageNotificationServer };
 
     private final BluetoothAdapterProperties mAdapterProperties;
     private final BluetoothDeviceProperties mDeviceProperties;
@@ -557,6 +558,7 @@ public class BluetoothService extends IBluetooth.Stub {
         // Add the default records
         uuids.add(BluetoothUuid.HSP_AG);
         uuids.add(BluetoothUuid.ObexObjectPush);
+        uuids.add(BluetoothUuid.MessageAccessServer);
 
         if (mContext.getResources().
                 getBoolean(com.android.internal.R.bool.config_voice_capable)) {
