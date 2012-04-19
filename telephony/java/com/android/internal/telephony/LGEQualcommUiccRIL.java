@@ -35,8 +35,8 @@ import java.util.ArrayList;
 public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterface {
     protected String mAid;
     protected boolean mUSIM;
-    private int mSetPreferredNetworkType;
-    private String mLastDataIface[] = new String[10];
+    protected int mSetPreferredNetworkType;
+    protected String[] mLastDataIface = new String[10];
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
 
