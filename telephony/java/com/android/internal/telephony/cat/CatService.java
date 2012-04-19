@@ -33,6 +33,7 @@ import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccFileHandler;
 import com.android.internal.telephony.IccRecords;
 import com.android.internal.telephony.IccSmsInterfaceManager;
+import com.android.internal.telephony.TelephonyProperties;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -320,11 +321,24 @@ public class CatService extends Handler implements AppInterface {
             case RECEIVE_DATA:
             case SEND_DATA:
                 BIPClientParams cmd = (BIPClientParams) cmdParams;
-                if (cmd.bHasAlphaId && (cmd.textMsg.text == null)) {
+                /*
+                 * If the text mesg is null, need to send the response
+                 * back to the card in the following scenarios
+                 * - It has alpha ID tag with no Text Msg (or)
+                 * - If alphaUsrCnf is not set. In the above cases
+                 *   there should be no UI indication given to the user.
+                 */
+                boolean alphaUsrCnf = SystemProperties.getBoolean(
+                         TelephonyProperties.PROPERTY_ALPHA_USRCNF, false);
+                CatLog.d(this, "alphaUsrCnf: " + alphaUsrCnf + ", bHasAlphaId: " + cmd.bHasAlphaId);
+
+                if (( cmd.textMsg.text == null) && ( cmd.bHasAlphaId || !alphaUsrCnf)) {
                     CatLog.d(this, "cmd " + cmdParams.getCommandType() + " with null alpha id");
                     // If alpha length is zero, we just respond with OK.
                     if (isProactiveCmd) {
                         sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, null);
+                    } else if (cmdParams.getCommandType() == CommandType.OPEN_CHANNEL) {
+                        mCmdIf.handleCallSetupRequestFromSim(true, null);
                     }
                     return;
                 }
