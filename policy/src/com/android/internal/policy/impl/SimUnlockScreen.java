@@ -320,9 +320,9 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                 mCallback.goToUnlockScreen();
             }
         }
-        
+
     }
-    
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -404,7 +404,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                 if (Settings.System.getInt(mContext.getContentResolver(),Settings.System.AIRPLANE_MODE_ON,0) == 1) {
                     // force the system to update the SIM state trying a dummy PIN validation
                     updateSimState();
-                } 
+                }
                 mCallback.goToLockScreen();
                 return;
             }
