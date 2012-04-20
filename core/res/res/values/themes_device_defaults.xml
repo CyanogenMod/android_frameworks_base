@@ -82,6 +82,7 @@ easier.
         <item name="listSeparatorTextViewStyle">@android:style/Widget.DeviceDefault.TextView.ListSeparator</item>
 
         <!-- Window attributes -->
+        <item name="windowBackground">@android:drawable/cm_screen_background_selector_dark</item>
         <item name="windowTitleStyle">@android:style/WindowTitle.DeviceDefault</item>
         <item name="windowTitleBackgroundStyle">@android:style/WindowTitleBackground.DeviceDefault</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.DeviceDefault.Activity</item>
