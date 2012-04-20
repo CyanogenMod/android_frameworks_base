@@ -1227,4 +1227,46 @@
     <string name="sending" msgid="8715108995741758718">"Küldés..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Böngésző indítása?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Hívás fogadása?"</string>
+
+    <!-- 20120420 -->
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Táblagép újraindítása</string>
+    <string name="reboot_system" product="default">Telefon újraindítása</string>
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Képernyőmentés</string>
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Újraindítás</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Újraindítás\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">A telefon újraindul.</string>
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Újraindítás</string>
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">Profil</string>
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Alapértelmezett</string>
+    <string name="profileNameWork">Munka</string>
+    <string name="profileNameHome">Otthon</string>
+    <string name="profileNameSilent">Néma</string>
+    <string name="profileNameNight">Éjszaka</string>
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Naptár</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-mail</string>
+    <string name="profileGroupSMS">SMS</string>
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Egyéb</string>
+
 </resources>
