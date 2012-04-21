@@ -49,6 +49,7 @@ public class QualcommNoSimReadyRIL extends RIL implements CommandsInterface {
     private final int RIL_INT_RADIO_OFF = 0;
     private final int RIL_INT_RADIO_UNAVALIABLE = 1;
     private final int RIL_INT_RADIO_ON = 2;
+    private final int RIL_INT_RADIO_ON_NG = 10;
 
     public QualcommNoSimReadyRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
@@ -622,6 +623,7 @@ public class QualcommNoSimReadyRIL extends RIL implements CommandsInterface {
                 radioState = CommandsInterface.RadioState.RADIO_UNAVAILABLE;
                 break;
             case RIL_INT_RADIO_ON:
+            case RIL_INT_RADIO_ON_NG:
                 if (mIccHandler == null) {
                     handlerThread = new HandlerThread("IccHandler");
                     mIccThread = handlerThread;
