@@ -63,6 +63,7 @@ import java.io.InputStream;
 import java.lang.Runtime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class Smdk4210RIL extends RIL implements CommandsInterface {
 
@@ -308,6 +309,56 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
                 }
             }
         }
+    }
+
+    @Override
+    protected RILRequest findAndRemoveRequestFromList(int serial) {
+        long removalTime = System.currentTimeMillis();
+        long timeDiff = 0;
+
+        synchronized (mRequestsList) {
+          Iterator<RILRequest> itr = mRequestsList.iterator();
+
+          while ( itr.hasNext() ) {
+            RILRequest rr = itr.next();
+
+            if (rr.mSerial == serial) {
+                itr.remove();
+                if (mRequestMessagesWaiting > 0)
+                    mRequestMessagesWaiting--;
+                return rr;
+            }
+            else
+            {
+              // We need some special code here for the Samsung RIL,
+              // which isn't responding to SET/QUERY TTY requests.
+              // We will perform a lazy removal of such stale requests which
+              // haven't yet received a response.  If the timeout fires
+              // first, then the wakelock is released without purging the 
+              // request.
+              timeDiff = removalTime - rr.creationTime;
+              if ( timeDiff > mWakeLockTimeout &&
+                   rr.mRequest == RIL_REQUEST_SET_TTY_MODE )
+              {
+                Log.d(LOG_TAG,  "No response for [" + rr.mSerial + "] " +
+                        requestToString(rr.mRequest) + " after " + timeDiff + " milliseconds.  Purging.");
+
+                itr.remove();
+                if (mRequestMessagesWaiting > 0) {
+                    mRequestMessagesWaiting--;
+                }
+
+                // We don't handle the callback (ie. rr.mResult) for 
+                // RIL_REQUEST_SET_TTY_MODE, which is
+                // RIL_REQUEST_QUERY_TTY_MODE.  The reason for not doing 
+                // so is because it will also not get a response from the 
+                // Samsung RIL
+                rr.release();
+              }
+            }
+          }
+        }
+        return null;
     }
 
     @Override
