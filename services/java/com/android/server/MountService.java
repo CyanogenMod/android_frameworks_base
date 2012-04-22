@@ -1154,6 +1154,60 @@ class MountService extends IMountService.Stub
             }
             parser.close();
         }
+
+        // If persist.sys.vold.switchexternal is in effect, switch volume
+        // properties for correct display. We switch everything except
+        // "primary" (position = 0) as that should always belong to /mnt/sdcard.
+        if (SystemProperties.getInt("persist.sys.vold.switchexternal", 0) == 1) {
+            String[] pair = SystemProperties.get("ro.vold.switchablepair", "").split(",");
+
+            if (pair.length != 2) {
+                Slog.e(TAG, "invalid switchable mountpoints");
+                return;
+            }
+
+            Slog.d(TAG, "Switching storage path " + pair[0] + " and " + pair[1]);
+
+            StorageVolume left = null;
+            StorageVolume right = null;
+            int leftIndex = -1;
+            int rightIndex = -1;
+            for (int i = 0; i < mVolumes.size(); i++) {
+                StorageVolume v = mVolumes.get(i);
+                String path = v.getPath();
+                if (path.equals(pair[0])) {
+                    left = v;
+                    leftIndex = i;
+                } else if (path.equals(pair[1])) {
+                    right = v;
+                    rightIndex = i;
+                }
+            }
+
+            if (left == null || right == null) {
+                Slog.e(TAG, "unable to locate volume for switchable mountpoints");
+                return;
+            }
+
+            // Create new volumes
+            StorageVolume newLeft = new StorageVolume(left.getPath(),
+                right.getDescription(), right.isRemovable(),
+                right.isEmulated(), right.getMtpReserveSpace(),
+                right.allowMassStorage(), right.getMaxFileSize());
+            newLeft.setStorageId(leftIndex);
+
+            StorageVolume newRight = new StorageVolume(right.getPath(),
+                left.getDescription(), left.isRemovable(),
+                left.isEmulated(), left.getMtpReserveSpace(),
+                left.allowMassStorage(), left.getMaxFileSize());
+            newRight.setStorageId(rightIndex);
+
+            mVolumes.remove(leftIndex);
+            mVolumes.add(leftIndex, newLeft);
+
+            mVolumes.remove(rightIndex);
+            mVolumes.add(rightIndex, newRight);
+        }
     }
 
     /**
