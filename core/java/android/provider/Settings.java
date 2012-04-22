@@ -2192,6 +2192,18 @@ public final class Settings {
         public static final String COMBINED_BAR_AUTO_HIDE = "combined_bar_auto_hide";
 
         /**
+        * CombinedBar navigation visibility on tablets.
+        * String of visible navigation elements seperated by the | character
+        * back: Shows back button
+        * home: Shows home button
+        * recent: Shows recent button
+        * menu: Shows menu button
+        * default: back|home|recent|menu|
+        * @hide
+        */
+        public static final String COMBINED_BAR_NAVIGATION = "combined_bar_navigation";
+
+        /**
          * Display style of AM/PM next to clock in status bar
          * 0: Normal display (Eclair stock)
          * 1: Small display (Froyo stock)

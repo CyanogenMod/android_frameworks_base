@@ -37,12 +37,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.inputmethodservice.InputMethodService;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -111,6 +113,7 @@ public class TabletStatusBar extends StatusBar implements
     public static final int MSG_OPEN_COMPAT_MODE_PANEL = 1050;
     public static final int MSG_CLOSE_COMPAT_MODE_PANEL = 1051;
     public static final int MSG_STOP_TICKER = 2000;
+    public static final int MSG_BUTTON_VISIBILITY = 3000;
 
     // Fitts' Law assistance for LatinIME; see policy.EventHole
     private static final boolean FAKE_SPACE_BAR = true;
@@ -119,6 +122,15 @@ public class TabletStatusBar extends StatusBar implements
     final static boolean NOTIFICATION_PEEK_ENABLED = false;
     final static int NOTIFICATION_PEEK_HOLD_THRESH = 200; // ms
     final static int NOTIFICATION_PEEK_FADE_DELAY = 3000; // ms
+
+    // Navigation button visibility strings
+    private static final String BACK = "back";
+    private static final String HOME = "home";
+    private static final String RECENT = "recent";
+    private static final String MENU = "menu";
+    private static final String SPLIT = "|";
+    private static final String DEFAULT_BUTTONS =
+            BACK + SPLIT + HOME + SPLIT + RECENT + SPLIT + MENU + SPLIT;
 
     // The height of the bar, as definied by the build.  It may be taller if we're plugged
     // into hdmi.
@@ -149,6 +161,11 @@ public class TabletStatusBar extends StatusBar implements
     View mHomeButton;
     View mMenuButton;
     View mRecentButton;
+
+    boolean mHideMenuButton;
+    boolean mHideBackButton;
+    boolean mHideRecentButton;
+    boolean mHideHomeButton;
 
     ViewGroup mFeedbackIconArea; // notification icons, IME icon, compat icon
     InputMethodButton mInputMethodSwitchButton;
@@ -448,6 +465,9 @@ public class TabletStatusBar extends StatusBar implements
     protected View makeStatusBarView() {
         final Context context = mContext;
 
+        SettingsObserver observer = new SettingsObserver(mHandler);
+        observer.observe(mContext);
+
         mWindowManager = IWindowManager.Stub.asInterface(
                 ServiceManager.getService(Context.WINDOW_SERVICE));
 
@@ -640,6 +660,9 @@ public class TabletStatusBar extends StatusBar implements
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         context.registerReceiver(mBroadcastReceiver, filter);
 
+        // Set navigation button visibility
+        updateButtonVisibilitySettings();
+
         return sb;
     }
 
@@ -807,6 +830,9 @@ public class TabletStatusBar extends StatusBar implements
                     break;
                 case MSG_STOP_TICKER:
                     mTicker.halt();
+                    break;
+                case MSG_BUTTON_VISIBILITY:
+                    updateButtonVisibilitySettings();
                     break;
             }
         }
@@ -1032,12 +1058,33 @@ public class TabletStatusBar extends StatusBar implements
         boolean disableRecent = ((visibility & StatusBarManager.DISABLE_RECENT) != 0);
         boolean disableBack = ((visibility & StatusBarManager.DISABLE_BACK) != 0);
 
-        mBackButton.setVisibility(disableBack ? View.INVISIBLE : View.VISIBLE);
-        mHomeButton.setVisibility(disableHome ? View.INVISIBLE : View.VISIBLE);
-        mRecentButton.setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
+        mBackButton.setVisibility(mHideBackButton ? View.GONE : (disableBack ? View.INVISIBLE :
+                View.VISIBLE));
+        mHomeButton.setVisibility(mHideHomeButton ? View.GONE : (disableHome ? View.INVISIBLE :
+                View.VISIBLE));
+        mRecentButton.setVisibility(mHideRecentButton ? View.GONE : (disableRecent ? View.INVISIBLE
+                : View.VISIBLE));
 
         mInputMethodSwitchButton.setScreenLocked(
                 (visibility & StatusBarManager.DISABLE_SYSTEM_INFO) != 0);
+    }
+
+    private void updateButtonVisibilitySettings() {
+        String navButtons = Settings.System.getString(mContext.getContentResolver(),
+                Settings.System.COMBINED_BAR_NAVIGATION);
+
+        if (navButtons == null) {
+            navButtons = DEFAULT_BUTTONS;
+        }
+
+        mHideBackButton = !navButtons.contains(BACK);
+        mHideHomeButton = !navButtons.contains(HOME);
+        mHideRecentButton = !navButtons.contains(RECENT);
+        mHideMenuButton = !navButtons.contains(MENU);
+
+        mMenuButton.setVisibility(mHideMenuButton ? View.GONE : View.INVISIBLE));
+
+        setNavigationVisibility(StatusBarManager.DISABLE_NONE);
     }
 
     private boolean hasTicker(Notification n) {
@@ -1161,7 +1208,9 @@ public class TabletStatusBar extends StatusBar implements
         if (DEBUG) {
             Slog.d(TAG, (showMenu?"showing":"hiding") + " the MENU button");
         }
-        mMenuButton.setVisibility(showMenu ? View.VISIBLE : View.GONE);
+        if (!mHideMenuButton) {
+            mMenuButton.setVisibility(showMenu ? View.VISIBLE : View.INVISIBLE);
+        }
 
         // See above re: lights-out policy for legacy apps.
         if (showMenu) setLightsOn(true);
@@ -1944,6 +1993,29 @@ public class TabletStatusBar extends StatusBar implements
         pw.println(Integer.toHexString(mDisabled));
         pw.println("mNetworkController:");
         mNetworkController.dump(fd, pw, args);
+    }
+
+    private static class SettingsObserver extends ContentObserver {
+        private Handler mHandler;
+
+        SettingsObserver(Handler handler) {
+            super(handler);
+            mHandler = handler;
+        }
+
+        void observe(Context context) {
+            ContentResolver resolver = context.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.COMBINED_BAR_NAVIGATION), false, this);
+        }
+
+        @Override
+        public void onChangeUri(Uri uri, boolean selfChange) {
+            if (uri.equals(Settings.System.getUriFor(Settings.System.COMBINED_BAR_NAVIGATION))) {
+                mHandler.removeMessages(MSG_BUTTON_VISIBILITY);
+                mHandler.sendEmptyMessage(MSG_BUTTON_VISIBILITY);
+            }
+        }
     }
 }
 
