@@ -28,9 +28,9 @@ public class TargetDrawable {
     private static final boolean DEBUG = false;
 
     public static final int[] STATE_ACTIVE =
-            { android.R.attr.state_enabled, android.R.attr.state_active };
+            { android.R.attr.state_enabled, android.R.attr.state_active, -android.R.attr.state_focused };
     public static final int[] STATE_INACTIVE =
-            { android.R.attr.state_enabled, -android.R.attr.state_active };
+            { android.R.attr.state_enabled, -android.R.attr.state_active, -android.R.attr.state_focused };
     public static final int[] STATE_FOCUSED =
             { android.R.attr.state_enabled, android.R.attr.state_focused };
 
