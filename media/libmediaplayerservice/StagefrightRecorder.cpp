@@ -1559,12 +1559,14 @@ status_t StagefrightRecorder::setupVideoEncoder(
         LOGW("Camera source supports metadata mode, create OMXCodec for metadata");
         encoder_flags |= OMXCodec::kHardwareCodecsOnly;
         encoder_flags |= OMXCodec::kStoreMetaDataInVideoBuffers;
+#ifdef QCOM_HARDWARE
         if (property_get("ro.board.platform", value, "0")
             && (!strncmp(value, "msm7627a", sizeof("msm7627a") - 1) ||
                 !strncmp(value, "msm7x27a", sizeof("msm7x27a") - 1))) {
             LOGW("msm7627 family of chipsets supports, only one buffer at a time");
             encoder_flags |= OMXCodec::kOnlySubmitOneInputBufferAtOneTime;
         }
+#endif
     }
 
     // Do not wait for all the input buffers to become available.
