@@ -81,6 +81,58 @@ public class MultiWaveView extends View {
     private static final float TAP_RADIUS_SCALE_ACCESSIBILITY_ENABLED = 1.3f;
     private TimeInterpolator mChevronAnimationInterpolator = Ease.Quad.easeOut;
 
+    /**
+     * @hide
+     */
+    public final static String ICON_RESOURCE = "icon_resource";
+
+    /**
+     * @hide
+     */
+    public final static String ICON_PACKAGE = "icon_package";
+
+    /**
+     * @hide
+     */
+    public final static String ICON_FILE = "icon_file";
+
+    /**
+     * Number of customizable lockscreen targets for tablets
+     * @hide
+     */
+    public final static int MAX_TABLET_TARGETS = 7;
+
+    /**
+     * Number of customizable lockscreen targets for phones
+     * @hide
+     */
+    public final static int MAX_PHONE_TARGETS = 4;
+
+    /**
+     * Inset padding for lockscreen targets for tablets
+     * @hide
+     */
+    public final static int TABLET_TARGET_INSET = 30;
+
+    /**
+     * Inset padding for lockscreen targets for phones
+     * @hide
+     */
+    public final static int PHONE_TARGET_INSET = 60;
+
+    /**
+     * Empty target used to reference unused lockscreen targets
+     * @hide
+     */
+    public final static String EMPTY_TARGET = "empty";
+
+    /**
+     * Default stock configuration for lockscreen targets
+     * @hide
+     */
+    public final static String DEFAULT_TARGETS = "empty|empty|empty|#Intent;action=android.intent.action.MAIN;" +
+            "category=android.intent.category.LAUNCHER;component=com.android.camera/.Camera;S.icon_resource=ic_lockscreen_camera_normal;end";
+
     private ArrayList<TargetDrawable> mTargetDrawables = new ArrayList<TargetDrawable>();
     private ArrayList<TargetDrawable> mChevronDrawables = new ArrayList<TargetDrawable>();
     private ArrayList<Tweener> mChevronAnimations = new ArrayList<Tweener>();
@@ -107,6 +159,7 @@ public class MultiWaveView extends View {
     private float mSnapMargin = 0.0f;
     private boolean mDragging;
     private int mNewTargetResources;
+    private ArrayList<TargetDrawable> mNewTargetDrawables;
 
     private AnimatorListener mResetListener = new AnimatorListenerAdapter() {
         public void onAnimationEnd(Animator animator) {
@@ -134,6 +187,10 @@ public class MultiWaveView extends View {
             if (mNewTargetResources != 0) {
                 internalSetTargetResources(mNewTargetResources);
                 mNewTargetResources = 0;
+                hideTargets(false);
+            } else if (mNewTargetDrawables != null) {
+                internalSetTargetResources(mNewTargetDrawables);
+                mNewTargetDrawables = null;
                 hideTargets(false);
             }
             mAnimatingTargets = false;
@@ -542,6 +599,21 @@ public class MultiWaveView extends View {
         }
     }
 
+    public void setTargetResources(ArrayList<TargetDrawable> drawList) {
+        if (mAnimatingTargets) {
+            // postpone this change until we return to the initial state
+            mNewTargetDrawables = drawList;
+        } else {
+            internalSetTargetResources(drawList);
+        }
+    }
+
+    private void internalSetTargetResources(ArrayList<TargetDrawable> drawList) {
+        mTargetResourceId = 0;
+        mTargetDrawables = drawList;
+        updateTargetPositions();
+    }
+
     public int getTargetResourceId() {
         return mTargetResourceId;
     }
@@ -927,7 +999,7 @@ public class MultiWaveView extends View {
     }
 
     private String getTargetDescription(int index) {
-        if (mTargetDescriptions == null || mTargetDescriptions.isEmpty()) {
+        if (mTargetDescriptions == null || mTargetDescriptions.isEmpty() || index >= mTargetDescriptions.size()) {
             mTargetDescriptions = loadDescriptions(mTargetDescriptionsResourceId);
             if (mTargetDrawables.size() != mTargetDescriptions.size()) {
                 Log.w(TAG, "The number of target drawables must be"
@@ -939,7 +1011,7 @@ public class MultiWaveView extends View {
     }
 
     private String getDirectionDescription(int index) {
-        if (mDirectionDescriptions == null || mDirectionDescriptions.isEmpty()) {
+        if (mDirectionDescriptions == null || mDirectionDescriptions.isEmpty() || index >= mDirectionDescriptions.size()) {
             mDirectionDescriptions = loadDescriptions(mDirectionDescriptionsResourceId);
             if (mTargetDrawables.size() != mDirectionDescriptions.size()) {
                 Log.w(TAG, "The number of target drawables must be"
