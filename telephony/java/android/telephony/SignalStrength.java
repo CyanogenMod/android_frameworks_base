@@ -17,6 +17,7 @@
 
 package android.telephony;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -445,6 +446,8 @@ public class SignalStrength implements Parcelable {
         final int cdmaEcio = getCdmaEcio();
         int levelDbm;
         int levelEcio;
+        boolean useSamsungCdmaSignalFix = Resources.getSystem()
+           .getBoolean(com.android.internal.R.bool.config_SamsungCDMASignalStrength);
 
         if (cdmaDbm >= -75) levelDbm = SIGNAL_STRENGTH_GREAT;
         else if (cdmaDbm >= -85) levelDbm = SIGNAL_STRENGTH_GOOD;
@@ -459,7 +462,7 @@ public class SignalStrength implements Parcelable {
         else if (cdmaEcio >= -150) levelEcio = SIGNAL_STRENGTH_POOR;
         else levelEcio = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
-        int level = (levelDbm < levelEcio) ? levelDbm : levelEcio;
+        int level = ((levelDbm < levelEcio) || useSamsungCdmaSignalFix) ? levelDbm : levelEcio;
         if (DBG) log("getCdmaLevel=" + level);
         return level;
     }
