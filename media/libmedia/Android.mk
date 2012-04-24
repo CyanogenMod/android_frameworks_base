@@ -52,9 +52,10 @@ ifeq ($(BOARD_USES_AUDIO_LEGACY),true)
         AudioParameter.cpp
 
     LOCAL_CFLAGS += -DUSES_AUDIO_LEGACY
-    ifeq ($(BOARD_USE_KINETO_COMPATIBILITY),true)
-        LOCAL_CFLAGS += -DUSE_KINETO_COMPATIBILITY
-    endif
+endif
+
+ifeq ($(BOARD_USE_KINETO_COMPATIBILITY),true)
+    LOCAL_CFLAGS += -DUSE_KINETO_COMPATIBILITY
 endif
 
 ifeq ($(BOARD_USE_YAMAHAPLAYER),true)
@@ -62,7 +63,7 @@ ifeq ($(BOARD_USE_YAMAHAPLAYER),true)
 endif
 
 LOCAL_SHARED_LIBRARIES := \
-	libui libcutils libutils libbinder libsonivox libicuuc libexpat \
+    libui libcutils libutils libbinder libsonivox libicuuc libexpat \
         libcamera_client libstagefright_foundation \
         libgui libdl
 
