@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (C) 2011, 2012 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.internal.telephony;
 
 import java.util.ArrayList;
@@ -45,25 +62,31 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         super(context, networkMode, cdmaSubscription);
     }
 
-    //SAMSUNG SGS STATES
+    // SAMSUNG SGS STATES
     static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
     static final int RIL_UNSOL_O2_HOME_ZONE_INFO = 11007;
     static final int RIL_UNSOL_DEVICE_READY_NOTI = 11008;
     static final int RIL_UNSOL_GPS_NOTI = 11009;
-    static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3 = 11010;
+    static final int RIL_UNSOL_AM = 11010;
+    static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST = 11012;
     static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2 = 11011;
     static final int RIL_UNSOL_HSDPA_STATE_CHANGED = 11016;
-    static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST = 11012;
     static final int RIL_REQUEST_DIAL_EMERGENCY = 10016;
+
+    static String
+    requestToString(int request) {
+        switch (request) {
+            case RIL_REQUEST_DIAL_EMERGENCY: return "DIAL_EMERGENCY";
+            default: return RIL.requestToString(request);
+        }
+    }
 
     @Override
     public void
     setRadioPower(boolean on, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_RADIO_POWER, result);
 
-        //samsung crap for airplane mode
-        if (on)
-        {
+        if (on) {
             rr.mp.writeInt(1);
             rr.mp.writeInt(1);
         } else {
@@ -71,6 +94,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             rr.mp.writeInt(0);
             rr.mp.writeInt(0);
         }
+
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
         send(rr);
     }
@@ -79,13 +103,12 @@ public class SamsungRIL extends RIL implements CommandsInterface {
     protected void
     processSolicited (Parcel p) {
         int serial, error;
-        boolean found = false;
 
         serial = p.readInt();
         error = p.readInt();
 
-        Log.d(LOG_TAG,"Serial: "+ serial);
-        Log.d(LOG_TAG,"Error: "+ error);
+        Log.d(LOG_TAG, "Serial: " + serial);
+        Log.d(LOG_TAG, "Error: " + error);
 
         RILRequest rr;
 
@@ -210,6 +233,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: ret = responseVoid(p); break;
+            case RIL_REQUEST_DIAL_EMERGENCY: ret = responseVoid(p); break;
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
                 //break;
@@ -267,15 +291,12 @@ public class SamsungRIL extends RIL implements CommandsInterface {
     dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
         RILRequest rr;
         if (!mIsSamsungCdma && PhoneNumberUtils.isEmergencyNumber(address)) {
-            Log.v(LOG_TAG, "Emergency dial: " + address);
-            rr = RILRequest.obtain(RIL_REQUEST_DIAL_EMERGENCY, result);
-            rr.mp.writeString(address + "/");
-        }
-        else {
-            rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
-            rr.mp.writeString(address);
+            dialEmergencyCall(address, clirMode, result);
+            return;
         }
 
+        rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
+        rr.mp.writeString(address);
         rr.mp.writeInt(clirMode);
         rr.mp.writeInt(0); // UUS information is absent
 
@@ -287,6 +308,22 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             rr.mp.writeInt(uusInfo.getDcs());
             rr.mp.writeByteArray(uusInfo.getUserData());
         }
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+
+    public void
+    dialEmergencyCall(String address, int clirMode, Message result) {
+        RILRequest rr;
+        Log.v(LOG_TAG, "Emergency dial: " + address);
+
+        rr = RILRequest.obtain(RIL_REQUEST_DIAL_EMERGENCY, result);
+        rr.mp.writeString(address + "/");
+        rr.mp.writeInt(clirMode);
+        rr.mp.writeInt(0);
+        rr.mp.writeInt(0);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
@@ -349,7 +386,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         case RIL_UNSOL_GPS_NOTI: ret = responseVoid(p); break; // Ignored in TW RIL.
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST: ret = responseVoid(p); break;
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2: ret = responseVoid(p); break;
-        case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3: ret = responseVoid(p); break;
+        case RIL_UNSOL_AM: ret = responseVoid(p); break;
 
         default:
             throw new RuntimeException("Unrecognized unsol response: " + response);
@@ -466,12 +503,14 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             String nitz = (String)ret;
             if (RILJ_LOGD) riljLog(" RIL_UNSOL_NITZ_TIME_RECEIVED length = "
                     + nitz.split("[/:,+-]").length);
-            //remove the tailing information that samsung added to the string
-            //it will screw the NITZ parser
+
+            // remove the tailing information that samsung added to the string
             if(nitz.split("[/:,+-]").length >= 9)
                 nitz = nitz.substring(0,(nitz.lastIndexOf(",")));
+
             if (RILJ_LOGD) riljLog(" RIL_UNSOL_NITZ_TIME_RECEIVED striped nitz = "
                     + nitz);
+
             result[0] = nitz;
             result[1] = Long.valueOf(nitzReceiveTime);
 
@@ -688,7 +727,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
     protected Object
     responseCallList(Parcel p) {
         int num;
-        int voiceSettings;
+        boolean isVideo;
         ArrayList<DriverCall> response;
         DriverCall dc;
         int dataAvail = p.dataAvail();
@@ -699,11 +738,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         Log.d(LOG_TAG, "Parcel pos = " + pos);
         Log.d(LOG_TAG, "Parcel dataAvail = " + dataAvail);
 
-        //Samsung fucked up here
-
         num = p.readInt();
-
-        Log.d(LOG_TAG, "num = " + num);
         response = new ArrayList<DriverCall>(num);
 
         for (int i = 0 ; i < num ; i++) {
@@ -712,36 +747,34 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             else
                 dc = new DriverCall();
 
-            dc.state = DriverCall.stateFromCLCC(p.readInt());
+            dc.state                = DriverCall.stateFromCLCC(p.readInt());
+            dc.index                = p.readInt();
+            dc.TOA                  = p.readInt();
+            dc.isMpty               = (0 != p.readInt());
+            dc.isMT                 = (0 != p.readInt());
+            dc.als                  = p.readInt();
+            dc.isVoice              = (0 != p.readInt());
+            isVideo                 = (0 != p.readInt());
+            dc.isVoicePrivacy       = (0 != p.readInt());
+            dc.number               = p.readString();
+            int np                  = p.readInt();
+            dc.numberPresentation   = DriverCall.presentationFromCLIP(np);
+            dc.name                 = p.readString();
+            dc.namePresentation     = p.readInt();
+            int uusInfoPresent      = p.readInt();
+
             Log.d(LOG_TAG, "state = " + dc.state);
-            dc.index = p.readInt();
             Log.d(LOG_TAG, "index = " + dc.index);
-            dc.TOA = p.readInt();
             Log.d(LOG_TAG, "state = " + dc.TOA);
-            dc.isMpty = (0 != p.readInt());
             Log.d(LOG_TAG, "isMpty = " + dc.isMpty);
-            dc.isMT = (0 != p.readInt());
             Log.d(LOG_TAG, "isMT = " + dc.isMT);
-            dc.als = p.readInt();
             Log.d(LOG_TAG, "als = " + dc.als);
-            voiceSettings = p.readInt();
-            dc.isVoice = (0 == voiceSettings) ? false : true;
             Log.d(LOG_TAG, "isVoice = " + dc.isVoice);
-            dc.isVoicePrivacy =  (0 != p.readInt());
-            //Some Samsung magic data for Videocalls
-            voiceSettings = p.readInt();
-            //printing it to cosole for later investigation
-            Log.d(LOG_TAG, "Samsung magic = " + voiceSettings);
-            dc.number = p.readString();
+            Log.d(LOG_TAG, "isVideo = " + isVideo);
             Log.d(LOG_TAG, "number = " + dc.number);
-            int np = p.readInt();
-            Log.d(LOG_TAG, "np = " + np);
-            dc.numberPresentation = DriverCall.presentationFromCLIP(np);
-            dc.name = p.readString();
+            Log.d(LOG_TAG, "numberPresentation = " + np);
             Log.d(LOG_TAG, "name = " + dc.name);
-            dc.namePresentation = p.readInt();
             Log.d(LOG_TAG, "namePresentation = " + dc.namePresentation);
-            int uusInfoPresent = p.readInt();
             Log.d(LOG_TAG, "uusInfoPresent = " + uusInfoPresent);
 
             if (uusInfoPresent == 1) {
@@ -820,17 +853,17 @@ public class SamsungRIL extends RIL implements CommandsInterface {
 		   Method taken from Samsungs cdma/gsmSignalStateTracker */
         if(mSignalbarCount)
         {
-            //Samsung sends the count of bars that should be displayed instead of
-            //a real signal strength
-            response[0] = ((response[0] & 0xFF00) >> 8) * 3; //gsmDbm
+            // Samsung sends the count of bars that should be displayed instead of
+            // a real signal strength
+            response[0] = ((response[0] & 0xFF00) >> 8) * 3; // gsmDbm
         } else {
-            response[0] = response[0] & 0xFF; //gsmDbm
+            response[0] = response[0] & 0xFF; // gsmDbm
         }
-        response[1] = -1; //gsmEcio
-        response[2] = (response[2] < 0)?-120:-response[2]; //cdmaDbm
-        response[3] = (response[3] < 0)?-160:-response[3]; //cdmaEcio
-        response[4] = (response[4] < 0)?-120:-response[4]; //evdoRssi
-        response[5] = (response[5] < 0)?-1:-response[5]; //evdoEcio
+        response[1] = -1; // gsmEcio
+        response[2] = (response[2] < 0)?-120:-response[2]; // cdmaDbm
+        response[3] = (response[3] < 0)?-160:-response[3]; // cdmaEcio
+        response[4] = (response[4] < 0)?-120:-response[4]; // evdoRssi
+        response[5] = (response[5] < 0)?-1:-response[5]; // evdoEcio
         if(response[6] < 0 || response[6] > 8)
             response[6] = -1;
 
