@@ -2187,7 +2187,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
     protected void
     processSolicited (Parcel p) {
         int serial, error;
-        boolean found = false;
 
         serial = p.readInt();
         error = p.readInt();
@@ -3560,7 +3559,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_ISIM_AUTHENTICATION: return "RIL_REQUEST_ISIM_AUTHENTICATION";
             case RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU: return "RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU";
             case RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS: return "RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS";
-            default: return "<unknown request>";
+            default: return "<unknown request: "+request+">";
         }
     }
 
@@ -3608,7 +3607,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             case RIL_UNSOl_CDMA_PRL_CHANGED: return "UNSOL_CDMA_PRL_CHANGED";
             case RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE: return "UNSOL_EXIT_EMERGENCY_CALLBACK_MODE";
             case RIL_UNSOL_RIL_CONNECTED: return "UNSOL_RIL_CONNECTED";
-            default: return "<unknown reponse>";
+            default: return "<unknown response: "+request+">";
         }
     }
 
