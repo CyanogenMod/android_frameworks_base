@@ -20,11 +20,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/background_dark"
-    android:gravity="center_horizontal">
+    android:background="@android:color/transparent"
+    android:cacheColorHint="@android:color/transparent"
+    android:gravity="center|center_horizontal">
 
     <LinearLayout android:id="@+id/topDisplayGroup"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -81,39 +82,19 @@
     <include
         android:id="@+id/keyPad"
         layout="@android:layout/twelve_key_entry"
-        android:layout_width="fill_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/topDisplayGroup"
         android:layout_marginTop="10dip"
     />
-
-    <!-- spacer below keypad -->
-    <View
-        android:id="@+id/spacerBottom"
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_marginTop="6dip"
-        android:layout_above="@id/emergencyCallButton"
-        android:background="@android:drawable/divider_horizontal_dark"
-    />
-
-    <!-- The emergency button should take the rest of the space and be centered vertically -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <!-- emergency call button -->
+   
+   <!-- emergency call button -->
         <Button
             android:id="@+id/emergencyCallButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@android:drawable/ic_emergency"
             android:drawablePadding="8dip"
-            android:text="@android:string/lockscreen_emergency_call"
-        />
-    </LinearLayout>
+            android:text="@android:string/lockscreen_emergency_call" />
 
 </LinearLayout>
