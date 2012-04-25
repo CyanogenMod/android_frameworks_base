@@ -36,6 +36,17 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Se ha producido un problema de conexión o el código MMI no es válido."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"La operación solo es válida para números de marcación fija."</string>
+    <string name="profileNameDefault">"Predeterminado"</string>
+    <string name="profileNameWork">"Trabajo"</string>
+    <string name="profileNameHome">"Casa"</string>
+    <string name="profileNameSilent">"Silencio"</string>
+    <string name="profileNameNight">"Noche"</string>
+    <string name="profileGroupPhone">"Teléfono"</string>
+    <string name="profileGroupCalendar">"Calendario"</string>
+    <string name="profileGroupGmail">"Gmail"</string>
+    <string name="profileGroupEmail">"Email"</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Otro</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"El servicio se ha habilitado."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Se ha habilitado el servicio para:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"El servicio se ha inhabilitado."</string>
@@ -137,6 +148,17 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Desactivar función inalámbrica"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bloqueo de pantalla"</string>
     <string name="power_off" msgid="4266614107412865048">"Apagar"</string>
+    <string name="reboot_system" product="tablet">"Reiniciar tablet"</string>
+    <string name="reboot_system" product="default">"Reiniciar teléfono"</string>
+    <string name="global_action_screenshot">"Captura de pantalla"</string>
+    <string name="reboot_reboot">"Reiniciar"</string>
+    <string name="reboot_recovery">"Modo Recovery"</string>
+    <string name="reboot_bootloader">"Modo Bootloader"</string>
+    <string name="reboot_bootmenu">"Modo Bootmenu"</string>
+    <string name="reboot_fastboot">"Modo Fastboot"</string>
+    <string name="reboot_download">"Modo Download"</string>
+    <string name="reboot_progress">"Reiniciando\u2026"</string>
+    <string name="reboot_confirm">"El teléfono se reiniciará."</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"Timbre desactivado"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Modo vibración"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Timbre activado"</string>
@@ -150,6 +172,8 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Opciones del teléfono"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Bloqueo de pantalla"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Apagar"</string>
+    <string name="global_action_reboot">"Reiniciar"</string>
+    <string name="global_action_choose_profile">"Perfil"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Modo silencio"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"El sonido está desactivado. Activar"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"El sonido está activado. Desactivar"</string>
@@ -301,6 +325,8 @@
     <string name="permdesc_clearAppCache" product="default" msgid="7740465694193671402">"Permite que una aplicación libere espacio de almacenamiento en el teléfono mediante la eliminación de archivos en el directorio de caché de la aplicación. El acceso al proceso del sistema suele estar muy restringido."</string>
     <string name="permlab_movePackage" msgid="728454979946503926">"Mover recursos de aplicaciones"</string>
     <string name="permdesc_movePackage" msgid="6323049291923925277">"Permite que una aplicación mueva los recursos de aplicaciones de un medio interno a otro externo y viceversa."</string>
+    <string name="permlab_preventpower">"anular tecla encendido"</string>
+    <string name="permdesc_preventpower">"Permite que una aplicación anule la tecla de encendido"</string>
     <string name="permlab_readLogs" msgid="6615778543198967614">"leer datos de registro personales"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Permite que una aplicación lea diversos archivos de registro del sistema. Con este permiso, la aplicación puede ver información general sobre las acciones que se realizan con el tablet (que puede incluir datos personales o privados)."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Permite que una aplicación lea distintos archivos de registro del sistema. Con este permiso, la aplicación puede ver información general sobre las acciones que realizas con el teléfono, que puede incluir datos personales o privados."</string>
@@ -1227,4 +1253,5 @@
     <string name="sending" msgid="8715108995741758718">"Enviando..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"¿Iniciar el navegador?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"¿Aceptar la llamada?"</string>
+    <string name="app_killed_message">"Aplicación finalizada"</string>
 </resources>
