@@ -20,6 +20,24 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Défaut</string>
+    <string name="profileNameWork">Bureau</string>
+    <string name="profileNameHome">Maison</string>
+    <string name="profileNameSilent">Silence</string>
+    <string name="profileNameNight">Nuit</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Téléphone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Autres</string>
+
     <string name="byteShort" msgid="8340973892742019101">"o"</string>
     <string name="kilobyteShort" msgid="5973789783504771878">"Ko"</string>
     <string name="megabyteShort" msgid="6355851576770428922">"Mo"</string>
@@ -157,6 +175,7 @@
     <string name="reboot_progress">Redémarrage en cours...</string>
     <string name="global_action_reboot">Redémarrer</string>
     <string name="global_action_screenshot">Capture d\'écran</string>
+    <string name="global_action_choose_profile">Profils</string>
     <string name="global_actions" product="tablet" msgid="408477140088053665">"Options de la tablette"</string>
     <string name="global_actions" product="default" msgid="2406416831541615258">"Options du téléphone"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Verrouillage de l\'écran"</string>
