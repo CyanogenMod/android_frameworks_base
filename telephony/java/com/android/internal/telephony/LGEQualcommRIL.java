@@ -21,6 +21,8 @@ import static com.android.internal.telephony.RILConstants.*;
 import android.content.Context;
 import android.os.Message;
 import android.os.Parcel;
+import android.os.AsyncResult;
+import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -33,6 +35,7 @@ import java.util.ArrayList;
  */
 public class LGEQualcommRIL extends QualcommNoSimReadyRIL implements CommandsInterface {
     protected String mAid;
+    protected int mPinState;
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
 
@@ -246,16 +249,24 @@ public class LGEQualcommRIL extends QualcommNoSimReadyRIL implements CommandsInt
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
                     + " aid: " + mAid + " facility: " + facility);
 
-        // count strings
-        rr.mp.writeInt(4);
+        if (facility.equals("SC") &&
+               SystemProperties.get("ro.cm.device").indexOf("e73") == 0) {
+            int [] iccstatus = new int[1];
+            iccstatus[0] = mPinState;
+            AsyncResult.forMessage(response, iccstatus, null);
+            response.sendToTarget();
+        } else {
+            // count strings
+            rr.mp.writeInt(4);
 
-        rr.mp.writeString(mAid);
-        rr.mp.writeString(facility);
-        rr.mp.writeString(password);
+            rr.mp.writeString(mAid);
+            rr.mp.writeString(facility);
+            rr.mp.writeString(password);
 
-        rr.mp.writeString(Integer.toString(serviceClass));
+            rr.mp.writeString(Integer.toString(serviceClass));
 
-        send(rr);
+            send(rr);
+        }
     }
 
     @Override
@@ -342,6 +353,8 @@ public class LGEQualcommRIL extends QualcommNoSimReadyRIL implements CommandsInt
 
         IccCardApplication application = status.getApplication(appIndex);
         mAid = application.aid;
+        mPinState = (application.pin1 == IccCardStatus.PinState.PINSTATE_DISABLED || 
+                     application.pin1 == IccCardStatus.PinState.PINSTATE_UNKNOWN) ? 0 : 1;
 
         return status;
     }
