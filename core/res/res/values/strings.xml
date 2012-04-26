@@ -3343,12 +3343,18 @@
 
     <!-- Storage description for internal storage. [CHAR LIMIT=NONE] -->
     <string name="storage_internal">Internal Storage</string>
+    <!-- Storage description for internal storage. [CHAR LIMIT=5] -->
+    <string name="storage_label_internal" translatable="false">EMMC</string>
 
     <!-- Storage description for the SD card. [CHAR LIMIT=NONE] -->
     <string name="storage_sd_card">SD Card</string>
+    <!-- Storage description for the SD card. [CHAR LIMIT=5] -->
+    <string name="storage_label_sd_card" translatable="false">SD</string>
 
     <!-- Storage description for USB storage. [CHAR LIMIT=NONE] -->
     <string name="storage_usb">USB storage</string>
+    <!-- Storage description for USB storage. [CHAR LIMIT=5] -->
+    <string name="storage_label_usb" translatable="false">USB</string>
 
     <!-- Button text for the edit menu in input method extract mode. [CHAR LIMIT=16] -->
     <string name="extract_edit_menu_button">Edit...</string>

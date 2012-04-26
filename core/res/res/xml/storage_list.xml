@@ -20,7 +20,7 @@
 <!-- The <device> element should contain one or more <storage> elements.
      Exactly one of these should have the attribute primary="true".
      This storage will be the primary external storage and should have mountPoint="/mnt/sdcard".
-     Each storage should have both a mountPoint and storageDescription attribute.
+     Each storage should have a mountPoint, a storageDescription and a storageLabel attribute.
      The following attributes are optional:
 
         primary:    (boolean) this storage is the primary external storage
@@ -28,6 +28,8 @@
         emulated:   (boolean) the storage is emulated via the FUSE sdcard daemon
         mtpReserve: (integer) number of megabytes of storage MTP should reserve for free storage
                      (used for emulated storage that is shared with system's data partition)
+        allowMassStorage: (boolean) this volume can be shared via USB mass storage
+        maxFileSize: (integer) maximum file size in megabytes
 
       A storage should not have both emulated and removable set to true
 -->
@@ -35,6 +37,7 @@
 <StorageList xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- removable is not set in nosdcard product -->
     <storage android:mountPoint="/mnt/sdcard"
-    		 android:storageDescription="@string/storage_usb"
-    		 android:primary="true" />
+            android:storageDescription="@string/storage_usb"
+            android:storageLabel="@string/storage_label_usb"
+            android:primary="true" />
 </StorageList>

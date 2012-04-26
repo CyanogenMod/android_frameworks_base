@@ -29,6 +29,7 @@ public class StorageVolume implements Parcelable {
 
     private final String mPath;
     private final String mDescription;
+    private final String mLabel;
     private final boolean mRemovable;
     private final boolean mEmulated;
     private final int mMtpReserveSpace;
@@ -42,10 +43,11 @@ public class StorageVolume implements Parcelable {
     // ACTION_MEDIA_BAD_REMOVAL, ACTION_MEDIA_UNMOUNTABLE and ACTION_MEDIA_EJECT broadcasts.
     public static final String EXTRA_STORAGE_VOLUME = "storage_volume";
 
-    public StorageVolume(String path, String description, boolean removable,
+    public StorageVolume(String path, String description, String label, boolean removable,
             boolean emulated, int mtpReserveSpace, boolean allowMassStorage, long maxFileSize) {
         mPath = path;
         mDescription = description;
+        mLabel = label;
         mRemovable = removable;
         mEmulated = emulated;
         mMtpReserveSpace = mtpReserveSpace;
@@ -54,11 +56,12 @@ public class StorageVolume implements Parcelable {
     }
 
     // for parcelling only
-    private StorageVolume(String path, String description, boolean removable,
+    private StorageVolume(String path, String description, String label, boolean removable,
             boolean emulated, int mtpReserveSpace, int storageId,
             boolean allowMassStorage, long maxFileSize) {
         mPath = path;
         mDescription = description;
+        mLabel = label;
         mRemovable = removable;
         mEmulated = emulated;
         mMtpReserveSpace = mtpReserveSpace;
@@ -83,6 +86,15 @@ public class StorageVolume implements Parcelable {
      */
     public String getDescription() {
         return mDescription;
+    }
+
+    /**
+     * Returns a short label description of the volume.
+     *
+     * @return the volume label description
+     */
+    public String getLabel() {
+        return mLabel;
     }
 
     /**
@@ -173,9 +185,9 @@ public class StorageVolume implements Parcelable {
     @Override
     public String toString() {
         return "StorageVolume [mAllowMassStorage=" + mAllowMassStorage + ", mDescription="
-                + mDescription + ", mEmulated=" + mEmulated + ", mMaxFileSize=" + mMaxFileSize
-                + ", mMtpReserveSpace=" + mMtpReserveSpace + ", mPath=" + mPath + ", mRemovable="
-                + mRemovable + ", mStorageId=" + mStorageId + "]";
+                + mDescription + ", mLabel=" + mLabel + ", mEmulated=" + mEmulated
+                + ", mMaxFileSize=" + mMaxFileSize + ", mMtpReserveSpace=" + mMtpReserveSpace
+                + ", mPath=" + mPath + ", mRemovable=" + mRemovable + ", mStorageId=" + mStorageId + "]";
     }
 
     public static final Parcelable.Creator<StorageVolume> CREATOR =
@@ -183,13 +195,14 @@ public class StorageVolume implements Parcelable {
         public StorageVolume createFromParcel(Parcel in) {
             String path = in.readString();
             String description = in.readString();
+            String label = in.readString();
             int removable = in.readInt();
             int emulated = in.readInt();
             int storageId = in.readInt();
             int mtpReserveSpace = in.readInt();
             int allowMassStorage = in.readInt();
             long maxFileSize = in.readLong();
-            return new StorageVolume(path, description,
+            return new StorageVolume(path, description, label,
                     removable == 1, emulated == 1, mtpReserveSpace,
                     storageId, allowMassStorage == 1, maxFileSize);
         }
@@ -206,6 +219,7 @@ public class StorageVolume implements Parcelable {
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(mPath);
         parcel.writeString(mDescription);
+        parcel.writeString(mLabel);
         parcel.writeInt(mRemovable ? 1 : 0);
         parcel.writeInt(mEmulated ? 1 : 0);
         parcel.writeInt(mStorageId);
