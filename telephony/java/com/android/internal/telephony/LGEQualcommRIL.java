@@ -183,7 +183,7 @@ public class LGEQualcommRIL extends QualcommNoSimReadyRIL implements CommandsInt
         rr.mp.writeString(user);
         rr.mp.writeString(password);
         rr.mp.writeString(authType);
-        rr.mp.writeString("0"); // ipVersion
+        rr.mp.writeString("IP"); // ipVersion
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> "
                 + requestToString(rr.mRequest) + " " + radioTechnology + " "
@@ -380,6 +380,11 @@ public class LGEQualcommRIL extends QualcommNoSimReadyRIL implements CommandsInt
         dataCall.ifname = "rmnet0";
         p.readInt(); // RadioTechnology
         p.readInt(); // inactiveReason
+
+        dataCall.dnses = new String[2];
+        dataCall.dnses[0] = SystemProperties.get("net."+dataCall.ifname+".dns1");
+        dataCall.dnses[1] = SystemProperties.get("net."+dataCall.ifname+".dns2");
+
         return dataCall;
     }
 
@@ -406,6 +411,13 @@ public class LGEQualcommRIL extends QualcommNoSimReadyRIL implements CommandsInt
         if (!TextUtils.isEmpty(addresses)) {
           dataCall.addresses = addresses.split(" ");
         }
+
+        dataCall.dnses = new String[2];
+        dataCall.dnses[0] = SystemProperties.get("net."+dataCall.ifname+".dns1");
+        dataCall.dnses[1] = SystemProperties.get("net."+dataCall.ifname+".dns2");
+        dataCall.active = 1;
+        dataCall.status = 0;
+
         return dataCall;
     }
 
