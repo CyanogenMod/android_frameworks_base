@@ -1098,6 +1098,9 @@ class MountService extends IMountService.Stub
                             com.android.internal.R.styleable.Storage_mountPoint);
                     CharSequence description = a.getText(
                             com.android.internal.R.styleable.Storage_storageDescription);
+                    CharSequence label = a.getText(
+                            com.android.internal.R.styleable.Storage_storageLabel);
+                    if(label == null) label = description.subSequence(0, description.length());
                     boolean primary = a.getBoolean(
                             com.android.internal.R.styleable.Storage_primary, false);
                     boolean removable = a.getBoolean(
@@ -1122,7 +1125,7 @@ class MountService extends IMountService.Stub
                     } else {
                         String pathString = path.toString();
                         StorageVolume volume = new StorageVolume(pathString,
-                                description.toString(), removable, emulated,
+                                description.toString(), label.toString(), removable, emulated,
                                 mtpReserve, allowMassStorage, maxFileSize);
                         if (primary) {
                             if (mPrimaryVolume == null) {
@@ -1191,13 +1194,13 @@ class MountService extends IMountService.Stub
 
             // Create new volumes
             StorageVolume newLeft = new StorageVolume(left.getPath(),
-                right.getDescription(), right.isRemovable(),
+                right.getDescription(), right.getLabel(), right.isRemovable(),
                 right.isEmulated(), right.getMtpReserveSpace(),
                 right.allowMassStorage(), right.getMaxFileSize());
             newLeft.setStorageId(leftIndex);
 
             StorageVolume newRight = new StorageVolume(right.getPath(),
-                left.getDescription(), left.isRemovable(),
+                left.getDescription(), left.getLabel(), left.isRemovable(),
                 left.isEmulated(), left.getMtpReserveSpace(),
                 left.allowMassStorage(), left.getMaxFileSize());
             newRight.setStorageId(rightIndex);
