@@ -150,13 +150,13 @@
     <string name="power_off" msgid="4266614107412865048">"Spegni"</string>
     <string name="reboot_system" product="tablet">Riavvia tablet</string>
     <string name="reboot_system" product="default">Riavvia telefono</string>
-    <string name="global_action_screenshot">Cattura schemo</string>
+    <string name="global_action_screenshot">Cattura schermata</string>
     <string name="reboot_reboot">Riavvia</string>
-    <string name="reboot_recovery">Modalità Recovery</string>
-    <string name="reboot_bootloader">Modalità Bootloader</string>
-    <string name="reboot_bootmenu">Modalità Bootmenu</string>
-    <string name="reboot_fastboot">Modalità Fastboot</string>
-    <string name="reboot_download">Modalità Download</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
     <string name="reboot_progress">Riavvio\u2026</string>
     <string name="reboot_confirm">Il telefono verrà riavviato.</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"Suoneria disattivata"</string>
