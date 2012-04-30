@@ -38,6 +38,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.internal.R;
+import android.provider.Settings;
 
 /**
  * Displays a dialer like interface to unlock the SIM PIN.
@@ -255,7 +256,12 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                     mUpdateMonitor.reportSimPinUnlocked();
                     mCallback.goToUnlockScreen();
                 } else {
-                    mHeaderText.setText(R.string.keyguard_password_wrong_pin_code);
+                    // check the airplane mode
+                    if (Settings.System.getInt(mContext.getContentResolver(),Settings.System.AIRPLANE_MODE_ON,0) == 1) {
+                       mHeaderText.setText(R.string.global_actions_airplane_mode_on_status);
+                    } else {
+                	   mHeaderText.setText(R.string.keyguard_password_wrong_pin_code);
+                    }
                     mPinText.setText("");
                     mEnteredDigits = 0;
                 }
@@ -314,9 +320,9 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                 mCallback.goToUnlockScreen();
             }
         }
-        
+
     }
-    
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -384,9 +390,21 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             mCancelButton.setOnClickListener(this);
         }
 
+        private void updateSimState() {
+            // dummy PIN validation
+            new CheckSimPin("") {
+                void onSimLockChangedResponse(boolean success) {
+                }
+            }.start();
+        }
 
         public void onClick(View v) {
             if (v == mCancelButton) {
+                // check the airplane mode
+                if (Settings.System.getInt(mContext.getContentResolver(),Settings.System.AIRPLANE_MODE_ON,0) == 1) {
+                    // force the system to update the SIM state trying a dummy PIN validation
+                    updateSimState();
+                }
                 mCallback.goToLockScreen();
                 return;
             }
