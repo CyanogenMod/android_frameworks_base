@@ -936,10 +936,11 @@ status_t AwesomePlayer::play_l() {
                 if(strcmp("true",lpaDecode) == 0)
                 {
                     LOGV("LPAPlayer::getObjectsAlive() %d",LPAPlayer::objectsAlive);
+                    int streamType = mAudioSink->getAudioStreamType();
                     if ( durationUs > 60000000 && !isFormatAdif
-                         &&(!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_MPEG) || !strcasecmp(mime,MEDIA_MIMETYPE_AUDIO_AAC))
-                         && LPAPlayer::objectsAlive == 0 && mVideoSource == NULL) {
-                        LOGE("LPAPlayer created, LPA MODE detected mime %s duration %d\n", mime, durationUs);
+                         && (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_MPEG) || !strcasecmp(mime,MEDIA_MIMETYPE_AUDIO_AAC))
+                         && LPAPlayer::objectsAlive == 0 && mVideoSource == NULL && streamType == AUDIO_STREAM_MUSIC) {
+                        LOGE("LPAPlayer created, LPA MODE detected mime %s duration %lld AudioStream %d", mime, durationUs,streamType);
                         bool initCheck =  false;
                         mAudioPlayer = new LPAPlayer(mAudioSink, initCheck, this);
                         if(!initCheck) {
