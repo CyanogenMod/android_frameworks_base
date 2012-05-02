@@ -1228,4 +1228,20 @@
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Käynnistetäänkö selain?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Vastataanko puheluun?"</string>
     <string name="global_action_screenshot">Kuvakaappaus</string>
+    <string name="reboot_reboot">Käynnistä uudelleen</string>
+    <string name="reboot_system" product="tablet">Käynnistä tablet uudelleen</string>
+    <string name="reboot_system" product="default">Käynnistä puhelin uudelleen</string>
+    <string name="reboot_progress">_Uudelleenkäynnistetään\u2026</string>
+    <string name="reboot_confirm">Laitteesi käynnistyy uudelleen</string>
+    <string name="profileNameDefault">Oletus</string>
+    <string name="profileNameWork">Työ</string>
+    <string name="profileNameHome">Koti</string>
+    <string name="profileNameSilent">Äänetön</string>
+    <string name="profileNameNight">Yö</string>
+    <string name="profileGroupPhone">Puhelin</string>
+    <string name="profileGroupCalendar">Kalenteri</string>
+    <string name="profileGroupEmail">Sähköposti</string>
+    <string name="profileGroupSMS">Tekstiviesti</string>
+    <string name="wildcardProfile">Muu</string>
+    <string name="global_action_choose_profile">Profiili</string>
 </resources>
