@@ -253,6 +253,7 @@ public class LGEQualcommRIL extends RIL implements CommandsInterface {
         int response = p.readInt();
 
         switch(response) {
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p);
             case 1031: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
             case 1032: ret = responseInts(p); break; // RIL_UNSOL_TETHERED_MODE_STATE_CHANGED
             case 1033: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_DATA_NETWORK_STATE_CHANGED
@@ -271,6 +272,10 @@ public class LGEQualcommRIL extends RIL implements CommandsInterface {
 	}
 
         switch(response) {
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED:
+                int state = p.readInt();
+                setRadioStateFromRILInt(state);
+            break;
             case 1031:
             case 1032:
             case 1033:
