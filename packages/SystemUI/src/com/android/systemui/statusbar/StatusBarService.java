@@ -400,6 +400,12 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mDateView = (DateView)sb.findViewById(R.id.date);
         mCmBatteryMiniIcon = (CmBatteryMiniIcon)sb.findViewById(R.id.CmBatteryMiniIcon);
 
+        /* Destroy any existing widgets before recreating the expanded dialog
+         * to ensure there are no lost context issues */
+        if (mPowerWidget != null) {
+            mPowerWidget.destroyWidget();
+        }
+
         mExpandedDialog = new ExpandedDialog(context);
         mExpandedView = expanded;
         mExpandedContents = expanded.findViewById(R.id.notificationLinearLayout);
