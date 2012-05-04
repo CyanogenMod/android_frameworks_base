@@ -17,12 +17,16 @@
 
 package com.android.systemui.statusbar;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-
+import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.statusbar.StatusBarIcon;
+import com.android.internal.statusbar.StatusBarIconList;
+import com.android.internal.statusbar.StatusBarNotification;
+import com.android.systemui.statusbar.CmBatteryMiniIcon.SettingsObserver;
+import com.android.systemui.statusbar.powerwidget.PowerWidget;
+import com.android.systemui.R;
+import android.os.IPowerManager;
+import android.provider.Settings.SettingNotFoundException;
 import android.app.ActivityManagerNative;
-import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -33,24 +37,23 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentFilter.MalformedMimeTypeException;
 import android.content.pm.PackageManager;
+import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.IPowerManager;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.provider.CmSystem;
 import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.Slog;
@@ -68,22 +71,19 @@ import android.view.WindowManagerImpl;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.android.internal.statusbar.IStatusBarService;
-import com.android.internal.statusbar.StatusBarIcon;
-import com.android.internal.statusbar.StatusBarIconList;
-import com.android.internal.statusbar.StatusBarNotification;
-import com.android.systemui.R;
-import com.android.systemui.statusbar.powerwidget.PowerWidget;
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class StatusBarService extends Service implements CommandQueue.Callbacks {
-    private static final String DATA_TYPE_TMOBILE_STYLE = "vnd.tmobile.cursor.item/style";
-    private static final String DATA_TYPE_TMOBILE_THEME = "vnd.tmobile.cursor.item/theme";
-    private static final String ACTION_TMOBILE_THEME_CHANGED = "com.tmobile.intent.action.THEME_CHANGED";
     static final String TAG = "StatusBarService";
     static final boolean SPEW_ICONS = false;
     static final boolean SPEW = false;
@@ -117,6 +117,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     int mPixelFormat;
     H mHandler = new H();
     Object mQueueLock = new Object();
+
+    // last theme that was applied in order to detect theme change (as opposed
+    // to some other configuration change).
+    CustomTheme mCurrentTheme;
 
     // icons
     LinearLayout mIcons;
@@ -274,6 +278,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     public void onCreate() {
         // First set up our views and stuff.
         mDisplay = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        CustomTheme currentTheme = getResources().getConfiguration().customTheme;
+        if (currentTheme != null) {
+            mCurrentTheme = (CustomTheme)currentTheme.clone();
+        }
         makeStatusBarView(this);
 
         // reset vars for bottom bar
@@ -288,16 +296,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mBroadcastReceiver, filter);
-
-        try {
-            IntentFilter tMoFilter = new IntentFilter(ACTION_TMOBILE_THEME_CHANGED);
-            tMoFilter.addDataType(DATA_TYPE_TMOBILE_THEME);
-            tMoFilter.addDataType(DATA_TYPE_TMOBILE_STYLE);
-            registerReceiver(mBroadcastReceiver, tMoFilter);
-        } catch (MalformedMimeTypeException e) {
-            Slog.e(TAG, "Could not set T-Mo mime types", e);
-        }
-
 
         // Connect in to the status bar manager service
         StatusBarIconList iconList = new StatusBarIconList();
@@ -1788,13 +1786,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
                 animateCollapse();
             } else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
                 updateResources();
-            } else if (ACTION_TMOBILE_THEME_CHANGED.equals(action)) {
-                // Normally it will restart on its own, but sometimes it doesn't.  Other times it's slow. 
-                // This will help it restart reliably and faster.
-                PendingIntent restartIntent = PendingIntent.getService(mContext, 0, new Intent(mContext, StatusBarService.class), 0);
-                AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-                alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, restartIntent);
-                android.os.Process.killProcess(android.os.Process.myPid());
             }
         }
     };
@@ -1848,8 +1839,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         setAreThereNotifications();
         mStatusBarContainer.addView(mStatusBarView);
         updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
-
-        mPowerWidget.setupWidget();
     }
 
     /**
@@ -1862,12 +1851,22 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     void updateResources() {
         Resources res = getResources();
 
-        mClearButton.setText(getText(R.string.status_bar_clear_all_button));
-        mOngoingTitle.setText(getText(R.string.status_bar_ongoing_events_title));
-        mLatestTitle.setText(getText(R.string.status_bar_latest_events_title));
-        mNoNotificationsTitle.setText(getText(R.string.status_bar_no_notifications_title));
+        // detect theme change.
+        CustomTheme newTheme = res.getConfiguration().customTheme;
+        if (newTheme != null &&
+                (mCurrentTheme == null || !mCurrentTheme.equals(newTheme))) {
+            mCurrentTheme = (CustomTheme)newTheme.clone();
+            mCmBatteryMiniIcon.updateIconCache();
+            mCmBatteryMiniIcon.updateMatrix();
+            recreateStatusBar();
+        } else {
+            mClearButton.setText(getText(R.string.status_bar_clear_all_button));
+            mOngoingTitle.setText(getText(R.string.status_bar_ongoing_events_title));
+            mLatestTitle.setText(getText(R.string.status_bar_latest_events_title));
+            mNoNotificationsTitle.setText(getText(R.string.status_bar_no_notifications_title));
 
-        mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
+            mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
+        }
 
         if (false) Slog.v(TAG, "updateResources");
     }
