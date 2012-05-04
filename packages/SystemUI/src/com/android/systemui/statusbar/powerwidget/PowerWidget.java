@@ -84,7 +84,7 @@ public class PowerWidget extends FrameLayout {
         updateVisibility();
     }
 
-    public void setupWidget() {
+    public void destroyWidget() {
         Log.i(TAG, "Clearing any old widget stuffs");
         // remove all views from the layout
         removeAllViews();
@@ -92,14 +92,21 @@ public class PowerWidget extends FrameLayout {
         // unregister our content receiver
         if(mBroadcastReceiver != null) {
             mContext.unregisterReceiver(mBroadcastReceiver);
+            mBroadcastReceiver = null;
         }
         // unobserve our content
         if(mObserver != null) {
             mObserver.unobserve();
+            mObserver = null;
         }
 
         // clear the button instances
         PowerButton.unloadAllButtons();
+    }
+
+
+    public void setupWidget() {
+        destroyWidget();
 
         Log.i(TAG, "Setting up widget");
 
