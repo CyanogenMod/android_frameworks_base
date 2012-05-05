@@ -304,18 +304,11 @@ public class SignalStrength implements Parcelable {
                 level = getLteLevel();
             }
         } else {
-            int cdmaLevel = getCdmaLevel();
-            int evdoLevel = getEvdoLevel();
-            if (evdoLevel == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
-                /* We don't know evdo, use cdma */
-                level = getCdmaLevel();
-            } else if (cdmaLevel == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
-                /* We don't know cdma, use evdo */
-                level = getEvdoLevel();
-            } else {
-                /* We know both, use the lowest level */
-                level = cdmaLevel < evdoLevel ? cdmaLevel : evdoLevel;
-            }
+            /**
+             * Samsung ROM ignores EVDO and ec/io.  We follow this behavior in 
+             * order to match the radio's behavior and to reduce complaints from users.
+             */
+            level = getCdmaLevel();
         }
         if (DBG) log("getLevel=" + level);
         return level;
@@ -442,24 +435,19 @@ public class SignalStrength implements Parcelable {
      */
     public int getCdmaLevel() {
         final int cdmaDbm = getCdmaDbm();
-        final int cdmaEcio = getCdmaEcio();
         int levelDbm;
-        int levelEcio;
 
         if (cdmaDbm >= -75) levelDbm = SIGNAL_STRENGTH_GREAT;
         else if (cdmaDbm >= -85) levelDbm = SIGNAL_STRENGTH_GOOD;
         else if (cdmaDbm >= -95) levelDbm = SIGNAL_STRENGTH_MODERATE;
-        else if (cdmaDbm >= -100) levelDbm = SIGNAL_STRENGTH_POOR;
+        else if (cdmaDbm >= -105) levelDbm = SIGNAL_STRENGTH_POOR;
         else levelDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
-        // Ec/Io are in dB*10
-        if (cdmaEcio >= -90) levelEcio = SIGNAL_STRENGTH_GREAT;
-        else if (cdmaEcio >= -110) levelEcio = SIGNAL_STRENGTH_GOOD;
-        else if (cdmaEcio >= -130) levelEcio = SIGNAL_STRENGTH_MODERATE;
-        else if (cdmaEcio >= -150) levelEcio = SIGNAL_STRENGTH_POOR;
-        else levelEcio = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
-
-        int level = (levelDbm < levelEcio) ? levelDbm : levelEcio;
+        /**
+         * Samsung ROM ignores EVDO and ec/io.  We follow this behavior in 
+         * order to match the radio's behavior and to reduce complaints from users.
+         */
+        int level = levelDbm;
         if (DBG) log("getCdmaLevel=" + level);
         return level;
     }
