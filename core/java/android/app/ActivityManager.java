@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1548,6 +1549,16 @@ public class ActivityManager {
             return new HashMap<String, Integer>();
         }
     }
+    /**
+     * @hide
+     */
+    public Configuration getConfiguration() {
+        try {
+            return ActivityManagerNative.getDefault().getConfiguration();
+        } catch (RemoteException e) {
+            return null;
+        }
+    }
 
     /**
      * Returns the usage statistics of each installed package.
@@ -1579,4 +1590,16 @@ public class ActivityManager {
         }
     }
 
+    /**
+     * @throws SecurityException Throws SecurityException if the caller does
+     * not hold the {@link android.Manifest.permission#CHANGE_CONFIGURATION} permission.
+     *
+     * @hide
+     */
+    public void updateConfiguration(Configuration values) throws SecurityException {
+        try {
+            ActivityManagerNative.getDefault().updateConfiguration(values);
+        } catch (RemoteException e) {
+        }
+    }
 }

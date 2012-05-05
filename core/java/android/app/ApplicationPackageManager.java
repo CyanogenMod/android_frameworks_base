@@ -403,6 +403,16 @@ final class ApplicationPackageManager extends PackageManager {
 
     @SuppressWarnings("unchecked")
     @Override
+    public List<PackageInfo> getInstalledThemePackages() {
+        try {
+            return mPM.getInstalledThemePackages();
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public List<ApplicationInfo> getInstalledApplications(int flags) {
         try {
             final List<ApplicationInfo> applicationInfos = new ArrayList<ApplicationInfo>();
