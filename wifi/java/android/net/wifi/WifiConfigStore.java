@@ -1025,6 +1025,32 @@ class WifiConfigStore {
                 break setVariables;
             }
 
+            // Android sometimes call this function with infrastructure
+            // configuration for ad-hoc networks (from selectNetwork),
+            // so we only set the variable if the mode is ad-hoc.
+            // (Infrastructure is default and does not have to be set.)
+            if (config.mode == WifiConfiguration.Mode.ADHOC) {
+                if (!WifiNative.setNetworkVariableCommand(
+                            netId,
+                            WifiConfiguration.Mode.varName,
+                            Integer.toString(config.mode))) {
+                    loge(config.SSID + ": failed to set mode: "
+                            +config.mode);
+                    break setVariables;
+                }
+
+                // Some drivers/wpa_supplicant require the frequency
+                // to be set for ad-hoc networks, even though it will
+                // not actually be used. Set it to Channel 11.
+                if (!WifiNative.setNetworkVariableCommand(
+                            netId,
+                            "frequency",
+                            "2462")) {
+                    loge(config.SSID + ": failed to set frequency: 2462");
+                    break setVariables;
+                }
+            }
+
             for (WifiConfiguration.EnterpriseField field
                     : config.enterpriseFields) {
                 String varName = field.varName();
@@ -1242,6 +1268,15 @@ class WifiConfigStore {
         if (!TextUtils.isEmpty(value)) {
             try {
                 config.hiddenSSID = Integer.parseInt(value) != 0;
+            } catch (NumberFormatException ignore) {
+            }
+        }
+
+        value = WifiNative.getNetworkVariableCommand(netId, WifiConfiguration.Mode.varName);
+        config.mode = WifiConfiguration.Mode.INFRASTRUCTURE;
+        if (!TextUtils.isEmpty(value)) {
+            try {
+                config.mode = Integer.parseInt(value);
             } catch (NumberFormatException ignore) {
             }
         }
