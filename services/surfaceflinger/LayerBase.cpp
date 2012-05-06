@@ -36,6 +36,17 @@
 #include "qcom_ui.h"
 #endif
 
+#define RENDER_EFFECT_NIGHT 1
+#define RENDER_EFFECT_TERMINAL 2
+#define RENDER_EFFECT_BLUE 3
+#define RENDER_EFFECT_AMBER 4
+#define RENDER_EFFECT_SALMON 5
+#define RENDER_EFFECT_FUSCIA 6
+#define RENDER_EFFECT_N1_CALIBRATED_N 7
+#define RENDER_EFFECT_N1_CALIBRATED_R 8
+#define RENDER_EFFECT_N1_CALIBRATED_C 9
+#define RENDER_EFFECT_RED 10
+
 namespace android {
 
 // ---------------------------------------------------------------------------
@@ -425,8 +436,15 @@ void LayerBase::drawWithOpenGL(const Region& clip) const
     const uint32_t fbHeight = hw.getHeight();
     const State& s(drawingState());
 
+    int renderEffect = mFlinger->getRenderEffect();
+    int renderColorR = mFlinger->getRenderColorR();
+    int renderColorG = mFlinger->getRenderColorG();
+    int renderColorB = mFlinger->getRenderColorB();
+
+    bool noEffect = renderEffect == 0;
+
     GLenum src = mPremultipliedAlpha ? GL_ONE : GL_SRC_ALPHA;
-    if (UNLIKELY(s.alpha < 0xFF)) {
+    if (UNLIKELY(s.alpha < 0xFF) && noEffect) {
         const GLfloat alpha = s.alpha * (1.0f/255.0f);
         if (mPremultipliedAlpha) {
             glColor4f(alpha, alpha, alpha, alpha);
@@ -436,7 +454,7 @@ void LayerBase::drawWithOpenGL(const Region& clip) const
         glEnable(GL_BLEND);
         glBlendFunc(src, GL_ONE_MINUS_SRC_ALPHA);
         glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    } else {
+    } else if (noEffect) {
         glColor4f(1, 1, 1, 1);
         glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
         if (!isOpaque()) {
@@ -445,6 +463,47 @@ void LayerBase::drawWithOpenGL(const Region& clip) const
         } else {
             glDisable(GL_BLEND);
         }
+    } else {
+        // Apply a render effect, which is simple color masks for now.
+        GLenum env, src;
+        env = GL_MODULATE;
+        src = mPremultipliedAlpha ? GL_ONE : GL_SRC_ALPHA;
+        const GGLfixed alpha = (s.alpha << 16)/255;
+        switch (renderEffect) {
+            case RENDER_EFFECT_NIGHT:
+                glColor4x(alpha, alpha*0.6204, alpha*0.3018, alpha);
+                break;
+            case RENDER_EFFECT_TERMINAL:
+                glColor4x(0, alpha, 0, alpha);
+                break;
+            case RENDER_EFFECT_BLUE:
+                glColor4x(0, 0, alpha, alpha);
+                break;
+            case RENDER_EFFECT_AMBER:
+                glColor4x(alpha, alpha*0.75, 0, alpha);
+                break;
+            case RENDER_EFFECT_SALMON:
+                glColor4x(alpha, alpha*0.5, alpha*0.5, alpha);
+                break;
+            case RENDER_EFFECT_FUSCIA:
+                glColor4x(alpha, 0, alpha*0.5, alpha);
+                break;
+            case RENDER_EFFECT_N1_CALIBRATED_N:
+                glColor4x(alpha*renderColorR/1000, alpha*renderColorG/1000, alpha*renderColorB/1000, alpha);
+                break;
+            case RENDER_EFFECT_N1_CALIBRATED_R:
+                glColor4x(alpha*(renderColorR-50)/1000, alpha*renderColorG/1000, alpha*(renderColorB-30)/1000, alpha);
+                break;
+            case RENDER_EFFECT_N1_CALIBRATED_C:
+                glColor4x(alpha*renderColorR/1000, alpha*renderColorG/1000, alpha*(renderColorB+30)/1000, alpha);
+                break;
+            case RENDER_EFFECT_RED:
+                glColor4x(alpha, 0, 0, alpha);
+                break;
+        }
+        glEnable(GL_BLEND);
+        glBlendFunc(src, GL_ONE_MINUS_SRC_ALPHA);
+        glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, env);
     }
 
     struct TexCoords {

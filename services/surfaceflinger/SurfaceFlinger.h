@@ -212,6 +212,11 @@ public:
             status_t postMessageSync(const sp<MessageBase>& msg,
                     nsecs_t reltime=0, uint32_t flags = 0);
 
+            inline int                  getRenderEffect() const { return mRenderEffect; }
+            inline int                  getRenderColorR() const { return mRenderColorR; }
+            inline int                  getRenderColorG() const { return mRenderColorG; }
+            inline int                  getRenderColorB() const { return mRenderColorB; }
+
     status_t removeLayer(const sp<LayerBase>& layer);
     status_t addLayer(const sp<LayerBase>& layer);
     status_t invalidateLayerVisibility(const sp<LayerBase>& layer);
@@ -405,6 +410,10 @@ private:
                 // don't use a lock for these, we don't care
                 int                         mDebugRegion;
                 int                         mDebugBackground;
+                int                         mRenderEffect;
+                int                         mRenderColorR;
+                int                         mRenderColorG;
+                int                         mRenderColorB;
                 int                         mDebugDDMS;
                 int                         mDebugDisableHWC;
                 int                         mDebugDisableTransformHint;
