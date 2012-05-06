@@ -554,6 +554,14 @@ public class MockPackageManager extends PackageManager {
     }
 
     /**
+     * @hide - to match hiding in superclass
+     */
+    @Override
+    public List<PackageInfo> getInstalledThemePackages() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @hide
      */
     @Override
