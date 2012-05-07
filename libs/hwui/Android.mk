@@ -42,10 +42,15 @@ ifeq ($(USE_OPENGL_RENDERER),true)
 	LOCAL_CFLAGS += -fvisibility=hidden
 	LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 	LOCAL_SHARED_LIBRARIES := libcutils libutils libGLESv2 libskia libui
-
 	LOCAL_MODULE := libhwui
 	LOCAL_MODULE_TAGS := optional
 	
+ifeq ($(BOARD_USES_QCOM_HARDWARE), true)
+	LOCAL_C_INCLUDES += \
+		hardware/qcom/display/libtilerenderer
+	LOCAL_SHARED_LIBRARIES += libtilerenderer
+endif
+
 	include $(BUILD_SHARED_LIBRARY)
 
     include $(call all-makefiles-under,$(LOCAL_PATH))
