@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 /* //device/apps/common/assets/res/any/strings.xml
@@ -136,6 +137,24 @@
     <string name="turn_on_radio" msgid="3912793092339962371">"Увімкнути радіо"</string>
     <string name="turn_off_radio" msgid="8198784949987062346">"Вимкнути радіо"</string>
     <string name="screen_lock" msgid="799094655496098153">"Заблок. екран"</string>
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Перезавантаження планшетного ПК</string>
+    <string name="reboot_system" product="default">Перезавантаження телефону</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Скріншот</string>
+    <string name="global_action_reboot">Перезавантаження</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Перезавантаження</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Перезавантаження\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Ваш телефон буде перезавантажений</string>
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">Вибрати профіль</string>
+
     <string name="power_off" msgid="4266614107412865048">"Вимкнути"</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"Дзвінок вимкнено"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Дзвінок на вібросигналі"</string>
@@ -532,35 +551,35 @@
     <string name="policylab_disableCamera" msgid="6395301023152297826">"Вимкнути камери"</string>
     <string name="policydesc_disableCamera" msgid="5680054212889413366">"Запобігати використанню всіх камер пристрою"</string>
   <string-array name="phoneTypes">
-    <item msgid="8901098336658710359">"Дом."</item>
+    <item msgid="8901098336658710359">"Домашній"</item>
     <item msgid="869923650527136615">"Мобільний"</item>
-    <item msgid="7897544654242874543">"Роб."</item>
-    <item msgid="1103601433382158155">"Роб. факс"</item>
-    <item msgid="1735177144948329370">"Дом. факс"</item>
+    <item msgid="7897544654242874543">"Робочий"</item>
+    <item msgid="1103601433382158155">"Робочий факс"</item>
+    <item msgid="1735177144948329370">"Домашній факс"</item>
     <item msgid="603878674477207394">"Пейджер"</item>
     <item msgid="1650824275177931637">"Інше"</item>
     <item msgid="9192514806975898961">"Спеціал."</item>
   </string-array>
   <string-array name="emailAddressTypes">
-    <item msgid="8073994352956129127">"Дом."</item>
-    <item msgid="7084237356602625604">"Роб."</item>
+    <item msgid="8073994352956129127">"Домашній"</item>
+    <item msgid="7084237356602625604">"Робочий"</item>
     <item msgid="1112044410659011023">"Інше"</item>
     <item msgid="2374913952870110618">"Спеціал."</item>
   </string-array>
   <string-array name="postalAddressTypes">
-    <item msgid="6880257626740047286">"Дом."</item>
-    <item msgid="5629153956045109251">"Роб."</item>
+    <item msgid="6880257626740047286">"Домашній"</item>
+    <item msgid="5629153956045109251">"Робочий"</item>
     <item msgid="4966604264500343469">"Інше"</item>
     <item msgid="4932682847595299369">"Спеціал."</item>
   </string-array>
   <string-array name="imAddressTypes">
-    <item msgid="1738585194601476694">"Дом."</item>
-    <item msgid="1359644565647383708">"Роб."</item>
+    <item msgid="1738585194601476694">"Домашній"</item>
+    <item msgid="1359644565647383708">"Робочий"</item>
     <item msgid="7868549401053615677">"Інше"</item>
     <item msgid="3145118944639869809">"Спеціал."</item>
   </string-array>
   <string-array name="organizationTypes">
-    <item msgid="7546335612189115615">"Роб."</item>
+    <item msgid="7546335612189115615">"Робочий"</item>
     <item msgid="4378074129049520373">"Інше"</item>
     <item msgid="3455047468583965104">"Спеціал."</item>
   </string-array>
@@ -575,24 +594,24 @@
     <item msgid="1648797903785279353">"Jabber"</item>
   </string-array>
     <string name="phoneTypeCustom" msgid="1644738059053355820">"Спеціал."</string>
-    <string name="phoneTypeHome" msgid="2570923463033985887">"Дом."</string>
+    <string name="phoneTypeHome" msgid="2570923463033985887">"Домашній"</string>
     <string name="phoneTypeMobile" msgid="6501463557754751037">"Мобільний"</string>
-    <string name="phoneTypeWork" msgid="8863939667059911633">"Роб."</string>
-    <string name="phoneTypeFaxWork" msgid="3517792160008890912">"Роб. факс"</string>
-    <string name="phoneTypeFaxHome" msgid="2067265972322971467">"Дом. факс"</string>
+    <string name="phoneTypeWork" msgid="8863939667059911633">"Робочий"</string>
+    <string name="phoneTypeFaxWork" msgid="3517792160008890912">"Робочий факс"</string>
+    <string name="phoneTypeFaxHome" msgid="2067265972322971467">"Домашній факс"</string>
     <string name="phoneTypePager" msgid="7582359955394921732">"Пейджер"</string>
     <string name="phoneTypeOther" msgid="1544425847868765990">"Інше"</string>
     <string name="phoneTypeCallback" msgid="2712175203065678206">"Звор. викл."</string>
     <string name="phoneTypeCar" msgid="8738360689616716982">"Авто"</string>
-    <string name="phoneTypeCompanyMain" msgid="540434356461478916">"Гол. тел. комп."</string>
+    <string name="phoneTypeCompanyMain" msgid="540434356461478916">"Офісний телефон"</string>
     <string name="phoneTypeIsdn" msgid="8022453193171370337">"ISDN"</string>
-    <string name="phoneTypeMain" msgid="6766137010628326916">"Осн."</string>
+    <string name="phoneTypeMain" msgid="6766137010628326916">"Основний"</string>
     <string name="phoneTypeOtherFax" msgid="8587657145072446565">"Інший факс"</string>
     <string name="phoneTypeRadio" msgid="4093738079908667513">"Радіо"</string>
     <string name="phoneTypeTelex" msgid="3367879952476250512">"Телекс"</string>
     <string name="phoneTypeTtyTdd" msgid="8606514378585000044">"TTY TDD"</string>
-    <string name="phoneTypeWorkMobile" msgid="1311426989184065709">"Роб. мобільний"</string>
-    <string name="phoneTypeWorkPager" msgid="649938731231157056">"Роб. пейджер"</string>
+    <string name="phoneTypeWorkMobile" msgid="1311426989184065709">"Робочий мобільний"</string>
+    <string name="phoneTypeWorkPager" msgid="649938731231157056">"Робочий пейджер"</string>
     <string name="phoneTypeAssistant" msgid="5596772636128562884">"Помічник"</string>
     <string name="phoneTypeMms" msgid="7254492275502768992">"MMS"</string>
     <string name="eventTypeCustom" msgid="7837586198458073404">"Спеціальні"</string>
@@ -600,19 +619,19 @@
     <string name="eventTypeAnniversary" msgid="3876779744518284000">"Річниця"</string>
     <string name="eventTypeOther" msgid="7388178939010143077">"Інші"</string>
     <string name="emailTypeCustom" msgid="8525960257804213846">"Спеціал."</string>
-    <string name="emailTypeHome" msgid="449227236140433919">"Дом."</string>
-    <string name="emailTypeWork" msgid="3548058059601149973">"Роб."</string>
+    <string name="emailTypeHome" msgid="449227236140433919">"Домашній"</string>
+    <string name="emailTypeWork" msgid="3548058059601149973">"Робочий"</string>
     <string name="emailTypeOther" msgid="2923008695272639549">"Інше"</string>
     <string name="emailTypeMobile" msgid="119919005321166205">"Мобільний"</string>
-    <string name="postalTypeCustom" msgid="8903206903060479902">"Спеціал."</string>
-    <string name="postalTypeHome" msgid="8165756977184483097">"Дом."</string>
-    <string name="postalTypeWork" msgid="5268172772387694495">"Роб."</string>
+    <string name="postalTypeCustom" msgid="8903206903060479902">"Спеціальний"</string>
+    <string name="postalTypeHome" msgid="8165756977184483097">"Домашній"</string>
+    <string name="postalTypeWork" msgid="5268172772387694495">"Робочий"</string>
     <string name="postalTypeOther" msgid="2726111966623584341">"Інше"</string>
-    <string name="imTypeCustom" msgid="2074028755527826046">"Спеціал."</string>
-    <string name="imTypeHome" msgid="6241181032954263892">"Дом."</string>
-    <string name="imTypeWork" msgid="1371489290242433090">"Роб."</string>
+    <string name="imTypeCustom" msgid="2074028755527826046">"Спеціальний"</string>
+    <string name="imTypeHome" msgid="6241181032954263892">"Домашній"</string>
+    <string name="imTypeWork" msgid="1371489290242433090">"Робочий"</string>
     <string name="imTypeOther" msgid="5377007495735915478">"Інше"</string>
-    <string name="imProtocolCustom" msgid="6919453836618749992">"Спеціал."</string>
+    <string name="imProtocolCustom" msgid="6919453836618749992">"Спеціальний"</string>
     <string name="imProtocolAim" msgid="7050360612368383417">"AIM"</string>
     <string name="imProtocolMsn" msgid="144556545420769442">"Windows Live"</string>
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
@@ -624,7 +643,7 @@
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
     <string name="orgTypeWork" msgid="29268870505363872">"Роб."</string>
     <string name="orgTypeOther" msgid="3951781131570124082">"Інше"</string>
-    <string name="orgTypeCustom" msgid="225523415372088322">"Спеціал."</string>
+    <string name="orgTypeCustom" msgid="225523415372088322">"Спеціальний"</string>
     <string name="relationTypeCustom" msgid="3542403679827297300">"Спеціальні"</string>
     <string name="relationTypeAssistant" msgid="6274334825195379076">"Помічник"</string>
     <string name="relationTypeBrother" msgid="8757913506784067713">"Брат"</string>
@@ -1227,4 +1246,21 @@
     <string name="sending" msgid="8715108995741758718">"Надсилання..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Запустити веб-переглядач?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Прийняти виклик?"</string>
+    <!--Application killed toast -->
+    <string name="app_killed_message">Програми закриті</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">По замовчюваню</string>
+    <string name="profileNameWork">Робота</string>
+    <string name="profileNameHome">Дім</string>
+    <string name="profileNameSilent">Без звука</string>
+    <string name="profileNameNight">Ніч</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Телефон</string>
+    <string name="profileGroupCalendar">Календар</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Інший</string>
+
 </resources>
