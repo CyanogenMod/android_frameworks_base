@@ -276,8 +276,12 @@ static void getSupportedVideoSizes(
  */
 status_t CameraSource::isCameraColorFormatSupported(
         const CameraParameters& params) {
-    mColorFormat = getColorFormat(params.get(
-            CameraParameters::KEY_VIDEO_FRAME_FORMAT));
+    const char* fmt = params.get(CameraParameters::KEY_VIDEO_FRAME_FORMAT);
+    if (!fmt) {
+        LOGE("Missing parameter %s!", CameraParameters::KEY_VIDEO_FRAME_FORMAT);
+        return BAD_VALUE;
+    }
+    mColorFormat = getColorFormat(fmt);
     if (mColorFormat == -1) {
         return BAD_VALUE;
     }
