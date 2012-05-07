@@ -113,7 +113,8 @@ public abstract class PowerButton {
                     updateImageView(buttonIcon, mIcon);
 
                     int sColorMaskBase = Settings.System.getInt(context.getContentResolver(),
-                            Settings.System.EXPANDED_VIEW_WIDGET_COLOR, 0xFF33B5E5);
+                            Settings.System.EXPANDED_VIEW_WIDGET_COLOR,
+                            res.getColor(android.R.color.holo_blue_light));
                     int sColorMaskOn    = sColorMaskBase;
                     int sColorMaskOff   = (sColorMaskBase & 0x00FFFFFF) | 0x33000000;
                     int sColorMaskInter = (sColorMaskBase & 0x00FFFFFF) | 0x60000000;
