@@ -1604,11 +1604,14 @@ public final class InputMethodManager {
             if (mCurMethod != null) {
                 if (event instanceof KeyEvent) {
                     KeyEvent keyEvent = (KeyEvent)event;
-                    if (keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                            && keyEvent.getKeyCode() == KeyEvent.KEYCODE_SYM
-                            && keyEvent.getRepeatCount() == 0) {
-                        showInputMethodPickerLocked();
-                        return DISPATCH_HANDLED;
+                    if (context.getResources().getBoolean(
+                                com.android.internal.R.bool.config_symKeyShowsImePicker)) {
+                        if (keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                                && keyEvent.getKeyCode() == KeyEvent.KEYCODE_SYM
+                                && keyEvent.getRepeatCount() == 0) {
+                            showInputMethodPickerLocked();
+                            return DISPATCH_HANDLED;
+                        }
                     }
                 }
 
