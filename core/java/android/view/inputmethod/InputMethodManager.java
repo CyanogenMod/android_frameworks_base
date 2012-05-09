@@ -1572,10 +1572,12 @@ public final class InputMethodManager {
             if (DEBUG) Log.d(TAG, "dispatchKeyEvent");
 
             if (mCurMethod != null) {
-                if (key.getAction() == KeyEvent.ACTION_DOWN
-                        && key.getKeyCode() == KeyEvent.KEYCODE_SYM) {
-                    showInputMethodPickerLocked();
-                    handled = true;
+                if (context.getResources().getBoolean(com.android.internal.R.bool.config_symKeyShowsImePicker)) {
+                    if (key.getAction() == KeyEvent.ACTION_DOWN
+                            && key.getKeyCode() == KeyEvent.KEYCODE_SYM) {
+                        showInputMethodPickerLocked();
+                        handled = true;
+                    }
                 } else {
                     try {
                         if (DEBUG) Log.v(TAG, "DISPATCH KEY: " + mCurMethod);
