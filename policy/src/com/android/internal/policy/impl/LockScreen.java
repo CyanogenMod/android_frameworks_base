@@ -381,11 +381,16 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     if (target < mStoredTargets.length && mStoredTargets[target] != null) {
                         try {
                             Intent tIntent = Intent.parseUri(mStoredTargets[target], 0);
-                            tIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            mContext.startActivity(tIntent);
-                            mCallback.goToUnlockScreen();
-                            return;
+                            // Check if the package is still installed.
+                            final PackageManager pM = mContext.getPackageManager();
+                            if(pM.getPackageInfo(tIntent.getPackage(), 0) != null) {
+                                tIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                mContext.startActivity(tIntent);
+                                mCallback.goToUnlockScreen();
+                                return;
+                            }
                         } catch (URISyntaxException e) {
+                        } catch (NameNotFoundException e) {
                         }
                     }
                 }
@@ -626,3 +631,4 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
     public void onPhoneStateChanged(String newState) {
     }
 }
+
