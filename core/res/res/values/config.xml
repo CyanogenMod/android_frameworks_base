@@ -790,4 +790,6 @@
     <!-- Asus dock compatibility disabled by default -->
     <bool name="config_hasDockBattery">false</bool>
 
+    <!-- True if the Sym key should open the InputMethodPicker (default) -->
+    <bool name="config_symKeyShowsImePicker">true</bool>
 </resources>
