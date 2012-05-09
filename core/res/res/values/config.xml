@@ -1448,4 +1448,7 @@
          performance profiles  -->
     <string name="config_perf_profile_default_entry" translatable="false"></string>
 
+    <!-- True if the Sym key should open the InputMethodPicker (default) -->
+    <bool name="config_symKeyShowsImePicker">true</bool>
+
 </resources>
