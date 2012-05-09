@@ -21,6 +21,9 @@ endif
 ifeq ($(TARGET_BOARD_PLATFORM),msm8660)
     LOCAL_CFLAGS += -DTARGET8x60
 endif
+ifeq ($(TARGET_BOARD_PLATFORM),msm8960)
+    LOCAL_CFLAGS += -DTARGET8x60
+endif
 endif
 include frameworks/base/media/libstagefright/codecs/common/Config.mk
 
