@@ -790,4 +790,9 @@
     <!-- Asus dock compatibility disabled by default -->
     <bool name="config_hasDockBattery">false</bool>
 
+    <!-- Location of the Authentec framework jar -->
+    <string name="config_authentecJarLocation"></string>
+
+    <!-- True if the Sym key should open the InputMethodPicker -->
+    <bool name="sym_key_shows_IME_picker">true</bool>
 </resources>
