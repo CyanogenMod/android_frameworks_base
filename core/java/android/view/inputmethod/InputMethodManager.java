@@ -1523,14 +1523,16 @@ public final class InputMethodManager {
                 return;
             }
     
-            if (key.getAction() == KeyEvent.ACTION_DOWN
-                    && key.getKeyCode() == KeyEvent.KEYCODE_SYM) {
-                showInputMethodPicker();
-                try {
-                    callback.finishedEvent(seq, true);
-                } catch (RemoteException e) {
+            if (context.getResources().getBoolean(com.android.internal.R.bool.config_symKeyShowsImePicker)) {
+                if (key.getAction() == KeyEvent.ACTION_DOWN
+                        && key.getKeyCode() == KeyEvent.KEYCODE_SYM) {
+                    showInputMethodPicker();
+                    try {
+                        callback.finishedEvent(seq, true);
+                    } catch (RemoteException e) {
+                    }
+                    return;
                 }
-                return;
             }
             try {
                 if (DEBUG) Log.v(TAG, "DISPATCH KEY: " + mCurMethod);
