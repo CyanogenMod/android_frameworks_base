@@ -301,6 +301,8 @@
     <string name="permdesc_clearAppCache" product="default" msgid="7740465694193671402">"Lehetővé teszi egy alkalmazás számára, hogy az alkalmazás-gyorsítótár könyvtárából töröljön fájlokat a telefon memóriájának felszabadításához. A hozzáférés erősen korlátozott, főleg rendszerfolyamatokra."</string>
     <string name="permlab_movePackage" msgid="728454979946503926">"További alkalmazás-erőforrások"</string>
     <string name="permdesc_movePackage" msgid="6323049291923925277">"Lehetővé teszi egy alkalmazás számára alkalmazás-erőforrások áthelyezését a belső tárolóról egy külső tárolóra, és fordítva."</string>
+    <string name="permlab_preventpower">"kikapcsológomb felülbírálata"</string>
+    <string name="permdesc_preventpower">"Lehetővé teszi egy alkalmazás számára a kikapcsológomb felülbírálatát"</string>
     <string name="permlab_readLogs" msgid="6615778543198967614">"érzékeny naplóadatok olvasása"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Lehetővé teszi az alkalmazások számára, hogy olvassák a rendszer különböző naplófájljait. Ezáltal általános információkat deríthetnek ki arról, hogy mire használja a táblagépét, valamint személyes, magánjellegű adatokhoz is hozzájuthatnak."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Lehetővé teszi az alkalmazások számára, hogy olvassák a rendszer különböző naplófájljait. Ezáltal általános információkat deríthetnek ki arról, hogy mire használja a telefonját, valamint személyes, magánjellegű adatokhoz is hozzájuthatnak."</string>
@@ -1268,5 +1270,7 @@
     <string name="profileGroupSMS">SMS</string>
     <!-- Name of wildcard profile. -->
     <string name="wildcardProfile">Egyéb</string>
+    <!--Application killed toast -->
+    <string name="app_killed_message">Alkalmazás leállítva.</string>
 
 </resources>
