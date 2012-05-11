@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
@@ -304,12 +305,23 @@ public class ViewConfiguration {
         mOverflingDistance = (int) (sizeAndDensity * OVERFLING_DISTANCE + 0.5f);
 
         if (!sHasPermanentMenuKeySet) {
-            IWindowManager wm = Display.getWindowManager();
-            try {
-                sHasPermanentMenuKey = wm.canStatusBarHide() && !wm.hasNavigationBar();
-                sHasPermanentMenuKeySet = true;
-            } catch (RemoteException ex) {
+            // The overflow menu button within apps' UIs can
+            // be forced on or off with a system property
+            String showOverflowButton = SystemProperties.get("ui.overflow_button.force");
+            if (showOverflowButton.equals("1")) {
                 sHasPermanentMenuKey = false;
+                sHasPermanentMenuKeySet = true;
+            } else if (showOverflowButton.equals("0")) {
+                sHasPermanentMenuKey = true;
+                sHasPermanentMenuKeySet = true;
+            } else {
+                IWindowManager wm = Display.getWindowManager();
+                try {
+                    sHasPermanentMenuKey = wm.canStatusBarHide() && !wm.hasNavigationBar();
+                    sHasPermanentMenuKeySet = true;
+                } catch (RemoteException ex) {
+                    sHasPermanentMenuKey = false;
+                }
             }
         }
 
