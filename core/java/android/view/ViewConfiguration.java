@@ -304,12 +304,21 @@ public class ViewConfiguration {
         mOverflingDistance = (int) (sizeAndDensity * OVERFLING_DISTANCE + 0.5f);
 
         if (!sHasPermanentMenuKeySet) {
-            IWindowManager wm = Display.getWindowManager();
-            try {
-                sHasPermanentMenuKey = wm.canStatusBarHide() && !wm.hasNavigationBar();
-                sHasPermanentMenuKeySet = true;
-            } catch (RemoteException ex) {
+            // The action overflow button within apps' UIs can
+            // be forced to display with a system setting
+            int showOverflowButton = Settings.System.getInt(
+                    context.getContentResolver(), Settings.System.UI_FORCE_OVERFLOW_BUTTON, 0);
+            if (showOverflowButton == 1) {
                 sHasPermanentMenuKey = false;
+                sHasPermanentMenuKeySet = true;
+            } else {
+                IWindowManager wm = Display.getWindowManager();
+                try {
+                    sHasPermanentMenuKey = wm.canStatusBarHide() && !wm.hasNavigationBar();
+                    sHasPermanentMenuKeySet = true;
+                } catch (RemoteException ex) {
+                    sHasPermanentMenuKey = false;
+                }
             }
         }
 
