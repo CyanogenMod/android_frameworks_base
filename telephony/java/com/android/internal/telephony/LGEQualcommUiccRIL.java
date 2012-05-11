@@ -36,7 +36,7 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
     protected String mAid;
     protected boolean mUSIM;
     private int mSetPreferredNetworkType;
-    private String mLastDataIface;
+    private String mLastDataIface[] = new String[10];
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
 
@@ -353,8 +353,12 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
         dataCall.cid = p.readInt();
         dataCall.active = p.readInt();
         dataCall.type = p.readString();
-        dataCall.ifname = mLastDataIface; //"rmnet_sdio0";
+        dataCall.ifname = mLastDataIface[dataCall.cid];
         p.readString(); // skip APN
+
+        if (TextUtils.isEmpty(dataCall.ifname)) {
+            dataCall.ifname = mLastDataIface[0];
+        }
 
         String addresses = p.readString();
         if (!TextUtils.isEmpty(addresses)) {
@@ -382,6 +386,7 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
 
         dataCall = new DataCallState();
         dataCall.version = 4;
+
         dataCall.cid = 0; // Integer.parseInt(p.readString());
         p.readString();
         dataCall.ifname = p.readString();
@@ -389,7 +394,14 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
             throw new RuntimeException(
                     "RIL_REQUEST_SETUP_DATA_CALL response, no ifname");
         }
-        mLastDataIface = dataCall.ifname;
+        /* Use the last digit of the interface id as the cid */
+        if (!needsOldRilFeature("singlepdp")) {
+            dataCall.cid =
+                Integer.parseInt(dataCall.ifname.substring(dataCall.ifname.length() - 1));
+        }
+
+        mLastDataIface[dataCall.cid] = dataCall.ifname;
+
 
         String addresses = p.readString();
         if (!TextUtils.isEmpty(addresses)) {
