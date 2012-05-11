@@ -972,6 +972,6 @@
   <string name="permlab_rawAudio">acesso a audio de baixo nível</string>
   <string name="permdesc_rawAudio">Concede à aplicação acesso completo ao equipamento de áudio.</string>
   <string name="edit_perms">Editar permissões</string>
-  <string name="adb_net_enabled_notification_title">Deupuração por rede ativada</string>
+  <string name="adb_net_enabled_notification_title">Depuração por rede ativada</string>
   <string name="adb_net_enabled_notification_message">Selecione para desativar depuração por rede.</string>
 </resources>
