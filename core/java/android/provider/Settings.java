@@ -2033,15 +2033,16 @@ public final class Settings {
 
         /**
          * Use VoiceDialer.apk
+         * 
          * @hide
          */
         public static final String VOICE_VOICEDIALER_ENABLED = "voice_use_voicedialer";
-        
+
         /**
          * @hide
          */
         public static final int VOICE_VOICEDIALER_ENABLED_DEFAULT = 1;
-        
+
         /**
          * Whether to route USB Audio when docked.
          * @hide
