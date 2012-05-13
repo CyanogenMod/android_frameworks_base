@@ -1242,7 +1242,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         // as missed calls), we use this flag to force the notification light
         // even if the screen was turned off.
         boolean forceWithScreenOff = (mLedNotification.notification.flags &
-                Notification.FLAG_FORCE_LED_SCREEN_OFF) != 0;
+                Notification.FLAG_FORCE_LED_SCREEN_OFF) != 1;
 
         // Don't flash while we are in a call, screen is on or we are in quiet hours with light dimmed
         if (mInCall || mScreenOn || (inQuietHours() && mQuietHoursDim) || (wasScreenOn && !forceWithScreenOff)) {
