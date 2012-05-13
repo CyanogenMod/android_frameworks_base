@@ -52,6 +52,27 @@ status_t SurfaceTextureLayer::setBufferCount(int bufferCount) {
     return res;
 }
 
+#ifdef QCOM_HARDWARE
+int SurfaceTextureLayer::query(int what, int* value) {
+    int ret = SurfaceTexture::query(what, value);
+    if (ret != NO_ERROR) return ret;
+
+    sp<Layer> layer(mLayer.promote());
+    if (layer == NULL) return NO_INIT;
+
+    switch (what) {
+    case NATIVE_WINDOW_TRANSFORM_HINT:
+        *value = layer->getTransformHint();
+        break;
+    default:
+        // for later use
+        break;
+    }
+
+    return NO_ERROR;
+}
+#endif
+
 status_t SurfaceTextureLayer::queueBuffer(int buf, int64_t timestamp,
         uint32_t* outWidth, uint32_t* outHeight, uint32_t* outTransform) {
 
