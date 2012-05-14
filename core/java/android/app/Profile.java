@@ -28,8 +28,10 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -43,6 +45,8 @@ public final class Profile implements Parcelable, Comparable {
     private int mNameResId;
 
     private UUID mUuid;
+
+    private ArrayList<UUID> mTags = new ArrayList<UUID>();
 
     private Map<UUID, ProfileGroup> profileGroups = new HashMap<UUID, ProfileGroup>();
 
@@ -159,6 +163,11 @@ public final class Profile implements Parcelable, Comparable {
         dest.writeString(mName);
         dest.writeInt(mNameResId);
         new ParcelUuid(mUuid).writeToParcel(dest, 0);
+        ArrayList<ParcelUuid> tags = new ArrayList<ParcelUuid>(mTags.size());
+        for (UUID u : mTags) {
+            tags.add(new ParcelUuid(u));
+        }
+        dest.writeParcelableArray(tags.toArray(new Parcelable[tags.size()]), flags);
         dest.writeInt(mStatusBarIndicator ? 1 : 0);
         dest.writeInt(mProfileType);
         dest.writeInt(mDirty ? 1 : 0);
@@ -176,6 +185,10 @@ public final class Profile implements Parcelable, Comparable {
         mName = in.readString();
         mNameResId = in.readInt();
         mUuid = ParcelUuid.CREATOR.createFromParcel(in).getUuid();
+        for (Parcelable parcel : in.readParcelableArray(null)) {
+            ParcelUuid u = (ParcelUuid) parcel;
+            mTags.add(u.getUuid());
+        }
         mStatusBarIndicator = (in.readInt() == 1);
         mProfileType = in.readInt();
         mDirty = (in.readInt() == 1);
@@ -221,6 +234,25 @@ public final class Profile implements Parcelable, Comparable {
     public UUID getUuid() {
         if (this.mUuid == null) this.mUuid = UUID.randomUUID();
         return this.mUuid;
+    }
+
+    public UUID[] getTags() {
+        return mTags.toArray(new UUID[mTags.size()]);
+    }
+
+    public void setTags(List<UUID> tags) {
+        mTags.clear();
+        if (tags != null) {
+            mTags.addAll(tags);
+            mDirty = true;
+        }
+    }
+
+    public void addTag(UUID tag) {
+        if (tag != null) {
+            mTags.add(tag);
+            mDirty = true;
+        }
     }
 
     public boolean getStatusBarIndicator() {
@@ -291,6 +323,14 @@ public final class Profile implements Parcelable, Comparable {
         builder.append(TextUtils.htmlEncode(getUuid().toString()));
         builder.append("\">\n");
 
+        builder.append("<tags>");
+        for (UUID u : mTags) {
+            builder.append("<tag>");
+            builder.append(TextUtils.htmlEncode(u.toString()));
+            builder.append("</tag>");
+        }
+        builder.append("</tags>\n");
+
         builder.append("<profiletype>");
         builder.append(getProfileType() == TOGGLE_TYPE ? "toggle" : "conditional");
         builder.append("</profiletype>\n");
@@ -314,6 +354,28 @@ public final class Profile implements Parcelable, Comparable {
         }
         builder.append("</profile>\n");
         mDirty = false;
+    }
+
+    private static List<UUID> readTagsFromXml(XmlPullParser xpp, Context context) throws XmlPullParserException,
+            IOException {
+        ArrayList<UUID> tags = new ArrayList<UUID>();
+        int event = xpp.next();
+        while (event != XmlPullParser.END_TAG || !xpp.getName().equals("tags")) {
+            if (event == XmlPullParser.START_TAG) {
+                String name = xpp.getName();
+                if (name.equals("tag")) {
+                    try {
+                        tags.add(UUID.fromString(xpp.nextText()));
+                    } catch (NullPointerException e) {
+                        Log.w(TAG, "Null Pointer - invalid UUID");
+                    } catch (IllegalArgumentException e) {
+                        Log.w(TAG, "UUID not recognized");
+                    }
+                }
+            }
+            event = xpp.next();
+        }
+        return tags;
     }
 
     /** @hide */
@@ -358,6 +420,9 @@ public final class Profile implements Parcelable, Comparable {
         while (event != XmlPullParser.END_TAG) {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
+                if (name.equals("tags")) {
+                    profile.setTags(readTagsFromXml(xpp, context));
+                }
                 if (name.equals("statusbar")) {
                     profile.setStatusBarIndicator(xpp.nextText().equals("yes"));
                 }

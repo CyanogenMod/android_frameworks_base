@@ -284,6 +284,26 @@ public class ProfileManagerService extends IProfileManager.Stub {
     }
 
     @Override
+    public Profile getProfileByTag(ParcelUuid profileParcelTagUuid) {
+        UUID profileTagUuid = profileParcelTagUuid.getUuid();
+        return getProfileByTag(profileTagUuid);
+    }
+
+    public Profile getProfileByTag(UUID profileTagUuid) {
+        if (profileTagUuid == null) {
+            return null;
+        }
+        for (Profile profile : mProfiles.values()) {
+            for (UUID uuid : profile.getTags()) {
+                if (profileTagUuid.equals(uuid)) {
+                    return profile;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Profile[] getProfiles() throws RemoteException {
         Profile[] tmpArr = mProfiles.values().toArray(new Profile[mProfiles.size()]);
         Arrays.sort(tmpArr);

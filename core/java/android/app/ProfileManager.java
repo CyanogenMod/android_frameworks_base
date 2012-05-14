@@ -124,6 +124,15 @@ public class ProfileManager {
         return null;
     }
 
+    public Profile getProfileByTag(UUID profileUuid) {
+        try {
+            return getService().getProfileByTag(new ParcelUuid(profileUuid));
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return null;
+    }
+
     public String[] getProfileNames() {
         try {
             Profile[] profiles = getService().getProfiles();

@@ -33,6 +33,7 @@ interface IProfileManager
     void updateProfile(in Profile profile);
 
     Profile getProfile(in ParcelUuid profileParcelUuid);
+    Profile getProfileByTag(in ParcelUuid profileParcelUuid);
     Profile getProfileByName(String profileName);
     Profile[] getProfiles();
     boolean profileExists(in ParcelUuid profileUuid);
