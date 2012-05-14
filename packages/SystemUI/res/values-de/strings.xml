@@ -140,4 +140,5 @@
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"GPS wird gesucht"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"Standort durch GPS festgelegt"</string>
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Alle Benachrichtigungen löschen"</string>
+    <string name="powerwidget_screen_timeout_toast">Bildschirm-Timeout ist jetzt %1$d %2$s</string>
 </resources>

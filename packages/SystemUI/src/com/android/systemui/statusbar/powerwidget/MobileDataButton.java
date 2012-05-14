@@ -13,18 +13,14 @@ import com.android.internal.telephony.TelephonyIntents;
 
 public class MobileDataButton extends PowerButton {
 
-    public static final String MOBILE_DATA_CHANGED = "com.android.internal.telephony.MOBILE_DATA_CHANGED";
-
-    public static boolean STATE_CHANGE_REQUEST = false;
+    public static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
+    public static final String EXTRA_NETWORK_MODE = "networkMode";
 
     public MobileDataButton() { mType = BUTTON_MOBILEDATA; }
 
     @Override
-    protected void updateState() {
-        if (STATE_CHANGE_REQUEST) {
-            mIcon = R.drawable.stat_data_on;
-            mState = STATE_INTERMEDIATE;
-        } else  if (getDataState(mView.getContext())) {
+    protected void updateState(Context context) {
+        if (getDataState(context)) {
             mIcon = R.drawable.stat_data_on;
             mState = STATE_ENABLED;
         } else {
@@ -34,8 +30,7 @@ public class MobileDataButton extends PowerButton {
     }
 
     @Override
-    protected void toggleState() {
-        Context context = mView.getContext();
+    protected void toggleState(Context context) {
         boolean enabled = getDataState(context);
 
         ConnectivityManager cm = (ConnectivityManager) context
@@ -48,13 +43,13 @@ public class MobileDataButton extends PowerButton {
     }
 
     @Override
-    protected boolean handleLongClick() {
+    protected boolean handleLongClick(Context context) {
         // it may be better to make an Intent action for this or find the appropriate one
         // we may want to look at that option later
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setClassName("com.android.phone", "com.android.phone.Settings");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mView.getContext().startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
@@ -65,24 +60,9 @@ public class MobileDataButton extends PowerButton {
         return filter;
     }
 
-    private static boolean getDataRomingEnabled(Context context) {
-        return Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Secure.DATA_ROAMING,0) > 0;
-    }
-
-    private static boolean getDataState(Context context) {
+    private boolean getDataState(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
             .getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getMobileDataEnabled();
     }
-
-    public void networkModeChanged(Context context, int networkMode) {
-        if (STATE_CHANGE_REQUEST) {
-            ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-            cm.setMobileDataEnabled(true);
-            STATE_CHANGE_REQUEST=false;
-        }
-    }
-
 }

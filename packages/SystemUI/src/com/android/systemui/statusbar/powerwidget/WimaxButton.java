@@ -105,8 +105,8 @@ public class WimaxButton extends PowerButton {
     public WimaxButton() { mType = BUTTON_WIMAX; }
 
     @Override
-    protected void updateState() {
-        mState = sWimaxState.getTriState(mView.getContext());
+    protected void updateState(Context context) {
+        mState = sWimaxState.getTriState(context);
         switch (mState) {
             case STATE_DISABLED:
                 mIcon = R.drawable.stat_wimax_off;
@@ -130,17 +130,17 @@ public class WimaxButton extends PowerButton {
     }
 
     @Override
-    protected void toggleState() {
-        sWimaxState.toggleState(mView.getContext());
+    protected void toggleState(Context context) {
+        sWimaxState.toggleState(context);
     }
 
     @Override
-    protected boolean handleLongClick() {
+    protected boolean handleLongClick(Context context) {
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.setClassName("com.android.settings.wimax", "com.android.settings.wimax.WimaxSettings");
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mView.getContext().startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
