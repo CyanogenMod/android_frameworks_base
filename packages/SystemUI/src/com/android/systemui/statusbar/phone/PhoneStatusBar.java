@@ -401,7 +401,6 @@ public class PhoneStatusBar extends StatusBar {
 
 
         mPowerWidget = (PowerWidget)expanded.findViewById(R.id.exp_power_stat);
-        mPowerWidget.setupSettingsObserver(mHandler);
         mPowerWidget.setGlobalButtonOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         if(Settings.System.getInt(mContext.getContentResolver(),
@@ -612,7 +611,7 @@ public class PhoneStatusBar extends StatusBar {
         StatusBarIconView view = new StatusBarIconView(mContext, slot, null);
         view.set(icon);
         mStatusIcons.addView(view, viewIndex, new LinearLayout.LayoutParams(mIconSize, mIconSize));
-	mPowerWidget.updateWidget();
+	mPowerWidget.updateAllButtons();
     }
 
     public void updateIcon(String slot, int index, int viewIndex,
