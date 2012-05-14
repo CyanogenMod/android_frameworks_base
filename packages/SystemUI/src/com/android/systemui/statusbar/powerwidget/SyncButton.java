@@ -92,7 +92,7 @@ public class SyncButton extends PowerButton {
 
     private static boolean getBackgroundDataState(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context
-        .getSystemService(Context.CONNECTIVITY_SERVICE);
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         return connManager.getBackgroundDataSetting();
     }
 
