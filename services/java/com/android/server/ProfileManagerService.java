@@ -276,11 +276,24 @@ public class ProfileManagerService extends IProfileManager.Stub {
     @Override
     public Profile getProfile(ParcelUuid profileParcelUuid) {
         UUID profileUuid = profileParcelUuid.getUuid();
-        return mProfiles.get(profileUuid);
+        return getProfile(profileUuid);
     }
 
     public Profile getProfile(UUID profileUuid) {
-        return mProfiles.get(profileUuid);
+        // use primary UUID first
+        if (mProfiles.containsKey(profileUuid)) {
+            return mProfiles.get(profileUuid);
+        }
+        // if no match was found: try secondary UUID
+        for (Profile p : mProfiles.values()) {
+            for (UUID uuid : p.getSecondaryUuids()) {
+                if (profileUuid.equals(uuid)) {
+                    return p;
+                }
+            }
+        }
+        // nothing found
+        return null;
     }
 
     @Override
