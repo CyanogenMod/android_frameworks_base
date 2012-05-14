@@ -80,8 +80,8 @@ public class BluetoothButton extends PowerButton {
     public BluetoothButton() { mType = BUTTON_BLUETOOTH; }
 
     @Override
-    protected void updateState() {
-        mState = sBluetoothState.getTriState(mView.getContext());
+    protected void updateState(Context context) {
+        mState = sBluetoothState.getTriState(context);
         switch (mState) {
             case STATE_DISABLED:
                 mIcon = R.drawable.stat_bluetooth_off;
@@ -105,16 +105,16 @@ public class BluetoothButton extends PowerButton {
     }
 
     @Override
-    protected void toggleState() {
-        sBluetoothState.toggleState(mView.getContext());
+    protected void toggleState(Context context) {
+        sBluetoothState.toggleState(context);
     }
 
     @Override
-    protected boolean handleLongClick() {
+    protected boolean handleLongClick(Context context) {
         Intent intent = new Intent("android.settings.BLUETOOTH_SETTINGS");
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mView.getContext().startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
