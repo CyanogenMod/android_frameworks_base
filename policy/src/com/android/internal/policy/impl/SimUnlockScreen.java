@@ -124,8 +124,10 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     /** {@inheritDoc} */
     public void onPause() {
-        mContext.unregisterReceiver(mThemeChangeReceiver);
-        mUiContext = null;
+        if (mUiContext != null) {
+            mContext.unregisterReceiver(mThemeChangeReceiver);
+            mUiContext = null;
+        }
         mKeyguardStatusViewManager.onPause();
     }
 
@@ -139,7 +141,6 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mPinText.setText("");
         mEnteredDigits = 0;
 
-        ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
         mKeyguardStatusViewManager.onResume();
     }
 
@@ -210,6 +211,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
         if (mSimUnlockProgressDialog == null) {
             mUiContext = ThemeUtils.createUiContext(mContext);
+            ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
 
             final Context uiContext = mUiContext != null ? mUiContext : mContext;
 
