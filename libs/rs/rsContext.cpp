@@ -263,8 +263,16 @@ void * Context::threadProc(void *vrsc) {
         mDraw &= (rsc->mRootScript.get() != NULL);
         mDraw &= rsc->mHasSurface;
 
+#ifdef QCOM_HARDWARE
+        int32_t scripttime = 0;
+#endif
         if (mDraw && rsc->mIsGraphicsContext) {
+#ifdef QCOM_HARDWARE
+            scripttime = rsc->runRootScript();
+            uint64_t delay = scripttime * 1000000;
+#else
             uint64_t delay = rsc->runRootScript() * 1000000;
+#endif
             targetTime = rsc->getTime() + delay;
             doWait = (delay == 0);
 
@@ -282,6 +290,14 @@ void * Context::threadProc(void *vrsc) {
         } else {
             doWait = true;
         }
+#ifdef QCOM_HARDWARE
+        if (scripttime > 1) {
+            int32_t t = (scripttime - (int32_t)(rsc->mTimeMSLastScript + rsc->mTimeMSLastSwap)) * 1000;
+            if (t > 0) {
+                usleep(t);
+            }
+        }
+#endif
     }
 
     LOGV("%p RS Thread exiting", rsc);

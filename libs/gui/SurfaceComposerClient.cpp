@@ -281,20 +281,10 @@ status_t Composer::setFreezeTint(const sp<SurfaceComposerClient>& client,
 }
 
 #ifdef QCOM_HDMI_OUT
-void SurfaceComposerClient::enableHDMIOutput(int enable)
+void SurfaceComposerClient::enableExternalDisplay(int disp_type, int enable)
 {
     sp<ISurfaceComposer> sm(getComposerService());
-    return sm->enableHDMIOutput(enable);
-}
-
-void SurfaceComposerClient::setActionSafeWidthRatio(float asWidthRatio){
-    sp<ISurfaceComposer> sm(getComposerService());
-    return sm->setActionSafeWidthRatio(asWidthRatio);
-}
-
-void SurfaceComposerClient::setActionSafeHeightRatio(float asHeightRatio){
-    sp<ISurfaceComposer> sm(getComposerService());
-    return sm->setActionSafeHeightRatio(asHeightRatio);
+    return sm->enableExternalDisplay(disp_type, enable);
 }
 #endif
 

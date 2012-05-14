@@ -69,6 +69,11 @@ namespace android {
 #define SYSFS_HPD               DEVICE_ROOT "/" DEVICE_NODE "/hpd"
 #define SYSFS_HDCP_PRESENT      DEVICE_ROOT "/" DEVICE_NODE "/hdcp_present"
 
+#ifdef QCOM_HARDWARE
+//Should match to the external_display_type HDMI in QComUI
+#define EXT_DISPLAY_HDMI        1
+#endif
+
 HDMIDaemon::HDMIDaemon() : Thread(false),
            mFrameworkSock(-1), mAcceptedConnection(-1), mUeventSock(-1),
            mHDMIUeventQueueHead(NULL), fd1(-1), mCurrentID(-1), mNxtMode(-1)
@@ -525,7 +530,11 @@ void HDMIDaemon::setResolution(int ID)
             if (cur->video_format == ID)
                 mode = cur;
         }
+#ifdef QCOM_HARDWARE
+        SurfaceComposerClient::enableExternalDisplay(EXT_DISPLAY_HDMI, 0);
+#else
         SurfaceComposerClient::enableHDMIOutput(0);
+#endif
         ioctl(fd1, FBIOGET_VSCREENINFO, &info);
         LOGD("GET Info<ID=%d %dx%d (%d,%d,%d), (%d,%d,%d) %dMHz>",
             info.reserved[3], info.xres, info.yres,
@@ -549,7 +558,11 @@ void HDMIDaemon::setResolution(int ID)
     ioctl(fd1, FBIOPAN_DISPLAY, &info);
     property_set("hw.hdmiON", "1");
     //Inform SF about HDMI
+#ifdef QCOM_HARDWARE
+    SurfaceComposerClient::enableExternalDisplay(EXT_DISPLAY_HDMI, 1);
+#else
     SurfaceComposerClient::enableHDMIOutput(1);
+#endif
 }
 
 int HDMIDaemon::processFrameworkCommand()
@@ -565,7 +578,9 @@ int HDMIDaemon::processFrameworkCommand()
         return -1;
 
     buffer[ret] = 0;
-
+#ifdef QCOM_HARDWARE
+    char actionsafe[PROPERTY_VALUE_MAX];
+#endif
     if (!strcmp(buffer, HDMI_CMD_ENABLE_HDMI)) {
         if (!openFramebuffer())
             return -1;
@@ -580,20 +595,34 @@ int HDMIDaemon::processFrameworkCommand()
         if (!openFramebuffer())
             return -1;
         property_set("hw.hdmiON", "0");
+#ifdef QCOM_HARDWARE
+        SurfaceComposerClient::enableExternalDisplay(EXT_DISPLAY_HDMI, 0);
+#else
         SurfaceComposerClient::enableHDMIOutput(0);
+#endif
         close(fd1);
         fd1 = -1;
     } else if (!strncmp(buffer, HDMI_CMD_SET_ASWIDTH, strlen(HDMI_CMD_SET_ASWIDTH))) {
         float asWidthRatio;
         int ret = sscanf(buffer, HDMI_CMD_SET_ASWIDTH "%f", &asWidthRatio);
         if(ret==1) {
+#ifdef QCOM_HARDWARE
+            sprintf(actionsafe, "%0.2f", asWidthRatio);
+            property_set("hw.actionsafe.width", actionsafe);
+#else
             SurfaceComposerClient::setActionSafeWidthRatio(asWidthRatio);
+#endif
         }
     } else if (!strncmp(buffer, HDMI_CMD_SET_ASHEIGHT, strlen(HDMI_CMD_SET_ASHEIGHT))) {
         float asHeightRatio;
         int ret = sscanf(buffer, HDMI_CMD_SET_ASHEIGHT "%f", &asHeightRatio);
         if(ret==1) {
+#ifdef QCOM_HARDWARE
+            sprintf(actionsafe, "%0.2f", asHeightRatio);
+            property_set("hw.actionsafe.height", actionsafe);
+#else
             SurfaceComposerClient::setActionSafeHeightRatio(asHeightRatio);
+#endif
         }
     } else if (!strncmp(buffer, HDMI_CMD_HPDOPTION, strlen(HDMI_CMD_HPDOPTION))) {
         int option;
