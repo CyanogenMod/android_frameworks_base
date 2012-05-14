@@ -14,22 +14,14 @@ import com.android.internal.telephony.Phone;
 
 public class MobileDataButton extends PowerButton {
 
-    public static final String MOBILE_DATA_CHANGED = "com.android.internal.telephony.MOBILE_DATA_CHANGED";
-
     public static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
-
     public static final String EXTRA_NETWORK_MODE = "networkMode";
-
-    public static boolean STATE_CHANGE_REQUEST = false;
 
     public MobileDataButton() { mType = BUTTON_MOBILEDATA; }
 
     @Override
     protected void updateState() {
-        if (STATE_CHANGE_REQUEST) {
-            mIcon = R.drawable.stat_data_on;
-            mState = STATE_INTERMEDIATE;
-        } else  if (getDataState(mView.getContext())) {
+        if (getDataState(mView.getContext())) {
             mIcon = R.drawable.stat_data_on;
             mState = STATE_ENABLED;
         } else {
@@ -97,14 +89,4 @@ public class MobileDataButton extends PowerButton {
             .getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getMobileDataEnabled();
     }
-
-    public void networkModeChanged(Context context, int networkMode) {
-        if (STATE_CHANGE_REQUEST) {
-            ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-            cm.setMobileDataEnabled(true);
-            STATE_CHANGE_REQUEST=false;
-        }
-    }
-
 }
