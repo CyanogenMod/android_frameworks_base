@@ -41,6 +41,8 @@ import com.android.systemui.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PowerWidget extends FrameLayout {
     private static final String TAG = "PowerWidget";
@@ -65,7 +67,40 @@ public class PowerWidget extends FrameLayout {
 
     private static final int LAYOUT_SCROLL_BUTTON_THRESHOLD = 6;
 
+    // this is a list of all possible buttons and their corresponding classes
+    private static final HashMap<String, Class<? extends PowerButton>> sPossibleButtons =
+            new HashMap<String, Class<? extends PowerButton>>();
+
+    static {
+        sPossibleButtons.put(PowerButton.BUTTON_WIFI, WifiButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_GPS, GPSButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_BLUETOOTH, BluetoothButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_BRIGHTNESS, BrightnessButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_SOUND, SoundButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_SYNC, SyncButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_WIFIAP, WifiApButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_SCREENTIMEOUT, ScreenTimeoutButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_MOBILEDATA, MobileDataButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_LOCKSCREEN, LockScreenButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_NETWORKMODE, NetworkModeButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_AUTOROTATE, AutoRotateButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_AIRPLANE, AirplaneButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_FLASHLIGHT, FlashlightButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_SLEEP, SleepButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_MEDIA_PLAY_PAUSE, MediaPlayPauseButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_MEDIA_PREVIOUS, MediaPreviousButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_MEDIA_NEXT, MediaNextButton.class);
+        sPossibleButtons.put(PowerButton.BUTTON_WIMAX, WimaxButton.class);
+    }
+
+    // this is a list of our currently loaded buttons
+    private final HashMap<String, PowerButton> mButtons = new HashMap<String, PowerButton>();
+
+    private View.OnClickListener mAllButtonClickListener;
+    private View.OnLongClickListener mAllButtonLongClickListener;
+
     private Context mContext;
+    private Handler mHandler;
     private LayoutInflater mInflater;
     private WidgetBroadcastReceiver mBroadcastReceiver = null;
     private WidgetSettingsObserver mObserver = null;
@@ -76,6 +111,7 @@ public class PowerWidget extends FrameLayout {
         super(context, attrs);
 
         mContext = context;
+        mHandler = new Handler();
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // get an initial width
@@ -101,7 +137,7 @@ public class PowerWidget extends FrameLayout {
         }
 
         // clear the button instances
-        PowerButton.unloadAllButtons();
+        unloadAllButtons();
     }
 
 
@@ -132,7 +168,7 @@ public class PowerWidget extends FrameLayout {
             // inflate our button, we don't add it to a parent and don't do any layout shit yet
             View buttonView = mInflater.inflate(R.layout.power_widget_button, null, false);
 
-            if(PowerButton.loadButton(button, buttonView)) {
+            if (loadButton(button, buttonView)) {
                 // add the button here
                 ll.addView(buttonView, BUTTON_LAYOUT_PARAMS);
                 buttonCount++;
@@ -161,7 +197,7 @@ public class PowerWidget extends FrameLayout {
 
         // set up a broadcast receiver for our intents, based off of what our power buttons have been loaded
         setupBroadcastReceiver();
-        IntentFilter filter = PowerButton.getAllBroadcastIntentFilters();
+        IntentFilter filter = getMergedBroadcastIntentFilter();
         // we add this so we can update views and such if the settings for our widget change
         filter.addAction(Settings.SETTINGS_CHANGED);
         // we need to detect orientation changes and update the static button width value appropriately
@@ -169,27 +205,114 @@ public class PowerWidget extends FrameLayout {
         // register the receiver
         mContext.registerReceiver(mBroadcastReceiver, filter);
         // register our observer
-        if(mObserver != null) {
-            mObserver.observe();
+        mObserver = new WidgetSettingsObserver(mHandler);
+        mObserver.observe();
+    }
+
+    private boolean loadButton(String key, View view) {
+        // first make sure we have a valid button
+        if (!sPossibleButtons.containsKey(key) || view == null) {
+            return false;
+        }
+
+        if (mButtons.containsKey(key)) {
+            // setup the button again
+            mButtons.get(key).setupButton(view);
+            return true;
+        }
+
+        try {
+            // we need to instantiate a new button and add it
+            PowerButton pb = sPossibleButtons.get(key).newInstance();
+            // set it up
+            pb.setupButton(view);
+            pb.setExternalClickListener(mAllButtonClickListener);
+            pb.setExternalLongClickListener(mAllButtonLongClickListener);
+            // save it
+            mButtons.put(key, pb);
+        } catch(Exception e) {
+            Log.e(TAG, "Error loading button: " + key, e);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void unloadButton(String key) {
+        // first make sure we have a valid button
+        if (mButtons.containsKey(key)) {
+            // wipe out the button view
+            mButtons.get(key).setupButton(null);
+            // remove the button from our list of loaded ones
+            mButtons.remove(key);
         }
     }
 
-    public void updateWidget() {
-        PowerButton.updateAllButtons();
+    private void unloadAllButtons() {
+        // cycle through setting the buttons to null
+        for (PowerButton pb : mButtons.values()) {
+            pb.setupButton(null);
+        }
+
+        // clear our list
+        mButtons.clear();
     }
 
-    public void setupSettingsObserver(Handler handler) {
-        if(mObserver == null) {
-            mObserver = new WidgetSettingsObserver(handler);
+    public void updateAllButtons() {
+        // cycle through our buttons and update them
+        for (PowerButton pb : mButtons.values()) {
+            pb.update();
         }
+    }
+
+    private IntentFilter getMergedBroadcastIntentFilter() {
+        IntentFilter filter = new IntentFilter();
+
+        for (PowerButton button : mButtons.values()) {
+            IntentFilter tmp = button.getBroadcastIntentFilter();
+
+            // cycle through these actions, and see if we need them
+            int num = tmp.countActions();
+            for (int i = 0; i < num; i++) {
+                String action = tmp.getAction(i);
+                if(!filter.hasAction(action)) {
+                    filter.addAction(action);
+                }
+            }
+        }
+
+        // return our merged filter
+        return filter;
+    }
+
+    private List<Uri> getAllObservedUris() {
+        List<Uri> uris = new ArrayList<Uri>();
+
+        for (PowerButton button : mButtons.values()) {
+            List<Uri> tmp = button.getObservedUris();
+
+            for (Uri uri : tmp) {
+                if (!uris.contains(uri)) {
+                    uris.add(uri);
+                }
+            }
+        }
+
+        return uris;
     }
 
     public void setGlobalButtonOnClickListener(View.OnClickListener listener) {
-        PowerButton.setGlobalOnClickListener(listener);
+        mAllButtonClickListener = listener;
+        for (PowerButton pb : mButtons.values()) {
+            pb.setExternalClickListener(listener);
+        }
     }
 
     public void setGlobalButtonOnLongClickListener(View.OnLongClickListener listener) {
-        PowerButton.setGlobalOnLongClickListener(listener);
+        mAllButtonLongClickListener = listener;
+        for (PowerButton pb : mButtons.values()) {
+            pb.setExternalLongClickListener(listener);
+        }
     }
 
     private void setupBroadcastReceiver() {
@@ -224,16 +347,23 @@ public class PowerWidget extends FrameLayout {
     // our own broadcast receiver :D
     private class WidgetBroadcastReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
+            String action = intent.getAction();
+
+            if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 updateButtonLayoutWidth();
                 setupWidget();
             } else {
                 // handle the intent through our power buttons
-                PowerButton.handleOnReceive(context, intent);
+                for (PowerButton button : mButtons.values()) {
+                    // call "onReceive" on those that matter
+                    if (button.getBroadcastIntentFilter().hasAction(action)) {
+                        button.onReceive(context, intent);
+                    }
+                }
             }
 
             // update our widget
-            updateWidget();
+            updateAllButtons();
         }
     };
 
@@ -272,7 +402,7 @@ public class PowerWidget extends FrameLayout {
                             false, this);
 
             // watch for power-button specifc stuff that has been loaded
-            for(Uri uri : PowerButton.getAllObservedUris()) {
+            for(Uri uri : getAllObservedUris()) {
                 resolver.registerContentObserver(uri, false, this);
             }
         }
@@ -300,10 +430,14 @@ public class PowerWidget extends FrameLayout {
             }
 
             // do whatever the individual buttons must
-            PowerButton.handleOnChangeUri(uri);
+            for (PowerButton button : mButtons.values()) {
+                if (button.getObservedUris().contains(uri)) {
+                    button.onChangeUri(uri);
+                }
+            }
 
             // something happened so update the widget
-            updateWidget();
+            updateAllButtons();
         }
     }
 }

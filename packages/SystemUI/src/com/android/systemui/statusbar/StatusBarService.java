@@ -429,7 +429,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mLatestTitle.setVisibility(View.GONE);
 
         mPowerWidget = (PowerWidget)expanded.findViewById(R.id.exp_power_stat);
-        mPowerWidget.setupSettingsObserver(mHandler);
         mPowerWidget.setGlobalButtonOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         if(Settings.System.getInt(getContentResolver(),
@@ -917,7 +916,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mExpandedVisible = true;
         visibilityChanged(true);
 
-        mPowerWidget.updateWidget();
+        mPowerWidget.updateAllButtons();
 
         updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
         mExpandedParams.flags &= ~WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
