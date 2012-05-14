@@ -18,9 +18,7 @@ import android.provider.Settings;
 import android.view.View;
 import android.provider.Settings;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class PowerButton {
     public static final String TAG = "PowerButton";
@@ -55,42 +53,13 @@ public abstract class PowerButton {
 
     private static final Mode MASK_MODE = Mode.SCREEN;
 
-    // this is a list of all of our buttons and their corresponding classes
-    private static final HashMap<String, Class<? extends PowerButton>> BUTTONS = new HashMap<String, Class<? extends PowerButton>>();
-    static {
-        BUTTONS.put(BUTTON_WIFI, WifiButton.class);
-        BUTTONS.put(BUTTON_GPS, GPSButton.class);
-        BUTTONS.put(BUTTON_BLUETOOTH, BluetoothButton.class);
-        BUTTONS.put(BUTTON_BRIGHTNESS, BrightnessButton.class);
-        BUTTONS.put(BUTTON_SOUND, SoundButton.class);
-        BUTTONS.put(BUTTON_SYNC, SyncButton.class);
-        BUTTONS.put(BUTTON_WIFIAP, WifiApButton.class);
-        BUTTONS.put(BUTTON_SCREENTIMEOUT, ScreenTimeoutButton.class);
-        BUTTONS.put(BUTTON_MOBILEDATA, MobileDataButton.class);
-        BUTTONS.put(BUTTON_LOCKSCREEN, LockScreenButton.class);
-        BUTTONS.put(BUTTON_NETWORKMODE, NetworkModeButton.class);
-        BUTTONS.put(BUTTON_AUTOROTATE, AutoRotateButton.class);
-        BUTTONS.put(BUTTON_AIRPLANE, AirplaneButton.class);
-        BUTTONS.put(BUTTON_FLASHLIGHT, FlashlightButton.class);
-        BUTTONS.put(BUTTON_SLEEP, SleepButton.class);
-        BUTTONS.put(BUTTON_MEDIA_PLAY_PAUSE, MediaPlayPauseButton.class);
-        BUTTONS.put(BUTTON_MEDIA_PREVIOUS, MediaPreviousButton.class);
-        BUTTONS.put(BUTTON_MEDIA_NEXT, MediaNextButton.class);
-        BUTTONS.put(BUTTON_WIMAX, WimaxButton.class);
-    }
-    // this is a list of our currently loaded buttons
-    private static final HashMap<String, PowerButton> BUTTONS_LOADED = new HashMap<String, PowerButton>();
-
     protected int mIcon;
     protected int mState;
     protected View mView;
     protected String mType = BUTTON_UNKNOWN;
 
-    // a static onclicklistener that can be set to register a callback when ANY button is clicked
-    private static View.OnClickListener GLOBAL_ON_CLICK_LISTENER = null;
-
-    // a static onlongclicklistener that can be set to register a callback when ANY button is long clicked
-    private static View.OnLongClickListener GLOBAL_ON_LONG_CLICK_LISTENER = null;
+    private View.OnClickListener mExternalClickListener;
+    private View.OnLongClickListener mExternalLongClickListener;
 
     // we use this to ensure we update our views on the UI thread
     private Handler mViewUpdateHandler = new Handler() {
@@ -188,180 +157,30 @@ public abstract class PowerButton {
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            String type = (String)v.getTag();
+            toggleState();
 
-            for(Map.Entry<String, PowerButton> entry : BUTTONS_LOADED.entrySet()) {
-                if(entry.getKey().equals(type)) {
-                    entry.getValue().toggleState();
-                    break;
-                }
-            }
-
-            // call our static listener if it's set
-            if(GLOBAL_ON_CLICK_LISTENER != null) {
-                GLOBAL_ON_CLICK_LISTENER.onClick(v);
+            if (mExternalClickListener != null) {
+                mExternalClickListener.onClick(v);
             }
         }
     };
 
     private View.OnLongClickListener mLongClickListener = new View.OnLongClickListener() {
         public boolean onLongClick(View v) {
-            boolean result = false;
-            String type = (String)v.getTag();
-            for (Map.Entry<String, PowerButton> entry : BUTTONS_LOADED.entrySet()) {
-                if(entry.getKey().endsWith(type)) {
-                    result = entry.getValue().handleLongClick();
-                    break;
-                }
-            }
+            boolean result = handleLongClick();
 
-            if(result && GLOBAL_ON_LONG_CLICK_LISTENER != null) {
-                GLOBAL_ON_LONG_CLICK_LISTENER.onLongClick(v);
+            if (result && mExternalLongClickListener != null) {
+                mExternalLongClickListener.onLongClick(v);
             }
             return result;
         }
     };
 
-    public static boolean loadButton(String key, View view) {
-        // first make sure we have a valid button
-        if(BUTTONS.containsKey(key) && view != null) {
-            synchronized (BUTTONS_LOADED) {
-                if(BUTTONS_LOADED.containsKey(key)) {
-                    // setup the button again
-                    BUTTONS_LOADED.get(key).setupButton(view);
-                } else {
-                    try {
-                        // we need to instantiate a new button and add it
-                        PowerButton pb = BUTTONS.get(key).newInstance();
-                        // set it up
-                        pb.setupButton(view);
-                        // save it
-                        BUTTONS_LOADED.put(key, pb);
-                    } catch(Exception e) {
-                        Log.e(TAG, "Error loading button: " + key, e);
-                    }
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+    void setExternalClickListener(View.OnClickListener listener) {
+        mExternalClickListener = listener;
     }
 
-    public static void unloadButton(String key) {
-        synchronized (BUTTONS_LOADED) {
-            // first make sure we have a valid button
-            if(BUTTONS_LOADED.containsKey(key)) {
-                // wipe out the button view
-                BUTTONS_LOADED.get(key).setupButton(null);
-                // remove the button from our list of loaded ones
-                BUTTONS_LOADED.remove(key);
-            }
-        }
-    }
-
-    public static void unloadAllButtons() {
-        synchronized (BUTTONS_LOADED) {
-            // cycle through setting the buttons to null
-            for(PowerButton pb : BUTTONS_LOADED.values()) {
-                pb.setupButton(null);
-            }
-
-            // clear our list
-            BUTTONS_LOADED.clear();
-        }
-    }
-
-    public static void updateAllButtons() {
-        synchronized (BUTTONS_LOADED) {
-            // cycle through our buttons and update them
-            for(PowerButton pb : BUTTONS_LOADED.values()) {
-                pb.update();
-            }
-        }
-    }
-
-    // glue for broadcast receivers
-    public static IntentFilter getAllBroadcastIntentFilters() {
-        IntentFilter filter = new IntentFilter();
-
-        synchronized(BUTTONS_LOADED) {
-            for(PowerButton button : BUTTONS_LOADED.values()) {
-                IntentFilter tmp = button.getBroadcastIntentFilter();
-
-                // cycle through these actions, and see if we need them
-                int num = tmp.countActions();
-                for(int i = 0; i < num; i++) {
-                    String action = tmp.getAction(i);
-                    if(!filter.hasAction(action)) {
-                        filter.addAction(action);
-                    }
-                }
-            }
-        }
-
-        // return our merged filter
-        return filter;
-    }
-
-    // glue for content observation
-    public static List<Uri> getAllObservedUris() {
-        List<Uri> uris = new ArrayList<Uri>();
-
-        synchronized(BUTTONS_LOADED) {
-            for(PowerButton button : BUTTONS_LOADED.values()) {
-                List<Uri> tmp = button.getObservedUris();
-
-                for(Uri uri : tmp) {
-                    if(!uris.contains(uri)) {
-                        uris.add(uri);
-                    }
-                }
-            }
-        }
-
-        return uris;
-    }
-
-    public static void handleOnReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-
-        // cycle through power buttons
-        synchronized(BUTTONS_LOADED) {
-            for(PowerButton button : BUTTONS_LOADED.values()) {
-                // call "onReceive" on those that matter
-                if(button.getBroadcastIntentFilter().hasAction(action)) {
-                    button.onReceive(context, intent);
-                }
-            }
-        }
-    }
-
-    public static void handleOnChangeUri(Uri uri) {
-        synchronized(BUTTONS_LOADED) {
-            for(PowerButton button : BUTTONS_LOADED.values()) {
-                if(button.getObservedUris().contains(uri)) {
-                    button.onChangeUri(uri);
-                }
-            }
-        }
-    }
-
-    public static void setGlobalOnClickListener(View.OnClickListener listener) {
-        GLOBAL_ON_CLICK_LISTENER = listener;
-    }
-
-    public static void setGlobalOnLongClickListener(View.OnLongClickListener listener) {
-        GLOBAL_ON_LONG_CLICK_LISTENER = listener;
-    }
-
-    protected static PowerButton getLoadedButton(String key) {
-        synchronized(BUTTONS_LOADED) {
-            if(BUTTONS_LOADED.containsKey(key)) {
-                return BUTTONS_LOADED.get(key);
-            } else {
-                return null;
-            }
-        }
+    void setExternalLongClickListener(View.OnLongClickListener listener) {
+        mExternalLongClickListener = listener;
     }
 }
