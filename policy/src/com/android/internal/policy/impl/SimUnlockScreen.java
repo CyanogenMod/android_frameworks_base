@@ -76,7 +76,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         @Override
         public void onReceive(Context context, Intent intent) {
             mUiContext = null;
-            mSimUnlockProgressDialog = null;
+            context.unregisterReceiver(this);
         }
     };
 
@@ -127,8 +127,10 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     /** {@inheritDoc} */
     public void onPause() {
-        mContext.unregisterReceiver(mThemeChangeReceiver);
-        mUiContext = null;
+        if (mUiContext != null) {
+            mContext.unregisterReceiver(mThemeChangeReceiver);
+            mUiContext = null;
+        }
     }
 
     /** {@inheritDoc} */
@@ -142,7 +144,6 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mEnteredDigits = 0;
 
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
-        ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
     }
 
     /** {@inheritDoc} */
@@ -212,11 +213,17 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         }
 
         if (mSimUnlockProgressDialog == null) {
+            final Context context;
+
             mUiContext = ThemeUtils.createUiContext(mContext);
+            if (mUiContext != null) {
+                context = mUiContext;
+                ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
+            } else {
+                context = mContext;
+            }
 
-            final Context uiContext = mUiContext != null ? mUiContext : mContext;
-
-            mSimUnlockProgressDialog = new ProgressDialog(uiContext);
+            mSimUnlockProgressDialog = new ProgressDialog(context);
             mSimUnlockProgressDialog.setMessage(
                     mContext.getString(R.string.lockscreen_sim_unlock_progress_dialog_message));
             mSimUnlockProgressDialog.setIndeterminate(true);

@@ -85,7 +85,7 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
         @Override
         public void onReceive(Context context, Intent intent) {
             mUiContext = null;
-            mCheckingDialog = null;
+            context.unregisterReceiver(this);
         }
     };
 
@@ -153,7 +153,10 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
 
     /** {@inheritDoc} */
     public void onPause() {
-        mContext.unregisterReceiver(mThemeChangeReceiver);
+        if (mUiContext != null) {
+            mContext.unregisterReceiver(mThemeChangeReceiver);
+            mUiContext = null;
+        }
     }
 
     /** {@inheritDoc} */
@@ -163,7 +166,6 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
         mPassword.setText("");
         mLogin.requestFocus();
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCall);
-        ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
     }
 
     /** {@inheritDoc} */
@@ -328,9 +330,15 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
         }
 
         if (mCheckingDialog == null) {
-            mUiContext = ThemeUtils.createUiContext(mContext);
+            final Context context;
 
-            final Context context = mUiContext != null ? mUiContext : mContext;
+            mUiContext = ThemeUtils.createUiContext(mContext);
+            if (mUiContext != null) {
+                context = mUiContext;
+                ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
+            } else {
+                context = mContext;
+            }
 
             mCheckingDialog = new ProgressDialog(context);
             mCheckingDialog.setMessage(
