@@ -653,6 +653,12 @@ public:
     static const char KEY_SUPPORTED_REDEYE_REDUCTION[];
 #endif
 
+#ifdef SAMSUNG_CAMERA_HARDWARE
+     static const char KEY_METERING[];
+     static const char KEY_WDR[];
+     static const char KEY_ANTI_SHAKE_MODE[];
+#endif
+
     // Values for white balance settings.
     static const char WHITE_BALANCE_AUTO[];
     static const char WHITE_BALANCE_INCANDESCENT[];
