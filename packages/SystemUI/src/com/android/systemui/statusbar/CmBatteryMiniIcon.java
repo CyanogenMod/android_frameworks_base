@@ -210,9 +210,14 @@ public class CmBatteryMiniIcon extends ImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int height = MeasureSpec.getSize(heightMeasureSpec);
-
         setMeasuredDimension(mWidthPx + mMarginRightPx, height);
+    }
+
+    @Override
+    protected boolean setFrame(int l, int t, int r, int b) {
+        boolean changed = super.setFrame(l, t, r, b);
         updateMatrix();
+        return changed;
     }
 
     @Override
@@ -300,7 +305,8 @@ public class CmBatteryMiniIcon extends ImageView {
     public void updateMatrix() {
         mMatrix.reset();
         mMatrix.setTranslate(0, 0);
-        float scaleFactor=getHeight()/(float)(mMiniIconCache[0].getHeight());
+
+        float scaleFactor = getHeight() / (float)(mMiniIconCache[0].getHeight());
         mMatrix.postScale(mWidthPx, scaleFactor);
     }
 }
