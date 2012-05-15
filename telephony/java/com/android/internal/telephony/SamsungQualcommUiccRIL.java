@@ -32,7 +32,7 @@ import com.android.internal.telephony.RILConstants;
  *
  * {@hide}
  */
-public class SamsungQualcommUiccRIL extends LGEQualcommUiccRIL implements CommandsInterface {
+public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements CommandsInterface {
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
 
@@ -103,32 +103,6 @@ public class SamsungQualcommUiccRIL extends LGEQualcommUiccRIL implements Comman
             // in case NITZ time registrant isnt registered yet
             mLastNITZTimeInfo = result;
         }
-    }
-
-    @Override
-    public void
-    setupDataCall(String radioTechnology, String profile, String apn,
-            String user, String password, String authType, String ipVersion,
-            Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_SETUP_DATA_CALL, result);
-
-        rr.mp.writeInt(7);
-
-        rr.mp.writeString(radioTechnology);
-        rr.mp.writeString(profile);
-        rr.mp.writeString(apn);
-        rr.mp.writeString(user);
-        rr.mp.writeString(password);
-        rr.mp.writeString(authType);
-        rr.mp.writeString("IP"); // ipVersion
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> "
-                + requestToString(rr.mRequest) + " " + radioTechnology + " "
-                + profile + " " + apn + " " + user + " "
-                + password + " " + authType + " " + ipVersion);
-
-        send(rr);
     }
 
     @Override
