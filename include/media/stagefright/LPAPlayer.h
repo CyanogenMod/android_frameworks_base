@@ -270,6 +270,7 @@ private:
     bool mSeeking;
     bool mInternalSeeking;
     bool mReachedEOS;
+    bool mReachedOutputEOS;
     status_t mFinalStatus;
     int64_t mSeekTimeUs;
     int64_t mPauseTime;
