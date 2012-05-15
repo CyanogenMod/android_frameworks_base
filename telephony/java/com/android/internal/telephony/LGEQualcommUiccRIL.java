@@ -32,11 +32,8 @@ import java.util.ArrayList;
  *
  * {@hide}
  */
-public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterface {
-    protected String mAid;
+public class LGEQualcommUiccRIL extends QualcommSharedRIL implements CommandsInterface {
     protected boolean mUSIM;
-    protected int mSetPreferredNetworkType;
-    protected String[] mLastDataIface = new String[10];
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
 
@@ -46,126 +43,8 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
 
     @Override
     public void
-    supplyIccPin(String pin, Message result) {
-        //Note: This RIL request has not been renamed to ICC,
-        //       but this request is also valid for SIM and RUIM
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_ENTER_SIM_PIN, result);
-
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        rr.mp.writeInt(2);
-        rr.mp.writeString(pin);
-        rr.mp.writeString(mAid);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    supplyIccPuk(String puk, String newPin, Message result) {
-        //Note: This RIL request has not been renamed to ICC,
-        //       but this request is also valid for SIM and RUIM
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_ENTER_SIM_PUK, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        rr.mp.writeInt(3);
-        rr.mp.writeString(puk);
-        rr.mp.writeString(newPin);
-        rr.mp.writeString(mAid);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    supplyIccPin2(String pin, Message result) {
-        //Note: This RIL request has not been renamed to ICC,
-        //       but this request is also valid for SIM and RUIM
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_ENTER_SIM_PIN2, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        rr.mp.writeInt(2);
-        rr.mp.writeString(pin);
-        rr.mp.writeString(mAid);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    supplyIccPuk2(String puk, String newPin2, Message result) {
-        //Note: This RIL request has not been renamed to ICC,
-        //       but this request is also valid for SIM and RUIM
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_ENTER_SIM_PUK2, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        rr.mp.writeInt(3);
-        rr.mp.writeString(puk);
-        rr.mp.writeString(newPin2);
-        rr.mp.writeString(mAid);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    changeIccPin(String oldPin, String newPin, Message result) {
-        //Note: This RIL request has not been renamed to ICC,
-        //       but this request is also valid for SIM and RUIM
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_CHANGE_SIM_PIN, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        rr.mp.writeInt(3);
-        rr.mp.writeString(oldPin);
-        rr.mp.writeString(newPin);
-        rr.mp.writeString(mAid);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    changeIccPin2(String oldPin2, String newPin2, Message result) {
-        //Note: This RIL request has not been renamed to ICC,
-        //       but this request is also valid for SIM and RUIM
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_CHANGE_SIM_PIN2, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        rr.mp.writeInt(3);
-        rr.mp.writeString(oldPin2);
-        rr.mp.writeString(newPin2);
-        rr.mp.writeString(mAid);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    getIMSI(Message result) {
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_IMSI, result);
-
-        rr.mp.writeInt(1);
-        rr.mp.writeString(mAid);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() +
-                              "> getIMSI:RIL_REQUEST_GET_IMSI " +
-                              RIL_REQUEST_GET_IMSI +
-                              " aid: " + mAid +
-                              " " + requestToString(rr.mRequest));
-
-        send(rr);
-    }
-
-    @Override
-    public void
     setupDataCall(String radioTechnology, String profile, String apn,
-            String user, String password, String authType, String ipVersion,
+            String user, String password, String authType, String protocol,
             Message result) {
 
         RILRequest rrSPT = RILRequest.obtain(
@@ -191,90 +70,12 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
         rr.mp.writeString(user);
         rr.mp.writeString(password);
         rr.mp.writeString(authType);
-        rr.mp.writeString("IP"); // ipVersion
+        rr.mp.writeString(protocol);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> "
                 + requestToString(rr.mRequest) + " " + radioTechnology + " "
                 + profile + " " + apn + " " + user + " "
-                + password + " " + authType + " " + ipVersion);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    iccIO (int command, int fileid, String path, int p1, int p2, int p3,
-            String data, String pin2, Message result) {
-        //Note: This RIL request has not been renamed to ICC,
-        //       but this request is also valid for SIM and RUIM
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_SIM_IO, result);
-
-        if (mUSIM)
-            path = path.replaceAll("7F20$","7FFF");
-
-        rr.mp.writeInt(command);
-        rr.mp.writeInt(fileid);
-        rr.mp.writeString(path);
-        rr.mp.writeInt(p1);
-        rr.mp.writeInt(p2);
-        rr.mp.writeInt(p3);
-        rr.mp.writeString(data);
-        rr.mp.writeString(pin2);
-        rr.mp.writeString(mAid);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> iccIO: "
-                    + " aid: " + mAid + " "
-                    + requestToString(rr.mRequest)
-                    + " 0x" + Integer.toHexString(command)
-                    + " 0x" + Integer.toHexString(fileid) + " "
-                    + " path: " + path + ","
-                    + p1 + "," + p2 + "," + p3);
-
-        send(rr);
-    }
-    @Override
-    public void
-    queryFacilityLock (String facility, String password, int serviceClass,
-                            Message response) {
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_QUERY_FACILITY_LOCK, response);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " aid: " + mAid + " facility: " + facility);
-
-        // count strings
-        rr.mp.writeInt(4);
-
-        rr.mp.writeString(facility);
-        rr.mp.writeString(password);
-
-        rr.mp.writeString(Integer.toString(serviceClass));
-        rr.mp.writeString(mAid);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    setFacilityLock (String facility, boolean lockState, String password,
-                        int serviceClass, Message response) {
-        String lockString;
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_SET_FACILITY_LOCK, response);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " aid: " + mAid + " facility: " + facility
-                    + " lockstate: " + lockState);
-
-        // count strings
-        rr.mp.writeInt(5);
-
-        rr.mp.writeString(facility);
-        lockString = (lockState)?"1":"0";
-        rr.mp.writeString(lockString);
-        rr.mp.writeString(password);
-        rr.mp.writeString(Integer.toString(serviceClass));
-        rr.mp.writeString("");
+                + password + " " + authType + " " + protocol);
 
         send(rr);
     }
@@ -338,114 +139,6 @@ public class LGEQualcommUiccRIL extends LGEQualcommRIL implements CommandsInterf
         }
 
         return status;
-    }
-
-    @Override
-    protected DataCallState getDataCallState(Parcel p, int version) {
-        DataCallState dataCall = new DataCallState();
-
-        boolean oldRil = needsOldRilFeature("datacall");
-
-        if (!oldRil)
-           return super.getDataCallState(p, version);
-
-        dataCall.version = 4; // was dataCall.version = version;
-        dataCall.cid = p.readInt();
-        dataCall.active = p.readInt();
-        dataCall.type = p.readString();
-        dataCall.ifname = mLastDataIface[dataCall.cid];
-        p.readString(); // skip APN
-
-        if (TextUtils.isEmpty(dataCall.ifname)) {
-            dataCall.ifname = mLastDataIface[0];
-        }
-
-        String addresses = p.readString();
-        if (!TextUtils.isEmpty(addresses)) {
-            dataCall.addresses = addresses.split(" ");
-        }
-        p.readInt(); // RadioTechnology
-        p.readInt(); // inactiveReason
-
-        dataCall.dnses = new String[2];
-        dataCall.dnses[0] = SystemProperties.get("net."+dataCall.ifname+".dns1");
-        dataCall.dnses[1] = SystemProperties.get("net."+dataCall.ifname+".dns2");
-
-        return dataCall;
-    }
-
-    @Override
-    protected Object
-    responseSetupDataCall(Parcel p) {
-        DataCallState dataCall;
-
-        boolean oldRil = needsOldRilFeature("datacall");
-
-        if (!oldRil)
-           return super.responseSetupDataCall(p);
-
-        dataCall = new DataCallState();
-        dataCall.version = 4;
-
-        dataCall.cid = 0; // Integer.parseInt(p.readString());
-        p.readString();
-        dataCall.ifname = p.readString();
-        if (TextUtils.isEmpty(dataCall.ifname)) {
-            throw new RuntimeException(
-                    "RIL_REQUEST_SETUP_DATA_CALL response, no ifname");
-        }
-        /* Use the last digit of the interface id as the cid */
-        if (!needsOldRilFeature("singlepdp")) {
-            dataCall.cid =
-                Integer.parseInt(dataCall.ifname.substring(dataCall.ifname.length() - 1));
-        }
-
-        mLastDataIface[dataCall.cid] = dataCall.ifname;
-
-
-        String addresses = p.readString();
-        if (!TextUtils.isEmpty(addresses)) {
-          dataCall.addresses = addresses.split(" ");
-        }
-
-        dataCall.dnses = new String[2];
-        dataCall.dnses[0] = SystemProperties.get("net."+dataCall.ifname+".dns1");
-        dataCall.dnses[1] = SystemProperties.get("net."+dataCall.ifname+".dns2");
-        dataCall.active = 1;
-        dataCall.status = 0;
-
-        return dataCall;
-    }
-
-    @Override
-    public void getNeighboringCids(Message response) {
-        if (!getRadioState().isOn())
-            return;
-
-        RILRequest rr = RILRequest.obtain(
-                RILConstants.RIL_REQUEST_GET_NEIGHBORING_CELL_IDS, response);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        send(rr);
-    }
-
-    @Override
-    public void setCurrentPreferredNetworkType() {
-        if (RILJ_LOGD) riljLog("setCurrentPreferredNetworkType: " + mSetPreferredNetworkType);
-        setPreferredNetworkType(mSetPreferredNetworkType, null);
-    }
-
-    @Override
-    public void setPreferredNetworkType(int networkType , Message response) {
-        /**
-          * If not using a USIM, ignore LTE mode and go to 3G
-          */
-        if (!mUSIM && networkType == RILConstants.NETWORK_MODE_LTE_GSM_WCDMA) {
-            networkType = RILConstants.NETWORK_MODE_WCDMA_PREF;
-        }
-        mSetPreferredNetworkType = networkType;
-        super.setPreferredNetworkType(networkType, response);
     }
 
     @Override
