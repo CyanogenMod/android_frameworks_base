@@ -2387,6 +2387,13 @@ public final class Settings {
         public static final String UI_FORCE_OVERFLOW_BUTTON = "ui_force_overflow_button";
 
         /**
+         * Whether to override the default function of long-pressing home and
+         * have it send a menu key press instead.
+         * @hide
+         */
+        public static final String LONG_PRESS_HOME_MENU = "long_press_home_menu";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
