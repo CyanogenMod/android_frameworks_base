@@ -89,18 +89,15 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
          * then change then re-enable).
          */
     }
-        
+
     private boolean NeedReconnect(int networkType)
     {
         ConnectivityManager cm =
             (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni_active = cm.getActiveNetworkInfo();
-       
-        if(ni_active != null) Log.e("rodries", "network tipo: "+ni_active.getTypeName() +"  sub: "+ni_active.getSubtype());
-        else Log.e("rodries", "network tipo activo: null");
-        
-        return ni_active != null && ni_active.getTypeName().equalsIgnoreCase( "mobile" ) && 
-                ni_active.isConnected() && cm.getMobileDataEnabled() ;        
+
+        return ni_active != null && ni_active.getTypeName().equalsIgnoreCase( "mobile" ) &&
+                ni_active.isConnected() && cm.getMobileDataEnabled();
     }
 
     @Override
@@ -112,7 +109,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
         Looper looper;
 
         if(NeedReconnect(networkType))
-        { 
+        {
             if (mSmdk4210Handler == null) {
                 handlerThread = new HandlerThread("mSmdk4210Thread");
                 mSmdk4210Thread = handlerThread;
@@ -123,14 +120,12 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
                 mSmdk4210Handler = new ConnectivityHandler(mContext, looper);               
             }
             mSmdk4210Handler.setPreferedNetworkType(networkType, response);    
-            Log.e("rodries", "setPreferedNetworkType: "+networkType);
         } else {
             if (mSmdk4210Handler != null) {
                 mSmdk4210Thread = null;
                 mSmdk4210Handler = null;
             }
             sendPreferedNetworktype(networkType, response);
-            Log.e("rodries", "sendPreferedNetworktype: "+networkType);
         }
 
     }
@@ -186,8 +181,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
 
         public void setPreferedNetworkType(int networkType, Message response)
         {
-            //Log.d(LOG_TAG, "Mobile Dataconnection is online setting it down");
-            Log.e("rodries", "Mobile Dataconnection is online setting it down");
+            Log.d(LOG_TAG, "Mobile Dataconnection is online setting it down");
             mDesiredNetworkType = networkType;
             mNetworktypeResponse = response;
             ConnectivityManager cm =
@@ -205,8 +199,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
                 ConnectivityManager cm =
                     (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                //Log.d(LOG_TAG, "preferred NetworkType set upping Mobile Dataconnection");
-                Log.e("rodries", "handleMessage: preferred NetworkType set upping Mobile Dataconnection");
+                Log.d(LOG_TAG, "preferred NetworkType set upping Mobile Dataconnection");
                 cm.setMobileDataEnabled(true);
                 //everything done now call back that we have set the networktype
                 AsyncResult.forMessage(mNetworktypeResponse, null, null);
