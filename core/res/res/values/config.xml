@@ -792,4 +792,7 @@
 
     <!-- True if the Sym key should open the InputMethodPicker (default) -->
     <bool name="config_symKeyShowsImePicker">true</bool>
+
+    <!-- Device has a h/w rotation lock switch -->
+    <bool name="config_hasRotaionLockSwitch">false</bool>
 </resources>
