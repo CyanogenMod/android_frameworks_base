@@ -1,0 +1,9 @@
+Change-Id: I1c30cc0e42922fe7dbcef24b20a6033d2acc74f1
+Code-Review+2: Danny Baumann <dannybaumann@web.de>
+Verified+1: Danny Baumann <dannybaumann@web.de>
+Code-Review+1: Taichi Nishimura <fuzzzzzzzzzzzzzzzzzz@gmail.com>
+Submitted-by: Danny Baumann <dannybaumann@web.de>
+Submitted-at: Wed, 16 May 2012 16:48:22 +0400
+Reviewed-on: http://review.cyanogenmod.com/16024
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/gingerbread
