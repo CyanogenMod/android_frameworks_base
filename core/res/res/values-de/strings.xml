@@ -1255,4 +1255,70 @@
 
     <!--Application killed toast -->
     <string name="app_killed_message">Anwendung beendet</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tropensturm</string>
+    <string name="weather_2">Hurrikan</string>
+    <string name="weather_3">Heftige Gewitter</string>
+    <string name="weather_4">Gewitter</string>
+    <string name="weather_5">Wechselnd Regen und Schnee</string>
+    <string name="weather_6">Wechselnd Regen und Schneeregen</string>
+    <string name="weather_7">Wechselnd Schnee und Schneeregen</string>
+    <string name="weather_8">Gefrierender Niesel</string>
+    <string name="weather_9">Niesel</string>
+    <string name="weather_10">Gefrierender Regen</string>
+    <string name="weather_11">Schauer</string>
+    <string name="weather_12">Schauer</string>
+    <string name="weather_13">Scheegestöber</string>
+    <string name="weather_14">Leichte Schneeschauer</string>
+    <string name="weather_15">Schneesturm</string>
+    <string name="weather_16">Schnee</string>
+    <string name="weather_17">Hagel</string>
+    <string name="weather_18">Schneeregen</string>
+    <string name="weather_19">Staubig</string>
+    <string name="weather_20">Neblig</string>
+    <string name="weather_21">Dunst</string>
+    <string name="weather_22">Rauch</string>
+    <string name="weather_23">Stürmisch</string>
+    <string name="weather_24">Windig</string>
+    <string name="weather_25">Kalt</string>
+    <string name="weather_26">Bedeckt</string>
+    <string name="weather_27">Stark bewölkt</string> <!-- Night -->
+    <string name="weather_28">Stark bewölkt</string> <!-- Day -->
+    <string name="weather_29">Teilweise bewölkt</string> <!-- Night -->
+    <string name="weather_30">Teilweise bewölkt</string> <!-- Day -->
+    <string name="weather_31">Klar</string> <!-- Night -->
+    <string name="weather_32">Sonnig</string>
+    <string name="weather_33">Heiter</string> <!-- Night -->
+    <string name="weather_34">Heiter</string> <!-- Day -->
+    <string name="weather_35">Wechselnd Regen und Hagel</string>
+    <string name="weather_36">Heiß</string>
+    <string name="weather_37">Örtliche Gewitter</string>
+    <string name="weather_38">Einzelne Gewitter</string>
+    <string name="weather_39">Einzelne Gewitter</string>
+    <string name="weather_40">Einzelne Schauer</string>
+    <string name="weather_41">Heftiger Schneefall</string>
+    <string name="weather_42">Einzelne Schneeschauer</string>
+    <string name="weather_43">Heftiger Schneefall</string>
+    <string name="weather_44">Teilweise bewölkt</string>
+    <string name="weather_45">Gewitterschauer</string>
+    <string name="weather_46">Schneeschauer</string>
+    <string name="weather_47">Örtliche Gewitterschauer</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NO</string>
+    <string name="weather_E">O</string>
+    <string name="weather_SE">SO</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SW</string>
+    <string name="weather_W">W</string>
+    <string name="weather_NW">NW</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_tap_to_refresh">Zum Aktualisieren berühren</string>
+
 </resources>
