@@ -1747,8 +1747,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return 0;
         } else if (keyCode == KeyEvent.KEYCODE_APP_SWITCH) {
-            if (down && repeatCount == 0) {
-                showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS);
+            if (down && repeatCount == 0 && !keyguardOn) {
+                sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
+                try {
+                    mStatusBarService.toggleRecentApps();
+                } catch (RemoteException e) {
+                }
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
