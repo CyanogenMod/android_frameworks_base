@@ -102,6 +102,97 @@
         android:drawablePadding="4dip"
         />
 
+    <!-- CyanogenMod Weather Panel -->
+    <RelativeLayout
+        android:id="@+id/weather_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="4dip" >
+
+        <ImageView
+            android:id="@+id/weather_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="8dip"
+            android:paddingRight="8dip" 
+            android:src="@android:drawable/ic_dialog_alert" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/weather_image"
+            android:orientation="horizontal"
+            android:padding="4dip" >
+
+            <TextView
+                android:id="@+id/weather_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_alignParentRight="true"
+                android:textColor="?android:attr/textColorPrimary"/>
+
+            <TextView
+                android:id="@+id/weather_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/weather_city"
+                android:layout_alignParentRight="true"
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorPrimary" />
+
+            <TextView
+                android:id="@+id/update_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/weather_condition"
+                android:layout_alignParentRight="true"
+                android:textSize="6sp"
+                android:textColor="?android:attr/textColorSecondary" />
+
+            </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/weather_image"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true" >
+
+            <TextView
+                android:id="@+id/weather_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="20sp"
+                android:textColor="?android:attr/textColorPrimary" />
+
+            <View
+                android:id="@+id/weather_divider"
+                android:layout_below="@id/weather_temp"
+                android:layout_width="44dip"
+                android:layout_height="1dip"
+                android:background="@android:drawable/divider_horizontal_dark" />
+
+            <TextView
+                android:id="@+id/weather_low_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/weather_divider"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="2dip"
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorPrimary" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
     <Space android:layout_gravity="fill" />
 
     <!-- emergency call button shown when sim is PUKd and tab_selector is hidden -->
@@ -121,7 +212,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="302dip">
+        android:layout_height="292dip">  <!-- was 302 -->
 
         <com.android.internal.widget.multiwaveview.MultiWaveView
             android:id="@+id/unlock_widget"
@@ -188,7 +279,7 @@
         layout="@layout/keyguard_transport_control"
         android:layout_row="0"
         android:layout_column="0"
-        android:layout_rowSpan="4"
+        android:layout_rowSpan="5"
         android:layout_columnSpan="1"
         android:layout_gravity="fill"
         android:layout_width="0dip"
