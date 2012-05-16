@@ -772,34 +772,54 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private void handleLongPressOnHome() {
-        // We can't initialize this in init() since the configuration hasn't been loaded yet.
-        if (mLongPressOnHomeBehavior < 0) {
-            mLongPressOnHomeBehavior
-                    = mContext.getResources().getInteger(R.integer.config_longPressOnHomeBehavior);
-            if (mLongPressOnHomeBehavior < LONG_PRESS_HOME_NOTHING ||
-                    mLongPressOnHomeBehavior > LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
-                mLongPressOnHomeBehavior = LONG_PRESS_HOME_NOTHING;
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LONG_PRESS_HOME_MENU, 0) == 0) {
+            // We can't initialize this in init() since the configuration hasn't been loaded yet.
+            if (mLongPressOnHomeBehavior < 0) {
+                mLongPressOnHomeBehavior = mContext.getResources().getInteger(
+                        R.integer.config_longPressOnHomeBehavior);
+                if (mLongPressOnHomeBehavior < LONG_PRESS_HOME_NOTHING ||
+                        mLongPressOnHomeBehavior > LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
+                    mLongPressOnHomeBehavior = LONG_PRESS_HOME_NOTHING;
+                }
             }
-        }
 
-        if (mLongPressOnHomeBehavior != LONG_PRESS_HOME_NOTHING) {
+            if (mLongPressOnHomeBehavior != LONG_PRESS_HOME_NOTHING) {
+                performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
+                // Eat the longpress so it won't dismiss the recent apps dialog when
+                // the user lets go of the home key
+                mHomePressed = false;
+            }
+
+            if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_DIALOG) {
+                showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS);
+            } else if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
+                try {
+                    mStatusBarService.toggleRecentApps();
+                } catch (RemoteException e) {
+                    Slog.e(TAG, "RemoteException when showing recent apps", e);
+                }
+            }
+        } else {
             performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
-            sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
-
-            // Eat the longpress so it won't dismiss the recent apps dialog when
-            // the user lets go of the home key
             mHomePressed = false;
+            triggerVirtualKeypress(KeyEvent.KEYCODE_MENU);
         }
+    }
 
-        if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_DIALOG) {
-            showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS);
-        } else if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
-            try {
-                mStatusBarService.toggleRecentApps();
-            } catch (RemoteException e) {
-                Slog.e(TAG, "RemoteException when showing recent apps", e);
+    private void triggerVirtualKeypress(final int keyCode) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    mWindowManager.injectKeyEvent(
+                            new KeyEvent(KeyEvent.ACTION_DOWN, keyCode), true);
+                    mWindowManager.injectKeyEvent(
+                            new KeyEvent(KeyEvent.ACTION_UP, keyCode), true);
+                } catch(RemoteException e) {
+                }
             }
-        }
+        }).start();
     }
 
     /**
