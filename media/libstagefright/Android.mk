@@ -24,6 +24,9 @@ endif
 ifeq ($(TARGET_BOARD_PLATFORM),msm8960)
     LOCAL_CFLAGS += -DTARGET8x60
 endif
+ifeq ($(BOARD_CAMERA_USE_MM_HEAP),true)
+    LOCAL_CFLAGS += -DCAMERA_MM_HEAP
+endif
 endif
 include frameworks/base/media/libstagefright/codecs/common/Config.mk
 
