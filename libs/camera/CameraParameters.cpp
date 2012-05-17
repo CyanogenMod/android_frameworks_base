@@ -52,10 +52,12 @@ const char CameraParameters::CAPTURE_MODE_HJR[] = "hjr";
 const char CameraParameters::CAPTURE_MODE_PANORAMA[] = "panorama";    
 const char CameraParameters::CONTINUOUS_AF_OFF[] = "caf-off";
 const char CameraParameters::CONTINUOUS_AF_ON[] = "caf-on";
+const char CameraParameters::KEY_CAF[] = "continuous-af";
 const char CameraParameters::KEY_CONTINUOUS_AF[] = "continuous-af";
 const char CameraParameters::KEY_CAPTURE_MODE[] = "capture-mode";
 const char CameraParameters::KEY_PICTURE_COUNT[] = "picture-count";
 const char CameraParameters::KEY_MAX_BURST_PICTURE_COUNT[] = "max-burst-picture-count";
+const char CameraParameters::KEY_SUPPORTED_CAF[] = "continuous-af-values";
 const char CameraParameters::KEY_SUPPORTED_CONTINUOUS_AF[] = "continuous-af-mode";
 const char CameraParameters::KEY_SUPPORTED_CAPTURE_MODES[] = "capture-mode-values";
 #endif
