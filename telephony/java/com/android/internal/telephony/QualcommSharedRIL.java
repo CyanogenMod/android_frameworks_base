@@ -45,7 +45,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
     protected HandlerThread mIccThread;
     protected IccHandler mIccHandler;
     protected String mAid;
-    protected boolean mUSIM;
+    protected boolean mUSIM = false;
     protected int mSetPreferredNetworkType;
     protected String[] mLastDataIface = new String[20];
     boolean RILJ_LOGV = true;

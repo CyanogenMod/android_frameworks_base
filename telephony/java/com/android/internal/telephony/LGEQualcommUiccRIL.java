@@ -33,7 +33,6 @@ import java.util.ArrayList;
  * {@hide}
  */
 public class LGEQualcommUiccRIL extends QualcommSharedRIL implements CommandsInterface {
-    protected boolean mUSIM;
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
 
