@@ -181,6 +181,7 @@ public:
     static const char KEY_CAPTURE_MODE[];
     static const char KEY_PICTURE_COUNT[];
     static const char KEY_MAX_BURST_PICTURE_COUNT[];
+    static const char KEY_SUPPORTED_CAF[];
     static const char KEY_SUPPORTED_CONTINUOUS_AF[];
     static const char CAPTURE_MODE_NORMAL[];
     static const char CAPTURE_MODE_BURST[];
@@ -822,6 +823,7 @@ public:
     // Proprietaries from CodeAurora use these...
     static const char CONTINUOUS_AF_OFF[] ;
     static const char CONTINUOUS_AF_ON[] ;
+    static const char KEY_CAF[] ;
     static const char KEY_CONTINUOUS_AF[] ;
 
     // Normal focus mode. Applications should call
