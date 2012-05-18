@@ -1013,7 +1013,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mVolumeWakeScreen = (Settings.System.getInt(resolver,
                     Settings.System.VOLUME_WAKE_SCREEN, 0) == 1);
             mVolBtnMusicControls = (Settings.System.getInt(resolver,
-                    Settings.System.VOLBTN_MUSIC_CONTROLS, 1) == 1);
+                    Settings.System.VOLBTN_MUSIC_CONTROLS, 0) == 1);
             int accelerometerDefault = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION, DEFAULT_ACCELEROMETER_ROTATION);
             
