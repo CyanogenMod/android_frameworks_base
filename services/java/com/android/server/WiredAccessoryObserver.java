@@ -1,4 +1,4 @@
-/*
+	/*
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,6 +66,8 @@ class WiredAccessoryObserver extends UEventObserver {
                                                    BIT_HDMI_AUDIO);
     private static final int HEADSETS_WITH_MIC = BIT_HEADSET;
 
+    public static final String DOCK_AUDIO_SETTING_CHANGED = "DOCK_AUDIO_SETTING_CHANGED";
+
     private int mHeadsetState;
     private int mPrevHeadsetState;
     private String mHeadsetName;
@@ -80,29 +82,50 @@ class WiredAccessoryObserver extends UEventObserver {
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WiredAccessoryObserver");
         mWakeLock.setReferenceCounted(false);
 
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
+        filter.addAction(DOCK_AUDIO_SETTING_CHANGED);
+
         context.registerReceiver(new BootCompletedReceiver(),
-            new IntentFilter(Intent.ACTION_BOOT_COMPLETED), null, null);
+            filter, null, null);
     }
 
     private final class BootCompletedReceiver extends BroadcastReceiver {
       @Override
       public void onReceive(Context context, Intent intent) {
-        // At any given time accessories could be inserted
-        // one on the board, one on the dock and one on HDMI:
-        // observe three UEVENTs
-        init();  // set initial status
+        final String action = intent.getAction();
+        if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
 
-        for (int i = 0; i < MAX_AUDIO_PORTS; i++) {
-            startObserving(uEventInfo[i][0]);
-        }
+            // At any given time accessories could be inserted
+            // one on the board, one on the dock and one on HDMI:
+            // observe three UEVENTs
+            init();  // set initial status
 
-        // Do we actually need/want to hack the system and look at the dock uevents?
-        if (Settings.System.getInt(context.getContentResolver(),
-                Settings.System.DOCK_USB_AUDIO_ENABLED, 0) == 1) {
-            for (int i = 0; i < MAX_AUDIO_PORTS_DOCK; i++) {
-                startObserving(uEventInfoDock[i][0]);
+            for (int i = 0; i < MAX_AUDIO_PORTS; i++) {
+                startObserving(uEventInfo[i][0]);
             }
-        }
+
+            // Do we actually need/want to hack the system and look at the dock uevents?
+            if (Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.DOCK_USB_AUDIO_ENABLED, 0) == 1) {
+                for (int i = 0; i < MAX_AUDIO_PORTS_DOCK; i++) {
+                    startObserving(uEventInfoDock[i][0]);
+                }
+            }
+        } else  if (DOCK_AUDIO_SETTING_CHANGED.equals(action)) {
+             // DOCK CHANGED
+              if (Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.DOCK_USB_AUDIO_ENABLED, 0) == 1) {
+                  for (int i = 0; i < MAX_AUDIO_PORTS_DOCK; i++) {
+                      startObserving(uEventInfoDock[i][0]);
+                  }
+              } else {
+                  stopObserving();
+                  for (int i = 0; i < MAX_AUDIO_PORTS; i++) {
+                      startObserving(uEventInfo[i][0]);
+                  }
+              }
+          }
       }
   }
 
