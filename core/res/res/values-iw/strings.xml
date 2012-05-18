@@ -1227,4 +1227,24 @@
     <string name="sending" msgid="8715108995741758718">"שולח..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"להפעיל את הדפדפן?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"לקבל את השיחה?"</string>
+    <string name="profileNameDefault">ברירת מחדל</string>
+    <string name="profileNameWork">עבודה</string>
+    <string name="profileNameSilent">שקט</string>
+    <string name="profileNameNight">לילה</string>
+    <string name="profileNameHome">בית</string>
+    <string name="profileGroupPhone">טלפון</string>
+    <string name="profileGroupCalendar">לוח שנה</string>
+    <string name="profileGroupEmail">דואר אלקטרוני</string>
+    <string name="profileGroupSMS">הודעות</string>
+    <string name="wildcardProfile">אחר</string>
+    <string name="reboot_system" product="tablet">הפעלה מחדש</string>
+    <string name="global_action_screenshot">צילום מסך</string>
+    <string name="reboot_reboot">הפעלה מחדש</string>
+    <string name="reboot_progress">"מפעיל מחדש\u2026"</string>
+    <string name="reboot_confirm">הטלפון שלך יופעל מחדש</string>
+    <string name="global_action_reboot">הפעלה מחדש</string>
+    <string name="global_action_choose_profile">פרופיל</string>
+    <string name="permlab_preventpower">"מניעת לחצן power"</string>
+    <string name="permdesc_preventpower">"מאפשר לאפליקציה לעקוף את כפתור ה-power"</string>
+    <string name="app_killed_message">האפליקציה נסגרה</string>
 </resources>
