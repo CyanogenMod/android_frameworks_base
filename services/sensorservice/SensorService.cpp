@@ -57,13 +57,24 @@ void SensorService::onFirstRef()
     SensorDevice& dev(SensorDevice::getInstance());
 
     if (dev.initCheck() == NO_ERROR) {
-        uint32_t virtualSensorsNeeds =
-                (1<<SENSOR_TYPE_GRAVITY) |
-                (1<<SENSOR_TYPE_LINEAR_ACCELERATION) |
-                (1<<SENSOR_TYPE_ROTATION_VECTOR);
         sensor_t const* list;
         int count = dev.getSensorList(&list);
         mLastEventSeen.setCapacity(count);
+        
+        uint32_t hasSensors = 0;
+        for (int i=0 ; i<count ; i++) {
+            hasSensors |= (1<<list[i].type);
+        }
+
+        uint32_t virtualSensorsNeeds = 0;
+        if ((hasSensors & (1<<SENSOR_TYPE_ACCELEROMETER))) {
+            virtualSensorsNeeds &= (1<<SENSOR_TYPE_GRAVITY);
+            virtualSensorsNeeds &= (1<<SENSOR_TYPE_LINEAR_ACCELERATION);
+            if ((hasSensors & (1<<SENSOR_TYPE_MAGNETIC_FIELD))) {
+                virtualSensorsNeeds &= (1<<SENSOR_TYPE_ROTATION_VECTOR);
+            }
+        }
+
         for (int i=0 ; i<count ; i++) {
             registerSensor( new HardwareSensor(list[i]) );
             switch (list[i].type) {
