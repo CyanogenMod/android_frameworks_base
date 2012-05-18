@@ -197,7 +197,7 @@ public class KeyButtonView extends ImageView {
                         ObjectAnimator.ofFloat(this, "glowScale", 1f),
                         ObjectAnimator.ofFloat(this, "drawingAlpha", BUTTON_QUIESCENT_ALPHA)
                     );
-                    as.setDuration(500);
+                    as.setDuration(0);
                 }
                 as.start();
             }
