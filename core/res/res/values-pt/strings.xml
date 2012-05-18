@@ -1279,4 +1279,5 @@
     <string name="permlab_preventpower">modificação do botão liga/desl.</string>
     <string name="permdesc_preventpower">Permite uma aplicação substituir o botão liga/desl.</string>
     <string name="app_killed_message">Aplicação terminada</string>
+    <string name="roamingTextAirplaneMode">Modo avião</string>
 </resources>
