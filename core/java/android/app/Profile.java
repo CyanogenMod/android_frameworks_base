@@ -17,10 +17,12 @@
 package android.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Parcel;
 import android.os.ParcelUuid;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -64,12 +66,23 @@ public final class Profile implements Parcelable, Comparable {
 
     private Map<Integer, ConnectionSettings> connections = new HashMap<Integer, ConnectionSettings>();
 
+    private Map<Integer, VibratorSettings> vibrators = new HashMap<Integer, VibratorSettings>();
+
     private int mScreenLockMode = LockMode.DEFAULT;
+
+    private int mAirplaneMode = AirplaneMode.DEFAULT;
 
     /** @hide */
     public static class LockMode {
         public static final int DEFAULT = 0;
         public static final int INSECURE = 1;
+        public static final int DISABLE = 2;
+    }
+
+    /** @hide */
+    public static class AirplaneMode {
+        public static final int DEFAULT = 0;
+        public static final int ENABLE = 1;
         public static final int DISABLE = 2;
     }
 
@@ -168,7 +181,9 @@ public final class Profile implements Parcelable, Comparable {
                 streams.values().toArray(new Parcelable[streams.size()]), flags);
         dest.writeParcelableArray(
                 connections.values().toArray(new Parcelable[connections.size()]), flags);
+        dest.writeParcelableArray(vibrators.values().toArray(new Parcelable[vibrators.size()]), flags);
         dest.writeInt(mScreenLockMode);
+        dest.writeInt(mAirplaneMode);
     }
 
     /** @hide */
@@ -194,7 +209,12 @@ public final class Profile implements Parcelable, Comparable {
             ConnectionSettings connection = (ConnectionSettings) parcel;
             connections.put(connection.getConnectionId(), connection);
         }
+        for (Parcelable parcel : in.readParcelableArray(null)) {
+            VibratorSettings vibrator = (VibratorSettings) parcel;
+            vibrators.put(vibrator.getVibratorId(), vibrator);
+        }
         mScreenLockMode = in.readInt();
+        mAirplaneMode = in.readInt();
     }
 
     public String getName() {
@@ -254,6 +274,19 @@ public final class Profile implements Parcelable, Comparable {
         mDirty = true;
     }
 
+    public int getAirplaneMode() {
+        return mAirplaneMode;
+    }
+
+    public void setAirplaneMode(int airplaneMode) {
+        if (airplaneMode < AirplaneMode.DEFAULT || airplaneMode > AirplaneMode.DISABLE) {
+            mAirplaneMode = AirplaneMode.DEFAULT;
+        } else {
+            mAirplaneMode = airplaneMode;
+        }
+        mDirty = true;
+    }
+
     /** @hide */
     public boolean isDirty() {
         if (mDirty) {
@@ -271,6 +304,11 @@ public final class Profile implements Parcelable, Comparable {
         }
         for (ConnectionSettings conn : connections.values()) {
             if (conn.isDirty()) {
+                return true;
+            }
+        }
+        for (VibratorSettings vibrator : vibrators.values()) {
+            if (vibrator.isDirty()) {
                 return true;
             }
         }
@@ -301,7 +339,11 @@ public final class Profile implements Parcelable, Comparable {
 
         builder.append("<screen-lock-mode>");
         builder.append(mScreenLockMode);
-        builder.append("</screen-lock-mode>");
+        builder.append("</screen-lock-mode>\n");
+
+        builder.append("<airplane-mode>");
+        builder.append(mAirplaneMode);
+        builder.append("</airplane-mode>\n");
 
         for (ProfileGroup pGroup : profileGroups.values()) {
             pGroup.getXmlString(builder, context);
@@ -311,6 +353,9 @@ public final class Profile implements Parcelable, Comparable {
         }
         for (ConnectionSettings cs : connections.values()) {
             cs.getXmlString(builder, context);
+        }
+        for (VibratorSettings vs : vibrators.values()) {
+            vs.getXmlString(builder, context);
         }
         builder.append("</profile>\n");
         mDirty = false;
@@ -367,6 +412,9 @@ public final class Profile implements Parcelable, Comparable {
                 if (name.equals("screen-lock-mode")) {
                     profile.setScreenLockMode(Integer.valueOf(xpp.nextText()));
                 }
+                if (name.equals("airplane-mode")) {
+                    profile.setAirplaneMode(Integer.valueOf(xpp.nextText()));
+                }
                 if (name.equals("profileGroup")) {
                     ProfileGroup pg = ProfileGroup.fromXml(xpp, context);
                     profile.addProfileGroup(pg);
@@ -378,6 +426,10 @@ public final class Profile implements Parcelable, Comparable {
                 if (name.equals("connectionDescriptor")) {
                     ConnectionSettings cs = ConnectionSettings.fromXml(xpp, context);
                     profile.connections.put(cs.getConnectionId(), cs);
+                }
+                if (name.equals("vibratorDescriptor")) {
+                    VibratorSettings vs = VibratorSettings.fromXml(xpp, context);
+                    profile.setVibratorSettings(vs);
                 }
             }
             event = xpp.next();
@@ -404,6 +456,27 @@ public final class Profile implements Parcelable, Comparable {
                 cs.processOverride(context);
             }
         }
+        // Set vibrators
+        for (VibratorSettings vs : vibrators.values()) {
+            if (vs.isOverride()) {
+                vs.processOverride(context);
+            }
+        }
+        // Set airplane mode
+        doSelectAirplaneMode(context);
+    }
+
+    private void doSelectAirplaneMode(Context context) {
+        if (getAirplaneMode() != AirplaneMode.DEFAULT) {
+            int current = Settings.System.getInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0);
+            int target = getAirplaneMode();
+            if (current == 1 && target == AirplaneMode.DISABLE || current == 0 && target == AirplaneMode.ENABLE) {
+                Settings.System.putInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 1 - current);
+                Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+                intent.putExtra("state", target != AirplaneMode.DISABLE);
+                context.sendBroadcast(intent);
+            }
+        }
     }
 
     /** @hide */
@@ -420,6 +493,22 @@ public final class Profile implements Parcelable, Comparable {
     /** @hide */
     public Collection<StreamSettings> getStreamSettings(){
         return streams.values();
+    }
+
+    /** @hide */
+    public VibratorSettings getSettingsForVibrator(int vibratorId) {
+        return vibrators.get(vibratorId);
+    }
+
+    /** @hide */
+    public void setVibratorSettings(VibratorSettings descriptor) {
+        vibrators.put(descriptor.getVibratorId(), descriptor);
+        mDirty = true;
+    }
+
+    /** @hide */
+    public Collection<VibratorSettings> getVibratorSettings() {
+        return vibrators.values();
     }
 
     /** @hide */
