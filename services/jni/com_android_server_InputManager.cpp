@@ -187,7 +187,6 @@ public:
     void setSystemUiVisibility(int32_t visibility);
     void setPointerSpeed(int32_t speed);
     void setShowTouches(bool enabled);
-    void setKeyLayout(const char* deviceName, const char* keyLayout);
 
     /* --- InputReaderPolicyInterface implementation --- */
 
@@ -709,12 +708,6 @@ void NativeInputManager::setShowTouches(bool enabled) {
 
     mInputManager->getReader()->requestRefreshConfiguration(
             InputReaderConfiguration::CHANGE_SHOW_TOUCHES);
-}
-
-void NativeInputManager::setKeyLayout(const char* deviceName, const char* keyLayout) {
-    mInputManager->getReader()->setKeyLayout(deviceName, keyLayout);
-    mInputManager->getReader()->requestRefreshConfiguration(
-            InputReaderConfiguration::CHANGE_MUST_REOPEN);
 }
 
 bool NativeInputManager::isScreenOn() {
@@ -1351,21 +1344,6 @@ static void android_server_InputManager_nativeMonitor(JNIEnv* env, jclass clazz)
     gNativeInputManager->getInputManager()->getDispatcher()->monitor();
 }
 
-static void android_server_InputManager_nativeSetKeyLayout(JNIEnv* env,
-        jclass clazz, jstring deviceName, jstring keyLayout) {
-    if (checkInputManagerUnitialized(env)) {
-        return;
-    }
-
-    const char *cDeviceName = env->GetStringUTFChars(deviceName, NULL);
-    const char *cKeyLayout = env->GetStringUTFChars(keyLayout, NULL);
-
-    gNativeInputManager->setKeyLayout(cDeviceName, cKeyLayout);
-
-    env->ReleaseStringUTFChars(deviceName, cDeviceName);
-    env->ReleaseStringUTFChars(keyLayout, cKeyLayout);
-}
-
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gInputManagerMethods[] = {
@@ -1420,8 +1398,6 @@ static JNINativeMethod gInputManagerMethods[] = {
             (void*) android_server_InputManager_nativeDump },
     { "nativeMonitor", "()V",
             (void*) android_server_InputManager_nativeMonitor },
-    { "nativeSetKeyLayout", "(Ljava/lang/String;Ljava/lang/String;)V",
-            (void*) android_server_InputManager_nativeSetKeyLayout },
 };
 
 #define FIND_CLASS(var, className) \

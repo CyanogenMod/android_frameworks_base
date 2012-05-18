@@ -623,9 +623,6 @@ private:
     virtual void monitor() {
     }
 
-    virtual void setKeyLayout(const char* deviceName, const char* keyLayout) {
-    }
-
     virtual void requestReopenDevices() {
     }
 
