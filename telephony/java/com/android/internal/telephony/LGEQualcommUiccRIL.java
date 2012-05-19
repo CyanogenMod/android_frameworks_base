@@ -168,5 +168,4 @@ public class LGEQualcommUiccRIL extends QualcommSharedRIL implements CommandsInt
 
         return response;
     }
-
 }
