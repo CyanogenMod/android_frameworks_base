@@ -425,7 +425,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_RINGBACK_TONE: ret = responseInts(p); break;
             case RIL_UNSOL_RESEND_INCALL_MUTE: ret = responseVoid(p); break;
             case RIL_UNSOL_CDMA_SUBSCRIPTION_SOURCE_CHANGED: ret = responseInts(p); break;
-            case RIL_UNSOl_CDMA_PRL_CHANGED: ret = responseInts(p); break;
+            case RIL_UNSOL_CDMA_PRL_CHANGED: ret = responseInts(p); break;
             case RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE: ret = responseVoid(p); break;
             case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
 
@@ -746,7 +746,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
                 }
                 break;
 
-            case RIL_UNSOl_CDMA_PRL_CHANGED:
+            case RIL_UNSOL_CDMA_PRL_CHANGED:
                 if (RILJ_LOGD) unsljLogRet(response, ret);
 
                 if (mCdmaPrlChangedRegistrants != null) {
