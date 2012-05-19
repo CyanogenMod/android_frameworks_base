@@ -532,15 +532,25 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
         int dataPosition = p.dataPosition(); // save off position within the Parcel
         int response = p.readInt();
 
+        /* Assume devices needing the "datacall" GB-compatibility flag are
+         * running GB RILs, so skip 1031-1034 for those */
+        if (needsOldRilFeature("datacall")) {
+            switch(response) {
+                 case 1031:
+                 case 1032:
+                 case 1033:
+                 case 1034:
+                     ret = responseVoid(p);
+                     return;
+            }
+        }
+
         switch(response) {
             case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p);
-            case 1031: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
-            case 1032: ret = responseInts(p); break; // RIL_UNSOL_TETHERED_MODE_STATE_CHANGED
-            case 1033: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_DATA_NETWORK_STATE_CHANGED
-            case 1034: ret = responseVoid(p); break; // RIL_UNSOL_CDMA_SUBSCRIPTION_SOURCE_CHANGED
-            case 1035: ret = responseVoid(p); break; // RIL_UNSOL_CDMA_PRL_CHANGED
+            case 1035: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
             case 1036: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED
             case 1037: ret = responseVoid(p); break; // RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE
+            case 1038: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
 
             default:
                 // Rewind the Parcel
@@ -549,17 +559,13 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
                 // Forward responses that we are not overriding to the super class
                 super.processUnsolicited(p);
                 return;
-	}
+        }
 
         switch(response) {
             case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED:
                 int state = p.readInt();
                 setRadioStateFromRILInt(state);
             break;
-            case 1031:
-            case 1032:
-            case 1033:
-            case 1034:
             case 1035:
             case 1036:
                 break;
@@ -570,6 +576,8 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
                     mExitEmergencyCallbackModeRegistrants.notifyRegistrants(
                                         new AsyncResult (null, null, null));
                 }
+                break;
+            case 1038:
                 break;
         }
     }
