@@ -2225,6 +2225,19 @@ public final class Settings {
         public static final String NAV_BUTTONS = "nav_buttons";
 
         /**
+         * Duration of navigation bar glow animation turning on
+         * @hide
+         */
+        public static final String NAV_GLOW_DURATION_ON = "nav_glow_duration_on";
+
+        /**
+         * Duration of navigation bar glow animation turning off
+         * @hide
+         */
+
+        public static final String NAV_GLOW_DURATION_OFF = "nav_glow_duration_off";
+
+        /**
         * Notification Power Widget - Custom Brightness Mode
         * @hide
         */
