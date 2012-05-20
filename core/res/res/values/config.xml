@@ -809,4 +809,12 @@
 
     <!-- True will enable the electron beam screen-off animation. -->
     <bool name="config_screenOffAnimation">true</bool>
+
+    <!-- Hardware keys present on the device:
+            0 - Keys not declared, in other configuration, or not present
+            1 - Home, Back, Menu, Search
+            2 - Home, Back, Menu
+    -->
+    <integer name="config_deviceHardwareKeys">0</integer>
+
 </resources>
