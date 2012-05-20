@@ -151,14 +151,15 @@ class WiredAccessoryObserver extends UEventObserver {
                                          ((state == 2) ? BIT_USB_HEADSET_DGTL : 0)));
         } else if (name.equals("dock")) {
              switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
-                           ((state == 2) ? BIT_USB_HEADSET_ANLG : 0));
+                           ((state == 2 || state == 1) ? BIT_USB_HEADSET_ANLG : 0));
             // This sets the switchsate to 4 (for USB HEADSET - BIT_USB_HEADSET_ANLG)
             // Looking at the other types, maybe the state that emitted should be a 1 and at 
             //       /devices/virtual/switch/usb_audio
             //
             // However the we need to deal with changes at
             //       /devices/virtual/switch/dock
-            // for this the state of 2 - means that we have a USB ANLG headset
+            // for the state of 2 - means that we have a USB ANLG headset Car Dock
+            // for the state of 1 - means that we have a USB ANLG headset Desk Dock
         } else if (name.equals("hdmi")) {
             switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|
                                              BIT_USB_HEADSET_DGTL|BIT_USB_HEADSET_ANLG)) |
