@@ -187,6 +187,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final int LONG_PRESS_HOME_RECENT_DIALOG = 1;
     static final int LONG_PRESS_HOME_RECENT_SYSTEM_UI = 2;
 
+    static final int LONG_PRESS_MENU_NOTHING = 0;
+    static final int LONG_PRESS_MENU_SEARCH = 1;
+
+    // Masks for checking presence of hardware keys.
+    // Must match values in core/res/res/values/config.xml
+    private static final int KEY_MASK_HOME = 0x01;
+    private static final int KEY_MASK_BACK = 0x02;
+    private static final int KEY_MASK_MENU = 0x04;
+    private static final int KEY_MASK_SEARCH = 0x08;
+    private static final int KEY_MASK_APP_SWITCH = 0x10;
+
     // wallpaper is at the bottom, though the window manager may move it.
     static final int WALLPAPER_LAYER = 2;
     static final int APPLICATION_LAYER = 2;
@@ -465,6 +476,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     // What we do when the user long presses on home
     private int mLongPressOnHomeBehavior = -1;
+
+    // What we do when the user long presses on menu
+    private int mLongPressOnMenuBehavior = -1;
 
     // Screenshot trigger states
     // Time to volume and power must be pressed within this interval of each other.
@@ -853,6 +867,37 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 Slog.e(TAG, "RemoteException when showing recent apps", e);
             }
         }
+    }
+
+    private void handleLongPressOnMenu() {
+        if (mLongPressOnMenuBehavior < 0) {
+            if ((mContext.getResources().getInteger(
+                    R.integer.config_deviceHardwareKeys) & KEY_MASK_SEARCH) == 0) {
+                // Hardware search key not present
+                mLongPressOnMenuBehavior = LONG_PRESS_MENU_SEARCH;
+            } else {
+                mLongPressOnMenuBehavior = LONG_PRESS_MENU_NOTHING;
+            }
+        }
+
+        if (mLongPressOnMenuBehavior == LONG_PRESS_MENU_SEARCH) {
+            performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+            triggerVirtualKeypress(KeyEvent.KEYCODE_SEARCH);
+        }
+    }
+
+    private void triggerVirtualKeypress(final int keyCode) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    mWindowManager.injectKeyEvent(
+                            new KeyEvent(KeyEvent.ACTION_DOWN, keyCode), true);
+                    mWindowManager.injectKeyEvent(
+                            new KeyEvent(KeyEvent.ACTION_UP, keyCode), true);
+                } catch(RemoteException e) {
+                }
+            }
+        }).start();
     }
 
     /**
@@ -1782,26 +1827,36 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // Hijack modified menu keys for debugging features
             final int chordBug = KeyEvent.META_SHIFT_ON;
 
-            if (down && repeatCount == 0) {
-                if (mEnableShiftMenuBugReports && (metaState & chordBug) == chordBug) {
-                    Intent intent = new Intent(Intent.ACTION_BUG_REPORT);
-                    mContext.sendOrderedBroadcast(intent, null);
-                    return -1;
-                } else if (SHOW_PROCESSES_ON_ALT_MENU &&
-                        (metaState & KeyEvent.META_ALT_ON) == KeyEvent.META_ALT_ON) {
-                    Intent service = new Intent();
-                    service.setClassName(mContext, "com.android.server.LoadAverageService");
-                    ContentResolver res = mContext.getContentResolver();
-                    boolean shown = Settings.System.getInt(
-                            res, Settings.System.SHOW_PROCESSES, 0) != 0;
-                    if (!shown) {
-                        mContext.startService(service);
-                    } else {
-                        mContext.stopService(service);
+            if (down) {
+                if (repeatCount == 0) {
+                    if (mEnableShiftMenuBugReports && (metaState & chordBug) == chordBug) {
+                        Intent intent = new Intent(Intent.ACTION_BUG_REPORT);
+                        mContext.sendOrderedBroadcast(intent, null);
+                        return -1;
+                    } else if (SHOW_PROCESSES_ON_ALT_MENU &&
+                            (metaState & KeyEvent.META_ALT_ON) == KeyEvent.META_ALT_ON) {
+                        Intent service = new Intent();
+                        service.setClassName(mContext, "com.android.server.LoadAverageService");
+                        ContentResolver res = mContext.getContentResolver();
+                        boolean shown = Settings.System.getInt(
+                                res, Settings.System.SHOW_PROCESSES, 0) != 0;
+                        if (!shown) {
+                            mContext.startService(service);
+                        } else {
+                            mContext.stopService(service);
+                        }
+                        Settings.System.putInt(
+                                res, Settings.System.SHOW_PROCESSES, shown ? 0 : 1);
+                        return -1;
                     }
-                    Settings.System.putInt(
-                            res, Settings.System.SHOW_PROCESSES, shown ? 0 : 1);
-                    return -1;
+                } else if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != 0) {
+                    if (!keyguardOn) {
+                        handleLongPressOnMenu();
+                        if (mLongPressOnMenuBehavior != LONG_PRESS_MENU_NOTHING) {
+                            // Do not open menu when key is released
+                            return -1;
+                        }
+                    }
                 }
             }
         } else if (keyCode == KeyEvent.KEYCODE_SEARCH) {
