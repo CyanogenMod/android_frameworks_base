@@ -111,6 +111,7 @@
     <string name="roamingText11" msgid="4154476854426920970">"Banner roaming attivato"</string>
     <string name="roamingText12" msgid="1189071119992726320">"Banner roaming disattivato"</string>
     <string name="roamingTextSearching" msgid="8360141885972279963">"Ricerca servizio"</string>
+    <string name="roamingTextAirplaneMode">Modalità aereo</string>
     <string name="cfTemplateNotForwarded" msgid="1683685883841272560">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: inoltro non effettuato"</string>
     <string name="cfTemplateForwarded" msgid="1302922117498590521">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
     <string name="cfTemplateForwardedTime" msgid="9206251736527085256">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g><xliff:g id="DIALING_NUMBER">{1}</xliff:g> dopo <xliff:g id="TIME_DELAY">{2}</xliff:g> secondi"</string>
