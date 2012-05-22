@@ -1169,6 +1169,28 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     }
 
     /**
+     * Clear data call entries with duplicate call ids.
+     * The function will retain the first found unique call id.
+     *
+     * @param dataCalls
+     * @return unique set of dataCalls.
+     */
+    private ArrayList<DataCallState> clearDuplicates(
+            ArrayList<DataCallState> dataCalls) {
+        // clear duplicate cid's
+        ArrayList<Integer> cids = new ArrayList<Integer>();
+        ArrayList<DataCallState> uniqueCalls = new ArrayList<DataCallState>();
+        for (DataCallState dc : dataCalls) {
+            if (!cids.contains(dc.cid)) {
+                uniqueCalls.add(dc);
+                cids.add(dc.cid);
+            }
+        }
+        log("Number of DataCallStates:" + dataCalls.size() + "Unique count:" + uniqueCalls.size());
+        return uniqueCalls;
+    }
+
+    /**
      * @param ar is the result of RIL_REQUEST_DATA_CALL_LIST
      * or RIL_UNSOL_DATA_CALL_LIST_CHANGED
      */
@@ -1186,6 +1208,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             return;
         }
         if (DBG) log("onDataStateChanged(ar): DataCallState size=" + dataCallStates.size());
+
+        dataCallStates = clearDuplicates(dataCallStates);
 
         // Create a hash map to store the dataCallState of each DataConnectionAc
         HashMap<DataCallState, DataConnectionAc> dataCallStateToDcac;
