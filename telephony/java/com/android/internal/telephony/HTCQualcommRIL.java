@@ -42,49 +42,6 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
     }
 
     @Override
-    protected DataCallState
-    getDataCallState(Parcel p, int version) {
-        DataCallState dataCall = new DataCallState();
-        dataCall.version = version;
-
-        if (version < 5) {
-            dataCall.cid = p.readInt();
-            dataCall.active = p.readInt();
-            dataCall.type = p.readString();
-            String addresses = p.readString();
-            if (!TextUtils.isEmpty(addresses)) {
-                dataCall.addresses = addresses.split(" ");
-            }
-        } else {
-            dataCall.status = p.readInt();
-            dataCall.suggestedRetryTime = p.readInt();
-            dataCall.cid = p.readInt();
-            dataCall.active = p.readInt();
-            dataCall.type = p.readString();
-            dataCall.ifname = p.readString();
-            if (dataCall.status == DataConnection.FailCause.NONE.getErrorCode()
-                && TextUtils.isEmpty(dataCall.ifname)
-                && dataCall.active != 0) {
-                throw new RuntimeException("getDataCallState, no ifname");
-            }
-            String addresses = p.readString();
-            if (!TextUtils.isEmpty(addresses)) {
-                dataCall.addresses = addresses.split(" ");
-            }
-            String dnses = p.readString();
-            if (!TextUtils.isEmpty(dnses)) {
-                dataCall.dnses = dnses.split(" ");
-            }
-            String gateways = p.readString();
-            if (!TextUtils.isEmpty(gateways)) {
-                dataCall.gateways = gateways.split(" ");
-            }
-        }
-
-        return dataCall;
-    }
-
-    @Override
     protected Object
     responseIccCardStatus(Parcel p) {
         IccCardApplication ca;
