@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Vibrator;
 import android.preference.MultiSelectListPreference;
 import android.provider.Settings;
 import android.view.View;
@@ -21,7 +20,7 @@ public class SoundButton extends PowerButton {
 
     private static final String TAG = "SoundButton";
 
-    private static final int VIBRATE_DURATION = 500; // 0.5s
+    private static final int VIBRATE_DURATION = 250; // 0.25s
 
     private static final IntentFilter INTENT_FILTER = new IntentFilter();
     static {
@@ -32,8 +31,6 @@ public class SoundButton extends PowerButton {
     private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
     static {
         OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.EXPANDED_RING_MODE));
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.EXPANDED_HAPTIC_FEEDBACK));
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.HAPTIC_FEEDBACK_ENABLED));
     }
 
     private final Ringer mSilentRinger = new Ringer(false, AudioManager.VIBRATE_SETTING_OFF,
@@ -54,10 +51,7 @@ public class SoundButton extends PowerButton {
     };
     private int mRingerValuesIndex = 2;
 
-    private boolean mHapticFeedbackEnabled = false;
-
     private AudioManager mAudioManager;
-    private Vibrator mVibrator;
 
     public SoundButton() {
         mType = BUTTON_SOUND;
@@ -69,7 +63,6 @@ public class SoundButton extends PowerButton {
         if (mView != null) {
             Context context = mView.getContext();
             mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             updateSettings(context.getContentResolver());
         }
     }
@@ -142,15 +135,6 @@ public class SoundButton extends PowerButton {
     }
 
     private void updateSettings(ContentResolver resolver) {
-        int expandedHapticFeedback = Settings.System.getInt(resolver,
-                Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2);
-        if (expandedHapticFeedback == 2) {
-            mHapticFeedbackEnabled = (Settings.System.getInt(resolver,
-                    Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1);
-        } else {
-            mHapticFeedbackEnabled = (expandedHapticFeedback == 1);
-        }
-
         String[] modes = MultiSelectListPreference.parseStoredValue(Settings.System.getString(
                 resolver, Settings.System.EXPANDED_RING_MODE));
         if (modes == null || modes.length == 0) {
@@ -222,7 +206,7 @@ public class SoundButton extends PowerButton {
             ensureAudioManager(context);
             mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, mVibrateSetting);
             mAudioManager.setRingerMode(mRingerMode);
-            if (mDoHapticFeedback && mHapticFeedbackEnabled) {
+            if (mDoHapticFeedback && mHapticFeedback) {
                 mVibrator.vibrate(VIBRATE_DURATION);
             }
         }

@@ -13,6 +13,7 @@ import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,6 +66,11 @@ public abstract class PowerButton {
 
     private View.OnClickListener mExternalClickListener;
     private View.OnLongClickListener mExternalLongClickListener;
+
+    protected boolean mHapticFeedback;
+    protected Vibrator mVibrator;
+    private long[] mClickPattern;
+    private long[] mLongClickPattern;
 
     // we use this to ensure we update our views on the UI thread
     private Handler mViewUpdateHandler = new Handler() {
@@ -122,6 +128,13 @@ public abstract class PowerButton {
         // to a changed setting
     }
 
+    /* package */ void setHapticFeedback(boolean enabled,
+            long[] clickPattern, long[] longClickPattern) {
+        mHapticFeedback = enabled;
+        mClickPattern = clickPattern;
+        mLongClickPattern = longClickPattern;
+    }
+
     protected IntentFilter getBroadcastIntentFilter() {
         return new IntentFilter();
     }
@@ -139,6 +152,7 @@ public abstract class PowerButton {
 
             mIconView = (ImageView) mView.findViewById(R.id.power_widget_button_image);
             mIndicatorView = (ImageView) mView.findViewById(R.id.power_widget_button_indic);
+            mVibrator = (Vibrator) mView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
         } else {
             mIconView = null;
             mIndicatorView = null;
@@ -151,6 +165,10 @@ public abstract class PowerButton {
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
+            if (mHapticFeedback && mClickPattern != null) {
+                mVibrator.vibrate(mClickPattern, -1);
+            }
+
             toggleState(v.getContext());
             update(v.getContext());
 
@@ -163,6 +181,10 @@ public abstract class PowerButton {
     private View.OnLongClickListener mLongClickListener = new View.OnLongClickListener() {
         public boolean onLongClick(View v) {
             boolean result = handleLongClick(v.getContext());
+
+            if (result && mHapticFeedback && mLongClickPattern != null) {
+                mVibrator.vibrate(mLongClickPattern, -1);
+            }
 
             if (result && mExternalLongClickListener != null) {
                 mExternalLongClickListener.onLongClick(v);
