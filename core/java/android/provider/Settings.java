@@ -1627,6 +1627,11 @@ public final class Settings {
         public static final String VOLUME_BLUETOOTH_SCO = "volume_bluetooth_sco";
 
         /**
+         * Whether to prevent loud volume levels when headset is first plugged in.
+         */
+        public static final String SAFE_HEADSET_VOLUME_RESTORE = "safe_headset_volume_restore";
+
+        /**
          * Whether the notifications should use the ring volume (value of 1) or a separate
          * notification volume (value of 0). In most cases, users will have this enabled so the
          * notification and ringer volumes will be the same. However, power users can disable this
