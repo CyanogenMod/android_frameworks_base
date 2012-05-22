@@ -2572,6 +2572,15 @@ public class AudioService extends IAudioService.Stub {
                 //Save and restore volumes for headset and speaker
                 int lastVolume;
                 if (state == 1) {
+                    // Headset plugged in
+                    int volumeRestoreCap;
+                    if (Settings.System.getInt(mContentResolver,
+                            Settings.System.SAFE_HEADSET_VOLUME_RESTORE, 1) == 0) {
+                        // Don't cap
+                        volumeRestoreCap = 8;
+                    } else {
+                        volumeRestoreCap = 4;
+                    }
                     for (int stream = 0; stream < STREAM_VOLUME_HEADSET_SETTINGS.length; stream++) {
                         try {
                             lastVolume = System.getInt(mContentResolver,
@@ -2582,9 +2591,27 @@ public class AudioService extends IAudioService.Stub {
                         System.putInt(mContentResolver, STREAM_VOLUME_SPEAKER_SETTINGS[stream],
                                 getStreamVolume(stream));
                         if (lastVolume >= 0)
-                            setStreamVolume(stream, lastVolume, 0);
+                            if (stream == 0) {
+                                // Don't touch voice call volume
+                                setStreamVolume(stream, lastVolume, 0);
+                            } else if (stream != 3) {
+                                if (lastVolume > volumeRestoreCap) {
+                                    setStreamVolume(stream, volumeRestoreCap, 0);
+                                } else {
+                                    setStreamVolume(stream, lastVolume, 0);
+                                }
+                            } else {
+                                // For media volume the cap is doubled to correspond
+                                // with its finer granularity
+                                if (lastVolume > (volumeRestoreCap * 2)) {
+                                    setStreamVolume(stream, (volumeRestoreCap * 2), 0);
+                                } else {
+                                    setStreamVolume(stream, lastVolume, 0);
+                                }
+                            }
                     }
                 } else {
+                    // Headset disconnected
                     for (int stream = 0; stream < STREAM_VOLUME_SPEAKER_SETTINGS.length; stream++) {
                         try {
                             lastVolume = System.getInt(mContentResolver,
