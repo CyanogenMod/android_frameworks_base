@@ -176,6 +176,7 @@ public class PowerWidget extends FrameLayout {
                 Log.e(TAG, "Error setting up button: " + button);
             }
         }
+        updateHapticFeedbackSetting();
 
         // we determine if we're using a horizontal scroll view based on a threshold of button counts
         if(buttonCount > LAYOUT_SCROLL_BUTTON_THRESHOLD) {
@@ -344,6 +345,24 @@ public class PowerWidget extends FrameLayout {
         mScrollView.setHorizontalScrollBarEnabled(!hideScrollBar);
     }
 
+    private void updateHapticFeedbackSetting() {
+        ContentResolver cr = mContext.getContentResolver();
+        int expandedHapticFeedback = Settings.System.getInt(cr,
+                Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2);
+        boolean hapticFeedback;
+
+        if (expandedHapticFeedback == 2) {
+             hapticFeedback = Settings.System.getInt(cr,
+                     Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1;
+        } else {
+            hapticFeedback = (expandedHapticFeedback == 1);
+        }
+
+        for (PowerButton button : mButtons.values()) {
+            button.setHapticFeedback(hapticFeedback);
+        }
+    }
+
     // our own broadcast receiver :D
     private class WidgetBroadcastReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
@@ -390,6 +409,9 @@ public class PowerWidget extends FrameLayout {
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.EXPANDED_HAPTIC_FEEDBACK),
                             false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.HAPTIC_FEEDBACK_ENABLED),
+                            false, this);
 
             // watch for changes in buttons
             resolver.registerContentObserver(
@@ -427,6 +449,11 @@ public class PowerWidget extends FrameLayout {
             // now check for scrollbar hiding
             } else if(uri.equals(Settings.System.getUriFor(Settings.System.EXPANDED_HIDE_SCROLLBAR))) {
                 updateScrollbar();
+            }
+
+            if (uri.equals(Settings.System.getUriFor(Settings.System.HAPTIC_FEEDBACK_ENABLED))
+                    || uri.equals(Settings.System.getUriFor(Settings.System.EXPANDED_HAPTIC_FEEDBACK))) {
+                updateHapticFeedbackSetting();
             }
 
             // do whatever the individual buttons must

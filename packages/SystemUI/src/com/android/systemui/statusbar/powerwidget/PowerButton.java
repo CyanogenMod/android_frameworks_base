@@ -12,6 +12,7 @@ import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,6 +54,7 @@ public abstract class PowerButton {
     public static final String BUTTON_UNKNOWN = "unknown";
 
     private static final Mode MASK_MODE = Mode.SCREEN;
+    private static final int VIBRATE_DURATION = 40;
 
     protected int mIcon;
     protected int mState;
@@ -64,6 +66,9 @@ public abstract class PowerButton {
 
     private View.OnClickListener mExternalClickListener;
     private View.OnLongClickListener mExternalLongClickListener;
+
+    protected boolean mHapticFeedback;
+    protected Vibrator mVibrator;
 
     // we use this to ensure we update our views on the UI thread
     private Handler mViewUpdateHandler = new Handler() {
@@ -121,6 +126,10 @@ public abstract class PowerButton {
         // to a changed setting
     }
 
+    /* package */ void setHapticFeedback(boolean enabled) {
+        mHapticFeedback = enabled;
+    }
+
     protected IntentFilter getBroadcastIntentFilter() {
         return new IntentFilter();
     }
@@ -138,6 +147,7 @@ public abstract class PowerButton {
 
             mIconView = (ImageView) mView.findViewById(R.id.power_widget_button_image);
             mIndicatorView = (ImageView) mView.findViewById(R.id.power_widget_button_indic);
+            mVibrator = (Vibrator) mView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
         } else {
             mIconView = null;
             mIndicatorView = null;
@@ -150,6 +160,9 @@ public abstract class PowerButton {
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
+            if (mHapticFeedback) {
+                mVibrator.vibrate(VIBRATE_DURATION);
+            }
             toggleState();
 
             if (mExternalClickListener != null) {
