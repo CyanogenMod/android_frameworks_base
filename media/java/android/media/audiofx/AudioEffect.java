@@ -140,6 +140,11 @@ public class AudioEffect {
      * @hide
      */
     public static final int NATIVE_EVENT_PARAMETER_CHANGED = 2;
+    /**
+     * Event id for engine error notification.
+     * @hide
+     */
+    public static final int NATIVE_EVENT_ERROR = 3;
 
     /**
      * Successful operation.
@@ -264,6 +269,9 @@ public class AudioEffect {
     private int mNativeAudioEffect;
     private int mJniData;
 
+    private int mPriority;
+    private int mAudioSession;
+
     /**
      * Effect descriptor
      */
@@ -338,6 +346,11 @@ public class AudioEffect {
     public AudioEffect(UUID type, UUID uuid, int priority, int audioSession)
             throws IllegalArgumentException, UnsupportedOperationException,
             RuntimeException {
+        init(type, uuid, priority, audioSession);
+        createNativeEventHandler();
+    }
+
+    private void init(UUID type, UUID uuid, int priority, int audioSession) {
         int[] id = new int[1];
         Descriptor[] desc = new Descriptor[1];
         // native initialization
@@ -364,6 +377,8 @@ public class AudioEffect {
         mDescriptor = desc[0];
         synchronized (mStateLock) {
             mState = STATE_INITIALIZED;
+            mPriority = priority;
+            mAudioSession = audioSession;
         }
     }
 
@@ -1096,7 +1111,15 @@ public class AudioEffect {
                             status, param, value);
                 }
                 break;
-
+            case NATIVE_EVENT_ERROR:
+                release();
+                try {
+                    init(mDescriptor.type, mDescriptor.uuid, mPriority, mAudioSession);
+                    Log.i(TAG, "Reconnected audio effect after native error");
+                } catch (RuntimeException e) {
+                    Log.e(TAG, "Could not reconnect audio effect", e);
+                }
+                break;
             default:
                 Log.e(TAG, "handleMessage() Unknown event type: " + msg.what);
                 break;
