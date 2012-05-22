@@ -420,6 +420,7 @@ public abstract class HardwareRenderer {
         static final int SURFACE_STATE_ERROR = 0;
         static final int SURFACE_STATE_SUCCESS = 1;
         static final int SURFACE_STATE_UPDATED = 2;
+        static final int SURFACE_STATE_UNDEFINED = 3;
         
         static EGL10 sEgl;
         static EGLDisplay sEglDisplay;
@@ -850,7 +851,7 @@ public abstract class HardwareRenderer {
                 view.mPrivateFlags |= View.DRAWN;
 
                 final int surfaceState = checkCurrent();
-                if (surfaceState != SURFACE_STATE_ERROR) {
+                if ((surfaceState != SURFACE_STATE_ERROR) && (surfaceState != SURFACE_STATE_UNDEFINED)) {
                     // We had to change the current surface and/or context, redraw everything
                     if (surfaceState == SURFACE_STATE_UPDATED) {
                         dirty = null;
@@ -949,6 +950,13 @@ public abstract class HardwareRenderer {
                      }
                     return SURFACE_STATE_UPDATED;
                 }
+            } else {
+                int[] width = new int[1];
+                int[] height = new int[1];
+                sEgl.eglQuerySurface(sEglDisplay, mEglSurface, EGL_WIDTH, width);
+                sEgl.eglQuerySurface(sEglDisplay, mEglSurface, EGL_HEIGHT, height);
+                if ((mWidth != -1) && (mHeight != -1) && (width[0] != mWidth || height[0] != mHeight))
+                    return SURFACE_STATE_UNDEFINED;
             }
             return SURFACE_STATE_SUCCESS;
         }
