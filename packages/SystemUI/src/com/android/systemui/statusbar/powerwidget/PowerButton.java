@@ -2,6 +2,7 @@ package com.android.systemui.statusbar.powerwidget;
 
 import com.android.systemui.R;
 
+import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,12 +12,11 @@ import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.provider.Settings;
 import android.view.View;
-import android.provider.Settings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -212,6 +212,10 @@ public abstract class PowerButton {
             for (Map.Entry<String, PowerButton> entry : BUTTONS_LOADED.entrySet()) {
                 if(entry.getKey().endsWith(type)) {
                     result = entry.getValue().handleLongClick();
+                    try {
+                        ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+                    } catch (RemoteException e) {
+                    }
                     break;
                 }
             }
