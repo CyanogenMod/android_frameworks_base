@@ -363,7 +363,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             if (mLockPatternUtils.isSecure()) {
                 // Lock immediately based on setting if secure (user has a pin/pattern/password)
                 // This is retained as-is to ensue AOSP security integrity is maintained
-                lockImmediately = true;
+                lockImmediately = mLockPatternUtils.getPowerButtonInstantlyLocks();
             } else {
                 // Unless a separate slide lock timeout is enabled, this "locks" the device when
                 // not secure to provide easy access to the camera while preventing unwanted input
