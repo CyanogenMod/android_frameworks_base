@@ -20,6 +20,10 @@
 
 *******************************************************************************/
 
+/* Include system headers before local headers - the local headers
+ * redefine __inline, which can mess up definitions in libc headers if
+ * they happen to use __inline. */
+#include <string.h>
 #include "basic_op.h"
 #include "oper_32b.h"
 #include "adj_thr_data.h"
