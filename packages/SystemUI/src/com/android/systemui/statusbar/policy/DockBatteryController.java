@@ -51,6 +51,9 @@ public class DockBatteryController extends BroadcastReceiver {
     private boolean mDockCharging = false;
     private int mBatteryStyle;
     private int mBatteryIcon = BATTERY_ICON_STYLE_NORMAL;
+    
+    private static final int BATTERY_TEXT_STYLE_NORMAL  = R.string.status_bar_settings_battery_meter_format;
+    private static final int BATTERY_TEXT_STYLE_MIN     = R.string.status_bar_settings_battery_meter_min_format;
 
     Handler mHandler;
 
@@ -86,6 +89,10 @@ public class DockBatteryController extends BroadcastReceiver {
     public void addIconView(ImageView v) {
         mIconViews.add(v);
     }
+    
+    public void addLabelView(TextView v) {
+        mLabelViews.add(v);
+    }
 
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
@@ -101,6 +108,12 @@ public class DockBatteryController extends BroadcastReceiver {
                 v.setContentDescription(mContext.getString(R.string.accessibility_battery_level,
                         level));
             }
+            N = mLabelViews.size();
+            for (int i=0; i<N; i++) {
+                TextView v = mLabelViews.get(i);
+                v.setText(mContext.getString(BATTERY_TEXT_STYLE_MIN,
+                        level));
+            }
             updateBattery();
         }
     }
@@ -110,10 +123,15 @@ public class DockBatteryController extends BroadcastReceiver {
         int mText = View.GONE;
         int mIconStyle = BATTERY_ICON_STYLE_NORMAL;
 
-        if (mBatteryStyle == 0 || mBatteryStyle == 1) {
+        if (mBatteryStyle == 0) {
             mIcon = mDockStatus ? (View.VISIBLE) : (View.GONE);
             mIconStyle = mDockCharging ? BATTERY_ICON_STYLE_CHARGE
                     : BATTERY_ICON_STYLE_NORMAL;
+        } else if(mBatteryStyle == 1){
+            mIcon = mDockStatus ? (View.VISIBLE) : (View.GONE);
+            mText = mDockStatus ? (View.VISIBLE) : (View.GONE);
+            mIconStyle = mDockCharging ? BATTERY_ICON_STYLE_CHARGE
+                    : BATTERY_ICON_STYLE_NORMAL;        	
         }
 
         int N = mIconViews.size();
@@ -122,6 +140,12 @@ public class DockBatteryController extends BroadcastReceiver {
             v.setVisibility(mIcon);
             v.setImageResource(mIconStyle);
         }
+        N = mLabelViews.size();
+        for (int i=0; i<N; i++) {
+            TextView v = mLabelViews.get(i);
+            v.setVisibility(mText);
+        }
+        
     }
 
     private void updateSettings() {
