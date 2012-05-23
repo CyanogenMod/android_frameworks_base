@@ -2394,6 +2394,21 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             }
         }
         if (mAllApns != null) {
+            // Use the preferred APN if it can handle the type being requested
+            if (canSetPreferApn && mPreferredApn != null) {
+                if (DBG) {
+                    log("buildWaitingApns: Preferred APN:" + operator + ":"
+                        + mPreferredApn.numeric + ":" + mPreferredApn);
+                }
+                if (mPreferredApn.numeric.equals(operator) && mPreferredApn.canHandleType(requestedApnType)) {
+                    if (mPreferredApn.bearer == 0 || mPreferredApn.bearer == radioTech) {
+                        apnList.add(mPreferredApn);
+                        if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
+                        return apnList;
+                    }
+                }
+            }
+
             for (ApnSetting apn : mAllApns) {
                 if (apn.canHandleType(requestedApnType)) {
                     if (apn.bearer == 0 || apn.bearer == radioTech) {
