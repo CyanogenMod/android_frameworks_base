@@ -3103,7 +3103,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             dataCall.type = p.readString();
             dataCall.ifname = p.readString();
             if ((dataCall.status == DataConnection.FailCause.NONE.getErrorCode()) &&
-                    TextUtils.isEmpty(dataCall.ifname)) {
+                    TextUtils.isEmpty(dataCall.ifname) && dataCall.active != 0) {
               throw new RuntimeException("getDataCallState, no ifname");
             }
             String addresses = p.readString();
