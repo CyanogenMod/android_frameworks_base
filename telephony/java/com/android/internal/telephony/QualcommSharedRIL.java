@@ -213,30 +213,55 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
 
         boolean oldRil = needsOldRilFeature("datacall");
 
-        if (!oldRil)
-           return super.getDataCallState(p, version);
+        if (!oldRil && version < 5) {
+            return super.getDataCallState(p, version);
+        } else if (!oldRil) {
+            dataCall.version = version;
+            dataCall.status = p.readInt();
+            dataCall.suggestedRetryTime = p.readInt();
+            dataCall.cid = p.readInt();
+            dataCall.active = p.readInt();
+            dataCall.type = p.readString();
+            dataCall.ifname = p.readString();
+            if ((dataCall.status == DataConnection.FailCause.NONE.getErrorCode()) &&
+                    TextUtils.isEmpty(dataCall.ifname) && dataCall.active != 0) {
+              throw new RuntimeException("getDataCallState, no ifname");
+            }
+            String addresses = p.readString();
+            if (!TextUtils.isEmpty(addresses)) {
+                dataCall.addresses = addresses.split(" ");
+            }
+            String dnses = p.readString();
+            if (!TextUtils.isEmpty(dnses)) {
+                dataCall.dnses = dnses.split(" ");
+            }
+            String gateways = p.readString();
+            if (!TextUtils.isEmpty(gateways)) {
+                dataCall.gateways = gateways.split(" ");
+            }
+        } else {
+            dataCall.version = 4; // was dataCall.version = version;
+            dataCall.cid = p.readInt();
+            dataCall.active = p.readInt();
+            dataCall.type = p.readString();
+            dataCall.ifname = mLastDataIface[dataCall.cid];
+            p.readString(); // skip APN
 
-        dataCall.version = 4; // was dataCall.version = version;
-        dataCall.cid = p.readInt();
-        dataCall.active = p.readInt();
-        dataCall.type = p.readString();
-        dataCall.ifname = mLastDataIface[dataCall.cid];
-        p.readString(); // skip APN
+            if (TextUtils.isEmpty(dataCall.ifname)) {
+                dataCall.ifname = mLastDataIface[0];
+            }
 
-        if (TextUtils.isEmpty(dataCall.ifname)) {
-            dataCall.ifname = mLastDataIface[0];
+            String addresses = p.readString();
+            if (!TextUtils.isEmpty(addresses)) {
+                dataCall.addresses = addresses.split(" ");
+            }
+            p.readInt(); // RadioTechnology
+            p.readInt(); // inactiveReason
+
+            dataCall.dnses = new String[2];
+            dataCall.dnses[0] = SystemProperties.get("net."+dataCall.ifname+".dns1");
+            dataCall.dnses[1] = SystemProperties.get("net."+dataCall.ifname+".dns2");
         }
-
-        String addresses = p.readString();
-        if (!TextUtils.isEmpty(addresses)) {
-            dataCall.addresses = addresses.split(" ");
-        }
-        p.readInt(); // RadioTechnology
-        p.readInt(); // inactiveReason
-
-        dataCall.dnses = new String[2];
-        dataCall.dnses[0] = SystemProperties.get("net."+dataCall.ifname+".dns1");
-        dataCall.dnses[1] = SystemProperties.get("net."+dataCall.ifname+".dns2");
 
         return dataCall;
     }
