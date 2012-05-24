@@ -1365,6 +1365,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 + ", reason:" + apnContext.getReason());
         }
         apnContext.setState(State.CONNECTED);
+        mActiveApn = apnContext.getApnSetting();
+
         // setState(State.CONNECTED);
         mPhone.notifyDataConnection(apnContext.getReason(), apnContext.getApnType());
         startNetStatPoll();
@@ -2393,13 +2395,37 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 }
             }
         }
+
+        // If the currently active data connect can handle the requested type, try it first
+        if ((mActiveApn != null) && mActiveApn.canHandleType(requestedApnType)) {
+            if (DBG) log("buildWaitingApns: X added already active apnList=" + apnList);
+            apnList.add(mActiveApn);
+        }
+
         if (mAllApns != null) {
+            // Use the preferred APN if it can handle the type being requested
+            if (canSetPreferApn && mPreferredApn != null) {
+                if (DBG) {
+                    log("buildWaitingApns: Preferred APN:" + operator + ":"
+                        + mPreferredApn.numeric + ":" + mPreferredApn);
+                }
+                if ((mPreferredApn.numeric.equals(operator) && mPreferredApn.canHandleType(requestedApnType)) &&
+                    (mPreferredApn.bearer == 0 || mPreferredApn.bearer == radioTech) && 
+                    !apnList.contains(mPreferredApn))
+                {
+                    apnList.add(mPreferredApn);
+                    if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
+                }
+            }
+
+            // Add all the rest of the apns that can handle the requested type
             for (ApnSetting apn : mAllApns) {
-                if (apn.canHandleType(requestedApnType)) {
-                    if (apn.bearer == 0 || apn.bearer == radioTech) {
-                        if (DBG) log("apn info : " +apn.toString());
-                        apnList.add(apn);
-                    }
+                if ((apn.canHandleType(requestedApnType)) &&
+                    (apn.bearer == 0 || apn.bearer == radioTech) &&
+                    !apnList.contains(apn))
+                {
+                    if (DBG) log("apn info : " +apn.toString());
+                    apnList.add(apn);
                 }
             }
         } else {
