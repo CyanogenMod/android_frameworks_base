@@ -51,10 +51,14 @@ import android.util.Log;
 class CpuGovernorService {
     private final String TAG = "CpuGovernorService";
     private Context mContext;
+
+    private final boolean DBG = false;
+    private final boolean mUseIOBusyFeature = true;
+
     private SamplingRateChangeProcessor mSamplingRateChangeProcessor =
         new SamplingRateChangeProcessor();
-    private IOBusyVoteProcessor mIOBusyVoteChangeProcessor =
-        new IOBusyVoteProcessor();
+
+    private IOBusyVoteProcessor mIOBusyVoteChangeProcessor = null;
 
     public CpuGovernorService(Context context) {
         mContext = context;
@@ -62,10 +66,16 @@ class CpuGovernorService {
 
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        intentFilter.addAction(IOBusyVoteProcessor.ACTION_IOBUSY_VOTE);
-        intentFilter.addAction(IOBusyVoteProcessor.ACTION_IOBUSY_UNVOTE);
         new Thread(mSamplingRateChangeProcessor).start();
-        new Thread(mIOBusyVoteChangeProcessor).start();
+
+        if (mUseIOBusyFeature) {
+            // IOBusy feature requires kernel >= 2.6.35
+            intentFilter.addAction(IOBusyVoteProcessor.ACTION_IOBUSY_VOTE);
+            intentFilter.addAction(IOBusyVoteProcessor.ACTION_IOBUSY_UNVOTE);
+
+            mIOBusyVoteChangeProcessor = new IOBusyVoteProcessor();
+            new Thread(mIOBusyVoteChangeProcessor).start();
+        }
         mContext.registerReceiver(mReceiver, intentFilter);
     }
 
@@ -74,7 +84,7 @@ class CpuGovernorService {
         public void onReceive(Context context, Intent intent) {
             boolean changeAdded = false;
 
-            Log.i(TAG, "intent action: " + intent.getAction());
+            if (DBG) Log.d(TAG, "intent action: " + intent.getAction());
 
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 if (SystemProperties.getInt("dev.pm.dyn_samplingrate", 0) != 0) {
