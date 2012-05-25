@@ -59,6 +59,7 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -740,7 +741,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
 
     protected void onConfigurationChanged(Configuration newConfig) {
         Resources resources = getResources();
-        mShowLockBeforeUnlock = resources.getBoolean(R.bool.config_enableLockBeforeUnlockScreen);
+        mShowLockBeforeUnlock = resources.getBoolean(R.bool.config_enableLockBeforeUnlockScreen) ||
+                        (Settings.Secure.getInt(mContext.getContentResolver(),
+                        Settings.Secure.LOCK_BEFORE_UNLOCK, 0) != 0);
         mConfiguration = newConfig;
         if (DEBUG_CONFIGURATION) Log.v(TAG, "**** re-creating lock screen since config changed");
         saveWidgetState();
@@ -1032,6 +1035,11 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
      */
     private Mode getInitialMode() {
         final IccCard.State simState = mUpdateMonitor.getSimState();
+
+        mShowLockBeforeUnlock = mContext.getResources().getBoolean(R.bool.config_enableLockBeforeUnlockScreen) ||
+                        (Settings.Secure.getInt(mContext.getContentResolver(),
+                        Settings.Secure.LOCK_BEFORE_UNLOCK, 0) != 0);
+
         if (stuckOnLockScreenBecauseSimMissing() ||
                 (simState == IccCard.State.PUK_REQUIRED &&
                         !mLockPatternUtils.isPukUnlockScreenEnable())) {

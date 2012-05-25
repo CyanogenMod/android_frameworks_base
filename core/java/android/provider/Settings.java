@@ -3212,6 +3212,14 @@ public final class Settings {
             "lock_screen_owner_info_enabled";
 
         /**
+         * Whether the unsecure widget screen will be shown before a secure
+         * lock screen
+         * @hide
+         */
+        public static final String LOCK_BEFORE_UNLOCK =
+            "lock_before_unlock";
+
+        /**
          * The saved value for WindowManagerService.setForcedDisplaySize().
          * Two integers separated by a comma.  If unset, then use the real display size.
          * @hide
