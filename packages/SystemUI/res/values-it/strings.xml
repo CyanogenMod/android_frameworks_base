@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-/**
- * Copyright (c) 2009, The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- *
- *     http://www.apache.org/licenses/LICENSE-2.0 
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License.
- */
- -->
+<!-- Copyright 2012 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label" msgid="7164937344850004466">"UI sistema"</string>
     <string name="status_bar_clear_all_button" msgid="7774721344716731603">"Cancella"</string>
+    <string name="notifications_off_title">Notifiche disabilitate</string>
+    <string name="notifications_off_text">Tocca per abilitare le notifiche.</string>
     <string name="status_bar_do_not_disturb_button" msgid="5812628897510997853">"Non disturbare"</string>
     <string name="status_bar_please_disturb_button" msgid="3345398298841572813">"Mostra notifiche"</string>
     <string name="status_bar_recent_remove_item_title" msgid="6026395868129852968">"Rimuovi dall\'elenco"</string>
@@ -29,7 +28,7 @@
     <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"Ignora applicazioni recenti"</string>
   <plurals name="status_bar_accessibility_recent_apps">
     <item quantity="one" msgid="5854176083865845541">"1 applicazione recente"</item>
-    <item quantity="other" msgid="1040784359794890744">"Applicazioni recenti in %d"</item>
+    <item quantity="other" msgid="1040784359794890744">"%d applicazioni recenti</item>
   </plurals>
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"Nessuna notifica"</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"In corso"</string>
@@ -41,6 +40,7 @@
     <string name="battery_low_why" msgid="7279169609518386372">"Utilizzo batteria"</string>
     <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Impostazioni"</string>
     <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
+    <string name="status_bar_settings_bluetooth_button">Bluetooth</string>
     <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Modalità aereo"</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Rotazione automatica schermo"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"MUTE"</string>
@@ -117,9 +117,7 @@
     <string name="accessibility_no_sim" msgid="8274017118472455155">"Nessuna SIM presente."</string>
     <string name="accessibility_bluetooth_tether" msgid="4102784498140271969">"Tethering Bluetooth."</string>
     <string name="accessibility_airplane_mode" msgid="834748999790763092">"Modalità aereo."</string>
-    <!-- String.format failed for translation -->
-    <!-- no translation found for accessibility_battery_level (7451474187113371965) -->
-    <skip />
+    <string name="accessibility_battery_level">Batteria <xliff:g id="number">%d</xliff:g> percento.</string>
     <string name="accessibility_settings_button" msgid="799583911231893380">"Impostazioni di sistema."</string>
     <string name="accessibility_notifications_button" msgid="4498000369779421892">"Notifiche."</string>
     <string name="accessibility_remove_notification" msgid="3603099514902182350">"Cancella notifica."</string>
@@ -140,4 +138,13 @@
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"Ricerca del GPS"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"Posizione stabilita dal GPS"</string>
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Cancella tutte le notifiche."</string>
+    <string name="navbar_dialog_title">Scegli l\'azione da assegnare</string>
+    <string name="navbar_home_button">Pulsante Home</string>
+    <string name="navbar_recent_button">Pulsante Recenti</string>
+    <string name="navbar_search_button">Pulsante Cerca</string>
+    <string name="navbar_back_button">Pulsante Indietro</string>
+    <string name="navbar_empty_button">Pulsante Vuoto</string>
+    <string name="navbar_menu_conditional_button">Pulsante Menù (nascondi automaticamente)</string>
+    <string name="navbar_menu_always_button">Pulsante Menù (mostra sempre)</string>
+    <string name="navbar_menu_big_button">Pulsante Menù</string>
 </resources>
