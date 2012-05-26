@@ -617,6 +617,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
         mCdmaSubscription  = cdmaSubscription;
         mPreferredNetworkType = preferredNetworkType;
+        mSetPreferredNetworkType = preferredNetworkType;
         mPhoneType = RILConstants.NO_PHONE;
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
