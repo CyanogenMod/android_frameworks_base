@@ -140,4 +140,15 @@
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"Поиск GPS"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"Местоположение установлено с помощью GPS"</string>
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Удалить все уведомления"</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Выберите действие</string>
+    <string name="navbar_home_button">Домой</string>
+    <string name="navbar_recent_button">Запущ. приложения</string>
+    <string name="navbar_search_button">Поиск</string>
+    <string name="navbar_back_button">Назад</string>
+    <string name="navbar_empty_button">Пустая кнопка</string>
+    <string name="navbar_menu_conditional_button">Меню (скрывающ.)</string>
+    <string name="navbar_menu_always_button">Меню (не скрывающ.)</string>
+    <string name="navbar_menu_big_button">Меню</string>
 </resources>
