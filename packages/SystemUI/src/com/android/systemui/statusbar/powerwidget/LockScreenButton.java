@@ -2,30 +2,24 @@ package com.android.systemui.statusbar.powerwidget;
 
 import com.android.systemui.R;
 
-import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.view.Gravity;
-import android.widget.Toast;
+import android.view.View;
 
 public class LockScreenButton extends PowerButton {
-
-    private static Boolean LOCK_SCREEN_STATE = null;
+    private static final String KEY_DISABLED = "lockscreen_disabled";
 
     private KeyguardLock mLock = null;
+    private boolean mDisabledLockscreen = false;
 
     public LockScreenButton() { mType = BUTTON_LOCKSCREEN; }
 
     @Override
-    protected void updateState() {
-        getState();
-        if (LOCK_SCREEN_STATE == null) {
-            mIcon = R.drawable.stat_lock_screen_off;
-            mState = STATE_INTERMEDIATE;
-        } else if (LOCK_SCREEN_STATE) {
+    protected void updateState(Context context) {
+        if (!mDisabledLockscreen) {
             mIcon = R.drawable.stat_lock_screen_on;
             mState = STATE_ENABLED;
         } else {
@@ -35,54 +29,50 @@ public class LockScreenButton extends PowerButton {
     }
 
     @Override
-    protected void toggleState() {
-        Context context = mView.getContext();
-        getState();
-        if(LOCK_SCREEN_STATE == null) {
-            Toast msg = Toast.makeText(context, "Not yet initialized", Toast.LENGTH_LONG);
-            msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2, msg.getYOffset() / 2);
-            msg.show();
-        } else {
-            getLock(context);
-            if (mLock != null) {
-                if (LOCK_SCREEN_STATE) {
-                  mLock.disableKeyguard();
-                  LOCK_SCREEN_STATE = false;
-                } else {
-                  mLock.reenableKeyguard();
-                  LOCK_SCREEN_STATE = true;
-                }
-            }
-        }
+    protected void setupButton(View view) {
+        super.setupButton(view);
 
-        // we're handling this, so just update our buttons now
-        // this is UGLY, do it better later >.>
-        update();
+        if (view == null && mDisabledLockscreen) {
+            mLock.reenableKeyguard();
+            mLock = null;
+        } else if (view != null) {
+            Context context = view.getContext();
+            mDisabledLockscreen = getPreferences(context).getBoolean(KEY_DISABLED, false);
+            applyState(context);
+        }
     }
 
     @Override
-    protected boolean handleLongClick() {
+    protected void toggleState(Context context) {
+        mDisabledLockscreen = !mDisabledLockscreen;
+
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.putBoolean(KEY_DISABLED, mDisabledLockscreen);
+        editor.apply();
+
+        applyState(context);
+    }
+
+    @Override
+    protected boolean handleLongClick(Context context) {
         Intent intent = new Intent("android.settings.SECURITY_SETTINGS");
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mView.getContext().startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
-    private KeyguardLock getLock(Context context) {
+    private void applyState(Context context) {
         if (mLock == null) {
-            KeyguardManager keyguardManager = (KeyguardManager)context.
-                    getSystemService(Activity.KEYGUARD_SERVICE);
-            mLock = keyguardManager.newKeyguardLock(Context.KEYGUARD_SERVICE);
+            KeyguardManager keyguardManager = (KeyguardManager)
+                    context.getSystemService(Context.KEYGUARD_SERVICE);
+            mLock = keyguardManager.newKeyguardLock("PowerWidget");
         }
-        return mLock;
-    }
-
-    private static boolean getState() {
-        if (LOCK_SCREEN_STATE == null) {
-            LOCK_SCREEN_STATE = true;
+        if (mDisabledLockscreen) {
+            mLock.disableKeyguard();
+        } else {
+            mLock.reenableKeyguard();
         }
-        return LOCK_SCREEN_STATE;
     }
 }
 
