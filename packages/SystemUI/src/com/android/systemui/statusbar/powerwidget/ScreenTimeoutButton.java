@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.provider.Settings;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,8 +37,17 @@ public class ScreenTimeoutButton extends PowerButton {
     public ScreenTimeoutButton() { mType = BUTTON_SCREENTIMEOUT; }
 
     @Override
-    protected void updateState() {
-        int timeout = getScreenTimeout(mView.getContext());
+    protected void setupButton(View view) {
+        super.setupButton(view);
+        if (view == null && mToast != null) {
+            mToast.cancel();
+            mToast = null;
+        }
+    }
+
+    @Override
+    protected void updateState(Context context) {
+        int timeout = getScreenTimeout(context);
 
         if (timeout <= SCREEN_TIMEOUT_LOW) {
             mIcon = R.drawable.stat_screen_timeout_off;
@@ -52,8 +62,7 @@ public class ScreenTimeoutButton extends PowerButton {
     }
 
     @Override
-    protected void toggleState() {
-        Context context = mView.getContext();
+    protected void toggleState(Context context) {
         int screenTimeout = getScreenTimeout(context);
         int currentMode = getCurrentCMMode(context);
 
@@ -111,11 +120,11 @@ public class ScreenTimeoutButton extends PowerButton {
     }
 
     @Override
-    protected boolean handleLongClick() {
+    protected boolean handleLongClick(Context context) {
         Intent intent = new Intent("android.settings.DISPLAY_SETTINGS");
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mView.getContext().startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
