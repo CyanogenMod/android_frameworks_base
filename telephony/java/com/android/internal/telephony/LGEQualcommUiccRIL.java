@@ -40,6 +40,7 @@ public class LGEQualcommUiccRIL extends QualcommSharedRIL implements CommandsInt
         super(context, networkMode, cdmaSubscription);
     }
 
+    /*
     @Override
     public void
     setupDataCall(String radioTechnology, String profile, String apn,
@@ -78,6 +79,7 @@ public class LGEQualcommUiccRIL extends QualcommSharedRIL implements CommandsInt
 
         send(rr);
     }
+    */
 
     @Override
     protected Object
