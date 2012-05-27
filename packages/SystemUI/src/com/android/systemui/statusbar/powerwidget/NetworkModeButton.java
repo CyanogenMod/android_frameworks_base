@@ -43,8 +43,7 @@ public class NetworkModeButton extends PowerButton{
     public NetworkModeButton() { mType = BUTTON_NETWORKMODE; }
 
     @Override
-    protected void updateState() {
-        Context context = mView.getContext();
+    protected void updateState(Context context) {
         mMode = get2G3G(context);
         mState = networkModeToState(context);
 
@@ -79,8 +78,7 @@ public class NetworkModeButton extends PowerButton{
     }
 
     @Override
-    protected void toggleState() {
-        Context context = mView.getContext();
+    protected void toggleState(Context context) {
         int currentMode = getCurrentCMMode(context);
 
         Intent intent = new Intent(ACTION_MODIFY_NETWORK_MODE);
@@ -120,13 +118,13 @@ public class NetworkModeButton extends PowerButton{
     }
 
     @Override
-    protected boolean handleLongClick() {
+    protected boolean handleLongClick(Context context) {
         // it may be better to make an Intent action for this or find the appropriate one
         // we may want to look at that option later
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setClassName("com.android.phone", "com.android.phone.Settings");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mView.getContext().startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
