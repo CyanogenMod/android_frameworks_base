@@ -205,9 +205,13 @@ void Layer::setGeometry(hwc_layer_t* hwcl)
     // we can't do alpha-fade with the hwc HAL. C2D composition
     // can handle fade cases
     const State& s(drawingState());
-    if ((s.alpha < 0xFF) &&
-        !(DisplayHardware::C2D_COMPOSITION & hw.getFlags())) {
-        hwcl->flags = HWC_SKIP_LAYER;
+    if (s.alpha < 0xFF) {
+        if ((DisplayHardware::C2D_COMPOSITION & hw.getFlags()) && (!isOpaque())) {
+            hwcl->blending = mPremultipliedAlpha ?
+                HWC_BLENDING_PREMULT : HWC_BLENDING_COVERAGE;
+        } else {
+            hwcl->flags = HWC_SKIP_LAYER;
+        }
     }
 
     hwcl->alpha = s.alpha;
