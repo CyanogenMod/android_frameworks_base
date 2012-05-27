@@ -95,6 +95,7 @@ public class PowerWidget extends FrameLayout {
 
     // this is a list of our currently loaded buttons
     private final HashMap<String, PowerButton> mButtons = new HashMap<String, PowerButton>();
+    private final ArrayList<String> mButtonNames = new ArrayList<String>();
 
     private View.OnClickListener mAllButtonClickListener;
     private View.OnLongClickListener mAllButtonLongClickListener;
@@ -105,6 +106,7 @@ public class PowerWidget extends FrameLayout {
     private WidgetBroadcastReceiver mBroadcastReceiver = null;
     private WidgetSettingsObserver mObserver = null;
 
+    private LinearLayout mButtonLayout;
     private HorizontalScrollView mScrollView;
 
     public PowerWidget(Context context, AttributeSet attrs) {
@@ -126,12 +128,12 @@ public class PowerWidget extends FrameLayout {
         removeAllViews();
 
         // unregister our content receiver
-        if(mBroadcastReceiver != null) {
+        if (mBroadcastReceiver != null) {
             mContext.unregisterReceiver(mBroadcastReceiver);
             mBroadcastReceiver = null;
         }
         // unobserve our content
-        if(mObserver != null) {
+        if (mObserver != null) {
             mObserver.unobserve();
             mObserver = null;
         }
@@ -147,7 +149,7 @@ public class PowerWidget extends FrameLayout {
         Log.i(TAG, "Setting up widget");
 
         String buttons = Settings.System.getString(mContext.getContentResolver(), Settings.System.WIDGET_BUTTONS);
-        if(buttons == null) {
+        if (buttons == null) {
             Log.i(TAG, "Default buttons being loaded");
             buttons = BUTTONS_DEFAULT;
             // Add the WiMAX button if it's supported
@@ -157,43 +159,14 @@ public class PowerWidget extends FrameLayout {
         }
         Log.i(TAG, "Button list: " + buttons);
 
-        // create a linearlayout to hold our buttons
-        LinearLayout ll = new LinearLayout(mContext);
-        ll.setOrientation(LinearLayout.HORIZONTAL);
-        ll.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        int buttonCount = 0;
-        for(String button : buttons.split("\\|")) {
-            Log.i(TAG, "Setting up button: " + button);
-            // inflate our button, we don't add it to a parent and don't do any layout shit yet
-            View buttonView = mInflater.inflate(R.layout.power_widget_button, null, false);
-
-            if (loadButton(button, buttonView)) {
-                // add the button here
-                ll.addView(buttonView, BUTTON_LAYOUT_PARAMS);
-                buttonCount++;
+        for (String button : buttons.split("\\|")) {
+            if (loadButton(button)) {
+                mButtonNames.add(button);
             } else {
                 Log.e(TAG, "Error setting up button: " + button);
             }
         }
-
-        // we determine if we're using a horizontal scroll view based on a threshold of button counts
-        if(buttonCount > LAYOUT_SCROLL_BUTTON_THRESHOLD) {
-            // we need our horizontal scroll view to wrap the linear layout
-            mScrollView = new HorizontalScrollView(mContext);
-            // make the fading edge the size of a button (makes it more noticible that we can scroll
-            mScrollView.setFadingEdgeLength(mContext.getResources().getDisplayMetrics().widthPixels / LAYOUT_SCROLL_BUTTON_THRESHOLD);
-            mScrollView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-            mScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-            // set the padding on the linear layout to the size of our scrollbar, so we don't have them overlap
-            ll.setPadding(ll.getPaddingLeft(), ll.getPaddingTop(), ll.getPaddingRight(), mScrollView.getVerticalScrollbarWidth());
-            mScrollView.addView(ll, WIDGET_LAYOUT_PARAMS);
-            updateScrollbar();
-            addView(mScrollView, WIDGET_LAYOUT_PARAMS);
-        } else {
-            // not needed, just add the linear layout
-            addView(ll, WIDGET_LAYOUT_PARAMS);
-        }
+        recreateButtonLayout();
 
         // set up a broadcast receiver for our intents, based off of what our power buttons have been loaded
         setupBroadcastReceiver();
@@ -209,28 +182,24 @@ public class PowerWidget extends FrameLayout {
         mObserver.observe();
     }
 
-    private boolean loadButton(String key, View view) {
+    private boolean loadButton(String key) {
         // first make sure we have a valid button
-        if (!sPossibleButtons.containsKey(key) || view == null) {
+        if (!sPossibleButtons.containsKey(key)) {
             return false;
         }
 
         if (mButtons.containsKey(key)) {
-            // setup the button again
-            mButtons.get(key).setupButton(view);
             return true;
         }
 
         try {
             // we need to instantiate a new button and add it
             PowerButton pb = sPossibleButtons.get(key).newInstance();
-            // set it up
-            pb.setupButton(view);
             pb.setExternalClickListener(mAllButtonClickListener);
             pb.setExternalLongClickListener(mAllButtonLongClickListener);
             // save it
             mButtons.put(key, pb);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Error loading button: " + key, e);
             return false;
         }
@@ -256,12 +225,52 @@ public class PowerWidget extends FrameLayout {
 
         // clear our list
         mButtons.clear();
+        mButtonNames.clear();
+    }
+
+    private void recreateButtonLayout() {
+        removeAllViews();
+
+        // create a linearlayout to hold our buttons
+        mButtonLayout = new LinearLayout(mContext);
+        mButtonLayout.setOrientation(LinearLayout.HORIZONTAL);
+        mButtonLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        for (String button : mButtonNames) {
+            PowerButton pb = mButtons.get(button);
+            if (pb != null) {
+                View buttonView = mInflater.inflate(R.layout.power_widget_button, null, false);
+                pb.setupButton(buttonView);
+                mButtonLayout.addView(buttonView, BUTTON_LAYOUT_PARAMS);
+            }
+        }
+
+        // we determine if we're using a horizontal scroll view based on a threshold of button counts
+        if (mButtonLayout.getChildCount() > LAYOUT_SCROLL_BUTTON_THRESHOLD) {
+            // we need our horizontal scroll view to wrap the linear layout
+            mScrollView = new HorizontalScrollView(mContext);
+            // make the fading edge the size of a button (makes it more noticible that we can scroll
+            mScrollView.setFadingEdgeLength(mContext.getResources().getDisplayMetrics().widthPixels / LAYOUT_SCROLL_BUTTON_THRESHOLD);
+            mScrollView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+            mScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            // set the padding on the linear layout to the size of our scrollbar, so we don't have them overlap
+            mButtonLayout.setPadding(mButtonLayout.getPaddingLeft(),
+                    mButtonLayout.getPaddingTop(),
+                    mButtonLayout.getPaddingRight(),
+                    mScrollView.getVerticalScrollbarWidth());
+            mScrollView.addView(mButtonLayout, WIDGET_LAYOUT_PARAMS);
+            updateScrollbar();
+            addView(mScrollView, WIDGET_LAYOUT_PARAMS);
+        } else {
+            // not needed, just add the linear layout
+            addView(mButtonLayout, WIDGET_LAYOUT_PARAMS);
+        }
     }
 
     public void updateAllButtons() {
         // cycle through our buttons and update them
         for (PowerButton pb : mButtons.values()) {
-            pb.update();
+            pb.update(mContext);
         }
     }
 
@@ -316,7 +325,7 @@ public class PowerWidget extends FrameLayout {
     }
 
     private void setupBroadcastReceiver() {
-        if(mBroadcastReceiver == null) {
+        if (mBroadcastReceiver == null) {
             mBroadcastReceiver = new WidgetBroadcastReceiver();
         }
     }
@@ -351,7 +360,7 @@ public class PowerWidget extends FrameLayout {
 
             if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 updateButtonLayoutWidth();
-                setupWidget();
+                recreateButtonLayout();
             } else {
                 // handle the intent through our power buttons
                 for (PowerButton button : mButtons.values()) {
@@ -432,7 +441,7 @@ public class PowerWidget extends FrameLayout {
             // do whatever the individual buttons must
             for (PowerButton button : mButtons.values()) {
                 if (button.getObservedUris().contains(uri)) {
-                    button.onChangeUri(uri);
+                    button.onChangeUri(resolver, uri);
                 }
             }
 
