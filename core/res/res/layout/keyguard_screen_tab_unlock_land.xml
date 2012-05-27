@@ -133,6 +133,9 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_alignParentRight="true"
+                android:gravity="right"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:textColor="?android:attr/textColorPrimary"/>
 
             <TextView
@@ -141,6 +144,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/weather_city"
                 android:layout_alignParentRight="true"
+                android:gravity="right"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:textSize="12sp"
                 android:textColor="?android:attr/textColorPrimary" />
 
@@ -150,6 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/weather_condition"
                 android:layout_alignParentRight="true"
+                android:gravity="right"
                 android:textSize="6sp"
                 android:textColor="?android:attr/textColorSecondary" />
 
