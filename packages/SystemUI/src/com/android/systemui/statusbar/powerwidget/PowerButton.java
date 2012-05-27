@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff.Mode;
@@ -102,12 +103,12 @@ public abstract class PowerButton {
         }
     };
 
-    protected abstract void updateState();
-    protected abstract void toggleState();
-    protected abstract boolean handleLongClick();
+    protected abstract void updateState(Context context);
+    protected abstract void toggleState(Context context);
+    protected abstract boolean handleLongClick(Context context);
 
-    protected void update() {
-        updateState();
+    protected void update(Context context) {
+        updateState(context);
         updateView();
     }
 
@@ -116,7 +117,7 @@ public abstract class PowerButton {
         // to broadcast events from the StatusBarService broadcast receiver
     }
 
-    protected void onChangeUri(Uri uri) {
+    protected void onChangeUri(ContentResolver resolver, Uri uri) {
         // do nothing as a standard, override this if the button needs to respond
         // to a changed setting
     }
@@ -150,7 +151,8 @@ public abstract class PowerButton {
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            toggleState();
+            toggleState(v.getContext());
+            update(v.getContext());
 
             if (mExternalClickListener != null) {
                 mExternalClickListener.onClick(v);
@@ -160,7 +162,7 @@ public abstract class PowerButton {
 
     private View.OnLongClickListener mLongClickListener = new View.OnLongClickListener() {
         public boolean onLongClick(View v) {
-            boolean result = handleLongClick();
+            boolean result = handleLongClick(v.getContext());
 
             if (result && mExternalLongClickListener != null) {
                 mExternalLongClickListener.onLongClick(v);
@@ -175,5 +177,9 @@ public abstract class PowerButton {
 
     void setExternalLongClickListener(View.OnLongClickListener listener) {
         mExternalLongClickListener = listener;
+    }
+
+    protected SharedPreferences getPreferences(Context context) {
+        return context.getSharedPreferences("PowerButton-" + mType, Context.MODE_PRIVATE);
     }
 }
