@@ -3507,6 +3507,6 @@
     <string name="weather_NW">NW</string>
 
     <!-- Lock screen Weather - error messages -->
-    <string name="weather_tap_to_refresh">Tap to refresh</string>
+    <string name="weather_tap_to_refresh">Refresh</string>
 
 </resources>
