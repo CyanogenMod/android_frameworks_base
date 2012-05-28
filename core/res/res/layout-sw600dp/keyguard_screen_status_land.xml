@@ -131,6 +131,7 @@
     <com.android.internal.widget.DigitalClock android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dip" >
 
         <!-- Because we can't have multi-tone fonts, we render two TextViews, one on
@@ -165,6 +166,7 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_below="@id/time"
         android:layout_marginTop="10dip">
 
@@ -191,6 +193,7 @@
         android:id="@+id/status1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dip"
         android:textSize="16sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -201,6 +204,7 @@
         android:lineSpacingExtra="8dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16sp"
         android:layout_marginTop="20dip"
@@ -208,4 +212,22 @@
         android:textColor="@color/lockscreen_owner_info"
         android:visibility="invisible"
         />
+
+    <!-- CyanogenMod Calendar Panel -->
+    <TextView
+        android:id="@+id/status_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dip"
+        android:layout_marginLeft="24dip"
+        android:layout_marginRight="24dip"
+        android:layout_gravity="center_horizontal"
+        android:gravity="top"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
+        android:textColor="?android:attr/textColorPrimary"
+        android:drawablePadding="4dip"
+        android:drawableLeft="@drawable/ic_lock_idle_calendar" />
+
 </LinearLayout>

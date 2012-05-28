@@ -212,7 +212,22 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="292dip">  <!-- was 302 -->
+        android:layout_height="302dip">  <!-- was 302 -->
+
+        <!-- CyanogenMod Calendar Panel -->
+        <TextView
+            android:id="@+id/status_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dip"
+            android:layout_marginRight="24dip"
+            android:gravity="top"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
+            android:textColor="?android:attr/textColorPrimary"
+            android:drawablePadding="4dip"
+            android:drawableLeft="@drawable/ic_lock_idle_calendar" />
 
         <com.android.internal.widget.multiwaveview.MultiWaveView
             android:id="@+id/unlock_widget"
