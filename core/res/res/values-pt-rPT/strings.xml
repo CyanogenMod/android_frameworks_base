@@ -1227,4 +1227,115 @@
     <string name="sending" msgid="8715108995741758718">"A enviar..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Iniciar Navegador?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Aceitar Chamada?"</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Padrão</string>
+    <string name="profileNameWork">Trabalho</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silêncio</string>
+    <string name="profileNameNight">Noite</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Outro</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">Perfil</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="reboot_system" product="default">Reiniciar telefone</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Capturar ecrã</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Reiniciar</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Reiniciar</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recuperação</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Menu de boot</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Reiniciando\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Seu telefone vai reiniciar.</string>
+
+    <string name="permlab_preventpower">modificação do botão liga/desl.</string>
+    <string name="permdesc_preventpower">Permite uma aplicação substituir o botão liga/desl.</string>
+    <string name="app_killed_message">Aplicação terminada</string>
+    <string name="roamingTextAirplaneMode">Modo avião</string>
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tempestade Tropical</string>
+    <string name="weather_2">Furacão</string>
+    <string name="weather_3">Tempestades Fortes</string>
+    <string name="weather_4">Tempestades</string>
+    <string name="weather_5">Chuva e Neve Misturados</string>
+    <string name="weather_6">Chuva e Geada Misturados</string>
+    <string name="weather_7">Neve e Geada Misturados</string>
+    <string name="weather_8">Chuvisco Congelante</string>
+    <string name="weather_9">Chuvisco</string>
+    <string name="weather_10">Chuva Congelante</string>
+    <string name="weather_11">Chuva</string>
+    <string name="weather_12">Chuva</string>
+    <string name="weather_13">Flocos de Neve</string>
+    <string name="weather_14">Chuva de Neve Fraca</string>
+    <string name="weather_15">Tempestade de Neve</string>
+    <string name="weather_16">Neve</string>
+    <string name="weather_17">Granizo</string>
+    <string name="weather_18">Geada</string>
+    <string name="weather_19">Poeira</string>
+    <string name="weather_20">Nebuloso</string>
+    <string name="weather_21">Neblina</string>
+    <string name="weather_22">Enfumaçado</string>
+    <string name="weather_23">Ventos Fortes</string>
+    <string name="weather_24">Ventania</string>
+    <string name="weather_25">Frio</string>
+    <string name="weather_26">Nublado</string>
+    <string name="weather_27">Maior Parte Nublado</string> <!-- Night -->
+    <string name="weather_28">Maior Parte Nublado</string> <!-- Day -->
+    <string name="weather_29">Parcialmente Nublado</string> <!-- Night -->
+    <string name="weather_30">Parcialmente Nublado</string> <!-- Day -->
+    <string name="weather_31">Limpo</string> <!-- Night -->
+    <string name="weather_32">Ensolarado</string>
+    <string name="weather_33">Razoável</string> <!-- Night -->
+    <string name="weather_34">Razoável</string> <!-- Day -->
+    <string name="weather_35">Chuva e Granizo Misturados</string>
+    <string name="weather_36">Quente</string>
+    <string name="weather_37">Tempestades Isoladas</string>
+    <string name="weather_38">Tempestades Dispersas</string>
+    <string name="weather_39">Tempestades Dispersas</string>
+    <string name="weather_40">Chuvas Dispersas</string>
+    <string name="weather_41">Nevasca Forte</string>
+    <string name="weather_42">Neve Dispersa</string>
+    <string name="weather_43">Nevasca Forte</string>
+    <string name="weather_44">Parcialmente Nublado</string>
+    <string name="weather_45">Chuvas com Trovoadas</string>
+    <string name="weather_46">Chuva de Neve</string>
+    <string name="weather_47">Chuvas com Trovoadas Isoladas</string>
+    <string name="weather_3200"></string>
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NE</string>
+    <string name="weather_E">E</string>
+    <string name="weather_SE">SE</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SO</string>
+    <string name="weather_W">O</string>
+    <string name="weather_NW">NO</string>
+    <string name="weather_tap_to_refresh">Aperte para atualizar</string>
 </resources>
