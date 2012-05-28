@@ -576,9 +576,13 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         try {
             rsp = mConnector.doCommand(cmd.toString());
         } catch (NativeDaemonConnectorException e) {
-            throw new IllegalStateException(
-                    "Unable to communicate with native dameon to add routes - "
+            if (action != REMOVE) {
+                throw new IllegalStateException(
+                    "Unable to communicate with native daemon to add routes - "
                     + e);
+            } else {
+                Log.w(TAG, "Unable to remove route on interface " + interfaceName);
+            }
         }
 
         if (DBG) {
