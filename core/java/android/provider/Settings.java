@@ -2442,6 +2442,12 @@ public final class Settings {
         public static final String WEATHER_USE_METRIC = "weather_use_metric";
 
         /**
+         * Invert low/high temperature display
+         * @hide
+         */
+        public static final String WEATHER_INVERT_LOWHIGH = "weather_invert_lowhigh";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *

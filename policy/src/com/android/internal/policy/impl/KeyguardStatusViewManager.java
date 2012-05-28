@@ -373,6 +373,8 @@ class KeyguardStatusViewManager implements OnClickListener {
                 Settings.System.WEATHER_SHOW_LOCATION, 1) == 1;
         boolean showTimestamp = Settings.System.getInt(resolver,
                 Settings.System.WEATHER_SHOW_TIMESTAMP, 1) == 1;
+        boolean invertLowhigh = Settings.System.getInt(resolver,
+                Settings.System.WEATHER_INVERT_LOWHIGH, 0) == 1;
 
         if (mWeatherPanel != null) {
             if (mWeatherCity != null) {
@@ -393,7 +395,7 @@ class KeyguardStatusViewManager implements OnClickListener {
                 mWeatherTemp.setText(w.temp);
             }
             if (mWeatherLowHigh != null) {
-                mWeatherLowHigh.setText(w.low + " | " + w.high);
+                mWeatherLowHigh.setText(invertLowhigh ? w.high + " | " + w.low : w.low + " | " + w.high);
             }
 
             if (mWeatherImage != null) {
