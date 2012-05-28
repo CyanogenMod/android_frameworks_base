@@ -2,6 +2,7 @@
 <!--
 **
 ** Copyright 2010, The Android Open Source Project
+** Copyright 2012, The CyanogenMod Project (Weather, Calendar)
 **
 ** Licensed under the Apache License, Version 2.0 (the "License")
 ** you may not use this file except in compliance with the License.
@@ -209,4 +210,68 @@
         android:visibility="invisible"
         android:textColor="@color/lockscreen_owner_info"
         />
+
+    <!-- CyanogenMod Calendar Panel -->
+    <LinearLayout
+        android:id="@+id/calendar_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:minHeight="28dip"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dip"
+        android:paddingRight="12dip" >
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:src="@drawable/ic_lock_idle_calendar" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:paddingTop="6dip"
+            android:paddingBottom="6dip"
+            android:background="@android:drawable/divider_horizontal_dark" />
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="6dip"
+            android:paddingBottom="6dip"
+            android:paddingLeft="4dip" >
+
+            <TextView
+                android:id="@+id/calendar_event_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:textColor="?android:attr/textColorPrimary"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal" />
+
+            <TextView
+                android:id="@+id/calendar_event_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/calendar_event_title"
+                android:layout_alignLeft="@id/calendar_event_title"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fadingEdge="horizontal"
+                android:textColor="?android:attr/textColorSecondary" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
 </LinearLayout>
