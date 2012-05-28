@@ -32,6 +32,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.ListPreferenceMultiSelect;
+import android.preference.MultiSelectListPreference;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -90,6 +92,7 @@ class KeyguardStatusViewManager implements OnClickListener {
     private RelativeLayout mWeatherPanel;
     private TextView mWeatherCity, mWeatherCondition, mWeatherLowHigh, mWeatherTemp, mUpdateTime;
     private ImageView mWeatherImage;
+    private TextView mStatusCalendar;
 
     // Top-level container view for above views
     private View mContainer;
@@ -215,6 +218,12 @@ class KeyguardStatusViewManager implements OnClickListener {
             mWeatherPanel.setOnClickListener(this);
         }
 
+        // Calendar panel
+        mStatusCalendar = (TextView) findViewById(R.id.status_calendar);
+        if (mStatusCalendar != null) {
+            mStatusCalendar.setVisibility(View.GONE);
+        }
+
         // Hide transport control view until we know we need to show it.
         if (mTransportView != null) {
             mTransportView.setVisibility(View.GONE);
@@ -235,6 +244,7 @@ class KeyguardStatusViewManager implements OnClickListener {
         refreshDate();
         updateOwnerInfo();
         refreshWeather();
+        refreshCalendar();
 
         // Required to get Marquee to work.
         final View scrollableViews[] = { mCarrierView, mDateView, mStatus1View, mOwnerInfoView,
@@ -490,6 +500,51 @@ class KeyguardStatusViewManager implements OnClickListener {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /*
+     * CyanogenMod Lock screen Calendar related functionality
+     */
+
+    private void refreshCalendar() {
+        final ContentResolver resolver = getContext().getContentResolver();
+        String nextCalendar = null;
+        boolean lockCalendar = (Settings.System.getInt(resolver,
+                Settings.System.LOCKSCREEN_CALENDAR, 0) == 1);
+        String[] calendars = parseStoredValue(Settings.System.getString(
+                resolver, Settings.System.LOCKSCREEN_CALENDARS));
+        boolean lockCalendarRemindersOnly = (Settings.System.getInt(resolver,
+                Settings.System.LOCKSCREEN_CALENDAR_REMINDERS_ONLY, 0) == 1);
+        long lockCalendarLookahead = Settings.System.getLong(resolver,
+                Settings.System.LOCKSCREEN_CALENDAR_LOOKAHEAD, 10800000);
+
+        if (lockCalendar) {
+            nextCalendar = mLockPatternUtils.getNextCalendarAlarm(lockCalendarLookahead,
+                    calendars, lockCalendarRemindersOnly);
+        }
+
+        if (nextCalendar != null) {
+            mStatusCalendar.setText(nextCalendar);
+            mStatusCalendar.setVisibility(View.VISIBLE);
+        } else {
+            mStatusCalendar.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Split the multiselectlistpreference string based on a separator of ',' and
+     * stripping off the start [ and the end ]
+     * @param val
+     * @return
+     */
+    private static String[] parseStoredValue(String val) {
+        if (val.isEmpty())
+            return null;
+        else {
+            // Strip off the start [ and the end ] before splitting
+            val = val.substring(1, val.length() -1);
+            return (val.split(","));
+        }
     }
 
     private boolean inWidgetMode() {
