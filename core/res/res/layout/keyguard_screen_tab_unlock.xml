@@ -214,6 +214,21 @@
         android:layout_width="match_parent"
         android:layout_height="292dip">  <!-- was 302 -->
 
+        <!-- CyanogenMod Calendar Panel -->
+        <TextView
+            android:id="@+id/status_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:layout_marginLeft="24dip"
+            android:layout_marginRight="24dip"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textSize="12sp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:drawablePadding="4dip"
+            android:drawableLeft="@drawable/ic_lock_idle_calendar" />
+
         <com.android.internal.widget.multiwaveview.MultiWaveView
             android:id="@+id/unlock_widget"
             android:orientation="horizontal"

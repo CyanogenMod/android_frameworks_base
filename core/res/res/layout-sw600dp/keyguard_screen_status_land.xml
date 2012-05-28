@@ -208,4 +208,20 @@
         android:textColor="@color/lockscreen_owner_info"
         android:visibility="invisible"
         />
+
+    <!-- CyanogenMod Calendar Panel -->
+    <TextView
+        android:id="@+id/status_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dip"
+        android:layout_marginLeft="24dip"
+        android:layout_marginRight="24dip"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:textSize="12sp"
+        android:textColor="?android:attr/textColorPrimary"
+        android:drawablePadding="4dip"
+        android:drawableLeft="@drawable/ic_lock_idle_calendar" />
+
 </LinearLayout>
