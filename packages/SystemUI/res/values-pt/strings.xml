@@ -143,4 +143,13 @@
     <string name="notifications_off_title">Notificações desligadas</string>
     <string name="notifications_off_text">Toque para ativar notificações.</string>
     <string name="accessibility_battery_level">%d porcentos de bateria.</string>
+    <string name="navbar_dialog_title">Escolha a ação para atribuir</string>
+    <string name="navbar_home_button">Botão Home</string>
+    <string name="navbar_recent_button">Botão de Apps Recentes</string>
+    <string name="navbar_search_button">Botão de Busca</string>
+    <string name="navbar_back_button">Botão de Voltar</string>
+    <string name="navbar_empty_button">Botão Vazio</string>
+    <string name="navbar_menu_conditional_button">Botão (auto ocultar) Menu</string>
+    <string name="navbar_menu_always_button">Botão (sempre mostrar) Menu</string>
+    <string name="navbar_menu_big_button">Botão Menu</string>
 </resources>
