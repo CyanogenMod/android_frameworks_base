@@ -22,6 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * THIS CLASS'S DATA MUST BE KEPT UP-TO-DATE WITH THE DATA IN
+ * com.android.systemui.statusbar.powerwidget.PowerWidget AND
+ * com.android.settings.cyanogenmod.PowerWidgetUtil
+ */
 public abstract class PowerButton {
     public static final String TAG = "PowerButton";
 
@@ -53,6 +58,7 @@ public abstract class PowerButton {
     public static final String BUTTON_LTE = "toggleLte";
     public static final String BUTTON_WIMAX = "toggleWimax";
     public static final String BUTTON_UNKNOWN = "unknown";
+    public static final String BUTTON_PROFILES = "toggleProfile";
 
     private static final Mode MASK_MODE = Mode.SCREEN;
 
@@ -79,6 +85,7 @@ public abstract class PowerButton {
         BUTTONS.put(BUTTON_MEDIA_NEXT, MediaNextButton.class);
         BUTTONS.put(BUTTON_LTE, LTEButton.class);
         BUTTONS.put(BUTTON_WIMAX, WimaxButton.class);
+        BUTTONS.put(BUTTON_PROFILES, ProfilesButton.class);
     }
     // this is a list of our currently loaded buttons
     private static final HashMap<String, PowerButton> BUTTONS_LOADED = new HashMap<String, PowerButton>();
