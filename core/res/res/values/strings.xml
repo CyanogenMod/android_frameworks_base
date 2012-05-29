@@ -1665,6 +1665,10 @@
         <item>Jabber</item>
     </string-array>
 
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">Display Rotation Unlocked</string>
+    <string name="toast_rotation_locked">Display Rotation Locked</string>
+
     <!-- Custom phone number type -->
     <string name="phoneTypeCustom">Custom</string>
     <!-- Home phone number type -->

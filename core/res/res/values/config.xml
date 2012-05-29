@@ -827,4 +827,6 @@
          config to 7. -->
     <integer name="config_deviceHardwareKeys">15</integer>
 
+    <!-- Device has a h/w rotation lock switch -->
+    <bool name="config_hasRotationLockSwitch">false</bool>
 </resources>
