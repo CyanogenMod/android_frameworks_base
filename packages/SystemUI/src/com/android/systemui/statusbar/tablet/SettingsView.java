@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.content.res.Resources;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.AirplaneModeController;
@@ -68,9 +69,9 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
         findViewById(R.id.network).setOnClickListener(this);
         findViewById(R.id.bluetooth).setOnClickListener(this);
         mBluetooth = new BluetoothController(context,
-					     (CompoundButton)findViewById(R.id.bluetooth_checkbox));
+                                                (CompoundButton)findViewById(R.id.bluetooth_checkbox));
         mWifi = new WifiController(context,
-				(CompoundButton)findViewById(R.id.wifi_checkbox));
+                                        (CompoundButton)findViewById(R.id.wifi_checkbox));
         mRotate = new AutoRotateController(context,
                 (CompoundButton)findViewById(R.id.rotate_checkbox));
         mBrightness = new BrightnessController(context,
