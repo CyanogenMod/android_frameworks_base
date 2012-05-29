@@ -144,6 +144,7 @@ class ServerThread extends Thread {
         BluetoothService bluetooth = null;
         BluetoothA2dpService bluetoothA2dp = null;
         DockObserver dock = null;
+        RotationSwitchObserver rot = null;
         UsbService usb = null;
         UiModeManagerService uiMode = null;
         RecognitionManagerService recognition = null;
@@ -531,6 +532,14 @@ class ServerThread extends Thread {
             }
 
             try {
+                Slog.i(TAG, "Rotation Switch Observer");
+                // Listen for switch changes
+                rot = new RotationSwitchObserver(context);
+            } catch (Throwable e) {
+                reportWtf("starting RotationSwitchObserver", e);
+            }
+
+            try {
                 Slog.i(TAG, "Wired Accessory Observer");
                 // Listen for wired headset changes
                 new WiredAccessoryObserver(context);
@@ -696,6 +705,7 @@ class ServerThread extends Thread {
         final NetworkPolicyManagerService networkPolicyF = networkPolicy;
         final ConnectivityService connectivityF = connectivity;
         final DockObserver dockF = dock;
+        final RotationSwitchObserver rotF = rot;
         final UsbService usbF = usb;
         final ThrottleService throttleF = throttle;
         final UiModeManagerService uiModeF = uiMode;
@@ -748,6 +758,11 @@ class ServerThread extends Thread {
                     if (dockF != null) dockF.systemReady();
                 } catch (Throwable e) {
                     reportWtf("making Dock Service ready", e);
+                }
+                try {
+                    if (rotF != null) rotF.systemReady();
+                } catch (Throwable e) {
+                    reportWtf("making Rotation Switch Service ready", e);
                 }
                 try {
                     if (usbF != null) usbF.systemReady();
