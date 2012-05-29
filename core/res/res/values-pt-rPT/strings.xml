@@ -36,9 +36,9 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Problema de ligação ou código MMI inválido."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"A operação está restringida a números fixos autorizados."</string>
-    <string name="serviceEnabled" msgid="8147278346414714315">"O serviço foi activado."</string>
-    <string name="serviceEnabledFor" msgid="6856228140453471041">"O serviço foi activado para:"</string>
-    <string name="serviceDisabled" msgid="1937553226592516411">"O serviço foi desactivado."</string>
+    <string name="serviceEnabled" msgid="8147278346414714315">"O serviço foi ativado."</string>
+    <string name="serviceEnabledFor" msgid="6856228140453471041">"O serviço foi ativado para:"</string>
+    <string name="serviceDisabled" msgid="1937553226592516411">"O serviço foi desativado."</string>
     <string name="serviceRegistered" msgid="6275019082598102493">"O registo foi bem sucedido."</string>
     <string name="serviceErased" msgid="1288584695297200972">"A eliminação foi bem sucedida."</string>
     <string name="passwordIncorrect" msgid="7612208839450128715">"Palavra-passe incorrecta."</string>
@@ -86,8 +86,8 @@
     <string name="serviceClassDataSync" msgid="7530000519646054776">"Sincronização"</string>
     <string name="serviceClassPacket" msgid="6991006557993423453">"Pacote"</string>
     <string name="serviceClassPAD" msgid="3235259085648271037">"PAD"</string>
-    <string name="roamingText0" msgid="7170335472198694945">"Indicador de Roaming activado"</string>
-    <string name="roamingText1" msgid="5314861519752538922">"Indicador de Roaming desactivado"</string>
+    <string name="roamingText0" msgid="7170335472198694945">"Indicador de Roaming ativado"</string>
+    <string name="roamingText1" msgid="5314861519752538922">"Indicador de Roaming desativado"</string>
     <string name="roamingText2" msgid="8969929049081268115">"Indicador de Roaming intermitente"</string>
     <string name="roamingText3" msgid="5148255027043943317">"Fora da Vizinhança"</string>
     <string name="roamingText4" msgid="8808456682550796530">"No Exterior"</string>
@@ -151,11 +151,11 @@
     <string name="global_action_lock" msgid="2844945191792119712">"Bloqueio de ecrã"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Desligar"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Modo silencioso"</string>
-    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Som desactivado"</string>
-    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"O som está activado"</string>
+    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Som desativado"</string>
+    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"O som está ativado"</string>
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Modo de avião"</string>
-    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"O modo de voo está activado"</string>
-    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"O modo de voo está desactivado"</string>
+    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"O modo de voo está ativado"</string>
+    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"O modo de voo está desativado"</string>
     <string name="status_bar_notification_info_overflow" msgid="5301981741705354993">"999+"</string>
     <string name="safeMode" msgid="2788228061547930246">"Modo seguro"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Sistema Android"</string>
@@ -706,8 +706,8 @@
     <string name="lockscreen_glogin_account_recovery_hint" msgid="8253152905532900548">"Esqueceu-me do nome de utilizador ou da palavra-passe?"\n"Visite "<b>"google.com/accounts/recovery"</b></string>
     <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"A verificar..."</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Desbloquear"</string>
-    <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Som activado"</string>
-    <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Som desactivado"</string>
+    <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Som ativado"</string>
+    <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Som desativado"</string>
     <string name="lockscreen_access_pattern_start" msgid="3941045502933142847">"Sequência iniciada"</string>
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"Sequência apagada"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"Célula adicionada"</string>
@@ -1090,7 +1090,7 @@
     <string name="no_file_chosen" msgid="6363648562170759465">"Não foi selecionado nenhum ficheiro"</string>
     <string name="reset" msgid="2448168080964209908">"Repor"</string>
     <string name="submit" msgid="1602335572089911941">"Enviar"</string>
-    <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Modo automóvel activado"</string>
+    <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Modo automóvel ativado"</string>
     <string name="car_mode_disable_notification_message" msgid="668663626721675614">"Seleccionar para sair do modo Carro."</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"Ligação ponto a ponto ou hotspot activos"</string>
     <string name="tethered_notification_message" msgid="3067108323903048927">"Tocar para configurar"</string>
@@ -1222,9 +1222,120 @@
     <string name="activity_chooser_view_see_all" msgid="180268188117163072">"Ver tudo..."</string>
     <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"Selecionar atividade"</string>
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Partilhar com..."</string>
-    <string name="status_bar_device_locked" msgid="3092703448690669768">"Aparelho bloqueado."</string>
+    <string name="status_bar_device_locked" msgid="3092703448690669768">"Telefone bloqueado."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
     <string name="sending" msgid="8715108995741758718">"A enviar..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Iniciar Navegador?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Aceitar Chamada?"</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Padrão</string>
+    <string name="profileNameWork">Trabalho</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silêncio</string>
+    <string name="profileNameNight">Noite</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Outro</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">Perfil</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="reboot_system" product="default">Reiniciar telefone</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Capturar ecrã</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Reiniciar</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Reiniciar</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recuperação</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Menu de boot</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Reiniciando\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">O telefone vai reiniciar.</string>
+
+    <string name="permlab_preventpower">modificação do botão liga/desl.</string>
+    <string name="permdesc_preventpower">Permite uma aplicação substituir o botão liga/desl.</string>
+    <string name="app_killed_message">Aplicação terminada</string>
+    <string name="roamingTextAirplaneMode">Modo avião</string>
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tempestade Tropical</string>
+    <string name="weather_2">Furacão</string>
+    <string name="weather_3">Tempestades Fortes</string>
+    <string name="weather_4">Tempestades</string>
+    <string name="weather_5">Chuva e Neve Misturados</string>
+    <string name="weather_6">Chuva e Geada Misturados</string>
+    <string name="weather_7">Neve e Geada Misturados</string>
+    <string name="weather_8">Chuva Congelante</string>
+    <string name="weather_9">Chuviscos</string>
+    <string name="weather_10">Chuva Congelante</string>
+    <string name="weather_11">Chuva</string>
+    <string name="weather_12">Chuva</string>
+    <string name="weather_13">Flocos de Neve</string>
+    <string name="weather_14">Chuva de Neve Fraca</string>
+    <string name="weather_15">Tempestade de Neve</string>
+    <string name="weather_16">Neve</string>
+    <string name="weather_17">Granizo</string>
+    <string name="weather_18">Geada</string>
+    <string name="weather_19">Poeira</string>
+    <string name="weather_20">Nebuloso</string>
+    <string name="weather_21">Neblina</string>
+    <string name="weather_22">Fumado</string>
+    <string name="weather_23">Ventos Fortes</string>
+    <string name="weather_24">Ventania</string>
+    <string name="weather_25">Frio</string>
+    <string name="weather_26">Nublado</string>
+    <string name="weather_27">Maior Parte Nublado</string> <!-- Night -->
+    <string name="weather_28">Maior Parte Nublado</string> <!-- Day -->
+    <string name="weather_29">Parcialmente Nublado</string> <!-- Night -->
+    <string name="weather_30">Parcialmente Nublado</string> <!-- Day -->
+    <string name="weather_31">Limpo</string> <!-- Night -->
+    <string name="weather_32">Ensolarado</string>
+    <string name="weather_33">Razoável</string> <!-- Night -->
+    <string name="weather_34">Razoável</string> <!-- Day -->
+    <string name="weather_35">Chuva e Granizo Misturados</string>
+    <string name="weather_36">Quente</string>
+    <string name="weather_37">Tempestades Isoladas</string>
+    <string name="weather_38">Tempestades Dispersas</string>
+    <string name="weather_39">Tempestades Dispersas</string>
+    <string name="weather_40">Chuvas Dispersas</string>
+    <string name="weather_41">Neve Forte</string>
+    <string name="weather_42">Neve Dispersa</string>
+    <string name="weather_43">Nevão Forte</string>
+    <string name="weather_44">Parcialmente Nublado</string>
+    <string name="weather_45">Chuvas com Trovoadas</string>
+    <string name="weather_46">Chuva de Neve</string>
+    <string name="weather_47">Chuvas com Trovoadas Isoladas</string>
+    <string name="weather_3200"></string>
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NE</string>
+    <string name="weather_E">E</string>
+    <string name="weather_SE">SE</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SO</string>
+    <string name="weather_W">O</string>
+    <string name="weather_NW">NO</string>
+    <string name="weather_tap_to_refresh">Toque para atualizar</string>
 </resources>
