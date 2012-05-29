@@ -349,8 +349,11 @@ class KeyguardStatusViewManager implements OnClickListener {
         if (showWeather) {
             final long interval = Settings.System.getLong(resolver,
                     Settings.System.WEATHER_UPDATE_INTERVAL, 60); // Default to hourly
-            if (((System.currentTimeMillis() - mWeatherInfo.last_sync) / 60000) >= interval) {
+            boolean manualSync = (interval == 0);
+            if (!manualSync && (((System.currentTimeMillis() - mWeatherInfo.last_sync) / 60000) >= interval)) {
                 mHandler.sendEmptyMessage(QUERY_WEATHER);
+            } else if (manualSync && mWeatherInfo.last_sync == 0) {
+                setNoWeatherData();
             } else {
                 setWeatherData(mWeatherInfo);
             }
