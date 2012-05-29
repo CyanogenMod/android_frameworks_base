@@ -10,6 +10,11 @@ LOCAL_SRC_FILES:= \
 	ICameraRecordingProxy.cpp \
 	ICameraRecordingProxyListener.cpp
 
+ifeq ($(BOARD_OVERLAY_BASED_CAMERA_HAL),true)
+    LOCAL_CFLAGS += -DUSE_OVERLAY_CPP
+    LOCAL_SRC_FILES += Overlay.cpp
+endif
+
 LOCAL_SHARED_LIBRARIES := \
 	libcutils \
 	libutils \
