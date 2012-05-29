@@ -137,9 +137,9 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Desactivar sem fios"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bloqueio de ecrã"</string>
     <string name="power_off" msgid="4266614107412865048">"Desligar"</string>
-    <string name="silent_mode_silent" msgid="319298163018473078">"Campainha desativada"</string>
+    <string name="silent_mode_silent" msgid="319298163018473078">"Campainha desactivada"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Campainha em vibração."</string>
-    <string name="silent_mode_ring" msgid="8592241816194074353">"Campainha ativada"</string>
+    <string name="silent_mode_ring" msgid="8592241816194074353">"Campainha activada"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"A encerrar..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"O seu tablet irá encerrar."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"O seu telefone irá encerrar."</string>
@@ -230,7 +230,7 @@
     <string name="permlab_dump" msgid="1681799862438954752">"obter estado interno do sistema"</string>
     <string name="permdesc_dump" msgid="2198776174276275220">"Permite à aplicação obter o estado interno do sistema. Algumas aplicações maliciosas podem obter uma ampla variedade de dados privados e seguros de que, normalmente, nunca devem necessitar."</string>
     <string name="permlab_retrieve_window_content" msgid="8022588608994589938">"obter o conteúdo do ecrã"</string>
-    <string name="permdesc_retrieve_window_content" msgid="3390962289797156152">"Permite que uma aplicação obtenha o conteúdo da janela ativa. As aplicações maliciosas poderão obter todo o conteúdo da janela e examinar todo o texto nela contida, exceto palavras-passe."</string>
+    <string name="permdesc_retrieve_window_content" msgid="3390962289797156152">"Permite que uma aplicação obtenha o conteúdo da janela activa. As aplicações maliciosas poderão obter todo o conteúdo da janela e examinar todo o texto nela contida, exceto palavras-passe."</string>
     <string name="permlab_shutdown" msgid="7185747824038909016">"encerramento parcial"</string>
     <string name="permdesc_shutdown" msgid="7046500838746291775">"Coloca o gestor de actividade num estado de encerramento. Não executa um encerramento completo."</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"impedir trocas de aplicações"</string>
@@ -529,7 +529,7 @@
     <string name="policydesc_expirePassword" msgid="4844430354224822074">"Controlar a frequência com que a palavra-passe deve ser alterada"</string>
     <string name="policylab_encryptedStorage" msgid="8901326199909132915">"Def. encriptação armazenamento"</string>
     <string name="policydesc_encryptedStorage" msgid="2504984732631479399">"Requerer encriptação dos dados da aplicação armazenados"</string>
-    <string name="policylab_disableCamera" msgid="6395301023152297826">"Desativar câmaras"</string>
+    <string name="policylab_disableCamera" msgid="6395301023152297826">"Desactivar câmaras"</string>
     <string name="policydesc_disableCamera" msgid="5680054212889413366">"Evitar a utilização de todas as câmaras do aparelho"</string>
   <string-array name="phoneTypes">
     <item msgid="8901098336658710359">"Residência"</item>
@@ -673,7 +673,7 @@
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"Nenhum cartão SIM no telefone."</string>
     <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"Introduza um cartão SIM."</string>
     <string name="lockscreen_missing_sim_instructions_long" msgid="7138450788301444298">"O cartão SIM está em falta ou não é legível. Introduza um cartão SIM."</string>
-    <string name="lockscreen_permanent_disabled_sim_instructions" msgid="1631853574702335453">"O seu cartão SIM está desativado definitivamente."\n" Contacte o seu fornecedor de serviços de rede sem fios para obter outro cartão."</string>
+    <string name="lockscreen_permanent_disabled_sim_instructions" msgid="1631853574702335453">"O seu cartão SIM está desactivado definitivamente."\n" Contacte o seu operador de rede sem fios para obter outro cartão."</string>
     <string name="lockscreen_transport_prev_description" msgid="201594905152746886">"Botão Faixa anterior"</string>
     <string name="lockscreen_transport_next_description" msgid="6089297650481292363">"Botão Faixa seguinte"</string>
     <string name="lockscreen_transport_pause_description" msgid="7659088786780128001">"Botão Pausa"</string>
@@ -908,7 +908,7 @@
     <string name="aerr_process" msgid="4507058997035697579">"Lamentamos, o processo <xliff:g id="PROCESS">%1$s</xliff:g> foi interrompido."</string>
     <string name="anr_title" msgid="4351948481459135709"></string>
     <string name="anr_activity_application" msgid="8339738283149696827">"A <xliff:g id="APPLICATION">%2$s</xliff:g> não está a responder."\n\n"Pretende encerrá-la?"</string>
-    <string name="anr_activity_process" msgid="7018289416670457797">"A atividade <xliff:g id="ACTIVITY">%1$s</xliff:g> não está a responder."\n\n"Pretende encerrá-la?"</string>
+    <string name="anr_activity_process" msgid="7018289416670457797">"A actividade <xliff:g id="ACTIVITY">%1$s</xliff:g> não está a responder."\n\n"Pretende encerrá-la?"</string>
     <string name="anr_application_process" msgid="7208175830253210526">"A <xliff:g id="APPLICATION">%1$s</xliff:g> não está a responder. Pretende encerrá-la?"</string>
     <string name="anr_process" msgid="306819947562555821">"O processo <xliff:g id="PROCESS">%1$s</xliff:g> não está a responder."\n\n"Pretende encerrá-lo?"</string>
     <string name="force_close" msgid="8346072094521265605">"OK"</string>
@@ -919,11 +919,11 @@
     <string name="launch_warning_original" msgid="188102023021668683">"<xliff:g id="APP_NAME">%1$s</xliff:g> foi originalmente iniciado."</string>
     <string name="screen_compat_mode_scale" msgid="3202955667675944499">"Escala"</string>
     <string name="screen_compat_mode_show" msgid="4013878876486655892">"Mostrar sempre"</string>
-    <string name="screen_compat_mode_hint" msgid="2953716574198046484">"Reativar modo através das Definições &gt; Aplicações &gt; Gerir aplicações."</string>
+    <string name="screen_compat_mode_hint" msgid="2953716574198046484">"Reactivar modo através das Definições &gt; Aplicações &gt; Gerir aplicações."</string>
     <string name="smv_application" msgid="295583804361236288">"A aplicação <xliff:g id="APPLICATION">%1$s</xliff:g> (processo <xliff:g id="PROCESS">%2$s</xliff:g>) violou a política StrictMode auto-imposta."</string>
     <string name="smv_process" msgid="5120397012047462446">"O processo <xliff:g id="PROCESS">%1$s</xliff:g> violou a política StrictMode auto-imposta."</string>
-    <string name="android_upgrading_title" msgid="378740715658358071">"O Android está a ser atualizado..."</string>
-    <string name="android_upgrading_apk" msgid="274409861603566003">"A otimizar a aplicação <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
+    <string name="android_upgrading_title" msgid="378740715658358071">"O Android está a ser actualizado..."</string>
+    <string name="android_upgrading_apk" msgid="274409861603566003">"A optimizar a aplicação <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
     <string name="android_upgrading_starting_apps" msgid="7959542881906488763">"A iniciar as aplicações."</string>
     <string name="android_upgrading_complete" msgid="1405954754112999229">"A concluir o arranque."</string>
     <string name="heavy_weight_notification" msgid="9087063985776626166">"<xliff:g id="APP">%1$s</xliff:g> em execução"</string>
@@ -968,12 +968,12 @@
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Não foi possível ligar a Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" tem uma ligação à internet fraca."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2804722042556269129">"Iniciar operação Wi-Fi Direct. Isto irá desativar a operação do cliente/zona Wi-Fi."</string>
+    <string name="wifi_p2p_turnon_message" msgid="2804722042556269129">"Iniciar operação Wi-Fi Direct. Isto irá desactivar a operação do cliente/zona Wi-Fi."</string>
     <string name="wifi_p2p_failed_message" msgid="1820097493844848281">"Não foi possível iniciar o Wi-Fi Direct"</string>
     <string name="wifi_p2p_pbc_go_negotiation_request_message" msgid="3170321684621420428">"Pedido de configuração de Wi-Fi Direct de <xliff:g id="P2P_DEVICE_ADDRESS">%1$s</xliff:g>. Clique em OK para aceitar."</string>
     <string name="wifi_p2p_pin_go_negotiation_request_message" msgid="5177412094633377308">"Pedido de configuração de ligação Wi-Fi Direct de <xliff:g id="P2P_DEVICE_ADDRESS">%1$s</xliff:g>. Introduza o PIN para prosseguir."</string>
     <string name="wifi_p2p_pin_display_message" msgid="2834049169114922902">"É preciso introduzir o PIN WPS <xliff:g id="P2P_WPS_PIN">%1$s</xliff:g> no aparelho de pares <xliff:g id="P2P_CLIENT_ADDRESS">%2$s</xliff:g> para que possa prosseguir a configuração da ligação"</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"O Wi-Fi Direct está ativado"</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"O Wi-Fi Direct está activado"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Toque para aceder às definições"</string>
     <string name="select_character" msgid="3365550120617701745">"Introduzir carácter"</string>
     <string name="sms_control_default_app_name" msgid="7630529934366549163">"Aplicação desconhecida"</string>
@@ -1066,7 +1066,7 @@
     <string name="ime_action_send" msgid="2316166556349314424">"Enviar"</string>
     <string name="ime_action_next" msgid="3138843904009813834">"Seguinte"</string>
     <string name="ime_action_done" msgid="8971516117910934605">"Concluído"</string>
-    <string name="ime_action_previous" msgid="1443550039250105948">"Ant"</string>
+    <string name="ime_action_previous" msgid="1443550039250105948">"Anterior"</string>
     <string name="ime_action_default" msgid="2840921885558045721">"Executar"</string>
     <string name="dial_number_using" msgid="5789176425167573586">"Marcar número"\n"utilizando <xliff:g id="NUMBER">%s</xliff:g>"</string>
     <string name="create_contact_using" msgid="4947405226788104538">"Criar contacto"\n"utilizando <xliff:g id="NUMBER">%s</xliff:g>"</string>
@@ -1082,8 +1082,8 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Acessibilidade"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Imagem de fundo"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Alterar imagem de fundo"</string>
-    <string name="vpn_title" msgid="8219003246858087489">"A VPN está ativa"</string>
-    <string name="vpn_title_long" msgid="6400714798049252294">"A VPN foi ativada pelo <xliff:g id="APP">%s</xliff:g>"</string>
+    <string name="vpn_title" msgid="8219003246858087489">"A VPN está activa"</string>
+    <string name="vpn_title_long" msgid="6400714798049252294">"A VPN foi activada pelo <xliff:g id="APP">%s</xliff:g>"</string>
     <string name="vpn_text" msgid="1610714069627824309">"Toque para gerir a rede."</string>
     <string name="vpn_text_long" msgid="4907843483284977618">"Ligado a <xliff:g id="SESSION">%s</xliff:g>. Toque para gerir a rede."</string>
     <string name="upload_file" msgid="2897957172366730416">"Escolher ficheiro"</string>
@@ -1120,7 +1120,7 @@
     <string name="media_removed" msgid="7001526905057952097">"O cartão SD foi removido."</string>
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"O armazenamento USB está actualmente a ser utilizado por um computador."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"O cartão SD está actualmente a ser utilizado por um computador."</string>
-    <string name="media_unknown_state" msgid="729192782197290385">"Suporte de dados externo em estado desconhecido."</string>
+    <string name="media_unknown_state" msgid="729192782197290385">"Armazenamento externo em estado desconhecido."</string>
     <string name="share" msgid="1778686618230011964">"Partilhar"</string>
     <string name="find" msgid="4808270900322985960">"Localizar"</string>
     <string name="websearch" msgid="4337157977400211589">"Pesquisar na Web"</string>
@@ -1156,12 +1156,12 @@
     <string name="date_picker_decrement_year_button" msgid="5193062846559743823">"Diminuir ano"</string>
     <string name="checkbox_checked" msgid="7222044992652711167">"marcado"</string>
     <string name="checkbox_not_checked" msgid="5174639551134444056">"desmarcado"</string>
-    <string name="radiobutton_selected" msgid="8603599808486581511">"selecionado"</string>
-    <string name="radiobutton_not_selected" msgid="2908760184307722393">"não selecionado"</string>
-    <string name="switch_on" msgid="551417728476977311">"ativado"</string>
-    <string name="switch_off" msgid="7249798614327155088">"desativado"</string>
-    <string name="togglebutton_pressed" msgid="4180411746647422233">"premido"</string>
-    <string name="togglebutton_not_pressed" msgid="4495147725636134425">"não premido"</string>
+    <string name="radiobutton_selected" msgid="8603599808486581511">"seleccionado"</string>
+    <string name="radiobutton_not_selected" msgid="2908760184307722393">"não seleccionado"</string>
+    <string name="switch_on" msgid="551417728476977311">"activado"</string>
+    <string name="switch_off" msgid="7249798614327155088">"desactivado"</string>
+    <string name="togglebutton_pressed" msgid="4180411746647422233">"pressionado"</string>
+    <string name="togglebutton_not_pressed" msgid="4495147725636134425">"não pressionado"</string>
     <string name="keyboardview_keycode_alt" msgid="4856868820040051939">"Alt"</string>
     <string name="keyboardview_keycode_cancel" msgid="1203984017245783244">"Cancelar"</string>
     <string name="keyboardview_keycode_delete" msgid="3337914833206635744">"Delete"</string>
@@ -1180,7 +1180,7 @@
     <string name="description_target_unlock" msgid="2228524900439801453">"Desbloquear"</string>
     <string name="description_target_camera" msgid="969071997552486814">"Câmara"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Silencioso"</string>
-    <string name="description_target_soundon" msgid="30052466675500172">"Som ativado"</string>
+    <string name="description_target_soundon" msgid="30052466675500172">"Som activado"</string>
     <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Deslizar rapidamente para desbloquear."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Ligue os auscultadores com microfone integrado para ouvir as teclas da palavra-passe."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Ponto."</string>
@@ -1193,11 +1193,11 @@
     <string name="extract_edit_menu_button" msgid="302060189057163906">"Editar..."</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Aviso de utilização de dados"</string>
     <string name="data_usage_warning_body" msgid="7217480745540055170">"Toque para ver a utiliz. e as def."</string>
-    <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Os dados 2G-3G estão desativados"</string>
-    <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Os dados 4G estão desativados"</string>
-    <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Os dados móveis estão desativados"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Dados Wi-Fi desativados"</string>
-    <string name="data_usage_limit_body" msgid="4313857592916426843">"Toque para ativar"</string>
+    <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Os dados 2G-3G estão desactivados"</string>
+    <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Os dados 4G estão desactivados"</string>
+    <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Os dados móveis estão desactivados"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Dados Wi-Fi desactivados"</string>
+    <string name="data_usage_limit_body" msgid="4313857592916426843">"Toque para activar"</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Limite de dados 2G-3G excedido"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Limite de dados 4G excedido"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Limite de dados móveis excedido"</string>
@@ -1220,11 +1220,122 @@
     <string name="sha256_fingerprint" msgid="4391271286477279263">"Impressão digital SHA-256:"</string>
     <string name="sha1_fingerprint" msgid="7930330235269404581">"Impressão digital SHA-1:"</string>
     <string name="activity_chooser_view_see_all" msgid="180268188117163072">"Ver tudo..."</string>
-    <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"Selecionar atividade"</string>
+    <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"Selecionar actividade"</string>
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Partilhar com..."</string>
-    <string name="status_bar_device_locked" msgid="3092703448690669768">"Aparelho bloqueado."</string>
+    <string name="status_bar_device_locked" msgid="3092703448690669768">"Dispositivo bloqueado."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
     <string name="sending" msgid="8715108995741758718">"A enviar..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Iniciar Navegador?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Aceitar Chamada?"</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Padrão</string>
+    <string name="profileNameWork">Trabalho</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silêncio</string>
+    <string name="profileNameNight">Noite</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Outro</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">Perfil</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="reboot_system" product="default">Reiniciar telefone</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Capturar ecrã</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Reiniciar</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Reiniciar</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recuperação</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Menu de boot</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Reiniciando\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">O telefone vai reiniciar.</string>
+
+    <string name="permlab_preventpower">modificação do botão liga/desl.</string>
+    <string name="permdesc_preventpower">Permite uma aplicação substituir o botão liga/desl.</string>
+    <string name="app_killed_message">Aplicação terminada</string>
+    <string name="roamingTextAirplaneMode">Modo avião</string>
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tempestade Tropical</string>
+    <string name="weather_2">Furacão</string>
+    <string name="weather_3">Tempestades Fortes</string>
+    <string name="weather_4">Tempestades</string>
+    <string name="weather_5">Chuva e Neve Misturados</string>
+    <string name="weather_6">Chuva e Geada Misturados</string>
+    <string name="weather_7">Neve e Geada Misturados</string>
+    <string name="weather_8">Chuva Congelante</string>
+    <string name="weather_9">Chuviscos</string>
+    <string name="weather_10">Chuva Congelante</string>
+    <string name="weather_11">Chuva</string>
+    <string name="weather_12">Chuva</string>
+    <string name="weather_13">Flocos de Neve</string>
+    <string name="weather_14">Chuva de Neve Fraca</string>
+    <string name="weather_15">Tempestade de Neve</string>
+    <string name="weather_16">Neve</string>
+    <string name="weather_17">Granizo</string>
+    <string name="weather_18">Geada</string>
+    <string name="weather_19">Poeira</string>
+    <string name="weather_20">Nebuloso</string>
+    <string name="weather_21">Neblina</string>
+    <string name="weather_22">Fumado</string>
+    <string name="weather_23">Ventos Fortes</string>
+    <string name="weather_24">Ventania</string>
+    <string name="weather_25">Frio</string>
+    <string name="weather_26">Nublado</string>
+    <string name="weather_27">Maior Parte Nublado</string> <!-- Night -->
+    <string name="weather_28">Maior Parte Nublado</string> <!-- Day -->
+    <string name="weather_29">Parcialmente Nublado</string> <!-- Night -->
+    <string name="weather_30">Parcialmente Nublado</string> <!-- Day -->
+    <string name="weather_31">Limpo</string> <!-- Night -->
+    <string name="weather_32">Ensolarado</string>
+    <string name="weather_33">Razoável</string> <!-- Night -->
+    <string name="weather_34">Razoável</string> <!-- Day -->
+    <string name="weather_35">Chuva e Granizo Misturados</string>
+    <string name="weather_36">Quente</string>
+    <string name="weather_37">Tempestades Isoladas</string>
+    <string name="weather_38">Tempestades Dispersas</string>
+    <string name="weather_39">Tempestades Dispersas</string>
+    <string name="weather_40">Chuvas Dispersas</string>
+    <string name="weather_41">Neve Forte</string>
+    <string name="weather_42">Neve Dispersa</string>
+    <string name="weather_43">Nevão Forte</string>
+    <string name="weather_44">Parcialmente Nublado</string>
+    <string name="weather_45">Chuvas com Trovoadas</string>
+    <string name="weather_46">Chuva de Neve</string>
+    <string name="weather_47">Chuvas com Trovoadas Isoladas</string>
+    <string name="weather_3200"></string>
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NE</string>
+    <string name="weather_E">E</string>
+    <string name="weather_SE">SE</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SO</string>
+    <string name="weather_W">O</string>
+    <string name="weather_NW">NO</string>
+    <string name="weather_tap_to_refresh">Toque para actualizar</string>
 </resources>
