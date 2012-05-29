@@ -798,4 +798,7 @@
 
     <!-- Name of that key handler class -->
     <string name="config_deviceKeyHandlerClass"></string>
+
+    <!-- Device has a h/w rotation lock switch -->
+    <bool name="config_hasRotaionLockSwitch">false</bool>
 </resources>
