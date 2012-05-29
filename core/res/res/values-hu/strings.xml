@@ -1273,4 +1273,68 @@
     <!--Application killed toast -->
     <string name="app_killed_message">Alkalmazás leállítva.</string>
 
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Tornádó</string>
+    <string name="weather_1">Trópusi vihar</string>
+    <string name="weather_2">Hurrikán</string>
+    <string name="weather_3">Komoly viharok</string>
+    <string name="weather_4">Viharok</string>
+    <string name="weather_5">Havas eső</string>
+    <string name="weather_6">Eső és ónos eső</string>
+    <string name="weather_7">Hó és ónos eső</string>
+    <string name="weather_8">Fagyos permet</string>
+    <string name="weather_9">Permet</string>
+    <string name="weather_10">Fagyos eső</string>
+    <string name="weather_11">Záporok</string>
+    <string name="weather_12">Záporok</string>
+    <string name="weather_13">Hófúvás</string>
+    <string name="weather_14">Könnyű hózáporok</string>
+    <string name="weather_15">Hóátfúvás</string>
+    <string name="weather_16">Hó</string>
+    <string name="weather_17">Jégeső</string>
+    <string name="weather_18">Ónos eső</string>
+    <string name="weather_19">Por</string>
+    <string name="weather_20">Köd</string>
+    <string name="weather_21">Pára</string>
+    <string name="weather_22">Füst</string>
+    <string name="weather_23">Viharos erejű szél</string>
+    <string name="weather_24">Szeles</string>
+    <string name="weather_25">Hideg</string>
+    <string name="weather_26">Felhős</string>
+    <string name="weather_27">Túlnyomóan felhős</string> <!-- Night -->
+    <string name="weather_28">Túlnyomóan felhős</string> <!-- Day -->
+    <string name="weather_29">Nyomokban felhős</string> <!-- Night -->
+    <string name="weather_30">Nyomokban felhős</string> <!-- Day -->
+    <string name="weather_31">Tiszta</string> <!-- Night -->
+    <string name="weather_32">Napos</string>
+    <string name="weather_33">Derűs</string> <!-- Night -->
+    <string name="weather_34">Derűs</string> <!-- Day -->
+    <string name="weather_35">Eső és jégeső</string>
+    <string name="weather_36">Forróság</string>
+    <string name="weather_37">Elszigetelt vihar</string>
+    <string name="weather_38">Elszórt viharok</string>
+    <string name="weather_39">Elszórt viharok</string>
+    <string name="weather_40">Elszórt záporok</string>
+    <string name="weather_41">Kemény havazás</string>
+    <string name="weather_42">Elszórt hózápor</string>
+    <string name="weather_43">Kemény havazás</string>
+    <string name="weather_44">Foltokban felhős</string>
+    <string name="weather_45">Viharos</string>
+    <string name="weather_46">Hózáporok</string>
+    <string name="weather_47">Elszigetelt vihar</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">É</string>
+    <string name="weather_NE">ÉK</string>
+    <string name="weather_E">K</string>
+    <string name="weather_SE">DK</string>
+    <string name="weather_S">D</string>
+    <string name="weather_SW">DNy</string>
+    <string name="weather_W">Ny</string>
+    <string name="weather_NW">ÉNy</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_tap_to_refresh">Érintse meg a frissítéshez</string>
 </resources>
