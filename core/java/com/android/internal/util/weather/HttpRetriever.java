@@ -1,18 +1,29 @@
-/*
+/******************************************************************************
+ * Class       : HttpConnectHelper.java                                                           *
+ * Main Weather activity, in this demo apps i use API from yahoo, you can     *
+ * use other weather web service which you prefer                             *
+ *                                                                            *
+ * Version     : v1.0                                                         *
+ * Date        : May 09, 2011                                                 *
+ * Copyright (c)-2011 DatNQ some right reserved                               *
+ * You can distribute, modify or what ever you want but WITHOUT ANY WARRANTY  *
+ * Be honest by keep credit of this file                                      *
+ *                                                                            *
+ * If you have any concern, feel free to contact with me via email, i will    *
+ * check email in free time                                                   * 
+ * Email: nguyendatnq@gmail.com                                               *
+ * ---------------------------------------------------------------------------*
+ * Modification Logs:                                                         *
+ *   KEYCHANGE  DATE          AUTHOR   DESCRIPTION                            *
+ * ---------------------------------------------------------------------------*
+ *    -------   May 09, 2011  DatNQ    Create new                             *
+ ******************************************************************************/
+
+/**
+ * Modification into Android-internal HttpRetreiver.java
  * Copyright (C) 2012 The AOKP Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
+
 
 package com.android.internal.util.weather;
 
