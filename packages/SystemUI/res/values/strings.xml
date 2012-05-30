@@ -109,6 +109,21 @@
     <!-- Label in the system panel for airplane mode (all radios are turned off)[CHAR LIMIT=30] -->
     <string name="status_bar_settings_airplane">Airplane mode</string>
 
+    <!-- Label in the system panel for gps state [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_location">GPS</string>
+
+    <!-- Label in the system panel for flashlight state [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_flashlight">LED flashlight</string>
+
+    <!-- Label in the system panel for mobile data state [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_mobile_data">Mobile data</string>
+
+    <!-- Label in the system panel for network mode [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_network_mode">2G/3G</string>
+
+    <!-- Label in the system panel for sound [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_sound_mode">Sound</string>
+
     <!-- Label in system panel saying the device will use the orientation sensor to rotate [CHAR LIMIT=30] -->
     <string name="status_bar_settings_auto_rotation">Auto-rotate screen</string>
 
