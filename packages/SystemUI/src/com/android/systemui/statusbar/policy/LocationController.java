@@ -22,6 +22,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,6 +30,7 @@ import android.location.LocationManager;
 import android.provider.Settings;
 import android.util.Slog;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 // private NM API
@@ -37,14 +39,30 @@ import com.android.internal.statusbar.StatusBarNotification;
 
 import com.android.systemui.R;
 
-public class LocationController extends BroadcastReceiver {
+public class LocationController extends BroadcastReceiver implements CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "StatusBar.LocationController";
 
     private static final int GPS_NOTIFICATION_ID = 374203-122084;
 
     private Context mContext;
+    private CompoundButton mCheckBox;
 
     private INotificationManager mNotificationService;
+
+    private boolean mGps;
+
+    public LocationController(Context context, CompoundButton checkbox) {
+        this(context);
+        mContext = context;
+        mGps = getGps();
+        mCheckBox = checkbox;
+        checkbox.setChecked(mGps);
+        checkbox.setOnCheckedChangeListener(this);
+    }
+
+    public void onCheckedChanged(CompoundButton view, boolean checked) {
+        Settings.Secure.setLocationProviderEnabled(mContext.getContentResolver(), LocationManager.GPS_PROVIDER, checked);
+    }
 
     public LocationController(Context context) {
         mContext = context;
@@ -57,6 +75,15 @@ public class LocationController extends BroadcastReceiver {
         NotificationManager nm = (NotificationManager)context.getSystemService(
                 Context.NOTIFICATION_SERVICE);
         mNotificationService = nm.getService();
+    }
+
+    private boolean getGps() {
+        ContentResolver cr = mContext.getContentResolver();
+        return Settings.Secure.isLocationProviderEnabled(cr, LocationManager.GPS_PROVIDER);
+    }
+
+    public void release() {
+        mContext.unregisterReceiver(this);
     }
 
     @Override
