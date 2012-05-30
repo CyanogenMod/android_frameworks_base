@@ -38,4 +38,6 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"Αξεσουάρ USB"</string>
     <string name="label_view" msgid="6304565553218192990">"Προβολή"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Χρήση από προεπιλογή για αυτό το εξάρτημα USB"</string>
+
+    <string name="powerwidget_screen_timeout_toast">Χρονικό όριο οθόνης: %1$d %2$s</string>
 </resources>

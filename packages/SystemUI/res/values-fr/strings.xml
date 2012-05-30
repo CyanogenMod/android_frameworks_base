@@ -38,4 +38,6 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"Accessoire USB"</string>
     <string name="label_view" msgid="6304565553218192990">"Afficher"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Utiliser par défaut pour cet accessoire USB"</string>
+
+    <string name="powerwidget_screen_timeout_toast">Veille de l\'écran réglée à : %1$d %2$s</string>
 </resources>
