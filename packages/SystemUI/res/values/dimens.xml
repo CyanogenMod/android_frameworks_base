@@ -26,8 +26,17 @@
     <dimen name="status_bar_recents_app_icon_max_height">48dp</dimen>
 
     <!-- Size of application thumbnail -->
-    <dimen name="status_bar_recents_thumbnail_width">164dp</dimen>
+    <dimen name="status_bar_recents_thumbnail_width">162dp</dimen>
     <dimen name="status_bar_recents_thumbnail_height">145dp</dimen>
+
+     <!-- Upper width limit for application icon for Sense View-->
+     <dimen name="status_bar_recents_app_icon_max_width_sense">42dp</dimen>	
+     <!-- Upper height limit for application icon for Sense View-->	
+     <dimen name="status_bar_recents_app_icon_max_height_sense">42dp</dimen>
+
+     <!-- Dimensions for Sense View -->
+     <dimen name="status_bar_recents_thumbnail_width_sense">162.0dip</dimen>	
+     <dimen name="status_bar_recents_thumbnail_height_sense">385.0dip</dimen>
 
     <!-- Size of application label text -->
     <dimen name="status_bar_recents_app_label_text_size">14dip</dimen>

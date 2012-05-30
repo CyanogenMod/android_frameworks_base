@@ -42,6 +42,9 @@
     <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Ajustes"</string>
     <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
     <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Modo avión"</string>
+    <string name="status_bar_settings_flashlight">Linterna</string>
+    <string name="status_bar_settings_mobile_data">Datos móviles</string>
+    <string name="status_bar_settings_sound_mode">Volumen</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Girar pantalla automáticamente"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"SILENC"</string>
     <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"AUTO"</string>
@@ -138,4 +141,16 @@
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"Buscando GPS"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"Ubicación definida por GPS"</string>
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Borrar todas las notificaciones"</string>
+    <string name="recent_apps_title">Aplicaciones Recientes</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Seleccionar acción a asignar</string>
+    <string name="navbar_home_button">Botón inicio</string>
+    <string name="navbar_recent_button">Botón recientes</string>
+    <string name="navbar_search_button">Botón busqueda</string>
+    <string name="navbar_back_button">Botón atrás</string>
+    <string name="navbar_empty_button">Botón vacio</string>
+    <string name="navbar_menu_conditional_button">Botón menú (Auto Ocultar)</string>
+    <string name="navbar_menu_always_button">Botón menú (Mostrar Siempre) </string>
+    <string name="navbar_menu_big_button">Botón menu</string>
 </resources>

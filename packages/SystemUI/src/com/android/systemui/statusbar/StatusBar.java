@@ -33,6 +33,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManagerImpl;
+import android.provider.Settings;
+import android.content.ContentResolver;
+import android.database.ContentObserver;
+import android.os.Handler;
 
 import java.util.ArrayList;
 
@@ -47,6 +51,7 @@ import com.android.systemui.R;
 public abstract class StatusBar extends SystemUI implements CommandQueue.Callbacks {
     static final String TAG = "StatusBar";
     private static final boolean SPEW = false;
+    private static final int NO_OPACITY = -16777216;
 
     protected CommandQueue mCommandQueue;
     protected IStatusBarService mBarService;
@@ -58,12 +63,33 @@ public abstract class StatusBar extends SystemUI implements CommandQueue.Callbac
     public abstract void animateCollapse();
 
     private DoNotDisturb mDoNotDisturb;
+    private static View mStatusBar;
+    private static WindowManager.LayoutParams mLayoutParams;
+    private static int mOpacity;
+    private Handler mHandler;
+
+    private final class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_TRANSPARENCY), false, this);
+	    setStatusBarParams();
+        }
+
+        @Override public void onChange(boolean selfChange) {
+            setStatusBarParams();
+        }
+    }
 
     public void start() {
         // First set up our views and stuff.
-        View sb = makeStatusBarView();
+        mStatusBar = makeStatusBarView();
 
-        mStatusBarContainer.addView(sb);
+	mStatusBarContainer.addView(mStatusBar);
 
         // Connect in to the status bar manager service
         StatusBarIconList iconList = new StatusBarIconList();
@@ -112,18 +138,18 @@ public abstract class StatusBar extends SystemUI implements CommandQueue.Callbac
 
         // Put up the view
         final int height = getStatusBarHeight();
-
-        final WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                height,
-                WindowManager.LayoutParams.TYPE_STATUS_BAR,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
-                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
-                // We use a pixel format of RGB565 for the status bar to save memory bandwidth and
-                // to ensure that the layer can be handled by HWComposer.  On some devices the
-                // HWComposer is unable to handle SW-rendered RGBX_8888 layers.
-                PixelFormat.RGB_565);
+        getStatusBarParams();
+	mLayoutParams = new WindowManager.LayoutParams(
+		        ViewGroup.LayoutParams.MATCH_PARENT,
+		        height,
+		        WindowManager.LayoutParams.TYPE_STATUS_BAR,
+		        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+		            | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
+		            | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                            PixelFormat.TRANSPARENT);
+	mHandler = new Handler();
+	SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+	settingsObserver.observe();
         
         // the status bar should be in an overlay if possible
         final Display defaultDisplay 
@@ -135,14 +161,14 @@ public abstract class StatusBar extends SystemUI implements CommandQueue.Callbac
         // for the status bar, we prevent the GPU from having to wake up just to do these small
         // updates, which should help keep power consumption down.
 
-        lp.gravity = getStatusBarGravity();
-        lp.setTitle("StatusBar");
-        lp.packageName = mContext.getPackageName();
-        lp.windowAnimations = R.style.Animation_StatusBar;
-        WindowManagerImpl.getDefault().addView(mStatusBarContainer, lp);
+        mLayoutParams.gravity = getStatusBarGravity();
+        mLayoutParams.setTitle("StatusBar");
+        mLayoutParams.packageName = mContext.getPackageName();
+        mLayoutParams.windowAnimations = R.style.Animation_StatusBar;
+        WindowManagerImpl.getDefault().addView(mStatusBarContainer, mLayoutParams);
 
         if (SPEW) {
-            Slog.d(TAG, "Added status bar view: gravity=0x" + Integer.toHexString(lp.gravity) 
+            Slog.d(TAG, "Added status bar view: gravity=0x" + Integer.toHexString(mLayoutParams.gravity) 
                    + " icons=" + iconList.size()
                    + " disabled=0x" + Integer.toHexString(switches[0])
                    + " lights=" + switches[1]
@@ -152,6 +178,19 @@ public abstract class StatusBar extends SystemUI implements CommandQueue.Callbac
         }
 
         mDoNotDisturb = new DoNotDisturb(mContext);
+    }
+
+    private void getStatusBarParams(){
+        mOpacity = Settings.System.getInt(mStatusBar.getContext().getContentResolver(), Settings.System.STATUS_BAR_TRANSPARENCY, 100);
+    }
+
+    private void setStatusBarParams(){
+        getStatusBarParams();
+        if (mOpacity != 100) {
+	    int background = (int) (((float) mOpacity / 100.0F) * 255) * 0x1000000;
+            mStatusBar.setBackgroundColor(background);
+        } else
+            mStatusBar.setBackgroundColor(NO_OPACITY);
     }
 
     protected View updateNotificationVetoButton(View row, StatusBarNotification n) {

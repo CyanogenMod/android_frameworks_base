@@ -31,4 +31,8 @@
     <color name="notification_list_shadow_top">#80000000</color>
     <drawable name="recents_callout_line">#99ffffff</drawable>
     <drawable name="notification_item_background_legacy_color">#ffaaaaaa</drawable>
+
+    <!-- Recent Apps Sense Style -->
+    <drawable name="status_bar_recents_background_solid_sense">#00000000</drawable>
+    <drawable name="status_bar_recents_app_thumbnail_background_sense">#00000000</drawable>
 </resources>

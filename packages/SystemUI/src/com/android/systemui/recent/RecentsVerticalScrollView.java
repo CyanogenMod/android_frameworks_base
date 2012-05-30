@@ -113,9 +113,13 @@ public class RecentsVerticalScrollView extends ScrollView implements SwipeHelper
                 final View appTitle = view.findViewById(R.id.app_label);
                 appTitle.setContentDescription(" ");
                 appTitle.setOnTouchListener(noOpListener);
-                final View calloutLine = view.findViewById(R.id.recents_callout_line);
-                calloutLine.setOnTouchListener(noOpListener);
-                mLinearLayout.addView(view);
+		try{
+		        final View calloutLine = view.findViewById(R.id.recents_callout_line);
+		        calloutLine.setOnTouchListener(noOpListener);
+		        mLinearLayout.addView(view);
+		} catch(Exception e){
+			//If we got an exception, we're using sense recent apps :)
+		}
             }
         }
         for (int i = mAdapter.getCount(); i < mLinearLayout.getChildCount(); i++) {

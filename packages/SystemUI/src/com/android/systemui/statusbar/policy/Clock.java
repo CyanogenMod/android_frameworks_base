@@ -52,23 +52,28 @@ import com.android.internal.R;
  * minutes.
  */
 public class Clock extends TextView {
-    private boolean mAttached;
-    private Calendar mCalendar;
-    private String mClockFormatString;
-    private SimpleDateFormat mClockFormat;
+    protected boolean mAttached;
+    protected Calendar mCalendar;
+    protected String mClockFormatString;
+    protected SimpleDateFormat mClockFormat;
 
-    private static final int AM_PM_STYLE_NORMAL  = 0;
-    private static final int AM_PM_STYLE_SMALL   = 1;
-    private static final int AM_PM_STYLE_GONE    = 2;
+    public static final int AM_PM_STYLE_NORMAL  = 0;
+    public static final int AM_PM_STYLE_SMALL   = 1;
+    public static final int AM_PM_STYLE_GONE    = 2;
 
-    private static int AM_PM_STYLE = AM_PM_STYLE_GONE;
+    protected static int AM_PM_STYLE = AM_PM_STYLE_GONE;
 
-    private int mAmPmStyle;
-    private boolean mShowClock;
+    public static final int CLOCK_STYLE_NORMAL   = 0;
+    public static final int CLOCK_STYLE_CENTERED = 1;
+    public static final int CLOCK_STYLE_GONE     = 2;
+
+    protected int mAmPmStyle;
+    protected int mClockStyle;
+    protected boolean mShowClock;
 
     Handler mHandler;
 
-    class SettingsObserver extends ContentObserver {
+    protected class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
         }
@@ -78,7 +83,8 @@ public class Clock extends TextView {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_AM_PM), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CLOCK), false, this);
+                    Settings.System.STATUS_BAR_CLOCK_STYLE), false, this);
+            updateSettings();
         }
 
         @Override public void onChange(boolean selfChange) {
@@ -96,12 +102,6 @@ public class Clock extends TextView {
 
     public Clock(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        mHandler = new Handler();
-        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
-
-        updateSettings();
     }
 
     @Override
@@ -125,7 +125,10 @@ public class Clock extends TextView {
 
         // The time zone may have changed while the receiver wasn't registered, so update the Time
         mCalendar = Calendar.getInstance(TimeZone.getDefault());
-
+        
+        mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
         // Make sure we update to the current time
         updateClock();
     }
@@ -139,7 +142,7 @@ public class Clock extends TextView {
         }
     }
 
-    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+    protected final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -154,12 +157,12 @@ public class Clock extends TextView {
         }
     };
 
-    final void updateClock() {
+    protected final void updateClock() {
         mCalendar.setTimeInMillis(System.currentTimeMillis());
         setText(getSmallTime());
     }
 
-    private final CharSequence getSmallTime() {
+    protected final CharSequence getSmallTime() {
         Context context = getContext();
         boolean b24 = DateFormat.is24HourFormat(context);
         int res;
@@ -238,28 +241,30 @@ public class Clock extends TextView {
 
     }
 
-    private void updateSettings(){
+    protected void updateSettings(){
         ContentResolver resolver = mContext.getContentResolver();
 
-        mAmPmStyle = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_AM_PM, 2));
+        mAmPmStyle = Settings.System.getInt(resolver, Settings.System.STATUS_BAR_AM_PM, 2);
+        AM_PM_STYLE = mAmPmStyle;
+        mClockFormatString = "";
 
-        if (mAmPmStyle != AM_PM_STYLE) {
-            AM_PM_STYLE = mAmPmStyle;
-            mClockFormatString = "";
+        mClockStyle = Settings.System.getInt(resolver, Settings.System.STATUS_BAR_CLOCK_STYLE, 0);
+        mShowClock = mClockStyle != CLOCK_STYLE_GONE;
+        updateClockVisibility();
+        updateClock();
+    }
 
-            if (mAttached) {
-                updateClock();
-            }
-        }
-
-        mShowClock = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_CLOCK, 1) == 1);
-
-        if(mShowClock)
+    protected void updateClockVisibility() {
+        if (mClockStyle == CLOCK_STYLE_NORMAL)
             setVisibility(View.VISIBLE);
         else
             setVisibility(View.GONE);
+    }
+
+
+    public void updateVisibilityFromStatusBar(boolean show) {
+	if(mClockStyle == CLOCK_STYLE_NORMAL)        
+           setVisibility(show ? View.VISIBLE : View.GONE);
     }
 }
 

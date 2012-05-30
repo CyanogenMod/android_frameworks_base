@@ -37,6 +37,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Process;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.LruCache;
@@ -61,10 +62,13 @@ public class RecentTasksLoader {
     private int mIconDpi;
     private Bitmap mDefaultThumbnailBackground;
 
+    private boolean mSenseRecent = false;
+
     public RecentTasksLoader(Context context) {
         mContext = context;
 
         final Resources res = context.getResources();
+	mSenseRecent = Settings.System.getInt(mContext.getContentResolver(), Settings.System.SENSE_RECENT, 0) == 1;
 
         // get the icon size we want -- on tablets, we use bigger icons
         boolean isTablet = res.getBoolean(R.bool.config_recents_interface_for_tablets);
@@ -88,7 +92,10 @@ public class RecentTasksLoader {
         // Render the default thumbnail background
         int width = (int) res.getDimensionPixelSize(com.android.internal.R.dimen.thumbnail_width);
         int height = (int) res.getDimensionPixelSize(com.android.internal.R.dimen.thumbnail_height);
-        int color = res.getColor(R.drawable.status_bar_recents_app_thumbnail_background);
+        int color = res.getColor(mSenseRecent ? R.drawable.status_bar_recents_app_thumbnail_background_sense : R.drawable.status_bar_recents_app_thumbnail_background);
+
+        if (DEBUG) Log.v(TAG, "default thumbnail background: width="
+                        + width + ", height=" + height);
 
         mDefaultThumbnailBackground = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(mDefaultThumbnailBackground);

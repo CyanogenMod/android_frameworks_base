@@ -24,9 +24,17 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.Matrix;
 import android.graphics.Shader.TileMode;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Color;
+import android.graphics.Canvas;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Bitmap.Config;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.Shader.TileMode;
 import android.net.Uri;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -50,6 +58,9 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.content.ContentResolver;
+import android.database.ContentObserver;
+import android.os.Handler;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.StatusBar;
@@ -61,6 +72,7 @@ import java.util.ArrayList;
 
 public class RecentsPanelView extends RelativeLayout implements OnItemClickListener, RecentsCallback,
         StatusBarPanel, Animator.AnimatorListener, View.OnTouchListener {
+    
     static final String TAG = "RecentsPanelView";
     static final boolean DEBUG = TabletStatusBar.DEBUG || PhoneStatusBar.DEBUG || false;
     private Context mContext;
@@ -80,6 +92,10 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
     private TaskDescriptionAdapter mListAdapter;
     private int mThumbnailWidth;
     private boolean mFitThumbnailToXY;
+    private boolean mSenseRecent = false;
+    private boolean mIconEnabled = false;
+    private int mFontSize = 14;
+    private Handler mHandler;
 
     public void setRecentTasksLoader(RecentTasksLoader loader) {
         mRecentTasksLoader = loader;
@@ -92,6 +108,27 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
         }
         public boolean onLongClick(View v) {
             return mOtherView.performLongClick();
+        }
+    }
+
+    private final class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SENSE_RECENT), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENTS_ICON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENTS_TEXT_SIZE), false, this);
+            updateValuesFromResources();
+        }
+
+        @Override public void onChange(boolean selfChange) {
+            updateValuesFromResources();
         }
     }
 
@@ -127,30 +164,30 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.status_bar_recent_item, parent, false);
+                convertView = mInflater.inflate(mSenseRecent ? R.layout.status_bar_recent_item_sense : R.layout.status_bar_recent_item, parent, false);
                 holder = new ViewHolder();
                 holder.thumbnailView = convertView.findViewById(R.id.app_thumbnail);
-                holder.thumbnailViewImage = (ImageView) convertView.findViewById(
-                        R.id.app_thumbnail_image);
+                holder.thumbnailViewImage = (ImageView) convertView.findViewById(R.id.app_thumbnail_image);
                 // If we set the default thumbnail now, we avoid an onLayout when we update
                 // the thumbnail later (if they both have the same dimensions)
                 updateThumbnail(holder, mRecentTasksLoader.getDefaultThumbnail(), false, false);
 
                 holder.iconView = (ImageView) convertView.findViewById(R.id.app_icon);
-                holder.labelView = (TextView) convertView.findViewById(R.id.app_label);
+                holder.labelView =  (TextView) convertView.findViewById(R.id.app_label);
                 holder.descriptionView = (TextView) convertView.findViewById(R.id.app_description);
-
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            // index is reverse since most recent appears at the bottom...
             final int index = mRecentTaskDescriptions.size() - position - 1;
 
             final TaskDescription td = mRecentTaskDescriptions.get(index);
-            holder.iconView.setImageDrawable(td.getIcon());
-            holder.labelView.setText(td.getLabel());
+	    if(mIconEnabled)
+		    holder.iconView.setImageDrawable(td.getIcon());
+	    holder.labelView.setText(td.getLabel());
+	    holder.labelView.setTextSize(mFontSize);
+
             holder.thumbnailView.setContentDescription(td.getLabel());
             updateThumbnail(holder, td.getThumbnail(), true, false);
 
@@ -193,7 +230,7 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
 
             // if there are no apps, either bring up a "No recent apps" message, or just
             // quit early
-            boolean noApps = (mRecentTaskDescriptions.size() == 0);
+            boolean noApps = (mRecentTaskDescriptions.size() == 0 && !mSenseRecent);
             if (mRecentsNoApps != null) {
                 mRecentsNoApps.setVisibility(noApps ? View.VISIBLE : View.INVISIBLE);
             } else {
@@ -248,7 +285,7 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
 
     public void handleShowBackground(boolean show) {
         if (show) {
-            mRecentsScrim.setBackgroundResource(R.drawable.status_bar_recents_background_solid);
+            mRecentsScrim.setBackgroundResource(mSenseRecent ? R.drawable.status_bar_recents_background_solid_sense : R.drawable.status_bar_recents_background_solid);
         } else {
             mRecentsScrim.setBackgroundDrawable(null);
         }
@@ -321,13 +358,18 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
     public RecentsPanelView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
-        updateValuesFromResources();
+	mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
     }
 
     public void updateValuesFromResources() {
         final Resources res = mContext.getResources();
-        mThumbnailWidth = Math.round(res.getDimension(R.dimen.status_bar_recents_thumbnail_width));
         mFitThumbnailToXY = res.getBoolean(R.bool.config_recents_thumbnail_image_fits_to_xy);
+        mThumbnailWidth = Math.round(res.getDimension(R.dimen.status_bar_recents_thumbnail_width));
+	mSenseRecent = Settings.System.getInt(mContext.getContentResolver(), Settings.System.SENSE_RECENT, 0) == 1;
+	mIconEnabled = Settings.System.getInt(mContext.getContentResolver(), Settings.System.RECENTS_ICON, 1) == 1;
+        mFontSize = Settings.System.getInt(mContext.getContentResolver(), Settings.System.RECENTS_TEXT_SIZE, 14);	
     }
 
     @Override
@@ -399,10 +441,38 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
 
     private void updateThumbnail(ViewHolder h, Bitmap thumbnail, boolean show, boolean anim) {
         if (thumbnail != null) {
-            // Should remove the default image in the frame
-            // that this now covers, to improve scrolling speed.
-            // That can't be done until the anim is complete though.
-            h.thumbnailViewImage.setImageBitmap(thumbnail);
+
+	// Display Reflection
+	if(mSenseRecent && h.thumbnailViewImage != null){
+            final int reflectionGap = 4;
+            int width = thumbnail.getWidth();
+            int height = thumbnail.getHeight();
+	
+            Matrix matrix = new Matrix();
+            matrix.preScale(1, -1);
+	
+            Bitmap reflectionImage = Bitmap.createBitmap(thumbnail, 0, height * 2 / 3, width, height/3, matrix, false);	    
+            Bitmap bitmapWithReflection = Bitmap.createBitmap(width, (height + height/3), Config.ARGB_8888);
+	      
+            Canvas canvas = new Canvas(bitmapWithReflection);
+            canvas.drawBitmap(thumbnail, 0, 0, null);
+            Paint defaultPaint = new Paint();
+            canvas.drawRect(0, height, width, height + reflectionGap, defaultPaint);
+            canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
+	        
+            Paint paint = new Paint(); 
+            LinearGradient shader = new LinearGradient(0, thumbnail.getHeight(), 0, 
+              bitmapWithReflection.getHeight() + reflectionGap, 0x70ffffff, 0x00ffffff, 
+              TileMode.CLAMP); 
+            paint.setShader(shader); 
+            paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN)); 
+            canvas.drawRect(0, height, width, 
+              bitmapWithReflection.getHeight() + reflectionGap, paint); 
+
+            h.thumbnailViewImage.setImageBitmap(bitmapWithReflection);
+	}
+	else
+	        h.thumbnailViewImage.setImageBitmap(thumbnail);
 
             // scale the image to fill the full width of the ImageView. do this only if
             // we haven't set a bitmap before, or if the bitmap size has changed
@@ -417,6 +487,10 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
                     scaleMatrix.setScale(scale, scale);
                     h.thumbnailViewImage.setScaleType(ScaleType.MATRIX);
                     h.thumbnailViewImage.setImageMatrix(scaleMatrix);
+	            if(mSenseRecent){
+			h.thumbnailViewImage.setScaleType(ScaleType.FIT_CENTER);
+			h.thumbnailViewImage.setRotationY(25.0f);
+		    }
                 }
             }
             if (show && h.thumbnailView.getVisibility() != View.VISIBLE) {
@@ -436,8 +510,7 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
                 ViewGroup container = mRecentsContainer;
                 if (container instanceof HorizontalScrollView
                         || container instanceof ScrollView) {
-                    container = (ViewGroup)container.findViewById(
-                            R.id.recents_linear_layout);
+                    container = (ViewGroup)container.findViewById(R.id.recents_linear_layout);
                 }
                 // Look for a view showing this thumbnail, to update.
                 for (int i=0; i<container.getChildCount(); i++) {
@@ -518,15 +591,13 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
 
     private void updateUiElements(Configuration config) {
         final int items = mRecentTaskDescriptions.size();
-
         mRecentsContainer.setVisibility(items > 0 ? View.VISIBLE : View.GONE);
 
         // Set description for accessibility
         int numRecentApps = mRecentTaskDescriptions.size();
         String recentAppsAccessibilityDescription;
         if (numRecentApps == 0) {
-            recentAppsAccessibilityDescription =
-                getResources().getString(R.string.status_bar_no_recent_apps);
+            recentAppsAccessibilityDescription = getResources().getString(R.string.status_bar_no_recent_apps);
         } else {
             recentAppsAccessibilityDescription = getResources().getQuantityString(
                 R.plurals.status_bar_accessibility_recent_apps, numRecentApps, numRecentApps);

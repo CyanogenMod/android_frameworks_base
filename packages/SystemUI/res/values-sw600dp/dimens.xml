@@ -38,8 +38,8 @@
     <dimen name="status_bar_recents_app_icon_max_height">64dp</dimen>
 
     <!-- Size of application icon -->
-    <dimen name="status_bar_recents_thumbnail_width">208dp</dimen>
-    <dimen name="status_bar_recents_thumbnail_height">130dp</dimen>
+    <dimen name="status_bar_recents_thumbnail_width">300dp</dimen>
+    <dimen name="status_bar_recents_thumbnail_height">220dp</dimen>
 
     <!-- Width of recents panel -->
     <dimen name="status_bar_recents_width">600dp</dimen>
