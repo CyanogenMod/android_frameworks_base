@@ -136,6 +136,7 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
         int response = p.readInt();
 
         switch(response) {
+            case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
             case 21004: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
             case 21005: ret = responseVoid(p); break; // RIL_UNSOL_IMS_NETWORK_STATE_CHANGED
             case 21007: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
@@ -150,6 +151,11 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
         }
 
         switch(response) {
+            case RIL_UNSOL_RIL_CONNECTED:
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                notifyRegistrantsRilConnectionChanged(((int[])ret)[0]);
+                break;
             case 21004:
             case 21005:
             case 21007:
@@ -160,6 +166,19 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
                                         new AsyncResult (null, null, null));
                 }
                 break;
-                    }
+        }
+    }
+
+    /**
+     * Notify all registrants that the ril has connected or disconnected.
+     *
+     * @param rilVer is the version of the ril or -1 if disconnected.
+     */
+    private void notifyRegistrantsRilConnectionChanged(int rilVer) {
+        mRilVersion = rilVer;
+        if (mRilConnectedRegistrants != null) {
+            mRilConnectedRegistrants.notifyRegistrants(
+                                new AsyncResult (null, new Integer(rilVer), null));
+        }
     }
 }
