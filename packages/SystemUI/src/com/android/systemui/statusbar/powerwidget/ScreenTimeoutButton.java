@@ -5,6 +5,7 @@ import com.android.systemui.R;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.Settings;
 import android.view.Gravity;
@@ -108,8 +109,8 @@ public class ScreenTimeoutButton extends PowerButton {
         }
 
         // inform users of how long the timeout is now
-        mToast = Toast.makeText(context, "Screen timeout set to: " + timeoutToString(screenTimeout),
-                Toast.LENGTH_LONG);
+        final String toast = makeTimeoutToastString(context, screenTimeout);
+        mToast = Toast.makeText(context, toast, Toast.LENGTH_LONG);
         mToast.setGravity(Gravity.CENTER, mToast.getXOffset() / 2, mToast.getYOffset() / 2);
         mToast.show();
     }
@@ -128,29 +129,41 @@ public class ScreenTimeoutButton extends PowerButton {
         return true;
     }
 
+    private String makeTimeoutToastString(Context context, int timeout) {
+        Resources res = context.getResources();
+        int resId;
+
+        /* ms -> seconds */
+        timeout /= 1000;
+
+        if (timeout >= 60 && timeout % 60 == 0) {
+            /* seconds -> minutes */
+            timeout /= 60;
+            if (timeout >= 60 && timeout % 60 == 0) {
+                /* minutes -> hours */
+                timeout /= 60;
+                resId = timeout == 1
+                        ? com.android.internal.R.string.hour
+                        : com.android.internal.R.string.hours;
+            } else {
+                resId = timeout == 1
+                        ? com.android.internal.R.string.minute
+                        : com.android.internal.R.string.minutes;
+            }
+        } else {
+            resId = timeout == 1
+                    ? com.android.internal.R.string.second
+                    : com.android.internal.R.string.seconds;
+        }
+
+        return res.getString(R.string.powerwidget_screen_timeout_toast,
+                timeout, res.getString(resId));
+    }
+
     private static int getScreenTimeout(Context context) {
         return Settings.System.getInt(
                 context.getContentResolver(),
                 Settings.System.SCREEN_OFF_TIMEOUT, 0);
-    }
-
-    private static String timeoutToString(int timeout) {
-        String[] tags = new String[] {
-                "second(s)",
-                "minute(s)",
-                "hour(s)"
-            };
-
-        // default to however many seconds we have
-        int tmp = (timeout / 1000);
-        String sTimeout = tmp + " " + tags[0];
-
-        for(int i = 1; i < tags.length && tmp >= 60; i++) {
-            tmp /= (60 * i);
-            sTimeout = tmp + " " + tags[i];
-        }
-
-        return sTimeout;
     }
 
     private static int getCurrentCMMode(Context context) {
