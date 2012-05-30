@@ -1862,7 +1862,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         if (RILJ_LOGD) riljLog("setCurrentPreferredNetworkType: " + mSetPreferredNetworkType);
         setPreferredNetworkType(mSetPreferredNetworkType, null);
     }
-    private int mSetPreferredNetworkType;
+    protected int mSetPreferredNetworkType;
 
     /**
      * {@inheritDoc}

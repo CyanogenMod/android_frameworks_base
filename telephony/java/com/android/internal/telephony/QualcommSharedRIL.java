@@ -46,7 +46,6 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
     protected IccHandler mIccHandler;
     protected String mAid;
     protected boolean mUSIM = false;
-    protected int mSetPreferredNetworkType;
     protected String[] mLastDataIface = new String[20];
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
@@ -60,6 +59,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
 
     public QualcommSharedRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
+        mSetPreferredNetworkType = -1;
     }
 
     @Override public void
@@ -334,10 +334,12 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
         /**
           * If not using a USIM, ignore LTE mode and go to 3G
           */
-        if (!mUSIM && networkType == RILConstants.NETWORK_MODE_LTE_GSM_WCDMA) {
+        if (!mUSIM && networkType == RILConstants.NETWORK_MODE_LTE_GSM_WCDMA &&
+                 mSetPreferredNetworkType >= RILConstants.NETWORK_MODE_WCDMA_PREF) {
             networkType = RILConstants.NETWORK_MODE_WCDMA_PREF;
         }
         mSetPreferredNetworkType = networkType;
+
         super.setPreferredNetworkType(networkType, response);
     }
 
