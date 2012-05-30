@@ -949,6 +949,7 @@ class KeyguardStatusViewManager implements OnClickListener {
         if (v == mEmergencyCallButton) {
             mCallback.takeEmergencyCallAction();
         } else if (v == mWeatherPanel) {
+            mCallback.pokeWakelock();
             if (!mHandler.hasMessages(QUERY_WEATHER)) {
                 mHandler.sendEmptyMessage(QUERY_WEATHER);
             }
