@@ -1263,4 +1263,68 @@
     <!-- Name of wildcard profile. -->
     <string name="wildcardProfile">Другой</string>
 
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Торнадо</string>
+    <string name="weather_1">Тропический шторм</string>
+    <string name="weather_2">Ураган</string>
+    <string name="weather_3">Сильные грозы</string>
+    <string name="weather_4">Грозы</string>
+    <string name="weather_5">Дождь со снегом</string>
+    <string name="weather_6">Дождь с мокрым снегом</string>
+    <string name="weather_7">Мокрый снег</string>
+    <string name="weather_8">Изморозь</string>
+    <string name="weather_9">Мелкий дождь</string>
+    <string name="weather_10">Ледяной дождь</string>
+    <string name="weather_11">Ливень</string>
+    <string name="weather_12">Ливень</string>
+    <string name="weather_13">Ливневый снег</string>
+    <string name="weather_14">Небольшой дождь со снегом</string>
+    <string name="weather_15">Позёмка</string>
+    <string name="weather_16">Снег</string>
+    <string name="weather_17">Град</string>
+    <string name="weather_18">Мокрый снег</string>
+    <string name="weather_19">Пыль</string>
+    <string name="weather_20">Туманно</string>
+    <string name="weather_21">Туман</string>
+    <string name="weather_22">Дым</string>
+    <string name="weather_23">Ветренно</string>
+    <string name="weather_24">Ветренно</string>
+    <string name="weather_25">Холодно</string>
+    <string name="weather_26">Облачно</string>
+    <string name="weather_27">Переменная облачность</string> <!-- Night -->
+    <string name="weather_28">Переменная облачность</string> <!-- Day -->
+    <string name="weather_29">Переменная облачность</string> <!-- Night -->
+    <string name="weather_30">Переменная облачность</string> <!-- Day -->
+    <string name="weather_31">Ясно</string> <!-- Night -->
+    <string name="weather_32">Солнечно</string>
+    <string name="weather_33">Ясно</string> <!-- Night -->
+    <string name="weather_34">Ясно</string> <!-- Day -->
+    <string name="weather_35">Дождь с градом</string>
+    <string name="weather_36">Жарко</string>
+    <string name="weather_37">Местами грозы</string>
+    <string name="weather_38">Возможны грозы</string>
+    <string name="weather_39">Возможны грозы</string>
+    <string name="weather_40">Возможны грозы</string>
+    <string name="weather_41">Сильный снег</string>
+    <string name="weather_42">Возможен снег</string>
+    <string name="weather_43">Сильный снег</string>
+    <string name="weather_44">Переменная облачность</string>
+    <string name="weather_45">Дождь с грозой</string>
+    <string name="weather_46">Дождь со снегом</string>
+    <string name="weather_47">Местами грозы</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">С</string>
+    <string name="weather_NE">СВ</string>
+    <string name="weather_E">В</string>
+    <string name="weather_SE">ЮВ</string>
+    <string name="weather_S">Ю</string>
+    <string name="weather_SW">ЮЗ</string>
+    <string name="weather_W">З</string>
+    <string name="weather_NW">СЗ</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_tap_to_refresh">Нажмите для обновления</string>
 </resources>
