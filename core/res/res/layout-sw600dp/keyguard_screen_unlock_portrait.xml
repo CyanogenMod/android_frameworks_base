@@ -47,7 +47,7 @@
                 android:layout_height="512dip"
                 />
 
-            <include layout="@layout/keyguard_screen_status_land"
+            <include layout="@layout/keyguard_screen_status_port"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dip"
