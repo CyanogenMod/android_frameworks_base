@@ -68,7 +68,7 @@ public class ConfirmDialog extends Activity implements CompoundButton.OnCheckedC
             ((CompoundButton) view.findViewById(R.id.check)).setOnCheckedChangeListener(this);
 
             mDialog = new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIconAttribute(android.R.attr.alertDialogIcon)
                     .setTitle(android.R.string.dialog_alert_title)
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, this)
