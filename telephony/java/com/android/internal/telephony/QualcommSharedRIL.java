@@ -574,7 +574,8 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
         }
 
         switch(response) {
-            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p);
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
+            case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
             case 1035: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
             case 1036: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED
             case 1037: ret = responseVoid(p); break; // RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE
@@ -583,7 +584,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
             default:
                 // Rewind the Parcel
                 p.setDataPosition(dataPosition);
- 
+
                 // Forward responses that we are not overriding to the super class
                 super.processUnsolicited(p);
                 return;
@@ -593,7 +594,12 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED:
                 int state = p.readInt();
                 setRadioStateFromRILInt(state);
-            break;
+                break;
+            case RIL_UNSOL_RIL_CONNECTED:
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                notifyRegistrantsRilConnectionChanged(((int[])ret)[0]);
+                break;
             case 1035:
             case 1036:
                 break;
@@ -607,6 +613,19 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
                 break;
             case 1038:
                 break;
+        }
+    }
+
+    /**
+     * Notify all registrants that the ril has connected or disconnected.
+     *
+     * @param rilVer is the version of the ril or -1 if disconnected.
+     */
+    private void notifyRegistrantsRilConnectionChanged(int rilVer) {
+        mRilVersion = rilVer;
+        if (mRilConnectedRegistrants != null) {
+            mRilConnectedRegistrants.notifyRegistrants(
+                                new AsyncResult (null, new Integer(rilVer), null));
         }
     }
 
