@@ -53,6 +53,7 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
             case RIL_UNSOL_NITZ_TIME_RECEIVED:
                 handleNitzTimeReceived(p);
                 return;
+            case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
             case 1038: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
 
             default:
@@ -65,6 +66,15 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
         }
 
         switch(response) {
+            case RIL_UNSOL_RIL_CONNECTED:
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                // Initial conditions
+                //setRadioPower(false, null);
+                //setPreferredNetworkType(mPreferredNetworkType, null);
+                //setCdmaSubscriptionSource(mCdmaSubscription, null);
+                notifyRegistrantsRilConnectionChanged(((int[])ret)[0]);
+            break;
             case 1038: // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
                 if (RILJ_LOGD) unsljLog(response);
 
@@ -73,6 +83,19 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
                 mVoiceNetworkStateRegistrants
                     .notifyRegistrants(new AsyncResult(null, null, null));
             break;
+        }
+    }
+
+    /**
+     * Notifiy all registrants that the ril has connected or disconnected.
+     *
+     * @param rilVer is the version of the ril or -1 if disconnected.
+     */
+    private void notifyRegistrantsRilConnectionChanged(int rilVer) {
+        mRilVersion = rilVer;
+        if (mRilConnectedRegistrants != null) {
+            mRilConnectedRegistrants.notifyRegistrants(
+                                new AsyncResult (null, new Integer(rilVer), null));
         }
     }
 
