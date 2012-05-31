@@ -86,6 +86,7 @@ final class DnsResolver {
     }
 
     private DnsResolver() {
+        mHostNamesToBeResolved = new HashMap();
         createDnsResolverThreadPool();
     }
 
@@ -96,7 +97,6 @@ final class DnsResolver {
                 Process.setThreadPriority( android.os.Process.THREAD_PRIORITY_DEFAULT +
                                            android.os.Process.THREAD_PRIORITY_LESS_FAVORABLE);
                 mDnsResolverThreadPool = Executors.newFixedThreadPool(MAX_DNS_RESOLVER_THREAD_POOL_SIZE);
-                mHostNamesToBeResolved = new HashMap();
                 boolean bResolvedPriorityHostNames = false;
                 int dnsQueryCounter = 0;
                 int numHosts = 0;
