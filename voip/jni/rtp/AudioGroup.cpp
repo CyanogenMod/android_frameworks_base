@@ -870,8 +870,11 @@ bool AudioGroup::DeviceThread::threadLoop()
         int16_t input[sampleCount];
         int toWrite = sampleCount;
         int toRead = (mode == MUTED) ? 0 : sampleCount;
+#ifdef QCOM_HARDWARE
+        int chances = 10000;
+#else
         int chances = 100;
-
+#endif
         while (--chances > 0 && (toWrite > 0 || toRead > 0)) {
             if (toWrite > 0) {
                 AudioTrack::Buffer buffer;
@@ -985,7 +988,11 @@ void add(JNIEnv *env, jobject thiz, jint mode,
     if (!group) {
         int mode = env->GetIntField(thiz, gMode);
         group = new AudioGroup;
+#ifdef QCOM_HARDWARE
+        if (!group->set(sampleRate, sampleCount) || !group->setMode(mode)) {
+#else
         if (!group->set(8000, 256) || !group->setMode(mode)) {
+#endif
             jniThrowException(env, "java/lang/IllegalStateException",
                 "cannot initialize audio group");
             goto error;
