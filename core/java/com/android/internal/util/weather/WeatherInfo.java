@@ -57,7 +57,7 @@ public class WeatherInfo {
         this.last_sync = last_sync;
         // Only the current temperature gets the temp_unit added.
         this.temp_unit = temp_unit;
-        this.temp = temp + "°" + temp_unit.toLowerCase();
+        this.temp = temp + "°" + temp_unit;
         this.low = low + "°";
         this.high = high + "°";
     }
