@@ -152,7 +152,7 @@
 
     <string name="shutdown_progress" msgid="2281079257329981203">"Vypínání\u2026"</string>
     <string name="reboot_progress">"Restart\u2026"</string>
-    <string name="shutdown_confirm" msgid="649792175242821353">"Váš telefon bude vypnut."</string>
+    <string name="shutdown_confirm" msgid="649792175242821353">"Telefon bude vypnut."</string>
     <string name="reboot_confirm">"Telefon bude restartován."</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Nejnovější"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Žádné nedávno použité aplikace."</string>
@@ -225,7 +225,7 @@
     <string name="permlab_setDebugApp" msgid="4339730312925176742">"povolit ladění aplikací"</string>
     <string name="permdesc_setDebugApp" msgid="5584310661711990702">"Umožňuje aplikaci povolit ladění jiné aplikace. Škodlivé aplikace mohou pomocí tohoto nastavení ukončit jiné aplikace."</string>
     <string name="permlab_changeConfiguration" msgid="8214475779521218295">"změna vašeho nastavení uživatelského rozhraní"</string>
-    <string name="permdesc_changeConfiguration" msgid="3465121501528064399">"Umožňuje aplikaci změnit aktuální konfiguraci, např. národní prostředí či obecnou velikost písma."</string>
+    <string name="permdesc_changeConfiguration" msgid="3465121501528064399">"Umožňuje aplikaci změnit aktuální nastavení, např. národní prostředí či obecnou velikost písma."</string>
     <string name="permlab_enableCarMode" msgid="5684504058192921098">"aktivovat režim V autě"</string>
     <string name="permdesc_enableCarMode" msgid="5673461159384850628">"Umožňuje aplikaci aktivovat režim V autě."</string>
     <string name="permlab_killBackgroundProcesses" msgid="8373714752793061963">"ukončit procesy na pozadí"</string>
@@ -305,7 +305,7 @@
     <string name="permlab_setPreferredApplications" msgid="3393305202145172005">"nastavení upřednostňovaných aplikací"</string>
     <string name="permdesc_setPreferredApplications" msgid="760008293501937546">"Umožňuje aplikaci změnit vaše upřednostňované aplikace. Toto nastavení může škodlivým aplikacím umožnit nepozorovaně změnit spouštěné aplikace a oklamat vaše existující aplikace tak, aby shromažďovaly vaše soukromá data."</string>
     <string name="permlab_writeSettings" msgid="1365523497395143704">"změna globálních nastavení systému"</string>
-    <string name="permdesc_writeSettings" msgid="838789419871034696">"Umožňuje aplikaci upravit data nastavení systému. Škodlivé aplikace mohou poškodit konfiguraci vašeho systému."</string>
+    <string name="permdesc_writeSettings" msgid="838789419871034696">"Umožňuje aplikaci upravit data nastavení systému. Škodlivé aplikace mohou poškodit nastavení vašeho systému."</string>
     <string name="permlab_writeSecureSettings" msgid="204676251876718288">"změny zabezpečených nastavení systému"</string>
     <string name="permdesc_writeSecureSettings" msgid="5497873143539034724">"Umožňuje aplikaci změnit data zabezpečených nastavení systému. Běžné aplikace toto nastavení nevyužívají."</string>
     <string name="permlab_writeGservices" msgid="2149426664226152185">"změna mapy služeb Google"</string>
@@ -397,7 +397,7 @@
     <string name="permlab_setWallpaperHints" msgid="3600721069353106851">"nastavení nápovědy pro velikost tapety"</string>
     <string name="permdesc_setWallpaperHints" msgid="6019479164008079626">"Umožňuje aplikaci nastavit nápovědu pro velikost tapety systému."</string>
     <string name="permlab_masterClear" msgid="2315750423139697397">"obnovení továrního nastavení systému"</string>
-    <string name="permdesc_masterClear" msgid="5033465107545174514">"Umožňuje aplikaci kompletně obnovit systém do továrního nastavení a vymazat všechna data, konfiguraci a nainstalované aplikace."</string>
+    <string name="permdesc_masterClear" msgid="5033465107545174514">"Umožňuje aplikaci kompletně obnovit systém do továrního nastavení a vymazat všechna data, nastavení a nainstalované aplikace."</string>
     <string name="permlab_setTime" msgid="2021614829591775646">"nastavit čas"</string>
     <string name="permdesc_setTime" msgid="667294309287080045">"Umožňuje aplikaci změnit čas hodin v telefonu."</string>
     <string name="permlab_setTimeZone" msgid="2945079801013077340">"nastavení časového pásma"</string>
@@ -427,7 +427,7 @@
     <string name="permlab_accessWifiState" msgid="8100926650211034400">"zobrazení stavu WiFi"</string>
     <string name="permdesc_accessWifiState" msgid="485796529139236346">"Umožňuje aplikaci zobrazit informace o stavu připojení WiFi."</string>
     <string name="permlab_changeWifiState" msgid="7280632711057112137">"změna stavu WiFi"</string>
-    <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Umožňuje aplikaci připojit se k přístupovým bodům WiFi či se od nich odpojit a provádět změny nakonfigurovaných sítí WiFi."</string>
+    <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Umožňuje aplikaci připojit se k přístupovým bodům WiFi či se od nich odpojit a provádět změny nastavených sítí WiFi."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"povolení příjmu Wi-Fi Multicast"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Povoluje aplikaci přijímat pakety, které nebyly adresovány přímo vašemu zařízení. Pomocí této možnosti můžete objevit služby nabízené ve vaší blízkosti. Spotřeba energie je vyšší než u režimu bez vícesměrového vysílání (multicast)."</string>
     <string name="permlab_accessWimaxState" msgid="2800410363171809280">"zobrazit stav připojení WiMAX"</string>
@@ -435,9 +435,9 @@
     <string name="permlab_changeWimaxState" msgid="340465839241528618">"měnit stav připojení WiMAX"</string>
     <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Umožňuje aplikaci připojovat se k síti WiMAX a odpojovat se od ní."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"správa rozhraní Bluetooth"</string>
-    <string name="permdesc_bluetoothAdmin" msgid="7256289774667054555">"Umožňuje aplikaci konfigurovat místní telefon s rozhraním Bluetooth a vyhledávat a párovat vzdálená zařízení."</string>
+    <string name="permdesc_bluetoothAdmin" msgid="7256289774667054555">"Umožňuje aplikaci nastavit místní telefon s rozhraním Bluetooth a vyhledávat a párovat vzdálená zařízení."</string>
     <string name="permlab_bluetooth" msgid="8361038707857018732">"vytvoření připojení Bluetooth"</string>
-    <string name="permdesc_bluetooth" msgid="762515380679392945">"Umožňuje aplikaci zobrazit konfiguraci místního telefonu s rozhraním Bluetooth, vytvářet připojení ke spárovaným zařízením a přijímat tato připojení."</string>
+    <string name="permdesc_bluetooth" msgid="762515380679392945">"Umožňuje aplikaci zobrazit nastavení místního telefonu s rozhraním Bluetooth, vytvářet připojení ke spárovaným zařízením a přijímat tato připojení."</string>
     <string name="permlab_nfc" msgid="4423351274757876953">"ovládat technologii NFC"</string>
     <string name="permdesc_nfc" msgid="9171401851954407226">"Umožňuje aplikaci komunikovat se štítky, kartami a čtečkami s podporou technologie NFC."</string>
     <string name="permlab_disableKeyguard" msgid="4977406164311535092">"vypnutí zámku kláves"</string>
@@ -933,7 +933,7 @@
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Aktivován režim V autě"</string>
     <string name="car_mode_disable_notification_message" msgid="668663626721675614">"Vyberte, chcete-li ukončit režim Na cestě."</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"Je aktivní tethering nebo hotspot"</string>
-    <string name="tethered_notification_message" msgid="3067108323903048927">"Dotykem zahájíte konfiguraci"</string>
+    <string name="tethered_notification_message" msgid="3067108323903048927">"Dotykem zahájíte nastevení"</string>
     <string name="throttle_warning_notification_title" msgid="4890894267454867276">"Vysoké využití mobilních dat"</string>
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Dotykem zobrazíte další informace o využití mobilních dat"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"Byl překročen limit mobilních dat"</string>
@@ -960,4 +960,22 @@
     </plurals>
     <string name="permlab_revokePermissions">"Umožní zobrazit a změnit nepovolená oprávnění. Nelze využít v normální aplikaci."</string>
     <string name="permdesc_revokePermissions">"Umožní číst a zapisovat nepovolená oprávnění. Nelze využít v normální aplikací."</string>
+
+    <string name="keyguard_finger_please_swipe">Pro odemknutí přejeďte prstem po senzoru otisku prstů</string>
+    <string name="keyguard_finger_ui_timeout">Vypršel časový limit!</string>
+    <string name="keyguard_finger_failed_to_unlock">Odemknutí se nezdařilo!</string>
+    <string name="keyguard_finger_screen_off">Vypnutá obrazovka</string>
+    <string name="keyguard_finger_screen_on">Zapnutá obrazovka</string>
+    <string name="keyguard_finger_match">Otisk prstu souhlasí, obrazovka se odemyká\u2026</string>
+    <string name="keyguard_finger_not_match">Otisk prstu nesouhlasí\u2026</string>
+    <string name="keyguard_finger_swipe_too_far_right">Použijte střed senzoru.</string>
+    <string name="keyguard_finger_swipe_too_far_left">Použijte střed senzoru.</string>
+    <string name="keyguard_finger_swipe_too_fast">Přejetí senzoru bylo příliš rychlé.</string>
+    <string name="keyguard_finger_swipe_too_short">Přejetí senzoru bylo příliš krátké.</string>
+    <string name="keyguard_finger_swipe_too_slow">Přejetí senzoru bylo příliš pomalé.</string>
+    <string name="keyguard_finger_swipe_too_skewed">Přejetí senzoru nebylo rovnoměrné.</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">Nepodařilo se %1$d-krát identifikovat otiskem prstu.\n\nProsím zkuste to za %2$d sekund.</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">Nepodařilo se %1$d-krát identifikovat otiskem prstu. Po dalších %2$d neúspěšných pokusech o identifikaci budete vyzváni k odemknutí zařízení použitím přihlášení k účtu Google.\n\nProsím zkuste to znovu za %3$d sekund.</string>
+    <string name="lockscreen_forgot_finger_button_text">Zapomenout otisk prstu?</string>
+
 </resources>
