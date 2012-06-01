@@ -33,7 +33,9 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
@@ -493,6 +495,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
         }
 
+        setBackground(mContext, (ViewGroup) findViewById(R.id.root));
+
         mStatusViewManager = new KeyguardStatusViewManager(this, mUpdateMonitor, mLockPatternUtils,
                 mCallback, false);
 
@@ -535,6 +539,29 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
         if (DBG) Log.v(TAG, "*** LockScreen accel is "
                 + (mUnlockWidget.isHardwareAccelerated() ? "on":"off"));
+    }
+
+    static void setBackground(Context bcontext, ViewGroup layout) {
+        String mLockBack = Settings.System.getString(bcontext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND);
+        if (mLockBack != null) {
+            if (!mLockBack.isEmpty()) {
+                try {
+                    layout.setBackgroundColor(Integer.parseInt(mLockBack));
+                }catch(NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                String lockWallpaper = "";
+                try {
+                    lockWallpaper = bcontext.createPackageContext("com.android.settings", 0).getFilesDir()+"/lockwallpaper";
+                } catch (NameNotFoundException e1) {
+                }
+                if (!lockWallpaper.isEmpty()) {
+                    Bitmap lockb = BitmapFactory.decodeFile(lockWallpaper);
+                    layout.setBackgroundDrawable(new BitmapDrawable(lockb));
+                }
+            }
+        }
     }
 
     private boolean isSilentMode() {
