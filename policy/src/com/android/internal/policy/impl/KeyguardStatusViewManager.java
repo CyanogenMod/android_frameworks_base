@@ -253,7 +253,7 @@ class KeyguardStatusViewManager implements OnClickListener {
 
         // Required to get Marquee to work.
         final View scrollableViews[] = { mCarrierView, mDateView, mStatus1View, mOwnerInfoView,
-                mAlarmStatusView, mCalendarEventDetails };
+                mAlarmStatusView, mCalendarEventDetails, mWeatherCity, mWeatherCondition };
         for (View v : scrollableViews) {
             if (v != null) {
                 v.setSelected(true);
