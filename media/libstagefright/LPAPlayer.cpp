@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "LPAPlayer"
 #include <utils/Log.h>
 #include <utils/threads.h>

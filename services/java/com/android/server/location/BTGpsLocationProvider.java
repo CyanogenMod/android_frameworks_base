@@ -855,4 +855,23 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
             }
         }
     }
+
+    public boolean updateCriteria(int action, long minTime, float minDistance,
+               boolean singleShot,Criteria criteria) {
+        return true;
+    }
+
+    public boolean updateSettings(boolean gpsSetting,boolean networkProvSetting,
+                                  boolean wifiSetting,boolean agpsSetting){
+       return true;
+    }
+
+    public boolean updateBatteryStatus(boolean isBatteryCharging){
+        return true;
+    }
+
+    public int getCapability(){
+        return 0;
+    }
+
 }
