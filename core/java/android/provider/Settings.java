@@ -1603,6 +1603,24 @@ public final class Settings {
         public static final String VOLUME_BLUETOOTH_SCO = "volume_bluetooth_sco";
 
         /**
+         * Whether the phone ringtone should be played in an increasing manner
+         * @hide
+         */
+        public static final String INCREASING_RING = "increasing_ring";
+
+        /**
+         * Minimum volume index for increasing ring volume
+         * @hide
+         */
+        public static final String INCREASING_RING_MIN_VOLUME = "increasing_ring_min_vol";
+
+        /**
+         * Time (in ms) between ringtone volume increases
+         * @hide
+         */
+        public static final String INCREASING_RING_INTERVAL = "increasing_ring_interval";
+
+        /**
          * Whether the notifications should use the ring volume (value of 1) or
          * a separate notification volume (value of 0). In most cases, users
          * will have this enabled so the notification and ringer volumes will be
