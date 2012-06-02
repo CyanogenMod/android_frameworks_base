@@ -958,9 +958,7 @@
     <item quantity="one" msgid="1634101450343277345">"Open Wi-Fi-netwerk beschikbaar"</item>
     <item quantity="other" msgid="7915895323644292768">"Open Wi-Fi-netwerken beschikbaar"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Aanmelden bij wifi-netwerk"</string>
-    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
-    <skip />
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Aanmelden bij Wi-Fi-netwerk"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kan geen verbinding maken met Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" heeft een slechte internetverbinding."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1224,7 +1222,8 @@
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Browser starten?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Oproep accepteren?"</string>
 
-    <!-- CyanogenMod additions -->
+    <!-- CYANOGENMOD EDITS -->
+
     <string name="reboot_system" product="tablet">Tablet herstarten</string>
     <string name="reboot_system" product="default">Telefoon herstarten</string>
     <string name="global_action_screenshot">Beeldschermafdruk</string>
@@ -1233,4 +1232,90 @@
     <string name="reboot_confirm">Uw telefoon zal worden herstart.</string>
     <string name="global_action_reboot">Herstarten</string>
     <string name="app_killed_message">App geforceerd afgesloten</string>
+    <string name="roamingTextAirplaneMode">Vliegmodus</string>
+    <string name="global_action_choose_profile">Profiel</string>
+    <string name="permlab_preventpower">Aan-/uitknop wijzigen</string>
+    <string name="permdesc_preventpower">Staat een app toe het gedrag van de aan-/uitknop te wijzigen</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Standaard</string>
+    <string name="profileNameWork">Werk</string>
+    <string name="profileNameHome">Thuis</string>
+    <string name="profileNameSilent">Stil</string>
+    <string name="profileNameNight">\'s Nachts</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefoon</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-mail</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Anders</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tropische storm</string>
+    <string name="weather_2">Tropische cycloon</string>
+    <string name="weather_3">Zwaar onweer</string>
+    <string name="weather_4">Onweer</string>
+    <string name="weather_5">Regen en sneeuw</string>
+    <string name="weather_6">Regen en natte sneeuw</string>
+    <string name="weather_7">Sneeuw en natte sneeuw</string>
+    <string name="weather_8">IJzel</string>
+    <string name="weather_9">Motregen</string>
+    <string name="weather_10">Aanvriezende regen</string>
+    <string name="weather_11">Buien</string>
+    <string name="weather_12">Buien</string>
+    <string name="weather_13">Sneeuwjacht</string>
+    <string name="weather_14">Lichte sneeuwbuien</string>
+    <string name="weather_15">Sneeuwstorm</string>
+    <string name="weather_16">Sneeuw</string>
+    <string name="weather_17">Hagel</string>
+    <string name="weather_18">Natte sneeuw</string>
+    <string name="weather_19">Stof</string>
+    <string name="weather_20">Mistig</string>
+    <string name="weather_21">Heiig</string>
+    <string name="weather_22">Walmend</string>
+    <string name="weather_23">Stormachtig</string>
+    <string name="weather_24">Waaierig</string>
+    <string name="weather_25">Koud</string>
+    <string name="weather_26">Bewolkt</string>
+    <string name="weather_27">Overwegend bewolkt</string> <!-- Night -->
+    <string name="weather_28">Overwegend bewolkt</string> <!-- Day -->
+    <string name="weather_29">Deels bewolkt</string> <!-- Night -->
+    <string name="weather_30">Deels bewolkt</string> <!-- Day -->
+    <string name="weather_31">Helder</string> <!-- Night -->
+    <string name="weather_32">Zonnig</string>
+    <string name="weather_33">Mooi</string> <!-- Night -->
+    <string name="weather_34">Mooi</string> <!-- Day -->
+    <string name="weather_35">Regen en hagel</string>
+    <string name="weather_36">Heet</string>
+    <string name="weather_37">Geïsoleerde onweersbuien</string>
+    <string name="weather_38">Verspreide onweersbuien</string>
+    <string name="weather_39">Verspreide onweersbuien</string>
+    <string name="weather_40">Verspreide buien</string>
+    <string name="weather_41">Hevige sneeuwbuien</string>
+    <string name="weather_42">Verspreide sneeuwbuien</string>
+    <string name="weather_43">Hevige sneeuwbuien</string>
+    <string name="weather_44">Deels bewolkt</string>
+    <string name="weather_45">Onweersbuien</string>
+    <string name="weather_46">Sneeuwstormen</string>
+    <string name="weather_47">Geïsoleerde onweersbuien</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NO</string>
+    <string name="weather_E">O</string>
+    <string name="weather_SE">ZO</string>
+    <string name="weather_S">Z</string>
+    <string name="weather_SW">ZW</string>
+    <string name="weather_W">W</string>
+    <string name="weather_NW">NW</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_tap_to_refresh">Tik om te vernieuwen</string>
 </resources>
