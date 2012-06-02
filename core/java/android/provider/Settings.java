@@ -1184,7 +1184,9 @@ public final class Settings {
          * Constant for use in AIRPLANE_MODE_RADIOS to specify Bluetooth radio.
          */
         public static final String RADIO_BLUETOOTH = "bluetooth";
-
+        
+       // Key identifying the voicemail notifiction setting
+       public static final String ENABLE_VOICEMAIL_NOTIFICATION = "enable_voicemail_notification";
         /**
          * Constant for use in AIRPLANE_MODE_RADIOS to specify Wi-Fi radio.
          */
@@ -1210,7 +1212,7 @@ public final class Settings {
          * included in the comma separated list.
          */
         public static final String AIRPLANE_MODE_RADIOS = "airplane_mode_radios";
-
+        
         /**
          * A comma separated list of radios that should to be disabled when airplane mode
          * is on, but can be manually reenabled by the user.  For example, if RADIO_WIFI is
