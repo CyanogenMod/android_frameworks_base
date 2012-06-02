@@ -13,7 +13,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<!--   //device/apps/common/assets/res/any/strings.xml -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="byteShort" msgid="8340973892742019101">"B"</string>
@@ -44,8 +43,8 @@
     <string name="mismatchPin" msgid="3695902225843339274">"De PIN-codes die u heeft ingevoerd, komen niet overeen."</string>
     <string name="invalidPin" msgid="3850018445187475377">"Voer een PIN-code van 4 tot 8 cijfers in."</string>
     <string name="invalidPuk" msgid="8761456210898036513">"Typ een PUK-code die 8 cijfers of langer is."</string>
-    <string name="needPuk" msgid="919668385956251611">"Uw SIM-kaart is vergrendeld met de PUK-code. Typ de PUK-code om te ontgrendelen."</string>
-    <string name="needPuk2" msgid="4526033371987193070">"Voer de PUK2-code in om de SIM-kaart te ontgrendelen."</string>
+    <string name="needPuk" msgid="919668385956251611">"Uw simkaart is vergrendeld met de PUK-code. Typ de PUK-code om te ontgrendelen."</string>
+    <string name="needPuk2" msgid="4526033371987193070">"Voer de PUK2-code in om de simkaart te ontgrendelen."</string>
     <string name="ClipMmi" msgid="6952821216480289285">"Inkomende beller-id"</string>
     <string name="ClirMmi" msgid="7784673673446833091">"Uitgaande beller-id"</string>
     <string name="CfMmi" msgid="5123218989141573515">"Oproep doorschakelen"</string>
@@ -70,14 +69,14 @@
     <string name="RestrictedOnEmergency" msgid="6581163779072833665">"Alarmservice is geblokkeerd."</string>
     <string name="RestrictedOnNormal" msgid="4953867011389750673">"Spraakservice is geblokkeerd."</string>
     <string name="RestrictedOnAllVoice" msgid="1459318899842232234">"Alle spraakservices zijn geblokkeerd."</string>
-    <string name="RestrictedOnSms" msgid="8314352327461638897">"SMS-service is geblokkeerd."</string>
+    <string name="RestrictedOnSms" msgid="8314352327461638897">"Sms-service is geblokkeerd."</string>
     <string name="RestrictedOnVoiceData" msgid="8244438624660371717">"Spraak-/gegevensservices zijn geblokkeerd."</string>
-    <string name="RestrictedOnVoiceSms" msgid="1888588152792023873">"Spraak-/SMS-services zijn geblokkeerd."</string>
-    <string name="RestrictedOnAll" msgid="2714924667937117304">"Alle spraak-/gegevens-/SMS-services zijn geblokkeerd."</string>
+    <string name="RestrictedOnVoiceSms" msgid="1888588152792023873">"Spraak-/sms-services zijn geblokkeerd."</string>
+    <string name="RestrictedOnAll" msgid="2714924667937117304">"Alle spraak-/gegevens-/sms-services zijn geblokkeerd."</string>
     <string name="serviceClassVoice" msgid="1258393812335258019">"Spraak"</string>
     <string name="serviceClassData" msgid="872456782077937893">"Gegevens"</string>
     <string name="serviceClassFAX" msgid="5566624998840486475">"FAX"</string>
-    <string name="serviceClassSMS" msgid="2015460373701527489">"SMS"</string>
+    <string name="serviceClassSMS" msgid="2015460373701527489">"Sms"</string>
     <string name="serviceClassDataAsync" msgid="4523454783498551468">"Asynchroon"</string>
     <string name="serviceClassDataSync" msgid="7530000519646054776">"Synchroniseren"</string>
     <string name="serviceClassPacket" msgid="6991006557993423453">"Pakket"</string>
@@ -149,16 +148,16 @@
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Stille modus"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Geluid is UIT"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Geluid is AAN"</string>
-    <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Vliegmodus"</string>
-    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Vliegmodus is AAN"</string>
-    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Vliegmodus is UIT"</string>
+    <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Vliegtuigmodus"</string>
+    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Vliegtuigmodus is AAN"</string>
+    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Vliegtuigmodus is UIT"</string>
     <string name="status_bar_notification_info_overflow" msgid="5301981741705354993">"999 +"</string>
     <string name="safeMode" msgid="2788228061547930246">"Veilige modus"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Android-systeem"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Services waarvoor u moet betalen"</string>
     <string name="permgroupdesc_costMoney" msgid="8193824940620517189">"Toepassingen toestaan activiteiten uit te voeren waarvoor mogelijk kosten in rekening worden gebracht."</string>
     <string name="permgrouplab_messages" msgid="7521249148445456662">"Uw berichten"</string>
-    <string name="permgroupdesc_messages" msgid="7045736972019211994">"SMS, e-mail en andere berichten lezen en schrijven."</string>
+    <string name="permgroupdesc_messages" msgid="7045736972019211994">"Sms, e-mail en andere berichten lezen en schrijven."</string>
     <string name="permgrouplab_personalInfo" msgid="3519163141070533474">"Uw persoonlijke informatie"</string>
     <string name="permgroupdesc_personalInfo" product="tablet" msgid="6975389054186265786">"Rechtstreekse toegang tot de op uw tablet opgeslagen contacten en agenda."</string>
     <string name="permgroupdesc_personalInfo" product="default" msgid="5488050357388806068">"Rechtstreekse toegang tot de op uw telefoon opgeslagen contacten en agenda."</string>
@@ -187,22 +186,22 @@
     <string name="permdesc_expandStatusBar" msgid="7088604400110768665">"Hiermee kan de app de statusbalk uitvouwen of samenvouwen."</string>
     <string name="permlab_processOutgoingCalls" msgid="1136262550878335980">"uitgaande oproepen onderscheppen"</string>
     <string name="permdesc_processOutgoingCalls" msgid="2228988201852654461">"Hiermee kan een app uitgaande oproepen verwerken en het nummer wijzigen dat wordt gebeld. Schadelijke apps kunnen uitgaande oproepen bijhouden, omleiden of tegenhouden."</string>
-    <string name="permlab_receiveSms" msgid="2697628268086208535">"SMS ontvangen"</string>
-    <string name="permdesc_receiveSms" msgid="6298292335965966117">"Hiermee kan een app SMS-berichten ontvangen en verwerken. Schadelijke apps kunnen uw berichten bijhouden of deze verwijderen zonder dat u ze te zien krijgt."</string>
-    <string name="permlab_receiveMms" msgid="8894700916188083287">"MMS ontvangen"</string>
-    <string name="permdesc_receiveMms" msgid="4563346832000174373">"Hiermee kan een app MMS-berichten ontvangen en verwerken. Schadelijke apps kunnen uw berichten bijhouden of deze verwijderen zonder dat u ze te zien krijgt."</string>
+    <string name="permlab_receiveSms" msgid="2697628268086208535">"Sms ontvangen"</string>
+    <string name="permdesc_receiveSms" msgid="6298292335965966117">"Hiermee kan een app sms-berichten ontvangen en verwerken. Schadelijke apps kunnen uw berichten bijhouden of deze verwijderen zonder dat u ze te zien krijgt."</string>
+    <string name="permlab_receiveMms" msgid="8894700916188083287">"Mms ontvangen"</string>
+    <string name="permdesc_receiveMms" msgid="4563346832000174373">"Hiermee kan een app mms-berichten ontvangen en verwerken. Schadelijke apps kunnen uw berichten bijhouden of deze verwijderen zonder dat u ze te zien krijgt."</string>
     <string name="permlab_receiveEmergencyBroadcast" msgid="1803477660846288089">"noodberichten ontvangen"</string>
     <string name="permdesc_receiveEmergencyBroadcast" msgid="7118393393716546131">"Hiermee kan een app noodberichten ontvangen en verwerken. Deze toestemming is alleen beschikbaar voor systeemapps."</string>
-    <string name="permlab_sendSms" msgid="5600830612147671529">"SMS-berichten verzenden"</string>
-    <string name="permdesc_sendSms" msgid="1946540351763502120">"Hiermee kan de app SMS-berichten verzenden. Schadelijke apps kunnen u geld kosten door berichten te verzenden zonder uw toestemming."</string>
+    <string name="permlab_sendSms" msgid="5600830612147671529">"Sms-berichten verzenden"</string>
+    <string name="permdesc_sendSms" msgid="1946540351763502120">"Hiermee kan de app sms-berichten verzenden. Schadelijke apps kunnen u geld kosten door berichten te verzenden zonder uw toestemming."</string>
     <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"zonder toestemming sms\'jes verzenden"</string>
     <string name="permdesc_sendSmsNoConfirmation" msgid="4477752891276276168">"Hiermee kan de app sms\'jes verzenden. Schadelijke apps kunnen u geld kosten door zonder uw toestemming berichten te verzenden."</string>
-    <string name="permlab_readSms" msgid="4085333708122372256">"SMS of MMS lezen"</string>
-    <string name="permdesc_readSms" product="tablet" msgid="5836710350295631545">"Hiermee kan een app de op uw tablet of SIM-kaart opgeslagen SMS-berichten lezen. Schadelijke apps kunnen uw vertrouwelijke berichten mogelijk lezen."</string>
-    <string name="permdesc_readSms" product="default" msgid="3002170087197294591">"Hiermee kan een app de op uw telefoon of SIM-kaart opgeslagen SMS-berichten lezen. Schadelijke apps kunnen uw vertrouwelijke berichten mogelijk lezen."</string>
-    <string name="permlab_writeSms" msgid="6881122575154940744">"SMS of MMS bewerken"</string>
-    <string name="permdesc_writeSms" product="tablet" msgid="5332124772918835437">"Hiermee kan een app naar de op uw tablet of SIM-kaart opgeslagen SMS-berichten schrijven. Schadelijke apps kunnen uw berichten mogelijk verwijderen."</string>
-    <string name="permdesc_writeSms" product="default" msgid="6299398896177548095">"Hiermee kan een app naar de op uw telefoon of SIM-kaart opgeslagen SMS-berichten schrijven. Schadelijke apps kunnen uw berichten mogelijk verwijderen."</string>
+    <string name="permlab_readSms" msgid="4085333708122372256">"Sms of mms lezen"</string>
+    <string name="permdesc_readSms" product="tablet" msgid="5836710350295631545">"Hiermee kan een app de op uw tablet of simkaart opgeslagen sms-berichten lezen. Schadelijke apps kunnen uw vertrouwelijke berichten mogelijk lezen."</string>
+    <string name="permdesc_readSms" product="default" msgid="3002170087197294591">"Hiermee kan een app de op uw telefoon of simkaart opgeslagen sms-berichten lezen. Schadelijke apps kunnen uw vertrouwelijke berichten mogelijk lezen."</string>
+    <string name="permlab_writeSms" msgid="6881122575154940744">"Sms of mms bewerken"</string>
+    <string name="permdesc_writeSms" product="tablet" msgid="5332124772918835437">"Hiermee kan een app naar de op uw tablet of simkaart opgeslagen sms-berichten schrijven. Schadelijke apps kunnen uw berichten mogelijk verwijderen."</string>
+    <string name="permdesc_writeSms" product="default" msgid="6299398896177548095">"Hiermee kan een app naar de op uw telefoon of simkaart opgeslagen sms-berichten schrijven. Schadelijke apps kunnen uw berichten mogelijk verwijderen."</string>
     <string name="permlab_receiveWapPush" msgid="8258226427716551388">"WAP ontvangen"</string>
     <string name="permdesc_receiveWapPush" msgid="5979623826128082171">"Hiermee kan een app WAP-berichten ontvangen en verwerken. Schadelijke apps kunnen uw berichten bijhouden of deze verwijderen zonder dat u ze te zien krijgt."</string>
     <string name="permlab_getTasks" msgid="5005277531132573353">"actieve apps ophalen"</string>
@@ -235,10 +234,10 @@
     <string name="permdesc_runSetActivityWatcher" msgid="2149363027173451218">"Hiermee kan een app de manier waarop het systeem activiteiten start, bijhouden en beheren. Schadelijke apps kunnen het systeem volledig in gevaar brengen. Deze machtiging is alleen voor ontwikkeling vereist, nooit voor normaal gebruik."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"melding verzenden dat pakket is verwijderd"</string>
     <string name="permdesc_broadcastPackageRemoved" msgid="3453286591439891260">"Hiermee kan een app een melding verzenden dat een app-pakket (APK) is verwijderd. Schadelijke apps kunnen hiervan gebruik maken om alle andere actieve apps af te sluiten."</string>
-    <string name="permlab_broadcastSmsReceived" msgid="5689095009030336593">"melding over ontvangen SMS-bericht verzenden"</string>
-    <string name="permdesc_broadcastSmsReceived" msgid="9122419277306740155">"Hiermee kan een app een melding verzenden dat een SMS-bericht is ontvangen. Schadelijke apps kunnen hiervan gebruik maken om inkomende SMS-berichten te vervalsen."</string>
+    <string name="permlab_broadcastSmsReceived" msgid="5689095009030336593">"melding over ontvangen sms-bericht verzenden"</string>
+    <string name="permdesc_broadcastSmsReceived" msgid="9122419277306740155">"Hiermee kan een app een melding verzenden dat een sms-bericht is ontvangen. Schadelijke apps kunnen hiervan gebruik maken om inkomende sms-berichten te vervalsen."</string>
     <string name="permlab_broadcastWapPush" msgid="3145347413028582371">"melding over ontvangen WAP-PUSH-bericht verzenden"</string>
-    <string name="permdesc_broadcastWapPush" msgid="3955303669461378091">"Hiermee kan een app een melding verzenden dat een WAP PUSH-bericht is ontvangen. Schadelijke apps kunnen hiervan gebruik maken om een valse MMS-ontvangst te melden of de inhoud van willekeurige webpagina\'s door schadelijke varianten te vervangen."</string>
+    <string name="permdesc_broadcastWapPush" msgid="3955303669461378091">"Hiermee kan een app een melding verzenden dat een WAP PUSH-bericht is ontvangen. Schadelijke apps kunnen hiervan gebruik maken om een valse mms-ontvangst te melden of de inhoud van willekeurige webpagina\'s door schadelijke varianten te vervangen."</string>
     <string name="permlab_setProcessLimit" msgid="2451873664363662666">"aantal actieve processen beperken"</string>
     <string name="permdesc_setProcessLimit" msgid="7824786028557379539">"Hiermee kan een app het maximum aantal processen bepalen dat wordt uitgevoerd. Nooit vereist voor normale apps."</string>
     <string name="permlab_setAlwaysFinish" msgid="5342837862439543783">"alle achtergrondapps sluiten"</string>
@@ -590,7 +589,7 @@
     <string name="phoneTypeWorkMobile" msgid="1311426989184065709">"Mobiel werk"</string>
     <string name="phoneTypeWorkPager" msgid="649938731231157056">"Pager werk"</string>
     <string name="phoneTypeAssistant" msgid="5596772636128562884">"Assistent"</string>
-    <string name="phoneTypeMms" msgid="7254492275502768992">"MMS"</string>
+    <string name="phoneTypeMms" msgid="7254492275502768992">"Mms"</string>
     <string name="eventTypeCustom" msgid="7837586198458073404">"Aangepast"</string>
     <string name="eventTypeBirthday" msgid="2813379844211390740">"Verjaardag"</string>
     <string name="eventTypeAnniversary" msgid="3876779744518284000">"Jubileum"</string>
@@ -664,10 +663,10 @@
     <string name="lockscreen_charged" msgid="4938930459620989972">"Opgeladen."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Sluit de oplader aan."</string>
-    <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"Geen SIM-kaart."</string>
-    <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Geen SIM-kaart in tablet."</string>
-    <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"Geen SIM-kaart in telefoon."</string>
-    <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"Plaats een SIM-kaart."</string>
+    <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"Geen simkaart."</string>
+    <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Geen simkaart in tablet."</string>
+    <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"Geen simkaart in telefoon."</string>
+    <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"Plaats een simkaart."</string>
     <string name="lockscreen_missing_sim_instructions_long" msgid="7138450788301444298">"De simkaart ontbreekt of kan niet worden gelezen. Plaats een simkaart."</string>
     <string name="lockscreen_permanent_disabled_sim_instructions" msgid="1631853574702335453">"Uw simkaart is permanent uitgeschakeld."\n" Neem contact op met uw draadloze serviceprovider voor een nieuwe simkaart."</string>
     <string name="lockscreen_transport_prev_description" msgid="201594905152746886">"Knop voor vorig nummer"</string>
@@ -677,10 +676,10 @@
     <string name="lockscreen_transport_stop_description" msgid="4562318378766987601">"Knop voor stoppen"</string>
     <string name="emergency_calls_only" msgid="6733978304386365407">"Alleen noodoproepen"</string>
     <string name="lockscreen_network_locked_message" msgid="143389224986028501">"Netwerk vergrendeld"</string>
-    <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"SIM-kaart is vergrendeld met PUK-code."</string>
+    <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"Simkaart is vergrendeld met PUK-code."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"Raadpleeg de gebruikershandleiding of neem contact op met de klantenservice."</string>
-    <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM-kaart is vergrendeld."</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"SIM-kaart ontgrendelen\u2026"</string>
+    <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"Simkaart is vergrendeld."</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Simkaart ontgrendelen\u2026"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"U heeft uw ontgrendelingspatroon <xliff:g id="NUMBER_0">%d</xliff:g> keer onjuist getekend. "\n\n"Probeer het over <xliff:g id="NUMBER_1">%d</xliff:g> seconden opnieuw."</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="4906034376425175381">"U heeft uw wachtwoord <xliff:g id="NUMBER_0">%d</xliff:g> keer onjuist ingevoerd. "\n\n"Probeer het over <xliff:g id="NUMBER_1">%d</xliff:g> seconden opnieuw."</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6827749231465145590">"U heeft uw PIN-code <xliff:g id="NUMBER_0">%d</xliff:g> keer onjuist ingevoerd. "\n\n"Probeer het over <xliff:g id="NUMBER_1">%d</xliff:g> seconden opnieuw."</string>
@@ -958,9 +957,7 @@
     <item quantity="one" msgid="1634101450343277345">"Open Wi-Fi-netwerk beschikbaar"</item>
     <item quantity="other" msgid="7915895323644292768">"Open Wi-Fi-netwerken beschikbaar"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Aanmelden bij wifi-netwerk"</string>
-    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
-    <skip />
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Aanmelden bij Wi-Fi-netwerk"</string>
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kan geen verbinding maken met Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" heeft een slechte internetverbinding."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -973,8 +970,8 @@
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Aanraken voor instellingen"</string>
     <string name="select_character" msgid="3365550120617701745">"Teken invoegen"</string>
     <string name="sms_control_default_app_name" msgid="7630529934366549163">"Onbekende app"</string>
-    <string name="sms_control_title" msgid="7296612781128917719">"SMS-berichten verzenden"</string>
-    <string name="sms_control_message" msgid="1289331457999236205">"Er wordt een groot aantal SMS-berichten verzonden. Selecteer \'OK\' om door te gaan of \'Annuleren\' om de verzending te stoppen."</string>
+    <string name="sms_control_title" msgid="7296612781128917719">"Sms-berichten verzenden"</string>
+    <string name="sms_control_message" msgid="1289331457999236205">"Er wordt een groot aantal sms-berichten verzonden. Selecteer \'OK\' om door te gaan of \'Annuleren\' om de verzending te stoppen."</string>
     <string name="sms_control_yes" msgid="2532062172402615953">"OK"</string>
     <string name="sms_control_no" msgid="1715320703137199869">"Annuleren"</string>
     <string name="sim_removed_title" msgid="6227712319223226185">"Simkaart verwijderd"</string>
@@ -1224,7 +1221,8 @@
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Browser starten?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Oproep accepteren?"</string>
 
-    <!-- CyanogenMod additions -->
+    <!-- CYANOGENMOD EDITS -->
+
     <string name="reboot_system" product="tablet">Tablet herstarten</string>
     <string name="reboot_system" product="default">Telefoon herstarten</string>
     <string name="global_action_screenshot">Beeldschermafdruk</string>
@@ -1233,4 +1231,88 @@
     <string name="reboot_confirm">Uw telefoon zal worden herstart.</string>
     <string name="global_action_reboot">Herstarten</string>
     <string name="app_killed_message">App geforceerd afgesloten</string>
+    <string name="roamingTextAirplaneMode">Vliegtuigmodus</string>
+    <string name="global_action_choose_profile">Profiel</string>
+    <string name="permlab_preventpower">Aan-/uitknop wijzigen</string>
+    <string name="permdesc_preventpower">Staat een app toe het gedrag van de aan-/uitknop te wijzigen</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Standaard</string>
+    <string name="profileNameWork">Werk</string>
+    <string name="profileNameHome">Thuis</string>
+    <string name="profileNameSilent">Stil</string>
+    <string name="profileNameNight">Nacht</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefoon</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-mail</string>
+    <string name="profileGroupSMS">Sms</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Anders</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tropische storm</string>
+    <string name="weather_2">Tropische cycloon</string>
+    <string name="weather_3">Zwaar onweer</string>
+    <string name="weather_4">Onweer</string>
+    <string name="weather_5">Regen en sneeuw</string>
+    <string name="weather_6">Regen en natte sneeuw</string>
+    <string name="weather_7">Sneeuw en natte sneeuw</string>
+    <string name="weather_8">IJzel</string>
+    <string name="weather_9">Motregen</string>
+    <string name="weather_10">Aanvriezende regen</string>
+    <string name="weather_11">Buien</string>
+    <string name="weather_12">Buien</string>
+    <string name="weather_13">Sneeuwjacht</string>
+    <string name="weather_14">Lichte sneeuwbuien</string>
+    <string name="weather_15">Sneeuwstorm</string>
+    <string name="weather_16">Sneeuw</string>
+    <string name="weather_17">Hagel</string>
+    <string name="weather_18">Natte sneeuw</string>
+    <string name="weather_19">Stof</string>
+    <string name="weather_20">Mistig</string>
+    <string name="weather_21">Heiig</string>
+    <string name="weather_22">Walmend</string>
+    <string name="weather_23">Stormachtig</string>
+    <string name="weather_24">Waaierig</string>
+    <string name="weather_25">Koud</string>
+    <string name="weather_26">Bewolkt</string>
+    <string name="weather_27">Overwegend bewolkt</string>
+    <string name="weather_28">Overwegend bewolkt</string>
+    <string name="weather_29">Deels bewolkt</string>
+    <string name="weather_30">Deels bewolkt</string>
+    <string name="weather_31">Helder</string>
+    <string name="weather_32">Zonnig</string>
+    <string name="weather_33">Mooi</string>
+    <string name="weather_34">Mooi</string>
+    <string name="weather_35">Regen en hagel</string>
+    <string name="weather_36">Heet</string>
+    <string name="weather_37">Geïsoleerde onweersbuien</string>
+    <string name="weather_38">Verspreide onweersbuien</string>
+    <string name="weather_39">Verspreide onweersbuien</string>
+    <string name="weather_40">Verspreide buien</string>
+    <string name="weather_41">Hevige sneeuwbuien</string>
+    <string name="weather_42">Verspreide sneeuwbuien</string>
+    <string name="weather_43">Hevige sneeuwbuien</string>
+    <string name="weather_44">Deels bewolkt</string>
+    <string name="weather_45">Onweersbuien</string>
+    <string name="weather_46">Sneeuwstormen</string>
+    <string name="weather_47">Geïsoleerde onweersbuien</string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NO</string>
+    <string name="weather_E">O</string>
+    <string name="weather_SE">ZO</string>
+    <string name="weather_S">Z</string>
+    <string name="weather_SW">ZW</string>
+    <string name="weather_W">W</string>
+    <string name="weather_NW">NW</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_tap_to_refresh">Vernieuwen</string>
 </resources>
