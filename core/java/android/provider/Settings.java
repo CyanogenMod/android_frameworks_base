@@ -1639,6 +1639,10 @@ public final class Settings {
         public static final String VOLUME_BLUETOOTH_SCO = "volume_bluetooth_sco";
 
         /**
+         * Whether notifications should request audio focus. Could be disabled
+         * if a users favorite app behaves badly when audio focus is requested.
+         * Value is boolean.
+         *
          * Whether to prevent loud volume levels when headset is first plugged in.
          * @hide
          */
@@ -1659,6 +1663,24 @@ public final class Settings {
         @Deprecated
         public static final String NOTIFICATIONS_USE_RING_VOLUME =
             "notifications_use_ring_volume";
+
+        /**
+         * Whether the phone ringtone should be played in an increasing manner
+         * @hide
+         */
+        public static final String INCREASING_RING = "increasing_ring";
+
+        /**
+         * Minimum volume index for increasing ring volume
+         * @hide
+         */
+        public static final String INCREASING_RING_MIN_VOLUME = "increasing_ring_min_vol";
+
+        /**
+         * Time (in ms) between ringtone volume increases
+         * @hide
+         */
+        public static final String INCREASING_RING_INTERVAL = "increasing_ring_interval";
 
         /**
          * Whether silent mode should allow vibration feedback. This is used
