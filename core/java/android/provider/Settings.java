@@ -1998,6 +1998,9 @@ public final class Settings {
          */
         public static final String NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES = "notification_light_pulse_custom_values";
 
+        // Key identifying the voicemail notifiction setting
+        public static final String ENABLE_VOICEMAIL_NOTIFICATION = "enable_voicemail_notification";
+
         /**
          * Show pointer location on screen?
          * 0 = no
