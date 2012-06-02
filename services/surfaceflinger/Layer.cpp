@@ -362,6 +362,8 @@ void Layer::onDraw(const Region& clip) const
     } else {
 #ifdef DECIDE_TEXTURE_TARGET
         glBindTexture(currentTextureTarget, mFlinger->getProtectedTexName());
+#elif defined(QCOM_HARDWARE)
+        glBindTexture(GL_TEXTURE_EXTERNAL_OES, mFlinger->getProtectedTexName());
 #else
         glBindTexture(GL_TEXTURE_2D, mFlinger->getProtectedTexName());
 #endif
@@ -370,6 +372,8 @@ void Layer::onDraw(const Region& clip) const
         glMatrixMode(GL_MODELVIEW);
 #ifdef DECIDE_TEXTURE_TARGET
         glEnable(currentTextureTarget);
+#elif defined(QCOM_HARDWARE)
+        glEnable(GL_TEXTURE_EXTERNAL_OES);
 #else
         glDisable(GL_TEXTURE_EXTERNAL_OES);
         glEnable(GL_TEXTURE_2D);
