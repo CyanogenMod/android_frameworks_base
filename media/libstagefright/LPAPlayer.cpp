@@ -45,6 +45,8 @@
 namespace android {
 int LPAPlayer::objectsAlive = 0;
 
+#define BT_A2DP_BUFFER_SIZE 65536
+
 LPAPlayer::LPAPlayer(
                     const sp<MediaPlayerBase::AudioSink> &audioSink, bool &initCheck,
                     AwesomePlayer *observer)
@@ -774,9 +776,15 @@ void LPAPlayer::decoderThreadEntry() {
         //Queue up the buffers for writing either for A2DP or LPA Driver
         else {
             struct msm_audio_aio_buf aio_buf_local;
+            int numOfBytes = 0;
 
-            LOGV("Calling fillBuffer for size %d",MEM_BUFFER_SIZE);
-            buf.bytesToWrite = fillBuffer(buf.localBuf, MEM_BUFFER_SIZE);
+            if (bIsA2DPEnabled)
+                numOfBytes = BT_A2DP_BUFFER_SIZE;
+            else
+                numOfBytes = MEM_BUFFER_SIZE;
+
+            LOGV("Calling fillBuffer for size %d",numOfBytes);
+            buf.bytesToWrite = fillBuffer(buf.localBuf, numOfBytes);
             LOGV("fillBuffer returned size %d",buf.bytesToWrite);
 
             /* TODO: Check if we have to notify the app if an error occurs */
