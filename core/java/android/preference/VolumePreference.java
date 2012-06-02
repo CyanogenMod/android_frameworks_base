@@ -172,6 +172,7 @@ public class VolumePreference extends SeekBarPreference implements
     public static class VolumeStore {
         public int volume = -1;
         public int originalVolume = -1;
+        public int originalRingerMode = -1;
     }
 
     private static class SavedState extends BaseSavedState {
@@ -181,6 +182,7 @@ public class VolumePreference extends SeekBarPreference implements
             super(source);
             mVolumeStore.volume = source.readInt();
             mVolumeStore.originalVolume = source.readInt();
+            mVolumeStore.originalRingerMode = source.readInt();
         }
 
         @Override
@@ -188,6 +190,7 @@ public class VolumePreference extends SeekBarPreference implements
             super.writeToParcel(dest, flags);
             dest.writeInt(mVolumeStore.volume);
             dest.writeInt(mVolumeStore.originalVolume);
+            dest.writeInt(mVolumeStore.originalRingerMode);
         }
 
         VolumeStore getVolumeStore() {
@@ -221,6 +224,7 @@ public class VolumePreference extends SeekBarPreference implements
         private AudioManager mAudioManager;
         private int mStreamType;
         private int mOriginalStreamVolume; 
+        private int mOriginalRingerMode;
         private Ringtone mRingtone;
     
         private int mLastProgress = -1;
@@ -254,6 +258,7 @@ public class VolumePreference extends SeekBarPreference implements
         private void initSeekBar(SeekBar seekBar) {
             seekBar.setMax(mAudioManager.getStreamMaxVolume(mStreamType));
             mOriginalStreamVolume = mAudioManager.getStreamVolume(mStreamType);
+            mOriginalRingerMode = mAudioManager.getRingerMode();
             seekBar.setProgress(mOriginalStreamVolume);
             seekBar.setOnSeekBarChangeListener(this);
             
@@ -284,6 +289,7 @@ public class VolumePreference extends SeekBarPreference implements
         
         public void revertVolume() {
             mAudioManager.setStreamVolume(mStreamType, mOriginalStreamVolume, 0);
+            mAudioManager.setRingerMode(mOriginalRingerMode);
         }
         
         public void onProgressChanged(SeekBar seekBar, int progress,
@@ -315,11 +321,15 @@ public class VolumePreference extends SeekBarPreference implements
             int newStreamVolume = mLastProgress;
             if (mStreamType == AudioManager.STREAM_RING) {
                 int ringerMode = mAudioManager.getRingerMode();
-                int vibrateSetting = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
 
                 if (mLastProgress == 0) {
                     if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                        mAudioManager.setRingerMode(vibrateSetting==AudioManager.VIBRATE_SETTING_OFF?AudioManager.RINGER_MODE_SILENT:AudioManager.RINGER_MODE_VIBRATE);
+                        int vibrateSetting = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+                        if (vibrateSetting == AudioManager.VIBRATE_SETTING_OFF) {
+                            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                        } else {
+                            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                        }
                     }
                 } else if (ringerMode != AudioManager.RINGER_MODE_NORMAL) {
                     mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
@@ -356,6 +366,7 @@ public class VolumePreference extends SeekBarPreference implements
             if (mLastProgress >= 0) {
                 volumeStore.volume = mLastProgress;
                 volumeStore.originalVolume = mOriginalStreamVolume;
+                volumeStore.originalRingerMode = mOriginalRingerMode;
             }
         }
 
@@ -363,6 +374,7 @@ public class VolumePreference extends SeekBarPreference implements
             if (volumeStore.volume != -1) {
                 mOriginalStreamVolume = volumeStore.originalVolume;
                 mLastProgress = volumeStore.volume;
+                mOriginalRingerMode = volumeStore.originalRingerMode;
                 postSetVolume(mLastProgress);
             }
         }
