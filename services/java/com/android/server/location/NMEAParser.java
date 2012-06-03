@@ -18,9 +18,7 @@ package com.android.server.location;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -37,7 +35,6 @@ public class NMEAParser {
     // NMEA sentence pattern
     private final Pattern sentencePattern = Pattern.compile("\\$([^*$]{5,})(\\*\\w{2})?");
     private final SimpleDateFormat timeFormatter = new SimpleDateFormat("HHmmss.S");
-    private final TimeZone mLocalTZ = TimeZone.getDefault();
 
     private HashMap<String,ParseInterface> parseMap = new HashMap<String,ParseInterface>();
     private String provider;
@@ -80,7 +77,6 @@ public class NMEAParser {
 
     private boolean mSatsReady = true;
     private Location loc = new Location(provider);
-    private GregorianCalendar currCalendar = new GregorianCalendar();
 
     /**
      * @param prov  Location provider name
@@ -163,13 +159,7 @@ public class NMEAParser {
     private long parseTimeToDate(String time) {
         try {
             Date btTime = timeFormatter.parse(time);
-            //System.currentTimeMillis()
-            GregorianCalendar cc = new GregorianCalendar();
-            cc.setTimeInMillis(System.currentTimeMillis());
-            currCalendar.setTimeInMillis(btTime.getTime() + mLocalTZ.getRawOffset());
-            currCalendar.set(cc.get(Calendar.YEAR), cc.get(Calendar.MONTH),
-                    cc.get(Calendar.DAY_OF_WEEK));
-            return currCalendar.getTimeInMillis();
+            return btTime.getTime();
         } catch (ParseException e) {
             Log.e(TAG, "Could not parse: " + time);
             return 0;
