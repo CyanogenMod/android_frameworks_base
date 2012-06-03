@@ -43,6 +43,9 @@ enum {
     CONNECT,
     DISCONNECT,
     SET_SCALING_MODE,
+#ifdef OMAP_ENHANCEMENT
+    SET_LAYOUT,
+#endif
 #ifdef QCOM_HARDWARE
     PERFORM_QCOM_OPERATION,
 #endif
@@ -220,6 +223,19 @@ public:
         return result;
     }
 
+#ifdef OMAP_ENHANCEMENT
+    virtual status_t setLayout(uint32_t layout) {
+        Parcel data, reply;
+        data.writeInterfaceToken(ISurfaceTexture::getInterfaceDescriptor());
+        data.writeInt32((int32_t)layout);
+        status_t result = remote()->transact(SET_LAYOUT, data, &reply);
+        if (result != NO_ERROR) {
+            return result;
+        }
+        result = reply.readInt32();
+        return result;
+    }
+#endif
 #ifdef QCOM_HARDWARE
     virtual status_t performQcomOperation(int operation, int arg1, int arg2, int arg3) {
         Parcel data, reply;
@@ -357,6 +373,17 @@ status_t BnSurfaceTexture::onTransact(
             reply->writeInt32(res);
             return NO_ERROR;
         } break;
+
+#ifdef OMAP_ENHANCEMENT
+        case SET_LAYOUT: {
+            uint32_t layout;
+            CHECK_INTERFACE(ISurfaceTexture, data, reply);
+            layout = (uint32_t)data.readInt32();
+            status_t result = setLayout(layout);
+            reply->writeInt32(result);
+            return NO_ERROR;
+        } break;
+#endif
 #ifdef QCOM_HARDWARE
         case PERFORM_QCOM_OPERATION: {
             CHECK_INTERFACE(ISurfaceTexture, data, reply);

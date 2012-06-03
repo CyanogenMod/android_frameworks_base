@@ -38,6 +38,9 @@ import com.android.internal.policy.PolicyManager;
 import java.util.Formatter;
 import java.util.Locale;
 
+import android.os.SystemClock;
+import android.os.SystemProperties;
+
 /**
  * A view containing controls for a MediaPlayer. Typically contains the
  * buttons like "Play/Pause", "Rewind", "Fast Forward" and a progress
@@ -94,6 +97,7 @@ public class MediaController extends FrameLayout {
     private ImageButton         mRewButton;
     private ImageButton         mNextButton;
     private ImageButton         mPrevButton;
+    private long mLastSeekEventTime;
 
     public MediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -529,6 +533,7 @@ public class MediaController extends FrameLayout {
     // we will simply apply the updated position without suspending regular updates.
     private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
         public void onStartTrackingTouch(SeekBar bar) {
+            mLastSeekEventTime = 0;
             show(3600000);
 
             mDragging = true;
@@ -547,12 +552,23 @@ public class MediaController extends FrameLayout {
                 // the progress bar's position.
                 return;
             }
-
-            long duration = mPlayer.getDuration();
-            long newposition = (duration * progress) / 1000L;
-            mPlayer.seekTo( (int) newposition);
-            if (mCurrentTime != null)
+            if (SystemProperties.OMAP_ENHANCEMENT) {
+                long now = SystemClock.elapsedRealtime();
+                if ((now - mLastSeekEventTime) > 250) {
+                    mLastSeekEventTime = now;
+                    long duration = mPlayer.getDuration();
+                    long newposition = (duration * progress) / 1000L;
+                    mPlayer.seekTo( (int) newposition);
+                    if (mCurrentTime != null)
+                        mCurrentTime.setText(stringForTime( (int) newposition));
+                }
+            } else {
+                long duration = mPlayer.getDuration();
+                long newposition = (duration * progress) / 1000L;
+                mPlayer.seekTo( (int) newposition);
+                if (mCurrentTime != null)
                 mCurrentTime.setText(stringForTime( (int) newposition));
+            }
         }
 
         public void onStopTrackingTouch(SeekBar bar) {

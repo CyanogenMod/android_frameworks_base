@@ -276,6 +276,9 @@ status_t SurfaceFlinger::readyToRun()
     dcblk->ydpi         = hw.getDpiY();
     dcblk->fps          = hw.getRefreshRate();
     dcblk->density      = hw.getDensity();
+#ifdef OMAP_ENHANCEMENT
+    dcblk->maxTex       = hw.getMaxTextureSize();
+#endif
 
     // Initialize OpenGL|ES
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);

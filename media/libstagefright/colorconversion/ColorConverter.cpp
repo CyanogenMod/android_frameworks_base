@@ -182,6 +182,52 @@ status_t ColorConverter::convert(
     return err;
 }
 
+#ifdef OMAP_ENHANCEMENT
+status_t ColorConverter::convertInterlacedBuffer(
+        const void *srcBits,
+        size_t srcWidth, size_t srcHeight,
+        size_t srcCropLeft, size_t srcCropTop,
+        size_t srcCropRight, size_t srcCropBottom,
+        OMX_INTERLACETYPE buff_layout,
+        void *dstBits,
+        size_t dstWidth, size_t dstHeight,
+        size_t dstCropLeft, size_t dstCropTop,
+        size_t dstCropRight, size_t dstCropBottom) {
+    if (mDstFormat != OMX_COLOR_Format16bitRGB565) {
+        return ERROR_UNSUPPORTED;
+    }
+    if (buff_layout != OMX_InterlaceFrameTopFieldFirst &&
+        buff_layout != OMX_InterlaceFrameBottomFieldFirst) {
+        return ERROR_UNSUPPORTED;
+    }
+
+    BitmapParams src(
+            const_cast<void *>(srcBits),
+            srcWidth, srcHeight,
+            srcCropLeft, srcCropTop, srcCropRight, srcCropBottom);
+
+    BitmapParams dst(
+            dstBits,
+            dstWidth, dstHeight,
+            dstCropLeft, dstCropTop, dstCropRight, dstCropBottom);
+
+    status_t err;
+
+    switch (mSrcFormat) {
+        case OMX_TI_COLOR_FormatYUV420PackedSemiPlanar:
+            err = convertTIYUV420PackedSemiPlanarInterlaced(src, dst);
+            break;
+
+        default:
+        {
+            CHECK(!"Should not be here. Unknown color conversion.");
+            break;
+        }
+    }
+
+    return err;
+}
+#endif
 status_t ColorConverter::convertCbYCrY(
         const BitmapParams &src, const BitmapParams &dst) {
     // XXX Untested
@@ -410,8 +456,11 @@ status_t ColorConverter::convertYUV420SemiPlanar(
     // XXX Untested
 
     uint8_t *kAdjustedClip = initClip();
-
+#ifdef OMAP_ENHANCEMENT
+    if (!((dst.mWidth & 1) == 0
+#else
     if (!((dst.mWidth & 3) == 0
+#endif
             && (src.mCropLeft & 1) == 0
             && src.cropWidth() == dst.cropWidth()
             && src.cropHeight() == dst.cropHeight())) {
@@ -479,8 +528,11 @@ status_t ColorConverter::convertYUV420SemiPlanar(
 status_t ColorConverter::convertTIYUV420PackedSemiPlanar(
         const BitmapParams &src, const BitmapParams &dst) {
     uint8_t *kAdjustedClip = initClip();
-
+#ifdef OMAP_ENHANCEMENT
+    if (!((dst.mWidth & 1) == 0
+#else
     if (!((dst.mWidth & 3) == 0
+#endif
             && (src.mCropLeft & 1) == 0
             && src.cropWidth() == dst.cropWidth()
             && src.cropHeight() == dst.cropHeight())) {
@@ -542,6 +594,76 @@ status_t ColorConverter::convertTIYUV420PackedSemiPlanar(
 
     return OK;
 }
+
+#ifdef OMAP_ENHANCEMENT
+status_t ColorConverter::convertTIYUV420PackedSemiPlanarInterlaced(
+        const BitmapParams &src, const BitmapParams &dst) {
+    uint8_t *kAdjustedClip = initClip();
+
+    if (!((dst.mWidth & 1) == 0
+            && (src.mCropLeft & 1) == 0
+            && src.cropWidth() == dst.cropWidth())) {
+        return ERROR_UNSUPPORTED;
+    }
+
+    uint32_t *dst_ptr = (uint32_t *)dst.mBits
+        + (dst.mCropTop * dst.mWidth + dst.mCropLeft) / 2;
+
+    const uint8_t *src_y = (const uint8_t *)src.mBits;
+
+    const uint8_t *src_u =
+        (const uint8_t *)src_y + src.mWidth * (src.mHeight - src.mCropTop / 2);
+    /* Duplicate the top field while color conversion */
+    for (size_t y = 0; y < src.cropHeight(); ++y) {
+            for (size_t x = 0; x < src.cropWidth(); x += 2) {
+                signed y1 = (signed)src_y[x] - 16;
+                signed y2 = (signed)src_y[x + 1] - 16;
+
+                signed u = (signed)src_u[x & ~1] - 128;
+                signed v = (signed)src_u[(x & ~1) + 1] - 128;
+
+                signed u_b = u * 517;
+                signed u_g = -u * 100;
+                signed v_g = -v * 208;
+                signed v_r = v * 409;
+
+                signed tmp1 = y1 * 298;
+                signed b1 = (tmp1 + u_b) / 256;
+                signed g1 = (tmp1 + v_g + u_g) / 256;
+                signed r1 = (tmp1 + v_r) / 256;
+
+                signed tmp2 = y2 * 298;
+                signed b2 = (tmp2 + u_b) / 256;
+                signed g2 = (tmp2 + v_g + u_g) / 256;
+                signed r2 = (tmp2 + v_r) / 256;
+
+                uint32_t rgb1 =
+                    ((kAdjustedClip[r1] >> 3) << 11)
+                    | ((kAdjustedClip[g1] >> 2) << 5)
+                    | (kAdjustedClip[b1] >> 3);
+
+                uint32_t rgb2 =
+                    ((kAdjustedClip[r2] >> 3) << 11)
+                    | ((kAdjustedClip[g2] >> 2) << 5)
+                    | (kAdjustedClip[b2] >> 3);
+
+                dst_ptr[x / 2] = (rgb2 << 16) | rgb1;
+
+                dst_ptr[dst.mWidth/2 + x / 2] = (rgb2 << 16) | rgb1;
+            }
+
+        src_y += src.mWidth;
+
+        if(y&1){
+           src_u += src.mWidth;
+        }
+
+        dst_ptr += dst.mWidth/2 *2;
+    }
+
+    return OK;
+}
+#endif
 
 uint8_t *ColorConverter::initClip() {
     static const signed kClipMin = -278;

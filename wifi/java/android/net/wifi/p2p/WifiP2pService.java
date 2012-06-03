@@ -461,6 +461,16 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                 loge("Failed to stop supplicant, issue kill");
                 WifiNative.killSupplicant();
             }
+
+            // Unload driver module as TI solution has loadable driver module
+            if(SystemProperties.OMAP_ENHANCEMENT) {
+                if(WifiNative.unloadDriver()) {
+                    logd("TI driver unloaded for P2P");
+                } else {
+                    loge("Failed to unload TI driver for P2P");
+                }
+            }
+
         }
 
         @Override
@@ -584,6 +594,15 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                     } catch (Exception e) {
                         loge("Failed to reload p2p firmware " + e);
                         // continue
+                    }
+
+                    // Load driver module. TI solution uses loadable driver module
+                    if(SystemProperties.OMAP_ENHANCEMENT) {
+                        if(WifiNative.loadDriver()) {
+                            logd("TI driver loaded for P2P");
+                        } else {
+                            loge("Failed to load TI driver for P2P");
+                        }
                     }
 
                     //A runtime crash can leave the interface up and

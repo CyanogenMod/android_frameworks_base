@@ -30,6 +30,10 @@
 #include "include/MPEG2TSExtractor.h"
 #include "include/WVMExtractor.h"
 
+#ifdef OMAP_ENHANCEMENT
+#include "include/ASFExtractor.h"
+#endif
+
 #include "timedtext/TimedTextPlayer.h"
 
 #include <binder/IPCThreadState.h>
@@ -71,6 +75,52 @@ static int64_t kLowWaterMarkUs = 2000000ll;  // 2secs
 static int64_t kHighWaterMarkUs = 5000000ll;  // 5secs
 static const size_t kLowWaterMarkBytes = 40000;
 static const size_t kHighWaterMarkBytes = 200000;
+
+/*
+    To print the FPS, type this command on the console before starting playback:
+    setprop debug.video.showfps 1
+    To disable the prints, type:
+    setprop debug.video.showfps 0
+
+*/
+
+#if defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR)
+
+/* The audio latency is typically 2x the buffer size set in the
+ * AudioHAL.  The value here is only used as a default value in case
+ * AudioPlayer::latency() returns 0 or a degenerate value.  A similar
+ * value is defined in AudioPlayer.cpp.  They should match, but they
+ * do not need to match.
+ *
+ * For OMAP4, The AudioHAL defines the hardware buffer at 4 x 40ms.
+ */
+/* 320 ms */
+#define DEFAULT_AUDIO_LATENCY (40000 * 4 * 2)
+
+#endif /* OMAP_ENHANCEMENT && OMAP_TIME_INTERPOLATOR */
+
+#ifdef OMAP_ENHANCEMENT
+
+static int mDebugFps = 0;
+static void debugShowFPS()
+{
+    static int mFrameCount = 0;
+    static int mLastFrameCount = 0;
+    static nsecs_t mLastFpsTime = 0;
+    static float mFps = 0;
+    mFrameCount++;
+    if (!(mFrameCount & 0x1F)) {
+        nsecs_t now = systemTime();
+        nsecs_t diff = now - mLastFpsTime;
+        mFps = ((mFrameCount - mLastFrameCount) * float(s2ns(1))) / diff;
+        mLastFpsTime = now;
+        mLastFrameCount = mFrameCount;
+        LOGD("%d Frames, %f FPS", mFrameCount, mFps);
+    }
+    // XXX: mFPS has the value we want
+}
+
+#endif
 
 struct AwesomeEvent : public TimedEventQueue::Event {
     AwesomeEvent(
@@ -129,6 +179,12 @@ struct AwesomeNativeWindowRenderer : public AwesomeRenderer {
             int32_t rotationDegrees)
         : mNativeWindow(nativeWindow) {
         applyRotation(rotationDegrees);
+#ifdef OMAP_ENHANCEMENT
+    char value[PROPERTY_VALUE_MAX];
+    property_get("debug.video.showfps", value, "0");
+    mDebugFps = atoi(value);
+    LOGD_IF(mDebugFps, "showfps enabled");
+#endif
     }
 
     virtual void render(MediaBuffer *buffer) {
@@ -145,6 +201,11 @@ struct AwesomeNativeWindowRenderer : public AwesomeRenderer {
 
         sp<MetaData> metaData = buffer->meta_data();
         metaData->setInt32(kKeyRendered, 1);
+#ifdef OMAP_ENHANCEMENT
+        if (mDebugFps != 0) {
+          debugShowFPS();
+        }
+#endif
     }
 
 protected:
@@ -195,6 +256,10 @@ AwesomePlayer::AwesomePlayer()
       mDisplayHeight(0),
       mFlags(0),
       mExtractorFlags(0),
+#ifdef OMAP_ENHANCEMENT
+      mExtractorType(NULL),
+      mExtractor(NULL),
+#endif
       mVideoBuffer(NULL),
       mDecryptHandle(NULL),
       mLastVideoTimeUs(-1),
@@ -257,6 +322,9 @@ AwesomePlayer::~AwesomePlayer() {
     reset();
 
     mClient.disconnect();
+#ifdef OMAP_ENHANCEMENT
+    mExtractor.clear();
+#endif
 }
 
 void AwesomePlayer::cancelPlayerEvents(bool keepNotifications) {
@@ -378,6 +446,17 @@ status_t AwesomePlayer::setDataSource_l(
         }
     }
 
+#ifdef OMAP_ENHANCEMENT
+    sp<MetaData> fileMetadata = extractor->getMetaData();
+    bool isAvailable = fileMetadata->findCString(kKeyMIMEType, &mExtractorType);
+    if(isAvailable) {
+        LOGV("%s:: ExtractorType %s", __FUNCTION__,  mExtractorType);
+    } else {
+        LOGV("%s:: ExtractorType not available", __FUNCTION__);
+    }
+    mExtractor = extractor;
+#endif
+
     return setDataSource_l(extractor);
 }
 
@@ -418,6 +497,17 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
 
     bool haveAudio = false;
     bool haveVideo = false;
+
+#ifdef OMAP_ENHANCEMENT
+    bool cachedASFStream = false;
+    if ((!strncasecmp("http://", mUri.string(), 7)
+            || !strncasecmp("https://", mUri.string(), 8))
+            && !strcasecmp(MEDIA_MIMETYPE_CONTAINER_ASF, mExtractorType)) {
+        cachedASFStream = true;
+    }
+
+    sp<MediaExtractor> tmpExtractor = extractor;
+#endif
     for (size_t i = 0; i < extractor->countTracks(); ++i) {
         sp<MetaData> meta = extractor->getTrackMetaData(i);
 
@@ -426,8 +516,23 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
 
         String8 mime = String8(_mime);
 
+#ifdef OMAP_ENHANCEMENT
+        if (cachedASFStream) {
+            if (createTrackExtractor(tmpExtractor,
+                    !strncasecmp(mime.string(), "video/", 6)
+                    ? TRACK_EXTRACTOR_VIDEO_TYPE
+                    : TRACK_EXTRACTOR_AUDIO_TYPE) != OK) {
+                LOGW("Fail to create separate extractor for Track %d", i);
+                tmpExtractor = extractor;
+            }
+        }
+#endif
         if (!haveVideo && !strncasecmp(mime.string(), "video/", 6)) {
+#ifdef OMAP_ENHANCEMENT
+            setVideoSource(tmpExtractor->getTrack(i));
+#else
             setVideoSource(extractor->getTrack(i));
+#endif
             haveVideo = true;
 
             // Set the presentation/display size
@@ -440,6 +545,12 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
                 mDisplayWidth = displayWidth;
                 mDisplayHeight = displayHeight;
             }
+#ifdef OMAP_ENHANCEMENT
+            else{
+                success=meta->findInt32(kKeyWidth, &mDisplayWidth);
+                success=meta->findInt32(kKeyHeight, &mDisplayHeight);
+            }
+#endif
 
             {
                 Mutex::Autolock autoLock(mStatsLock);
@@ -450,7 +561,11 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
                 stat->mMIME = mime.string();
             }
         } else if (!haveAudio && !strncasecmp(mime.string(), "audio/", 6)) {
+#ifdef OMAP_ENHANCEMENT
+            setAudioSource(tmpExtractor->getTrack(i));
+#else
             setAudioSource(extractor->getTrack(i));
+#endif
             haveAudio = true;
 
             {
@@ -600,6 +715,8 @@ void AwesomePlayer::reset_l() {
         mStats.mBitrate = -1;
         mStats.mAudioTrackIndex = -1;
         mStats.mVideoTrackIndex = -1;
+        mStats.mNumVideoFramesDecoded = 0;
+        mStats.mNumVideoFramesDropped = 0;
         mStats.mVideoWidth = -1;
         mStats.mVideoHeight = -1;
         mStats.mFlags = 0;
@@ -671,7 +788,11 @@ void AwesomePlayer::onVideoLagUpdate() {
     }
     mVideoLagEventPending = false;
 
+#if defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR)
+    int64_t audioTimeUs = mAudioPlayer->getRealTimeUs();
+#else
     int64_t audioTimeUs = mAudioPlayer->getMediaTimeUs();
+#endif
     int64_t videoLateByUs = audioTimeUs - mVideoTimeUs;
 
     if (!(mFlags & VIDEO_AT_EOS) && videoLateByUs > 300000ll) {
@@ -727,7 +848,13 @@ void AwesomePlayer::onBufferingUpdate() {
                     LOGI("cache is running low (< %d) , pausing.",
                          kLowWaterMarkBytes);
                     modifyFlags(CACHE_UNDERRUN, SET);
+#if defined(OMAP_ENHANCEMENT) && defined(TIME_INTERPOLATOR)
+                    // if cache is running low because of seek, wait for seek complete event to occur before pausing.
+                    // pause causes all events to be cancelled and therefore the event MEDIA_SEEK_COMPLETE will be lost.
+                    if (!mWatchForAudioSeekComplete) pause_l();
+#else
                     pause_l();
+#endif
                     ensureCacheIsFetching_l();
                     sendCacheStats();
                     notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);
@@ -783,7 +910,13 @@ void AwesomePlayer::onBufferingUpdate() {
             LOGI("cache is running low (%.2f secs) , pausing.",
                  cachedDurationUs / 1E6);
             modifyFlags(CACHE_UNDERRUN, SET);
+#if defined(OMAP_ENHANCEMENT) && defined(TIME_INTERPOLATOR)
+            // if cache is running low because of seek, wait for seek complete event to occur before pausing.
+            // pause causes all events to be cancelled and therefore the event MEDIA_SEEK_COMPLETE will be lost.
+            if (!mWatchForAudioSeekComplete) pause_l();
+#else
             pause_l();
+#endif
             ensureCacheIsFetching_l();
             sendCacheStats();
             notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);
@@ -1125,6 +1258,23 @@ void AwesomePlayer::notifyVideoSize_l() {
         rotationDegrees = 0;
     }
 
+#ifdef OMAP_ENHANCEMENT
+    int32_t sarIdc, sarWidth, sarHeight;
+    if (mVideoTrack->getFormat()->findInt32(kKeySARIdc, &sarIdc) &&
+            sarIdc != SAR_IDC_UNSPECIFIED) {
+        if (mVideoTrack->getFormat()->findInt32(kKeySARWidth, &sarWidth) &&
+                mVideoTrack->getFormat()->findInt32(kKeySARHeight, &sarHeight)
+                && sarWidth && sarHeight) {
+            LOGI("Output picture width will be recalculated according to SAR (%d:%d)",
+                    sarWidth, sarHeight);
+            usableWidth = (usableWidth * sarWidth) / sarHeight;
+        } else {
+            LOGW("Property kKeySARWidth or/and kKeySARHeight not defined");
+            mVideoTrack->getFormat()->setInt32(kKeySARIdc, SAR_IDC_UNSPECIFIED);
+        }
+    }
+#endif
+
     if (rotationDegrees == 90 || rotationDegrees == 270) {
         notifyListener_l(
                 MEDIA_SET_VIDEO_SIZE, usableHeight, usableWidth);
@@ -1193,6 +1343,10 @@ status_t AwesomePlayer::pause_l(bool at_eos) {
     }
 
     cancelPlayerEvents(true /* keepNotifications */);
+
+#if defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR)
+    mSeekTimeUs = mVideoTimeUs;
+#endif
 
     if (mAudioPlayer != NULL && (mFlags & AUDIO_RUNNING)) {
         if (at_eos) {
@@ -1271,7 +1425,14 @@ void AwesomePlayer::shutdownVideoDecoder_l() {
         usleep(1000);
     }
     IPCThreadState::self()->flushCommands();
-    LOGV("video decoder shutdown completed");
+
+#ifdef OMAP_ENHANCEMENT
+    if (mDebugFps != 0) {
+        LOGD("video decoder shutdown completed");
+    }
+#else
+     LOGV("video decoder shutdown completed");
+#endif
 }
 
 status_t AwesomePlayer::setNativeWindow_l(const sp<ANativeWindow> &native) {
@@ -1349,7 +1510,11 @@ status_t AwesomePlayer::getPosition(int64_t *positionUs) {
         Mutex::Autolock autoLock(mMiscStateLock);
         *positionUs = mVideoTimeUs;
     } else if (mAudioPlayer != NULL) {
+#if defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR)
+        *positionUs = mAudioPlayer->getRealTimeUs();
+#else
         *positionUs = mAudioPlayer->getMediaTimeUs();
+#endif
     } else {
         *positionUs = 0;
     }
@@ -1480,6 +1645,17 @@ status_t AwesomePlayer::initAudioDecoder() {
 
     if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_RAW)) {
         mAudioSource = mAudioTrack;
+#ifdef OMAP_ENHANCEMENT
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_WMA)) {
+        const char *componentName  = "OMX.ITTIAM.WMA.decode";
+        mAudioSource = OMXCodec::Create(
+        mClient.interface(), mAudioTrack->getFormat(),
+        false,
+        mAudioTrack, componentName);
+        if (mAudioSource == NULL) {
+            LOGE("Failed to create OMX component for WMA codec");
+        }
+#endif
     } else {
 #ifdef WITH_QCOM_LPA
         // For LPA Playback use the decoder without OMX layer
@@ -1611,6 +1787,21 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
     }
 #endif
 
+#ifdef OMAP_ENHANCEMENT
+    sp<MetaData> fileMetadata = mExtractor->getMetaData();
+    bool isAvailable = fileMetadata->findCString(kKeyMIMEType, &mExtractorType);
+    bool have_delta_table = true;
+    if (!strcasecmp("video/mp4", mExtractorType)) {
+        struct MediaSourceWithHaveDeltaTable *msdt =
+                static_cast<MediaSourceWithHaveDeltaTable*>(mVideoTrack.get());
+        have_delta_table = msdt->haveDeltaTable();
+    }
+    if ((!have_delta_table) || isAvailable &&
+        (!strcasecmp(MEDIA_MIMETYPE_CONTAINER_ASF, mExtractorType)
+        || !strcasecmp(MEDIA_MIMETYPE_CONTAINER_AVI, mExtractorType))) {
+            flags |= OMXCodec::kEnableTimeStampInDecodeOrder;
+    }
+#endif
     property_get("sys.media.vdec.sw", value, "0");
     if (atoi(value)) {
         LOGW("Software Codec is preferred for Video");
@@ -1625,6 +1816,19 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
             NULL, flags, USE_SURFACE_ALLOC ? mNativeWindow : NULL);
 
     if (mVideoSource != NULL) {
+#ifdef OMAP_ENHANCEMENT
+        sp<MetaData> sourceMetadata = mVideoSource->getFormat();
+        int32_t sarIdc, sarWidth, sarHeight;
+        if (sourceMetadata->findInt32(kKeySARIdc, &sarIdc) &&
+                sarIdc != SAR_IDC_UNSPECIFIED &&
+                sourceMetadata->findInt32(kKeySARWidth, &sarWidth) &&
+                sourceMetadata->findInt32(kKeySARHeight, &sarHeight)) {
+            sp<MetaData> trackMetadata = mVideoTrack->getFormat();
+            trackMetadata->setInt32(kKeySARIdc, sarIdc);
+            trackMetadata->setInt32(kKeySARWidth, sarWidth);
+            trackMetadata->setInt32(kKeySARHeight, sarHeight);
+        }
+#endif
         int64_t durationUs;
         if (mVideoTrack->getFormat()->findInt64(kKeyDuration, &durationUs)) {
             Mutex::Autolock autoLock(mMiscStateLock);
@@ -1815,7 +2019,9 @@ void AwesomePlayer::onVideoEvent() {
     int64_t timeUs;
     CHECK(mVideoBuffer->meta_data()->findInt64(kKeyTime, &timeUs));
 
+#if !(defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR))
     mLastVideoTimeUs = timeUs;
+#endif
 
     if (mSeeking == SEEK_VIDEO_ONLY) {
         if (mSeekTimeUs > timeUs) {
@@ -1824,10 +2030,12 @@ void AwesomePlayer::onVideoEvent() {
         }
     }
 
+#if !(defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR))
     {
         Mutex::Autolock autoLock(mMiscStateLock);
         mVideoTimeUs = timeUs;
     }
+#endif
 
     SeekType wasSeeking = mSeeking;
     finishSeekIfNecessary(timeUs);
@@ -1881,7 +2089,24 @@ void AwesomePlayer::onVideoEvent() {
     if (wasSeeking == NO_SEEK) {
         // Let's display the first frame after seeking right away.
 
+#if defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR)
+        int64_t nowUs = ts->getRealTimeUs();
+
+        if (ts == (TimeSource*)&mSystemTimeSource) {
+            /* At end of audio stream, clock switches back to system clock.
+             * This keeps the timeline from having a big jump.
+             */
+            nowUs -= mTimeSourceDeltaUs;
+        }
+
+        mLastVideoTimeUs = nowUs;
+        {
+            Mutex::Autolock autoLock(mMiscStateLock);
+            mVideoTimeUs = nowUs;
+        }
+#else
         nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
+#endif
 
         latenessUs = nowUs - timeUs;
 
@@ -1889,8 +2114,15 @@ void AwesomePlayer::onVideoEvent() {
                 && mAudioPlayer != NULL
                 && mAudioPlayer->getMediaTimeMapping(
                     &realTimeUs, &mediaTimeUs)) {
+#ifdef OMAP_ENHANCEMENT
+            if (mDebugFps != 0) {
+                LOGD("we're much too late (%.2f secs), video skipping ahead",
+                      latenessUs / 1E6);
+            }
+#else
             LOGI("we're much too late (%.2f secs), video skipping ahead",
                  latenessUs / 1E6);
+#endif
 
             mVideoBuffer->release();
             mVideoBuffer = NULL;
@@ -1898,7 +2130,11 @@ void AwesomePlayer::onVideoEvent() {
             mSeeking = SEEK_VIDEO_ONLY;
             mSeekTimeUs = mediaTimeUs;
 
+#if defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR)
+            postVideoEvent_l(0);
+#else
             postVideoEvent_l();
+#endif
             return;
         }
 
@@ -1910,9 +2146,17 @@ void AwesomePlayer::onVideoEvent() {
             if (!(mFlags & SLOW_DECODER_HACK)
                     || mSinceLastDropped > FRAME_DROP_FREQ)
             {
+#ifdef OMAP_ENHANCEMENT
+                if (mDebugFps != 0) {
+                    LOGD("we're late by %lld us (%.2f secs) dropping "
+                         "one after %d frames",
+                          latenessUs, latenessUs / 1E6, mSinceLastDropped);
+                }
+#else
                 LOGV("we're late by %lld us (%.2f secs) dropping "
                      "one after %d frames",
                      latenessUs, latenessUs / 1E6, mSinceLastDropped);
+#endif
 
                 mSinceLastDropped = 0;
                 mVideoBuffer->release();
@@ -1931,7 +2175,11 @@ void AwesomePlayer::onVideoEvent() {
                     }
                 }
 
+#if defined(OMAP_ENHANCEMENT) && defined(TIME_INTERPOLATOR)
+                postVideoEvent_l(0);
+#else
                 postVideoEvent_l();
+#endif
                 return;
             }
         }
@@ -1943,7 +2191,21 @@ void AwesomePlayer::onVideoEvent() {
                 Mutex::Autolock autoLock(mStatsLock);
                 mStats.mConsecutiveFramesDropped = 0;
             }
+
+#if defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR)
+            /* We're early, so repost this video event with more
+             * precise timing, but limit it to 100 ms.  This provides
+             * better timing and uses less CPU than the default
+             * behavior (which is to keep trying every 10 ms).
+             */
+            if (-latenessUs > 100000) {
+                postVideoEvent_l(100000);
+            } else {
+                postVideoEvent_l(latenessUs * -1);
+            }
+#else
             postVideoEvent_l(10000);
+#endif
             return;
         }
     }
@@ -1987,7 +2249,24 @@ void AwesomePlayer::onVideoEvent() {
         return;
     }
 
+#if defined(OMAP_ENHANCEMENT) && defined(OMAP_TIME_INTERPOLATOR)
+    /* By having this at the end, this function is essentially
+     * scheduling itself to be re-called.  The default behavior
+     * [postVideoEvent_l()] is to schedule a call in 10 ms.  However,
+     * at this point the function doesn't know when is the best time
+     * to repost this event.  E.g. at 30 fps (33.3 ms) there will be
+     * 30 ms or 40 ms until the next non-idle call of this function.
+     * This adds extra jitter.
+     *
+     * Therefore we schedule this function to be re-called
+     * immediately, and then a more precise post timing is calculated.
+     * (See above when latenessUs < -10000).  This reduces jitter and
+     * uses less CPU.
+     */
+    postVideoEvent_l(0);
+#else
     postVideoEvent_l();
+#endif
 }
 
 void AwesomePlayer::postVideoEvent_l(int64_t delayUs) {
@@ -2314,6 +2593,18 @@ status_t AwesomePlayer::finishSetDataSource_l() {
         }
     }
 
+#ifdef OMAP_ENHANCEMENT
+    sp<MetaData> fileMetadata = extractor->getMetaData();
+    bool isAvailable = fileMetadata->findCString(kKeyMIMEType, &mExtractorType);
+    if(isAvailable) {
+        LOGD("%s:: ExtractorType %s", __FUNCTION__,  mExtractorType);
+    }
+    else {
+        LOGE("%s:: ExtractorType not available", __FUNCTION__);
+    }
+    mExtractor = extractor;
+#endif
+
     status_t err = setDataSource_l(extractor);
 
     if (err != OK) {
@@ -2551,6 +2842,62 @@ void AwesomePlayer::modifyFlags(unsigned value, FlagMode mode) {
     }
 }
 
+#ifdef OMAP_ENHANCEMENT
+status_t AwesomePlayer::createTrackExtractor(sp<MediaExtractor> &trackExtractor, track_extractor_t type) {
+    sp<HTTPBase> connectingDataSource = HTTPBase::Create(
+            (mFlags & INCOGNITO)
+                ? HTTPBase::kFlagIncognito
+                : 0);
+
+
+    if (mUIDValid) {
+        connectingDataSource->setUID(mUID);
+    }
+
+    String8 cacheConfig;
+    bool disconnectAtHighwatermark;
+
+    NuCachedSource2::RemoveCacheSpecificHeaders(
+            &mUriHeaders, &cacheConfig, &disconnectAtHighwatermark);
+
+    mLock.unlock();
+    status_t err = connectingDataSource->connect(mUri, &mUriHeaders);
+    mLock.lock();
+
+    if (err != OK) {
+        connectingDataSource.clear();
+
+        LOGI("connectingDataSource->connect() returned %d", err);
+        return err;
+    }
+
+    sp<NuCachedSource2> cachedSource = new NuCachedSource2(
+                connectingDataSource,
+                cacheConfig.isEmpty() ? NULL : cacheConfig.string(),
+                disconnectAtHighwatermark);
+
+    connectingDataSource.clear();
+
+    if (cachedSource == NULL) {
+        return UNKNOWN_ERROR;
+    }
+
+    trackExtractor = MediaExtractor::Create(
+            cachedSource, NULL);
+
+    if (trackExtractor == NULL) {
+        return UNKNOWN_ERROR;
+    }
+
+    if (type == TRACK_EXTRACTOR_VIDEO_TYPE) {
+        mCachedSource.clear();
+        mCachedSource = cachedSource;
+        mExtractor = trackExtractor;
+    }
+
+    return OK;
+}
+#endif
 //Statistics profiling
 void AwesomePlayer::logStatistics() {
     const char *mime;

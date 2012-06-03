@@ -30,6 +30,11 @@
 #include "include/WVMExtractor.h"
 #include "include/FLACExtractor.h"
 #include "include/AACExtractor.h"
+
+#ifdef OMAP_ENHANCEMENT
+#include "include/ASFExtractor.h"
+#include "include/AVIExtractor.h"
+#endif
 #ifdef QCOM_HARDWARE
 #include "include/ExtendedExtractor.h"
 #endif
@@ -120,6 +125,34 @@ sp<MediaExtractor> MediaExtractor::Create(
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MPEG2PS)) {
         ret = new MPEG2PSExtractor(source);
     }
+
+#ifdef OMAP_ENHANCEMENT
+      else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_AVI)) {
+        ret = new AVIExtractor(source);
+    } else if(!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_ASF)) {
+        if(isASFParserAvailable())  {
+            MediaExtractor *ret = new ASFExtractor(source);
+            if (ret == NULL) {
+                LOGE("Failed to create ASFExtractor object");
+                return NULL;
+            }
+
+            /* Reading DRM/WMR property */
+            int32_t bDRM;
+            if (ret->getMetaData()->findInt32(kKeyIsDRM, &bDRM) && bDRM != 0) {
+                LOGE("Content has been protected by encryption (DRM, WMR, etc.) "
+                    "and will not be played.");
+                delete ret;
+                return NULL;
+            }
+
+            return ret;
+        }
+        else {
+            return NULL;
+        }
+    }
+#endif
 
     if (ret != NULL) {
        if (isDrm) {
