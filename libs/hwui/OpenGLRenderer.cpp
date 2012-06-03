@@ -2137,11 +2137,7 @@ void OpenGLRenderer::drawText(const char* text, int bytesCount, int count,
         setupDrawShader();
         setupDrawBlending(true, mode);
         setupDrawProgram();
-#ifdef QCOM_HARDWARE
-        setupDrawModelView(sx, sy, sx + shadow->width, sy + shadow->height, pureTranslate, true);
-#else
         setupDrawModelView(sx, sy, sx + shadow->width, sy + shadow->height);
-#endif
         setupDrawTexture(shadow->id);
         setupDrawPureColorUniforms();
         setupDrawColorFilterUniforms();
