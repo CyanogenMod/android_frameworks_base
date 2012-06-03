@@ -38,7 +38,12 @@ struct display_cblk_t
     float       density;
     float       xdpi;
     float       ydpi;
+#ifdef OMAP_ENHANCEMENT
+    uint32_t    maxTex;
+    uint32_t    pad[1];
+#else
     uint32_t    pad[2];
+#endif
 };
 
 struct surface_flinger_cblk_t   // 4KB max

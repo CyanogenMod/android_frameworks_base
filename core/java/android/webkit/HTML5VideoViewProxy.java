@@ -137,6 +137,9 @@ class HTML5VideoViewProxy extends Handler
                 // When switching out, clean the video content on the old page
                 // by telling the layer not readyToUseSurfTex.
                 setBaseLayer(mBaseLayer);
+                if("true".equals(System.getProperty("omap.enhancement"))) {
+                    mHTML5VideoView.release();
+                }
             }
         }
 
@@ -171,41 +174,83 @@ class HTML5VideoViewProxy extends Handler
                 WebChromeClient client, int videoLayerId) {
             int currentVideoLayerId = -1;
             boolean backFromFullScreenMode = false;
+            boolean surfaceDeleted = true;
+            int currentState = mHTML5VideoView.STATE_RELEASED;
             if (mHTML5VideoView != null) {
                 currentVideoLayerId = mHTML5VideoView.getVideoLayerId();
                 backFromFullScreenMode = mHTML5VideoView.fullScreenExited();
+                if ("true".equals(System.getProperty("omap.enhancement"))) {
+                    surfaceDeleted = mHTML5VideoView.surfaceTextureDeleted();
+                    currentState = mHTML5VideoView.getCurrentState();
+                }
             }
 
-            if (backFromFullScreenMode
-                || currentVideoLayerId != videoLayerId
-                || mHTML5VideoView.surfaceTextureDeleted()) {
-                // Here, we handle the case when switching to a new video,
-                // either inside a WebView or across WebViews
-                // For switching videos within a WebView or across the WebView,
-                // we need to pause the old one and re-create a new media player
-                // inside the HTML5VideoView.
-                if (mHTML5VideoView != null) {
-                    if (!backFromFullScreenMode) {
-                        mHTML5VideoView.pauseAndDispatch(mCurrentProxy);
+            if ("true".equals(System.getProperty("omap.enhancement"))) {
+                if (backFromFullScreenMode
+                    || currentVideoLayerId != videoLayerId
+                    || surfaceDeleted == true
+                    || currentState == mHTML5VideoView.STATE_RELEASED) {
+                    // Here, we handle the case when switching to a new video,
+                    // either inside a WebView or across WebViews
+                    // For switching videos within a WebView or across the WebView,
+                    // we need to pause the old one and re-create a new media player
+                    // inside the HTML5VideoView.
+                    if (mHTML5VideoView != null
+                        && currentState != mHTML5VideoView.STATE_RELEASED) {
+                        if (!backFromFullScreenMode) {
+                            mHTML5VideoView.pauseAndDispatch(mCurrentProxy);
+                        }
+                        // release the media player to avoid finalize error
+                        mHTML5VideoView.release();
                     }
-                    // release the media player to avoid finalize error
-                    mHTML5VideoView.release();
-                }
-                mCurrentProxy = proxy;
-                mHTML5VideoView = new HTML5VideoInline(videoLayerId, time, false);
+                    mCurrentProxy = proxy;
+                    mHTML5VideoView = new HTML5VideoInline(videoLayerId, time, false);
 
-                mHTML5VideoView.setVideoURI(url, mCurrentProxy);
-                mHTML5VideoView.prepareDataAndDisplayMode(proxy);
-            } else if (mCurrentProxy == proxy) {
-                // Here, we handle the case when we keep playing with one video
-                if (!mHTML5VideoView.isPlaying()) {
-                    mHTML5VideoView.seekTo(time);
-                    mHTML5VideoView.start();
+                    mHTML5VideoView.setVideoURI(url, mCurrentProxy);
+                    mHTML5VideoView.prepareDataAndDisplayMode(proxy);
+                } else if (mCurrentProxy == proxy) {
+                    // Here, we handle the case when we keep playing with one video
+                    if (!mHTML5VideoView.isPlaying()) {
+                        mHTML5VideoView.seekTo(time);
+                        mHTML5VideoView.start();
+                    }
+                } else if (mCurrentProxy != null) {
+                    // Some other video is already playing. Notify the caller that
+                    // its playback ended.
+                    proxy.dispatchOnEnded();
                 }
-            } else if (mCurrentProxy != null) {
-                // Some other video is already playing. Notify the caller that
-                // its playback ended.
-                proxy.dispatchOnEnded();
+            } else {
+                if (backFromFullScreenMode
+                    || currentVideoLayerId != videoLayerId
+                    || mHTML5VideoView.surfaceTextureDeleted()) {
+                    // Here, we handle the case when switching to a new video,
+                    // either inside a WebView or across WebViews
+                    // For switching videos within a WebView or across the WebView,
+                    // we need to pause the old one and re-create a new media player
+                    // inside the HTML5VideoView.
+                    if (mHTML5VideoView != null) {
+                        if (!backFromFullScreenMode) {
+                            mHTML5VideoView.pauseAndDispatch(mCurrentProxy);
+                        }
+                        // release the media player to avoid finalize error
+                        mHTML5VideoView.release();
+                    }
+                    mCurrentProxy = proxy;
+                    mHTML5VideoView = new HTML5VideoInline(videoLayerId, time, false);
+
+                    mHTML5VideoView.setVideoURI(url, mCurrentProxy);
+                    mHTML5VideoView.prepareDataAndDisplayMode(proxy);
+                } else if (mCurrentProxy == proxy) {
+                    // Here, we handle the case when we keep playing with one video
+                    if (!mHTML5VideoView.isPlaying()) {
+                        mHTML5VideoView.seekTo(time);
+                        mHTML5VideoView.start();
+                    }
+                } else if (mCurrentProxy != null) {
+                    // Some other video is already playing. Notify the caller that
+                    // its playback ended.
+                    proxy.dispatchOnEnded();
+                }
             }
         }
 

@@ -140,6 +140,7 @@ public class Camera {
     private static final int CAMERA_MSG_STATS_DATA       = 0x800;
     private static final int CAMERA_MSG_META_DATA        = 0x8000;
     private static final int CAMERA_MSG_PREVIEW_METADATA = 0x400;
+    private static final int CAMERA_MSG_BURST_IMAGE      = 0x800;
     private static final int CAMERA_MSG_ALL_MSGS         = 0x4FF;
 
     private int mNativeContext; // accessed by native methods

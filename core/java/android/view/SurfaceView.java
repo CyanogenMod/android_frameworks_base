@@ -31,6 +31,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.ParcelFileDescriptor;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -516,6 +517,15 @@ public class SurfaceView extends View {
                             for (SurfaceHolder.Callback c : callbacks) {
                                 c.surfaceDestroyed(mSurfaceHolder);
                             }
+                        }
+                    }
+
+                    if (SystemProperties.OMAP_ENHANCEMENT) {
+                        if (!mNewSurface.isValid()) {
+                            // If the surface is invalid, it makes no sense to do
+                            // anything with it (e.g. mark it for redraw, etc).
+
+                            return;
                         }
                     }
 
