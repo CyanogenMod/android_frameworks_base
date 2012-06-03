@@ -319,6 +319,12 @@ void BlockIterator::seek(int64_t seekTimeUs, bool seekToKeyFrame) {
         while (!eos() && !mBlockEntry->GetBlock()->IsKey()) {
             advance_l();
         }
+#ifdef OMAP_ENHANCEMENT
+    } else {
+        while (!eos() && blockTimeUs() < seekTimeUs) {
+            advance_l();
+        }
+#endif
     }
 }
 

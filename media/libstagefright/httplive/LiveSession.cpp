@@ -491,7 +491,13 @@ rinse_repeat:
 
     if (mLastPlaylistFetchTimeUs < 0
             || (ssize_t)bandwidthIndex != mPrevBandwidthIndex
+#ifdef OMAP_ENHANCEMENT
+            || (!mPlaylist->isComplete()
+                    && (mPlaylist->meta() != NULL)
+                    && timeToRefreshPlaylist(nowUs))) {
+#else
             || (!mPlaylist->isComplete() && timeToRefreshPlaylist(nowUs))) {
+#endif
         AString url;
         if (mBandwidthItems.size() > 0) {
             url = mBandwidthItems.editItemAt(bandwidthIndex).mURI;

@@ -192,6 +192,11 @@ public:
     // pass metadata through the buffers. Currently, it is force set to true
     bool isMetaDataStoredInVideoBuffers() const;
 
+#ifdef OMAP_ENHANCEMENT
+    // Just confirming to the ISurfaceTexture interface as of now
+    virtual status_t setLayout(uint32_t layout) { return OK; }
+#endif
+
 protected:
 
     // freeAllBuffersLocked frees the resources (both GraphicBuffer and EGLImage) for
