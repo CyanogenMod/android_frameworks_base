@@ -137,6 +137,9 @@ struct InputReaderConfiguration {
         // The device name alias supplied by the may have changed for some devices.
         CHANGE_DEVICE_ALIAS = 1 << 5,
 
+        // Stylus icon option changed.
+        CHANGE_STYLUS_ICON_ENABLED = 1 << 6,
+
         // All devices must be reopened.
         CHANGE_MUST_REOPEN = 1 << 31,
     };
@@ -224,6 +227,8 @@ struct InputReaderConfiguration {
     // True to show the location of touches on the touch screen as spots.
     bool showTouches;
 
+    // True to show the pointer icon when a stylus is used.
+    bool stylusIconEnabled;
     InputReaderConfiguration() :
             virtualKeyQuietTime(0),
             pointerVelocityControlParameters(1.0f, 500.0f, 3000.0f, 3.0f),
@@ -240,7 +245,9 @@ struct InputReaderConfiguration {
             pointerGestureSwipeMaxWidthRatio(0.25f),
             pointerGestureMovementSpeedRatio(0.8f),
             pointerGestureZoomSpeedRatio(0.3f),
-            showTouches(false) { }
+            showTouches(false),
+            stylusIconEnabled(false),
+    { }
 
     bool getDisplayInfo(bool external, DisplayViewport* outViewport) const;
     void setDisplayInfo(bool external, const DisplayViewport& viewport);
@@ -1662,6 +1669,13 @@ private:
     const VirtualKey* findVirtualKeyHit(int32_t x, int32_t y);
 
     void assignPointerIds();
+<<<<<<< HEAD
+=======
+
+    void unfadePointer(PointerControllerInterface::Transition transition);
+
+    bool rejectPalm(nsecs_t when);
+>>>>>>> db70e7a... input: Add option to toggle pointer icon when using stylus
 };
 
 
