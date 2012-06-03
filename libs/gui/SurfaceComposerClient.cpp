@@ -489,6 +489,9 @@ status_t SurfaceComposerClient::getDisplayInfo(
     info->ydpi           = dcblk->ydpi;
     info->fps            = dcblk->fps;
     info->density        = dcblk->density;
+#ifdef OMAP_ENHANCEMENT
+    info->maxTex         = dcblk->maxTex;
+#endif
     return getPixelFormatInfo(dcblk->format, &(info->pixelFormatInfo));
 }
 

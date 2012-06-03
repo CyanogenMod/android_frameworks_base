@@ -961,6 +961,7 @@ int main(int argc, char **argv) {
 
         Vector<sp<MediaSource> > mediaSources;
         sp<MediaSource> mediaSource;
+        sp<MediaExtractor> extractor;
 
         if (isJPEG) {
             mediaSource = new JPEGSource(dataSource);
@@ -979,7 +980,6 @@ int main(int argc, char **argv) {
                 mediaSources.push(mediaSource);
             }
         } else {
-            sp<MediaExtractor> extractor;
 
             if (!strncasecmp("httplive://", filename, 11)) {
                 String8 uri("http://");

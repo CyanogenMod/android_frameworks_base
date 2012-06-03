@@ -48,6 +48,13 @@ public:
     enum { NUM_BUFFER_SLOTS = 32 };
     enum { NO_CONNECTED_API = 0 };
 
+#ifdef OMAP_ENHANCEMENT
+    enum {
+        MIN_SURFACEFLINGERCLIENT_BUFFERS = 2,
+        MAX_SURFACEFLINGERCLIENT_BUFFERS
+    };
+#endif
+
     struct FrameAvailableListener : public virtual RefBase {
         // onFrameAvailable() is called from queueBuffer() each time an
         // additional frame becomes available for consumption. This means that
@@ -235,6 +242,13 @@ public:
     void dump(String8& result) const;
     void dump(String8& result, const char* prefix, char* buffer, size_t SIZE) const;
 
+#ifdef OMAP_ENHANCEMENT
+    //sets the layout for the buffers
+    virtual status_t setLayout(uint32_t layout);
+    // getCurrentLayout returns the layout of the current buffer
+    uint32_t getCurrentLayout() const;
+#endif
+
 protected:
 
     // freeBufferLocked frees the resources (both GraphicBuffer and EGLImage)
@@ -365,6 +379,12 @@ private:
         // to EGL_NO_SYNC_KHR when the buffer is created and (optionally, based
         // on a compile-time option) set to a new sync object in updateTexImage.
         EGLSyncKHR mFence;
+
+#ifdef OMAP_ENHANCEMENT
+        // mLayout is the current layout of the buffer for this buffer slot. This gets
+        // set to mNextLayout each time queueBuffer gets called for this buffer.
+        uint32_t mLayout;
+#endif
     };
 
     // mSlots is the array of buffer slots that must be mirrored on the client
@@ -516,6 +536,11 @@ private:
     // with the surface Texture.
     uint64_t mFrameCounter;
 
+#ifdef OMAP_ENHANCEMENT
+    // current and next layout for the buffers
+    uint32_t mCurrentLayout;
+    uint32_t mNextLayout;
+#endif
 #ifdef QCOM_HARDWARE
     // s3dFormat is the S3D format specified by the client.
     int mS3DFormat;

@@ -262,6 +262,10 @@ typedef enum OMX_INDEXTYPE {
        to 0x7FFFFFFE.  This range is not broken out by vendor, so
        private indexes are not guaranteed unique and therefore should
        only be sent to the appropriate component. */
+#ifdef OMAP_ENHANCEMENT
+    OMX_TI_IndexConfigStreamInterlaceFormats = OMX_IndexVendorStartUnused + 0x100, /**< reference:
+OMX_STREAMINTERLACEFORMATTYPE */
+#endif
 
     OMX_IndexMax = 0x7FFFFFFF
 

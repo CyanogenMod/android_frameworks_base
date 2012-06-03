@@ -73,6 +73,12 @@ public:
     status_t dump(int fd, const Vector<String16>& args) const;
 
 private:
+#ifdef OMAP_ENHANCEMENT
+    enum {
+        kMaxCttsOffsetTimeUs = 1000000LL,  // 1 second
+    };
+#endif
+
     MPEG4Writer *mOwner;
     sp<MetaData> mMeta;
     sp<MediaSource> mSource;
@@ -142,8 +148,15 @@ private:
         uint32_t sampleCount;
         int32_t sampleDuration;  // time scale based
     };
-    bool          mHasNegativeCttsDeltaDuration;
-    size_t        mNumCttsTableEntries;
+
+#ifdef OMAP_ENHANCEMENT
+    int64_t      mMinCttsOffsetTimeUs;
+    int64_t      mMaxCttsOffsetTimeUs;
+#else
+    bool         mHasNegativeCttsDeltaDuration;
+#endif
+
+    size_t       mNumCttsTableEntries;
     List<CttsTableEntry> mCttsTableEntries;
 
     // Sequence parameter set or picture parameter set
@@ -174,6 +187,10 @@ private:
 
     // Update the audio track's drift information.
     void updateDriftTime(const sp<MetaData>& meta);
+
+#ifdef OMAP_ENHANCEMENT
+    int32_t getStartTimeOffsetScaledTime() const;
+#endif
 
     static void *ThreadWrapper(void *me);
     status_t threadEntry();
@@ -1189,9 +1206,12 @@ void MPEG4Writer::Track::addOneCttsTableEntry(
     if (mIsAudio) {
         return;
     }
+
+#ifndef OMAP_ENHANCEMENT
     if (duration < 0 && !mHasNegativeCttsDeltaDuration) {
         mHasNegativeCttsDeltaDuration = true;
     }
+#endif
     CttsTableEntry cttsEntry(sampleCount, duration);
     mCttsTableEntries.push_back(cttsEntry);
     ++mNumCttsTableEntries;
@@ -1512,7 +1532,9 @@ status_t MPEG4Writer::Track::start(MetaData *params) {
     mMdatSizeBytes = 0;
 
     mMaxChunkDurationUs = 0;
-    mHasNegativeCttsDeltaDuration = false;
+#ifndef OMAP_ENHANCEMENT
+   mHasNegativeCttsDeltaDuration = false;
+#endif
 
     pthread_create(&mThread, &attr, ThreadWrapper, this);
     pthread_attr_destroy(&attr);
@@ -1836,17 +1858,29 @@ status_t MPEG4Writer::Track::threadEntry() {
     int32_t nChunks = 0;
     int32_t nZeroLengthFrames = 0;
     int64_t lastTimestampUs = 0;      // Previous sample time stamp
+#ifndef OMAP_ENHANCEMENT
     int64_t lastCttsTimeUs = 0;       // Previous sample time stamp
+#endif
     int64_t lastDurationUs = 0;       // Between the previous two samples
     int64_t currDurationTicks = 0;    // Timescale based ticks
     int64_t lastDurationTicks = 0;    // Timescale based ticks
     int32_t sampleCount = 1;          // Sample count in the current stts table entry
+
+#ifdef OMAP_ENHANCEMENT
+    int64_t cttsOffsetTimeUs = 0;
+    int64_t currCttsOffsetTimeTicks = 0;   // Timescale based ticks
+    int64_t lastCttsOffsetTimeTicks = -1;  // Timescale based ticks
+    int32_t cttsSampleCount = 1;           // Sample count in the current ctts table entry
+#else
     int64_t currCttsDurTicks = 0;     // Timescale based ticks
     int64_t lastCttsDurTicks = 0;     // Timescale based ticks
     int32_t cttsSampleCount = 0;      // Sample count in the current ctts table entry
+#endif
     uint32_t previousSampleSize = 0;      // Size of the previous sample
     int64_t previousPausedDurationUs = 0;
     int64_t timestampUs = 0;
+
+#ifndef OMAP_ENHANCEMENT
     int64_t cttsDeltaTimeUs = 0;
     bool hasBFrames = false;
 #ifdef QCOM_HARDWARE
@@ -1861,6 +1895,7 @@ status_t MPEG4Writer::Track::threadEntry() {
         (!strcasecmp(value, "true") || !strcasecmp(value, "1"))) {
         hasBFrames = true;
     }
+#endif
 #endif
     if (mIsAudio) {
         prctl(PR_SET_NAME, (unsigned long)"AudioTrackEncoding", 0, 0, 0);
@@ -1996,7 +2031,12 @@ status_t MPEG4Writer::Track::threadEntry() {
 
         timestampUs -= previousPausedDurationUs;
         CHECK(timestampUs >= 0);
+
+#ifdef OMAP_ENHANCEMENT
+        if (!mIsAudio) {
+#else
         if (!mIsAudio && hasBFrames) {
+#endif
             /*
              * Composition time: timestampUs
              * Decoding time: decodingTimeUs
@@ -2019,11 +2059,44 @@ status_t MPEG4Writer::Track::threadEntry() {
             }
 #endif
             decodingTimeUs -= previousPausedDurationUs;
+#ifdef OMAP_ENHANCEMENT
+            cttsOffsetTimeUs =
+                    timestampUs + kMaxCttsOffsetTimeUs - decodingTimeUs;
+            CHECK(cttsOffsetTimeUs >= 0);
+            timestampUs = decodingTimeUs;
+            LOGV("decoding time: %lld and ctts offset  time: %lld",
+                timestampUs, cttsOffsetTimeUs);
+            // Update ctts box table if necessary
+            currCttsOffsetTimeTicks =
+                    (cttsOffsetTimeUs * mTimeScale + 500000LL) / 1000000LL;
+            CHECK(currCttsOffsetTimeTicks <= 0x7FFFFFFFLL);
+
+            // FIXME:
+            // Optimize to reduce the number of ctts table entries.
+            // Also, make sure that the very first ctts table entry contains
+            // only a single sample.
+
+            addOneCttsTableEntry(1, currCttsOffsetTimeTicks);
+            lastCttsOffsetTimeTicks = currCttsOffsetTimeTicks;
+
+            // Update ctts time offset range
+            if (mNumSamples == 0) {
+                mMinCttsOffsetTimeUs = currCttsOffsetTimeTicks;
+                mMaxCttsOffsetTimeUs = currCttsOffsetTimeTicks;
+            } else {
+                if (currCttsOffsetTimeTicks > mMaxCttsOffsetTimeUs) {
+                    mMaxCttsOffsetTimeUs = currCttsOffsetTimeTicks;
+                } else if (currCttsOffsetTimeTicks < mMinCttsOffsetTimeUs) {
+                    mMinCttsOffsetTimeUs = currCttsOffsetTimeTicks;
+                }
+            }
+#else
             int64_t timeUs = decodingTimeUs;
             cttsDeltaTimeUs = timestampUs - decodingTimeUs;
             timestampUs = decodingTimeUs;
             LOGV("decoding time: %lld and ctts delta time: %lld",
                 timestampUs, cttsDeltaTimeUs);
+#endif
         }
 
         if (mIsRealTimeRecording) {
@@ -2047,6 +2120,9 @@ status_t MPEG4Writer::Track::threadEntry() {
         currDurationTicks =
             ((timestampUs * mTimeScale + 500000LL) / 1000000LL -
                 (lastTimestampUs * mTimeScale + 500000LL) / 1000000LL);
+#ifdef OMAP_ENHANCEMENT
+        CHECK(currDurationTicks >= 0);
+#endif
 
         mSampleSizes.push_back(sampleSize);
         ++mNumSamples;
@@ -2063,8 +2139,7 @@ status_t MPEG4Writer::Track::threadEntry() {
                 ++sampleCount;
             }
 
-        }
-
+#ifndef OMAP_ENHANCEMENT
         if (!mIsAudio && hasBFrames && (mNumSamples >= 2)) {
             currCttsDurTicks = (cttsDeltaTimeUs * mTimeScale) / 1000000LL;
             ++cttsSampleCount;
@@ -2078,7 +2153,9 @@ status_t MPEG4Writer::Track::threadEntry() {
             lastCttsDurTicks = currCttsDurTicks;
             lastCttsTimeUs = cttsDeltaTimeUs;
         }
+#endif
 
+        }
 
         if (mSamplesHaveSameSize) {
             if (mNumSamples >= 2 && previousSampleSize != sampleSize) {
@@ -2160,7 +2237,9 @@ status_t MPEG4Writer::Track::threadEntry() {
     if (mNumSamples == 1) {
         lastDurationUs = 0;  // A single sample's duration
         lastDurationTicks = 0;
+#ifndef OMAP_ENHANCEMENT
         lastCttsDurTicks = 0;
+#endif
     } else {
         ++sampleCount;  // Count for the last sample
         ++cttsSampleCount;
@@ -2175,12 +2254,13 @@ status_t MPEG4Writer::Track::threadEntry() {
         addOneSttsTableEntry(sampleCount, lastDurationTicks);
     }
 
+#ifndef OMAP_ENHANCEMENT
     if (!mIsAudio && hasBFrames) {
         LOGV("Add ctts for last sample count = %d, ctts value = %lld", cttsSampleCount,
              lastCttsDurTicks);
         addOneCttsTableEntry(cttsSampleCount, lastCttsDurTicks);
     }
-
+#endif
     mTrackDurationUs += lastDurationUs;
     mReachedEOS = true;
 
@@ -2730,11 +2810,25 @@ void MPEG4Writer::Track::writePaspBox() {
     mOwner->endBox();  // pasp
 }
 
+#ifdef OMAP_ENHANCEMENT
+int32_t MPEG4Writer::Track::getStartTimeOffsetScaledTime() const {
+    int64_t trackStartTimeOffsetUs = 0;
+    int64_t moovStartTimeUs = mOwner->getStartTimestampUs();
+    if (mStartTimestampUs != moovStartTimeUs) {
+        CHECK(mStartTimestampUs > moovStartTimeUs);
+        trackStartTimeOffsetUs = mStartTimestampUs - moovStartTimeUs;
+    }
+    return (trackStartTimeOffsetUs *  mTimeScale + 500000LL) / 1000000LL;
+}
+
+#endif
+
 void MPEG4Writer::Track::writeSttsBox() {
     mOwner->beginBox("stts");
     mOwner->writeInt32(0);  // version=0, flags=0
     mOwner->writeInt32(mNumSttsTableEntries);
 
+#ifndef OMAP_ENHANCEMENT
     // Compensate for small start time difference from different media tracks
     int64_t trackStartTimeOffsetUs = 0;
     int64_t moovStartTimeUs = mOwner->getStartTimestampUs();
@@ -2742,11 +2836,18 @@ void MPEG4Writer::Track::writeSttsBox() {
         CHECK(mStartTimestampUs > moovStartTimeUs);
         trackStartTimeOffsetUs = mStartTimestampUs - moovStartTimeUs;
     }
+#endif
+
     List<SttsTableEntry>::iterator it = mSttsTableEntries.begin();
     CHECK(it != mSttsTableEntries.end() && it->sampleCount == 1);
     mOwner->writeInt32(it->sampleCount);
+
+#ifdef OMAP_ENHANCEMENT
+    mOwner->writeInt32(getStartTimeOffsetScaledTime() + it->sampleDuration);
+#else
     int32_t dur = (trackStartTimeOffsetUs * mTimeScale + 500000LL) / 1000000LL;
     mOwner->writeInt32(dur + it->sampleDuration);
+#endif
 
     int64_t totalCount = 1;
     while (++it != mSttsTableEntries.end()) {
@@ -2763,6 +2864,13 @@ void MPEG4Writer::Track::writeCttsBox() {
         return;
     }
 
+#ifdef OMAP_ENHANCEMENT
+    // There is no B frame at all
+    if (mMinCttsOffsetTimeUs == mMaxCttsOffsetTimeUs) {
+        return;
+    }
+#endif
+
     // Do not write ctts box when there is no need to have it.
     if ((mNumCttsTableEntries == 1 &&
         mCttsTableEntries.begin()->sampleDuration == 0) ||
@@ -2770,16 +2878,49 @@ void MPEG4Writer::Track::writeCttsBox() {
         return;
     }
 
+#ifdef OMAP_ENHANCEMENT
+    LOGD("ctts box has %d entries with range [%lld, %lld] ", mNumCttsTableEntries, mMinCttsOffsetTimeUs,mMaxCttsOffsetTimeUs);
+#else
     LOGV("ctts box has %d entries", mNumCttsTableEntries);
+#endif
 
     mOwner->beginBox("ctts");
+
+#ifdef OMAP_ENHANCEMENT
+    // Version 1 allows to use negative offset time value, but
+    // we are sticking to version 0 for now.
+    mOwner->writeInt32(0);  // version=0, flags=0
+#else
     if (mHasNegativeCttsDeltaDuration) {
         mOwner->writeInt32(0x01000000);  // version=1 (1 byte), flags=0 (3 bytes)
     } else {
         mOwner->writeInt32(0);  // version=0, flags=0
     }
+#endif
+
     mOwner->writeInt32(mNumCttsTableEntries);
 
+#ifdef OMAP_ENHANCEMENT
+    // Compensate for small start time difference from different media tracks
+    List<CttsTableEntry>::iterator it = mCttsTableEntries.begin();
+    CHECK(it != mCttsTableEntries.end() && it->sampleCount == 1);
+    mOwner->writeInt32(it->sampleCount);
+    mOwner->writeInt32(getStartTimeOffsetScaledTime() +
+                        it->sampleDuration - mMinCttsOffsetTimeUs);
+
+    int64_t totalCount = 1;
+    while (++it != mCttsTableEntries.end()) {
+
+          mOwner->writeInt32(it->sampleCount);
+          LOGI("sample duration = %d, and mMinCttsOffsetTimeUs = %lld",
+                it->sampleDuration, mMinCttsOffsetTimeUs);
+          mOwner->writeInt32(it->sampleDuration - mMinCttsOffsetTimeUs);
+          totalCount += it->sampleCount;
+    }
+
+    LOGI("totalCount = %lld, and mNumSamples = %d",
+            totalCount, mNumSamples);
+#else
     int64_t totalCount = 0;
     for (List<CttsTableEntry>::iterator it = mCttsTableEntries.begin();
          it != mCttsTableEntries.end(); ++it) {
@@ -2788,6 +2929,8 @@ void MPEG4Writer::Track::writeCttsBox() {
         totalCount += it->sampleCount;
     }
     LOGV("totalCount = %lld, mNumSamples = %d", totalCount, mNumSamples);
+#endif
+
     CHECK(totalCount == mNumSamples);
     mOwner->endBox();  // ctts
 }
