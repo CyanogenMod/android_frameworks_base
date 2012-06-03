@@ -35,7 +35,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:shrinkColumns="2,4"
-        android:stretchColumns="7"
+        android:stretchColumns="8"
         >
         <TableRow>
 
@@ -138,6 +138,17 @@
                 android:layout_alignBaseline="@id/wifi_signal"
                 android:paddingRight="6dp"
                 android:contentDescription="@null"
+                />
+
+            <TextView
+                android:id="@+id/dock_battery_text"
+                style="@style/StatusBarNotificationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:paddingRight="6dp"
+                android:singleLine="true"
+                android:text="@string/status_bar_settings_settings_button"
                 />
 
             <ImageView
