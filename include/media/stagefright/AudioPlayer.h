@@ -23,6 +23,12 @@
 #include <media/stagefright/TimeSource.h>
 #include <utils/threads.h>
 
+#if defined(OMAP_ENHANCEMENT)
+namespace omap_enhancement {
+    class TimeInterpolator;
+}
+#endif
+
 namespace android {
 
 class MediaSource;
@@ -114,6 +120,11 @@ private:
 
     AudioPlayer(const AudioPlayer &);
     AudioPlayer &operator=(const AudioPlayer &);
+#if defined(OMAP_ENHANCEMENT)
+    omap_enhancement::TimeInterpolator *mRealTimeInterpolator;
+public:
+    int64_t latency() const;
+#endif
 };
 
 }  // namespace android

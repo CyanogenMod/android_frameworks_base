@@ -112,6 +112,9 @@ private:
     Rect mCurrentCrop;
     uint32_t mCurrentTransform;
     uint32_t mCurrentScalingMode;
+#ifdef OMAP_ENHANCEMENT
+    uint32_t mCurrentLayout;
+#endif
     bool mCurrentOpacity;
 
     // constants
@@ -128,6 +131,9 @@ private:
     // binder thread, transaction thread
     mutable Mutex mLock;
 
+#ifdef OMAP_ENHANCEMENT
+    bool mTextureSizeTooLarge;
+#endif
 #ifdef QCOM_HARDWARE
     // Qcom specific flags for this layer.
     int mLayerQcomFlags;
