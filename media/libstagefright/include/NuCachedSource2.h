@@ -73,12 +73,22 @@ private:
     enum {
         kPageSize                       = 65536,
         kDefaultHighWaterThreshold      = 20 * 1024 * 1024,
+#ifdef OMAP_ENHANCEMENT
+        kDefaultLowWaterThreshold       = 7 * 1024 * 1024,
+#else
         kDefaultLowWaterThreshold       = 4 * 1024 * 1024,
+#endif
 
         // Read data after a 15 sec timeout whether we're actively
         // fetching or not.
         kDefaultKeepAliveIntervalUs     = 15000000,
     };
+
+#ifdef OMAP_ENHANCEMENT
+    enum {
+        kGrayArea = 2 * 1024 * 1024,
+    };
+#endif
 
     enum {
         kWhatFetchMore  = 'fetc',
@@ -101,6 +111,10 @@ private:
     off64_t mCacheOffset;
     status_t mFinalStatus;
     off64_t mLastAccessPos;
+#ifdef OMAP_ENHANCEMENT
+    off64_t mMinAccessPos;
+    off64_t mMaxAccessPos;
+#endif
     sp<AMessage> mAsyncResult;
     bool mFetching;
     int64_t mLastFetchTimeUs;

@@ -42,6 +42,9 @@ struct offsets_t {
     jfieldID density;
     jfieldID xdpi;
     jfieldID ydpi;
+#ifdef OMAP_ENHANCEMENT
+    jfieldID maxTex;
+#endif
 };
 static offsets_t offsets;
 
@@ -61,6 +64,9 @@ static void android_view_Display_init(
     env->SetFloatField(clazz, offsets.density,  info.density);
     env->SetFloatField(clazz, offsets.xdpi,     info.xdpi);
     env->SetFloatField(clazz, offsets.ydpi,     info.ydpi);
+#ifdef OMAP_ENHANCEMENT
+    env->SetIntField(clazz, offsets.maxTex,     info.maxTex);
+#endif
 }
 
 static jint android_view_Display_getRawWidthNative(
@@ -119,6 +125,9 @@ void nativeClassInit(JNIEnv* env, jclass clazz)
     offsets.density     = env->GetFieldID(clazz, "mDensity", "F");
     offsets.xdpi        = env->GetFieldID(clazz, "mDpiX", "F");
     offsets.ydpi        = env->GetFieldID(clazz, "mDpiY", "F");
+#ifdef OMAP_ENHANCEMENT
+    offsets.maxTex      = env->GetFieldID(clazz, "mMaximumTextureSize", "I");
+#endif
 }
 
 int register_android_view_Display(JNIEnv* env)

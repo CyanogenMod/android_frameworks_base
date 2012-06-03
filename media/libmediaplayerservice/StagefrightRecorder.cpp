@@ -75,6 +75,9 @@ static void addBatteryData(uint32_t params) {
 StagefrightRecorder::StagefrightRecorder()
     : mWriter(NULL),
       mOutputFd(-1),
+#ifdef OMAP_ENHANCEMENT
+      mVidEncoder(NULL),
+#endif
       mAudioSource(AUDIO_SOURCE_CNT),
       mVideoSource(VIDEO_SOURCE_LIST_END),
 #ifdef QCOM_HARDWARE
@@ -721,6 +724,14 @@ status_t StagefrightRecorder::setParameter(
             return setParamTimeBetweenTimeLapseFrameCapture(
                     1000LL * timeBetweenTimeLapseFrameCaptureMs);
         }
+#ifdef OMAP_ENHANCEMENT
+    } else if ((key == "video-param-insert-i-frame") ||
+               (key == "video-param-nalsize-bytes") ||
+               (key == "video-param-nalsize-macroblocks") ||
+               (key == "video-config-encoding-bitrate") ||
+               (key == "video-config-encoding-framerate")) {
+        return mVidEncoder->setParameter(key, value);
+#endif
     } else {
         LOGE("setParameter: failed to find key %s", key.string());
     }
@@ -1647,6 +1658,10 @@ status_t StagefrightRecorder::setupMPEG4Recording(
         if (err != OK) {
             return err;
         }
+
+#ifdef OMAP_ENHANCEMENT
+        mVidEncoder = encoder;
+#endif
 
         writer->addSource(encoder);
         *totalBitRate += videoBitRate;
