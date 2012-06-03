@@ -138,4 +138,13 @@
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"Buscando GPS"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"Ubicación definida por GPS"</string>
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Borrar todas las notificaciones"</string>
+    <string name="navbar_dialog_title">Seleccionar acción a asignar</string>
+    <string name="navbar_home_button">Botón inicio</string>
+    <string name="navbar_recent_button">Botón recientes</string>
+    <string name="navbar_search_button">Botón búsqueda</string>
+    <string name="navbar_back_button">Botón atrás</string>
+    <string name="navbar_empty_button">Botón vacio</string>
+    <string name="navbar_menu_conditional_button">Botón menú (Auto Ocultar)</string>
+    <string name="navbar_menu_always_button">Botón menú (Mostrar Siempre) </string>
+    <string name="navbar_menu_big_button">Botón menú</string>
 </resources>
