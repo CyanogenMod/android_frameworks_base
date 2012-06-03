@@ -172,6 +172,7 @@ public class InputManagerService extends IInputManager.Stub implements Watchdog.
             InputChannel fromChannel, InputChannel toChannel);
     private static native void nativeSetPointerSpeed(int ptr, int speed);
     private static native void nativeSetShowTouches(int ptr, boolean enabled);
+    private static native void nativeSetStylusIconEnabled(int ptr, boolean enabled);
     private static native void nativeVibrate(int ptr, int deviceId, long[] pattern,
             int repeat, int token);
     private static native void nativeCancelVibrate(int ptr, int deviceId, int token);
@@ -231,9 +232,11 @@ public class InputManagerService extends IInputManager.Stub implements Watchdog.
 
         registerPointerSpeedSettingObserver();
         registerShowTouchesSettingObserver();
+        registerStylusIconEnabledSettingObserver();
 
         updatePointerSpeedFromSettings();
         updateShowTouchesFromSettings();
+        updateStylusIconEnabledFromSettings();
     }
 
     public void systemReady(BluetoothService bluetoothService) {
@@ -1064,6 +1067,32 @@ public class InputManagerService extends IInputManager.Stub implements Watchdog.
         } catch (SettingNotFoundException snfe) {
         }
         return speed;
+    }
+
+    public void updateStylusIconEnabledFromSettings() {
+        int enabled = getStylusIconEnabled(0);
+        nativeSetStylusIconEnabled(mPtr, enabled != 0);
+    }
+
+    public void registerStylusIconEnabledSettingObserver() {
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.STYLUS_ICON_ENABLED), false,
+                new ContentObserver(mHandler) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateStylusIconEnabledFromSettings();
+                    }
+                });
+    }
+
+    private int getStylusIconEnabled(int defaultValue) {
+        int result = defaultValue;
+        try {
+            result = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STYLUS_ICON_ENABLED);
+        } catch (SettingNotFoundException snfe) {
+        }
+        return result;
     }
 
     public void updateShowTouchesFromSettings() {
