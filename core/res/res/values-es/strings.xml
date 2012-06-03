@@ -1254,4 +1254,58 @@
     <string name="launchBrowserDefault" msgid="2057951947297614725">"¿Iniciar el navegador?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"¿Aceptar la llamada?"</string>
     <string name="app_killed_message">"Aplicación finalizada"</string>
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Torm. tropical</string>
+    <string name="weather_2">Huracan</string>
+    <string name="weather_3">Torm. severas</string>
+    <string name="weather_4">Tormentas</string>
+    <string name="weather_5">Agua y nieve</string>
+    <string name="weather_6">Agua y aguanieve</string>
+    <string name="weather_7">Nieve y aguanieve</string>
+    <string name="weather_8">Llovizna helada</string>
+    <string name="weather_9">Llovizna</string>
+    <string name="weather_10">Lluvia helada</string>
+    <string name="weather_11">Lluvias</string>
+    <string name="weather_12">Lluvias</string>
+    <string name="weather_13">Copos de nieve</string>
+    <string name="weather_14">Nevadas ligeras</string>
+    <string name="weather_15">Chub. de nieve</string>
+    <string name="weather_16">Nieve</string>
+    <string name="weather_17">Granizo</string>
+    <string name="weather_18">Aguanieve</string>
+    <string name="weather_19">Polvo</string>
+    <string name="weather_20">Nublado</string>
+    <string name="weather_21">Neblina</string>
+    <string name="weather_22">Humo</string>
+    <string name="weather_23">Borrascoso</string>
+    <string name="weather_24">Ventoso</string>
+    <string name="weather_25">Frío</string>
+    <string name="weather_26">Nublado</string>
+    <string name="weather_27">Mayorm. nublado</string> <!-- Night -->
+    <string name="weather_28">Mayorm. nublado</string> <!-- Day -->
+    <string name="weather_29">Parc. nublado</string> <!-- Night -->
+    <string name="weather_30">Parc. nublado</string> <!-- Day -->
+    <string name="weather_31">Despejado</string> <!-- Night -->
+    <string name="weather_32">Soleado</string>
+    <string name="weather_33">Moderado</string> <!-- Night -->
+    <string name="weather_34">Moderado</string> <!-- Day -->
+    <string name="weather_35">Lluvia y granizo</string>
+    <string name="weather_36">Caluroso</string>
+    <string name="weather_37">Torm. eléctricas</string>
+    <string name="weather_38">Torm. elec. aisladas</string>
+    <string name="weather_39">Torm. elec. aisladas</string>
+    <string name="weather_40">Parc. Nublado</string>
+    <string name="weather_41">Fuertes Nevadas</string>
+    <string name="weather_42">Chub. de nieve</string>
+  <string name="weather_43">Fuertes nevadas</string>
+    <string name="weather_44">Parc. nublado</string>
+    <string name="weather_45">Chaparrones</string>
+    <string name="weather_46">Nieve</string>
+    <string name="weather_47">Chap. aislados</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200">No disponible</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_tap_to_refresh">Toca para refrescar</string>
 </resources>
