@@ -110,6 +110,7 @@
     <string name="roamingText11" msgid="4154476854426920970">"Dolaşım Başlığı Açık"</string>
     <string name="roamingText12" msgid="1189071119992726320">"Dolaşım Başlığı Kapalı"</string>
     <string name="roamingTextSearching" msgid="8360141885972279963">"Hizmet Aranıyor"</string>
+    <string name="roamingTextAirplaneMode">Uçak Modu</string>
     <string name="cfTemplateNotForwarded" msgid="1683685883841272560">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: Yönlendirilmedi"</string>
     <string name="cfTemplateForwarded" msgid="1302922117498590521">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
     <string name="cfTemplateForwardedTime" msgid="9206251736527085256">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="TIME_DELAY">{2}</xliff:g> saniye sonra <xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
@@ -1262,5 +1263,65 @@
     <string name="SetupCallDefault" msgid="6870275517518479651">"Çağrı Kabul Edilsin mi?"</string>
     <!-- #CM-MOD-START -->
     <string name="app_killed_message">Uygulama kapatıldı</string>
+    <!-- #CM-MOD-END -->
+    <!-- #CM-MOD-START -->
+    <string name="weather_0">Kasırgalı</string>
+    <string name="weather_1">Tropik Kasırgalı</string>
+    <string name="weather_2">Fırtınalı</string>
+    <string name="weather_3">Aşırı Gök Gürültülü</string>
+    <string name="weather_4">Gök Gürültülü</string>
+    <string name="weather_5">Karışık Yağmurlu ve Karlı</string>
+    <string name="weather_6">Karla Karışık Yağmurlu</string>
+    <string name="weather_7">Karla Karışık Yağmurlu</string>
+    <string name="weather_8">Dondurucu Çiseleme</string>
+    <string name="weather_9">Çiseleme</string>
+    <string name="weather_10">Dondurucu Yağmurlu</string>
+    <string name="weather_11">Sağanak</string>
+    <string name="weather_12">Sağanak</string>
+    <string name="weather_13">Şiddetli Kar</string>
+    <string name="weather_14">Hafif Kar Yağışlı</string>
+    <string name="weather_15">Esintili Kar Yağışlı</string>
+    <string name="weather_16">Karlı</string>
+    <string name="weather_17">Dolu</string>
+    <string name="weather_18">Karla Karışık Yağmur</string>
+    <string name="weather_19">Tozlu</string>
+    <string name="weather_20">Sisli</string>
+    <string name="weather_21">Puslu</string>
+    <string name="weather_22">Dumanlı</string>
+    <string name="weather_23">Fırtınalı</string>
+    <string name="weather_24">Rüzgarlı</string>
+    <string name="weather_25">Soğuk</string>
+    <string name="weather_26">Bulutlu</string>
+    <string name="weather_27">Bulutlu</string> <!-- Night -->
+    <string name="weather_28">Bulutlu</string> <!-- Day -->
+    <string name="weather_29">Parçalı Bulutlu</string> <!-- Night -->
+    <string name="weather_30">Parçalı Bulutlu</string> <!-- Day -->
+    <string name="weather_31">Açık</string> <!-- Night -->
+    <string name="weather_32">Güneşli</string>
+    <string name="weather_33">Normal</string> <!-- Night -->
+    <string name="weather_34">Normal</string> <!-- Day -->
+    <string name="weather_35">Karışık Yağmur ve Dolu</string>
+    <string name="weather_36">Sıcak</string>
+    <string name="weather_37">Sürekli Gökgürültülü Fırtına</string>
+    <string name="weather_38">Aralıklı Gökgürültülü Fırtına</string>
+    <string name="weather_39">Aralıklı Gökgürültülü Fırtına</string>
+    <string name="weather_40">Aralıklı Yağış</string>
+    <string name="weather_41">Çok Karlı</string>
+    <string name="weather_42">Aralıklı Kar Yağışlı</string>
+    <string name="weather_43">Çok Karlı</string>
+    <string name="weather_44">Parçalı Bulutlu</string>
+    <string name="weather_45">Gökgürültülü Yağmurlu Fırtına</string>
+    <string name="weather_46">Kar Yağışlı</string>
+    <string name="weather_47">Sürekli Gökgürültülü Fırtına</string>
+    <string name="weather_3200"></string>
+    <string name="weather_N">K</string>
+    <string name="weather_NE">KD</string>
+    <string name="weather_E">D</string>
+    <string name="weather_SE">GD</string>
+    <string name="weather_S">G</string>
+    <string name="weather_SW">GB</string>
+    <string name="weather_W">B</string>
+    <string name="weather_NW">KB</string>
+    <string name="weather_tap_to_refresh">Yenile</string>
     <!-- #CM-MOD-END -->
 </resources>
