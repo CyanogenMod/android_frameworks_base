@@ -665,7 +665,7 @@
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Yritä uudelleen"</string>
     <string name="lockscreen_password_wrong" msgid="6237443657358168819">"Yritä uudelleen"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Ladataan (<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>)"</string>
-    <string name="lockscreen_charged" msgid="4938930459620989972">"Muutettu."</string>
+    <string name="lockscreen_charged" msgid="4938930459620989972">"Ladattu."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Kytke laturi."</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"Ei SIM-korttia."</string>
