@@ -71,6 +71,9 @@ private:
     int dispatchSetUsage(va_list args);
     int dispatchLock(va_list args);
     int dispatchUnlockAndPost(va_list args);
+#ifdef OMAP_ENHANCEMENT
+    int dispatchSetBuffersLayout(va_list args);
+#endif
 #ifdef QCOM_HARDWARE
     int dispatchPerformQcomOperation(int operation, va_list args);
 #endif
@@ -96,6 +99,9 @@ protected:
     virtual int setUsage(uint32_t reqUsage);
     virtual int lock(ANativeWindow_Buffer* outBuffer, ARect* inOutDirtyBounds);
     virtual int unlockAndPost();
+#ifdef OMAP_ENHANCEMENT
+    virtual int setBuffersLayout(uint32_t layout);
+#endif
 #ifdef QCOM_HARDWARE
     virtual int performQcomOperation(int operation, int arg1, int arg2, int arg3);
 #endif
@@ -166,6 +172,9 @@ private:
     mutable Region              mOldDirtyRegion[NUM_BUFFER_SLOTS];
 #else
     mutable Region              mOldDirtyRegion;
+#ifdef OMAP_ENHANCEMENT
+    mutable Vector<Region>      mOldDirtyRegionHistory;
+#endif
 #endif
     bool                        mConnectedToCpu;
 

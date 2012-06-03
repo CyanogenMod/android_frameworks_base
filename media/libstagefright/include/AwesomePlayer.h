@@ -346,6 +346,19 @@ private:
 
     AwesomePlayer(const AwesomePlayer &);
     AwesomePlayer &operator=(const AwesomePlayer &);
+
+#ifdef OMAP_ENHANCEMENT
+    const char* mExtractorType;
+    sp<MediaExtractor> mExtractor;
+
+    typedef enum {
+        TRACK_EXTRACTOR_NULL,
+        TRACK_EXTRACTOR_VIDEO_TYPE,
+        TRACK_EXTRACTOR_AUDIO_TYPE
+    } track_extractor_t;
+
+    status_t createTrackExtractor(sp<MediaExtractor> &, track_extractor_t type);
+#endif
 };
 
 }  // namespace android

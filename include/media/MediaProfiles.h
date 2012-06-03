@@ -72,6 +72,9 @@ enum videoeditor_capability {
 
 enum video_decoder {
     VIDEO_DECODER_WMV,
+#ifdef OMAP_ENHANCEMENT
+    VIDEO_DECODER_MPEG2,
+#endif
 };
 
 enum audio_decoder {

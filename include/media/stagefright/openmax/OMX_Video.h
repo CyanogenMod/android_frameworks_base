@@ -1067,6 +1067,87 @@ typedef struct OMX_VIDEO_CONFIG_NALSIZE {
     OMX_U32 nNaluBytes;
 } OMX_VIDEO_CONFIG_NALSIZE;
 
+
+#ifdef OMAP_ENHANCEMENT
+/**
+ * Interlaced Video Content format
+ *
+ * STRUCT MEMBERS:
+ *  nSize      : Size of the structure in bytes
+ *  nVersion   : OMX specification version information
+ *  nPortIndex : Port that this structure applies to
+ *  nFormat    : bitmapped value indentifying the interlaced formats supported by component
+ *  nTimeStamp : temporal timestamp information for the second field
+ */
+typedef struct OMX_INTERLACEFORMATTYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nPortIndex;
+    OMX_U32 nFormat;
+    OMX_TICKS nTimeStamp;
+} OMX_INTERLACEFORMATTYPE;
+
+/**
+ * Interlace format types
+ */
+typedef enum OMX_INTERLACETYPE {
+    OMX_InterlaceFrameProgressive               = 0x00,
+    OMX_InterlaceInterleaveFrameTopFieldFirst   = 0x01,
+    OMX_InterlaceInterleaveFrameBottomFieldFirst= 0x02,
+    OMX_InterlaceFrameTopFieldFirst             = 0x04,
+    OMX_InterlaceFrameBottomFieldFirst          = 0x08,
+    OMX_InterlaceInterleaveFieldTop             = 0x10,
+    OMX_InterlaceInterleaveFieldBottom          = 0x20,
+    OMX_InterlaceFmtMask                        = 0xFFFFFFFF
+} OMX_INTERLACETYPE;
+
+
+/**
+ * To enable or disable deinterlacing support
+ *
+ * STRUCT MEMBERS:
+ *  nSize      : Size of the structure in bytes
+ *  nVersion   : OMX specification version information
+ *  nPortIndex : Port that this structure applies to
+ *  bEnable    : specifies the requested state of the deinterlacing support
+ */
+typedef struct OMX_DEINTERLACETYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nPortIndex;
+    OMX_BOOL bEnable;
+} OMX_DEINTERLACETYPE;
+
+/**
+ * To query if the stream contains interlaced or progressive conten
+ *
+ * STRUCT MEMBERS:
+ *  nSize             : Size of the structure in bytes
+ *  nVersion          : OMX specification version information
+ *  nPortIndex        : Port that this structure applies to
+ *  bInterlaceFormat  : whether the stream contains interlace or progressive content
+ *                        OMX_TRUE indicates interlace and OMX_FALSE indicates progressive
+ *  nInterlaceFormats : bitmapped value identifying the interlace formats detected within the stream
+ */
+typedef struct OMX_STREAMINTERLACEFORMATTYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nPortIndex;
+    OMX_BOOL bInterlaceFormat;
+    OMX_U32 nInterlaceFormats;
+} OMX_STREAMINTERLACEFORMAT;
+
+/**
+ * Structure to enable timestamps in decode order at i/p of decoders.
+ */
+typedef struct OMX_TI_PARAM_TIMESTAMP_IN_DECODE_ORDER {
+        OMX_U32 nSize;
+        OMX_VERSIONTYPE nVersion;
+        OMX_BOOL bEnabled;
+} OMX_TI_PARAM_TIMESTAMP_IN_DECODE_ORDER;
+
+#endif
+
 /** @} */
 
 #ifdef __cplusplus
