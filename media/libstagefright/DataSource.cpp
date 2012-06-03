@@ -27,6 +27,10 @@
 #include "include/DRMExtractor.h"
 #include "include/FLACExtractor.h"
 #include "include/AACExtractor.h"
+
+#ifdef OMAP_ENHANCEMENT
+#include "include/AVIExtractor.h"
+#endif
 #ifdef QCOM_HARDWARE
 #include "include/ExtendedExtractor.h"
 #else
@@ -173,6 +177,10 @@ void DataSource::RegisterDefaultSniffers() {
     RegisterSniffer(SniffMP3);
     RegisterSniffer(SniffAAC);
     RegisterSniffer(SniffMPEG2PS);
+
+#ifdef OMAP_ENHANCEMENT
+    RegisterSniffer(SniffAVI);
+#endif
 #ifdef QCOM_HARDWARE
     ExtendedExtractor::RegisterSniffers();
 #endif

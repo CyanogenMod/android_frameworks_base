@@ -76,6 +76,9 @@ private:
     int mOutputFd;
     sp<AudioSource> mAudioSourceNode;
 
+#ifdef OMAP_ENHANCEMENT
+    sp<MediaSource> mVidEncoder;
+#endif
     audio_source_t mAudioSource;
     video_source mVideoSource;
     output_format mOutputFormat;

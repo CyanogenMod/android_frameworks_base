@@ -23,6 +23,9 @@
 #include <media/stagefright/MediaErrors.h>
 #include <utils/RefBase.h>
 #include <utils/Vector.h>
+#ifdef OMAP_ENHANCEMENT
+#include <utils/String8.h>
+#endif
 
 namespace android {
 
@@ -115,7 +118,27 @@ protected:
 private:
     MediaSource(const MediaSource &);
     MediaSource &operator=(const MediaSource &);
+
+#ifdef OMAP_ENHANCEMENT
+public:
+    virtual status_t setParameter(const String8 &key, const String8 &value){
+        return OK;
+    }
+#endif
+
 };
+
+#ifdef OMAP_ENHANCEMENT
+struct MediaSourceWithHaveDeltaTable : public MediaSource
+{
+public:
+    virtual bool haveDeltaTable() const {
+        // Assume true by default.
+        // This means extractor can set presentation time correctly.
+        return true;
+    }
+};
+#endif /* OMAP_ENHANCEMENT */
 
 }  // namespace android
 

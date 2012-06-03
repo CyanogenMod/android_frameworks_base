@@ -399,7 +399,9 @@ status_t MediaRecorder::setParameters(const String8& params) {
 
     bool isInvalidState = (mCurrentState &
                            (MEDIA_RECORDER_PREPARED |
+#ifndef OMAP_ENHANCEMENT
                             MEDIA_RECORDER_RECORDING |
+#endif
                             MEDIA_RECORDER_ERROR));
     if (isInvalidState) {
         LOGE("setParameters is called in an invalid state: %d", mCurrentState);

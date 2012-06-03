@@ -79,6 +79,9 @@ LOCAL_SRC_FILES:=                         \
         XINGSeeker.cpp                    \
         avc_utils.cpp                     \
 
+ifeq ($(OMAP_ENHANCEMENT), true)
+LOCAL_SRC_FILES += AVIExtractor.cpp
+endif
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         LOCAL_SRC_FILES += ExtendedExtractor.cpp
         LOCAL_SRC_FILES += ExtendedWriter.cpp
@@ -108,7 +111,11 @@ LOCAL_C_INCLUDES+= \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/external/flac/include \
         $(TOP)/external/tremolo \
-        $(TOP)/external/openssl/include
+        $(TOP)/external/openssl/include \
+
+ifeq ($(OMAP_ENHANCEMENT), true)
+LOCAL_C_INCLUDES += $(TOP)/hardware/ti/omap4xxx/domx/omx_core/inc
+endif
 
 LOCAL_SHARED_LIBRARIES += \
         libbinder         \

@@ -26,12 +26,200 @@ Copyright (c) 2011, Code Aurora Forum. All rights reserved.
 #include <media/stagefright/MediaBuffer.h>
 #include <media/stagefright/MediaSource.h>
 #include <utils/threads.h>
+#ifdef OMAP_ENHANCEMENT
+#include <media/stagefright/MediaDebug.h>
+#endif
 
 namespace android {
 
 class MemoryDealer;
 struct OMXCodecObserver;
 struct CodecProfileLevel;
+
+#ifdef OMAP_ENHANCEMENT
+/* Table of H.264 sample aspect ratios
+ * This table implemented according to "Table E-1 – Meaning of sample aspect
+ * ratio indicator" of "Rec. ITU-T H.264 (06/2011) – Prepublished version"
+ */
+struct SampleAspectRatio_s {
+    uint32_t width;
+    uint32_t height;
+} static const SampleAspectRatio[] = {
+    {0,0},
+    {1,1},
+    {12,11},
+    {10,11},
+    {16,11},
+    {40,33},
+    {24,11},
+    {20,11},
+    {32,11},
+    {80,33},
+    {18,11},
+    {15,11},
+    {64,33},
+    {160,99},
+    {4,3},
+    {3,2},
+    {2,1}
+};
+
+// Calculating SampleAspectRatio table size
+#define SARTableSize() (sizeof(SampleAspectRatio) / sizeof(SampleAspectRatio_s))
+#define SAR_IDC_UNSPECIFIED (0)
+#define SAR_IDC_EXTENDED    (255)
+
+// Bit reader implementation class
+class CBitBuffer {
+    // Pointer to buffer
+    const uint8_t *m_pBuffer;
+    // Buffer size
+    size_t m_nBufferSize;
+    // Number of read bits
+    uint8_t m_nBitsRead;
+
+public:
+    /**
+     * Constructor of CBitBuffer class
+     * @param[in]   pBuffer         Pointer to buffer
+     * @param[ini]  nBufferSize     Buffer size
+     */
+    CBitBuffer(const uint8_t *pBuffer, size_t nBufferSize) {
+        CHECK(pBuffer != NULL);
+        m_pBuffer = pBuffer;
+
+        CHECK(nBufferSize > 0);
+        m_nBufferSize = nBufferSize;
+
+        m_nBitsRead = 0;
+    }
+
+    /**
+     * Skip the number of bits from buffer
+     * @param[in]   nBits   Number of bits to skip
+     * @return False if buffer end reached
+     */
+    bool SkipBits(size_t nBits = 1) {
+        size_t nBytes = (nBits + m_nBitsRead) / 8;
+        m_nBufferSize -= nBytes;
+        if (m_nBufferSize < 0) {
+            LOGW("Buffer end reached");
+            return false;
+        }
+        m_pBuffer += nBytes;
+        m_nBitsRead += (uint8_t)(nBits % 8);
+        return true;
+    }
+
+    /**
+     * Get single bit from buffer
+     * @return  -1 on error
+     */
+    int8_t GetBit() {
+        int8_t nValue;
+
+        if (m_nBufferSize < 0) {
+            LOGW("Buffer end reached");
+            return -1;
+        }
+
+        nValue = (*m_pBuffer >> (7 - m_nBitsRead)) & 0x1;
+        if (m_nBitsRead == 7) {
+            m_nBitsRead = 0;
+            m_pBuffer++;
+            m_nBufferSize--;
+        } else {
+            m_nBitsRead++;
+        }
+        return nValue;
+    }
+
+    /**
+     * Get some number of bits from buffer
+     * @param[in]   nBits   Number of bits
+     * @param[out]  nValue  Result as uint32_t value
+     * @return  False if buffer end reached
+     */
+    bool GetBits(size_t nBits, uint32_t &nValue) {
+        int8_t nBit;
+
+        nValue = 0;
+        for (size_t nIndex = 0; nIndex < nBits; nIndex++) {
+            nBit = GetBit();
+
+            if (nBit < 0) {
+                return false;
+            }
+
+            nValue = (nValue << 1) + nBit;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get Exp-Golomb codes, according to "Rec. ITU-T H.264 (06/2011) – Prepublished version"
+     * chapter 9.1 "Parsing process for Exp-Golomb codes"
+     * @param[out]  nValue  Value of the syntax element is equal to codeNum
+     * @return  False if buffer end reached
+     */
+    bool GetExpGolombUE(uint32_t &nValue) {
+        int8_t nBit;
+        uint8_t nSignBits = 0;
+        uint32_t nBitsValue;
+
+        nBit = GetBit();
+        while (nBit == 0) {
+            nSignBits++;
+            nBit = GetBit();
+        }
+
+        if (nBit < 0 || !GetBits(nSignBits, nBitsValue)) {
+            return false;
+        }
+
+        nValue = (1 << nSignBits) + nBitsValue - 1;
+        return true;
+    }
+
+    /**
+     * Get Exp-Golomb codes, according to "Rec. ITU-T H.264 (06/2011) – Prepublished version"
+     * chapter 9.1 "Parsing process for Exp-Golomb codes"
+     * @param[out]  nValue  Value of the syntax element is equal to signed codeNum
+     * @return  False if buffer end reached
+     */
+    bool GetExpGolombSE(int32_t &nValue) {
+        uint32_t nValueUE;
+
+        if (!GetExpGolombUE(nValueUE)) {
+            return false;
+        }
+
+        if (nValueUE & 0x01) {
+            nValue = (int32_t)(nValueUE + 1) >> 1;
+        } else {
+            nValue = -((int32_t)(nValueUE >> 1));
+        }
+
+        return true;
+    }
+};
+
+/// Descriptor of H.264 SPS frame
+struct SpsData_s {
+    unsigned profile_idc;
+    unsigned level_idc;
+
+    struct vui_parameters_s {
+        /** In case if this flag is "false", then aspect_ratio_idc,
+         * sar_width and sar_height should be ignored */
+        bool aspect_ratio_info_present;
+        uint32_t aspect_ratio_idc;
+        uint32_t sar_width;
+        uint32_t sar_height;
+    } vui_parameters;
+};
+#endif
 
 struct OMXCodec : public MediaSource,
                   public MediaBufferObserver {
@@ -60,6 +248,10 @@ struct OMXCodec : public MediaSource,
         // Secure decoding mode
         kUseSecureInputBuffers = 256,
 
+#ifdef OMAP_ENHANCEMENT
+        // To request codec to return frames in decode order
+        kEnableTimeStampInDecodeOrder         = 512,
+#endif
 #ifdef QCOM_HARDWARE
         kEnableThumbnailMode = 512,
         kUseMinBufferCount = 32768,
@@ -374,17 +566,36 @@ private:
     status_t applyRotation();
     status_t waitForBufferFilled_l();
 
+#ifdef OMAP_ENHANCEMENT
+    int64_t getDecodingTimeUs();
+    status_t parseSpsFrame(const uint8_t *pData,
+            size_t nSize,
+            struct SpsData_s &pSpsData);
+    bool isVideoS3D(struct SpsData_s &pSpsData);
+    status_t parseAVCCodecSpecificData(
+            const void *data, size_t size,
+            unsigned *profile, unsigned *level,
+            struct SpsData_s &pSpsData);
+#else
     int64_t retrieveDecodingTimeUs(bool isCodecSpecific);
 
     status_t parseAVCCodecSpecificData(
             const void *data, size_t size,
             unsigned *profile, unsigned *level, const sp<MetaData> &meta);
+#endif
 #ifdef QCOM_HARDWARE
     void parseFlags( uint32_t flags );
 #endif
 
     OMXCodec(const OMXCodec &);
     OMXCodec &operator=(const OMXCodec &);
+#ifdef OMAP_ENHANCEMENT
+    OMX_U32 mInputMinBufferSize;
+
+public:
+    status_t setParameter(const String8 &key, const String8 &value);
+    int32_t mVideoFPS;
+#endif
 #ifdef QCOM_HARDWARE
     status_t setWMAFormat(const sp<MetaData> &inputFormat);
     void setAC3Format(int32_t numChannels, int32_t sampleRate);

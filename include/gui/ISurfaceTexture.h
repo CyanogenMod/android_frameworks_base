@@ -128,6 +128,10 @@ protected:
     // connected to the specified client API.
     virtual status_t disconnect(int api) = 0;
 
+#ifdef OMAP_ENHANCEMENT
+    //method to set the buffer layout
+    virtual status_t setLayout(uint32_t layout) = 0;
+#endif
 #ifdef QCOM_HARDWARE
     // performQcomOperation performs Qcom specific operations. The actual
     // operation to be performed depends on the operation specified.
