@@ -35,6 +35,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.provider.CmSystem.RinglockStyle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -274,11 +276,39 @@ public class LockPatternView extends View {
         mPathPaint.setStrokeCap(Paint.Cap.ROUND);
 
         // lot's of bitmaps!
-        mBitmapBtnDefault = getBitmapFor(R.drawable.btn_code_lock_default);
-        mBitmapBtnTouched = getBitmapFor(R.drawable.btn_code_lock_touched);
-        mBitmapCircleDefault = getBitmapFor(R.drawable.indicator_code_lock_point_area_default);
-        mBitmapCircleGreen = getBitmapFor(R.drawable.indicator_code_lock_point_area_green);
-        mBitmapCircleRed = getBitmapFor(R.drawable.indicator_code_lock_point_area_red);
+        int ringlockStyle = Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.PATTERN_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
+
+        switch (RinglockStyle.getStyleById(ringlockStyle)) {
+            case Revamped:
+                mBitmapBtnDefault = getBitmapFor(R.drawable.btn_code_lock_default_rev);
+                mBitmapBtnTouched = getBitmapFor(R.drawable.btn_code_lock_touched_rev);
+                mBitmapCircleDefault = getBitmapFor(R.drawable.indicator_code_lock_point_area_default_rev);
+                mBitmapCircleGreen = getBitmapFor(R.drawable.indicator_code_lock_point_area_green_rev);
+                mBitmapCircleRed = getBitmapFor(R.drawable.indicator_code_lock_point_area_red_rev);
+                break;
+            case Holo:
+                mBitmapBtnDefault = getBitmapFor(R.drawable.btn_code_lock_default_holo);
+                mBitmapBtnTouched = getBitmapFor(R.drawable.btn_code_lock_touched_holo);
+                mBitmapCircleDefault = getBitmapFor(R.drawable.indicator_code_lock_point_area_default_holo);
+                mBitmapCircleGreen = getBitmapFor(R.drawable.indicator_code_lock_point_area_green_holo);
+                mBitmapCircleRed = getBitmapFor(R.drawable.indicator_code_lock_point_area_red_holo);
+                break;
+            case Blade:
+                mBitmapBtnDefault = getBitmapFor(R.drawable.btn_code_lock_default_blade);
+                mBitmapBtnTouched = getBitmapFor(R.drawable.btn_code_lock_touched_blade);
+                mBitmapCircleDefault = getBitmapFor(R.drawable.indicator_code_lock_point_area_default_blade);
+                mBitmapCircleGreen = getBitmapFor(R.drawable.indicator_code_lock_point_area_green_blade);
+                mBitmapCircleRed = getBitmapFor(R.drawable.indicator_code_lock_point_area_red_blade);
+                break;
+            default:
+                mBitmapBtnDefault = getBitmapFor(R.drawable.btn_code_lock_default);
+                mBitmapBtnTouched = getBitmapFor(R.drawable.btn_code_lock_touched);
+                mBitmapCircleDefault = getBitmapFor(R.drawable.indicator_code_lock_point_area_default);
+                mBitmapCircleGreen = getBitmapFor(R.drawable.indicator_code_lock_point_area_green);
+                mBitmapCircleRed = getBitmapFor(R.drawable.indicator_code_lock_point_area_red);
+                break;
+        }
 
         mBitmapArrowGreenUp = getBitmapFor(R.drawable.indicator_code_lock_drag_direction_green_up);
         mBitmapArrowRedUp = getBitmapFor(R.drawable.indicator_code_lock_drag_direction_red_up);

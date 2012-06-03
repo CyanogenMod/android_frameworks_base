@@ -2628,6 +2628,12 @@ public final class Settings {
         public static final String RINGLOCK_STYLE_PREF = "ringlock_style_pref";
 
         /**
+         * Sets the pattern style
+         * @hide
+         */
+        public static final String PATTERN_STYLE_PREF = "pattern_style_pref";
+
+        /**
          * Pulse the Trackball with Screen On.  The value is boolean (1 or 0).
          * @hide
          */
