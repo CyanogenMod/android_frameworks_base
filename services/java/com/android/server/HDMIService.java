@@ -1,6 +1,6 @@
 /*
  * Copyright 2007, The Android Open Source Project
- * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import android.os.UEventObserver;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.WindowManagerPolicy;
 
 import java.io.File;
 import java.io.FileReader;
@@ -52,10 +53,7 @@ class HDMIService extends IHDMIService.Stub {
     private HDMIListener mListener;
     private boolean mHDMIUserOption = false;
     private int mHDMIModes[];
-    public final String HDMICableConnectedEvent = "HDMI_CABLE_CONNECTED";
-    public final String HDMICableDisconnectedEvent = "HDMI_CABLE_DISCONNECTED";
-    public final String HDMIONEvent = "HDMI_CONNECTED";
-    public final String HDMIOFFEvent = "HDMI_DISCONNECTED";
+    private int mCurrHDMIMode = -1;
 
     final int m640x480p60_4_3         = 1;
     final int m720x480p60_4_3         = 2;
@@ -80,30 +78,39 @@ class HDMIService extends IHDMIService.Stub {
         switch (mode) {
         default:
         case m1440x480i60_4_3:
+            return 1; // 480i 4:3
         case m1440x480i60_16_9:
-            return 1; // 480i
+            return 2; // 480i 16:9
         case m1440x576i50_4_3:
+            return 3; // i576i 4:3
         case m1440x576i50_16_9:
-            return 2; // 576i
+            return 4; // 576i 16:9
         case m640x480p60_4_3:
-            return 3; // 480p x640
+            return 5; // 640x480 4:3
         case m720x480p60_4_3:
+            return 6; // 480p 4:3
         case m720x480p60_16_9:
-            return 4; // 480p x720
+            return 7; // 480p 16:9
         case m720x576p50_4_3:
+            return 8; // 576p 4:3
         case m720x576p50_16_9:
-            return 5; // 576p
+            return 9; // 576p 16:9
         case m1920x1080i60_16_9:
-            return 6; // 1080i
-        case m1280x720p60_16_9:
+            return 10; // 1080i 16:9
         case m1280x720p50_16_9:
-            return 7; // 720p
+            return 11; // 720p@50Hz
+        case m1280x720p60_16_9:
+            return 12; // 720p@60Hz
         case m1920x1080p24_16_9:
+            return 13; //1080p@24Hz
         case m1920x1080p25_16_9:
+            return 14; //108-p@25Hz
         case m1920x1080p30_16_9:
+            return 15; //1080p@30Hz
         case m1920x1080p50_16_9:
+            return 16; //1080p@50Hz
         case m1920x1080p60_16_9:
-            return 8;
+            return 17; //1080p@60Hz
         }
     }
 
@@ -127,6 +134,13 @@ class HDMIService extends IHDMIService.Stub {
         // start processing events before we ought-to
         mContext.registerReceiver(mBroadcastReceiver,
                 new IntentFilter(Intent.ACTION_BOOT_COMPLETED), null, null);
+        if(SystemProperties.getBoolean("ro.hdmi.enable", false)) {
+            //Stop and start the daemon if its already started
+            SystemProperties.set("ctl.stop", "hdmid");
+            SystemProperties.set("ctl.start", "hdmid");
+            //yield for the daemon to start
+            Thread.yield();
+        }
         mListener =  new HDMIListener(this);
         String hdmiUserOption = Settings.System.getString(
                               mContext.getContentResolver(),
@@ -142,10 +156,7 @@ class HDMIService extends IHDMIService.Stub {
             String action = intent.getAction();
 
             if (action.equals(Intent.ACTION_BOOT_COMPLETED) &&
-                    (SystemProperties.getBoolean("ro.hdmi.enable", false))
-
-
-            ) {
+                    (SystemProperties.getBoolean("ro.hdmi.enable", false))) {
                 Thread thread = new Thread(mListener, HDMIListener.class.getName());
                 thread.start();
             }
@@ -173,8 +184,8 @@ class HDMIService extends IHDMIService.Stub {
 
         synchronized(mListener) {
             if(enableHDMI == false) {
-                broadcastEvent(HDMIOFFEvent);
-                broadcastEvent(HDMICableDisconnectedEvent);
+                final boolean connected = false;
+                broadcastHDMIPluggedEvent(connected);
                 mListener.enableHDMIOutput(false);
             }
             mListener.setHPD(getHDMIUserOption());
@@ -193,42 +204,42 @@ class HDMIService extends IHDMIService.Stub {
         return mHDMIUserOption;
     }
 
-    public void broadcastEvent(String eventName) {
-        Intent intent = new Intent(eventName);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        mContext.sendBroadcast(intent);
-        Log.e(TAG, "Broadcasting ... " + eventName);
+    public void setMode(int mode) {
+        mCurrHDMIMode = mode;
+        mListener.changeDisplayMode(mode);
     }
 
-    public void broadcastEvent(String eventName, int[] modes) {
-        Intent intent = new Intent(eventName);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.putExtra("EDID", modes);
-        mContext.sendBroadcast(intent);
-        Log.e(TAG, "Broadcasting ... " + eventName + ", modes: " + modes.length);
+    public int[] getModes() {
+        return mHDMIModes;
+    }
+
+    public void broadcastHDMIPluggedEvent(boolean connected) {
+        Intent intent = new Intent(WindowManagerPolicy.ACTION_HDMI_PLUGGED);
+        intent.putExtra(WindowManagerPolicy.EXTRA_HDMI_PLUGGED_STATE, connected);
+        if(connected)
+            intent.putExtra("EDID", mHDMIModes);
+        mContext.sendStickyBroadcast(intent);
+        Log.e(TAG, "Broadcasting Intent ACTION_HDMI_PLUGGED state = " + connected);
     }
 
     public void notifyHDMIConnected(int[] modes) {
         mHDMIModes = modes;
-        broadcastEvent(HDMICableConnectedEvent);
         if(getHDMIUserOption()) {
             synchronized(mListener) {
-                mListener.changeDisplayMode(getBestMode());
+                if(mCurrHDMIMode == -1) {
+                    mCurrHDMIMode = getBestMode();
+                }
+                mListener.changeDisplayMode(mCurrHDMIMode);
                 mListener.enableHDMIOutput(true);
-            }
-            if((mListener.getOnlineBroadcast())) {
-                Log.d(TAG, "Broadcast HDMI connected");
-                broadcastEvent(HDMIONEvent, mHDMIModes);
             }
         }
     }
 
     public void notifyHDMIDisconnected() {
         mHDMIModes = null;
-        broadcastEvent(HDMICableDisconnectedEvent);
+        mCurrHDMIMode = -1;
         if(getHDMIUserOption()) {
-             broadcastEvent(HDMIOFFEvent);
-             synchronized(mListener) {
+            synchronized(mListener) {
                 mListener.enableHDMIOutput(false);
                 mListener.setHPD(getHDMIUserOption());
             }
@@ -236,14 +247,16 @@ class HDMIService extends IHDMIService.Stub {
     }
 
     public void notifyHDMIAudioOn() {
+        boolean connected = true;
         if(getHDMIUserOption()) {
-            broadcastEvent(HDMIONEvent, mHDMIModes);
+            broadcastHDMIPluggedEvent(connected);
         }
     }
 
     public void notifyHDMIAudioOff() {
+        boolean connected = false;
         if(getHDMIUserOption()) {
-            broadcastEvent(HDMIOFFEvent);
+            broadcastHDMIPluggedEvent(connected);
        }
     }
 }
