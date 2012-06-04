@@ -364,7 +364,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
                 response[i] = -1;
                 noLte = true;
             }
-            if (i == 8 && !noLte) {
+            if (i == 8 && !(noLte || oldRil)) {
                 response[i] *= -1;
             }
         }
