@@ -24,6 +24,7 @@
 
 package com.android.internal.util.weather;
 
+import java.io.IOException;
 import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -37,6 +38,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 
 public class WeatherXmlParser {
@@ -50,6 +52,7 @@ public class WeatherXmlParser {
     private static final String PARAM_YAHOO_CONDITION = "yweather:condition";
     private static final String PARAM_YAHOO_WIND = "yweather:wind";
     private static final String PARAM_YAHOO_FORECAST = "yweather:forecast";
+    private static final String URL_YAHOO_API_WEATHER = "http://weather.yahooapis.com/forecastrss?w=%s&u=";
 
     private static final String ATT_YAHOO_CITY = "city";
     private static final String ATT_YAHOO_TEMP = "temp";
@@ -171,6 +174,46 @@ public class WeatherXmlParser {
             }
         } catch (Exception e) {
             Log.e(TAG, e.toString());
+        }
+        return null;
+    }
+
+    /**
+     * Get the weather forecast XML document for a specific location
+     * @param woeid
+     * @return
+     */
+    public Document getDocument(String woeid) {
+        try {
+            boolean celcius = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.WEATHER_USE_METRIC, 1) == 1;
+            String urlWithDegreeUnit;
+
+            if (celcius) {
+                urlWithDegreeUnit = URL_YAHOO_API_WEATHER + "c";
+            } else {
+                urlWithDegreeUnit = URL_YAHOO_API_WEATHER + "f";
+            }
+
+            return new HttpRetriever().getDocumentFromURL(String.format(urlWithDegreeUnit, woeid));
+        } catch (IOException e) {
+            Log.e(TAG, "Error querying Yahoo weather");
+        }
+
+        return null;
+    }
+
+    /**
+     * Parse the weather XML document
+     * @param wDoc
+     * @return
+     */
+    public WeatherInfo parseXml(Document wDoc) {
+        try {
+            return parseWeatherResponse(wDoc);
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing Yahoo weather XML document");
+            e.printStackTrace();
         }
         return null;
     }
