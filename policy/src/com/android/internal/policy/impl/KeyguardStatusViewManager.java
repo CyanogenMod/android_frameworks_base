@@ -17,12 +17,16 @@
 
 package com.android.internal.policy.impl;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -261,6 +265,17 @@ class KeyguardStatusViewManager implements OnClickListener {
         }
     }
 
+    private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isConnected = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+            if (isConnected) {
+                mHandler.sendEmptyMessage(QUERY_WEATHER);
+                getContext().unregisterReceiver(mConnReceiver);
+            }
+        }
+    };
+
     /*
      * CyanogenMod Lock screen Weather related functionality
      */
@@ -366,7 +381,15 @@ class KeyguardStatusViewManager implements OnClickListener {
                     Settings.System.WEATHER_UPDATE_INTERVAL, 60); // Default to hourly
             boolean manualSync = (interval == 0);
             if (!manualSync && (((System.currentTimeMillis() - mWeatherInfo.last_sync) / 60000) >= interval)) {
-                mHandler.sendEmptyMessage(QUERY_WEATHER);
+                ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected()) {
+                    mHandler.sendEmptyMessage(QUERY_WEATHER);
+                } else {
+                    getContext().registerReceiver(mConnReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+                    if (mWeatherInfo.last_sync == 0) {
+                        setNoWeatherData();
+                    }
+                }
             } else if (manualSync && mWeatherInfo.last_sync == 0) {
                 setNoWeatherData();
             } else {
