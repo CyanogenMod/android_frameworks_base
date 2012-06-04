@@ -98,7 +98,8 @@ public class InputManager implements Watchdog.Monitor {
     private static native String nativeDump();
     private static native void nativeMonitor();
     private static native void nativeSetKeyLayout(String deviceName, String keyLayout);
-    
+    private static native void nativeSetStylusIconEnabled(boolean enabled);
+
     // Input event injection constants defined in InputDispatcher.h.
     static final int INPUT_EVENT_INJECTION_SUCCEEDED = 0;
     static final int INPUT_EVENT_INJECTION_PERMISSION_DENIED = 1;
@@ -151,12 +152,14 @@ public class InputManager implements Watchdog.Monitor {
         registerPointerSpeedSettingObserver();
         registerShowTouchesSettingObserver();
         registerKeyLayoutSettingObserver();
+        registerStylusIconEnabledSettingObserver();
 
         updatePointerSpeedFromSettings();
         updateShowTouchesFromSettings();
         updateKeyLayoutFromSettings();
+        updateStylusIconEnabledFromSettings();
     }
-    
+
     public void setDisplaySize(int displayId, int width, int height,
             int externalWidth, int externalHeight) {
         if (width <= 0 || height <= 0 || externalWidth <= 0 || externalHeight <= 0) {
@@ -459,6 +462,35 @@ public class InputManager implements Watchdog.Monitor {
         } catch (SettingNotFoundException snfe) {
         }
         return speed;
+    }
+
+    /**
+     * Show the pointer icon when a stylus is used
+     * @param enabled
+     */
+    public void setStylusIconEnabled(boolean enabled) {
+        nativeSetStylusIconEnabled(enabled);
+    }
+
+    public void updateStylusIconEnabledFromSettings() {
+        boolean enabled = getStylusIconEnabled();
+        setStylusIconEnabled(enabled);
+    }
+
+    private void registerStylusIconEnabledSettingObserver() {
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.STYLUS_ICON_ENABLED), false,
+                new ContentObserver(mWindowManagerService.mH) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateStylusIconEnabledFromSettings();
+                    }
+                });
+    }
+
+    private boolean getStylusIconEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.STYLUS_ICON_ENABLED, 0) == 1;
     }
 
     public void updateShowTouchesFromSettings() {
