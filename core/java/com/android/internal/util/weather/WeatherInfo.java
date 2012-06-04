@@ -80,28 +80,36 @@ public class WeatherInfo {
     }
 
     private String calcDirection(Context context, String degrees) {
-        int deg = Integer.parseInt(degrees);
-        if (deg >= 338 || deg <= 22)
-            return context.getResources().getString(R.string.weather_N);
-        else if (deg < 68)
-            return context.getResources().getString(R.string.weather_NE);
-        else if (deg < 113)
-            return context.getResources().getString(R.string.weather_E);
-        else if (deg < 158)
-            return context.getResources().getString(R.string.weather_SE);
-        else if (deg < 203)
-            return context.getResources().getString(R.string.weather_S);
-        else if (deg < 248)
-            return context.getResources().getString(R.string.weather_SW);
-        else if (deg < 293)
-            return context.getResources().getString(R.string.weather_W);
-        else if (deg < 338)
-            return context.getResources().getString(R.string.weather_NW);
-        else
+        try {
+            int deg = Integer.parseInt(degrees);
+            if (deg >= 338 || deg <= 22)
+                return context.getResources().getString(R.string.weather_N);
+            else if (deg < 68)
+                return context.getResources().getString(R.string.weather_NE);
+            else if (deg < 113)
+                return context.getResources().getString(R.string.weather_E);
+            else if (deg < 158)
+                return context.getResources().getString(R.string.weather_SE);
+            else if (deg < 203)
+                return context.getResources().getString(R.string.weather_S);
+            else if (deg < 248)
+                return context.getResources().getString(R.string.weather_SW);
+            else if (deg < 293)
+                return context.getResources().getString(R.string.weather_W);
+            else if (deg < 338)
+                return context.getResources().getString(R.string.weather_NW);
+            else
+                return "";
+        } catch (NumberFormatException e) {
             return "";
+        }
     }
 
     private String trimSpeed(String speed) {
-        return String.valueOf(Math.round(Float.parseFloat(speed)));
+        try {
+            return String.valueOf(Math.round(Float.parseFloat(speed)));
+        } catch (NumberFormatException e) {
+            return "";
+        }
     }
 }
