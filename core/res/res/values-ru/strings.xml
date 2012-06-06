@@ -1291,10 +1291,10 @@
     <string name="weather_24">Ветренно</string>
     <string name="weather_25">Холодно</string>
     <string name="weather_26">Облачно</string>
-    <string name="weather_27">Переменная облачность</string> <!-- Night -->
-    <string name="weather_28">Переменная облачность</string> <!-- Day -->
-    <string name="weather_29">Переменная облачность</string> <!-- Night -->
-    <string name="weather_30">Переменная облачность</string> <!-- Day -->
+    <string name="weather_27">Малооблачно</string> <!-- Night -->
+    <string name="weather_28">Малооблачно</string> <!-- Day -->
+    <string name="weather_29">Малооблачно</string> <!-- Night -->
+    <string name="weather_30">Малооблачно</string> <!-- Day -->
     <string name="weather_31">Ясно</string> <!-- Night -->
     <string name="weather_32">Солнечно</string>
     <string name="weather_33">Ясно</string> <!-- Night -->
@@ -1308,7 +1308,7 @@
     <string name="weather_41">Сильный снег</string>
     <string name="weather_42">Возможен снег</string>
     <string name="weather_43">Сильный снег</string>
-    <string name="weather_44">Переменная облачность</string>
+    <string name="weather_44">Малооблачно</string>
     <string name="weather_45">Дождь с грозой</string>
     <string name="weather_46">Дождь со снегом</string>
     <string name="weather_47">Местами грозы</string>
