@@ -138,4 +138,18 @@
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"Wyszukiwanie sygnału GPS"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"Lokalizacja ustawiona według GPS"</string>
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Usuń wszystkie powiadomienia."</string>
+
+    <string name="notifications_off_title">Powiadomienia wyłączone</string>
+    <string name="notifications_off_text">Dotknij by włączyć powiadomienia.</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Wybierz akcję do przypisania</string>
+    <string name="navbar_home_button">Przycisk Home</string>
+    <string name="navbar_recent_button">Przycisk Recent</string>
+    <string name="navbar_search_button">Przycisk Wyszukiwania</string>
+    <string name="navbar_back_button">Przycisk Wstecz</string>
+    <string name="navbar_empty_button">Pusty przycisk</string>
+    <string name="navbar_menu_conditional_button">Przycisk Menu (autoukrywany)</string>
+    <string name="navbar_menu_always_button">Przycisk Menu (zawsze widoczny)</string>
+    <string name="navbar_menu_big_button">Przycisk Menu</string>
 </resources>

@@ -100,6 +100,7 @@
     <string name="roamingText11" msgid="4154476854426920970">"Baner roamingu włączony"</string>
     <string name="roamingText12" msgid="1189071119992726320">"Baner roamingu wyłączony"</string>
     <string name="roamingTextSearching" msgid="8360141885972279963">"Wyszukiwanie usługi"</string>
+    <string name="roamingTextAirplaneMode">Tryb Samolotowy</string>
     <string name="cfTemplateNotForwarded" msgid="1683685883841272560">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: nieprzekierowane"</string>
     <string name="cfTemplateForwarded" msgid="1302922117498590521">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
     <string name="cfTemplateForwardedTime" msgid="9206251736527085256">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g> po <xliff:g id="TIME_DELAY">{2}</xliff:g> sekundach"</string>
@@ -1284,4 +1285,65 @@
     <!--Application killed toast -->
     <string name="app_killed_message">Aplikacja zabita</string>
 
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_1">Tropikalna burza</string>
+    <string name="weather_2">Huragan</string>
+    <string name="weather_3">Silna burza z piorunami</string>
+    <string name="weather_4">Burza z piorunami</string>
+    <string name="weather_5">Deszcz ze śniegiem</string>
+    <string name="weather_6">Deszcz ze śniegiem</string>
+    <string name="weather_7">Deszcz ze śniegiem</string>
+    <string name="weather_8">Zamarzająca mżawka</string>
+    <string name="weather_9">Mżawka</string>
+    <string name="weather_10">Zamarzający deszcz</string>
+    <string name="weather_11">Przelotne opady deszczu</string>
+    <string name="weather_12">Przelotne opady deszczu</string>
+    <string name="weather_13">Przelotne opady śniegu</string>
+    <string name="weather_14">Lekkie opady śniegu</string>
+    <string name="weather_15">Zamieć</string>
+    <string name="weather_16">Śnieg</string>
+    <string name="weather_17">Gradobicie</string>
+    <string name="weather_18">Deszcz ze śniegiem</string>
+    <string name="weather_19">Pył</string>
+    <string name="weather_20">Mgła</string>
+    <string name="weather_21">Mgła</string>
+    <string name="weather_22">Mocna mgła</string>
+    <string name="weather_23">Porwisty wiatr</string>
+    <string name="weather_24">Wietrznie</string>
+    <string name="weather_25">Zimno</string>
+    <string name="weather_26">Pochmurnie</string>
+    <string name="weather_27">Zachmurzenie</string> <!-- Night -->
+    <string name="weather_28">Zachmurzenie</string> <!-- Day -->
+    <string name="weather_29">Częściowe zachmurzenie</string> <!-- Night -->
+    <string name="weather_30">Częściowe zachmurzenie</string> <!-- Day -->
+    <string name="weather_31">Pogodnie</string> <!-- Night -->
+    <string name="weather_32">Słonecznie</string>
+    <string name="weather_33">Ładna pogoda</string> <!-- Night -->
+    <string name="weather_34">Ładna pogoda</string> <!-- Day -->
+    <string name="weather_35">Deszcz z gradem</string>
+    <string name="weather_36">Gorąco</string>
+    <string name="weather_37">Pojedyncze burze z piorunami</string>
+    <string name="weather_38">Przelotne burze z piorunami</string>
+    <string name="weather_39">Przelotne burze z piorunami</string>
+    <string name="weather_40">Przelotne opady deszczu</string>
+    <string name="weather_41">Intensywne opady śniegu</string>
+    <string name="weather_42">Przelotne opady śniegu</string>
+    <string name="weather_43">Intensywne opady śniegu</string>
+    <string name="weather_44">Częściowe zachmurzenie</string>
+    <string name="weather_45">Deszcz i burza z piorunami</string>
+    <string name="weather_46">Przelotne opady śniegu</string>
+    <string name="weather_47">Przelotne burze z piorunami</string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">pn.</string>
+    <string name="weather_NE">pn.-wsch.</string>
+    <string name="weather_E">wsch.</string>
+    <string name="weather_SE">pd.-wsch.</string>
+    <string name="weather_S">pd.</string>
+    <string name="weather_SW">pd.-zach.</string>
+    <string name="weather_W">zach.</string>
+    <string name="weather_NW">pn.-zach.</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_tap_to_refresh">Dotknij by odświeżyć</string>
 </resources>
