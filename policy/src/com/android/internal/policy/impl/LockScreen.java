@@ -363,10 +363,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                 } else if (target == 2 || target == 3) { // 2 = alt/portrait, 3 = alt/landscape
                     if (!mCameraDisabled) {
                         // Start the Camera
+                        mCallback.goToUnlockScreen();
                         Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         mContext.startActivity(intent);
-                        mCallback.goToUnlockScreen();
                     } else {
                         toggleRingMode();
                         mUnlockWidgetMethods.updateResources();
@@ -381,10 +381,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     target -= 1 + mTargetOffset;
                     if (target < mStoredTargets.length && mStoredTargets[target] != null) {
                         try {
+                            mCallback.goToUnlockScreen();
                             Intent tIntent = Intent.parseUri(mStoredTargets[target], 0);
                             tIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             mContext.startActivity(tIntent);
-                            mCallback.goToUnlockScreen();
                             return;
                         } catch (URISyntaxException e) {
                         } catch (ActivityNotFoundException e) {
