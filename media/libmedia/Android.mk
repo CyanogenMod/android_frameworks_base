@@ -47,6 +47,11 @@ LOCAL_SRC_FILES:= \
     MemoryLeakTrackUtil.cpp \
     fixedfft.cpp.arm
 
+ifeq ($(BOARD_USES_LIBMEDIA_WITH_AUDIOPARAMETER),true)
+    LOCAL_SRC_FILES+= \
+        AudioParameter.cpp
+endif
+
 ifeq ($(BOARD_USES_AUDIO_LEGACY),true)
     LOCAL_SRC_FILES+= \
         AudioParameter.cpp
