@@ -187,6 +187,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final int LONG_PRESS_HOME_RECENT_DIALOG = 1;
     static final int LONG_PRESS_HOME_RECENT_SYSTEM_UI = 2;
 
+    static final int LONG_PRESS_HOME_MENU = 3;
+
     static final int LONG_PRESS_MENU_NOTHING = 0;
     static final int LONG_PRESS_MENU_SEARCH = 1;
 
@@ -480,6 +482,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // What we do when the user long presses on menu
     private int mLongPressOnMenuBehavior = -1;
 
+    // Whether to bind app switching to the menu key, and menu to long-press on home
+    private boolean mAppSwitchMenuKeySwap;
+
+    // For differentiating between real and virtual keypresses
+    private boolean mIsVirtualKeypress;
+
     // Screenshot trigger states
     // Time to volume and power must be pressed within this interval of each other.
     private static final long ACTION_CHORD_DEBOUNCE_DELAY_MILLIS = 150;
@@ -535,6 +543,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim"), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.APP_SWITCH_MENU_KEY_SWAP), false, this);
             updateSettings();
         }
 
@@ -841,31 +851,38 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void handleLongPressOnHome() {
         // We can't initialize this in init() since the configuration hasn't been loaded yet.
         if (mLongPressOnHomeBehavior < 0) {
-            mLongPressOnHomeBehavior
-                    = mContext.getResources().getInteger(R.integer.config_longPressOnHomeBehavior);
-            if (mLongPressOnHomeBehavior < LONG_PRESS_HOME_NOTHING ||
-                    mLongPressOnHomeBehavior > LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
-                mLongPressOnHomeBehavior = LONG_PRESS_HOME_NOTHING;
+            if (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.APP_SWITCH_MENU_KEY_SWAP, 0) == 1) {
+                mLongPressOnHomeBehavior = LONG_PRESS_HOME_MENU;
+            } else {
+                mLongPressOnHomeBehavior = mContext.getResources().getInteger(
+                        R.integer.config_longPressOnHomeBehavior);
+                if (mLongPressOnHomeBehavior < LONG_PRESS_HOME_NOTHING ||
+                        mLongPressOnHomeBehavior > LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
+                    mLongPressOnHomeBehavior = LONG_PRESS_HOME_NOTHING;
+                }
             }
         }
 
         if (mLongPressOnHomeBehavior != LONG_PRESS_HOME_NOTHING) {
             performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
-            sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
-
-            // Eat the longpress so it won't dismiss the recent apps dialog when
-            // the user lets go of the home key
-            mHomePressed = false;
-        }
-
-        if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_DIALOG) {
-            showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS);
-        } else if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
-            try {
-                mStatusBarService.toggleRecentApps();
-            } catch (RemoteException e) {
-                Slog.e(TAG, "RemoteException when showing recent apps", e);
+            if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_MENU) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_MENU);
+            } else {
+                sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
+                if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_DIALOG) {
+                    showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS);
+                } else if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
+                    try {
+                        mStatusBarService.toggleRecentApps();
+                    } catch (RemoteException e) {
+                        Slog.e(TAG, "RemoteException when showing recent apps", e);
+                    }
+                }
             }
+
+            // Eat the longpress so it won't take us home when the key is released
+            mHomePressed = false;
         }
     }
 
@@ -889,6 +906,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void triggerVirtualKeypress(final int keyCode) {
         new Thread(new Runnable() {
             public void run() {
+                mIsVirtualKeypress = true;
                 try {
                     mWindowManager.injectKeyEvent(
                             new KeyEvent(KeyEvent.ACTION_DOWN, keyCode), true);
@@ -896,6 +914,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             new KeyEvent(KeyEvent.ACTION_UP, keyCode), true);
                 } catch(RemoteException e) {
                 }
+                mIsVirtualKeypress = false;
             }
         }).start();
     }
@@ -1157,6 +1176,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mOrientationListener.setLogEnabled(
                     Settings.System.getInt(resolver,
                             Settings.System.WINDOW_ORIENTATION_LISTENER_LOG, 0) != 0);
+
+            if (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.APP_SWITCH_MENU_KEY_SWAP, 0) == 1) {
+                mAppSwitchMenuKeySwap = true;
+                mLongPressOnHomeBehavior = LONG_PRESS_HOME_MENU;
+            } else if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_MENU) {
+                mAppSwitchMenuKeySwap = false;
+                // Restore long press on home behavior from config.
+                mLongPressOnHomeBehavior = mContext.getResources().getInteger(
+                        R.integer.config_longPressOnHomeBehavior);
+                if (mLongPressOnHomeBehavior < LONG_PRESS_HOME_NOTHING ||
+                        mLongPressOnHomeBehavior > LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
+                    mLongPressOnHomeBehavior = LONG_PRESS_HOME_NOTHING;
+                }
+            }
 
             if (mSystemReady) {
                 int pointerLocation = Settings.System.getInt(resolver,
@@ -1848,15 +1882,25 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         Settings.System.putInt(
                                 res, Settings.System.SHOW_PROCESSES, shown ? 0 : 1);
                         return -1;
+                    } else if (mAppSwitchMenuKeySwap && !mIsVirtualKeypress) {
+                        mAppSwitchPressed = true;
+                        return -1;
                     }
                 } else if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) != 0) {
                     if (!keyguardOn) {
                         handleLongPressOnMenu();
                         if (mLongPressOnMenuBehavior != LONG_PRESS_MENU_NOTHING) {
-                            // Do not open menu when key is released
+                            // Do not perform action when key is released
+                            mAppSwitchPressed = false;
                             return -1;
                         }
                     }
+                }
+            } else if (mAppSwitchPressed) {
+                mAppSwitchPressed = false;
+                if (!canceled && !keyguardOn) {
+                    triggerVirtualKeypress(KeyEvent.KEYCODE_APP_SWITCH);
+                    return -1;
                 }
             }
         } else if (keyCode == KeyEvent.KEYCODE_SEARCH) {

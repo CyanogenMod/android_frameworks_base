@@ -2438,6 +2438,13 @@ public final class Settings {
          */
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
+         /**
+          * Whether to use hardware menu key for app switching (and long-press
+          * on home for menu).
+          * @hide
+          */
+         public static final String APP_SWITCH_MENU_KEY_SWAP = "app_switch_menu_key_swap";
+
         /**
          * Sets the lockscreen background style
          * @hide
