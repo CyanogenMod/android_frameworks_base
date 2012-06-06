@@ -9,12 +9,13 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.provider.Settings;
 
-import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.Phone;
 
 public class MobileDataButton extends PowerButton {
 
     public static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
+    public static final String ACTION_MOBILE_DATA_CHANGED = "com.android.internal.telephony.MOBILE_DATA_CHANGED";
+
     public static final String EXTRA_NETWORK_MODE = "networkMode";
 
     public MobileDataButton() { mType = BUTTON_MOBILEDATA; }
@@ -75,7 +76,7 @@ public class MobileDataButton extends PowerButton {
     @Override
     protected IntentFilter getBroadcastIntentFilter() {
         IntentFilter filter = new IntentFilter();
-        filter.addAction(TelephonyIntents.ACTION_ANY_DATA_CONNECTION_STATE_CHANGED);
+        filter.addAction(ACTION_MOBILE_DATA_CHANGED);
         return filter;
     }
 

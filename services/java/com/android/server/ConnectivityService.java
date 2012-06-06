@@ -74,6 +74,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private static final String NETWORK_RESTORE_DELAY_PROP_NAME =
             "android.telephony.apn-restore";
 
+    private static final String ACTION_MOBILE_DATA_CHANGED =
+            "com.android.internal.telephony.MOBILE_DATA_CHANGED";
+    private static final String EXTRA_ENABLED = "enabled";
 
     private Tethering mTethering;
     private boolean mTetheringConfigValid = false;
@@ -1014,6 +1017,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 mNetTrackers[ConnectivityManager.TYPE_WIMAX].teardown();
             }
         }
+
+        Intent intent = new Intent(ACTION_MOBILE_DATA_CHANGED);
+        intent.putExtra(EXTRA_ENABLED, enabled);
+        mContext.sendBroadcast(intent);
     }
 
     private int getNumConnectedNetworks() {
