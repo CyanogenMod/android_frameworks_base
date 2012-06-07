@@ -210,7 +210,11 @@ static void setIntField(JNIEnv* env, jobject obj, const char* path, jfieldID fie
     env->SetIntField(obj, fieldID, value);
 }
 
+#ifdef MOTO_PERCENT_BATTERY_MOD
+static void setIntFieldMax(JNIEnv* env, jobject obj, const char* path, jfieldID fieldID, int maxValue)
+#else
 static void setPercentageField(JNIEnv* env, jobject obj, const char* path, jfieldID fieldID)
+#endif
 {
     const int SIZE = 128;
     char buf[SIZE];
@@ -219,12 +223,16 @@ static void setPercentageField(JNIEnv* env, jobject obj, const char* path, jfiel
     if (readFromFile(path, buf, SIZE) > 0) {
         value = atoi(buf);
     }
+#ifdef MOTO_PERCENT_BATTERY_MOD
+    if (value > maxValue) value = maxValue;
+#else
     /* sanity check for buggy drivers that provide bogus values, e.g. 103% */
     if (value < 0) {
         value = 0;
     } else if (value > 100) {
         value = 100;
     }
+#endif
 
     env->SetIntField(obj, fieldID, value);
 }
@@ -252,8 +260,11 @@ static void android_server_BatteryService_update(JNIEnv* env, jobject obj)
 #ifdef HAS_DOCK_BATTERY
     setIntField(env, obj, gPaths.dockbatteryCapacityPath, gFieldIds.mDockBatteryLevel);
 #endif
-    
+#ifdef MOTO_PERCENT_BATTERY_MOD
+    setIntFieldMax(env, obj, gPaths.batteryCapacityPath, gFieldIds.mBatteryLevel, 100);
+#else
     setPercentageField(env, obj, gPaths.batteryCapacityPath, gFieldIds.mBatteryLevel);
+#endif
     setVoltageField(env, obj, gPaths.batteryVoltagePath, gFieldIds.mBatteryVoltage);
     setIntField(env, obj, gPaths.batteryTemperaturePath, gFieldIds.mBatteryTemperature);
     
@@ -332,7 +343,11 @@ int register_android_server_BatteryService(JNIEnv* env)
                 snprintf(path, sizeof(path), "%s/%s/present", POWER_SUPPLY_PATH, name);
                 if (access(path, R_OK) == 0)
                     gPaths.batteryPresentPath = strdup(path);
+#ifdef MOTO_PERCENT_BATTERY_MOD
+                snprintf(path, sizeof(path), "%s/%s/charge_counter", POWER_SUPPLY_PATH, name);
+#else
                 snprintf(path, sizeof(path), "%s/%s/capacity", POWER_SUPPLY_PATH, name);
+#endif
                 if (access(path, R_OK) == 0)
                     gPaths.batteryCapacityPath = strdup(path);
 

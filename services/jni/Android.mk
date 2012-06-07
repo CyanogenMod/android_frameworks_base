@@ -45,6 +45,10 @@ ifeq ($(TARGET_HAS_DOCK_BATTERY),true)
     LOCAL_CFLAGS += -DHAS_DOCK_BATTERY
 endif
 
+ifeq ($(MOTO_PERCENT_BATTERY_MOD),true)
+    LOCAL_CFLAGS += -DMOTO_PERCENT_BATTERY_MOD
+endif
+
 LOCAL_MODULE:= libandroid_servers
 
 include $(BUILD_SHARED_LIBRARY)
