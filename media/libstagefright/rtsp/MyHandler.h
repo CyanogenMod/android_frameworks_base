@@ -40,13 +40,15 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
-// If no access units are received within 3 secs, assume that the rtp
+// If no access units are received within 10 secs, assume that the rtp
 // stream has ended and signal end of stream.
-static int64_t kAccessUnitTimeoutUs = 3000000ll;
+static int64_t kAccessUnitTimeoutUs = 10000000ll;
 
 // If no access units arrive for the first 10 secs after starting the
 // stream, assume none ever will and signal EOS or switch transports.
 static int64_t kStartupTimeoutUs = 10000000ll;
+
+static int64_t kDefaultKeepAliveTimeoutUs = 60000000ll;
 
 namespace android {
 
@@ -110,7 +112,9 @@ struct MyHandler : public AHandler {
           mTryFakeRTCP(false),
           mReceivedFirstRTCPPacket(false),
           mReceivedFirstRTPPacket(false),
-          mSeekable(false) {
+          mSeekable(false),
+          mKeepAliveTimeoutUs(kDefaultKeepAliveTimeoutUs),
+          mKeepAliveGeneration(0) {
         mNetLooper->setName("rtsp net");
         mNetLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
@@ -371,6 +375,8 @@ struct MyHandler : public AHandler {
 
             case 'disc':
             {
+                ++mKeepAliveGeneration;
+
                 int32_t reconnect;
                 if (msg->findInt32("reconnect", &reconnect) && reconnect) {
                     sp<AMessage> reply = new AMessage('conn', id());
@@ -502,6 +508,34 @@ struct MyHandler : public AHandler {
                         CHECK_GE(i, 0);
 
                         mSessionID = response->mHeaders.valueAt(i);
+
+                        mKeepAliveTimeoutUs = kDefaultKeepAliveTimeoutUs;
+                        AString timeoutStr;
+                        if (GetAttribute(
+                                    mSessionID.c_str(), "timeout", &timeoutStr)) {
+                            char *end;
+                            unsigned long timeoutSecs =
+                                strtoul(timeoutStr.c_str(), &end, 10);
+
+                            if (end == timeoutStr.c_str() || *end != '\0') {
+                                LOGW("server specified malformed timeout '%s'",
+                                     timeoutStr.c_str());
+
+                                mKeepAliveTimeoutUs = kDefaultKeepAliveTimeoutUs;
+                            } else if (timeoutSecs < 15) {
+                                LOGW("server specified too short a timeout "
+                                     "(%lu secs), using default.",
+                                     timeoutSecs);
+
+                                mKeepAliveTimeoutUs = kDefaultKeepAliveTimeoutUs;
+                            } else {
+                                mKeepAliveTimeoutUs = timeoutSecs * 1000000ll;
+
+                                LOGI("server specified timeout of %lu secs.",
+                                     timeoutSecs);
+                            }
+                        }
+
                         i = mSessionID.find(";");
                         if (i >= 0) {
                             // Remove options, i.e. ";timeout=90"
@@ -549,6 +583,9 @@ struct MyHandler : public AHandler {
                 if (index < mSessionDesc->countTracks()) {
                     setupTrack(index);
                 } else if (mSetupTracksSuccessful) {
+                    ++mKeepAliveGeneration;
+                    postKeepAlive();
+
                     AString request = "PLAY ";
                     request.append(mSessionURL);
                     request.append(" RTSP/1.0\r\n");
@@ -597,6 +634,51 @@ struct MyHandler : public AHandler {
                     mConn->disconnect(reply);
                 }
 
+                break;
+            }
+
+            case 'aliv':
+            {
+                int32_t generation;
+                CHECK(msg->findInt32("generation", &generation));
+
+                if (generation != mKeepAliveGeneration) {
+                    // obsolete event.
+                    break;
+                }
+
+                AString request;
+                request.append("OPTIONS ");
+                request.append(mSessionURL);
+                request.append(" RTSP/1.0\r\n");
+                request.append("Session: ");
+                request.append(mSessionID);
+                request.append("\r\n");
+                request.append("\r\n");
+
+                sp<AMessage> reply = new AMessage('opts', id());
+                reply->setInt32("generation", mKeepAliveGeneration);
+                mConn->sendRequest(request.c_str(), reply);
+                break;
+            }
+
+            case 'opts':
+            {
+                int32_t result;
+                CHECK(msg->findInt32("result", &result));
+
+                LOGI("OPTIONS completed with result %d (%s)",
+                     result, strerror(-result));
+
+                int32_t generation;
+                CHECK(msg->findInt32("generation", &generation));
+
+                if (generation != mKeepAliveGeneration) {
+                    // obsolete event.
+                    break;
+                }
+
+                postKeepAlive();
                 break;
             }
 
@@ -962,6 +1044,12 @@ struct MyHandler : public AHandler {
         }
     }
 
+    void postKeepAlive() {
+        sp<AMessage> msg = new AMessage('aliv', id());
+        msg->setInt32("generation", mKeepAliveGeneration);
+        msg->post((mKeepAliveTimeoutUs * 9) / 10);
+    }
+
     void postAccessUnitTimeoutCheck() {
         if (mCheckPending) {
             return;
@@ -1092,6 +1180,8 @@ private:
     bool mReceivedFirstRTCPPacket;
     bool mReceivedFirstRTPPacket;
     bool mSeekable;
+    int64_t mKeepAliveTimeoutUs;
+    int32_t mKeepAliveGeneration;
 
     struct TrackInfo {
         AString mURL;
