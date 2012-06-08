@@ -395,6 +395,18 @@ public final class CallManager {
                 }
                 break;
         }
+
+        // Some proprietary audio HALs needs a special parameter "realcall" set for incall audio
+        if(context.getResources().getBoolean(com.android.internal.R.bool.config_telephony_set_realcall_parameter)) {
+            if (mode == AudioManager.MODE_IN_CALL) {
+                Log.d(LOG_TAG, "setAudioMode(): realcall=on");
+                audioManager.setParameters("realcall=on");
+            } else if (mode == AudioManager.MODE_NORMAL) {
+                Log.d(LOG_TAG, "setAudioMode(): realcall=off");
+                audioManager.setParameters("realcall=off");
+            }
+        }
+
         // calling audioManager.setMode() multiple times in a short period of
         // time seems to break the audio recorder in in-call mode
         if (audioManager.getMode() != mode) audioManager.setMode(mode);
