@@ -82,6 +82,9 @@ public final class CallManager {
     // Singleton instance
     private static final CallManager INSTANCE = new CallManager();
 
+    // Audio HAL needs "realcall" parameter set for incall audio
+    private static boolean mNeedsRealCallParameter;
+
     // list of registered phones, which are PhoneBase objs
     private final ArrayList<Phone> mPhones;
 
@@ -170,6 +173,7 @@ public final class CallManager {
         mBackgroundCalls = new ArrayList<Call>();
         mForegroundCalls = new ArrayList<Call>();
         mDefaultPhone = null;
+        mNeedsRealCallParameter = mContext.getResources().getBoolean(R.bool.config_telephony_set_realcall_parameter);
     }
 
     /**
@@ -395,6 +399,18 @@ public final class CallManager {
                 }
                 break;
         }
+
+        // Some samsung devices need a special parameter "realcall" set for incall audio
+        if(mNeedsRealCallParameter) {
+            if (mode == AudioManager.MODE_IN_CALL) {
+                Log.d(LOG_TAG, "setAudioMode(): realcall=on");
+                audioManager.setParameters("realcall=on");
+            } else if (mode == AudioManager.MODE_NORMAL) {
+                Log.d(LOG_TAG, "setAudioMode(): realcall=off");
+                audioManager.setParameters("realcall=off");
+            }
+        }
+
         // calling audioManager.setMode() multiple times in a short period of
         // time seems to break the audio recorder in in-call mode
         if (audioManager.getMode() != mode) audioManager.setMode(mode);
