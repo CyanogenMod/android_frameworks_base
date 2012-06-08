@@ -135,7 +135,7 @@ LOCAL_STATIC_LIBRARIES := libdex libft2
 LOCAL_C_INCLUDES += external/freetype/include external/zlib dalvik
 LOCAL_C_INCLUDES += frameworks/compile/libbcc/include
 
-LOCAL_CFLAGS += -Werror -Wall -Wno-unused-parameter -Wno-unused-variable
+LOCAL_CFLAGS += -Wall -Wno-unused-parameter -Wno-unused-variable
 
 LOCAL_LDLIBS := -lpthread -ldl
 LOCAL_MODULE:= libRS
@@ -180,7 +180,7 @@ $(GEN): $(intermediates)/%.cpp : $(LOCAL_PATH)/%.cpp.rsg
 
 LOCAL_GENERATED_SOURCES += $(GEN)
 
-LOCAL_CFLAGS += -Werror -Wall -Wno-unused-parameter -Wno-unused-variable
+LOCAL_CFLAGS += -Wall -Wno-unused-parameter -Wno-unused-variable
 LOCAL_CFLAGS += -DANDROID_RS_SERIALIZE
 LOCAL_CFLAGS += -fPIC
 
