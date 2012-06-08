@@ -79,8 +79,13 @@ public final class CallManager {
     private static final int EVENT_SERVICE_STATE_CHANGED = 118;
     private static final int EVENT_POST_DIAL_CHARACTER = 119;
 
+    private final Context mContext;
+
     // Singleton instance
     private static final CallManager INSTANCE = new CallManager();
+
+    // Set "realcall" parameter on phone calls, needed for some proprietary audio HALs
+    private static boolean mNeedsRealCallParameter;
 
     // list of registered phones, which are PhoneBase objs
     private final ArrayList<Phone> mPhones;
@@ -165,11 +170,13 @@ public final class CallManager {
     = new RegistrantList();
 
     private CallManager() {
+        mContext = getContext();
         mPhones = new ArrayList<Phone>();
         mRingingCalls = new ArrayList<Call>();
         mBackgroundCalls = new ArrayList<Call>();
         mForegroundCalls = new ArrayList<Call>();
         mDefaultPhone = null;
+        mNeedsRealCallParameter = mContext.getResources().getBoolean(com.android.internal.R.bool.config_telephony_set_realcall_parameter);
     }
 
     /**
@@ -395,6 +402,18 @@ public final class CallManager {
                 }
                 break;
         }
+
+        // Some proprietary audio HALs needs a special parameter "realcall" set for incall audio
+        if(mNeedsRealCallParameter) {
+            if (mode == AudioManager.MODE_IN_CALL) {
+                Log.d(LOG_TAG, "setAudioMode(): realcall=on");
+                audioManager.setParameters("realcall=on");
+            } else if (mode == AudioManager.MODE_NORMAL) {
+                Log.d(LOG_TAG, "setAudioMode(): realcall=off");
+                audioManager.setParameters("realcall=off");
+            }
+        }
+
         // calling audioManager.setMode() multiple times in a short period of
         // time seems to break the audio recorder in in-call mode
         if (audioManager.getMode() != mode) audioManager.setMode(mode);
