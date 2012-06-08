@@ -6,7 +6,6 @@ import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.View;
 
 public class LockScreenButton extends PowerButton {
@@ -36,20 +35,13 @@ public class LockScreenButton extends PowerButton {
             mLock.reenableKeyguard();
             mLock = null;
         } else if (view != null) {
-            Context context = view.getContext();
-            mDisabledLockscreen = getPreferences(context).getBoolean(KEY_DISABLED, false);
-            applyState(context);
+            applyState(view.getContext());
         }
     }
 
     @Override
     protected void toggleState(Context context) {
         mDisabledLockscreen = !mDisabledLockscreen;
-
-        SharedPreferences.Editor editor = getPreferences(context).edit();
-        editor.putBoolean(KEY_DISABLED, mDisabledLockscreen);
-        editor.apply();
-
         applyState(context);
     }
 
