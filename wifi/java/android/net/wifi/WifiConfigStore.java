@@ -740,6 +740,7 @@ class WifiConfigStore {
             in = new DataInputStream(new BufferedInputStream(new FileInputStream(
                     ipConfigFile)));
 
+            int pos = 0;
             int version = in.readInt();
             if (version != 2 && version != 1) {
                 loge("Bad version on IP configuration file, ignore read");
@@ -796,6 +797,8 @@ class WifiConfigStore {
                         } else if (key.equals(EXCLUSION_LIST_KEY)) {
                             exclusionList = in.readUTF();
                         } else if (key.equals(EOS)) {
+                            // an eos can be present after the version header
+                            if (pos == 0) continue;
                             break;
                         } else {
                             loge("Ignore unknown key " + key + "while reading");
@@ -803,6 +806,7 @@ class WifiConfigStore {
                     } catch (IllegalArgumentException e) {
                         loge("Ignore invalid address while reading" + e);
                     }
+                    pos++;
                 } while (true);
 
                 if (id != -1) {
