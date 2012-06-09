@@ -753,6 +753,7 @@ class WifiConfigStore {
                 LinkProperties linkProperties = new LinkProperties();
                 String proxyHost = null;
                 int proxyPort = -1;
+                int pos = 0;
                 String exclusionList = null;
                 String key;
 
@@ -796,6 +797,8 @@ class WifiConfigStore {
                         } else if (key.equals(EXCLUSION_LIST_KEY)) {
                             exclusionList = in.readUTF();
                         } else if (key.equals(EOS)) {
+                            // an eos can be present after the version header
+                            if (pos == 0) continue;
                             break;
                         } else {
                             loge("Ignore unknown key " + key + "while reading");
@@ -803,6 +806,7 @@ class WifiConfigStore {
                     } catch (IllegalArgumentException e) {
                         loge("Ignore invalid address while reading" + e);
                     }
+                    pos++;
                 } while (true);
 
                 if (id != -1) {
