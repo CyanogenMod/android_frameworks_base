@@ -47,8 +47,12 @@ public:
 
     status_t unlock(buffer_handle_t handle);
 
-#ifdef EXYNOS4210_ENHANCEMENTS
+#if (defined(EXYNOS4210_ENHANCEMENTS) && !defined(EXYNOS4X12_ENHANCEMENTS))
     status_t getphys(buffer_handle_t handle, void** paddr);
+#endif
+
+#ifdef EXYNOS4X12_ENHANCEMENTS
+    status_t getphys(buffer_handle_t handle, int* paddr);
 #endif
 
     // dumps information about the mapping of this handle
