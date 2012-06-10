@@ -776,6 +776,13 @@ void LPAPlayer::decoderThreadEntry() {
         //Queue up the buffers for writing either for A2DP or LPA Driver
         else {
             struct msm_audio_aio_buf aio_buf_local;
+            if(bIsA2DPEnabled && isPaused){
+                pthread_mutex_lock(&mem_response_mutex);
+                buf.bytesToWrite = 0;
+                memBuffersResponseQueue.push_back(buf);
+                pthread_mutex_unlock(&mem_response_mutex);
+                continue;
+            }
             int numOfBytes = 0;
 
             if (bIsA2DPEnabled)
