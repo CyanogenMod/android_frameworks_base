@@ -58,8 +58,7 @@ public class BrightnessController implements ToggleSlider.Listener {
             }
             control.setChecked(automatic != 0);
         } else {
-            control.setChecked(false);
-            //control.hideToggle();
+            control.hideToggle();
         }
         
         int value;

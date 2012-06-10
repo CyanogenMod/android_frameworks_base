@@ -23,6 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -73,6 +74,19 @@ public class ToggleSlider extends RelativeLayout
         mLabel.setText(a.getString(R.styleable.ToggleSlider_text));
 
         a.recycle();
+    }
+
+    /* @hide */
+    public void hideToggle() {
+        /* Using View.GONE makes the slider disappear */
+        ViewGroup.LayoutParams params = mToggle.getLayoutParams();
+        params.width = 0;
+        params.height = 0;
+        mToggle.setLayoutParams(params);
+        mToggle.setVisibility(View.INVISIBLE);
+
+        /* We can use GONE on the label though */
+        mLabel.setVisibility(View.GONE);
     }
 
     public void onCheckedChanged(CompoundButton toggle, boolean checked) {
