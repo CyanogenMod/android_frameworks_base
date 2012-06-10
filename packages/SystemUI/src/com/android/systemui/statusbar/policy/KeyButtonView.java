@@ -117,7 +117,7 @@ public class KeyButtonView extends ImageView {
             canvas.restore();
             mRect.right = w;
             mRect.bottom = h;
-            canvas.saveLayerAlpha(mRect, (int)(mDrawingAlpha * 255), Canvas.ALL_SAVE_FLAG);
+            canvas.saveLayerAlpha(mRect, 255, Canvas.ALL_SAVE_FLAG);
         }
         super.onDraw(canvas);
         if (mGlowBG != null) {
