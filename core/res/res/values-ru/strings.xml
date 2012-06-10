@@ -1326,5 +1326,7 @@
     <string name="weather_NW">СЗ</string>
 
     <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Нет данных</string>
     <string name="weather_tap_to_refresh">Нажмите для обновления</string>
+    <string name="weather_refreshing">Обновление</string>
 </resources>
