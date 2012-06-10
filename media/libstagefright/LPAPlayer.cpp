@@ -70,6 +70,7 @@ mObserver(observer),
 AudioPlayer(audioSink,observer) {
     LOGV("LPAPlayer::LPAPlayer() ctor");
     a2dpDisconnectPause = false;
+    a2dpResumeAfterReConnect = false;
     mSeeked = false;
     objectsAlive++;
     timeStarted = 0;
@@ -507,6 +508,7 @@ void LPAPlayer::resume() {
             mReachedEOS = false;
             mSeekTimeUs = timePlayed;
             a2dpDisconnectPause = false;
+            a2dpResumeAfterReConnect = true;
             mAudioSink->start();
             pthread_cond_signal(&decoder_cv);
             pthread_cond_signal(&a2dp_cv);
@@ -1149,6 +1151,19 @@ void LPAPlayer::A2DPThreadEntry() {
                     //Seeked: break out of loop, flush old buffers and write new buffers
                     LOGV("@_@bytes To write1:%d",bytesToWrite);
                 }
+                /* Incase of A2DP disconnect and connects back flushing all the buffers
+                   which are decoded by fillbuffer and not sent to A2DP */
+                if( a2dpResumeAfterReConnect == true )
+                {
+                    a2dpResumeAfterReConnect = false;
+                    while (!memBuffersResponseQueue.empty()) {
+                        List<BuffersAllocated>::iterator it = memBuffersResponseQueue.begin();
+                        BuffersAllocated buf = *it;
+                        memBuffersRequestQueue.push_back(buf);
+                        memBuffersResponseQueue.erase(it);
+                    }
+                    break;
+                }
                 if (mSeeked) {
                     LOGV("Seeking A2DP Playback");
                     break;
@@ -1504,7 +1519,14 @@ realTimeOffset = 0;
 
 return mPositionTimeMediaUs + realTimeOffset;
 */
-    LOGV("getMediaTimeUs() isPaused %d timeStarted %d timePlayed %d", isPaused, timeStarted, timePlayed);
+    /* When A2DP connects in the middile timePlayed will be updated to the
+       number of buffer played from zero which will be non-zero value
+       incase if user does not perform any seek operation timePlayed will be
+       willbe non-zero and which will effect the seekbar after playback
+       to resolve this sending zero when the EOS reached and A2DP enable */
+    if( isPaused && bIsA2DPEnabled && mReachedEOS )
+        return 0;
+    LOGV("getMediaTimeUs() isPaused %d timeStarted %lld timePlayed %lld", isPaused, timeStarted, timePlayed);
     if (isPaused || timeStarted == 0) {
         return timePlayed;
     } else {
