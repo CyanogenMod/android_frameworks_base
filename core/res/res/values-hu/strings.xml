@@ -1336,5 +1336,7 @@
     <string name="weather_NW">ÉNy</string>
 
     <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Nincs adat</string>
     <string name="weather_tap_to_refresh">Érintse meg a frissítéshez</string>
+    <string name="weather_refreshing">Frissítés…</string>
 </resources>
