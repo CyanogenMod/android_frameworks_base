@@ -868,6 +868,8 @@ bool AudioFlinger::masterMute() const
 #ifdef WITH_QCOM_LPA
 status_t AudioFlinger::setSessionVolume(int stream, float left, float right)
 {
+    AutoMutex lock(mLock);
+
     mLPALeftVol  = left;
     mLPARightVol = right;
     if( (mLPAOutput != NULL) && (mLPAStreamType == stream) ) {
