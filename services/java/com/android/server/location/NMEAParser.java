@@ -18,7 +18,9 @@ package com.android.server.location;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -35,6 +37,8 @@ public class NMEAParser {
     // NMEA sentence pattern
     private final Pattern sentencePattern = Pattern.compile("\\$([^*$]{5,})(\\*\\w{2})?");
     private final SimpleDateFormat timeFormatter = new SimpleDateFormat("HHmmss.S");
+    private final TimeZone GPSTimezone = TimeZone.getTimeZone("UTC");
+    private GregorianCalendar GPSCalendar = new GregorianCalendar(GPSTimezone);
 
     private HashMap<String,ParseInterface> parseMap = new HashMap<String,ParseInterface>();
     private String provider;
@@ -158,8 +162,14 @@ public class NMEAParser {
      */
     private long parseTimeToDate(String time) {
         try {
+            // parse time , We only get timestamp from sentences
+            // use UTC calendar to set the date.
             Date btTime = timeFormatter.parse(time);
-            return btTime.getTime();
+            Calendar localCalendar = Calendar.getInstance(GPSTimezone);
+            GPSCalendar.setTimeInMillis(btTime.getTime());
+            GPSCalendar.set(localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH),
+                    localCalendar.get(Calendar.DAY_OF_MONTH));
+            return GPSCalendar.getTimeInMillis();
         } catch (ParseException e) {
             Log.e(TAG, "Could not parse: " + time);
             return 0;
