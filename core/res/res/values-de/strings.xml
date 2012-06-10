@@ -1319,6 +1319,8 @@
     <string name="weather_NW">NW</string>
 
     <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Keine Daten</string>
     <string name="weather_tap_to_refresh">Zum Aktualisieren berühren</string>
+    <string name="weather_refreshing">Aktualisiere\u2026</string>
 
 </resources>
