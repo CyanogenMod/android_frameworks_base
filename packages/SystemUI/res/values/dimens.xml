@@ -91,4 +91,14 @@
     <!-- The padding on the global screenshot background image -->
     <dimen name="global_screenshot_bg_padding">20dp</dimen>
 
+<<<<<<< HEAD
+=======
+    <!-- Brightness panel top margin -->
+    <dimen name="brightness_panel_top">80dp</dimen>
+
+    <!-- Carrier label bottom padding -->
+    <dimen name="carrier_label_bottom">20dp</dimen>
+
+
+>>>>>>> 6349b4c... Bottom status bar - Fix carrier label padding
 </resources>
