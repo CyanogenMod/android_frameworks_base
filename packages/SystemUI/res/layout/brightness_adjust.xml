@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@*android:drawable/dialog_full_holo_dark"
+    android:paddingTop="35dp"
+    android:paddingBottom="35dp"
+    android:paddingLeft="60dp"
+    android:paddingRight="60dp"
+    >
+    <LinearLayout
+        android:id="@+id/display_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <ImageView
+            android:id="@+id/brightness_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/stat_brightness_mid"
+            android:paddingBottom="12dp"
+            />
+        <TextView
+            android:id="@+id/brightness_text"
+            android:textSize="28sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_blue_light"
+        />
+    </LinearLayout>
+</FrameLayout>

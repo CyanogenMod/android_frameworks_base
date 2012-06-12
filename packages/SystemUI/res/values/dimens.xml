@@ -91,4 +91,7 @@
     <!-- The padding on the global screenshot background image -->
     <dimen name="global_screenshot_bg_padding">20dp</dimen>
 
+    <!-- Brightness panel top margin -->
+    <dimen name="brightness_panel_top">80dp</dimen>
+
 </resources>

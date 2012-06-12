@@ -129,6 +129,9 @@ public class PhoneStatusBar extends StatusBar {
     private boolean mBrightnessControl;
     private boolean mAutoBrightness;
 
+    // brightness panel
+    private BrightnessPanel mBrightnessPanel = null;
+
     // fling gesture tuning parameters, scaled to display density
     private float mSelfExpandVelocityPx; // classic value: 2000px/s
     private float mSelfCollapseVelocityPx; // classic value: 2000px/s (will be negated to collapse "up")
@@ -1603,6 +1606,11 @@ public class PhoneStatusBar extends StatusBar {
                                         power.setBacklightBrightness(newBrightness);
                                         Settings.System.putInt(mContext.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS,
                                                 newBrightness);
+
+                                        if (mBrightnessPanel == null)
+                                            mBrightnessPanel = new BrightnessPanel(mContext);
+                                        mBrightnessPanel.postBrightnessChanged(newBrightness, android.os.Power.BRIGHTNESS_ON);
+
                                     }
                                 } catch (RemoteException e) {
                                     Slog.w(TAG, "Setting Brightness failed: " + e);

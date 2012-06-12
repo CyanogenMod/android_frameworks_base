@@ -95,5 +95,12 @@
         <!-- Note: must be dp to fit in status bar -->
         <item name="android:textSize">14dp</item>
     </style>
+
+    <style name="BrightnessPanel">
+        <item name="android:windowAnimationStyle">@*android:style/Animation.VolumePanel</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
     
 </resources>
