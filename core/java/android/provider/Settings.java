@@ -2333,6 +2333,13 @@ public final class Settings {
         public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
 
         /**
+         * Whether to place the status bar at the bottom of the screen
+         * @hide
+         */
+
+        public static final String STATUS_BAR_BOTTOM = "status_bar_bottom";
+
+        /**
          * Whether to use a separate delay for "slide to unlock" and security
          * lock
          * @hide
