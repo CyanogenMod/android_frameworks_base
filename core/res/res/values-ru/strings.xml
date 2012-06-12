@@ -1247,7 +1247,7 @@
     <string name="SetupCallDefault" msgid="6870275517518479651">"Принять вызов?"</string>
 
     <!--Application killed toast -->
-    <string name="app_killed_message">Приложения закрыты</string>
+    <string name="app_killed_message">Приложение закрыто</string>
 
     <!-- Names of default profiles. -->
     <string name="profileNameDefault">По умолчанию</string>
