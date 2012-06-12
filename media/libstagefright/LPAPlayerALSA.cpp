@@ -532,6 +532,8 @@ status_t LPAPlayer::seekTo(int64_t time_us) {
             mAudioSink->pause();
             mAudioSink->flush();
             mAudioSink->start();
+        } else {
+            mAudioSink->flush();
         }
         mNumA2DPBytesPlayed = 0;
     }
@@ -598,7 +600,6 @@ void LPAPlayer::pause(bool playPendingSamples) {
                 state = A2DP_DISABLED;
             } else {
                 mAudioSink->pause();
-                mAudioSink->flush();
                 state = A2DP_ENABLED;
             }
             mPauseTime = mSeekTimeUs + getTimeStamp(state);
