@@ -100,6 +100,7 @@
     <string name="roamingText11" msgid="4154476854426920970">"Barangolást jelző szalaghirdetés bekapcsolva"</string>
     <string name="roamingText12" msgid="1189071119992726320">"Barangolást jelző szalaghirdetés kikapcsolva"</string>
     <string name="roamingTextSearching" msgid="8360141885972279963">"Szolgáltatás keresése"</string>
+    <string name="roamingTextAirplaneMode">Repülőgép üzemmód</string>
     <string name="cfTemplateNotForwarded" msgid="1683685883841272560">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: nincs átirányítva"</string>
     <string name="cfTemplateForwarded" msgid="1302922117498590521">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
     <string name="cfTemplateForwardedTime" msgid="9206251736527085256">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g> <xliff:g id="TIME_DELAY">{2}</xliff:g> másodperc után"</string>
@@ -1336,5 +1337,7 @@
     <string name="weather_NW">ÉNy</string>
 
     <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Nincs adat</string>
     <string name="weather_tap_to_refresh">Érintse meg a frissítéshez</string>
+    <string name="weather_refreshing">Frissítés…</string>
 </resources>
