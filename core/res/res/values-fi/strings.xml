@@ -150,6 +150,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Puhelimen asetukset"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Näytön lukitus"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Katkaise virta"</string>
+    <string name="global_action_reboot">Käynnistä uudelleen</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Äänetön tila"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Äänet ovat POISSA KÄYTÖSTÄ"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Äänet ovat KÄYTÖSSÄ"</string>
@@ -695,7 +696,7 @@
     <string name="lockscreen_failed_attempts_now_wiping" product="tablet" msgid="280873516493934365">"Tablet-laitteen lukituksen poisto epäonnistui <xliff:g id="NUMBER">%d</xliff:g> kertaa. Laitteeseen palautetaan nyt tehdasasetukset."</string>
     <string name="lockscreen_failed_attempts_now_wiping" product="default" msgid="3025504721764922246">"Puhelimen lukituksen poisto epäonnistui <xliff:g id="NUMBER">%d</xliff:g> kertaa. Puhelimeen palautetaan nyt tehdasasetukset."</string>
     <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"Yritä uudelleen <xliff:g id="NUMBER">%d</xliff:g> sekunnin kuluttua."</string>
-    <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"Unohditko mallin?"</string>
+    <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"Unohditko kuvion?"</string>
     <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"Tilin lukituksen poisto"</string>
     <string name="lockscreen_glogin_too_many_attempts" msgid="2446246026221678244">"Liikaa kuvion piirtoyrityksiä!"</string>
     <string name="lockscreen_glogin_instructions" msgid="1816635201812207709">"Poista lukitus kirjautumalla sisään Google-tilisi avulla"</string>
@@ -1231,7 +1232,7 @@
     <string name="reboot_reboot">Käynnistä uudelleen</string>
     <string name="reboot_system" product="tablet">Käynnistä tablet uudelleen</string>
     <string name="reboot_system" product="default">Käynnistä puhelin uudelleen</string>
-    <string name="reboot_progress">_Uudelleenkäynnistetään\u2026</string>
+    <string name="reboot_progress">Uudelleenkäynnistetään\u2026</string>
     <string name="reboot_confirm">Laitteesi käynnistyy uudelleen</string>
     <string name="profileNameDefault">Oletus</string>
     <string name="profileNameWork">Työ</string>
@@ -1244,4 +1245,53 @@
     <string name="profileGroupSMS">Tekstiviesti</string>
     <string name="wildcardProfile">Muu</string>
     <string name="global_action_choose_profile">Profiili</string>
+    <string name="weather_0">Pyörremyrsky</string>
+    <string name="weather_1">Trooppinen myrsky</string>
+    <string name="weather_2">Hurrikaani</string>
+    <string name="weather_3">Kovia ukkosmyrskyjä</string>
+    <string name="weather_4">Ukkosmyrskyjä</string>
+    <string name="weather_5">Räntäsadetta</string>
+    <string name="weather_6">Räntäsadetta</string>
+    <string name="weather_7">Räntäsadetta</string>
+    <string name="weather_8">Jäätävää tihkua</string>
+    <string name="weather_9">Tihkusadetta</string>
+    <string name="weather_10">Jäätävää sadetta</string>
+    <string name="weather_11">Sadekuuroja</string>
+    <string name="weather_12">Sadekuuroja</string>
+    <string name="weather_13">Lumikuuroja</string>
+    <string name="weather_14">Kevyitä lumikuuroja</string>
+    <string name="weather_15">Lumituiskuja</string>
+    <string name="weather_16">Lumisadetta</string>
+    <string name="weather_17">Raekuuroja</string>
+    <string name="weather_18">Räntäsadetta</string>
+    <string name="weather_19">Pölyistä</string>
+    <string name="weather_20">Sumua</string>
+    <string name="weather_21">Usvaa</string>
+    <string name="weather_22">Savua</string>
+    <string name="weather_23">Tuulenpuuskia</string>
+    <string name="weather_24">Tuulista</string>
+    <string name="weather_25">Kylmää</string>
+    <string name="weather_26">Pilvistä</string>
+    <string name="weather_27">Enimmäkseen pilvistä</string> <!-- Night -->
+    <string name="weather_28">Enimmäkseen pilvistä</string> <!-- Day -->
+    <string name="weather_29">Puolipilvistä</string> <!-- Night -->
+    <string name="weather_30">Puolipilvistä</string> <!-- Day -->
+    <string name="weather_31">Kirkasta</string> <!-- Night -->
+    <string name="weather_32">Aurinkoista</string>
+    <string name="weather_33">Selkeää</string> <!-- Night -->
+    <string name="weather_34">Poutaa</string> <!-- Day -->
+    <string name="weather_35">Raekuuroja</string>
+    <string name="weather_36">Hellettä</string>
+    <string name="weather_37">Paikallisia ukkosia</string>
+    <string name="weather_38">Satunnaisia ukkosia</string>
+    <string name="weather_39">Satunnaisia ukkosia</string>
+    <string name="weather_40">Satunnaisia sateita</string>
+    <string name="weather_41">Sankkaa lumisadetta</string>
+    <string name="weather_42">Satunnaisia lumisateita</string>
+    <string name="weather_43">Sankkaa lumisadetta</string>
+    <string name="weather_44">Puolipilvistä</string>
+    <string name="weather_45">Ukkoskuuroja</string>
+    <string name="weather_46">Lumikuuroja</string>
+    <string name="weather_47">Paikallisia ukkoskuuroja</string>
+    <string name="weather_tap_to_refresh">Päivitä</string>
 </resources>
