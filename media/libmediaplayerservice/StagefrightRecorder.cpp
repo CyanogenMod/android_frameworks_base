@@ -1373,8 +1373,8 @@ status_t StagefrightRecorder::setupCameraSource(
 #ifdef QCOM_HARDWARE
         bool useMeta = true;
         char value[PROPERTY_VALUE_MAX];
-        if (property_get("debug.camcorder.disablemeta", value, NULL) &&
-            atoi(value)) {
+        property_get("debug.camcorder.disablemeta", value,"0");
+        if (!strncmp(value, "true", 4)) {
             useMeta = false;
         }
 #endif
