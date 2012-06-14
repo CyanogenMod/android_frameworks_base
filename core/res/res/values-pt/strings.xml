@@ -1338,4 +1338,6 @@
     <string name="weather_W">O</string>
     <string name="weather_NW">NO</string>
     <string name="weather_tap_to_refresh">Aperte para atualizar</string>
+    <string name="weather_no_data">Sem dados</string>
+    <string name="weather_refreshing">Atualizando</string>
 </resources>
