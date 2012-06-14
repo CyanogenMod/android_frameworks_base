@@ -109,18 +109,6 @@ public class MultiWaveView extends View {
     public final static int MAX_PHONE_TARGETS = 4;
 
     /**
-     * Inset padding for lockscreen targets for tablets
-     * @hide
-     */
-    public final static int TABLET_TARGET_INSET = 30;
-
-    /**
-     * Inset padding for lockscreen targets for phones
-     * @hide
-     */
-    public final static int PHONE_TARGET_INSET = 60;
-
-    /**
      * Empty target used to reference unused lockscreen targets
      * @hide
      */

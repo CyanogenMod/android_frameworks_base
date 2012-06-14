@@ -201,4 +201,8 @@
 
     <!-- Minimum width for an action button in the menu area of an action bar -->
     <dimen name="action_button_min_width">56dip</dimen>
+
+    <!-- Lockscreen target insets -->
+    <item type="dimen" name="lockscreen_target_inset">25dp</item>
+
 </resources>

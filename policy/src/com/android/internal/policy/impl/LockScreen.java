@@ -267,8 +267,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                 mIsScreenLarge = isScreenLarge();
                 ArrayList<TargetDrawable> storedDraw = new ArrayList<TargetDrawable>();
                 final Resources res = getResources();
-                final int targetInset = mIsScreenLarge ? MultiWaveView.TABLET_TARGET_INSET :
-                    MultiWaveView.PHONE_TARGET_INSET;
+                final int targetInset = res.getDimensionPixelSize(com.android.internal.R.dimen.lockscreen_target_inset);
                 final PackageManager packMan = mContext.getPackageManager();
                 final boolean isLandscape = mCreationOrientation == Configuration.ORIENTATION_LANDSCAPE;
                 final Drawable blankActiveDrawable = res.getDrawable(R.drawable.ic_lockscreen_target_activated);
