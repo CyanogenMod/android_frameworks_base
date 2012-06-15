@@ -2279,6 +2279,12 @@ public final class Settings {
         */
         public static final String COMBINED_BAR_AUTO_HIDE = "combined_bar_auto_hide";
 
+ 	/**
+         * StatusBar Transparency
+         * @hide
+         */
+        public static final String STATUS_BAR_TRANSPARENCY = "status_bar_transparency";
+
         /**
          * Display style of AM/PM next to clock in status bar
          * 0: Normal display (Eclair stock)
