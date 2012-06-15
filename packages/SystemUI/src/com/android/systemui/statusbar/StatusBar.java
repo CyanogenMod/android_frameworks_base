@@ -18,10 +18,13 @@ package com.android.systemui.statusbar;
 
 import android.app.ActivityManager;
 import android.app.Service;
+import android.database.ContentObserver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -58,15 +61,36 @@ public abstract class StatusBar extends SystemUI implements CommandQueue.Callbac
     public abstract int getStatusBarHeight();
     public abstract void animateCollapse();
 
+    private View mStatusBar;
     private DoNotDisturb mDoNotDisturb;
 
     private boolean mShowNotificationCounts;
+    private static int mOpacity;
+    private Handler mHandler;
+
+    private final class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_TRANSPARENCY), false, this);
+            setStatusBarParams();
+        }
+
+        @Override public void onChange(boolean selfChange) {
+            setStatusBarParams();
+        }
+    }
+
 
     public void start() {
         // First set up our views and stuff.
-        View sb = makeStatusBarView();
+        mStatusBar = makeStatusBarView();
 
-        mStatusBarContainer.addView(sb);
+        mStatusBarContainer.addView(mStatusBar);
 
         mShowNotificationCounts = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1;
@@ -126,10 +150,15 @@ public abstract class StatusBar extends SystemUI implements CommandQueue.Callbac
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
                     | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
-                // We use a pixel format of RGB565 for the status bar to save memory bandwidth and
-                // to ensure that the layer can be handled by HWComposer.  On some devices the
-                // HWComposer is unable to handle SW-rendered RGBX_8888 layers.
-                PixelFormat.RGB_565);
+                // We use a pixel format of RGBA_4444 (instead of TRANSPARENT) for the status bar
+                // to save memory bandwidth and to ensure that the layer can be handled
+                // by HWComposer.  On some devices the HWComposer is unable to handle SW-rendered 
+                // TRANSPARENT layers.
+                // TODO Fix this
+                PixelFormat.RGBA_4444);
+        mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
         
         // the status bar should be in an overlay if possible
         final Display defaultDisplay 
@@ -158,6 +187,11 @@ public abstract class StatusBar extends SystemUI implements CommandQueue.Callbac
         }
 
         mDoNotDisturb = new DoNotDisturb(mContext);
+    }
+
+    private void setStatusBarParams(){
+        mOpacity = Settings.System.getInt(mStatusBar.getContext().getContentResolver(), Settings.System.STATUS_BAR_TRANSPARENCY, 100);
+        mStatusBar.setBackgroundColor((int) (((float) mOpacity / 100.0f) * 255) * 0x1000000);
     }
 
     protected View updateNotificationVetoButton(View row, StatusBarNotification n) {
