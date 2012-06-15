@@ -1298,8 +1298,8 @@
     <string name="weather_30">Parçalı Bulutlu</string> <!-- Day -->
     <string name="weather_31">Açık</string> <!-- Night -->
     <string name="weather_32">Güneşli</string>
-    <string name="weather_33">Normal</string> <!-- Night -->
-    <string name="weather_34">Normal</string> <!-- Day -->
+    <string name="weather_33">Açık</string> <!-- Night -->
+    <string name="weather_34">Güneşli</string> <!-- Day -->
     <string name="weather_35">Karışık Yağmur ve Dolu</string>
     <string name="weather_36">Sıcak</string>
     <string name="weather_37">Sürekli Gökgürültülü Fırtına</string>
@@ -1322,6 +1322,8 @@
     <string name="weather_SW">GB</string>
     <string name="weather_W">B</string>
     <string name="weather_NW">KB</string>
+    <string name="weather_no_data">Veri yok</string>
     <string name="weather_tap_to_refresh">Yenile</string>
+    <string name="weather_refreshing">Güncelleniyor</string>
     <!-- #CM-MOD-END -->
 </resources>
