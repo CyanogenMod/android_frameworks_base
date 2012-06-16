@@ -1141,13 +1141,30 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 mNowPlaying.setSelected(true); // set focus to TextView to allow scrolling
             }
             // Set album art
-            Uri uri = getArtworkUri(getContext(), KeyguardViewMediator.SongId(),
-                    KeyguardViewMediator.AlbumId());
-            if (uri != null && mAlbumArtToggle && !(mUseRingLockscreen && mCustomAppToggle && !mHideUnlockTab)) {
-                mAlbumArt.setImageURI(uri);
-                mAlbumArt.setVisibility(View.VISIBLE);
+            if (shouldShowAlbumArt()) {
+                Uri uri = getArtworkUri(getContext(), KeyguardViewMediator.SongId(),
+                        KeyguardViewMediator.AlbumId());
+                if (uri != null) {
+                    mAlbumArt.setImageURI(uri);
+                    mAlbumArt.setVisibility(View.VISIBLE);
+                }
             }
         }
+    }
+
+    private boolean shouldShowAlbumArt() {
+        if (!mAlbumArtToggle) {
+            return false;
+        }
+        if (mHideUnlockTab) {
+            return false;
+        }
+        if (mUseRingLockscreen) {
+            if (mCustomAppToggle || mRingMinimal) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void sendMediaButtonEvent(int code) {
