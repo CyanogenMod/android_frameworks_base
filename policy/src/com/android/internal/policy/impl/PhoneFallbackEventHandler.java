@@ -17,14 +17,12 @@
 package com.android.internal.policy.impl;
 
 import android.app.KeyguardManager;
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.media.AudioManager;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.util.EventLog;
 import android.util.Slog;
 import android.view.View;
 import android.view.HapticFeedbackConstants;
@@ -35,12 +33,20 @@ public class PhoneFallbackEventHandler implements FallbackEventHandler {
     private static String TAG = "PhoneFallbackEventHandler";
     private static final boolean DEBUG = false;
 
+    // Available custom actions to perform on a keypress.
+    // Must match values for KEY_HOME_LONG_PRESS_ACTION in:
+    // core/java/android/provider/Settings.java
+    private static final int KEY_ACTION_NOTHING = 0;
+    private static final int KEY_ACTION_MENU = 1;
+    private static final int KEY_ACTION_APP_SWITCH = 2;
+    private static final int KEY_ACTION_SEARCH = 3;
+    private static final int KEY_ACTION_VOICE_SEARCH = 4;
+
     Context mContext;
     View mView;
 
     AudioManager mAudioManager;
     KeyguardManager mKeyguardManager;
-    SearchManager mSearchManager;
     TelephonyManager mTelephonyManager;
 
     public PhoneFallbackEventHandler(Context context) {
@@ -153,25 +159,13 @@ public class PhoneFallbackEventHandler implements FallbackEventHandler {
                 if (event.getRepeatCount() == 0) {
                     dispatcher.startTracking(event, this);
                 } else if (event.isLongPress() && dispatcher.isTracking(event)) {
-                    Configuration config = mContext.getResources().getConfiguration(); 
-                    if (config.keyboard == Configuration.KEYBOARD_NOKEYS
-                            || config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-                        // launch the search activity
-                        Intent intent = new Intent(Intent.ACTION_SEARCH_LONG_PRESS);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        try {
-                            mView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                            sendCloseSystemWindows();
-                            getSearchManager().stopSearch();
-                            mContext.startActivity(intent);
-                            // Only clear this if we successfully start the
-                            // activity; otherwise we will allow the normal short
-                            // press action to be performed.
-                            dispatcher.performedLongPress(event);
-                            return true;
-                        } catch (ActivityNotFoundException e) {
-                            // Ignore
-                        }
+                    // CM - Primary long-press handling moved to PhoneWindowManager.
+                    // Here we just swallow the key up event, if necessary.
+                    if (Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.KEY_SEARCH_LONG_PRESS_ACTION, KEY_ACTION_VOICE_SEARCH)
+                            != KEY_ACTION_NOTHING) {
+                        dispatcher.performedLongPress(event);
+                        return true;
                     }
                 }
                 break;
@@ -253,13 +247,6 @@ public class PhoneFallbackEventHandler implements FallbackEventHandler {
         } catch (ActivityNotFoundException e) {
             Slog.w(TAG, "No activity found for android.intent.action.CALL_BUTTON.");
         }
-    }
-
-    SearchManager getSearchManager() {
-        if (mSearchManager == null) {
-            mSearchManager = (SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE);
-        }
-        return mSearchManager;
     }
 
     TelephonyManager getTelephonyManager() {
