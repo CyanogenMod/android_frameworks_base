@@ -42,6 +42,11 @@
     <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
     <string name="status_bar_settings_bluetooth_button">Bluetooth</string>
     <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Modalità aereo"</string>
+    <string name="status_bar_settings_location">GPS</string>
+    <string name="status_bar_settings_flashlight">Torcia LED</string>
+    <string name="status_bar_settings_mobile_data">Dati mobili</string>
+    <string name="status_bar_settings_network_mode">2G/3G</string>
+    <string name="status_bar_settings_sound_mode">Suoneria</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Rotazione automatica schermo"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"MUTE"</string>
     <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"AUTO"</string>
