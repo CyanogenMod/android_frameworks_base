@@ -167,6 +167,7 @@ public class PowerWidget extends FrameLayout {
             }
         }
         recreateButtonLayout();
+        updateHapticFeedbackSetting();
 
         // set up a broadcast receiver for our intents, based off of what our power buttons have been loaded
         setupBroadcastReceiver();
@@ -353,6 +354,32 @@ public class PowerWidget extends FrameLayout {
         mScrollView.setHorizontalScrollBarEnabled(!hideScrollBar);
     }
 
+    private void updateHapticFeedbackSetting() {
+        ContentResolver cr = mContext.getContentResolver();
+        int expandedHapticFeedback = Settings.System.getInt(cr,
+                Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2);
+        long[] clickPattern = null, longClickPattern = null;
+        boolean hapticFeedback;
+
+        if (expandedHapticFeedback == 2) {
+             hapticFeedback = Settings.System.getInt(cr,
+                     Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1;
+        } else {
+            hapticFeedback = (expandedHapticFeedback == 1);
+        }
+
+        if (hapticFeedback) {
+            clickPattern = Settings.System.getLongArray(cr,
+                    Settings.System.HAPTIC_DOWN_ARRAY, null);
+            longClickPattern = Settings.System.getLongArray(cr,
+                    Settings.System.HAPTIC_LONG_ARRAY, null);
+        }
+
+        for (PowerButton button : mButtons.values()) {
+            button.setHapticFeedback(hapticFeedback, clickPattern, longClickPattern);
+        }
+    }
+
     // our own broadcast receiver :D
     private class WidgetBroadcastReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
@@ -399,6 +426,15 @@ public class PowerWidget extends FrameLayout {
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.EXPANDED_HAPTIC_FEEDBACK),
                             false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.HAPTIC_FEEDBACK_ENABLED),
+                            false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.HAPTIC_DOWN_ARRAY),
+                            false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.HAPTIC_LONG_ARRAY),
+                            false, this);
 
             // watch for changes in buttons
             resolver.registerContentObserver(
@@ -436,6 +472,13 @@ public class PowerWidget extends FrameLayout {
             // now check for scrollbar hiding
             } else if(uri.equals(Settings.System.getUriFor(Settings.System.EXPANDED_HIDE_SCROLLBAR))) {
                 updateScrollbar();
+            }
+
+            if (uri.equals(Settings.System.getUriFor(Settings.System.HAPTIC_FEEDBACK_ENABLED))
+                    || uri.equals(Settings.System.getUriFor(Settings.System.HAPTIC_DOWN_ARRAY))
+                    || uri.equals(Settings.System.getUriFor(Settings.System.HAPTIC_LONG_ARRAY))
+                    || uri.equals(Settings.System.getUriFor(Settings.System.EXPANDED_HAPTIC_FEEDBACK))) {
+                updateHapticFeedbackSetting();
             }
 
             // do whatever the individual buttons must
