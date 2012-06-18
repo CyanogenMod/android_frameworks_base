@@ -639,4 +639,7 @@
 
     <!-- Location of the Authentec framework jar -->
     <string name="config_authentecJarLocation"></string>
+
+    <!-- True if the Sym key should open the InputMethodPicker (deault) -->
+    <bool name="config_symKeyShowsImePicker">true</bool>
 </resources>
