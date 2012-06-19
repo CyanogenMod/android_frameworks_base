@@ -3441,7 +3441,7 @@
     <!-- STK setup Call -->
     <string name="SetupCallDefault">Accept Call?</string>
 
-    <!--Application killed toast -->
+    <!-- Long-press back kill application -->
     <string name="app_killed_message">Application killed</string>
 
     <!-- Lock screen Weather - Weather codes -->
