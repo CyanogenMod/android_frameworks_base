@@ -1039,12 +1039,18 @@ void LPAPlayer::eventThreadEntry() {
         if (killEventThread) {
             break;
         }
-        if (memBuffersResponseQueue.empty())
-            continue;
 
         //exit on abrupt event
         Mutex::Autolock autoLock(mLock);
         pthread_mutex_lock(&mem_response_mutex);
+        pthread_mutex_lock(&mem_request_mutex);
+
+        if (memBuffersResponseQueue.empty()){
+            pthread_mutex_unlock(&mem_request_mutex);
+            pthread_mutex_unlock(&mem_response_mutex);
+            continue;
+        }
+
         BuffersAllocated buf = *(memBuffersResponseQueue.begin());
         memBuffersResponseQueue.erase(memBuffersResponseQueue.begin());
         /* If the rendering is complete report EOS to the AwesomePlayer */
@@ -1054,11 +1060,10 @@ void LPAPlayer::eventThreadEntry() {
             LOGV("Setting timeout to %d,nextbuffer %d, buf.bytesToWrite %d, mReachedEOS %d, memBuffersRequestQueue.size() %d", timeout, tempbuf.bytesToWrite, buf.bytesToWrite, mReachedEOS,memBuffersResponseQueue.size());
         }
 
-        pthread_mutex_unlock(&mem_response_mutex);
         // Post buffer to request Q
-        pthread_mutex_lock(&mem_request_mutex);
         memBuffersRequestQueue.push_back(buf);
         pthread_mutex_unlock(&mem_request_mutex);
+        pthread_mutex_unlock(&mem_response_mutex);
 
         pthread_cond_signal(&decoder_cv);
 
