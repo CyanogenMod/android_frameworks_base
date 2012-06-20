@@ -1894,7 +1894,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (Settings.Secure.getInt(mContext.getContentResolver(),
                     Settings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1) {
                 if (down && repeatCount == 0) {
-                    mHandler.postDelayed(mBackLongPress, 2000);
+                    int timeout = SystemProperties.getInt("ro.cm.back_kill_timeout", 2000);
+                    mHandler.postDelayed(mBackLongPress, timeout);
                 }
             }
         }
