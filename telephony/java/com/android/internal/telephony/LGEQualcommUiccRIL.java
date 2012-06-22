@@ -83,6 +83,20 @@ public class LGEQualcommUiccRIL extends QualcommSharedRIL implements CommandsInt
 
     @Override
     protected Object
+    responseSetupDataCall(Parcel p) {
+        DataCallState dataCall;
+
+        boolean oldRil = needsOldRilFeature("datacall");
+
+        if (!oldRil)
+           return super.responseSetupDataCall(p);
+
+        p.readString();
+        return super.responseSetupDataCall(p);
+
+    }
+    @Override
+    protected Object
     responseIccCardStatus(Parcel p) {
         IccCardApplication ca;
 
@@ -163,7 +177,7 @@ public class LGEQualcommUiccRIL extends QualcommSharedRIL implements CommandsInt
                 response[i] = -1;
                 noLte = true;
             }
-            if (i == 8 && !noLte) {
+            if (i == 8 && !(noLte || oldRil)) {
                 response[i] *= -1;
             }
         }
