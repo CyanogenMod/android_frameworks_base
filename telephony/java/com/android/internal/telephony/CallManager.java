@@ -398,13 +398,25 @@ public final class CallManager {
 
         // Set additional audio parameters needed for incall audio
         String[] audioParams = context.getResources().getStringArray(com.android.internal.R.array.config_telephony_set_audioparameters);
+        String[] aPValues;
+
         for (String parameter : audioParams) {
+            aPValues = parameter.split("=");
+
+            if(aPValues[1] == null || aPValues[1].length() == 0) {
+                aPValues[1] = "on";
+            }
+
+            if(aPValues[2] == null || aPValues[2].length() == 0) {
+                aPValues[2] = "off";
+            }
+
             if (mode == AudioManager.MODE_IN_CALL) {
-                Log.d(LOG_TAG, "setAudioMode(): " + parameter + "=on");
-                audioManager.setParameters(parameter + "=on");
+                Log.d(LOG_TAG, "setAudioMode(): " + aPValues[0] + "=" + aPValues[1]);
+                audioManager.setParameters(aPValues[0] + "=" + aPValues[1]);
             } else if (mode == AudioManager.MODE_NORMAL) {
-                Log.d(LOG_TAG, "setAudioMode(): " + parameter + "=off");
-                audioManager.setParameters(parameter + "=off");
+                Log.d(LOG_TAG, "setAudioMode(): " + aPValues[0] + "=" + aPValues[2]);
+                audioManager.setParameters(aPValues[0] + "=" + aPValues[2]);
             }
         }
 
