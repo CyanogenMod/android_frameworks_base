@@ -658,8 +658,9 @@
     <!-- The VoiceMail default value is displayed to my own number if it is true -->
     <bool name="config_telephony_use_own_number_for_voicemail">false</bool>
 
-    <!-- Set additional audio parameters for incall audio -->
-    <!-- Examples: <item>realcall</item> <item>dualmic_enabled</item> <item>mic_boost</item> -->
+    <!-- Set additional audio parameters for incall audio
+         Usage: parameter=onstring=offstring
+         Examples: <item>realcall=on=off</item> <item>dualmic_enabled=true=false</item> <item>mic_boost=yes=no</item> -->
     <string-array name="config_telephony_set_audioparameters" translatable="false">
     </string-array>
 
