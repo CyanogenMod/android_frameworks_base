@@ -18,6 +18,8 @@ package android.bluetooth;
 
 import java.util.*;
 
+import android.util.Log;
+
 /**
  * An AT (Hayes command) Parser based on (a subset of) the ITU-T V.250 standard.
  * <p>
@@ -246,8 +248,7 @@ public class AtParser {
      *                  converted to a String[] response with toStrings().
      */
     public AtCommandResult process(String raw_input) {
-        String input = clean(raw_input);
-
+    	String input = clean(raw_input);
         // Handle "A/" (repeat previous line)
         if (input.regionMatches(0, "A/", 0, 2)) {
             input = new String(mLastInput);
