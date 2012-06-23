@@ -1825,7 +1825,7 @@ public class PowerManagerService extends IPowerManager.Stub
             }
 
             if (!mBootCompleted && !mAutoBrightnessButtonKeyboard) {
-                newState |= ALL_BRIGHT;
+                newState |= (mKeyboardVisible ? ALL_BRIGHT : SCREEN_BUTTON_BRIGHT);
             }
 
             boolean oldScreenOn = (mPowerState & SCREEN_ON_BIT) != 0;
@@ -2422,7 +2422,11 @@ public class PowerManagerService extends IPowerManager.Stub
             // do not override brightness if the battery is low
             return state;
         }
-        if (!mKeyboardVisible) {
+        // Ignore mKeyboardVisible if KEYBOARD_BRIGHT_BIT is explicitly set, which
+        // it will only if the keyboard is visible at the time mPowerState is set.
+        // Otherwise, if mKeyboardVisible changes afterwards, it's possible for
+        // the backlight to mismatch mPowerState and remain off.
+        if (!mKeyboardVisible && (state & KEYBOARD_BRIGHT_BIT) == 0) {
             brightness = 0;
         } else if (mButtonBrightnessOverride >= 0) {
             brightness = mButtonBrightnessOverride;
@@ -2817,14 +2821,10 @@ public class PowerManagerService extends IPowerManager.Stub
                 int buttonValue = getAutoBrightnessValue(value, mLastButtonValue,
                         (mCustomLightEnabled ? mCustomLightLevels : mAutoBrightnessLevels),
                         (mCustomLightEnabled ? mCustomButtonValues : mButtonBacklightValues));
-                int keyboardValue;
-                if (mKeyboardVisible) {
-                    keyboardValue = getAutoBrightnessValue(value, mLastKeyboardValue,
+                int keyboardValue = getAutoBrightnessValue(value, mLastKeyboardValue,
                             (mCustomLightEnabled ? mCustomLightLevels : mAutoBrightnessLevels),
                             (mCustomLightEnabled ? mCustomKeyboardValues : mKeyboardBacklightValues));
-                } else {
-                    keyboardValue = 0;
-                }
+
                 mLightSensorScreenBrightness = lcdValue;
                 mLightSensorButtonBrightness = buttonValue;
                 mLightSensorKeyboardBrightness = keyboardValue;
@@ -3327,7 +3327,7 @@ public class PowerManagerService extends IPowerManager.Stub
             setPowerState(SCREEN_BRIGHT);
         } else {
             // turn everything on
-            setPowerState(ALL_BRIGHT);
+            setPowerState(mKeyboardVisible ? ALL_BRIGHT : SCREEN_BUTTON_BRIGHT);
         }
 
         synchronized (mLocks) {
