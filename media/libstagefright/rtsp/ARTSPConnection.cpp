@@ -268,14 +268,17 @@ void ARTSPConnection::onConnect(const sp<AMessage> &msg) {
 
     MakeSocketBlocking(mSocket, false);
 
-    struct sockaddr_in remote;
+    union {
+        struct sockaddr_in remote;
+        struct sockaddr remote_generic;
+    };
     memset(remote.sin_zero, 0, sizeof(remote.sin_zero));
     remote.sin_family = AF_INET;
     remote.sin_addr.s_addr = *(in_addr_t *)ent->h_addr;
     remote.sin_port = htons(port);
 
     int err = ::connect(
-            mSocket, (const struct sockaddr *)&remote, sizeof(remote));
+            mSocket, &remote_generic, sizeof(remote));
 
     reply->setInt32("server-ip", ntohl(remote.sin_addr.s_addr));
 

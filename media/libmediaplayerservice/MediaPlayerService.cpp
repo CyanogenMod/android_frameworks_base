@@ -541,12 +541,15 @@ static player_type getDefaultPlayerType() {
 
 player_type getPlayerType(int fd, int64_t offset, int64_t length)
 {
-    char buf[20];
+    union {
+        char buf[20];
+        long bufl[];
+    };
     lseek(fd, offset, SEEK_SET);
     read(fd, buf, sizeof(buf));
     lseek(fd, offset, SEEK_SET);
 
-    long ident = *((long*)buf);
+    long ident = *bufl;
 
     // Ogg vorbis?
     if (ident == 0x5367674f) // 'OggS'

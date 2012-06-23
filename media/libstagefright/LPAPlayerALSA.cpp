@@ -382,7 +382,7 @@ status_t LPAPlayer::start(bool sourceAlreadyStarted) {
     if (!bIsA2DPEnabled) {
         LOGV("Opening a routing session for audio playback: sessionId = %d mSampleRate %d numChannels %d",
              sessionId, mSampleRate, numChannels);
-        status_t err = mAudioSink->openSession(AUDIO_FORMAT_PCM_16_BIT, sessionId, mSampleRate, numChannels);
+        status_t err = mAudioSink->openSession(AUDIO_FORMAT_PCM_16_BIT, 1, mSampleRate, numChannels);
         if (err != OK) {
             if (mFirstBuffer != NULL) {
                 mFirstBuffer->release();
@@ -785,7 +785,7 @@ bool LPAPlayer::reachedEOS(status_t *finalStatus) {
     *finalStatus = OK;
     Mutex::Autolock autoLock(mLock);
     *finalStatus = mFinalStatus;
-    return mReachedOutputEOS;
+    return mReachedEOS;
 }
 
 
