@@ -1312,5 +1312,7 @@
     <string name="weather_SW">SW</string>
     <string name="weather_W">W</string>
     <string name="weather_NW">NW</string>
+    <string name="weather_no_data">Nessun dato</string>
     <string name="weather_tap_to_refresh">Tocca per aggiornare</string>
+    <string name="weather_refreshing">In aggiornamento</string>
 </resources>
