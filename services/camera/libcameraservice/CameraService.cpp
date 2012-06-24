@@ -1147,6 +1147,12 @@ bool CameraService::Client::recordingEnabled() {
 }
 
 status_t CameraService::Client::autoFocus() {
+#ifdef LIBCAMERA_MISSING_AUTOFOCUS
+    // skip autofocus callback
+    notifyCallback(CAMERA_MSG_FOCUS, 1, 0, 0);
+    return NO_ERROR;
+#endif
+
     LOG1("autoFocus (pid %d)", getCallingPid());
 
     Mutex::Autolock lock(mLock);
@@ -1157,6 +1163,11 @@ status_t CameraService::Client::autoFocus() {
 }
 
 status_t CameraService::Client::cancelAutoFocus() {
+#ifdef LIBCAMERA_MISSING_AUTOFOCUS
+    // skip autofocus cancellation
+    return NO_ERROR;
+#endif
+
     LOG1("cancelAutoFocus (pid %d)", getCallingPid());
 
     Mutex::Autolock lock(mLock);
