@@ -645,5 +645,4 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
 
         return response;
     }
-
 }
