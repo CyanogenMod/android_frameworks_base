@@ -31,7 +31,9 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccFileHandler;
 import com.android.internal.telephony.IccRecords;
+import com.android.internal.telephony.IccSmsInterfaceManager;
 
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -73,6 +75,9 @@ public class CatService extends Handler implements AppInterface {
     private Context mContext;
     private CatCmdMessage mCurrntCmd = null;
     private CatCmdMessage mMenuCmd = null;
+    private IccSmsInterfaceManager mIccSms = null;
+    private int mTimeoutDest = 0;
+    private int mCallControlResultCode = 0;
 
     private RilMessageDecoder mMsgDecoder = null;
     private boolean mStkAppInstalled = false;
@@ -87,6 +92,7 @@ public class CatService extends Handler implements AppInterface {
     static final int MSG_ID_SIM_READY                = 7;
 
     static final int MSG_ID_RIL_MSG_DECODED          = 10;
+    static final int MSG_ID_SEND_SMS_RESULT          = 12;//samsung ril response
 
     // Events to signal SIM presence or absent in the device.
     private static final int MSG_ID_ICC_RECORDS_LOADED       = 20;
@@ -102,15 +108,15 @@ public class CatService extends Handler implements AppInterface {
 
     /* Intentionally private for singleton */
     private CatService(CommandsInterface ci, IccRecords ir, Context context,
-            IccFileHandler fh, IccCard ic) {
+            IccFileHandler fh, IccCard ic, IccSmsInterfaceManager iccSmsInt) {
         if (ci == null || ir == null || context == null || fh == null
-                || ic == null) {
+                || ic == null || iccSmsInt==null) {
             throw new NullPointerException(
                     "Service: Input parameters must not be null");
         }
         mCmdIf = ci;
         mContext = context;
-
+	    mIccSms = iccSmsInt;
         // Get the RilMessagesDecoder for decoding the messages.
         mMsgDecoder = RilMessageDecoder.getInstance(this, fh);
 
@@ -119,6 +125,7 @@ public class CatService extends Handler implements AppInterface {
         mCmdIf.setOnCatProactiveCmd(this, MSG_ID_PROACTIVE_COMMAND, null);
         mCmdIf.setOnCatEvent(this, MSG_ID_EVENT_NOTIFY, null);
         mCmdIf.setOnCatCallSetUp(this, MSG_ID_CALL_SETUP, null);
+	    mCmdIf.setOnCatSendSmsResult(this, MSG_ID_SEND_SMS_RESULT, null);//samsung ril sms send result
         //mCmdIf.setOnSimRefresh(this, MSG_ID_REFRESH, null);
 
         mIccRecords = ir;
@@ -141,6 +148,7 @@ public class CatService extends Handler implements AppInterface {
         mCmdIf.unSetOnCatProactiveCmd(this);
         mCmdIf.unSetOnCatEvent(this);
         mCmdIf.unSetOnCatCallSetUp(this);
+	    mCmdIf.unSetOnCatSendSmsResult(this);
 
         this.removeCallbacksAndMessages(null);
     }
@@ -267,6 +275,17 @@ public class CatService extends Handler implements AppInterface {
                 break;
             case SEND_DTMF:
             case SEND_SMS:
+                handleProactiveCommandSendSMS(cmdParams);
+                if(((DisplayTextParams)cmdParams).textMsg == null || ((DisplayTextParams)cmdParams).textMsg.text == null)
+                    break;
+                if(((DisplayTextParams)cmdParams).textMsg.text.equals(STK_DEFAULT))
+                {
+                    message = mContext.getText(com.android.internal.R.string.sending);
+                    ((DisplayTextParams)cmdParams).textMsg.text = message.toString();
+                    Toast.makeText(mContext, ((DisplayTextParams)cmdParams).textMsg.text, 1).show();
+                }
+
+                break;
             case SEND_SS:
             case SEND_USSD:
                 if ((((DisplayTextParams)cmdParams).textMsg.text != null)
@@ -401,7 +420,7 @@ public class CatService extends Handler implements AppInterface {
 
         byte[] rawData = buf.toByteArray();
         String hexString = IccUtils.bytesToHexString(rawData);
-        if (false) {
+        if (true) { //enabled for debuging
             CatLog.d(this, "TERMINAL RESPONSE: " + hexString);
         }
 
@@ -556,7 +575,7 @@ public class CatService extends Handler implements AppInterface {
      * @return The only Service object in the system
      */
     public static CatService getInstance(CommandsInterface ci, IccRecords ir,
-            Context context, IccFileHandler fh, IccCard ic) {
+            Context context, IccFileHandler fh, IccCard ic, IccSmsInterfaceManager iccSmsInt) {
         synchronized (sInstanceLock) {
             if (sInstance == null) {
                 if (ci == null || ir == null || context == null || fh == null
@@ -565,7 +584,7 @@ public class CatService extends Handler implements AppInterface {
                 }
                 HandlerThread thread = new HandlerThread("Cat Telephony service");
                 thread.start();
-                sInstance = new CatService(ci, ir, context, fh, ic);
+                sInstance = new CatService(ci, ir, context, fh, ic, iccSmsInt);
                 CatLog.d(sInstance, "NEW sInstance");
             } else if ((ir != null) && (mIccRecords != ir)) {
                 CatLog.d(sInstance, "Reinitialize the Service with SIMRecords");
@@ -587,7 +606,7 @@ public class CatService extends Handler implements AppInterface {
      * @return The only Service object in the system
      */
     public static AppInterface getInstance() {
-        return getInstance(null, null, null, null, null);
+        return getInstance(null, null, null, null, null, null);
     }
 
     @Override
@@ -626,6 +645,55 @@ public class CatService extends Handler implements AppInterface {
         case MSG_ID_SIM_READY:
             CatLog.d(this, "SIM ready. Reporting STK service running now...");
             mCmdIf.reportStkServiceIsRunning(null);
+            break;
+        case MSG_ID_SEND_SMS_RESULT: //Samsung ril sms send handling part
+            int[] ai;
+            AsyncResult ar;
+            CatLog.d(this, "handleMsg : MSG_ID_SEND_SMS_RESULT");
+            cancelTimeOut();
+            CatLog.d(this, (new StringBuilder()).append("The Msg ID data:").append(msg.what).toString());
+            ai = new int[1];
+            if(msg.obj == null)
+                break;
+            ar = (AsyncResult)msg.obj;
+            if(ar == null || ar.result == null)
+                break;
+            ai = (int[])(int[])ar.result;
+            switch(ai[0])
+            {
+                default:
+                    CatLog.d(this, "SMS SEND GENERIC FAIL");
+                    ClassCastException classcastexception1;
+                    if(CallControlResult.fromInt(mCallControlResultCode) == CallControlResult.CALL_CONTROL_NOT_ALLOWED)
+                        sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.USIM_CALL_CONTROL_PERMANENT, true, 1, null);
+                    else
+                        sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.TERMINAL_CRNTLY_UNABLE_TO_PROCESS, false, 0, null);
+                    break;
+
+                case 0: // '\0'
+                    CatLog.d(this, "SMS SEND OK");
+                    if(CallControlResult.fromInt(mCallControlResultCode) == CallControlResult.CALL_CONTROL_NOT_ALLOWED)
+                        sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.USIM_CALL_CONTROL_PERMANENT, true, 1, null);
+                    else
+                        sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.OK, false, 0, null);
+                    break;
+
+                case 32790:
+                    CatLog.d(this, "SMS SEND FAIL - MEMORY NOT AVAILABLE");
+                    if(CallControlResult.fromInt(mCallControlResultCode) == CallControlResult.CALL_CONTROL_NOT_ALLOWED)
+                        sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.USIM_CALL_CONTROL_PERMANENT, true, 1, null);
+                    else
+                        sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.TERMINAL_CRNTLY_UNABLE_TO_PROCESS, false, 0, null);
+                    break;
+
+                case 32810:
+                    CatLog.d(this, "SMS SEND FAIL RETRY");
+                    if(CallControlResult.fromInt(mCallControlResultCode) == CallControlResult.CALL_CONTROL_NOT_ALLOWED)
+                        sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.USIM_CALL_CONTROL_PERMANENT, true, 1, null);
+                    else
+                        sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.NETWORK_CRNTLY_UNABLE_TO_PROCESS, false, 0, null);
+                    break;
+                }
             break;
         default:
             throw new AssertionError("Unrecognized CAT command: " + msg.what);
@@ -748,5 +816,27 @@ public class CatService extends Handler implements AppInterface {
         int numReceiver = broadcastReceivers == null ? 0 : broadcastReceivers.size();
 
         return (numReceiver > 0);
+    }
+
+    //samsung send sms part
+    private void handleProactiveCommandSendSMS(CommandParams cmdPar)
+    {
+        CatLog.d(this, "The smscaddress is: " + ((SendSMSParams)cmdPar).SmscAddress);
+        CatLog.d(this, "The SMS tpdu is: " + ((SendSMSParams)cmdPar).Pdu);
+        mIccSms.sendRawPduSat(IccUtils.hexStringToBytes(((SendSMSParams)cmdPar).SmscAddress),IccUtils.hexStringToBytes(((SendSMSParams)cmdPar).Pdu),null,null);
+        startTimeOut(2,60000);
+    }
+
+    private void cancelTimeOut()
+    {
+        removeMessages(9);
+        mTimeoutDest = 0;
+    }
+
+    private void startTimeOut(int timeout, int delay)
+    {
+        cancelTimeOut();
+        mTimeoutDest = timeout;
+        sendMessageDelayed(obtainMessage(9),delay);
     }
 }

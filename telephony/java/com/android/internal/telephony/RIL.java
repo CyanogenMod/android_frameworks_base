@@ -3812,4 +3812,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
         send(rr);
     }
+
+    //added samsung part to command interface
+    public void setOnCatSendSmsResult(Handler h, int what, Object obj)
+    {}
+    public void unSetOnCatSendSmsResult(Handler h)
+    {}
 }
