@@ -42,6 +42,7 @@ import android.os.Message;
 import android.os.Parcel;
 import android.os.PowerManager;
 import android.os.SystemProperties;
+import android.os.Registrant;
 import android.os.PowerManager.WakeLock;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneNumberUtils;
@@ -75,6 +76,26 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
     static final int RIL_UNSOL_HSDPA_STATE_CHANGED = 11016;
     protected HandlerThread mSmdk4210Thread;
     protected ConnectivityHandler mSmdk4210Handler;
+
+    protected Registrant mCatSendSmsResultRegistrant;
+    /**
+     * samsung stk service implementation - set up registrant for sending
+     * sms send result from modem(RIL) to catService
+     * @param h
+     * @param what
+     * @param obj
+     */
+    public void setOnCatSendSmsResult(Handler h, int what, Object obj){
+        mCatSendSmsResultRegistrant = new Registrant(h, what, obj);
+    }
+
+    /**
+     *
+     * @param h
+     */
+    public void unSetOnCatSendSmsResult(Handler h){
+        mCatSendSmsResultRegistrant.clear();
+    }
 
     public Smdk4210RIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
@@ -425,7 +446,8 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_1: ret = responseVoid(p); break;
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2: ret = responseVoid(p); break;
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3: ret = responseVoid(p); break;
-
+            //samsung stk service implementation
+            case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseInts(p); break;
             default:
                 // Rewind the Parcel
                 p.setDataPosition(dataPosition);
@@ -458,6 +480,15 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2:
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3:
                 break;
+            //samsung stk service implementation
+            case RIL_UNSOL_STK_SEND_SMS_RESULT:
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                if (mCatSendSmsResultRegistrant != null) {
+                    mCatSendSmsResultRegistrant.notifyRegistrant(
+                            new AsyncResult (null, ret, null));
+                }
+                break;
         }
     }
 
@@ -470,7 +501,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
         mRilVersion = rilVer;
         if (mRilConnectedRegistrants != null) {
             mRilConnectedRegistrants.notifyRegistrants(
-                                new AsyncResult (null, new Integer(rilVer), null));
+                    new AsyncResult (null, new Integer(rilVer), null));
         }
     }
 
