@@ -414,4 +414,20 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     public boolean needsOldRilFeature(String feature) { return false; }
+
+    /**
+     * added samsung part to command interface
+     * @param h
+     * @param what
+     * @param obj
+     */
+    public void setOnCatSendSmsResult(Handler h, int what, Object obj){
+    }
+
+    /**
+     * 
+     * @param h
+     */
+    public void unSetOnCatSendSmsResult(Handler h){
+    }
 }

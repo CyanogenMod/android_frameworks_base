@@ -3812,4 +3812,20 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
         send(rr);
     }
+
+    /**
+     * Samsung phones stk implementation
+     * @param h
+     * @param what
+     * @param obj
+     */
+    public void setOnCatSendSmsResult(Handler h, int what, Object obj){
+    }
+
+    /**
+     * Samsung phones stk implementation
+     * @param h
+     */
+    public void unSetOnCatSendSmsResult(Handler h){
+    }
 }
