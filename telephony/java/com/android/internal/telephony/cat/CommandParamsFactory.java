@@ -641,32 +641,29 @@ class CommandParamsFactory extends Handler {
         }
 
         textMsg.responseNeeded = false;
+
         //samsung part not sure if it breaks other phones stk
         String smscAddress = null;
         String pdu = null;
 
         ctlv = searchForTag(ComprehensionTlvTag.ADDRESS, ctlvs);
-        if (ctlv!=null)
-        {
+        if (ctlv!=null){
             smscAddress = ValueParser.retrieveSMSCaddress(ctlv);
             CatLog.d(this,"The smsc address is " + smscAddress);
         }
-        else
-        {
+        else{
             CatLog.d(this,"The smsc address is null");
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.SMS_TPDU, ctlvs);
-        if (ctlv!=null)
-        {
+        if (ctlv!=null){
             pdu = ValueParser.retrieveSMSTPDU(ctlv);
             CatLog.d(this,"The SMS tpdu is " + pdu);
             ComprehensionTlv ctlv1 = searchForTag(ComprehensionTlvTag.TEXT_ATTRIBUTE, ctlvs);
             //if (ctlv1!=null)
-            //	textMsg.textAttributes = ValueParser.retrieveTextAttribute(ctlv1);
+            //textMsg.textAttributes = ValueParser.retrieveTextAttribute(ctlv1);
         }
-        else
-        {
+        else{
             CatLog.d(this,"The SMS tpdu is null");
         }
         mCmdParams = new SendSMSParams(cmdDet, textMsg, smscAddress,pdu,false);

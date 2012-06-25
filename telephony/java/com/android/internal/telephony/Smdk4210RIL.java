@@ -77,15 +77,23 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
     protected HandlerThread mSmdk4210Thread;
     protected ConnectivityHandler mSmdk4210Handler;
 
-    //samsung stk service implementation - set up registrant for sending sms send result from modem(RIL) to catService
     protected Registrant mCatSendSmsResultRegistrant;
-    public void setOnCatSendSmsResult(Handler h, int what, Object obj)
-    {
+    /**
+     * samsung stk service implementation - set up registrant for sending
+     * sms send result from modem(RIL) to catService
+     * @param h
+     * @param what
+     * @param obj
+     */
+    public void setOnCatSendSmsResult(Handler h, int what, Object obj){
         mCatSendSmsResultRegistrant = new Registrant(h, what, obj);
     }
-	
-    public void unSetOnCatSendSmsResult(Handler h)
-    {
+
+    /**
+     *
+     * @param h
+     */
+    public void unSetOnCatSendSmsResult(Handler h){
         mCatSendSmsResultRegistrant.clear();
     }
 
@@ -438,7 +446,8 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_1: ret = responseVoid(p); break;
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2: ret = responseVoid(p); break;
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3: ret = responseVoid(p); break;
-            case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseInts(p); break; //samsung stk service implementation
+            //samsung stk service implementation
+            case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseInts(p); break;
             default:
                 // Rewind the Parcel
                 p.setDataPosition(dataPosition);
@@ -477,7 +486,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
 
                 if (mCatSendSmsResultRegistrant != null) {
                     mCatSendSmsResultRegistrant.notifyRegistrant(
-                                        new AsyncResult (null, ret, null));
+                            new AsyncResult (null, ret, null));
                 }
                 break;
         }
@@ -492,7 +501,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
         mRilVersion = rilVer;
         if (mRilConnectedRegistrants != null) {
             mRilConnectedRegistrants.notifyRegistrants(
-                                new AsyncResult (null, new Integer(rilVer), null));
+                    new AsyncResult (null, new Integer(rilVer), null));
         }
     }
 

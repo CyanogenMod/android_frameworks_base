@@ -18,21 +18,19 @@ package com.android.internal.telephony.cat;
 
 import android.graphics.Bitmap;
 
-class SendSMSParams extends DisplayTextParams
-{
+class SendSMSParams extends DisplayTextParams{
     String Pdu;
     String SmscAddress;
     TextMessage textMsg;
 
-    SendSMSParams(CommandDetails cmdDet, TextMessage textmessage, String s, String s1)
-    {
+    SendSMSParams(CommandDetails cmdDet, TextMessage textmessage, String s, String s1){
         super(cmdDet,textmessage);
         SmscAddress = s;
         Pdu = s1;
     }
 
-    SendSMSParams(CommandDetails cmdDet, TextMessage textmessage, String s, String s1, boolean flag)
-    {
+    SendSMSParams(CommandDetails cmdDet, TextMessage textmessage, String s,
+            String s1, boolean flag){
         this(cmdDet,textmessage,s,s1);
     }
 }

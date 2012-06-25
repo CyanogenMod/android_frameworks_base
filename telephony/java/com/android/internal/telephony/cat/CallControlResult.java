@@ -17,8 +17,7 @@
 package com.android.internal.telephony.cat;
 
 
-public enum CallControlResult
-{
+public enum CallControlResult{
     CALL_CONTROL_NO_CONTROL(0x00),
     CALL_CONTROL_ALLOWED_NO_MOD(0x01),
     CALL_CONTROL_NOT_ALLOWED(0x02),
@@ -26,13 +25,11 @@ public enum CallControlResult
 
     private int mValue;
 
-    CallControlResult(int value)
-    {
+    CallControlResult(int value){
         mValue = value;
     }
 
-    public static CallControlResult fromInt(int value)
-    {
+    public static CallControlResult fromInt(int value){
         for (CallControlResult e : CallControlResult.values()) {
             if (e.mValue == value) {
                 return e;
@@ -41,8 +38,7 @@ public enum CallControlResult
         return null;
     }
 
-    public int value()
-    {
+    public int value(){
         return mValue;
     }
 }

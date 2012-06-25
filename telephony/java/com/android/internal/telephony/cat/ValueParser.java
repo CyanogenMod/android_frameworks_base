@@ -338,27 +338,27 @@ abstract class ValueParser {
             throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
         }
     }
-	//samsung part for converting byte[] to hexstring
+
+    /**
+     * samsung part for converting byte[] to hexstring
+     * @param ctlv
+     * @return
+     * @throws ResultException
+     */
     static String retrieveSMSCaddress(ComprehensionTlv ctlv)
-        throws ResultException
-    {
+        throws ResultException{
         byte[] abyte0 = ctlv.getRawValue();
         int i = ctlv.getValueIndex();
         int j = ctlv.getLength();
         byte[] abyte1 = new byte[j + 1];
-        int k = 0;
-        while(k < j + 1) 
-        {
-            int l = k + (i - 1);
-            try
-            {
-                abyte1[k] = abyte0[l];
+
+        while(int k = 0; k < j + 1; k++){
+            try{
+                abyte1[k] = abyte0[k + (i - 1)];
             }
-            catch(IndexOutOfBoundsException indexoutofboundsexception)
-            {
+            catch(IndexOutOfBoundsException indexoutofboundsexception){
                 throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
             }
-            k++;
         }
         if(j != 0)
             return IccUtils.bytesToHexString(abyte1);
@@ -366,41 +366,43 @@ abstract class ValueParser {
             throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
     }
 
+    /**
+     *
+     * @param ctlv
+     * @return
+     * @throws ResultException
+     */
     static String retrieveSMSTPDU(ComprehensionTlv ctlv)
-	throws ResultException
-    {
-	byte[] abyte0 = ctlv.getRawValue();
-	int i = ctlv.getValueIndex();
-	int j = ctlv.getLength();
-	byte[] abyte1;
-	int k;
-	String result;
-	if (abyte0[i+2]%2==0)
-	    k = abyte0[i+2]/2;
-	else
-	    k = (1+abyte0[i+2])/2;
+            throws ResultException{
+        byte[] abyte0 = ctlv.getRawValue();
+        int i = ctlv.getValueIndex();
+        int j = ctlv.getLength();
+        byte[] abyte1;
+        int k;
+        String result;
+        if (abyte0[i+2]%2==0)
+            k = abyte0[i+2]/2;
+        else
+            k = (1+abyte0[i+2])/2;
 
-	if (j==k+6)
-	    abyte1 = new byte[j+1];
-	else
-	    abyte1 = new byte[j];
-	
-	for (int l=0;l<j;l++)	
-	{
-	    try
-	    {
-		abyte1[l] = abyte0[i+l];
-	    }
-	    catch(IndexOutOfBoundsException ex)
-	    {
-		throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
-	    }
-	}
-	if(j!=0)
-	    result = IccUtils.bytesToHexString(abyte1);
-	else
-	    throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
-	
-	return result;
+        if (j==k+6)
+            abyte1 = new byte[j+1];
+        else
+            abyte1 = new byte[j];
+
+        for (int l = 0;l < j; l++){
+            try{
+                abyte1[l] = abyte0[i+l];
+            }
+            catch(IndexOutOfBoundsException ex){
+                throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
+            }
+        }
+        if(j!=0)
+            result = IccUtils.bytesToHexString(abyte1);
+        else
+            throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
+
+        return result;
     }
 }
