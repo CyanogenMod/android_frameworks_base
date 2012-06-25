@@ -38,6 +38,8 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
     boolean RILJ_LOGV = true;
     boolean RILJ_LOGD = true;
 
+    private boolean mSignalbarCount = SystemProperties.getBoolean("ro.telephony.sends_barcount", false);
+
     public SamsungQualcommUiccRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
     }
@@ -227,14 +229,10 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
         }
 
         // RIL_GW_SignalStrength
-        boolean mSignalbarCount = SystemProperties.getBoolean("telephony.sends_barcount", true);
-        if(mSignalbarCount) {
+        if (mSignalbarCount) {
             //Samsung sends the count of bars that should be displayed instead of
             //a real signal strength
             response[0] = ((response[0] & 0xFF00) >> 8) * 3; //gsmDbm
-            if ((response[0] > 0) && (response[0] != 99)) {
-                response[0]--;   // correct down by 1 dBm to match stock's behavior
-            }
         } else {
             response[0] = response[0] & 0xFF; //gsmDbm
         }
@@ -253,12 +251,28 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
         if (response[7] == 99) {
             // If LTE is not enabled, clear LTE results
             // 7-11 must be -1 for GSM signal strength to be used (see frameworks/base/telephony/java/android/telephony/SignalStrength.java)
-            response[7]  = -1;
-            response[8]  = -1;
-            response[9]  = -1;
-            response[10] = -1;
-            response[11] = -1;
+            response[7]  = -1; // lteSignalStrength
+            response[8]  = -1; // lteRsrp
+            response[9]  = -1; // lteRsrq
+            response[10] = -1; // lteRssnr
+            response[11] = -1; // lteCqi
+        } else if (mSignalbarCount) {
+            int num_bars = (response[7] & 0xFF00) >> 8;
+            response[7] &= 0xFF;  // remove the Samsung number of bars field
+            response[10] = -1;    // mark lteRssnr invalid so it doesn't get used
+
+            // Translate number of bars into something SignalStrength.java can understand
+            switch (num_bars) {
+                case 0  : response[8] = -1;   break; // map to 0 bars
+                case 1  : response[8] = -116; break; // map to 1 bar
+                case 2  : response[8] = -115; break; // map to 2 bars
+                case 3  : response[8] = -105; break; // map to 3 bars
+                case 4  : response[8] = -95;  break; // map to 4 bars
+                case 5  : response[8] = -85;  break; // map to 4 bars but give an extra 10 dBm
+                deafult : response[8] *= -1;  break; // no idea; just pass value through
+            }
         } else {
+            response[7] &= 0xFF;  // remove the Samsung number of bars field
             response[8] *= -1;
         }
 
