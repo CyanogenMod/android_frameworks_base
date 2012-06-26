@@ -820,4 +820,29 @@ public class Process {
          */
         public boolean usingWrapper;
     }
+
+    private static final int[] PROCESS_STATE_FORMAT = new int[] {
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM|PROC_PARENS, // 1: name
+        PROC_SPACE_TERM|PROC_OUT_STRING, // 2: state
+    };
+
+    /**
+     * Returns true if the process is not found or is a zombie
+     * @param pid the process id
+     * @hide
+     */
+    public static final boolean isZombie(int pid) {
+        boolean ret = true;
+        String[] processStateString = new String[1];
+        if (Process.readProcFile("/proc/" + pid + "/stat",
+                PROCESS_STATE_FORMAT, processStateString, null, null)) {
+            ret = false;
+            // Log.i(LOG_TAG,"State of process " + pid + " is " + processStateString[0]);
+            if (processStateString[0].equals("Z")) {
+                ret = true;
+            }
+        }
+        return ret;
+    }
 }
