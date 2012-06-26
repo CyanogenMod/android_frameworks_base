@@ -60,8 +60,12 @@ public:
         data.writeInt32(msgType);
         data.writeStrongBinder(imageData->asBinder());
         if (metadata) {
-            data.writeInt32(metadata->number_of_faces);
-            data.write(metadata->faces, sizeof(camera_face_t) * metadata->number_of_faces);
+            if (metadata->number_of_faces > 0 && !metadata->faces) {
+                LOGE("Metadata indicates faces were detected, but no face objects were attached. Discarding");
+            } else {
+                data.writeInt32(metadata->number_of_faces);
+                data.write(metadata->faces, sizeof(camera_face_t) * metadata->number_of_faces);
+            }
         }
         remote()->transact(DATA_CALLBACK, data, &reply, IBinder::FLAG_ONEWAY);
     }
