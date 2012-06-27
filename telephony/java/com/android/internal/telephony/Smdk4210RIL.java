@@ -501,6 +501,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_AM: ret = responseVoid(p); break;
             case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL: ret = responseVoid(p); break;
             case RIL_UNSOL_DATA_SUSPEND_RESUME: ret = responseInts(p); break;
+            case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseInts(p); break;
             case RIL_UNSOL_WB_AMR_STATE: ret = responseInts(p); break;
 
             default:
@@ -535,6 +536,17 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL:
             case RIL_UNSOL_DATA_SUSPEND_RESUME:
                 if (RILJ_LOGD) unsljLogRet(response, ret);
+                break;
+            case RIL_UNSOL_STK_SEND_SMS_RESULT:
+                if (Resources.getSystem().
+                        getBoolean(com.android.internal.R.bool.config_samsung_stk)) {
+                    if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                    if (mCatSendSmsResultRegistrant != null) {
+                        mCatSendSmsResultRegistrant.notifyRegistrant(
+                                new AsyncResult (null, ret, null));
+                    }
+                }
                 break;
             case RIL_UNSOL_WB_AMR_STATE:
                 unsljLogRet(response, ret);
@@ -586,6 +598,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_AM: return "RIL_UNSOL_AM";
             case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL: return "RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL";
             case RIL_UNSOL_DATA_SUSPEND_RESUME: return "RIL_UNSOL_DATA_SUSPEND_RESUME";
+            case RIL_UNSOL_STK_SEND_SMS_RESULT: return "RIL_UNSOL_STK_SEND_SMS_RESULT";
             case RIL_UNSOL_WB_AMR_STATE: return "RIL_UNSOL_WB_AMR_STATE";
             default: return "<unknown response: "+request+">";
         }
@@ -602,6 +615,26 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             mRilConnectedRegistrants.notifyRegistrants(
                                 new AsyncResult (null, new Integer(rilVer), null));
         }
+    }
+
+    protected Registrant mCatSendSmsResultRegistrant;
+    /**
+     * samsung stk service implementation - set up registrant for sending
+     * sms send result from modem(RIL) to catService
+     * @param h
+     * @param what
+     * @param obj
+     */
+    public void setOnCatSendSmsResult(Handler h, int what, Object obj) {
+        mCatSendSmsResultRegistrant = new Registrant(h, what, obj);
+    }
+
+    /**
+     *
+     * @param h
+     */
+    public void unSetOnCatSendSmsResult(Handler h) {
+        mCatSendSmsResultRegistrant.clear();
     }
 
     /**
