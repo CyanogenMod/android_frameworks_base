@@ -307,11 +307,18 @@ final class ActivityStack {
                     // We don't at this point know if the activity is fullscreen,
                     // so we need to be conservative and assume it isn't.
                     Slog.w(TAG, "Activity pause timeout for " + r);
+                    int pid = -1;
+                    long pauseTime = 0;
+                    String m = null;
                     synchronized (mService) {
                         if (r.app != null) {
-                            mService.logAppTooSlow(r.app, r.pauseTime,
-                                    "pausing " + r);
+                            pid = r.app.pid;
                         }
+                        pauseTime = r.pauseTime;
+                        m = "pausing " + r;
+                    }
+                    if (pid > 0) {
+                        mService.logAppTooSlow(pid, pauseTime, m);
                     }
 
                     activityPaused(r != null ? r.appToken : null, true);
@@ -332,11 +339,20 @@ final class ActivityStack {
                 } break;
                 case LAUNCH_TICK_MSG: {
                     ActivityRecord r = (ActivityRecord)msg.obj;
+                    int pid = -1;
+                    long launchTickTime = 0;
+                    String m = null;
                     synchronized (mService) {
                         if (r.continueLaunchTickingLocked()) {
-                            mService.logAppTooSlow(r.app, r.launchTickTime,
-                                    "launching " + r);
+                            if (r.app != null) {
+                                pid = r.app.pid;
+                            }
+                            launchTickTime = r.launchTickTime;
+                            m = "launching " + r;
                         }
+                    }
+                    if (pid > 0) {
+                        mService.logAppTooSlow(pid, launchTickTime, m);
                     }
                 } break;
                 case DESTROY_TIMEOUT_MSG: {
