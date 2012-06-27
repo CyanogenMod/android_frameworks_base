@@ -118,7 +118,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
     static final int RIL_REQUEST_HANGUP_VT = 10052;
 
     static final int RIL_UNSOL_RELEASE_COMPLETE_MESSAGE = 11001;
-    static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
+    //static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
     static final int RIL_UNSOL_STK_CALL_CONTROL_RESULT = 11003;
     static final int RIL_UNSOL_DUN_CALL_STATUS = 11004;
 

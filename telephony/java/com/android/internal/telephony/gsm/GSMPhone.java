@@ -147,7 +147,8 @@ public class GSMPhone extends PhoneBase {
             mSimSmsIntManager = new SimSmsInterfaceManager(this, mSMS);
             mSubInfo = new PhoneSubInfo(this);
         }
-        mStkService = CatService.getInstance(mCM, mIccRecords, mContext, mIccFileHandler, mIccCard);
+        mStkService = CatService.getInstance(mCM, mIccRecords, mContext, mIccFileHandler, mIccCard,
+                mSimSmsIntManager);
 
         mCM.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
         mIccRecords.registerForRecordsLoaded(this, EVENT_SIM_RECORDS_LOADED, null);

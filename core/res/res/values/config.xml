@@ -835,4 +835,7 @@
          kill the foreground app. -->
     <integer name="config_backKillTimeout">2000</integer>
 
+    <!--Boolean to enable stk functionality on Samsung phones-->
+    <bool name="config_samsung_stk">false</bool>
+
 </resources>
