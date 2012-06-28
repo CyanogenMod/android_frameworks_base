@@ -38,19 +38,19 @@
     <string name="serviceErased" msgid="1288584695297200972">"Wissen uitgevoerd."</string>
     <string name="passwordIncorrect" msgid="7612208839450128715">"Onjuist wachtwoord."</string>
     <string name="mmiComplete" msgid="8232527495411698359">"MMI voltooid."</string>
-    <string name="badPin" msgid="5085454289896032547">"De oude PIN-code die u heeft ingevoerd, is onjuist."</string>
-    <string name="badPuk" msgid="5702522162746042460">"De PUK-code die u heeft ingevoerd, is onjuist."</string>
-    <string name="mismatchPin" msgid="3695902225843339274">"De PIN-codes die u heeft ingevoerd, komen niet overeen."</string>
-    <string name="invalidPin" msgid="3850018445187475377">"Voer een PIN-code van 4 tot 8 cijfers in."</string>
-    <string name="needPuk" msgid="919668385956251611">"Uw simkaart is vergrendeld met de PUK-code. Typ de PUK-code om te ontgrendelen."</string>
-    <string name="needPuk2" msgid="4526033371987193070">"Voer de PUK2-code in om de simkaart te ontgrendelen."</string>
+    <string name="badPin" msgid="5085454289896032547">"De oude pincode die u heeft ingevoerd, is onjuist."</string>
+    <string name="badPuk" msgid="5702522162746042460">"De pukcode die u heeft ingevoerd, is onjuist."</string>
+    <string name="mismatchPin" msgid="3695902225843339274">"De pincodes die u heeft ingevoerd, komen niet overeen."</string>
+    <string name="invalidPin" msgid="3850018445187475377">"Voer een pincode van 4 tot 8 cijfers in."</string>
+    <string name="needPuk" msgid="919668385956251611">"Uw simkaart is vergrendeld met de pukcode. Typ de pukcode om te ontgrendelen."</string>
+    <string name="needPuk2" msgid="4526033371987193070">"Voer de puk2-code in om de simkaart te ontgrendelen."</string>
     <string name="ClipMmi" msgid="6952821216480289285">"Inkomende beller-id"</string>
     <string name="ClirMmi" msgid="7784673673446833091">"Uitgaande beller-id"</string>
     <string name="CfMmi" msgid="5123218989141573515">"Oproep doorschakelen"</string>
     <string name="CwMmi" msgid="9129678056795016867">"Wisselgesprek"</string>
     <string name="BaMmi" msgid="455193067926770581">"Oproep blokkeren"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"Wachtwoordwijziging"</string>
-    <string name="PinMmi" msgid="3113117780361190304">"PIN-wijziging"</string>
+    <string name="PinMmi" msgid="3113117780361190304">"Pinwijziging"</string>
     <string name="CnipMmi" msgid="3110534680557857162">"Nummer van beller beschikbaar"</string>
     <string name="CnirMmi" msgid="3062102121430548731">"Nummer van beller beperkt"</string>
     <string name="ThreeWCMmi" msgid="9051047170321190368">"Driewegs bellen"</string>
@@ -205,11 +205,11 @@
     <string name="permlab_changeConfiguration" msgid="8214475779521218295">"uw UI-instellingen wijzigen"</string>
     <string name="permdesc_changeConfiguration" msgid="3465121501528064399">"Hiermee kan een applicatie de huidige configuratie, zoals de landinstelling of de algemene lettergrootte, wijzigen."</string>
     <string name="permlab_enableCarMode" msgid="5684504058192921098">"automodus inschakelen"</string>
-    <string name="permdesc_enableCarMode" msgid="5673461159384850628">"Staat een applicatie toe de automodus in te schakelen."</string>
+    <string name="permdesc_enableCarMode" msgid="5673461159384850628">"Hiermee kan een applicatie de automodus inschakelen."</string>
     <string name="permlab_killBackgroundProcesses" msgid="8373714752793061963">"processen op de achtergrond beëindigen"</string>
-    <string name="permdesc_killBackgroundProcesses" msgid="2908829602869383753">"Staat een applicatie toe processen op de achtergrond te beëindigen, zelfs als er voldoende geheugen beschikbaar is."</string>
+    <string name="permdesc_killBackgroundProcesses" msgid="2908829602869383753">"Hiermee kan een applicatie processen op de achtergrond beëindigen, zelfs als er voldoende geheugen beschikbaar is."</string>
     <string name="permlab_forceStopPackages" msgid="1447830113260156236">"andere applicaties gedwongen stoppen"</string>
-    <string name="permdesc_forceStopPackages" msgid="7263036616161367402">"Staat een applicatie toe andere applicaties te stoppen."</string>
+    <string name="permdesc_forceStopPackages" msgid="7263036616161367402">"Hiermee kan een applicatie andere applicaties stoppen."</string>
     <string name="permlab_forceBack" msgid="1804196839880393631">"applicatie nu sluiten"</string>
     <string name="permdesc_forceBack" msgid="6534109744159919013">"Hiermee kan een applicatie elke willekeurige activiteit die op de voorgrond wordt uitgevoerd, sluiten en naar de achtergrond verplaatsen. Nooit vereist voor normale applicaties."</string>
     <string name="permlab_dump" msgid="1681799862438954752">"interne systeemstatus ophalen"</string>
@@ -373,7 +373,7 @@
     <string name="permlab_masterClear" msgid="2315750423139697397">"systeem terugzetten op fabrieksinstellingen"</string>
     <string name="permdesc_masterClear" msgid="5033465107545174514">"Hiermee kan een applicatie het systeem terugzetten op de fabrieksinstellingen, waarbij alle gegevens, configuraties en geïnstalleerde applicaties worden verwijderd."</string>
     <string name="permlab_setTime" msgid="2021614829591775646">"tijd instellen"</string>
-    <string name="permdesc_setTime" msgid="667294309287080045">"Staat een applicatie toe de kloktijd van de telefoon te wijzigen."</string>
+    <string name="permdesc_setTime" msgid="667294309287080045">"Hiermee kan een applicatie de kloktijd van de telefoon wijzigen."</string>
     <string name="permlab_setTimeZone" msgid="2945079801013077340">"tijdzone instellen"</string>
     <string name="permdesc_setTimeZone" msgid="1902540227418179364">"Hiermee kan een applicatie de tijdzone van de telefoon wijzigen."</string>
     <string name="permlab_accountManagerService" msgid="4829262349691386986">"fungeren als de AccountManagerService"</string>
@@ -393,9 +393,9 @@
     <string name="permlab_writeApnSettings" msgid="7823599210086622545">"instellingen voor toegangspuntnaam schrijven"</string>
     <string name="permdesc_writeApnSettings" msgid="7443433457842966680">"Hiermee kan een applicatie de APN-instellingen, zoals proxy en poort, van elke APN wijzigen."</string>
     <string name="permlab_changeNetworkState" msgid="958884291454327309">"netwerkverbinding wijzigen"</string>
-    <string name="permdesc_changeNetworkState" msgid="4199958910396387075">"Staat een applicatie toe de status van de netwerkverbinding te wijzigen."</string>
+    <string name="permdesc_changeNetworkState" msgid="4199958910396387075">"Hiermee kan een applicatie de status van de netwerkverbinding wijzigen."</string>
     <string name="permlab_changeTetherState" msgid="2702121155761140799">"Getetherde verbinding wijzigen"</string>
-    <string name="permdesc_changeTetherState" msgid="8905815579146349568">"Staat een applicatie toe de status van de getetherde netwerkverbinding te wijzigen."</string>
+    <string name="permdesc_changeTetherState" msgid="8905815579146349568">"Hiermee kan een applicatie de status van de getetherde netwerkverbinding wijzigen."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"instelling voor gebruik van achtergrondgegevens van gegevens wijzigen"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="1001482853266638864">"Hiermee kan een applicatie de instelling voor gebruik van achtergrondgegevens wijzigen."</string>
     <string name="permlab_accessWifiState" msgid="8100926650211034400">"Wi-Fi-status bekijken"</string>
@@ -435,7 +435,7 @@
     <string name="permdesc_sdcardWrite" product="nosdcard" msgid="6594393334785738252">"Hiermee kan een applicatie schrijven naar de USB-opslag."</string>
     <string name="permdesc_sdcardWrite" product="default" msgid="6643963204976471878">"Hiermee kan een applicatie schrijven naar de SD-kaart."</string>
     <string name="permlab_cache_filesystem" msgid="5656487264819669824">"het cachebestandssysteem openen"</string>
-    <string name="permdesc_cache_filesystem" msgid="1624734528435659906">"Staat een applicatie toe het cachebestandssysteem te lezen en te schrijven."</string>
+    <string name="permdesc_cache_filesystem" msgid="1624734528435659906">"Hiermee kan een applicatie het cachebestandssysteem lezen en ernaar schrijven."</string>
     <string name="permlab_use_sip" msgid="5986952362795870502">"internetoproepen starten/ontvangen"</string>
     <string name="permdesc_use_sip" msgid="6320376185606661843">"Hiermee kan een applicatie de SIP-service gebruiken om internetoproepen te starten/te ontvangen."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Wachtwoordregels instellen"</string>
@@ -448,49 +448,6 @@
     <string name="policydesc_forceLock" msgid="5696964126226028442">"Beheren hoe en wanneer het scherm wordt vergrendeld"</string>
     <string name="policylab_wipeData" msgid="3910545446758639713">"Alle gegevens wissen"</string>
     <string name="policydesc_wipeData" msgid="7669895333814222586">"De gegevens van de telefoon zonder waarschuwing wissen door de fabrieksinstellingen te herstellen"</string>
-  <string-array name="phoneTypes">
-    <item msgid="8901098336658710359">"Thuis"</item>
-    <item msgid="869923650527136615">"Mobiel"</item>
-    <item msgid="7897544654242874543">"Werk"</item>
-    <item msgid="1103601433382158155">"Fax werk"</item>
-    <item msgid="1735177144948329370">"Fax thuis"</item>
-    <item msgid="603878674477207394">"Semafoon"</item>
-    <item msgid="1650824275177931637">"Overig"</item>
-    <item msgid="9192514806975898961">"Aangepast"</item>
-  </string-array>
-  <string-array name="emailAddressTypes">
-    <item msgid="8073994352956129127">"Thuis"</item>
-    <item msgid="7084237356602625604">"Werk"</item>
-    <item msgid="1112044410659011023">"Overig"</item>
-    <item msgid="2374913952870110618">"Aangepast"</item>
-  </string-array>
-  <string-array name="postalAddressTypes">
-    <item msgid="6880257626740047286">"Thuis"</item>
-    <item msgid="5629153956045109251">"Werk"</item>
-    <item msgid="4966604264500343469">"Overig"</item>
-    <item msgid="4932682847595299369">"Aangepast"</item>
-  </string-array>
-  <string-array name="imAddressTypes">
-    <item msgid="1738585194601476694">"Thuis"</item>
-    <item msgid="1359644565647383708">"Werk"</item>
-    <item msgid="7868549401053615677">"Overig"</item>
-    <item msgid="3145118944639869809">"Aangepast"</item>
-  </string-array>
-  <string-array name="organizationTypes">
-    <item msgid="7546335612189115615">"Werk"</item>
-    <item msgid="4378074129049520373">"Overig"</item>
-    <item msgid="3455047468583965104">"Aangepast"</item>
-  </string-array>
-  <string-array name="imProtocols">
-    <item msgid="8595261363518459565">"AIM"</item>
-    <item msgid="7390473628275490700">"Windows Live"</item>
-    <item msgid="7882877134931458217">"Yahoo"</item>
-    <item msgid="5035376313200585242">"Skype"</item>
-    <item msgid="7532363178459444943">"QQ"</item>
-    <item msgid="3713441034299660749">"Google Talk"</item>
-    <item msgid="2506857312718630823">"ICQ"</item>
-    <item msgid="1648797903785279353">"Jabber"</item>
-  </string-array>
     <string name="phoneTypeCustom" msgid="1644738059053355820">"Aangepast"</string>
     <string name="phoneTypeHome" msgid="2570923463033985887">"Thuis"</string>
     <string name="phoneTypeMobile" msgid="6501463557754751037">"Mobiel"</string>
@@ -547,9 +504,9 @@
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Overig"</string>
     <string name="contact_status_update_attribution" msgid="5112589886094402795">"via <xliff:g id="SOURCE">%1$s</xliff:g>"</string>
     <string name="contact_status_update_attribution_with_date" msgid="5945386376369979909">"<xliff:g id="DATE">%1$s</xliff:g> via <xliff:g id="SOURCE">%2$s</xliff:g>"</string>
-    <string name="keyguard_password_enter_pin_code" msgid="3731488827218876115">"PIN-code invoeren"</string>
+    <string name="keyguard_password_enter_pin_code" msgid="3731488827218876115">"Pincode invoeren"</string>
     <string name="keyguard_password_enter_password_code" msgid="9138158344813213754">"Voer het wachtwoord in om te ontgrendelen"</string>
-    <string name="keyguard_password_wrong_pin_code" msgid="1295984114338107718">"Onjuiste PIN-code!"</string>
+    <string name="keyguard_password_wrong_pin_code" msgid="1295984114338107718">"Onjuiste pincode!"</string>
     <string name="keyguard_label_text" msgid="861796461028298424">"Druk op \'Menu\' en vervolgens op 0 om te ontgrendelen."</string>
     <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"Alarmnummer"</string>
     <string name="lockscreen_carrier_default" msgid="8812714795156374435">"(Geen service)"</string>
@@ -571,7 +528,7 @@
     <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"Plaats een simkaart."</string>
     <string name="emergency_calls_only" msgid="6733978304386365407">"Alleen noodoproepen"</string>
     <string name="lockscreen_network_locked_message" msgid="143389224986028501">"Netwerk vergrendeld"</string>
-    <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"Simkaart is vergrendeld met PUK-code."</string>
+    <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"Simkaart is vergrendeld met pukcode."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"Raadpleeg de gebruikershandleiding of neem contact op met de klantenservice."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"Simkaart is vergrendeld."</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Simkaart ontgrendelen\u2026"</string>
@@ -611,7 +568,7 @@
     <string name="permlab_setAlarm" msgid="5924401328803615165">"alarm instellen in wekker"</string>
     <string name="permdesc_setAlarm" msgid="5966966598149875082">"Hiermee kan de applicatie een alarm instellen in een geïnstalleerde wekker-app. Deze functie wordt door sommige wekker-applicaties niet geïmplementeerd."</string>
     <string name="permlab_writeGeolocationPermissions" msgid="4715212655598275532">"Geolocatierechten voor browser aanpassen"</string>
-    <string name="permdesc_writeGeolocationPermissions" msgid="4011908282980861679">"Staat een applicatie toe de geolocatierechten van de browser aan te passen. Schadelijke applicaties kunnen dit gebruiken om locatiegegevens te verzenden naar willekeurige websites."</string>
+    <string name="permdesc_writeGeolocationPermissions" msgid="4011908282980861679">"Hiermee kan een applicatie de geolocatierechten van de browser aanpassen. Schadelijke applicaties kunnen dit gebruiken om locatiegegevens te verzenden naar willekeurige websites."</string>
     <string name="save_password_message" msgid="767344687139195790">"Wilt u dat de browser dit wachtwoord onthoudt?"</string>
     <string name="save_password_notnow" msgid="6389675316706699758">"Niet nu"</string>
     <string name="save_password_remember" msgid="6491879678996749466">"Onthouden"</string>
@@ -626,75 +583,8 @@
     <string name="search_go" msgid="8298016669822141719">"Zoeken"</string>
     <string name="oneMonthDurationPast" msgid="7396384508953779925">"1 maand geleden"</string>
     <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Meer dan 1 maand geleden"</string>
-  <plurals name="num_seconds_ago">
-    <item quantity="one" msgid="4869870056547896011">"1 seconde geleden"</item>
-    <item quantity="other" msgid="3903706804349556379">"<xliff:g id="COUNT">%d</xliff:g> seconden geleden"</item>
-  </plurals>
-  <plurals name="num_minutes_ago">
-    <item quantity="one" msgid="3306787433088810191">"1 minuut geleden"</item>
-    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> minuten geleden"</item>
-  </plurals>
-  <plurals name="num_hours_ago">
-    <item quantity="one" msgid="9150797944610821849">"1 uur geleden"</item>
-    <item quantity="other" msgid="2467273239587587569">"<xliff:g id="COUNT">%d</xliff:g> uur geleden"</item>
-  </plurals>
-  <plurals name="last_num_days">
-    <item quantity="other" msgid="3069992808164318268">"Afgelopen <xliff:g id="COUNT">%d</xliff:g> dagen"</item>
-  </plurals>
     <string name="last_month" msgid="3959346739979055432">"Afgelopen maand"</string>
     <string name="older" msgid="5211975022815554840">"Ouder"</string>
-  <plurals name="num_days_ago">
-    <item quantity="one" msgid="861358534398115820">"gisteren"</item>
-    <item quantity="other" msgid="2479586466153314633">"<xliff:g id="COUNT">%d</xliff:g> dagen geleden"</item>
-  </plurals>
-  <plurals name="in_num_seconds">
-    <item quantity="one" msgid="2729745560954905102">"over 1 seconde"</item>
-    <item quantity="other" msgid="1241926116443974687">"over <xliff:g id="COUNT">%d</xliff:g> seconden"</item>
-  </plurals>
-  <plurals name="in_num_minutes">
-    <item quantity="one" msgid="8793095251325200395">"over 1 minuut"</item>
-    <item quantity="other" msgid="3330713936399448749">"over <xliff:g id="COUNT">%d</xliff:g> minuten"</item>
-  </plurals>
-  <plurals name="in_num_hours">
-    <item quantity="one" msgid="7164353342477769999">"over 1 uur"</item>
-    <item quantity="other" msgid="547290677353727389">"over <xliff:g id="COUNT">%d</xliff:g> uur"</item>
-  </plurals>
-  <plurals name="in_num_days">
-    <item quantity="one" msgid="5413088743009839518">"morgen"</item>
-    <item quantity="other" msgid="5109449375100953247">"over <xliff:g id="COUNT">%d</xliff:g> dagen"</item>
-  </plurals>
-  <plurals name="abbrev_num_seconds_ago">
-    <item quantity="one" msgid="1849036840200069118">"1 seconde geleden"</item>
-    <item quantity="other" msgid="3699169366650930415">"<xliff:g id="COUNT">%d</xliff:g> seconden geleden"</item>
-  </plurals>
-  <plurals name="abbrev_num_minutes_ago">
-    <item quantity="one" msgid="6361490147113871545">"1 minuut geleden"</item>
-    <item quantity="other" msgid="851164968597150710">"<xliff:g id="COUNT">%d</xliff:g> minuten geleden"</item>
-  </plurals>
-  <plurals name="abbrev_num_hours_ago">
-    <item quantity="one" msgid="4796212039724722116">"1 uur geleden"</item>
-    <item quantity="other" msgid="6889970745748538901">"<xliff:g id="COUNT">%d</xliff:g> uur geleden"</item>
-  </plurals>
-  <plurals name="abbrev_num_days_ago">
-    <item quantity="one" msgid="8463161711492680309">"gisteren"</item>
-    <item quantity="other" msgid="3453342639616481191">"<xliff:g id="COUNT">%d</xliff:g> dagen geleden"</item>
-  </plurals>
-  <plurals name="abbrev_in_num_seconds">
-    <item quantity="one" msgid="5842225370795066299">"over 1 seconde"</item>
-    <item quantity="other" msgid="5495880108825805108">"over <xliff:g id="COUNT">%d</xliff:g> seconden"</item>
-  </plurals>
-  <plurals name="abbrev_in_num_minutes">
-    <item quantity="one" msgid="562786149928284878">"over 1 minuut"</item>
-    <item quantity="other" msgid="4216113292706568726">"over <xliff:g id="COUNT">%d</xliff:g> minuten"</item>
-  </plurals>
-  <plurals name="abbrev_in_num_hours">
-    <item quantity="one" msgid="3274708118124045246">"over 1 uur"</item>
-    <item quantity="other" msgid="3705373766798013406">"over <xliff:g id="COUNT">%d</xliff:g> uur"</item>
-  </plurals>
-  <plurals name="abbrev_in_num_days">
-    <item quantity="one" msgid="2178576254385739855">"morgen"</item>
-    <item quantity="other" msgid="2973062968038355991">"over <xliff:g id="COUNT">%d</xliff:g> dagen"</item>
-  </plurals>
     <string name="preposition_for_date" msgid="9093949757757445117">"op <xliff:g id="DATE">%s</xliff:g>"</string>
     <string name="preposition_for_time" msgid="5506831244263083793">"om <xliff:g id="TIME">%s</xliff:g>"</string>
     <string name="preposition_for_year" msgid="5040395640711867177">"in <xliff:g id="YEAR">%s</xliff:g>"</string>
@@ -785,14 +675,6 @@
     <string name="ringtone_silent" msgid="4440324407807468713">"Stil"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Beltonen"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Onbekende beltoon"</string>
-  <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fi-netwerk beschikbaar"</item>
-    <item quantity="other" msgid="4192424489168397386">"Wi-Fi-netwerken beschikbaar"</item>
-  </plurals>
-  <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Open Wi-Fi-netwerk beschikbaar"</item>
-    <item quantity="other" msgid="7915895323644292768">"Open Wi-Fi-netwerken beschikbaar"</item>
-  </plurals>
     <string name="select_character" msgid="3365550120617701745">"Teken invoegen"</string>
     <string name="sms_control_default_app_name" msgid="7630529934366549163">"Onbekende app"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"Sms-berichten verzenden"</string>
@@ -861,8 +743,8 @@
     <string name="activity_list_empty" msgid="4168820609403385789">"Geen overeenkomende activiteiten gevonden"</string>
     <string name="permlab_pkgUsageStats" msgid="8787352074326748892">"gebruiksstatistieken van component bijwerken"</string>
     <string name="permdesc_pkgUsageStats" msgid="891553695716752835">"Hiermee kunnen verzamelde gebruiksstatistieken van een component worden gewijzigd. Niet voor gebruik door normale applicaties."</string>
-    <string name="permlab_copyProtectedData" msgid="1660908117394854464">"Staat het aanroepen van de standaardcontainerservice toe om inhoud te kopiëren. Niet voor gebruik door normale applicaties."</string>
-    <string name="permdesc_copyProtectedData" msgid="537780957633976401">"Staat het aanroepen van de standaardcontainerservice toe om inhoud te kopiëren. Niet voor gebruik door normale applicaties."</string>
+    <string name="permlab_copyProtectedData" msgid="1660908117394854464">"Standaardcontainerservice toestaan inhoud te kopiëren"</string>
+    <string name="permdesc_copyProtectedData" msgid="537780957633976401">"Hiermee kan inhoud gekopiëerd worden door het aanroepen van de standaardcontainerservice. Niet voor gebruik door normale applicaties."</string>
     <string name="tutorial_double_tap_to_zoom_message_short" msgid="1311810005957319690">"Tik twee keer voor zoomregeling"</string>
     <string name="gadget_host_error_inflating" msgid="2613287218853846830">"Fout bij uitbreiden van widget"</string>
     <string name="ime_action_go" msgid="8320845651737369027">"Ga"</string>
@@ -921,10 +803,7 @@
     <string name="app_killed_message">Applicatie geforceerd afgesloten</string>
     <string name="phone_goggles_problem_count">Probleem #%1$d: </string>
     <string name="phone_goggles_description">Los de %1$d volgende wiskundeproblemen op in minder dan %2$d seconden om de communicatie uit te voeren.</string>
-    <plurals name="phone_goggles_countdown">
-        <item quantity="one">%d seconde over</item>
-        <item quantity="other">%d seconden over</item>
-    </plurals>
+
     <string name="permlab_revokePermissions">Hiermee kan de applicatie machtigingen inzien en bewerken. Niet gebruikt bij normale applicaties.</string>
     <string name="permdesc_revokePermissions">Hiermee kan de applicatie ingetrokken machtigingen lezen en schrijven. Niet gebruikt bij normale applicaties.</string>
     <string name="profileNameDefault">Standaard</string>
