@@ -205,11 +205,11 @@
     <string name="permlab_changeConfiguration" msgid="8214475779521218295">"uw UI-instellingen wijzigen"</string>
     <string name="permdesc_changeConfiguration" msgid="3465121501528064399">"Hiermee kan een applicatie de huidige configuratie, zoals de landinstelling of de algemene lettergrootte, wijzigen."</string>
     <string name="permlab_enableCarMode" msgid="5684504058192921098">"automodus inschakelen"</string>
-    <string name="permdesc_enableCarMode" msgid="5673461159384850628">"Staat een applicatie toe de automodus in te schakelen."</string>
+    <string name="permdesc_enableCarMode" msgid="5673461159384850628">"Hiermee kan een applicatie de automodus in schakelen."</string>
     <string name="permlab_killBackgroundProcesses" msgid="8373714752793061963">"processen op de achtergrond beëindigen"</string>
-    <string name="permdesc_killBackgroundProcesses" msgid="2908829602869383753">"Staat een applicatie toe processen op de achtergrond te beëindigen, zelfs als er voldoende geheugen beschikbaar is."</string>
+    <string name="permdesc_killBackgroundProcesses" msgid="2908829602869383753">"Hiermee kan een applicatie processen op de achtergrond beëindigen, zelfs als er voldoende geheugen beschikbaar is."</string>
     <string name="permlab_forceStopPackages" msgid="1447830113260156236">"andere applicaties gedwongen stoppen"</string>
-    <string name="permdesc_forceStopPackages" msgid="7263036616161367402">"Staat een applicatie toe andere applicaties te stoppen."</string>
+    <string name="permdesc_forceStopPackages" msgid="7263036616161367402">"Hiermee kan een applicatie andere applicaties stoppen."</string>
     <string name="permlab_forceBack" msgid="1804196839880393631">"applicatie nu sluiten"</string>
     <string name="permdesc_forceBack" msgid="6534109744159919013">"Hiermee kan een applicatie elke willekeurige activiteit die op de voorgrond wordt uitgevoerd, sluiten en naar de achtergrond verplaatsen. Nooit vereist voor normale applicaties."</string>
     <string name="permlab_dump" msgid="1681799862438954752">"interne systeemstatus ophalen"</string>
@@ -373,7 +373,7 @@
     <string name="permlab_masterClear" msgid="2315750423139697397">"systeem terugzetten op fabrieksinstellingen"</string>
     <string name="permdesc_masterClear" msgid="5033465107545174514">"Hiermee kan een applicatie het systeem terugzetten op de fabrieksinstellingen, waarbij alle gegevens, configuraties en geïnstalleerde applicaties worden verwijderd."</string>
     <string name="permlab_setTime" msgid="2021614829591775646">"tijd instellen"</string>
-    <string name="permdesc_setTime" msgid="667294309287080045">"Staat een applicatie toe de kloktijd van de telefoon te wijzigen."</string>
+    <string name="permdesc_setTime" msgid="667294309287080045">"Hiermee kan een applicatie de kloktijd van de telefoon wijzigen."</string>
     <string name="permlab_setTimeZone" msgid="2945079801013077340">"tijdzone instellen"</string>
     <string name="permdesc_setTimeZone" msgid="1902540227418179364">"Hiermee kan een applicatie de tijdzone van de telefoon wijzigen."</string>
     <string name="permlab_accountManagerService" msgid="4829262349691386986">"fungeren als de AccountManagerService"</string>
@@ -393,9 +393,9 @@
     <string name="permlab_writeApnSettings" msgid="7823599210086622545">"instellingen voor toegangspuntnaam schrijven"</string>
     <string name="permdesc_writeApnSettings" msgid="7443433457842966680">"Hiermee kan een applicatie de APN-instellingen, zoals proxy en poort, van elke APN wijzigen."</string>
     <string name="permlab_changeNetworkState" msgid="958884291454327309">"netwerkverbinding wijzigen"</string>
-    <string name="permdesc_changeNetworkState" msgid="4199958910396387075">"Staat een applicatie toe de status van de netwerkverbinding te wijzigen."</string>
+    <string name="permdesc_changeNetworkState" msgid="4199958910396387075">"Hiermee kan een applicatie de status van de netwerkverbinding wijzigen."</string>
     <string name="permlab_changeTetherState" msgid="2702121155761140799">"Getetherde verbinding wijzigen"</string>
-    <string name="permdesc_changeTetherState" msgid="8905815579146349568">"Staat een applicatie toe de status van de getetherde netwerkverbinding te wijzigen."</string>
+    <string name="permdesc_changeTetherState" msgid="8905815579146349568">"Hiermee kan een applicatie de status van de getetherde netwerkverbinding wijzigen."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"instelling voor gebruik van achtergrondgegevens van gegevens wijzigen"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="1001482853266638864">"Hiermee kan een applicatie de instelling voor gebruik van achtergrondgegevens wijzigen."</string>
     <string name="permlab_accessWifiState" msgid="8100926650211034400">"Wi-Fi-status bekijken"</string>
@@ -435,7 +435,7 @@
     <string name="permdesc_sdcardWrite" product="nosdcard" msgid="6594393334785738252">"Hiermee kan een applicatie schrijven naar de USB-opslag."</string>
     <string name="permdesc_sdcardWrite" product="default" msgid="6643963204976471878">"Hiermee kan een applicatie schrijven naar de SD-kaart."</string>
     <string name="permlab_cache_filesystem" msgid="5656487264819669824">"het cachebestandssysteem openen"</string>
-    <string name="permdesc_cache_filesystem" msgid="1624734528435659906">"Staat een applicatie toe het cachebestandssysteem te lezen en te schrijven."</string>
+    <string name="permdesc_cache_filesystem" msgid="1624734528435659906">"Hiermee kan een applicatie het cachebestandssysteem lezen en ernaar schrijven."</string>
     <string name="permlab_use_sip" msgid="5986952362795870502">"internetoproepen starten/ontvangen"</string>
     <string name="permdesc_use_sip" msgid="6320376185606661843">"Hiermee kan een applicatie de SIP-service gebruiken om internetoproepen te starten/te ontvangen."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Wachtwoordregels instellen"</string>
@@ -611,7 +611,7 @@
     <string name="permlab_setAlarm" msgid="5924401328803615165">"alarm instellen in wekker"</string>
     <string name="permdesc_setAlarm" msgid="5966966598149875082">"Hiermee kan de applicatie een alarm instellen in een geïnstalleerde wekker-app. Deze functie wordt door sommige wekker-applicaties niet geïmplementeerd."</string>
     <string name="permlab_writeGeolocationPermissions" msgid="4715212655598275532">"Geolocatierechten voor browser aanpassen"</string>
-    <string name="permdesc_writeGeolocationPermissions" msgid="4011908282980861679">"Staat een applicatie toe de geolocatierechten van de browser aan te passen. Schadelijke applicaties kunnen dit gebruiken om locatiegegevens te verzenden naar willekeurige websites."</string>
+    <string name="permdesc_writeGeolocationPermissions" msgid="4011908282980861679">"Hiermee kan een applicatie de geolocatierechten van de browser aanpassen. Schadelijke applicaties kunnen dit gebruiken om locatiegegevens te verzenden naar willekeurige websites."</string>
     <string name="save_password_message" msgid="767344687139195790">"Wilt u dat de browser dit wachtwoord onthoudt?"</string>
     <string name="save_password_notnow" msgid="6389675316706699758">"Niet nu"</string>
     <string name="save_password_remember" msgid="6491879678996749466">"Onthouden"</string>
@@ -861,8 +861,8 @@
     <string name="activity_list_empty" msgid="4168820609403385789">"Geen overeenkomende activiteiten gevonden"</string>
     <string name="permlab_pkgUsageStats" msgid="8787352074326748892">"gebruiksstatistieken van component bijwerken"</string>
     <string name="permdesc_pkgUsageStats" msgid="891553695716752835">"Hiermee kunnen verzamelde gebruiksstatistieken van een component worden gewijzigd. Niet voor gebruik door normale applicaties."</string>
-    <string name="permlab_copyProtectedData" msgid="1660908117394854464">"Staat het aanroepen van de standaardcontainerservice toe om inhoud te kopiëren. Niet voor gebruik door normale applicaties."</string>
-    <string name="permdesc_copyProtectedData" msgid="537780957633976401">"Staat het aanroepen van de standaardcontainerservice toe om inhoud te kopiëren. Niet voor gebruik door normale applicaties."</string>
+    <string name="permlab_copyProtectedData" msgid="1660908117394854464">"Aanroepen service voor kopiëren inhoud toestaan"</string>
+    <string name="permdesc_copyProtectedData" msgid="537780957633976401">"Hiermee kan het aanroepen van de standaardcontainerservice toe inhoud kopiëren. Niet voor gebruik door normale applicaties."</string>
     <string name="tutorial_double_tap_to_zoom_message_short" msgid="1311810005957319690">"Tik twee keer voor zoomregeling"</string>
     <string name="gadget_host_error_inflating" msgid="2613287218853846830">"Fout bij uitbreiden van widget"</string>
     <string name="ime_action_go" msgid="8320845651737369027">"Ga"</string>
