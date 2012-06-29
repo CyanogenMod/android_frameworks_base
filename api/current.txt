@@ -22287,6 +22287,14 @@ package android.view {
     field public static final int KEYCODE_FOCUS = 80; // 0x50
     field public static final int KEYCODE_FORWARD = 125; // 0x7d
     field public static final int KEYCODE_FORWARD_DEL = 112; // 0x70
+    field public static final int KEYCODE_FUNC_1 = 218; // 0xda
+    field public static final int KEYCODE_FUNC_2 = 219; // 0xdb
+    field public static final int KEYCODE_FUNC_3 = 220; // 0xdc
+    field public static final int KEYCODE_FUNC_4 = 221; // 0xdd
+    field public static final int KEYCODE_FUNC_5 = 222; // 0xde
+    field public static final int KEYCODE_FUNC_6 = 223; // 0xdf
+    field public static final int KEYCODE_FUNC_7 = 224; // 0xe0
+    field public static final int KEYCODE_FUNC_8 = 225; // 0xe1
     field public static final int KEYCODE_FUNCTION = 119; // 0x77
     field public static final int KEYCODE_G = 35; // 0x23
     field public static final int KEYCODE_GRAVE = 68; // 0x44
@@ -22390,6 +22398,11 @@ package android.view {
     field public static final int KEYCODE_TV_INPUT = 178; // 0xb2
     field public static final int KEYCODE_TV_POWER = 177; // 0xb1
     field public static final int KEYCODE_U = 49; // 0x31
+    field public static final int KEYCODE_USER1 = 226; // 0xe2
+    field public static final int KEYCODE_USER2 = 227; // 0xe3
+    field public static final int KEYCODE_USER3 = 228; // 0xe4
+    field public static final int KEYCODE_USER4 = 229; // 0xe5
+    field public static final int KEYCODE_USER5 = 230; // 0xe6
     field public static final int KEYCODE_UNKNOWN = 0; // 0x0
     field public static final int KEYCODE_V = 50; // 0x32
     field public static final int KEYCODE_VOLUME_DOWN = 25; // 0x19
