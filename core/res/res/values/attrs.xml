@@ -1504,6 +1504,19 @@
         <enum name="KEYCODE_BRIGHTNESS_UP" value="215" />
         <enum name="KEYCODE_BRIGHTNESS_AUTO" value="216" />
         <enum name="KEYCODE_SCREENSHOT" value="217" />
+        <enum name="KEYCODE_FUNC_1" value="218" />
+        <enum name="KEYCODE_FUNC_2" value="219" />
+        <enum name="KEYCODE_FUNC_3" value="220" />
+        <enum name="KEYCODE_FUNC_4" value="221" />
+        <enum name="KEYCODE_FUNC_5" value="222" />
+        <enum name="KEYCODE_FUNC_6" value="223" />
+        <enum name="KEYCODE_FUNC_7" value="224" />
+        <enum name="KEYCODE_FUNC_8" value="225" />
+        <enum name="KEYCODE_USER1" value="226" />
+        <enum name="KEYCODE_USER2" value="227" />
+        <enum name="KEYCODE_USER3" value="228" />
+        <enum name="KEYCODE_USER4" value="229" />
+        <enum name="KEYCODE_USER5" value="230" />
     </attr>
 
     <!-- ***************************************************************** -->
