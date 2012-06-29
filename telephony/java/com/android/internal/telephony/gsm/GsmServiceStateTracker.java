@@ -47,6 +47,7 @@ import android.util.EventLog;
 import android.util.Log;
 import android.util.TimeUtils;
 
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.DataConnectionTracker;
@@ -140,6 +141,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
      */
     private Notification mNotification;
 
+    private Context mUiContext;
+
     /** Wake lock used while setting time of day. */
     private PowerManager.WakeLock mWakeLock;
     private static final String WAKELOCK_TAG = "ServiceStateTracker";
@@ -173,6 +176,12 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 // update emergency string whenever locale changed
                 updateSpnDisplay();
             }
+        }
+    };
+
+    private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            mUiContext = null;
         }
     };
 
@@ -226,6 +235,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         phone.getContext().registerReceiver(mIntentReceiver, filter);
+
+        ThemeUtils.registerThemeChangeReceiver(phone.getContext(), mThemeChangeReceiver);
     }
 
     public void dispose() {
@@ -1361,6 +1372,14 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         return a*10 + b;
     }
 
+    private Context getUiContext() {
+        Context mainContext = phone.getContext();
+        if (mUiContext == null) {
+            mUiContext = ThemeUtils.createUiContext(mainContext);
+        }
+        return mUiContext != null ? mUiContext : mainContext;
+    }
+
     /**
      * @return The current GPRS state. IN_SERVICE is the same as "attached"
      * and OUT_OF_SERVICE is the same as detached.
@@ -1678,7 +1697,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
         Log.d(LOG_TAG, "[DSAC DEB] " + "put notification " + title + " / " +details);
         mNotification.tickerText = title;
-        mNotification.setLatestEventInfo(context, title, details,
+        mNotification.setLatestEventInfo(getUiContext(), title, details,
                 mNotification.contentIntent);
 
         NotificationManager notificationManager = (NotificationManager)
