@@ -40,7 +40,9 @@ import com.android.internal.widget.ActionBarContextView;
 import com.android.internal.widget.ActionBarView;
 
 import android.app.KeyguardManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -1469,7 +1471,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
         //Log.i(TAG, "Key up: repeat=" + event.getRepeatCount()
         //        + " flags=0x" + Integer.toHexString(event.getFlags()));
-        
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -1783,7 +1784,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             final boolean isDown = action == KeyEvent.ACTION_DOWN;
 
             if (isDown && (event.getRepeatCount() == 0)) {
-                // First handle chording of panel key: if a panel key is held
+            	// First handle chording of panel key: if a panel key is held
                 // but not released, try to execute a shortcut in it.
                 if ((mPanelChordingKey > 0) && (mPanelChordingKey != keyCode)) {
                     boolean handled = dispatchKeyShortcutEvent(event);
@@ -1802,6 +1803,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             }
 
             if (!isDestroyed()) {
+            	 
                 final Callback cb = getCallback();
                 final boolean handled = cb != null && mFeatureId < 0 ? cb.dispatchKeyEvent(event)
                         : super.dispatchKeyEvent(event);
@@ -1809,7 +1811,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     return true;
                 }
             }
-
+            
             return isDown ? PhoneWindow.this.onKeyDown(mFeatureId, event.getKeyCode(), event)
                     : PhoneWindow.this.onKeyUp(mFeatureId, event.getKeyCode(), event);
         }
@@ -1856,7 +1858,38 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
         @Override
         public boolean dispatchTouchEvent(MotionEvent ev) {
-            final Callback cb = getCallback();
+        	//Stylus events with side button pressed are filtered and other events are processed normally.
+        	if(MotionEvent.BUTTON_SECONDARY == ev.getButtonState()){  
+        		
+        		boolean flag = StylusGestureFilter.getFilter().onTouchEvent(ev);
+        		if(flag){
+        			int action = StylusGestureFilter.getFilter().getAction();
+        			if(mContext.getPackageName().equalsIgnoreCase("com.android.systemui")){
+        				action = StylusGestureFilter.SWIPE_LEFT;
+        			}
+		        	switch (action){
+			        		case StylusGestureFilter.SWIPE_LEFT:
+		        			dispatchKeyEvent( new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_BACK));
+		        			dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,KeyEvent.KEYCODE_BACK));
+		        			break;
+		        		case StylusGestureFilter.SWIPE_RIGHT:
+		        			launchDefaultSearch();
+		        			break;
+		        		case StylusGestureFilter.SWIPE_UP:
+		        			dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_MENU));
+		        			dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,KeyEvent.KEYCODE_MENU));
+		        			break;
+		        		case StylusGestureFilter.SWIPE_DOWN:
+		        			Intent i = new Intent(Intent.ACTION_MAIN);
+		        			i.addCategory(Intent.CATEGORY_HOME);
+		        			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		        			mContext.startActivity(i);
+		        			break;
+		        			}
+		        		}
+        		return false;
+        	}
+           	final Callback cb = getCallback();
             return cb != null && !isDestroyed() && mFeatureId < 0 ? cb.dispatchTouchEvent(ev)
                     : super.dispatchTouchEvent(ev);
         }
