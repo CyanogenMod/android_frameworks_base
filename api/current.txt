@@ -10813,8 +10813,6 @@ package android.media {
     ctor public MediaRecorder();
     method public static final int getAudioSourceMax();
     method public int getMaxAmplitude() throws java.lang.IllegalStateException;
-    method public void native_start() throws java.lang.IllegalStateException;
-    method public void native_stop() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
     method public void release();
     method public void reset();
@@ -10853,13 +10851,9 @@ package android.media {
 
   public final class MediaRecorder.AudioEncoder {
     field public static final int AAC = 3; // 0x3
-    field public static final int AAC_PLUS = 4; // 0x4
     field public static final int AMR_NB = 1; // 0x1
     field public static final int AMR_WB = 2; // 0x2
     field public static final int DEFAULT = 0; // 0x0
-    field public static final int EAAC_PLUS = 5; // 0x5
-    field public static final int EVRC = 6; // 0x6
-    field public static final int QCELP = 7; // 0x7
   }
 
   public final class MediaRecorder.AudioSource {
@@ -10886,10 +10880,8 @@ package android.media {
     field public static final int AMR_WB = 4; // 0x4
     field public static final int DEFAULT = 0; // 0x0
     field public static final int MPEG_4 = 2; // 0x2
-    field public static final int QCP = 9; // 0x9
     field public static final int RAW_AMR = 3; // 0x3
     field public static final int THREE_GPP = 1; // 0x1
-    field public static final int THREE_GPP2 = 10; // 0xa
   }
 
   public final class MediaRecorder.VideoEncoder {
@@ -22208,9 +22200,6 @@ package android.view {
     field public static final int KEYCODE_BACKSLASH = 73; // 0x49
     field public static final int KEYCODE_BOOKMARK = 174; // 0xae
     field public static final int KEYCODE_BREAK = 121; // 0x79
-    field public static final int KEYCODE_BRIGHTNESS_AUTO = 216; // 0xd8
-    field public static final int KEYCODE_BRIGHTNESS_DOWN = 214; // 0xd6
-    field public static final int KEYCODE_BRIGHTNESS_UP = 215; // 0xd7
     field public static final int KEYCODE_BUTTON_1 = 188; // 0xbc
     field public static final int KEYCODE_BUTTON_10 = 197; // 0xc5
     field public static final int KEYCODE_BUTTON_11 = 198; // 0xc6
@@ -22364,7 +22353,6 @@ package android.view {
     field public static final int KEYCODE_R = 46; // 0x2e
     field public static final int KEYCODE_RIGHT_BRACKET = 72; // 0x48
     field public static final int KEYCODE_S = 47; // 0x2f
-    field public static final int KEYCODE_SCREENSHOT = 217; // 0xd9
     field public static final int KEYCODE_SCROLL_LOCK = 116; // 0x74
     field public static final int KEYCODE_SEARCH = 84; // 0x54
     field public static final int KEYCODE_SEMICOLON = 74; // 0x4a
@@ -22383,9 +22371,6 @@ package android.view {
     field public static final int KEYCODE_SYSRQ = 120; // 0x78
     field public static final int KEYCODE_T = 48; // 0x30
     field public static final int KEYCODE_TAB = 61; // 0x3d
-    field public static final int KEYCODE_TOGGLE_BT = 212; // 0xd4
-    field public static final int KEYCODE_TOGGLE_TOUCHPAD = 213; // 0xd5
-    field public static final int KEYCODE_TOGGLE_WIFI = 211; // 0xd3
     field public static final int KEYCODE_TV = 170; // 0xaa
     field public static final int KEYCODE_TV_INPUT = 178; // 0xb2
     field public static final int KEYCODE_TV_POWER = 177; // 0xb1
