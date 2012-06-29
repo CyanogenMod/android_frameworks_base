@@ -120,6 +120,16 @@ public class KeyCharacterMap {
     public static final char PICKER_DIALOG_INPUT = '\uEF01';
 
     /**
+     * Private use character denoting a .com suffix
+     */
+    public static final char DOT_COM_INPUT = '\uEF03';
+
+    /**
+     * Private use character denoting a www. prefix
+     */
+    public static final char DOT_WWW_INPUT = '\uEF04';
+		
+    /**
      * Modifier keys may be chorded with character keys.
      *
      * @see {#link #getModifierBehavior()} for more details.

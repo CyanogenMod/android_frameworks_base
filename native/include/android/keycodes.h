@@ -261,6 +261,19 @@ enum {
     AKEYCODE_BRIGHTNESS_UP   = 215,
     AKEYCODE_BRIGHTNESS_AUTO = 216,
     AKEYCODE_SCREENSHOT      = 217,
+    AKEYCODE_FUNC_1          = 218,
+    AKEYCODE_FUNC_2          = 219,
+    AKEYCODE_FUNC_3          = 220,
+    AKEYCODE_FUNC_4          = 221,
+    AKEYCODE_FUNC_5          = 222,
+    AKEYCODE_FUNC_6          = 223,
+    AKEYCODE_FUNC_7          = 224,
+    AKEYCODE_FUNC_8          = 225,
+    AKEYCODE_USER1           = 226,
+    AKEYCODE_USER2           = 227,
+    AKEYCODE_USER3           = 228,
+    AKEYCODE_USER4           = 229,
+    AKEYCODE_USER5           = 230,
 
     // NOTE: If you add a new keycode here you must also add it to several other files.
     //       Refer to frameworks/base/core/java/android/view/KeyEvent.java for the full list.

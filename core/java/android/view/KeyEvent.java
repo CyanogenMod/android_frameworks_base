@@ -599,8 +599,22 @@ public class KeyEvent extends InputEvent implements Parcelable {
     public static final int KEYCODE_BRIGHTNESS_UP   = 215;
     public static final int KEYCODE_BRIGHTNESS_AUTO = 216;
     public static final int KEYCODE_SCREENSHOT      = 217;
+    /** FUNC_1 through USER5 to support keypad mapping */
+    public static final int KEYCODE_FUNC_1          = 218;
+    public static final int KEYCODE_FUNC_2          = 219;
+    public static final int KEYCODE_FUNC_3          = 220;
+    public static final int KEYCODE_FUNC_4          = 221;
+    public static final int KEYCODE_FUNC_5          = 222;
+    public static final int KEYCODE_FUNC_6          = 223;
+    public static final int KEYCODE_FUNC_7          = 224;
+    public static final int KEYCODE_FUNC_8          = 225;
+    public static final int KEYCODE_USER1           = 226;
+    public static final int KEYCODE_USER2           = 227;
+    public static final int KEYCODE_USER3           = 228;
+    public static final int KEYCODE_USER4           = 229;
+    public static final int KEYCODE_USER5           = 230;
 
-    private static final int LAST_KEYCODE           = KEYCODE_SCREENSHOT;
+    private static final int LAST_KEYCODE           = KEYCODE_USER5;
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
@@ -840,6 +854,19 @@ public class KeyEvent extends InputEvent implements Parcelable {
         names.append(KEYCODE_BRIGHTNESS_UP, "KEYCODE_BRIGHTNESS_UP");
         names.append(KEYCODE_BRIGHTNESS_AUTO, "KEYCODE_BRIGHTNESS_AUTO");
         names.append(KEYCODE_SCREENSHOT, "KEYCODE_SCREENSHOT");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_1");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_2");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_3");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_4");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_5");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_6");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_7");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_8");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER1");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER2");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER3");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER4");
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER5");
     };
 
     // Symbolic names of all metakeys in bit order from least significant to most significant.
