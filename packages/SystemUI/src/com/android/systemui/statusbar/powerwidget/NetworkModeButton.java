@@ -36,16 +36,15 @@ public class NetworkModeButton extends PowerButton{
     private static final int CM_MODE_3GONLY = 1;
     private static final int CM_MODE_BOTH = 2;
 
-    private static int NETWORK_MODE = NO_NETWORK_MODE_YET;
-    private static int INTENDED_NETWORK_MODE = NO_NETWORK_MODE_YET;
-    private static int CURRENT_INTERNAL_STATE = STATE_INTERMEDIATE;
+    private int mMode = NO_NETWORK_MODE_YET;
+    private int mIntendedMode = NO_NETWORK_MODE_YET;
+    private int mInternalState = STATE_INTERMEDIATE;
 
     public NetworkModeButton() { mType = BUTTON_NETWORKMODE; }
 
     @Override
-    protected void updateState() {
-        Context context = mView.getContext();
-        NETWORK_MODE = get2G3G(context);
+    protected void updateState(Context context) {
+        mMode = get2G3G(context);
         mState = networkModeToState(context);
 
         switch (mState) {
@@ -53,7 +52,7 @@ public class NetworkModeButton extends PowerButton{
             mIcon = R.drawable.stat_2g3g_off;
             break;
         case STATE_ENABLED:
-            if (NETWORK_MODE == Phone.NT_MODE_WCDMA_ONLY) {
+            if (mMode == Phone.NT_MODE_WCDMA_ONLY) {
                 mIcon = R.drawable.stat_3g_on;
             } else {
                 mIcon = R.drawable.stat_2g3g_on;
@@ -65,8 +64,8 @@ public class NetworkModeButton extends PowerButton{
             // the top dark-gray-or-bright-white logo shows the
             // user's intent. This is much easier to see in
             // sunlight.
-            if (CURRENT_INTERNAL_STATE == STATE_TURNING_ON) {
-                if (INTENDED_NETWORK_MODE == Phone.NT_MODE_WCDMA_ONLY) {
+            if (mInternalState == STATE_TURNING_ON) {
+                if (mIntendedMode == Phone.NT_MODE_WCDMA_ONLY) {
                     mIcon = R.drawable.stat_3g_on;
                 } else {
                     mIcon = R.drawable.stat_2g3g_on;
@@ -79,76 +78,67 @@ public class NetworkModeButton extends PowerButton{
     }
 
     @Override
-    protected void toggleState() {
-        Context context = mView.getContext();
+    protected void toggleState(Context context) {
         int currentMode = getCurrentCMMode(context);
 
         Intent intent = new Intent(ACTION_MODIFY_NETWORK_MODE);
-        switch (NETWORK_MODE) {
+        switch (mMode) {
         case Phone.NT_MODE_WCDMA_PREF:
         case Phone.NT_MODE_GSM_UMTS:
             intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_GSM_ONLY);
-            CURRENT_INTERNAL_STATE = STATE_TURNING_OFF;
-            INTENDED_NETWORK_MODE=Phone.NT_MODE_GSM_ONLY;
+            mInternalState = STATE_TURNING_OFF;
+            mIntendedMode = Phone.NT_MODE_GSM_ONLY;
             break;
         case Phone.NT_MODE_WCDMA_ONLY:
-            if(currentMode == CM_MODE_3GONLY) {
+            if (currentMode == CM_MODE_3GONLY) {
                 intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_GSM_ONLY);
-                CURRENT_INTERNAL_STATE = STATE_TURNING_OFF;
-                INTENDED_NETWORK_MODE = Phone.NT_MODE_GSM_ONLY;
+                mInternalState = STATE_TURNING_OFF;
+                mIntendedMode = Phone.NT_MODE_GSM_ONLY;
             } else {
                 intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_WCDMA_PREF);
-                CURRENT_INTERNAL_STATE = STATE_TURNING_ON;
-                INTENDED_NETWORK_MODE = Phone.NT_MODE_WCDMA_PREF;
+                mInternalState = STATE_TURNING_ON;
+                mIntendedMode = Phone.NT_MODE_WCDMA_PREF;
             }
             break;
         case Phone.NT_MODE_GSM_ONLY:
-            if(currentMode == CM_MODE_3GONLY || currentMode == CM_MODE_BOTH) {
+            if (currentMode == CM_MODE_3GONLY || currentMode == CM_MODE_BOTH) {
                 intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_WCDMA_ONLY);
-                CURRENT_INTERNAL_STATE = STATE_TURNING_ON;
-                INTENDED_NETWORK_MODE = Phone.NT_MODE_WCDMA_ONLY;
+                mInternalState = STATE_TURNING_ON;
+                mIntendedMode = Phone.NT_MODE_WCDMA_ONLY;
             } else {
                 intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_WCDMA_PREF);
-                CURRENT_INTERNAL_STATE = STATE_TURNING_ON;
-                INTENDED_NETWORK_MODE = Phone.NT_MODE_WCDMA_PREF;
+                mInternalState = STATE_TURNING_ON;
+                mIntendedMode = Phone.NT_MODE_WCDMA_PREF;
             }
             break;
         }
 
-        NETWORK_MODE = NETWORK_MODE_UNKNOWN;
+        mMode = NETWORK_MODE_UNKNOWN;
         context.sendBroadcast(intent);
     }
 
     @Override
-    protected boolean handleLongClick() {
+    protected boolean handleLongClick(Context context) {
         // it may be better to make an Intent action for this or find the appropriate one
         // we may want to look at that option later
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setClassName("com.android.phone", "com.android.phone.Settings");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mView.getContext().startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getExtras() != null) {
-            NETWORK_MODE = intent.getExtras().getInt(EXTRA_NETWORK_MODE);
+            mMode = intent.getExtras().getInt(EXTRA_NETWORK_MODE);
             //Update to actual state
-            INTENDED_NETWORK_MODE = NETWORK_MODE;
+            mIntendedMode = mMode;
         }
 
         //need to clear intermediate states
-        CURRENT_INTERNAL_STATE = STATE_ENABLED;
-
-        int widgetState = networkModeToState(context);
-        CURRENT_INTERNAL_STATE = widgetState;
-        if (widgetState == STATE_ENABLED) {
-            MobileDataButton mdb = (MobileDataButton)getLoadedButton(BUTTON_MOBILEDATA);
-            if(mdb != null) {
-                mdb.networkModeChanged(context, NETWORK_MODE);
-            }
-        }
+        mInternalState = STATE_ENABLED;
+        mInternalState = networkModeToState(context);
     }
 
     @Override
@@ -173,12 +163,12 @@ public class NetworkModeButton extends PowerButton{
         return state;
     }
 
-    private static int networkModeToState(Context context) {
-        if (CURRENT_INTERNAL_STATE == STATE_TURNING_ON ||
-                CURRENT_INTERNAL_STATE == STATE_TURNING_OFF)
+    private int networkModeToState(Context context) {
+        if (mInternalState == STATE_TURNING_ON || mInternalState == STATE_TURNING_OFF) {
             return STATE_INTERMEDIATE;
+        }
 
-        switch(NETWORK_MODE) {
+        switch (mMode) {
             case Phone.NT_MODE_WCDMA_PREF:
             case Phone.NT_MODE_WCDMA_ONLY:
             case Phone.NT_MODE_GSM_UMTS:
@@ -190,7 +180,7 @@ public class NetworkModeButton extends PowerButton{
             case Phone.NT_MODE_EVDO_NO_CDMA:
             case Phone.NT_MODE_GLOBAL:
                 // need to check wtf is going on
-                Log.d(TAG, "Unexpected network mode (" + NETWORK_MODE + ")");
+                Log.d(TAG, "Unexpected network mode (" + mMode + ")");
                 return STATE_DISABLED;
         }
         return STATE_INTERMEDIATE;

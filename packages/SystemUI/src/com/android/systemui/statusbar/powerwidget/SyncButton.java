@@ -18,7 +18,9 @@ public class SyncButton extends PowerButton {
     private SyncStatusObserver mSyncObserver = new SyncStatusObserver() {
             public void onStatusChanged(int which) {
                 // update state/view if something happened
-                update();
+                if (mView != null) {
+                    update(mView.getContext());
+                }
             }
         };
     private Object mSyncObserverHandle = null;
@@ -38,8 +40,8 @@ public class SyncButton extends PowerButton {
     }
 
     @Override
-    protected void updateState() {
-        if (getSyncState(mView.getContext())) {
+    protected void updateState(Context context) {
+        if (getSyncState(context)) {
             mIcon = R.drawable.stat_sync_on;
             mState = STATE_ENABLED;
         } else {
@@ -49,10 +51,9 @@ public class SyncButton extends PowerButton {
     }
 
     @Override
-    protected void toggleState() {
-        Context context = mView.getContext();
-        ConnectivityManager connManager = (ConnectivityManager)context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+    protected void toggleState(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean backgroundData = getBackgroundDataState(context);
         boolean sync = ContentResolver.getMasterSyncAutomatically();
 
@@ -82,21 +83,21 @@ public class SyncButton extends PowerButton {
     }
 
     @Override
-    protected boolean handleLongClick() {
+    protected boolean handleLongClick(Context context) {
         Intent intent = new Intent("android.settings.SYNC_SETTINGS");
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mView.getContext().startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
-    private static boolean getBackgroundDataState(Context context) {
-        ConnectivityManager connManager = (ConnectivityManager) context
-        .getSystemService(Context.CONNECTIVITY_SERVICE);
+    private boolean getBackgroundDataState(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return connManager.getBackgroundDataSetting();
     }
 
-    private static boolean getSyncState(Context context) {
+    private boolean getSyncState(Context context) {
         boolean backgroundData = getBackgroundDataState(context);
         boolean sync = ContentResolver.getMasterSyncAutomatically();
         return backgroundData && sync;
