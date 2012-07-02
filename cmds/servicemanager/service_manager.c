@@ -31,6 +31,7 @@ static struct {
     { AID_MEDIA, "media.player" },
     { AID_MEDIA, "media.camera" },
     { AID_MEDIA, "media.audio_policy" },
+    { AID_MEDIA, "media.nvidia.audio_alsa" },
     { AID_DRM,   "drm.drmManager" },
     { AID_NFC,   "nfc" },
     { AID_BLUETOOTH, "bluetooth" },
