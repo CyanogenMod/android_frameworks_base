@@ -37,6 +37,7 @@ static struct {
 #ifdef YAMAHAPLAYER
     { AID_MEDIA, "media.yamahaplayer" },
 #endif
+    { AID_MEDIA, "media.nvidia.audio_alsa" },
 #ifdef SECTVOUT
     { AID_MEDIA, "SecTVOutService" },
 #endif
