@@ -61,6 +61,10 @@
 #include <qcom_ui.h>
 #endif
 
+#ifdef SAMSUNG_HDMI_SUPPORT
+#include "SecTVOutService.h"
+#endif
+
 /* ideally AID_GRAPHICS would be in a semi-public header
  * or there would be a way to map a user/group name to its id
  */
@@ -77,6 +81,7 @@ extern "C" void NvDispMgrAutoOrientation(int rotation);
 #endif
 
 namespace android {
+
 // ---------------------------------------------------------------------------
 
 const String16 sHardwareTest("android.permission.HARDWARE_TEST");
@@ -116,6 +121,25 @@ SurfaceFlinger::SurfaceFlinger()
         mUseDithering(false)
 {
     init();
+
+#ifdef SAMSUNG_HDMI_SUPPORT
+    LOGI(">>> Run SecTVOutService");
+    android::SecTVOutService::instantiate();
+#if defined(SAMSUNG_EXYNOS5250)
+    mHdmiClient = SecHdmiClient::getInstance();
+    mHdmiClient->setHdmiEnable(1);
+
+    const int orientation = ISurfaceComposer::eOrientationDefault;
+    if (uint32_t(orientation) == eOrientation90)
+        mHdmiClient->setHdmiRotate(270, 0);
+    else if(uint32_t(orientation) == eOrientation180)
+        mHdmiClient->setHdmiRotate(180, 0);
+    else if(uint32_t(orientation) == eOrientation270)
+        mHdmiClient->setHdmiRotate(90, 0);
+    else
+        mHdmiClient->setHdmiRotate(0, 0);
+#endif
+#endif
 }
 
 void SurfaceFlinger::init()
@@ -613,6 +637,19 @@ void SurfaceFlinger::handleTransactionLocked(uint32_t transactionFlags)
 
             mVisibleRegionsDirty = true;
             mDirtyRegion.set(hw.bounds());
+
+#if defined(SAMSUNG_HDMI_SUPPORT) && defined(SAMSUNG_EXYNOS5250)
+            HWComposer& hwc(graphicPlane(0).displayHardware().getHwComposer());
+            int overlayLayerCount = hwc.getLayerCount(HWC_OVERLAY);
+            if (uint32_t(orientation) == eOrientation90)
+                mHdmiClient->setHdmiRotate(270, overlayLayerCount);
+            else if(uint32_t(orientation) == eOrientation180)
+                mHdmiClient->setHdmiRotate(180, overlayLayerCount);
+            else if(uint32_t(orientation) == eOrientation270)
+                mHdmiClient->setHdmiRotate(90, overlayLayerCount);
+            else
+                mHdmiClient->setHdmiRotate(0, overlayLayerCount);
+#endif
         }
 
         if (currentLayers.size() > mDrawingState.layersSortedByZ.size()) {
@@ -1628,6 +1665,10 @@ void SurfaceFlinger::screenReleased(int dpy)
     // this may be called by a signal handler, we can't do too much in here
     android_atomic_or(eConsoleReleased, &mConsoleSignals);
     signalEvent();
+
+#if defined(SAMSUNG_HDMI_SUPPORT) && defined(SAMSUNG_EXYNOS5250)
+    mHdmiClient->setHdmiEnable(0);
+#endif
 }
 
 void SurfaceFlinger::screenAcquired(int dpy)
@@ -1635,6 +1676,10 @@ void SurfaceFlinger::screenAcquired(int dpy)
     // this may be called by a signal handler, we can't do too much in here
     android_atomic_or(eConsoleAcquired, &mConsoleSignals);
     signalEvent();
+
+#if defined(SAMSUNG_HDMI_SUPPORT) && defined(SAMSUNG_EXYNOS5250)
+    mHdmiClient->setHdmiEnable(1);
+#endif
 }
 
 status_t SurfaceFlinger::dump(int fd, const Vector<String16>& args)
