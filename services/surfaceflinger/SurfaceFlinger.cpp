@@ -61,6 +61,12 @@
 #include <qcom_ui.h>
 #endif
 
+#ifdef SAMSUNG_HDMI_SUPPORT
+#include "SecHdmi.h"
+// true : HDMI cable is pluged in, false: HDMI cable is plugged out
+bool    mHdmiCableInserted;
+#endif
+
 /* ideally AID_GRAPHICS would be in a semi-public header
  * or there would be a way to map a user/group name to its id
  */
@@ -77,6 +83,20 @@ extern "C" void NvDispMgrAutoOrientation(int rotation);
 #endif
 
 namespace android {
+
+#ifdef SAMSUNG_HDMI_SUPPORT
+extern "C" {
+    extern bool blit2Hdmi();
+    extern int SecHdmi_flush();
+    extern int SecHdmi_connect(void);
+    extern int SecHdmi_disconnect(void);
+    extern int SecHdmi_destroy(void);
+    extern void SecHdmi();
+    extern int SecHdmi_create(void);
+    extern void setHdmiStatus(uint32_t status);
+}
+#endif
+
 // ---------------------------------------------------------------------------
 
 const String16 sHardwareTest("android.permission.HARDWARE_TEST");
@@ -150,6 +170,12 @@ void SurfaceFlinger::init()
 SurfaceFlinger::~SurfaceFlinger()
 {
     glDeleteTextures(1, &mWormholeTexName);
+#ifdef SAMSUNG_HDMI_SUPPORT
+    if(SecHdmi_destroy() == false)
+    {
+        LOGE("%s::mSecHdmi.destroy() fail \n", __func__);
+    }
+#endif
 }
 
 sp<IMemoryHeap> SurfaceFlinger::getCblk() const
@@ -314,6 +340,17 @@ status_t SurfaceFlinger::readyToRun()
     // put the origin in the left-bottom corner
     glOrthof(0, w, 0, h, 0, 1); // l=0, r=w ; b=0, t=h
 
+#ifdef SAMSUNG_HDMI_SUPPORT
+    SecHdmi();
+    if(SecHdmi_create() == 0)
+        LOGE("%s::mSecHdmi.create() fail \n", __func__);
+    else
+    {
+        // for it to connect
+        setHdmiStatus(1);
+    }
+#endif
+
     mReadyToRunBarrier.open();
 
     /*
@@ -418,6 +455,11 @@ bool SurfaceFlinger::threadLoop()
 {
     waitForEvent();
 
+#ifdef SAMSUNG_HDMI_SUPPORT
+    //Check For HDMI Detection
+    setHdmiStatus(true);
+#endif
+
     // check for transactions
     if (UNLIKELY(mConsoleSignals)) {
         handleConsoleEvents();
@@ -514,6 +556,11 @@ void SurfaceFlinger::postFramebuffer()
     mLastSwapBufferTime = systemTime() - now;
     mDebugInSwapBuffers = 0;
     mSwapRegion.clear();
+
+#ifdef SAMSUNG_HDMI_SUPPORT
+    if(mHdmiCableInserted == true)
+        blit2Hdmi();
+#endif
 }
 
 void SurfaceFlinger::handleConsoleEvents()
@@ -1391,6 +1438,55 @@ int SurfaceFlinger::setOrientation(DisplayID dpy,
     }
     return orientation;
 }
+
+#ifdef SAMSUNG_HDMI_SUPPORT
+void setHdmiStatus(uint32_t status)
+{
+    bool hdmiCableInserted = (bool)status;
+
+    if(mHdmiCableInserted == hdmiCableInserted)
+        return;
+
+    if(hdmiCableInserted == true)
+    {
+        if(SecHdmi_connect() == 0) {
+            hdmiCableInserted = false;
+        }
+    } else {
+        if(SecHdmi_disconnect() == 0) {
+            LOGE("%s::mSecHdmi.disconnect() fail\n", __func__);
+        }
+    }
+
+    mHdmiCableInserted = hdmiCableInserted;
+
+    if(mHdmiCableInserted == true) {
+        blit2Hdmi();
+    }
+}
+
+void setHdmiMode(uint32_t mode) {
+}
+
+void setHdmiResolution(uint32_t resolution) {
+}
+
+void setHdmiHdcp(uint32_t hdcp_en) {
+}
+
+bool blit2Hdmi(void) {
+    if(mHdmiCableInserted == false) {
+        LOGE("mHdmiCableInserted == false fail");
+        return false;
+    }
+
+    if(SecHdmi_flush() == false) {
+        LOGE("%s::mSecHdmi.flush() fail\n", __func__);
+    }
+
+    return true;
+}
+#endif
 
 #ifdef QCOM_HDMI_OUT
 void SurfaceFlinger::updateHwcExternalDisplay(int externaltype)
