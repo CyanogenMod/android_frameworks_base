@@ -1974,6 +1974,18 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.action.PROVIDER_CHANGED";
 
     /**
+     * Broadcast Action: Carrier supports HD-Voice (Wideband AMR).
+     *
+     * <p>The intent will have the following extra values:
+     * <ul>
+     *   <li><em>state</em> - 0 for unsupported, 1 for supported. </li>
+     * </ul>
+     * </ul>
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_WB_AMR = "android.intent.action.WB_AMR";
+
+    /**
      * Broadcast Action: Wired Headset plugged in or unplugged.
      *
      * <p>The intent will have the following extra values:
