@@ -253,7 +253,8 @@ private:
     sp<MediaSource> mSource;
 
     MediaBuffer *mInputBuffer;
-    int32_t numChannels;
+    int32_t mNumOutputChannels;
+    int32_t mNumInputChannels;
     int mSampleRate;
     int64_t mLatencyUs;
     size_t mFrameSize;
@@ -303,7 +304,7 @@ private:
     };
 
     size_t fillBuffer(void *data, size_t size);
-
+    void convertMonoToStereo(int16_t *data, size_t size);
     int64_t getRealTimeUsLocked();
     int64_t getTimeStamp(A2DPState state);
 
