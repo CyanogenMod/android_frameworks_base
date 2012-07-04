@@ -1292,7 +1292,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 mHasMobileDataFeature ? mDataSignalIconId : mWifiIconId;
             mContentDescriptionCombinedSignal = mHasMobileDataFeature
                 ? mContentDescriptionDataType : mContentDescriptionWifi;
+        }
 
+        if (!mDataConnected) {
+            Log.d(TAG, "refreshViews: Data not connected!! Set no data type icon / Roaming");
             mDataTypeIconId = 0;
             mQSDataTypeIconId = 0;
             if (isCdma()) {
