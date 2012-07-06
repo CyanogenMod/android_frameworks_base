@@ -23,6 +23,7 @@ extern AudioCodec *newUlawCodec();
 extern AudioCodec *newGsmCodec();
 extern AudioCodec *newAmrCodec();
 extern AudioCodec *newGsmEfrCodec();
+extern AudioCodec *newSpeexCodec();
 
 struct AudioCodecType {
     const char *name;
@@ -33,6 +34,7 @@ struct AudioCodecType {
     {"GSM", newGsmCodec},
     {"AMR", newAmrCodec},
     {"GSM-EFR", newGsmEfrCodec},
+	{"Speex", newSpeexCodec},
     {NULL, NULL},
 };
 
