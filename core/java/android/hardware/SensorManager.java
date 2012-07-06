@@ -16,6 +16,7 @@
 
 package android.hardware;
 
+import android.content.res.Resources;
 import android.os.Looper;
 import android.os.Process;
 import android.os.RemoteException;
@@ -659,11 +660,22 @@ public class SensorManager
                     i = sensors_module_get_next_sensor(sensor, i);
 
                     if (i>=0) {
-                        //Log.d(TAG, "found sensor: " + sensor.getName() +
-                        //        ", handle=" + sensor.getHandle());
+                        //Log.i(TAG, "found sensor: " + sensor.getName() +
+                        //        ", handle=" + sensor.getHandle() + ", type=" + sensor.getType());
                         sensor.setLegacyType(getLegacySensorType(sensor.getType()));
                         fullList.add(sensor);
                         sHandleToSensor.append(sensor.getHandle(), sensor);
+
+                        // fake light sensor max range and resolution
+                        if (sensor.getType() == Sensor.TYPE_LIGHT) {
+                            float range = (float) Resources.getSystem().getInteger(com.android.internal.R.integer.config_light_sensor_range);
+                            float resolution = (float) Resources.getSystem().getInteger(com.android.internal.R.integer.config_light_sensor_resolution);
+
+                            if (range > 0 && resolution > 0) {
+                                Log.i(TAG, "fake light sensor values: range=" + range + ", resolution=" + resolution);
+                                sensor.setRange(range, resolution);
+                            }
+                        }
                     }
                 } while (i>0);
 

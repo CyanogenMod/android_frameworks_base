@@ -280,6 +280,16 @@
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">false</bool>
 
+    <!-- In case the sensor hal is reporting a wrong max range for the light sensor,
+         set this > 0 to fake the range value at SensorManager.
+         Depends on "config_light_sensor_resolution" -->
+    <integer translatable="false" name="config_light_sensor_range">0</integer>
+
+    <!-- In case the sensor hal is reporting a wrong resolution for the light sensor,
+         set this > 0 to fake the resolution value at SensorManager.
+         Depends on "config_light_sensor_range" -->
+    <integer translatable="false" name="config_light_sensor_resolution">0</integer>
+
     <!-- Don't name config resources like this.  It should look like config_annoyDianne -->
     <bool name="config_annoy_dianne">true</bool>
 
