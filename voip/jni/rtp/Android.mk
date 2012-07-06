@@ -30,7 +30,8 @@ LOCAL_SRC_FILES := \
 LOCAL_SRC_FILES += \
 	AmrCodec.cpp \
 	G711Codec.cpp \
-	GsmCodec.cpp
+	GsmCodec.cpp \
+	SpeexCodec.cpp
 
 LOCAL_SHARED_LIBRARIES := \
 	libnativehelper \
@@ -39,11 +40,12 @@ LOCAL_SHARED_LIBRARIES := \
 	libmedia \
 	libstagefright
 
-LOCAL_STATIC_LIBRARIES := libgsm
+LOCAL_STATIC_LIBRARIES := libgsm libspeex
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
 	external/libgsm/inc \
+	external/speex/include \
 	frameworks/base/media/libstagefright/codecs/amrnb/common/include \
 	frameworks/base/media/libstagefright/codecs/amrnb/common/ \
 	frameworks/base/media/libstagefright/codecs/amrnb/enc/include \

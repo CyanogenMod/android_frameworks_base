@@ -79,8 +79,10 @@ public class AudioCodec {
      * more details about these features in RFC 4867.
      */
     public static final AudioCodec AMR = new AudioCodec(97, "AMR/8000", null);
+	
+	public static final AudioCodec SPEEX = new AudioCodec(92, "SPEEX/8000", null);
 
-    private static final AudioCodec[] sCodecs = {GSM_EFR, AMR, GSM, PCMU, PCMA};
+    private static final AudioCodec[] sCodecs = {SPEEX, GSM_EFR, AMR, GSM, PCMU, PCMA};
 
     private AudioCodec(int type, String rtpmap, String fmtp) {
         this.type = type;
