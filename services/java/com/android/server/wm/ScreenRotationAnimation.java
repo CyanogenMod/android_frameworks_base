@@ -99,7 +99,7 @@ class ScreenRotationAnimation {
         try {
             try {
                 mSurface = new Surface(session, 0, "FreezeSurface",
-                        -1, mWidth, mHeight, PixelFormat.OPAQUE, Surface.FX_SURFACE_SCREENSHOT | Surface.HIDDEN);
+                        -1, mWidth, mHeight, PixelFormat.OPAQUE, Surface.FX_SURFACE_NORMAL);
                 if (mSurface == null || !mSurface.isValid()) {
                     // Screenshot failed, punt.
                     mSurface = null;
@@ -116,6 +116,32 @@ class ScreenRotationAnimation {
                             "  FREEZE " + mSurface + ": CREATE");
 
             setRotation(originalRotation);
+
+            Rect rect = new Rect(0, 0, mWidth, mHeight);
+            Canvas canvas = null;
+
+            try {
+                canvas = mSurface.lockCanvas(rect);
+            } catch (IllegalArgumentException e) {
+                Slog.w(TAG, "Unable to lock surface", e);
+            } catch (Surface.OutOfResourcesException e) {
+                Slog.w(TAG, "Unable to lock surface", e);
+            }
+
+            Bitmap screenshot = Surface.screenshot(0, 0);
+            if (canvas == null || screenshot == null) {
+                Slog.w(TAG, "Null surface canvas");
+                mSurface.destroy();
+                mSurface = null;
+                return;
+            }
+
+            Paint paint = new Paint(0);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+
+            canvas.drawBitmap(screenshot, 0, 0, paint);
+            mSurface.unlockCanvasAndPost(canvas);
+
         } finally {
             if (!inTransaction) {
                 Surface.closeTransaction();
