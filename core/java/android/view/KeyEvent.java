@@ -592,15 +592,53 @@ public class KeyEvent extends InputEvent implements Parcelable {
      * Used to launch a calculator application. */
     public static final int KEYCODE_CALCULATOR      = 210;
 
-    public static final int KEYCODE_TOGGLE_WIFI     = 211;
-    public static final int KEYCODE_TOGGLE_BT       = 212;
-    public static final int KEYCODE_TOGGLE_TOUCHPAD = 213;
-    public static final int KEYCODE_BRIGHTNESS_DOWN = 214;
-    public static final int KEYCODE_BRIGHTNESS_UP   = 215;
-    public static final int KEYCODE_BRIGHTNESS_AUTO = 216;
-    public static final int KEYCODE_SCREENSHOT      = 217;
+    /** Please note all remaining keycodes need to be
+     * hidden from the api */
 
-    private static final int LAST_KEYCODE           = KEYCODE_SCREENSHOT;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_WIFI     = 211;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_BT       = 212;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_TOUCHPAD = 213;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_DOWN = 214;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_UP   = 215;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_AUTO = 216;
+    /** @hide */
+    public static final int KEYCODE_SCREENSHOT      = 217;
+    /** @hide */
+    /** FUNC_1 through USER5 to support keypad mapping */
+    /** @hide */
+    public static final int KEYCODE_FUNC_1          = 218;
+    /** @hide */
+    public static final int KEYCODE_FUNC_2          = 219;
+    /** @hide */
+    public static final int KEYCODE_FUNC_3          = 220;
+    /** @hide */
+    public static final int KEYCODE_FUNC_4          = 221;
+    /** @hide */
+    public static final int KEYCODE_FUNC_5          = 222;
+    /** @hide */
+    public static final int KEYCODE_FUNC_6          = 223;
+    /** @hide */
+    public static final int KEYCODE_FUNC_7          = 224;
+    /** @hide */
+    public static final int KEYCODE_FUNC_8          = 225;
+    /** @hide */
+    public static final int KEYCODE_USER1           = 226;
+    /** @hide */
+    public static final int KEYCODE_USER2           = 227;
+    /** @hide */
+    public static final int KEYCODE_USER3           = 228;
+    /** @hide */
+    public static final int KEYCODE_USER4           = 229;
+    /** @hide */
+    public static final int KEYCODE_USER5           = 230;
+
+    private static final int LAST_KEYCODE           = KEYCODE_USER5;
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
@@ -833,13 +871,46 @@ public class KeyEvent extends InputEvent implements Parcelable {
         names.append(KEYCODE_CALENDAR, "KEYCODE_CALENDAR");
         names.append(KEYCODE_MUSIC, "KEYCODE_MUSIC");
         names.append(KEYCODE_CALCULATOR, "KEYCODE_CALCULATOR");
+	/** @hide */
         names.append(KEYCODE_TOGGLE_WIFI, "KEYCODE_TOGGLE_WIFI");
+	/** @hide */
         names.append(KEYCODE_TOGGLE_BT, "KEYCODE_TOGGLE_BT");
+	/** @hide */
         names.append(KEYCODE_TOGGLE_TOUCHPAD, "KEYCODE_TOGGLE_TOUCHPAD");
+	/** @hide */
         names.append(KEYCODE_BRIGHTNESS_DOWN, "KEYCODE_BRIGHTNESS_DOWN");
+	/** @hide */
         names.append(KEYCODE_BRIGHTNESS_UP, "KEYCODE_BRIGHTNESS_UP");
+	/** @hide */
         names.append(KEYCODE_BRIGHTNESS_AUTO, "KEYCODE_BRIGHTNESS_AUTO");
+	/** @hide */
         names.append(KEYCODE_SCREENSHOT, "KEYCODE_SCREENSHOT");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_1");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_2");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_3");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_4");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_5");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_6");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_7");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_FUNC_8");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER1");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER2");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER3");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER4");
+	/** @hide */
+        names.append(KEYCODE_SCREENSHOT, "KEYCODE_USER5");
     };
 
     // Symbolic names of all metakeys in bit order from least significant to most significant.
