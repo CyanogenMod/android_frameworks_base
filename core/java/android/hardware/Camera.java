@@ -1656,7 +1656,7 @@ public class Camera {
         private static final String KEY_SCENE_DETECT = "scene-detect";
         private static final String KEY_FLASH_MODE = "flash-mode";
         private static final String KEY_FOCUS_MODE = "focus-mode";
-		private static final String KEY_ISO_MODE = "iso";
+        private static final String KEY_ISO_MODE = "iso";
         private static final String KEY_LENSSHADE = "lensshade";
         private static final String KEY_HISTOGRAM = "histogram";
         private static final String KEY_SKIN_TONE_ENHANCEMENT = "skinToneEnhancement";
@@ -1703,7 +1703,7 @@ public class Camera {
         private static final String KEY_SELECTABLE_ZONE_AF = "selectable-zone-af";
         private static final String KEY_FACE_DETECTION = "face-detection";
         private static final String KEY_MEMORY_COLOR_ENHANCEMENT = "mce";
-	private static final String KEY_REDEYE_REDUCTION = "redeye-reduction";
+        private static final String KEY_REDEYE_REDUCTION = "redeye-reduction";
         private static final String KEY_ZSL = "zsl";
         private static final String KEY_CAMERA_MODE = "camera-mode";
         private static final String KEY_VIDEO_HIGH_FRAME_RATE = "video-hfr";
@@ -1753,8 +1753,8 @@ public class Camera {
         public static final String ANTIBANDING_50HZ = "50hz";
         public static final String ANTIBANDING_60HZ = "60hz";
         public static final String ANTIBANDING_OFF = "off";
-        //Values for ISO settings
 
+        //Values for ISO settings
         /** @hide */
         public static final String ISO_AUTO = "auto";
         /** @hide */
@@ -3787,7 +3787,7 @@ public class Camera {
          * @hide
          * Gets the supported ISO values.
          *
-         * @return a List of FLASH_MODE_XXX string constants. null if flash mode
+         * @return a list of ISO_XXX string constants. null if ISO
          *         setting is not supported.
          */
         public List<String> getSupportedIsoValues() {
