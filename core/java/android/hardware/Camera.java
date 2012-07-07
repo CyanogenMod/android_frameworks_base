@@ -1656,7 +1656,7 @@ public class Camera {
         private static final String KEY_SCENE_DETECT = "scene-detect";
         private static final String KEY_FLASH_MODE = "flash-mode";
         private static final String KEY_FOCUS_MODE = "focus-mode";
-		private static final String KEY_ISO_MODE = "iso";
+        private /*static final*/ String KEY_ISO_MODE = "iso";
         private static final String KEY_LENSSHADE = "lensshade";
         private static final String KEY_HISTOGRAM = "histogram";
         private static final String KEY_SKIN_TONE_ENHANCEMENT = "skinToneEnhancement";
@@ -3787,11 +3787,20 @@ public class Camera {
          * @hide
          * Gets the supported ISO values.
          *
-         * @return a List of FLASH_MODE_XXX string constants. null if flash mode
+         * @return a list of ISO_XXX string constants. null if ISO
          *         setting is not supported.
          */
         public List<String> getSupportedIsoValues() {
             String str = get(KEY_ISO_MODE + SUPPORTED_VALUES_SUFFIX);
+            if (str == null && get("nv-mode-hint") != null) {
+                /* Support NV cams */
+                KEY_ISO_MODE = "nv-picture-iso";
+                str = get(KEY_ISO_MODE + SUPPORTED_VALUES_SUFFIX);
+            } else if (str == null && get("iso-mode-values") != null) {
+                /* Support OMAP cams */
+                KEY_ISO_MODE = "iso-mode";
+                str = get(KEY_ISO_MODE + SUPPORTED_VALUES_SUFFIX);
+            }
             return split(str);
         }
 
