@@ -669,7 +669,7 @@ public class CatService extends Handler implements AppInterface {
                 if (msg.obj == null)
                     break;
                 ar = (AsyncResult) msg.obj;
-                if (ar == null || ar.result == null)
+                if (ar == null || ar.result == null || mCurrntCmd == null || mCurrntCmd.mCmdDet == null)
                     break;
                 sendResult = (int[]) ar.result;
                 switch (sendResult[0]) {
