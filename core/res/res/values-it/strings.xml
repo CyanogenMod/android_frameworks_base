@@ -601,6 +601,8 @@
     <item msgid="2506857312718630823">"ICQ"</item>
     <item msgid="1648797903785279353">"Jabber"</item>
   </string-array>
+    <string name="toast_rotation_unlocked">Rotazione display sbloccata</string>
+    <string name="toast_rotation_locked">Rotazione display bloccata</string>
     <string name="phoneTypeCustom" msgid="1644738059053355820">"Personalizzato"</string>
     <string name="phoneTypeHome" msgid="2570923463033985887">"Casa"</string>
     <string name="phoneTypeMobile" msgid="6501463557754751037">"Cellulare"</string>
