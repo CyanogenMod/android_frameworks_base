@@ -580,8 +580,6 @@ public:
     static const char KEY_FULL_VIDEO_SNAP_SUPPORTED[];
 
 #ifdef QCOM_HARDWARE
-    static const char KEY_ISO_MODE[];
-    static const char KEY_SUPPORTED_ISO_MODES[];
     static const char KEY_LENSSHADE[] ;
     static const char KEY_SUPPORTED_LENSSHADE_MODES[] ;
 
@@ -593,6 +591,10 @@ public:
     static const char KEY_GPS_ALTITUDE_REF[];
     static const char KEY_GPS_STATUS[];
     static const char KEY_EXIF_DATETIME[];
+#ifndef SAMSUNG_CAMERA_HARDWARE
+    static const char KEY_ISO_MODE[];
+    static const char KEY_SUPPORTED_ISO_MODES[];
+#endif
 #endif
 
     // The state of the video stabilization. If set to true, both the
