@@ -2370,11 +2370,18 @@ public final class Settings {
         public static final String STATUS_BAR_SIGNAL_TEXT = "status_bar_signal";
 
          /**
-         * Whether to control brightness from status bar
+         * Whether to control brightness from status bar (slide method)
          *
          * @hide
          */
-        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+        public static final String STATUS_BAR_BRIGHTNESS_CONTROL_SLIDE = "status_bar_brightness_control_slide";
+
+         /**
+         * Whether to control brightness from status bar (longpress method)
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_CONTROL_LONGPRESS = "status_bar_brightness_control_longpress";
 
         /**
          * Whether to show the IME switcher in the status bar
