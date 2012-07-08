@@ -54,12 +54,14 @@ import android.util.Slog;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -130,6 +132,8 @@ public class PhoneStatusBar extends StatusBar {
     private boolean mShowClock;
     private boolean mBrightnessControl;
     private boolean mAutoBrightness;
+
+    private Handler mBrightnessHandler = new Handler();
 
     // fling gesture tuning parameters, scaled to display density
     private float mSelfExpandVelocityPx; // classic value: 2000px/s
@@ -1541,6 +1545,31 @@ public class PhoneStatusBar extends StatusBar {
         stopTracking();
     }
 
+    private void adjustBrightness(float x) {
+        float raw = (x / mScreenWidth);
+
+        // Add a padding to the brightness control on both sides to make it easier
+        // to reach min/max brightness
+        float padded = Math.min(1.0f - BRIGHTNESS_CONTROL_PADDING, Math.max(BRIGHTNESS_CONTROL_PADDING, raw));
+        float value = (padded - BRIGHTNESS_CONTROL_PADDING) / (1 - (2.0f * BRIGHTNESS_CONTROL_PADDING));
+
+        int newBrightness = mMinBrightness + (int) Math.round(value *
+                (android.os.Power.BRIGHTNESS_ON - mMinBrightness));
+
+        newBrightness = Math.min(newBrightness, android.os.Power.BRIGHTNESS_ON);
+        newBrightness = Math.max(newBrightness, mMinBrightness);
+        try {
+            IPowerManager power = IPowerManager.Stub.asInterface(ServiceManager.getService("power"));
+            if (power != null) {
+                power.setBacklightBrightness(newBrightness);
+                Settings.System.putInt(mContext.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS,
+                        newBrightness);
+            }
+        } catch (RemoteException e) {
+            Slog.w(TAG, "Setting Brightness failed: " + e);
+        }
+    }
+
     boolean interceptTouchEvent(MotionEvent event) {
         if (SPEW) {
             Slog.d(TAG, "Touch: rawY=" + event.getRawY() + " event=" + event + " mDisabled="
@@ -1564,6 +1593,19 @@ public class PhoneStatusBar extends StatusBar {
         final int y = (int)event.getRawY();
         if (action == MotionEvent.ACTION_DOWN) {
             mLinger = 0;
+
+            if (mBrightnessControl && !mAutoBrightness) {
+                final float x = event.getRawX();
+                mBrightnessHandler.removeCallbacksAndMessages(null);
+                mBrightnessHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        adjustBrightness(x);
+                        mStatusBarView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    }
+                }, ViewConfiguration.getLongPressTimeout());
+            }
+
             if (!mExpanded) {
                 mViewDelta = statusBarSize - y;
             } else {
@@ -1594,40 +1636,25 @@ public class PhoneStatusBar extends StatusBar {
                         yVel = Math.abs(yVel);
                         if (yVel < 50.0f) {
                             if (mLinger > 20) {
-                                float x = (float) event.getRawX();
-                                float raw = (x / mScreenWidth);
-
-                                // Add a padding to the brightness control on both sides to make it easier
-                                // to reach min/max brightness
-                                float padded = Math.min(1.0f - BRIGHTNESS_CONTROL_PADDING, Math.max(BRIGHTNESS_CONTROL_PADDING, raw));
-                                float value = (padded - BRIGHTNESS_CONTROL_PADDING) / (1 - (2.0f * BRIGHTNESS_CONTROL_PADDING));
-
-                                int newBrightness = mMinBrightness + (int) Math.round(value *
-                                        (android.os.Power.BRIGHTNESS_ON - mMinBrightness));
-
-                                newBrightness = Math.min(newBrightness, android.os.Power.BRIGHTNESS_ON);
-                                newBrightness = Math.max(newBrightness, mMinBrightness);
-                                try {
-                                    IPowerManager power = IPowerManager.Stub.asInterface(ServiceManager.getService("power"));
-                                    if (power != null) {
-                                        power.setBacklightBrightness(newBrightness);
-                                        Settings.System.putInt(mContext.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS,
-                                                newBrightness);
-                                    }
-                                } catch (RemoteException e) {
-                                    Slog.w(TAG, "Setting Brightness failed: " + e);
-                                }
+                                mBrightnessHandler.removeCallbacksAndMessages(null);
+                                adjustBrightness(event.getRawX());
                             } else {
                                 mLinger++;
                             }
                         }
                     }
                 } else {
+                    if (mBrightnessControl && !mAutoBrightness) {
+                        mBrightnessHandler.removeCallbacksAndMessages(null);
+                    }
                     mAnimatingReveal = false;
                     updateExpandedViewPos(y + mViewDelta);
                 }
             } else if (action == MotionEvent.ACTION_UP
                     || action == MotionEvent.ACTION_CANCEL) {
+                if (mBrightnessControl && !mAutoBrightness) {
+                    mBrightnessHandler.removeCallbacksAndMessages(null);
+                }
                 mLinger = 0;
                 mVelocityTracker.computeCurrentVelocity(1000);
 
