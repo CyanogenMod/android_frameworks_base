@@ -95,6 +95,11 @@ static const uint32_t kMinThreadSleepTimeUs = 5000;
 // maximum divider applied to the active sleep time in the mixer thread loop
 static const uint32_t kMaxThreadSleepTimeShift = 2;
 
+#ifdef HAS_SAMSUNG_VOLUME_BUG
+float gPrevMusicStreamVolume = 0;
+bool gMusicStreamIsMuted = false;
+bool gMusicStreamNeedsPrevVolume = false;
+#endif
 
 // ----------------------------------------------------------------------------
 
@@ -2527,9 +2532,42 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
                     track->setPaused();
                 }
             } else {
+#ifdef HAS_SAMSUNG_VOLUME_BUG
+                if (track->type() == AUDIO_STREAM_MUSIC && !track->isMuted() && !track->isPausing()) {
+                    if(mStreamTypes[AUDIO_STREAM_MUSIC].volume > 0 && !gMusicStreamNeedsPrevVolume) {
+                        gPrevMusicStreamVolume = mStreamTypes[AUDIO_STREAM_MUSIC].volume;
+                        LOGD("Stored volume = %f", gPrevMusicStreamVolume);
+                    } else {
+                        gMusicStreamIsMuted = true;
+                    }
+                } else if (track->type() == AUDIO_STREAM_MUSIC && (track->isMuted() || track->isPausing())) {
+                    gMusicStreamIsMuted = true;
+                }
 
+                if (track->type() == AUDIO_STREAM_NOTIFICATION && gMusicStreamIsMuted) {
+                    LOGD("Music stream needs volume restore!");
+                    LOGD("gPrevMusicStreamVolume = %f", gPrevMusicStreamVolume);
+                    gMusicStreamNeedsPrevVolume = true;
+                }
+#endif
                 // read original volumes with volume control
                 float typeVolume = mStreamTypes[track->type()].volume;
+
+#ifdef HAS_SAMSUNG_VOLUME_BUG
+                if (track->type() == AUDIO_STREAM_MUSIC && typeVolume > 0 && !track->isMuted() &&
+                        !track->isPausing() && gMusicStreamNeedsPrevVolume) {
+                    LOGI("Restoring last known good volume value on music stream!");
+                    LOGI("gPrevMusicStreamVolume = %f", gPrevMusicStreamVolume);
+                    mStreamTypes[AUDIO_STREAM_MUSIC].volume = gPrevMusicStreamVolume;
+                    typeVolume = gPrevMusicStreamVolume;
+                    gMusicStreamIsMuted = false;
+                    gMusicStreamNeedsPrevVolume = false;
+                } else if (track->type() == AUDIO_STREAM_MUSIC && typeVolume > 0
+                        && !track->isMuted() && !track->isPausing()) {
+                    gMusicStreamIsMuted = false;
+                }
+#endif
+
                 float v = masterVolume * typeVolume;
                 vl = (uint32_t)(v * cblk->volume[0]) << 12;
                 vr = (uint32_t)(v * cblk->volume[1]) << 12;
