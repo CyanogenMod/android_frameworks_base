@@ -54,6 +54,7 @@ import android.util.Slog;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -126,10 +127,12 @@ public class PhoneStatusBar extends StatusBar {
     private static final boolean CLOSE_PANEL_WHEN_EMPTIED = true;
 
     private static final float BRIGHTNESS_CONTROL_PADDING = 0.15f;
+    private static final int BRIGHTNESS_LONGPRESS_TIMEOUT = 1000; // ms
 
     private boolean mShowClock;
     private boolean mBrightnessControl;
-    private boolean mAutoBrightness;
+
+    private Handler mBrightnessHandler = new Handler();
 
     // fling gesture tuning parameters, scaled to display density
     private float mSelfExpandVelocityPx; // classic value: 2000px/s
@@ -237,6 +240,7 @@ public class PhoneStatusBar extends StatusBar {
     int mViewDelta;
     int[] mAbsPos = new int[2];
     int mLinger = 0;
+    int mMove = 0;
     Runnable mPostCollapseCleanup = null;
 
     // last theme that was applied in order to detect theme change (as opposed
@@ -273,11 +277,10 @@ public class PhoneStatusBar extends StatusBar {
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-            mBrightnessControl = Settings.System.getInt(resolver,
-                    Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) != 0;
-            mAutoBrightness = Settings.System.getInt(resolver,
-                    Settings.System.SCREEN_BRIGHTNESS_MODE, 0) ==
-                    Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+            boolean autoBrightness = Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, 0) ==
+                            Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+            mBrightnessControl = !autoBrightness &
+                    Settings.System.getInt(resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
         }
     }
 
@@ -1541,6 +1544,31 @@ public class PhoneStatusBar extends StatusBar {
         stopTracking();
     }
 
+    private void adjustBrightness(float x) {
+        float raw = (x / mScreenWidth);
+
+        // Add a padding to the brightness control on both sides to make it easier
+        // to reach min/max brightness
+        float padded = Math.min(1.0f - BRIGHTNESS_CONTROL_PADDING, Math.max(BRIGHTNESS_CONTROL_PADDING, raw));
+        float value = (padded - BRIGHTNESS_CONTROL_PADDING) / (1 - (2.0f * BRIGHTNESS_CONTROL_PADDING));
+
+        int newBrightness = mMinBrightness + (int) Math.round(value *
+                (android.os.Power.BRIGHTNESS_ON - mMinBrightness));
+
+        newBrightness = Math.min(newBrightness, android.os.Power.BRIGHTNESS_ON);
+        newBrightness = Math.max(newBrightness, mMinBrightness);
+        try {
+            IPowerManager power = IPowerManager.Stub.asInterface(ServiceManager.getService("power"));
+            if (power != null) {
+                power.setBacklightBrightness(newBrightness);
+                Settings.System.putInt(mContext.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS,
+                        newBrightness);
+            }
+        } catch (RemoteException e) {
+            Slog.w(TAG, "Setting Brightness failed: " + e);
+        }
+    }
+
     boolean interceptTouchEvent(MotionEvent event) {
         if (SPEW) {
             Slog.d(TAG, "Touch: rawY=" + event.getRawY() + " event=" + event + " mDisabled="
@@ -1564,6 +1592,8 @@ public class PhoneStatusBar extends StatusBar {
         final int y = (int)event.getRawY();
         if (action == MotionEvent.ACTION_DOWN) {
             mLinger = 0;
+            mMove = 0;
+
             if (!mExpanded) {
                 mViewDelta = statusBarSize - y;
             } else {
@@ -1583,52 +1613,59 @@ public class PhoneStatusBar extends StatusBar {
                     trackMovement(event);
                 }
             }
+
+            if (mTracking && mBrightnessControl) {
+                final float x = event.getRawX();
+                mBrightnessHandler.removeCallbacksAndMessages(null);
+                mBrightnessHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        adjustBrightness(x);
+                        mStatusBarView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    }
+                }, BRIGHTNESS_LONGPRESS_TIMEOUT);
+            }
+
         } else if (mTracking) {
             trackMovement(event);
             final int minY = statusBarSize + mCloseView.getHeight();
             if (action == MotionEvent.ACTION_MOVE) {
                 if (mAnimatingReveal && y < minY) {
-                    if (mBrightnessControl && !mAutoBrightness) {
+                    if (mBrightnessControl) {
                         mVelocityTracker.computeCurrentVelocity(1000);
                         float yVel = mVelocityTracker.getYVelocity();
                         yVel = Math.abs(yVel);
                         if (yVel < 50.0f) {
                             if (mLinger > 20) {
-                                float x = (float) event.getRawX();
-                                float raw = (x / mScreenWidth);
-
-                                // Add a padding to the brightness control on both sides to make it easier
-                                // to reach min/max brightness
-                                float padded = Math.min(1.0f - BRIGHTNESS_CONTROL_PADDING, Math.max(BRIGHTNESS_CONTROL_PADDING, raw));
-                                float value = (padded - BRIGHTNESS_CONTROL_PADDING) / (1 - (2.0f * BRIGHTNESS_CONTROL_PADDING));
-
-                                int newBrightness = mMinBrightness + (int) Math.round(value *
-                                        (android.os.Power.BRIGHTNESS_ON - mMinBrightness));
-
-                                newBrightness = Math.min(newBrightness, android.os.Power.BRIGHTNESS_ON);
-                                newBrightness = Math.max(newBrightness, mMinBrightness);
-                                try {
-                                    IPowerManager power = IPowerManager.Stub.asInterface(ServiceManager.getService("power"));
-                                    if (power != null) {
-                                        power.setBacklightBrightness(newBrightness);
-                                        Settings.System.putInt(mContext.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS,
-                                                newBrightness);
-                                    }
-                                } catch (RemoteException e) {
-                                    Slog.w(TAG, "Setting Brightness failed: " + e);
-                                }
+                                adjustBrightness(event.getRawX());
                             } else {
                                 mLinger++;
                             }
                         }
+                        float xVel = mVelocityTracker.getXVelocity();
+                        xVel = Math.abs(xVel);
+                        if (xVel > 50.0f) {
+                            if (mMove > 20) {
+                                mBrightnessHandler.removeCallbacksAndMessages(null);
+                            } else {
+                                mMove++;
+                            }
+                        }
                     }
                 } else {
+                    if (mBrightnessControl) {
+                        mBrightnessHandler.removeCallbacksAndMessages(null);
+                    }
                     mAnimatingReveal = false;
                     updateExpandedViewPos(y + mViewDelta);
                 }
             } else if (action == MotionEvent.ACTION_UP
                     || action == MotionEvent.ACTION_CANCEL) {
+                if (mBrightnessControl) {
+                    mBrightnessHandler.removeCallbacksAndMessages(null);
+                }
                 mLinger = 0;
+                mMove = 0;
                 mVelocityTracker.computeCurrentVelocity(1000);
 
                 float yVel = mVelocityTracker.getYVelocity();
