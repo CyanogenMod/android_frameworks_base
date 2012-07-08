@@ -95,6 +95,11 @@ static const uint32_t kMinThreadSleepTimeUs = 5000;
 // maximum divider applied to the active sleep time in the mixer thread loop
 static const uint32_t kMaxThreadSleepTimeShift = 2;
 
+#ifdef HAS_SAMSUNG_VOLUME_BUG
+float mPrevVolume = 0;
+bool mIsMuted = false;
+bool mNeedsPrevVolume = false;
+#endif
 
 // ----------------------------------------------------------------------------
 
@@ -2522,18 +2527,41 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
             uint32_t vl, vr, va;
             if (track->isMuted() || track->isPausing() ||
                 mStreamTypes[track->type()].mute) {
+                mPrevVolume = mStreamTypes[track->type()].volume;
                 vl = vr = va = 0;
                 if (track->isPausing()) {
                     track->setPaused();
                 }
             } else {
-
+#ifdef HAS_SAMSUNG_VOLUME_BUG
+                if (track->type() == 3) {
+                    if(mStreamTypes[3].volume > 0) {
+                        mPrevVolume = mStreamTypes[track->type()].volume;
+                    } else {
+                        mIsMuted = true;
+                    }
+                }
+                
+                if (track->type() == 5 && mIsMuted) {
+                    mNeedsPrevVolume = true;
+                }
+#endif
                 // read original volumes with volume control
                 float typeVolume = mStreamTypes[track->type()].volume;
+
+#ifdef HAS_SAMSUNG_VOLUME_BUG
+                if (track->type() == 3 && typeVolume > 0 && mNeedsPrevVolume) {
+                    LOGI("Restoring last known good volume value on music track.");
+                    LOGI("mPrevVolume = %f", mPrevVolume);
+                    mStreamTypes[track->type()].volume = mPrevVolume;
+                    typeVolume = mPrevVolume;
+                    mIsMuted = false;
+                    mNeedsPrevVolume = false;
+                }
+#endif
                 float v = masterVolume * typeVolume;
                 vl = (uint32_t)(v * cblk->volume[0]) << 12;
                 vr = (uint32_t)(v * cblk->volume[1]) << 12;
-
                 va = (uint32_t)(v * cblk->sendLevel);
             }
             // Delegate volume control to effect in track effect chain if needed
@@ -2558,7 +2586,6 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
             v_clamped = (vr + (1 << 11)) >> 12;
             if (v_clamped > MAX_GAIN_INT) v_clamped = MAX_GAIN_INT;
             right = int16_t(v_clamped);
-
             if (va > MAX_GAIN_INT) va = MAX_GAIN_INT;
             aux = int16_t(va);
 
