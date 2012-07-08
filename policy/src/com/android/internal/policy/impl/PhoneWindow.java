@@ -26,21 +26,14 @@ import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
 import static android.view.WindowManager.LayoutParams.FLAG_SPLIT_TOUCH;
 
-import com.android.internal.view.RootViewSurfaceTaker;
-import com.android.internal.view.StandaloneActionMode;
-import com.android.internal.view.menu.ContextMenuBuilder;
-import com.android.internal.view.menu.IconMenuPresenter;
-import com.android.internal.view.menu.ListMenuPresenter;
-import com.android.internal.view.menu.MenuBuilder;
-import com.android.internal.view.menu.MenuDialogHelper;
-import com.android.internal.view.menu.MenuPresenter;
-import com.android.internal.view.menu.MenuView;
-import com.android.internal.widget.ActionBarContainer;
-import com.android.internal.widget.ActionBarContextView;
-import com.android.internal.widget.ActionBarView;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import android.app.KeyguardManager;
+import android.database.ContentObserver;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -57,6 +50,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.util.AndroidRuntimeException;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
@@ -65,6 +59,8 @@ import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.ContextThemeWrapper;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
 import android.view.IRotationWatcher;
 import android.view.IWindowManager;
@@ -92,8 +88,19 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.view.RootViewSurfaceTaker;
+import com.android.internal.view.StandaloneActionMode;
+import com.android.internal.view.menu.ContextMenuBuilder;
+import com.android.internal.view.menu.IconMenuPresenter;
+import com.android.internal.view.menu.ListMenuPresenter;
+import com.android.internal.view.menu.MenuBuilder;
+import com.android.internal.view.menu.MenuDialogHelper;
+import com.android.internal.view.menu.MenuPresenter;
+import com.android.internal.view.menu.MenuView;
+import com.android.internal.widget.ActionBarContainer;
+import com.android.internal.widget.ActionBarContextView;
+import com.android.internal.widget.ActionBarView;
 
 /**
  * Android-specific Window.
@@ -175,6 +182,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     private int mTitleColor = 0;
 
     private boolean mAlwaysReadCloseOnTouchAttr = false;
+
+    private boolean mEnableGestures;
     
     private ContextMenuBuilder mContextMenu;
     private MenuDialogHelper mContextMenuHelper;
@@ -184,6 +193,30 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
     private AudioManager mAudioManager;
     private KeyguardManager mKeyguardManager;
+
+    private Handler mConfigHandler;
+
+    private final class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = getContext().getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ENABLE_STYLUS_GESTURES), false, this);
+            checkGestures();
+        }
+
+        @Override public void onChange(boolean selfChange) {
+            checkGestures();
+        }
+
+        void checkGestures(){
+             mEnableGestures = Settings.System.getInt(getContext().getContentResolver(),
+                    Settings.System.ENABLE_STYLUS_GESTURES, 0) == 1;
+        }
+    }
 
     private int mUiOptions = 0;
 
@@ -197,6 +230,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     public PhoneWindow(Context context) {
         super(context);
         mLayoutInflater = LayoutInflater.from(context);
+        mConfigHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mConfigHandler);
+        settingsObserver.observe();
     }
 
     @Override
@@ -1854,11 +1890,161 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             return false;
         }
 
+        private final StylusGestureFilter mStylusFilter = new StylusGestureFilter();
+
+        private class StylusGestureFilter extends SimpleOnGestureListener {
+
+            private final static int SWIPE_UP = 1;
+            private final static int SWIPE_DOWN = 2;
+            private final static int SWIPE_LEFT = 3;
+            private final static int SWIPE_RIGHT = 4;
+            private final static int PRESS_LONG = 5;
+            private final static int TAP_DOUBLE = 6;
+            private final static int SWIPE_MIN_DISTANCE = 50;
+            private final static int SWIPE_MIN_VELOCITY = 100;
+            private GestureDetector mDetector;
+            private final static String TAG = "StylusGestureFilter";
+
+            public StylusGestureFilter() {
+                mDetector = new GestureDetector(this);
+            }
+
+            public boolean onTouchEvent(MotionEvent event) {
+                return mDetector.onTouchEvent(event);
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2,
+                    float velocityX, float velocityY) {
+
+                final float xDistance = Math.abs(e1.getX() - e2.getX());
+                final float yDistance = Math.abs(e1.getY() - e2.getY());
+
+                velocityX = Math.abs(velocityX);
+                velocityY = Math.abs(velocityY);
+                boolean result = false;
+
+                if (velocityX > SWIPE_MIN_VELOCITY
+                        && xDistance > SWIPE_MIN_DISTANCE
+                        && xDistance > yDistance) {
+                    if (e1.getX() > e2.getX()) { // right to left
+                        // Swipe Left
+                        dispatchStylusAction(SWIPE_LEFT);
+                    } else {
+                        // Swipe Right
+                        dispatchStylusAction(SWIPE_RIGHT);
+                    }
+                    result = true;
+                } else if (velocityY > SWIPE_MIN_VELOCITY
+                        && yDistance > SWIPE_MIN_DISTANCE
+                        && yDistance > xDistance) {
+                    if (e1.getY() > e2.getY()) { // bottom to up
+                        // Swipe Up
+                        dispatchStylusAction(SWIPE_UP);
+                    } else {
+                        // Swipe Down
+                        dispatchStylusAction(SWIPE_DOWN);
+                    }
+                    result = true;
+                }
+                return result;
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent arg0) {
+                dispatchStylusAction(TAP_DOUBLE);
+                return true;
+            }
+
+            public void onLongPress(MotionEvent e) {
+                dispatchStylusAction(PRESS_LONG);
+            }
+
+        }
+
+        private void dispatchStylusAction(int gestureAction) {
+            final ContentResolver resolver = getContext().getContentResolver();
+            // disabled swipe gestures on systemui, only long press is available
+            if (gestureAction != StylusGestureFilter.PRESS_LONG
+                    && "com.android.systemui".equalsIgnoreCase(mContext
+                            .getPackageName())) {
+                return;
+            }
+            int dispatchAction = -1;
+            switch (gestureAction) {
+            case StylusGestureFilter.SWIPE_LEFT:
+                dispatchAction = Settings.System.getInt(resolver,
+                        Settings.System.GESTURES_LEFT_SWIPE, 1002);
+                break;
+            case StylusGestureFilter.SWIPE_RIGHT:
+                dispatchAction = Settings.System.getInt(resolver,
+                        Settings.System.GESTURES_RIGHT_SWIPE, 1004);
+                break;
+            case StylusGestureFilter.SWIPE_UP:
+                dispatchAction = Settings.System.getInt(resolver,
+                        Settings.System.GESTURES_UP_SWIPE, 1003);
+                break;
+            case StylusGestureFilter.SWIPE_DOWN:
+                dispatchAction = Settings.System.getInt(resolver,
+                        Settings.System.GESTURES_DOWN_SWIPE, 1001);
+                break;
+            case StylusGestureFilter.TAP_DOUBLE:
+                dispatchAction = Settings.System.getInt(resolver,
+                        Settings.System.GESTURES_DOUBLE_TAP, 1000);
+                break;
+            case StylusGestureFilter.PRESS_LONG:
+                dispatchAction = Settings.System.getInt(resolver,
+                        Settings.System.GESTURES_LONG_PRESS, 1005);
+                break;
+
+            }
+            // Dispatching action
+            switch (dispatchAction) {
+            case 1001:
+                Intent i = new Intent(Intent.ACTION_MAIN);
+                i.addCategory(Intent.CATEGORY_HOME);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(i);
+                break;
+            case 1002:
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+                        KeyEvent.KEYCODE_BACK));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
+                        KeyEvent.KEYCODE_BACK));
+                break;
+            case 1003:
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+                        KeyEvent.KEYCODE_MENU));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
+                        KeyEvent.KEYCODE_MENU));
+                break;
+            case 1004:
+                launchDefaultSearch();
+                break;
+            case 1005:
+                IStatusBarService mStatusBarService = IStatusBarService.Stub
+                        .asInterface(ServiceManager.getService("statusbar"));
+                try {
+                    mStatusBarService.toggleRecentApps();
+                } catch (RemoteException e) {
+                }
+
+                break;
+            }
+        }
+
         @Override
         public boolean dispatchTouchEvent(MotionEvent ev) {
+            // Stylus events with side button pressed are filtered and other
+            // events are processed normally.
+            if (MotionEvent.BUTTON_SECONDARY == ev.getButtonState()
+                    && mEnableGestures) {
+                mStylusFilter.onTouchEvent(ev);
+                return false;
+            }
             final Callback cb = getCallback();
-            return cb != null && !isDestroyed() && mFeatureId < 0 ? cb.dispatchTouchEvent(ev)
-                    : super.dispatchTouchEvent(ev);
+            return cb != null && !isDestroyed() && mFeatureId < 0 ? cb
+                    .dispatchTouchEvent(ev) : super.dispatchTouchEvent(ev);
         }
 
         @Override
