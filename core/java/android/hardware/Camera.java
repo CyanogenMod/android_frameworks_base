@@ -1434,6 +1434,19 @@ public class Camera {
         Parameters p = new Parameters();
         String s = native_getParameters();
         p.unflatten(s);
+        /* some of the camera HALs returns 0 instead of Auto for ISO value, 
+         * like nvidia tegra camera, and should we not replace it here with Auto,
+         * when it's being set in Camera reconnect, it would fail.
+         * so we look up the 1st element, which should be Auto normally.
+         */
+        String isoValue = p.getISOValue();
+        if (isoValue!=null && p.getSupportedIsoValues().size()>0)
+        {
+            if (!p.getSupportedIsoValues().contains(isoValue))
+            {
+                p.setISOValue(p.getSupportedIsoValues().get(0));
+            }
+        }
         return p;
     }
 
