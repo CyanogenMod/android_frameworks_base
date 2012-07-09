@@ -1340,4 +1340,6 @@
     <string name="weather_tap_to_refresh">Aperte para atualizar</string>
     <string name="weather_no_data">Sem dados</string>
     <string name="weather_refreshing">Atualizando</string>
+    <string name="toast_rotation_unlocked">Rotação da Tela está Desbloqueada</string>
+    <string name="toast_rotation_locked">Rotação da Tela está Bloqueada</string>
 </resources>
