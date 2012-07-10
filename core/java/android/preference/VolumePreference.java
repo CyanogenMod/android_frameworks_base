@@ -44,13 +44,21 @@ public class VolumePreference extends SeekBarPreference implements
     private static final String TAG = "VolumePreference";
     
     private int mStreamType;
+    private boolean mRingerControl;
 
     /** May be null if the dialog isn't visible. */
     private SeekBarVolumizer mSeekBarVolumizer;
     
     public VolumePreference(Context context, AttributeSet attrs) {
+        this(context, attrs, true);
+    }
+
+    /** @hide */
+    public VolumePreference(Context context, AttributeSet attrs, boolean ringerControl) {
         super(context, attrs);
-        
+
+        mRingerControl = ringerControl;
+
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.VolumePreference, 0, 0);
         mStreamType = a.getInt(android.R.styleable.VolumePreference_streamType, 0);
@@ -66,7 +74,7 @@ public class VolumePreference extends SeekBarPreference implements
         super.onBindDialogView(view);
     
         final SeekBar seekBar = (SeekBar) view.findViewById(com.android.internal.R.id.seekbar);
-        mSeekBarVolumizer = new SeekBarVolumizer(getContext(), seekBar, mStreamType);
+        mSeekBarVolumizer = new SeekBarVolumizer(getContext(), seekBar, mStreamType, mRingerControl);
 
         getPreferenceManager().registerOnActivityStopListener(this);
 
@@ -137,6 +145,11 @@ public class VolumePreference extends SeekBarPreference implements
         if (mSeekBarVolumizer != null && volumizer != mSeekBarVolumizer) {
             mSeekBarVolumizer.stopSample();
         }
+    }
+
+    /** @hide */
+    protected boolean onVolumeChange(SeekBarVolumizer volumizer, int value) {
+        return true;
     }
 
     @Override
@@ -223,6 +236,7 @@ public class VolumePreference extends SeekBarPreference implements
     
         private AudioManager mAudioManager;
         private int mStreamType;
+        private boolean mRingerControl;
         private int mOriginalStreamVolume; 
         private int mOriginalRingerMode;
         private Ringtone mRingtone;
@@ -247,9 +261,16 @@ public class VolumePreference extends SeekBarPreference implements
         };
 
         public SeekBarVolumizer(Context context, SeekBar seekBar, int streamType) {
+            this(context, seekBar, streamType, true);
+        }
+
+        /** @hide */
+        public SeekBarVolumizer(Context context, SeekBar seekBar,
+                int streamType, boolean ringerControl) {
             mContext = context;
             mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             mStreamType = streamType;
+            mRingerControl = ringerControl;
             mSeekBar = seekBar;
             
             initSeekBar(seekBar);
@@ -289,7 +310,9 @@ public class VolumePreference extends SeekBarPreference implements
         
         public void revertVolume() {
             mAudioManager.setStreamVolume(mStreamType, mOriginalStreamVolume, 0);
-            mAudioManager.setRingerMode(mOriginalRingerMode);
+            if (mRingerControl) {
+                mAudioManager.setRingerMode(mOriginalRingerMode);
+            }
         }
         
         public void onProgressChanged(SeekBar seekBar, int progress,
@@ -302,10 +325,14 @@ public class VolumePreference extends SeekBarPreference implements
         }
 
         void postSetVolume(int progress) {
-            // Do the volume changing separately to give responsive UI
-            mLastProgress = progress;
-            mHandler.removeCallbacks(this);
-            mHandler.post(this);
+            if (onVolumeChange(this, progress)) {
+                // Do the volume changing separately to give responsive UI
+                mLastProgress = progress;
+                mHandler.removeCallbacks(this);
+                mHandler.post(this);
+            } else {
+                mSeekBar.setProgress(mLastProgress);
+            }
         }
     
         public void onStartTrackingTouch(SeekBar seekBar) {
@@ -319,7 +346,7 @@ public class VolumePreference extends SeekBarPreference implements
         
         public void run() {
             int newStreamVolume = mLastProgress;
-            if (mStreamType == AudioManager.STREAM_RING) {
+            if (mStreamType == AudioManager.STREAM_RING && mRingerControl) {
                 int ringerMode = mAudioManager.getRingerMode();
 
                 if (mLastProgress == 0) {
