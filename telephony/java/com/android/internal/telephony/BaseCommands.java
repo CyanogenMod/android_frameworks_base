@@ -62,6 +62,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mVoicePrivacyOnRegistrants = new RegistrantList();
     protected RegistrantList mVoicePrivacyOffRegistrants = new RegistrantList();
     protected Registrant mUnsolOemHookRawRegistrant;
+	protected Registrant mUnsolOemHookExtAppRegistrant;
     protected RegistrantList mOtaProvisionRegistrants = new RegistrantList();
     protected RegistrantList mCallWaitingInfoRegistrants = new RegistrantList();
     protected RegistrantList mDisplayInfoRegistrants = new RegistrantList();
@@ -73,7 +74,11 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mT53AudCntrlInfoRegistrants = new RegistrantList();
     protected RegistrantList mRingbackToneRegistrants = new RegistrantList();
     protected RegistrantList mResendIncallMuteRegistrants = new RegistrantList();
-    protected RegistrantList mCdmaSubscriptionChangedRegistrants = new RegistrantList();
+    protected RegistrantList mCdmaFwdBurstDtmfRegistrants = new RegistrantList();  
+    protected RegistrantList mCdmaFwdContDtmfStartRegistrants = new RegistrantList();
+    protected RegistrantList mCdmaFwdContDtmfStopRegistrants = new RegistrantList();
+    protected RegistrantList mCallReestablishIndRegistrants = new RegistrantList();
+	protected RegistrantList mCdmaSubscriptionChangedRegistrants = new RegistrantList();
     protected RegistrantList mCdmaPrlChangedRegistrants = new RegistrantList();
     protected RegistrantList mExitEmergencyCallbackModeRegistrants = new RegistrantList();
     protected RegistrantList mRilConnectedRegistrants = new RegistrantList();
