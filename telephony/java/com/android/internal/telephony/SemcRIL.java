@@ -62,16 +62,16 @@ public class SemcRIL extends RIL {
                     mIccHandler = new IccHandler(this, mIccThread.getLooper());
                 }
                 mIccHandler.run();
-                state = mPhoneType == RILConstants.CDMA_PHONE ? RadioState.RUIM_NOT_READY : RadioState.SIM_NOT_READY;
+                state = RadioState.RADIO_ON;
                 break;
             }
-            case 3: state = RadioState.SIM_LOCKED_OR_ABSENT; break;
-            case 4: state = RadioState.SIM_READY; break;
-            case 5: state = RadioState.RUIM_NOT_READY; break;
-            case 6: state = RadioState.RUIM_READY; break;
-            case 7: state = RadioState.RUIM_LOCKED_OR_ABSENT; break;
-            case 8: state = RadioState.NV_NOT_READY; break;
-            case 9: state = RadioState.NV_READY; break;
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9: state = RadioState.RADIO_ON; break;
 
             default:
                 throw new RuntimeException(
@@ -374,11 +374,7 @@ public class SemcRIL extends RIL {
                             break;
                         }
 
-                        if (mPhoneType == RILConstants.CDMA_PHONE) {
-                            mRil.setRadioState(CommandsInterface.RadioState.RUIM_LOCKED_OR_ABSENT);
-                        } else {
-                            mRil.setRadioState(CommandsInterface.RadioState.SIM_LOCKED_OR_ABSENT);
-                        }
+                        mRil.setRadioState(CommandsInterface.RadioState.RADIO_ON);
                     } else {
                         int appIndex = -1;
                         if (mPhoneType == RILConstants.CDMA_PHONE) {
@@ -399,10 +395,8 @@ public class SemcRIL extends RIL {
                                 switch (app_type) {
                                     case APPTYPE_SIM:
                                     case APPTYPE_USIM:
-                                        mRil.setRadioState(CommandsInterface.RadioState.SIM_LOCKED_OR_ABSENT);
-                                        break;
                                     case APPTYPE_RUIM:
-                                        mRil.setRadioState(CommandsInterface.RadioState.RUIM_LOCKED_OR_ABSENT);
+                                        mRil.setRadioState(CommandsInterface.RadioState.RADIO_ON);
                                         break;
                                     default:
                                         Log.e(LOG_TAG, "Currently we don't handle SIMs of type: " + app_type);
@@ -413,10 +407,8 @@ public class SemcRIL extends RIL {
                                 switch (app_type) {
                                     case APPTYPE_SIM:
                                     case APPTYPE_USIM:
-                                        mRil.setRadioState(CommandsInterface.RadioState.SIM_READY);
-                                        break;
                                     case APPTYPE_RUIM:
-                                        mRil.setRadioState(CommandsInterface.RadioState.RUIM_READY);
+                                        mRil.setRadioState(CommandsInterface.RadioState.RADIO_ON);
                                         break;
                                     default:
                                         Log.e(LOG_TAG, "Currently we don't handle SIMs of type: " + app_type);

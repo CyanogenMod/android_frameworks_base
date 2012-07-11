@@ -659,12 +659,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
                     mIccHandler = new IccHandler(this,looper);
                     mIccHandler.run();
                 }
-                if (mPhoneType == RILConstants.CDMA_PHONE) {
-                    radioState = CommandsInterface.RadioState.RUIM_NOT_READY;
-                } else {
-                    radioState = CommandsInterface.RadioState.SIM_NOT_READY;
-                }
-                setRadioState(radioState);
+                radioState = CommandsInterface.RadioState.RADIO_ON;
                 break;
             default:
                 throw new RuntimeException("Unrecognized RIL_RadioState: " + stateCode);
@@ -706,11 +701,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
                             break;
                         }
 
-                        if (mPhoneType == RILConstants.CDMA_PHONE) {
-                            mRil.setRadioState(CommandsInterface.RadioState.RUIM_LOCKED_OR_ABSENT);
-                        } else {
-                            mRil.setRadioState(CommandsInterface.RadioState.SIM_LOCKED_OR_ABSENT);
-                        }
+                        mRil.setRadioState(CommandsInterface.RadioState.RADIO_ON);
                     } else {
                         int appIndex = -1;
                         if (mPhoneType == RILConstants.CDMA_PHONE) {
@@ -731,10 +722,8 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
                                 switch (app_type) {
                                     case APPTYPE_SIM:
                                     case APPTYPE_USIM:
-                                        mRil.setRadioState(CommandsInterface.RadioState.SIM_LOCKED_OR_ABSENT);
-                                        break;
                                     case APPTYPE_RUIM:
-                                        mRil.setRadioState(CommandsInterface.RadioState.RUIM_LOCKED_OR_ABSENT);
+                                        mRil.setRadioState(CommandsInterface.RadioState.RADIO_ON);
                                         break;
                                     default:
                                         Log.e(LOG_TAG, "Currently we don't handle SIMs of type: " + app_type);
@@ -745,10 +734,8 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
                                 switch (app_type) {
                                     case APPTYPE_SIM:
                                     case APPTYPE_USIM:
-                                        mRil.setRadioState(CommandsInterface.RadioState.SIM_READY);
-                                        break;
                                     case APPTYPE_RUIM:
-                                        mRil.setRadioState(CommandsInterface.RadioState.RUIM_READY);
+                                        mRil.setRadioState(CommandsInterface.RadioState.RADIO_ON);
                                         break;
                                     default:
                                         Log.e(LOG_TAG, "Currently we don't handle SIMs of type: " + app_type);
