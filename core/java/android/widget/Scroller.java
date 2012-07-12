@@ -24,6 +24,7 @@ import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 
+import org.codeaurora.Performance;
 
 /**
  * This class encapsulates scrolling.  The duration of the scroll
@@ -72,6 +73,7 @@ public class Scroller  {
     private float mDeceleration;
     private final float mPpi;
 
+    Performance mPerf = new Performance();
     static {
         float x_min = 0.0f;
         for (int i = 0; i <= NB_SAMPLES; i++) {
@@ -343,6 +345,7 @@ public class Scroller  {
         mDeltaX = dx;
         mDeltaY = dy;
         mDurationReciprocal = 1.0f / (float) mDuration;
+	mPerf.pulseFreqBoost(25,10);
     }
 
     /**

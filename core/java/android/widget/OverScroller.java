@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import org.codeaurora.Performance;
 
 /**
  * This class encapsulates scrolling with the ability to overshoot the bounds
@@ -42,6 +43,9 @@ public class OverScroller {
     private static final int DEFAULT_DURATION = 250;
     private static final int SCROLL_MODE = 0;
     private static final int FLING_MODE = 1;
+    private static boolean mFlingInProgress = false;
+    private static int mFlingTmpCnt = 0;
+
 
     /**
      * Creates an OverScroller with a viscous fluid scroll interpolator and flywheel.
@@ -602,6 +606,7 @@ public class OverScroller {
         private static final int SPLINE = 0;
         private static final int CUBIC = 1;
         private static final int BALLISTIC = 2;
+        Performance mPerf = new Performance();
 
         static {
             float x_min = 0.0f;
@@ -697,6 +702,15 @@ public class OverScroller {
         }
 
         void finish() {
+
+            if (mFlingInProgress) {
+                mFlingTmpCnt--;
+            }
+
+            if (mFlingInProgress && mFlingTmpCnt == 0) {
+                mFlingInProgress = false;
+            }
+
             mCurrentPosition = mFinal;
             // Not reset since WebView relies on this value for fast fling.
             // TODO: restore when WebView uses the fast fling implemented in this class.
@@ -756,6 +770,12 @@ public class OverScroller {
             mStartTime = AnimationUtils.currentAnimationTimeMillis();
             mCurrentPosition = mStart = start;
 
+            if (!mFlingInProgress) {
+	        mPerf.pulseFreqBoost(25,10);
+            }
+
+            mFlingInProgress = true;
+            mFlingTmpCnt++;
             if (start > max || start < min) {
                 startAfterEdge(start, min, max, velocity);
                 return;
