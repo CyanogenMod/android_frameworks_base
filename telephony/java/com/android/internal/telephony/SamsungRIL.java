@@ -24,6 +24,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.Message;
@@ -63,7 +64,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
     }
 
     // SAMSUNG SGS STATES
-    static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
+    //static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
     static final int RIL_UNSOL_O2_HOME_ZONE_INFO = 11007;
     static final int RIL_UNSOL_DEVICE_READY_NOTI = 11008;
     static final int RIL_UNSOL_GPS_NOTI = 11009;
@@ -381,7 +382,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         //FIXME figure out what the states mean an what data is in the parcel
 
         case RIL_UNSOL_O2_HOME_ZONE_INFO: ret = responseVoid(p); break;
-        case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseVoid(p); break;
+        case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseInts(p); break;
         case RIL_UNSOL_DEVICE_READY_NOTI: ret = responseVoid(p); break;
         case RIL_UNSOL_GPS_NOTI: ret = responseVoid(p); break; // Ignored in TW RIL.
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST: ret = responseVoid(p); break;
@@ -710,6 +711,19 @@ public class SamsungRIL extends RIL implements CommandsInterface {
                 boolean playtone = (((int[])ret)[0] == 1);
                 mRingbackToneRegistrants.notifyRegistrants(
                         new AsyncResult (null, playtone, null));
+            }
+            break;
+
+        //samsung stk service implementation
+        case RIL_UNSOL_STK_SEND_SMS_RESULT:
+            if (Resources.getSystem().
+                    getBoolean(com.android.internal.R.bool.config_samsung_stk)) {
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                if (mCatSendSmsResultRegistrant != null) {
+                     mCatSendSmsResultRegistrant.notifyRegistrant(
+                            new AsyncResult (null, ret, null));
+                }
             }
             break;
 
