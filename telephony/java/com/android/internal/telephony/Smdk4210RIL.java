@@ -59,6 +59,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.Runtime;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -69,7 +70,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
     static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
     static final int RIL_UNSOL_O2_HOME_ZONE_INFO = 11007;
     static final int RIL_UNSOL_DEVICE_READY_NOTI = 11008;
-    static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_1 = 11010;
+    static final int RIL_UNSOL_AM = 11010;
     static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2 = 11011;
     static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3 = 11012;
     static final int RIL_UNSOL_HSDPA_STATE_CHANGED = 11016;
@@ -422,7 +423,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS: ret = responseString(p); break;
             case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
             // SAMSUNG STATES
-            case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_1: ret = responseVoid(p); break;
+            case RIL_UNSOL_AM: ret = responseString(p); break;
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2: ret = responseVoid(p); break;
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3: ret = responseVoid(p); break;
 
@@ -454,7 +455,17 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
                 notifyRegistrantsRilConnectionChanged(((int[])ret)[0]);
                 break;
             // SAMSUNG STATES
-            case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_1:
+            case RIL_UNSOL_AM:
+                String amString = (String) ret;
+                Log.d(LOG_TAG, "Executing AM: " + amString);
+
+                try {
+                    Runtime.getRuntime().exec("am " + amString);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(LOG_TAG, "am " + amString + " could not be executed.");
+                }
+                break;
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2:
             case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3:
                 break;
