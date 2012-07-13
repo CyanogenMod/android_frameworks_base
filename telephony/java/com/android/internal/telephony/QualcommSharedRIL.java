@@ -515,7 +515,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
             case 105: ret = responseInts(p); break; // RIL_REQUEST_CDMA_GET_SUBSCRIPTION_SOURCE
             case 106: ret = responseStrings(p); break; // RIL_REQUEST_CDMA_PRL_VERSION
             case 107: ret = responseInts(p);  break; // RIL_REQUEST_IMS_REGISTRATION_STATE
-            case 108: ret = responseSMS(p);  break; // RIL_REQUEST_IMS_SEND_SMS
+            case RIL_REQUEST_VOICE_RADIO_TECH: ret = responseInts(p); break;
 
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
@@ -574,7 +574,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
         }
 
         switch(response) {
-            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
+            //case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
             case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
             case 1035: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
             case 1036: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED
