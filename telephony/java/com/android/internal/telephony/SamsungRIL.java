@@ -24,6 +24,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.Message;
@@ -63,7 +64,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
     }
 
     // SAMSUNG SGS STATES
-    static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
+    //static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
     static final int RIL_UNSOL_O2_HOME_ZONE_INFO = 11007;
     static final int RIL_UNSOL_DEVICE_READY_NOTI = 11008;
     static final int RIL_UNSOL_GPS_NOTI = 11009;
@@ -335,10 +336,11 @@ public class SamsungRIL extends RIL implements CommandsInterface {
     processUnsolicited (Parcel p) {
         int response;
         Object ret;
+        int dataPosition = p.dataPosition();
 
         response = p.readInt();
 
-        try {switch(response) {
+        switch(response) {
         /*
 				cat libs/telephony/ril_unsol_commands.h \
 				| egrep "^ *{RIL_" \
@@ -381,7 +383,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         //FIXME figure out what the states mean an what data is in the parcel
 
         case RIL_UNSOL_O2_HOME_ZONE_INFO: ret = responseVoid(p); break;
-        case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseVoid(p); break;
+        //case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseInts(p); break;
         case RIL_UNSOL_DEVICE_READY_NOTI: ret = responseVoid(p); break;
         case RIL_UNSOL_GPS_NOTI: ret = responseVoid(p); break; // Ignored in TW RIL.
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST: ret = responseVoid(p); break;
@@ -389,11 +391,14 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         case RIL_UNSOL_AM: ret = responseVoid(p); break;
 
         default:
-            throw new RuntimeException("Unrecognized unsol response: " + response);
+            //throw new RuntimeException("Unrecognized unsol response: " + response);
             //break; (implied)
-        }} catch (Throwable tr) {
-            Log.e(LOG_TAG, "Exception processing unsol response: " + response +
-                    "Exception:" + tr.toString());
+
+            // Rewind the Parcel
+            p.setDataPosition(dataPosition);
+
+            // Forward responses that we are not overriding to the super class
+            super.processUnsolicited(p);
             return;
         }
 
