@@ -152,7 +152,57 @@ again:
         }
 
 
+        //Carriage return
         if (*bufit=='\xd') {
+
+            /********************************************************************************/
+            //Need to parse special commands which include carriage return as part of their data
+            if ( (int)(bufit - buf) > 9)
+
+                if ( !memcmp(buf, "AT+CMGS=", 8) ) {
+
+                    //Send the prompt back to get the rest of the message
+                    if (write_error_check(fd, "\r\n> ", 4)) {
+                        LOGE("write_error_check for CMGS ");
+                        return NULL;
+                    }
+
+                    //Keep on reading till ctrl-z or no more buffer
+                    while ((int)(bufit - buf) < (len - 1))
+                    {
+                        bufit++;
+
+                        errno = 0;
+                        int rc = read(fd, bufit, 1);
+
+                        if (!rc)
+                        {
+                            LOGE("reading for CMGS timeout");
+                            return buf;
+                        }
+
+                        if (rc < 0) {
+                            *err = errno;
+                            LOGE("reading for CMGS error %s (%d)", strerror(errno), errno);
+                            return NULL;
+                        }
+
+                        //Got ctrl-z
+                        if (*bufit=='\x1a') {
+                            bufit++;
+                            *bufit = NULL;
+                            return buf;
+                        }
+
+                    }
+                    LOGE("reading for CMGS - exceeded buffer");
+                    return NULL;
+
+                }
+
+
+            /*******************************************************************/
+            //Normal commands - stop reading
             break;
         }
 
@@ -518,7 +568,7 @@ static jstring readNative(JNIEnv *env, jobject obj, jint timeout_ms) {
     {
         native_data_t *nat = get_native_data(env, obj);
         if (nat->rfcomm_connected) {
-            char buf[256];
+            char buf[1024];
             const char *ret = get_line(nat->rfcomm_sock,
                                        buf, sizeof(buf),
                                        timeout_ms,

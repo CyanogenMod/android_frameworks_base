@@ -26,6 +26,7 @@ import com.android.internal.widget.SlidingTab;
 import com.android.internal.widget.SlidingTab.OnTriggerListener;
 import com.android.internal.widget.RingSelector;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -1513,6 +1514,38 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
     }
 
+    private void toggleBluetooth()
+    {
+
+        BluetoothAdapter bluetoothAdapter;
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (bluetoothAdapter == null)
+            return;
+
+        mCallback.pokeWakelock();
+        Integer curState = bluetoothAdapter.getState();
+        if ( BluetoothAdapter.STATE_ON == curState || BluetoothAdapter.STATE_TURNING_ON == curState )
+        {
+            long[] pattern = {
+                0, 500,
+            };
+            v.vibrate(pattern, -1);
+            mCallback.pokeWakelock();
+            bluetoothAdapter.disable();
+        }
+        else
+        {
+             long[] pattern = {
+                 0, 100
+             };
+             v.vibrate(pattern, -1);
+             mCallback.pokeWakelock();
+             bluetoothAdapter.enable();
+        }
+    }
+
     private void toggleSilentMode() {
         // tri state silent<->vibrate<->ring if silent mode is enabled, otherwise toggle silent mode
         final boolean mVolumeControlSilent = Settings.System.getInt(mContext.getContentResolver(),
@@ -1559,6 +1592,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     mCallback.goToUnlockScreen();
                 } else if ("SOUND".equals(uri)) {
                     toggleSilentMode();
+                    mCallback.pokeWakelock();
+                } else if ("BLUETOOTH".equals(uri)) {
+                    toggleBluetooth();
                     mCallback.pokeWakelock();
                 } else if ("FLASHLIGHT".equals(uri)) {
                     mContext.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
