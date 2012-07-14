@@ -115,10 +115,12 @@ public:
         LOGV("%s(%s) buf %p", __FUNCTION__, mName.string(), buf.get());
 
         if (mDevice->ops->set_preview_window) {
+#ifdef QCOM_HARDWARE
             LOGV("%s buf %p mPreviewWindow %p", __FUNCTION__, buf.get(), mPreviewWindow.get());
             if (mPreviewWindow.get() && (buf.get() != mPreviewWindow.get())) {
                  mDevice->ops->set_preview_window(mDevice, 0);
             }
+#endif
 
             mPreviewWindow = buf;
             mHalPreviewWindow.user = this;
