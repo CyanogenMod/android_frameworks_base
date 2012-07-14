@@ -60,6 +60,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.Runtime;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -500,7 +501,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS: ret = responseString(p); break;
             case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
             // SAMSUNG STATES
-            case RIL_UNSOL_AM: ret = responseVoid(p); break;
+            case RIL_UNSOL_AM: ret = responseString(p); break;
             case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL: ret = responseVoid(p); break;
             case RIL_UNSOL_DATA_SUSPEND_RESUME: ret = responseInts(p); break;
             case RIL_UNSOL_STK_CALL_CONTROL_RESULT: ret = responseVoid(p); break;
@@ -536,7 +537,20 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
                 break;
             // SAMSUNG STATES
             case RIL_UNSOL_AM:
+                if (RILJ_LOGD) samsungUnsljLogRet(response, ret);
+                String amString = (String) ret;
+                Log.d(LOG_TAG, "Executing AM: " + amString);
+
+                try {
+                    Runtime.getRuntime().exec("am " + amString);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(LOG_TAG, "am " + amString + " could not be executed.");
+                }
+                break;
             case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL:
+                if (RILJ_LOGD) samsungUnsljLogRet(response, ret);
+                break;
             case RIL_UNSOL_DATA_SUSPEND_RESUME:
                 if (RILJ_LOGD) samsungUnsljLogRet(response, ret);
                 break;
