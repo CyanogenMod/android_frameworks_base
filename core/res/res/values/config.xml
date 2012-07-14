@@ -842,4 +842,6 @@
     <!--Boolean to enable stk functionality on Samsung phones-->
     <bool name="config_samsung_stk">false</bool>
 
+    <!-- Boolean to enable Stylus gestures -->
+    <bool name="config_stylusGestures">false</bool>
 </resources>
