@@ -4087,4 +4087,11 @@
     <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">Display rotation unlocked</string>
     <string name="toast_rotation_locked">Display rotation locked</string>
+
+    <!-- **** CYANOGENMOD ADDITIONS START **** -->
+
+    <!-- stylus gestures support -->
+    <string name="stylus_app_not_installed">%s is not installed</string>
+
+    <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
