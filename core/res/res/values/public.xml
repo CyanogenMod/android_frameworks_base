@@ -3939,4 +3939,6 @@
   <!-- IME Picker showing upon pressing Sym Key -->
   <java-symbol type="bool" name="config_symKeyShowsImePicker" />
 
+  <!-- Stylus gestures -->
+  <java-symbol type="bool" name="config_stylusGestures" />
 </resources>
