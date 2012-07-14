@@ -1925,4 +1925,8 @@
   <java-symbol type="drawable" name="ic_navigation_ring_torch" />
   <java-symbol type="drawable" name="ic_navigation_ring_vibrate" />
 
+  <!-- Stylus gestures -->
+  <java-symbol type="bool" name="config_stylusGestures" />
+  <java-symbol type="string" name="stylus_app_not_installed" />
+
 </resources>
