@@ -4087,4 +4087,7 @@
     <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">Display rotation unlocked</string>
     <string name="toast_rotation_locked">Display rotation locked</string>
+
+    <!-- stylus gestures support -->
+    <string name="stylus_app_not_installed">Application is not installed</string>
 </resources>
