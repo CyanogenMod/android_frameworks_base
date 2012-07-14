@@ -2536,7 +2536,6 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
                 if (track->type() == AUDIO_STREAM_MUSIC && !track->isMuted() && !track->isPausing()) {
                     if(mStreamTypes[AUDIO_STREAM_MUSIC].volume > 0 && !gMusicStreamNeedsPrevVolume) {
                         gPrevMusicStreamVolume = mStreamTypes[AUDIO_STREAM_MUSIC].volume;
-                        LOGD("Stored volume = %f", gPrevMusicStreamVolume);
                     } else {
                         gMusicStreamIsMuted = true;
                     }
