@@ -19,6 +19,8 @@ package com.android.internal.telephony;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.lang.Runtime;
+import java.io.IOException;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -386,7 +388,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         case RIL_UNSOL_GPS_NOTI: ret = responseVoid(p); break; // Ignored in TW RIL.
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST: ret = responseVoid(p); break;
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2: ret = responseVoid(p); break;
-        case RIL_UNSOL_AM: ret = responseVoid(p); break;
+        case RIL_UNSOL_AM: ret = responseString(p); break;
 
         default:
             throw new RuntimeException("Unrecognized unsol response: " + response);
@@ -720,6 +722,18 @@ public class SamsungRIL extends RIL implements CommandsInterface {
                 mResendIncallMuteRegistrants.notifyRegistrants(
                         new AsyncResult (null, ret, null));
             }
+            break;
+        case RIL_UNSOL_AM:
+            String amString = (String) ret;
+            Log.d(LOG_TAG, "Executing AM: " + amString);
+
+            try {
+                Runtime.getRuntime().exec("am " + amString);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(LOG_TAG, "am " + amString + " could not be executed.");
+            }
+            break;
         }
     }
 
