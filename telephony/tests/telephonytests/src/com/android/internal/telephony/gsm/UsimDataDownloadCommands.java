@@ -18,6 +18,7 @@ package com.android.internal.telephony.gsm;
 
 import android.content.Context;
 import android.os.AsyncResult;
+import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
@@ -611,4 +612,12 @@ class UsimDataDownloadCommands extends BaseCommands {
 
     @Override
     public boolean needsOldRilFeature(String feature) { return false; }
+
+    @Override
+    public void setOnCatSendSmsResult(Handler h, int what, Object obj) {
+    }
+
+    @Override
+    public void unSetOnCatSendSmsResult(Handler h) {
+    }
 }
