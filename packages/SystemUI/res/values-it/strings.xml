@@ -152,4 +152,5 @@
     <string name="navbar_menu_conditional_button">Pulsante Menù (nascondi automaticamente)</string>
     <string name="navbar_menu_always_button">Pulsante Menù (mostra sempre)</string>
     <string name="navbar_menu_big_button">Pulsante Menù</string>
+    <string name="powerwidget_screen_timeout_toast">Timeout schermo impostato a: %1$d %2$s</string>
 </resources>
