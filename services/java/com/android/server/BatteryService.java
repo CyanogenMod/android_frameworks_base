@@ -24,9 +24,13 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.graphics.Color;
 import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.FileUtils;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.DropBoxManager;
 import android.os.RemoteException;
@@ -44,7 +48,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
-
+import java.util.Calendar;
 
 /**
  * <p>BatteryService monitors the charging status, and charge level of the device
@@ -122,8 +126,20 @@ class BatteryService extends Binder {
     private int mDischargeStartLevel;
 
     private Led mLed;
+    private boolean mLightEnabled;
+    private boolean mLedPulseEnabled;
+    private int mBatteryLowARGB;
+    private int mBatteryMediumARGB;
+    private int mBatteryFullARGB;
+    private boolean mMultiColorLed;
 
     private boolean mSentLowBatteryBroadcast = false;
+
+    // Quiet hours support
+    private boolean mQuietHoursEnabled = false;
+    private int mQuietHoursStart = 0;
+    private int mQuietHoursEnd = 0;
+    private boolean mQuietHoursDim = true;
 
     public BatteryService(Context context, LightsService lights) {
         mContext = context;
@@ -143,6 +159,9 @@ class BatteryService extends Binder {
         if (new File("/sys/devices/virtual/switch/invalid_charger/state").exists()) {
             mInvalidChargerObserver.startObserving("DEVPATH=/devices/virtual/switch/invalid_charger");
         }
+
+        SettingsObserver observer = new SettingsObserver(new Handler());
+        observer.observe();
 
         // set initial status
         update();
@@ -542,6 +561,10 @@ class BatteryService extends Binder {
         }
     }
 
+    private synchronized void updateLedPulse() {
+        mLed.updateLightsLocked();
+    }
+
     class Led {
         private LightsService mLightsService;
         private LightsService.Light mBatteryLight;
@@ -560,12 +583,10 @@ class BatteryService extends Binder {
             mLightsService = lights;
             mBatteryLight = lights.getLight(LightsService.LIGHT_ID_BATTERY);
 
-            mBatteryLowARGB = mContext.getResources().getInteger(
-                    com.android.internal.R.integer.config_notificationsBatteryLowARGB);
-            mBatteryMediumARGB = mContext.getResources().getInteger(
-                    com.android.internal.R.integer.config_notificationsBatteryMediumARGB);
-            mBatteryFullARGB = mContext.getResources().getInteger(
-                    com.android.internal.R.integer.config_notificationsBatteryFullARGB);
+            // Does the Device support changing battery LED colors?
+            mMultiColorLed = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_multiColorBatteryLed);
+
             mBatteryLedOn = mContext.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLedOn);
             mBatteryLedOff = mContext.getResources().getInteger(
@@ -578,29 +599,143 @@ class BatteryService extends Binder {
         void updateLightsLocked() {
             final int level = mBatteryLevel;
             final int status = mBatteryStatus;
-            if (level < mLowBatteryWarningLevel) {
-                if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-                    // Solid red when battery is charging
-                    mBatteryLight.setColor(mBatteryLowARGB);
-                } else {
-                    // Flash red when battery is low and not charging
+
+            if (!mLightEnabled) {
+                // No lights if explicitly disabled
+                mBatteryLight.turnOff();
+            } else if (inQuietHours() && mQuietHoursDim) {
+                if (mLedPulseEnabled && level < mLowBatteryWarningLevel &&
+                        status != BatteryManager.BATTERY_STATUS_CHARGING) {
+                    // The battery is low, the device is not charging and the low battery pulse
+                    // is enabled - ignore Quiet Hours
                     mBatteryLight.setFlashing(mBatteryLowARGB, LightsService.LIGHT_FLASH_TIMED,
                             mBatteryLedOn, mBatteryLedOff);
+                } else {
+                    // No lights if in Quiet Hours and battery not low
+                    mBatteryLight.turnOff();
+                }
+            } else if (level < mLowBatteryWarningLevel) {
+                if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+                    // Battery is charging and low
+                    mBatteryLight.setColor(mBatteryLowARGB);
+                } else if (mLedPulseEnabled) {
+                    // Battery is low and not charging
+                    mBatteryLight.setFlashing(mBatteryLowARGB, LightsService.LIGHT_FLASH_TIMED,
+                            mBatteryLedOn, mBatteryLedOff);
+                } else {
+                    // "Pulse low battery light" is disabled, no lights.
+                    mBatteryLight.turnOff();
                 }
             } else if (status == BatteryManager.BATTERY_STATUS_CHARGING
-                    || status == BatteryManager.BATTERY_STATUS_FULL) {
+                        || status == BatteryManager.BATTERY_STATUS_FULL) {
                 if (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90) {
-                    // Solid green when full or charging and nearly full
+                    // Battery is full or charging and nearly full
                     mBatteryLight.setColor(mBatteryFullARGB);
                 } else {
-                    // Solid orange when charging and halfway full
+                    // Battery is charging and halfway full
                     mBatteryLight.setColor(mBatteryMediumARGB);
                 }
             } else {
-                // No lights if not charging and not low
+                //No lights if not charging and not low
                 mBatteryLight.turnOff();
             }
         }
     }
-}
 
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            // Battery light enabled
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_LIGHT_ENABLED), false, this);
+
+            // Low battery pulse
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_LIGHT_PULSE), false, this);
+
+            // Light colors
+            if (mMultiColorLed) {
+                // Register observer if we have a multi color led
+                resolver.registerContentObserver(Settings.System.getUriFor(
+                        Settings.System.BATTERY_LIGHT_LOW_COLOR), false, this);
+                resolver.registerContentObserver(Settings.System.getUriFor(
+                        Settings.System.BATTERY_LIGHT_MEDIUM_COLOR), false, this);
+                resolver.registerContentObserver(Settings.System.getUriFor(
+                        Settings.System.BATTERY_LIGHT_FULL_COLOR), false, this);
+            }
+
+            // Quiet Hours
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_ENABLED), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_START), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_END), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_DIM), false, this);
+
+            update();
+        }
+
+        @Override public void onChange(boolean selfChange) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            Resources res = mContext.getResources();
+
+            // Battery light enabled
+            mLightEnabled = Settings.System.getInt(resolver,
+                    Settings.System.BATTERY_LIGHT_ENABLED, 1) != 0;
+
+            // Low battery pulse
+            mLedPulseEnabled = Settings.System.getInt(resolver,
+                        Settings.System.BATTERY_LIGHT_PULSE, 1) != 0;
+
+            // Light colors
+            mBatteryLowARGB = Settings.System.getInt(resolver,
+                    Settings.System.BATTERY_LIGHT_LOW_COLOR,
+                    res.getInteger(com.android.internal.R.integer.config_notificationsBatteryLowARGB));
+            mBatteryMediumARGB = Settings.System.getInt(resolver,
+                    Settings.System.BATTERY_LIGHT_MEDIUM_COLOR,
+                    res.getInteger(com.android.internal.R.integer.config_notificationsBatteryMediumARGB));
+            mBatteryFullARGB = Settings.System.getInt(resolver,
+                    Settings.System.BATTERY_LIGHT_FULL_COLOR,
+                    res.getInteger(com.android.internal.R.integer.config_notificationsBatteryFullARGB));
+
+            // Quiet Hours
+            mQuietHoursEnabled = Settings.System.getInt(resolver,
+                    Settings.System.QUIET_HOURS_ENABLED, 0) != 0;
+            mQuietHoursStart = Settings.System.getInt(resolver,
+                    Settings.System.QUIET_HOURS_START, 0);
+            mQuietHoursEnd = Settings.System.getInt(resolver,
+                    Settings.System.QUIET_HOURS_END, 0);
+            mQuietHoursDim = Settings.System.getInt(resolver,
+                    Settings.System.QUIET_HOURS_DIM, 0) != 0; 
+
+            updateLedPulse();
+        }
+    }
+
+    private boolean inQuietHours() {
+        if (mQuietHoursEnabled && (mQuietHoursStart != mQuietHoursEnd)) {
+            // Get the date in "quiet hours" format.
+            Calendar calendar = Calendar.getInstance();
+            int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
+            if (mQuietHoursEnd < mQuietHoursStart) {
+                // Starts at night, ends in the morning.
+                return (minutes > mQuietHoursStart) || (minutes < mQuietHoursEnd);
+            } else {
+                return (minutes > mQuietHoursStart) && (minutes < mQuietHoursEnd);
+            }
+        }
+        return false;
+    }
+
+}

@@ -67,9 +67,19 @@ public class WimaxManagerConstants
     public static final int NET_4G_STATE_DISABLED = 1;
 
     /**
+     * Indicatates Wimax is disabling.
+     */
+    public static final int NET_4G_STATE_DISABLING = 0;
+
+    /**
      * Indicatates Wimax is enabled.
      */
     public static final int NET_4G_STATE_ENABLED = 3;
+
+    /**
+     * Indicatates Wimax is enabling.
+     */
+    public static final int NET_4G_STATE_ENABLING = 2;
 
     /**
      * Indicatates Wimax status is known.
@@ -101,4 +111,9 @@ public class WimaxManagerConstants
      */
     public static final int WIMAX_STATE_DISCONNECTED = 9;
 
+    /**
+     * Constants for HTC/SQN WiMAX implementation
+     */
+    public static final String WIMAX_ENABLED_CHANGED_ACTION = "com.htc.net.wimax.WIMAX_ENABLED_CHANGED";
+    public static final String CURRENT_WIMAX_ENABLED_STATE  = "curWimaxEnabledState";
 }
