@@ -298,6 +298,8 @@
     <string name="silent_mode_vibrate">Ringer vibrate</string>
     <!-- Spoken description for ringer normal option. [CHAR LIMIT=NONE] -->
     <string name="silent_mode_ring">Ringer on</string>
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Screenshot</string>
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system">Reboot phone</string>
     <!-- Button to reboot the phone, within the Reboot Options dialog -->
