@@ -1,31 +1,31 @@
 <!-- This file defines the base public resources exported by the
-     platform, which must always exist. -->
+   platform, which must always exist. -->
 
 <!-- ***************************************************************
-     ***************************************************************
-     IMPORTANT NOTE FOR ANYONE MODIFYING THIS FILE
-     READ THIS BEFORE YOU MAKE ANY CHANGES
+   ***************************************************************
+   IMPORTANT NOTE FOR ANYONE MODIFYING THIS FILE
+   READ THIS BEFORE YOU MAKE ANY CHANGES
 
-     This file defines the binary compatibility for resources.  As such,
-     you must be very careful when making changes here, or you will
-     completely break backwards compatibility with old applications.
+   This file defines the binary compatibility for resources.  As such,
+   you must be very careful when making changes here, or you will
+   completely break backwards compatibility with old applications.
 
-     To avoid breaking compatibility, all new resources must be placed
-     at the end of the list of resources of the same type.  Placing a resource
-     in the middle of type will cause all following resources to be
-     assigned new resource numbers, breaking compatibility.
+   To avoid breaking compatibility, all new resources must be placed
+   at the end of the list of resources of the same type.  Placing a resource
+   in the middle of type will cause all following resources to be
+   assigned new resource numbers, breaking compatibility.
 
-     ***************************************************************
-     *************************************************************** -->
+   ***************************************************************
+   *************************************************************** -->
 <resources>
 
   <!-- We don't want to publish private symbols in android.R as part of the
-       SDK.  Instead, put them here. -->
+     SDK.  Instead, put them here. -->
   <private-symbols package="com.android.internal" />
 
   <!-- Private symbols that we need to reference from framework code.  See
-       frameworks/base/core/res/MakeJavaSymbols.sed for how to easily generate
-       this.
+     frameworks/base/core/res/MakeJavaSymbols.sed for how to easily generate
+     this.
   -->
   <java-symbol type="id" name="account_name" />
   <java-symbol type="id" name="account_row_icon" />
@@ -1019,6 +1019,7 @@
   <java-symbol type="drawable" name="ic_lockscreen_camera" />
   <java-symbol type="drawable" name="ic_lockscreen_silent" />
   <java-symbol type="drawable" name="ic_lockscreen_unlock" />
+  <java-symbol type="drawable" name="ic_lockscreen_camera" />
   <java-symbol type="drawable" name="ic_action_assist_generic" />
   <java-symbol type="drawable" name="notification_bg" />
   <java-symbol type="drawable" name="notification_bg_low" />
@@ -1683,8 +1684,8 @@
   <eat-comment />
 
 <!-- ===============================================================
-     Resources for version 1 of the platform.
-     =============================================================== -->
+   Resources for version 1 of the platform.
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="theme" id="0x01010000" />
@@ -2589,15 +2590,15 @@
   <public type="anim" name="decelerate_interpolator" id="0x010a0006" />
 
 <!-- ===============================================================
-     Resources added in version 2 of the platform.
-     =============================================================== -->
+   Resources added in version 2 of the platform.
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="marqueeRepeatLimit" id="0x0101021d" />
 
 <!-- ===============================================================
-     Resources added in version 3 of the platform (Cupcake).
-     =============================================================== -->
+   Resources added in version 3 of the platform (Cupcake).
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="windowNoDisplay" id="0x0101021e" />
@@ -2677,44 +2678,44 @@
   <public type="attr" name="imeExtractExitAnimation" id="0x01010269" />
 
   <!-- The part of the UI shown by an
-       {@link android.inputmethodservice.InputMethodService} that contains the
-       views for interacting with the user in extraction mode. -->
+     {@link android.inputmethodservice.InputMethodService} that contains the
+     views for interacting with the user in extraction mode. -->
   <public type="id" name="extractArea" id="0x0102001c" />
 
   <!-- The part of the UI shown by an
-       {@link android.inputmethodservice.InputMethodService} that contains the
-       views for displaying candidates for what the user has entered. -->
+     {@link android.inputmethodservice.InputMethodService} that contains the
+     views for displaying candidates for what the user has entered. -->
   <public type="id" name="candidatesArea" id="0x0102001d" />
 
   <!-- The part of the UI shown by an
-       {@link android.inputmethodservice.InputMethodService} that contains the
-       views for entering text using the screen. -->
+     {@link android.inputmethodservice.InputMethodService} that contains the
+     views for entering text using the screen. -->
   <public type="id" name="inputArea" id="0x0102001e" />
 
   <!-- Context menu ID for the "Select All" menu item to select all text
-       in a text view. -->
+     in a text view. -->
   <public type="id" name="selectAll" id="0x0102001f" />
   <!-- Context menu ID for the "Cut" menu item to copy and delete the currently
-       selected (or all) text in a text view to the clipboard. -->
+     selected (or all) text in a text view to the clipboard. -->
   <public type="id" name="cut" id="0x01020020" />
   <!-- Context menu ID for the "Copy" menu item to copy the currently
-       selected (or all) text in a text view to the clipboard. -->
+     selected (or all) text in a text view to the clipboard. -->
   <public type="id" name="copy" id="0x01020021" />
   <!-- Context menu ID for the "Paste" menu item to copy the current contents
-       of the clipboard into the text view. -->
+     of the clipboard into the text view. -->
   <public type="id" name="paste" id="0x01020022" />
   <!-- Context menu ID for the "Copy URL" menu item to copy the currently
-       selected URL from the text view to the clipboard. -->
+     selected URL from the text view to the clipboard. -->
   <public type="id" name="copyUrl" id="0x01020023" />
   <!-- Context menu ID for the "Input Method" menu item to being up the
-       input method picker dialog, allowing the user to switch to another
-       input method. -->
+     input method picker dialog, allowing the user to switch to another
+     input method. -->
   <public type="id" name="switchInputMethod" id="0x01020024" />
   <!-- View ID of the text editor inside of an extracted text layout. -->
   <public type="id" name="inputExtractEditText" id="0x01020025" />
 
   <!-- View ID of the {@link android.inputmethodservice.KeyboardView} within
-        an input method's input area. -->
+    an input method's input area. -->
   <public type="id" name="keyboardView" id="0x01020026" />
   <!-- View ID of a {@link android.view.View} to close a popup keyboard -->
   <public type="id" name="closeButton" id="0x01020027" />
@@ -2750,8 +2751,8 @@
   <public type="integer" name="config_longAnimTime" id="0x010e0002" />
 
 <!-- ===============================================================
-     Resources added in version 4 of the platform (Donut).
-     =============================================================== -->
+   Resources added in version 4 of the platform (Donut).
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="tension" id="0x0101026a" />
@@ -2807,8 +2808,8 @@
   <public type="anim" name="linear_interpolator" id="0x010a000b" />
 
 <!-- ===============================================================
-     Resources added in version 5 of the platform (Eclair).
-     =============================================================== -->
+   Resources added in version 5 of the platform (Eclair).
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="required" id="0x0101028e" />
@@ -2853,16 +2854,16 @@
   <public type="style" name="TextAppearance.SearchResult.Subtitle" id="0x01030064" />
 
   <!-- Semi-transparent background that can be used when placing a dark
-       themed UI on top of some arbitrary background (such as the
-       wallpaper).  This darkens the background sufficiently that the UI
-       can be seen. -->
+     themed UI on top of some arbitrary background (such as the
+     wallpaper).  This darkens the background sufficiently that the UI
+     can be seen. -->
   <public type="drawable" name="screen_background_dark_transparent" id="0x010800a9" />
   <public type="drawable" name="screen_background_light_transparent" id="0x010800aa" />
   <public type="drawable" name="stat_notify_sdcard_prepare" id="0x010800ab" />
 
 <!-- ===============================================================
-     Resources added in version 6 of the platform (Eclair 2.0.1).
-     =============================================================== -->
+   Resources added in version 6 of the platform (Eclair 2.0.1).
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="quickContactBadgeStyleWindowSmall" id="0x010102ae" />
@@ -2873,8 +2874,8 @@
   <public type="attr" name="quickContactBadgeStyleSmallWindowLarge" id="0x010102b3" />
 
 <!-- ===============================================================
-     Resources added in version 7 of the platform (Eclair MR1).
-     =============================================================== -->
+   Resources added in version 7 of the platform (Eclair MR1).
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="author" id="0x010102b4" />
@@ -2882,15 +2883,15 @@
 
 
 <!-- ===============================================================
-     Resources added in version 8 of the platform (Eclair MR2).
-     =============================================================== -->
+   Resources added in version 8 of the platform (Eclair MR2).
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="expandableListViewWhiteStyle" id="0x010102b6" />
 
 <!-- ===============================================================
-     Resources added in version 8 of the platform (Froyo / 2.2)
-     =============================================================== -->
+   Resources added in version 8 of the platform (Froyo / 2.2)
+   =============================================================== -->
   <eat-comment />
   <public type="attr" name="installLocation" id="0x010102b7" />
   <public type="attr" name="vmSafeMode" id="0x010102b8" />
@@ -2905,8 +2906,8 @@
   <public type="anim" name="cycle_interpolator" id="0x010a000c" />
 
 <!-- ===============================================================
-     Resources added in version 9 of the platform (Gingerbread / 2.3)
-     =============================================================== -->
+   Resources added in version 9 of the platform (Gingerbread / 2.3)
+   =============================================================== -->
   <eat-comment />
   <public type="attr" name="logo" id="0x010102be" />
   <public type="attr" name="xlargeScreens" id="0x010102bf" />
@@ -2937,8 +2938,8 @@
   <public type="style" name="TextAppearance.StatusBar.EventContent.Title" id="0x01030068" />
 
 <!-- ===============================================================
-     Resources added in version 11 of the platform (Honeycomb / 3.0).
-     =============================================================== -->
+   Resources added in version 11 of the platform (Honeycomb / 3.0).
+   =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="allContactsName" id="0x010102cc" />
@@ -3116,22 +3117,22 @@
   <!-- An interpolator where the change starts backward then flings forward. -->
   <public type="interpolator" name="anticipate" id="0x010c0007" />
   <!-- An interpolator where the change flings forward and overshoots the last
-       value then comes back. -->
+     value then comes back. -->
   <public type="interpolator" name="overshoot" id="0x010c0008" />
   <!-- An interpolator where the change starts backward then flings forward and
-       overshoots the target value and finally goes back to the final value. -->
+     overshoots the target value and finally goes back to the final value. -->
   <public type="interpolator" name="anticipate_overshoot" id="0x010c0009" />
   <!-- An interpolator where the change bounces at the end. -->
   <public type="interpolator" name="bounce" id="0x010c000a" />
   <!-- An interpolator where the rate of change is constant. -->
   <public type="interpolator" name="linear" id="0x010c000b" />
   <!-- Repeats the animation for one cycle. The rate of change follows a
-       sinusoidal pattern. -->
+     sinusoidal pattern. -->
   <public type="interpolator" name="cycle" id="0x010c000c" />
 
   <public type="id" name="home" id="0x0102002c" />
   <!-- Context menu ID for the "Select text..." menu item to switch to text
-       selection context mode in text views. -->
+     selection context mode in text views. -->
   <public type="id" name="selectTextMode" id="0x0102002d" />
 
   <public type="dimen" name="dialog_min_width_major" id="0x01050003" />
@@ -3140,23 +3141,23 @@
   <public type="dimen" name="notification_large_icon_height" id="0x01050006" />
 
   <!-- Standard content view for a {@link android.app.ListFragment}.
-       If you are implementing a subclass of ListFragment with your
-       own customized content, you can include this layout in that
-       content to still retain all of the standard functionality of
-       the base class. -->
+     If you are implementing a subclass of ListFragment with your
+     own customized content, you can include this layout in that
+     content to still retain all of the standard functionality of
+     the base class. -->
   <public type="layout" name="list_content" id="0x01090014" />
 
   <!-- A simple ListView item layout which can contain text and support (single or multiple) item selection. -->
   <public type="layout" name="simple_selectable_list_item" id="0x01090015" />
 
   <!-- A version of {@link #simple_list_item_1} that is able to change its
-       background state to indicate when it is activated (that is checked by
-       a ListView). -->
+     background state to indicate when it is activated (that is checked by
+     a ListView). -->
   <public type="layout" name="simple_list_item_activated_1" id="0x01090016" />
 
   <!-- A version of {@link #simple_list_item_2} that is able to change its
-       background state to indicate when it is activated (that is checked by
-       a ListView). -->
+     background state to indicate when it is activated (that is checked by
+     a ListView). -->
   <public type="layout" name="simple_list_item_activated_2" id="0x01090017" />
 
   <public type="drawable" name="dialog_holo_dark_frame" id="0x010800b2" />
@@ -3304,15 +3305,15 @@
   <public type="mipmap" name="sym_def_app_icon" id="0x010d0000" />
 
 <!-- ===============================================================
-     Resources added in version 12 of the platform (Honeycomb MR 1 / 3.1)
-     =============================================================== -->
+   Resources added in version 12 of the platform (Honeycomb MR 1 / 3.1)
+   =============================================================== -->
   <eat-comment />
   <public type="attr" name="textCursorDrawable" id="0x01010362" />
   <public type="attr" name="resizeMode" id="0x01010363" />
 
 <!-- ===============================================================
-     Resources added in version 13 of the platform (Honeycomb MR 2 / 3.2)
-     =============================================================== -->
+   Resources added in version 13 of the platform (Honeycomb MR 2 / 3.2)
+   =============================================================== -->
   <eat-comment />
   <public type="attr" name="requiresSmallestWidthDp" id="0x01010364" />
   <public type="attr" name="compatibleWidthLimitDp" id="0x01010365" />
@@ -3361,8 +3362,8 @@
   <public type="style" name="TextAppearance.Holo.DialogWindowTitle" id="0x01030117" />
 
 <!-- ===============================================================
-     Resources added in version 14 of the platform (Ice Cream Sandwich / 4.0)
-     =============================================================== -->
+   Resources added in version 14 of the platform (Ice Cream Sandwich / 4.0)
+   =============================================================== -->
   <eat-comment />
   <public type="attr" name="state_hovered" id="0x01010367" />
   <public type="attr" name="state_drag_can_accept" id="0x01010368" />
@@ -3635,8 +3636,8 @@
   <public type="color" name="holo_blue_bright" id="0x0106001b" />
 
 <!-- ===============================================================
-     Resources added in version 16 of the platform (Jelly Bean)
-     =============================================================== -->
+   Resources added in version 16 of the platform (Jelly Bean)
+   =============================================================== -->
   <eat-comment />
   <public type="attr" name="parentActivityName" id="0x010103a7" />
   <public type="attr" name="permissionGroupFlags" id="0x010103a8" />
@@ -3653,12 +3654,201 @@
   <public type="style" name="Widget.DeviceDefault.Light.MediaRouteButton" id="0x010301d8" />
 
 <!-- ===============================================================
-     Resources added in version 10 of CyanogenMod
-     =============================================================== -->
+   Resources added in version 10 of CyanogenMod
+   =============================================================== -->
   <eat-comment />
 
+  <!-- Config.xml entries -->
   <java-symbol type="string" name="config_legacyUmsLunFile" />
   <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
   <java-symbol type="array" name="config_telephony_set_audioparameters" />
+  <java-symbol type="integer" name="config_screenOnAnimation" />
+  <java-symbol type="integer" name="config_backKillTimeout" />
+  <java-symbol type="bool" name="config_screenOffAnimation" />
+  <java-symbol type="bool" name="config_hasRotationLockSwitch" />
+
+  <!-- Notification and battery light -->
+  <java-symbol type="bool" name="config_intrusiveBatteryLed" />
+  <java-symbol type="bool" name="config_multiColorBatteryLed" />
+  <java-symbol type="array" name="notification_light_package_mapping" />
+
+  <!-- Power menu -->
+  <java-symbol type="string" name="global_action_screenshot" />
+  <java-symbol type="string" name="global_action_choose_profile" />
+  <java-symbol type="string" name="global_action_reboot" />
+  <java-symbol type="string" name="global_actions" />
+  <java-symbol type="drawable" name="ic_lock_screenshot" />
+  <java-symbol type="drawable" name="ic_lock_reboot" />
+  <java-symbol type="drawable" name="ic_lock_profile" />
+
+  <!-- Profiles -->
+  <java-symbol type="xml" name="profile_default" />
+  <java-symbol type="string" name="wildcardProfile" />
+
+  <!-- Lock screen Weather -->
+  <java-symbol type="drawable" name="weather_0" />
+  <java-symbol type="drawable" name="weather_1" />
+  <java-symbol type="drawable" name="weather_2" />
+  <java-symbol type="drawable" name="weather_3" />
+  <java-symbol type="drawable" name="weather_4" />
+  <java-symbol type="drawable" name="weather_5" />
+  <java-symbol type="drawable" name="weather_6" />
+  <java-symbol type="drawable" name="weather_7" />
+  <java-symbol type="drawable" name="weather_8" />
+  <java-symbol type="drawable" name="weather_9" />
+  <java-symbol type="drawable" name="weather_10" />
+  <java-symbol type="drawable" name="weather_11" />
+  <java-symbol type="drawable" name="weather_12" />
+  <java-symbol type="drawable" name="weather_13" />
+  <java-symbol type="drawable" name="weather_14" />
+  <java-symbol type="drawable" name="weather_15" />
+  <java-symbol type="drawable" name="weather_16" />
+  <java-symbol type="drawable" name="weather_17" />
+  <java-symbol type="drawable" name="weather_18" />
+  <java-symbol type="drawable" name="weather_19" />
+  <java-symbol type="drawable" name="weather_20" />
+  <java-symbol type="drawable" name="weather_21" />
+  <java-symbol type="drawable" name="weather_22" />
+  <java-symbol type="drawable" name="weather_23" />
+  <java-symbol type="drawable" name="weather_24" />
+  <java-symbol type="drawable" name="weather_25" />
+  <java-symbol type="drawable" name="weather_26" />
+  <java-symbol type="drawable" name="weather_27" />
+  <java-symbol type="drawable" name="weather_28" />
+  <java-symbol type="drawable" name="weather_29" />
+  <java-symbol type="drawable" name="weather_30" />
+  <java-symbol type="drawable" name="weather_31" />
+  <java-symbol type="drawable" name="weather_32" />
+  <java-symbol type="drawable" name="weather_33" />
+  <java-symbol type="drawable" name="weather_34" />
+  <java-symbol type="drawable" name="weather_35" />
+  <java-symbol type="drawable" name="weather_36" />
+  <java-symbol type="drawable" name="weather_37" />
+  <java-symbol type="drawable" name="weather_38" />
+  <java-symbol type="drawable" name="weather_39" />
+  <java-symbol type="drawable" name="weather_40" />
+  <java-symbol type="drawable" name="weather_41" />
+  <java-symbol type="drawable" name="weather_42" />
+  <java-symbol type="drawable" name="weather_43" />
+  <java-symbol type="drawable" name="weather_44" />
+  <java-symbol type="drawable" name="weather_45" />
+  <java-symbol type="drawable" name="weather_46" />
+  <java-symbol type="drawable" name="weather_47" />
+  <java-symbol type="drawable" name="weather_na" />
+  <java-symbol type="string" name="weather_0" />
+  <java-symbol type="string" name="weather_1" />
+  <java-symbol type="string" name="weather_2" />
+  <java-symbol type="string" name="weather_3" />
+  <java-symbol type="string" name="weather_4" />
+  <java-symbol type="string" name="weather_5" />
+  <java-symbol type="string" name="weather_6" />
+  <java-symbol type="string" name="weather_7" />
+  <java-symbol type="string" name="weather_8" />
+  <java-symbol type="string" name="weather_9" />
+  <java-symbol type="string" name="weather_10" />
+  <java-symbol type="string" name="weather_11" />
+  <java-symbol type="string" name="weather_12" />
+  <java-symbol type="string" name="weather_13" />
+  <java-symbol type="string" name="weather_14" />
+  <java-symbol type="string" name="weather_15" />
+  <java-symbol type="string" name="weather_16" />
+  <java-symbol type="string" name="weather_17" />
+  <java-symbol type="string" name="weather_18" />
+  <java-symbol type="string" name="weather_19" />
+  <java-symbol type="string" name="weather_20" />
+  <java-symbol type="string" name="weather_21" />
+  <java-symbol type="string" name="weather_22" />
+  <java-symbol type="string" name="weather_23" />
+  <java-symbol type="string" name="weather_24" />
+  <java-symbol type="string" name="weather_25" />
+  <java-symbol type="string" name="weather_26" />
+  <java-symbol type="string" name="weather_27" />
+  <java-symbol type="string" name="weather_28" />
+  <java-symbol type="string" name="weather_29" />
+  <java-symbol type="string" name="weather_30" />
+  <java-symbol type="string" name="weather_31" />
+  <java-symbol type="string" name="weather_32" />
+  <java-symbol type="string" name="weather_33" />
+  <java-symbol type="string" name="weather_34" />
+  <java-symbol type="string" name="weather_35" />
+  <java-symbol type="string" name="weather_36" />
+  <java-symbol type="string" name="weather_37" />
+  <java-symbol type="string" name="weather_38" />
+  <java-symbol type="string" name="weather_39" />
+  <java-symbol type="string" name="weather_40" />
+  <java-symbol type="string" name="weather_41" />
+  <java-symbol type="string" name="weather_42" />
+  <java-symbol type="string" name="weather_43" />
+  <java-symbol type="string" name="weather_44" />
+  <java-symbol type="string" name="weather_45" />
+  <java-symbol type="string" name="weather_46" />
+  <java-symbol type="string" name="weather_47" />
+  <java-symbol type="string" name="weather_3200" />
+  <java-symbol type="string" name="weather_N" />
+  <java-symbol type="string" name="weather_NE" />
+  <java-symbol type="string" name="weather_E" />
+  <java-symbol type="string" name="weather_SE" />
+  <java-symbol type="string" name="weather_S" />
+  <java-symbol type="string" name="weather_SW" />
+  <java-symbol type="string" name="weather_W" />
+  <java-symbol type="string" name="weather_NW" />
+  <java-symbol type="string" name="weather_no_data" />
+  <java-symbol type="string" name="weather_tap_to_refresh" />
+  <java-symbol type="string" name="weather_refreshing" />
+  <java-symbol type="id" name="weather_panel" />
+  <java-symbol type="id" name="weather_city" />
+  <java-symbol type="id" name="weather_condition" />
+  <java-symbol type="id" name="weather_image" />
+  <java-symbol type="id" name="weather_temp" />
+  <java-symbol type="id" name="weather_low_high" />
+  <java-symbol type="id" name="update_time" />
+  <java-symbol type="id" name="weather_temps_panel" />
+
+  <!-- Lock screen calendar -->
+  <java-symbol type="drawable" name="ic_lock_idle_calendar" />
+  <java-symbol type="id" name="calendar_panel" />
+  <java-symbol type="id" name="calendar_event_title" />
+  <java-symbol type="id" name="calendar_event_details" />
+
+  <!-- Lock screen shortcuts -->
+  <!-- Lock screen shortcuts - Normal (must match 'Activated' list below) -->
+  <java-symbol type="drawable" name="ic_lockscreen_alarm_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_browser_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_calendar_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_camera_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_email_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_facebook_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_gallery_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_gplus_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_gtalk_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_maps_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_movie_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_music_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_nav_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_phone_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_podcast_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_rss_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_sms_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_twitter_normal" />
+
+  <!-- Lock screen shortcuts - Activated (must match 'Normal' list above) -->
+  <java-symbol type="drawable" name="ic_lockscreen_alarm_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_browser_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_calendar_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_camera_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_email_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_facebook_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_gallery_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_gplus_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_gtalk_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_maps_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_movie_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_music_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_nav_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_phone_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_podcast_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_rss_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_sms_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_twitter_activated" />
 
 </resources>
