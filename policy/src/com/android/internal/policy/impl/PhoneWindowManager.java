@@ -253,6 +253,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mPointerLocationMode = 0;
     PointerLocationView mPointerLocationView = null;
     InputChannel mPointerLocationInputChannel;
+    int mBackKillTimeout;
 
     private final InputHandler mPointerLocationInputHandler = new BaseInputHandler() {
         @Override
@@ -764,6 +765,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 com.android.internal.R.integer.config_lidKeyboardAccessibility);
         mLidNavigationAccessibility = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_lidNavigationAccessibility);
+        mBackKillTimeout = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_backKillTimeout);
         // register for dock events
         IntentFilter filter = new IntentFilter();
         filter.addAction(UiModeManager.ACTION_ENTER_CAR_MODE);
@@ -1385,7 +1388,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (down && repeatCount == 0) {
-                mHandler.postDelayed(mBackLongPress, ViewConfiguration.getGlobalActionKeyTimeout());
+                mHandler.postDelayed(mBackLongPress, mBackKillTimeout);
             }
             return false;
         } else if (keyCode == KeyEvent.KEYCODE_MENU) {
