@@ -73,6 +73,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.StrictMode;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.AndroidRuntimeException;
 import android.util.DisplayMetrics;
@@ -3883,8 +3884,39 @@ public final class ActivityThread {
         } catch (RemoteException e) {
             // Ignore
         }
-    }    
-    
+    }
+
+    /**
+     * hwui.use.blacklist allows to disable the hardware acceleration
+     * to specified applications processes, if files (process names)
+     * are present in /data/local/hwui.deny/
+     */
+    private boolean hwuiForbidden(String processName) {
+
+        boolean useBL = SystemProperties.getBoolean("hwui.use.blacklist", false);
+
+        // Default is allowed
+        boolean blacklisted = false;
+
+        if (!useBL || TextUtils.isEmpty(processName))
+            return blacklisted;
+
+        File hwuiConfig = new File("/data/local/hwui.deny/" + processName);
+        if (hwuiConfig.exists()) {
+            blacklisted = true;
+        }
+
+        hwuiConfig = null;
+
+        // Keep the logs to show process names with "adb logcat | grep listed"
+        if (!blacklisted)
+            Slog.v(TAG, processName + " white listed for hwui");
+        else
+            Slog.d(TAG, processName + " black listed for hwui");
+
+        return blacklisted;
+    }
+
     private void handleBindApplication(AppBindData data) {
         mBoundApplication = data;
         mConfiguration = new Configuration(data.config);
@@ -3907,6 +3939,8 @@ public final class ActivityThread {
             if (!ActivityManager.isHighEndGfx(display)) {
                 HardwareRenderer.disable(false);
             }
+        } else if (hwuiForbidden(data.processName)) {
+            HardwareRenderer.disable(false);
         }
         
         if (mProfiler.profileFd != null) {
