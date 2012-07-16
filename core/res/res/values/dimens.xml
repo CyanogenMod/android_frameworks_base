@@ -237,4 +237,7 @@
     <dimen name="notification_title_text_size">18dp</dimen>
     <!-- Size of smaller notification text (see TextAppearance.StatusBar.EventContent.Line2, Info, Time) -->
     <dimen name="notification_subtext_size">12dp</dimen>
+
+    <!-- Lockscreen target insets -->
+    <item type="dimen" name="lockscreen_target_inset">25dp</item>
 </resources>
