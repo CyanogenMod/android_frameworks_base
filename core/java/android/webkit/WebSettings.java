@@ -751,6 +751,17 @@ public abstract class WebSettings {
     }
 
     /**
+     * Sets whether the WebView should preload media resources.
+     *
+     * @param flag whether the WebView should preload media resources.
+     *
+     * @hide
+     */
+    public synchronized void setMediaPreloadEnabled(boolean flag) {
+        throw new MustOverrideException();
+    }
+
+    /**
      * Sets whether the WebView should load image resources. Note that this method
      * controls loading of all images, including those embedded using the data
      * URI scheme. Use {@link #setBlockNetworkImage} to control loading only
