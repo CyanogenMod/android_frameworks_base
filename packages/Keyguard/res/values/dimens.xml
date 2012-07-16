@@ -54,6 +54,11 @@
     <!-- Height of FaceUnlock view in keyguard -->
     <dimen name="face_unlock_height">330dip</dimen>
 
+    <!-- Lockscreen target insets -->
+    <item type="dimen" name="lockscreen_target_inset">25dp</item>
+    <!-- Additional inset used for targets with icons loaded from files -->
+    <item type="dimen" name="lockscreen_target_icon_file_inset">2dp</item>
+
     <!-- Keyguard dimensions -->
     <!-- TEMP -->
     <dimen name="kg_security_panel_height">600dp</dimen>
