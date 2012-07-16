@@ -173,6 +173,8 @@ public class SearchPanelView extends FrameLayout implements
             targets.add(NavigationRingHelpers.getTargetDrawable(mContext, null));
         }
         mGlowPadView.setTargetResources(targets);
+        mGlowPadView.setTargetDescriptionsResourceId(0);
+        mGlowPadView.setDirectionDescriptionsResourceId(0);
     }
 
     private boolean pointInside(int x, int y, View v) {
