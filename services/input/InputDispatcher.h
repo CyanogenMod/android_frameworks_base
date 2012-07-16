@@ -890,6 +890,7 @@ private:
     struct KeyRepeatState {
         KeyEntry* lastKeyEntry; // or null if no repeat
         nsecs_t nextRepeatTime;
+        volatile nsecs_t wakeKeyDownTime; // lockless
     } mKeyRepeatState;
 
     void resetKeyRepeatLocked();
