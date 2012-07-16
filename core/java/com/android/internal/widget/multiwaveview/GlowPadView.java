@@ -633,14 +633,6 @@ public class GlowPadView extends View {
         }
     }
 
-    public int getTargetResourceId() {
-        return mTargetResourceId;
-    }
-
-    public ArrayList<TargetDrawable> getTargetDrawables() {
-        return mTargetDrawables;
-    }
-
     public void setTargetResources(ArrayList<TargetDrawable> drawList) {
         if (mAnimatingTargets) {
             // postpone this change until we return to the initial state
@@ -648,6 +640,14 @@ public class GlowPadView extends View {
         } else {
             internalSetTargetResources(drawList);
         }
+    }
+
+    public int getTargetResourceId() {
+        return mTargetResourceId;
+    }
+
+    public ArrayList<TargetDrawable> getTargetDrawables() {
+        return mTargetDrawables;
     }
 
     /**
@@ -711,6 +711,14 @@ public class GlowPadView extends View {
         } else {
             mVibrator = null;
         }
+    }
+
+    public boolean getMagneticTargets() {
+        return mMagneticTargets;
+    }
+
+    public void setMagneticTargets(boolean enabled) {
+        mMagneticTargets = enabled;
     }
 
     /**
