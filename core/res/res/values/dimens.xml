@@ -244,6 +244,8 @@
     <dimen name="notification_title_text_size">18dp</dimen>
     <!-- Size of smaller notification text (see TextAppearance.StatusBar.EventContent.Line2, Info, Time) -->
     <dimen name="notification_subtext_size">12dp</dimen>
+    <!-- Additional inset used for targets with icons loaded from files -->
+    <item type="dimen" name="lockscreen_target_icon_file_inset">2dp</item>
 
     <!-- Keyguard dimensions -->
     <!-- TEMP -->
