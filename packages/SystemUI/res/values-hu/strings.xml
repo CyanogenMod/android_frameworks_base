@@ -21,6 +21,8 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label" msgid="7164937344850004466">"Rendszer UI"</string>
     <string name="status_bar_clear_all_button" msgid="7774721344716731603">"Törlés"</string>
+    <string name="notifications_off_title">Értesítések kikapcsolva</string>
+    <string name="notifications_off_text">Érintse meg az értesítések engedélyezéséhez.</string>
     <string name="status_bar_do_not_disturb_button" msgid="5812628897510997853">"Ne zavarjanak"</string>
     <string name="status_bar_please_disturb_button" msgid="3345398298841572813">"Értesítések megjelenítése"</string>
     <string name="status_bar_recent_remove_item_title" msgid="6026395868129852968">"Eltávolítás a listából"</string>
@@ -41,7 +43,13 @@
     <string name="battery_low_why" msgid="7279169609518386372">"Akkumulátorhasználat"</string>
     <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Beállítások"</string>
     <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
+    <string name="status_bar_settings_bluetooth_button">Bluetooth</string>
     <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Repülőgép üzemmód"</string>
+    <string name="status_bar_settings_location">GPS</string>
+    <string name="status_bar_settings_flashlight">LED villanófény</string>
+    <string name="status_bar_settings_mobile_data">Mobilinternet</string>
+    <string name="status_bar_settings_network_mode">2G/3G</string>
+    <string name="status_bar_settings_sound_mode">Hang</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Képernyő automatikus forgatása"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"NÉMÍT"</string>
     <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"AUTO"</string>
@@ -138,5 +146,17 @@
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"GPS keresése"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"A GPS beállította a helyet"</string>
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Minden értesítés törlése"</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Válasszon eseményt</string>
+    <string name="navbar_home_button">Kezdőlap</string>
+    <string name="navbar_recent_button">Előzmények</string>
+    <string name="navbar_search_button">Keresés</string>
+    <string name="navbar_back_button">Vissza</string>
+    <string name="navbar_empty_button">Gomb törlése</string>
+    <string name="navbar_menu_conditional_button">Menü (auto elrejtés)</string>
+    <string name="navbar_menu_always_button">Menü (mindig látszik)</string>
+    <string name="navbar_menu_big_button">Menü</string>
+
     <string name="powerwidget_screen_timeout_toast">"Képernyő időkorlátja beállítva a következőre: %1$d %2$s"</string>
 </resources>
