@@ -90,10 +90,11 @@ public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements Command
             ca.pin1_replaced = p.readInt();
             ca.pin1 = ca.PinStateFromRILInt(p.readInt());
             ca.pin2 = ca.PinStateFromRILInt(p.readInt());
-            p.readInt(); //remaining_count_pin1
-            p.readInt(); //remaining_count_puk1
-            p.readInt(); //remaining_count_pin2
-            p.readInt(); //remaining_count_puk2
+            p.readInt(); //remaining_count_pin1   - pin1_num_retries
+            p.readInt(); //remaining_count_puk1   - puk1_num_retries
+            p.readInt(); //remaining_count_pin2   - pin2_num_retries
+            p.readInt(); //remaining_count_puk2   - puk2_num_retries
+            p.readInt(); //                       - perso_unblock_retries
             status.addApplication(ca);
         }
         int appIndex = -1;
