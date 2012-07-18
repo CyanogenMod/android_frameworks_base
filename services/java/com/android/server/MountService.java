@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.ObbInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -90,7 +91,8 @@ import javax.crypto.spec.PBEKeySpec;
  * to access the MountService.
  */
 class MountService extends IMountService.Stub
-        implements INativeDaemonConnectorCallbacks, Watchdog.Monitor {
+        implements INativeDaemonConnectorCallbacks, Watchdog.Monitor,
+        ServiceManager.ConfigurationService {
 
     private static final boolean LOCAL_LOGD = false;
     private static final boolean DEBUG_UNMOUNT = false;
@@ -1296,6 +1298,74 @@ class MountService extends IMountService.Stub
                     mListeners.remove(mListeners.indexOf(bl));
                     return;
                 }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig.userSetLocale) {
+            // Volume description need to be updated
+            Resources resources = mContext.getResources();
+
+            int id = com.android.internal.R.xml.storage_list;
+            XmlResourceParser parser = resources.getXml(id);
+            AttributeSet attrs = Xml.asAttributeSet(parser);
+
+            try {
+                XmlUtils.beginDocument(parser, TAG_STORAGE_LIST);
+                while (true) {
+                    XmlUtils.nextElement(parser);
+
+                    String element = parser.getName();
+                    if (element == null) break;
+
+                    if (TAG_STORAGE.equals(element)) {
+                        TypedArray a = resources.obtainAttributes(attrs,
+                                com.android.internal.R.styleable.Storage);
+
+                        CharSequence path = a.getText(
+                                com.android.internal.R.styleable.Storage_mountPoint);
+                        CharSequence description = a.getText(
+                                com.android.internal.R.styleable.Storage_storageDescription);
+                        if (path != null && description != null) {
+                            String pathString = path.toString();
+
+                            synchronized (mVolumeStates) {
+                                if (mVolumeMap.containsKey(pathString)) {
+                                    // Create volume from old reference, changing description
+                                    StorageVolume oldVol = mVolumeMap.get(pathString);
+                                    StorageVolume newVol = new StorageVolume(oldVol.getPath(),
+                                            description.toString(), oldVol.isRemovable(),
+                                            oldVol.isEmulated(), oldVol.getMtpReserveSpace(),
+                                            oldVol.allowMassStorage(), oldVol.getMaxFileSize());
+                                    newVol.setStorageId(oldVol.getStorageId());
+
+                                    //Update volume map and volume array
+                                    mVolumeMap.put(pathString, newVol);
+                                    for (int i = 0; i < mVolumes.size(); i++) {
+                                        StorageVolume volumen = mVolumes.get(i);
+                                        if (volumen != null &&
+                                            volumen.getPath().compareTo(pathString) == 0) {
+                                            mVolumes.set(i, newVol);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        a.recycle();
+                    }
+                }
+            } catch (XmlPullParserException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } finally {
+                parser.close();
             }
         }
     }

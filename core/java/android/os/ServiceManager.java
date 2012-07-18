@@ -18,17 +18,34 @@ package android.os;
 
 import com.android.internal.os.BinderInternal;
 
+import android.content.res.Configuration;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /** @hide */
 public final class ServiceManager {
     private static final String TAG = "ServiceManager";
 
+    /**
+     * An interface for services that need listen system configuration changes
+     */
+    public interface ConfigurationService {
+        /**
+         * Invoked when the system configuration has changed.
+         *
+         * @param newConfig the new configuration
+         */
+        public void onConfigurationChanged(Configuration newConfig);
+    }
+
     private static IServiceManager sServiceManager;
     private static HashMap<String, IBinder> sCache = new HashMap<String, IBinder>();
+    private static List<ConfigurationService> sConfigurationServices =
+            new ArrayList<ConfigurationService>();
 
     private static IServiceManager getIServiceManager() {
         if (sServiceManager != null) {
@@ -70,6 +87,9 @@ public final class ServiceManager {
     public static void addService(String name, IBinder service) {
         try {
             getIServiceManager().addService(name, service);
+            if( service != null && service instanceof ConfigurationService ){
+                sConfigurationServices.add((ConfigurationService)service);
+            }
         } catch (RemoteException e) {
             Log.e(TAG, "error in addService", e);
         }
@@ -118,5 +138,17 @@ public final class ServiceManager {
             throw new IllegalStateException("setServiceCache may only be called once");
         }
         sCache.putAll(cache);
+    }
+
+    /**
+     * This is only intended to be called when the system configuration has changed
+     * and need to be communicate to {@link ConfigurationService} services
+     * @hide
+     */
+    public static synchronized void updateServiceConfiguration(Configuration newConfig)
+        throws RemoteException {
+        for (int i=sConfigurationServices.size()-1; i>=0; i--) {
+            sConfigurationServices.get(i).onConfigurationChanged(newConfig);
+        }
     }
 }

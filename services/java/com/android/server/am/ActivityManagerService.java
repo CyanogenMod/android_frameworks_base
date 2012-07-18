@@ -13516,6 +13516,21 @@ public final class ActivityManagerService extends ActivityManagerNative
                     msg.obj = new Configuration(configCopy);
                     mHandler.sendMessage(msg);
                 }
+
+                // Before update the processes, some services may require also need to be updated
+                try {
+                    Thread scheduleThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                ServiceManager.updateServiceConfiguration(configCopy);
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+                    scheduleThread.start();
+                } catch (Exception e) {
+                }
         
                 for (int i=mLruProcesses.size()-1; i>=0; i--) {
                     ProcessRecord app = mLruProcesses.get(i);
