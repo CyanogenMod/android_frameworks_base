@@ -250,6 +250,11 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     public void onKeyboardChange(boolean isKeyboardOpen) {}
 
     /** {@inheritDoc} */
+    public boolean suspendRecreate() {
+        return false;
+    }
+
+    /** {@inheritDoc} */
     public boolean needsInput() {
         return false;
     }
