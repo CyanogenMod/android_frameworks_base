@@ -38,6 +38,11 @@ public class SignalClusterView
 
     NetworkController mNC;
 
+    public static final int STYLE_NORMAL = 0;
+    public static final int STYLE_TEXT = 1;
+    public static final int STYLE_HIDDEN = 2;
+
+    private int mSignalClusterStyle = STYLE_NORMAL;
     private boolean mWifiVisible = false;
     private int mWifiStrengthId = 0, mWifiActivityId = 0;
     private boolean mMobileVisible = false;
@@ -220,6 +225,20 @@ public class SignalClusterView
 
         mMobileType.setVisibility(
                 !mWifiVisible ? View.VISIBLE : View.GONE);
+
+        updateVisibilityForStyle();
+    }
+
+    public void setStyle(int style) {
+        mSignalClusterStyle = style;
+        updateVisibilityForStyle();
+    }
+
+    private void updateVisibilityForStyle() {
+        if (!mIsAirplaneMode && mMobileGroup != null) {
+            mMobileGroup.setVisibility(mSignalClusterStyle != STYLE_NORMAL
+                    ? View.GONE : View.VISIBLE);
+        }
     }
 }
 
