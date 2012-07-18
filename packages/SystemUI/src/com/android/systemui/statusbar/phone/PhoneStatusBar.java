@@ -105,6 +105,7 @@ import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.GestureRecorder;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.NotificationData.Entry;
+import com.android.systemui.statusbar.SignalClusterTextView;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.policy.BatteryController;
@@ -257,8 +258,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     private boolean mShowCarrierInPanel = false;
 
+    private SignalClusterView mSignalClusterView;
+    private SignalClusterTextView mSignalTextView;
     private BatteryMeterView mBatteryView;
     private DockBatteryMeterView mDockBatteryView;
+
+    // clock
+    private boolean mShowClock = true;
+    private boolean mClockEnabled;
 
     // position
     int[] mPositionTmp = new int[2];
@@ -370,6 +377,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CUSTOM_HEADER), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CLOCK), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_SIGNAL_TEXT), false, this);
             updateSettings();
         }
 
@@ -696,14 +707,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mNetworkController = new NetworkController(mContext);
         mBluetoothController = new BluetoothController(mContext);
         mRotationLockController = new RotationLockController(mContext);
-        final SignalClusterView signalCluster =
-                (SignalClusterView)mStatusBarView.findViewById(R.id.signal_cluster);
 
+        mSignalClusterView = (SignalClusterView) mStatusBarView.findViewById(R.id.signal_cluster);
+        mSignalTextView = (SignalClusterTextView)
+                mStatusBarView.findViewById(R.id.signal_cluster_text);
         mBatteryView = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
         mDockBatteryView = (DockBatteryMeterView) mStatusBarView.findViewById(R.id.dock_battery);
 
-        mNetworkController.addSignalCluster(signalCluster);
-        signalCluster.setNetworkController(mNetworkController);
+        mNetworkController.addSignalCluster(mSignalClusterView);
+        mNetworkController.addNetworkSignalChangedCallback(mSignalTextView);
+        mNetworkController.addSignalStrengthChangedCallback(mSignalTextView);
+        mSignalClusterView.setNetworkController(mNetworkController);
 
         final boolean isAPhone = mNetworkController.hasVoiceCallingFeature();
         if (isAPhone) {
@@ -1459,10 +1473,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     }
 
     public void showClock(boolean show) {
+        mShowClock = show;
+        updateClockVisibility();
+    }
+
+    private void updateClockVisibility() {
         if (mStatusBarView == null) return;
         View clock = mStatusBarView.findViewById(R.id.clock);
         if (clock != null) {
-            clock.setVisibility(show ? View.VISIBLE : View.GONE);
+            clock.setVisibility(mClockEnabled && mShowClock ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -2986,6 +3005,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mDockBatteryController.onBatteryMeterModeChanged(mode);
         mDockBatteryView.setShowPercent(showPercent);
         mDockBatteryController.onBatteryMeterShowPercent(showPercent);
+
+        mClockEnabled = Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_CLOCK, 1) != 0;
+        updateClockVisibility();
+
+        int signalStyle = Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_SIGNAL_TEXT, SignalClusterView.STYLE_NORMAL);
+        mSignalClusterView.setStyle(signalStyle);
+        mSignalTextView.setStyle(signalStyle);
     }
 
     private void resetUserSetupObserver() {
