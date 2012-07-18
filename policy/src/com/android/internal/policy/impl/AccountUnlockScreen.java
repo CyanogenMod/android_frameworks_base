@@ -144,6 +144,11 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
     }
 
     /** {@inheritDoc} */
+    public boolean suspendRecreate() {
+        return false;
+    }
+
+    /** {@inheritDoc} */
     public boolean needsInput() {
         return true;
     }

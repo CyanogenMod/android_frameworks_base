@@ -219,7 +219,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 mode = Mode.LockScreen;
                 dismissAfterCreation = true;
             }
-            updateScreen(mode, true);
+            final boolean suspendRecreate = mUnlockScreen != null
+                    && ((KeyguardScreen) mUnlockScreen).suspendRecreate();
+            updateScreen(mode, !suspendRecreate);
             restoreWidgetState();
             if (dismissAfterCreation) {
                 mKeyguardScreenCallback.keyguardDone(false);
