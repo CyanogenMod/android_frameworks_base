@@ -171,6 +171,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     private int mExpandedDesktopStyle = 0;
 
+    private boolean mShowNotificationCounts;
+
     public IStatusBarService getStatusBarService() {
         return mBarService;
     }
@@ -295,6 +297,9 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         mLocale = mContext.getResources().getConfiguration().locale;
         mLayoutDirection = TextUtils.getLayoutDirectionFromLocale(mLocale);
+
+        mShowNotificationCounts = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1;
 
         mStatusBarContainer = new FrameLayout(mContext);
 
