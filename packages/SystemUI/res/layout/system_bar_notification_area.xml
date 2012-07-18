@@ -122,6 +122,14 @@
                 android:paddingLeft="4dip"
                 android:visibility="gone"
                 />
+            <com.android.systemui.statusbar.policy.CircleBattery
+                android:id="@+id/dock_circle_battery"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:paddingLeft="4dip"
+                android:gravity="center_vertical|left"
+                />
             <ImageView
                 android:id="@+id/battery"
                 android:layout_height="wrap_content"
