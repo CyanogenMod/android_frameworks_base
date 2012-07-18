@@ -59,6 +59,7 @@ import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.provider.Settings.System;
 import android.speech.RecognizerIntent;
 import android.telephony.PhoneStateListener;
@@ -255,6 +256,24 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         AudioSystem.STREAM_MUSIC            // STREAM_TTS
     };
     private int[] mStreamVolumeAlias;
+
+    private static final String[] STREAM_VOLUME_HEADSET_SETTINGS = new String[] {
+        "AudioService.SAVED_VOICE_CALL_HEADSET_VOL",
+        "AudioService.SAVED_SYSTEM_HEADSET_VOL",
+        "AudioService.SAVED_RING_HEADSET_VOL",
+        "AudioService.SAVED_MUSIC_HEADSET_VOL",
+        "AudioService.SAVED_ALARM_HEADSET_VOL",
+        "AudioService.SAVED_NOTIFICATION_HEADSET_VOL",
+    };
+
+    private static final String[] STREAM_VOLUME_SPEAKER_SETTINGS = new String[] {
+        "AudioService.SAVED_VOICE_CALL_SPEAKER_VOL",
+        "AudioService.SAVED_SYSTEM_SPEAKER_VOL",
+        "AudioService.SAVED_RING_SPEAKER_VOL",
+        "AudioService.SAVED_MUSIC_SPEAKER_VOL",
+        "AudioService.SAVED_ALARM_SPEAKER_VOL",
+        "AudioService.SAVED_NOTIFICATION_SPEAKER_VOL",
+    };
 
     // stream names used by dumpStreamStates()
     private final String[] STREAM_NAMES = new String[] {
@@ -3448,6 +3467,146 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                             mBluetoothHeadsetDevice = null;
                             resetBluetoothSco();
                         }
+                    }
+                }
+            } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                state = intent.getIntExtra("state", 0);
+                int microphone = intent.getIntExtra("microphone", 0);
+
+                //Save and restore volumes for headset and speaker
+                int lastVolume;
+                if (state == 1) {
+                    // Headset plugged in
+                    int volumeRestoreCap;
+                    if (Settings.System.getInt(mContentResolver,
+                            Settings.System.SAFE_HEADSET_VOLUME_RESTORE, 1) == 0) {
+                        // Don't cap
+                        volumeRestoreCap = 8;
+                    } else {
+                        volumeRestoreCap = 4;
+                    }
+                    for (int stream = 0; stream < STREAM_VOLUME_HEADSET_SETTINGS.length; stream++) {
+                        try {
+                            lastVolume = System.getInt(mContentResolver,
+                                    STREAM_VOLUME_HEADSET_SETTINGS[stream]);
+                        } catch (SettingNotFoundException e) {
+                            lastVolume = -1;
+                        }
+                        System.putInt(mContentResolver, STREAM_VOLUME_SPEAKER_SETTINGS[stream],
+                                getStreamVolume(stream));
+                        if (lastVolume >= 0)
+                            if (stream == 0) {
+                                // Don't touch voice call volume
+                                setStreamVolume(stream, lastVolume, 0);
+                            } else if (stream != 3) {
+                                if (lastVolume > volumeRestoreCap) {
+                                    setStreamVolume(stream, volumeRestoreCap, 0);
+                                } else {
+                                    setStreamVolume(stream, lastVolume, 0);
+                                }
+                            } else {
+                                // For media volume the cap is doubled to correspond
+                                // with its finer granularity
+                                if (lastVolume > (volumeRestoreCap * 2)) {
+                                    setStreamVolume(stream, (volumeRestoreCap * 2), 0);
+                                } else {
+                                    setStreamVolume(stream, lastVolume, 0);
+                                }
+                            }
+                    }
+                } else {
+                    // Headset disconnected
+                    for (int stream = 0; stream < STREAM_VOLUME_SPEAKER_SETTINGS.length; stream++) {
+                        try {
+                            lastVolume = System.getInt(mContentResolver,
+                                    STREAM_VOLUME_SPEAKER_SETTINGS[stream]);
+                        } catch (SettingNotFoundException e) {
+                            lastVolume = -1;
+                        }
+                        System.putInt(mContentResolver, STREAM_VOLUME_HEADSET_SETTINGS[stream],
+                                getStreamVolume(stream));
+                        if (lastVolume >= 0)
+                            setStreamVolume(stream, lastVolume, 0);
+                    }
+                }
+
+                synchronized (mConnectedDevices) {
+                    if (microphone != 0) {
+                        boolean isConnected =
+                            mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADSET);
+                        if (state == 0 && isConnected) {
+                            AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_WIRED_HEADSET,
+                                    AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                                    "");
+                            mConnectedDevices.remove(AudioSystem.DEVICE_OUT_WIRED_HEADSET);
+                        } else if (state == 1 && !isConnected)  {
+                            AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_WIRED_HEADSET,
+                                    AudioSystem.DEVICE_STATE_AVAILABLE,
+                                    "");
+                            mConnectedDevices.put(
+                                    new Integer(AudioSystem.DEVICE_OUT_WIRED_HEADSET), "");
+                        }
+                    } else {
+                        boolean isConnected =
+                            mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE);
+                        if (state == 0 && isConnected) {
+                            AudioSystem.setDeviceConnectionState(
+                                    AudioSystem.DEVICE_OUT_WIRED_HEADPHONE,
+                                    AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                                    "");
+                            mConnectedDevices.remove(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE);
+                        } else if (state == 1 && !isConnected)  {
+                            AudioSystem.setDeviceConnectionState(
+                                    AudioSystem.DEVICE_OUT_WIRED_HEADPHONE,
+                                    AudioSystem.DEVICE_STATE_AVAILABLE,
+                                    "");
+                            mConnectedDevices.put(
+                                    new Integer(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE), "");
+                        }
+                    }
+                }
+            } else if (action.equals(Intent.ACTION_ANALOG_AUDIO_DOCK_PLUG)) {
+                state = intent.getIntExtra("state", 0);
+                Log.v(TAG, "Broadcast Receiver: Got ACTION_ANALOG_AUDIO_DOCK_PLUG, state = "+state);
+                synchronized (mConnectedDevices) {
+                    boolean isConnected =
+                        mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET);
+                    if (state == 0 && isConnected) {
+                        AudioSystem.setDeviceConnectionState(
+                                                        AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET,
+                                                        AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                                                        "");
+                        mConnectedDevices.remove(AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET);
+                    } else if (state == 1 && !isConnected)  {
+                        // Only Route the Audio if enabled in Dock Settings
+                        if (Settings.System.getInt(mContentResolver,Settings.System.DOCK_USB_AUDIO_ENABLED, 0) == 1) {
+                            AudioSystem.setDeviceConnectionState(
+                                                        AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET,
+                                                        AudioSystem.DEVICE_STATE_AVAILABLE,
+                                                        "");
+                            mConnectedDevices.put(
+                                new Integer(AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET), "");
+                        } else {
+                            Log.v(TAG, "Broadcast Receiver: Not using USB audio by request");
+                        }
+                    }
+                }
+            } else if (action.equals(Intent.ACTION_HDMI_AUDIO_PLUG)) {
+                state = intent.getIntExtra("state", 0);
+                Log.v(TAG, "Broadcast Receiver: Got ACTION_HDMI_AUDIO_PLUG, state = "+state);
+                synchronized (mConnectedDevices) {
+                    boolean isConnected =
+                        mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_AUX_DIGITAL);
+                    if (state == 0 && isConnected) {
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_AUX_DIGITAL,
+                                                             AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                                                             "");
+                        mConnectedDevices.remove(AudioSystem.DEVICE_OUT_AUX_DIGITAL);
+                    } else if (state == 1 && !isConnected)  {
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_AUX_DIGITAL,
+                                                             AudioSystem.DEVICE_STATE_AVAILABLE,
+                                                             "");
+                        mConnectedDevices.put( new Integer(AudioSystem.DEVICE_OUT_AUX_DIGITAL), "");
                     }
                 }
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||

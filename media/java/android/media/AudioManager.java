@@ -524,6 +524,29 @@ public class AudioManager {
     }
 
     /**
+     * Toggles global mute state via ringer mode.
+     * @param stream The stream for which the volume panel will be shown.
+     * @hide
+     */
+    public void toggleMute(int stream) {
+        boolean vibrate = getVibrateSetting(
+                AudioManager.VIBRATE_TYPE_RINGER)
+                        == AudioManager.VIBRATE_SETTING_ON;
+
+        int currentMode = getRingerMode();
+
+        if ((vibrate && currentMode == AudioManager.RINGER_MODE_VIBRATE)
+                || (currentMode == AudioManager.RINGER_MODE_SILENT)) {
+            setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        } else {
+            setRingerMode(vibrate ? AudioManager.RINGER_MODE_VIBRATE
+                    : AudioManager.RINGER_MODE_SILENT);
+        }
+
+        adjustSuggestedStreamVolume(ADJUST_SAME, stream, FLAG_SHOW_UI | FLAG_VIBRATE);
+    }
+
+    /**
      * Adjusts the volume of a particular stream by one step in a direction.
      * <p>
      * This method should only be used by applications that replace the platform-wide
