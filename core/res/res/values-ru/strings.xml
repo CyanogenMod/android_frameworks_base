@@ -1079,8 +1079,8 @@
     <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"Все файлы, сохраненные на USB-накопителе, будут удалены. Это действие невозможно отменить."</string>
     <string name="extmedia_format_message" product="default" msgid="14131895027543830">"Все данные будут удалены с карты."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Формат"</string>
-    <string name="adb_active_notification_title" msgid="6729044778949189918">"Отладка по USB разрешена"</string>
-    <string name="adb_active_notification_message" msgid="1016654627626476142">"Нажмите, чтобы отключить отладку по USB."</string>
+    <string name="adb_active_notification_title" msgid="6729044778949189918">"Отладка Android разрешена"</string>
+    <string name="adb_active_notification_message" msgid="1016654627626476142">"Нажмите, чтобы отключить отладку."</string>
     <string name="select_input_method" msgid="4653387336791222978">"Выберите способ ввода"</string>
     <string name="configure_input_methods" msgid="9091652157722495116">"Настройка способов ввода"</string>
     <string name="use_physical_keyboard" msgid="6203112478095117625">"Физическая клавиатура"</string>
@@ -1290,4 +1290,107 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Система"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Воспроизведение звука через Bluetooth"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Готово"</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Стандартный</string>
+    <string name="profileNameWork">Работа</string>
+    <string name="profileNameHome">Дом</string>
+    <string name="profileNameSilent">Без звука</string>
+    <string name="profileNameNight">Ночь</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Телефон</string>
+    <string name="profileGroupCalendar">Календарь</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Другой</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Перезагрузка планшетного ПК</string>
+    <string name="reboot_system" product="default">Перезагрузка телефона</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Скриншот</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="global_action_reboot">Перезагрузка</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Перезагрузка\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Ваш телефон будет перезагружен</string>
+
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">Выбрать профиль</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Торнадо</string>
+    <string name="weather_1">Тропический шторм</string>
+    <string name="weather_2">Ураган</string>
+    <string name="weather_3">Сильные грозы</string>
+    <string name="weather_4">Грозы</string>
+    <string name="weather_5">Дождь со снегом</string>
+    <string name="weather_6">Дождь с мокрым снегом</string>
+    <string name="weather_7">Мокрый снег</string>
+    <string name="weather_8">Изморозь</string>
+    <string name="weather_9">Мелкий дождь</string>
+    <string name="weather_10">Ледяной дождь</string>
+    <string name="weather_11">Ливень</string>
+    <string name="weather_12">Ливень</string>
+    <string name="weather_13">Ливневый снег</string>
+    <string name="weather_14">Небольшой дождь со снегом</string>
+    <string name="weather_15">Позёмка</string>
+    <string name="weather_16">Снег</string>
+    <string name="weather_17">Град</string>
+    <string name="weather_18">Мокрый снег</string>
+    <string name="weather_19">Пыль</string>
+    <string name="weather_20">Туманно</string>
+    <string name="weather_21">Туман</string>
+    <string name="weather_22">Дым</string>
+    <string name="weather_23">Ветренно</string>
+    <string name="weather_24">Ветренно</string>
+    <string name="weather_25">Холодно</string>
+    <string name="weather_26">Облачно</string>
+    <string name="weather_27">Малооблачно</string> <!-- Night -->
+    <string name="weather_28">Малооблачно</string> <!-- Day -->
+    <string name="weather_29">Малооблачно</string> <!-- Night -->
+    <string name="weather_30">Малооблачно</string> <!-- Day -->
+    <string name="weather_31">Ясно</string> <!-- Night -->
+    <string name="weather_32">Солнечно</string>
+    <string name="weather_33">Ясно</string> <!-- Night -->
+    <string name="weather_34">Ясно</string> <!-- Day -->
+    <string name="weather_35">Дождь с градом</string>
+    <string name="weather_36">Жарко</string>
+    <string name="weather_37">Местами грозы</string>
+    <string name="weather_38">Возможны грозы</string>
+    <string name="weather_39">Возможны грозы</string>
+    <string name="weather_40">Возможны грозы</string>
+    <string name="weather_41">Сильный снег</string>
+    <string name="weather_42">Возможен снег</string>
+    <string name="weather_43">Сильный снег</string>
+    <string name="weather_44">Малооблачно</string>
+    <string name="weather_45">Дождь с грозой</string>
+    <string name="weather_46">Дождь со снегом</string>
+    <string name="weather_47">Местами грозы</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">С</string>
+    <string name="weather_NE">СВ</string>
+    <string name="weather_E">В</string>
+    <string name="weather_SE">ЮВ</string>
+    <string name="weather_S">Ю</string>
+    <string name="weather_SW">ЮЗ</string>
+    <string name="weather_W">З</string>
+    <string name="weather_NW">СЗ</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Нет данных</string>
+    <string name="weather_tap_to_refresh">Нажмите для обновления</string>
+    <string name="weather_refreshing">Обновление...</string>
+
+    <string name="powerwidget_screen_timeout_toast">Время отключения экрана установлено на: %1$d %2$s</string>
+
+    <string name="app_killed_message">Приложение закрыто</string>
 </resources>
