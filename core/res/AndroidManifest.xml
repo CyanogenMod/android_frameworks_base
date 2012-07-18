@@ -755,6 +755,22 @@
         android:label="@string/permlab_vibrate"
         android:description="@string/permdesc_vibrate" />
 
+    <!-- Allows access to the FM Radio receiver
+        @hide Pending API council approval -->
+    <permission android:name="com.stericsson.permission.FM_RADIO_RECEIVER"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_fm_radio_receiver"
+        android:description="@string/permdesc_fm_radio_receiver" />
+
+    <!-- Allows access to the FM Radio transmitter
+         @hide Pending API council approval -->
+    <permission android:name="com.stericsson.permission.FM_RADIO_TRANSMITTER"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="dangerous"
+        android:label="@string/permlab_fm_radio_transmitter"
+        android:description="@string/permdesc_fm_radio_transmitter" />
+
     <!-- Allows access to the flashlight -->
     <permission android:name="android.permission.FLASHLIGHT"
         android:permissionGroup="android.permission-group.AFFECTS_BATTERY"
