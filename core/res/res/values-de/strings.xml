@@ -36,6 +36,23 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Verbindungsproblem oder ungültiger MMI-Code."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Der Vorgang ist nur für Ihre zugelassenen Rufnummern möglich."</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Standard</string>
+    <string name="profileNameWork">Arbeit</string>
+    <string name="profileNameHome">Zu Hause</string>
+    <string name="profileNameSilent">Lautlos</string>
+    <string name="profileNameNight">Nacht</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-Mail</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <string name="wildcardProfile">Anderes</string>
+
     <string name="serviceEnabled" msgid="8147278346414714315">"Dienst wurde aktiviert."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Dienst wurde aktiviert für:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Dienst wurde deaktiviert."</string>
@@ -132,6 +149,8 @@
     <string name="low_memory" product="tablet" msgid="6494019234102154896">"Der Tablet-Speicher ist voll. Löschen Sie Dateien, um Speicherplatz freizugeben."</string>
     <string name="low_memory" product="default" msgid="3475999286680000541">"Der Handyspeicher ist voll! Löschen Sie Dateien, um Speicherplatz freizugeben."</string>
     <string name="me" msgid="6545696007631404292">"Eigene"</string>
+
+    <!-- Power Dialog --> <skip />
     <string name="power_dialog" product="tablet" msgid="8545351420865202853">"Tablet-Optionen"</string>
     <string name="power_dialog" product="default" msgid="1319919075463988638">"Telefonoptionen"</string>
     <string name="silent_mode" msgid="7167703389802618663">"Lautlos-Modus"</string>
@@ -139,6 +158,32 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Funk ausschalten"</string>
     <string name="screen_lock" msgid="799094655496098153">"Display-Sperre"</string>
     <string name="power_off" msgid="4266614107412865048">"Ausschalten"</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Tablet neu starten</string>
+    <string name="reboot_system" product="default">Telefon neu starten</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Bildschirmfoto</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Neu starten</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenü</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Neu starten\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Telefon wird neu gestartet.</string>
+
     <string name="silent_mode_silent" msgid="319298163018473078">"Klingelton aus"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Klingeltonmodus \"Vibration\""</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Klingelton ein"</string>
@@ -150,16 +195,42 @@
     <string name="reboot_safemode_confirm" msgid="55293944502784668">"Möchten Sie im abgesicherten Modus neu starten? Dadurch werden alle Apps von Drittanbietern deaktiviert, die Sie installiert haben. Sie werden jedoch nach einem weiteren Neustart wiederhergestellt."</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Kürzlich geöffnet"</string>
     <string name="no_recent_tasks" msgid="8794906658732193473">"Keine kürzlich geöffneten Apps"</string>
+
+    <!-- Title of the Global Actions Dialog -->
     <string name="global_actions" product="tablet" msgid="408477140088053665">"Tablet-Optionen"</string>
+    <!-- Title of the Global Actions Dialog -->
     <string name="global_actions" product="default" msgid="2406416831541615258">"Telefonoptionen"</string>
+
+    <!-- label for item that locks the phone in the phone options dialog -->
     <string name="global_action_lock" msgid="2844945191792119712">"Display-Sperre"</string>
+
+    <!-- label for item that turns off power in phone options dialog -->
     <string name="global_action_power_off" msgid="4471879440839879722">"Ausschalten"</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Neu starten</string>
+
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">Profile</string>
+
+    <!-- label for item that enables silent mode in phone options dialog -->
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Lautlos-Modus"</string>
+
+    <!-- status message in phone options dialog for when silent mode is enabled -->
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ton ist AUS."</string>
+
+    <!-- status message in phone options dialog for when silent mode is disabled -->
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ton ist AN."</string>
+
+    <!-- label for item that toggles airplane mode -->
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Flugmodus"</string>
+
+    <!-- status message in phone options dialog for when airplane mode is on -->
     <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Flugmodus ist AN."</string>
+
+    <!-- status message in phone options dialog for when airplane mode is off -->
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Flugmodus ist AUS."</string>
+
     <string name="status_bar_notification_info_overflow" msgid="5301981741705354993">"999+"</string>
     <string name="safeMode" msgid="2788228061547930246">"Abgesicherter Modus"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Android-System"</string>
@@ -1290,4 +1361,72 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"System"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Bluetooth-Audio"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Fertig"</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tropensturm</string>
+    <string name="weather_2">Hurrikan</string>
+    <string name="weather_3">Heftige Gewitter</string>
+    <string name="weather_4">Gewitter</string>
+    <string name="weather_5">Wechselnd Regen und Schnee</string>
+    <string name="weather_6">Wechselnd Regen und Schneeregen</string>
+    <string name="weather_7">Wechselnd Schnee und Schneeregen</string>
+    <string name="weather_8">Gefrierender Niesel</string>
+    <string name="weather_9">Niesel</string>
+    <string name="weather_10">Gefrierender Regen</string>
+    <string name="weather_11">Schauer</string>
+    <string name="weather_12">Schauer</string>
+    <string name="weather_13">Scheegestöber</string>
+    <string name="weather_14">Leichte Schneeschauer</string>
+    <string name="weather_15">Schneesturm</string>
+    <string name="weather_16">Schnee</string>
+    <string name="weather_17">Hagel</string>
+    <string name="weather_18">Schneeregen</string>
+    <string name="weather_19">Staubig</string>
+    <string name="weather_20">Neblig</string>
+    <string name="weather_21">Dunst</string>
+    <string name="weather_22">Rauch</string>
+    <string name="weather_23">Stürmisch</string>
+    <string name="weather_24">Windig</string>
+    <string name="weather_25">Kalt</string>
+    <string name="weather_26">Bedeckt</string>
+    <string name="weather_27">Stark bewölkt</string> <!-- Night -->
+    <string name="weather_28">Stark bewölkt</string> <!-- Day -->
+    <string name="weather_29">Teilweise bewölkt</string> <!-- Night -->
+    <string name="weather_30">Teilweise bewölkt</string> <!-- Day -->
+    <string name="weather_31">Klar</string> <!-- Night -->
+    <string name="weather_32">Sonnig</string>
+    <string name="weather_33">Heiter</string> <!-- Night -->
+    <string name="weather_34">Heiter</string> <!-- Day -->
+    <string name="weather_35">Wechselnd Regen und Hagel</string>
+    <string name="weather_36">Heiß</string>
+    <string name="weather_37">Örtliche Gewitter</string>
+    <string name="weather_38">Einzelne Gewitter</string>
+    <string name="weather_39">Einzelne Gewitter</string>
+    <string name="weather_40">Einzelne Schauer</string>
+    <string name="weather_41">Heftiger Schneefall</string>
+    <string name="weather_42">Einzelne Schneeschauer</string>
+    <string name="weather_43">Heftiger Schneefall</string>
+    <string name="weather_44">Teilweise bewölkt</string>
+    <string name="weather_45">Gewitterschauer</string>
+    <string name="weather_46">Schneeschauer</string>
+    <string name="weather_47">Örtliche Gewitterschauer</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NO</string>
+    <string name="weather_E">O</string>
+    <string name="weather_SE">SO</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SW</string>
+    <string name="weather_W">W</string>
+    <string name="weather_NW">NW</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Keine Daten</string>
+    <string name="weather_tap_to_refresh">Zum Aktualisieren berühren</string>
+    <string name="weather_refreshing">Aktualisiere\u2026</string>
+
 </resources>
