@@ -60,7 +60,7 @@ import com.android.server.pm.PackageManagerService;
 import com.android.server.pm.ShutdownThread;
 import com.android.server.usb.UsbService;
 import com.android.server.wm.WindowManagerService;
-
+import com.android.internal.atfwd.AtCmdFwdService;
 import dalvik.system.VMRuntime;
 import dalvik.system.Zygote;
 
@@ -624,7 +624,13 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 reportWtf("starting Recognition Service", e);
             }
-
+            try {
+                Slog.i(TAG, "AtCmdFwd Service");
+                AtCmdFwdService atfwd = new AtCmdFwdService(context);
+                ServiceManager.addService("AtCmdFwd", atfwd);
+            } catch (Throwable e) {
+                reportWtf("starting AtCmdFwd Service", e);
+            }
             try {
                 Slog.i(TAG, "DiskStats Service");
                 ServiceManager.addService("diskstats", new DiskStatsService(context));
