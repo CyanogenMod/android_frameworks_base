@@ -61,6 +61,14 @@ public final class Settings {
 
     // Intent actions for Settings
 
+
+   /**
+    * Intent actions for Settings
+    *
+    * @hide
+    */
+    public static final String SETTINGS_CHANGED = "android.settings.SETTINGS_CHANGED_ACTION";
+
     /**
      * Activity Action: Show system settings.
      * <p>
