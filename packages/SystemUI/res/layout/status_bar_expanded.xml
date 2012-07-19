@@ -50,14 +50,23 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/notification_panel_header_height"
             />
-     
+
+        <com.android.systemui.statusbar.powerwidget.PowerWidget
+            android:id="@+id/exp_power_stat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/notification_panel_widget_height"
+            android:background="@*android:drawable/notification_item_background_color"
+            android:layout_marginTop="44dip"
+        />
+
         <ScrollView
             android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fadingEdge="none"
             android:overScrollMode="ifContentScrolls"
-            android:layout_marginTop="@dimen/notification_panel_header_height"
+            android:layout_marginTop="@dimen/notification_panel_header_and_widget"
             >
             <com.android.systemui.statusbar.policy.NotificationRowLayout
                 android:id="@+id/latestItems"
