@@ -101,7 +101,6 @@ public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements Command
         appIndex = status.getGsmUmtsSubscriptionAppIndex();
         Log.d(LOG_TAG, "This is a CDMA PHONE " + appIndex);
 
-
         if (numApplications > 0) {
             IccCardApplication application = status.getApplication(appIndex);
             mAid = application.aid;
@@ -117,7 +116,8 @@ public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements Command
         return status;
     }
 
-    private void setRadioStateFromRILInt (int stateCode) {
+    @Override
+    protected void setRadioStateFromRILInt (int stateCode) {
         CommandsInterface.RadioState radioState;
         HandlerThread handlerThread;
         Looper looper;
@@ -147,8 +147,12 @@ public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements Command
                     mIccHandler = new IccHandler(this,looper);
                     mIccHandler.run();
                 }
-                radioState = CommandsInterface.RadioState.SIM_NOT_READY;
 
+                if (mPhoneType == RILConstants.CDMA_PHONE) {
+                    radioState = CommandsInterface.RadioState.RUIM_NOT_READY;
+                } else {
+                    radioState = CommandsInterface.RadioState.SIM_NOT_READY;
+                }
                 setRadioState(radioState);
                 break;
             default:
@@ -157,6 +161,7 @@ public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements Command
 
         setRadioState (radioState);
     }
+
     @Override
     protected Object
     responseSignalStrength(Parcel p) {
