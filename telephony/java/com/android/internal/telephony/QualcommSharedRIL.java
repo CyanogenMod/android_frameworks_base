@@ -629,7 +629,7 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
         }
     }
 
-    private void setRadioStateFromRILInt (int stateCode) {
+    protected void setRadioStateFromRILInt (int stateCode) {
         CommandsInterface.RadioState radioState;
         HandlerThread handlerThread;
         Looper looper;
