@@ -3392,7 +3392,7 @@ class PowerManagerService extends IPowerManager.Stub
             synchronized (mLocks) {
                 // ignore light sensor while screen is turning off
                 // or when flashlight would affect it
-                if (isScreenTurningOffLocked() || mIgnoreLightSensor) {
+                if (isScreenTurningOffLocked() || mIgnoreLightSensor || !mLightSensorEnabled) {
                     return;
                 }
 
