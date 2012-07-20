@@ -16,6 +16,10 @@
 
 package com.android.systemui.statusbar.powerwidget;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -32,17 +36,14 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import com.android.systemui.R;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class PowerWidget extends FrameLayout {
     private static final String TAG = "PowerWidget";
@@ -128,6 +129,11 @@ public class PowerWidget extends FrameLayout {
         // get an initial width
         updateButtonLayoutWidth();
         setupWidget();
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
         updateVisibility();
     }
 
@@ -358,9 +364,13 @@ public class PowerWidget extends FrameLayout {
         // now check if we need to display the widget still
         boolean displayPowerWidget = Settings.System.getInt(mContext.getContentResolver(),
                    Settings.System.EXPANDED_VIEW_WIDGET, 1) == 1;
+        ScrollView notifScroll = (ScrollView) ((ViewGroup) getParent()).findViewById(R.id.scroll);
+        MarginLayoutParams param = (MarginLayoutParams) notifScroll.getLayoutParams();
         if(!displayPowerWidget) {
+            param.topMargin = (int) getResources().getDimension(R.dimen.notification_panel_header_height);
             setVisibility(View.GONE);
         } else {
+            param.topMargin = (int) getResources().getDimension(R.dimen.notification_panel_header_and_widget);
             setVisibility(View.VISIBLE);
         }
     }
