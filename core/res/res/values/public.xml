@@ -1283,6 +1283,7 @@
   <java-symbol type="id" name="pukDel" />
   <java-symbol type="id" name="pukDisplay" />
   <java-symbol type="id" name="right_icon" />
+  <java-symbol type="id" name="root" />
   <java-symbol type="id" name="seven" />
   <java-symbol type="id" name="six" />
   <java-symbol type="id" name="status" />
