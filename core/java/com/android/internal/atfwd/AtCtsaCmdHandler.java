@@ -212,18 +212,18 @@ public class AtCtsaCmdHandler extends AtCmdBaseHandler {
                                 oev.getX(), oev.getY(),
                                 oev.getMetaState());
                         oev.recycle();
-                        try {
-                            mWm.injectPointerEvent(ev , false);
-                        } catch (RemoteException e) {
-                            Log.e(LOG_TAG, "Remote exception while inserting pointer event " +
-                                    ev.getAction() +
-                                    " at (" + ev.getX() + ","+ ev.getY() + ")", e);
+                        //try {
+                            //mWm.injectPointerEvent(ev , false);
+                       // } catch (RemoteException e) {
+                        //    Log.e(LOG_TAG, "Remote exception while inserting pointer event " +
+                         //           ev.getAction() +
+                         //           " at (" + ev.getX() + ","+ ev.getY() + ")", e);
                             // TODO: Not much more that we can do.
                             // Should we try restarting the connection?
-                            return;
-                        } catch (Throwable e) {
-                            Log.e(LOG_TAG, "Unexpected exception while injecting event", e);
-                        }
+                         //   return;
+                        //} catch (Throwable e) {
+                         //   Log.e(LOG_TAG, "Unexpected exception while injecting event", e);
+                       // }
                         // TODO: Add callbacks to provide support for unsolicited TS codes
                     }
                 }

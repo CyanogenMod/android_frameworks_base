@@ -40,7 +40,7 @@ import java.util.List;
  */
 public class WifiNative {
 
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
     private final String mTAG;
     private static final int DEFAULT_GROUP_OWNER_INTENT = 7;
 

@@ -31,7 +31,7 @@
 
 namespace android {
 
-static jint DBG = false;
+static jint DBG = true;
 
 static int doCommand(const char *ifname, const char *cmd, char *replybuf, int replybuflen)
 {

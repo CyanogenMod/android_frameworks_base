@@ -36,6 +36,7 @@ import static com.android.server.NetworkManagementService.NetdResponseCode.TtyLi
 import static com.android.server.NetworkManagementSocketTagger.PROP_QTAGUID_ENABLED;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.INetworkManagementEventObserver;
 import android.net.InterfaceConfiguration;
 import android.net.LinkAddress;
@@ -926,7 +927,10 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             WifiConfiguration wifiConfig, String wlanIface, String softapIface) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
         try {
-            wifiFirmwareReload(wlanIface, "AP");
+            Resources resources = mContext.getResources();
+            //if (resources.getBoolean(com.android.internal.R.bool.config_wifi_ap_firmware_reload))
+            //    wifiFirmwareReload(wlanIface, "AP");
+            mConnector.doCommand(String.format("softap start " + wlanIface));
             if (wifiConfig == null) {
                 mConnector.execute("softap", "set", wlanIface, softapIface);
             } else {
@@ -967,7 +971,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         try {
             mConnector.execute("softap", "stopap");
             mConnector.execute("softap", "stop", wlanIface);
-            wifiFirmwareReload(wlanIface, "STA");
+           // wifiFirmwareReload(wlanIface, "STA");
         } catch (NativeDaemonConnectorException e) {
             throw e.rethrowAsParcelableException();
         }

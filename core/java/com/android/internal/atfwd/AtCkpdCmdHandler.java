@@ -261,16 +261,16 @@ public class AtCkpdCmdHandler extends AtCmdBaseHandler {
                                 ev.getAction(),
                                 ev.getKeyCode(), 0);
 
-                        try {
-                            wl.acquire();
-                            mWm.injectKeyEvent(ev , false);
-                            wl.release();
-                        } catch (RemoteException e) {
-                            Log.e(LOG_TAG, "Remote exception while inserting press code " + ev.getKeyCode(), e);
+                        //try {
+                        //    wl.acquire();
+                            //mWm.injectKeyEvent(ev , false);
+                        //    wl.release();
+                        //} catch (RemoteException e) {
+                        //    Log.e(LOG_TAG, "Remote exception while inserting press code " + ev.getKeyCode(), e);
                             // TODO: Not much more that we can do.
                             // Should we try restarting the connection?
-                            return;
-                        }
+                          //  return;
+                       // }
                         // TODO: Add callbacks to provide support for +CKEV unsolicited codes
                     }
                 }
