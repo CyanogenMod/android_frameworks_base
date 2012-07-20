@@ -16,14 +16,7 @@
 
 package com.android.internal.policy.impl;
 
-import com.android.internal.R;
-import com.android.internal.policy.impl.KeyguardUpdateMonitor.InfoCallbackImpl;
-import com.android.internal.policy.impl.KeyguardUpdateMonitor.SimStateCallback;
-import com.android.internal.telephony.IccCard.State;
-import com.android.internal.widget.LockPatternUtils;
-import com.android.internal.widget.SlidingTab;
-import com.android.internal.widget.WaveView;
-import com.android.internal.widget.multiwaveview.GlowPadView;
+import java.io.File;
 
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
@@ -32,21 +25,39 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.os.RemoteException;
 import android.os.Vibrator;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
+import android.util.Slog;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import android.util.Log;
-import android.util.Slog;
-import android.media.AudioManager;
-import android.os.RemoteException;
-import android.provider.MediaStore;
+import android.view.ViewParent;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import java.io.File;
+import com.android.internal.R;
+import com.android.internal.policy.impl.KeyguardUpdateMonitor.InfoCallbackImpl;
+import com.android.internal.policy.impl.KeyguardUpdateMonitor.SimStateCallback;
+import com.android.internal.telephony.IccCard.State;
+import com.android.internal.widget.LockPatternUtils;
+import com.android.internal.widget.SlidingTab;
+import com.android.internal.widget.WaveView;
+import com.android.internal.widget.multiwaveview.GlowPadView;
 
 /**
  * The screen within {@link LockPatternKeyguardView} that shows general
@@ -462,6 +473,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
         }
 
+        setBackground(mContext, (ViewGroup) findViewById(R.id.root));
+
         mStatusViewManager = new KeyguardStatusViewManager(this, mUpdateMonitor, mLockPatternUtils,
                 mCallback, false);
 
@@ -530,6 +543,45 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         mCameraDisabled = disabledByAdmin || disabledBySimState || !cameraTargetPresent;
         mSearchDisabled = disabledBySimState || !searchActionAvailable || !searchTargetPresent;
         mUnlockWidgetMethods.updateResources();
+    }
+
+    static void setBackground(Context context, ViewGroup layout) {
+        String lockBack = Settings.System.getString(context.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND);
+        if (lockBack != null) {
+            if (!lockBack.isEmpty()) {
+                try {
+                    layout.setBackgroundColor(Integer.parseInt(lockBack));
+                } catch(NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    ViewParent parent =  layout.getParent();
+                    if (parent != null) {
+                        //change parent to show background correctly on scale
+                        RelativeLayout rlout = new RelativeLayout(context);
+                        ((ViewGroup) parent).removeView(layout);
+                        layout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        ((ViewGroup) parent).addView(rlout); // change parent to new layout
+                        rlout.addView(layout);
+                        // create framelayout and add imageview to set background
+                        FrameLayout flayout = new FrameLayout(context);
+                        flayout.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        ImageView mLockScreenWallpaperImage = new ImageView(flayout.getContext());
+                        mLockScreenWallpaperImage.setScaleType(ScaleType.CENTER_CROP);
+                        flayout.addView(mLockScreenWallpaperImage, -1, -1);
+                        Context settingsContext = context.createPackageContext("com.android.settings", 0);
+                        String wallpaperFile = settingsContext.getFilesDir() + "/lockwallpaper";
+                        Bitmap background = BitmapFactory.decodeFile(wallpaperFile);
+                        Drawable d = new BitmapDrawable(context.getResources(), background);
+                        mLockScreenWallpaperImage.setImageDrawable(d);
+                        // add background to lock screen.
+                        rlout.addView(flayout,0);
+                    }
+                } catch (NameNotFoundException e) {
+                }
+            }
+        }
     }
 
     private boolean isSilentMode() {

@@ -22,36 +22,31 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-
-import com.android.internal.widget.LockPatternUtils;
-import com.android.internal.widget.PasswordEntryKeyboardView;
-
 import android.os.CountDownTimer;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.security.KeyStore;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.text.method.TextKeyListener;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.android.internal.R;
+import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.PasswordEntryKeyboardHelper;
+import com.android.internal.widget.PasswordEntryKeyboardView;
 
 /**
  * Displays a dialer-like interface or alphanumeric (latin-1) key entry for the user to enter
@@ -99,7 +94,7 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
         } else {
             layoutInflater.inflate(R.layout.keyguard_screen_password_landscape, this, true);
         }
-
+        LockScreen.setBackground(context, (ViewGroup) findViewById(R.id.root));
         mStatusViewManager = new KeyguardStatusViewManager(this, mUpdateMonitor, mLockPatternUtils,
                 mCallback, true);
 
