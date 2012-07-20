@@ -103,6 +103,33 @@ public class NetworkUtils {
     public native static String getDhcpError();
 
     /**
+     * SQN WiMAX: stub in native: method should add routing rule for wimax.
+     * will recieve arguments wimax API:
+     * ("all", "all", "wimax", 3100)
+     *
+     * {@hide}
+     */
+    public native static int addRoutingRule(String param1, String param2, String table, int param4);
+
+    /**
+     * SQN WiMAX: stub in native: method should delete routing rule for wimax.
+     * will recieve arguments wimax API:
+     * ("all", "all", "wimax", 3100)
+     *
+     * {@hide}
+     */
+    public native static int delRoutingRule(String param1, String param2, String table, int param4);
+
+    /**
+     * SQN WiMAX: stub in native: method should create routing table for wimax.
+     * will recieve arguments wimax API:
+     * ("wimax", "wimax0", SystemProperties.get("dhcp.wimax0.gateway))
+     *
+     * {@hide}
+     */
+    public native static int addRoutingTable(String table, String sInterfaceName, String gateway);
+
+    /**
      * Convert a IPv4 address from an integer to an InetAddress.
      * @param hostAddress an int corresponding to the IPv4 address in network byte order
      */

@@ -30,6 +30,8 @@ public class DhcpInfo implements Parcelable {
 
     public int dns1;
     public int dns2;
+    public int dns3;
+    public int dns4;
 
     public int serverAddress;
     public int leaseDuration;
@@ -46,6 +48,8 @@ public class DhcpInfo implements Parcelable {
             netmask = source.netmask;
             dns1 = source.dns1;
             dns2 = source.dns2;
+            dns3 = source.dns3;
+            dns4 = source.dns4;
             serverAddress = source.serverAddress;
             leaseDuration = source.leaseDuration;
         }
@@ -59,6 +63,8 @@ public class DhcpInfo implements Parcelable {
         str.append(" netmask "); putAddress(str, netmask);
         str.append(" dns1 "); putAddress(str, dns1);
         str.append(" dns2 "); putAddress(str, dns2);
+        str.append(" dns3 "); putAddress(str, dns3);
+        str.append(" dns4 "); putAddress(str, dns4);
         str.append(" DHCP server "); putAddress(str, serverAddress);
         str.append(" lease ").append(leaseDuration).append(" seconds");
 
@@ -81,6 +87,8 @@ public class DhcpInfo implements Parcelable {
         dest.writeInt(netmask);
         dest.writeInt(dns1);
         dest.writeInt(dns2);
+        dest.writeInt(dns3);
+        dest.writeInt(dns4);
         dest.writeInt(serverAddress);
         dest.writeInt(leaseDuration);
     }
@@ -95,6 +103,8 @@ public class DhcpInfo implements Parcelable {
                 info.netmask = in.readInt();
                 info.dns1 = in.readInt();
                 info.dns2 = in.readInt();
+                info.dns3 = in.readInt();
+                info.dns4 = in.readInt();
                 info.serverAddress = in.readInt();
                 info.leaseDuration = in.readInt();
                 return info;
