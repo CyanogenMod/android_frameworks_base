@@ -36,6 +36,24 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"出现连接问题或 MMI 码无效。"</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"只能对固定拨号号码执行此类操作。"</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">默认</string>
+    <string name="profileNameWork">工作</string>
+    <string name="profileNameHome">住宅</string>
+    <string name="profileNameSilent">静音</string>
+    <string name="profileNameNight">夜晚</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">电话</string>
+    <string name="profileGroupCalendar">日历</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">电子邮件</string>
+    <string name="profileGroupSMS">短信</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">其他</string>
+
     <string name="serviceEnabled" msgid="8147278346414714315">"已启用服务。"</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"已针对以下内容启用了服务："</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"已停用服务。"</string>
@@ -100,6 +118,7 @@
     <string name="roamingText11" msgid="4154476854426920970">"启用漫游横幅"</string>
     <string name="roamingText12" msgid="1189071119992726320">"禁用漫游横幅"</string>
     <string name="roamingTextSearching" msgid="8360141885972279963">"正在搜索服务"</string>
+    <string name="roamingTextAirplaneMode">飞行模式</string>
     <string name="cfTemplateNotForwarded" msgid="1683685883841272560">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>：无法转接"</string>
     <string name="cfTemplateForwarded" msgid="1302922117498590521">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>：<xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
     <string name="cfTemplateForwardedTime" msgid="9206251736527085256">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>：<xliff:g id="TIME_DELAY">{2}</xliff:g> 秒后<xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
@@ -141,13 +160,14 @@
     <string name="reboot_system" product="default">"重启手机"</string>
     <string name="global_action_screenshot">"屏幕截图"</string>
     <string name="reboot_reboot">"重启"</string>
-    <string name="reboot_recovery">"恢复"</string>
-    <string name="reboot_bootloader">"引导"</string>
+    <string name="global_action_choose_profile">场景模式</string>
+    <string name="reboot_recovery">"恢复模式"</string>
+    <string name="reboot_bootloader">"引导程序"</string>
     <string name="reboot_bootmenu">"引导菜单"</string>
-    <string name="reboot_fastboot">"快速启动"</string>
-    <string name="reboot_download">"下载"</string>
+    <string name="reboot_fastboot">"Fastboot"</string>
+    <string name="reboot_download">"下载模式"</string>
     <string name="reboot_progress">"正在重启..."</string>
-    <string name="reboot_confirm">"您的手机会重启。"</string>
+    <string name="reboot_confirm">"您的手机将会重启。"</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"振铃器关闭"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"振铃器振动"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"振铃器开启"</string>
@@ -313,6 +333,12 @@
     <string name="permdesc_clearAppCache" product="default" msgid="7740465694193671402">"允许应用程序通过删除应用程序缓存目录中的文件释放手机存储空间。通常此权限只适用于系统进程。"</string>
     <string name="permlab_movePackage" msgid="728454979946503926">"移动应用程序资源"</string>
     <string name="permdesc_movePackage" msgid="6323049291923925277">"允许应用程序在内部介质和外部介质之间移动应用程序资源。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_preventpower">阻止电源键</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_preventpower">允许应用程序完全掌控电源键。</string>
+
     <string name="permlab_readLogs" msgid="6615778543198967614">"查阅敏感日志数据"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"允许应用程序从系统的各种日志文件中读取信息。这样，应用程序就可以发现关于您平板电脑使用情况的一般信息，其中可能包含个人信息或私密信息。"</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"允许应用程序从系统的各个日志文件中读取信息。这样，应用程序就可以发现关于您手机使用情况的一般信息，其中可能包含个人信息或私密信息。"</string>
@@ -586,6 +612,11 @@
     <item msgid="2506857312718630823">"ICQ"</item>
     <item msgid="1648797903785279353">"Jabber"</item>
   </string-array>
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">屏幕方向已解锁</string>
+    <string name="toast_rotation_locked">屏幕方向已锁定</string>
+
     <string name="phoneTypeCustom" msgid="1644738059053355820">"自定义"</string>
     <string name="phoneTypeHome" msgid="2570923463033985887">"住宅"</string>
     <string name="phoneTypeMobile" msgid="6501463557754751037">"手机"</string>
@@ -1240,4 +1271,72 @@
     <string name="launchBrowserDefault" msgid="2057951947297614725">"要启动浏览器吗？"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"要接听电话吗？"</string>
     <string name="app_killed_message">应用程序已被杀死</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">龙卷风</string>
+    <string name="weather_1">热带风暴</string>
+    <string name="weather_2">飓风</string>
+    <string name="weather_3">强雷暴</string>
+    <string name="weather_4">雷暴</string>
+    <string name="weather_5">雨夹雪</string>
+    <string name="weather_6">混合雨和冻雨</string>
+    <string name="weather_7">混合雪和冻雨</string>
+    <string name="weather_8">冻毛毛雨</string>
+    <string name="weather_9">毛毛雨</string>
+    <string name="weather_10">冰雨</string>
+    <string name="weather_11">阵雨</string>
+    <string name="weather_12">阵雨</string>
+    <string name="weather_13">飘雪</string>
+    <string name="weather_14">小雪</string>
+    <string name="weather_15">吹雪</string>
+    <string name="weather_16">雪</string>
+    <string name="weather_17">冰雹</string>
+    <string name="weather_18">冻雨</string>
+    <string name="weather_19">沙尘</string>
+    <string name="weather_20">多雾</string>
+    <string name="weather_21">阴霾</string>
+    <string name="weather_22">烟雾</string>
+    <string name="weather_23">强风</string>
+    <string name="weather_24">大风</string>
+    <string name="weather_25">冷</string>
+    <string name="weather_26">多云</string>
+    <string name="weather_27">大部多云</string> <!-- Night -->
+    <string name="weather_28">大部多云</string> <!-- Day -->
+    <string name="weather_29">部分多云</string> <!-- Night -->
+    <string name="weather_30">部分多云</string> <!-- Day -->
+    <string name="weather_31">晴天</string> <!-- Night -->
+    <string name="weather_32">晴天</string>
+    <string name="weather_33">晴天积云</string> <!-- Night -->
+    <string name="weather_34">晴天积云</string> <!-- Day -->
+    <string name="weather_35">雨夹冰雹</string>
+    <string name="weather_36">热</string>
+    <string name="weather_37">局部性雷暴雨</string>
+    <string name="weather_38">分散雷雨</string>
+    <string name="weather_39">分散雷雨</string>
+    <string name="weather_40">零星阵雨</string>
+    <string name="weather_41">大雪</string>
+    <string name="weather_42">零星阵雪</string>
+    <string name="weather_43">大雪</string>
+    <string name="weather_44">晴间多云</string>
+    <string name="weather_45">雷阵雨</string>
+    <string name="weather_46">阵雪</string>
+    <string name="weather_47">局部雷阵雨</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">北</string>
+    <string name="weather_NE">东北</string>
+    <string name="weather_E">东</string>
+    <string name="weather_SE">东南</string>
+    <string name="weather_S">南</string>
+    <string name="weather_SW">西南</string>
+    <string name="weather_W">西</string>
+    <string name="weather_NW">西北</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">无数据</string>
+    <string name="weather_tap_to_refresh">请点击刷新</string>
+    <string name="weather_refreshing">正在刷新</string>
+
 </resources>
