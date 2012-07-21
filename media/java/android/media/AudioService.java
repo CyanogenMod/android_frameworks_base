@@ -67,6 +67,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.VolumePanel;
+import android.provider.Settings.SettingNotFoundException;
 
 import com.android.internal.telephony.ITelephony;
 
@@ -270,7 +271,30 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
             "STREAM_TTS"
     };
 
-    private final AudioSystem.ErrorCallback mAudioSystemCallback = new AudioSystem.ErrorCallback() {
+    // Add separate headset and speaker volumes
+    private static final String[] STREAM_VOLUME_HEADSET_SETTINGS = new String[] {
+        "AudioService.SAVED_VOICE_CALL_HEADSET_VOL",
+        "AudioService.SAVED_SYSTEM_HEADSET_VOL",
+        "AudioService.SAVED_RING_HEADSET_VOL",
+        "AudioService.SAVED_MUSIC_HEADSET_VOL",
+        "AudioService.SAVED_ALARM_HEADSET_VOL",
+        "AudioService.SAVED_NOTIFICATION_HEADSET_VOL",
+    };
+
+    private static final String[] STREAM_VOLUME_SPEAKER_SETTINGS = new String[] {
+        "AudioService.SAVED_VOICE_CALL_SPEAKER_VOL",
+        "AudioService.SAVED_SYSTEM_SPEAKER_VOL",
+        "AudioService.SAVED_RING_SPEAKER_VOL",
+        "AudioService.SAVED_MUSIC_SPEAKER_VOL",
+        "AudioService.SAVED_ALARM_SPEAKER_VOL",
+        "AudioService.SAVED_NOTIFICATION_SPEAKER_VOL",
+    };
+
+    private static final int HEADSET_VOLUME_RESTORE_CAP_VOICE_CALL = 3; // Out of 5
+    private static final int HEADSET_VOLUME_RESTORE_CAP_MUSIC = 8; // Out of 15
+    private static final int HEADSET_VOLUME_RESTORE_CAP_OTHER = 4; // Out of 7
+
+     private final AudioSystem.ErrorCallback mAudioSystemCallback = new AudioSystem.ErrorCallback() {
         public void onError(int error) {
             switch (error) {
             case AudioSystem.AUDIO_STATUS_SERVER_DIED:
@@ -402,7 +426,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     private int mDeviceOrientation = Configuration.ORIENTATION_UNDEFINED;
 
-    // Request to override default use of A2DP for media.
+    // Request to override default use of A2DP for media
     private boolean mBluetoothA2dpEnabled;
     private final Object mBluetoothA2dpEnabledLock = new Object();
 
@@ -469,6 +493,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
 
         // Register a configuration change listener only if requested by system properties
         // to monitor orientation changes (off by default)
@@ -636,6 +661,18 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         } else {
             mRingerModeAffectedStreams |= (1 << AudioSystem.STREAM_MUSIC);
         }
+
+        boolean linkNotificationWithVolume = Settings.System.getInt(mContentResolver,
+                Settings.System.VOLUME_LINK_NOTIFICATION, 1) == 1;
+        if (linkNotificationWithVolume) {
+            STREAM_VOLUME_ALIAS[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
+            STREAM_VOLUME_ALIAS_NON_VOICE[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
+        } else {
+            STREAM_VOLUME_ALIAS[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
+            STREAM_VOLUME_ALIAS_NON_VOICE[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
+        }
+        updateStreamVolumeAlias(false);
+
         Settings.System.putInt(cr,
                 Settings.System.MODE_RINGER_STREAMS_AFFECTED, mRingerModeAffectedStreams);
 
@@ -3121,6 +3158,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
             super(new Handler());
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                 Settings.System.MODE_RINGER_STREAMS_AFFECTED), false, this);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                Settings.System.VOLUME_LINK_NOTIFICATION), false, this);
         }
 
         @Override
@@ -3148,6 +3187,18 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                     mRingerModeAffectedStreams = ringerModeAffectedStreams;
                     setRingerModeInt(getRingerMode(), false);
                 }
+
+                boolean linkNotificationWithVolume = Settings.System.getInt(mContentResolver,
+                        Settings.System.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                if (linkNotificationWithVolume) {
+                    STREAM_VOLUME_ALIAS[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
+                    STREAM_VOLUME_ALIAS_NON_VOICE[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
+
+                } else {
+                    STREAM_VOLUME_ALIAS[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
+                    STREAM_VOLUME_ALIAS_NON_VOICE[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
+                }
+                updateStreamVolumeAlias(false);
             }
         }
     }
@@ -3448,6 +3499,70 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                             mBluetoothHeadsetDevice = null;
                             resetBluetoothSco();
                         }
+                    }
+                }
+            } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                //Save and restore volumes for headset and speaker
+                state = intent.getIntExtra("state", 0);
+                int lastVolume;
+                if (state == 1) {
+                    // Headset plugged in
+                    final boolean capVolumeRestore = Settings.System.getInt(mContentResolver,
+                            Settings.System.SAFE_HEADSET_VOLUME_RESTORE, 1) == 1;
+                    for (int stream = 0; stream < STREAM_VOLUME_HEADSET_SETTINGS.length; stream++) {
+                        final int streamAlias = mStreamVolumeAlias[stream];
+                        // Save speaker volume
+                        System.putInt(mContentResolver, STREAM_VOLUME_SPEAKER_SETTINGS[stream],
+                                getStreamVolume(streamAlias));
+                        // Restore headset volume
+                        try {
+                            lastVolume = System.getInt(mContentResolver,
+                                    STREAM_VOLUME_HEADSET_SETTINGS[streamAlias]);
+                        } catch (SettingNotFoundException e) {
+                            lastVolume = -1;
+                        }
+                        if (lastVolume >= 0) {
+                            if (capVolumeRestore) {
+                                final int volumeCap;
+                                switch (streamAlias) {
+                                    case AudioSystem.STREAM_VOICE_CALL:
+                                        volumeCap = HEADSET_VOLUME_RESTORE_CAP_VOICE_CALL;
+                                        break;
+                                    case AudioSystem.STREAM_MUSIC:
+                                        volumeCap = HEADSET_VOLUME_RESTORE_CAP_MUSIC;
+                                        break;
+                                    case AudioSystem.STREAM_SYSTEM:
+                                    case AudioSystem.STREAM_RING:
+                                    case AudioSystem.STREAM_ALARM:
+                                    case AudioSystem.STREAM_NOTIFICATION:
+                                    default:
+                                        volumeCap = HEADSET_VOLUME_RESTORE_CAP_OTHER;
+                                        break;
+                                }
+                                setStreamVolume(streamAlias, Math.min(volumeCap, lastVolume), 0);
+                            } else {
+                                setStreamVolume(streamAlias, lastVolume, 0);
+                            }
+                        }
+                    }
+                } else {
+                    // Headset disconnected
+                    for (int stream = 0; stream < STREAM_VOLUME_SPEAKER_SETTINGS.length; stream++) {
+                        final int streamAlias = mStreamVolumeAlias[stream];
+                        // Save headset volume
+                        System.putInt(mContentResolver, STREAM_VOLUME_HEADSET_SETTINGS[stream],
+                                getStreamVolume(streamAlias));
+                        // Restore speaker volume
+                        try {
+                            lastVolume = System.getInt(mContentResolver,
+                                    STREAM_VOLUME_SPEAKER_SETTINGS[streamAlias]);
+                        } catch (SettingNotFoundException e) {
+                            lastVolume = -1;
+                        }
+                        System.putInt(mContentResolver, STREAM_VOLUME_HEADSET_SETTINGS[stream],
+                                getStreamVolume(stream));
+                        if (lastVolume >= 0)
+                            setStreamVolume(streamAlias, lastVolume, 0);
                     }
                 }
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||
