@@ -41,6 +41,7 @@ import static com.android.server.NetworkManagementSocketTagger.PROP_QTAGUID_ENAB
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.content.res.Resources;
 import android.net.INetworkManagementEventObserver;
 import android.net.InterfaceConfiguration;
 import android.net.IpPrefix;
@@ -1403,7 +1404,10 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             WifiConfiguration wifiConfig, String wlanIface) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
         try {
-            wifiFirmwareReload(wlanIface, "AP");
+            if (mContext.getResources().getBoolean(
+                        com.android.internal.R.bool.config_wifiApFirmwareReload)) {
+                wifiFirmwareReload(wlanIface, "AP");
+            }
             if (wifiConfig == null) {
                 mConnector.execute("softap", "set", wlanIface);
             } else {
