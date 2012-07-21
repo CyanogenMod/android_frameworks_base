@@ -2077,12 +2077,12 @@ public class WifiStateMachine extends StateMachine {
                     transitionTo(mDriverUnloadingState);
                     break;
                 case CMD_START_SUPPLICANT:
-                    try {
-                        mNwService.wifiFirmwareReload(mInterfaceName, "STA");
-                    } catch (Exception e) {
-                        loge("Failed to reload STA firmware " + e);
+                   // try {
+                   //     mNwService.wifiFirmwareReload(mInterfaceName, "STA");
+                   //} catch (Exception e) {
+                   //     loge("Failed to reload STA firmware " + e);
                         // continue
-                    }
+                   // }
                    try {
                        //A runtime crash can leave the interface up and
                        //this affects connectivity when supplicant starts up.
