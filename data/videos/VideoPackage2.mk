@@ -16,13 +16,13 @@
 
 # Good-quality videos for non-space-constrained devices
 
-LOCAL_PATH  := frameworks/base/data/videos
-TARGET_PATH := system/media/video
+#LOCAL_PATH  := frameworks/base/data/videos
+#TARGET_PATH := system/media/video
 
-PRODUCT_COPY_FILES += \
-        $(LOCAL_PATH)/AndroidInSpace.240p.mp4:$(TARGET_PATH)/AndroidInSpace.240p.mp4 \
-        $(LOCAL_PATH)/AndroidInSpace.480p.mq.mp4:$(TARGET_PATH)/AndroidInSpace.480p.mp4 \
-        $(LOCAL_PATH)/Sunset.240p.mp4:$(TARGET_PATH)/Sunset.240p.mp4 \
-        $(LOCAL_PATH)/Sunset.480p.mq.mp4:$(TARGET_PATH)/Sunset.480p.mp4 \
-        $(LOCAL_PATH)/Disco.240p.mp4:$(TARGET_PATH)/Disco.240p.mp4 \
-        $(LOCAL_PATH)/Disco.480p.mq.mp4:$(TARGET_PATH)/Disco.480p.mp4
+#PRODUCT_COPY_FILES += \
+#        $(LOCAL_PATH)/AndroidInSpace.240p.mp4:$(TARGET_PATH)/AndroidInSpace.240p.mp4 \
+#        $(LOCAL_PATH)/AndroidInSpace.480p.mq.mp4:$(TARGET_PATH)/AndroidInSpace.480p.mp4 \
+#        $(LOCAL_PATH)/Sunset.240p.mp4:$(TARGET_PATH)/Sunset.240p.mp4 \
+#        $(LOCAL_PATH)/Sunset.480p.mq.mp4:$(TARGET_PATH)/Sunset.480p.mp4 \
+#        $(LOCAL_PATH)/Disco.240p.mp4:$(TARGET_PATH)/Disco.240p.mp4 \
+#        $(LOCAL_PATH)/Disco.480p.mq.mp4:$(TARGET_PATH)/Disco.480p.mp4
