@@ -198,6 +198,7 @@ EventHub::EventHub(void) :
         mOpeningDevices(0), mClosingDevices(0),
         mNeedToSendFinishedDeviceScan(false),
         mNeedToReopenDevices(false), mNeedToScanDevices(true),
+        mNeedToSendHeadPhoneEvent(false), mNeedToSendMicroPhoneEvent(false), mHeadsetDeviceId(-1),
         mPendingEventCount(0), mPendingEventIndex(0), mPendingINotify(false) {
     acquire_wake_lock(PARTIAL_WAKE_LOCK, WAKE_LOCK_ID);
 
@@ -693,6 +694,22 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
             event->type = DEVICE_ADDED;
             event += 1;
             mNeedToSendFinishedDeviceScan = true;
+#ifdef ALSA_HEADSET_DETECTION
+            if(device->classes == INPUT_DEVICE_CLASS_SWITCH) {
+                mLock.unlock();
+                int state = getSwitchState(device->id, SW_HEADPHONE_INSERT);
+                if(state > 0) {
+                    mNeedToSendHeadPhoneEvent = true;
+                }
+
+                state = getSwitchState(device->id, SW_MICROPHONE_INSERT);
+                mLock.lock();
+                if(state > 0) {
+                    mNeedToSendMicroPhoneEvent = true;
+                }
+                mHeadsetDeviceId = device->id;
+            }
+#endif
             if (--capacity == 0) {
                 break;
             }
@@ -707,6 +724,33 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
                 break;
             }
         }
+
+#ifdef ALSA_HEADSET_DETECTION
+        if(mNeedToSendHeadPhoneEvent) {
+            event->type = EV_SW;
+            event->code = SW_HEADPHONE_INSERT;
+            event->value = 1;
+            event->deviceId = mHeadsetDeviceId;
+            event->when = systemTime(SYSTEM_TIME_MONOTONIC);
+            mNeedToSendHeadPhoneEvent = false;
+            event += 1;
+            if (--capacity == 0) {
+                break;
+            }
+        }
+        if(mNeedToSendMicroPhoneEvent) {
+            event->type = EV_SW;
+            event->code = SW_MICROPHONE_INSERT;
+            event->value = 1;
+            event->deviceId = mHeadsetDeviceId;
+            event->when = systemTime(SYSTEM_TIME_MONOTONIC);
+            mNeedToSendMicroPhoneEvent = false;
+            event += 1;
+            if (--capacity == 0) {
+                break;
+            }
+        }
+#endif
 
         // Grab the next input event.
         bool deviceChanged = false;
@@ -1039,6 +1083,8 @@ status_t EventHub::openDeviceLocked(const char *devicePath) {
     // See if this is a keyboard.  Ignore everything in the button range except for
     // joystick and gamepad buttons which are handled like keyboards for the most part.
     bool haveKeyboardKeys = containsNonZeroByte(device->keyBitmask, 0, sizeof_bit_array(BTN_MISC))
+            || containsNonZeroByte(device->keyBitmask, sizeof_bit_array(BTN_MISC),
+                    sizeof_bit_array(BTN_9))
             || containsNonZeroByte(device->keyBitmask, sizeof_bit_array(KEY_OK),
                     sizeof_bit_array(KEY_MAX + 1));
     bool haveGamepadButtons = containsNonZeroByte(device->keyBitmask, sizeof_bit_array(BTN_MISC),
