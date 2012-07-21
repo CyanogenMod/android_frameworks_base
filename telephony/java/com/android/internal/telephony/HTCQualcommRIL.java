@@ -20,6 +20,8 @@ import static com.android.internal.telephony.RILConstants.*;
 
 import android.content.Context;
 import android.os.AsyncResult;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.text.TextUtils;
@@ -36,6 +38,9 @@ import java.util.ArrayList;
  * {@hide}
  */
 public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterface {
+    private final int RIL_INT_RADIO_OFF = 0;
+    private final int RIL_INT_RADIO_UNAVAILABLE = 1;
+    private final int RIL_INT_RADIO_ON = 13;
 
     public HTCQualcommRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
@@ -136,6 +141,7 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
         int response = p.readInt();
 
         switch(response) {
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret = responseVoid(p); break;
             case 21004: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
             case 21005: ret = responseVoid(p); break; // RIL_UNSOL_IMS_NETWORK_STATE_CHANGED
             case 21007: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
@@ -150,6 +156,10 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
         }
 
         switch(response) {
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED:
+                int state = p.readInt();
+                setRadioStateFromRILInt(state);
+                break;
             case 21004:
             case 21005:
             case 21007:
@@ -160,6 +170,43 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
                                         new AsyncResult (null, null, null));
                 }
                 break;
-                    }
+        }
+    }
+
+    private void setRadioStateFromRILInt(int stateCode) {
+        CommandsInterface.RadioState radioState;
+        HandlerThread handlerThread;
+        Looper looper;
+        IccHandler iccHandler;
+
+        switch (stateCode) {
+            case RIL_INT_RADIO_OFF:
+                radioState = CommandsInterface.RadioState.RADIO_OFF;
+                if (mIccHandler != null) {
+                    mIccThread = null;
+                    mIccHandler = null;
+                }
+                break;
+            case RIL_INT_RADIO_UNAVAILABLE:
+                radioState = CommandsInterface.RadioState.RADIO_UNAVAILABLE;
+                break;
+            case RIL_INT_RADIO_ON:
+                if (mIccHandler == null) {
+                    handlerThread = new HandlerThread("IccHandler");
+                    mIccThread = handlerThread;
+
+                    mIccThread.start();
+
+                    looper = mIccThread.getLooper();
+                    mIccHandler = new IccHandler(this,looper);
+                    mIccHandler.run();
+                }
+                radioState = CommandsInterface.RadioState.RADIO_ON;
+                break;
+            default:
+                throw new RuntimeException("Unrecognized RIL_RadioState: " + stateCode);
+        }
+
+        setRadioState(radioState);
     }
 }
