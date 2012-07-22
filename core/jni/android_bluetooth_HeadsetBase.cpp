@@ -96,6 +96,22 @@ static int send_line(int fd, const char* line) {
     return 0;
 }
 
+static int send_chars(int fd, const char* line) {
+    int nw;
+    int len = strlen(line);
+    int llen = len + 1;
+    char *buffer = (char *)calloc(llen, sizeof(char));
+
+    snprintf(buffer, llen, "%s", line);
+
+    if (write_error_check(fd, buffer, llen - 1)) {
+        free(buffer);
+        return -1;
+    }
+    free(buffer);
+    return 0;
+}
+
 static void mask_eighth_bit(char *line)
 {
    for (;;line++) {
@@ -177,6 +193,85 @@ again:
 
     return buf;
 }
+
+// specialized version of get_line that terminates on ESC(abort) or Ctrl-Z
+
+static const char* get_PDUline(int fd, char *buf, int len, int timeout_ms,
+                            int *err) {
+    char *bufit=buf;
+    int fd_flags = fcntl(fd, F_GETFL, 0);
+    struct pollfd pfd;
+
+again:
+    *bufit = 0;
+    pfd.fd = fd;
+    pfd.events = POLLIN;
+    *err = errno = 0;
+    int ret = TEMP_FAILURE_RETRY(poll(&pfd, 1, timeout_ms));
+    if (ret < 0) {
+        ALOGE("poll() error\n");
+        *err = errno;
+        return NULL;
+    }
+    if (ret == 0) {
+        return NULL;
+    }
+
+    if (pfd.revents & (POLLHUP | POLLERR | POLLNVAL)) {
+        ALOGW("RFCOMM poll() returned  success (%d), "
+             "but with an unexpected revents bitmask: %#x\n", ret, pfd.revents);
+        errno = EIO;
+        *err = errno;
+        return NULL;
+    }
+
+    while ((int)(bufit - buf) < (len - 1))
+    {
+        errno = 0;
+        int rc = TEMP_FAILURE_RETRY(read(fd, bufit, 1));
+
+        if (!rc)
+            break;
+
+        if (rc < 0) {
+            if (errno == EBUSY) {
+                ALOGI("read() error %s (%d): repeating read()...",
+                     strerror(errno), errno);
+                goto again;
+            }
+            *err = errno;
+            ALOGE("read() error %s (%d)", strerror(errno), errno);
+            return NULL;
+        }
+
+        if (*bufit == '\x1b') { // ESC  - cause a string containing only ESC to be returned
+            *buf = '\x1b';
+            bufit = buf+1;
+            break;
+        }
+
+        if (*bufit=='\x1a') { // ctrl-z
+            break;
+        }
+
+        bufit++;
+    }
+
+    *bufit = 0;
+
+    // According to ITU V.250 section 5.1, IA5 7 bit chars are used,
+    //   the eighth bit or higher bits are ignored if they exists
+    // We mask out only eighth bit, no higher bit, since we do char
+    // string here, not wide char.
+    // We added this processing due to 2 real world problems.
+    // 1 BMW 2005 E46 which sends binary junk
+    // 2 Audi 2010 A3, dial command use 0xAD (soft-hyphen) as number
+    //   formater, which was rejected by the AT handler
+    mask_eighth_bit(buf);
+
+    return buf;
+}
+
 #endif
 
 static void classInitNative(JNIEnv* env, jclass clazz) {
@@ -513,6 +608,20 @@ static jboolean sendURCNative(JNIEnv *env, jobject obj, jstring urc) {
     return JNI_FALSE;
 }
 
+static jboolean sendURCNativeChars(JNIEnv *env, jobject obj, jstring urc) {
+#ifdef HAVE_BLUETOOTH
+    native_data_t *nat = get_native_data(env, obj);
+    if (nat->rfcomm_connected) {
+        const char *c_urc = env->GetStringUTFChars(urc, NULL);
+        jboolean ret = send_chars(nat->rfcomm_sock, c_urc) == 0 ? JNI_TRUE : JNI_FALSE;
+        if (ret == JNI_TRUE) pretty_log_urc(c_urc);
+        env->ReleaseStringUTFChars(urc, c_urc);
+        return ret;
+    }
+#endif
+    return JNI_FALSE;
+}
+
 static jstring readNative(JNIEnv *env, jobject obj, jint timeout_ms) {
 #ifdef HAVE_BLUETOOTH
     {
@@ -520,6 +629,25 @@ static jstring readNative(JNIEnv *env, jobject obj, jint timeout_ms) {
         if (nat->rfcomm_connected) {
             char buf[256];
             const char *ret = get_line(nat->rfcomm_sock,
+                                       buf, sizeof(buf),
+                                       timeout_ms,
+                                       &nat->last_read_err);
+            return ret ? env->NewStringUTF(ret) : NULL;
+        }
+        return NULL;
+    }
+#else
+    return NULL;
+#endif
+}
+
+static jstring readNativePDUStream(JNIEnv *env, jobject obj, jint timeout_ms) {
+#ifdef HAVE_BLUETOOTH
+    {
+        native_data_t *nat = get_native_data(env, obj);
+        if (nat->rfcomm_connected) {
+            char buf[256];
+            const char *ret = get_PDUline(nat->rfcomm_sock,
                                        buf, sizeof(buf),
                                        timeout_ms,
                                        &nat->last_read_err);
@@ -555,7 +683,9 @@ static JNINativeMethod sMethods[] = {
     {"waitForAsyncConnectNative", "(I)I", (void *)waitForAsyncConnectNative},
     {"disconnectNative", "()V", (void *)disconnectNative},
     {"sendURCNative", "(Ljava/lang/String;)Z", (void *)sendURCNative},
+    {"sendURCNativeChars", "(Ljava/lang/String;)Z", (void *)sendURCNativeChars},
     {"readNative", "(I)Ljava/lang/String;", (void *)readNative},
+    {"readNativePDUStream", "(I)Ljava/lang/String;", (void *)readNativePDUStream},
     {"getLastReadStatusNative", "()I", (void *)getLastReadStatusNative},
 };
 
