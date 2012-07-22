@@ -1,0 +1,1227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+ --><resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="byteShort" msgid="8340973892742019101">"B"</string>
+    <string name="kilobyteShort" msgid="5973789783504771878">"KB"</string>
+    <string name="megabyteShort" msgid="6355851576770428922">"MB"</string>
+    <string name="gigabyteShort" msgid="3259882455212193214">"GB"</string>
+    <string name="terabyteShort" msgid="231613018159186962">"TB"</string>
+    <string name="petabyteShort" msgid="5637816680144990219">"PB"</string>
+    <string name="fileSizeSuffix" msgid="7670819340156489359">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
+    <string name="untitled" msgid="6071602020171759109">"‹ماۋزۇسىز›"</string>
+    <string name="ellipsis" msgid="7899829516048813237">"…"</string>
+    <string name="ellipsis_two_dots" msgid="1228078994866030736">"‥"</string>
+    <string name="emptyPhoneNumber" msgid="7694063042079676517">"(تېلېفون نومۇرى يوق)"</string>
+    <string name="unknownName" msgid="2277556546742746522">"(نامەلۇم)"</string>
+    <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"ئۈنخەت"</string>
+    <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
+    <string name="mmiError" msgid="5154499457739052907">"باغلىنىشتا مەسىلە كۆرۈلدى ياكى MMI كودى خاتا."</string>
+    <string name="mmiFdnError" msgid="5224398216385316471">"پەقەت مۇقىم نومۇرغىلا بۇ مەشغۇلاتنى ئىجرا قىلىدۇ."</string>
+    <string name="serviceEnabled" msgid="8147278346414714315">"مۇلازىمەت قوزغىتىلدى."</string>
+    <string name="serviceEnabledFor" msgid="6856228140453471041">"مۇلازىمەت تۆۋەندىكى تۈر ئۈچۈن قوزغىتىلدى:"</string>
+    <string name="serviceDisabled" msgid="1937553226592516411">"مۇلازىمەت چەكلەندى."</string>
+    <string name="serviceRegistered" msgid="6275019082598102493">"خەتلەش مۇۋەپپەقىيەتلىك."</string>
+    <string name="serviceErased" msgid="1288584695297200972">"مۇۋەپپەقىيەتلىك ئۆچۈردى."</string>
+    <string name="passwordIncorrect" msgid="7612208839450128715">"ئىم خاتا."</string>
+    <string name="mmiComplete" msgid="8232527495411698359">"MMI تاماملاندى."</string>
+    <string name="badPin" msgid="5085454289896032547">"سىز كىرگۈزگەن كونا PIN خاتا."</string>
+    <string name="badPuk" msgid="5702522162746042460">"سىز كىرگۈزگەن PUK خاتا."</string>
+    <string name="mismatchPin" msgid="3695902225843339274">"سىز كىرگۈزگەن PIN ماس كەلمىدى."</string>
+    <string name="invalidPin" msgid="3850018445187475377">"4-8 خانىلىق PIN نى كىرگۈزۈڭ."</string>
+    <string name="invalidPuk" msgid="8761456210898036513">"8 خانە ۋە ئۇنىڭدىن كۆپ PUK2 نى كىرگۈزۈڭ."</string>
+    <string name="needPuk" msgid="919668385956251611">"SIM كارتا PUK نۇمۇرىدا قۇلۇپلانغان. ئېچىش ئۈچۈن PUK نۇمۇرىنى كىرگۈزۈڭ."</string>
+    <string name="needPuk2" msgid="4526033371987193070">"SIM كارتىنى ئېچىش ئۈچۈن PUK2 نۇمۇرىنى كىرگۈزۈڭ."</string>
+    <string name="ClipMmi" msgid="6952821216480289285">"كەلگەن تېلېفون نومۇر"</string>
+    <string name="ClirMmi" msgid="7784673673446833091">"ئۇرۇلغان تېلېفون نومۇر"</string>
+    <string name="CfMmi" msgid="5123218989141573515">"كەلگەن تېلېفوننى ئۇلاپ يەتكۈزۈش"</string>
+    <string name="CwMmi" msgid="9129678056795016867">"چاقىرىشنى كۈتۈش"</string>
+    <string name="BaMmi" msgid="455193067926770581">"چاقىرىشنى چەكلەش"</string>
+    <string name="PwdMmi" msgid="7043715687905254199">"ئىم ئۆزگەرتىش"</string>
+    <string name="PinMmi" msgid="3113117780361190304">"PIN ئۆزگەرت"</string>
+    <string name="CnipMmi" msgid="3110534680557857162">"كەلگەن نومۇرنى كۆرسىتىش"</string>
+    <string name="CnirMmi" msgid="3062102121430548731">"كەلگەن نومۇرنى كۆرسىتىشنى چەكلەش"</string>
+    <string name="ThreeWCMmi" msgid="9051047170321190368">"ئۈچىنچى تەرەپ چاقىرىۋاتىدۇ"</string>
+    <string name="RuacMmi" msgid="7827887459138308886">"ئېلىشنى خالىمايدىغان تېلېفۇنلارنى ئۈزىۋېتىش"</string>
+    <string name="CndMmi" msgid="3116446237081575808">"چاقىرغان نومۇرنى يەتكۈزۈش"</string>
+    <string name="DndMmi" msgid="1265478932418334331">"ئاۋارە قىلماڭ"</string>
+    <string name="CLIRDefaultOnNextCallOn" msgid="429415409145781923">"كۆڭۈلدىكى ئەھۋالدا يەرلىك نومۇرنى كۆرسەتمەيدۇ ئەمما كېيىنكى قېتىملىق سۆزلىشىشتە كۆرسىتىدۇ."</string>
+    <string name="CLIRDefaultOnNextCallOff" msgid="3092918006077864624">"كۆڭۈلدىكى ئەھۋالدا يەرلىك نومۇرنى كۆرسەتمەيدۇ ئەمما كېيىنكى قېتىملىق سۆزلىشىشتە كۆرسەتمەيدۇ."</string>
+    <string name="CLIRDefaultOffNextCallOn" msgid="6179425182856418465">"كۆڭۈلدىكى ئەھۋالدا يەرلىك نومۇرنى كۆرسىتىدۇ ئەمما كېيىنكى قېتىملىق سۆزلىشىشتە كۆرسەتمەيدۇ."</string>
+    <string name="CLIRDefaultOffNextCallOff" msgid="2567998633124408552">"كۆڭۈلدىكى ئەھۋالدا يەرلىك نومۇرنى كۆرسىتىدۇ كېيىنكى قېتىملىق سۆزلىشىشتىمۇ كۆرسىتىدۇ."</string>
+    <string name="serviceNotProvisioned" msgid="8614830180508686666">"مۇلازىمەت تەمىنلەنمىگەن"</string>
+    <string name="CLIRPermanent" msgid="5460892159398802465">"مەزكۇر تېلېفون نۇمۇرىنى كۆرسىتىش تەڭشىكىنى ئۆزگەرتەلمەيدۇ."</string>
+    <string name="RestrictedChangedTitle" msgid="5592189398956187498">"زىيارەت چەكلىمىسى ئۆزگەردى"</string>
+    <string name="RestrictedOnData" msgid="8653794784690065540">"سانلىق مەلۇمات مۇلازىمىتى چەكلەندى."</string>
+    <string name="RestrictedOnEmergency" msgid="6581163779072833665">"جىددىي مۇلازىمەت چەكلەندى."</string>
+    <string name="RestrictedOnNormal" msgid="4953867011389750673">"ئاۋاز مۇلازىمىتى چەكلەندى."</string>
+    <string name="RestrictedOnAllVoice" msgid="1459318899842232234">"بارلىق ئاۋاز مۇلازىمىتى چەكلەندى."</string>
+    <string name="RestrictedOnSms" msgid="8314352327461638897">"قىسقا ئۇچۇر مۇلازىمىتى توختىتىلدى."</string>
+    <string name="RestrictedOnVoiceData" msgid="8244438624660371717">"ئاۋاز/سانلىق مەلۇمات مۇلازىمىتى توختىتىلدى."</string>
+    <string name="RestrictedOnVoiceSms" msgid="1888588152792023873">"ئاۋاز/قىسقا ئۇچۇر مۇلازىمىتى توختىتىلدى."</string>
+    <string name="RestrictedOnAll" msgid="2714924667937117304">"بارلىق ئاۋاز/سانلىق مەلۇمات/قىسقا ئۇچۇر مۇلازىمىتى توختىتىلدى."</string>
+    <string name="serviceClassVoice" msgid="1258393812335258019">"ئاۋاز"</string>
+    <string name="serviceClassData" msgid="872456782077937893">"سانلىق مەلۇمات"</string>
+    <string name="serviceClassFAX" msgid="5566624998840486475">"فاكس"</string>
+    <string name="serviceClassSMS" msgid="2015460373701527489">"قىسقا ئۇچۇر"</string>
+    <string name="serviceClassDataAsync" msgid="4523454783498551468">"قەدەمداشسىز"</string>
+    <string name="serviceClassDataSync" msgid="7530000519646054776">"قەدەمداش"</string>
+    <string name="serviceClassPacket" msgid="6991006557993423453">"بوغچا"</string>
+    <string name="serviceClassPAD" msgid="3235259085648271037">"PAD"</string>
+    <string name="roamingText0" msgid="7170335472198694945">"كەزمە كۆرسەتكۈچ ئوچۇق"</string>
+    <string name="roamingText1" msgid="5314861519752538922">"كەزمە كۆرسەتكۈچ تاقاق"</string>
+    <string name="roamingText2" msgid="8969929049081268115">"كەزمە كۆرسەتكۈچ چاقناۋاتىدۇ"</string>
+    <string name="roamingText3" msgid="5148255027043943317">"يەرلىك دائىرىسىدىن ھالقىدى"</string>
+    <string name="roamingText4" msgid="8808456682550796530">"بىنا سىرتىدا"</string>
+    <string name="roamingText5" msgid="7604063252850354350">"كەزمە - مايىللىق سىستېما"</string>
+    <string name="roamingText6" msgid="2059440825782871513">"كەزمە - ئىشلىتىلىشچان سىستېما"</string>
+    <string name="roamingText7" msgid="7112078724097233605">"كەزمە - ئىتتىپاقداش ھەمكارلاشقۇچىلار"</string>
+    <string name="roamingText8" msgid="5989569778604089291">"كەزمە - ئالىي ھەمكارلاشقۇچىلار"</string>
+    <string name="roamingText9" msgid="7969296811355152491">"كەزمە - تولۇق مۇلازىمەت ئىقتىدارى"</string>
+    <string name="roamingText10" msgid="3992906999815316417">"كەزمە - قىسمەن مۇلازىمەت ئىقتىدارى"</string>
+    <string name="roamingText11" msgid="4154476854426920970">"كەزمە لەۋھە ئوچۇق"</string>
+    <string name="roamingText12" msgid="1189071119992726320">"كەزمە لەۋھە تاقاق"</string>
+    <string name="roamingTextSearching" msgid="8360141885972279963">"مۇلازىمەت ئىزدەۋاتىدۇ"</string>
+    <string name="cfTemplateNotForwarded" msgid="1683685883841272560">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>:ئۇلاپ يۆتكىيەلمىدى"</string>
+    <string name="cfTemplateForwarded" msgid="1302922117498590521">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
+    <string name="cfTemplateForwardedTime" msgid="9206251736527085256">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g> after <xliff:g id="TIME_DELAY">{2}</xliff:g> سېكۇنت"</string>
+    <string name="cfTemplateRegistered" msgid="5073237827620166285">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>:ئۇلاپ يۆتكىيەلمىدى"</string>
+    <string name="cfTemplateRegisteredTime" msgid="6781621964320635172">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>:ئۇلاپ يۆتكىيەلمىدى"</string>
+    <string name="fcComplete" msgid="3118848230966886575">"ئىقتىدار كودى تاماملاندى."</string>
+    <string name="fcError" msgid="3327560126588500777">"باغلىنىشتا مەسىلە كۆرۈلدى ياكى ئىقتىدار كودى ئىناۋەتسىز."</string>
+    <string name="httpErrorOk" msgid="1191919378083472204">"جەزملە"</string>
+    <string name="httpError" msgid="6603022914760066338">"تور خاتالىقى كۆرۈلدى."</string>
+    <string name="httpErrorLookup" msgid="4517085806977851374">"بۇ تور ئادرېسىنى تاپالمىدى."</string>
+    <string name="httpErrorUnsupportedAuthScheme" msgid="2781440683514730227">"بۇ تور بېكەتنىڭ سالاھىيەت دەلىللەش لايىھەسىنى قوللىمايدۇ."</string>
+    <string name="httpErrorAuth" msgid="7293960746955020542">"سالاھىيەت دەلىللەش مەغلۇپ بولدى."</string>
+    <string name="httpErrorProxyAuth" msgid="1788207010559081331">"ۋاكالەتچى مۇلازىمېتىر ئارقىلىق سالاھىيەت دەلىللەش مەغلۇپ بولدى."</string>
+    <string name="httpErrorConnect" msgid="7623096283505770433">"مۇلازىمىتېرغا مۇۋەپپەقىيەتلىك باغلىنالمىدى."</string>
+    <string name="httpErrorIO" msgid="4270874999047767599">"مۇلازىمېتىر ئالاقە ئورنىتالمىدى، سەل تۇرۇپ قايتا سىناڭ."</string>
+    <string name="httpErrorTimeout" msgid="4743403703762883954">"مۇلازىمىتىرغا ئۇلىنىش مۆھلىتى ئېشىپ كەتتى."</string>
+    <string name="httpErrorRedirectLoop" msgid="8679596090392779516">"بۇ بەتتە نۇرغۇنلىغان مۇلازىمېتىر قايتا يىتەكلىگۈچلەر بار."</string>
+    <string name="httpErrorUnsupportedScheme" msgid="5257172771607996054">"بۇ كېلىشىمنى قوللىمايدۇ."</string>
+    <string name="httpErrorFailedSslHandshake" msgid="3088290300440289771">"بىخەتەر باغلىنىشنى قۇرالمىدى."</string>
+    <string name="httpErrorBadUrl" msgid="6088183159988619736">"تور بەتنى ئاچالمايدۇ چۈنكى تور ئادرېس خاتا."</string>
+    <string name="httpErrorFile" msgid="8250549644091165175">"بۇ ھۆججەتنى زىيارەت قىلالمايدۇ."</string>
+    <string name="httpErrorFileNotFound" msgid="5588380756326017105">"ئىلتىماس قىلغان ھۆججەتنى تاپالمىدى."</string>
+    <string name="httpErrorTooManyRequests" msgid="1235396927087188253">"بىر تەرەپ قىلىۋاتقان ئىلتىماس بەك كۆپ. سەل تۇرۇپ قايتا سىناڭ."</string>
+    <string name="notification_title" msgid="1259940370369187045">"<xliff:g id="ACCOUNT">%1$s</xliff:g> نىڭ تىزىمغا كىرىش خاتالىقى"</string>
+    <string name="contentServiceSync" msgid="8353523060269335667">"قەدەمداش"</string>
+    <string name="contentServiceSyncNotificationTitle" msgid="397743349191901458">"قەدەمداش"</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc" msgid="8100981435080696431">"نۇرغۇن <xliff:g id="CONTENT_TYPE">%s</xliff:g> ئۆچۈرۈش."</string>
+    <string name="low_memory" product="tablet" msgid="2292820184396262278">"تاختا كومپيۇتېر ساقلىغۇچىسى توشتى!بەزى ھۆججەتلەرنى ئۆچۈرۈپ بوشلۇق بىكارلاڭ."</string>
+    <string name="low_memory" product="default" msgid="6632412458436461203">"تېلېفون ساقلىغۇچىسى توشتى!بەزى ھۆججەتلەرنى ئۆچۈرۈپ بوشلۇق بىكارلاڭ."</string>
+    <string name="me" msgid="6545696007631404292">"مەن"</string>
+    <string name="power_dialog" product="tablet" msgid="8545351420865202853">"تاختا كومپيۇتېر تاللانمىلار"</string>
+    <string name="power_dialog" product="default" msgid="1319919075463988638">"تېلېفون تاللانما"</string>
+    <string name="silent_mode" msgid="7167703389802618663">"ئۈنسىز ھالەت"</string>
+    <string name="turn_on_radio" msgid="3912793092339962371">"سىمسىز تورنى ئاچ"</string>
+    <string name="turn_off_radio" msgid="8198784949987062346">"سىمسىز تورنى تاقا"</string>
+    <string name="screen_lock" msgid="799094655496098153">"ئېكران قۇلۇپلاش"</string>
+    <string name="power_off" msgid="4266614107412865048">"تاقاش"</string>
+    <string name="silent_mode_silent" msgid="319298163018473078">"قوڭغۇراق تاقاق"</string>
+    <string name="silent_mode_vibrate" msgid="7072043388581551395">"قوڭغۇراق تىترەت"</string>
+    <string name="silent_mode_ring" msgid="8592241816194074353">"قوڭغۇراق ئوچۇق"</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"تاقاۋاتىدۇ…"</string>
+    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"تاختا كومپيۇتېرىڭىز تاقىلىدۇ."</string>
+    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"تېلېفونىڭىز تاقىلىدۇ."</string>
+    <string name="shutdown_confirm_question" msgid="6656441286856415014">"تاقامسىز؟"</string>
+    <string name="recent_tasks_title" msgid="3691764623638127888">"يېقىنقى"</string>
+    <string name="no_recent_tasks" msgid="279702952298056674">"يېقىنقى پىروگراممىلار يوق."</string>
+    <string name="global_actions" product="tablet" msgid="408477140088053665">"تاختا كومپيۇتېر تاللانمىلار"</string>
+    <string name="global_actions" product="default" msgid="2406416831541615258">"تېلېفون تاللانما"</string>
+    <string name="global_action_lock" msgid="2844945191792119712">"ئېكران قۇلۇپلاش"</string>
+    <string name="global_action_power_off" msgid="4471879440839879722">"تاقاش"</string>
+    <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"ئۈنسىز ھالەت"</string>
+    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"ئاۋاز تاقاق"</string>
+    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"ئاۋاز ئوچۇق"</string>
+    <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"ئايروپىلان ھالىتى"</string>
+    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"ئايروپىلان ھالىتى ئوچۇق"</string>
+    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"ئايروپىلان ھالىتى تاقاق"</string>
+    <string name="status_bar_notification_info_overflow" msgid="5301981741705354993">"999+"</string>
+    <string name="safeMode" msgid="2788228061547930246">"بىخەتەر ھالەت"</string>
+    <string name="android_system_label" msgid="6577375335728551336">"Android سىستېما"</string>
+    <string name="permgrouplab_costMoney" msgid="5429808217861460401">"ھەقلىق مۇلازىمەتلەر"</string>
+    <string name="permgroupdesc_costMoney" msgid="8193824940620517189">"ئەپنى ئىجرا قىلىشقا يول قويسىڭىز ھەق تاپشۇرۇش مەشغۇلاتى قىلىسىز."</string>
+    <string name="permgrouplab_messages" msgid="7521249148445456662">"ئۇچۇرلىرىڭىز"</string>
+    <string name="permgroupdesc_messages" msgid="7045736972019211994">"قىسقا ئۇچۇر، ئېلخەت ۋە باشقا ئۇچۇرلىرىڭىزنى ئۇقۇڭ، يېزىڭ."</string>
+    <string name="permgrouplab_personalInfo" msgid="3519163141070533474">"شەخسىي ئۇچۇرلىرىڭىز"</string>
+    <string name="permgroupdesc_personalInfo" product="tablet" msgid="6975389054186265786">"تاختا كومپيۇتېردا ساقلانغان ئالاقەداشلار ۋە كۈنتەرتىپلەرنى بىۋاستە زىيارەت قىلىدۇ."</string>
+    <string name="permgroupdesc_personalInfo" product="default" msgid="5488050357388806068">"يانفوندا ساقلانغان ئالاقەداشلار ۋە كۈنتەرتىپلەرنى بىۋاستە زىيارەت قىلىدۇ."</string>
+    <string name="permgrouplab_location" msgid="635149742436692049">"ئورنىڭىز"</string>
+    <string name="permgroupdesc_location" msgid="2430258821648348660">"فىزىكىلىق ئورنىڭىزنى كۆزىتىش"</string>
+    <string name="permgrouplab_network" msgid="5808983377727109831">"تور ئالاقە"</string>
+    <string name="permgroupdesc_network" msgid="5035763698958415998">"قوللىنىشچان پروگراممىنىڭ ھەرخىل تور ئىقتىدارلىرىنى زىيارەت قىلىشىغا يول قويىدۇ."</string>
+    <string name="permgrouplab_accounts" msgid="3359646291125325519">"ھېساباتلىرىڭىز"</string>
+    <string name="permgroupdesc_accounts" msgid="4948732641827091312">"ئىشلىتىشچان ھېساباتلارنى زىيارەت."</string>
+    <string name="permgrouplab_hardwareControls" msgid="7998214968791599326">"قاتتىق دېتال باشقۇرغۇچلىرى"</string>
+    <string name="permgroupdesc_hardwareControls" msgid="4357057861225462702">"تېلېفوندىكى قاتتىق دېتاللارنى بىۋاسىتە زىيارەت قىلىش."</string>
+    <string name="permgrouplab_phoneCalls" msgid="9067173988325865923">"تېلېفون ئالاقە"</string>
+    <string name="permgroupdesc_phoneCalls" msgid="7489701620446183770">"تېلېفون ئالاقە كۆزىتىش، خاتىرىلەش ۋە  بىر تەرەپ قىلىش."</string>
+    <string name="permgrouplab_systemTools" msgid="4652191644082714048">"سىستېما قوراللىرى"</string>
+    <string name="permgroupdesc_systemTools" msgid="8162102602190734305">"سىستېمىغا تۆۋەن دەرىجىلىك باشقۇرۇش ۋە زىيارەت قىلىش."</string>
+    <string name="permgrouplab_developmentTools" msgid="3446164584710596513">"ئىجادكارلار قورالى"</string>
+    <string name="permgroupdesc_developmentTools" msgid="9056431193893809814">"ئەپ ئىجادكارلىرىلا ئىشلىتىدىغان ئىقتىدارلار."</string>
+    <string name="permgrouplab_storage" msgid="1971118770546336966">"ساقلىغۇچ"</string>
+    <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"USB ساقلىغۇچنى زىيارەت قىلىدۇ."</string>
+    <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"SD كارتىنى زىيارەت."</string>
+    <string name="permlab_statusBar" msgid="7417192629601890791">"ھالەت بالداقنى چەكلەش ياكى ئۆزگەرتىش."</string>
+    <string name="permdesc_statusBar" msgid="1365473595331989732">"قوللىنىشچان پروگراممىنىڭ ھالەت بالداقنى چەكلىشىگە ياكى سىستېما سىنبەلگىسىنى قوشۇش ۋە ئۆچۈرۈشىگە يول قويىدۇ."</string>
+    <string name="permlab_statusBarService" msgid="7247281911387931485">"ھالەت بالداق"</string>
+    <string name="permdesc_statusBarService" msgid="4097605867643520920">"پىروگراممىنىڭ ھالەت بالداقتا تۇرۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_expandStatusBar" msgid="1148198785937489264">"ھالەت بالداقنى ياي/قاتلا"</string>
+    <string name="permdesc_expandStatusBar" msgid="7088604400110768665">"ئەپنىڭ ھالەت بالداقنى يېيىش ياكى قاتلىشىغا يول قويىدۇ."</string>
+    <string name="permlab_processOutgoingCalls" msgid="1136262550878335980">"سىرتقا نومۇر بۇراشنى توس"</string>
+    <string name="permdesc_processOutgoingCalls" msgid="2228988201852654461">"ئەپنىڭ ئۇرۇلغان تېلېفۇننى توختىتىش ۋە نۇمۇرنى ئۆزگەرتىپ ئۇرۇشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار ئۇرۇلغان تېلېفۇننى كۆزىتىشى، قايتا ئۇرۇشى ھەتتا چەكلەپ قۇيۇشى مۇمكىن."</string>
+    <string name="permlab_receiveSms" msgid="2697628268086208535">"قىسقا ئۇچۇر قوبۇللا"</string>
+    <string name="permdesc_receiveSms" msgid="6298292335965966117">"ئەپنىڭ ئۇچۇر قۇبۇل قىلىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار ئۇچۇرلىرىڭىزنى نازارەت قىلىشى ياكى سىزگە كۆرسەتمەي ئۆچۈرۈۋېتىشى مۇمكىن."</string>
+    <string name="permlab_receiveMms" msgid="8894700916188083287">"MMS قوبۇللا"</string>
+    <string name="permdesc_receiveMms" msgid="4563346832000174373">"ئەپنىڭ ئۇچۇر قۇبۇل قىلىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار كۆپ ۋاسىتە ئۇچۇر(MMS)لىرىڭىزنى نازارەت قىلىشى ياكى سىزگە كۆرسەتمەي ئۆچۈرۈۋېتىشى مۇمكىن."</string>
+    <string name="permlab_receiveEmergencyBroadcast" msgid="1803477660846288089">"جىددىي ئاڭلىتىش قوبۇللا"</string>
+    <string name="permdesc_receiveEmergencyBroadcast" msgid="7118393393716546131">"ئەپنىڭ جىددىي تارقىتىلغان ئۇچۇرلارنى قوبۇل قىلىپ ۋە بىر تەرەپ قىلىشىغا يول قويىدۇ. بۇ ھوقۇقنى پەقەت سىستېما پىروگراممىلىرىلا ئىشلىتەلەيدۇ."</string>
+    <string name="permlab_sendSms" msgid="5600830612147671529">"قىسقا ئۇچۇر يوللا"</string>
+    <string name="permdesc_sendSms" msgid="1946540351763502120">"ئەپنىڭ  ئۇچۇر يوللىشىغا يول قويىدۇ. زەھەرخەندە پروگراممىلار رۇخسىتىڭىزسىز ئۇچۇر يوللاپ، سىزنى چىقىم قىلدۇرىدۇ."</string>
+    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"جەزملىمەيلا قىسقا ئۇچۇر يوللا"</string>
+    <string name="permdesc_sendSmsNoConfirmation" msgid="4477752891276276168">"ئەپنىڭ  ئۇچۇر يوللىشىغا يول قويىدۇ. زەھەرخەندە پروگراممىلار رۇخسىتىڭىزسىز ئۇچۇر يوللاپ، سىزنى چىقىم قىلدۇرىدۇ."</string>
+    <string name="permlab_readSms" msgid="4085333708122372256">"قىسقا ئۇچۇر ياكى MMS ئوقۇ"</string>
+    <string name="permdesc_readSms" product="tablet" msgid="5836710350295631545">"ئەپنىڭ  تاختا كومپيۇتېر ياكى SIM كارتىدىكى ئۇچۇرلارنى ئۇقۇشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ مەخپىي ئۇچۇرلىرىڭىزنى ئۇقۇۋالالايدۇ."</string>
+    <string name="permdesc_readSms" product="default" msgid="3002170087197294591">"ئەپنىڭ  يانفون ياكى SIM كارتىدىكى ئۇچۇرلارنى ئۇقۇشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ مەخپىي ئۇچۇرلىرىڭىزنى ئۇقۇۋالالايدۇ."</string>
+    <string name="permlab_writeSms" msgid="6881122575154940744">"قىسقا ئۇچۇر ياكى MMS تەھرىر"</string>
+    <string name="permdesc_writeSms" product="tablet" msgid="5332124772918835437">"ئەپنىڭ  تاختا كومپيۇتېر ياكى SIM كارتىغا ئۇچۇر يېزىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ ئۇچۇرلىرىڭىزنى ئۆچۈرۈۋېتىشى مۇمكىن."</string>
+    <string name="permdesc_writeSms" product="default" msgid="6299398896177548095">"ئەپنىڭ  يانفون ياكى SIM كارتىغا ئۇچۇر يېزىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ ئۇچۇرلىرىڭىزنى ئۆچۈرۈۋېتىشى مۇمكىن."</string>
+    <string name="permlab_receiveWapPush" msgid="8258226427716551388">"WAP قوبۇللاش"</string>
+    <string name="permdesc_receiveWapPush" msgid="5979623826128082171">"ئەپنىڭ WAP قۇبۇل قىلىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار ئۇچۇرلىرىڭىزنى نازارەت قىلىشى ياكى سىزگە كۆرسەتمەي ئۆچۈرۈۋېتىشى مۇمكىن."</string>
+    <string name="permlab_getTasks" msgid="5005277531132573353">"ئىجرا قىلىنىۋاتقان پىروگراممىلارنى ئىزدەش"</string>
+    <string name="permdesc_getTasks" msgid="7048711358713443341">"ئەپنىڭ نۆۋەتتىكى ۋە يىقىنقى ئىجرا قىلىنغان ۋەزىپە ئۇچۇرلىرىنى ئىزدىشىگە يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق باشقا پىروگراممىلارنىڭ مەخپىي ئۇچۇرلىرىنى ئىزدەيدۇ."</string>
+    <string name="permlab_reorderTasks" msgid="5669588525059921549">"ئىجرا قىلىنىۋاتقان ئەپلەرنى قايتا تەرتىپلە"</string>
+    <string name="permdesc_reorderTasks" msgid="126252774270522835">"ئەپنىڭ  ۋەزىپە تەرتىپىنى ئورۇنلاشتۇرۇشىغا يول قويىدۇ. قارا نىيەت پروگراممىلار بۇ ئارقىلىق باشقۇرۇشىڭىزغا  قارىماي ئالدىغا ئۈتىۋالىدۇ."</string>
+    <string name="permlab_removeTasks" msgid="4802740047161700683">"ئەپ ئىجرا قىلىشنى توختات"</string>
+    <string name="permdesc_removeTasks" msgid="2000332928514575461">"ئەپنىڭ ۋەزىپىنى چىقىرىۋېتىپ، باشقا ئەپلەرنى توختىتىشىغا يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق باشقا ئەپلەرنى تاقىۋېتىدۇ."</string>
+    <string name="permlab_setDebugApp" msgid="4339730312925176742">"ئەپ سازلاشنى قوزغات"</string>
+    <string name="permdesc_setDebugApp" msgid="5584310661711990702">"ئەپنىڭ باشقا ئەپلەرگە قارىتا تەڭشەش ئېلىپ بېرىشىغا يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق باشقا ئەپلەرنى تاقىۋېتىدۇ."</string>
+    <string name="permlab_changeConfiguration" msgid="8214475779521218295">"ئارايۈز تەڭشىكىنى ئۆزگەرت"</string>
+    <string name="permdesc_changeConfiguration" msgid="3465121501528064399">"ئەپنىڭ  تەڭشەكنى ئۆزگەرتىشىگە يول قويىدۇ. مەسىلەن: تىل تەڭشىكى ۋە خەتنىڭ چوڭ-كىچىكلىكى…"</string>
+    <string name="permlab_enableCarMode" msgid="5684504058192921098">"ماشىنىدا يۈرۈش ھالىتىنى قوزغات"</string>
+    <string name="permdesc_enableCarMode" msgid="5673461159384850628">"ئەپنىڭ ماشىنىدا يۈرۈش ھالىتىنى قوزغىتىشىغا يول قويىدۇ."</string>
+    <string name="permlab_killBackgroundProcesses" msgid="8373714752793061963">"ئارقا سۇپىدىكى جەرياننى ئاخىرلاشتۇر"</string>
+    <string name="permdesc_killBackgroundProcesses" msgid="2908829602869383753">"ئەسلەك يېتىشسۇن يېتىشمىسۇن، ئەپنىڭ باشقا پىروگراممىلارنىڭ ئارقا سۇپىدىكى جەريانىنى تاقىشىغا يول قويىدۇ."</string>
+    <string name="permlab_forceStopPackages" msgid="1447830113260156236">"باشقا ئەپلەرنى مەجبۇرىي توختات"</string>
+    <string name="permdesc_forceStopPackages" msgid="7263036616161367402">"ئەپنىڭ باشقا ئەپلەرنى مەجبۇرىي توختىتىشىغا يول قويىدۇ."</string>
+    <string name="permlab_forceBack" msgid="1804196839880393631">"ئەپنى مەجبۇرىي تاقا"</string>
+    <string name="permdesc_forceBack" msgid="6534109744159919013">"ئەپنىڭ بۇرۇنقى بارلىق ۋەزىپىلەرنى توختىتىپ قايتىدىن باشلىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇنىڭغا ئىھتياجلىق ئەمەس."</string>
+    <string name="permlab_dump" msgid="1681799862438954752">"سىستېمىنىڭ ئىچكى ھالىتىنى ئىزدەش"</string>
+    <string name="permdesc_dump" msgid="2198776174276275220">"ئەپنىڭ سىستېمىنىڭ ئىچكى ھالىتىنى ئىزدىشىگە يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق زۈرۈر بولمىغان مەخپىي ئۇچۇرلارنى تېپىپ ئاشكارىلاپ قۇيىدۇ."</string>
+    <string name="permlab_retrieve_window_content" msgid="8022588608994589938">"ئېكران مەزمۇنىنى ئىزدە"</string>
+    <string name="permdesc_retrieve_window_content" msgid="3390962289797156152">"ئەپنىڭ نۆۋەتتىكى ئاكتىپ كۆزنەكتىكى مەزمۇننى ئىزدىشىگە يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق پۈتكۈل ئېكراندىكى مەزمۇننى ئىزدەيدۇ ھەندە ئىمدىن سىرت ھەممىسىنى تەكشۈرىدۇ."</string>
+    <string name="permlab_shutdown" msgid="7185747824038909016">"قىسمەن تاقا"</string>
+    <string name="permdesc_shutdown" msgid="7046500838746291775">"ئاكتىپ باشقۇرغۇچ تاقاش ھالىتىگە كىرىدۇ، ئەمما پۇتۇنلەي تاقىۋېتىلمەيدۇ."</string>
+    <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"ئەپنى ئالماشتۇرۇشنى چەكلە"</string>
+    <string name="permdesc_stopAppSwitches" msgid="3857886086919033794">"ئىشلەتكۈچىنىڭ باشقا پىروگراممىغا يۈتكىلىشىنى چەكلەيدۇ."</string>
+    <string name="permlab_runSetActivityWatcher" msgid="7811586187574696296">"بارلىق پىروگراممىلارنىڭ قوزغىلىشىنى كۆزەت"</string>
+    <string name="permdesc_runSetActivityWatcher" msgid="2149363027173451218">"ئەپنىڭ سىستېمىنڭ ئاكتىپ قوزغىتىش شەكلىنى كۆزىتىشىگە يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق سىستېمىنى بۇزىدۇ. بۇ خىل ھوقۇق پەقەت پىروگرامما تۈزۈش ئۈچۈن كېرەك بولىدۇ، ئادەتتىكى ئىشلىتىشتە زۈرۈر بولمايدۇ."</string>
+    <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"بوغچا ئۆچۈرۈشتە چىققان ئۇچۇرنى يوللاش"</string>
+    <string name="permdesc_broadcastPackageRemoved" msgid="3453286591439891260">"مەلۇم ئەپ بوغچىسىنىڭ ئۆچۈرۈلگەنلىكىنى ئۇقتۇرۇشىغا يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق ئىجرا قىلىنىۋاتقان باشقا ئەپلەرنى تاقايدۇ."</string>
+    <string name="permlab_broadcastSmsReceived" msgid="5689095009030336593">"قىسقا ئۇچۇر قۇبۇل قىلغانلىق خەۋىرىنى يوللا"</string>
+    <string name="permdesc_broadcastSmsReceived" msgid="9122419277306740155">"ئەپنىڭ ئۇچۇر قۇبۇل قىلغانلىقىنى ئۇقتۇرۇشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق يالغان ئۇقتۇرۇش يوللايدۇ."</string>
+    <string name="permlab_broadcastWapPush" msgid="3145347413028582371">"WAP_PUSH قۇبۇللاش خەۋىرىنى يوللا"</string>
+    <string name="permdesc_broadcastWapPush" msgid="3955303669461378091">"ئەپنىڭ WAP_PUSH ئۇچۇرى قۇبۇل قىلغانلىقىنى ئۇقتۇرۇشىغا يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق قالايمىقان كۆپ ۋاسىتە ئۇچۇر يوللايدۇ."</string>
+    <string name="permlab_setProcessLimit" msgid="2451873664363662666">"ئىجرا قىلىنىدىغان جەريان سانى چېكى"</string>
+    <string name="permdesc_setProcessLimit" msgid="7824786028557379539">"ئەپنىڭ جەريان سانىنى چەكلىشىگە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇنىڭغا مۇھتاج ئەمەس."</string>
+    <string name="permlab_setAlwaysFinish" msgid="5342837862439543783">"ئارقا سۇپىدىكى ھەممە پىروگراممىلارنى تاقا"</string>
+    <string name="permdesc_setAlwaysFinish" msgid="8773936403987091620">"ئەپنىڭ ئاكتىپ ئارقا سەپكە ئۈتۈش ئارقىلىق تاماملىنىشىنى كونترول قىلىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ خىل ھوقۇققا موھتاج ئەمەس."</string>
+    <string name="permlab_batteryStats" msgid="7863923071360031652">"توكدان سىتاتىستىكا ئۇچۇرىنى ئۆزگەرت"</string>
+    <string name="permdesc_batteryStats" msgid="5847319823772230560">"توكداننىڭ ئىشلىتىلىش سىتاتىستىكا ئۇچۇرىنى ئۆزگەرتىشكە يول قويىدۇ. ئادەتتىكى پىروگراممىلارنىڭ بۇنداق ھوقۇقى يوق."</string>
+    <string name="permlab_backup" msgid="470013022865453920">"سىستېمىنى زاپاسلاش ۋە ئەسلىگە كەلتۈرۈشنى باشقۇر"</string>
+    <string name="permdesc_backup" msgid="4837493065154256525">"ئەپنىڭ سىستېمىنى زاپاسلاش ۋە ئەسلىگە كەلتۈرۈشنى باشقۇرۇشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇنداق ھوقۇققا ئېرىشەلمەيدۇ."</string>
+    <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"تولۇق زاپاسلاش ياكى ئەسلىگە كەلتۈرۈش مەشغۇلاتىنى جەزملەيدۇ"</string>
+    <string name="permdesc_confirm_full_backup" msgid="9005017754175897954">"ئەپنىڭ تولۇق زاپاسلاشنى جەزملەش ئارا يۈزىنى قوزغىتىشىغا يول قويىدۇ. باشقا ئەپكە ئىشلىتىلمەيدۇ."</string>
+    <string name="permlab_internalSystemWindow" msgid="2148563628140193231">"ھوقۇق بېرىلمىگەن كۆزنەكلەرنى كۆرسەت"</string>
+    <string name="permdesc_internalSystemWindow" msgid="5895082268284998469">"مەخسۇس ئىچكى سىستېمىنى زىيارەت قىلىش كۆزنىكى قۇرۇشقا يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇنداق ھوقۇققا ئېرىشەلمەيدۇ."</string>
+    <string name="permlab_systemAlertWindow" msgid="3372321942941168324">"سىستېما دەرىجىسىدىكى ئاگاھلاندۇرۇشنى كۆرسەت"</string>
+    <string name="permdesc_systemAlertWindow" msgid="2884149573672821318">"ئەپنىڭ سىستېما ئاگاھلاندۇرۇش كۆزنىكى چىقىرىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق پۈتۈن ئېكراننى ئىگەللىۋالىدۇ."</string>
+    <string name="permlab_setAnimationScale" msgid="2805103241153907174">"ئومۇمىيەت جانلاندۇرۇم سۈرئىتىنى ئۆزگەرت"</string>
+    <string name="permdesc_setAnimationScale" msgid="7181522138912391988">"ئەپنىڭ ھەرۋاقىت ئومۇمىيەت جانلاندۇرۇم سۈرئىتى(جانلاندۇرۇمنى تېزلىتىش ياكى ئاستىلىتىش)نى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_manageAppTokens" msgid="17124341698093865">"ئەپ بەلگىسىنى باشقۇرۇش"</string>
+    <string name="permdesc_manageAppTokens" msgid="977127907524195988">"ئەپنىڭ ئۆزىنىڭ بەلگىسىنى ئۆزگەرتىپ، Z يۈنىلىشتىن ئايلىنىپ ئۆتۈپ كېتىشىگە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇققا مۇھتاج ئەمەس."</string>
+    <string name="permlab_injectEvents" msgid="1378746584023586600">"بېسىش كۇنۇپكىسى ۋە باشقۇرۇش توپچىلىرى"</string>
+    <string name="permdesc_injectEvents" product="tablet" msgid="7200014808195664505">"ئەپنىڭ ئۆزىنىڭ كىرگۈزۈش قورالىنى باشقىلارغا تەمىنلەپ بېرىشىگە يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق تاختا كومپيۇتېرنى ئىگەللىۋالىدۇ."</string>
+    <string name="permdesc_injectEvents" product="default" msgid="3946098050410874715">"ئەپنىڭ ئۆزىنىڭ كىرگۈزۈش قورالىنى باشقىلارغا تەمىنلەپ بېرىشىگە يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق يانفوننى ئىگەللىۋالىدۇ."</string>
+    <string name="permlab_readInputState" msgid="469428900041249234">"كىرگۈزگەن مەزمۇن ۋە ئىجرا قىلغان مەشغۇلاتنى خاتىرىلە"</string>
+    <string name="permdesc_readInputState" msgid="5132879321450325445">"ئەپنىڭ كۇنۇپكا مەشغۇلاتىنى تەكشۈرۈپ، باشقا پىروگراممىلار بىلەن ئورتاقلىشىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇققا موھتاج بولمايدۇ."</string>
+    <string name="permlab_bindInputMethod" msgid="3360064620230515776">"كىرگۈزگۈچكە باغلاش"</string>
+    <string name="permdesc_bindInputMethod" msgid="3734838321027317228">"ئىشلەتكۈچىنىڭ كىرگۈزگۈچنى يۇقىرى قاتلام كۆرۈنۈشىگە باغلىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇققا موھتاج بولمايدۇ."</string>
+    <string name="permlab_bindTextService" msgid="7358378401915287938">"تېكىست مۇلازىمىتىگە باغلا"</string>
+    <string name="permdesc_bindTextService" msgid="172508880651909350">"ئىشلەتكۈچىنىڭ تېكىست مۇلازىمىتى (مەسىلەن، ئىملا تەكشۈرۈش مۇلازىمىتى) نى يۇقىرى قاتلام كۆرۈنۈشىگە باغلىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلارغا بۇ ھوقۇق بېرىلمەيدۇ."</string>
+    <string name="permlab_bindVpnService" msgid="4708596021161473255">"VPN مۇلازىمىتىگە باغلا"</string>
+    <string name="permdesc_bindVpnService" msgid="6011554199384584151">"ئىشلەتكۈچىنىڭ مەۋھۇم شەخسىي تور (VPN) مۇلازىمىتىنى يۇقىرى قاتلام كۆرۈنۈشىگە باغلىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلارغا بۇ ھوقۇق بېرىلمەيدۇ."</string>
+    <string name="permlab_bindWallpaper" msgid="8716400279937856462">"تام قەغەزگە باغلا"</string>
+    <string name="permdesc_bindWallpaper" msgid="5287754520361915347">"ئىشلەتكۈچىنىڭ تام قەغەزنى يۇقىرى قاتلام كۆرۈنۈشىگە باغلىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلارغا بۇ ھوقۇق بېرىلمەيدۇ."</string>
+    <string name="permlab_bindRemoteViews" msgid="5697987759897367099">"كىچىك ئەپ مۇلازىمىتىگە باغلا"</string>
+    <string name="permdesc_bindRemoteViews" msgid="2930855984822926963">"ئىشلەتكۈچىنىڭ كىچىك ئەپ مۇلازىمىتىنى يۇقىرى قاتلام كۆرۈنۈشىگە باغلىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلارغا بۇ ھوقۇق بېرىلمەيدۇ."</string>
+    <string name="permlab_bindDeviceAdmin" msgid="8704986163711455010">"ئۈسكۈنە باشقۇرغۇچ بىلەن ئالاقىلىشىش"</string>
+    <string name="permdesc_bindDeviceAdmin" msgid="8714424333082216979">"ئوبيىكىتنىڭ ئۈسكۈنە باشقۇرغۇچقا يوللىنىشىغا يول قويىدۇ. ئادەتتىكى پىروگراممىلارغا بۇ ھوقۇق بېرىلمەيدۇ."</string>
+    <string name="permlab_setOrientation" msgid="3365947717163866844">"ئېكران يۆنىلىشىنى ئۆزگەرت"</string>
+    <string name="permdesc_setOrientation" msgid="6335814461615851863">"ئەپنىڭ خالىغان ۋاقىتتا ئىكران يۈنىلىشىنى ئۆزگەرتىشىگە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇنىڭغا موھتاج ئەمەس."</string>
+    <string name="permlab_setPointerSpeed" msgid="9175371613322562934">"ئىسترېلكا سۈرئىتىنى ئۆزگەرت"</string>
+    <string name="permdesc_setPointerSpeed" msgid="137436038503379864">"ئەپنىڭ خالىغان ۋاقىتتا چاشقىنەك ياكى ئىزلاش تاختا ئىستىرېلكىسىنىڭ سۈرئىتىنى خالىغان ۋاقىتتا ئۆزگەرتىشىگە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇنىڭغا موھتاج ئەمەس."</string>
+    <string name="permlab_signalPersistentProcesses" msgid="4255467255488653854">"ئەپكە لىنۇكىس سىگنالى يوللا"</string>
+    <string name="permdesc_signalPersistentProcesses" msgid="3565530463215015289">"ئەپنىڭ قۇبۇللىغان سىگنالىنى بارلىق جەريانغا يوللىشىغا يول قويىدۇ."</string>
+    <string name="permlab_persistentActivity" msgid="8659652042401085862">"ئەپنى ھەمىشە ئىجرا قىلىش"</string>
+    <string name="permdesc_persistentActivity" msgid="5037199778265006008">"ئەپنىڭ داۋاملىق ئىجرا قىلىنىشىغا يول قويىدۇ. بۇنداق بولغاندا سىستېما باشقا پىروگراممىنى قوزغىتالمايدۇ."</string>
+    <string name="permlab_deletePackages" msgid="3343439331576348805">"پىروگراممىنى ئۆچۈر"</string>
+    <string name="permdesc_deletePackages" msgid="3634943677518723314">"ئەپنىڭ Android بوغچىسىنى ئۆچۈرۈشىگە يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق مۇھىم پىروگراممىلارنى ئۆچۈرۈۋېتەلەيدۇ."</string>
+    <string name="permlab_clearAppUserData" msgid="2192134353540277878">"باشقا ئەپلەرنىڭ سانلىق مەلۇماتىنى ئۆچۈر"</string>
+    <string name="permdesc_clearAppUserData" msgid="7546345080434325456">"ئەپنىڭ ئىشلەتكۈچى سانلىق مەلۇماتىنى تازىلىشىغا يول قويىدۇ."</string>
+    <string name="permlab_deleteCacheFiles" msgid="1518556602634276725">"باشقا پىروگراممىلارنىڭ غەملەكلىرىنى ئۆچۈر"</string>
+    <string name="permdesc_deleteCacheFiles" msgid="2283074077168165971">"ئەپنىڭ غەملەك ھۆججەتلىرىنى ئۆچۈرۈشىگە يول قويىدۇ."</string>
+    <string name="permlab_getPackageSize" msgid="4799785352306641460">"پىروگراممىنىڭ ساقلاش بوشلۇقىنى ھىسابلا"</string>
+    <string name="permdesc_getPackageSize" msgid="5557253039670753437">"ئەپنىڭ ئۆزىنىڭ كودى، سانلىق مەلۇماتى ۋە غەملەك بوشلۇقىنى ئىزدىشىگە يول قويىدۇ."</string>
+    <string name="permlab_installPackages" msgid="335800214119051089">"پىروگراممىنى بىۋاسىتە ئورنات"</string>
+    <string name="permdesc_installPackages" msgid="526669220850066132">"ئەپنىڭ پۈتۈنلەي يىڭى ياكى يىڭىلانغان پىروگراممىلارنى ئورنىتىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق تولۇق ھوقۇقلۇق پىروگراممىلارنى ئورنىتالايدۇ."</string>
+    <string name="permlab_clearAppCache" msgid="4747698311163766540">"بارلىق پىروگراممىلارنىڭ غەملەك سانلىق مەلۇماتىنى ئۆچۈر"</string>
+    <string name="permdesc_clearAppCache" product="tablet" msgid="3097119797652477973">"ئەپنىڭ تاختا كومپيۇتېر غەملەك مۇندەرىجىسىدىكى بارلىق ھۆججەتلەرنى ئۆچۈرۈپ، بوشلۇق بىكارلىشىغا يول قويىدۇ. ئادەتتە پەقەت سىستېما جەريانىغىلا قوللىنىلىدۇ."</string>
+    <string name="permdesc_clearAppCache" product="default" msgid="7740465694193671402">"ئەپنىڭ تېلېفون غەملەك مۇندەرىجىسىدىكى بارلىق ھۆججەتلەرنى ئۆچۈرۈپ، بوشلۇق بىكارلىشىغا يول قويىدۇ. ئادەتتە پەقەت سىستېما جەريانىغىلا قوللىنىلىدۇ."</string>
+    <string name="permlab_movePackage" msgid="728454979946503926">"ئەپ مەنبەسىنى يۆتكە"</string>
+    <string name="permdesc_movePackage" msgid="6323049291923925277">"ئەپنىڭ ئىچكى ۋە تاشقى مۇھىتتا ئەپ مەنبەسىنى يۆتكىشىگە يول قويىدۇ."</string>
+    <string name="permlab_readLogs" msgid="6615778543198967614">"سەزگۈر خاتىرە سانلىق مەلۇماتىنى ئوقۇ"</string>
+    <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"ئەپنىڭ سىستېما خاتىرە ھۆججەتلىرىدىن ئۇچۇر ئوقۇشىغا يول قويىدۇ. بۇنىڭدىن تاختا كومپيۇتېر ئىشلىتىش ئەھۋالىڭىزنى بىلەلەيدۇ ئىچىدە شەخسىي ۋە مەخپىي ئۇچۇرلىرىڭىز بولۇشى مۇمكىن."</string>
+    <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"ئەپنىڭ سىستېما خاتىرە ھۆججەتلىرىدىن ئۇچۇر ئوقۇشىغا يول قويىدۇ. بۇنىڭدىن يانفون ئىشلىتىش ئەھۋالىڭىزنى بىلەلەيدۇ ئىچىدە شەخسىي ۋە مەخپىي ئۇچۇرلىرىڭىز بولۇشى مۇمكىن."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"قايتا چېلىش ئۈچۈن ئىشلىتىدىغان خالىغان ۋاستە كوك يەشكۈچ"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"ئەپنىڭ ئورنىتىلغان ۋاستە كود يەشكۈچنى ئىشلىتىپ، قايتا چېلىش ئۈچۈن كود يېشىشىگە يول قويىدۇ."</string>
+    <string name="permlab_diagnostic" msgid="8076743953908000342">"سىناشقا ئىشلىتىدىغان بارلىق مەنبەنى ئوقۇ\ياز"</string>
+    <string name="permdesc_diagnostic" msgid="3121238373951637049">"ئەپنىڭ سىناش گۇرۇپپىسى ئىگە بولغان بارلىق مەنبەنى ئوقۇش\يېزىشىغا يول قويىدۇ. سىستىمىنىڭ بىخەتەرلىكىگە تەسىر يېتىدۇ. بۇ ھوقۇق پەقەت ياساش سودىگىرى ياكى مۇلازىمەت سودىگىرى قاتتىق دېتال مەسىلىسىنى تەكشۈرۈشكە ئىشلىتىلىدۇ."</string>
+    <string name="permlab_changeComponentState" msgid="79425198834329406">"ئەپ بولىكىنى قوزغات ياكى چەكلە"</string>
+    <string name="permdesc_changeComponentState" product="tablet" msgid="4647419365510068321">"ئەپنىڭ باشقا ئەپ بولەكلىرىنى ئىشلىتىشىگە يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق تاختا كومپيۇتېرنىڭ مۇھىم ئىقتىدارلىرىنى توختىتىپ قويىدۇ. بۇنى تاللاشتا دىققەت قىلىش كېرەك، بۇ بىر قىسىم تەڭشەكلەرنىڭ بىخەتەر بولماسلىقى، بىردەك بولماسلىقى ۋە تۇراقسىزلىقىنى كەلتۈرۈپ چىقىرىدۇ."</string>
+    <string name="permdesc_changeComponentState" product="default" msgid="3443473726140080761">"ئەپنىڭ باشقا ئەپ بولەكلىرىنى ئىشلىتىشىگە يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق تېلېفوننىڭ مۇھىم ئىقتىدارلىرىنى توختىتىپ قويىدۇ. بۇنى تاللاشتا دىققەت قىلىش كېرەك، بۇ بىر قىسىم تەڭشەكلەرنىڭ بىخەتەر بولماسلىقى، بىردەك بولماسلىقى ۋە تۇراقسىزلىقىنى كەلتۈرۈپ چىقىرىدۇ."</string>
+    <string name="permlab_setPreferredApplications" msgid="3393305202145172005">"ئەپ مايىللىق تەڭشىكى"</string>
+    <string name="permdesc_setPreferredApplications" msgid="760008293501937546">"بىر ئەپنىڭ سىز ياقتۇرىدىغان ئەپ قىلىپ ئۆزگەرتىلىشىگە يول قويىدۇ. بۇنداق بولغاندا زەھەرخەندە ئەپلەر ئىجرا قىلىنىۋاتقان ئەپلەرنى يوشۇرۇن ئۆزگەرتىپ، نۆۋەتتىكى ئىجرا قىلىنىۋاتقان ئەپلىرىڭىزنى ئالداپ مەخپىي ئۇچۇرلىرىڭىزنى توپلىشى مۇمكىن."</string>
+    <string name="permlab_writeSettings" msgid="1365523497395143704">"ئومۇمىيەت سىستېما تەڭشىكىنى ئۆزگەرت"</string>
+    <string name="permdesc_writeSettings" msgid="838789419871034696">"ئەپنىڭ سىستېما سانلىق مەلۇماتىنى ئۆزگەرتىشىگە يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق سىستىما سەپلىمىڭىزنى بۇزىدۇ."</string>
+    <string name="permlab_writeSecureSettings" msgid="204676251876718288">"بىخەتەرلىك سىستېما تەڭشىكىنى ئۆزگەرت"</string>
+    <string name="permdesc_writeSecureSettings" msgid="5497873143539034724">"ئەپنىڭ سىستېما بىخەتەرلىك تەڭشىكى سانلىق مەلۇماتىنى ئۆزگەرتىشىگە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇققا ئېرىشەلمەيدۇ."</string>
+    <string name="permlab_writeGservices" msgid="2149426664226152185">"Google مۇلازىمەت خەرىتىسىنى ئۆزگەرت"</string>
+    <string name="permdesc_writeGservices" msgid="6602362746516676175">"Google مۇلازىمەت خەرىتىسىنى ئۆزگەرتىشىگە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇققا ئېرىشەلمەيدۇ."</string>
+    <string name="permlab_receiveBootCompleted" msgid="7776779842866993377">"يانفوننى ئاچقاندا ئۆزلۈكىدىن قوزغات"</string>
+    <string name="permdesc_receiveBootCompleted" product="tablet" msgid="7530977064379338199">"ئەپنىڭ سىستېما قوزغىتىلغاندا ئاپتۇماتىك قوزغىلىشىغا يول قويىدۇ. بۇنداق بولغاندا تاختا كومپيۇتېر قوزغىلىش ۋاقتى ئۇزىراپ كېتىدۇ، ئەپ ئوچۇق تۇرغاندا سىستېما سۈرئىتىگىمۇ تەسىر يىتىدۇ."</string>
+    <string name="permdesc_receiveBootCompleted" product="default" msgid="698336728415008796">"ئەپنىڭ سىستېما قوزغىتىلغاندا ئاپتۇماتىك قوزغىلىشىغا يول قويىدۇ. بۇنداق بولغاندا تېلېفون قوزغىلىش ۋاقتى ئۇزىراپ كېتىدۇ، ئەپ ئوچۇق تۇرغاندا سىستېما سۈرئىتىگىمۇ تەسىر يىتىدۇ."</string>
+    <string name="permlab_broadcastSticky" msgid="7919126372606881614">"مۇقىم ئاڭلىتىشنى يوللا"</string>
+    <string name="permdesc_broadcastSticky" product="tablet" msgid="6322249605930062595">"ئەپنىڭ ئاڭلىتىش تۈگىگەندىن كېيىنمۇ ساقلىنىپ قالىدىغان مۇقىم ئاڭلىتىشنى يوللىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق تاختا كومپيۇتېرنى ئاستىلىتىۋېتىدۇ ياكى ساقلىغۇچنى كۆپ ئىگەللىۋالىدۇ."</string>
+    <string name="permdesc_broadcastSticky" product="default" msgid="1920045289234052219">"ئەپنىڭ ئاڭلىتىش تۈگىگەندىن كېيىنمۇ ساقلىنىپ قالىدىغان مۇقىم ئاڭلىتىشنى يوللىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق ساقلىغۇچنى ئىگەللىۋالىدۇ."</string>
+    <string name="permlab_readContacts" msgid="6219652189510218240">"ئالاقەداشنىڭ سانلىق مەلۇماتىنى ئۇقۇ"</string>
+    <string name="permdesc_readContacts" product="tablet" msgid="7596158687301157686">"ئەپنىڭ تاختا كومپيۇتېردىكى بارلىق ئالاقەداشلارنىڭ سانلىق مەلۇماتىنى ئۇقۇشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ مەخپىي سانلىق مەلۇماتلىرىڭىزنى باشقىلارغا يوللاپ بېرىدۇ."</string>
+    <string name="permdesc_readContacts" product="default" msgid="3371591512896545975">"ئەپنىڭ يانفوندىكى بارلىق ئالاقەداشلارنىڭ سانلىق مەلۇماتىنى ئۇقۇشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ مەخپىي سانلىق مەلۇماتلىرىڭىزنى باشقىلارغا يوللاپ بېرىدۇ."</string>
+    <string name="permlab_writeContacts" msgid="644616215860933284">"ئالاقەداش سانلىق مەلۇماتىنى ياز"</string>
+    <string name="permdesc_writeContacts" product="tablet" msgid="7782689510038568495">"ئەپنىڭ تاختا كومپيۇتېردىكى ئالاقەداشلار سانلىق مەلۇماتىنى ئۆزگەرتىشىگە يول قويىدۇ. زەھەرخەندە  پىروگراممىلار بۇ ئارقىلىق ئالاقەداشلىرىڭىزنىڭ سانلىق مەلۇماتىنى ئۆچۈرۈۋېتىدۇ ياكى ئۆزگەرتىۋېتىدۇ."</string>
+    <string name="permdesc_writeContacts" product="default" msgid="3924383579108183601">"ئەپنىڭ يانفوندىكى ئالاقەداشلار سانلىق مەلۇماتىنى ئۆزگەرتىشىگە يول قويىدۇ. زەھەرخەندە  پىروگراممىلار بۇ ئارقىلىق ئالاقەداشلىرىڭىزنىڭ سانلىق مەلۇماتىنى ئۆچۈرۈۋېتىدۇ ياكى ئۆزگەرتىۋېتىدۇ."</string>
+    <string name="permlab_readProfile" msgid="6824681438529842282">"سەپلىمە ھۆججەت سانلىق مەلۇماتىڭىزنى ئوقۇيدۇ"</string>
+    <string name="permdesc_readProfile" product="default" msgid="6335739730324727203">"ئەپنىڭ ئۈسكۈنىڭىزگە ساقلانغان ئاتىڭىز ۋە ئالاقەداش ئۇچۇرلىرىڭىزغا ئوخشاش شەخسىي سەپلىمە ئۇچۇرلىرىڭىزنى ئوقۇشىغا يول قويىدۇ. بۇ ئەپنىڭ سىزنى پەرقلەندۈرەلەيدىغانلىقى ۋە سەپلىمە ھۆججەت ئۇچۇرىڭىزنى باشقىلارغا يوللاپ بېرەلەيدىغانلىقىنى بىلدۈرىدۇ."</string>
+    <string name="permlab_writeProfile" msgid="4679878325177177400">"سەپلىمە ھۆججەت سانلىق مەلۇماتىڭىزغا يازىدۇ"</string>
+    <string name="permdesc_writeProfile" product="default" msgid="6431297330378229453">"ئەپنىڭ ئۈسكۈنىڭىزگە ساقلانغان ئاتىڭىز ۋە ئالاقەداش ئۇچۇرلىرىڭىزغا ئوخشاش شەخسىي سەپلىمە ئۇچۇرلىرىڭىزنى يېزىشىغا يول قويىدۇ. بۇ ئەپنىڭ سىزنى پەرقلەندۈرەلەيدىغانلىقى ۋە سەپلىمە ھۆججەت ئۇچۇرىڭىزنى باشقىلارغا يوللاپ بېرەلەيدىغانلىقىنى بىلدۈرىدۇ."</string>
+    <string name="permlab_readSocialStream" product="default" msgid="1268920956152419170">"ئىجتىمائىي ئالاقىڭىزنى ئوقۇيدۇ"</string>
+    <string name="permdesc_readSocialStream" product="default" msgid="6619997662735851111">"ئەپنىڭ سىز ۋە دوستلىرىڭىزنىڭ ئىجتىمائىي ئالاقىسىنى زىيارەت قىلىپ ۋە قەدەمداشلىشىغا يول قويىدۇ. زەھەرخەندە ئەپلەر بۇنىڭدىن پايدىلىنىپ سىزنىڭ ئىجتىمائىي ئالاقە تورىڭىزدىكى دوستلىرىڭىز بىلەن بولغان شەخسىي ئالاقە ئۇچۇرلىرىنى ئوقۇيدۇ."</string>
+    <string name="permlab_writeSocialStream" product="default" msgid="3504179222493235645">"ئىجتىمائىي ئالاقىڭىزغا يازىدۇ"</string>
+    <string name="permdesc_writeSocialStream" product="default" msgid="2689083745826002521">"ئەپنىڭ دوستلىرىڭىزنىڭ ئەڭ يېڭى ئىجتىمائىي ئالاقە ھالىتىنى كۆرسىتىشىگە يول قويىدۇ. زەھەرخەندە ئەپلەر بۇنىڭدىن پايدىلىنىپ، دوستىڭىز سۈپىتىدە سىياقلىنىپ ئىم ۋە باشقا مەخپىي ئۇچۇرلىرىڭىزنى ئاشكارىلاشقا ئازدۇرىدۇ."</string>
+    <string name="permlab_readCalendar" msgid="5972727560257612398">"يىلنامەدىكى پائالىيەت ۋە مەخپىي ئۇچۇرلارنى ئوقۇيدۇ"</string>
+    <string name="permdesc_readCalendar" product="tablet" msgid="5665520896961671949">"ئەپنىڭ تاختا كومپيۇتېرىڭىزدا ساقلانغان بارلىق يىلنەمە پائالىيەتلىرىڭىز(دوستلىرىڭىز ۋە ئىشداشلىرىڭىزنىڭ پائالىيەتلىرىنىمۇ ئۆز ئىچىگە ئالىدۇ)نى ئوقۇشىغا يول قويىدۇ. بۇ ھوقۇققا ئىگە زەھەرخەندە ئەپلەر ئىگىسى خەۋەرسىز ئەھۋالدا بۇ يىلنامەلەردىن شەخسىي ئۇچۇرنى ئاجرىتىپ ئالىدۇ."</string>
+    <string name="permdesc_readCalendar" product="default" msgid="2915879965326930312">"ئەپنىڭ تېلېفونىڭىزدا ساقلانغان بارلىق يىلنەمە پائالىيەتلىرىڭىز(دوستلىرىڭىز ۋە ئىشداشلىرىڭىزنىڭ پائالىيەتلىرىنىمۇ ئۆز ئىچىگە ئالىدۇ)نى ئوقۇشىغا يول قويىدۇ. بۇ ھوقۇققا ئىگە زەھەرخەندە ئەپلەر ئىگىسى خەۋەرسىز ئەھۋالدا بۇ يىلنامەلەردىن شەخسىي ئۇچۇرنى ئاجرىتىپ ئالىدۇ."</string>
+    <string name="permlab_writeCalendar" msgid="8438874755193825647">"يىلنامەدىكى پائالىيەتلىرىڭىزنى قوشۇپ ئۆزگەرتىدۇ ھەمدە ئىگىسى خەۋەرسىز ئەھۋالدا قارشى تەرەپنىڭ ئېلخەت يوللىشىنى ئىلتىماس قىلىدۇ."</string>
+    <string name="permdesc_writeCalendar" msgid="5368129321997977226">"ئەپنىڭ يىلنامە ئىگىسىنىڭ نامىدا پائالىيەت ئىلتىماسى يوللىشىغا يول قويىدۇ ھەمدە ئۈسكۈنىڭىزدە ئۆزگەرتەلەيدىغان پائالىيەت(دوستلىرىڭىز ۋە ئىشداشلىرىڭىزنىڭ پائالىيەتلىرىنىمۇ ئۆز ئىچىگە ئالىدۇ)لەرنى قوشۇپ، ئۆچۈرۈپ ۋە ئۆزگەرتىشىگە يول قويىدۇ. بۇ ھوقۇققا ئىگە زەھەرخەندە ئەپلەر يىلنامە ئىگىسىنىڭ ئاتىدا ئەخلەت ئېلخەت يوللايدۇ، ئۇندىن باشقا ئىگىسى خەۋەرسىز ئەھۋالدا پائالىيەتنى ئۆزگەرتىدۇ ياكى ساختا پائالىيەت قوشىدۇ."</string>
+    <string name="permlab_accessMockLocation" msgid="8688334974036823330">"تەقلىدىي مەنبە ئارقىلىق سىناق ئېلىپ بېرىش"</string>
+    <string name="permdesc_accessMockLocation" msgid="7648286063459727252">"تەقلىدىي مەنبە قۇرۇپ سىناق ئېلىپ بارىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق تەقلىدىي مەنبەنى ئەمەلىي مەنبەنىڭ ئورنى(مەسىلەن GPS ياكى تور تەمىنلىگۈچى) ۋە ياكى ھالىتىگە دەسسىتېۋېلىشى مۇمكىن."</string>
+    <string name="permlab_accessLocationExtraCommands" msgid="2836308076720553837">"زىيادە ئورۇن ئۇچۇرىغا ئېرىشىش پىروگرامما بۇيرۇق زىيارىتى"</string>
+    <string name="permdesc_accessLocationExtraCommands" msgid="1948144701382451721">"زىيادە ئورۇن ئۇچۇرىغا ئېرىشىش ئۈچۈن پىروگرامما بۇيرۇق زىيارىتى بىلەن تەمىنلەيدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق GPS ياكى باشقا پىروگراممىلارنىڭ نورمال خىزمىتىگە تەسىر يەتكۈزىدۇ."</string>
+    <string name="permlab_installLocationProvider" msgid="6578101199825193873">"ئورۇن تەمىنلىگۈچ ئورنىتىشقا يول قويىدۇ"</string>
+    <string name="permdesc_installLocationProvider" msgid="5449175116732002106">"تەقلىدىي مەنبە قۇرۇپ سىناق ئېلىپ بارىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق تەقلىدىي مەنبەنى ئەمەلىي مەنبەنىڭ ئورنى(مەسىلەن GPS ياكى تور تەمىنلىگۈچى) ۋە ياكى ھالىتىگە دەسسىتېۋېلىشى مۇمكىن ياكى ئورنىڭىزنى نازارەت قىلىپ سىرتقى مەنبەگە تەمىنلىشى مۇمكىن."</string>
+    <string name="permlab_accessFineLocation" msgid="8116127007541369477">"GPS تىكى دەل ئورنى"</string>
+    <string name="permdesc_accessFineLocation" product="tablet" msgid="243973693233359681">"مەنبەنىڭ دەل ئورنىنى زىيارەت قىلىدۇ، يەنى تاختا كومپيۇتېردىكى يەرشارى ئورۇن بەلگىلەش سىستېمىسى(ئەگەر بولسا) دىگەندەك. زەھەرخەندە پىروگراممىلار مۇشۇ پۇرسەتتىن پايدىلىنىپ ئورنىڭىزنى جەزملەپ، توكداننى بىھۇدە سەرپ قىلىشى مۇمكىن."</string>
+    <string name="permdesc_accessFineLocation" product="default" msgid="7411213317434337331">"مەنبەنىڭ دەل ئورنىنى زىيارەت قىلىدۇ، يەنى يانفوندىكى يەرشارى ئورۇن بەلگىلەش سىستېمىسى(ئەگەر بولسا) دىگەندەك. زەھەرخەندە پىروگراممىلار مۇشۇ پۇرسەتتىن پايدىلىنىپ ئورنىڭىزنى جەزملەپ، توكداننى بىھۇدە سەرپ قىلىشى مۇمكىن."</string>
+    <string name="permlab_accessCoarseLocation" msgid="4642255009181975828">"(تورنى ئاساس قىلغان) تەخمىنىي ئورنى"</string>
+    <string name="permdesc_accessCoarseLocation" product="tablet" msgid="3704633168985466045">"تەخمىنىي مەنبە(مەسىلەن كۆچمە تور ساندان)نى زىيارەت قىلىش ئارقىلىق تاختا كومپيۇتېر ئورنىنى تەخمىنىي بىكىتىدۇ(ئەگەر مۇمكىن بولسا). زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ تەخمىنىي ئورنىڭىزنى بىلىۋالىدۇ."</string>
+    <string name="permdesc_accessCoarseLocation" product="default" msgid="8235655958070862293">"تەخمىنىي مەنبە(مەسىلەن كۆچمە تور ساندان)نى زىيارەت قىلىش ئارقىلىق تېلېفون ئورنىنى تەخمىنىي بىكىتىدۇ(ئەگەر مۇمكىن بولسا). زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ تەخمىنىي ئورنىڭىزنى بىلىۋالىدۇ."</string>
+    <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"SurfaceFlinger زىيارەت"</string>
+    <string name="permdesc_accessSurfaceFlinger" msgid="6805241830020733025">"ئەپنىڭ SurfaceFlinger نىڭ تۆۋەن ئىقتىدارىنى ئىشلىتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"كاندۇك يىغلەكنى ئوقۇش"</string>
+    <string name="permdesc_readFrameBuffer" msgid="7530020370469942528">"ئەپنىڭ كاندۇك يىغلەكتىكى مەزمۇننى ئوقۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_modifyAudioSettings" msgid="6095859937069146086">"ئاۋاز تەڭشىكىنى ئۆزگەرت"</string>
+    <string name="permdesc_modifyAudioSettings" msgid="5793461287365991922">"ئەپنىڭ سىستېمىنىڭ ئاۋاز كۈچى، ئاۋاز يولى قاتارلىق بارلىق ئاۋاز تەڭشىكىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_recordAudio" msgid="3876049771427466323">"ئاۋاز ئېلىش"</string>
+    <string name="permdesc_recordAudio" msgid="6493228261176552356">"ئەپنىڭ ئاۋاز ئېلىش يولىنى زىيارەت قىلىشىغا يول قويىدۇ."</string>
+    <string name="permlab_camera" msgid="3616391919559751192">"رەسىم ۋە سىن تارت"</string>
+    <string name="permdesc_camera" msgid="6004878235852154239">"ئەپنىڭ كامېرا بىلەن رەسىم ۋە سىن تارتىشىغا يول قويىدۇ. بۇنداق بولغاندا ئەپ خالىغان ۋاقىتتا كامېرادىن سۈرەتكە تارتالايدۇ."</string>
+    <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"تاختا كومپيۇتېرنى مەڭگۈلۈك چەكلە"</string>
+    <string name="permlab_brick" product="default" msgid="8337817093326370537">"يانفوننى مەڭگۈلۈك چەكلە"</string>
+    <string name="permdesc_brick" product="tablet" msgid="7379164636920817963">"ئەپنىڭ پۈتۈن تاختا كومپيۇتېرنى مەڭگۈلۈك توختىتىشىغا يول قويىدۇ. بۇ ئىنتايىن خەتەرلىك."</string>
+    <string name="permdesc_brick" product="default" msgid="5569526552607599221">"ئەپنىڭ پۈتۈن يانفوننى مەڭگۈلۈك توختىتىشىغا يول قويىدۇ. بۇ ئىنتايىن خەتەرلىك."</string>
+    <string name="permlab_reboot" product="tablet" msgid="3436634972561795002">"تاختا كومپيۇتېرنى مەجبۇرىي قايتا قوزغات"</string>
+    <string name="permlab_reboot" product="default" msgid="2898560872462638242">"يانفوننى مەجبۇرىي قايتا قوزغات"</string>
+    <string name="permdesc_reboot" product="tablet" msgid="4555793623560701557">"ئەپنىڭ تاختا كومپيۇتېرنى مەجبۇرىي قايتا قوزغىتىشىغا يول قويىدۇ."</string>
+    <string name="permdesc_reboot" product="default" msgid="7914933292815491782">"ئەپنىڭ يانفۇننى مەجبۇرىي قايتا قوزغىتىشىغا يول قويىدۇ."</string>
+    <string name="permlab_mount_unmount_filesystems" msgid="1761023272170956541">"ھۆججەت سىستېمىسىنى ئېگەرلەش ۋە ئېگەرسىزلەش"</string>
+    <string name="permdesc_mount_unmount_filesystems" msgid="6253263792535859767">"ئەپنىڭ يۆتكەلمە ساقلىغۇچتىكى ھۆججەت سىستېمىسىنى ئېگەرلەش ۋە ئېگەرسىزلىشىگە يول قويىدۇ."</string>
+    <string name="permlab_mount_format_filesystems" msgid="5523285143576718981">"سىرتقى ساقلىغۇچنى فورماتلا"</string>
+    <string name="permdesc_mount_format_filesystems" msgid="574060044906047386">"ئەپنىڭ يۆتكەلمە ساقلىغۇچنى فورماتلىشىغا يول قويىدۇ."</string>
+    <string name="permlab_asec_access" msgid="3411338632002193846">"ئىچىدىكى ساقلىغۇچتىن ئۇچۇرغا ئېرىش"</string>
+    <string name="permdesc_asec_access" msgid="8820326551687285439">"پىروگراممىنىڭ ئىچىدىكى ساقلىغۇچ ئۇچۇرىغا ئېرىشىشىگە يول قويىدۇ."</string>
+    <string name="permlab_asec_create" msgid="6414757234789336327">"ئىچىدىكى ساقلىغۇچ قۇر"</string>
+    <string name="permdesc_asec_create" msgid="2621346764995731250">"پىروگراممىنىڭ ئىچىدىكى ساقلىغۇچ قۇرۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_asec_destroy" msgid="526928328301618022">"ئىچىدىكى ساقلىغۇچنى بۇز"</string>
+    <string name="permdesc_asec_destroy" msgid="2746706889208066256">"پىروگراممىنىڭ ئىچىدىكى ساقلىغۇچنى بۇزۇشىغا يول قويىدۇ"</string>
+    <string name="permlab_asec_mount_unmount" msgid="2456287623689029744">"ئىچىدىكى ساقلىغۇچنى ئېگەرلە/ئېگەرسىزلە"</string>
+    <string name="permdesc_asec_mount_unmount" msgid="5934375590189368200">"پىروگراممىنىڭ ئىچىدىكى ساقلىغۇچنى ئېگەرلەش/ئېگەرسىزلەشكە يول قويىدۇ."</string>
+    <string name="permlab_asec_rename" msgid="7496633954080472417">"ئىچىدىكى ساقلىغۇچ ئاتىنى ئۆزگەرت"</string>
+    <string name="permdesc_asec_rename" msgid="2152829985238876790">"پىروگراممىنىڭ ئىچىدىكى ساقلىغۇچنىڭ ئىسمىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_vibrate" msgid="7768356019980849603">"تىترەتكۈچ تىزگىنى"</string>
+    <string name="permdesc_vibrate" msgid="2886677177257789187">"ئەپنىڭ تىترەتكۈچنى باشقۇرۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_flashlight" msgid="2155920810121984215">"چاقماق چىراغ باشقۇرۇش"</string>
+    <string name="permdesc_flashlight" msgid="6433045942283802309">"ئەپنىڭ چاقماق چىراغ باشقۇرۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_manageUsb" msgid="1113453430645402723">"USB ئۈسكۈنىلەرنىڭ مايىللىقى ۋە ھوقۇقىنى باشقۇر"</string>
+    <string name="permdesc_manageUsb" msgid="6148489202092166164">"پىروگراممىنىڭ USB ئۈسكۈنىلەرنىڭ مايىللىقى ۋە ھوقۇقىنى باشقۇرۇشىغا يول قويىدۇ"</string>
+    <string name="permlab_accessMtp" msgid="4953468676795917042">"MTP كېلىشىمىنى ئىجرا قىلىدۇ"</string>
+    <string name="permdesc_accessMtp" msgid="6532961200486791570">"يادرولۇق MTP قوزغاتقۇنى زىيارەت قىلىشقا يول قويۇپ  MTP USB كېلىشىمىنى قوللىنىشقا قولايلىق يارىتىدۇ."</string>
+    <string name="permlab_hardware_test" msgid="4148290860400659146">"قاتتىق دېتالنى سىنا"</string>
+    <string name="permdesc_hardware_test" msgid="3668894686500081699">"ئەپنىڭ سىرتتىن چىتىلغان قاتتىق دېتالنى سىنىشىغا يول قويىدۇ."</string>
+    <string name="permlab_callPhone" msgid="3925836347681847954">"تېلېفون نۇمۇرىنى بىۋاستە بۇرا"</string>
+    <string name="permdesc_callPhone" msgid="3369867353692722456">"ئەپنىڭ سىزنىڭ ۋاسىتىڭىزسىز تېلېفون ئۇرۇشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق تېلېفون ھەققىڭىزنى ئاشۇرۇۋېتىدۇ. دىققەت: بۇ ھوقۇق پىروگراممىنىڭ جىددى قۇتقۇزۇش تېلېفۇنى ئۇرۇشىغا رۇخسەت قىلمايدۇ."</string>
+    <string name="permlab_callPrivileged" msgid="4198349211108497879">"ھەرقانداق تېلېفوننى بىۋاستە بۇرا"</string>
+    <string name="permdesc_callPrivileged" msgid="244405067160028452">"ئەپنىڭ سىزنىڭ ۋاستىڭىزسىز ھەرقانداق تېلېفون ئۇرۇشىغا (جىددى قۇتقۇزۇش تېلېفونىنىمۇ ئۆز ئىچىگە ئالىدۇ) يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق جىددى مۇلازىمەتلەرگە ھەم قانۇنسىز تېلېفونلارنىمۇ ئۇرۇشى مۇمكىن."</string>
+    <string name="permlab_performCdmaProvisioning" product="tablet" msgid="4842576994144604821">"CDMA تاختا كومپيۇتېر تەڭشىكىنى بىۋاستە قوزغات"</string>
+    <string name="permlab_performCdmaProvisioning" product="default" msgid="5604848095315421425">"CDMA تېلېفون تەڭشىكىنى بىۋاستە قوزغات"</string>
+    <string name="permdesc_performCdmaProvisioning" msgid="6457447676108355905">"ئەپنىڭ CDMA تېلېفۇن تەڭشىكىنى قوزغىتىشىغا يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق زۈرۈر بولمىغان CDMA مۇلازىمەتلىرىنى قوزغىتىپ قويۇشى مۇمكىن."</string>
+    <string name="permlab_locationUpdates" msgid="7785408253364335740">"ئورۇن يىڭىلاش ئۇقتۇرۇشىنى باشقۇرۇش"</string>
+    <string name="permdesc_locationUpdates" msgid="2300018303720930256">"ئەپنىڭ رادىئونىڭ ئورۇن يىڭىلىنىش ئۇقتۇرۇشىنى قوزغىتىش/چەكلىشىگە يول قويىدۇ. ئادەتتىكى پىروگراممىلارنىڭ بۇنداق ھوقۇقى بولمايدۇ."</string>
+    <string name="permlab_checkinProperties" msgid="7855259461268734914">"يوقلام خاسلىق زىيارىتى"</string>
+    <string name="permdesc_checkinProperties" msgid="7150307006141883832">"ئەپنىڭ يوقلام مۇلازىمىتىنى يوللاشقا قارىتا ئوقۇش/يېزىش زىيارىتىگە يول قويىدۇ. ئادەتتىكى پىروگراممىلارنىڭ بۇنداق ھوقۇقى بولمايدۇ."</string>
+    <string name="permlab_bindGadget" msgid="776905339015863471">"پارچە تاللاش"</string>
+    <string name="permdesc_bindGadget" msgid="2098697834497452046">"ئەپنىڭ قايسى پىروگراممىنىڭ قايسى كۆزنەك پارچىلىرىنى ئىشلىتەلەيدىغانلىقىنى سىستېمىغا كۆرسىتىپ بېرىشىگە يول قويىدۇ. بۇ ھوقۇققا ئېرىشكەن ئەپ باشقا پىروگراممىلارنىڭ ھوقۇقىنى بەلگىلەپ بېرىدۇ. ئادەتتىكى ئەپلەرنىڭ بۇنداق ھوقۇقى بولمايدۇ."</string>
+    <string name="permlab_modifyPhoneState" msgid="8423923777659292228">"يانفون ھالىتىنى ئۆزگەرتىش"</string>
+    <string name="permdesc_modifyPhoneState" msgid="3302284561346956587">"ئەپنىڭ ئۈسكۈنىنىڭ تېلېفون ئىقتىدارىنى باشقۇرۇشىغا يول قويىدۇ. بۇنىڭدا پىروگراممىنىڭ تور ئالماشتۇرۇش، سىمسىز ئالاقىنى ئېچىش ياكى تاقاش ھوقۇقى بولىدۇ. ئەمما سىزگە ئۇقتۇرمايدۇ."</string>
+    <string name="permlab_readPhoneState" msgid="2326172951448691631">"يانفوننىڭ ھالىتى ۋە سالاھىيىتىنى ئوقۇش"</string>
+    <string name="permdesc_readPhoneState" msgid="188877305147626781">"ئەپنىڭ ئۈسكۈنىنىڭ يانفون ئىقتىدارىنى زىيارەت قىلىشىغا يول قويىدۇ. پىروگرامما يانفوننىڭ نۇمۇرىنى، رەت نۇمۇرىنى، تېلېفوننىڭ سۆزلىشىشۋاتقانلىقىنى، قارشى تەرەپنىڭ نۇمۇرىنى جەزملەشتۈرۈش ھوقۇقى بولىدۇ. "</string>
+    <string name="permlab_wakeLock" product="tablet" msgid="1531731435011495015">"تاختا كومپيۇتېرنى ئۇيقۇ ھالىتىدىن چەكلەش"</string>
+    <string name="permlab_wakeLock" product="default" msgid="573480187941496130">"يانفوننى ئۇيقۇ ھالىتىدىن چەكلەش"</string>
+    <string name="permdesc_wakeLock" product="tablet" msgid="4032181488045338551">"ئەپنىڭ تاختا كومپيۇتېرنىڭ ئۇيقۇ ھالىتىگە كىرىشىنى چەكلىشىگە يول قويىدۇ."</string>
+    <string name="permdesc_wakeLock" product="default" msgid="7584036471227467099">"ئەپنىڭ يانفوننىڭ ئۇيقۇ ھالىتىگە كىرىشىنى چەكلىشىگە يول قويىدۇ."</string>
+    <string name="permlab_devicePower" product="tablet" msgid="2787034722616350417">"تاختا كومپيۇتېر ئاچ ياكى ياپ"</string>
+    <string name="permlab_devicePower" product="default" msgid="4928622470980943206">"تېلېفون ئاچ ياكى ياپ"</string>
+    <string name="permdesc_devicePower" product="tablet" msgid="3853773100100451905">"ئەپنىڭ تاختا كومپيۇتېرنى ئېچىش ياكى تاقىشىغا يول قويىدۇ."</string>
+    <string name="permdesc_devicePower" product="default" msgid="4577331933252444818">"ئەپنىڭ يانفوننى ئېچىش ياكى تاقىشىغا يول قويىدۇ."</string>
+    <string name="permlab_factoryTest" msgid="3715225492696416187">"زاۋۇتتا تەكشۈرۈش ھالىتىدە ئىجرا قىلىش"</string>
+    <string name="permdesc_factoryTest" product="tablet" msgid="3952059318359653091">"توۋەن دەرىجىلىك ئىشلەپچىقارغۇچى سىنىقى ھالىتىدە ئىجرا قىلىش ئارقىلىق قاتتىق دېتالنى ئومۇميۈزلۈك زىيارەت قىلىشىغا يول قويىدۇ. بۇنى پەقەت تاختا كومپيۇتېر زاۋۇت سىناش ھالىتىدە ئىجرا قىلىنغاندىلا ئىشلەتكىلى بولىدۇ."</string>
+    <string name="permdesc_factoryTest" product="default" msgid="8136644990319244802">"توۋەن دەرىجىلىك ئىشلەپچىقارغۇچى سىنىقى ھالىتىدە ئىجرا قىلىش ئارقىلىق قاتتىق دېتالنى ئومۇميۈزلۈك زىيارەت قىلىشىغا يول قويىدۇ. بۇنى پەقەت يانفون زاۋۇت سىناش ھالىتىدە ئىجرا قىلىنغاندىلا ئىشلەتكىلى بولىدۇ."</string>
+    <string name="permlab_setWallpaper" msgid="6627192333373465143">"تام قەغەز تەڭشىكى"</string>
+    <string name="permdesc_setWallpaper" msgid="6417041752170585837">"ئەپنىڭ تام قەغەزنى تەڭشىشىگە يول قويىدۇ."</string>
+    <string name="permlab_setWallpaperHints" msgid="3600721069353106851">"تام قەغەز چوڭلۇقىنىڭ ئەسكەرتىش تەڭشىكى"</string>
+    <string name="permdesc_setWallpaperHints" msgid="6019479164008079626">"ئەپنىڭ تام قەغەزنىڭ چوڭ-كىچىكلىكىنىڭ ئەسكەرتىشىنى تەڭشىشىگە يول قويىدۇ."</string>
+    <string name="permlab_masterClear" msgid="2315750423139697397">"سىستېمىنى زاۋۇت تەڭشەككە قايتۇر"</string>
+    <string name="permdesc_masterClear" msgid="5033465107545174514">"ئەپنىڭ سىستېمىنى زاۋۇتتىن چىققان تەڭشەك ھالىتىگە قايتۇرۇپ، بارلىق سانلىق مەلۇمات، سەپلىمە ۋە ئورناتقان پىروگراممىلارنى تازىلىشىغا يول قويىدۇ."</string>
+    <string name="permlab_setTime" msgid="2021614829591775646">"ۋاقىت تەڭشەك"</string>
+    <string name="permdesc_setTime" product="tablet" msgid="209693136361006073">"ئەپنىڭ تاختا كومپيۇتېر ۋاقتىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permdesc_setTime" product="default" msgid="667294309287080045">"پىروگراممىنىڭ يانفون ۋاقتىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_setTimeZone" msgid="2945079801013077340">"ۋاقىت رايون تەڭشىكى"</string>
+    <string name="permdesc_setTimeZone" product="tablet" msgid="2522877107613885139">"ئەپنىڭ تاختا كومپيۇتېر ۋاقىت رايونىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permdesc_setTimeZone" product="default" msgid="1902540227418179364">"پىروگراممىنىڭ يانفوننىڭ ۋاقىت رايونىنى تەڭشىشىگە يول قويىدۇ."</string>
+    <string name="permlab_accountManagerService" msgid="4829262349691386986">"ھېسابات باشقۇرۇش مۇلازىمىتى سۈپىتىدە"</string>
+    <string name="permdesc_accountManagerService" msgid="6056903274106394752">"ئەپنىڭ ھېسابات دەلىللەشنى چاقىرىشىغا يول قويىدۇ"</string>
+    <string name="permlab_getAccounts" msgid="4549918644233460103">"مەلۇملۇق ھىساباتنى بايقىدى"</string>
+    <string name="permdesc_getAccounts" product="tablet" msgid="857622793935544694">"ئەپنىڭ تاختا كومپيۇتېردا ئەسلى بار بولغان مەلۇملۇق ھىسابات تىزىملىكىگە ئېرىشىشىگە يول قويىدۇ."</string>
+    <string name="permdesc_getAccounts" product="default" msgid="6839262446413155394">"ئەپنىڭ يانفوندا ئەسلى بار بولغان مەلۇملۇق ھىسابات تىزىملىكىنى زىيارەت قىلىشىغا يول قويىدۇ."</string>
+    <string name="permlab_authenticateAccounts" msgid="3940505577982882450">"ھېسابات سالاھىيەت دەلىللەش پىروگراممىسى سۈپىتىدە"</string>
+    <string name="permdesc_authenticateAccounts" msgid="4006839406474208874">"ئەپنىڭ ھېسابات باشقۇرۇش سالاھىيىتى بىلەن پىروگرامما ئىقتىدارىنى دەلىللىشىگە يول قويىدۇ، ھېسابات قۇرۇش، ئىم تۇرغۇزۇش ۋە ئېرىشىشنى ئۆز ئىچىگە ئالىدۇ."</string>
+    <string name="permlab_manageAccounts" msgid="4440380488312204365">"ھىسابات تىزىملىكىنى باشقۇرۇش"</string>
+    <string name="permdesc_manageAccounts" msgid="8804114016661104517">"ئەپنىڭ ھېسابات ۋە ئىم قوشۇش ۋە ئۆچۈرۈشىگە يول قويىدۇ."</string>
+    <string name="permlab_useCredentials" msgid="6401886092818819856">"ھىساباتنىڭ سالاھىيىتى بىلەن ئاساسنى دەلىللەش"</string>
+    <string name="permdesc_useCredentials" msgid="7416570544619546974">"ئەپنىڭ سالاھىيەت تەلەپ قىلىشىغا يول قويىدۇ."</string>
+    <string name="permlab_accessNetworkState" msgid="6865575199464405769">"تور ھالىتىنى كۆرسەت"</string>
+    <string name="permdesc_accessNetworkState" msgid="558721128707712766">"ئەپنىڭ بارلىق تور ھالىتىنى كۆرۈشىگە يول قويىدۇ."</string>
+    <string name="permlab_createNetworkSockets" msgid="9121633680349549585">"ئىنتېرنېتنى تولۇق زىيارەت ھوقۇقى"</string>
+    <string name="permdesc_createNetworkSockets" msgid="4593339106921772192">"ئەپنىڭ تور ئېغىزى قۇرۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_writeApnSettings" msgid="505660159675751896">"تور تەڭشىكى ۋە ئېقىمىنى ئۆزگەرت/توس"</string>
+    <string name="permdesc_writeApnSettings" msgid="2369786339323021771">"ئەپنىڭ تور تەڭشىكىنى ئۆزگەرتىپ، ھەممە تور ئېقىمىنى تەكشۈرۈپ ۋە توسىشىغا يول قويىدۇ، مەسىلەن، خالىغان APN نىڭ ۋاكالەتچىسى ۋە ئېغىزىنى ئۆزگەرتىش. زەھەرخەندە ئەپلەر سىز خەۋەرسىز ئەھۋالدا تور سانلىق مەلۇمات بوغچىلىرىنى كۆزىتىپ، قايتا نىشان بەلگىلەپ ياكى ئۆزگەرتەلەيدۇ."</string>
+    <string name="permlab_changeNetworkState" msgid="958884291454327309">"تور باغلىنىشچانلىقىنى ئۆزگەرت"</string>
+    <string name="permdesc_changeNetworkState" msgid="4199958910396387075">"ئەپنىڭ تور باغلىنىش ھالىتىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_changeTetherState" msgid="2702121155761140799">"باغلاقنىڭ ئۇلىنىشىنى ئۆزگەرت"</string>
+    <string name="permdesc_changeTetherState" msgid="8905815579146349568">"ئەپنىڭ باغلانما تور ئۇلىنىش ھالىتىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"تەگلىك سانلىق مەلۇمات ئىشلىتىش تەڭشىكىنى ئۆزگەرت"</string>
+    <string name="permdesc_changeBackgroundDataSetting" msgid="1001482853266638864">"ئەپنىڭ تەگلىك سانلىق مەلۇمات ئىشلىتىش تەڭشىكىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_accessWifiState" msgid="8100926650211034400">"Wi-Fi ھالىتىنى كۆرسەت"</string>
+    <string name="permdesc_accessWifiState" msgid="485796529139236346">"ئەپنىڭ Wi-Fi غا مۇناسىۋەتلىك ئۇچۇرنى كۆرۈشىگە يول قويىدۇ."</string>
+    <string name="permlab_changeWifiState" msgid="7280632711057112137">"Wi-Fi ھالىتىنى ئۆزگەرت"</string>
+    <string name="permdesc_changeWifiState" msgid="2950383153656873267">"ئەپنىڭ Wi-Fi ئېغىزىنى ئۇلاش ياكى ئۈزۈش، سەپلىمىنىڭ Wi-Fi تورىنى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Wi-Fi كۆپ قاناللىق ئاڭلىتىشقا يول قويىدۇ"</string>
+    <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"ئەپنىڭ سانلىق مەلۇمات بوغچىسىنى قۇبۇل قىلىش ۋە ئۈسكۈنىگە ۋاستىلىك يەتكۈزۈشىگە يول قويىدۇ. بۇنىڭ توك سەرپىياتى سەل يۇقىرى."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"WiMAX ھالىتىنى كۆرسەت"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"ئەپنىڭ WiMAX غا مۇناسىۋەتلىك ئۇچۇرنى كۆرۈشىگە يول قويىدۇ."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"WiMAX ھالىتىنى ئۆزگەرت"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"پىروگراممىنىڭ WiMAX تورىغا باغلىنىشى ۋە ئۈزۈشىگە يول قويىدۇ."</string>
+    <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"كۆكچىش باشقۇرۇش"</string>
+    <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"ئەپنىڭ تاختا كومپيۇتېر كۆكچىشنى سەپلىشىگە، قوشنا ئۈسكۈنىلەرنى بايقىشىغا ۋە يىراق مۇساپىلىق پەرلەشكە يول قويىدۇ."</string>
+    <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"ئەپنىڭ كۆكچىش سەپلىشىگە، قوشنا ئۈسكۈنىلەرنى بايقىشىغا ۋە يىراق مۇساپىلىق پەرلەشكە يول قويىدۇ."</string>
+    <string name="permlab_bluetooth" msgid="8361038707857018732">"كۆكچىش باغلىنىش قۇر"</string>
+    <string name="permdesc_bluetooth" product="tablet" msgid="4191941825910543803">"ئەپنىڭ تاختا كومپيۇتېر كۆكچىش سەپلىمىسىنى تەكشۈرۈپ، ماس ئۈسكۈنىگە باغلىنىشىغا يول قويىدۇ."</string>
+    <string name="permdesc_bluetooth" product="default" msgid="762515380679392945">"ئەپنىڭ كۆكچىش سەپلىمىسىنى تەكشۈرۈپ، ماس ئۈسكۈنىگە باغلىنىشىغا يول قويىدۇ."</string>
+    <string name="permlab_nfc" msgid="4423351274757876953">"يېقىن دائىرىدىكى ئالاقە تىزگىنى"</string>
+    <string name="permdesc_nfc" msgid="9171401851954407226">"پىروگراممىنىڭ يېقىن ئەتراپتىكى ئالاقە(NFC) بەلگە، كارتا ۋە ئوقۇغۇچ بىلەن ئالاقە قىلىشىغا يول قويىدۇ،"</string>
+    <string name="permlab_disableKeyguard" msgid="4977406164311535092">"قۇلۇپ كۇنۇپكىنى چەكلە"</string>
+    <string name="permdesc_disableKeyguard" msgid="3189763479326302017">"ئەپنىڭ كۇنۇپكا قۇلۇپى ۋە ئىم بىلەن باغلانغان بىخەتەرلىك تەڭشىكىنى توختىتىشىغا يول قويىدۇ. مەسىلەن، تېلېفوندا كەلگەندە كۇنۇپكا قۇلۇپىنى توختىتىپ، سۆزلىشىش تاماملانغاندا كۇنۇپكا قۇلۇپىنى قايتا قوزغىتىدۇ."</string>
+    <string name="permlab_readSyncSettings" msgid="6201810008230503052">"قەدەمداش تەڭشىكىنى ئوقۇش"</string>
+    <string name="permdesc_readSyncSettings" msgid="5315925706353341823">"ئەپنىڭ قەدەمداش تەڭشىكىنى ئوقۇشىغا يول قويىدۇ. مەسىلەن، ئالاقەداشقا قەدەمداشنى قوزغىتامدۇ يوق."</string>
+    <string name="permlab_writeSyncSettings" msgid="6297138566442486462">"قەدەمداش تەڭشىكىنى يېزىش"</string>
+    <string name="permdesc_writeSyncSettings" msgid="2498201614431360044">"ئەپنىڭ قەدەمداش تەڭشىكىنى يېزىشىغا يول قويىدۇ. مەسىلەن، ئالاقەداشقا قەدەمداشنى قوزغىتامدۇ يوق."</string>
+    <string name="permlab_readSyncStats" msgid="7396577451360202448">"قەدەمداش سىتاتىستىكا ئۇچۇرىنى ئوقۇش"</string>
+    <string name="permdesc_readSyncStats" msgid="7511448343374465000">"ئەپنىڭ قەدەمداش سىتاتىستىكا ئۇچۇرىنى ئوقۇشىغا يول قويىدۇ؛ مەسىلەن، يۈز بەرگەن قەدەمداش تارىخ خاتىرىسى."</string>
+    <string name="permlab_subscribedFeedsRead" msgid="4756609637053353318">"مۇشتەرى بولغان خەۋەر بېتىنى ئوقۇش"</string>
+    <string name="permdesc_subscribedFeedsRead" msgid="3622200625634207660">"ئەپنىڭ نۆۋەتتە قەدەمداشلانغان خەۋەر بېتىگە مۇناسىۋەتلىك تەپسىلىي ئۇچۇرىنى ئوقۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_subscribedFeedsWrite" msgid="9015246325408209296">"مۇشتەرى بولغان خەۋەر بېتىنى يېزىش"</string>
+    <string name="permdesc_subscribedFeedsWrite" msgid="8121607099326533878">"ئەپنىڭ نۆۋەتتە قەدەمداشلانغان خەۋەر بېتىنى ئۆزگەرتىشىگە يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق سىزنىڭ خەۋەر بېتىڭىزنى ئۆزگەرتىۋېتىدۇ. "</string>
+    <string name="permlab_readDictionary" msgid="432535716804748781">"ئىشلەتكۈچى بەلگىلىگەن لۇغەتنى ئوقۇيدۇ"</string>
+    <string name="permdesc_readDictionary" msgid="1082972603576360690">"ئەپنىڭ ئىشلەتكۈچى لۇغىتىدە ساقلانغان شەخسىي سۆز، ئىسىم ۋە ئىبارىلەرنى ئوقۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_writeDictionary" msgid="6703109511836343341">"ئىشلەتكۈچى بەلگىلىگەن لۇغەتكە يازىدۇ"</string>
+    <string name="permdesc_writeDictionary" msgid="2241256206524082880">"ئەپنىڭ ئىشلەتكۈچى لۇغىتىگە يېڭى سۆز يېزىشىغا يول قويىدۇ."</string>
+    <string name="permlab_sdcardWrite" product="nosdcard" msgid="85430876310764752">"USB ساقلىغۇچتىكى مەزمۇننى ئۆزگەرت/ئۆچۈر"</string>
+    <string name="permlab_sdcardWrite" product="default" msgid="8079403759001777291">"SD كارتىدىكى مەزمۇننى ئۆزگەرت/ئۆچۈر"</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard" msgid="6594393334785738252">"ئەپنىڭ USB ساقلىغۇچقا يېزىشىغا يول قويىدۇ."</string>
+    <string name="permdesc_sdcardWrite" product="default" msgid="6643963204976471878">"ئەپنىڭ SD كارتىغا يېزىشىغا يول قويىدۇ."</string>
+    <string name="permlab_mediaStorageWrite" product="default" msgid="6859839199706879015">"ئىچىدىكى ۋاستە ساقلىغۇچتىكى مەزمۇننى ئۆزگەرت/ئۆچۈر"</string>
+    <string name="permdesc_mediaStorageWrite" product="default" msgid="8232008512478316233">"ئەپنىڭ ئىچىدىكى ۋاستە ساقلىغۇچتىكى مەزمۇننى ئۆزگەرتىشىگە يول قويىدۇ."</string>
+    <string name="permlab_cache_filesystem" msgid="5656487264819669824">"غەملەك ھۆججەت سىستېمىسىنى زىيارەت"</string>
+    <string name="permdesc_cache_filesystem" msgid="1624734528435659906">"ئەپنىڭ غەملەك ھۆججەت سىستېمىسىنى ئوقۇپ يېزىشىغا يول قويىدۇ."</string>
+    <string name="permlab_use_sip" msgid="5986952362795870502">"ئىنتېرنېت چاقىرىش قۇر/قوبۇللا"</string>
+    <string name="permdesc_use_sip" msgid="6320376185606661843">"پىروگراممىنىڭ SIP مۇلازىمىتىنى ئىشلىتىپ ئىنتېرنېت چاقىرىش قۇرۇپ/قوبۇللاشلىرىغا يول قويىدۇ."</string>
+    <string name="permlab_readNetworkUsageHistory" msgid="7862593283611493232">"تور ئىشلىتىش ئەھۋالىنىڭ تارىخىنى ئوقۇيدۇ"</string>
+    <string name="permdesc_readNetworkUsageHistory" msgid="6040738474779135653">"ئەپنىڭ مۇئەييەن تور ۋە ئەپنىڭ تور ئىشلىتىش ئەھۋالىنىڭ تارىخىنى ئوقۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_manageNetworkPolicy" msgid="2562053592339859990">"تور تەدبىرىنى باشقۇر"</string>
+    <string name="permdesc_manageNetworkPolicy" msgid="3723795285132803958">"ئەپنىڭ تور تەدبىرىنى باشقۇرۇشىغا ۋە ئەپكە قارىتىلغان قائىدە بەلگىلىشىگە يول قويىدۇ."</string>
+    <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"تور ئىشلىتىش ئەھۋالىنىڭ تارىخىنى خاتىرىلەش ئۇسۇلىنى ئۆزگەرتىدۇ"</string>
+    <string name="permdesc_modifyNetworkAccounting" msgid="8702285686629184404">"ئەپكە نىسبەتەن تور ئىشلىتىش ئەھۋالىنى خاتىرىلەش ئۇسۇلىنى ئۆزگەرتىشكە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇقنى ئىشلىتەلمەيدۇ."</string>
+    <string name="policylab_limitPassword" msgid="4497420728857585791">"ئىم قائىدە تەڭشىكى"</string>
+    <string name="policydesc_limitPassword" msgid="9083400080861728056">"ئېكران قۇلۇپ ئىمنىڭ ئۇزۇنلۇقى ۋە ھەرپ سانى تىزگىنى"</string>
+    <string name="policylab_watchLogin" msgid="914130646942199503">"ئېكران قۇلۇپىنى ئېچىشنى سىناش قېتىم سانى نازارەتچىسى"</string>
+    <string name="policydesc_watchLogin" product="tablet" msgid="933601759466308092">"ئېكراننى قۇلۇپلاشتىن ئىلگىرى ئىم كىرگۈزۈش قېتىم سانىنى نازارەت قىلىدۇ؛ ئەگەر ئىم كىرگۈزۈش قېتىم سانى بەك كۆپ بولۇپ كەتسە تاختا كومپيۇتېرنى قۇلۇپلايدۇ ياكى تاختا كومپيۇتېردىكى ھەممە سانلىق مەلۇماتلارنى ئۆچۈرىدۇ."</string>
+    <string name="policydesc_watchLogin" product="default" msgid="7227578260165172673">"ئېكراننى قۇلۇپلاشتىن ئىلگىرى ئىم كىرگۈزۈش قېتىم سانىنى نازارەت قىلىدۇ؛ ئەگەر ئىم كىرگۈزۈش قېتىم سانى بەك كۆپ بولۇپ كەتسە تېلېفوننى قۇلۇپلايدۇ ياكى تېلېفوندىكى ھەممە سانلىق مەلۇماتلارنى ئۆچۈرىدۇ."</string>
+    <string name="policylab_resetPassword" msgid="2620077191242688955">"ئېكران ئېچىش ئىمنى ئۆزگەرت"</string>
+    <string name="policydesc_resetPassword" msgid="5391240616981297361">"ئېكران ئېچىش ئىمنى ئۆزگەرت"</string>
+    <string name="policylab_forceLock" msgid="2274085384704248431">"ئېكراننى قۇلۇپلا"</string>
+    <string name="policydesc_forceLock" msgid="5696964126226028442">"ئېكران قۇلۇپلاش ئۇسۇلى ۋە ۋاقىت تىزگىنى"</string>
+    <string name="policylab_wipeData" msgid="3910545446758639713">"ھەممە سانلىق مەلۇماتنى ئۆچۈر"</string>
+    <string name="policydesc_wipeData" product="tablet" msgid="314455232799486222">"تاختا كومپيۇتېرنىڭ سانلىق مەلۇماتلىرىنى ئاگاھلاندۇرمايلا ئۆچۈرىدۇ، خۇددى زاۋۇت تەڭشىكىنى ئەسلىگە قايتۇرغان مەشغۇلاتتەك."</string>
+    <string name="policydesc_wipeData" product="default" msgid="7669895333814222586">"تېلېفوننىڭ سانلىق مەلۇماتلىرىنى ئاگاھلاندۇرمايلا ئۆچۈرىدۇ، خۇددى زاۋۇت تەڭشىكىنى ئەسلىگە قايتۇرغان مەشغۇلاتتەك."</string>
+    <string name="policylab_setGlobalProxy" msgid="2784828293747791446">"ئۈسكۈنىنىڭ ئومۇمىيەت ۋاكالەتچى تەڭشىكى"</string>
+    <string name="policydesc_setGlobalProxy" msgid="6387497466660154931">"تەدبىر قوزغىتىلغاندا ئىشلىتىدىغان ئۈسكۈنىنىڭ ئومۇمىيەت ۋاكالەتچىسىنى تەڭشەيدۇ. پەقەت تۇنجى ئۇسكۈنە باشقۇرۇش تەڭشىكىنىڭ ئومۇمىيەت ۋاكالەتچى تەڭشىكىدە ئۈنۈمى بولىدۇ."</string>
+    <string name="policylab_expirePassword" msgid="885279151847254056">"ئېكران قۇلۇپلاش ئىمنىڭ مۆھلەت تەڭشىكى"</string>
+    <string name="policydesc_expirePassword" msgid="4844430354224822074">"ئېكران قۇلۇپلايدىغان ئىمنى ئۆزگەرتىش چاستوتىسىنى تىزگىنلەيدۇ"</string>
+    <string name="policylab_encryptedStorage" msgid="8901326199909132915">"ساقلىغۇچ شىفىرلاش تەڭشىكى"</string>
+    <string name="policydesc_encryptedStorage" msgid="2504984732631479399">"لازىملىق ساقلايدىغان ئەپ سانلىق مەلۇماتلىرىنى شىفىرلايدۇ"</string>
+    <string name="policylab_disableCamera" msgid="6395301023152297826">"كامېرانى چەكلە"</string>
+    <string name="policydesc_disableCamera" msgid="5680054212889413366">"ھەممە ئۈسكۈنە كامېراسىنى ئىشلىتىشنى چەكلەيدۇ"</string>
+  <string-array name="phoneTypes">
+    <item msgid="8901098336658710359">"باش بەت"</item>
+    <item msgid="869923650527136615">"كۆچمە"</item>
+    <item msgid="7897544654242874543">"ئىش"</item>
+    <item msgid="1103601433382158155">"ئىش فاكىس"</item>
+    <item msgid="1735177144948329370">"ئوي فاكىس"</item>
+    <item msgid="603878674477207394">"چاقىرغۇ"</item>
+    <item msgid="1650824275177931637">"باشقا"</item>
+    <item msgid="9192514806975898961">"ئۆزلەشتۈر"</item>
+  </string-array>
+  <string-array name="emailAddressTypes">
+    <item msgid="8073994352956129127">"باش بەت"</item>
+    <item msgid="7084237356602625604">"ئىش"</item>
+    <item msgid="1112044410659011023">"باشقا"</item>
+    <item msgid="2374913952870110618">"ئۆزلەشتۈر"</item>
+  </string-array>
+  <string-array name="postalAddressTypes">
+    <item msgid="6880257626740047286">"باش بەت"</item>
+    <item msgid="5629153956045109251">"ئىش"</item>
+    <item msgid="4966604264500343469">"باشقا"</item>
+    <item msgid="4932682847595299369">"ئۆزلەشتۈر"</item>
+  </string-array>
+  <string-array name="imAddressTypes">
+    <item msgid="1738585194601476694">"باش بەت"</item>
+    <item msgid="1359644565647383708">"ئىش"</item>
+    <item msgid="7868549401053615677">"باشقا"</item>
+    <item msgid="3145118944639869809">"ئۆزلەشتۈر"</item>
+  </string-array>
+  <string-array name="organizationTypes">
+    <item msgid="7546335612189115615">"ئىش"</item>
+    <item msgid="4378074129049520373">"باشقا"</item>
+    <item msgid="3455047468583965104">"ئۆزلەشتۈر"</item>
+  </string-array>
+  <string-array name="imProtocols">
+    <item msgid="8595261363518459565">"AIM"</item>
+    <item msgid="7390473628275490700">"Windows Live"</item>
+    <item msgid="7882877134931458217">"ياخۇ"</item>
+    <item msgid="5035376313200585242">"Skype"</item>
+    <item msgid="7532363178459444943">"QQ"</item>
+    <item msgid="3713441034299660749">"Google Talk"</item>
+    <item msgid="2506857312718630823">"ICQ"</item>
+    <item msgid="1648797903785279353">"Jabber"</item>
+  </string-array>
+    <string name="phoneTypeCustom" msgid="1644738059053355820">"ئۆزلەشتۈر"</string>
+    <string name="phoneTypeHome" msgid="2570923463033985887">"باش بەت"</string>
+    <string name="phoneTypeMobile" msgid="6501463557754751037">"كۆچمە"</string>
+    <string name="phoneTypeWork" msgid="8863939667059911633">"ئىش"</string>
+    <string name="phoneTypeFaxWork" msgid="3517792160008890912">"ئىش فاكىس"</string>
+    <string name="phoneTypeFaxHome" msgid="2067265972322971467">"ئوي فاكىس"</string>
+    <string name="phoneTypePager" msgid="7582359955394921732">"چاقىرغۇ"</string>
+    <string name="phoneTypeOther" msgid="1544425847868765990">"باشقا"</string>
+    <string name="phoneTypeCallback" msgid="2712175203065678206">"قايتۇرما چاقىرىق"</string>
+    <string name="phoneTypeCar" msgid="8738360689616716982">"ماشىنا"</string>
+    <string name="phoneTypeCompanyMain" msgid="540434356461478916">"شىركەت باش ئاپپاراتى"</string>
+    <string name="phoneTypeIsdn" msgid="8022453193171370337">"ISDN"</string>
+    <string name="phoneTypeMain" msgid="6766137010628326916">"ئاساسىي تىزىملىك"</string>
+    <string name="phoneTypeOtherFax" msgid="8587657145072446565">"باشقا فاكىس"</string>
+    <string name="phoneTypeRadio" msgid="4093738079908667513">"سىمسىز ئالاقە"</string>
+    <string name="phoneTypeTelex" msgid="3367879952476250512">"تېلېگرامما"</string>
+    <string name="phoneTypeTtyTdd" msgid="8606514378585000044">"TTY/TDD"</string>
+    <string name="phoneTypeWorkMobile" msgid="1311426989184065709">"خىزمەت يانفونى"</string>
+    <string name="phoneTypeWorkPager" msgid="649938731231157056">"خىزمەت چاقىرغۇ"</string>
+    <string name="phoneTypeAssistant" msgid="5596772636128562884">"ياردەمچى"</string>
+    <string name="phoneTypeMms" msgid="7254492275502768992">"MMS"</string>
+    <string name="eventTypeCustom" msgid="7837586198458073404">"ئىختىيارىيلاشقان"</string>
+    <string name="eventTypeBirthday" msgid="2813379844211390740">"تۇغۇلغان كۈن"</string>
+    <string name="eventTypeAnniversary" msgid="3876779744518284000">"يىللىق خاتىرە كۈن"</string>
+    <string name="eventTypeOther" msgid="7388178939010143077">"باشقا"</string>
+    <string name="emailTypeCustom" msgid="8525960257804213846">"ئۆزلەشتۈر"</string>
+    <string name="emailTypeHome" msgid="449227236140433919">"باش بەت"</string>
+    <string name="emailTypeWork" msgid="3548058059601149973">"ئىش"</string>
+    <string name="emailTypeOther" msgid="2923008695272639549">"باشقا"</string>
+    <string name="emailTypeMobile" msgid="119919005321166205">"كۆچمە"</string>
+    <string name="postalTypeCustom" msgid="8903206903060479902">"ئۆزلەشتۈر"</string>
+    <string name="postalTypeHome" msgid="8165756977184483097">"باش بەت"</string>
+    <string name="postalTypeWork" msgid="5268172772387694495">"ئىش"</string>
+    <string name="postalTypeOther" msgid="2726111966623584341">"باشقا"</string>
+    <string name="imTypeCustom" msgid="2074028755527826046">"ئۆزلەشتۈر"</string>
+    <string name="imTypeHome" msgid="6241181032954263892">"باش بەت"</string>
+    <string name="imTypeWork" msgid="1371489290242433090">"ئىش"</string>
+    <string name="imTypeOther" msgid="5377007495735915478">"باشقا"</string>
+    <string name="imProtocolCustom" msgid="6919453836618749992">"ئۆزلەشتۈر"</string>
+    <string name="imProtocolAim" msgid="7050360612368383417">"AIM"</string>
+    <string name="imProtocolMsn" msgid="144556545420769442">"Windows Live"</string>
+    <string name="imProtocolYahoo" msgid="8271439408469021273">"ياخۇ"</string>
+    <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
+    <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
+    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
+    <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
+    <string name="imProtocolNetMeeting" msgid="8287625655986827971">"تور يېغىنى "</string>
+    <string name="orgTypeWork" msgid="29268870505363872">"ئىش"</string>
+    <string name="orgTypeOther" msgid="3951781131570124082">"باشقا"</string>
+    <string name="orgTypeCustom" msgid="225523415372088322">"ئۆزلەشتۈر"</string>
+    <string name="relationTypeCustom" msgid="3542403679827297300">"ئىختىيارىيلاشقان"</string>
+    <string name="relationTypeAssistant" msgid="6274334825195379076">"ياردەمچى"</string>
+    <string name="relationTypeBrother" msgid="8757913506784067713">"قېرىنداش"</string>
+    <string name="relationTypeChild" msgid="1890746277276881626">"بالا"</string>
+    <string name="relationTypeDomesticPartner" msgid="6904807112121122133">"ئۆيداش"</string>
+    <string name="relationTypeFather" msgid="5228034687082050725">"ئاتا"</string>
+    <string name="relationTypeFriend" msgid="7313106762483391262">"دوست"</string>
+    <string name="relationTypeManager" msgid="6365677861610137895">"باشقۇرغۇچى"</string>
+    <string name="relationTypeMother" msgid="4578571352962758304">"ئانا"</string>
+    <string name="relationTypeParent" msgid="4755635567562925226">"ئاتا-ئانا"</string>
+    <string name="relationTypePartner" msgid="7266490285120262781">"ھەمراھ"</string>
+    <string name="relationTypeReferredBy" msgid="101573059844135524">"تونۇشتۇرغۇچى"</string>
+    <string name="relationTypeRelative" msgid="1799819930085610271">"نىسپىي"</string>
+    <string name="relationTypeSister" msgid="1735983554479076481">"ئاچا-سىڭىل"</string>
+    <string name="relationTypeSpouse" msgid="394136939428698117">"جورا"</string>
+    <string name="sipAddressTypeCustom" msgid="2473580593111590945">"ئىختىيارىيلاشقان"</string>
+    <string name="sipAddressTypeHome" msgid="6093598181069359295">"باش بەت"</string>
+    <string name="sipAddressTypeWork" msgid="6920725730797099047">"ئىش"</string>
+    <string name="sipAddressTypeOther" msgid="4408436162950119849">"باشقا"</string>
+    <string name="keyguard_password_enter_pin_code" msgid="3731488827218876115">"PIN نومۇرىنى كىرگۈزۈڭ"</string>
+    <string name="keyguard_password_enter_puk_code" msgid="5965173481572346878">"PUK ۋە يېڭى PIN كودىنى كىرگۈزۈڭ"</string>
+    <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUK كودى"</string>
+    <string name="keyguard_password_enter_pin_prompt" msgid="2987350144349051286">"يېڭى Pin كودى"</string>
+    <string name="keyguard_password_entry_touch_hint" msgid="7906561917570259833"><font size="17">"بۇ جاينى چېكىپ ئىم كىرگۈزۈڭ"</font></string>
+    <string name="keyguard_password_enter_password_code" msgid="9138158344813213754">"قۇلۇپسىزلاش ئۈچۈن ئىم كىرگۈزۈڭ"</string>
+    <string name="keyguard_password_enter_pin_password_code" msgid="638347075625491514">"PIN كىرگۈزۈپ قۇلۇپ ئېچىڭ"</string>
+    <string name="keyguard_password_wrong_pin_code" msgid="1295984114338107718">"PIN كودى خاتا!"</string>
+    <string name="keyguard_label_text" msgid="861796461028298424">"قۇلۇپ ئېچىشتا، ئاۋۋال تىزىملىكنى بېسىپ ئاندىن 0 نى بېسىڭ."</string>
+    <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"جىددىي قۇتقۇزۇش ياكى ساقچىغا مەلۇم قىلىش تېلېفۇنى"</string>
+    <string name="lockscreen_carrier_default" msgid="8963839242565653192">"مۇلازىمەت يوق"</string>
+    <string name="lockscreen_screen_locked" msgid="7288443074806832904">"ئىكران قۇلۇپلانغان."</string>
+    <string name="lockscreen_instructions_when_pattern_enabled" msgid="46154051614126049">"Menu نى بېسىپ قۇلۇپ ئېچىڭ ياكى جىددىي قۇتقۇزۇشنى چاقىرىڭ."</string>
+    <string name="lockscreen_instructions_when_pattern_disabled" msgid="686260028797158364">"Menu نى بېسىپ قۇلۇپنى ئېچىڭ."</string>
+    <string name="lockscreen_pattern_instructions" msgid="7478703254964810302">"قۇلۇپ ئېچىش ئەندىزىسىنى سىزىڭ"</string>
+    <string name="lockscreen_emergency_call" msgid="5347633784401285225">"جىددىي چاقىرىش"</string>
+    <string name="lockscreen_return_to_call" msgid="5244259785500040021">"چاقىرىشقا قايتىش"</string>
+    <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"توغرا!"</string>
+    <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"كەچۈرۈڭ، قايتا سىناڭ"</string>
+    <string name="lockscreen_password_wrong" msgid="6237443657358168819">"كەچۈرۈڭ، قايتا سىناڭ"</string>
+    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"توكلاۋاتىدۇ، <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
+    <string name="lockscreen_charged" msgid="4938930459620989972">"توكلاندى."</string>
+    <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
+    <string name="lockscreen_low_battery" msgid="1482873981919249740">"توكلىغۇچنى ئۇلاڭ."</string>
+    <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"SIM كارتا يوق."</string>
+    <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"تاختا كومپيۇتېردا SIM كارتا يوق."</string>
+    <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"تېلېفوندا SIM كارتا يوق."</string>
+    <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"SIM كارتا قىستۇرۇڭ."</string>
+    <string name="lockscreen_missing_sim_instructions_long" msgid="7138450788301444298">"SIM كارتا يوقالغان ياكى ئوقۇغىلى بولمايدۇ. SIM كارتا قىستۇرۇڭ."</string>
+    <string name="lockscreen_permanent_disabled_sim_instructions" msgid="1631853574702335453">"SIM كارتىڭىز مەڭگۈلۈك توختىتىلدى."\n"سىمسىز تور مۇلازىمىتى تەمىنلىگۈچىڭىز بىلەن ئالاقە قىلىپ، يېڭىدىن بىر SIM كارتىغا ئېرىشىڭ."</string>
+    <string name="lockscreen_transport_prev_description" msgid="201594905152746886">"ئالدىنقى ناخشا توپچىسى"</string>
+    <string name="lockscreen_transport_next_description" msgid="6089297650481292363">"كېيىنكى ناخشا توپچىسى"</string>
+    <string name="lockscreen_transport_pause_description" msgid="7659088786780128001">"ۋاقىتلىق توختات توپچىسى"</string>
+    <string name="lockscreen_transport_play_description" msgid="5888422938351019426">"چال توپچىسى"</string>
+    <string name="lockscreen_transport_stop_description" msgid="4562318378766987601">"توختا توپچىسى"</string>
+    <string name="emergency_calls_only" msgid="6733978304386365407">"جىددىي تېلېفونلا ئۇرغىلى بولىدۇ"</string>
+    <string name="lockscreen_network_locked_message" msgid="143389224986028501">"تور قۇلۇپلانغان"</string>
+    <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"SIM كارتا PUK نۇمۇر ئارقىلىق قۇلۇپلانغان."</string>
+    <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"ئىشلەتكۈچىلەر قوللانمىسىنى كۆرۈڭ ياكى مۇلازىمەتچى بىلەن ئالاقىلىشىڭ."</string>
+    <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM كارتا قۇلۇپلانغان."</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"SIM كارتا قۇلۇپىنى ئېچىۋاتىدۇ…"</string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"سىز قۇلۇپ ئېچىش ئەندىزىسىنى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا سىزدىڭىز."\n\n"<xliff:g id="NUMBER_1">%d</xliff:g> سېكۇنتتىن كېيىن قايتا سىناڭ."</string>
+    <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="4906034376425175381">"سىز ئىمنى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا كىرگۈزدىڭىز."\n\n"<xliff:g id="NUMBER_1">%d</xliff:g> سېكۇنتتىن كېيىن قايتا سىناڭ."</string>
+    <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6827749231465145590">"سىز PIN نى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا كىرگۈزدىڭىز."\n\n"<xliff:g id="NUMBER_1">%d</xliff:g> سېكۇنتتىن كېيىن قايتا سىناڭ."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin" product="tablet" msgid="8687762517114904651">"سىز قۇلۇپ ئېچىش ئەندىزىسىنى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا سىزدىڭىز. ئەگەر <xliff:g id="NUMBER_1">%d</xliff:g> قېتىم سىناپمۇ مۇۋەپپەقىيەتلىك بولمىسا، سىستېما Google ھېساباتىڭىزدىكى تىزىمغا كىرىش ئۇچۇرى بىلەن تاختا كومپيۇتېر قۇلۇپىنى ئېچىشنى تەلەپ قىلىدۇ."\n\n" يەنە <xliff:g id="NUMBER_2">%d</xliff:g> سېكۇنتتىن كېيىن قايتا سىناڭ."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin" product="default" msgid="3351013842320127827">"سىز قۇلۇپ ئېچىش ئەندىزىسىنى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا سىزدىڭىز. ئەگەر <xliff:g id="NUMBER_1">%d</xliff:g> قېتىم سىناپمۇ مۇۋەپپەقىيەتلىك بولمىسا، سىستېما Google ھېساباتىڭىزدىكى تىزىمغا كىرىش ئۇچۇرى بىلەن تېلېفون قۇلۇپىنى ئېچىشنى تەلەپ قىلىدۇ."\n\n" يەنە <xliff:g id="NUMBER_2">%d</xliff:g> سېكۇنتتىن كېيىن قايتا سىناڭ."</string>
+    <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet" msgid="6128106399745755604">"سىز تاختا كومپيۇتېر قۇلۇپىنى ئېچىشنى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا سىنىدىڭىز. ئەگەر <xliff:g id="NUMBER_1">%d</xliff:g> قېتىم سىناپمۇ مۇۋەپپەقىيەتلىك بولمىسا، تاختا كومپيۇتېرنى زاۋۇتتىن چىققان ھالەتكە ئەسلىگە قايتۇرىدۇ، ھەممە ئىشلەتكۈچى سانلىق مەلۇماتلىرى يوقىلىدۇ."</string>
+    <string name="lockscreen_failed_attempts_almost_at_wipe" product="default" msgid="8603565142156826565">"سىز تېلېفون قۇلۇپىنى ئېچىشنى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا سىنىدىڭىز. ئەگەر <xliff:g id="NUMBER_1">%d</xliff:g> قېتىم سىناپمۇ مۇۋەپپەقىيەتلىك بولمىسا، تېلېفوننى زاۋۇتتىن چىققان ھالەتكە ئەسلىگە قايتۇرىدۇ، ھەممە ئىشلەتكۈچى سانلىق مەلۇماتلىرى يوقىلىدۇ."</string>
+    <string name="lockscreen_failed_attempts_now_wiping" product="tablet" msgid="280873516493934365">"سىز تاختا كومپيۇتېر قۇلۇپىنى ئېچىشنى <xliff:g id="NUMBER">%d</xliff:g> قېتىم خاتا سىنىدىڭىز. تاختا كومپيۇتېر زاۋۇتتىن چىققان ھالەتكە ئەسلىگە قايتىدۇ، "</string>
+    <string name="lockscreen_failed_attempts_now_wiping" product="default" msgid="3025504721764922246">"سىز تېلېفون قۇلۇپىنى ئېچىشنى <xliff:g id="NUMBER">%d</xliff:g> قېتىم خاتا سىنىدىڭىز. تېلېفون زاۋۇتتىن چىققان ھالەتكە ئەسلىگە قايتىدۇ، "</string>
+    <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"<xliff:g id="NUMBER">%d</xliff:g> سېكۇنتتىن كېيىن قايتا سىناڭ."</string>
+    <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"ئەندىزىنى ئۇنتۇپسىزمۇ؟"</string>
+    <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"ھىسابات قۇلۇپى ئېچىلدى"</string>
+    <string name="lockscreen_glogin_too_many_attempts" msgid="2446246026221678244">"ئەندىزىسىنى سىناش قېتىم سانى بەك كۆپ بولۇپ كەتتى!"</string>
+    <string name="lockscreen_glogin_instructions" msgid="1816635201812207709">"قۇلۇپ ئېچىشتا، Google ھېساباتىڭىزدا تىزىمغا كىرىڭ"</string>
+    <string name="lockscreen_glogin_username_hint" msgid="8846881424106484447">"ئىشلەتكۈچى ئاتى(ئېلخەت)"</string>
+    <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">"ئىم"</string>
+    <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"تىزىمغا كىرىڭ"</string>
+    <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"ئىشلەتكۈچى ئاتى ۋە ياكى ئىم خاتا."</string>
+    <string name="lockscreen_glogin_account_recovery_hint" msgid="8253152905532900548">"ئىشلەتكۈچى ئاتىڭىز ياكى ئىمنى ئۇنۇتتىڭىزمۇ؟"\n"<b>google.com/accounts/recovery</b> زىيارەت قىلىڭ"</string>
+    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"تەكشۈرۈۋاتىدۇ…"</string>
+    <string name="lockscreen_unlock_label" msgid="737440483220667054">"قۇلۇپ ئاچ"</string>
+    <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"ئاۋاز ئوچۇق"</string>
+    <string name="lockscreen_sound_off_label" msgid="996822825154319026">"ئاۋاز تاقاق"</string>
+    <string name="lockscreen_access_pattern_start" msgid="3941045502933142847">"ئەندىزە سىزىڭ"</string>
+    <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"ئەندىزە تازىلاندى"</string>
+    <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"كاتەكچە قوشۇلدى"</string>
+    <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"ئەندىزە تامام"</string>
+    <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
+    <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
+    <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
+    <string name="hour_ampm" msgid="4329881288269772723">"<xliff:g id="HOUR">%-l</xliff:g><xliff:g id="AMPM">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm" msgid="1829009197680861107">"<xliff:g id="HOUR">%-l</xliff:g><xliff:g id="AMPM">%p</xliff:g>"</string>
+    <string name="factorytest_failed" msgid="5410270329114212041">"زاۋۇتتىن چىقىش سىنىقى مەغلۇب بولدى."</string>
+    <string name="factorytest_not_system" msgid="4435201656767276723">"پەقەت \system\app گە ئورنىتىلغان بوغچىلارلا FACTORY-TEST مەشقۇلاتىنى قوللايدۇ."</string>
+    <string name="factorytest_no_action" msgid="872991874799998561">"FACTORY_TEST مەشغۇلاتىنى قوللايدىغان بوغچا تېپىلمىدى."</string>
+    <string name="factorytest_reboot" msgid="6320168203050791643">"قايتا قوزغات"</string>
+    <string name="js_dialog_title" msgid="8143918455087008109">"\'<xliff:g id="TITLE">%s</xliff:g>\' دىكى بەتتە:"</string>
+    <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
+    <string name="js_dialog_before_unload" msgid="1901675448179653089">"بۇ بەتنى باشقا جايغا يېتەكلەمدۇ يوق؟"\n\n"<xliff:g id="MESSAGE">%s</xliff:g> "\n\n"جەزملە تاللانسا داۋاملىشىدۇ ياكى ۋاز كەچ تاللانسا نۆۋەتتىكى بەتتە قالىدۇ."</string>
+    <string name="save_password_label" msgid="6860261758665825069">"جەزملە"</string>
+    <string name="double_tap_toast" msgid="1068216937244567247">"ئەسكەرتىش: قوش چەكسىڭىز چوڭىيىدۇ ۋە كىچىكلەيدۇ."</string>
+    <string name="autofill_this_form" msgid="1272247532604569872">"ئۆزلۈكىدىن تولدۇر"</string>
+    <string name="setup_autofill" msgid="8154593408885654044">"ئۆزلۈكىدىن تولدۇرۇش تەڭشىكى"</string>
+    <string name="autofill_address_name_separator" msgid="2504700673286691795">" "</string>
+    <string name="autofill_address_summary_name_format" msgid="3268041054899214945">"$1$2$3"</string>
+    <string name="autofill_address_summary_separator" msgid="7483307893170324129">« ،»</string>
+    <string name="autofill_address_summary_format" msgid="4874459455786827344">"$1$2$3"</string>
+    <string name="autofill_province" msgid="2231806553863422300">"ئۆلكە"</string>
+    <string name="autofill_postal_code" msgid="4696430407689377108">"پوچتا نومۇر"</string>
+    <string name="autofill_state" msgid="6988894195520044613">"ئۆلكە"</string>
+    <string name="autofill_zip_code" msgid="8697544592627322946">"پوچتا نومۇرى"</string>
+    <string name="autofill_county" msgid="237073771020362891">"دۆلەت"</string>
+    <string name="autofill_island" msgid="4020100875984667025">"ئارال"</string>
+    <string name="autofill_district" msgid="8400735073392267672">"رايون"</string>
+    <string name="autofill_department" msgid="5343279462564453309">"تارماق"</string>
+    <string name="autofill_prefecture" msgid="2028499485065800419">"تەۋە رايون"</string>
+    <string name="autofill_parish" msgid="8202206105468820057">"مەمۇرىي رايون"</string>
+    <string name="autofill_area" msgid="3547409050889952423">"دائىرە"</string>
+    <string name="autofill_emirate" msgid="2893880978835698818">"خەلىپەلىك"</string>
+    <string name="permlab_readHistoryBookmarks" msgid="1284843728203412135">"توركۆرگۈنىڭ تارىخ خاتىرىسى ۋە خەتكۈچىنى ئوقۇ"</string>
+    <string name="permdesc_readHistoryBookmarks" msgid="4981489815467617191">"ئەپنىڭ توركۆرگۈدىكى بارلىق ئادرېس ۋە خەتكۈچلەرنى ئوقۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_writeHistoryBookmarks" msgid="9009434109836280374">"توركۆرگۈنىڭ تارىخ خاتىرىسى ۋە خەتكۈچىنى ياز"</string>
+    <string name="permdesc_writeHistoryBookmarks" product="tablet" msgid="7193514090469945307">"ئەپنىڭ توركۆرگۈنىڭ تاختا كومپيۇتېردا ساقلانغان تارىخ خاتىرىسى ۋە خەتكۈچنى ئۆزگەرتىشىگە يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق توركۆرگۈنىڭ سانلىق مەلۇماتىنى ئۆزگەرتىۋېتىدۇ ياكى ئۆچۈرۈۋېتىدۇ."</string>
+    <string name="permdesc_writeHistoryBookmarks" product="default" msgid="945571990357114950">"ئەپنىڭ توركۆرگۈنىڭ تېلېفوندا ساقلانغان تارىخ خاتىرىسى ۋە خەتكۈچنى ئۆزگەرتىشىگە يول قويىدۇ. زەھەرخەندە پىروگراممىلار بۇ ئارقىلىق توركۆرگۈنىڭ سانلىق مەلۇماتىنى ئۆزگەرتىۋېتىدۇ ياكى ئۆچۈرۈۋېتىدۇ."</string>
+    <string name="permlab_setAlarm" msgid="5924401328803615165">"قوڭغۇراق سائەتتە ئاگاھلاندۇرۇش تەڭشىكى"</string>
+    <string name="permdesc_setAlarm" msgid="5966966598149875082">"ئەپنىڭ ئورنىتىلغان قوڭغۇراق سائەت پىروگراممىسىدا ئاگاھلاندۇرۇش تەڭشىشىگە يول قويىدۇ. بەزى قوڭغۇراقلىق سائەت ئەپلىرى بۇ ئىقتىدارنى ئەمەلگە ئاشۇرمىغان."</string>
+    <string name="permlab_addVoicemail" msgid="5525660026090959044">"ئۈنخەت قوش"</string>
+    <string name="permdesc_addVoicemail" msgid="4828507394878206682">"ئەپنىڭ ئۈنخەت ساندۇقىڭىزنىڭ قوبۇللاش ساندۇقىغا ئۇچۇر قوشۇشىغا يول قويىدۇ."</string>
+    <string name="permlab_writeGeolocationPermissions" msgid="4715212655598275532">"توركۆرگۈنىڭ جۇغراپىيەلىك ئورۇن ھوقۇقىنى ئۆزگەرت"</string>
+    <string name="permdesc_writeGeolocationPermissions" msgid="4011908282980861679">"ئەپنىڭ توركۆرگۈنىڭ جۇغراپىيەلىك ئورۇن ھوقۇقىنى ئۆزگەرتىشىگە يول قويىدۇ. زەھەرخەندە ئەپلەر بۇ ئارقىلىق توركۆرگۈنىڭ ئورنىنى خالىغان تور بىكەتكە يوللايدۇ."</string>
+    <string name="permlab_packageVerificationAgent" msgid="5568139100645829117">"بوغچا دەلىللە"</string>
+    <string name="permdesc_packageVerificationAgent" msgid="6033195477325381106">"ئەپنىڭ بوغچىنى ئورناتقىلى بولىدىغانلىقىنى تەكشۈرۈشىگە يول قويىدۇ."</string>
+    <string name="permlab_bindPackageVerifier" msgid="4187786793360326654">"بوغچا تەكشۈرگۈچكە باغلا"</string>
+    <string name="permdesc_bindPackageVerifier" msgid="2409521927385789318">"يانفون ئىشلەتكۈچىنىڭ بوغچا دەلىللىگۈچنى ئىشلىتىش ئىلتىماسىغا يول قويىدۇ. ئادەتتىكى ئەپلەرگە بۇ ھوقۇق لازىم بولمايدۇ."</string>
+    <string name="save_password_message" msgid="767344687139195790">"توركۆرگۈ ئىمنى ساقلىۋالسۇنمۇ؟"</string>
+    <string name="save_password_notnow" msgid="6389675316706699758">"ھازىرچە ياق"</string>
+    <string name="save_password_remember" msgid="6491879678996749466">"ئەستە تۇت"</string>
+    <string name="save_password_never" msgid="8274330296785855105">"ھەرگىز"</string>
+    <string name="open_permission_deny" msgid="5661861460947222274">"سىزنىڭ بۇ بەتنى ئېچىش ھوقۇقىڭىز يوق."</string>
+    <string name="text_copied" msgid="4985729524670131385">"تېكىست كېسىپ چاپلاش تاختىسىغا كۆچۈرۈلدى."</string>
+    <string name="more_item_label" msgid="4650918923083320495">"تېخىمۇ كۆپ"</string>
+    <string name="prepend_shortcut_label" msgid="2572214461676015642">"Menu+"</string>
+    <string name="menu_space_shortcut_label" msgid="2410328639272162537">"بوشلۇق"</string>
+    <string name="menu_enter_shortcut_label" msgid="2743362785111309668">"Enter"</string>
+    <string name="menu_delete_shortcut_label" msgid="3658178007202748164">"ئۆچۈر"</string>
+    <string name="search_go" msgid="8298016669822141719">"ئىزدە"</string>
+    <string name="searchview_description_search" msgid="6749826639098512120">"ئىزدە"</string>
+    <string name="searchview_description_query" msgid="5911778593125355124">"سۈرۈشتۈرۈش ئىزدە"</string>
+    <string name="searchview_description_clear" msgid="1330281990951833033">"سۈرۈشتۈرۈش تازىلا"</string>
+    <string name="searchview_description_submit" msgid="2688450133297983542">"سۈرۈشتۈرۈش تاپشۇر"</string>
+    <string name="searchview_description_voice" msgid="2453203695674994440">"تاۋۇش ئىزدەش"</string>
+    <string name="oneMonthDurationPast" msgid="7396384508953779925">"1 ئاي ئىلگىرى"</string>
+    <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"1"</string>
+  <plurals name="num_seconds_ago">
+    <item quantity="one" msgid="4869870056547896011">"1 سېكۇنت ئىلگىرى"</item>
+    <item quantity="other" msgid="3903706804349556379">"<xliff:g id="COUNT">%d</xliff:g> سېكۇنت ئىلگىرى"</item>
+  </plurals>
+  <plurals name="num_minutes_ago">
+    <item quantity="one" msgid="3306787433088810191">"1 مىنۇت ئىلگىرى"</item>
+    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> مىنۇت ئىلگىرى"</item>
+  </plurals>
+  <plurals name="num_hours_ago">
+    <item quantity="one" msgid="9150797944610821849">"1 سائەت ئىلگىرى"</item>
+    <item quantity="other" msgid="2467273239587587569">"<xliff:g id="COUNT">%d</xliff:g> سائەت ئىلگىرى"</item>
+  </plurals>
+  <plurals name="last_num_days">
+    <item quantity="other" msgid="3069992808164318268">"ئۆتكەن <xliff:g id="COUNT">%d</xliff:g> كۈن"</item>
+  </plurals>
+    <string name="last_month" msgid="3959346739979055432">"ئالدىنقى ئاي"</string>
+    <string name="older" msgid="5211975022815554840">"كونىراق"</string>
+  <plurals name="num_days_ago">
+    <item quantity="one" msgid="861358534398115820">"تۈنۈگۈن"</item>
+    <item quantity="other" msgid="2479586466153314633">"<xliff:g id="COUNT">%d</xliff:g> كۈن ئىلگىرى"</item>
+  </plurals>
+  <plurals name="in_num_seconds">
+    <item quantity="one" msgid="2729745560954905102">"1 سېكۇنت كېيىن"</item>
+    <item quantity="other" msgid="1241926116443974687">"<xliff:g id="COUNT">%d</xliff:g> سېكۇنتتىن كېيىن"</item>
+  </plurals>
+  <plurals name="in_num_minutes">
+    <item quantity="one" msgid="8793095251325200395">"1 مىنۇتتىن كېيىن"</item>
+    <item quantity="other" msgid="3330713936399448749">"<xliff:g id="COUNT">%d</xliff:g> مىنۇتتىن كېيىن"</item>
+  </plurals>
+  <plurals name="in_num_hours">
+    <item quantity="one" msgid="7164353342477769999">"1 سائەتتىن كېيىن"</item>
+    <item quantity="other" msgid="547290677353727389">"<xliff:g id="COUNT">%d</xliff:g> سائەتتىن كېيىن"</item>
+  </plurals>
+  <plurals name="in_num_days">
+    <item quantity="one" msgid="5413088743009839518">"ئەتە"</item>
+    <item quantity="other" msgid="5109449375100953247">"<xliff:g id="COUNT">%d</xliff:g> كۈندىن كېيىن"</item>
+  </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+    <item quantity="one" msgid="1849036840200069118">"1 سېكۇنت ئىلگىرى"</item>
+    <item quantity="other" msgid="3699169366650930415">"<xliff:g id="COUNT">%d</xliff:g> سېكۇنت ئىلگىرى"</item>
+  </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+    <item quantity="one" msgid="6361490147113871545">"1 مىنۇت ئىلگىرى"</item>
+    <item quantity="other" msgid="851164968597150710">"<xliff:g id="COUNT">%d</xliff:g> مىنۇت ئىلگىرى"</item>
+  </plurals>
+  <plurals name="abbrev_num_hours_ago">
+    <item quantity="one" msgid="4796212039724722116">"1 سائەت ئىلگىرى"</item>
+    <item quantity="other" msgid="6889970745748538901">"<xliff:g id="COUNT">%d</xliff:g> سائەت ئىلگىرى"</item>
+  </plurals>
+  <plurals name="abbrev_num_days_ago">
+    <item quantity="one" msgid="8463161711492680309">"تۈنۈگۈن"</item>
+    <item quantity="other" msgid="3453342639616481191">"<xliff:g id="COUNT">%d</xliff:g> كۈن ئىلگىرى"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_seconds">
+    <item quantity="one" msgid="5842225370795066299">"1 سېكۇنت كېيىن"</item>
+    <item quantity="other" msgid="5495880108825805108">"<xliff:g id="COUNT">%d</xliff:g> سېكۇنتتىن كېيىن"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_minutes">
+    <item quantity="one" msgid="562786149928284878">"1 مىنۇتتىن كېيىن"</item>
+    <item quantity="other" msgid="4216113292706568726">"<xliff:g id="COUNT">%d</xliff:g> مىنۇتتىن كېيىن"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_hours">
+    <item quantity="one" msgid="3274708118124045246">"1 سائەتتىن كېيىن"</item>
+    <item quantity="other" msgid="3705373766798013406">"<xliff:g id="COUNT">%d</xliff:g> سائەتتىن كېيىن"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_days">
+    <item quantity="one" msgid="2178576254385739855">"ئەتە"</item>
+    <item quantity="other" msgid="2973062968038355991">"<xliff:g id="COUNT">%d</xliff:g> كۈندىن كېيىن"</item>
+  </plurals>
+    <string name="preposition_for_date" msgid="9093949757757445117">"چېسلا: <xliff:g id="DATE">%s</xliff:g>"</string>
+    <string name="preposition_for_time" msgid="5506831244263083793">"ۋاقىت: <xliff:g id="TIME">%s</xliff:g>"</string>
+    <string name="preposition_for_year" msgid="5040395640711867177">"يىل: <xliff:g id="YEAR">%s</xliff:g>"</string>
+    <string name="day" msgid="8144195776058119424">"كۈن"</string>
+    <string name="days" msgid="4774547661021344602">"كۈن"</string>
+    <string name="hour" msgid="2126771916426189481">"سائەت"</string>
+    <string name="hours" msgid="894424005266852993">"سائەت"</string>
+    <string name="minute" msgid="9148878657703769868">"مىنۇت"</string>
+    <string name="minutes" msgid="5646001005827034509">"مىنۇت"</string>
+    <string name="second" msgid="3184235808021478">"سېكۇنت"</string>
+    <string name="seconds" msgid="3161515347216589235">"سېكۇنت"</string>
+    <string name="week" msgid="5617961537173061583">"ھەپتە"</string>
+    <string name="weeks" msgid="6509623834583944518">"ھەپتە"</string>
+    <string name="year" msgid="4001118221013892076">"يىل"</string>
+    <string name="years" msgid="6881577717993213522">"يىل"</string>
+    <string name="VideoView_error_title" msgid="3359437293118172396">"سىننى قويالمايدۇ"</string>
+    <string name="VideoView_error_text_invalid_progressive_playback" msgid="897920883624437033">"كەچۈرۈڭ، بۇ سىننى مەزكۇر ئۈسكۈنىدە قويۇشقا ماس كەلمەيدۇ."</string>
+    <string name="VideoView_error_text_unknown" msgid="710301040038083944">"كەچۈرۈڭ، بۇ سىننى قويالمايدۇ."</string>
+    <string name="VideoView_error_button" msgid="2822238215100679592">"جەزملە"</string>
+    <string name="relative_time" msgid="1818557177829411417">"<xliff:g id="DATE">%1$s</xliff:g>, <xliff:g id="TIME">%2$s</xliff:g>"</string>
+    <string name="noon" msgid="7245353528818587908">"چۈش"</string>
+    <string name="Noon" msgid="3342127745230013127">"چۈش"</string>
+    <string name="midnight" msgid="7166259508850457595">"يېرىم كېچە"</string>
+    <string name="Midnight" msgid="5630806906897892201">"يېرىم كېچە"</string>
+    <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
+    <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
+    <string name="selectAll" msgid="6876518925844129331">"ھەممىنى تاللا"</string>
+    <string name="cut" msgid="3092569408438626261">"كەس"</string>
+    <string name="copy" msgid="2681946229533511987">"كۆچۈر"</string>
+    <string name="paste" msgid="5629880836805036433">"چاپلا"</string>
+    <string name="replace" msgid="5781686059063148930">"ئالماشتۇر…"</string>
+    <string name="delete" msgid="6098684844021697789">"ئۆچۈر"</string>
+    <string name="copyUrl" msgid="2538211579596067402">"تور ئادرېس كۆچۈر"</string>
+    <string name="selectTextMode" msgid="6738556348861347240">"تېكىست تاللا…"</string>
+    <string name="textSelectionCABTitle" msgid="5236850394370820357">"تېكىست تاللاش"</string>
+    <string name="addToDictionary" msgid="9090375111134433012">"لۇغەتكە قوش"</string>
+    <string name="deleteText" msgid="7070985395199629156">"ئۆچۈر"</string>
+    <string name="inputMethod" msgid="1653630062304567879">"كىرگۈزگۈچ"</string>
+    <string name="editTextMenuTitle" msgid="4909135564941815494">"تېكىست مەشغۇلاتى"</string>
+    <string name="low_internal_storage_view_title" msgid="1399732408701697546">"ساقلاش بوشلۇقى ئاز"</string>
+    <string name="low_internal_storage_view_text" product="tablet" msgid="4231085657068852042">"تاختا كومپيۇتېر ساقلىغۇچ بوشلۇقى ئاز قالدى."</string>
+    <string name="low_internal_storage_view_text" product="default" msgid="635106544616378836">"تېلېفون ساقلىغۇچ بوشلۇقى ئاز قالدى."</string>
+    <string name="ok" msgid="5970060430562524910">"جەزملە"</string>
+    <string name="cancel" msgid="6442560571259935130">"ۋاز كەچ"</string>
+    <string name="yes" msgid="5362982303337969312">"جەزملە"</string>
+    <string name="no" msgid="5141531044935541497">"ۋاز كەچ"</string>
+    <string name="dialog_alert_title" msgid="2049658708609043103">"دىققەت"</string>
+    <string name="loading" msgid="1760724998928255250">"يۈكلەۋاتىدۇ…"</string>
+    <string name="capital_on" msgid="1544682755514494298">"ئاچ"</string>
+    <string name="capital_off" msgid="6815870386972805832">"تاقا"</string>
+    <string name="whichApplication" msgid="4533185947064773386">"تۆۋەندىكى ئۇسۇلدا ئەۋەتىش"</string>
+    <string name="alwaysUse" msgid="4583018368000610438">"كۆڭۈلدىكى ئەھۋالدا مۇشۇ خىل ئۇسۇلدا يوللاش"</string>
+    <string name="clearDefaultHintMsg" msgid="4815455344600932173">"ئىكراندىكى تەڭشەك›› ئەپنى باشقۇرۇش ئارقىلىق كۆڭۈلدىكى تەڭشەكنى تازىلاڭ."</string>
+    <string name="chooseActivity" msgid="1009246475582238425">"مەشغۇلات تاللاڭ"</string>
+    <string name="chooseUsbActivity" msgid="7892597146032121735">"USB ئۈسكۈنىدە ئىشلەيدىغان ئەپ تاللاڭ"</string>
+    <string name="noApplications" msgid="1691104391758345586">"بۇ مەشغۇلاتنى ئىجرا قىلىدىغان  يوق."</string>
+    <string name="aerr_title" msgid="1905800560317137752"/>
+    <string name="aerr_application" msgid="932628488013092776">"ناھايىتى ئەپسۇس، <xliff:g id="APPLICATION">%1$s</xliff:g> توختىدى."</string>
+    <string name="aerr_process" msgid="4507058997035697579">"ناھايىتى ئەپسۇس، <xliff:g id="PROCESS">%1$s</xliff:g> جەريان توختىدى."</string>
+    <string name="anr_title" msgid="4351948481459135709"/>
+    <string name="anr_activity_application" msgid="8339738283149696827">"<xliff:g id="APPLICATION">%2$s</xliff:g> ئىنكاس يوق."\n\n"ئۇنى تاقامسىز؟"</string>
+    <string name="anr_activity_process" msgid="7018289416670457797">"<xliff:g id="ACTIVITY">%1$s</xliff:g> پائالىيەتتە ئىنكاس يوق."\n\n"ئۇنى تاقامسىز؟"</string>
+    <string name="anr_application_process" msgid="7208175830253210526">"<xliff:g id="APPLICATION">%1$s</xliff:g> ئىنكاس يوق.\n\nئۇنى تاقامسىز؟"</string>
+    <string name="anr_process" msgid="306819947562555821">"<xliff:g id="PROCESS">%1$s</xliff:g> جەرياندا ئىنكاس يوق."\n\n"ئۇنى تاقامسىز؟"</string>
+    <string name="force_close" msgid="8346072094521265605">"جەزملە"</string>
+    <string name="report" msgid="4060218260984795706">"دوكلات"</string>
+    <string name="wait" msgid="7147118217226317732">"كۈت"</string>
+    <string name="launch_warning_title" msgid="8323761616052121936">"ئەپ قايتا نىشانلاندى"</string>
+    <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> ئىجرا قىلىنىۋاتىدۇ."</string>
+    <string name="launch_warning_original" msgid="188102023021668683">"<xliff:g id="APP_NAME">%1$s</xliff:g> قوزغىتىلدى."</string>
+    <string name="screen_compat_mode_scale" msgid="3202955667675944499">"نىسبىتى"</string>
+    <string name="screen_compat_mode_show" msgid="4013878876486655892">"ھەمىشە كۆرسەت"</string>
+    <string name="screen_compat_mode_hint" msgid="2953716574198046484">"تەڭشەكلەر›ئەپلەر›ئەپ باشقۇرۇش ئارقىلىق بۇ ھالەتنى قايتا قوزغىتىڭ."</string>
+    <string name="smv_application" msgid="295583804361236288">"ئەپ <xliff:g id="APPLICATION">%1$s</xliff:g> (جەريان <xliff:g id="PROCESS">%2$s</xliff:g>) ئۆزلۈكىدىن ئىجرا قىلىدىغان مەجبۇرىي ھالەت تەدبىرىگە خىلاپلىق قىلدى."</string>
+    <string name="smv_process" msgid="5120397012047462446">"ئەپ %1$s ئۆزلۈكىدىن ئىجرا قىلىدىغان مەجبۇرىي ھالەت تەدبىرىگە خىلاپلىق قىلدى"</string>
+    <string name="android_upgrading_title" msgid="378740715658358071">"Android يۈكسىلىۋاتىدۇ…"</string>
+    <string name="android_upgrading_apk" msgid="274409861603566003">"<xliff:g id="NUMBER_1">%2$d</xliff:g> ئەپتىن <xliff:g id="NUMBER_0">%1$d</xliff:g> نى ئەلالاشتۇرۇۋاتىدۇ."</string>
+    <string name="android_upgrading_starting_apps" msgid="7959542881906488763">"پروگرامما قوزغىتىش."</string>
+    <string name="android_upgrading_complete" msgid="1405954754112999229">"قوزغىتىشنى تاماملاۋاتىدۇ."</string>
+    <string name="heavy_weight_notification" msgid="9087063985776626166">"<xliff:g id="APP">%1$s</xliff:g> ئىجرا قىلىنىۋاتىدۇ"</string>
+    <string name="heavy_weight_notification_detail" msgid="2423977499339403402">"تاللانسا ئەپ ئالمىشىدۇ"</string>
+    <string name="heavy_weight_switcher_title" msgid="1135403633766694316">"ئەپ ئالماشتۇرامدۇ؟"</string>
+    <string name="heavy_weight_switcher_text" msgid="4592075610079319667">"باشقا بىر ئەپ ئىجرا قىلىنىۋاتىدۇ، يېڭى ئەپ ئىجرا قىلىش ئۈچۈن شۇ ئەپنى توختىتىشىڭىز كېرەك."</string>
+    <string name="old_app_action" msgid="493129172238566282">"<xliff:g id="OLD_APP">%1$s</xliff:g> غا قايت"</string>
+    <string name="old_app_description" msgid="942967900237208466">"يېڭى ئەپنى قوزغاتما."</string>
+    <string name="new_app_action" msgid="5472756926945440706">"<xliff:g id="OLD_APP">%1$s</xliff:g> نى قوزغات"</string>
+    <string name="new_app_description" msgid="6830398339826789493">"كونا پىروگراممىنى ساقلىمايلا توختات."</string>
+    <string name="sendText" msgid="5132506121645618310">"تېكىستكە ئېلىپ بېرىلىدىغان مەشغۇلاتنى تاللاڭ"</string>
+    <string name="volume_ringtone" msgid="6885421406845734650">"قوڭغۇراق ئاۋازى"</string>
+    <string name="volume_music" msgid="5421651157138628171">"ۋاسىتە ئاۋازى"</string>
+    <string name="volume_music_hint_playing_through_bluetooth" msgid="9165984379394601533">"كۆكچىشتا قويۇۋاتىدۇ"</string>
+    <string name="volume_music_hint_silent_ringtone_selected" msgid="6158339745293431194">"ئۈنسىز قوڭغۇراق تاللاندى"</string>
+    <string name="volume_call" msgid="3941680041282788711">"سۆزلىشىش ئاۋازى"</string>
+    <string name="volume_bluetooth_call" msgid="2002891926351151534">"كۆكچىش ئىشلەتكەندىكى سۆزلىشىش ئاۋازى"</string>
+    <string name="volume_alarm" msgid="1985191616042689100">"قوڭغۇراق ئاۋازى"</string>
+    <string name="volume_notification" msgid="2422265656744276715">"ئۇقتۇرۇش ئاۋازى"</string>
+    <string name="volume_unknown" msgid="1400219669770445902">"ئاۋاز مىقدارى"</string>
+    <string name="volume_icon_description_bluetooth" msgid="6538894177255964340">"كۆكچىش ئاۋازى"</string>
+    <string name="volume_icon_description_ringer" msgid="3326003847006162496">"قوڭغۇراق ئاۋازى"</string>
+    <string name="volume_icon_description_incall" msgid="8890073218154543397">"چاقىرىش ئاۋازى"</string>
+    <string name="volume_icon_description_media" msgid="4217311719665194215">"ۋاسىتە ئاۋازى"</string>
+    <string name="volume_icon_description_notification" msgid="7044986546477282274">"ئۇقتۇرۇش ئاۋازى"</string>
+    <string name="ringtone_default" msgid="3789758980357696936">"كۆڭۈلدىكى قوڭغۇراق ئاۋازى"</string>
+    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"كۆڭۈلدىكى قوڭغۇراق ئاۋازى(<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
+    <string name="ringtone_silent" msgid="4440324407807468713">"ئۈنسىز"</string>
+    <string name="ringtone_picker_title" msgid="3515143939175119094">"قوڭغۇراق ئاۋازى"</string>
+    <string name="ringtone_unknown" msgid="5477919988701784788">"نامەلۇم قوڭغۇراق ئاۋازى"</string>
+  <plurals name="wifi_available">
+    <item quantity="one" msgid="6654123987418168693">"ئىشلىتىلىشچان Wi-Fi تورى بار"</item>
+    <item quantity="other" msgid="4192424489168397386">"ئىشلىتىلىشچان Wi-Fi تورلىرى بار"</item>
+  </plurals>
+  <plurals name="wifi_available_detailed">
+    <item quantity="one" msgid="1634101450343277345">"ئىشلىتىلىشچان Wi-Fi تورىنى ئاچ"</item>
+    <item quantity="other" msgid="7915895323644292768">"ئىشلىتىلىشچان Wi-Fi تورلىرىنى ئاچ"</item>
+  </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Wi-Fi تورىغا تىزىملاپ كىرىڭ"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip/>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Wi-Fi تورىغا باغلىنالمايدۇ"</string>
+    <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" ئىنتېرنېت باغلىنىشى ناچار"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2804722042556269129">"Wi-Fi Direct مەشغۇلاتىنى قوزغات. بۇ مەشغۇلات Wi-Fi خېرىدارى/قىزىق نۇقتا مەشغۇلاتىنى تاقايدۇ."</string>
+    <string name="wifi_p2p_failed_message" msgid="1820097493844848281">"Wi-Fi Direct نى قوزغىتالمايدۇ"</string>
+    <string name="wifi_p2p_pbc_go_negotiation_request_message" msgid="3170321684621420428">"<xliff:g id="P2P_DEVICE_ADDRESS">%1$s</xliff:g> نىڭ Wi-Fi Direct باغلىنىش ئىلتىماسىنى قوبۇللىدى. جەزملە چېكىلسە قوشۇلىدۇ."</string>
+    <string name="wifi_p2p_pin_go_negotiation_request_message" msgid="5177412094633377308">"<xliff:g id="P2P_DEVICE_ADDRESS">%1$s</xliff:g> نىڭ Wi-Fi Direct باغلىنىش ئىلتىماسىنى قوبۇللىدى. pin كىرگۈزۈلسە داۋاملىشىدۇ."</string>
+    <string name="wifi_p2p_pin_display_message" msgid="2834049169114922902">"جۈپلەيدىغان ئۈسكۈنە <xliff:g id="P2P_CLIENT_ADDRESS">%2$s</xliff:g> دە WPS pin <xliff:g id="P2P_WPS_PIN">%1$s</xliff:g> كىرگۈزگەندىلا ئاندىن باغلىنىش تەڭشىكىنى داۋاملاشتۇرالايدۇ"</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct ئوچۇق"</string>
+    <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"چېكىلسە تەڭشەيدۇ"</string>
+    <string name="select_character" msgid="3365550120617701745">"ھەرپ قىستۇر"</string>
+    <string name="sms_control_default_app_name" msgid="7630529934366549163">"يوچۇن ئەپ"</string>
+    <string name="sms_control_title" msgid="7296612781128917719">"قىسقا ئۇچۇر يوللاۋاتىدۇ"</string>
+    <string name="sms_control_message" msgid="1289331457999236205">"ناھايىتى جىق قىسقا ئۇچۇر يوللىنىۋاتىدۇ. \"جەزملە\" تاللانسا داۋاملاشتۇرىدۇ، \"ۋاز كەچ\" تاللانسا يوللاشنى توختىتىدۇ."</string>
+    <string name="sms_control_yes" msgid="2532062172402615953">"جەزملە"</string>
+    <string name="sms_control_no" msgid="1715320703137199869">"ۋاز كەچ"</string>
+    <string name="sim_removed_title" msgid="6227712319223226185">"SIM كارتا چىقىرىۋېتىلدى"</string>
+    <string name="sim_removed_message" msgid="2333164559970958645">"كۆچمە تورنى ئىشلەتكىلى بولمايدۇ. ئىناۋەتلىك SIM كارتا قىستۇرۇپ قايتا قوزغىتىڭ."</string>
+    <string name="sim_done_button" msgid="827949989369963775">"تامام"</string>
+    <string name="sim_added_title" msgid="3719670512889674693">"SIM كارتا قوشۇلدى"</string>
+    <string name="sim_added_message" msgid="1209265974048554242">"ئۈسكۈنىڭىزنى قايتا قوزغاتسىڭىز ئاندىن كۆچمە تورنى زىيارەت قىلالايسىز."</string>
+    <string name="sim_restart_button" msgid="4722407842815232347">"قايتا قوزغات"</string>
+    <string name="time_picker_dialog_title" msgid="8349362623068819295">"ۋاقىت تەڭشەك"</string>
+    <string name="date_picker_dialog_title" msgid="5879450659453782278">"چېسلا تەڭشەك"</string>
+    <string name="date_time_set" msgid="5777075614321087758">"تەڭشەك"</string>
+    <string name="default_permission_group" msgid="2690160991405646128">"كۆڭۈلدىكى"</string>
+    <string name="no_permissions" msgid="7283357728219338112">"ھىچقانداق ھوقۇق كېرەك ئەمەس"</string>
+    <string name="perms_hide" msgid="7283915391320676226"><b>"يوشۇر"</b></string>
+    <string name="perms_show_all" msgid="2671791163933091180"><b>"ھەممىنى كۆرسەت"</b></string>
+    <string name="usb_storage_activity_title" msgid="2399289999608900443">"USB يۇقىرى سىغىملىق ساقلىغۇچ"</string>
+    <string name="usb_storage_title" msgid="5901459041398751495">"USB ئۇلاندى"</string>
+    <string name="usb_storage_message" product="nosdcard" msgid="6631094834151575841">"سىز USB ئارقىلىق كومپيۇتېرنى ئۇلىدىڭىز. كومپيۇتېر بىلەن ئاندىرويىد USB ساقلىغۇچ ئارىسىدا ھۆججەت كۆچۈرمەكچى بولسىڭىز، تۆۋەندىكى توپچىنى بېسىڭ."</string>
+    <string name="usb_storage_message" product="default" msgid="4510858346516069238">"سىز USB ئارقىلىق كومپيۇتېرنى ئۇلىدىڭىز. كومپيۇتېر بىلەن ئاندىرويىد SD كارتا ئارىسىدا ھۆججەت كۆچۈرمەكچى بولسىڭىز، تۆۋەندىكى توپچىنى بېسىڭ."</string>
+    <string name="usb_storage_button_mount" msgid="1052259930369508235">"USB ساقلىغۇچنى ئاچ"</string>
+    <string name="usb_storage_error_message" product="nosdcard" msgid="3276413764430468454">"USB ساقلىغۇچنى USB ساقلىغۇچ سۈپىتىدە ئاچقاندا مەسىلە كۆرۈلدى."</string>
+    <string name="usb_storage_error_message" product="default" msgid="120810397713773275">"SD كارتىڭىزنى USB ساقلىغۇچ سۈپىتىدە ئاچقاندا مەسىلە كۆرۈلدى."</string>
+    <string name="usb_storage_notification_title" msgid="8175892554757216525">"USB ئۇلاندى"</string>
+    <string name="usb_storage_notification_message" msgid="7380082404288219341">"ھۆججەتنى كومپيۇتېرغا كۆچۈرۈش ياكى كومپيۇتېردىن ساقلىغۇچقا كۆچۈرۈشنى تاللاڭ."</string>
+    <string name="usb_storage_stop_notification_title" msgid="2336058396663516017">"USB ساقلىغۇچنى تاقا"</string>
+    <string name="usb_storage_stop_notification_message" msgid="2591813490269841539">"USB ساقلىغۇچنى تاقاشنى تاللاڭ."</string>
+    <string name="usb_storage_stop_title" msgid="660129851708775853">"USB ساقلىغۇچ ئىشلىتىلىۋاتىدۇ "</string>
+    <string name="usb_storage_stop_message" product="nosdcard" msgid="1368842269463745067">"USB ساقلىغۇچنى تاقاشتىن ئىلگىرى، كومپيۇتېردىن Android نىڭ USB ساقلىغۇچنى چىقىرىۋەتكەن ياكى چىقىرىۋەتمىگەنلىڭىزنى تەكشۈرۈڭ."</string>
+    <string name="usb_storage_stop_message" product="default" msgid="3613713396426604104">"USB ساقلىغۇچنى تاقاشتىن ئىلگىرى، كومپيۇتېردىن Android نىڭ SD كارتىنى چىقىرىۋەتكەن ياكى چىقىرىۋەتمىگەنلىڭىزنى تەكشۈرۈڭ."</string>
+    <string name="usb_storage_stop_button_mount" msgid="7060218034900696029">"USB ساقلىغۇچنى تاقا"</string>
+    <string name="usb_storage_stop_error_message" msgid="143881914840412108">"بىز USB ساقلىغۇچنى تاقاشتا مەسىلىگە يولۇقتۇق. USB نى چىقىرىۋەتكەنلىكىڭىزنى تەكشۈرۈپ، قايتا سىناڭ."</string>
+    <string name="dlg_confirm_kill_storage_users_title" msgid="963039033470478697">"USB ساقلىغۇچنى تاقا"</string>
+    <string name="dlg_confirm_kill_storage_users_text" msgid="3202838234780505886">"ئەگەر سىز USB ساقلىغۇچنى ئاچسىڭىز، ئىشلىتىلىۋاتقان پىروگراممىلار ئىشتىن توختايدۇ ھەم USB نى تاقىغاندىن كېيىن ئاندىن قايتا ئىشلەيدۇ."</string>
+    <string name="dlg_error_title" msgid="7323658469626514207">"USB مەشغۇلاتى مەغلۇب بولدى."</string>
+    <string name="dlg_ok" msgid="7376953167039865701">"جەزملە"</string>
+    <string name="usb_mtp_notification_title" msgid="3699913097391550394">"ۋاستە ئۈسكۈنە سۈپىتىدە باغلاندى"</string>
+    <string name="usb_ptp_notification_title" msgid="1960817192216064833">"كامېرا سۈپىتىدە باغلاندى"</string>
+    <string name="usb_cd_installer_notification_title" msgid="6774712827892090754">"ئورناتقۇچ سۈپىتىدە باغلاندى"</string>
+    <string name="usb_accessory_notification_title" msgid="7848236974087653666">"USB زاپچاس سۈپىتىدە باغلاندى"</string>
+    <string name="usb_notification_message" msgid="4447869605109736382">"چېكىلسە باشقا USB تاللانمىلارنى كۆرسىتىدۇ"</string>
+    <string name="extmedia_format_title" product="nosdcard" msgid="7980995592595097841">"USB ساقلىغۇچنى فورماتلا"</string>
+    <string name="extmedia_format_title" product="default" msgid="8663247929551095854">"SD كارتىنى فورماتلا"</string>
+    <string name="extmedia_format_message" product="nosdcard" msgid="8296908079722897772">"USB ساقلىغۇچ فورماتلانسا ئۇنىڭدىكى ھەممە ھۆججەتلەر ئۆچۈرۈلىدۇ؟ بۇ مەشغۇلاتنى ئەسلىگە كەلتۈرگىلى بولمايدۇ!"</string>
+    <string name="extmedia_format_message" product="default" msgid="3621369962433523619">"راستىنلا SD كارتىنى فورماتلامسىز؟ كارتىدىكى بارلىق ئۇچۇرلار يوقايدۇ!"</string>
+    <string name="extmedia_format_button_format" msgid="4131064560127478695">"فورمات"</string>
+    <string name="adb_active_notification_title" msgid="6729044778949189918">"USB سازلاش ئۇلاندى"</string>
+    <string name="adb_active_notification_message" msgid="8470296818270110396">"USB سازلاشنى توختىتىشنى تاللاڭ."</string>
+    <string name="select_input_method" msgid="6865512749462072765">"كىرگۈزگۈچ تاللاڭ"</string>
+    <string name="configure_input_methods" msgid="6324843080254191535">"كىرگۈزگۈچ سەپلىمىسى"</string>
+    <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+    <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+    <string name="candidates_style" msgid="4333913089637062257"><u>"نامزات"</u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard" msgid="3449816005351468560">"USB ساقلىغۇچنى تەييارلاۋاتىدۇ"</string>
+    <string name="ext_media_checking_notification_title" product="default" msgid="5457603418970994050">"SD كارتا تەييارلاۋاتىدۇ"</string>
+    <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"خاتالىق تەكشۈرۈۋاتىدۇ"</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard" msgid="7788040745686229307">"بوش USB ساقلىغۇچ"</string>
+    <string name="ext_media_nofs_notification_title" product="default" msgid="780477838241212997">"بوش SD كارتا"</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard" msgid="8623130522556087311">"USB ساقلىغۇچ بوش ياكى قوللىمايدىغان ھۆججەت سىستېمىسى بار."</string>
+    <string name="ext_media_nofs_notification_message" product="default" msgid="3817704088027829380">"SD كارتا بوش ياكى قوللىمايدىغان ھۆججەت سىستېمىسى بار."</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard" msgid="2090046769532713563">"بۇزۇلغان USB ساقلىغۇچ"</string>
+    <string name="ext_media_unmountable_notification_title" product="default" msgid="6410723906019100189">"بۇزۇلغان SD كارتا"</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard" msgid="529021299294450667">"USB ساقلىغۇچ بۇزۇلغان. ئۇنى فورماتلىسىڭىز بولىدىغان ئوخشايدۇ."</string>
+    <string name="ext_media_unmountable_notification_message" product="default" msgid="6902531775948238989">"SD كارتا بۇزۇلغان. ئۇنى فورماتلىسىڭىز بولىدىغان ئوخشايدۇ."</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard" msgid="1661683031330951073">"USB ساقلىغۇچ تاسادىپىي چىقىرىۋېتىلدى."</string>
+    <string name="ext_media_badremoval_notification_title" product="default" msgid="6872152882604407837">"SD كارتا تاسادىپىي چىقىرىۋېتىلدى."</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard" msgid="4329848819865594241">"سانلىق مەلۇماتلارنىڭ يوقاپ كېتىشىدىن ساقلىنىش ئۈچۈن، ئاۋۋال USB ساقلىغۇچنى ئېگەرسىزلەپ ئاندىن ئاجرىتېۋېلىڭ."</string>
+    <string name="ext_media_badremoval_notification_message" product="default" msgid="7260183293747448241">"سانلىق مەلۇماتلارنىڭ يوقاپ كېتىشىدىن ساقلىنىش ئۈچۈن، ئاۋۋال SD كارتىنى ئېگەرسىزلەپ ئاندىن ئاجرىتېۋېلىڭ."</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard" msgid="3967973893270360230">"USB ساقلىغۇچنى چىقىرىۋېتىش بىخەتەر"</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default" msgid="6729801130790616200">"SD كارتا چىقىرىۋېتىش بىخەتەر "</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard" msgid="6142195361606493530">"SD كارتىنى بىخەتەر ھالدا چىقىرىۋالسىڭىز بولىدۇ."</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default" msgid="568841278138377604">"SD كارتىنى بىخەتەر ھالدا چىقىرىۋالسىڭىز بولىدۇ."</string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard" msgid="4486377230140227651">"چىقىرىۋېتىلگەن USB ساقلىغۇچ"</string>
+    <string name="ext_media_nomedia_notification_title" product="default" msgid="8902518030404381318">"چىقىرىۋېتىلگەن SDكارتا "</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard" msgid="6921126162580574143">"USB ساقلىغۇچ چىقىرىۋېتىلدى. يېڭى ۋاستە قىستۇرۇڭ."</string>
+    <string name="ext_media_nomedia_notification_message" product="default" msgid="3870120652983659641">"SD كارتا چىقىرىۋېتىلدى، يېڭى SD كارتىنى قىستۇرۇڭ."</string>
+    <string name="activity_list_empty" msgid="4168820609403385789">"ماس كەلگۈدەك پائالىيەت تاپالمىدى"</string>
+    <string name="permlab_pkgUsageStats" msgid="8787352074326748892">"دېتال ئىشلىتىش ئەھۋالى سىتاتىستىكىسىنى يىڭىلاش"</string>
+    <string name="permdesc_pkgUsageStats" msgid="891553695716752835">"دېتال ئىشلىتىش ئەھۋالى سىتاتىستىكىسىنى ئۆزگەرتىشكە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇقنى ئىشلىتەلمەيدۇ."</string>
+    <string name="permlab_copyProtectedData" msgid="1660908117394854464">"ئەسلىدىكى سىغىم مۇلازىمىتىنى ئىشلىتىپ مەزمۇن كۆچۈرۈشكە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇقنى ئىشلىتەلمەيدۇ."</string>
+    <string name="permdesc_copyProtectedData" msgid="537780957633976401">"ئەسلىدىكى سىغىم مۇلازىمىتىنى ئىشلىتىپ مەزمۇن كۆچۈرۈشكە يول قويىدۇ. ئادەتتىكى پىروگراممىلار بۇ ھوقۇقنى ئىشلىتەلمەيدۇ."</string>
+    <string name="tutorial_double_tap_to_zoom_message_short" msgid="1311810005957319690">"قوش چىكىپ چوڭ-كىچىكلىكىنى باشقۇرغىلى بولىدۇ."</string>
+    <string name="gadget_host_error_inflating" msgid="2613287218853846830">"پارچە چوڭايتىشتا خاتالىق كۆرۈلدى."</string>
+    <string name="ime_action_go" msgid="8320845651737369027">"يۆتكەل"</string>
+    <string name="ime_action_search" msgid="658110271822807811">"ئىزدە"</string>
+    <string name="ime_action_send" msgid="2316166556349314424">"يوللا"</string>
+    <string name="ime_action_next" msgid="3138843904009813834">"كېيىنكى"</string>
+    <string name="ime_action_done" msgid="8971516117910934605">"تامام"</string>
+    <string name="ime_action_previous" msgid="1443550039250105948">"ئالدىنقى"</string>
+    <string name="ime_action_default" msgid="2840921885558045721">"ئىجرا قىل"</string>
+    <string name="dial_number_using" msgid="5789176425167573586">"<xliff:g id="NUMBER">%s</xliff:g> دا نومۇر بۇرا"</string>
+    <string name="create_contact_using" msgid="4947405226788104538">"<xliff:g id="NUMBER">%s</xliff:g> دا ئالاقەداش قۇر"</string>
+    <string name="grant_credentials_permission_message_header" msgid="6824538733852821001">"تۆۋەندىكى بىر ياكى بىرقانچە ئەپ سىزنىڭ ھىساباتىڭىزنى زىيارەت قىلىش ھوقۇقىنى تەلەپ قىلىۋاتىدۇ."</string>
+    <string name="grant_credentials_permission_message_footer" msgid="3125211343379376561">"بۇ ئىلتىماسقا يول قويامسىز؟"</string>
+    <string name="grant_permissions_header_text" msgid="2722567482180797717">"ئىلتىماسقا يول قوي"</string>
+    <string name="allow" msgid="7225948811296386551">"يول قوي"</string>
+    <string name="deny" msgid="2081879885755434506">"رەت قىل"</string>
+    <string name="permission_request_notification_title" msgid="5390555465778213840">"ئىلتىماس قىلغان ھوقۇق"</string>
+    <string name="permission_request_notification_with_subtitle" msgid="4325409589686688000">"<xliff:g id="ACCOUNT">%s</xliff:g> ھېساباتقا\nھوقۇق ئىلتىماس قىلدى"</string>
+    <string name="input_method_binding_label" msgid="1283557179944992649">"كىرگۈزگۈچ"</string>
+    <string name="sync_binding_label" msgid="3687969138375092423">"قەدەمداش"</string>
+    <string name="accessibility_binding_label" msgid="4148120742096474641">"قوشۇمچە ئىقتىدار"</string>
+    <string name="wallpaper_binding_label" msgid="1240087844304687662">"تام قەغىزى"</string>
+    <string name="chooser_wallpaper" msgid="7873476199295190279">"تام قەغەز ئۆزگەرت"</string>
+    <string name="vpn_title" msgid="8219003246858087489">"VPN ئاكتىپلاندى"</string>
+    <string name="vpn_title_long" msgid="6400714798049252294">"VPN نى <xliff:g id="APP">%s</xliff:g> ئاكتىپلىدى"</string>
+    <string name="vpn_text" msgid="1610714069627824309">"چېكىلسە تورنى باشقۇرىدۇ."</string>
+    <string name="vpn_text_long" msgid="4907843483284977618">"<xliff:g id="SESSION">%s</xliff:g> غا باغلاندى. چېكىلسە تورنى باشقۇرىدۇ."</string>
+    <string name="upload_file" msgid="2897957172366730416">"ھۆججەت تاللاڭ"</string>
+    <string name="no_file_chosen" msgid="6363648562170759465">"ھۆججەت تاللانمىغان"</string>
+    <string name="reset" msgid="2448168080964209908">"ئەسلىگە قايتۇر"</string>
+    <string name="submit" msgid="1602335572089911941">"تاپشۇر"</string>
+    <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"ماشىنا ھالىتى قوزغىتىلدى"</string>
+    <string name="car_mode_disable_notification_message" msgid="668663626721675614">"ماشىنا ھالىتىدىن چىكىنىشنى تاللاش"</string>
+    <string name="tethered_notification_title" msgid="3146694234398202601">"USB غا باغلاش ياكى قىزىق نۇقتىنى قوزغىتىش"</string>
+    <string name="tethered_notification_message" msgid="3067108323903048927">"چېكىلسە سەپلەيدۇ"</string>
+    <string name="back_button_label" msgid="2300470004503343439">"قايت"</string>
+    <string name="next_button_label" msgid="1080555104677992408">"كېيىنكى"</string>
+    <string name="skip_button_label" msgid="1275362299471631819">"ئاتلا"</string>
+    <string name="throttle_warning_notification_title" msgid="4890894267454867276">"يانفون ئېقىم مىقدارى يۇقىرى"</string>
+    <string name="throttle_warning_notification_message" msgid="2609734763845705708">"يىنىك چىكىپ تېلېفوننىڭ سانلىق مەلۇمات ئېقىم مىقدارى تەپسىلاتىنى چۈشىنىڭ"</string>
+    <string name="throttled_notification_title" msgid="6269541897729781332">"يانفون سانلىق مەلۇماتى يۇقىرى چىكىدىن ئېشىپ كەتتى"</string>
+    <string name="throttled_notification_message" msgid="4712369856601275146">"يىنىك چىكىپ تېلېفوننىڭ سانلىق مەلۇمات ئېقىم مىقدارى تەپسىلاتىنى چۈشىنىڭ"</string>
+    <string name="no_matches" msgid="8129421908915840737">"ماس كەلگىنى يوق"</string>
+    <string name="find_on_page" msgid="1946799233822820384">"بەتتىن ئىزدە"</string>
+  <plurals name="matches_found">
+    <item quantity="one" msgid="8167147081136579439">"ماس كەلگىنى 1"</item>
+    <item quantity="other" msgid="4641872797067609177">"<xliff:g id="TOTAL">%2$d</xliff:g> دىن <xliff:g id="INDEX">%1$d</xliff:g>"</item>
+  </plurals>
+    <string name="action_mode_done" msgid="7217581640461922289">"تامام"</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"USB ساقلىغۇچنى ئېگەرسىزلەۋاتىدۇ…"</string>
+    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"SD كارتىنى ئېگەرسىزلەۋاتىدۇ…"</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"USB ساقلىغۇچنى ئۆچۈرۈۋاتىدۇ…"</string>
+    <string name="progress_erasing" product="default" msgid="2115214724367534095">"SD كارتىنى ئۆچۈرۈۋاتىدۇ…"</string>
+    <string name="format_error" product="nosdcard" msgid="6299769563624776948">"USB ساقلىغۇچنى ئۆچۈرەلمەيدۇ."</string>
+    <string name="format_error" product="default" msgid="7315248696644510935">"SD كارتىنى ئۆچۈرەلمەيدۇ."</string>
+    <string name="media_bad_removal" msgid="7960864061016603281">"SD كارتا ئېگەرسىزلەشتىن ئىلگىرى چىقىرىۋېتىلگەن."</string>
+    <string name="media_checking" product="nosdcard" msgid="418188720009569693">"نۆۋەتتە USB ساقلىغۇچ تەكشۈرۈلدى."</string>
+    <string name="media_checking" product="default" msgid="7334762503904827481">"نۆۋەتتە SD كارتا تەكشۈرۈلدى."</string>
+    <string name="media_removed" msgid="7001526905057952097">"SD كارتا چىقىرىۋېتىلدى."</string>
+    <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"نۆۋەتتە كۆمپيۇتېر USB ساقلىغۇچنى ئىشلىتىۋاتىدۇ."</string>
+    <string name="media_shared" product="default" msgid="5706130568133540435">"نۆۋەتتە كۆمپيۇتېر SD كارتانى ئىشلىتىۋاتىدۇ."</string>
+    <string name="media_unknown_state" msgid="729192782197290385">"سىرتقى ۋاستە يوچۇن ھالەتتە."</string>
+    <string name="share" msgid="1778686618230011964">"ھەمبەھىر"</string>
+    <string name="find" msgid="4808270900322985960">"ئىزدە"</string>
+    <string name="websearch" msgid="4337157977400211589">"توردىن ئىزدە"</string>
+    <string name="gpsNotifTicker" msgid="5622683912616496172">"<xliff:g id="NAME">%s</xliff:g> نىڭ ئورۇن ئىلتىماسى"</string>
+    <string name="gpsNotifTitle" msgid="5446858717157416839">"ئورۇن ئىلتىماسى"</string>
+    <string name="gpsNotifMessage" msgid="1374718023224000702">"ئىلتىماس قىلغۇچى <xliff:g id="NAME">%1$s</xliff:g> (<xliff:g id="SERVICE">%2$s</xliff:g>)"</string>
+    <string name="gpsVerifYes" msgid="2346566072867213563">"ھەئە"</string>
+    <string name="gpsVerifNo" msgid="1146564937346454865">"ياق"</string>
+    <string name="sync_too_many_deletes" msgid="5296321850662746890">"ئۆچۈرۈش چېكىدىن ئېشىپ كەتتى"</string>
+    <string name="sync_too_many_deletes_desc" msgid="7030265992955132593">"<xliff:g id="ACCOUNT_NAME">%3$s</xliff:g> ھېساباتنىڭ <xliff:g id="NUMBER_OF_DELETED_ITEMS">%1$d</xliff:g> دانە <xliff:g id="TYPE_OF_SYNC">%2$s</xliff:g> غا ئائىت ئۆچۈرۈش تۈرى بار. قانداق مەشغۇلات قىلىسىز؟"</string>
+    <string name="sync_really_delete" msgid="8933566316059338692">"تۈرلەرنى ئۆچۈر."</string>
+    <string name="sync_undo_deletes" msgid="8610996708225006328">"ئۆچۈرۈشتىن يېنىۋال."</string>
+    <string name="sync_do_nothing" msgid="8717589462945226869">"ھازىر ھېچقانداق مەشغۇلات قىلما."</string>
+    <string name="choose_account_label" msgid="4191313562041125787">"بىر ھېسابات تاللاڭ"</string>
+    <string name="add_account_label" msgid="2935267344849993553">"بىر ھېسابات قوش"</string>
+    <string name="choose_account_text" msgid="6891230675141555481">"قايسى ھېساباتنى ئىشلىتىسىز؟"</string>
+    <string name="add_account_button_label" msgid="3611982894853435874">"ھېسابات قوش"</string>
+    <string name="number_picker_increment_button" msgid="4830170763103463443">"ئاشۇر"</string>
+    <string name="number_picker_decrement_button" msgid="2576606679160067262">"كېمەيت"</string>
+    <string name="number_picker_increment_scroll_mode" msgid="1343063395404990189">"<xliff:g id="VALUE">%s</xliff:g> نى چېكىپ بېسىڭ."</string>
+    <string name="number_picker_increment_scroll_action" msgid="4628981789985093179">"ئۈستىگە سۈرۈلسە قىممىتى ئاشىدۇ، ئاستىغا سۈرۈلسە قىممىتى كېمىيىدۇ."</string>
+    <string name="time_picker_increment_minute_button" msgid="2843066823236250329">"ئاشۇرغان مىنۇت"</string>
+    <string name="time_picker_decrement_minute_button" msgid="4357907223628449595">"كېمەيگەن مىنۇت"</string>
+    <string name="time_picker_increment_hour_button" msgid="2484204991937119057">"ئاشۇرغان سائەت"</string>
+    <string name="time_picker_decrement_hour_button" msgid="4659353501775842780">"كېمەيگەن سائەت"</string>
+    <string name="time_picker_increment_set_pm_button" msgid="4147590696151230863">"چ ك تەڭشەك"</string>
+    <string name="time_picker_decrement_set_am_button" msgid="8302140353539486752">"چ ب تەڭشەك"</string>
+    <string name="date_picker_increment_month_button" msgid="6324978841467899081">"ئاشۇرغان ئاي"</string>
+    <string name="date_picker_decrement_month_button" msgid="7304349355000398077">"كېمەيگەن ئاي"</string>
+    <string name="date_picker_increment_day_button" msgid="4397040141921413183">"ئاشۇرغان كۈن"</string>
+    <string name="date_picker_decrement_day_button" msgid="2427816793443629131">"كېمەيگەن كۈن"</string>
+    <string name="date_picker_increment_year_button" msgid="3058553394722295105">"ئاشۇرغان يىل"</string>
+    <string name="date_picker_decrement_year_button" msgid="5193062846559743823">"كېمەيگەن يىل"</string>
+    <string name="checkbox_checked" msgid="7222044992652711167">"تاللانغان"</string>
+    <string name="checkbox_not_checked" msgid="5174639551134444056">"تاللانمىغان"</string>
+    <string name="radiobutton_selected" msgid="8603599808486581511">"تاللانغان"</string>
+    <string name="radiobutton_not_selected" msgid="2908760184307722393">"تاللانمىدى"</string>
+    <string name="switch_on" msgid="551417728476977311">"قوزغات"</string>
+    <string name="switch_off" msgid="7249798614327155088">"تاقا"</string>
+    <string name="togglebutton_pressed" msgid="4180411746647422233">"بېسىلغان"</string>
+    <string name="togglebutton_not_pressed" msgid="4495147725636134425">"بېسىلمىغان"</string>
+    <string name="keyboardview_keycode_alt" msgid="4856868820040051939">"Alt"</string>
+    <string name="keyboardview_keycode_cancel" msgid="1203984017245783244">"ۋاز كەچ"</string>
+    <string name="keyboardview_keycode_delete" msgid="3337914833206635744">"ئۆچۈر"</string>
+    <string name="keyboardview_keycode_done" msgid="1992571118466679775">"تامام"</string>
+    <string name="keyboardview_keycode_mode_change" msgid="4547387741906537519">"ھالەت ئۆزگەرت"</string>
+    <string name="keyboardview_keycode_shift" msgid="2270748814315147690">"Shift"</string>
+    <string name="keyboardview_keycode_enter" msgid="2985864015076059467">"Enter"</string>
+    <string name="activitychooserview_choose_application" msgid="4540794444768613567">"بىر ئەپ تاللاڭ"</string>
+    <string name="shareactionprovider_share_with" msgid="806688056141131819">"ھەمبەھىر"</string>
+    <string name="shareactionprovider_share_with_application" msgid="5627411384638389738">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> ئىلە ھەمبەھىر"</string>
+    <string name="content_description_sliding_handle" msgid="7311938669217173870">"تۇتقۇچنى سۈرۈڭ. چېكىپ بېسىڭ."</string>
+    <string name="description_direction_up" msgid="1983114130441878529">"<xliff:g id="TARGET_DESCRIPTION">%s</xliff:g> ئۈستىگە."</string>
+    <string name="description_direction_down" msgid="4294993639091088240">"<xliff:g id="TARGET_DESCRIPTION">%s</xliff:g> ئاستىغا."</string>
+    <string name="description_direction_left" msgid="6814008463839915747">"<xliff:g id="TARGET_DESCRIPTION">%s</xliff:g> سولغا."</string>
+    <string name="description_direction_right" msgid="4296057241963012862">"<xliff:g id="TARGET_DESCRIPTION">%s</xliff:g> ئوڭغا."</string>
+    <string name="description_target_unlock" msgid="2228524900439801453">"قۇلۇپ ئاچ"</string>
+    <string name="description_target_camera" msgid="969071997552486814">"كامېرا"</string>
+    <string name="description_target_silent" msgid="893551287746522182">"ئۈنسىز"</string>
+    <string name="description_target_soundon" msgid="30052466675500172">"ئاۋاز ئوچۇق"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"سۈرۈلسە قۇلۇپ ئاچىدۇ."</string>
+    <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"قۇلاقلىق قىستۇرۇلغاندىلا ئاندىن ئىم ئاۋازىنى ئاڭلىغىلى بولىدۇ."</string>
+    <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"چېكىت"</string>
+    <string name="action_bar_home_description" msgid="5293600496601490216">"يولباشچى باش بەت"</string>
+    <string name="action_bar_up_description" msgid="2237496562952152589">"ئۈستىگە يولباشچى"</string>
+    <string name="action_menu_overflow_description" msgid="2295659037509008453">"تېخىمۇ كۆپ تاللانما"</string>
+    <string name="storage_internal" msgid="7556050805474115618">"ئىچىدىكى ساقلىغۇچ"</string>
+    <string name="storage_sd_card" msgid="8921771478629812343">"SD كارتا"</string>
+    <string name="storage_usb" msgid="3017954059538517278">"USB ساقلىغۇچ"</string>
+    <string name="extract_edit_menu_button" msgid="302060189057163906">"تەھرىر…"</string>
+    <string name="data_usage_warning_title" msgid="1955638862122232342">"سانلىق مەلۇمات ئىشلىتىش ئاگاھلاندۇرۇشى"</string>
+    <string name="data_usage_warning_body" msgid="7217480745540055170">"چېكىلسە ئىشلىتىلىشى ۋە تەڭشەكلەرنى كۆرسىتىدۇ"</string>
+    <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G سانلىق مەلۇماتى چەكلەندى"</string>
+    <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G سانلىق مەلۇماتى چەكلەندى"</string>
+    <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"كۆچمە سانلىق مەلۇمات چەكلەندى"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi سانلىق مەلۇماتى چەكلەندى"</string>
+    <string name="data_usage_limit_body" msgid="4313857592916426843">"چېكىلسە قوزغىتىدۇ"</string>
+    <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"2G-3G سانلىق مەلۇمات ئېقىمىدىن ئېشىپ كەتتى"</string>
+    <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"4G سانلىق مەلۇمات ئېقىمىدىن ئېشىپ كەتتى"</string>
+    <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"يانفون سانلىق مەلۇماتى يۇقىرى چىكىدىن ئېشىپ كەتتى"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Wi-Fi سانلىق مەلۇمات ئېقىمىدىن ئېشىپ كەتتى"</string>
+    <string name="data_usage_limit_snoozed_body" msgid="2932736326652880660">"<xliff:g id="SIZE">%s</xliff:g> بەلگىلەنگەن چەكتىن ئېشىپ كەتتى"</string>
+    <string name="data_usage_restricted_title" msgid="5965157361036321914">"تەگلىك سانلىق مەلۇماتى چەكلىمىگە ئۇچرايدۇ"</string>
+    <string name="data_usage_restricted_body" msgid="5087354814839059798">"چېكىلسە چەكلىمە چىقىرىۋېتىلىدۇ"</string>
+    <string name="ssl_certificate" msgid="6510040486049237639">"بىخەتەرلىك گۇۋاھنامىسى"</string>
+    <string name="ssl_certificate_is_valid" msgid="6825263250774569373">"بۇ گۇۋاھنامە كۈچكە ئىگە."</string>
+    <string name="issued_to" msgid="454239480274921032">"تارقىتىلغۇچى:"</string>
+    <string name="common_name" msgid="2233209299434172646">"ئورتاق ئات:"</string>
+    <string name="org_name" msgid="6973561190762085236">"تەشكىل:"</string>
+    <string name="org_unit" msgid="7265981890422070383">"تەشكىل بىرلىكى:"</string>
+    <string name="issued_by" msgid="2647584988057481566">"تارقاتقۇچى:"</string>
+    <string name="validity_period" msgid="8818886137545983110">"ئۈنۈملۈكلۈكى:"</string>
+    <string name="issued_on" msgid="5895017404361397232">"تارقاتقان ۋاقىت:"</string>
+    <string name="expires_on" msgid="3676242949915959821">"توشىدىغان ۋاقىت:"</string>
+    <string name="serial_number" msgid="758814067660862493">"تەرتىپ نومۇرى:"</string>
+    <string name="fingerprints" msgid="4516019619850763049">"بارماق ئىزى:"</string>
+    <string name="sha256_fingerprint" msgid="4391271286477279263">"SHA-256 بارماق ئىزى"</string>
+    <string name="sha1_fingerprint" msgid="7930330235269404581">"SHA-1 بارماق ئىزى"</string>
+    <string name="activity_chooser_view_see_all" msgid="180268188117163072">"ھەممىنى كۆرسەت…"</string>
+    <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"پائالىيەت تاللاڭ"</string>
+    <string name="share_action_provider_share_with" msgid="1791316789651185229">"ھەمبەھىر…"</string>
+    <string name="status_bar_device_locked" msgid="3092703448690669768">"ئۈسكۈنە قۇلۇپلانغان."</string>
+    <string name="list_delimeter" msgid="3975117572185494152">« ،»</string>
+    <string name="sending" msgid="8715108995741758718">"يوللاۋاتىدۇ…"</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"توركۆرگۈ قوزغىتامدۇ؟"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"چاقىرىشنى قوبۇللامسىز؟"</string>
+</resources>
