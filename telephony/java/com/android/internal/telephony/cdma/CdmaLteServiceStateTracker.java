@@ -27,6 +27,7 @@ import android.telephony.ServiceState;
 import android.telephony.cdma.CdmaCellLocation;
 import android.os.AsyncResult;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.provider.Telephony.Intents;
 
 import android.text.TextUtils;
@@ -500,10 +501,11 @@ public class CdmaLteServiceStateTracker extends CdmaServiceStateTracker {
 
     @Override
     public boolean isConcurrentVoiceAndDataAllowed() {
-        // Note: it needs to be confirmed which CDMA network types
-        // can support voice and data calls concurrently.
-        // For the time-being, the return value will be false.
-        return (networkType == ServiceState.RADIO_TECHNOLOGY_LTE);
+        if (mLteSS.getRadioTechnology() !=
+                    ServiceState.RADIO_TECHNOLOGY_1xRTT)
+            return SystemProperties.getBoolean(TelephonyProperties.PROPERTY_SVDATA, false);
+        else
+            return (mLteSS.getCssIndicator() == 1);
     }
 
     /**
