@@ -1,0 +1,10 @@
+Change-Id: I09881f2e7a71b58c43ff1b0879690c69cffe1174
+Code-Review+2: Daniel Hillenbrand <codeworkx@cyanogenmod.com>
+Verified+1: Daniel Hillenbrand <codeworkx@cyanogenmod.com>
+Code-Review+1: Danesh M <daneshm90@gmail.com>
+Code-Review+1: David van Tonder <david.vantonder@gmail.com>
+Submitted-by: Daniel Hillenbrand <codeworkx@cyanogenmod.com>
+Submitted-at: Sun, 22 Jul 2012 18:20:40 +0400
+Reviewed-on: http://review.cyanogenmod.com/19777
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/jellybean
