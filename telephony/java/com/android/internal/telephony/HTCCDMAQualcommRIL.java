@@ -1,0 +1,216 @@
+/*
+ * Copyright (C) 2012 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.internal.telephony;
+
+import static com.android.internal.telephony.RILConstants.*;
+
+import android.content.Context;
+import android.os.AsyncResult;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Parcel;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.android.internal.telephony.cdma.CdmaInformationRecords;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+/**
+ *
+ * {@hide}
+ */
+public class HTCCDMAQualcommRIL extends QualcommSharedRIL implements CommandsInterface {
+    protected IccHandler mIccHandler;
+    private final int RIL_INT_RADIO_OFF = 0;
+    private final int RIL_INT_RADIO_UNAVAILABLE = 1;
+    private final int RIL_INT_RADIO_ON = 13;
+
+    public HTCCDMAQualcommRIL(Context context, int networkMode, int cdmaSubscription) {
+        super(context, networkMode, cdmaSubscription);
+    }
+
+    @Override
+    protected Object
+    responseIccCardStatus(Parcel p) {
+        IccCardApplication ca;
+
+        IccCardStatus status = new IccCardStatus();
+        status.setCardState(p.readInt());
+        status.setUniversalPinState(p.readInt());
+        status.setGsmUmtsSubscriptionAppIndex(p.readInt());
+        status.setCdmaSubscriptionAppIndex(p.readInt());
+        status.setImsSubscriptionAppIndex(p.readInt());
+        int numApplications = p.readInt();
+
+        // limit to maximum allowed applications
+        if (numApplications > IccCardStatus.CARD_MAX_APPS) {
+            numApplications = IccCardStatus.CARD_MAX_APPS;
+        }
+        status.setNumApplications(numApplications);
+        for (int i = 0; i < numApplications; i++) {
+            ca = new IccCardApplication();
+            ca.app_type       = ca.AppTypeFromRILInt(p.readInt());
+            ca.app_state      = ca.AppStateFromRILInt(p.readInt());
+            ca.perso_substate = ca.PersoSubstateFromRILInt(p.readInt());
+            ca.aid            = p.readString();
+            ca.app_label      = p.readString();
+            ca.pin1_replaced  = p.readInt();
+            ca.pin1           = ca.PinStateFromRILInt(p.readInt());
+            ca.pin2           = ca.PinStateFromRILInt(p.readInt());
+            status.addApplication(ca);
+        }
+        return status;
+    }
+
+    // fake icc status for testing.
+    private IccCardStatus getFakeIccCardStatus()
+    {
+        IccCardStatus icccardstatus = new IccCardStatus();
+        icccardstatus.setCardState(1);
+        icccardstatus.setUniversalPinState(2);
+        IccCardApplication icccardapplication = new IccCardApplication();
+        icccardapplication.aid = "";
+        icccardapplication.app_label = "";
+        icccardapplication.app_state = IccCardApplication.AppState.APPSTATE_READY;
+        icccardapplication.app_type = IccCardApplication.AppType.APPTYPE_CSIM;
+        icccardapplication.perso_substate = IccCardApplication.PersoSubState.PERSOSUBSTATE_READY;
+        icccardapplication.pin1 = IccCardStatus.PinState.PINSTATE_ENABLED_VERIFIED;
+        icccardapplication.pin1_replaced = 0;
+        icccardapplication.pin2 = IccCardStatus.PinState.PINSTATE_ENABLED_VERIFIED;
+        icccardstatus.addApplication(icccardapplication);
+        return icccardstatus;
+    }
+
+    @Override
+    protected Object
+    responseSignalStrength(Parcel p) {
+        int numInts = 14;
+        int response[];
+
+        /* HTC signal strength format:
+         * 0: GW_SignalStrength
+         * 1: GW_SignalStrength.bitErrorRate
+         * 2: CDMA_SignalStrength.dbm
+         * 3: CDMA_SignalStrength.ecio
+         * 4: EVDO_SignalStrength.dbm
+         * 5: EVDO_SignalStrength.ecio
+         * 6: EVDO_SignalStrength.signalNoiseRatio
+         * 7: ATT_SignalStrength.dbm
+         * 8: ATT_SignalStrength.ecno
+         * 9: LTE_SignalStrength.signalStrength
+         * 10: LTE_SignalStrength.rsrp
+         * 11: LTE_SignalStrength.rsrq
+         * 12: LTE_SignalStrength.rssnr
+         * 13: LTE_SignalStrength.cqi
+         */
+
+        response = new int[numInts];
+        for (int i = 0; i < numInts; i++) {
+                response[i] = p.readInt();
+        }
+        return response;
+    }
+
+    @Override
+    protected void
+    processUnsolicited (Parcel p) {
+        Object ret;
+        int dataPosition = p.dataPosition(); // save off position within the Parcel
+        int response = p.readInt();
+
+        switch(response) {
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret = responseVoid(p); break;
+            case 3009: ret = responseInts(p); break; // RIL_UNSOL_CDMA_3G_INDICATOR
+            case 3012: ret = responseInts(p); break; // RIL_UNSOL_CDMA_3G_INDICATOR
+            case 6002: ret = responseInts(p); break; // RIL_UNSOL_RESPONSE_PHONE_MODE_CHANGE
+            case 21004: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
+            case 21005: ret = responseVoid(p); break; // RIL_UNSOL_IMS_NETWORK_STATE_CHANGED
+            case 21007: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
+
+            default:
+                // Rewind the Parcel
+                p.setDataPosition(dataPosition);
+
+                // Forward responses that we are not overriding to the super class
+                super.processUnsolicited(p);
+                return;
+        }
+
+        switch(response) {
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED:
+	         int state = p.readInt();
+	         setRadioStateFromRILInt(state);
+	         break;
+            case 3009:
+            case 3012:
+            case 6002:
+            case 21004:
+            case 21005:
+            case 21007:
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                if (mExitEmergencyCallbackModeRegistrants != null) {
+                    mExitEmergencyCallbackModeRegistrants.notifyRegistrants(
+                                        new AsyncResult (null, null, null));
+                }
+                break;
+                    }
+    }
+
+    @Override
+    protected void setRadioStateFromRILInt (int stateCode) {
+        CommandsInterface.RadioState radioState;
+        HandlerThread handlerThread;
+        Looper looper;
+        IccHandler iccHandler;
+
+        switch (stateCode) {
+            case RIL_INT_RADIO_OFF:
+                radioState = CommandsInterface.RadioState.RADIO_OFF;
+                if (mIccHandler != null) {
+                    mIccThread = null;
+                    mIccHandler = null;
+                }
+                break;
+            case RIL_INT_RADIO_UNAVAILABLE:
+                radioState = CommandsInterface.RadioState.RADIO_UNAVAILABLE;
+                break;
+            case RIL_INT_RADIO_ON:
+                if (mIccHandler == null) {
+                    handlerThread = new HandlerThread("IccHandler");
+                    mIccThread = handlerThread;
+
+                    mIccThread.start();
+
+                    looper = mIccThread.getLooper();
+                    mIccHandler = new IccHandler(this,looper);
+                    mIccHandler.run();
+                }
+                radioState = CommandsInterface.RadioState.RADIO_ON;
+                break;
+            default:
+                throw new RuntimeException("Unrecognized RIL_RadioState: " + stateCode);
+        }
+
+        setRadioState(radioState);
+    }
+
+}
