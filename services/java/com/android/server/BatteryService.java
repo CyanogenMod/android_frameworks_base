@@ -569,15 +569,8 @@ class BatteryService extends Binder {
         private LightsService mLightsService;
         private LightsService.Light mBatteryLight;
 
-        private int mBatteryLowARGB;
-        private int mBatteryMediumARGB;
-        private int mBatteryFullARGB;
         private int mBatteryLedOn;
         private int mBatteryLedOff;
-
-        private boolean mBatteryCharging;
-        private boolean mBatteryLow;
-        private boolean mBatteryFull;
 
         Led(Context context, LightsService lights) {
             mLightsService = lights;
