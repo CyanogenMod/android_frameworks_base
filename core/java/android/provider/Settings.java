@@ -2423,11 +2423,12 @@ public final class Settings {
          * Whether to show the clock in status bar
          * of the stock battery icon
          * 0: don't show the clock
-         * 1: show the clock
+         * 1: Right clock
+         * 2: Center clock
          * default: 1
          * @hide
          */
-        public static final String STATUS_BAR_CLOCK = "status_bar_clock";
+        public static final String STATUS_BAR_CLOCK_STYLE = "status_bar_clock_style";
 
         /**
          * Whether to show the signal text or signal bars.
