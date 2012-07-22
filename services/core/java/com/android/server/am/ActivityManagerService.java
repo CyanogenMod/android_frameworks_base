@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2006-2008 The Android Open Source Project
- *
+ * Copyright (c) 2010-2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -67,6 +68,7 @@ import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.ProcessCpuTracker;
 import com.android.internal.os.TransferPipe;
 import com.android.internal.os.Zygote;
+import com.android.internal.telephony.cat.AppInterface;
 import com.android.internal.util.FastPrintWriter;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.MemInfoReader;
@@ -200,6 +202,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import dalvik.system.VMRuntime;
+import android.view.WindowManagerPolicy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -11295,6 +11298,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         Slog.i(TAG, "System now ready");
         EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_AMS_READY,
             SystemClock.uptimeMillis());
+        IntentFilter bootFilter = new IntentFilter(AppInterface.CHECK_SCREEN_IDLE_ACTION);
+        mContext.registerReceiver(new ScreenStatusReceiver(), bootFilter);
 
         synchronized(this) {
             // Make sure we have no pre-ready processes sitting around.
@@ -11411,6 +11416,26 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
             mStackSupervisor.resumeTopActivitiesLocked();
             sendUserSwitchBroadcastsLocked(-1, mCurrentUserId);
+        }
+    }
+
+    class ScreenStatusReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null || intent.getAction() == null) {
+                return;
+            }
+            if (intent.getAction().equals(AppInterface.CHECK_SCREEN_IDLE_ACTION)) {
+                Slog.i(TAG, "ICC has requested idle screen status");
+                Intent idleScreenIntent = new Intent(AppInterface.CAT_IDLE_SCREEN_ACTION);
+                idleScreenIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                boolean isIdle = getFocusedStack().isHomeStack();
+                idleScreenIntent.putExtra("SCREEN_IDLE", isIdle);
+                Slog.i(TAG, "Broadcasting Home idle screen Intent"
+                        + " SCREEN_IDLE is " + isIdle);
+                mContext.sendBroadcast(idleScreenIntent);
+            }
         }
     }
 
