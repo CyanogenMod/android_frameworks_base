@@ -670,10 +670,13 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
         }
 
         // if the current profile has disabled us, don't show
-        if (!lockedOrMissing
-                && mProfileManager.getActiveProfile().getScreenLockMode() == Profile.LockMode.DISABLE) {
-            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because of profile override");
-            return;
+        Profile profile = mProfileManager.getActiveProfile();
+        if (profile != null) {
+            if (!lockedOrMissing
+                    && profile.getScreenLockMode() == Profile.LockMode.DISABLE) {
+                if (DEBUG) Log.d(TAG, "doKeyguard: not showing because of profile override");
+                return;
+            }
         }
 
         if (DEBUG) Log.d(TAG, "doKeyguard: showing the lock screen");

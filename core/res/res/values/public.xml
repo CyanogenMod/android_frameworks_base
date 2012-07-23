@@ -3698,6 +3698,7 @@
   <!-- Profiles -->
   <java-symbol type="xml" name="profile_default" />
   <java-symbol type="string" name="wildcardProfile" />
+  <java-symbol type="string" name="profileNameDefault" />
 
   <!-- Lock screen Weather -->
   <java-symbol type="drawable" name="weather_0" />
