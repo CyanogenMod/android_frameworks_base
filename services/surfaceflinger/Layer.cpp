@@ -182,11 +182,17 @@ status_t Layer::setBuffers( uint32_t w, uint32_t h,
     mSurfaceTexture->setDefaultBufferSize(w, h);
     mSurfaceTexture->setDefaultBufferFormat(format);
 
-    if (mFlinger->getUseDithering()) {
-        // we use the red index
-        int displayRedSize = displayInfo.getSize(PixelFormatInfo::INDEX_RED);
-        int layerRedsize = info.getSize(PixelFormatInfo::INDEX_RED);
-        mNeedsDithering = layerRedsize > displayRedSize;
+    int useDither = mFlinger->getUseDithering();
+    if (useDither) {
+        if (useDither == 2) {
+            mNeedsDithering = true;
+        }
+        else {
+            // we use the red index
+            int displayRedSize = displayInfo.getSize(PixelFormatInfo::INDEX_RED);
+            int layerRedsize = info.getSize(PixelFormatInfo::INDEX_RED);
+            mNeedsDithering = (layerRedsize > displayRedSize);
+        }
     } else {
         mNeedsDithering = false;
     }
