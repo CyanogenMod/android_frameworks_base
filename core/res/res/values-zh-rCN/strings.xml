@@ -36,6 +36,22 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"出现连接问题或 MMI 码无效。"</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"只能对固定拨号号码执行此类操作。"</string>
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">默认</string>
+    <string name="profileNameWork">工作</string>
+    <string name="profileNameHome">家庭</string>
+    <string name="profileNameSilent">安静</string>
+    <string name="profileNameNight">夜晚</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">电话</string>
+    <string name="profileGroupCalendar">日历</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">电子邮件</string>
+    <string name="profileGroupSMS">短信</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">其他</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"已启用服务。"</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"已针对以下内容启用了服务："</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"已停用服务。"</string>
@@ -139,6 +155,31 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"关闭收音机"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">重启平板</string>
+    <string name="reboot_system" product="default">重启手机</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">截取屏幕</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">重启</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">恢复</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">引导</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">正在重启\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a con
+firmation dialog.  This is the message. -->
+    <string name="reboot_confirm">您的电话将会重启.</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"振铃器关闭"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"振铃器振动"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"振铃器开启"</string>
@@ -154,6 +195,12 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"手机选项"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"屏幕锁定"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"关机"</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">重启</string>
+
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">场景</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"静音模式"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"声音已关闭"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"声音已开启"</string>
@@ -1290,4 +1337,72 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"系统"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"蓝牙音频"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"完成"</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">龙卷风</string>
+    <string name="weather_1">热带风暴</string>
+    <string name="weather_2">飓风</string>
+    <string name="weather_3">强雷暴</string>
+    <string name="weather_4">雷暴</string>
+    <string name="weather_5">雨夹雪</string>
+    <string name="weather_6">冻雨</string>
+    <string name="weather_7">冻雪</string>
+    <string name="weather_8">冻毛毛雨</string>
+    <string name="weather_9">毛毛雨</string>
+    <string name="weather_10">冻雨</string>
+    <string name="weather_11">阵雨</string>
+    <string name="weather_12">阵雨</string>
+    <string name="weather_13">飘雪</string>
+    <string name="weather_14">小阵雪</string>
+    <string name="weather_15">吹雪</string>
+    <string name="weather_16">有雪</string>
+    <string name="weather_17">冰雹</string>
+    <string name="weather_18">冻雨</string>
+    <string name="weather_19">飘尘</string>
+    <string name="weather_20">薄雾</string>
+    <string name="weather_21">阴霾</string>
+    <string name="weather_22">浓雾</string>
+    <string name="weather_23">大风</string>
+    <string name="weather_24">有风</string>
+    <string name="weather_25">多云</string>
+    <string name="weather_26">阴</string>
+    <string name="weather_27">夜间大部多云</string> <!-- Night -->
+    <string name="weather_28">日间大部多云</string> <!-- Day -->
+    <string name="weather_29">夜间少部多云</string> <!-- Night -->
+    <string name="weather_30">日间少部多云</string> <!-- Day -->
+    <string name="weather_31">晴朗</string> <!-- Night -->
+    <string name="weather_32">晴</string>
+    <string name="weather_33">夜间晴</string> <!-- Night -->
+    <string name="weather_34">日间晴</string> <!-- Day -->
+    <string name="weather_35">雨夹冰雹</string>
+    <string name="weather_36">酷热</string>
+    <string name="weather_37">局部雷雨</string>
+    <string name="weather_38">分散雷雨</string>
+    <string name="weather_39">分散雷雨</string>
+    <string name="weather_40">分散阵雨</string>
+    <string name="weather_41">大雪</string>
+    <string name="weather_42">分散阵雪</string>
+    <string name="weather_43">大雪</string>
+    <string name="weather_44">局部多云</string>
+    <string name="weather_45">雷阵雨</string>
+    <string name="weather_46">阵雪</string>
+    <string name="weather_47">局部雷雨</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">北</string>
+    <string name="weather_NE">东北</string>
+    <string name="weather_E">东</string>
+    <string name="weather_SE">东南</string>
+    <string name="weather_S">南</string>
+    <string name="weather_SW">西南</string>
+    <string name="weather_W">西</string>
+    <string name="weather_NW">西北</string>
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">无数据</string>
+    <string name="weather_tap_to_refresh">点击刷新</string>
+   <string name="weather_refreshing">正在刷新</string>
+
+
 </resources>
