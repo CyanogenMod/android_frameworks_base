@@ -113,7 +113,7 @@ SurfaceFlinger::SurfaceFlinger()
 #endif
         mConsoleSignals(0),
         mSecureFrameBuffer(0),
-        mUseDithering(false)
+        mUseDithering(0)
 {
     init();
 }
@@ -134,8 +134,8 @@ void SurfaceFlinger::init()
     property_get("debug.sf.ddms", value, "0");
     mDebugDDMS = atoi(value);
 
-    property_get("persist.sys.use_dithering", value, "0");
-    mUseDithering = atoi(value) == 1;
+    property_get("persist.sys.use_dithering", value, "1");
+    mUseDithering = atoi(value);
 
     if (mDebugDDMS) {
         DdmConnection::start(getServiceName());
@@ -283,7 +283,12 @@ status_t SurfaceFlinger::readyToRun()
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnable(GL_SCISSOR_TEST);
     glShadeModel(GL_FLAT);
-    glDisable(GL_DITHER);
+    if (mUseDithering == 0 || mUseDithering == 1) {
+        glDisable(GL_DITHER);
+    }
+    else if (mUseDithering == 2) {
+        glEnable(GL_DITHER);
+    }
     glDisable(GL_CULL_FACE);
 
     const uint16_t g0 = pack565(0x0F,0x1F,0x0F);
