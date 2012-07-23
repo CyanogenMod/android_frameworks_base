@@ -36,6 +36,22 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"連線發生問題或錯誤的 MMI 碼。"</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"僅限對固定撥號號碼執行此作業。"</string>
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">默認</string>
+    <string name="profileNameWork">工作</string>
+    <string name="profileNameHome">家庭</string>
+    <string name="profileNameSilent">安靜</string>
+    <string name="profileNameNight">夜晚</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">電話</string>
+    <string name="profileGroupCalendar">日歷</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">電子郵件</string>
+    <string name="profileGroupSMS">短訊</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">其他</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"服務已啟用。"</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"已啟用服務："</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"服務已停用。"</string>
@@ -139,6 +155,31 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"關閉無線網路"</string>
     <string name="screen_lock" msgid="799094655496098153">"螢幕鎖定"</string>
     <string name="power_off" msgid="4266614107412865048">"關機"</string>
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">重啟設備</string>
+    <string name="reboot_system" product="default">重啟手機</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">截取屏幕</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">重啟</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">恢復</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">引導</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">正在重啟\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a con
+firmation dialog.  This is the message. -->
+    <string name="reboot_confirm">您的電話將會重啟.</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"鈴聲關閉"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"鈴聲震動"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"鈴聲開啟"</string>
@@ -1290,4 +1331,72 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"系統"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"藍牙音訊"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"完成"</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">龍卷風</string>
+    <string name="weather_1">熱帶風暴</string>
+    <string name="weather_2">颶風</string>
+    <string name="weather_3">強雷暴</string>
+    <string name="weather_4">雷暴</string>
+    <string name="weather_5">雨夾雪</string>
+    <string name="weather_6">凍雨</string>
+    <string name="weather_7">凍雪</string>
+    <string name="weather_8">凍毛毛雨</string>
+    <string name="weather_9">毛毛雨</string>
+    <string name="weather_10">凍雨</string>
+    <string name="weather_11">陣雨</string>
+    <string name="weather_12">陣雨</string>
+    <string name="weather_13">飄雪</string>
+    <string name="weather_14">小陣雪</string>
+    <string name="weather_15">吹雪</string>
+    <string name="weather_16">有雪</string>
+    <string name="weather_17">冰雹</string>
+    <string name="weather_18">凍雨</string>
+    <string name="weather_19">飄尘</string>
+    <string name="weather_20">薄霧</string>
+    <string name="weather_21">陰霾</string>
+    <string name="weather_22">濃霧</string>
+    <string name="weather_23">大風</string>
+    <string name="weather_24">有風</string>
+    <string name="weather_25">多雲</string>
+    <string name="weather_26">陰</string>
+    <string name="weather_27">夜間大部多雲</string> <!-- Night -->
+    <string name="weather_28">日間大部多雲</string> <!-- Day -->
+    <string name="weather_29">夜間少部多雲</string> <!-- Night -->
+    <string name="weather_30">日間少部多雲</string> <!-- Day -->
+    <string name="weather_31">晴朗</string> <!-- Night -->
+    <string name="weather_32">晴</string>
+    <string name="weather_33">夜間晴</string> <!-- Night -->
+    <string name="weather_34">日間晴</string> <!-- Day -->
+    <string name="weather_35">雨夹冰雹</string>
+    <string name="weather_36">酷熱</string>
+    <string name="weather_37">局部雷雨</string>
+    <string name="weather_38">分散雷雨</string>
+    <string name="weather_39">分散雷雨</string>
+    <string name="weather_40">分散陣雨</string>
+    <string name="weather_41">大雪</string>
+    <string name="weather_42">分散陣雪</string>
+    <string name="weather_43">大雪</string>
+    <string name="weather_44">局部多雲</string>
+    <string name="weather_45">雷陣雨</string>
+    <string name="weather_46">陣雪</string>
+    <string name="weather_47">局部雷雨</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">北</string>
+    <string name="weather_NE">東北</string>
+    <string name="weather_E">東</string>
+    <string name="weather_SE">東南</string>
+    <string name="weather_S">南</string>
+    <string name="weather_SW">南</string>
+    <string name="weather_W">西</string>
+    <string name="weather_NW">西北</string>
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">無數據</string>
+    <string name="weather_tap_to_refresh">點擊刷新</string>
+   <string name="weather_refreshing">正在刷新</string>
+
+
 </resources>
