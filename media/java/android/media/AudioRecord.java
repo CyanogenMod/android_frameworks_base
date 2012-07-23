@@ -27,6 +27,7 @@ import java.nio.ByteBuffer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.util.Log;
 
 /**
@@ -310,6 +311,15 @@ public class AudioRecord
         case AudioFormat.ENCODING_PCM_8BIT:
             mAudioFormat = audioFormat;
             break;
+        case AudioFormat.ENCODING_AMRNB:
+        case AudioFormat.ENCODING_AMRWB:
+        case AudioFormat.ENCODING_EVRC:
+        case AudioFormat.ENCODING_EVRCB:
+        case AudioFormat.ENCODING_EVRCWB:
+            if (SystemProperties.QCOM_HARDWARE) {
+                mAudioFormat = audioFormat;
+                break;
+            }
         default:
             mAudioFormat = AudioFormat.ENCODING_INVALID;
         throw (new IllegalArgumentException("Unsupported sample encoding." 
@@ -476,7 +486,12 @@ public class AudioRecord
         }
         
         // PCM_8BIT is not supported at the moment
-        if (audioFormat != AudioFormat.ENCODING_PCM_16BIT) {
+        if (audioFormat != AudioFormat.ENCODING_PCM_16BIT
+            && audioFormat != AudioFormat.ENCODING_AMRNB
+            && audioFormat != AudioFormat.ENCODING_AMRWB
+            && audioFormat != AudioFormat.ENCODING_EVRC
+            && audioFormat != AudioFormat.ENCODING_EVRCB
+            && audioFormat != AudioFormat.ENCODING_EVRCWB) {
             loge("getMinBufferSize(): Invalid audio format.");
             return AudioRecord.ERROR_BAD_VALUE;
         }
