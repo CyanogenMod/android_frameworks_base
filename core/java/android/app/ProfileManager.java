@@ -18,13 +18,16 @@ package android.app;
 
 import java.util.UUID;
 
+import android.R;
 import android.content.Context;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.util.Log;
+
 
 /**
  * @hide
@@ -36,6 +39,8 @@ public class ProfileManager {
     private Context mContext;
 
     private static final String TAG = "ProfileManager";
+
+    private static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
 
     /** @hide */
     static public IProfileManager getService() {
@@ -54,28 +59,48 @@ public class ProfileManager {
 
     @Deprecated
     public void setActiveProfile(String profileName) {
-        try {
-            getService().setActiveProfileByName(profileName);
-        } catch (RemoteException e) {
-            Log.e(TAG, e.getLocalizedMessage(), e);
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                SYSTEM_PROFILES_ENABLED, 1) == 1) {
+            // Profiles are enabled, return active profile
+            try {
+                getService().setActiveProfileByName(profileName);
+            } catch (RemoteException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+            }
         }
     }
 
     public void setActiveProfile(UUID profileUuid) {
-        try {
-            getService().setActiveProfile(new ParcelUuid(profileUuid));
-        } catch (RemoteException e) {
-            Log.e(TAG, e.getLocalizedMessage(), e);
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                SYSTEM_PROFILES_ENABLED, 1) == 1) {
+            // Profiles are enabled, return active profile
+            try {
+                getService().setActiveProfile(new ParcelUuid(profileUuid));
+            } catch (RemoteException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+            }
         }
     }
 
     public Profile getActiveProfile() {
-        try {
-            return getService().getActiveProfile();
-        } catch (RemoteException e) {
-            Log.e(TAG, e.getLocalizedMessage(), e);
-        }
-        return null;
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                SYSTEM_PROFILES_ENABLED, 1) == 1) {
+            // Profiles are enabled, return active profile
+            try {
+                return getService().getActiveProfile();
+            } catch (RemoteException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+            }
+            return null;
+        } else {
+            // Profiles are not enabled, return the default profile
+            try {
+                return getService().getProfileByName(R.string.profileNameDefault);
+            } catch (RemoteException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+            }
+            return null;
+      }
     }
 
     /** @hide */
