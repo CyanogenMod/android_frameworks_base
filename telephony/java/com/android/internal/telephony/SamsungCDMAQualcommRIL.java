@@ -53,7 +53,6 @@ public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements Command
     private final int RIL_INT_RADIO_UNAVALIABLE = 1;
     private final int RIL_INT_RADIO_ON = 2;
     private final int RIL_INT_RADIO_ON_NG = 10;
-    private final int RIL_INT_RADIO_ON_HTC = 13;
 
     public SamsungCDMAQualcommRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
@@ -136,19 +135,7 @@ public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements Command
                 break;
             case RIL_INT_RADIO_ON:
             case RIL_INT_RADIO_ON_NG:
-            case RIL_INT_RADIO_ON_HTC:
-                if (mIccHandler == null) {
-                    handlerThread = new HandlerThread("IccHandler");
-                    mIccThread = handlerThread;
-
-                    mIccThread.start();
-
-                    looper = mIccThread.getLooper();
-                    mIccHandler = new IccHandler(this,looper);
-                    mIccHandler.run();
-                }
-                radioState = CommandsInterface.RadioState.RADIO_ON;
-                break;
+		break;
             default:
                 throw new RuntimeException("Unrecognized RIL_RadioState: " + stateCode);
         }
@@ -170,9 +157,19 @@ public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements Command
             response[i] = p.readInt();
         }
         //Workaround: use cdmaecio and evdoecio to determine signal strength and it is better than no signal bars
-        //TODO: find a proper fix for it
-        response[2] = response[3]*4; // mutiply by 4 simulate dbm so the signal bars do not jump often to full bars
-        response[4] = response[5]*4;
+        //TODO: Figure out how stock fakes it
+	if (reponse[3] > 75) {
+	    response[2] = reponse[3]*2;  // multiple by 2 to not have ridiculous values
+	} else {
+            response[2] = response[3]*4; // mutiply by 4 simulate dbm so the signal bars do not jump often to full bars
+	}
+
+	if (reponse[5] > 75) {
+	   response[4] = response[5]*2;
+	} else {
+           response[4] = response[5]*4;
+	}
+
         // RIL_LTE_SignalStrength
         if (response[7] == 99) {
             // If LTE is not enabled, clear LTE results
