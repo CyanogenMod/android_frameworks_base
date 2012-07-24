@@ -20,6 +20,100 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="reboot_system">Redémarrage</string>
+    <string name="reboot_reboot">Redémarrer</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_confirm">Votre appareil va redémarrer</string>
+    <string name="reboot_progress">Redémarrage en cours...</string>
+    <string name="global_action_reboot">Redémarrer</string>
+    <string name="global_action_screenshot">Capture d\'écran</string>
+    <string name="global_action_choose_profile">Profils</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Défaut</string>
+    <string name="profileNameWork">Bureau</string>
+    <string name="profileNameHome">Maison</string>
+    <string name="profileNameSilent">Silence</string>
+    <string name="profileNameNight">Nuit</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Téléphone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Autres</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Tornade</string>
+    <string name="weather_1">Orage tropical</string>
+    <string name="weather_2">Ouragan</string>
+    <string name="weather_3">Orages sévères</string>
+    <string name="weather_4">Orages</string>
+    <string name="weather_5">Neige ou pluie</string>
+    <string name="weather_6">Pluie ou verglas</string>
+    <string name="weather_7">Neige ou verglas</string>
+    <string name="weather_8">Brouillard givrant</string>
+    <string name="weather_9">Bruine</string>
+    <string name="weather_10">Pluie givrante</string>
+    <string name="weather_11">Pluie</string>
+    <string name="weather_12">Averses</string>
+    <string name="weather_13">Chûtes de neige</string>
+    <string name="weather_14">Neige légère</string>
+    <string name="weather_15">Poudreuse</string>
+    <string name="weather_16">Neige</string>
+    <string name="weather_17">Grêle</string>
+    <string name="weather_18">Neige fondue</string>
+    <string name="weather_19">Poussière</string>
+    <string name="weather_20">Brouillard</string>
+    <string name="weather_21">Brume</string>
+    <string name="weather_22">Enfumé</string>
+    <string name="weather_23">Vent</string>
+    <string name="weather_24">Venteux</string>
+    <string name="weather_25">Froid</string>
+    <string name="weather_26">Couvert</string>
+    <string name="weather_27">Ciel couvert</string> <!-- Night -->
+    <string name="weather_28">Nuageux</string> <!-- Day -->
+    <string name="weather_29">Quelques nuages</string> <!-- Night -->
+    <string name="weather_30">Quelques nuages</string> <!-- Day -->
+    <string name="weather_31">Ciel dégagé</string> <!-- Night -->
+    <string name="weather_32">Ensoleillé</string>
+    <string name="weather_33">Plutôt dégagé</string> <!-- Fair, Night -->
+    <string name="weather_34">Beau temps</string> <!-- Fair, Day -->
+    <string name="weather_35">Pluie et grêle</string>
+    <string name="weather_36">Chaud</string>
+    <string name="weather_37">Orages isolés</string>
+    <string name="weather_38">Orages épars</string>
+    <string name="weather_39">Orageux</string>
+    <string name="weather_40">Quelques averses</string>
+    <string name="weather_41">Chûtes de neige</string>
+    <string name="weather_42">Neige par moment</string>
+    <string name="weather_43">Neige importante</string>
+    <string name="weather_44">Peu nuageux</string>
+    <string name="weather_45">Averses</string>
+    <string name="weather_46">Averses de neige</string>
+    <string name="weather_47">Averses isolées</string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NE</string>
+    <string name="weather_E">E</string>
+    <string name="weather_SE">SE</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SO</string>
+    <string name="weather_W">O</string>
+    <string name="weather_NW">NO</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_tap_to_refresh">Appuyer pour rafraîchir</string>
+
     <string name="byteShort" msgid="8340973892742019101">"o"</string>
     <string name="kilobyteShort" msgid="5973789783504771878">"Ko"</string>
     <string name="megabyteShort" msgid="6355851576770428922">"Mo"</string>
