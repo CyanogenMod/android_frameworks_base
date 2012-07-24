@@ -59,6 +59,7 @@ import android.provider.Settings;
 import android.util.PrintWriterPrinter;
 import android.util.Printer;
 import android.util.Slog;
+import android.util.Log;
 import android.util.Xml;
 import android.view.IWindowManager;
 import android.view.WindowManagerPolicy;
@@ -1619,8 +1620,15 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             } else {
                 // Make sure KEEP_SCREEN_ON is disabled, since that
                 // would allow bypassing of the maximum time to lock.
+
+                // XXX: Disable for now as it's not increasing security
+                // and is a major inconvenience for developers (any third
+                // party app with android.permission.WRITE_SETTINGS can
+                // override any time, might as well not clear it)
+                /*
                 Settings.System.putInt(mContext.getContentResolver(),
                         Settings.System.STAY_ON_WHILE_PLUGGED_IN, 0);
+                */
             }
 
             mLastMaximumTimeToLock = timeMs;
