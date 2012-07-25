@@ -115,6 +115,9 @@ import java.util.regex.Pattern;
 import libcore.io.IoUtils;
 
 import dalvik.system.CloseGuard;
+import dalvik.system.VMRuntime;
+import android.os.SystemProperties;
+import java.lang.*;
 
 final class SuperNotCalledException extends AndroidRuntimeException {
     public SuperNotCalledException(String msg) {
@@ -4075,6 +4078,35 @@ public final class ActivityThread {
 
         // send up app name; do this *before* waiting for debugger
         Process.setArgV0(data.processName);
+
+        String str  = SystemProperties.get("dalvik.vm.heaputilization", "" );
+        if( !str.equals("") ){
+            float heapUtil = Float.valueOf(str.trim()).floatValue();
+            VMRuntime.getRuntime().setTargetHeapUtilization(heapUtil);
+            Log.d(TAG, "setTargetHeapUtilization:" + str );
+        }
+        int heapIdealFree  = SystemProperties.getInt("dalvik.vm.heapidealfree", 0 );
+        if( heapIdealFree > 0 ){
+            VMRuntime.getRuntime().setTargetHeapIdealFree(heapIdealFree);
+            Log.d(TAG, "setTargetHeapIdealFree:" + heapIdealFree );
+        }
+        int heapConcurrentStart  = SystemProperties.getInt("dalvik.vm.heapconcurrentstart", 0 );
+        if( heapConcurrentStart > 0 ){
+            VMRuntime.getRuntime().setTargetHeapConcurrentStart(heapConcurrentStart);
+            Log.d(TAG, "setTargetHeapConcurrentStart:" + heapConcurrentStart );
+        }
+
+        ////
+        ////If want to set application specific GC paramters, can use
+        ////the following check
+        ////
+        //if( data.processName.equals("com.android.gallery3d")) {
+        //    VMRuntime.getRuntime().setTargetHeapUtilization(0.25f);
+        //    VMRuntime.getRuntime().setTargetHeapIdealFree(12*1024*1024);
+        //    VMRuntime.getRuntime().setTargetHeapConcurrentStart(4*1024*1024);
+        //}
+
+
         android.ddm.DdmHandleAppName.setAppName(data.processName);
 
         if (data.persistent) {
