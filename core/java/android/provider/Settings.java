@@ -3265,6 +3265,12 @@ public final class Settings {
         public static final String ADB_PORT = "adb_port";
 
         /**
+         * Whether to display the ADB notification.
+         * @hide
+         */
+        public static final String ADB_NOTIFY = "adb_notify";
+
+        /**
          * The hostname for this device
          * @hide
          */
