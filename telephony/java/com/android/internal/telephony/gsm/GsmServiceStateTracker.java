@@ -863,9 +863,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 mGotCountryCode = false;
                 mNitzUpdatedTime = false;
             } else {
+                String mcc = "000";
                 String iso = "";
-                String mcc = operatorNumeric.substring(0, 3);
                 try{
+                    mcc = operatorNumeric.substring(0, 3);
                     iso = MccTable.countryCodeForMcc(Integer.parseInt(mcc));
                 } catch ( NumberFormatException ex){
                     loge("pollStateDone: countryCodeForMcc error" + ex);
