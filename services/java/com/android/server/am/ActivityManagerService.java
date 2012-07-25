@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006-2008 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ package com.android.server.am;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import com.android.internal.R;
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.ProcessStats;
 import com.android.server.AttributeCache;
@@ -84,6 +86,7 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.UserInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
 import android.net.Proxy;
 import android.net.ProxyProperties;
@@ -156,6 +159,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import dalvik.system.Zygote;
 
 public final class ActivityManagerService extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -665,6 +669,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     boolean mLaunchWarningShown = false;
 
     Context mContext;
+    Context mUiContext;
 
     int mFactoryTest;
 
@@ -901,7 +906,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     }
                     AppErrorResult res = (AppErrorResult) data.get("result");
                     if (mShowDialogs && !mSleeping && !mShuttingDown) {
-                        Dialog d = new AppErrorDialog(mContext, res, proc);
+                        Dialog d = new AppErrorDialog(getUiContext(), res, proc);
                         d.show();
                         proc.crashDialog = d;
                     } else {
@@ -933,7 +938,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                     if (mShowDialogs) {
                         Dialog d = new AppNotRespondingDialog(ActivityManagerService.this,
-                                mContext, proc, (ActivityRecord)data.get("activity"));
+                                getUiContext(), proc, (ActivityRecord)data.get("activity"));
                         d.show();
                         proc.anrDialog = d;
                     } else {
@@ -958,7 +963,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     }
                     AppErrorResult res = (AppErrorResult) data.get("result");
                     if (mShowDialogs && !mSleeping && !mShuttingDown) {
-                        Dialog d = new StrictModeViolationDialog(mContext, res, proc);
+                        Dialog d = new StrictModeViolationDialog(getUiContext(), res, proc);
                         d.show();
                         proc.crashDialog = d;
                     } else {
@@ -971,7 +976,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             } break;
             case SHOW_FACTORY_ERROR_MSG: {
                 Dialog d = new FactoryErrorDialog(
-                    mContext, msg.getData().getCharSequence("msg"));
+                    getUiContext(), msg.getData().getCharSequence("msg"));
                 d.show();
                 ensureBootCompleted();
             } break;
@@ -991,7 +996,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         if (!app.waitedForDebugger) {
                             Dialog d = new AppWaitingForDebuggerDialog(
                                     ActivityManagerService.this,
-                                    mContext, app);
+                                    getUiContext(), app);
                             app.waitDialog = d;
                             app.waitedForDebugger = true;
                             d.show();
@@ -1073,7 +1078,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Log.e(TAG, title + ": " + text);
                 if (mShowDialogs) {
                     // XXX This is a temporary dialog, no need to localize.
-                    AlertDialog d = new BaseErrorDialog(mContext);
+                    AlertDialog d = new BaseErrorDialog(getUiContext());
                     d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
                     d.setCancelable(false);
                     d.setTitle(title);
@@ -1144,7 +1149,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     notification.defaults = 0; // please be quiet
                     notification.sound = null;
                     notification.vibrate = null;
-                    notification.setLatestEventInfo(context, text,
+                    notification.setLatestEventInfo(getUiContext(), text,
                             mContext.getText(R.string.heavy_weight_notification_detail),
                             PendingIntent.getActivity(mContext, 0, root.intent,
                                     PendingIntent.FLAG_CANCEL_CURRENT));
@@ -1732,6 +1737,15 @@ public final class ActivityManagerService extends ActivityManagerNative
             synchronized(mPidsSelfLocked) {
                 mOnBattery = DEBUG_POWER ? true : onBattery;
             }
+        }
+    }
+
+    private Context getUiContext() {
+        synchronized (this) {
+            if (mUiContext == null && mBooted) {
+                mUiContext = ThemeUtils.createUiContext(mContext);
+            }
+            return mUiContext != null ? mUiContext : mContext;
         }
     }
 
@@ -3350,7 +3364,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 @Override
                 public void run() {
                     synchronized (ActivityManagerService.this) {
-                        final Dialog d = new LaunchWarningWindow(mContext, cur, next);
+                        final Dialog d = new LaunchWarningWindow(getUiContext(), cur, next);
                         d.show();
                         mHandler.postDelayed(new Runnable() {
                             @Override
@@ -4233,6 +4247,13 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }, userFilter);
 
+        ThemeUtils.registerThemeChangeReceiver(mContext, new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mUiContext = null;
+            }
+        });
+        
         synchronized (this) {
             // Ensure that any processes we had put on hold are now started
             // up.
@@ -13518,6 +13539,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                                      values.userSetLocale);
                 }
 
+                if (values.customTheme != null) {
+                    saveThemeResourceLocked(values.customTheme,
+                            !values.customTheme.equals(mConfiguration.customTheme));
+                }
+
                 mConfigurationSeq++;
                 if (mConfigurationSeq <= 0) {
                     mConfigurationSeq = 1;
@@ -13733,6 +13759,13 @@ public final class ActivityManagerService extends ActivityManagerNative
             return -1;
         }
         return srec.launchedFromUid;
+    }
+
+    private void saveThemeResourceLocked(CustomTheme t, boolean isDiff){
+        if(isDiff){
+            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, t.getThemeId());
+            SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getThemePackageName());  
+        }
     }
 
     // =========================================================

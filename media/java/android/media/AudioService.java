@@ -69,6 +69,7 @@ import android.view.KeyEvent;
 import android.view.VolumePanel;
 import android.provider.Settings.SettingNotFoundException;
 
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.telephony.ITelephony;
 
 import java.io.FileDescriptor;
@@ -114,6 +115,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     /** The UI */
     private VolumePanel mVolumePanel;
+    private Context mUiContext;
+    private Handler mHandler;
 
     // sendMsg() flags
     /** If the msg is already queued, replace it with this one. */
@@ -448,6 +451,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     public AudioService(Context context) {
         mContext = context;
         mContentResolver = context.getContentResolver();
+        mHandler = new Handler();
         mVoiceCapable = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_voice_capable);
 
@@ -465,7 +469,6 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         SOUND_EFFECT_VOLUME_DB = context.getResources().getInteger(
                 com.android.internal.R.integer.config_soundEffectVolumeDb);
 
-        mVolumePanel = new VolumePanel(context, this);
         mMode = AudioSystem.MODE_NORMAL;
         mForcedUseForComm = AudioSystem.FORCE_NONE;
         createAudioSystemThread();
@@ -511,6 +514,13 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         pkgFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         pkgFilter.addDataScheme("package");
         context.registerReceiver(mReceiver, pkgFilter);
+
+        ThemeUtils.registerThemeChangeReceiver(context, new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mUiContext = null;
+            }
+        });
 
         // Register for phone state monitoring
         TelephonyManager tmgr = (TelephonyManager)
@@ -972,8 +982,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
             streamType = AudioSystem.STREAM_NOTIFICATION;
         }
 
-        mVolumePanel.postVolumeChanged(streamType, flags);
-
+        showVolumeChangeUi(streamType, flags);
         oldIndex = (oldIndex + 5) / 10;
         index = (index + 5) / 10;
         Intent intent = new Intent(AudioManager.VOLUME_CHANGED_ACTION);
@@ -3662,6 +3671,25 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
             } else if (action.equalsIgnoreCase(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 handleConfigurationChanged(context);
             }
+        }
+    }
+
+    private void showVolumeChangeUi(final int streamType, final int flags) {
+        if (mUiContext != null && mVolumePanel != null) {
+            mVolumePanel.postVolumeChanged(streamType, flags);
+        } else {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mUiContext == null) {
+                        mUiContext = ThemeUtils.createUiContext(mContext);
+                    }
+
+                    final Context context = mUiContext != null ? mUiContext : mContext;
+                    mVolumePanel = new VolumePanel(context, AudioService.this);
+                    mVolumePanel.postVolumeChanged(streamType, flags);
+                }
+            });
         }
     }
 
