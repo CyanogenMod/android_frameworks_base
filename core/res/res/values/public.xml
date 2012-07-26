@@ -3834,4 +3834,8 @@
   <java-symbol type="string" name="second" />
   <java-symbol type="string" name="seconds" />
 
+  <!-- HW rotation lock -->
+  <java-symbol type="string" name="toast_rotation_unlocked" />
+  <java-symbol type="string" name="toast_rotation_locked" />
+
 </resources>
