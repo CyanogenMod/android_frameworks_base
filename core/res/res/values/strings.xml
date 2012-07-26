@@ -3697,4 +3697,9 @@
     <string name="weather_tap_to_refresh">Tap to refresh</string>
     <string name="weather_refreshing">Refreshing</string>
 
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">Display Rotation Unlocked</string>
+    <string name="toast_rotation_locked">Display Rotation Locked</string>
+
 </resources>
