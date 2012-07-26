@@ -1081,6 +1081,31 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         }
     }
 
+    /**
+     * @see AudioManager#toggleGlobalMute()
+     * @hide
+     */
+    public void toggleGlobalMute() {
+        int currentMode = getRingerMode();
+
+        if (currentMode == RINGER_MODE_VIBRATE || currentMode == RINGER_MODE_SILENT) {
+            setRingerMode(RINGER_MODE_NORMAL);
+
+        } else {
+            int ringerMode = mHasVibrator ? RINGER_MODE_VIBRATE : RINGER_MODE_SILENT;
+            setRingerMode(ringerMode);
+        }
+
+        if (mVolumePanel != null) {
+            int streamType = getActiveStreamType(AudioManager.USE_DEFAULT_STREAM_TYPE);
+            if (streamType == STREAM_REMOTE_MUSIC) {
+                streamType = AudioManager.STREAM_MUSIC;
+            }
+            mVolumePanel.postMuteChanged(streamType,
+                    AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+        }
+    }
+
     /** get stream mute state. */
     public boolean isStreamMute(int streamType) {
         return (mStreamStates[streamType].muteCount() != 0);

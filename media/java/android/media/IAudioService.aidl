@@ -60,6 +60,8 @@ interface IAudioService {
 
     boolean isMasterMute();
 
+    void toggleGlobalMute();
+
     int getStreamVolume(int streamType);
 
     int getMasterVolume();
