@@ -837,6 +837,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     Runnable mBackLongPress = new Runnable() {
         public void run() {
             try {
+                performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
                 IActivityManager am = ActivityManagerNative.getDefault();
                 List<RunningAppProcessInfo> apps = am.getRunningAppProcesses();
                 for (RunningAppProcessInfo appInfo : apps) {
@@ -846,12 +847,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (uid >= Process.FIRST_APPLICATION_UID && uid <= Process.LAST_APPLICATION_UID
                             && appInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                         Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
-                        if (appInfo.pkgList != null && (apps.size() > 0)) {
-                            am.forceStopPackage(appInfo.pkgList[0]);
+                        if (appInfo.pkgList != null && (appInfo.pkgList.length > 0)) {
+                            for (String pkg : appInfo.pkgList) {
+                                if (!pkg.equals("com.android.systemui")) {
+                                    am.forceStopPackage(pkg);
+                                    break;
+                                }
+                            }
                         } else {
                             Process.killProcess(appInfo.pid);
+                            break;
                         }
-                        break;
                     }
                 }
             } catch (RemoteException remoteException) {
