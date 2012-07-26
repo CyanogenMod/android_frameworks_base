@@ -20,9 +20,11 @@ package com.android.internal.widget;
 interface ILockSettings {
     void setBoolean(in String key, in boolean value, in int userId);
     void setLong(in String key, in long value, in int userId);
+    void setInteger(in String key, in int value, in int userId);
     void setString(in String key, in String value, in int userId);
     boolean getBoolean(in String key, in boolean defaultValue, in int userId);
     long getLong(in String key, in long defaultValue, in int userId);
+    int getInteger(in String key, in int defaultValue, in int userId);
     String getString(in String key, in String defaultValue, in int userId);
     void setLockPattern(in byte[] hash, int userId);
     boolean checkPattern(in byte[] hash, int userId);

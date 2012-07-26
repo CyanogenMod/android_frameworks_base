@@ -144,6 +144,8 @@ public class LockPatternUtils {
     private ILockSettings mLockSettingsService;
     private int mCurrentUserId = 0;
 
+    private static int PATTERN_SIZE = 3;
+
     public DevicePolicyManager getDevicePolicyManager() {
         if (mDevicePolicyManager == null) {
             mDevicePolicyManager =
@@ -704,7 +706,7 @@ public class LockPatternUtils {
         final byte[] bytes = string.getBytes();
         for (int i = 0; i < bytes.length; i++) {
             byte b = bytes[i];
-            result.add(LockPatternView.Cell.of(b / 3, b % 3));
+            result.add(LockPatternView.Cell.of(b / PATTERN_SIZE, b % PATTERN_SIZE));
         }
         return result;
     }
@@ -723,7 +725,7 @@ public class LockPatternUtils {
         byte[] res = new byte[patternSize];
         for (int i = 0; i < patternSize; i++) {
             LockPatternView.Cell cell = pattern.get(i);
-            res[i] = (byte) (cell.getRow() * 3 + cell.getColumn());
+            res[i] = (byte) (cell.getRow() * PATTERN_SIZE + cell.getColumn());
         }
         return new String(res);
     }
@@ -744,7 +746,7 @@ public class LockPatternUtils {
         byte[] res = new byte[patternSize];
         for (int i = 0; i < patternSize; i++) {
             LockPatternView.Cell cell = pattern.get(i);
-            res[i] = (byte) (cell.getRow() * 3 + cell.getColumn());
+            res[i] = (byte) (cell.getRow() * PATTERN_SIZE + cell.getColumn());
         }
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -916,6 +918,30 @@ public class LockPatternUtils {
      */
     public void setTactileFeedbackEnabled(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED, enabled);
+    }
+
+    /**
+     * @return the pattern lockscreen size
+     */
+    public int getLockPatternSize() {
+        return getInteger(Settings.Secure.LOCK_PATTERN_SIZE, 3);
+    }
+
+    /**
+     * Set the pattern lockscreen size
+     */
+    public void setLockPatternSize(int size) {
+        setInteger(Settings.Secure.LOCK_PATTERN_SIZE, size);
+        PATTERN_SIZE = size;
+    }
+
+    /**
+     * Update PATTERN_SIZE for this LockPatternUtils instance
+     * This must be called before patternToHash, patternToString, etc
+     * will work correctly with a non-standard size
+     */
+    public void updateLockPatternSize() {
+        PATTERN_SIZE = getLockPatternSize();
     }
 
     /**
@@ -1185,6 +1211,24 @@ public class LockPatternUtils {
         } catch (RemoteException re) {
             // What can we do?
             Log.e(TAG, "Couldn't write long " + secureSettingKey + re);
+        }
+    }
+
+    private int getInteger(String secureSettingKey, int defaultValue) {
+        try {
+            return getLockSettings().getInteger(secureSettingKey, defaultValue,
+                    getCurrentOrCallingUserId());
+        } catch (RemoteException re) {
+            return defaultValue;
+        }
+    }
+
+    private void setInteger(String secureSettingKey, int value) {
+        try {
+            getLockSettings().setInteger(secureSettingKey, value, getCurrentOrCallingUserId());
+        } catch (RemoteException re) {
+            // What can we do?
+            Log.e(TAG, "Couldn't write boolean " + secureSettingKey + re);
         }
     }
 
