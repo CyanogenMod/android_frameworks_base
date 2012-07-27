@@ -23250,9 +23250,6 @@ package android.view {
     field public static final int KEYCODE_BACKSLASH = 73; // 0x49
     field public static final int KEYCODE_BOOKMARK = 174; // 0xae
     field public static final int KEYCODE_BREAK = 121; // 0x79
-    field public static final int KEYCODE_BRIGHTNESS_AUTO = 225; // 0xe1
-    field public static final int KEYCODE_BRIGHTNESS_DOWN = 223; // 0xdf
-    field public static final int KEYCODE_BRIGHTNESS_UP = 224; // 0xe0
     field public static final int KEYCODE_BUTTON_1 = 188; // 0xbc
     field public static final int KEYCODE_BUTTON_10 = 197; // 0xc5
     field public static final int KEYCODE_BUTTON_11 = 198; // 0xc6
@@ -23412,7 +23409,6 @@ package android.view {
     field public static final int KEYCODE_RIGHT_BRACKET = 72; // 0x48
     field public static final int KEYCODE_RO = 217; // 0xd9
     field public static final int KEYCODE_S = 47; // 0x2f
-    field public static final int KEYCODE_SCREENSHOT = 226; // 0xe2
     field public static final int KEYCODE_SCROLL_LOCK = 116; // 0x74
     field public static final int KEYCODE_SEARCH = 84; // 0x54
     field public static final int KEYCODE_SEMICOLON = 74; // 0x4a
@@ -23431,9 +23427,6 @@ package android.view {
     field public static final int KEYCODE_SYSRQ = 120; // 0x78
     field public static final int KEYCODE_T = 48; // 0x30
     field public static final int KEYCODE_TAB = 61; // 0x3d
-    field public static final int KEYCODE_TOGGLE_BT = 221; // 0xdd
-    field public static final int KEYCODE_TOGGLE_TOUCHPAD = 222; // 0xde
-    field public static final int KEYCODE_TOGGLE_WIFI = 220; // 0xdc
     field public static final int KEYCODE_TV = 170; // 0xaa
     field public static final int KEYCODE_TV_INPUT = 178; // 0xb2
     field public static final int KEYCODE_TV_POWER = 177; // 0xb1
