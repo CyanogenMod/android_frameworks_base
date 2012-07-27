@@ -284,6 +284,7 @@ Layer* LayerRenderer::createTextureLayer(bool isOpaque) {
 void LayerRenderer::updateTextureLayer(Layer* layer, uint32_t width, uint32_t height,
         bool isOpaque, GLenum renderTarget, float* transform) {
     if (layer) {
+        layer->setEmpty(true);
         layer->setBlend(!isOpaque);
         layer->setSize(width, height);
         layer->layer.set(0.0f, 0.0f, width, height);
@@ -335,7 +336,7 @@ void LayerRenderer::destroyLayerDeferred(Layer* layer) {
 }
 
 void LayerRenderer::flushLayer(Layer* layer) {
-#ifdef GL_EXT_discard_framebuffer
+#if defined(GL_EXT_discard_framebuffer) && !defined(DONT_DISCARD_FRAMEBUFFER)
     GLuint fbo = layer->getFbo();
     if (layer && fbo) {
         // If possible, discard any enqueud operations on deferred
