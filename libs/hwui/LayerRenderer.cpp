@@ -36,16 +36,16 @@ LayerRenderer::LayerRenderer(Layer* layer): mLayer(layer) {
 
 LayerRenderer::~LayerRenderer() {
 }
-
+GLuint fboTmp;
 int LayerRenderer::prepareDirty(float left, float top, float right, float bottom, bool opaque) {
     LAYER_RENDERER_LOGD("Rendering into layer, fbo = %d", mLayer->getFbo());
-
-    glBindFramebuffer(GL_FRAMEBUFFER, mLayer->getFbo());
 
     const float width = mLayer->layer.getWidth();
     const float height = mLayer->layer.getHeight();
 
-#if RENDER_LAYERS_AS_REGIONS
+    glBindFramebuffer(GL_FRAMEBUFFER, mLayer->getFbo());
+
+#if RENDER_LAYERS_AS_REGIONS && !defined(FBO_ONESHOT_RENDER)
     Rect dirty(left, top, right, bottom);
     if (dirty.isEmpty() || (dirty.left <= 0 && dirty.top <= 0 &&
             dirty.right >= width && dirty.bottom >= height)) {
@@ -69,6 +69,12 @@ void LayerRenderer::finish() {
     generateMesh();
 
     LAYER_RENDERER_LOGD("Finished rendering into layer, fbo = %d", mLayer->getFbo());
+#ifdef FBO_ONESHOT_RENDER
+    Caches& caches = Caches::getInstance();
+    fboTmp = caches.fboCache.get();
+    caches.fboCache.put(fboTmp);
+    mLayer->setFbo(fboTmp);
+#endif
 
     // No need to unbind our FBO, this will be taken care of by the caller
     // who will invoke OpenGLRenderer::resume()
@@ -284,6 +290,7 @@ Layer* LayerRenderer::createTextureLayer(bool isOpaque) {
 void LayerRenderer::updateTextureLayer(Layer* layer, uint32_t width, uint32_t height,
         bool isOpaque, GLenum renderTarget, float* transform) {
     if (layer) {
+        layer->setEmpty(true);
         layer->setBlend(!isOpaque);
         layer->setSize(width, height);
         layer->layer.set(0.0f, 0.0f, width, height);

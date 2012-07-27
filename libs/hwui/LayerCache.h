@@ -30,6 +30,7 @@ namespace uirenderer {
 ///////////////////////////////////////////////////////////////////////////////
 
 // Debug
+#define DEBUG_LAYERS 1
 #if DEBUG_LAYERS
     #define LAYER_LOGD(...) ALOGD(__VA_ARGS__)
 #else

@@ -32,11 +32,14 @@ namespace uirenderer {
 ///////////////////////////////////////////////////////////////////////////////
 
 // Debug
+#define DEBUG_LAYER_RENDERER 1
 #if DEBUG_LAYER_RENDERER
     #define LAYER_RENDERER_LOGD(...) ALOGD(__VA_ARGS__)
 #else
     #define LAYER_RENDERER_LOGD(...)
 #endif
+
+#define FBO_ONESHOT_RENDER
 
 ///////////////////////////////////////////////////////////////////////////////
 // Renderer
