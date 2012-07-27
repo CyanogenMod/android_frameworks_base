@@ -1774,6 +1774,9 @@
   <java-symbol type="bool" name="config_samsung_stk" />
   <java-symbol type="array" name="config_telephony_set_audioparameters" />
 
+  <!-- Hardware Key ReMapping -->
+  <java-symbol type="integer" name="config_deviceHardwareKeys" />
+
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
   <java-symbol type="bool" name="config_multiColorBatteryLed" />
