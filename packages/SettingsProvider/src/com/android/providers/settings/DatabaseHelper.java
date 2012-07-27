@@ -1455,6 +1455,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Set default tty mode
             loadSetting(stmt, Settings.System.TTY_MODE, 0);
 
+            // Set default noise suppression value
+            loadSetting(stmt, Settings.System.NOISE_SUPPRESSION, 0);
+
             loadBooleanSetting(stmt, Settings.System.AIRPLANE_MODE_ON,
                     R.bool.def_airplane_mode_on);
 
