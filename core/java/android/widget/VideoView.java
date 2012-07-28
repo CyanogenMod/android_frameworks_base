@@ -79,6 +79,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private int         mVideoHeight;
     private int         mSurfaceWidth;
     private int         mSurfaceHeight;
+    private int         mPreviousWidth;
+    private int         mPreviousHeight;
     private MediaController mMediaController;
     private OnCompletionListener mOnCompletionListener;
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
@@ -120,6 +122,18 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 //Log.i("@@@", "aspect ratio is correct: " +
                         //width+"/"+height+"="+
                         //mVideoWidth+"/"+mVideoHeight);
+            }
+            mPreviousWidth = mVideoWidth;
+            mPreviousHeight = mVideoHeight;
+        } else if (mPreviousWidth > 0 && mPreviousHeight > 0) {
+            width = getDefaultSize(mPreviousWidth, widthMeasureSpec);
+            height = getDefaultSize(mPreviousHeight, heightMeasureSpec);
+            if ( mPreviousWidth * height > width * mPreviousHeight ) {
+               Log.i("VideoView", "image too tall, correcting");
+               height = width * mPreviousHeight / mPreviousWidth;
+            } else if ( mPreviousWidth * height < width * mPreviousHeight ) {
+               Log.i("VideoView", "image too wide, correcting");
+               width = height * mPreviousWidth / mPreviousHeight;
             }
         }
         //Log.i("@@@@@@@@@@", "setting size: " + width + 'x' + height);

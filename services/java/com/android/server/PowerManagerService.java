@@ -53,6 +53,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.WorkSource;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.EventLog;
 import android.util.Log;
@@ -68,6 +69,8 @@ import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
 import static android.provider.Settings.System.STAY_ON_WHILE_PLUGGED_IN;
 import static android.provider.Settings.System.WINDOW_ANIMATION_SCALE;
 import static android.provider.Settings.System.TRANSITION_ANIMATION_SCALE;
+
+import com.android.internal.app.ThemeUtils;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -230,6 +233,7 @@ public class PowerManagerService extends IPowerManager.Stub
     private Intent mScreenOnIntent;
     private LightsService mLightsService;
     private Context mContext;
+    private Context mUiContext;
     private LightsService.Light mLcdLight;
     private LightsService.Light mButtonLight;
     private LightsService.Light mKeyboardLight;
@@ -280,7 +284,7 @@ public class PowerManagerService extends IPowerManager.Stub
     private int mButtonBrightnessOverride = -1;
     private int mScreenBrightnessDim;
     private boolean mUseSoftwareAutoBrightness;
-    private boolean mAutoBrightessEnabled;
+    private boolean mAutoBrightessEnabled = true;
     private int[] mAutoBrightnessLevels;
     private int[] mLcdBacklightValues;
     private int[] mButtonBacklightValues;
@@ -1783,6 +1787,13 @@ public class PowerManagerService extends IPowerManager.Stub
                     // If AutoBrightness is enabled, set the brightness immediately after the
                     // next sensor value is received.
                     mWaitingForFirstLightSensor = mAutoBrightessEnabled;
+                    if (!mAutoBrightessEnabled && SystemProperties.getBoolean(
+                        "ro.hardware.respect_als", false)) {
+                        /* Force a light sensor reset since we enabled it
+                            when the screen came on */
+                        mAutoBrightessEnabled = true;
+                        setScreenBrightnessMode(Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                    }
                 } else {
                     // make sure button and key backlights are off too
                     mButtonLight.turnOff();
@@ -2806,7 +2817,7 @@ public class PowerManagerService extends IPowerManager.Stub
         Runnable runnable = new Runnable() {
             public void run() {
                 synchronized (this) {
-                    ShutdownThread.reboot(mContext, finalReason, false);
+                    ShutdownThread.reboot(getUiContext(), finalReason, false);
                 }
 
             }
@@ -2841,6 +2852,13 @@ public class PowerManagerService extends IPowerManager.Stub
         } catch (InterruptedException e) {
             Log.wtf(TAG, e);
         }
+    }
+
+    private Context getUiContext() {
+        if (mUiContext == null) {
+            mUiContext = ThemeUtils.createUiContext(mContext);
+        }
+        return mUiContext != null ? mUiContext : mContext;
     }
 
     private void goToSleepLocked(long time, int reason) {

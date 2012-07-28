@@ -26,7 +26,7 @@ public abstract class SystemUI {
     public Context mContext;
 
     public abstract void start();
-    
+
     protected void onConfigurationChanged(Configuration newConfig) {
     }
 

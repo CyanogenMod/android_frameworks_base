@@ -18,11 +18,14 @@ package com.android.internal.policy.impl;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.widget.LockPatternUtils;
 
@@ -41,6 +44,8 @@ import com.android.internal.R;
  */
 public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, View.OnClickListener {
 
+    private boolean mSimCheckInProgress;
+
     private static final int DIGIT_PRESS_WAKE_MILLIS = 5000;
 
     private final KeyguardUpdateMonitor mUpdateMonitor;
@@ -56,6 +61,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     private final int[] mEnteredPin = {0, 0, 0, 0, 0, 0, 0, 0};
     private int mEnteredDigits = 0;
 
+    private Context mUiContext;
     private ProgressDialog mSimUnlockProgressDialog = null;
 
     private LockPatternUtils mLockPatternUtils;
@@ -67,6 +73,14 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     private KeyguardStatusViewManager mKeyguardStatusViewManager;
 
     private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mUiContext = null;
+            mSimUnlockProgressDialog = null;
+        }
+    };
 
     public SimUnlockScreen(Context context, Configuration configuration,
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
@@ -106,12 +120,21 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     }
 
     /** {@inheritDoc} */
+    public boolean suspendRecreate() {
+        return mSimCheckInProgress;
+    }
+
+    /** {@inheritDoc} */
     public boolean needsInput() {
         return true;
     }
 
     /** {@inheritDoc} */
     public void onPause() {
+        if (mUiContext != null) {
+            mContext.unregisterReceiver(mThemeChangeReceiver);
+            mUiContext = null;
+        }
         mKeyguardStatusViewManager.onPause();
     }
 
@@ -188,8 +211,18 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     }
 
     private Dialog getSimUnlockProgressDialog() {
+        if (mUiContext == null && mSimUnlockProgressDialog != null) {
+            mSimUnlockProgressDialog.dismiss();
+            mSimUnlockProgressDialog = null;
+        }
+
         if (mSimUnlockProgressDialog == null) {
-            mSimUnlockProgressDialog = new ProgressDialog(mContext);
+            mUiContext = ThemeUtils.createUiContext(mContext);
+            ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
+
+            final Context uiContext = mUiContext != null ? mUiContext : mContext;
+
+            mSimUnlockProgressDialog = new ProgressDialog(uiContext);
             mSimUnlockProgressDialog.setMessage(
                     mContext.getString(R.string.lockscreen_sim_unlock_progress_dialog_message));
             mSimUnlockProgressDialog.setIndeterminate(true);
@@ -211,12 +244,15 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             mCallback.pokeWakelock();
             return;
         }
+
+        mSimCheckInProgress = true;
         getSimUnlockProgressDialog().show();
 
         new CheckSimPin(mPinText.getText().toString()) {
             void onSimLockChangedResponse(final boolean success) {
                 mPinText.post(new Runnable() {
                     public void run() {
+                        mSimCheckInProgress = false;
                         if (mSimUnlockProgressDialog != null) {
                             mSimUnlockProgressDialog.hide();
                         }
