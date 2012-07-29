@@ -110,6 +110,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private Profile mChosenProfile;
 
     private static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
+    private static final String POWER_MENU_SCREENSHOT_ENABLED = "power_menu_screenshot_enabled";
 
     /**
      * @param context everything needs a context :(
@@ -274,7 +275,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 }
             });
 
-        // next: profile - only shown if enabled, which is true by default
+        // next: profile - only shown if enabled, enabled by default
         if (Settings.System.getInt(mContext.getContentResolver(), SYSTEM_PROFILES_ENABLED, 1) == 1) {
             mItems.add(
                 new ProfileChooseAction() {
@@ -296,21 +297,24 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 });
         }
 
-        // next: screenshot
-        mItems.add(
-            new SinglePressAction(R.drawable.ic_lock_screenshot, R.string.global_action_screenshot) {
-                public void onPress() {
-                    takeScreenshot();
-                }
+        // next: screenshot - only shown if enabled, disabled by default
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                POWER_MENU_SCREENSHOT_ENABLED, 0) == 1) {
+            mItems.add(
+                new SinglePressAction(R.drawable.ic_lock_screenshot, R.string.global_action_screenshot) {
+                    public void onPress() {
+                        takeScreenshot();
+                    }
 
-                public boolean showDuringKeyguard() {
-                    return true;
-                }
+                    public boolean showDuringKeyguard() {
+                        return true;
+                    }
 
-                public boolean showBeforeProvisioning() {
-                    return true;
-                }
-            });
+                    public boolean showBeforeProvisioning() {
+                        return true;
+                    }
+                });
+        }
 
         // next: airplane mode
         mItems.add(mAirplaneModeOn);
