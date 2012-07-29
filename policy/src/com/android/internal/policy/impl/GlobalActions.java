@@ -17,13 +17,11 @@
 
 package com.android.internal.policy.impl;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Profile;
 import android.app.ProfileManager;
-import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,6 +30,7 @@ import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
@@ -48,7 +47,6 @@ import com.android.internal.R;
 import com.android.internal.app.ShutdownThread;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
-import com.google.android.collect.Lists;
 
 import com.android.internal.app.ThemeUtils;
 
@@ -79,6 +77,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private final Context mContext;
     private Context mUiContext;
     private final AudioManager mAudioManager;
+    private final Vibrator mVibrator;
 
     private ArrayList<Action> mItems;
     private AlertDialog mDialog;
@@ -101,6 +100,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     public GlobalActions(Context context) {
         mContext = context;
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
@@ -149,7 +149,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
      * @return A new dialog.
      */
     private AlertDialog createDialog() {
-        mSilentModeAction = new SilentModeAction(mAudioManager, mHandler);
+        ContentResolver cr = mContext.getContentResolver();
+        mSilentModeAction = new SilentModeAction(mAudioManager, mVibrator, cr, mHandler);
 
         mAirplaneModeOn = new ToggleAction(
                 R.drawable.ic_lock_airplane_mode,
@@ -414,8 +415,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     }
     
     private void prepareDialog() {
-        final boolean silentModeOn =
-                mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
         mAirplaneModeOn.updateState(mAirplaneState);
         mAdapter.notifyDataSetChanged();
         if (mKeyguardShowing) {
@@ -746,32 +745,70 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private static class SilentModeAction implements Action, View.OnClickListener {
 
-        private final int[] ITEM_IDS = { R.id.option1, R.id.option2, R.id.option3 };
+        private final int[] ITEM_IDS = { R.id.option1, R.id.option2, R.id.option3, R.id.option4};
+
+        private static final int VIBRATE_DURATION = 250; // 0.25s
 
         private final AudioManager mAudioManager;
+        private final Vibrator mVibrator;
+        private final ContentResolver mContentResolver;
         private final Handler mHandler;
 
-        SilentModeAction(AudioManager audioManager, Handler handler) {
+        SilentModeAction(AudioManager audioManager, Vibrator vibrator,
+                ContentResolver cr, Handler handler) {
             mAudioManager = audioManager;
+            mVibrator = vibrator;
+            mContentResolver = cr;
             mHandler = handler;
         }
 
-        private int ringerModeToIndex(int ringerMode) {
-            // They just happen to coincide
+        private int ringerModeToIndex(int ringerMode, int vibrateMode) {
+            if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                if (vibrateMode == AudioManager.VIBRATE_SETTING_ON) {
+                    return ringerMode+1;
+                }
+            }
             return ringerMode;
         }
 
         private int indexToRingerMode(int index) {
-            // They just happen to coincide
-            return index;
+            if (index == 0) return AudioManager.RINGER_MODE_SILENT;
+            if (index == 1) return AudioManager.RINGER_MODE_VIBRATE;
+            return AudioManager.RINGER_MODE_NORMAL;
+        }
+
+        private int indexToVibrateSetting(int index) {
+            if ( index == 0 ) return AudioManager.VIBRATE_SETTING_OFF;
+            if ( index == 1 ) return AudioManager.VIBRATE_SETTING_ONLY_SILENT;
+            if ( index == 2 ) return AudioManager.VIBRATE_SETTING_ONLY_SILENT;
+            return AudioManager.VIBRATE_SETTING_ON;
+        }
+
+        private boolean indexToVibrate(int index) {
+            return (index == 1 || index == 3);
+        }
+
+        private boolean isHapticFeedback() {
+            try {
+                int expandedHapticFeedback = Settings.System.getInt(mContentResolver,
+                        Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2);
+
+                if (expandedHapticFeedback == 2) {
+                     return Settings.System.getInt(mContentResolver,
+                             Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1;
+                }
+                return (expandedHapticFeedback == 1);
+            } catch (Exception e) {}
+            return false;
         }
 
         public View create(Context context, View convertView, ViewGroup parent,
                 LayoutInflater inflater) {
             View v = inflater.inflate(R.layout.global_actions_silent_mode, parent, false);
-
-            int selectedIndex = ringerModeToIndex(mAudioManager.getRingerMode());
-            for (int i = 0; i < 3; i++) {
+            int vibrateSetting = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+            int ringerMode = mAudioManager.getRingerMode();
+            int selectedIndex = ringerModeToIndex(ringerMode, vibrateSetting);
+            for (int i = 0; i < ITEM_IDS.length; i++) {
                 View itemView = v.findViewById(ITEM_IDS[i]);
                 itemView.setSelected(selectedIndex == i);
                 // Set up click handler
@@ -803,7 +840,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (!(v.getTag() instanceof Integer)) return;
 
             int index = (Integer) v.getTag();
+            mAudioManager.setVibrateSetting(
+                    AudioManager.VIBRATE_TYPE_RINGER, indexToVibrateSetting(index));
             mAudioManager.setRingerMode(indexToRingerMode(index));
+            if ( mVibrator != null && indexToVibrate(index) && isHapticFeedback()) {
+                mVibrator.vibrate(VIBRATE_DURATION);
+            }
             mHandler.sendEmptyMessageDelayed(MESSAGE_DISMISS, DIALOG_DISMISS_DELAY);
         }
     }
