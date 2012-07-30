@@ -1,4 +1,4 @@
-<!-- This file defines the base public resources exported by the
+4<!-- This file defines the base public resources exported by the
    platform, which must always exist. -->
 
 <!-- ***************************************************************
@@ -3941,4 +3941,7 @@
 
   <!-- Stylus gestures -->
   <java-symbol type="bool" name="config_stylusGestures" />
+
+  <!-- Qualcomm electron beam -->
+  <java-symbol type="bool" name="config_qualcommElectronBeam" />
 </resources>
