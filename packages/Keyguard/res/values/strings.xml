@@ -61,8 +61,8 @@
     <string name="keyguard_plugged_in">Charging, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
     <!-- When the lock screen is showing and the battery is low, warn user to plug
-         in the phone soon. -->
-    <string name="keyguard_low_battery">Connect your charger.</string>
+         in the phone soon and show current percentage. -->
+    <string name="keyguard_low_battery">Connect your charger, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
     <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
     <string name="keyguard_instructions_when_pattern_disabled">Press Menu to unlock.</string>
