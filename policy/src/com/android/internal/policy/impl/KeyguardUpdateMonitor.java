@@ -449,8 +449,8 @@ public class KeyguardUpdateMonitor {
             return true;
         }
 
-        // change in battery level while plugged in
-        if (nowPluggedIn && old.level != current.level) {
+        // change in battery level while plugged in or always interested
+        if ((nowPluggedIn || shouldAlwaysShowBatteryInfo()) && old.level != current.level) {
             return true;
         }
 
@@ -676,8 +676,13 @@ public class KeyguardUpdateMonitor {
     }
 
     public boolean shouldShowBatteryInfo() {
-        return isPluggedIn(mBatteryStatus) || isBatteryLow(mBatteryStatus);
+        return isPluggedIn(mBatteryStatus) || isBatteryLow(mBatteryStatus)
+                       || shouldAlwaysShowBatteryInfo();
     }
+
+    public boolean shouldAlwaysShowBatteryInfo() {
+        return Settings.System.getInt(getContext().getContentResolver(),
+                       Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, 0) == 1;
 
     public CharSequence getTelephonyPlmn() {
         return mTelephonyPlmn;
