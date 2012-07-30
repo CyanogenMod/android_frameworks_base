@@ -84,7 +84,11 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
         }
 
         int appIndex = -1;
-        if (mPhoneType == RILConstants.CDMA_PHONE) {
+        // NOTE: This works on Sprint LTE and CDMA devices with embedded SIM.
+        // These devices require the subscription to be obtained from NV not the SIM or RUIM.
+        // This may not be the case on a VZW device which has a proper SIM.
+        if (mPhoneType == RILConstants.CDMA_PHONE ||
+            getLteOnCdmaMode() == RILConstants.LTE_ON_CDMA_TRUE) {
             appIndex = status.getCdmaSubscriptionAppIndex();
             Log.d(LOG_TAG, "This is a CDMA PHONE " + appIndex);
         } else {
