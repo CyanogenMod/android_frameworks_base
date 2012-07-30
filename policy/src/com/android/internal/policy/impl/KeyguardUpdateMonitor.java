@@ -378,7 +378,7 @@ public class KeyguardUpdateMonitor {
     private void handleBatteryUpdate(BatteryStatus batteryStatus) {
         if (DEBUG) Log.d(TAG, "handleBatteryUpdate");
         final boolean batteryUpdateInteresting =
-                isBatteryUpdateInteresting(mBatteryStatus, batteryStatus);
+                isBatteryUpdateInteresting(mBatteryStatus, batteryStatus, mContext);
         mBatteryStatus = batteryStatus;
         if (batteryUpdateInteresting) {
             for (int i = 0; i < mInfoCallbacks.size(); i++) {
@@ -437,7 +437,7 @@ public class KeyguardUpdateMonitor {
                 || status.plugged == BatteryManager.BATTERY_PLUGGED_USB;
     }
 
-    private static boolean isBatteryUpdateInteresting(BatteryStatus old, BatteryStatus current) {
+    private static boolean isBatteryUpdateInteresting(BatteryStatus old, BatteryStatus current, Context context) {
         final boolean nowPluggedIn = isPluggedIn(current);
         final boolean wasPluggedIn = isPluggedIn(old);
         final boolean stateChangedWhilePluggedIn =
@@ -449,8 +449,8 @@ public class KeyguardUpdateMonitor {
             return true;
         }
 
-        // change in battery level while plugged in
-        if (nowPluggedIn && old.level != current.level) {
+        // change in battery level while plugged in or always interested
+        if ((nowPluggedIn || shouldAlwaysShowBatteryInfo(context)) && old.level != current.level) {
             return true;
         }
 
@@ -676,7 +676,13 @@ public class KeyguardUpdateMonitor {
     }
 
     public boolean shouldShowBatteryInfo() {
-        return isPluggedIn(mBatteryStatus) || isBatteryLow(mBatteryStatus);
+        return isPluggedIn(mBatteryStatus) || isBatteryLow(mBatteryStatus)
+                       || shouldAlwaysShowBatteryInfo(mContext);
+    }
+
+    public static boolean shouldAlwaysShowBatteryInfo(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                       Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, 0) == 1;
     }
 
     public CharSequence getTelephonyPlmn() {
