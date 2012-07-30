@@ -501,9 +501,10 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS: ret = responseString(p); break;
             case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
             // SAMSUNG STATES
-            case RIL_UNSOL_AM: ret = responseString(p); break;
+            case RIL_UNSOL_AM: ret = responseVoid(p); break;
             case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL: ret = responseVoid(p); break;
             case RIL_UNSOL_DATA_SUSPEND_RESUME: ret = responseInts(p); break;
+            case RIL_UNSOL_DEVICE_READY_NOTI: ret = responseVoid(p); break;
             case RIL_UNSOL_STK_CALL_CONTROL_RESULT: ret = responseVoid(p); break;
             case RIL_UNSOL_TWO_MIC_STATE: ret = responseInts(p); break;
             case RIL_UNSOL_WB_AMR_STATE: ret = responseInts(p); break;
@@ -538,20 +539,14 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             // SAMSUNG STATES
             case RIL_UNSOL_AM:
                 if (RILJ_LOGD) samsungUnsljLogRet(response, ret);
-                String amString = (String) ret;
-                Log.d(LOG_TAG, "Executing AM: " + amString);
-
-                try {
-                    Runtime.getRuntime().exec("am " + amString);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e(LOG_TAG, "am " + amString + " could not be executed.");
-                }
                 break;
             case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL:
                 if (RILJ_LOGD) samsungUnsljLogRet(response, ret);
                 break;
             case RIL_UNSOL_DATA_SUSPEND_RESUME:
+                if (RILJ_LOGD) samsungUnsljLogRet(response, ret);
+                break;
+            case RIL_UNSOL_DEVICE_READY_NOTI:
                 if (RILJ_LOGD) samsungUnsljLogRet(response, ret);
                 break;
             case RIL_UNSOL_STK_CALL_CONTROL_RESULT:
@@ -575,6 +570,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_AM: return "RIL_UNSOL_AM";
             case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL: return "RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL";
             case RIL_UNSOL_DATA_SUSPEND_RESUME: return "RIL_UNSOL_DATA_SUSPEND_RESUME";
+            case RIL_UNSOL_DEVICE_READY_NOTI: return "RIL_UNSOL_DEVICE_READY_NOTI";
             case RIL_UNSOL_STK_CALL_CONTROL_RESULT: return "RIL_UNSOL_STK_CALL_CONTROL_RESULT";
             case RIL_UNSOL_TWO_MIC_STATE: return "RIL_UNSOL_TWO_MIC_STATE";
             case RIL_UNSOL_WB_AMR_STATE: return "RIL_UNSOL_WB_AMR_STATE";
@@ -631,6 +627,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
     responseCallList(Parcel p) {
         int num;
         int voiceSettings;
+        int videoSettings;
         ArrayList<DriverCall> response;
         DriverCall dc;
         int dataAvail = p.dataAvail();
@@ -667,10 +664,9 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             dc.isVoice = (0 == voiceSettings) ? false : true;
             Log.d(LOG_TAG, "isVoice = " + dc.isVoice);
             dc.isVoicePrivacy =  (0 != p.readInt());
-            //Some Samsung magic data for Videocalls
-            voiceSettings = p.readInt();
-            //printing it to cosole for later investigation
-            Log.d(LOG_TAG, "Samsung magic = " + voiceSettings);
+            // Some Samsung magic data for Videocalls
+            videoSettings = p.readInt();
+            Log.d(LOG_TAG, "isVideo = " + videoSettings);
             dc.number = p.readString();
             Log.d(LOG_TAG, "number = " + dc.number);
             int np = p.readInt();
