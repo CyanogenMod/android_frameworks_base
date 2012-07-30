@@ -125,13 +125,10 @@ CommandsInterface {
         for (int i = 0; i < numInts; i++) {
             response[i] = p.readInt();
         }
-        // Workaround: use cdmaecio and evdoecio to determine signal strength
-        // and it is better than no signal bars
-        // TODO: find a proper fix for it
-        response[2] = response[3] * 4; // mutiply by 4 simulate dbm so the
-        // signal bars do not jump often to full
-        // bars
-        response[4] = response[5] * 4;
+        // Take just the least significant byte as the signal strength
+        response[2] %= 256;
+        response[4] %= 256;
+        
         // RIL_LTE_SignalStrength
         if (response[7] == 99) {
             // If LTE is not enabled, clear LTE results
