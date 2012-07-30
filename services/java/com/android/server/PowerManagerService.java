@@ -179,6 +179,7 @@ public class PowerManagerService extends IPowerManager.Stub
 
     // animate screen lights in PowerManager (as opposed to SurfaceFlinger)
     boolean mAnimateScreenLights = true;
+    boolean mQualcommElectronBeam = false;
 
     static final int ANIM_STEPS = 60; // nominal # of frames at 60Hz
     // Slower animation for autobrightness changes
@@ -681,6 +682,9 @@ public class PowerManagerService extends IPowerManager.Stub
 
         mAnimateScreenLights = resources.getBoolean(
                 com.android.internal.R.bool.config_animateScreenLights);
+
+        mQualcommElectronBeam = resources.getBoolean(
+                com.android.internal.R.bool.config_qualcommElectronBeam);
 
         mUnplugTurnsOnScreen = resources.getBoolean(
                 com.android.internal.R.bool.config_unplugTurnsOnScreen);
@@ -2394,6 +2398,14 @@ public class PowerManagerService extends IPowerManager.Stub
                     Message msg = mScreenBrightnessHandler
                             .obtainMessage(ANIMATE_LIGHTS, mask, newValue);
                     mScreenBrightnessHandler.sendMessageDelayed(msg, delay);
+                } else if(mQualcommElectronBeam) {
+                    final boolean doScreenAnimation = (mask & (SCREEN_BRIGHT_BIT | SCREEN_ON_BIT)) != 0;
+                    final boolean turnOff = currentValue == PowerManager.BRIGHTNESS_OFF;
+                    if (turnOff && doScreenAnimation) {
+                        // Cancel all pending animations since we're turning off
+                        mScreenBrightnessHandler.removeCallbacksAndMessages(null);
+                        screenOffFinishedAnimatingLocked(mScreenOffReason);
+                    }
                 }
             }
         }
@@ -2457,9 +2469,11 @@ public class PowerManagerService extends IPowerManager.Stub
                     final boolean doScreenAnim = (mask & (SCREEN_BRIGHT_BIT | SCREEN_ON_BIT)) != 0;
                     final boolean turningOff = endValue == PowerManager.BRIGHTNESS_OFF;
                     if (turningOff && doScreenAnim) {
-                        // Cancel all pending animations since we're turning off
-                        mScreenBrightnessHandler.removeCallbacksAndMessages(null);
-                        screenOffFinishedAnimatingLocked(mScreenOffReason);
+                        if (!mQualcommElectronBeam) {
+                            // Cancel all pending animations since we're turning off
+                             mScreenBrightnessHandler.removeCallbacksAndMessages(null);
+                             screenOffFinishedAnimatingLocked(mScreenOffReason);
+                        }
                         duration = 200; // TODO: how long should this be?
                     }
                     if (doScreenAnim) {
