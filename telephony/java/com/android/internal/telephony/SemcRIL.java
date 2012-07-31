@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 The CyanogenMod Project
+ * Copyright (C) 2011-2012, The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,66 +18,39 @@ package com.android.internal.telephony;
 
 import static com.android.internal.telephony.RILConstants.*;
 
-import android.content.*;
-import android.net.*;
-import android.os.*;
-import android.telephony.*;
+import android.content.Context;
+import android.os.AsyncResult;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Parcel;
+import android.telephony.SmsMessage;
+import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
-import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
-import com.android.internal.telephony.cdma.CdmaInformationRecords;
-import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
-import com.android.internal.telephony.gsm.SuppServiceNotification;
-import java.io.*;
-import java.util.*;
+
+import java.util.ArrayList;
 
 /**
- * Custom SEMC ril
+ * Custom Qualcomm No SimReady RIL for SEMC
  *
  * {@hide}
  */
-public class SemcRIL extends RIL {
-    String mAid = "";
-    IccHandler mIccHandler;
-    HandlerThread mIccThread;
+
+public class SemcRIL extends RIL implements CommandsInterface {
+    protected String mAid = "";
+    protected HandlerThread mIccThread;
+    protected IccHandler mIccHandler;
+    boolean RILJ_LOGV = true;
+    boolean RILJ_LOGD = true;
+
+    private final int RIL_INT_RADIO_OFF = 0;
+    private final int RIL_INT_RADIO_UNAVALIABLE = 1;
+    private final int RIL_INT_RADIO_ON = 2;
 
     public SemcRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
-        mIccHandler = null;
-    }
-
-    @Override
-    protected RadioState getRadioStateFromInt(int stateInt) {
-        RadioState state;
-
-        /* RIL_RadioState ril.h */
-        switch(stateInt) {
-            case 0: state = RadioState.RADIO_OFF; break;
-            case 1: state = RadioState.RADIO_UNAVAILABLE; break;
-            case 2: {
-                if (mIccHandler == null)
-                {
-                    mIccThread = new HandlerThread("IccHandler");
-                    mIccThread.start();
-                    mIccHandler = new IccHandler(this, mIccThread.getLooper());
-                }
-                mIccHandler.run();
-                state = RadioState.RADIO_ON;
-                break;
-            }
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9: state = RadioState.RADIO_ON; break;
-
-            default:
-                throw new RuntimeException(
-                            "Unrecognized RIL_RadioState: " + stateInt);
-        }
-        return state;
     }
 
     @Override
@@ -93,7 +66,6 @@ public class SemcRIL extends RIL {
         status.setImsSubscriptionAppIndex(p.readInt());
 
         int numApplications = p.readInt();
-
         // limit to maximum allowed applications
         if (numApplications > IccCardStatus.CARD_MAX_APPS) {
             numApplications = IccCardStatus.CARD_MAX_APPS;
@@ -118,20 +90,16 @@ public class SemcRIL extends RIL {
     }
 
     private void updateIccType (IccCardStatus status) {
-        if (status.getNumApplications() > 0)
-        {
-            int appType;
+        int appType;
+        if (status.getNumApplications() > 0) {
             if (mPhoneType == RILConstants.CDMA_PHONE)
-            {
                 appType = status.getCdmaSubscriptionAppIndex();
-            } else {
+            else
                 appType = status.getGsmUmtsSubscriptionAppIndex();
-            }
 
             IccCardApplication application = status.getApplication(appType);
             mAid = application.aid;
             Log.d(LOG_TAG, "Picked default AID: " + mAid);
-            SystemProperties.set("ril.icctype", Integer.toString(application.app_type.ordinal()));
         }
     }
 
@@ -177,7 +145,6 @@ public class SemcRIL extends RIL {
         return dataCall;
     }
 
-
     @Override public void
     supplyIccPin(String pin, Message result) {
         supplyIccPinForApp(pin, mAid, result);
@@ -217,7 +184,7 @@ public class SemcRIL extends RIL {
 
     @Override
     public void
-    setFacilityLock (String facility, boolean lockState, String password,
+    setFacilityLock(String facility, boolean lockState, String password,
                         int serviceClass, Message response) {
         setFacilityLockForApp(facility, lockState, password, serviceClass, mAid, response);
     }
@@ -226,68 +193,25 @@ public class SemcRIL extends RIL {
     public void
     iccIO (int command, int fileid, String path, int p1, int p2, int p3,
             String data, String pin2, Message result) {
-        //Note: This RIL request has not been renamed to ICC,
-        //       but this request is also valid for SIM and RUIM
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_SIM_IO, result);
-
-        rr.mp.writeInt(command);
-        rr.mp.writeInt(fileid);
-        rr.mp.writeString(path);
-        rr.mp.writeInt(p1);
-        rr.mp.writeInt(p2);
-        rr.mp.writeInt(p3);
-        rr.mp.writeString(data);
-        rr.mp.writeString(pin2);
-        rr.mp.writeString(mAid);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> iccIO: " + requestToString(rr.mRequest)
-                + " 0x" + Integer.toHexString(command)
-                + " 0x" + Integer.toHexString(fileid) + " "
-                + " path: " + path + ","
-                + p1 + "," + p2 + "," + p3);
-
-        send(rr);
+        iccIOForApp(command, fileid, path, p1, p2, p3, data, pin2, mAid, result);
     }
 
     @Override
     public void
     getIMSI(Message result) {
+        getIMSIForApp(mAid, result);
+    }
+
+    @Override
+    public void
+    getIMSIForApp(String aid, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_IMSI, result);
-        rr.mp.writeString(mAid);
 
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+        rr.mp.writeString(aid);
 
-        send(rr);
-    }
-
-    @Override
-    public void
-    setNetworkSelectionModeAutomatic(Message response) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_AUTOMATIC,
-                                    response);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        rr.mp.writeString(null);
-        rr.mp.writeInt(-1);
-
-        send(rr);
-    }
-
-    @Override
-    public void
-    setNetworkSelectionModeManual(String operatorNumeric, Message response) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_MANUAL,
-                                    response);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " " + operatorNumeric);
-
-        rr.mp.writeString(operatorNumeric);
-        rr.mp.writeInt(-1);
+        if (RILJ_LOGD) riljLog(rr.serialString() +
+                              "> getIMSI: " + requestToString(rr.mRequest)
+                              + " aid: " + aid);
 
         send(rr);
     }
@@ -324,7 +248,7 @@ public class SemcRIL extends RIL {
 
         rr.mp.writeString(address);
         rr.mp.writeInt(clirMode);
-        rr.mp.writeInt(0); // UUS information is absent
+        rr.mp.writeInt(0);
 
         if (uusInfo == null) {
             rr.mp.writeInt(0); // UUS information is absent
@@ -339,6 +263,100 @@ public class SemcRIL extends RIL {
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
         send(rr);
+    }
+
+    public void
+    setNetworkSelectionMode(String operatorNumeric, Message response) {
+        RILRequest rr;
+
+        if (operatorNumeric == null)
+            rr = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_AUTOMATIC, response);
+        else
+            rr = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_MANUAL, response);
+
+        rr.mp.writeString(operatorNumeric);
+        rr.mp.writeInt(-1);
+
+        send(rr);
+    }
+
+    @Override
+    public void
+    setNetworkSelectionModeAutomatic(Message response) {
+        setNetworkSelectionMode(null, response);
+    }
+
+    @Override
+    public void
+    setNetworkSelectionModeManual(String operatorNumeric, Message response) {
+        setNetworkSelectionMode(operatorNumeric, response);
+    }
+
+    @Override
+    protected void
+    processUnsolicited (Parcel p) {
+        Object ret;
+        int dataPosition = p.dataPosition(); // save off position within the Parcel
+        int response = p.readInt();
+
+        switch(response) {
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
+            case 1036: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED
+
+            default:
+                // Rewind the Parcel
+                p.setDataPosition(dataPosition);
+
+                // Forward responses that we are not overriding to the super class
+                super.processUnsolicited(p);
+                return;
+        }
+
+        switch(response) {
+            case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED:
+                int state = p.readInt();
+                setRadioStateFromRILInt(state);
+                break;
+            case 1036:
+                break;
+        }
+    }
+
+    private void setRadioStateFromRILInt (int stateCode) {
+        CommandsInterface.RadioState radioState;
+        HandlerThread handlerThread;
+        Looper looper;
+        IccHandler iccHandler;
+
+        switch (stateCode) {
+            case RIL_INT_RADIO_OFF:
+                radioState = CommandsInterface.RadioState.RADIO_OFF;
+                if (mIccHandler != null) {
+                    mIccThread = null;
+                    mIccHandler = null;
+                }
+                break;
+            case RIL_INT_RADIO_UNAVALIABLE:
+                radioState = CommandsInterface.RadioState.RADIO_UNAVAILABLE;
+                break;
+            case RIL_INT_RADIO_ON:
+                if (mIccHandler == null) {
+                    handlerThread = new HandlerThread("IccHandler");
+                    mIccThread = handlerThread;
+
+                    mIccThread.start();
+
+                    looper = mIccThread.getLooper();
+                    mIccHandler = new IccHandler(this,looper);
+                    mIccHandler.run();
+                }
+                radioState = CommandsInterface.RadioState.RADIO_ON;
+                break;
+            default:
+                throw new RuntimeException("Unrecognized RIL_RadioState: " + stateCode);
+        }
+
+        setRadioState (radioState);
     }
 
     class IccHandler extends Handler implements Runnable {
@@ -388,7 +406,6 @@ public class SemcRIL extends RIL {
                         IccCardApplication application = status.getApplication(appIndex);
                         IccCardApplication.AppState app_state = application.app_state;
                         IccCardApplication.AppType app_type = application.app_type;
-
                         switch (app_state) {
                             case APPSTATE_PIN:
                             case APPSTATE_PUK:
@@ -420,18 +437,18 @@ public class SemcRIL extends RIL {
                         }
                     }
                     break;
-                case EVENT_ICC_STATUS_CHANGED:
+               case EVENT_ICC_STATUS_CHANGED:
                     if (mRadioOn) {
                         Log.d(LOG_TAG, "Received EVENT_ICC_STATUS_CHANGED, calling getIccCardStatus");
-                         mRil.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE, paramMessage.obj));
+                        mRil.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE, paramMessage.obj));
                     } else {
-                         Log.d(LOG_TAG, "Received EVENT_ICC_STATUS_CHANGED while radio is not ON. Ignoring");
+                        Log.d(LOG_TAG, "Received EVENT_ICC_STATUS_CHANGED while radio is not ON. Ignoring");
                     }
                     break;
                 case EVENT_RADIO_OFF_OR_UNAVAILABLE:
                     mRadioOn = false;
                     // disposeCards(); // to be verified;
-                default:
+               default:
                     Log.e(LOG_TAG, " Unknown Event " + paramMessage.what);
                     break;
             }
