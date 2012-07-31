@@ -86,16 +86,18 @@
             android:orientation="horizontal"
             android:gravity="center"
             >
-            <include layout="@layout/signal_cluster_view" 
-                android:id="@+id/signal_cluster"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
             <include layout="@layout/signal_cluster_text_view"
                 android:id="@+id/signal_cluster_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
+
+            <include layout="@layout/signal_cluster_view" 
+                android:id="@+id/signal_cluster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
             <TextView
                 android:id="@+id/battery_text"
                 android:textAppearance="@style/TextAppearance.StatusBar.Battery"
