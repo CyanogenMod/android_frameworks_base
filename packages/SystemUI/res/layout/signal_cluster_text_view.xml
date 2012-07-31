@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:singleLine="true"
-            android:layout_marginRight="-3dip"
+            android:layout_marginRight="2dip"
             android:gravity="center_vertical|left"
             />
         <ImageView
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_marginLeft="1dip"
-            android:paddingRight="2dip"
+            android:paddingRight="0dip"
             />
     </LinearLayout>
 </com.android.systemui.statusbar.SignalClusterTextView>
