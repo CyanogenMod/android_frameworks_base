@@ -588,7 +588,8 @@
         android:label="@string/permlab_camera"
         android:description="@string/permdesc_camera" />
 
-    <!-- Allows an application to override the power key action -->
+    <!-- Allows an application to override the power key action
+         @hide -->
     <permission android:name="android.permission.PREVENT_POWER_KEY"
         android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
         android:protectionLevel="dangerous"
