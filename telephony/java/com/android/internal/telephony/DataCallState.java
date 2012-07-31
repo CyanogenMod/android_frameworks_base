@@ -155,7 +155,12 @@ public class DataCallState {
                         }
                     }
                 } else {
-                    throw new UnknownHostException("no address for ifname=" + ifname);
+                    //Workaround for java.net.UnknownHostException: no address for ifname= error
+                    if ("true".equals(SystemProperties.get("ro.telephony.ignore.linkiperror"))) {
+                        Log.e(LOG_TAG, "skipping exception: no address for ifname=" + ifname);
+                    } else {
+                        throw new UnknownHostException("no address for ifname=" + ifname);
+                    }
                 }
 
                 // set dns servers
