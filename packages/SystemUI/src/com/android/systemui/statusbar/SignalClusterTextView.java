@@ -47,9 +47,10 @@ import com.android.systemui.R;
 public class SignalClusterTextView
     extends LinearLayout {
 
-    private static final int SIGNAL_CLUSTER_STYLE_NORMAL   = 0;
-    private static final int SIGNAL_CLUSTER_STYLE_TEXT     = 1;
-    private static final int SIGNAL_CLUSTER_STYLE_HIDDEN   = 2;
+    private static final int SIGNAL_CLUSTER_STYLE_NORMAL    = 0;
+    private static final int SIGNAL_CLUSTER_STYLE_TEXT      = 1;
+    private static final int SIGNAL_CLUSTER_STYLE_TEXT_ICON = 2;
+    private static final int SIGNAL_CLUSTER_STYLE_HIDDEN    = 3;
 
     private boolean mAttached;
     private boolean mAirplaneMode;
@@ -60,6 +61,7 @@ public class SignalClusterTextView
 
     ViewGroup mMobileGroup;
     TextView mMobileSignalText;
+    ImageView mMobileSignalTextIcon;
 
     Handler mHandler;
 
@@ -102,8 +104,9 @@ public class SignalClusterTextView
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        mMobileGroup      = (ViewGroup) findViewById(R.id.mobile_signal_text_combo);
-        mMobileSignalText = (TextView) findViewById(R.id.mobile_signal_text);
+        mMobileGroup            = (ViewGroup) findViewById(R.id.mobile_signal_text_combo);
+        mMobileSignalText       = (TextView) findViewById(R.id.mobile_signal_text);
+        mMobileSignalTextIcon   = (ImageView) findViewById(R.id.mobile_signal_text_icon);
 
         if (!mAttached) {
             mAttached = true;
@@ -137,7 +140,12 @@ public class SignalClusterTextView
             return;
         } else if (mSignalClusterStyle == SIGNAL_CLUSTER_STYLE_TEXT) {
             mMobileGroup.setVisibility(View.VISIBLE);
+            mMobileSignalTextIcon.setVisibility(View.VISIBLE);
             mMobileSignalText.setText(getSignalLevelString(dBm));
+        } else if (mSignalClusterStyle == SIGNAL_CLUSTER_STYLE_TEXT_ICON) {
+            mMobileGroup.setVisibility(View.VISIBLE);
+            mMobileSignalText.setText(getSignalLevelString(dBm));
+            mMobileSignalTextIcon.setVisibility(View.GONE);
         } else {
             mMobileGroup.setVisibility(View.GONE);
         }
