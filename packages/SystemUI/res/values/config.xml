@@ -51,6 +51,9 @@
     <!-- When true, show 1/2G networks as 3G. -->
     <bool name="config_showMin3G">false</bool>
 
+    <!-- When true, show 1xRTT and CDMA networks as 3G. Inherit config_showMin3G is true -->
+    <bool name="config_showMore3G">false</bool>
+
     <!-- Show rotation lock button in phone-style notification panel. -->
     <bool name="config_showRotationLock">true</bool>
 
