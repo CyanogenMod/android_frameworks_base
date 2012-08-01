@@ -94,21 +94,6 @@ CommandsInterface {
             p.readInt(); // - perso_unblock_retries
             status.addApplication(ca);
         }
-        int appIndex = -1;
-        appIndex = status.getGsmUmtsSubscriptionAppIndex();
-        Log.d(LOG_TAG, "This is a CDMA PHONE " + appIndex);
-
-        if (numApplications > 0) {
-            IccCardApplication application = status.getApplication(appIndex);
-            mAid = application.aid;
-            mUSIM = application.app_type == IccCardApplication.AppType.APPTYPE_USIM;
-            mSetPreferredNetworkType = mPreferredNetworkType;
-
-            if (TextUtils.isEmpty(mAid))
-                mAid = "";
-            Log.d(LOG_TAG, "mAid " + mAid);
-        }
-
         return status;
     }
 
