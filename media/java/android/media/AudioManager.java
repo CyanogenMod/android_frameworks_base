@@ -2407,42 +2407,6 @@ public class AudioManager {
         }
     }
 
-     /**
-     * Indicate wired accessory connection state change.
-     * @param device type of device connected/disconnected (AudioManager.DEVICE_OUT_xxx)
-     * @param state  new connection state: 1 connected, 0 disconnected
-     * @param name   device name
-     * {@hide}
-     */
-    public void setWiredDeviceConnectionState(int device, int state, String name) {
-        IAudioService service = getService();
-        try {
-            service.setWiredDeviceConnectionState(device, state, name);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Dead object in setWiredDeviceConnectionState "+e);
-        }
-    }
-
-     /**
-     * Indicate A2DP sink connection state change.
-     * @param device Bluetooth device connected/disconnected
-     * @param state  new connection state (BluetoothProfile.STATE_xxx)
-     * @return a delay in ms that the caller should wait before broadcasting
-     * BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED intent.
-     * {@hide}
-     */
-    public int setBluetoothA2dpDeviceConnectionState(BluetoothDevice device, int state) {
-        IAudioService service = getService();
-        int delay = 0;
-        try {
-            delay = service.setBluetoothA2dpDeviceConnectionState(device, state);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Dead object in setBluetoothA2dpDeviceConnectionState "+e);
-        } finally {
-            return delay;
-        }
-    }
-
     /** {@hide} */
     public IRingtonePlayer getRingtonePlayer() {
         try {
