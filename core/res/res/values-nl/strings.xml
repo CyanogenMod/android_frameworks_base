@@ -141,7 +141,7 @@
     <string name="global_action_lock" msgid="2844945191792119712">"Schermvergrendeling"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Uitschakelen"</string>
     <string name="global_action_reboot">"Herstarten"</string>
-    <string name="global_action_choose_profile">"Kies profiel"</string>
+    <string name="global_action_choose_profile">"Profiel"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Stille modus"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Geluid is UIT"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Geluid is AAN"</string>
@@ -749,7 +749,7 @@
     <string name="gadget_host_error_inflating" msgid="2613287218853846830">"Fout bij uitbreiden van widget"</string>
     <string name="ime_action_go" msgid="8320845651737369027">"Ga"</string>
     <string name="ime_action_search" msgid="658110271822807811">"Zoeken"</string>
-    <string name="ime_action_send" msgid="2316166556349314424">"Verzenden"</string>
+    <string name="ime_action_send" msgid="2316166556349314424">"Zenden"</string>
     <string name="ime_action_next" msgid="3138843904009813834">"Volgende"</string>
     <string name="ime_action_done" msgid="8971516117910934605">"Gereed"</string>
     <string name="ime_action_default" msgid="2840921885558045721">"Uitvoeren"</string>
@@ -780,11 +780,11 @@
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Automodus ingeschakeld"</string>
     <string name="car_mode_disable_notification_message" msgid="668663626721675614">"Selecteer dit om de automodus af te sluiten."</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"Tethering of hotspot actief"</string>
-    <string name="tethered_notification_message" msgid="3067108323903048927">"Aanraken om te configureren"</string>
+    <string name="tethered_notification_message" msgid="3067108323903048927">"Tik om te configureren"</string>
     <string name="throttle_warning_notification_title" msgid="4890894267454867276">"Hoog mobiel gegevensgebruik"</string>
-    <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Raak aan voor meer informatie over mobiel gegevensgebruik"</string>
+    <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Tik voor meer informatie over mobiel gegevensgebruik"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"Mobiele gegevenslimiet overschreden"</string>
-    <string name="throttled_notification_message" msgid="4712369856601275146">"Raak aan voor meer informatie over mobiel gegevensgebruik"</string>
+    <string name="throttled_notification_message" msgid="4712369856601275146">"Tik voor meer informatie over mobiel gegevensgebruik"</string>
     <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"USB-opslag ontkoppelen\u2026"</string>
     <string name="progress_unmounting" product="default" msgid="5556813978958789471">"SD-kaart ontkoppelen\u2026"</string>
     <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"USB-opslag wissen\u2026"</string>
