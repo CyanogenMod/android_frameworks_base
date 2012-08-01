@@ -1314,5 +1314,7 @@
     <string name="weather_NW">NW</string>
 
     <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Geen gegevens</string>
     <string name="weather_tap_to_refresh">Vernieuwen</string>
+    <string name="weather_refreshing">Vernieuwen\u2026</string>
 </resources>
