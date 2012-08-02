@@ -630,7 +630,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
     protected Object
     responseCallList(Parcel p) {
         int num;
-        int voiceSettings;
+        boolean isVideo;
         ArrayList<DriverCall> response;
         DriverCall dc;
         int dataAvail = p.dataAvail();
@@ -649,38 +649,35 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
 
         for (int i = 0 ; i < num ; i++) {
 
-            dc = new DriverCall();
+            dc                      = new DriverCall();
+            dc.state                = DriverCall.stateFromCLCC(p.readInt());
+            dc.index                = p.readInt();
+            dc.TOA                  = p.readInt();
+            dc.isMpty               = (0 != p.readInt());
+            dc.isMT                 = (0 != p.readInt());
+            dc.als                  = p.readInt();
+            dc.isVoice              = (0 != p.readInt());
+            isVideo                 = (0 != p.readInt());
+            dc.isVoicePrivacy       = (0 != p.readInt());
+            dc.number               = p.readString();
+            int np                  = p.readInt();
+            dc.numberPresentation   = DriverCall.presentationFromCLIP(np);
+            dc.name                 = p.readString();
+            dc.namePresentation     = p.readInt();
+            int uusInfoPresent      = p.readInt();
 
-            dc.state = DriverCall.stateFromCLCC(p.readInt());
             Log.d(LOG_TAG, "state = " + dc.state);
-            dc.index = p.readInt();
             Log.d(LOG_TAG, "index = " + dc.index);
-            dc.TOA = p.readInt();
             Log.d(LOG_TAG, "state = " + dc.TOA);
-            dc.isMpty = (0 != p.readInt());
             Log.d(LOG_TAG, "isMpty = " + dc.isMpty);
-            dc.isMT = (0 != p.readInt());
             Log.d(LOG_TAG, "isMT = " + dc.isMT);
-            dc.als = p.readInt();
             Log.d(LOG_TAG, "als = " + dc.als);
-            voiceSettings = p.readInt();
-            dc.isVoice = (0 == voiceSettings) ? false : true;
             Log.d(LOG_TAG, "isVoice = " + dc.isVoice);
-            dc.isVoicePrivacy =  (0 != p.readInt());
-            //Some Samsung magic data for Videocalls
-            voiceSettings = p.readInt();
-            //printing it to cosole for later investigation
-            Log.d(LOG_TAG, "Samsung magic = " + voiceSettings);
-            dc.number = p.readString();
+            Log.d(LOG_TAG, "isVideo = " + isVideo);
             Log.d(LOG_TAG, "number = " + dc.number);
-            int np = p.readInt();
             Log.d(LOG_TAG, "np = " + np);
-            dc.numberPresentation = DriverCall.presentationFromCLIP(np);
-            dc.name = p.readString();
             Log.d(LOG_TAG, "name = " + dc.name);
-            dc.namePresentation = p.readInt();
             Log.d(LOG_TAG, "namePresentation = " + dc.namePresentation);
-            int uusInfoPresent = p.readInt();
             Log.d(LOG_TAG, "uusInfoPresent = " + uusInfoPresent);
 
             if (uusInfoPresent == 1) {
