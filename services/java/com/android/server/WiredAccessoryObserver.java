@@ -107,6 +107,14 @@ class WiredAccessoryObserver extends UEventObserver {
             Slog.w(TAG, "This kernel does not have usb audio support");
         }
 
+        // Monitor Samsung USB audio
+        uei = new UEventInfo("dock", BIT_USB_HEADSET_DGTL, BIT_USB_HEADSET_ANLG);
+        if (uei.checkSwitchExists()) {
+            retVal.add(uei);
+        } else {
+            Slog.w(TAG, "This kernel does not have samsung usb dock audio support");
+        }
+
         // Monitor HDMI
         //
         // If the kernel has support for the "hdmi_audio" switch, use that.  It will be signalled
@@ -135,6 +143,7 @@ class WiredAccessoryObserver extends UEventObserver {
     private int mHeadsetState;
     private int mPrevHeadsetState;
     private String mHeadsetName;
+    private boolean dockAudioEnabled = false;
 
     private final Context mContext;
     private final WakeLock mWakeLock;  // held while there is a pending route change
@@ -148,22 +157,45 @@ class WiredAccessoryObserver extends UEventObserver {
         mWakeLock.setReferenceCounted(false);
         mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 
+        File f = new File("/sys/class/switch/dock/state");
+        if (f!=null && f.exists()) {
+            // Listen out for changes to the Dock Audio Settings
+            context.registerReceiver(new SettingsChangedReceiver(),
+            new IntentFilter("com.cyanogenmod.settings.SamsungDock"), null, null);
+        }
         context.registerReceiver(new BootCompletedReceiver(),
             new IntentFilter(Intent.ACTION_BOOT_COMPLETED), null, null);
     }
 
-    private final class BootCompletedReceiver extends BroadcastReceiver {
-      @Override
-      public void onReceive(Context context, Intent intent) {
-        // At any given time accessories could be inserted
-        // one on the board, one on the dock and one on HDMI:
-        // observe three UEVENTs
-        init();  // set initial status
-        for (int i = 0; i < uEventInfo.size(); ++i) {
-            UEventInfo uei = uEventInfo.get(i);
-            startObserving("DEVPATH="+uei.getDevPath());
+    private final class SettingsChangedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            Slog.e(TAG, "Recieved a Settings Changed Action " + action);
+            if (action.equals("com.cyanogenmod.settings.SamsungDock")) {
+                String data = intent.getStringExtra("data");
+                Slog.e(TAG, "Recieved a Dock Audio change " + data);
+                if (data != null && data.equals("1")) {
+                    dockAudioEnabled = true;
+                } else {
+                    dockAudioEnabled = false;
+                }
+            }
         }
-      }
+    }
+
+    private final class BootCompletedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // At any given time accessories could be inserted
+            // one on the board, one on the dock, one on the samsung dock and one on HDMI:
+            // observe all UEVENTs that have a valid switch supported by the Kernel
+            init();  // set initial status
+            for (int i = 0; i < uEventInfo.size(); ++i) {
+                UEventInfo uei = uEventInfo.get(i);
+                startObserving("DEVPATH="+uei.getDevPath());
+            }
+        }
     }
 
     @Override
@@ -173,6 +205,16 @@ class WiredAccessoryObserver extends UEventObserver {
         try {
             String devPath = event.get("DEVPATH");
             String name = event.get("SWITCH_NAME");
+            if (name.equals("dock")) {
+                // Samsung USB Audio Jack is non-sensing - so must be enabled manually
+                // The choice is made in the GalaxyS2Settings.apk
+                // device/samsung/i9100/DeviceSettings/src/com/cyanogenmod/settings/device/DockFragmentActivity.java
+                // This sends an Intent to this class
+                if (!dockAudioEnabled) {
+                    Slog.e(TAG, "Ignoring dock event as Audio routing disabled " + event);
+                    return;
+                }
+            }
             int state = Integer.parseInt(event.get("SWITCH_STATE"));
             updateState(devPath, name, state);
         } catch (NumberFormatException e) {
@@ -180,8 +222,7 @@ class WiredAccessoryObserver extends UEventObserver {
         }
     }
 
-    private synchronized final void updateState(String devPath, String name, int state)
-    {
+    private synchronized final void updateState(String devPath, String name, int state) {
         for (int i = 0; i < uEventInfo.size(); ++i) {
             UEventInfo uei = uEventInfo.get(i);
             if (devPath.equals(uei.getDevPath())) {
