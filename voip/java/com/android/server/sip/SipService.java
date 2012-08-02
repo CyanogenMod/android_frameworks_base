@@ -282,6 +282,18 @@ public final class SipService extends ISipService.Stub {
         }
     }
 
+    private String determineLocalIp(SipProfile localProfile) {
+        try {
+            DatagramSocket s = new DatagramSocket();
+            s.connect(InetAddress.getByName(localProfile.getSipDomain()), 80);
+            return s.getLocalAddress().getHostAddress();
+        } catch (IOException e) {
+            if (DEBUG) Log.d(TAG, "determineLocalIp()", e);
+            // dont do anything; there should be a connectivity change going
+            return null;
+        }
+    }
+
     private SipSessionGroupExt createGroup(SipProfile localProfile)
             throws SipException {
         String key = localProfile.getUriString();
@@ -353,7 +365,7 @@ public final class SipService extends ISipService.Stub {
             SipProfile localProfile, int maxInterval) {
         if ((mIntervalMeasurementProcess == null)
                 && (mKeepAliveInterval == -1)
-                && isBehindNAT(mLocalIp)) {
+                && isBehindNAT(mLocalIp, localProfile)) {
             Log.d(TAG, "start NAT port mapping timeout measurement on "
                     + localProfile.getUriString());
 
@@ -426,7 +438,7 @@ public final class SipService extends ISipService.Stub {
                 : mKeepAliveInterval;
     }
 
-    private boolean isBehindNAT(String address) {
+    private boolean isPrivateAddress(String address) {
         try {
             byte[] d = InetAddress.getByName(address).getAddress();
             if ((d[0] == 10) ||
@@ -437,10 +449,29 @@ public final class SipService extends ISipService.Stub {
                 return true;
             }
         } catch (UnknownHostException e) {
-            Log.e(TAG, "isBehindAT()" + address, e);
+            Log.e(TAG, "isPrivateIP()" + address, e);
         }
         return false;
     }
+
+    private boolean isBehindNAT(String address, SipProfile localProfile) {
+        if (isPrivateAddress(address)) {
+            if (isPrivateAddress(localProfile.getSipDomain())) {
+                if (DEBUG) {
+                    Log.d(TAG, "isBehindNAT()" + address
+                            + " is false because client and server are private");
+                }
+                return false;
+            }
+            if (DEBUG) {
+                Log.d(TAG, "isBehindNAT()" + address
+                        + " is true because client is private and server is public");
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     private class SipSessionGroupExt extends SipSessionAdapter {
         private SipSessionGroup mSipGroup;
@@ -999,7 +1030,8 @@ public final class SipService extends ISipService.Stub {
                         restart(duration);
 
                         SipProfile localProfile = mSession.getLocalProfile();
-                        if ((mKeepAliveSession == null) && (isBehindNAT(mLocalIp)
+                        if ((mKeepAliveSession == null) 
+                                && (isBehindNAT(determineLocalIp(localProfile), localProfile)
                                 || localProfile.getSendKeepAlive())) {
                             startKeepAliveProcess(getKeepAliveInterval());
                         }
