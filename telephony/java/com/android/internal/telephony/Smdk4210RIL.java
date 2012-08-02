@@ -631,6 +631,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
     responseCallList(Parcel p) {
         int num;
         int voiceSettings;
+        int videoSettings;
         ArrayList<DriverCall> response;
         DriverCall dc;
         int dataAvail = p.dataAvail();
@@ -666,11 +667,10 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             voiceSettings = p.readInt();
             dc.isVoice = (0 == voiceSettings) ? false : true;
             Log.d(LOG_TAG, "isVoice = " + dc.isVoice);
+            // For samsungs videocall feature
+            videoSettings = p.readInt();
+            Log.d(LOG_TAG, "isVideo = " + videoSettings);
             dc.isVoicePrivacy =  (0 != p.readInt());
-            //Some Samsung magic data for Videocalls
-            voiceSettings = p.readInt();
-            //printing it to cosole for later investigation
-            Log.d(LOG_TAG, "Samsung magic = " + voiceSettings);
             dc.number = p.readString();
             Log.d(LOG_TAG, "number = " + dc.number);
             int np = p.readInt();
