@@ -1300,4 +1300,12 @@ public class LockPatternUtils {
         setBoolean(Settings.Secure.LOCK_BEFORE_UNLOCK, enabled);
     }
 
+    /**
+     * @hide
+     * Get the lock-before-unlock option (show widgets before the secure
+     * unlock screen).
+     */
+    public boolean getLockBeforeUnlock() {
+        return getBoolean(Settings.Secure.LOCK_BEFORE_UNLOCK, false);
+    }
 }
