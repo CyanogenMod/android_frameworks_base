@@ -145,4 +145,11 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Skærmen roterer automatisk."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Skærmen er nu låst i liggende retning."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Skærmen er nu låst i stående retning."</string>
+
+    <!-- **** CYANOGENMOD ADDITIONS START **** -->
+    <!-- Translated by Morten Jørgensen fidoble@gmail.com -->
+
+    <string name="powerwidget_screen_timeout_toast">Timeout for skærmen er sat til: %1$d %2$s</string>
+
+    <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
