@@ -1879,4 +1879,59 @@
   <java-symbol type="string" name="perf_profile_bal" />
   <java-symbol type="string" name="perf_profile_perf" />
 
+  <!-- Options that show upon long-pressing a key on the physical keyboard -->
+  <java-symbol type="string" name="symbol_picker_0" />
+  <java-symbol type="string" name="symbol_picker_1" />
+  <java-symbol type="string" name="symbol_picker_2" />
+  <java-symbol type="string" name="symbol_picker_3" />
+  <java-symbol type="string" name="symbol_picker_4" />
+  <java-symbol type="string" name="symbol_picker_5" />
+  <java-symbol type="string" name="symbol_picker_7" />
+  <java-symbol type="string" name="symbol_picker_a" />
+  <java-symbol type="string" name="symbol_picker_A" />
+  <java-symbol type="string" name="symbol_picker_c" />
+  <java-symbol type="string" name="symbol_picker_C" />
+  <java-symbol type="string" name="symbol_picker_closing_parenthesis" />
+  <java-symbol type="string" name="symbol_picker_comma" />
+  <java-symbol type="string" name="symbol_picker_d" />
+  <java-symbol type="string" name="symbol_picker_D" />
+  <java-symbol type="string" name="symbol_picker_dollar" />
+  <java-symbol type="string" name="symbol_picker_e" />
+  <java-symbol type="string" name="symbol_picker_E" />
+  <java-symbol type="string" name="symbol_picker_equal" />
+  <java-symbol type="string" name="symbol_picker_exclamation" />
+  <java-symbol type="string" name="symbol_picker_g" />
+  <java-symbol type="string" name="symbol_picker_G" />
+  <java-symbol type="string" name="symbol_picker_gt" />
+  <java-symbol type="string" name="symbol_picker_i" />
+  <java-symbol type="string" name="symbol_picker_I" />
+  <java-symbol type="string" name="symbol_picker_l" />
+  <java-symbol type="string" name="symbol_picker_L" />
+  <java-symbol type="string" name="symbol_picker_lt" />
+  <java-symbol type="string" name="symbol_picker_minus" />
+  <java-symbol type="string" name="symbol_picker_n" />
+  <java-symbol type="string" name="symbol_picker_N" />
+  <java-symbol type="string" name="symbol_picker_o" />
+  <java-symbol type="string" name="symbol_picker_O" />
+  <java-symbol type="string" name="symbol_picker_opening_parenthesis" />
+  <java-symbol type="string" name="symbol_picker_percent" />
+  <java-symbol type="string" name="symbol_picker_plus" />
+  <java-symbol type="string" name="symbol_picker_question" />
+  <java-symbol type="string" name="symbol_picker_quote" />
+  <java-symbol type="string" name="symbol_picker_r" />
+  <java-symbol type="string" name="symbol_picker_R" />
+  <java-symbol type="string" name="symbol_picker_s" />
+  <java-symbol type="string" name="symbol_picker_S" />
+  <java-symbol type="string" name="symbol_picker_slash" />
+  <java-symbol type="string" name="symbol_picker_star" />
+  <java-symbol type="string" name="symbol_picker_sym" />
+  <java-symbol type="string" name="symbol_picker_t" />
+  <java-symbol type="string" name="symbol_picker_T" />
+  <java-symbol type="string" name="symbol_picker_u" />
+  <java-symbol type="string" name="symbol_picker_U" />
+  <java-symbol type="string" name="symbol_picker_y" />
+  <java-symbol type="string" name="symbol_picker_Y" />
+  <java-symbol type="string" name="symbol_picker_z" />
+  <java-symbol type="string" name="symbol_picker_Z" />
+
 </resources>
