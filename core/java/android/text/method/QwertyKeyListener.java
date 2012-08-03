@@ -434,77 +434,74 @@ public class QwertyKeyListener extends BaseKeyListener {
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static SparseArray<String> PICKER_SETS =
-                        new SparseArray<String>();
+    private static SparseArray<Integer> SYM_PICKER_RES_ID =
+                        new SparseArray<Integer>();
+
     static {
-        PICKER_SETS.put('A', "\u00C0\u00C1\u00C2\u00C4\u00C6\u00C3\u00C5\u0104\u0100");
-        PICKER_SETS.put('C', "\u00C7\u0106\u010C");
-        PICKER_SETS.put('D', "\u010E");
-        PICKER_SETS.put('E', "\u00C8\u00C9\u00CA\u00CB\u0118\u011A\u0112");
-        PICKER_SETS.put('G', "\u011E");
-        PICKER_SETS.put('L', "\u0141");
-        PICKER_SETS.put('I', "\u00CC\u00CD\u00CE\u00CF\u012A\u0130");
-        PICKER_SETS.put('N', "\u00D1\u0143\u0147");
-        PICKER_SETS.put('O', "\u00D8\u0152\u00D5\u00D2\u00D3\u00D4\u00D6\u014C");
-        PICKER_SETS.put('R', "\u0158");
-        PICKER_SETS.put('S', "\u015A\u0160\u015E");
-        PICKER_SETS.put('T', "\u0164");
-        PICKER_SETS.put('U', "\u00D9\u00DA\u00DB\u00DC\u016E\u016A");
-        PICKER_SETS.put('Y', "\u00DD\u0178");
-        PICKER_SETS.put('Z', "\u0179\u017B\u017D");
-        PICKER_SETS.put('a', "\u00E0\u00E1\u00E2\u00E4\u00E6\u00E3\u00E5\u0105\u0101");
-        PICKER_SETS.put('c', "\u00E7\u0107\u010D");
-        PICKER_SETS.put('d', "\u010F");
-        PICKER_SETS.put('e', "\u00E8\u00E9\u00EA\u00EB\u0119\u011B\u0113");
-        PICKER_SETS.put('g', "\u011F");
-        PICKER_SETS.put('i', "\u00EC\u00ED\u00EE\u00EF\u012B\u0131");
-        PICKER_SETS.put('l', "\u0142");
-        PICKER_SETS.put('n', "\u00F1\u0144\u0148");
-        PICKER_SETS.put('o', "\u00F8\u0153\u00F5\u00F2\u00F3\u00F4\u00F6\u014D");
-        PICKER_SETS.put('r', "\u0159");
-        PICKER_SETS.put('s', "\u00A7\u00DF\u015B\u0161\u015F");
-        PICKER_SETS.put('t', "\u0165");
-        PICKER_SETS.put('u', "\u00F9\u00FA\u00FB\u00FC\u016F\u016B");
-        PICKER_SETS.put('y', "\u00FD\u00FF");
-        PICKER_SETS.put('z', "\u017A\u017C\u017E");
-        PICKER_SETS.put(KeyCharacterMap.PICKER_DIALOG_INPUT,
-                             "\u2026\u00A5\u2022\u00AE\u00A9\u00B1[]{}\\|");
-        PICKER_SETS.put('/', "\\");
-
-        // From packages/inputmethods/LatinIME/res/xml/kbd_symbols.xml
-
-        PICKER_SETS.put('1', "\u00b9\u00bd\u2153\u00bc\u215b");
-        PICKER_SETS.put('2', "\u00b2\u2154");
-        PICKER_SETS.put('3', "\u00b3\u00be\u215c");
-        PICKER_SETS.put('4', "\u2074");
-        PICKER_SETS.put('5', "\u215d");
-        PICKER_SETS.put('7', "\u215e");
-        PICKER_SETS.put('0', "\u207f\u2205");
-        PICKER_SETS.put('$', "\u00a2\u00a3\u20ac\u00a5\u20a3\u20a4\u20b1");
-        PICKER_SETS.put('%', "\u2030");
-        PICKER_SETS.put('*', "\u2020\u2021");
-        PICKER_SETS.put('-', "\u2013\u2014");
-        PICKER_SETS.put('+', "\u00b1");
-        PICKER_SETS.put('(', "[{<");
-        PICKER_SETS.put(')', "]}>");
-        PICKER_SETS.put('!', "\u00a1");
-        PICKER_SETS.put('"', "\u201c\u201d\u00ab\u00bb\u02dd");
-        PICKER_SETS.put('?', "\u00bf");
-        PICKER_SETS.put(',', "\u201a\u201e");
-
-        // From packages/inputmethods/LatinIME/res/xml/kbd_symbols_shift.xml
-
-        PICKER_SETS.put('=', "\u2260\u2248\u221e");
-        PICKER_SETS.put('<', "\u2264\u00ab\u2039");
-        PICKER_SETS.put('>', "\u2265\u00bb\u203a");
+        SYM_PICKER_RES_ID.put('A', com.android.internal.R.string.symbol_picker_A);
+        SYM_PICKER_RES_ID.put('C', com.android.internal.R.string.symbol_picker_C);
+        SYM_PICKER_RES_ID.put('D', com.android.internal.R.string.symbol_picker_D);
+        SYM_PICKER_RES_ID.put('E', com.android.internal.R.string.symbol_picker_E);
+        SYM_PICKER_RES_ID.put('G', com.android.internal.R.string.symbol_picker_G);
+        SYM_PICKER_RES_ID.put('L', com.android.internal.R.string.symbol_picker_L);
+        SYM_PICKER_RES_ID.put('I', com.android.internal.R.string.symbol_picker_I);
+        SYM_PICKER_RES_ID.put('N', com.android.internal.R.string.symbol_picker_N);
+        SYM_PICKER_RES_ID.put('O', com.android.internal.R.string.symbol_picker_O);
+        SYM_PICKER_RES_ID.put('R', com.android.internal.R.string.symbol_picker_R);
+        SYM_PICKER_RES_ID.put('S', com.android.internal.R.string.symbol_picker_S);
+        SYM_PICKER_RES_ID.put('T', com.android.internal.R.string.symbol_picker_T);
+        SYM_PICKER_RES_ID.put('U', com.android.internal.R.string.symbol_picker_U);
+        SYM_PICKER_RES_ID.put('Y', com.android.internal.R.string.symbol_picker_Y);
+        SYM_PICKER_RES_ID.put('Z', com.android.internal.R.string.symbol_picker_Z);
+        SYM_PICKER_RES_ID.put('a', com.android.internal.R.string.symbol_picker_a);
+        SYM_PICKER_RES_ID.put('c', com.android.internal.R.string.symbol_picker_c);
+        SYM_PICKER_RES_ID.put('d', com.android.internal.R.string.symbol_picker_d);
+        SYM_PICKER_RES_ID.put('e', com.android.internal.R.string.symbol_picker_e);
+        SYM_PICKER_RES_ID.put('g', com.android.internal.R.string.symbol_picker_g);
+        SYM_PICKER_RES_ID.put('i', com.android.internal.R.string.symbol_picker_i);
+        SYM_PICKER_RES_ID.put('l', com.android.internal.R.string.symbol_picker_l);
+        SYM_PICKER_RES_ID.put('n', com.android.internal.R.string.symbol_picker_n);
+        SYM_PICKER_RES_ID.put('o', com.android.internal.R.string.symbol_picker_o);
+        SYM_PICKER_RES_ID.put('r', com.android.internal.R.string.symbol_picker_r);
+        SYM_PICKER_RES_ID.put('s', com.android.internal.R.string.symbol_picker_s);
+        SYM_PICKER_RES_ID.put('t', com.android.internal.R.string.symbol_picker_t);
+        SYM_PICKER_RES_ID.put('u', com.android.internal.R.string.symbol_picker_u);
+        SYM_PICKER_RES_ID.put('y', com.android.internal.R.string.symbol_picker_y);
+        SYM_PICKER_RES_ID.put('z', com.android.internal.R.string.symbol_picker_z);
+        SYM_PICKER_RES_ID.put('1', com.android.internal.R.string.symbol_picker_1);
+        SYM_PICKER_RES_ID.put('2', com.android.internal.R.string.symbol_picker_2);
+        SYM_PICKER_RES_ID.put('3', com.android.internal.R.string.symbol_picker_3);
+        SYM_PICKER_RES_ID.put('4', com.android.internal.R.string.symbol_picker_4);
+        SYM_PICKER_RES_ID.put('5', com.android.internal.R.string.symbol_picker_5);
+        SYM_PICKER_RES_ID.put('7', com.android.internal.R.string.symbol_picker_7);
+        SYM_PICKER_RES_ID.put('0', com.android.internal.R.string.symbol_picker_0);
+        SYM_PICKER_RES_ID.put(KeyCharacterMap.PICKER_DIALOG_INPUT,com.android.internal.R.string.symbol_picker_sym);
+        SYM_PICKER_RES_ID.put('/', com.android.internal.R.string.symbol_picker_slash);
+        SYM_PICKER_RES_ID.put('$', com.android.internal.R.string.symbol_picker_dollar);
+        SYM_PICKER_RES_ID.put('%', com.android.internal.R.string.symbol_picker_percent);
+        SYM_PICKER_RES_ID.put('*', com.android.internal.R.string.symbol_picker_star);
+        SYM_PICKER_RES_ID.put('-', com.android.internal.R.string.symbol_picker_minus);
+        SYM_PICKER_RES_ID.put('+', com.android.internal.R.string.symbol_picker_plus);
+        SYM_PICKER_RES_ID.put('(', com.android.internal.R.string.symbol_picker_opening_parenthesis);
+        SYM_PICKER_RES_ID.put(')', com.android.internal.R.string.symbol_picker_closing_parenthesis);
+        SYM_PICKER_RES_ID.put('!', com.android.internal.R.string.symbol_picker_exclamation);
+        SYM_PICKER_RES_ID.put('"', com.android.internal.R.string.symbol_picker_quote);
+        SYM_PICKER_RES_ID.put('?', com.android.internal.R.string.symbol_picker_question);
+        SYM_PICKER_RES_ID.put(',', com.android.internal.R.string.symbol_picker_comma);
+        SYM_PICKER_RES_ID.put('=', com.android.internal.R.string.symbol_picker_equal);
+        SYM_PICKER_RES_ID.put('<', com.android.internal.R.string.symbol_picker_lt);
+        SYM_PICKER_RES_ID.put('>', com.android.internal.R.string.symbol_picker_gt);
     };
 
     private boolean showCharacterPicker(View view, Editable content, char c,
                                         boolean insert, int count) {
-        String set = PICKER_SETS.get(c);
-        if (set == null) {
+        Integer resId = SYM_PICKER_RES_ID.get(c);
+
+        if (resId == null) {
             return false;
         }
+
+        String set = view.getContext().getString(resId);
 
         if (count == 1) {
             new CharacterPickerDialog(view.getContext(),
