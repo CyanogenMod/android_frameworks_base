@@ -1290,4 +1290,134 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"System"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Bluetooth-lyd"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Udfør"</string>
+
+    <!-- **** CYANOGENMOD ADDITIONS START **** -->
+    <!-- Translated by Morten Jørgensen fidoble@gmail.com -->
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Standard</string>
+    <string name="profileNameWork">Arbejde</string>
+    <string name="profileNameHome">Hjem</string>
+    <string name="profileNameSilent">Lydløs</string>
+    <string name="profileNameNight">Nat</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Andre</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Genstart tablet</string>
+    <string name="reboot_system" product="default">Genstart telefon</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Skærmbillede</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Genstart</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Genstarter\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Telefonen vil genstarte.</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Genstart</string>
+
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">Profil</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_preventpower">Undgå tænd/sluk-tasten</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_preventpower">Tillader et program at tilsidesætte tænd/sluk-tasten</string>
+
+    <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
+    <string name="wifi_available_sign_in_detailed"><xliff:g id="wifi_network_ssid">%1$s</xliff:g></string>
+
+    <!-- Long-press back kill application -->
+    <string name="app_killed_message">Applikation lukket</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tropisk Storm</string>
+    <string name="weather_2">Orkan</string>
+    <string name="weather_3">Kraftige Tordenbyger</string>
+    <string name="weather_4">Tordenbyger</string>
+    <string name="weather_5">Blandet Regn og Sne</string>
+    <string name="weather_6">Blandet Regn og Slud</string>
+    <string name="weather_7">Blandet Sne og Slud</string>
+    <string name="weather_8">Islag</string>
+    <string name="weather_9">Støvregn</string>
+    <string name="weather_10">Isslag</string>
+    <string name="weather_11">Mest Skyet</string>
+    <string name="weather_12">Mest Skyet</string>
+    <string name="weather_13">Let Sne</string>
+    <string name="weather_14">Lette Snebyger</string>
+    <string name="weather_15">Snefygning</string>
+    <string name="weather_16">Sne</string>
+    <string name="weather_17">Hagl</string>
+    <string name="weather_18">Slud</string>
+    <string name="weather_19">Støv</string>
+    <string name="weather_20">Tåget</string>
+    <string name="weather_21">Dis</string>
+    <string name="weather_22">Røget</string>
+    <string name="weather_23">Stærk Blæst</string>
+    <string name="weather_24">Blæsende</string>
+    <string name="weather_25">Koldt</string>
+    <string name="weather_26">Overskyet</string>
+    <string name="weather_27">Mest Skyet</string> <!-- Night -->
+    <string name="weather_28">Mest Skyet</string> <!-- Day -->
+    <string name="weather_29">Delvist Skyet</string> <!-- Night -->
+    <string name="weather_30">Delvist Skyet</string> <!-- Day -->
+    <string name="weather_31">Klart</string> <!-- Night -->
+    <string name="weather_32">Solrigt</string>
+    <string name="weather_33">Rimelig</string> <!-- Night -->
+    <string name="weather_34">Rimelig</string> <!-- Day -->
+    <string name="weather_35">Blandet Regn og Hagl</string>
+    <string name="weather_36">Varmt</string>
+    <string name="weather_37">Lokale Tordenbyger</string>
+    <string name="weather_38">Spredte Tordenbyger</string>
+    <string name="weather_39">Spredte Tordenbyger</string>
+    <string name="weather_40">Spredte Byger</string>
+    <string name="weather_41">Kraftig Sne</string>
+    <string name="weather_42">Spredte Snebyger</string>
+    <string name="weather_43">Kraftig Sne</string>
+    <string name="weather_44">Delvist Skyet</string>
+    <string name="weather_45">Tordenbyger</string>
+    <string name="weather_46">Snebyger</string>
+    <string name="weather_47">Lokale Tordenbyger</string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NØ</string>
+    <string name="weather_E">Ø</string>
+    <string name="weather_SE">SØ</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SV</string>
+    <string name="weather_W">V</string>
+    <string name="weather_NW">NV</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Ingen data</string>
+    <string name="weather_tap_to_refresh">Tryk for at opdatere</string>
+    <string name="weather_refreshing">Opdaterer</string>
+
+    <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
