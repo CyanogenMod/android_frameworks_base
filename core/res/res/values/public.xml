@@ -1993,6 +1993,7 @@
      Resources added in version 17 of the platform (Jelly Bean MR1)
      =============================================================== -->
   <eat-comment />
+<<<<<<< HEAD
   <public type="attr" name="supportsRtl" id="0x010103af" />
   <public type="attr" name="textDirection" id="0x010103b0" />
   <public type="attr" name="textAlignment" id="0x010103b1" />
