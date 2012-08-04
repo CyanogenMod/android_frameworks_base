@@ -58,6 +58,10 @@ const char CameraParameters::KEY_PICTURE_COUNT[] = "picture-count";
 const char CameraParameters::KEY_MAX_BURST_PICTURE_COUNT[] = "max-burst-picture-count";
 const char CameraParameters::KEY_SUPPORTED_CONTINUOUS_AF[] = "continuous-af-mode";
 const char CameraParameters::KEY_SUPPORTED_CAPTURE_MODES[] = "capture-mode-values";
+const char CameraParameters::KEY_PANORAMA_MODE[] = "panorama-mode";
+const char CameraParameters::PANORAMA_MODE_NOT_INPROGRESS[] = "not-in-progress";
+const char CameraParameters::PANORAMA_MODE_INPROGRESS[] = "in-progress";
+const char CameraParameters::KEY_TAKING_PICTURE_ZOOM[] = "taking-picture-zoom";
 #endif
 const char CameraParameters::KEY_PICTURE_SIZE[] = "picture-size";
 const char CameraParameters::KEY_SUPPORTED_PICTURE_SIZES[] = "picture-size-values";

@@ -189,6 +189,10 @@ public:
     static const char CAPTURE_MODE_HDR[];
     static const char CAPTURE_MODE_HJR[];
     static const char CAPTURE_MODE_PANORAMA[];
+    static const char KEY_PANORAMA_MODE[];
+    static const char PANORAMA_MODE_NOT_INPROGRESS[];
+    static const char PANORAMA_MODE_INPROGRESS[];
+    static const char KEY_TAKING_PICTURE_ZOOM[];
 #endif
     // The dimensions for captured pictures in pixels (width x height).
     // Example value: "1024x768". Read/write.
