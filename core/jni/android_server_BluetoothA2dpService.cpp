@@ -39,6 +39,13 @@ namespace android {
 #ifdef HAVE_BLUETOOTH
 static jmethodID method_onSinkPropertyChanged;
 static jmethodID method_onConnectSinkResult;
+static jmethodID method_onGetPlayStatusRequest;
+static jfieldID field_mTrackName;
+static jfieldID field_mArtistName;
+static jfieldID field_mAlbumName;
+static jfieldID field_mMediaNumber;
+static jfieldID field_mMediaCount;
+static jfieldID field_mDuration;
 
 typedef struct {
     JavaVM *vm;
@@ -49,6 +56,7 @@ typedef struct {
 
 static native_data_t *nat = NULL;  // global native data
 static void onConnectSinkResult(DBusMessage *msg, void *user, void *n);
+static void onStatusReply(DBusMessage *msg, void *user, void *n);
 
 static Properties sink_properties[] = {
         {"State", DBUS_TYPE_STRING},
@@ -216,6 +224,92 @@ static jboolean avrcpVolumeUpNative(JNIEnv *env, jobject object,
     return JNI_FALSE;
 }
 
+static jboolean sendMetaDataNative(JNIEnv *env, jobject obj,
+                                     jstring path) {
+#ifdef HAVE_BLUETOOTH
+    ALOGV(__FUNCTION__);
+    if (nat) {
+        jstring title, artist, album, media_number, total_media_count, playing_time;
+        const char *c_title, *c_artist, *c_album, *c_media_number;
+        const char *c_total_media_count, *c_playing_time;
+        const char *c_path = env->GetStringUTFChars(path, NULL);
+        title = (jstring) env->GetObjectField(obj, field_mTrackName);
+        artist = (jstring) env->GetObjectField(obj, field_mArtistName);
+        album = (jstring) env->GetObjectField(obj, field_mAlbumName);
+        media_number = (jstring) env->GetObjectField(obj, field_mMediaNumber);
+        total_media_count = (jstring) env->GetObjectField(obj, field_mMediaCount);
+        playing_time = (jstring) env->GetObjectField(obj, field_mDuration);
+
+        c_title = env->GetStringUTFChars(title, NULL);
+        c_artist = env->GetStringUTFChars(artist, NULL);
+        c_album = env->GetStringUTFChars(album, NULL);
+        c_media_number = env->GetStringUTFChars(media_number, NULL);
+        c_total_media_count = env->GetStringUTFChars(total_media_count, NULL);
+        c_playing_time = env->GetStringUTFChars(playing_time, NULL);
+
+        bool ret = dbus_func_args_async(env, nat->conn, -1, onStatusReply, NULL, nat,
+                           c_path, "org.bluez.Control", "UpdateMetaData",
+                           DBUS_TYPE_STRING, &c_title,
+                           DBUS_TYPE_STRING, &c_artist,
+                           DBUS_TYPE_STRING, &c_album,
+                           DBUS_TYPE_STRING, &c_media_number,
+                           DBUS_TYPE_STRING, &c_total_media_count,
+                           DBUS_TYPE_STRING, &c_playing_time,
+                           DBUS_TYPE_INVALID);
+
+        env->ReleaseStringUTFChars(path, c_path);
+        env->ReleaseStringUTFChars(title, c_title);
+        env->ReleaseStringUTFChars(artist, c_artist);
+        env->ReleaseStringUTFChars(album, c_album);
+        env->ReleaseStringUTFChars(media_number, c_media_number);
+        env->ReleaseStringUTFChars(total_media_count, c_total_media_count);
+        env->ReleaseStringUTFChars(playing_time, c_playing_time);
+
+        return ret ? JNI_TRUE : JNI_FALSE;
+    }
+#endif
+    return JNI_FALSE;
+}
+
+
+static jboolean sendPlayStatusNative(JNIEnv *env, jobject object, jstring path,
+                                        jint duration, jint position, jint play_status) {
+#ifdef HAVE_BLUETOOTH
+    ALOGV(__FUNCTION__);
+    if (nat) {
+        const char *c_path = env->GetStringUTFChars(path, NULL);
+        bool ret = dbus_func_args_async(env, nat->conn, -1, onStatusReply, NULL, nat,
+                           c_path, "org.bluez.Control", "UpdatePlayStatus",
+                           DBUS_TYPE_UINT32, &duration,
+                           DBUS_TYPE_UINT32, &position,
+                           DBUS_TYPE_UINT32, &play_status,
+                           DBUS_TYPE_INVALID);
+        env->ReleaseStringUTFChars(path, c_path);
+        return ret ? JNI_TRUE : JNI_FALSE;
+    }
+#endif
+    return JNI_FALSE;
+}
+
+static jboolean sendEventNative(JNIEnv *env, jobject object,
+                                     jstring path, jint event_id, jlong data) {
+#ifdef HAVE_BLUETOOTH
+    ALOGV(__FUNCTION__);
+    if (nat) {
+        const char *c_path = env->GetStringUTFChars(path, NULL);
+
+        bool ret = dbus_func_args_async(env, nat->conn, -1, onStatusReply, NULL, nat,
+                           c_path, "org.bluez.Control", "UpdateNotification",
+                           DBUS_TYPE_UINT16, &event_id,
+                           DBUS_TYPE_UINT64, &data,
+                           DBUS_TYPE_INVALID);
+        env->ReleaseStringUTFChars(path, c_path);
+        return ret ? JNI_TRUE : JNI_FALSE;
+    }
+#endif
+    return JNI_FALSE;
+}
+
 static jboolean avrcpVolumeDownNative(JNIEnv *env, jobject object,
                                      jstring path) {
 #ifdef HAVE_BLUETOOTH
@@ -264,7 +358,12 @@ DBusHandlerResult a2dp_event_filter(DBusMessage *msg, JNIEnv *env) {
         env->DeleteLocalRef(path);
         result = DBUS_HANDLER_RESULT_HANDLED;
         return result;
-    } else {
+    } else if (dbus_message_is_signal(msg, "org.bluez.Control",
+                                      "GetPlayStatus")) {
+        env->CallVoidMethod(nat->me, method_onGetPlayStatusRequest);
+        result = DBUS_HANDLER_RESULT_HANDLED;
+        return result;
+    }else {
         ALOGV("... ignored");
     }
     if (env->ExceptionCheck()) {
@@ -304,6 +403,17 @@ void onConnectSinkResult(DBusMessage *msg, void *user, void *n) {
     free(user);
 }
 
+void onStatusReply(DBusMessage *msg, void *user, void *n) {
+    ALOGV(__FUNCTION__);
+
+    native_data_t *nat = (native_data_t *)n;
+    DBusError err;
+    dbus_error_init(&err);
+    if (dbus_set_error_from_message(&err, msg)) {
+        LOG_AND_FREE_DBUS_ERROR(&err);
+    }
+}
+
 
 #endif
 
@@ -321,6 +431,9 @@ static JNINativeMethod sMethods[] = {
                                     (void *)getSinkPropertiesNative},
     {"avrcpVolumeUpNative", "(Ljava/lang/String;)Z", (void*)avrcpVolumeUpNative},
     {"avrcpVolumeDownNative", "(Ljava/lang/String;)Z", (void*)avrcpVolumeDownNative},
+    {"sendMetaDataNative", "(Ljava/lang/String;)Z", (void*)sendMetaDataNative},
+    {"sendEventNative", "(Ljava/lang/String;IJ)Z", (void*)sendEventNative},
+    {"sendPlayStatusNative", "(Ljava/lang/String;III)Z", (void*)sendPlayStatusNative},
 };
 
 int register_android_server_BluetoothA2dpService(JNIEnv *env) {
@@ -335,6 +448,14 @@ int register_android_server_BluetoothA2dpService(JNIEnv *env) {
                                           "(Ljava/lang/String;[Ljava/lang/String;)V");
     method_onConnectSinkResult = env->GetMethodID(clazz, "onConnectSinkResult",
                                                          "(Ljava/lang/String;Z)V");
+    method_onGetPlayStatusRequest = env->GetMethodID(clazz, "onGetPlayStatusRequest",
+                                          "()V");
+    field_mTrackName = env->GetFieldID(clazz, "mTrackName", "Ljava/lang/String;");
+    field_mArtistName = env->GetFieldID(clazz, "mArtistName", "Ljava/lang/String;");
+    field_mAlbumName = env->GetFieldID(clazz, "mAlbumName", "Ljava/lang/String;");
+    field_mMediaNumber = env->GetFieldID(clazz, "mMediaNumber", "Ljava/lang/String;");
+    field_mMediaCount = env->GetFieldID(clazz, "mMediaCount", "Ljava/lang/String;");
+    field_mDuration = env->GetFieldID(clazz, "mDuration", "Ljava/lang/String;");
 #endif
 
     return AndroidRuntime::registerNativeMethods(env,

@@ -3896,4 +3896,22 @@
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
 
+<!-- ===============================================================
+     AVRCP 1.3 Meta Data Resources
+     =============================================================== -->
+  <eat-comment />
+
+  <java-symbol type="array" name="avrcp_meta_changed_intents" />
+  <java-symbol type="array" name="avrcp_playstate_changed_intents" />
+  <java-symbol type="array" name="avrcp_special_extra_keys" />
+  <java-symbol type="array" name="avrcp_overridable_extra_keys" />
+  <java-symbol type="string" name="com.amazon.mp3.metachanged_track" />
+  <java-symbol type="string" name="com.amazon.mp3.metachanged_artist" />
+  <java-symbol type="string" name="com.amazon.mp3.metachanged_album" />
+  <java-symbol type="string" name="com.amazon.mp3.metachanged_id" />
+  <java-symbol type="string" name="com.amazon.mp3.playstatechanged_track" />
+  <java-symbol type="string" name="com.amazon.mp3.playstatechanged_artist" />
+  <java-symbol type="string" name="com.amazon.mp3.playstatechanged_album" />
+  <java-symbol type="string" name="com.amazon.mp3.playstatechanged_id" />
+
 </resources>
