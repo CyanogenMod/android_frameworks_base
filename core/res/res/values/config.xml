@@ -1105,4 +1105,7 @@
          applied. -->
     <bool name="config_hasRemovableLid">false</bool>
 
+    <!-- If true, adds support for no delay A2DP in Samsung devices -->
+    <bool name="config_noDelayInATwoDP">false</bool>
+
 </resources>
