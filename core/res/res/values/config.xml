@@ -23,11 +23,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Component to be used as the status bar service.  Must implement the IStatusBar
          interface.  This name is in the ComponentName flattened format (package/class)  -->
-    <string name="config_statusBarComponent">com.android.systemui/com.android.systemui.statusbar.StatusBarService</string>
+    <string name="config_statusBarComponent" translatable="false">com.android.systemui/com.android.systemui.statusbar.StatusBarService</string>
 
     <!-- Do not translate. Defines the slots for the right-hand side icons.  That is to say, the
          icons in the status bar that are not notifications. -->
-    <string-array name="config_statusBarIcons">
+    <string-array name="config_statusBarIcons" translatable="false">
        <item><xliff:g id="id">ime</xliff:g></item>
        <item><xliff:g id="id">sync_failing</xliff:g></item>
        <item><xliff:g id="id">sync_active</xliff:g></item>
@@ -94,7 +94,7 @@
          based on the hardware -->
     <!-- An Array of "[Connection name],[ConnectivityManager connection type],
          [associated radio-type],[priority]  -->
-    <string-array translatable="false" name="networkAttributes">
+    <string-array name="networkAttributes" translatable="false">
         <item>"wifi,1,1,1"</item>
         <item>"mobile,0,0,0"</item>
         <item>"mobile_mms,2,0,2"</item>
@@ -107,7 +107,7 @@
          based on the hardware -->
     <!-- An Array of "[ConnectivityManager connectionType],
                       [# simultaneous connection types]"  -->
-    <string-array translatable="false" name="radioAttributes">
+    <string-array name="radioAttributes" translatable="false">
         <item>"1,1"</item>
         <item>"0,1"</item>
     </string-array>
@@ -115,36 +115,36 @@
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
          USB interfaces.  If the device doesn't want to support tething over USB this should
          be empty.  An example would be "usb.*" -->
-    <string-array translatable="false" name="config_tether_usb_regexs">
+    <string-array name="config_tether_usb_regexs" translatable="false">
     </string-array>
 
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
          Wifi interfaces.  If the device doesn't want to support tethering over Wifi this
          should be empty.  An example would be "softap.*" -->
-    <string-array translatable="false" name="config_tether_wifi_regexs">
+    <string-array name="config_tether_wifi_regexs" translatable="false">
     </string-array>
 
     <!-- Dhcp range (min, max) to use for tethering purposes -->
-    <string-array translatable="false" name="config_tether_dhcp_range">
+    <string-array name="config_tether_dhcp_range" translatable="false">
     </string-array>
 
     <!-- Regex array of allowable upstream ifaces for tethering - for example if you want
          tethering on a new interface called "foo2" add <item>"foo\\d"</item> to the array -->
     <!-- Interfaces will be prioritized according to the order listed -->
-    <string-array translatable="false" name="config_tether_upstream_regexs">
+    <string-array name="config_tether_upstream_regexs" translatable="false">
     </string-array>
 
     <!-- Boolean indicating if we require the use of DUN on mobile for tethering.
          Note that this defaults to false so that if you move to a carrier that
          hasn't configured anything tethering will still work.  If you'd rather
          make the device untetherable on unconfigured devices, set to true -->
-    <bool translatable="false" name="config_tether_dun_required">false</bool>
+    <bool name="config_tether_dun_required">false</bool>
 
     <!-- String containing the apn value for tethering.  May be overriden by secure settings
          TETHER_DUN_APN.  Value is a comma separated series of strings:
          "name,apn,proxy,port,username,password,server,mmsc,mmsproxy,mmsport,mcc,mnc,auth,type"
          note that empty fields can be ommitted: "name,apn,,,,,,,,,310,260,,DUN" -->
-    <string translatable="false" name="config_tether_apndata"></string>
+    <string name="config_tether_apndata" translatable="false"></string>
 
 
     <!-- Flag indicating whether the keyguard should be bypassed when
@@ -355,13 +355,13 @@
 
     <!-- Component name of the default wallpaper. This will be ImageWallpaper if not 
          specified -->
-    <string name="default_wallpaper_component">@null</string>
+    <string name="default_wallpaper_component" translatable="false">@null</string>
 
     <!-- Component name of the service providing network location support. -->
-    <string name="config_networkLocationProvider">@null</string>
+    <string name="config_networkLocationProvider" translatable="false">@null</string>
 
     <!-- Component name of the service providing geocoder API support. -->
-    <string name="config_geocodeProvider">@null</string>
+    <string name="config_geocodeProvider" translatable="false">@null</string>
 
     <!-- Boolean indicating if current platform supports bluetooth SCO for off call
     use cases -->
@@ -377,7 +377,7 @@
     <integer name="config_datause_throttle_kbitsps">300</integer>
 
     <!-- The default iface on which to monitor data use -->
-    <string name="config_datause_iface">rmnet0</string>
+    <string name="config_datause_iface" translatable="false">rmnet0</string>
 
     <!-- The default reduced-datarate notification mask -->
     <!-- 2 means give warning -->
@@ -440,12 +440,12 @@
     <bool name="config_enablePermissionsManagement">false</bool>
 
     <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
-    <string-array name="config_twoDigitNumberPattern">
+    <string-array name="config_twoDigitNumberPattern" translatable="false">
     </string-array>
 
     <!-- Contains a list of vendor specific services to start via ServiceManager.
          Format for each item is: <path_to_service_jar_file>:<service_class_name> -->
-    <string-array name="config_vendorServices">
+    <string-array name="config_vendorServices" translatable="false">
     </string-array>
 
     <!-- ************************************************
@@ -461,7 +461,7 @@
     <!-- these values should be default for all phone devices! -->
 
     <!-- toggles weather device is tablet or phone. right now,
-    tablets are know to have soft buttons, but phones have harware
+    tablets are know to have soft buttons, but phones have hardware
     buttons. this might change in the future - especially when the
     honeycomb modifications become available for phones -->
     <bool name="cm_default_is_tablet">false</bool>
@@ -616,15 +616,15 @@
     <!-- Set and Unsets WiMAX -->
     <bool name="config_wimaxEnabled">false</bool>
     <!-- Location of the wimax framwork jar location -->
-    <string name="config_wimaxServiceJarLocation"></string>
+    <string name="config_wimaxServiceJarLocation" translatable="false"></string>
     <!-- Location of the wimax native library locaiton -->
-    <string name="config_wimaxNativeLibLocation"></string>
+    <string name="config_wimaxNativeLibLocation" translatable="false"></string>
     <!-- Name of the wimax manager class -->
-    <string name="config_wimaxManagerClassname"></string>
+    <string name="config_wimaxManagerClassname" translatable="false"></string>
     <!-- Name of the wimax service class -->
-    <string name="config_wimaxServiceClassname"></string>
+    <string name="config_wimaxServiceClassname" translatable="false"></string>
     <!-- Name of the wimax state tracker clas -->
-    <string name="config_wimaxStateTrackerClassname"></string>
+    <string name="config_wimaxStateTrackerClassname" translatable="false"></string>
 
     <!-- Set to true if the RSSI should always display CDMA signal strength
          even on EVDO -->
@@ -638,7 +638,7 @@
     <bool name="config_duplicate_port_omadm_wappush">false</bool>
 
     <!-- Location of the Authentec framework jar -->
-    <string name="config_authentecJarLocation"></string>
+    <string name="config_authentecJarLocation" translatable="false"></string>
 
     <!-- True if the Sym key should open the InputMethodPicker (deault) -->
     <bool name="config_symKeyShowsImePicker">true</bool>
