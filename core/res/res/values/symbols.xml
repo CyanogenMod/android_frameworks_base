@@ -1839,6 +1839,7 @@
   <java-symbol type="bool" name="config_samsung_stk" />
   <java-symbol type="integer" name="config_wallpaperMaxWidth" />
   <java-symbol type="string" name="config_legacyUmsLunFile" />
+  <java-symbol type="bool" name="config_hasRemovableLid" />
 
   <!-- Hardware Key ReMapping -->
   <java-symbol type="integer" name="config_deviceHardwareKeys" />
