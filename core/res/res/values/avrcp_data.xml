@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* Copyright 2012, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- meta changed intents -->
+    <string-array translatable="false" name="avrcp_meta_changed_intents">
+        <!-- Android Stock Music App / Google Play Music App -->
+        <item>com.android.music.metachanged</item>
+        <!-- HTC Music App -->
+        <item>com.htc.music.metachanged</item>
+        <!-- WinAmp -->
+        <item>com.nullsoft.winamp.metachanged</item>
+        <!-- MIUI Music App -->
+        <item>com.miui.player.metachanged</item>
+        <!-- Sony Ericson Music App -->
+        <item>com.sonyericsson.music.metachanged</item>
+        <!-- RDIO Music App -->
+        <item>com.rdio.android.metachanged</item>
+        <!-- PowerAmp Music App -->
+        <item>com.maxmpz.audioplayer.metachanged</item>
+        <!-- Samsung Music App -->
+        <item>com.samsung.sec.android.MusicPlayer.metachanged</item>
+        <item>com.sec.android.app.music.metachanged</item>
+        <!-- Amazon Music App -->
+        <item>com.amazon.mp3.metachanged</item>
+        <!-- Rhapsody Music App -->
+        <item>com.rhapsody.metachanged</item>
+        <!-- Player Pro Music App -->
+        <item>com.tbig.playerpro.metachanged</item>
+        <!-- Doubletwist Music App - breaks system-->
+        <!-- <item>com.doubleTwist.androidPlayer.metachanged</item> -->
+        <!-- Last.fm scrobbler intent -->
+        <item>fm.last.android.metachanged</item>
+    </string-array>
+
+    <!-- playstate changed intents -->
+    <string-array translatable="false" name="avrcp_playstate_changed_intents">
+        <!-- Android Stock Music App / Google Play Music App -->
+        <item>com.android.music.playstatechanged</item>
+        <!-- HTC Music App -->
+        <item>com.htc.music.playstatechanged</item>
+        <!-- WinAmp -->
+        <item>com.nullsoft.winamp.playstatechanged</item>
+        <!-- MIUI Music App -->
+        <item>com.miui.player.playstatechanged</item>
+        <!-- Sony Ericson Music App -->
+        <item>com.sonyericsson.music.playstatechanged</item>
+        <!-- RDIO Music App -->
+        <item>com.rdio.android.playstatechanged</item>
+        <!-- PowerAmp Music App -->
+        <item>com.maxmpz.audioplayer.playstatechanged</item>
+        <!-- Samsung Music App -->
+        <item>com.samsung.sec.android.MusicPlayer.playstatechanged</item>
+        <item>com.sec.android.app.music.playstatechanged</item>
+        <!-- Amazon Music App -->
+        <item>com.amazon.mp3.playstatechanged</item>
+        <!-- Rhapsody Music App -->
+        <item>com.rhapsody.playstatechanged</item>
+        <!-- Player Pro Music App -->
+        <item>com.tbig.playerpro.playstatechanged</item>
+        <!-- Doubletwist Music App  - breaks system-->
+        <!-- <item>com.doubleTwist.androidPlayer.playstatechanged</item> -->
+        <!-- Last.fm scrobbler intent -->
+        <item>fm.last.android.playstatechanged</item>
+        <!-- A simple last.fm scrobbler intent -->
+        <item>com.adam.aslfms.notify.playstatechanged</item>
+        <!-- Scrobble Droid scrobbler intent -->
+        <item>net.jjc1138.android.scrobbler.action.MUSIC_STATUS</item>
+    </string-array>
+
+    <!-- intents with special extra keys -->
+    <string-array translatable="false" name="avrcp_special_extra_keys">
+        <!-- Amazon Music App -->
+        <item>com.amazon.mp3.metachanged</item>
+        <item>com.amazon.mp3.playstatechanged</item>
+    </string-array>
+
+    <!-- overridable extra keys -->
+    <string-array translatable="false" name="avrcp_overridable_extra_keys">
+        <item>track</item>
+        <item>artist</item>
+        <item>album</item>
+        <item>id</item>
+    </string-array>
+
+    <!-- mapping of special extra keys -->
+    <string name="com.amazon.mp3.metachanged_track" translatable="false">com.amazon.mp3.track</string>
+    <string name="com.amazon.mp3.metachanged_artist" translatable="false">com.amazon.mp3.artist</string>
+    <string name="com.amazon.mp3.metachanged_album" translatable="false">com.amazon.mp3.album</string>
+    <string name="com.amazon.mp3.metachanged_id" translatable="false">com.amazon.mp3.id</string>
+
+    <string name="com.amazon.mp3.playstatechanged_track" translatable="false">com.amazon.mp3.track</string>
+    <string name="com.amazon.mp3.playstatechanged_artist" translatable="false">com.amazon.mp3.artist</string>
+    <string name="com.amazon.mp3.playstatechanged_album" translatable="false">com.amazon.mp3.album</string>
+    <string name="com.amazon.mp3.playstatechanged_id" translatable="false">com.amazon.mp3.id</string>
+
+</resources>
