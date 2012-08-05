@@ -459,7 +459,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         try {
             boolean showNav = mWindowManager.hasNavigationBar();
             if (DEBUG) Slog.v(TAG, "hasNavigationBar=" + showNav);
-            if (showNav) {
+            if (showNav && !mRecreating) {
                 mNavigationBarView =
                     (NavigationBarView) View.inflate(context, R.layout.navigation_bar, null);
 
@@ -2463,11 +2463,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         copyNotifications(notifications, mNotificationData);
         mNotificationData.clear();
 
-        if (mNavigationBarView != null) {
-            WindowManagerImpl.getDefault().removeView(mNavigationBarView);
-        }
         makeStatusBarView();
-        addNavigationBar();
+        repositionNavigationBar();
 
         // recreate StatusBarIconViews.
         for (int i = 0; i < nIcons; i++) {
