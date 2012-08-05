@@ -1375,4 +1375,7 @@
     <string name="weather_tap_to_refresh">Aperte para atualizar</string>
     <string name="weather_refreshing">Atualizando</string>
     <string name="lockscreen_discharging">Descarregando, <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%%</xliff:g></string>
+    <string name="permlab_preventpower">modificação do botão liga/desl.</string>
+    <string name="permdesc_preventpower">Permite uma aplicação substituir o botão liga/desl.</string>
+    <string name="storage_sd_dock_card">Cartão SD do dock</string>
 </resources>
