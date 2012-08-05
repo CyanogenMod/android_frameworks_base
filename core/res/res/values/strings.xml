@@ -3359,6 +3359,8 @@
     <string name="find">Find</string>
     <!-- ActionBar action to use the current selection to perform a web search [CHAR-LIMIT=16] -->
     <string name="websearch">Web Search</string>
+    <!-- ActionBar action to open the current selection as a url in the browser [CHAR-LIMIT=16] -->
+    <string name="openurl">Open Url</string>
 
     <!-- Network positioning notification ticker. The name of the user (e.g. John Doe) who sent
          the request is shown as a dynamic string. -->
