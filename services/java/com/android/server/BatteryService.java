@@ -107,10 +107,6 @@ class BatteryService extends Binder {
     private boolean mBatteryLevelCritical;
     private int mInvalidCharger;
 
-    private int mDockBatteryStatus;
-    private int mDockBatteryLevel;
-    private String mDockBatteryPresent;
-
     private int mLastBatteryStatus;
     private int mLastBatteryHealth;
     private boolean mLastBatteryPresent;
@@ -120,10 +116,18 @@ class BatteryService extends Binder {
     private boolean mLastBatteryLevelCritical;
     private int mLastInvalidCharger;
 
+    private boolean mHasDockBattery;
+
+    private int mDockBatteryStatus;
+    private int mDockBatteryLevel;
+    private boolean mDockBatteryPresent;
+
+    private int mLastDockBatteryStatus;
+    private int mLastDockBatteryLevel;
+    private boolean mLastDockBatteryPresent;
+
     private int mLowBatteryWarningLevel;
     private int mLowBatteryCloseWarningLevel;
-
-    private boolean mHasDockBattery;
 
     private int mPlugType;
     private int mLastPlugType = -1; // Extra state so we can detect first run
@@ -287,6 +291,14 @@ class BatteryService extends Binder {
         shutdownIfNoPower();
         shutdownIfOverTemp();
 
+        boolean dockBatteryChanged = false;
+        if (mHasDockBattery &&
+                (mDockBatteryLevel != mLastDockBatteryLevel ||
+                mDockBatteryStatus != mLastDockBatteryStatus ||
+                mDockBatteryPresent != mLastDockBatteryPresent)) {
+            dockBatteryChanged = true;
+        }
+
         if (mBatteryStatus != mLastBatteryStatus ||
                 mBatteryHealth != mLastBatteryHealth ||
                 mBatteryPresent != mLastBatteryPresent ||
@@ -294,7 +306,8 @@ class BatteryService extends Binder {
                 mPlugType != mLastPlugType ||
                 mBatteryVoltage != mLastBatteryVoltage ||
                 mBatteryTemperature != mLastBatteryTemperature ||
-                mInvalidCharger != mLastInvalidCharger) {
+                mInvalidCharger != mLastInvalidCharger ||
+                dockBatteryChanged) {
 
             if (mPlugType != mLastPlugType) {
                 if (mLastPlugType == BATTERY_PLUGGED_NONE) {
@@ -395,6 +408,12 @@ class BatteryService extends Binder {
             mLastBatteryTemperature = mBatteryTemperature;
             mLastBatteryLevelCritical = mBatteryLevelCritical;
             mLastInvalidCharger = mInvalidCharger;
+
+            if (mHasDockBattery) {
+                mLastDockBatteryLevel = mDockBatteryLevel;
+                mLastDockBatteryStatus = mDockBatteryStatus;
+                mLastDockBatteryPresent = mDockBatteryPresent;
+            }
         }
     }
 
@@ -419,9 +438,9 @@ class BatteryService extends Binder {
         intent.putExtra(BatteryManager.EXTRA_INVALID_CHARGER, mInvalidCharger);
 
         if (mHasDockBattery){
+            intent.putExtra(BatteryManager.EXTRA_DOCK_PRESENT, mDockBatteryPresent);
             intent.putExtra(BatteryManager.EXTRA_DOCK_STATUS, mDockBatteryStatus);
             intent.putExtra(BatteryManager.EXTRA_DOCK_LEVEL, mDockBatteryLevel);
-            intent.putExtra(BatteryManager.EXTRA_DOCK_AC_ONLINE, false);
         }
 
         if (false) {
