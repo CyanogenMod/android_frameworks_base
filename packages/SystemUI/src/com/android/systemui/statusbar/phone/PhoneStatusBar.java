@@ -73,6 +73,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.WindowManager.BadTokenException;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.FrameLayout;
@@ -738,8 +739,14 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         prepareNavigationBarView();
 
-        WindowManagerImpl.getDefault().addView(
-                mNavigationBarView, getNavigationBarLayoutParams());
+        try {
+            WindowManagerImpl.getDefault().addView(
+                    mNavigationBarView, getNavigationBarLayoutParams());
+        } catch (BadTokenException bte){
+            try {
+                Runtime.getRuntime().exec("killall com.android.systemui");
+            } catch (Exception ex) {}
+        }
     }
 
     private void repositionNavigationBar() {
