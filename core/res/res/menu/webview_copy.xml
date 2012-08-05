@@ -49,5 +49,10 @@
         android:title="@string/websearch"
         android:showAsAction="ifRoom|withText"
         />
+    <item android:id="@+id/openurl"
+        android:icon="?android:attr/actionModeWebSearchDrawable"
+        android:title="@string/openurl"
+        android:showAsAction="ifRoom|withText"
+        />
 </menu>
 

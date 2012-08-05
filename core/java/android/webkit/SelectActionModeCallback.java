@@ -21,7 +21,9 @@ import android.app.SearchManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.Browser;
+import android.util.Patterns;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ class SelectActionModeCallback implements ActionMode.Callback {
     private WebViewClassic mWebView;
     private ActionMode mActionMode;
     private boolean mIsTextSelected = true;
+    private Menu mMenu;
 
     void setWebView(WebViewClassic webView) {
         mWebView = webView;
@@ -52,7 +55,7 @@ class SelectActionModeCallback implements ActionMode.Callback {
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mode.getMenuInflater().inflate(com.android.internal.R.menu.webview_copy, menu);
-
+        mMenu = menu;
         final Context context = mWebView.getContext();
         mode.setTitle(context.getString(com.android.internal.R.string.textSelectionCABTitle));
         mode.setTitleOptionalHint(true);
@@ -76,8 +79,14 @@ class SelectActionModeCallback implements ActionMode.Callback {
         setMenuVisibility(menu, canCut, com.android.internal.R.id.cut);
         setMenuVisibility(menu, canCopy, com.android.internal.R.id.copy);
         setMenuVisibility(menu, canWebSearch, com.android.internal.R.id.websearch);
+        setOpenUrlVisibility();
         mActionMode = mode;
         return true;
+    }
+
+    protected void setOpenUrlVisibility() {
+        boolean isUrl = Patterns.WEB_URL.matcher(mWebView.getSelection()).matches();
+        setMenuVisibility(mMenu, isUrl, com.android.internal.R.id.openurl);
     }
 
     @Override
@@ -128,7 +137,13 @@ class SelectActionModeCallback implements ActionMode.Callback {
                 }
                 mWebView.getContext().startActivity(i);
                 break;
-
+            case com.android.internal.R.id.openurl:
+                String url = mWebView.getSelection();
+                if (!url.startsWith("https://") && !url.startsWith("http://")){
+                    url = "http://" + url;
+                }
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                mWebView.getContext().startActivity(browserIntent);
             default:
                 return false;
         }
