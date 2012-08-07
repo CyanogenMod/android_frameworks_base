@@ -941,4 +941,7 @@
          applied. -->
     <bool name="config_hasRemovableLid">false</bool>
 
+    <!-- Boolean to enable stk functionality on Samsung phones -->
+    <bool name="config_samsung_stk">false</bool>
+
 </resources>
