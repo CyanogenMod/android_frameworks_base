@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.cat;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -135,43 +136,43 @@ class CommandParamsFactory extends Handler {
             case DISPLAY_TEXT:
                 cmdPending = processDisplayText(cmdDet, ctlvs);
                 break;
-             case SET_UP_IDLE_MODE_TEXT:
-                 cmdPending = processSetUpIdleModeText(cmdDet, ctlvs);
-                 break;
-             case GET_INKEY:
+            case SET_UP_IDLE_MODE_TEXT:
+                cmdPending = processSetUpIdleModeText(cmdDet, ctlvs);
+                break;
+            case GET_INKEY:
                 cmdPending = processGetInkey(cmdDet, ctlvs);
                 break;
-             case GET_INPUT:
-                 cmdPending = processGetInput(cmdDet, ctlvs);
-                 break;
-             case SEND_DTMF:
-             case SEND_SMS:
-             case SEND_SS:
-             case SEND_USSD:
-                 cmdPending = processEventNotify(cmdDet, ctlvs);
-                 break;
-             case SET_UP_CALL:
-                 cmdPending = processSetupCall(cmdDet, ctlvs);
-                 break;
-             case REFRESH:
+            case GET_INPUT:
+                cmdPending = processGetInput(cmdDet, ctlvs);
+                break;
+            case SEND_DTMF:
+            case SEND_SMS:
+            case SEND_SS:
+            case SEND_USSD:
+                cmdPending = processEventNotify(cmdDet, ctlvs);
+                break;
+            case SET_UP_CALL:
+                cmdPending = processSetupCall(cmdDet, ctlvs);
+                break;
+            case REFRESH:
                 processRefresh(cmdDet, ctlvs);
                 cmdPending = false;
                 break;
-             case LAUNCH_BROWSER:
-                 cmdPending = processLaunchBrowser(cmdDet, ctlvs);
-                 break;
-             case PLAY_TONE:
+            case LAUNCH_BROWSER:
+                cmdPending = processLaunchBrowser(cmdDet, ctlvs);
+                break;
+            case PLAY_TONE:
                 cmdPending = processPlayTone(cmdDet, ctlvs);
                 break;
-             case PROVIDE_LOCAL_INFORMATION:
+            case PROVIDE_LOCAL_INFORMATION:
                 cmdPending = processProvideLocalInfo(cmdDet, ctlvs);
                 break;
-             case OPEN_CHANNEL:
-             case CLOSE_CHANNEL:
-             case RECEIVE_DATA:
-             case SEND_DATA:
-                 cmdPending = processBIPClient(cmdDet, ctlvs);
-                 break;
+            case OPEN_CHANNEL:
+            case CLOSE_CHANNEL:
+            case RECEIVE_DATA:
+            case SEND_DATA:
+                cmdPending = processBIPClient(cmdDet, ctlvs);
+                break;
             default:
                 // unsupported proactive commands
                 mCmdParams = new CommandParams(cmdDet);
@@ -643,7 +644,34 @@ class CommandParamsFactory extends Handler {
         }
 
         textMsg.responseNeeded = false;
-        mCmdParams = new DisplayTextParams(cmdDet, textMsg);
+
+        // samsung stk overlay
+        if (Resources.getSystem().getBoolean(com.android.internal.R.bool.config_samsung_stk)) {
+            String smscAddress = null;
+            String pdu = null;
+
+            ctlv = searchForTag(ComprehensionTlvTag.ADDRESS, ctlvs);
+            if (ctlv != null) {
+                smscAddress = ValueParser.retrieveSMSCaddress(ctlv);
+                CatLog.d(this, "The smsc address is " + smscAddress);
+            }
+            else {
+                CatLog.d(this, "The smsc address is null");
+            }
+
+            ctlv = searchForTag(ComprehensionTlvTag.SMS_TPDU, ctlvs);
+            if (ctlv != null) {
+                pdu = ValueParser.retrieveSMSTPDU(ctlv);
+                CatLog.d(this, "The SMS tpdu is " + pdu);
+            }
+            else {
+                CatLog.d(this, "The SMS tpdu is null");
+            }
+            mCmdParams = new SendSMSParams(cmdDet, textMsg, smscAddress, pdu);
+        }
+        else {
+            mCmdParams = new DisplayTextParams(cmdDet, textMsg);
+        }
 
         if (iconId != null) {
             mIconLoadState = LOAD_SINGLE_ICON;
