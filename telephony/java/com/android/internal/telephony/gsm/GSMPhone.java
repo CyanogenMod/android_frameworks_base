@@ -104,6 +104,7 @@ public class GSMPhone extends PhoneBase {
     // Instance Variables
     GsmCallTracker mCT;
     GsmServiceStateTracker mSST;
+    CatService mStkService;
     ArrayList <GsmMmiCode> mPendingMMIs = new ArrayList<GsmMmiCode>();
     SimPhoneBookInterfaceManager mSimPhoneBookIntManager;
     SimSmsInterfaceManager mSimSmsIntManager;
@@ -144,12 +145,15 @@ public class GSMPhone extends PhoneBase {
         mCT = new GsmCallTracker(this);
         mSST = new GsmServiceStateTracker (this);
         mSMS = new GsmSMSDispatcher(this, mSmsStorageMonitor, mSmsUsageMonitor);
+        IccFileHandler mIccFileHandler = mIccCard.get().getIccFileHandler();
         mDataConnectionTracker = new GsmDataConnectionTracker (this);
         if (!unitTestMode) {
             mSimPhoneBookIntManager = new SimPhoneBookInterfaceManager(this);
             mSimSmsIntManager = new SimSmsInterfaceManager(this, mSMS);
             mSubInfo = new PhoneSubInfo(this);
         }
+        mStkService = CatService.getInstance(mCM, mIccRecords, mContext, mIccFileHandler,
+                                             mIccCard.get(), getIccSmsInterfaceManager());
 
         mCM.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
         registerForSimRecordEvents();
@@ -215,6 +219,7 @@ public class GSMPhone extends PhoneBase {
             mPendingMMIs.clear();
 
             //Force all referenced classes to unregister their former registered events
+            mStkService.dispose();
             mCT.dispose();
             mDataConnectionTracker.dispose();
             mSST.dispose();
