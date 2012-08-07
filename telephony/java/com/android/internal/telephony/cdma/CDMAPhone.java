@@ -106,6 +106,7 @@ public class CDMAPhone extends PhoneBase {
     PhoneSubInfo mSubInfo;
     EriManager mEriManager;
     WakeLock mWakeLock;
+    CatService mCcatService;
 
     // mEriFileLoadedRegistrants are informed after the ERI text has been loaded
     private final RegistrantList mEriFileLoadedRegistrants = new RegistrantList();
@@ -165,11 +166,14 @@ public class CDMAPhone extends PhoneBase {
         mCdmaSSM = CdmaSubscriptionSourceManager.getInstance(context, mCM, this,
                 EVENT_CDMA_SUBSCRIPTION_SOURCE_CHANGED, null);
         mSMS = new CdmaSMSDispatcher(this, mSmsStorageMonitor, mSmsUsageMonitor);
+        IccFileHandler mIccFileHandler = mIccCard.get().getIccFileHandler();
         mDataConnectionTracker = new CdmaDataConnectionTracker (this);
         mRuimPhoneBookInterfaceManager = new RuimPhoneBookInterfaceManager(this);
         mRuimSmsInterfaceManager = new RuimSmsInterfaceManager(this, mSMS);
         mSubInfo = new PhoneSubInfo(this);
         mEriManager = new EriManager(this, context, EriManager.ERI_FROM_XML);
+        mCcatService = CatService.getInstance(mCM, mIccRecords, mContext,
+                mIccFileHandler, mIccCard.get(), getIccSmsInterfaceManager());
 
         mCM.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
         registerForRuimRecordEvents();
@@ -246,6 +250,7 @@ public class CDMAPhone extends PhoneBase {
             mRuimSmsInterfaceManager.dispose();
             mSubInfo.dispose();
             mEriManager.dispose();
+            mCcatService.dispose();
         }
     }
 

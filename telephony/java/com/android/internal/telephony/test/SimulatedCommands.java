@@ -17,6 +17,7 @@
 package com.android.internal.telephony.test;
 
 import android.os.AsyncResult;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
@@ -1524,4 +1525,20 @@ public final class SimulatedCommands extends BaseCommands
     }
 
     public boolean needsOldRilFeature(String feature) { return false; }
+
+    /**
+     * added samsung part to command interface
+     * @param h
+     * @param what
+     * @param obj
+     */
+    public void setOnCatSendSmsResult(Handler h, int what, Object obj) {
+    }
+
+    /**
+     *
+     * @param h
+     */
+    public void unSetOnCatSendSmsResult(Handler h) {
+    }
 }
