@@ -279,6 +279,14 @@ public class LocationManager {
         return provider;
     }
 
+    public void setGPSSource(String device) {
+        try {
+            mService.setGPSSource(device);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
     /**
      * Returns a list of the names of all known location providers.  All
      * providers are returned, including ones that are not permitted to be
