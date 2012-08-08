@@ -140,7 +140,14 @@ public class IccCardApplication {
             case 2: newState = AppState.APPSTATE_PIN; break;
             case 3: newState = AppState.APPSTATE_PUK; break;
             case 4: newState = AppState.APPSTATE_SUBSCRIPTION_PERSO; break;
-            case 5: newState = AppState.APPSTATE_READY; break;
+            // Consider RIL_APPSTATE_ILLEGAL also READY. Even if app state is
+            // RIL_APPSTATE_ILLEGAL (-1), ICC operations must be permitted.
+            // Network access requests will anyway be rejected and ME will
+            // be in limited service.
+            case -1:
+            case 5:
+            newState = AppState.APPSTATE_READY;
+            break;
             default:
                 throw new RuntimeException(
                             "Unrecognized RIL_AppState: " +state);
