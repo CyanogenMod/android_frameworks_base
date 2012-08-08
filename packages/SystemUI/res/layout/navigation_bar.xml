@@ -54,7 +54,6 @@
                 android:src="@drawable/ic_sysbar_back"
                 systemui:keyCode="4"
                 android:layout_weight="0"
-                android:scaleType="center"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight"
                 android:contentDescription="@string/accessibility_back"
                 />
