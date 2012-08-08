@@ -20,6 +20,7 @@ import android.app.ActivityManagerNative;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.UEventObserver;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -56,6 +57,8 @@ class RingerSwitchObserver extends UEventObserver {
     private Context mContext;
     private Context mUiContext;
     private VolumePanel mVolumePanel;
+    private Handler mHandler;
+    private Runnable mVolumeChangeUiRunnable;
 
     private final WakeLock mWakeLock;  // held while there is a pending route change
 
@@ -69,6 +72,14 @@ class RingerSwitchObserver extends UEventObserver {
                 mUiContext = null;
             }
         });
+
+        mHandler = new Handler();
+        mVolumeChangeUiRunnable = new Runnable() {
+            @Override
+            public void run() {
+                getVolumePanel().postVolumeChanged(AudioManager.STREAM_RING,AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+            }
+        };
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RingerSwitchObserver");
@@ -153,7 +164,7 @@ class RingerSwitchObserver extends UEventObserver {
                 }
 
                 // Raise UI
-                getVolumePanel().postVolumeChanged(AudioManager.STREAM_RING,AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                mHandler.post(mVolumeChangeUiRunnable);
 
             } catch (RemoteException e) {
             }
