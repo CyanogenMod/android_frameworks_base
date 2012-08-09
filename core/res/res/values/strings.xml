@@ -3691,6 +3691,9 @@
     <!-- Forecast unavailable -->
     <string name="weather_3200"></string>
 
+    <string name="sms_reply">SMS Reply</string>
+    <string name="sms_callback">Call</string>
+
     <!-- Lock screen Weather - Wind directions -->
     <string name="weather_N">N</string>
     <string name="weather_NE">NE</string>

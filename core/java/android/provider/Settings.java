@@ -3570,6 +3570,13 @@ public final class Settings {
         public static final String LOCK_SCREEN_OWNER_INFO = "lock_screen_owner_info";
 
         /**
+         * Setting to enable SMS on LockScreen.
+         * 1 -> Enabled , 0 -> Disabled
+         * @hide
+         */
+        public static final String LOCK_SCREEN_SMS = "lock_screen_sms";
+
+        /**
          * This preference enables showing the owner info on LockScren.
          * @hide
          */

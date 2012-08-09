@@ -75,8 +75,8 @@ public class SlidingTab extends ViewGroup {
      */
     private final int mOrientation;
 
-    private final Slider mLeftSlider;
-    private final Slider mRightSlider;
+    protected final Slider mLeftSlider;
+    protected final Slider mRightSlider;
     private Slider mCurrentSlider;
     private boolean mTracking;
     private float mThreshold;
@@ -153,7 +153,7 @@ public class SlidingTab extends ViewGroup {
      * {@link #target} is the target the user must drag the slider past to trigger the slider.
      *
      */
-    private static class Slider {
+    protected static class Slider {
         /**
          * Tab alignment - determines which side the tab should be drawn on
          */
@@ -286,7 +286,7 @@ public class SlidingTab extends ViewGroup {
             target.setVisibility(View.VISIBLE);
         }
 
-        void reset(boolean animate) {
+        public void reset(boolean animate) {
             setState(STATE_NORMAL);
             text.setVisibility(View.VISIBLE);
             text.setTextAppearance(text.getContext(), R.style.TextAppearance_SlidingTabNormal);
@@ -431,6 +431,19 @@ public class SlidingTab extends ViewGroup {
             target.clearAnimation();
             target.setVisibility(View.INVISIBLE);
         }
+
+        /**
+         * @hide used internally only
+         */
+        public void setIcon(Drawable imgDrawable){
+            tab.setImageDrawable(imgDrawable);
+        }
+
+        public void hideSlider(){
+            tab.setVisibility(View.INVISIBLE);
+            target.setVisibility(View.INVISIBLE);
+            text.setVisibility(View.INVISIBLE);
+        }
     }
 
     public SlidingTab(Context context) {
@@ -464,6 +477,14 @@ public class SlidingTab extends ViewGroup {
                 R.drawable.jog_tab_target_gray);
 
         // setBackgroundColor(0x80808080);
+    }
+
+    protected void setLeftTabDrawable(Drawable imgDrawable){
+        mLeftSlider.setIcon(imgDrawable);
+    }
+
+    protected void setRightTabDrawable(Drawable imgDrawable){
+        mRightSlider.setIcon(imgDrawable);
     }
 
     @Override

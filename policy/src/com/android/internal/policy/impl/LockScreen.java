@@ -644,6 +644,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         mUnlockWidget = findViewById(R.id.unlock_widget);
         mUnlockWidgetMethods = createUnlockMethods(mUnlockWidget);
 
+        initializeSMSTabUnlockView();
+
         if (DBG) Log.v(TAG, "*** LockScreen accel is "
                 + (mUnlockWidget.isHardwareAccelerated() ? "on":"off"));
     }
@@ -741,6 +743,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
     private boolean isSilentMode() {
         return mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
+    }
+
+    private void initializeSMSTabUnlockView(){
+        SMSTab SMSTabUnlockView = (SMSTab) findViewById(R.id.locksms);
+        View fillView = findViewById(R.id.fill_space);
+
+        if(SMSTabUnlockView != null)
+            SMSTabUnlockView.initializer(mCallback,fillView);
     }
 
     @Override
