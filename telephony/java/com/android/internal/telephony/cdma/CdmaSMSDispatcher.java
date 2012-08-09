@@ -207,6 +207,28 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
                     // The message was sent to a port, so concoct a URI for it.
                     dispatchPortAddressedPdus(pdus, smsHeader.portAddrs.destPort);
                 }
+            }
+           /*
+            * Check to see if we have a Virgin Mobile MMS
+            * If so, do extra processsing for Virgin Mobile's non-standard format.
+            * Otherwise, dispatch normal message.
+            */
+            if (sms.getOriginatingAddress().equals("9999999999")) {
+                Log.d(TAG, "Got a suspect SMS from the Virgin MMS originator");
+                    byte virginMMSPayload[] = null;
+                    try {
+                        int[] ourMessageRef = new int[1];
+                        virginMMSPayload = getVirginMMS(sms.getUserData(), ourMessageRef);
+                        if (virginMMSPayload == null) {
+                            Log.e(TAG, "Not a virgin MMS like we were expecting");
+                            throw new Exception("Not a Virgin MMS like we were expecting");
+                        } else {
+                            Log.d(TAG, "Sending our deflowered MMS to processCdmaWapPdu");
+                            return processCdmaWapPdu(virginMMSPayload, ourMessageRef[0], "9999999999");
+                        }
+                    } catch (Exception ourException) {
+                        Log.e(TAG, "Got an exception trying to get VMUS MMS data " + ourException);
+            }
             } else {
                 // Normal short and non-port-addressed message, dispatch it.
                 dispatchPdus(pdus);
@@ -216,30 +238,6 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
             // Process the message part.
             return processMessagePart(sms, smsHeader.concatRef, smsHeader.portAddrs);
         }
-
-       /*
-         * Check to see if we have a Virgin Mobile MMS
-         * If so, do extra processsing for Virgin Mobile's non-standard format.
-         * Otherwise, dispatch normal message.
-         */
-        if (sms.getOriginatingAddress().equals("9999999999")) {
-            Log.d(TAG, "Got a suspect SMS from the Virgin MMS originator");
-                byte virginMMSPayload[] = null;
-                try {
-                    int[] ourMessageRef = new int[1];
-                    virginMMSPayload = getVirginMMS(sms.getUserData(), ourMessageRef);
-                    if (virginMMSPayload == null) {
-                        Log.e(TAG, "Not a virgin MMS like we were expecting");
-                        throw new Exception("Not a Virgin MMS like we were expecting");
-                    } else {
-                        Log.d(TAG, "Sending our deflowered MMS to processCdmaWapPdu");
-                        return processCdmaWapPdu(virginMMSPayload, ourMessageRef[0], "9999999999");
-                    }
-                } catch (Exception ourException) {
-                    Log.e(TAG, "Got an exception trying to get VMUS MMS data " + ourException);
-                }
-        }
-        return dispatchNormalMessage(smsb);
     }
 
     private synchronized byte[] getVirginMMS(final byte[] someEncodedMMSData, int[] aMessageRef) throws Exception {
@@ -265,11 +263,7 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
             for (int j1 = 0; j1 < i1; j1++) {
                 abyte1[j1] = 0;
             }
-
-
-
-
-       desiredBitLength = i1 * 8;
+            desiredBitLength = i1 * 8;
             if (ourInputStream.available() < desiredBitLength) {
                 int availableBitLength = ourInputStream.available();
                 Log.e(TAG, "mmsVirginGetMsgId inStream.available() = " + availableBitLength + " wantedBits = " + desiredBitLength);
