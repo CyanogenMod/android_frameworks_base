@@ -163,7 +163,6 @@
                 android:layout_alignParentRight="true"
                 android:textSize="6sp"
                 android:textColor="?android:attr/textColorSecondary" />
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -203,7 +202,22 @@
 
     </RelativeLayout>
 
-    <Space android:layout_gravity="fill" />
+
+    <RelativeLayout
+        android:id="@+id/sms_lock_screen"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal" >
+            <com.android.internal.policy.impl.SMSTab
+                android:id="@+id/locksms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+             />
+    </RelativeLayout>
+
+
+    <Space android:layout_gravity="fill"
+        android:id="@+id/fill_space"/>
 
     <!-- emergency call button shown when sim is PUKd and tab_selector is hidden -->
     <Button

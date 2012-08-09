@@ -3824,6 +3824,13 @@
   <java-symbol type="id" name="update_time" />
   <java-symbol type="id" name="weather_temps_panel" />
 
+  <!-- Lock screen SMS -->
+  <java-symbol type="id" name="sms_lock_screen" />
+  <java-symbol type="id" name="locksms" />
+  <java-symbol type="id" name="fill_space" />
+  <java-symbol type="string" name="sms_reply" />
+  <java-symbol type="string" name="sms_callback" />
+
   <!-- Lock screen calendar -->
   <java-symbol type="drawable" name="ic_lock_idle_calendar" />
   <java-symbol type="id" name="calendar_panel" />
