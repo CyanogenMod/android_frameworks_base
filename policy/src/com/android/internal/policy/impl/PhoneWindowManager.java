@@ -3779,12 +3779,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         Slog.d(TAG,"Headset detect: Inside handleMessage() for IntentHandler" + (String)msg.obj);
             if (mSystemBooted) {
             sendIntents((String)msg.obj);
-            mBroadcastWakeLock.release();
             } else {
                 Log.e(TAG, "system not booted yet, send headset intent later");
                 mHeadsetIntent = true;
                 mHeadsetName = (String)msg.obj;
             }
+            mBroadcastWakeLock.release();
         }
     };
 
@@ -4728,7 +4728,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mHeadsetIntent) {
                 Log.e(TAG, "send headset intent after system booted");
                 sendIntents(mHeadsetName);
-                mBroadcastWakeLock.release();
             }
         }
     }
