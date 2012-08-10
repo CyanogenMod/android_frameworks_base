@@ -2480,7 +2480,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                         + mPreferredApn.numeric + ":" + mPreferredApn);
                 }
                 if ((mPreferredApn.numeric.equals(operator) && mPreferredApn.canHandleType(requestedApnType)) &&
-                    (mPreferredApn.bearer == 0 || mPreferredApn.bearer == networkType) && 
+                    (mPreferredApn.bearer == 0 || mPreferredApn.bearer == radioTech) && 
                     !apnList.contains(mPreferredApn))
                 {
                     apnList.add(mPreferredApn);
@@ -2491,7 +2491,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             // Add all the rest of the apns that can handle the requested type
             for (ApnSetting apn : mAllApns) {
                 if ((apn.canHandleType(requestedApnType)) &&
-                    (apn.bearer == 0 || apn.bearer == networkType || apn.bearer = radioTech) &&
+                    (apn.bearer == 0 || apn.bearer == radioTech) &&
                     !apnList.contains(apn))
                 {
                     if (DBG) log("apn info : " +apn.toString());
