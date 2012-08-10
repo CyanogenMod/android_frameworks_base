@@ -528,6 +528,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private int mPressOnAppSwitchBehavior = -1;
     private int mLongPressOnAppSwitchBehavior = -1;
 
+    private boolean mHomePressed;
+
     // To identify simulated keypresses, so we can perform
     // the default action for that key
     private boolean mIsVirtualKeypress;
@@ -2149,9 +2151,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
-            if (!down) {
+            if (!down && mHomePressed) {
                 final boolean homeWasLongPressed = mHomeLongPressed;
                 mHomeLongPressed = false;
+                mHomePressed = false;
                 if (!homeWasLongPressed) {
                     if (mRecentAppsPreloaded) {
                         cancelPreloadRecentApps();
@@ -2202,16 +2205,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
             if (down) {
-                if (!mRecentAppsPreloaded && mLongPressOnHomeBehavior == KEY_ACTION_APP_SWITCH) {
+                if (repeatCount == 0) {
+                    mHomePressed = true;
+                } else if (repeatCount == 1 && !mRecentAppsPreloaded &&
+                        mLongPressOnHomeBehavior == KEY_ACTION_APP_SWITCH) {
                     preloadRecentApps();
-                }
-                if (longPress) {
-                    if (!keyguardOn && mLongPressOnHomeBehavior != KEY_ACTION_NOTHING) {
-                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
-                        performKeyAction(mLongPressOnHomeBehavior);
-                        // Eat the long-press so it won't take us home when the key is released
-                        mHomeLongPressed = true;
-                    }
+                } else if (repeatCount == 2 && !keyguardOn &&
+                        mLongPressOnHomeBehavior != KEY_ACTION_NOTHING) {
+                    performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                    performKeyAction(mLongPressOnHomeBehavior);
+                    // Eat the long-press so it won't take us home when the key is released
+                    mHomeLongPressed = true;
                 }
             }
             return -1;
