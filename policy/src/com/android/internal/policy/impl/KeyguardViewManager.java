@@ -109,7 +109,7 @@ public class KeyguardViewManager implements KeyguardWindowController {
         Resources res = mContext.getResources();
         boolean enableScreenRotation =
                 SystemProperties.getBoolean("lockscreen.rot_override",false)
-                || (res.getBoolean(R.bool.config_enableLockScreenRotation) && (Settings.System.getInt(mContext.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 1) != 0));
+                || ((Settings.System.getInt(mContext.getContentResolver(), Settings.System.LOCKSCREEN_ROTATION, 1) != 0) && (Settings.System.getInt(mContext.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 1) != 0));
         if (mKeyguardHost == null) {
             if (DEBUG) Log.d(TAG, "keyguard host is null, creating it...");
 
