@@ -485,10 +485,14 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mRecentsNoApps = findViewById(R.id.recents_no_apps);
         mChoreo = new Choreographer(this, mRecentsScrim, mRecentsContainer, mRecentsNoApps, this);
 
+        mHighEndGfx = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HIGH_END_GFX_ENABLED, 0) != 0;
+
         if (mRecentsScrim != null) {
             Display d = ((WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
-            mHighEndGfx = ActivityManager.isHighEndGfx(d);
+            if(!mHighEndGfx)
+                mHighEndGfx = ActivityManager.isHighEndGfx(d);
             if (!mHighEndGfx) {
                 mRecentsScrim.setBackground(null);
             } else if (mRecentsScrim.getBackground() instanceof BitmapDrawable) {
@@ -664,8 +668,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         if (!mFirstScreenful && tasks.size() == 0) {
             return;
         }
-        mNumItemsWaitingForThumbnailsAndIcons = mFirstScreenful 
-                ? tasks.size() : mRecentTaskDescriptions == null 
+        mNumItemsWaitingForThumbnailsAndIcons = mFirstScreenful
+                ? tasks.size() : mRecentTaskDescriptions == null
                         ? 0 : mRecentTaskDescriptions.size();
         if (mRecentTaskDescriptions == null) {
             mRecentTaskDescriptions = new ArrayList<TaskDescription>(tasks);
