@@ -64,6 +64,7 @@ public class LockPatternView extends View {
 
     private Paint mPaint = new Paint();
     private Paint mPathPaint = new Paint();
+    private Paint mMsgPaint = new Paint();
 
     // TODO: make this common with PhoneWindow
     static final int STATUS_BAR_HEIGHT = 25;
@@ -114,6 +115,8 @@ public class LockPatternView extends View {
     private Bitmap mBitmapCircleDefault;
     private Bitmap mBitmapCircleGreen;
     private Bitmap mBitmapCircleRed;
+
+    private String mIncorrectPatternMsg;
 
     private Bitmap mBitmapArrowGreenUp;
     private Bitmap mBitmapArrowRedUp;
@@ -267,6 +270,12 @@ public class LockPatternView extends View {
         mPathPaint.setStrokeJoin(Paint.Join.ROUND);
         mPathPaint.setStrokeCap(Paint.Cap.ROUND);
 
+        mMsgPaint.setAntiAlias(true);
+        mMsgPaint.setDither(true);
+        mMsgPaint.setColor(Color.RED);   // TODO this should be from the style
+        mMsgPaint.setTextAlign(Paint.Align.CENTER);
+
+
         // lot's of bitmaps!
         mBitmapBtnDefault = getBitmapFor(R.drawable.btn_code_lock_default_holo);
         mBitmapBtnTouched = getBitmapFor(R.drawable.btn_code_lock_touched_holo);
@@ -286,6 +295,8 @@ public class LockPatternView extends View {
             mBitmapHeight = Math.max(mBitmapHeight, bitmap.getHeight());
         }
 
+        // incorrect pattern message
+        mIncorrectPatternMsg = context.getResources().getString(R.string.lockscreen_pattern_wrong);
     }
 
     private Bitmap getBitmapFor(int resId) {
@@ -452,6 +463,9 @@ public class LockPatternView extends View {
 
         final int height = h - mPaddingTop - mPaddingBottom;
         mSquareHeight = height / 3.0f;
+
+        // Try to set a message size relative to square size
+        mMsgPaint.setTextSize(mSquareHeight / 6);
     }
 
     private int resolveMeasured(int measureSpec, int desired)
@@ -930,11 +944,17 @@ public class LockPatternView extends View {
             }
         }
 
+        // If lock pattern is in stealth mode and the pattern was wrong
+        // show a text advising of the pattern failure
+        float msgLeftX = paddingLeft + squareWidth + (squareWidth / 2);
+        float msgTopY = paddingTop + (squareHeight * 2);
+        drawMsg(canvas, (int) msgLeftX, (int) msgTopY);
+
         // TODO: the path should be created and cached every time we hit-detect a cell
         // only the last segment of the path should be computed here
         // draw the path of the pattern (unless the user is in progress, and
         // we are in stealth mode)
-        final boolean drawPath = (!mInStealthMode || mPatternDisplayMode == DisplayMode.Wrong);
+        final boolean drawPath = !mInStealthMode;
 
         // draw the arrows associated with the path (unless the user is in progress, and
         // we are in stealth mode)
@@ -1038,7 +1058,7 @@ public class LockPatternView extends View {
         Bitmap outerCircle;
         Bitmap innerCircle;
 
-        if (!partOfPattern || (mInStealthMode && mPatternDisplayMode != DisplayMode.Wrong)) {
+        if (!partOfPattern || (mInStealthMode)) {
             // unselected circle
             outerCircle = mBitmapCircleDefault;
             innerCircle = mBitmapBtnDefault;
@@ -1079,6 +1099,17 @@ public class LockPatternView extends View {
 
         canvas.drawBitmap(outerCircle, mCircleMatrix, mPaint);
         canvas.drawBitmap(innerCircle, mCircleMatrix, mPaint);
+    }
+
+    /**
+     * @param canvas
+     * @param leftX
+     * @param topY
+     */
+    private void drawMsg(Canvas canvas, int leftX, int topY) {
+        if (mInStealthMode && mPatternDisplayMode == DisplayMode.Wrong) {
+            canvas.drawText(mIncorrectPatternMsg, leftX, topY, mMsgPaint);
+        }
     }
 
     @Override
