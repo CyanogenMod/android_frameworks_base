@@ -418,11 +418,13 @@ status_t LPAPlayer::seekTo(int64_t time_us) {
     LOGV("In seekTo(), mSeekTimeUs %lld",mSeekTimeUs);
     if (!bIsA2DPEnabled) {
         if(mIsDriverStarted) {
+#ifndef QCOM_KERNEL_SUPPORT_LPA_PAUSE
             if (!isPaused) {
                 if (ioctl(afd, AUDIO_PAUSE, 1) < 0) {
                     LOGE("Audio Pause failed");
                 }
             }
+#endif
             if (ioctl(afd, AUDIO_FLUSH, 0) < 0) {
                 LOGE("Audio Flush failed");
             }
