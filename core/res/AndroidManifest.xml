@@ -133,6 +133,7 @@
     <protected-broadcast android:name="android.intent.action.PROXY_CHANGE" />
 
     <protected-broadcast android:name="android.os.UpdateLock.UPDATE_LOCK_CHANGED" />
+    <protected-broadcast android:name="android.intent.action.NAVBAR_EDIT" />
 
     <!-- ====================================== -->
     <!-- Permissions for things that cost money -->
