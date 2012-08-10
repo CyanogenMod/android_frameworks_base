@@ -19,18 +19,15 @@ package com.android.systemui.statusbar.policy;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.hardware.input.InputManager;
-import android.os.RemoteException;
 import android.os.SystemClock;
-import android.os.ServiceManager;
 import android.util.AttributeSet;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.HapticFeedbackConstants;
-import android.view.IWindowManager;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -38,9 +35,14 @@ import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 
+import com.android.internal.util.ArrayUtils;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.NavbarEditor;
+import com.android.systemui.statusbar.phone.NavbarEditor.ButtonInfo;
+import com.android.systemui.statusbar.phone.NavigationBarView;
 
 public class KeyButtonView extends ImageView {
     private static final String TAG = "StatusBar.KeyButtonView";
@@ -207,7 +209,42 @@ public class KeyButtonView extends ImageView {
         super.setPressed(pressed);
     }
 
+    public void setInfo (String itemKey, boolean isVertical) {
+        ButtonInfo item = NavbarEditor.buttonMap.get(itemKey);
+        setTag(itemKey);
+        final Resources res = getResources();
+        setContentDescription(res.getString(item.contentDescription));
+        mCode = item.keyCode;
+        boolean isSmallButton = ArrayUtils.contains(NavbarEditor.smallButtonIds, getId());
+        Drawable keyD;
+        if (isSmallButton) {
+            keyD = res.getDrawable(item.sideResource);
+        } else if (!isVertical) {
+            keyD = res.getDrawable(item.portResource);
+        } else {
+            keyD = res.getDrawable(item.landResource);
+        }
+        //Reason for setImageDrawable vs setImageResource is because setImageResource calls relayout() w/o
+        //any checks. setImageDrawable performs size checks and only calls relayout if necessary. We rely on this
+        //because otherwise the setX/setY attributes which are post layout cause it to mess up the layout.
+        setImageDrawable(keyD);
+        if (itemKey.equals(NavbarEditor.NAVBAR_EMPTY)) {
+            if (isSmallButton) {
+                setVisibility(NavigationBarView.getEditMode() ? View.VISIBLE : View.INVISIBLE);
+            } else {
+                setVisibility(NavigationBarView.getEditMode() ? View.VISIBLE : View.GONE);
+            }
+        } else if (itemKey.equals(NavbarEditor.NAVBAR_CONDITIONAL_MENU)) {
+            setVisibility(NavigationBarView.getEditMode() ? View.VISIBLE : View.INVISIBLE);
+        } else if (itemKey.equals(NavbarEditor.NAVBAR_HOME)) {
+            mSupportsLongpress = false;
+        }
+    }
+
     public boolean onTouchEvent(MotionEvent ev) {
+        if (NavigationBarView.getEditMode()) {
+            return false;
+        }
         final int action = ev.getAction();
         int x, y;
 
