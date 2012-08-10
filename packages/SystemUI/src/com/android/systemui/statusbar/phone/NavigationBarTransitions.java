@@ -26,6 +26,8 @@ import android.view.animation.AccelerateInterpolator;
 
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.NavbarEditor;
+import com.android.systemui.statusbar.phone.NavbarEditor.ButtonInfo;
 import com.android.systemui.statusbar.policy.KeyButtonView;
 
 public final class NavigationBarTransitions extends BarTransitions {
@@ -75,14 +77,23 @@ public final class NavigationBarTransitions extends BarTransitions {
         // apply to key buttons
         final boolean isOpaque = mode == MODE_OPAQUE || mode == MODE_LIGHTS_OUT;
         final float alpha = isOpaque ? KeyButtonView.DEFAULT_QUIESCENT_ALPHA : 1f;
-        setKeyButtonViewQuiescentAlpha(mView.getBackButton(), alpha, animate);
-        setKeyButtonViewQuiescentAlpha(mView.getHomeButton(), alpha, animate);
-        setKeyButtonViewQuiescentAlpha(mView.getRecentsButton(), alpha, animate);
-        setKeyButtonViewQuiescentAlpha(mView.getMenuButton(), alpha, animate);
+        setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_BACK, alpha, animate);
+        setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_HOME, alpha, animate);
+        setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_RECENT, alpha, animate);
+        setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_CONDITIONAL_MENU, alpha, animate);
+        setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_ALWAYS_MENU, alpha, animate);
+        setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_MENU_BIG, alpha, animate);
         setKeyButtonViewQuiescentAlpha(mView.getCameraButton(), alpha, animate);
 
         // apply to lights out
         applyLightsOut(mode == MODE_LIGHTS_OUT, animate, force);
+    }
+
+    private void setKeyButtonViewQuiescentAlpha(ButtonInfo info, float alpha, boolean animate) {
+        View button = mView.findViewWithTag(info);
+        if (button != null) {
+            setKeyButtonViewQuiescentAlpha(button, alpha, animate);
+        }
     }
 
     private void setKeyButtonViewQuiescentAlpha(View button, float alpha, boolean animate) {
