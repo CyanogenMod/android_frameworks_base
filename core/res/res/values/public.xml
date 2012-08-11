@@ -3915,4 +3915,6 @@
   <java-symbol type="string" name="com.amazon.mp3.playstatechanged_album" />
   <java-symbol type="string" name="com.amazon.mp3.playstatechanged_id" />
 
+  <!-- WiredAccessoryObserver -->
+  <java-symbol type="array" name="config_accessoryDockNames" />
 </resources>

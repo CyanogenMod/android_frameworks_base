@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -57,6 +59,7 @@ class WiredAccessoryObserver extends UEventObserver {
         private final int mState1Bits;
         private final int mState2Bits;
         private int switchState;
+        private String mDockNames[]=Resources.getSystem().getStringArray(com.android.internal.R.array.config_accessoryDockNames);
 
         public UEventInfo(String devName, int state1Bits, int state2Bits) {
             mDevName = devName;
@@ -86,7 +89,7 @@ class WiredAccessoryObserver extends UEventObserver {
             switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
                            ((state == 1) ? BIT_USB_HEADSET_ANLG :
                                          ((state == 2) ? BIT_USB_HEADSET_DGTL : 0)));
-        } else if (name.equals("dock")) {
+        } else if (Arrays.asList(mDockNames).contains(name)) {
              switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
                            ((state == 2 || state == 1) ? BIT_USB_HEADSET_ANLG : 0));
             // This sets the switchsate to 4 (for USB HEADSET - BIT_USB_HEADSET_ANLG)
