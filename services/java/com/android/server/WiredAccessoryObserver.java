@@ -86,7 +86,7 @@ class WiredAccessoryObserver extends UEventObserver {
             switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
                            ((state == 1) ? BIT_USB_HEADSET_ANLG :
                                          ((state == 2) ? BIT_USB_HEADSET_DGTL : 0)));
-        } else if (name.equals("dock")) {
+        } else if (name.equalsIgnoreCase("dock") || name.equalsIgnoreCase("DESK") || name.equalsIgnoreCase("CAR")) {
              switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
                            ((state == 2 || state == 1) ? BIT_USB_HEADSET_ANLG : 0));
             // This sets the switchsate to 4 (for USB HEADSET - BIT_USB_HEADSET_ANLG)
