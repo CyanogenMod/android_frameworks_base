@@ -3896,4 +3896,6 @@
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
 
+  <!-- WiredAccessoryObserver -->
+  <java-symbol type="array" name="config_accessoryDockNames" />
 </resources>

@@ -941,4 +941,9 @@
          applied. -->
     <bool name="config_hasRemovableLid">false</bool>
 
+    <!-- Possible names from /devices/virtual/switch/dock for a dock device.
+         Some kernels use names like CAR and DESK. -->
+    <string-array translatable="false" name="config_accessoryDockNames">
+        <item>"dock"</item>
+    </string-array>
 </resources>
