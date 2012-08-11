@@ -606,6 +606,10 @@
     <item msgid="2506857312718630823">"ICQ"</item>
     <item msgid="1648797903785279353">"Jabber"</item>
   </string-array>
+    <!-- #CM-MOD-START -->
+    <string name="toast_rotation_unlocked">Ekran döndürme kilitli değil</string>
+    <string name="toast_rotation_locked">Ekran döndürme kilitli</string>
+    <!-- #CM-MOD-END -->
     <string name="phoneTypeCustom" msgid="1644738059053355820">"Özel"</string>
     <string name="phoneTypeHome" msgid="2570923463033985887">"Ev"</string>
     <string name="phoneTypeMobile" msgid="6501463557754751037">"Mobil"</string>
@@ -699,7 +703,7 @@
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Şarj oluyor (<xliff:g id="PERCENT">%%</xliff:g><xliff:g id="NUMBER">%d</xliff:g>)"</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Şarj oldu."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Şarj cihazınızı bağlayın."</string>
+    <string name="lockscreen_low_battery">"Şarj cihazını bağlayın."</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"SIM kart yok."</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Tablette SIM kart yok."</string>
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"Telefonda SIM kart yok."</string>
@@ -736,7 +740,7 @@
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Oturum aç"</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"Geçersiz kullanıcı adı veya şifre."</string>
     <string name="lockscreen_glogin_account_recovery_hint" msgid="8253152905532900548">"Kullanıcı adınızı veya şifrenizi mi unuttunuz?"\n<b>"google.com/accounts/recovery"</b>" adresini ziyaret edin"</string>
-    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Kontrol ediliyor..."</string>
+    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Kontrol ediliyor\u2026"</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Kilit Aç"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Sesi aç"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Sesi kapat"</string>
@@ -909,10 +913,10 @@
     <string name="cut" msgid="3092569408438626261">"Kes"</string>
     <string name="copy" msgid="2681946229533511987">"Kopyala"</string>
     <string name="paste" msgid="5629880836805036433">"Yapıştır"</string>
-    <string name="replace" msgid="5781686059063148930">"Değiştir..."</string>
+    <string name="replace" msgid="5781686059063148930">"Değiştir\u2026"</string>
     <string name="delete" msgid="6098684844021697789">"Sil"</string>
     <string name="copyUrl" msgid="2538211579596067402">"URL\'yi kopyala"</string>
-    <string name="selectTextMode" msgid="6738556348861347240">"Metin seç..."</string>
+    <string name="selectTextMode" msgid="6738556348861347240">"Metin seç\u2026"</string>
     <string name="textSelectionCABTitle" msgid="5236850394370820357">"Metin seçimi"</string>
     <string name="addToDictionary" msgid="9090375111134433012">"sözlüğe ekle"</string>
     <string name="deleteText" msgid="7070985395199629156">"sil"</string>
@@ -926,7 +930,7 @@
     <string name="yes" msgid="5362982303337969312">"Tamam"</string>
     <string name="no" msgid="5141531044935541497">"İptal"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Dikkat"</string>
-    <string name="loading" msgid="1760724998928255250">"Yükleniyor..."</string>
+    <string name="loading" msgid="1760724998928255250">"Yükleniyor\u2026"</string>
     <string name="capital_on">"AÇK"</string>
     <string name="capital_off">"KPL"</string>
     <string name="whichApplication" msgid="4533185947064773386">"İşlemi şunu kullanarak tamamla"</string>
@@ -954,7 +958,7 @@
     <string name="screen_compat_mode_hint" msgid="2953716574198046484">"Bunu Ayarlar &gt; Uygulamalar &gt; Uygulamaları yönet bölümünden yeniden etkinleştirebilirsiniz."</string>
     <string name="smv_application" msgid="295583804361236288">"<xliff:g id="APPLICATION">%1$s</xliff:g> uygulaması (<xliff:g id="PROCESS">%2$s</xliff:g> işlemi) kendiliğinden uyguladığı StrictMode politikasını ihlal etti."</string>
     <string name="smv_process" msgid="5120397012047462446">"<xliff:g id="PROCESS">%1$s</xliff:g> işlemi kendiliğinden uyguladığı StrictMode politikasını ihlal etti."</string>
-    <string name="android_upgrading_title" msgid="378740715658358071">"Android yeni sürüme geçiriliyor..."</string>
+    <string name="android_upgrading_title" msgid="378740715658358071">"Android yeni sürüme geçiriliyor\u2026"</string>
     <string name="android_upgrading_apk" msgid="274409861603566003">"<xliff:g id="NUMBER_0">%1$d</xliff:g>/<xliff:g id="NUMBER_1">%2$d</xliff:g> uygulama optimize ediliyor."</string>
     <string name="android_upgrading_starting_apps" msgid="7959542881906488763">"Uygulamalar başlatılıyor."</string>
     <string name="android_upgrading_complete" msgid="1405954754112999229">"Açılış tamamlanıyor."</string>
@@ -1142,10 +1146,10 @@
     <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g> / <xliff:g id="TOTAL">%d</xliff:g>"</item>
   </plurals>
     <string name="action_mode_done" msgid="7217581640461922289">"Bitti"</string>
-    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"USB depolama biriminin bağlantısı kesiliyor..."</string>
-    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"SD kartın bağlantısı kesiliyor..."</string>
-    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"USB dep brm silinyr..."</string>
-    <string name="progress_erasing" product="default" msgid="2115214724367534095">"SD kart siliniyor..."</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"USB depolama biriminin bağlantısı kesiliyor\u2026"</string>
+    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"SD kartın bağlantısı kesiliyor\u2026"</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"USB dep brm silinyr\u2026"</string>
+    <string name="progress_erasing" product="default" msgid="2115214724367534095">"SD kart siliniyor\u2026"</string>
     <string name="format_error" product="nosdcard" msgid="6299769563624776948">"USB depolama birimi silinemedi."</string>
     <string name="format_error" product="default" msgid="7315248696644510935">"SD kart silinemedi."</string>
     <string name="media_bad_removal" msgid="7960864061016603281">"SD kart, bağlantısı kesilmeden çıkarıldı."</string>
@@ -1224,7 +1228,7 @@
     <string name="storage_internal" msgid="7556050805474115618">"Dahili Depolama"</string>
     <string name="storage_sd_card" msgid="8921771478629812343">"SD Kart"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB depolama birimi"</string>
-    <string name="extract_edit_menu_button" msgid="302060189057163906">"Düzenle..."</string>
+    <string name="extract_edit_menu_button" msgid="302060189057163906">"Düzenle\u2026"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Veri kullanım uyarısı"</string>
     <string name="data_usage_warning_body" msgid="7217480745540055170">"Kullanımı ve ayarları görmek için dokunun"</string>
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G verileri devre dışı"</string>
@@ -1253,12 +1257,12 @@
     <string name="fingerprints" msgid="4516019619850763049">"Parmak izleri:"</string>
     <string name="sha256_fingerprint" msgid="4391271286477279263">"SHA-256 parmak izi:"</string>
     <string name="sha1_fingerprint" msgid="7930330235269404581">"SHA-1 parmak izi:"</string>
-    <string name="activity_chooser_view_see_all" msgid="180268188117163072">"Tümünü göster..."</string>
+    <string name="activity_chooser_view_see_all" msgid="180268188117163072">"Tümünü göster\u2026"</string>
     <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"Etkinlik seçin"</string>
-    <string name="share_action_provider_share_with" msgid="1791316789651185229">"Şununla paylaş..."</string>
+    <string name="share_action_provider_share_with" msgid="1791316789651185229">"Şununla paylaş\u2026"</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Cihaz kilitli."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
-    <string name="sending" msgid="8715108995741758718">"Gönderiliyor..."</string>
+    <string name="sending" msgid="8715108995741758718">"Gönderiliyor\u2026"</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Tarayıcı Başlatılsın mı?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Çağrı Kabul Edilsin mi?"</string>
     <!-- #CM-MOD-START -->
