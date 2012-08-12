@@ -3896,4 +3896,7 @@
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
 
+  <!-- New GlobalActions.SilentModeFourStateAction ringer options -->
+  <java-symbol type="id" name="option4" />
+
 </resources>
