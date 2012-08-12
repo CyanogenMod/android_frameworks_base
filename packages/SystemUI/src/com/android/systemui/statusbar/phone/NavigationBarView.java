@@ -20,14 +20,17 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.StatusBarManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.animation.AccelerateInterpolator;
@@ -75,7 +78,7 @@ public class NavigationBarView extends LinearLayout {
     int mNavigationIconHints = 0;
 
     private Drawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon;
-    
+
     private DelegateViewHelper mDelegateHelper;
 
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
@@ -318,16 +321,37 @@ public class NavigationBarView extends LinearLayout {
         setLowProfile(false);
     }
 
-    @Override
-    public void onFinishInflate() {
-        mRotatedViews[Surface.ROTATION_0] = 
+    private void regenerateRotatedViews(){
+
+        boolean leftNavbar = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.NAVBAR_LEFT, 0) == 1;
+
+        mRotatedViews[Surface.ROTATION_0] =
         mRotatedViews[Surface.ROTATION_180] = findViewById(R.id.rot0);
 
-        mRotatedViews[Surface.ROTATION_90] = findViewById(R.id.rot90);
-        
-        mRotatedViews[Surface.ROTATION_270] = NAVBAR_ALWAYS_AT_RIGHT
-                                                ? findViewById(R.id.rot90)
-                                                : findViewById(R.id.rot270);
+        if (leftNavbar){
+            mRotatedViews[Surface.ROTATION_90] =
+            mRotatedViews[Surface.ROTATION_270] = findViewById(R.id.rot270);
+        } else {
+            mRotatedViews[Surface.ROTATION_90] =
+            mRotatedViews[Surface.ROTATION_270] = findViewById(R.id.rot90);
+        }
+    }
+
+    @Override
+    public void onFinishInflate() {
+        regenerateRotatedViews();
+
+        ContentResolver resolver = mContext.getContentResolver();
+        resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NAVBAR_LEFT),
+                false,
+                new ContentObserver(mHandler){
+            @Override
+            public void onChange(boolean selfChange){
+                regenerateRotatedViews();
+            }
+        });
 
         mCurrentView = mRotatedViews[Surface.ROTATION_0];
     }
@@ -382,7 +406,7 @@ public class NavigationBarView extends LinearLayout {
     @Override
     protected void onLayout (boolean changed, int left, int top, int right, int bottom) {
         if (DEBUG) Slog.d(TAG, String.format(
-                    "onLayout: %s (%d,%d,%d,%d)", 
+                    "onLayout: %s (%d,%d,%d,%d)",
                     changed?"changed":"notchanged", left, top, right, bottom));
         super.onLayout(changed, left, top, right, bottom);
     }
@@ -398,7 +422,7 @@ public class NavigationBarView extends LinearLayout {
         return super.onInterceptTouchEvent(ev);
     }
     */
-        
+
 
     private String getResourceName(int resId) {
         if (resId != 0) {
@@ -438,7 +462,7 @@ public class NavigationBarView extends LinearLayout {
         getWindowVisibleDisplayFrame(r);
         final boolean offscreen = r.right > mDisplay.getRawWidth()
             || r.bottom > mDisplay.getRawHeight();
-        pw.println("      window: " 
+        pw.println("      window: "
                 + r.toShortString()
                 + " " + visibilityToString(getWindowVisibility())
                 + (offscreen ? " OFFSCREEN!" : ""));
