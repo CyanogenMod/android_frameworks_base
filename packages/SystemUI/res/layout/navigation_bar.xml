@@ -190,11 +190,88 @@
             />
     </FrameLayout>
 
-    <!-- not used -->
-    <View android:id="@+id/rot270"
+    <!-- required so that the 2 views are different, or else issues with the touch detection -->
+    <FrameLayout android:id="@+id/rot270"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:visibility="gone"
-        />
+        android:paddingTop="0dp"
+        >
 
+        <LinearLayout 
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:id="@+id/container"
+            >
+            <include layout="@layout/mid_navigation_bar_land"/>
+        </LinearLayout>
+
+        <!-- lights out layout to match exactly -->
+        <LinearLayout 
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:id="@+id/lights_out"
+            android:visibility="gone"
+            >
+            <ImageView
+                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_sysbar_lights_out_dot_large"
+                android:scaleType="center"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="invisible"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_sysbar_lights_out_dot_large"
+                android:scaleType="center"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="invisible"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_sysbar_lights_out_dot_large"
+                android:scaleType="center"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="invisible"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_sysbar_lights_out_dot_large"
+                android:scaleType="center"
+                />
+        </LinearLayout>
+
+        <com.android.systemui.statusbar.policy.DeadZone
+            android:id="@+id/deadzone"
+            android:layout_width="@dimen/navigation_bar_deadzone_size"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            />
+    </FrameLayout>
 </com.android.systemui.statusbar.phone.NavigationBarView>

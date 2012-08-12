@@ -2387,6 +2387,13 @@ public final class Settings {
         public static final String NAV_BUTTONS = "nav_buttons";
 
         /**
+         * Navigation bars on the left side of the screen.
+         *
+         * @hide
+         */
+        public static final String NAVBAR_LEFT = "navigation_bar_left";
+
+        /**
         * Notification Power Widget - Custom Brightness Mode
         * @hide
         */
@@ -2511,7 +2518,7 @@ public final class Settings {
 
         /**
          * Boolean value whether to link ringtone and notification volumes
-         * 
+         *
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
