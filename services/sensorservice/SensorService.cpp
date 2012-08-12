@@ -273,7 +273,7 @@ bool SensorService::threadLoop()
                     for (size_t j=0 ; j<activeVirtualSensorCount ; j++) {
                         if (count + k >= minBufferSize) {
                             ALOGE("buffer too small to hold all events: "
-                                    "count=%u, k=%u, size=%u",
+                                    "count=%ld, k=%ld, size=%ld",
                                     count, k, minBufferSize);
                             break;
                         }
