@@ -31,6 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Switch;
+import android.view.LayoutInflater;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.AirplaneModeController;
@@ -51,7 +53,6 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
     static final String TAG = "SettingsView";
 
     private static final String NO_TOGGLES = "no_toggles";
-    private static final int[] TOGGLE_ID_ARRAY = new int[6];
     private static final int AIRPLANE_ID = 0;
     private static final int ROTATE_ID = 1;
     private static final int BLUETOOTH_ID = 2;
@@ -61,15 +62,6 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
     private static final int MOBILE_DATA_ID = 6;
     private static final int NETWORK_MODE_ID = 7;
     private static final int SOUND_ID = 8;
-
-    private static final int[] mToggleIds = new int[]{
-        R.id.toggle_1, R.id.toggle_2, R.id.toggle_3, R.id.toggle_4, R.id.toggle_5, R.id.toggle_6};
-    private static final int[] mToggleIcons = new int[]{
-        R.id.toggle_1_icon, R.id.toggle_2_icon, R.id.toggle_3_icon, R.id.toggle_4_icon, R.id.toggle_5_icon, R.id.toggle_6_icon};
-    private static final int[] mToggleLabels = new int[]{
-        R.id.toggle_1_label, R.id.toggle_2_label, R.id.toggle_3_label, R.id.toggle_4_label, R.id.toggle_5_label, R.id.toggle_6_label};
-    private static final int[] mToggleCheckBoxes = new int[]{
-        R.id.toggle_1_checkbox, R.id.toggle_2_checkbox, R.id.toggle_3_checkbox, R.id.toggle_4_checkbox, R.id.toggle_5_checkbox, R.id.toggle_6_checkbox};
 
     private static final String[] KEY_TOGGLES = new String[]{"pref_airplane_toggle", "pref_rotate_toggle", "pref_bluetooth_toggle", "pref_gps_toggle", "pref_wifi_toggle", "pref_flashlight_toggle", "pref_mobile_data_toggle", "pref_network_mode_toggle", "pref_sound_toggle"};
 
@@ -91,7 +83,6 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
     SoundController mSound;
     WifiController mWifi;
     View mRotationLockContainer;
-    View mRotationLockSeparator;
 
     private Context mContext;
     private Handler mHandler;
@@ -120,6 +111,13 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
         }
     }
 
+    private class ButtonTag {
+        public int toggleId;
+        public ButtonTag(int id) {
+            toggleId = id;
+        }
+    }
+
     public SettingsView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -138,8 +136,6 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
 
         final Context context = getContext();
 
-        mRotationLockSeparator = findViewById(R.id.rotate_separator);
-
         mBrightness = new BrightnessController(context,
                 (ToggleSlider)findViewById(R.id.brightness));
         mDoNotDisturb = new DoNotDisturbController(context,
@@ -147,34 +143,43 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
 
         if(mToggleContainer == null)
            mToggleContainer = BUTTONS_DEFAULT;
-        if(!mToggleContainer.equals(NO_TOGGLES)){
+        if(!mToggleContainer.equals(NO_TOGGLES))
             updateToggles();
-
-            int mLastVisible = mToggles.length;
-            for(int i=0; i<mToggleIds.length; i++){
-                if(i<mLastVisible)
-                    findViewById(mToggleIds[i]).setOnClickListener(this);
-                else
-                    findViewById(mToggleIds[i]).setVisibility(View.GONE);
-            }
-        } else {
-            for(int i=0; i<mToggleIds.length; i++){
-                findViewById(mToggleIds[i]).setVisibility(View.GONE);
-            }
-        }
-
         findViewById(R.id.settings).setOnClickListener(this);
     }
 
-     private void updateToggles(){
-        mToggles = mToggleContainer.split("\\|");
-        for(int i=0; i<mToggles.length; i++){
-                String mToggleName = mToggles[i].replace("\\", "");
-                int[] resources = getResourcesById(mToggleName);
-                setToggleResources(mToggleIds[i], mToggleIcons[i], mToggleLabels[i], resources[0], resources[1]);
-                TOGGLE_ID_ARRAY[i] = resources[2];
-                setToggleController(mToggleName, i);
+    private void clearToggles() {
+        for (int i = getChildCount() - 1; i >= 0; i--) {
+            View v = getChildAt(i);
+            if (v.getTag() instanceof ButtonTag)
+                removeView(v);
         }
+    }
+    private void updateToggles(){
+        clearToggleControllers();
+        clearToggles();
+        mToggles = mToggleContainer.split("\\|");
+        for(int i=mToggles.length - 1; i>=0; i--){
+            String mToggleName = mToggles[i].replace("\\", "");
+            int[] resources = getResourcesById(mToggleName);
+            addToggle(resources, mToggleName);
+        }
+    }
+
+    private void addToggle(final int[] res, String name) {
+        LinearLayout toggle = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.status_bar_settings_button, this, false);
+        addView(toggle,0);
+
+        ImageView icon = (ImageView)toggle.getChildAt(0);
+        icon.setImageResource(res[0]);
+        TextView label = (TextView)toggle.getChildAt(1);
+        label.setText(res[1]);
+        Switch checkbox = (Switch)toggle.getChildAt(2);
+
+        toggle.setTag(new ButtonTag(res[2]));
+        toggle.setOnClickListener(this);
+
+        setToggleController(name, (CompoundButton)checkbox, toggle);
     }
 
     @Override
@@ -191,36 +196,45 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
         mDoNotDisturb.release();
     }
 
-    private void setToggleController(String id, int i){
-        int checkBox = mToggleCheckBoxes[i];
+    private void clearToggleControllers() {
+        mAirplane = null;
+        mRotate = null;
+        mBluetooth = null;
+        mFlashLight = null;
+        mGps = null;
+        mMobileData = null;
+        mNetworkMode = null;
+        mSound = null;
+        mWifi = null;
+    }
+
+    private void setToggleController(String id, CompoundButton checkbox, LinearLayout toggle) {
         if(id.equals(KEY_TOGGLES[0]))
-           mAirplane = new AirplaneModeController(mContext, (CompoundButton)findViewById(checkBox));
+           mAirplane = new AirplaneModeController(mContext, checkbox);
         else if(id.equals(KEY_TOGGLES[1])){
-            mRotationLockContainer = findViewById(mToggleIds[i]);
-            mRotate = new AutoRotateController(mContext,
-                (CompoundButton)findViewById(checkBox),
+            mRotationLockContainer = toggle;
+            mRotate = new AutoRotateController(mContext, checkbox,
                 new AutoRotateController.RotationLockCallbacks() {
                     @Override
                     public void setRotationLockControlVisibility(boolean show) {
                         mRotationLockContainer.setVisibility(show ? View.VISIBLE : View.GONE);
-                        mRotationLockSeparator.setVisibility(show ? View.VISIBLE : View.GONE);
                     }
                 });
         }
         else if(id.equals(KEY_TOGGLES[2]))
-           mBluetooth = new BluetoothController(mContext, (CompoundButton)findViewById(checkBox));
+           mBluetooth = new BluetoothController(mContext, checkbox);
         else if(id.equals(KEY_TOGGLES[3]))
-           mGps = new LocationController(mContext, (CompoundButton)findViewById(checkBox));
+           mGps = new LocationController(mContext, checkbox);
         else if(id.equals(KEY_TOGGLES[4]))
-           mWifi = new WifiController(mContext, (CompoundButton)findViewById(checkBox));
+           mWifi = new WifiController(mContext, checkbox);
         else if(id.equals(KEY_TOGGLES[5]))
-           mFlashLight = new FlashlightController(mContext, (CompoundButton)findViewById(checkBox));
+           mFlashLight = new FlashlightController(mContext, checkbox);
         else if(id.equals(KEY_TOGGLES[6]))
-           mMobileData = new MobileDataController(mContext, (CompoundButton)findViewById(checkBox));
+           mMobileData = new MobileDataController(mContext, checkbox);
         else if(id.equals(KEY_TOGGLES[7]))
-           mNetworkMode = new NetworkModeController(mContext, (CompoundButton)findViewById(checkBox));
+           mNetworkMode = new NetworkModeController(mContext, checkbox);
         else if(id.equals(KEY_TOGGLES[8]))
-           mSound = new SoundController(mContext, (CompoundButton)findViewById(checkBox));
+           mSound = new SoundController(mContext, checkbox);
     }
 
     private int[] getResourcesById(String id){
@@ -246,41 +260,17 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
            return new int[]{0, 0};
     }
 
-    private void setToggleResources(int resourceId, int resourceIcon, int resourceLabel, int newResourceIcon, int newResourceLabel){
-        LinearLayout mToggle = (LinearLayout) findViewById(resourceId);
-        ImageView mToggleImageView = (ImageView) mToggle.findViewById(resourceIcon);
-        mToggleImageView.setImageResource(newResourceIcon);
-        TextView mToggleTextView = (TextView) mToggle.findViewById(resourceLabel);
-        mToggleTextView.setText(newResourceLabel);
-    }
-
     private StatusBarManager getStatusBarManager() {
         return (StatusBarManager)getContext().getSystemService(Context.STATUS_BAR_SERVICE);
     }
 
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.toggle_1:
-                onClickToggle(TOGGLE_ID_ARRAY[0]);
-                break;
-            case R.id.toggle_2:
-                onClickToggle(TOGGLE_ID_ARRAY[1]);
-                break;
-            case R.id.toggle_3:
-                onClickToggle(TOGGLE_ID_ARRAY[2]);
-                break;
-            case R.id.toggle_4:
-                onClickToggle(TOGGLE_ID_ARRAY[3]);
-                break;
-            case R.id.toggle_5:
-                onClickToggle(TOGGLE_ID_ARRAY[4]);
-                break;
-            case R.id.toggle_6:
-                onClickToggle(TOGGLE_ID_ARRAY[5]);
-                break;
-            case R.id.settings:
-                onClickSettings();
-                break;
+        if (v.getId() == R.id.settings) {
+            onClickSettings();
+        } else {
+            Object tag = v.getTag();
+            if (tag instanceof ButtonTag)
+                onClickToggle(((ButtonTag) tag).toggleId);
         }
     }
 
