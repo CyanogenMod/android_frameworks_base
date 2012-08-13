@@ -3692,7 +3692,7 @@ class ActivityManagerProxy implements IActivityManager
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
         data.writeInterfaceToken(IActivityManager.descriptor);
-        mRemote.transact(SWITCH_USER_TRANSACTION, data, reply, 0);
+        mRemote.transact(GET_CURRENT_USER_TRANSACTION, data, reply, 0);
         reply.readException();
         UserInfo userInfo = UserInfo.CREATOR.createFromParcel(reply);
         reply.recycle();
