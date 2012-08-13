@@ -930,6 +930,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             Resources resources = mContext.getResources();
             if (resources.getBoolean(com.android.internal.R.bool.config_wifiApFirmwareReload))
                 wifiFirmwareReload(wlanIface, "AP");
+            mConnector.execute("softap", "start", wlanIface);
             if (wifiConfig == null) {
                 mConnector.execute("softap", "set", wlanIface, softapIface);
             } else {
