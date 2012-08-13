@@ -102,6 +102,8 @@ CommandsInterface {
             p.readInt(); // - perso_unblock_retries
             status.addApplication(ca);
         }
+        int appIndex = -1;
+        appIndex = status.getCdmaSubscriptionAppIndex();
         return status;
     }
 
