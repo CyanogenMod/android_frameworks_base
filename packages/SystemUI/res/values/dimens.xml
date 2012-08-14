@@ -156,4 +156,7 @@
 
     <!-- Height of the carrier/wifi name label -->
     <dimen name="carrier_label_height">24dp</dimen>
+
+    <!-- Height of the system bar settings view -->
+    <dimen name="system_bar_settings_view_height">-1dp</dimen>
 </resources>
