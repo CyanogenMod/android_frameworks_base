@@ -149,4 +149,7 @@
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"A tela está bloqueada na orientação retrato."</string>
     <string name="accessibility_battery_level">%d porcentos de bateria.</string>
     <string name="powerwidget_screen_timeout_toast">Tempo limite da tela ajustado para: %1$d %2$s</string>
+    <string name="status_bar_settings_flashlight">Lanterna de LED</string>
+    <string name="status_bar_settings_mobile_data">Dados móveis</string>
+    <string name="status_bar_settings_sound_mode">Som</string>
 </resources>
