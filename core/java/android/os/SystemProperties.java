@@ -33,6 +33,16 @@ public class SystemProperties
     public static final int PROP_NAME_MAX = 31;
     public static final int PROP_VALUE_MAX = 91;
 
+/**
+ * Add boolean for early OMAP4 devices such as the KF and Nook Tablet
+ */
+    public static final boolean OMAP_ENHANCEMENT = native_get_boolean("com.ti.omap_enhamcement", false);
+    
+/**
+ * Add boolean for OMAP3 devices such as the Nook Color and Defy
+ */
+    public static final boolean OMAP_COMPAT = native_get_boolean("com.ti.omap_compat", false);
+      
     public static final boolean QCOM_HARDWARE = native_get_boolean("com.qc.hardware", false);
 
     private static final ArrayList<Runnable> sChangeCallbacks = new ArrayList<Runnable>();
