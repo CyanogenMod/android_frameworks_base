@@ -109,7 +109,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private IWindowManager mIWindowManager;
     private Profile mChosenProfile;
 
-    private static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
     private static final String POWER_MENU_SCREENSHOT_ENABLED = "power_menu_screenshot_enabled";
 
     /**
@@ -276,7 +275,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             });
 
         // next: profile - only shown if enabled, enabled by default
-        if (Settings.System.getInt(mContext.getContentResolver(), SYSTEM_PROFILES_ENABLED, 1) == 1) {
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) {
             mItems.add(
                 new ProfileChooseAction() {
                     public void onPress() {

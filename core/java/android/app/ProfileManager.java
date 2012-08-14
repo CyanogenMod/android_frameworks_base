@@ -41,8 +41,6 @@ public class ProfileManager {
 
     private static final String TAG = "ProfileManager";
 
-    private static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
-
     // A blank profile that is created to be returned if profiles disabled
     private static Profile mEmptyProfile;
 
@@ -65,7 +63,7 @@ public class ProfileManager {
     @Deprecated
     public void setActiveProfile(String profileName) {
         if (Settings.System.getInt(mContext.getContentResolver(),
-                SYSTEM_PROFILES_ENABLED, 1) == 1) {
+                Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) {
             // Profiles are enabled, return active profile
             try {
                 getService().setActiveProfileByName(profileName);
@@ -77,7 +75,7 @@ public class ProfileManager {
 
     public void setActiveProfile(UUID profileUuid) {
         if (Settings.System.getInt(mContext.getContentResolver(),
-                SYSTEM_PROFILES_ENABLED, 1) == 1) {
+                Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) {
             // Profiles are enabled, return active profile
             try {
                 getService().setActiveProfile(new ParcelUuid(profileUuid));
@@ -89,7 +87,7 @@ public class ProfileManager {
 
     public Profile getActiveProfile() {
         if (Settings.System.getInt(mContext.getContentResolver(),
-                SYSTEM_PROFILES_ENABLED, 1) == 1) {
+                Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) {
             // Profiles are enabled, return active profile
             try {
                 return getService().getActiveProfile();
