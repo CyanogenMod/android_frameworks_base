@@ -1374,7 +1374,9 @@
     <string name="weather_no_data">Sem dados</string>
     <string name="weather_tap_to_refresh">Aperte para atualizar</string>
     <string name="weather_refreshing">Atualizando</string>
+    <string name="weather_last_sync_just_now">Agora mesmo</string>
     <string name="lockscreen_discharging">Descarregando, <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%%</xliff:g></string>
     <string name="permlab_preventpower">substituir tecla de energia</string>
     <string name="permdesc_preventpower">Permite a uma aplicação a substituir o tecla de energia</string>
+    <string name="storage_sd_dock_card">Cartão SD do dock</string>
 </resources>
