@@ -36,6 +36,17 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Problema di connessione o codice MMI non valido."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Operazione limitata solo ai numeri di selezione fissa."</string>
+    <string name="profileNameDefault">Predefinito</string>
+    <string name="profileNameWork">Lavoro</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silenzioso</string>
+    <string name="profileNameNight">Notte</string>
+    <string name="profileGroupPhone">Telefono</string>
+    <string name="profileGroupCalendar">Calendario</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Altro</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Il servizio è stato attivato."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Il servizio è stato attivato per:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Il servizio è stato disattivato."</string>
@@ -139,6 +150,17 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Disattiva wireless"</string>
     <string name="screen_lock" msgid="799094655496098153">"Blocco schermo"</string>
     <string name="power_off" msgid="4266614107412865048">"Spegni"</string>
+    <string name="reboot_system" product="tablet">Riavvia tablet</string>
+    <string name="reboot_system" product="default">Riavvia telefono</string>
+    <string name="global_action_screenshot">Cattura schermata</string>
+    <string name="reboot_reboot">Riavvia</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Riavvio\u2026</string>
+    <string name="reboot_confirm">Il dispositivo verrà riavviato.</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"Suoneria disattivata"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Suoneria vibrazione"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Suoneria attiva"</string>
@@ -154,6 +176,8 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Opzioni telefono"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Blocco schermo"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Spegni"</string>
+    <string name="global_action_reboot">Riavvia</string>
+    <string name="global_action_choose_profile">Profilo</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Modalità silenziosa"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Audio non attivo"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Audio attivo"</string>
@@ -312,12 +336,14 @@
     <string name="permlab_getPackageSize" msgid="7472921768357981986">"calcolo spazio di archiviazione applicazioni"</string>
     <string name="permdesc_getPackageSize" msgid="3921068154420738296">"Consente all\'applicazione di recuperare il suo codice, i suoi dati e le dimensioni della cache"</string>
     <string name="permlab_installPackages" msgid="2199128482820306924">"installazione diretta di applicazioni"</string>
-    <string name="permdesc_installPackages" msgid="5628530972548071284">"Consente all\'applicazione da installare pacchetti Android nuovi o aggiornati. Le applicazioni dannose potrebbero farne uso per aggiungere nuove applicazioni con autorizzazioni arbitrariamente importanti."</string>
+    <string name="permdesc_installPackages" msgid="5628530972548071284">"Consente all\'applicazione di installare pacchetti Android nuovi o aggiornati. Le applicazioni dannose potrebbero farne uso per aggiungere nuove applicazioni con autorizzazioni arbitrariamente importanti."</string>
     <string name="permlab_clearAppCache" msgid="7487279391723526815">"eliminazione di tutti i dati della cache applicazioni"</string>
     <string name="permdesc_clearAppCache" product="tablet" msgid="3523396284474042284">"Consente all\'applicazione di liberare spazio sul tablet eliminando file nella directory della cache dell\'applicazione. L\'accesso è generalmente limitato a processi di sistema."</string>
     <string name="permdesc_clearAppCache" product="default" msgid="5067988373366292186">"Consente all\'applicazione di liberare spazio sul telefono eliminando file nella directory della cache dell\'applicazione. L\'accesso è generalmente limitato a processi di sistema."</string>
     <string name="permlab_movePackage" msgid="3289890271645921411">"spostamento delle risorse dell\'applicazione"</string>
     <string name="permdesc_movePackage" msgid="319562217778244524">"Consente all\'applicazione di spostare le risorse delle applicazioni da supporti interni a supporti esterni e viceversa."</string>
+    <string name="permlab_preventpower">modifica azione tasto spegnimento</string>
+    <string name="permdesc_preventpower">Consente a un\'applicazione di cambiare il comportamento del tasto di spegnimento</string>
     <string name="permlab_readLogs" msgid="6615778543198967614">"Lettura dati di registro sensibili"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="82061313293455151">"Consente all\'applicazione di leggere vari file di registro del sistema per trovare informazioni generali sulle operazioni effettuate con il tablet. Tali file potrebbero contenere informazioni personali o riservate."</string>
     <string name="permdesc_readLogs" product="default" msgid="2063438140241560443">"Consente all\'applicazione di leggere vari file di registro del sistema per trovare informazioni generali sulle operazioni effettuate con il telefono. Tali file potrebbero contenere informazioni personali o riservate."</string>
@@ -699,9 +725,10 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Riprova"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Numero massimo di tentativi di Sblocco col sorriso superato"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"In carica (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
-    <string name="lockscreen_charged" msgid="4938930459620989972">"Carico."</string>
+    <string name="lockscreen_discharging">In uso, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_charged" msgid="4938930459620989972">"Carico"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Collegare il caricabatterie."</string>
+    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Collegare il caricabatterie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"Nessuna SIM presente."</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Nessuna scheda SIM presente nel tablet."</string>
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"Nessuna SIM presente nel telefono."</string>
@@ -1011,8 +1038,6 @@
     <item quantity="other" msgid="7915895323644292768">"Reti Wi-Fi aperte disponibili"</item>
   </plurals>
     <string name="wifi_available_sign_in" msgid="4029489716605255386">"Accedi a rete Wi-Fi"</string>
-    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
-    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Impossibile connettersi alla rete Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" ha una connessione Internet debole."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1079,8 +1104,8 @@
     <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"Tutti i file memorizzati nell\'archivio USB verranno cancellati. Questa azione non può essere annullata."</string>
     <string name="extmedia_format_message" product="default" msgid="14131895027543830">"Tutti i dati sulla scheda andranno persi."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Formatta"</string>
-    <string name="adb_active_notification_title" msgid="6729044778949189918">"Debug USB collegato"</string>
-    <string name="adb_active_notification_message" msgid="1016654627626476142">"Tocca per disattivare il debug USB."</string>
+    <string name="adb_active_notification_title" msgid="6729044778949189918">"Android debug abilitato"</string>
+    <string name="adb_active_notification_message" msgid="1016654627626476142">"Seleziona per disattivare il debug USB."</string>
     <string name="select_input_method" msgid="4653387336791222978">"Scegli il metodo di immissione"</string>
     <string name="configure_input_methods" msgid="9091652157722495116">"Configura metodi di immissione"</string>
     <string name="use_physical_keyboard" msgid="6203112478095117625">"Tastiera fisica"</string>
@@ -1242,6 +1267,7 @@
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Altre opzioni"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Memoria interna"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"Scheda SD"</string>
+    <string name="storage_sd_dock_card">Scheda SD dock</string>
     <string name="storage_usb" msgid="3017954059538517278">"Archivio USB"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Modifica"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Avviso sull\'utilizzo dei dati"</string>
@@ -1280,6 +1306,7 @@
     <string name="sending" msgid="3245653681008218030">"Invio..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Avviare l\'applicazione Browser?"</string>
     <string name="SetupCallDefault" msgid="5834948469253758575">"Accettare la chiamata?"</string>
+    <string name="app_killed_message">Applicazione terminata</string>
     <string name="activity_resolver_use_always" msgid="8017770747801494933">"Sempre"</string>
     <string name="activity_resolver_use_once" msgid="2404644797149173758">"Solo una volta"</string>
     <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"Tablet"</string>
@@ -1290,4 +1317,64 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Sistema"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Audio Bluetooth"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Fine"</string>
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tempesta tropicale</string>
+    <string name="weather_2">Uragano</string>
+    <string name="weather_3">Temporali violenti</string>
+    <string name="weather_4">Temporali</string>
+    <string name="weather_5">Pioggia e neve</string>
+    <string name="weather_6">Pioggia e nevischio</string>
+    <string name="weather_7">Neve e nevischio</string>
+    <string name="weather_8">Pioviggine gelata</string>
+    <string name="weather_9">Pioviggine/Bruma</string>
+    <string name="weather_10">Pioggia gelata</string>
+    <string name="weather_11">Acquazzoni</string>
+    <string name="weather_12">Acquazzoni</string>
+    <string name="weather_13">Raffiche di neve</string>
+    <string name="weather_14">Nevicate leggere</string>
+    <string name="weather_15">Scaccianeve</string>
+    <string name="weather_16">Neve</string>
+    <string name="weather_17">Grandine</string>
+    <string name="weather_18">Nevischio</string>
+    <string name="weather_19">Pulviscolo</string>
+    <string name="weather_20">Nebbia</string>
+    <string name="weather_21">Foschia</string>
+    <string name="weather_22">Fumoso</string>
+    <string name="weather_23">Tempestoso</string>
+    <string name="weather_24">Ventoso</string>
+    <string name="weather_25">Freddo</string>
+    <string name="weather_26">Nuvoloso</string>
+    <string name="weather_27">Preval. nuvoloso</string>
+    <string name="weather_28">Preval. nuvoloso</string>
+    <string name="weather_29">Parz. nuvoloso</string>
+    <string name="weather_30">Parz. nuvoloso</string>
+    <string name="weather_31">Sereno</string>
+    <string name="weather_32">Sereno</string>
+    <string name="weather_33">Bel tempo</string>
+    <string name="weather_34">Bel tempo</string>
+    <string name="weather_35">Pioggia e grandine</string>
+    <string name="weather_36">Caldo</string>
+    <string name="weather_37">Temporali isolati</string>
+    <string name="weather_38">Temporali sparsi</string>
+    <string name="weather_39">Temporali sparsi</string>
+    <string name="weather_40">Rovesci sparsi</string>
+    <string name="weather_41">Nevicate intense</string>
+    <string name="weather_42">Nevicate sparse</string>
+    <string name="weather_43">Nevicate intense</string>
+    <string name="weather_44">Parz. nuvoloso</string>
+    <string name="weather_45">Temporali</string>
+    <string name="weather_46">Nevicate</string>
+    <string name="weather_47">Temporali sparsi</string>
+    <string name="weather_3200"></string>
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NE</string>
+    <string name="weather_E">E</string>
+    <string name="weather_SE">SE</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SW</string>
+    <string name="weather_W">W</string>
+    <string name="weather_NW">NW</string>
+    <string name="weather_no_data">Nessun dato</string>
+    <string name="weather_tap_to_refresh">Tocca per aggiornare</string>
+    <string name="weather_refreshing">In aggiornamento</string>
 </resources>
