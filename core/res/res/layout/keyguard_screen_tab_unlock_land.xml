@@ -157,7 +157,7 @@
                 android:layout_below="@id/weather_condition"
                 android:layout_alignParentRight="true"
                 android:gravity="right"
-                android:textSize="6sp"
+                android:textSize="8sp"
                 android:textColor="?android:attr/textColorSecondary" />
 
         </RelativeLayout>
