@@ -3705,6 +3705,7 @@
     <string name="weather_no_data">No data</string>
     <string name="weather_tap_to_refresh">Tap to refresh</string>
     <string name="weather_refreshing">Refreshing</string>
+    <string name="weather_last_sync_just_now">Just now</string>
 
     <!-- Options that show upon long-pressing a key on the physical keyboard -->
     <string name="symbol_picker_A">\u00C0\u00C1\u00C2\u00C4\u00C6\u00C3\u00C5\u0104\u0100</string>
