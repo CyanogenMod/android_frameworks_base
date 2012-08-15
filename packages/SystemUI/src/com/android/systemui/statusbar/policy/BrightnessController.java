@@ -31,7 +31,7 @@ import android.widget.CompoundButton;
 public class BrightnessController implements ToggleSlider.Listener {
     private static final String TAG = "StatusBar.BrightnessController";
 
-    private static final int MINIMUM_BACKLIGHT = android.os.PowerManager.BRIGHTNESS_DIM;
+    private int mScreenBrightnessDim;
     private static final int MAXIMUM_BACKLIGHT = android.os.PowerManager.BRIGHTNESS_ON;
 
     private Context mContext;
@@ -45,6 +45,9 @@ public class BrightnessController implements ToggleSlider.Listener {
         boolean automaticAvailable = context.getResources().getBoolean(
                 com.android.internal.R.bool.config_automatic_brightness_available);
         mPower = IPowerManager.Stub.asInterface(ServiceManager.getService("power"));
+
+        mScreenBrightnessDim = context.getResources().getInteger(
+                com.android.internal.R.integer.config_screenBrightnessDim);
 
         if (automaticAvailable) {
             int automatic;
@@ -68,8 +71,8 @@ public class BrightnessController implements ToggleSlider.Listener {
             value = MAXIMUM_BACKLIGHT;
         }
 
-        control.setMax(MAXIMUM_BACKLIGHT - MINIMUM_BACKLIGHT);
-        control.setValue(value - MINIMUM_BACKLIGHT);
+        control.setMax(MAXIMUM_BACKLIGHT - mScreenBrightnessDim);
+        control.setValue(value - mScreenBrightnessDim);
 
         control.setOnChangedListener(this);
     }
@@ -78,7 +81,7 @@ public class BrightnessController implements ToggleSlider.Listener {
         setMode(automatic ? Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC
                 : Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
         if (!automatic) {
-            final int val = value + MINIMUM_BACKLIGHT;
+            final int val = value + mScreenBrightnessDim;
             setBrightness(val);
             if (!tracking) {
                 AsyncTask.execute(new Runnable() {
