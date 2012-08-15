@@ -1308,6 +1308,7 @@
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system" product="tablet">Перезагрузка планшетного ПК</string>
     <string name="reboot_system" product="default">Перезагрузка телефона</string>
+    <string name="reboot_reboot">Перезагрузка</string>
 
     <!-- label for item that screenshots in phone options dialog -->
     <string name="global_action_screenshot">Скриншот</string>
