@@ -441,10 +441,20 @@ class KeyguardStatusViewManager implements OnClickListener {
                 mWeatherCondition.setVisibility(View.VISIBLE);
             }
             if (mWeatherUpdateTime != null) {
-                Date lastTime = new Date(mWeatherInfo.last_sync);
-                String date = DateFormat.getDateFormat(getContext()).format(lastTime);
-                String time = DateFormat.getTimeFormat(getContext()).format(lastTime);
-                mWeatherUpdateTime.setText(date + " " + time);
+                Date lastTime = new Date(w.last_sync);
+                String lastTimeText;
+                long now = System.currentTimeMillis();
+                long timeDiff = (now - lastTime.getTime()) / 1000;
+                if (timeDiff >= 172800) { // >2 days (60*60*24*2)
+                    lastTimeText = String.format("%d days ago", (int) Math.floor(timeDiff / 86400));
+                } else if (timeDiff >= 86400) { // >1 day (60*60*24)
+                    lastTimeText = String.format("Yesterday at %s",
+                            DateFormat.getTimeFormat(getContext()).format(lastTime));
+                } else { // <1 day
+                    lastTimeText = String.format("Today at %s",
+                            DateFormat.getTimeFormat(getContext()).format(lastTime));
+                }
+                mWeatherUpdateTime.setText(lastTimeText);
                 mWeatherUpdateTime.setVisibility(showTimestamp ? View.VISIBLE : View.GONE);
             }
             if (mWeatherTempsPanel != null && mWeatherTemp != null && mWeatherLowHigh != null) {
