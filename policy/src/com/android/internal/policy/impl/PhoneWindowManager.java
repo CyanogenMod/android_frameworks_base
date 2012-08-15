@@ -1992,7 +1992,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return R.anim.dock_top_enter;
             }
         } else if (win == mNavigationBar) {
-            // This can be on either the bottom or the right. or left
+            // This can be on either the bottom, the right or the left
 
             if (mNavigationBarOnBottom) {
                 if (transit == TRANSIT_EXIT || transit == TRANSIT_HIDE) {

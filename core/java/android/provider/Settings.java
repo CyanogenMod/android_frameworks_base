@@ -2370,7 +2370,7 @@ public final class Settings {
          * @hide
          */
         public static final String NAV_BUTTONS = "nav_buttons";
-        
+
         /**
          * Navigation bars on the left side of the screen.
          *
@@ -2503,7 +2503,7 @@ public final class Settings {
 
         /**
          * Boolean value whether to link ringtone and notification volumes
-         * 
+         *
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";

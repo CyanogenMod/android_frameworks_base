@@ -159,7 +159,7 @@
         android:paddingTop="0dp"
         >
 
-        <LinearLayout 
+        <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="vertical"
@@ -289,7 +289,7 @@
         android:paddingTop="0dp"
         >
 
-        <LinearLayout 
+        <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="vertical"
@@ -298,7 +298,7 @@
             android:id="@+id/nav_buttons"
             android:animateLayoutChanges="true"
             >
-            
+
             <!-- navigation controls -->
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/menu"
                 android:layout_height="40dp"
@@ -318,7 +318,7 @@
                 android:contentDescription="@string/accessibility_recent"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
                 />
-            <View 
+            <View
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
@@ -334,7 +334,7 @@
                 android:contentDescription="@string/accessibility_home"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
                 />
-            <View 
+            <View
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
@@ -359,7 +359,7 @@
         </LinearLayout>
 
         <!-- lights out layout to match exactly -->
-        <LinearLayout 
+        <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="vertical"
@@ -374,7 +374,7 @@
                 android:scaleType="center"
                 android:layout_weight="0"
                 />
-            <View 
+            <View
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
@@ -387,7 +387,7 @@
                 android:scaleType="center"
                 android:layout_weight="0"
                 />
-            <View 
+            <View
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
