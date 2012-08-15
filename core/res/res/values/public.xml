@@ -3815,6 +3815,7 @@
   <java-symbol type="string" name="weather_no_data" />
   <java-symbol type="string" name="weather_tap_to_refresh" />
   <java-symbol type="string" name="weather_refreshing" />
+  <java-symbol type="string" name="weather_last_sync_just_now" />
   <java-symbol type="id" name="weather_panel" />
   <java-symbol type="id" name="weather_city" />
   <java-symbol type="id" name="weather_condition" />
