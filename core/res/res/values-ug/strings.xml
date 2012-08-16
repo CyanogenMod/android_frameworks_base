@@ -967,13 +967,9 @@
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
     <string name="wifi_p2p_turnon_message" msgid="2804722042556269129">"Wi-Fi Direct مەشغۇلاتىنى قوزغات. بۇ مەشغۇلات Wi-Fi خېرىدارى/قىزىق نۇقتا مەشغۇلاتىنى تاقايدۇ."</string>
     <string name="wifi_p2p_failed_message" msgid="1820097493844848281">"Wi-Fi Direct نى قوزغىتالمايدۇ"</string>
-    <string name="wifi_p2p_pbc_go_negotiation_request_message" msgid="3170321684621420428">"<xliff:g id="P2P_DEVICE_ADDRESS">%1$s</xliff:g> نىڭ Wi-Fi Direct باغلىنىش ئىلتىماسىنى قوبۇللىدى. جەزملە چېكىلسە قوشۇلىدۇ."</string>
-    <string name="wifi_p2p_pin_go_negotiation_request_message" msgid="5177412094633377308">"<xliff:g id="P2P_DEVICE_ADDRESS">%1$s</xliff:g> نىڭ Wi-Fi Direct باغلىنىش ئىلتىماسىنى قوبۇللىدى. pin كىرگۈزۈلسە داۋاملىشىدۇ."</string>
-    <string name="wifi_p2p_pin_display_message" msgid="2834049169114922902">"جۈپلەيدىغان ئۈسكۈنە <xliff:g id="P2P_CLIENT_ADDRESS">%2$s</xliff:g> دە WPS pin <xliff:g id="P2P_WPS_PIN">%1$s</xliff:g> كىرگۈزگەندىلا ئاندىن باغلىنىش تەڭشىكىنى داۋاملاشتۇرالايدۇ"</string>
     <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct ئوچۇق"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"چېكىلسە تەڭشەيدۇ"</string>
     <string name="select_character" msgid="3365550120617701745">"ھەرپ قىستۇر"</string>
-    <string name="sms_control_default_app_name" msgid="7630529934366549163">"يوچۇن ئەپ"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"قىسقا ئۇچۇر يوللاۋاتىدۇ"</string>
     <string name="sms_control_message" msgid="1289331457999236205">"ناھايىتى جىق قىسقا ئۇچۇر يوللىنىۋاتىدۇ. \"جەزملە\" تاللانسا داۋاملاشتۇرىدۇ، \"ۋاز كەچ\" تاللانسا يوللاشنى توختىتىدۇ."</string>
     <string name="sms_control_yes" msgid="2532062172402615953">"جەزملە"</string>
@@ -1133,7 +1129,6 @@
     <string name="sync_do_nothing" msgid="8717589462945226869">"ھازىر ھېچقانداق مەشغۇلات قىلما."</string>
     <string name="choose_account_label" msgid="4191313562041125787">"بىر ھېسابات تاللاڭ"</string>
     <string name="add_account_label" msgid="2935267344849993553">"بىر ھېسابات قوش"</string>
-    <string name="choose_account_text" msgid="6891230675141555481">"قايسى ھېساباتنى ئىشلىتىسىز؟"</string>
     <string name="add_account_button_label" msgid="3611982894853435874">"ھېسابات قوش"</string>
     <string name="number_picker_increment_button" msgid="4830170763103463443">"ئاشۇر"</string>
     <string name="number_picker_decrement_button" msgid="2576606679160067262">"كېمەيت"</string>
@@ -1151,14 +1146,6 @@
     <string name="date_picker_decrement_day_button" msgid="2427816793443629131">"كېمەيگەن كۈن"</string>
     <string name="date_picker_increment_year_button" msgid="3058553394722295105">"ئاشۇرغان يىل"</string>
     <string name="date_picker_decrement_year_button" msgid="5193062846559743823">"كېمەيگەن يىل"</string>
-    <string name="checkbox_checked" msgid="7222044992652711167">"تاللانغان"</string>
-    <string name="checkbox_not_checked" msgid="5174639551134444056">"تاللانمىغان"</string>
-    <string name="radiobutton_selected" msgid="8603599808486581511">"تاللانغان"</string>
-    <string name="radiobutton_not_selected" msgid="2908760184307722393">"تاللانمىدى"</string>
-    <string name="switch_on" msgid="551417728476977311">"قوزغات"</string>
-    <string name="switch_off" msgid="7249798614327155088">"تاقا"</string>
-    <string name="togglebutton_pressed" msgid="4180411746647422233">"بېسىلغان"</string>
-    <string name="togglebutton_not_pressed" msgid="4495147725636134425">"بېسىلمىغان"</string>
     <string name="keyboardview_keycode_alt" msgid="4856868820040051939">"Alt"</string>
     <string name="keyboardview_keycode_cancel" msgid="1203984017245783244">"ۋاز كەچ"</string>
     <string name="keyboardview_keycode_delete" msgid="3337914833206635744">"ئۆچۈر"</string>
