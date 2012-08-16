@@ -294,14 +294,9 @@ public class CdmaServiceStateTracker extends ServiceStateTracker {
                 mNeedToRegForRuimLoaded = false;
             }
 
-            if (phone.getLteOnCdmaMode() == Phone.LTE_ON_CDMA_TRUE) {
-                // Subscription will be read from SIM I/O
-                if (DBG) log("Receive EVENT_RUIM_READY");
-                pollState();
-            } else {
-                if (DBG) log("Receive EVENT_RUIM_READY and Send Request getCDMASubscription.");
-                getSubscriptionInfoAndStartPollingThreads();
-            }
+            // Send Request getCDMASubscription. get subscription from SIM I/O and NV
+            if (DBG) log("Receive EVENT_RUIM_READY and Send Request getCDMASubscription.");
+            getSubscriptionInfoAndStartPollingThreads();
             phone.prepareEri();
             break;
 
