@@ -297,6 +297,7 @@ public class CdmaServiceStateTracker extends ServiceStateTracker {
             if (phone.getLteOnCdmaMode() == Phone.LTE_ON_CDMA_TRUE) {
                 // Subscription will be read from SIM I/O
                 if (DBG) log("Receive EVENT_RUIM_READY");
+                getSubscriptionInfoAndStartPollingThreads();
                 pollState();
             } else {
                 if (DBG) log("Receive EVENT_RUIM_READY and Send Request getCDMASubscription.");
