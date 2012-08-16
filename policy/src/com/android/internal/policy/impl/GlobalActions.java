@@ -254,29 +254,36 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             });
 
         // next: reboot
-        mItems.add(
-            new SinglePressAction(R.drawable.ic_lock_reboot, R.string.global_action_reboot) {
-                public void onPress() {
-                    mWindowManagerFuncs.reboot();
-                }
-
-                public boolean onLongPress() {
-                    mWindowManagerFuncs.rebootSafeMode();
-                    return true;
-                }
-
-                public boolean showDuringKeyguard() {
-                    return true;
-                }
-
-                public boolean showBeforeProvisioning() {
-                    return true;
-                }
-            });
-
-        // next: profile - only shown if enabled, enabled by default
+        // only shown if enabled, enabled by default
         if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) {
+                Settings.System.POWER_MENU_REBOOT_ENABLED, 1) == 1) {
+            mItems.add(
+                new SinglePressAction(R.drawable.ic_lock_reboot, R.string.global_action_reboot) {
+                    public void onPress() {
+                        mWindowManagerFuncs.reboot();
+                    }
+
+                    public boolean onLongPress() {
+                        mWindowManagerFuncs.rebootSafeMode();
+                        return true;
+                    }
+
+                    public boolean showDuringKeyguard() {
+                        return true;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return true;
+                    }
+                });
+        }
+
+        // next: profile
+        // only shown if both system profiles and the menu item is enabled, enabled by default
+        if ((Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) &&
+                (Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.POWER_MENU_PROFILES_ENABLED, 1) == 1)) {
             mItems.add(
                 new ProfileChooseAction() {
                     public void onPress() {
@@ -297,7 +304,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 });
         }
 
-        // next: screenshot - only shown if enabled, disabled by default
+        // next: screenshot
+        // only shown if enabled, disabled by default
         if (Settings.System.getInt(mContext.getContentResolver(),
                 POWER_MENU_SCREENSHOT_ENABLED, 0) == 1) {
             mItems.add(
