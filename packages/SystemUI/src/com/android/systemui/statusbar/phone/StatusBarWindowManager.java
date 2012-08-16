@@ -23,6 +23,7 @@ import android.graphics.Point;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.Display;
 import android.view.View;
@@ -81,8 +82,13 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
 
     private boolean shouldEnableKeyguardScreenRotation() {
         Resources res = mContext.getResources();
-        return SystemProperties.getBoolean("lockscreen.rot_override", false)
-                || res.getBoolean(R.bool.config_enableLockScreenRotation);
+        boolean enableLockScreenRotation = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_ROTATION, 0) != 0;
+        boolean enableAccelerometerRotation = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION, 1) != 0;
+        return (SystemProperties.getBoolean("lockscreen.rot_override", false)
+                || res.getBoolean(R.bool.config_enableLockScreenRotation))
+                && (enableLockScreenRotation || enableAccelerometerRotation);
     }
 
     /**
