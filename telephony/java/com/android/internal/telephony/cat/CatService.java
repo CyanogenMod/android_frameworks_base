@@ -85,6 +85,7 @@ public class CatService extends Handler implements AppInterface {
     static final int MSG_ID_REFRESH                  = 5;
     static final int MSG_ID_RESPONSE                 = 6;
     static final int MSG_ID_SIM_READY                = 7;
+    static final int MSG_ID_TIMEOUT                  = 9;
 
     static final int MSG_ID_RIL_MSG_DECODED          = 10;
 
@@ -624,6 +625,9 @@ public class CatService extends Handler implements AppInterface {
         case MSG_ID_SIM_READY:
             CatLog.d(this, "SIM ready. Reporting STK service running now...");
             mCmdIf.reportStkServiceIsRunning(null);
+            break;
+        case MSG_ID_TIMEOUT:
+            CatLog.d(this, "CAT Timeout");
             break;
         default:
             throw new AssertionError("Unrecognized CAT command: " + msg.what);
