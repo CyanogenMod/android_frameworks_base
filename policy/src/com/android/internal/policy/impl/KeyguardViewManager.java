@@ -26,6 +26,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Canvas;
 import android.os.IBinder;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,9 +107,13 @@ public class KeyguardViewManager implements KeyguardWindowController {
         if (DEBUG) Log.d(TAG, "show(); mKeyguardView==" + mKeyguardView);
 
         Resources res = mContext.getResources();
+        boolean enableLockScreenRotation = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_ROTATION, 0) != 0;
+        boolean enableAccelerometerRotation = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION, 1) != 0;
         boolean enableScreenRotation =
                 SystemProperties.getBoolean("lockscreen.rot_override",false)
-                || res.getBoolean(R.bool.config_enableLockScreenRotation);
+                || (enableLockScreenRotation && enableAccelerometerRotation);
         if (mKeyguardHost == null) {
             if (DEBUG) Log.d(TAG, "keyguard host is null, creating it...");
 
