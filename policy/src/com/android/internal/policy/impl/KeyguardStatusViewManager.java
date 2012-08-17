@@ -666,6 +666,7 @@ class KeyguardStatusViewManager implements OnClickListener {
         if (mDigitalClock != null) {
             mDigitalClock.updateTime();
         }
+        updateWeatherIfAvailable();
 
         mUpdateMonitor.registerInfoCallback(mInfoCallback);
         mUpdateMonitor.registerSimStateCallback(mSimStateCallback);
@@ -701,6 +702,13 @@ class KeyguardStatusViewManager implements OnClickListener {
         updateOwnerInfo();
         updateStatus1();
         updateCarrierText();
+    }
+
+    private void updateWeatherIfAvailable() {
+        boolean showWeather = Settings.System.getInt(resolver,Settings.System.LOCKSCREEN_WEATHER, 0) == 1;
+        if (showWeather && mWeatherInfo.last_sync > 0) {
+            setWeatherData(mWeatherInfo);
+        }
     }
 
     private void updateAlarmInfo() {
