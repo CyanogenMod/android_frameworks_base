@@ -389,7 +389,9 @@ class KeyguardStatusViewManager implements OnClickListener {
                     Settings.System.WEATHER_UPDATE_INTERVAL, 60); // Default to hourly
             boolean manualSync = (interval == 0);
             if (!manualSync && (((System.currentTimeMillis() - mWeatherInfo.last_sync) / 60000) >= interval)) {
-                mHandler.sendEmptyMessage(QUERY_WEATHER);
+                if (!mHandler.hasMessages(QUERY_WEATHER)) {
+                    mHandler.sendEmptyMessage(QUERY_WEATHER);
+                }
             } else if (manualSync && mWeatherInfo.last_sync == 0) {
                 setNoWeatherData();
             } else {
@@ -438,7 +440,10 @@ class KeyguardStatusViewManager implements OnClickListener {
                 mWeatherCity.setVisibility(showLocation ? View.VISIBLE : View.GONE);
             }
             if (mWeatherCondition != null) {
-                mWeatherCondition.setText(w.condition);
+                // Avoid overriding "Refreshing..." status while we're querying...
+                if (!mHandler.hasMessages(QUERY_WEATHER)) {
+                    mWeatherCondition.setText(w.condition);
+                }
                 mWeatherCondition.setVisibility(View.VISIBLE);
             }
             if (mWeatherUpdateTime != null) {
@@ -666,6 +671,7 @@ class KeyguardStatusViewManager implements OnClickListener {
         if (mDigitalClock != null) {
             mDigitalClock.updateTime();
         }
+        refreshWeather();
 
         mUpdateMonitor.registerInfoCallback(mInfoCallback);
         mUpdateMonitor.registerSimStateCallback(mSimStateCallback);
@@ -1020,6 +1026,7 @@ class KeyguardStatusViewManager implements OnClickListener {
         @Override
         public void onTimeChanged() {
             refreshDate();
+            refreshWeather();
         }
 
         @Override
