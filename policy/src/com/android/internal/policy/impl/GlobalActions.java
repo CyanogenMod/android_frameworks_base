@@ -695,8 +695,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             return false;
         }
 
-        public View create(
-                Context context, View convertView, ViewGroup parent, LayoutInflater inflater) {
+        public View create(Context context, View convertView, ViewGroup parent, LayoutInflater inflater) {
             View v = inflater.inflate(R.layout.global_actions_item, parent, false);
 
             ImageView icon = (ImageView) v.findViewById(R.id.icon);
@@ -733,18 +732,24 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         abstract public void onPress();
 
         public View create(Context context, View convertView, ViewGroup parent, LayoutInflater inflater) {
-            View v = (convertView != null) ?
-                    convertView :
-                    inflater.inflate(R.layout.global_actions_item, parent, false);
+            View v = inflater.inflate(R.layout.global_actions_item, parent, false);
 
             ImageView icon = (ImageView) v.findViewById(R.id.icon);
             TextView messageView = (TextView) v.findViewById(R.id.message);
             TextView statusView = (TextView) v.findViewById(R.id.status);
-            statusView.setVisibility(View.VISIBLE);
-            statusView.setText(mProfileManager.getActiveProfile().getName());
 
-            icon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_lock_profile));
-            messageView.setText(R.string.global_action_choose_profile);
+            if (statusView != null) {
+                statusView.setVisibility(View.VISIBLE);
+                statusView.setText(mProfileManager.getActiveProfile().getName());
+            }
+
+            if (icon != null) {
+                icon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_lock_profile));
+            }
+
+            if (messageView != null) {
+                messageView.setText(R.string.global_action_choose_profile);
+            }
 
             return v;
         }
