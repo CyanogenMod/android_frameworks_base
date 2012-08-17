@@ -189,14 +189,24 @@ public class MobileDataStateTracker implements NetworkStateTracker {
                 if (!TextUtils.equals(apnType, mApnType)) {
                     return;
                 }
-                mNetworkInfo.setSubtype(TelephonyManager.getDefault().getNetworkType(),
-                        TelephonyManager.getDefault().getNetworkTypeName());
+
+
+                int oldSubtype = mNetworkInfo.getSubtype();
+                int newSubType = TelephonyManager.getDefault().getNetworkType();
+                String subTypeName = TelephonyManager.getDefault().getNetworkTypeName();
+                mNetworkInfo.setSubtype(newSubType, subTypeName);
+                if (newSubType != oldSubtype && mNetworkInfo.isConnected()) {
+                    Message msg = mTarget.obtainMessage(EVENT_NETWORK_SUBTYPE_CHANGED,
+                                                        oldSubtype, 0, mNetworkInfo);
+                    msg.sendToTarget();
+                }
+
                 Phone.DataState state = Enum.valueOf(Phone.DataState.class,
                         intent.getStringExtra(Phone.STATE_KEY));
                 String reason = intent.getStringExtra(Phone.STATE_CHANGE_REASON_KEY);
                 String apnName = intent.getStringExtra(Phone.DATA_APN_KEY);
-                mNetworkInfo.setRoaming(intent.getBooleanExtra(Phone.DATA_NETWORK_ROAMING_KEY,
-                        false));
+                mNetworkInfo.setRoaming(intent.getBooleanExtra(
+                        Phone.DATA_NETWORK_ROAMING_KEY, false));
                 if (VDBG) {
                     log(mApnType + " setting isAvailable to " +
                             intent.getBooleanExtra(Phone.NETWORK_UNAVAILABLE_KEY,false));
