@@ -6778,9 +6778,6 @@ sp<AudioFlinger::EffectHandle> AudioFlinger::EffectModule::controlHandle()
 
 void AudioFlinger::EffectModule::disconnect(const wp<EffectHandle>& handle, bool unpiniflast)
 {
-#ifdef WITH_QCOM_LPA
-    setEnabled(false);
-#endif
     LOGV("disconnect() %p handle %p ", this, handle.unsafe_get());
     // keep a strong reference on this EffectModule to avoid calling the
     // destructor before we exit
