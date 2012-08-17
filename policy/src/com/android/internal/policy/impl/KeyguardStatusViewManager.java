@@ -701,6 +701,12 @@ class KeyguardStatusViewManager implements OnClickListener {
         updateOwnerInfo();
         updateStatus1();
         updateCarrierText();
+        // We have to update the timestamp now that it's relative. Also, don't
+        // use refreshWeather() to make sure we don't request weather multiple
+        // times since updateStatusLines() is called so frequently.
+        if (mWeatherInfo != null) {
+            setWeatherData(mWeatherInfo);
+        }
     }
 
     private void updateAlarmInfo() {
