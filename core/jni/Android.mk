@@ -164,8 +164,6 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 	    com_android_internal_app_ActivityTrigger.cpp
     LOCAL_C_INCLUDES += \
 	    hardware/qcom/display/libtilerenderer
-    LOCAL_SHARED_LIBRARIES += \
-	    libtilerenderer
 endif
 
 LOCAL_C_INCLUDES += \
@@ -228,6 +226,10 @@ LOCAL_SHARED_LIBRARIES := \
 	libusbhost \
 	libharfbuzz \
 	libz
+
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+	LOCAL_SHARED_LIBRARIES += libtilerenderer
+endif
 
 ifeq ($(USE_OPENGL_RENDERER),true)
 	LOCAL_SHARED_LIBRARIES += libhwui
