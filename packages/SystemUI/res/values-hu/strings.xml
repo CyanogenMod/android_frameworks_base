@@ -41,7 +41,13 @@
     <string name="battery_low_why" msgid="7279169609518386372">"Akkumulátorhasználat"</string>
     <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Beállítások"</string>
     <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
+    <string name="status_bar_settings_bluetooth_button">Bluetooth</string>
     <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Repülőgép üzemmód"</string>
+    <string name="status_bar_settings_location">GPS</string>
+    <string name="status_bar_settings_flashlight">LED villanófény</string>
+    <string name="status_bar_settings_mobile_data">Mobilinternet</string>
+    <string name="status_bar_settings_network_mode">2G/3G</string>
+    <string name="status_bar_settings_sound_mode">Hang</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Képernyő automatikus forgatása"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"NÉMÍT"</string>
     <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"AUTO"</string>
