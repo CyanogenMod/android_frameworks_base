@@ -986,6 +986,22 @@ public class LockPatternUtils {
         setLong(Settings.Secure.LOCK_PATTERN_SIZE, size);
     }
 
+    public void setVisibleDotsEnabled(boolean enabled) {
+        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled);
+    }
+
+    public boolean isVisibleDotsEnabled() {
+        return getBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, true);
+    }
+
+    public void setShowErrorPath(boolean enabled) {
+        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled);
+    }
+
+    public boolean isShowErrorPath() {
+        return getBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, true);
+    }
+
     /**
      * Set and store the lockout deadline, meaning the user can't attempt his/her unlock
      * pattern until the deadline has passed.
