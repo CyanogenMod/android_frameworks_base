@@ -678,6 +678,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
            String[] settingsToMove = {
                    Secure.LOCK_PATTERN_ENABLED,
                    Secure.LOCK_PATTERN_VISIBLE,
+                   Secure.LOCK_SHOW_ERROR_PATH,
+                   Secure.LOCK_DOTS_VISIBLE,
                    Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED,
                    "lockscreen.password_type",
                    "lockscreen.lockoutattemptdeadline",
