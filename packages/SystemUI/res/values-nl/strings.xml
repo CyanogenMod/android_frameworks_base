@@ -37,7 +37,7 @@
     <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Vliegtuigmodus"</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Scherm automatisch draaien"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"DEMPEN"</string>
-    <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"AUTO"</string>
+    <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"AUTOMATISCH"</string>
     <string name="status_bar_settings_notifications" msgid="397146176280905137">"Meldingen"</string>
     <string name="bluetooth_tethered" msgid="7094101612161133267">"Bluetooth getetherd"</string>
     <string name="status_bar_input_method_settings_configure_input_methods" msgid="3504292471512317827">"Invoermethoden instellen"</string>
@@ -109,7 +109,7 @@
     <string name="accessibility_data_connection_wifi" msgid="2324496756590645221">"Wi-Fi"</string>
     <string name="accessibility_no_sim" msgid="8274017118472455155">"Geen simkaart."</string>
     <string name="accessibility_bluetooth_tether" msgid="4102784498140271969">"Bluetooth-tethering."</string>
-    <string name="accessibility_airplane_mode" msgid="834748999790763092">"Vliegmodus."</string>
+    <string name="accessibility_airplane_mode" msgid="834748999790763092">"Vliegtuigmodus."</string>
     <string name="accessibility_battery_level" msgid="7451474187113371965">"Accu: <xliff:g id="NUMBER">%d</xliff:g> procent."</string>
     <string name="accessibility_settings_button" msgid="799583911231893380">"Systeeminstellingen."</string>
     <string name="accessibility_notifications_button" msgid="4498000369779421892">"Meldingen."</string>
@@ -136,6 +136,12 @@
     <string name="notifications_off_title" msgid="8936620513608443224">"Meldingen uit"</string>
     <string name="notifications_off_text" msgid="2529001315769385273">"Tik hier om meldingen weer in te schakelen."</string>
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Scherm wordt automatisch gedraaid."</string>
-    <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Het scherm is nu vergrendeld in liggende modus."</string>
-    <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Het scherm is nu vergrendeld in staande modus."</string>
+    <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Het scherm is nu vergrendeld in landschapsmodus."</string>
+    <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Het scherm is nu vergrendeld in portretmodus."</string>
+
+    <!-- CYANOGENMOD EDITS -->
+    <string name="status_bar_settings_flashlight">Zaklamp</string>
+    <string name="status_bar_settings_mobile_data">Mobiele gegevens</string>
+    <string name="status_bar_settings_sound_mode">Geluid</string>
+    <string name="powerwidget_screen_timeout_toast">Time-out scherm ingesteld op: %1$d %2$s</string>
 </resources>
