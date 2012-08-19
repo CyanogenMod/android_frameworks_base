@@ -1378,4 +1378,7 @@
     <string name="weather_no_data">Geen gegevens</string>
     <string name="weather_tap_to_refresh">Vernieuwen</string>
     <string name="weather_refreshing">Vernieuwen\u2026</string>
+    <string name="lockscreen_discharging">Ontladen, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="storage_sd_dock_card">SD-kaart koppelen</string>
+    <string name="weather_last_sync_just_now">Zojuist</string>
 </resources>
