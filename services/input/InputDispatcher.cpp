@@ -196,6 +196,7 @@ InputDispatcher::InputDispatcher(const sp<InputDispatcherPolicyInterface>& polic
     mLooper = new Looper(false);
 
     mKeyRepeatState.lastKeyEntry = NULL;
+    mKeyRepeatState.wakeKeyDownTime = 0;
 
     policy->getDispatcherConfiguration(&mConfig);
 }
@@ -235,13 +236,6 @@ void InputDispatcher::dispatchOnce() {
 
 void InputDispatcher::dispatchOnceInnerLocked(nsecs_t* nextWakeupTime) {
     nsecs_t currentTime = now();
-
-    // Reset the key repeat timer whenever we disallow key events, even if the next event
-    // is not a key.  This is to ensure that we abort a key repeat if the device is just coming
-    // out of sleep.
-    if (!mPolicy->isKeyRepeatEnabled() || !mDispatchEnabled) {
-        resetKeyRepeatLocked();
-    }
 
     // If dispatching is frozen, do not process timeouts or try to deliver any new events.
     if (mDispatchFrozen) {
@@ -682,7 +676,8 @@ bool InputDispatcher::dispatchKeyLocked(nsecs_t currentTime, KeyEntry* entry,
         if (entry->repeatCount == 0
                 && entry->action == AKEY_EVENT_ACTION_DOWN
                 && (entry->policyFlags & POLICY_FLAG_TRUSTED)
-                && (!(entry->policyFlags & POLICY_FLAG_DISABLE_KEY_REPEAT))) {
+                && (!(entry->policyFlags & POLICY_FLAG_DISABLE_KEY_REPEAT))
+                && entry->downTime != mKeyRepeatState.wakeKeyDownTime) {
             if (mKeyRepeatState.lastKeyEntry
                     && mKeyRepeatState.lastKeyEntry->keyCode == entry->keyCode) {
                 // We have seen two identical key downs in a row which indicates that the device
@@ -2310,6 +2305,18 @@ void InputDispatcher::notifyKey(const NotifyKeyArgs* args) {
     if (!validateKeyEvent(args->action)) {
         return;
     }
+
+    // This is to ensure that we abort a key repeat if the device is
+    // just coming out of sleep. Recording the downtime of the wake
+    // key before taking the mutex is quite important because the java
+    // thread otherwise runs first and finishes waking up the device
+    // before the InputDispatcher can notice. We can't run
+    // resetKeyRepeatLocked() here without the mutex, so we just
+    // record the wake key downTime out of order after checking if the
+    // dispatcher is enabled (lockless too) so we can skip the repeat
+    // later.
+    if (!mDispatchEnabled)
+        mKeyRepeatState.wakeKeyDownTime = args->downTime;
 
     uint32_t policyFlags = args->policyFlags;
     int32_t flags = args->flags;
