@@ -19,14 +19,15 @@ package com.android.internal.telephony;
 import static com.android.internal.telephony.RILConstants.*;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
-import android.telephony.SmsMessage;
 import android.os.SystemProperties;
+import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -273,6 +274,51 @@ public class SonyQualcommRIL extends RIL implements CommandsInterface {
     }
 
     @Override
+    protected DataCallState getDataCallState(Parcel p, int version) {
+        DataCallState dataCall = new DataCallState();
+
+        dataCall.version = version;
+        if (version < 5) {
+            dataCall.cid = p.readInt();
+            dataCall.active = p.readInt();
+            dataCall.type = p.readString();
+            if (version < 4) {
+                p.readString(); // APN - not used
+            }
+            String addresses = p.readString();
+            if (!TextUtils.isEmpty(addresses)) {
+                dataCall.addresses = addresses.split(" ");
+            }
+            // DataCallState needs an ifname. Since we don't have one use the name from the ThrottleService resource (default=rmnet0).
+            dataCall.ifname = Resources.getSystem().getString(com.android.internal.R.string.config_datause_iface);
+        } else {
+            dataCall.status = p.readInt();
+	    dataCall.suggestedRetryTime = p.readInt();
+            dataCall.cid = p.readInt();
+            dataCall.active = p.readInt();
+            dataCall.type = p.readString();
+            dataCall.ifname = p.readString();
+            if ((dataCall.status == DataConnection.FailCause.NONE.getErrorCode()) &&
+                    TextUtils.isEmpty(dataCall.ifname) && dataCall.active != 0) {
+              throw new RuntimeException("getDataCallState, no ifname");
+            }
+            String addresses = p.readString();
+            if (!TextUtils.isEmpty(addresses)) {
+                dataCall.addresses = addresses.split(" ");
+            }
+            String dnses = p.readString();
+            if (!TextUtils.isEmpty(dnses)) {
+                dataCall.dnses = dnses.split(" ");
+            }
+            String gateways = p.readString();
+            if (!TextUtils.isEmpty(gateways)) {
+                dataCall.gateways = gateways.split(" ");
+            }
+        }
+        return dataCall;
+    }
+
+    @Override
     protected void
     processUnsolicited (Parcel p) {
         Object ret;
@@ -281,6 +327,7 @@ public class SonyQualcommRIL extends RIL implements CommandsInterface {
 
         switch(response) {
             case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
+            case 1038: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
 
             default:
                 // Rewind the Parcel
@@ -295,6 +342,8 @@ public class SonyQualcommRIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED:
                 int state = p.readInt();
                 setRadioStateFromRILInt(state);
+                break;
+            case 1038:
                 break;
         }
     }
