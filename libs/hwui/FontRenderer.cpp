@@ -473,12 +473,15 @@ void FontRenderer::setFont(SkPaint* paint, uint32_t fontId, float fontSize) {
     }
 
     const float skewX = paint->getTextSkewX();
-    uint32_t italicStyle = *(uint32_t*) &skewX;
+    uint32_t italicStyle;
+    memcpy(&italicStyle, &skewX, sizeof(italicStyle));
     const float scaleXFloat = paint->getTextScaleX();
-    uint32_t scaleX = *(uint32_t*) &scaleXFloat;
+    uint32_t scaleX;
+    memcpy(&scaleX, &scaleXFloat, sizeof(scaleX));
     SkPaint::Style style = paint->getStyle();
     const float strokeWidthFloat = paint->getStrokeWidth();
-    uint32_t strokeWidth = *(uint32_t*) &strokeWidthFloat;
+    uint32_t strokeWidth;
+    memcpy(&strokeWidth, &strokeWidthFloat, sizeof(strokeWidth));
     mCurrentFont = Font::create(this, fontId, fontSize, flags, italicStyle,
             scaleX, style, strokeWidth);
 
@@ -554,12 +557,12 @@ void FontRenderer::precache(SkPaint* paint, const char* text, int numGlyphs) {
         flags |= Font::kFakeBold;
     }
     const float skewX = paint->getTextSkewX();
-    uint32_t italicStyle = *(uint32_t*) &skewX;
+    uint32_t italicStyle; memcpy(&italicStyle, &skewX, sizeof(float)); // = *(uint32_t*) &skewX;
     const float scaleXFloat = paint->getTextScaleX();
-    uint32_t scaleX = *(uint32_t*) &scaleXFloat;
+    uint32_t scaleX; memcpy(&scaleX, &scaleXFloat, sizeof(float)); // = *(uint32_t*) &scaleXFloat;
     SkPaint::Style style = paint->getStyle();
     const float strokeWidthFloat = paint->getStrokeWidth();
-    uint32_t strokeWidth = *(uint32_t*) &strokeWidthFloat;
+    uint32_t strokeWidth; memcpy(&strokeWidth, &strokeWidthFloat, sizeof(float)); // = *(uint32_t*) &strokeWidthFloat;
     float fontSize = paint->getTextSize();
     Font* font = Font::create(this, SkTypeface::UniqueID(paint->getTypeface()),
             fontSize, flags, italicStyle, scaleX, style, strokeWidth);

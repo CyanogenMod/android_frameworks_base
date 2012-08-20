@@ -4090,7 +4090,7 @@ bool ResTable::stringToFloat(const char16_t* s, size_t len, Res_value* outValue)
     if (*end == 0) {
         if (outValue) {
             outValue->dataType = outValue->TYPE_FLOAT;
-            *(float*)(&outValue->data) = f;
+            memcpy(&outValue->data, &f, sizeof(float)); // *(float*)(&outValue->data) = f;
             return true;
         }
     }
@@ -5530,7 +5530,9 @@ void ResTable::print_value(const Package* pkg, const Res_value& value) const
             }
         } 
     } else if (value.dataType == Res_value::TYPE_FLOAT) {
-        printf("(float) %g\n", *(const float*)&value.data);
+        float f;
+        memcpy(&f, &value.data, sizeof(float));
+        printf("(float) %g\n", f);
     } else if (value.dataType == Res_value::TYPE_DIMENSION) {
         printf("(dimension) ");
         print_complex(value.data, false);
