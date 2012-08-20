@@ -2703,6 +2703,13 @@ public final class Settings {
         public static final String POWER_MENU_PROFILES_ENABLED = "power_menu_profiles_enabled";
 
         /**
+         * NFC polling mode configuration key
+         *
+         * @hide
+         */
+        public static final String NFC_POLLING_MODE = "nfc_polling_mode";
+
+        /**
          * Whether to enable custom rebindings of the actions performed on
          * certain key press events.
          * @hide
