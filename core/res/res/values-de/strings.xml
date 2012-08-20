@@ -1428,5 +1428,8 @@
     <string name="weather_no_data">Keine Daten</string>
     <string name="weather_tap_to_refresh">Zum Aktualisieren berühren</string>
     <string name="weather_refreshing">Aktualisiere\u2026</string>
+    <string name="weather_last_sync_just_now">Gerade jetzt</string>
 
+    <!-- Long-press back kill application -->
+    <string name="app_killed_message">Anwendung beendet</string>
 </resources>
