@@ -2685,7 +2685,7 @@ public final class Settings {
         public static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
 
         /**
-         * Whether power menu screenshot is enabled
+         * Whether the power menu reboot menu is enabled
          * @hide
          */
         public static final String POWER_MENU_REBOOT_ENABLED = "power_menu_reboot_enabled";
@@ -2697,7 +2697,7 @@ public final class Settings {
         public static final String POWER_MENU_SCREENSHOT_ENABLED = "power_menu_screenshot_enabled";
 
         /**
-         * Whether power menu screenshot is enabled
+         * Whether power menu profiles switcher is enabled
          * @hide
          */
         public static final String POWER_MENU_PROFILES_ENABLED = "power_menu_profiles_enabled";
