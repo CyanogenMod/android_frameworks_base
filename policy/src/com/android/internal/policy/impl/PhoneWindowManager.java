@@ -566,6 +566,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     dispatchMediaKeyRepeatWithWakeLock((KeyEvent)msg.obj);
                     break;
                 case MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK:
+                    mIsLongPress = true;
                     dispatchMediaKeyWithWakeLockToAudioService((KeyEvent)msg.obj);
                     dispatchMediaKeyWithWakeLockToAudioService(KeyEvent.changeAction((KeyEvent)msg.obj, KeyEvent.ACTION_UP));
                     break;
