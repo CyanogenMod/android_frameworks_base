@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
+import android.os.SystemProperties;
 
 /**
  * Contains methods to standard constants used in the UI for timeouts, sizes, and distances.
@@ -408,8 +410,13 @@ public class ViewConfiguration {
      * a long press
      */
     public static int getLongPressTimeout() {
+        // Allow increase of timeout using property for targets which
+        // may take more time than default timeout to report headset
+        // events. The value will be Zero incase the property is not
+        // defined for a particular target.
+        int delay = SystemProperties.getInt("headset.hook.delay", 0);
         return AppGlobals.getIntCoreSetting(Settings.Secure.LONG_PRESS_TIMEOUT,
-                DEFAULT_LONG_PRESS_TIMEOUT);
+                                            DEFAULT_LONG_PRESS_TIMEOUT + delay);
     }
 
     /**
