@@ -957,5 +957,21 @@
     </plurals>
     <string name="permlab_revokePermissions">Umožňuje zobraziť a upraviť odmietnuté povolenia. Nie pre normálne aplikácie.</string>
     <string name="permdesc_revokePermissions">Umožňuje zapisovať a čítať odmietnuté povolenia. Nie pre normálne aplikácie.</string>
+    <string name="keyguard_finger_please_swipe">Potiahnite prstom cez senzor pre odomknutie</string>
+    <string name="keyguard_finger_ui_timeout">Časový limit UI vypršal!</string>
+    <string name="keyguard_finger_failed_to_unlock">Odomknutie zlyhalo!</string>
+    <string name="keyguard_finger_screen_off">Obrazovka vypnutá</string>
+    <string name="keyguard_finger_screen_on">Obrazovka zapnutá</string>
+    <string name="keyguard_finger_match">Zhoda, odomykám obrazovku...</string>
+    <string name="keyguard_finger_not_match">Nezhoduje sa...</string>
+    <string name="keyguard_finger_swipe_too_far_right">Potiahnite stredom.</string>
+    <string name="keyguard_finger_swipe_too_far_left">Potiahnite stredom.</string>
+    <string name="keyguard_finger_swipe_too_fast">Potiahnutie príliš rýchle.</string>
+    <string name="keyguard_finger_swipe_too_short">Potiahnutie príliš krátke.</string>
+    <string name="keyguard_finger_swipe_too_slow">Potiahnutie príliš pomalé.</string>
+    <string name="keyguard_finger_swipe_too_skewed">Potiahnutie príliš šikmé.</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">Identifikácia odtlačku zlyhala %1$d krát.\n\nSkúste znova o %2$d sekúnd.</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">Identifikácia odtlačku zlyhala %1$d krát. Po %2$d ďalších neúspešných pokusoch budete vyzvaný k identifikácii cez Google prihlásenie.\n\nSkúste znova o %3$d sekúnd.</string>
+    <string name="lockscreen_forgot_finger_button_text">Zabudnutý odtlačok?</string>
 
 </resources>
