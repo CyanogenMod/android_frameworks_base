@@ -3659,7 +3659,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         } // synchronized(mHeadsetLock)
     }
 
-    private synchronized final void update() {
+    private final void update() {
 
         // Retain only relevant bits
         int headsetState = mHeadsetJackState & SUPPORTED_HEADSETS;
@@ -3766,6 +3766,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Log.e(TAG, "sendIntent: couldn't get AudioManager reference");
                     return;
                 }
+                Slog.d(TAG,"sendIntent(): device "+device+" state "+state);
                 am.setWiredDeviceConnectionState(device, state, headsetName);
             } else {
                 Slog.d(TAG,"system not booted yet, call setWiredDeviceConnectionState later");
