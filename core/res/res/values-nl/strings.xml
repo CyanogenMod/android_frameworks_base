@@ -24,7 +24,7 @@
     <string name="petabyteShort" msgid="5637816680144990219">"PB"</string>
     <string name="fileSizeSuffix" msgid="7670819340156489359">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
     <string name="untitled" msgid="6071602020171759109">"&lt;zonder titel&gt;"</string>
-    <string name="ellipsis" msgid="7899829516048813237">"…"</string>
+    <string name="ellipsis" msgid="7899829516048813237">"\u2026"</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">"(Geen telefoonnummer)"</string>
     <string name="unknownName" msgid="2277556546742746522">"(Onbekend)"</string>
     <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"Voicemail"</string>
@@ -141,7 +141,7 @@
     <string name="global_action_lock" msgid="2844945191792119712">"Schermvergrendeling"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Uitschakelen"</string>
     <string name="global_action_reboot">"Herstarten"</string>
-    <string name="global_action_choose_profile">"Kies profiel"</string>
+    <string name="global_action_choose_profile">"Profiel"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Stille modus"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Geluid is UIT"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Geluid is AAN"</string>
@@ -179,7 +179,7 @@
     <string name="permlab_statusBarService" msgid="7247281911387931485">"statusbalk"</string>
     <string name="permdesc_statusBarService" msgid="4097605867643520920">"Hiermee kan de applicatie de statusbalk zijn."</string>
     <string name="permlab_expandStatusBar" msgid="1148198785937489264">"statusbalk uitvouwen/samenvouwen"</string>
-    <string name="permdesc_expandStatusBar" msgid="7088604400110768665">"Hiermee kan de applicatie de statusbalk uitvouwen of samenvouwen."</string>
+    <string name="permdesc_expandStatusBar" msgid="7088604400110768665">"Hiermee kan een applicatie de statusbalk uitvouwen of samenvouwen."</string>
     <string name="permlab_processOutgoingCalls" msgid="1136262550878335980">"uitgaande oproepen onderscheppen"</string>
     <string name="permdesc_processOutgoingCalls" msgid="2228988201852654461">"Hiermee kan een applicatie uitgaande oproepen verwerken en het nummer wijzigen dat wordt gebeld. Schadelijke applicaties kunnen uitgaande oproepen bijhouden, omleiden of tegenhouden."</string>
     <string name="permlab_receiveSms" msgid="2697628268086208535">"Sms ontvangen"</string>
@@ -234,14 +234,14 @@
     <string name="permdesc_batteryStats" msgid="5847319823772230560">"Hiermee kunnen verzamelde accustatistieken worden gewijzigd. Niet voor gebruik door normale applicaties."</string>
     <string name="permlab_backup" msgid="470013022865453920">"systeemback-up en -herstel beheren"</string>
     <string name="permdesc_backup" msgid="4837493065154256525">"Hiermee kan de applicatie het mechanisme voor systeemback-up en -herstel beheren. Niet voor gebruik door normale applicaties."</string>
-    <string name="permlab_internalSystemWindow" msgid="2148563628140193231">"niet-geautoriseerde vensters weergeven"</string>
+    <string name="permlab_internalSystemWindow" msgid="2148563628140193231">"niet-geautoriseerde vensters tonen"</string>
     <string name="permdesc_internalSystemWindow" msgid="5895082268284998469">"Hiermee kunnen vensters worden gemaakt die door de interne systeemgebruikersinterface worden gebruikt. Niet voor gebruik door normale applicaties."</string>
-    <string name="permlab_systemAlertWindow" msgid="3372321942941168324">"waarschuwingen op systeemniveau weergeven"</string>
-    <string name="permdesc_systemAlertWindow" msgid="5109622689323490558">"Hiermee kan een applicatie systeemwaarschuwingen weergeven. Schadelijke applicaties kunnen op deze manier het hele scherm van de telefoon overnemen."</string>
+    <string name="permlab_systemAlertWindow" msgid="3372321942941168324">"waarschuwingen op systeemniveau tonen"</string>
+    <string name="permdesc_systemAlertWindow" msgid="5109622689323490558">"Hiermee kan een applicatie systeemwaarschuwingen tonen. Schadelijke applicaties kunnen op deze manier het hele scherm van de telefoon overnemen."</string>
     <string name="permlab_setAnimationScale" msgid="2805103241153907174">"algemene animatiesnelheid wijzigen"</string>
     <string name="permdesc_setAnimationScale" msgid="7181522138912391988">"Hiermee kan een applicatie op elk gewenst moment de algemene animatiesnelheid wijzigen (snellere of tragere animaties)."</string>
     <string name="permlab_manageAppTokens" msgid="17124341698093865">"toepassingstokens beheren"</string>
-    <string name="permdesc_manageAppTokens" msgid="977127907524195988">"Hiermee kunnen applicaties hun eigen tokens maken en beheren, waarbij de normale Z-volgorde wordt overgeslagen. Nooit nodig voor normale applicaties."</string>
+    <string name="permdesc_manageAppTokens" msgid="977127907524195988">"Hiermee kan een applicatie eigen tokens maken en beheren, waarbij de normale Z-volgorde wordt overgeslagen. Nooit nodig voor normale applicaties."</string>
     <string name="permlab_injectEvents" msgid="1378746584023586600">"drukken op toetsen en bedieningselementen"</string>
     <string name="permdesc_injectEvents" msgid="3946098050410874715">"Hiermee kan een applicatie zijn de invoergebeurtenissen (toetsaanslagen, enzovoort) aan andere applicaties doorgeven. Schadelijke applicaties kunnen dit gebruiken om de telefoon over te nemen."</string>
     <string name="permlab_readInputState" msgid="469428900041249234">"uw invoer en acties vastleggen"</string>
@@ -518,9 +518,9 @@
     <string name="lockscreen_return_to_call" msgid="5244259785500040021">"Terug naar gesprek"</string>
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Juist!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Probeer het opnieuw"</string>
-    <string name="lockscreen_plugged_in" msgid="613343852842944435">"Opladen (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
-    <string name="lockscreen_discharging">Batterij (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
-    <string name="lockscreen_charged" msgid="4938930459620989972">"Opgeladen."</string>
+    <string name="lockscreen_plugged_in" msgid="613343852842944435">"Bezig met opladen (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Op batterij (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_charged" msgid="4938930459620989972">"Volledig opgeladen"</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Sluit de oplader aan."</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"Geen simkaart."</string>
@@ -538,7 +538,7 @@
     <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"Patroon vergeten?"</string>
     <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"Account ontgrendelen"</string>
     <string name="lockscreen_glogin_too_many_attempts" msgid="2446246026221678244">"Te veel patroonpogingen!"</string>
-    <string name="lockscreen_glogin_instructions" msgid="1816635201812207709">"Om te ontgrendelen, moet U zich eerst bij uw Google-account aanmelden"</string>
+    <string name="lockscreen_glogin_instructions" msgid="1816635201812207709">"Om te ontgrendelen, moet u zich eerst bij uw Google-account aanmelden"</string>
     <string name="lockscreen_glogin_username_hint" msgid="8846881424106484447">"Gebruikersnaam (e-mail)"</string>
     <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">"Wachtwoord"</string>
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Aanmelden"</string>
@@ -632,7 +632,7 @@
     <string name="capital_off" msgid="6815870386972805832">"UIT"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Actie voltooien met"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Standaard gebruiken voor deze actie."</string>
-    <string name="clearDefaultHintMsg" msgid="4815455344600932173">"Wis standaardinstelling via startscherm: \'Instellingen\' &gt; \'Toepassingen\' &gt; \'Toepassingen beheren\'."</string>
+    <string name="clearDefaultHintMsg" msgid="4815455344600932173">"Wis standaardinstelling via startscherm: \'Instellingen\' &gt; \'Applicaties\' &gt; \'Applicaties beheren\'."</string>
     <string name="chooseActivity" msgid="1009246475582238425">"Een actie selecteren"</string>
     <string name="chooseUsbActivity" msgid="7892597146032121735">"Selecteer een applicatie voor het USB-apparaat"</string>
     <string name="noApplications" msgid="1691104391758345586">"Geen enkele applicatie kan deze actie uitvoeren."</string>
@@ -653,8 +653,8 @@
     <string name="smv_application" msgid="295583804361236288">"De applicatie <xliff:g id="APPLICATION">%1$s</xliff:g> (proces <xliff:g id="PROCESS">%2$s</xliff:g>) heeft het zelf afgedwongen StrictMode-beleid geschonden."</string>
     <string name="smv_process" msgid="5120397012047462446">"Het proces <xliff:g id="PROCESS">%1$s</xliff:g> heeft het zelf afgedwongen StrictMode-beleid geschonden."</string>
     <string name="heavy_weight_notification" msgid="9087063985776626166">"<xliff:g id="APP">%1$s</xliff:g> wordt uitgevoerd"</string>
-    <string name="heavy_weight_notification_detail" msgid="2423977499339403402">"Selecteren om over te schakelen naar app"</string>
-    <string name="heavy_weight_switcher_title" msgid="1135403633766694316">"Toepassingen wijzigen?"</string>
+    <string name="heavy_weight_notification_detail" msgid="2423977499339403402">"Selecteren om over te schakelen naar applicatie"</string>
+    <string name="heavy_weight_switcher_title" msgid="1135403633766694316">"Applicaties wijzigen?"</string>
     <string name="heavy_weight_switcher_text" msgid="4592075610079319667">"Er wordt al een andere applicatie uitgevoerd die moet worden gestopt voordat u een nieuwe applicatie kunt starten."</string>
     <string name="old_app_action" msgid="493129172238566282">"Terug naar <xliff:g id="OLD_APP">%1$s</xliff:g>"</string>
     <string name="old_app_description" msgid="942967900237208466">"De nieuwe applicatie niet starten."</string>
@@ -676,7 +676,7 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Beltonen"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Onbekende beltoon"</string>
     <string name="select_character" msgid="3365550120617701745">"Teken invoegen"</string>
-    <string name="sms_control_default_app_name" msgid="7630529934366549163">"Onbekende app"</string>
+    <string name="sms_control_default_app_name" msgid="7630529934366549163">"Onbekende applicatie"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"Sms-berichten verzenden"</string>
     <string name="sms_control_message" msgid="1289331457999236205">"Er wordt een groot aantal sms-berichten verzonden. Selecteer \'OK\' om door te gaan of \'Annuleren\' om de verzending te stoppen."</string>
     <string name="sms_control_yes" msgid="2532062172402615953">"OK"</string>
@@ -685,7 +685,7 @@
     <string name="default_permission_group" msgid="2690160991405646128">"Standaard"</string>
     <string name="no_permissions" msgid="7283357728219338112">"Geen machtigingen vereist"</string>
     <string name="perms_hide" msgid="7283915391320676226"><b>"Verbergen"</b></string>
-    <string name="perms_show_all" msgid="2671791163933091180"><b>"Alles weergeven"</b></string>
+    <string name="perms_show_all" msgid="2671791163933091180"><b>"Alles tonen"</b></string>
     <string name="usb_storage_activity_title" msgid="2399289999608900443">"USB-massaopslag"</string>
     <string name="usb_storage_title" msgid="5901459041398751495">"USB-verbinding"</string>
     <string name="usb_storage_message" product="nosdcard" msgid="115779324551502062">"U heeft uw telefoon via USB op uw computer aangesloten. Selecteer de onderstaande knop als u bestanden tussen uw computer en de USB-opslag van uw Android wilt kopiëren."</string>
@@ -749,7 +749,7 @@
     <string name="gadget_host_error_inflating" msgid="2613287218853846830">"Fout bij uitbreiden van widget"</string>
     <string name="ime_action_go" msgid="8320845651737369027">"Ga"</string>
     <string name="ime_action_search" msgid="658110271822807811">"Zoeken"</string>
-    <string name="ime_action_send" msgid="2316166556349314424">"Verzenden"</string>
+    <string name="ime_action_send" msgid="2316166556349314424">"Zenden"</string>
     <string name="ime_action_next" msgid="3138843904009813834">"Volgende"</string>
     <string name="ime_action_done" msgid="8971516117910934605">"Gereed"</string>
     <string name="ime_action_default" msgid="2840921885558045721">"Uitvoeren"</string>
@@ -780,11 +780,11 @@
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Automodus ingeschakeld"</string>
     <string name="car_mode_disable_notification_message" msgid="668663626721675614">"Selecteer dit om de automodus af te sluiten."</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"Tethering of hotspot actief"</string>
-    <string name="tethered_notification_message" msgid="3067108323903048927">"Aanraken om te configureren"</string>
+    <string name="tethered_notification_message" msgid="3067108323903048927">"Tik om te configureren"</string>
     <string name="throttle_warning_notification_title" msgid="4890894267454867276">"Hoog mobiel gegevensgebruik"</string>
-    <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Raak aan voor meer informatie over mobiel gegevensgebruik"</string>
+    <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Tik voor meer informatie over mobiel gegevensgebruik"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"Mobiele gegevenslimiet overschreden"</string>
-    <string name="throttled_notification_message" msgid="4712369856601275146">"Raak aan voor meer informatie over mobiel gegevensgebruik"</string>
+    <string name="throttled_notification_message" msgid="4712369856601275146">"Tik voor meer informatie over mobiel gegevensgebruik"</string>
     <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"USB-opslag ontkoppelen\u2026"</string>
     <string name="progress_unmounting" product="default" msgid="5556813978958789471">"SD-kaart ontkoppelen\u2026"</string>
     <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"USB-opslag wissen\u2026"</string>
@@ -804,8 +804,8 @@
     <string name="phone_goggles_problem_count">Probleem #%1$d: </string>
     <string name="phone_goggles_description">Los de %1$d volgende wiskundeproblemen op in minder dan %2$d seconden om de communicatie uit te voeren.</string>
 
-    <string name="permlab_revokePermissions">Hiermee kan de applicatie machtigingen inzien en bewerken. Niet gebruikt bij normale applicaties.</string>
-    <string name="permdesc_revokePermissions">Hiermee kan de applicatie ingetrokken machtigingen lezen en schrijven. Niet gebruikt bij normale applicaties.</string>
+    <string name="permlab_revokePermissions">Hiermee kan een applicatie machtigingen inzien en bewerken. Niet voor gebruik door normale applicaties.</string>
+    <string name="permdesc_revokePermissions">Hiermee kan een applicatie ingetrokken machtigingen lezen en schrijven. Niet voor gebruik door normale applicaties.</string>
     <string name="profileNameDefault">Standaard</string>
     <string name="profileNameWork">Werk</string>
     <string name="profileNameHome">Thuis</string>
@@ -819,12 +819,12 @@
     <string name="wildcardProfile">Anders</string>
     <string name="global_action_back">Terug</string>
     <string name="permlab_preventpower">Gedrag aan/uit-knop</string>
-    <string name="permdesc_preventpower">Hiermee kan de applicatie het gedrag van de aan/uit-knop wijzigen</string>
+    <string name="permdesc_preventpower">Hiermee kan een applicatie het gedrag van de aan/uit-knop wijzigen</string>
     <string name="permlab_rawAudio">Geluidstoegang op laag niveau</string>
-    <string name="permdesc_rawAudio">Hiermee krijgt de applicatie volledige toegang tot de geluidshardware</string>
+    <string name="permdesc_rawAudio">Hiermee krijgt een applicatie volledige toegang tot de geluidshardware</string>
     <string name="lockscreen_phone_label">Telefoon</string>
-    <string name="aerr_revoked_application">De applicatie <xliff:g id="application">%1$s</xliff:g> is onverwachts gestopt.\nWaarschuwing\nEen aantal machtigingen van deze applicatie is ingetrokken. Wellicht kan het ongedaan maken hiervan helpen.</string>
-    <string name="aerr_revoked_process">Het proces <xliff:g id="process">%1$s</xliff:g> is onverwachts gestopt.\nWaarschuwing\nEen aantal machtigingen van dit proces is ingetrokken. Wellicht kan het ongedaan maken hiervan helpen.</string>
+    <string name="aerr_revoked_application">De applicatie <xliff:g id="application">%1$s</xliff:g> is onverwachts gestopt.\Let op:\nEen aantal machtigingen van deze applicatie is ingetrokken. Wellicht kan het ongedaan maken hiervan helpen.</string>
+    <string name="aerr_revoked_process">Het proces <xliff:g id="process">%1$s</xliff:g> is onverwachts gestopt.\Let op:\nEen aantal machtigingen van dit proces is ingetrokken. Wellicht kan het ongedaan maken hiervan helpen.</string>
     <string name="edit_perms">Machtigingen bewerken</string>
     <string name="reset_perms">Machtigingen herstellen</string>
     <string name="adb_net_enabled_notification_title">Netwerkfoutopsporingsmodus ingeschakeld</string>
