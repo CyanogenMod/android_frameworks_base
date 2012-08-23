@@ -34,6 +34,7 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/notifications/ogg/Antares.ogg:system/media/audio/notifications/Antares.ogg \
 	$(LOCAL_PATH)/notifications/ogg/Arcturus.ogg:system/media/audio/notifications/Arcturus.ogg \
 	$(LOCAL_PATH)/notifications/ogg/Betelgeuse.ogg:system/media/audio/notifications/Betelgeuse.ogg \
+	$(LOCAL_PATH)/notifications/ogg/BrassAndroid.ogg:system/media/audio/notifications/BrassAndroid.ogg \
 	$(LOCAL_PATH)/notifications/ogg/Canopus.ogg:system/media/audio/notifications/Canopus.ogg \
 	$(LOCAL_PATH)/notifications/ogg/Capella.ogg:system/media/audio/notifications/Capella.ogg \
 	$(LOCAL_PATH)/notifications/ogg/Castor.ogg:system/media/audio/notifications/Castor.ogg \
@@ -82,6 +83,7 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/ringtones/ogg/Pegasus.ogg:system/media/audio/ringtones/Pegasus.ogg \
 	$(LOCAL_PATH)/ringtones/ogg/Perseus.ogg:system/media/audio/ringtones/Perseus.ogg \
 	$(LOCAL_PATH)/ringtones/ogg/Pyxis.ogg:system/media/audio/ringtones/Pyxis.ogg \
+	$(LOCAL_PATH)/ringtones/ogg/Raindance.ogg:system/media/audio/ringtones/Raindance.ogg \
 	$(LOCAL_PATH)/ringtones/ogg/Rigel.ogg:system/media/audio/ringtones/Rigel.ogg \
 	$(LOCAL_PATH)/ringtones/ogg/Scarabaeus.ogg:system/media/audio/ringtones/Scarabaeus.ogg \
 	$(LOCAL_PATH)/ringtones/ogg/Sceptrum.ogg:system/media/audio/ringtones/Sceptrum.ogg \
@@ -90,4 +92,6 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/ringtones/ogg/Themos.ogg:system/media/audio/ringtones/Themos.ogg \
 	$(LOCAL_PATH)/ringtones/ogg/UrsaMinor.ogg:system/media/audio/ringtones/UrsaMinor.ogg \
 	$(LOCAL_PATH)/ringtones/ogg/Vespa.ogg:system/media/audio/ringtones/Vespa.ogg \
+	$(LOCAL_PATH)/ringtones/ogg/Whisperer.ogg:system/media/audio/ringtones/Whisperer.ogg \
+	$(LOCAL_PATH)/ringtones/ogg/WobblyRinger.ogg:system/media/audio/ringtones/WobblyRinger.ogg \
 	$(LOCAL_PATH)/ringtones/ogg/Zeta.ogg:system/media/audio/ringtones/Zeta.ogg
