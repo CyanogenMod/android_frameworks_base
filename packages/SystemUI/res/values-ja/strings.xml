@@ -147,4 +147,20 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"画面は自動的に回転します。"</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"画面は横向きにロックされています。"</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"画面は縦向きにロックされています。"</string>
+
+    <!-- CM -->
+    <!-- Label in the system panel for flashlight state [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_flashlight">LEDフラッシュライト</string>
+
+    <!-- Label in the system panel for mobile data state [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_mobile_data">モバイルデータ</string>
+
+    <!-- Label in the system panel for sound [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_sound_mode">サウンド</string>
+
+    <!-- Content description of the battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_battery_level">バッテリー <xliff:g id="number">%d</xliff:g>パーセント</string>
+
+    <string name="powerwidget_screen_timeout_toast">スクリーンタイムアウトを %1$d %2$s に設定</string>
+
 </resources>
