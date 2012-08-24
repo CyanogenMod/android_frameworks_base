@@ -55,7 +55,9 @@ public final class RotationPolicy {
     public static boolean isRotationLockToggleVisible(Context context) {
         return isRotationLockToggleSupported(context) &&
                 Settings.System.getInt(context.getContentResolver(),
-                        Settings.System.HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY, 0) == 0;
+                        Settings.System.HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY, 0) == 0 &&
+                !context.getResources().getBoolean(com.android
+                        .internal.R.bool.config_hasRotationLockSwitch);
     }
 
     /**
