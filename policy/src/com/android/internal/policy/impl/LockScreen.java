@@ -491,13 +491,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     target -= 1 + mTargetOffset;
                     if (target < mStoredTargets.length && mStoredTargets[target] != null) {
                         try {
-                            Intent tIntent = Intent.parseUri(mStoredTargets[target], 0);
-                            tIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            mContext.startActivity(tIntent);
-                            mCallback.goToUnlockScreen();
-                            return;
+                            launchActivity(Intent.parseUri(mStoredTargets[target], 0));
                         } catch (URISyntaxException e) {
-                        } catch (ActivityNotFoundException e) {
                         }
                     }
                 }
@@ -510,7 +505,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     | Intent.FLAG_ACTIVITY_SINGLE_TOP
                     | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             try {
-                ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+                if (mLockPatternUtils.isSecure()) {
+                    mCallback.goToUnlockScreen();
+                } else {
+                    ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+                }
             } catch (RemoteException e) {
                 Log.w(TAG, "can't dismiss keyguard on launch");
             }
