@@ -1377,4 +1377,7 @@
     <string name="weather_no_data">Nessun dato</string>
     <string name="weather_tap_to_refresh">Tocca per aggiornare</string>
     <string name="weather_refreshing">In aggiornamento</string>
+    <string name="weather_last_sync_just_now">Adesso</string>
+    <string name="toast_rotation_unlocked">Rotazione schermo sbloccata</string>
+    <string name="toast_rotation_locked">Rotazione schermo bloccata</string>
 </resources>
