@@ -36,6 +36,24 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"出现连接问题或 MMI 码无效。"</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"只能对固定拨号号码执行此类操作。"</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">默认</string>
+    <string name="profileNameWork">工作</string>
+    <string name="profileNameHome">住宅</string>
+    <string name="profileNameSilent">静音</string>
+    <string name="profileNameNight">夜晚</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">电话</string>
+    <string name="profileGroupCalendar">日历</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">电子邮件</string>
+    <string name="profileGroupSMS">短信</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">其他</string>
+
     <string name="serviceEnabled" msgid="8147278346414714315">"已启用服务。"</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"已针对以下内容启用了服务："</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"已停用服务。"</string>
@@ -139,6 +157,33 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"关闭收音机"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">"重启平板"</string>
+    <string name="reboot_system" product="default">"重启手机"</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">"屏幕截图"</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">"重启"</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">"恢复模式"</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">"引导程序"</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">"引导菜单"</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">"Fastboot"</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">"下载模式"</string>
+
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">"正在重启\u2026"</string>
+    <!-- Reboot Confirmation Dialog. When the user chooses to reboot the phone, there will be a confirmation dialog. This is the message. -->
+    <string name="reboot_confirm">"您的手机将会重启。"</string>
+
     <string name="silent_mode_silent" msgid="319298163018473078">"振铃器关闭"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"振铃器振动"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"振铃器开启"</string>
@@ -154,6 +199,13 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"手机选项"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"屏幕锁定"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"关机"</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">重启</string>
+
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">场景模式</string>
+
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"静音模式"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"声音已关闭"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"声音已开启"</string>
@@ -318,6 +370,12 @@
     <string name="permdesc_clearAppCache" product="default" msgid="5067988373366292186">"允许应用删除应用缓存目录中的文件，从而释放手机的存储空间。对系统进程的访问权限通常受到很大的限制。"</string>
     <string name="permlab_movePackage" msgid="3289890271645921411">"移动应用资源"</string>
     <string name="permdesc_movePackage" msgid="319562217778244524">"允许应用在内部与外部媒体之间移动应用资源。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_preventpower">阻止电源键</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_preventpower">允许应用程序完全掌控电源键。</string>
+
     <string name="permlab_readLogs" msgid="6615778543198967614">"查阅敏感日志数据"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="82061313293455151">"允许应用从系统的各种日志文件中读取信息。这样，应用就可以发现关于您平板电脑使用情况的一般信息，其中可能包含个人信息或隐私信息。"</string>
     <string name="permdesc_readLogs" product="default" msgid="2063438140241560443">"允许应用从系统的各个日志文件中读取信息。这样，应用就可以发现关于您手机使用情况的一般信息，其中可能包含个人信息或隐私信息。"</string>
@@ -607,6 +665,11 @@
     <item msgid="2506857312718630823">"ICQ"</item>
     <item msgid="1648797903785279353">"Jabber"</item>
   </string-array>
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">屏幕方向已解锁</string>
+    <string name="toast_rotation_locked">屏幕方向已锁定</string>
+
     <string name="phoneTypeCustom" msgid="1644738059053355820">"自定义"</string>
     <string name="phoneTypeHome" msgid="2570923463033985887">"住宅"</string>
     <string name="phoneTypeMobile" msgid="6501463557754751037">"手机"</string>
@@ -699,9 +762,10 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"重试"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"已超过“人脸解锁”尝试次数上限"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"正在充电，<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
+    <string name="lockscreen_discharging">正在放电，<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"已充满。"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"连接您的充电器。"</string>
+    <string name="lockscreen_low_battery" msgid="1482873981919249740">"连接您的充电器，<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"没有 SIM 卡"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"平板电脑中没有 SIM 卡。"</string>
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"手机中无 SIM 卡"</string>
@@ -1242,6 +1306,10 @@
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"更多选项"</string>
     <string name="storage_internal" msgid="4891916833657929263">"内存设备"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD 卡"</string>
+
+    <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
+    <string name="storage_sd_dock_card">基座 SD 卡</string>
+
     <string name="storage_usb" msgid="3017954059538517278">"USB 存储器"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"修改"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"流量使用警告"</string>
@@ -1280,6 +1348,10 @@
     <string name="sending" msgid="3245653681008218030">"正在发送..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"要启动浏览器吗？"</string>
     <string name="SetupCallDefault" msgid="5834948469253758575">"要接听电话吗？"</string>
+
+    <!-- Long-press back kill application -->
+    <string name="app_killed_message">应用程序已被杀死</string>
+
     <string name="activity_resolver_use_always" msgid="8017770747801494933">"始终"</string>
     <string name="activity_resolver_use_once" msgid="2404644797149173758">"仅此一次"</string>
     <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"平板电脑"</string>
@@ -1290,4 +1362,72 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"系统"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"蓝牙音频"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"完成"</string>
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">龙卷风</string>
+    <string name="weather_1">热带风暴</string>
+    <string name="weather_2">飓风</string>
+    <string name="weather_3">强雷暴</string>
+    <string name="weather_4">雷暴</string>
+    <string name="weather_5">雨夹雪</string>
+    <string name="weather_6">混合雨和冻雨</string>
+    <string name="weather_7">混合雪和冻雨</string>
+    <string name="weather_8">冻毛毛雨</string>
+    <string name="weather_9">毛毛雨</string>
+    <string name="weather_10">冰雨</string>
+    <string name="weather_11">阵雨</string>
+    <string name="weather_12">阵雨</string>
+    <string name="weather_13">飘雪</string>
+    <string name="weather_14">小雪</string>
+    <string name="weather_15">吹雪</string>
+    <string name="weather_16">雪</string>
+    <string name="weather_17">冰雹</string>
+    <string name="weather_18">冻雨</string>
+    <string name="weather_19">沙尘</string>
+    <string name="weather_20">多雾</string>
+    <string name="weather_21">阴霾</string>
+    <string name="weather_22">烟雾</string>
+    <string name="weather_23">强风</string>
+    <string name="weather_24">大风</string>
+    <string name="weather_25">冷</string>
+    <string name="weather_26">多云</string>
+    <string name="weather_27">大部多云</string> <!-- Night -->
+    <string name="weather_28">大部多云</string> <!-- Day -->
+    <string name="weather_29">部分多云</string> <!-- Night -->
+    <string name="weather_30">部分多云</string> <!-- Day -->
+    <string name="weather_31">晴天</string> <!-- Night -->
+    <string name="weather_32">晴天</string>
+    <string name="weather_33">晴天积云</string> <!-- Night -->
+    <string name="weather_34">晴天积云</string> <!-- Day -->
+    <string name="weather_35">雨夹冰雹</string>
+    <string name="weather_36">热</string>
+    <string name="weather_37">局部性雷暴雨</string>
+    <string name="weather_38">分散雷雨</string>
+    <string name="weather_39">分散雷雨</string>
+    <string name="weather_40">零星阵雨</string>
+    <string name="weather_41">大雪</string>
+    <string name="weather_42">零星阵雪</string>
+    <string name="weather_43">大雪</string>
+    <string name="weather_44">晴间多云</string>
+    <string name="weather_45">雷阵雨</string>
+    <string name="weather_46">阵雪</string>
+    <string name="weather_47">局部雷阵雨</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200"></string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">北</string>
+    <string name="weather_NE">东北</string>
+    <string name="weather_E">东</string>
+    <string name="weather_SE">东南</string>
+    <string name="weather_S">南</string>
+    <string name="weather_SW">西南</string>
+    <string name="weather_W">西</string>
+    <string name="weather_NW">西北</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">无数据</string>
+    <string name="weather_tap_to_refresh">请点击刷新</string>
+    <string name="weather_refreshing">正在刷新</string>
+    <string name="weather_last_sync_just_now">刚刚刷新</string>
 </resources>
