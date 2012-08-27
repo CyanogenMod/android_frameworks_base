@@ -1210,6 +1210,7 @@
     <string name="share" msgid="1778686618230011964">"Condividi"</string>
     <string name="find" msgid="4808270900322985960">"Trova"</string>
     <string name="websearch" msgid="4337157977400211589">"Ricerca Web"</string>
+    <string name="openurl">Apri Url</string>
     <string name="gpsNotifTicker" msgid="5622683912616496172">"Richiesta posizione da <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="gpsNotifTitle" msgid="5446858717157416839">"Richiesta posizione"</string>
     <string name="gpsNotifMessage" msgid="1374718023224000702">"Richiesto da <xliff:g id="NAME">%1$s</xliff:g> (<xliff:g id="SERVICE">%2$s</xliff:g>)"</string>
@@ -1377,4 +1378,8 @@
     <string name="weather_no_data">Nessun dato</string>
     <string name="weather_tap_to_refresh">Tocca per aggiornare</string>
     <string name="weather_refreshing">In aggiornamento</string>
+    <string name="weather_last_sync_just_now">Poco fa</string>
+    <string name="toast_rotation_unlocked">Rotazione schermo sbloccata</string>
+    <string name="toast_rotation_locked">Rotazione schermo bloccata</string>
 </resources>
+
