@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2006 The Android Open Source Project
+     Copyright (C) 2012 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="phoneTypes">
+    <item msgid="8901098336658710359">"Thuis"</item>
+    <item msgid="869923650527136615">"Mobiel"</item>
+    <item msgid="7897544654242874543">"Werk"</item>
+    <item msgid="1103601433382158155">"Fax werk"</item>
+    <item msgid="1735177144948329370">"Fax thuis"</item>
+    <item msgid="603878674477207394">"Semafoon"</item>
+    <item msgid="1650824275177931637">"Overig"</item>
+    <item msgid="9192514806975898961">"Aangepast"</item>
+  </string-array>
+  <string-array name="emailAddressTypes">
+    <item msgid="8073994352956129127">"Thuis"</item>
+    <item msgid="7084237356602625604">"Werk"</item>
+    <item msgid="1112044410659011023">"Overig"</item>
+    <item msgid="2374913952870110618">"Aangepast"</item>
+  </string-array>
+  <string-array name="postalAddressTypes">
+    <item msgid="6880257626740047286">"Thuis"</item>
+    <item msgid="5629153956045109251">"Werk"</item>
+    <item msgid="4966604264500343469">"Overig"</item>
+    <item msgid="4932682847595299369">"Aangepast"</item>
+  </string-array>
+  <string-array name="imAddressTypes">
+    <item msgid="1738585194601476694">"Thuis"</item>
+    <item msgid="1359644565647383708">"Werk"</item>
+    <item msgid="7868549401053615677">"Overig"</item>
+    <item msgid="3145118944639869809">"Aangepast"</item>
+  </string-array>
+  <string-array name="organizationTypes">
+    <item msgid="7546335612189115615">"Werk"</item>
+    <item msgid="4378074129049520373">"Overig"</item>
+    <item msgid="3455047468583965104">"Aangepast"</item>
+  </string-array>
+  <string-array name="imProtocols">
+    <item msgid="8595261363518459565">"AIM"</item>
+    <item msgid="7390473628275490700">"Windows Live"</item>
+    <item msgid="7882877134931458217">"Yahoo"</item>
+    <item msgid="5035376313200585242">"Skype"</item>
+    <item msgid="7532363178459444943">"QQ"</item>
+    <item msgid="3713441034299660749">"Google Talk"</item>
+    <item msgid="2506857312718630823">"ICQ"</item>
+    <item msgid="1648797903785279353">"Jabber"</item>
+  </string-array>
+</resources>

@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--  Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
-  
+
           http://www.apache.org/licenses/LICENSE-2.0
-  
+
      Unless required by applicable law or agreed to in writing, software
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
-
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="backup_confirm_title" msgid="827563724209303345">"Volledige back-up"</string>
@@ -25,14 +25,14 @@
     <string name="allow_restore_button_label" msgid="3081286752277127827">"Mijn gegevens herstellen"</string>
     <string name="deny_restore_button_label" msgid="1724367334453104378">"Niet herstellen"</string>
     <string name="current_password_text" msgid="8268189555578298067">"Geef hieronder uw huidige back-upwachtwoord op:"</string>
-    <string name="device_encryption_restore_text" msgid="1570864916855208992">"Geef hieronder uw wachtwoord voor apparaatcodering op."</string>
-    <string name="device_encryption_backup_text" msgid="5866590762672844664">"Geef hieronder uw wachtwoord voor apparaatcodering op. Dit wordt ook gebruikt om het back-uparchief te coderen."</string>
-    <string name="backup_enc_password_text" msgid="4981585714795233099">"Geef een wachtwoord op dat u wilt gebruiken voor het coderen van de gegevens van de volledige back-up. Als u dit leeg laat, wordt uw huidige back-upwachtwoord gebruikt:"</string>
-    <string name="backup_enc_password_optional" msgid="1350137345907579306">"Als u de gegevens van de volledige back-up wilt coderen, geeft u daarvoor hieronder een wachtwoord op:"</string>
-    <string name="restore_enc_password_text" msgid="6140898525580710823">"Als deze herstelgegevens zijn gecodeerd, geeft u hieronder het wachtwoord op:"</string>
-    <string name="toast_backup_started" msgid="550354281452756121">"Back-up starten..."</string>
+    <string name="device_encryption_restore_text" msgid="1570864916855208992">"Geef hieronder uw wachtwoord voor apparaatversleuteling op."</string>
+    <string name="device_encryption_backup_text" msgid="5866590762672844664">"Geef hieronder uw wachtwoord voor apparaatversleuteling op. Dit wordt ook gebruikt om het back-uparchief te versleutelen."</string>
+    <string name="backup_enc_password_text" msgid="4981585714795233099">"Geef een wachtwoord op dat u wilt gebruiken voor het versleutelen van de gegevens van de volledige back-up. Als u dit leeg laat, wordt uw huidige back-upwachtwoord gebruikt:"</string>
+    <string name="backup_enc_password_optional" msgid="1350137345907579306">"Als u de gegevens van de volledige back-up wilt versleutelen, geeft u daarvoor hieronder een wachtwoord op:"</string>
+    <string name="restore_enc_password_text" msgid="6140898525580710823">"Als deze herstelgegevens zijn versleuteld, geeft u hieronder het wachtwoord op:"</string>
+    <string name="toast_backup_started" msgid="550354281452756121">"Back-up starten\u2026"</string>
     <string name="toast_backup_ended" msgid="3818080769548726424">"Back-up voltooid"</string>
-    <string name="toast_restore_started" msgid="7881679218971277385">"Herstel starten..."</string>
+    <string name="toast_restore_started" msgid="7881679218971277385">"Herstel starten\u2026"</string>
     <string name="toast_restore_ended" msgid="1764041639199696132">"Herstellen voltooid"</string>
     <string name="toast_timeout" msgid="5276598587087626877">"Time-out voor bewerking"</string>
 </resources>
