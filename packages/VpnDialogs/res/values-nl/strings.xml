@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--  Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -12,12 +13,11 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
- -->
-
+-->
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="prompt" msgid="8359175999006833462">"<xliff:g id="APP">%s</xliff:g> pogingen om een VPN-verbinding te maken."</string>
-    <string name="warning" msgid="5470743576660160079">"Als u doorgaat, geeft u de app toestemming om al het netwerkverkeer te onderscheppen. "<b>"Ga NIET akkoord, tenzij u de app vertrouwt."</b>" Anders loopt u het risico dat uw gegevens worden gecomprimeerd door schadelijke software."</string>
+    <string name="warning" msgid="5470743576660160079">"Als u doorgaat, geeft u de app toestemming om al het netwerkverkeer te onderscheppen. "<b>"Ga NIET akkoord, tenzij u de app vertrouwt."</b>" Anders loopt u het risico dat uw gegevens worden afgetapt door schadelijke software."</string>
     <string name="accept" msgid="2889226408765810173">"Ik vertrouw deze app."</string>
     <string name="legacy_title" msgid="192936250066580964">"Verbinding met VPN"</string>
     <string name="configure" msgid="4905518375574791375">"Configureren"</string>

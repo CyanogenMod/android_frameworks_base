@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2006 The Android Open Source Project
+     Copyright (C) 2012 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="num_seconds_ago">
+    <item quantity="one" msgid="4869870056547896011">"1 seconde geleden"</item>
+    <item quantity="other" msgid="3903706804349556379">"<xliff:g id="COUNT">%d</xliff:g> seconden geleden"</item>
+  </plurals>
+  <plurals name="num_minutes_ago">
+    <item quantity="one" msgid="3306787433088810191">"1 minuut geleden"</item>
+    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> minuten geleden"</item>
+  </plurals>
+  <plurals name="num_hours_ago">
+    <item quantity="one" msgid="9150797944610821849">"1 uur geleden"</item>
+    <item quantity="other" msgid="2467273239587587569">"<xliff:g id="COUNT">%d</xliff:g> uur geleden"</item>
+  </plurals>
+  <plurals name="last_num_days">
+    <item quantity="other" msgid="3069992808164318268">"Afgelopen <xliff:g id="COUNT">%d</xliff:g> dagen"</item>
+  </plurals>
+    <string name="last_month" msgid="3959346739979055432">"Afgelopen maand"</string>
+    <string name="older" msgid="5211975022815554840">"Ouder"</string>
+  <plurals name="num_days_ago">
+    <item quantity="one" msgid="861358534398115820">"gisteren"</item>
+    <item quantity="other" msgid="2479586466153314633">"<xliff:g id="COUNT">%d</xliff:g> dagen geleden"</item>
+  </plurals>
+  <plurals name="in_num_seconds">
+    <item quantity="one" msgid="2729745560954905102">"over 1 seconde"</item>
+    <item quantity="other" msgid="1241926116443974687">"over <xliff:g id="COUNT">%d</xliff:g> seconden"</item>
+  </plurals>
+  <plurals name="in_num_minutes">
+    <item quantity="one" msgid="8793095251325200395">"over 1 minuut"</item>
+    <item quantity="other" msgid="3330713936399448749">"over <xliff:g id="COUNT">%d</xliff:g> minuten"</item>
+  </plurals>
+  <plurals name="in_num_hours">
+    <item quantity="one" msgid="7164353342477769999">"over 1 uur"</item>
+    <item quantity="other" msgid="547290677353727389">"over <xliff:g id="COUNT">%d</xliff:g> uur"</item>
+  </plurals>
+  <plurals name="in_num_days">
+    <item quantity="one" msgid="5413088743009839518">"morgen"</item>
+    <item quantity="other" msgid="5109449375100953247">"over <xliff:g id="COUNT">%d</xliff:g> dagen"</item>
+  </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+    <item quantity="one" msgid="1849036840200069118">"1 seconde geleden"</item>
+    <item quantity="other" msgid="3699169366650930415">"<xliff:g id="COUNT">%d</xliff:g> seconden geleden"</item>
+  </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+    <item quantity="one" msgid="6361490147113871545">"1 minuut geleden"</item>
+    <item quantity="other" msgid="851164968597150710">"<xliff:g id="COUNT">%d</xliff:g> minuten geleden"</item>
+  </plurals>
+  <plurals name="abbrev_num_hours_ago">
+    <item quantity="one" msgid="4796212039724722116">"1 uur geleden"</item>
+    <item quantity="other" msgid="6889970745748538901">"<xliff:g id="COUNT">%d</xliff:g> uur geleden"</item>
+  </plurals>
+  <plurals name="abbrev_num_days_ago">
+    <item quantity="one" msgid="8463161711492680309">"gisteren"</item>
+    <item quantity="other" msgid="3453342639616481191">"<xliff:g id="COUNT">%d</xliff:g> dagen geleden"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_seconds">
+    <item quantity="one" msgid="5842225370795066299">"over 1 seconde"</item>
+    <item quantity="other" msgid="5495880108825805108">"over <xliff:g id="COUNT">%d</xliff:g> seconden"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_minutes">
+    <item quantity="one" msgid="562786149928284878">"over 1 minuut"</item>
+    <item quantity="other" msgid="4216113292706568726">"over <xliff:g id="COUNT">%d</xliff:g> minuten"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_hours">
+    <item quantity="one" msgid="3274708118124045246">"over 1 uur"</item>
+    <item quantity="other" msgid="3705373766798013406">"over <xliff:g id="COUNT">%d</xliff:g> uur"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_days">
+    <item quantity="one" msgid="2178576254385739855">"morgen"</item>
+    <item quantity="other" msgid="2973062968038355991">"over <xliff:g id="COUNT">%d</xliff:g> dagen"</item>
+  </plurals>
+  <plurals name="wifi_available">
+    <item quantity="one" msgid="6654123987418168693">"Wi-Fi-netwerk beschikbaar"</item>
+    <item quantity="other" msgid="4192424489168397386">"Wi-Fi-netwerken beschikbaar"</item>
+  </plurals>
+  <plurals name="wifi_available_detailed">
+    <item quantity="one" msgid="1634101450343277345">"Open Wi-Fi-netwerk beschikbaar"</item>
+    <item quantity="other" msgid="7915895323644292768">"Open Wi-Fi-netwerken beschikbaar"</item>
+  </plurals>
+  <plurals name="matches_found">
+    <item quantity="one" msgid="8167147081136579439">"1 overeenkomst"</item>
+    <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g> van <xliff:g id="TOTAL">%d</xliff:g>"</item>
+  </plurals>
+</resources>

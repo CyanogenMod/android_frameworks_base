@@ -129,4 +129,36 @@ public class BridgePowerManager implements IPowerManager {
     public void userActivityWithForce(long arg0, boolean arg1, boolean arg2) throws RemoteException {
         // pass for now.
     }
+
+    // custom backlight things
+
+    @Override
+    public int getLightSensorValue() throws RemoteException {
+        // pass for now.
+        return 0;
+    }
+
+    @Override
+    public int getRawLightSensorValue() throws RemoteException {
+        // pass for now.
+        return 0;
+    }
+
+    @Override
+    public int getLightSensorScreenBrightness() throws RemoteException {
+        // pass for now.
+        return 0;
+    }
+
+    @Override
+    public int getLightSensorButtonBrightness() throws RemoteException {
+        // pass for now.
+        return 0;
+    }
+
+    @Override
+    public int getLightSensorKeyboardBrightness() throws RemoteException {
+        // pass for now.
+        return 0;
+    }
 }

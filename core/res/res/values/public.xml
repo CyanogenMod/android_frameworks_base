@@ -214,6 +214,7 @@
   <java-symbol type="id" name="status_bar_latest_event_content" />
   <java-symbol type="id" name="action_divider" />
   <java-symbol type="id" name="overflow_divider" />
+  <java-symbol type="id" name="openurl" />
 
   <java-symbol type="attr" name="actionModeShareDrawable" />
   <java-symbol type="attr" name="alertDialogCenterButtons" />
@@ -3917,4 +3918,8 @@
 
   <!-- WiredAccessoryObserver -->
   <java-symbol type="array" name="config_accessoryDockNames" />
+
+  <!-- HW rotation lock -->
+  <java-symbol type="string" name="toast_rotation_unlocked" />
+  <java-symbol type="string" name="toast_rotation_locked" />
 </resources>

@@ -112,7 +112,10 @@
     <string name="weather_NW">NO</string>
 
     <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">Aucune donnée</string>
     <string name="weather_tap_to_refresh">Appuyer pour rafraîchir</string>
+    <string name="weather_refreshing">Actualisation</string>
+    <string name="weather_last_sync_just_now">À l\'instant</string>
 
     <string name="byteShort" msgid="8340973892742019101">"o"</string>
     <string name="kilobyteShort" msgid="5973789783504771878">"Ko"</string>
