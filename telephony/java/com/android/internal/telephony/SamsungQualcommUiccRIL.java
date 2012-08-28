@@ -40,6 +40,8 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
 
     public static final int INVALID_SNR = 0x7fffffff;
     private boolean mSignalbarCount = SystemProperties.getBoolean("ro.telephony.sends_barcount", false);
+    private Object mLock = new Object();
+    private boolean mIsSending = false;
 
     public SamsungQualcommUiccRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
@@ -108,6 +110,27 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
             // in case NITZ time registrant isnt registered yet
             mLastNITZTimeInfo = result;
         }
+    }
+
+    @Override
+    public void
+    sendSMS (String smscPDU, String pdu, Message result) {
+        // Do not send a new SMS until the response for the previous SMS has been received
+        //   * for the error case where the response never comes back, time out after
+        //     30 seconds and just try the next SEND_SMS
+        synchronized(mLock) {
+            if (mIsSending) {
+                Log.d(LOG_TAG, "sendSMS() waiting for response of previous SEND_SMS");
+                try {
+                    mLock.wait(30000);
+                } catch (InterruptedException ex) {
+                    Log.e(LOG_TAG, "sendSMS() timed out waiting for response of previous SEND_SMS");
+                }
+            }
+            mIsSending = true;
+        }
+
+        super.sendSMS(smscPDU, pdu, result);
     }
 
     @Override
@@ -306,4 +329,17 @@ public class SamsungQualcommUiccRIL extends QualcommSharedRIL implements Command
             " lteRssnr=" + response[10] + " lteCqi=" + response[11]);
         return response;
     }
+
+    @Override
+    protected Object
+    responseSMS(Parcel p) {
+        // Notify that sendSMS() can send the next SMS
+        synchronized(mLock) {
+            mIsSending = false;
+            mLock.notify();
+        }
+
+        return super.responseSMS(p);
+    }
+
 }
