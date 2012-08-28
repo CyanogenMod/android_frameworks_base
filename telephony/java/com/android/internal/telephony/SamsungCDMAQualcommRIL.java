@@ -50,10 +50,32 @@ import java.util.Collections;
  */
 public class SamsungCDMAQualcommRIL extends QualcommSharedRIL implements
 CommandsInterface {
+    private Object mLock = new Object();
+    private boolean mIsSending = false;
 
     public SamsungCDMAQualcommRIL(Context context, int networkMode,
             int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
+    }
+
+    @Override
+    public void
+    sendCdmaSms(byte[] pdu, Message result) {
+        // Do not send a new SMS until the response for the previous SMS has been received
+        //   * for the error case where the response never comes back, time out after
+        //     30 seconds and just try the next CDMA_SEND_SMS
+        synchronized (mLock) {
+            if (mIsSending) {
+                Log.d(LOG_TAG, "sendCdmaSms() waiting for response of previous CDMA_SEND_SMS");
+                try {
+                    mLock.wait(30000);
+                } catch (InterruptedException ex) {
+                }
+            }
+            mIsSending = true;
+        }
+
+        super.sendCdmaSms(pdu, result);
     }
 
     @Override
@@ -265,5 +287,17 @@ CommandsInterface {
         }
 
         super.notifyRegistrantsCdmaInfoRec(infoRec);
+    }
+
+    @Override
+    protected Object
+    responseSMS(Parcel p) {
+        // Notify that sendSMS() can send the next SMS
+        synchronized (mLock) {
+            mIsSending = false;
+            mLock.notify();
+        }
+
+        return super.responseSMS(p);
     }
 }
