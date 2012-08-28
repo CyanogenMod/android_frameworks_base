@@ -3005,7 +3005,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     final void logAppTooSlow(int pid, long startTime, String msg) {
-        if (IS_USER_BUILD) {
+        if (true || IS_USER_BUILD) {
             return;
         }
         String tracesPath = SystemProperties.get("dalvik.vm.stack-trace-file", null);
