@@ -1850,12 +1850,6 @@ public class Camera {
         public static final String FLASH_MODE_TORCH = "torch";
 
         /**
-         * Scene mode is off. (for some QCom)
-         * @hide
-         */
-        public static final String SCENE_MODE_OFF = "off";
-
-        /**
          * Scene mode is off.
          * @hide
          */
