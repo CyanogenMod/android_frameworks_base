@@ -3899,6 +3899,12 @@
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
 
+  <!-- QuickMessage, for editbox background overrides -->
+  <!-- @hide -->
+  <public type="drawable" name="edit_text_holo_light" />
+  <!-- @hide -->
+  <public type="drawable" name="edit_text_holo_dark" />
+
 <!-- ===============================================================
      AVRCP 1.3 Meta Data Resources
      =============================================================== -->
