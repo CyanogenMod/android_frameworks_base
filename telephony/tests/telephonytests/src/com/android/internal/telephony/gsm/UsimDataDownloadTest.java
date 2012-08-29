@@ -142,11 +142,4 @@ public class UsimDataDownloadTest extends AndroidTestCase {
         mCm.assertExpectedMethodsCalled();
     }
 
-    @Override
-    public void setOnCatSendSmsResult(Handler h, int what, Object obj) {
-    }
-
-    @Override
-    public void unSetOnCatSendSmsResult(Handler h) {
-    }
 }
