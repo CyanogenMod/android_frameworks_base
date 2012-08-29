@@ -90,6 +90,8 @@ import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.StatusBar;
 import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.SignalClusterView;
+import com.android.systemui.statusbar.policy.CenterClock;
+import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.LocationController;
@@ -127,7 +129,6 @@ public class PhoneStatusBar extends StatusBar {
 
     private static final float BRIGHTNESS_CONTROL_PADDING = 0.15f;
 
-    private boolean mShowClock;
     private boolean mBrightnessControl;
     private boolean mAutoBrightness;
 
@@ -176,10 +177,15 @@ public class PhoneStatusBar extends StatusBar {
     WindowManager.LayoutParams mExpandedParams;
     ScrollView mScrollView;
     View mExpandedContents;
+
     // top bar
     TextView mNoNotificationsTitle;
     View mClearButton;
     View mSettingsButton;
+
+    // clock
+    private int mClockStyle;
+    LinearLayout mCenterClockLayout;
 
     // drag bar
     CloseDragHandle mCloseView;
@@ -386,6 +392,8 @@ public class PhoneStatusBar extends StatusBar {
         mExpandedDialog = new ExpandedDialog(context);
         mExpandedView = expanded;
         mPile = (NotificationRowLayout)expanded.findViewById(R.id.latestItems);
+        mCenterClockLayout = (LinearLayout) mStatusBarView.findViewById(R.id.center_clock_layout);
+
         mExpandedContents = mPile; // was: expanded.findViewById(R.id.notificationLinearLayout);
         mNoNotificationsTitle = (TextView)expanded.findViewById(R.id.noNotificationsTitle);
         mNoNotificationsTitle.setVisibility(View.GONE); // disabling for now
@@ -1128,11 +1136,16 @@ public class PhoneStatusBar extends StatusBar {
     public void showClock(boolean show) {
         ContentResolver resolver = mContext.getContentResolver();
 
-        View clock = mStatusBarView.findViewById(R.id.clock);
-        mShowClock = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_CLOCK, 1) == 1);
-        if (clock != null) {
-            clock.setVisibility(show ? (mShowClock ? View.VISIBLE : View.GONE) : View.GONE);
+        mClockStyle = (Settings.System.getInt(resolver, Settings.System.STATUS_BAR_CLOCK_STYLE, 1));
+        Clock clock = (Clock) mStatusBarView.findViewById(R.id.clock);
+        CenterClock cclock = (CenterClock) mStatusBarView.findViewById(R.id.center_clock);
+        if(mClockStyle != 0 && clock !=null && cclock != null){
+            clock.updateClockVisibility(show);     
+            cclock.updateClockVisibility(show);
+        }
+        else{
+            clock.updateClockVisibility(false);
+            cclock.updateClockVisibility(false);
         }
     }
 
@@ -1826,24 +1839,32 @@ public class PhoneStatusBar extends StatusBar {
         public void tickerStarting() {
             mTicking = true;
             mIcons.setVisibility(View.GONE);
+            mCenterClockLayout.setVisibility(View.GONE);
             mTickerView.setVisibility(View.VISIBLE);
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_up_in, null));
             mIcons.startAnimation(loadAnim(com.android.internal.R.anim.push_up_out, null));
+            mCenterClockLayout.startAnimation(loadAnim(com.android.internal.R.anim.push_up_out,
+                    null));
         }
 
         @Override
         public void tickerDone() {
             mIcons.setVisibility(View.VISIBLE);
+            mCenterClockLayout.setVisibility(View.VISIBLE);
             mTickerView.setVisibility(View.GONE);
             mIcons.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in, null));
+            mCenterClockLayout.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in,
+                    null));
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_down_out,
                         mTickingDoneListener));
         }
 
         public void tickerHalting() {
             mIcons.setVisibility(View.VISIBLE);
+            mCenterClockLayout.setVisibility(View.VISIBLE);
             mTickerView.setVisibility(View.GONE);
             mIcons.startAnimation(loadAnim(com.android.internal.R.anim.fade_in, null));
+            mCenterClockLayout.startAnimation(loadAnim(com.android.internal.R.anim.fade_in, null));
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.fade_out,
                         mTickingDoneListener));
         }
