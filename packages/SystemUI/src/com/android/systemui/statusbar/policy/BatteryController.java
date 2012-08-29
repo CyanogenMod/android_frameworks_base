@@ -40,14 +40,39 @@ public class BatteryController extends BroadcastReceiver {
     private ArrayList<ImageView> mIconViews = new ArrayList<ImageView>();
     private ArrayList<TextView> mLabelViews = new ArrayList<TextView>();
 
-    private static final int BATTERY_STYLE_NORMAL  = 0;
-    private static final int BATTERY_STYLE_TEXT    = 1;
-    private static final int BATTERY_STYLE_GONE    = 2;
+    private static final int BATTERY_STYLE_NORMAL       = 0;
+    private static final int BATTERY_STYLE_TEXT         = 1;
+    private static final int BATTERY_STYLE_TEXT_NO_ICON = 2;
+    private static final int BATTERY_STYLE_CIRCLE       = 3;
+    private static final int BATTERY_STYLE_FULL         = 4;
+    private static final int BATTERY_STYLE_GAUGE        = 5;
+    private static final int BATTERY_STYLE_HONEYCOMB    = 6;
+    private static final int BATTERY_STYLE_DROID        = 7;
+    private static final int BATTERY_STYLE_SPHERE       = 8;
+    private static final int BATTERY_STYLE_NUMBERS      = 9;
+    private static final int BATTERY_STYLE_DIGITAL      = 10;
+    private static final int BATTERY_STYLE_GONE         = 11;
 
-    private static final int BATTERY_ICON_STYLE_NORMAL      = R.drawable.stat_sys_battery;
-    private static final int BATTERY_ICON_STYLE_CHARGE      = R.drawable.stat_sys_battery_charge;
-    private static final int BATTERY_ICON_STYLE_NORMAL_MIN  = R.drawable.stat_sys_battery_min;
-    private static final int BATTERY_ICON_STYLE_CHARGE_MIN  = R.drawable.stat_sys_battery_charge_min;
+    private static final int BATTERY_ICON_STYLE_NORMAL                 = R.drawable.stat_sys_battery;
+    private static final int BATTERY_ICON_STYLE_CHARGE                 = R.drawable.stat_sys_battery_charge;
+    private static final int BATTERY_ICON_STYLE_NORMAL_MIN             = R.drawable.stat_sys_battery_min;
+    private static final int BATTERY_ICON_STYLE_CHARGE_MIN             = R.drawable.stat_sys_battery_charge_min;
+    private static final int BATTERY_ICON_STYLE_CIRCLE                 = R.drawable.stat_sys_battery_circle;
+    private static final int BATTERY_ICON_STYLE_CIRCLE_CHARGE          = R.drawable.stat_sys_battery_circle_charge;
+    private static final int BATTERY_ICON_STYLE_FULL_CIRCLE            = R.drawable.stat_sys_battery_full_circle;
+    private static final int BATTERY_ICON_STYLE_FULL_CIRCLE_CHARGE     = R.drawable.stat_sys_battery_full_circle_charge;
+    private static final int BATTERY_ICON_STYLE_GAUGE                  = R.drawable.stat_sys_battery_gauge;
+    private static final int BATTERY_ICON_STYLE_GAUGE_CHARGE           = R.drawable.stat_sys_battery_gauge_charge;
+    private static final int BATTERY_ICON_STYLE_HONEYCOMB              = R.drawable.stat_sys_battery_honeycomb;
+    private static final int BATTERY_ICON_STYLE_HONEYCOMB_CHARGE       = R.drawable.stat_sys_battery_honeycomb_charge;
+    private static final int BATTERY_ICON_STYLE_DROID                  = R.drawable.stat_sys_battery_droid;
+    private static final int BATTERY_ICON_STYLE_DROID_CHARGE           = R.drawable.stat_sys_battery_droid_charge;
+    private static final int BATTERY_ICON_STYLE_SPHERE                 = R.drawable.stat_sys_battery_sphere;
+    private static final int BATTERY_ICON_STYLE_SPHERE_CHARGE          = R.drawable.stat_sys_battery_sphere_charge;
+    private static final int BATTERY_ICON_STYLE_NUMBERS                = R.drawable.stat_sys_battery_numbers;
+    private static final int BATTERY_ICON_STYLE_NUMBERS_CHARGE         = R.drawable.stat_sys_battery_numbers_charge;
+    private static final int BATTERY_ICON_STYLE_DIGITAL_NUMBERS        = R.drawable.stat_sys_battery_digital_numbers;
+    private static final int BATTERY_ICON_STYLE_DIGITAL_NUMBERS_CHARGE = R.drawable.stat_sys_battery_digital_numbers_charge;
 
     private static final int BATTERY_TEXT_STYLE_NORMAL  = R.string.status_bar_settings_battery_meter_format;
     private static final int BATTERY_TEXT_STYLE_MIN     = R.string.status_bar_settings_battery_meter_min_format;
@@ -132,6 +157,40 @@ public class BatteryController extends BroadcastReceiver {
             mText = (View.VISIBLE);
             mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_CHARGE_MIN
                     : BATTERY_ICON_STYLE_NORMAL_MIN;
+        } else if (mBatteryStyle == 2) {
+            mText = (View.VISIBLE);
+        } else if (mBatteryStyle == 3) {
+            mIcon = (View.VISIBLE);
+            mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_CIRCLE_CHARGE
+                    : BATTERY_ICON_STYLE_CIRCLE;
+        } else if (mBatteryStyle == 4) {
+            mIcon = (View.VISIBLE);
+            mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_FULL_CIRCLE_CHARGE
+                    : BATTERY_ICON_STYLE_FULL_CIRCLE;
+        } else if (mBatteryStyle == 5) {
+            mIcon = (View.VISIBLE);
+            mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_GAUGE_CHARGE
+                    : BATTERY_ICON_STYLE_GAUGE;
+        } else if (mBatteryStyle == 6) {
+            mIcon = (View.VISIBLE);
+            mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_HONEYCOMB_CHARGE
+                    : BATTERY_ICON_STYLE_HONEYCOMB;
+        } else if (mBatteryStyle == 7) {
+            mIcon = (View.VISIBLE);
+            mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_DROID_CHARGE
+                    : BATTERY_ICON_STYLE_DROID;
+        } else if (mBatteryStyle == 8) {
+            mIcon = (View.VISIBLE);
+            mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_SPHERE_CHARGE
+                    : BATTERY_ICON_STYLE_SPHERE;
+        } else if (mBatteryStyle == 9) {
+            mIcon = (View.VISIBLE);
+            mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_NUMBERS_CHARGE
+                    : BATTERY_ICON_STYLE_NUMBERS;
+        } else if (mBatteryStyle == 10) {
+            mIcon = (View.VISIBLE);
+            mIconStyle = mBatteryPlugged ? BATTERY_ICON_STYLE_DIGITAL_NUMBERS_CHARGE
+                    : BATTERY_ICON_STYLE_DIGITAL_NUMBERS;
         }
 
         int N = mIconViews.size();

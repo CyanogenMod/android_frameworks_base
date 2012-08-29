@@ -40,9 +40,18 @@ public class DockBatteryController extends BroadcastReceiver {
     private ArrayList<ImageView> mIconViews = new ArrayList<ImageView>();
     private ArrayList<TextView> mLabelViews = new ArrayList<TextView>();
 
-    private static final int BATTERY_STYLE_NORMAL  = 0;
-    private static final int BATTERY_STYLE_TEXT    = 1;
-    private static final int BATTERY_STYLE_GONE    = 2;
+    private static final int BATTERY_STYLE_NORMAL       = 0;
+    private static final int BATTERY_STYLE_TEXT         = 1;
+    private static final int BATTERY_STYLE_TEXT_NO_ICON = 2;
+    private static final int BATTERY_STYLE_CIRCLE       = 3;
+    private static final int BATTERY_STYLE_FULL         = 4;
+    private static final int BATTERY_STYLE_GAUGE        = 5;
+    private static final int BATTERY_STYLE_HONEYCOMB    = 6;
+    private static final int BATTERY_STYLE_DROID        = 7;
+    private static final int BATTERY_STYLE_SPHERE       = 8;
+    private static final int BATTERY_STYLE_NUMBERS      = 9;
+    private static final int BATTERY_STYLE_DIGITAL      = 10;
+    private static final int BATTERY_STYLE_GONE         = 11;
 
     private static final int BATTERY_ICON_STYLE_NORMAL      = R.drawable.stat_sys_kb_battery;
     private static final int BATTERY_ICON_STYLE_CHARGE      = R.drawable.stat_sys_kb_battery_charge;
@@ -127,7 +136,7 @@ public class DockBatteryController extends BroadcastReceiver {
             mIcon = mDockStatus ? (View.VISIBLE) : (View.GONE);
             mIconStyle = mDockCharging ? BATTERY_ICON_STYLE_CHARGE
                     : BATTERY_ICON_STYLE_NORMAL;
-        } else if(mBatteryStyle == 1){
+        } else if(mBatteryStyle >= 1 || mBatteryStyle <= 10 ){
             mIcon = mDockStatus ? (View.VISIBLE) : (View.GONE);
             mText = mDockStatus ? (View.VISIBLE) : (View.GONE);
             mIconStyle = mDockCharging ? BATTERY_ICON_STYLE_CHARGE
