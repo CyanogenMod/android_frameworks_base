@@ -1438,8 +1438,20 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             mCurMethodId = null;
             unbindCurrentMethodLocked(true);
         }
-        mShowOngoingImeSwitcherForPhones = Settings.System.getInt(mContext.getContentResolver(),
-               Settings.System.STATUS_BAR_IME_SWITCHER, 1) == 1;
+        try {
+            mShowOngoingImeSwitcherForPhones = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.STATUS_BAR_IME_SWITCHER) == 1;
+        } catch (SettingNotFoundException e) {
+            mShowOngoingImeSwitcherForPhones = mRes.getBoolean(
+            com.android.internal.R.bool.config_show_cmIMESwitcher);
+        }
+        //if (!getResources().getBoolean(com.android.internal.R.bool.config_show_cmIMESwitcher)) {
+        //    mShowOngoingImeSwitcherForPhones = Settings.System.getInt(mContext.getContentResolver(),
+        //          Settings.System.STATUS_BAR_IME_SWITCHER, 1) == -1;
+        //} else {
+        //    mShowOngoingImeSwitcherForPhones = Settings.System.getInt(mContext.getContentResolver(),
+        //          Settings.System.STATUS_BAR_IME_SWITCHER, 1) == 1;
+        //}
     }
 
     /* package */ void setInputMethodLocked(String id, int subtypeId) {
