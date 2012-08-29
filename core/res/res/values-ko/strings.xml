@@ -1290,4 +1290,105 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"시스템"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"블루투스 오디오"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"완료"</string>
+
+
+    <!-- Lock screen Weather - Weather codes -->
+    <string name="weather_0">토네이도</string>
+    <string name="weather_1">열대 폭풍</string>
+    <string name="weather_2">허리케인</string>
+    <string name="weather_3">극심한 천둥폭풍</string>
+    <string name="weather_4">천둥폭풍</string>
+    <string name="weather_5">진눈깨비</string>
+    <string name="weather_6">진눈깨비</string>
+    <string name="weather_7">진눈깨비</string>
+    <string name="weather_8">차가운 이슬비</string>
+    <string name="weather_9">이슬비</string>
+    <string name="weather_10">차가운 비</string>
+    <string name="weather_11">소나기</string>
+    <string name="weather_12">소나기</string>
+    <string name="weather_13">눈보라</string>
+    <string name="weather_14">약한 눈발</string>
+    <string name="weather_15">눈보라</string>
+    <string name="weather_16">눈</string>
+    <string name="weather_17">우박</string>
+    <string name="weather_18">진눈깨비</string>
+    <string name="weather_19">먼지</string>
+    <string name="weather_20">안개</string>
+    <string name="weather_21">안개</string>
+    <string name="weather_22">안개</string>
+    <string name="weather_23">강한 바람</string>
+    <string name="weather_24">바람</string>
+    <string name="weather_25">추움</string>
+    <string name="weather_26">흐림</string>
+    <string name="weather_27">매우 흐림</string> <!-- Night -->
+    <string name="weather_28">매우 흐림</string> <!-- Day -->
+    <string name="weather_29">약간 흐림</string> <!-- Night -->
+    <string name="weather_30">약간 흐림</string> <!-- Day -->
+    <string name="weather_31">맑음</string> <!-- Night -->
+    <string name="weather_32">밝음</string>
+    <string name="weather_33">좋음</string> <!-- Night -->
+    <string name="weather_34">좋음</string> <!-- Day -->
+    <string name="weather_35">우박과 비</string>
+    <string name="weather_36">뜨거움</string>
+    <string name="weather_37">천둥폭풍</string>
+    <string name="weather_38">산발적인 천둥폭풍</string>
+    <string name="weather_39">산발적인 천둥폭풍</string>
+    <string name="weather_40">산발적인 소나기</string>
+    <string name="weather_41">강한 눈</string>
+    <string name="weather_42">산발적인 눈발</string>
+    <string name="weather_43">강한 눈</string>
+    <string name="weather_44">약간 흐림</string>
+    <string name="weather_45">천둥소나기</string>
+    <string name="weather_46">눈보라</string>
+    <string name="weather_47">천둥폭풍</string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">북</string>
+    <string name="weather_NE">북동</string>
+    <string name="weather_E">동</string>
+    <string name="weather_SE">남동</string>
+    <string name="weather_S">남</string>
+    <string name="weather_SW">남서</string>
+    <string name="weather_W">서</string>
+    <string name="weather_NW">북서</string>
+
+    <!-- Lock screen Weather - error messages -->
+    <string name="weather_no_data">자료 없음</string>
+    <string name="weather_tap_to_refresh">눌러서 새로고침</string>
+    <string name="weather_refreshing">새로 고치는 중</string>
+    <string name="weather_last_sync_just_now">방금</string>
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">화면 회전 잠금 해제됨</string>
+    <string name="toast_rotation_locked">화면 회전 잠김</string>
+
+    <!-- Long-press back kill application -->
+    <string name="app_killed_message">애플리케이션 종료됨</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">태블릿 다시 시작</string>
+    <string name="reboot_system" product="default">휴대전화 다시 시작</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">스크린샷</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">다시 시작</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">복구 모드</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">부트로더</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">부트 메뉴</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">다시 시작하는 중\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">휴대전화를 다시 시작합니다.</string>
+
+
 </resources>
