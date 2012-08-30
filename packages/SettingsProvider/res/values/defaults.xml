@@ -306,4 +306,7 @@
         containing the IDs of all enabled input methods, each ID separated by ':'.
     -->
     <string name="def_enable_input_methods" translatable="false"></string>
+
+    <!-- Defaults for Settings.System.DEV_FORCE_SHOW_NAVBAR. -->
+    <integer name="def_force_disable_navkeys">0</integer>
 </resources>
