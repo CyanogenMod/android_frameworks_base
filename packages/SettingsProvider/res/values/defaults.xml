@@ -201,4 +201,7 @@
     <!-- Defaults for Settings.System.LOCKSCREEN_TARGETS. -->
     <string name="def_lockscreen_targets" translatable="false"></string>
     <string name="def_lockscreen_targets_no_telephony" translatable="false"></string>
+
+    <!-- Defaults for Settings.System.DEV_FORCE_SHOW_NAVBAR. -->
+    <integer name="def_force_disable_navkeys">0</integer>
 </resources>
