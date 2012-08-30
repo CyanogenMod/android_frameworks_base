@@ -5260,6 +5260,48 @@ public final class ActivityManagerService extends ActivityManagerNative
         return msg;
     }
 
+    boolean incProviderCount(ProcessRecord r, ContentProviderRecord cpr) {
+        if (r != null) {
+            Integer cnt = r.conProviders.get(cpr);
+            if (DEBUG_PROVIDER) Slog.v(TAG,
+                    "Adding provider requested by "
+                    + r.processName + " from process "
+                    + cpr.info.processName + ": " + cpr.name.flattenToShortString()
+                    + " cnt=" + (cnt == null ? 1 : cnt));
+            if (cnt == null) {
+                cpr.clients.add(r);
+                r.conProviders.put(cpr, new Integer(1));
+                return true;
+            } else {
+                r.conProviders.put(cpr, new Integer(cnt.intValue()+1));
+            }
+        } else {
+            cpr.externals++;
+        }
+        return false;
+    }
+
+    boolean decProviderCount(ProcessRecord r, ContentProviderRecord cpr) {
+        if (r != null) {
+            Integer cnt = r.conProviders.get(cpr);
+            if (DEBUG_PROVIDER) Slog.v(TAG,
+                    "Removing provider requested by "
+                    + r.processName + " from process "
+                    + cpr.info.processName + ": " + cpr.name.flattenToShortString()
+                    + " cnt=" + cnt);
+            if (cnt == null || cnt.intValue() <= 1) {
+                cpr.clients.remove(r);
+                r.conProviders.remove(cpr);
+                return true;
+            } else {
+                r.conProviders.put(cpr, new Integer(cnt.intValue()-1));
+            }
+        } else {
+            cpr.externals++;
+        }
+        return false;
+    }
+
     private final ContentProviderHolder getContentProviderImpl(
         IApplicationThread caller, String name) {
         ContentProviderRecord cpr;
@@ -5279,7 +5321,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
             // First check if this content provider has been published...
             cpr = mProvidersByName.get(name);
-            if (cpr != null) {
+            boolean providerRunning = cpr != null;
+            if (providerRunning) {
                 cpi = cpr.info;
                 String msg;
                 if ((msg=checkContentProviderPermissionLocked(cpi, r)) != null) {
@@ -5303,18 +5346,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                 // In this case the provider instance already exists, so we can
                 // return it right away.
-                if (r != null) {
-                    if (DEBUG_PROVIDER) Slog.v(TAG,
-                            "Adding provider requested by "
-                            + r.processName + " from process "
-                            + cpr.info.processName);
-                    Integer cnt = r.conProviders.get(cpr);
-                    if (cnt == null) {
-                        r.conProviders.put(cpr, new Integer(1));
-                    } else {
-                        r.conProviders.put(cpr, new Integer(cnt.intValue()+1));
-                    }
-                    cpr.clients.add(r);
+                final boolean countChanged = incProviderCount(r, cpr);
+                if (countChanged) {
                     if (cpr.app != null && r.setAdj <= PERCEPTIBLE_APP_ADJ) {
                         // If this is a perceptible app accessing the provider,
                         // make sure to count it as being accessed and thus
@@ -5322,17 +5355,33 @@ public final class ActivityManagerService extends ActivityManagerNative
                         // content providers are often expensive to start.
                         updateLruProcessLocked(cpr.app, false, true);
                     }
-                } else {
-                    cpr.externals++;
                 }
 
                 if (cpr.app != null) {
                     updateOomAdjLocked(cpr.app);
+                    if (!Process.isAlive(cpr.app.pid)) {
+                        // Uh oh... it looks like the provider's process
+                        // has been killed on us. We need to wait for a new
+                        // process to be started, and make sure its death
+                        // doesn't kill our process.
+                        Slog.i(TAG,
+                                "Existing provider " + cpr.name.flattenToShortString()
+                                + " is crashing; detaching " + r);
+                        boolean lastRef = decProviderCount(r, cpr);
+                        //appDiedLocked(cpr.app, cpr.app.pid, cpr.app.thread);
+                        if (!lastRef) {
+                            // This wasn't the last ref our process had on
+                            // the provider... we have now been killed, bail.
+                            return null;
+                        }
+                        providerRunning = false;
+                    }
                 }
 
                 Binder.restoreCallingIdentity(origId);
+            }
 
-            } else {
+            if (!providerRunning) {
                 try {
                     cpi = AppGlobals.getPackageManager().
                         resolveContentProvider(name,
@@ -5428,22 +5477,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     mProvidersByClass.put(cpi.name, cpr);
                 }
                 mProvidersByName.put(name, cpr);
-
-                if (r != null) {
-                    if (DEBUG_PROVIDER) Slog.v(TAG,
-                            "Adding provider requested by "
-                            + r.processName + " from process "
-                            + cpr.info.processName);
-                    Integer cnt = r.conProviders.get(cpr);
-                    if (cnt == null) {
-                        r.conProviders.put(cpr, new Integer(1));
-                    } else {
-                        r.conProviders.put(cpr, new Integer(cnt.intValue()+1));
-                    }
-                    cpr.clients.add(r);
-                } else {
-                    cpr.externals++;
-                }
+                incProviderCount(r, cpr);
             }
         }
 
@@ -5506,24 +5540,16 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
             //update content provider record entry info
             ContentProviderRecord localCpr = mProvidersByClass.get(cpr.info.name);
-            if (DEBUG_PROVIDER) Slog.v(TAG, "Removing provider requested by "
-                    + r.info.processName + " from process "
-                    + localCpr.appInfo.processName);
             if (localCpr.app == r) {
                 //should not happen. taken care of as a local provider
                 Slog.w(TAG, "removeContentProvider called on local provider: "
                         + cpr.info.name + " in process " + r.processName);
                 return;
             } else {
-                Integer cnt = r.conProviders.get(localCpr);
-                if (cnt == null || cnt.intValue() <= 1) {
-                    localCpr.clients.remove(r);
-                    r.conProviders.remove(localCpr);
-                } else {
-                    r.conProviders.put(localCpr, new Integer(cnt.intValue()-1));
+                if (decProviderCount(r, localCpr)) {
+                    updateOomAdjLocked();
                 }
             }
-            updateOomAdjLocked();
         }
     }
 
