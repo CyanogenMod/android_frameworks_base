@@ -294,7 +294,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-			android:paddingLeft="8dip"
+            android:paddingLeft="8dip"
             android:paddingRight="8dip"
             android:focusable="true"
 
