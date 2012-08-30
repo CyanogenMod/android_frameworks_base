@@ -231,4 +231,7 @@
 
     <!-- Default setting for ability to add users from the lock screen -->
     <bool name="def_add_users_from_lockscreen">false</bool>
+
+    <!-- Defaults for Settings.System.DEV_FORCE_SHOW_NAVBAR. -->
+    <integer name="def_force_disable_navkeys">0</integer>
 </resources>
