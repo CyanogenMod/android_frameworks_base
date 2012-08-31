@@ -1162,35 +1162,66 @@
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Gereed"</string>
 
     <!-- CYANOGENMOD EDITS -->
+
+    <string name="lockscreen_discharging">Ontladen, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Tablet herstarten</string>
+    <string name="reboot_system" product="default">Telefoon herstarten</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Schermafdruk</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Herstarten</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Boot-menu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download-modus</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+  <string name="reboot_progress">Herstarten\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Uw telefoon wordt herstart.</string>
+
+    <!-- Names of default profiles. -->
     <string name="profileNameDefault">Standaard</string>
     <string name="profileNameWork">Werk</string>
     <string name="profileNameHome">Thuis</string>
     <string name="profileNameSilent">Stil</string>
     <string name="profileNameNight">Nacht</string>
+
+    <!-- Names of application groups. -->
     <string name="profileGroupPhone">Telefoon</string>
     <string name="profileGroupCalendar">Agenda</string>
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">E-mail</string>
     <string name="profileGroupSMS">SMS</string>
-    <string name="wildcardProfile">Anders</string>
-    <string name="reboot_system" product="tablet">Tablet herstarten</string>
-    <string name="global_action_screenshot">Schermafdruk</string>
-    <string name="reboot_reboot">Herstarten</string>
-    <string name="reboot_recovery">Recovery</string>
-    <string name="reboot_bootloader">Bootloader</string>
-    <string name="reboot_bootmenu">Bootmenu</string>
-    <string name="reboot_fastboot">Fastboot</string>
-    <string name="reboot_download">Download</string>
-    <string name="reboot_progress">Herstarten\u2026</string>
-    <string name="reboot_confirm">Uw telefoon zal worden herstart.</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Overige</string>
+  
+    <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">Herstarten</string>
+    <!-- label for item that opens the profile choosing dialog -->
     <string name="global_action_choose_profile">Profiel</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_preventpower">Aan/uit-knop wijzigen</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_preventpower">Hiermee kan een app het gedrag van de aan/uit-knop wijzigen</string>
 
+    <!-- Long-press back kill application -->
     <string name="app_killed_message">App afgesloten</string>
 
+    <!-- Lock screen Weather - Weather codes -->
     <string name="weather_0">Tornado</string>
     <string name="weather_1">Tropische storm</string>
     <string name="weather_2">Tropische cycloon</string>
@@ -1239,6 +1270,11 @@
     <string name="weather_45">Onweersbuien</string>
     <string name="weather_46">Sneeuwstormen</string>
     <string name="weather_47">Geïsoleerde onweersbuien</string>
+
+    <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
+    <string name="storage_sd_dock_card">SD-kaart koppelen</string>
+
+    <!-- Lock screen Weather - Wind directions -->
     <string name="weather_N">N</string>
     <string name="weather_NE">NO</string>
     <string name="weather_E">O</string>
@@ -1247,10 +1283,14 @@
     <string name="weather_SW">ZW</string>
     <string name="weather_W">W</string>
     <string name="weather_NW">NW</string>
+
+    <!-- Lock screen Weather - error messages -->
     <string name="weather_no_data">Geen gegevens</string>
     <string name="weather_tap_to_refresh">Vernieuwen</string>
-    <string name="weather_refreshing">Vernieuwen\u2026</string>
-    <string name="lockscreen_discharging">Ontladen, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-    <string name="storage_sd_dock_card">SD-kaart koppelen</string>
+    <string name="weather_refreshing">Bezig met vernieuwen\u2026</string>
     <string name="weather_last_sync_just_now">Zojuist</string>
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">Het scherm wordt automatisch gedraaid</string>
+    <string name="toast_rotation_locked">Het scherm wordt niet meer automatisch gedraaid</string>
 </resources>
