@@ -1379,4 +1379,7 @@
     <string name="permlab_preventpower">substituir tecla de energia</string>
     <string name="permdesc_preventpower">Permite a uma aplicação a substituir o tecla de energia</string>
     <string name="storage_sd_dock_card">Cartão SD do dock</string>
+    <string name="openurl">Abrir Url</string>
+    <string name="toast_rotation_unlocked">Rotação da Tela está Destravada</string>
+    <string name="toast_rotation_locked">Rotação da Tela está Travada</string>
 </resources>
