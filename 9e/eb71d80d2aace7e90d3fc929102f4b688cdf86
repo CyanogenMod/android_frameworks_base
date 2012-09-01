@@ -1,0 +1,12 @@
+Change-Id: I9eeb71d80d2aace7e90d3fc929102f4b688cdf86
+Code-Review+2: Steve Kondik <shade@chemlab.org>
+Verified+1: Steve Kondik <shade@chemlab.org>
+Code-Review+1: David van Tonder <david.vantonder@gmail.com>
+Code-Review+1: Pavel Chernyak <fjfalcon@fjfalcon.ru>
+Code-Review+1: David Marble <drmarble1@gmail.com>
+Code-Review+1: Jesús David <jedga_95@outlook.com>
+Submitted-by: Steve Kondik <shade@chemlab.org>
+Submitted-at: Sat, 01 Sep 2012 20:53:56 +0400
+Reviewed-on: http://review.cyanogenmod.com/22567
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/jellybean
