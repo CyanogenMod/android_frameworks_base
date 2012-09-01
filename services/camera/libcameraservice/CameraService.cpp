@@ -540,7 +540,9 @@ void CameraService::Client::disconnect() {
     // Release the held ANativeWindow resources.
     if (mPreviewWindow != 0) {
 #ifdef QCOM_HARDWARE
+#ifndef NO_UPDATE_PREVIEW
         mHardware->setPreviewWindow(0);
+#endif
 #endif
         disconnectWindow(mPreviewWindow);
         mPreviewWindow = 0;
@@ -584,8 +586,10 @@ status_t CameraService::Client::setPreviewWindow(const sp<IBinder>& binder,
             result = mHardware->setPreviewWindow(window);
         }
 #ifdef QCOM_HARDWARE
+#ifndef NO_UPDATE_PREVIEW
     } else {
         result = mHardware->setPreviewWindow(window);
+#endif
 #endif
     }
 

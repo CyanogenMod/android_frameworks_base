@@ -116,10 +116,12 @@ public:
 
         if (mDevice->ops->set_preview_window) {
 #ifdef QCOM_HARDWARE
+#ifndef NO_UPDATE_PREVIEW
             LOGV("%s buf %p mPreviewWindow %p", __FUNCTION__, buf.get(), mPreviewWindow.get());
             if (mPreviewWindow.get() && (buf.get() != mPreviewWindow.get())) {
                  mDevice->ops->set_preview_window(mDevice, 0);
             }
+#endif
 #endif
 
             mPreviewWindow = buf;
