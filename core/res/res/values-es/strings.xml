@@ -1365,7 +1365,24 @@
     <string name="weather_46">Nieve</string>
     <string name="weather_47">Chap. aislados</string>
     <string name="weather_3200">No disponible</string>
+
+    <!-- Lock screen Weather - Wind directions -->
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NE</string>
+    <string name="weather_E">E</string>
+    <string name="weather_SE">SE</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SO</string>
+    <string name="weather_W">O</string>
+    <string name="weather_NW">NO</string>
+
+    <!-- Lock screen Weather - error messages -->
     <string name="weather_no_data">Sin datos</string>
     <string name="weather_tap_to_refresh">Toca para refrescar</string>
-    <string name="weather_refreshing">Actualizando</string>
+    <string name="weather_refreshing">Actualizando\u2026</string>
+    <string name="weather_last_sync_just_now">Ahora</string>
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">Rotación de pantalla desbloqueada</string>
+    <string name="toast_rotation_locked">Rotación de pantalla bloqueada</string>
 </resources>
