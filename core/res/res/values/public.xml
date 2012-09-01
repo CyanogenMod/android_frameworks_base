@@ -3685,6 +3685,7 @@
   <java-symbol type="integer" name="config_deviceHardwareKeys" />
   <java-symbol type="bool" name="config_hasRemovableLid" />
   <java-symbol type="bool" name="config_samsung_stk" />
+  <java-symbol type="integer" name="config_wallpaperMaxWidth" />
 
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
