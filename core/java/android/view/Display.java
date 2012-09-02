@@ -378,7 +378,13 @@ public class Display {
      * @hide
      */
     public int getRawExternalWidth() {
-        return 1280;
+        // Also check height because HDMI cable may be plugged in while we're
+        // in portrait mode.
+        if (getRawWidth() >= 1920 || getRawHeight() >= 1920) {
+            return 1920;
+        } else {
+            return 1280;
+        }
     }
 
     /**
@@ -387,7 +393,11 @@ public class Display {
      * @hide
      */
     public int getRawExternalHeight() {
-        return 720;
+        if (getRawWidth() >= 1920 || getRawHeight() >= 1920) {
+            return 1080;
+        } else {
+            return 720;
+        }
     }
 
     /**
