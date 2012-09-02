@@ -531,7 +531,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
 
         int maxWidth = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_wallpaperMaxWidth);
-        if (width > maxWidth) {
+        if (maxWidth != -1 && width > maxWidth) {
             width = maxWidth;
         }
 
