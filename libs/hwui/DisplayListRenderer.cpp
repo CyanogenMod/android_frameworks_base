@@ -1677,6 +1677,7 @@ status_t DisplayListRenderer::drawText(const char* text, int bytesCount, int cou
     //       its own copy as it does right now.
     // Beware: this needs Glyph encoding (already done on the Paint constructor)
     paint->setAntiAlias(true);
+    paint->setSubpixelText(true);
     if (length < 0.0f) length = paint->measureText(text, bytesCount);
 
     bool reject = false;
@@ -1706,6 +1707,7 @@ status_t DisplayListRenderer::drawTextOnPath(const char* text, int bytesCount, i
     addFloat(hOffset);
     addFloat(vOffset);
     paint->setAntiAlias(true);
+    paint->setSubpixelText(true);
     addPaint(paint);
     return DrawGlInfo::kStatusDone;
 }
@@ -1718,6 +1720,7 @@ status_t DisplayListRenderer::drawPosText(const char* text, int bytesCount, int 
     addInt(count);
     addFloats(positions, count * 2);
     paint->setAntiAlias(true);
+    paint->setSubpixelText(true);
     addPaint(paint);
     return DrawGlInfo::kStatusDone;
 }
