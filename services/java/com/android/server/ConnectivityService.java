@@ -1422,7 +1422,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
         //       asynchronous.
         enforceAccessPermission();
         boolean retVal = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.MOBILE_DATA, 1) == 1;
+                Settings.Secure.MOBILE_DATA, 0) == 1;
         if (VDBG) log("getMobileDataEnabled returning " + retVal);
         return retVal;
     }

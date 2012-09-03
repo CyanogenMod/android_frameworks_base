@@ -498,7 +498,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
         if (info != null) {
             boolean dataEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
-                                                         Settings.Secure.MOBILE_DATA, 1) == 1;
+                                                         Settings.Secure.MOBILE_DATA, 0) == 1;
             boolean networkAvailable = info.isAvailable() && dataEnabled;
             String defaultApn = getSelectedApn();
             if (defaultApn == null) {

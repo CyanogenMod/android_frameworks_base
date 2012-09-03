@@ -520,7 +520,7 @@ public abstract class DataConnectionTracker extends Handler {
         filter.addAction(INTENT_SET_FAIL_DATA_SETUP_COUNTER);
 
         mUserDataEnabled = Settings.Secure.getInt(
-                mPhone.getContext().getContentResolver(), Settings.Secure.MOBILE_DATA, 1) == 1;
+                mPhone.getContext().getContentResolver(), Settings.Secure.MOBILE_DATA, 0) == 1;
 
         // TODO: Why is this registering the phone as the receiver of the intent
         //       and not its own handler?
