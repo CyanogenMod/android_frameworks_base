@@ -25,8 +25,9 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
-import android.telephony.SmsMessage;
+import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -48,6 +49,10 @@ public class SemcRIL extends RIL implements CommandsInterface {
     private final int RIL_INT_RADIO_OFF = 0;
     private final int RIL_INT_RADIO_UNAVALIABLE = 1;
     private final int RIL_INT_RADIO_ON = 2;
+
+    private Object mSMSLock = new Object();
+    private boolean mIsSendingSMS = false;
+    public static final long SEND_SMS_TIMEOUT_IN_MS = 30000;
 
     public SemcRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
@@ -263,6 +268,45 @@ public class SemcRIL extends RIL implements CommandsInterface {
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
         send(rr);
+    }
+
+    @Override
+    public void
+    sendSMS (String smscPDU, String pdu, Message result) {
+        // Do not send a new SMS until the response for the previous SMS has been received
+        //   * for the error case where the response never comes back, time out after
+        //     30 seconds and just try the next SEND_SMS
+        synchronized (mSMSLock) {
+            long timeoutTime  = SystemClock.elapsedRealtime() + SEND_SMS_TIMEOUT_IN_MS;
+            long waitTimeLeft = SEND_SMS_TIMEOUT_IN_MS;
+            while (mIsSendingSMS && (waitTimeLeft > 0)) {
+                Log.d(LOG_TAG, "sendSMS() waiting for response of previous SEND_SMS");
+                try {
+                    mSMSLock.wait(waitTimeLeft);
+                } catch (InterruptedException ex) {
+                    // ignore the interrupt and rewait for the remainder
+                }
+                waitTimeLeft = timeoutTime - SystemClock.elapsedRealtime();
+            }
+            if (waitTimeLeft <= 0) {
+                Log.e(LOG_TAG, "sendSms() timed out waiting for response of previous CDMA_SEND_SMS");
+            }
+            mIsSendingSMS = true;
+        }
+
+        super.sendSMS(smscPDU, pdu, result);
+    }
+
+    @Override
+    protected Object
+    responseSMS(Parcel p) {
+        // Notify that sendSMS() can send the next SMS
+        synchronized (mSMSLock) {
+            mIsSendingSMS = false;
+            mSMSLock.notify();
+        }
+
+        return super.responseSMS(p);
     }
 
     public void
