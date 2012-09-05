@@ -38,6 +38,4 @@
     <dimen name="status_bar_recents_app_icon_left_margin">8dp</dimen>
     <dimen name="status_bar_recents_app_icon_top_margin">8dp</dimen>
 
-    <!-- Height of the system bar settings view -->
-    <dimen name="system_bar_settings_view_height">300dp</dimen>
 </resources>

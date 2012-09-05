@@ -42,6 +42,9 @@
     <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Ajustes"</string>
     <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
     <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Modo avión"</string>
+    <string name="status_bar_settings_flashlight">Flash LED</string>
+    <string name="status_bar_settings_mobile_data">Datos móviles</string>
+    <string name="status_bar_settings_sound_mode">Sonido</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Girar pantalla automáticamente"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"SILENC"</string>
     <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"AUTO"</string>
@@ -62,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Expandir para ajustar"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Zoom de compatibilidad"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Si la aplicación se ha diseñado para una pantalla más pequeña, aparecerá un control de zoom junto al reloj."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Guardando captura..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Guardando captura..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Guardando captura\u2026"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Guardando captura\u2026"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"La captura de pantalla se está guardando."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Captura guardada"</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Toca para ver la captura de pantalla"</string>
@@ -122,7 +125,7 @@
     <string name="accessibility_notifications_button" msgid="4498000369779421892">"Notificaciones"</string>
     <string name="accessibility_remove_notification" msgid="3603099514902182350">"Borrar notificación"</string>
     <string name="accessibility_gps_enabled" msgid="3511469499240123019">"GPS habilitado"</string>
-    <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"Obteniendo ubicación..."</string>
+    <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"Obteniendo ubicación\u2026"</string>
     <string name="accessibility_tty_enabled" msgid="4613200365379426561">"Teletipo habilitado"</string>
     <string name="accessibility_ringer_vibrate" msgid="666585363364155055">"Modo vibración"</string>
     <string name="accessibility_ringer_silent" msgid="9061243307939135383">"Modo silencio"</string>
@@ -145,4 +148,5 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"La pantalla girará automáticamente."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"La pantalla está bloqueada en modo horizontal."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"La pantalla está bloqueada en modo vertical."</string>
+    <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
 </resources>

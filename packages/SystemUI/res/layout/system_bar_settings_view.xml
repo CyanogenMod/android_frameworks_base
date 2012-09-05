@@ -19,7 +19,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
-    android:layout_height="@dimen/system_bar_settings_view_height"
+    android:layout_height="match_parent"
     android:layout_width="match_parent">
 
 <com.android.systemui.statusbar.tablet.SettingsView
