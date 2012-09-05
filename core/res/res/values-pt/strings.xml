@@ -1302,6 +1302,7 @@
     <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">Outro</string>
     <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="reboot_system" product="default">Reiniciar telefone</string>
     <string name="global_action_screenshot">Capturar tela</string>
     <string name="reboot_reboot">Reiniciar</string>
     <string name="reboot_recovery">Recuperação</string>
