@@ -1187,7 +1187,7 @@ public class VCardEntry {
                 }
                 builder.withValue(Phone.NUMBER, phoneData.data);
                 if (phoneData.isPrimary) {
-                    builder.withValue(Phone.IS_PRIMARY, 1);
+                    builder.withValue(Phone.IS_SUPER_PRIMARY, 1);
                 }
                 operationList.add(builder.build());
             }
@@ -1212,7 +1212,7 @@ public class VCardEntry {
                     builder.withValue(Organization.PHONETIC_NAME, organizationData.phoneticName);
                 }
                 if (organizationData.isPrimary) {
-                    builder.withValue(Organization.IS_PRIMARY, 1);
+                    builder.withValue(Organization.IS_SUPER_PRIMARY, 1);
                 }
                 operationList.add(builder.build());
             }
@@ -1230,7 +1230,7 @@ public class VCardEntry {
                 }
                 builder.withValue(Email.DATA, emailData.data);
                 if (emailData.isPrimary) {
-                    builder.withValue(Data.IS_PRIMARY, 1);
+                    builder.withValue(Data.IS_SUPER_PRIMARY, 1);
                 }
                 operationList.add(builder.build());
             }
@@ -1257,7 +1257,7 @@ public class VCardEntry {
                     builder.withValue(Im.CUSTOM_PROTOCOL, imData.customProtocol);
                 }
                 if (imData.isPrimary) {
-                    builder.withValue(Data.IS_PRIMARY, 1);
+                    builder.withValue(Data.IS_SUPER_PRIMARY, 1);
                 }
                 operationList.add(builder.build());
             }
@@ -1280,7 +1280,7 @@ public class VCardEntry {
                 builder.withValue(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
                 builder.withValue(Photo.PHOTO, photoData.photoBytes);
                 if (photoData.isPrimary) {
-                    builder.withValue(Photo.IS_PRIMARY, 1);
+                    builder.withValue(Photo.IS_SUPER_PRIMARY, 1);
                 }
                 operationList.add(builder.build());
             }
