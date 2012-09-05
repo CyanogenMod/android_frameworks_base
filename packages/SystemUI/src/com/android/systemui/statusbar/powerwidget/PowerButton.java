@@ -165,10 +165,7 @@ public abstract class PowerButton {
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            if (mHapticFeedback && mClickPattern != null) {
-                mVibrator.vibrate(mClickPattern, -1);
-            }
-
+            provideHapticFeedback(mClickPattern);
             toggleState(v.getContext());
             update(v.getContext());
 
@@ -182,16 +179,26 @@ public abstract class PowerButton {
         public boolean onLongClick(View v) {
             boolean result = handleLongClick(v.getContext());
 
-            if (result && mHapticFeedback && mLongClickPattern != null) {
-                mVibrator.vibrate(mLongClickPattern, -1);
+            if (result) {
+                provideHapticFeedback(mLongClickPattern);
+                if (mExternalLongClickListener != null) {
+                    mExternalLongClickListener.onLongClick(v);
+                }
             }
 
-            if (result && mExternalLongClickListener != null) {
-                mExternalLongClickListener.onLongClick(v);
-            }
             return result;
         }
     };
+
+    private void provideHapticFeedback(long[] pattern) {
+        if (mHapticFeedback && pattern != null) {
+            if (pattern.length == 1) {
+                mVibrator.vibrate(pattern[0]);
+            } else {
+                mVibrator.vibrate(pattern, -1);
+            }
+        }
+    }
 
     void setExternalClickListener(View.OnClickListener listener) {
         mExternalClickListener = listener;
