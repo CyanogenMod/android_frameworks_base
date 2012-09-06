@@ -26,9 +26,9 @@ public class PorterDuff {
         SRC         (1),
         /** [Da, Dc] */
         DST         (2),
-        /** [Sa + (1 - Sa)*Da, Rc = Sc + (1 - Sa)*Dc] */
+        /** [Sa + (1 - Sa)*Da, Sc + (1 - Sa)*Dc] */
         SRC_OVER    (3),
-        /** [Sa + (1 - Sa)*Da, Rc = Dc + (1 - Da)*Sc] */
+        /** [Sa + (1 - Sa)*Da, Dc + (1 - Da)*Sc] */
         DST_OVER    (4),
         /** [Sa * Da, Sc * Da] */
         SRC_IN      (5),
