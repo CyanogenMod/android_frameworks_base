@@ -1390,5 +1390,27 @@
     <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
     <string name="reboot_confirm">휴대전화를 다시 시작합니다.</string>
 
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">다시 시작</string>
+
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">프로파일</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">기본</string>
+    <string name="profileNameWork">직장</string>
+    <string name="profileNameHome">집</string>
+    <string name="profileNameSilent">음소거</string>
+    <string name="profileNameNight">야간</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">전화</string>
+    <string name="profileGroupCalendar">달력</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">이메일</string>
+    <string name="profileGroupSMS">메시지</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">기타</string>
 
 </resources>
