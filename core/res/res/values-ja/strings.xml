@@ -28,7 +28,7 @@
     <string name="petabyteShort" msgid="5637816680144990219">"PB"</string>
     <string name="fileSizeSuffix" msgid="9164292791500531949">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
     <string name="untitled" msgid="4638956954852782576">"&lt;新規&gt;"</string>
-    <string name="ellipsis" msgid="7899829516048813237">"..."</string>
+    <string name="ellipsis" msgid="7899829516048813237">"…"</string>
     <string name="ellipsis_two_dots" msgid="1228078994866030736">"‥"</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">"（電話番号なし）"</string>
     <string name="unknownName" msgid="2277556546742746522">"（名前）"</string>
