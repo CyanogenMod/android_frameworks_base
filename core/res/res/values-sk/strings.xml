@@ -344,6 +344,8 @@
     <string name="permdesc_recordAudio">"Umožňuje aplikácii pristupovať k zaznamenávaniu zvuku."</string>
     <string name="permlab_camera">"snímanie fotografií a natáčanie videí"</string>
     <string name="permdesc_camera">"Umožňuje aplikácii fotografovať a natáčať videá pomocou fotoaparátu. Toto nastavenie aplikácie umožní zhromažďovať fotografie vecí, na ktoré je práve fotoaparát namierený."</string>
+    <string name="permlab_rawAudio">"Nízkoúrovňový prístup ku zvuku"</string>
+    <string name="permdesc_rawAudio">"Poskytne aplikácii plný prístup ku zvukovým častiam zariadenia."</string>
     <string name="permlab_brick">"trvalé vypnutie telefónu"</string>
     <string name="permdesc_brick">"Umožňuje aplikácii trvale vypnúť celý telefón. Toto je veľmi nebezpečné nastavenie."</string>
     <string name="permlab_reboot">"vynútenie reštartovania telefónu"</string>
@@ -475,7 +477,7 @@
     <string name="policylab_wipeData">"Vymazanie všetkých údajov"</string>
     <string name="policydesc_wipeData">"Bez predchádzajúceho upozornenia zmazať všetky údaje tým, že sa obnovia továrenské nastavenia telefónu"</string>
   <string-array name="phoneTypes">
-    <item>"Domovská stránka"</item>
+    <item>"Domov"</item>
     <item>"Mobil"</item>
     <item>"Práca"</item>
     <item>"Fax do práce"</item>
@@ -485,19 +487,19 @@
     <item>"Vlastné"</item>
   </string-array>
   <string-array name="emailAddressTypes">
-    <item>"Domovská stránka"</item>
+    <item>"Domov"</item>
     <item>"Práca"</item>
     <item>"Iné"</item>
     <item>"Vlastné"</item>
   </string-array>
   <string-array name="postalAddressTypes">
-    <item>"Domovská stránka"</item>
+    <item>"Domov"</item>
     <item>"Práca"</item>
     <item>"Iné"</item>
     <item>"Vlastné"</item>
   </string-array>
   <string-array name="imAddressTypes">
-    <item>"Domovská stránka"</item>
+    <item>"Domov"</item>
     <item>"Práca"</item>
     <item>"Iné"</item>
     <item>"Vlastné"</item>
@@ -518,7 +520,7 @@
     <item>"Jabber"</item>
   </string-array>
     <string name="phoneTypeCustom">"Vlastné"</string>
-    <string name="phoneTypeHome">"Domovská stránka"</string>
+    <string name="phoneTypeHome">"Domov"</string>
     <string name="phoneTypeMobile">"Mobil"</string>
     <string name="phoneTypeWork">"Práca"</string>
     <string name="phoneTypeFaxWork">"Fax do práce"</string>
@@ -542,16 +544,16 @@
     <string name="eventTypeAnniversary">"Výročie"</string>
     <string name="eventTypeOther">"Udalosť"</string>
     <string name="emailTypeCustom">"Vlastné"</string>
-    <string name="emailTypeHome">"Domovská stránka"</string>
+    <string name="emailTypeHome">"Domov"</string>
     <string name="emailTypeWork">"Práca"</string>
     <string name="emailTypeOther">"Iné"</string>
     <string name="emailTypeMobile">"Mobil"</string>
     <string name="postalTypeCustom">"Vlastné"</string>
-    <string name="postalTypeHome">"Domovská stránka"</string>
+    <string name="postalTypeHome">"Domov"</string>
     <string name="postalTypeWork">"Práca"</string>
     <string name="postalTypeOther">"Iné"</string>
     <string name="imTypeCustom">"Vlastné"</string>
-    <string name="imTypeHome">"Domovská stránka"</string>
+    <string name="imTypeHome">"Domov"</string>
     <string name="imTypeWork">"Práca"</string>
     <string name="imTypeOther">"Iné"</string>
     <string name="imProtocolCustom">"Vlastné"</string>
@@ -568,7 +570,7 @@
     <string name="orgTypeOther">"Iné"</string>
     <string name="orgTypeCustom">"Vlastné"</string>
     <string name="sipAddressTypeCustom">"Vlastné"</string>
-    <string name="sipAddressTypeHome">"Domovská stránka"</string>
+    <string name="sipAddressTypeHome">"Domov"</string>
     <string name="sipAddressTypeWork">"Práca"</string>
     <string name="sipAddressTypeOther">"Iné"</string>
     <string name="contact_status_update_attribution">", zdroj: <xliff:g id="SOURCE">%1$s</xliff:g>"</string>
@@ -785,7 +787,8 @@
     <string name="anr_application_process">"Aplikácia <xliff:g id="APPLICATION">%1$s</xliff:g> (v procese <xliff:g id="PROCESS">%2$s</xliff:g>) neodpovedá."</string>
     <string name="anr_process">"Proces <xliff:g id="PROCESS">%1$s</xliff:g> neodpovedá."</string>
     <string name="force_close">"Vynútenie zavretia"</string>
-    <string name="report">"Prehľad"</string>
+    <string name="report">"Nahlásiť"</string>
+    <string name="edit_perms">Upraviť povolenia</string>
     <string name="reset_perms">Obnoviť povolenia</string>
     <string name="wait">"Čakajte"</string>
     <string name="launch_warning_title">"Aplikácia bola presmerov."</string>
@@ -862,6 +865,10 @@
     <string name="extmedia_format_button_format">"Formát"</string>
     <string name="adb_active_notification_title">"Ladenie cez rozhranie USB pripojené"</string>
     <string name="adb_active_notification_message">"Vyberte, ak chcete zakázať ladenie USB."</string>
+
+    <string name="adb_net_enabled_notification_title">Ladenie po sieti povolené</string>
+    <string name="adb_net_enabled_notification_message">Vyberte, ak chcete zakázať ladenie po sieti.</string>
+
     <string name="select_input_method">"Výber metódy vstupu"</string>
     <string name="fast_scroll_alphabet">" AÁÄBCČDĎDZDŽEÉFGHCHIÍJKLĽMNŇOÓÔPRŔSŠTŤUÚVWXYÝZŽ"</string>
     <string name="fast_scroll_numeric_alphabet">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
