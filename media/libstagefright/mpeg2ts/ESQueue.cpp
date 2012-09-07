@@ -146,6 +146,11 @@ sp<ABuffer> ElementaryStreamQueue::dequeueAccessUnitAAC() {
         bits.skipBits(2);
 
         unsigned aac_frame_length = bits.getBits(13);
+        size_t headerSize = protection_absent ? 7 : 9;
+
+        if (aac_frame_length < headerSize) {
+            break;
+        }
 
         bits.skipBits(11);  // adts_buffer_fullness
 
@@ -159,8 +164,6 @@ sp<ABuffer> ElementaryStreamQueue::dequeueAccessUnitAAC() {
         if (offset + aac_frame_length > mBuffer->size()) {
             break;
         }
-
-        size_t headerSize = protection_absent ? 7 : 9;
 
         frameOffsets.push(offset + headerSize);
         frameSizes.push(aac_frame_length - headerSize);
