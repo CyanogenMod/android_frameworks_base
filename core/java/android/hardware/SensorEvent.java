@@ -112,7 +112,7 @@ public class SensorEvent {
      *          // with t, the low-pass filter's time-constant
      *          // and dT, the event delivery rate
      *
-     *          final float alpha = 0.8;
+     *          final float alpha = 0.8f;
      *
      *          gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
      *          gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];

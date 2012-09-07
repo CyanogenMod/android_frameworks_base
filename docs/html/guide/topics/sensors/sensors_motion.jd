@@ -221,7 +221,7 @@ public void onSensorChanged(SensorEvent event){
   // where t is the low-pass filter's time-constant and
   // dT is the event delivery rate.
 
-  final float alpha = 0.8;
+  final float alpha = 0.8f;
 
   // Isolate the force of gravity with the low-pass filter.
   gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
