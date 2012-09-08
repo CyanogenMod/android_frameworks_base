@@ -106,8 +106,18 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
             appIndex = status.getGsmUmtsSubscriptionAppIndex();
             Log.d(LOG_TAG, "This is a GSM PHONE " + appIndex);
         }
-
-        mAid = status.getApplication(appIndex).aid;
+        
+        if (numApplications > 0) {
+            IccCardApplication application = status.getApplication(appIndex);
+            mAid = application.aid;
+            mUSIM = application.app_type
+                      == IccCardApplication.AppType.APPTYPE_USIM;
+            mSetPreferredNetworkType = mPreferredNetworkType;
+            
+            if (TextUtils.isEmpty(mAid))
+               mAid = "";
+            Log.d(LOG_TAG, "mAid " + mAid);
+        }
 
         return status;
     }
