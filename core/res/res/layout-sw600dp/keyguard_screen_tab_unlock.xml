@@ -42,7 +42,7 @@
 
             <!-- Status -->
             <include layout="@layout/keyguard_screen_status_port"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dip"
                 android:layout_marginTop="50dip"
