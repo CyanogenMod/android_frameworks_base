@@ -1257,6 +1257,7 @@
   <java-symbol type="id" name="button7" />
   <java-symbol type="id" name="carrier" />
   <java-symbol type="id" name="date" />
+  <java-symbol type="id" name="date_line" />
   <java-symbol type="id" name="eight" />
   <java-symbol type="id" name="emergencyCallButton" />
   <java-symbol type="id" name="faceLockAreaView" />
@@ -1618,6 +1619,9 @@
 
   <!-- From SettingsProvider -->
   <java-symbol type="raw" name="fallbackring" />
+
+  <!-- From KeyguardStatusViewManager -->
+  <java-symbol type="dimen" name="keyguard_lockscreen_status_line_font_right_margin" />
 
   <!-- From Settings -->
   <java-symbol type="array" name="config_mobile_hotspot_provision_app" />

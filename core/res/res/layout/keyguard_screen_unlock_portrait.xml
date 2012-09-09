@@ -31,8 +31,8 @@
     <com.android.internal.widget.DigitalClock android:id="@+id/time"
         android:layout_marginTop="@dimen/keyguard_lockscreen_status_line_clockfont_top_margin"
         android:layout_marginBottom="@dimen/keyguard_lockscreen_status_line_clockfont_bottom_margin"
-        android:layout_marginRight="@dimen/keyguard_lockscreen_status_line_font_right_margin"
-        android:layout_gravity="right">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <!-- Because we can't have multi-tone fonts, we render two TextViews, one on
         top of the other. Hence the redundant layout... -->
@@ -59,9 +59,10 @@
     </com.android.internal.widget.DigitalClock>
 
     <LinearLayout
+        android:id="@+id/date_line"
         android:orientation="horizontal"
-        android:layout_gravity="right"
-        android:layout_marginRight="@dimen/keyguard_lockscreen_status_line_font_right_margin">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/date"
@@ -90,8 +91,8 @@
 
     <TextView
         android:id="@+id/status1"
-        android:layout_gravity="right"
-        android:layout_marginRight="@dimen/keyguard_lockscreen_status_line_font_right_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:textAppearance="?android:attr/textAppearanceMedium"

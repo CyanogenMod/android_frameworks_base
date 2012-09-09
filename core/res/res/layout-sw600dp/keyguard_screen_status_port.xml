@@ -22,7 +22,7 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dip"
         android:gravity="right"
@@ -140,7 +140,7 @@
     </RelativeLayout>
 
     <com.android.internal.widget.DigitalClock android:id="@+id/time"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dip" >
 
@@ -173,8 +173,9 @@
     </com.android.internal.widget.DigitalClock>
 
     <LinearLayout
+        android:id="@+id/date_line"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/time"
         android:layout_marginTop="10dip">
@@ -199,7 +200,7 @@
 
     <TextView
         android:id="@+id/status1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
         android:textSize="16sp"
