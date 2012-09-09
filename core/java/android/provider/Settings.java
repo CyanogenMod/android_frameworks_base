@@ -48,6 +48,7 @@ import android.util.AndroidException;
 import android.util.Log;
 import android.view.WindowOrientationListener;
 
+import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.widget.ILockSettings;
 
 import java.net.URISyntaxException;
@@ -3443,6 +3444,12 @@ public final class Settings {
         public static final String ALLOW_MOCK_LOCATION = "mock_location";
 
         /**
+         * Setting to allow the use of {@link SMSDispatcher#MockSmsReceiver} to simulate
+         * the reception of SMS for testing purposes during application development.
+         */
+        public static final String ALLOW_MOCK_SMS = "mock_sms";
+
+        /**
          * A 64-bit number (as a hex string) that is randomly
          * generated on the device's first boot and should remain
          * constant for the lifetime of the device.  (The value may
@@ -5226,6 +5233,7 @@ public final class Settings {
         public static final String[] SETTINGS_TO_BACKUP = {
             ADB_ENABLED,
             ALLOW_MOCK_LOCATION,
+            ALLOW_MOCK_SMS,
             PARENTAL_CONTROL_ENABLED,
             PARENTAL_CONTROL_REDIRECT_URL,
             USB_MASS_STORAGE_ENABLED,

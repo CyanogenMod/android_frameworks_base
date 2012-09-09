@@ -549,6 +549,13 @@
      This may result in unexpected charges. Malicious apps may cost you money by
      sending messages without your confirmation.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sendMockSms">Send mock SMS messages</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sendMockSms">Allows the app to send mock SMS messages.
+     This allows an app send SMS to trusted applications. Malicious apps could send messages
+     continuously, blocking the device notification system and disrupting the user.</string>
+
      <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_sendSmsNoConfirmation">send SMS messages with no confirmation</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
