@@ -340,9 +340,19 @@ class KeyguardStatusViewManager implements OnClickListener {
                                 e.printStackTrace();
                             }
                         }
+                        if (DEBUG) {
+                            Log.d(TAG, "Location code is " + woeid);
+                        }
+                        WeatherInfo w = null;
+                        if (woeid != null) {
+                            try {
+                                w = parseXml(getDocument(woeid));
+                            } catch (Exception e) {
+                            }
+                        }
                         Message msg = Message.obtain();
                         msg.what = UPDATE_WEATHER;
-                        msg.obj = woeid;
+                        msg.obj = w;
                         mHandler.sendMessage(msg);
                     }
                 });
@@ -351,23 +361,11 @@ class KeyguardStatusViewManager implements OnClickListener {
                 queryWeather.start();
                 break;
             case UPDATE_WEATHER:
-                String woeid = (String) msg.obj;
-                if (woeid != null) {
-                    if (DEBUG) {
-                        Log.d(TAG, "Location code is " + woeid);
-                    }
-                    WeatherInfo w = null;
-                    try {
-                        w = parseXml(getDocument(woeid));
-                    } catch (Exception e) {
-                    }
+                WeatherInfo w = (WeatherInfo) msg.obj;
+                if (w != null) {
                     mWeatherRefreshing = false;
-                    if (w == null) {
-                        setNoWeatherData();
-                    } else {
-                        setWeatherData(w);
-                        mWeatherInfo = w;
-                    }
+                    setWeatherData(w);
+                    mWeatherInfo = w;
                 } else {
                     mWeatherRefreshing = false;
                     if (mWeatherInfo.temp.equals(WeatherInfo.NODATA)) {
