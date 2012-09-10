@@ -677,11 +677,11 @@ sp<MediaSource> OMXCodec::Create(
 #endif
 		}
         if (softwareCodec != NULL) {
-            LOGE("Successfully allocated software codec '%s'", componentName);
+            LOGI("Successfully allocated software codec '%s'", componentName);
             return softwareCodec;
         }
 
-        LOGE("Attempting to allocate OMX node '%s'", componentName);
+        LOGI("Attempting to allocate OMX node '%s'", componentName);
 
         uint32_t quirks = getComponentQuirks(componentNameBase, createEncoder);
 #ifdef QCOM_HARDWARE
@@ -721,7 +721,7 @@ sp<MediaSource> OMXCodec::Create(
 
         status_t err = omx->allocateNode(componentName, observer, &node);
         if (err == OK) {
-            LOGE("Successfully allocated OMX node '%s'", componentName);
+            LOGI("Successfully allocated OMX node '%s'", componentName);
 
             sp<OMXCodec> codec = new OMXCodec(
                     omx, node, quirks, flags,
