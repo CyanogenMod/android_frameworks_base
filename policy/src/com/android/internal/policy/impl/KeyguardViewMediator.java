@@ -1287,7 +1287,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             }
 
             if (DEBUG) {
-                Log.d(TAG, "adjustStatusBarLocked: mShowing=" + mShowing + " mHidden=" + mHidden
+                if (mKeyguardViewProperties != null) Log.d(TAG, "adjustStatusBarLocked: mShowing=" + mShowing + " mHidden=" + mHidden
                         + " isSecure=" + isSecure() + " --> flags=0x" + Integer.toHexString(flags));
             }
 
