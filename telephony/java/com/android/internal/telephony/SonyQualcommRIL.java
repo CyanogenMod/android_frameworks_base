@@ -52,6 +52,7 @@ public class SonyQualcommRIL extends RIL implements CommandsInterface {
 
     public SonyQualcommRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
+        mQANElements = 5;
     }
 
     @Override
@@ -159,31 +160,6 @@ public class SonyQualcommRIL extends RIL implements CommandsInterface {
     public void
     getIMSI(Message result) {
         getIMSIForApp(mAid, result);
-    }
-
-    @Override
-    protected Object
-    responseOperatorInfos(Parcel p) {
-        String strings[] = (String [])responseStrings(p);
-        ArrayList<OperatorInfo> ret;
-
-        if (strings.length % 5 != 0) {
-            throw new RuntimeException(
-                "RIL_REQUEST_QUERY_AVAILABLE_NETWORKS: invalid response. Got "
-                + strings.length + " strings, expected multible of 5");
-        }
-
-        ret = new ArrayList<OperatorInfo>(strings.length / 4);
-
-        for (int i = 0 ; i < strings.length ; i += 5) {
-            ret.add (
-                new OperatorInfo(
-                    strings[i+0],
-                    strings[i+1],
-                    strings[i+2],
-                    strings[i+3]));
-        }
-        return ret;
     }
 
     @Override

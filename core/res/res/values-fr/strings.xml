@@ -796,6 +796,7 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Veuillez réessayer."</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Nombre maximal autorisé de tentatives Face Unlock atteint."</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"En charge (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">"Déchargement (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Chargé"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Branchez votre chargeur."</string>

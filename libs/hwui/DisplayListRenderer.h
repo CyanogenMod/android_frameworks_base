@@ -871,6 +871,8 @@ private:
 
     bool mHasDrawOps;
 
+    bool mSubpixelText;
+
     friend class DisplayList;
 
 }; // class DisplayListRenderer

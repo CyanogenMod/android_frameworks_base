@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/*
+/* //device/apps/common/assets/res/any/colors.xml
 **
 ** Copyright 2006, Google Inc.
 **
@@ -18,4 +18,15 @@
 */
 -->
 <resources>
+
+    <!-- Do not translate. -->
+    <integer-array name="maps_starting_lat_lng">
+        <item>40524724</item>
+        <item>-3816153</item>
+    </integer-array>
+    <!-- Do not translate. -->
+    <integer-array name="maps_starting_zoom">
+        <item>6</item>
+    </integer-array>
+
 </resources>
