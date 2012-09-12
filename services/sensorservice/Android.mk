@@ -25,7 +25,9 @@ LOCAL_SHARED_LIBRARIES := \
 	libui \
 	libgui
 
-
+ifneq ($(BOARD_SYSFS_LIGHT_SENSOR),)
+    LOCAL_CFLAGS += -DSYSFS_LIGHT_SENSOR=\"$(BOARD_SYSFS_LIGHT_SENSOR)\"
+endif
 
 LOCAL_MODULE:= libsensorservice
 
