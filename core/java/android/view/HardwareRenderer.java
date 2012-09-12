@@ -623,7 +623,7 @@ public abstract class HardwareRenderer {
         static boolean sTileRendering;
         static {
             String dirtyProperty = SystemProperties.get(RENDER_DIRTY_REGIONS_PROPERTY, "true");
-            String trProperty = SystemProperties.get(TILE_RENDERING_PROPERTY, "false");
+            String trProperty = SystemProperties.get(TILE_RENDERING_PROPERTY, "true");
             //noinspection PointlessBooleanExpression,ConstantConditions
             //enable dirty regions if tile-rendering enabled or dirty regions property enabled
             sTileRendering = "true".equalsIgnoreCase(trProperty);
