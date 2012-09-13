@@ -827,6 +827,15 @@ public class WifiService extends IWifiManager.Stub {
         mWifiStateMachine.setCountryCode(countryCode, persist);
     }
 
+
+    /**
+     * Get the operational country code
+     */
+    public String getCountryCode() {
+        enforceAccessPermission();
+        return mWifiStateMachine.getCountryCode();
+    }
+
     /**
      * Set the operational frequency band
      * @param band One of
