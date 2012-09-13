@@ -2238,6 +2238,12 @@ public final class Settings {
         public static final String LOCKSCREEN_VIBRATE_ENABLED = "lockscreen.vibrate_enabled";
 
         /**
+         * Whether the screen will be locked if a call ends and the screen is off.
+         * @hide
+         */
+        public static final String LOCKSCREEN_IF_CALL_ENDS_WITH_SCREENOFF = "lockscreen_if_call_ends_with_screenoff";
+
+        /**
          * Stores values for custom lockscreen targets
          * @hide
          */
