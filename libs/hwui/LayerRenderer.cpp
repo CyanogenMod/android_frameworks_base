@@ -48,7 +48,7 @@ int LayerRenderer::prepareDirty(float left, float top, float right, float bottom
     LAYER_RENDERER_LOGD("Rendering into layer, fbo = %d", mLayer->getFbo());
 
 #ifdef QCOM_HARDWARE
-    TILERENDERING_END(previousFbo);
+    TILERENDERING_END(previousFbo, mLayer->getFbo());
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, mLayer->getFbo());
 
@@ -66,13 +66,13 @@ int LayerRenderer::prepareDirty(float left, float top, float right, float bottom
         mLayer->region.subtractSelf(r);
     }
 #ifdef QCOM_HARDWARE
-    TILERENDERING_START(mLayer->getFbo(), dirty.left, dirty.top,
+    TILERENDERING_START(mLayer->getFbo(), previousFbo, dirty.left, dirty.top,
                         dirty.right, dirty.bottom, width, height);
 #endif
     return OpenGLRenderer::prepareDirty(dirty.left, dirty.top, dirty.right, dirty.bottom, opaque);
 #else
 #ifdef QCOM_HARDWARE
-    TILERENDERING_START(mLayer->getFbo(), 0, 0, width, height, width, height);
+    TILERENDERING_START(mLayer->getFbo(), previousFbo, 0, 0, width, height, width, height);
 #endif
     return OpenGLRenderer::prepareDirty(0.0f, 0.0f, width, height, opaque);
 #endif
@@ -224,7 +224,7 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &previousFbo);
 
 #ifdef QCOM_HARDWARE
-    TILERENDERING_END(previousFbo);
+    TILERENDERING_END(previousFbo, layer->getFbo());
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, layer->getFbo());
     layer->bindTexture();
@@ -239,7 +239,7 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
                     fbo, width, height);
             glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
 #ifdef QCOM_HARDWARE
-            TILERENDERING_START(previousFbo);
+            TILERENDERING_START(previousFbo, layer->getFbo());
             TILERENDERING_CLEARCACHE(fbo);
 #endif
             caches.fboCache.put(fbo);
@@ -260,7 +260,7 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
 
     glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
 #ifdef QCOM_HARDWARE
-    TILERENDERING_START(previousFbo, true);
+    TILERENDERING_START(previousFbo, layer->getFbo(), true);
 #endif
 
     return layer;
@@ -431,11 +431,11 @@ bool LayerRenderer::copyLayer(Layer* layer, SkBitmap* bitmap) {
 
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &previousFbo);
 #ifdef QCOM_HARDWARE
-        TILERENDERING_END(previousFbo);
+        TILERENDERING_END(previousFbo, fbo);
 #endif
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 #ifdef QCOM_HARDWARE
-        TILERENDERING_START(fbo, 0, 0, bitmap->width(), bitmap->height(),
+        TILERENDERING_START(fbo, previousFbo, 0, 0, bitmap->width(), bitmap->height(),
                             bitmap->width(), bitmap->height());
 #endif
         glGenTextures(1, &texture);
@@ -501,11 +501,11 @@ error:
         }
 #endif
 #ifdef QCOM_HARDWARE
-        TILERENDERING_END(fbo, true);
+        TILERENDERING_END(fbo, previousFbo, true);
 #endif
         glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
 #ifdef QCOM_HARDWARE
-        TILERENDERING_START(previousFbo);
+        TILERENDERING_START(previousFbo, fbo);
 #endif
         layer->setAlpha(alpha, mode);
         layer->setFbo(0);

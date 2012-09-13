@@ -275,11 +275,11 @@ void OpenGLRenderer::resume() {
 
     mCaches.activeTexture(0);
 #ifdef QCOM_HARDWARE
-    TILERENDERING_END(previousFbo);
+    TILERENDERING_END(previousFbo, snapshot->fbo);
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, snapshot->fbo);
 #ifdef QCOM_HARDWARE
-    TILERENDERING_START(snapshot->fbo, 0, 0,
+    TILERENDERING_START(snapshot->fbo, previousFbo, 0, 0,
                         snapshot->viewport.getWidth(),
                         snapshot->viewport.getHeight(),
                         snapshot->viewport.getWidth(),
@@ -653,7 +653,7 @@ bool OpenGLRenderer::createFboLayer(Layer* layer, Rect& bounds, sp<Snapshot> sna
 
     // Bind texture to FBO
 #ifdef QCOM_HARDWARE
-    TILERENDERING_END(previousFbo);
+    TILERENDERING_END(previousFbo, layer->getFbo());
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, layer->getFbo());
     layer->bindTexture();
@@ -673,7 +673,7 @@ bool OpenGLRenderer::createFboLayer(Layer* layer, Rect& bounds, sp<Snapshot> sna
         ALOGE("Framebuffer incomplete (GL error code 0x%x)", status);
         glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
 #ifdef QCOM_HARDWARE
-        TILERENDERING_START(previousFbo, true);
+        TILERENDERING_START(previousFbo, layer->getFbo(), true);
 #endif
         layer->deleteTexture();
         mCaches.fboCache.put(layer->getFbo());
@@ -684,9 +684,9 @@ bool OpenGLRenderer::createFboLayer(Layer* layer, Rect& bounds, sp<Snapshot> sna
 #endif
 
 #ifdef QCOM_HARDWARE
-    TILERENDERING_START(layer->getFbo(), clip.left, clip.top,
-                        clip.right, clip.bottom,
-                        bounds.getWidth(), bounds.getHeight());
+    TILERENDERING_START(layer->getFbo(), previousFbo, clip.left, clip.bottom - bounds.getHeight(),
+                      bounds.getWidth() + clip.left, clip.bottom,
+                      bounds.getWidth(), bounds.getHeight());
 #endif
 
     // Clear the FBO, expand the clear region by 1 to get nice bilinear filtering
@@ -716,7 +716,7 @@ void OpenGLRenderer::composeLayer(sp<Snapshot> current, sp<Snapshot> previous) {
 
     if (fboLayer) {
 #ifdef QCOM_HARDWARE
-        TILERENDERING_END(current->fbo);
+        TILERENDERING_END(current->fbo, previous->fbo);
 #endif
         // Detach the texture from the FBO
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
@@ -724,7 +724,7 @@ void OpenGLRenderer::composeLayer(sp<Snapshot> current, sp<Snapshot> previous) {
         // Unbind current FBO and restore previous one
         glBindFramebuffer(GL_FRAMEBUFFER, previous->fbo);
 #ifdef QCOM_HARDWARE
-        TILERENDERING_START(previous->fbo, true);
+        TILERENDERING_START(previous->fbo, current->fbo, true);
 #endif
     }
 
