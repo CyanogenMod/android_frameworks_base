@@ -40,6 +40,11 @@ ifneq ($(filter p990 p999 p970, $(TARGET_BOOTLOADER_BOARD_NAME)),)
     endif
 endif
 
+ifneq ($(BOARD_SYSFS_LIGHT_SENSOR),)
+    LOCAL_CFLAGS += -DSYSFS_LIGHT_SENSOR=\"$(BOARD_SYSFS_LIGHT_SENSOR)\"
+    LOCAL_CFLAGS += -DUSE_LGE_ALS_DUMMY
+endif
+
 LOCAL_SHARED_LIBRARIES := \
 	libcutils \
 	libhardware \
@@ -47,7 +52,6 @@ LOCAL_SHARED_LIBRARIES := \
 	libbinder \
 	libui \
 	libgui
-
 
 
 LOCAL_MODULE:= libsensorservice

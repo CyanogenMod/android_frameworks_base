@@ -321,8 +321,12 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
         int nwr, ret, fd;
         char value[2];
 
-#ifdef USE_LGE_ALS_OMAP3
+#if defined(USE_LGE_ALS_OMAP3) || defined(SYSFS_LIGHT_SENSOR)
+#ifndef SYSFS_LIGHT_SENSOR
         fd = open("/sys/class/leds/lcd-backlight/als", O_RDWR);
+#else
+        fd = open(SYSFS_LIGHT_SENSOR, O_RDWR);
+#endif
         if(fd < 0)
             return -ENODEV;
 
