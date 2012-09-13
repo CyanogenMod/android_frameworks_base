@@ -1380,6 +1380,15 @@ public class WifiManager {
        } catch (RemoteException e) {
            return null;
        }
+     * Get the operational country code.
+     * @hide
+     */
+    public String getCountryCode() {
+        try {
+            return mService.getCountryCode();
+        } catch (RemoteException e) {
+            return null;
+        }
     }
 
     /**
