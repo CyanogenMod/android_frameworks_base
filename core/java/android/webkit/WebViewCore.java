@@ -775,7 +775,7 @@ public final class WebViewCore {
                             case REDUCE_PRIORITY:
                                 // 3 is an adjustable number.
                                 Process.setThreadPriority(
-                                        Process.THREAD_PRIORITY_DEFAULT + 3 *
+                                        Process.THREAD_PRIORITY_DEFAULT + 10 *
                                         Process.THREAD_PRIORITY_LESS_FAVORABLE);
                                 break;
 
