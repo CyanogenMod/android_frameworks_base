@@ -32,9 +32,6 @@
 #include "SensorService.h"
 
 #include "sensors_deprecated.h"
-#ifdef USE_LGE_ALS_DUMMY
-#include <fcntl.h>
-#endif
 
 namespace android {
 // ---------------------------------------------------------------------------
@@ -103,27 +100,6 @@ ANDROID_SINGLETON_STATIC_INSTANCE(BatteryService)
 
 ANDROID_SINGLETON_STATIC_INSTANCE(SensorDevice)
 
-#ifdef USE_LGE_ALS_DUMMY
-static ssize_t addDummyLGESensor(sensor_t const **list, ssize_t count) {
-    struct sensor_t dummy_light =     {
-                  name            : "Dummy LGE-Star light sensor",
-                  vendor          : "CyanogenMod",
-                  version         : 1,
-                  handle          : SENSOR_TYPE_LIGHT,
-                  type            : SENSOR_TYPE_LIGHT,
-                  maxRange        : 20,
-                  resolution      : 0.1,
-                  power           : 20,
-    };
-    void * new_list = malloc((count+1)*sizeof(sensor_t));
-    new_list = memcpy(new_list, *list, count*sizeof(sensor_t));
-    ((sensor_t *)new_list)[count] = dummy_light;
-    *list = (sensor_t const *)new_list;
-    count++;
-    return count;
-}
-#endif
-
 SensorDevice::SensorDevice()
     :  mSensorDevice(0),
        mOldSensorsEnabled(0),
@@ -166,10 +142,6 @@ SensorDevice::SensorDevice()
         if (mSensorDevice || mOldSensorsCompatMode) {
             sensor_t const* list;
             ssize_t count = mSensorModule->get_sensors_list(mSensorModule, &list);
-
-#ifdef USE_LGE_ALS_DUMMY
-            count = addDummyLGESensor(&list, count);
-#endif
 
             if (mOldSensorsCompatMode) {
                 mOldSensorsList = list;
@@ -222,10 +194,6 @@ void SensorDevice::dump(String8& result, char* buffer, size_t SIZE)
 ssize_t SensorDevice::getSensorList(sensor_t const** list) {
     if (!mSensorModule) return NO_INIT;
     ssize_t count = mSensorModule->get_sensors_list(mSensorModule, list);
-
-#ifdef USE_LGE_ALS_DUMMY
-    return addDummyLGESensor(list, count);
-#endif
     return count;
 }
 
@@ -294,9 +262,9 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
                 if (buffer[pollsDone].distance >= PROXIMITY_LIES)
 			buffer[pollsDone].distance = maxRange;
 #endif
-                return pollsDone+1;
+		return pollsDone+1;
             } else if (sensorType == SENSOR_TYPE_LIGHT) {
-                return pollsDone+1;
+		return pollsDone+1;
             }
             pollsDone++;
         }
@@ -315,41 +283,6 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
     status_t err(NO_ERROR);
     bool actuateHardware = false;
 
-#ifdef USE_LGE_ALS_DUMMY
-
-    if (handle == SENSOR_TYPE_LIGHT) {
-        int nwr, ret, fd;
-        char value[2];
-
-#ifdef USE_LGE_ALS_OMAP3
-        fd = open("/sys/class/leds/lcd-backlight/als", O_RDWR);
-        if(fd < 0)
-            return -ENODEV;
-
-        nwr = sprintf(value, "%s\n", enabled ? "1" : "0");
-        write(fd, value, nwr);
-        close(fd);
-#else
-        fd = open("/sys/devices/platform/star_aat2870.0/lsensor_onoff", O_RDWR);
-        if(fd < 0)
-            return -ENODEV;
-
-        nwr = sprintf(value, "%s\n", enabled ? "1" : "0");
-        write(fd, value, nwr);
-        close(fd);
-        fd = open("/sys/devices/platform/star_aat2870.0/alc", O_RDWR);
-        if(fd < 0)
-            return -ENODEV;
-
-        nwr = sprintf(value, "%s\n", enabled ? "2" : "0");
-        write(fd, value, nwr);
-        close(fd);
-#endif
-
-        return 0;
-
-    }
-#endif
     Info& info( mActivationCount.editValueFor(handle) );
 
 
