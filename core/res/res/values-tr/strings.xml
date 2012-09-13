@@ -35,6 +35,19 @@
     <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"Sesli Mesaj"</string>
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Bağlantı sorunu veya geçersiz MMI kodu."</string>
+    <!-- #CM-MOD-START -->
+    <string name="profileNameDefault">Normal</string>
+    <string name="profileNameWork">İş</string>
+    <string name="profileNameHome">Ev</string>
+    <string name="profileNameSilent">Sessiz</string>
+    <string name="profileNameNight">Gece</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Takvim</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-posta</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Diğer</string>
+    <!-- #CM-MOD-END -->
     <string name="mmiFdnError" msgid="5224398216385316471">"İşlem sadece sabit arama numaralarıyla sınırlandırılmıştır."</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Hizmet etkindi."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Hizmet şunun için etkinleştirildi:"</string>
@@ -139,6 +152,18 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Kablosuzu kapat"</string>
     <string name="screen_lock" msgid="799094655496098153">"Ekran kilidi"</string>
     <string name="power_off" msgid="4266614107412865048">"Kapat"</string>
+    <!-- #CM-MOD-START -->
+    <string name="reboot_system" product="tablet">Tableti yeniden başlat</string>
+    <string name="reboot_system" product="default">Telefonu yeniden başlat</string>
+    <string name="reboot_reboot">Yeniden başlat</string>
+    <string name="reboot_recovery">Kurtar</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Boot menüsü</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Yeniden başlatılıyor\u2026</string>
+    <string name="reboot_confirm">Telefonunuz yeniden başlatılacak.</string>
+    <!-- #CM-MOD-END -->
     <string name="silent_mode_silent" msgid="319298163018473078">"Telefon zili kapalı"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Telefon zili titreşimde"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Telefon zili açık"</string>
@@ -154,6 +179,11 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Telefon seçenekleri"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Ekran kilidi"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Kapat"</string>
+    <!-- #CM-MOD-START -->
+    <string name="global_action_reboot">Yeniden başlat</string>
+    <string name="global_action_choose_profile">Profil</string>
+    <string name="global_action_screenshot">Ekran görüntüsü</string>
+    <!-- #CM-MOD-END -->
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Sessiz mod"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ses KAPALI"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ses AÇIK"</string>
@@ -318,6 +348,10 @@
     <string name="permdesc_clearAppCache" product="default" msgid="5067988373366292186">"Uygulamaya, önbellek dizinindeki dosyaları silerek telefonunuzun depolama bölümünü boşaltma izni verir. Erişim genellikle sadece sistem işlemlerine verilecek şekilde oldukça kısıtlıdır."</string>
     <string name="permlab_movePackage" msgid="3289890271645921411">"uygulama kaynaklarını taşı"</string>
     <string name="permdesc_movePackage" msgid="319562217778244524">"Uygulamaya, iç medyadan dış medyaya (ve tam tersi yönde) uygulama kaynaklarını taşıma izni verir."</string>
+    <!-- #CM-MOD-START -->
+    <string name="permlab_preventpower">güç tuşunu değiştir</string>
+    <string name="permdesc_preventpower">Uygulamaya güç tuşunu değiştirme izni verir</string>
+    <!-- #CM-MOD-END -->
     <string name="permlab_readLogs" msgid="6615778543198967614">"hassas günlük verilerini okuma"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="82061313293455151">"Uygulamaya, sisteme ait çeşitli günlük dosyalarındaki bilgileri okuma izni verir. Bu izin, uygulamanın, kişisel ve gizli bilgileriniz de dahil olmak üzere tablette yaptıklarınızla ilgili genel bilgileri bulmasına olanak verir."</string>
     <string name="permdesc_readLogs" product="default" msgid="2063438140241560443">"Uygulamaya, sisteme ait çeşitli günlük dosyalarındaki bilgileri okuma izni verir. Bu izin, uygulamanın, kişisel ve gizli bilgileriniz de dahil olmak üzere telefonda yaptıklarınızla ilgili genel bilgileri bulmasına olanak verir."</string>
@@ -698,10 +732,13 @@
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Tekrar deneyin"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Tekrar deneyin"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Yüz Tanıma Kilidi için maksimum deneme sayısı aşıldı"</string>
-    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Şarj oluyor (<xliff:g id="PERCENT">%%</xliff:g><xliff:g id="NUMBER">%d</xliff:g>)"</string>
-    <string name="lockscreen_charged" msgid="4938930459620989972">"Şarj oldu."</string>
-    <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="PERCENT">%%</xliff:g><xliff:g id="NUMBER">%d</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Şarj cihazınızı bağlayın."</string>
+    <!-- #CM-MOD-START -->
+    <string name="lockscreen_plugged_in">Şarj oluyor (<xliff:g id="PERCENT">%%</xliff:g><xliff:g id="NUMBER">%d</xliff:g>)</string>
+    <string name="lockscreen_discharging">Şarj olmuyor (<xliff:g id="PERCENT">%%</xliff:g><xliff:g id="NUMBER">%d</xliff:g>)</string>
+    <string name="lockscreen_charged">Şarj oldu</string>
+    <string name="lockscreen_battery_short"><xliff:g id="PERCENT">%%</xliff:g><xliff:g id="NUMBER">%d</xliff:g></string>
+    <string name="lockscreen_low_battery">Şarj cihazını bağlayın (<xliff:g id="PERCENT">%%</xliff:g><xliff:g id="NUMBER">%d</xliff:g>)</string>
+    <!-- #CM-MOD-END -->
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"SIM kart yok."</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Tablette SIM kart yok."</string>
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"Telefonda SIM kart yok."</string>
@@ -1079,8 +1116,10 @@
     <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"USB belleğinizdeki tüm dosyalar silinecek. Bu işlem geri alınamaz!"</string>
     <string name="extmedia_format_message" product="default" msgid="14131895027543830">"Kartınızdaki tüm veriler kaybolacak."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Biçimlendir"</string>
-    <string name="adb_active_notification_title" msgid="6729044778949189918">"USB hata ayıklaması bağlandı"</string>
-    <string name="adb_active_notification_message" msgid="1016654627626476142">"USB hata ayıklama özelliğini devre dışı bırakmak için dokunun."</string>
+    <!-- #CM-MOD-START -->
+    <string name="adb_active_notification_title">Android hata ayıklama etkin</string>
+    <string name="adb_active_notification_message">Hata ayıklamayı devre dışı bırakmak için seçin.</string>
+    <!-- #CM-MOD-END -->
     <string name="select_input_method" msgid="4653387336791222978">"Giriş yöntemini seçin"</string>
     <string name="configure_input_methods" msgid="9091652157722495116">"Giriş yöntemlerini ayarla"</string>
     <string name="use_physical_keyboard" msgid="6203112478095117625">"Fiziksel klavye"</string>
@@ -1185,6 +1224,7 @@
     <string name="share" msgid="1778686618230011964">"Paylaş"</string>
     <string name="find" msgid="4808270900322985960">"Bul"</string>
     <string name="websearch" msgid="4337157977400211589">"Google Web Arama"</string>
+    <string name="openurl">Url Aç</string>
     <string name="gpsNotifTicker" msgid="5622683912616496172">"<xliff:g id="NAME">%s</xliff:g> kullanıcısından gelen konum isteği"</string>
     <string name="gpsNotifTitle" msgid="5446858717157416839">"Konum isteği"</string>
     <string name="gpsNotifMessage" msgid="1374718023224000702">"<xliff:g id="NAME">%1$s</xliff:g> tarafından istendi (<xliff:g id="SERVICE">%2$s</xliff:g>)"</string>
@@ -1242,6 +1282,9 @@
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Diğer seçenekler"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Dahili depolama birimi"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD kart"</string>
+    <!-- #CM-MOD-START -->
+    <string name="storage_sd_dock_card">SD Kard Kiti</string>
+    <!-- #CM-MOD-END -->
     <string name="storage_usb" msgid="3017954059538517278">"USB bellek"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Düzenle"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Veri kullanım uyarısı"</string>
@@ -1290,4 +1333,74 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Sistem"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Bluetooth ses"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Tamamlandı"</string>
+    <!-- #CM-MOD-START -->
+    <string name="app_killed_message">Uygulama kapatıldı</string>
+    <!-- #CM-MOD-END -->
+    <!-- #CM-MOD-START -->
+    <string name="weather_0">Kasırgalı</string>
+    <string name="weather_1">Tropik Kasırgalı</string>
+    <string name="weather_2">Fırtınalı</string>
+    <string name="weather_3">Aşırı Gök Gürültülü</string>
+    <string name="weather_4">Gök Gürültülü</string>
+    <string name="weather_5">Karışık Yağmurlu ve Karlı</string>
+    <string name="weather_6">Karla Karışık Yağmurlu</string>
+    <string name="weather_7">Karla Karışık Yağmurlu</string>
+    <string name="weather_8">Dondurucu Çiseleme</string>
+    <string name="weather_9">Çiseleme</string>
+    <string name="weather_10">Dondurucu Yağmurlu</string>
+    <string name="weather_11">Sağanak</string>
+    <string name="weather_12">Sağanak</string>
+    <string name="weather_13">Şiddetli Kar</string>
+    <string name="weather_14">Hafif Kar Yağışlı</string>
+    <string name="weather_15">Esintili Kar Yağışlı</string>
+    <string name="weather_16">Karlı</string>
+    <string name="weather_17">Dolu</string>
+    <string name="weather_18">Karla Karışık Yağmur</string>
+    <string name="weather_19">Tozlu</string>
+    <string name="weather_20">Sisli</string>
+    <string name="weather_21">Puslu</string>
+    <string name="weather_22">Dumanlı</string>
+    <string name="weather_23">Fırtınalı</string>
+    <string name="weather_24">Rüzgarlı</string>
+    <string name="weather_25">Soğuk</string>
+    <string name="weather_26">Bulutlu</string>
+    <string name="weather_27">Bulutlu</string> <!-- Night -->
+    <string name="weather_28">Bulutlu</string> <!-- Day -->
+    <string name="weather_29">Parçalı Bulutlu</string> <!-- Night -->
+    <string name="weather_30">Parçalı Bulutlu</string> <!-- Day -->
+    <string name="weather_31">Açık</string> <!-- Night -->
+    <string name="weather_32">Güneşli</string>
+    <string name="weather_33">Açık</string> <!-- Night -->
+    <string name="weather_34">Güneşli</string> <!-- Day -->
+    <string name="weather_35">Karışık Yağmur ve Dolu</string>
+    <string name="weather_36">Sıcak</string>
+    <string name="weather_37">Sürekli Gökgürültülü Fırtına</string>
+    <string name="weather_38">Aralıklı Gökgürültülü Fırtına</string>
+    <string name="weather_39">Aralıklı Gökgürültülü Fırtına</string>
+    <string name="weather_40">Aralıklı Yağış</string>
+    <string name="weather_41">Çok Karlı</string>
+    <string name="weather_42">Aralıklı Kar Yağışlı</string>
+    <string name="weather_43">Çok Karlı</string>
+    <string name="weather_44">Parçalı Bulutlu</string>
+    <string name="weather_45">Gökgürültülü Yağmurlu Fırtına</string>
+    <string name="weather_46">Kar Yağışlı</string>
+    <string name="weather_47">Sürekli Gökgürültülü Fırtına</string>
+    <string name="weather_3200"></string>
+    <string name="weather_N">K</string>
+    <string name="weather_NE">KD</string>
+    <string name="weather_E">D</string>
+    <string name="weather_SE">GD</string>
+    <string name="weather_S">G</string>
+    <string name="weather_SW">GB</string>
+    <string name="weather_W">B</string>
+    <string name="weather_NW">KB</string>
+    <string name="weather_no_data">Veri yok</string>
+    <string name="weather_tap_to_refresh">Yenile</string>
+    <string name="weather_refreshing">Güncelleniyor</string>
+    <string name="weather_last_sync_just_now">Az önce</string>
+    <!-- #CM-MOD-END -->
+    <!-- #CM-MOD-START -->
+    <string name="toast_rotation_unlocked">Ekran döndürme kilitli değil</string>
+    <string name="toast_rotation_locked">Ekran döndürme kilitli</string>
+    <!-- #CM-MOD-END -->
 </resources>
