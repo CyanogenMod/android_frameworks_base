@@ -36,6 +36,13 @@ static const nsecs_t DEFAULT_EVENTS_PERIOD = 200000000; //    5 Hz
 class SensorDevice : public Singleton<SensorDevice> {
     friend class Singleton<SensorDevice>;
     struct sensors_poll_device_t* mSensorDevice;
+    struct sensors_data_device_t* mSensorDataDevice;
+    struct sensors_control_device_t* mSensorControlDevice;
+    int32_t mOldSensorsEnabled;
+    bool mOldSensorsCompatMode;
+    native_handle_t *mOldSensorsDataChannel;
+    sensor_t const* mOldSensorsList;
+    int mOldSensorsCount;
     struct sensors_module_t* mSensorModule;
     mutable Mutex mLock; // protect mActivationCount[].rates
     // fixed-size array after construction
