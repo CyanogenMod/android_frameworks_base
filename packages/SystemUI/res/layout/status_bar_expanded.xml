@@ -54,8 +54,7 @@
         <com.android.systemui.statusbar.powerwidget.PowerWidget
             android:id="@+id/exp_power_stat"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/notification_panel_widget_height"
+            android:layout_height="@dimen/notification_panel_widget_height"
             android:layout_marginTop="44dip"
         />
 
