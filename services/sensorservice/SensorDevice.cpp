@@ -35,6 +35,11 @@
 #include <fcntl.h>
 #endif
 
+#ifdef ENABLE_SENSORS_COMPAT
+#include "sensors_deprecated.h"
+#endif
+
+
 namespace android {
 // ---------------------------------------------------------------------------
 class BatteryService : public Singleton<BatteryService> {
@@ -126,6 +131,8 @@ static ssize_t addDummyLightSensor(sensor_t const **list, ssize_t count) {
 
 SensorDevice::SensorDevice()
     :  mSensorDevice(0),
+       mOldSensorsEnabled(0),
+       mOldSensorsCompatMode(false),
        mSensorModule(0)
 {
     status_t err = hw_get_module(SENSORS_HARDWARE_MODULE_ID,
@@ -135,22 +142,55 @@ SensorDevice::SensorDevice()
             SENSORS_HARDWARE_MODULE_ID, strerror(-err));
 
     if (mSensorModule) {
+#ifdef ENABLE_SENSORS_COMPAT
+#ifdef SENSORS_NO_OPEN_CHECK
+        sensors_control_open(&mSensorModule->common, &mSensorControlDevice) ;
+        sensors_data_open(&mSensorModule->common, &mSensorDataDevice) ;
+        mOldSensorsCompatMode = true;
+#else
+        if (!sensors_control_open(&mSensorModule->common, &mSensorControlDevice)) {
+            if (sensors_data_open(&mSensorModule->common, &mSensorDataDevice)) {
+                ALOGE("couldn't open data device in backwards-compat mode for module %s (%s)",
+                        SENSORS_HARDWARE_MODULE_ID, strerror(-err));
+            } else {
+                ALOGD("Opened sensors in backwards compat mode");
+                mOldSensorsCompatMode = true;
+            }
+        } else {
+            ALOGE("couldn't open control device in backwards-compat mode for module %s (%s)",
+                    SENSORS_HARDWARE_MODULE_ID, strerror(-err));
+        }
+#endif
+#else
         err = sensors_open(&mSensorModule->common, &mSensorDevice);
 
         ALOGE_IF(err, "couldn't open device for module %s (%s)",
                 SENSORS_HARDWARE_MODULE_ID, strerror(-err));
+#endif
 
-        if (mSensorDevice) {
+        if (mSensorDevice  || mOldSensorsCompatMode) {
             sensor_t const* list;
             ssize_t count = mSensorModule->get_sensors_list(mSensorModule, &list);
 #ifdef SYSFS_LIGHT_SENSOR
             count = addDummyLightSensor(&list, count);
 #endif
+
+			if (mOldSensorsCompatMode) {
+                mOldSensorsList = list;
+                mOldSensorsCount = count;
+                mSensorDataDevice->data_open(mSensorDataDevice,
+                            mSensorControlDevice->open_data_source(mSensorControlDevice));
+            }
+			
             mActivationCount.setCapacity(count);
             Info model;
             for (size_t i=0 ; i<size_t(count) ; i++) {
                 mActivationCount.add(list[i].handle, model);
-                mSensorDevice->activate(mSensorDevice, list[i].handle, 0);
+				  if (mOldSensorsCompatMode) {
+                    mSensorControlDevice->activate(mSensorControlDevice, list[i].handle, 0);
+                } else {
+					mSensorDevice->activate(mSensorDevice, list[i].handle, 0);
+				}
             }
         }
     }
@@ -194,21 +234,88 @@ ssize_t SensorDevice::getSensorList(sensor_t const** list) {
 }
 
 status_t SensorDevice::initCheck() const {
-    return mSensorDevice && mSensorModule ? NO_ERROR : NO_INIT;
+    return (mSensorDevice || mOldSensorsCompatMode) && mSensorModule ? NO_ERROR : NO_INIT;
 }
 
 ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
-    if (!mSensorDevice) return NO_INIT;
+    if (!mSensorDevice  && !mOldSensorsCompatMode) return NO_INIT;
     ssize_t c;
-    do {
-        c = mSensorDevice->poll(mSensorDevice, buffer, count);
-    } while (c == -EINTR);
-    return c;
+	    if (mOldSensorsCompatMode) {
+        size_t pollsDone = 0;
+        //LOGV("%d buffers were requested",count);
+        while (!mOldSensorsEnabled) {
+            sleep(1);
+            ALOGV("Waiting...");
+        }
+        while (pollsDone < (size_t)mOldSensorsEnabled && pollsDone < count) {
+            sensors_data_t oldBuffer;
+            long result =  mSensorDataDevice->poll(mSensorDataDevice, &oldBuffer);
+            int sensorType = -1;
+            int maxRange = -1;
+
+            if (result == 0x7FFFFFFF) {
+                continue;
+            } else {
+                /* the old data_poll is supposed to return a handle,
+                 * which has to be mapped to the type. */
+                for (size_t i=0 ; i<size_t(mOldSensorsCount) && sensorType < 0 ; i++) {
+                    if (mOldSensorsList[i].handle == result) {
+                        sensorType = mOldSensorsList[i].type;
+                        maxRange = mOldSensorsList[i].maxRange;
+                        ALOGV("mapped sensor type to %d",sensorType);
+                    }
+                }
+            }
+            if ( sensorType <= 0 ||
+                 sensorType > SENSOR_TYPE_ROTATION_VECTOR) {
+                ALOGV("Useless output at round %u from %d",pollsDone, oldBuffer.sensor);
+                count--;
+                continue;
+            }
+            buffer[pollsDone].version = sizeof(struct sensors_event_t);
+            buffer[pollsDone].timestamp = oldBuffer.time;
+            buffer[pollsDone].type = sensorType;
+            buffer[pollsDone].sensor = result;
+            /* This part is a union. Regardless of the sensor type,
+             * we only need to copy a sensors_vec_t and a float */
+            buffer[pollsDone].acceleration = oldBuffer.vector;
+            buffer[pollsDone].temperature = oldBuffer.temperature;
+            ALOGV("Adding results for sensor %d", buffer[pollsDone].sensor);
+            /* The ALS and PS sensors only report values on change,
+             * instead of a data "stream" like the others. So don't wait
+             * for the number of requested samples to fill, and deliver
+             * it immediately */
+            if (sensorType == SENSOR_TYPE_PROXIMITY) {
+#ifdef FOXCONN_SENSORS
+            /* Fix ridiculous API breakages from FIH. */
+            /* These idiots are returning -1 for FAR, and 1 for NEAR */
+                if (buffer[pollsDone].distance > 0) {
+                    buffer[pollsDone].distance = 0;
+                } else {
+                    buffer[pollsDone].distance = 1;
+                }
+#elif defined(PROXIMITY_LIES)
+                if (buffer[pollsDone].distance >= PROXIMITY_LIES)
+			buffer[pollsDone].distance = maxRange;
+#endif
+                return pollsDone+1;
+            } else if (sensorType == SENSOR_TYPE_LIGHT) {
+                return pollsDone+1;
+            }
+            pollsDone++;
+        }
+        return pollsDone;
+    } else {
+		do {
+			c = mSensorDevice->poll(mSensorDevice, buffer, count);
+		} while (c == -EINTR);
+		return c;
+	}
 }
 
 status_t SensorDevice::activate(void* ident, int handle, int enabled)
 {
-    if (!mSensorDevice) return NO_INIT;
+    if (!mSensorDevice  && !mOldSensorsCompatMode) return NO_INIT;
     status_t err(NO_ERROR);
     bool actuateHardware = false;
 
@@ -265,8 +372,21 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
 
     if (actuateHardware) {
         ALOGD_IF(DEBUG_CONNECTIONS, "\t>>> actuating h/w");
-
-        err = mSensorDevice->activate(mSensorDevice, handle, enabled);
+		
+		if (mOldSensorsCompatMode) {
+            if (enabled)
+                mOldSensorsEnabled++;
+            else if (mOldSensorsEnabled > 0)
+                mOldSensorsEnabled--;
+            ALOGV("Activation for %d (%d)",handle,enabled);
+            if (enabled) {
+                mSensorControlDevice->wake(mSensorControlDevice);
+            }
+            err = mSensorControlDevice->activate(mSensorControlDevice, handle, enabled);
+            err = 0;
+        } else {
+			err = mSensorDevice->activate(mSensorDevice, handle, enabled);
+		}
         if (enabled) {
             ALOGE_IF(err, "Error activating sensor %d (%s)", handle, strerror(-err));
             if (err == 0) {
@@ -282,7 +402,11 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
     { // scope for the lock
         Mutex::Autolock _l(mLock);
         nsecs_t ns = info.selectDelay();
-        mSensorDevice->setDelay(mSensorDevice, handle, ns);
+		if (mOldSensorsCompatMode) {
+            mSensorControlDevice->set_delay(mSensorControlDevice, (ns/(1000*1000)));
+        } else {
+			mSensorDevice->setDelay(mSensorDevice, handle, ns);
+		}
     }
 
     return err;
@@ -290,13 +414,17 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
 
 status_t SensorDevice::setDelay(void* ident, int handle, int64_t ns)
 {
-    if (!mSensorDevice) return NO_INIT;
+    if (!mSensorDevice  && !mOldSensorsCompatMode) return NO_INIT;
     Mutex::Autolock _l(mLock);
     Info& info( mActivationCount.editValueFor(handle) );
     status_t err = info.setDelayForIdent(ident, ns);
     if (err < 0) return err;
     ns = info.selectDelay();
-    return mSensorDevice->setDelay(mSensorDevice, handle, ns);
+	 if (mOldSensorsCompatMode) {
+        return mSensorControlDevice->set_delay(mSensorControlDevice, (ns/(1000*1000)));
+    } else {
+		return mSensorDevice->setDelay(mSensorDevice, handle, ns);
+	}
 }
 
 // ---------------------------------------------------------------------------
