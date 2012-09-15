@@ -71,6 +71,14 @@
 
         </com.android.systemui.recent.RecentsVerticalScrollView>
 
+        <ImageView
+            android:id="@+id/recents_clear"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:src="@drawable/ic_notify_clear" />
+
         <include layout="@layout/system_bar_no_recent_apps"
             android:id="@+id/recents_no_apps"
             android:layout_width="match_parent"

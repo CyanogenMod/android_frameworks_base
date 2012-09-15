@@ -87,6 +87,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private Choreographer mChoreo;
     OnRecentsPanelVisibilityChangedListener mVisibilityChangedListener;
 
+    ImageView mClearRecents;
     ImageView mPlaceholderThumbnail;
     View mTransitionBg;
     boolean mHideRecentsAfterThumbnailScaleUpStarted;
@@ -317,6 +318,12 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             // if there are no apps, either bring up a "No recent apps" message, or just
             // quit early
             boolean noApps = !mFirstScreenful && (mRecentTaskDescriptions.size() == 0);
+
+            // if no apps found, we just hide the "Clear" button as it's not needed
+            if(mClearRecents != null){
+                mClearRecents.setVisibility(noApps ? View.GONE : View.VISIBLE);
+            }
+
             if (mRecentsNoApps != null) {
                 mRecentsNoApps.setAlpha(1f);
                 mRecentsNoApps.setVisibility(noApps ? View.VISIBLE : View.INVISIBLE);
@@ -484,6 +491,16 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mRecentsScrim = findViewById(R.id.recents_bg_protect);
         mRecentsNoApps = findViewById(R.id.recents_no_apps);
         mChoreo = new Choreographer(this, mRecentsScrim, mRecentsContainer, mRecentsNoApps, this);
+
+        mClearRecents = (ImageView) findViewById(R.id.recents_clear);
+        if (mClearRecents != null){
+            mClearRecents.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mRecentsContainer.removeAllViewsInLayout();
+                }
+            });
+        }
 
         if (mRecentsScrim != null) {
             Display d = ((WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE))
@@ -768,7 +785,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         ActivityOptions opts = ActivityOptions.makeDelayedThumbnailScaleUpAnimation(
                 holder.thumbnailViewImage, bm, 0, 0,
                 new ActivityOptions.OnAnimationStartedListener() {
-                    @Override public void onAnimationStarted() {
+                    @Override
+                    public void onAnimationStarted() {
                         mThumbnailScaleUpStarted = true;
                         if (!mHighEndGfx) {
                             mPlaceholderThumbnail.setVisibility(INVISIBLE);
