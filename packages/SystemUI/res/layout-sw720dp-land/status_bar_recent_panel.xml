@@ -26,6 +26,11 @@
     android:layout_width="match_parent"
     systemui:recentItemLayout="@layout/status_bar_recent_item"
     >
+    <View
+        android:id="@+id/recents_transition_background"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="invisible" />
     <FrameLayout
         android:id="@+id/recents_bg_protect"
         android:background="@drawable/status_bar_recents_background"
@@ -35,18 +40,31 @@
         android:clipToPadding="false"
         android:clipChildren="false">
 
+        <ImageView
+            android:id="@+id/recents_transition_placeholder_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
+
         <com.android.systemui.recent.RecentsHorizontalScrollView android:id="@+id/recents_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:divider="@null"
+            android:stackFromBottom="true"
             android:fadingEdge="horizontal"
             android:scrollbars="none"
-            android:layout_gravity="right"
-            android:fadingEdgeLength="@dimen/status_bar_recents_scroll_fading_edge_length">
+            android:fadingEdgeLength="@dimen/status_bar_recents_scroll_fading_edge_length"
+            android:layout_gravity="bottom|right"
+            android:orientation="horizontal"
+            android:clipToPadding="false"
+            android:clipChildren="false">
 
             <LinearLayout android:id="@+id/recents_linear_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clipToPadding="false"
+                android:clipChildren="false">
             </LinearLayout>
 
         </com.android.systemui.recent.RecentsHorizontalScrollView>
