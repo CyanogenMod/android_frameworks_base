@@ -57,6 +57,15 @@
 
         </com.android.systemui.recent.RecentsVerticalScrollView>
 
+        <ImageView
+            android:id="@+id/recents_clear"
+            android:clickable="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="center"
+            android:layout_gravity="top|right"
+            android:src="@drawable/ic_notify_clear" />
+
     </FrameLayout>
 
     <include layout="@layout/status_bar_no_recent_apps"
