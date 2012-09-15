@@ -24,8 +24,11 @@ public interface RecentsCallback {
     static final int SWIPE_UP = 2;
     static final int SWIPE_DOWN = 3;
 
+    void addContainer(View container);
     void handleOnClick(View selectedView);
     void handleSwipe(View selectedView);
     void handleLongPress(View selectedView, View anchorView, View thumbnailView);
+    void setScrollView(Object scrollView);
+    void clear();
     void dismiss();
 }
