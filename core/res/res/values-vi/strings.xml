@@ -942,8 +942,8 @@
     <string name="no" msgid="5141531044935541497">"Hủy"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Chú ý"</string>
     <string name="loading" msgid="7933681260296021180">"Đang tải…"</string>
-    <string name="capital_on" msgid="1544682755514494298">"BẬT"</string>
-    <string name="capital_off" msgid="6815870386972805832">"TẮT"</string>
+    <string name="capital_on" product="tablet">"BẬT"</string>
+    <string name="capital_off" product="tablet">"TẮT"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Hoàn tất tác vụ đang sử dụng"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Sử dụng theo mặc định đối với tác vụ này."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Xóa mặc định trong Cài đặt hệ thống &gt; Ứng dụng &gt; Đã tải xuống."</string>

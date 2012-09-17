@@ -942,8 +942,8 @@
     <string name="no" msgid="5141531044935541497">"Kanselleer"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Aandag"</string>
     <string name="loading" msgid="7933681260296021180">"Laai tans..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"AAN"</string>
-    <string name="capital_off" msgid="6815870386972805832">"AF"</string>
+    <string name="capital_on" product="tablet">"AAN"</string>
+    <string name="capital_off" product="tablet">"AF"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Voltooi handeling met"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Gebruik hierdie aksie by verstek."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Vee die verstek instelling uit in Stelselinstellings &gt; Programme &gt; Afgelaai."</string>

@@ -942,8 +942,8 @@
     <string name="no" msgid="5141531044935541497">"Avbryt"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Merk"</string>
     <string name="loading" msgid="7933681260296021180">"Laster inn …"</string>
-    <string name="capital_on" msgid="1544682755514494298">"På"</string>
-    <string name="capital_off" msgid="6815870386972805832">"Av"</string>
+    <string name="capital_on" product="tablet">"På"</string>
+    <string name="capital_off" product="tablet">"Av"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Fullfør med"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Bruk som standardvalg."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Fjern app angitt som standard i systeminnstillingene &gt; Apper &gt; Nedlastet."</string>

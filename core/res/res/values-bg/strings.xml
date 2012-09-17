@@ -942,8 +942,8 @@
     <string name="no" msgid="5141531044935541497">"Отказ"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Внимание"</string>
     <string name="loading" msgid="7933681260296021180">"Зарежда се..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"ВКЛ"</string>
-    <string name="capital_off" msgid="6815870386972805832">"ИЗКЛ"</string>
+    <string name="capital_on" product="tablet">"ВКЛ"</string>
+    <string name="capital_off" product="tablet">"ИЗКЛ"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Изпълняване на действието чрез"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Използване по подразбиране за това действие."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Изчистване на стандартната настройка в „Системни настройки“ &gt; „Приложения“ &gt; „Изтеглени“."</string>

@@ -1014,8 +1014,8 @@
     <string name="no" msgid="5141531044935541497">"Abbrechen"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Achtung"</string>
     <string name="loading" msgid="7933681260296021180">"Wird geladen…"</string>
-    <string name="capital_on" msgid="1544682755514494298">"AN"</string>
-    <string name="capital_off" msgid="6815870386972805832">"AUS"</string>
+    <string name="capital_on" product="tablet">"AN"</string>
+    <string name="capital_off" product="tablet">"AUS"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Aktion durchführen mit"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Immer für diese Aktion verwenden"</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Das Löschen der Standardeinstellungen ist in den Systemeinstellungen unter \"Apps &gt; Heruntergeladen\" möglich."</string>

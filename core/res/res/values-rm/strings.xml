@@ -1431,8 +1431,8 @@
     <string name="dialog_alert_title" msgid="2049658708609043103">"Attenziun"</string>
     <!-- no translation found for loading (7933681260296021180) -->
     <skip />
-    <string name="capital_on" msgid="1544682755514494298">"ACTIVÀ"</string>
-    <string name="capital_off" msgid="6815870386972805832">"DEACTIVÀ"</string>
+    <string name="capital_on" product="tablet">"ACTIVÀ"</string>
+    <string name="capital_off" product="tablet">"DEACTIVÀ"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Cumplettar l\'acziun cun"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Utilisar questa applicaziun sco standard per questa acziun."</string>
     <!-- no translation found for clearDefaultHintMsg (3252584689512077257) -->
