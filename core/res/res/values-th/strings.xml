@@ -942,8 +942,10 @@
     <string name="no" msgid="5141531044935541497">"ยกเลิก"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"โปรดทราบ"</string>
     <string name="loading" msgid="7933681260296021180">"กำลังโหลด..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"เปิด"</string>
-    <string name="capital_off" msgid="6815870386972805832">"ปิด"</string>
+    <string name="capital_on" product="tablet">"เปิด"</string>
+    <string name="capital_off" product="tablet">"ปิด"</string>
+    <string name="capital_on" product="default">"เปิด"</string>
+    <string name="capital_off" product="default">"ปิด"</string>
     <string name="whichApplication" msgid="4533185947064773386">"ทำงานให้เสร็จโดยใช้"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"ใช้ค่าเริ่มต้นสำหรับการทำงานนี้"</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"ล้างค่าเริ่มต้นในการตั้งค่าระบบ &gt; แอปพลิเคชัน &gt; ดาวน์โหลด"</string>
