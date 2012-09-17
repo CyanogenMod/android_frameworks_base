@@ -942,8 +942,10 @@
     <string name="no" msgid="5141531044935541497">"لغو"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"توجه"</string>
     <string name="loading" msgid="7933681260296021180">"درحال بارگیری..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"روشن"</string>
-    <string name="capital_off" msgid="6815870386972805832">"خاموش"</string>
+    <string name="capital_on" product="tablet">"روشن"</string>
+    <string name="capital_off" product="tablet">"خاموش"</string>
+    <string name="capital_on" product="default">"روشن"</string>
+    <string name="capital_off" product="default">"خاموش"</string>
     <string name="whichApplication" msgid="4533185947064773386">"تکمیل عملکرد با استفاده از"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"استفاده به صورت پیش فرض برای این عملکرد."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"پیش فرض را در تنظیمات سیستم&gt; برنامه‎ها&gt; مورد دانلود شده پاک کنید."</string>

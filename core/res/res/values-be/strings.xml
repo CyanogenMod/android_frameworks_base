@@ -942,8 +942,10 @@
     <string name="no" msgid="5141531044935541497">"Адмяніць"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Увага"</string>
     <string name="loading" msgid="7933681260296021180">"Загрузка..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"Уключыць"</string>
-    <string name="capital_off" msgid="6815870386972805832">"Адключана"</string>
+    <string name="capital_on" product="tablet">"Уключыць"</string>
+    <string name="capital_off" product="tablet">"Адключана"</string>
+    <string name="capital_on" product="default">"Уключыць"</string>
+    <string name="capital_off" product="default">"Адключана"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Завяршыць дзеянне з дапамогай"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Выкарыстоўваць па змаўчанні для гэтага дзеяння."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Ачысціць па змаўчанні ў раздзеле \"Налады сістэмы &gt; Прыкладанні &gt; Спампаваныя\"."</string>

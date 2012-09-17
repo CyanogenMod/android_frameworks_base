@@ -942,8 +942,10 @@
     <string name="no" msgid="5141531044935541497">"रद्द करें"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"ध्यानाकर्षण"</string>
     <string name="loading" msgid="7933681260296021180">"लोड हो रहे हैं..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"चालू"</string>
-    <string name="capital_off" msgid="6815870386972805832">"बंद"</string>
+    <string name="capital_on" product="tablet">"चालू"</string>
+    <string name="capital_off" product="tablet">"बंद"</string>
+    <string name="capital_on" product="default">"चालू"</string>
+    <string name="capital_off" product="default">"बंद"</string>
     <string name="whichApplication" msgid="4533185947064773386">"इसका उपयोग करके क्रिया पूर्ण करें"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"इस क्रिया के लिए डिफ़ॉल्‍ट रूप से उपयोग करें."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"सिस्‍टम सेटिंग &gt; Apps &gt; डाउनलोड किए गए में डिफ़ॉल्‍ट साफ करें."</string>
