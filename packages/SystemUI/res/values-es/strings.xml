@@ -149,4 +149,13 @@
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"La pantalla está bloqueada en modo horizontal."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"La pantalla está bloqueada en modo vertical."</string>
     <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
+    <string name="navbar_dialog_title">Seleccionar botón a mostrar</string>
+    <string name="navbar_home_button">Botón Inicio</string>
+    <string name="navbar_recent_button">Botón Recientes</string>
+    <string name="navbar_search_button">Botón Búsqueda</string>
+    <string name="navbar_back_button">Botón Atrás</string>
+    <string name="navbar_empty_button">Sin botón</string>
+    <string name="navbar_menu_conditional_button">Botón Menú (auto-ocultar)</string>
+    <string name="navbar_menu_always_button">Botón Menú (siempre visible)</string>
+    <string name="navbar_menu_big_button">Botón Menú</string>
 </resources>
