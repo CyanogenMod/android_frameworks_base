@@ -3079,6 +3079,11 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return false;
     }
 
+    @Override
+    public boolean needsSMSQueue() {
+        return false;
+    }
+
     protected Object
     responseIccCardStatus(Parcel p) {
         IccCardApplication ca;

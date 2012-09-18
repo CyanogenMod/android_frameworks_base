@@ -56,6 +56,11 @@ public class SonyQualcommRIL extends RIL implements CommandsInterface {
     }
 
     @Override
+    public boolean needsSMSQueue() {
+        return true;
+    }
+
+    @Override
     public void
     iccIO (int command, int fileid, String path, int p1, int p2, int p3,
             String data, String pin2, Message result) {

@@ -1590,6 +1590,11 @@ public interface CommandsInterface {
     public boolean needsOldRilFeature(String feature);
     /**
      * @hide
+     * CM-specific: Define if the RIL needs SMS to be sent one by one
+     */
+    public boolean needsSMSQueue();
+    /**
+     * @hide
      * samsung stk service implementation - set up registrant for sending
      * sms send result from modem(RIL) to catService
      */

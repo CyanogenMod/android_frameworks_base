@@ -58,7 +58,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.telephony.SmsManager.RESULT_ERROR_FDN_CHECK_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_GENERIC_FAILURE;
@@ -166,6 +169,9 @@ public abstract class SMSDispatcher extends Handler {
 
     protected int mRemainingMessages = -1;
 
+    private Queue<SmsTracker> mPendingMessagesQueue;
+    private AtomicBoolean mIsProcessingMessage;
+
     protected static int getNextConcatenatedRef() {
         sConcatenatedRef += 1;
         return sConcatenatedRef;
@@ -180,6 +186,8 @@ public abstract class SMSDispatcher extends Handler {
     protected SMSDispatcher(PhoneBase phone, SmsStorageMonitor storageMonitor,
             SmsUsageMonitor usageMonitor) {
         mPhone = phone;
+        mPendingMessagesQueue = new ConcurrentLinkedQueue();
+        mIsProcessingMessage = new AtomicBoolean(false);
         mWapPush = new WapPushOverSms(phone, this);
         mContext = phone.getContext();
         mResolver = mContext.getContentResolver();
@@ -395,6 +403,11 @@ public abstract class SMSDispatcher extends Handler {
                     }
                 } catch (CanceledException ex) {}
             }
+            // Send the next message as the current one is correctly sent.
+            // If the queue is empty mIsProcessingMessage is unlocked.
+            if (mCm.needsSMSQueue()) {
+                processNextPendingMessage();
+            }
         } else {
             if (false) {
                 Log.d(TAG, "SMS send failed");
@@ -441,6 +454,12 @@ public abstract class SMSDispatcher extends Handler {
 
                     tracker.mSentIntent.send(mContext, error, fillIn);
                 } catch (CanceledException ex) {}
+
+                // Send the next message as the current one fail to be sent.
+                // If the queue is empty mIsProcessingMessage is unlocked.
+                if (mCm.needsSMSQueue()) {
+                    processNextPendingMessage();
+                }
             }
         }
     }
@@ -933,7 +952,7 @@ public abstract class SMSDispatcher extends Handler {
         if (ss != ServiceState.STATE_IN_SERVICE) {
             handleNotInService(ss, tracker.mSentIntent);
         } else {
-            sendSms(tracker);
+            processNewMessage(tracker);
         }
     }
 
@@ -1007,6 +1026,38 @@ public abstract class SMSDispatcher extends Handler {
      * @param tracker holds the SMS message to send
      */
     protected abstract void sendSms(SmsTracker tracker);
+
+    /**
+     * Add the pending message in a queue.
+     * If this feature is not needed, it's sent immediately
+     *
+     * @param tracker holds the SMS message to send
+     */
+    private void processNewMessage(SmsTracker tracker) {
+        if (tracker == null) {
+            return;
+        }
+
+        mPendingMessagesQueue.add(tracker);
+        if (!mCm.needsSMSQueue() || mIsProcessingMessage.compareAndSet(false, true)) {
+            processNextPendingMessage();
+        }
+    }
+
+    /**
+     * Send the next message of the queue
+     */
+    private void processNextPendingMessage() {
+        mIsProcessingMessage.compareAndSet(false, true);
+        SmsTracker tracker = mPendingMessagesQueue.poll();
+
+        if (tracker == null) {
+            mIsProcessingMessage.compareAndSet(true, false);
+            return;
+        }
+
+        sendSms(tracker);
+    }
 
     /**
      * Send the multi-part SMS based on multipart Sms tracker

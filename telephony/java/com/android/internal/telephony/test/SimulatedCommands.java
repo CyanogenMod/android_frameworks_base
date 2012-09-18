@@ -1526,6 +1526,8 @@ public final class SimulatedCommands extends BaseCommands
 
     public boolean needsOldRilFeature(String feature) { return false; }
 
+    public boolean needsSMSQueue() { return false; }
+
     /**
      * added samsung part to command interface
      * @param h
