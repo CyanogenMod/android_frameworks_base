@@ -154,4 +154,15 @@
 
     <string name="powerwidget_screen_timeout_toast">"Képernyő időkorlátja: %1$d %2$s"</string>
 
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Válasszon eseményt</string>
+    <string name="navbar_home_button">Kezdőlap</string>
+    <string name="navbar_recent_button">Előzmények</string>
+    <string name="navbar_search_button">Keresés</string>
+    <string name="navbar_back_button">Vissza</string>
+    <string name="navbar_empty_button">Gomb törlése</string>
+    <string name="navbar_menu_conditional_button">Menü (auto elrejtés)</string>
+    <string name="navbar_menu_always_button">Menü (mindig látszik)/string>
+    <string name="navbar_menu_big_button">Menü</string>
+
 </resources>
