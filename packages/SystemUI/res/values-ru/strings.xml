@@ -150,4 +150,15 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Экран будет поворачиваться автоматически."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Выбрана только альбомная ориентация экрана."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Выбрана только книжная ориентация экрана."</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Выберите действие</string>
+    <string name="navbar_home_button">Домой</string>
+    <string name="navbar_recent_button">Запущ. приложения</string>
+    <string name="navbar_search_button">Поиск</string>
+    <string name="navbar_back_button">Назад</string>
+    <string name="navbar_empty_button">Пустая кнопка</string>
+    <string name="navbar_menu_conditional_button">Меню (скрывающ.)</string>
+    <string name="navbar_menu_always_button">Меню (не скрывающ.)</string>
+    <string name="navbar_menu_big_button">Меню</string>
 </resources>
