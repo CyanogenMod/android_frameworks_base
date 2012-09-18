@@ -60,6 +60,7 @@ import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccFileHandler;
 import com.android.internal.telephony.IccPhoneBookInterfaceManager;
 import com.android.internal.telephony.IccSmsInterfaceManager;
+import com.android.internal.telephony.LGPecanCommandsInterface;
 import com.android.internal.telephony.MmiCode;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneBase;
@@ -1034,7 +1035,11 @@ public class GSMPhone extends PhoneBase {
         // get the message
         Message msg = obtainMessage(EVENT_SET_NETWORK_MANUAL_COMPLETE, nsm);
 
-        mCM.setNetworkSelectionModeManual(network.operatorNumeric, msg);
+        if (mCM instanceof LGPecanCommandsInterface) {
+            ((LGPecanCommandsInterface)mCM).setNetworkSelectionModeManual(network.operatorNumeric, network.operatorRAT, msg);
+        } else {
+	       mCM.setNetworkSelectionModeManual(network.operatorNumeric, msg);
+        }
     }
 
     public void
