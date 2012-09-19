@@ -1323,4 +1323,15 @@
     <string name="weather_tap_to_refresh">Zum Aktualisieren berühren</string>
     <string name="weather_refreshing">Aktualisiere\u2026</string>
 
+    <!-- Options that show upon long-pressing a key on the physical keyboard -->
+    <string name="symbol_picker_A">\u00C4\u00C0\u00C1\u00C2\u00C6\u00C3\u00C5\u0104\u0100</string>
+    <string name="symbol_picker_O">\u00D6\u00D8\u0152\u00D5\u00D2\u00D3\u00D4\u014C</string>
+    <string name="symbol_picker_S">\u015A\u0160\u015E</string>
+    <string name="symbol_picker_U">\u00DC\u00D9\u00DA\u00DB\u016E\u016A</string>
+    <string name="symbol_picker_a">\u00E4\u00E0\u00E1\u00E2\u00E6\u00E3\u00E5\u0105\u0101</string>
+    <string name="symbol_picker_e">\u00E8\u00E9\u00EA\u00EB\u0119\u011B\u0113</string>
+    <string name="symbol_picker_o">\u00F6\u00F8\u0153\u00F5\u00F2\u00F3\u00F4\u014D</string>
+    <string name="symbol_picker_s">\u00DF\u00A7\u015B\u0161\u015F</string>
+    <string name="symbol_picker_u">\u00FC\u00F9\u00FA\u00FB\u016F\u016B</string>
+    <string name="symbol_picker_dollar">\u20ac\u00a2\u00a3\u00a5\u20a3\u20a4\u20b1</string>
 </resources>
