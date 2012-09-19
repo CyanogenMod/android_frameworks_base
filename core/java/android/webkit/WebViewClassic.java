@@ -3813,6 +3813,7 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
             invalidate();  // So we draw again
 
             if (!mScroller.isFinished()) {
+                mSendScroll.setPostpone(true);
                 int rangeX = computeMaxScrollX();
                 int rangeY = computeMaxScrollY();
                 int overflingDistance = mOverflingDistance;
@@ -3840,6 +3841,7 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
                 if (mOverScrollGlow != null) {
                     mOverScrollGlow.absorbGlow(x, y, oldX, oldY, rangeX, rangeY);
                 }
+                mSendScroll.setPostpone(false);
             } else {
                 if (mTouchMode == TOUCH_DRAG_LAYER_MODE) {
                     // Update the layer position instead of WebView.
@@ -3859,7 +3861,7 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
                     }
                 }
                 if (oldX != getScrollX() || oldY != getScrollY()) {
-                    sendOurVisibleRect();
+                    mSendScroll.send(true);
                 }
             }
         } else {
@@ -4716,7 +4718,7 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
             if (oldScrollX != getScrollX() || oldScrollY != getScrollY()) {
                 mWebViewPrivate.onScrollChanged(getScrollX(), getScrollY(), oldScrollX, oldScrollY);
             } else {
-                sendOurVisibleRect();
+                mSendScroll.send(true);
             }
         }
     }
@@ -5674,10 +5676,31 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
         contentScrollTo(scrollX, scrollY, false);
     }
 
+    private final class SendScrollToWebCore implements Runnable {
+        public void run() {
+            if (!mInOverScrollMode) {
+                sendOurVisibleRect();
+            }
+        }
+        private boolean mPostpone = false;
+        public void setPostpone(boolean set) { mPostpone = set; }
+        public void send(boolean force) {
+            mPrivateHandler.removeCallbacks(this);
+            if (!mPostpone || force) {
+                run();
+            } else {
+                mPrivateHandler.postAtFrontOfQueue(this);
+            }
+        }
+    }
+
+    SendScrollToWebCore mSendScroll = new SendScrollToWebCore();
+
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
+        mSendScroll.send(false);
+
         if (!mInOverScrollMode) {
-            sendOurVisibleRect();
             // update WebKit if visible title bar height changed. The logic is same
             // as getVisibleTitleHeightImpl.
             int titleHeight = getTitleHeight();
