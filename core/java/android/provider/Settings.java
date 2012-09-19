@@ -2683,6 +2683,12 @@ public final class Settings {
         public static final String NAV_BUTTONS = "nav_buttons";
 
         /**
+         * Height of navigation bar buttons
+         * @hide
+         */
+        public static final String NAV_BUTTONS_HEIGHT = "nav_buttons_height";
+
+        /**
         * Notification Power Widget - Custom Brightness Mode
         * @hide
         */
