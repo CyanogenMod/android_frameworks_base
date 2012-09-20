@@ -1687,6 +1687,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                         return startInputUncheckedLocked(cs, inputContext, attribute,
                                 controlFlags);
                     }
+                    cs = null;
                     return null;
                 }
                 mCurFocusedWindow = windowToken;

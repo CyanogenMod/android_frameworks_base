@@ -1179,6 +1179,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         flagdbg.append(((diff  & StatusBarManager.DISABLE_CLOCK) != 0) ? "* " : " ");
         flagdbg.append(">");
         Slog.d(TAG, flagdbg.toString());
+        flagdbg = null;
 
         if ((diff & StatusBarManager.DISABLE_SYSTEM_INFO) != 0) {
             mIcons.animate().cancel();
