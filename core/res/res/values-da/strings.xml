@@ -1292,7 +1292,6 @@
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Udfør"</string>
 
     <!-- **** CYANOGENMOD ADDITIONS START **** -->
-    <!-- Translated by Morten Jørgensen fidoble@gmail.com -->
 
     <!-- Names of default profiles. -->
     <string name="profileNameDefault">Standard</string>
@@ -1418,6 +1417,20 @@
     <string name="weather_no_data">Ingen data</string>
     <string name="weather_tap_to_refresh">Tryk for at opdatere</string>
     <string name="weather_refreshing">Opdaterer</string>
+    <string name="weather_last_sync_just_now">Lige nu</string>
+
+    <!-- Lock screen discharging -->
+    <string name="lockscreen_discharging">Aflader, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+
+    <!-- Text for WebView's text selection Action Mode -->
+    <string name="openurl">Åbn URL</string>
+
+    <!-- Storage description for the SD card on the dock -->
+    <string name="storage_sd_dock_card">Dockstationens SD-kort</string>
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">Skærmrotation Ulåst</string>
+    <string name="toast_rotation_locked">Skærmrotation Låst</string>
 
     <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
