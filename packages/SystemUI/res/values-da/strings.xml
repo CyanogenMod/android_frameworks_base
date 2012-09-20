@@ -147,9 +147,31 @@
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Skærmen er nu låst i stående retning."</string>
 
     <!-- **** CYANOGENMOD ADDITIONS START **** -->
-    <!-- Translated by Morten Jørgensen fidoble@gmail.com -->
 
+    <!-- Powerwidget screen timeout toast -->
     <string name="powerwidget_screen_timeout_toast">Timeout for skærmen er sat til: %1$d %2$s</string>
+
+    <!-- Statusbar settings -->
+    <string name="status_bar_settings_bluetooth_button">Bluetooth</string>
+    <string name="status_bar_settings_location">GPS</string>
+    <string name="status_bar_settings_flashlight">LED-lommelygte</string>
+    <string name="status_bar_settings_mobile_data">Mobildata</string>
+    <string name="status_bar_settings_network_mode">2G/3G</string>
+    <string name="status_bar_settings_sound_mode">Lyd</string>
+
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen) -->
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Vælg en handling at tildele</string>
+    <string name="navbar_home_button">Start-knap</string>
+    <string name="navbar_recent_button">Seneste-knap</string>
+    <string name="navbar_search_button">Søg-knap</string>
+    <string name="navbar_back_button">Tilbage-knap</string>
+    <string name="navbar_empty_button">Tom-knap</string>
+    <string name="navbar_menu_conditional_button">Menu-knap (auto-skjul)</string>
+    <string name="navbar_menu_always_button">Menu-knap (vis-altid)</string>
+    <string name="navbar_menu_big_button">Menu-knap</string>
 
     <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
