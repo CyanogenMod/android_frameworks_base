@@ -20,18 +20,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.text.TextUtils.TruncateAt;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
+import android.util.Slog;
 import android.view.View;
 import android.view.ViewParent;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.systemui.R;
 
 import java.util.Date;
 
-public final class DateView extends TextView {
+public final class DateView extends LinearLayout {
     private static final String TAG = "DateView";
+
+    private TextView mDoW;
+    private TextView mDate;
 
     private boolean mAttachedToWindow;
     private boolean mWindowVisible;
@@ -52,6 +58,41 @@ public final class DateView extends TextView {
 
     public DateView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        // Layout params
+        setOrientation(LinearLayout.VERTICAL);
+
+        // Create the text views
+        mDoW = new TextView(context, attrs);
+        mDoW.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, 1.0f));
+        mDoW.setSingleLine();
+        mDoW.setEllipsize(TruncateAt.END);
+        mDoW.setTextAppearance(context, R.style.TextAppearance_StatusBar_Expanded_Date);
+        mDate = new TextView(context, attrs);
+        mDate.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, 1.0f));
+        mDate.setSingleLine();
+        mDate.setEllipsize(TruncateAt.END);
+        mDate.setTextAppearance(context, R.style.TextAppearance_StatusBar_Expanded_Date);
+
+        // Extract how DoW and Date are distributed in the layout
+        // The format is distributed as %1$s\n%2$s or %2$s\n%1$s but always in
+        // two lines. Otherwise assume DoW = Top and Date = Bottom
+        int positionDoW = 0;
+        int positionDate = 1;
+        try {
+            String format = context.getString(R.string.status_bar_date_formatter);
+            String[] positions = format.split("\n");
+            if (positions.length == 2) {
+                positionDoW = positions[0].indexOf("1") != -1 ? 0 : 1;
+                positionDate = positions[1].indexOf("2") != -1 ? 1 : 0;
+            }
+        } catch (Exception ex) {
+            Slog.w(TAG, "Error extracting DoW and Date positions", ex);
+        }
+
+        // Add the TextViews
+        addView(positionDoW == 0 ? mDoW : mDate);
+        addView(positionDate != 0 ? mDate : mDoW);
     }
 
     @Override
@@ -92,7 +133,16 @@ public final class DateView extends TextView {
         Date now = new Date();
         CharSequence dow = DateFormat.format("EEEE", now);
         CharSequence date = DateFormat.getLongDateFormat(context).format(now);
-        setText(context.getString(R.string.status_bar_date_formatter, dow, date));
+        mDoW.setText(dow);
+        mDate.setText(date);
+    }
+
+    public final TextView getDoW() {
+        return mDoW;
+    }
+
+    public final TextView getDate() {
+        return mDate;
     }
 
     private boolean isVisible() {
