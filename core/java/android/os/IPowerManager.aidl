@@ -53,4 +53,6 @@ interface IPowerManager
     int getLightSensorScreenBrightness();
     int getLightSensorButtonBrightness();
     int getLightSensorKeyboardBrightness();
+
+    void cpuBoost(int duration);
 }

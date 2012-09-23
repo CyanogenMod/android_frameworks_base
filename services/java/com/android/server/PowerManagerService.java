@@ -196,6 +196,9 @@ public class PowerManagerService extends IPowerManager.Stub
     static final int INITIAL_BUTTON_BRIGHTNESS = PowerManager.BRIGHTNESS_OFF;
     static final int INITIAL_KEYBOARD_BRIGHTNESS = PowerManager.BRIGHTNESS_OFF;
 
+    // Max time (microseconds) to allow a CPU boost for
+    static final int MAX_CPU_BOOST_TIME = 5000000;
+
     private final int MY_UID;
     private final int MY_PID;
 
@@ -358,6 +361,7 @@ public class PowerManagerService extends IPowerManager.Stub
     private static native int nativeSetScreenState(boolean on);
     private static native void nativeShutdown();
     private static native void nativeReboot(String reason) throws IOException;
+    private static native void nativeCpuBoost(int duration);
 
     /*
     static PrintStream mLog;
@@ -1182,6 +1186,15 @@ public class PowerManagerService extends IPowerManager.Stub
                 // change anything
                 setTimeoutLocked(SystemClock.uptimeMillis(), mTimeoutTask.nextState);
             }
+        }
+    }
+
+    public void cpuBoost(int duration)
+    {
+        if (duration > 0 && duration <= MAX_CPU_BOOST_TIME) {
+            nativeCpuBoost(duration);
+        } else {
+            Log.e(TAG, "Invalid boost duration: " + duration);
         }
     }
 
