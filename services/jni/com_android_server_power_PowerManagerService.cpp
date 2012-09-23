@@ -204,6 +204,12 @@ static void nativeReboot(JNIEnv *env, jclass clazz, jstring reason) {
     jniThrowIOException(env, errno);
 }
 
+static void nativeCpuBoost(JNIEnv *env, jobject clazz, jint duration) {
+    // Tell the Power HAL to boost the CPU
+    if (gPowerModule && gPowerModule->powerHint) {
+        gPowerModule->powerHint(gPowerModule, POWER_HINT_CPU_BOOST, (void *) duration);
+    }
+}
 
 // ----------------------------------------------------------------------------
 
@@ -225,6 +231,8 @@ static JNINativeMethod gPowerManagerServiceMethods[] = {
             (void*) nativeShutdown },
     { "nativeReboot", "(Ljava/lang/String;)V",
             (void*) nativeReboot },
+    { "nativeCpuBoost", "(I)V",
+            (void*) nativeCpuBoost },
 };
 
 #define FIND_CLASS(var, className) \
