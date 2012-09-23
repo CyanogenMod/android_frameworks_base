@@ -1383,4 +1383,8 @@
     <string name="openurl">Abrir Url</string>
     <string name="toast_rotation_unlocked">Rotação da Tela está Destravada</string>
     <string name="toast_rotation_locked">Rotação da Tela está Travada</string>
+    <string name="permlab_sendMockSms">Enviar mensagens fictícias de SMS</string>
+    <string name="permdesc_sendMockSms">Permite ao aplicativo enviar mensagens fictícias de SMS.
+     Isto permite ao aplicativo enviar SMS aos aplicativos confiáveis. Aplicativos maliciosos podem enviar mensagens
+     continuamente, bloqueando o sistema de notificação do dispositivo e pertubando o usuário.</string>
 </resources>
