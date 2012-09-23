@@ -187,7 +187,7 @@ public class Scroller  {
         mFlywheel = flywheel;
 
         mPhysicalCoeff = computeDeceleration(0.84f); // look and feel tuning
-        mPm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        mPm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
     }
 
     /**
@@ -411,7 +411,7 @@ public class Scroller  {
         mDeltaX = dx;
         mDeltaY = dy;
         mDurationReciprocal = 1.0f / (float) mDuration;
-        mPm.cpuBoost(1500000);
+        mPm.cpuBoost(duration * 1000);
     }
 
     /**
