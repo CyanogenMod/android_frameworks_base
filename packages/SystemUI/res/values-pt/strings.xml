@@ -152,4 +152,13 @@
     <string name="status_bar_settings_flashlight">Lanterna de LED</string>
     <string name="status_bar_settings_mobile_data">Dados móveis</string>
     <string name="status_bar_settings_sound_mode">Som</string>
+    <string name="navbar_dialog_title">Escolha uma ação para atribuir</string>
+    <string name="navbar_home_button">Botão de início</string>
+    <string name="navbar_recent_button">Botão de recentes</string>
+    <string name="navbar_search_button">Botão de buscar</string>
+    <string name="navbar_back_button">Botão de voltar</string>
+    <string name="navbar_empty_button">Botão vazio</string>
+    <string name="navbar_menu_conditional_button">Botão menu (esconder auto.)</string>
+    <string name="navbar_menu_always_button">Botão menu (sempre visível)</string>
+    <string name="navbar_menu_big_button">Botão menu</string>
 </resources>
