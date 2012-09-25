@@ -152,4 +152,13 @@
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Lo schermo è bloccato in orientamento orizzontale."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Lo schermo è bloccato in orientamento verticale."</string>
     <string name="powerwidget_screen_timeout_toast">Timeout schermo impostato a: %1$d %2$s</string>
+    <string name="navbar_dialog_title">Scegliere l\'azione</string>
+    <string name="navbar_home_button">Tasto home</string>
+    <string name="navbar_recent_button">Tasto app recenti</string>
+    <string name="navbar_search_button">Tasto cerca</string>
+    <string name="navbar_back_button">Tasto indietro</string>
+    <string name="navbar_empty_button">Tasto vuoto</string>
+    <string name="navbar_menu_conditional_button">Tasto menu (nascondi autom.)</string>
+    <string name="navbar_menu_always_button">Tasto menu (mostra sempre)</string>
+    <string name="navbar_menu_big_button">Tasto menu</string>
 </resources>
