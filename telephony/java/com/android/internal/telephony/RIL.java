@@ -232,6 +232,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
     // WAKE_LOCK_TIMEOUT occurs.
     int mRequestMessagesWaiting;
 
+    // RIL version
+    int mRilVer = -1;
+
     //I'd rather this be LinkedList or something
     ArrayList<RILRequest> mRequestsList = new ArrayList<RILRequest>();
 
@@ -2901,7 +2904,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 setRadioPower(false, null);
                 setPreferredNetworkType(mPreferredNetworkType, null);
                 setCdmaSubscriptionSource(mCdmaSubscription, null);
-                notifyRegistrantsRilConnectionChanged(((int[])ret)[0]);
+                mRilVer = ((int[])ret)[0];
+                if (RILJ_LOGD) riljLog("RIL version: " + mRilVer);
+                notifyRegistrantsRilConnectionChanged(mRilVer);
                 break;
             }
 
