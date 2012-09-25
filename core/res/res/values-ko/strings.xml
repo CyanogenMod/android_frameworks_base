@@ -1381,9 +1381,9 @@
     <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
     <string name="reboot_bootmenu">부트 메뉴</string>
     <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
-    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_fastboot">빠른 시작</string>
     <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
-    <string name="reboot_download">Download</string>
+    <string name="reboot_download">다운로드</string>
 
     <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
     <string name="reboot_progress">다시 시작하는 중\u2026</string>
