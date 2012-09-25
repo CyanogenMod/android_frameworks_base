@@ -154,6 +154,8 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Opţiuni telefon"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Blocaţi ecranul"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Opriţi alimentarea"</string>
+    <string name="global_action_reboot">"Repornire"</string>
+    <string name="global_action_choose_profile">"Profil"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Mod Silenţios"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Sunetul este DEZACTIVAT"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Sunetul este ACTIVAT"</string>
@@ -699,6 +701,7 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Încercaţi din nou"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"S-a depăşit numărul maxim de încercări pentru Deblocare facială"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Se încarcă, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
+    <string name="lockscreen_discharging">"Descărcare, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Încărcată."</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Conectaţi încărcătorul."</string>
@@ -1242,7 +1245,7 @@
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Mai multe opţiuni"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Stocare internă"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"Card SD"</string>
-    <string name="storage_usb" msgid="3017954059538517278">"Dsipozitiv de stocare USB"</string>
+    <string name="storage_usb" msgid="3017954059538517278">"Dispozitiv de stocare USB"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Editaţi"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Avertisment de utiliz. a datelor"</string>
     <string name="data_usage_warning_body" msgid="2814673551471969954">"Atingeţi pt. a afişa utiliz./set."</string>
@@ -1290,4 +1293,74 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Sistem"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Audio Bluetooth"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Terminat"</string>
+    <string name="app_killed_message">"Aplicaţie oprită"</string>
+    <string name="weather_0">"Tornadă"</string>
+    <string name="weather_1">"Furtună Tropicală"</string>
+    <string name="weather_2">"Uragan"</string>
+    <string name="weather_3">"Furtuni Severe"</string>
+    <string name="weather_4">"Furtuni"</string>
+    <string name="weather_5">"Precipitaţii Mixte"</string>
+    <string name="weather_6">"Lapoviţă"</string>
+    <string name="weather_7">"Precipitaţii Mixte"</string>
+    <string name="weather_8">"Chiciură"</string>
+    <string name="weather_9">"Burniţă"</string>
+    <string name="weather_10">"Polei"</string>
+    <string name="weather_11">"Averse"</string>
+    <string name="weather_12">"Averse"</string>
+    <string name="weather_13">"Fulgi"</string>
+    <string name="weather_14">"Averse de Ninsoare Slabă"</string>
+    <string name="weather_15">"Viscol"</string>
+    <string name="weather_16">"Ninsoare"</string>
+    <string name="weather_17">"Grindină"</string>
+    <string name="weather_18">"Lapoviză"</string>
+    <string name="weather_19">"Praf"</string>
+    <string name="weather_20">"Ceţos"</string>
+    <string name="weather_21">"Ceaţă"</string>
+    <string name="weather_22">"Fumuriu"</string>
+    <string name="weather_23">"Furtunos"</string>
+    <string name="weather_24">"Vânt"</string>
+    <string name="weather_25">"Rece"</string>
+    <string name="weather_26">"Înnorat"</string>
+    <string name="weather_27">"În General Noros"</string>
+    <string name="weather_28">"În General Noros"</string>
+    <string name="weather_29">"Parţial Noros"</string>
+    <string name="weather_30">"Parţial Noros"</string>
+    <string name="weather_31">"Senin"</string>
+    <string name="weather_32">"Însorit"</string>
+    <string name="weather_33">"Frumoasă"</string>
+    <string name="weather_34">"Frumoasă"</string>
+    <string name="weather_35">"Ploaie cu Grindină"</string>
+    <string name="weather_36">"Cald"</string>
+    <string name="weather_37">"Furtuni Izolate"</string>
+    <string name="weather_38">"Furtuni Dispersate cu Tunete"</string>
+    <string name="weather_39">"Furtuni Dispersate cu Tunete"</string>
+    <string name="weather_40">"Averse Dispersate"</string>
+    <string name="weather_41">"Ninsoare Puternică"</string>
+    <string name="weather_42">"Averse de Ninsoare Dispersate"</string>
+    <string name="weather_43">"Ninsoare Puternică"</string>
+    <string name="weather_44">"Parţial Noros"</string>
+    <string name="weather_45">"Averse cu Descărcări Electrice"</string>
+    <string name="weather_46">"Averse de Ninsoare"</string>
+    <string name="weather_47">"Averse cu Descărcări Electrice Izolate"</string>
+    <string name="weather_no_data">"Nu există date"</string>
+    <string name="weather_tap_to_refresh">"Apăsaţi pentru actualizare"</string>
+    <string name="weather_refreshing">"Actualizare"</string>
+    <string name="weather_last_sync_just_now">"Acum"</string>
+    <string name="toast_rotation_unlocked">"Rotire Ecran Deblocată"</string>
+    <string name="toast_rotation_locked">"Rotire Ecran Blocată"</string>
+    <string name="reboot_system" product="tablet">"Reporniţi tablet PC"</string>
+    <string name="reboot_system" product="default">"Reporniţi telefonul"</string>
+    <string name="reboot_reboot">"Repornire"</string>
+    <string name="reboot_progress">"Repornire..."</string>
+    <string name="reboot_confirm">"Telefonul dvs. va reporni."</string>
+    <string name="profileNameDefault">"General"</string>
+    <string name="profileNameWork">"Serviciu"</string>
+    <string name="profileNameHome">"Acasă"</string>
+    <string name="profileNameSilent">"Silenţios"</string>
+    <string name="profileNameNight">"Noapte"</string>
+    <string name="profileGroupPhone">"Telefon"</string>
+    <string name="profileGroupCalendar">"Calendar"</string>
+    <string name="profileGroupGmail">"Gmail"</string>
+    <string name="profileGroupEmail">"Email"</string>
+    <string name="profileGroupSMS">"SMS"</string>
 </resources>
