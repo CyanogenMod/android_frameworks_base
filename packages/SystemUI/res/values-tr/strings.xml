@@ -41,7 +41,13 @@
     <string name="battery_low_why" msgid="7279169609518386372">"Pil kullanımı"</string>
     <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Ayarlar"</string>
     <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Kablosuz"</string>
-    <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Uçak modu"</string>
+    <string name="status_bar_settings_bluetooth_button">Bluetooth</string>
+    <string name="status_bar_settings_airplane">Uçak modu</string>
+    <string name="status_bar_settings_location">GPS</string>
+    <string name="status_bar_settings_flashlight">LED ışığı</string>
+    <string name="status_bar_settings_mobile_data">Mobil veri</string>
+    <string name="status_bar_settings_network_mode">2G/3G</string>
+    <string name="status_bar_settings_sound_mode">Ses</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Ekranı otomatik döndür"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"KAPAT"</string>
     <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"OTOMTK"</string>
@@ -110,6 +116,7 @@
     <string name="accessibility_data_connection_gprs" msgid="1606477224486747751">"GPRS"</string>
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
@@ -145,4 +152,14 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Ekran otomatik olarak dönecektir."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Ekran yatay yönde kilitlendi."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Ekran dikey yönde kilitlendi."</string>
+    <string name="powerwidget_screen_timeout_toast">Ekran zaman aşımı ayarlandı: %1$d %2$s</string>
+    <string name="navbar_dialog_title">Atamak için eylem seçin</string>
+    <string name="navbar_home_button">Ev düğmesi</string>
+    <string name="navbar_recent_button">Son kullanılanlar düğmesi</string>
+    <string name="navbar_search_button">Arama düğmesi</string>
+    <string name="navbar_back_button">Geri düğmesi</string>
+    <string name="navbar_empty_button">Boş düğme</string>
+    <string name="navbar_menu_conditional_button">Menü (otomatikGizle) düğmesi</string>
+    <string name="navbar_menu_always_button">Menü (herzamanGöster) düğmesi</string>
+    <string name="navbar_menu_big_button">Menü düğmesi</string>
 </resources>
