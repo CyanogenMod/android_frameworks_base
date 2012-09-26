@@ -3446,6 +3446,7 @@ public final class Settings {
         /**
          * Setting to allow the use of {@link SMSDispatcher#MockSmsReceiver} to simulate
          * the reception of SMS for testing purposes during application development.
+         * @hide
          */
         public static final String ALLOW_MOCK_SMS = "mock_sms";
 
