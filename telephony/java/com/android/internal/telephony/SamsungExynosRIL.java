@@ -65,7 +65,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-public class Smdk4210RIL extends RIL implements CommandsInterface {
+public class SamsungExynosRIL extends RIL implements CommandsInterface {
 
     //SAMSUNG STATES
     static final int RIL_REQUEST_GET_CELL_BROADCAST_CONFIG = 10002;
@@ -151,11 +151,11 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
     static final int RIL_UNSOL_UTS_GET_UNREAD_SMS_STATUS = 11031;
     static final int RIL_UNSOL_MIP_CONNECT_STATUS = 11032;
 
-    protected HandlerThread mSmdk4210Thread;
-    protected ConnectivityHandler mSmdk4210Handler;
+    protected HandlerThread mExynosThread;
+    protected ConnectivityHandler mExynosHandler;
     private AudioManager audioManager;
 
-    public Smdk4210RIL(Context context, int networkMode, int cdmaSubscription) {
+    public SamsungExynosRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
         audioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
         mQANElements = 5;
@@ -191,21 +191,21 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
 
         if(NeedReconnect())
         {
-            if (mSmdk4210Handler == null) {
+            if (mExynosHandler == null) {
 
-                handlerThread = new HandlerThread("mSmdk4210Thread");
-                mSmdk4210Thread = handlerThread;
+                handlerThread = new HandlerThread("mExynosThread");
+                mExynosThread = handlerThread;
 
-                mSmdk4210Thread.start();
+                mExynosThread.start();
 
-                looper = mSmdk4210Thread.getLooper();
-                mSmdk4210Handler = new ConnectivityHandler(mContext, looper);
+                looper = mExynosThread.getLooper();
+                mExynosHandler = new ConnectivityHandler(mContext, looper);
             }
-            mSmdk4210Handler.setPreferedNetworkType(networkType, response);
+            mExynosHandler.setPreferedNetworkType(networkType, response);
         } else {
-            if (mSmdk4210Handler != null) {
-                mSmdk4210Thread = null;
-                mSmdk4210Handler = null;
+            if (mExynosHandler != null) {
+                mExynosThread = null;
+                mExynosHandler = null;
             }
             sendPreferedNetworktype(networkType, response);
         }
@@ -495,7 +495,7 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_ISIM_AUTHENTICATION: ret =  responseString(p); break;
             case RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU: ret = responseVoid(p); break;
             case RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS: ret = responseICC_IO(p); break;
-            case RIL_REQUEST_VOICE_RADIO_TECH: ret = responseVoid(p); break;
+            case RIL_REQUEST_VOICE_RADIO_TECH: ret = responseInts(p); break;
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
                 //break;
@@ -845,15 +845,6 @@ public class Smdk4210RIL extends RIL implements CommandsInterface {
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
         Log.d(LOG_TAG, "RIL_REQUEST_GET_NEIGHBORING_CELL_IDS blocked!!!");
-        //send(rr);
-    }
-
-    @Override public void
-    getVoiceRadioTechnology(Message result) {
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_VOICE_RADIO_TECH, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-        Log.d(LOG_TAG, "RIL_REQUEST_VOICE_RADIO_TECH blocked!!!");
         //send(rr);
     }
 
