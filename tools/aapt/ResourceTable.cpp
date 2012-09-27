@@ -9,6 +9,7 @@
 
 #include "XMLNode.h"
 #include "ResourceFilter.h"
+#include "ResourceIdCache.h"
 
 #include <androidfw/ResourceTypes.h>
 #include <utils/ByteOrder.h>
@@ -2057,7 +2058,11 @@ uint32_t ResourceTable::getResId(const String16& ref,
                      String8(name).string()));
         return 0;
     }
-    uint32_t res = getResId(package, type, name, onlyPublic && refOnlyPublic);
+    uint32_t res = ResourceIdCache::lookup(package, type, name, onlyPublic && refOnlyPublic);
+    if (res == 0) {
+        res = getResId(package, type, name, onlyPublic && refOnlyPublic);
+        ResourceIdCache::store(package, type, name, onlyPublic && refOnlyPublic, res);
+    }
     NOISY(printf("Expanded resource: p=%s, t=%s, n=%s, res=%d\n",
                  String8(package).string(), String8(type).string(),
                  String8(name).string(), res));
