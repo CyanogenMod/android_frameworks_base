@@ -1,4 +1,4 @@
-/*
+	 	/*
  * Copyright (C) 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -680,8 +680,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     //***** CommandsInterface implementation
-
-    public void getVoiceRadioTechnology(Message result) {
+    @Override public void 
+    getVoiceRadioTechnology(Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_VOICE_RADIO_TECH, result);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
