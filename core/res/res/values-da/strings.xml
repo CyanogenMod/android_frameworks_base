@@ -1343,9 +1343,9 @@
     <string name="global_action_choose_profile">Profil</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_preventpower">Undgå tænd/sluk-tasten</string>
+    <string name="permlab_preventpower">Undgå tænd/sluk-knappen</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_preventpower">Tillader et program at tilsidesætte tænd/sluk-tasten</string>
+    <string name="permdesc_preventpower">Tillader et program at tilsidesætte tænd/sluk-knappen</string>
 
     <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
     <string name="wifi_available_sign_in_detailed"><xliff:g id="wifi_network_ssid">%1$s</xliff:g></string>
@@ -1431,6 +1431,11 @@
     <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">Skærmrotation Ulåst</string>
     <string name="toast_rotation_locked">Skærmrotation Låst</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sendMockSms">Send imiterede SMS-beskeder</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sendMockSms">Tillader appen at sende imiterede SMS-beskeder. Dette tillader en app at sende beskeder til pålidelige apps. Ondsindede apps kan sende beskeder kontinuerligt, blokere enhedens notifikationssystem og forstyrre brugeren.</string>
 
     <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
