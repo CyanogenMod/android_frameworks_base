@@ -6042,6 +6042,14 @@ public final class ContactsContract {
              * <P>Type: boolean</P>
              */
             public static final String IM_ISPRIMARY = "im_isprimary";
+
+            /**
+             * The extra field for the contact sip address.
+             * <P>Type: String</P>
+             *
+             * @hide
+             */
+            public static final String SIP_ADDRESS = "sip_address";
         }
     }
 }
