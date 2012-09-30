@@ -401,6 +401,7 @@ public class LockSettingsService extends ILockSettings.Stub {
         Secure.LOCK_SHOW_ERROR_PATH,
         Secure.LOCK_DOTS_VISIBLE,
         Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED,
-        Secure.LOCK_BEFORE_UNLOCK
+        Secure.LOCK_BEFORE_UNLOCK,
+        Secure.LOCK_SYNC_ENCRYPTION_PASSWORD
         };
 }
