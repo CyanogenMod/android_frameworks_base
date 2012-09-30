@@ -3140,6 +3140,7 @@ public final class Settings {
             MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED);
             MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_SIZE);
             MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_BEFORE_UNLOCK);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.SYNC_ENC_PASS);
         }
 
         /**
@@ -3665,6 +3666,13 @@ public final class Settings {
          */
         public static final String LOCK_BEFORE_UNLOCK =
             "lock_before_unlock";
+
+        /**
+         * Whether to sync encryption password with lock screen token
+         * @hide
+         */
+        public static final String SYNC_ENC_PASS =
+            "sync_enc_pass";
 
         /**
          * The saved value for WindowManagerService.setForcedDisplaySize().

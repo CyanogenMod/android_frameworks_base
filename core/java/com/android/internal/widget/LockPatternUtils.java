@@ -583,8 +583,13 @@ public class LockPatternUtils {
             DevicePolicyManager dpm = getDevicePolicyManager();
             KeyStore keyStore = KeyStore.getInstance();
             if (password != null) {
-                // Update the encryption password.
-                updateEncryptionPassword(password);
+                // Sync encryption password if enabled
+                if (getSyncEncPass()) {
+                    Log.d(TAG, "Syncing encryption password");
+                    updateEncryptionPassword(password);
+                } else {
+                    Log.d(TAG, "Skipping encryption password sync");
+                }
 
                 // Update the keystore password
                 keyStore.password(password);
@@ -1367,5 +1372,13 @@ public class LockPatternUtils {
      */
     public boolean getLockBeforeUnlock() {
         return getBoolean(Settings.Secure.LOCK_BEFORE_UNLOCK, false);
+    }
+
+    public void setSyncEncPass(boolean enabled) {
+        setBoolean(Settings.Secure.SYNC_ENC_PASS, enabled);
+    }
+
+    public boolean getSyncEncPass() {
+        return getBoolean(Settings.Secure.SYNC_ENC_PASS, false);
     }
 }
