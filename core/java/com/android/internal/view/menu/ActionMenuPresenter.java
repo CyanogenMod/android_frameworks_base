@@ -278,7 +278,7 @@ public class ActionMenuPresenter extends BaseMenuPresenter
      */
     public boolean showOverflowMenu() {
         if (mReserveOverflow && !isOverflowMenuShowing() && mMenu != null && mMenuView != null &&
-                mPostedOpenRunnable == null) {
+                mPostedOpenRunnable == null && !mMenu.getNonActionItems().isEmpty()) {
             OverflowPopup popup = new OverflowPopup(mContext, mMenu, mOverflowButton, true);
             mPostedOpenRunnable = new OpenOverflowRunnable(popup);
             // Post this for later; we might still need a layout for the anchor to be right.
@@ -397,6 +397,7 @@ public class ActionMenuPresenter extends BaseMenuPresenter
         }
 
         // Flag as many more requested items as will fit.
+        // Compute required items prior to optional items
         for (int i = 0; i < itemsSize; i++) {
             MenuItemImpl item = visibleItems.get(i);
 
@@ -421,7 +422,12 @@ public class ActionMenuPresenter extends BaseMenuPresenter
                     seenGroups.put(groupId, true);
                 }
                 item.setIsActionButton(true);
-            } else if (item.requestsActionButton()) {
+            }
+        }
+        for (int i = 0; i < itemsSize; i++) {
+            MenuItemImpl item = visibleItems.get(i);
+
+            if (item.requestsActionButton()) {
                 // Items in a group with other items that already have an action slot
                 // can break the max actions rule, but not the width limit.
                 final int groupId = item.getGroupId();
