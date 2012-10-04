@@ -147,4 +147,17 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"屏幕会自动旋转。"</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"屏幕锁定为横向模式。"</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"屏幕锁定为纵向模式。"</string>
+
+    <string name="powerwidget_screen_timeout_toast">屏幕超时设为: %1$d %2$s</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">选择指定的行为</string>
+    <string name="navbar_home_button">Home 键</string>
+    <string name="navbar_recent_button">最近使用键</string>
+    <string name="navbar_search_button">搜索键</string>
+    <string name="navbar_back_button">后退键</string>
+    <string name="navbar_empty_button">空按键</string>
+    <string name="navbar_menu_conditional_button">菜单 (自动隐藏) 键</string>
+    <string name="navbar_menu_always_button">菜单 (总是显示) 键</string>
+    <string name="navbar_menu_big_button">菜单键</string>
 </resources>
