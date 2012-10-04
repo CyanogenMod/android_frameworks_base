@@ -376,7 +376,7 @@ private:
             void        debugFlashRegions();
             void        debugShowFPS() const;
             void        drawWormhole() const;
-           
+            void        triggerScreenRepaint();
 
     mutable     MessageQueue    mEventQueue;
 
