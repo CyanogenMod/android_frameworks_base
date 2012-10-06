@@ -175,6 +175,7 @@ LOCAL_SRC_FILES += \
 	core/java/com/android/internal/app/IAssetRedirectionManager.aidl \
 	core/java/com/android/internal/appwidget/IAppWidgetService.aidl \
 	core/java/com/android/internal/appwidget/IAppWidgetHost.aidl \
+	core/java/com/android/internal/atfwd/IAtCmdFwd.aidl \
 	core/java/com/android/internal/backup/IBackupTransport.aidl \
 	core/java/com/android/internal/policy/IFaceLockCallback.aidl \
 	core/java/com/android/internal/policy/IFaceLockInterface.aidl \
