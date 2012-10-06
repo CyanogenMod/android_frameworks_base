@@ -267,7 +267,8 @@ public class BTGPSService {
             }
             mmSocket = tmp;
             // Make a connection to the BluetoothSocket
-            if (mAdapter.isEnabled()) mAdapter.cancelDiscovery();
+            if (mAdapter.isEnabled() && mAdapter.isDiscovering()) 
+                mAdapter.cancelDiscovery();
             try {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
@@ -390,11 +391,30 @@ public class BTGPSService {
 
         public void cancel() {
             try {
+                if (mmInStream != null) {
+                    mmInStream.close();
+                    mmInStream = null;
+                }
+            } catch (Exception e) {
+                Log.i(TAG, "Failed to close inputstream", e);
+            }
+
+            try {
+                if (mmOutStream != null) {
+                    mmOutStream.close();
+                    mmOutStream = null;
+                }
+            } catch (Exception e) {
+                Log.i(TAG, "Failed to close outputstream", e);
+            }
+
+            try {
                 if (mmSocket == null) {
                     Log.e(TAG, "Input stream null. Aborting Cacnel");
                     return;
                 }
                 mmSocket.close();
+                mmSocket = null;
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
             } finally {
