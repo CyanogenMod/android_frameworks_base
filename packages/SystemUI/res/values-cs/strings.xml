@@ -147,4 +147,24 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Obrazovka se automaticky otočí."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Obrazovka je uzamčena v orientaci na šířku."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Obrazovka je uzamčena v orientaci na výšku."</string>
+
+    <!-- Update for JB -->
+    <string name="status_bar_settings_bluetooth_button">Bluetooth</string>
+    <string name="status_bar_settings_location">GPS</string>
+    <string name="status_bar_settings_flashlight">LED baterka</string>
+    <string name="status_bar_settings_mobile_data">Mobilní data</string>
+    <string name="status_bar_settings_network_mode">2G/3G</string>
+    <string name="status_bar_settings_sound_mode">Zvuk</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_battery_level">Baterie <xliff:g id="number">%d</xliff:g> procent.</string>
+    <string name="powerwidget_screen_timeout_toast">Časový limit obrazovky nastaven na: %1$d %2$s</string>
+    <string name="navbar_dialog_title">Vyberte tlačítko, které chcete přiřadit</string>
+    <string name="navbar_home_button">Domů</string>
+    <string name="navbar_recent_button">Nedávné aplikace</string>
+    <string name="navbar_search_button">Hledat</string>
+    <string name="navbar_back_button">Zpět</string>
+    <string name="navbar_empty_button">Prázdné tlačítko</string>
+    <string name="navbar_menu_conditional_button">Menu (automaticky skrývat)</string>
+    <string name="navbar_menu_always_button">Menu (vždy zobrazovat)</string>
+    <string name="navbar_menu_big_button">Menu</string>
 </resources>
