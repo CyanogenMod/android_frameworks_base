@@ -1290,4 +1290,100 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Systém"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Bluetooth Audio"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Hotovo"</string>
+
+    <!-- Update for JB -->
+    <string name="profileNameDefault">Výchozí</string>
+    <string name="profileNameWork">Práce</string>
+    <string name="profileNameHome">Doma</string>
+    <string name="profileNameSilent">Tichý</string>
+    <string name="profileNameNight">Noc</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalendář</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-mail</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Ostatní</string>
+    <string name="reboot_system" product="tablet">Restartovat tablet</string>
+    <string name="reboot_system" product="default">Restartovat telefon</string>
+    <string name="global_action_screenshot">Snímek obrazovky</string>
+    <string name="reboot_reboot">Restartovat</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Zavaděč</string>
+    <string name="reboot_bootmenu">Nabídka startu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Stahování</string>
+    <string name="reboot_progress">Restartuji\u2026</string>
+    <string name="reboot_confirm">Zařízení bude restartováno.</string>
+    <string name="global_action_reboot">Restartovat</string>
+    <string name="global_action_choose_profile">Zvolit profil</string>
+    <string name="permlab_sendMockSms">Zaslání falešné SMS zprávy</string>
+    <string name="permdesc_sendMockSms">Umožňuje aplikaci odesílání falešných SMS zpráv.</string>
+    <string name="permlab_preventpower">Ovlivnit chování tlačítka Vypnout</string>
+    <string name="permdesc_preventpower">Umožní aplikaci potlačit chování tlačítka pro vypnutí</string>
+    <string name="openurl">Otevřít adresu URL</string>
+    <string name="storage_sd_dock_card">Slot pro SD kartu</string>
+    <string name="app_killed_message">Aplikace ukončena</string>
+    <string name="weather_0">Tornádo</string>
+    <string name="weather_1">Tropická bouře</string>
+    <string name="weather_2">Hurikán</string>
+    <string name="weather_3">Silné bouřky</string>
+    <string name="weather_4">Bouřky</string>
+    <string name="weather_5">Déšť a sníh</string>
+    <string name="weather_6">Dešťové přeháňky se sněhem</string>
+    <string name="weather_7">Sněhové přeháňky s dešťem</string>
+    <string name="weather_8">Mrznoucí mrholení</string>
+    <string name="weather_9">Mrholení</string>
+    <string name="weather_10">Mrznoucí déšť</string>
+    <string name="weather_11">Silný déšť</string>
+    <string name="weather_12">Déšť</string>
+    <string name="weather_13">Sněhové přeháňky</string>
+    <string name="weather_14">Lehké sněhové přeháňky</string>
+    <string name="weather_15">Zvířený sníh</string>
+    <string name="weather_16">Sníh</string>
+    <string name="weather_17">Kroupy</string>
+    <string name="weather_18">Plískanice</string>
+    <string name="weather_19">Prach</string>
+    <string name="weather_20">Mlha</string>
+    <string name="weather_21">Mlha</string>
+    <string name="weather_22">Smog</string>
+    <string name="weather_23">Bouřlivo</string>
+    <string name="weather_24">Větrno</string>
+    <string name="weather_25">Chladno</string>
+    <string name="weather_26">Zataženo</string>
+    <string name="weather_27">Oblačno</string>
+    <string name="weather_28">Převážně zataženo</string>
+    <string name="weather_29">Polojasno</string>
+    <string name="weather_30">Polojasno</string>
+    <string name="weather_31">Jasno</string>
+    <string name="weather_32">Slunečno</string>
+    <string name="weather_33">Jasno</string>
+    <string name="weather_34">Jasno</string>
+    <string name="weather_35">Déšť s kroupami</string>
+    <string name="weather_36">Horko</string>
+    <string name="weather_37">Místy bouřky</string>
+    <string name="weather_38">Občasné bouřky</string>
+    <string name="weather_39">Občasné bouřky</string>
+    <string name="weather_40">Ojedinělé přeháňky</string>
+    <string name="weather_41">Silné sněžení</string>
+    <string name="weather_42">Ojedinělé sněhové přeháňky</string>
+    <string name="weather_43">Silné sněžení</string>
+    <string name="weather_44">Polojasno</string>
+    <string name="weather_45">Bouřky</string>
+    <string name="weather_46">Sněhové přeháňky</string>
+    <string name="weather_47">Ojedinělé bouřky</string>
+    <string name="weather_N">S</string>
+    <string name="weather_NE">SV</string>
+    <string name="weather_E">V</string>
+    <string name="weather_SE">JV</string>
+    <string name="weather_S">J</string>
+    <string name="weather_SW">JZ</string>
+    <string name="weather_W">Z</string>
+    <string name="weather_NW">SZ</string>
+    <string name="weather_no_data">Žádná data</string>
+    <string name="weather_tap_to_refresh">Klepnutím aktualizujte</string>
+    <string name="weather_refreshing">Aktualizuji</string>
+    <string name="weather_last_sync_just_now">Právě teď</string>
+    <string name="toast_rotation_unlocked">Otočení displeje povoleno</string>
+    <string name="toast_rotation_locked">Otočení displeje zakázáno</string>
+    <string name="lockscreen_discharging">Vybíjení, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 </resources>
