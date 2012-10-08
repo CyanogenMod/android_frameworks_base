@@ -324,6 +324,26 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 });
         }
 
+        // next: expanded desktop toggle
+        // only shown if enabled, enabled by default
+        if(Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.POWER_MENU_EXPANDED_DESKTOP_ENABLED, 0) == 1){
+            mItems.add(
+                       new SinglePressAction(R.drawable.ic_lock_expanded_desktop, R.string.global_action_expanded_desktop_status) {
+                public void onPress() {
+                    Settings.System.putInt(mContext.getContentResolver(), Settings.System.EXPANDED_DESKTOP_STATE, Settings.System.getInt(mContext.getContentResolver(), Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1 ? 0 : 1);
+                }
+
+                public boolean showDuringKeyguard() {
+                    return true;
+                }
+
+                public boolean showBeforeProvisioning() {
+                    return true;
+                }
+            });
+        }
+
         // next: airplane mode
         mItems.add(mAirplaneModeOn);
 
