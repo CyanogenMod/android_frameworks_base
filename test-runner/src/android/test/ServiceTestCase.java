@@ -91,7 +91,7 @@ import java.util.Random;
  *      {@link #setApplication setApplication()}.  You must do this <em>before</em> calling
  *      startService() or bindService().  The test framework provides a
  *      number of alternatives for Context, including
- *      {link android.test.mock.MockContext MockContext},
+ *      {@link android.test.mock.MockContext MockContext},
  *      {@link android.test.RenamingDelegatingContext RenamingDelegatingContext},
  *      {@link android.content.ContextWrapper ContextWrapper}, and
  *      {@link android.test.IsolatedContext}.
@@ -216,7 +216,7 @@ public abstract class ServiceTestCase<T extends Service> extends AndroidTestCase
      *      the service. The flag is assumed to be {@link android.content.Context#BIND_AUTO_CREATE}.
      * </p>
      * <p>
-     *      See <a href="{@docRoot}guide/developing/tools/aidl.html">Designing a Remote Interface
+     *      See <a href="{@docRoot}guide/components/aidl.html">Designing a Remote Interface
      *      Using AIDL</a> for more information about the communication channel object returned
      *      by this method.
      * </p>

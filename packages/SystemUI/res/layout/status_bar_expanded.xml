@@ -40,10 +40,11 @@
         android:visibility="invisible"
         />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/close_handle_underlap"
+        android:orientation="vertical"
         >
 
         <include layout="@layout/status_bar_expanded_header"
@@ -57,6 +58,16 @@
             android:layout_height="@dimen/notification_panel_widget_height"
             android:layout_marginTop="44dip"
         />
+
+        <TextView
+            android:id="@+id/emergency_calls_only"
+            android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network.EmergencyOnly"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="4dp"
+            android:gravity="center"
+            android:visibility="gone"
+            />
 
         <ScrollView
             android:id="@+id/scroll"
@@ -73,7 +84,7 @@
                 systemui:rowHeight="@dimen/notification_row_min_height"
                 />
         </ScrollView>
-    </FrameLayout>
+    </LinearLayout>
 
     <com.android.systemui.statusbar.phone.CloseDragHandle android:id="@+id/close"
         android:layout_width="match_parent"

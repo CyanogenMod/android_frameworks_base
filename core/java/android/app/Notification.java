@@ -906,12 +906,16 @@ public class Notification implements Parcelable
      * Builder class for {@link Notification} objects.
      * 
      * Provides a convenient way to set the various fields of a {@link Notification} and generate
-     * content views using the platform's notification layout template. 
+     * content views using the platform's notification layout template. If your app supports
+     * versions of Android as old as API level 4, you can instead use
+     * {@link android.support.v4.app.NotificationCompat.Builder NotificationCompat.Builder},
+     * available in the <a href="{@docRoot}tools/extras/support-library.html">Android Support
+     * library</a>.
      * 
-     * Example:
+     * <p>Example:
      * 
      * <pre class="prettyprint">
-     * Notification noti = new Notification.Builder()
+     * Notification noti = new Notification.Builder(mContext)
      *         .setContentTitle(&quot;New mail from &quot; + sender.toString())
      *         .setContentText(subject)
      *         .setSmallIcon(R.drawable.new_mail)
@@ -1740,6 +1744,9 @@ public class Notification implements Parcelable
             return this;
         }
 
+        /**
+         * Provide the bitmap to be used as the payload for the BigPicture notification.
+         */
         public BigPictureStyle bigPicture(Bitmap b) {
             mPicture = b;
             return this;
@@ -1818,6 +1825,10 @@ public class Notification implements Parcelable
             return this;
         }
 
+        /**
+         * Provide the longer text to be displayed in the big form of the
+         * template in place of the content text.
+         */
         public BigTextStyle bigText(CharSequence cs) {
             mBigText = cs;
             return this;
@@ -1898,6 +1909,9 @@ public class Notification implements Parcelable
             return this;
         }
 
+        /**
+         * Append a line to the digest section of the Inbox notification.
+         */
         public InboxStyle addLine(CharSequence cs) {
             mTexts.add(cs);
             return this;

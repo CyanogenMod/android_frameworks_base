@@ -203,12 +203,12 @@
             <span class="en">Syncing to the Cloud</span>
           </a></div>
         <ul>
-          <li><a href="<?cs var:toroot ?>training/cloudsync/aesync.html">
-            <span class="en">Syncing with App Engine</span>
-          </a>
-          </li>
           <li><a href="<?cs var:toroot ?>training/cloudsync/backupapi.html">
             <span class="en">Using the Backup API</span>
+          </a>
+          </li>
+          <li><a href="<?cs var:toroot ?>training/cloudsync/gcm.html">
+            <span class="en">Making the Most of Google Cloud Messaging</span>
           </a>
           </li>
         </ul>
@@ -667,6 +667,27 @@
           </li>
           <li><a href="<?cs var:toroot ?>training/graphics/opengl/touch.html">
             <span class="en">Responding to Touch Events</span>
+          </a>
+          </li>
+        </ul>
+      </li>
+
+
+      <li class="nav-section">
+        <div class="nav-section-header"><a href="<?cs var:toroot ?>training/connect-devices-wirelessly/index.html">
+            <span class="en">Connecting Devices Wirelessly</span>
+          </a></div>
+        <ul>
+          <li><a href="<?cs var:toroot ?>training/connect-devices-wirelessly/nsd.html">
+            <span class="en">Using Network Service Discovery</span>
+          </a>
+          </li>
+          <li><a href="<?cs var:toroot ?>training/connect-devices-wirelessly/wifi-direct.html">
+            <span class="en">Connecting with Wi-Fi Direct</span>
+          </a>
+          </li>
+          <li><a href="<?cs var:toroot ?>training/connect-devices-wirelessly/nsd-wifi-direct.html">
+            <span class="en">Using Wi-Fi Direct for Service Discovery</span>
           </a>
           </li>
         </ul>

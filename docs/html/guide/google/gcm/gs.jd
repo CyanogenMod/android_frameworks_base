@@ -63,7 +63,7 @@ page.title=GCM: Getting Started
 </div>
 </div>
 
-  <li>Click  <strong>Create new Server key</strong>. The following screen appears:</li><br />
+  <li>Click  <strong>Create new Server key</strong>. Either a server key or a browser key should work. The advantage to using a server key is that it allows you to whitelist IP addresses. The following screen appears:</li><br />
 
 <div style="width:408px;margin:1.5em;">
 <div style="width:410px;border:1px solid #DDD;">
@@ -85,7 +85,10 @@ page.title=GCM: Getting Started
 <p class="note"><strong>Note:</strong> If you need to rotate the key, click  <strong>Generate new key</strong>. A new key  will be created while the old one will still be active for up to 24 hours. If you want to get rid of the old key immediately (for example, if you feel it was compromised), click <strong>Delete key</strong>.</p>
 
 <h2 id="libs">Install the Helper Libraries</h2>
-<p>To perform the steps described in the following sections, you must first install the helper libraries (reference: <a href="{@docRoot}guide/google/gcm/client-javadoc/index.html">client</a> and <a href="{@docRoot}guide/google/gcm/server-javadoc/index.html">server</a>). From the SDK Manager, install <strong>Extras &gt; Google Cloud Messaging for Android Library</strong>. This creates a <code>gcm</code> directory under <code><em>YOUR_SDK_ROOT</em>/extras/google/</code> containing these subdirectories: <code>gcm-client</code>, <code>gcm-demo-appengine</code>, <code>gcm-demo-client</code>, <code>gcm-demo-server</code>, and <code>gcm-server</code>.</p>
+<p>To perform the steps described in the following sections, you must first install the helper libraries (reference: <a href="{@docRoot}guide/google/gcm/client-javadoc/index.html">client</a> and <a href="{@docRoot}guide/google/gcm/server-javadoc/index.html">server</a>). From the SDK Manager, install <strong>Extras &gt; Google Cloud Messaging for Android Library</strong>. This creates a <code>gcm</code> directory under <code><em>YOUR_SDK_ROOT</em>/extras/google/</code> containing these subdirectories: <code>gcm-client</code>, <code>gcm-server</code>, <code>samples/gcm-demo-client</code>, <code>samples/gcm-demo-server</code>, and <code>samples/gcm-demo-appengine</code>.</p>
+
+<p class="note"><strong>Note:</strong> If you don't see <strong>Extras &gt; Google Cloud Messaging for Android Library</strong> in the SDK Manager, make sure you are running version 20 or higher. Be sure to restart the SDK Manager after updating it.</p>
+
 <h2 id="android-app">Writing the Android Application</h2>
 <p>This section describes the steps involved in writing an Android application that uses GCM.</p>
 <h4>Step 1: Copy the gcm.jar file into your application classpath</h4>
@@ -104,9 +107,16 @@ page.title=GCM: Getting Started
 <p> This permission must be called <code>my_app_package.permission.C2D_MESSAGE</code> (where <code>my_app_package</code> is the package name of your app as defined by the manifest tag), otherwise it will not  work.</p>
 <p class="note"><strong>Note:</strong> This permission is not required if you are targeting your application to 4.1 or above (i.e., minSdkVersion 16)</p>
 
-  <li>Add the permission to receive GCM messages:</li>
+  <li>Add the following permissions:</li>
 
-<pre class="prettyprint pretty-xml">&lt;uses-permission android:name=&quot;com.google.android.c2dm.permission.RECEIVE&quot; /&gt;</pre>
+<pre class="prettyprint pretty-xml">&lt;!-- App receives GCM messages. --&gt;
+&lt;uses-permission android:name=&quot;com.google.android.c2dm.permission.RECEIVE&quot; /&gt;
+&lt;!-- GCM connects to Google Services. --&gt;
+&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt; 
+&lt;!-- GCM requires a Google account. --&gt;
+&lt;uses-permission android:name=&quot;android.permission.GET_ACCOUNTS&quot; /&gt;
+&lt;!-- Keeps the processor from sleeping when a message is received. --&gt;
+&lt;uses-permission android:name=&quot;android.permission.WAKE_LOCK&quot; /&gt;</pre>
 
   <li>Add the following broadcast receiver:</li>
 
@@ -127,7 +137,7 @@ page.title=GCM: Getting Started
  <pre class="prettyprint pretty-xml">&lt;service android:name=&quot;.GCMIntentService&quot; /&gt;</pre>
 
 </ol>
-<p> This intent service will be called by the <code>GCMBroadcastReceiver</code> (which is is provided by GCM library), as shown in the next step. It must be named <code>my_app_package.GCMIntentService</code>, unless you use a subclass of <code>GCMBroadcastReceiver</code> that overrides the method used to name the service.</p>
+<p>This intent service will be called by the <code>GCMBroadcastReceiver</code> (which is is provided by GCM library), as shown in the next step. It must be a subclass of <code>com.google.android.gcm.GCMBaseIntentService</code>, must contain a public constructor, and should be named <code>my_app_package.GCMIntentService</code> (unless you use a subclass of <code>GCMBroadcastReceiver</code> that overrides the method used to name the service).</p>
 <h4><br>
   Step 3: Write the my_app_package.GCMIntentService class</h4>
 <p>Next write the <code>my_app_package.GCMIntentService</code> class, overriding the following callback methods (which are called by <code>GCMBroadcastReceiver</code>):<br>
@@ -168,14 +178,14 @@ if (regId.equals("")) {
   <li>Create a servlet (or other server-side mechanism) that can be used by the Android application to send the registration ID received by GCM . The application might also need to send other information&mdash;such as the user's email address or username&mdash;so that the server can associate the registration ID with the user owning the device.</li>
   <li>Similarly, create a servlet used to unregister registration IDs.<br>
     </li>
-  <li>When the server needs to send a message to the device, it can use the <code>com.google.android.gcm.server.Sender</code> helper class from the GCM library. For example:</li>
+<li>When the server needs to send a message to the registration ID, it can use the <code>com.google.android.gcm.server.Sender</code> helper class from the GCM library. For example:</li>
 </ol>
 
 <pre class="prettyprint pretty-java">import com.google.android.gcm.server.*;
 
 Sender sender = new Sender(myApiKey);
-Message message = new Message.Builder(regId).build();
-Result result = sender.send(message, 5);</pre>
+Message message = new Message.Builder().build();
+MulticastResult result = sender.send(message, devices, 5);</pre>
 
 <p> The snippet above does the following:
 <ul>
