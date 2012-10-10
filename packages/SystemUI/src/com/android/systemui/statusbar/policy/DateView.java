@@ -68,11 +68,13 @@ public final class DateView extends LinearLayout {
         mDoW.setSingleLine();
         mDoW.setEllipsize(TruncateAt.END);
         mDoW.setTextAppearance(context, R.style.TextAppearance_StatusBar_Expanded_Date);
+        mDoW.setIncludeFontPadding(false);
         mDate = new TextView(context, attrs);
         mDate.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, 1.0f));
         mDate.setSingleLine();
         mDate.setEllipsize(TruncateAt.END);
         mDate.setTextAppearance(context, R.style.TextAppearance_StatusBar_Expanded_Date);
+        mDate.setIncludeFontPadding(false);
 
         // Extract how DoW and Date are distributed in the layout
         // The format is distributed as %1$s\n%2$s or %2$s\n%1$s but always in
