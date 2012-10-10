@@ -38,7 +38,8 @@ SECONDARY_FRAMEWORKS_SUBDIRS := \
         media/java/android/media/videoeditor \
         media/java/android/media/audiofx \
         media/mca/effect/java/android/media/effect \
-        media/mca/effect/java/android/media/effect/effects
+        media/mca/effect/java/android/media/effect/effects \
+        voip/java/com/android/server/sip
 
 include $(CLEAR_VARS)
 
