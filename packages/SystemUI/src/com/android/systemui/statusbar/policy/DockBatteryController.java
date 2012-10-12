@@ -40,9 +40,16 @@ public class DockBatteryController extends BroadcastReceiver {
     private ArrayList<ImageView> mIconViews = new ArrayList<ImageView>();
     private ArrayList<TextView> mLabelViews = new ArrayList<TextView>();
 
-    private static final int BATTERY_STYLE_NORMAL = 0;
-    private static final int BATTERY_STYLE_TEXT = 1;
-    private static final int BATTERY_STYLE_HIDE = 2;
+    private static final int BATTERY_STYLE_NORMAL         = 0;
+    private static final int BATTERY_STYLE_PERCENT        = 1;
+    /***
+     * BATTERY_STYLE_CIRCLE* cannot be handled in this controller, since we cannot get views from
+     * statusbar here. Yet it is listed for completion and not to confuse at future updates
+     * See CircleBattery.java for more info
+     */
+    private static final int BATTERY_STYLE_CIRCLE         = 2;
+    private static final int BATTERY_STYLE_CIRCLE_PERCENT = 3;
+    private static final int BATTERY_STYLE_GONE           = 4;
 
     private static final int BATTERY_ICON_STYLE_UNKNOWN = R.drawable.stat_sys_kb_battery_unknown;
     private static final int BATTERY_ICON_STYLE_NORMAL = R.drawable.stat_sys_kb_battery;
@@ -127,10 +134,10 @@ public class DockBatteryController extends BroadcastReceiver {
         int text = View.GONE;
         int iconStyle = BATTERY_ICON_STYLE_UNKNOWN;
 
-        if (mDockPresent && mBatteryStyle != BATTERY_STYLE_HIDE) {
+        if (mDockPresent && (mBatteryStyle == BATTERY_STYLE_NORMAL || mBatteryStyle == BATTERY_STYLE_PERCENT)) {
             icon = View.VISIBLE;
 
-            if (mBatteryStyle == BATTERY_STYLE_TEXT) {
+            if (mBatteryStyle == BATTERY_STYLE_PERCENT) {
                 text = View.VISIBLE;
             }
 
