@@ -947,12 +947,16 @@ public class RIL extends BaseCommands implements CommandsInterface {
     getIMSIForApp(String aid, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_IMSI, result);
 
-        boolean oldRil = needsOldRilFeature("skipnullaid");
+        boolean skipNullAid = needsOldRilFeature("skipnullaid");
+        boolean writeAidOnly = needsOldRilFeature("writeaidonly");
 
-        if (aid != null || !oldRil) {
+        if (!writeAidOnly && (aid != null || !skipNullAid)) {
             rr.mp.writeInt(1);
             rr.mp.writeString(aid);
         }
+
+        if (writeAidOnly)
+            rr.mp.writeString(aid);
 
         if (RILJ_LOGD) riljLog(rr.serialString() +
                               "> getIMSI: " + requestToString(rr.mRequest)
