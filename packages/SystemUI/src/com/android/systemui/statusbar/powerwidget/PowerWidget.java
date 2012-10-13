@@ -31,6 +31,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -283,6 +284,20 @@ public class PowerWidget extends FrameLayout {
             // not needed, just add the linear layout
             addView(mButtonLayout, WIDGET_LAYOUT_PARAMS);
         }
+        mScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ){
+                    int mSelectedItem = ((mScrollView.getScrollX() + (BUTTON_LAYOUT_PARAMS.width / 2)) / BUTTON_LAYOUT_PARAMS.width);
+                    int scrollTo = mSelectedItem * BUTTON_LAYOUT_PARAMS.width;
+                    mScrollView.smoothScrollTo(scrollTo, 0);
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        });
     }
 
     public void updateAllButtons() {
