@@ -936,6 +936,8 @@ public class NetworkController extends BroadcastReceiver {
         int combinedSignalIconId = 0;
         int combinedActivityIconId = 0;
         String combinedLabel = "";
+        // Note: the real purpose of "wifiLabel" is to display the connectivity status of
+        // everything (wifi, bluetooth, ethernet) except mobile
         String wifiLabel = "";
         String mobileLabel = "";
         int N;
@@ -1033,7 +1035,7 @@ public class NetworkController extends BroadcastReceiver {
         }
 
         if (mBluetoothTethered) {
-            combinedLabel = mContext.getString(R.string.bluetooth_tethered);
+            combinedLabel = wifiLabel = mContext.getString(R.string.bluetooth_tethered);
             combinedSignalIconId = mBluetoothTetherIconId;
             mContentDescriptionCombinedSignal = mContext.getString(
                     R.string.accessibility_bluetooth_tether);
@@ -1042,7 +1044,7 @@ public class NetworkController extends BroadcastReceiver {
         final boolean ethernetConnected = (mConnectedNetworkType == ConnectivityManager.TYPE_ETHERNET);
         if (ethernetConnected) {
             // TODO: icons and strings for Ethernet connectivity
-            combinedLabel = mConnectedNetworkTypeName;
+            combinedLabel = wifiLabel = mConnectedNetworkTypeName;
         }
 
         if (mAirplaneMode &&
@@ -1055,8 +1057,8 @@ public class NetworkController extends BroadcastReceiver {
             mAirplaneIconId = R.drawable.stat_sys_signal_flightmode;
             mPhoneSignalIconId = mDataSignalIconId = mDataTypeIconId = 0;
 
-            // combined values from connected wifi take precedence over airplane mode
-            if (mWifiConnected) {
+            // combined values from connected networks take precedence over airplane mode
+            if (mWifiConnected || mBluetoothTethered || ethernetConnected) {
                 // Suppress "No internet connection." from mobile if wifi connected.
                 mobileLabel = "";
             } else {
