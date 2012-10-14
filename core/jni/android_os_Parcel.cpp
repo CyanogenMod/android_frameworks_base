@@ -236,7 +236,7 @@ static void android_os_Parcel_writeString(JNIEnv* env, jclass clazz, jint native
         if (val) {
             const jchar* str = env->GetStringCritical(val, 0);
             if (str) {
-                err = parcel->writeString16((char16_t*)str, env->GetStringLength(val));
+                err = parcel->writeString16((uint16_t*)str, env->GetStringLength(val));
                 env->ReleaseStringCritical(val, str);
             }
         } else {
