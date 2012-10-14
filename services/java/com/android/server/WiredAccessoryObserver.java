@@ -234,6 +234,7 @@ class WiredAccessoryObserver extends UEventObserver {
     public void onUEvent(UEventObserver.UEvent event) {
         if (LOG) Slog.v(TAG, "Headset UEVENT: " + event.toString());
 
+        int state = Integer.parseInt(event.get("SWITCH_STATE"));
         try {
             String devPath = event.get("DEVPATH");
             String name = event.get("SWITCH_NAME");
@@ -242,12 +243,11 @@ class WiredAccessoryObserver extends UEventObserver {
                 // The choice is made in the GalaxyS2Settings.apk
                 // device/samsung/i9100/DeviceSettings/src/com/cyanogenmod/settings/device/DockFragmentActivity.java
                 // This sends an Intent to this class
-                if (!dockAudioEnabled) {
+                if ((!dockAudioEnabled) && (state == 1)) {
                     Slog.e(TAG, "Ignoring dock event as Audio routing disabled " + event);
                     return;
                 }
             }
-            int state = Integer.parseInt(event.get("SWITCH_STATE"));
             updateState(devPath, name, state);
         } catch (NumberFormatException e) {
             Slog.e(TAG, "Could not parse switch state from event " + event);
