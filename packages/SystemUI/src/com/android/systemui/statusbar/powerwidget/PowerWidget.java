@@ -31,6 +31,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -110,7 +111,7 @@ public class PowerWidget extends FrameLayout {
     private long[] mLongPressVibePattern;
 
     private LinearLayout mButtonLayout;
-    private HorizontalScrollView mScrollView;
+    private SnappingScrollView mScrollView;
 
     public PowerWidget(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -251,6 +252,44 @@ public class PowerWidget extends FrameLayout {
         mButtonNames.clear();
     }
 
+    static class SnappingScrollView extends HorizontalScrollView {
+
+        private boolean mSnapTrigger = false;
+
+        public SnappingScrollView(Context context) {
+            super(context);
+        }
+
+        Runnable mSnapRunnable = new Runnable(){
+            @Override
+            public void run() {
+                int mSelectedItem = ((getScrollX() + (BUTTON_LAYOUT_PARAMS.width / 2)) / BUTTON_LAYOUT_PARAMS.width);
+                int scrollTo = mSelectedItem * BUTTON_LAYOUT_PARAMS.width;
+                smoothScrollTo(scrollTo, 0);
+                mSnapTrigger = false;
+            }
+        };
+
+        @Override
+        protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+            super.onScrollChanged(l, t, oldl, oldt);
+            if (Math.abs(oldl - l) <= 1 && mSnapTrigger) {
+                removeCallbacks(mSnapRunnable);
+                postDelayed(mSnapRunnable, 100);
+            }
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent ev) {
+            int action = ev.getAction();
+            if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+                mSnapTrigger = true;
+            }
+            return super.onTouchEvent(ev);
+        }
+
+    }
+
     private void recreateButtonLayout() {
         removeAllViews();
 
@@ -271,7 +310,7 @@ public class PowerWidget extends FrameLayout {
         // we determine if we're using a horizontal scroll view based on a threshold of button counts
         if (mButtonLayout.getChildCount() > LAYOUT_SCROLL_BUTTON_THRESHOLD) {
             // we need our horizontal scroll view to wrap the linear layout
-            mScrollView = new HorizontalScrollView(mContext);
+            mScrollView = new SnappingScrollView(mContext);
             // make the fading edge the size of a button (makes it more noticible that we can scroll
             mScrollView.setFadingEdgeLength(mContext.getResources().getDisplayMetrics().widthPixels / LAYOUT_SCROLL_BUTTON_THRESHOLD);
             mScrollView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
