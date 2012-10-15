@@ -104,7 +104,7 @@ public class CatService extends Handler implements AppInterface {
     private static final int DEV_ID_TERMINAL    = 0x82;
     private static final int DEV_ID_NETWORK     = 0x83;
 
-    static final String STK_DEFAULT = "Defualt Message";
+    static final String STK_DEFAULT = "Default Message";
 
     // Sms send result constants.
     static final int SMS_SEND_OK = 0;
