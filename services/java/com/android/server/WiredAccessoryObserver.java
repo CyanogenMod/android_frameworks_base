@@ -243,7 +243,7 @@ class WiredAccessoryObserver extends UEventObserver {
                 // The choice is made in the GalaxyS2Settings.apk
                 // device/samsung/i9100/DeviceSettings/src/com/cyanogenmod/settings/device/DockFragmentActivity.java
                 // This sends an Intent to this class
-                if ((!dockAudioEnabled) && (state == 1)) {
+                if ((!dockAudioEnabled) && (state > 0)) {
                     Slog.e(TAG, "Ignoring dock event as Audio routing disabled " + event);
                     return;
                 }
