@@ -510,10 +510,20 @@ public class GpsLocationProvider implements LocationProviderInterface {
                                         info.getExtraInfo(), defaultApn);
         }
 
-        if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE_SUPL
+        /*
+         * The NetworkInfo that we now receive is the active network connection,
+         * which may be out-ranking be the SUPL network connection. Check manually
+         * for a SUPL network update.
+         */
+        final NetworkInfo suplNetwork = mConnMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE_SUPL);
+        Log.d(TAG, "SUPL mobile is " + suplNetwork);
+
+        if (suplNetwork != null
+                && (suplNetwork.isConnected() || !suplNetwork.isConnectedOrConnecting())
                 && mAGpsDataConnectionState == AGPS_DATA_CONNECTION_OPENING) {
-            String apnName = info.getExtraInfo();
-            if (mNetworkAvailable) {
+            String apnName = suplNetwork.getExtraInfo();
+            boolean networkAvailable = suplNetwork.isConnected();
+            if (networkAvailable) {
                 if (apnName == null) {
                     /* Assign a dummy value in the case of C2K as otherwise we will have a runtime 
                     exception in the following call to native_agps_data_conn_open*/
