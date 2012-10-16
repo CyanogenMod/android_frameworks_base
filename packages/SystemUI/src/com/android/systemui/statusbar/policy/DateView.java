@@ -17,23 +17,28 @@
 package com.android.systemui.statusbar.policy;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.text.TextUtils.TruncateAt;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.systemui.R;
 
+import java.lang.reflect.Method;
 import java.util.Date;
 
-public final class DateView extends LinearLayout {
+public final class DateView extends LinearLayout implements OnClickListener {
     private static final String TAG = "DateView";
 
     private TextView mDoW;
@@ -75,6 +80,7 @@ public final class DateView extends LinearLayout {
         mDate.setEllipsize(TruncateAt.END);
         mDate.setTextAppearance(context, R.style.TextAppearance_StatusBar_Expanded_Date);
         mDate.setIncludeFontPadding(false);
+        setOnClickListener(this);
 
         // Extract how DoW and Date are distributed in the layout
         // The format is distributed as %1$s\n%2$s or %2$s\n%1$s but always in
@@ -103,7 +109,7 @@ public final class DateView extends LinearLayout {
         mAttachedToWindow = true;
         setUpdates();
     }
-    
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -178,6 +184,30 @@ public final class DateView extends LinearLayout {
             } else {
                 mContext.unregisterReceiver(mIntentReceiver);
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        // start calendar - today is selected
+        long nowMillis=System.currentTimeMillis();
+
+        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+        builder.appendPath("time");
+        ContentUris.appendId(builder, nowMillis);
+        Intent intent = new Intent(Intent.ACTION_VIEW)
+            .setData(builder.build());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+
+        // collapse status bar
+        try{
+               Object service  = mContext.getSystemService("statusbar");
+               Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+               Method collapse = statusbarManager.getMethod("collapse");
+               collapse.invoke(service);
+        }
+        catch(Exception ex){
         }
     }
 }
