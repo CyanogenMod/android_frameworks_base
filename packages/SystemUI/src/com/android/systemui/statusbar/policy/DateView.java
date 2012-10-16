@@ -16,13 +16,21 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.app.ActivityManagerNative;
+import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
+import android.provider.CalendarContract;
+import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewParent;
 import android.widget.TextView;
 
@@ -34,10 +42,14 @@ import java.util.Locale;
 
 import libcore.icu.ICU;
 
-public class DateView extends TextView {
+public class DateView extends TextView implements OnClickListener, OnLongClickListener {
     private static final String TAG = "DateView";
 
     private final Date mCurrentTime = new Date();
+
+    private boolean mAttachedToWindow;
+    private boolean mWindowVisible;
+    private boolean mUpdating;
 
     private SimpleDateFormat mWeekdayFormat;
     private SimpleDateFormat mDateFormat;
@@ -63,6 +75,8 @@ public class DateView extends TextView {
 
     public DateView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setOnClickListener(this);
+        setOnLongClickListener(this);
     }
 
     @Override
@@ -85,6 +99,40 @@ public class DateView extends TextView {
 
         mDateFormat = null; // reload the locale next time
         mContext.unregisterReceiver(mIntentReceiver);
+    }
+
+    private void setUpdates() {
+        boolean update = mAttachedToWindow && mWindowVisible && isVisible();
+        if (update != mUpdating) {
+            mUpdating = update;
+            if (update) {
+                // Register for Intent broadcasts for the clock and battery
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(Intent.ACTION_TIME_TICK);
+                filter.addAction(Intent.ACTION_TIME_CHANGED);
+                filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+                filter.addAction(Intent.ACTION_LOCALE_CHANGED);
+                mContext.registerReceiver(mIntentReceiver, filter, null, null);
+                updateClock();
+            } else {
+            mContext.unregisterReceiver(mIntentReceiver);
+            }
+        }
+    }
+
+    private boolean isVisible() {
+        View v = this;
+        while (true) {
+            if (v.getVisibility() != VISIBLE) {
+                return false;
+            }
+            final ViewParent parent = v.getParent();
+            if (parent instanceof View) {
+                v = (View)parent;
+            } else {
+                return true;
+            }
+        }
     }
 
     protected void updateClock() {
@@ -111,5 +159,45 @@ public class DateView extends TextView {
             setText(text);
             mLastText = text;
         }
+    }
+
+    private void collapseStartActivity(Intent what) {
+        // collapse status bar
+        StatusBarManager statusBarManager = (StatusBarManager) getContext().getSystemService(
+                Context.STATUS_BAR_SERVICE);
+        statusBarManager.collapsePanels();
+
+        // dismiss keyguard in case it was active and no passcode set
+        try {
+            ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+        } catch (Exception ex) {
+            // no action needed here
+        }
+
+        // start activity
+        what.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(what);
+    }
+
+    @Override
+    public void onClick(View v) {
+        long nowMillis = System.currentTimeMillis();
+
+        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+        builder.appendPath("time");
+        ContentUris.appendId(builder, nowMillis);
+        Intent intent = new Intent(Intent.ACTION_VIEW)
+                .setData(builder.build());
+        collapseStartActivity(intent);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        Intent intent = new Intent("android.settings.DATE_SETTINGS");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        collapseStartActivity(intent);
+
+        // consume event
+        return true;
     }
 }
