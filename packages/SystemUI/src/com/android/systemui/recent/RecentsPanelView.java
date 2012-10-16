@@ -35,6 +35,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -43,9 +44,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.text.format.Formatter;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -74,6 +77,8 @@ import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.StatusBarPanel;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 
+import com.android.internal.util.MemInfoReader;
+
 import java.util.ArrayList;
 
 public class RecentsPanelView extends FrameLayout implements OnItemClickListener, RecentsCallback,
@@ -93,6 +98,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private long mWindowAnimationStartTime;
     private boolean mCallUiHiddenBeforeNextReload;
 
+    private LinearColorBar mRamUsageBar;
+    private View mRamUsageBarShadow;
+
     private RecentTasksLoader mRecentTasksLoader;
     private ArrayList<TaskDescription> mRecentTaskDescriptions;
     private TaskDescriptionAdapter mListAdapter;
@@ -101,6 +109,21 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private int mRecentItemLayoutId;
     private boolean mHighEndGfx;
     private ImageView mClearRecents;
+    boolean ramBarEnabled;
+
+    TextView mBackgroundProcessText;
+    TextView mForegroundProcessText;
+
+    Handler mHandler = new Handler();
+    SettingsObserver mSettingsObserver;
+    ActivityManager mAm;
+    ActivityManager.MemoryInfo mMemInfo;
+
+    MemInfoReader mMemInfoReader = new MemInfoReader();
+
+    public static interface OnRecentsPanelVisibilityChangedListener {
+        public void onRecentsPanelVisibilityChanged(boolean visible);
+    }
 
     public static interface RecentsScrollView {
         public int numItemsInOneScreenful();
@@ -273,12 +296,16 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         super(context, attrs, defStyle);
         updateValuesFromResources();
 
+        mAm = (ActivityManager)
+                mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        mMemInfo = new ActivityManager.MemoryInfo();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RecentsPanelView,
                 defStyle, 0);
 
         mRecentItemLayoutId = a.getResourceId(R.styleable.RecentsPanelView_recentItemLayout, 0);
         mRecentTasksLoader = RecentTasksLoader.getInstance(context);
         a.recycle();
+        mSettingsObserver = new SettingsObserver(mHandler);
     }
 
     public int numItemsInOneScreenful() {
@@ -386,12 +413,20 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         }
     }
 
+    @Override
     protected void onAttachedToWindow () {
         super.onAttachedToWindow();
         final ViewRootImpl root = getViewRootImpl();
         if (root != null) {
             root.setDrawDuringWindowsAnimating(true);
         }
+        mSettingsObserver.observe(); // observe will call updateSettings()
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
+        super.onDetachedFromWindow();
     }
 
     public void onUiHidden() {
@@ -463,7 +498,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
         mRecentsContainer = (RecentsScrollView) findViewById(R.id.recents_container);
         mRecentsContainer.setOnScrollListener(new Runnable() {
             public void run() {
@@ -497,6 +531,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 ((BitmapDrawable) mRecentsScrim.getBackground()).setTileModeY(TileMode.REPEAT);
             }
         }
+
+        mRamUsageBar = (LinearColorBar) findViewById(R.id.ram_usage_bar);
+        mForegroundProcessText = (TextView) findViewById(R.id.foregroundText);
+        mBackgroundProcessText = (TextView) findViewById(R.id.backgroundText);
+        mRamUsageBarShadow = findViewById(R.id.aokp_rambar_shadow);
     }
 
     public void setMinSwipeAlpha(float minAlpha) {
@@ -623,6 +662,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mRecentTasksLoader.cancelLoadingThumbnailsAndIcons(this);
             onTaskLoadingCancelled();
         }
+        mHandler.post(updateRamBarTask);
     }
 
     public void onTaskLoadingCancelled() {
@@ -631,6 +671,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mRecentTaskDescriptions = null;
             mListAdapter.notifyDataSetInvalidated();
         }
+        mHandler.removeCallbacks(updateRamBarTask);
     }
 
     public void refreshViews() {
@@ -661,6 +702,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         if (((RecentsActivity) mContext).isActivityShowing()) {
             refreshViews();
         }
+        mHandler.post(updateRamBarTask);
     }
 
     private void updateUiElements() {
@@ -696,8 +738,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         ViewHolder holder = (ViewHolder) view.getTag();
         TaskDescription ad = holder.taskDescription;
         final Context context = view.getContext();
-        final ActivityManager am = (ActivityManager)
-                context.getSystemService(Context.ACTIVITY_SERVICE);
 
         Bitmap bm = null;
         boolean usingDrawingCache = true;
@@ -720,7 +760,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         show(false);
         if (ad.taskId >= 0) {
             // This is an active task; it should just go to the foreground.
-            am.moveTaskToFront(ad.taskId, ActivityManager.MOVE_TASK_WITH_HOME,
+            mAm.moveTaskToFront(ad.taskId, ActivityManager.MOVE_TASK_WITH_HOME,
                     opts);
         } else {
             Intent intent = ad.intent;
@@ -766,17 +806,15 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
         // Currently, either direction means the same thing, so ignore direction and remove
         // the task.
-        final ActivityManager am = (ActivityManager)
-                mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        if (am != null) {
-            am.removeTask(ad.persistentTaskId, ActivityManager.REMOVE_TASK_KILL_PROCESS);
+        mAm.removeTask(ad.persistentTaskId, ActivityManager.REMOVE_TASK_KILL_PROCESS);
 
-            // Accessibility feedback
-            setContentDescription(
-                    mContext.getString(R.string.accessibility_recents_item_dismissed, ad.getLabel()));
-            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
-            setContentDescription(null);
-        }
+        // Accessibility feedback
+        setContentDescription(
+                mContext.getString(R.string.accessibility_recents_item_dismissed, ad.getLabel()));
+        sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
+        setContentDescription(null);
+
+        mHandler.post(updateRamBarTask);
     }
 
     private void startApplicationDetailsActivity(String packageName) {
@@ -902,6 +940,80 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             bottom += getBottomPaddingOffset();
         }
         mRecentsContainer.drawFadedEdges(canvas, left, right, top, bottom);
+    }
+
+    private boolean hasHWbuttons() {
+        int hardwareKeyMask = mContext.getResources()
+                .getInteger(com.android.internal.R.integer.config_deviceHardwareKeys);
+        return (hardwareKeyMask != 0);
+    }
+
+    private int pxToDp(int px, Context context) {
+        float d = context.getResources().getDisplayMetrics().density;
+        return (int)(px * d);
+    }
+
+    private static boolean isTablet(Context context) {
+        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+        return (xlarge || large);
+    }
+
+    private final Runnable updateRamBarTask = new Runnable() {
+        @Override
+        public void run() {
+            if (!ramBarEnabled)
+                return;
+
+            mAm.getMemoryInfo(mMemInfo);
+            long secServerMem = mMemInfo.secondaryServerThreshold;
+            mMemInfoReader.readMemInfo();
+            long availMem = mMemInfoReader.getFreeSize() + mMemInfoReader.getCachedSize() -
+                    secServerMem;
+            long totalMem = mMemInfoReader.getTotalSize();
+
+            String sizeStr = Formatter.formatShortFileSize(mContext, totalMem-availMem);
+            mForegroundProcessText.setText(getResources().getString(
+                    R.string.service_foreground_processes, sizeStr));
+            sizeStr = Formatter.formatShortFileSize(mContext, availMem);
+            mBackgroundProcessText.setText(getResources().getString(
+                    R.string.service_background_processes, sizeStr));
+
+            float fTotalMem = totalMem;
+            float fAvailMem = availMem;
+            mRamUsageBar.setRatios((fTotalMem - fAvailMem) / fTotalMem, 0, 0);
+        }
+    };
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+            	Settings.System.RAM_USAGE_BAR),
+                    false, this);
+            updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
+    public void updateSettings() {
+        ramBarEnabled = Settings.System.getBoolean(mContext.getContentResolver(),
+                Settings.System.RAM_USAGE_BAR, false);
+
+        if (mRamUsageBar != null) {
+            mRamUsageBar.setVisibility(ramBarEnabled ? View.VISIBLE : View.GONE);
+        }
+        if (mRamUsageBarShadow != null) {
+            mRamUsageBarShadow.setVisibility(ramBarEnabled ? View.VISIBLE : View.GONE);
+        }
     }
 
     class FakeClearUserDataObserver extends IPackageDataObserver.Stub {
