@@ -587,6 +587,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         return !configDisabled || isTestHarness || fileOverride || menuOverride;
     }
 
+    boolean mHomeUnlockScreen = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HOME_UNLOCK_SCREEN, 0) == 1);
+
     /**
      * @param context Used to setup the view.
      * @param configuration The current configuration. Used to use when selecting layout, etc.
@@ -733,7 +735,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) {
+        if ((keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) ||
+            (keyCode == KeyEvent.KEYCODE_HOME && mHomeUnlockScreen)) {
             mCallback.goToUnlockScreen();
         }
         return false;
