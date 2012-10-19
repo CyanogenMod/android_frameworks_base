@@ -4526,4 +4526,14 @@
     <!-- Longer version of toast bar message when hiding the transient navigation bar (if room) -->
     <string name="transient_navigation_confirmation_long">Swipe from edge of screen to reveal system bar</string>
     <add-resource type="bool" name="config_hotswapCapable"></add-resource>
+
+    <!-- Displayed when the USSD/SS request is modified by STK CC to a
+    different request. This will be displayed in a toast. -->
+    <string name="stk_cc_ussd_to_dial">USSD request is modified to DIAL request.</string>
+    <string name="stk_cc_ussd_to_ss">USSD request is modified to SS request.</string>
+    <string name="stk_cc_ussd_to_ussd">USSD request is modified to new USSD request.</string>
+    <string name="stk_cc_ss_to_dial">SS request is modified to DIAL request.</string>
+    <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
+    <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
+
 </resources>
