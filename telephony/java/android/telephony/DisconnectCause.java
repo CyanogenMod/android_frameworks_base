@@ -160,10 +160,27 @@ public class DisconnectCause {
      */
     public static final int OUTGOING_CANCELED = 44;
 
+    /**
+     * Stk Call Control modified DIAL request to USSD request.
+     * {@hide}
+     */
+    public static final int DIAL_MODIFIED_TO_USSD          = 45;
+    /**
+     * Stk Call Control modified DIAL request to SS request.
+     * {@hide}
+     */
+    public static final int DIAL_MODIFIED_TO_SS            = 46;
+    /**
+     * Stk Call Control modified DIAL request to DIAL with modified data.
+     * {@hide}
+     */
+    public static final int DIAL_MODIFIED_TO_DIAL          = 47;
+
     /** Smallest valid value for call disconnect codes. */
     public static final int MINIMUM_VALID_VALUE = NOT_DISCONNECTED;
 
-    /** Largest valid value for call disconnect codes. */
+    /** Largest valid value for call disconnect codes.
+        TODO: Not changing the max value as it will need API update. */
     public static final int MAXIMUM_VALID_VALUE = OUTGOING_CANCELED;
 
     /** Private constructor to avoid class instantiation. */
@@ -256,6 +273,12 @@ public class DisconnectCause {
             return "CDMA_CALL_LOST";
         case EXITED_ECM:
             return "EXITED_ECM";
+        case DIAL_MODIFIED_TO_USSD:
+            return "DIAL_MODIFIED_TO_USSD";
+        case DIAL_MODIFIED_TO_SS:
+            return "DIAL_MODIFIED_TO_SS";
+        case DIAL_MODIFIED_TO_DIAL:
+            return "DIAL_MODIFIED_TO_DIAL";
         case ERROR_UNSPECIFIED:
             return "ERROR_UNSPECIFIED";
         case OUTGOING_FAILURE:
