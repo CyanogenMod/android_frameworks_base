@@ -2436,6 +2436,15 @@ public final class Settings {
         public static final String COMBINED_BAR_AUTO_HIDE = "combined_bar_auto_hide";
 
         /**
+         * Whether to show the alarm icon in status bar
+         * 0: don't show the alarm
+         * 1: show the alarm
+         * default: 1
+         * @hide
+         */
+        public static final String STATUS_BAR_ALARM = "status_bar_alarm";
+
+        /**
          * Display style of AM/PM next to clock in status bar
          * 0: Normal display (Eclair stock)
          * 1: Small display (Froyo stock)
