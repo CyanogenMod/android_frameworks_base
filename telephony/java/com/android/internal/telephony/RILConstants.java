@@ -56,6 +56,15 @@ public interface RILConstants {
     int ILLEGAL_SIM_OR_ME = 15;               /* network selection failure due
                                                  to wrong SIM/ME and no
                                                  retries needed */
+    int DIAL_MODIFIED_TO_USSD = 17;           /* DIAL request modified to USSD */
+    int DIAL_MODIFIED_TO_SS = 18;             /* DIAL request modified to SS */
+    int DIAL_MODIFIED_TO_DIAL = 19;           /* DIAL request modified to DIAL with different data */
+    int USSD_MODIFIED_TO_DIAL = 20;           /* USSD request modified to DIAL */
+    int USSD_MODIFIED_TO_SS = 21;             /* USSD request modified to SS */
+    int USSD_MODIFIED_TO_USSD = 22;           /* USSD request modified to different USSD request */
+    int SS_MODIFIED_TO_DIAL = 23;             /* SS request modified to DIAL */
+    int SS_MODIFIED_TO_USSD = 24;             /* SS request modified to USSD */
+    int SS_MODIFIED_TO_SS = 25;               /* SS request modified to different SS request */
 
     /* NETWORK_MODE_* See ril.h RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE */
     int NETWORK_MODE_WCDMA_PREF     = 0; /* GSM/WCDMA (WCDMA preferred) */
@@ -312,6 +321,8 @@ cat include/telephony/ril.h | \
     int RIL_UNSOL_CELL_INFO_LIST = 1036;
     int RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED = 1037;
     int RIL_UNSOL_TETHERED_MODE_STATE_CHANGED = 1038;
+    int RIL_UNSOL_ON_SS = 1039;
+    int RIL_UNSOL_STK_CC_ALPHA_NOTIFY = 1040;
 
     int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002; /* Samsung STK */
 }
