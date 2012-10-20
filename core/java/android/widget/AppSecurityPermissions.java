@@ -102,7 +102,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
         try {
             pkgInfo = mPm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
         } catch (NameNotFoundException e) {
-            Log.w(TAG, "Could'nt retrieve permissions for package:"+packageName);
+            Log.w(TAG, "Couldn't retrieve permissions for package:"+packageName);
             return;
         }
         // Extract all user permissions
@@ -137,7 +137,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
                 sharedUid = mPm.getUidForSharedUser(pkg.mSharedUserId);
                 getAllUsedPermissions(sharedUid, permSet);
             } catch (NameNotFoundException e) {
-                Log.w(TAG, "Could'nt retrieve shared user id for:"+pkg.packageName);
+                Log.w(TAG, "Couldn't retrieve shared user id for:"+pkg.packageName);
             }
         }
         // Retrieve list of permissions
@@ -175,7 +175,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
         try {
             pkgInfo = mPm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
         } catch (NameNotFoundException e) {
-            Log.w(TAG, "Could'nt retrieve permissions for package:"+packageName);
+            Log.w(TAG, "Couldn't retrieve permissions for package:"+packageName);
             return;
         }
         if ((pkgInfo != null) && (pkgInfo.requestedPermissions != null)) {
