@@ -54,6 +54,7 @@ import java.util.List;
  */
 public class LockPatternView extends View {
     private static final String TAG = "LockPatternView";
+    private static final boolean DEBUG = false;
     // Aspect to use when rendering this view
     private static final int ASPECT_SQUARE = 0; // View will be the minimum of width/height
     private static final int ASPECT_LOCK_WIDTH = 1; // Fixed width; height will be minimum of (w,h)
@@ -613,7 +614,9 @@ public class LockPatternView extends View {
         mPatternDrawLookup[newCell.getRow()][newCell.getColumn()] = true;
         mPattern.add(newCell);
         notifyCellAdded();
-        Log.v("SMASHER816", "("+newCell.column+", "+newCell.row+")");
+        if(DEBUG) {
+            Log.v("SMASHER816", "("+newCell.column+", "+newCell.row+")");
+        }
     }
 
     // helper method to find which cell a point maps to
