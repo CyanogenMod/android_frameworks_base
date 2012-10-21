@@ -613,7 +613,6 @@ public class LockPatternView extends View {
         mPatternDrawLookup[newCell.getRow()][newCell.getColumn()] = true;
         mPattern.add(newCell);
         notifyCellAdded();
-        Log.v("SMASHER816", "("+newCell.column+", "+newCell.row+")");
     }
 
     // helper method to find which cell a point maps to
