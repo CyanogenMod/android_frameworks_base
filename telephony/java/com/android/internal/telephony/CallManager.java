@@ -18,7 +18,10 @@ package com.android.internal.telephony;
 
 import com.android.internal.telephony.sip.SipPhone;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -27,6 +30,7 @@ import android.os.RegistrantList;
 import android.os.Registrant;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -163,6 +167,20 @@ public final class CallManager {
 
     protected final RegistrantList mPostDialCharacterRegistrants
     = new RegistrantList();
+
+    private BroadcastReceiver mRingVolumeChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int streamType = intent.getIntExtra(AudioManager.EXTRA_VOLUME_STREAM_TYPE, -1);
+            if (getState() == Phone.State.RINGING && streamType == AudioManager.STREAM_RING) {
+                int oldVolume = intent.getIntExtra(AudioManager.EXTRA_PREV_VOLUME_STREAM_VALUE, -1);
+                int newVolume = intent.getIntExtra(AudioManager.EXTRA_VOLUME_STREAM_VALUE, -1);
+                if (oldVolume == 0 || newVolume == 0) {
+                    updateRingingAudioFocus(context);
+                }
+            }
+        }
+    };
 
     private CallManager() {
         mPhones = new ArrayList<Phone>();
@@ -372,18 +390,15 @@ public final class CallManager {
         if (context == null) return;
         AudioManager audioManager = (AudioManager)
                 context.getSystemService(Context.AUDIO_SERVICE);
+        Phone.State state = getState();
+        int lastAudioMode = audioManager.getMode();
 
         // change the audio mode and request/abandon audio focus according to phone state,
         // but only on audio mode transitions
-        switch (getState()) {
+        switch (state) {
             case RINGING:
-                if (audioManager.getMode() != AudioManager.MODE_RINGTONE) {
-                    // only request audio focus if the ringtone is going to be heard
-                    if (audioManager.getStreamVolume(AudioManager.STREAM_RING) > 0) {
-                        if (VDBG) Log.d(LOG_TAG, "requestAudioFocus on STREAM_RING");
-                        audioManager.requestAudioFocusForCall(AudioManager.STREAM_RING,
-                                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-                    }
+                if (lastAudioMode != AudioManager.MODE_RINGTONE) {
+                    updateRingingAudioFocus(context);
                     audioManager.setMode(AudioManager.MODE_RINGTONE);
                 }
                 break;
@@ -400,7 +415,7 @@ public final class CallManager {
                     // enable IN_COMMUNICATION audio mode instead for sipPhone
                     newAudioMode = AudioManager.MODE_IN_COMMUNICATION;
                 }
-                if (audioManager.getMode() != newAudioMode) {
+                if (lastAudioMode != newAudioMode) {
                     // request audio focus before setting the new mode
                     if (VDBG) Log.d(LOG_TAG, "requestAudioFocus on STREAM_VOICE_CALL");
                     audioManager.requestAudioFocusForCall(AudioManager.STREAM_VOICE_CALL,
@@ -409,7 +424,7 @@ public final class CallManager {
                 }
                 break;
             case IDLE:
-                if (audioManager.getMode() != AudioManager.MODE_NORMAL) {
+                if (lastAudioMode != AudioManager.MODE_NORMAL) {
                     audioManager.setMode(AudioManager.MODE_NORMAL);
                     if (VDBG) Log.d(LOG_TAG, "abandonAudioFocus");
                     // abandon audio focus after the mode has been set back to normal
@@ -418,30 +433,51 @@ public final class CallManager {
                 break;
         }
 
+        if (state == Phone.State.RINGING && lastAudioMode != AudioManager.MODE_RINGTONE) {
+            context.registerReceiver(mRingVolumeChangeReceiver,
+                    new IntentFilter(AudioManager.VOLUME_CHANGED_ACTION));
+        } else if (state != Phone.State.RINGING && lastAudioMode == AudioManager.MODE_RINGTONE) {
+            context.unregisterReceiver(mRingVolumeChangeReceiver);
+        }
+
         // Set additional audio parameters needed for incall audio
-        String[] audioParams = context.getResources().getStringArray(com.android.internal.R.array.config_telephony_set_audioparameters);
-        String[] aPValues;
+        String[] audioParams = context.getResources().getStringArray(
+                com.android.internal.R.array.config_telephony_set_audioparameters);
 
         for (String parameter : audioParams) {
-            aPValues = parameter.split("=");
+            String[] aPValues = parameter.split("=");
 
-            if(aPValues[1] == null || aPValues[1].length() == 0) {
+            if (TextUtils.isEmpty(aPValues[1])) {
                 aPValues[1] = "on";
             }
 
-            if(aPValues[2] == null || aPValues[2].length() == 0) {
+            if (TextUtils.isEmpty(aPValues[2])) {
                 aPValues[2] = "off";
             }
 
-            if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
-                Log.d(LOG_TAG, "setAudioMode(): " + aPValues[0] + "=" + aPValues[1]);
-                audioManager.setParameters(aPValues[0] + "=" + aPValues[1]);
-            } else if (audioManager.getMode() == AudioManager.MODE_NORMAL) {
-                Log.d(LOG_TAG, "setAudioMode(): " + aPValues[0] + "=" + aPValues[2]);
-                audioManager.setParameters(aPValues[0] + "=" + aPValues[2]);
-            }
+            String value = (audioManager.getMode() == AudioManager.MODE_IN_CALL)
+                    ? aPValues[1] : aPValues[2];
+            String param = aPValues[0] + "=" + value;
+
+            Log.d(LOG_TAG, "setAudioMode(): " + param);
+            audioManager.setParameters(param);
         }
 
+    }
+
+    private void updateRingingAudioFocus(Context context) {
+        AudioManager audioManager = (AudioManager)
+                context.getSystemService(Context.AUDIO_SERVICE);
+        int hint = audioManager.getStreamVolume(AudioManager.STREAM_RING) == 0
+                // make user aware of an incoming call by
+                // attenuating the music he may be listening to
+                ? AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK
+                // if we're going to play the ring tone, silence
+                // other sound sources
+                : AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
+
+        if (VDBG) Log.d(LOG_TAG, "requestAudioFocus on STREAM_RING");
+        audioManager.requestAudioFocusForCall(AudioManager.STREAM_RING, hint);
     }
 
     private Context getContext() {
