@@ -369,6 +369,9 @@ public class ActivityManager {
      * @hide
      */
     static public boolean isHighEndGfx(Display display) {
+        if(SystemProperties.getBoolean("persist.sys.use_high_end_gfx", false)) {
+            return true;
+        }
         MemInfoReader reader = new MemInfoReader();
         reader.readMemInfo();
         if (reader.getTotalSize() >= (512*1024*1024)) {
