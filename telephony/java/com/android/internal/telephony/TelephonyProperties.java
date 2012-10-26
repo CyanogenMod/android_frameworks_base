@@ -228,4 +228,10 @@ public interface TelephonyProperties
      * Property to store default subscription.
      */
     static final String PROPERTY_DEFAULT_SUBSCRIPTION = "persist.default.subscription";
+
+    /**
+     * Property to enable MMS Mode.
+     * Type: string ( default = silent, enable to = prompt )
+     */
+    static final String PROPERTY_MMS_TRANSACTION = "mms.transaction";
 }
