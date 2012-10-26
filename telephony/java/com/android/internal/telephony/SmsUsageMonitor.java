@@ -94,10 +94,11 @@ public class SmsUsageMonitor {
      *
      * @param appName the package name of the app requesting to send an SMS
      * @param smsWaiting the number of new messages desired to send
+     * @param recordNewUsage whether to log this check as a message affecting usage
      * @return true if application is allowed to send the requested number
      *  of new sms messages
      */
-    public boolean check(String appName, int smsWaiting) {
+    public boolean check(String appName, int smsWaiting, boolean recordNewUsage) {
         synchronized (mSmsStamp) {
             removeExpiredTimestamps();
 
@@ -107,7 +108,28 @@ public class SmsUsageMonitor {
                 mSmsStamp.put(appName, sentList);
             }
 
-            return isUnderLimit(sentList, smsWaiting);
+            return isUnderLimit(sentList, smsWaiting, recordNewUsage);
+        }
+    }
+
+    /**
+     * Provide a method for external modules to clear the array that is tracking
+     * messages sent over time.
+     *
+     * @param appName the package name of the app requesting to send an SMS
+     * @return true if appName was found in list, if not, there was an error...
+     */
+    public boolean flush(String appName) {
+        synchronized (mSmsStamp) {
+            removeExpiredTimestamps();
+
+            ArrayList<Long> sentList = mSmsStamp.get(appName);
+            if (sentList == null) {
+                return false;
+            }
+            
+            sentList.clear();
+            return true;
         }
     }
 
@@ -130,7 +152,7 @@ public class SmsUsageMonitor {
         }
     }
 
-    private boolean isUnderLimit(ArrayList<Long> sent, int smsWaiting) {
+    private boolean isUnderLimit(ArrayList<Long> sent, int smsWaiting, boolean recordNewUsage) {
         Long ct = System.currentTimeMillis();
         long beginCheckPeriod = ct - mCheckPeriod;
 
@@ -141,11 +163,14 @@ public class SmsUsageMonitor {
         }
 
         if ((sent.size() + smsWaiting) <= mMaxAllowed) {
-            for (int i = 0; i < smsWaiting; i++ ) {
-                sent.add(ct);
+            if(recordNewUsage == true){
+                for (int i = 0; i < smsWaiting; i++ ) {
+                  sent.add(ct);
+                }
             }
             return true;
         }
+
         return false;
     }
 

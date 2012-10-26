@@ -94,6 +94,9 @@ public abstract class SMSDispatcher extends Handler {
             "pdu"
     };
 
+    /** String used to store the call app name in the event of usage confirmation requirement */
+    private static String storedAppPackage = null;
+
     /** Query projection for combining concatenated message segments. */
     private static final String[] PDU_SEQUENCE_PORT_PROJECTION = new String[] {
             "pdu",
@@ -167,6 +170,9 @@ public abstract class SMSDispatcher extends Handler {
      * any receiver(s) to grab its own wake lock.
      */
     private static final int WAKE_LOCK_TIMEOUT = 5000;
+
+    private static final boolean RECORD_USAGE_ON_CHECK = true;
+    private static final boolean DONT_RECORD_USAGE_ON_CHECK = false;
 
     /* Flags indicating whether the current device allows sms service */
     protected boolean mSmsCapable = true;
@@ -305,6 +311,12 @@ public abstract class SMSDispatcher extends Handler {
         case EVENT_SEND_CONFIRMED_SMS:
         {
             SmsTracker tracker = (SmsTracker) msg.obj;
+
+            // User confirmed send OK for this app, flush the monitor array so the
+            // warning is not repeatedly popped up every SMS until timer expires.
+            Log.d(TAG, String.format("Flushing usage counter for app:%s.",tracker.mAppPackage));
+            mUsageMonitor.flush(tracker.mAppPackage);
+
             if (tracker.isMultipart()) {
                 sendMultipartSms(tracker);
             } else {
@@ -325,6 +337,7 @@ public abstract class SMSDispatcher extends Handler {
                 }
             }
             mPendingTrackerCount--;
+            storedAppPackage = null;
             break;
         }
         }
@@ -807,8 +820,62 @@ public abstract class SMSDispatcher extends Handler {
         int refNumber = getNextConcatenatedRef() & 0x00FF;
         int msgCount = parts.size();
         int encoding = android.telephony.SmsMessage.ENCODING_UNKNOWN;
+        String appPackage;
 
         mRemainingMessages = msgCount;
+
+        // Get calling app package name via UID from Binder call
+        if (storedAppPackage == null){
+            PackageManager pm = mContext.getPackageManager();
+            String[] packageNames = pm.getPackagesForUid(Binder.getCallingUid());
+
+            if (packageNames == null || packageNames.length == 0) {
+                // Refuse to send SMS if we can't get the calling package name.
+                Log.e(TAG, "Can't get calling app package name: refusing to send SMS");
+                if (sentIntents != null) {
+                    try {
+                        sentIntents.get(0).send(RESULT_ERROR_GENERIC_FAILURE);
+                    } catch (CanceledException ex) {
+                        Log.e(TAG, "failed to send error result");
+                    }
+                }
+                return;
+            }
+
+            appPackage = packageNames[0];
+        }else{
+            // if we are here via the path that takes us through the usage warning 
+            // dialog, then we would have stored the appPackage below on a previous pass
+            appPackage = storedAppPackage;
+        }
+
+        Log.d(TAG, String.format("App:%s, sending %d part msg that breaks usage.",appPackage, msgCount));
+
+        //Check if any part of this message will break the SMSUsage limits
+        if (!mUsageMonitor.check(appPackage, msgCount, DONT_RECORD_USAGE_ON_CHECK)){
+            // one of the parts in this message will break usage boundary, prepare for 
+            // sendMultipartSMS and throw a message to get user approval 
+
+            // create a map object to hold multi-part info
+            HashMap<String, Object> map = new HashMap<String, Object>();
+
+            // Fill the map element with the data required for sendMultipartSMS()
+            map.put("destination", destAddr);
+            map.put("scaddress",scAddr);
+            map.put("parts",parts);
+            map.put("sentIntents", sentIntents);
+            map.put("deliveryIntents", deliveryIntents);
+
+            // create a special multi-part tracker
+            SmsTracker tracker = new SmsTracker(map, sentIntents.get(0), deliveryIntents.get(0), appPackage, destAddr);
+
+            // store the calling app as we will lose this through the confirm dialog process
+            storedAppPackage = appPackage;
+            // throw the message to get approval from user before sending...
+            sendMessage(obtainMessage(EVENT_SEND_LIMIT_REACHED_CONFIRMATION, tracker));
+
+            return;
+        }
 
         TextEncodingDetails[] encodingForParts = new TextEncodingDetails[msgCount];
         for (int i = 0; i < msgCount; i++) {
@@ -856,6 +923,9 @@ public abstract class SMSDispatcher extends Handler {
                     sentIntent, deliveryIntent, (i == (msgCount - 1)));
         }
 
+        // clean up storedAppPackage after individual packets sent if req'd
+        storedAppPackage = null;
+
     }
 
     /**
@@ -889,6 +959,9 @@ public abstract class SMSDispatcher extends Handler {
      */
     protected void sendRawPdu(byte[] smsc, byte[] pdu, PendingIntent sentIntent,
             PendingIntent deliveryIntent, String destAddr) {
+
+        String appPackage;
+
         if (mSmsSendDisabled) {
             if (sentIntent != null) {
                 try {
@@ -912,24 +985,31 @@ public abstract class SMSDispatcher extends Handler {
         map.put("smsc", smsc);
         map.put("pdu", pdu);
 
-        // Get calling app package name via UID from Binder call
-        PackageManager pm = mContext.getPackageManager();
-        String[] packageNames = pm.getPackagesForUid(Binder.getCallingUid());
+        if (storedAppPackage == null){
+            // Get calling app package name via UID from Binder call
+            PackageManager pm = mContext.getPackageManager();
+            String[] packageNames = pm.getPackagesForUid(Binder.getCallingUid());
 
-        if (packageNames == null || packageNames.length == 0) {
-            // Refuse to send SMS if we can't get the calling package name.
-            Log.e(TAG, "Can't get calling app package name: refusing to send SMS");
-            if (sentIntent != null) {
-                try {
-                    sentIntent.send(RESULT_ERROR_GENERIC_FAILURE);
-                } catch (CanceledException ex) {
-                    Log.e(TAG, "failed to send error result");
+            if (packageNames == null || packageNames.length == 0) {
+                // Refuse to send SMS if we can't get the calling package name.
+                Log.e(TAG, "Can't get calling app package name: refusing to send SMS");
+                if (sentIntent != null) {
+                    try {
+                        sentIntent.send(RESULT_ERROR_GENERIC_FAILURE);
+                    } catch (CanceledException ex) {
+                        Log.e(TAG, "failed to send error result");
+                    }
                 }
+                return;
             }
-            return;
-        }
 
-        String appPackage = packageNames[0];
+            appPackage = packageNames[0];
+        }else{
+            // We are in process on a multipart message AFTER usage monitor confirmation
+            // so use the stored original storedAppPackage which is lost through the 
+            // message handling process
+            appPackage = storedAppPackage;
+        }
 
         // Strip non-digits from destination phone number before checking for short codes
         // and before displaying the number to the user if confirmation is required.
@@ -937,7 +1017,7 @@ public abstract class SMSDispatcher extends Handler {
                 PhoneNumberUtils.extractNetworkPortion(destAddr));
 
         // check for excessive outgoing SMS usage by this app
-        if (!mUsageMonitor.check(appPackage, SINGLE_PART_SMS)) {
+        if (!mUsageMonitor.check(appPackage, SINGLE_PART_SMS, RECORD_USAGE_ON_CHECK)) {
             sendMessage(obtainMessage(EVENT_SEND_LIMIT_REACHED_CONFIRMATION, tracker));
             return;
         }
