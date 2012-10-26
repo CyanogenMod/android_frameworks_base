@@ -60,7 +60,8 @@ public class CircleBattery extends ImageView {
     private boolean mPercentage;    // whether or not to show percentage number
     private boolean mIsCharging;    // whether or not device is currently charging
     private int     mLevel;         // current battery level
-    private int     mAnimLevel;     // current level of charging animation
+    private int     mAnimOffset;    // current level of charging animation
+    private boolean mIsAnimating;   // stores charge-animation status to reliably remove callbacks
 
     private int     mCircleSize;    // draw size of circle. read rather complicated from
                                     // another status bar icon, so it fits the icon size
@@ -74,7 +75,6 @@ public class CircleBattery extends ImageView {
     private Paint   mPaintGray;
     private Paint   mPaintSystem;
     private Paint   mPaintRed;
-    private Paint   mPaintAnim;
 
     // runnable to invalidate view via mHandler.postDelayed() call
     private final Runnable mInvalidate = new Runnable() {
@@ -196,7 +196,6 @@ public class CircleBattery extends ImageView {
         mPaintGray = new Paint(mPaintFont);
         mPaintSystem = new Paint(mPaintFont);
         mPaintRed = new Paint(mPaintFont);
-        mPaintAnim = new Paint(mPaintFont);
 
         mPaintFont.setColor(res.getColor(R.color.holo_blue_dark));
         mPaintSystem.setColor(res.getColor(R.color.holo_blue_dark));
@@ -204,7 +203,6 @@ public class CircleBattery extends ImageView {
         // do not want to use static 0x404040 color value. would break theming.
         mPaintGray.setColor(res.getColor(R.color.darker_gray));
         mPaintRed.setColor(res.getColor(R.color.holo_red_light));
-        mPaintAnim.setColor(res.getColor(R.color.holo_blue_dark));
 
         // font needs some extra settings
         mPaintFont.setTextAlign(Align.CENTER);
@@ -255,24 +253,19 @@ public class CircleBattery extends ImageView {
         if (mLevel <= 14) {
             usePaint = mPaintRed;
         }
-        mPaintAnim.setColor(usePaint.getColor());
 
         // pad circle percentage to 100% once it reaches 97%
         // for one, the circle looks odd with a too small gap,
         // for another, some phones never reach 100% due to hardware design
         int padLevel = mLevel;
-        if(mLevel>=97) {
+        if (mLevel >= 97) {
             padLevel=100;
         }
 
         // draw thin gray ring first
         canvas.drawArc(mCircleRect, 270, 360, false, mPaintGray);
-        // if charging, draw thin animated colored ring next
-        if (mIsCharging){
-            canvas.drawArc(mCircleRect, 270, 3.6f * mAnimLevel, false, mPaintAnim);
-        }
         // draw thin colored ring-level last
-        canvas.drawArc(mCircleRect, 270, 3.6f * padLevel, false, usePaint);
+        canvas.drawArc(mCircleRect, 270+mAnimOffset, 3.6f * padLevel, false, usePaint);
         // if chosen by options, draw percentage text in the middle
         // always skip percentage when 100, so layout doesnt break
         if (mLevel < 100 && mPercentage){
@@ -287,22 +280,25 @@ public class CircleBattery extends ImageView {
      * uses mInvalidate for delayed invalidate() callbacks
      */
     private void updateChargeAnim() {
-        if (!mIsCharging) {
-            if (mAnimLevel != -1) {
-                mAnimLevel = -1;
+        if (!mIsCharging || mLevel >= 97) {
+            if (mIsAnimating) {
+                mIsAnimating = false;
+                mAnimOffset = 0;
                 mHandler.removeCallbacks(mInvalidate);
             }
             return;
         }
 
-        if (mAnimLevel > 100 || mAnimLevel < 0) {
-            mAnimLevel = mLevel;
+        mIsAnimating = true;
+
+        if (mAnimOffset > 360) {
+            mAnimOffset = 0;
         } else {
-            mAnimLevel += 6;
+            mAnimOffset += 3;
         }
 
         mHandler.removeCallbacks(mInvalidate);
-        mHandler.postDelayed(mInvalidate, 750);
+        mHandler.postDelayed(mInvalidate, 50);
     }
 
     /***
@@ -321,7 +317,6 @@ public class CircleBattery extends ImageView {
         mPaintRed.setStrokeWidth(strokeWidth);
         mPaintSystem.setStrokeWidth(strokeWidth);
         mPaintGray.setStrokeWidth(strokeWidth / 3.5f);
-        mPaintAnim.setStrokeWidth(strokeWidth / 3.5f);
 
         // calculate rectangle for drawArc calls
         int pLeft = getPaddingLeft();
