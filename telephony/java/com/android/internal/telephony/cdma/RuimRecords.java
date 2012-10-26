@@ -231,9 +231,9 @@ public final class RuimRecords extends IccRecords {
                 if (mImsi != null && (mImsi.length() < 6 || mImsi.length() > 15)) {
                     loge("invalid IMSI " + mImsi);
                     mImsi = null;
+                } else {
+                    log("IMSI: " + mImsi.substring(0, 6) + "xxxxxxxxx");
                 }
-
-                log("IMSI: " + mImsi.substring(0, 6) + "xxxxxxxxx");
 
                 String operatorNumeric = getRUIMOperatorNumeric();
                 if (operatorNumeric != null) {
