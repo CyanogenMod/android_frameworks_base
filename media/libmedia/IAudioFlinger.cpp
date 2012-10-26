@@ -67,6 +67,10 @@ enum {
 #endif
     SUSPEND_OUTPUT,
     RESTORE_OUTPUT,
+#ifdef STE_AUDIO
+    ADD_INPUT_CLIENT,
+    REMOVE_INPUT_CLIENT,
+#endif
     OPEN_INPUT,
     CLOSE_INPUT,
     SET_STREAM_OUTPUT,
@@ -81,6 +85,9 @@ enum {
     GET_EFFECT_DESCRIPTOR,
     CREATE_EFFECT,
     MOVE_EFFECTS,
+#ifdef STE_AUDIO
+    READ_INPUT,
+#endif
 #ifdef WITH_QCOM_LPA
     SET_FM_VOLUME,
     CREATE_SESSION,
@@ -567,11 +574,35 @@ public:
         return reply.readInt32();
     }
 
+#ifdef STE_AUDIO
+    virtual uint32_t *addInputClient(uint32_t clientId)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioFlinger::getInterfaceDescriptor());
+        data.writeInt32(clientId);
+        remote()->transact(ADD_INPUT_CLIENT, data, &reply);
+        return (uint32_t*) reply.readIntPtr();
+    }
+
+    virtual status_t removeInputClient(uint32_t *pClientId)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioFlinger::getInterfaceDescriptor());
+        data.writeIntPtr((intptr_t)pClientId);
+        remote()->transact(REMOVE_INPUT_CLIENT, data, &reply);
+        return reply.readInt32();
+    }
+#endif
     virtual int openInput(uint32_t *pDevices,
                             uint32_t *pSamplingRate,
                             uint32_t *pFormat,
                             uint32_t *pChannels,
+#ifdef STE_AUDIO
+                            uint32_t acoustics,
+                            uint32_t *pInputClientId)
+#else
                             uint32_t acoustics)
+#endif
     {
         Parcel data, reply;
         uint32_t devices = pDevices ? *pDevices : 0;
@@ -585,6 +616,9 @@ public:
         data.writeInt32(format);
         data.writeInt32(channels);
         data.writeInt32(acoustics);
+#ifdef STE_AUDIO
+        data.writeIntPtr((intptr_t)pInputClientId);
+#endif
         remote()->transact(OPEN_INPUT, data, &reply);
         int input = reply.readInt32();
         devices = reply.readInt32();
@@ -598,6 +632,17 @@ public:
         return input;
     }
 
+#ifdef STE_AUDIO
+    virtual status_t closeInput(int input, uint32_t *inputClientId)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioFlinger::getInterfaceDescriptor());
+        data.writeInt32(input);
+        data.writeIntPtr((intptr_t) inputClientId);
+        remote()->transact(CLOSE_INPUT, data, &reply);
+        return reply.readInt32();
+    }
+#else
     virtual status_t closeInput(int input)
     {
         Parcel data, reply;
@@ -606,7 +651,7 @@ public:
         remote()->transact(CLOSE_INPUT, data, &reply);
         return reply.readInt32();
     }
-
+#endif
     virtual status_t setStreamOutput(uint32_t stream, int output)
     {
         Parcel data, reply;
@@ -655,6 +700,20 @@ public:
         return reply.readInt32();
     }
 
+#ifdef STE_AUDIO
+    virtual size_t readInput(uint32_t *input, uint32_t inputClientId, void *buffer, uint32_t bytes, uint32_t *pOverwrittenBytes)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioFlinger::getInterfaceDescriptor());
+        data.writeIntPtr((intptr_t) input);
+        data.writeInt32(inputClientId);
+        data.writeIntPtr((intptr_t) buffer);
+        data.writeInt32(bytes);
+        data.writeIntPtr((intptr_t) pOverwrittenBytes);
+        remote()->transact(READ_INPUT, data, &reply);
+        return reply.readInt32();
+    }
+#endif
     virtual int newAudioSessionId()
     {
         Parcel data, reply;
@@ -1092,6 +1151,20 @@ status_t BnAudioFlinger::onTransact(
             reply->writeInt32(restoreOutput(data.readInt32()));
             return NO_ERROR;
         } break;
+#ifdef STE_AUDIO
+        case ADD_INPUT_CLIENT: {
+            CHECK_INTERFACE(IAudioFlinger, data, reply);
+            uint32_t clientId = data.readInt32();
+            reply->writeIntPtr((intptr_t)addInputClient(clientId));
+            return NO_ERROR;
+        } break;
+        case REMOVE_INPUT_CLIENT: {
+            CHECK_INTERFACE(IAudioFlinger, data, reply);
+            uint32_t *pClientId = (uint32_t*) data.readIntPtr();
+            reply->writeInt32(removeInputClient(pClientId));
+            return NO_ERROR;
+        } break;
+#endif
         case OPEN_INPUT: {
             CHECK_INTERFACE(IAudioFlinger, data, reply);
             uint32_t devices = data.readInt32();
@@ -1099,12 +1172,19 @@ status_t BnAudioFlinger::onTransact(
             uint32_t format = data.readInt32();
             uint32_t channels = data.readInt32();
             uint32_t acoutics = data.readInt32();
-
+#ifdef STE_AUDIO
+            uint32_t *inputClientId = (uint32_t*) data.readIntPtr();
+#endif
             int input = openInput(&devices,
                                      &samplingRate,
                                      &format,
                                      &channels,
+#ifdef STE_AUDIO
+                                     acoutics,
+                                     inputClientId);
+#else
                                      acoutics);
+#endif
             reply->writeInt32(input);
             reply->writeInt32(devices);
             reply->writeInt32(samplingRate);
@@ -1114,7 +1194,13 @@ status_t BnAudioFlinger::onTransact(
         } break;
         case CLOSE_INPUT: {
             CHECK_INTERFACE(IAudioFlinger, data, reply);
+#ifdef STE_AUDIO
+            uint32_t input = data.readInt32();
+            uint32_t *inputClientId = (uint32_t*) data.readIntPtr();
+            reply->writeInt32(closeInput(input, inputClientId));
+#else
             reply->writeInt32(closeInput(data.readInt32()));
+#endif
             return NO_ERROR;
         } break;
         case SET_STREAM_OUTPUT: {
@@ -1227,6 +1313,18 @@ status_t BnAudioFlinger::onTransact(
             reply->writeInt32(moveEffects(session, srcOutput, dstOutput));
             return NO_ERROR;
         } break;
+#ifdef STE_AUDIO
+        case READ_INPUT: {
+            CHECK_INTERFACE(IAudioFlinger, data, reply);
+            uint32_t* input = (uint32_t*) data.readIntPtr();
+            uint32_t inputClientId = data.readInt32();
+            void* buffer = (void*) data.readIntPtr();
+            uint32_t bytes = data.readInt32();
+            uint32_t *pOverwrittenBytes = (uint32_t*) data.readIntPtr();
+            reply->writeInt32(readInput(input, inputClientId, buffer, bytes, pOverwrittenBytes));
+            return NO_ERROR;
+        } break;
+#endif
         default:
             return BBinder::onTransact(code, data, reply, flags);
     }

@@ -151,13 +151,22 @@ public:
     virtual status_t suspendOutput(int output) = 0;
     virtual status_t restoreOutput(int output) = 0;
 
+#ifdef STE_AUDIO
+    virtual uint32_t *addInputClient(uint32_t clientId) = 0;
+    virtual status_t removeInputClient(uint32_t *pClientId) = 0;
+#endif
     virtual int openInput(uint32_t *pDevices,
                                     uint32_t *pSamplingRate,
                                     uint32_t *pFormat,
                                     uint32_t *pChannels,
+#ifdef STE_AUDIO
+                                    uint32_t acoustics,
+                                    uint32_t *pInputClientId = NULL) = 0;
+    virtual status_t closeInput(int input, uint32_t* inputClientId = NULL) = 0;
+#else
                                     uint32_t acoustics) = 0;
     virtual status_t closeInput(int input) = 0;
-
+#endif
     virtual status_t setStreamOutput(uint32_t stream, int output) = 0;
 
     virtual status_t setVoiceVolume(float volume) = 0;
@@ -190,6 +199,9 @@ public:
     virtual status_t moveEffects(int session, int srcOutput, int dstOutput) = 0;
 #ifdef WITH_QCOM_LPA
     virtual status_t deregisterClient(const sp<IAudioFlingerClient>& client) { return false; };
+#endif
+#ifdef STE_AUDIO
+    virtual size_t readInput(uint32_t *input, uint32_t inputClientId, void *buffer, uint32_t bytes, uint32_t *pOverwrittenBytes) = 0;
 #endif
 };
 
