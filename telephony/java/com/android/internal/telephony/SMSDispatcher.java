@@ -305,6 +305,11 @@ public abstract class SMSDispatcher extends Handler {
         case EVENT_SEND_CONFIRMED_SMS:
         {
             SmsTracker tracker = (SmsTracker) msg.obj;
+
+            // User confirmed send OK for this app, flush the monitor array so the 
+            // warning is not repeatedly popped up every SMS until timer expires.
+            mUsageMonitor.flush(tracker.mAppPackage);
+
             if (tracker.isMultipart()) {
                 sendMultipartSms(tracker);
             } else {

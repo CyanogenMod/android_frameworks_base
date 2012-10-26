@@ -112,6 +112,30 @@ public class SmsUsageMonitor {
     }
 
     /**
+     * Provide a method for external modules to clear the array that is tracking
+     * messages sent over time. 
+     *
+     * @param appName the package name of the app requesting to send an SMS
+     * @return true if appName was found in list, if not, there was an error...
+     */
+    public boolean flush(String appName) {
+        synchronized (mSmsStamp) {
+            removeExpiredTimestamps();
+
+            ArrayList<Long> sentList = mSmsStamp.get(appName);
+            if (sentList == null) {
+                return false;
+            }
+            else{
+                while (!sentList.isEmpty()) {
+                    sentList.remove(0);
+                }
+                return true;
+            }
+        }
+    }
+
+    /**
      * Remove keys containing only old timestamps. This can happen if an SMS app is used
      * to send messages and then uninstalled.
      */
