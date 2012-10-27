@@ -2699,6 +2699,24 @@ public final class Settings {
         public static final String LOCKSCREEN_CLOCK_ALIGN = "lockscreen_clock_align";
 
         /**
+         * Action for long-pressing home button on lock screen
+         * @hide
+         */
+        public static final String LOCKSCREEN_LONG_HOME_ACTION = "lockscreen_long_home_action";
+
+        /**
+         * Action for long-pressing menu button on lock screen
+         * @hide
+         */
+        public static final String LOCKSCREEN_LONG_MENU_ACTION = "lockscreen_long_menu_action";
+
+        /**
+         * Action for long-pressing search button on lock screen
+         * @hide
+         */
+        public static final String LOCKSCREEN_LONG_SEARCH_ACTION = "lockscreen_long_search_action";
+
+        /**
          * Show the pending notification counts as overlays on the status bar
          * @hide
          */
