@@ -2493,10 +2493,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
                 // retrieve current volume for device
                 String name = getSettingNameForDevice(false /* lastAudible */, device);
-                // if no volume stored for current stream and device, use default volume if default
-                // device, continue otherwise
-                int defaultIndex = (device == AudioSystem.DEVICE_OUT_DEFAULT) ?
-                                        AudioManager.DEFAULT_STREAM_VOLUME[mStreamType] : -1;
+                // if no volume stored for current stream and device, use default volume
+                int defaultIndex = AudioManager.DEFAULT_STREAM_VOLUME[mStreamType];
                 int index = Settings.System.getInt(mContentResolver, name, defaultIndex);
                 if (index == -1) {
                     continue;
