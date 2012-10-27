@@ -21,6 +21,7 @@ import android.content.res.Configuration;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.security.KeyStore;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.MotionEvent;
@@ -210,6 +211,26 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     public void setEnableFallback(boolean state) {
         if (DEBUG) Log.d(TAG, "setEnableFallback(" + state + ")");
         mEnableFallback = state;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                || keyCode == KeyEvent.KEYCODE_HOME
+                || keyCode == KeyEvent.KEYCODE_MENU) {
+            event.startTracking();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (LockScreen.handleKeyLongPress(getContext(), keyCode)) {
+            mCallback.pokeWakelock();
+            return true;
+        }
+        return false;
     }
 
     @Override

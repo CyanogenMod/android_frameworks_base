@@ -38,6 +38,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.media.AudioManager;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -735,11 +736,107 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                || keyCode == KeyEvent.KEYCODE_HOME
+                || keyCode == KeyEvent.KEYCODE_MENU) {
+            event.startTracking();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) ||
             (keyCode == KeyEvent.KEYCODE_HOME && mHomeUnlockScreen)) {
             mCallback.goToUnlockScreen();
         }
         return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (handleKeyLongPress(mContext, keyCode)) {
+            mCallback.pokeWakelock();
+            return true;
+        }
+        return false;
+    }
+
+    private static final int ACTION_RESULT_RUN = 0;
+    private static final int ACTION_RESULT_NOTRUN = 1;
+
+    private static int runAction(Context context, String uri) {
+        if ("FLASHLIGHT".equals(uri)) {
+            context.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
+            return ACTION_RESULT_RUN;
+        } else if ("NEXT".equals(uri)) {
+            sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_NEXT);
+            return ACTION_RESULT_RUN;
+        } else if ("PREVIOUS".equals(uri)) {
+            sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+            return ACTION_RESULT_RUN;
+        } else if ("PLAYPAUSE".equals(uri)) {
+            sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+            return ACTION_RESULT_RUN;
+        } else if ("SOUND".equals(uri)) {
+            toggleSilentMode(context);
+            return ACTION_RESULT_RUN;
+        }
+
+        return ACTION_RESULT_NOTRUN;
+    }
+
+    public static boolean handleKeyLongPress(Context context, int keyCode) {
+        String action = null;
+
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                action = Settings.System.LOCKSCREEN_LONG_BACK_ACTION;
+                break;
+            case KeyEvent.KEYCODE_HOME:
+                action = Settings.System.LOCKSCREEN_LONG_HOME_ACTION;
+                break;
+            case KeyEvent.KEYCODE_MENU:
+                action = Settings.System.LOCKSCREEN_LONG_MENU_ACTION;
+                break;
+        }
+
+        if (action != null) {
+            String uri = Settings.System.getString(context.getContentResolver(), action);
+            if (uri != null && runAction(context, uri) != ACTION_RESULT_NOTRUN) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void sendMediaButtonEvent(Context context, int code) {
+        long eventtime = SystemClock.uptimeMillis();
+
+        Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+        KeyEvent downEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_DOWN, code, 0);
+        downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
+        context.sendOrderedBroadcast(downIntent, null);
+
+        Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+        KeyEvent upEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_UP, code, 0);
+        upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
+        context.sendOrderedBroadcast(upIntent, null);
+    }
+
+    private static void toggleSilentMode(Context context) {
+        final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        final Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        final boolean hasVib = vib == null ? false : vib.hasVibrator();
+        if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+            am.setRingerMode(hasVib
+                ? AudioManager.RINGER_MODE_VIBRATE
+                : AudioManager.RINGER_MODE_SILENT);
+        } else {
+            am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        }
     }
 
     void updateConfiguration() {
