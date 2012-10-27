@@ -19,6 +19,8 @@ package com.android.internal.telephony;
 import android.os.*;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Iterator;
 
 /**
  * {@hide}
@@ -48,7 +50,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     static protected final int TYPE_EF  = 4;
 
     // size of GET_RESPONSE for EF's
-    static protected final int GET_RESPONSE_EF_SIZE_BYTES = 15;
+    static protected final int GET_RESPONSE_EF_SIZE_BYTES = 0;
     static protected final int GET_RESPONSE_EF_IMG_SIZE_BYTES = 10;
 
     // Byte order received in response to COMMAND_GET_RESPONSE
@@ -71,6 +73,19 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     static protected final int RESPONSE_DATA_STRUCTURE = 13;
     static protected final int RESPONSE_DATA_RECORD_LENGTH = 14;
 
+    // USIM responses
+    static protected final long RESPONSE_DATA_TLV_TAG = 0x62;
+    static protected final long REPOSNSE_DATA_TLV_FILE_DESC_TAG = 0x82;
+    static protected final long RESPONSE_DATA_TLV_FILE_SIZE_TAG = 0x80;
+
+    // 11.1.1.4.3 of ETSI TS 102 221
+    static protected final int RESPONSE_DATA_TLV_RECORD_SIZE_1 = 2;
+    static protected final int RESPONSE_DATA_TLV_RECORD_SIZE_2 = 3;
+    static protected final int RESPONSE_DATA_TLV_RECORD_LENGTH = 4;
+
+    // 11.1.1.4.1 of ETSI TS 102 221
+    static protected final int RESPONSE_DATA_TLV_FILE_SIZE_1 = 0;
+    static protected final int RESPONSE_DATA_TLV_FILE_SIZE_2 = 1;
 
     //***** Events
 
@@ -344,17 +359,39 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
 
                 data = result.payload;
 
-                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE] ||
-                    EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
-                    throw new IccFileTypeMismatch();
-                }
-
                 recordSize = new int[3];
-                recordSize[0] = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
-                recordSize[1] = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
-                       + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
-                recordSize[2] = recordSize[1] / recordSize[0];
+                if (data[0] ==RESPONSE_DATA_TLV_TAG) {
+                    TlvParser parser = new TlvParser(1, 1, 2);  
+                    parser.parse(data);
 
+                    byte[] valueDescTag=parser.getValueOfTag(REPOSNSE_DATA_TLV_FILE_DESC_TAG);
+                    if(valueDescTag==null || valueDescTag.length!=5){
+                        throw new IccFileTypeMismatch();
+                    }
+
+                    byte[] valueSizeTag=parser.getValueOfTag(RESPONSE_DATA_TLV_FILE_SIZE_TAG);
+                    if(valueSizeTag==null || valueSizeTag.length!=2){
+                        throw new IccFileTypeMismatch();
+                    }
+
+                    recordSize[0] = ((valueDescTag[RESPONSE_DATA_TLV_RECORD_SIZE_1] & 0xff) << 8) 
+                        + (valueDescTag[RESPONSE_DATA_TLV_RECORD_SIZE_2] & 0xff);
+                    recordSize[1] = ((valueSizeTag[RESPONSE_DATA_TLV_FILE_SIZE_1] & 0xff) << 8) 
+                        + (valueSizeTag[RESPONSE_DATA_TLV_FILE_SIZE_2] & 0xff);
+                    recordSize[2] = (valueDescTag[RESPONSE_DATA_TLV_RECORD_LENGTH] & 0xff);
+		            logd("Tlv: fileSize:"+recordSize[1]+" recordSize:"+recordSize[0]+" recordCount:" +recordSize[2]);                    
+
+                } else {
+                    if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE] ||
+                        EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                        throw new IccFileTypeMismatch();
+                    }
+
+                    recordSize[0] = data[RESPONSE_DATA_RECORD_LENGTH] & 0xff;
+                    recordSize[1] = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                       + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+                    recordSize[2] = recordSize[1] / recordSize[0];
+                }
                 sendResult(response, recordSize, null);
                 break;
              case EVENT_GET_RECORD_SIZE_DONE:
@@ -379,20 +416,40 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                 fileid = lc.efid;
                 recordNum = lc.recordNum;
 
-                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
-                    throw new IccFileTypeMismatch();
-                }
+                if (data[0] == RESPONSE_DATA_TLV_TAG) {
+                    TlvParser parser = new TlvParser(1, 1, 2);  
+                    parser.parse(data);
 
-                if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
-                    throw new IccFileTypeMismatch();
-                }
+                    byte[] valueDescTag=parser.getValueOfTag(REPOSNSE_DATA_TLV_FILE_DESC_TAG);
+                    if(valueDescTag==null || valueDescTag.length!=5){
+                        throw new IccFileTypeMismatch();
+                    }
 
-                lc.recordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
+                    byte[] valueSizeTag=parser.getValueOfTag(RESPONSE_DATA_TLV_FILE_SIZE_TAG);
+                    if(valueSizeTag==null || valueSizeTag.length!=2){
+                        throw new IccFileTypeMismatch();
+                    }
 
-                size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                    size = ((valueSizeTag[RESPONSE_DATA_TLV_FILE_SIZE_1] & 0xff) << 8) 
+                        + (valueSizeTag[RESPONSE_DATA_TLV_FILE_SIZE_2] & 0xff);
+                    lc.recordSize = ((valueDescTag[RESPONSE_DATA_TLV_RECORD_SIZE_1] & 0xff) << 8) 
+                        + (valueDescTag[RESPONSE_DATA_TLV_RECORD_SIZE_2] & 0xff);
+                    lc.countRecords = (valueDescTag[RESPONSE_DATA_TLV_RECORD_LENGTH] & 0xff);
+		            logd("Tlv: fileSize:"+size+" recordSize:" +lc.recordSize+" recordCount:" +lc.countRecords);                    
+
+                } else {
+                    if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE] ||
+                        EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                        throw new IccFileTypeMismatch();
+                    }
+
+                    lc.recordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xff;
+
+                    size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
                        + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
 
-                lc.countRecords = size / lc.recordSize;
+                    lc.countRecords = size / lc.recordSize;
+                }
 
                  if (lc.loadAll) {
                      lc.results = new ArrayList<byte[]>(lc.countRecords);
@@ -425,16 +482,27 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
 
                 fileid = msg.arg1;
 
-                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
-                    throw new IccFileTypeMismatch();
-                }
+                if (data[0] == RESPONSE_DATA_TLV_TAG) {
+                    TlvParser parser = new TlvParser(1, 1, 2);  
+                    parser.parse(data);
 
-                if (EF_TYPE_TRANSPARENT != data[RESPONSE_DATA_STRUCTURE]) {
-                    throw new IccFileTypeMismatch();
-                }
+                    byte[] valueSizeTag=parser.getValueOfTag(RESPONSE_DATA_TLV_FILE_SIZE_TAG);
+                    if(valueSizeTag==null || valueSizeTag.length!=2){
+                        throw new IccFileTypeMismatch();
+                    }
 
-                size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                    size = ((valueSizeTag[RESPONSE_DATA_TLV_FILE_SIZE_1] & 0xff) << 8) 
+                        + (valueSizeTag[RESPONSE_DATA_TLV_FILE_SIZE_2] & 0xff);
+		            logd("Tlv: fileSize:"+size);                    
+                } else {
+                    if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE] ||
+                        EF_TYPE_TRANSPARENT != data[RESPONSE_DATA_STRUCTURE]) {
+                        throw new IccFileTypeMismatch();
+                    }
+
+                    size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
                        + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+                }
 
                 mCi.iccIOForApp(COMMAND_READ_BINARY, fileid, getEFPath(fileid),
                                 0, 0, size, null, null, mAid,
