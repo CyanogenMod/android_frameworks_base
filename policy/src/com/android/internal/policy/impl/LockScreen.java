@@ -733,11 +733,33 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         return mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
     }
 
+    boolean mEnableTorch = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.LOCKSCREEN_TORCH, 0) == 1);
+
+    static void toggleFlashLight(Context context) {
+        Intent intent = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
+        intent.putExtra("strobe", false);
+        intent.putExtra("period", 0);
+        intent.putExtra("bright", false);
+        context.sendBroadcast(intent);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) ||
             (keyCode == KeyEvent.KEYCODE_HOME && mHomeUnlockScreen)) {
             mCallback.goToUnlockScreen();
+            return false;
+        } else if (keyCode == KeyEvent.KEYCODE_HOME && mEnableTorch) {
+            event.startTracking();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+            toggleFlashLight(mContext);
         }
         return false;
     }

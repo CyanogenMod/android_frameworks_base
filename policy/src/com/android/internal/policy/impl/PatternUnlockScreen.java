@@ -20,7 +20,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.security.KeyStore;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.MotionEvent;
@@ -210,6 +212,25 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     public void setEnableFallback(boolean state) {
         if (DEBUG) Log.d(TAG, "setEnableFallback(" + state + ")");
         mEnableFallback = state;
+    }
+
+    boolean mEnableTorch = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.LOCKSCREEN_TORCH, 0) == 1);
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME && mEnableTorch) {
+            event.startTracking();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+            LockScreen.toggleFlashLight(getContext());
+        }
+        return false;
     }
 
     @Override
