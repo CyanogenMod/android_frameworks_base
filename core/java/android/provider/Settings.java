@@ -2699,6 +2699,12 @@ public final class Settings {
         public static final String LOCKSCREEN_CLOCK_ALIGN = "lockscreen_clock_align";
 
         /**
+         * Activate torch with home button long-press on the lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_TORCH = "lockscreen_torch";
+
+        /**
          * Show the pending notification counts as overlays on the status bar
          * @hide
          */
