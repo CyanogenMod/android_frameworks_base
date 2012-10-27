@@ -735,10 +735,77 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME
+                || keyCode == KeyEvent.KEYCODE_MENU
+                || keyCode == KeyEvent.KEYCODE_SEARCH) {
+            event.startTracking();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) ||
             (keyCode == KeyEvent.KEYCODE_HOME && mHomeUnlockScreen)) {
             mCallback.goToUnlockScreen();
         }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (handleKeyLongPress(mContext, keyCode)) {
+            mCallback.pokeWakelock();
+            return true;
+        }
+        return false;
+    }
+
+    private static final int ACTION_RESULT_RUN = 0;
+    private static final int ACTION_RESULT_NOTRUN = 1;
+    private static final int ACTION_RESULT_RUNCUSTOM = 2;
+
+    private static int runAction(Context context, String uri) {
+        if ("FLASHLIGHT".equals(uri)) {
+            context.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
+            return ACTION_RESULT_RUN;
+        }
+
+        try {
+            Intent i = Intent.parseUri(uri, 0);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            context.startActivity(i);
+            return ACTION_RESULT_RUNCUSTOM;
+        } catch (URISyntaxException e) {
+        } catch (ActivityNotFoundException e) {
+        }
+
+        return ACTION_RESULT_NOTRUN;
+    }
+
+    public static boolean handleKeyLongPress(Context context, int keyCode) {
+        String action = null;
+
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_HOME:
+                action = Settings.System.LOCKSCREEN_LONG_HOME_ACTION;
+                break;
+            case KeyEvent.KEYCODE_MENU:
+                action = Settings.System.LOCKSCREEN_LONG_MENU_ACTION;
+                break;
+            case KeyEvent.KEYCODE_SEARCH:
+                action = Settings.System.LOCKSCREEN_LONG_SEARCH_ACTION;
+                break;
+        }
+
+        if (action != null) {
+            String uri = Settings.System.getString(context.getContentResolver(), action);
+            if (uri != null && runAction(context, uri) != ACTION_RESULT_NOTRUN) {
+                return true;
+            }
+        }
+
         return false;
     }
 
