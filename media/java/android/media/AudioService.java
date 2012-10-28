@@ -3548,9 +3548,16 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                     // Volume restore capping
                     final boolean capVolumeRestore = Settings.System.getInt(mContentResolver,
                             Settings.System.SAFE_HEADSET_VOLUME_RESTORE, 1) == 1;
-                    if (capVolumeRestore) {
-                        for (int stream = 0; stream < AudioSystem.getNumStreamTypes(); stream++) {
-                            if (stream == mStreamVolumeAlias[stream]) {
+
+                    for (int stream = 0; stream < AudioSystem.getNumStreamTypes(); stream++) {
+                        if (stream == mStreamVolumeAlias[stream]) {
+                            VolumeStreamState streamState = mStreamStates[mStreamVolumeAlias[stream]];
+                            device = getDeviceForStream(stream);
+                            // apply stored value for device
+                            streamState.applyDeviceVolume(device);
+
+                            // now reduce volume if required
+                            if (capVolumeRestore) {
                                 final int volume = getStreamVolume(stream);
                                 final int restoreCap = rescaleIndex(HEADSET_VOLUME_RESTORE_CAP,
                                         AudioSystem.STREAM_MUSIC, stream);
@@ -3565,6 +3572,16 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                     // Avoid disconnection glitches
                     if (noDelayInATwoDP) {
                         setBluetoothA2dpOnInt(true);
+                    }
+
+                    // Restore volumes
+                    for (int stream = 0; stream < AudioSystem.getNumStreamTypes(); stream++) {
+                        if (stream == mStreamVolumeAlias[stream]) {
+                            VolumeStreamState streamState = mStreamStates[mStreamVolumeAlias[stream]];
+                            device = getDeviceForStream(stream);
+                            // apply stored value for device
+                            streamState.applyDeviceVolume(device);
+                        }
                     }
                 }
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||
