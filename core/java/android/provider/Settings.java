@@ -2898,6 +2898,20 @@ public final class Settings {
          */
         public static final String EGG_MODE = "egg_mode";
 
+	/**
+         * Notification Toggles Icon Color (On)
+         *
+         * @hide
+         */
+        public static final String TOGGLE_ICON_ON_COLOR = "toggle_icon_color_on";
+
+        /**
+         * Notification Toggles Icon Color (Off)
+         *
+         * @hide
+         */
+        public static final String TOGGLE_ICON_OFF_COLOR = "toggle_icon_color_off";
+
         /**
          * Quick Settings Panel Tiles to Use
          *

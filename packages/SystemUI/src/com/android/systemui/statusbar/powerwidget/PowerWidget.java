@@ -471,6 +471,13 @@ public class PowerWidget extends FrameLayout {
         public void observe() {
             ContentResolver resolver = mContext.getContentResolver();
 
+	    // watch for color change
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TOGGLE_ICON_ON_COLOR), false, this);
+
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TOGGLE_ICON_OFF_COLOR), false, this);
+
             // watch for display widget
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.EXPANDED_VIEW_WIDGET),
@@ -511,8 +518,10 @@ public class PowerWidget extends FrameLayout {
             ContentResolver resolver = mContext.getContentResolver();
             Resources res = mContext.getResources();
 
-            // first check if our widget buttons have changed
-            if(uri.equals(Settings.System.getUriFor(Settings.System.WIDGET_BUTTONS))) {
+            // first check if our widget buttons or its color have changed
+            if(uri.equals(Settings.System.getUriFor(Settings.System.WIDGET_BUTTONS))
+                    || uri.equals(Settings.System.getUriFor(Settings.System.TOGGLE_ICON_ON_COLOR))
+                    || uri.equals(Settings.System.getUriFor(Settings.System.TOGGLE_ICON_OFF_COLOR))) {
                 setupWidget();
             // now check if we change visibility
             } else if(uri.equals(Settings.System.getUriFor(Settings.System.EXPANDED_VIEW_WIDGET))) {

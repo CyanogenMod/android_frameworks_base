@@ -2,15 +2,20 @@ package com.android.systemui.statusbar.powerwidget;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff.Mode;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManagerGlobal;
@@ -55,7 +60,7 @@ public abstract class PowerButton {
     public static final String BUTTON_FCHARGE = "toggleFCharge";
     public static final String BUTTON_UNKNOWN = "unknown";
     private static final String SEPARATOR = "OV=I=XseparatorX=I=VO";
-    private static final Mode MASK_MODE = Mode.SCREEN;
+//    private static final Mode MASK_MODE = Mode.SCREEN;
 
     protected int mIcon;
     protected int mState;
@@ -66,18 +71,34 @@ public abstract class PowerButton {
 
     private View.OnClickListener mExternalClickListener;
     private View.OnLongClickListener mExternalLongClickListener;
+    private Context mContext;
+    private Handler mHandler;
 
     protected boolean mHapticFeedback;
     protected Vibrator mVibrator;
     private long[] mClickPattern;
     private long[] mLongClickPattern;
 
+    int colorBackgroundOn = Color.TRANSPARENT;
+    int colorBackgroundOff = Color.TRANSPARENT;
+    int colorIconOn;
+    int colorIconOff;
+
     // we use this to ensure we update our views on the UI thread
     private Handler mViewUpdateHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+	Context context = mContext;
             if (mIconView != null) {
+		boolean mButtonOn = (mState == STATE_ENABLED);
                 mIconView.setImageResource(mIcon);
+		if(mButtonOn) {
+		mIconView.setColorFilter(colorIconOn, PorterDuff.Mode.SRC_ATOP);
+		mIconView.setBackgroundColor(colorBackgroundOn);
+		} else {
+		mIconView.setColorFilter(colorIconOff, PorterDuff.Mode.SRC_ATOP);
+		mIconView.setBackgroundColor(colorBackgroundOff);
+		}
             }
         }
     };
@@ -87,6 +108,10 @@ public abstract class PowerButton {
     protected abstract boolean handleLongClick(Context context);
 
     protected void update(Context context) {
+	colorIconOn = Settings.System.getInt(context.getContentResolver(),
+                	Settings.System.TOGGLE_ICON_ON_COLOR, 0xFFFFFFFF);
+	colorIconOff = Settings.System.getInt(context.getContentResolver(),
+                	Settings.System.TOGGLE_ICON_OFF_COLOR, 0xFF111111);
         updateState(context);
         updateView();
     }
@@ -130,7 +155,6 @@ public abstract class PowerButton {
             mView.setTag(mType);
             mView.setOnClickListener(mClickListener);
             mView.setOnLongClickListener(mLongClickListener);
-
             mIconView = (ImageView) mView.findViewById(R.id.power_widget_button_image);
             mVibrator = (Vibrator) mView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
         } else {
