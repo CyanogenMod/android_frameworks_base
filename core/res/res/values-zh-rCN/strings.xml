@@ -165,6 +165,13 @@
     <!-- label for item that screenshots in phone options dialog -->
     <string name="global_action_screenshot">"屏幕截图"</string>
 
+    <!-- label for item that toggles expand desktop mode -->
+    <string name="global_actions_toggle_expanded_desktop_mode">扩展桌面</string>
+    <!-- status message in phone options dialog for when expand desktop mode is on -->
+    <string name="global_actions_expanded_desktop_mode_on_status">已启用</string>
+    <!-- status message in phone options dialog for when expand desktop mode is off -->
+    <string name="global_actions_expanded_desktop_mode_off_status">已禁用</string>
+
     <!-- Button to reboot the phone, within the Reboot Options dialog -->
     <string name="reboot_reboot">"重新启动"</string>
     <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
