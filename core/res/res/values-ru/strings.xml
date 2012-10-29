@@ -1316,6 +1316,11 @@
     <!-- label for item that screenshots in phone options dialog -->
     <string name="global_action_screenshot">Скриншот</string>
 
+    <!-- label for item that toggles expand desktop mode -->
+    <string name="global_actions_toggle_expanded_desktop_mode">Расширенный рабочий стол</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Включен</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Выключен</string>
+
     <!-- Button to reboot the phone, within the Reboot Options dialog -->
     <string name="global_action_reboot">Перезагрузка</string>
 
