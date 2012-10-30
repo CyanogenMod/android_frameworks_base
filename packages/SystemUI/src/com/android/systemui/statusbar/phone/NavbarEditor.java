@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -56,6 +57,7 @@ public class NavbarEditor implements OnTouchListener {
             new LinkedHashMap<String,ButtonInfo>();
 
     protected static int visibleCount = 4;
+    private static Boolean mIsDeviceHybrid = null;
 
     /**
      * Holds reference to the parent/root of the inflated view
@@ -164,6 +166,21 @@ public class NavbarEditor implements OnTouchListener {
             }
         }
     };
+
+    protected static boolean isDeviceHybrid(Context con) {
+        if (mIsDeviceHybrid == null) {
+            WindowManager wm = (WindowManager)con.getSystemService(Context.WINDOW_SERVICE);
+            android.view.Display display = wm.getDefaultDisplay();
+            int shortSize = Math.min(display.getRawHeight(), display.getRawWidth());
+            int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / DisplayMetrics.DENSITY_DEVICE;
+            if (shortSizeDp < 720 && shortSizeDp >= 600) {
+                mIsDeviceHybrid = true;
+            } else {
+                mIsDeviceHybrid = false;
+            }
+        }
+        return mIsDeviceHybrid;
+    }
 
     @Override
     public boolean onTouch(final View view, MotionEvent event) {
