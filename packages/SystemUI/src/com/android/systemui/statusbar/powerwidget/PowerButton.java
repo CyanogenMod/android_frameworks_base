@@ -2,7 +2,6 @@ package com.android.systemui.statusbar.powerwidget;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -83,12 +82,13 @@ public abstract class PowerButton {
 //    int colorBackgroundOff = Color.TRANSPARENT;
     int colorIconOn;
     int colorIconOff;
+    int defaultColor;
+    int defaultOffColor;
 
     // we use this to ensure we update our views on the UI thread
     private Handler mViewUpdateHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-	Context context = mContext;
             if (mIconView != null) {
 		boolean mButtonOn = (mState == STATE_ENABLED);
                 mIconView.setImageResource(mIcon);
@@ -108,6 +108,23 @@ public abstract class PowerButton {
     protected abstract boolean handleLongClick(Context context);
 
     protected void update(Context context) {
+        float[] hsv = new float[3];
+        defaultColor = context.getResources().getColor(
+                com.android.internal.R.color.holo_blue_light);
+        Color.colorToHSV(defaultColor, hsv);
+        hsv[2] *= 0.5f; // value component
+        defaultOffColor = Color.HSVToColor(hsv);
+
+	boolean mButtonOn = (mState == STATE_ENABLED);
+        Drawable bg = context.getResources().getDrawable(
+                mButtonOn ? R.drawable.btn_on : R.drawable.btn_off);
+		if(mButtonOn) {
+            	bg.setColorFilter(defaultColor, PorterDuff.Mode.SRC_ATOP);
+		} else {
+            	bg.setColorFilter(defaultOffColor, PorterDuff.Mode.SRC_ATOP);
+		}
+		mIconView.setBackgroundDrawable(bg);
+
 	colorIconOn = Settings.System.getInt(context.getContentResolver(),
                 	Settings.System.TOGGLE_ICON_ON_COLOR, 0xFFFFFFFF);
 	colorIconOff = Settings.System.getInt(context.getContentResolver(),
