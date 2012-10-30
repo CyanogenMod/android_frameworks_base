@@ -182,6 +182,18 @@ public interface TelephonyProperties
     static final String PROPERTY_SMS_SEND = "telephony.sms.send";
 
     /**
+     * Set to false to disable MMS automatic retrieval of content,
+     * default is true
+     */
+    static final String PROPERTY_MMS_AUTO_RETRIEVAL = "persist.sys.mms_auto_retrieval";
+
+    /**
+     * Set to false to disable MMS automatic retrieval during roaming,
+     * default is false
+     */
+    static final String PROPERTY_MMS_AUTO_RETRIEVAL_ON_ROAMING = "persist.sys.mms_auto_on_roaming";
+
+    /**
      * Set to true to indicate a test CSIM card is used in the device.
      * This property is for testing purpose only. This should not be defined
      * in commercial configuration.

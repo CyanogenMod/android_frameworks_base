@@ -63,6 +63,7 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.RetryManager;
+import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.util.AsyncChannel;
 
 import java.io.FileDescriptor;
@@ -757,8 +758,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
 
         boolean desiredPowerState = mPhone.getServiceStateTracker().getDesiredPowerState();
 
-        if ((apnContext.getState() == State.IDLE || apnContext.getState() == State.SCANNING) &&
-                isDataAllowed(apnContext) && getAnyDataEnabled() && !isEmergency()) {
+        if (canSetupData(apnContext)) {
 
             if (apnContext.getState() == State.IDLE) {
                 ArrayList<ApnSetting> waitingApns = buildWaitingApns(apnContext.getApnType());
@@ -791,6 +791,41 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             notifyOffApnsOfAvailability(apnContext.getReason());
             return false;
         }
+    }
+
+    /**
+     * Report on whether data connectivity can be setup for any APN.
+     * APN_TYPE_MMS connectivity can always be setup, except on roaming with data disabled
+     * @param apnContext The apnContext
+     * @return boolean
+     */
+    private boolean canSetupData(ApnContext apnContext) {
+        if (apnContext.getState() != State.IDLE && apnContext.getState() != State.SCANNING) {
+            return false;
+        }
+
+        if (isDataAllowed(apnContext) && getAnyDataEnabled() && !isEmergency()) {
+            return true;
+        }
+
+        boolean mmsAutoRetrieval = SystemProperties.getBoolean(
+                TelephonyProperties.PROPERTY_MMS_AUTO_RETRIEVAL, true);
+        boolean mmsRetrievalRoaming = SystemProperties.getBoolean(
+                TelephonyProperties.PROPERTY_MMS_AUTO_RETRIEVAL_ON_ROAMING, false);
+
+        // Allow automatic Mms connections if user has enabled it system-wide
+        if (mmsAutoRetrieval && apnContext.getApnType().equals(Phone.APN_TYPE_MMS)) {
+            /* don't allow MMS connections on roaming if data roaming is disabled (in Settings
+             * and in the Mms application) */
+            TelephonyManager tm = (TelephonyManager)
+                    mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            if (tm.isNetworkRoaming() && !mPhone.getDataRoamingEnabled() && !mmsRetrievalRoaming)
+                return false;
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -2494,7 +2529,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                         + mPreferredApn.numeric + ":" + mPreferredApn);
                 }
                 if ((mPreferredApn.numeric.equals(operator) && mPreferredApn.canHandleType(requestedApnType)) &&
-                    (mPreferredApn.bearer == 0 || mPreferredApn.bearer == radioTech) && 
+                    (mPreferredApn.bearer == 0 || mPreferredApn.bearer == radioTech) &&
                     !apnList.contains(mPreferredApn))
                 {
                     apnList.add(mPreferredApn);
