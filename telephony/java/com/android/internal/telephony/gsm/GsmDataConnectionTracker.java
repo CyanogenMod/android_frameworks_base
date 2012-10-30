@@ -757,8 +757,22 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
 
         boolean desiredPowerState = mPhone.getServiceStateTracker().getDesiredPowerState();
 
-        if ((apnContext.getState() == State.IDLE || apnContext.getState() == State.SCANNING) &&
-                isDataAllowed(apnContext) && getAnyDataEnabled() && !isEmergency()) {
+        // Get some informations about roaming
+        boolean mRoamingIssues = false;
+        try {
+            TelephonyManager phoneManager = (TelephonyManager)
+                    mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            // If phone is on roaming and DataOnRoaming is disabled, there is a problem
+            mRoamingIssues = (phoneManager.isNetworkRoaming() &&
+                    !mPhone.getDataRoamingEnabled()) ? true : false;
+        } catch (Exception e) {
+        }
+
+        // All APN will be created only if data is allowed and already enabled by the user
+        // But APN_TYPE_MMS data is always allowed except if there is roaming issues
+        if (((apnContext.getState() == State.IDLE || apnContext.getState() == State.SCANNING) &&
+                isDataAllowed(apnContext) && getAnyDataEnabled() && !isEmergency()) ||
+                (apnContext.getApnType().equals(Phone.APN_TYPE_MMS)) && !mRoamingIssues) {
 
             if (apnContext.getState() == State.IDLE) {
                 ArrayList<ApnSetting> waitingApns = buildWaitingApns(apnContext.getApnType());
@@ -2494,7 +2508,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                         + mPreferredApn.numeric + ":" + mPreferredApn);
                 }
                 if ((mPreferredApn.numeric.equals(operator) && mPreferredApn.canHandleType(requestedApnType)) &&
-                    (mPreferredApn.bearer == 0 || mPreferredApn.bearer == radioTech) && 
+                    (mPreferredApn.bearer == 0 || mPreferredApn.bearer == radioTech) &&
                     !apnList.contains(mPreferredApn))
                 {
                     apnList.add(mPreferredApn);
