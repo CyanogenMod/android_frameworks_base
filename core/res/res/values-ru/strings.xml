@@ -1317,7 +1317,7 @@
     <string name="global_action_screenshot">Скриншот</string>
 
     <!-- label for item that toggles expand desktop mode -->
-    <string name="global_actions_toggle_expanded_desktop_mode">Расширенный рабочий стол</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Расширенный экран</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Включен</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Выключен</string>
 
