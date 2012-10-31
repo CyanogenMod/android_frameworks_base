@@ -2,13 +2,13 @@ package com.android.systemui.statusbar.powerwidget;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -70,8 +70,6 @@ public abstract class PowerButton {
 
     private View.OnClickListener mExternalClickListener;
     private View.OnLongClickListener mExternalLongClickListener;
-    private Context mContext;
-    private Handler mHandler;
 
     protected boolean mHapticFeedback;
     protected Vibrator mVibrator;
@@ -90,15 +88,7 @@ public abstract class PowerButton {
         @Override
         public void handleMessage(Message msg) {
             if (mIconView != null) {
-		boolean mButtonOn = (mState == STATE_ENABLED);
                 mIconView.setImageResource(mIcon);
-		if(mButtonOn) {
-		mIconView.setColorFilter(colorIconOn, PorterDuff.Mode.SRC_ATOP);
-//		mIconView.setBackgroundColor(colorBackgroundOn);
-		} else {
-		mIconView.setColorFilter(colorIconOff, PorterDuff.Mode.SRC_ATOP);
-//		mIconView.setBackgroundColor(colorBackgroundOff);
-		}
             }
         }
     };
@@ -108,6 +98,14 @@ public abstract class PowerButton {
     protected abstract boolean handleLongClick(Context context);
 
     protected void update(Context context) {
+
+	boolean mEnableToggleColors = Settings.System.getInt(context.getContentResolver(),
+                  Settings.System.ENABLE_TOGGLE_COLORS, 0) != 0;
+	boolean mEnableToggleBar = Settings.System.getInt(context.getContentResolver(),
+                  Settings.System.ENABLE_TOGGLE_BAR, 0) != 0;
+
+	if(mEnableToggleBar || mEnableToggleColors) {
+
         float[] hsv = new float[3];
         defaultColor = context.getResources().getColor(
                 com.android.internal.R.color.holo_blue_light);
@@ -115,20 +113,35 @@ public abstract class PowerButton {
         hsv[2] *= 0.5f; // value component
         defaultOffColor = Color.HSVToColor(hsv);
 
+	colorIconOn = Settings.System.getInt(context.getContentResolver(),
+                	Settings.System.TOGGLE_ICON_ON_COLOR, defaultColor);
+	colorIconOff = Settings.System.getInt(context.getContentResolver(),
+                	Settings.System.TOGGLE_ICON_OFF_COLOR, defaultOffColor);
+
 	boolean mButtonOn = (mState == STATE_ENABLED);
         Drawable bg = context.getResources().getDrawable(
                 mButtonOn ? R.drawable.btn_on : R.drawable.btn_off);
 		if(mButtonOn) {
-            	bg.setColorFilter(defaultColor, PorterDuff.Mode.SRC_ATOP);
+		   if(mEnableToggleBar) {
+            	   bg.setColorFilter(defaultColor, PorterDuff.Mode.SRC_ATOP);
+		   }
+		   if(mEnableToggleColors) {
+		   mIconView.setColorFilter(colorIconOn, PorterDuff.Mode.SRC_ATOP);
+//		   mIconView.setBackgroundColor(colorBackgroundOn);
+		   }
 		} else {
-            	bg.setColorFilter(defaultOffColor, PorterDuff.Mode.SRC_ATOP);
+		   if(mEnableToggleBar) {
+            	   bg.setColorFilter(defaultOffColor, PorterDuff.Mode.SRC_ATOP);
+		   }
+		   if(mEnableToggleColors) {		   
+		   mIconView.setColorFilter(colorIconOff, PorterDuff.Mode.SRC_ATOP);
+//		   mIconView.setBackgroundColor(colorBackgroundOff);
+		   }
 		}
+		if(mEnableToggleBar) {
 		mIconView.setBackgroundDrawable(bg);
-
-	colorIconOn = Settings.System.getInt(context.getContentResolver(),
-                	Settings.System.TOGGLE_ICON_ON_COLOR, 0xFFFFFFFF);
-	colorIconOff = Settings.System.getInt(context.getContentResolver(),
-                	Settings.System.TOGGLE_ICON_OFF_COLOR, 0xFF111111);
+		}
+	}
         updateState(context);
         updateView();
     }
