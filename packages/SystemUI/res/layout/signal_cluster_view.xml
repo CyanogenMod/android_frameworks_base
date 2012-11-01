@@ -2,6 +2,8 @@
 <!--
 /* apps/common/assets/default/default/skins/StatusBar.xml
 **
+** Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+** Not a Contribution.
 ** Copyright 2011, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -103,6 +105,11 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_gravity="end|bottom"
+                />
+            <ImageView
+                android:id="@+id/no_sim"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 />
         </FrameLayout>
     </FrameLayout>
