@@ -2354,6 +2354,8 @@
 
     <!-- Shown in the lock screen when there is emergency calls only mode. -->
     <string name="emergency_calls_only" msgid="2485604591272668370">Emergency calls only</string>
+    <!-- Shown in the lock screen when there is SIM card IO error. -->
+    <string name="lockscreen_sim_error_message_short">Invalid Card.</string>
 
     <!-- When the user inserts a sim card from an unsupported network, it becomes network
          locked -->
@@ -2373,6 +2375,9 @@
          whether it is valid, and to unlock the sim if it is valid.  we display a
          progress dialog in the meantime.  this is the emssage. -->
     <string name="lockscreen_sim_unlock_progress_dialog_message">Unlocking SIM card\u2026</string>
+
+    <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
+    <string name="lockscreen_airplane_mode_on">Airplane Mode</string>
 
     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts at
          drawing the unlock pattern -->
