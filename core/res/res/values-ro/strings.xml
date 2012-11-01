@@ -1364,4 +1364,7 @@
     <string name="profileGroupGmail">"Gmail"</string>
     <string name="profileGroupEmail">"Email"</string>
     <string name="profileGroupSMS">"SMS"</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">"Desktop extins"</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">"Activat"</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">"Dezactivat"</string>
 </resources>
