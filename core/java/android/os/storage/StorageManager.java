@@ -422,6 +422,24 @@ public class StorageManager
     }
 
     /**
+     * Query if a USB Mass Storage (UMS) is supported on the device.
+     * @return true if UMS is supported.
+     *
+     * @hide
+     */
+    public boolean isUsbMassStorageSupported() {
+        // TODO: Maybe query mMountService instead?
+        StorageVolume[] volumes = getVolumeList();
+        if (volumes == null) return false;
+        for (int i = 0; i < volumes.length; i++) {
+            if (volumes[i].allowMassStorage()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Mount an Opaque Binary Blob (OBB) file. If a <code>key</code> is
      * specified, it is supplied to the mounting process to be used in any
      * encryption used in the OBB.
