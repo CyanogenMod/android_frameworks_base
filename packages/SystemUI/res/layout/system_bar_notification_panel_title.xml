@@ -153,15 +153,6 @@
                 android:text="@string/status_bar_settings_settings_button"
                 />
 
-            <com.android.systemui.statusbar.policy.CircleBattery
-                android:id="@+id/panel_circle_battery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:paddingLeft="6dp"
-                android:layout_gravity="center_vertical"
-                />
-
             <ImageView
                 android:id="@+id/battery"
                 android:layout_height="wrap_content"
@@ -182,6 +173,15 @@
                 android:paddingRight="2dp"
                 android:singleLine="true"
                 android:text="@string/status_bar_settings_settings_button"
+                />
+
+            <com.android.systemui.statusbar.policy.CircleBattery
+                android:id="@+id/panel_circle_battery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:paddingLeft="6dp"
+                android:layout_gravity="center_vertical"
                 />
 
             <!-- this will stretch to eat up available space -->
