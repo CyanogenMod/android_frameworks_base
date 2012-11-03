@@ -166,6 +166,13 @@
     <!-- label for item that screenshots in phone options dialog -->
     <string name="global_action_screenshot">Képernyőmentés</string>
 
+    <!-- label for item that toggles expand desktop mode -->
+    <string name="global_actions_toggle_expanded_desktop_mode">Kiterjesztett képernyő</string>
+    <!-- status message in phone options dialog for when expand desktop mode is on -->
+    <string name="global_actions_expanded_desktop_mode_on_status">Engedélyezve</string>
+    <!-- status message in phone options dialog for when expand desktop mode is off -->
+    <string name="global_actions_expanded_desktop_mode_off_status">Letiltva</string>
+
     <!-- Button to reboot the phone, within the Reboot Options dialog -->
     <string name="reboot_reboot">Újraindítás</string>
     <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
