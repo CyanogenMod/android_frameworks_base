@@ -1293,4 +1293,16 @@
     <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">Het scherm wordt automatisch gedraaid</string>
     <string name="toast_rotation_locked">Het scherm wordt niet automatisch gedraaid</string>
+
+    <!-- label for item that toggles expand desktop mode -->
+    <string name="global_actions_toggle_expanded_desktop_mode">Uitgebreid bureaublad</string>
+    <!-- status message in phone options dialog for when expand desktop mode is on -->
+    <string name="global_actions_expanded_desktop_mode_on_status">Ingeschakeld</string>
+    <!-- status message in phone options dialog for when expand desktop mode is off -->
+    <string name="global_actions_expanded_desktop_mode_off_status">Uitgeschakeld</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sendMockSms">nep-sms-berichten versturen</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sendMockSms">Hiermee kan de app nep-sms-berichten versturen, waardoor de app sms-berichten kan versturen naar vertrouwde apps.Allows the app to send mock SMS messages. Schadelijke apps kunnen voortdurend sms-berichten versturen, waardoor het notificatiesysteem geblokkeerd kan worden en u verstoord wordt.</string>
 </resources>
