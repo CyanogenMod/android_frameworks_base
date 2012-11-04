@@ -76,13 +76,6 @@ public abstract class PowerButton {
     private long[] mClickPattern;
     private long[] mLongClickPattern;
 
-//    int colorBackgroundOn = Color.TRANSPARENT;
-//    int colorBackgroundOff = Color.TRANSPARENT;
-    int colorIconOn;
-    int colorIconOff;
-    int defaultColor;
-    int defaultOffColor;
-
     // we use this to ensure we update our views on the UI thread
     private Handler mViewUpdateHandler = new Handler() {
         @Override
@@ -105,6 +98,14 @@ public abstract class PowerButton {
                   Settings.System.ENABLE_TOGGLE_BAR, 0) != 0;
 
 	if(mEnableToggleBar || mEnableToggleColors) {
+//    	int colorBackgroundOn = Color.TRANSPARENT;
+//    	int colorBackgroundOff = Color.TRANSPARENT;
+    	int colorIconOn;
+    	int colorIconOff;
+    	int defaultColor;
+    	int defaultOffColor;
+	int defaultIntermediatColor;
+	int colorIconIntermediate;
 
         float[] hsv = new float[3];
         defaultColor = context.getResources().getColor(
@@ -118,28 +119,42 @@ public abstract class PowerButton {
 	colorIconOff = Settings.System.getInt(context.getContentResolver(),
                 	Settings.System.TOGGLE_ICON_OFF_COLOR, defaultOffColor);
 
-	boolean mButtonOn = (mState != STATE_DISABLED);
-        Drawable bg = context.getResources().getDrawable(
-                mButtonOn ? R.drawable.btn_on : R.drawable.btn_off);
-		if(mButtonOn) {
+		if(mState == STATE_ENABLED) {
+		Drawable bg = context.getResources().getDrawable(R.drawable.btn_on);
 		   if(mEnableToggleBar) {
             	   bg.setColorFilter(defaultColor, PorterDuff.Mode.SRC_ATOP);
+		   mIconView.setBackgroundDrawable(bg);
 		   }
 		   if(mEnableToggleColors) {
 		   mIconView.setColorFilter(colorIconOn, PorterDuff.Mode.SRC_ATOP);
 //		   mIconView.setBackgroundColor(colorBackgroundOn);
 		   }
-		} else {
+		} else if(mState == STATE_DISABLED || mState == STATE_UNKNOWN) {
+		Drawable bg = context.getResources().getDrawable(R.drawable.btn_off);
 		   if(mEnableToggleBar) {
             	   bg.setColorFilter(defaultOffColor, PorterDuff.Mode.SRC_ATOP);
+		   mIconView.setBackgroundDrawable(bg);
 		   }
 		   if(mEnableToggleColors) {		   
 		   mIconView.setColorFilter(colorIconOff, PorterDuff.Mode.SRC_ATOP);
 //		   mIconView.setBackgroundColor(colorBackgroundOff);
 		   }
-		}
-		if(mEnableToggleBar) {
-		mIconView.setBackgroundDrawable(bg);
+		} else {
+		Drawable bg = context.getResources().getDrawable(R.drawable.btn_on);
+		   if(mEnableToggleBar) {
+       		   Color.colorToHSV(defaultColor, hsv);
+        	   hsv[2] *= 0.7f; // value component
+        	   defaultIntermediatColor = Color.HSVToColor(hsv);
+            	   bg.setColorFilter(defaultIntermediatColor, PorterDuff.Mode.SRC_ATOP);
+		   mIconView.setBackgroundDrawable(bg);
+		   }
+		   if(mEnableToggleColors) {
+       		   Color.colorToHSV(colorIconOn, hsv);
+        	   hsv[2] *= 0.7f; // value component
+        	   colorIconIntermediate = Color.HSVToColor(hsv);	   
+		   mIconView.setColorFilter(colorIconIntermediate, PorterDuff.Mode.SRC_ATOP);
+//		   mIconView.setBackgroundColor(colorBackgroundOff);
+		   }
 		}
 	}
         updateState(context);
