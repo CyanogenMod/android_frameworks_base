@@ -1437,5 +1437,10 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_sendMockSms">Tillader appen at sende imiterede SMS-beskeder. Dette tillader en app at sende beskeder til pålidelige apps. Ondsindede apps kan sende beskeder kontinuerligt, blokere enhedens notifikationssystem og forstyrre brugeren.</string>
 
+    <!-- Expanded desktop mode -->
+    <string name="global_actions_toggle_expanded_desktop_mode">Udvidet skrivebord</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Aktiveret</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Deaktiveret</string>
+
     <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
