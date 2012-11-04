@@ -33,6 +33,11 @@
     <string name="global_action_reboot">Redémarrer</string>
     <string name="global_action_screenshot">Capture d\'écran</string>
     <string name="global_action_choose_profile">Profils</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Bureau étendu</string>
+
+    <!-- label for item that toggles expand desktop mode -->
+    <string name="global_actions_expanded_desktop_mode_on_status">Activé</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Désactivé</string>
 
     <!-- Names of default profiles. -->
     <string name="profileNameDefault">Défaut</string>
