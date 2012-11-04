@@ -95,6 +95,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
     private boolean mSilentMode;
     private AudioManager mAudioManager;
     private boolean mEnableMenuKeyInLockScreen;
+    private boolean mUnlockKeyDown = false;
 
     private KeyguardStatusViewManager mStatusViewManager;
     private UnlockWidgetCommonMethods mUnlockWidgetMethods;
@@ -739,6 +740,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 || keyCode == KeyEvent.KEYCODE_HOME
                 || keyCode == KeyEvent.KEYCODE_MENU) {
+            // make sure the keydown is from a screen on state
+            mUnlockKeyDown = true;
             event.startTracking();
             return true;
         }
@@ -747,8 +750,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) ||
-            (keyCode == KeyEvent.KEYCODE_HOME && mHomeUnlockScreen)) {
+        int flags = event.getFlags();
+        if (((keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) ||
+                (keyCode == KeyEvent.KEYCODE_HOME && mHomeUnlockScreen)) &&
+                mUnlockKeyDown && (flags & KeyEvent.FLAG_CANCELED_LONG_PRESS) == 0) {
+            mUnlockKeyDown = false;
             mCallback.goToUnlockScreen();
         }
         return false;
