@@ -1398,6 +1398,7 @@
     <string name="weather_no_data">Нет данных</string>
     <string name="weather_tap_to_refresh">Нажмите для обновления</string>
     <string name="weather_refreshing">Обновление...</string>
+    <string name="weather_last_sync_just_now">Только что</string>
 
     <string name="app_killed_message">Приложение закрыто</string>
 </resources>
