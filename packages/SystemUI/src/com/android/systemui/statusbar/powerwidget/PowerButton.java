@@ -118,7 +118,7 @@ public abstract class PowerButton {
 	colorIconOff = Settings.System.getInt(context.getContentResolver(),
                 	Settings.System.TOGGLE_ICON_OFF_COLOR, defaultOffColor);
 
-	boolean mButtonOn = (mState == STATE_ENABLED);
+	boolean mButtonOn = (mState != STATE_DISABLED);
         Drawable bg = context.getResources().getDrawable(
                 mButtonOn ? R.drawable.btn_on : R.drawable.btn_off);
 		if(mButtonOn) {
