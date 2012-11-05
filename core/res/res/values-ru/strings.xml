@@ -1334,7 +1334,7 @@
 
     <!-- Lock screen Weather - Weather codes -->
     <string name="weather_0">Торнадо</string>
-    <string name="weather_1">Тропический шторм</string>
+    <string name="weather_1">Шторм</string>
     <string name="weather_2">Ураган</string>
     <string name="weather_3">Сильные грозы</string>
     <string name="weather_4">Грозы</string>
@@ -1343,10 +1343,10 @@
     <string name="weather_7">Мокрый снег</string>
     <string name="weather_8">Изморозь</string>
     <string name="weather_9">Мелкий дождь</string>
-    <string name="weather_10">Ледяной дождь</string>
+    <string name="weather_10">Град</string>
     <string name="weather_11">Ливень</string>
     <string name="weather_12">Ливень</string>
-    <string name="weather_13">Ливневый снег</string>
+    <string name="weather_13">Снег с дождём</string>
     <string name="weather_14">Небольшой дождь со снегом</string>
     <string name="weather_15">Позёмка</string>
     <string name="weather_16">Снег</string>
