@@ -2723,6 +2723,12 @@ public final class Settings {
         public static final String LOCKSCREEN_LONG_MENU_ACTION = "lockscreen_long_menu_action";
 
         /**
+         * Whether to turn off the flashlight by release action button
+         * @hide
+         */
+        public static final String LOCKSCREEN_TURN_OFF_TORCH = "lockscreen_turn_off_torch";
+
+        /**
          * Show the pending notification counts as overlays on the status bar
          * @hide
          */

@@ -74,6 +74,8 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     private KeyguardStatusViewManager mKeyguardStatusViewManager;
     private LockPatternView mLockPatternView;
 
+    private ButtonActionsHelper mButtonActionsHelper;
+
     /**
      * Keeps track of the last time we poked the wake lock during dispatching
      * of the touch event, initalized to something gauranteed to make us
@@ -162,6 +164,8 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
         mCreationOrientation = configuration.orientation;
 
+        mButtonActionsHelper = new ButtonActionsHelper();
+
         LayoutInflater inflater = LayoutInflater.from(context);
 
         if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
@@ -225,8 +229,16 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if ((event.getFlags() & KeyEvent.FLAG_CANCELED_LONG_PRESS) != 0) {
+            mButtonActionsHelper.handleKeyLongPress(mContext, keyCode, true);
+        }
+        return false;
+    }
+
+    @Override
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (LockScreen.handleKeyLongPress(getContext(), keyCode)) {
+        if (mButtonActionsHelper.handleKeyLongPress(getContext(), keyCode, false)) {
             mCallback.pokeWakelock();
             return true;
         }
