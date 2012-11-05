@@ -17,7 +17,6 @@
 package com.android.internal.policy.impl;
 
 import android.app.ActivityManager;
-import android.app.ActivityManagerNative;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -37,8 +36,6 @@ import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.media.AudioManager;
-import android.os.RemoteException;
-import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -103,6 +100,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
     private boolean mSearchDisabled;
     // Is there a vibrator
     private final boolean mHasVibrator;
+
+    private ButtonActionsHelper mButtonActionsHelper;
 
     InfoCallbackImpl mInfoCallback = new InfoCallbackImpl() {
 
@@ -607,6 +606,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         mCallback = callback;
         mEnableMenuKeyInLockScreen = shouldEnableMenuKey();
         mCreationOrientation = configuration.orientation;
+        mButtonActionsHelper = new ButtonActionsHelper();
 
         if (LockPatternKeyguardView.DEBUG_CONFIGURATION) {
             Log.v(TAG, "***** CREATING LOCK SCREEN", new RuntimeException());
@@ -736,9 +736,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                || keyCode == KeyEvent.KEYCODE_HOME
-                || keyCode == KeyEvent.KEYCODE_MENU) {
+        if (mButtonActionsHelper.handleKeyDown(keyCode)) {
             event.startTracking();
             return true;
         }
@@ -747,8 +745,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) ||
-            (keyCode == KeyEvent.KEYCODE_HOME && mHomeUnlockScreen)) {
+        if (!mButtonActionsHelper.handleKeyUp(keyCode) &&
+            ((keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) ||
+             (keyCode == KeyEvent.KEYCODE_HOME && mHomeUnlockScreen))) {
             mCallback.goToUnlockScreen();
         }
         return false;
@@ -756,116 +755,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
     @Override
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (handleKeyLongPress(mContext, keyCode)) {
+        if (mButtonActionsHelper.handleKeyLongPress(mContext, keyCode)) {
             mCallback.pokeWakelock();
             return true;
         }
         return false;
-    }
-
-    private static final int ACTION_RESULT_RUN = 0;
-    private static final int ACTION_RESULT_NOTRUN = 1;
-
-    private static int runAction(Context context, String uri) {
-        if ("FLASHLIGHT".equals(uri)) {
-            context.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
-            return ACTION_RESULT_RUN;
-        } else if ("NEXT".equals(uri)) {
-            sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_NEXT);
-            return ACTION_RESULT_RUN;
-        } else if ("PREVIOUS".equals(uri)) {
-            sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-            return ACTION_RESULT_RUN;
-        } else if ("PLAYPAUSE".equals(uri)) {
-            sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-            return ACTION_RESULT_RUN;
-        } else if ("SOUND".equals(uri)) {
-            toggleSilentMode(context);
-            return ACTION_RESULT_RUN;
-        }
-
-        return ACTION_RESULT_NOTRUN;
-    }
-
-    public static boolean handleKeyLongPress(Context context, int keyCode) {
-        String action = null;
-
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                action = Settings.System.LOCKSCREEN_LONG_BACK_ACTION;
-                break;
-            case KeyEvent.KEYCODE_HOME:
-                action = Settings.System.LOCKSCREEN_LONG_HOME_ACTION;
-                break;
-            case KeyEvent.KEYCODE_MENU:
-                action = Settings.System.LOCKSCREEN_LONG_MENU_ACTION;
-                break;
-        }
-
-        if (action != null) {
-            String uri = Settings.System.getString(context.getContentResolver(), action);
-            if (uri != null && runAction(context, uri) != ACTION_RESULT_NOTRUN) {
-                long[] pattern = getLongPressVibePattern(context);
-                if (pattern != null) {
-                    Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-                    if (pattern.length == 1) {
-                        v.vibrate(pattern[0]);
-                    } else {
-                        v.vibrate(pattern, -1);
-                    }
-                }
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static void sendMediaButtonEvent(Context context, int code) {
-        long eventtime = SystemClock.uptimeMillis();
-
-        Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
-        KeyEvent downEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_DOWN, code, 0);
-        downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
-        context.sendOrderedBroadcast(downIntent, null);
-
-        Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
-        KeyEvent upEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_UP, code, 0);
-        upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
-        context.sendOrderedBroadcast(upIntent, null);
-    }
-
-    private static void toggleSilentMode(Context context) {
-        final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        final Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        final boolean hasVib = vib == null ? false : vib.hasVibrator();
-        if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-            am.setRingerMode(hasVib
-                ? AudioManager.RINGER_MODE_VIBRATE
-                : AudioManager.RINGER_MODE_SILENT);
-        } else {
-            am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        }
-    }
-
-    private static long[] getLongPressVibePattern(Context context) {
-        if (Settings.System.getInt(context.getContentResolver(),
-                Settings.System.HAPTIC_FEEDBACK_ENABLED, 0) == 0) {
-            return null;
-        }
-
-        int[] defaultPattern = context.getResources().getIntArray(
-                com.android.internal.R.array.config_longPressVibePattern);
-        if (defaultPattern == null) {
-            return null;
-        }
-
-        long[] pattern = new long[defaultPattern.length];
-        for (int i = 0; i < defaultPattern.length; i++) {
-            pattern[i] = defaultPattern[i];
-        }
-
-        return pattern;
     }
 
     void updateConfiguration() {

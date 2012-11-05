@@ -72,6 +72,8 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     private KeyguardStatusViewManager mKeyguardStatusViewManager;
 
+    private ButtonActionsHelper mButtonActionsHelper;
+
     private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
@@ -92,6 +94,8 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mCreationOrientation = configuration.orientation;
         mKeyboardHidden = configuration.hardKeyboardHidden;
         mLockPatternUtils = lockpatternutils;
+
+        mButtonActionsHelper = new ButtonActionsHelper();
 
         LayoutInflater inflater = LayoutInflater.from(context);
         if (mKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
@@ -298,9 +302,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             return true;
         }
 
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                || keyCode == KeyEvent.KEYCODE_MENU
-                || keyCode == KeyEvent.KEYCODE_HOME) {
+        if (mButtonActionsHelper.handleKeyDown(keyCode)) {
             event.startTracking();
             return true;
         }
@@ -309,8 +311,14 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        mButtonActionsHelper.handleKeyUp(keyCode);
+        return false;
+    }
+
+    @Override
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (LockScreen.handleKeyLongPress(getContext(), keyCode)) {
+        if (mButtonActionsHelper.handleKeyLongPress(getContext(), keyCode)) {
             mCallback.pokeWakelock();
             return true;
         }
