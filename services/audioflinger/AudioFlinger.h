@@ -70,7 +70,9 @@ class AudioFlinger :
     friend class BinderService<AudioFlinger>;
 public:
     static char const* getServiceName() { return "media.audio_flinger"; }
-
+#ifdef STE_AUDIO
+    int getNbrOfClients(audio_stream_in_t* input);
+#endif
     virtual     status_t    dump(int fd, const Vector<String16>& args);
 
     // IAudioFlinger interface
@@ -161,13 +163,27 @@ public:
 
     virtual status_t restoreOutput(int output);
 
+#ifdef STE_AUDIO
+    virtual uint32_t *addInputClient(uint32_t clientId);
+
+    virtual status_t removeInputClient(uint32_t *pClientId);
+#endif
     virtual int openInput(uint32_t *pDevices,
                             uint32_t *pSamplingRate,
                             uint32_t *pFormat,
                             uint32_t *pChannels,
+#ifdef STE_AUDIO
+                            uint32_t acoustics,
+                            uint32_t *pInputClientId = NULL);
+
+    virtual status_t closeInput(int input, uint32_t *inputClientId = NULL);
+
+    virtual size_t readInput(uint32_t *input, uint32_t inputClientId, void *buffer, uint32_t bytes, uint32_t *pOverwrittenBytes);
+#else
                             uint32_t acoustics);
 
     virtual status_t closeInput(int input);
+#endif
 
     virtual status_t setStreamOutput(uint32_t stream, int output);
 
@@ -1026,7 +1042,12 @@ private:
                         uint32_t sampleRate,
                         uint32_t channels,
                         int id,
+#ifdef STE_AUDIO
+                        uint32_t device,
+                        audio_input_clients pInputClientId);
+#else
                         uint32_t device);
+#endif
                 ~RecordThread();
 
         virtual bool        threadLoop();
@@ -1078,6 +1099,9 @@ private:
                 int                                 mReqChannelCount;
                 uint32_t                            mReqSampleRate;
                 ssize_t                             mBytesRead;
+#ifdef STE_AUDIO
+                audio_input_clients                 mInputClientId;
+#endif
     };
 
     class RecordHandle : public android::BnAudioRecord {
@@ -1469,6 +1493,9 @@ private:
 
                 mutable     Mutex                   mHardwareLock;
                 audio_hw_device_t*                  mPrimaryHardwareDev;
+#ifdef STE_AUDIO
+                AudioStreamIn*                      mInputFMStream;
+#endif
                 Vector<audio_hw_device_t*>          mAudioHwDevs;
     mutable     int                                 mHardwareStatus;
 
@@ -1501,7 +1528,9 @@ private:
 #endif
 
                 Vector<AudioSessionRef*> mAudioSessionRefs;
-
+#ifdef STE_AUDIO
+                SortedVector<uint32_t*> mInputClients;
+#endif
 #ifdef WITH_QCOM_LPA
                 public:
                 int                                 mLPASessionId;

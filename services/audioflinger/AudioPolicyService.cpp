@@ -410,14 +410,23 @@ audio_io_handle_t AudioPolicyService::getInput(int inputSource,
                                     uint32_t format,
                                     uint32_t channels,
                                     audio_in_acoustics_t acoustics,
+#ifdef STE_AUDIO
+                                    int audioSession,
+                                    audio_input_clients *inputClientId)
+#else
                                     int audioSession)
+#endif
 {
     if (mpAudioPolicy == NULL) {
         return 0;
     }
     Mutex::Autolock _l(mLock);
     audio_io_handle_t input = mpAudioPolicy->get_input(mpAudioPolicy, inputSource, samplingRate,
+#ifdef STE_AUDIO
+                                                       format, channels, acoustics, inputClientId);
+#else
                                                        format, channels, acoustics);
+#endif
 
     if (input == 0) {
         return input;
@@ -1543,7 +1552,12 @@ static audio_io_handle_t aps_open_input(void *service,
                                             uint32_t *pSamplingRate,
                                             uint32_t *pFormat,
                                             uint32_t *pChannels,
+#ifdef STE_AUDIO
+                                            uint32_t acoustics,
+                                            uint32_t *inputClientId)
+#else
                                             uint32_t acoustics)
+#endif
 {
     sp<IAudioFlinger> af = AudioSystem::get_audio_flinger();
     if (af == NULL) {
@@ -1552,16 +1566,28 @@ static audio_io_handle_t aps_open_input(void *service,
     }
 
     return af->openInput(pDevices, pSamplingRate, pFormat, pChannels,
+#ifdef STE_AUDIO
+                         acoustics, inputClientId);
+#else
                          acoustics);
+#endif
 }
 
+#ifdef STE_AUDIO
+static int aps_close_input(void *service, audio_io_handle_t input, uint32_t *inputClientId = NULL)
+#else
 static int aps_close_input(void *service, audio_io_handle_t input)
+#endif
 {
     sp<IAudioFlinger> af = AudioSystem::get_audio_flinger();
     if (af == NULL)
         return PERMISSION_DENIED;
 
+#ifdef STE_AUDIO
+    return af->closeInput(input, inputClientId);
+#else
     return af->closeInput(input);
+#endif
 }
 
 static int aps_set_stream_output(void *service, audio_stream_type_t stream,
