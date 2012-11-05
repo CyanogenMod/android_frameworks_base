@@ -588,6 +588,9 @@ status_t CameraService::Client::setPreviewWindow(const sp<IBinder>& binder,
 #ifdef QCOM_HARDWARE
 #ifndef NO_UPDATE_PREVIEW
     } else {
+        if (window != 0) {
+            native_window_set_buffers_transform(window.get(), mOrientation);
+        }
         result = mHardware->setPreviewWindow(window);
 #endif
 #endif
