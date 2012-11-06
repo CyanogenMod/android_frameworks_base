@@ -135,9 +135,9 @@ public class PhoneProxy extends Handler implements Phone {
     private void updatePhoneObject(int newVoiceRadioTech) {
 
         if (mActivePhone != null) {
-            if(mRilVersion == 6 && getLteOnCdmaMode() == Phone.LTE_ON_CDMA_TRUE) {
+            if(mRilVersion >= 6 && getLteOnCdmaMode() == Phone.LTE_ON_CDMA_TRUE) {
                 /*
-                 * On v6 RIL, when LTE_ON_CDMA is TRUE, always create CDMALTEPhone
+                 * On v6 or greater RIL, when LTE_ON_CDMA is TRUE, always create CDMALTEPhone
                  * irrespective of the voice radio tech reported.
                  */
                 if (mActivePhone.getPhoneType() == PHONE_TYPE_CDMA) {
