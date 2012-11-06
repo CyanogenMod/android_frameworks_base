@@ -1387,4 +1387,7 @@
     <string name="permdesc_sendMockSms">Permite ao aplicativo enviar mensagens fictícias de SMS.
      Isto permite ao aplicativo enviar SMS aos aplicativos confiáveis. Aplicativos maliciosos podem enviar mensagens
      continuamente, bloqueando o sistema de notificação do dispositivo e pertubando o usuário.</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Área de trabalho expandida</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Ativada</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Desativada</string>
 </resources>
