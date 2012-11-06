@@ -208,14 +208,22 @@ status_t OpenGLRenderer::prepareDirty(float left, float top, float right, float 
 }
 
 status_t OpenGLRenderer::clear(float left, float top, float right, float bottom, bool opaque) {
+#ifdef QCOM_HARDWARE
+    mCaches.enableScissor();
+    mCaches.setScissor(left, mSnapshot->height - bottom, right - left, bottom - top);
+    glClear(GL_COLOR_BUFFER_BIT);
+    if(opaque)
+        mCaches.resetScissor();
+#else
     if (!opaque) {
         mCaches.enableScissor();
         mCaches.setScissor(left, mSnapshot->height - bottom, right - left, bottom - top);
         glClear(GL_COLOR_BUFFER_BIT);
         return DrawGlInfo::kStatusDrew;
     }
-
     mCaches.resetScissor();
+#endif
+
     return DrawGlInfo::kStatusDone;
 }
 
