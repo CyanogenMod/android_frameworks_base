@@ -42,6 +42,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Slog;
@@ -719,7 +720,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         // TODO - move this into the MobileDataStateTracker
         int usedNetworkType = networkType;
         if(networkType == ConnectivityManager.TYPE_MOBILE) {
-            if (!getMobileDataEnabled()) {
+            if (!canSetupData(networkType, feature)) {
                 if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
                 return Phone.APN_TYPE_NOT_AVAILABLE;
             }
@@ -787,6 +788,38 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             }
         }
         return Phone.APN_TYPE_NOT_AVAILABLE;
+    }
+
+    /**
+    * Report on whether data connectivity can be setup for any networkType and feature.
+    * @param networkType Network type
+    * @param feature Feature
+    * @return boolean
+    */
+    private boolean canSetupData(int networkType, String feature) {
+        if (getMobileDataEnabled()) {
+            return true;
+        }
+
+        // Get the MMS retrieval settings. Defaults to enabled with roaming disabled
+        final ContentResolver resolver = mContext.getContentResolver();
+        boolean mmsAutoRetrieval = Settings.System.getInt(resolver,
+                Settings.System.MMS_AUTO_RETRIEVAL, 1) == 1;
+        boolean mmsRetrievalRoaming = Settings.System.getInt(resolver,
+                Settings.System.MMS_AUTO_RETRIEVAL_ON_ROAMING, 0) == 1;
+
+        // Allow automatic Mms connections if user has enabled it
+        if (mmsAutoRetrieval && TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
+            // don't allow MMS connections while roaming if disabled
+            TelephonyManager tm = (TelephonyManager)
+                    mContext.getSystemService(Context.TELEPHONY_SERVICE);
+            if (tm.isNetworkRoaming() && !mmsRetrievalRoaming) {
+                return false;
+            }
+            return true;
+        }
+
+        return false;
     }
 
     // javadoc from interface
