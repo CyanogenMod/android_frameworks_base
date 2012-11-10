@@ -1090,6 +1090,50 @@ public final class Settings {
         }
 
         /**
+         * @hide
+         * Convenience function for retrieving a single system settings value
+         * as a boolean.  Note that internally setting values are always
+         * stored as strings; this function converts the string to a boolean
+         * for you. It will only return true if the stored value is "1"
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         * @param def Value to return if the setting is not defined.
+         *
+         * @return The setting's current value, or 'def' if it is not defined
+         * or not a valid integer.
+         */
+        public static boolean getBoolean(ContentResolver cr, String name, boolean def) {
+            String v = getString(cr, name);
+            try {
+                if(v != null)
+                    return "1".equals(v);
+                else
+                    return def;
+            } catch (NumberFormatException e) {
+                return def;
+            }
+        }
+
+        /**
+         * @hide
+         * Convenience function for updating a single settings value as a
+         * boolean. This will either create a new entry in the table if the
+         * given name does not exist, or modify the value of the existing row
+         * with that name.  Note that internally setting values are always
+         * stored as strings, so this function converts the given value to a
+         * string (1 or 0) before storing it.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to modify.
+         * @param value The new value for the setting.
+         * @return true if the value was set, false on database errors
+         */
+        public static boolean putBoolean(ContentResolver cr, String name, boolean value) {
+            return putString(cr, name, value ? "1" : "0");
+        }
+
+        /**
          * Convenience function to read all of the current
          * configuration-related settings into a
          * {@link Configuration} object.
@@ -2492,8 +2536,29 @@ public final class Settings {
          * 2: show signal text numbers w/small dBm appended
          * @hide
          */
-        public static final String STATUS_BAR_SIGNAL_TEXT = "status_bar_signal";
+        public static final String STATUS_BAR_SIGNAL_TEXT = "status_bar_signal_text";
 
+        /**
+         * whether to hide the signal barss
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_HIDE_SIGNAL_BARS = "status_bar_hide_signal_bars";
+
+        /**
+         * Whether to show statusbar WiFi signal text
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_WIFI_SIGNAL_TEXT = "status_bar_wifi_signal_text";
+
+        /**
+         * use Alt Statusbar Signal Layout
+         * boolean
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_SIGNAL_CLUSTER_ALT = "status_bar_signal_cluster_alt";
          /**
          * Whether to control brightness from status bar
          *

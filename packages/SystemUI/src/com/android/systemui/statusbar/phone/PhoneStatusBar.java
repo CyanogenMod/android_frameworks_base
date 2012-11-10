@@ -601,8 +601,12 @@ public class PhoneStatusBar extends BaseStatusBar {
         mBatteryController.addIconView((ImageView)mStatusBarView.findViewById(R.id.battery));
         mBatteryController.addLabelView((TextView)mStatusBarView.findViewById(R.id.battery_text));
         mNetworkController = new NetworkController(mContext);
-        final SignalClusterView signalCluster =
+        SignalClusterView signalCluster =
                 (SignalClusterView)mStatusBarView.findViewById(R.id.signal_cluster);
+
+        mNetworkController.addSignalCluster(signalCluster);
+        signalCluster.setNetworkController(mNetworkController);
+        signalCluster = (SignalClusterView)mStatusBarView.findViewById(R.id.signal_cluster_alt);
 
         mNetworkController.addSignalCluster(signalCluster);
         signalCluster.setNetworkController(mNetworkController);
@@ -1109,7 +1113,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         final boolean makeVisible =
             !(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
             && mPile.getHeight() < (mScrollView.getHeight() - mCarrierLabelHeight);
-        
+
         if (force || mCarrierLabelVisible != makeVisible) {
             mCarrierLabelVisible = makeVisible;
             if (DEBUG) {
@@ -1985,7 +1989,7 @@ public class PhoneStatusBar extends BaseStatusBar {
             final View notifications = mStatusBarView.findViewById(R.id.notification_icon_area);
             final View systemIcons = mStatusBarView.findViewById(R.id.statusIcons);
             final View signal = mStatusBarView.findViewById(R.id.signal_cluster);
-            final View signalText = mStatusBarView.findViewById(R.id.signal_cluster_text);
+            final View signalAlt = mStatusBarView.findViewById(R.id.signal_cluster_alt);
             final View battery = mStatusBarView.findViewById(R.id.battery);
             final View batteryText = mStatusBarView.findViewById(R.id.battery_text);
 
@@ -1994,7 +1998,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                     ObjectAnimator.ofFloat(notifications, View.ALPHA, 0),
                     ObjectAnimator.ofFloat(systemIcons, View.ALPHA, 0),
                     ObjectAnimator.ofFloat(signal, View.ALPHA, 0),
-                    ObjectAnimator.ofFloat(signalText, View.ALPHA, 0),
+                    ObjectAnimator.ofFloat(signalAlt, View.ALPHA, 0),
                     ObjectAnimator.ofFloat(battery, View.ALPHA, 0.5f),
                     ObjectAnimator.ofFloat(batteryText, View.ALPHA, 0),
                     ObjectAnimator.ofFloat(mClockView, View.ALPHA, 0.5f)
@@ -2006,7 +2010,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                     ObjectAnimator.ofFloat(notifications, View.ALPHA, 1),
                     ObjectAnimator.ofFloat(systemIcons, View.ALPHA, 1),
                     ObjectAnimator.ofFloat(signal, View.ALPHA, 1),
-                    ObjectAnimator.ofFloat(signalText, View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(signalAlt, View.ALPHA, 1),
                     ObjectAnimator.ofFloat(battery, View.ALPHA, 1),
                     ObjectAnimator.ofFloat(batteryText, View.ALPHA, 1),
                     ObjectAnimator.ofFloat(mClockView, View.ALPHA, 1)

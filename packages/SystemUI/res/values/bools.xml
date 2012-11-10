@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Can be used to default to Alt-Signal_layout -->
+    <bool name="status_bar_alt_signal_layout">false</bool>
+</resources>

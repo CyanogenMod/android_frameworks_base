@@ -36,7 +36,7 @@
         android:layout_width="@dimen/status_bar_icon_size"
         android:layout_height="match_parent"
         android:paddingLeft="6dip"
-		android:paddingBottom="2dip"
+        android:paddingBottom="2dip"
         android:src="@drawable/ic_sysbar_lights_out_dot_small"
         android:scaleType="center"
         android:visibility="gone"
@@ -51,7 +51,7 @@
         >
 
         <LinearLayout
-			android:id="@+id/notification_icon_area"
+            android:id="@+id/notification_icon_area"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -90,11 +90,13 @@
                 android:id="@+id/signal_cluster"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 />
-            <include layout="@layout/signal_cluster_text_view"
-                android:id="@+id/signal_cluster_text"
+            <include layout="@layout/signal_cluster_view_alt"
+                android:id="@+id/signal_cluster_alt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 />
             <TextView
                 android:id="@+id/battery_text"

@@ -22,10 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
@@ -132,6 +134,9 @@ public class NetworkController extends BroadcastReceiver {
 
     private boolean mAirplaneMode = false;
     private boolean mLastAirplaneMode = true;
+
+    private boolean mHideSignal;
+    private boolean mUseAltSignal;
 
     // our ui
     Context mContext;
@@ -240,6 +245,9 @@ public class NetworkController extends BroadcastReceiver {
 
         // yuck
         mBatteryStats = BatteryStatsService.getService();
+
+        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
+        settingsObserver.observe();
     }
 
     public boolean hasMobileDataFeature() {
@@ -480,13 +488,27 @@ public class NetworkController extends BroadcastReceiver {
     private final void updateTelephonySignalStrength() {
         if (!hasService()) {
             if (CHATTY) Slog.d(TAG, "updateTelephonySignalStrength: !hasService()");
-            mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
-            mDataSignalIconId = R.drawable.stat_sys_signal_null;
+            if (mHideSignal) {
+                mPhoneSignalIconId = 0;
+                mDataSignalIconId = 0;
+            }else {
+                mPhoneSignalIconId = (mUseAltSignal ? R.drawable.stat_sys_signal_null_alt :
+                    R.drawable.stat_sys_signal_null);
+                mDataSignalIconId = (mUseAltSignal ? R.drawable.stat_sys_signal_null_alt :
+                    R.drawable.stat_sys_signal_null);
+            }
         } else {
             if (mSignalStrength == null) {
                 if (CHATTY) Slog.d(TAG, "updateTelephonySignalStrength: mSignalStrength == null");
-                mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
-                mDataSignalIconId = R.drawable.stat_sys_signal_null;
+                if (mHideSignal) {
+                    mPhoneSignalIconId = 0;
+                    mDataSignalIconId = 0;
+                }else {
+                    mPhoneSignalIconId = (mUseAltSignal ? R.drawable.stat_sys_signal_null_alt :
+                        R.drawable.stat_sys_signal_null);
+                    mDataSignalIconId = (mUseAltSignal ? R.drawable.stat_sys_signal_null_alt :
+                        R.drawable.stat_sys_signal_null);
+                }
                 mContentDescriptionPhoneSignal = mContext.getString(
                         AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0]);
             } else {
@@ -503,22 +525,31 @@ public class NetworkController extends BroadcastReceiver {
 
                 if (isCdma()) {
                     if (isCdmaEri()) {
-                        iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING[mInetCondition];
+                        iconList = mUseAltSignal ? TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_ALT[mInetCondition] :
+                            TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING[mInetCondition];
                     } else {
-                        iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH[mInetCondition];
+                        iconList = mUseAltSignal ? TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ALT[mInetCondition] :
+                            TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH[mInetCondition];
                     }
                 } else {
                     // Though mPhone is a Manager, this call is not an IPC
                     if (mPhone.isNetworkRoaming()) {
-                        iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING[mInetCondition];
+                        iconList = mUseAltSignal ? TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_ALT[mInetCondition] :
+                            TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING[mInetCondition];
                     } else {
-                        iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH[mInetCondition];
+                        iconList = mUseAltSignal ? TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ALT[mInetCondition] :
+                            TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH[mInetCondition];
                     }
                 }
-                mPhoneSignalIconId = iconList[iconLevel];
+                mPhoneSignalIconId = (mHideSignal ? 0 : iconList[iconLevel]);
                 mContentDescriptionPhoneSignal = mContext.getString(
                         AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[iconLevel]);
-                mDataSignalIconId = TelephonyIcons.DATA_SIGNAL_STRENGTH[mInetCondition][iconLevel];
+                if (mHideSignal) {
+                    mDataSignalIconId = 0;
+                } else {
+                    mDataSignalIconId = mUseAltSignal ? TelephonyIcons.DATA_SIGNAL_STRENGTH_ALT[mInetCondition][iconLevel] :
+                        TelephonyIcons.DATA_SIGNAL_STRENGTH[mInetCondition][iconLevel];
+                }
             }
         }
     }
@@ -527,14 +558,15 @@ public class NetworkController extends BroadcastReceiver {
         if (mIsWimaxEnabled && mWimaxConnected) {
             // wimax is a special 4g network not handled by telephony
             mDataIconList = TelephonyIcons.DATA_4G[mInetCondition];
-            mDataTypeIconId = R.drawable.stat_sys_data_connected_4g;
+            mDataTypeIconId = mDataIconList[0];
             mContentDescriptionDataType = mContext.getString(
                     R.string.accessibility_data_connection_4g);
         } else {
             switch (mDataNetType) {
                 case TelephonyManager.NETWORK_TYPE_UNKNOWN:
                     if (!mShowAtLeastThreeGees) {
-                        mDataIconList = TelephonyIcons.DATA_G[mInetCondition];
+                        mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_G_ALT[mInetCondition] :
+                            TelephonyIcons.DATA_G[mInetCondition];
                         mDataTypeIconId = 0;
                         mContentDescriptionDataType = mContext.getString(
                                 R.string.accessibility_data_connection_gprs);
@@ -544,8 +576,9 @@ public class NetworkController extends BroadcastReceiver {
                     }
                 case TelephonyManager.NETWORK_TYPE_EDGE:
                     if (!mShowAtLeastThreeGees) {
-                        mDataIconList = TelephonyIcons.DATA_E[mInetCondition];
-                        mDataTypeIconId = R.drawable.stat_sys_data_connected_e;
+                        mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_E_ALT[mInetCondition] :
+                            TelephonyIcons.DATA_E[mInetCondition];
+                        mDataTypeIconId = mDataIconList[0];
                         mContentDescriptionDataType = mContext.getString(
                                 R.string.accessibility_data_connection_edge);
                         break;
@@ -553,8 +586,9 @@ public class NetworkController extends BroadcastReceiver {
                         // fall through
                     }
                 case TelephonyManager.NETWORK_TYPE_UMTS:
-                    mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
-                    mDataTypeIconId = R.drawable.stat_sys_data_connected_3g;
+                    mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_3G_ALT[mInetCondition] :
+                        TelephonyIcons.DATA_3G[mInetCondition];
+                    mDataTypeIconId = mDataIconList[0];
                     mContentDescriptionDataType = mContext.getString(
                             R.string.accessibility_data_connection_3g);
                     break;
@@ -562,40 +596,45 @@ public class NetworkController extends BroadcastReceiver {
                 case TelephonyManager.NETWORK_TYPE_HSUPA:
                 case TelephonyManager.NETWORK_TYPE_HSPA:
                     if (mHspaDataDistinguishable) {
-                        mDataIconList = TelephonyIcons.DATA_H[mInetCondition];
-                        mDataTypeIconId = R.drawable.stat_sys_data_connected_h;
+                        mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_H_ALT[mInetCondition] :
+                            TelephonyIcons.DATA_H[mInetCondition];
+                        mDataTypeIconId = mDataIconList[0];
                         mContentDescriptionDataType = mContext.getString(
                                 R.string.accessibility_data_connection_3_5g);
                     } else {
-                        mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
-                        mDataTypeIconId = R.drawable.stat_sys_data_connected_3g;
+                        mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_3G_ALT[mInetCondition] :
+                            TelephonyIcons.DATA_3G[mInetCondition];
+                        mDataTypeIconId = mDataIconList[0];
                         mContentDescriptionDataType = mContext.getString(
                                 R.string.accessibility_data_connection_3g);
                     }
                     break;
                 case TelephonyManager.NETWORK_TYPE_HSPAP:
-                    mDataIconList = TelephonyIcons.DATA_HP[mInetCondition];
-                    mDataTypeIconId = R.drawable.stat_sys_data_connected_hp;
+                    mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_HP_ALT[mInetCondition] :
+                        TelephonyIcons.DATA_HP[mInetCondition];
+                    mDataTypeIconId = mDataIconList[0];
                     mContentDescriptionDataType = mContext.getString(
                             R.string.accessibility_data_connection_HP);
                     break;
                 case TelephonyManager.NETWORK_TYPE_CDMA:
                     if (!mShowAtLeastThreeGees) {
                         // display 1xRTT for IS95A/B
-                        mDataIconList = TelephonyIcons.DATA_1X[mInetCondition];
-                        mDataTypeIconId = R.drawable.stat_sys_data_connected_1x;
+                        mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_1X_ALT[mInetCondition] :
+                        TelephonyIcons.DATA_1X[mInetCondition];
+                        mDataTypeIconId = mDataIconList[0];
                         mContentDescriptionDataType = mContext.getString(
-                                R.string.accessibility_data_connection_cdma);
+                            R.string.accessibility_data_connection_cdma);
                         break;
                     } else {
                         // fall through
                     }
                 case TelephonyManager.NETWORK_TYPE_1xRTT:
                     if (!mShowAtLeastThreeGees) {
-                        mDataIconList = TelephonyIcons.DATA_1X[mInetCondition];
-                        mDataTypeIconId = R.drawable.stat_sys_data_connected_1x;
+                        mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_1X_ALT[mInetCondition] :
+                        TelephonyIcons.DATA_1X[mInetCondition];
+                        mDataTypeIconId = mDataIconList[0];
                         mContentDescriptionDataType = mContext.getString(
-                                R.string.accessibility_data_connection_cdma);
+                            R.string.accessibility_data_connection_cdma);
                         break;
                     } else {
                         // fall through
@@ -604,26 +643,30 @@ public class NetworkController extends BroadcastReceiver {
                 case TelephonyManager.NETWORK_TYPE_EVDO_A:
                 case TelephonyManager.NETWORK_TYPE_EVDO_B:
                 case TelephonyManager.NETWORK_TYPE_EHRPD:
-                    mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
-                    mDataTypeIconId = R.drawable.stat_sys_data_connected_3g;
+                    mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_3G_ALT[mInetCondition] :
+                        TelephonyIcons.DATA_3G[mInetCondition];
+                    mDataTypeIconId = mDataIconList[0];
                     mContentDescriptionDataType = mContext.getString(
                             R.string.accessibility_data_connection_3g);
                     break;
                 case TelephonyManager.NETWORK_TYPE_LTE:
-                    mDataIconList = TelephonyIcons.DATA_4G[mInetCondition];
-                    mDataTypeIconId = R.drawable.stat_sys_data_connected_4g;
+                    mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_4G_ALT[mInetCondition] :
+                        TelephonyIcons.DATA_4G[mInetCondition];
+                    mDataTypeIconId = mDataIconList[0];
                     mContentDescriptionDataType = mContext.getString(
                             R.string.accessibility_data_connection_4g);
                     break;
                 default:
                     if (!mShowAtLeastThreeGees) {
-                        mDataIconList = TelephonyIcons.DATA_G[mInetCondition];
-                        mDataTypeIconId = R.drawable.stat_sys_data_connected_g;
+                        mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_G_ALT[mInetCondition] :
+                            TelephonyIcons.DATA_G[mInetCondition];
+                        mDataTypeIconId = mDataIconList[0];
                         mContentDescriptionDataType = mContext.getString(
                                 R.string.accessibility_data_connection_gprs);
                     } else {
-                        mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
-                        mDataTypeIconId = R.drawable.stat_sys_data_connected_3g;
+                        mDataIconList = mUseAltSignal ? TelephonyIcons.DATA_3G_ALT[mInetCondition] :
+                            TelephonyIcons.DATA_3G[mInetCondition];
+                        mDataTypeIconId = mDataIconList[0];
                         mContentDescriptionDataType = mContext.getString(
                                 R.string.accessibility_data_connection_3g);
                     }
@@ -633,10 +676,12 @@ public class NetworkController extends BroadcastReceiver {
 
         if (isCdma()) {
             if (isCdmaEri()) {
-                mDataTypeIconId = R.drawable.stat_sys_data_connected_roam;
+                mDataTypeIconId = mUseAltSignal ? R.drawable.stat_sys_data_connected_roam_alt :
+                    R.drawable.stat_sys_data_connected_roam;
             }
         } else if (mPhone.isNetworkRoaming()) {
-                mDataTypeIconId = R.drawable.stat_sys_data_connected_roam;
+                mDataTypeIconId = mUseAltSignal ? R.drawable.stat_sys_data_connected_roam_alt :
+                    R.drawable.stat_sys_data_connected_roam;
         }
     }
 
@@ -975,13 +1020,16 @@ public class NetworkController extends BroadcastReceiver {
                 combinedSignalIconId = mDataSignalIconId;
                 switch (mDataActivity) {
                     case TelephonyManager.DATA_ACTIVITY_IN:
-                        mMobileActivityIconId = R.drawable.stat_sys_signal_in;
+                        mMobileActivityIconId = mUseAltSignal ? R.drawable.stat_sys_signal_in_alt :
+                            R.drawable.stat_sys_signal_in;
                         break;
                     case TelephonyManager.DATA_ACTIVITY_OUT:
-                        mMobileActivityIconId = R.drawable.stat_sys_signal_out;
+                        mMobileActivityIconId = mUseAltSignal ? R.drawable.stat_sys_signal_out_alt :
+                            R.drawable.stat_sys_signal_out;
                         break;
                     case TelephonyManager.DATA_ACTIVITY_INOUT:
-                        mMobileActivityIconId = R.drawable.stat_sys_signal_inout;
+                        mMobileActivityIconId = mUseAltSignal ? R.drawable.stat_sys_signal_inout_alt :
+                            R.drawable.stat_sys_signal_inout;
                         break;
                     default:
                         mMobileActivityIconId = 0;
@@ -1415,6 +1463,40 @@ public class NetworkController extends BroadcastReceiver {
         } else {
             return "(null)";
         }
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUS_BAR_HIDE_SIGNAL_BARS), false,
+                    this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUS_BAR_SIGNAL_CLUSTER_ALT), false,
+                    this);
+            updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
+    protected void updateSettings() {
+        boolean clustdefault = mContext.getResources().getBoolean(R.bool.status_bar_alt_signal_layout);
+        mHideSignal = (Settings.System.getBoolean(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_HIDE_SIGNAL_BARS,false));
+        mUseAltSignal = (Settings.System.getBoolean(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_SIGNAL_CLUSTER_ALT, clustdefault));
+        updateTelephonySignalStrength();
+        updateDataNetType();
+        updateDataIcon();
+        refreshViews();
     }
 
 }
