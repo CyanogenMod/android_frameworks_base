@@ -60,6 +60,14 @@ status_t Overlay::queueBuffer(overlay_buffer_t buffer)
     return mOverlayData->queueBuffer(mOverlayData, buffer);
 }
 
+#ifdef STE_ENHANCEMENT
+status_t Overlay::postExternalBuffer(overlay_external_buf_t* buf)
+{
+    if (mStatus != NO_ERROR) return mStatus;
+    return mOverlayData->postExternalBuffer(mOverlayData, buf);
+}
+#endif
+
 status_t Overlay::resizeInput(uint32_t width, uint32_t height)
 {
     if (mStatus != NO_ERROR) return mStatus;

@@ -83,6 +83,11 @@ public:
     /* release the overlay buffer and post it */
     status_t queueBuffer(overlay_buffer_t buffer);
 
+#ifdef STE_ENHANCEMENT
+	/* post a buffer */
+	status_t postExternalBuffer(overlay_external_buf_t* buf);
+#endif
+
     /* change the width and height of the overlay */
     status_t resizeInput(uint32_t width, uint32_t height);
 
