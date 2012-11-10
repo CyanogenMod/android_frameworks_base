@@ -157,6 +157,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private static final int ADD_LISTENER = 8;
     private static final int REMOVE_LISTENER = 9;
     private static final int REQUEST_SINGLE_SHOT = 10;
+    private static final int DOWNLOAD_LTO_DATA = 11;
 
     // Request setid
     private static final int AGPS_RIL_REQUEST_SETID_IMSI = 1;
@@ -207,6 +208,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     // initialized to true so we do NTP and XTRA when the network comes up after booting
     private boolean mInjectNtpTimePending = true;
     private boolean mDownloadXtraDataPending = true;
+    private boolean mDownloadLtoDataPending = true;
 
     // set to true if the GPS engine does not do on-demand NTP time requests
     private boolean mPeriodicTimeInjection;
@@ -281,9 +283,11 @@ public class GpsLocationProvider implements LocationProviderInterface {
     // Alarms
     private final static String ALARM_WAKEUP = "com.android.internal.location.ALARM_WAKEUP";
     private final static String ALARM_TIMEOUT = "com.android.internal.location.ALARM_TIMEOUT";
+    private static final String ALARM_LTO = "com.android.internal.location.ALARM_LTO";
     private final AlarmManager mAlarmManager;
     private final PendingIntent mWakeupIntent;
     private final PendingIntent mTimeoutIntent;
+    private final PendingIntent mLtoIntent;
 
     private final IBatteryStats mBatteryStats;
     private final SparseIntArray mClientUids = new SparseIntArray();
@@ -291,6 +295,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     // how often to request NTP time, in milliseconds
     // current setting 24 hours
     private static final long NTP_INTERVAL = 24*60*60*1000;
+    private static final long LTO_INTERVAL = 24*60*60*1000;
     // how long to wait if we have a network error in NTP or XTRA downloading
     // current setting - 5 minutes
     private static final long RETRY_INTERVAL = 5*60*1000;
@@ -356,6 +361,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
             } else if (action.equals(ALARM_TIMEOUT)) {
                 if (DEBUG) Log.d(TAG, "ALARM_TIMEOUT");
                 hibernate();
+            } else if (action.equals(ALARM_LTO)) {
+				if (DEBUG) Log.d(TAG, "ALARM_LTO");
+				ltoDownloadRequest();
             } else if (action.equals(Intents.DATA_SMS_RECEIVED_ACTION)) {
                 checkSmsSuplInit(intent);
             } else if (action.equals(Intents.WAP_PUSH_RECEIVED_ACTION)) {
@@ -397,6 +405,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         mAlarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
         mWakeupIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(ALARM_WAKEUP), 0);
         mTimeoutIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(ALARM_TIMEOUT), 0);
+        mLtoIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(ALARM_LTO), 0);
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intents.DATA_SMS_RECEIVED_ACTION);
@@ -424,7 +433,13 @@ public class GpsLocationProvider implements LocationProviderInterface {
             FileInputStream stream = new FileInputStream(file);
             mProperties.load(stream);
             stream.close();
-
+            String mServer = mProperties.getProperty("LTO_SERVER_1");
+            if (mServer == null) {
+                Log.i(TAG, "LTO download disabled");
+                mDownloadLtoDataPending = false;
+            } else {
+                Log.i(TAG, "LTO download enabled");
+            }
             mSuplServerHost = mProperties.getProperty("SUPL_HOST");
             String portString = mProperties.getProperty("SUPL_PORT");
             if (mSuplServerHost != null && portString != null) {
@@ -466,7 +481,12 @@ public class GpsLocationProvider implements LocationProviderInterface {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ALARM_WAKEUP);
         intentFilter.addAction(ALARM_TIMEOUT);
+        intentFilter.addAction(ALARM_LTO);
         mContext.registerReceiver(mBroadcastReciever, intentFilter);
+    }
+    
+    private void ltoDownloadRequest() {
+        sendMessage(DOWNLOAD_LTO_DATA, 0, null);
     }
 
     /**
@@ -546,6 +566,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
             if (mDownloadXtraDataPending) {
                 sendMessage(DOWNLOAD_XTRA_DATA, 0, null);
             }
+            if (mDownloadLtoDataPending) {
+                sendMessage(DOWNLOAD_LTO_DATA, 0, null);
+            }
         }
     }
 
@@ -614,6 +637,23 @@ public class GpsLocationProvider implements LocationProviderInterface {
             mHandler.removeMessages(DOWNLOAD_XTRA_DATA);
             mHandler.sendMessageDelayed(Message.obtain(mHandler, DOWNLOAD_XTRA_DATA), RETRY_INTERVAL);
         }
+    }
+    
+    private void handleDownloadLtoData() {
+	    long interval = LTO_INTERVAL;
+        if (!mNetworkAvailable) {
+            mDownloadLtoDataPending = true;
+            return;
+        }
+        mDownloadLtoDataPending = false;
+        if (new GpsLtoDownloader(mContext, mProperties).downloadLtoData()) {
+            Log.d(TAG, "Download LTO data success");
+        } else {
+            Log.e(TAG, "Download LTO data failed");
+            interval = RETRY_INTERVAL;
+        }
+        mAlarmManager.cancel(mLtoIntent);
+        mAlarmManager.set(AlarmManager.RTC, interval + System.currentTimeMillis(), mLtoIntent);
     }
 
     /**
@@ -953,6 +993,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 xtraDownloadRequest();
                 result = true;
             }
+        } else if ("force_lto_injection".equals(command)) {
+            ltoDownloadRequest();
+            result = true;
         } else {
             Log.w(TAG, "sendExtraCommand: unknown command " + command);
         }
@@ -1587,6 +1630,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
                     if (mSupportsXtra) {
                         handleDownloadXtraData();
                     }
+                    break;
+                case DOWNLOAD_LTO_DATA:
+                    handleDownloadLtoData();
                     break;
                 case UPDATE_LOCATION:
                     handleUpdateLocation((Location)msg.obj);
