@@ -198,8 +198,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
     private boolean mAlwaysReadCloseOnTouchAttr = false;
 
-    private boolean mEnableGestures;
-
     private Context mContext;
     private ContextMenuBuilder mContextMenu;
     private MenuDialogHelper mContextMenuHelper;
@@ -209,33 +207,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
     private AudioManager mAudioManager;
     private KeyguardManager mKeyguardManager;
-
-    private Handler mConfigHandler;
-
-    private final class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.ENABLE_STYLUS_GESTURES), false,
-                    this);
-            checkGestures();
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            checkGestures();
-        }
-
-        void checkGestures() {
-            mEnableGestures = Settings.System.getInt(
-                    mContext.getContentResolver(),
-                    Settings.System.ENABLE_STYLUS_GESTURES, 0) == 1;
-        }
-    }
 
     private int mUiOptions = 0;
 
@@ -250,9 +221,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         super(context);
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-        mConfigHandler = new Handler();
-        SettingsObserver settingsObserver = new SettingsObserver(mConfigHandler);
-        settingsObserver.observe();
     }
 
     @Override
@@ -1835,9 +1803,15 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         private PopupWindow mActionModePopup;
         private Runnable mShowActionModePopup;
 
+        private SettingsObserver gestureObserver;
+        private Handler mConfigHandler;
+        private boolean mEnableGestures;
+
         public DecorView(Context context, int featureId) {
             super(context);
             mFeatureId = featureId;
+            mConfigHandler = new Handler();
+            gestureObserver = new SettingsObserver(mConfigHandler);
         }
 
         @Override
@@ -1995,6 +1969,36 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 dispatchStylusAction(PRESS_LONG);
             }
 
+        }
+
+        private final class SettingsObserver extends ContentObserver {
+            SettingsObserver(Handler handler) {
+                super(handler);
+            }
+
+            void observe() {
+                ContentResolver resolver = mContext.getContentResolver();
+                resolver.registerContentObserver(Settings.System
+                        .getUriFor(Settings.System.ENABLE_STYLUS_GESTURES), false,
+                        this);
+                checkGestures();
+            }
+
+            void unobserve() {
+                ContentResolver resolver = mContext.getContentResolver();
+                resolver.unregisterContentObserver(this);
+            }
+
+            @Override
+            public void onChange(boolean selfChange) {
+                checkGestures();
+            }
+
+            void checkGestures() {
+                mEnableGestures = Settings.System.getInt(
+                        mContext.getContentResolver(),
+                        Settings.System.ENABLE_STYLUS_GESTURES, 0) == 1;
+            }
         }
 
         private void menuAction() {
@@ -2719,6 +2723,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             
             updateWindowResizeState();
             
+            gestureObserver.observe();
+
             final Callback cb = getCallback();
             if (cb != null && !isDestroyed() && mFeatureId < 0) {
                 cb.onAttachedToWindow();
@@ -2740,6 +2746,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();
             
+            gestureObserver.unobserve();
+
             final Callback cb = getCallback();
             if (cb != null && mFeatureId < 0) {
                 cb.onDetachedFromWindow();
