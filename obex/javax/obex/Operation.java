@@ -175,9 +175,9 @@ public interface Operation {
 
     DataOutputStream openDataOutputStream() throws IOException;
 
-    void noEndofBody();
-
     void close() throws IOException;
+
+    void noEndofBody();
 
     int getMaxPacketSize();
 }
