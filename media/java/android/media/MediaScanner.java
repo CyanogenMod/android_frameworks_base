@@ -910,12 +910,18 @@ public class MediaScanner
 
             Uri tableUri = mFilesUri;
             MediaInserter inserter = mMediaInserter;
+            boolean clearThumbMagic = false;
             if (!mNoMedia) {
                 if (MediaFile.isVideoFileType(mFileType)) {
+                    values.put(Video.Media.MINI_THUMB_MAGIC, 0);
+                    clearThumbMagic = true;
                     tableUri = mVideoUri;
                 } else if (MediaFile.isImageFileType(mFileType)) {
+                    values.put(Images.Media.MINI_THUMB_MAGIC, 0);
+                    clearThumbMagic = true;
                     tableUri = mImagesUri;
                 } else if (MediaFile.isAudioFileType(mFileType)) {
+                    clearThumbMagic = true;
                     tableUri = mAudioUri;
                 }
             }
@@ -979,7 +985,9 @@ public class MediaScanner
                 result = ContentUris.withAppendedId(tableUri, rowId);
                 // path should never change, and we want to avoid replacing mixed cased paths
                 // with squashed lower case paths
-                values.remove(MediaStore.MediaColumns.DATA);
+                if (!clearThumbMagic) {
+                    values.remove(MediaStore.MediaColumns.DATA);
+                }
 
                 int mediaType = 0;
                 if (!MediaScanner.isNoMediaPath(entry.mPath)) {
