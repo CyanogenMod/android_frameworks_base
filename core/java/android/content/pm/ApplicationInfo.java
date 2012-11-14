@@ -399,6 +399,15 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public String[] resourceDirs;
 
     /**
+     * String retrieved from the seinfo tag found in selinux policy. This value
+     * is useful in setting an SELinux security context on the process as well
+     * as its data directory.
+     *
+     * {@hide}
+     */
+    public String seinfo;
+
+    /**
      * Paths to all shared libraries this application is linked against.  This
      * field is only set if the {@link PackageManager#GET_SHARED_LIBRARY_FILES
      * PackageManager.GET_SHARED_LIBRARY_FILES} flag was used when retrieving
@@ -502,6 +511,9 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         if (resourceDirs != null) {
             pw.println(prefix + "resourceDirs=" + resourceDirs);
         }
+        if (seinfo != null) {
+            pw.println(prefix + "seinfo=" + seinfo);
+        }
         pw.println(prefix + "dataDir=" + dataDir);
         if (sharedLibraryFiles != null) {
             pw.println(prefix + "sharedLibraryFiles=" + sharedLibraryFiles);
@@ -569,6 +581,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         publicSourceDir = orig.publicSourceDir;
         nativeLibraryDir = orig.nativeLibraryDir;
         resourceDirs = orig.resourceDirs;
+        seinfo = orig.seinfo;
         sharedLibraryFiles = orig.sharedLibraryFiles;
         dataDir = orig.dataDir;
         uid = orig.uid;
@@ -609,6 +622,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         dest.writeString(publicSourceDir);
         dest.writeString(nativeLibraryDir);
         dest.writeStringArray(resourceDirs);
+        dest.writeString(seinfo);
         dest.writeStringArray(sharedLibraryFiles);
         dest.writeString(dataDir);
         dest.writeInt(uid);
@@ -648,6 +662,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         publicSourceDir = source.readString();
         nativeLibraryDir = source.readString();
         resourceDirs = source.readStringArray();
+        seinfo = source.readString();
         sharedLibraryFiles = source.readStringArray();
         dataDir = source.readString();
         uid = source.readInt();
