@@ -858,8 +858,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                                 DevicePolicyData policy = getUserData(userHandle);
                                 boolean doProxyCleanup = admin.info.usesPolicy(
                                         DeviceAdminInfo.USES_POLICY_SETS_GLOBAL_PROXY);
-                                boolean doSELinuxCleanup = admin.info.usesPolicy(
-                                        DeviceAdminInfo.USES_POLICY_ENFORCE_SELINUX) && admin.isSELinuxAdmin;
+                                boolean doSELinuxCleanup = admin.isSELinuxAdmin;
                                 policy.mAdminList.remove(admin);
                                 policy.mAdminMap.remove(adminReceiver);
                                 validatePasswordOwnerLocked(policy);
@@ -2572,104 +2571,6 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     //                      FTT fails a
     //                           FTF fails a,b
 
-    // Cases = 16
-    @Override
-    public boolean isSELinuxAdmin(ComponentName who, int userHandle) {
-        enforceCrossUserPermission(userHandle);
-        synchronized (this) {
-            // Check for permissions
-            if (who == null) {
-                throw new NullPointerException("ComponentName is null");
-            }
-            // Only owner can set SELinux settings
-            if (userHandle != UserHandle.USER_OWNER
-                    || UserHandle.getCallingUserId() != UserHandle.USER_OWNER) {
-                Slog.w(TAG, "Only owner is allowed to set SELinux settings. User "
-                        + UserHandle.getCallingUserId() + " is not permitted.");
-                return false;
-            }
-            //Case F** = 4
-            ActiveAdmin admin = getActiveAdminForCallerLocked(who,
-                    DeviceAdminInfo.USES_POLICY_ENFORCE_SELINUX);
-            //Case T** = 4
-            return admin.isSELinuxAdmin;
-        }
-    }
-
-    // Cases = 16
-    @Override
-    public boolean setSELinuxAdmin(ComponentName who, boolean control, int userHandle) {
-        enforceCrossUserPermission(userHandle);
-        synchronized (this) {
-            // Check for permissions
-            if (who == null) {
-                throw new NullPointerException("ComponentName is null");
-            }
-            // Only owner can set SELinux settings
-            if (userHandle != UserHandle.USER_OWNER
-                    || UserHandle.getCallingUserId() != UserHandle.USER_OWNER) {
-                Slog.w(TAG, "Only owner is allowed to set SELinux settings. User "
-                        + UserHandle.getCallingUserId() + " is not permitted.");
-                return false;
-            }
-            // Case F**(*) = 8
-            ActiveAdmin admin = getActiveAdminForCallerLocked(who,
-                    DeviceAdminInfo.USES_POLICY_ENFORCE_SELINUX);
-
-            // Case TT*(T) = 2
-            // Case TF*(F) = 2
-            if (admin.isSELinuxAdmin == control) {
-                return true;
-            }
-
-            DevicePolicyData policy = getUserData(userHandle);
-            ActiveAdmin curAdmin = policy.findSELinuxAdminLocked();
-
-            // Case TFF(T) = 1
-            if (control && curAdmin == null) {
-                Slog.v(TAG, "SELinux admin set to " + admin.info.getComponent());
-                admin.isSELinuxAdmin = true;
-
-                admin.sebools = new HashMap<String, Boolean>(seboolsOrig.size());
-                Set<String> seboolnames = seboolsOrig.keySet();
-                for (String sebool : seboolnames) {
-                    boolean value = seboolsOrig.get(sebool);
-                    admin.sebools.put(sebool, value);
-                }
-
-                saveSettingsLocked(userHandle);
-                return true;
-            }
-
-            // Case TTT(F) = 1
-            if (!control && curAdmin.equals(admin)) {
-                boolean setSEpolicyFile = admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEPOLICY];
-                boolean setPropertyContextsFile = admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_PROPCTXS];
-                boolean setFileContextsFile = admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_FILECTXS];
-                boolean setSEappContextsFile = admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEAPPCTXS];
-
-                Slog.v(TAG, admin.info.getComponent() + " is no longer a SELinux admin");
-
-                admin.isSELinuxAdmin = false;
-                admin.enforceSELinux = false;
-                admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEPOLICY] = false;
-                admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_PROPCTXS] = false;
-                admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_FILECTXS] = false;
-                admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEAPPCTXS] = false;
-
-                saveSettingsLocked(userHandle);
-                syncSELinuxPolicyLocked(policy, setSEpolicyFile,
-                        setPropertyContextsFile, setFileContextsFile,
-                        setSEappContextsFile);
-                return true;
-            }
-
-            //Case TTF(F) = 1
-            //Case TFT(T) = 1
-            return false;
-        }
-    }
-
     /** Resets the state the SELinux values in an ActiveAdmin to the current state of system */
     private static void resetSELinuxAdmin(ActiveAdmin admin) {
         String[] seboolsnames = SELinux.getBooleanNames();
@@ -2767,6 +2668,104 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             }
 
         } else { //SELinux not enabled or user is not owner
+            return false;
+        }
+    }
+
+    // Cases = 8
+    @Override
+    public boolean isSELinuxAdmin(ComponentName who, int userHandle) {
+        enforceCrossUserPermission(userHandle);
+        synchronized (this) {
+            // Check for permissions
+            if (who == null) {
+                throw new NullPointerException("ComponentName is null");
+            }
+            // Only owner can set SELinux settings
+            if (userHandle != UserHandle.USER_OWNER
+                    || UserHandle.getCallingUserId() != UserHandle.USER_OWNER) {
+                Slog.w(TAG, "Only owner is allowed to set SELinux settings. User "
+                        + UserHandle.getCallingUserId() + " is not permitted.");
+                return false;
+            }
+            //Case F** = 4
+            ActiveAdmin admin = getActiveAdminForCallerLocked(who,
+                    DeviceAdminInfo.USES_POLICY_ENFORCE_SELINUX);
+            //Case T** = 4
+            return admin.isSELinuxAdmin;
+        }
+    }
+
+    // Cases = 16
+    @Override
+    public boolean setSELinuxAdmin(ComponentName who, boolean control, int userHandle) {
+        enforceCrossUserPermission(userHandle);
+        synchronized (this) {
+            // Check for permissions
+            if (who == null) {
+                throw new NullPointerException("ComponentName is null");
+            }
+            // Only owner can set SELinux settings
+            if (userHandle != UserHandle.USER_OWNER
+                    || UserHandle.getCallingUserId() != UserHandle.USER_OWNER) {
+                Slog.w(TAG, "Only owner is allowed to set SELinux settings. User "
+                        + UserHandle.getCallingUserId() + " is not permitted.");
+                return false;
+            }
+            // Case F**(*) = 8
+            ActiveAdmin admin = getActiveAdminForCallerLocked(who,
+                    DeviceAdminInfo.USES_POLICY_ENFORCE_SELINUX);
+
+            // Case TT*(T) = 2
+            // Case TF*(F) = 2
+            if (admin.isSELinuxAdmin == control) {
+                return true;
+            }
+
+            DevicePolicyData policy = getUserData(userHandle);
+            ActiveAdmin curAdmin = policy.findSELinuxAdminLocked();
+
+            // Case TFF(T) = 1
+            if (control && curAdmin == null) {
+                Slog.v(TAG, "SELinux admin set to " + admin.info.getComponent());
+                admin.isSELinuxAdmin = true;
+
+                admin.sebools = new HashMap<String, Boolean>(seboolsOrig.size());
+                Set<String> seboolnames = seboolsOrig.keySet();
+                for (String sebool : seboolnames) {
+                    boolean value = seboolsOrig.get(sebool);
+                    admin.sebools.put(sebool, value);
+                }
+
+                saveSettingsLocked(userHandle);
+                return true;
+            }
+
+            // Case TTT(F) = 1
+            if (!control && curAdmin.equals(admin)) {
+                boolean setSEpolicyFile = admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEPOLICY];
+                boolean setPropertyContextsFile = admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_PROPCTXS];
+                boolean setFileContextsFile = admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_FILECTXS];
+                boolean setSEappContextsFile = admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEAPPCTXS];
+
+                Slog.v(TAG, admin.info.getComponent() + " is no longer a SELinux admin");
+
+                admin.isSELinuxAdmin = false;
+                admin.enforceSELinux = false;
+                admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEPOLICY] = false;
+                admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_PROPCTXS] = false;
+                admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_FILECTXS] = false;
+                admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEAPPCTXS] = false;
+
+                saveSettingsLocked(userHandle);
+                syncSELinuxPolicyLocked(policy, setSEpolicyFile,
+                        setPropertyContextsFile, setFileContextsFile,
+                        setSEappContextsFile);
+                return true;
+            }
+
+            //Case TTF(F) = 1
+            //Case TFT(T) = 1
             return false;
         }
     }
