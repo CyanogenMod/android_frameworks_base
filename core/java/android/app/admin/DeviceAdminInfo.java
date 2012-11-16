@@ -146,6 +146,14 @@ public final class DeviceAdminInfo implements Parcelable {
      */
     public static final int USES_POLICY_DISABLE_KEYGUARD_FEATURES = 9;
 
+    /**
+     * A type of policy that this device admin can use: enforce SELinux policy.
+     *
+     * <p>To control this policy, the device admin must have a "enforce-selinux"
+     * tag in the "uses-policies" section of its meta-data.
+     */
+    public static final int USES_POLICY_ENFORCE_SELINUX = 10;
+
     /** @hide */
     public static class PolicyInfo {
         public final int ident;
@@ -197,6 +205,9 @@ public final class DeviceAdminInfo implements Parcelable {
                 USES_POLICY_DISABLE_KEYGUARD_FEATURES, "disable-keyguard-features",
                 com.android.internal.R.string.policylab_disableKeyguardFeatures,
                 com.android.internal.R.string.policydesc_disableKeyguardFeatures));
+        sPoliciesDisplayOrder.add(new PolicyInfo(USES_POLICY_ENFORCE_SELINUX, "enforce-selinux",
+                com.android.internal.R.string.policylab_enforceSelinux,
+                com.android.internal.R.string.policydesc_enforceSelinux));
 
         for (int i=0; i<sPoliciesDisplayOrder.size(); i++) {
             PolicyInfo pi = sPoliciesDisplayOrder.get(i);
@@ -389,7 +400,7 @@ public final class DeviceAdminInfo implements Parcelable {
      * {@link #USES_POLICY_RESET_PASSWORD}, {@link #USES_POLICY_FORCE_LOCK},
      * {@link #USES_POLICY_WIPE_DATA},
      * {@link #USES_POLICY_EXPIRE_PASSWORD}, {@link #USES_ENCRYPTED_STORAGE},
-     * {@link #USES_POLICY_DISABLE_CAMERA}.
+     * {@link #USES_POLICY_DISABLE_CAMERA}, {@link #USES_POLICY_ENFORCE_SELINUX}.
      */
     public boolean usesPolicy(int policyIdent) {
         return (mUsesPolicies & (1<<policyIdent)) != 0;

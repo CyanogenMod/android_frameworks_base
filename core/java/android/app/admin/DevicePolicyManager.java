@@ -1421,6 +1421,303 @@ public class DevicePolicyManager {
     }
 
     /**
+     * Called by an application that is administering the device to start or stop
+     * controlling SELinux policies, enforcement, booleans, etc. When an admin app
+     * gives up control of SELinux policies, the policy in place prior to the app
+     * taking control will be applied.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * <p>When an application gains control of SELinux settings, it is called an
+     * SELinux administrator. Admistration applications will call this with true and
+     * ensure this method returned true before attempting to toggle SELinux settings.
+     * When apps intend to stop controlling SELinux settings, apps should call this
+     * with false.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated,
+     * must be self
+     * @param control true if the admin wishes to control SELinux, false if the admin
+     * wishes to give back control of SELinux
+     * @return true if the operation succeeded, false if the operation failed or
+     * SELinux was not enabled on the device.
+     */
+    public boolean setSELinuxAdmin(ComponentName admin, boolean control) {
+        return setSELinuxAdmin(admin, control, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean setSELinuxAdmin(ComponentName admin, boolean control, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.setSELinuxAdmin(admin, control, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether an admin app has control over SELinux policy.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated,
+     * must be self
+     * @return true if admin app can control SELinux policy, false otherwise
+     */
+    public boolean isSELinuxAdmin(ComponentName admin) {
+        return isSELinuxAdmin(admin, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean isSELinuxAdmin(ComponentName admin, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.isSELinuxAdmin(admin, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Called by a SELinux admin to set SELinux into enforcing or permissive mode.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     * @param enforcing true for enforcing mode, false for permissive mode.
+     * @return false if Android was unable to set the desired mode
+     */
+    public boolean setSELinuxEnforcing(ComponentName admin, boolean enforcing) {
+        return setSELinuxEnforcing(admin, enforcing, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean setSELinuxEnforcing(ComponentName admin, boolean enforcing, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.setSELinuxEnforcing(admin, enforcing, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false; // I guess this doesn't fit the spec, but it never happens...
+    }
+
+    /**
+     * Determine whether or not SELinux policies are currently being enforced
+     * by the current admin.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * <p>The returned value is only meaningful if the current admin is a
+     * SELinux admin.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     */
+    public boolean getSELinuxEnforcing(ComponentName admin) {
+        return getSELinuxEnforcing(admin, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean getSELinuxEnforcing(ComponentName admin, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.getSELinuxEnforcing(admin, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get a list of the SELinux booleans available on the system.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * <p>The returned value is only meaningful if the current admin is a
+     * SELinux admin.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     */
+    public List<String> getSELinuxBooleanNames(ComponentName admin) {
+        return getSELinuxBooleanNames(admin, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public List<String> getSELinuxBooleanNames(ComponentName admin, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.getSELinuxBooleanNames(admin, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the value of a SELinux boolean.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * <p>The returned value is only meaningful if the current admin is a
+     * SELinux admin.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     * @param name the name of the SELinux boolean
+     * @return the value of the SELinux boolean
+     */
+    public boolean getSELinuxBooleanValue(ComponentName admin, String name) {
+        return getSELinuxBooleanValue(admin, name, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean getSELinuxBooleanValue(ComponentName admin, String name, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.getSELinuxBooleanValue(admin, name, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Set the value of a SELinux boolean.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * <p>The returned value is only meaningful if the current admin is a
+     * SELinux admin.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     * @param name the name of the SELinux boolean
+     * @param value the desired value for the boolean
+     * @return false if Android was unable to set the desired mode
+     */
+    public boolean setSELinuxBooleanValue(ComponentName admin, String name,
+            boolean value) {
+        return setSELinuxBooleanValue(admin, name, value, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean setSELinuxBooleanValue(ComponentName admin, String name,
+            boolean value, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.setSELinuxBooleanValue(admin, name, value, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    // Before changing these values, be sure to update
+    // DevicePolicyManagerService.java's POLICY_DESCRIPTIONS array.
+    public static final int SEPOLICY_FILE_SEPOLICY = 0;
+    public static final int SEPOLICY_FILE_PROPCTXS = 1;
+    public static final int SEPOLICY_FILE_FILECTXS = 2;
+    public static final int SEPOLICY_FILE_SEAPPCTXS = 3;
+    public static final int SEPOLICY_FILE_COUNT = SEPOLICY_FILE_SEAPPCTXS+1;
+
+    /**
+     * Sets a new policy file and reloads it at the proper time.
+     *
+     * <p>For {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
+     * {@link #SEPOLICY_FILE_FILECTXS}, and {@link #SEPOLICY_FILE_SEAPPCTXS}, the admin
+     * must have requested {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX}
+     * before calling this method. If it has not, a security exception will be
+     * thrown.
+     *
+     * <p>For {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
+     * {@link #SEPOLICY_FILE_FILECTXS}, and {@link #SEPOLICY_FILE_SEAPPCTXS}, these
+     * files are reloaded before returning from the DevicePolicyManager.
+     *
+     * <p>For {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
+     * {@link #SEPOLICY_FILE_FILECTXS}, and {@link #SEPOLICY_FILE_SEAPPCTXS}, the
+     * returned value is only meaingful if the current admin is a SELinux
+     * admin.
+     *
+     * @param admin which {@link DeviceAdminReceiver} this request is associated with
+     * @param policyType one of {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
+     * {@link #SEPOLICY_FILE_FILECTXS}, or {@link #SEPOLICY_FILE_SEAPPCTXS}
+     * @param policy the new policy file in bytes, or null if you wish to revert to
+     * the default policy
+     * @return false if Android was unable to set the new policy
+     */
+    public boolean setCustomPolicyFile(ComponentName admin, int policyType, byte[] policy) {
+        return setCustomPolicyFile(admin, policyType, policy, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean setCustomPolicyFile(ComponentName admin, int policyType, byte[] policy, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.setCustomPolicyFile(admin, policyType, policy, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determine whether this admin set a custom policy file.
+     *
+     * <p>For {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
+     * {@link #SEPOLICY_FILE_FILECTXS}, and {@link #SEPOLICY_FILE_SEAPPCTXS}, the admin
+     * must have requested {@link DeviceAdminInfo#USES_POLICY_ENFORCE_SELINUX}
+     * before calling this method. If it has not, a security exception will be
+     * thrown.
+     *
+     * <p>For {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
+     * {@link #SEPOLICY_FILE_FILECTXS}, and {@link #SEPOLICY_FILE_SEAPPCTXS}, the
+     * returned value is only meaingful if the current admin is a SELinux
+     * admin.
+     *
+     * @param admin which {@link DeviceAdminReceiver} this request is associated with
+     * @param policyType one of {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
+     * {@link #SEPOLICY_FILE_FILECTXS}, or {@link #SEPOLICY_FILE_SEAPPCTXS}
+     * @return true if the admin set a custom policy file
+     */
+    public boolean isCustomPolicyFile(ComponentName admin, int policyType) {
+        return isCustomPolicyFile(admin, policyType, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean isCustomPolicyFile(ComponentName admin, int policyType, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.isCustomPolicyFile(admin, policyType, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
      * @hide
      */
     public void setActiveAdmin(ComponentName policyReceiver, boolean refreshing) {

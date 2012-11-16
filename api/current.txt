@@ -4220,6 +4220,7 @@ package android.app.admin {
     field public static final int USES_ENCRYPTED_STORAGE = 7; // 0x7
     field public static final int USES_POLICY_DISABLE_CAMERA = 8; // 0x8
     field public static final int USES_POLICY_DISABLE_KEYGUARD_FEATURES = 9; // 0x9
+    field public static final int USES_POLICY_ENFORCE_SELINUX = 10; // 0xa
     field public static final int USES_POLICY_EXPIRE_PASSWORD = 6; // 0x6
     field public static final int USES_POLICY_FORCE_LOCK = 3; // 0x3
     field public static final int USES_POLICY_LIMIT_PASSWORD = 0; // 0x0
@@ -4270,15 +4271,21 @@ package android.app.admin {
     method public int getPasswordMinimumSymbols(android.content.ComponentName);
     method public int getPasswordMinimumUpperCase(android.content.ComponentName);
     method public int getPasswordQuality(android.content.ComponentName);
+    method public java.util.List<java.lang.String> getSELinuxBooleanNames(android.content.ComponentName);
+    method public boolean getSELinuxBooleanValue(android.content.ComponentName, java.lang.String);
+    method public boolean getSELinuxEnforcing(android.content.ComponentName);
     method public boolean getStorageEncryption(android.content.ComponentName);
     method public int getStorageEncryptionStatus();
     method public boolean hasGrantedPolicy(android.content.ComponentName, int);
     method public boolean isActivePasswordSufficient();
     method public boolean isAdminActive(android.content.ComponentName);
+    method public boolean isCustomPolicyFile(android.content.ComponentName, int);
+    method public boolean isSELinuxAdmin(android.content.ComponentName);
     method public void lockNow();
     method public void removeActiveAdmin(android.content.ComponentName);
     method public boolean resetPassword(java.lang.String, int);
     method public void setCameraDisabled(android.content.ComponentName, boolean);
+    method public boolean setCustomPolicyFile(android.content.ComponentName, int, byte[]);
     method public void setKeyguardDisabledFeatures(android.content.ComponentName, int);
     method public void setMaximumFailedPasswordsForWipe(android.content.ComponentName, int);
     method public void setMaximumTimeToLock(android.content.ComponentName, long);
@@ -4292,6 +4299,9 @@ package android.app.admin {
     method public void setPasswordMinimumSymbols(android.content.ComponentName, int);
     method public void setPasswordMinimumUpperCase(android.content.ComponentName, int);
     method public void setPasswordQuality(android.content.ComponentName, int);
+    method public boolean setSELinuxAdmin(android.content.ComponentName, boolean);
+    method public boolean setSELinuxBooleanValue(android.content.ComponentName, java.lang.String, boolean);
+    method public boolean setSELinuxEnforcing(android.content.ComponentName, boolean);
     method public int setStorageEncryption(android.content.ComponentName, boolean);
     method public void wipeData(int);
     field public static final java.lang.String ACTION_ADD_DEVICE_ADMIN = "android.app.action.ADD_DEVICE_ADMIN";
@@ -4315,6 +4325,11 @@ package android.app.admin {
     field public static final int PASSWORD_QUALITY_SOMETHING = 65536; // 0x10000
     field public static final int PASSWORD_QUALITY_UNSPECIFIED = 0; // 0x0
     field public static final int RESET_PASSWORD_REQUIRE_ENTRY = 1; // 0x1
+    field public static final int SEPOLICY_FILE_COUNT = 4; // 0x4
+    field public static final int SEPOLICY_FILE_FILECTXS = 2; // 0x2
+    field public static final int SEPOLICY_FILE_PROPCTXS = 1; // 0x1
+    field public static final int SEPOLICY_FILE_SEAPPCTXS = 3; // 0x3
+    field public static final int SEPOLICY_FILE_SEPOLICY = 0; // 0x0
     field public static final int WIPE_EXTERNAL_STORAGE = 1; // 0x1
   }
 

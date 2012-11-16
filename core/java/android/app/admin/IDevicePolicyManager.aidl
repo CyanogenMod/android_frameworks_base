@@ -93,6 +93,19 @@ interface IDevicePolicyManager {
     void removeActiveAdmin(in ComponentName policyReceiver, int userHandle);
     boolean hasGrantedPolicy(in ComponentName policyReceiver, int usesPolicy, int userHandle);
 
+    boolean setSELinuxAdmin(in ComponentName who, boolean control, int userHandle);
+    boolean isSELinuxAdmin(in ComponentName who, int userHandle);
+
+    boolean setSELinuxEnforcing(in ComponentName who, boolean enforcing, int userHandle);
+    boolean getSELinuxEnforcing(in ComponentName who, int userHandle);
+
+    List<String> getSELinuxBooleanNames(in ComponentName who, int userHandle);
+    boolean getSELinuxBooleanValue(in ComponentName who, String name, int userHandle);
+    boolean setSELinuxBooleanValue(in ComponentName who, String name, boolean value, int userHandle);
+
+    boolean setCustomPolicyFile(in ComponentName who, int policyType, in byte[] policy, int userHandle);
+    boolean isCustomPolicyFile(in ComponentName who, int policyType, int userHandle);
+
     void setActivePasswordState(int quality, int length, int letters, int uppercase, int lowercase,
         int numbers, int symbols, int nonletter, int userHandle);
     void reportFailedPasswordAttempt(int userHandle);
