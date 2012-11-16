@@ -1824,6 +1824,10 @@
     <string name="policylab_enforceSelinux">Enforce SELinux</string>
     <!-- Description of policy access to start enforcing SELinux policy [CHAR LIMIT=110]-->
     <string name="policydesc_enforceSelinux">Toggle SELinux policy enforcing or permissive mode.</string>
+    <!-- Title of policy access to start enforcing SE Android MMAC policy [CHAR LIMIT=30]-->
+    <string name="policylab_enforceMmac">Enforce SE Android MMAC</string>
+    <!-- Description of policy access to start enforcing SE Android MMAC policy [CHAR LIMIT=110]-->
+    <string name="policydesc_enforceMmac">Toggle SE Android MMAC policy enforcing or permissive mode.</string>
 
     <!-- The order of these is important, don't reorder without changing Contacts.java --> <skip />
     <!-- Phone number types from android.provider.Contacts. This could be used when adding a new phone number for a contact, for example. -->

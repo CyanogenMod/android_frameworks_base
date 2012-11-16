@@ -1640,6 +1640,134 @@ public class DevicePolicyManager {
         return false;
     }
 
+    /**
+     * Checks whether an admin app has control over SE Android MMAC policy.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_MMAC} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated,
+     * must be self
+     * @return true if admin app can control MMAC policy, false otherwise
+     * @hide
+     */
+    public boolean isMMACadmin(ComponentName admin) {
+        return isMMACadmin(admin, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean isMMACadmin(ComponentName admin, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.isMMACadmin(admin, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Called by an application that is administering the device to start or stop
+     * controlling SE Android MMAC policies, enforcement, etc. When an admin
+     * app gives up control of MMAC policies, the policy in place prior to the app
+     * taking control will be applied.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_MMAC} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * <p>When an application gains control of MMAC settings, it is called an
+     * MMAC administrator. Admistration applications will call this with true and
+     * ensure this method returned true before attempting to toggle MMAC settings.
+     * When apps intend to stop controlling MMAC settings, apps should call this
+     * with false.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated,
+     * must be self
+     * @param control true if the admin wishes to control MMAC, false if the admin
+     * wishes to give back control of MMAC
+     * @return true if the operation succeeded, false if the operation failed or
+     * MMAC was not enabled on the device.
+     * @hide
+     */
+    public boolean setMMACadmin(ComponentName admin, boolean control) {
+        return setMMACadmin(admin, control, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean setMMACadmin(ComponentName admin, boolean control, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.setMMACadmin(admin, control, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Called by an application that is a SEAndroid MMAC admin to set MMAC
+     * protections into enforcing or permissive mode. The system requires a
+     * reboot for the protections to take effect.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_MMAC} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     * @param enforcing true for enforcing mode, false for permissive mode.
+     * @return false if Android was unable to set the desired mode
+     * @hide
+     */
+    public boolean setMMACenforcing(ComponentName admin, boolean enforcing) {
+        return setMMACenforcing(admin, enforcing, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean setMMACenforcing(ComponentName admin, boolean enforcing, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.setMMACenforcing(admin, enforcing, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determine whether SE Android MMAC policies are being enforced by the
+     * current admin.
+     *
+     * <p>The calling device admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_MMAC} to be able to call
+     * this method; if it has not, a security exception will be thrown.
+     *
+     * <p>The returned value is only meaningful if the current admin is a
+     * MMAC admin.
+     *
+     * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     * @hide
+     */
+    public boolean getMMACenforcing(ComponentName admin) {
+        return getMMACenforcing(admin, UserHandle.myUserId());
+    }
+
+    /** @hide per-user version */
+    public boolean getMMACenforcing(ComponentName admin, int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.getMMACenforcing(admin, userHandle);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed talking with device policy server", e);
+            }
+        }
+        return false;
+    }
+
     // Before changing these values, be sure to update
     // DevicePolicyManagerService.java's POLICY_DESCRIPTIONS array.
     /** @hide */
@@ -1651,7 +1779,9 @@ public class DevicePolicyManager {
     /** @hide */
     public static final int SEPOLICY_FILE_SEAPPCTXS = 3;
     /** @hide */
-    public static final int SEPOLICY_FILE_COUNT = SEPOLICY_FILE_SEAPPCTXS+1;
+    public static final int MMAC_POLICY_FILE = 4;
+    /** @hide */
+    public static final int SEPOLICY_FILE_COUNT = MMAC_POLICY_FILE+1;
 
     /**
      * Sets a new policy file and reloads it at the proper time.
@@ -1671,9 +1801,20 @@ public class DevicePolicyManager {
      * returned value is only meaingful if the current admin is a SELinux
      * admin.
      *
+     * <p>For {@link #MMAC_POLICY_FILE}, the admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_MMAC} before calling this
+     * method. If it has not, a security exception will be thrown.
+     *
+     * <p>For {@link #MMAC_POLICY_FILE}, the MMAC policy file is reloaded on
+     * reboot.
+     *
+     * <p>For {@link #MMAC_POLICY_FILE}, the returned value is only meaingful
+     * if the current admin is a MMAC admin.
+     *
      * @param admin which {@link DeviceAdminReceiver} this request is associated with
      * @param policyType one of {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
-     * {@link #SEPOLICY_FILE_FILECTXS}, or {@link #SEPOLICY_FILE_SEAPPCTXS}
+     * {@link #SEPOLICY_FILE_FILECTXS}, {@link #SEPOLICY_FILE_SEAPPCTXS},
+     * or {@link #MMAC_POLICY_FILE}.
      * @param policy the new policy file in bytes, or null if you wish to revert to
      * the default policy
      * @return false if Android was unable to set the new policy
@@ -1709,9 +1850,17 @@ public class DevicePolicyManager {
      * returned value is only meaingful if the current admin is a SELinux
      * admin.
      *
+     * <p>For {@link #MMAC_POLICY_FILE}, the admin must have requested
+     * {@link DeviceAdminInfo#USES_POLICY_ENFORCE_MMAC} before calling this
+     * method. If it has not, a security exception will be thrown.
+     *
+     * <p>For {@link #MMAC_POLICY_FILE}, the returned value is only meaingful
+     * if the current admin is a MMAC admin.
+     *
      * @param admin which {@link DeviceAdminReceiver} this request is associated with
      * @param policyType one of {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
-     * {@link #SEPOLICY_FILE_FILECTXS}, or {@link #SEPOLICY_FILE_SEAPPCTXS}
+     * {@link #SEPOLICY_FILE_FILECTXS}, {@link #SEPOLICY_FILE_SEAPPCTXS}, or
+     * {@link #MMAC_POLICY_FILE}
      * @return true if the admin set a custom policy file
      * @hide
      */

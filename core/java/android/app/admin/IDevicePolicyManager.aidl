@@ -103,6 +103,12 @@ interface IDevicePolicyManager {
     boolean getSELinuxBooleanValue(in ComponentName who, String name, int userHandle);
     boolean setSELinuxBooleanValue(in ComponentName who, String name, boolean value, int userHandle);
 
+    boolean isMMACadmin(in ComponentName who, int userHandle);
+    boolean setMMACadmin(in ComponentName who, boolean control, int userHandle);
+
+    boolean setMMACenforcing(in ComponentName who, boolean enforcing, int userHandle);
+    boolean getMMACenforcing(in ComponentName who, int userHandle);
+
     boolean setCustomPolicyFile(in ComponentName who, int policyType, in byte[] policy, int userHandle);
     boolean isCustomPolicyFile(in ComponentName who, int policyType, int userHandle);
 

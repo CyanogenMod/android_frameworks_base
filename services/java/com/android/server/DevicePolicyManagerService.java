@@ -149,6 +149,19 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             // No device admin controls SELinux
             return null;
         }
+
+        /** Return the admin that controls SE Android MMAC, or null if there is none. */
+        ActiveAdmin findMMACadminLocked() {
+            //Uses very similar code to the SELinux version
+            final int N = mAdminList.size();
+            for (int i = 0; i < N; ++i) {
+                ActiveAdmin ap = mAdminList.get(i);
+                if (ap.isMMACadmin) {
+                    return ap;
+                }
+            }
+            return null;
+        }
     }
 
     final SparseArray<DevicePolicyData> mUserData = new SparseArray<DevicePolicyData>();
@@ -228,6 +241,23 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
     }
 
+    private static class MMACpolicyDescription extends PolicyFileDescription {
+        MMACpolicyDescription(String path) {
+            super(path, DeviceAdminInfo.USES_POLICY_ENFORCE_MMAC);
+        }
+
+        @Override
+        boolean isPolicyAdmin(ActiveAdmin admin) {
+            return admin.isMMACadmin;
+        }
+
+        @Override
+        boolean doPolicyReload() {
+            //policy is reloaded on reboot
+            return true;
+        }
+    }
+
     private static final String SEPOLICY_PATH_SEPOLICY = "/data/system/sepolicy";
 
     private static final String SEPOLICY_PATH_PROPCTXS = "/data/system/property_contexts";
@@ -235,6 +265,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     private static final String SEPOLICY_PATH_FILECTXS = "/data/system/file_contexts";
 
     private static final String SEPOLICY_PATH_SEAPPCTXS = "/data/system/seapp_contexts";
+
+    private static final String MMAC_POLICY_PATH = "/data/system/mac_permissions.xml";
 
     private static final PolicyFileDescription[] POLICY_DESCRIPTIONS = {
         // 0 = SEPOLICY_FILE_SEPOLICY
@@ -245,6 +277,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         new SELinuxPolicyDescription(SEPOLICY_PATH_FILECTXS),
         // 3 = SEPOLICY_FILE_SEAPPCTXS
         new SELinuxPolicyDescription(SEPOLICY_PATH_SEAPPCTXS),
+        // 4 = MMAC_POLICY_FILE
+        new MMACpolicyDescription(MMAC_POLICY_PATH),
     };
 
     static class ActiveAdmin {
@@ -302,6 +336,9 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         boolean isSELinuxAdmin = false;
         boolean enforceSELinux = false;
         Map<String, Boolean> sebools = null;
+
+        boolean isMMACadmin = false;
+        boolean enforceMMAC = false;
 
         boolean[] isCustomPolicyFile = new boolean[DevicePolicyManager.SEPOLICY_FILE_COUNT];
 
@@ -463,6 +500,22 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                     out.endTag(null, "selinux-seappctxs");
                 }
             }
+            if (isMMACadmin) {
+                out.startTag(null, "mmac-admin");
+                out.attribute(null, "value", Boolean.toString(isMMACadmin));
+                out.endTag(null, "mmac-admin");
+                if (enforceMMAC) {
+                    out.startTag(null, "enforce-mmac");
+                    out.attribute(null, "value", Boolean.toString(enforceMMAC));
+                    out.endTag(null, "enforce-mmac");
+                }
+                boolean isCustomMMAC = isCustomPolicyFile[DevicePolicyManager.MMAC_POLICY_FILE];
+                if (isCustomMMAC) {
+                    out.startTag(null, "mmac-macperms");
+                    out.attribute(null, "value", Boolean.toString(isCustomMMAC));
+                    out.endTag(null, "mmac-macperms");
+                }
+            }
         }
 
         void readFromXml(XmlPullParser parser)
@@ -560,6 +613,15 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                 } else if ("selinux-seappctxs".equals(tag)) {
                     this.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEAPPCTXS] =
                             Boolean.parseBoolean(parser.getAttributeValue(null, "value"));
+                } else if ("mmac-admin".equals(tag)) {
+                    isMMACadmin = Boolean.parseBoolean(
+                            parser.getAttributeValue(null, "value"));
+                } else if ("enforce-mmac".equals(tag)) {
+                    enforceMMAC = Boolean.parseBoolean(
+                            parser.getAttributeValue(null, "value"));
+                } else if ("mmac-macperms".equals(tag)) {
+                    this.isCustomPolicyFile[DevicePolicyManager.MMAC_POLICY_FILE] =
+                            Boolean.parseBoolean(parser.getAttributeValue(null, "value"));
                 } else {
                     Slog.w(TAG, "Unknown admin tag: " + tag);
                 }
@@ -632,6 +694,13 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                     pw.println(isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_FILECTXS]);
             pw.print(prefix); pw.print("customSEappContexts=");
                     pw.println(isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEAPPCTXS]);
+            pw.print(prefix); pw.print("isMMACadmin=");
+                    pw.println(isMMACadmin);
+            pw.print(prefix); pw.print("enforceMMAC=");
+                    pw.println(enforceMMAC);
+            pw.print(prefix); pw.print("customMMACpolicy=");
+                    pw.println(isCustomPolicyFile[DevicePolicyManager.MMAC_POLICY_FILE]);
+
         }
     }
 
@@ -859,6 +928,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                                 boolean doProxyCleanup = admin.info.usesPolicy(
                                         DeviceAdminInfo.USES_POLICY_SETS_GLOBAL_PROXY);
                                 boolean doSELinuxCleanup = admin.isSELinuxAdmin;
+                                boolean doMMACcleanup = admin.isMMACadmin;
                                 policy.mAdminList.remove(admin);
                                 policy.mAdminMap.remove(adminReceiver);
                                 validatePasswordOwnerLocked(policy);
@@ -872,6 +942,9 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                                             admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_PROPCTXS],
                                             admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_FILECTXS],
                                             admin.isCustomPolicyFile[DevicePolicyManager.SEPOLICY_FILE_SEAPPCTXS]);
+                                }
+                                if (doMMACcleanup) {
+                                    syncMMACpolicyLocked(policy, admin.isCustomPolicyFile[DevicePolicyManager.MMAC_POLICY_FILE]);
                                 }
                                 saveSettingsLocked(userHandle);
                                 updateMaximumTimeToLockLocked(policy);
@@ -1113,6 +1186,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         syncDeviceCapabilitiesLocked(policy);
         updateMaximumTimeToLockLocked(policy);
         syncSELinuxPolicyLocked(policy, false);
+        syncMMACpolicyLocked(policy, false);
     }
 
     static void validateQualityConstant(int quality) {
@@ -2917,6 +2991,210 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             }
             DevicePolicyData policy = getUserData(userHandle);
             return syncSELinuxPolicyLocked(policy, false);
+        }
+    }
+
+    // Possible MMAC Admin API states:
+    //  1: Caller has ENFORCE_MMAC = {T,F}
+    //  2: Caller is a MMAC admin = {T,F}
+    //  3: There is a MMAC admin on the system = {T,F}
+    // Invariants:
+    //  a) 1=F -> 2=F
+    //  b) 3=F -> 2=F for all admin apps
+    // States:
+    //  TTT, TTF, TFT, TFF, FTT, FTF, FFT, FFF
+    //  TTT,      TFT, TFF,           FFT, FFF
+    //       TTF fails b,
+    //                      FTT fails a
+    //                           FTF fails a,b
+
+    /**
+     * This system property is used to share the state of the MAC enforcing mode.
+     * SE Android MAC protection layer is expected to read this property and act accordingly.
+     */
+    public static final String SYSTEM_PROP_ENFORCE_MAC = "persist.mac_enforcing_mode";
+
+    /**
+     * Sync's the current MMAC admin's policies to the device. If there is
+     * no MMAC admin, then this will set MMAC to permissive mode
+     * and may remove the {@link MMAC_POLICY_PATH} file.
+     * @return true if policies were synced successfully
+     */
+    private boolean syncMMACpolicyLocked(DevicePolicyData policy,
+            boolean removePolicy) {
+        if (policy.mUserHandle == UserHandle.USER_OWNER) {
+            ActiveAdmin mmacAdmin = policy.findMMACadminLocked();
+            if (mmacAdmin == null) {
+                // No admin, so create a fake one and restore it.
+                mmacAdmin = new ActiveAdmin(null);
+                mmacAdmin.enforceMMAC = false;
+            }
+
+            boolean systemState = SystemProperties.getBoolean(SYSTEM_PROP_ENFORCE_MAC, false);
+            boolean enforceMMAC = mmacAdmin.enforceMMAC;
+            if (systemState != enforceMMAC) {
+                Slog.v(TAG, SYSTEM_PROP_ENFORCE_MAC + " was " + systemState + ", to be set to " + enforceMMAC);
+                String value = enforceMMAC ? "1" : "0";
+                SystemProperties.set(SYSTEM_PROP_ENFORCE_MAC, value);
+            }
+
+            if (removePolicy) {
+                boolean ret = true;
+                File polFile;
+                polFile = new File(MMAC_POLICY_PATH);
+                if (polFile.exists() && !polFile.delete()) {
+                    ret = false;
+                }
+                return ret;
+
+            } else { //Not removing any policy files
+                return true;
+            }
+
+        } else { //User is not owner
+            return false;
+        }
+    }
+
+    // Cases = 8
+    @Override
+    public boolean isMMACadmin(ComponentName who, int userHandle) {
+        //Uses very similar code to the SELinux version
+        enforceCrossUserPermission(userHandle);
+        synchronized (this) {
+            // Check for permissions
+            if (who == null) {
+                throw new NullPointerException("ComponentName is null");
+            }
+            // Only owner can set MMAC settings
+            if (userHandle != UserHandle.USER_OWNER
+                    || UserHandle.getCallingUserId() != UserHandle.USER_OWNER) {
+                Slog.w(TAG, "Only owner is allowed to set MMAC settings. User "
+                        + UserHandle.getCallingUserId() + " is not permitted.");
+                return false;
+            }
+            // Case F** = 4
+            ActiveAdmin admin = getActiveAdminForCallerLocked(who,
+                    DeviceAdminInfo.USES_POLICY_ENFORCE_MMAC);
+            // Case T** = 4
+            return admin.isMMACadmin;
+        }
+    }
+
+    // Cases = 16
+    @Override
+    public boolean setMMACadmin(ComponentName who, boolean control, int userHandle) {
+        //Uses very similar code to the SELinux version
+        enforceCrossUserPermission(userHandle);
+        synchronized (this) {
+            // Check for permissions
+            if (who == null) {
+                throw new NullPointerException("ComponentName is null");
+            }
+            // Only owner can set MMAC settings
+            if (userHandle != UserHandle.USER_OWNER
+                    || UserHandle.getCallingUserId() != UserHandle.USER_OWNER) {
+                Slog.w(TAG, "Only owner is allowed to set MMAC settings. User "
+                        + UserHandle.getCallingUserId() + " is not permitted.");
+                return false;
+            }
+            // Case F**(*) = 8
+            ActiveAdmin admin = getActiveAdminForCallerLocked(who,
+                    DeviceAdminInfo.USES_POLICY_ENFORCE_MMAC);
+
+            // Case TT*(T) = 2
+            // Case TF*(F) = 2
+            if (admin.isMMACadmin == control) {
+                return true;
+            }
+
+            DevicePolicyData policy = getUserData(userHandle);
+            ActiveAdmin curAdmin = policy.findMMACadminLocked();
+
+            // Case TFF(T) = 1
+            if (control && curAdmin == null) {
+                Slog.v(TAG, "SE Android MMAC admin set to " + admin.info.getComponent());
+                admin.isMMACadmin = true;
+                saveSettingsLocked(userHandle);
+                return true;
+            }
+
+            // Case TTT(F) = 1
+            if (!control && curAdmin.equals(admin)) {
+                boolean setMMACpolicyFile = admin.isCustomPolicyFile[DevicePolicyManager.MMAC_POLICY_FILE];
+                Slog.v(TAG, admin.info.getComponent() + " is no longer a SE Android MMAC admin");
+
+                admin.isMMACadmin = false;
+                admin.enforceMMAC = false;
+                admin.isCustomPolicyFile[DevicePolicyManager.MMAC_POLICY_FILE] = false;
+
+                saveSettingsLocked(userHandle);
+                syncMMACpolicyLocked(policy, setMMACpolicyFile);
+                return true;
+            }
+        }
+
+        // Case TTF(F) = 1
+        // Case TFT(T) = 1
+        return false;
+    }
+
+    @Override
+    public boolean getMMACenforcing(ComponentName who, int userHandle) {
+        //Uses very similar code to the SELinux version
+        enforceCrossUserPermission(userHandle);
+        synchronized (this) {
+            // Check for permissions
+            if (who == null) {
+                throw new NullPointerException("ComponentName is null");
+            }
+            // Only owner can set MMAC settings
+            if (userHandle != UserHandle.USER_OWNER
+                    || UserHandle.getCallingUserId() != UserHandle.USER_OWNER) {
+                Slog.w(TAG, "Only owner is allowed to set MMAC settings. User "
+                        + UserHandle.getCallingUserId() + " is not permitted.");
+                return false;
+            }
+            // Case: F** = 4
+            ActiveAdmin admin = getActiveAdminForCallerLocked(who,
+                    DeviceAdminInfo.USES_POLICY_ENFORCE_MMAC);
+            // Case: T** = 4
+            return admin.isMMACadmin && admin.enforceMMAC;
+        }
+    }
+
+    @Override
+    public boolean setMMACenforcing(ComponentName who, boolean enforcing, int userHandle) {
+        //Uses very similar code to the SELinux version
+        enforceCrossUserPermission(userHandle);
+        synchronized (this) {
+            // Check for permissions
+            if (who == null) {
+                throw new NullPointerException("ComponentName is null");
+            }
+            // Only owner can set MMAC settings
+            if (userHandle != UserHandle.USER_OWNER
+                    || UserHandle.getCallingUserId() != UserHandle.USER_OWNER) {
+                Slog.w(TAG, "Only owner is allowed to set MMAC settings. User "
+                        + UserHandle.getCallingUserId() + " is not permitted.");
+                return false;
+            }
+            // Case F**(*) = 8
+            ActiveAdmin admin = getActiveAdminForCallerLocked(who,
+                    DeviceAdminInfo.USES_POLICY_ENFORCE_MMAC);
+
+            // Case TF*(*) = 4
+            if (!admin.isMMACadmin) {
+                return false;
+            }
+
+            // Case TT*(*) = 4
+            if (admin.enforceMMAC != enforcing) {
+                admin.enforceMMAC = enforcing;
+                saveSettingsLocked(userHandle);
+            }
+            DevicePolicyData policy = getUserData(userHandle);
+            return syncMMACpolicyLocked(policy, false);
         }
     }
 
