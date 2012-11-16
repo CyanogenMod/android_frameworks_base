@@ -9,6 +9,7 @@
 
 #include "XMLNode.h"
 #include "ResourceFilter.h"
+#include "ResourceIdCache.h"
 
 #include <androidfw/ResourceTypes.h>
 #include <utils/ByteOrder.h>
@@ -1999,6 +2000,9 @@ uint32_t ResourceTable::getResId(const String16& package,
                                  const String16& name,
                                  bool onlyPublic) const
 {
+    uint32_t id = ResourceIdCache::lookup(package, type, name, onlyPublic);
+    if (id != 0) return id;     // cache hit
+
     sp<Package> p = mPackages.valueFor(package);
     if (p == NULL) return 0;
 
@@ -2017,11 +2021,10 @@ uint32_t ResourceTable::getResId(const String16& package,
         }
         
         if (Res_INTERNALID(rid)) {
-            return rid;
+            return ResourceIdCache::store(package, type, name, onlyPublic, rid);
         }
-        return Res_MAKEID(p->getAssignedId()-1,
-                          Res_GETTYPE(rid),
-                          Res_GETENTRY(rid));
+        return ResourceIdCache::store(package, type, name, onlyPublic,
+                Res_MAKEID(p->getAssignedId()-1, Res_GETTYPE(rid), Res_GETENTRY(rid)));
     }
 
     sp<Type> t = p->getTypes().valueFor(type);
@@ -2030,7 +2033,9 @@ uint32_t ResourceTable::getResId(const String16& package,
     if (c == NULL) return 0;
     int32_t ei = c->getEntryIndex();
     if (ei < 0) return 0;
-    return getResId(p, t, ei);
+
+    return ResourceIdCache::store(package, type, name, onlyPublic,
+            getResId(p, t, ei));
 }
 
 uint32_t ResourceTable::getResId(const String16& ref,
