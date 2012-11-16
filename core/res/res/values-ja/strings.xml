@@ -1292,6 +1292,26 @@
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"完了"</string>
 
     <!-- CM Extra entries -->
+    <!-- label for item that toggles expand desktop mode -->
+    <string name="global_actions_toggle_expanded_desktop_mode">拡張デスクトップ</string>
+    <!-- status message in phone options dialog for when expand desktop mode is on -->
+    <string name="global_actions_expanded_desktop_mode_on_status">有効</string>
+    <!-- status message in phone options dialog for when expand desktop mode is off -->
+    <string name="global_actions_expanded_desktop_mode_off_status">無効</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sendMockSms">擬似SMSメッセージを送信</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sendMockSms">擬似SMSメッセージの送信をアプリケーションに許可します。
+     アプリは信頼されたアプリケーションにSMSを送信することができます。
+     悪意のあるアプリは、連続してメッセージを送信することでデバイスの通知システムをブロックさせ、ユーザーを混乱させる可能性があります。
+    </string>
+
+    <!-- ActionBar action to open the current selection as a url in the browser [CHAR-LIMIT=16] -->
+    <string name="openurl">URLを開く</string>
+
+    <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
+    <string name="storage_sd_dock_card">SDカードを接続</string>
 
     <!-- Lock screen Weather - Weather codes -->
     <string name="weather_0">竜巻</string>
@@ -1361,6 +1381,7 @@
     <string name="weather_no_data">データなし</string>
     <string name="weather_tap_to_refresh">タップして更新</string>
     <string name="weather_refreshing">更新中</string>
+    <string name="weather_last_sync_just_now">たった今</string>
 
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system" product="tablet">タブレットを再起動</string>
@@ -1414,5 +1435,9 @@
     <string name="wildcardProfile">その他</string>
 
     <string name="app_killed_message">アプリケーションを強制終了しました</string>
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">画面の回転を解除しました</string>
+    <string name="toast_rotation_locked">画面の回転をロックしました</string>
 
 </resources>
