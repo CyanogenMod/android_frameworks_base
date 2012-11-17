@@ -109,6 +109,26 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
 
         mKeyboardView = (PasswordEntryKeyboardView) findViewById(R.id.keyboard);
         mPasswordEntry = (EditText) findViewById(R.id.passwordEntry);
+        mPasswordEntry.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction()==KeyEvent.ACTION_DOWN
+                        && (keyCode == KeyEvent.KEYCODE_BACK
+                        || keyCode == KeyEvent.KEYCODE_MENU
+                        || keyCode == KeyEvent.KEYCODE_HOME)) {
+                    if ((event.getFlags() & KeyEvent.FLAG_LONG_PRESS) == 0) {
+                        event.startTracking();
+                        return true;
+                    } else {
+                        if (LockScreen.handleKeyLongPress(getContext(), keyCode)) {
+                            mCallback.pokeWakelock();
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        });
         mPasswordEntry.setOnEditorActionListener(this);
 
         mKeyboardHelper = new PasswordEntryKeyboardHelper(context, mKeyboardView, this, false);
