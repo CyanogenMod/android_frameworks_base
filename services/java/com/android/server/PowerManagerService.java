@@ -2313,13 +2313,6 @@ public class PowerManagerService extends IPowerManager.Stub
                             mLcdLight.setBrightness(value, brightnessMode);
                             mLastLcdValue = value;
                         }
-                        if ((mask & BUTTON_BRIGHT_BIT) != 0) {
-                            mButtonLight.setBrightness(value);
-                        }
-                        if ((mask & KEYBOARD_BRIGHT_BIT) != 0) {
-                            mKeyboardLight.setBrightness(value);
-                        }
-
                         if (elapsed > 100) {
                             Slog.e(TAG, "Excessive delay setting brightness: " + elapsed
                                     + "ms, mask=" + mask);
@@ -2417,11 +2410,14 @@ public class PowerManagerService extends IPowerManager.Stub
             synchronized(this) {
                 if ((mask & SCREEN_BRIGHT_BIT) == 0) {
                     // We only animate keyboard and button when passed in with SCREEN_BRIGHT_BIT.
+                    // and only if no custom values are set
                     if ((mask & BUTTON_BRIGHT_BIT) != 0) {
-                        mButtonLight.setBrightness(target);
+                        mButtonLight.setBrightness(mLightSensorButtonBrightness >= 0 && target > 0 ?
+                                    mLightSensorButtonBrightness : target);
                     }
                     if ((mask & KEYBOARD_BRIGHT_BIT) != 0) {
-                        mKeyboardLight.setBrightness(target);
+                        mKeyboardLight.setBrightness(mLightSensorKeyboardBrightness >= 0 && target > 0 ?
+                                    mLightSensorKeyboardBrightness : target);
                     }
                     return;
                 }
