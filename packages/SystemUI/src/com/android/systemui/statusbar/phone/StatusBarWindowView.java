@@ -63,6 +63,7 @@ public class StatusBarWindowView extends FrameLayout
         mExpandHelper = new ExpandHelper(mContext, latestItems, minHeight, maxHeight);
         mExpandHelper.setEventSource(this);
         mExpandHelper.setScrollView(mScrollView);
+        mExpandHelper.onAttachToWindow();
 
         // We really need to be able to animate while window animations are going on
         // so that activities may be started asynchronously from panel animations
@@ -72,6 +73,12 @@ public class StatusBarWindowView extends FrameLayout
         }
     }
     
+    @Override
+    protected void onDetachedFromWindow() {
+        mExpandHelper.onDetachedFromWindow();
+        super.onDetachedFromWindow();
+    }
+
     @Override
     public void dispatchWindowFocusChanged(boolean hasFocus) {
         this.setFocusableInTouchMode(hasFocus);
