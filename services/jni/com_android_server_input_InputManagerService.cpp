@@ -23,7 +23,7 @@
 
 // Log debug messages about InputDispatcherPolicy
 #define DEBUG_INPUT_DISPATCHER_POLICY 0
-
+#define SW_SPEN			0x0e
 
 #include "JNIHelp.h"
 #include "jni.h"
@@ -65,6 +65,7 @@ static struct {
     jmethodID notifyInputDevicesChanged;
     jmethodID notifyLidSwitchChanged;
     jmethodID notifyJackSwitchChanged;
+    jmethodID notifySPenSwitchChanged;
     jmethodID notifyInputChannelBroken;
     jmethodID notifyANR;
     jmethodID filterInputEvent;
@@ -605,6 +606,13 @@ void NativeInputManager::notifySwitch(nsecs_t when, int32_t switchCode,
         checkAndClearExceptionFromCallback(env, "notifyJackSwitchChanged");
         break;
 #endif
+    case SW_SPEN:
+		ALOGD("SPEN-DETECT: In NativeInputManager-Before calling windowmanager service for SPEN CHANGE");
+		env->CallVoidMethod(mServiceObj,
+				gServiceClassInfo.notifySPenSwitchChanged, when, switchCode,
+				switchValue);
+		checkAndClearExceptionFromCallback(env, "notifySPenSwitchChanged");
+		break;
     }
 }
 
@@ -1460,6 +1468,9 @@ int register_android_server_InputManager(JNIEnv* env) {
 
     GET_METHOD_ID(gServiceClassInfo.notifyJackSwitchChanged, clazz,
             "notifyJackSwitchChanged", "(JIZ)V");
+
+    GET_METHOD_ID(gServiceClassInfo.notifySPenSwitchChanged, clazz,
+                "notifySPenSwitchChanged", "(JIZ)V");
 
     GET_METHOD_ID(gServiceClassInfo.notifyInputChannelBroken, clazz,
             "notifyInputChannelBroken", "(Lcom/android/server/input/InputWindowHandle;)V");

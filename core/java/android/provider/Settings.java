@@ -2758,6 +2758,19 @@ public final class Settings {
         public static final String GESTURES_DOUBLE_TAP = "gestures_double_tap";
 
         /**
+         * Spen inserted
+         *
+         * @hide
+         */
+        public static final String SPEN_INSERTED = "spen_inserted";
+
+        /**
+         * Spen removed
+         *
+         * @hide
+         */
+        public static final String SPEN_REMOVED = "spen_removed";
+        /**
          * Always show the battery status on the lockscreen
          * @hide
          */

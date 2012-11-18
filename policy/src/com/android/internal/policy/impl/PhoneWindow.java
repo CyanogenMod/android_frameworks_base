@@ -40,10 +40,12 @@ import com.android.internal.widget.ActionBarContextView;
 import com.android.internal.widget.ActionBarView;
 
 import android.app.KeyguardManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -124,7 +126,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     private final static String TAG = "PhoneWindow";
 
     private final static boolean SWEEP_OPEN_MENU = false;
-
     /**
      * Simple callback used by the context menu and its submenus. The options
      * menu submenus do not use this (their behavior is more complex).
@@ -1806,12 +1807,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         private SettingsObserver gestureObserver;
         private Handler mConfigHandler;
         private boolean mEnableGestures;
-
+        private StylusReceiver SPenReciver;
         public DecorView(Context context, int featureId) {
             super(context);
             mFeatureId = featureId;
             mConfigHandler = new Handler();
             gestureObserver = new SettingsObserver(mConfigHandler);
+            SPenReciver = new StylusReceiver();
         }
 
         @Override
@@ -1894,6 +1896,40 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
         private final StylusGestureFilter mStylusFilter = new StylusGestureFilter();
 
+        private final class StylusReceiver extends BroadcastReceiver {
+            private boolean hasStylusSwitch(){
+                return getResources().getBoolean(com.android.internal.R.bool.config_stylusSwitch);
+            }
+
+            public StylusReceiver() {
+                super();
+                // TODO Auto-generated constructor stub
+            }
+
+            public void register() {
+                if(hasStylusSwitch()){
+                    IntentFilter filter = new IntentFilter();
+                    filter.addAction(PhoneWindowManager.ACTION_SPEN_INSERTED);
+                    filter.addAction(PhoneWindowManager.ACTION_SPEN_REMOVED);
+                    mContext.registerReceiver(this, filter);
+                }
+
+            }
+            public void unregister() {
+                if (hasStylusSwitch()) {
+                    mContext.unregisterReceiver(this);
+                }
+            }
+            @Override
+            public void onReceive(Context context, Intent intent) {
+              if(intent.getAction().equalsIgnoreCase(PhoneWindowManager.ACTION_SPEN_INSERTED)){
+                  dispatchStylusAction(StylusGestureFilter.SPEN_INSERTED);
+              }else if(intent.getAction().equalsIgnoreCase(PhoneWindowManager.ACTION_SPEN_REMOVED)){
+                  dispatchStylusAction(StylusGestureFilter.SPEN_REMOVED);
+              }
+            }
+        }
+
         private class StylusGestureFilter extends SimpleOnGestureListener {
 
             private final static int SWIPE_UP = 1;
@@ -1902,6 +1938,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             private final static int SWIPE_RIGHT = 4;
             private final static int PRESS_LONG = 5;
             private final static int TAP_DOUBLE = 6;
+            private final static int SPEN_REMOVED = 7;
+            private final static int SPEN_INSERTED = 8;
             private final static double SWIPE_MIN_DISTANCE = 25.0;
             private final static double SWIPE_MIN_VELOCITY = 50.0;
             private final static int KEY_NO_ACTION = 1000;
@@ -2050,6 +2088,14 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             case StylusGestureFilter.PRESS_LONG:
                 packageName = Settings.System.getString(resolver,
                         Settings.System.GESTURES_LONG_PRESS);
+                break;
+            case StylusGestureFilter.SPEN_INSERTED:
+                packageName = Settings.System.getString(resolver,
+                        Settings.System.SPEN_INSERTED);
+                break;
+            case StylusGestureFilter.SPEN_REMOVED:
+                packageName = Settings.System.getString(resolver,
+                        Settings.System.SPEN_REMOVED);
                 break;
             }
             if (packageName != null) {
@@ -2724,7 +2770,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             updateWindowResizeState();
             
             gestureObserver.observe();
-
+            SPenReciver.register();
             final Callback cb = getCallback();
             if (cb != null && !isDestroyed() && mFeatureId < 0) {
                 cb.onAttachedToWindow();
@@ -2747,7 +2793,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             super.onDetachedFromWindow();
             
             gestureObserver.unobserve();
-
+            SPenReciver.unregister();
             final Callback cb = getCallback();
             if (cb != null && mFeatureId < 0) {
                 cb.onDetachedFromWindow();

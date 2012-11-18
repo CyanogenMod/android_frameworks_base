@@ -5269,4 +5269,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         pw.print(prefix); pw.print("mPortraitRotation="); pw.print(mPortraitRotation);
                 pw.print(" mUpsideDownRotation="); pw.println(mUpsideDownRotation);
     }
+
+    @Override
+    public void notifySPenSwitchChanged(long whenNanos, boolean penon) {
+        Intent i = new Intent();
+        if (penon) {
+            i.setAction(ACTION_SPEN_REMOVED);
+        } else {
+            i.setAction(ACTION_SPEN_INSERTED);
+        }
+        mContext.sendBroadcast(i);
+    }
 }

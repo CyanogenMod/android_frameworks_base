@@ -288,6 +288,11 @@ final class InputMonitor implements InputManagerService.Callbacks {
         mService.mPolicy.notifyJackSwitchChanged(whenNanos, switchCode, jackOpen);
     }
 
+    /* Notifies spen state changed */
+    public void notifySPenSwitchChanged(long whenNanos,int switchCode, boolean penon) {
+        mService.mPolicy.notifySPenSwitchChanged(whenNanos, penon);
+    }
+
     /* Provides an opportunity for the window manager policy to intercept early key
      * processing as soon as the key has been read from the device. */
     public int interceptKeyBeforeQueueing(
