@@ -1249,6 +1249,11 @@ public class InputManagerService extends IInputManager.Stub implements Watchdog.
     }
 
     // Native callback.
+    public void notifySPenSwitchChanged(long whenNanos,int switchCode, boolean penOn) {
+        mCallbacks.notifySPenSwitchChanged(whenNanos, switchCode, penOn);
+    }
+
+    // Native callback.
     private void notifyInputChannelBroken(InputWindowHandle inputWindowHandle) {
         mCallbacks.notifyInputChannelBroken(inputWindowHandle);
     }
@@ -1435,6 +1440,8 @@ public class InputManagerService extends IInputManager.Stub implements Watchdog.
         public void notifyLidSwitchChanged(long whenNanos, boolean lidOpen);
 
         public void notifyJackSwitchChanged(long whenNanos,int switchCode, boolean jackOpen);
+
+        public void notifySPenSwitchChanged(long whenNanos,int switchCode, boolean penOn);
 
         public void notifyInputChannelBroken(InputWindowHandle inputWindowHandle);
 
