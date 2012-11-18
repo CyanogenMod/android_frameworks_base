@@ -3524,6 +3524,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    @Override
+    public void notifySPenSwitchChanged(long whenNanos, boolean penon) {
+        Intent i = new Intent();
+        if (penon) {
+            i.setAction(ACTION_SPEN_REMOVED);
+        } else {
+            i.setAction(ACTION_SPEN_INSERTED);
+        }
+        mContext.sendBroadcast(i);
+    }
+
     void setHdmiPlugged(boolean plugged) {
         if (mHdmiPlugged != plugged) {
             mHdmiPlugged = plugged;
