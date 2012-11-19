@@ -562,6 +562,8 @@
         <xliff:g id="number">%d</xliff:g>
     </string>
 
+    <string name="app_killed_message">App killed</string>
+
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Choose action to assign</string>
     <string name="navbar_home_button">Home button</string>
