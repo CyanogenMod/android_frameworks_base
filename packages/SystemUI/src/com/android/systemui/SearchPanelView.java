@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2013 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +18,22 @@
 package com.android.systemui;
 
 import android.animation.LayoutTransition;
-import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
-import android.app.SearchManager;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.media.AudioManager;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.IWindowManager;
@@ -40,9 +44,13 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.FrameLayout;
 
+import static com.android.internal.util.cm.NavigationRingConstants.*;
+import com.android.internal.util.cm.NavigationRingHelpers;
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.GlowPadView.OnTriggerListener;
+import com.android.internal.widget.multiwaveview.TargetDrawable;
 import com.android.systemui.R;
+import com.android.systemui.cm.ActionTarget;
 import com.android.systemui.recent.StatusBarTouchProxy;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.CommandQueue;
@@ -50,13 +58,13 @@ import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.tablet.StatusBarPanel;
 import com.android.systemui.statusbar.tablet.TabletStatusBar;
 
+import java.util.ArrayList;
+
 public class SearchPanelView extends FrameLayout implements
         StatusBarPanel, ActivityOptions.OnAnimationStartedListener {
     private static final int SEARCH_PANEL_HOLD_DURATION = 0;
     static final String TAG = "SearchPanelView";
     static final boolean DEBUG = TabletStatusBar.DEBUG || PhoneStatusBar.DEBUG || false;
-    private static final String ASSIST_ICON_METADATA_NAME =
-            "com.android.systemui.action_assist_icon";
     private final Context mContext;
     private BaseStatusBar mBar;
     private StatusBarTouchProxy mStatusBarTouchProxy;
@@ -66,6 +74,11 @@ public class SearchPanelView extends FrameLayout implements
     private GlowPadView mGlowPadView;
     private IWindowManager mWm;
 
+    private ActionTarget mActionTarget;
+    private String[] mTargetActivities;
+    private int mStartPosOffset;
+    private int mEndPosOffset;
+
     public SearchPanelView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -74,52 +87,10 @@ public class SearchPanelView extends FrameLayout implements
         super(context, attrs, defStyle);
         mContext = context;
         mWm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
-    }
+        mActionTarget = new ActionTarget(context);
 
-    private void startAssistActivity() {
-        if (!mBar.isDeviceProvisioned()) return;
-
-        // Close Recent Apps if needed
-        mBar.animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_SEARCH_PANEL);
-        boolean isKeyguardShowing = false;
-        try {
-            isKeyguardShowing = mWm.isKeyguardLocked();
-        } catch (RemoteException e) {
-
-        }
-
-        if (isKeyguardShowing) {
-            // Have keyguard show the bouncer and launch the activity if the user succeeds.
-            try {
-                mWm.showAssistant();
-            } catch (RemoteException e) {
-                // too bad, so sad...
-            }
-            onAnimationStarted();
-        } else {
-            // Otherwise, keyguard isn't showing so launch it from here.
-            Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-                    .getAssistIntent(mContext, UserHandle.USER_CURRENT);
-            if (intent == null) return;
-
-            try {
-                ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-            } catch (RemoteException e) {
-                // too bad, so sad...
-            }
-
-            try {
-                ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
-                        R.anim.search_launch_enter, R.anim.search_launch_exit,
-                        getHandler(), this);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivityAsUser(intent, opts.toBundle(),
-                        new UserHandle(UserHandle.USER_CURRENT));
-            } catch (ActivityNotFoundException e) {
-                Slog.w(TAG, "Activity not found for " + intent.getAction());
-                onAnimationStarted();
-            }
-        }
+        SettingsObserver observer = new SettingsObserver(new Handler());
+        observer.observe();
     }
 
     class GlowPadTriggerListener implements GlowPadView.OnTriggerListener {
@@ -139,13 +110,7 @@ public class SearchPanelView extends FrameLayout implements
 
         public void onTrigger(View v, final int target) {
             final int resId = mGlowPadView.getResourceIdForTarget(target);
-            switch (resId) {
-                case com.android.internal.R.drawable.ic_action_assist_generic:
-                    mWaitingForLaunch = true;
-                    startAssistActivity();
-                    vibrate();
-                    break;
-            }
+            mActionTarget.launchAction(mTargetActivities[target - mStartPosOffset]);
         }
 
         public void onFinishFinalAnimation() {
@@ -172,19 +137,35 @@ public class SearchPanelView extends FrameLayout implements
         // TODO: fetch views
         mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view);
         mGlowPadView.setOnTriggerListener(mGlowPadViewListener);
+
+        updateSettings();
+        setDrawables();
     }
 
-    private void maybeSwapSearchIcon() {
-        Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-                .getAssistIntent(mContext, UserHandle.USER_CURRENT);
-        if (intent != null) {
-            ComponentName component = intent.getComponent();
-            if (component == null || !mGlowPadView.replaceTargetDrawablesIfPresent(component,
-                    ASSIST_ICON_METADATA_NAME,
-                    com.android.internal.R.drawable.ic_action_assist_generic)) {
-                if (DEBUG) Slog.v(TAG, "Couldn't grab icon for component " + component);
-            }
+    private void setDrawables() {
+        final ArrayList<TargetDrawable> targets = new ArrayList<TargetDrawable>();
+
+        if (isScreenLarge() || isScreenPortrait()) {
+            mStartPosOffset =  1;
+            mEndPosOffset = 4;
+        } else {
+            mStartPosOffset = 3;
+            mEndPosOffset =  2;
         }
+
+         // Add Initial Place Holder Targets
+        for (int i = 0; i < mStartPosOffset; i++) {
+            targets.add(NavigationRingHelpers.getTargetDrawable(mContext, null));
+        }
+        // Add User Targets
+        for (int i = 0; i < mTargetActivities.length; i++) {
+            targets.add(NavigationRingHelpers.getTargetDrawable(mContext, mTargetActivities[i]));
+        }
+        // Add End Place Holder Targets
+        for (int i = 0; i < mEndPosOffset; i++) {
+            targets.add(NavigationRingHelpers.getTargetDrawable(mContext, null));
+        }
+        mGlowPadView.setTargetResources(targets);
     }
 
     private boolean pointInside(int x, int y, View v) {
@@ -224,14 +205,27 @@ public class SearchPanelView extends FrameLayout implements
         }
     }
 
+    private boolean hasValidTargets() {
+        for (String target : mTargetActivities) {
+            if (!TextUtils.isEmpty(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void show(final boolean show, boolean animate) {
         if (!show) {
             final LayoutTransition transitioner = animate ? createLayoutTransitioner() : null;
             ((ViewGroup) mSearchTargetsContainer).setLayoutTransition(transitioner);
         }
         mShowing = show;
-        if (show) {
-            maybeSwapSearchIcon();
+        if (show && hasValidTargets()) {
+            for (int i = 0; i < mTargetActivities.length; i++) {
+                NavigationRingHelpers.updateRingerIconIfNeeded(mContext, mGlowPadView,
+                        mTargetActivities[i], i + mStartPosOffset);
+            }
+            NavigationRingHelpers.swapSearchIconIfNeeded(mContext, mGlowPadView);
             if (getVisibility() != View.VISIBLE) {
                 setVisibility(View.VISIBLE);
                 // Don't start the animation until we've created the layer, which is done
@@ -296,11 +290,6 @@ public class SearchPanelView extends FrameLayout implements
     public void setStatusBarView(final View statusBarView) {
         if (mStatusBarTouchProxy != null) {
             mStatusBarTouchProxy.setStatusBar(statusBarView);
-//            mGlowPadView.setOnTouchListener(new OnTouchListener() {
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    return statusBarView.onTouchEvent(event);
-//                }
-//            });
         }
     }
 
@@ -312,8 +301,42 @@ public class SearchPanelView extends FrameLayout implements
         return transitioner;
     }
 
-    public boolean isAssistantAvailable() {
-        return ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-                .getAssistIntent(mContext, UserHandle.USER_CURRENT) != null;
+    private boolean isScreenLarge() {
+        final Configuration configuration = mContext.getResources().getConfiguration();
+        final int screenSize = configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        return screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE
+                || screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
+    }
+
+    private boolean isScreenPortrait() {
+        final Configuration configuration = mContext.getResources().getConfiguration();
+        return configuration.orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    private void updateSettings() {
+        mTargetActivities = NavigationRingHelpers.getTargetActions(mContext);
+    }
+
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            for (int i = 0; i < NavigationRingHelpers.MAX_ACTIONS; i++) {
+                resolver.registerContentObserver(
+                        Settings.System.getUriFor(Settings.System.NAVIGATION_RING_TARGETS[i]),
+                        false, this);
+            }
+            updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+            setDrawables();
+        }
     }
 }
