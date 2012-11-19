@@ -1912,4 +1912,17 @@
   <!-- Reboot confirmation string -->
   <java-symbol type="string" name="reboot_confirm" />
 
+  <!-- Navigation Ring -->
+  <java-symbol type="drawable" name="ic_navigation_ring_blank_normal" />
+  <java-symbol type="drawable" name="ic_navigation_ring_blank_activated" />
+  <java-symbol type="drawable" name="ic_navigation_ring_empty" />
+  <java-symbol type="drawable" name="ic_navigation_ring_ime_switcher" />
+  <java-symbol type="drawable" name="ic_navigation_ring_killtask" />
+  <java-symbol type="drawable" name="ic_navigation_ring_power" />
+  <java-symbol type="drawable" name="ic_navigation_ring_screenshot" />
+  <java-symbol type="drawable" name="ic_navigation_ring_silent" />
+  <java-symbol type="drawable" name="ic_navigation_ring_sound_on" />
+  <java-symbol type="drawable" name="ic_navigation_ring_torch" />
+  <java-symbol type="drawable" name="ic_navigation_ring_vibrate" />
+
 </resources>
