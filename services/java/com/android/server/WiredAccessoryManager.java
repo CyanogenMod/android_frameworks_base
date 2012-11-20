@@ -77,7 +77,7 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
     private final WakeLock mWakeLock;  // held while there is a pending route change
     private final AudioManager mAudioManager;
 
-    private int mHeadsetState;
+    private static int mHeadsetState;
 
     private int mSwitchValues;
 
@@ -422,7 +422,7 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
             for (int i = 0; i < mUEventInfo.size(); ++i) {
                 UEventInfo uei = mUEventInfo.get(i);
                 if (devPath.equals(uei.getDevPath())) {
-                    updateLocked(name, uei.computeNewHeadsetState(mHeadsetState, state));
+                    updateLocked(name, uei.computeNewHeadsetState(name, state));
                     return;
                 }
             }
@@ -432,6 +432,7 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
             private final String mDevName;
             private final int mState1Bits;
             private final int mState2Bits;
+            private int switchState;
 
             public UEventInfo(String devName, int state1Bits, int state2Bits) {
                 mDevName = devName;
@@ -454,13 +455,41 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
                 return f.exists();
             }
 
-            public int computeNewHeadsetState(int headsetState, int switchState) {
-                int preserveMask = ~(mState1Bits | mState2Bits);
-                int setBits = ((switchState == 1) ? mState1Bits :
-                              ((switchState == 2) ? mState2Bits : 0));
+            public int computeNewHeadsetState(String name, int state) {
 
-                return ((headsetState & preserveMask) | setBits);
+            if (LOG) Slog.v(TAG, "updateState name: " + name + " state " + state);
+            if (name.equals("usb_audio")) {
+                switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
+                              ((state == 1) ? BIT_USB_HEADSET_ANLG :
+                              ((state == 2) ? BIT_USB_HEADSET_DGTL : 0)));
+            } else if (name.equals("dock")) {
+                switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|BIT_HDMI_AUDIO)) |
+                              ((state == 2 || state == 1) ? BIT_USB_HEADSET_ANLG : 0));
+                // This sets the switchsate to 4 (for USB HEADSET - BIT_USB_HEADSET_ANLG)
+                // Looking at the other types, maybe the state that emitted should be a 1 and at
+                //       /devices/virtual/switch/usb_audio
+                //
+                // However the we need to deal with changes at
+                //       /devices/virtual/switch/dock
+                // for the state of 2 - means that we have a USB ANLG headset Car Dock
+                // for the state of 1 - means that we have a USB ANLG headset Desk Dock
+            } else if (name.equals("hdmi")) {
+                switchState = ((mHeadsetState & (BIT_HEADSET|BIT_HEADSET_NO_MIC|
+                                                 BIT_USB_HEADSET_DGTL|BIT_USB_HEADSET_ANLG)) |
+                              ((state == 1) ? BIT_HDMI_AUDIO : 0));
+            } else if (name.equals("Headset")) {
+                switchState = ((mHeadsetState & (BIT_HDMI_AUDIO|BIT_USB_HEADSET_ANLG|
+                                                 BIT_USB_HEADSET_DGTL)) |
+                                                (state & (BIT_HEADSET|BIT_HEADSET_NO_MIC)));
+            } else {
+                switchState = ((mHeadsetState & (BIT_HDMI_AUDIO|BIT_USB_HEADSET_ANLG|
+                                                 BIT_USB_HEADSET_DGTL)) |
+                              ((state == 1) ? BIT_HEADSET :
+                              ((state == 2) ? BIT_HEADSET_NO_MIC : 0)));
             }
+            if (LOG) Slog.v(TAG, "updateState switchState: " + switchState);
+            return switchState;
+           }
         }
     }
 }
