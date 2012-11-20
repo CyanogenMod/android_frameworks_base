@@ -18,14 +18,24 @@ package android.app;
 
 import static android.app.ActivityThread.DEBUG_CONFIGURATION;
 
+import com.android.internal.app.IAssetRedirectionManager;
+
 import android.content.pm.ActivityInfo;
+import android.content.pm.IPackageManager;
+import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
+import android.content.res.PackageRedirectionMap;
 import android.content.res.Resources;
 import android.content.res.ResourcesKey;
 import android.hardware.display.DisplayManagerGlobal;
 import android.os.IBinder;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.os.UserHandle;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.Slog;
@@ -49,6 +59,8 @@ public class ResourcesManager {
             = new ArrayMap<DisplayAdjustments, DisplayMetrics>();
 
     CompatibilityInfo mResCompatibilityInfo;
+    static IAssetRedirectionManager sAssetRedirectionManager;
+    static IPackageManager sPackageManager;
 
     Configuration mResConfiguration;
     final Configuration mTmpConfig = new Configuration();
@@ -150,7 +162,8 @@ public class ResourcesManager {
     public Resources getTopLevelResources(String resDir, int displayId,
             Configuration overrideConfiguration, CompatibilityInfo compatInfo, IBinder token) {
         final float scale = compatInfo.applicationScale;
-        ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfiguration, scale,
+        final boolean isThemeable = compatInfo.isThemeable;
+        ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfiguration, scale, isThemeable,
                 token);
         Resources r;
         synchronized (this) {
@@ -219,7 +232,7 @@ public class ResourcesManager {
         }
     }
 
-    public final boolean applyConfigurationToResourcesLocked(Configuration config,
+    public final int applyConfigurationToResourcesLocked(Configuration config,
             CompatibilityInfo compat) {
         if (mResConfiguration == null) {
             mResConfiguration = new Configuration();
@@ -227,7 +240,7 @@ public class ResourcesManager {
         if (!mResConfiguration.isOtherSeqNewer(config) && compat == null) {
             if (DEBUG_CONFIGURATION) Slog.v(TAG, "Skipping new config: curSeq="
                     + mResConfiguration.seq + ", newSeq=" + config.seq);
-            return false;
+            return 0;
         }
         int changes = mResConfiguration.updateFrom(config);
         flushDisplayMetricsLocked();
@@ -263,6 +276,16 @@ public class ResourcesManager {
                 boolean isDefaultDisplay = (displayId == Display.DEFAULT_DISPLAY);
                 DisplayMetrics dm = defaultDisplayMetrics;
                 final boolean hasOverrideConfiguration = key.hasOverrideConfiguration();
+                boolean themeChanged = (changes & ActivityInfo.CONFIG_THEME_RESOURCE) != 0;
+                if (themeChanged) {
+                    AssetManager am = r.getAssets();
+                    if (am.hasThemeSupport()) {
+                        detachThemeAssets(am);
+                        if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
+                            attachThemeAssets(am, config.customTheme);
+                        }
+                    }
+                }
                 if (!isDefaultDisplay || hasOverrideConfiguration) {
                     if (tmpConfig == null) {
                         tmpConfig = new Configuration();
@@ -279,6 +302,9 @@ public class ResourcesManager {
                 } else {
                     r.updateConfiguration(config, dm, compat);
                 }
+                if (themeChanged) {
+                    r.updateStringCache();
+                }
                 //Slog.i(TAG, "Updated app resources " + v.getKey()
                 //        + " " + r + ": " + r.getConfiguration());
             } else {
@@ -287,7 +313,106 @@ public class ResourcesManager {
             }
         }
 
-        return changes != 0;
+        return changes;
+    }
+
+    public static IPackageManager getPackageManager() {
+        if (sPackageManager != null) {
+            //Slog.v("PackageManager", "returning cur default = " + sPackageManager);
+            return sPackageManager;
+        }
+        IBinder b = ServiceManager.getService("package");
+        //Slog.v("PackageManager", "default service binder = " + b);
+        sPackageManager = IPackageManager.Stub.asInterface(b);
+        //Slog.v("PackageManager", "default service = " + sPackageManager);
+        return sPackageManager;
+    }
+
+    // NOTE: this method can return null if the SystemServer is still
+    // initializing (for example, of another SystemServer component is accessing
+    // a resources object)
+    public static IAssetRedirectionManager getAssetRedirectionManager() {
+        if (sAssetRedirectionManager != null) {
+            return sAssetRedirectionManager;
+        }
+        IBinder b = ServiceManager.getService("assetredirection");
+        sAssetRedirectionManager = IAssetRedirectionManager.Stub.asInterface(b);
+        return sAssetRedirectionManager;
+    }
+
+    /**
+     * Attach the necessary theme asset paths and meta information to convert an
+     * AssetManager to being globally "theme-aware".
+     *
+     * @param assets
+     * @param theme
+     * @return true if the AssetManager is now theme-aware; false otherwise.
+     *         This can fail, for example, if the theme package has been been
+     *         removed and the theme manager has yet to revert formally back to
+     *         the framework default.
+     */
+    private boolean attachThemeAssets(AssetManager assets, CustomTheme theme) {
+        IAssetRedirectionManager rm = getAssetRedirectionManager();
+        if (rm == null) {
+            return false;
+        }
+        PackageInfo pi = null;
+        try {
+            pi = getPackageManager().getPackageInfo(theme.getThemePackageName(), 0, 0);
+        } catch (RemoteException e) {
+        }
+        if (pi != null && pi.applicationInfo != null && pi.themeInfos != null) {
+            String themeResDir = pi.applicationInfo.publicSourceDir;
+            int cookie = assets.attachThemePath(themeResDir);
+            if (cookie != 0) {
+                String themePackageName = theme.getThemePackageName();
+                String themeId = theme.getThemeId();
+                int N = assets.getBasePackageCount();
+                for (int i = 0; i < N; i++) {
+                    String packageName = assets.getBasePackageName(i);
+                    int packageId = assets.getBasePackageId(i);
+
+                    /*
+                     * For now, we only consider redirections coming from the
+                     * framework or regular android packages. This excludes
+                     * themes and other specialty APKs we are not aware of.
+                     */
+                    if (packageId != 0x01 && packageId != 0x7f) {
+                        continue;
+                    }
+
+                    try {
+                        PackageRedirectionMap map = rm.getPackageRedirectionMap(themePackageName, themeId,
+                                packageName);
+                        if (map != null) {
+                            assets.addRedirections(map);
+                        }
+                    } catch (RemoteException e) {
+                        Slog.e(TAG, "Failure accessing package redirection map, removing theme support.");
+                        assets.detachThemePath(themePackageName, cookie);
+                        return false;
+                    }
+                }
+
+                assets.setThemePackageName(theme.getThemePackageName());
+                assets.setThemeCookie(cookie);
+                return true;
+            } else {
+                Slog.e(TAG, "Unable to attach theme assets at " + themeResDir);
+            }
+        }
+        return false;
+    }
+
+    private void detachThemeAssets(AssetManager assets) {
+        String themePackageName = assets.getThemePackageName();
+        int themeCookie = assets.getThemeCookie();
+        if (!TextUtils.isEmpty(themePackageName) && themeCookie != 0) {
+            assets.detachThemePath(themePackageName, themeCookie);
+            assets.setThemePackageName(null);
+            assets.setThemeCookie(0);
+            assets.clearRedirections();
+        }
     }
 
 }

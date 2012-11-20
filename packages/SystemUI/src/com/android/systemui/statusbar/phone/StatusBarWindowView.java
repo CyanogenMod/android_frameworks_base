@@ -73,6 +73,12 @@ public class StatusBarWindowView extends FrameLayout
     }
 
     @Override
+    public void dispatchWindowFocusChanged(boolean hasFocus) {
+        this.setFocusableInTouchMode(hasFocus);
+        this.requestFocus();
+    }
+
+    @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
         switch (event.getKeyCode()) {

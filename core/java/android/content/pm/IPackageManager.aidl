@@ -42,6 +42,7 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.UserInfo;
 import android.content.pm.VerificationParams;
 import android.content.pm.VerifierDeviceIdentity;
+import android.content.pm.ThemeInfo;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.content.IntentSender;
@@ -142,6 +143,8 @@ interface IPackageManager {
      */
     ParceledListSlice getPackagesHoldingPermissions(in String[] permissions,
             int flags, int userId);
+
+    List<PackageInfo> getInstalledThemePackages();
 
     /**
      * This implements getInstalledApplications via a "last returned row"

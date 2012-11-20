@@ -1,5 +1,6 @@
 //
 // Copyright 2006 The Android Open Source Project
+// This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
 //
 // Build resource files from raw assets.
 //
@@ -3816,7 +3817,16 @@ sp<ResourceTable::Package> ResourceTable::getPackage(const String16& package)
             mHaveAppPackage = true;
             p = new Package(package, 127);
         } else {
-            p = new Package(package, mNextPackageId);
+            int extendedPackageId = mBundle->getExtendedPackageId();
+            if (extendedPackageId != 0) {
+                if ((uint32_t)extendedPackageId < mNextPackageId) {
+                    fprintf(stderr, "Package ID %d already in use!\n", mNextPackageId);
+                    return NULL;
+                }
+                p = new Package(package, extendedPackageId);
+            } else {
+                p = new Package(package, mNextPackageId);
+            }
         }
         //printf("*** NEW PACKAGE: \"%s\" id=%d\n",
         //       String8(package).string(), p->getAssignedId());
