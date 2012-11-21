@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.view.ViewGroup.LayoutParams;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -62,13 +63,18 @@ public class CircleBattery extends ImageView {
     private int     mLevel;         // current battery level
     private int     mAnimOffset;    // current level of charging animation
     private boolean mIsAnimating;   // stores charge-animation status to reliably remove callbacks
+    private int     mDockLevel;     // current dock battery level
+    private boolean mDockIsCharging;// whether or not dock battery is currently charging
+    private boolean mIsDocked;      // whether or not dock battery is connected
 
     private int     mCircleSize;    // draw size of circle. read rather complicated from
                                     // another status bar icon, so it fits the icon size
                                     // no matter the dps and resolution
-    private RectF   mCircleRect;    // contains the precalculated rect used in drawArc(), derived from mCircleSize
-    private Float   mPercentX;      // precalculated x position for drawText() to appear centered
-    private Float   mPercentY;      // precalculated y position for drawText() to appear vertical-centered
+    private RectF   mRectLeft;      // contains the precalculated rect used in drawArc(), derived from mCircleSize
+    private RectF   mRectRight;     // contains the precalculated rect used in drawArc() for dock battery
+    private Float   mTextLeftX;     // precalculated x position for drawText() to appear centered
+    private Float   mTextY;         // precalculated y position for drawText() to appear vertical-centered
+    private Float   mTextRightX;    // precalculated x position for dock battery drawText()
 
     // quiet a lot of paint variables. helps to move cpu-usage from actual drawing to initialization
     private Paint   mPaintFont;
@@ -131,7 +137,18 @@ public class CircleBattery extends ImageView {
                 mLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
                 mIsCharging = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
 
+                mDockLevel = intent.getIntExtra(BatteryManager.EXTRA_DOCK_LEVEL, 0);
+                mDockIsCharging = intent.getIntExtra(BatteryManager.EXTRA_DOCK_STATUS,
+                        BatteryManager.DOCK_BATTERY_STATUS_UNKNOWN) == BatteryManager.DOCK_BATTERY_STATUS_CHARGING;
+                mIsDocked = intent.getBooleanExtra(BatteryManager.EXTRA_DOCK_PRESENT,
+                        false);
+
                 if (mActivated && mAttached) {
+                    LayoutParams l = getLayoutParams();
+                    l.width = mCircleSize + getPaddingLeft()
+                            + (mIsDocked ? mCircleSize + getPaddingLeft() : 0);
+                    setLayoutParams(l);
+
                     invalidate();
                 }
             }
@@ -225,7 +242,7 @@ public class CircleBattery extends ImageView {
         if (mAttached) {
             mAttached = false;
             mBatteryReceiver.updateRegistration();
-            mCircleRect = null; // makes sure, size based variables get
+            mRectLeft = null; // makes sure, size based variables get
                                 // recalculated on next attach
             mCircleSize = 0;    // makes sure, mCircleSize is reread from icons on
                                 // next attach
@@ -237,40 +254,52 @@ public class CircleBattery extends ImageView {
         if (mCircleSize == 0) {
             initSizeMeasureIconHeight();
         }
-        setMeasuredDimension(mCircleSize + getPaddingLeft(), mCircleSize);
+
+        setMeasuredDimension(mCircleSize + getPaddingLeft()
+                + (mIsDocked ? mCircleSize + getPaddingLeft() : 0), mCircleSize);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        if (mCircleRect == null) {
-            initSizeBasedStuff();
-        }
-
-        updateChargeAnim();
-
+    private void drawCircle(Canvas canvas, int level, int animOffset, float textX, RectF drawRect) {
         Paint usePaint = mPaintSystem;
         // turn red at 14% - same level android battery warning appears
-        if (mLevel <= 14) {
+        if (level <= 14) {
             usePaint = mPaintRed;
         }
 
         // pad circle percentage to 100% once it reaches 97%
         // for one, the circle looks odd with a too small gap,
         // for another, some phones never reach 100% due to hardware design
-        int padLevel = mLevel;
-        if (mLevel >= 97) {
-            padLevel=100;
+        int padLevel = level;
+        if (padLevel >= 97) {
+            padLevel = 100;
         }
 
         // draw thin gray ring first
-        canvas.drawArc(mCircleRect, 270, 360, false, mPaintGray);
-        // draw thin colored ring-level last
-        canvas.drawArc(mCircleRect, 270+mAnimOffset, 3.6f * padLevel, false, usePaint);
+        canvas.drawArc(drawRect, 270, 360, false, mPaintGray);
+        // draw colored arc representing charge level
+        canvas.drawArc(drawRect, 270 + animOffset, 3.6f * padLevel, false, usePaint);
         // if chosen by options, draw percentage text in the middle
         // always skip percentage when 100, so layout doesnt break
-        if (mLevel < 100 && mPercentage){
+        if (level < 100 && mPercentage) {
             mPaintFont.setColor(usePaint.getColor());
-            canvas.drawText(Integer.toString(mLevel), mPercentX, mPercentY, mPaintFont);
+            canvas.drawText(Integer.toString(level), textX, mTextY, mPaintFont);
+        }
+
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if (mRectLeft == null) {
+            initSizeBasedStuff();
+        }
+
+        updateChargeAnim();
+
+        if (mIsDocked) {
+            drawCircle(canvas, mDockLevel, (mDockIsCharging ? mAnimOffset : 0), mTextLeftX, mRectLeft);
+            drawCircle(canvas, mLevel, (mIsCharging ? mAnimOffset : 0), mTextRightX, mRectRight);
+        } else {
+            drawCircle(canvas, mLevel, (mIsCharging ? mAnimOffset : 0), mTextLeftX, mRectLeft);
         }
     }
 
@@ -280,7 +309,7 @@ public class CircleBattery extends ImageView {
      * uses mInvalidate for delayed invalidate() callbacks
      */
     private void updateChargeAnim() {
-        if (!mIsCharging || mLevel >= 97) {
+        if (!(mIsCharging || mDockIsCharging) || (mLevel >= 97 && mDockLevel >= 97)) {
             if (mIsAnimating) {
                 mIsAnimating = false;
                 mAnimOffset = 0;
@@ -320,15 +349,19 @@ public class CircleBattery extends ImageView {
 
         // calculate rectangle for drawArc calls
         int pLeft = getPaddingLeft();
-        mCircleRect = new RectF(pLeft + strokeWidth / 2.0f, 0 + strokeWidth / 2.0f, mCircleSize
+        mRectLeft = new RectF(pLeft + strokeWidth / 2.0f, 0 + strokeWidth / 2.0f, mCircleSize
                 - strokeWidth / 2.0f + pLeft, mCircleSize - strokeWidth / 2.0f);
+        int off = pLeft + mCircleSize;
+        mRectRight = new RectF(mRectLeft.left + off, mRectLeft.top, mRectLeft.right + off,
+                mRectLeft.bottom);
 
         // calculate Y position for text
         Rect bounds = new Rect();
         mPaintFont.getTextBounds("99", 0, "99".length(), bounds);
-        mPercentX = mCircleSize / 2.0f + getPaddingLeft();
+        mTextLeftX = mCircleSize / 2.0f + getPaddingLeft();
+        mTextRightX = mTextLeftX + off;
         // the +1 at end of formular balances out rounding issues. works out on all resolutions
-        mPercentY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f - strokeWidth / 2.0f + 1;
+        mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f - strokeWidth / 2.0f + 1;
 
         // force new measurement for wrap-content xml tag
         onMeasure(0, 0);
