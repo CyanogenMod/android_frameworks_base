@@ -167,9 +167,13 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
 
         switch(response) {
             case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret = responseVoid(p); break;
-            case 21004: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
-            case 21005: ret = responseVoid(p); break; // RIL_UNSOL_IMS_NETWORK_STATE_CHANGED
-            case 21007: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
+            case RIL_UNSOL_ENTER_LPM: ret = responseVoid(p); break;
+            case RIL_UNSOL_CDMA_3G_INDICATOR:  ret = responseInts(p); break;
+            case RIL_UNSOL_CDMA_ENHANCE_ROAMING_INDICATOR:  ret = responseInts(p); break;
+            case RIL_UNSOL_RESPONSE_PHONE_MODE_CHANGE:  ret = responseInts(p); break;
+            case RIL_UNSOL_RESPONSE_VOICE_RADIO_TECH_CHANGED: ret = responseVoid(p); break;
+            case RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED: ret = responseVoid(p); break;
+            case RIL_UNSOL_RESPONSE_DATA_NETWORK_STATE_CHANGED: ret = responseVoid(p); break;
 
             default:
                 // Rewind the Parcel
@@ -185,9 +189,13 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
                 int state = p.readInt();
                 setRadioStateFromRILInt(state);
                 break;
-            case 21004:
-            case 21005:
-            case 21007:
+            case RIL_UNSOL_ENTER_LPM:
+            case RIL_UNSOL_CDMA_3G_INDICATOR:
+            case RIL_UNSOL_CDMA_ENHANCE_ROAMING_INDICATOR:
+            case RIL_UNSOL_RESPONSE_PHONE_MODE_CHANGE:
+            case RIL_UNSOL_RESPONSE_VOICE_RADIO_TECH_CHANGED:
+            case RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED:
+            case RIL_UNSOL_RESPONSE_DATA_NETWORK_STATE_CHANGED:
                 if (RILJ_LOGD) unsljLogRet(response, ret);
 
                 if (mExitEmergencyCallbackModeRegistrants != null) {
