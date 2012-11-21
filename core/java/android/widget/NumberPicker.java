@@ -1,5 +1,9 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution. Apache license notifications and license are retained
+ * for attribution purposes only.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -680,6 +684,11 @@ public class NumberPicker extends LinearLayout {
                 } else {
                     mInputText.setSelection(0, 0);
                     validateInputTextView(v);
+                    // When mInputText isn't on focus ,hide the soft input.
+                    InputMethodManager inputMethodManager = InputMethodManager.peekInstance();
+                    if (inputMethodManager != null && inputMethodManager.isActive(mInputText)) {
+                        inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+                    }
                 }
             }
         });
