@@ -167,9 +167,10 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
 
         switch(response) {
             case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret = responseVoid(p); break;
-            case 21004: ret = responseVoid(p); break; // RIL_UNSOL_VOICE_RADIO_TECH_CHANGED
-            case 21005: ret = responseVoid(p); break; // RIL_UNSOL_IMS_NETWORK_STATE_CHANGED
-            case 21007: ret = responseVoid(p); break; // RIL_UNSOL_DATA_NETWORK_STATE_CHANGED
+            case 6002:  ret = responseInts(p); break; // RIL_UNSOL_RESPONSE_PHONE_MODE_CHANGE
+            case 21004: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_VOICE_RADIO_TECH_CHANGED
+            case 21005: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED
+            case 21007: ret = responseVoid(p); break; // RIL_UNSOL_RESPONSE_DATA_NETWORK_STATE_CHANGED
 
             default:
                 // Rewind the Parcel
@@ -185,6 +186,7 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
                 int state = p.readInt();
                 setRadioStateFromRILInt(state);
                 break;
+            case 6002:
             case 21004:
             case 21005:
             case 21007:
