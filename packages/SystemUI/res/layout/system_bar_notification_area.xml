@@ -151,7 +151,6 @@
                 android:layout_height="match_parent"
                 android:singleLine="true"
                 android:paddingLeft="4dip"
-                android:layout_marginRight="-3dip"
                 android:gravity="center_vertical|left"
                 />
             <ImageView
