@@ -1,0 +1,9 @@
+Change-Id: I1446adfdb254ed161f0d4c244a227c8d75e930c2
+Code-Review+2: Jef Oliver <jeagoss@gmail.com>
+Verified+1: Jef Oliver <jeagoss@gmail.com>
+Code-Review+1: Roger Chui <chui101@gmail.com>
+Submitted-by: Jef Oliver <jeagoss@gmail.com>
+Submitted-at: Wed, 21 Nov 2012 10:00:21 -0800
+Reviewed-on: http://review.cyanogenmod.org/22776
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/ics
