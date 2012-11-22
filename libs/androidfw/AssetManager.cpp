@@ -228,6 +228,29 @@ bool AssetManager::addAssetPath(const String8& path, void** cookie, bool asSkin)
     return true;
 }
 
+bool AssetManager::createIdmap(const char* targetApkPath, const char* overlayApkPath,
+        uint32_t targetCrc, uint32_t overlayCrc, uint32_t** outData, uint32_t* outSize)
+{
+    AutoMutex _l(mLock);
+    const String8 paths[2] = { String8(targetApkPath), String8(overlayApkPath) };
+    ResTable tables[2];
+
+    for (int i = 0; i < 2; ++i) {
+        asset_path ap;
+        ap.type = kFileTypeRegular;
+        ap.path = paths[i];
+        Asset* ass = openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap);
+        if (ass == NULL) {
+            ALOGW("failed to find resources.arsc in %s\n", ap.path.string());
+            return false;
+        }
+        tables[i].add(ass, (void*)1, false);
+    }
+
+    return tables[0].createIdmap(tables[1], targetCrc, overlayCrc,
+            targetApkPath, overlayApkPath, (void**)outData, outSize) == NO_ERROR;
+}
+
 bool AssetManager::isIdmapStaleLocked(const String8& originalPath, const String8& overlayPath,
                                       const String8& idmapPath)
 {
