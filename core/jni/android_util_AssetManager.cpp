@@ -38,7 +38,11 @@
 #include <androidfw/PackageRedirectionMap.h>
 #include <androidfw/ZipFile.h>
 
+#include <private/android_filesystem_config.h> // for AID_SYSTEM
+
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define REDIRECT_NOISY(x) //x
 
@@ -103,6 +107,68 @@ jint copyValue(JNIEnv* env, jobject outValue, const ResTable* table,
         env->SetIntField(outValue, gTypedValueOffsets.mDensity, config->density);
     }
     return block;
+}
+
+// This is called by zygote (running as user root) as part of preloadResources.
+static void verifySystemIdmaps()
+{
+    static const char* IDMAP_BIN = "/system/bin/idmap";
+    static const char* OVERLAY_DIR = "/vendor/overlay";
+    static const char* TARGET_PACKAGE_NAME = "android";
+    static const char* TARGET_APK_PATH = "/system/framework/framework-res.apk";
+    static const char* IDMAP_DIR = "/data/resource-cache";
+    static const char* SYMLINK_DIR = "/data/system/overlay";
+    pid_t pid;
+    char system_id[10];
+
+    snprintf(system_id, sizeof(system_id), "%d", AID_SYSTEM);
+
+    switch (pid = fork()) {
+        case -1:
+            ALOGE("failed to fork for idmap: %s", strerror(errno));
+            break;
+        case 0: // child
+            {
+                struct __user_cap_header_struct capheader;
+                struct __user_cap_data_struct capdata;
+
+                memset(&capheader, 0, sizeof(capheader));
+                memset(&capdata, 0, sizeof(capdata));
+
+                capheader.version = _LINUX_CAPABILITY_VERSION;
+                capheader.pid = 0;
+
+                if (capget(&capheader, &capdata) != 0) {
+                    ALOGE("capget: %s\n", strerror(errno));
+                    exit(1);
+                }
+
+                capdata.effective = capdata.permitted;
+                if (capset(&capheader, &capdata) != 0) {
+                    ALOGE("capset: %s\n", strerror(errno));
+                    exit(1);
+                }
+
+                if (setgid(AID_SYSTEM) != 0) {
+                    ALOGE("setgid: %s\n", strerror(errno));
+                    exit(1);
+                }
+
+                if (setuid(AID_SYSTEM) != 0) {
+                    ALOGE("setuid: %s\n", strerror(errno));
+                    exit(1);
+                }
+
+                execl(IDMAP_BIN, IDMAP_BIN, "--scan", OVERLAY_DIR, TARGET_PACKAGE_NAME,
+                        TARGET_APK_PATH, IDMAP_DIR, SYMLINK_DIR, (char*)NULL);
+                ALOGE("failed to execl for idmap: %s", strerror(errno));
+                exit(1); // should never get here
+            }
+            break;
+        default: // parent
+            waitpid(pid, NULL, 0);
+            break;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -1714,8 +1780,11 @@ static jint android_content_AssetManager_splitThemePackage(JNIEnv* env, jobject 
     return (jint)result;
 }
 
-static void android_content_AssetManager_init(JNIEnv* env, jobject clazz)
+static void android_content_AssetManager_init(JNIEnv* env, jobject clazz, jboolean isSystem)
 {
+    if (isSystem) {
+        verifySystemIdmaps();
+    }
     AssetManager* am = new AssetManager();
     if (am == NULL) {
         jniThrowException(env, "java/lang/OutOfMemoryError", "");
@@ -2026,7 +2095,7 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_getArrayIntResource },
 
     // Bookkeeping.
-    { "init",           "()V",
+    { "init",           "(Z)V",
         (void*) android_content_AssetManager_init },
     { "destroy",        "()V",
         (void*) android_content_AssetManager_destroy },
