@@ -287,15 +287,11 @@ private:
     void setLocaleLocked(const char* locale);
     void updateResourceParamsLocked() const;
 
-    bool createIdmapFileLocked(const String8& originalPath, const String8& overlayPath,
-                               const String8& idmapPath);
-
-    bool isIdmapStaleLocked(const String8& originalPath, const String8& overlayPath,
-                            const String8& idmapPath);
-
     Asset* openIdmapLocked(const struct asset_path& ap) const;
-
-    bool getZipEntryCrcLocked(const String8& zipPath, const char* entryFilename, uint32_t* pCrc);
+#ifdef HAVE_ANDROID_OS
+    void addOverlaysFromIdmapsInDirLocked(const String8& dir);
+    bool addOverlayFromIdmapLocked(const String8& idmapPath);
+#endif
 
     class SharedZip : public RefBase {
     public:

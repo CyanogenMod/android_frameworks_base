@@ -218,6 +218,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     static final int SCAN_UPDATE_TIME = 1<<6;
     static final int SCAN_DEFER_DEX = 1<<7;
     static final int SCAN_BOOTING = 1<<8;
+    static final int SCAN_IS_OVERLAY = 1<<9;
 
     static final int REMOVE_CHATTY = 1<<16;
 
@@ -249,6 +250,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     private static final String PACKAGE_MIME_TYPE = "application/vnd.android.package-archive";
 
     private static final String LIB_DIR_NAME = "lib";
+
+    private static final String OVERLAY_DIR = "/vendor/overlay";
 
     static final String mTempContainerPrefix = "smdl2tmp";
 
@@ -286,6 +289,9 @@ public class PackageManagerService extends IPackageManager.Stub {
     // This is the object monitoring the system app dir.
     final FileObserver mVendorInstallObserver;
 
+    // This is the object monitoring the vendor overlay package dir.
+    final FileObserver mVendorOverlayInstallObserver;
+
     // This is the object monitoring mAppInstallDir.
     final FileObserver mAppInstallObserver;
 
@@ -299,8 +305,13 @@ public class PackageManagerService extends IPackageManager.Stub {
     final File mFrameworkDir;
     final File mSystemAppDir;
     final File mVendorAppDir;
+    final File mVendorOverlayDir;
     final File mAppInstallDir;
     final File mDalvikCacheDir;
+
+    // Tracks available target package names -> overlay package paths.
+    final HashMap<String, HashSet<PackageParser.Package>> mOverlays =
+        new HashMap<String, HashSet<PackageParser.Package>>();
 
     /**
      * Directory to which applications installed internally have native
@@ -1156,6 +1167,17 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
             }
+
+            // Collect vendor overlay packages.
+            // (Do this before scanning any apps.)
+            // For security and version matching reason, only consider
+            // overlay packages if they reside in OVERLAY_DIR.
+            mVendorOverlayDir = new File(OVERLAY_DIR);
+            mVendorOverlayInstallObserver = new AppDirObserver(
+                mVendorOverlayDir.getPath(), OBSERVER_EVENTS, true);
+            mVendorOverlayInstallObserver.startWatching();
+            scanDirLI(mVendorOverlayDir, PackageParser.PARSE_IS_SYSTEM
+                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanMode | SCAN_IS_OVERLAY, 0);
 
             // Find base frameworks (resource packages without code).
             mFrameworkInstallObserver = new AppDirObserver(
@@ -3163,6 +3185,25 @@ public class PackageManagerService extends IPackageManager.Stub {
         return finalList;
     }
 
+    private void createIdmapsForPackageLI(PackageParser.Package pkg) {
+        HashSet<PackageParser.Package> overlays = mOverlays.get(pkg.packageName);
+        if (overlays == null) {
+            Log.w(TAG, "Unable to create idmap for " + pkg.packageName + ": no overlay packages");
+            return;
+        }
+        for (PackageParser.Package opkg : overlays) {
+            createIdmapForPackagePairLI(pkg, opkg);
+        }
+    }
+
+    private void createIdmapForPackagePairLI(PackageParser.Package pkg,
+            PackageParser.Package opkg) {
+        if (mInstaller.idmap(pkg.mScanPath, opkg.mScanPath, opkg.mOverlayPriority,
+                    pkg.applicationInfo.uid) != 0) {
+            Log.w(TAG, "Failed to generate idmap for " + pkg.mScanPath + " and " + opkg.mScanPath);
+        }
+    }
+
     private void scanDirLI(File dir, int flags, int scanMode, long currentTime) {
         String[] files = dir.list();
         if (files == null) {
@@ -3645,6 +3686,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private PackageParser.Package scanPackageLI(PackageParser.Package pkg,
             int parseFlags, int scanMode, long currentTime, UserHandle user) {
+
         File scanFile = new File(pkg.mScanPath);
         if (scanFile == null || pkg.applicationInfo.sourceDir == null ||
                 pkg.applicationInfo.publicSourceDir == null) {
@@ -4171,6 +4213,26 @@ public class PackageManagerService extends IPackageManager.Stub {
                 mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
                 return null;
             }
+        }
+
+        // Create idmap files for pairs of (packages, overlay packages).
+        // Note: "android", ie framework-res.apk, is handled by native layers.
+        if ((scanMode & SCAN_IS_OVERLAY) != 0) {
+            // This is an overlay package.
+            if (pkg.mOverlayTarget != null && !pkg.mOverlayTarget.equals("android")) {
+                if (!mOverlays.containsKey(pkg.mOverlayTarget)) {
+                    mOverlays.put(pkg.mOverlayTarget, new HashSet<PackageParser.Package>());
+                }
+                HashSet<PackageParser.Package> set = mOverlays.get(pkg.mOverlayTarget);
+                set.add(pkg);
+                PackageParser.Package orig = mPackages.get(pkg.mOverlayTarget);
+                if (orig != null) {
+                    createIdmapForPackagePairLI(orig, pkg);
+                }
+            }
+        } else if (mOverlays.containsKey(pkg.packageName)) {
+            // This is a regular package, with zero or more known overlay packages.
+            createIdmapsForPackageLI(pkg);
         }
 
         if (mFactoryTest && pkg.requestedPermissions.contains(
