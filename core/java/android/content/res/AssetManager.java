@@ -106,7 +106,7 @@ public final class AssetManager {
                 mNumRefs = 0;
                 incRefsLocked(this.hashCode());
             }
-            init();
+            init(false);
             if (localLOGV) Log.v(TAG, "New asset manager: " + this);
             ensureSystemAssets();
         }
@@ -129,7 +129,7 @@ public final class AssetManager {
                 incRefsLocked(this.hashCode());
             }
         }
-        init();
+        init(true);
         if (localLOGV) Log.v(TAG, "New asset manager: " + this);
     }
 
@@ -275,7 +275,7 @@ public final class AssetManager {
     }
 
     /*package*/ final void makeStringBlocks(boolean copyFromSystem) {
-        final int sysNum = copyFromSystem ? sSystem.mStringBlocks.length : 0;
+        final int sysNum = copyFromSystem ? 1 : 0; // copy only from system
         final int num = getStringBlockCount();
         mStringBlocks = new StringBlock[num];
         if (localLOGV) Log.v(TAG, "Making string blocks for " + this
@@ -900,6 +900,7 @@ public final class AssetManager {
     private native final void clearRedirectionsNative();
 
     private native final void init();
+    private native final void init(boolean isSystem);
     private native final void destroy();
 
     private final void incRefsLocked(int id) {
