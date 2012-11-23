@@ -316,6 +316,7 @@ public class PackageParser {
         }
         pi.applicationInfo = generateApplicationInfo(p, flags, state, userId);
         pi.installLocation = p.installLocation;
+        pi.overlayTarget = p.mOverlayTarget;
         pi.firstInstallTime = firstInstallTime;
         pi.lastUpdateTime = lastUpdateTime;
         if ((flags&PackageManager.GET_GIDS) != 0) {
@@ -1027,6 +1028,48 @@ public class PackageParser {
 
                 foundApp = true;
                 if (!parseApplication(pkg, res, parser, attrs, flags, outError)) {
+                    return null;
+                }
+            } else if (tagName.equals("overlay")) {
+                pkg.mOverlayPriority = -1;
+                for (int i = 0; i < parser.getAttributeCount(); ++i) {
+                    if (parser.getAttributeName(i).equals("target")) {
+                        if (pkg.mOverlayTarget != null) {
+                            outError[0] = "<overlay> has more than one target attribute";
+                            mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                            return null;
+                        }
+                        pkg.mOverlayTarget = parser.getAttributeValue(i);
+                    }
+                    if (parser.getAttributeName(i).equals("priority")) {
+                        if (pkg.mOverlayPriority != -1) {
+                            outError[0] = "<overlay> has more than one priority attribute";
+                            mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                            return null;
+                        }
+                        try {
+                            pkg.mOverlayPriority = Integer.parseInt(parser.getAttributeValue(i));
+                            if (pkg.mOverlayPriority < 0 || pkg.mOverlayPriority > 9999) {
+                                outError[0] = "<overlay> priority must be between 0 and 9999";
+                                mParseError =
+                                    PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                                return null;
+                            }
+                        } catch (NumberFormatException e) {
+                            outError[0] = "<overlay> priority malformed";
+                            mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                            return null;
+                        }
+                    }
+                }
+                if (pkg.mOverlayTarget == null) {
+                    outError[0] = "<overlay> does not specify a target package";
+                    mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                    return null;
+                }
+                if (pkg.mOverlayPriority == -1) {
+                    outError[0] = "<overlay> does not specify a priority";
+                    mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
                     return null;
                 }
             } else if (tagName.equals("permission-group")) {
@@ -3326,6 +3369,9 @@ public class PackageParser {
          */
         public ManifestDigest manifestDigest;
 
+        public String mOverlayTarget;
+        public int mOverlayPriority;
+
         public Package(String _name) {
             packageName = _name;
             applicationInfo.packageName = _name;
@@ -3385,6 +3431,25 @@ public class PackageParser {
                 }
             }
             return false;
+        }
+
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof PackageParser.Package)) {
+                return false;
+            }
+            PackageParser.Package p = (PackageParser.Package)o;
+            if (packageName == null) {
+                return p.packageName == null;
+            } else {
+                return packageName.equals(p.packageName);
+            }
+        }
+
+        public int hashCode() {
+            return packageName == null ? 0 : packageName.hashCode();
         }
 
         public String toString() {

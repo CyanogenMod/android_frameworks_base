@@ -218,7 +218,7 @@ public class PackageInfo implements Parcelable {
      * @hide
      */
     public int installLocation = INSTALL_LOCATION_INTERNAL_ONLY;
-    
+
     // Is Theme Apk
     /**
      * {@hide}
@@ -230,6 +230,14 @@ public class PackageInfo implements Parcelable {
      * {@hide}
      */
     public ThemeInfo [] themeInfos;
+
+    /**
+     * What package, if any, this package will overlay.
+     *
+     * Package name of target package, or null.
+     * @hide
+     */
+    public String overlayTarget;
 
     public PackageInfo() {
     }
@@ -325,6 +333,8 @@ public class PackageInfo implements Parcelable {
         dest.writeInt((drmProtectedThemeApk)? 1 : 0);
         dest.writeTypedArray(themeInfos, parcelableFlags);
         dest.writeString(lockedZipFilePath);
+
+        dest.writeString(overlayTarget);
     }
 
     public static final Parcelable.Creator<PackageInfo> CREATOR
@@ -369,5 +379,7 @@ public class PackageInfo implements Parcelable {
         drmProtectedThemeApk = (source.readInt() != 0);
         themeInfos = source.createTypedArray(ThemeInfo.CREATOR);
         lockedZipFilePath = source.readString();
+
+        overlayTarget = source.readString();
     }
 }
