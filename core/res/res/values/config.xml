@@ -1114,4 +1114,31 @@
     <!-- If true, adds support for no delay A2DP in Samsung devices -->
     <bool name="config_noDelayInATwoDP">false</bool>
 
+    <!-- Resources reserved for unit tests of runtime resource overlay. -->
+    <bool name="rro_test_usually_false">false</bool>
+    <bool name="rro_test_always_true">true</bool>
+    <string name="rro_test_animal">cat</string>
+    <string name="rro_test_fruit">pineapple</string>
+    <string name="rro_test_opera">Tosca</string>
+    <integer-array name="rro_test_fibonacci">
+        <item>1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>8</item>
+        <item>13</item>
+        <item>21</item>
+    </integer-array>
+    <integer-array name="rro_test_prime_numbers">
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+        <item>11</item>
+        <item>13</item>
+        <item>17</item>
+        <item>19</item>
+    </integer-array>
+
 </resources>

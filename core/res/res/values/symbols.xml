@@ -278,6 +278,8 @@
   <java-symbol type="bool" name="config_camera_sound_forced" />
   <java-symbol type="bool" name="config_dontPreferApn" />
   <java-symbol type="bool" name="config_speed_up_audio_on_mt_calls" />
+  <java-symbol type="bool" name="rro_test_usually_false" />
+  <java-symbol type="bool" name="rro_test_always_true" />
 
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_longPressOnPowerBehavior" />
@@ -863,6 +865,9 @@
   <java-symbol type="string" name="media_route_status_available" />
   <java-symbol type="string" name="media_route_status_not_available" />
   <java-symbol type="string" name="owner_name" />
+  <java-symbol type="string" name="rro_test_animal" />
+  <java-symbol type="string" name="rro_test_fruit" />
+  <java-symbol type="string" name="rro_test_opera" />
 
   <java-symbol type="plurals" name="abbrev_in_num_days" />
   <java-symbol type="plurals" name="abbrev_in_num_hours" />
@@ -895,6 +900,8 @@
   <java-symbol type="array" name="special_locale_names" />
   <java-symbol type="array" name="config_masterVolumeRamp" />
   <java-symbol type="array" name="config_cdma_dun_supported_types" />
+  <java-symbol type="array" name="rro_test_fibonacci" />
+  <java-symbol type="array" name="rro_test_prime_numbers" />
 
   <java-symbol type="drawable" name="default_wallpaper" />
   <java-symbol type="drawable" name="indicator_input_error" />
@@ -1011,6 +1018,7 @@
   <java-symbol type="drawable" name="ic_lockscreen_unlock_phantom" />
   <java-symbol type="drawable" name="ic_media_route_on_holo_dark" />
   <java-symbol type="drawable" name="ic_media_route_disabled_holo_dark" />
+  <java-symbol type="drawable" name="rro_test_drawable" />
 
   <java-symbol type="layout" name="action_bar_home" />
   <java-symbol type="layout" name="action_bar_title_item" />
