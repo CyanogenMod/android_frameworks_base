@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="rro_test_fruit">ananas</string>
+    <bool name="rro_test_usually_false">false</bool>
 </resources>

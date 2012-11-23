@@ -1444,4 +1444,6 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Byte till tillgänglighetsläge avbrutet."</string>
     <string name="user_switched" msgid="3768006783166984410">"Nuvarande användare: <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Ägare"</string>
+
+    <string name="rro_test_animal">katt</string>
 </resources>
