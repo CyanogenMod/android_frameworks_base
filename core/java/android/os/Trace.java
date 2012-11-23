@@ -100,7 +100,7 @@ public final class Trace {
     private static long cacheEnabledTags() {
         long tags = nativeGetEnabledTags();
         if (tags == TRACE_FLAGS_NOT_READY) {
-            Log.w(TAG, "Unexpected value from nativeGetEnabledTags: " + tags);
+            //Log.w(TAG, "Unexpected value from nativeGetEnabledTags: " + tags);
             // keep going
         }
         sEnabledTags = tags;
