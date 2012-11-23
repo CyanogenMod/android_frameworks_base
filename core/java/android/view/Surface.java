@@ -409,6 +409,9 @@ public class Surface implements Parcelable {
     public native void destroy();
     
     private native Canvas lockCanvasNative(Rect dirty);   
+
+    /** @hide */
+    public native void setDirtyRegionNative(Rect dirty);
     
     /*
      * set display parameters & screenshots

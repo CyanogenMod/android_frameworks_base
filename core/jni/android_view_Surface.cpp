@@ -345,6 +345,36 @@ static inline SkBitmap::Config convertPixelFormat(PixelFormat format)
     }
 }
 
+#ifdef QCOM_HARDWARE
+static void Surface_setDirtyRegion(JNIEnv* env, jobject clazz, jobject dirtyRect)
+{
+    const sp<Surface>& surface(getSurface(env, clazz));
+    if (!Surface::isValid(surface)) {
+       return;
+    }
+
+    // get dirty region
+    Region dirtyRegion;
+    if (dirtyRect) {
+        Rect dirty;
+        dirty.left  = env->GetIntField(dirtyRect, ro.l);
+        dirty.top   = env->GetIntField(dirtyRect, ro.t);
+	dirty.right = env->GetIntField(dirtyRect, ro.r);
+	dirty.bottom= env->GetIntField(dirtyRect, ro.b);
+
+	if (!dirty.isEmpty()) {
+	   dirtyRegion.set(dirty);
+	}
+    } else {
+       dirtyRegion.set(Rect(0x3FFF,0x3FFF));
+    }
+    status_t err = surface->setDirtyRegion(&dirtyRegion);
+    if (err < 0) {
+        doThrowIAE(env);
+    }
+}
+#endif
+
 static jobject Surface_lockCanvas(JNIEnv* env, jobject clazz, jobject dirtyRect)
 {
     const sp<Surface>& surface(getSurface(env, clazz));
@@ -886,6 +916,9 @@ static JNINativeMethod gSurfaceMethods[] = {
     {"copyFrom",            "(Landroid/view/Surface;)V",  (void*)Surface_copyFrom },
     {"transferFrom",        "(Landroid/view/Surface;)V",  (void*)Surface_transferFrom },
     {"isValid",             "()Z",  (void*)Surface_isValid },
+#ifdef QCOM_HARDWARE
+    {"setDirtyRegionNative", "(Landroid/graphics/Rect;)V",  (void*)Surface_setDirtyRegion },
+#endif
     {"lockCanvasNative",    "(Landroid/graphics/Rect;)Landroid/graphics/Canvas;",  (void*)Surface_lockCanvas },
     {"unlockCanvasAndPost", "(Landroid/graphics/Canvas;)V", (void*)Surface_unlockCanvasAndPost },
     {"unlockCanvas",        "(Landroid/graphics/Canvas;)V", (void*)Surface_unlockCanvas },

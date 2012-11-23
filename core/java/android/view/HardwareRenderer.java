@@ -38,6 +38,7 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
+import android.view.SurfaceHolder;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -607,6 +608,8 @@ public abstract class HardwareRenderer {
         static final ThreadLocal<ManagedEGLContext> sEglContextStorage
                 = new ThreadLocal<ManagedEGLContext>();
 
+        private SurfaceHolder mHolder = null;
+
         EGLContext mEglContext;
         Thread mEglThread;
 
@@ -1022,6 +1025,7 @@ public abstract class HardwareRenderer {
         }
 
         private boolean createSurface(SurfaceHolder holder) {
+            mHolder = holder;
             mEglSurface = sEgl.eglCreateWindowSurface(sEglDisplay, sEglConfig, holder, null);
 
             if (mEglSurface == null || mEglSurface == EGL_NO_SURFACE) {
@@ -1143,6 +1147,22 @@ public abstract class HardwareRenderer {
                         startTileRendering(dirty);
 
                     int status = onPreDraw(dirty);
+
+                    if(mHolder == null )
+                        Log.e(LOG_TAG,"draw mHolder == null");
+                    else {
+                        if(mHolder.getSurface() == null)
+                            Log.d(LOG_TAG, "draw mHolder.getsurface == null");
+                        else {
+                            if(mHolder.getSurface().isValid()){
+                                Log.d(LOG_TAG, "draw surface is valid dirty= " + dirty);
+                                (mHolder.getSurface()).setDirtyRegionNative(dirty);
+                            } else {
+                                Log.d(LOG_TAG, "draw surface is not valid");
+                            }
+                        }
+                    }
+
                     int saveCount = canvas.save();
                     callbacks.onHardwarePreDraw(canvas);
 
