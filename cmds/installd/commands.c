@@ -659,14 +659,11 @@ static void run_dexopt(int zip_fd, int odex_fd, const char* input_file_name,
     ALOGE("execl(%s) failed: %s\n", DEX_OPT_BIN, strerror(errno));
 }
 
-static int wait_dexopt(pid_t pid, const char* apk_path)
+static int wait_child(pid_t pid)
 {
     int status;
     pid_t got_pid;
 
-    /*
-     * Wait for the optimization process to finish.
-     */
     while (1) {
         got_pid = waitpid(pid, &status, 0);
         if (got_pid == -1 && errno == EINTR) {
@@ -682,11 +679,8 @@ static int wait_dexopt(pid_t pid, const char* apk_path)
     }
 
     if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
-        ALOGV("DexInv: --- END '%s' (success) ---\n", apk_path);
         return 0;
     } else {
-        ALOGW("DexInv: --- END '%s' --- status=0x%04x, process failed\n",
-            apk_path, status);
         return status;      /* always nonzero */
     }
 }
@@ -781,8 +775,12 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
         run_dexopt(zip_fd, odex_fd, apk_path, dexopt_flags);
         exit(68);   /* only get here on exec failure */
     } else {
-        res = wait_dexopt(pid, apk_path);
-        if (res != 0) {
+        res = wait_child(pid);
+        if (res == 0) {
+            ALOGV("DexInv: --- END '%s' (success) ---\n", apk_path);
+        } else {
+            ALOGW("DexInv: --- END '%s' --- status=0x%04x, process failed\n",
+                 apk_path, res);
             ALOGE("dexopt failed on '%s' res = %d\n", dex_path, res);
             goto fail;
         }
@@ -1136,4 +1134,183 @@ out:
     }
 
     return rc;
+}
+
+static void run_idmap(const char *target_apk, const char *overlay_apk, int idmap_fd)
+{
+    static const char *IDMAP_BIN = "/system/bin/idmap";
+    static const size_t MAX_INT_LEN = 32;
+    char idmap_str[MAX_INT_LEN];
+
+    snprintf(idmap_str, sizeof(idmap_str), "%d", idmap_fd);
+
+    execl(IDMAP_BIN, IDMAP_BIN, "--fd", target_apk, overlay_apk, idmap_str, (char*)NULL);
+    ALOGE("execl(%s) failed: %s\n", IDMAP_BIN, strerror(errno));
+}
+
+// Transform string /a/b/c.apk to (prefix)/a@b@c.apk@(suffix)
+// eg /a/b/c.apk to /data/resource-cache/a@b@c.apk@idmap
+static int flatten_path(const char *prefix, const char *suffix,
+        const char *overlay_path, char *idmap_path, size_t N)
+{
+    if (overlay_path == NULL || idmap_path == NULL) {
+        return -1;
+    }
+    const size_t len_overlay_path = strlen(overlay_path);
+    // will access overlay_path + 1 further below; requires absolute path
+    if (len_overlay_path < 2 || *overlay_path != '/') {
+        return -1;
+    }
+    const size_t len_idmap_root = strlen(prefix);
+    const size_t len_suffix = strlen(suffix);
+    if (SIZE_MAX - len_idmap_root < len_overlay_path ||
+            SIZE_MAX - (len_idmap_root + len_overlay_path) < len_suffix) {
+        // additions below would cause overflow
+        return -1;
+    }
+    if (N < len_idmap_root + len_overlay_path + len_suffix) {
+        return -1;
+    }
+    memset(idmap_path, 0, N);
+    snprintf(idmap_path, N, "%s%s%s", prefix, overlay_path + 1, suffix);
+    char *ch = idmap_path + len_idmap_root;
+    while (*ch != '\0') {
+        if (*ch == '/') {
+            *ch = '@';
+        }
+        ++ch;
+    }
+    return 0;
+}
+
+int idmap(const char *target_apk, const char *overlay_apk, size_t priority, uid_t uid)
+{
+    ALOGV("idmap target_apk=%s overlay_apk=%s uid=%d\n", target_apk, overlay_apk, uid);
+
+    int idmap_fd = -1;
+    char idmap_path[PATH_MAX];
+
+    if (flatten_path(IDMAP_PREFIX, IDMAP_SUFFIX, overlay_apk,
+                idmap_path, sizeof(idmap_path)) == -1) {
+        ALOGE("idmap cannot generate idmap path for overlay %s\n", overlay_apk);
+        goto fail;
+    }
+
+    unlink(idmap_path);
+    idmap_fd = open(idmap_path, O_RDWR | O_CREAT | O_EXCL, 0644);
+    if (idmap_fd < 0) {
+        ALOGE("idmap cannot open '%s' for output: %s\n", idmap_path, strerror(errno));
+        goto fail;
+    }
+    if (fchown(idmap_fd, AID_SYSTEM, uid) < 0) {
+        ALOGE("idmap cannot chown '%s'\n", idmap_path);
+        goto fail;
+    }
+    if (fchmod(idmap_fd, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH) < 0) {
+        ALOGE("idmap cannot chmod '%s'\n", idmap_path);
+        goto fail;
+    }
+
+    pid_t pid;
+    pid = fork();
+    if (pid == 0) {
+        /* child -- drop privileges before continuing */
+        if (setgid(uid) != 0) {
+            ALOGE("setgid(%d) failed during idmap\n", uid);
+            exit(1);
+        }
+        if (setuid(uid) != 0) {
+            ALOGE("setuid(%d) failed during idmap\n", uid);
+            exit(1);
+        }
+        if (flock(idmap_fd, LOCK_EX | LOCK_NB) != 0) {
+            ALOGE("flock(%s) failed during idmap: %s\n", idmap_path, strerror(errno));
+            exit(1);
+        }
+
+        run_idmap(target_apk, overlay_apk, idmap_fd);
+        exit(1); /* only if exec call to idmap failed */
+    } else {
+        int status = wait_child(pid);
+        if (status != 0) {
+            ALOGE("idmap failed, status=0x%04x\n", status);
+            goto fail;
+        }
+    }
+    if (enable_overlay(target_apk, overlay_apk, priority) != 0) {
+        goto fail;
+    }
+    close(idmap_fd);
+    return 0;
+fail:
+    if (idmap_fd >= 0) {
+        close(idmap_fd);
+        unlink(idmap_path);
+    }
+    return -1;
+}
+
+int enable_overlay(const char *target_path, const char *overlay_path, size_t priority)
+{
+    char symlink_target[PATH_MAX];
+    char symlink_name[PATH_MAX];
+    struct stat st;
+
+    if (flatten_path(OVERLAY_PREFIX, OVERLAY_SUFFIX, target_path,
+                symlink_name, sizeof(symlink_name)) == -1) {
+        ALOGE("failed to generate symlink target for %s\n", target_path);
+        return -1;
+    }
+
+    if (flatten_path(IDMAP_PREFIX, IDMAP_SUFFIX, overlay_path,
+                symlink_target, sizeof(symlink_target)) == -1) {
+        ALOGE("failed to generate symlink name for %s\n", overlay_path);
+        return -1;
+    }
+
+    if (stat(OVERLAY_PREFIX, &st) == -1 && errno == ENOENT) {
+        if (mkdir(OVERLAY_PREFIX, 0755) == -1) {
+            ALOGE("failed to create dir %s: %s\n", OVERLAY_PREFIX, strerror(errno));
+            return -1;
+        }
+        if (chown(OVERLAY_PREFIX, AID_SYSTEM, AID_SYSTEM) == -1) {
+            ALOGE("failed to chown dir %s: %s\n", OVERLAY_PREFIX, strerror(errno));
+            unlink(OVERLAY_PREFIX);
+            return -1;
+        }
+        if (chmod(OVERLAY_PREFIX, 0755) < 0) {
+            ALOGE("failed to chmod dir %s: %s\n", OVERLAY_PREFIX, strerror(errno));
+            unlink(OVERLAY_PREFIX);
+            return -1;
+        }
+    }
+
+    if (stat(symlink_name, &st) == -1 && errno == ENOENT) {
+        if (mkdir(symlink_name, 0755) == -1) {
+            ALOGE("failed to create dir %s: %s\n", symlink_name, strerror(errno));
+            return -1;
+        }
+        if (chown(symlink_name, AID_SYSTEM, AID_SYSTEM) == -1) {
+            ALOGE("failed to chown dir %s: %s\n", symlink_name, strerror(errno));
+            unlink(symlink_name);
+            return -1;
+        }
+        if (chmod(symlink_name, 0755) < 0) {
+            ALOGE("failed to chmod dir %s: %s\n", symlink_name, strerror(errno));
+            unlink(symlink_name);
+            return -1;
+        }
+    }
+
+    snprintf(symlink_name, sizeof(symlink_name), "%s/%04d", symlink_name, priority);
+
+    unlink(symlink_name); /* disable previous overlay, if any */
+
+    if (symlink(symlink_target, symlink_name) == -1) {
+        ALOGE("failed to create symlink %s -> %s: %s\n",
+                symlink_name, symlink_target, strerror(errno));
+        return -1;
+    }
+
+    return 0;
 }

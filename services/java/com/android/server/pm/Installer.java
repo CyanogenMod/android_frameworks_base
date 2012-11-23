@@ -209,6 +209,19 @@ public final class Installer {
         return execute(builder.toString());
     }
 
+    public int idmap(String targetApkPath, String overlayApkPath, int priority, int uid) {
+        StringBuilder builder = new StringBuilder("idmap");
+        builder.append(' ');
+        builder.append(targetApkPath);
+        builder.append(' ');
+        builder.append(overlayApkPath);
+        builder.append(' ');
+        builder.append(priority);
+        builder.append(' ');
+        builder.append(uid);
+        return execute(builder.toString());
+    }
+
     public int movedex(String srcPath, String dstPath) {
         StringBuilder builder = new StringBuilder("movedex");
         builder.append(' ');

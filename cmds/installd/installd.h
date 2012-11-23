@@ -78,6 +78,11 @@
 
 #define UPDATE_COMMANDS_DIR_PREFIX  "/system/etc/updatecmds/"
 
+#define IDMAP_PREFIX           "/data/resource-cache/"
+#define IDMAP_SUFFIX           "@idmap"
+#define OVERLAY_PREFIX         "/data/system/overlay/"
+#define OVERLAY_SUFFIX         ""
+
 #define PKG_NAME_MAX  128   /* largest allowed package name */
 #define PKG_PATH_MAX  256   /* max size of any path we use */
 
@@ -215,3 +220,6 @@ int free_cache(int64_t free_size);
 int dexopt(const char *apk_path, uid_t uid, int is_public);
 int movefiles();
 int linklib(const char* target, const char* source, int userId);
+int idmap(const char *target_path, const char *overlay_path, size_t priority, uid_t uid);
+int enable_overlay(const char *target_path, const char *overlay_path, size_t priority);
+int disable_overlay(const char *target_path);
