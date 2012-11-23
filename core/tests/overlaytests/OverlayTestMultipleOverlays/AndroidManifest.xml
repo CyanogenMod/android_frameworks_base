@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.android.overlaytest.overlay"
+        package="com.android.overlaytest.multipleoverlays"
         android:versionCode="1"
         android:versionName="1.0">
-        <overlay target="android" priority="1"/>
+        <overlay target="android" priority="0"/>
 </manifest>
