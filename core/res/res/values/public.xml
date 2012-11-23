@@ -2059,4 +2059,6 @@
   <java-symbol type="string" name="seconds" />
 
   <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
+  <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
+
 </resources>
