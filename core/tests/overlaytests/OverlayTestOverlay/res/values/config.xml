@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="config_automatic_brightness_available">true</bool>
-    <string name="phoneTypeCar">Automobile</string>
-    <integer-array name="config_scrollBarrierVibePattern">
-        <item>100</item>
-        <item>200</item>
-        <item>300</item>
+    <bool name="rro_test_usually_false">true</bool>
+    <string name="rro_test_animal">dog</string>
+    <integer-array name="rro_test_fibonacci">
+        <item>21</item>
+        <item>13</item>
+        <item>8</item>
+        <item>5</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+        <item>1</item>
     </integer-array>
     <!-- The following integer does not exist in the original package. Idmap
          generation should therefore ignore it. -->
