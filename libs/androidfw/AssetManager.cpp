@@ -37,10 +37,7 @@
 #include <assert.h>
 #include <dirent.h>
 #include <errno.h>
-#include <fcntl.h>
 #include <strings.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #ifndef TEMP_FAILURE_RETRY
 /* Used to retry syscalls that can return EINTR. */
@@ -72,33 +69,26 @@ static Asset* const kExcludedAsset = (Asset*) 0xd000000d;
 static volatile int32_t gCount = 0;
 
 namespace {
-    // Transform string /a/b/c.apk to /data/resource-cache/a@b@c.apk@idmap
-    String8 idmapPathForPackagePath(const String8& pkgPath)
+#ifdef HAVE_ANDROID_OS
+    String8 flattenPath(const String8& path)
     {
-        const char* root = getenv("ANDROID_DATA");
-        LOG_ALWAYS_FATAL_IF(root == NULL, "ANDROID_DATA not set");
-        String8 path(root);
-        path.appendPath(kIdmapCacheDir);
-
-        char buf[256]; // 256 chars should be enough for anyone...
-        strncpy(buf, pkgPath.string(), 255);
-        buf[255] = '\0';
-        char* filename = buf;
-        while (*filename && *filename == '/') {
-            ++filename;
-        }
-        char* p = filename;
-        while (*p) {
+        assert(path[0] == '/');
+        char str[PATH_MAX + 1];
+        memset(str, 0, sizeof(str));
+        strncpy(str, path.string() + 1, PATH_MAX);
+        for (char* p = str; *p; ++p) {
             if (*p == '/') {
                 *p = '@';
             }
-            ++p;
         }
-        path.appendPath(filename);
-        path.append("@idmap");
-
-        return path;
+        return String8(str);
     }
+
+    int overlay_path_compare(const String8* lhs, const String8* rhs)
+    {
+        return -strcmp(lhs->string(), rhs->string());
+    }
+#endif
 
     /*
      * Like strdup(), but uses C++ "new" operator instead of malloc.
@@ -197,33 +187,10 @@ bool AssetManager::addAssetPath(const String8& path, void** cookie, bool asSkin)
         *cookie = (void*)mAssetPaths.size();
     }
 
-    // add overlay packages for /system/framework; apps are handled by the
-    // (Java) package manager
-    if (strncmp(path.string(), "/system/framework/", 18) == 0) {
-        // When there is an environment variable for /vendor, this
-        // should be changed to something similar to how ANDROID_ROOT
-        // and ANDROID_DATA are used in this file.
-        String8 overlayPath("/vendor/overlay/framework/");
-        overlayPath.append(path.getPathLeaf());
-        if (TEMP_FAILURE_RETRY(access(overlayPath.string(), R_OK)) == 0) {
-            asset_path oap;
-            oap.path = overlayPath;
-            oap.type = ::getFileType(overlayPath.string());
-            bool addOverlay = (oap.type == kFileTypeRegular); // only .apks supported as overlay
-            if (addOverlay) {
-                oap.idmap = idmapPathForPackagePath(overlayPath);
-
-                if (isIdmapStaleLocked(ap.path, oap.path, oap.idmap)) {
-                    addOverlay = createIdmapFileLocked(ap.path, oap.path, oap.idmap);
-                }
-            }
-            if (addOverlay) {
-                mAssetPaths.add(oap);
-            } else {
-                ALOGW("failed to add overlay package %s\n", overlayPath.string());
-            }
-        }
-    }
+#ifdef HAVE_ANDROID_OS
+    // Add overlay packages.
+    addOverlaysFromIdmapsInDirLocked(String8("/data/system/overlay").appendPath(flattenPath(path)));
+#endif
 
     return true;
 }
@@ -249,150 +216,6 @@ bool AssetManager::createIdmap(const char* targetApkPath, const char* overlayApk
 
     return tables[0].createIdmap(tables[1], targetCrc, overlayCrc,
             targetApkPath, overlayApkPath, (void**)outData, outSize) == NO_ERROR;
-}
-
-bool AssetManager::isIdmapStaleLocked(const String8& originalPath, const String8& overlayPath,
-                                      const String8& idmapPath)
-{
-    struct stat st;
-    if (TEMP_FAILURE_RETRY(stat(idmapPath.string(), &st)) == -1) {
-        if (errno == ENOENT) {
-            return true; // non-existing idmap is always stale
-        } else {
-            ALOGW("failed to stat file %s: %s\n", idmapPath.string(), strerror(errno));
-            return false;
-        }
-    }
-    if (st.st_size < ResTable::IDMAP_HEADER_SIZE_BYTES) {
-        ALOGW("file %s has unexpectedly small size=%zd\n", idmapPath.string(), (size_t)st.st_size);
-        return false;
-    }
-    int fd = TEMP_FAILURE_RETRY(::open(idmapPath.string(), O_RDONLY));
-    if (fd == -1) {
-        ALOGW("failed to open file %s: %s\n", idmapPath.string(), strerror(errno));
-        return false;
-    }
-    char buf[ResTable::IDMAP_HEADER_SIZE_BYTES];
-    ssize_t bytesLeft = ResTable::IDMAP_HEADER_SIZE_BYTES;
-    for (;;) {
-        ssize_t r = TEMP_FAILURE_RETRY(read(fd, buf + ResTable::IDMAP_HEADER_SIZE_BYTES - bytesLeft,
-                                            bytesLeft));
-        if (r < 0) {
-            TEMP_FAILURE_RETRY(close(fd));
-            return false;
-        }
-        bytesLeft -= r;
-        if (bytesLeft == 0) {
-            break;
-        }
-    }
-    TEMP_FAILURE_RETRY(close(fd));
-
-    uint32_t cachedOriginalCrc, cachedOverlayCrc;
-    if (!ResTable::getIdmapInfo(buf, ResTable::IDMAP_HEADER_SIZE_BYTES,
-                                &cachedOriginalCrc, &cachedOverlayCrc)) {
-        return false;
-    }
-
-    uint32_t actualOriginalCrc, actualOverlayCrc;
-    if (!getZipEntryCrcLocked(originalPath, "resources.arsc", &actualOriginalCrc)) {
-        return false;
-    }
-    if (!getZipEntryCrcLocked(overlayPath, "resources.arsc", &actualOverlayCrc)) {
-        return false;
-    }
-    return cachedOriginalCrc != actualOriginalCrc || cachedOverlayCrc != actualOverlayCrc;
-}
-
-bool AssetManager::getZipEntryCrcLocked(const String8& zipPath, const char* entryFilename,
-                                        uint32_t* pCrc)
-{
-    asset_path ap;
-    ap.path = zipPath;
-    const ZipFileRO* zip = getZipFileLocked(ap);
-    if (zip == NULL) {
-        return false;
-    }
-    const ZipEntryRO entry = zip->findEntryByName(entryFilename);
-    if (entry == NULL) {
-        return false;
-    }
-    if (!zip->getEntryInfo(entry, NULL, NULL, NULL, NULL, NULL, (long*)pCrc)) {
-        return false;
-    }
-    return true;
-}
-
-bool AssetManager::createIdmapFileLocked(const String8& originalPath, const String8& overlayPath,
-                                         const String8& idmapPath)
-{
-    ALOGD("%s: originalPath=%s overlayPath=%s idmapPath=%s\n",
-         __FUNCTION__, originalPath.string(), overlayPath.string(), idmapPath.string());
-    ResTable tables[2];
-    const String8* paths[2] = { &originalPath, &overlayPath };
-    uint32_t originalCrc, overlayCrc;
-    bool retval = false;
-    ssize_t offset = 0;
-    int fd = 0;
-    uint32_t* data = NULL;
-    size_t size;
-
-    for (int i = 0; i < 2; ++i) {
-        asset_path ap;
-        ap.type = kFileTypeRegular;
-        ap.path = *paths[i];
-        Asset* ass = openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap);
-        if (ass == NULL) {
-            ALOGW("failed to find resources.arsc in %s\n", ap.path.string());
-            goto error;
-        }
-        tables[i].add(ass, (void*)1, false);
-    }
-
-    if (!getZipEntryCrcLocked(originalPath, "resources.arsc", &originalCrc)) {
-        ALOGW("failed to retrieve crc for resources.arsc in %s\n", originalPath.string());
-        goto error;
-    }
-    if (!getZipEntryCrcLocked(overlayPath, "resources.arsc", &overlayCrc)) {
-        ALOGW("failed to retrieve crc for resources.arsc in %s\n", overlayPath.string());
-        goto error;
-    }
-
-    if (tables[0].createIdmap(tables[1], originalCrc, overlayCrc,
-                              (void**)&data, &size) != NO_ERROR) {
-        ALOGW("failed to generate idmap data for file %s\n", idmapPath.string());
-        goto error;
-    }
-
-    // This should be abstracted (eg replaced by a stand-alone
-    // application like dexopt, triggered by something equivalent to
-    // installd).
-    fd = TEMP_FAILURE_RETRY(::open(idmapPath.string(), O_WRONLY | O_CREAT | O_TRUNC, 0644));
-    if (fd == -1) {
-        ALOGW("failed to write idmap file %s (open: %s)\n", idmapPath.string(), strerror(errno));
-        goto error_free;
-    }
-    for (;;) {
-        ssize_t written = TEMP_FAILURE_RETRY(write(fd, data + offset, size));
-        if (written < 0) {
-            ALOGW("failed to write idmap file %s (write: %s)\n", idmapPath.string(),
-                 strerror(errno));
-            goto error_close;
-        }
-        size -= (size_t)written;
-        offset += written;
-        if (size == 0) {
-            break;
-        }
-    }
-
-    retval = true;
-error_close:
-    TEMP_FAILURE_RETRY(close(fd));
-error_free:
-    free(data);
-error:
-    return retval;
 }
 
 bool AssetManager::addDefaultAssets()
@@ -784,6 +607,86 @@ Asset* AssetManager::openIdmapLocked(const struct asset_path& ap) const
     }
     return ass;
 }
+
+#ifdef HAVE_ANDROID_OS
+bool AssetManager::addOverlayFromIdmapLocked(const String8& idmapPath)
+{
+    for (size_t i = 0; i < mAssetPaths.size(); ++i) {
+        if (mAssetPaths[i].idmap == idmapPath) {
+            return true;
+        }
+    }
+
+    Asset* idmap = NULL;
+    if ((idmap = openAssetFromFileLocked(idmapPath, Asset::ACCESS_BUFFER)) == NULL) {
+        return false;
+    }
+
+    String8 targetPath;
+    String8 overlayPath;
+    if (!ResTable::getIdmapInfo(idmap->getBuffer(false), idmap->getLength(),
+                NULL, NULL, &targetPath, &overlayPath)) {
+        delete idmap;
+        return false;
+    }
+    delete idmap;
+
+    if (access(targetPath.string(), R_OK) != 0) {
+        return false;
+    }
+    if (access(idmapPath.string(), R_OK) != 0) {
+        return false;
+    }
+    if (access(overlayPath.string(), R_OK) != 0) {
+        return false;
+    }
+
+    asset_path oap;
+    oap.path = overlayPath;
+    oap.type = ::getFileType(overlayPath.string());
+    oap.idmap = idmapPath;
+#if 0
+    ALOGD("Overlay added: targetPath=%s overlayPath=%s idmapPath=%s\n",
+            targetPath.string(), overlayPath.string(), idmapPath.string());
+#endif
+    mAssetPaths.add(oap);
+
+    return true;
+}
+
+/*
+ * Load overlay packages from a directory.
+ *
+ * Directory assumed to contain symbolic links, named [0000, 9999], pointing to
+ * the idmap file of the overlay package; the path to the overlay package is
+ * embedded within the file name of the idmap file. The symlinks are processed
+ * in lexicographical order.
+ */
+void AssetManager::addOverlaysFromIdmapsInDirLocked(const String8& dirPath)
+{
+    DIR* dir;
+    struct dirent* dirent;
+    Vector<String8> symlinks;
+
+    if ((dir = opendir(dirPath.string())) == NULL) {
+        return;
+    }
+    while ((dirent = readdir(dir)) != NULL) {
+        if (dirent->d_type == DT_LNK) {
+            symlinks.add(String8(dirPath).appendPath(dirent->d_name));
+        }
+    }
+    closedir(dir);
+
+    symlinks.sort(overlay_path_compare);
+    const size_t N = symlinks.size();
+    for (size_t i = 0; i < N; ++i) {
+        if (!addOverlayFromIdmapLocked(symlinks[i])) {
+            ALOGW("Failed to add overlay for idmap file %s\n", symlinks[i].string());
+        }
+    }
+}
+#endif
 
 const ResTable& AssetManager::getResources(bool required) const
 {
