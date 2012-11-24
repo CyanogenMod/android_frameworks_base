@@ -616,6 +616,8 @@ public class WindowManagerService extends IWindowManager.Stub
     final DisplayManagerInternal mDisplayManagerInternal;
     final DisplayManager mDisplayManager;
 
+    private boolean mForceDisableHardwareKeyboard = false;
+
     // Who is holding the screen on.
     Session mHoldingScreenOn;
     PowerManager.WakeLock mHoldingScreenWakeLock;
@@ -883,6 +885,9 @@ public class WindowManagerService extends IWindowManager.Stub
         mHoldingScreenWakeLock.setReferenceCounted(false);
 
         mAnimator = new WindowAnimator(this);
+
+        mForceDisableHardwareKeyboard = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_forceDisableHardwareKeyboard);
 
         LocalServices.addService(WindowManagerInternal.class, new LocalService());
         initPolicy();
@@ -7222,9 +7227,13 @@ public class WindowManagerService extends IWindowManager.Stub
             }
 
             // Determine whether a hard keyboard is available and enabled.
-            boolean hardKeyboardAvailable = config.keyboard != Configuration.KEYBOARD_NOKEYS;
+            boolean hardKeyboardAvailable = false;
+            if (!mForceDisableHardwareKeyboard) {
+                hardKeyboardAvailable = config.keyboard != Configuration.KEYBOARD_NOKEYS;
+            }
             if (hardKeyboardAvailable != mHardKeyboardAvailable) {
                 mHardKeyboardAvailable = hardKeyboardAvailable;
+                mShowImeWithHardKeyboard = hardKeyboardAvailable;
                 mH.removeMessages(H.REPORT_HARD_KEYBOARD_STATUS_CHANGE);
                 mH.sendEmptyMessage(H.REPORT_HARD_KEYBOARD_STATUS_CHANGE);
             }
