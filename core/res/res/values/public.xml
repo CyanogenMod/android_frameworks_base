@@ -2082,4 +2082,5 @@
   <java-symbol type="string" name="second" />
   <java-symbol type="string" name="seconds" />
 
+  <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
 </resources>
