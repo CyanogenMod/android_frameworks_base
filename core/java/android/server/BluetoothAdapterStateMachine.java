@@ -263,10 +263,12 @@ final class BluetoothAdapterStateMachine extends StateMachine {
                 return false;
             }
 
-            // try to start event loop, give 2 attempts
-            int retryCount = 2;
+            // try to start event loop, give 4 attempts
+            final int maxRetryCount = 4;
+            int retryCount = maxRetryCount;
             boolean eventLoopStarted = false;
             while ((retryCount-- > 0) && !eventLoopStarted) {
+                log("starting event loop try: " + (maxRetryCount - retryCount));
                 mEventLoop.start();
                 // it may take a moment for the other thread to do its
                 // thing.  Check periodically for a while.
