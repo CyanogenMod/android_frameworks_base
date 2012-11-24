@@ -16,6 +16,7 @@
 
 package com.android.server.wifi;
 
+import android.app.PendingIntent;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.TaskStackBuilder;
@@ -46,6 +47,18 @@ final class WifiNotificationController {
      */
     private static final int ICON_NETWORKS_AVAILABLE =
             com.android.internal.R.drawable.stat_notify_wifi_in_range;
+
+    /**
+     * Listen for this intent when the notification is showing
+     */
+    private static final String ACTION_TURN_WIFI_OFF = "com.android.server.WifiService.ACTION_TURN_WIFI_OFF";
+
+    /**
+     * Turns wifi off when run (IntentFilter responsible for specifying the action
+     * ACTION_TURN_WIFI_OFF)
+     */
+    private static NotificationBroadcastReceiver mNotificationBroadcastReceiver = null;
+
     /**
      * When a notification is shown, we wait this amount before possibly showing it again.
      */
@@ -227,30 +240,41 @@ final class WifiNotificationController {
                 return;
             }
 
-            if (mNotification == null) {
-                // Cache the Notification object.
-                mNotification = new Notification();
-                mNotification.when = 0;
-                mNotification.icon = ICON_NETWORKS_AVAILABLE;
-                mNotification.flags = Notification.FLAG_AUTO_CANCEL;
-                mNotification.contentIntent = TaskStackBuilder.create(mContext)
-                        .addNextIntentWithParentStack(
-                                new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK))
-                        .getPendingIntent(0, 0, null, UserHandle.CURRENT);
-            }
-
             CharSequence title = mContext.getResources().getQuantityText(
                     com.android.internal.R.plurals.wifi_available, numNetworks);
             CharSequence details = mContext.getResources().getQuantityText(
                     com.android.internal.R.plurals.wifi_available_detailed, numNetworks);
-            mNotification.tickerText = title;
-            mNotification.setLatestEventInfo(mContext, title, details, mNotification.contentIntent);
+             mNotification = new Notification.Builder(mContext)
+                    .setWhen(0)
+                    .setSmallIcon(ICON_NETWORKS_AVAILABLE)
+                    .setAutoCancel(true)
+                    .setContentIntent(TaskStackBuilder.create(mContext)
+                        .addNextIntentWithParentStack(
+                                new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK))
+                        .getPendingIntent(0, 0, null, UserHandle.CURRENT))
+                    .addAction(com.android.internal.R.drawable.ic_stat_turn_wifi_off,
+                            mContext.getText(com.android.internal.R.string.notify_turn_wifi_off_title),
+                            PendingIntent.getBroadcast(mContext, 0,
+                                    new Intent(ACTION_TURN_WIFI_OFF).setPackage(mContext.getPackageName()), PendingIntent.FLAG_ONE_SHOT))
+                     .setTicker(title)
+                     .setContentTitle(title)
+                     .setContentText(details)
+                     .build();
 
             mNotificationRepeatTime = System.currentTimeMillis() + NOTIFICATION_REPEAT_DELAY_MS;
 
             notificationManager.notifyAsUser(null, ICON_NETWORKS_AVAILABLE, mNotification,
                     UserHandle.ALL);
+
+            if(mNotificationBroadcastReceiver == null) {
+                mNotificationBroadcastReceiver = new NotificationBroadcastReceiver();
+                IntentFilter filter = new IntentFilter(ACTION_TURN_WIFI_OFF);
+                mContext.registerReceiver(mNotificationBroadcastReceiver, filter);
+            }
         } else {
+            if (mNotificationBroadcastReceiver != null) {
+                mContext.unregisterReceiver(mNotificationBroadcastReceiver);
+            }
             notificationManager.cancelAsUser(null, ICON_NETWORKS_AVAILABLE, UserHandle.ALL);
         }
 
@@ -262,6 +286,14 @@ final class WifiNotificationController {
         pw.println("mNotificationRepeatTime " + mNotificationRepeatTime);
         pw.println("mNotificationShown " + mNotificationShown);
         pw.println("mNumScansSinceNetworkStateChange " + mNumScansSinceNetworkStateChange);
+    }
+
+    private class NotificationBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+            wifiManager.setWifiEnabled(false);
+        }
     }
 
     private class NotificationEnabledSettingObserver extends ContentObserver {
