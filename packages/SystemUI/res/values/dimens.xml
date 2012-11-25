@@ -210,6 +210,8 @@
     <dimen name="qs_tile_margin_above_icon">27dp</dimen>
     <!-- Quick Settings tile geometry: gap between icon and text -->
     <dimen name="qs_tile_margin_below_icon">17dp</dimen>
+    <!-- Quick Settings tile geometry: interior margin, above and below icon (ribbon mode) -->
+    <dimen name="qs_tile_ribbon_icon_margin">16dp</dimen>
     <!-- Quick Settings tile geometry: icon size -->
     <dimen name="qs_tile_icon_size">32dp</dimen>
     <!-- Quick Settings CA Cert Warning tile geometry: gap between icon and text -->
