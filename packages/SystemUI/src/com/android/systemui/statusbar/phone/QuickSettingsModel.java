@@ -16,7 +16,8 @@
 
 package com.android.systemui.statusbar.phone;
 
-import android.app.ActivityManager;
+import java.util.List;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothAdapter.BluetoothStateChangeCallback;
 import android.content.BroadcastReceiver;
@@ -29,8 +30,8 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.WifiDisplayStatus;
+import android.media.AudioManager;
 import android.os.Handler;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
@@ -46,8 +47,6 @@ import com.android.systemui.statusbar.policy.BrightnessController.BrightnessStat
 import com.android.systemui.statusbar.policy.CurrentUserTracker;
 import com.android.systemui.statusbar.policy.LocationController.LocationGpsStateChangeCallback;
 import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
-
-import java.util.List;
 
 
 class QuickSettingsModel implements BluetoothStateChangeCallback,
@@ -96,13 +95,26 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     }
 
     /** Broadcast receive to determine if there is an alarm set. */
-    private BroadcastReceiver mAlarmIntentReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mAlarmIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(Intent.ACTION_ALARM_CHANGED)) {
                 onAlarmChanged(intent);
                 onNextAlarmChanged();
+            }
+        }
+    };
+
+    /** Broadcast receive to determine if ringer is on or muted */
+    private final BroadcastReceiver mRingerStateChangeReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
+                onSystemVolumeChanged();
+                onVibrationChanged();
             }
         }
     };
@@ -173,63 +185,71 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
 
     private QuickSettingsTileView mUserTile;
     private RefreshCallback mUserCallback;
-    private UserState mUserState = new UserState();
+    private final UserState mUserState = new UserState();
 
     private QuickSettingsTileView mTimeTile;
     private RefreshCallback mTimeCallback;
-    private State mTimeState = new State();
+    private final State mTimeState = new State();
 
     private QuickSettingsTileView mAlarmTile;
     private RefreshCallback mAlarmCallback;
-    private State mAlarmState = new State();
+    private final State mAlarmState = new State();
 
     private QuickSettingsTileView mAirplaneModeTile;
     private RefreshCallback mAirplaneModeCallback;
-    private State mAirplaneModeState = new State();
+    private final State mAirplaneModeState = new State();
 
     private QuickSettingsTileView mWifiTile;
     private RefreshCallback mWifiCallback;
-    private WifiState mWifiState = new WifiState();
+    private final WifiState mWifiState = new WifiState();
 
     private QuickSettingsTileView mWifiDisplayTile;
     private RefreshCallback mWifiDisplayCallback;
-    private State mWifiDisplayState = new State();
+    private final State mWifiDisplayState = new State();
 
     private QuickSettingsTileView mRSSITile;
     private RefreshCallback mRSSICallback;
-    private RSSIState mRSSIState = new RSSIState();
+    private final RSSIState mRSSIState = new RSSIState();
 
     private QuickSettingsTileView mBluetoothTile;
     private RefreshCallback mBluetoothCallback;
-    private BluetoothState mBluetoothState = new BluetoothState();
+    private final BluetoothState mBluetoothState = new BluetoothState();
 
     private QuickSettingsTileView mBatteryTile;
     private RefreshCallback mBatteryCallback;
-    private BatteryState mBatteryState = new BatteryState();
+    private final BatteryState mBatteryState = new BatteryState();
 
     private QuickSettingsTileView mLocationTile;
     private RefreshCallback mLocationCallback;
-    private State mLocationState = new State();
+    private final State mLocationState = new State();
 
     private QuickSettingsTileView mImeTile;
     private RefreshCallback mImeCallback = null;
-    private State mImeState = new State();
+    private final State mImeState = new State();
 
     private QuickSettingsTileView mRotationLockTile;
     private RefreshCallback mRotationLockCallback;
-    private State mRotationLockState = new State();
+    private final State mRotationLockState = new State();
 
     private QuickSettingsTileView mBrightnessTile;
     private RefreshCallback mBrightnessCallback;
-    private BrightnessState mBrightnessState = new BrightnessState();
+    private final BrightnessState mBrightnessState = new BrightnessState();
 
     private QuickSettingsTileView mBugreportTile;
     private RefreshCallback mBugreportCallback;
-    private State mBugreportState = new State();
+    private final State mBugreportState = new State();
 
     private QuickSettingsTileView mSettingsTile;
     private RefreshCallback mSettingsCallback;
-    private State mSettingsState = new State();
+    private final State mSettingsState = new State();
+
+    private QuickSettingsTileView mSystemVolumeTile;
+    private RefreshCallback mSystemVolumeCallback;
+    private final State mSystemVolumeState = new State();
+
+    private QuickSettingsTileView mVibrationTile;
+    private RefreshCallback mVibrationCallback;
+    private final State mVibrationState = new State();
 
     public QuickSettingsModel(Context context) {
         mContext = context;
@@ -252,11 +272,13 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         IntentFilter alarmIntentFilter = new IntentFilter();
         alarmIntentFilter.addAction(Intent.ACTION_ALARM_CHANGED);
         context.registerReceiver(mAlarmIntentReceiver, alarmIntentFilter);
+        IntentFilter ringerIntentFilter = new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION);
+        context.registerReceiver(mRingerStateChangeReceiver, ringerIntentFilter);
     }
 
     void updateResources() {
         refreshSettingsTile();
-        refreshBatteryTile();
+        //refreshBatteryTile();
         refreshBluetoothTile();
         refreshBrightnessTile();
         refreshRotationLockTile();
@@ -698,5 +720,62 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         onBrightnessLevelChanged();
         onNextAlarmChanged();
         onBugreportChanged();
+        onSystemVolumeChanged();
+        onVibrationChanged();
+    }
+
+    //Volume
+    void addSystemVolumeTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mSystemVolumeTile = view;
+        mSystemVolumeCallback = cb;
+        onSystemVolumeChanged();
+    }
+
+    void onSystemVolumeChanged(){
+        AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        boolean soundOn = !am.isSilentMode();
+        if(soundOn){
+            mSystemVolumeState.enabled = true;
+            mSystemVolumeState.iconId = R.drawable.stat_ring_on;
+            mSystemVolumeState.label = mContext.getString(R.string.accessibility_desc_on);
+        }else{
+            mSystemVolumeState.enabled = false;
+            mSystemVolumeState.iconId = R.drawable.stat_ring_off;
+            mSystemVolumeState.label = mContext.getString(R.string.accessibility_desc_off);
+        }
+        if(mSystemVolumeTile != null && mSystemVolumeCallback != null){
+            mSystemVolumeCallback.refreshView(mSystemVolumeTile, mSystemVolumeState);
+        }
+    }
+
+    //Vibration
+    void addVibrationTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mVibrationTile = view;
+        mVibrationCallback = cb;
+        onVibrationChanged();
+    }
+
+    void onVibrationChanged(){
+        AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        boolean vibrateInSilent = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.VIBRATE_IN_SILENT, 0) == 1;
+        int vibrateSetting = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+        if(am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL && vibrateSetting == AudioManager.VIBRATE_SETTING_ON){
+            //Sound + vibrate
+            mVibrationState.enabled = true;
+            mVibrationState.iconId = R.drawable.stat_vibrate_on;
+            mVibrationState.label = mContext.getString(R.string.accessibility_desc_on);
+        }else if(am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE){
+            //Vibrate
+            mVibrationState.enabled = true;
+            mVibrationState.iconId = R.drawable.stat_vibrate_on;
+            mVibrationState.label = mContext.getString(R.string.accessibility_desc_on);
+        }else{
+            //No vibration
+            mVibrationState.enabled = false;
+            mVibrationState.iconId = R.drawable.stat_vibrate_off;
+            mVibrationState.label = mContext.getString(R.string.accessibility_desc_off);
+        }
+        mVibrationCallback.refreshView(mVibrationTile, mVibrationState);
     }
 }
