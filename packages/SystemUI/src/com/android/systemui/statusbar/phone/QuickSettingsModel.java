@@ -29,6 +29,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.WifiDisplayStatus;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -106,6 +107,19 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
             }
         }
     };
+    
+    /** Broadcast receive to determine if ringer is on or muted */
+    private BroadcastReceiver mRingerStateChangeReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+            if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
+                onSystemVolumeChanged();
+                onVibrationChanged();
+            }
+		}
+	};
 
     /** ContentObserver to determine the next alarm */
     private class NextAlarmObserver extends ContentObserver {
@@ -230,6 +244,14 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     private QuickSettingsTileView mSettingsTile;
     private RefreshCallback mSettingsCallback;
     private State mSettingsState = new State();
+    
+    private QuickSettingsTileView mSystemVolumeTile;
+    private RefreshCallback mSystemVolumeCallback;
+    private State mSystemVolumeState = new State();
+    
+    private QuickSettingsTileView mVibrationTile;
+    private RefreshCallback mVibrationCallback;
+    private State mVibrationState = new State();
 
     public QuickSettingsModel(Context context) {
         mContext = context;
@@ -252,11 +274,13 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         IntentFilter alarmIntentFilter = new IntentFilter();
         alarmIntentFilter.addAction(Intent.ACTION_ALARM_CHANGED);
         context.registerReceiver(mAlarmIntentReceiver, alarmIntentFilter);
+        IntentFilter ringerIntentFilter = new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION);
+        context.registerReceiver(mRingerStateChangeReceiver, ringerIntentFilter);
     }
 
     void updateResources() {
         refreshSettingsTile();
-        refreshBatteryTile();
+        //refreshBatteryTile();
         refreshBluetoothTile();
         refreshBrightnessTile();
         refreshRotationLockTile();
@@ -698,5 +722,62 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         onBrightnessLevelChanged();
         onNextAlarmChanged();
         onBugreportChanged();
+        onSystemVolumeChanged();
+        onVibrationChanged();
+    }
+    
+    //Volume
+    void addSystemVolumeTile(QuickSettingsTileView view, RefreshCallback cb) {
+    	mSystemVolumeTile = view;
+    	mSystemVolumeCallback = cb;
+    	onSystemVolumeChanged();
+    }
+    
+    void onSystemVolumeChanged(){
+    	AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+    	boolean soundOn = !am.isSilentMode();
+    	if(soundOn){
+    		mSystemVolumeState.enabled = true;
+    		mSystemVolumeState.iconId = R.drawable.stat_ring_on;
+    		mSystemVolumeState.label = mContext.getString(R.string.accessibility_desc_on);
+    	}else{
+    		mSystemVolumeState.enabled = false;
+    		mSystemVolumeState.iconId = R.drawable.stat_ring_off;
+    		mSystemVolumeState.label = mContext.getString(R.string.accessibility_desc_off);
+    	}
+    	if(mSystemVolumeTile != null && mSystemVolumeCallback != null){
+    		mSystemVolumeCallback.refreshView(mSystemVolumeTile, mSystemVolumeState);
+    	}
+    }
+    
+  //Vibration
+    void addVibrationTile(QuickSettingsTileView view, RefreshCallback cb) {
+    	mVibrationTile = view;
+    	mVibrationCallback = cb;
+    	onVibrationChanged();
+    }
+    
+    void onVibrationChanged(){
+    	AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+    	boolean vibrateInSilent = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.VIBRATE_IN_SILENT, 0) == 1;
+        int vibrateSetting = am.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+        if(am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL && vibrateSetting == AudioManager.VIBRATE_SETTING_ON){
+        	//Sound + vibrate
+        	mVibrationState.enabled = true;
+        	mVibrationState.iconId = R.drawable.stat_vibrate_on;
+        	mVibrationState.label = mContext.getString(R.string.accessibility_desc_on);
+        }else if(am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE){
+        	//Vibrate
+        	mVibrationState.enabled = true;
+        	mVibrationState.iconId = R.drawable.stat_vibrate_on;
+        	mVibrationState.label = mContext.getString(R.string.accessibility_desc_on);
+        }else{
+        	//No vibration
+        	mVibrationState.enabled = false;
+        	mVibrationState.iconId = R.drawable.stat_vibrate_off;
+        	mVibrationState.label = mContext.getString(R.string.accessibility_desc_off);
+        }
+        mVibrationCallback.refreshView(mVibrationTile, mVibrationState);
     }
 }
