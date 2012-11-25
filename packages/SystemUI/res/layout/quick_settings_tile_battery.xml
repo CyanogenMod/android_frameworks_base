@@ -19,10 +19,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="top"
         android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
     <com.android.systemui.BatteryMeterView
             android:id="@+id/image"
-            android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
-            android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
             android:layout_width="22dp"
             android:layout_height="32dp"
             android:padding="3dp"
@@ -36,4 +38,8 @@
             android:layout_gravity="top|center_horizontal"
             android:gravity="top|center_horizontal"
             />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
 </LinearLayout>
