@@ -13,37 +13,46 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="top">
-    <ImageView
-        android:id="@+id/image"
-        android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
-        android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
-        android:layout_width="@dimen/qs_tile_icon_size"
-        android:layout_height="@dimen/qs_tile_icon_size"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerInside"
-        />
-    <ImageView
-            android:id="@+id/activity_in"
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_gravity="top|center_horizontal">
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/qs_tile_icon_size"
+            android:layout_height="@dimen/qs_tile_icon_size"
+            android:scaleType="centerInside" />
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_qs_wifi_in"
-            android:layout_toRightOf="@id/image"
-            android:layout_alignBottom="@id/image"
-            />
-    <ImageView
-            android:id="@+id/activity_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_qs_wifi_out"
-            android:layout_toRightOf="@id/image"
-            android:layout_alignBottom="@id/image"
-            />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/activity_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_qs_wifi_in" />
+            <ImageView
+                android:id="@+id/activity_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_qs_wifi_out" />
+        </FrameLayout>
+    </LinearLayout>
+    <View
+        android:id="@+id/separator_padding"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3" />
     <TextView
         style="@style/TextAppearance.QuickSettings.TileView"
         android:id="@+id/text"
@@ -51,7 +60,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:gravity="top|center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/image" 
-        />
-</RelativeLayout>
+        android:layout_below="@id/image" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7" />
+</LinearLayout>
