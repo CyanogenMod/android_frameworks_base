@@ -20,12 +20,10 @@
     android:layout_gravity="top">
     <FrameLayout
         android:id="@+id/rssi_images"
-        android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
-        android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
         android:layout_width="@dimen/qs_tile_icon_size"
         android:layout_height="@dimen/qs_tile_icon_size"
         android:layout_gravity="top|center_horizontal"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         >
         <ImageView
             android:id="@+id/rssi_image"
@@ -58,7 +56,7 @@
             />
     <TextView
         style="@style/TextAppearance.QuickSettings.TileView"
-        android:id="@+id/rssi_textview"
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
