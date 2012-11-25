@@ -395,6 +395,9 @@
     <!-- Content description of the alarm tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_alarm">Alarm set for <xliff:g id="time" example="Wed 3:30 PM">%s</xliff:g>.</string>
 
+    <string name="accessibility_quick_settings_ringer">Sound <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+
     <!-- Title of dialog shown when 2G-3G data usage has exceeded limit and has been disabled. [CHAR LIMIT=48] -->
     <string name="data_usage_disabled_dialog_3g_title">2G-3G data disabled</string>
     <!-- Title of dialog shown when 4G data usage has exceeded limit and has been disabled. [CHAR LIMIT=48] -->
@@ -522,4 +525,13 @@
     <string name="status_bar_settings_battery_meter_min_format" translatable="false">
         <xliff:g id="number">%d</xliff:g>
     </string>
+
+    <string name="quicksettings_screen_sleep">Go to sleep</string>
+    <string name="quicksettings_ringer_on">Sound on</string>
+    <string name="quicksettings_ringer_off">Sound off</string>
+    <string name="quicksettings_vibration_on">Vibration on</string>
+    <string name="quicksettings_vibration_off">Vibration off</string>
+    <string name="quicksettings_label_enabled">On</string>
+    <string name="quicksettings_label_disabled">Off</string>
+    <string name="quicksettings_ringer_normal">Sound</string>
 </resources>
