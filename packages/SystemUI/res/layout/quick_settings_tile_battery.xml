@@ -14,26 +14,26 @@
      limitations under the License.
 -->
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="top"
-        android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:orientation="vertical">
     <com.android.systemui.BatteryMeterView
-            android:id="@+id/image"
-            android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
-            android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
-            android:layout_width="22dp"
-            android:layout_height="32dp"
-            android:padding="3dp"
-            android:layout_gravity="top|center_horizontal"
-            />
+        android:id="@+id/image"
+        android:layout_width="22dp"
+        android:layout_height="32dp"
+        android:padding="3dp"
+        android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
+        android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
+        android:layout_gravity="top|center_horizontal"
+        />
     <TextView
-            style="@style/TextAppearance.QuickSettings.TileView"
-            android:id="@+id/text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:gravity="top|center_horizontal"
-            />
+        style="@style/TextAppearance.QuickSettings.TileView"
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:gravity="top|center_horizontal"
+        />
 </LinearLayout>
