@@ -16,19 +16,14 @@
 
 package com.android.systemui.statusbar.phone;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.GestureRecorder;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BluetoothController;
@@ -37,7 +32,7 @@ import com.android.systemui.statusbar.policy.NetworkController;
 
 public class SettingsPanelView extends PanelView {
 
-    private QuickSettings mQS;
+    private QuickSettingsController mQS;
     private QuickSettingsContainerView mQSContainer;
 
     Drawable mHandleBar;
@@ -61,8 +56,8 @@ public class SettingsPanelView extends PanelView {
 
         setContentDescription(resources.getString(R.string.accessibility_desc_quick_settings));
     }
-    
-    public void setQuickSettings(QuickSettings qs) {
+
+    public void setQuickSettings(QuickSettingsController qs) {
         mQS = qs;
     }
 
@@ -84,8 +79,7 @@ public class SettingsPanelView extends PanelView {
     public void setup(NetworkController networkController, BluetoothController bluetoothController,
             BatteryController batteryController, LocationController locationController) {
         if (mQS != null) {
-            mQS.setup(networkController, bluetoothController, batteryController,
-                    locationController);
+            mQS.setupQuickSettings();
         }
     }
 

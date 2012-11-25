@@ -747,6 +747,7 @@ class QuickSettings {
     }
 
     private Runnable mDismissBrightnessDialogRunnable = new Runnable() {
+        @Override
         public void run() {
             if (mBrightnessDialog != null && mBrightnessDialog.isShowing()) {
                 mBrightnessDialog.dismiss();
