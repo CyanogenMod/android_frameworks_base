@@ -38,7 +38,7 @@ import com.android.systemui.statusbar.policy.RotationLockController;
 public class SettingsPanelView extends PanelView {
     public static final boolean DEBUG_GESTURES = true;
 
-    private QuickSettings mQS;
+    private QuickSettingsController mQS;
     private QuickSettingsContainerView mQSContainer;
 
     Drawable mHandleBar;
@@ -61,7 +61,7 @@ public class SettingsPanelView extends PanelView {
         mHandleView = findViewById(R.id.handle);
     }
 
-    public void setQuickSettings(QuickSettings qs) {
+    public void setQuickSettings(QuickSettingsController qs) {
         mQS = qs;
     }
 
@@ -84,8 +84,8 @@ public class SettingsPanelView extends PanelView {
             BatteryController batteryController, LocationController locationController,
             RotationLockController rotationLockController) {
         if (mQS != null) {
-            mQS.setup(networkController, bluetoothController, batteryController,
-                    locationController, rotationLockController);
+            /*mQS.setup(networkController, bluetoothController, batteryController,
+                    locationController, rotationLockController);*/
         }
     }
 
