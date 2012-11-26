@@ -280,6 +280,7 @@
   <java-symbol type="bool" name="config_dontPreferApn" />
   <java-symbol type="bool" name="config_speed_up_audio_on_mt_calls" />
   <java-symbol type="bool" name="config_useFixedVolume" />
+  <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
 
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_longPressOnPowerBehavior" />
