@@ -291,6 +291,7 @@
   <java-symbol type="bool" name="config_forceDefaultOrientation" />
   <java-symbol type="bool" name="config_wifi_batched_scan_supported" />
   <java-symbol type="bool" name="flip_controller_fallback_keys" />
+  <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
 
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_extraFreeKbytesAdjust" />
