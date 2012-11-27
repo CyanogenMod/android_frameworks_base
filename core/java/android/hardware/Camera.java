@@ -1806,6 +1806,7 @@ public class Camera {
         private static final String KEY_RECORDING_HINT = "recording-hint";
         private static final String KEY_VIDEO_SNAPSHOT_SUPPORTED = "video-snapshot-supported";
         private static final String KEY_FULL_VIDEO_SNAP_SUPPORTED = "full-video-snap-supported";
+        private static final String KEY_POWER_MODE_SUPPORTED = "power-mode-supported";
         private static final String KEY_VIDEO_STABILIZATION = "video-stabilization";
         private static final String KEY_VIDEO_STABILIZATION_SUPPORTED = "video-stabilization-supported";
         private static final String KEY_SHARPNESS = "sharpness";
@@ -1819,10 +1820,12 @@ public class Camera {
         private static final String KEY_SELECTABLE_ZONE_AF = "selectable-zone-af";
         private static final String KEY_FACE_DETECTION = "face-detection";
         private static final String KEY_MEMORY_COLOR_ENHANCEMENT = "mce";
-	private static final String KEY_REDEYE_REDUCTION = "redeye-reduction";
+        private static final String KEY_REDEYE_REDUCTION = "redeye-reduction";
         private static final String KEY_ZSL = "zsl";
         private static final String KEY_CAMERA_MODE = "camera-mode";
         private static final String KEY_VIDEO_HIGH_FRAME_RATE = "video-hfr";
+
+        private static final String KEY_POWER_MODE = "power-mode";
 
         // Parameter key suffix for supported values.
         private static final String SUPPORTED_VALUES_SUFFIX = "-values";
@@ -1922,6 +1925,10 @@ public class Camera {
         public static final String AE_BRACKET_HDR = "HDR";
         /** @hide */
         public static final String AE_BRACKET = "AE-Bracket";
+
+        // Values for POWER MODE
+        public static final String LOW_POWER = "Low_Power";
+        public static final String NORMAL_POWER = "Normal_Power";
 
         // Values for HFR settings.
         /** @hide */
@@ -3458,6 +3465,28 @@ public class Camera {
         }
 
         /**
+         * Sets the Power mode.
+         *
+         * @param value Power mode.
+         * @see #getPowerMode()
+         */
+        public void setPowerMode(String value) {
+            set(KEY_POWER_MODE, value);
+        }
+
+        /**
+         * Gets the current power mode setting.
+         *
+         * @return current power mode. null if power mode setting is not
+         *         supported.
+         * @see #POWER_MODE_LOW
+         * @see #POWER_MODE_NORMAL
+         */
+        public String getPowerMode() {
+            return get(KEY_POWER_MODE);
+        }
+
+        /**
          * Gets the supported scene modes.
          *
          * @return a list of supported scene modes. null if scene mode setting
@@ -4490,6 +4519,14 @@ public class Camera {
          */ 
         public boolean isFullsizeVideoSnapSupported() {
             String str = get(KEY_FULL_VIDEO_SNAP_SUPPORTED);
+            return TRUE.equals(str);
+        }
+
+        /**
+         * @return true if full size video snapshot is supported.
+         */
+        public boolean isPowerModeSupported() {
+            String str = get(KEY_POWER_MODE_SUPPORTED);
             return TRUE.equals(str);
         }
 
