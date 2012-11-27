@@ -389,6 +389,10 @@ private:
     bool mNeedToSendFinishedDeviceScan;
     bool mNeedToReopenDevices;
     bool mNeedToScanDevices;
+    bool mNeedToSendHeadPhoneEvent;
+    bool mNeedToSendMicroPhoneEvent;
+    bool mNeedToSendHeadsetSyncEvent;
+    int  mHeadsetDeviceId;
     Vector<String8> mExcludedDevices;
 
     int mEpollFd;

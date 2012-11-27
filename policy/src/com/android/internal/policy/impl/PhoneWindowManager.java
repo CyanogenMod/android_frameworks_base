@@ -236,6 +236,31 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_MASK_ASSIST = 0x08;
     private static final int KEY_MASK_APP_SWITCH = 0x10;
 
+    // Useful scan codes.
+    private static final int SW_HEADPHONE_INSERT = 0x02;
+    private static final int SW_MICROPHONE_INSERT = 0x04;
+    private static final int SW_JACK_PHYSICAL_INSERT = 0x07;
+    private static final int SW_HEADSET_INSERT = (SW_HEADPHONE_INSERT|SW_MICROPHONE_INSERT);
+
+    // Useful HeadSet codes... Same definition as WireAccessoryObserver.java
+    private static int mHeadsetJackState = 0;
+    private static final int SW_HEADPHONE_INSERT_BIT = 1 << SW_HEADPHONE_INSERT;
+    private static final int SW_MICROPHONE_INSERT_BIT = 1 << SW_MICROPHONE_INSERT;
+    private static final int SW_JACK_PHYSICAL_INSERT_BIT = 1 << SW_JACK_PHYSICAL_INSERT;
+    private static final int SW_JACK_BITS = SW_HEADPHONE_INSERT_BIT | SW_MICROPHONE_INSERT_BIT | SW_JACK_PHYSICAL_INSERT_BIT;
+
+    private static final int BIT_HEADSET = (1 << 0);
+    private static final int BIT_HEADSET_NO_MIC = (1 << 1);
+
+    private static final int SUPPORTED_HEADSETS = (BIT_HEADSET|BIT_HEADSET_NO_MIC);
+
+    private String mHeadsetName = "Headset";
+    private int mPrevHeadsetState = 0;
+    private int mCurHeadsetState = 0;
+    private boolean mHeadsetIntent = false;
+    private int mSwitchValues = 0;
+    private final Object mHeadsetLock = new Object();
+
     /**
      * These are the system UI flags that, when changing, can cause the layout
      * of the screen to change.
@@ -3741,6 +3766,154 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         setHdmiPlugged(!mHdmiPlugged);
     }
 
+    /** {@inheritDoc} */
+    public void notifyJackSwitchChanged(long whenNanos, int switchValues, int switchMask) {
+        Slog.d(TAG,"notifyJackSwitchChanged(): switchValues "+switchValues+" switchMask "+switchMask);
+        synchronized(mHeadsetLock) {
+            mSwitchValues = (mSwitchValues & ~switchMask) | switchValues;
+            switch (mSwitchValues & (SW_HEADPHONE_INSERT_BIT | SW_MICROPHONE_INSERT_BIT)) {
+                case 0:
+                    mHeadsetJackState = 0;
+                    break;
+
+                case SW_HEADPHONE_INSERT_BIT:
+                    mHeadsetJackState = BIT_HEADSET_NO_MIC;
+                    break;
+
+                case SW_HEADPHONE_INSERT_BIT | SW_MICROPHONE_INSERT_BIT:
+                    mHeadsetJackState = BIT_HEADSET;
+                    break;
+
+                case SW_MICROPHONE_INSERT_BIT:
+                    mHeadsetJackState = BIT_HEADSET;
+                    break;
+
+                default:
+                    mHeadsetJackState = 0;
+                    break;
+            }
+
+            update();
+        } // synchronized(mHeadsetLock)
+    }
+
+    private final void update() {
+
+        // Retain only relevant bits
+        int headsetState = mHeadsetJackState & SUPPORTED_HEADSETS;;
+        // Default delay to allow all the events to reach before sending intent
+        int delay = 100;
+        // reject all suspect transitions: only accept state changes from:
+        // - a: 0 heaset to 1 headset
+        // - b: 1 headset to 0 headset
+        if (mCurHeadsetState == headsetState) {
+            Slog.d(TAG,"update(): mCurHeadsetState "+mCurHeadsetState+" headsetState "+headsetState);
+            return;
+        }
+
+        mBroadcastWakeLock.acquire();
+        Slog.d(TAG,"update(): sending Message to IntentHander with delay of "+delay);
+        mIntentHandler.sendMessageDelayed( mIntentHandler.obtainMessage(0, mHeadsetName),
+                                           delay);
+    }
+
+    private synchronized final void sendIntents(String headsetName) {
+
+        Slog.d(TAG,"sendIntents(): mHeadsetJackState "+mHeadsetJackState+" mCurHeadsetState "+mCurHeadsetState+" mPrevHeadsetState "+mPrevHeadsetState);
+        int headsetState;
+
+        synchronized(mHeadsetLock) {
+            headsetState = mHeadsetJackState & SUPPORTED_HEADSETS;
+            if (mCurHeadsetState == headsetState) {
+                Slog.d(TAG,"sendIntents(): mCurHeadsetState "+mCurHeadsetState+" headsetState "+headsetState);
+                return;
+            }
+            mPrevHeadsetState = mCurHeadsetState;
+            mCurHeadsetState  = headsetState;
+        }
+        if(headsetState == 0) {
+            Intent intent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+            mContext.sendBroadcast(intent);
+        }
+        int allHeadsets = SUPPORTED_HEADSETS;
+        //Handle plug-in events first
+        for (int curHeadset = 1; curHeadset < SUPPORTED_HEADSETS; curHeadset <<= 1) {
+            if (((headsetState & curHeadset) == curHeadset) && ((mPrevHeadsetState & curHeadset) == 0)) {
+                if ((curHeadset & allHeadsets) != 0) {
+                    sendIntent(curHeadset, headsetState, mPrevHeadsetState, headsetName);
+                    allHeadsets &= ~curHeadset;
+                }
+            }
+        }
+        // Allow AudioService to handle plug in events
+        try {
+            Thread.sleep(20);
+        } catch (Exception e) {
+             e.printStackTrace();
+        }
+        //Handle unplug events
+        for (int curHeadset = 1; curHeadset < SUPPORTED_HEADSETS; curHeadset <<= 1) {
+            if (((headsetState & curHeadset) == 0) && ((mPrevHeadsetState & curHeadset) == curHeadset)) {
+                if ((curHeadset & allHeadsets) != 0) {
+                    sendIntent(curHeadset, headsetState, mPrevHeadsetState, headsetName);
+                    allHeadsets &= ~curHeadset;
+                }
+            }
+        }
+    }
+
+    private final void sendIntent(int headset, int headsetState, int prevHeadsetState, String headsetName) {
+
+        if ((headsetState & headset) != (prevHeadsetState & headset)) {
+            //  Pack up the values and broadcast them to everyone
+            int state = 0;
+            int device = 0;
+
+
+            if ((headset & BIT_HEADSET) != 0) {
+                device = AudioManager.DEVICE_OUT_WIRED_HEADSET;
+            } else if ((headset & BIT_HEADSET_NO_MIC) != 0) {
+                device = AudioManager.DEVICE_OUT_WIRED_HEADPHONE;
+            } else {
+                Slog.e(TAG, "setDeviceState() invalid headset type: "+headset);
+                return;
+            }
+
+            if ((headsetState & headset) != 0) {
+                state = 1;
+            } else {
+                state = 0;
+            }
+
+            if (mSystemBooted) {
+                final AudioManager am = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
+                if (am == null) {
+                    Log.e(TAG, "sendIntent: couldn't get AudioManager reference");
+                    return;
+                }
+                Slog.d(TAG,"sendIntent(): device "+device+" state "+state);
+                am.setWiredDeviceConnectionState(device, state, headsetName);
+            } else {
+                Slog.d(TAG,"system not booted yet, call setWiredDeviceConnectionState later");
+            }
+        }
+    }
+
+    private final Handler mIntentHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+        Slog.d(TAG,"Headset detect: Inside handleMessage() for IntentHandler" + (String)msg.obj);
+            if (mSystemBooted) {
+                sendIntents((String)msg.obj);
+            } else {
+                Log.e(TAG, "system not booted yet, send headset intent later");
+                mHeadsetIntent = true;
+                mHeadsetName = (String)msg.obj;
+            }
+            mBroadcastWakeLock.release();
+        }
+    };
+
     /**
      * @return Whether music is being played right now.
      */
@@ -4776,6 +4949,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public void systemBooted() {
         synchronized (mLock) {
             mSystemBooted = true;
+            if (mHeadsetIntent) {
+                Log.e(TAG, "send headset intent after system booted");
+                sendIntents(mHeadsetName);
+            }
         }
     }
 

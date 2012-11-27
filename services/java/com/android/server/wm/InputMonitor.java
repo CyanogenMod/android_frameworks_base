@@ -329,7 +329,12 @@ final class InputMonitor implements InputManagerService.WindowManagerCallbacks {
     public void notifyLidSwitchChanged(long whenNanos, boolean lidOpen) {
         mService.mPolicy.notifyLidSwitchChanged(whenNanos, lidOpen);
     }
-    
+
+    /* Notifies that the Jack switch changed state. */
+    public void notifyJackSwitchChanged(long whenNanos, int switchValues, int switchMask) {
+        mService.mPolicy.notifyJackSwitchChanged(whenNanos, switchValues, switchMask);
+    }
+
     /* Provides an opportunity for the window manager policy to intercept early key
      * processing as soon as the key has been read from the device. */
     public int interceptKeyBeforeQueueing(

@@ -198,6 +198,8 @@ EventHub::EventHub(void) :
         mOpeningDevices(0), mClosingDevices(0),
         mNeedToSendFinishedDeviceScan(false),
         mNeedToReopenDevices(false), mNeedToScanDevices(true),
+        mNeedToSendHeadPhoneEvent(false), mNeedToSendMicroPhoneEvent(false),
+        mNeedToSendHeadsetSyncEvent(false), mHeadsetDeviceId(-1),
         mPendingEventCount(0), mPendingEventIndex(0), mPendingINotify(false) {
     acquire_wake_lock(PARTIAL_WAKE_LOCK, WAKE_LOCK_ID);
 
@@ -693,6 +695,22 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
             event->type = DEVICE_ADDED;
             event += 1;
             mNeedToSendFinishedDeviceScan = true;
+            if(device->classes == INPUT_DEVICE_CLASS_SWITCH) {
+                mLock.unlock();
+                int state = getSwitchState(device->id, SW_HEADPHONE_INSERT);
+                if(state > 0) {
+                    mNeedToSendHeadPhoneEvent = true;
+                    mNeedToSendHeadsetSyncEvent = true;
+                }
+
+                state = getSwitchState(device->id, SW_MICROPHONE_INSERT);
+                mLock.lock();
+                if(state > 0) {
+                    mNeedToSendMicroPhoneEvent = true;
+                    mNeedToSendHeadsetSyncEvent = true;
+                }
+                mHeadsetDeviceId = device->id;
+            }
             if (--capacity == 0) {
                 break;
             }
@@ -702,6 +720,43 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
             mNeedToSendFinishedDeviceScan = false;
             event->when = now;
             event->type = FINISHED_DEVICE_SCAN;
+            event += 1;
+            if (--capacity == 0) {
+                break;
+            }
+        }
+
+        if(mNeedToSendHeadPhoneEvent) {
+            event->type = EV_SW;
+            event->code = SW_HEADPHONE_INSERT;
+            event->value = 1;
+            event->deviceId = mHeadsetDeviceId;
+            event->when = systemTime(SYSTEM_TIME_MONOTONIC);
+            mNeedToSendHeadPhoneEvent = false;
+            event += 1;
+            if (--capacity == 0) {
+                break;
+            }
+        }
+        if(mNeedToSendMicroPhoneEvent) {
+            event->type = EV_SW;
+            event->code = SW_MICROPHONE_INSERT;
+            event->value = 1;
+            event->deviceId = mHeadsetDeviceId;
+            event->when = systemTime(SYSTEM_TIME_MONOTONIC);
+            mNeedToSendMicroPhoneEvent = false;
+            event += 1;
+            if (--capacity == 0) {
+                break;
+            }
+        }
+        if(mNeedToSendHeadsetSyncEvent) {
+            event->type = EV_SYN;
+            event->code = SYN_REPORT;
+            event->value = 1;
+            event->deviceId = mHeadsetDeviceId;
+            event->when = systemTime(SYSTEM_TIME_MONOTONIC);
+            mNeedToSendHeadsetSyncEvent = false;
             event += 1;
             if (--capacity == 0) {
                 break;
@@ -981,6 +1036,10 @@ status_t EventHub::openDeviceLocked(const char *devicePath) {
     if(ioctl(fd, EVIOCGNAME(sizeof(buffer) - 1), &buffer) < 1) {
         //fprintf(stderr, "could not get device name for %s, %s\n", devicePath, strerror(errno));
     } else {
+        if((strstr(buffer, "Button Jack")) != NULL) {
+            memset(buffer, 0, sizeof(buffer));
+            strlcpy(buffer, "Button Jack", sizeof(buffer));
+        }
         buffer[sizeof(buffer) - 1] = '\0';
         identifier.name.setTo(buffer);
     }
