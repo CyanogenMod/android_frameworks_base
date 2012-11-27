@@ -5755,6 +5755,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     public List<ActivityManager.RecentTaskInfo> getRecentTasks(int maxNum,
             int flags, int userId) {
+	Log.d("Cheshire", "AMS.getRecentTasks");
         userId = handleIncomingUser(Binder.getCallingPid(), Binder.getCallingUid(), userId,
                 false, true, "getRecentTasks", null);
 
