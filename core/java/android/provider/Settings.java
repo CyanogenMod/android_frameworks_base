@@ -2676,7 +2676,9 @@ public final class Settings {
          * Display style of the status bar battery information
          * 0: Display the stock battery information
          * 1: Display cm battery percentage implementation / dont show stock icon
-         * 2: Hide the battery information
+         * 2: Display cm circle battery implementation without percentage
+         * 3: Display cm circle battery implementation with percentage
+         * 4: Hide the battery information
          * default: 0
          * @hide
          */
@@ -2750,7 +2752,7 @@ public final class Settings {
 
         /**
          * Boolean value whether to link ringtone and notification volumes
-         * 
+         *
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
@@ -2827,89 +2829,6 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_BACKGROUND = "lockscreen_background";
 
-        /**
-         * Show the weather on the lock screen
-         * @hide
-         */
-        public static final String LOCKSCREEN_WEATHER = "lockscreen_weather";
-
-        /**
-         * Show the current weather location on the lock screen
-         * @hide
-         */
-        public static final String WEATHER_SHOW_LOCATION = "weather_show_location";
-
-        /**
-         * Show the current weather location on the lock screen
-         * @hide
-         */
-        public static final String WEATHER_SHOW_TIMESTAMP = "weather_show_timestamp";
-
-        /**
-         * Use the custom/manually configured weather location
-         * @hide
-         */
-        public static final String WEATHER_USE_CUSTOM_LOCATION = "weather_use_custom_location";
-
-        /**
-         * Stores the custom/manually configured weather location
-         * @hide
-         */
-        public static final String WEATHER_CUSTOM_LOCATION = "weather_custom_location";
-
-        /**
-         * Stores the weather update frequency
-         * @hide
-         */
-        public static final String WEATHER_UPDATE_INTERVAL = "weather_update_interval";
-
-        /**
-         * Use Metric measurements (celcius, km/h) for weather data
-         * @hide
-         */
-        public static final String WEATHER_USE_METRIC = "weather_use_metric";
-
-        /**
-         * Invert low/high temperature display
-         * @hide
-         */
-        public static final String WEATHER_INVERT_LOWHIGH = "weather_invert_lowhigh";
-
-        /**
-         * Whether to show the next calendar event
-         * @hide
-         */
-        public static final String LOCKSCREEN_CALENDAR = "lockscreen_calendar";
-
-        /**
-         * Whether to show the next calendar event's location
-         * @hide
-         */
-        public static final String LOCKSCREEN_CALENDAR_SHOW_LOCATION = "lockscreen_calendar_show_location";
-
-        /**
-         * Whether to show the next calendar event's description
-         * @hide
-         */
-        public static final String LOCKSCREEN_CALENDAR_SHOW_DESCRIPTION = "lockscreen_calendar_show_description";
-
-        /**
-         * Which calendars to look for events
-         * @hide
-         */
-        public static final String LOCKSCREEN_CALENDARS = "lockscreen_calendars";
-
-        /**
-         * How far in the future to look for events
-         * @hide
-         */
-        public static final String LOCKSCREEN_CALENDAR_LOOKAHEAD = "lockscreen_calendar_lookahead";
-
-        /**
-         * Whether to find only events with reminders
-         * @hide
-         */
-        public static final String LOCKSCREEN_CALENDAR_REMINDERS_ONLY = "lockscreen_calendar_reminders_only";
 
         /**
          * Show the pending notification counts as overlays on the status bar
@@ -3798,6 +3717,12 @@ public final class Settings {
          * @hide
          */
         public static final String ADB_PORT = "adb_port";
+
+        /**
+         * Whether to display the ADB notification.
+         * @hide
+         */
+        public static final String ADB_NOTIFY = "adb_notify";
 
         /**
          * The hostname for this device
@@ -4755,6 +4680,12 @@ public final class Settings {
         public static final String SCREENSAVER_DEFAULT_COMPONENT = "screensaver_default_component";
 
         /**
+         * Whether to allow killing of the foreground app by long-pressing the Back button
+         * @hide
+         */
+        public static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -5021,13 +4952,6 @@ public final class Settings {
          * @hide
          */
         public static final String POWER_SOUNDS_ENABLED = "power_sounds_enabled";
-
-        /**
-         * Whether to allow killing of the foreground app by long-pressing the Back button
-         * @hide
-         */
-        public static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
-
 
         /**
          * Whether we keep the device on while the device is plugged in.
