@@ -1007,6 +1007,27 @@
          where if the preferred is used we don't try the others. -->
     <bool name="config_dontPreferApn">false</bool>
 
+    <!-- Vibrator pattern to be used as the default for notifications
+         that specify DEFAULT_VIBRATE.
+     -->
+    <integer-array name="config_defaultNotificationVibePattern">
+        <item>0</item>
+        <item>250</item>
+        <item>250</item>
+        <item>250</item>
+    </integer-array>
+
+    <!-- Vibrator pattern to be used as the default for notifications
+         that do not specify vibration but vibrate anyway because the device
+         is in vibrate mode.
+     -->
+    <integer-array name="config_notificationFallbackVibePattern">
+        <item>0</item>
+        <item>250</item>
+        <item>250</item>
+        <item>250</item>
+    </integer-array>
+
     <!-- Values greater or equal to 0 will enable electronbeam screen-on
          animation with the specified delay (in milliseconds), -1 will disable the animation -->
     <integer name="config_screenOnAnimation">-1</integer>
