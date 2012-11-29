@@ -20,7 +20,6 @@ LOCAL_SRC_FILES := \
 	StringPool.cpp \
 	XMLNode.cpp \
 	ResourceFilter.cpp \
-	ResourceIdCache.cpp \
 	ResourceTable.cpp \
 	Images.cpp \
 	Resource.cpp \
