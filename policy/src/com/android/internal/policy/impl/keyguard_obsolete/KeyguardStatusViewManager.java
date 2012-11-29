@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
- * Copyright (C) 2012 The CyanogenMod Project (Weather, Calendar)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +16,6 @@
 
 package com.android.internal.policy.impl.keyguard_obsolete;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.provider.Settings;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-
 import com.android.internal.R;
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.widget.DigitalClock;
@@ -38,6 +26,17 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import libcore.util.MutableInt;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 /***
  * Manages a number of views inside of LockScreen layouts. See below for a list of widgets
@@ -213,22 +212,6 @@ class KeyguardStatusViewManager implements OnClickListener {
             if (v != null) {
                 v.setSelected(true);
             }
-        }
-    }
-
-    /**
-     * Split the MultiSelectListPreference string based on a separator of ',' and
-     * stripping off the start [ and the end ]
-     * @param val
-     * @return
-     */
-    private static String[] parseStoredValue(String val) {
-        if (val == null || val.isEmpty())
-            return null;
-        else {
-            // Strip off the start [ and the end ] before splitting
-            val = val.substring(1, val.length() -1);
-            return (val.split(","));
         }
     }
 
