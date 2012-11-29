@@ -1,17 +1,13 @@
 package com.android.systemui.statusbar.powerwidget;
 
-import com.android.systemui.R;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.provider.Settings;
-import android.util.Log;
-import android.view.IWindowManager;
+
+import com.android.internal.view.RotationPolicy;
+import com.android.systemui.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +36,7 @@ public class AutoRotateButton extends PowerButton {
 
     @Override
     protected void toggleState(Context context) {
-        setAutoRotation(!getAutoRotation(context));
+        RotationPolicy.setRotationLock(context, getAutoRotation(context));
     }
 
     @Override
@@ -58,25 +54,7 @@ public class AutoRotateButton extends PowerButton {
     }
 
     private boolean getAutoRotation(Context context) {
-        ContentResolver cr = context.getContentResolver();
-        return Settings.System.getInt(cr, Settings.System.ACCELEROMETER_ROTATION, 0) != 0;
+        return !RotationPolicy.isRotationLocked(context);
     }
 
-    private void setAutoRotation(final boolean autorotate) {
-        AsyncTask.execute(new Runnable() {
-                public void run() {
-                    try {
-                        IWindowManager wm = IWindowManager.Stub.asInterface(
-                                ServiceManager.getService(Context.WINDOW_SERVICE));
-                        if (autorotate) {
-                            wm.thawRotation();
-                        } else {
-                            wm.freezeRotation(-1);
-                        }
-                    } catch (RemoteException exc) {
-                        Log.w(TAG, "Unable to save auto-rotate setting");
-                    }
-                }
-            });
-    }
 }
