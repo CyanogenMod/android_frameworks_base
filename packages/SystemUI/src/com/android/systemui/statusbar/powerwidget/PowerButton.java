@@ -143,7 +143,13 @@ public abstract class PowerButton {
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             if (mHapticFeedback && mClickPattern != null) {
-                mVibrator.vibrate(mClickPattern, -1);
+                if (mClickPattern.length == 1) {
+                    // One-shot vibration
+                    mVibrator.vibrate(mClickPattern[0]);
+                } else {
+                    // Pattern vibration
+                    mVibrator.vibrate(mClickPattern, -1);
+                }
             }
             toggleState(v.getContext());
             update(v.getContext());
