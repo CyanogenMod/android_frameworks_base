@@ -1137,6 +1137,15 @@
         android:description="@string/permdesc_transmitIr"
         android:protectionLevel="normal" />
 
+    <!-- Allows an application to override the power key action
+        @hide -->
+    <permission android:name="android.permission.PREVENT_POWER_KEY"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="signatureOrSystem"
+        android:label="@string/permlab_preventpower"
+        android:description="@string/permdesc_preventpower" />
+
+
     <!-- ==================================================== -->
     <!-- Permissions related to changing audio settings   -->
     <!-- ==================================================== -->

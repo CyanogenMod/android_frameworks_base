@@ -1128,6 +1128,12 @@ public interface WindowManager extends ViewManager {
         public static final int PRIVATE_FLAG_FORCE_STATUS_BAR_VISIBLE_TRANSPARENT = 0x00001000;
 
         /**
+         * Window flag: Overrides default power key behavior
+         * @{hide}
+         */
+        public static final int PRIVATE_FLAG_PREVENT_POWER_KEY = 0x20000000;
+
+        /**
          * Control flags that are private to the platform.
          * @hide
          */
