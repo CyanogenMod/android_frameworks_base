@@ -745,6 +745,10 @@ public abstract class Window {
      * @see #clearFlags
      */
     public void setFlags(int flags, int mask) {
+        if ((flags & mask & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0){
+            mContext.enforceCallingOrSelfPermission("android.permission.PREVENT_POWER_KEY",
+                    "No permission to prevent power key");
+        }
         final WindowManager.LayoutParams attrs = getAttributes();
         attrs.flags = (attrs.flags&~mask) | (flags&mask);
         if ((mask&WindowManager.LayoutParams.FLAG_NEEDS_MENU_KEY) != 0) {
@@ -792,6 +796,10 @@ public abstract class Window {
      *          current values.
      */
     public void setAttributes(WindowManager.LayoutParams a) {
+        if ((a.flags & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0) {
+            mContext.enforceCallingOrSelfPermission("android.permission.PREVENT_POWER_KEY",
+                    "No permission to prevent power key");
+        }
         mWindowAttributes.copyFrom(a);
         if (mCallback != null) {
             mCallback.onWindowAttributesChanged(mWindowAttributes);
