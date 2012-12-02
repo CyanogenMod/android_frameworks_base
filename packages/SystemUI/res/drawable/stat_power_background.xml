@@ -18,6 +18,5 @@
         android:exitFadeDuration="@android:integer/config_mediumAnimTime">
 
     <item android:state_pressed="true"  android:drawable="@*android:drawable/notification_item_background_color_pressed" />
-    <item android:state_pressed="false" android:drawable="@*android:drawable/notification_item_background_color" />
 
 </selector>
