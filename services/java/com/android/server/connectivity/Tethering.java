@@ -116,6 +116,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     // with 255.255.255.0
 
     private String[] mDhcpRange;
+    private static final int TETHER_RETRY_UPSTREAM_LIMIT = 5;
     private static final String[] DHCP_DEFAULT_RANGE = {
         "192.168.42.2", "192.168.42.254", "192.168.43.2", "192.168.43.254",
         "192.168.44.2", "192.168.44.254", "192.168.45.2", "192.168.45.254",
@@ -1180,6 +1181,8 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
         private String mUpstreamIfaceName = null;
 
+        protected int mRetryCount;
+
         private static final int UPSTREAM_SETTLE_TIME_MS     = 10000;
         private static final int CELL_CONNECTION_RENEW_MS    = 40000;
 
@@ -1413,14 +1416,31 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 }
 
                 if (upType == ConnectivityManager.TYPE_NONE) {
-                    boolean tryAgainLater = true;
-                    if ((tryCell == TRY_TO_SETUP_MOBILE_CONNECTION) &&
-                            (turnOnUpstreamMobileConnection(mPreferredUpstreamMobileApn) == true)) {
-                        // we think mobile should be coming up - don't set a retry
-                        tryAgainLater = false;
-                    }
-                    if (tryAgainLater) {
-                        sendMessageDelayed(CMD_RETRY_UPSTREAM, UPSTREAM_SETTLE_TIME_MS);
+                    try {
+                        if (cm.getMobileDataEnabled()) {
+                            boolean tryAgainLater = true;
+                            if (mRetryCount < TETHER_RETRY_UPSTREAM_LIMIT) {
+                                if ((tryCell == TRY_TO_SETUP_MOBILE_CONNECTION) &&
+                                         (turnOnUpstreamMobileConnection
+                                                (mPreferredUpstreamMobileApn) == true)) {
+                                    // we think mobile should be coming up - don't set a retry
+                                    tryAgainLater = false;
+                                    mRetryCount = 0;
+                                }
+                                if (tryAgainLater) {
+                                    mRetryCount++;
+                                    sendMessageDelayed(CMD_RETRY_UPSTREAM, UPSTREAM_SETTLE_TIME_MS);
+                                }
+                            } else {
+                               mRetryCount = 0;
+                               turnOffUpstreamMobileConnection();
+                               Log.d(TAG, "chooseUpstreamType: Reached MAX, NO RETRIES");
+                            }
+                        } else {
+                            Log.d(TAG, "Data is Disabled");
+                        }
+                    } catch (RemoteException e) {
+                        Log.d(TAG, "Exception in getMobileDataEnabled()");
                     }
                 } else {
                     LinkProperties linkProperties = null;
@@ -1517,6 +1537,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
                 mTryCell = !WAIT_FOR_NETWORK_TO_SETTLE; // better try something first pass
                                                         // or crazy tests cases will fail
+                mRetryCount = 0;
                 chooseUpstreamType(mTryCell);
                 mTryCell = !mTryCell;
             }
