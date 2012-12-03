@@ -1049,6 +1049,14 @@ public class WifiManager {
      */
     public boolean stopWifi() {
         try {
+            for (WifiConfiguration config : getConfiguredNetworks()) {
+                if (config != null) {
+                    if (!config.autoConnect) {
+                        disableNetwork(config.networkId);
+                    }
+                }
+            }
+            saveConfiguration();
             mService.stopWifi();
             return true;
         } catch (RemoteException e) {
