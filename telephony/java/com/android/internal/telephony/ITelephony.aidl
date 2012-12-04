@@ -48,8 +48,13 @@ interface ITelephony {
     void call(String callingPackage, String number);
 
     /**
+     * Toggle between 3G and LTE (NT_MODE_CDMA, NT_MODE_GLOBAL)
+     * @param boolean to turn on and off LTE
+     */
+    void toggleLTE(boolean on);
+
+    /**
      * End call if there is a call in progress, otherwise does nothing.
-     *
      * @return whether it hung up
      */
     boolean endCall();
