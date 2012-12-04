@@ -1334,13 +1334,24 @@ public class TelephonyManager {
      */
     /** {@hide} */
     public String getIccOperatorNumeric(long subId) {
-       try{
+        try {
             return getITelephony().getIccOperatorNumeric(subId);
-       } catch (RemoteException ex) {
-           return null;
-       } catch (NullPointerException ex) {
-           return null;
-       }
+        } catch (RemoteException ex) {
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * {@hide}
+     */
+    public void toggleLTE(boolean on) {
+        try {
+            getITelephony().toggleLTE(on);
+        } catch (RemoteException e) {
+            //Silently fail
+        }
     }
 
     /** Unknown network class. {@hide} */
