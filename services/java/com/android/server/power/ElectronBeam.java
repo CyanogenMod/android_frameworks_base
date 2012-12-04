@@ -133,13 +133,28 @@ final class ElectronBeam {
         mDisplay.getDisplayInfo(mDisplayInfo);
         mDisplayLayerStack = mDisplay.getLayerStack();
         mDisplayRotation = mDisplayInfo.rotation;
-        if (mDisplayRotation == Surface.ROTATION_90
-                || mDisplayRotation == Surface.ROTATION_270) {
-            mDisplayWidth = mDisplayInfo.logicalHeight;
-            mDisplayHeight = mDisplayInfo.logicalWidth;
+
+        // Allow for abnormal hardware orientation
+        int mHwRotation;
+        mHwRotation = (4 - android.os.SystemProperties.getInt("ro.sf.hwrotation", 0) / 90) % 4;
+        if (mHwRotation == Surface.ROTATION_0 || mHwRotation == Surface.ROTATION_180) {
+            if (mDisplayRotation == Surface.ROTATION_90
+                    || mDisplayRotation == Surface.ROTATION_270) {
+                mDisplayWidth = mDisplayInfo.logicalHeight;
+                mDisplayHeight = mDisplayInfo.logicalWidth;
+            } else {
+                mDisplayWidth = mDisplayInfo.logicalWidth;
+                mDisplayHeight = mDisplayInfo.logicalHeight;
+            }
         } else {
-            mDisplayWidth = mDisplayInfo.logicalWidth;
-            mDisplayHeight = mDisplayInfo.logicalHeight;
+            if (mDisplayRotation == Surface.ROTATION_90
+                    || mDisplayRotation == Surface.ROTATION_270) {
+                mDisplayWidth = mDisplayInfo.logicalWidth;
+                mDisplayHeight = mDisplayInfo.logicalHeight;
+            } else {
+                mDisplayWidth = mDisplayInfo.logicalHeight;
+                mDisplayHeight = mDisplayInfo.logicalWidth;
+            }
         }
 
         // Prepare the surface for drawing.
@@ -550,8 +565,11 @@ final class ElectronBeam {
 
             mSurface.setLayerStack(mDisplayLayerStack);
             mSurface.setSize(mDisplayWidth, mDisplayHeight);
+            // Allow for abnormal hardware orientation
+            int mSnapshotRotation;
+            mSnapshotRotation = (mDisplayRotation + (4 - android.os.SystemProperties.getInt("ro.sf.hwrotation", 0) / 90)) % 4;
 
-            switch (mDisplayRotation) {
+            switch (mSnapshotRotation) {
                 case Surface.ROTATION_0:
                     mSurface.setPosition(0, 0);
                     mSurface.setMatrix(1, 0, 0, 1);
