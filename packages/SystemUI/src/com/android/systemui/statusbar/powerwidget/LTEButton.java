@@ -1,6 +1,5 @@
 package com.android.systemui.statusbar.powerwidget;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,28 +17,27 @@ public class LTEButton extends PowerButton{
 
     private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
     static {
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.LTE_MODE));
+        OBSERVED_URIS.add(Settings.Global.getUriFor(Settings.Global.PREFERRED_NETWORK_MODE));
     }
 
     public LTEButton() { mType = BUTTON_LTE; }
 
     @Override
     protected void updateState(Context context) {
-        ContentResolver resolver = context.getContentResolver();
         int network = getCurrentPreferredNetworkMode(context);
         switch(network) {
             case Phone.NT_MODE_GLOBAL:
-/*
+            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
             case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
             case Phone.NT_MODE_LTE_ONLY:
+            case Phone.NT_MODE_LTE_WCDMA:
                 mIcon = R.drawable.stat_lte_on;
                 mState = STATE_ENABLED;
-                Settings.System.putInt(resolver, Settings.System.LTE_MODE, 1);
-                break;*/
+                break;
             default:
                 mIcon = R.drawable.stat_lte_off;
                 mState = STATE_DISABLED;
-                Settings.System.putInt(resolver, Settings.System.LTE_MODE, 0);
                 break;
         }
     }
@@ -49,17 +47,18 @@ public class LTEButton extends PowerButton{
         TelephonyManager tm = (TelephonyManager)
             context.getSystemService(Context.TELEPHONY_SERVICE);
         int network = getCurrentPreferredNetworkMode(context);
-        ContentResolver resolver = context.getContentResolver();
-        if (Phone.NT_MODE_GLOBAL == network/* ||
-              Phone.NT_MODE_LTE_GSM_WCDMA == network*/) {
-            //tm.toggleLTE(false);                                   // TODO: ******* Disabled for now ************
-            mState = STATE_DISABLED;
-            Settings.System.putInt(resolver, Settings.System.LTE_MODE, 0);
-        } else if (Phone.NT_MODE_CDMA == network/* ||
-                     tm.getLteOnGsmMode() != 0*/) {
-            //tm.toggleLTE(true);                                    // TODO: ******* Disabled for now ************
-            mState = STATE_ENABLED;
-            Settings.System.putInt(resolver, Settings.System.LTE_MODE, 1);
+        switch(network) {
+            case Phone.NT_MODE_GLOBAL:
+            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
+            case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_ONLY:
+            case Phone.NT_MODE_LTE_WCDMA:
+                tm.toggleLTE(false);
+                break;
+            default:
+                tm.toggleLTE(true);
+                break;
         }
     }
 
@@ -80,7 +79,7 @@ public class LTEButton extends PowerButton{
     private static int getCurrentPreferredNetworkMode(Context context) {
         int network = -1;
         try {
-            network = Settings.Secure.getInt(context.getContentResolver(),
+            network = Settings.Global.getInt(context.getContentResolver(),
                     Settings.Global.PREFERRED_NETWORK_MODE);
         } catch (SettingNotFoundException e) {
             e.printStackTrace();
