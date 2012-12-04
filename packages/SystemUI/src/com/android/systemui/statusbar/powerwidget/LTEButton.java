@@ -29,13 +29,15 @@ public class LTEButton extends PowerButton{
         int network = getCurrentPreferredNetworkMode(context);
         switch(network) {
             case Phone.NT_MODE_GLOBAL:
-/*
+            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
             case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
             case Phone.NT_MODE_LTE_ONLY:
+            case Phone.NT_MODE_LTE_WCDMA:
                 mIcon = R.drawable.stat_lte_on;
                 mState = STATE_ENABLED;
                 Settings.System.putInt(resolver, Settings.System.LTE_MODE, 1);
-                break;*/
+                break;
             default:
                 mIcon = R.drawable.stat_lte_off;
                 mState = STATE_DISABLED;
@@ -50,16 +52,22 @@ public class LTEButton extends PowerButton{
             context.getSystemService(Context.TELEPHONY_SERVICE);
         int network = getCurrentPreferredNetworkMode(context);
         ContentResolver resolver = context.getContentResolver();
-        if (Phone.NT_MODE_GLOBAL == network/* ||
-              Phone.NT_MODE_LTE_GSM_WCDMA == network*/) {
-            //tm.toggleLTE(false);                                   // TODO: ******* Disabled for now ************
-            mState = STATE_DISABLED;
-            Settings.System.putInt(resolver, Settings.System.LTE_MODE, 0);
-        } else if (Phone.NT_MODE_CDMA == network/* ||
-                     tm.getLteOnGsmMode() != 0*/) {
-            //tm.toggleLTE(true);                                    // TODO: ******* Disabled for now ************
-            mState = STATE_ENABLED;
-            Settings.System.putInt(resolver, Settings.System.LTE_MODE, 1);
+        switch(network) {
+            case Phone.NT_MODE_GLOBAL:
+            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
+            case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_ONLY:
+            case Phone.NT_MODE_LTE_WCDMA:
+                tm.toggleLTE(false);
+                mState = STATE_DISABLED;
+                Settings.System.putInt(resolver, Settings.System.LTE_MODE, 0);
+                break;
+            default:
+                tm.toggleLTE(true);
+                mState = STATE_ENABLED;
+                Settings.System.putInt(resolver, Settings.System.LTE_MODE, 1);
+                break;
         }
     }
 
