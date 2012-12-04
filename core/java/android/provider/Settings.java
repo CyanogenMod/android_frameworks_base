@@ -2788,13 +2788,6 @@ public final class Settings {
         public static final String EXPANDED_NETWORK_MODE = "expanded_network_mode";
 
         /**
-         * Notification Power Widget - Custom LTE Toggle
-         * 1 - lte on, 0 - lte off
-         * @hide
-         */
-        public static final String LTE_MODE = "lte_mode";
-
-        /**
         * Notification Power Widget - Custom Screen Timeout
         * @hide
         */
