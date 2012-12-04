@@ -219,7 +219,9 @@ public class AudioSystem
     public static final int DEVICE_OUT_USB_ACCESSORY = 0x2000;
     public static final int DEVICE_OUT_USB_DEVICE = 0x4000;
     public static final int DEVICE_OUT_REMOTE_SUBMIX = 0x8000;
-
+    public static final int DEVICE_OUT_ANC_HEADSET = 0x10000;
+    public static final int DEVICE_OUT_ANC_HEADPHONE = 0x20000;
+    public static final int DEVICE_OUT_PROXY = 0x40000;
     public static final int DEVICE_OUT_DEFAULT = DEVICE_BIT_DEFAULT;
 
     public static final int DEVICE_OUT_ALL = (DEVICE_OUT_EARPIECE |
@@ -238,6 +240,9 @@ public class AudioSystem
                                               DEVICE_OUT_USB_ACCESSORY |
                                               DEVICE_OUT_USB_DEVICE |
                                               DEVICE_OUT_REMOTE_SUBMIX |
+                                              DEVICE_OUT_ANC_HEADSET |
+                                              DEVICE_OUT_ANC_HEADPHONE |
+                                              DEVICE_OUT_PROXY |
                                               DEVICE_OUT_DEFAULT);
     public static final int DEVICE_OUT_ALL_A2DP = (DEVICE_OUT_BLUETOOTH_A2DP |
                                                    DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
@@ -262,6 +267,8 @@ public class AudioSystem
     public static final int DEVICE_IN_DGTL_DOCK_HEADSET = DEVICE_BIT_IN | 0x400;
     public static final int DEVICE_IN_USB_ACCESSORY = DEVICE_BIT_IN | 0x800;
     public static final int DEVICE_IN_USB_DEVICE = DEVICE_BIT_IN | 0x1000;
+    public static final int DEVICE_IN_ANC_HEADSET = DEVICE_BIT_IN | 0x2000;
+    public static final int DEVICE_IN_PROXY = DEVICE_BIT_IN | 0x4000;
     public static final int DEVICE_IN_DEFAULT = DEVICE_BIT_IN | DEVICE_BIT_DEFAULT;
 
     public static final int DEVICE_IN_ALL = (DEVICE_IN_COMMUNICATION |
@@ -277,6 +284,8 @@ public class AudioSystem
                                              DEVICE_IN_DGTL_DOCK_HEADSET |
                                              DEVICE_IN_USB_ACCESSORY |
                                              DEVICE_IN_USB_DEVICE |
+                                             DEVICE_IN_ANC_HEADSET |
+                                             DEVICE_IN_PROXY |
                                              DEVICE_IN_DEFAULT);
     public static final int DEVICE_IN_ALL_SCO = DEVICE_IN_BLUETOOTH_SCO_HEADSET;
 
@@ -301,6 +310,9 @@ public class AudioSystem
     public static final String DEVICE_OUT_USB_ACCESSORY_NAME = "usb_accessory";
     public static final String DEVICE_OUT_USB_DEVICE_NAME = "usb_device";
     public static final String DEVICE_OUT_REMOTE_SUBMIX_NAME = "remote_submix";
+    public static final String DEVICE_OUT_ANC_HEADSET_NAME = "anc_headset";
+    public static final String DEVICE_OUT_ANC_HEADPHONE_NAME = "anc_headphone";
+    public static final String DEVICE_OUT_PROXY_NAME = "proxy";
 
     public static String getDeviceName(int device)
     {
@@ -337,6 +349,12 @@ public class AudioSystem
             return DEVICE_OUT_USB_DEVICE_NAME;
         case DEVICE_OUT_REMOTE_SUBMIX:
             return DEVICE_OUT_REMOTE_SUBMIX_NAME;
+        case DEVICE_OUT_ANC_HEADSET:
+            return DEVICE_OUT_ANC_HEADSET_NAME;
+        case DEVICE_OUT_ANC_HEADPHONE:
+            return DEVICE_OUT_ANC_HEADPHONE_NAME;
+        case DEVICE_OUT_PROXY:
+            return DEVICE_OUT_PROXY_NAME;
         case DEVICE_OUT_DEFAULT:
         default:
             return "";
