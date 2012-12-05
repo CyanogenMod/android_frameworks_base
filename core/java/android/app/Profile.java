@@ -534,10 +534,10 @@ public final class Profile implements Parcelable, Comparable {
 
     private void doSelectAirplaneMode(Context context) {
         if (getAirplaneMode() != AirplaneMode.DEFAULT) {
-            int current = Settings.System.getInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0);
+            int current = Settings.Global.getInt(context.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0);
             int target = getAirplaneMode();
             if (current == 1 && target == AirplaneMode.DISABLE || current == 0 && target == AirplaneMode.ENABLE) {
-                Settings.System.putInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 1 - current);
+                Settings.Global.putInt(context.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 1 - current);
                 Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
                 intent.putExtra("state", target != AirplaneMode.DISABLE);
                 context.sendBroadcast(intent);
