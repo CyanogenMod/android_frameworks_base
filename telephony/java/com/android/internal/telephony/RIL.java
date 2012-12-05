@@ -3264,18 +3264,29 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     protected Object
     responseDataCallList(Parcel p) {
-        ArrayList<DataCallState> response;
+        ArrayList<DataCallState> response,response_sublist;
         boolean oldRil = needsOldRilFeature("datacall");
         int ver = (oldRil ? 3 : p.readInt());
         int num = p.readInt();
-        riljLog("responseDataCallList ver=" + ver + " num=" + num);
+        int num_adj = num;
 
         response = new ArrayList<DataCallState>(num);
         for (int i = 0; i < num; i++) {
-            response.add(getDataCallState(p, ver));
+            try {
+                response.add(getDataCallState(p, ver));
+            } catch (RuntimeException e) {
+                if (e.getMessage() == "getDataCallState, no ifname")
+                    --num_adj;
+                else throw e;
+            }
         }
 
-        return response;
+        riljLog("responseDataCallList ver=" + ver + " num=" + num_adj);
+
+        if (num_adj != num) {
+            response_sublist =  new ArrayList<DataCallState>(response.subList(0,num_adj));
+            return response_sublist;
+        } else return response;
     }
 
     protected Object
