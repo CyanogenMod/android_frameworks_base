@@ -167,7 +167,11 @@ static void agps_status_callback(AGpsStatus* agps_status)
     uint32_t ipaddr;
     // ipaddr field was not included in original AGpsStatus
     if (agps_status->size >= sizeof(AGpsStatus))
+#ifdef NEW_QC_GPS
+        ipaddr = agps_status->ipv4_addr;
+#else
         ipaddr = agps_status->ipaddr;
+#endif
     else
         ipaddr = 0xFFFFFFFF;
     env->CallVoidMethod(mCallbacksObj, method_reportAGpsStatus,
@@ -483,7 +487,11 @@ static void android_location_GpsLocationProvider_agps_data_conn_open(JNIEnv* env
         return;
     }
     const char *apnStr = env->GetStringUTFChars(apn, NULL);
+#ifdef NEW_QC_GPS
+    sAGpsInterface->data_conn_open(0, apnStr, 0);
+#else
     sAGpsInterface->data_conn_open(apnStr);
+#endif
     env->ReleaseStringUTFChars(apn, apnStr);
 }
 
@@ -493,7 +501,11 @@ static void android_location_GpsLocationProvider_agps_data_conn_closed(JNIEnv* e
         ALOGE("no AGPS interface in agps_data_conn_open");
         return;
     }
+#ifdef NEW_QC_GPS
+    sAGpsInterface->data_conn_closed(0);
+#else
     sAGpsInterface->data_conn_closed();
+#endif
 }
 
 static void android_location_GpsLocationProvider_agps_data_conn_failed(JNIEnv* env, jobject obj)
@@ -502,7 +514,11 @@ static void android_location_GpsLocationProvider_agps_data_conn_failed(JNIEnv* e
         ALOGE("no AGPS interface in agps_data_conn_open");
         return;
     }
+#ifdef NEW_QC_GPS
+    sAGpsInterface->data_conn_failed(0);
+#else
     sAGpsInterface->data_conn_failed();
+#endif
 }
 
 static void android_location_GpsLocationProvider_set_agps_server(JNIEnv* env, jobject obj,
