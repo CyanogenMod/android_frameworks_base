@@ -29,7 +29,7 @@ import com.android.systemui.R;
 /**
  *
  */
-class QuickSettingsContainerView extends FrameLayout {
+public class QuickSettingsContainerView extends FrameLayout {
 
     // The number of columns in the QuickSettings grid
     private int mNumColumns;
@@ -108,11 +108,11 @@ class QuickSettingsContainerView extends FrameLayout {
         int cursor = 0;
         for (int i = 0; i < N; ++i) {
             QuickSettingsTileView v = (QuickSettingsTileView) getChildAt(i);
-            ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) v.getLayoutParams();
+            ViewGroup.LayoutParams lp = v.getLayoutParams();
             if (v.getVisibility() != GONE) {
                 int col = cursor % mNumColumns;
                 int colSpan = v.getColumnSpan();
-                int row = (int) (cursor / mNumColumns);
+                int row = cursor / mNumColumns;
 
                 // Push the item to the next row if it can't fit on this one
                 if ((col + colSpan) > mNumColumns) {
