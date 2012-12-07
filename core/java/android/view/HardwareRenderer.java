@@ -1155,7 +1155,7 @@ public abstract class HardwareRenderer {
                             Log.d(LOG_TAG, "draw mHolder.getsurface == null");
                         else {
                             if(mHolder.getSurface().isValid()){
-                                Log.d(LOG_TAG, "draw surface is valid dirty= " + dirty);
+                                //Log.d(LOG_TAG, "draw surface is valid dirty= " + dirty);
                                 (mHolder.getSurface()).setDirtyRegionNative(dirty);
                             } else {
                                 Log.d(LOG_TAG, "draw surface is not valid");
