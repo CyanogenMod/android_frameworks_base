@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (c) 2011,2012, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,7 +108,7 @@ static void nmea_callback(GpsUtcTime timestamp, const char* nmea, int length)
 
 static void set_capabilities_callback(uint32_t capabilities)
 {
-    ALOGD("set_capabilities_callback: %ld\n", capabilities);
+    ALOGD("set_capabilities_callback: %ld\n", (long ) capabilities);
     JNIEnv* env = AndroidRuntime::getJNIEnv();
     env->CallVoidMethod(mCallbacksObj, method_setEngineCapabilities, capabilities);
     checkAndClearExceptionFromCallback(env, __FUNCTION__);
@@ -163,20 +164,60 @@ GpsXtraCallbacks sGpsXtraCallbacks = {
 static void agps_status_callback(AGpsStatus* agps_status)
 {
     JNIEnv* env = AndroidRuntime::getJNIEnv();
+    jbyteArray byteArray = NULL;
+    jstring ssid_string = NULL;
+    jstring password_string = NULL;
 
+#ifdef NEW_QC_GPS
+    // there is neither ipv4 now ipv6 addresses unless this is true
+    if (agps_status->size >
+        ((char*)(agps_status->ipv4_addr) - (char*)agps_status)) {
+        // if we have a valid ipv4 address
+        if (agps_status->ipv4_addr != 0xFFFFFFFF) {
+            byteArray = env->NewByteArray(4);
+            ALOG_ASSERT(byteArray, "Native could not create new byte[]");
+            env->SetByteArrayRegion(byteArray, 0, 4, (const jbyte *)agps_status->ipv4_addr);
+        } else if (agps_status->size >= sizeof(AGpsStatus)) {
+            // newest version of AGpsStatus struct, which has ipv6
+            // address. So we go with that. We won't get here if
+            // we have a valid ipv4 address.
+            byteArray = env->NewByteArray(16);
+            ALOG_ASSERT(byteArray, "Native could not create new byte[]");
+            env->SetByteArrayRegion(byteArray, 0, 16, (const jbyte *)agps_status->ipv6_addr );
+
+            if (agps_status->ssid[0] != '\0') {
+                ssid_string = env->NewStringUTF(agps_status->ssid);
+                if (agps_status->password[0] != '\0') {
+                    password_string = env->NewStringUTF(agps_status->password);
+                }
+            }
+        }
+    }
+#else
     uint32_t ipaddr;
     // ipaddr field was not included in original AGpsStatus
-    if (agps_status->size >= sizeof(AGpsStatus))
-#ifdef NEW_QC_GPS
-        ipaddr = agps_status->ipv4_addr;
-#else
-        ipaddr = agps_status->ipaddr;
+    if (agps_status->size >= sizeof(AGpsStatus)) {
+        if (agps_status->ipaddr != 0xFFFFFFFF) {
+            byteArray = env->NewByteArray(4);
+            ALOG_ASSERT(byteArray, "Native could not create new byte[]");
+            env->SetByteArrayRegion(byteArray, 0, 4, (const jbyte *)agps_status->ipaddr);
+        }
+    }
 #endif
-    else
-        ipaddr = 0xFFFFFFFF;
-    env->CallVoidMethod(mCallbacksObj, method_reportAGpsStatus,
-                        agps_status->type, agps_status->status, ipaddr);
+    env->CallVoidMethod(mCallbacksObj,
+                        method_reportAGpsStatus,
+                        agps_status->type,
+                        agps_status->status,
+                        byteArray,
+                        byteArray,
+                        ssid_string,
+                        password_string);
+
     checkAndClearExceptionFromCallback(env, __FUNCTION__);
+    
+    if (byteArray != NULL) {
+        env->DeleteLocalRef(byteArray);
+    }
 }
 
 AGpsCallbacks sAGpsCallbacks = {
@@ -244,7 +285,7 @@ static void android_location_GpsLocationProvider_class_init_native(JNIEnv* env, 
     method_reportLocation = env->GetMethodID(clazz, "reportLocation", "(IDDDFFFJ)V");
     method_reportStatus = env->GetMethodID(clazz, "reportStatus", "(I)V");
     method_reportSvStatus = env->GetMethodID(clazz, "reportSvStatus", "()V");
-    method_reportAGpsStatus = env->GetMethodID(clazz, "reportAGpsStatus", "(III)V");
+    method_reportAGpsStatus = env->GetMethodID(clazz, "reportAGpsStatus", "(II[BLjava/lang/String;Ljava/lang/String;)V");
     method_reportNmea = env->GetMethodID(clazz, "reportNmea", "(J)V");
     method_setEngineCapabilities = env->GetMethodID(clazz, "setEngineCapabilities", "(I)V");
     method_xtraDownloadRequest = env->GetMethodID(clazz, "xtraDownloadRequest", "()V");
@@ -476,7 +517,8 @@ static void android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* env, j
     env->ReleasePrimitiveArrayCritical(data, bytes, JNI_ABORT);
 }
 
-static void android_location_GpsLocationProvider_agps_data_conn_open(JNIEnv* env, jobject obj, jstring apn)
+static void android_location_GpsLocationProvider_agps_data_conn_open(JNIEnv* env, jobject obj,
+        jint agpsType, jstring apn, jint bearerType)
 {
     if (!sAGpsInterface) {
         ALOGE("no AGPS interface in agps_data_conn_open");
@@ -488,34 +530,36 @@ static void android_location_GpsLocationProvider_agps_data_conn_open(JNIEnv* env
     }
     const char *apnStr = env->GetStringUTFChars(apn, NULL);
 #ifdef NEW_QC_GPS
-    sAGpsInterface->data_conn_open(0, apnStr, 0);
+    sAGpsInterface->data_conn_open(agpsType, apnStr, bearerType);
 #else
     sAGpsInterface->data_conn_open(apnStr);
 #endif
     env->ReleaseStringUTFChars(apn, apnStr);
 }
 
-static void android_location_GpsLocationProvider_agps_data_conn_closed(JNIEnv* env, jobject obj)
+static void android_location_GpsLocationProvider_agps_data_conn_closed(JNIEnv* env, jobject obj,
+        jint agpsType)
 {
     if (!sAGpsInterface) {
         ALOGE("no AGPS interface in agps_data_conn_open");
         return;
     }
 #ifdef NEW_QC_GPS
-    sAGpsInterface->data_conn_closed(0);
+    sAGpsInterface->data_conn_closed(agpsType);
 #else
     sAGpsInterface->data_conn_closed();
 #endif
 }
 
-static void android_location_GpsLocationProvider_agps_data_conn_failed(JNIEnv* env, jobject obj)
+static void android_location_GpsLocationProvider_agps_data_conn_failed(JNIEnv* env, jobject obj,
+        jint agpsType)
 {
     if (!sAGpsInterface) {
         ALOGE("no AGPS interface in agps_data_conn_open");
         return;
     }
 #ifdef NEW_QC_GPS
-    sAGpsInterface->data_conn_failed(0);
+    sAGpsInterface->data_conn_failed(agpsType);
 #else
     sAGpsInterface->data_conn_failed();
 #endif
@@ -597,9 +641,9 @@ static JNINativeMethod sMethods[] = {
     {"native_inject_location", "(DDF)V", (void*)android_location_GpsLocationProvider_inject_location},
     {"native_supports_xtra", "()Z", (void*)android_location_GpsLocationProvider_supports_xtra},
     {"native_inject_xtra_data", "([BI)V", (void*)android_location_GpsLocationProvider_inject_xtra_data},
-    {"native_agps_data_conn_open", "(Ljava/lang/String;)V", (void*)android_location_GpsLocationProvider_agps_data_conn_open},
-    {"native_agps_data_conn_closed", "()V", (void*)android_location_GpsLocationProvider_agps_data_conn_closed},
-    {"native_agps_data_conn_failed", "()V", (void*)android_location_GpsLocationProvider_agps_data_conn_failed},
+    {"native_agps_data_conn_open", "(ILjava/lang/String;I)V", (void*)android_location_GpsLocationProvider_agps_data_conn_open},
+    {"native_agps_data_conn_closed", "(I)V", (void*)android_location_GpsLocationProvider_agps_data_conn_closed},
+    {"native_agps_data_conn_failed", "(I)V", (void*)android_location_GpsLocationProvider_agps_data_conn_failed},
     {"native_agps_set_id","(ILjava/lang/String;)V",(void*)android_location_GpsLocationProvider_agps_set_id},
     {"native_agps_set_ref_location_cellid","(IIIII)V",(void*)android_location_GpsLocationProvider_agps_set_reference_location_cellid},
     {"native_set_agps_server", "(ILjava/lang/String;I)V", (void*)android_location_GpsLocationProvider_set_agps_server},
