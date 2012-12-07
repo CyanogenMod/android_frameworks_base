@@ -237,9 +237,10 @@ public class QualcommSharedRIL extends RIL implements CommandsInterface {
             if (!TextUtils.isEmpty(gateways)) {
                 dataCall.gateways = gateways.split(" ");
             }
-            if ((dataCall.status == DataConnection.FailCause.NONE.getErrorCode()) &&
-                    TextUtils.isEmpty(dataCall.ifname)) {
-              throw new RuntimeException("getDataCallState, no ifname");
+            if (((dataCall.status == DataConnection.FailCause.NONE.getErrorCode()) &&
+                    TextUtils.isEmpty(dataCall.ifname)) ||
+                ((dataCall.active != 0) && TextUtils.isEmpty(addresses))) {
+              throw new RuntimeException("getDataCallState, no ifname and/or active call without ip address");
             }
         } else {
             dataCall.version = 4; // was dataCall.version = version;

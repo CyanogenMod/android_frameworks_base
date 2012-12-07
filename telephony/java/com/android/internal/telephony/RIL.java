@@ -3275,7 +3275,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             try {
                 response.add(getDataCallState(p, ver));
             } catch (RuntimeException e) {
-                if (e.getMessage() == "getDataCallState, no ifname")
+                if (e.getMessage() == "getDataCallState, no ifname and/or active call without ip address")
                     --num_adj;
                 else throw e;
             }
