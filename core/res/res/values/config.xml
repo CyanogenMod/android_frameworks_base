@@ -1051,4 +1051,7 @@
     <!-- Setting to false will disable CM's IME switcher implementation for tablets -->
     <bool name="config_show_cmIMESwitcher">true</bool>
 
+    <!-- Disable the home key unlock setting -->
+    <bool name="config_disableHomeUnlockSetting">true</bool>
+
 </resources>
