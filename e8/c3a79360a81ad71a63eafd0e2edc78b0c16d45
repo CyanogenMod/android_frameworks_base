@@ -1,0 +1,12 @@
+Change-Id: I2eea8bd84d2d4e1c70d6483fe193a246ce2e2610
+Code-Review+1: Björn Lundén <blunden2@gmail.com>
+Code-Review+1: Abhisek Devkota <ciwrl@cyanogenmod.com>
+Code-Review+2: David van Tonder <david.vantonder@gmail.com>
+Verified+1: David van Tonder <david.vantonder@gmail.com>
+Code-Review+1: Piotr Bochenski <bochenski.piotr@gmail.com>
+Code-Review+1: Michael Bestas <mikeioannina@gmail.com>
+Submitted-by: David van Tonder <david.vantonder@gmail.com>
+Submitted-at: Fri, 07 Dec 2012 14:03:32 -0800
+Reviewed-on: http://review.cyanogenmod.org/26635
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/jellybean
