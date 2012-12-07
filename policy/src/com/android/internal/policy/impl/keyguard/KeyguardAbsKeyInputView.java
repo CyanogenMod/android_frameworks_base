@@ -21,6 +21,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -47,6 +48,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     protected View mEcaView;
     private Drawable mBouncerFrame;
     protected boolean mEnableHaptics;
+    private boolean mQuickUnlock;
 
     // To avoid accidental lockout due to events while the device in in the pocket, ignore
     // any passwords with length less than or equal to this length.
@@ -111,6 +113,9 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
             }
         });
 
+        mQuickUnlock = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+
         mPasswordEntry.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -121,6 +126,14 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
             public void afterTextChanged(Editable s) {
                 if (mCallback != null) {
                     mCallback.userActivity(0);
+                }
+                if (mQuickUnlock) {
+                    String entry = mPasswordEntry.getText().toString();
+                    if (entry.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT &&
+                            mLockPatternUtils.checkPassword(entry)) {
+                        mCallback.reportSuccessfulUnlockAttempt();
+                        mCallback.dismiss(true);
+                    }
                 }
             }
         });
