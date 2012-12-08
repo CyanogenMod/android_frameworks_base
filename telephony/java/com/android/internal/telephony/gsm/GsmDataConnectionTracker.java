@@ -1310,7 +1310,11 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             DataConnectionAc dcac = dataCallStateToDcac.get(newState);
 
             if (dcac == null) {
-                loge("onDataStateChanged(ar): No associated DataConnection ignore");
+                if (newState.active == DATA_CONNECTION_ACTIVE_PH_LINK_DOWN) {
+                    loge("onDataStateChanged(ar): DataCallState with no DataConnection " + 
+                        "+ link down: request disconnect");
+                    mPhone.mCM.deactivateDataCall(newState.cid, RILConstants.DEACTIVATE_REASON_NONE, null);
+		} else loge("onDataStateChanged(ar): No associated DataConnection ignore");
                 continue;
             }
 
