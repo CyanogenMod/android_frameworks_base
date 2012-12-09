@@ -66,6 +66,7 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
 
     private static final String NAME_H2W = "h2w";
     private static final String NAME_USB_AUDIO = "usb_audio";
+    private static final String NAME_SAMSUNG_USB_AUDIO = "dock";
     private static final String NAME_HDMI_AUDIO = "hdmi_audio";
     private static final String NAME_HDMI = "hdmi";
 
@@ -345,8 +346,10 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
             }
 
             // At any given time accessories could be inserted
-            // one on the board, one on the dock and one on HDMI:
-            // observe three UEVENTs
+            // one on the board, one on the dock, one on the
+            // samsung dock and one on HDMI:
+            // observe all UEVENTs that have valid switch supported
+            // by the Kernel
             for (int i = 0; i < mUEventInfo.size(); ++i) {
                 UEventInfo uei = mUEventInfo.get(i);
                 startObserving("DEVPATH="+uei.getDevPath());
@@ -373,6 +376,15 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
                 retVal.add(uei);
             } else {
                 Slog.w(TAG, "This kernel does not have usb audio support");
+            }
+
+            // Monitor Samsung USB audio
+            uei = new UEventInfo(NAME_SAMSUNG_USB_AUDIO, BIT_USB_HEADSET_DGTL,
+                                 BIT_USB_HEADSET_ANLG, 0);
+            if (uei.checkSwitchExists()) {
+                retVal.add(uei);
+            } else {
+                Slog.w(TAG, "This kernel does not have samsung usb dock audio support");
             }
 
             // Monitor HDMI
