@@ -109,4 +109,8 @@
     <!-- Packages in this list should be a union of all packages defined in values-mccxxx (mcc) -->
     <java-symbol type="array" name="config_restrict_to_region_locked_devices" />
 
+    <!-- Support Samsung docks -->
+    <java-symbol type="bool" name="config_forceAnalogCarDock" />
+    <java-symbol type="bool" name="config_forceAnalogDeskDock" />
+
 </resources>
