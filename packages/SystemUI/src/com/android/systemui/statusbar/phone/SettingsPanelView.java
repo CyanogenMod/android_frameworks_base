@@ -38,7 +38,7 @@ public class SettingsPanelView extends PanelView {
     Drawable mHandleBar;
     float mHandleBarHeight;
     View mHandleView;
-
+    
     public SettingsPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -55,6 +55,7 @@ public class SettingsPanelView extends PanelView {
         mHandleView = findViewById(R.id.handle);
 
         setContentDescription(resources.getString(R.string.accessibility_desc_quick_settings));
+
     }
 
     public void setQuickSettings(QuickSettingsController qs) {
@@ -130,4 +131,5 @@ public class SettingsPanelView extends PanelView {
         mHandleBar.draw(canvas);
         canvas.translate(0, -off);
     }
+
 }
