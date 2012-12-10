@@ -21,6 +21,10 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)
 
+ifeq ($(TARGET_BOOTANIMATION_USE_RGB565),true)
+    LOCAL_CFLAGS += -DUSE_565
+endif
+
 LOCAL_MODULE:= bootanimation
 
 
