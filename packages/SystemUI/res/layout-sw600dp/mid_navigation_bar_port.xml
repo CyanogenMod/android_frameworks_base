@@ -26,12 +26,25 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     android:id="@+id/nav_buttons">
-    <com.android.systemui.statusbar.policy.KeyButtonView
-        android:id="@+id/one"
-        android:layout_width="@dimen/navigation_extra_key_width"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:scaleType="fitCenter" />
+    <FrameLayout
+            android:layout_width="@dimen/navigation_extra_key_width"
+            android:layout_height="match_parent"
+            android:layout_weight="0">
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:id="@+id/dpad_left"
+            android:visibility="gone"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:scaleType="fitCenter"
+            systemui:keyRepeat="true" />
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:id="@+id/one"
+            android:layout_width="@dimen/navigation_extra_key_width"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -94,6 +107,14 @@
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:scaleType="fitCenter" />
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:id="@+id/dpad_right"
+            android:visibility="gone"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:scaleType="fitCenter"
+            systemui:keyRepeat="true" />
     </FrameLayout>
 
 </LinearLayout>
