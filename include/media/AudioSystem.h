@@ -176,7 +176,12 @@ public:
                                     uint32_t format = AUDIO_FORMAT_DEFAULT,
                                     uint32_t channels = AUDIO_CHANNEL_IN_MONO,
                                     audio_in_acoustics_t acoustics = (audio_in_acoustics_t)0,
+#ifdef STE_AUDIO
+                                    int sessionId = 0,
+                                    audio_input_clients *inputClientId = NULL);
+#else
                                     int sessionId = 0);
+#endif
     static status_t startInput(audio_io_handle_t input);
     static status_t stopInput(audio_io_handle_t input);
     static void releaseInput(audio_io_handle_t input);

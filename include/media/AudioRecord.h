@@ -385,6 +385,9 @@ private:
     uint32_t                mChannelMask;
     audio_io_handle_t       mInput;
     int                     mSessionId;
+#ifdef STE_AUDIO
+    audio_input_clients     *mpInputClientId;
+#endif
 };
 
 }; // namespace android
