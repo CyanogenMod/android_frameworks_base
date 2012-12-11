@@ -24,7 +24,7 @@
         android:id="@+id/nav_buttons"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+     
         <com.android.systemui.statusbar.phone.ReverseLinearLayout
             android:id="@+id/ends_group"
             android:layout_width="match_parent"
@@ -39,6 +39,8 @@
             android:gravity="center"
             android:orientation="vertical"
             android:clipChildren="false" />
+
+       <include layout="@layout/nav_buttons_dpad_group_rot90" />
 
     </FrameLayout>
 
