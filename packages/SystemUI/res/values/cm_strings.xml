@@ -44,6 +44,9 @@
     <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
 
+    <string name="accessibility_dpad_left">Cursor left</string>
+    <string name="accessibility_dpad_right">Cursor right</string>
+
     <!-- QuickSettings: Mobile data [CHAR LIMIT=NONE] -->
     <string name="quick_settings_mobile_data_label">Mobile data</string>
     <!-- QuickSettings: Roaming [CHAR LIMIT=NONE] -->
