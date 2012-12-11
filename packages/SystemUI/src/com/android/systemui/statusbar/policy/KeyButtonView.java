@@ -77,7 +77,11 @@ public class KeyButtonView extends ImageView {
         public void run() {
             if (isPressed()) {
                 // Log.d("KeyButtonView", "longpressed: " + this);
-                if (mCode != 0) {
+                if (mCode == KeyEvent.KEYCODE_DPAD_LEFT || mCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                    sendEvent(KeyEvent.ACTION_UP, ~KeyEvent.FLAG_VIRTUAL_HARD_KEY);
+                    sendEvent(KeyEvent.ACTION_DOWN, ~KeyEvent.FLAG_VIRTUAL_HARD_KEY);
+                    postDelayed(mCheckLongPress, ViewConfiguration.getKeyRepeatDelay());
+                } else if (mCode != 0) {
                     sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.FLAG_LONG_PRESS);
                     sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
                 } else {
