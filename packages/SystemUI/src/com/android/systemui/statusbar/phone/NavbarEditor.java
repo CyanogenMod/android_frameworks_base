@@ -133,6 +133,14 @@ public class NavbarEditor implements View.OnTouchListener {
             R.string.navbar_menu_big_button, R.string.accessibility_menu,
             KeyEvent.KEYCODE_MENU, R.drawable.ic_sysbar_menu_big,
             R.drawable.ic_sysbar_menu_big_land, 0);
+    public static final ButtonInfo NAVBAR_DPAD_LEFT = new ButtonInfo("dpad_left",
+            0, R.string.accessibility_dpad_left,
+            KeyEvent.KEYCODE_DPAD_LEFT, 0,
+            0, R.drawable.ic_sysbar_ime_left);
+    public static final ButtonInfo NAVBAR_DPAD_RIGHT = new ButtonInfo("dpad_right",
+            0, R.string.accessibility_dpad_right,
+            KeyEvent.KEYCODE_DPAD_RIGHT, 0,
+            0, R.drawable.ic_sysbar_ime_right);
 
     private static final ButtonInfo[] ALL_BUTTONS = new ButtonInfo[] {
         NAVBAR_EMPTY, NAVBAR_HOME, NAVBAR_BACK, NAVBAR_SEARCH,
@@ -148,9 +156,18 @@ public class NavbarEditor implements View.OnTouchListener {
         mRtl = isRtl;
 
         mButtonViews = new ArrayList<KeyButtonView>();
+
+        KeyButtonView dpadLeft = (KeyButtonView) mParent.findViewById(R.id.dpad_left);
+        dpadLeft.setInfo(NAVBAR_DPAD_LEFT, orientation, true);
+        mButtonViews.add(dpadLeft);
+
         for (int id : BUTTON_IDS) {
             mButtonViews.add((KeyButtonView) mParent.findViewById(id));
         }
+
+        KeyButtonView dpadRight = (KeyButtonView) mParent.findViewById(R.id.dpad_right);
+        dpadRight.setInfo(NAVBAR_DPAD_RIGHT, orientation, true);
+        mButtonViews.add(dpadRight);
     }
 
     public void setEditMode(boolean editMode) {
