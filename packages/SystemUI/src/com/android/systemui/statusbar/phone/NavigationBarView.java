@@ -108,7 +108,14 @@ public class NavigationBarView extends LinearLayout {
     private final NavigationBarTransitions mBarTransitions;
 
     private boolean mModLockDisabled = true;
+    private boolean mShowDpadArrowKeys = true;
     private SettingsObserver mObserver;
+
+    // Visibility of R.id.one view prior to swapping it for a left arrow key
+    public int mSlotOneVisibility = -1;
+
+    // Visibility of R.id.six view prior to swapping it for a right arrow key
+    public int mSlotSixVisibility = -1;
 
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
     final static boolean WORKAROUND_INVALID_LAYOUT = true;
@@ -458,6 +465,7 @@ public class NavigationBarView extends LinearLayout {
         setNavigationIconHints(hints, false);
     }
 
+
     public void setNavigationIconHints(int hints, boolean force) {
         if (!force && hints == mNavigationIconHints) return;
         final boolean backAlt = (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0;
@@ -486,6 +494,27 @@ public class NavigationBarView extends LinearLayout {
         }
 
         setDisabledFlags(mDisabledFlags, true);
+
+        if (mShowDpadArrowKeys) {
+            final boolean showingIme = ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0);
+            View one = mCurrentView.findViewById(mVertical ? R.id.six : R.id.one);
+            View six = mCurrentView.findViewById(mVertical ? R.id.one : R.id.six);
+            setVisibleOrGone(one, showingIme);
+            setVisibleOrGone(six, showingIme);
+            if (showingIme) {
+                mSlotOneVisibility = one.getVisibility();
+                mSlotSixVisibility = six.getVisibility();
+                setVisibleOrGone(one, false);
+                setVisibleOrGone(six, false);
+            } else {
+                if (mSlotOneVisibility != -1) {
+                    one.setVisibility(mSlotOneVisibility);
+                }
+                if (mSlotSixVisibility != -1) {
+                    six.setVisibility(mSlotSixVisibility);
+                }
+            }
+        }
     }
 
     public void setDisabledFlags(int disabledFlags) {
@@ -545,6 +574,12 @@ public class NavigationBarView extends LinearLayout {
     private void setVisibleOrGone(View view, boolean visible) {
         if (view != null) {
             view.setVisibility(visible ? VISIBLE : GONE);
+        }
+    }
+
+    private void setVisibleOrInvisible(View view, boolean visible) {
+        if (view != null) {
+            view.setVisibility(visible ? VISIBLE : INVISIBLE);
         }
     }
 
@@ -874,6 +909,9 @@ public class NavigationBarView extends LinearLayout {
             resolver.registerContentObserver(
                 Settings.System.getUriFor(Settings.System.LOCKSCREEN_MODLOCK_ENABLED),
                 false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS),
+                    false, this);
 
             // intialize mModlockDisabled
             onChange(false);
@@ -890,7 +928,9 @@ public class NavigationBarView extends LinearLayout {
         public void onChange(boolean selfChange) {
             mModLockDisabled = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_MODLOCK_ENABLED, 1) == 0;
-            setDisabledFlags(mDisabledFlags, true /* force */);
+            mShowDpadArrowKeys = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 1) != 0;
+            setNavigationIconHints(mNavigationIconHints, true);
         }
     }
 }
