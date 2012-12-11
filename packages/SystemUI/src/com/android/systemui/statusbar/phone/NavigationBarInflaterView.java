@@ -45,6 +45,8 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     public static final String NAVSPACE = "space";
     public static final String CLIPBOARD = "clipboard";
     public static final String KEY = "key";
+    public static final String DPAD_LEFT = "dpad_left";
+    public static final String DPAD_RIGHT = "dpad_right";
 
     public static final String GRAVITY_SEPARATOR = ";";
     public static final String BUTTON_SEPARATOR = ",";
@@ -247,6 +249,10 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
             if (uri != null) {
                 ((KeyButtonView) v).loadAsync(uri);
             }
+        } else if (DPAD_LEFT.equals(button)) {
+            v = inflater.inflate(R.layout.dpad_left, parent, false);
+        } else if (DPAD_RIGHT.equals(button)) {
+            v = inflater.inflate(R.layout.dpad_right, parent, false);
         } else {
             return null;
         }

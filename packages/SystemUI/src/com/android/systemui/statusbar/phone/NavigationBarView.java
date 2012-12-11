@@ -23,6 +23,7 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.ActivityManagerNative;
 import android.app.StatusBarManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -31,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -51,6 +53,8 @@ import com.android.systemui.statusbar.policy.DeadZone;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+
+import cyanogenmod.providers.CMSettings;
 
 public class NavigationBarView extends LinearLayout {
     final static boolean DEBUG = false;
@@ -80,14 +84,24 @@ public class NavigationBarView extends LinearLayout {
     private Drawable mDockedIcon;
     private Drawable mImeIcon;
     private Drawable mMenuIcon;
+    private Drawable mDpadLeftIcon, mDpadRightIcon;
 
     private NavigationBarGestureHelper mGestureHelper;
     private DeadZone mDeadZone;
     private final NavigationBarTransitions mBarTransitions;
 
+    // Visibility of R.id.one view prior to swapping it for a left arrow key
+    public int mSlotOneVisibility = -1;
+
+    // Visibility of R.id.six view prior to swapping it for a right arrow key
+    public int mSlotSixVisibility = -1;
+
+
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
     final static boolean WORKAROUND_INVALID_LAYOUT = true;
     final static int MSG_CHECK_INVALID_LAYOUT = 8686;
+
+    private boolean mShowDpadArrowKeys = true;
 
     // performs manual animation in sync with layout transitions
     private final NavTransitionListener mTransitionListener = new NavTransitionListener();
@@ -201,6 +215,8 @@ public class NavigationBarView extends LinearLayout {
         mButtonDisatchers.put(R.id.recent_apps, new ButtonDispatcher(R.id.recent_apps));
         mButtonDisatchers.put(R.id.menu, new ButtonDispatcher(R.id.menu));
         mButtonDisatchers.put(R.id.ime_switcher, new ButtonDispatcher(R.id.ime_switcher));
+        mButtonDisatchers.put(R.id.dpad_left, new ButtonDispatcher(R.id.dpad_left));
+        mButtonDisatchers.put(R.id.dpad_right, new ButtonDispatcher(R.id.dpad_right));
     }
 
     public BarTransitions getBarTransitions() {
@@ -266,6 +282,14 @@ public class NavigationBarView extends LinearLayout {
         return mButtonDisatchers.get(R.id.ime_switcher);
     }
 
+    public ButtonDispatcher getDpadRightButton() {
+        return mButtonDisatchers.get(R.id.dpad_right);
+    }
+
+    public ButtonDispatcher getDpadLeftButton() {
+        return mButtonDisatchers.get(R.id.dpad_left);
+    }
+
     private void updateCarModeIcons(Context ctx) {
         mBackCarModeIcon = ctx.getDrawable(R.drawable.ic_sysbar_back_carmode);
         mBackLandCarModeIcon = mBackCarModeIcon;
@@ -289,7 +313,8 @@ public class NavigationBarView extends LinearLayout {
             mRecentIcon = ctx.getDrawable(R.drawable.ic_sysbar_recent);
             mMenuIcon = ctx.getDrawable(R.drawable.ic_sysbar_menu);
             mImeIcon = ctx.getDrawable(R.drawable.ic_ime_switcher_default);
-
+            mDpadLeftIcon = ctx.getDrawable(R.drawable.ic_sysbar_ime_left);
+            mDpadRightIcon = ctx.getDrawable(R.drawable.ic_sysbar_ime_right);
             updateCarModeIcons(ctx);
         }
     }
@@ -354,15 +379,34 @@ public class NavigationBarView extends LinearLayout {
             getHomeButton().setImageDrawable(mHomeDefaultIcon);
         }
 
-        final boolean showImeButton = ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0);
+        final boolean showImeButton = ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0)
+                                && !mShowDpadArrowKeys;
         getImeSwitchButton().setVisibility(showImeButton ? View.VISIBLE : View.INVISIBLE);
         getImeSwitchButton().setImageDrawable(mImeIcon);
+
+        setDisabledFlags(mDisabledFlags, true);
+
+        updateDpadKeys();
 
         // Update menu button in case the IME state has changed.
         setMenuVisibility(mShowMenu, true);
         getMenuButton().setImageDrawable(mMenuIcon);
+    }
 
-        setDisabledFlags(mDisabledFlags, true);
+    public void updateDpadKeys() {
+        if (mShowDpadArrowKeys) { // overrides IME button
+            final boolean showingIme = ((mNavigationIconHints
+                    & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0);
+
+            final int vis = showingIme ? View.VISIBLE : View.INVISIBLE;
+            getDpadLeftButton().setVisibility(vis);
+            getDpadRightButton().setVisibility(vis);
+
+            if (showingIme) {
+                getDpadLeftButton().setImageDrawable(mDpadLeftIcon);
+                getDpadRightButton().setImageDrawable(mDpadRightIcon);
+            }
+        }
     }
 
     public void setDisabledFlags(int disabledFlags) {
@@ -752,5 +796,4 @@ public class NavigationBarView extends LinearLayout {
     public interface OnVerticalChangedListener {
         void onVerticalChanged(boolean isVertical);
     }
-
 }

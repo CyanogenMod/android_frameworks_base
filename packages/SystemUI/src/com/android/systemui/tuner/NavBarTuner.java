@@ -54,6 +54,8 @@ import java.util.List;
 import static com.android.systemui.statusbar.phone.NavigationBarInflaterView.BACK;
 import static com.android.systemui.statusbar.phone.NavigationBarInflaterView.BUTTON_SEPARATOR;
 import static com.android.systemui.statusbar.phone.NavigationBarInflaterView.CLIPBOARD;
+import static com.android.systemui.statusbar.phone.NavigationBarInflaterView.DPAD_LEFT;
+import static com.android.systemui.statusbar.phone.NavigationBarInflaterView.DPAD_RIGHT;
 import static com.android.systemui.statusbar.phone.NavigationBarInflaterView.GRAVITY_SEPARATOR;
 import static com.android.systemui.statusbar.phone.NavigationBarInflaterView.HOME;
 import static com.android.systemui.statusbar.phone.NavigationBarInflaterView.KEY;
@@ -218,6 +220,10 @@ public class NavBarTuner extends Fragment implements TunerService.Tunable {
             return context.getString(R.string.clipboard);
         } else if (button.startsWith(KEY)) {
             return context.getString(R.string.keycode);
+        } else if (button.startsWith(DPAD_LEFT)) {
+            return context.getString(R.string.accessibility_dpad_left);
+        } else if (button.startsWith(DPAD_RIGHT)) {
+            return context.getString(R.string.accessibility_dpad_right);
         }
         return button;
     }
@@ -431,6 +437,7 @@ public class NavBarTuner extends Fragment implements TunerService.Tunable {
         private void showAddDialog(final Context context) {
             final String[] options = new String[] {
                     BACK, HOME, RECENT, MENU_IME, NAVSPACE, CLIPBOARD, KEY,
+                    DPAD_LEFT, DPAD_RIGHT,
             };
             final CharSequence[] labels = new CharSequence[options.length];
             for (int i = 0; i < options.length; i++) {
