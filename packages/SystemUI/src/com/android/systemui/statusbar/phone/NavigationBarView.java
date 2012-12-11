@@ -458,6 +458,8 @@ public class NavigationBarView extends LinearLayout {
         setNavigationIconHints(hints, false);
     }
 
+
+    public int mLeftVisibility = -1, mRightVisibility = -1;
     public void setNavigationIconHints(int hints, boolean force) {
         if (!force && hints == mNavigationIconHints) return;
         final boolean backAlt = (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0;
@@ -486,6 +488,25 @@ public class NavigationBarView extends LinearLayout {
         }
 
         setDisabledFlags(mDisabledFlags, true);
+
+        final boolean showingIme = ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0);
+        setVisibleOrGone(mCurrentView.findViewById(R.id.dpad_left), showingIme);
+        setVisibleOrGone(mCurrentView.findViewById(R.id.dpad_right), showingIme);
+        View one = mCurrentView.findViewById(mVertical ? R.id.six : R.id.one);
+        View six = mCurrentView.findViewById(mVertical ? R.id.one : R.id.six);
+        if (showingIme) {
+            mLeftVisibility = one.getVisibility();
+            mRightVisibility = six.getVisibility();
+            setVisibleOrGone(one, false);
+            setVisibleOrGone(six, false);
+        } else {
+            if (mLeftVisibility != -1) {
+                one.setVisibility(mLeftVisibility);
+            }
+            if (mRightVisibility != -1) {
+                six.setVisibility(mRightVisibility);
+            }
+        }
     }
 
     public void setDisabledFlags(int disabledFlags) {
@@ -545,6 +566,12 @@ public class NavigationBarView extends LinearLayout {
     private void setVisibleOrGone(View view, boolean visible) {
         if (view != null) {
             view.setVisibility(visible ? VISIBLE : GONE);
+        }
+    }
+
+    private void setVisibleOrInvisible(View view, boolean visible) {
+        if (view != null) {
+            view.setVisibility(visible ? VISIBLE : INVISIBLE);
         }
     }
 
