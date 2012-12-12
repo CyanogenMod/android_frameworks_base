@@ -625,7 +625,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             // update APN availability so that APN can be enabled.
             notifyOffApnsOfAvailability(Phone.REASON_DATA_ATTACHED);
         }
-
+        mAutoAttachOnCreation = true;
         setupDataOnReadyApns(Phone.REASON_DATA_ATTACHED);
     }
 
