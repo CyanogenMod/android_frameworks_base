@@ -2842,8 +2842,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
 
         int N = mNotificationData.size();
-        int thisUsersNotifications = 0;
-        for (int i=0; i<N; i++) {
+        for (int i = 0; i < N; i++) {
             Entry ent = mNotificationData.get(N-i-1);
             if(ent != null
                     && ent.notification != null
@@ -2853,14 +2852,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     case com.android.internal.R.drawable.stat_sys_adb:
                         continue;
                 }
-                thisUsersNotifications++;
+                // We have at least one notification, we cannot skip
+                return false;
             }
         }
-        if(thisUsersNotifications == 0) {
-            return true;
-        }
-
-        return false;
+        // No notifications for current user, lets skip to Settings panel
+        return true;
     }
 
     private static class FastColorDrawable extends Drawable {
