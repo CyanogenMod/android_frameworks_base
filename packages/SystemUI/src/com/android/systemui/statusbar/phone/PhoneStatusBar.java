@@ -2611,6 +2611,33 @@ public class PhoneStatusBar extends BaseStatusBar {
                 || (mDisabled & StatusBarManager.DISABLE_SEARCH) != 0;
     }
 
+    public boolean skipToSettingsPanel() {
+        if (mPile == null || mNotificationData == null) {
+            return false;
+        }
+
+        int N = mNotificationData.size();
+        int thisUsersNotifications = 0;
+        for (int i=0; i<N; i++) {
+            Entry ent = mNotificationData.get(N-i-1);
+            if(ent != null
+                    && ent.notification != null
+                    && notificationIsForCurrentUser(ent.notification)) {
+                switch(ent.notification.id) {
+                    // ignore adb icon
+                    case com.android.internal.R.drawable.stat_sys_adb:
+                        continue;
+                }
+                thisUsersNotifications++;
+            }
+        }
+        if(thisUsersNotifications == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     private static class FastColorDrawable extends Drawable {
         private final int mColor;
 
