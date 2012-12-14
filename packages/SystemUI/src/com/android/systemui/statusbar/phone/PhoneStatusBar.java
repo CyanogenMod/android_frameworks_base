@@ -2617,30 +2617,6 @@ public class PhoneStatusBar extends BaseStatusBar {
                 || (mDisabled & StatusBarManager.DISABLE_SEARCH) != 0;
     }
 
-    public boolean skipToSettingsPanel() {
-        if (mPile == null || mNotificationData == null) {
-            return false;
-        }
-
-        int N = mNotificationData.size();
-        for (int i = 0; i < N; i++) {
-            Entry ent = mNotificationData.get(N-i-1);
-            if(ent != null
-                    && ent.notification != null
-                    && notificationIsForCurrentUser(ent.notification)) {
-                switch(ent.notification.id) {
-                    // ignore adb icon
-                    case com.android.internal.R.drawable.stat_sys_adb:
-                        continue;
-                }
-                // We have at least one notification, we cannot skip
-                return false;
-            }
-        }
-        // No notifications for current user, lets skip to Settings panel
-        return true;
-    }
-
     private static class FastColorDrawable extends Drawable {
         private final int mColor;
 
