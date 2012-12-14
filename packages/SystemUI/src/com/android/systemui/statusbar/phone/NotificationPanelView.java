@@ -95,8 +95,10 @@ public class NotificationPanelView extends PanelView {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     mOkToFlip = getExpandedHeight() == 0;
-                    break;
                 case MotionEvent.ACTION_POINTER_DOWN:
+                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN && event.getX(0) < getWidth() * 0.9f) {
+                        break;
+                    }
                     if (mOkToFlip) {
                         float miny = event.getY(0);
                         float maxy = miny;
