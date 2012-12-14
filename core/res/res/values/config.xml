@@ -1010,6 +1010,11 @@
          where if the preferred is used we don't try the others. -->
     <bool name="config_dontPreferApn">false</bool>
 
+    <!-- Maximum wallpaper width for devices with very high-res screen (1920x1200)
+ 	the wallpaper width suggestion by the launcher may be too large for the GPU to handle. -->
+
+    <integer name="config_wallpaperMaxWidth">-1</integer>
+
     <!-- Vibrator pattern to be used as the default for notifications
          that specify DEFAULT_VIBRATE.
      -->
