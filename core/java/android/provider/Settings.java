@@ -2611,6 +2611,13 @@ public final class Settings {
         public static final String QS_DYNAMIC_WIFI = "qs_dyanmic_wifi";
 
         /**
+         * Quick Settings Quick Pulldown
+         *
+         * @hide
+         */
+        public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
+
+        /**
          * Use the Notification Power Widget? (Who wouldn't!)
          *
          * @hide
