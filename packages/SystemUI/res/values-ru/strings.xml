@@ -207,4 +207,16 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"АВТОНАСТРОЙКА"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Это панель уведомлений"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Ее можно открыть, пролистнув экран вниз."\n"Чтобы открыть настройки, проведите пальцем вниз ещё раз."</string>
+
+    <string name="quick_settings_screen_sleep">Сон</string>
+    <string name="quick_settings_ringer_on">Вкл. звук</string>
+    <string name="quick_settings_ringer_off">Выкл. звук</string>
+    <string name="quick_settings_vibration_on">Вкл. вибро</string>
+    <string name="quick_settings_vibration_off">Выкл. вибро</string>
+    <string name="quick_settings_label_enabled">Вкл.</string>
+    <string name="quick_settings_label_disabled">Выкл.</string>
+    <string name="quick_settings_ringer_normal">Звук</string>
+    <string name="quick_settings_lockscreen">Экран блокировки</string>
+    <string name="quick_settings_network_type">Тип сети</string>
+    <string name="quick_settings_report_bug">Отчёт об ошибке</string>
 </resources>
