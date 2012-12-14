@@ -201,8 +201,31 @@
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"WLAN aus"</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"WLAN-Display"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Kabellose Übertragung"</string>
+    <!-- QuickSettings: Profile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_profile_label">Profile</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Helligkeit"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTO"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Benachrichtigungen erscheinen hier"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Greifen Sie jederzeit auf sie zu, indem Sie nach unten wischen."\n"Wischen Sie für Systemeinstellungen erneut nach unten."</string>
+
+<!-- **** CYANOGENMOD EDITS START **** -->
+
+    <!-- Screen timeout toast -->
+    <string name="powerwidget_screen_timeout_toast">Bildschirmsperre nach: %1$d %2$s</string>
+
+    <!-- Quick settings -->
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_screen_sleep">Standby</string>
+    <string name="quick_settings_ringer_on">Ton an</string>
+    <string name="quick_settings_ringer_off">Ton aus</string>
+    <string name="quick_settings_vibration_on">Vibration an</string>
+    <string name="quick_settings_vibration_off">Vibration aus</string>
+    <string name="quick_settings_label_enabled">An</string>
+    <string name="quick_settings_label_disabled">Aus</string>
+    <string name="quick_settings_ringer_normal">Ton</string>
+    <string name="quick_settings_lockscreen">Bildschirmsperre</string>
+    <string name="quick_settings_network_type">Netzwerktyp</string>
+    <string name="quick_settings_report_bug">Fehlerprotokollierung</string>
+
+<!-- **** CYANOGENMOD EDITS END **** -->
 </resources>
