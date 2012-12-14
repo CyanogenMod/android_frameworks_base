@@ -1148,17 +1148,6 @@ unsigned int AudioFlinger::getInputFramesLost(int ioHandle)
     return 0;
 }
 
-#ifdef STE_AUDIO
-size_t AudioFlinger::readInput(uint32_t *input, uint32_t inputClientId, void *buffer, uint32_t bytes, uint32_t *pOverwrittenBytes)
-{
-    if (input == NULL || buffer == NULL) {
-        return 0;
-    }
-
-    AudioStreamIn* stream = (AudioStreamIn*)input;
-    return 0; //return stream->read(buffer, bytes);
-}
-#endif
 status_t AudioFlinger::setVoiceVolume(float value)
 {
     status_t ret = initCheck();
@@ -4810,27 +4799,10 @@ bool AudioFlinger::RecordThread::threadLoop()
                         if (framesOut && mFrameCount == mRsmpInIndex) {
                             if (framesOut == mFrameCount &&
                                 ((int)mChannelCount == mReqChannelCount || mFormat != AUDIO_FORMAT_PCM_16_BIT)) {
-#ifdef STE_AUDIO
-                                mBytesRead = mAudioFlinger->readInput((uint32_t*) mInput,
-                                                                      (uint32_t)mInputClientId,
-                                                                      buffer.raw,
-                                                                      mInputBytes,
-                                                                      NULL);
-#else
                                 mBytesRead = mInput->stream->read(mInput->stream, buffer.raw, mInputBytes);
-#endif
                                 framesOut = 0;
                             } else {
-#ifdef STE_AUDIO
-                                mBytesRead = mAudioFlinger->readInput((uint32_t*) mInput,
-                                                                      (uint32_t)mInputClientId,
-                                                                      mRsmpInBuffer,
-                                                                      mInputBytes,
-                                                                      NULL);
-
-#else
                                 mBytesRead = mInput->stream->read(mInput->stream, mRsmpInBuffer, mInputBytes);
-#endif
                                 mRsmpInIndex = 0;
                             }
                             if (mBytesRead < 0) {
@@ -5078,15 +5050,7 @@ status_t AudioFlinger::RecordThread::getNextBuffer(AudioBufferProvider::Buffer* 
     int channelCount;
 
     if (framesReady == 0) {
-#ifdef STE_AUDIO
-        mBytesRead = mAudioFlinger->readInput((uint32_t*) mInput,
-                                              (uint32_t)mInputClientId,
-                                              mRsmpInBuffer,
-                                              mInputBytes,
-                                              NULL);
-#else
         mBytesRead = mInput->stream->read(mInput->stream, mRsmpInBuffer, mInputBytes);
-#endif
         if (mBytesRead < 0) {
             LOGE("RecordThread::getNextBuffer() Error reading audio input");
             if (mActiveTrack->mState == TrackBase::ACTIVE) {

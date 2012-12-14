@@ -177,8 +177,6 @@ public:
                             uint32_t *pInputClientId = NULL);
 
     virtual status_t closeInput(int input, uint32_t *inputClientId = NULL);
-
-    virtual size_t readInput(uint32_t *input, uint32_t inputClientId, void *buffer, uint32_t bytes, uint32_t *pOverwrittenBytes);
 #else
                             uint32_t acoustics);
 
