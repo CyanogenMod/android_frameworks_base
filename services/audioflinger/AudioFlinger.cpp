@@ -5635,7 +5635,7 @@ int AudioFlinger::openInput(uint32_t *pDevices,
     audio_hw_device_t *inHwDev;
 #ifdef STE_AUDIO
     bool returnRecordThread = true;
-    audio_input_clients inputClientId;
+    audio_input_clients inputClientId = AUDIO_INPUT_CLIENT_RECORD;
 #endif
     if (pDevices == NULL || *pDevices == 0) {
         return 0;
