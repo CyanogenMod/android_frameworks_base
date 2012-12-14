@@ -1880,4 +1880,7 @@
   <!-- Lockscreen -->
   <java-symbol type="bool" name="config_disableHomeUnlockSetting" />
 
+  <!-- Wallpaper on Large Screen Devices" -->
+  <java-symbol type="integer" name="config_wallpaperMaxWidth" />
+
 </resources>
