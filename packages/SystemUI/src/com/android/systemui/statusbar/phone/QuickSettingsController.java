@@ -34,6 +34,7 @@ import com.android.systemui.quicksettings.BatteryTile;
 import com.android.systemui.quicksettings.BluetoothTile;
 import com.android.systemui.quicksettings.BrightnessTile;
 import com.android.systemui.quicksettings.BugReportTile;
+import com.android.systemui.quicksettings.FlashLightTile;
 import com.android.systemui.quicksettings.GPSTile;
 import com.android.systemui.quicksettings.InputMethodTile;
 import com.android.systemui.quicksettings.MobileNetworkTile;
@@ -121,6 +122,7 @@ public class QuickSettingsController {
     public static final int ALARM_TILE = 16;
     public static final int BUG_REPORT_TILE = 17;
     public static final int WIFI_DISPLAY_TILE = 18;
+    public static final int FLASHLIGHT_TILE = 19;
     public static final int USER_TILE = 99;
     private InputMethodTile IMETile;
 
@@ -184,7 +186,7 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_AIRPLANE)) {
                 mQuickSettings.add(AIRPLANE_MODE_TILE);
             } else if (tile.equals(TILE_FLASHLIGHT)) {
-                // Not available yet
+                mQuickSettings.add(FLASHLIGHT_TILE);
             } else if (tile.equals(TILE_SLEEP)) {
                 mQuickSettings.add(SLEEP_TILE);
             } else if (tile.equals(TILE_MEDIA_PLAY_PAUSE)) {
@@ -319,6 +321,10 @@ public class QuickSettingsController {
             case USER_TILE:
                 qs = new UserTile(mContext, inflater,
                         (QuickSettingsContainerView) mContainerView, this);
+                break;
+            case FLASHLIGHT_TILE:
+                qs = new FlashLightTile(mContext, inflater,
+                        (QuickSettingsContainerView) mContainerView, this, mHandler);
                 break;
             }
             if (qs != null) {
