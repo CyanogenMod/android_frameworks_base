@@ -1,9 +1,11 @@
 package com.android.systemui.quicksettings;
 
+import android.app.ActivityManagerNative;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.RemoteException;
 import android.os.UserHandle;
 import android.view.LayoutInflater;
 import android.view.View.OnClickListener;
@@ -85,6 +87,12 @@ public class QuickSettingsTile {
     }
 
     private void startSettingsActivity(Intent intent, boolean onlyProvisioned) {
+        if (onlyProvisioned && !mStatusbarService.isDeviceProvisioned()) return;
+        try {
+            // Dismiss the lock screen when Settings starts.
+            ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+        } catch (RemoteException e) {
+        }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
         mStatusbarService.animateCollapsePanels();
