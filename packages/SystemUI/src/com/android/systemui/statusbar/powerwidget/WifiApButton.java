@@ -17,7 +17,7 @@ public class WifiApButton extends PowerButton {
     /**
      * Subclass of StateTracker to get/set Wifi AP state.
      */
-    private static final class WifiApStateTracker extends StateTracker {
+    public static class WifiApStateTracker extends StateTracker {
         @Override
         public int getActualState(Context context) {
             WifiManager wifiManager = (WifiManager) context
