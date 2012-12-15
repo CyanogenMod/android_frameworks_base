@@ -25,12 +25,20 @@ public class FlashLightTile extends QuickSettingsTile {
         TorchObserver observer = new TorchObserver(handler);
         observer.startObserving();
         updateTileState();
-
         onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
                 mContext.sendBroadcast(i);
+            }
+        };
+        onLongClick = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setClassName("net.cactii.flash2", "net.cactii.flash2.MainActivity");
+                startSettingsActivity(intent);
+                return true;
             }
         };
     }
@@ -40,8 +48,10 @@ public class FlashLightTile extends QuickSettingsTile {
                 Settings.System.TORCH_STATE, 0) == 1;
         if(enabled) {
             mDrawable = R.drawable.ic_qs_flashlight_on;
+            mLabel = mContext.getString(R.string.quick_settings_label_enabled);
         } else {
             mDrawable = R.drawable.ic_qs_flashlight_off;
+            mLabel = mContext.getString(R.string.quick_settings_label_disabled);
         }
     }
 
