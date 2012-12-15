@@ -74,6 +74,8 @@ public class KeyguardViewManager {
     private boolean mScreenOn = false;
     private LockPatternUtils mLockPatternUtils;
 
+    private boolean mUnlockKeyDown = false;
+
     public interface ShowListener {
         void onShown(IBinder windowToken);
     };
@@ -144,48 +146,16 @@ public class KeyguardViewManager {
 
         @Override
         public boolean dispatchKeyEvent(KeyEvent event) {
-            if (event.getAction() == KeyEvent.ACTION_DOWN && mKeyguardView != null) {
+            if (mKeyguardView != null) {
                 int keyCode = event.getKeyCode();
-                String action = null;
-                switch (keyCode) {
-                    case KeyEvent.KEYCODE_BACK:
-                        if (mKeyguardView.handleBackKey()) {
-                            return true;
-                        }
-                        if (event.isLongPress()) {
-                            action = Settings.System.LOCKSCREEN_LONG_BACK_ACTION;
-                        }
-                        break;
-                    case KeyEvent.KEYCODE_HOME:
-                        if (mKeyguardView.handleHomeKey()) {
-                            return true;
-                        }
-                        if (event.isLongPress()) {
-                            action = Settings.System.LOCKSCREEN_LONG_HOME_ACTION;
-                        }
-                        break;
-                    case KeyEvent.KEYCODE_MENU:
-                        if (mKeyguardView.handleMenuKey()) {
-                            return true;
-                        }
-                        if (event.isLongPress()) {
-                            action = Settings.System.LOCKSCREEN_LONG_MENU_ACTION;
-                        }
-                        break;
-                }
+                int action = event.getAction();
 
-                if (action != null) {
-                    String uri = Settings.System.getString(mContext.getContentResolver(), action);
-                    if (uri != null && runAction(mContext, uri) != ACTION_RESULT_NOTRUN) {
-                        long[] pattern = getLongPressVibePattern(mContext);
-                        if (pattern != null) {
-                            Vibrator v = (Vibrator) mContext.getSystemService(mContext.VIBRATOR_SERVICE);
-                            if (pattern.length == 1) {
-                                v.vibrate(pattern[0]);
-                            } else {
-                                v.vibrate(pattern, -1);
-                            }
-                        }
+                if (action == KeyEvent.ACTION_DOWN) {
+                    if (handleKeyDown(keyCode, event)) {
+                        return true;
+                    }
+                } else if (action == KeyEvent.ACTION_UP) {
+                    if (handleKeyUp(keyCode, event)) {
                         return true;
                     }
                 }
@@ -194,28 +164,83 @@ public class KeyguardViewManager {
         }
     }
 
-    private static final int ACTION_RESULT_RUN = 0;
-    private static final int ACTION_RESULT_NOTRUN = 1;
+    public boolean handleKeyDown(int keyCode, KeyEvent event) {
+        if (event.getRepeatCount() == 0) {
+            mUnlockKeyDown = true;
+        }
+        if (event.isLongPress()) {
+            String action = null;
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    action = Settings.System.LOCKSCREEN_LONG_BACK_ACTION;
+                    break;
+                case KeyEvent.KEYCODE_HOME:
+                    action = Settings.System.LOCKSCREEN_LONG_HOME_ACTION;
+                    break;
+                case KeyEvent.KEYCODE_MENU:
+                    action = Settings.System.LOCKSCREEN_LONG_MENU_ACTION;
+                    break;
+            }
 
-    private static int runAction(Context context, String uri) {
+            if (action != null) {
+                mUnlockKeyDown = false;
+                String uri = Settings.System.getString(mContext.getContentResolver(), action);
+                if (uri != null && runAction(mContext, uri)) {
+                    long[] pattern = getLongPressVibePattern(mContext);
+                    if (pattern != null) {
+                        Vibrator v = (Vibrator) mContext.getSystemService(mContext.VIBRATOR_SERVICE);
+                        if (pattern.length == 1) {
+                            v.vibrate(pattern[0]);
+                        } else {
+                            v.vibrate(pattern, -1);
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean handleKeyUp(int keyCode, KeyEvent event) {
+        if (mUnlockKeyDown) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    if (mKeyguardView.handleBackKey()) {
+                        return true;
+                    }
+                case KeyEvent.KEYCODE_HOME:
+                    if (mKeyguardView.handleHomeKey()) {
+                        return true;
+                    }
+                case KeyEvent.KEYCODE_MENU:
+                    if (mKeyguardView.handleMenuKey()) {
+                        return true;
+                    }
+            }
+        }
+        return false;
+    }
+
+    private static boolean runAction(Context context, String uri) {
         if ("FLASHLIGHT".equals(uri)) {
             context.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
-            return ACTION_RESULT_RUN;
+            return true;
         } else if ("NEXT".equals(uri)) {
             sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_NEXT);
-            return ACTION_RESULT_RUN;
+            return true;
         } else if ("PREVIOUS".equals(uri)) {
             sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-            return ACTION_RESULT_RUN;
+            return true;
         } else if ("PLAYPAUSE".equals(uri)) {
             sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-            return ACTION_RESULT_RUN;
+            return true;
         } else if ("SOUND".equals(uri)) {
             toggleSilentMode(context);
-            return ACTION_RESULT_RUN;
+            return true;
         }
 
-        return ACTION_RESULT_NOTRUN;
+        return false;
     }
 
     private static void sendMediaButtonEvent(Context context, int code) {
