@@ -146,29 +146,30 @@ public class KeyguardViewManager {
         public boolean dispatchKeyEvent(KeyEvent event) {
             if (event.getAction() == KeyEvent.ACTION_DOWN && mKeyguardView != null) {
                 int keyCode = event.getKeyCode();
+                boolean mLongPress = event.isLongPress();
                 String action = null;
                 switch (keyCode) {
                     case KeyEvent.KEYCODE_BACK:
-                        if (mKeyguardView.handleBackKey()) {
+                        if (!mLongPress && mKeyguardView.handleBackKey()) {
                             return true;
                         }
-                        if (event.isLongPress()) {
+                        if (mLongPress) {
                             action = Settings.System.LOCKSCREEN_LONG_BACK_ACTION;
                         }
                         break;
                     case KeyEvent.KEYCODE_HOME:
-                        if (mKeyguardView.handleHomeKey()) {
+                        if (!mLongPress && mKeyguardView.handleHomeKey()) {
                             return true;
                         }
-                        if (event.isLongPress()) {
+                        if (mLongPress) {
                             action = Settings.System.LOCKSCREEN_LONG_HOME_ACTION;
                         }
                         break;
                     case KeyEvent.KEYCODE_MENU:
-                        if (mKeyguardView.handleMenuKey()) {
+                        if (!mLongPress && mKeyguardView.handleMenuKey()) {
                             return true;
                         }
-                        if (event.isLongPress()) {
+                        if (mLongPress) {
                             action = Settings.System.LOCKSCREEN_LONG_MENU_ACTION;
                         }
                         break;
