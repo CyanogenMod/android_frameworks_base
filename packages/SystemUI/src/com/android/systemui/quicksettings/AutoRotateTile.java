@@ -17,26 +17,22 @@ import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 
 public class AutoRotateTile extends QuickSettingsTile {
 
-    private boolean enabled = false;
-    private ContentObserver mContentObserver;
     private static final String TAG = "AutoRotateButton";
 
     public AutoRotateTile(Context context, LayoutInflater inflater,
             QuickSettingsContainerView container, QuickSettingsController qsc, Handler handler) {
         super(context, inflater, container, qsc);
 
-        mContentObserver = new AutoRotationObserver(handler);
+        new AutoRotationObserver(handler);
 
         onClick = new OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                RotationPolicy.setRotationLock(mContext, !enabled);
+                RotationPolicy.setRotationLock(mContext, getAutoRotation());
             }
         };
 
         onLongClick = new OnLongClickListener() {
-
             @Override
             public boolean onLongClick(View v) {
                 startSettingsActivity(Settings.ACTION_DISPLAY_SETTINGS);
@@ -46,7 +42,7 @@ public class AutoRotateTile extends QuickSettingsTile {
     }
 
     void applyAutoRotationChanges() {
-        if(enabled){
+        if(!getAutoRotation()){
             mDrawable = R.drawable.ic_qs_rotation_locked;
             mLabel = mContext.getString(R.string.quick_settings_rotation_locked_label);
         }else{
@@ -62,31 +58,21 @@ public class AutoRotateTile extends QuickSettingsTile {
         super.onPostCreate();
     }
 
-    private class AutoRotationObserver extends ContentObserver {
+    private boolean getAutoRotation() {
+        return !RotationPolicy.isRotationLocked(mContext);
+    }
 
+    private class AutoRotationObserver extends ContentObserver {
         public AutoRotationObserver(Handler handler) {
             super(handler);
-            observe();
-        }
-
-        public void observe() {
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION),
                     false, this);
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            if(uri.equals(Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION))){
-                enabled = Settings.System.getInt(mContext.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) != 1;
-                applyAutoRotationChanges();
-            }
-            super.onChange(selfChange, uri);
+            applyAutoRotationChanges();
         }
-
-        public void unObserve() {
-            mContext.getContentResolver().unregisterContentObserver(this);
-        }
-
     }
 
 }
