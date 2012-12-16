@@ -2953,7 +2953,7 @@ public final class Settings {
          * Whether power menu silent mode is enabled
          * @hide
          */
-        public static final String POWER_MENU_SILENT_ENABLED = "power_menu_silent_enabled";
+        public static final String POWER_MENU_SOUND_ENABLED = "power_menu_silent_enabled";
 
         /**
          * Whether to unlock the screen with the home key.  The value is boolean (1 or 0).
@@ -3129,7 +3129,7 @@ public final class Settings {
             POWER_MENU_REBOOT_ENABLED,
             POWER_MENU_PROFILES_ENABLED,
             POWER_MENU_AIRPLANE_ENABLED,
-            POWER_MENU_SILENT_ENABLED,
+            POWER_MENU_SOUND_ENABLED,
             POWER_MENU_USER_ENABLED,
             LOCKSCREEN_VIBRATE_ENABLED,
             LOCKSCREEN_ALWAYS_SHOW_BATTERY,

@@ -68,7 +68,7 @@ public final class Profile implements Parcelable, Comparable {
 
     private Map<Integer, ConnectionSettings> connections = new HashMap<Integer, ConnectionSettings>();
 
-    private SilentModeSettings mSilentMode = new SilentModeSettings();
+    private RingModeSettings mSilentMode = new RingModeSettings();
 
     private AirplaneModeSettings mAirplaneMode = new AirplaneModeSettings();
 
@@ -213,7 +213,7 @@ public final class Profile implements Parcelable, Comparable {
             ConnectionSettings connection = (ConnectionSettings) parcel;
             connections.put(connection.getConnectionId(), connection);
         }
-        mSilentMode = (SilentModeSettings) in.readParcelable(null);
+        mSilentMode = (RingModeSettings) in.readParcelable(null);
         mAirplaneMode = (AirplaneModeSettings) in.readParcelable(null);
         mScreenLockMode = in.readInt();
     }
@@ -281,11 +281,11 @@ public final class Profile implements Parcelable, Comparable {
         mDirty = true;
     }
 
-    public SilentModeSettings getSilentMode() {
+    public RingModeSettings getRingMode() {
         return mSilentMode;
     }
 
-    public void setSilentMode(SilentModeSettings descriptor) {
+    public void setRingMode(RingModeSettings descriptor) {
         mSilentMode = descriptor;
         mDirty = true;
     }
@@ -467,8 +467,8 @@ public final class Profile implements Parcelable, Comparable {
                     profile.setProfileType(xpp.nextText().equals("toggle") ? TOGGLE_TYPE : CONDITIONAL_TYPE);
                 }
                 if (name.equals("silentModeDescriptor")) {
-                    SilentModeSettings smd = SilentModeSettings.fromXml(xpp, context);
-                    profile.setSilentMode(smd);
+                    RingModeSettings smd = RingModeSettings.fromXml(xpp, context);
+                    profile.setRingMode(smd);
                 }
                 if (name.equals("airplaneModeDescriptor")) {
                     AirplaneModeSettings amd = AirplaneModeSettings.fromXml(xpp, context);
