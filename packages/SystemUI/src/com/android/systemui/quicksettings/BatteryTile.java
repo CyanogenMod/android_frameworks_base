@@ -35,7 +35,7 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
         BatteryController controller = new BatteryController(mContext);
         controller.addStateChangedCallback(this);
 
-        onClick = new View.OnClickListener() {
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startSettingsActivity(Intent.ACTION_POWER_USAGE_SUMMARY);

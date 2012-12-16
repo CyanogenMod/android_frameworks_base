@@ -43,7 +43,7 @@ public class UserTile extends QuickSettingsTile {
 
         mTileLayout = R.layout.quick_settings_tile_user;
 
-        onClick = new View.OnClickListener() {
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mQsc.mBar.collapseAllPanels(true);

@@ -43,7 +43,7 @@ public class BugReportTile extends QuickSettingsTile{
         BugreportObserver observer = new BugreportObserver(mHandler);
         observer.startObserving();
 
-        onClick = new View.OnClickListener() {
+        mOnClick = new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

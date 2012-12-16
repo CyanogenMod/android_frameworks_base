@@ -23,7 +23,7 @@ public class RingerModeTile extends QuickSettingsTile {
 
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 
-        onClick = new View.OnClickListener() {
+        mOnClick = new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -39,7 +39,7 @@ public class RingerModeTile extends QuickSettingsTile {
             }
         };
 
-        onLongClick = new OnLongClickListener() {
+        mOnLongClick = new OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {

@@ -25,7 +25,7 @@ public class WifiAPTile extends QuickSettingsTile {
         mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 
         updateTileState();
-        onClick = new View.OnClickListener() {
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int state = mWifiManager.getWifiApState();
@@ -41,7 +41,7 @@ public class WifiAPTile extends QuickSettingsTile {
                 }
             }
         };
-        onLongClick = new View.OnLongClickListener() {
+        mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);

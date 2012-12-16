@@ -17,7 +17,7 @@ public class PreferencesTile extends QuickSettingsTile{
         mDrawable = R.drawable.ic_qs_settings;
         mLabel = mContext.getString(R.string.quick_settings_settings_label);
 
-        onClick = new View.OnClickListener() {
+        mOnClick = new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

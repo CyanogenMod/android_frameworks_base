@@ -31,7 +31,7 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
 
         mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
 
-        onClick = new OnClickListener() {
+        mOnClick = new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -46,7 +46,7 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
             }
         };
 
-        onLongClick = new OnLongClickListener() {
+        mOnLongClick = new OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {

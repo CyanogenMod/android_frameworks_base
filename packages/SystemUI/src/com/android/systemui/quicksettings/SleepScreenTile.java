@@ -22,13 +22,13 @@ public class SleepScreenTile extends QuickSettingsTile {
         mDrawable = R.drawable.ic_qs_sleep;
         mLabel = mContext.getString(R.string.quick_settings_screen_sleep);
         pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-        onClick = new OnClickListener() {
+        mOnClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 pm.goToSleep(SystemClock.uptimeMillis());
             }
         };
-        onLongClick = new OnLongClickListener() {
+        mOnLongClick = new OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {

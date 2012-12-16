@@ -37,7 +37,7 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
         mLabel = mContext.getString(R.string.quick_settings_gps);
         enabled = Settings.Secure.isLocationProviderEnabled(mContentResolver, LocationManager.GPS_PROVIDER);
 
-        onClick = new OnClickListener() {
+        mOnClick = new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -45,7 +45,7 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
             }
         };
 
-        onLongClick = new OnLongClickListener() {
+        mOnLongClick = new OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {
