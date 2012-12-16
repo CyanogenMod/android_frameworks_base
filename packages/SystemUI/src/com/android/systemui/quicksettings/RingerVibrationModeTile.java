@@ -24,27 +24,19 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
     private static final String SEPARATOR = "OV=I=XseparatorX=I=VO";
 
     // Define the available ringer modes
-    private final Ringer mSilentRinger = new Ringer(false,
-            AudioManager.VIBRATE_SETTING_OFF,
-            AudioManager.RINGER_MODE_SILENT, false);
-    private final Ringer mVibrateRinger = new Ringer(true,
-            AudioManager.VIBRATE_SETTING_ONLY_SILENT,
-            AudioManager.RINGER_MODE_VIBRATE, true);
-    private final Ringer mSoundRinger = new Ringer(true,
-            AudioManager.VIBRATE_SETTING_ONLY_SILENT,
-            AudioManager.RINGER_MODE_NORMAL, false);
-    private final Ringer mSoundVibrateRinger = new Ringer(true,
-            AudioManager.VIBRATE_SETTING_ON,
-            AudioManager.RINGER_MODE_NORMAL, true);
+    private final Ringer mSilentRinger = new Ringer(AudioManager.RINGER_MODE_SILENT, false);
+    private final Ringer mVibrateRinger = new Ringer(AudioManager.RINGER_MODE_VIBRATE, true);
+    private final Ringer mSoundRinger = new Ringer(AudioManager.RINGER_MODE_NORMAL, false);
+    private final Ringer mSoundVibrateRinger = new Ringer(AudioManager.RINGER_MODE_NORMAL, true);
     private final Ringer[] mRingers = new Ringer[] {
             mSilentRinger, mVibrateRinger, mSoundRinger, mSoundVibrateRinger
     };
 
-    private int mRingersIndex = 2;
+    private int mRingersIndex;
     private int[] mRingerValues = new int[] {
             0, 1, 2, 3
     };
-    private int mRingerValuesIndex = 2;
+    private int mRingerValuesIndex;
 
     private AudioManager mAudioManager;
     private Handler mHandler;
@@ -60,10 +52,14 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
         // Load the available ringer modes
         updateSettings(mContext.getContentResolver());
 
+        // Make sure we show the initial state correctly
+        updateState();
+
         // Start observing for changes
         mSoundModesChangedObserver = new SoundModesChangedObserver(mHandler);
         mSoundModesChangedObserver.startObserving();
 
+        // Tile actions
         onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,26 +161,12 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
     }
 
     private void findCurrentState() {
-        boolean vibrateInSilent = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.VIBRATE_IN_SILENT, 0) == 1;
-        int vibrateSetting = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean vibrateWhenRinging = Settings.System.getInt(resolver,
+                Settings.System.VIBRATE_WHEN_RINGING, 0) == 1;
         int ringerMode = mAudioManager.getRingerMode();
 
-        // Sometimes the setting don't quite match up to the states we've defined.
-        // In that case, override the reported settings to get us "close" to the
-        // defined settings. This bit is a little ugly but oh well.
-        if (!vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_SILENT) {
-            vibrateSetting = AudioManager.VIBRATE_SETTING_OFF; // match Silent ringer
-        } else if (!vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-            vibrateInSilent = true; // match either Sound or SoundVibrate ringer
-            if (vibrateSetting == AudioManager.VIBRATE_SETTING_OFF) {
-                vibrateSetting = AudioManager.VIBRATE_SETTING_ONLY_SILENT; // match Sound ringer
-            }
-        } else if (vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
-            vibrateSetting = AudioManager.VIBRATE_SETTING_ONLY_SILENT; // match Vibrate ringer 
-        }
-
-        Ringer ringer = new Ringer(vibrateInSilent, vibrateSetting, ringerMode, false);
+        Ringer ringer = new Ringer(ringerMode, vibrateWhenRinging);
         for (int i = 0; i < mRingers.length; i++) {
             if (mRingers[i].equals(ringer)) {
                 mRingersIndex = i;
@@ -194,30 +176,25 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
     }
 
     private class Ringer {
-        final boolean mVibrateInSilent;
-        final int mVibrateSetting;
+        final boolean mVibrateWhenRinging;
         final int mRingerMode;
 
-        Ringer(boolean vibrateInSilent, int vibrateSetting, int ringerMode, boolean doHapticFeedback) {
-            mVibrateInSilent = vibrateInSilent;
-            mVibrateSetting = vibrateSetting;
+        Ringer( int ringerMode, boolean vibrateWhenRinging) {
+            mVibrateWhenRinging = vibrateWhenRinging;
             mRingerMode = ringerMode;
         }
 
         void execute(Context context) {
-            ContentResolver resolver = context.getContentResolver();
-            Settings.System.putInt(resolver, Settings.System.VIBRATE_IN_SILENT,
-                    (mVibrateInSilent ? 1 : 0));
-
             // If we are setting a vibrating state, vibrate to indicate it
-            if (mVibrateSetting == AudioManager.VIBRATE_SETTING_ON
-                    || mVibrateSetting == AudioManager.VIBRATE_SETTING_ONLY_SILENT) {
+            if (mVibrateWhenRinging) {
                 Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
                 vibrator.vibrate(250);
             }
 
             // Set the desired state
-            mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, mVibrateSetting);
+            ContentResolver resolver = context.getContentResolver();
+            Settings.System.putInt(resolver, Settings.System.VIBRATE_WHEN_RINGING,
+                    (mVibrateWhenRinging ? 1 : 0));
             mAudioManager.setRingerMode(mRingerMode);
         }
 
@@ -231,18 +208,7 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
             }
 
             Ringer r = (Ringer) o;
-            // Silent mode docs: "Ringer mode that will be silent and will not
-            // vibrate. (This overrides the vibrate setting.)" If silent mode is
-            // set, don't bother checking vibrate since silent overrides. This
-            // fixes cases where silent mode is not detected because of "wrong"
-            // vibrate state.
-            if (mRingerMode == AudioManager.RINGER_MODE_SILENT
-                    && (r.mRingerMode == mRingerMode)) {
-                return true;
-            }
-
-            return r.mVibrateInSilent == mVibrateInSilent
-                    && r.mVibrateSetting == mVibrateSetting
+            return r.mVibrateWhenRinging == mVibrateWhenRinging
                     && r.mRingerMode == mRingerMode;
         }
     }
@@ -267,6 +233,9 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
             final ContentResolver cr = mContext.getContentResolver();
             cr.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.EXPANDED_RING_MODE),
+                    false, this);
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.VIBRATE_WHEN_RINGING),
                     false, this);
         }
     }
