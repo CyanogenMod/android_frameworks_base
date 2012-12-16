@@ -2,12 +2,15 @@ package com.android.systemui.quicksettings;
 
 import android.app.ActivityManagerNative;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
@@ -19,7 +22,7 @@ import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsTileView;
 
-public class QuickSettingsTile {
+public class QuickSettingsTile implements OnClickListener {
 
     protected final Context mContext;
     protected final ViewGroup mContainerView;
@@ -51,7 +54,7 @@ public class QuickSettingsTile {
         onPostCreate();
         registerQuickSettingsReceiver();
         updateQuickSettings();
-        mTile.setOnClickListener(onClick);
+        mTile.setOnClickListener(this);
         mTile.setOnLongClickListener(onLongClick);
     }
 
@@ -96,6 +99,16 @@ public class QuickSettingsTile {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
         mStatusbarService.animateCollapsePanels();
+    }
+
+    @Override
+    public final void onClick(View v) {
+        onClick.onClick(v);
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean shouldCollapse = Settings.System.getInt(resolver, Settings.System.QS_COLLAPSE_PANE, 0) == 1;
+        if (shouldCollapse) {
+            mQsc.mBar.collapseAllPanels(true);
+        }
     }
 
 }
