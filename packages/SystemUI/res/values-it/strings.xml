@@ -134,8 +134,7 @@
     <string name="accessibility_no_sim" msgid="8274017118472455155">"Nessuna SIM presente."</string>
     <string name="accessibility_bluetooth_tether" msgid="4102784498140271969">"Tethering Bluetooth."</string>
     <string name="accessibility_airplane_mode" msgid="834748999790763092">"Modalità aereo."</string>
-    <!-- String.format failed for translation -->
-    <!-- no translation found for accessibility_battery_level (7451474187113371965) -->
+    <string name="accessibility_battery_level">Batteria <xliff:g id="number">%d</xliff:g> percento.</string>
     <skip />
     <string name="accessibility_settings_button" msgid="799583911231893380">"Impostazioni di sistema."</string>
     <string name="accessibility_notifications_button" msgid="4498000369779421892">"Notifiche."</string>
@@ -157,6 +156,8 @@
     <string name="accessibility_quick_settings_airplane" msgid="4196876722090224753">"Modalità aereo: <xliff:g id="STATE">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_bluetooth" msgid="5749054971341882340">"Bluetooth: <xliff:g id="STATE">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_alarm" msgid="3959908972897295660">"Allarme impostato per: <xliff:g id="TIME">%s</xliff:g>."</string>
+    <string name="accessibility_quick_settings_ringer">Suoneria <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibrazione <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="data_usage_disabled_dialog_3g_title" msgid="5257833881698644687">"Dati 2G-3G disattivati"</string>
     <string name="data_usage_disabled_dialog_4g_title" msgid="4789143363492682629">"Dati 4G disattivati"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="1046047248844821202">"Dati mobili disattivati"</string>
@@ -176,6 +177,8 @@
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Lo schermo è bloccato in orientamento orizzontale."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Lo schermo è bloccato in orientamento verticale."</string>
     <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
+    <string name="bean_dream_settings_cid_title">Utilizza testa CID</string>
+    <string name="bean_dream_settings_cid_summary">Utilizza la testa di CID al posto dei jellybean all\'interno di Daydream</string>
     <string name="start_dreams" msgid="7219575858348719790">"Daydream"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Modalità aereo"</string>
@@ -205,4 +208,16 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTO"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Le notifiche vengono visualizzate qui"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Puoi accedervi in qualsiasi momento scorrendo verso il basso."\n"Fai scorrere di nuovo verso il basso per visualizzare i controlli del sistema."</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_screen_sleep">Blocca telefono</string>
+    <string name="quick_settings_ringer_on">Suoneria attiva</string>
+    <string name="quick_settings_ringer_off">Suoneria disattiva</string>
+    <string name="quick_settings_vibration_on">Vibrazione attiva</string>
+    <string name="quick_settings_vibration_off">Vibrazione disattiva</string>
+    <string name="quick_settings_label_enabled">Attiva</string>
+    <string name="quick_settings_label_disabled">Disattiva</string>
+    <string name="quick_settings_ringer_normal">Suoneria</string>
+    <string name="quick_settings_lockscreen">Blocco schermo</string>
+    <string name="quick_settings_network_type">Modalità rete</string>
+    <string name="quick_settings_report_bug">Segnalazione bug</string>
 </resources>
