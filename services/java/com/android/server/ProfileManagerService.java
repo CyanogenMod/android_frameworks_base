@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.XmlResourceParser;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.os.ParcelUuid;
@@ -213,7 +214,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
                 broadcast.putExtra("uuid", mActiveProfile.getUuid().toString());
                 broadcast.putExtra("lastName", lastProfile.getName());
                 broadcast.putExtra("lastUuid", lastProfile.getUuid().toString());
-                mContext.sendBroadcast(broadcast);
+                mContext.sendBroadcastAsUser(broadcast, UserHandle.ALL);
 
                 restoreCallingIdentity(token);
                 persistIfDirty();
