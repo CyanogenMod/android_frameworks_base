@@ -12,7 +12,7 @@ import java.io.IOException;
 
 /** @hide */
 public final class SilentModeSettings implements Parcelable {
-    private static final String SILENT_MODE_OFF = "off";
+    private static final String SILENT_MODE_NORMAL = "normal";
     private static final String SILENT_MODE_VIBRATE = "vibrate";
     private static final String SILENT_MODE_MUTE = "mute";
 
@@ -38,7 +38,7 @@ public final class SilentModeSettings implements Parcelable {
     }
 
     public SilentModeSettings() {
-        this(SILENT_MODE_OFF, false);
+        this(SILENT_MODE_NORMAL, false);
     }
 
     public SilentModeSettings(String value, boolean override) {
