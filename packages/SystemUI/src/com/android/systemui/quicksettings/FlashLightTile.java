@@ -25,14 +25,14 @@ public class FlashLightTile extends QuickSettingsTile {
         TorchObserver observer = new TorchObserver(handler);
         observer.startObserving();
         updateTileState();
-        onClick = new View.OnClickListener() {
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
                 mContext.sendBroadcast(i);
             }
         };
-        onLongClick = new View.OnLongClickListener() {
+        mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);

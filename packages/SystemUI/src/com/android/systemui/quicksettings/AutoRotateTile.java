@@ -25,14 +25,14 @@ public class AutoRotateTile extends QuickSettingsTile {
 
         new AutoRotationObserver(handler);
 
-        onClick = new OnClickListener() {
+        mOnClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 RotationPolicy.setRotationLock(mContext, getAutoRotation());
             }
         };
 
-        onLongClick = new OnLongClickListener() {
+        mOnLongClick = new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 startSettingsActivity(Settings.ACTION_DISPLAY_SETTINGS);

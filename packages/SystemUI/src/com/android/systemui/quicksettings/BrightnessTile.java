@@ -45,7 +45,7 @@ public class BrightnessTile extends QuickSettingsTile implements BrightnessState
 
         mBrightnessObserver = new BrightnessObserver(mHandler);
 
-        onClick = new OnClickListener() {
+        mOnClick = new OnClickListener() {
 
             @Override
             public void onClick(View v) {

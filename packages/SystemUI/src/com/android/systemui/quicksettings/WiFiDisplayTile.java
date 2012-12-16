@@ -24,7 +24,7 @@ public class WiFiDisplayTile extends QuickSettingsTile{
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        onClick = new OnClickListener() {
+        mOnClick = new OnClickListener() {
 
             @Override
             public void onClick(View v) {

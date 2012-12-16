@@ -74,7 +74,7 @@ public class MobileNetworkTypeTile extends QuickSettingsTile {
 
         mLabel = mContext.getString(R.string.quick_settings_network_type);
 
-        onClick = new OnClickListener() {
+        mOnClick = new OnClickListener() {
 
             @Override
             public void onClick(View v) {

@@ -17,7 +17,7 @@ public class WiFiTile extends QuickSettingsTile implements NetworkSignalChangedC
     public WiFiTile(Context context, LayoutInflater inflater,
             QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
-        onClick = new View.OnClickListener() {
+        mOnClick = new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -25,7 +25,7 @@ public class WiFiTile extends QuickSettingsTile implements NetworkSignalChangedC
                 wfm.setWifiEnabled(!wfm.isWifiEnabled());
             }
         };
-        onLongClick = new OnLongClickListener() {
+        mOnLongClick = new OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {
