@@ -36,6 +36,17 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Problema di connessione o codice MMI non valido."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Operazione limitata solo ai numeri di selezione fissa."</string>
+    <string name="profileNameDefault">Predefinito</string>
+    <string name="profileNameWork">Lavoro</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silenzioso</string>
+    <string name="profileNameNight">Notte</string>
+    <string name="profileGroupPhone">Telefono</string>
+    <string name="profileGroupCalendar">Calendario</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Altro</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Il servizio è stato attivato."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Il servizio è stato attivato per:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Il servizio è stato disattivato."</string>
@@ -139,6 +150,20 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Disattiva wireless"</string>
     <string name="screen_lock" msgid="799094655496098153">"Blocco schermo"</string>
     <string name="power_off" msgid="4266614107412865048">"Spegni"</string>
+    <string name="reboot_system" product="tablet">Riavvia tablet</string>
+    <string name="reboot_system" product="default">Riavvia telefono</string>
+    <string name="global_action_screenshot">Cattura schermata</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Desktop espanso</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Attivato</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Disattivato</string>
+    <string name="reboot_reboot">Riavvia</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Riavvio\u2026</string>
+    <string name="reboot_confirm">Il dispositivo verrà riavviato.</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"Suoneria disattivata"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Suoneria vibrazione"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Suoneria attiva"</string>
@@ -374,6 +399,8 @@
     <string name="permdesc_clearAppCache" product="default" msgid="2459441021956436779">"Consente all\'applicazione di liberare memoria sul telefono eliminando file nelle directory della cache di altre applicazioni. Altre applicazioni potrebbero avviarsi più lentamente perché devono recuperare di nuovo i loro dati."</string>
     <string name="permlab_movePackage" msgid="3289890271645921411">"spostamento delle risorse dell\'applicazione"</string>
     <string name="permdesc_movePackage" msgid="319562217778244524">"Consente all\'applicazione di spostare le risorse delle applicazioni da supporti interni a supporti esterni e viceversa."</string>
+    <string name="permlab_preventpower">modifica azione tasto spegnimento</string>
+    <string name="permdesc_preventpower">Consente a un\'applicazione di cambiare il comportamento del tasto di spegnimento</string>
     <string name="permlab_readLogs" msgid="6615778543198967614">"Lettura dati di registro sensibili"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="82061313293455151">"Consente all\'applicazione di leggere vari file di registro del sistema per trovare informazioni generali sulle operazioni effettuate con il tablet. Tali file potrebbero contenere informazioni personali o riservate."</string>
     <string name="permdesc_readLogs" product="default" msgid="2063438140241560443">"Consente all\'applicazione di leggere vari file di registro del sistema per trovare informazioni generali sulle operazioni effettuate con il telefono. Tali file potrebbero contenere informazioni personali o riservate."</string>
@@ -762,6 +789,7 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Riprova"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Numero massimo di tentativi di Sblocco col sorriso superato"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"In carica (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">In uso, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Carica"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Collegare il caricabatterie."</string>
@@ -1378,6 +1406,7 @@
     <string name="sending" msgid="3245653681008218030">"Invio..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Avviare l\'applicazione Browser?"</string>
     <string name="SetupCallDefault" msgid="5834948469253758575">"Accettare la chiamata?"</string>
+    <string name="app_killed_message">Applicazione terminata</string>
     <string name="activity_resolver_use_always" msgid="8017770747801494933">"Sempre"</string>
     <string name="activity_resolver_use_once" msgid="2404644797149173758">"Solo una volta"</string>
     <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"Tablet"</string>
@@ -1444,4 +1473,6 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Accessibilità annullata."</string>
     <string name="user_switched" msgid="3768006783166984410">"Utente corrente <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Proprietario"</string>
+    <string name="global_action_reboot">Riavvia</string>
+    <string name="global_action_choose_profile">Profilo</string>
 </resources>
