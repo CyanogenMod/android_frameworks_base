@@ -1444,4 +1444,29 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Accesibilitatea a fost anulată"</string>
     <string name="user_switched" msgid="3768006783166984410">"Utilizator curent: <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Proprietar"</string>
+
+    <string name="reboot_system" product="tablet">"Reporniţi tablet PC"</string>
+    <string name="reboot_system" product="default">"Reporniţi telefonul"</string>
+    <string name="reboot_reboot">"Repornire"</string>
+    <string name="reboot_progress">"Repornire..."</string>
+    <string name="reboot_recovery">"Recuperare"</string>
+    <string name="reboot_confirm">"Telefonul dvs. va reporni."</string>
+    <string name="profileNameDefault">"General"</string>
+    <string name="profileNameWork">"Serviciu"</string>
+    <string name="profileNameHome">"Acasă"</string>
+    <string name="profileNameSilent">"Silenţios"</string>
+    <string name="profileNameNight">"Noapte"</string>
+    <string name="profileGroupPhone">"Telefon"</string>
+    <string name="profileGroupCalendar">"Calendar"</string>
+    <string name="profileGroupGmail">"Gmail"</string>
+    <string name="profileGroupEmail">"Email"</string>
+    <string name="profileGroupSMS">"SMS"</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">"Desktop extins"</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">"Activat"</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">"Dezactivat"</string>
+    <string name="global_action_reboot">"Repornire"</string>
+    <string name="global_action_choose_profile">"Profil"</string>
+    <string name="lockscreen_discharging">"Descărcare, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
+    <string name="toast_rotation_unlocked">"Rotire Ecran Deblocată"</string>
+    <string name="toast_rotation_locked">"Rotire Ecran Blocată"</string>
 </resources>
