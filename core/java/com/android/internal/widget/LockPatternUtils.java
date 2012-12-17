@@ -170,6 +170,9 @@ public class LockPatternUtils {
     // The current user is set by KeyguardViewMediator and shared by all LockPatternUtils.
     private static volatile int sCurrentUserId = UserHandle.USER_NULL;
 
+    public static final byte PATTERN_SIZE_DEFAULT = LockSettingsService.PATTERN_SIZE_DEFAULT;
+    private static byte PATTERN_SIZE = PATTERN_SIZE_DEFAULT;
+
     public DevicePolicyManager getDevicePolicyManager() {
         if (mDevicePolicyManager == null) {
             mDevicePolicyManager =
@@ -765,7 +768,7 @@ public class LockPatternUtils {
         final byte[] bytes = string.getBytes();
         for (int i = 0; i < bytes.length; i++) {
             byte b = bytes[i];
-            result.add(LockPatternView.Cell.of(b / 3, b % 3));
+            result.add(LockPatternView.Cell.of(b / PATTERN_SIZE, b % PATTERN_SIZE));
         }
         return result;
     }
@@ -784,7 +787,7 @@ public class LockPatternUtils {
         byte[] res = new byte[patternSize];
         for (int i = 0; i < patternSize; i++) {
             LockPatternView.Cell cell = pattern.get(i);
-            res[i] = (byte) (cell.getRow() * 3 + cell.getColumn());
+            res[i] = (byte) (cell.getRow() * PATTERN_SIZE + cell.getColumn());
         }
         return new String(res);
     }
@@ -805,7 +808,7 @@ public class LockPatternUtils {
         byte[] res = new byte[patternSize];
         for (int i = 0; i < patternSize; i++) {
             LockPatternView.Cell cell = pattern.get(i);
-            res[i] = (byte) (cell.getRow() * 3 + cell.getColumn());
+            res[i] = (byte) (cell.getRow() * PATTERN_SIZE + cell.getColumn());
         }
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -971,6 +974,34 @@ public class LockPatternUtils {
     public boolean isTactileFeedbackEnabled() {
         return Settings.System.getIntForUser(mContentResolver,
                 Settings.System.HAPTIC_FEEDBACK_ENABLED, 1, UserHandle.USER_CURRENT) != 0;
+    }
+
+    /**
+     * @return the pattern lockscreen size
+     */
+    public byte getLockPatternSize() {
+        try {
+            return getLockSettings().getLockPatternSize(getCurrentOrCallingUserId());
+        } catch (RemoteException re) {
+            return PATTERN_SIZE_DEFAULT;
+        }
+    }
+
+    /**
+     * Set the pattern lockscreen size
+     */
+    public void setLockPatternSize(long size) {
+        setLong(Settings.Secure.LOCK_PATTERN_SIZE, size);
+        PATTERN_SIZE = getLockPatternSize();
+    }
+
+    /**
+     * Update PATTERN_SIZE for this LockPatternUtils instance
+     * This must be called before patternToHash, patternToString, etc
+     * will work correctly with a non-standard size
+     */
+    public void updateLockPatternSize() {
+        PATTERN_SIZE = getLockPatternSize();
     }
 
     /**
