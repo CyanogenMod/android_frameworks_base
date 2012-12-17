@@ -40,6 +40,7 @@ import com.android.systemui.quicksettings.InputMethodTile;
 import com.android.systemui.quicksettings.MobileNetworkTile;
 import com.android.systemui.quicksettings.MobileNetworkTypeTile;
 import com.android.systemui.quicksettings.PreferencesTile;
+import com.android.systemui.quicksettings.ProfileTile;
 import com.android.systemui.quicksettings.QuickSettingsTile;
 import com.android.systemui.quicksettings.RingerModeTile;
 import com.android.systemui.quicksettings.RingerVibrationModeTile;
@@ -84,6 +85,7 @@ public class QuickSettingsController {
     public static final String TILE_MEDIA_NEXT = "toggleMediaNext";
     public static final String TILE_LTE = "toggleLte";
     public static final String TILE_WIMAX = "toggleWimax";
+    public static final String TILE_PROFILE = "toggleProfile";
 
     private static final String TILE_DELIMITER = "|";
     private static final String TILES_DEFAULT = TILE_USER
@@ -125,6 +127,7 @@ public class QuickSettingsController {
     public static final int WIFI_DISPLAY_TILE = 18;
     public static final int FLASHLIGHT_TILE = 19;
     public static final int WIFIAP_TILE = 20;
+    public static final int PROFILE_TILE = 21;
     public static final int USER_TILE = 99;
     private InputMethodTile IMETile;
 
@@ -191,6 +194,10 @@ public class QuickSettingsController {
                 mQuickSettings.add(FLASHLIGHT_TILE);
             } else if (tile.equals(TILE_SLEEP)) {
                 mQuickSettings.add(SLEEP_TILE);
+            } else if (tile.equals(TILE_PROFILE)) {
+                if (Settings.System.getInt(resolver, Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) {
+                    mQuickSettings.add(PROFILE_TILE);
+                }
             } else if (tile.equals(TILE_MEDIA_PLAY_PAUSE)) {
                 // Not available yet
             } else if (tile.equals(TILE_MEDIA_PREVIOUS)) {
@@ -330,6 +337,10 @@ public class QuickSettingsController {
                 break;
             case WIFIAP_TILE:
                 qs = new WifiAPTile(mContext, inflater,
+                        (QuickSettingsContainerView) mContainerView, this);
+                break;
+            case PROFILE_TILE:
+                qs = new ProfileTile(mContext, inflater,
                         (QuickSettingsContainerView) mContainerView, this);
                 break;
             }
