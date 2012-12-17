@@ -4055,4 +4055,7 @@
     <!-- label for item that opens the profile choosing dialog -->
     <string name="global_action_choose_profile">Profile</string>
 
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">Display Rotation Unlocked</string>
+    <string name="toast_rotation_locked">Display Rotation Locked</string>
 </resources>
