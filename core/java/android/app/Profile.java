@@ -375,9 +375,7 @@ public final class Profile implements Parcelable, Comparable {
         builder.append(mScreenLockMode);
         builder.append("</screen-lock-mode>\n");
 
-        builder.append("<airplane-mode>");
-        builder.append(mAirplaneMode);
-        builder.append("</airplane-mode>\n");
+        mAirplaneMode.getXmlString(builder, context);
 
         mSilentMode.getXmlString(builder, context);
 
