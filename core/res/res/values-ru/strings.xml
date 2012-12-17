@@ -761,7 +761,8 @@
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Повторите попытку"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Повторить попытку"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Все попытки войти с помощью Фейсконтроля использованы"</string>
-    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Идет зарядка (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_plugged_in">Зарядка батареи (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)</string>
+    <string name="lockscreen_discharging">Разрядка батареи (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Заряжено"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Подключите зарядное устройство"</string>
