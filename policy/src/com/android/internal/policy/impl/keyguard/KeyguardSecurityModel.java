@@ -15,6 +15,8 @@
  */
 package com.android.internal.policy.impl.keyguard;
 
+import android.app.Profile;
+import android.app.ProfileManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.telephony.TelephonyManager;
@@ -42,9 +44,13 @@ public class KeyguardSecurityModel {
     private Context mContext;
     private LockPatternUtils mLockPatternUtils;
 
+    // We can use the profile manager to override security
+    private ProfileManager mProfileManager;
+
     KeyguardSecurityModel(Context context) {
         mContext = context;
         mLockPatternUtils = new LockPatternUtils(context);
+        mProfileManager = (ProfileManager) context.getSystemService(Context.PROFILE_SERVICE);
     }
 
     void setLockPatternUtils(LockPatternUtils utils) {
@@ -86,21 +92,36 @@ public class KeyguardSecurityModel {
             final int security = mLockPatternUtils.getKeyguardStoredPasswordQuality();
             switch (security) {
                 case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
-                    mode = mLockPatternUtils.isLockPasswordEnabled() ?
-                            SecurityMode.PIN : SecurityMode.None;
+                    if (mLockPatternUtils.isLockPasswordEnabled()
+                            && mProfileManager.getActiveProfile().getScreenLockMode()
+                               != Profile.LockMode.INSECURE) {
+                        mode = SecurityMode.PIN;
+                    } else {
+                        mode = SecurityMode.None;
+                    }
                     break;
+
                 case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
                 case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
                 case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
-                    mode = mLockPatternUtils.isLockPasswordEnabled() ?
-                            SecurityMode.Password : SecurityMode.None;
+                    if (mLockPatternUtils.isLockPasswordEnabled()
+                            && mProfileManager.getActiveProfile().getScreenLockMode()
+                               != Profile.LockMode.INSECURE) {
+                        mode = SecurityMode.Password;
+                    } else {
+                        mode = SecurityMode.None;
+                    }
                     break;
 
                 case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
                 case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
-                    if (mLockPatternUtils.isLockPatternEnabled()) {
+                    if (mLockPatternUtils.isLockPatternEnabled()
+                            && mProfileManager.getActiveProfile().getScreenLockMode()
+                               != Profile.LockMode.INSECURE) {
                         mode = mLockPatternUtils.isPermanentlyLocked() ?
                             SecurityMode.Account : SecurityMode.Pattern;
+                    } else {
+                        mode = SecurityMode.None;
                     }
                     break;
 
