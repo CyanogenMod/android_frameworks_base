@@ -68,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"/>  
+                android:orientation="horizontal"/>
         </LinearLayout>
 
         <LinearLayout android:id="@+id/system_icon_area"
@@ -117,6 +117,24 @@
         </LinearLayout>
     </LinearLayout>
         
+    <LinearLayout
+        android:id="@+id/center_clock_layout"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <com.android.systemui.statusbar.policy.ClockCenter
+            android:textAppearance="@style/TextAppearance.StatusBar.Clock"
+            android:gravity="center"
+            android:id="@+id/center_clock"
+            android:paddingLeft="6.0dip"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:singleLine="true" />
+    </LinearLayout>
+
     <LinearLayout android:id="@+id/ticker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
