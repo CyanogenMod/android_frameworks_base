@@ -206,6 +206,7 @@
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi disattivato"</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Display Wi-Fi"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Visualizzazione wireless"</string>
+	<string name="quick_settings_profile_label">Profilo</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Luminosità"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTO"</string>
 <<<<<<< HEAD

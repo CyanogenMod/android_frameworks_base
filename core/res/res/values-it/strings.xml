@@ -1681,4 +1681,6 @@
     <string name="immersive_mode_confirmation" msgid="7227416894979047467">"Scorri dall\'alto verso il basso per uscire dalla modalità schermo intero."</string>
     <string name="global_action_reboot">Riavvia</string>
     <string name="global_action_choose_profile">Profilo</string>
+    <string name="toast_rotation_unlocked">Rotazione schermo sbloccata</string>
+    <string name="toast_rotation_locked">Rotazione schermo bloccata</string>
 </resources>
