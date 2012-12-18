@@ -53,6 +53,7 @@ public class RecentsVerticalScrollView extends ScrollView
     private RecentsScrollViewPerformanceHelper mPerformanceHelper;
     private HashSet<View> mRecycledViews;
     private int mNumItemsInOneScreenful;
+    private RecentsActivity mActivity;
 
     public RecentsVerticalScrollView(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
@@ -62,6 +63,10 @@ public class RecentsVerticalScrollView extends ScrollView
 
         mPerformanceHelper = RecentsScrollViewPerformanceHelper.create(context, attrs, this, true);
         mRecycledViews = new HashSet<View>();
+
+        if (context instanceof RecentsActivity) {
+            mActivity = (RecentsActivity) context;
+        }
     }
 
     public void setMinSwipeAlpha(float minAlpha) {
@@ -189,14 +194,30 @@ public class RecentsVerticalScrollView extends ScrollView
     public void removeAllViewsInLayout() {
         smoothScrollTo(0, 0);
         int count = mLinearLayout.getChildCount();
+        int offset = -1;
+        boolean restore = false;
         for (int i = 0; i < count; i++) {
             final View child = mLinearLayout.getChildAt(i);
+            RecentsPanelView.ViewHolder viewHolder = (RecentsPanelView.ViewHolder) child.getTag();
+            if (mActivity != null && viewHolder != null && viewHolder.taskDescription.persistentTaskId ==
+                    mActivity.getRecentTaskId()) {
+                restore = true;
+                continue;
+            }
             postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     dismissChild(child);
                 }
-            }, i * 150);
+            }, ++offset * 150);
+        }
+        if (mActivity != null && restore) {
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mActivity.dismissAndGoBack();
+                }
+            }, ++offset * 150);
         }
     }
 

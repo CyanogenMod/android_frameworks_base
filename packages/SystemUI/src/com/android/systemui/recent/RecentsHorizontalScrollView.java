@@ -53,14 +53,20 @@ public class RecentsHorizontalScrollView extends HorizontalScrollView
     private RecentsScrollViewPerformanceHelper mPerformanceHelper;
     private HashSet<View> mRecycledViews;
     private int mNumItemsInOneScreenful;
+    private RecentsActivity mActivity;
 
     public RecentsHorizontalScrollView(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
         float densityScale = getResources().getDisplayMetrics().density;
         float pagingTouchSlop = ViewConfiguration.get(mContext).getScaledPagingTouchSlop();
         mSwipeHelper = new SwipeHelper(SwipeHelper.Y, this, densityScale, pagingTouchSlop);
+
         mPerformanceHelper = RecentsScrollViewPerformanceHelper.create(context, attrs, this, false);
         mRecycledViews = new HashSet<View>();
+
+        if (context instanceof RecentsActivity) {
+            mActivity = (RecentsActivity) context;
+        }
     }
 
     public void setMinSwipeAlpha(float minAlpha) {
@@ -181,14 +187,30 @@ public class RecentsHorizontalScrollView extends HorizontalScrollView
     public void removeAllViewsInLayout() {
         smoothScrollTo(0, 0);
         int count = mLinearLayout.getChildCount();
+        int offset = -1;
+        boolean restore = false;
         for (int i = 0; i < count; i++) {
             final View child = mLinearLayout.getChildAt(i);
+            RecentsPanelView.ViewHolder viewHolder = (RecentsPanelView.ViewHolder) child.getTag();
+            if (mActivity != null && viewHolder != null && viewHolder.taskDescription.persistentTaskId ==
+                    mActivity.getRecentTaskId()) {
+                restore = true;
+                continue;
+            }
             postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     dismissChild(child);
                 }
-            }, i * 150);
+            }, ++offset * 150);
+        }
+        if (mActivity != null && restore) {
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mActivity.dismissAndGoBack();
+                }
+            }, ++offset * 150);
         }
     }
 

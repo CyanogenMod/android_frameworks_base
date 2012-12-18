@@ -172,6 +172,19 @@ public class RecentsActivity extends Activity {
         finish();
     }
 
+    public int getRecentTaskId() {
+        final ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
+        final List<ActivityManager.RecentTaskInfo> recentTasks =
+                am.getRecentTasks(2,
+                        ActivityManager.RECENT_WITH_EXCLUDED |
+                        ActivityManager.RECENT_IGNORE_UNAVAILABLE);
+        if (recentTasks.size() > 1) {
+            return recentTasks.get(1).persistentId;
+        }
+        return -1;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.status_bar_recent_panel);
