@@ -203,4 +203,17 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTOMAT"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Notificările se afişează aici"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Accesaţi-le oricând glisând în jos."\n"Glisaţi în jos din nou pentru comenzile sistemului."</string>
+
+    <string name="quick_settings_gps">"GPS"</string>
+    <string name="quick_settings_screen_sleep">"Adormire"</string>
+    <string name="quick_settings_ringer_on">"Sunet activat"</string>
+    <string name="quick_settings_ringer_off">"Sunet dezactivat"</string>
+    <string name="quick_settings_vibration_on">"Vibrare activată"</string>
+    <string name="quick_settings_vibration_off">"Vibrare dezactivată"</string>
+    <string name="quick_settings_label_enabled">"Activat"</string>
+    <string name="quick_settings_label_disabled">"Dezactivat"</string>
+    <string name="quick_settings_ringer_normal">"Sunet"</string>
+    <string name="quick_settings_lockscreen">"Ecran Blocare"</string>
+    <string name="quick_settings_network_type">"Tip Reţea"</string>
+    <string name="quick_settings_report_bug">"Raport Erori"</string>
 </resources>
