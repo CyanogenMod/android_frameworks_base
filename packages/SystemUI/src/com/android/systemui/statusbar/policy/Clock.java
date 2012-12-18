@@ -59,9 +59,7 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
 
-    private static int AM_PM_STYLE = AM_PM_STYLE_GONE;
-
-    private int mAmPmStyle;
+    private int mAmPmStyle = AM_PM_STYLE_GONE;
     private boolean mShowClock;
 
     Handler mHandler;
@@ -182,7 +180,7 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
              * add dummy characters around it to let us find it again after
              * formatting and change its size.
              */
-            if (AM_PM_STYLE != AM_PM_STYLE_NORMAL) {
+            if (mAmPmStyle != AM_PM_STYLE_NORMAL) {
                 int a = -1;
                 boolean quoted = false;
                 for (int i = 0; i < format.length(); i++) {
@@ -214,15 +212,15 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
         }
         String result = sdf.format(mCalendar.getTime());
 
-        if (AM_PM_STYLE != AM_PM_STYLE_NORMAL) {
+        if (mAmPmStyle != AM_PM_STYLE_NORMAL) {
             int magic1 = result.indexOf(MAGIC1);
             int magic2 = result.indexOf(MAGIC2);
             if (magic1 >= 0 && magic2 > magic1) {
                 SpannableStringBuilder formatted = new SpannableStringBuilder(result);
-                if (AM_PM_STYLE == AM_PM_STYLE_GONE) {
+                if (mAmPmStyle == AM_PM_STYLE_GONE) {
                     formatted.delete(magic1, magic2+1);
                 } else {
-                    if (AM_PM_STYLE == AM_PM_STYLE_SMALL) {
+                    if (mAmPmStyle == AM_PM_STYLE_SMALL) {
                         CharacterStyle style = new RelativeSizeSpan(0.7f);
                         formatted.setSpan(style, magic1, magic2,
                                           Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -241,11 +239,11 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
     private void updateSettings(){
         ContentResolver resolver = mContext.getContentResolver();
 
-        mAmPmStyle = (Settings.System.getInt(resolver,
+        int amPmStyle = (Settings.System.getInt(resolver,
                 Settings.System.STATUS_BAR_AM_PM, 2));
 
-        if (mAmPmStyle != AM_PM_STYLE) {
-            AM_PM_STYLE = mAmPmStyle;
+        if (mAmPmStyle != amPmStyle) {
+            mAmPmStyle = amPmStyle;
             mClockFormatString = "";
 
             if (mAttached) {
