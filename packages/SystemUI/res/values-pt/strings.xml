@@ -205,4 +205,24 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTO"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"As notificações aparecem aqui"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Acesse a qualquer momento deslizando para baixo."\n"Deslize para baixo novamente para acessar os controles do sistema."</string>
+    <string name="accessibility_battery_level">%d porcentos de bateria.</string>
+    <string name="powerwidget_screen_timeout_toast">Tempo limite da tela ajustado para: %1$d %2$s</string>
+    <string name="quick_settings_profile_label">Perfil</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_screen_sleep">Dormir</string>
+    <string name="quick_settings_ringer_on">Som ligado</string>
+    <string name="quick_settings_ringer_off">Som desligado</string>
+    <string name="quick_settings_vibration_on">Vibração ligada</string>
+    <string name="quick_settings_vibration_off">Vibração desligada</string>
+    <string name="quick_settings_label_enabled">Ligado</string>
+    <string name="quick_settings_label_disabled">Desligado</string>
+    <string name="quick_settings_ringer_normal">Som</string>
+    <string name="quick_settings_lockscreen">Tela de Bloqueio</string>
+    <string name="quick_settings_network_type">Tipo de Rede</string>
+    <string name="quick_settings_report_bug">Reportar Problema</string>
+    <string name="accessibility_quick_settings_ringer">Sound <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibração <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Usar cabeça CID</string>
+    <string name="bean_dream_settings_cid_summary">Usar cabeça CID em vez de jujuba dentro do sonho</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
 </resources>
