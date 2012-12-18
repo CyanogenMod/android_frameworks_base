@@ -1475,4 +1475,6 @@
     <string name="owner_name" msgid="2716755460376028154">"Proprietario"</string>
     <string name="global_action_reboot">Riavvia</string>
     <string name="global_action_choose_profile">Profilo</string>
+    <string name="toast_rotation_unlocked">Rotazione schermo sbloccata</string>
+    <string name="toast_rotation_locked">Rotazione schermo bloccata</string>
 </resources>
