@@ -35,7 +35,7 @@ public class AutoRotateTile extends QuickSettingsTile {
         mOnLongClick = new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startSettingsActivity(Settings.ACTION_DISPLAY_SETTINGS);
+                startSettingsActivity(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 return true;
             }
         };
