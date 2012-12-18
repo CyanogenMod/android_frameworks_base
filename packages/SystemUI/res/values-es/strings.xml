@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Expandir para ajustar"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Zoom de compatibilidad"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Si la aplicación se ha diseñado para una pantalla más pequeña, aparecerá un control de zoom junto al reloj."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Guardando captura..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Guardando captura..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Guardando captura\u2026"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Guardando captura\u2026"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"La captura de pantalla se está guardando."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Captura guardada"</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Toca para ver la captura de pantalla"</string>
@@ -139,7 +139,7 @@
     <string name="accessibility_notifications_button" msgid="4498000369779421892">"Notificaciones"</string>
     <string name="accessibility_remove_notification" msgid="3603099514902182350">"Borrar notificación"</string>
     <string name="accessibility_gps_enabled" msgid="3511469499240123019">"GPS habilitado"</string>
-    <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"Obteniendo ubicación..."</string>
+    <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"Obteniendo ubicación\u2026"</string>
     <string name="accessibility_tty_enabled" msgid="4613200365379426561">"Teletipo habilitado"</string>
     <string name="accessibility_ringer_vibrate" msgid="666585363364155055">"Modo vibración"</string>
     <string name="accessibility_ringer_silent" msgid="9061243307939135383">"Modo silencio"</string>
@@ -205,14 +205,25 @@
     <string name="status_bar_help_text" msgid="7874607155052076323">"Desliza el dedo hacia abajo para acceder al contenido."\n"Vuelve a deslizar el dedo hacia abajo para acceder a los controles del sistema."</string>
 
     <string name="quick_settings_screen_sleep">Bloquear</string>
-    <string name="quick_settings_ringer_on">Sonido ON</string>
-    <string name="quick_settings_ringer_off">Sonido OFF</string>
-    <string name="quick_settings_vibration_on">Vibración ON</string>
-    <string name="quick_settings_vibration_off">Vibración OFF</string>
-    <string name="quick_settings_label_enabled">ON</string>
-    <string name="quick_settings_label_disabled">OFF</string>
+    <string name="quick_settings_ringer_on">Sonido activado</string>
+    <string name="quick_settings_ringer_off">Sonido desactivado</string>
+    <string name="quick_settings_vibration_on">Vibración activada</string>
+    <string name="quick_settings_vibration_off">Vibración desactivada</string>
+    <string name="quick_settings_label_enabled">Activado</string>
+    <string name="quick_settings_label_disabled">Desactivado</string>
     <string name="quick_settings_ringer_normal">Sonido</string>
     <string name="quick_settings_lockscreen">Pantalla Bloqueo</string>
     <string name="quick_settings_network_type">Red móvil</string>
     <string name="quick_settings_report_bug">Informar de error</string>
+
+    <!-- CYANOGENMOD EDITS START -->
+
+    <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Usar a CID</string>
+    <string name="bean_dream_settings_cid_summary">Usar el icono CID para el salvapantallas en vez del icono Jellybean</string>
+    <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+
+    <!-- CYANOGENMOD ADDITIONS END -->
 </resources>

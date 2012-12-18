@@ -28,8 +28,8 @@
     <string name="petabyteShort" msgid="5637816680144990219">"PB"</string>
     <string name="fileSizeSuffix" msgid="9164292791500531949">"<xliff:g id="NUMBER">%1$s</xliff:g> <xliff:g id="UNIT">%2$s</xliff:g>"</string>
     <string name="untitled" msgid="4638956954852782576">"&lt;Sin título&gt;"</string>
-    <string name="ellipsis" msgid="7899829516048813237">"…"</string>
-    <string name="ellipsis_two_dots" msgid="1228078994866030736">"..."</string>
+    <string name="ellipsis" msgid="7899829516048813237">"\u2026"</string>
+    <string name="ellipsis_two_dots" msgid="1228078994866030736">"\u2025"</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">"(Sin número de teléfono)"</string>
     <string name="unknownName" msgid="2277556546742746522">"Desconocido"</string>
     <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"Buzón de voz"</string>
@@ -142,7 +142,7 @@
     <string name="silent_mode_silent" msgid="319298163018473078">"Timbre desactivado"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Modo vibración"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Timbre activado"</string>
-    <string name="shutdown_progress" msgid="2281079257329981203">"Apagando..."</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Apagando\u2026"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"El tablet se apagará."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"El teléfono se apagará."</string>
     <string name="shutdown_confirm_question" msgid="2906544768881136183">"¿Seguro que quieres apagar el teléfono?"</string>
@@ -761,7 +761,7 @@
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Vuelve a intentarlo"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Vuelve a intentarlo"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Se ha superado el número máximo de intentos de desbloqueo facial."</string>
-    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Cargando (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Cargando, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Cargado"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Conecta el cargador"</string>
@@ -782,7 +782,7 @@
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"La tarjeta SIM está bloqueada con el código PUK."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">"Consulta la guía del usuario o ponte en contacto con el servicio de atención al cliente."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"Introduce el código PIN."</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Desbloqueando tarjeta SIM..."</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Desbloqueando tarjeta SIM\u2026"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="6481623830344107222">"Has realizado <xliff:g id="NUMBER_0">%d</xliff:g> intentos fallidos de creación de un patrón de desbloqueo. "\n\n"Inténtalo de nuevo dentro de <xliff:g id="NUMBER_1">%d</xliff:g> segundos."</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="2725973286239344555">"Has introducido una contraseña incorrecta <xliff:g id="NUMBER_0">%d</xliff:g> veces. "\n\n"Inténtalo de nuevo dentro de <xliff:g id="NUMBER_1">%d</xliff:g> segundos."</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6216672706545696955">"Has introducido un código PIN incorrecto <xliff:g id="NUMBER_0">%d</xliff:g> veces. "\n\n"Inténtalo de nuevo dentro de <xliff:g id="NUMBER_1">%d</xliff:g> segundos."</string>
@@ -802,7 +802,7 @@
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Iniciar sesión"</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"Nombre de usuario o contraseña no válido"</string>
     <string name="lockscreen_glogin_account_recovery_hint" msgid="1696924763690379073">"Si has olvidado tu nombre de usuario o tu contraseña,"\n"accede a la página "<b>"google.com/accounts/recovery"</b>"."</string>
-    <string name="lockscreen_glogin_checking_password" msgid="7114627351286933867">"Comprobando..."</string>
+    <string name="lockscreen_glogin_checking_password" msgid="7114627351286933867">"Comprobando\u2026"</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Desbloquear"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Activar sonido"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Desactivar sonido"</string>
@@ -1008,7 +1008,7 @@
     <string name="cut" msgid="3092569408438626261">"Cortar"</string>
     <string name="copy" msgid="2681946229533511987">"Copiar"</string>
     <string name="paste" msgid="5629880836805036433">"Pegar"</string>
-    <string name="replace" msgid="5781686059063148930">"Sustituir..."</string>
+    <string name="replace" msgid="5781686059063148930">"Sustituir\u2026"</string>
     <string name="delete" msgid="6098684844021697789">"Eliminar"</string>
     <string name="copyUrl" msgid="2538211579596067402">"Copiar URL"</string>
     <string name="selectTextMode" msgid="1018691815143165326">"Seleccionar texto"</string>
@@ -1024,7 +1024,7 @@
     <string name="yes" msgid="5362982303337969312">"Aceptar"</string>
     <string name="no" msgid="5141531044935541497">"Cancelar"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Atención"</string>
-    <string name="loading" msgid="7933681260296021180">"Cargando..."</string>
+    <string name="loading" msgid="7933681260296021180">"Cargando\u2026"</string>
     <string name="capital_on" msgid="1544682755514494298">"SÍ"</string>
     <string name="capital_off" msgid="6815870386972805832">"NO"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Completar acción utilizando"</string>
@@ -1054,9 +1054,9 @@
     <string name="smv_application" msgid="3307209192155442829">"La aplicación <xliff:g id="APPLICATION">%1$s</xliff:g> (proceso <xliff:g id="PROCESS">%2$s</xliff:g>) ha infringido su política StrictMode autoaplicable."</string>
     <string name="smv_process" msgid="5120397012047462446">"El proceso <xliff:g id="PROCESS">%1$s</xliff:g> ha infringido su política StrictMode autoaplicable."</string>
     <string name="android_upgrading_title" msgid="1584192285441405746">"Actualizando Android"</string>
-    <string name="android_upgrading_apk" msgid="7904042682111526169">"Optimizando aplicación <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>..."</string>
+    <string name="android_upgrading_apk" msgid="7904042682111526169">"Optimizando aplicación <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>\u2026"</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Iniciando aplicaciones"</string>
-    <string name="android_upgrading_complete" msgid="1405954754112999229">"Finalizando inicio..."</string>
+    <string name="android_upgrading_complete" msgid="1405954754112999229">"Finalizando inicio\u2026"</string>
     <string name="heavy_weight_notification" msgid="9087063985776626166">"<xliff:g id="APP">%1$s</xliff:g> en ejecución"</string>
     <string name="heavy_weight_notification_detail" msgid="1721681741617898865">"Toca esta opción para cambiar a la aplicación."</string>
     <string name="heavy_weight_switcher_title" msgid="7153167085403298169">"¿Cambiar aplicaciones?"</string>
@@ -1114,7 +1114,7 @@
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN:"</string>
     <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"El teléfono se desconectará temporalmente de la red Wi-Fi mientras está conectado a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>."</string>
     <string name="select_character" msgid="3365550120617701745">"Insertar carácter"</string>
-    <string name="sms_control_title" msgid="7296612781128917719">"Enviando mensajes SMS..."</string>
+    <string name="sms_control_title" msgid="7296612781128917719">"Enviando mensajes SMS\u2026"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; está enviando un gran número de mensajes SMS. ¿Quieres permitir que está aplicación siga enviando mensajes?"</string>
     <string name="sms_control_yes" msgid="3663725993855816807">"Permitir"</string>
     <string name="sms_control_no" msgid="625438561395534982">"Denegar"</string>
@@ -1184,7 +1184,7 @@
     <string name="candidates_style" msgid="4333913089637062257"><u>"candidatos"</u></string>
     <string name="ext_media_checking_notification_title" product="nosdcard" msgid="3449816005351468560">"Preparando almacenamiento USB"</string>
     <string name="ext_media_checking_notification_title" product="default" msgid="5457603418970994050">"Preparando tarjeta SD"</string>
-    <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Comprobando errores..."</string>
+    <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Comprobando errores\u2026"</string>
     <string name="ext_media_nofs_notification_title" product="nosdcard" msgid="7788040745686229307">"Almacenamiento USB vacío"</string>
     <string name="ext_media_nofs_notification_title" product="default" msgid="780477838241212997">"Tarjeta SD vacía"</string>
     <string name="ext_media_nofs_notification_message" product="nosdcard" msgid="7840121067427269500">"Almacenamiento USB vacío o con sistema de archivos no admitido"</string>
@@ -1265,10 +1265,10 @@
     <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g> de <xliff:g id="TOTAL">%d</xliff:g>"</item>
   </plurals>
     <string name="action_mode_done" msgid="7217581640461922289">"Listo"</string>
-    <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">"Desactivando almacenamiento USB..."</string>
-    <string name="progress_unmounting" product="default" msgid="1327894998409537190">"Desactivando tarjeta SD..."</string>
-    <string name="progress_erasing" product="nosdcard" msgid="4521573321524340058">"Borrando almacenamiento USB..."</string>
-    <string name="progress_erasing" product="default" msgid="6596988875507043042">"Borrando tarjeta SD..."</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">"Desactivando almacenamiento USB\u2026"</string>
+    <string name="progress_unmounting" product="default" msgid="1327894998409537190">"Desactivando tarjeta SD\u2026"</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4521573321524340058">"Borrando almacenamiento USB\u2026"</string>
+    <string name="progress_erasing" product="default" msgid="6596988875507043042">"Borrando tarjeta SD\u2026"</string>
     <string name="format_error" product="nosdcard" msgid="6299769563624776948">"No se ha podido borrar el almacenamiento USB."</string>
     <string name="format_error" product="default" msgid="7315248696644510935">"No se ha podido borrar la tarjeta SD."</string>
     <string name="media_bad_removal" msgid="7960864061016603281">"La tarjeta SD se ha extraído antes de desactivarla."</string>
@@ -1375,7 +1375,7 @@
     <string name="share_action_provider_share_with" msgid="5247684435979149216">"Compartir con"</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Dispositivo bloqueado"</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
-    <string name="sending" msgid="3245653681008218030">"Enviando..."</string>
+    <string name="sending" msgid="3245653681008218030">"Enviando\u2026"</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"¿Iniciar el navegador?"</string>
     <string name="SetupCallDefault" msgid="5834948469253758575">"¿Aceptar la llamada?"</string>
     <string name="activity_resolver_use_always" msgid="8017770747801494933">"Siempre"</string>
@@ -1389,8 +1389,8 @@
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Audio Bluetooth"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Fin"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Salida multimedia"</string>
-    <string name="media_route_status_scanning" msgid="7279908761758293783">"Analizando..."</string>
-    <string name="media_route_status_connecting" msgid="6422571716007825440">"Conectando..."</string>
+    <string name="media_route_status_scanning" msgid="7279908761758293783">"Analizando\u2026"</string>
+    <string name="media_route_status_connecting" msgid="6422571716007825440">"Conectando\u2026"</string>
     <string name="media_route_status_available" msgid="6983258067194649391">"Disponible"</string>
     <string name="media_route_status_not_available" msgid="6739899962681886401">"No disponible"</string>
     <string name="display_manager_built_in_display_name" msgid="2583134294292563941">"Pantalla integrada"</string>
@@ -1444,4 +1444,40 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Accesibilidad cancelada"</string>
     <string name="user_switched" msgid="3768006783166984410">"Usuario actual: <xliff:g id="NAME">%1$s</xliff:g>"</string>
     <string name="owner_name" msgid="2716755460376028154">"Propietario"</string>
+
+    <!-- CYANOGENMOD EDITS START -->
+
+    <string name="profileNameDefault">Predeterminado</string>
+    <string name="profileNameWork">Trabajo</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silencio</string>
+    <string name="profileNameNight">Noche</string>
+    <string name="profileGroupPhone">Teléfono</string>
+    <string name="profileGroupCalendar">Calendario</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Otro</string>
+    <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="reboot_system" product="default">Reiniciar teléfono</string>
+    <string name="global_action_screenshot">Captura de pantalla</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Escritorio extendido</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Activado</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Desactivado</string>
+    <string name="reboot_reboot">Reiniciar</string>
+    <string name="reboot_recovery">Modo Recovery</string>
+    <string name="reboot_bootloader">Modo Bootloader</string>
+    <string name="reboot_bootmenu">Modo Bootmenu</string>
+    <string name="reboot_fastboot">Modo Fastboot</string>
+    <string name="reboot_download">Modo Download</string>
+    <string name="reboot_progress">Reiniciando\u2026</string>
+    <string name="reboot_confirm">El terminal se reiniciará</string>
+    <string name="permlab_preventpower">Anular tecla encendido</string>
+    <string name="permdesc_preventpower">Permite que una aplicación cambie el comportamiento de la tecla de encendido</string>
+    <string name="lockscreen_discharging">Descargando, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="app_killed_message">Aplicación finalizada</string>
+    <string name="global_action_reboot">Reiniciar</string>
+    <string name="global_action_choose_profile">Perfil</string>
+
+<!-- CYANOGENMOD ADDITIONS END -->
 </resources>
