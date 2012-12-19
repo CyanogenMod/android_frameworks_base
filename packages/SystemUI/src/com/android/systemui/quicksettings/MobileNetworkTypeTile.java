@@ -138,7 +138,7 @@ public class MobileNetworkTypeTile extends QuickSettingsTile {
     private static int get2G3G(Context context) {
         int state = 99;
         try {
-            state = Settings.Secure.getInt(context.getContentResolver(),
+            state = Settings.Global.getInt(context.getContentResolver(),
                     Settings.Global.PREFERRED_NETWORK_MODE);
         } catch (SettingNotFoundException e) {
         }
