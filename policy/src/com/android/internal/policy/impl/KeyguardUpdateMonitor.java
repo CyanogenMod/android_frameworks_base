@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
+import static android.os.BatteryManager.BATTERY_STATUS_CHARGING;
+import static android.os.BatteryManager.BATTERY_STATUS_DISCHARGING;
 import static android.os.BatteryManager.BATTERY_STATUS_FULL;
 import static android.os.BatteryManager.BATTERY_STATUS_UNKNOWN;
 import static android.os.BatteryManager.BATTERY_HEALTH_UNKNOWN;
@@ -433,8 +435,7 @@ public class KeyguardUpdateMonitor {
      * @return Whether the device is considered "plugged in."
      */
     private static boolean isPluggedIn(BatteryStatus status) {
-        return status.plugged == BatteryManager.BATTERY_PLUGGED_AC
-                || status.plugged == BatteryManager.BATTERY_PLUGGED_USB;
+        return status.status == BatteryManager.BATTERY_STATUS_CHARGING;
     }
 
     private static boolean isBatteryUpdateInteresting(BatteryStatus old, BatteryStatus current, Context context) {

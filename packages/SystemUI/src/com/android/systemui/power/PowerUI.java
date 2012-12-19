@@ -118,8 +118,8 @@ public class PowerUI extends SystemUI {
                 final int oldInvalidCharger = mInvalidCharger;
                 mInvalidCharger = intent.getIntExtra(BatteryManager.EXTRA_INVALID_CHARGER, 0);
 
-                final boolean plugged = mPlugType != 0;
-                final boolean oldPlugged = oldPlugType != 0;
+                final boolean plugged = mBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING;
+                final boolean oldPlugged = oldBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING;
 
                 int oldBucket = findBatteryLevelBucket(oldBatteryLevel);
                 int bucket = findBatteryLevelBucket(mBatteryLevel);
