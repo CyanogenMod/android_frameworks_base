@@ -139,6 +139,20 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Vezeték nélküli eszköz kikapcsolása"</string>
     <string name="screen_lock" msgid="799094655496098153">"Képernyő lezárása"</string>
     <string name="power_off" msgid="4266614107412865048">"Kikapcsolás"</string>
+    <string name="reboot_system" product="tablet">Táblagép újraindítása</string>
+    <string name="reboot_system" product="default">Telefon újraindítása</string>
+    <string name="global_action_screenshot">Képernyőmentés</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Kiterjesztett képernyő</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Engedélyezve</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Letiltva</string>
+    <string name="reboot_reboot">Újraindítás</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenü</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Újraindítás\u2026</string>
+    <string name="reboot_confirm">A telefon újraindul.</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"Csengő kikapcsolva"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Csengő rezeg"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Csengő bekapcsolva"</string>
@@ -374,6 +388,8 @@
     <string name="permdesc_clearAppCache" product="default" msgid="2459441021956436779">"Lehetővé teszi az alkalmazás számára, hogy tárhelyet szabadítson fel a telefonon azáltal, hogy fájlokat töröl más alkalmazások gyorsítótármappáiból. Ez a többi alkalmazás lassabb elindulását okozhatja, mert azoknak újra le kell kérniük az adataikat."</string>
     <string name="permlab_movePackage" msgid="3289890271645921411">"alkalmazás-erőforrások áthelyezése"</string>
     <string name="permdesc_movePackage" msgid="319562217778244524">"Lehetővé teszi az alkalmazás számára alkalmazás-erőforrások áthelyezését a belső tárolóról egy külső tárolóra, és fordítva."</string>
+    <string name="permlab_preventpower">kikapcsológomb felülbírálata</string>
+    <string name="permdesc_preventpower">Lehetővé teszi egy alkalmazás számára a kikapcsológomb felülbírálatát</string>
     <string name="permlab_readLogs" msgid="6615778543198967614">"érzékeny naplóadatok olvasása"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="82061313293455151">"Lehetővé teszi az alkalmazás számára, hogy olvassa a rendszer különböző naplófájljait. Ezáltal általános információkat deríthet ki arról, hogy mire használja a táblagépét, valamint személyes, magánjellegű adatokhoz is hozzájuthat."</string>
     <string name="permdesc_readLogs" product="default" msgid="2063438140241560443">"Lehetővé teszi az alkalmazás számára, hogy olvassa a rendszer különböző naplófájljait. Ezáltal általános információkat deríthet ki arról, hogy mire használja a telefonját, valamint személyes, magánjellegű adatokhoz is hozzájuthat."</string>
@@ -762,6 +778,7 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Újra"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Elérte az arcalapú feloldási kísérletek maximális számát"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Töltés (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Lemerítés, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Feltöltve"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Csatlakoztassa a töltőt."</string>
@@ -1378,6 +1395,7 @@
     <string name="sending" msgid="3245653681008218030">"Küldés…"</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Böngésző indítása?"</string>
     <string name="SetupCallDefault" msgid="5834948469253758575">"Fogadja a hívást?"</string>
+    <string name="app_killed_message">Alkalmazás leállítva</string>
     <string name="activity_resolver_use_always" msgid="8017770747801494933">"Mindig"</string>
     <string name="activity_resolver_use_once" msgid="2404644797149173758">"Csak egyszer"</string>
     <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"Táblagép"</string>
@@ -1444,4 +1462,19 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Hozzáférés megszakítva."</string>
     <string name="user_switched" msgid="3768006783166984410">"<xliff:g id="NAME">%1$s</xliff:g> az aktuális felhasználó."</string>
     <string name="owner_name" msgid="2716755460376028154">"Tulajdonos"</string>
+    <string name="global_action_reboot">Újraindítás</string>
+    <string name="global_action_choose_profile">Profil</string>
+    <string name="profileNameDefault">Alapértelmezett</string>
+    <string name="profileNameWork">Munka</string>
+    <string name="profileNameHome">Otthon</string>
+    <string name="profileNameSilent">Néma</string>
+    <string name="profileNameNight">Éjszaka</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Naptár</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-mail</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Egyéb</string>
+    <string name="toast_rotation_unlocked">Képernyő elforgatás engedélyezve</string>
+    <string name="toast_rotation_locked">Képernyő elforgatás letiltva</string>
 </resources>
