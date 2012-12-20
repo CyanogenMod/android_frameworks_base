@@ -49,29 +49,24 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
                 return true;
             }
         };
+        qsc.registerAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED, this);
+        qsc.registerAction(BluetoothAdapter.ACTION_STATE_CHANGED, this);
+    }
 
-        mBroadcastReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if(intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
+            int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                    BluetoothAdapter.ERROR);
+            enabled = (state == BluetoothAdapter.STATE_ON);
+        }
 
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if(intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
-                    int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
-                            BluetoothAdapter.ERROR);
-                    enabled = (state == BluetoothAdapter.STATE_ON);
-                }
-
-                if(intent.getAction().equals(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)){
-                    int state = intent.getIntExtra(BluetoothAdapter.EXTRA_CONNECTION_STATE,
-                            BluetoothAdapter.STATE_DISCONNECTED);
-                    connected = (state == BluetoothAdapter.STATE_CONNECTED);
-                }
-                applyBluetoothChanges();
-            }
-        };
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
-        mIntentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        if(intent.getAction().equals(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)){
+            int state = intent.getIntExtra(BluetoothAdapter.EXTRA_CONNECTION_STATE,
+                    BluetoothAdapter.STATE_DISCONNECTED);
+            connected = (state == BluetoothAdapter.STATE_CONNECTED);
+        }
+        applyBluetoothChanges();
     }
 
     void checkBluetoothState() {

@@ -53,18 +53,14 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
                 return true;
             }
         };
+        qsc.registerAction(LocationManager.PROVIDERS_CHANGED_ACTION, this);
+    }
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                enabled = Settings.Secure.isLocationProviderEnabled(mContentResolver, LocationManager.GPS_PROVIDER);
-                mLabel = mContext.getString(R.string.quick_settings_gps);
-                applyGPSChanges();
-            }
-        };
-
-        mIntentFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        enabled = Settings.Secure.isLocationProviderEnabled(mContentResolver, LocationManager.GPS_PROVIDER);
+        mLabel = mContext.getString(R.string.quick_settings_gps);
+        applyGPSChanges();
     }
 
     @Override
