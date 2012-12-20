@@ -71,8 +71,6 @@ public class KeyguardHostView extends KeyguardViewBase {
     // Found in KeyguardAppWidgetPickActivity.java
     static final int APPWIDGET_HOST_ID = 0x4B455947;
 
-    private final int MAX_WIDGETS = 5;
-
     private AppWidgetHost mAppWidgetHost;
     private AppWidgetManager mAppWidgetManager;
     private KeyguardWidgetPager mAppWidgetContainer;
@@ -240,7 +238,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         addDefaultWidgets();
 
         addWidgetsFromSettings();
-        if (numWidgets() >= MAX_WIDGETS) {
+        if (numWidgets() >= maxWidgets()) {
             setAddWidgetEnabled(false);
         }
         checkAppWidgetConsistency();
@@ -334,14 +332,14 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         @Override
         public void onAddView(View v) {
-            if (numWidgets() >= MAX_WIDGETS) {
+            if (numWidgets() >= maxWidgets()) {
                 setAddWidgetEnabled(false);
             }
         };
 
         @Override
         public void onRemoveView(View v) {
-            if (numWidgets() < MAX_WIDGETS) {
+            if (numWidgets() < maxWidgets()) {
                 setAddWidgetEnabled(true);
             }
         }
@@ -1008,6 +1006,19 @@ public class KeyguardHostView extends KeyguardViewBase {
             return mLockPatternUtils;
         }
     };
+
+    private int maxWidgets() {
+        switch (Settings.System.getInt(getContext.getContentResolver(), Settings.System.LOCKSCREEN_WIDGETS_LIMIT, 0) {
+            case 0:
+                return 5;
+            case 1:
+                return 7;
+            case 2:
+                return 9;
+            default:
+                return 5;
+        }
+    }
 
     private int numWidgets() {
         final int childCount = mAppWidgetContainer.getChildCount();
