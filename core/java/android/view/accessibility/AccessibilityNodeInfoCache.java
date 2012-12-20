@@ -310,7 +310,6 @@ public class AccessibilityNodeInfoCache {
                     if (inputFocus != null) {
                         Log.e(LOG_TAG, "Duplicate input focus: " + current);
                     } else {
-                        inputFocus = current;
                     }
                 }
 

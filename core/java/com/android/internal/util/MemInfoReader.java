@@ -30,7 +30,6 @@ public class MemInfoReader {
     private boolean matchText(byte[] buffer, int index, String text) {
         int N = text.length();
         if ((index+N) >= buffer.length) {
-            return false;
         }
         for (int i=0; i<N; i++) {
             if (buffer[index+i] != text.charAt(i)) {

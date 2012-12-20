@@ -366,7 +366,6 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         if (WindowManagerService.localLOGV) Slog.v(
             TAG, "Attaching " + this + " token=" + mToken
             + ", list=" + mToken.windows);
-        mSession.windowAddedLocked();
     }
 
     @Override

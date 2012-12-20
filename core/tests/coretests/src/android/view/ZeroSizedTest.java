@@ -46,7 +46,6 @@ public class ZeroSizedTest extends ActivityInstrumentationTestCase<ZeroSized> {
         final ZeroSized activity = getActivity();
         mWithDimension = activity.findViewById(R.id.dimension);
         mWithNoWdith = activity.findViewById(R.id.noWidth);
-        mWithNoHeight = activity.findViewById(R.id.noHeight);
         mWithNoDimension = activity.findViewById(R.id.noDimension);
     }
 

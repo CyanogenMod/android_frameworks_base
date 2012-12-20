@@ -59,7 +59,6 @@ public class StreamPort extends InputPort {
             throw new RuntimeException(
                 "Attempting to push more than one frame on port: " + this + "!");
         }
-        mFrame = frame.retain();
         mFrame.markReadOnly();
         mPersistent = persistent;
     }
