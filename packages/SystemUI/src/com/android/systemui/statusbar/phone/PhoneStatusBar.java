@@ -467,11 +467,6 @@ public class PhoneStatusBar extends BaseStatusBar {
                     }
                 });
 
-        if (!ActivityManager.isHighEndGfx()) {
-            mStatusBarWindow.setBackground(null);
-            mNotificationPanel.setBackground(new FastColorDrawable(context.getResources().getColor(
-                    R.color.notification_panel_solid_background)));
-        }
         if (ENABLE_INTRUDERS) {
             mIntruderAlertView = (IntruderAlertView) View.inflate(context, R.layout.intruder_alert, null);
             mIntruderAlertView.setVisibility(View.GONE);
@@ -687,13 +682,6 @@ public class PhoneStatusBar extends BaseStatusBar {
                     mSettingsPanel = (SettingsPanelView) ((ViewStub)settings_stub).inflate();
                 } else {
                     mSettingsPanel = (SettingsPanelView) mStatusBarWindow.findViewById(R.id.settings_panel);
-                }
-
-                if (mSettingsPanel != null) {
-                    if (!ActivityManager.isHighEndGfx()) {
-                        mSettingsPanel.setBackground(new FastColorDrawable(context.getResources().getColor(
-                                R.color.notification_panel_solid_background)));
-                    }
                 }
             }
 
