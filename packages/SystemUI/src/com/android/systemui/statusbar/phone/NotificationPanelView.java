@@ -25,6 +25,7 @@ import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.MotionEvent;
 import android.view.View;
+import android.util.Log;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.GestureRecorder;
@@ -99,10 +100,12 @@ public class NotificationPanelView extends PanelView {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     mOkToFlip = getExpandedHeight() == 0;
-                    if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_SETTINGS_FLIP_PERCENTAGE) &&
-                            Settings.System.getInt(getContext().getContentResolver(),
-                                    Settings.System.QS_QUICK_PULLDOWN, 0) != 0) {
+                    if ((event.getX(0) > getWidth() * (1.0f - STATUS_BAR_SETTINGS_FLIP_PERCENTAGE) &&
+                         Settings.System.getInt(getContext().getContentResolver(), Settings.System.QS_QUICK_PULLDOWN, 0) == 2) ||
+                        (mStatusBar.skipToSettingsPanel() &&
+                         Settings.System.getInt(getContext().getContentResolver(), Settings.System.QS_QUICK_PULLDOWN, 0) == 1)) {
                         flip = true;
+                        Log.v("MEU-QS2", "Valor: " + Settings.System.getInt(getContext().getContentResolver(), Settings.System.QS_QUICK_PULLDOWN, 0));
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
