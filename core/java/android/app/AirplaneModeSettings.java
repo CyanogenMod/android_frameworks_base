@@ -86,7 +86,7 @@ public final class AirplaneModeSettings implements Parcelable {
             throws XmlPullParserException, IOException {
         int event = xpp.next();
         AirplaneModeSettings connectionDescriptor = new AirplaneModeSettings();
-        while (event != XmlPullParser.END_TAG) {
+        while (event != XmlPullParser.END_TAG || !xpp.getName().equals("airplaneModeDescriptor")) {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if (name.equals("value")) {
