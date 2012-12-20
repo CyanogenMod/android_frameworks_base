@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.provider.Settings;
@@ -31,7 +31,6 @@ public class BrightnessTile extends QuickSettingsTile implements BrightnessState
     private Dialog mBrightnessDialog;
     private BrightnessController mBrightnessController;
     private final Handler mHandler;
-    private final BrightnessObserver mBrightnessObserver;
     private boolean autoBrightness = true;
 
     public BrightnessTile(Context context, LayoutInflater inflater,
@@ -43,8 +42,6 @@ public class BrightnessTile extends QuickSettingsTile implements BrightnessState
         mBrightnessDialogLongTimeout = mContext.getResources().getInteger(R.integer.quick_settings_brightness_dialog_long_timeout);
         mBrightnessDialogShortTimeout = mContext.getResources().getInteger(R.integer.quick_settings_brightness_dialog_short_timeout);
 
-        mBrightnessObserver = new BrightnessObserver(mHandler);
-
         mOnClick = new OnClickListener() {
 
             @Override
@@ -53,7 +50,10 @@ public class BrightnessTile extends QuickSettingsTile implements BrightnessState
                 showBrightnessDialog();
             }
         };
-
+        qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS)
+                , this);
+        qsc.registerObservedContent(Settings.System.getUriFor(Settings.System
+                .SCREEN_BRIGHTNESS_MODE), this);
         onBrightnessLevelChanged();
     }
 
@@ -126,27 +126,8 @@ public class BrightnessTile extends QuickSettingsTile implements BrightnessState
         }
     }
 
-    private class BrightnessObserver extends ContentObserver {
-        public BrightnessObserver(Handler handler) {
-            super(handler);
-            startObserving();
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            onBrightnessLevelChanged();
-        }
-
-        public void startObserving() {
-            final ContentResolver cr = mContext.getContentResolver();
-            cr.unregisterContentObserver(this);
-            cr.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE),
-                    false, this);
-            cr.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS),
-                    false, this);
-        }
+    @Override
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        onBrightnessLevelChanged();
     }
-
 }
