@@ -132,7 +132,8 @@ final class ElectronBeam {
         // Get the display size and adjust it for rotation.
         mDisplay.getDisplayInfo(mDisplayInfo);
         mDisplayLayerStack = mDisplay.getLayerStack();
-        mDisplayRotation = mDisplayInfo.rotation;
+        mDisplayRotation = (mDisplayInfo.rotation +
+                (4 - android.os.SystemProperties.getInt("ro.sf.hwrotation", 0) / 90)) % 4;
         if (mDisplayRotation == Surface.ROTATION_90
                 || mDisplayRotation == Surface.ROTATION_270) {
             mDisplayWidth = mDisplayInfo.logicalHeight;
