@@ -111,28 +111,24 @@ public class MobileNetworkTypeTile extends QuickSettingsTile {
                 mContext.sendBroadcast(intent);
             }
         };
+        qsc.registerAction(ACTION_MODIFY_NETWORK_MODE, this);
+    }
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int mode = intent.getIntExtra(EXTRA_NETWORK_MODE, 0);
-                switch(mode){
-                case Phone.NT_MODE_WCDMA_PREF:
-                case Phone.NT_MODE_GSM_UMTS:
-                    mDrawable = R.drawable.stat_2g3g_on;
-                    break;
-                case Phone.NT_MODE_WCDMA_ONLY:
-                    mDrawable = R.drawable.stat_3g_on;
-                    break;
-                case Phone.NT_MODE_GSM_ONLY:
-                    mDrawable = R.drawable.stat_2g3g_off;
-                }
-                updateQuickSettings();
-            }
-        };
-
-        mIntentFilter = new IntentFilter(ACTION_MODIFY_NETWORK_MODE);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        int mode = intent.getIntExtra(EXTRA_NETWORK_MODE, 0);
+        switch(mode){
+        case Phone.NT_MODE_WCDMA_PREF:
+        case Phone.NT_MODE_GSM_UMTS:
+            mDrawable = R.drawable.stat_2g3g_on;
+            break;
+        case Phone.NT_MODE_WCDMA_ONLY:
+            mDrawable = R.drawable.stat_3g_on;
+            break;
+        case Phone.NT_MODE_GSM_ONLY:
+            mDrawable = R.drawable.stat_2g3g_off;
+        }
+        updateQuickSettings();
     }
 
     private static int get2G3G(Context context) {

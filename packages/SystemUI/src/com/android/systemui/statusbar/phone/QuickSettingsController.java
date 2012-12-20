@@ -17,10 +17,17 @@
 package com.android.systemui.statusbar.phone;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
@@ -51,9 +58,17 @@ import com.android.systemui.quicksettings.VibrationModeTile;
 import com.android.systemui.quicksettings.WiFiDisplayTile;
 import com.android.systemui.quicksettings.WiFiTile;
 import com.android.systemui.quicksettings.WifiAPTile;
+import com.android.systemui.statusbar.powerwidget.PowerButton;
 
 public class QuickSettingsController {
     private static String TAG = "QuickSettingsController";
+
+    // Stores the broadcast receivers and content observers
+    // quick tiles register for.
+    public HashMap<String, ArrayList<QuickSettingsTile>> mReceiverMap
+        = new HashMap<String, ArrayList<QuickSettingsTile>>();
+    public HashMap<Uri, ArrayList<QuickSettingsTile>> mObserverMap
+        = new HashMap<Uri, ArrayList<QuickSettingsTile>>();
 
     /**
      * START OF DATA MATCHING BLOCK
@@ -102,6 +117,8 @@ public class QuickSettingsController {
     public PanelBar mBar;
     private final ViewGroup mContainerView;
     private final Handler mHandler;
+    private BroadcastReceiver mReceiver;
+    private ContentObserver mObserver;
     private final ArrayList<Integer> mQuickSettings;
     public PhoneStatusBar mStatusBarService;
 
@@ -230,8 +247,84 @@ public class QuickSettingsController {
 
     void setupQuickSettings() {
         LayoutInflater inflater = LayoutInflater.from(mContext);
+        // Clear out old receiver
+        if (mReceiver != null) {
+            mContext.unregisterReceiver(mReceiver);
+        }
+        mReceiver = new QSBroadcastReceiver();
+        mReceiverMap.clear();
+        ContentResolver resolver = mContext.getContentResolver();
+        // Clear out old observer
+        if (mObserver != null) {
+            resolver.unregisterContentObserver(mObserver);
+        }
+        mObserver = new QuickSettingsObserver(mHandler);
+        mObserverMap.clear();
         addQuickSettings(inflater);
+        setupBroadcastReceiver();
+        setupContentObserver();
     }
+
+    void setupContentObserver() {
+        ContentResolver resolver = mContext.getContentResolver();
+        for (Uri uri : mObserverMap.keySet()) {
+            resolver.registerContentObserver(uri, false, mObserver);
+        }
+    }
+
+    private class QuickSettingsObserver extends ContentObserver {
+        public QuickSettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            ContentResolver resolver = mContext.getContentResolver();
+            for (QuickSettingsTile tile : mObserverMap.get(uri)) {
+                tile.onChangeUri(resolver, uri);
+            }
+        }
+    }
+
+    void setupBroadcastReceiver() {
+        IntentFilter filter = new IntentFilter();
+        for (String action : mReceiverMap.keySet()) {
+            filter.addAction(action);
+        }
+        mContext.registerReceiver(mReceiver, filter);
+    }
+
+    private void registerInMap(Object item, QuickSettingsTile tile, HashMap map) {
+        if (map.keySet().contains(item)) {
+            ArrayList list = (ArrayList) map.get(item);
+            if (!list.contains(tile)) {
+                list.add(tile);
+            }
+        } else {
+            ArrayList<QuickSettingsTile> list = new ArrayList<QuickSettingsTile>();
+            list.add(tile);
+            map.put(item, list);
+        }
+    }
+    
+    public void registerAction(Object action, QuickSettingsTile tile) {
+        registerInMap(action, tile, mReceiverMap);
+    }
+
+    public void registerObservedContent(Uri uri, QuickSettingsTile tile) {
+        registerInMap(uri, tile, mObserverMap);
+    }
+
+    private class QSBroadcastReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null) {
+                for (QuickSettingsTile t : mReceiverMap.get(action)) {
+                    t.onReceive(context, intent);
+                }
+            }
+        }
+    };
 
     boolean deviceSupportsTelephony() {
         PackageManager pm = mContext.getPackageManager();
@@ -361,5 +454,4 @@ public class QuickSettingsController {
     }
 
     public void updateResources() {}
-
 }
