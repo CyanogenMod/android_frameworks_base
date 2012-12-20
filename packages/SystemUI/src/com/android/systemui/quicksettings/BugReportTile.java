@@ -7,7 +7,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.provider.Settings;
@@ -40,9 +40,6 @@ public class BugReportTile extends QuickSettingsTile{
         } catch (SettingNotFoundException e) {
         }
 
-        BugreportObserver observer = new BugreportObserver(mHandler);
-        observer.startObserving();
-
         mOnClick = new View.OnClickListener() {
 
             @Override
@@ -51,22 +48,12 @@ public class BugReportTile extends QuickSettingsTile{
                 showBugreportDialog();
             }
         };
+        qsc.registerObservedContent(Settings.System.getUriFor(Settings.Secure.BUGREPORT_IN_POWER_MENU), this);
     }
 
-    private class BugreportObserver extends ContentObserver {
-        public BugreportObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override public void onChange(boolean selfChange) {
-            onBugreportChanged();
-        }
-
-        public void startObserving() {
-            final ContentResolver cr = mContext.getContentResolver();
-            cr.registerContentObserver(
-                    Settings.Secure.getUriFor(Settings.Secure.BUGREPORT_IN_POWER_MENU), false, this);
-        }
+    @Override
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        onBugreportChanged();
     }
 
     public void onBugreportChanged() {

@@ -6,7 +6,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -25,9 +25,6 @@ public class AlarmTile extends QuickSettingsTile{
             QuickSettingsController qsc, Handler handler) {
         super(context, inflater, container, qsc);
 
-        NextAlarmObserver observer = new NextAlarmObserver(handler);
-        observer.startObserving();
-
         mDrawable = R.drawable.ic_qs_alarm_on;
         String nextAlarmTime = Settings.System.getString(mContext.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
         if(nextAlarmTime != null){
@@ -45,15 +42,19 @@ public class AlarmTile extends QuickSettingsTile{
                 startSettingsActivity(intent);
             }
         };
-        mBroadcastReceiver = new BroadcastReceiver() {
+        qsc.registerAction(Intent.ACTION_ALARM_CHANGED, this);
+        qsc.registerObservedContent(Settings.System.getUriFor(
+                Settings.System.NEXT_ALARM_FORMATTED), this);
+    }
 
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                onAlarmChanged(intent);
-            }
-        };
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        onAlarmChanged(intent);
+    }
 
-        mIntentFilter = new IntentFilter(Intent.ACTION_ALARM_CHANGED);
+    @Override
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        onNextAlarmChanged();
     }
 
     void onAlarmChanged(Intent intent) {
@@ -65,23 +66,6 @@ public class AlarmTile extends QuickSettingsTile{
         mLabel = Settings.System.getString(mContext.getContentResolver(),
                 Settings.System.NEXT_ALARM_FORMATTED);
         updateQuickSettings();
-    }
-
-    /** ContentObserver to determine the next alarm */
-    private class NextAlarmObserver extends ContentObserver {
-        public NextAlarmObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override public void onChange(boolean selfChange) {
-            onNextAlarmChanged();
-        }
-
-        public void startObserving() {
-            final ContentResolver cr = mContext.getContentResolver();
-            cr.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.NEXT_ALARM_FORMATTED), false, this);
-        }
     }
 
     @Override

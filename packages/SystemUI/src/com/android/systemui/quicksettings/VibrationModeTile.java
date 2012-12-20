@@ -66,18 +66,13 @@ public class VibrationModeTile extends QuickSettingsTile {
                 return true;
             }
         };
+        qsc.registerAction(AudioManager.RINGER_MODE_CHANGED_ACTION, this);
+        qsc.registerAction(VIBRATION_STATE_CHANGED, this);
+    }
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                applyVibrationChanges();
-            }
-        };
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
-        mIntentFilter.addAction(VIBRATION_STATE_CHANGED);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        applyVibrationChanges();
     }
 
     private void applyVibrationChanges(){

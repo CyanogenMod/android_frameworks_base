@@ -38,15 +38,14 @@ import java.util.UUID;
 public class ProfileTile extends QuickSettingsTile {
     private Profile mChosenProfile;
     private ProfileManager mProfileManager;
-    private ProfileReceiver mProfileReceiver;
 
     public ProfileTile(Context context, LayoutInflater inflater,
             QuickSettingsContainerView container,
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        mProfileReceiver = new ProfileReceiver();
-        mProfileReceiver.registerSelf();
+        qsc.registerAction(ProfileManagerService.INTENT_ACTION_PROFILE_SELECTED, this);
+
         mProfileManager = (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
         mDrawable = R.drawable.ic_qs_profiles;
 
@@ -68,34 +67,10 @@ public class ProfileTile extends QuickSettingsTile {
         };
     }
 
-    private class ProfileReceiver extends BroadcastReceiver {
-        private boolean mIsRegistered;
-
-        public ProfileReceiver() {
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mLabel = mProfileManager.getActiveProfile().getName();
-            updateQuickSettings();
-        }
-
-        private void registerSelf() {
-            if (!mIsRegistered) {
-                mIsRegistered = true;
-
-                IntentFilter filter = new IntentFilter();
-                filter.addAction(ProfileManagerService.INTENT_ACTION_PROFILE_SELECTED);
-                mContext.registerReceiver(mProfileReceiver, filter);
-            }
-        }
-
-        private void unregisterSelf() {
-            if (mIsRegistered) {
-                mIsRegistered = false;
-                mContext.unregisterReceiver(this);
-            }
-        }
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        mLabel = mProfileManager.getActiveProfile().getName();
+        updateQuickSettings();
     }
 
     // copied from com.android.internal.policy.impl.GlobalActions

@@ -5,8 +5,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.ContentObserver;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -40,7 +40,6 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
 
     private AudioManager mAudioManager;
     private Handler mHandler;
-    private SoundModesChangedObserver mSoundModesChangedObserver;
 
     public RingerVibrationModeTile(Context context, LayoutInflater inflater,
             QuickSettingsContainerView container, QuickSettingsController qsc) {
@@ -54,10 +53,6 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
 
         // Make sure we show the initial state correctly
         updateState();
-
-        // Start observing for changes
-        mSoundModesChangedObserver = new SoundModesChangedObserver(mHandler);
-        mSoundModesChangedObserver.startObserving();
 
         // Tile actions
         mOnClick = new View.OnClickListener() {
@@ -75,17 +70,23 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
                 return true;
             }
         };
+        qsc.registerAction(AudioManager.RINGER_MODE_CHANGED_ACTION, this);
+        qsc.registerAction(VibrationModeTile.VIBRATION_STATE_CHANGED, this);
+        qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.EXPANDED_RING_MODE)
+                , this);
+        qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.VIBRATE_WHEN_RINGING)
+                , this);
+    }
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                applyVibrationChanges();
-            }
-        };
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        applyVibrationChanges();
+    }
 
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
-        mIntentFilter.addAction(VibrationModeTile.VIBRATION_STATE_CHANGED);
+    @Override
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        updateSettings(mContext.getContentResolver());
+        applyVibrationChanges();
     }
 
     private void applyVibrationChanges(){
@@ -210,33 +211,6 @@ public class RingerVibrationModeTile extends QuickSettingsTile {
             Ringer r = (Ringer) o;
             return r.mVibrateWhenRinging == mVibrateWhenRinging
                     && r.mRingerMode == mRingerMode;
-        }
-    }
-
-    /**
-     *  ContentObserver to watch for Quick Settings tiles changes
-     * @author dvtonder
-     *
-     */
-    private class SoundModesChangedObserver extends ContentObserver {
-        public SoundModesChangedObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings(mContext.getContentResolver());
-            applyVibrationChanges();
-        }
-
-        public void startObserving() {
-            final ContentResolver cr = mContext.getContentResolver();
-            cr.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.EXPANDED_RING_MODE),
-                    false, this);
-            cr.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.VIBRATE_WHEN_RINGING),
-                    false, this);
         }
     }
 }

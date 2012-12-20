@@ -50,14 +50,13 @@ public class WifiAPTile extends QuickSettingsTile {
                 return true;
             }
         };
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                 updateTileState();
-                 updateQuickSettings();
-            }
-        };
-        mIntentFilter = new IntentFilter(WifiManager.WIFI_AP_STATE_CHANGED_ACTION);
+        qsc.registerAction(WifiManager.WIFI_AP_STATE_CHANGED_ACTION, this);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        updateTileState();
+        updateQuickSettings();
     }
 
     private void updateTileState() {

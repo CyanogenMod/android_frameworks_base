@@ -64,18 +64,13 @@ public class UserTile extends QuickSettingsTile {
                 }
             }
         };
+        qsc.registerAction(Intent.ACTION_USER_SWITCHED, this);
+        qsc.registerAction(ContactsContract.Intents.ACTION_PROFILE_CHANGED, this);
+    }
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                queryForUserInformation();
-            }
-        };
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(Intent.ACTION_USER_SWITCHED);
-        mIntentFilter.addAction(ContactsContract.Intents.ACTION_PROFILE_CHANGED);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        queryForUserInformation();
     }
 
     @Override

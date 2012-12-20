@@ -47,24 +47,19 @@ public class RingerModeTile extends QuickSettingsTile {
                 return true;
             }
         };
+        qsc.registerAction(AudioManager.RINGER_MODE_CHANGED_ACTION, this);
+    }
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if(mAudioManager.isSilentMode()){
-                    mDrawable = R.drawable.ic_qs_ring_off;
-                    mLabel = mContext.getString(R.string.quick_settings_ringer_off);
-                }else{
-                    mDrawable = R.drawable.ic_qs_ring_on;
-                    mLabel = mContext.getString(R.string.quick_settings_ringer_on);
-                }
-                updateQuickSettings();
-            }
-        };
-
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if(mAudioManager.isSilentMode()){
+            mDrawable = R.drawable.ic_qs_ring_off;
+            mLabel = mContext.getString(R.string.quick_settings_ringer_off);
+        }else{
+            mDrawable = R.drawable.ic_qs_ring_on;
+            mLabel = mContext.getString(R.string.quick_settings_ringer_on);
+        }
+        updateQuickSettings();
     }
 
 }
