@@ -38,7 +38,6 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
         enabled = Settings.Secure.isLocationProviderEnabled(mContentResolver, LocationManager.GPS_PROVIDER);
 
         mOnClick = new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 Settings.Secure.setLocationProviderEnabled(mContentResolver, LocationManager.GPS_PROVIDER, !enabled);
@@ -46,7 +45,6 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
         };
 
         mOnLongClick = new OnLongClickListener() {
-
             @Override
             public boolean onLongClick(View v) {
                 startSettingsActivity(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -60,6 +58,7 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
     public void onReceive(Context context, Intent intent) {
         enabled = Settings.Secure.isLocationProviderEnabled(mContentResolver, LocationManager.GPS_PROVIDER);
         mLabel = mContext.getString(R.string.quick_settings_gps);
+        setGenericLabel();
         applyGPSChanges();
     }
 
@@ -69,12 +68,12 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
         super.onPostCreate();
     }
 
-    void applyGPSChanges(){
-        if(enabled && working){
+    void applyGPSChanges() {
+        if (enabled && working) {
             mDrawable = R.drawable.ic_qs_location;
-        }else if(enabled){
+        } else if (enabled) {
             mDrawable = R.drawable.ic_qs_gps_on;
-        }else{
+        } else {
             mDrawable = R.drawable.ic_qs_gps_off;
         }
         updateQuickSettings();
@@ -83,13 +82,17 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
     @Override
     public void onLocationGpsStateChanged(boolean inUse, String description) {
         working = inUse;
-        if(description != null){
+        if (description != null) {
             mLabel = description;
-        }else{
-            mLabel = mContext.getString(R.string.quick_settings_gps);
+        } else {
+            setGenericLabel();
         }
         applyGPSChanges();
-
     }
 
+    private void setGenericLabel() {
+        // Show OFF next to the GPS label when in OFF state, ON/IN USE is indicated by the color
+        String label = mContext.getString(R.string.quick_settings_gps);
+        mLabel = (enabled ? label : label + " " + mContext.getString(R.string.quick_settings_label_disabled));
+    }
 }
