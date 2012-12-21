@@ -91,5 +91,8 @@
               android:contentDescription="@string/keyguard_accessibility_expand_lock_area" />
 
     </com.android.internal.policy.impl.keyguard.SlidingChallengeLayout>
+
+        <include layout="@layout/keyguard_multi_user_selector"
+              android:gravity="bottom|center_horizontal" />
 </com.android.internal.policy.impl.keyguard.KeyguardHostView>
 

@@ -327,8 +327,8 @@
     <!-- Shadow radius under the frame for the circular avatars. -->
     <dimen name="keyguard_avatar_frame_shadow_radius">1dp</dimen>
 
-    <!-- Size of the avator on hte multiuser lockscreen. -->
-    <dimen name="keyguard_avatar_size">66dp</dimen>
+    <!-- Size of the avator on the multiuser lockscreen. -->
+    <dimen name="keyguard_avatar_size">56dp</dimen>
 
     <!-- Size of the text under the avator on the multiuser lockscreen. -->
     <dimen name="keyguard_avatar_name_size">10sp</dimen>
