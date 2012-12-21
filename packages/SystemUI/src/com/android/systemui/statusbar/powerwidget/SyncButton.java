@@ -52,33 +52,11 @@ public class SyncButton extends PowerButton {
 
     @Override
     protected void toggleState(Context context) {
-        ConnectivityManager connManager = (ConnectivityManager)
-                context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean backgroundData = getBackgroundDataState(context);
-        boolean sync = ContentResolver.getMasterSyncAutomatically();
-
-        // four cases to handle:
-        // setting toggled from off to on:
-        // 1. background data was off, sync was off: turn on both
-        if (!backgroundData && !sync) {
-            connManager.setBackgroundDataSetting(true);
-            ContentResolver.setMasterSyncAutomatically(true);
-        }
-
-        // 2. background data was off, sync was on: turn on background data
-        if (!backgroundData && sync) {
-            connManager.setBackgroundDataSetting(true);
-        }
-
-        // 3. background data was on, sync was off: turn on sync
-        if (backgroundData && !sync) {
-            ContentResolver.setMasterSyncAutomatically(true);
-        }
-
-        // setting toggled from on to off:
-        // 4. background data was on, sync was on: turn off sync
-        if (backgroundData && sync) {
+        // If ON turn OFF else turn ON
+        if (getSyncState(context)) {
             ContentResolver.setMasterSyncAutomatically(false);
+        } else {
+            ContentResolver.setMasterSyncAutomatically(true);
         }
     }
 
@@ -91,15 +69,7 @@ public class SyncButton extends PowerButton {
         return true;
     }
 
-    private boolean getBackgroundDataState(Context context) {
-        ConnectivityManager connManager = (ConnectivityManager)
-                context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return connManager.getBackgroundDataSetting();
-    }
-
     private boolean getSyncState(Context context) {
-        boolean backgroundData = getBackgroundDataState(context);
-        boolean sync = ContentResolver.getMasterSyncAutomatically();
-        return backgroundData && sync;
+        return ContentResolver.getMasterSyncAutomatically();
     }
 }
