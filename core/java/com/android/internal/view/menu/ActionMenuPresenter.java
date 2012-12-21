@@ -40,6 +40,8 @@ import com.android.internal.view.ActionBarPolicy;
 import com.android.internal.view.menu.ActionMenuView.ActionMenuChildView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * MenuPresenter for building action menus as seen in the action bar and action modes.
@@ -385,7 +387,27 @@ public class ActionMenuPresenter extends BaseMenuPresenter
     }
 
     public boolean flagActionItems() {
-        final ArrayList<MenuItemImpl> visibleItems = mMenu.getVisibleItems();
+        // Items must be sorted always in base to his showAsAction type
+        //    always  ->  ifRoom  ->  Others
+        // Create an internal sorted array based in this priority (items must keep
+        // his original order)
+        final ArrayList<MenuItemImpl> visibleItems =
+                new ArrayList<MenuItemImpl>(mMenu.getVisibleItems());
+        Collections.sort(visibleItems, new Comparator<MenuItemImpl>() {
+            @Override
+            public int compare(MenuItemImpl lhs, MenuItemImpl rhs) {
+                boolean lhsRequires = lhs.requiresActionButton();
+                boolean lhsRequest = lhs.requestsActionButton();
+                boolean rhsRequires = rhs.requiresActionButton();
+                boolean rhsRequest = rhs.requestsActionButton();
+                if (lhsRequires && rhsRequires) return 0;
+                if (lhsRequires) return -1;
+                if (rhsRequires) return 1;
+                if (lhsRequest && rhsRequest) return 0;
+                if (lhsRequest) return -1;
+                return 1;
+            }
+        });
         final int itemsSize = visibleItems.size();
         int maxActions = mMaxItems;
         int widthLimit = mActionItemWidthLimit;
