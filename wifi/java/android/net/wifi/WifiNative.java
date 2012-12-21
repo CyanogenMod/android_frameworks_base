@@ -798,4 +798,6 @@ public class WifiNative {
     public boolean p2pServDiscCancelReq(String id) {
         return doBooleanCommand("P2P_SERV_DISC_CANCEL_REQ " + id);
     }
+
+    public native static boolean setMode(int mode);
 }
