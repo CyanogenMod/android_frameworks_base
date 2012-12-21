@@ -214,6 +214,7 @@
     <string name="quick_settings_label_disabled">"Dezactivat"</string>
     <string name="quick_settings_ringer_normal">"Sunet"</string>
     <string name="quick_settings_lockscreen">"Ecran Blocare"</string>
-    <string name="quick_settings_network_type">"Tip Reţea"</string>
+    <string name="quick_settings_network_type">"Mod Reţea"</string>
     <string name="quick_settings_report_bug">"Raport Erori"</string>
+    <string name="quick_settings_sync">Sincronizare</string>
 </resources>
