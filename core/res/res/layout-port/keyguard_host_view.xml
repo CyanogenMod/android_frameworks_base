@@ -60,6 +60,9 @@
               androidprv:layout_childType="scrim"
               android:background="#99000000" />
 
+        <include layout="@layout/keyguard_multi_user_selector"
+              android:gravity="bottom|center_horizontal" />
+
         <com.android.internal.policy.impl.keyguard.KeyguardSecurityContainer
             android:id="@+id/keyguard_security_container"
             android:layout_width="wrap_content"
