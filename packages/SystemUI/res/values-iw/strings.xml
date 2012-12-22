@@ -203,4 +203,32 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"אוטומטי"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"הודעות מופיעות כאן"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"גש אליהם בכל עת על ידי החלקה למטה."\n"החלק למטה שוב למעבר למרכז הבקרה של המערכת."</string>
+
+<!-- CyanogenMod edits start -->
+
+<!-- QuickSettings -->
+    <string name="accessibility_quick_settings_ringer">צליל <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">רטט <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <!-- QuickSettings: Profile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_profile_label">פרופיל</string>
+
+    <string name="powerwidget_screen_timeout_toast">כיבוי מסך אוטומטי מוגדר ל: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_screen_sleep">לך לישון</string>
+    <string name="quick_settings_ringer_on">קול פועל</string>
+    <string name="quick_settings_ringer_off">קול מושתק</string>
+    <string name="quick_settings_vibration_on">רטט פועל</string>
+    <string name="quick_settings_vibration_off">רטט כבוי</string>
+    <string name="quick_settings_label_enabled">פועל</string>
+    <string name="quick_settings_label_disabled">כבוי</string>
+    <string name="quick_settings_ringer_normal">צליל</string>
+    <string name="quick_settings_lockscreen">מסך נעילה</string>
+    <string name="quick_settings_network_type">מצב רשת</string>
+    <string name="quick_settings_report_bug">דיווח על באג</string>
+    <string name="quick_settings_sync">סינכרון</string>
+    <string name="quick_settings_torch">פנס</string>
+
+<!-- CID DayDream -->
+    <string name="bean_dream_settings_cid_title">השתמש בראשו של סיד</string>
+    <string name="bean_dream_settings_cid_summary">השתמש בראשו של סיד במקום בסוכריות הגומי</string>
 </resources>

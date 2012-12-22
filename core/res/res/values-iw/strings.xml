@@ -873,7 +873,7 @@
     <string name="permdesc_writeHistoryBookmarks" product="default" msgid="8497389531014185509">"מאפשר ליישום לשנות את ההיסטוריה או ה-Bookmarks של הדפדפן המאוחסנים בטלפון. הדבר עשוי לאפשר ליישום למחוק או לשנות נתוני דפדפן. שים לב: אישור זה אינו ניתן לאכיפה על ידי דפדפני צד שלישי או יישומים אחרים בעלי יכולות גלישה באינטרנט."</string>
     <string name="permlab_setAlarm" msgid="1379294556362091814">"הגדרת התראה"</string>
     <string name="permdesc_setAlarm" msgid="316392039157473848">"מאפשר ליישום להגדיר התראה ביישום שעון מעורר מותקן. יישומי שעון מעורר מסוימים אינם מיישמים תכונה זו."</string>
-    <string name="permlab_addVoicemail" msgid="5525660026090959044">"הוסף דואר קולי"</string>
+    <string name="permlab_addVoicemail" msgid="5525660026090959044">"הוסף הודעה קולית"</string>
     <string name="permdesc_addVoicemail" msgid="6604508651428252437">"מאפשר ליישום להוסיף הודעות לתיבת הדואר הקולי."</string>
     <string name="permlab_writeGeolocationPermissions" msgid="5962224158955273932">"שינוי הרשאות המיקום הגיאוגרפי של הדפדפן"</string>
     <string name="permdesc_writeGeolocationPermissions" msgid="1083743234522638747">"מאפשר ליישום לשנות את הרשאות המיקום הגיאוגרפי של הדפדפן. יישומים זדוניים עלולים להשתמש בכך כדי לאפשר משלוח של פרטי מיקום לאתרים זדוניים אחרים."</string>
@@ -1444,4 +1444,88 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"נגישות בוטלה."</string>
     <string name="user_switched" msgid="3768006783166984410">"המשתמש הנוכחי <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"בעלים"</string>
+
+<!-- CyanogenMod Edits Start -->
+
+<!-- Profile names -->
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">ברירת מחדל</string>
+    <string name="profileNameWork">עבודה</string>
+    <string name="profileNameHome">בית</string>
+    <string name="profileNameSilent">שקט</string>
+    <string name="profileNameNight">לילה</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">טלפון</string>
+    <string name="profileGroupCalendar">יומן</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">דוא\"ל</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">אחר</string>
+
+<!-- Power Menu -->
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">הפעלת טאבלט מחדש</string>
+    <string name="reboot_system" product="default">הפעלת טלפון מחדש</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">צלם מסך</string>
+
+    <!-- label for item that toggles expand desktop mode -->
+    <string name="global_actions_toggle_expanded_desktop_mode">שולחן עבודה מורחב</string>
+    <!-- status message in phone options dialog for when expand desktop mode is on -->
+    <string name="global_actions_expanded_desktop_mode_on_status">פועל</string>
+    <!-- status message in phone options dialog for when expand desktop mode is off -->
+    <string name="global_actions_expanded_desktop_mode_off_status">מושבת</string>
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">הפעלה מחדש</string>
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">פרופיל</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">הפעלה מחדש</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">מפעיל מחדש...</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm" product="tablet">הטאבלט יופעל מחדש.</string>
+    <string name="reboot_confirm" product="default">הטלפון יופעל מחדש.</string>
+
+<!-- App Permissions -->
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_preventpower">מניעת כפתור הכיבוי</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור הכיבוי.</string>
+
+<!-- Lock Screen -->
+
+   <!-- Discharging -->
+    <string name="lockscreen_discharging">פורק(<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>)
+
+<!-- Pop-Up messages -->
+
+    <!-- Long-press back kill application -->
+    <string name="app_killed_message">התהליך נסגר</string>
+
+<!-- Unknown -->
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">סיבוב אוטומטי</string>
+    <string name="toast_rotation_locked">סיבוב נעול</string>
+<!-- CyanogenMod Edits End -->
 </resources>
