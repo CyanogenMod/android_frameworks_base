@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
  * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
+ * Copyright (c) 2012, 2013. The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +33,7 @@ import android.database.Cursor;
 import android.media.AudioService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
+import android.os.IBinder;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -80,6 +82,9 @@ import dalvik.system.Zygote;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import dalvik.system.PathClassLoader;
+import java.lang.reflect.Constructor;
 
 class ServerThread {
     private static final String TAG = "SystemServer";
@@ -155,6 +160,7 @@ class ServerThread {
         NetworkStatsService networkStats = null;
         NetworkPolicyManagerService networkPolicy = null;
         ConnectivityService connectivity = null;
+        Object cneObj = null;
         WifiP2pService wifiP2p = null;
         WifiService wifi = null;
         NsdService serviceDiscovery= null;
@@ -546,6 +552,32 @@ class ServerThread {
                 }
 
                 try {
+                    int value = SystemProperties.getInt("persist.cne.feature", 0);
+                    if(value > 0) {
+                        try {
+                            PathClassLoader cneClassLoader =
+                                new PathClassLoader("/system/framework/com.quicinc.cne.jar",
+                                        ClassLoader.getSystemClassLoader());
+                            Class cneClass = cneClassLoader.loadClass("com.quicinc.cne.CNE");
+                            Constructor cneConstructor = cneClass.getConstructor
+                                (new Class[] {Context.class, Handler.class});
+                            cneObj = cneConstructor.newInstance(context, null);
+                        } catch (Exception e) {
+                            Slog.e(TAG,"Failed to load CNE class", e);
+                            cneObj = null;
+                            reportWtf("Creating Connectivity Engine Service", e);
+                        }
+                        if (cneObj != null && (cneObj instanceof IBinder)) {
+                            ServiceManager.addService("cneservice", (IBinder)cneObj);
+                            Slog.i(TAG, "starting cneservice");
+                        }
+                    }
+                } catch (Throwable e) {
+                    Slog.e(TAG,"Loading CNEService failed: ", e);
+                    reportWtf("starting Connectivity Engine Service", e);
+                }
+
+                try {
                     Slog.i(TAG, "Network Service Discovery Service");
                     serviceDiscovery = NsdService.create(context);
                     ServiceManager.addService(
@@ -809,7 +841,7 @@ class ServerThread {
                 }
             }
 
-            if (!disableNonCoreServices && 
+            if (!disableNonCoreServices &&
                 context.getResources().getBoolean(R.bool.config_dreamsSupported)) {
                 try {
                     Slog.i(TAG, "Dreams Service");
