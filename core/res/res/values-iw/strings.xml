@@ -1515,7 +1515,7 @@
 <!-- Lock Screen -->
 
    <!-- Discharging -->
-    <string name="lockscreen_discharging">פורק(<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_discharging">פורק(<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
 
 <!-- Pop-Up messages -->
 

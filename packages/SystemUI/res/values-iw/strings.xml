@@ -227,6 +227,9 @@
     <string name="quick_settings_report_bug">דיווח על באג</string>
     <string name="quick_settings_sync">סינכרון</string>
     <string name="quick_settings_torch">פנס</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_screen_timeout">כיבוי מסך</string>
+    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
 
 <!-- CID DayDream -->
     <string name="bean_dream_settings_cid_title">השתמש בראשו של סיד</string>
