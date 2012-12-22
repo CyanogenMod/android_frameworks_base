@@ -181,7 +181,7 @@
     <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"מלאה"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth ‏(<xliff:g id="NUMBER">%d</xliff:g> מכשירים)"</string>
-    <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth מופסק"</string>
+    <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth כבוי"</string>
     <string name="quick_settings_brightness_label" msgid="6968372297018755815">"בהירות"</string>
     <string name="quick_settings_rotation_unlocked_label" msgid="336054930362580584">"סיבוב אוטומטי"</string>
     <string name="quick_settings_rotation_locked_label" msgid="8058646447242565486">"סיבוב נעול"</string>
@@ -211,8 +211,8 @@
     <string name="accessibility_quick_settings_vibration">רטט <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <!-- QuickSettings: Profile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_profile_label">פרופיל</string>
-
     <string name="powerwidget_screen_timeout_toast">כיבוי מסך אוטומטי מוגדר ל: %1$d %2$s</string>
+
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_screen_sleep">לך לישון</string>
     <string name="quick_settings_ringer_on">קול פועל</string>
@@ -227,8 +227,26 @@
     <string name="quick_settings_report_bug">דיווח על באג</string>
     <string name="quick_settings_sync">סינכרון</string>
     <string name="quick_settings_torch">פנס</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_screen_timeout">כיבוי מסך</string>
+    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
+    <string name="quick_settings_usb_tether_off_label">מנותק</string>
+    <string name="quick_settings_usb_tether_connected_label">קשירה כבויה</string>
+    <string name="quick_settings_usb_tether_on_label">קשירה</string>
 
 <!-- CID DayDream -->
     <string name="bean_dream_settings_cid_title">השתמש בראשו של סיד</string>
     <string name="bean_dream_settings_cid_summary">השתמש בראשו של סיד במקום בסוכריות הגומי</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">בחר פעולה שברצונך לשייך</string>
+    <string name="navbar_home_button">כפתור בית</string>
+    <string name="navbar_recent_button">כפתור יישומים אחרונים</string>
+    <string name="navbar_search_button">כפתור חיפוש</string>
+    <string name="navbar_back_button">כפתור חזרה</string>
+    <string name="navbar_empty_button">כפתור ריק</string>
+    <string name="navbar_menu_conditional_button">כפתור תפריט (הסתרה אוטומטית)</string>
+    <string name="navbar_menu_always_button">כפתור תפריט (הצג תמיד)</string>
+    <string name="navbar_menu_big_button">כפתור תפריט</string>
+
 </resources>
