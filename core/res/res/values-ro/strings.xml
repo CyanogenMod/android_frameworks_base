@@ -1340,7 +1340,7 @@
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Mai multe opţiuni"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Stocare internă"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"Card SD"</string>
-    <string name="storage_usb" msgid="3017954059538517278">"Dsipozitiv de stocare USB"</string>
+    <string name="storage_usb" msgid="3017954059538517278">"Dispozitiv de stocare USB"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Editaţi"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Avertisment de utiliz. a datelor"</string>
     <string name="data_usage_warning_body" msgid="2814673551471969954">"Atingeţi pt. a afişa utiliz./set."</string>
@@ -1469,4 +1469,5 @@
     <string name="lockscreen_discharging">"Descărcare, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="toast_rotation_unlocked">"Rotire Ecran Deblocată"</string>
     <string name="toast_rotation_locked">"Rotire Ecran Blocată"</string>
+    <string name="app_killed_message">"Aplicaţie oprită"</string>
 </resources>
