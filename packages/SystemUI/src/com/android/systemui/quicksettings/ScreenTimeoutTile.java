@@ -1,20 +1,24 @@
-package com.android.systemui.statusbar.powerwidget;
+package com.android.systemui.quicksettings;
 
-import com.android.systemui.R;
-
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.Settings;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.QuickSettingsController;
+import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 
-public class ScreenTimeoutButton extends PowerButton {
+public class ScreenTimeoutTile extends QuickSettingsTile {
 
     // timeout values
     private static final int SCREEN_TIMEOUT_MIN    =  15000;
@@ -27,44 +31,62 @@ public class ScreenTimeoutButton extends PowerButton {
     private static final int CM_MODE_15_60_300 = 0;
     private static final int CM_MODE_30_120_300 = 1;
 
-    private Toast mToast = null;
+    public ScreenTimeoutTile(Context context,
+            LayoutInflater inflater, QuickSettingsContainerView container, QuickSettingsController qsc) {
+        super(context, inflater, container, qsc);
 
-    private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
-    static {
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.SCREEN_OFF_TIMEOUT));
+        updateTileState();
+
+        mOnClick = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleState();
+                applyTimeoutChanges();
+            }
+        };
+
+        mOnLongClick = new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent("android.settings.DISPLAY_SETTINGS");
+                startSettingsActivity(intent);
+                return true;
+            }
+        };
+
+        qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.SCREEN_OFF_TIMEOUT)
+                , this);
     }
 
-    public ScreenTimeoutButton() { mType = BUTTON_SCREENTIMEOUT; }
-
     @Override
-    protected void setupButton(View view) {
-        super.setupButton(view);
-        if (view == null && mToast != null) {
-            mToast.cancel();
-            mToast = null;
-        }
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        applyTimeoutChanges();
     }
 
-    @Override
-    protected void updateState(Context context) {
-        int timeout = getScreenTimeout(context);
+    void applyTimeoutChanges() {
+        updateTileState();
+        updateQuickSettings();
+    }
 
+    protected void updateTileState() {
+        int timeout = getScreenTimeout();
+        mLabel = makeTimeoutSummaryString(mContext, timeout);
+        mDrawable = R.drawable.ic_qs_screen_timeout_off;
+
+        /* TODO: Determine if we need an on and off state
         if (timeout <= SCREEN_TIMEOUT_LOW) {
-            mIcon = R.drawable.stat_screen_timeout_off;
-            mState = STATE_DISABLED;
+            mDrawable = R.drawable.ic_qs_screen_timeout_off;
         } else if (timeout <= SCREEN_TIMEOUT_HIGH) {
-            mIcon = R.drawable.stat_screen_timeout_off;
-            mState = STATE_INTERMEDIATE;
+            mDrawable = R.drawable.ic_qs_screen_timeout_off;
         } else {
-            mIcon = R.drawable.stat_screen_timeout_on;
-            mState = STATE_ENABLED;
+            mDrawable = R.drawable.ic_qs_screen_timeout_on;
         }
+        */
     }
 
-    @Override
-    protected void toggleState(Context context) {
-        int screenTimeout = getScreenTimeout(context);
-        int currentMode = getCurrentCMMode(context);
+    protected void toggleState() {
+        int screenTimeout = getScreenTimeout();
+        int currentMode = getCurrentCMMode();
 
         if (screenTimeout < SCREEN_TIMEOUT_MIN) {
             if (currentMode == CM_MODE_15_60_300) {
@@ -99,36 +121,11 @@ public class ScreenTimeoutButton extends PowerButton {
         }
 
         Settings.System.putInt(
-                context.getContentResolver(),
+                mContext.getContentResolver(),
                 Settings.System.SCREEN_OFF_TIMEOUT, screenTimeout);
-
-        // cancel any previous toast
-        if (mToast != null) {
-            mToast.cancel();
-        }
-
-        // inform users of how long the timeout is now
-        final String toast = makeTimeoutToastString(context, screenTimeout);
-        mToast = Toast.makeText(context, toast, Toast.LENGTH_LONG);
-        mToast.setGravity(Gravity.CENTER, mToast.getXOffset() / 2, mToast.getYOffset() / 2);
-        mToast.show();
     }
 
-    @Override
-    protected List<Uri> getObservedUris() {
-        return OBSERVED_URIS;
-    }
-
-    @Override
-    protected boolean handleLongClick(Context context) {
-        Intent intent = new Intent("android.settings.DISPLAY_SETTINGS");
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-        return true;
-    }
-
-    private String makeTimeoutToastString(Context context, int timeout) {
+    private String makeTimeoutSummaryString(Context context, int timeout) {
         Resources res = context.getResources();
         int resId;
 
@@ -155,21 +152,17 @@ public class ScreenTimeoutButton extends PowerButton {
                     : com.android.internal.R.string.seconds;
         }
 
-        return res.getString(R.string.powerwidget_screen_timeout_toast,
+        return res.getString(R.string.quick_settings_screen_timeout_summary,
                 timeout, res.getString(resId));
     }
 
-    private static int getScreenTimeout(Context context) {
-        return Settings.System.getInt(
-                context.getContentResolver(),
+    private int getScreenTimeout() {
+        return Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SCREEN_OFF_TIMEOUT, 0);
     }
 
-    private static int getCurrentCMMode(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
-                Settings.System.EXPANDED_SCREENTIMEOUT_MODE,
-                CM_MODE_15_60_300);
+    private int getCurrentCMMode() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.EXPANDED_SCREENTIMEOUT_MODE, CM_MODE_15_60_300);
     }
 }
-
-
