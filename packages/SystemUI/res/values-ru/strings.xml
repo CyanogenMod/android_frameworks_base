@@ -157,6 +157,8 @@
     <string name="accessibility_quick_settings_airplane" msgid="4196876722090224753">"Режим полета <xliff:g id="STATE">%s</xliff:g>"</string>
     <string name="accessibility_quick_settings_bluetooth" msgid="5749054971341882340">"Bluetooth <xliff:g id="STATE">%s</xliff:g>"</string>
     <string name="accessibility_quick_settings_alarm" msgid="3959908972897295660">"Будильник установлен на <xliff:g id="TIME">%s</xliff:g>"</string>
+    <string name="accessibility_quick_settings_ringer">Звук <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Вибрация <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="data_usage_disabled_dialog_3g_title" msgid="5257833881698644687">"Передача данных по каналам 2G и 3G отключена"</string>
     <string name="data_usage_disabled_dialog_4g_title" msgid="4789143363492682629">"Передача данных по каналу 4G отключена"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="1046047248844821202">"Моб. Интернет отключен"</string>
@@ -220,4 +222,6 @@
     <string name="quick_settings_lockscreen">Экран блокировки</string>
     <string name="quick_settings_network_type">Тип сети</string>
     <string name="quick_settings_report_bug">Отчёт об ошибке</string>
+    <string name="quick_settings_sync">Синхронизация</string>
+    <string name="quick_settings_torch">Фонарь</string>
 </resources>
