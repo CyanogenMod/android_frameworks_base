@@ -26,13 +26,17 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
             QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        enabled = mBluetoothAdapter.isEnabled();
-        connected = mBluetoothAdapter.getConnectionState() == BluetoothAdapter.STATE_CONNECTED;
-
+	/* mBluetoothAdapter will be null if Bluetooth is not supported on this hardware platform */
+        if(mBluetoothAdapter != null){
+            enabled = mBluetoothAdapter.isEnabled();
+            connected = mBluetoothAdapter.getConnectionState() == BluetoothAdapter.STATE_CONNECTED;
+        }
         mOnClick = new OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                if(mBluetoothAdapter == null)
+                    return;
                 if(enabled){
                     mBluetoothAdapter.disable();
                 }else{
@@ -75,6 +79,8 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
     }
 
     void checkBluetoothState() {
+        if (mBluetoothAdapter == null)
+            return;
         enabled = mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON;
         connected = mBluetoothAdapter.getConnectionState() == BluetoothAdapter.STATE_CONNECTED;
     }
