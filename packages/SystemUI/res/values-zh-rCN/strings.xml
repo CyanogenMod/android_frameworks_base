@@ -126,6 +126,8 @@
     <string name="accessibility_data_connection_hspa" msgid="2032328855462645198">"HSPA"</string>
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"漫游中"</string>
@@ -157,6 +159,10 @@
     <string name="accessibility_quick_settings_airplane" msgid="4196876722090224753">"飞行模式：<xliff:g id="STATE">%s</xliff:g>。"</string>
     <string name="accessibility_quick_settings_bluetooth" msgid="5749054971341882340">"蓝牙：<xliff:g id="STATE">%s</xliff:g>。"</string>
     <string name="accessibility_quick_settings_alarm" msgid="3959908972897295660">"闹钟已设置为：<xliff:g id="TIME">%s</xliff:g>。"</string>
+
+    <string name="accessibility_quick_settings_ringer">声音 <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">震动 <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+
     <string name="data_usage_disabled_dialog_3g_title" msgid="5257833881698644687">"2G-3G 数据网络已停用"</string>
     <string name="data_usage_disabled_dialog_4g_title" msgid="4789143363492682629">"4G 数据网络已停用"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="1046047248844821202">"移动数据已停用"</string>
@@ -176,6 +182,8 @@
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"屏幕锁定为横向模式。"</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"屏幕锁定为纵向模式。"</string>
     <string name="jelly_bean_dream_name" msgid="5992026543636816792">"果冻豆大乱舞"</string>
+    <string name="bean_dream_settings_cid_title">使用 CID 头像</string>
+    <string name="bean_dream_settings_cid_summary">在大乱舞内使用 CID 的头像代替果冻豆</string>
     <string name="start_dreams" msgid="7219575858348719790">"互动屏保"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"以太网"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"飞行模式"</string>
@@ -201,8 +209,29 @@
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi 已关闭"</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Wi-Fi 显示设备"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"无线显示"</string>
+    <!-- QuickSettings: Profile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_profile_label">情景模式</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"亮度"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"自动"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"通知会显示在这里"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"向下滑动可随时查看通知。"\n"再次向下滑动可使用系统控制功能。"</string>
+    <string name="powerwidget_screen_timeout_toast">屏幕超时设为: %1$d %2$s</string>
+
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_screen_sleep">进入睡眠</string>
+    <string name="quick_settings_ringer_on">声音开启</string>
+    <string name="quick_settings_ringer_off">声音关闭</string>
+    <string name="quick_settings_vibration_on">震动开启</string>
+    <string name="quick_settings_vibration_off">震动关闭</string>
+    <string name="quick_settings_label_enabled">开启</string>
+    <string name="quick_settings_label_disabled">关闭</string>
+    <string name="quick_settings_ringer_normal">声音</string>
+    <string name="quick_settings_lockscreen">锁屏</string>
+    <string name="quick_settings_network_type">网络模式</string>
+    <string name="quick_settings_report_bug">报告错误</string>
+    <string name="quick_settings_sync">同步</string>
+    <string name="quick_settings_torch">手电筒</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_screen_timeout">超时</string>
+
 </resources>
