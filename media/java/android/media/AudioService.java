@@ -4381,7 +4381,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         }
 
         synchronized(mAudioFocusLock) {
-            if (!canReassignAudioFocus()) {
+            if (!IN_VOICE_COMM_FOCUS_ID.equals(clientId) && !canReassignAudioFocus()) {
                 return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
             }
 
