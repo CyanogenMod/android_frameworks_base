@@ -33,6 +33,8 @@ public class NotificationPanelView extends PanelView {
 
     private static final float STATUS_BAR_SETTINGS_LEFT_PERCENTAGE = 0.8f;
     private static final float STATUS_BAR_SETTINGS_RIGHT_PERCENTAGE = 0.2f;
+    private static final float STATUS_BAR_SWIPE_HORIZONTAL_MIN_PERCENTAGE = 0.2f;
+    private static final float STATUS_BAR_SWIPE_VERTICAL_MAX_PERCENTAGE = 0.1f;
 
     private Drawable mHandleBar;
     private float mHandleBarHeight;
@@ -40,6 +42,10 @@ public class NotificationPanelView extends PanelView {
     private int mFingers;
     private PhoneStatusBar mStatusBar;
     private boolean mOkToFlip;
+
+    private float mGestureStartX;
+    private float mGestureStartY;
+    private boolean mTrackingSwipe;
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -97,8 +103,12 @@ public class NotificationPanelView extends PanelView {
     public boolean onTouchEvent(MotionEvent event) {
         if (PhoneStatusBar.SETTINGS_DRAG_SHORTCUT && mStatusBar.mHasFlipSettings) {
             boolean flip = false;
+            boolean swipeFlip = false;
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    mGestureStartX = event.getX(0);
+                    mGestureStartY = event.getY(0);
+                    mTrackingSwipe = isFullyExpanded();
                     mOkToFlip = getExpandedHeight() == 0;
                     if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_SETTINGS_RIGHT_PERCENTAGE) &&
                             Settings.System.getInt(getContext().getContentResolver(),
@@ -110,8 +120,21 @@ public class NotificationPanelView extends PanelView {
                         flip = true;
                     }
                     break;
+                case MotionEvent.ACTION_MOVE:
+                    final float deltaX = Math.abs(event.getX(0) - mGestureStartX);
+                    final float deltaY = Math.abs(event.getY(0) - mGestureStartY);
+                    final float maxDeltaY = getHeight() * STATUS_BAR_SWIPE_VERTICAL_MAX_PERCENTAGE;
+                    final float minDeltaX = getWidth() * STATUS_BAR_SWIPE_HORIZONTAL_MIN_PERCENTAGE;
+                    if (mTrackingSwipe && deltaX > deltaY && deltaY < maxDeltaY && deltaX > minDeltaX) {
+                        mTrackingSwipe = false;
+                        swipeFlip = true;
+                    }
+                    break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     flip = true;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    mTrackingSwipe = false;
                     break;
             }
             if (mOkToFlip && flip) {
@@ -130,6 +153,9 @@ public class NotificationPanelView extends PanelView {
                     }
                     mOkToFlip = false;
                 }
+            }
+            else if (swipeFlip) {
+                mStatusBar.flipPanels();
             }
         }
         return mHandleView.dispatchTouchEvent(event);
