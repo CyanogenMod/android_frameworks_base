@@ -1,22 +1,23 @@
 <html>
     <head>
-        <title>找不到网页</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>تور بەتنى تاپالمىدى</title>
         <style type="text/css">
             body { margin-top: 0px; padding-top: 0px; }
             h2   { margin-top: 5px; padding-top: 0px; }
         </style>
 
-        <body>
+        </head><body>
 
             <img src="file:///android_asset/webkit/android-weberror.png" align="top" />
-            <h2>找不到网页</h2>
-            <p><a href="%s">%s</a> 处的网页可能暂时出现故障，也可能已永久移至某个新的网络地址。</p>
+            <h2>تور بەتنى تاپالمىدى</h2>
+            <p><a href="%s">%s</a> دىكى تور بەتكە ۋاقتىنچە ئۇلىغىلى بولمايدۇ ياكى ئۇ مەڭگۈلۈك باشقا يېڭى ئادرېسقا يۆتكەلگەن.</p>
 
-            <p><b>以下是几点建议：</b></p>
+            <p><b>تۆۋەندىكىسى بىر قىسىم تەكلىپ:</b></p>
             <ul>
-                <li>进行检查以确保您的设备具有信号和数据连接</li>
-                <li>稍后重新载入该网页。</li>
-                <li>查看 Google 提供的该网页的缓存副本</li>
+                <li>ئۈسكۈنىڭىزدە سىگنال بارلىقى ۋە سانلىق مەلۇمات باغلىنىشى بارلىقىنى تەكشۈرۈڭ</li>
+                <li>سەل تۇرۇپ بۇ بەتنى قايتا يۈكلەڭ.</li>
+                <li>بۇ تور بەتنىڭ گۇگىل تەمىنلىگەن غەملەكتىكى نۇسخىسىنى كۆرۈڭ</li>
 
             </ul>
         </body>
