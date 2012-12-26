@@ -185,8 +185,8 @@
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> Geräte)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth aus"</string>
     <string name="quick_settings_brightness_label" msgid="6968372297018755815">"Helligkeit"</string>
-    <string name="quick_settings_rotation_unlocked_label" msgid="336054930362580584">"Autom. drehen"</string>
-    <string name="quick_settings_rotation_locked_label" msgid="8058646447242565486">"Drehung gesperrt"</string>
+    <string name="quick_settings_rotation_unlocked_label" msgid="336054930362580584">"Automatisch"</string>
+    <string name="quick_settings_rotation_locked_label" msgid="8058646447242565486">"Gesperrt"</string>
     <string name="quick_settings_ime_label" msgid="7073463064369468429">"Eingabemethode"</string>
     <string name="quick_settings_location_label" msgid="3292451598267467545">"Verwendeter Standort"</string>
     <string name="quick_settings_media_device_label" msgid="1302906836372603762">"Mediengerät"</string>
@@ -223,9 +223,14 @@
     <string name="quick_settings_label_enabled">An</string>
     <string name="quick_settings_label_disabled">Aus</string>
     <string name="quick_settings_ringer_normal">Ton</string>
-    <string name="quick_settings_lockscreen">Bildschirmsperre</string>
-    <string name="quick_settings_network_type">Netzwerktyp</string>
+    <string name="quick_settings_lockscreen">Sperren</string>
+    <string name="quick_settings_network_type">Netzmodus</string>
     <string name="quick_settings_report_bug">Fehlerprotokollierung</string>
+    <string name="quick_settings_sync">Sync</string>
+    <string name="quick_settings_torch">Lampe</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_screen_timeout">Timeout</string>
+    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
 
 <!-- **** CYANOGENMOD EDITS END **** -->
 </resources>
