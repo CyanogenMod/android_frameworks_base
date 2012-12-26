@@ -222,4 +222,8 @@
     <string name="quick_settings_lockscreen">Képernyőzár</string>
     <string name="quick_settings_network_type">Hálózat típusa</string>
     <string name="quick_settings_report_bug">Hibajelentés</string>
+    <string name="quick_settings_sync">Szinkronizálás</string>
+    <string name="quick_settings_torch">Zseblámpa</string>
+    <string name="quick_settings_screen_timeout">Időkorlát: </string>
+
 </resources>
