@@ -75,7 +75,7 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
     private final WakeLock mWakeLock;  // held while there is a pending route change
     private final AudioManager mAudioManager;
 
-    private int mHeadsetState;
+    private static int mHeadsetState;
 
     private int mSwitchValues;
 
@@ -362,6 +362,14 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
                 } else {
                     Slog.w(TAG, "This kernel does not have wired headset support");
                 }
+
+                uei = new UEventInfo("Headset", BIT_HEADSET, BIT_HEADSET_NO_MIC);
+                if (uei.checkSwitchExists()) {
+                    retVal.add(uei);
+                } else {
+                    Slog.w(TAG, "This kernel does not have HTC wired headset support");
+                }
+
             }
 
             // Monitor USB
@@ -470,7 +478,7 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
                 int setBits = ((switchState == 1) ? mState1Bits :
                               ((switchState == 2) ? mState2Bits : 0));
 
-                return ((headsetState & preserveMask) | setBits);
+                return ((headsetState & preserveMask | setBits));
             }
         }
     }
