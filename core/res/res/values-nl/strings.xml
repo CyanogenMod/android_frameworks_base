@@ -1444,4 +1444,40 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Toegankelijkheid geannuleerd."</string>
     <string name="user_switched" msgid="3768006783166984410">"Huidige gebruiker <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Eigenaar"</string>
+
+    <!-- CYANOGENMOD EDITS -->
+
+    <string name="profileNameDefault">Standaard</string>
+    <string name="profileNameWork">Zakelijk</string>
+    <string name="profileNameHome">Thuis</string>
+    <string name="profileNameSilent">Stil</string>
+    <string name="profileNameNight">\'s Nachts</string>
+    <string name="profileGroupPhone">Telefoon</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-mail</string>
+    <string name="profileGroupSMS">Sms</string>
+    <string name="wildcardProfile">Anders</string>
+    <string name="reboot_system" product="tablet">Tablet herstarten</string>
+    <string name="global_action_screenshot">Schermafdruk</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Uitgebreid bureaublad</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Ingeschakeld</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Uitgeschakeld</string>
+    <string name="reboot_reboot">Herstarten</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Herstarten\u2026</string>
+    <string name="reboot_confirm" product="tablet">Uw tablet wordt herstart.</string>
+    <string name="reboot_confirm" product="default">Uw telefoon wordt herstart.</string>
+    <string name="permlab_preventpower">aan/uit-knop beheren</string>
+    <string name="permdesc_preventpower">Hiermee kan een app het gedrag van de aan/uit-knop wijzigen</string>
+    <string name="lockscreen_discharging">Ontladen, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="app_killed_message">App afgesloten</string>
+    <string name="global_action_reboot">Herstarten</string>
+    <string name="global_action_choose_profile">Profiel</string>
+    <string name="toast_rotation_unlocked">Scherm wordt automatisch gedraaid</string>
+    <string name="toast_rotation_locked">Scherm wordt niet automatisch gedraaid</string>
 </resources>
