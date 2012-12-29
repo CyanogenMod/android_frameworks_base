@@ -656,6 +656,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
     int mIncallPowerBehavior;
 
+    // Behavior of HOME button during incomming call ring.
+    // (See Settings.Secure.RING_HOME_BUTTON_BEHAVIOR.)
+    int mRingHomeBehavior;
+
     Display mDisplay;
 
     private int mDisplayRotation;
@@ -833,6 +837,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                            CMSettings.Secure.RING_HOME_BUTTON_BEHAVIOR), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.WAKE_GESTURE_ENABLED), false, this,
@@ -2138,6 +2145,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR,
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT,
                     UserHandle.USER_CURRENT);
+            mRingHomeBehavior = CMSettings.Secure.getIntForUser(resolver,
+                    CMSettings.Secure.RING_HOME_BUTTON_BEHAVIOR,
+                    CMSettings.Secure.RING_HOME_BUTTON_BEHAVIOR_DEFAULT,
+                    UserHandle.USER_CURRENT);
             mHomeWakeScreen = (CMSettings.System.getIntForUser(resolver,
                     CMSettings.System.HOME_WAKE_SCREEN, 1, UserHandle.USER_CURRENT) == 1) &&
                     ((mDeviceHardwareWakeKeys & KEY_MASK_HOME) != 0);
@@ -3229,8 +3240,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // and his ONLY options are to answer or reject the call.)
                 TelecomManager telecomManager = getTelecommService();
                 if (telecomManager != null && telecomManager.isRinging()) {
-                    Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
-                    return -1;
+                    if ((mRingHomeBehavior
+                            & CMSettings.Secure.RING_HOME_BUTTON_BEHAVIOR_ANSWER) != 0) {
+                        Log.i(TAG, "Answering with HOME button.");
+                        telecomManager.acceptRingingCall();
+                        return -1;
+                    } else {
+                        Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
+                        return -1;
+                    }
                 }
 
                 // Delay handling home if a double-tap is possible.
@@ -7828,6 +7846,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         pw.print(prefix);
                 pw.print("mShortPressOnPowerBehavior="); pw.print(mShortPressOnPowerBehavior);
                 pw.print(" mLongPressOnPowerBehavior="); pw.println(mLongPressOnPowerBehavior);
+                pw.print(" mRingHomeBehavior="); pw.print(mRingHomeBehavior);
         pw.print(prefix);
                 pw.print("mDoublePressOnPowerBehavior="); pw.print(mDoublePressOnPowerBehavior);
                 pw.print(" mTriplePressOnPowerBehavior="); pw.println(mTriplePressOnPowerBehavior);
