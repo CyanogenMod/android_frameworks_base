@@ -515,6 +515,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     Display mDisplay;
 
+    // Behavior of HOME button during incomming call ring.
+    // (See Settings.Secure.RING_HOME_BUTTON_BEHAVIOR.)
+    int mRingHomeBehavior;
+
     int mLandscapeRotation = 0;  // default landscape rotation
     int mSeascapeRotation = 0;   // "other" landscape rotation, 180 degrees from mLandscapeRotation
     int mPortraitRotation = 0;   // default portrait rotation
@@ -595,6 +599,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.RING_HOME_BUTTON_BEHAVIOR), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_WAKE_SCREEN), false, this,
@@ -1312,6 +1319,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mIncallPowerBehavior = Settings.Secure.getIntForUser(resolver,
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR,
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT,
+                    UserHandle.USER_CURRENT);
+            mRingHomeBehavior = Settings.Secure.getIntForUser(resolver,
+                    Settings.Secure.RING_HOME_BUTTON_BEHAVIOR,
+                    Settings.Secure.RING_HOME_BUTTON_BEHAVIOR_DEFAULT,
                     UserHandle.USER_CURRENT);
             mVolumeWakeScreen = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
@@ -2168,23 +2179,25 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                     mHomePressed = false;
                     if (!canceled) {
-                        // If an incoming call is ringing, HOME is totally disabled.
-                        // (The user is already on the InCallScreen at this point,
-                        // and his ONLY options are to answer or reject the call.)
                         boolean incomingRinging = false;
                         try {
                             ITelephony telephonyService = getTelephonyService();
                             if (telephonyService != null) {
                                 incomingRinging = telephonyService.isRinging();
                             }
+                            if (incomingRinging) {
+                                if ((mRingHomeBehavior
+                                        & Settings.Secure.RING_HOME_BUTTON_BEHAVIOR_ANSWER) != 0) {
+                                    Log.i(TAG, "Answering with HOME button.");
+                                    telephonyService.answerRingingCall();
+                                } else {
+                                    Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
+                                }
+                            } else {
+                                launchHomeFromHotKey();
+                            }
                         } catch (RemoteException ex) {
                             Log.w(TAG, "RemoteException from getPhoneInterface()", ex);
-                        }
-
-                        if (incomingRinging) {
-                            Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
-                        } else {
-                            launchHomeFromHotKey();
                         }
                     } else {
                         Log.i(TAG, "Ignoring HOME; event canceled.");
@@ -5147,6 +5160,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 pw.print(" mLockScreenTimerActive="); pw.println(mLockScreenTimerActive);
         pw.print(prefix); pw.print("mEndcallBehavior="); pw.print(mEndcallBehavior);
                 pw.print(" mIncallPowerBehavior="); pw.print(mIncallPowerBehavior);
+                pw.print(" mRingHomeBehavior="); pw.print(mRingHomeBehavior);
                 pw.print(" mLongPressOnHomeBehavior="); pw.println(mLongPressOnHomeBehavior);
         pw.print(prefix); pw.print("mLandscapeRotation="); pw.print(mLandscapeRotation);
                 pw.print(" mSeascapeRotation="); pw.println(mSeascapeRotation);
