@@ -370,6 +370,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mVolBtnMusicControls;
     boolean mIsLongPress;
 
+    // Power button torch
+    boolean mPowerButtonTorch;
+    boolean mTorchOn;
+
     private static final class PointerLocationInputEventReceiver extends InputEventReceiver {
         private final PointerLocationView mView;
 
@@ -642,6 +646,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HARDWARE_KEY_REBINDING), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.POWER_BUTTON_TORCH), false, this);
 
             updateSettings();
         }
@@ -925,6 +931,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
     };
+
+    private final Runnable mTorchLongPress = new Runnable() {
+        @Override
+        public void run() {
+            toggleTorch(true); // on
+        }
+    };
+
+    void toggleTorch(boolean on) {
+        Intent intent = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
+        intent.putExtra("strobe", false);
+        intent.putExtra("period", 0);
+        intent.putExtra("bright", false);
+        mContext.sendOrderedBroadcast(intent, null);
+        mTorchOn = on;
+    }
 
     void showGlobalActionsDialog() {
         if (mGlobalActions == null) {
@@ -1317,6 +1339,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mVolBtnMusicControls = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1);
+
+            mPowerButtonTorch = (Settings.System.getIntForUser(resolver,
+                    Settings.System.POWER_BUTTON_TORCH, 0, UserHandle.USER_CURRENT) == 1);
 
             boolean keyRebindingEnabled = Settings.System.getInt(resolver,
                     Settings.System.HARDWARE_KEY_REBINDING, 0) == 1;
@@ -3737,6 +3762,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         final boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
+        final boolean up = event.getAction() == KeyEvent.ACTION_UP;
         final boolean canceled = event.isCanceled();
         int keyCode = event.getKeyCode();
 
@@ -3785,7 +3811,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // When the screen is off and the key is not injected, determine whether
             // to wake the device but don't pass the key to the application.
             result = 0;
-            if (down && isWakeKey && isWakeKeyWhenScreenOff(keyCode)) {
+            if (((down && !mPowerButtonTorch) || (up && !mTorchOn && mPowerButtonTorch))
+                    && isWakeKey && isWakeKeyWhenScreenOff(keyCode)) {
                 if (keyguardActive) {
                     // If the keyguard is showing, let it wake the device when ready.
                     mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode);
@@ -3932,6 +3959,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             case KeyEvent.KEYCODE_POWER: {
+                // handle power key long-press
+                if (mPowerButtonTorch && !isScreenOn) {
+                    if (down) {
+                        mHandler.postDelayed(mTorchLongPress, 1000);
+                        break;
+                    }
+
+                    if (up) {
+                        mHandler.removeCallbacks(mTorchLongPress);
+                        if (mTorchOn) {
+                            toggleTorch(false); // off
+                            break;
+                        }
+                    }
+                }
+
                 if ((mTopFullscreenOpaqueWindowState.getAttrs().flags
                         & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0){
                     return result;
