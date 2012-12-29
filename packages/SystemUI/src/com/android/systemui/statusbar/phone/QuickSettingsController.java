@@ -469,5 +469,10 @@ public class QuickSettingsController {
         }
     }
 
-    public void updateResources() {}
+    public void updateResources() {
+        ((QuickSettingsContainerView) mContainerView).updateResources();
+        mContainerView.removeAllViews();
+        setupQuickSettings();
+        mContainerView.requestLayout();
+    }
 }
