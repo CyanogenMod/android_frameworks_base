@@ -2968,6 +2968,12 @@ public final class Settings {
         public static final String LOCKSCREEN_VIBRATE_ENABLED = "lockscreen.vibrate_enabled";
 
         /**
+         * Whether to control torch by holding power button with screen off
+         * @hide
+         */
+        public static final String POWER_BUTTON_TORCH = "power_button_torch";
+
+        /**
          * Show the pending notification counts as overlays on the status bar
          * Whether to enable custom rebindings of the actions performed on
          * certain key press events.
