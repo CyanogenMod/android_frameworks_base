@@ -346,7 +346,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
                 mKeyguardStatusViewManager.updateStatusLines(true);
                 mCallback.keyguardDone(true);
                 mCallback.reportSuccessfulUnlockAttempt();
-                KeyStore.getInstance().password(LockPatternUtils.patternToString(pattern));
+                KeyStore.getInstance().password(mLockPatternUtils.patternToString(pattern));
             } else {
                 boolean reportFailedAttempt = false;
                 if (pattern.size() > MIN_PATTERN_BEFORE_POKE_WAKELOCK) {
