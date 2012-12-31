@@ -26,6 +26,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 
 /**
  * This activity is shown to the user to confirm formatting of external media.
@@ -34,6 +36,10 @@ import android.util.Log;
 public class ExternalMediaFormatActivity extends AlertActivity implements DialogInterface.OnClickListener {
 
     private static final int POSITIVE_BUTTON = AlertDialog.BUTTON_POSITIVE;
+    public static final String FORMAT_PATH = "format_path";
+
+    private StorageManager mStorageManager;
+    private StorageVolume mStorageVolume = null;
 
     /** Used to detect when the media state changes, in case we need to call finish() */
     private BroadcastReceiver mStorageReceiver = new BroadcastReceiver() {
@@ -55,12 +61,36 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (mStorageManager == null) {
+            mStorageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
+        }
+
+        if (savedInstanceState == null) {
+            String path = getIntent().getStringExtra(FORMAT_PATH);
+            StorageVolume[] volumes = mStorageManager.getVolumeList();
+
+            // I don't know how else to work out which mount point needs to be
+            // formatted... but that's what this does
+            for (int i = 0; i < volumes.length && mStorageVolume == null; i++) {
+                if (path.equals(volumes[i].getPath())) {
+                    mStorageVolume = volumes[i];
+                }
+            }
+        }
+
+        Log.d("ExternalMediaFormatActivity", "The storage volume to be formatted is : " + mStorageVolume.getPath());
+
         Log.d("ExternalMediaFormatActivity", "onCreate!");
         // Set up the "dialog"
         final AlertController.AlertParams p = mAlertParams;
         p.mIconId = com.android.internal.R.drawable.stat_sys_warning;
         p.mTitle = getString(com.android.internal.R.string.extmedia_format_title);
-        p.mMessage = getString(com.android.internal.R.string.extmedia_format_message);
+        // TODO: This needs a proper message to tell the user which device will
+        // be formatted
+        // e.g., "Make sure you don't need anything on /mnt/usbdisk0", or
+        // something
+        p.mMessage = getString(com.android.internal.R.string.extmedia_format_message)
+                + "\nEverything at this path will be deleted: " + mStorageVolume.getPath();
         p.mPositiveButtonText = getString(com.android.internal.R.string.extmedia_format_button_format);
         p.mPositiveButtonListener = this;
         p.mNegativeButtonText = getString(com.android.internal.R.string.cancel);
@@ -95,6 +125,10 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
         if (which == POSITIVE_BUTTON) {
             Intent intent = new Intent(ExternalStorageFormatter.FORMAT_ONLY);
             intent.setComponent(ExternalStorageFormatter.COMPONENT_NAME);
+            // I think this StorageVolume is supposed to come from the calling
+            // intent... which it doesn't
+            // See earlier hack in onCreate
+            intent.putExtra(StorageVolume.EXTRA_STORAGE_VOLUME, mStorageVolume);
             startService(intent);
         }
 
