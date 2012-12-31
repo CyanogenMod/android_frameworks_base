@@ -52,6 +52,7 @@ public abstract class PowerButton {
     public static final String BUTTON_LTE = "toggleLte";
     public static final String BUTTON_WIMAX = "toggleWimax";
     public static final String BUTTON_REBOOT = "toggleReboot";
+    public static final String BUTTON_FCHARGE = "toggleFCharge";
     public static final String BUTTON_UNKNOWN = "unknown";
     private static final String SEPARATOR = "OV=I=XseparatorX=I=VO";
     private static final Mode MASK_MODE = Mode.SCREEN;
