@@ -26,79 +26,118 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 
 /**
  * This activity is shown to the user to confirm formatting of external media.
- * It uses the alert dialog style. It will be launched from a notification, or from settings
+ * It uses the alert dialog style. It will be launched from a notification, or
+ * from settings
  */
-public class ExternalMediaFormatActivity extends AlertActivity implements DialogInterface.OnClickListener {
+public class ExternalMediaFormatActivity extends AlertActivity implements
+		DialogInterface.OnClickListener {
 
-    private static final int POSITIVE_BUTTON = AlertDialog.BUTTON_POSITIVE;
+	private static final int POSITIVE_BUTTON = AlertDialog.BUTTON_POSITIVE;
+	public static final String FORMAT_PATH = "format_path";
 
-    /** Used to detect when the media state changes, in case we need to call finish() */
-    private BroadcastReceiver mStorageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            Log.d("ExternalMediaFormatActivity", "got action " + action);
+	private StorageManager mStorageManager;
+	private StorageVolume mStorageVolume = null;
 
-            if (action == Intent.ACTION_MEDIA_REMOVED ||
-                action == Intent.ACTION_MEDIA_CHECKING ||
-                action == Intent.ACTION_MEDIA_MOUNTED ||
-                action == Intent.ACTION_MEDIA_SHARED) {
-                finish();
-            }
-        }
-    };
-    
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	/**
+	 * Used to detect when the media state changes, in case we need to call
+	 * finish()
+	 */
+	private BroadcastReceiver mStorageReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			Log.d("ExternalMediaFormatActivity", "got action " + action);
 
-        Log.d("ExternalMediaFormatActivity", "onCreate!");
-        // Set up the "dialog"
-        final AlertController.AlertParams p = mAlertParams;
-        p.mIconId = com.android.internal.R.drawable.stat_sys_warning;
-        p.mTitle = getString(com.android.internal.R.string.extmedia_format_title);
-        p.mMessage = getString(com.android.internal.R.string.extmedia_format_message);
-        p.mPositiveButtonText = getString(com.android.internal.R.string.extmedia_format_button_format);
-        p.mPositiveButtonListener = this;
-        p.mNegativeButtonText = getString(com.android.internal.R.string.cancel);
-        p.mNegativeButtonListener = this;
-        setupAlert();
-    }
+			if (action == Intent.ACTION_MEDIA_REMOVED
+					|| action == Intent.ACTION_MEDIA_CHECKING
+					|| action == Intent.ACTION_MEDIA_MOUNTED
+					|| action == Intent.ACTION_MEDIA_SHARED) {
+				finish();
+			}
+		}
+	};
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Log.d("ExternalMediaFormatActivity", "onCreate!");
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_MEDIA_REMOVED);
-        filter.addAction(Intent.ACTION_MEDIA_CHECKING);
-        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
-        filter.addAction(Intent.ACTION_MEDIA_SHARED);
-        registerReceiver(mStorageReceiver, filter);
-    }
+		if (mStorageManager == null) {
+			mStorageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
+		}
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        unregisterReceiver(mStorageReceiver);
-    }
+		if (savedInstanceState == null) {
+			String path = getIntent().getStringExtra(FORMAT_PATH);
+			StorageVolume[] volumes = mStorageManager.getVolumeList();
 
-    /**
-     * {@inheritDoc}
-     */
-    public void onClick(DialogInterface dialog, int which) {
+			// I don't know how else to work out which mount point needs to be
+			// formatted... but that's what this does
+			for (int i = 0; i < volumes.length && mStorageVolume == null; i++) {
+				if (path.equals(volumes[i].getPath())) {
+					mStorageVolume = volumes[i];
+				}
+			}
+		}
 
-        if (which == POSITIVE_BUTTON) {
-            Intent intent = new Intent(ExternalStorageFormatter.FORMAT_ONLY);
-            intent.setComponent(ExternalStorageFormatter.COMPONENT_NAME);
-            startService(intent);
-        }
+		Log.d("ExternalMediaFormatActivity",
+				"The storage volume to be formatted is : " + mStorageVolume.getPath());
 
-        // No matter what, finish the activity
-        finish();
-    }
+		// Set up the "dialog"
+		final AlertController.AlertParams p = mAlertParams;
+		p.mIconId = com.android.internal.R.drawable.stat_sys_warning;
+		p.mTitle = getString(com.android.internal.R.string.extmedia_format_title);
+		//TODO: This needs a proper message to tell the user which device will be formatted
+		// e.g., "Make sure you don't need anything on /mnt/usbdisk0", or something
+		p.mMessage = getString(com.android.internal.R.string.extmedia_format_message)
+				+ "\nPath: " + mStorageVolume.getPath();
+		p.mPositiveButtonText = getString(com.android.internal.R.string.extmedia_format_button_format);
+		p.mPositiveButtonListener = this;
+		p.mNegativeButtonText = getString(com.android.internal.R.string.cancel);
+		p.mNegativeButtonListener = this;
+		setupAlert();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Intent.ACTION_MEDIA_REMOVED);
+		filter.addAction(Intent.ACTION_MEDIA_CHECKING);
+		filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+		filter.addAction(Intent.ACTION_MEDIA_SHARED);
+		registerReceiver(mStorageReceiver, filter);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		unregisterReceiver(mStorageReceiver);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void onClick(DialogInterface dialog, int which) {
+
+		if (which == POSITIVE_BUTTON) {
+			Intent intent = new Intent(ExternalStorageFormatter.FORMAT_ONLY);
+			intent.setComponent(ExternalStorageFormatter.COMPONENT_NAME);
+			// I think this StorageVolume is supposed to come from the calling
+			// intent...
+			// which it doesn't
+			// See earlier hack in onCreate
+			intent.putExtra(StorageVolume.EXTRA_STORAGE_VOLUME, mStorageVolume);
+			startService(intent);
+		}
+
+		// No matter what, finish the activity
+		finish();
+	}
 }
