@@ -26,6 +26,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 
 /**
  * This activity is shown to the user to confirm formatting of external media.
@@ -34,6 +36,10 @@ import android.util.Log;
 public class ExternalMediaFormatActivity extends AlertActivity implements DialogInterface.OnClickListener {
 
     private static final int POSITIVE_BUTTON = AlertDialog.BUTTON_POSITIVE;
+    public static final String FORMAT_PATH = "format_path";
+
+    private StorageManager mStorageManager;
+    private StorageVolume mStorageVolume = null;
 
     /** Used to detect when the media state changes, in case we need to call finish() */
     private BroadcastReceiver mStorageReceiver = new BroadcastReceiver() {
@@ -50,16 +56,37 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
             }
         }
     };
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // This is necessary because this class's caller,
+        // packages/SystemUI/src/com/android/systemui/usb/StorageNotification.java,
+        // supplies the path to be erased/formatted as a String, instead of a
+        // StorageVolume. This for-loop gets the correct StorageVolume from the
+        // given path.
+        mStorageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
+        String path = getIntent().getStringExtra(FORMAT_PATH);
+        StorageVolume[] volumes = mStorageManager.getVolumeList();
+
+        for (StorageVolume sv : volumes) {
+            if (path.equals(sv.getPath())) {
+                mStorageVolume = sv;
+                break;
+            }
+        }
+
         Log.d("ExternalMediaFormatActivity", "onCreate!");
+        Log.d("ExternalMediaFormatActivity", "The storage volume to be formatted is : "
+                + mStorageVolume.getPath());
+
         // Set up the "dialog"
         final AlertController.AlertParams p = mAlertParams;
         p.mTitle = getString(com.android.internal.R.string.extmedia_format_title);
-        p.mMessage = getString(com.android.internal.R.string.extmedia_format_message);
+        p.mMessage = String.format(
+                getString(com.android.internal.R.string.extmedia_format_message),
+                mStorageVolume.getPath());
         p.mPositiveButtonText = getString(com.android.internal.R.string.extmedia_format_button_format);
         p.mPositiveButtonListener = this;
         p.mNegativeButtonText = getString(com.android.internal.R.string.cancel);
@@ -82,7 +109,7 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
     @Override
     protected void onPause() {
         super.onPause();
-        
+
         unregisterReceiver(mStorageReceiver);
     }
 
@@ -94,6 +121,7 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
         if (which == POSITIVE_BUTTON) {
             Intent intent = new Intent(ExternalStorageFormatter.FORMAT_ONLY);
             intent.setComponent(ExternalStorageFormatter.COMPONENT_NAME);
+            intent.putExtra(StorageVolume.EXTRA_STORAGE_VOLUME, mStorageVolume);
             startService(intent);
         }
 
