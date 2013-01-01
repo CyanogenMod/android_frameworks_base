@@ -24,6 +24,8 @@ import static android.media.AudioManager.RINGER_MODE_VIBRATE;
 import android.app.Activity;
 import android.app.ActivityManagerNative;
 import android.app.KeyguardManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
 import android.app.PendingIntent.OnFinished;
@@ -42,6 +44,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -70,6 +73,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.VolumePanel;
 
+import com.android.internal.R;
 import com.android.internal.app.ThemeUtils;
 import com.android.internal.telephony.ITelephony;
 
@@ -441,6 +445,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     private boolean mDockAudioMediaEnabled = true;
 
+    private NotificationManager mNotificationManager;
+
     ///////////////////////////////////////////////////////////////////////////
     // Construction
     ///////////////////////////////////////////////////////////////////////////
@@ -504,6 +510,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         IntentFilter intentFilter =
                 new IntentFilter(BluetoothHeadset.ACTION_AUDIO_STATE_CHANGED);
         intentFilter.addAction(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED);
+        intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
         intentFilter.addAction(Intent.ACTION_DOCK_EVENT);
         intentFilter.addAction(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG);
         intentFilter.addAction(Intent.ACTION_USB_AUDIO_DEVICE_PLUG);
@@ -555,6 +562,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         mHasRemotePlayback = false;
         mMainRemoteIsActive = false;
         postReevaluateRemote();
+
+        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     private void createAudioSystemThread() {
@@ -3985,6 +3994,35 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                             AudioSystem.DEVICE_STATE_UNAVAILABLE,
                             "");
                     mConnectedDevices.remove(AudioSystem.DEVICE_OUT_PROXY);
+                }
+            } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                if (mNotificationManager != null) {
+                    state = intent.getIntExtra("state", 0);
+                    if (state == 1) {
+                        final int id = com.android.internal.R.string.headset_plug_notification_title;
+                        Resources r = context.getResources();
+                        CharSequence title = r.getText(id);
+                        CharSequence message = r.getText(com.android.internal.R.string.headset_plug_notification_message);
+
+                        Notification notification = new Notification();
+                        notification.icon = com.android.internal.R.drawable.stat_sys_headset;
+                        notification.when = 0;
+                        notification.flags = Notification.FLAG_ONGOING_EVENT;
+                        notification.tickerText = title;
+                        notification.defaults = 0;
+                        notification.sound = null;
+                        notification.vibrate = null;
+
+                        Intent headsetIntent = Intent.makeRestartActivityTask(
+                                new ComponentName("com.android.settings",
+                                        "com.android.settings.SoundSettings"));
+                        PendingIntent pi = PendingIntent.getActivity(context, 0, headsetIntent, 0);
+                        notification.setLatestEventInfo(context, title, message, pi);
+                        mNotificationManager.notify(id, notification);
+                    } else {
+                        final int id = com.android.internal.R.string.headset_plug_notification_title;
+                        mNotificationManager.cancel(id);
+                    }
                 }
             }
         }
