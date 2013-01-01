@@ -4059,4 +4059,7 @@
     <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">Display rotation unlocked</string>
     <string name="toast_rotation_locked">Display rotation locked</string>
+
+    <string name="headset_plug_notification_title">Headset plugged in</string>
+    <string name="headset_plug_notification_message">Select for sound options.</string>
 </resources>
