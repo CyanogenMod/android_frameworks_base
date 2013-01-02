@@ -225,4 +225,9 @@
     <string name="bean_dream_settings_cid_title">Usar cabeça CID</string>
     <string name="bean_dream_settings_cid_summary">Usar cabeça CID em vez de jujuba dentro do sonho</string>
     <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="quick_settings_sync">Sincronização</string>
+    <string name="quick_settings_torch">Tocha</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_screen_timeout">Tempo limite</string>
+    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
 </resources>
