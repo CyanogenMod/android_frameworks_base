@@ -15,7 +15,7 @@ public class AirplaneButton extends PowerButton {
 
     private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
     static {
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.AIRPLANE_MODE_ON));
+        OBSERVED_URIS.add(Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON));
     }
 
     public AirplaneButton() { mType = BUTTON_AIRPLANE; }
@@ -34,8 +34,8 @@ public class AirplaneButton extends PowerButton {
     @Override
     protected void toggleState(Context context) {
         boolean state = getState(context);
-        Settings.System.putInt(context.getContentResolver(),
-            Settings.System.AIRPLANE_MODE_ON, state ? 0 : 1);
+        Settings.Global.putInt(context.getContentResolver(),
+            Settings.Global.AIRPLANE_MODE_ON, state ? 0 : 1);
         // notify change
         Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         // Reverse state when sending the intent, since we grabbed it before the toggle.
@@ -58,8 +58,8 @@ public class AirplaneButton extends PowerButton {
     }
 
     private boolean getState(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
-                 Settings.System.AIRPLANE_MODE_ON,0) == 1;
+        return Settings.Global.getInt(context.getContentResolver(),
+                 Settings.Global.AIRPLANE_MODE_ON,0) == 1;
     }
 }
 
