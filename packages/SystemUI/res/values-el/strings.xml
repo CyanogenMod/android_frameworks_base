@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Προβoλή σε πλήρη οθ."</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Ζουμ για συμβατότητα"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Όταν μια εφαρμογή έχει σχεδιαστεί για προβολή σε μικρότερη οθόνη, δίπλα από το ρολόι θα εμφανιστεί ένα στοιχείο ελέγχου ζουμ."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Αποθήκ. στιγμιότυπου οθόνης..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Αποθήκευση στιγμιότυπου οθόνης..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Αποθήκ. στιγμιότυπου οθόνης\u2026"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Αποθήκευση στιγμιότυπου οθόνης\u2026"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Γίνεται αποθήκευση του στιγμιότυπου οθόνης."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Λήφθηκε το στιγμιότυπο οθόνης ."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Αγγίξτε για να δείτε το στιγμιότυπο οθόνης σας"</string>
@@ -134,9 +134,6 @@
     <string name="accessibility_no_sim" msgid="8274017118472455155">"Δεν υπάρχει SIM."</string>
     <string name="accessibility_bluetooth_tether" msgid="4102784498140271969">"Πρόσδεση Bluetooth"</string>
     <string name="accessibility_airplane_mode" msgid="834748999790763092">"Λειτουργία πτήσης."</string>
-    <!-- String.format failed for translation -->
-    <!-- no translation found for accessibility_battery_level (7451474187113371965) -->
-    <skip />
     <string name="accessibility_settings_button" msgid="799583911231893380">"Ρυθμίσεις συστήματος."</string>
     <string name="accessibility_notifications_button" msgid="4498000369779421892">"Ειδοποιήσεις."</string>
     <string name="accessibility_remove_notification" msgid="3603099514902182350">"Εκκαθάριση ειδοποίησης."</string>
@@ -205,4 +202,32 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"ΑΥΤΟΜΑΤΗ"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Οι ειδοποιήσεις εμφανίζονται εδώ"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Μεταβείτε σε αυτές ανά πάσα στιγμή σύροντας προς τα κάτω."\n"Σύρετε ξανά προς τα κάτω για τα στοιχεία ελέγχου συστήματος."</string>
+
+    <string name="powerwidget_screen_timeout_toast">Λήξη χρον. ορίου οθόνης: %1$d %2$s</string>
+
+    <string name="accessibility_quick_settings_ringer">Ήχος <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Δόνηση <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_screen_sleep">Αναστολή λειτουργίας</string>
+    <string name="quick_settings_ringer_on">Ήχος ενεργός</string>
+    <string name="quick_settings_ringer_off">Ήχος ανενεργός</string>
+    <string name="quick_settings_vibration_on">Δόνηση ενεργή</string>
+    <string name="quick_settings_vibration_off">Δόνηση ανενεργή</string>
+    <string name="quick_settings_label_enabled">Ενεργό</string>
+    <string name="quick_settings_label_disabled">Ανενεργό</string>
+    <string name="quick_settings_ringer_normal">Ήχος</string>
+    <string name="quick_settings_lockscreen">Οθόνη κλειδώματος</string>
+    <string name="quick_settings_network_type">Δίκτυο</string>
+    <string name="quick_settings_report_bug">Αναφορά σφάλματος</string>
+    <string name="quick_settings_sync">Συγχρονισμός</string>
+    <string name="quick_settings_torch">Φακός</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_screen_timeout">Χρ. όριο οθόνης</string>
+    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
+
+    <string name="quick_settings_profile_label">Προφίλ</string>
+
+    <string name="bean_dream_settings_cid_title">Χρήση κεφαλιού CID</string>
+    <string name="bean_dream_settings_cid_summary">Χρήση του κεφαλιού CID αντί για το jellybean στο dream</string>
 </resources>
