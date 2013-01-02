@@ -1541,6 +1541,13 @@
         <enum name="KEYCODE_YEN" value="216" />
         <enum name="KEYCODE_RO" value="217" />
         <enum name="KEYCODE_KANA" value="218" />
+        <enum name="KEYCODE_TOGGLE_WIFI" value="220" />
+        <enum name="KEYCODE_TOGGLE_BT" value="221" />
+        <enum name="KEYCODE_TOGGLE_TOUCHPAD" value="222" />
+        <enum name="KEYCODE_BRIGHTNESS_DOWN" value="223" />
+        <enum name="KEYCODE_BRIGHTNESS_UP" value="224"/>
+        <enum name="KEYCODE_BRIGHTNESS_AUTO" value="225" />
+        <enum name="KEYCODE_SCREENSHOT" value="226" />
     </attr>
 
     <!-- ***************************************************************** -->
