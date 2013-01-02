@@ -624,7 +624,37 @@ public class KeyEvent extends InputEvent implements Parcelable {
      * Launches the global assist activity.  Not delivered to applications. */
     public static final int KEYCODE_ASSIST          = 219;
 
-    private static final int LAST_KEYCODE           = KEYCODE_ASSIST;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_WIFI;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_BT;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_TOUCHPAD;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_DOWN;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_UP;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_AUTO;
+    /** @hide */
+    public static final int KEYCODE_SCREENSHOT;
+
+
+    static { if(!getResources().getBoolean(com.android.internal.R.bool.config_transformerDockKeys)) {
+        LAST_KEYCODE = KEYCODE_ASSIST;
+        } else {
+            KEYCODE_TOGGLE_WIFI     = 220;
+            KEYCODE_TOGGLE_BT       = 221;
+            KEYCODE_TOGGLE_TOUCHPAD = 222;
+            KEYCODE_BRIGHTNESS_DOWN = 223;
+            KEYCODE_BRIGHTNESS_UP   = 224;
+            KEYCODE_BRIGHTNESS_AUTO = 225;
+            KEYCODE_SCREENSHOT      = 226;
+
+            LAST_KEYCODE = KEYCODE_SCREENSHOT;
+        }
+    };
+
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
@@ -866,6 +896,15 @@ public class KeyEvent extends InputEvent implements Parcelable {
         names.append(KEYCODE_RO, "KEYCODE_RO");
         names.append(KEYCODE_KANA, "KEYCODE_KANA");
         names.append(KEYCODE_ASSIST, "KEYCODE_ASSIST");
+        if(getResources().getBoolean(com.android.internal.R.bool.config_transformerDockKeys)) {
+            names.append(KEYCODE_TOGGLE_WIFI, "KEYCODE_TOGGLE_WIFI");
+            names.append(KEYCODE_TOGGLE_BT, "KEYCODE_TOGGLE_BT");
+            names.append(KEYCODE_TOGGLE_TOUCHPAD, "KEYCODE_TOGGLE_TOUCHPAD");
+            names.append(KEYCODE_BRIGHTNESS_DOWN, "KEYCODE_BRIGHTNESS_DOWN");
+            names.append(KEYCODE_BRIGHTNESS_UP, "KEYCODE_BRIGHTNESS_UP");
+            names.append(KEYCODE_BRIGHTNESS_AUTO, "KEYCODE_BRIGHTNESS_AUTO");
+            names.append(KEYCODE_SCREENSHOT, "KEYCODE_SCREENSHOT");
+        }
     };
 
     // Symbolic names of all metakeys in bit order from least significant to most significant.

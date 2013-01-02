@@ -1103,6 +1103,9 @@
     <!-- Name of that key handler class -->
     <string name="config_deviceKeyHandlerClass" translatable="false"></string>
 
+    <!-- Enable/Disable Transformer KeyEvents -->
+    <bool name="config_transformerDockKeys">false</bool>
+
     <!-- If a dock provides a lid switch, that lid can be removed. This
          setting is used to determine, whether lidOpenRotation has to be
          applied. -->
