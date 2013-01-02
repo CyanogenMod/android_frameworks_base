@@ -624,7 +624,23 @@ public class KeyEvent extends InputEvent implements Parcelable {
      * Launches the global assist activity.  Not delivered to applications. */
     public static final int KEYCODE_ASSIST          = 219;
 
-    private static final int LAST_KEYCODE           = KEYCODE_ASSIST;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_WIFI     = 220;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_BT       = 221;
+    /** @hide */
+    public static final int KEYCODE_TOGGLE_TOUCHPAD = 222;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_DOWN = 223;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_UP   = 224;
+    /** @hide */
+    public static final int KEYCODE_BRIGHTNESS_AUTO = 225;
+    /** @hide */
+    public static final int KEYCODE_SCREENSHOT      = 226;
+
+    private static final int LAST_KEYCODE           = KEYCODE_SCREENSHOT;
+
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
