@@ -203,4 +203,29 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTOMATISCH"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Meldingen worden hier weergegeven"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"U kunt de meldingen op elk gewenst moment openen door met uw vinger omlaag te vegen."\n"Veeg nogmaals met uw vinger omlaag om de systeembesturingselementen weer te geven."</string>
+
+    <!-- CYANOGENMOD EDITS -->
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_quick_settings_ringer">Geluid <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Trillen <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Hoofd van Cid gebruiken</string>
+    <string name="bean_dream_settings_cid_summary">Het hoofd van de mascotte van CyanogenMod gebruiken i.p.v. jellybeans</string>
+    <string name="quick_settings_profile_label">Profiel</string>
+    <string name="powerwidget_screen_timeout_toast">Schermtime-out ingesteld op: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_screen_sleep">Slaapstand</string>
+    <string name="quick_settings_ringer_on">Geluid aan</string>
+    <string name="quick_settings_ringer_off">Geluid uit</string>
+    <string name="quick_settings_vibration_on">Trillen aan</string>
+    <string name="quick_settings_vibration_off">Trillen uit</string>
+    <string name="quick_settings_label_enabled">Aan</string>
+    <string name="quick_settings_label_disabled">Uit</string>
+    <string name="quick_settings_ringer_normal">Geluid</string>
+    <string name="quick_settings_lockscreen">Vergrendelscherm</string>
+    <string name="quick_settings_network_type">Netwerkstand</string>
+    <string name="quick_settings_report_bug">Fout melden</string>
+    <string name="quick_settings_sync">Synchroniseren</string>
+    <string name="quick_settings_torch">Zaklamp</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_screen_timeout">Time-out</string>
 </resources>
