@@ -59,11 +59,29 @@ status_t getPixelFormatInfo(PixelFormat format, PixelFormatInfo* info)
     // YUV format from the HAL are handled here
     switch (format) {
     case HAL_PIXEL_FORMAT_YCbCr_422_SP:
+#ifdef STE_HARDWARE
+    case HAL_PIXEL_FORMAT_YCrCb_422_SP:
+    case HAL_PIXEL_FORMAT_YCbCr_422_P:
+#endif
     case HAL_PIXEL_FORMAT_YCbCr_422_I:
+#ifdef STE_HARDWARE
+    case HAL_PIXEL_FORMAT_CbYCrY_422_I:
+#endif
         info->bitsPerPixel = 16;
         goto done;
+#ifdef STE_HARDWARE
+    case HAL_PIXEL_FORMAT_YCbCr_420_SP:
+#endif
     case HAL_PIXEL_FORMAT_YCrCb_420_SP:
     case HAL_PIXEL_FORMAT_YV12:
+#ifdef STE_HARDWARE
+    case HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED:
+    case HAL_PIXEL_FORMAT_YCrCb_420_SP_TILED:
+    case HAL_PIXEL_FORMAT_YCbCr_420_P:
+    case HAL_PIXEL_FORMAT_YCbCr_420_I:
+    case HAL_PIXEL_FORMAT_CbYCrY_420_I:
+    case HAL_PIXEL_FORMAT_YCBCR42XMBN:
+#endif
         info->bitsPerPixel = 12;
      done:
         info->format = format;
