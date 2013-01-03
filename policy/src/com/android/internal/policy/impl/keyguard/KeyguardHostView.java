@@ -240,7 +240,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         addDefaultWidgets();
 
         addWidgetsFromSettings();
-        if (numWidgets() >= MAX_WIDGETS) {
+        if (numWidgets() >= MAX_WIDGETS && !unlimitedWidgets()) {
             setAddWidgetEnabled(false);
         }
         checkAppWidgetConsistency();
@@ -334,7 +334,7 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         @Override
         public void onAddView(View v) {
-            if (numWidgets() >= MAX_WIDGETS) {
+            if (numWidgets() >= MAX_WIDGETS && !unlimitedWidgets()) {
                 setAddWidgetEnabled(false);
             }
         };
@@ -1020,6 +1020,9 @@ public class KeyguardHostView extends KeyguardViewBase {
         return widgetCount;
     }
 
+    private boolean unlimitedWidgets() {
+        return Settings.System.getInt(getContext().getContentResolver(), Settings.System.LOCKSCREEN_WIDGETS_UNLIMITED, 0) == 1;
+    }
 
     private void setAddWidgetEnabled(boolean clickable) {
         View addWidget = mAppWidgetContainer.findViewById(R.id.keyguard_add_widget);
