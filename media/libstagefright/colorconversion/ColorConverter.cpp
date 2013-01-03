@@ -54,6 +54,9 @@ bool ColorConverter::isValid() const {
         case OMX_QCOM_COLOR_FormatYVU420SemiPlanar:
         case OMX_COLOR_FormatYUV420SemiPlanar:
         case OMX_TI_COLOR_FormatYUV420PackedSemiPlanar:
+#ifdef STE_HARDWARE
+        case OMX_STE_COLOR_FormatYUV420PackedSemiPlanarMB:
+#endif
 #ifdef QCOM_HARDWARE
         case QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka:
 #endif
@@ -554,6 +557,145 @@ status_t ColorConverter::convertTIYUV420PackedSemiPlanar(
 
     return OK;
 }
+
+#ifdef STE_HARDWARE
+status_t ColorConverter::convertSTEYUV420PackedSemiPlanarMB(
+        const BitmapParams &src, const BitmapParams &dst) {
+
+    if (!((dst.mWidth & 1) == 0
+            && src.mCropLeft == 0
+            && src.mCropTop == 0
+            && src.cropWidth() == dst.cropWidth()
+            && src.cropHeight() == dst.cropHeight())) {
+        return ERROR_UNSUPPORTED;
+    }
+
+    OMX_U32 mx = src.mWidth / 16;
+    OMX_U32 my = src.mHeight / 16;
+    OMX_U32 lx, ly;
+    OMX_U32 *pChroma, *pLuma = (OMX_U32 *)src.mBits;
+
+    pChroma = (OMX_U32 *)src.mBits + mx * my * 64;
+    for (ly = 0; ly < my; ly++) {
+        for (lx = 0; lx < mx; lx++) {
+            OMX_U32 col, row, lumaWord, chromaWord1 = 0, rgbWord, i;
+            OMX_U8 y[4], cb[4], cr[4], r[4], g[4], b[4];
+            OMX_U32 *dstBuf, *locBuf;
+            OMX_U32 *pBurstLuma = 0, *pBurstChroma = 0;
+            OMX_U32 *pWordLuma = 0, *pWordChroma = 0;
+            OMX_U8 nbOfBlock;
+
+            dstBuf = ((OMX_U32 *)dst.mBits) + (ly * 16) * dst.mWidth / 2;
+            dstBuf += (lx * 16) / 2;
+
+            pBurstLuma = pLuma;
+            pBurstChroma = pChroma;
+
+            for (col = 0; col < 2; col++) {
+                // conversion of a macroblock
+                for (nbOfBlock = 0; nbOfBlock < 2; nbOfBlock++) {
+                    locBuf = dstBuf + 4 * col + 2 * nbOfBlock;
+                    OMX_U32 dstRowOrigo = ly * 16 * dst.mWidth;
+
+                    switch (nbOfBlock) {
+                    case 0:
+                        pWordLuma = pBurstLuma;
+                        pWordChroma = pBurstChroma;
+                        break;
+                    case 1:
+                        pWordLuma = pBurstLuma + 1;
+                        pWordChroma = pBurstChroma + 1;
+                        break;
+                    }
+                    for (row = 0; row < 16; row++) {
+
+                        // Check for cropping on the y axis
+                        if (ly * 16 + row >= dst.mHeight) {
+                            break;
+                        }
+
+                        lumaWord = *pWordLuma;
+                        pWordLuma += 2;
+                        if (row % 2 == 0) {
+                            chromaWord1 = *pWordChroma;
+                            pWordChroma += 2;
+                        }
+
+                        y[3] = ((lumaWord >> 24) & 0xff);
+                        y[2] = ((lumaWord >> 16) & 0xff);
+                        y[1] = ((lumaWord >>  8) & 0xff);
+                        y[0] = ((lumaWord >>  0) & 0xff);
+
+                        cb[0] = cb[1] = ((chromaWord1 >>  0) & 0xff);
+                        cb[2] = cb[3] = ((chromaWord1 >> 16) & 0xff);
+                        cr[0] = cr[1] = ((chromaWord1 >>  8) & 0xff);
+                        cr[2] = cr[3] = ((chromaWord1 >> 24) & 0xff);
+
+                        for (i = 0; i < 4; i++) {
+
+                            int32_t rW,gW,bW;
+
+                            rW = 298 * y[i] + 408 * cr[i] - 57059;
+                            gW = 298 * y[i] - 100 * cb[i] - 208 * cr[i] + 34713;
+                            bW = 298 * y[i] + 516 * cb[i] - 70887;
+
+                            if (rW < 0) {
+                                r[i] = 0;
+                            } else if (rW >= 65536) {
+                                r[i] = 255;
+                            } else {
+                                r[i] = (rW >> 8);
+                            }
+                            if (gW < 0) {
+                                g[i] = 0;
+                            } else if (gW >= 65536) {
+                                g[i] = 255;
+                            } else {
+                                g[i] = (gW >> 8);
+                            }
+                            if (bW < 0) {
+                                b[i] = 0;
+                            } else if (bW >= 65536) {
+                                b[i] = 255;
+                            } else {
+                                b[i] = (bW >> 8);
+                            }
+                            r[i] >>= 3;
+                            g[i] >>= 2;
+                            b[i] >>= 3;
+                        }
+                        for (i = 0; i < 4; i += 2) {
+
+                            // Check for cropping on the x axis
+                            OMX_U32 rowPos = (locBuf - (OMX_U32 *)dst.mBits) * 2 - dstRowOrigo;
+                            if (rowPos >= dst.mWidth) {
+                                locBuf++;
+                                continue;
+                            }
+
+                            rgbWord = (r[i + 1] << 27) +
+                                (g[i + 1] << 21) +
+                                (b[i + 1] << 16) +
+                                (r[i] << 11) +
+                                (g[i] << 5) +
+                                (b[i] << 0);
+                            *locBuf++ = rgbWord;
+                        }
+                        locBuf += dst.mWidth / 2 - 2;
+                        dstRowOrigo += dst.mWidth;
+                    } //end of for 16 loop
+                }  //end of 2 block loop
+                pBurstLuma += 32;
+                pBurstChroma += 16;
+            } // end of 2 col loop
+            pLuma   += 64;
+            pChroma += 32;
+        }
+    }
+
+    return OK;
+}
+#endif
 
 uint8_t *ColorConverter::initClip() {
     static const signed kClipMin = -278;
