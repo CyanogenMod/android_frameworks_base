@@ -315,4 +315,16 @@ public class TelephonyIntents {
     public static final String EXTRA_PLMN       = "plmn";
     public static final String EXTRA_SHOW_SPN   = "showSpn";
     public static final String EXTRA_SPN        = "spn";
+
+     /**
+     * Managed Roaming Intent. Used by Phone App to show popup to the end user that location update
+     * request rejected with status as "Persistent location update reject", so user can try to do
+     * location update on other Network:</p>
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     * @hide
+     */
+    public static final String ACTION_MANAGED_ROAMING_IND
+            = "codeaurora.intent.action.ACTION_MANAGED_ROAMING_IND";
 }
