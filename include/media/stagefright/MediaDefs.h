@@ -27,8 +27,14 @@ extern const char *MEDIA_MIMETYPE_VIDEO_VPX;
 extern const char *MEDIA_MIMETYPE_VIDEO_AVC;
 extern const char *MEDIA_MIMETYPE_VIDEO_MPEG4;
 extern const char *MEDIA_MIMETYPE_VIDEO_H263;
+#ifdef STE_HARDWARE
+extern const char *MEDIA_MIMETYPE_VIDEO_H263_SW;
+#endif
 extern const char *MEDIA_MIMETYPE_VIDEO_MPEG2;
 extern const char *MEDIA_MIMETYPE_VIDEO_RAW;
+#ifdef STE_HARDWARE
+extern const char *MEDIA_MIMETYPE_VIDEO_VC1;
+#endif
 
 extern const char *MEDIA_MIMETYPE_AUDIO_AMR_NB;
 extern const char *MEDIA_MIMETYPE_AUDIO_AMR_WB;

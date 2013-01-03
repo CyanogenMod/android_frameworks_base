@@ -234,6 +234,9 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_VPX, "OMX.SEC.vp8.dec" },
 #endif
     { MEDIA_MIMETYPE_IMAGE_JPEG, "OMX.TI.JPEG.decode" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.ST.mp3.decoder" },
+#endif
 //    { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.TI.MP3.decode" },
     { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.google.mp3.decoder" },
 #ifdef WITH_QCOM_LPA
@@ -246,6 +249,9 @@ static const CodecInfo kDecoderInfo[] = {
 //    { MEDIA_MIMETYPE_AUDIO_AMR_NB, "OMX.Nvidia.amrwb.decoder" },
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.TI.WBAMR.decode" },
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.google.amrwb.decoder" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.ST.aac.decoder" }, 
+#endif
 //    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.Nvidia.aac.decoder" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.decode" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.google.aac.decoder" },
@@ -254,6 +260,9 @@ static const CodecInfo kDecoderInfo[] = {
 #endif
     { MEDIA_MIMETYPE_AUDIO_G711_ALAW, "OMX.google.g711.alaw.decoder" },
     { MEDIA_MIMETYPE_AUDIO_G711_MLAW, "OMX.google.g711.mlaw.decoder" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.ST.VFM.MPEG4Dec" },
+#endif
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.DUCATI1.VIDEO.DECODER" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.Nvidia.mp4.decode" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.7x30.video.decoder.mpeg4" },
@@ -261,12 +270,19 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.Video.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.MPEG4.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.google.mpeg4.decoder" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.ST.VFM.MPEG4Dec" },
+#endif
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.TI.DUCATI1.VIDEO.DECODER" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.Nvidia.h263.decode" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.7x30.video.decoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.video.decoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.H263.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.google.h263.decoder" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_VIDEO_H263_SW, "OMX.ST.VFM.MPEG4HostDec" },
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.ST.VFM.H264Dec" },
+#endif
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.DUCATI1.VIDEO.DECODER" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.Nvidia.h264.decode" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.7x30.video.decoder.avc" },
@@ -280,6 +296,9 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_VPX, "OMX.SEC.VP8.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_VPX, "OMX.google.vpx.decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG2, "OMX.Nvidia.mpeg2v.decode" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_VIDEO_VC1, "OMX.ST.VFM.VC1Dec" },
+#endif
 #ifdef QCOM_HARDWARE
     { MEDIA_MIMETYPE_VIDEO_DIVX, "OMX.qcom.video.decoder.divx"},
     { MEDIA_MIMETYPE_VIDEO_DIVX311, "OMX.qcom.video.decoder.divx311"},
@@ -312,6 +331,9 @@ static const CodecInfo kEncoderInfo[] = {
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.encode" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.qcom.audio.encoder.aac" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "AACEncoder" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.ST.VFM.MPEG4Enc" },
+#endif
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.DUCATI1.VIDEO.MPEG4E" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.7x30.video.encoder.mpeg4" },
 #ifdef QCOM_HARDWARE
@@ -323,6 +345,9 @@ static const CodecInfo kEncoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.Nvidia.mp4.encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.MPEG4.Encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "M4vH263Encoder" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.ST.VFM.MPEG4Enc" },
+#endif
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.TI.DUCATI1.VIDEO.MPEG4E" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.7x30.video.encoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.video.encoder.h263" },
@@ -330,6 +355,9 @@ static const CodecInfo kEncoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.Nvidia.h263.encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.H263.Encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "M4vH263Encoder" },
+#ifdef STE_HARDWARE
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.ST.VFM.H264Enc" },
+#endif
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.DUCATI1.VIDEO.H264E" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.7x30.video.encoder.avc" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.video.encoder.avc" },
@@ -444,6 +472,20 @@ static int CompareSoftwareCodecsFirst(
 
     return 0;
 }
+
+#ifdef STE_HARDWARE
+static uint32_t OmxToHALFormat(OMX_COLOR_FORMATTYPE omxValue) {
+    switch (omxValue) {
+        case OMX_STE_COLOR_FormatYUV420PackedSemiPlanarMB:
+            return HAL_PIXEL_FORMAT_YCBCR42XMBN;
+        case OMX_COLOR_FormatYUV420Planar:
+            return HAL_PIXEL_FORMAT_YCbCr_420_P;
+        default:
+            LOGI("Unknown OMX pixel format (0x%X), passing it on unchanged", omxValue);
+            return omxValue;
+    }
+}
+#endif
 
 // static
 uint32_t OMXCodec::getComponentQuirks(
@@ -564,6 +606,19 @@ uint32_t OMXCodec::getComponentQuirks(
 
     if (!strcmp(componentName, "OMX.qcom.audio.decoder.wma")) {
         quirks |= kRequiresWMAProComponent;
+    }
+#endif
+
+#ifdef STE_HARDWARE
+    if (!isEncoder && !strncmp(componentName, "OMX.ST.VFM.", 11)) {
+        quirks |= kRequiresAllocateBufferOnInputPorts;
+        quirks |= kRequiresAllocateBufferOnOutputPorts;
+    }
+
+    if (!strncmp(componentName, "OMX.ST.VFM.MPEG4Enc", 19) ||
+            !strncmp(componentName, "OMX.ST.VFM.H264Enc", 18)) {
+        quirks |= kRequiresAllocateBufferOnOutputPorts;
+        quirks |= kRequiresStoreMetaDataBeforeIdle;
     }
 #endif
 
@@ -1276,6 +1331,9 @@ static size_t getFrameSize(
         case OMX_COLOR_FormatYUV420Planar:
         case OMX_COLOR_FormatYUV420SemiPlanar:
         case OMX_TI_COLOR_FormatYUV420PackedSemiPlanar:
+#ifdef STE_HARDWARE
+        case OMX_STE_COLOR_FormatYUV420PackedSemiPlanarMB:
+#endif
         /*
         * FIXME: For the Opaque color format, the frame size does not
         * need to be (w*h*3)/2. It just needs to
@@ -1933,7 +1991,11 @@ status_t OMXCodec::setVideoOutputFormat(
                || format.eColorFormat == OMX_COLOR_FormatYUV420SemiPlanar
                || format.eColorFormat == OMX_COLOR_FormatCbYCrY
                || format.eColorFormat == OMX_TI_COLOR_FormatYUV420PackedSemiPlanar
+#ifndef STE_HARDWARE
                || format.eColorFormat == OMX_QCOM_COLOR_FormatYVU420SemiPlanar
+#else
+               || format.eColorFormat == OMX_STE_COLOR_FormatYUV420PackedSemiPlanarMB
+#endif
 #ifdef QCOM_HARDWARE
                || format.eColorFormat == QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka
 #endif
@@ -2106,6 +2168,10 @@ void OMXCodec::setComponentRole(
             "video_decoder.mpeg4", "video_encoder.mpeg4" },
         { MEDIA_MIMETYPE_VIDEO_H263,
             "video_decoder.h263", "video_encoder.h263" },
+#ifdef STE_HARDWARE
+        { MEDIA_MIMETYPE_VIDEO_VC1,
+            "video_decoder.vc1", "video_encoder.vc1" },
+#endif
 #ifdef QCOM_HARDWARE
         { MEDIA_MIMETYPE_VIDEO_DIVX,
             "video_decoder.divx", NULL },
@@ -2183,6 +2249,17 @@ status_t OMXCodec::init() {
     CHECK_EQ((int)mState, (int)LOADED);
 
     status_t err;
+#ifdef STE_HARDWARE
+    if ((mQuirks & kRequiresStoreMetaDataBeforeIdle)
+            && (mFlags & kStoreMetaDataInVideoBuffers)) {
+        err = mOMX->storeMetaDataInBuffers(mNode, kPortIndexInput, OMX_TRUE);
+        if (err != OK) {
+            LOGE("Storing meta data in video buffers is not supported");
+            return err;
+        }
+    }
+#endif
+
     if (!(mQuirks & kRequiresLoadedToIdleAfterAllocation)) {
         err = mOMX->sendCommand(mNode, OMX_CommandStateSet, OMX_StateIdle);
         CHECK_EQ(err, (status_t)OK);
@@ -2246,7 +2323,12 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
     }
 
     status_t err = OK;
+#ifndef STE_HARDWARE
     if ((mFlags & kStoreMetaDataInVideoBuffers)
+#else
+    if (!(mQuirks & kRequiresStoreMetaDataBeforeIdle)
+            && (mFlags & kStoreMetaDataInVideoBuffers)
+#endif
             && portIndex == kPortIndexInput) {
         LOGW("Trying to enable metadata mode on encoder");
         err = mOMX->storeMetaDataInBuffers(mNode, kPortIndexInput, OMX_TRUE);
@@ -2462,7 +2544,11 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
 #else
             def.format.video.nFrameWidth,
             def.format.video.nFrameHeight,
+#ifndef STE_HARDWARE
             def.format.video.eColorFormat);
+#else
+           OmxToHALFormat(def.format.video.eColorFormat));
+#endif
 #endif
 #else
     OMX_COLOR_FORMATTYPE eColorFormat;
@@ -5351,6 +5437,9 @@ static const char *videoCompressionFormatString(OMX_VIDEO_CODINGTYPE type) {
         "OMX_VIDEO_CodingRV",
         "OMX_VIDEO_CodingAVC",
         "OMX_VIDEO_CodingMJPEG",
+#ifdef STE_HARDWARE
+        "OMX_VIDEO_CodingVC1",
+#endif
     };
 
     size_t numNames = sizeof(kNames) / sizeof(kNames[0]);

@@ -750,12 +750,26 @@ public:
     static const char SCENE_DETECT_ON[];
 #endif
     static const char PIXEL_FORMAT_YUV422SP[];
+#ifdef STE_HARDWARE
+    static const char PIXEL_FORMAT_YUV420P[]; // YV12
+#endif
     static const char PIXEL_FORMAT_YUV420SP[]; // NV21
+#ifdef STE_HARDWARE
+    static const char PIXEL_FORMAT_YUV420SPNV12[]; // NV12
+#endif
 #ifdef QCOM_HARDWARE
     static const char PIXEL_FORMAT_YUV420SP_ADRENO[]; // ADRENO
 #endif
     static const char PIXEL_FORMAT_YUV422I[]; // YUY2
+#ifndef STE_HARDWARE
     static const char PIXEL_FORMAT_YUV420P[]; // YV12
+#else
+    static const char PIXEL_FORMAT_YVU422SP[];
+    static const char PIXEL_FORMAT_YVU422P[];
+    static const char PIXEL_FORMAT_YVU420SP[];
+    static const char PIXEL_FORMAT_YVU420P[];
+    static const char PIXEL_FORMAT_YUV420MB[];
+#endif
     static const char PIXEL_FORMAT_RGB565[];
     static const char PIXEL_FORMAT_RGBA8888[];
     static const char PIXEL_FORMAT_JPEG[];
@@ -819,6 +833,11 @@ public:
     // other modes.
     static const char FOCUS_MODE_CONTINUOUS_PICTURE[];
 
+#ifdef STE_HARDWARE
+    // keys for record stride and slice height
+    static const char KEY_RECORD_STRIDE[];
+    static const char KEY_RECORD_SLICE_HEIGHT[];
+#endif
 #ifdef QCOM_HARDWARE
     static const char FOCUS_MODE_CONTINUOUS_CAMERA[];
 
