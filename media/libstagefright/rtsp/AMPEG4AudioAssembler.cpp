@@ -201,6 +201,9 @@ static status_t parseAudioSpecificConfig(ABitReader *bits, sp<ABuffer> *asc) {
             CHECK_EQ(parseAudioObjectType(bits, &extensionAudioObjectType),
                      (status_t)OK);
 
+#ifdef STE_HARDWARE
+            if (extensionAudioObjectType == 5) {
+#endif
             sbrPresent = bits->getBits(1);
 
             if (sbrPresent == 1) {
@@ -208,6 +211,28 @@ static status_t parseAudioSpecificConfig(ABitReader *bits, sp<ABuffer> *asc) {
                 if (extensionSamplingFreqIndex == 0x0f) {
                     /* unsigned extensionSamplingFrequency = */bits->getBits(24);
                 }
+#ifdef STE_HARDWARE
+                    if (bits->numBitsLeft() >= 12) {
+                        syncExtensionType = bits->getBits(11);
+                        if (syncExtensionType == 0x548) {
+                            /* unsigned psPresent */bits->getBits(1);
+                        } else {
+                            // Rewind bitstream so that the reading of second
+                            // syncExtensionType has no effect
+                            bits->rewindBits(11);
+                        }
+                    }
+                }
+            } else if (extensionAudioObjectType == 22) {
+                sbrPresent = bits->getBits(1);
+                if (sbrPresent == 1) {
+                    unsigned extensionSamplingFreqIndex = bits->getBits(4);
+                    if (extensionSamplingFreqIndex == 0x0f) {
+                        /* unsigned extensionSamplingFrequency = */bits->getBits(24);
+                    }
+                }
+                /* unsigned extensionChannelConfiguration = */bits->getBits(4);
+#endif
             }
 
             size_t numBitsInExtension =
@@ -223,7 +248,12 @@ static status_t parseAudioSpecificConfig(ABitReader *bits, sp<ABuffer> *asc) {
                 bits->skipBits(8 - (numBitsInExtension & 7));
             }
         } else {
+#ifdef STE_HARDWARE
+            bits->rewindBits(11);
+#else
             bits->putBits(syncExtensionType, 11);
+#endif
+
         }
     }
 
@@ -335,11 +365,18 @@ static status_t parseStreamMuxConfig(
             break;
     }
 
+#ifdef STE_HARDWARE
+    status_t parseResult = OK;
+#endif
     *otherDataPresent = bits->getBits(1);
     *otherDataLenBits = 0;
     if (*otherDataPresent) {
         if (audioMuxVersion == 1) {
             TRESPASS();  // XXX to be implemented
+#ifdef STE_HARDWARE
+        } else if (bits->numBitsLeft() < 9) {
+            parseResult = ERROR_MALFORMED;
+#endif
         } else {
             *otherDataLenBits = 0;
 
@@ -349,14 +386,57 @@ static status_t parseStreamMuxConfig(
                 otherDataLenEsc = bits->getBits(1);
                 unsigned otherDataLenTmp = bits->getBits(8);
                 (*otherDataLenBits) += otherDataLenTmp;
-            } while (otherDataLenEsc);
+#ifdef STE_HARDWARE
+            } while (otherDataLenEsc && bits->numBitsLeft() >= 9);
+
+            if (otherDataLenEsc) {
+                parseResult = ERROR_MALFORMED;
+            }
         }
     }
 
+    if (parseResult == OK && bits->numBitsLeft() >= 1) {
+        unsigned crcCheckPresent = bits->getBits(1);
+        if (crcCheckPresent && bits->numBitsLeft() >= 8) {
+            /* unsigned crcCheckSum = */bits->getBits(8);
+        } else if (crcCheckPresent && bits->numBitsLeft() < 8) {
+            parseResult = ERROR_MALFORMED;
+        }
+    } else {
+        parseResult = ERROR_MALFORMED;
+    }
+
+    // Verify that only bits are left for byte aligning and that
+    // any remaining bits are 0
+    if (bits->numBitsLeft() / 8 > 0) {
+        parseResult = ERROR_MALFORMED;
+    } else {
+        unsigned remainder = bits->getBits(bits->numBitsLeft());
+        if (remainder != 0) {
+            parseResult = ERROR_MALFORMED;
+#else
+            } while (otherDataLenEsc);
+#endif
+        }
+    }
+
+#ifdef STE_HARDWARE
+    // Check if config string parsing has failed (then probably due to a
+    // malformed AudioSpecificConfig) and if so, assume most common
+    // configuration for the variables after AudioSpecificConfig.
+    if (parseResult != OK) {
+        LOGW("LATM config string parsing has failed, assuming most common case "
+             "of frameLengthType=0, otherDataPresent=0, and otherDataLenBits=0");
+        *frameLengthType = 0;
+        *otherDataPresent = 0;
+        *otherDataLenBits = 0;
+    }
+#else
     unsigned crcCheckPresent = bits->getBits(1);
     if (crcCheckPresent) {
         /* unsigned crcCheckSum = */bits->getBits(8);
     }
+#endif
 
     return OK;
 }
