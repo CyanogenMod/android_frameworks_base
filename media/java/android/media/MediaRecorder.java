@@ -175,6 +175,8 @@ public class MediaRecorder
          *  is applied.
          */
         public static final int VOICE_COMMUNICATION = 7;
+        /** FM Radio Rx audio source */
+        public static final int FM_RADIO_RX = 8;
     }
 
     /**

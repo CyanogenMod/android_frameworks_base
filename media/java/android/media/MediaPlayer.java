@@ -808,7 +808,8 @@ public class MediaPlayer
     }
 
     /**
-     * Sets the data source (file-path or http/rtsp URL) to use.
+     * Sets the data source (file-path or http/rtsp URL) to use. To select FM Radio as the data
+     * source, set the path to "fmradio://rx".
      *
      * @param path the path of the file, or the http/rtsp URL of the stream you want to play
      * @throws IllegalStateException if it is called in an invalid state
