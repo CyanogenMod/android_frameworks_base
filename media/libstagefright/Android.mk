@@ -103,6 +103,11 @@ endif
 endif
 endif
 
+ifeq ($(BOARD_USES_STE_FM),true)
+LOCAL_SRC_FILES+=        PCMExtractor.cpp \
+                         FMRadioDataSource.cpp
+endif
+
 LOCAL_C_INCLUDES+= \
 	$(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \

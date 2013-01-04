@@ -22,7 +22,13 @@ namespace android {
 
 ABitReader::ABitReader(const uint8_t *data, size_t size)
     : mData(data),
+#ifdef STE_HARDWARE
+      mOriginalData(data),
+#endif
       mSize(size),
+#ifdef STE_HARDWARE
+      mOriginalSize(size),
+#endif
       mReservoir(0),
       mNumBitsLeft(0) {
 }
@@ -77,6 +83,21 @@ void ABitReader::skipBits(size_t n) {
         getBits(n);
     }
 }
+
+#ifdef STE_HARDWARE
+void ABitReader::rewindBits(size_t n) {
+    CHECK_GE(mOriginalSize * 8 - numBitsLeft(), n);
+
+    size_t bitsLeft = numBitsLeft();
+
+    mData = mOriginalData;
+    mSize = mOriginalSize;
+    mReservoir = 0;
+    mNumBitsLeft = 0;
+
+    skipBits(mOriginalSize * 8 - bitsLeft - n);
+}
+#endif
 
 void ABitReader::putBits(uint32_t x, size_t n) {
     CHECK_LE(n, 32u);
