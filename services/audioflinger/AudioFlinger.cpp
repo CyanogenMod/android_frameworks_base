@@ -2817,8 +2817,8 @@ bool AudioFlinger::MixerThread::checkForNewParameters_l()
 #ifdef STE_HARDWARE
         if (param.getInt(String8(AudioParameter::keyLatency), value) == NO_ERROR) {
             updateLatency = true;
-#endif
         }
+#endif
 
         if (status == NO_ERROR) {
             status = mOutput->stream->common.set_parameters(&mOutput->stream->common,
