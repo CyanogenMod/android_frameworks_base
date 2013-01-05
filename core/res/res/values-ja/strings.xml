@@ -1450,10 +1450,6 @@
     <string name="global_actions_toggle_expanded_desktop_mode">拡張デスクトップ</string>
     <string name="global_actions_expanded_desktop_mode_on_status">有効</string>
     <string name="global_actions_expanded_desktop_mode_off_status">無効</string>
-    <string name="reboot_confirm" product="tablet">タブレットは再起動します。</string>
-    <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
-    <string name="toast_rotation_unlocked">ディスプレイの回転をロック解除しました</string>
-    <string name="toast_rotation_locked">ディスプレイの回転をロックしました</string>
 
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system" product="tablet">タブレットを再起動</string>
