@@ -1450,6 +1450,10 @@
     <string name="global_actions_toggle_expanded_desktop_mode">拡張デスクトップ</string>
     <string name="global_actions_expanded_desktop_mode_on_status">有効</string>
     <string name="global_actions_expanded_desktop_mode_off_status">無効</string>
+    <string name="reboot_confirm" product="tablet">タブレットは再起動します。</string>
+    <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
+    <string name="toast_rotation_unlocked">ディスプレイの回転をロック解除しました</string>
+    <string name="toast_rotation_locked">ディスプレイの回転をロックしました</string>
 
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system" product="tablet">タブレットを再起動</string>
@@ -1473,8 +1477,6 @@
 
     <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
     <string name="reboot_progress">再起動中\u2026</string>
-    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
-    <string name="reboot_confirm">端末は再起動します</string>
 
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">再起動</string>
