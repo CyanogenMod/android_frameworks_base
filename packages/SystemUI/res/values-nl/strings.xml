@@ -228,4 +228,13 @@
     <string name="quick_settings_torch">Zaklamp</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">Time-out</string>
+    <string name="navbar_dialog_title">Kies de toe te wijzen functie</string>
+    <string name="navbar_home_button">Thuisknop</string>
+    <string name="navbar_recent_button">Recentknop</string>
+    <string name="navbar_search_button">Zoekknop</string>
+    <string name="navbar_back_button">Terugknop</string>
+    <string name="navbar_empty_button">Functieloze knop</string>
+    <string name="navbar_menu_conditional_button">Menuknop (altijd verbergen)</string>
+    <string name="navbar_menu_always_button">Menuknop (altijd tonen)</string>
+    <string name="navbar_menu_big_button">Menuknop</string>
 </resources>
