@@ -147,4 +147,26 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Θα γίνεται αυτόματη περιστροφή της οθόνης."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Η οθόνη έχει κλειδωθεί σε οριζόντιο προσανατολισμό."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Η οθόνη έχει κλειδωθεί σε κατακόρυφο προσανατολισμό."</string>
+
+    <string name="powerwidget_screen_timeout_toast">Λήξη χρον. ορίου οθόνης: %1$d %2$s</string>
+
+    <!-- Label in the system panel for flashlight state [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_flashlight">Φακός LED</string>
+
+    <!-- Label in the system panel for mobile data state [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_mobile_data">Δεδομένα</string>
+
+    <!-- Label in the system panel for sound [CHAR LIMIT=30] -->
+    <string name="status_bar_settings_sound_mode">Ήχος</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Επιλέξτε λειτουργία για εκχώρηση</string>
+    <string name="navbar_home_button">Κουμπί Home</string>
+    <string name="navbar_recent_button">Κουμπί Recent</string>
+    <string name="navbar_search_button">Κουμπί Search</string>
+    <string name="navbar_back_button">Κουμπί Back</string>
+    <string name="navbar_empty_button">Άδειο κουμπί</string>
+    <string name="navbar_menu_conditional_button">Κουμπί Menu (αυτόματη απόκρυψη)</string>
+    <string name="navbar_menu_always_button">Κουμπί Menu (εμφάνιση πάντα)</string>
+    <string name="navbar_menu_big_button">Κουμπί Menu</string>
 </resources>
