@@ -1,0 +1,9 @@
+Change-Id: I869d5b316f665e8d16286098e0e6699e9e91cec5
+Code-Review+1: Pavel Volkov <marshmollow@gmail.com>
+Code-Review+2: Marco Brohet <therbom@gmail.com>
+Verified+1: Marco Brohet <therbom@gmail.com>
+Submitted-by: Marco Brohet <therbom@gmail.com>
+Submitted-at: Mon, 07 Jan 2013 01:27:29 -0800
+Reviewed-on: http://review.cyanogenmod.org/29786
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/cm-10.1
