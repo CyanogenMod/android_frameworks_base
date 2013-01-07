@@ -224,4 +224,15 @@
     <string name="quick_settings_report_bug">Отчёт об ошибке</string>
     <string name="quick_settings_sync">Синхронизация</string>
     <string name="quick_settings_torch">Фонарь</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Выберите действие</string>
+    <string name="navbar_home_button">Домой</string>
+    <string name="navbar_recent_button">Запущ. приложения</string>
+    <string name="navbar_search_button">Поиск</string>
+    <string name="navbar_back_button">Назад</string>
+    <string name="navbar_empty_button">Пустая кнопка</string>
+    <string name="navbar_menu_conditional_button">Меню (скрывающ.)</string>
+    <string name="navbar_menu_always_button">Меню (не скрывающ.)</string>
+    <string name="navbar_menu_big_button">Меню</string>
 </resources>
