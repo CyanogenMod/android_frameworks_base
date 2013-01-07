@@ -2263,10 +2263,19 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="com.android.internal.weather.WeatherReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.android.internal.weather.REFRESH_UPDATE_INTERVAL" />
+            </intent-filter>
+        </receiver>
+
         <service android:name="com.android.internal.os.storage.ExternalStorageFormatter"
             android:permission="android.permission.MASTER_CLEAR"
             android:exported="true" />
 
+        <service android:name="com.android.internal.weather.WeatherUpdateService"
+            android:exported="true" />
     </application>
 
 </manifest>

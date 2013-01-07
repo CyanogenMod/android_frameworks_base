@@ -18,6 +18,14 @@
 -->
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/keyguard_calendar_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_gravity="top|left" />
+
     <include layout="@layout/keyguard_glow_pad_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

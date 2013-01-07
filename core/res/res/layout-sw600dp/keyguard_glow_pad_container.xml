@@ -17,6 +17,27 @@
 */
 -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_gravity="top|left"
+        android:orientation="vertical">
+
+        <include layout="@layout/keyguard_weather_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"/>
+
+        <include layout="@layout/keyguard_calendar_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"/>
+    </LinearLayout>
+
     <include layout="@layout/keyguard_glow_pad_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
