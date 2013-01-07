@@ -226,4 +226,15 @@
     <string name="quick_settings_torch">Zseblámpa</string>
     <string name="quick_settings_screen_timeout">Időkorlát: </string>
 
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Válasszon eseményt</string>
+    <string name="navbar_home_button">Kezdőgomb</string>
+    <string name="navbar_recent_button">Alkalmazás előzmények gomb</string>
+    <string name="navbar_search_button">Keresés gomb</string>
+    <string name="navbar_back_button">Vissza gomb</string>
+    <string name="navbar_empty_button">Gomb törlése</string>
+    <string name="navbar_menu_conditional_button">Menü (auto elrejtés)</string>
+    <string name="navbar_menu_always_button">Menü (mindig látszik)</string>
+    <string name="navbar_menu_big_button">Menü gomb</string>
+
 </resources>
