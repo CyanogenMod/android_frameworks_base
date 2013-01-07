@@ -48,3 +48,5 @@ PRODUCT_PACKAGES := \
     AndroidClock.ttf \
     AndroidClock_Highlight.ttf \
     AndroidClock_Solid.ttf \
+    Nokora-Khmer.ttf \
+    Padauk-Burmese.tff \

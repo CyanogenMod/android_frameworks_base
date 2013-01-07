@@ -55,6 +55,16 @@
     </family>
     <family>
         <fileset>
+            <file>Nokora-Khmer.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <fileset>
+            <file>Padauk-Burmese.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <fileset>
             <file>DroidSansArmenian.ttf</file>
         </fileset>
     </family>
