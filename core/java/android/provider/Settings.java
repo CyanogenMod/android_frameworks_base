@@ -3068,6 +3068,48 @@ public final class Settings {
          public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
 
         /**
+         * Whether to show the next calendar event
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR = "lockscreen_calendar";
+
+        /**
+         * Whether to show the next calendar event's location
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_SHOW_LOCATION = "lockscreen_calendar_show_location";
+
+        /**
+         * Whether to show the next calendar event's description
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_SHOW_DESCRIPTION = "lockscreen_calendar_show_description";
+
+        /**
+         * Which calendars to look for events
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDARS = "lockscreen_calendars";
+
+        /**
+         * How far in the future to look for events
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_LOOKAHEAD = "lockscreen_calendar_lookahead";
+
+        /**
+         * Whether to find only events with reminders
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_REMINDERS_ONLY = "lockscreen_calendar_reminders_only";
+
+        /**
+         * Whether to hide all day events
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_HIDE_ALLDAY = "lockscreen_calendar_hide_allday";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
