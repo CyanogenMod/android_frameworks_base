@@ -1892,4 +1892,10 @@
 
   <!-- Wifi -->
   <java-symbol type="bool" name="config_wifiApStartInterface" />
+
+  <!-- Keyguard Calendar -->
+  <java-symbol type="id" name="keyguard_calendar_view" />
+  <java-symbol type="id" name="keyguard_calendar_event_title" />
+  <java-symbol type="id" name="keyguard_calendar_event_details" />
+
 </resources>
