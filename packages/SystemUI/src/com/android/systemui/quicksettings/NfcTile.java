@@ -3,6 +3,7 @@ package com.android.systemui.quicksettings;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ public class NfcTile extends QuickSettingsTile {
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        setTileState(NFC_ADAPTER_UNKNOWN);
+        setTileState(getNfcState());
 
         mOnClick = new View.OnClickListener() {
             @Override
@@ -90,11 +91,13 @@ public class NfcTile extends QuickSettingsTile {
     }
 
     private int getNfcState() {
-        if (mNfcAdapter != null || (mNfcAdapter = NfcAdapter.getDefaultAdapter(mContext)) != null) {
-            return mNfcAdapter.getAdapterState();
-        } else {
-            Log.d(TAG, "No NFC adapter available");
-            return NFC_ADAPTER_UNKNOWN;
+        if (mNfcAdapter == null) {
+            try {
+                mNfcAdapter = NfcAdapter.getNfcAdapter(mContext);
+            } catch (UnsupportedOperationException e) {
+                return NFC_ADAPTER_UNKNOWN;
+            }
         }
+        return mNfcAdapter.getAdapterState();
     }
 }

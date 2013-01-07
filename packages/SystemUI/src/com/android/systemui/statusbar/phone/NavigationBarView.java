@@ -479,7 +479,6 @@ public class NavigationBarView extends LinearLayout {
                     "onSizeChanged: (%dx%d) old: (%dx%d)", w, h, oldw, oldh));
 
         final boolean newVertical = w > 0 && h > w;
-        System.out.println(newVertical + " vs " + mVertical);
         if (newVertical != mVertical) {
             mVertical = newVertical;
             //Slog.v(TAG, String.format("onSizeChanged: h=%d, w=%d, vert=%s", h, w, mVertical?"y":"n"));

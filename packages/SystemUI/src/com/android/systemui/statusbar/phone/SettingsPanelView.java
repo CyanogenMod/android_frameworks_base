@@ -77,23 +77,6 @@ public class SettingsPanelView extends PanelView {
         }
     }
 
-    public void setup(NetworkController networkController, BluetoothController bluetoothController,
-            BatteryController batteryController, LocationController locationController) {
-        if (mQS != null) {
-            mQS.setupQuickSettings();
-        }
-    }
-
-    void updateResources() {
-        if (mQS != null) {
-            mQS.updateResources();
-        }
-        if (mQSContainer != null) {
-            mQSContainer.updateResources();
-        }
-        requestLayout();
-    }
-
     @Override
     public void fling(float vel, boolean always) {
         GestureRecorder gr = ((PhoneStatusBarView) mBar).mBar.getGestureRecorder();
