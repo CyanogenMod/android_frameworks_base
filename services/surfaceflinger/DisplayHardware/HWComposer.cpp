@@ -239,5 +239,13 @@ void HWComposer::perform(int event, int value) {
 }
 #endif
 
+#ifdef STE_HDMI
+int HWComposer::setHDMIParameter(int event, int value) {
+int ret = NO_INIT;
+return ret;
+}
+
+#endif
+
 // ---------------------------------------------------------------------------
 }; // namespace android

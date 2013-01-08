@@ -574,7 +574,6 @@ void SurfaceFlinger::handleTransactionLocked(uint32_t transactionFlags)
 {
     const LayerVector& currentLayers(mCurrentState.layersSortedByZ);
     const size_t count = currentLayers.size();
-
     /*
      * Traversal of the children
      * (perform the transaction for each of them if needed)
@@ -1425,6 +1424,14 @@ void SurfaceFlinger::enableExternalDisplay(int disp_type, int value)
         updateHwcExternalDisplay(mExtDispOutput);
         signalEvent();
     }
+}
+#endif
+
+#ifdef STE_HDMI
+int SurfaceFlinger::setHDMIParameter(int disp_type, int value)
+{
+    HWComposer &hwc(graphicPlane(0).displayHardware().getHwComposer());
+    return hwc.setHDMIParameter(disp_type,value);
 }
 #endif
 

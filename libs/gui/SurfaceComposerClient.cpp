@@ -287,6 +287,13 @@ void SurfaceComposerClient::enableExternalDisplay(int disp_type, int enable)
     return sm->enableExternalDisplay(disp_type, enable);
 }
 #endif
+#ifdef STE_HDMI
+int SurfaceComposerClient::setHDMIParameter(int disp_type, int enable)
+{
+    sp<ISurfaceComposer> sm(getComposerService());
+    return sm->setHDMIParameter(disp_type, enable);
+}
+#endif
 
 status_t Composer::setOrientation(int orientation) {
     Mutex::Autolock _l(mLock);
