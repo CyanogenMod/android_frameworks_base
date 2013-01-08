@@ -206,8 +206,10 @@ public class RingerModeTile extends QuickSettingsTile {
             if (o.getClass() != getClass()) {
                 return false;
             }
-
             Ringer r = (Ringer) o;
+            if ((mRingerMode == AudioManager.RINGER_MODE_SILENT || mRingerMode == AudioManager.RINGER_MODE_VIBRATE)
+                    && (r.mRingerMode == mRingerMode))
+                return true;
             return r.mVibrateWhenRinging == mVibrateWhenRinging
                     && r.mRingerMode == mRingerMode;
         }
