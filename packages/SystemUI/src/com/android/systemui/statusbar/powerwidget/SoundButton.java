@@ -3,13 +3,16 @@ package com.android.systemui.statusbar.powerwidget;
 
 import com.android.systemui.R;
 
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Vibrator;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -19,37 +22,29 @@ public class SoundButton extends PowerButton {
 
     private static final String TAG = "SoundButton";
 
-    private static final int VIBRATE_DURATION = 250; // 0.25s
-
     private static final IntentFilter INTENT_FILTER = new IntentFilter();
     static {
         INTENT_FILTER.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
-        INTENT_FILTER.addAction(AudioManager.VIBRATE_SETTING_CHANGED_ACTION);
     }
 
     private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
     static {
         OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.EXPANDED_RING_MODE));
+        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.VIBRATE_WHEN_RINGING));
     }
 
-    private final Ringer mSilentRinger = new Ringer(false, AudioManager.VIBRATE_SETTING_OFF,
-            AudioManager.RINGER_MODE_SILENT, false);
-    private final Ringer mVibrateRinger = new Ringer(true, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
-            AudioManager.RINGER_MODE_VIBRATE, true);
-    private final Ringer mSoundRinger = new Ringer(true, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
-            AudioManager.RINGER_MODE_NORMAL, false);
-    private final Ringer mSoundVibrateRinger = new Ringer(true, AudioManager.VIBRATE_SETTING_ON,
-            AudioManager.RINGER_MODE_NORMAL, true);
+    private final Ringer mSilentRinger = new Ringer(AudioManager.RINGER_MODE_SILENT, false);
+    private final Ringer mVibrateRinger = new Ringer(AudioManager.RINGER_MODE_VIBRATE, true);
+    private final Ringer mSoundRinger = new Ringer(AudioManager.RINGER_MODE_NORMAL, false);
+    private final Ringer mSoundVibrateRinger = new Ringer(AudioManager.RINGER_MODE_NORMAL, true);
     private final Ringer[] mRingers = new Ringer[] {
             mSilentRinger, mVibrateRinger, mSoundRinger, mSoundVibrateRinger
     };
-    private int mRingersIndex = 2;
-
+    private int mRingersIndex;
     private int[] mRingerValues = new int[] {
             0, 1, 2, 3
     };
-    private int mRingerValuesIndex = 2;
-
+    private int mRingerValuesIndex;
     private AudioManager mAudioManager;
 
     public SoundButton() {
@@ -150,32 +145,18 @@ public class SoundButton extends PowerButton {
     private void findCurrentState(Context context) {
         ensureAudioManager(context);
 
-        boolean vibrateInSilent = Settings.System.getInt(context.getContentResolver(),
-                Settings.System.VIBRATE_IN_SILENT, 0) == 1;
-        int vibrateSetting = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-        int ringerMode = mAudioManager.getRingerMode();
-        // Sometimes the setting don't quite match up to the states we've defined.
-        // In that case, override the reported settings to get us "close" to the
-        // defined settings. This bit is a little ugly but oh well.
-        if (!vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_SILENT) {
-            vibrateSetting = AudioManager.VIBRATE_SETTING_OFF; // match Silent ringer
-        } else if (!vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-            vibrateInSilent = true; // match either Sound or SoundVibrate ringer
-            if (vibrateSetting == AudioManager.VIBRATE_SETTING_OFF) {
-                vibrateSetting = AudioManager.VIBRATE_SETTING_ONLY_SILENT; // match Sound ringer
-            }
-        } else if (vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
-            vibrateSetting = AudioManager.VIBRATE_SETTING_ONLY_SILENT; // match Vibrate ringer 
-        }
-
-        Ringer ringer = new Ringer(vibrateInSilent, vibrateSetting, ringerMode, false);
-        for (int i = 0; i < mRingers.length; i++) {
-            if (mRingers[i].equals(ringer)) {
-                mRingersIndex = i;
-                break;
+            ContentResolver resolver = context.getContentResolver();
+            boolean vibrateWhenRinging = Settings.System.getInt(resolver,
+                    Settings.System.VIBRATE_WHEN_RINGING, 0) == 1;
+            int ringerMode = mAudioManager.getRingerMode();
+            Ringer ringer = new Ringer(ringerMode, vibrateWhenRinging);
+            for (int i = 0; i < mRingers.length; i++) {
+                if (mRingers[i].equals(ringer)) {
+                    mRingersIndex = i;
+                    break;
+                }
             }
         }
-    }
 
     private void ensureAudioManager(Context context) {
         if (mAudioManager == null) {
@@ -184,29 +165,27 @@ public class SoundButton extends PowerButton {
     }
 
     private class Ringer {
-        final boolean mVibrateInSilent;
-        final int mVibrateSetting;
+        final boolean mVibrateWhenRinging;
         final int mRingerMode;
-        final boolean mDoHapticFeedback;
 
-        Ringer(boolean vibrateInSilent, int vibrateSetting, int ringerMode, boolean doHapticFeedback) {
-            mVibrateInSilent = vibrateInSilent;
-            mVibrateSetting = vibrateSetting;
+
+        Ringer( int ringerMode, boolean vibrateWhenRinging) {
+            mVibrateWhenRinging = vibrateWhenRinging;
             mRingerMode = ringerMode;
-            mDoHapticFeedback = doHapticFeedback;
         }
 
         void execute(Context context) {
-            ContentResolver resolver = context.getContentResolver();
-            Settings.System.putInt(resolver, Settings.System.VIBRATE_IN_SILENT,
-                    (mVibrateInSilent ? 1 : 0));
-
-            ensureAudioManager(context);
-            mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, mVibrateSetting);
-            mAudioManager.setRingerMode(mRingerMode);
-            if (mDoHapticFeedback && mHapticFeedback) {
-                mVibrator.vibrate(VIBRATE_DURATION);
+            // If we are setting a vibrating state, vibrate to indicate it
+            if (mVibrateWhenRinging) {
+                Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator.vibrate(250);
             }
+
+            // Set the desired state
+            ContentResolver resolver = context.getContentResolver();
+            Settings.System.putInt(resolver, Settings.System.VIBRATE_WHEN_RINGING,
+                    (mVibrateWhenRinging ? 1 : 0));
+            mAudioManager.setRingerMode(mRingerMode);
         }
 
         @Override
@@ -217,19 +196,12 @@ public class SoundButton extends PowerButton {
             if (o.getClass() != getClass()) {
                 return false;
             }
-
             Ringer r = (Ringer) o;
-            // Silent mode docs: "Ringer mode that will be silent and will not
-            // vibrate. (This overrides the vibrate setting.)" If silent mode is
-            // set, don't bother checking vibrate since silent overrides. This
-            // fixes cases where silent mode is not detected because of "wrong"
-            // vibrate state.
-            if (mRingerMode == AudioManager.RINGER_MODE_SILENT && (r.mRingerMode == mRingerMode))
+            if ((mRingerMode == AudioManager.RINGER_MODE_SILENT || mRingerMode == AudioManager.RINGER_MODE_VIBRATE)
+                    && (r.mRingerMode == mRingerMode))
                 return true;
-            return r.mVibrateInSilent == mVibrateInSilent && r.mVibrateSetting == mVibrateSetting
+            return r.mVibrateWhenRinging == mVibrateWhenRinging
                     && r.mRingerMode == mRingerMode;
         }
-
     }
-
 }
