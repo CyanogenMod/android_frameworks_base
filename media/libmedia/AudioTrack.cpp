@@ -78,7 +78,6 @@ status_t AudioTrack::getMinFrameCount(
     if (AudioSystem::getOutputLatency(&afLatency, streamType) != NO_ERROR) {
         return NO_INIT;
     }
-
     // Ensure that buffer depth covers at least audio hardware latency
     uint32_t minBufCount = afLatency / ((1000 * afFrameCount) / afSampleRate);
     if (minBufCount < 2) minBufCount = 2;
@@ -215,6 +214,9 @@ AudioTrack::~AudioTrack()
         AudioSystem::releaseAudioSessionId(mSessionId);
 #endif
     }
+#ifdef STE_HARDWARE
+    AudioSystem::unregisterLatencyNotificationClient(mLatencyClientId);
+#endif
 }
 
 status_t AudioTrack::set(
@@ -345,6 +347,10 @@ status_t AudioTrack::set(
 #endif
     AudioSystem::acquireAudioSessionId(mSessionId);
     mRestoreStatus = NO_ERROR;
+#ifdef STE_HARDWARE
+    mLatencyClientId = AudioSystem::registerLatencyNotificationClient(
+                                    &AudioTrack::LatencyCallbackWrapper, this);
+#endif
     return NO_ERROR;
 }
 
@@ -1478,6 +1484,30 @@ status_t AudioTrack::dump(int fd, const Vector<String16>& args) const
     ::write(fd, result.string(), result.size());
     return NO_ERROR;
 }
+
+#ifdef STE_HARDWARE
+// static
+void AudioTrack::LatencyCallbackWrapper(void *cookie, audio_io_handle_t output, uint32_t latency)
+{
+    static_cast<AudioTrack *>(cookie)->latencyCallback(output, latency);
+}
+
+void AudioTrack::latencyCallback(audio_io_handle_t output, uint32_t latency)
+{
+    audio_io_handle_t myOutput = getOutput();
+    if (output != myOutput) {
+        return;
+    }
+
+    uint32_t oldLatency = mLatency;
+    mLatency = latency + (1000*mCblk->frameCount) / mCblk->sampleRate;
+    LOGV("new latency for output %d (old latency %d, new latency %d)", output, oldLatency, mLatency);
+
+    if (mCbf != NULL) {
+        mCbf(EVENT_LATENCY_CHANGED, mUserData, &mLatency);
+    }
+}
+#endif
 
 // =========================================================================
 
