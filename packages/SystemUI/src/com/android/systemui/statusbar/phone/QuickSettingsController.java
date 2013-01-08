@@ -30,6 +30,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -101,14 +102,19 @@ public class QuickSettingsController {
     public static final String TILE_NFC = "toggleNfc";
 
     private static final String TILE_DELIMITER = "|";
-    private static final String TILES_DEFAULT = TILE_USER
-            + TILE_DELIMITER + TILE_BRIGHTNESS
-            + TILE_DELIMITER + TILE_SETTINGS
-            + TILE_DELIMITER + TILE_WIFI
-            + TILE_DELIMITER + TILE_MOBILEDATA
-            + TILE_DELIMITER + TILE_BATTERY
-            + TILE_DELIMITER + TILE_AIRPLANE
-            + TILE_DELIMITER + TILE_BLUETOOTH;
+    private static ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
+
+    static {
+        TILES_DEFAULT.add(TILE_USER);
+        TILES_DEFAULT.add(TILE_BRIGHTNESS);
+        TILES_DEFAULT.add(TILE_SETTINGS);
+        TILES_DEFAULT.add(TILE_WIFI);
+        TILES_DEFAULT.add(TILE_MOBILEDATA);
+        TILES_DEFAULT.add(TILE_BATTERY);
+        TILES_DEFAULT.add(TILE_AIRPLANE);
+        TILES_DEFAULT.add(TILE_BLUETOOTH);
+    }
+
     /**
      * END OF DATA MATCHING BLOCK
      */
@@ -158,12 +164,26 @@ public class QuickSettingsController {
     }
 
     void loadTiles() {
+
+        // Filter items not compatible with device
+        boolean bluetoothSupported = deviceSupportsBluetooth();
+        boolean telephonySupported = deviceSupportsTelephony();
+
+        if (!bluetoothSupported) {
+            TILES_DEFAULT.remove(TILE_BLUETOOTH);
+        }
+        if (!telephonySupported) {
+            TILES_DEFAULT.remove(TILE_WIFIAP);
+            TILES_DEFAULT.remove(TILE_MOBILEDATA);
+            TILES_DEFAULT.remove(TILE_NETWORKMODE);
+        }
+
         // Read the stored list of tiles
         ContentResolver resolver = mContext.getContentResolver();
         String tiles = Settings.System.getString(resolver, Settings.System.QUICK_SETTINGS_TILES);
         if (tiles == null) {
             Log.i(TAG, "Default tiles being loaded");
-            tiles = TILES_DEFAULT;
+            tiles = TextUtils.join(TILE_DELIMITER, TILES_DEFAULT);
         }
 
         Log.i(TAG, "Tiles list: " + tiles);
@@ -184,7 +204,7 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_GPS)) {
                 mQuickSettings.add(GPS_TILE);
             } else if (tile.equals(TILE_BLUETOOTH)) {
-                if(deviceSupportsBluetooth()) {
+                if(bluetoothSupported) {
                     mQuickSettings.add(BLUETOOTH_TILE);
                 }
             } else if (tile.equals(TILE_BRIGHTNESS)) {
@@ -194,19 +214,19 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_SYNC)) {
                 mQuickSettings.add(SYNC_TILE);
             } else if (tile.equals(TILE_WIFIAP)) {
-                if(deviceSupportsTelephony()) {
+                if(telephonySupported) {
                     mQuickSettings.add(WIFIAP_TILE);
                 }
             } else if (tile.equals(TILE_SCREENTIMEOUT)) {
                 mQuickSettings.add(SCREENTIMEOUT_TILE);
             } else if (tile.equals(TILE_MOBILEDATA)) {
-                if(deviceSupportsTelephony()) {
+                if(telephonySupported) {
                     mQuickSettings.add(MOBILE_NETWORK_TILE);
                 }
             } else if (tile.equals(TILE_LOCKSCREEN)) {
                 mQuickSettings.add(TOGGLE_LOCKSCREEN_TILE);
             } else if (tile.equals(TILE_NETWORKMODE)) {
-                if(deviceSupportsTelephony()) {
+                if(telephonySupported) {
                     mQuickSettings.add(MOBILE_NETWORK_TYPE_TILE);
                 }
             } else if (tile.equals(TILE_AUTOROTATE)) {
