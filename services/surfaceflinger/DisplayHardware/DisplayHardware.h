@@ -82,7 +82,6 @@ public:
     void        setActionSafeWidthRatio(float asWidthRatio) const;
     void        setActionSafeHeightRatio(float asHeightRatio) const;
 #endif
-
     uint32_t getPageFlipCount() const;
     EGLDisplay getEGLDisplay() const { return mDisplay; }
 #ifdef QCOM_HARDWARE

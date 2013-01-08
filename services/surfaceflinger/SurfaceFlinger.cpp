@@ -574,7 +574,7 @@ void SurfaceFlinger::handleTransactionLocked(uint32_t transactionFlags)
 {
     const LayerVector& currentLayers(mCurrentState.layersSortedByZ);
     const size_t count = currentLayers.size();
-
+    int rot, ori;
     /*
      * Traversal of the children
      * (perform the transaction for each of them if needed)
@@ -643,6 +643,27 @@ void SurfaceFlinger::handleTransactionLocked(uint32_t transactionFlags)
             }
         }
     }
+#ifdef STE_HDMI
+    ori = mCurrentState.orientation;
+    switch (ori) {
+        case 1:
+               rot = Transform::ROT_270;
+               break;
+        case 2:
+               rot = Transform::ROT_180;
+               break;
+        case 3:
+               rot = Transform::ROT_90;
+               break;
+        case 0:
+        default:
+               rot=0;
+               break;
+    }
+    HWComposer &hwc(graphicPlane(0).displayHardware().getHwComposer());
+    hwc.setHDMIParameter(HWC_UI_ORIENTATION,rot);
+    hwc.setHDMIParameter(HWC_HW_ROTATION,rot);
+#endif
 
     commitTransaction();
 }
@@ -1425,6 +1446,14 @@ void SurfaceFlinger::enableExternalDisplay(int disp_type, int value)
         updateHwcExternalDisplay(mExtDispOutput);
         signalEvent();
     }
+}
+#endif
+
+#ifdef STE_HDMI
+int SurfaceFlinger::setHDMIParameter(int disp_type, int value)
+{
+    HWComposer &hwc(graphicPlane(0).displayHardware().getHwComposer());
+    return hwc.setHDMIParameter(disp_type,value);
 }
 #endif
 

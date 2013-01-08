@@ -186,6 +186,10 @@ public:
     //HDMI Specific
     virtual void                        enableExternalDisplay(int disp_type, int externaltype);
 #endif
+#ifdef STE_HDMI
+    //HDMI Specific
+    virtual int                         setHDMIParameter(int disp_type, int externaltype);
+#endif
 
     virtual status_t captureScreen(DisplayID dpy,
             sp<IMemoryHeap>* heap,
@@ -421,7 +425,6 @@ private:
 #ifdef QCOM_HARDWARE
                 bool                        mCanSkipComposition;
 #endif
-
                 // these are thread safe
     mutable     Barrier                     mReadyToRunBarrier;
 

@@ -72,6 +72,9 @@ public:
     uint32_t getFlags() const;
     void perform(int event, int value);
 #endif
+#ifdef STE_HDMI
+    int setHDMIParameter(int event, int value);
+#endif
 
     // for debugging
     void dump(String8& out, char* scratch, size_t SIZE,

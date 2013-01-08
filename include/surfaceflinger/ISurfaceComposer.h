@@ -136,6 +136,10 @@ public:
     //External display specific functions
     virtual void enableExternalDisplay(int disp_type, int enable) = 0;
 #endif
+#ifdef STE_HDMI
+    //External display specific functions
+    virtual int setHDMIParameter(int disp_type, int enable) = 0;
+#endif
 
 };
 
@@ -159,6 +163,9 @@ public:
         AUTHENTICATE_SURFACE,
 #ifdef QCOM_HDMI_OUT
         EXTERNAL_DISPLAY,
+#endif
+#ifdef STE_HDMI
+        SET_HDMI_PARAMETER,
 #endif
     };
 

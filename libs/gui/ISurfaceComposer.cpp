@@ -185,6 +185,17 @@ public:
         remote()->transact(BnSurfaceComposer::EXTERNAL_DISPLAY, data, &reply);
     }
 #endif
+#ifdef STE_HDMI
+    virtual int setHDMIParameter(int disp_type, int enable)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(ISurfaceComposer::getInterfaceDescriptor());
+        data.writeInt32(disp_type);
+        data.writeInt32(enable);
+        remote()->transact(BnSurfaceComposer::SET_HDMI_PARAMETER, data, &reply);
+        return reply.readInt32();
+    }
+#endif
 
 };
 
@@ -272,6 +283,15 @@ status_t BnSurfaceComposer::onTransact(
             int disp_type = data.readInt32();
             int enable = data.readInt32();
             enableExternalDisplay(disp_type, enable);
+        } break;
+#endif
+#ifdef STE_HDMI
+        case SET_HDMI_PARAMETER: {
+            CHECK_INTERFACE(ISurfaceComposer, data, reply);
+            int disp_type = data.readInt32();
+            int enable = data.readInt32();
+            int32_t result = setHDMIParameter(disp_type, enable);
+            reply->writeInt32(result);
         } break;
 #endif
         default:
