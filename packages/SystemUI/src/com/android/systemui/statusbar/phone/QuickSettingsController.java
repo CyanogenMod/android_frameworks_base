@@ -56,6 +56,7 @@ import com.android.systemui.quicksettings.RingerModeTile;
 import com.android.systemui.quicksettings.SleepScreenTile;
 import com.android.systemui.quicksettings.SyncTile;
 import com.android.systemui.quicksettings.ToggleLockscreenTile;
+import com.android.systemui.quicksettings.UsbTetherTile;
 import com.android.systemui.quicksettings.UserTile;
 import com.android.systemui.quicksettings.WiFiDisplayTile;
 import com.android.systemui.quicksettings.WiFiTile;
@@ -100,6 +101,7 @@ public class QuickSettingsController {
     public static final String TILE_WIMAX = "toggleWimax";
     public static final String TILE_PROFILE = "toggleProfile";
     public static final String TILE_NFC = "toggleNfc";
+    public static final String TILE_USBTETHER = "toggleUsbTether";
 
     private static final String TILE_DELIMITER = "|";
     private static ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
@@ -152,6 +154,7 @@ public class QuickSettingsController {
     public static final int SYNC_TILE = 20;
     public static final int NFC_TILE = 21;
     public static final int SCREENTIMEOUT_TILE = 22;
+    public static final int USBTETHER_TILE = 23;
     public static final int USER_TILE = 99;
     private InputMethodTile IMETile;
 
@@ -249,6 +252,8 @@ public class QuickSettingsController {
                 // Not available yet
             } else if (tile.equals(TILE_LTE)) {
                 // Not available yet
+            } else if (tile.equals(TILE_USBTETHER)) {
+                mQuickSettings.add(USBTETHER_TILE);
             }
         }
 
@@ -447,6 +452,9 @@ public class QuickSettingsController {
                 break;
             case SCREENTIMEOUT_TILE:
                 qs = new ScreenTimeoutTile(mContext, inflater, mContainerView, this);
+                break;
+            case USBTETHER_TILE:
+                qs = new UsbTetherTile(mContext, inflater, mContainerView, this);
                 break;
             }
             if (qs != null) {
