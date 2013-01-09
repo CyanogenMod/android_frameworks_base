@@ -57,6 +57,14 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
     private static final int FLAG_HAS_LOCAL_HOUR = 0x1;
     private static final int FLAG_HAS_LOCAL_MINUTE = 0x2;
 
+    private static final String[] CLOCK_WIDGET_PACKAGES = new String[] {
+        "com.cyanogenmod.lockclock",
+        "com.dvtonder.chronus",
+        "com.android.deskclock",
+        "com.google.android.apps.dashclock",
+        "net.nurik.roman.dashclock"
+    };
+
     protected KeyguardViewStateManager mViewStateManager;
     private LockPatternUtils mLockPatternUtils;
 
@@ -143,6 +151,16 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
             ViewGroup vg = (ViewGroup) newPage;
             if (vg.getChildAt(0) instanceof KeyguardStatusView) {
                 showingClock = true;
+            } else if (vg.getChildAt(0) instanceof AppWidgetHostView) {
+                AppWidgetProviderInfo info =
+                        ((AppWidgetHostView) vg.getChildAt(0)).getAppWidgetInfo();
+                String widgetPackage = info.provider.getPackageName();
+                for (String packageName : CLOCK_WIDGET_PACKAGES) {
+                    if (packageName.equals(widgetPackage)) {
+                        showingClock = true;
+                        break;
+                    }
+                }
             }
         }
 
