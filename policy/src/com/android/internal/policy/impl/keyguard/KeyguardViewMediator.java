@@ -623,9 +623,6 @@ public class KeyguardViewMediator {
         // having to unlock the screen)
         final ContentResolver cr = mContext.getContentResolver();
 
-        boolean separateSlideLockTimeoutEnabled = Settings.System.getInt(cr,
-                Settings.System.SCREEN_LOCK_SLIDE_DELAY_TOGGLE, 0) == 1;
-
         // From DisplaySettings
         long displayTimeout = Settings.System.getInt(cr, SCREEN_OFF_TIMEOUT,
                 KEYGUARD_DISPLAY_TIMEOUT_DELAY_DEFAULT);
@@ -636,6 +633,12 @@ public class KeyguardViewMediator {
                 KEYGUARD_LOCK_AFTER_DELAY_DEFAULT);
 
         // From CyanogenMod specific Settings
+        // If utilizing a secured lock screen, we should not utilize the slide
+        // delay and should let it default to the standard delay
+        boolean separateSlideLockTimeoutEnabled = (mLockPatternUtils.isSecure() ? false
+                : Settings.System.getInt(cr,
+                        Settings.System.SCREEN_LOCK_SLIDE_DELAY_TOGGLE, 0) == 1);
+
         int slideLockTimeoutDelay = (mSlideLockDelay == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT ? Settings.System
                 .getInt(cr, Settings.System.SCREEN_LOCK_SLIDE_TIMEOUT_DELAY,
                         KEYGUARD_LOCK_AFTER_DELAY_DEFAULT) : Settings.System.getInt(cr,
