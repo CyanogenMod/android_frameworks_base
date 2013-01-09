@@ -124,7 +124,12 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
         status_t err = mAudioSink->open(
                 mSampleRate, numChannels, AUDIO_FORMAT_PCM_16_BIT,
                 DEFAULT_AUDIOSINK_BUFFERCOUNT,
+#ifdef STE_HARDWARE
+                &AudioPlayer::AudioSinkCallback, this,
+                &AudioPlayer::LatencyCallback);
+#else
                 &AudioPlayer::AudioSinkCallback, this);
+#endif
         if (err != OK) {
             if (mFirstBuffer != NULL) {
                 mFirstBuffer->release();
@@ -275,6 +280,16 @@ void AudioPlayer::AudioCallback(int event, void *user, void *info) {
     static_cast<AudioPlayer *>(user)->AudioCallback(event, info);
 }
 
+#ifdef STE_HARDWARE
+// static
+void AudioPlayer::LatencyCallback(uint32_t latency, void *cookie) {
+    AudioPlayer *me = (AudioPlayer *)cookie;
+    int64_t oldLatency = me->mLatencyUs;
+    me->mLatencyUs = (int64_t)latency * 1000;
+    LOGI("Audio output latency updated from %lldus to %lldus", oldLatency, me->mLatencyUs);
+}
+#endif
+
 bool AudioPlayer::isSeeking() {
     Mutex::Autolock autoLock(mLock);
     return mSeeking;
@@ -298,14 +313,26 @@ size_t AudioPlayer::AudioSinkCallback(
 }
 
 void AudioPlayer::AudioCallback(int event, void *info) {
+#ifdef STE_HARDWARE
+    if (event == AudioTrack::EVENT_MORE_DATA) {
+#else
     if (event != AudioTrack::EVENT_MORE_DATA) {
         return;
     }
+#endif
 
     AudioTrack::Buffer *buffer = (AudioTrack::Buffer *)info;
     size_t numBytesWritten = fillBuffer(buffer->raw, buffer->size);
 
     buffer->size = numBytesWritten;
+#ifdef STE_HARDWARE
+    } else if (event == AudioTrack::EVENT_LATENCY_CHANGED) {
+        uint32_t *newLatency = (uint32_t *)info;
+        int64_t oldLatency = mLatencyUs;
+        mLatencyUs = (int64_t)*newLatency * 1000;
+        LOGI("Audio output latency updated from %lldus to %lldus", oldLatency, mLatencyUs);
+    }
+#endif
 }
 
 uint32_t AudioPlayer::getNumFramesPendingPlayout() const {

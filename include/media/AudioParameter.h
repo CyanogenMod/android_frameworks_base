@@ -46,6 +46,9 @@ public:
     static const char *keyChannels;
     static const char *keyFrameCount;
     static const char *keyInputSource;
+#ifdef STE_HARDWARE
+    static const char *keyLatency;
+#endif
 
     String8 toString();
 
