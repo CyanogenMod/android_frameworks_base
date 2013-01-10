@@ -81,7 +81,10 @@ class BatteryService extends Binder {
 
     // Used locally for determining when to make a last ditch effort to log
     // discharge stats before the device dies.
-    private int mCriticalBatteryLevel;
+    private int mCriticalBatteryWarnLevel;
+
+    // Try to shutdown device before it dies
+    private int mCriticalBatteryShutdownLevel;
 
     private static final int DUMP_MAX_LENGTH = 24 * 1024;
     private static final String[] DUMPSYS_ARGS = new String[] { "--checkin", "-u" };
@@ -156,8 +159,10 @@ class BatteryService extends Binder {
         mLed = new Led(context, lights);
         mBatteryStats = BatteryStatsService.getService();
 
-        mCriticalBatteryLevel = mContext.getResources().getInteger(
+        mCriticalBatteryWarnLevel = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_criticalBatteryWarningLevel);
+        mCriticalBatteryShutdownLevel = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_criticalBatteryShutdownLevel);
         mLowBatteryWarningLevel = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_lowBatteryWarningLevel);
         mLowBatteryCloseWarningLevel = mContext.getResources().getInteger(
@@ -180,12 +185,15 @@ class BatteryService extends Binder {
         update();
     }
 
-    final boolean isPowered() {
-        // assume we are powered if battery state is unknown so the "stay on while plugged in" option will work.
+    final boolean isPlugged() {
         return (mAcOnline || mUsbOnline || mBatteryStatus == BatteryManager.BATTERY_STATUS_UNKNOWN);
     }
 
-    final boolean isPowered(int plugTypeSet) {
+    final boolean isCharging() {
+        return (mBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING);
+    }
+
+    final boolean isPlugged(int plugTypeSet) {
         // assume we are powered if battery state is unknown so
         // the "stay on while plugged in" option will work.
         if (mBatteryStatus == BatteryManager.BATTERY_STATUS_UNKNOWN) {
@@ -233,14 +241,14 @@ class BatteryService extends Binder {
 
     void systemReady() {
         // check our power situation now that it is safe to display the shutdown dialog.
-        shutdownIfNoPower();
+        shutdownIfCriticalPower();
         shutdownIfOverTemp();
     }
 
-    private final void shutdownIfNoPower() {
+    private final void shutdownIfCriticalPower() {
         // shut down gracefully if our battery is critically low and we are not powered.
         // wait until the system has booted before attempting to display the shutdown dialog.
-        if (mBatteryLevel == 0 && !isPowered() && ActivityManagerNative.isSystemReady()) {
+        if (mBatteryLevel <= mCriticalBatteryShutdownLevel && !isCharging() && ActivityManagerNative.isSystemReady()) {
             Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
             intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -270,7 +278,7 @@ class BatteryService extends Binder {
         boolean logOutlier = false;
         long dischargeDuration = 0;
 
-        mBatteryLevelCritical = mBatteryLevel <= mCriticalBatteryLevel;
+        mBatteryLevelCritical = mBatteryLevel <= mCriticalBatteryWarnLevel;
         if (mAcOnline) {
             mPlugType = BatteryManager.BATTERY_PLUGGED_AC;
         } else if (mUsbOnline) {
@@ -288,7 +296,7 @@ class BatteryService extends Binder {
             // Should never happen.
         }
         
-        shutdownIfNoPower();
+        shutdownIfCriticalPower();
         shutdownIfOverTemp();
 
         boolean dockBatteryChanged = false;
@@ -351,8 +359,8 @@ class BatteryService extends Binder {
                 logOutlier = true;
             }
 
-            final boolean plugged = mPlugType != BATTERY_PLUGGED_NONE;
-            final boolean oldPlugged = mLastPlugType != BATTERY_PLUGGED_NONE;
+            final boolean charging = (mBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING);
+            final boolean oldCharging = (mLastBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING);
 
             /* The ACTION_BATTERY_LOW broadcast is sent in these situations:
              * - is just un-plugged (previously was plugged) and battery level is
@@ -360,10 +368,10 @@ class BatteryService extends Binder {
              * - is not plugged and battery level falls to WARNING boundary
              *   (becomes <= mLowBatteryWarningLevel).
              */
-            final boolean sendBatteryLow = !plugged
+            final boolean sendBatteryLow = !charging
                     && mBatteryStatus != BatteryManager.BATTERY_STATUS_UNKNOWN
                     && mBatteryLevel <= mLowBatteryWarningLevel
-                    && (oldPlugged || mLastBatteryLevel > mLowBatteryWarningLevel);
+                    && (oldCharging || mLastBatteryLevel > mLowBatteryWarningLevel);
 
             sendIntent();
 
@@ -530,7 +538,7 @@ class BatteryService extends Binder {
             return com.android.internal.R.drawable.stat_sys_battery;
         } else if (mBatteryStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING
                 || mBatteryStatus == BatteryManager.BATTERY_STATUS_FULL) {
-            if (isPowered() && mBatteryLevel >= 100) {
+            if (isPlugged() && mBatteryLevel >= 100) {
                 return com.android.internal.R.drawable.stat_sys_battery_charge;
             } else {
                 return com.android.internal.R.drawable.stat_sys_battery;
