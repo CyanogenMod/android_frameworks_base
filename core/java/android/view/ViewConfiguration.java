@@ -205,6 +205,16 @@ public class ViewConfiguration {
      */
     private static final int OVERFLING_DISTANCE = 6;
 
+    /**
+     * Masks for checking presence of hardware keys.
+     * Must match values in frameworks/base/core/res/res/values/config.xml
+     */
+    private static final int KEY_MASK_HOME = 0x01;
+    private static final int KEY_MASK_BACK = 0x02;
+    private static final int KEY_MASK_MENU = 0x04;
+    private static final int KEY_MASK_ASSIST = 0x08;
+    private static final int KEY_MASK_APP_SWITCH = 0x10;
+
     private final int mEdgeSlop;
     private final int mFadingEdgeLength;
     private final int mMinimumFlingVelocity;
@@ -295,7 +305,13 @@ public class ViewConfiguration {
         if (!sHasPermanentMenuKeySet) {
             IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
             try {
-                sHasPermanentMenuKey = !wm.hasSystemNavBar() && !wm.hasNavigationBar();
+                if (wm.hasSystemNavBar() || wm.hasNavigationBar())
+                    sHasPermanentMenuKey = false;
+                else {
+                    final int hardwareKeys = context.getResources().getInteger(
+                            com.android.internal.R.integer.config_deviceHardwareKeys);
+                    sHasPermanentMenuKey = (hardwareKeys & KEY_MASK_MENU) != 0;
+                }
                 sHasPermanentMenuKeySet = true;
             } catch (RemoteException ex) {
                 sHasPermanentMenuKey = false;
