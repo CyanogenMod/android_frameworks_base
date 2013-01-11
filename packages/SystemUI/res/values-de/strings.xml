@@ -208,7 +208,7 @@
     <string name="status_bar_help_title" msgid="1199237744086469217">"Benachrichtigungen erscheinen hier"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Greifen Sie jederzeit auf sie zu, indem Sie nach unten wischen."\n"Wischen Sie für Systemeinstellungen erneut nach unten."</string>
 
-<!-- **** CYANOGENMOD EDITS START **** -->
+<!-- **** CYANOGENMOD ADDITIONS START **** -->
 
     <!-- Screen timeout toast -->
     <string name="powerwidget_screen_timeout_toast">Bildschirmsperre nach: %1$d %2$s</string>
@@ -232,5 +232,16 @@
     <string name="quick_settings_screen_timeout">Timeout</string>
     <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
 
-<!-- **** CYANOGENMOD EDITS END **** -->
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Funktion zuweisen</string>
+    <string name="navbar_home_button">Home</string>
+    <string name="navbar_recent_button">Zuletzt verwendet</string>
+    <string name="navbar_search_button">Suche</string>
+    <string name="navbar_back_button">Zurück</string>
+    <string name="navbar_empty_button">Nicht belegt</string>
+    <string name="navbar_menu_conditional_button">Menü (automatisch ausblenden)</string>
+    <string name="navbar_menu_always_button">Menü (immer sichtbar)</string>
+    <string name="navbar_menu_big_button">Menü</string>
+
+<!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
