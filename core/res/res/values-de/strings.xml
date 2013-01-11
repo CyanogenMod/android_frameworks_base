@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-/* //device/apps/common/assets/res/any/strings.xml
-**
-** Copyright 2006, The Android Open Source Project
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
- -->
+<!-- Copyright (C) 2006, The Android Open Source Project
+     Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="byteShort" msgid="8340973892742019101">"B"</string>
     <string name="kilobyteShort" msgid="5973789783504771878">"KB"</string>
     <string name="megabyteShort" msgid="6355851576770428922">"MB"</string>
@@ -1445,7 +1443,7 @@
     <string name="user_switched" msgid="3768006783166984410">"Aktueller Nutzer <xliff:g id="NAME">%1$s</xliff:g>"</string>
     <string name="owner_name" msgid="2716755460376028154">"Eigentümer"</string>
 
-    <!-- **** CYANOGENMOD EDITS START **** -->
+    <!-- **** CYANOGENMOD ADDITIONS START **** -->
 
     <!-- Names of default profiles. -->
     <string name="profileNameDefault">Standard</string>
@@ -1459,12 +1457,12 @@
     <string name="profileGroupCalendar">Kalender</string>
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">E-Mail</string>
-    <string name="profileGroupSMS">SMS</string>
+    <string name="profileGroupSMS">SMS/MMS</string>
 
     <!-- Name of wildcard profile. -->
     <string name="wildcardProfile">Anderes</string>
 
-    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <!-- Button to reboot the phone, within the phone options dialog -->
     <string name="reboot_system" product="tablet">Tablet neu starten</string>
     <string name="reboot_system" product="default">Telefon neu starten</string>
 
@@ -1488,7 +1486,8 @@
     <string name="reboot_progress">Neu starten\u2026</string>
 
     <!-- Reboot Confirmation Dialog -->
-    <string name="reboot_confirm">Telefon wird neu gestartet.</string>
+    <string name="reboot_confirm" product="default">Telefon wird neu gestartet</string>
+    <string name="reboot_confirm" product="tablet">Tablet wird neu gestartet</string>
 
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">Neu starten</string>
@@ -1502,5 +1501,6 @@
     <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">Bildschirmausrichtung sperren</string>
     <string name="toast_rotation_locked">Bildschirmausrichtung entsperren</string>
-    <!-- **** CYANOGENMOD EDITS END **** -->
+
+    <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
