@@ -27,105 +27,162 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE.
 
-==================================
+=========================================================================================
   Description
-==================================
+=========================================================================================
 
 The PerfLock APIs can be used in either the framework or in packaged applications.
 The APIs toggle system performance optimizations based upon level requested.
+PerfLock will always run the highest level of optimization requested.
 
-==================================
+NOTE: Each instance of the Performance class object will serve one unique PerfLock request.
+      Therefore, a new Performance class object will need to be created for every
+      unique request for PerfLock.
+
+Please read through the following carefully to understand the proper usage of this API.
+
+=========================================================================================
   PerfLock APIs
-==================================
+=========================================================================================
 
 The following two methods are the PerfLock APIs
 
-1. perfLockAcquire(int... args)
+1. perfLockAcquire(int duration, int... args)
 
-    Toggle on all optimizations requested.
+    Description:
 
-    Description: Call perfLockAcquire with the list of optimizations required.
-                 perfLockAcquire accepts variable number of arguments, enter all
-                 optimizations required at once.
+        Toggle on all optimizations requested.
 
-                 See next section below for the optimizations supported.
+    Arguments:
 
-    Limitations: Only the first five optimizations will be performed.
-                 You are only allowed to choose one optimization from each of the
-                 numbered sections in the table below.
+        duration: The maximum amount of time required to hold the lock.
+                  Only a positive integer value in milliseconds will be accepted.
+                  You may explicitly call perfLockRelease before the timer expires.
 
-                 Incorrect or unsupported optimizations will be ignored.
+        args: Enter all optimizations required. Only the optimizations in the
+              table below are supported. You can only choose one optimization
+              from each of the numbered sections in the table. Incorrect or
+              unsupported optimizations will be ignored.
+
+              NOTE: Enter the optimizations required in the order they appear in the table.
+
+    Returns: On success, a non-zero integer handle is returned, you must store this.
+             On error, a NULL pointer is returned.
+
+2. perfLockRelease() [OPTIONAL]
+
+    Description:
+
+        Toggle off all optimizations requested.
+        Use this function if you want to release before the time duration ends.
+
+    Arguments: None.
 
     Returns: REQUEST_SUCCEEDED or REQUEST_FAILED.
 
-2. perfLockRelease()
-
-    Toggle off all optimizations requested.
-
-    Returns: REQUEST_SUCCEEDED or REQUEST_FAILED.
-
-=============================
+=========================================================================================
   Optimizations Supported
-=============================
+=========================================================================================
 
 The following resource optimizations are supported for MSM8960:
 
- =============================================================================
-|         |                         |                                         |
-| Section | Optimization            | Description                             |
-|         |                         |                                         |
- =============================================================================
-|    1    | PWR_CLSP_A              | Disables all power collapse             |
-|         |                         |                                         |
- =============================================================================
-|    2    | HEAP_OPT_A              | Optimizes heap parameters               |
-|         |                         |                                         |
- =============================================================================
-|    3    | CPUS_ON_LVL_MAX         | Turn on all additional cores            |
-|         |_________________________|_________________________________________|
-|         | CPUS_ON_LVL_3           | Turn on three additional cores          |
-|         |_________________________|_________________________________________|
-|         | CPUS_ON_LVL_2           | Turn on two additional cores            |
-|         |_________________________|_________________________________________|
-|         | CPUS_ON_LVL_1           | Turn on one additional core             |
-|         |                         |                                         |
- =============================================================================
-|    4    | CPU0_FREQ_LVL_MAX       | Set CPU0 minimum frequency to MAX       |
-|         |_________________________|_________________________________________|
-|         | CPU0_FREQ_LVL_TURBO     | Set CPU0 minimum frequency to 1512 Mhz  |
-|         |_________________________|_________________________________________|
-|         |  CPU0_FREQ_LVL_NONTURBO | Set CPU0 minimum frequency to 1026 Mhz  |
-|         |                         |                                         |
- =============================================================================
-|    5    | CPU1_FREQ_LVL_MAX       | Set CPU1 minimum frequency to MAX       |
-|         |_________________________|_________________________________________|
-|         | CPU1_FREQ_LVL_TURBO     | Set CPU1 minimum frequency to 1512 Mhz  |
-|         |_________________________|_________________________________________|
-|         | CPU1_FREQ_LVL_NONTURBO  | Set CPU1 minimum frequency to 1026 Mhz  |
-|         |                         |                                         |
- =============================================================================
+ ========================================================================================
+|         |                                 |                                            |
+| Section | Optimization                    | Description                                |
+|         |                                 |                                            |
+ ========================================================================================
+|    1    | ALL_CPUS_PWR_CLPS_DIS           | Disables power collapse on all CPUs        |
+|         |                                 |                                            |
+ ========================================================================================
+|    2    | CPUS_ON_MAX                     | Minimum of four cores on                   |
+|         |_________________________________|____________________________________________|
+|         | CPUS_ON_3                       | Minimum of three cores on                  |
+|         |_________________________________|____________________________________________|
+|         | CPUS_ON_2                       | Minimum of two cores on                    |
+|         |                                 |                                            |
+ ========================================================================================
+|    3    | CPU0_FREQ_LVL_TURBO_MAX         | Set CPU0 minimum frequency to 1512 Mhz     |
+|         |_________________________________|____________________________________________|
+|         | CPU0_FREQ_LVL_NONTURBO_MAX      | Set CPU0 minimum frequency to 1026 Mhz     |
+|         |                                 |                                            |
+ ========================================================================================
+|    4    | CPU1_FREQ_LVL_TURBO_MAX         | Set CPU1 minimum frequency to 1512 Mhz     |
+|         |_________________________________|____________________________________________|
+|         | CPU1_FREQ_LVL_NONTURBO_MAX      | Set CPU1 minimum frequency to 1026 Mhz     |
+|         |                                 |                                            |
+ ========================================================================================
+|    5    | CPU2_FREQ_LVL_TURBO_MAX         | Set CPU2 minimum frequency to 1512 Mhz     |
+|         |_________________________________|____________________________________________|
+|         | CPU2_FREQ_LVL_NONTURBO_MAX      | Set CPU2 minimum frequency to 1026 Mhz     |
+|         |                                 |                                            |
+ ========================================================================================
+|    6    | CPU3_FREQ_LVL_TURBO_MAX         | Set CPU3 minimum frequency to 1512 Mhz     |
+|         |_________________________________|____________________________________________|
+|         | CPU3_FREQ_LVL_NONTURBO_MAX      | Set CPU3 minimum frequency to 1026 Mhz     |
+|         |                                 |                                            |
+ ========================================================================================
+|    7    | ALL_CPUS_FREQ_LVL_TURBO_MAX     | Set all online CPUs frequency to 1512 Mhz  |
+|         |_________________________________|__________________________   _______________|
+|         | ALL_CPUS_FREQ_LVL_NONTURBO_MAX  | Set all online CPUs frequency to 1026 Mhz  |
+|         |                                 |                                            |
+ ========================================================================================
 
-=====================================
+=========================================================================================
   PerfLock API usage in framework
-=====================================
+=========================================================================================
 
 1. Add "import org.codeaurora.Performance;" in your Java source file
+
 2. Create the Performance class object
+
 3. Use "perfLockAcquire" to request the optmizations required
+   and store the returned handle into an int variable.
+
 4. Use "perfLockRelease" to toggle the optimizations off
+   NOTE: perfLockRelease is optional but required if the duration
+         of acquisition is unknown (ie. 0).
 ______________________________________________________________________
-Example: Request PerfLock to bring up all additional cores and set the
-         minimum frequency for CPU0 and CPU1 to 1026 Mhz.
+Example: Request PerfLock for minimum of two cores and set the
+         minimum frequency for CPU0 and CPU1 to 1026 Mhz for three seconds.
 
    Performance mPerf = new Performance();
-   mPerf.perfLockAcquire(mPerf.CPUS_ON_LVL_MAX, mPerf.CPU0_FREQ_LVL_NONTURBO, mPerf.CPU1_FREQ_LVL_NONTURBO);
+
+   mPerf.perfLockAcquire(3000, mPerf.CPUS_ON_2, \
+                       mPerf.CPU0_FREQ_LVL_NONTURBO_MAX, mPerf.CPU1_FREQ_LVL_NONTURBO_MAX);
+
+   // Critical section requiring PerfLock
+
+NOTE: perfLockRelease is not required since PerfLock will automatically
+      release after three seconds.
+______________________________________________________________________
+Example: Request PerfLock for minimum of three cores in one section.
+         Set duration for five seconds and release before that if possible.
+
+         Request PerfLock for minimum of two cores in another section.
+         Set duration for three seconds and release before that if possible.
+
+   Performance mPerf = new Performance();
+   Performance sPerf = new Performance();
+
+   mPerf.perfLockAcquire(5000, mPerf.CPUS_ON_3);
 
    // Critical section requiring PerfLock
 
    mPerf.perfLockRelease();
 
-=================================================
+   // other code in between
+
+   sPerf.perfLockAcquire(3000, sPerf.CPUS_ON_2);
+
+   // Critical section requiring PerfLock
+
+   sPerf.perfLockRelease();
+
+NOTE: perfLockRelease is recommended to ensure PerfLock is not held for longer
+      than it needs to be.
+
+=========================================================================================
   PerfLock APIs usage in packaged applications
-=================================================
+=========================================================================================
 1. Repeat above steps for using APIs in framework
 2. Add "LOCAL_JAVA_LIBRARIES := org.codeaurora.Performance" to the application's Android.mk file

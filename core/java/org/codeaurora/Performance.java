@@ -40,58 +40,65 @@ public class Performance
     }
 
     /* The following defined constants are to be used for PerfLock APIs*/
-    /** @hide */ public static final int PWR_CLSP_A = 1100;
-    /** @hide */ public static final int HEAP_OPT_A = 2100;
+    /** @hide */ public static final int ALL_CPUS_PWR_CLPS_DIS = 0x100;
 
-    /** @hide */ public static final int CPUS_ON_LVL_MAX = 3900;
-    /** @hide */ public static final int CPUS_ON_LVL_3 = 3300;
-    /** @hide */ public static final int CPUS_ON_LVL_2 = 3200;
-    /** @hide */ public static final int CPUS_ON_LVL_1 = 3100;
+    /** @hide */ public static final int CPU0_FREQ_NONTURBO_MAX = 0x20A;
+    /** @hide */ public static final int CPU0_FREQ_TURBO_MAX = 0x20F;
 
-    /** @hide */ public static final int CPU0_FREQ_LVL_NONTURBO = 4200;
-    /** @hide */ public static final int CPU0_FREQ_LVL_TURBO = 4300;
-    /** @hide */ public static final int CPU0_FREQ_LVL_MAX = 4900;
+    /** @hide */ public static final int CPU1_FREQ_NONTURBO_MAX = 0x30A;
+    /** @hide */ public static final int CPU1_FREQ_TURBO_MAX = 0x30F;
 
-    /** @hide */ public static final int CPU1_FREQ_LVL_NONTURBO = 5200;
-    /** @hide */ public static final int CPU1_FREQ_LVL_TURBO = 5300;
-    /** @hide */ public static final int CPU1_FREQ_LVL_MAX = 5900;
+    /** @hide */ public static final int CPU2_FREQ_NONTURBO_MAX = 0x40A;
+    /** @hide */ public static final int CPU2_FREQ_TURBO_MAX = 0x40F;
+
+    /** @hide */ public static final int CPU3_FREQ_NONTURBO_MAX = 0x50A;
+    /** @hide */ public static final int CPU3_FREQ_TURBO_MAX = 0x50F;
+
+    /** @hide */ public static final int CPUS_ON_2 = 0x702;
+    /** @hide */ public static final int CPUS_ON_3 = 0x703;
+    /** @hide */ public static final int CPUS_ON_MAX = 0x704;
+
+    /** @hide */ public static final int ALL_CPUS_FREQ_NONTURBO_MAX = 0x90A;
+    /** @hide */ public static final int ALL_CPUS_FREQ_TURBO_MAX = 0x90F;
 
     /* The following are the PerfLock API return values*/
-    /** @hide */ public static final int REQUEST_FAILED = 0;
-    /** @hide */ public static final int REQUEST_SUCCEEDED = 1;
-    /** @hide */ public static final int REQUEST_PENDING = 2;
+    /** @hide */ public static final int REQUEST_FAILED = -1;
+    /** @hide */ public static final int REQUEST_SUCCEEDED = 0;
 
-    private int HANDLE = 0;
+    /** @hide */ private int handle = 0;
 
     /* The following two functions are the PerfLock APIs*/
     /** &hide */
-    public int perfLockAcquire(int... list) {
-        if (HANDLE == 0)
-            HANDLE = native_perf_lock_acq(list);
-        if (HANDLE > 0)
-            return REQUEST_SUCCEEDED;
-        return REQUEST_FAILED;
+    public int perfLockAcquire(int duration, int... list) {
+        int rc = REQUEST_SUCCEEDED;
+        handle = native_perf_lock_acq(handle, duration, list);
+        if (handle == 0)
+            rc = REQUEST_FAILED;
+        return rc;
     }
 
     /** &hide */
     public int perfLockRelease() {
-        int rc = 0;
-        if (HANDLE > 0)
-            rc = native_perf_lock_rel(HANDLE);
-            if (rc > 0)
-                HANDLE = 0;
-        return rc;
+        return native_perf_lock_rel(handle);
+    }
+
+    /** &hide */
+    public void setCpuBoost() {
+        int[] configPerfLock = new int[4];
+        final int DURATION_OF_PERFLOCK = 2000;
+
+        configPerfLock[0] = ALL_CPUS_PWR_CLPS_DIS;
+        configPerfLock[1] = CPUS_ON_MAX;
+        configPerfLock[2] = CPU0_FREQ_TURBO_MAX;
+        configPerfLock[3] = CPU1_FREQ_TURBO_MAX;
+
+        perfLockAcquire(DURATION_OF_PERFLOCK, configPerfLock);
     }
 
     /* The following are for internal use only */
     /** @hide */ public static final int CPUOPT_CPU0_PWRCLSP = 1;
     /** @hide */ public static final int CPUOPT_CPU0_FREQMIN = 2;
     /** @hide */ public static final int CPUOPT_CPU1_FREQMIN = 3;
-
-    /** &hide */
-    public void cpuBoost(int ntasks) {
-        native_cpu_boost(ntasks);
-    }
 
     /** &hide */
     public int cpuSetOptions(int reqType, int reqValue) {
@@ -103,9 +110,8 @@ public class Performance
         native_deinit();
     }
 
-    private native int  native_perf_lock_acq(int list[]);
+    private native int  native_perf_lock_acq(int handle, int duration, int list[]);
     private native int  native_perf_lock_rel(int handle);
-    private native void native_cpu_boost(int ntasks);
     private native int  native_cpu_setoptions(int reqtype, int reqvalue);
     private native void native_deinit();
 }

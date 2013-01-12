@@ -45,9 +45,8 @@ namespace android
 {
 
 // ----------------------------------------------------------------------------
-static void (*cpu_boost)(int)                       = NULL;
 static int  (*cpu_setoptions)(int, int)             = NULL;
-static int  (*perf_lock_acq)(int[], int)            = NULL;
+static int  (*perf_lock_acq)(int, int, int[], int)  = NULL;
 static int  (*perf_lock_rel)(int)                   = NULL;
 static void *dlhandle                               = NULL;
 
@@ -81,15 +80,12 @@ org_codeaurora_performance_native_init()
 
     dlerror();
 
-    cpu_boost = (void (*) (int))dlsym(dlhandle, "perf_cpu_boost");
-    if ((rc = dlerror()) != NULL) {
-        goto cleanup;
-    }
     cpu_setoptions = (int (*) (int, int))dlsym(dlhandle, "perf_cpu_setoptions");
     if ((rc = dlerror()) != NULL) {
         goto cleanup;
     }
-    perf_lock_acq = (int (*) (int[], int))dlsym(dlhandle, "perf_lock_acq");
+
+    perf_lock_acq = (int (*) (int, int, int[], int))dlsym(dlhandle, "perf_lock_acq");
     if ((rc = dlerror()) != NULL) {
         goto cleanup;
     }
@@ -107,7 +103,6 @@ org_codeaurora_performance_native_init()
     return;
 
 cleanup:
-    cpu_boost      = NULL;
     cpu_setoptions = NULL;
     perf_lock_acq  = NULL;
     perf_lock_rel  = NULL;
@@ -123,7 +118,6 @@ org_codeaurora_performance_native_deinit(JNIEnv *env, jobject clazz)
     void (*deinit)(void);
 
     if (dlhandle) {
-        cpu_boost      = NULL;
         cpu_setoptions = NULL;
         perf_lock_acq  = NULL;
         perf_lock_rel  = NULL;
@@ -138,14 +132,6 @@ org_codeaurora_performance_native_deinit(JNIEnv *env, jobject clazz)
     }
 }
 
-static void
-org_codeaurora_performance_native_cpu_boost(JNIEnv *env, jobject clazz, jint ntasks)
-{
-    if (cpu_boost) {
-        (*cpu_boost)(ntasks);
-    }
-}
-
 static jint
 org_codeaurora_performance_native_cpu_setoptions(JNIEnv *env, jobject clazz,
                                                  jint reqtype, jint reqvalue)
@@ -157,7 +143,7 @@ org_codeaurora_performance_native_cpu_setoptions(JNIEnv *env, jobject clazz,
 }
 
 static jint
-org_codeaurora_performance_native_perf_lock_acq(JNIEnv *env, jobject clazz, jintArray list)
+org_codeaurora_performance_native_perf_lock_acq(JNIEnv *env, jobject clazz, jint handle, jint duration, jintArray list)
 {
     jint listlen = env->GetArrayLength(list);
     jint buf[listlen];
@@ -168,7 +154,7 @@ org_codeaurora_performance_native_perf_lock_acq(JNIEnv *env, jobject clazz, jint
         org_codeaurora_performance_native_init();
     }
     if (perf_lock_acq) {
-        return (*perf_lock_acq)(buf, listlen);
+        return (*perf_lock_acq)(handle, duration, buf, listlen);
     }
     return 0;
 }
@@ -184,13 +170,11 @@ org_codeaurora_performance_native_perf_lock_rel(JNIEnv *env, jobject clazz, jint
     }
     return 0;
 }
-
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gMethods[] = {
-    {"native_cpu_boost",      "(I)V",                  (void *)org_codeaurora_performance_native_cpu_boost},
     {"native_cpu_setoptions", "(II)I",                 (int *)org_codeaurora_performance_native_cpu_setoptions},
-    {"native_perf_lock_acq",  "([I)I",                 (int *)org_codeaurora_performance_native_perf_lock_acq},
+    {"native_perf_lock_acq",  "(II[I)I",               (int *)org_codeaurora_performance_native_perf_lock_acq},
     {"native_perf_lock_rel",  "(I)I",                  (int *)org_codeaurora_performance_native_perf_lock_rel},
     {"native_deinit",         "()V",                   (void *)org_codeaurora_performance_native_deinit},
 };
