@@ -224,6 +224,10 @@
     <string name="quick_settings_report_bug">Отчёт об ошибке</string>
     <string name="quick_settings_sync">Синхронизация</string>
     <string name="quick_settings_torch">Фонарь</string>
+    <string name="quick_settings_screen_timeout">Тайм-аут</string>
+    <string name="quick_settings_usb_tether_off_label">Отключено</string>
+    <string name="quick_settings_usb_tether_connected_label">Выключен</string>
+    <string name="quick_settings_usb_tether_on_label">Включен</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Выберите действие</string>
