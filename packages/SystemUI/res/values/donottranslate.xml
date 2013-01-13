@@ -17,7 +17,6 @@
  */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Date format for display: should match the lockscreen in /policy.  -->
-    <string name="abbrev_wday_month_day_no_year">@*android:string/abbrev_wday_month_day_no_year</string>
-
+    <!-- Date format for display in status bar.  -->
+    <string name="full_wday_month_day_no_year_split">@*android:string/full_wday_month_day_no_year_split</string>
 </resources>
