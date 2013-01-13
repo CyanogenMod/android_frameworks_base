@@ -248,6 +248,7 @@ public class PowerWidget extends FrameLayout {
         // cycle through setting the buttons to null
         for (PowerButton pb : mButtons.values()) {
             pb.setupButton(null);
+            pb = null;
         }
 
         // clear our list
