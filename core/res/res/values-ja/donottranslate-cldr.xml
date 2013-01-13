@@ -57,4 +57,5 @@
     <string name="full_wday_month_day_no_year">M月d日 (E)</string>
     <string name="abbrev_wday_month_day_no_year">M月d日 (E)</string>
     <string name="abbrev_wday_month_day_year">yyyy年M月d日 (E)</string>
+    <string name="full_wday_month_day_no_year_split">M月d日\n(EEEE)</string>
 </resources>
