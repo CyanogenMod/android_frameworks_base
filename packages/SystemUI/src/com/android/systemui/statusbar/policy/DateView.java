@@ -116,7 +116,7 @@ public class DateView extends TextView implements OnClickListener, OnLongClickLi
     }
 
     protected void updateClock() {
-        final String dateFormat = getContext().getString(R.string.abbrev_wday_month_day_no_year);
+        final String dateFormat = "EEEE\nMMMM d";
         setText(DateFormat.format(dateFormat, new Date()));
     }
 
