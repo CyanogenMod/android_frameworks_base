@@ -225,6 +225,9 @@
     <string name="quick_settings_sync">Szinkronizálás</string>
     <string name="quick_settings_torch">Zseblámpa</string>
     <string name="quick_settings_screen_timeout">Időkorlát: </string>
+    <string name="quick_settings_usb_tether_off_label">Lecsatlakoztatva</string>
+    <string name="quick_settings_usb_tether_connected_label">Megosztás ki</string>
+    <string name="quick_settings_usb_tether_on_label">Megosztás be</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Válasszon eseményt</string>
