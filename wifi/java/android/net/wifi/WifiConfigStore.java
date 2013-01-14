@@ -142,7 +142,6 @@ class WifiConfigStore {
     private static final String PROXY_PORT_KEY = "proxyPort";
     private static final String EXCLUSION_LIST_KEY = "exclusionList";
     private static final String EOS = "eos";
-    private static final String AUTO_CONNECT_KEY = "autoConnect";
 
     private WifiNative mWifiNative;
 
@@ -180,7 +179,7 @@ class WifiConfigStore {
     void enableAllNetworks() {
         boolean networkEnabledStateChanged = false;
         for(WifiConfiguration config : mConfiguredNetworks.values()) {
-            if(config != null && config.status == Status.DISABLED && config.autoConnect) {
+            if(config != null && config.status == Status.DISABLED) {
                 if(mWifiNative.enableNetwork(config.networkId, false)) {
                     networkEnabledStateChanged = true;
                     config.status = Status.ENABLED;
@@ -196,21 +195,6 @@ class WifiConfigStore {
         }
     }
 
-    /**
-     * disable all networks that don't have autoConnect set and save config.
-     */
-    void setStateFromAutoConnectAllNetworks() {
-        for(WifiConfiguration config : mConfiguredNetworks.values()) {
-            if(config != null) {
-                if (config.status == Status.DISABLED && config.autoConnect) {
-                    enableNetwork(config.networkId, false);
-                } else if (config.status == Status.ENABLED && !config.autoConnect) {
-                    disableNetwork(config.networkId);
-                }
-            }
-        }
-
-    }
 
     /**
      * Selects the specified network for connection. This involves
@@ -238,13 +222,10 @@ class WifiConfigStore {
             mLastPriority = 0;
         }
 
-        boolean tmpAutoConnect = true;
-        tmpAutoConnect = mConfiguredNetworks.get(netId).autoConnect;
         // Set to the highest priority and save the configuration.
         WifiConfiguration config = new WifiConfiguration();
         config.networkId = netId;
         config.priority = ++mLastPriority;
-        config.autoConnect = tmpAutoConnect;
 
         addOrUpdateNetworkNative(config);
         mWifiNative.saveConfig();
@@ -296,9 +277,6 @@ class WifiConfigStore {
                     //If network is already disabled, keep the status
                     if (config.status == Status.CURRENT) {
                         config.status = Status.ENABLED;
-                    }
-                    else if (!config.autoConnect) {
-                       config.status = Status.DISABLED;
                     }
                     break;
                 default:
@@ -820,8 +798,6 @@ class WifiConfigStore {
                                 break;
                         }
                         if (writeToFile) {
-                            out.writeUTF(AUTO_CONNECT_KEY);
-                            out.writeUTF((config.autoConnect ? "True" : "False"));
                             out.writeUTF(ID_KEY);
                             out.writeInt(configKey(config));
                         }
@@ -874,12 +850,10 @@ class WifiConfigStore {
                 IpAssignment ipAssignment = IpAssignment.UNASSIGNED;
                 ProxySettings proxySettings = ProxySettings.UNASSIGNED;
                 LinkProperties linkProperties = new LinkProperties();
-                boolean autoConnect = true;
                 String proxyHost = null;
                 int proxyPort = -1;
                 String exclusionList = null;
                 String key;
-                String value;
 
                 do {
                     key = in.readUTF();
@@ -912,13 +886,6 @@ class WifiConfigStore {
                         } else if (key.equals(DNS_KEY)) {
                             linkProperties.addDns(
                                     NetworkUtils.numericToInetAddress(in.readUTF()));
-                        } else if (key.equals(AUTO_CONNECT_KEY)) {
-                            value = in.readUTF();
-                            if (value.equals("True")) {
-                                autoConnect = true;
-                            } else {
-                                autoConnect = false;
-                            }
                         } else if (key.equals(PROXY_SETTINGS_KEY)) {
                             proxySettings = ProxySettings.valueOf(in.readUTF());
                         } else if (key.equals(PROXY_HOST_KEY)) {
@@ -975,7 +942,6 @@ class WifiConfigStore {
                                 loge("Ignore invalid proxy settings while reading");
                                 break;
                         }
-                        config.autoConnect = autoConnect;
                     }
                 } else {
                     if (DBG) log("Missing id while parsing configuration");
@@ -1223,7 +1189,6 @@ class WifiConfigStore {
             WifiConfiguration newConfig) {
         boolean ipChanged = false;
         boolean proxyChanged = false;
-        boolean autoConnectChanged = false;
         LinkProperties linkProperties = new LinkProperties();
 
         switch (newConfig.ipAssignment) {
@@ -1289,19 +1254,6 @@ class WifiConfigStore {
                 break;
         }
 
-        boolean newAutoConnect = newConfig.autoConnect;
-        boolean currentAutoConnect = currentConfig.autoConnect;
-        if (newAutoConnect == currentAutoConnect) {
-            autoConnectChanged = false;
-        } else {
-            autoConnectChanged = true;
-            if (newAutoConnect) {
-                enableNetwork(newConfig.networkId, false);
-            } else {
-                disableNetwork(newConfig.networkId);
-            }
-        }
-
         if (!ipChanged) {
             addIpSettingsFromConfig(linkProperties, currentConfig);
         } else {
@@ -1323,13 +1275,7 @@ class WifiConfigStore {
             }
         }
 
-        if (!autoConnectChanged) {
-            currentConfig.autoConnect = currentConfig.autoConnect;
-        } else {
-            currentConfig.autoConnect = newConfig.autoConnect;
-        }
-
-        if (ipChanged || proxyChanged || autoConnectChanged) {
+        if (ipChanged || proxyChanged) {
             currentConfig.linkProperties = linkProperties;
             writeIpAndProxyConfigurations();
             sendConfiguredNetworksChangedBroadcast(currentConfig,
