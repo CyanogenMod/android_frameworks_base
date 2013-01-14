@@ -215,6 +215,7 @@
 
     <!-- Quick settings -->
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS Aus</string>
     <string name="quick_settings_screen_sleep">Standby</string>
     <string name="quick_settings_ringer_on">Ton an</string>
     <string name="quick_settings_ringer_off">Ton aus</string>
@@ -228,6 +229,7 @@
     <string name="quick_settings_report_bug">Fehlerprotokollierung</string>
     <string name="quick_settings_sync">Sync</string>
     <string name="quick_settings_torch">Lampe</string>
+    <string name="quick_settings_torch_off">Lampe Aus</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">Timeout</string>
     <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>

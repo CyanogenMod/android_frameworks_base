@@ -217,6 +217,7 @@
     <string name="powerwidget_screen_timeout_toast">Skærm-timeout sat til: %1$d %2$s</string>
 
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS Slået fra</string>
     <string name="quick_settings_screen_sleep">Gå i dvale</string>
     <string name="quick_settings_ringer_on">Lyd slået til</string>
     <string name="quick_settings_ringer_off">Lyd slået fra</string>
@@ -230,6 +231,7 @@
     <string name="quick_settings_report_bug">Rapportér fejl</string>
     <string name="quick_settings_sync">Synkr.</string>
     <string name="quick_settings_torch">Lommelygte</string>
+    <string name="quick_settings_torch_off">Lommelygte Slået fra</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">Timeout</string>
 

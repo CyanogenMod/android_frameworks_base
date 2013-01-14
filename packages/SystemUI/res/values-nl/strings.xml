@@ -213,6 +213,7 @@
     <string name="quick_settings_profile_label">Profiel</string>
     <string name="powerwidget_screen_timeout_toast">Schermtime-out ingesteld op: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS Uit</string>
     <string name="quick_settings_screen_sleep">Slaapstand</string>
     <string name="quick_settings_ringer_on">Geluid aan</string>
     <string name="quick_settings_ringer_off">Geluid uit</string>
@@ -226,6 +227,7 @@
     <string name="quick_settings_report_bug">Fout melden</string>
     <string name="quick_settings_sync">Synchroniseren</string>
     <string name="quick_settings_torch">Zaklamp</string>
+    <string name="quick_settings_torch_off">Zaklamp Uit</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">Time-out</string>
     <string name="navbar_dialog_title">Kies de toe te wijzen functie</string>
