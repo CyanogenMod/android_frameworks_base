@@ -218,6 +218,7 @@
     <string name="powerwidget_screen_timeout_toast">屏幕超时设为: %1$d %2$s</string>
 
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS 关闭</string>
     <string name="quick_settings_screen_sleep">进入睡眠</string>
     <string name="quick_settings_ringer_on">声音开启</string>
     <string name="quick_settings_ringer_off">声音关闭</string>
@@ -231,6 +232,7 @@
     <string name="quick_settings_report_bug">报告错误</string>
     <string name="quick_settings_sync">同步</string>
     <string name="quick_settings_torch">手电筒</string>
+    <string name="quick_settings_torch_off">手电筒 关闭</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">超时</string>
 

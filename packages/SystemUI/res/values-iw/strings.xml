@@ -214,6 +214,7 @@
 
     <string name="powerwidget_screen_timeout_toast">כיבוי מסך אוטומטי מוגדר ל: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS כבוי</string>
     <string name="quick_settings_screen_sleep">לך לישון</string>
     <string name="quick_settings_ringer_on">קול פועל</string>
     <string name="quick_settings_ringer_off">קול מושתק</string>
@@ -227,6 +228,7 @@
     <string name="quick_settings_report_bug">דיווח על באג</string>
     <string name="quick_settings_sync">סינכרון</string>
     <string name="quick_settings_torch">פנס</string>
+    <string name="quick_settings_torch_off">פנס כבוי</string>
 
 <!-- CID DayDream -->
     <string name="bean_dream_settings_cid_title">השתמש בראשו של סיד</string>
