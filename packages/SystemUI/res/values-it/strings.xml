@@ -210,6 +210,7 @@
     <string name="status_bar_help_title" msgid="1199237744086469217">"Le notifiche vengono visualizzate qui"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Puoi accedervi in qualsiasi momento scorrendo verso il basso."\n"Fai scorrere di nuovo verso il basso per visualizzare i controlli del sistema."</string>
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS Disattiva</string>
     <string name="quick_settings_screen_sleep">Blocca telefono</string>
     <string name="quick_settings_ringer_on">Suoneria attiva</string>
     <string name="quick_settings_ringer_off">Suoneria disattiva</string>

@@ -209,6 +209,7 @@
     <string name="accessibility_quick_settings_vibration">Δόνηση <xliff:g id="state" example="Off">%s</xliff:g>.</string>
 
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS Ανενεργό</string>
     <string name="quick_settings_screen_sleep">Αναστολή λειτουργίας</string>
     <string name="quick_settings_ringer_on">Ήχος ενεργός</string>
     <string name="quick_settings_ringer_off">Ήχος ανενεργός</string>
@@ -222,6 +223,7 @@
     <string name="quick_settings_report_bug">Αναφορά σφάλματος</string>
     <string name="quick_settings_sync">Συγχρονισμός</string>
     <string name="quick_settings_torch">Φακός</string>
+    <string name="quick_settings_torch_off">Φακός Ανενεργό</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">Χρ. όριο οθόνης</string>
     <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
