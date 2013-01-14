@@ -47,6 +47,24 @@ public class HTCQualcommRIL extends QualcommSharedRIL implements CommandsInterfa
     }
 
     @Override
+    public void
+    getIccCardStatus(Message result) {
+        // if CDMA, do nothing
+        if (IsCdmaPhone) {
+            Log.d(LOG_TAG, "### CDMA device...ignoring getIccCardStatus...");
+            return;
+        }
+
+        //Note: This RIL request has not been renamed to ICC,
+        //       but this request is also valid for SIM and RUIM
+        RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_SIM_STATUS, result);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+
+    @Override
     protected Object
     responseIccCardStatus(Parcel p) {
         IccCardApplication ca;
