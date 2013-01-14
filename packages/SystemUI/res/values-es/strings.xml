@@ -181,10 +181,10 @@
     <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Cargada"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> dispositivos)"</string>
-    <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth desactivado"</string>
+    <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth"</string>
     <string name="quick_settings_brightness_label" msgid="6968372297018755815">"Brillo"</string>
-    <string name="quick_settings_rotation_unlocked_label" msgid="336054930362580584">"Girar automáticamente"</string>
-    <string name="quick_settings_rotation_locked_label" msgid="8058646447242565486">"Rotación bloqueada"</string>
+    <string name="quick_settings_rotation_unlocked_label" msgid="336054930362580584">"Automático"</string>
+    <string name="quick_settings_rotation_locked_label" msgid="8058646447242565486">"Bloqueado"</string>
     <string name="quick_settings_ime_label" msgid="7073463064369468429">"Método de entrada"</string>
     <string name="quick_settings_location_label" msgid="3292451598267467545">"Ubicación en uso"</string>
     <string name="quick_settings_media_device_label" msgid="1302906836372603762">"Dispositivo multimedia"</string>
@@ -196,7 +196,7 @@
     <string name="quick_settings_wifi_label" msgid="9135344704899546041">"Wi-Fi"</string>
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"No conectado"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"No hay red."</string>
-    <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi desactivado"</string>
+    <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi"</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Pantalla Wi-Fi"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Pantalla inalámbrica"</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Brillo"</string>
@@ -207,24 +207,29 @@
     <!-- CYANOGENMOD EDITS START -->
 
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS</string>
     <string name="quick_settings_label_enabled">Activado</string>
     <string name="quick_settings_label_disabled">Desactivado</string>
-    <string name="quick_settings_lockscreen">Pantalla Bloqueo</string>
+    <string name="quick_settings_lockscreen">Bloqueo</string>
     <string name="quick_settings_network_type">Red móvil</string>
     <string name="quick_settings_nfc">NFC</string>
-    <string name="quick_settings_report_bug">Informar de error</string>
+    <string name="quick_settings_profile_label">Perfil</string>
+    <string name="quick_settings_report_bug">Notificar error</string>
     <string name="quick_settings_ringer_normal">Sonido</string>
-    <string name="quick_settings_ringer_on">Sonido activado</string>
-    <string name="quick_settings_ringer_off">Sonido desactivado</string>
+    <string name="quick_settings_ringer_on">Sonido</string>
+    <string name="quick_settings_ringer_off">Silencio</string>
     <string name="quick_settings_screen_sleep">Bloquear</string>
-    <string name="quick_settings_screen_timeout">Tiempo de espera</string>
+    <string name="quick_settings_screen_timeout">Tiempo espera</string>
     <string name="quick_settings_sync">Sincronizar</string>
     <string name="quick_settings_torch">Linterna</string>
+    <string name="quick_settings_torch_off">Linterna</string>
     <string name="quick_settings_usb_tether_off_label">Desconectado</string>
     <string name="quick_settings_usb_tether_connected_label">Anclaje USB</string>
     <string name="quick_settings_usb_tether_on_label">Anclaje USB</string>
-    <string name="quick_settings_vibration_on">Vibración activada</string>
-    <string name="quick_settings_vibration_off">Vibración desactivada</string>
+    <string name="quick_settings_vibration_on">Vibración</string>
+    <string name="quick_settings_vibration_off">Vibración</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP</string>
     <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
     <string name="bean_dream_settings_cid_title">Usar a CID</string>
