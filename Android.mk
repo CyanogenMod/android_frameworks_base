@@ -39,7 +39,8 @@ SECONDARY_FRAMEWORKS_SUBDIRS := \
         media/java/android/media/audiofx \
         media/mca/effect/java/android/media/effect \
         media/mca/effect/java/android/media/effect/effects \
-        voip/java/com/android/server/sip
+        voip/java/com/android/server/sip \
+        core/java/com/android/internal/widget/multiwaveview
 
 include $(CLEAR_VARS)
 
