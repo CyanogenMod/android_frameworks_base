@@ -102,7 +102,8 @@ public class KeyguardWidgetCarousel extends KeyguardWidgetPager {
         mScreenCenter = screenCenter;
         updatePageAlphaValues(screenCenter);
         if (isReordering(false)) return;
-        for (int i = 0; i < getChildCount(); i++) {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
             KeyguardWidgetFrame v = getWidgetPageAt(i);
             float scrollProgress = getScrollProgress(screenCenter, v, i);
             float boundedProgress = getBoundedScrollProgress(screenCenter, v, i);

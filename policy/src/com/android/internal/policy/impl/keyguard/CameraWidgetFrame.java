@@ -189,7 +189,7 @@ public class CameraWidgetFrame extends KeyguardWidgetFrame implements View.OnCli
     }
 
     public void render() {
-        final Throwable[] thrown = new Throwable[1];
+        final Throwable thrown = new Throwable;
         final Bitmap[] offscreen = new Bitmap[1];
         try {
             final int width = getRootView().getWidth();
@@ -220,23 +220,22 @@ public class CameraWidgetFrame extends KeyguardWidgetFrame implements View.OnCli
                     end));
             mRenderedSize.set(width, height);
         } catch (Throwable t) {
-            thrown[0] = t;
+            thrown = t;
         }
 
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (thrown[0] == null) {
+                if (thrown == null) {
                     try {
                         ((ImageView) getChildAt(0)).setImageBitmap(offscreen[0]);
+                        return;
                     } catch (Throwable t) {
-                        thrown[0] = t;
+                        thrown = t;
                     }
                 }
-                if (thrown[0] == null)
-                    return;
 
-                Log.w(TAG, "Error rendering camera widget", thrown[0]);
+                Log.w(TAG, "Error rendering camera widget", thrown);
                 try {
                     removeAllViews();
                     final View genericView = inflateGenericWidgetView(mContext);

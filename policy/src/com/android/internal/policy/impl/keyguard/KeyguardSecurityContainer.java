@@ -21,7 +21,8 @@ public class KeyguardSecurityContainer extends FrameLayout {
     }
 
     KeyguardSecurityViewFlipper getFlipper() {
-        for (int i = 0; i < getChildCount(); i++) {
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
             if (child instanceof KeyguardSecurityViewFlipper) {
                 return (KeyguardSecurityViewFlipper) child;
