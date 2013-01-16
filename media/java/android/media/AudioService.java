@@ -438,7 +438,6 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     // Devices for which the volume is fixed and VolumePanel slider should be disabled
     final int mFixedVolumeDevices = AudioSystem.DEVICE_OUT_AUX_DIGITAL |
             AudioSystem.DEVICE_OUT_DGTL_DOCK_HEADSET |
-            AudioSystem.DEVICE_OUT_ANLG_DOCK_HEADSET |
             AudioSystem.DEVICE_OUT_ALL_USB;
 
     private final boolean mMonitorOrientation;
