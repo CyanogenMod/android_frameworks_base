@@ -132,12 +132,12 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
     public void onPageSwitched(View newPage, int newPageIndex) {
         boolean showingStatusWidget = false;
         if (newPage instanceof ViewGroup) {
-            ViewGroup vg = (ViewGroup) newPage;
-            if (vg.getChildAt(0) instanceof KeyguardStatusView) {
+            View firstChild = ((ViewGroup) newPage).getChildAt(0);
+            if (firstChild instanceof KeyguardStatusView) {
                 showingStatusWidget = true;
-            } else if (vg.getChildAt(0) instanceof AppWidgetHostView) {
+            } else if (firstChild instanceof AppWidgetHostView) {
                 AppWidgetProviderInfo info =
-                        ((AppWidgetHostView) vg.getChildAt(0)).getAppWidgetInfo();
+                        ((AppWidgetHostView) firstChild).getAppWidgetInfo();
                 String widgetPackage = info.provider.getPackageName();
                 for (String packageName : CLOCK_WIDGET_PACKAGES) {
                     if (packageName.equals(widgetPackage)) {
@@ -192,8 +192,7 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
     private void updateWidgetFramesImportantForAccessibility() {
         final int pageCount = getPageCount();
         for (int i = 0; i < pageCount; i++) {
-            KeyguardWidgetFrame frame = getWidgetPageAt(i);
-            updateWidgetFrameImportantForAccessibility(frame);
+            updateWidgetFrameImportantForAccessibility(getWidgetPageAt(i));
         }
     }
 
@@ -297,7 +296,8 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
     public void addWidget(View widget, int pageIndex) {
         KeyguardWidgetFrame frame;
         // All views contained herein should be wrapped in a KeyguardWidgetFrame
-        if (!(widget instanceof KeyguardWidgetFrame)) {
+        boolean widgetIsFrame = widget instanceof KeyguardWidgetFrame;
+        if (!widgetIsFrame) {
             frame = new KeyguardWidgetFrame(getContext());
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT);
@@ -338,13 +338,14 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
         }
 
         // Update the frame content description.
-        View content = (widget == frame) ?  frame.getContent() : widget;
+        View content = widgetIsFrame ?  frame.getContent() : widget;
         if (content != null) {
             String contentDescription = mContext.getString(
                 com.android.internal.R.string.keyguard_accessibility_widget,
                 content.getContentDescription());
             frame.setContentDescription(contentDescription);
         }
+
         updateWidgetFrameImportantForAccessibility(frame);
     }
 
@@ -522,18 +523,6 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
                 }
             }
         }
-    }
-
-    public boolean isWidgetPage(int pageIndex) {
-        if (pageIndex < 0 || pageIndex >= getChildCount()) {
-            return false;
-        }
-        View v = getChildAt(pageIndex);
-        if (v != null && v instanceof KeyguardWidgetFrame) {
-            KeyguardWidgetFrame kwf = (KeyguardWidgetFrame) v;
-            return kwf.getContentAppWidgetId() != AppWidgetManager.INVALID_APPWIDGET_ID;
-        }
-        return false;
     }
 
     /**
@@ -816,6 +805,12 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
             mZoomInOutAnim.setInterpolator(new DecelerateInterpolator(1.5f));
             mZoomInOutAnim.start();
         }
+    }
+
+    public boolean isWidgetPage(int pageIndex) {
+        View v = getChildAt(pageIndex);
+        return v instanceof KeyguardWidgetFrame &&
+            ((KeyguardWidgetFrame) v).getContentAppWidgetId() != AppWidgetManager.INVALID_APPWIDGET_ID;
     }
 
     boolean isAddPage(int pageIndex) {

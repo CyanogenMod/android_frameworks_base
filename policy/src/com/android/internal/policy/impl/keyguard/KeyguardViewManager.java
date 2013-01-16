@@ -260,9 +260,8 @@ public class KeyguardViewManager {
     private static void toggleSilentMode(Context context) {
         final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         final Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        final boolean hasVib = vib == null ? false : vib.hasVibrator();
         if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-            am.setRingerMode(hasVib
+            am.setRingerMode(vib == null ? false : vib.hasVibrator()
                 ? AudioManager.RINGER_MODE_VIBRATE
                 : AudioManager.RINGER_MODE_SILENT);
         } else {
@@ -462,32 +461,30 @@ public class KeyguardViewManager {
             final KeyguardViewManager.ShowListener showListener) {
         if (DEBUG) Log.d(TAG, "onScreenTurnedOn()");
         mScreenOn = true;
+        if (showListener == null) {
+            return;
+        }
         if (mKeyguardView != null) {
             mKeyguardView.onScreenTurnedOn();
-
             // Caller should wait for this window to be shown before turning
             // on the screen.
-            if (showListener != null) {
-                if (mKeyguardHost.getVisibility() == View.VISIBLE) {
-                    // Keyguard may be in the process of being shown, but not yet
-                    // updated with the window manager...  give it a chance to do so.
-                    mKeyguardHost.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mKeyguardHost.getVisibility() == View.VISIBLE) {
-                                showListener.onShown(mKeyguardHost.getWindowToken());
-                            } else {
-                                showListener.onShown(null);
-                            }
+            if (mKeyguardHost.getVisibility() == View.VISIBLE) {
+                // Keyguard may be in the process of being shown, but not yet
+                // updated with the window manager...  give it a chance to do so.
+                mKeyguardHost.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mKeyguardHost.getVisibility() == View.VISIBLE) {
+                            showListener.onShown(mKeyguardHost.getWindowToken());
+                        } else {
+                            showListener.onShown(null);
                         }
-                    });
-                } else {
-                    showListener.onShown(null);
-                }
+                    }
+                });
+                return;
             }
-        } else if (showListener != null) {
-            showListener.onShown(null);
-        }
+        } 
+        showListener.onShown(null);
     }
 
     public synchronized void verifyUnlock() {
