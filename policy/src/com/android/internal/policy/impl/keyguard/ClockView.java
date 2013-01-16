@@ -49,7 +49,6 @@ public class ClockView extends RelativeLayout {
     private TextView mTimeView;
     private AmPm mAmPm;
     private ContentObserver mFormatChangeObserver;
-    private int mAttached = 0; // for debugging - tells us whether attach/detach is unbalanced
 
     /* called by system on minute ticks */
     private final Handler mHandler = new Handler();
@@ -164,8 +163,6 @@ public class ClockView extends RelativeLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        mAttached++;
-
         /* monitor time ticks, time changed, timezone */
         if (mIntentReceiver == null) {
             mIntentReceiver = new TimeChangedReceiver(this);
@@ -189,8 +186,6 @@ public class ClockView extends RelativeLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
-        mAttached--;
 
         if (mIntentReceiver != null) {
             mContext.unregisterReceiver(mIntentReceiver);

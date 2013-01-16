@@ -67,11 +67,7 @@ public class KeyguardViewStateManager implements
 
     private void updateEdgeSwiping() {
         if (mChallengeLayout != null && mKeyguardWidgetPager != null) {
-            if (mChallengeLayout.isChallengeOverlapping()) {
-                mKeyguardWidgetPager.setOnlyAllowEdgeSwipes(true);
-            } else {
-                mKeyguardWidgetPager.setOnlyAllowEdgeSwipes(false);
-            }
+            mKeyguardWidgetPager.setOnlyAllowEdgeSwipes(mChallengeLayout.isChallengeOverlapping());
         }
     }
 
@@ -112,8 +108,7 @@ public class KeyguardViewStateManager implements
     public void onPageBeginMoving() {
         if (mChallengeLayout.isChallengeOverlapping() &&
                 mChallengeLayout instanceof SlidingChallengeLayout) {
-            SlidingChallengeLayout scl = (SlidingChallengeLayout) mChallengeLayout;
-            scl.fadeOutChallenge();
+            ((SlidingChallengeLayout) mChallengeLayout).fadeOutChallenge();
             mPageIndexOnPageBeginMoving = mKeyguardWidgetPager.getCurrentPage();
         }
         // We use mAppWidgetToShow to show a particular widget after you add it--
@@ -133,18 +128,18 @@ public class KeyguardViewStateManager implements
     }
 
     public void onPageSwitching(View newPage, int newPageIndex) {
-        if (mKeyguardWidgetPager != null && mChallengeLayout instanceof SlidingChallengeLayout) {
-            boolean isCameraPage = newPage instanceof CameraWidgetFrame;
-            ((SlidingChallengeLayout) mChallengeLayout).setChallengeInteractive(!isCameraPage);
-        }
-
-        // If the page we're settling to is the same as we started on, and the action of
-        // moving the page hid the security, we restore it immediately.
-        if (mPageIndexOnPageBeginMoving == mKeyguardWidgetPager.getNextPage() &&
-                mChallengeLayout instanceof SlidingChallengeLayout) {
+        if(mChallengeLayout instanceof SlidingChallengeLayout) {
             SlidingChallengeLayout scl = (SlidingChallengeLayout) mChallengeLayout;
-            scl.fadeInChallenge();
-            mKeyguardWidgetPager.setWidgetToResetOnPageFadeOut(-1);
+            if (mKeyguardWidgetPager != null) {
+                scl.setChallengeInteractive(!(newPage instanceof CameraWidgetFrame));
+            }
+
+            // If the page we're settling to is the same as we started on, and the action of
+            // moving the page hid the security, we restore it immediately.
+            if (mPageIndexOnPageBeginMoving == mKeyguardWidgetPager.getNextPage()) {
+                scl.fadeInChallenge();
+                mKeyguardWidgetPager.setWidgetToResetOnPageFadeOut(-1);
+            }
         }
         mPageIndexOnPageBeginMoving = -1;
     }
