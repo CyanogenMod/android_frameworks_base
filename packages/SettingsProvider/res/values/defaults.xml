@@ -167,4 +167,7 @@
 
     <!-- Default for Settings.Secure.USER_SETUP_COMPLETE -->
     <bool name="def_user_setup_complete">false</bool>
+
+    <!-- Default for Settings.System.STATUS_BAR_BATTERY -->
+    <integer name="def_battery_style">0</integer>
 </resources>
