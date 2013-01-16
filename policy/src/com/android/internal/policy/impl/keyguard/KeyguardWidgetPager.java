@@ -132,12 +132,12 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
     public void onPageSwitched(View newPage, int newPageIndex) {
         boolean showingStatusWidget = false;
         if (newPage instanceof ViewGroup) {
-            ViewGroup vg = (ViewGroup) newPage;
-            if (vg.getChildAt(0) instanceof KeyguardStatusView) {
+            View firstChild = ((ViewGroup) newPage).getChildAt(0);
+            if (firstChild instanceof KeyguardStatusView) {
                 showingStatusWidget = true;
-            } else if (vg.getChildAt(0) instanceof AppWidgetHostView) {
+            } else if (firstChild instanceof AppWidgetHostView) {
                 AppWidgetProviderInfo info =
-                        ((AppWidgetHostView) vg.getChildAt(0)).getAppWidgetInfo();
+                        ((AppWidgetHostView) firstChild).getAppWidgetInfo();
                 String widgetPackage = info.provider.getPackageName();
                 for (String packageName : CLOCK_WIDGET_PACKAGES) {
                     if (packageName.equals(widgetPackage)) {
@@ -524,18 +524,6 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
         }
     }
 
-    public boolean isWidgetPage(int pageIndex) {
-        if (pageIndex < 0 || pageIndex >= getChildCount()) {
-            return false;
-        }
-        View v = getChildAt(pageIndex);
-        if (v != null && v instanceof KeyguardWidgetFrame) {
-            KeyguardWidgetFrame kwf = (KeyguardWidgetFrame) v;
-            return kwf.getContentAppWidgetId() != AppWidgetManager.INVALID_APPWIDGET_ID;
-        }
-        return false;
-    }
-
     /**
      * Returns the bounded set of pages that are re-orderable.  The range is fully inclusive.
      */
@@ -816,6 +804,12 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
             mZoomInOutAnim.setInterpolator(new DecelerateInterpolator(1.5f));
             mZoomInOutAnim.start();
         }
+    }
+
+    public boolean isWidgetPage(int pageIndex) {
+        View v = getChildAt(pageIndex);
+        return v instanceof KeyguardWidgetFrame && 
+            ((KeyguardWidgetFrame) v).getContentAppWidgetId() != AppWidgetManager.INVALID_APPWIDGET_ID;
     }
 
     boolean isAddPage(int pageIndex) {

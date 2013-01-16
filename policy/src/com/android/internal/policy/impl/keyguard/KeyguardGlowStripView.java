@@ -110,8 +110,7 @@ public class KeyguardGlowStripView extends LinearLayout {
             mAnimator.cancel();
         }
         float from = mLeftToRight ? 0f : 1f;
-        float to = mLeftToRight ? 1f : 0f;
-        mAnimator = ValueAnimator.ofFloat(from, to);
+        mAnimator = ValueAnimator.ofFloat(from, 1f - from);
         mAnimator.setDuration(DURATION);
         mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.addListener(new AnimatorListenerAdapter() {
