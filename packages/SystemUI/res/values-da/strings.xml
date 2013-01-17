@@ -217,6 +217,7 @@
     <string name="powerwidget_screen_timeout_toast">Skærm-timeout sat til: %1$d %2$s</string>
 
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS slået fra</string>
     <string name="quick_settings_screen_sleep">Gå i dvale</string>
     <string name="quick_settings_ringer_on">Lyd slået til</string>
     <string name="quick_settings_ringer_off">Lyd slået fra</string>
@@ -230,8 +231,14 @@
     <string name="quick_settings_report_bug">Rapportér fejl</string>
     <string name="quick_settings_sync">Synkr.</string>
     <string name="quick_settings_torch">Lommelygte</string>
+    <string name="quick_settings_torch_off">Lommelygte slået fra</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">Timeout</string>
+    <string name="quick_settings_usb_tether_off_label">Afbrudt</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering slået fra</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP slået fra</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Vælg handling at tildele</string>
