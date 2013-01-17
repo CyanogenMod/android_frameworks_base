@@ -25,8 +25,14 @@ const char *MEDIA_MIMETYPE_VIDEO_VPX = "video/x-vnd.on2.vp8";
 const char *MEDIA_MIMETYPE_VIDEO_AVC = "video/avc";
 const char *MEDIA_MIMETYPE_VIDEO_MPEG4 = "video/mp4v-es";
 const char *MEDIA_MIMETYPE_VIDEO_H263 = "video/3gpp";
+#ifdef STE_HARDWARE
+const char *MEDIA_MIMETYPE_VIDEO_H263_SW = "video/3gpp-sw";
+#endif
 const char *MEDIA_MIMETYPE_VIDEO_MPEG2 = "video/mpeg2";
 const char *MEDIA_MIMETYPE_VIDEO_RAW = "video/raw";
+#ifdef STE_HARDWARE
+const char *MEDIA_MIMETYPE_VIDEO_VC1 = "video/vc1";
+#endif
 
 const char *MEDIA_MIMETYPE_AUDIO_AMR_NB = "audio/3gpp";
 const char *MEDIA_MIMETYPE_AUDIO_AMR_WB = "audio/amr-wb";

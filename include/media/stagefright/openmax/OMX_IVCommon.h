@@ -158,6 +158,9 @@ typedef enum OMX_COLOR_FORMATTYPE {
      * */
     OMX_COLOR_FormatAndroidOpaque = 0x7F000789,
     OMX_TI_COLOR_FormatYUV420PackedSemiPlanar = 0x7F000100,
+#ifdef STE_HARDWARE
+    OMX_STE_COLOR_FormatYUV420PackedSemiPlanarMB = 0x7FA00000,
+#endif
 #ifndef QCOM_HARDWARE
     OMX_QCOM_COLOR_FormatYVU420SemiPlanar = 0x7FA30C00,
 #endif
