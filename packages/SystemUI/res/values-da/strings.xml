@@ -232,6 +232,9 @@
     <string name="quick_settings_torch">Lommelygte</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">Timeout</string>
+    <string name="quick_settings_usb_tether_off_label">Afbrudt</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering slået fra</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Vælg handling at tildele</string>
