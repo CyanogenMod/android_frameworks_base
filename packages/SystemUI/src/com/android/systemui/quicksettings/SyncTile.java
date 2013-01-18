@@ -21,7 +21,7 @@ public class SyncTile extends QuickSettingsTile {
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        updateTileState();
+        updateResources();
 
         mOnClick = new View.OnClickListener() {
             @Override
@@ -60,7 +60,7 @@ public class SyncTile extends QuickSettingsTile {
     }
 
     private void applySyncChanges() {
-        updateTileState();
+        updateResources();
         updateQuickSettings();
     }
 
@@ -73,8 +73,8 @@ public class SyncTile extends QuickSettingsTile {
         }
     }
 
-    private void updateTileState() {
-
+    @Override
+    public void updateResources() {
         if (getSyncState()) {
             mDrawable = R.drawable.ic_qs_sync_on;
             mLabel = mContext.getString(R.string.quick_settings_sync);

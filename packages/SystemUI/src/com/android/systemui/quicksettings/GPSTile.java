@@ -1,10 +1,8 @@
 package com.android.systemui.quicksettings;
 
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -13,8 +11,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
+import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.LocationController.LocationGpsStateChangeCallback;
 
@@ -58,17 +56,18 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
         enabled = Settings.Secure.isLocationProviderEnabled(mContentResolver, LocationManager.GPS_PROVIDER);
         mLabel = mContext.getString(R.string.quick_settings_gps);
         setGenericLabel();
-        applyGPSChanges();
+        updateResources();
     }
 
     @Override
     void onPostCreate() {
         setGenericLabel();
-        applyGPSChanges();
+        updateResources();
         super.onPostCreate();
     }
 
-    void applyGPSChanges() {
+    @Override
+    public void updateResources() {
         if (enabled && working) {
             mDrawable = R.drawable.ic_qs_location;
         } else if (enabled) {
@@ -87,7 +86,7 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
         } else {
             setGenericLabel();
         }
-        applyGPSChanges();
+        updateResources();
     }
 
     private void setGenericLabel() {

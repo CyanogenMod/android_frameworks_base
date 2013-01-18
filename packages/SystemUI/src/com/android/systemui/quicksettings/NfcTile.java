@@ -3,15 +3,12 @@ package com.android.systemui.quicksettings;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
-
 
 public class NfcTile extends QuickSettingsTile {
 
@@ -24,7 +21,7 @@ public class NfcTile extends QuickSettingsTile {
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        setTileState(getNfcState());
+        updateResources();
 
         mOnClick = new View.OnClickListener() {
             @Override
@@ -54,7 +51,7 @@ public class NfcTile extends QuickSettingsTile {
     }
 
     private void applyNfcChanges() {
-        setTileState(getNfcState());
+        updateResources();
         updateQuickSettings();
     }
 
@@ -72,20 +69,21 @@ public class NfcTile extends QuickSettingsTile {
         }
     }
 
-    private void setTileState(int state) {
-
+    @Override
+    public void updateResources() {
+        int state = getNfcState();
         switch (state) {
-        case NfcAdapter.STATE_TURNING_ON:
-        case NfcAdapter.STATE_ON:
-            mDrawable = R.drawable.ic_qs_nfc_on;
-            mLabel = mContext.getString(R.string.quick_settings_nfc);
-            break;
-        case NfcAdapter.STATE_TURNING_OFF:
-        case NfcAdapter.STATE_OFF:
-        default:
-            mDrawable = R.drawable.ic_qs_nfc_off;
-            mLabel = mContext.getString(R.string.quick_settings_nfc_off);
-            break;
+            case NfcAdapter.STATE_TURNING_ON:
+            case NfcAdapter.STATE_ON:
+                mDrawable = R.drawable.ic_qs_nfc_on;
+                mLabel = mContext.getString(R.string.quick_settings_nfc);
+                break;
+            case NfcAdapter.STATE_TURNING_OFF:
+            case NfcAdapter.STATE_OFF:
+            default:
+                mDrawable = R.drawable.ic_qs_nfc_off;
+                mLabel = mContext.getString(R.string.quick_settings_nfc_off);
+                break;
         }
     }
 

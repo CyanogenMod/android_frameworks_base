@@ -68,6 +68,8 @@ public class QuickSettingsTile implements OnClickListener {
 
     public void onChangeUri(ContentResolver resolver, Uri uri) {}
 
+    public void updateResources() {}
+
     void updateQuickSettings(){
         TextView tv = (TextView) mTile.findViewById(R.id.tile_textview);
         tv.setCompoundDrawablesWithIntrinsicBounds(0, mDrawable, 0, 0);
