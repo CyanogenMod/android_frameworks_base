@@ -3,8 +3,6 @@ package com.android.systemui.quicksettings;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -15,7 +13,6 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class NfcTile extends QuickSettingsTile {
 
-    private static String TAG = "NfcTile";
     private static NfcAdapter mNfcAdapter;
     private static final int NFC_ADAPTER_UNKNOWN = -100;
 
@@ -24,13 +21,11 @@ public class NfcTile extends QuickSettingsTile {
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        setTileState(getNfcState());
-
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleState();
-                applyNfcChanges();
+                updateResources();
             }
         };
 
@@ -49,12 +44,19 @@ public class NfcTile extends QuickSettingsTile {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        applyNfcChanges();
+    void onPostCreate() {
+        updateTile(getNfcState());
+        super.onPostCreate();
     }
 
-    private void applyNfcChanges() {
-        setTileState(getNfcState());
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        updateResources();
+    }
+
+    @Override
+    public void updateResources() {
+        updateTile(getNfcState());
         updateQuickSettings();
     }
 
@@ -72,7 +74,7 @@ public class NfcTile extends QuickSettingsTile {
         }
     }
 
-    private void setTileState(int state) {
+    private synchronized void updateTile(int state) {
 
         switch (state) {
         case NfcAdapter.STATE_TURNING_ON:
