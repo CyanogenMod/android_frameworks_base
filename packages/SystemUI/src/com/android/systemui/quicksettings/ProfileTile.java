@@ -95,27 +95,16 @@ public class ProfileTile extends QuickSettingsTile {
 
         final AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
 
-        AlertDialog dialog = ab
-                .setTitle(R.string.quick_settings_profile_label)
-                .setSingleChoiceItems(names, checkedItem, new DialogInterface.OnClickListener() {
+        AlertDialog dialog = ab.setSingleChoiceItems(names, checkedItem,
+                new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which < 0)
                             return;
                         mChosenProfile = profiles[which];
+                        profileManager.setActiveProfile(mChosenProfile.getUuid());
+                        dialog.cancel();
                     }
-                })
-                .setPositiveButton(com.android.internal.R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                profileManager.setActiveProfile(mChosenProfile.getUuid());
-                            }
-                        })
-                .setNegativeButton(com.android.internal.R.string.no,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        }).create();
+                }).create();
         mStatusbarService.animateCollapsePanels();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
         dialog.show();
