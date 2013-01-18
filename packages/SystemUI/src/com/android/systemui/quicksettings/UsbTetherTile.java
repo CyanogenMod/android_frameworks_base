@@ -67,12 +67,12 @@ public class UsbTetherTile extends QuickSettingsTile {
             mMassStorageActive = false;
         }
 
-        updateTileState();
+        updateResources();
     }
 
     @Override
     void onPostCreate() {
-        updateTileState();
+        updateResources();
         super.onPostCreate();
     }
 
@@ -82,7 +82,8 @@ public class UsbTetherTile extends QuickSettingsTile {
         super.updateQuickSettings();
     }
 
-    private void updateTileState() {
+    @Override
+    public void updateResources() {
         updateState();
         if (mUsbConnected && !mMassStorageActive) {
             if (mUsbTethered) {
@@ -120,14 +121,12 @@ public class UsbTetherTile extends QuickSettingsTile {
 
     private void updateUsbState(String[] available, String[] tethered,
             String[] errored) {
-
         mUsbTethered = false;
         for (String s : tethered) {
             for (String regex : mUsbRegexs) {
                 if (s.matches(regex)) mUsbTethered = true;
             }
         }
-
     }
 
     private void setUsbTethering(boolean enabled) {

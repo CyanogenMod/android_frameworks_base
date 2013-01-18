@@ -37,12 +37,12 @@ public class AlarmTile extends QuickSettingsTile {
 
         qsc.registerObservedContent(Settings.System.getUriFor(
                 Settings.System.NEXT_ALARM_FORMATTED), this);
-        updateStatus();
+        updateResources();
     }
 
     @Override
     public void onChangeUri(ContentResolver resolver, Uri uri) {
-        updateStatus();
+        updateResources();
         updateQuickSettings();
     }
 
@@ -55,7 +55,8 @@ public class AlarmTile extends QuickSettingsTile {
     /**
      * Updates the alarm status shown on the tile.
      */
-    private void updateStatus() {
+    @Override
+    public void updateResources() {
         mLabel = Settings.System.getString(mContext.getContentResolver(),
             Settings.System.NEXT_ALARM_FORMATTED);
     }

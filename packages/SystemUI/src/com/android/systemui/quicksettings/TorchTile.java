@@ -20,7 +20,7 @@ public class TorchTile extends QuickSettingsTile {
             QuickSettingsController qsc, Handler handler) {
         super(context, inflater, container, qsc);
 
-        updateTileState();
+        updateResources();
 
         mOnClick = new View.OnClickListener() {
             @Override
@@ -43,7 +43,14 @@ public class TorchTile extends QuickSettingsTile {
         qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.TORCH_STATE), this);
     }
 
-    private void updateTileState() {
+    @Override
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        updateResources();
+        updateQuickSettings();
+    }
+
+    @Override
+    public void updateResources() {
         boolean enabled = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.TORCH_STATE, 0) == 1;
 
@@ -56,9 +63,4 @@ public class TorchTile extends QuickSettingsTile {
         }
     }
 
-    @Override
-    public void onChangeUri(ContentResolver resolver, Uri uri) {
-        updateTileState();
-        updateQuickSettings();
-    }
 }

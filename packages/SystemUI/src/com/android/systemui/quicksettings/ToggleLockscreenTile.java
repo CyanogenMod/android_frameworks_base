@@ -43,7 +43,7 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
                 editor.putBoolean(KEY_DISABLED, mDisabledLockscreen);
                 editor.apply();
 
-                applyLockscreenChanges();
+                updateResources();
             }
         };
 
@@ -59,11 +59,12 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
 
     @Override
     void onPostCreate() {
-        applyLockscreenChanges();
+        updateResources();
         super.onPostCreate();
     }
 
-    void applyLockscreenChanges() {
+    @Override
+    public void updateResources() {
         if (mLock == null) {
             KeyguardManager keyguardManager = (KeyguardManager)
                     mContext.getSystemService(Context.KEYGUARD_SERVICE);
