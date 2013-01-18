@@ -520,18 +520,19 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
     }
 
-    private void createProfileDialog(){
-        final ProfileManager profileManager = (ProfileManager)mContext.getSystemService(Context.PROFILE_SERVICE);
+    private void createProfileDialog() {
+        final ProfileManager profileManager = (ProfileManager) mContext
+                .getSystemService(Context.PROFILE_SERVICE);
 
         final Profile[] profiles = profileManager.getProfiles();
         UUID activeProfile = profileManager.getActiveProfile().getUuid();
         final CharSequence[] names = new CharSequence[profiles.length];
 
-        int i=0;
+        int i = 0;
         int checkedItem = 0;
 
-        for(Profile profile : profiles) {
-            if(profile.getUuid().equals(activeProfile)) {
+        for (Profile profile : profiles) {
+            if (profile.getUuid().equals(activeProfile)) {
                 checkedItem = i;
                 mChosenProfile = profile;
             }
@@ -540,34 +541,23 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         final AlertDialog.Builder ab = new AlertDialog.Builder(getUiContext());
 
-        AlertDialog dialog = ab
-                .setTitle(R.string.global_action_choose_profile)
-                .setSingleChoiceItems(names, checkedItem, new DialogInterface.OnClickListener() {
+        AlertDialog dialog = ab.setSingleChoiceItems(names, checkedItem,
+                new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which < 0)
                             return;
                         mChosenProfile = profiles[which];
+                        profileManager.setActiveProfile(mChosenProfile.getUuid());
+                        dialog.cancel();
                     }
-                })
-                .setPositiveButton(com.android.internal.R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                profileManager.setActiveProfile(mChosenProfile.getUuid());
-                            }
-                        })
-                .setNegativeButton(com.android.internal.R.string.no,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
                 }).create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
         dialog.show();
     }
 
     /**
-     * functions needed for taking screenhots.  
-     * This leverages the built in ICS screenshot functionality 
+     * functions needed for taking screenhots.
+     * This leverages the built in ICS screenshot functionality
      */
     final Object mScreenshotLock = new Object();
     ServiceConnection mScreenshotConnection = null;
@@ -622,14 +612,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                             msg.arg1 = 1;
                         if (mNavigationBar != null && mNavigationBar.isVisibleLw())
                             msg.arg2 = 1;
-                         */                        
+                         */
 
                         /* wait for the dialog box to close */
                         try {
-                            Thread.sleep(1000); 
+                            Thread.sleep(1000);
                         } catch (InterruptedException ie) {
                         }
-                        
+
                         /* take the screenshot */
                         try {
                             messenger.send(msg);
@@ -646,7 +636,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             }
         }
     }
-    
+
     private void prepareDialog() {
         refreshSilentMode();
         mAirplaneModeOn.updateState(mAirplaneState);
