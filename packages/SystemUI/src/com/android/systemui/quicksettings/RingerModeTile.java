@@ -1,10 +1,8 @@
 package com.android.systemui.quicksettings;
 
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -16,8 +14,8 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
+import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class RingerModeTile extends QuickSettingsTile {
 
@@ -52,7 +50,7 @@ public class RingerModeTile extends QuickSettingsTile {
         updateSettings(mContext.getContentResolver());
 
         // Make sure we show the initial state correctly
-        updateState();
+        updateResources();
 
         // Tile actions
         mOnClick = new View.OnClickListener() {
@@ -89,11 +87,12 @@ public class RingerModeTile extends QuickSettingsTile {
     }
 
     private void applyVibrationChanges(){
-        updateState();
+        updateResources();
         updateQuickSettings();
     }
 
-    protected void updateState() {
+    @Override
+    public void updateResources() {
         // The title does not change
         mLabel = mContext.getString(R.string.quick_settings_ringer_normal);
 

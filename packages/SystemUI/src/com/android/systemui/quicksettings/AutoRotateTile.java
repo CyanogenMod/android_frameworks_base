@@ -41,7 +41,8 @@ public class AutoRotateTile extends QuickSettingsTile {
                 , this);
     }
 
-    void applyAutoRotationChanges() {
+    @Override
+    public void updateResources() {
         if(!getAutoRotation()){
             mDrawable = R.drawable.ic_qs_rotation_locked;
             mLabel = mContext.getString(R.string.quick_settings_rotation_locked_label);
@@ -54,7 +55,7 @@ public class AutoRotateTile extends QuickSettingsTile {
 
     @Override
     void onPostCreate() {
-        applyAutoRotationChanges();
+        updateResources();
         super.onPostCreate();
     }
 
@@ -64,6 +65,6 @@ public class AutoRotateTile extends QuickSettingsTile {
 
     @Override
     public void onChangeUri(ContentResolver resolver, Uri uri) {
-        applyAutoRotationChanges();
+        updateResources();
     }
 }

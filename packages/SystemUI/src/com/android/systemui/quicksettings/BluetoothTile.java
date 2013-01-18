@@ -2,10 +2,8 @@ package com.android.systemui.quicksettings;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothAdapter.BluetoothStateChangeCallback;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -66,7 +64,7 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
                     BluetoothAdapter.STATE_DISCONNECTED);
             connected = (state == BluetoothAdapter.STATE_CONNECTED);
         }
-        applyBluetoothChanges();
+        updateResources();
     }
 
     void checkBluetoothState() {
@@ -74,7 +72,8 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
         connected = mBluetoothAdapter.getConnectionState() == BluetoothAdapter.STATE_CONNECTED;
     }
 
-    private void applyBluetoothChanges(){
+    @Override
+    public void updateResources(){
         if(enabled){
             if(connected){
                 mDrawable = R.drawable.ic_qs_bluetooth_on;
@@ -94,14 +93,14 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
         BluetoothController controller = new BluetoothController(mContext);
         controller.addStateChangedCallback(this);
         checkBluetoothState();
-        applyBluetoothChanges();
+        updateResources();
         super.onPostCreate();
     }
 
     @Override
     public void onBluetoothStateChange(boolean on) {
         this.enabled = on;
-        applyBluetoothChanges();
+        updateResources();
     }
 
 }

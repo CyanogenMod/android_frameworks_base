@@ -35,7 +35,7 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
             LayoutInflater inflater, QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        updateTileState();
+        updateResources();
 
         mOnClick = new OnClickListener() {
             @Override
@@ -64,11 +64,12 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
     }
 
     void applyTimeoutChanges() {
-        updateTileState();
+        updateResources();
         updateQuickSettings();
     }
 
-    protected void updateTileState() {
+    @Override
+    public void updateResources() {
         int timeout = getScreenTimeout();
         mLabel = makeTimeoutSummaryString(mContext, timeout);
         mDrawable = R.drawable.ic_qs_screen_timeout_off;

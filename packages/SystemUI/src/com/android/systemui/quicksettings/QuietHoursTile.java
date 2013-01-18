@@ -20,7 +20,7 @@ public class QuietHoursTile extends QuickSettingsTile {
     public QuietHoursTile(Context context, LayoutInflater inflater,
             QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
-        updateTileState();
+        updateResources();
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,11 +42,12 @@ public class QuietHoursTile extends QuickSettingsTile {
 
     @Override
     public void onChangeUri(ContentResolver resolver, Uri uri) {
-        updateTileState();
+        updateResources();
         updateQuickSettings();
     }
 
-    private void updateTileState() {
+    @Override
+    public void updateResources() {
         mEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
         if (mEnabled) {

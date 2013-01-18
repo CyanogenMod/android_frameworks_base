@@ -48,7 +48,7 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        updateState();
+        updateResources();
 
         mOnClick = new OnClickListener() {
             @Override
@@ -120,11 +120,12 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
     }
 
     private void applyNetworkTypeChanges(){
-        updateState();
+        updateResources();
         updateQuickSettings();
     }
 
-    protected void updateState() {
+    @Override
+    public void updateResources() {
         mMode = get2G3G(mContext);
         mState = networkModeToState();
 
