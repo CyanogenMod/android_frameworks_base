@@ -707,7 +707,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 }
                 mQS.setService(this);
                 mQS.setBar(mStatusBarView);
-                mQS.updateResources();
+                mQS.setupQuickSettings();
 
                 // Start observing for changes
                 mTilesChangedObserver = new TilesChangedObserver(mHandler);
@@ -2912,7 +2912,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         @Override
         public void onChange(boolean selfChange) {
             if (mSettingsContainer != null) {
-                mQS.updateResources();
+                mQS.setupQuickSettings();
             }
         }
 
