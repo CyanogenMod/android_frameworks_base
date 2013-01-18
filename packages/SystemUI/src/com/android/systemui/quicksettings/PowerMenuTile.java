@@ -16,53 +16,40 @@
 
 package com.android.systemui.quicksettings;
 
-import android.app.ProfileManager;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.android.server.ProfileManagerService;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
-public class ProfileTile extends QuickSettingsTile {
-    private ProfileManager mProfileManager;
-
-    public ProfileTile(Context context, LayoutInflater inflater,
+public class PowerMenuTile extends QuickSettingsTile {
+    public PowerMenuTile(Context context, LayoutInflater inflater,
             QuickSettingsContainerView container,
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        qsc.registerAction(ProfileManagerService.INTENT_ACTION_PROFILE_SELECTED, this);
-
-        mDrawable = R.drawable.ic_qs_profiles;
-
-        mProfileManager = (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
-        mLabel = mProfileManager.getActiveProfile().getName();
+        mLabel = mContext.getString(R.string.quick_settings_powermenu_label);
+        mDrawable = R.drawable.ic_qs_profiles; // need resource here
 
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mStatusbarService.animateCollapsePanels();
-                Intent intent=new Intent(Intent.ACTION_POWERMENU_PROFILE);
+                Intent intent=new Intent(Intent.ACTION_POWERMENU);
                 mContext.sendBroadcast(intent);
             }
         };
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent = new Intent("android.settings.PROFILES_SETTINGS");
-                startSettingsActivity(intent);
+                mStatusbarService.animateCollapsePanels();
+                Intent intent=new Intent(Intent.ACTION_POWERMENU_REBOOT);
+                mContext.sendBroadcast(intent);
                 return true;
             }
         };
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        mLabel = mProfileManager.getActiveProfile().getName();
-        updateQuickSettings();
     }
 }

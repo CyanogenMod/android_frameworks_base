@@ -44,6 +44,7 @@ import com.android.systemui.quicksettings.BluetoothTile;
 import com.android.systemui.quicksettings.BrightnessTile;
 import com.android.systemui.quicksettings.BugReportTile;
 import com.android.systemui.quicksettings.NfcTile;
+import com.android.systemui.quicksettings.PowerMenuTile;
 import com.android.systemui.quicksettings.ScreenTimeoutTile;
 import com.android.systemui.quicksettings.TorchTile;
 import com.android.systemui.quicksettings.GPSTile;
@@ -468,6 +469,9 @@ public class QuickSettingsController {
                 qs.setupQuickSettingsTile();
             }
         }
+        // staticly add power menu tile for testing
+        QuickSettingsTile qs = new PowerMenuTile(mContext, inflater, mContainerView, this);
+        qs.setupQuickSettingsTile();
     }
 
     public void setService(PhoneStatusBar phoneStatusBar) {
