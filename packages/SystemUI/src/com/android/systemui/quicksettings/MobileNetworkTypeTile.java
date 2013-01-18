@@ -48,8 +48,6 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
             QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        updateState();
-
         mOnClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,15 +114,24 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
 
         //need to clear intermediate states and update the tile
         mInternalState = networkModeToState();
-        applyNetworkTypeChanges();
+        updateResources();
     }
 
-    private void applyNetworkTypeChanges(){
-        updateState();
-        updateQuickSettings();
+    @Override
+    void onPostCreate() {
+        NetworkController controller = new NetworkController(mContext);
+        controller.addNetworkSignalChangedCallback(this);
+        updateTile();
+        super.onPostCreate();
     }
 
-    protected void updateState() {
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
+    private synchronized void updateTile() {
         mMode = get2G3G(mContext);
         mState = networkModeToState();
 
@@ -199,16 +206,8 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
     }
 
     @Override
-    void onPostCreate() {
-        NetworkController controller = new NetworkController(mContext);
-        controller.addNetworkSignalChangedCallback(this);
-        super.onPostCreate();
-    }
-
-    @Override
     public void onWifiSignalChanged(boolean enabled, int wifiSignalIconId,
         String wifitSignalContentDescriptionId, String description) {
-            // TODO Auto-generated method stub
     }
 
     @Override
@@ -216,11 +215,10 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
         int mobileSignalIconId, String mobileSignalContentDescriptionId,
         int dataTypeIconId, String dataTypeContentDescriptionId,
         String description) {
-            applyNetworkTypeChanges();
+        updateResources();
     }
 
     @Override
     public void onAirplaneModeChanged(boolean enabled) {
-        // TODO Auto-generated method stub
     }
 }
