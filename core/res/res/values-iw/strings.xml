@@ -1034,8 +1034,8 @@
     <string name="chooseUsbActivity" msgid="6894748416073583509">"בחר יישום עבור התקן ה-USB"</string>
     <string name="noApplications" msgid="2991814273936504689">"אין יישומים שיכולים לבצע פעולה זו."</string>
     <string name="aerr_title" msgid="1905800560317137752"></string>
-    <string name="aerr_application" msgid="932628488013092776">"לצערנו, פעולת ה<xliff:g id="APPLICATION">%1$s</xliff:g> הופסקה."</string>
-    <string name="aerr_process" msgid="4507058997035697579">"לצערנו, התהליך <xliff:g id="PROCESS">%1$s</xliff:g> הופסק."</string>
+    <string name="aerr_application" msgid="932628488013092776">"לצערנו, פעולת \"<xliff:g id="APPLICATION">%1$s</xliff:g>\" הופסקה."</string>
+    <string name="aerr_process" msgid="4507058997035697579">"לצערנו, התהליך \"<xliff:g id="PROCESS">%1$s</xliff:g>\" הופסק."</string>
     <string name="anr_title" msgid="4351948481459135709"></string>
     <string name="anr_activity_application" msgid="1904477189057199066">"<xliff:g id="APPLICATION">%2$s</xliff:g> אינו מגיב."\n\n"תרצה לסגור אותו?"</string>
     <string name="anr_activity_process" msgid="5776209883299089767">"הפעילות <xliff:g id="ACTIVITY">%1$s</xliff:g> אינה מגיבה."\n\n"תרצה לסגור אותה?"</string>
@@ -1383,7 +1383,7 @@
     <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"טאבלט"</string>
     <string name="default_audio_route_name" product="default" msgid="4239291273420140123">"טלפון"</string>
     <string name="default_audio_route_name_headphones" msgid="8119971843803439110">"אוזניות"</string>
-    <string name="default_audio_route_name_dock_speakers" msgid="6240602982276591864">"רמקולים של מעגן"</string>
+    <string name="default_audio_route_name_dock_speakers" msgid="6240602982276591864">"רמקולים של תחנת עגינה"</string>
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"מערכת"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"אודיו Bluetooth"</string>
@@ -1445,7 +1445,7 @@
     <string name="user_switched" msgid="3768006783166984410">"המשתמש הנוכחי <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"בעלים"</string>
 
-<!-- CyanogenMod Edits Start -->
+<!-- **** CYANOGENMOD ADDITIONS START **** -->
 
 <!-- Profile names -->
     <!-- Names of default profiles. -->
@@ -1522,10 +1522,15 @@
     <!-- Long-press back kill application -->
     <string name="app_killed_message">התהליך נסגר</string>
 
+<!-- Dock -->
+
+    <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
+    <string name="storage_sd_dock_card">כרטיס SD של תחנת עגינה</string>
+
 <!-- Unknown -->
 
     <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">סיבוב אוטומטי</string>
     <string name="toast_rotation_locked">סיבוב נעול</string>
-<!-- CyanogenMod Edits End -->
+<!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
