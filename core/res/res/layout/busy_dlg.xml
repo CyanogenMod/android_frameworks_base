@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/busy_dlg_icon"
+        android:scaleType="fitCenter"
+        android:layout_margin="10dip" />
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/busy_dlg_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/busy_dlg_animation" />
+    <TextView
+        android:textSize="14.0dip"
+        android:gravity="center_horizontal"
+        android:id="@+id/busy_dlg_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13.0dip"
+        style="@android:style/TextAppearance.Medium"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_green_light" />
+</LinearLayout>

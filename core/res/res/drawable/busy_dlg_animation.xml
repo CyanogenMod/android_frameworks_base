@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list android:oneshot="false"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_0" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_1" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_2" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_3" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_4" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_5" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_6" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_7" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_8" />
+    <item android:duration="50" android:drawable="@drawable/busy_dlg_animation_9" />
+</animation-list>
