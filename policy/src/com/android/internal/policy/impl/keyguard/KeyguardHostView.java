@@ -47,6 +47,7 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -79,6 +80,7 @@ public class KeyguardHostView extends KeyguardViewBase {
     private KeyguardSecurityViewFlipper mSecurityViewContainer;
     private KeyguardSelectorView mKeyguardSelectorView;
     private KeyguardTransportControlView mTransportControl;
+    private View mExpandChallengeView;
     private boolean mIsVerifyUnlockOnly;
     private boolean mEnableFallback; // TODO: This should get the value from KeyguardPatternView
     private SecurityMode mCurrentSecuritySelection = SecurityMode.Invalid;
@@ -250,8 +252,26 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         showPrimarySecurityScreen(false);
         updateSecurityViews();
+
+        mExpandChallengeView = (View) findViewById(R.id.expand_challenge_handle);
+        if (mExpandChallengeView != null) {
+            mExpandChallengeView.setOnLongClickListener(mFastUnlockClickListener);
+        }
+
         minimizeChallengeIfDesired();
     }
+
+    private final OnLongClickListener mFastUnlockClickListener = new OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            if (mLockPatternUtils.isTactileFeedbackEnabled()) {
+                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
+                        HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            }
+            showNextSecurityScreenOrFinish(false);
+            return true;
+        }
+    };
 
     private int getDisabledFeatures(DevicePolicyManager dpm) {
         int disabledFeatures = DevicePolicyManager.KEYGUARD_DISABLE_FEATURES_NONE;
