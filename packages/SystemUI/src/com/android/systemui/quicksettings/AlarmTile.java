@@ -29,6 +29,7 @@ public class AlarmTile extends QuickSettingsTile{
         String nextAlarmTime = Settings.System.getString(mContext.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
         if(nextAlarmTime != null){
             mLabel = nextAlarmTime;
+            enabled = true;
         }
 
         mOnClick = new View.OnClickListener() {
