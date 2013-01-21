@@ -182,8 +182,7 @@
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Режим полета"</string>
     <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <!-- String.format failed for translation -->
-    <!-- no translation found for quick_settings_battery_charged_label (8865413079414246081) -->
+    <string name="quick_settings_battery_charged_label">Заряжено</string>
     <skip />
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g>)"</string>
@@ -211,6 +210,7 @@
     <string name="status_bar_help_title" msgid="1199237744086469217">"Это панель уведомлений"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Ее можно открыть, пролистнув экран вниз."\n"Чтобы открыть настройки, проведите пальцем вниз ещё раз."</string>
 
+    <string name="quick_settings_gps_off">GPS выкл.</string>
     <string name="quick_settings_screen_sleep">Сон</string>
     <string name="quick_settings_ringer_on">Вкл. звук</string>
     <string name="quick_settings_ringer_off">Выкл. звук</string>
@@ -224,10 +224,13 @@
     <string name="quick_settings_report_bug">Отчёт об ошибке</string>
     <string name="quick_settings_sync">Синхронизация</string>
     <string name="quick_settings_torch">Фонарь</string>
+    <string name="quick_settings_torch_off">Фонарь выкл.</string>
     <string name="quick_settings_screen_timeout">Тайм-аут</string>
     <string name="quick_settings_usb_tether_off_label">Отключено</string>
     <string name="quick_settings_usb_tether_connected_label">Выключен</string>
     <string name="quick_settings_usb_tether_on_label">Включен</string>
+    <string name="quick_settings_wifiap">Wi-Fi модем</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi модем выкл.</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Выберите действие</string>
