@@ -579,6 +579,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
             mSimState = IccCardConstants.State.ABSENT;
         }
+        else if (IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR.equals(stateExtra)) {
+            mSimState = IccCardConstants.State.CARD_IO_ERROR;
+        }
         else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
             mSimState = IccCardConstants.State.READY;
         }
