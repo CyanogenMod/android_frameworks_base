@@ -210,6 +210,7 @@
   <java-symbol type="id" name="status_bar_latest_event_content" />
   <java-symbol type="id" name="action_divider" />
   <java-symbol type="id" name="overflow_divider" />
+  <java-symbol type="id" name="toast_layout_root" />
   <java-symbol type="id" name="sms_short_code_confirm_message" />
   <java-symbol type="id" name="sms_short_code_detail_layout" />
   <java-symbol type="id" name="sms_short_code_detail_message" />
@@ -438,6 +439,12 @@
   <java-symbol type="string" name="autofill_zip_code_re" />
   <java-symbol type="string" name="badPin" />
   <java-symbol type="string" name="badPuk" />
+  <java-symbol type="string" name="pinpuk_attempts" />
+  <java-symbol type="string" name="lockscreen_sim_error_message_short" />
+  <java-symbol type="string" name="keyguard_pin_accepted" />
+  <java-symbol type="string" name="keyguard_password_pin_failed" />
+  <java-symbol type="string" name="keyguard_password_puk_failed" />
+  <java-symbol type="string" name="keyguard_password_wrong_puk_code" />
   <java-symbol type="string" name="byteShort" />
   <java-symbol type="string" name="capability_desc_canRequestEnhancedWebAccessibility" />
   <java-symbol type="string" name="capability_title_canRequestFilterKeyEvents" />
@@ -652,6 +659,7 @@
   <java-symbol type="string" name="orgTypeOther" />
   <java-symbol type="string" name="orgTypeWork" />
   <java-symbol type="string" name="passwordIncorrect" />
+  <java-symbol type="string" name="enablePin" />
   <java-symbol type="string" name="perms_description_app" />
   <java-symbol type="string" name="perms_new_perm_prefix" />
   <java-symbol type="string" name="petabyteShort" />

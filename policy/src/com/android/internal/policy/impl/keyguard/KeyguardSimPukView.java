@@ -31,6 +31,7 @@ import android.view.WindowManager;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneConstants;
 
 import com.android.internal.R;
 
@@ -87,10 +88,26 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         }
 
         void reset() {
+            String  displayMessage = "";
+            try {
+                int attemptsRemaining = ITelephony.Stub.asInterface(ServiceManager
+                        .checkService("phone")).getIccPin1RetryCount();
+                if (attemptsRemaining >= 0) {
+                    displayMessage = getContext().getString(
+                            R.string.keyguard_password_wrong_puk_code)
+                            + getContext().getString(R.string.pinpuk_attempts)
+                            + attemptsRemaining + ". ";
+                }
+            } catch (RemoteException ex) {
+                displayMessage = getContext().getString(
+                        R.string.keyguard_password_puk_failed);
+            }
+            displayMessage = displayMessage
+                    + getContext().getString(R.string.kg_puk_enter_puk_hint);
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
-            mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint, true);
+            mSecurityMessageDisplay.setMessage(displayMessage, true);
             mPasswordEntry.requestFocus();
         }
     }
@@ -186,13 +203,13 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
             mPin = pin;
         }
 
-        abstract void onSimLockChangedResponse(boolean success);
+        abstract void onSimLockChangedResponse(final int result);
 
         @Override
         public void run() {
             try {
-                final boolean result = ITelephony.Stub.asInterface(ServiceManager
-                        .checkService("phone")).supplyPuk(mPuk, mPin);
+                final int result = ITelephony.Stub.asInterface(ServiceManager
+                        .checkService("phone")).supplyPukReportResult(mPuk, mPin);
 
                 post(new Runnable() {
                     public void run() {
@@ -202,7 +219,7 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
             } catch (RemoteException e) {
                 post(new Runnable() {
                     public void run() {
-                        onSimLockChangedResponse(false);
+                        onSimLockChangedResponse(PhoneConstants.PIN_GENERAL_FAILURE);
                     }
                 });
             }
@@ -253,17 +270,23 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         if (!mCheckInProgress) {
             mCheckInProgress = true;
             new CheckSimPuk(mPukText, mPinText) {
-                void onSimLockChangedResponse(final boolean success) {
+                void onSimLockChangedResponse(final int result) {
                     post(new Runnable() {
                         public void run() {
                             if (mSimUnlockProgressDialog != null) {
                                 mSimUnlockProgressDialog.hide();
                             }
-                            if (success) {
+                            if (result == PhoneConstants.PIN_RESULT_SUCCESS) {
                                 mCallback.dismiss(true);
                             } else {
+                                if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
+                                    mSecurityMessageDisplay.setMessage
+                                            (R.string.kg_invalid_puk, true);
+                                } else {
+                                    mSecurityMessageDisplay.setMessage
+                                            (R.string.keyguard_password_puk_failed, true);
+                                }
                                 mStateMachine.reset();
-                                mSecurityMessageDisplay.setMessage(R.string.kg_invalid_puk, true);
                             }
                             mCheckInProgress = false;
                         }

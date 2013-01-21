@@ -17,6 +17,7 @@
 package com.android.internal.policy.impl.keyguard;
 
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneConstants;
 
 import android.content.Context;
 import android.app.Activity;
@@ -30,6 +31,7 @@ import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.util.AttributeSet;
 import android.view.View;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -53,7 +55,20 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     }
 
     public void resetState() {
-        mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
+        String  displayMessage = "";
+        try {
+            int attemptsRemaining = ITelephony.Stub.asInterface(ServiceManager
+                    .checkService("phone")).getIccPin1RetryCount();
+            if (attemptsRemaining >= 0) {
+                displayMessage = getContext().getString(R.string.keyguard_password_wrong_pin_code)
+                        + getContext().getString(R.string.pinpuk_attempts)
+                        + attemptsRemaining + ". ";
+            }
+        } catch (RemoteException ex) {
+            displayMessage = getContext().getString(R.string.keyguard_password_pin_failed);
+        }
+        displayMessage = displayMessage + getContext().getString(R.string.kg_sim_pin_instructions) ;
+        mSecurityMessageDisplay.setMessage(displayMessage, true);
         mPasswordEntry.setEnabled(true);
     }
 
@@ -131,13 +146,13 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
             mPin = pin;
         }
 
-        abstract void onSimCheckResponse(boolean success);
+        abstract void onSimCheckResponse(final int result);
 
         @Override
         public void run() {
             try {
-                final boolean result = ITelephony.Stub.asInterface(ServiceManager
-                        .checkService("phone")).supplyPin(mPin);
+                final int result = ITelephony.Stub.asInterface(ServiceManager
+                        .checkService("phone")).supplyPinReportResult(mPin);
                 post(new Runnable() {
                     public void run() {
                         onSimCheckResponse(result);
@@ -146,7 +161,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
             } catch (RemoteException e) {
                 post(new Runnable() {
                     public void run() {
-                        onSimCheckResponse(false);
+                        onSimCheckResponse(PhoneConstants.PIN_GENERAL_FAILURE);
                     }
                 });
             }
@@ -185,20 +200,23 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
         if (!mSimCheckInProgress) {
             mSimCheckInProgress = true; // there should be only one
             new CheckSimPin(mPasswordEntry.getText().toString()) {
-                void onSimCheckResponse(final boolean success) {
+                void onSimCheckResponse(final int result) {
                     post(new Runnable() {
                         public void run() {
                             if (mSimUnlockProgressDialog != null) {
                                 mSimUnlockProgressDialog.hide();
                             }
-                            if (success) {
-                                // before closing the keyguard, report back that the sim is unlocked
-                                // so it knows right away.
+                            if (result == PhoneConstants.PIN_RESULT_SUCCESS) {
                                 KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked();
                                 mCallback.dismiss(true);
                             } else {
-                                mSecurityMessageDisplay.setMessage
-                                    (R.string.kg_password_wrong_pin_code, true);
+                                if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
+                                    mSecurityMessageDisplay.setMessage
+                                            (R.string.kg_password_wrong_pin_code, true);
+                                } else {
+                                    mSecurityMessageDisplay.setMessage
+                                            (R.string.keyguard_password_pin_failed, true);
+                                }
                                 mPasswordEntry.setText("");
                             }
                             mCallback.userActivity(0);
