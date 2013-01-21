@@ -60,6 +60,8 @@
 
 #define CACHE_DIR_POSTFIX      "/cache"
 
+#define DATA_SUBDIR             "data/" // sub-directory under ANDROID_DATA
+
 #define APP_SUBDIR             "app/" // sub-directory under ANDROID_DATA
 
 #define APP_LIB_SUBDIR         "app-lib/" // sub-directory under ANDROID_DATA
@@ -98,6 +100,7 @@ extern dir_rec_t android_app_dir;
 extern dir_rec_t android_app_private_dir;
 extern dir_rec_t android_app_lib_dir;
 extern dir_rec_t android_data_dir;
+extern dir_rec_t android_datadata_dir;
 extern dir_rec_t android_asec_dir;
 extern dir_rec_t android_media_dir;
 extern dir_rec_array_t android_system_dirs;

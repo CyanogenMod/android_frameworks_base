@@ -24,6 +24,7 @@
 
 /* Directory records that are used in execution of commands. */
 dir_rec_t android_data_dir;
+dir_rec_t android_datadata_dir;
 dir_rec_t android_asec_dir;
 dir_rec_t android_app_dir;
 dir_rec_t android_app_private_dir;
