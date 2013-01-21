@@ -78,7 +78,20 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     }
 
     public void resetState() {
-        mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
+        String  displayMessage = "";
+        try {
+            int attemptsRemaining = ITelephony.Stub.asInterface(ServiceManager
+                    .checkService("phone")).getIccPin1RetryCount();
+            if (attemptsRemaining >= 0) {
+                displayMessage = getContext().getString(R.string.keyguard_password_wrong_pin_code)
+                        + getContext().getString(R.string.pinpuk_attempts)
+                        + attemptsRemaining + ". ";
+            }
+        } catch (RemoteException ex) {
+            displayMessage = getContext().getString(R.string.keyguard_password_pin_failed);
+        }
+        displayMessage = displayMessage + getContext().getString(R.string.kg_sim_pin_instructions) ;
+        mSecurityMessageDisplay.setMessage(displayMessage, true);
         mPasswordEntry.setEnabled(true);
     }
 
@@ -259,6 +272,8 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                                 mSimUnlockProgressDialog.hide();
                             }
                             if (result == PhoneConstants.PIN_RESULT_SUCCESS) {
+                                // before closing the keyguard, report back that the sim is unlocked
+                                // so it knows right away.
                                 KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked();
                                 mCallback.dismiss(true);
                             } else {
