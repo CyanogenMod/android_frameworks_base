@@ -529,6 +529,7 @@
     <string name="powerwidget_screen_timeout_toast">Screen timeout set to: %1$d %2$s</string>
 
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS off</string>
     <string name="quick_settings_screen_sleep">Go to sleep</string>
     <string name="quick_settings_ringer_on">Sound on</string>
     <string name="quick_settings_ringer_off">Sound off</string>
@@ -542,12 +543,15 @@
     <string name="quick_settings_report_bug">Report bug</string>
     <string name="quick_settings_sync">Sync</string>
     <string name="quick_settings_torch">Torch</string>
+    <string name="quick_settings_torch_off">Torch off</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">Timeout</string>
     <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">Disconnected</string>
-    <string name="quick_settings_usb_tether_connected_label">Tethering Off</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering off</string>
     <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP off</string>
 
     <!-- Text to display next to the minimal graphical battery meter.  [CHAR LIMIT=3] -->
     <string name="status_bar_settings_battery_meter_min_format" translatable="false">

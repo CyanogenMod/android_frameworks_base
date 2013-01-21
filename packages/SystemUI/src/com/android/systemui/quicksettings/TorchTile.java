@@ -46,15 +46,13 @@ public class TorchTile extends QuickSettingsTile {
     private void updateTileState() {
         boolean enabled = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.TORCH_STATE, 0) == 1;
-        String label = mContext.getString(R.string.quick_settings_torch);
 
-        // Show OFF next to the label when in OFF state, ON/IN USE is indicated by the color
         if(enabled) {
             mDrawable = R.drawable.ic_qs_torch_on;
-            mLabel = label;
+            mLabel = mContext.getString(R.string.quick_settings_torch);
         } else {
             mDrawable = R.drawable.ic_qs_torch_off;
-            mLabel = label + " " + mContext.getString(R.string.quick_settings_label_disabled);
+            mLabel = mContext.getString(R.string.quick_settings_torch_off);
         }
     }
 
