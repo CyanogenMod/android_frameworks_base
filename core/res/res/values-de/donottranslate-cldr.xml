@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="hour_minute_24">%-k:%M</string>
@@ -8,7 +8,7 @@
     <string name="twenty_four_hour_time_format">H:mm</string>
     <string name="numeric_date">%d.%m.%Y</string>
     <string name="numeric_date_format">dd.MM.yyyy</string>
-    <string name="numeric_date_template">"%s.%s.%s"</string>
+    <string name="numeric_date_template">%s.%s.%s</string>
     <string name="month_day_year">%-e. %B %Y</string>
     <string name="time_of_day">%H:%M:%S</string>
     <string name="date_and_time">%d.%m.%Y, %H:%M:%S</string>
