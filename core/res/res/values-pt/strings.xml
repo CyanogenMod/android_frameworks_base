@@ -1476,4 +1476,5 @@
     <string name="global_action_choose_profile">Perfil</string>
     <string name="toast_rotation_unlocked">Rotação da tela está destravada</string>
     <string name="toast_rotation_locked">Rotação da tela está travada</string>
+    <string name="storage_sd_dock_card">Dock cartão SD</string>
 </resources>
