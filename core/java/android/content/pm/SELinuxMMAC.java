@@ -49,7 +49,7 @@ public final class SELinuxMMAC {
 
     private static final String TAG = "SELinuxMMAC";
     private static final String MMAC_DENY = "MMAC_DENIAL:";
-
+    private static final String MMAC_ENFORCE_PROPERTY = "persist.mmac.enforce";
     private static final boolean DEBUG_POLICY = true;
     private static final boolean DEBUG_POLICY_INSTALL = DEBUG_POLICY || false;
 
@@ -63,7 +63,7 @@ public final class SELinuxMMAC {
 
     // Locations of potential install policy files.
     private static final File[] INSTALL_POLICY_FILE = {
-        new File(Environment.getDataDirectory(), "system/mac_permissions.xml"),
+        new File(Environment.getDataDirectory(), "security/mac_permissions.xml"),
         new File(Environment.getRootDirectory(), "etc/security/mac_permissions.xml"),
         null};
 
@@ -80,6 +80,23 @@ public final class SELinuxMMAC {
     public static boolean readInstallPolicy() {
 
         return readInstallPolicy(INSTALL_POLICY_FILE);
+    }
+
+    /**
+     * Returns the current status of MMAC enforcing mode.
+     * @param none
+     * @return boolean indicating whether or not the device is in enforcing mode.
+     */
+    public static boolean getEnforcingMode() {
+        return SystemProperties.getBoolean(MMAC_ENFORCE_PROPERTY, false);
+    }
+
+    /**
+     * Returns the current status of MMAC enforcing mode.
+     * @param boolean value to set the enforcing state too.
+     */
+    public static void setEnforcingMode(boolean value) {
+        SystemProperties.set(MMAC_ENFORCE_PROPERTY, value ? "1" : "0");
     }
 
     /**
@@ -113,7 +130,7 @@ public final class SELinuxMMAC {
 
         Slog.d(TAG, "MMAC install enabled using file " + policyFiles[i].getPath());
 
-        boolean enforcing = SystemProperties.getBoolean("persist.mac_enforcing_mode", false);
+        boolean enforcing = getEnforcingMode();
         String mode = enforcing ? "enforcing" : "permissive";
         Slog.d(TAG, "MMAC install starting in " + mode + " mode.");
 

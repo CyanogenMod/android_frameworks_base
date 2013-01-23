@@ -45,6 +45,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.content.pm.SELinuxMMAC;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -258,15 +259,15 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
     }
 
-    private static final String SEPOLICY_PATH_SEPOLICY = "/data/system/sepolicy";
+    private static final String SEPOLICY_PATH_SEPOLICY = "/data/security/sepolicy";
 
-    private static final String SEPOLICY_PATH_PROPCTXS = "/data/system/property_contexts";
+    private static final String SEPOLICY_PATH_PROPCTXS = "/data/security/property_contexts";
 
-    private static final String SEPOLICY_PATH_FILECTXS = "/data/system/file_contexts";
+    private static final String SEPOLICY_PATH_FILECTXS = "/data/security/file_contexts";
 
-    private static final String SEPOLICY_PATH_SEAPPCTXS = "/data/system/seapp_contexts";
+    private static final String SEPOLICY_PATH_SEAPPCTXS = "/data/security/seapp_contexts";
 
-    private static final String MMAC_POLICY_PATH = "/data/system/mac_permissions.xml";
+    private static final String MMAC_POLICY_PATH = "/data/security/mac_permissions.xml";
 
     private static final PolicyFileDescription[] POLICY_DESCRIPTIONS = {
         // 0 = SEPOLICY_FILE_SEPOLICY
@@ -3009,12 +3010,6 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     //                           FTF fails a,b
 
     /**
-     * This system property is used to share the state of the MAC enforcing mode.
-     * SE Android MAC protection layer is expected to read this property and act accordingly.
-     */
-    public static final String SYSTEM_PROP_ENFORCE_MAC = "persist.mac_enforcing_mode";
-
-    /**
      * Sync's the current MMAC admin's policies to the device. If there is
      * no MMAC admin, then this will set MMAC to permissive mode
      * and may remove the {@link MMAC_POLICY_PATH} file.
@@ -3030,12 +3025,11 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                 mmacAdmin.enforceMMAC = false;
             }
 
-            boolean systemState = SystemProperties.getBoolean(SYSTEM_PROP_ENFORCE_MAC, false);
+            boolean systemState = SELinuxMMAC.getEnforcingMode();
             boolean enforceMMAC = mmacAdmin.enforceMMAC;
             if (systemState != enforceMMAC) {
-                Slog.v(TAG, SYSTEM_PROP_ENFORCE_MAC + " was " + systemState + ", to be set to " + enforceMMAC);
-                String value = enforceMMAC ? "1" : "0";
-                SystemProperties.set(SYSTEM_PROP_ENFORCE_MAC, value);
+                Slog.v(TAG, "Changing MMAC enforcing status from " + systemState + ", to " + enforceMMAC);
+                SELinuxMMAC.setEnforcingMode(enforceMMAC);
             }
 
             if (removePolicy) {
