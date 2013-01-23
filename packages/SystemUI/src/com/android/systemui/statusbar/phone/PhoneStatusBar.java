@@ -1715,6 +1715,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         final int zeroOutDelays = halfWayDone ? 0 : 1;
 
         mFlipSettingsView.setVisibility(View.VISIBLE);
+        if (!halfWayDone)
+	        mFlipSettingsView.setScaleX(0f);
         mFlipSettingsViewAnim = start(
             startDelay(FLIP_DURATION_OUT * zeroOutDelays,
                 interpolator(mDecelerateInterpolator,
