@@ -12,6 +12,7 @@ import android.provider.Settings.SettingNotFoundException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
@@ -50,6 +51,17 @@ public class BrightnessTile extends QuickSettingsTile implements BrightnessState
                 showBrightnessDialog();
             }
         };
+
+        mOnLongClick = new OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                startSettingsActivity(Settings.ACTION_DISPLAY_SETTINGS);
+                return true;
+            }
+
+        };
+
         qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS)
                 , this);
         qsc.registerObservedContent(Settings.System.getUriFor(Settings.System
