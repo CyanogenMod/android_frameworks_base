@@ -16,15 +16,17 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="prompt" msgid="8359175999006833462">"Aplikace <xliff:g id="APP">%s</xliff:g> se pokouší připojit k síti VPN."</string>
-    <string name="warning" msgid="5470743576660160079">"Pokračováním souhlasíte s tím, aby aplikace sledovala veškerou vaši síťovou aktivitu. "<b>" Pokud aplikaci nevěříte, nepokračujte."</b>" V opačném případě riskujete vystavení svých dat škodlivému softwaru."</string>
+    <string name="prompt" msgid="8359175999006833462">"Aplikace <xliff:g id="APP">%s</xliff:g> se pokouší vytvořit VPN spojení."</string>
+    <string name="warning" msgid="5470743576660160079">"Pokračováním souhlasíte s tím, aby aplikace zachytávala veškerou vaši síťovou aktivitu. "<b>"Pokud aplikaci nevěříte, nepokračujte."</b>" V opačném případě riskujete vystavení svých dat škodlivému softwaru."</string>
     <string name="accept" msgid="2889226408765810173">"Této aplikaci věřím."</string>
+
     <string name="legacy_title" msgid="192936250066580964">"Síť VPN je připojena"</string>
-    <string name="configure" msgid="4905518375574791375">"Konfigurovat"</string>
+    <string name="configure" msgid="4905518375574791375">"Nastavit"</string>
     <string name="disconnect" msgid="971412338304200056">"Odpojit"</string>
     <string name="session" msgid="6470628549473641030">"Relace:"</string>
     <string name="duration" msgid="3584782459928719435">"Doba trvání:"</string>
     <string name="data_transmitted" msgid="7988167672982199061">"Odesláno:"</string>
     <string name="data_received" msgid="4062776929376067820">"Přijato:"</string>
+
     <string name="data_value_format" msgid="2192466557826897580">"<xliff:g id="NUMBER_0">%1$s</xliff:g> bajtů / <xliff:g id="NUMBER_1">%2$s</xliff:g> paketů"</string>
 </resources>
