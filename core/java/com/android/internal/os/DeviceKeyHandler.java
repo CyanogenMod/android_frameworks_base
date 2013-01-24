@@ -14,8 +14,13 @@ package com.android.internal.os;
 import android.view.KeyEvent;
 
 public interface DeviceKeyHandler {
-    public static final int KEYEVENT_CAUGHT = -1;
-    public static final int KEYEVENT_UNCAUGHT = 0;
 
-    public int handleKeyEvent(KeyEvent event);
+    /**
+     * Invoked when an unknown key was detected by the system, letting the device handle
+     * this special keys prior to pass the key to the active app.
+     *
+     * @param event The key event to be handled
+     * @return If the event is consume
+     */
+    public boolean handleKeyEvent(KeyEvent event);
 }
