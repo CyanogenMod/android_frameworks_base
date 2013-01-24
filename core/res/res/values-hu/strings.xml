@@ -1357,6 +1357,7 @@
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"További lehetőségek"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Belső tárhely"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD-kártya"</string>
+    <string name="storage_sd_dock_card">Dokkoló SD-kártyája</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB-tár"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Szerkesztés"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Adathasználati figyelmeztetés"</string>

@@ -200,7 +200,7 @@
     <string name="quick_settings_wifi_label" msgid="9135344704899546041">"Wi-Fi"</string>
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"Nincs kapcsolat"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"Nincs hálózat"</string>
-    <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi kikapcsolva"</string>
+    <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi ki"</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Wi-Fi kijelző"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Vezeték nélküli kijelző"</string>
     <string name="quick_settings_profile_label">Profil</string>
@@ -211,10 +211,11 @@
     <string name="powerwidget_screen_timeout_toast">Képernyő időkorlátja: %1$d %2$s</string>
 
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS ki</string>
     <string name="quick_settings_screen_sleep">Alvó mód</string>
-    <string name="quick_settings_ringer_on">Hang be</string>
+    <string name="quick_settings_ringer_on">Hang</string>
     <string name="quick_settings_ringer_off">Hang ki</string>
-    <string name="quick_settings_vibration_on">Rezgés be</string>
+    <string name="quick_settings_vibration_on">Rezgés</string>
     <string name="quick_settings_vibration_off">Rezgés ki</string>
     <string name="quick_settings_label_enabled">Be</string>
     <string name="quick_settings_label_disabled">Ki</string>
@@ -224,10 +225,13 @@
     <string name="quick_settings_report_bug">Hibajelentés</string>
     <string name="quick_settings_sync">Szinkronizálás</string>
     <string name="quick_settings_torch">Zseblámpa</string>
+    <string name="quick_settings_torch_off">Zseblámpa ki</string>
     <string name="quick_settings_screen_timeout">Időkorlát: </string>
     <string name="quick_settings_usb_tether_off_label">Lecsatlakoztatva</string>
     <string name="quick_settings_usb_tether_connected_label">Megosztás ki</string>
-    <string name="quick_settings_usb_tether_on_label">Megosztás be</string>
+    <string name="quick_settings_usb_tether_on_label">Megosztás</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP ki</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Válasszon eseményt</string>
