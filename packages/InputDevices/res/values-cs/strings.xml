@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_label">Vstupní zařízení</string>
+    <string name="keyboard_layouts_label">Klávesnice Android</string>
+    <string name="keyboard_layout_english_us_label">Anglická (US)</string>
+    <string name="keyboard_layout_english_us_colemak_label">Anglická (US), Colemak</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Anglická (US), Dvorak</string>
+    <string name="keyboard_layout_german_label">Německá</string>
+    <string name="keyboard_layout_french_label">Francouzská</string>
+    <string name="keyboard_layout_french_ca_label">Francouzská (Kanada)</string>
+    <string name="keyboard_layout_russian_label">Ruská</string>
+    <string name="keyboard_layout_russian_mac_label">Ruská, Mac</string>
+    <string name="keyboard_layout_spanish_label">Španělská</string>
+    <string name="keyboard_layout_swiss_french_label">Švýcarská franština</string>
+    <string name="keyboard_layout_swiss_german_label">Švýcarská němčina</string>
+    <string name="keyboard_layout_belgian">Belgická</string>
+    <string name="keyboard_layout_bulgarian">Bulharská</string>
+    <string name="keyboard_layout_italian">Italská</string>
+    <string name="keyboard_layout_danish">Dánská</string>
+    <string name="keyboard_layout_norwegian">Norská</string>
+    <string name="keyboard_layout_swedish">Švédská</string>
+    <string name="keyboard_layout_finnish">Finská</string>
+    <string name="keyboard_layout_croatian">Chorvatská</string>
+    <string name="keyboard_layout_czech">Česká</string>
+    <string name="keyboard_layout_estonian">Estonská</string>
+    <string name="keyboard_layout_hungarian">Maďarská</string>
+    <string name="keyboard_layout_icelandic">Islandská</string>
+    <string name="keyboard_layout_portuguese">Portugalská</string>
+    <string name="keyboard_layout_slovak">Slovenská</string>
+    <string name="keyboard_layout_slovenian">Slovinská</string>
+    <string name="keyboard_layout_turkish">Turecká</string>
+    <string name="keyboard_layout_ukrainian">Ukrajinská</string>
+</resources>
