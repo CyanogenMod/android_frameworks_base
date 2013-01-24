@@ -1025,8 +1025,8 @@
     <string name="no" msgid="5141531044935541497">"Anulaţi"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Atenţie"</string>
     <string name="loading" msgid="7933681260296021180">"Se încarcă…"</string>
-    <string name="capital_on" msgid="1544682755514494298">"ACTIVAT"</string>
-    <string name="capital_off" msgid="6815870386972805832">"DEZACTIVAT"</string>
+    <string name="capital_on" msgid="1544682755514494298">"PORNIT"</string>
+    <string name="capital_off" msgid="6815870386972805832">"OPRIT"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Finalizare acţiune utilizând"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Se utilizează în mod prestabilit pentru această acţiune."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Ştergeţi setările prestabilite din Setări de sistem &gt; Aplicaţii &gt; Descărcate."</string>
