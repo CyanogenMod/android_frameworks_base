@@ -35,4 +35,5 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"USB-Zubehör"</string>
     <string name="label_view" msgid="6304565553218192990">"Anzeigen"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Standardmäßig für dieses USB-Zubehör verwenden"</string>
+    <string name="powerwidget_screen_timeout_toast">Bildschirm-Timeout ist jetzt %1$d %2$s</string>
 </resources>
