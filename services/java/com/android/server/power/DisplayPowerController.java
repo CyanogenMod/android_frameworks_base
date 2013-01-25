@@ -22,7 +22,9 @@ import com.android.server.TwilightService.TwilightState;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -35,6 +37,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.format.DateUtils;
 import android.util.FloatMath;
 import android.util.Slog;
@@ -168,6 +172,9 @@ final class DisplayPowerController {
     // The display blanker.
     private final DisplayBlanker mDisplayBlanker;
 
+    // Our context
+    private final Context mContext;
+
     // Our handler.
     private final DisplayControllerHandler mHandler;
 
@@ -198,7 +205,7 @@ final class DisplayPowerController {
     private final int mScreenBrightnessDimConfig;
 
     // The minimum allowed brightness.
-    private final int mScreenBrightnessRangeMinimum;
+    private int mScreenBrightnessRangeMinimum;
 
     // The maximum allowed brightness.
     private final int mScreenBrightnessRangeMaximum;
@@ -348,6 +355,7 @@ final class DisplayPowerController {
             LightsService lights, TwilightService twilight,
             DisplayBlanker displayBlanker,
             Callbacks callbacks, Handler callbackHandler) {
+        mContext = context;
         mHandler = new DisplayControllerHandler(looper);
         mNotifier = notifier;
         mDisplayBlanker = displayBlanker;
@@ -370,26 +378,27 @@ final class DisplayPowerController {
 
         mUseSoftwareAutoBrightnessConfig = resources.getBoolean(
                 com.android.internal.R.bool.config_automatic_brightness_available);
-        if (mUseSoftwareAutoBrightnessConfig) {
-            int[] lux = resources.getIntArray(
-                    com.android.internal.R.array.config_autoBrightnessLevels);
-            int[] screenBrightness = resources.getIntArray(
-                    com.android.internal.R.array.config_autoBrightnessLcdBacklightValues);
 
-            mScreenAutoBrightnessSpline = createAutoBrightnessSpline(lux, screenBrightness);
-            if (mScreenAutoBrightnessSpline == null) {
-                Slog.e(TAG, "Error in config.xml.  config_autoBrightnessLcdBacklightValues "
-                        + "(size " + screenBrightness.length + ") "
-                        + "must be monotic and have exactly one more entry than "
-                        + "config_autoBrightnessLevels (size " + lux.length + ") "
-                        + "which must be strictly increasing.  "
-                        + "Auto-brightness will be disabled.");
-                mUseSoftwareAutoBrightnessConfig = false;
-            } else {
-                if (screenBrightness[0] < screenBrightnessMinimum) {
-                    screenBrightnessMinimum = screenBrightness[0];
+        if (mUseSoftwareAutoBrightnessConfig) {
+            updateAutomaticBrightnessSettings();
+        }
+
+        if (mUseSoftwareAutoBrightnessConfig) {
+            final ContentResolver cr = mContext.getContentResolver();
+            final ContentObserver observer = new ContentObserver(mHandler) {
+                @Override
+                public void onChange(boolean selfChange) {
+                    updateAutomaticBrightnessSettings();
+                    updatePowerState();
                 }
-            }
+            };
+
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.AUTO_BRIGHTNESS_LUX),
+                    true, observer, UserHandle.USER_ALL);
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.AUTO_BRIGHTNESS_BACKLIGHT),
+                    true, observer, UserHandle.USER_ALL);
 
             mLightSensorWarmUpTimeConfig = resources.getInteger(
                     com.android.internal.R.integer.config_lightSensorWarmupTime);
@@ -417,6 +426,68 @@ final class DisplayPowerController {
         if (mUseSoftwareAutoBrightnessConfig && USE_TWILIGHT_ADJUSTMENT) {
             mTwilight.registerListener(mTwilightListener, mHandler);
         }
+    }
+
+    private void updateAutomaticBrightnessSettings() {
+        int[] lux = getIntArrayForSetting(Settings.System.AUTO_BRIGHTNESS_LUX);
+        int[] values = getIntArrayForSetting(Settings.System.AUTO_BRIGHTNESS_BACKLIGHT);
+        Resources res = mContext.getResources();
+
+        mScreenAutoBrightnessSpline = null;
+        mUseSoftwareAutoBrightnessConfig = true;
+
+        if (lux != null && values != null) {
+            mScreenAutoBrightnessSpline = createAutoBrightnessSpline(lux, values);
+            if (mScreenAutoBrightnessSpline == null) {
+                Slog.w(TAG, "Found invalid auto-brightness configuration, falling back to default");
+            }
+        }
+
+        if (mScreenAutoBrightnessSpline == null) {
+            lux = res.getIntArray(com.android.internal.R.array.config_autoBrightnessLevels);
+            values = res.getIntArray(com.android.internal.R.array.config_autoBrightnessLcdBacklightValues);
+            mScreenAutoBrightnessSpline = createAutoBrightnessSpline(lux, values);
+        }
+
+        if (mScreenAutoBrightnessSpline == null) {
+            Slog.e(TAG, "Error in config.xml.  config_autoBrightnessLcdBacklightValues "
+                    + "(size " + values.length + ") "
+                    + "must be monotic and have exactly one more entry than "
+                    + "config_autoBrightnessLevels (size " + lux.length + ") "
+                    + "which must be strictly increasing.  "
+                    + "Auto-brightness will be disabled.");
+            mUseSoftwareAutoBrightnessConfig = false;
+            return;
+        }
+
+        int screenBrightnessMinimum = res.getInteger(
+                com.android.internal.R.integer.config_screenBrightnessSettingMinimum);
+        screenBrightnessMinimum = Math.min(screenBrightnessMinimum, mScreenBrightnessDimConfig);
+        screenBrightnessMinimum = Math.min(screenBrightnessMinimum, values[0]);
+        mScreenBrightnessRangeMinimum = clampAbsoluteBrightness(screenBrightnessMinimum);
+    }
+
+    private int[] getIntArrayForSetting(String setting) {
+        final String value = Settings.System.getStringForUser(
+                mContext.getContentResolver(), setting, UserHandle.USER_CURRENT);
+        if (value == null) {
+            return null;
+        }
+        String[] items = value.split(",");
+        if (items == null || items.length == 0) {
+            return null;
+        }
+
+        int[] values = new int[items.length];
+        for (int i = 0; i < items.length; i++) {
+            try {
+                values[i] = Integer.valueOf(values[i]);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+
+        return values;
     }
 
     private static Spline createAutoBrightnessSpline(int[] lux, int[] brightness) {
