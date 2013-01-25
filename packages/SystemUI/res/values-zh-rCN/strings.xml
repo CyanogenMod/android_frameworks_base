@@ -218,20 +218,40 @@
     <string name="powerwidget_screen_timeout_toast">屏幕超时设为: %1$d %2$s</string>
 
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS 已关闭</string>
     <string name="quick_settings_screen_sleep">进入睡眠</string>
     <string name="quick_settings_ringer_on">声音开启</string>
     <string name="quick_settings_ringer_off">声音关闭</string>
-    <string name="quick_settings_vibration_on">震动开启</string>
-    <string name="quick_settings_vibration_off">震动关闭</string>
-    <string name="quick_settings_label_enabled">开启</string>
-    <string name="quick_settings_label_disabled">关闭</string>
+    <string name="quick_settings_vibration_on">震动已开启</string>
+    <string name="quick_settings_vibration_off">震动已关闭</string>
+    <string name="quick_settings_label_enabled">已开启</string>
+    <string name="quick_settings_label_disabled">已关闭</string>
     <string name="quick_settings_ringer_normal">声音</string>
     <string name="quick_settings_lockscreen">锁屏</string>
     <string name="quick_settings_network_type">网络模式</string>
     <string name="quick_settings_report_bug">报告错误</string>
     <string name="quick_settings_sync">同步</string>
+    <string name="quick_settings_sync_off">同步已关闭</string>
     <string name="quick_settings_torch">手电筒</string>
+    <string name="quick_settings_torch_off">手电筒已关闭</string>
     <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC 已关闭</string>
     <string name="quick_settings_screen_timeout">超时</string>
+    <string name="quick_settings_usb_tether_off_label">已断开</string>
+    <string name="quick_settings_usb_tether_connected_label">网络共享已关闭</string>
+    <string name="quick_settings_usb_tether_on_label">网络共享</string>
+    <string name="quick_settings_wifiap">Wi-Fi 热点</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi 热点已关闭</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">选择指定的行为</string>
+    <string name="navbar_home_button">Home 键</string>
+    <string name="navbar_recent_button">最近应用键</string>
+    <string name="navbar_search_button">搜索键</string>
+    <string name="navbar_back_button">后退键</string>
+    <string name="navbar_empty_button">空白按键</string>
+    <string name="navbar_menu_conditional_button">菜单键 (自动隐藏)</string>
+    <string name="navbar_menu_always_button">菜单键 (总是显示)</string>
+    <string name="navbar_menu_big_button">菜单键</string>
 
 </resources>
