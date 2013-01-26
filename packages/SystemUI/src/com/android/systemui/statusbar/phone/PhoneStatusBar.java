@@ -617,6 +617,9 @@ public class PhoneStatusBar extends BaseStatusBar {
             mDockBatteryController.addIconView((ImageView)mStatusBarView.findViewById(R.id.dock_battery));
             mDockBatteryController.addLabelView(
                     (TextView)mStatusBarView.findViewById(R.id.dock_battery_text));
+        } else {
+            mStatusBarView.findViewById(R.id.dock_battery).setVisibility(View.GONE);
+            mStatusBarView.findViewById(R.id.dock_battery_text).setVisibility(View.GONE);
         }
 
         mNetworkController = new NetworkController(mContext);
