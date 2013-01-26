@@ -1257,8 +1257,8 @@
     <string name="usb_notification_message" msgid="2290859399983720271">"Toque para obter outras opções USB."</string>
     <string name="extmedia_format_title" product="nosdcard" msgid="9020092196061007262">"Formatar armaz. USB?"</string>
     <string name="extmedia_format_title" product="default" msgid="3648415921526526069">"Formatar cartão SD?"</string>
-    <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"Todos os arquivos armazenados em sua unidade armazenamento USB serão apagados. Não é possível reverter essa ação."</string>
-    <string name="extmedia_format_message" product="default" msgid="14131895027543830">"Todos os dados em seu cartão serão perdidos."</string>
+    <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"Todos os arquivos armazenados em sua unidade armazenamento USB (no caminho \'%1$s\') serão apagados. Não é possível reverter essa ação."</string>
+    <string name="extmedia_format_message" product="default" msgid="14131895027543830">"Todos os dados em seu cartão (no caminho \'%1$s\') serão apagados. Não é possível reverter essa ação."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Formatar"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"Depuração USB conectada"</string>
     <string name="adb_active_notification_message" msgid="1016654627626476142">"Toque para desativar a depuração do USB."</string>
