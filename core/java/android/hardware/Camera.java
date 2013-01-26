@@ -1792,6 +1792,12 @@ public class Camera {
         /** @hide */
         public static final String ISO_HJR = "ISO_HJR";
         /** @hide */
+        public static final String ISO_SPORTS = "ISOSPORTS";
+        /** @hide */
+        public static final String ISO_NIGHT = "ISONIGHT";
+        /** @hide */
+        public static final String ISO_MOVIE = "ISOMOVIE";
+        /** @hide */
         public static final String ISO_100 = "ISO100";
         /** @hide */
         public static final String ISO_200 = "ISO200";
