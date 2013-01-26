@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-/* //device/apps/common/assets/res/any/strings.xml
-**
-** Copyright 2006, The Android Open Source Project
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
- -->
+<!-- Copyright (C) 2006 The Android Open Source Project
+     Copyright (C) 2013 The CyanogenMod Project
 
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="byteShort" msgid="8340973892742019101">"B"</string>
@@ -28,13 +24,24 @@
     <string name="petabyteShort" msgid="5637816680144990219">"PB"</string>
     <string name="fileSizeSuffix" msgid="7670819340156489359">"<xliff:g id="NUMBER">%1$s</xliff:g> <xliff:g id="UNIT">%2$s</xliff:g>"</string>
     <string name="untitled" msgid="6071602020171759109">"&lt;χωρίς τίτλο&gt;"</string>
-    <string name="ellipsis" msgid="7899829516048813237">"…"</string>
+    <string name="ellipsis" msgid="7899829516048813237">"\u2026"</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">"(Δεν υπάρχει τηλεφωνικός αριθμός)"</string>
     <string name="unknownName" msgid="2277556546742746522">"(Άγνωστο)"</string>
     <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"Αυτόματος τηλεφωνητής"</string>
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Πρόβλημα σύνδεσης ή μη έγκυρος κώδικας MMI."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Η λειτουργία περιορίζεται μόνο σε καθορισμένους αριθμούς κλήσης."</string>
+    <string name="profileNameDefault">Προεπιλογή</string>
+    <string name="profileNameWork">Εργασία</string>
+    <string name="profileNameHome">Σπίτι</string>
+    <string name="profileNameSilent">Αθορυβο</string>
+    <string name="profileNameNight">Νύχτα</string>
+    <string name="profileGroupPhone">Τηλέφωνο</string>
+    <string name="profileGroupCalendar">Ημερολόγιο</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Άλλο</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Η υπηρεσία ενεργοποιήθηκε."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Η υπηρεσία ενεργοποιήθηκε για:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Η υπηρεσία έχει απενεργοποιηθεί."</string>
@@ -133,19 +140,34 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Απενεργοποίηση ασύρματου"</string>
     <string name="screen_lock" msgid="799094655496098153">"Κλείδωμα οθόνης"</string>
     <string name="power_off" msgid="4266614107412865048">"Απενεργοποίηση"</string>
-    <string name="shutdown_progress" msgid="2281079257329981203">"Απενεργοποίηση..."</string>
+    <string name="reboot_system">Επανεκκίνηση τηλεφώνου</string>
+    <string name="reboot_reboot">Επανεκκίνηση</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Απενεργοποίηση\u2026"</string>
+    <string name="reboot_progress">Επανεκκίνηση\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Το τηλέφωνό σας θα απενεργοποιηθεί."</string>
+    <string name="reboot_confirm">Το τηλέφωνό σας θα κάνει επανεκκίνηση.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Πρόσφατα"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Δεν υπάρχουν πρόσφατες εφαρμογές."</string>
     <string name="global_actions" msgid="2406416831541615258">"Επιλογές τηλεφώνου"</string>
+    <string name="global_action_home">Home</string>
+    <string name="global_action_menu">Μενού</string>
+    <string name="global_action_back">Πίσω</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Κλείδωμα οθόνης"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Απενεργοποίηση"</string>
+    <string name="global_action_reboot">Επανεκκίνηση</string>
+    <string name="global_action_choose_profile">Προφίλ</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Λειτουργία σίγασης"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ο ήχος είναι απενεργοποιημένος"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ο ήχος είναι ενεργοποιημένος"</string>
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Λειτουργία πτήσης"</string>
     <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Η λειτουργία πτήσης είναι ενεργοποιημένη."</string>
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Η λειτουργία πτήσης είναι απενεργοποιημένη"</string>
+    <string name="global_action_screenshot">Στιγμιότυπο οθόνης</string>
     <string name="safeMode" msgid="2788228061547930246">"Ασφαλής λειτουργία"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Σύστημα Android"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Υπηρεσίες επί πληρωμή"</string>
@@ -558,10 +580,11 @@
     <string name="lockscreen_return_to_call" msgid="5244259785500040021">"Επιστροφή στην κλήση"</string>
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Σωστό!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Προσπαθήστε αργότερα"</string>
-    <string name="lockscreen_plugged_in" msgid="613343852842944435">"Φόρτιση (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_plugged_in" msgid="613343852842944435">"Φόρτιση, (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Αποφόρτιση, (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Φορτίστηκε."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Συνδέστε τον φορτιστή."</string>
+    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Συνδέστε τον φορτιστή, (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"Δεν υπάρχει κάρτα SIM."</string>
     <string name="lockscreen_missing_sim_message" msgid="2186920585695169078">"Δεν υπάρχει κάρτα SIM στο τηλέφωνο."</string>
     <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"Τοποθετήστε μια κάρτα SIM."</string>
@@ -570,7 +593,7 @@
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"Η κάρτα SIM είναι κλειδωμένη με κωδικό PUK."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"Ανατρέξτε στον οδηγό χρήσης ή επικοινωνήστε με την εξυπηρέτηση πελατών."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"Η κάρτα SIM είναι κλειδωμένη."</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Ξεκλείδωμα κάρτας SIM..."</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Ξεκλείδωμα κάρτας SIM\u2026"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"Σχεδιάσατε εσφαλμένα το μοτίβο ξεκλειδώματος<xliff:g id="NUMBER_0">%d</xliff:g> φορές. "\n\n"Προσπαθήστε ξανά σε <xliff:g id="NUMBER_1">%d</xliff:g> δευτερόλεπτα."</string>
     <string name="lockscreen_failed_attempts_almost_glogin" msgid="3351013842320127827">"Σχεδιάσατε το μοτίβο ξεκλειδώματος εσφαλμένα <xliff:g id="NUMBER_0">%d</xliff:g> φορές. Μετά από <xliff:g id="NUMBER_1">%d</xliff:g> ανεπιτυχείς προσπάθειες ακόμη, θα σας ζητηθεί να ξεκλειδώσετε το τηλέφωνό σας με τη χρήση της σύνδεσής σας Google."\n\n" Προσπαθήστε ξανά σε <xliff:g id="NUMBER_2">%d</xliff:g> δευτερόλεπτα."</string>
     <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"Προσπαθήστε ξανά σε <xliff:g id="NUMBER">%d</xliff:g> δευτερόλεπτα."</string>
@@ -582,10 +605,11 @@
     <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">"Κωδικός πρόσβασης"</string>
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Σύνδεση"</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"Μη έγκυρο όνομα χρήστη ή κωδικός πρόσβασης."</string>
-    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Έλεγχος..."</string>
+    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Έλεγχος\u2026"</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Ξεκλείδωμα"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Ενεργοποίηση ήχου"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Απενεργοποίηση ήχου"</string>
+    <string name="lockscreen_phone_label">Τηλέφωνο</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ΑΒΓ"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
@@ -718,6 +742,7 @@
     <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
     <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
     <string name="selectAll" msgid="6876518925844129331">"Επιλογή όλων"</string>
+    <string name="copyAll">Αντιγραφή όλων</string>
     <string name="selectText" msgid="4862359311088898878">"Επιλογή λέξης"</string>
     <string name="cut" msgid="3092569408438626261">"Αποκοπή"</string>
     <string name="copy" msgid="2681946229533511987">"Αντιγραφή"</string>
@@ -744,6 +769,8 @@
     <string name="aerr_title" msgid="653922989522758100">"Λυπούμαστε!"</string>
     <string name="aerr_application" msgid="4683614104336409186">"Υπήρξε μη αναμενόμενη διακοπή της εφαρμογής <xliff:g id="APPLICATION">%1$s</xliff:g> (διαδικασία <xliff:g id="PROCESS">%2$s</xliff:g>). Προσπαθήστε ξανά."</string>
     <string name="aerr_process" msgid="1551785535966089511">"Υπήρξε μη αναμενόμενη διακοπή της διαδικασίας <xliff:g id="PROCESS">%1$s</xliff:g>. Προσπαθήστε αργότερα."</string>
+    <string name="aerr_revoked_application">Υπήρξε μη αναμενόμενη διακοπή της εφαρμογής <xliff:g id="application">%1$s</xliff:g> (διαδικασία <xliff:g id="process">%2$s</xliff:g>).\nΠΡΟΣΟΧΗ!\nΈχουν ανακληθεί μια ή περισσότερες από τις απαιτούμενες άδειες της εφαρμογής. Αυτό μπορεί να προκαλεί δυσλειτουργία. Παρακαλώ επαναφέρετε τις άδειες και προσπαθήστε ξανά.</string>
+    <string name="aerr_revoked_process">Υπήρξε μη αναμενόμενη διακοπή της διαδικασίας <xliff:g id="process">%1$s</xliff:g>.\nΠΡΟΣΟΧΗ!\nΈχουν ανακληθεί μια ή περισσότερες από τις απαιτούμενες άδειες της δραστηριότητας. Αυτό μπορεί να προκαλεί δυσλειτουργία. Παρακαλώ επαναφέρετε τις άδειες και προσπαθήστε ξανά.</string>
     <string name="anr_title" msgid="3100070910664756057">"Λυπούμαστε!"</string>
     <string name="anr_activity_application" msgid="3538242413112507636">"Η δραστηριότητα <xliff:g id="ACTIVITY">%1$s</xliff:g> (στην εφαρμογή <xliff:g id="APPLICATION">%2$s</xliff:g>) δεν αποκρίνεται."</string>
     <string name="anr_activity_process" msgid="5420826626009561014">"Η δραστηριότητα <xliff:g id="ACTIVITY">%1$s</xliff:g> (στη διαδικασία <xliff:g id="PROCESS">%2$s</xliff:g>) δεν αποκρίνεται."</string>
@@ -751,6 +778,8 @@
     <string name="anr_process" msgid="1246866008169975783">"Η διαδικασία <xliff:g id="PROCESS">%1$s</xliff:g> δεν αποκρίνεται."</string>
     <string name="force_close" msgid="3653416315450806396">"Αναγκαστικό κλείσιμο"</string>
     <string name="report" msgid="4060218260984795706">"Αναφορά"</string>
+    <string name="edit_perms">Επεξεργασία αδειών</string>
+    <string name="reset_perms">Επαναφορά αδειών</string>
     <string name="wait" msgid="7147118217226317732">"Αναμονή"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Ανακατεύθυνση εφαρμογής"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"Η εφαρμογή <xliff:g id="APP_NAME">%1$s</xliff:g> εκτελείται τώρα."</string>
@@ -826,6 +855,8 @@
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Διαμόρφωση"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"Συνδέθηκε ο εντοπισμός σφαλμάτων USB"</string>
     <string name="adb_active_notification_message" msgid="8470296818270110396">"Επιλογή για απενεργοποίηση του εντοπισμού σφαλμάτων USB."</string>
+    <string name="adb_net_enabled_notification_title">Συνδέθηκε ο εντοπισμός σφαλμάτων μέσω δικτύου</string>
+    <string name="adb_net_enabled_notification_message">Επιλογή για απενεργοποίηση του εντοπισμού σφαλμάτων μέσω δικτύου.</string>
     <string name="select_input_method" msgid="6865512749462072765">"Επιλογή μεθόδου εισόδου"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
@@ -898,10 +929,10 @@
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Αγγίξτε για να μάθετε περισσότερα σχετικά με τη χρήση δεδομένων κινητής τηλεφωνίας"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"Ξεπεράστηκε το όριο δεδομένων κινητής τηλεφωνίας"</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"Αγγίξτε για να μάθετε περισσότερα σχετικά με τη χρήση δεδομένων κινητής τηλεφωνίας"</string>
-    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"Αποπροσάρτηση αποθηκευτικού χώρου USB..."</string>
-    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"Αποπροσάρτηση κάρτας SD..."</string>
-    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"Διαγραφή αποθηκευτικού χώρου USB..."</string>
-    <string name="progress_erasing" product="default" msgid="2115214724367534095">"Διαγραφή κάρτας SD..."</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"Αποπροσάρτηση αποθηκευτικού χώρου USB\u2026"</string>
+    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"Αποπροσάρτηση κάρτας SD\u2026"</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"Διαγραφή αποθηκευτικού χώρου USB\u2026"</string>
+    <string name="progress_erasing" product="default" msgid="2115214724367534095">"Διαγραφή κάρτας SD\u2026"</string>
     <string name="format_error" product="nosdcard" msgid="4320339096529911637">"Αποτυχία διαγραφής αποθηκευτικού χώρου USB."</string>
     <string name="format_error" product="default" msgid="1343380371925238343">"Αποτυχία διαγραφής κάρτας SD."</string>
     <string name="media_bad_removal" msgid="7960864061016603281">"Η κάρτα SD καταργήθηκε πριν την αποπροσάρτησή της."</string>
@@ -911,4 +942,30 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Αυτή τη στιγμή ο αποθηκευτικός χώρος USB χρησιμοποιείται από κάποιον υπολογιστή."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Αυτή τη στιγμή η κάρτα SD χρησιμοποιείται από κάποιον υπολογιστή."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Το εξωτερικό μέσο είναι σε άγνωστη κατάσταση."</string>
+
+    <!--Application killed toast -->
+    <string name="app_killed_message">Η εφαρμογή τερματίστηκε</string>
+
+    <!-- Phone goggles -->
+    <string name="phone_goggles_problem_count">Πρόβλημα #%1$d: </string>
+    <string name="phone_goggles_description">Λύστε τα επόμενα %1$d μαθηματικά προβλήματα σε λιγότερο απο %2$d δευτερόλεπτα για να πραγματοποιηθεί η επικοινωνία σας.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">Απομένει %d δευτερόλεπτο</item>
+        <item quantity="other">Απομένουν %d δευτερόλεπτα</item>
+    </plurals>
+
+    <!-- Title of an application permission that lets an application view/edit revoked permissions. -->
+    <string name="permlab_revokePermissions">Ανάκληση αδειών</string>
+    <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
+    <string name="permdesc_revokePermissions">Επιτρέπει την αλλαγή και ανάκληση αδειών μιας εφαρμογής. Να μην χρησιμοποιείται σε κανονικές εφαρμογές.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_preventpower">Παράκαμψη πλήκτρου λειτουργίας</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_preventpower">Επιτρέπει σε μια εφαρμογή να χρησιμοποιήσει το πλήκτρο λειτουργίας για μια διαφορετική λειτουργία</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_rawAudio">Πρόσβαση ήχου χαμηλού επιπέδου</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_rawAudio">Δίνει πλήρη πρόσβαση στην εφαρμογή στο υλικό ήχου.</string>
 </resources>
