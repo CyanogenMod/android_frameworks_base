@@ -2923,7 +2923,7 @@ public class Editor {
 
         @Override
         public void show() {
-            boolean canPaste = mTextView.canPaste();
+            boolean canPaste = mTextView.canPaste() && (mSelectionActionMode == null);
             boolean canSuggest = mTextView.isSuggestionsEnabled() && isCursorInsideSuggestionSpan();
             mPasteTextView.setVisibility(canPaste ? View.VISIBLE : View.GONE);
             mReplaceTextView.setVisibility(canSuggest ? View.VISIBLE : View.GONE);
