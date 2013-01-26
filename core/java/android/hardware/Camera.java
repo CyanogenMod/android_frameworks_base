@@ -1792,6 +1792,12 @@ public class Camera {
         /** @hide */
         public static final String ISO_HJR = "ISO_HJR";
         /** @hide */
+        public static final String ISO_SPORTS = "ISO_SPORTS";
+        /** @hide */
+        public static final String ISO_NIGHT = "ISO_NIGHT";
+        /** @hide */
+        public static final String ISO_MOVIE = "ISO_MOVIE";
+        /** @hide */
         public static final String ISO_100 = "ISO100";
         /** @hide */
         public static final String ISO_200 = "ISO200";
@@ -1801,6 +1807,10 @@ public class Camera {
         public static final String ISO_800 = "ISO800";
         /** @hide */
         public static final String ISO_1600 = "ISO1600";
+        /** @hide */
+        public static final String ISO_3200 = "ISO3200";
+        /** @hide */
+        public static final String ISO_6400 = "ISO6400";
 
         /**
          * Scene mode is off.
