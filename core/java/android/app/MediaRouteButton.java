@@ -175,7 +175,7 @@ public class MediaRouteButton extends View {
         Toast cheatSheet = Toast.makeText(context, contentDesc, Toast.LENGTH_SHORT);
         if (midy < displayFrame.height()) {
             // Show along the top; follow action buttons
-            cheatSheet.setGravity(Gravity.TOP | Gravity.END,
+            cheatSheet.setGravity(Gravity.TOP | Gravity.RIGHT,
                     screenWidth - screenPos[0] - width / 2, height);
         } else {
             // Show along the bottom center
