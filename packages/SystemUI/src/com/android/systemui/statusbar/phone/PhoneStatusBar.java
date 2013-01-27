@@ -609,12 +609,18 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         if (mHasDockBattery) {
             mDockBatteryController = new DockBatteryController(mContext);
-            mDockBatteryController.addIconView((ImageView)mStatusBarView.findViewById(R.id.dock_battery));
+            mDockBatteryController.addIconView(
+                    (ImageView)mStatusBarView.findViewById(R.id.dock_battery));
             mDockBatteryController.addLabelView(
                     (TextView)mStatusBarView.findViewById(R.id.dock_battery_text));
         } else {
-            mStatusBarView.findViewById(R.id.dock_battery).setVisibility(View.GONE);
-            mStatusBarView.findViewById(R.id.dock_battery_text).setVisibility(View.GONE);
+            // Remove dock battery icons if device doesn't hava dock battery support
+            View v = mStatusBarView.findViewById(R.id.dock_battery);
+            if (v != null) mStatusBarView.removeView(v);
+            v = mStatusBarView.findViewById(R.id.dock_battery_text);
+            if (v != null) mStatusBarView.removeView(v);
+            v = mStatusBarView.findViewById(R.id.circle_dock_battery);
+            if (v != null) mStatusBarView.removeView(v);
         }
 
         mNetworkController = new NetworkController(mContext);

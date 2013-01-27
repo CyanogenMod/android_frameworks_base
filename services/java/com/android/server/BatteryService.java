@@ -17,6 +17,8 @@
 package com.android.server;
 
 import com.android.internal.app.IBatteryStats;
+import com.android.internal.os.DeviceDockBatteryHandler;
+import com.android.internal.os.IDeviceHandler;
 import com.android.server.am.BatteryStatsService;
 
 import android.app.ActivityManagerNative;
@@ -65,7 +67,8 @@ import java.util.Calendar;
  * <p>&quot;present&quot; - boolean, true if the battery is present<br />
  * <p>&quot;icon-small&quot; - int, suggested small icon to use for this state</p>
  * <p>&quot;plugged&quot; - int, 0 if the device is not plugged in; 1 if plugged
- * into an AC power adapter; 2 if plugged in via USB.</p>
+ * into an AC power adapter; 2 if plugged in via USB; 4 if plugged in via Wireless;
+ * 8 if plugged in via Dock.</p>
  * <p>&quot;voltage&quot; - int, current battery voltage in millivolts</p>
  * <p>&quot;temperature&quot; - int, current battery temperature in tenths of
  * a degree Centigrade</p>
@@ -129,15 +132,9 @@ public final class BatteryService extends Binder {
     private boolean mLastBatteryLevelCritical;
     private int mLastInvalidCharger;
 
+    // Device specific handler for extra dock battery
     private boolean mHasDockBattery;
-
-    private int mDockBatteryStatus;
-    private int mDockBatteryLevel;
-    private boolean mDockBatteryPresent;
-
-    private int mLastDockBatteryStatus;
-    private int mLastDockBatteryLevel;
-    private boolean mLastDockBatteryPresent;
+    private DeviceDockBatteryHandler mDeviceDockBatteryHandler;
 
     private int mLowBatteryWarningLevel;
     private int mLowBatteryCloseWarningLevel;
@@ -168,7 +165,7 @@ public final class BatteryService extends Binder {
     private int mQuietHoursEnd = 0;
     private boolean mQuietHoursDim = true;
 
-    public BatteryService(Context context, LightsService lights) {
+    public BatteryService(Context context, LightsService lights, IDeviceHandler deviceHandler) {
         mContext = context;
         mHandler = new Handler(true /*async*/);
         mLed = new Led(context, lights);
@@ -183,8 +180,14 @@ public final class BatteryService extends Binder {
         mShutdownBatteryTemperature = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_shutdownBatteryTemperature);
 
+        // Has Dock battery? and device specific handler?
         mHasDockBattery = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_hasDockBattery);
+        if (mHasDockBattery) {
+            if (deviceHandler != null) {
+                mDeviceDockBatteryHandler = deviceHandler.getDeviceDockBatteryHandler();
+            }
+        }
 
         mPowerSupplyObserver.startObserving("SUBSYSTEM=power_supply");
 
@@ -233,6 +236,10 @@ public final class BatteryService extends Binder {
             return true;
         }
         if ((plugTypeSet & BatteryManager.BATTERY_PLUGGED_WIRELESS) != 0 && mWirelessOnline) {
+            return true;
+        }
+        if ((plugTypeSet & BatteryManager.BATTERY_PLUGGED_DOCK) != 0 &&
+              (mDeviceDockBatteryHandler != null && mDeviceDockBatteryHandler.isPlugged())) {
             return true;
         }
         return false;
@@ -306,9 +313,15 @@ public final class BatteryService extends Binder {
         if (!mUpdatesStopped) {
             // Update the values of mAcOnline, et. all.
             native_update();
+            if (mDeviceDockBatteryHandler != null) {
+                mDeviceDockBatteryHandler.handleUpdate();
+            }
 
             // Process the new values.
             processValuesLocked();
+            if (mDeviceDockBatteryHandler != null) {
+                mDeviceDockBatteryHandler.handleProcessValues();
+            }
         }
     }
 
@@ -323,6 +336,8 @@ public final class BatteryService extends Binder {
             mPlugType = BatteryManager.BATTERY_PLUGGED_USB;
         } else if (mWirelessOnline) {
             mPlugType = BatteryManager.BATTERY_PLUGGED_WIRELESS;
+        } else if (mDeviceDockBatteryHandler != null && mDeviceDockBatteryHandler.isPlugged()) {
+            mPlugType = BatteryManager.BATTERY_PLUGGED_DOCK;
         } else {
             mPlugType = BATTERY_PLUGGED_NONE;
         }
@@ -355,14 +370,6 @@ public final class BatteryService extends Binder {
         shutdownIfNoPowerLocked();
         shutdownIfOverTempLocked();
 
-        boolean dockBatteryChanged = false;
-        if (mHasDockBattery &&
-                (mDockBatteryLevel != mLastDockBatteryLevel ||
-                mDockBatteryStatus != mLastDockBatteryStatus ||
-                mDockBatteryPresent != mLastDockBatteryPresent)) {
-            dockBatteryChanged = true;
-        }
-
         if (mBatteryStatus != mLastBatteryStatus ||
                 mBatteryHealth != mLastBatteryHealth ||
                 mBatteryPresent != mLastBatteryPresent ||
@@ -370,8 +377,7 @@ public final class BatteryService extends Binder {
                 mPlugType != mLastPlugType ||
                 mBatteryVoltage != mLastBatteryVoltage ||
                 mBatteryTemperature != mLastBatteryTemperature ||
-                mInvalidCharger != mLastInvalidCharger ||
-                dockBatteryChanged) {
+                mInvalidCharger != mLastInvalidCharger) {
 
             if (mPlugType != mLastPlugType) {
                 if (mLastPlugType == BATTERY_PLUGGED_NONE) {
@@ -494,12 +500,6 @@ public final class BatteryService extends Binder {
             mLastBatteryTemperature = mBatteryTemperature;
             mLastBatteryLevelCritical = mBatteryLevelCritical;
             mLastInvalidCharger = mInvalidCharger;
-
-            if (mHasDockBattery) {
-                mLastDockBatteryLevel = mDockBatteryLevel;
-                mLastDockBatteryStatus = mDockBatteryStatus;
-                mLastDockBatteryPresent = mDockBatteryPresent;
-            }
         }
     }
 
@@ -533,23 +533,6 @@ public final class BatteryService extends Binder {
                     ", AC powered:" + mAcOnline + ", USB powered:" + mUsbOnline +
                     ", Wireless powered:" + mWirelessOnline +
                     ", icon:" + icon  + ", invalid charger:" + mInvalidCharger);
-        }
-
-        if (mHasDockBattery){
-            intent.putExtra(BatteryManager.EXTRA_DOCK_PRESENT, mDockBatteryPresent);
-            intent.putExtra(BatteryManager.EXTRA_DOCK_STATUS, mDockBatteryStatus);
-            intent.putExtra(BatteryManager.EXTRA_DOCK_LEVEL, mDockBatteryLevel);
-        }
-
-        if (false) {
-            Slog.d(TAG, "level:" + mBatteryLevel +
-                    " scale:" + BATTERY_SCALE + " status:" + mBatteryStatus +
-                    " health:" + mBatteryHealth +  " present:" + mBatteryPresent +
-                    " voltage: " + mBatteryVoltage +
-                    " temperature: " + mBatteryTemperature +
-                    " technology: " + mBatteryTechnology +
-                    " AC powered:" + mAcOnline + " USB powered:" + mUsbOnline +
-                    " icon:" + icon  + " invalid charger:" + mInvalidCharger);
         }
 
         mHandler.post(new Runnable() {

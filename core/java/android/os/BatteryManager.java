@@ -142,8 +142,12 @@ public class BatteryManager {
     public static final int BATTERY_PLUGGED_USB = 2;
     /** Power source is wireless. */
     public static final int BATTERY_PLUGGED_WIRELESS = 4;
+    /** Power source is dock. */
+    /** @hide */
+    public static final int BATTERY_PLUGGED_DOCK = 8;
 
     /** @hide */
     public static final int BATTERY_PLUGGED_ANY =
-            BATTERY_PLUGGED_AC | BATTERY_PLUGGED_USB | BATTERY_PLUGGED_WIRELESS;
+            BATTERY_PLUGGED_AC | BATTERY_PLUGGED_USB |
+            BATTERY_PLUGGED_WIRELESS | BATTERY_PLUGGED_DOCK;
 }
