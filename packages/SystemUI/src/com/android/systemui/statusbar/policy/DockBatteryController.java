@@ -16,151 +16,72 @@
 
 package com.android.systemui.statusbar.policy;
 
-import java.util.ArrayList;
-
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.ContentObserver;
 import android.os.BatteryManager;
-import android.os.Handler;
-import android.provider.Settings;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.systemui.R;
 
-public class DockBatteryController extends BroadcastReceiver {
+public class DockBatteryController extends BatteryController {
     private static final String TAG = "StatusBar.DockBatteryController";
 
-    private Context mContext;
-    private ArrayList<ImageView> mIconViews = new ArrayList<ImageView>();
-    private ArrayList<TextView> mLabelViews = new ArrayList<TextView>();
-
-    private static final int BATTERY_STYLE_NORMAL = 0;
-    private static final int BATTERY_STYLE_TEXT = 1;
-    private static final int BATTERY_STYLE_HIDE = 2;
-
-    private static final int BATTERY_ICON_STYLE_UNKNOWN = R.drawable.stat_sys_kb_battery_unknown;
-    private static final int BATTERY_ICON_STYLE_NORMAL = R.drawable.stat_sys_kb_battery;
-    private static final int BATTERY_ICON_STYLE_CHARGE = R.drawable.stat_sys_kb_battery_charge;
-
-    private int mDockStatus = BatteryManager.DOCK_BATTERY_STATUS_UNKNOWN;
-    private boolean mDockPresent = false;
-    private int mBatteryStyle;
-
-    private static final int BATTERY_TEXT_STYLE_MIN =
-            R.string.status_bar_settings_battery_meter_min_format;
-
-    private Handler mHandler;
-
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_BATTERY), false, this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
+    private int mDockBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
+    private boolean mBatteryPlugged = false;
+    private boolean mBatteryPresent = false;
 
     public DockBatteryController(Context context) {
-        mContext = context;
-        mHandler = new Handler();
-
-        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
-        updateSettings();
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        context.registerReceiver(this, filter);
+        super(context);
     }
 
-    public void addIconView(ImageView v) {
-        mIconViews.add(v);
-    }
-
-    public void addLabelView(TextView v) {
-        mLabelViews.add(v);
-    }
-
+    @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             final int level = intent.getIntExtra(BatteryManager.EXTRA_DOCK_LEVEL, 0);
-            mDockStatus = intent.getIntExtra(BatteryManager.EXTRA_DOCK_STATUS,
-                    BatteryManager.DOCK_BATTERY_STATUS_UNKNOWN);
-            mDockPresent = intent.getBooleanExtra(BatteryManager.EXTRA_DOCK_PRESENT,
-                    false);
-
-            int N = mIconViews.size();
-            for (int i = 0; i < N; i++) {
-                ImageView v = mIconViews.get(i);
-                v.setImageLevel(level);
-                v.setContentDescription(mContext.getString(R.string.accessibility_battery_level,
-                        level));
-            }
-
-            N = mLabelViews.size();
-            for (int i = 0; i < N; i++) {
-                TextView v = mLabelViews.get(i);
-                v.setText(mContext.getString(BATTERY_TEXT_STYLE_MIN, level));
-            }
-
+            mDockBatteryStatus = intent.getIntExtra(
+                                        BatteryManager.EXTRA_DOCK_STATUS,
+                                        BatteryManager.BATTERY_STATUS_UNKNOWN);
+            mBatteryPlugged = intent.getIntExtra(BatteryManager.EXTRA_DOCK_PLUGGED, 0) != 0;
+            mBatteryPresent = intent.getBooleanExtra(BatteryManager.EXTRA_DOCK_PRESENT, false);
+            updateViews(level);
             updateBattery();
         }
     }
 
-    private void updateBattery() {
-        int icon = View.GONE;
-        int text = View.GONE;
-        int iconStyle = BATTERY_ICON_STYLE_UNKNOWN;
-
-        if (mDockPresent && mBatteryStyle != BATTERY_STYLE_HIDE) {
-            icon = View.VISIBLE;
-
-            if (mBatteryStyle == BATTERY_STYLE_TEXT) {
-                text = View.VISIBLE;
-            }
-
-            if (mDockStatus == BatteryManager.DOCK_BATTERY_STATUS_NOT_CHARGING) {
-                iconStyle = BATTERY_ICON_STYLE_NORMAL;
-            } else if (mDockStatus == BatteryManager.DOCK_BATTERY_STATUS_CHARGING) {
-                iconStyle = BATTERY_ICON_STYLE_CHARGE;
-            }
-        }
-
-        int N = mIconViews.size();
-        for (int i = 0; i < N; i++) {
-            ImageView v = mIconViews.get(i);
-            v.setVisibility(icon);
-            v.setImageResource(iconStyle);
-        }
-
-        N = mLabelViews.size();
-        for (int i = 0; i < N; i++) {
-            TextView v = mLabelViews.get(i);
-            v.setVisibility(text);
-        }
+    @Override
+    public int getIconStyleUnknown() {
+        return R.drawable.stat_sys_kb_battery_unknown;
+    }
+    @Override
+    public int getIconStyleNormal() {
+        return R.drawable.stat_sys_kb_battery;
+    }
+    @Override
+    public int getIconStyleCharge() {
+        return R.drawable.stat_sys_kb_battery_charge;
+    }
+    @Override
+    public int getIconStyleNormalMin() {
+        return R.drawable.stat_sys_kb_battery_min;
+    }
+    @Override
+    public int getIconStyleChargeMin() {
+        return R.drawable.stat_sys_kb_battery_charge_min;
     }
 
-    private void updateSettings() {
-        ContentResolver resolver = mContext.getContentResolver();
-
-        mBatteryStyle = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_BATTERY, BATTERY_STYLE_NORMAL));
-
-        updateBattery();
+    @Override
+    protected int getBatteryStatus() {
+        return mDockBatteryStatus;
     }
+
+    @Override
+    protected boolean isBatteryPlugged() {
+        return mBatteryPlugged;
+    }
+
+    @Override
+    protected boolean isBatteryPresent() {
+        return mBatteryPresent;
+    }
+
 }
