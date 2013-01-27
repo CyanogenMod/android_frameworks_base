@@ -332,6 +332,14 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
     };
 
+    // Available only in this package
+    boolean hasNotifications() {
+        if (mNotificationData == null) {
+            return false;
+        }
+        return mNotificationData.size() > 0;
+    }
+
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
