@@ -620,6 +620,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         } else {
             mStatusBarView.findViewById(R.id.dock_battery).setVisibility(View.GONE);
             mStatusBarView.findViewById(R.id.dock_battery_text).setVisibility(View.GONE);
+            mStatusBarView.findViewById(R.id.circle_dock_battery).setVisibility(View.GONE);
         }
 
         mNetworkController = new NetworkController(mContext);
