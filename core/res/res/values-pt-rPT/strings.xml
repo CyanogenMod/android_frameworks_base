@@ -19,7 +19,7 @@
  -->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">+
     <string name="byteShort" msgid="8340973892742019101">"B"</string>
     <string name="kilobyteShort" msgid="5973789783504771878">"KB"</string>
     <string name="megabyteShort" msgid="6355851576770428922">"MB"</string>
@@ -320,7 +320,7 @@
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"confirmar uma operação de restauro ou de cópia de segurança completa"</string>
     <string name="permdesc_confirm_full_backup" msgid="1748762171637699562">"Permite que a aplicação inicie a IU de confirmação de cópia de segurança completa. Não deve ser utilizado por qualquer aplicação."</string>
     <string name="permlab_internalSystemWindow" msgid="2148563628140193231">"apresentar janelas não autorizadas"</string>
-    <string name="permdesc_internalSystemWindow" msgid="7458387759461466397">"Permite que a aplicação crie janelas que se destinam a ser utilizadas ​​pela interface de utilizador do sistema interno. Nunca é necessário para aplicações normais."</string>
+    <string name="permdesc_internalSystemWindow" msgid="7458387759461466397">"Permite que a aplicação crie janelas que se destinam a ser utilizadas pela interface de utilizador do sistema interno. Nunca é necessário para aplicações normais."</string>
     <string name="permlab_systemAlertWindow" msgid="3543347980839518613">"desenhar sobre outras aplicações"</string>
     <string name="permdesc_systemAlertWindow" msgid="8584678381972820118">"Permite que a aplicação se sobreponha a outras aplicações ou partes da interface de utilizador. Poderá interferir na utilização da interface de qualquer aplicação ou alterar o que pensa estar a ver noutras aplicações."</string>
     <string name="permlab_setAnimationScale" msgid="2805103241153907174">"modificar velocidade global da animação"</string>
@@ -762,7 +762,8 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Tentar novamente"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Excedido o n.º máximo de tentativas de Desbloqueio Através do Rosto"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"A carregar, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_charged" msgid="321635745684060624">"Cobrado"</string>
+    <string name="lockscreen_charged" msgid="321635745684060624">"Carregado"</string>
+    <string name="lockscreen_discharging">A descarregar, <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%%</xliff:g></string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Ligue o carregador."</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Nenhum cartão SIM"</string>
@@ -1444,4 +1445,36 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Acessibilidade cancelada."</string>
     <string name="user_switched" msgid="3768006783166984410">"<xliff:g id="NAME">%1$s</xliff:g> do utilizador atual."</string>
     <string name="owner_name" msgid="2716755460376028154">"Proprietário"</string>
+    <string name="profileNameDefault">Padrão</string>
+    <string name="profileNameWork">Trabalho</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silêncio</string>
+    <string name="profileNameNight">Noite</string>
+    <string name="profileGroupPhone">Telefone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Outro</string>
+    <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="global_action_screenshot">Capturar ecrã</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Ecrã expandido</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Ativada</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Desativada</string>
+    <string name="reboot_reboot">Reiniciar</string>
+    <string name="reboot_recovery">Recuperação</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Menu de arranque</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">A reiniciar\u2026</string>
+    <string name="reboot_confirm">O seu telefone vai reiniciar.</string>
+    <string name="permlab_preventpower">Substituir tecla de energia</string>
+    <string name="permdesc_preventpower">Permite a uma aplicação a substituir o tecla de energia</string>
+    <string name="app_killed_message">Aplicação terminada</string>
+    <string name="global_action_reboot">Reiniciar</string>
+    <string name="global_action_choose_profile">Perfil</string>
+    <string name="toast_rotation_unlocked">Rotação do ecrã está desbloqueada</string>
+    <string name="toast_rotation_locked">Rotação do ecrã está bloqueada</string>
+    <string name="storage_sd_dock_card">Inserido cartão SD</string>
 </resources>
