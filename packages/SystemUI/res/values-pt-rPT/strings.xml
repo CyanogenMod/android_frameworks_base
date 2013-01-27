@@ -139,10 +139,10 @@
     <string name="accessibility_notifications_button" msgid="4498000369779421892">"Notificações."</string>
     <string name="accessibility_remove_notification" msgid="3603099514902182350">"Limpar notificações"</string>
     <string name="accessibility_gps_enabled" msgid="3511469499240123019">"GPS ativado."</string>
-    <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"Adquirir GPS."</string>
+    <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"A adquirir GPS."</string>
     <string name="accessibility_tty_enabled" msgid="4613200365379426561">"Teletipo ativado."</string>
-    <string name="accessibility_ringer_vibrate" msgid="666585363364155055">"Campainha em vibração."</string>
-    <string name="accessibility_ringer_silent" msgid="9061243307939135383">"Campainha em silêncio."</string>
+    <string name="accessibility_ringer_vibrate" msgid="666585363364155055">"Vibração activada."</string>
+    <string name="accessibility_ringer_silent" msgid="9061243307939135383">"Em silêncio."</string>
     <string name="accessibility_recents_item_dismissed" msgid="6803574935084867070">"<xliff:g id="APP">%s</xliff:g> ignorado."</string>
     <string name="accessibility_notification_dismissed" msgid="854211387186306927">"Notificação ignorada."</string>
     <string name="accessibility_desc_notification_shade" msgid="4690274844447504208">"Painel de notificações."</string>
@@ -175,7 +175,7 @@
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"O ecrã está bloqueado na orientação vertical."</string>
     <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
     <string name="start_dreams" msgid="7219575858348719790">"Daydream"</string>
-    <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
+    <string name="ethernet_label" msgid="7967563676324087464">"Rede"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Modo de avião"</string>
     <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"A carregar, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Carregada"</string>
@@ -203,4 +203,44 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTOMÁTICO"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"As notificações são apresentadas aqui"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Pode aceder em qualquer altura, deslizando rapidamente para baixo com o dedo."\n"Deslize novamente para baixo para aceder aos controlos do sistema."</string>
+    <string name="powerwidget_screen_timeout_toast">Tempo de suspensão do ecrã ajustado para: %1$d %2$s</string>
+    <string name="quick_settings_profile_label">Perfil</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS desligado</string>
+    <string name="quick_settings_screen_sleep">Bloquear ecrã</string>
+    <string name="quick_settings_ringer_on">Som ligado</string>
+    <string name="quick_settings_ringer_off">Som desligado</string>
+    <string name="quick_settings_vibration_on">Vibração ligada</string>
+    <string name="quick_settings_vibration_off">Vibração desligada</string>
+    <string name="quick_settings_label_enabled">Ligado</string>
+    <string name="quick_settings_label_disabled">Desligado</string>
+    <string name="quick_settings_ringer_normal">Som</string>
+    <string name="quick_settings_lockscreen">Ecrã de bloqueio</string>
+    <string name="quick_settings_network_type">Modo de rede</string>
+    <string name="quick_settings_report_bug">Reportar problema</string>
+    <string name="accessibility_quick_settings_ringer">Som <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibração <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Utilizar a cabeça do CID</string>
+    <string name="bean_dream_settings_cid_summary">Utilizar a cabeça do CID em vez do Jelly Bean</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="quick_settings_sync">Sincronização</string>
+    <string name="quick_settings_torch">Lanterna</string>
+    <string name="quick_settings_torch_off">Lanterna desligada</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_screen_timeout">Tempo excedido</string>
+    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
+    <string name="quick_settings_usb_tether_off_label">Desligado</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering ligado</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP desligado</string>
+    <string name="navbar_dialog_title">Escolha um local para criar um atalho</string>
+    <string name="navbar_home_button">Botão de Início</string>
+    <string name="navbar_recent_button">Botão de Recentes</string>
+    <string name="navbar_search_button">Botão de Pesquisa</string>
+    <string name="navbar_back_button">Botão de Voltar</string>
+    <string name="navbar_empty_button">Espaço Vazio</string>
+    <string name="navbar_menu_conditional_button">Botão Menu (auto-ocultar)</string>
+    <string name="navbar_menu_always_button">Botão Menu (sempre visível)</string>
+    <string name="navbar_menu_big_button">Botão de Menu</string>
 </resources>
