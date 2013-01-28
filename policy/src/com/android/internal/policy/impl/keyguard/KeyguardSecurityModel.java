@@ -88,45 +88,33 @@ public class KeyguardSecurityModel {
         } else if (simState == IccCardConstants.State.PUK_REQUIRED
                 && mLockPatternUtils.isPukUnlockScreenEnable()) {
             mode = SecurityMode.SimPuk;
-        } else {
+        } else if (mProfileManager.getActiveProfile().getScreenLockMode() != Profile.LockMode.INSECURE) {
             final int security = mLockPatternUtils.getKeyguardStoredPasswordQuality();
             switch (security) {
                 case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
-                    if (mLockPatternUtils.isLockPasswordEnabled()
-                            && mProfileManager.getActiveProfile().getScreenLockMode()
-                               != Profile.LockMode.INSECURE) {
+                    if (mLockPatternUtils.isLockPasswordEnabled()) {
                         mode = SecurityMode.PIN;
-                    } else {
-                        mode = SecurityMode.None;
                     }
                     break;
 
                 case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
                 case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
                 case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
-                    if (mLockPatternUtils.isLockPasswordEnabled()
-                            && mProfileManager.getActiveProfile().getScreenLockMode()
-                               != Profile.LockMode.INSECURE) {
+                    if (mLockPatternUtils.isLockPasswordEnabled()) {
                         mode = SecurityMode.Password;
-                    } else {
-                        mode = SecurityMode.None;
                     }
                     break;
 
                 case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
                 case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
-                    if (mLockPatternUtils.isLockPatternEnabled()
-                            && mProfileManager.getActiveProfile().getScreenLockMode()
-                               != Profile.LockMode.INSECURE) {
+                    if (mLockPatternUtils.isLockPatternEnabled()) {
                         mode = mLockPatternUtils.isPermanentlyLocked() ?
                             SecurityMode.Account : SecurityMode.Pattern;
-                    } else {
-                        mode = SecurityMode.None;
                     }
                     break;
 
                 default:
-                    throw new IllegalStateException("Unknown unlock mode:" + mode);
+                    throw new IllegalStateException("Unknown unlock mode:" + security);
             }
         }
         return mode;
