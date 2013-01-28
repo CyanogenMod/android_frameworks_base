@@ -76,6 +76,7 @@ public class StatusBarWindowView extends FrameLayout
     public void dispatchWindowFocusChanged(boolean hasFocus) {
         this.setFocusableInTouchMode(hasFocus);
         this.requestFocus();
+        super.dispatchWindowFocusChanged(hasFocus);
     }
 
     @Override
