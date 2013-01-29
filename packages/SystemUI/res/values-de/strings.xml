@@ -235,6 +235,7 @@
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Funktion zuweisen</string>
+    <string name="navbar_dialog_cancel">Abbrechen</string>
     <string name="navbar_home_button">Home</string>
     <string name="navbar_recent_button">Zuletzt verwendet</string>
     <string name="navbar_search_button">Suche</string>
