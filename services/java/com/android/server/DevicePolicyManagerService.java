@@ -1186,8 +1186,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         validatePasswordOwnerLocked(policy);
         syncDeviceCapabilitiesLocked(policy);
         updateMaximumTimeToLockLocked(policy);
-        syncSELinuxPolicyLocked(policy, false);
-        syncMMACpolicyLocked(policy, false);
+        syncSELinuxPolicyLocked(policy, false, true);
+        syncMMACpolicyLocked(policy, false, true);
     }
 
     static void validateQualityConstant(int quality) {
@@ -2658,7 +2658,19 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
 
     private boolean syncSELinuxPolicyLocked(DevicePolicyData policy, boolean removeAllPolicy) {
         return syncSELinuxPolicyLocked(policy, removeAllPolicy, removeAllPolicy,
-                removeAllPolicy, removeAllPolicy);
+                                       removeAllPolicy, removeAllPolicy);
+    }
+
+    private boolean syncSELinuxPolicyLocked(DevicePolicyData policy, boolean removeSELinuxPolicy,
+                                            boolean removePropertyContexts,
+                                            boolean removeFileContexts, boolean removeSEappContexts) {
+        return syncSELinuxPolicyLocked(policy, removeSELinuxPolicy, removePropertyContexts,
+                                       removeFileContexts, removeSEappContexts, false);
+    }
+
+    private boolean syncSELinuxPolicyLocked(DevicePolicyData policy, boolean removeAllPolicy, boolean firstBoot) {
+            return syncSELinuxPolicyLocked(policy, removeAllPolicy, removeAllPolicy,
+                                           removeAllPolicy, removeAllPolicy, firstBoot);
     }
 
     /**
@@ -2672,79 +2684,73 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
      */
     private boolean syncSELinuxPolicyLocked(DevicePolicyData policy,
             boolean removeSELinuxPolicy, boolean removePropertyContexts,
-            boolean removeFileContexts, boolean removeSEappContexts) {
-        if (SELinux.isSELinuxEnabled() && policy.mUserHandle == UserHandle.USER_OWNER) {
-            ActiveAdmin selinuxAdmin = policy.findSELinuxAdminLocked();
-            if (selinuxAdmin == null) {
-                // No admin, so create a fake one and restore it.
-                selinuxAdmin = new ActiveAdmin(null);
-                selinuxAdmin.sebools = seboolsOrig;
-                selinuxAdmin.enforceSELinux = false;
-            }
+            boolean removeFileContexts, boolean removeSEappContexts, 
+            boolean firstBoot) {
+        if (!SELinux.isSELinuxEnabled() || policy.mUserHandle != UserHandle.USER_OWNER) {
+            return false;
+        }
 
-            boolean systemState = SELinux.isSELinuxEnforced();
-            boolean desiredState = selinuxAdmin.enforceSELinux;
+        ActiveAdmin selinuxAdmin = policy.findSELinuxAdminLocked();
+        if (selinuxAdmin == null) {
+            return false;
+        }
+        
+        boolean systemState = SELinux.isSELinuxEnforced();
+        boolean desiredState = selinuxAdmin.enforceSELinux;
+        if (!firstBoot || !systemState) {
             if (systemState != desiredState) {
                 Slog.v(TAG, "SELinux enforcing was " + systemState + ", to be set to " + desiredState);
                 boolean res = SELinux.setSELinuxEnforce(desiredState);
                 Slog.v(TAG, "Change in SELinux enforcing state " + (res ? "succeeded" : "failed"));
                 if (res == false) {
                     // this really shouldn't ever happen
-                    if (selinuxAdmin.info != null) { // null is fake ActiveAdmin
-                        resetSELinuxAdmin(selinuxAdmin);
-                    }
+                    resetSELinuxAdmin(selinuxAdmin);
                     return false;
                 }
             }
-
-            Set<String> sebools = selinuxAdmin.sebools.keySet();
-            for (String sebool : sebools) {
-                systemState = SELinux.getBooleanValue(sebool);
-                desiredState = selinuxAdmin.sebools.get(sebool);
+        }
+        
+        Set<String> sebools = selinuxAdmin.sebools.keySet();
+        for (String sebool : sebools) {
+            systemState = SELinux.getBooleanValue(sebool);
+            desiredState = selinuxAdmin.sebools.get(sebool);
+            if (!firstBoot || !systemState) {
                 if (systemState != desiredState) {
-                    Slog.v(TAG, "SELinux boolean " + sebool + " was " + systemState + ", to be set to " + desiredState);
+                    Slog.v(TAG, "SELinux boolean [" + sebool + "] : " + systemState + " -> " + desiredState);
                     boolean res = SELinux.setBooleanValue(sebool, desiredState);
-                    Slog.v(TAG, "Change in SELinux boolean " + sebool + " " + (res ? "succeeded" : "failed"));
+                    Slog.v(TAG, "SELinux boolean " + sebool + " " + (res ? "succeeded" : "failed"));
                     if (res == false) {
                         // this really shouldn't ever happen
-                        if (selinuxAdmin.info != null) { // null is fake ActiveAdmin
-                            resetSELinuxAdmin(selinuxAdmin);
-                        }
+                        resetSELinuxAdmin(selinuxAdmin);
                         return false;
                     }
                 }
             }
-
-            if (removeSELinuxPolicy || removePropertyContexts
-                    || removeFileContexts || removeSEappContexts) {
-                boolean ret = true;
-                File polfile;
-                polfile = new File(SEPOLICY_PATH_SEPOLICY);
-                if (removeSELinuxPolicy && polfile.exists() && !polfile.delete()) {
-                    ret = false;
-                }
-                polfile = new File(SEPOLICY_PATH_PROPCTXS);
-                if (removePropertyContexts && polfile.exists() && !polfile.delete()) {
-                    ret = false;
-                }
-                polfile = new File(SEPOLICY_PATH_FILECTXS);
-                if (removeFileContexts && polfile.exists() && !polfile.delete()) {
-                    ret = false;
-                }
-                polfile = new File(SEPOLICY_PATH_SEAPPCTXS);
-                if (removeSEappContexts && polfile.exists() && !polfile.delete()) {
-                    ret = false;
-                }
-                SystemProperties.set("selinux.reload_policy", "1");
-                return ret;
-
-            } else { //Not removing any policy files
-                return true;
-            }
-
-        } else { //SELinux not enabled or user is not owner
-            return false;
         }
+        
+        boolean ret = true;
+        if (removeSELinuxPolicy || removePropertyContexts
+            || removeFileContexts || removeSEappContexts) {
+            File polfile;
+            polfile = new File(SEPOLICY_PATH_SEPOLICY);
+            if (removeSELinuxPolicy && polfile.exists() && !polfile.delete()) {
+                ret = false;
+            }
+            polfile = new File(SEPOLICY_PATH_PROPCTXS);
+            if (removePropertyContexts && polfile.exists() && !polfile.delete()) {
+                ret = false;
+            }
+            polfile = new File(SEPOLICY_PATH_FILECTXS);
+            if (removeFileContexts && polfile.exists() && !polfile.delete()) {
+                ret = false;
+            }
+            polfile = new File(SEPOLICY_PATH_SEAPPCTXS);
+            if (removeSEappContexts && polfile.exists() && !polfile.delete()) {
+                ret = false;
+            }
+            SystemProperties.set("selinux.reload_policy", "1");
+        }
+        return ret;
     }
 
     // Cases = 8
@@ -3009,45 +3015,45 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     //                      FTT fails a
     //                           FTF fails a,b
 
+    private boolean syncMMACpolicyLocked(DevicePolicyData policy, boolean removePolicy) {
+        return syncMMACpolicyLocked(policy, removePolicy, false);
+    }
+
     /**
      * Sync's the current MMAC admin's policies to the device. If there is
      * no MMAC admin, then this will set MMAC to permissive mode
      * and may remove the {@link MMAC_POLICY_PATH} file.
      * @return true if policies were synced successfully
      */
-    private boolean syncMMACpolicyLocked(DevicePolicyData policy,
-            boolean removePolicy) {
-        if (policy.mUserHandle == UserHandle.USER_OWNER) {
-            ActiveAdmin mmacAdmin = policy.findMMACadminLocked();
-            if (mmacAdmin == null) {
-                // No admin, so create a fake one and restore it.
-                mmacAdmin = new ActiveAdmin(null);
-                mmacAdmin.enforceMMAC = false;
-            }
-
-            boolean systemState = SELinuxMMAC.getEnforcingMode();
-            boolean enforceMMAC = mmacAdmin.enforceMMAC;
-            if (systemState != enforceMMAC) {
-                Slog.v(TAG, "Changing MMAC enforcing status from " + systemState + ", to " + enforceMMAC);
-                SELinuxMMAC.setEnforcingMode(enforceMMAC);
-            }
-
-            if (removePolicy) {
-                boolean ret = true;
-                File polFile;
-                polFile = new File(MMAC_POLICY_PATH);
-                if (polFile.exists() && !polFile.delete()) {
-                    ret = false;
-                }
-                return ret;
-
-            } else { //Not removing any policy files
-                return true;
-            }
-
-        } else { //User is not owner
+    private boolean syncMMACpolicyLocked(DevicePolicyData policy, boolean removePolicy,
+                                         boolean firstBoot) {
+        if (policy.mUserHandle != UserHandle.USER_OWNER) {
             return false;
         }
+
+        ActiveAdmin mmacAdmin = policy.findMMACadminLocked();
+        if (mmacAdmin == null) {
+            return false;
+        }
+
+        boolean systemState = SELinuxMMAC.getEnforcingMode();
+        boolean enforceMMAC = mmacAdmin.enforceMMAC;
+        if (!firstBoot || !systemState) {
+            if (systemState != enforceMMAC) {
+                Slog.v(TAG, "Changed MMAC enforcing status " + systemState + " to " + enforceMMAC);
+                SELinuxMMAC.setEnforcingMode(enforceMMAC);
+            }
+        }
+
+        boolean ret = true;
+        if (removePolicy) {
+            File polFile;
+            polFile = new File(MMAC_POLICY_PATH);
+            if (polFile.exists() && !polFile.delete()) {
+                ret = false;
+            }
+        }
+        return ret;
     }
 
     // Cases = 8
@@ -3235,6 +3241,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                         + UserHandle.getCallingUserId() + " is not permitted.");
                 return false;
             }
+
             PolicyFileDescription desc = POLICY_DESCRIPTIONS[policyType];
             File polFile = new File(desc.path);
             File polFileTmp = new File(desc.path + ".tmp");
@@ -3249,9 +3256,10 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                 admin.isCustomPolicyFile[policyType] = newPolicy;
                 saveSettingsLocked(userHandle);
             }
-
             boolean ret = writePolicyFile(polFile, polFileTmp, policy);
-            desc.doPolicyReload();
+            if (ret) {
+                desc.doPolicyReload();
+            }
             return ret;
         }
     }
@@ -3295,6 +3303,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                     }
                 }
                 journal.rollback();
+                Slog.w(TAG, err.toString());
                 return false;
             }
             return true;
