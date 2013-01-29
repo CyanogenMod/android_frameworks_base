@@ -298,6 +298,9 @@ public class PhoneStatusBar extends BaseStatusBar {
     int mInitialTouchX;
     int mInitialTouchY;
 
+    // notification shade dimming
+    private static boolean mStatusBarDim;
+
     // for disabling the status bar
     int mDisabled = 0;
 
@@ -343,6 +346,8 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_DIM), false, this);
             update();
         }
 
@@ -358,9 +363,15 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
             mBrightnessControl = !autoBrightness && Settings.System.getInt(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
+            mStatusBarDim = Settings.System.getInt(
+                    resolver, Settings.System.STATUS_BAR_DIM,
+                    ActivityManager.isHighEndGfx() ? 1 : 0) == 1;
         }
     }
 
+    static public boolean shouldStatusBarDim() {
+        return mStatusBarDim;
+    }
 
     // ensure quick settings is disabled until the current user makes it through the setup wizard
     private boolean mUserSetup = false;
