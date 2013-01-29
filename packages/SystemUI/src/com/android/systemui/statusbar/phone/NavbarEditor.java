@@ -248,7 +248,7 @@ public class NavbarEditor implements OnTouchListener {
                         ((KeyButtonView) view).setInfo(list.getItem(which).toString(), mVertical);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
