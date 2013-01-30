@@ -106,10 +106,6 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     private boolean mSafeModeEnabled;
 
-
-     // We can use the profile manager to override security
-     private ProfileManager mProfileManager;
-
      /*package*/ interface TransportCallback {
         void onListenerDetached();
         void onListenerAttached();
@@ -141,8 +137,6 @@ public class KeyguardHostView extends KeyguardViewBase {
         mSecurityModel = new KeyguardSecurityModel(context);
 
         mViewStateManager = new KeyguardViewStateManager(this);
-
-        mProfileManager = (ProfileManager) context.getSystemService(Context.PROFILE_SERVICE);
 
         DevicePolicyManager dpm =
             (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -883,31 +877,11 @@ public class KeyguardHostView extends KeyguardViewBase {
         showPrimarySecurityScreen(false);
     }
 
-    private boolean isSecure() {
-        SecurityMode mode = mSecurityModel.getSecurityMode();
-        switch (mode) {
-            case Pattern:
-                return mLockPatternUtils.isLockPatternEnabled()
-                        && mProfileManager.getActiveProfile().getScreenLockMode()!= Profile.LockMode.INSECURE;
-            case Password:
-            case PIN:
-                return mLockPatternUtils.isLockPasswordEnabled()
-                        && mProfileManager.getActiveProfile().getScreenLockMode() != Profile.LockMode.INSECURE;
-            case SimPin:
-            case SimPuk:
-            case Account:
-                return true;
-            case None:
-                return false;
-            default:
-                throw new IllegalStateException("Unknown security mode " + mode);
-        }
-    }
 
     @Override
     public void wakeWhenReadyTq(int keyCode) {
         if (DEBUG) Log.d(TAG, "onWakeKey");
-        if (keyCode == KeyEvent.KEYCODE_MENU && isSecure()) {
+        if (keyCode == KeyEvent.KEYCODE_MENU && mSecurityModel.getSecurityMode() != SecurityMode.None) {
             if (DEBUG) Log.d(TAG, "switching screens to unlock screen because wake key was MENU");
             showSecurityScreen(SecurityMode.None);
         } else {
