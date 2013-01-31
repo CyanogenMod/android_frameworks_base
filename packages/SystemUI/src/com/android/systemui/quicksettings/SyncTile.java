@@ -74,14 +74,13 @@ public class SyncTile extends QuickSettingsTile {
     }
 
     private void updateTileState() {
-        // Get the initial label
-        mLabel = mContext.getString(R.string.quick_settings_sync);
 
         if (getSyncState()) {
             mDrawable = R.drawable.ic_qs_sync_on;
+            mLabel = mContext.getString(R.string.quick_settings_sync);
         } else {
             mDrawable = R.drawable.ic_qs_sync_off;
-            mLabel += " " + mContext.getString(R.string.quick_settings_label_disabled);
+            mLabel = mContext.getString(R.string.quick_settings_sync_off);
         }
     }
 
