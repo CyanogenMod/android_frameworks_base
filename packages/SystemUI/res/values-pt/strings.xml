@@ -240,6 +240,10 @@
     <string name="navbar_menu_always_button">Botão menu (sempre visível)</string>
     <string name="navbar_menu_big_button">Botão menu</string>
     <string name="quick_settings_usb_tether_off_label">Disconectado</string>
-    <string name="quick_settings_usb_tether_connected_label">Tethering Desl.</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering desl.</string>
     <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_sync_off">Sinc. desl.</string>
+    <string name="quick_settings_torch_off">Tocha desl.</string>
+    <string name="quick_settings_nfc_off">NFC desl.</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP desl.</string>
 </resources>
