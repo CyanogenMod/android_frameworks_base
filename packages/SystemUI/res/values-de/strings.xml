@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2009 The Android Open Source Project
      Copyright (C) 2013 The CyanogenMod Project
 
@@ -206,32 +206,34 @@
     <string name="status_bar_help_title" msgid="1199237744086469217">"Benachrichtigungen erscheinen hier"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Greifen Sie jederzeit auf sie zu, indem Sie nach unten wischen."\n"Wischen Sie für Systemeinstellungen erneut nach unten."</string>
 
-<!-- **** CYANOGENMOD ADDITIONS START **** -->
+    <!-- **** CYANOGENMOD ADDITIONS START **** -->
 
     <!-- Screen timeout toast -->
     <string name="powerwidget_screen_timeout_toast">Bildschirmsperre nach: %1$d %2$s</string>
 
     <!-- Quick settings -->
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS aus</string>
     <string name="quick_settings_screen_sleep">Standby</string>
-    <string name="quick_settings_ringer_on">Ton an</string>
-    <string name="quick_settings_ringer_off">Ton aus</string>
-    <string name="quick_settings_vibration_on">Vibration an</string>
-    <string name="quick_settings_vibration_off">Vibration aus</string>
     <string name="quick_settings_label_enabled">An</string>
     <string name="quick_settings_label_disabled">Aus</string>
-    <string name="quick_settings_ringer_normal">Ton</string>
+    <string name="quick_settings_ringer_normal">Klingelmodus</string>
     <string name="quick_settings_lockscreen">Sperren</string>
     <string name="quick_settings_network_type">Netzmodus</string>
     <string name="quick_settings_report_bug">Fehlerprotokollierung</string>
     <string name="quick_settings_sync">Sync</string>
+    <string name="quick_settings_sync_off">Sync aus</string>
     <string name="quick_settings_torch">Lampe</string>
+    <string name="quick_settings_torch_off">Lampe aus</string>
     <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC aus</string>
     <string name="quick_settings_screen_timeout">Timeout</string>
     <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">Getrennt</string>
-    <string name="quick_settings_usb_tether_connected_label">Tethering Aus</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering aus</string>
     <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Hotspot</string>
+    <string name="quick_settings_wifiap_off">Hotspot aus</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Funktion zuweisen</string>
@@ -244,5 +246,5 @@
     <string name="navbar_menu_always_button">Menü (immer sichtbar)</string>
     <string name="navbar_menu_big_button">Menü</string>
 
-<!-- **** CYANOGENMOD ADDITIONS END **** -->
+    <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
