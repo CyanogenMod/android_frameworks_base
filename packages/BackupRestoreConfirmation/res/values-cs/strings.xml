@@ -18,7 +18,7 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="backup_confirm_title" msgid="827563724209303345">"Úplná záloha"</string>
     <string name="restore_confirm_title" msgid="5469365809567486602">"Úplné obnovení"</string>
-    <string name="backup_confirm_text" msgid="1878021282758896593">"Obdrželi jsme požadavek na úplnou zálohu všech dat do připojeného počítače. Chcete tuto akci povolit? "\n\n"Pokud jste o zálohu nežádali, operaci nepovolujte."</string>
+    <string name="backup_confirm_text" msgid="1878021282758896593">"Obdrželi jsme požadavek na úplnou zálohu všech dat do připojeného počítače. Chcete tuto akci povolit?"\n\n"Pokud jste o zálohu nežádali, operaci nepovolujte."</string>
     <string name="allow_backup_button_label" msgid="4217228747769644068">"Zálohovat data"</string>
     <string name="deny_backup_button_label" msgid="6009119115581097708">"Nezálohovat"</string>
     <string name="restore_confirm_text" msgid="7499866728030461776">"Obdrželi jsme žádost o úplné obnovení všech dat z připojeného počítače. Chcete tuto akci povolit?"\n\n"Pokud jste o obnovení nepožádali, operaci nepovolujte. Tato akce nahradí veškerá data v zařízení."</string>
@@ -30,9 +30,9 @@
     <string name="backup_enc_password_text" msgid="4981585714795233099">"Zadejte prosím heslo pro šifrování dat úplné zálohy. Pokud pole ponecháte prázdné, použije se aktuální heslo pro zálohy:"</string>
     <string name="backup_enc_password_optional" msgid="1350137345907579306">"Chcete-li data úplné zálohy zašifrovat, zadejte heslo:"</string>
     <string name="restore_enc_password_text" msgid="6140898525580710823">"Pokud jsou obnovená data šifrována, zadejte prosím heslo níže:"</string>
-    <string name="toast_backup_started" msgid="550354281452756121">"Spouští se zálohování..."</string>
+    <string name="toast_backup_started" msgid="550354281452756121">"Spouští se zálohování\u2026"</string>
     <string name="toast_backup_ended" msgid="3818080769548726424">"Zálohování bylo dokončeno"</string>
-    <string name="toast_restore_started" msgid="7881679218971277385">"Spouští se obnovení..."</string>
+    <string name="toast_restore_started" msgid="7881679218971277385">"Spouští se obnovení\u2026"</string>
     <string name="toast_restore_ended" msgid="1764041639199696132">"Obnovení skončilo"</string>
     <string name="toast_timeout" msgid="5276598587087626877">"Časový limit operace vypršel"</string>
 </resources>
