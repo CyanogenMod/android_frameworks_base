@@ -153,8 +153,8 @@
     <string name="power_dialog" product="tablet" msgid="8545351420865202853">"平板电脑选项"</string>
     <string name="power_dialog" product="default" msgid="1319919075463988638">"手机选项"</string>
     <string name="silent_mode" msgid="7167703389802618663">"静音模式"</string>
-    <string name="turn_on_radio" msgid="3912793092339962371">"打开收音机"</string>
-    <string name="turn_off_radio" msgid="8198784949987062346">"关闭收音机"</string>
+    <string name="turn_on_radio" msgid="3912793092339962371">"打开无线电"</string>
+    <string name="turn_off_radio" msgid="8198784949987062346">"关闭无线电"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
 
@@ -189,14 +189,15 @@
     <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
     <string name="reboot_progress">正在重启\u2026</string>
     <!-- Reboot Confirmation Dialog. When the user chooses to reboot the phone, there will be a confirmation dialog. This is the message. -->
-    <string name="reboot_confirm">您的手机将会重启.</string>
+    <string name="reboot_confirm" product="tablet">您的平板电脑将会重启.</string>
+    <string name="reboot_confirm" product="default">您的手机将会重启.</string>
 
     <string name="silent_mode_silent" msgid="319298163018473078">"振铃器关闭"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"振铃器振动"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"振铃器开启"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"正在关机..."</string>
-    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"您的平板电脑会关闭。"</string>
-    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"您的手机将会关机。"</string>
+    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"您的平板电脑将会关机."</string>
+    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"您的手机将会关机."</string>
     <string name="shutdown_confirm_question" msgid="2906544768881136183">"您要关机吗？"</string>
     <string name="reboot_safemode_title" msgid="7054509914500140361">"重新启动并进入安全模式"</string>
     <string name="reboot_safemode_confirm" msgid="55293944502784668">"您要重新启动并进入安全模式吗？这样会停用您已安装的所有第三方应用。再次重新启动将恢复这些应用。"</string>
@@ -1227,8 +1228,8 @@
     <string name="usb_notification_message" msgid="2290859399983720271">"触摸可显示其他 USB 选项。"</string>
     <string name="extmedia_format_title" product="nosdcard" msgid="9020092196061007262">"格式化 USB 存储设备吗？"</string>
     <string name="extmedia_format_title" product="default" msgid="3648415921526526069">"要格式化 SD 卡吗？"</string>
-    <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"您的 USB 存储设备中存储的所有文件都将清除。该操作无法撤消！"</string>
-    <string name="extmedia_format_message" product="default" msgid="14131895027543830">"您卡上的所有数据都会丢失。"</string>
+    <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"您在 USB 存储设备里 (\'%1$s\' 路径下) 存储的所有文件都将被删除. 该操作将无法被撤消!"</string>
+    <string name="extmedia_format_message" product="default" msgid="14131895027543830">"您卡上 (在 \'%1$s\' 路径下) 的所有数据都将被删除. 该操作将无法被撤消!"</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"格式化"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"Android 调试模式已启用"</string>
     <string name="adb_active_notification_message" msgid="1016654627626476142">"选择即可停用调试模式."</string>
@@ -1399,6 +1400,8 @@
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"更多选项"</string>
     <string name="storage_internal" msgid="4891916833657929263">"内存设备"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD 卡"</string>
+    <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
+    <string name="storage_sd_dock_card">底座 SD 卡</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB 存储器"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"修改"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"流量使用警告"</string>
