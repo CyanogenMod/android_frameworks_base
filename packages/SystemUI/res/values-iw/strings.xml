@@ -204,7 +204,7 @@
     <string name="status_bar_help_title" msgid="1199237744086469217">"הודעות מופיעות כאן"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"גש אליהם בכל עת על ידי החלקה למטה."\n"החלק למטה שוב למעבר למרכז הבקרה של המערכת."</string>
 
-<!-- CyanogenMod edits start -->
+<!-- **** CYANOGENMOD ADDITIONS START **** -->
 
 <!-- QuickSettings -->
     <string name="accessibility_quick_settings_ringer">צליל <xliff:g id="state" example="Off">%s</xliff:g>.</string>
@@ -248,5 +248,7 @@
     <string name="navbar_menu_conditional_button">כפתור תפריט (הסתרה אוטומטית)</string>
     <string name="navbar_menu_always_button">כפתור תפריט (הצג תמיד)</string>
     <string name="navbar_menu_big_button">כפתור תפריט</string>
+
+    <!-- **** CYANOGENMOD ADDITIONS END **** -->
 
 </resources>
