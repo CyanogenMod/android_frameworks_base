@@ -554,6 +554,7 @@
     <string name="quick_settings_usb_tether_on_label">Tethering</string>
     <string name="quick_settings_wifiap">Wi-Fi AP</string>
     <string name="quick_settings_wifiap_off">Wi-Fi AP off</string>
+    <string name="quick_settings_quiethours">Quiet hours</string>
 
     <!-- Text to display next to the minimal graphical battery meter.  [CHAR LIMIT=3] -->
     <string name="status_bar_settings_battery_meter_min_format" translatable="false">
