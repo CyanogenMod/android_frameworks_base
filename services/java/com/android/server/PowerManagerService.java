@@ -62,6 +62,7 @@ import android.util.Slog;
 import android.view.WindowManagerPolicy;
 import static android.view.WindowManagerPolicy.OFF_BECAUSE_OF_PROX_SENSOR;
 import static android.provider.Settings.System.DIM_SCREEN;
+import static android.provider.Settings.System.ELECTRON_BEAM_ANIMATION_OFF;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_AUTO_BRIGHTNESS_ADJ;
@@ -179,6 +180,8 @@ public class PowerManagerService extends IPowerManager.Stub
 
     // animate screen lights in PowerManager (as opposed to SurfaceFlinger)
     boolean mAnimateScreenLights = true;
+
+    boolean mElectronBeamAnimationOff = false;
 
     static final int ANIM_STEPS = 60; // nominal # of frames at 60Hz
     // Slower animation for autobrightness changes
@@ -568,8 +571,13 @@ public class PowerManagerService extends IPowerManager.Stub
 
                 mWindowScaleAnimation = getFloat(WINDOW_ANIMATION_SCALE, 1.0f);
                 final float transitionScale = getFloat(TRANSITION_ANIMATION_SCALE, 1.0f);
+
+                mElectronBeamAnimationOff = (Settings.System.getInt(mContext.getContentResolver(),
++                        ELECTRON_BEAM_ANIMATION_OFF, 1) != 0) &&
++                        mContext.getResources().getBoolean(com.android.internal.R.bool.config_screenOffAnimation);
+
                 mAnimationSetting = 0;
-                if (mWindowScaleAnimation > 0.5f) {
+                if (mElectronBeamAnimationOff) {
                     mAnimationSetting |= ANIM_SETTING_OFF;
                 }
                 if (transitionScale > 0.5f) {
@@ -715,10 +723,12 @@ public class PowerManagerService extends IPowerManager.Stub
                         + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?) or ("
+                        + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?)",
                 new String[]{STAY_ON_WHILE_PLUGGED_IN, SCREEN_OFF_TIMEOUT, DIM_SCREEN, SCREEN_BRIGHTNESS,
                         SCREEN_BRIGHTNESS_MODE, /*SCREEN_AUTO_BRIGHTNESS_ADJ,*/
-                        WINDOW_ANIMATION_SCALE, TRANSITION_ANIMATION_SCALE, Settings.System.LIGHTS_CHANGED},
+                        WINDOW_ANIMATION_SCALE, TRANSITION_ANIMATION_SCALE, Settings.System.LIGHTS_CHANGED,
+                        ELECTRON_BEAM_ANIMATION_OFF},
                 null);
         mSettings = new ContentQueryMap(settingsCursor, Settings.System.NAME, true, mHandler);
         SettingsObserver settingsObserver = new SettingsObserver();
