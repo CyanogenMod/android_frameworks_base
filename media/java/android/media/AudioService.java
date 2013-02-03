@@ -1847,7 +1847,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         checkAllAliasStreamVolumes();
 
         synchronized (mSafeMediaVolumeState) {
-            if (mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_ACTIVE) {
+            if (safeVolumeEnabled() &&
+                    mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_ACTIVE) {
                 enforceSafeMediaVolume();
             }
         }
@@ -2308,7 +2309,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     private void onCheckMusicActive() {
         synchronized (mSafeMediaVolumeState) {
-            if (mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_INACTIVE) {
+            if (safeVolumeEnabled() &&
+                    mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_INACTIVE) {
                 int device = getDeviceForStream(AudioSystem.STREAM_MUSIC);
 
                 if ((device & mSafeMediaVolumeDevices) != 0) {
@@ -2342,9 +2344,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
             if ((mMcc != mcc) || ((mMcc == 0) && force)) {
                 mSafeMediaVolumeIndex = mContext.getResources().getInteger(
                         com.android.internal.R.integer.config_safe_media_volume_index) * 10;
-                boolean safeMediaVolumeEnabled = mContext.getResources().getBoolean(
-                        com.android.internal.R.bool.config_safe_media_volume_enabled);
-                if (safeMediaVolumeEnabled) {
+                if (safeVolumeEnabled()) {
                     mSafeMediaVolumeState = SAFE_MEDIA_VOLUME_ACTIVE;
                     enforceSafeMediaVolume();
                 } else {
@@ -2353,6 +2353,19 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 mMcc = mcc;
             }
         }
+    }
+
+    private boolean safeVolumeEnabled() {
+        boolean safeMediaVolumeEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_safe_media_volume_enabled);
+        boolean safeHeadsetVolumeEnabled = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.SAFE_HEADSET_VOLUME, safeMediaVolumeEnabled ? 1 : 0,
+                UserHandle.USER_CURRENT) != 0;
+
+        // No need to worry about the media volume bool since it will be the default
+        // of the headset volume unless manually changed by the end user
+        return safeHeadsetVolumeEnabled;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -6075,7 +6088,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     private void setSafeMediaVolumeEnabled(boolean on) {
         synchronized (mSafeMediaVolumeState) {
-            if ((mSafeMediaVolumeState != SAFE_MEDIA_VOLUME_NOT_CONFIGURED) &&
+            if (safeVolumeEnabled() && 
+                    (mSafeMediaVolumeState != SAFE_MEDIA_VOLUME_NOT_CONFIGURED) &&
                     (mSafeMediaVolumeState != SAFE_MEDIA_VOLUME_DISABLED)) {
                 if (on && (mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_INACTIVE)) {
                     mSafeMediaVolumeState = SAFE_MEDIA_VOLUME_ACTIVE;
@@ -6134,7 +6148,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     private boolean checkSafeMediaVolume(int streamType, int index, int device) {
         synchronized (mSafeMediaVolumeState) {
-            if ((mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_ACTIVE) &&
+            if (safeVolumeEnabled() &&
+                    (mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_ACTIVE) &&
                     (mStreamVolumeAlias[streamType] == AudioSystem.STREAM_MUSIC) &&
                     ((device & mSafeMediaVolumeDevices) != 0) &&
                     (index > mSafeMediaVolumeIndex)) {
