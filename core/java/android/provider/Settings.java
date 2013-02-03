@@ -2798,10 +2798,16 @@ public final class Settings {
         public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
 
          /**
-         * Statusbar State
+         * Navigation bar State
          * @hide
          */
         public static final String EXPANDED_DESKTOP_STATE = "expanded_desktop_state";
+
+        /**
+         * Status bar State
+         * @hide
+         */
+        public static final String EXPANDED_DESKTOP_STATUS_BAR_STATE = "expanded_desktop_status_bar_state";
 
         /**
          * Whether to use a separate delay for "slide to unlock" and security
