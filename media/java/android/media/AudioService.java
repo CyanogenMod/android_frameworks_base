@@ -2342,9 +2342,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
             if ((mMcc != mcc) || ((mMcc == 0) && force)) {
                 mSafeMediaVolumeIndex = mContext.getResources().getInteger(
                         com.android.internal.R.integer.config_safe_media_volume_index) * 10;
-                boolean safeMediaVolumeEnabled = mContext.getResources().getBoolean(
-                        com.android.internal.R.bool.config_safe_media_volume_enabled);
-                if (safeMediaVolumeEnabled) {
+                if (safeVolumeEnabled()) {
                     mSafeMediaVolumeState = SAFE_MEDIA_VOLUME_ACTIVE;
                     enforceSafeMediaVolume();
                 } else {
@@ -2353,6 +2351,17 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 mMcc = mcc;
             }
         }
+    }
+
+    private boolean safeVolumeEnabled() {
+        boolean safeMediaVolumeEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_safe_media_volume_enabled);
+        boolean safeHeadsetVolumeEnabled = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.SAFE_HEADSET_VOLUME, safeMediaVolumeEnabled ? 1 : 0,
+                UserHandle.USER_CURRENT) != 0;
+
+        return safeMediaVolumeEnabled && safeHeadsetVolumeEnabled;
     }
 
     ///////////////////////////////////////////////////////////////////////////
