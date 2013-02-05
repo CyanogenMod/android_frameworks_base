@@ -204,7 +204,7 @@
     <string name="status_bar_help_title" msgid="1199237744086469217">"Meldingen worden hier weergegeven"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"U kunt de meldingen op elk gewenst moment openen door met uw vinger omlaag te vegen."\n"Veeg nogmaals met uw vinger omlaag om de systeembesturingselementen weer te geven."</string>
 
-    <!-- CYANOGENMOD EDITS -->
+    <!-- CYANOGENMOD ADDITIONS -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="accessibility_quick_settings_ringer">Geluid <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Trillen <xliff:g id="state" example="Off">%s</xliff:g>.</string>
@@ -213,6 +213,7 @@
     <string name="quick_settings_profile_label">Profiel</string>
     <string name="powerwidget_screen_timeout_toast">Schermtime-out ingesteld op: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS uit</string>
     <string name="quick_settings_screen_sleep">Slaapstand</string>
     <string name="quick_settings_ringer_on">Geluid aan</string>
     <string name="quick_settings_ringer_off">Geluid uit</string>
@@ -224,10 +225,18 @@
     <string name="quick_settings_lockscreen">Vergrendelscherm</string>
     <string name="quick_settings_network_type">Netwerkstand</string>
     <string name="quick_settings_report_bug">Fout melden</string>
-    <string name="quick_settings_sync">Synchroniseren</string>
+    <string name="quick_settings_sync">Synchr.</string>
+    <string name="quick_settings_sync_off">Synchr. uit</string>
     <string name="quick_settings_torch">Zaklamp</string>
+    <string name="quick_settings_torch_off">Zaklamp uit</string>
     <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC uit</string>
     <string name="quick_settings_screen_timeout">Time-out</string>
+    <string name="quick_settings_usb_tether_off_label">Losgekoppeld</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering uit</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Hotspot</string>
+    <string name="quick_settings_wifiap_off">Hotspot uit</string>
     <string name="navbar_dialog_title">Kies de toe te wijzen functie</string>
     <string name="navbar_home_button">Thuisknop</string>
     <string name="navbar_recent_button">Recentknop</string>
