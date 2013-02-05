@@ -2,6 +2,7 @@ package com.android.systemui.quicksettings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
@@ -13,8 +14,10 @@ import com.android.internal.telephony.Phone;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
+import com.android.systemui.statusbar.policy.NetworkController;
+import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
 
-public class MobileNetworkTypeTile extends QuickSettingsTile {
+public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkSignalChangedCallback {
 
     private static final String TAG = "NetworkModeQuickSettings";
 
@@ -194,5 +197,39 @@ public class MobileNetworkTypeTile extends QuickSettingsTile {
         return Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.EXPANDED_NETWORK_MODE,
                 CM_MODE_3G2G);
+    }
+
+
+    boolean deviceSupportsTelephony() {
+        PackageManager pm = mContext.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+    }
+
+    @Override
+    void onPostCreate() {
+        NetworkController controller = new NetworkController(mContext);
+        controller.addNetworkSignalChangedCallback(this);
+        super.onPostCreate();
+    }
+
+    @Override
+    public void onWifiSignalChanged(boolean enabled, int wifiSignalIconId,
+        String wifitSignalContentDescriptionId, String description) {
+            // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onMobileDataSignalChanged(boolean enabled,
+        int mobileSignalIconId, String mobileSignalContentDescriptionId,
+        int dataTypeIconId, String dataTypeContentDescriptionId,
+        String description) {
+            if (deviceSupportsTelephony()) {
+                applyNetworkTypeChanges();
+        }
+    }
+
+    @Override
+    public void onAirplaneModeChanged(boolean enabled) {
+        // TODO Auto-generated method stub
     }
 }
