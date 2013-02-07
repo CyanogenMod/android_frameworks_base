@@ -874,13 +874,13 @@ public final class BatteryService extends Binder {
 
             // Quiet Hours
             mQuietHoursEnabled = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
+                    Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
             mQuietHoursStart = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT);
+                    Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT_OR_SELF);
             mQuietHoursEnd = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT);
+                    Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT_OR_SELF);
             mQuietHoursDim = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_DIM, 0, UserHandle.USER_CURRENT) != 0;
+                    Settings.System.QUIET_HOURS_DIM, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
 
             updateLedPulse();
         }

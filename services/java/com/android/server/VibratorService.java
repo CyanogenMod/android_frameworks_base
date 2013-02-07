@@ -167,13 +167,13 @@ public class VibratorService extends IVibratorService.Stub
 
     private boolean inQuietHours() {
         boolean quietHoursEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
+                Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
         int quietHoursStart = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT);
+                Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT_OR_SELF);
         int quietHoursEnd = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT);
+                Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT_OR_SELF);
         boolean quietHoursHaptic = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_HAPTIC, 0, UserHandle.USER_CURRENT) != 0;
+                Settings.System.QUIET_HOURS_HAPTIC, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
         if (quietHoursEnabled && quietHoursHaptic && (quietHoursStart != quietHoursEnd)) {
             // Get the date in "quiet hours" format.
             Calendar calendar = Calendar.getInstance();

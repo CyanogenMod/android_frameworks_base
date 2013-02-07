@@ -689,17 +689,17 @@ public class NotificationManagerService extends INotificationManager.Stub
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
             mQuietHoursEnabled = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
+                    Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
             mQuietHoursStart = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT);
+                    Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT_OR_SELF);
             mQuietHoursEnd = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT);
+                    Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT_OR_SELF);
             mQuietHoursMute = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_MUTE, 0, UserHandle.USER_CURRENT) != 0;
+                    Settings.System.QUIET_HOURS_MUTE, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
             mQuietHoursStill = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_STILL, 0, UserHandle.USER_CURRENT) != 0;
+                    Settings.System.QUIET_HOURS_STILL, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
             mQuietHoursDim = Settings.System.getIntForUser(resolver,
-                    Settings.System.QUIET_HOURS_DIM, 0, UserHandle.USER_CURRENT) != 0;
+                    Settings.System.QUIET_HOURS_DIM, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
         }
     }
 
