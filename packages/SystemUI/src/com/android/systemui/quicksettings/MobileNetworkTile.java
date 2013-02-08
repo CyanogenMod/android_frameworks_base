@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -26,25 +25,32 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
     private String signalContentDescription;
     private boolean wifiOn = false;
 
+    private ConnectivityManager mCm;
+
+    private int NO_OVERLAY = 0;
+    private int DISABLED_OVERLAY = -1;
+
     public MobileNetworkTile(Context context, LayoutInflater inflater,
             QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
-        mTileLayout = R.layout.quick_settings_tile_rssi;
-        mOnClick = new View.OnClickListener() {
 
+        mTileLayout = R.layout.quick_settings_tile_rssi;
+        mCm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-                ConnectivityManager conMan = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-                if(tm.getDataState() == TelephonyManager.DATA_DISCONNECTED){
-                    conMan.setMobileDataEnabled(true);
-                }else{
-                    conMan.setMobileDataEnabled(false);
+                if (!mCm.getMobileDataEnabled()) {
+                    updateOverlayImage(NO_OVERLAY); // None, onMobileDataSignalChanged will set final overlay image
+                    mCm.setMobileDataEnabled(true);
+                } else {
+                    updateOverlayImage(DISABLED_OVERLAY);
+                    mCm.setMobileDataEnabled(false);
                 }
             }
         };
-        mOnLongClick = new OnLongClickListener() {
 
+        mOnLongClick = new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent();
@@ -68,7 +74,6 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
     public void onWifiSignalChanged(boolean enabled, int wifiSignalIconId,
             String wifitSignalContentDescriptionId, String description) {
         wifiOn = enabled;
-
     }
 
     @Override
@@ -85,9 +90,16 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
             signalContentDescription = enabled && (mobileSignalIconId > 0)
                     ? signalContentDescription
                     : r.getString(R.string.accessibility_no_signal);
-            mDataTypeIconId = enabled && (dataTypeIconId > 0) && !wifiOn
-                    ? dataTypeIconId
-                    : 0;
+
+            // Determine the overlay image
+            if (enabled && (dataTypeIconId > 0) && !wifiOn) {
+                mDataTypeIconId = dataTypeIconId;
+            } else if (!mCm.getMobileDataEnabled()) {
+                mDataTypeIconId = DISABLED_OVERLAY;
+            } else {
+                mDataTypeIconId = NO_OVERLAY;
+            }
+
             dataContentDescription = enabled && (dataTypeIconId > 0) && !wifiOn
                     ? dataContentDescription
                     : r.getString(R.string.accessibility_no_data);
@@ -101,7 +113,6 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
     @Override
     public void onAirplaneModeChanged(boolean enabled) {
         // TODO Auto-generated method stub
-
     }
 
     boolean deviceSupportsTelephony() {
@@ -113,13 +124,9 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
     void updateQuickSettings() {
         TextView tv = (TextView) mTile.findViewById(R.id.rssi_textview);
         ImageView iv = (ImageView) mTile.findViewById(R.id.rssi_image);
-        ImageView iov = (ImageView) mTile.findViewById(R.id.rssi_overlay_image);
+
         iv.setImageResource(mDrawable);
-        if (mDataTypeIconId > 0) {
-            iov.setImageResource(mDataTypeIconId);
-        } else {
-            iov.setImageResource(R.drawable.ic_qs_signal_data_off);
-        }
+        updateOverlayImage(mDataTypeIconId);
         tv.setText(mLabel);
         mTile.setContentDescription(mContext.getResources().getString(
                 R.string.accessibility_quick_settings_mobile,
@@ -127,7 +134,18 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
                 mLabel));
     }
 
- // Remove the period from the network name
+    void updateOverlayImage(int dataTypeIconId) {
+        ImageView iov = (ImageView) mTile.findViewById(R.id.rssi_overlay_image);
+        if (dataTypeIconId > 0) {
+            iov.setImageResource(dataTypeIconId);
+        } else if (dataTypeIconId == DISABLED_OVERLAY) {
+            iov.setImageResource(R.drawable.ic_qs_signal_data_off);
+        } else {
+            iov.setImageDrawable(null);
+        }
+    }
+
+    // Remove the period from the network name
     public static String removeTrailingPeriod(String string) {
         if (string == null) return null;
         final int length = string.length();
