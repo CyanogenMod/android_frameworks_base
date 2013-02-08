@@ -49,6 +49,7 @@ import org.xmlpull.v1.XmlSerializer;
 
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
+import android.app.AppGlobals;
 import android.app.IActivityManager;
 import android.app.admin.IDevicePolicyManager;
 import android.app.backup.IBackupManager;
@@ -113,6 +114,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.Environment.UserEnvironment;
+import android.privacy.IPrivacyManager;
 import android.provider.Settings.Secure;
 import android.security.SystemKeyStore;
 import android.util.DisplayMetrics;
@@ -401,6 +403,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     final ArrayList<PackageParser.Package> mDeferredDexOpt =
             new ArrayList<PackageParser.Package>();
+
+    private final PrivacyDelegater mPrivacy = new PrivacyDelegater();
 
     /** Token for keys in mPendingVerification. */
     private int mPendingVerificationToken = 0;
@@ -1645,10 +1649,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (DEBUG_PACKAGE_INFO)
                 Log.v(TAG, "getPackageInfo " + packageName + ": " + p);
             if (p != null) {
-                return generatePackageInfo(p, flags, userId);
+                return mPrivacy.getPackageInfo(generatePackageInfo(p, flags, userId), packageName, flags);
             }
             if((flags & PackageManager.GET_UNINSTALLED_PACKAGES) != 0) {
-                return generatePackageInfoFromSettingsLPw(packageName, flags, userId);
+                return mPrivacy.getPackageInfo(generatePackageInfoFromSettingsLPw(packageName, flags, userId), packageName, flags);
             }
         }
         return null;
@@ -1708,6 +1712,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 final PackageSetting ps = (PackageSetting)p.mExtras;
                 final SharedUserSetting suid = ps.sharedUser;
                 int[] gids = suid != null ? suid.gids : ps.gids;
+                gids = mPrivacy.getPackageGids(gids, packageName);
 
                 // include GIDs for any unenforced permissions
                 if (!isPermissionEnforcedLocked(READ_EXTERNAL_STORAGE, enforcedDefault)) {
@@ -2046,14 +2051,14 @@ public class PackageManagerService extends IPackageManager.Stub {
                 PackageSetting ps = (PackageSetting)p.mExtras;
                 if (ps.sharedUser != null) {
                     if (ps.sharedUser.grantedPermissions.contains(permName)) {
-                        return PackageManager.PERMISSION_GRANTED;
+                        return mPrivacy.checkGrantedPermission(permName, pkgName);
                     }
                 } else if (ps.grantedPermissions.contains(permName)) {
-                    return PackageManager.PERMISSION_GRANTED;
+                    return mPrivacy.checkGrantedPermission(permName, pkgName);
                 }
             }
             if (!isPermissionEnforcedLocked(permName, enforcedDefault)) {
-                return PackageManager.PERMISSION_GRANTED;
+                return mPrivacy.checkGrantedPermission(permName, pkgName);
             }
         }
         return PackageManager.PERMISSION_DENIED;
@@ -2066,16 +2071,16 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (obj != null) {
                 GrantedPermissions gp = (GrantedPermissions)obj;
                 if (gp.grantedPermissions.contains(permName)) {
-                    return PackageManager.PERMISSION_GRANTED;
+                    return mPrivacy.checkGrantedPermission(permName, uid);
                 }
             } else {
                 HashSet<String> perms = mSystemPermissions.get(uid);
                 if (perms != null && perms.contains(permName)) {
-                    return PackageManager.PERMISSION_GRANTED;
+                    return mPrivacy.checkGrantedPermission(permName, uid);
                 }
             }
             if (!isPermissionEnforcedLocked(permName, enforcedDefault)) {
-                return PackageManager.PERMISSION_GRANTED;
+                return mPrivacy.checkGrantedPermission(permName, uid);
             }
         }
         return PackageManager.PERMISSION_DENIED;
@@ -9234,6 +9239,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     public void systemReady() {
         mSystemReady = true;
 
+        mPrivacy.systemReady();
+
         // Read the compatibilty setting when the system is ready.
         boolean compatibilityModeEnabled = android.provider.Settings.Global.getInt(
                 mContext.getContentResolver(),
@@ -10382,6 +10389,77 @@ public class PackageManagerService extends IPackageManager.Stub {
             return dsm.isMemoryLow();
         } finally {
             Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    /**
+     * dispatch all calls to IPrivacyManager and handle packages with shared users
+     */
+    private static class PrivacyDelegater {
+
+        private IPrivacyManager mPrivacyManager;
+
+        public void systemReady() {
+
+            IBinder pm = ServiceManager.getService("PrivacyManager");
+            if (pm == null)
+                return;
+
+            mPrivacyManager = IPrivacyManager.Stub.asInterface(pm);
+        }
+
+        public PackageInfo getPackageInfo(PackageInfo info, String packageName,
+                int flags) {
+            if (mPrivacyManager == null)
+                return info;
+            try {
+                return mPrivacyManager.filterPackageInfo(info, packageName, flags);
+            } catch (RemoteException e) {
+                throw new RuntimeException("error in privacy filter", e);
+            }
+        }
+
+        public int[] getPackageGids(int[] gids, String packageName) {
+            if (mPrivacyManager == null)
+                return gids;
+
+            try {
+                return mPrivacyManager.filterPackageGids(gids, packageName);
+            } catch (RemoteException e) {
+                throw new RuntimeException("error in privacy filter", e);
+            }
+        }
+
+        public int checkGrantedPermission(String permName, int uid) {
+            if (mPrivacyManager == null)
+                return PackageManager.PERMISSION_GRANTED;
+
+            try {
+                String[] packages = AppGlobals.getPackageManager().getPackagesForUid(uid);
+                if (packages == null)
+                    return PackageManager.PERMISSION_GRANTED;
+                for (String p : packages) {
+                    boolean granted = mPrivacyManager.filterGrantedPermission(permName, p);
+                    if (!granted)
+                        return PackageManager.PERMISSION_DENIED;
+                }
+                return PackageManager.PERMISSION_GRANTED;
+            } catch (RemoteException e) {
+                throw new RuntimeException("error in privacy filter", e);
+            }
+
+        }
+
+        public int checkGrantedPermission(String permName, String pkgName) {
+            if (mPrivacyManager == null)
+                return PackageManager.PERMISSION_GRANTED;
+
+            try {
+                return mPrivacyManager.filterGrantedPermission(permName, pkgName) ? PackageManager.PERMISSION_GRANTED
+                        : PackageManager.PERMISSION_DENIED;
+            } catch (RemoteException e) {
+                throw new RuntimeException("error in privacy filter", e);
+            }
         }
     }
 }
