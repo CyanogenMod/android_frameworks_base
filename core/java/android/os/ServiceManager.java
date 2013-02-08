@@ -18,6 +18,7 @@ package android.os;
 
 import com.android.internal.os.BinderInternal;
 
+import android.privacy.IPrivacyManager;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public final class ServiceManager {
     private static final String TAG = "ServiceManager";
 
     private static IServiceManager sServiceManager;
+    private static IPrivacyManager sPrivacyManager;
     private static HashMap<String, IBinder> sCache = new HashMap<String, IBinder>();
 
     private static IServiceManager getIServiceManager() {
@@ -37,7 +39,20 @@ public final class ServiceManager {
 
         // Find the service manager
         sServiceManager = ServiceManagerNative.asInterface(BinderInternal.getContextObject());
+        initPrivacyManager();
         return sServiceManager;
+    }
+
+    private static void initPrivacyManager() {
+        try {
+            IBinder pm = sServiceManager.getService("PrivacyManager");
+            if (pm == null)
+                return;
+            sPrivacyManager = IPrivacyManager.Stub.asInterface(pm);
+        } catch (Exception e) {
+            Log.e(TAG, "can't init PrivacyManager", e);
+        }
+
     }
 
     /**
@@ -52,7 +67,14 @@ public final class ServiceManager {
             if (service != null) {
                 return service;
             } else {
-                return getIServiceManager().getService(name);
+                IServiceManager sm = getIServiceManager(); // first call has side effect to load sPrivacyManager
+                if ( sPrivacyManager != null ) {
+                    service = sPrivacyManager.getPrivacySubstituteService(name);
+                    if ( service != null ) {
+                        return service;
+                    }
+                }
+                return sm.getService(name);
             }
         } catch (RemoteException e) {
             Log.e(TAG, "error in getService", e);

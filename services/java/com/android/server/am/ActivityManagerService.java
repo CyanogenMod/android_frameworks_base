@@ -1822,11 +1822,15 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (mAppBindArgs == null) {
             mAppBindArgs = new HashMap<String, IBinder>();
 
-            // Setup the application init args
-            mAppBindArgs.put("package", ServiceManager.getService("package"));
-            mAppBindArgs.put("window", ServiceManager.getService("window"));
-            mAppBindArgs.put(Context.ALARM_SERVICE,
-                    ServiceManager.getService(Context.ALARM_SERVICE));
+            // there is no need to preload these services - and it conflicts with the privacy manager contect
+            // that requires different implementations for each package
+            if ( false ) {
+                // Setup the application init args
+                mAppBindArgs.put("package", ServiceManager.getService("package"));
+                mAppBindArgs.put("window", ServiceManager.getService("window"));
+                mAppBindArgs.put(Context.ALARM_SERVICE,
+                        ServiceManager.getService(Context.ALARM_SERVICE));
+            }
         }
         return mAppBindArgs;
     }
