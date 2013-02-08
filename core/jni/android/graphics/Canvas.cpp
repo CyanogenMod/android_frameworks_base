@@ -493,19 +493,36 @@ public:
                         jobject srcIRect, const SkRect& dst, SkPaint* paint,
                         jint screenDensity, jint bitmapDensity) {
         SkIRect    src, *srcPtr = NULL;
+        SkPaint    filteredPaint;
 
         if (NULL != srcIRect) {
             GraphicsJNI::jrect_to_irect(env, srcIRect, &src);
             srcPtr = &src;
         }
-        
+
         if (screenDensity != 0 && screenDensity != bitmapDensity) {
-            SkPaint filteredPaint;
             if (paint) {
                 filteredPaint = *paint;
             }
             filteredPaint.setFilterBitmap(true);
-            canvas->drawBitmapRect(*bitmap, srcPtr, dst, &filteredPaint);
+            paint = &filteredPaint;
+        }
+
+        //If we're doing downscaling and we have an unscaled bitmap, convert
+        //this to an upscaling operation, or at least less of a downscale
+        SkBitmap*  unscaled = bitmap->unscaledBitmap();
+        if (NULL != srcPtr && NULL != unscaled) {
+            //use new bitmap and adapt the coordinates of the src rect to this new bitmap
+            SkScalar   dx, dy;
+            SkRect     srcF;
+            dx = SkScalarDiv(SkIntToScalar(unscaled->width()), SkIntToScalar(bitmap->width()));
+            dy = SkScalarDiv(SkIntToScalar(unscaled->height()), SkIntToScalar(bitmap->height()));
+            srcF.set(SkScalarMul(SkIntToScalar(src.left()), dx),
+                SkScalarMul(SkIntToScalar(src.top()), dy),
+                SkScalarMul(SkIntToScalar(src.right()), dx),
+                SkScalarMul(SkIntToScalar(src.bottom()), dy));
+
+            canvas->drawBitmapScalarRect(*unscaled, &srcF, dst, paint);
         } else {
             canvas->drawBitmapRect(*bitmap, srcPtr, dst, paint);
         }

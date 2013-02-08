@@ -354,6 +354,17 @@ static jobject doDecode(JNIEnv* env, SkStream* stream, jobject padding,
         SkCanvas canvas(*bitmap);
         canvas.scale(sx, sy);
         canvas.drawBitmap(*decoded, 0.0f, 0.0f, &paint);
+
+        // Save off the unscaled version of bitmap to be used in later
+        // transformations if it would reduce memory pressure. Only do
+        // so if it is being upscaled more than 50%, is bigger than
+        // 256x256, and not too big to be keeping a copy of (<1MB).
+        const int numUnscaledPixels = decoded->width() * decoded->height();
+        if (sx > 1.5 && numUnscaledPixels > 65536 && numUnscaledPixels < 262144) {
+            bitmap->setUnscaledBitmap(decoded);
+            adb2.detach(); //responsibility for freeing decoded's memory is
+                           //transferred to bitmap's destructor
+        }
     }
 
     if (padding) {
