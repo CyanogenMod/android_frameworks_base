@@ -118,7 +118,7 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
         if (mDataTypeIconId > 0) {
             iov.setImageResource(mDataTypeIconId);
         } else {
-            iov.setImageDrawable(null);
+            iov.setImageResource(R.drawable.ic_qs_signal_data_off);
         }
         tv.setText(mLabel);
         mTile.setContentDescription(mContext.getResources().getString(
