@@ -126,6 +126,7 @@
     <string name="accessibility_data_connection_hspa" msgid="2032328855462645198">"HSPA"</string>
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"Roaming"</string>
@@ -209,16 +210,40 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTO"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Le notifiche vengono visualizzate qui"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Puoi accedervi in qualsiasi momento scorrendo verso il basso."\n"Fai scorrere di nuovo verso il basso per visualizzare i controlli del sistema."</string>
+    <string name="powerwidget_screen_timeout_toast">Timeout impostato a: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS disattivato</string>
     <string name="quick_settings_screen_sleep">Blocca telefono</string>
     <string name="quick_settings_ringer_on">Suoneria attiva</string>
-    <string name="quick_settings_ringer_off">Suoneria disattiva</string>
+    <string name="quick_settings_ringer_off">Suoneria disattivata</string>
     <string name="quick_settings_vibration_on">Vibrazione attiva</string>
-    <string name="quick_settings_vibration_off">Vibrazione disattiva</string>
-    <string name="quick_settings_label_enabled">Attiva</string>
-    <string name="quick_settings_label_disabled">Disattiva</string>
+    <string name="quick_settings_vibration_off">Vibrazione disattivata</string>
+    <string name="quick_settings_label_enabled">Attivo</string>
+    <string name="quick_settings_label_disabled">Disattivato</string>
     <string name="quick_settings_ringer_normal">Suoneria</string>
     <string name="quick_settings_lockscreen">Blocco schermo</string>
     <string name="quick_settings_network_type">Modalità rete</string>
     <string name="quick_settings_report_bug">Segnalazione bug</string>
+    <string name="quick_settings_sync">Sincronia attiva</string>
+    <string name="quick_settings_sync_off">Sincronia disattivata</string>
+    <string name="quick_settings_torch">Torcia</string>
+    <string name="quick_settings_torch_off">Torcia disattivata</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC disattivato</string>
+    <string name="quick_settings_screen_timeout">Timeout</string>
+    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
+    <string name="quick_settings_usb_tether_off_label">Disconnesso</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering disattivato</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP disattivato</string>
+    <string name="navbar_dialog_title">Azione da associare</string>
+    <string name="navbar_home_button">Pulsante Home</string>
+    <string name="navbar_recent_button">Pulsante Recenti</string>
+    <string name="navbar_search_button">Pulsante Cerca</string>
+    <string name="navbar_back_button">Pulsante Indietro</string>
+    <string name="navbar_empty_button">Pulsante vuoto</string>
+    <string name="navbar_menu_conditional_button">Pulsante Menu (automatico)</string>
+    <string name="navbar_menu_always_button">Pulsante Menu (fisso)</string>
+    <string name="navbar_menu_big_button">Pulsante Menu</string>
 </resources>
