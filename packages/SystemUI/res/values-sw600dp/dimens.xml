@@ -51,4 +51,9 @@
     <!-- How far to slide the panel out when you touch it -->
     <!-- On tablets this is just the close_handle_height -->
     <dimen name="peek_height">@dimen/close_handle_height</dimen>
+
+    <!-- The padding of the items of the battery cluster -->
+    <dimen name="status_bar_battery_cluster_padding">4dip</dimen>
+    <!-- The margin adjusment of the text items of the battery cluster -->
+    <dimen name="status_bar_battery_cluster_text_margin">-3dip</dimen>
 </resources>

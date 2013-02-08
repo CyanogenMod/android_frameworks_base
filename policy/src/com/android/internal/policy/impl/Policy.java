@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManagerPolicy;
 
+import com.android.internal.os.IDeviceHandler;
 import com.android.internal.policy.IPolicy;
 import com.android.internal.policy.impl.PhoneLayoutInflater;
 import com.android.internal.policy.impl.PhoneWindow;
@@ -67,8 +68,8 @@ public class Policy implements IPolicy {
         return new PhoneLayoutInflater(context);
     }
 
-    public WindowManagerPolicy makeNewWindowManager() {
-        return new PhoneWindowManager();
+    public WindowManagerPolicy makeNewWindowManager(IDeviceHandler device) {
+        return new PhoneWindowManager(device);
     }
 
     public FallbackEventHandler makeNewFallbackEventHandler(Context context) {
