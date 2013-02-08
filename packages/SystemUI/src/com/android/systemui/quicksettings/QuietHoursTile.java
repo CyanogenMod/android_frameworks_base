@@ -49,11 +49,12 @@ public class QuietHoursTile extends QuickSettingsTile {
     private void updateTileState() {
         mEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
-        mLabel = mContext.getString(R.string.quick_settings_quiethours);
         if (mEnabled) {
             mDrawable = R.drawable.ic_qs_quiet_hours_on;
+            mLabel = mContext.getString(R.string.quick_settings_quiethours);
         } else {
             mDrawable = R.drawable.ic_qs_quiet_hours_off;
+            mLabel = mContext.getString(R.string.quick_settings_quiethours_off);
         }
     }
 

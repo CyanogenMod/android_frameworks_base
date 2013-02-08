@@ -215,6 +215,8 @@
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC</string>
     <string name="quick_settings_profile_label">Perfil</string>
+    <string name="quick_settings_quiethours">Modo tranq.</string>
+    <string name="quick_settings_quiethours_off">Modo tranq.</string>
     <string name="quick_settings_report_bug">Notificar error</string>
     <string name="quick_settings_ringer_normal">Sonido</string>
     <string name="quick_settings_ringer_on">Sonido</string>
