@@ -143,6 +143,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/os/IUpdateLock.aidl \
         core/java/android/os/IUserManager.aidl \
 	core/java/android/os/IVibratorService.aidl \
+	core/java/android/privacy/IPrivacyManager.aidl \
 	core/java/android/service/dreams/IDreamManager.aidl \
 	core/java/android/service/dreams/IDreamService.aidl \
 	core/java/android/service/wallpaper/IWallpaperConnection.aidl \
