@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright (c) 2009, The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+<resources>
+    <string name="app_label">Dispositivos de entrada</string>
+    <string name="keyboard_layouts_label">Teclado Android</string>
+    <string name="keyboard_layout_Inglés_uk_label">Inglés (Reino Unido)</string>
+    <string name="keyboard_layout_Inglés_us_label">Inglés (Estados Unidos)</string>
+    <string name="keyboard_layout_Inglés_us_colemak_label">Inglés (Estados Unidos), Colemak</string>
+    <string name="keyboard_layout_Inglés_us_dvorak_label">Inglés (Estados Unidos), Dvorak</string>
+    <string name="keyboard_layout_german_label">Alemán</string>
+    <string name="keyboard_layout_french_label">Francés</string>
+    <string name="keyboard_layout_french_ca_label">Francés (Canadá)</string>
+    <string name="keyboard_layout_russian_label">Ruso</string>
+    <string name="keyboard_layout_russian_mac_label">Ruso, Mac</string>
+    <string name="keyboard_layout_spanish_label">Español</string>
+    <string name="keyboard_layout_swiss_french_label">Suizo (Francés)</string>
+    <string name="keyboard_layout_swiss_german_label">Suizo (Alemán)</string>
+    <string name="keyboard_layout_belgian">Belga</string>
+    <string name="keyboard_layout_bulgarian">Búlgaro</string>
+    <string name="keyboard_layout_italian">Italiano</string>
+    <string name="keyboard_layout_danish">Danés</string>
+    <string name="keyboard_layout_norwegian">Noruego</string>
+    <string name="keyboard_layout_swedish">Sueco</string>
+    <string name="keyboard_layout_finnish">Finlandés</string>
+    <string name="keyboard_layout_croatian">Croata</string>
+    <string name="keyboard_layout_czech">Checo</string>
+    <string name="keyboard_layout_estonian">Estonio</string>
+    <string name="keyboard_layout_hungarian">Húngaro</string>
+    <string name="keyboard_layout_icelandic">Islandés</string>
+    <string name="keyboard_layout_portuguese">Portugués</string>
+    <string name="keyboard_layout_slovak">Eslovaco</string>
+    <string name="keyboard_layout_slovenian">Esloveno</string>
+    <string name="keyboard_layout_turkish">Turco</string>
+    <string name="keyboard_layout_ukrainian">Ucraniano</string>
+</resources>

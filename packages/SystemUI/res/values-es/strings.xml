@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- 
 /**
  * Copyright (c) 2009, The Android Open Source Project
@@ -204,7 +204,7 @@
     <string name="status_bar_help_title" msgid="1199237744086469217">"Las notificaciones aparecen aquí"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Desliza el dedo hacia abajo para acceder al contenido."\n"Vuelve a deslizar el dedo hacia abajo para acceder a los controles del sistema."</string>
 
-    <!-- CYANOGENMOD EDITS START -->
+    <!-- CYANOGENMOD ADDITIONS START -->
 
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS</string>
@@ -213,6 +213,7 @@
     <string name="quick_settings_lockscreen">Bloqueo</string>
     <string name="quick_settings_network_type">Red móvil</string>
     <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC</string>
     <string name="quick_settings_profile_label">Perfil</string>
     <string name="quick_settings_report_bug">Notificar error</string>
     <string name="quick_settings_ringer_normal">Sonido</string>
@@ -221,6 +222,7 @@
     <string name="quick_settings_screen_sleep">Bloquear</string>
     <string name="quick_settings_screen_timeout">Tiempo espera</string>
     <string name="quick_settings_sync">Sincronizar</string>
+    <string name="quick_settings_sync_off">Sincronizar</string>
     <string name="quick_settings_torch">Linterna</string>
     <string name="quick_settings_torch_off">Linterna</string>
     <string name="quick_settings_usb_tether_off_label">Desconectado</string>
