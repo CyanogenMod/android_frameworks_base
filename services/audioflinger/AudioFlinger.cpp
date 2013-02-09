@@ -18,7 +18,7 @@
 
 
 #define LOG_TAG "AudioFlinger"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 
 #include <math.h>
 #include <signal.h>
@@ -1151,7 +1151,12 @@ unsigned int AudioFlinger::getInputFramesLost(int ioHandle)
 #ifdef STE_AUDIO
 size_t AudioFlinger::readInput(uint32_t *input, uint32_t inputClientId, void *buffer, uint32_t bytes, uint32_t *pOverwrittenBytes)
 {
-    return mInputFMStream->stream->read(mInputFMStream->stream, buffer, (size_t)bytes);
+    if (input == NULL || buffer == NULL) {
+        return 0;
+    }
+
+    AudioStreamIn* stream = (AudioStreamIn*)input;
+    return 0; //return stream->read(buffer, bytes);
 }
 #endif
 status_t AudioFlinger::setVoiceVolume(float value)
@@ -5666,6 +5671,12 @@ int AudioFlinger::openInput(uint32_t *pDevices,
     if (inHwDev == NULL)
         return 0;
 
+#ifdef STE_AUDIO
+    if (pInputClientId != NULL && *pInputClientId == AUDIO_INPUT_CLIENT_PLAYBACK) {
+        returnRecordThread = false;
+    }
+#endif
+
     status = inHwDev->open_input_stream(inHwDev, *pDevices, (int *)&format,
                                         &channels, &samplingRate,
                                         (audio_in_acoustics_t)acoustics,
@@ -5692,18 +5703,10 @@ int AudioFlinger::openInput(uint32_t *pDevices,
                                             &inStream);
     }
 
-#ifdef STE_AUDIO
-    if (inStream == NULL) {
-       return 0;
-    }
 
-    AudioStreamIn *input = new AudioStreamIn(inHwDev, inStream);
-
-    if (inStream != NULL && pInputClientId == NULL) {
-#else
     if (inStream != NULL) {
         AudioStreamIn *input = new AudioStreamIn(inHwDev, inStream);
-#endif
+
         int id = nextUniqueId();
         // Start record thread
         // RecorThread require both input and output device indication to forward to audio
@@ -5735,11 +5738,6 @@ int AudioFlinger::openInput(uint32_t *pDevices,
         // notify client processes of the new input creation
         thread->audioConfigChanged_l(AudioSystem::INPUT_OPENED);
         return id;
-#ifdef STE_AUDIO
-    } else if (pInputClientId != NULL && *pInputClientId == AUDIO_INPUT_CLIENT_PLAYBACK) {
-        mInputFMStream = input;
-        return (int)input;
-#endif
     }
 
     return 0;
