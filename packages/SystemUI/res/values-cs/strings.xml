@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 /**
  * Copyright (c) 2009, The Android Open Source Project
@@ -44,7 +44,7 @@
     <string name="battery_low_why" msgid="7279169609518386372">"Využití baterie"</string>
 
     <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Nastavení"</string>
-    <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"WiFi"</string>
+    <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
     <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Režim V letadle"</string>
     <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Autom. otočení obrazovky"</string>
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"ZTLUM."</string>
@@ -113,12 +113,12 @@
     <string name="accessibility_data_two_bars" msgid="6166018492360432091">"Dvě čárky signálu datové sítě."</string>
     <string name="accessibility_data_three_bars" msgid="9167670452395038520">"Tři čárky signálu datové sítě."</string>
     <string name="accessibility_data_signal_full" msgid="2708384608124519369">"Plný signál datové sítě."</string>
-    <string name="accessibility_wifi_off" msgid="3177380296697933627">"Síť WiFi je vypnuta."</string>
-    <string name="accessibility_no_wifi" msgid="1425476551827924474">"Síť WiFi odpojena."</string>
-    <string name="accessibility_wifi_one_bar" msgid="7735893178010724377">"Jedna čárka signálu sítě WiFi."</string>
-    <string name="accessibility_wifi_two_bars" msgid="4994274250497262434">"Dvě čárky signálu sítě WiFi."</string>
-    <string name="accessibility_wifi_three_bars" msgid="3495755044276588384">"Tři čárky signálu sítě WiFi."</string>
-    <string name="accessibility_wifi_signal_full" msgid="6853561303586480376">"Plný signál sítě WiFi."</string>
+    <string name="accessibility_wifi_off" msgid="3177380296697933627">"Síť Wi-Fi je vypnuta."</string>
+    <string name="accessibility_no_wifi" msgid="1425476551827924474">"Síť Wi-Fi odpojena."</string>
+    <string name="accessibility_wifi_one_bar" msgid="7735893178010724377">"Jedna čárka signálu sítě Wi-Fi."</string>
+    <string name="accessibility_wifi_two_bars" msgid="4994274250497262434">"Dvě čárky signálu sítě Wi-Fi."</string>
+    <string name="accessibility_wifi_three_bars" msgid="3495755044276588384">"Tři čárky signálu sítě Wi-Fi."</string>
+    <string name="accessibility_wifi_signal_full" msgid="6853561303586480376">"Plný signál sítě Wi-Fi."</string>
     <string name="accessibility_no_wimax" msgid="4329180129727630368">"Žádný signál sítě WiMAX."</string>
     <string name="accessibility_wimax_one_bar" msgid="4170994299011863648">"Jedna čárka signálu sítě WiMAX."</string>
     <string name="accessibility_wimax_two_bars" msgid="9176236858336502288">"Dvě čárky signálu sítě WiMAX."</string>
@@ -143,7 +143,7 @@
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"Roaming"</string>
     <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
-    <string name="accessibility_data_connection_wifi" msgid="2324496756590645221">"WiFi"</string>
+    <string name="accessibility_data_connection_wifi" msgid="2324496756590645221">"Wi-Fi"</string>
     <string name="accessibility_no_sim" msgid="8274017118472455155">"Žádná SIM karta."</string>
     <string name="accessibility_bluetooth_tether" msgid="4102784498140271969">"Sdílené připojení Bluetooth."</string>
     <string name="accessibility_airplane_mode" msgid="834748999790763092">"Režim V letadle."</string>
@@ -180,7 +180,7 @@
     <string name="data_usage_disabled_dialog_enable" msgid="7729772039208664606">"Znovu povolit data"</string>
 
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Žádné přip. k internetu"</string>
-    <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"WiFi: připojeno"</string>
+    <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi: připojeno"</string>
 
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"Vyhledávání satelitů GPS"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"Poloha nastavena pomocí systému GPS"</string>
@@ -220,11 +220,11 @@
     <string name="quick_settings_settings_label" msgid="5326556592578065401">"Nastavení"</string>
     <string name="quick_settings_time_label" msgid="4635969182239736408">"Doba"</string>
     <string name="quick_settings_user_label" msgid="5238995632130897840">"Já"</string>
-    <string name="quick_settings_wifi_label" msgid="9135344704899546041">"WiFi"</string>
+    <string name="quick_settings_wifi_label" msgid="9135344704899546041">"Wi-Fi"</string>
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"Nepřipojeno"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"Žádná síť"</string>
-    <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"WiFi vypnuté"</string>
-    <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Zobrazení přes WiFi"</string>
+    <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi vypnuté"</string>
+    <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Zobrazení přes Wi-Fi"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Bezdrátové zobrazování"</string>
     <string name="quick_settings_profile_label">Profil</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Jas"</string>
@@ -248,15 +248,19 @@
     <string name="quick_settings_network_type">Režim sítě</string>
     <string name="quick_settings_report_bug">Ohlásit chybu</string>
     <string name="quick_settings_sync">Synch.</string>
+    <string name="quick_settings_sync_off">Synch. vyp.</string>
     <string name="quick_settings_torch">Svítilna</string>
     <string name="quick_settings_torch_off">Svítilna zap.</string>
+    <string name="quick_settings_nfc_off">NFC vyp.</string>
     <string name="quick_settings_screen_timeout">Režim spánku</string>
     <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">Odpojeno</string>
     <string name="quick_settings_usb_tether_connected_label">USB sdíl. vyp.</string>
     <string name="quick_settings_usb_tether_on_label">USB sdíl.</string>
-    <string name="quick_settings_wifiap">WiFi AP</string>
-    <string name="quick_settings_wifiap_off">WiFi AP vyp.</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP vyp.</string>
+    <string name="quick_settings_quiethours">Čas klidu</string>
+    <string name="quick_settings_quiethours_off">Čas klidu vyp.</string>
 
     <string name="navbar_dialog_title">Vybrat akci k přiřazení</string>
     <string name="navbar_home_button">Tlačítko Domů</string>
