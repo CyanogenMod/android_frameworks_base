@@ -99,6 +99,12 @@ The following resource optimizations are supported for MSM8960:
 |         | CPUS_ON_3                       | Minimum of three cores on                  |
 |         |_________________________________|____________________________________________|
 |         | CPUS_ON_2                       | Minimum of two cores on                    |
+|         |_________________________________|____________________________________________|
+|         | CPUS_ON_LIMIT_1                 | Maximum of one core on                     |
+|         |_________________________________|____________________________________________|
+|         | CPUS_ON_LIMIT_2                 | Maximum of two cores on                    |
+|         |_________________________________|____________________________________________|
+|         | CPUS_ON_LIMIT_3                 | Maximum of three cores on                  |
 |         |                                 |                                            |
  ========================================================================================
 |    3    | CPU0_FREQ_LVL_TURBO_MAX         | Set CPU0 minimum frequency to 1512 Mhz     |

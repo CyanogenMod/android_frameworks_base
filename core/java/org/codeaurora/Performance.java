@@ -57,6 +57,9 @@ public class Performance
     /** @hide */ public static final int CPUS_ON_2 = 0x702;
     /** @hide */ public static final int CPUS_ON_3 = 0x703;
     /** @hide */ public static final int CPUS_ON_MAX = 0x704;
+    /** @hide */ public static final int CPUS_ON_LIMIT_1 = 0x7FE;
+    /** @hide */ public static final int CPUS_ON_LIMIT_2 = 0x7FD;
+    /** @hide */ public static final int CPUS_ON_LIMIT_3 = 0x7FC;
 
     /** @hide */ public static final int ALL_CPUS_FREQ_NONTURBO_MAX = 0x90A;
     /** @hide */ public static final int ALL_CPUS_FREQ_TURBO_MAX = 0x90F;
