@@ -323,13 +323,11 @@ public class KeyguardViewManager {
             int flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                     | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
                     | WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-                    | WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+                    | WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER
+                    | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
 
             if (!mNeedsInput) {
                 flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
-            }
-            if (ActivityManager.isHighEndGfx()) {
-                flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
             }
 
             final int stretch = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -339,11 +337,8 @@ public class KeyguardViewManager {
                     stretch, stretch, type, flags, PixelFormat.TRANSLUCENT);
             lp.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
             lp.windowAnimations = com.android.internal.R.style.Animation_LockScreen;
-            if (ActivityManager.isHighEndGfx()) {
-                lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-                lp.privateFlags |=
-                        WindowManager.LayoutParams.PRIVATE_FLAG_FORCE_HARDWARE_ACCELERATED;
-            }
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+            lp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_FORCE_HARDWARE_ACCELERATED;
             lp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_SET_NEEDS_MENU_KEY;
             if (isActivity) {
                 lp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_SHOW_FOR_ALL_USERS;
