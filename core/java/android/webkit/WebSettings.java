@@ -1082,6 +1082,16 @@ public abstract class WebSettings {
         throw new MustOverrideException();
     }
 
+     /**
+     * Sets whether the web sockets API is enabled. The default value is
+     * false.
+     *
+     * @param flag true if the WebView should use the web sockets API
+     */
+    public synchronized void setWebSocketsEnabled(boolean flag) {
+        throw new MustOverrideException();
+    }
+
     /**
      * Sets whether the DOM storage API is enabled. The default value is false.
      *
@@ -1117,6 +1127,16 @@ public abstract class WebSettings {
      * @see #setDatabaseEnabled
      */
     public synchronized boolean getDatabaseEnabled() {
+        throw new MustOverrideException();
+    }
+
+    /**
+     * Gets whether the web sockets API is enabled.
+     *
+     * @return true if the web sockets API is enabled
+     * @see #setWebSocketsEnabled
+     */
+    public synchronized boolean getWebSocketsEnabled() {
         throw new MustOverrideException();
     }
 
