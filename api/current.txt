@@ -27217,6 +27217,7 @@ package android.webkit {
     method public synchronized int getTextZoom();
     method public synchronized boolean getUseWideViewPort();
     method public synchronized java.lang.String getUserAgentString();
+    method public synchronized boolean getWebSocketsEnabled();
     method public void setAllowContentAccess(boolean);
     method public void setAllowFileAccess(boolean);
     method public abstract void setAllowFileAccessFromFileURLs(boolean);
@@ -27267,6 +27268,7 @@ package android.webkit {
     method public synchronized void setTextZoom(int);
     method public synchronized void setUseWideViewPort(boolean);
     method public synchronized void setUserAgentString(java.lang.String);
+    method public synchronized void setWebSocketsEnabled(boolean);
     method public synchronized boolean supportMultipleWindows();
     method public boolean supportZoom();
     field public static final int LOAD_CACHE_ELSE_NETWORK = 1; // 0x1
@@ -41332,8 +41334,8 @@ package java.util.zip {
 
   public class ZipFile {
     ctor public ZipFile(java.io.File) throws java.io.IOException, java.util.zip.ZipException;
-    ctor public ZipFile(java.io.File, int) throws java.io.IOException;
     ctor public ZipFile(java.lang.String) throws java.io.IOException;
+    ctor public ZipFile(java.io.File, int) throws java.io.IOException;
     method public void close() throws java.io.IOException;
     method public java.util.Enumeration<? extends java.util.zip.ZipEntry> entries();
     method public java.util.zip.ZipEntry getEntry(java.lang.String);
