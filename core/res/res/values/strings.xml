@@ -1450,14 +1450,12 @@
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_fm_radio_receiver">control FM receiver</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fm_radio_receiver">Allows the application to control
-        the FM receiver.</string>
+    <string name="permdesc_fm_radio_receiver">Allows the application to control the FM receiver.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_fm_radio_transmitter">control FM transmitter</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fm_radio_transmitter">Allows the application to control
-        the FM transmitter.</string>
+    <string name="permdesc_fm_radio_transmitter">Allows the application to control the FM transmitter.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_flashlight">control flashlight</string>
