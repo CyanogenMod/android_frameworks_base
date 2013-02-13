@@ -478,7 +478,7 @@ and tablets), with a single Google Play listing:
   </ul>
 </li>
 <li>If necessary, you can alternatively choose to deliver your app using <a 
-href="{@docRoot}guide/google/play/publishing/multiple-apks.html">Multiple APK Support</a>, 
+href="{@docRoot}google/play/publishing/multiple-apks.html">Multiple APK Support</a>, 
 although in most cases using a single APK to reach all devices is strongly recommended.</li>
 
 <li>Highlight your app’s tablet capabilities in the product details page:
@@ -507,7 +507,7 @@ highlights the use of your app on tablets.</li>
 <td><p>Related resources:</p>
 <ul style="margin-top:-.5em;">
 <li><strong><a href="https://play.google.com/apps/publish/">Publishing Checklist</a></strong> &mdash; Recommendations on how to prepare your app for publishing, test it, and launch successfully on Google Play.</li>
-<li><strong><a href="https://play.google.com/apps/publish/">Google Play Android Developer Console</a></strong> &mdash; The tools console for publishing your app to Android users.</li>
+<li><strong><a href="https://play.google.com/apps/publish/">Google Play Developer Console</a></strong> &mdash; The tools console for publishing your app to Android users.</li>
 </ul>
 </td>
 </tr>

@@ -1,4 +1,4 @@
-page.title=Setting Up the Loader
+page.title=Running a Query with a CursorLoader
 trainingnavtop=true
 startpage=true
 
@@ -10,81 +10,133 @@ startpage=true
 <h2>This lesson teaches you to</h2>
 <ol>
     <li>
-        <a href="#AddExtensions">Extend an Activity</a>
+        <a href="#Extend">Define an Activity That Uses CursorLoader</a>
     </li>
     <li>
-        <a href="#GetLoader">Retrieve a LoaderManager</a>
+        <a href="#InitializeLoader">Initialize the Query</a>
     </li>
     <li>
-        <a href="#InitializeLoader">Initialize the Loader Framework</a>
+        <a href="#DefineLaunch">Start the Query</a>
     </li>
 </ol>
+
+<h2>Try it out</h2>
+<div class="download-box">
+    <a href="{@docRoot}shareables/training/ThreadSample.zip" class="button">Download the sample</a>
+    <p class="filename">ThreadSample.zip</p>
+</div>
+
   </div>
 </div>
 <p>
-    You create a {@link android.support.v4.content.CursorLoader} within a
-    <b>loader framework</b>. To set up the framework, you implement the
+    A {@link android.support.v4.content.CursorLoader} runs an asynchronous query in the background
+    against a {@link android.content.ContentProvider}, and returns the results to the
+    {@link android.app.Activity} or {@link android.support.v4.app.FragmentActivity} from which it
+    was called. This allows the {@link android.app.Activity} or
+    {@link android.support.v4.app.FragmentActivity} to continue to interact with the user while the
+    query is ongoing.
+</p>
+<h2 id="Extend">Define an Activity That Uses CursorLoader</h2>
+<p>
+    To use a {@link android.support.v4.content.CursorLoader} with an
+    {@link android.app.Activity} or {@link android.support.v4.app.FragmentActivity}, use the
     {@link android.support.v4.app.LoaderManager.LoaderCallbacks LoaderCallbacks&lt;Cursor&gt;}
-    as part of an {@link android.app.Activity}. In addition, to provide compatibility
-    compatible with platform versions starting with Android 1.6, you must extend the
-    {@link android.app.Activity} with the {@link android.support.v4.app.FragmentActivity} class.
+    interface. A {@link android.support.v4.content.CursorLoader} invokes callbacks defined
+    in this interface to communicate with the class; this lesson and the next one
+    describe each callback in detail.
 </p>
+<p>
+    For example, this is how you should define a {@link android.support.v4.app.FragmentActivity}
+    that uses the support library version of {@link android.support.v4.content.CursorLoader}. By
+    extending {@link android.support.v4.app.FragmentActivity}, you get support for
+    {@link android.support.v4.content.CursorLoader} as well as
+    {@link android.support.v4.app.Fragment}:
+</p>
+<pre>
+public class PhotoThumbnailFragment extends FragmentActivity implements
+        LoaderManager.LoaderCallbacks&lt;Cursor&gt; {
+...
+}
+</pre>
+<h2 id="InitializeLoader">Initialize the Query</h2>
+<p>
+    To initialize a query, call
+    {@link android.support.v4.app.LoaderManager#initLoader LoaderManager.initLoader()}. This
+    initializes the background framework. You can do this after the user has entered data that's
+    used in the query, or, if you don't need any user data, you can do it in
+    {@link android.support.v4.app.FragmentActivity#onCreate onCreate()} or
+    {@link android.support.v4.app.Fragment#onCreateView onCreateView()}. For example:
+</p>
+<pre>
+    // Identifies a particular Loader being used in this component
+    private static final int URL_LOADER = 0;
+    ...
+    /* When the system is ready for the Fragment to appear, this displays
+     * the Fragment's View
+     */
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup viewGroup,
+            Bundle bundle) {
+        ...
+        /*
+         * Initializes the CursorLoader. The URL_LOADER value is eventually passed
+         * to onCreateLoader().
+         */
+        getLoaderManager().initLoader(URL_LOADER, null, this);
+        ...
+    }
+</pre>
 <p class="note">
-    <strong>Note:</strong> A {@link android.support.v4.app.Fragment} is not a prerequisite for
-    {@link android.support.v4.content.CursorLoader}. As a convenience, the support library class
-    {@link android.support.v4.app.FragmentActivity} contains the fragment and the loader frameworks,
-    but they are completely independent of each other.
-</p>
-<p>
-    Before you can use the loader framework, you need to initialize it. To do this, retrieve
-    a {@link android.support.v4.app.LoaderManager} object and call its
-    {@link android.support.v4.app.LoaderManager#initLoader initLoader()} method.
-</p>
-<p>
-    If you do use one or more {@link android.support.v4.app.Fragment} objects in an
-    {@link android.app.Activity}, the {@link android.support.v4.app.LoaderManager} you retrieve is
-    available to all of them.
-</p>
-<h2 id="AddExtensions">Extend an Activity</h2>
-<p>
-    To set up an {@link android.app.Activity} subclass to contain a
-    {@link android.support.v4.content.CursorLoader}, extend the subclass with
-    must extend {@link android.support.v4.app.FragmentActivity}, which provides the loader
-    framework, and implement the {@link android.support.v4.app.LoaderManager.LoaderCallbacks
-    LoaderCallbacks&lt;Cursor&gt;} interface, which specifies method signatures that the loader
-    framework uses to interact with the {@link android.app.Activity}.
-</p>
-<p>
-    For example:
-</p>
-<pre>
-public class DisplayActivity extends FragmentActivity
-        implements LoaderManager.LoaderCallbacks&lt;Cursor&gt;
-</pre>
-<h2 id="GetLoader">Retrieve a LoaderManager</h2>
-<p>
-    To get an instance {@link android.support.v4.app.LoaderManager} for use in your
-    {@link android.app.Activity}, call
+    <strong>Note:</strong> The method {@link android.support.v4.app.Fragment#getLoaderManager
+    getLoaderManager()} is only available in the {@link android.support.v4.app.Fragment} class. To
+    get a {@link android.support.v4.app.LoaderManager} in a
+    {@link android.support.v4.app.FragmentActivity}, call
     {@link android.support.v4.app.FragmentActivity#getSupportLoaderManager
-    FragmentActivity.getSupportLoaderManager()} at the beginning of the
-    {@link android.app.Activity#onCreate onCreate()} method. For example:
+    getSupportLoaderManager()}.
 </p>
-<pre>
-private LoaderManager mLoaderManager;
-public void onCreate() {
-...
-mLoaderManager = this.getSupportLoaderManager();
-</pre>
-<h2 id="InitializeLoader">Initialize the Loader Framework</h2>
+<h2 id="DefineLaunch">Start the Query</h2>
 <p>
-    Once you have the {@link android.support.v4.app.LoaderManager} object, initialize
-    it by calling {@link android.support.v4.app.LoaderManager#initLoader initLoader()}. For
-    example:
+    As soon as the background framework is initialized, it calls your implementation of
+    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onCreateLoader onCreateLoader()}.
+    To start the query, return a {@link android.support.v4.content.CursorLoader} from this method.
+    You can instantiate an empty {@link android.support.v4.content.CursorLoader} and then use its
+    methods to define your query, or you can instantiate the object and define the query at the
+    same time:
 </p>
 <pre>
-// CursorLoader instance identifier
-public static final int URL_LOADER = 0;
-...
-// Initializes the CursorLoader
-getSupportLoaderManager().initLoader(URL_LOADER, null, this);
+/*
+* Callback that's invoked when the system has initialized the Loader and
+* is ready to start the query. This usually happens when initLoader() is
+* called. The loaderID argument contains the ID value passed to the
+* initLoader() call.
+*/
+&#64;Override
+public Loader&lt;Cursor&gt; onCreateLoader(int loaderID, Bundle bundle)
+{
+    /*
+     * Takes action based on the ID of the Loader that's being created
+     */
+    switch (loaderID) {
+        case URL_LOADER:
+            // Returns a new CursorLoader
+            return new CursorLoader(
+                        getActivity(),   // Parent activity context
+                        mDataUrl,        // Table to query
+                        mProjection,     // Projection to return
+                        null,            // No selection clause
+                        null,            // No selection arguments
+                        null             // Default sort order
+        );
+        default:
+            // An invalid id was passed in
+            return null;
+    }
+}
 </pre>
+<p>
+    Once the background framework has the object, it starts the query in the background. When the
+    query is done, the background framework calls
+    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoadFinished onLoadFinished()},
+    which is described in the next lesson.
+</p>

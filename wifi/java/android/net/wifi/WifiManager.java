@@ -508,6 +508,10 @@ public class WifiManager {
     private Messenger mWifiServiceMessenger;
     private final CountDownLatch mConnected = new CountDownLatch(1);
 
+    private static Object sThreadRefLock = new Object();
+    private static int sThreadRefCount;
+    private static HandlerThread sHandlerThread;
+
     /**
      * Create a new WifiManager instance.
      * Applications will almost always want to use
@@ -1377,9 +1381,14 @@ public class WifiManager {
             return;
         }
 
-        HandlerThread t = new HandlerThread("WifiManager");
-        t.start();
-        mHandler = new ServiceHandler(t.getLooper());
+        synchronized (sThreadRefLock) {
+            if (++sThreadRefCount == 1) {
+                sHandlerThread = new HandlerThread("WifiManager");
+                sHandlerThread.start();
+            }
+        }
+
+        mHandler = new ServiceHandler(sHandlerThread.getLooper());
         mAsyncChannel.connect(mContext, mHandler, mWifiServiceMessenger);
         try {
             mConnected.await();
@@ -1995,8 +2004,10 @@ public class WifiManager {
 
     protected void finalize() throws Throwable {
         try {
-            if (mHandler != null && mHandler.getLooper() != null) {
-                mHandler.getLooper().quit();
+            synchronized (sThreadRefLock) {
+                if (--sThreadRefCount == 0 && sHandlerThread != null) {
+                    sHandlerThread.getLooper().quit();
+                }
             }
         } finally {
             super.finalize();

@@ -284,15 +284,144 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     private TextUtils.TruncateAt mEllipsize;
 
     static class Drawables {
+        final static int DRAWABLE_NONE = -1;
+        final static int DRAWABLE_RIGHT = 0;
+        final static int DRAWABLE_LEFT = 1;
+
         final Rect mCompoundRect = new Rect();
+
         Drawable mDrawableTop, mDrawableBottom, mDrawableLeft, mDrawableRight,
-                mDrawableStart, mDrawableEnd;
+                mDrawableStart, mDrawableEnd, mDrawableError, mDrawableTemp;
+
         int mDrawableSizeTop, mDrawableSizeBottom, mDrawableSizeLeft, mDrawableSizeRight,
-                mDrawableSizeStart, mDrawableSizeEnd;
+                mDrawableSizeStart, mDrawableSizeEnd, mDrawableSizeError, mDrawableSizeTemp;
+
         int mDrawableWidthTop, mDrawableWidthBottom, mDrawableHeightLeft, mDrawableHeightRight,
-                mDrawableHeightStart, mDrawableHeightEnd;
+                mDrawableHeightStart, mDrawableHeightEnd, mDrawableHeightError, mDrawableHeightTemp;
+
         int mDrawablePadding;
+
+        int mDrawableSaved = DRAWABLE_NONE;
+
+        public void resolveWithLayoutDirection(int layoutDirection) {
+            switch(layoutDirection) {
+                case LAYOUT_DIRECTION_RTL:
+                    if (mDrawableStart != null) {
+                        mDrawableRight = mDrawableStart;
+
+                        mDrawableSizeRight = mDrawableSizeStart;
+                        mDrawableHeightRight = mDrawableHeightStart;
+                    }
+                    if (mDrawableEnd != null) {
+                        mDrawableLeft = mDrawableEnd;
+
+                        mDrawableSizeLeft = mDrawableSizeEnd;
+                        mDrawableHeightLeft = mDrawableHeightEnd;
+                    }
+                    break;
+
+                case LAYOUT_DIRECTION_LTR:
+                default:
+                    if (mDrawableStart != null) {
+                        mDrawableLeft = mDrawableStart;
+
+                        mDrawableSizeLeft = mDrawableSizeStart;
+                        mDrawableHeightLeft = mDrawableHeightStart;
+                    }
+                    if (mDrawableEnd != null) {
+                        mDrawableRight = mDrawableEnd;
+
+                        mDrawableSizeRight = mDrawableSizeEnd;
+                        mDrawableHeightRight = mDrawableHeightEnd;
+                    }
+                    break;
+            }
+            applyErrorDrawableIfNeeded(layoutDirection);
+            updateDrawablesLayoutDirection(layoutDirection);
+        }
+
+        private void updateDrawablesLayoutDirection(int layoutDirection) {
+            if (mDrawableLeft != null) {
+                mDrawableLeft.setLayoutDirection(layoutDirection);
+            }
+            if (mDrawableRight != null) {
+                mDrawableRight.setLayoutDirection(layoutDirection);
+            }
+            if (mDrawableTop != null) {
+                mDrawableTop.setLayoutDirection(layoutDirection);
+            }
+            if (mDrawableBottom != null) {
+                mDrawableBottom.setLayoutDirection(layoutDirection);
+            }
+        }
+
+        public void setErrorDrawable(Drawable dr, TextView tv) {
+            if (mDrawableError != dr && mDrawableError != null) {
+                mDrawableError.setCallback(null);
+            }
+            mDrawableError = dr;
+
+            final Rect compoundRect = mCompoundRect;
+            int[] state = tv.getDrawableState();
+
+            if (mDrawableError != null) {
+                mDrawableError.setState(state);
+                mDrawableError.copyBounds(compoundRect);
+                mDrawableError.setCallback(tv);
+                mDrawableSizeError = compoundRect.width();
+                mDrawableHeightError = compoundRect.height();
+            } else {
+                mDrawableSizeError = mDrawableHeightError = 0;
+            }
+        }
+
+        private void applyErrorDrawableIfNeeded(int layoutDirection) {
+            // first restore the initial state if needed
+            switch (mDrawableSaved) {
+                case DRAWABLE_LEFT:
+                    mDrawableLeft = mDrawableTemp;
+                    mDrawableSizeLeft = mDrawableSizeTemp;
+                    mDrawableHeightLeft = mDrawableHeightTemp;
+                    break;
+                case DRAWABLE_RIGHT:
+                    mDrawableRight = mDrawableTemp;
+                    mDrawableSizeRight = mDrawableSizeTemp;
+                    mDrawableHeightRight = mDrawableHeightTemp;
+                    break;
+                case DRAWABLE_NONE:
+                default:
+            }
+            // then, if needed, assign the Error drawable to the correct location
+            if (mDrawableError != null) {
+                switch(layoutDirection) {
+                    case LAYOUT_DIRECTION_RTL:
+                        mDrawableSaved = DRAWABLE_LEFT;
+
+                        mDrawableTemp = mDrawableLeft;
+                        mDrawableSizeTemp = mDrawableSizeLeft;
+                        mDrawableHeightTemp = mDrawableHeightLeft;
+
+                        mDrawableLeft = mDrawableError;
+                        mDrawableSizeLeft = mDrawableSizeError;
+                        mDrawableHeightLeft = mDrawableHeightError;
+                        break;
+                    case LAYOUT_DIRECTION_LTR:
+                    default:
+                        mDrawableSaved = DRAWABLE_RIGHT;
+
+                        mDrawableTemp = mDrawableRight;
+                        mDrawableSizeTemp = mDrawableSizeRight;
+                        mDrawableHeightTemp = mDrawableHeightRight;
+
+                        mDrawableRight = mDrawableError;
+                        mDrawableSizeRight = mDrawableSizeError;
+                        mDrawableHeightRight = mDrawableHeightError;
+                        break;
+                }
+            }
+        }
     }
+
     Drawables mDrawables;
 
     private CharWrapper mCharWrapper;
@@ -4734,6 +4863,13 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         return highlight;
     }
 
+    /**
+     * @hide
+     */
+    public int getHorizontalOffsetForDrawables() {
+        return 0;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         restartMarqueeIfNeeded();
@@ -4751,6 +4887,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         final int left = mLeft;
         final int bottom = mBottom;
         final int top = mTop;
+        final boolean isLayoutRtl = isLayoutRtl();
+        final int offset = getHorizontalOffsetForDrawables();
+        final int leftOffset = isLayoutRtl ? 0 : offset;
+        final int rightOffset = isLayoutRtl ? offset : 0 ;
 
         final Drawables dr = mDrawables;
         if (dr != null) {
@@ -4766,7 +4906,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             // Make sure to update invalidateDrawable() when changing this code.
             if (dr.mDrawableLeft != null) {
                 canvas.save();
-                canvas.translate(scrollX + mPaddingLeft,
+                canvas.translate(scrollX + mPaddingLeft + leftOffset,
                                  scrollY + compoundPaddingTop +
                                  (vspace - dr.mDrawableHeightLeft) / 2);
                 dr.mDrawableLeft.draw(canvas);
@@ -4777,7 +4917,8 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             // Make sure to update invalidateDrawable() when changing this code.
             if (dr.mDrawableRight != null) {
                 canvas.save();
-                canvas.translate(scrollX + right - left - mPaddingRight - dr.mDrawableSizeRight,
+                canvas.translate(scrollX + right - left - mPaddingRight
+                        - dr.mDrawableSizeRight - rightOffset,
                          scrollY + compoundPaddingTop + (vspace - dr.mDrawableHeightRight) / 2);
                 dr.mDrawableRight.draw(canvas);
                 canvas.restore();
@@ -4861,8 +5002,6 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             voffsetCursor = getVerticalOffset(true);
         }
         canvas.translate(compoundPaddingLeft, extendedPaddingTop + voffsetText);
-
-        final boolean isLayoutRtl = isLayoutRtl();
 
         final int layoutDirection = getLayoutDirection();
         final int absoluteGravity = Gravity.getAbsoluteGravity(mGravity, layoutDirection);
@@ -8229,9 +8368,8 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
     TextDirectionHeuristic getTextDirectionHeuristic() {
         if (hasPasswordTransformationMethod()) {
-            // TODO: take care of the content direction to show the password text and dots justified
-            // to the left or to the right
-            return TextDirectionHeuristics.LOCALE;
+            // passwords fields should be LTR
+            return TextDirectionHeuristics.LTR;
         }
 
         // Always need to resolve layout direction first
@@ -8264,63 +8402,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             return;
         }
         mLastLayoutDirection = layoutDirection;
-        // No drawable to resolve
-        if (mDrawables == null) {
-            return;
-        }
-        // No relative drawable to resolve
-        if (mDrawables.mDrawableStart == null && mDrawables.mDrawableEnd == null) {
-            return;
-        }
 
-        Drawables dr = mDrawables;
-        switch(layoutDirection) {
-            case LAYOUT_DIRECTION_RTL:
-                if (dr.mDrawableStart != null) {
-                    dr.mDrawableRight = dr.mDrawableStart;
-
-                    dr.mDrawableSizeRight = dr.mDrawableSizeStart;
-                    dr.mDrawableHeightRight = dr.mDrawableHeightStart;
-                }
-                if (dr.mDrawableEnd != null) {
-                    dr.mDrawableLeft = dr.mDrawableEnd;
-
-                    dr.mDrawableSizeLeft = dr.mDrawableSizeEnd;
-                    dr.mDrawableHeightLeft = dr.mDrawableHeightEnd;
-                }
-                break;
-
-            case LAYOUT_DIRECTION_LTR:
-            default:
-                if (dr.mDrawableStart != null) {
-                    dr.mDrawableLeft = dr.mDrawableStart;
-
-                    dr.mDrawableSizeLeft = dr.mDrawableSizeStart;
-                    dr.mDrawableHeightLeft = dr.mDrawableHeightStart;
-                }
-                if (dr.mDrawableEnd != null) {
-                    dr.mDrawableRight = dr.mDrawableEnd;
-
-                    dr.mDrawableSizeRight = dr.mDrawableSizeEnd;
-                    dr.mDrawableHeightRight = dr.mDrawableHeightEnd;
-                }
-                break;
-        }
-        updateDrawablesLayoutDirection(dr, layoutDirection);
-    }
-
-    private void updateDrawablesLayoutDirection(Drawables dr, int layoutDirection) {
-        if (dr.mDrawableLeft != null) {
-            dr.mDrawableLeft.setLayoutDirection(layoutDirection);
-        }
-        if (dr.mDrawableRight != null) {
-            dr.mDrawableRight.setLayoutDirection(layoutDirection);
-        }
-        if (dr.mDrawableTop != null) {
-            dr.mDrawableTop.setLayoutDirection(layoutDirection);
-        }
-        if (dr.mDrawableBottom != null) {
-            dr.mDrawableBottom.setLayoutDirection(layoutDirection);
+        // Resolve drawables
+        if (mDrawables != null) {
+            mDrawables.resolveWithLayoutDirection(layoutDirection);
         }
     }
 
@@ -8328,6 +8413,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
      * @hide
      */
     protected void resetResolvedDrawables() {
+        super.resetResolvedDrawables();
         mLastLayoutDirection = -1;
     }
 

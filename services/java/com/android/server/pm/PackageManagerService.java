@@ -1035,7 +1035,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             readPermissions();
 
-            mRestoredSettings = mSettings.readLPw(sUserManager.getUsers(false));
+            mRestoredSettings = mSettings.readLPw(sUserManager.getUsers(false),
+                    mSdkVersion, mOnlyCore);
             long startTime = SystemClock.uptimeMillis();
 
             EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_SYSTEM_SCAN_START,
@@ -1333,6 +1334,10 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     public boolean isFirstBoot() {
         return !mRestoredSettings;
+    }
+
+    public boolean isOnlyCoreApps() {
+        return mOnlyCore;
     }
 
     private String getRequiredVerifierLPr() {
@@ -4159,7 +4164,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                         }
                     }
 
-                    Slog.i(TAG, "Linking native library dir for " + path);
+                    if (DEBUG_INSTALL) Slog.i(TAG, "Linking native library dir for " + path);
                     final int[] userIds = sUserManager.getUserIds();
                     synchronized (mInstallLock) {
                         for (int userId : userIds) {
@@ -6385,20 +6390,21 @@ public class PackageManagerService extends IPackageManager.Stub {
 
                     final File packageFile;
                     if (encryptionParams != null || !"file".equals(mPackageURI.getScheme())) {
-                        ParcelFileDescriptor out = null;
-
                         mTempPackage = createTempPackageFile(mDrmAppPrivateInstallDir);
                         if (mTempPackage != null) {
+                            ParcelFileDescriptor out;
                             try {
                                 out = ParcelFileDescriptor.open(mTempPackage,
                                         ParcelFileDescriptor.MODE_READ_WRITE);
                             } catch (FileNotFoundException e) {
+                                out = null;
                                 Slog.e(TAG, "Failed to create temporary file for : " + mPackageURI);
                             }
 
                             // Make a temporary file for decryption.
                             ret = mContainerService
                                     .copyResource(mPackageURI, encryptionParams, out);
+                            IoUtils.closeQuietly(out);
 
                             packageFile = mTempPackage;
 
@@ -6430,6 +6436,18 @@ public class PackageManagerService extends IPackageManager.Stub {
                             if (mInstaller.freeCache(size + lowThreshold) >= 0) {
                                 pkgLite = mContainerService.getMinimalPackageInfo(packageFilePath,
                                         flags, lowThreshold);
+                            }
+                            /*
+                             * The cache free must have deleted the file we
+                             * downloaded to install.
+                             *
+                             * TODO: fix the "freeCache" call to not delete
+                             *       the file we care about.
+                             */
+                            if (pkgLite.recommendedInstallLocation
+                                    == PackageHelper.RECOMMEND_FAILED_INVALID_URI) {
+                                pkgLite.recommendedInstallLocation
+                                    = PackageHelper.RECOMMEND_FAILED_INSUFFICIENT_STORAGE;
                             }
                         }
                     }
@@ -9264,10 +9282,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (removed.size() > 0) {
                     for (int j=0; j<removed.size(); j++) {
                         PreferredActivity pa = removed.get(i);
-                        RuntimeException here = new RuntimeException("here");
-                        here.fillInStackTrace();
                         Slog.w(TAG, "Removing dangling preferred activity: "
-                                + pa.mPref.mComponent, here);
+                                + pa.mPref.mComponent);
                         pir.removeFilter(pa);
                     }
                     mSettings.writePackageRestrictionsLPr(

@@ -21,6 +21,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
@@ -31,6 +32,8 @@ import android.media.AudioManager;
 import android.media.AudioService;
 import android.net.ConnectivityManager;
 import android.os.Environment;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -68,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 94;
+    private static final int DATABASE_VERSION = 95;
 
     private Context mContext;
     private int mUserHandle;
@@ -171,7 +174,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE INDEX bookmarksIndex2 ON bookmarks (shortcut);");
 
         // Populate bookmarks table with initial bookmarks
-        loadBookmarks(db);
+        boolean onlyCore = false;
+        try {
+            onlyCore = IPackageManager.Stub.asInterface(ServiceManager.getService(
+                    "package")).isOnlyCoreApps();
+        } catch (RemoteException e) {
+        }
+        if (!onlyCore) {
+            loadBookmarks(db);
+        }
 
         // Load initial volume levels into DB
         loadVolumeLevels(db);
@@ -1494,6 +1505,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 94;
         }
 
+        if (upgradeVersion == 94) {
+            // Add wireless charging started sound setting
+            if (mUserHandle == UserHandle.USER_OWNER) {
+                db.beginTransaction();
+                SQLiteStatement stmt = null;
+                try {
+                    stmt = db.compileStatement("INSERT OR REPLACE INTO global(name,value)"
+                            + " VALUES(?,?);");
+                    loadStringSetting(stmt, Settings.Global.WIRELESS_CHARGING_STARTED_SOUND,
+                            R.string.def_wireless_charging_started_sound);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                    if (stmt != null) stmt.close();
+                }
+            }
+            upgradeVersion = 95;
+        }
+
         // *** Remember to update DATABASE_VERSION above!
 
         if (upgradeVersion != currentVersion) {
@@ -2186,6 +2216,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.string.def_car_dock_sound);
             loadStringSetting(stmt, Settings.Global.CAR_UNDOCK_SOUND,
                     R.string.def_car_undock_sound);
+            loadStringSetting(stmt, Settings.Global.WIRELESS_CHARGING_STARTED_SOUND,
+                    R.string.def_wireless_charging_started_sound);
 
             loadSetting(stmt, Settings.Global.SET_INSTALL_LOCATION, 0);
             loadSetting(stmt, Settings.Global.DEFAULT_INSTALL_LOCATION,

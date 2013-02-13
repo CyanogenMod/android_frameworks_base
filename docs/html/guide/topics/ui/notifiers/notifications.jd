@@ -569,7 +569,7 @@ numMessages = 0;
                     For this element, set
 <code><a href="{@docRoot}guide/topics/manifest/meta-data-element.html#nm">android:name</a>="android.support.PARENT_ACTIVITY"</code>.
                     Set
-<code><a href="{@docRoot}/guide/topics/manifest/meta-data-element.html#val">android:value</a>="&lt;parent_activity_name&gt;"</code>
+<code><a href="{@docRoot}guide/topics/manifest/meta-data-element.html#val">android:value</a>="&lt;parent_activity_name&gt;"</code>
                     where <code>&lt;parent_activity_name&gt;</code> is the value of
 <code><a href="{@docRoot}guide/topics/manifest/meta-data-element.html#nm">android:name</a></code>
                     for the parent
@@ -700,7 +700,7 @@ mNotificationManager.notify(id, builder.build());
         element for the {@link android.app.Activity}
         <dl>
             <dt>
-<code><a href="guide/topics/manifest/activity-element.html#nm">android:name</a>="<i>activityclass</i>"</code>
+<code><a href="{@docRoot}guide/topics/manifest/activity-element.html#nm">android:name</a>="<i>activityclass</i>"</code>
             </dt>
             <dd>
                 The activity's fully-qualified class name.
@@ -921,7 +921,7 @@ mNotifyManager.notify(0, mBuilder.build());
 </p>
 <pre>
  // Sets an activity indicator for an operation of indeterminate length
-mBuilder.setProgress(0, 0, false);
+mBuilder.setProgress(0, 0, true);
 // Issues the notification
 mNotifyManager.notify(0, mBuilder.build());
 </pre>

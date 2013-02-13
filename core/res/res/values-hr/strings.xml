@@ -59,7 +59,7 @@
     <string name="BaMmi" msgid="455193067926770581">"Zabrana poziva"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"Promjena zaporke"</string>
     <string name="PinMmi" msgid="3113117780361190304">"PIN je promijenjen"</string>
-    <string name="CnipMmi" msgid="3110534680557857162">"Pozivni je broj prisutan"</string>
+    <string name="CnipMmi" msgid="3110534680557857162">"Sadržan je pozivni broj"</string>
     <string name="CnirMmi" msgid="3062102121430548731">"Pozivni broj je ograničen"</string>
     <string name="ThreeWCMmi" msgid="9051047170321190368">"Trostrani poziv"</string>
     <string name="RuacMmi" msgid="7827887459138308886">"Odbijanje neželjenih i neugodnih poziva"</string>
@@ -993,6 +993,18 @@
     <string name="weeks" msgid="6509623834583944518">"tjedna"</string>
     <string name="year" msgid="4001118221013892076">"godina"</string>
     <string name="years" msgid="6881577717993213522">"godina"</string>
+  <plurals name="duration_seconds">
+    <item quantity="one" msgid="6962015528372969481">"1 s"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> s"</item>
+  </plurals>
+  <plurals name="duration_minutes">
+    <item quantity="one" msgid="4915414002546085617">"1 min"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> min"</item>
+  </plurals>
+  <plurals name="duration_hours">
+    <item quantity="one" msgid="8917467491248809972">"1 sat"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> h"</item>
+  </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Problem s videozapisom"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"Ovaj videozapis nije valjan za streaming na ovaj uređaj."</string>
     <string name="VideoView_error_text_unknown" msgid="3450439155187810085">"Ovaj videozapis nije moguće reproducirati."</string>
@@ -1082,7 +1094,7 @@
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Glasnoća obavijesti"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"Zadana melodija zvona"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Zadana melodija zvona (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <string name="ringtone_silent" msgid="4440324407807468713">"Bešumno"</string>
+    <string name="ringtone_silent" msgid="7937634392408977062">"Nijedan"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Melodije zvona"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Nepoznata melodija zvona"</string>
   <plurals name="wifi_available">

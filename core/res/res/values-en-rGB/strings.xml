@@ -993,6 +993,18 @@
     <string name="weeks" msgid="6509623834583944518">"weeks"</string>
     <string name="year" msgid="4001118221013892076">"year"</string>
     <string name="years" msgid="6881577717993213522">"years"</string>
+  <plurals name="duration_seconds">
+    <item quantity="one" msgid="6962015528372969481">"1 second"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> seconds"</item>
+  </plurals>
+  <plurals name="duration_minutes">
+    <item quantity="one" msgid="4915414002546085617">"1 minute"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> minutes"</item>
+  </plurals>
+  <plurals name="duration_hours">
+    <item quantity="one" msgid="8917467491248809972">"1 hour"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> hours"</item>
+  </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Video problem"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"This video isn\'t valid for streaming to this device."</string>
     <string name="VideoView_error_text_unknown" msgid="3450439155187810085">"Can\'t play this video."</string>
@@ -1082,7 +1094,8 @@
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Notification volume"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"Default ringtone"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Default ringtone (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <string name="ringtone_silent" msgid="4440324407807468713">"Silent"</string>
+    <!-- no translation found for ringtone_silent (7937634392408977062) -->
+    <skip />
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Ringtones"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Unknown ringtone"</string>
   <plurals name="wifi_available">

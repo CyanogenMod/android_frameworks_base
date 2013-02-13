@@ -32,8 +32,26 @@ position:absolute;top:50%;left:0;width:100%;z-index:-1;text-align:center;display
            <ul>
               <li class="item carousel-home">
                  <div class="col-8">
+                   <img src="{@docRoot}images/google/maps-v2-trulia-n7.png"
+class="play no-shadow no-transform" style="margin:0 0 0 40px;max-height:250px;height:250px;
+                                           max-width:409px;width:409px" />
+                 </div>
+                <div class="content-right col-6" style="width:350px">
+                  <h2>New Google Maps Android APIs!</h2>
+                  <p>Google Maps Android API version 2 is now available with enhanced
+                    features such as 3D buildings, vector-based map tiles, rich overlay capabilities,
+                    indoor maps, support for fragments, and much more.</p>
+                    
+                  <p>The APIs are bundled with Google Play services and are
+                  compatible with Android 2.2 and higher.</p>
+                  <p><a
+href="{@docRoot}google/play-services/maps.html" class="button">Read more</a></p>
+                </div>            
+              </li>
+              <li class="item carousel-home">
+                 <div class="col-8">
                    <img
-src="http://4.bp.blogspot.com/-lfjzgG5Dqrk/UHMThRtpRwI/AAAAAAAABpk/h4d3nsmkgPM/s400/mint.png"
+src="//lh4.ggpht.com/-lfjzgG5Dqrk/UHMThRtpRwI/AAAAAAAABpk/h4d3nsmkgPM/s400/mint.png"
 class="play no-shadow no-transform" />
                  </div>
                 <div class="content-right col-6">
@@ -47,19 +65,19 @@ more</a></p>
                <li class="item carousel-home">
                    <div class="col-8">
                      <img
-src="http://1.bp.blogspot.com/-6K1kfNOdek8/T72bXvtTSQI/AAAAAAAABmw/kYzmJt0_328/s1600/google-play-subscriptions.png" class="play"></div>
+src="//lh4.ggpht.com/-6K1kfNOdek8/T72bXvtTSQI/AAAAAAAABmw/kYzmJt0_328/s1600/google-play-subscriptions.png" class="play"></div>
                    <div class="content-right col-6">
                    <h2>In-app Subscriptions with Trials</h2>
                    <p>You can now set up a <strong>free trial period</strong> for any Google Play in-app subscription, making it easy for users try your subscriber content before automatically converting to a full subscription. Free trials give you a new way to bring users into your products and engage them effectively. </p>
                    <p><a class="button"
-href="http://dirkbd.mtv:8809/guide/google/play/billing/billing_subscriptions.html#trials">Read
+href="{@docRoot}google/play/billing/v2/billing_subscriptions.html#trials">Read
 more</a></p>
                    </div>                
                 </li>
                <li class="item carousel-home">
                    <div class="col-8">
                      <img
-src="http://2.bp.blogspot.com/-MgN5DnoO5XU/UHYGYzTcAOI/AAAAAAAABs4/jTS7sKkfBcM/s1600/pubsites.png" class="play"></div>
+src="//lh4.ggpht.com/-MgN5DnoO5XU/UHYGYzTcAOI/AAAAAAAABs4/jTS7sKkfBcM/s1600/pubsites.png" class="play"></div>
                    <div class="content-right col-6">
                    <p class="title-intro">From the blog:</p>
                    <h2>New Google Play Developer Console</h2>
@@ -72,7 +90,7 @@ more</a></p>
                <li class="item carousel-home">
                  <div class="col-8">
                    <img
-src="http://4.bp.blogspot.com/-g05If_eKKRQ/UAcrVLI-OYI/AAAAAAAAAr8/AWvunVb5S-w/s320/nexus7.png"
+src="//lh4.ggpht.com/-g05If_eKKRQ/UAcrVLI-OYI/AAAAAAAAAr8/AWvunVb5S-w/s320/nexus7.png"
 class="play no-shadow no-transform" />
                  </div>
                 <div class="content-right col-6">
@@ -103,26 +121,26 @@ more</a></p>
 			<div class="feed-frame">
                                 <!-- DEVELOPER NEWS -->
           <ul>
-            <li><a href="http://android-developers.blogspot.com/2012/10/google-play-seller-support-in-india.html">
-              <div class="feed-image" style="background:url('http://4.bp.blogspot.com/-ekT-9XQi0YY/UH7WT2XjSdI/AAAAAAAABwc/fI5QaPi7QEk/s320/india-apps1.png') no-repeat 0 0"></div>
-              <h4>Google Play Seller Support in India</h4>
-              <p>Developers in India can sell paid applications, in-app products, and subscriptions in Google Play, with monthly payouts to their local bank accounts...</p>
+            <li><a href="//android-developers.blogspot.com/2013/01/verifying-back-end-calls-from-android.html">
+              <div class="feed-image" style="background:url('//lh4.ggpht.com/7z4NItEg-X21zvFGAarKonk-VaysBYthJ30u1JjaQ0-5fjyHNawnmoNeG--4FCACog=w124') no-repeat 0 0"></div>
+              <h4>Verifying Back-End Calls from Android Apps</h4>
+              <p>You can take advantage of the auth APIs in Google Play services to let your back end know which app is calling and for which user....</p>
               </a></li>
-            <li><a href="http://android-developers.blogspot.com/2012/09/google-play-services-and-oauth-identity.html">
-              <div class="feed-image" style="background:url('https://lh4.ggpht.com/7z4NItEg-X21zvFGAarKonk-VaysBYthJ30u1JjaQ0-5fjyHNawnmoNeG--4FCACog=w124') no-repeat 0 0"></div>
-              <h4>Google Play services and OAuth Tools</h4>
-              <p>The rollout of Google Play services to all Android 2.2+ devices worldwide is now complete, and all of those devices now have new tools for working with OAuth 2.0 tokens...</p>
+            <li><a href="//android-developers.blogspot.com/2012/12/daydream-interactive-screen-savers.html">
+              <div class="feed-image" style="background:url('//lh4.ggpht.com/-wVsUOo4xGE0/UNy9mZ1nmMI/AAAAAAAAB4w/f6rhyLn5KbI/s1600/daydream-example.jpg') no-repeat 0 0;background-position:right top;"></div>
+              <h4>Daydream: Interactive Screen Savers</h4>
+              <p>Daydream is an interactive screen-saver mode introduced in Android 4.2. Learn how to add Daydreams to your apps...</p>
               </a></li>
-            <li><a href="http://android-developers.blogspot.com/2012/08/creating-your-own-spelling-checker.html">
-              <div class="feed-image" style="background:url('http://2.bp.blogspot.com/-QKlztEdM1aA/UC1bH6Kv4UI/AAAAAAAAADo/fQS8-EfBYIQ/s320/spell-check-framed-new.png') no-repeat 0 0"></div>
-              <h4>Creating A Spelling Checker Service</h4>
-              <p>If you are an IME developer, the Spelling Checker framework gives you a great way to provide an even better experience for your users...</p>
+            <li><a href="//android-developers.blogspot.com/2012/11/designing-for-tablets-were-here-to-help.html">
+              <div class="feed-image" style="background:url('//developer.android.com/design/media/multipane_expand.png') no-repeat 0 0; background-position:right top;"></div>
+              <h4>Designing for Tablets?</h4>
+              <p>Essential resources for everyone in the app development pipeline—from product managers, to designers, to developers, and QA engineers...</p>
               </a></li>
-            <li><a href="http://android-developers.blogspot.com/2012/04/accessibility-are-you-serving-all-your.html">
-              <div class="feed-image"></div>
-              <h4>Accessibility</h4>
-              <p>We recently published some new resources to help developers make their Android applications more accessible... </p>
-              </a></li>                         
+            <li><a href="//android-developers.blogspot.com/2012/12/in-app-billing-version-3.html">
+              <div class="feed-image" style="background:url('//developer.android.com/images/iab-thumb.png') no-repeat 0 0;background-position:center right;"></div>
+              <h4>In-app Billing Version 3 Now Available</h4>
+              <p>A new version of In-app Billing is available that lets you sell digital goods in your app with just a few lines of code...</p>
+              </a></li>
           </ul>
                                 <!-- FEATURED DOCS -->
           <ul>
@@ -296,17 +314,17 @@ function renderDevelopersLivePlaylist(data) {
  * Each string in 'ids' is the ID of a YouTube playlist that belongs in the corresponding tab.
  */
 var playlists = {
-  'googleio' : {
-    'ids': ["4C6BCDE45E05F49E"]
-  },
-  'fridayreview' : {
-    'ids': ["B7B9B23D864A55C3"]
-  },
-  'officehours' : {
-    'ids': ["7383D9AADA6E6D55"]
+  'designinaction' : {
+    'ids': ["PLWz5rJ2EKKc8j2B95zGMb8muZvrIy-wcF"]
   },
   'about' : {
-    'ids': ["D7C64411AF40DEA5"]
+    'ids': ["PL611F8C5DBF49CEC6"]
+  },
+  'developersstrikeback' : {
+    'ids': ["PLWz5rJ2EKKc8nhhIOieejm1PxYHmPkIPh"]
+  },
+  'googleio' : {
+    'ids': ["PL4C6BCDE45E05F49E"]
   }
 };
 
@@ -326,7 +344,7 @@ function showVideosPlaylists() {
 
 /* Request the playlist feeds from YouTube */
 function showDevelopersLivePlaylist() {
-  var playlistId = "B7B9B23D864A55C3"; /* The Friday Review */
+  var playlistId = "PLWz5rJ2EKKc_XOgcRukSoKKjewFJZrKV0"; /* DevBytes */
   var script = "<script type='text/javascript' src='//gdata.youtube.com/feeds/api/playlists/"
                 + playlistId +
                 "?v=2&alt=json-in-script&max-results=10&callback=renderDevelopersLivePlaylist&orderby=published'><\/script > ";

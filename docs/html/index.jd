@@ -13,18 +13,58 @@ page.metaDescription=The official site for Android developers. Provides the Andr
         <div class="frame">
             <ul>
                 <li class="item carousel-home">
+                    <div class="content-left col-11" style="padding-top:65px;">
+                      <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+                      <div style="box-shadow: 3px 10px 18px 1px #999;width:600px;height:338px">
+                        <div id="ytapiplayer">
+                          You need Flash player 8+ and JavaScript enabled to view this video.
+                        </div>
+                        <script type="text/javascript">
+                            var params = { allowScriptAccess: "always" };
+                            var atts = { id: "ytapiplayer" };
+                            swfobject.embedSWF("//www.youtube.com/v/RRelFvc6Czo?enablejsapi=1&playerapiid=ytplayer&version=3&HD=1;rel=0;showinfo=0;modestbranding;origin=developer.android.com;autohide=1",
+                              "ytapiplayer", "600", "338", "8", null, null, params, atts);
+
+                            // Callback used to pause/resume carousel based on video state
+                            function onytplayerStateChange(newState) {              
+                               var isPaused = $("#pauseButton").hasClass("paused");
+                               if ((newState == 1) || (newState == 3)) {
+                               // if playing or buffering, pause the carousel
+                                 if (!isPaused) {
+                                    $("#pauseButton").click();
+                                 }
+                               } else {
+                               // otherwise, make sure carousel is running
+                                 if (isPaused) {
+                                    $("#pauseButton").click();
+                                 }
+                               }
+                            }
+
+                            // Callback received when YouTube player loads to setup callback (above)
+                            function onYouTubePlayerReady(playerId) {
+                              var ytplayer = document.getElementById("ytapiplayer");
+                              ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
+                            }
+
+                        </script>
+                      </div>
+                    </div>
+                    <div class="content-right col-4">
+                    <h1 style="white-space:nowrap;line-height:1em;">Developer Story: Smule</h1>
+                    <p>The creators of AutoRap, Magic Piano, and Songify talk about launching on
+                       Android and the explosive global growth they’ve seen on Google Play.</p>
+                    </div>
+                </li>
+                <li class="item carousel-home">
                     <div class="content-left col-9">
                         <a href="{@docRoot}about/versions/jelly-bean.html"><img src="{@docRoot}images/home/android-jellybean.png" ></a>
                     </div>
                     <div class="content-right col-6">
-                    <h1>Jelly Bean now available!</h1>
-                    <p>Android 4.1 (Jelly Bean) builds on what's great about Android
-                      with improvements to performance and user experience.</p>
-                    <p>New APIs are also available that allow you to build richer and more
-                      interactive notifications, transfer larger
-                    payloads through NFC, discover services over Wi-Fi, and much more.</p>
-                    <p><a href="{@docRoot}about/versions/jelly-bean.html" class="button">More 
-                        about Jelly Bean</a></p>
+                    <h1>Android 4.2 Jelly Bean!</h1>
+                    <p>The latest version of Jelly Bean is here, with performance optimizations, a refreshed UI, and great new features for developers. </p>
+                    <p>Android 4.2 includes APIs for developing lock sceen widgets and Daydream screensavers, using external displays, creating RTL layouts, building flexible UI with nested Fragments, and much more.</p>
+                    <p><a href="{@docRoot}about/versions/jelly-bean.html" class="button">Learn More</a></p>
                     </div>
                 </li>
                 <li class="item carousel-home">
@@ -67,6 +107,8 @@ class="button">Watch the Android sessions</a></p>
     </div>
     <!-- /End slideshow -->
     
+    <a href="" id="pauseButton" style="display:none">pause</a>
+    
     
 </div>
 <div class="wrap" style="padding-bottom:20px">
@@ -82,4 +124,3 @@ class="button">Watch the Android sessions</a></p>
     </div>
     <!-- /Section links -->
 </div>     
-

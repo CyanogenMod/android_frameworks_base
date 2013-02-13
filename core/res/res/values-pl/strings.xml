@@ -762,7 +762,7 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Spróbuj ponownie."</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Przekroczono maksymalną liczbę prób rozpoznania twarzy."</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Ładowanie (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
-    <string name="lockscreen_charged" msgid="321635745684060624">"Naładowana"</string>
+    <string name="lockscreen_charged" msgid="321635745684060624">"Naładowany"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Podłącz ładowarkę."</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Brak karty SIM"</string>
@@ -993,6 +993,18 @@
     <string name="weeks" msgid="6509623834583944518">"tygodni"</string>
     <string name="year" msgid="4001118221013892076">"rok"</string>
     <string name="years" msgid="6881577717993213522">"lat"</string>
+  <plurals name="duration_seconds">
+    <item quantity="one" msgid="6962015528372969481">"1 sekunda"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> s"</item>
+  </plurals>
+  <plurals name="duration_minutes">
+    <item quantity="one" msgid="4915414002546085617">"1 minuta"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> min"</item>
+  </plurals>
+  <plurals name="duration_hours">
+    <item quantity="one" msgid="8917467491248809972">"1 godzina"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> godz."</item>
+  </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Problem z filmem"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"Ten film nie nadaje się do strumieniowego przesyłania do tego urządzenia."</string>
     <string name="VideoView_error_text_unknown" msgid="3450439155187810085">"Nie można odtworzyć tego filmu."</string>
@@ -1025,8 +1037,8 @@
     <string name="no" msgid="5141531044935541497">"Anuluj"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Uwaga"</string>
     <string name="loading" msgid="7933681260296021180">"Wczytywanie…"</string>
-    <string name="capital_on" msgid="1544682755514494298">"Wł."</string>
-    <string name="capital_off" msgid="6815870386972805832">"Wył."</string>
+    <string name="capital_on" msgid="1544682755514494298">"Wł"</string>
+    <string name="capital_off" msgid="6815870386972805832">"Wył"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Zakończ czynność przez..."</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Domyślne dla tej czynności"</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Wyczyść wartości domyślne w: Ustawienia systemu &gt; Aplikacje &gt; Pobrane."</string>
@@ -1082,7 +1094,7 @@
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Głośność powiadomień"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"Dzwonek domyślny"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Dzwonek domyślny (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <string name="ringtone_silent" msgid="4440324407807468713">"Cichy"</string>
+    <string name="ringtone_silent" msgid="7937634392408977062">"Brak"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Dzwonki"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Nieznany dzwonek"</string>
   <plurals name="wifi_available">
@@ -1351,7 +1363,7 @@
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Dotknij, aby włączyć."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Przekroczono limit danych 2G/3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Przekroczono limit danych 4G"</string>
-    <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Przekroczono limit danych komór."</string>
+    <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Przekroczenie limitu danych"</string>
     <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Przekroczono limit danych Wi-Fi"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> ponad określony limit"</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Dane w tle są ograniczone"</string>

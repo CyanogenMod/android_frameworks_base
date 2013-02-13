@@ -1,0 +1,61 @@
+page.title=Google Play In-app Billing
+@jd:body
+
+<p>In-app Billing is a Google Play service that lets you sell digital content from inside
+your applications. You can use the service to sell a wide range of content, including downloadable
+content such as media files or photos, virtual content such as game levels or potions, premium services 
+and features, and more. You can use In-app Billing to sell products as</p>
+
+<div class="sidebox-wrapper">
+<div class="sidebox">
+  <h2><strong>New in In-App Billing</strong></h2>
+  <ul>
+  <li><strong>In-app Billing Version 3</strong>&mdash;The <a href="{@docRoot}google/play/billing/api.html">latest version</a> of In-app Billing features a synchronous API that is easier to implement and lets you manage products and purchases more effectively.</li>
+  <li><strong>New order number format</strong>&mdash;Starting 5 December, orders are reported in Merchant Order Number format. See <a href="/google/play/billing/billing_admin.html#orderId">Working with Order Numbers</a> for an example.</li>
+  <li><strong>Free trials</strong>&mdash;You can now offer users a configurable <a href="/google/play/billing/v2/billing_subscriptions.html#trials">free trial period</a> for your in-app subscriptions. You can set up trials with a simple change in the Developer Console&mdash;no change to your app code is needed.</li>
+ </ul>
+</div>
+</div>
+
+<ul>
+<li>Standard in-app products (one-time billing), or</li>
+<li>Subscriptions, (recurring, automated billing)</li>
+</ul>
+
+<p>When you use the in-app billing service to sell an item,
+whether it's an in-app product or a subscription, Google Play
+handles all checkout details so your application never has to directly process
+any financial transactions. Google Play uses the same checkout backend service as
+is used for application purchases, so your users experience a consistent and
+familiar purchase flow.</p>
+
+<p>Any application that you publish through Google Play can implement In-app Billing. No special
+account or registration is required other than an Android Market publisher account and a Google
+Checkout merchant account.</p>
+
+<p>To help you integrate in-app billing into your application, the Android SDK
+provides a sample application that demonstrates how to sell standard in-app
+products and subscriptions from inside an app.</p>
+
+<p>To get started, read the documents below or take the <a href="{@docRoot}training/in-app-billing/index.html">Selling 
+    In-app Products</a> training class.</p>
+</div>
+</div>
+
+<dl>
+  <dt><strong><a href="{@docRoot}google/play/billing/billing_overview.html">Overview</a></strong></dt>
+    <dd>Read this document for a description of the underlying concepts in In-app Billing.</dd>
+  <dt><strong><a href="{@docRoot}google/play/billing/api.html">Version 3 API</a></strong></dt>
+    <dd>Read the documents in this section for an overview of the latest version of In-app Billing, as well as implementation details and API reference.</dd>
+  <dt><strong><a href="{@docRoot}google/play/billing/billing_best_practices.html">Security
+  and Design</a></strong></dt>
+    <dd>Review these best practices to help ensure that your In-app Billing implementation is
+    secure and well designed.</dd>
+  <dt><strong><a href="{@docRoot}google/play/billing/billing_testing.html">Testing In-app
+  Billing</a></strong></dt>
+    <dd>Understand how the In-app Billing test tools work and learn how to test your In-app Billing
+    implementation.</dd>
+  <dt><strong><a href="{@docRoot}google/play/billing/billing_admin.html">Administering
+  In-app Billing</a></strong></dt>
+    <dd>Learn how to set up your product list, register test accounts, and handle refunds.</dd>
+</dl>
