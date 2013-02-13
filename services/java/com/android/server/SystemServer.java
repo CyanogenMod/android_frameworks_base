@@ -30,10 +30,13 @@ import android.content.res.Configuration;
 import android.media.AudioService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
+import android.net.INetworkPolicyManager;
+import android.net.INetworkStatsService;
 import android.os.IBinder;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.INetworkManagementService;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.StrictMode;
@@ -50,6 +53,7 @@ import android.view.WindowManager;
 import com.android.internal.R;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.SamplingProfilerIntegration;
+import com.android.internal.util.MemInfoReader;
 import com.android.server.accessibility.AccessibilityManagerService;
 import com.android.server.accounts.AccountManagerService;
 import com.android.server.am.ActivityManagerService;
@@ -143,7 +147,7 @@ class ServerThread {
         NetworkStatsService networkStats = null;
         NetworkPolicyManagerService networkPolicy = null;
         ConnectivityService connectivity = null;
-        Object cneObj = null;
+        Object qcCon = null;
         WifiP2pService wifiP2p = null;
         WifiService wifi = null;
         NsdService serviceDiscovery= null;
@@ -522,45 +526,42 @@ class ServerThread {
                     reportWtf("starting Wi-Fi Service", e);
                 }
 
-                try {
-                    Slog.i(TAG, "Connectivity Service");
-                    connectivity = new ConnectivityService(
-                            context, networkManagement, networkStats, networkPolicy);
-                    ServiceManager.addService(Context.CONNECTIVITY_SERVICE, connectivity);
-                    networkStats.bindConnectivityManager(connectivity);
-                    networkPolicy.bindConnectivityManager(connectivity);
+               try {
+                   int enableCne = 1;
+                   if (!deviceHasSufficientMemory()) {
+                       enableCne = SystemProperties.getInt("persist.cne.override.memlimit", 0);
+                   }
+                   int cneFeature = (enableCne == 1) ?
+                       SystemProperties.getInt("persist.cne.feature", 0) : 0;
 
-                    wifiP2p.connectivityServiceReady();
-                    wifi.checkAndStartWifi();
-                } catch (Throwable e) {
-                    reportWtf("starting Connectivity Service", e);
-                }
-
-                try {
-                    int value = SystemProperties.getInt("persist.cne.feature", 0);
-                    if(value > 0) {
-                        try {
-                            PathClassLoader cneClassLoader =
-                                new PathClassLoader("/system/framework/com.quicinc.cne.jar",
-                                        ClassLoader.getSystemClassLoader());
-                            Class cneClass = cneClassLoader.loadClass("com.quicinc.cne.CNE");
-                            Constructor cneConstructor = cneClass.getConstructor
-                                (new Class[] {Context.class, Handler.class});
-                            cneObj = cneConstructor.newInstance(context, null);
-                        } catch (Exception e) {
-                            Slog.e(TAG,"Failed to load CNE class", e);
-                            cneObj = null;
-                            reportWtf("Creating Connectivity Engine Service", e);
-                        }
-                        if (cneObj != null && (cneObj instanceof IBinder)) {
-                            ServiceManager.addService("cneservice", (IBinder)cneObj);
-                            Slog.i(TAG, "starting cneservice");
-                        }
-                    }
-                } catch (Throwable e) {
-                    Slog.e(TAG,"Loading CNEService failed: ", e);
-                    reportWtf("starting Connectivity Engine Service", e);
-                }
+                   if ( cneFeature > 0 && cneFeature < 7 ) {
+                       Slog.i(TAG, "QcConnectivity Service");
+                       PathClassLoader qcsClassLoader =
+                           new PathClassLoader("/system/framework/services-ext.jar",
+                                   ClassLoader.getSystemClassLoader());
+                       Class qcsClass =
+                           qcsClassLoader.loadClass("com.android.server.QcConnectivityService");
+                       Constructor qcsConstructor = qcsClass.getConstructor
+                           (new Class[] {Context.class, INetworkManagementService.class,
+                            INetworkStatsService.class, INetworkPolicyManager.class});
+                       qcCon = qcsConstructor.newInstance(
+                               context, networkManagement, networkStats, networkPolicy);
+                       connectivity = (ConnectivityService) qcCon;
+                   } else {
+                       Slog.i(TAG, "Connectivity Service");
+                       connectivity = new ConnectivityService( context, networkManagement,
+                               networkStats, networkPolicy);
+                   }
+                   if (connectivity != null) {
+                       ServiceManager.addService(Context.CONNECTIVITY_SERVICE, connectivity);
+                       networkStats.bindConnectivityManager(connectivity);
+                       networkPolicy.bindConnectivityManager(connectivity);
+                       wifi.checkAndStartWifi();
+                       wifiP2p.connectivityServiceReady();
+                   }
+               } catch (Throwable e) {
+                   reportWtf("starting Connectivity Service", e);
+               }
 
                 try {
                     Slog.i(TAG, "Network Service Discovery Service");
@@ -1128,6 +1129,17 @@ class ServerThread {
                     "com.android.systemui.SystemUIService"));
         //Slog.d(TAG, "Starting service: " + intent);
         context.startServiceAsUser(intent, UserHandle.OWNER);
+    }
+
+    private static final boolean deviceHasSufficientMemory() {
+        final long MEMORY_SIZE_MIN = 512 * 1024 * 1024;
+
+        MemInfoReader minfo = new MemInfoReader();
+        minfo.readMemInfo();
+        if (minfo.getTotalSize() <= MEMORY_SIZE_MIN) {
+            return false;
+        }
+        return true;
     }
 }
 

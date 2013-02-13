@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2012, 2013. The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -428,6 +430,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private AtomicInteger mEnableFailFastMobileDataTag = new AtomicInteger(0);
 
     TelephonyManager mTelephonyManager;
+
+    protected ConnectivityService() { }
 
     public ConnectivityService(Context context, INetworkManagementService netd,
             INetworkStatsService statsService, INetworkPolicyManager policyManager) {
@@ -3695,7 +3699,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      * be done whenever a better abstraction is developed.
      */
     public class VpnCallback {
-        private VpnCallback() {
+        protected VpnCallback() {
         }
 
         public void onStateChanged(NetworkInfo info) {
@@ -4830,5 +4834,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     void setAlarm(int timeoutInMilliseconds, PendingIntent intent) {
         long wakeupTime = SystemClock.elapsedRealtime() + timeoutInMilliseconds;
         mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, wakeupTime, intent);
+    }
+
+    protected void updateBlockedUids(int uid, boolean isBlocked) {
     }
 }
