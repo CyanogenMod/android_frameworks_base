@@ -492,6 +492,10 @@
     <string name="permdesc_asec_rename" msgid="1794757588472127675">"Lehetővé teszi az alkalmazás számára, hogy átnevezze a belső tárhelyet."</string>
     <string name="permlab_vibrate" msgid="7696427026057705834">"rezgés szabályozása"</string>
     <string name="permdesc_vibrate" msgid="6284989245902300945">"Lehetővé teszi az alkalmazás számára a rezgés vezérlését."</string>
+    <string name="permlab_fm_radio_receiver">FM rádióvevő vezérlése</string>
+    <string name="permdesc_fm_radio_receiver">Lehetővé teszi az alkalmazás számára az FM rádióvevő vezérlését.</string>
+    <string name="permlab_fm_radio_transmitter">FM rádióadó vezérlése</string>
+    <string name="permdesc_fm_radio_transmitter">Lehetővé teszi az alkalmazás számára az FM rádióadó vezérlését.</string>
     <string name="permlab_flashlight" msgid="2155920810121984215">"vaku vezérlése"</string>
     <string name="permdesc_flashlight" msgid="6522284794568368310">"Lehetővé teszi az alkalmazás számára a vaku vezérlését."</string>
     <string name="permlab_manageUsb" msgid="1113453430645402723">"USB-eszközök preferenciáinak és engedélyeinek kezelése"</string>
