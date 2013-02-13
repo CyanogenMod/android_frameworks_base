@@ -494,6 +494,10 @@
     <string name="permdesc_vibrate" msgid="6284989245902300945">"Lehetővé teszi az alkalmazás számára a rezgés vezérlését."</string>
     <string name="permlab_flashlight" msgid="2155920810121984215">"vaku vezérlése"</string>
     <string name="permdesc_flashlight" msgid="6522284794568368310">"Lehetővé teszi az alkalmazás számára a vaku vezérlését."</string>
+    <string name="permlab_fm_radio_receiver">FM rádióvevő vezérlése</string>
+    <string name="permdesc_fm_radio_receiver">Lehetővé teszi az alkalmazás számára az FM rádióvevő vezérlését.</string>
+    <string name="permlab_fm_radio_transmitter">FM rádióadó vezérlése</string>
+    <string name="permdesc_fm_radio_transmitter">Lehetővé teszi az alkalmazás számára az FM rádióadó vezérlését.</string>
     <string name="permlab_manageUsb" msgid="1113453430645402723">"USB-eszközök preferenciáinak és engedélyeinek kezelése"</string>
     <string name="permdesc_manageUsb" msgid="7776155430218239833">"Lehetővé teszi az alkalmazás számára az USB-eszközök preferenciáinak és engedélyeinek kezelését."</string>
     <string name="permlab_accessMtp" msgid="4953468676795917042">"MTP-protokoll megvalósítása"</string>
