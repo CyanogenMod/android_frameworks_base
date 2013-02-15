@@ -1404,6 +1404,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION, KEY_ACTION_NOTHING);
                 }
             }
+            
 
             // Configure rotation lock.
             int userRotation = Settings.System.getIntForUser(resolver,
@@ -1445,6 +1446,38 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mHasSoftInput != hasSoftInput) {
                 mHasSoftInput = hasSoftInput;
                 updateRotation = true;
+            }
+            
+            
+            // Update navigation bar dimensions
+            // Height of the navigation bar when presented horizontally at bottom
+            mNavigationBarHeightForRotation[mPortraitRotation] =
+            mNavigationBarHeightForRotation[mUpsideDownRotation] =
+                    mContext.getResources().getDimensionPixelSize(
+                            com.android.internal.R.dimen.navigation_bar_height);
+            mNavigationBarHeightForRotation[mLandscapeRotation] =
+            mNavigationBarHeightForRotation[mSeascapeRotation] =
+                    mContext.getResources().getDimensionPixelSize(
+                            com.android.internal.R.dimen.navigation_bar_height_landscape);
+
+            // Width of the navigation bar when presented vertically along one side
+            mNavigationBarWidthForRotation[mPortraitRotation] =
+            mNavigationBarWidthForRotation[mUpsideDownRotation] =
+            mNavigationBarWidthForRotation[mLandscapeRotation] =
+            mNavigationBarWidthForRotation[mSeascapeRotation] =
+                    mContext.getResources().getDimensionPixelSize(
+                            com.android.internal.R.dimen.navigation_bar_width);
+
+    		// Set the navigation bar's dimensions to 0 in expanded desktop mode
+            if(Settings.System.getInt(mContext.getContentResolver(), Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1){
+                    mNavigationBarWidthForRotation[mPortraitRotation]
+                            = mNavigationBarWidthForRotation[mUpsideDownRotation]
+                            = mNavigationBarWidthForRotation[mLandscapeRotation]
+                            = mNavigationBarWidthForRotation[mSeascapeRotation]
+                            = mNavigationBarHeightForRotation[mPortraitRotation]
+                            = mNavigationBarHeightForRotation[mUpsideDownRotation]
+                            = mNavigationBarHeightForRotation[mLandscapeRotation]
+                            = mNavigationBarHeightForRotation[mSeascapeRotation] = 0;
             }
         }
         if (updateRotation) {
