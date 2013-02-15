@@ -993,6 +993,18 @@
     <string name="weeks" msgid="6509623834583944518">"недеље(а)"</string>
     <string name="year" msgid="4001118221013892076">"година"</string>
     <string name="years" msgid="6881577717993213522">"годинe(а)"</string>
+  <plurals name="duration_seconds">
+    <item quantity="one" msgid="6962015528372969481">"1 секунда"</item>
+    <item quantity="other" msgid="1886107766577166786">"Секунди: <xliff:g id="COUNT">%d</xliff:g>"</item>
+  </plurals>
+  <plurals name="duration_minutes">
+    <item quantity="one" msgid="4915414002546085617">"1 минут"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> минута"</item>
+  </plurals>
+  <plurals name="duration_hours">
+    <item quantity="one" msgid="8917467491248809972">"1 сат"</item>
+    <item quantity="other" msgid="3863962854246773930">"Сати: <xliff:g id="COUNT">%d</xliff:g>"</item>
+  </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Проблем са видео снимком"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"Овај видео не може да се стримује на овом уређају."</string>
     <string name="VideoView_error_text_unknown" msgid="3450439155187810085">"Не можете да пустите овај видео."</string>
@@ -1082,7 +1094,7 @@
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Јачина звука обавештења"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"Подразумевани звук звона"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Подразумевани звук звона (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <string name="ringtone_silent" msgid="4440324407807468713">"Нечујно"</string>
+    <string name="ringtone_silent" msgid="7937634392408977062">"Без"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Звукови звона"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Непознати звук звона"</string>
   <plurals name="wifi_available">

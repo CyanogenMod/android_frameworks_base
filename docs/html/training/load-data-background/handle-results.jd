@@ -13,92 +13,125 @@ startpage=true
     <a href="#HandleResults">Handle Query Results</a>
   </li>
   <li>
-    <a href="#HandleReset">Clear Out Old Data</a></li>
+    <a href="#HandleReset">Delete Old Cursor References</a></li>
 </ol>
+
+<h2>Try it out</h2>
+<div class="download-box">
+    <a href="{@docRoot}shareables/training/ThreadSample.zip" class="button">Download the sample</a>
+    <p class="filename">ThreadSample.zip</p>
+</div>
+
   </div>
 </div>
 
 <p>
-    {@link android.support.v4.content.CursorLoader} returns its query results to your
-    implementation of
-    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoadFinished
-    LoaderCallbacks.onLoadFinished()}, in the form of a {@link android.database.Cursor}. In the
-    callback, you can update your data display, do further processing on the
-    {@link android.database.Cursor} data, and so forth.
+    As shown in the previous lesson, you should begin loading your data with a
+    {@link android.support.v4.content.CursorLoader} in your implementation of
+    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onCreateLoader
+    onCreateLoader()}. The loader then provides the query results to your
+    {@link android.app.Activity} or {@link android.support.v4.app.FragmentActivity} in your
+    implementation of {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoadFinished
+    LoaderCallbacks.onLoadFinished()}. One of the incoming arguments to this method is a
+    {@link android.database.Cursor} containing the query results. You can use this object to
+    update your data display or do further processing.
 </p>
 <p>
-    When the loader framework detects changes to data associated with the query,
-    it resets the {@link android.support.v4.content.CursorLoader}, closes the current
-    {@link android.database.Cursor}, and then invokes your implementation of
+    Besides
+    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onCreateLoader onCreateLoader()} and
+    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoadFinished onLoadFinished()},
+    you also have to implement
     {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoaderReset onLoaderReset()}.
-    Use this callback to delete references to the current {@link android.database.Cursor}; when the
-    loader framework destroys the {@link android.database.Cursor}, you won't have outstanding
-    references that cause memory leaks.
+    This method is invoked when {@link android.support.v4.content.CursorLoader} detects
+    that data associated with the {@link android.database.Cursor} has changed. When the
+    data changes, the framework also re-runs the current query.
 </p>
-<h2 id="HandleFinished">Handle Query Results</h2>
+<h2 id="HandleResults">Handle Query Results</h2>
 <p>
-    The following two snippets are an example of displaying the results of a query, using a
-    {@link android.widget.ListView} backed by a
-    {@link android.support.v4.widget.SimpleCursorAdapter}.
+    To display {@link android.database.Cursor} data returned by
+    {@link android.support.v4.content.CursorLoader}, use a
+    {@link android.view.View} class that implements {@link android.widget.AdapterView} and
+    provide the view with an adapter that implements
+    {@link android.support.v4.widget.CursorAdapter}. The system then automatically moves data from
+    the {@link android.database.Cursor} to the view.
 </p>
 <p>
-    The first snippet shows the {@link android.widget.ListView} and
-    {@link android.support.v4.widget.SimpleCursorAdapter}:
-</p>
-<pre>
-// Gets a handle to the Android built-in ListView widget
-mListView = ((ListView) findViewById(android.R.id.list));
-// Creates a CursorAdapter
-mAdapter =
-    new SimpleCursorAdapter(
-    this,                   // Current context
-    R.layout.logitem,       // View for each item in the list
-    null,                   // Don't provide the cursor yet
-    FROM_COLUMNS,           // List of cursor columns to display
-    TO_FIELDS,              // List of TextViews in each line
-    0                       // flags
-);
-// Links the adapter to the ListView
-mListView.setAdapter(mAdapter);
-</pre>
-<p>
-    The next snippet shows an implementation of
+    You can set up the linkage between the view and adapter before you have any data to display,
+    and then move a {@link android.database.Cursor} into the adapter in the
     {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoadFinished onLoadFinished()}
-    that moves the query results in the returned {@link android.database.Cursor} to the
-    {@link android.support.v4.widget.SimpleCursorAdapter}. Changing the
-    {@link android.database.Cursor} in the
-    {@link android.support.v4.widget.SimpleCursorAdapter} triggers a refresh of the
-    {@link android.widget.ListView} with the new data:
-</p>
-<pre>
-public void onLoadFinished(Loader&lt;Cursor&gt; loader, Cursor cursor)
-{
-    /*
-     * Move the results into the adapter. This
-     * triggers the ListView to re-display.
-     */
-    mAdapter.swapCursor(cursor);
-}
-</pre>
-<h2 id="HandleReset">Handle a Loader Reset</h2>
-<p>
-    The loader framework resets the {@link android.support.v4.content.CursorLoader} whenever the
-    {@link android.database.Cursor} becomes invalid. This usually occurs because the data associated
-    with the {@link android.database.Cursor} has changed. Before re-running the query,
-    the framework calls your implementation of
-    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoaderReset onLoaderReset()}. In
-    this callback, make sure to prevent memory leaks by deleting all references to the current
-    {@link android.database.Cursor}. Once you return from
-    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoaderReset onLoaderReset()},
-    the loader framework re-runs the query.
+    method. As soon as you move the {@link android.database.Cursor} into the adapter, the
+    system automatically updates the view. This also happens if you change the contents of the
+    {@link android.database.Cursor}.
 </p>
 <p>
     For example:
 </p>
 <pre>
-public void onLoaderReset(Loader&lt;Cursor&gt; loader)
-{
-    // Remove the reference to the current Cursor
-    mAdapter.swapCursor(null);
+public String[] mFromColumns = {
+    DataProviderContract.IMAGE_PICTURENAME_COLUMN
+};
+public int[] mToFields = {
+    R.id.PictureName
+};
+// Gets a handle to a List View
+ListView mListView = (ListView) findViewById(R.id.dataList);
+/*
+ * Defines a SimpleCursorAdapter for the ListView
+ *
+ */
+SimpleCursorAdapter mAdapter =
+    new SimpleCursorAdapter(
+            this,                // Current context
+            R.layout.list_item,  // Layout for a single row
+            null,                // No Cursor yet
+            mFromColumns,        // Cursor columns to use
+            mToFields,           // Layout fields to use
+            0                    // No flags
+    );
+// Sets the adapter for the view
+mListView.setAdapter(mAdapter);
+...
+/*
+ * Defines the callback that {@link android.support.v4.content.CursorLoader} calls
+ * when it's finished its query
+ */
+&#64;Override
+public void onLoadFinished(Loader&lt;Cursor&gt; loader, Cursor cursor) {
+    ...
+    /*
+     * Moves the query results into the adapter, causing the
+     * ListView fronting this adapter to re-display
+     */
+    mAdapter.changeCursor(cursor);
+}
+</pre>
+<h2 id="HandleReset">Delete Old Cursor References</h2>
+<p>
+    The {@link android.support.v4.content.CursorLoader} is reset whenever its
+    {@link android.database.Cursor} becomes invalid. This usually occurs because the data associated
+    with the {@link android.database.Cursor} has changed. Before re-running the query,
+    the framework calls your implementation of
+    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoaderReset onLoaderReset()}. In
+    this callback, you should delete all references to the current {@link android.database.Cursor}
+    in order to prevent memory leaks. Once
+    {@link android.support.v4.app.LoaderManager.LoaderCallbacks#onLoaderReset onLoaderReset()}
+    finishes, {@link android.support.v4.content.CursorLoader} re-runs its query.
+</p>
+<p>
+    For example:
+</p>
+<pre>
+/*
+ * Invoked when the CursorLoader is being reset. For example, this is
+ * called if the data in the provider changes and the Cursor becomes stale.
+ */
+&#64;Override
+public void onLoaderReset(Loader&lt;Cursor&gt; loader) {
+    
+    /*
+     * Clears out the adapter's reference to the Cursor.
+     * This prevents memory leaks.
+     */
+    mAdapter.changeCursor(null);
 }
 </pre>

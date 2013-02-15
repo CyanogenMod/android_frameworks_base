@@ -32,12 +32,16 @@ interface IAppWidgetService {
     //
     int[] startListening(IAppWidgetHost host, String packageName, int hostId,
             out List<RemoteViews> updatedViews);
+    int[] startListeningAsUser(IAppWidgetHost host, String packageName, int hostId,
+            out List<RemoteViews> updatedViews, int userId);
     void stopListening(int hostId);
+    void stopListeningAsUser(int hostId, int userId);
     int allocateAppWidgetId(String packageName, int hostId);
     void deleteAppWidgetId(int appWidgetId);
     void deleteHost(int hostId);
     void deleteAllHosts();
     RemoteViews getAppWidgetViews(int appWidgetId);
+    int[] getAppWidgetIdsForHost(int hostId);
 
     //
     // for AppWidgetManager
@@ -48,15 +52,15 @@ interface IAppWidgetService {
     void partiallyUpdateAppWidgetIds(in int[] appWidgetIds, in RemoteViews views);
     void updateAppWidgetProvider(in ComponentName provider, in RemoteViews views);
     void notifyAppWidgetViewDataChanged(in int[] appWidgetIds, int viewId);
-    List<AppWidgetProviderInfo> getInstalledProviders();
+    List<AppWidgetProviderInfo> getInstalledProviders(int categoryFilter);
     AppWidgetProviderInfo getAppWidgetInfo(int appWidgetId);
     boolean hasBindAppWidgetPermission(in String packageName);
     void setBindAppWidgetPermission(in String packageName, in boolean permission);
     void bindAppWidgetId(int appWidgetId, in ComponentName provider, in Bundle options);
     boolean bindAppWidgetIdIfAllowed(
             in String packageName, int appWidgetId, in ComponentName provider, in Bundle options);
-    void bindRemoteViewsService(int appWidgetId, in Intent intent, in IBinder connection);
-    void unbindRemoteViewsService(int appWidgetId, in Intent intent);
+    void bindRemoteViewsService(int appWidgetId, in Intent intent, in IBinder connection, int userId);
+    void unbindRemoteViewsService(int appWidgetId, in Intent intent, int userId);
     int[] getAppWidgetIds(in ComponentName provider);
 
 }

@@ -52,7 +52,7 @@ public class UserTile extends QuickSettingsTile {
                 if (um.getUsers(true).size() > 1) {
                     try {
                         WindowManagerGlobal.getWindowManagerService().lockNow(
-                                LockPatternUtils.USER_SWITCH_LOCK_OPTIONS);
+                                null);
                     } catch (RemoteException e) {
                         Log.e(TAG, "Couldn't show user switcher", e);
                     }

@@ -114,7 +114,7 @@
     <string name="roamingText0" msgid="7170335472198694945">"Indikátor roamingu svítí"</string>
     <string name="roamingText1" msgid="5314861519752538922">"Indikátor roamingu nesvítí"</string>
     <string name="roamingText2" msgid="8969929049081268115">"Indikátor roamingu bliká"</string>
-    <string name="roamingText3" msgid="5148255027043943317">"Není v blízkosti"</string>
+    <string name="roamingText3" msgid="5148255027043943317">"Není v okolí"</string>
     <string name="roamingText4" msgid="8808456682550796530">"Mimo budovu"</string>
     <string name="roamingText5" msgid="7604063252850354350">"Roaming – preferovaný systém"</string>
     <string name="roamingText6" msgid="2059440825782871513">"Roaming – dostupný systém"</string>
@@ -416,7 +416,7 @@
     <string name="permlab_deletePackages" msgid="184385129537705938">"smazání aplikací"</string>
     <string name="permdesc_deletePackages" msgid="7411480275167205081">"Umožňuje smazat balíčky aplikací. Škodlivé aplikace mohou toto oprávnění použít ke smazání důležitých aplikací."</string>
     <string name="permlab_clearAppUserData" msgid="274109191845842756">"smazání dat ostatních aplikací"</string>
-    <string name="permdesc_clearAppUserData" msgid="4625323684125459488">"Umožňuje smazat data uživatele."</string>
+    <string name="permdesc_clearAppUserData" msgid="4625323684125459488">"Umožňuje aplikaci vymazat data uživatele."</string>
     <string name="permlab_deleteCacheFiles" msgid="3128665571837408675">"smazání mezipaměti ostatních aplikací"</string>
     <string name="permdesc_deleteCacheFiles" msgid="3812998599006730196">"Umožňuje smazat soubory v mezipaměti."</string>
     <string name="permlab_getPackageSize" msgid="7472921768357981986">"výpočet místa pro ukládání aplikací"</string>
@@ -503,7 +503,7 @@
     <string name="permlab_modifyAudioSettings" msgid="6095859937069146086">"změna nastavení zvuku"</string>
     <string name="permdesc_modifyAudioSettings" msgid="3522565366806248517">"Umožňuje změnit globální nastavení zvuku, například hlasitost či reproduktor pro výstup zvuku."</string>
     <string name="permlab_recordAudio" msgid="3876049771427466323">"nahrávání zvuku"</string>
-    <string name="permdesc_recordAudio" msgid="4906839301087980680">"Umožňuje zaznamenat zvuk pomocí mikrofonu. Toto oprávnění umožňuje aplikaci kdykoliv zaznamenat zvuk bez vašeho svolení."</string>
+    <string name="permdesc_recordAudio" msgid="4906839301087980680">"Umožňuje aplikaci zaznamenat zvuk pomocí mikrofonu. Toto oprávnění umožňuje aplikaci kdykoliv zaznamenat zvuk bez vašeho svolení."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"pořizování fotografií a videí"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"Umožňuje pořizovat fotografie a videa pomocí fotoaparátu. Toto oprávnění umožňuje aplikaci používat fotoaparát kdykoliv i bez vašeho svolení."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"trvalé vypnutí tabletu"</string>
@@ -643,8 +643,8 @@
     <string name="permlab_sdcardRead" product="default" msgid="8235341515605559677">"testování přístupu do chráněného úložiště"</string>
     <string name="permdesc_sdcardRead" product="nosdcard" msgid="3642473292348132072">"Umožňuje testovat oprávnění pro úložiště USB, které bude dostupné v budoucích zařízeních."</string>
     <string name="permdesc_sdcardRead" product="default" msgid="5914402684685848828">"Umožňuje testovat oprávnění pro kartu SD, která bude dostupná v budoucích zařízeních."</string>
-    <string name="permlab_sdcardWrite" product="nosdcard" msgid="8485979062254666748">"úprava nebo smazání obsahu v úložišti USB"</string>
-    <string name="permlab_sdcardWrite" product="default" msgid="8805693630050458763">"úprava nebo smazání obsahu na kartě SD"</string>
+    <string name="permlab_sdcardWrite" product="nosdcard" msgid="8485979062254666748">"úprava nebo mazání obsahu v úložišti USB"</string>
+    <string name="permlab_sdcardWrite" product="default" msgid="8805693630050458763">"úprava nebo mazání obsahu na kartě SD"</string>
     <string name="permdesc_sdcardWrite" product="nosdcard" msgid="6175406299445710888">"Umožňuje zapisovat do úložiště USB."</string>
     <string name="permdesc_sdcardWrite" product="default" msgid="4337417790936632090">"Umožňuje zapisovat na kartu SD."</string>
     <string name="permlab_mediaStorageWrite" product="default" msgid="6859839199706879015">"upravit/smazat interní úložiště"</string>
@@ -1082,7 +1082,18 @@
     <string name="weeks" msgid="6509623834583944518">"týd."</string>
     <string name="year" msgid="4001118221013892076">"rokem"</string>
     <string name="years" msgid="6881577717993213522">"lety"</string>
-
+  <plurals name="duration_seconds">
+    <item quantity="one" msgid="6962015528372969481">"1 sekunda"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> s"</item>
+  </plurals>
+  <plurals name="duration_minutes">
+    <item quantity="one" msgid="4915414002546085617">"1 minuta"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> min"</item>
+  </plurals>
+  <plurals name="duration_hours">
+    <item quantity="one" msgid="8917467491248809972">"1 hodina"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> h"</item>
+  </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Potíže s videem"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"Toto video nelze přenášet datovým proudem do tohoto zařízení."</string>
     <string name="VideoView_error_text_unknown" msgid="3450439155187810085">"Toto video nelze přehrát."</string>
@@ -1129,7 +1140,7 @@
     <string name="whichApplication" msgid="4533185947064773386">"Dokončit akci pomocí aplikace"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Použít jako výchozí nastavení pro tuto činnost."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Výchozí nastavení vymažete v \u201eNastavení systému\u201c \u2192 \u201eAplikace\u201c \u2192 \u201eStažené\u201c."</string>
-    <string name="chooseActivity" msgid="7486876147751803333">"Vyberte činnost"</string>
+    <string name="chooseActivity" msgid="7486876147751803333">"Vyberte akci"</string>
     <string name="chooseUsbActivity" msgid="6894748416073583509">"Vyberte aplikaci pro zařízení USB"</string>
     <string name="noApplications" msgid="2991814273936504689">"Tuto činnost nemohou provádět žádné aplikace."</string>
     <string name="aerr_title" msgid="1905800560317137752"></string>
@@ -1169,9 +1180,7 @@
     <string name="old_app_description" msgid="2082094275580358049">"Nespouštět novou aplikaci."</string>
     <string name="new_app_action" msgid="5472756926945440706">"Spustit aplikaci <xliff:g id="OLD_APP">%1$s</xliff:g>"</string>
     <string name="new_app_description" msgid="1932143598371537340">"Zastavit starou aplikaci bez uložení."</string>
-
-    <string name="sendText" msgid="5209874571959469142">"Vyberte činnost s textem"</string>
-
+    <string name="sendText" msgid="5209874571959469142">"Vyberte akci pro text"</string>
     <string name="volume_ringtone" msgid="6885421406845734650">"Hlasitost vyzvánění"</string>
     <string name="volume_music" msgid="5421651157138628171">"Hlasitost médií"</string>
     <string name="volume_music_hint_playing_through_bluetooth" msgid="9165984379394601533">"Přehrávání pomocí rozhraní Bluetooth"</string>
@@ -1186,10 +1195,9 @@
     <string name="volume_icon_description_incall" msgid="8890073218154543397">"Hlasitost hovoru"</string>
     <string name="volume_icon_description_media" msgid="4217311719665194215">"Hlasitost médií"</string>
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Hlasitost oznámení"</string>
-
-    <string name="ringtone_default" msgid="3789758980357696936">"Výchozí vyzvánění"</string>
-    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Výchozí vyzvánění (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <string name="ringtone_silent" msgid="4440324407807468713">"Ticho"</string>
+    <string name="ringtone_default" msgid="3789758980357696936">"Výchozí vyzváněcí tón"</string>
+    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Výchozí vyzváněcí tón (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
+    <string name="ringtone_silent" msgid="7937634392408977062">"Žádné"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Vyzváněcí tóny"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Neznámý vyzváněcí tón"</string>
 

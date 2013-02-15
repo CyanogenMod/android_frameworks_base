@@ -26,6 +26,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
@@ -134,14 +135,27 @@ public class KeyguardViewManager {
         }
 
         @Override
+        protected boolean fitSystemWindows(Rect insets) {
+            Log.v("TAG", "bug 7643792: fitSystemWindows(" + insets.toShortString() + ")");
+            return super.fitSystemWindows(insets);
+        }
+
+        @Override
         protected void onConfigurationChanged(Configuration newConfig) {
             super.onConfigurationChanged(newConfig);
-            if (mKeyguardHost.getVisibility() == View.VISIBLE) {
-                // only propagate configuration messages if we're currently showing
-                maybeCreateKeyguardLocked(shouldEnableScreenRotation(), true, null);
-            } else {
-                if (DEBUG) Log.v(TAG, "onConfigurationChanged: view not visible");
-            }
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (KeyguardViewManager.this) {
+                        if (mKeyguardHost.getVisibility() == View.VISIBLE) {
+                            // only propagate configuration messages if we're currently showing
+                            maybeCreateKeyguardLocked(shouldEnableScreenRotation(), true, null);
+                        } else {
+                            if (DEBUG) Log.v(TAG, "onConfigurationChanged: view not visible");
+                        }
+                    }
+                }
+            });
         }
 
         @Override
@@ -342,6 +356,7 @@ public class KeyguardViewManager {
 
         if (force || mKeyguardView == null) {
             inflateKeyguardView(options);
+            mKeyguardView.requestFocus();
         }
         updateUserActivityTimeoutInWindowLayoutParams();
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
@@ -376,12 +391,6 @@ public class KeyguardViewManager {
         }
 
         if (options != null) {
-            if (options.getBoolean(LockPatternUtils.KEYGUARD_SHOW_USER_SWITCHER)) {
-                mKeyguardView.goToUserSwitcher();
-            }
-            if (options.getBoolean(LockPatternUtils.KEYGUARD_SHOW_SECURITY_CHALLENGE)) {
-                mKeyguardView.showNextSecurityScreenIfPresent();
-            }
             int widgetToShow = options.getInt(LockPatternUtils.KEYGUARD_SHOW_APPWIDGET,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             if (widgetToShow != AppWidgetManager.INVALID_APPWIDGET_ID) {

@@ -763,7 +763,7 @@
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Έγινε υπέρβαση του μέγιστου αριθμού προσπαθειών Face Unlock"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Φόρτιση, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_discharging">Αποφόρτιση, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-    <string name="lockscreen_charged" msgid="321635745684060624">"Φορτίστηκε"</string>
+    <string name="lockscreen_charged" msgid="321635745684060624">"Μπαταρία πλήρης"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Συνδέστε τον φορτιστή, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Δεν υπάρχει κάρτα SIM"</string>
@@ -994,6 +994,18 @@
     <string name="weeks" msgid="6509623834583944518">"εβδομάδες"</string>
     <string name="year" msgid="4001118221013892076">"έτος"</string>
     <string name="years" msgid="6881577717993213522">"έτη"</string>
+  <plurals name="duration_seconds">
+    <item quantity="one" msgid="6962015528372969481">"1 δευτερόλεπτο"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> δευτερόλεπτα"</item>
+  </plurals>
+  <plurals name="duration_minutes">
+    <item quantity="one" msgid="4915414002546085617">"1 λεπτό"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> λεπτά"</item>
+  </plurals>
+  <plurals name="duration_hours">
+    <item quantity="one" msgid="8917467491248809972">"1 ώρα"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> ώρες"</item>
+  </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Πρόβλημα με το βίντεο"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"Αυτό το βίντεο δεν είναι έγκυρο για ροή σε αυτή τη συσκευή."</string>
     <string name="VideoView_error_text_unknown" msgid="3450439155187810085">"Δεν μπορείτε να αναπαράγετε αυτό το βίντεο."</string>
@@ -1083,7 +1095,7 @@
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Ένταση ήχου ειδοποιήσεων"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"Προεπιλεγμένος ήχος κλήσης"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Προεπιλεγμένος ήχος κλήσης (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <string name="ringtone_silent" msgid="4440324407807468713">"Σίγαση"</string>
+    <string name="ringtone_silent" msgid="7937634392408977062">"Κανένας"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Ήχοι κλήσης"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Άγνωστος ήχος κλήσης"</string>
   <plurals name="wifi_available">

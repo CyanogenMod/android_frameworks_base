@@ -23,7 +23,6 @@ import com.android.internal.R;
 import com.android.internal.app.ThemeUtils;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.ProcessStats;
-import com.android.internal.widget.LockPatternUtils;
 import com.android.server.AttributeCache;
 import com.android.server.IntentResolver;
 import com.android.server.ProcessMap;
@@ -3884,7 +3883,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
 
         boolean didSomething = killPackageProcessesLocked(name, appId, userId,
-                -100, callerWillRestart, false, doit, evenPersistent,
+                -100, callerWillRestart, true, doit, evenPersistent,
                 name == null ? ("force stop user " + userId) : ("force stop " + name));
         
         TaskRecord lastTask = null;
@@ -4783,6 +4782,18 @@ public final class ActivityManagerService extends ActivityManagerNative
         } catch (ClassCastException e) {
         }
         return false;
+    }
+
+    public Intent getIntentForIntentSender(IIntentSender pendingResult) {
+        if (!(pendingResult instanceof PendingIntentRecord)) {
+            return null;
+        }
+        try {
+            PendingIntentRecord res = (PendingIntentRecord)pendingResult;
+            return res.key.requestIntent != null ? new Intent(res.key.requestIntent) : null;
+        } catch (ClassCastException e) {
+        }
+        return null;
     }
 
     public void setProcessLimit(int max) {
@@ -7944,7 +7955,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                             }
                         }, 0, null, null,
                         android.Manifest.permission.INTERACT_ACROSS_USERS,
-                        false, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
+                        true, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
             } finally {
                 Binder.restoreCallingIdentity(ident);
             }
@@ -12342,7 +12353,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
                 newConfig.seq = mConfigurationSeq;
                 mConfiguration = newConfig;
-                Slog.i(TAG, "Config changed: " + newConfig);
+                Slog.i(TAG, "Config changes=" + Integer.toHexString(changes) + " " + newConfig);
 
                 final Configuration configCopy = new Configuration(mConfiguration);
                 
@@ -14153,7 +14164,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     // Multi-user methods
 
     @Override
-    public boolean switchUser(int userId) {
+    public boolean switchUser(final int userId) {
         if (checkCallingPermission(android.Manifest.permission.INTERACT_ACROSS_USERS_FULL)
                 != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: switchUser() from pid="
@@ -14201,7 +14212,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                 // Once the internal notion of the active user has switched, we lock the device
                 // with the option to show the user switcher on the keyguard.
-                mWindowManager.lockNow(LockPatternUtils.USER_SWITCH_LOCK_OPTIONS);
+                mWindowManager.lockNow(null);
 
                 final UserStartedState uss = mStartedUsers.get(userId);
 
@@ -14247,7 +14258,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                                     public void performReceive(Intent intent, int resultCode,
                                             String data, Bundle extras, boolean ordered,
                                             boolean sticky, int sendingUser) {
-                                        userInitialized(uss);
+                                        userInitialized(uss, userId);
                                     }
                                 }, 0, null, null, null, true, false, MY_PID, Process.SYSTEM_UID,
                                 userId);
@@ -14262,6 +14273,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     startHomeActivityLocked(userId);
                 }
 
+                EventLogTags.writeAmSwitchUser(userId);
                 getUserManagerLocked().userForeground(userId);
                 sendUserSwitchBroadcastsLocked(oldUserId, userId);
                 if (needStart) {
@@ -14277,7 +14289,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                                 }
                             }, 0, null, null,
                             android.Manifest.permission.INTERACT_ACROSS_USERS,
-                            false, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
+                            true, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
                 }
             }
         } finally {
@@ -14373,32 +14385,39 @@ public final class ActivityManagerService extends ActivityManagerNative
                 oldUserId, newUserId, uss));
     }
 
-    void userInitialized(UserStartedState uss) {
-        synchronized (ActivityManagerService.this) {
-            getUserManagerLocked().makeInitialized(uss.mHandle.getIdentifier());
-            uss.initializing = false;
-            completeSwitchAndInitalizeLocked(uss);
-        }
+    void userInitialized(UserStartedState uss, int newUserId) {
+        completeSwitchAndInitalize(uss, newUserId, true, false);
     }
 
     void continueUserSwitch(UserStartedState uss, int oldUserId, int newUserId) {
-        final int N = mUserSwitchObservers.beginBroadcast();
-        for (int i=0; i<N; i++) {
-            try {
-                mUserSwitchObservers.getBroadcastItem(i).onUserSwitchComplete(newUserId);
-            } catch (RemoteException e) {
-            }
-        }
-        mUserSwitchObservers.finishBroadcast();
-        synchronized (this) {
-            uss.switching = false;
-            completeSwitchAndInitalizeLocked(uss);
-        }
+        completeSwitchAndInitalize(uss, newUserId, false, true);
     }
 
-    void completeSwitchAndInitalizeLocked(UserStartedState uss) {
-        if (!uss.switching && !uss.initializing) {
-            mWindowManager.stopFreezingScreen();
+    void completeSwitchAndInitalize(UserStartedState uss, int newUserId,
+            boolean clearInitializing, boolean clearSwitching) {
+        boolean unfrozen = false;
+        synchronized (this) {
+            if (clearInitializing) {
+                uss.initializing = false;
+                getUserManagerLocked().makeInitialized(uss.mHandle.getIdentifier());
+            }
+            if (clearSwitching) {
+                uss.switching = false;
+            }
+            if (!uss.switching && !uss.initializing) {
+                mWindowManager.stopFreezingScreen();
+                unfrozen = true;
+            }
+        }
+        if (unfrozen) {
+            final int N = mUserSwitchObservers.beginBroadcast();
+            for (int i=0; i<N; i++) {
+                try {
+                    mUserSwitchObservers.getBroadcastItem(i).onUserSwitchComplete(newUserId);
+                } catch (RemoteException e) {
+                }
+            }
+            mUserSwitchObservers.finishBroadcast();
         }
     }
 
@@ -14500,7 +14519,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             long ident = Binder.clearCallingIdentity();
             try {
                 // We are going to broadcast ACTION_USER_STOPPING and then
-                // once that is down send a final ACTION_SHUTDOWN and then
+                // once that is done send a final ACTION_SHUTDOWN and then
                 // stop the user.
                 final Intent stoppingIntent = new Intent(Intent.ACTION_USER_STOPPING);
                 stoppingIntent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
@@ -14565,6 +14584,10 @@ public final class ActivityManagerService extends ActivityManagerNative
                 // Clean up all state and processes associated with the user.
                 // Kill all the processes for the user.
                 forceStopUserLocked(userId);
+                AttributeCache ac = AttributeCache.instance();
+                if (ac != null) {
+                    ac.removeUser(userId);
+                }
             }
         }
 

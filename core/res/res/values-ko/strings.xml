@@ -570,9 +570,9 @@
     <string name="permlab_disableKeyguard" msgid="3598496301486439258">"화면 잠금 사용 중지"</string>
     <string name="permdesc_disableKeyguard" msgid="6034203065077122992">"앱이 키 잠금 및 관련 비밀번호 보안을 사용중지할 수 있도록 허용합니다. 예를 들어, 휴대전화가 수신전화를 받을 때 키 잠금을 사용중지했다가 통화가 끝나면 키 잠금을 다시 사용할 수 있습니다."</string>
     <string name="permlab_readSyncSettings" msgid="6201810008230503052">"동기화 설정 읽기"</string>
-    <string name="permdesc_readSyncSettings" msgid="2706745674569678644">"앱이 계정의 동기화 설정을 읽을 수 있도록 허용합니다. 예를 들어, 계정에서 피플 앱을 동기화할지 여부를 확인할 수 있습니다."</string>
+    <string name="permdesc_readSyncSettings" msgid="2706745674569678644">"앱이 계정의 동기화 설정을 읽을 수 있도록 허용합니다. 예를 들어, 계정에서 주소록 앱을 동기화할지 여부를 확인할 수 있습니다."</string>
     <string name="permlab_writeSyncSettings" msgid="5408694875793945314">"동기화 사용 및 사용 중지 전환"</string>
-    <string name="permdesc_writeSyncSettings" msgid="8956262591306369868">"앱이 계정의 동기화 설정을 수정할 수 있도록 허용합니다. 예를 들어, 계정에서 피플 앱을 동기화할 목적으로 앱이 사용될 수 있습니다."</string>
+    <string name="permdesc_writeSyncSettings" msgid="8956262591306369868">"앱이 계정의 동기화 설정을 수정할 수 있도록 허용합니다. 예를 들어, 계정에서 주소록 앱을 동기화할 목적으로 앱이 사용될 수 있습니다."</string>
     <string name="permlab_readSyncStats" msgid="7396577451360202448">"동기화 통계 읽기"</string>
     <string name="permdesc_readSyncStats" msgid="1510143761757606156">"앱이 동기화된 일정의 기록이나 동기화된 데이터의 양 등을 포함하여 계정의 동기화 통계를 읽을 수 있도록 허용합니다."</string>
     <string name="permlab_subscribedFeedsRead" msgid="4756609637053353318">"가입된 피드 읽기"</string>
@@ -993,6 +993,18 @@
     <string name="weeks" msgid="6509623834583944518">"주"</string>
     <string name="year" msgid="4001118221013892076">"년"</string>
     <string name="years" msgid="6881577717993213522">"년"</string>
+  <plurals name="duration_seconds">
+    <item quantity="one" msgid="6962015528372969481">"1초"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g>초"</item>
+  </plurals>
+  <plurals name="duration_minutes">
+    <item quantity="one" msgid="4915414002546085617">"1분"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g>분"</item>
+  </plurals>
+  <plurals name="duration_hours">
+    <item quantity="one" msgid="8917467491248809972">"1시간"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g>시간"</item>
+  </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"영상 문제"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"이 기기로 스트리밍하기에 적합하지 않은 동영상입니다."</string>
     <string name="VideoView_error_text_unknown" msgid="3450439155187810085">"동영상을 재생할 수 없습니다."</string>
@@ -1082,7 +1094,7 @@
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"알림 볼륨"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"기본 벨소리"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"기본 벨소리(<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <string name="ringtone_silent" msgid="4440324407807468713">"무음"</string>
+    <string name="ringtone_silent" msgid="7937634392408977062">"없음"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"벨소리"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"알 수 없는 벨소리"</string>
   <plurals name="wifi_available">

@@ -77,9 +77,10 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
     private boolean mShowing;
     private boolean mWaitingToShow;
-    private int mNumItemsWaitingForThumbnailsAndIcons;
     private ViewHolder mItemToAnimateInWhenWindowAnimationIsFinished;
+    private boolean mAnimateIconOfFirstTask;
     private boolean mWaitingForWindowAnimation;
+    private long mWindowAnimationStartTime;
 
     private RecentTasksLoader mRecentTasksLoader;
     private ArrayList<TaskDescription> mRecentTaskDescriptions;
@@ -175,10 +176,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             if (td.isLoaded()) {
                 updateThumbnail(holder, td.getThumbnail(), true, false);
                 updateIcon(holder, td.getIcon(), true, false);
-                mNumItemsWaitingForThumbnailsAndIcons--;
             }
             if (index == 0) {
-                if (mWaitingForWindowAnimation) {
+                if (mAnimateIconOfFirstTask) {
                     if (mItemToAnimateInWhenWindowAnimationIsFinished != null) {
                         holder.iconView.setAlpha(1f);
                         holder.iconView.setTranslationX(0f);
@@ -207,6 +207,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                         holder.iconView.setAlpha(0f);
                         holder.iconView.setTranslationY(translation);
                     }
+                    if (!mWaitingForWindowAnimation) {
+                        animateInIconOfFirstTask();
+                    }
                 }
             }
 
@@ -221,7 +224,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             updateThumbnail(holder, mRecentTasksLoader.getDefaultThumbnail(), false, false);
             holder.iconView.setImageBitmap(mRecentTasksLoader.getDefaultIcon());
             holder.iconView.setVisibility(INVISIBLE);
+            holder.iconView.animate().cancel();
             holder.labelView.setText(null);
+            holder.labelView.animate().cancel();
             holder.thumbnailView.setContentDescription(null);
             holder.thumbnailView.setTag(null);
             holder.thumbnailView.setOnLongClickListener(null);
@@ -236,6 +241,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 holder.calloutLine.setAlpha(1f);
                 holder.calloutLine.setTranslationX(0f);
                 holder.calloutLine.setTranslationY(0f);
+                holder.calloutLine.animate().cancel();
             }
             holder.taskDescription = null;
             holder.loadedThumbnailAndIcon = false;
@@ -292,8 +298,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     }
 
     public void show(boolean show, ArrayList<TaskDescription> recentTaskDescriptions,
-            boolean firstScreenful, boolean waitingForWindowAnimation) {
-        mWaitingForWindowAnimation = waitingForWindowAnimation;
+            boolean firstScreenful, boolean animateIconOfFirstTask) {
+        mAnimateIconOfFirstTask = animateIconOfFirstTask;
+        mWaitingForWindowAnimation = animateIconOfFirstTask;
         if (show) {
             mWaitingToShow = true;
             refreshRecentTasksList(recentTaskDescriptions, firstScreenful);
@@ -538,7 +545,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                             updateIcon(h, td.getIcon(), true, animateShow);
                             updateThumbnail(h, td.getThumbnail(), true, animateShow);
                             h.loadedThumbnailAndIcon = true;
-                            mNumItemsWaitingForThumbnailsAndIcons--;
                         }
                     }
                 }
@@ -547,9 +553,14 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         showIfReady();
     }
 
-    public void onWindowAnimationStart() {
-        if (mItemToAnimateInWhenWindowAnimationIsFinished != null) {
-            final int startDelay = 150;
+    private void animateInIconOfFirstTask() {
+        if (mItemToAnimateInWhenWindowAnimationIsFinished != null &&
+                !mRecentTasksLoader.isFirstScreenful()) {
+            int timeSinceWindowAnimation =
+                    (int) (System.currentTimeMillis() - mWindowAnimationStartTime);
+            final int minStartDelay = 150;
+            final int startDelay = Math.max(0, Math.min(
+                    minStartDelay - timeSinceWindowAnimation, minStartDelay));
             final int duration = 250;
             final ViewHolder holder = mItemToAnimateInWhenWindowAnimationIsFinished;
             final TimeInterpolator cubic = new DecelerateInterpolator(1.5f);
@@ -561,8 +572,14 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 }
             }
             mItemToAnimateInWhenWindowAnimationIsFinished = null;
-            mWaitingForWindowAnimation = false;
+            mAnimateIconOfFirstTask = false;
         }
+    }
+
+    public void onWindowAnimationStart() {
+        mWaitingForWindowAnimation = false;
+        mWindowAnimationStartTime = System.currentTimeMillis();
+        animateInIconOfFirstTask();
     }
 
     public void clearRecentTasksList() {
@@ -601,9 +618,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     }
 
     public void onTasksLoaded(ArrayList<TaskDescription> tasks, boolean firstScreenful) {
-        mNumItemsWaitingForThumbnailsAndIcons = firstScreenful
-                ? tasks.size() : mRecentTaskDescriptions == null
-                        ? 0 : mRecentTaskDescriptions.size();
         if (mRecentTaskDescriptions == null) {
             mRecentTaskDescriptions = new ArrayList<TaskDescription>(tasks);
         } else {
@@ -700,6 +714,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         }
         if (DEBUG) Log.v(TAG, "Jettison " + ad.getLabel());
         mRecentTaskDescriptions.remove(ad);
+        mRecentTasksLoader.remove(ad);
 
         // Handled by widget containers to enable LayoutTransitions properly
         // mListAdapter.notifyDataSetChanged();

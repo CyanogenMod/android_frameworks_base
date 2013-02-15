@@ -14,6 +14,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.os.Debug;
+import android.os.UserHandle;
 import android.util.Slog;
 import android.view.DisplayInfo;
 import android.view.Surface;
@@ -803,7 +804,7 @@ class WindowStateAnimator {
 
             mSurfaceShown = false;
             mSurface = null;
-            mWin.mHasSurface =false;
+            mWin.mHasSurface = false;
             mDrawState = NO_SURFACE;
         }
     }
@@ -876,7 +877,7 @@ class WindowStateAnimator {
             final Matrix tmpMatrix = mWin.mTmpMatrix;
 
             // Compute the desired transformation.
-            if (screenAnimation) {
+            if (screenAnimation && screenRotationAnimation.isRotating()) {
                 // If we are doing a screen animation, the global rotation
                 // applied to windows can result in windows that are carefully
                 // aligned with each other to slightly separate, allowing you
@@ -1533,7 +1534,8 @@ class WindowStateAnimator {
                         break;
                 }
                 if (attr >= 0) {
-                    a = mService.loadAnimation(mWin.mAttrs, attr);
+                    a = mService.loadAnimation(UserHandle.getUserId(mWin.mOwnerUid),
+                            mWin.mAttrs, attr);
                 }
             }
             if (WindowManagerService.DEBUG_ANIM) Slog.v(TAG,

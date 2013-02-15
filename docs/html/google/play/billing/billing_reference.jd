@@ -1,0 +1,219 @@
+page.title=In-app Billing Reference <span style="font-size:16px;">(IAB Version 3)</span>
+parent.title=In-app Billing
+parent.link=index.html
+@jd:body
+
+<div id="qv-wrapper">
+<div id="qv">
+  <h2>In this document</h2>
+  <ol>
+    <li><a href="#billing-codes">Server Response Codes</a></li>
+    <li><a href="#billing-interface">API Reference</a>
+    <ol>
+      <li><a href="#getSkuDetails">getSkuDetails()</a></li>
+      <li><a href="#getBuyIntent">getBuyIntent()</a></li>
+      <li><a href="#getPurchases">getPurchases()</a></li>
+    </ol>
+    </li>
+  </ol>
+  <h2>Downloads</h2>
+  <ol>
+    <li><a href="{@docRoot}google/play/billing/billing_integrate.html#billing-download">Sample
+    Application (V3)</a></li>
+  </ol>
+  <h2>See also</h2>
+  <ol>
+    <li><a href="{@docRoot}google/play/billing/api.html">In-app Billing Version 3</a></li>
+    <li><a href="{@docRoot}training/in-app-billing/index.html">Selling In-app Products</a></li>
+  </ol>
+</div>
+</div>
+<p>This documentation provides technical reference information for using the In-app Billing Version 3 API. </p>
+
+<h2 id="billing-codes">Server Response Codes</h2>
+<p>The following table lists all of the server response codes that are sent from Google Play to your application. Google Play sends the response code synchronously as an integer mapped to the {@code RESPONSE_CODE} key in the response {@code Bundle}. Your application must handle all of these response codes.</p>
+
+<p class="table-caption" id="response-codes-table">
+<strong>Table 1.</strong> Summary of response codes for In-app Billing Version 3 API calls.</p>
+<table>
+  <tr>
+    <th scope="col">Response Code</th>
+    <th scope="col">Value</th>
+    <th scope="col">Description</th>
+  </tr>
+  <tr>
+    <td>{@code BILLING_RESPONSE_RESULT_OK}</td>
+    <td>0</td>
+    <td>Success</td>
+  </tr>
+  <tr>
+    <td>{@code BILLING_RESPONSE_RESULT_USER_CANCELED}</td>
+    <td>1</td>
+    <td>User pressed back or canceled a dialog</td>
+  </tr>
+  <tr>
+    <td>{@code BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE}</td>
+    <td>3</td>
+    <td>Billing API version is not supported for the type requested</td>
+  </tr>
+  <tr>
+    <td>{@code BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE}</td>
+    <td>4</td>
+    <td>Requested product is not available for purchase</td>
+  </tr>
+  <tr>
+    <td>{@code BILLING_RESPONSE_RESULT_DEVELOPER_ERROR}</td>
+    <td>5</td>
+    <td>Invalid arguments provided to the API. This error can also indicate that the application was not correctly signed or properly set up for In-app Billing in Google Play, or does not have the necessary permissions in its manifest</td>
+  </tr>
+  <tr>
+    <td>{@code BILLING_RESPONSE_RESULT_ERROR}</td>
+    <td>6</td>
+    <td>Fatal error during the API action</td>
+  </tr>
+  <tr>
+    <td>{@code BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED}</td>
+    <td>7</td>
+    <td>Failure to purchase since item is already owned</td>
+  </tr>
+  <tr>
+    <td>{@code BILLING_RESPONSE_RESULT_ITEM_NOT_OWNED}</td>
+    <td>8</td>
+    <td>Failure to consume since item is not owned</td>
+  </tr>
+</table>
+
+<h2 id="billing-interface">API Reference</h2>
+<p>The In-app Billing Version 3 API is defined in the {@code IInAppBillingService.aidl} file, which is included with the Version 3 <a href="{@docRoot}training/in-app-billing/preparing-iab-app.html#GetSample">sample application</a>.</p>
+
+<h3 id="getSkuDetails">The getSkuDetails() method</h3>
+<p>This method returns product details for a list of product IDs. In the response {@code Bundle} sent by Google Play, the query results are stored in a String {@code ArrayList} mapped to the {@code DETAILS_LIST} key. Each String in the details list contains product details for a single product in JSON format. The fields in the JSON string with the product details are summarized in table 2.</p>
+
+<p class="table-caption" id="product-details-table">
+<strong>Table 2.</strong> Description of JSON fields with product item details returned from a {@code getSkuDetails} request.</p>
+<table>
+  <tr>
+    <th scope="col">Key</th>
+    <th scope="col">Description</th>
+  </tr>
+  <tr>
+    <td>{@code productId}</td>
+    <td>The product ID for the product.</td>
+  </tr>
+  <tr>
+    <td>{@code type}</td>
+    <td>Value must be “inapp” for an in-app purchase type.</td>
+  </tr>
+  <tr>
+    <td>{@code price}</td>
+    <td>Formatted price of the item, including its currency sign. The price does not include tax.</td>
+  </tr>
+  <tr>
+    <td>{@code title}</td>
+    <td>Title of the product.</td>
+  </tr>
+  <tr>
+    <td>{@code description}</td>
+    <td>Description of the product.</td>
+  </tr>
+</table>
+</p>
+
+<h3 id="getBuyIntent">The getBuyIntent() method</h3>
+<p>This method returns a response code integer mapped to the {@code RESPONSE_CODE} key, and a {@code PendingIntent} to launch the puchase flow for the in-app item mapped to the {@code BUY_INTENT} key. When it receives the {@code PendingIntent}, Google Play sends a response {@code Intent} with the data for that purchase order.  The data that is returned in the response {@code Intent} is summarized in table 3.</p>
+
+<p class="table-caption" id="purchase-pendingintent-response-table">
+<strong>Table 3.</strong>  Response data from an In-app Billing Version 3 purchase request.</p>
+<table>
+  <tr>
+    <th scope="col">Key</th>
+    <th scope="col">Description</th>
+  </tr>
+  <tr>
+    <td>{@code RESPONSE_CODE}</td>
+    <td>0 if the purchase was success, error otherwise.</td>
+  </tr>
+  <tr>
+    <td>{@code INAPP_PURCHASE_DATA}</td>
+    <td>
+       A String in JSON format that contains details about the purchase order. See table 4 for a description of the JSON fields.
+    </td>
+  </tr>
+  <tr>
+    <td>{@code INAPP_DATA_SIGNATURE}</td>
+    <td>String containing the signature of the purchase data that was signed with the private key of the developer.</td>
+  </tr>
+</table>
+</p>
+
+<p>Table 4 describes the JSON fields that are returned in the response data for a purchase order.</p>
+<p class="table-caption" id="purchase-data-table">
+<strong>Table 4.</strong>  Descriptions of the JSON fields for {@code INAPP_PURCHASE_DATA}.</p>
+<table>
+  <tr>
+    <th scope="col">Field</th>
+    <th scope="col">Description</th>
+  </tr>
+  <tr>
+    <td>{@code orderId}</td>
+    <td>A unique order identifier for the transaction. This corresponds to the Google Wallet Order ID.</td>
+  </tr>
+  <tr>
+    <td>{@code packageName}</td>
+    <td>The application package from which the purchase originated.</td>
+  </tr>
+  <tr>
+    <td>{@code productId}</td>
+    <td>The item's product identifier. Every item has a product ID, which you must specify in the application's product list on the Google Play publisher site.</td>
+  </tr>
+  <tr>
+    <td>{@code purchaseTime}</td>
+    <td>The time the product was purchased, in milliseconds since the epoch (Jan 1, 1970).</td>
+  </tr>
+  <tr>
+    <td>{@code purchaseState}</td>
+    <td>The purchase state of the order. Possible values are 0 (purchased), 1 (canceled), or 2 (refunded).</td>
+  </tr>
+  <tr>
+    <td>{@code developerPayload}</td>
+    <td>A developer-specified string that contains supplemental information about an order. You can specify a value for this field when you make a {@code getBuyIntent} request.</td>
+  </tr>
+  <tr>
+    <td>{@code purchaseToken}</td>
+    <td>A token that uniquely identifies a purchase for a given item and user pair. </td>
+  </tr>
+</table>
+</p>
+
+<h3 id="getPurchases">The getPurchases() method</h3>
+<p>This method returns the current un-consumed products owned by the user. Table 5 lists the response data that is returned in the {@code Bundle}.</p>
+<p class="table-caption" id="getpurchases-response-table">
+<strong>Table 5.</strong> Response data from a {@code getPurchases} request.</p>
+<table>
+  <tr>
+    <th scope="col">Key</th>
+    <th scope="col">Description</th>
+  </tr>
+  <tr>
+    <td>{@code RESPONSE_CODE}</td>
+    <td>0 if the request was successful, error otherwise.</td>
+  </tr>
+  <tr>
+    <td>{@code INAPP_PURCHASE_ITEM_LIST}</td>
+    <td>{@code StringArrayList} containing the list of productIds of purchases from this app.</td>
+  </tr>
+  <tr>
+    <td>{@code INAPP_PURCHASE_DATA_LIST}</td>
+    <td>{@code StringArrayList} containing the details for purchases from this app. See table 4 for the list of detail information stored in each {@code INAPP_PURCHASE_DATA} item in the list.</td>
+  </tr>
+  <tr>
+    <td>{@code INAPP_DATA_SIGNATURE_LIST}</td>
+    <td>{@code StringArrayList} containing the signatures of purchases from this app.</td>
+  </tr>
+  <tr>
+    <td>{@code INAPP_CONTINUATION_TOKEN}</td>
+    <td>String containing a continuation token to retrieve the next set of in-app products owned by the user. This is only set by the Google Play service if the number of products owned by the user is very large. When a continuation token is present in the response, you must make another call to {@code getPurchases} and pass in the continuation token that you received. The subsequent {@code getPurchases} call returns more purchases and possibly another continuation token.</td>
+  </tr>
+</table>
+</p>
+

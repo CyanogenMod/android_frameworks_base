@@ -60,6 +60,7 @@ public class AppWidgetHost {
         public void updateAppWidget(int appWidgetId, RemoteViews views) {
             if (isLocalBinder() && views != null) {
                 views = views.clone();
+                views.setUser(mUser);
             }
             Message msg = mHandler.obtainMessage(HANDLE_UPDATE);
             msg.arg1 = appWidgetId;
@@ -123,6 +124,8 @@ public class AppWidgetHost {
     Callbacks mCallbacks = new Callbacks();
     final HashMap<Integer,AppWidgetHostView> mViews = new HashMap<Integer, AppWidgetHostView>();
     private OnClickHandler mOnClickHandler;
+    // Optionally set by lockscreen
+    private UserHandle mUser;
 
     public AppWidgetHost(Context context, int hostId) {
         this(context, hostId, null, context.getMainLooper());
@@ -137,7 +140,13 @@ public class AppWidgetHost {
         mOnClickHandler = handler;
         mHandler = new UpdateHandler(looper);
         mDisplayMetrics = context.getResources().getDisplayMetrics();
+        mUser = Process.myUserHandle();
         bindService();
+    }
+
+    /** @hide */
+    public void setUserId(int userId) {
+        mUser = new UserHandle(userId);
     }
 
     private static void bindService() {
@@ -154,6 +163,15 @@ public class AppWidgetHost {
      * becomes visible, i.e. from onStart() in your Activity.
      */
     public void startListening() {
+        startListeningAsUser(UserHandle.myUserId());
+    }
+
+    /**
+     * Start receiving onAppWidgetChanged calls for your AppWidgets.  Call this when your activity
+     * becomes visible, i.e. from onStart() in your Activity.
+     * @hide
+     */
+    public void startListeningAsUser(int userId) {
         int[] updatedIds;
         ArrayList<RemoteViews> updatedViews = new ArrayList<RemoteViews>();
 
@@ -161,7 +179,8 @@ public class AppWidgetHost {
             if (mPackageName == null) {
                 mPackageName = mContext.getPackageName();
             }
-            updatedIds = sService.startListening(mCallbacks, mPackageName, mHostId, updatedViews);
+            updatedIds = sService.startListeningAsUser(
+                    mCallbacks, mPackageName, mHostId, updatedViews, userId);
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -169,6 +188,9 @@ public class AppWidgetHost {
 
         final int N = updatedIds.length;
         for (int i=0; i<N; i++) {
+            if (updatedViews.get(i) != null) {
+                updatedViews.get(i).setUser(new UserHandle(userId));
+            }
             updateAppWidgetView(updatedIds[i], updatedViews.get(i));
         }
     }
@@ -179,11 +201,27 @@ public class AppWidgetHost {
      */
     public void stopListening() {
         try {
-            sService.stopListening(mHostId);
+            sService.stopListeningAsUser(mHostId, UserHandle.myUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
         }
+    }
+
+    /**
+     * Stop receiving onAppWidgetChanged calls for your AppWidgets.  Call this when your activity is
+     * no longer visible, i.e. from onStop() in your Activity.
+     * @hide
+     */
+    public void stopListeningAsUser(int userId) {
+        try {
+            sService.stopListeningAsUser(mHostId, userId);
+        }
+        catch (RemoteException e) {
+            throw new RuntimeException("system server dead?", e);
+        }
+        // Also clear the views
+        clearViews();
     }
 
     /**
@@ -219,6 +257,22 @@ public class AppWidgetHost {
                     (Context) ActivityThread.currentActivityThread().getSystemContext();
             String packageName = systemContext.getPackageName();
             return sService.allocateAppWidgetId(packageName, hostId);
+        } catch (RemoteException e) {
+            throw new RuntimeException("system server dead?", e);
+        }
+    }
+
+    /**
+     * Gets a list of all the appWidgetIds that are bound to the current host
+     *
+     * @hide
+     */
+    public int[] getAppWidgetIds() {
+        try {
+            if (sService == null) {
+                bindService();
+            }
+            return sService.getAppWidgetIdsForHost(mHostId);
         } catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
         }
@@ -308,6 +362,7 @@ public class AppWidgetHost {
     public final AppWidgetHostView createView(Context context, int appWidgetId,
             AppWidgetProviderInfo appWidget) {
         AppWidgetHostView view = onCreateView(context, appWidgetId, appWidget);
+        view.setUserId(mUser.getIdentifier());
         view.setOnClickHandler(mOnClickHandler);
         view.setAppWidget(appWidgetId, appWidget);
         synchronized (mViews) {
@@ -316,6 +371,9 @@ public class AppWidgetHost {
         RemoteViews views;
         try {
             views = sService.getAppWidgetViews(appWidgetId);
+            if (views != null) {
+                views.setUser(mUser);
+            }
         } catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
         }

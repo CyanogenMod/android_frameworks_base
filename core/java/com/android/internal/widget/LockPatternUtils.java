@@ -27,7 +27,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -62,8 +61,6 @@ import java.util.TimeZone;
  * Utilities for the lock pattern and its settings.
  */
 public class LockPatternUtils {
-
-    private static final String OPTION_ENABLE_FACELOCK = "enable_facelock";
 
     private static final String TAG = "LockPatternUtils";
 
@@ -128,16 +125,6 @@ public class LockPatternUtils {
      * Tells the keyguard to show the widget with the specified id when the keyguard is created.
      */
     public static final String KEYGUARD_SHOW_APPWIDGET = "showappwidget";
-
-    /**
-     * Options used to lock the device upon user switch.
-     */
-    public static final Bundle USER_SWITCH_LOCK_OPTIONS = new Bundle();
-
-    static {
-        USER_SWITCH_LOCK_OPTIONS.putBoolean(KEYGUARD_SHOW_USER_SWITCHER, true);
-        USER_SWITCH_LOCK_OPTIONS.putBoolean(KEYGUARD_SHOW_SECURITY_CHALLENGE, true);
-    }
 
     /**
      * The bit in LOCK_BIOMETRIC_WEAK_FLAGS to be used to indicate whether liveliness should

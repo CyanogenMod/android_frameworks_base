@@ -1010,6 +1010,18 @@
     <string name="weeks" msgid="6509623834583944518">"hét"</string>
     <string name="year" msgid="4001118221013892076">"év"</string>
     <string name="years" msgid="6881577717993213522">"év"</string>
+  <plurals name="duration_seconds">
+    <item quantity="one" msgid="6962015528372969481">"1 másodperc"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> másodperc"</item>
+  </plurals>
+  <plurals name="duration_minutes">
+    <item quantity="one" msgid="4915414002546085617">"1 perc"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> perc"</item>
+  </plurals>
+  <plurals name="duration_hours">
+    <item quantity="one" msgid="8917467491248809972">"1 óra"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> óra"</item>
+  </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Videoprobléma"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"Ezt a videót nem lehet megjeleníteni ezen az eszközön."</string>
     <string name="VideoView_error_text_unknown" msgid="3450439155187810085">"Nem lehet lejátszani ezt a videót."</string>
@@ -1099,7 +1111,7 @@
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Értesítés hangereje"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"Alapértelmezett csengőhang"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Alapértelmezett csengőhang (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <string name="ringtone_silent" msgid="4440324407807468713">"Néma"</string>
+    <string name="ringtone_silent" msgid="7937634392408977062">"Egyik sem"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Csengőhangok"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Ismeretlen csengőhang"</string>
   <plurals name="wifi_available">

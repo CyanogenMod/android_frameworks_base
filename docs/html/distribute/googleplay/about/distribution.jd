@@ -8,13 +8,13 @@ page.metaDescription=Reach the users you want, whenever you want.
 <h2 id="instant">Instant publishing, instant updates</h2>
 
 <p>On Google Play, you can publish your products to customers instantly. Just
-upload and configure your product in the <span style="font-weight:500;">Google Play Android Developer Console</span>
+upload and configure your product in the <span style="font-weight:500;">Google Play Developer Console</span>
 and press the Publish button&mdash;your app appears in the store listings within
 hours, not weeks.</p>
 
 <p>Once your app is published, you can update it as often as you want. You can
 change prices, configuration, and distribution options at any time through the
-Google Play Android Developer Console, without needing to update your app
+Google Play Developer Console, without needing to update your app
 binary.</p>
 
 <p>Later, as you add features or address code issues, you can publish an updated
@@ -24,7 +24,7 @@ the rollout across your customer base, Google Play also lets users accept
 automatic updates of your app, so that your updates are delivered and installed
 as soon as you publish them.</p>
 
-<h2>Reaching the customers you want</h2>
+<h2 id="targeting">Reaching the customers you want</h2>
 
 <p>Google Play does more than connect your app with users&mdash;it helps you
 reach the broadest possible distribution across the Android ecosystem, while
@@ -37,7 +37,7 @@ reach.</p>
 
 <h3 id="geotargeting">Geographic targeting</h3>
 
-<p>You can use controls in the Google Play Android Developer Console to easily
+<p>You can use controls in the Google Play Developer Console to easily
 manage the geographic distribution of your apps, without any changes in your
 application binary. You can specify which countries and territories you want to
 distribute to, and even which carriers (for some countries). </p>
@@ -45,7 +45,12 @@ distribute to, and even which carriers (for some countries). </p>
 <p>When users visit the store, Google Play makes sure that they are in one of
 your targeted countries before downloading your app. You can change your country
 and carrier targeting at any time just by saving changes in the Google Play
-Android Developer Console</p>
+Developer Console.</p>
+
+<p>To help you market to users around the world, you
+can <a href="{@docRoot}distribute/googleplay/publish/preparing.html#localize">localize
+your store listing</a>, including app details and description,
+promotional graphics, screenshots, and more.</p>
 
 <div style="float:right;margin-left:18px;border:1px solid #DDD;margin:1.5em;">
 <img src="{@docRoot}images/gp-supported-dev-requirements.png"
@@ -62,18 +67,18 @@ others.</p>
 
 <p>When you upload your app, Google Play reads the dependencies and sets up any
 necessary distribution rules. For technical information about declaring
-dependencies, read <a href="{@docRoot}guide/google/play/filters.html">Filters on 
+dependencies, read <a href="{@docRoot}google/play/filters.html">Filters on 
 Google Play</a>. </p>
 
 <p>For pinpoint control over distribution, Google Play lets you see all of the
 devices your app is available to based on its dependencies (if any). From the
-Google Play Android Developer Console, you can list the supported devices and
+Google Play Developer Console, you can list the supported devices and
 even exclude specific devices if needed.</p>
 
 <h2 id="stats">Statistics for analyzing installs</h2>
 
 <p>Once you’ve published your app, Google Play makes it easy to see how it’s
-doing. The Google Play Android Developer Console gives you access to a variety
+doing. The Google Play Developer Console gives you access to a variety
 of anonymized metrics that show your app’s installation performance measured by
 unique users and unique devices, across a variety of different dimensions such
 as country, Android version, device, country, carrier, and app version.</p>
