@@ -37,6 +37,7 @@ public class PlatLogoActivity extends Activity {
     ImageView mContent;
     int mCount;
     final Handler mHandler = new Handler();
+    private boolean mIsCid;
 
     private View makeView() {
         DisplayMetrics metrics = new DisplayMetrics();
@@ -67,15 +68,15 @@ public class PlatLogoActivity extends Activity {
         tv.setTextSize(1.25f*size);
         tv.setTextColor(0xFFFFFFFF);
         tv.setShadowLayer(4*metrics.density, 0, 2*metrics.density, 0x66000000);
-        tv.setText("Android " + Build.VERSION.RELEASE);
+        tv.setText(mIsCid ? "CyanogenMod 10.1" : "Android " + Build.VERSION.RELEASE);
         view.addView(tv, lp);
-   
+
         tv = new TextView(this);
         if (normal != null) tv.setTypeface(normal);
         tv.setTextSize(size);
         tv.setTextColor(0xFFFFFFFF);
         tv.setShadowLayer(4*metrics.density, 0, 2*metrics.density, 0x66000000);
-        tv.setText("JELLY BEAN");
+        tv.setText(mIsCid ? "Android " + Build.VERSION.RELEASE : "JELLY BEAN");
         view.addView(tv, lp);
 
         return view;
@@ -85,6 +86,7 @@ public class PlatLogoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final boolean isCid = getIntent().hasExtra("is_cid");
+        mIsCid = isCid;
         mToast = Toast.makeText(this, "", Toast.LENGTH_LONG);
         mToast.setView(makeView());
 
@@ -92,7 +94,7 @@ public class PlatLogoActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         mContent = new ImageView(this);
-        mContent.setImageResource(isCid ? com.android.internal.R.drawable.cidlogo
+        mContent.setImageResource(mIsCid ? com.android.internal.R.drawable.cidlogo
             : com.android.internal.R.drawable.platlogo_alt);
         mContent.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         
@@ -103,7 +105,7 @@ public class PlatLogoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 mToast.show();
-                mContent.setImageResource(isCid ? com.android.internal.R.drawable.cidlogo_alt
+                mContent.setImageResource(mIsCid ? com.android.internal.R.drawable.cidlogo_alt
                     : com.android.internal.R.drawable.platlogo);
             }
         });
@@ -126,7 +128,7 @@ public class PlatLogoActivity extends Activity {
                 return true;
             }
         });
-        
+
         setContentView(mContent);
     }
 }
