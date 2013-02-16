@@ -242,7 +242,7 @@
     <dimen name="notification_subtext_size">12dp</dimen>
 
     <!-- Lockscreen target insets -->
-    <item type="dimen" name="lockscreen_target_inset">25dp</item>
+    <item type="dimen" name="lockscreen_target_inset">30dp</item>
 
     <!-- Keyguard dimensions -->
     <!-- TEMP -->
