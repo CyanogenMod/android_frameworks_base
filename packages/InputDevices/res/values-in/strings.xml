@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_label">Aparat masukan</string>
+    <string name="keyboard_layouts_label">Keyboard Android</string>
+    <string name="keyboard_layout_english_uk_label">Inggris (BR)</string>
+    <string name="keyboard_layout_english_us_label">Inggris (AS)</string>
+    <string name="keyboard_layout_english_us_colemak_label">Inggris (AS), secara Colemak</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Inggris (AS), secara Dvorak</string>
+    <string name="keyboard_layout_german_label">Jerman</string>
+    <string name="keyboard_layout_french_label">Perancis</string>
+    <string name="keyboard_layout_french_ca_label">Perancis (Kanada)</string>
+    <string name="keyboard_layout_russian_label">Rusia</string>
+    <string name="keyboard_layout_russian_mac_label">Rusia, secara Mac</string>
+    <string name="keyboard_layout_spanish_label">Spanyol</string>
+    <string name="keyboard_layout_swiss_french_label">Swiss (Perancis)</string>
+    <string name="keyboard_layout_swiss_german_label">Swiss (Jerman)</string>
+    <string name="keyboard_layout_belgian">Belgia</string>
+    <string name="keyboard_layout_bulgarian">Bulgaria</string>
+    <string name="keyboard_layout_italian">Italia</string>
+    <string name="keyboard_layout_danish">Denmark</string>
+    <string name="keyboard_layout_norwegian">Norwagia</string>
+    <string name="keyboard_layout_swedish">Swedia</string>
+    <string name="keyboard_layout_finnish">Finlandia</string>
+    <string name="keyboard_layout_croatian">Kroasia</string>
+    <string name="keyboard_layout_czech">Ceko</string>
+    <string name="keyboard_layout_estonian">Estonia</string>
+    <string name="keyboard_layout_hungarian">Hongaria</string>
+    <string name="keyboard_layout_icelandic">Islandia</string>
+    <string name="keyboard_layout_portuguese">Portugis</string>
+    <string name="keyboard_layout_slovak">Slowakia</string>
+    <string name="keyboard_layout_slovenian">Slovenia</string>
+    <string name="keyboard_layout_turkish">Turki</string>
+    <string name="keyboard_layout_ukrainian">Ukraina</string>
+</resources>
