@@ -26,13 +26,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.os.Handler;
-import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
 import android.text.style.CharacterStyle;
 import android.text.style.RelativeSizeSpan;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +40,8 @@ import android.view.View.OnLongClickListener;
 import android.widget.TextView;
 
 import com.android.internal.R;
+import static com.android.internal.util.cm.NotificationActionConstants.*;
+import com.android.systemui.cm.ActionTarget;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,6 +57,7 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
     private String mClockFormatString;
     private SimpleDateFormat mClockFormat;
     private Locale mLocale;
+    private ActionTarget mActionTarget;
 
     private static final int AM_PM_STYLE_NORMAL  = 0;
     private static final int AM_PM_STYLE_SMALL   = 1;
@@ -62,6 +65,7 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
 
     private int mAmPmStyle = AM_PM_STYLE_GONE;
     private boolean mShowClock;
+    private String[] mClockActions = new String[2];
 
     Handler mHandler;
 
@@ -76,6 +80,10 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
                     Settings.System.STATUS_BAR_AM_PM), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CLOCK), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_CLOCK_ACTIONS[SHORT_CLICK]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_CLOCK_ACTIONS[LONG_CLICK]), false, this);
         }
 
         @Override public void onChange(boolean selfChange) {
@@ -95,6 +103,7 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
         super(context, attrs, defStyle);
 
         mHandler = new Handler();
+        mActionTarget = new ActionTarget(context);
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
         if(isClickable()){
@@ -266,42 +275,32 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
             setVisibility(View.VISIBLE);
         else
             setVisibility(View.GONE);
-    }
 
-    private void collapseStartActivity(Intent what) {
-        // collapse status bar
-        StatusBarManager statusBarManager = (StatusBarManager) getContext().getSystemService(
-                Context.STATUS_BAR_SERVICE);
-        statusBarManager.collapsePanels();
+        mClockActions[SHORT_CLICK] = Settings.System.getString(resolver, Settings.System.NOTIFICATION_CLOCK_ACTIONS[SHORT_CLICK]);
+        mClockActions[LONG_CLICK] = Settings.System.getString(resolver, Settings.System.NOTIFICATION_CLOCK_ACTIONS[LONG_CLICK]);
 
-        // dismiss keyguard in case it was active and no passcode set
-        try {
-            ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-        } catch (Exception ex) {
-            // no action needed here
+        if (TextUtils.isEmpty(mClockActions[SHORT_CLICK])) {
+            mClockActions[SHORT_CLICK] = ACTION_CLOCK;
         }
-
-        // start activity
-        what.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(what);
+        if (TextUtils.isEmpty(mClockActions[LONG_CLICK])) {
+            mClockActions[LONG_CLICK] = ACTION_ALARM;
+        }
     }
 
     @Override
     public void onClick(View v) {
-        // start com.android.deskclock/.DeskClock
-        ComponentName clock = new ComponentName("com.android.deskclock",
-                "com.android.deskclock.DeskClock");
-        Intent intent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
-                .setComponent(clock);
-        collapseStartActivity(intent);
+        StatusBarManager statusBarManager = (StatusBarManager) getContext().getSystemService(
+                Context.STATUS_BAR_SERVICE);
+        statusBarManager.collapsePanels();
+        mActionTarget.launchAction(mClockActions[SHORT_CLICK]);
     }
 
     @Override
     public boolean onLongClick(View v) {
-        Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
-        collapseStartActivity(intent);
-
-        // consume event
+        StatusBarManager statusBarManager = (StatusBarManager) getContext().getSystemService(
+                Context.STATUS_BAR_SERVICE);
+        statusBarManager.collapsePanels();
+        mActionTarget.launchAction(mClockActions[SHORT_CLICK]);
         return true;
     }
 }

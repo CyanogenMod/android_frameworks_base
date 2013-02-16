@@ -21,6 +21,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -28,6 +29,7 @@ import android.content.pm.ResolveInfo;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -36,6 +38,10 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.provider.AlarmClock;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
+import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.InputDevice;
@@ -46,6 +52,7 @@ import android.widget.Toast;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.R;
 import static com.android.internal.util.cm.NavigationRingConstants.*;
+import static com.android.internal.util.cm.NotificationActionConstants.*;
 import com.android.systemui.screenshot.TakeScreenshotService;
 
 import java.net.URISyntaxException;
@@ -88,24 +95,6 @@ public class ActionTarget {
                 // ignored
             }
             return true;
-        } else if (action.equals(ACTION_HOME)) {
-            injectKeyDelayed(KeyEvent.KEYCODE_HOME);
-            return true;
-        } else if (action.equals(ACTION_BACK)) {
-            injectKeyDelayed(KeyEvent.KEYCODE_BACK);
-            return true;
-        } else if (action.equals(ACTION_MENU)) {
-            injectKeyDelayed(KeyEvent.KEYCODE_MENU);
-            return true;
-        } else if (action.equals(ACTION_POWER)) {
-            injectKeyDelayed(KeyEvent.KEYCODE_POWER);
-            return true;
-        } else if (action.equals(ACTION_IME)) {
-            mContext.sendBroadcast(new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"));
-            return true;
-        } else if (action.equals(ACTION_SCREENSHOT)) {
-            takeScreenshot();
-            return true;
         } else if (action.equals(ACTION_ASSIST)) {
             Intent intent = new Intent(Intent.ACTION_ASSIST);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -136,6 +125,63 @@ public class ActionTarget {
             } else {
                 switchToNormalRingerMode();
             }
+            return true;
+        } else if (action.equals(ACTION_ALARM)) {
+            Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+            return true;
+        } else if (action.equals(ACTION_CLOCK)) {
+            ComponentName clock = new ComponentName("com.android.deskclock",
+                    "com.android.deskclock.DeskClock");
+            Intent intent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+                    .setComponent(clock);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+            return true;
+        } else if (action.equals(ACTION_CLOCK_SETTINGS)) {
+            Intent intent = new Intent(Intent.ACTION_QUICK_CLOCK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+            return true;
+        } else if (action.equals(ACTION_EVENT)) {
+            Intent intent = new Intent(Intent.ACTION_INSERT)
+                    .setData(Events.CONTENT_URI);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+            return true;
+        } else if (action.equals(ACTION_TODAY)) {
+            long startMillis = System.currentTimeMillis();
+            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+            builder.appendPath("time");
+            ContentUris.appendId(builder, startMillis);
+            Intent intent = new Intent(Intent.ACTION_VIEW)
+                    .setData(builder.build());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+            return true;
+        } else if (action.equals(ACTION_VOICE_ASSISTANT)) {
+            Intent intent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+            return true;
+        } else if (action.equals(ACTION_HOME)) {
+            injectKeyDelayed(KeyEvent.KEYCODE_HOME);
+            return true;
+        } else if (action.equals(ACTION_BACK)) {
+            injectKeyDelayed(KeyEvent.KEYCODE_BACK);
+            return true;
+        } else if (action.equals(ACTION_MENU)) {
+            injectKeyDelayed(KeyEvent.KEYCODE_MENU);
+            return true;
+        } else if (action.equals(ACTION_POWER)) {
+            injectKeyDelayed(KeyEvent.KEYCODE_POWER);
+            return true;
+        } else if (action.equals(ACTION_IME)) {
+            mContext.sendBroadcast(new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"));
+            return true;
+        } else if (action.equals(ACTION_SCREENSHOT)) {
+            takeScreenshot();
             return true;
         } else if (action.equals(ACTION_NOTIFICATIONS)) {
             try {
