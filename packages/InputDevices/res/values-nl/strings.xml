@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_label">Invoerapparaten</string>
+    <string name="keyboard_layouts_label">Android-toetsenbord</string>
+    <string name="keyboard_layout_english_uk_label">Engels (VK)</string>
+    <string name="keyboard_layout_english_us_label">Engels (VS)</string>
+    <string name="keyboard_layout_english_us_colemak_label">Engels (VS), Colemak-stijl</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Engels (VS), Dvorak-stijl</string>
+    <string name="keyboard_layout_german_label">Duits</string>
+    <string name="keyboard_layout_french_label">Frans</string>
+    <string name="keyboard_layout_french_ca_label">Frans (Canada)</string>
+    <string name="keyboard_layout_russian_label">Russisch</string>
+    <string name="keyboard_layout_russian_mac_label">Russisch, Mac-stijl</string>
+    <string name="keyboard_layout_spanish_label">Spaans</string>
+    <string name="keyboard_layout_swiss_french_label">Zwitsers (Frans)</string>
+    <string name="keyboard_layout_swiss_german_label">Zwitsers (Duits)</string>
+    <string name="keyboard_layout_belgian">Belgisch</string>
+    <string name="keyboard_layout_bulgarian">Bulgaars</string>
+    <string name="keyboard_layout_italian">Italiaans</string>
+    <string name="keyboard_layout_danish">Deens</string>
+    <string name="keyboard_layout_norwegian">Noors</string>
+    <string name="keyboard_layout_swedish">Zweeds</string>
+    <string name="keyboard_layout_finnish">Fins</string>
+    <string name="keyboard_layout_croatian">Kroatisch</string>
+    <string name="keyboard_layout_czech">Tsjechisch</string>
+    <string name="keyboard_layout_estonian">Estoniaans</string>
+    <string name="keyboard_layout_hungarian">Hongaars</string>
+    <string name="keyboard_layout_icelandic">IJslands</string>
+    <string name="keyboard_layout_portuguese">Portugees</string>
+    <string name="keyboard_layout_slovak">Slowaaks</string>
+    <string name="keyboard_layout_slovenian">Sloveens</string>
+    <string name="keyboard_layout_turkish">Turks</string>
+    <string name="keyboard_layout_ukrainian">Oekraïens</string>
+</resources>
