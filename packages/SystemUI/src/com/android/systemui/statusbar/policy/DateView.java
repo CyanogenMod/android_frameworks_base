@@ -19,14 +19,17 @@ package com.android.systemui.statusbar.policy;
 import android.app.ActivityManagerNative;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentUris;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.net.Uri;
-import android.provider.CalendarContract;
+import android.os.Handler;
+import android.provider.Settings;
 import android.text.format.DateFormat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +39,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.systemui.R;
+import static com.android.internal.util.cm.NotificationActionConstants.*;
+import com.android.systemui.cm.ActionTarget;
 
 import java.util.Date;
 
@@ -43,10 +48,14 @@ public class DateView extends TextView implements OnClickListener, OnLongClickLi
     private static final String TAG = "DateView";
 
     private RelativeLayout mParent;
+    private ActionTarget mActionTarget;
 
     private boolean mAttachedToWindow;
     private boolean mWindowVisible;
     private boolean mUpdating;
+    private String[] mDateActions = new String[2];
+
+    private Handler mHandler;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -60,10 +69,33 @@ public class DateView extends TextView implements OnClickListener, OnLongClickLi
         }
     };
 
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_DATE_ACTIONS[SHORT_CLICK]), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_DATE_ACTIONS[LONG_CLICK]), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
     public DateView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mActionTarget = new ActionTarget(context);
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
         setOnClickListener(this);
         setOnLongClickListener(this);
+        updateSettings();
     }
 
     @Override
@@ -153,43 +185,34 @@ public class DateView extends TextView implements OnClickListener, OnLongClickLi
         }
     }
 
-    private void collapseStartActivity(Intent what) {
-        // collapse status bar
-        StatusBarManager statusBarManager = (StatusBarManager) getContext().getSystemService(
-                Context.STATUS_BAR_SERVICE);
-        statusBarManager.collapsePanels();
+    private void updateSettings(){
+        ContentResolver resolver = mContext.getContentResolver();
 
-        // dismiss keyguard in case it was active and no passcode set
-        try {
-            ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-        } catch (Exception ex) {
-            // no action needed here
+        mDateActions[SHORT_CLICK] = Settings.System.getString(resolver, Settings.System.NOTIFICATION_DATE_ACTIONS[SHORT_CLICK]);
+        mDateActions[LONG_CLICK] = Settings.System.getString(resolver, Settings.System.NOTIFICATION_DATE_ACTIONS[LONG_CLICK]);
+
+        if (TextUtils.isEmpty(mDateActions[SHORT_CLICK])) {
+            mDateActions[SHORT_CLICK] = ACTION_TODAY;
         }
-
-        // start activity
-        what.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(what);
+        if (TextUtils.isEmpty(mDateActions[LONG_CLICK])) {
+            mDateActions[LONG_CLICK] = ACTION_CLOCK_SETTINGS;
+        }
     }
 
     @Override
     public void onClick(View v) {
-        long nowMillis = System.currentTimeMillis();
-
-        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-        builder.appendPath("time");
-        ContentUris.appendId(builder, nowMillis);
-        Intent intent = new Intent(Intent.ACTION_VIEW)
-                .setData(builder.build());
-        collapseStartActivity(intent);
+        StatusBarManager statusBarManager = (StatusBarManager) mContext.getSystemService(
+                Context.STATUS_BAR_SERVICE);
+        statusBarManager.collapsePanels();
+        mActionTarget.launchAction(mDateActions[SHORT_CLICK]);
     }
 
     @Override
     public boolean onLongClick(View v) {
-        Intent intent = new Intent("android.settings.DATE_SETTINGS");
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        collapseStartActivity(intent);
-
-        // consume event
+        StatusBarManager statusBarManager = (StatusBarManager) mContext.getSystemService(
+                Context.STATUS_BAR_SERVICE);
+        statusBarManager.collapsePanels();
+        mActionTarget.launchAction(mDateActions[LONG_CLICK]);
         return true;
     }
 }

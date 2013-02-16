@@ -3020,6 +3020,26 @@ public final class Settings {
         };
 
         /**
+         * Custom notification clock actions
+         *
+         * @hide
+         */
+        public static final String[] NOTIFICATION_CLOCK_ACTIONS = new String[] {
+            "notification_clock_short",
+            "notification_clock_long",
+        };
+
+        /**
+         * Custom notification date actions
+         *
+         * @hide
+         */
+        public static final String[] NOTIFICATION_DATE_ACTIONS = new String[] {
+            "notification_date_short",
+            "notification_date_long",
+        };
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
