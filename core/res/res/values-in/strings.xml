@@ -1456,4 +1456,42 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Aksesibilitas dibatalkan."</string>
     <string name="user_switched" msgid="3768006783166984410">"Pengguna saat ini <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Pemilik"</string>
+
+    <!-- CYANOGENMOD ADDITIONS -->
+
+    <string name="profileNameDefault">Standar</string>
+    <string name="profileNameWork">Kerjaan</string>
+    <string name="profileNameHome">Rumah tangga</string>
+    <string name="profileNameSilent">Senyap</string>
+    <string name="profileNameNight">Malam</string>
+    <string name="profileGroupPhone">Ponsel</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Lainan</string>
+    <string name="reboot_system" product="tablet">Reboot tablet</string>
+    <string name="reboot_system" product="default">Reboot ponsel</string>
+    <string name="global_action_screenshot">Screenshot</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Desktop perluas</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Diaktifkan</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Dinonaktifkan</string>
+    <string name="reboot_reboot">Reboot</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Reboot\u2026</string>
+    <string name="reboot_confirm" product="tablet">Tablet Anda adalah direboot</string>
+    <string name="reboot_confirm" product="default">Ponsel Anda adalah direboot</string>
+    <string name="permlab_preventpower">kelola tombol daya</string>
+    <string name="permdesc_preventpower">Memungkinkan aplikasi mengubah perilaku tombol daya</string>
+    <string name="lockscreen_discharging">Tidak mengisi daya, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="app_killed_message">Aplikasi dimatikan</string>
+    <string name="global_action_reboot">Reboot</string>
+    <string name="global_action_choose_profile">Profil</string>
+    <string name="toast_rotation_unlocked">Layar diputarkan secara otomatis</string>
+    <string name="toast_rotation_locked">Layar diputarkan secara manual</string>
+    <string name="storage_sd_dock_card">Kartu SD di dok</string>
 </resources>
