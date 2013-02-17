@@ -3047,6 +3047,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     private boolean mHasPerformedLongPress;
 
     /**
+     * Whether the primary button (left mouse button) was pressed.
+     */
+    private boolean mIsPrimaryButtonPressed;
+
+    /**
      * The minimum height of the view. We'll try our best to have the height
      * of this view to at least this amount.
      */
@@ -4258,9 +4263,15 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      */
     protected boolean performButtonActionOnTouchDown(MotionEvent event) {
         if ((event.getButtonState() & MotionEvent.BUTTON_SECONDARY) != 0) {
-            if (showContextMenu(event.getX(), event.getY(), event.getMetaState())) {
-                return true;
+            // External mouse, touchpad and stylus first button should
+            // display the longclick associated action or its context menu
+            // Action should be always consumed
+            if (isLongClickable()) {
+                performLongClick();
+            } else {
+                showContextMenu(event.getX(), event.getY(), event.getMetaState());
             }
+            return true;
         }
         return false;
     }
@@ -8234,9 +8245,17 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
                 case MotionEvent.ACTION_DOWN:
                     mHasPerformedLongPress = false;
+                    mIsPrimaryButtonPressed = false;
 
                     if (performButtonActionOnTouchDown(event)) {
                         break;
+                    }
+
+                    // BUTTON_PRIMARY is not set in response to simple touches with a
+                    // finger or stylus tip. We are in presence of a left mouse button click
+                    // so we need to avoid long press events
+                    if ((event.getButtonState() & MotionEvent.BUTTON_PRIMARY) != 0) {
+                        mIsPrimaryButtonPressed = true;
                     }
 
                     // Walk up the hierarchy to determine if we're inside a scrolling container.
@@ -17329,6 +17348,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         private int mOriginalWindowAttachCount;
 
         public void run() {
+            if (mIsPrimaryButtonPressed) {
+                return;
+            }
             if (isPressed() && (mParent != null)
                     && mOriginalWindowAttachCount == mWindowAttachCount) {
                 if (performLongClick()) {
