@@ -79,6 +79,7 @@ final class ElectronBeam {
     private int mDisplayLayerStack; // layer stack associated with primary display
     private int mDisplayWidth;      // real width, not rotated
     private int mDisplayHeight;     // real height, not rotated
+    private int mHwRotation;        // hardware screen rotation
     private SurfaceSession mSurfaceSession;
     private Surface mSurface;
     private NaturalSurfaceLayout mSurfaceLayout;
@@ -135,8 +136,16 @@ final class ElectronBeam {
         // This is not expected to change while the electron beam surface is showing.
         DisplayInfo displayInfo = mDisplayManager.getDisplayInfo(Display.DEFAULT_DISPLAY);
         mDisplayLayerStack = displayInfo.layerStack;
-        mDisplayWidth = displayInfo.getNaturalWidth();
-        mDisplayHeight = displayInfo.getNaturalHeight();
+
+        // hw rotation can flip screen dimensions and cause the screengrab to fail
+        mHwRotation = android.os.SystemProperties.getInt("ro.sf.hwrotation", 0);
+        if ( mHwRotation == 90 || mHwRotation == 270 ) {
+            mDisplayWidth = displayInfo.getNaturalHeight();
+            mDisplayHeight = displayInfo.getNaturalWidth();
+        } else {
+            mDisplayWidth = displayInfo.getNaturalWidth();
+            mDisplayHeight = displayInfo.getNaturalHeight();
+        }
 
         // Prepare the surface for drawing.
         if (!tryPrepare()) {
@@ -547,7 +556,7 @@ final class ElectronBeam {
             mSurface.setLayerStack(mDisplayLayerStack);
             mSurface.setSize(mDisplayWidth, mDisplayHeight);
 
-            mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager, mSurface);
+            mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager, mSurface, mHwRotation);
             mSurfaceLayout.onDisplayTransaction();
         } finally {
             Surface.closeTransaction();
@@ -709,10 +718,12 @@ final class ElectronBeam {
     private static final class NaturalSurfaceLayout implements DisplayTransactionListener {
         private final DisplayManagerService mDisplayManager;
         private Surface mSurface;
+        private int mHwRotation;
 
-        public NaturalSurfaceLayout(DisplayManagerService displayManager, Surface surface) {
+        public NaturalSurfaceLayout(DisplayManagerService displayManager, Surface surface, int hwRotation) {
             mDisplayManager = displayManager;
             mSurface = surface;
+            mHwRotation = hwRotation;
             mDisplayManager.registerDisplayTransactionListener(this);
         }
 
@@ -731,7 +742,8 @@ final class ElectronBeam {
                 }
 
                 DisplayInfo displayInfo = mDisplayManager.getDisplayInfo(Display.DEFAULT_DISPLAY);
-                switch (displayInfo.rotation) {
+                int rotation = (displayInfo.rotation + (mHwRotation / 90)) % 4;
+                switch (rotation) {
                     case Surface.ROTATION_0:
                         mSurface.setPosition(0, 0);
                         mSurface.setMatrix(1, 0, 0, 1);
