@@ -1230,7 +1230,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                     ContentResolver resolver = mContext.getContentResolver();
                     hasValidSound = Settings.System.getString(resolver,
                            Settings.System.NOTIFICATION_SOUND) != null;
-                } else if (notification.sound != null) {
+                } else if (!(inQuietHours && mQuietHoursMute) && notification.sound != null) {
                     soundUri = notification.sound;
                     hasValidSound = (soundUri != null);
                 }
