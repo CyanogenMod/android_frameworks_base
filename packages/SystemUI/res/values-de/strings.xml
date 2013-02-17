@@ -246,5 +246,10 @@
     <string name="navbar_menu_always_button">Menü (immer sichtbar)</string>
     <string name="navbar_menu_big_button">Menü</string>
 
+    <!-- BeanFlinger daydream -->
+    <string name="jelly_bean_dream_name">Schleudernde Bohnen</string>
+    <string name="bean_dream_settings_cid_title">CID-Kopf verwenden</string>
+    <string name="bean_dream_settings_cid_summary">Den Kopf des CyanogenMod-Maskotchens anstelle der \"Jellybeans\" im Daydream verwenden</string>
+
     <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
