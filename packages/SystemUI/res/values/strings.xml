@@ -460,8 +460,8 @@
 
     <!-- Name of the Jelly Bean platlogo screensaver -->
     <string name="jelly_bean_dream_name">BeanFlinger</string>
-    <string name="bean_dream_settings_cid_title">Use CID head</string>
-    <string name="bean_dream_settings_cid_summary">Use CID head instead of jellybean inside the dream</string>
+    <string name="bean_dream_settings_cid_title">Use Cid\'s head</string>
+    <string name="bean_dream_settings_cid_summary">Use Cid\'s head instead of jellybeans inside the dream</string>
 
     <!-- Name of the launcher shortcut icon that allows dreams to be started immediately [CHAR LIMIT=20] -->
     <string name="start_dreams">Daydream</string>
