@@ -221,7 +221,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         5,  // STREAM_VOICE_CALL
         7,  // STREAM_SYSTEM
         7,  // STREAM_RING
-        15, // STREAM_MUSIC
+        30, // STREAM_MUSIC
         7,  // STREAM_ALARM
         7,  // STREAM_NOTIFICATION
         15, // STREAM_BLUETOOTH_SCO
@@ -281,7 +281,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     // Cap used for safe headset volume restore. The value directly applies
     // to AudioSystem.STREAM_MUSIC volume and is rescaled for other streams.
-    private static final int HEADSET_VOLUME_RESTORE_CAP = 10;
+    private static final int HEADSET_VOLUME_RESTORE_CAP = 20;
 
     private final AudioSystem.ErrorCallback mAudioSystemCallback = new AudioSystem.ErrorCallback() {
         public void onError(int error) {
