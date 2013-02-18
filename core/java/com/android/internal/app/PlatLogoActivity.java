@@ -123,7 +123,7 @@ public class PlatLogoActivity extends Activity {
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                             | Intent.FLAG_ACTIVITY_CLEAR_TASK
                             | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                        .putExtra("is_cid", isCid)
+                        .putExtra("is_cid", mIsCid)
                         .addCategory("com.android.internal.category.PLATLOGO"));
                         //.setClassName("com.android.systemui","com.android.systemui.BeanBag"));
                 } catch (ActivityNotFoundException ex) {
