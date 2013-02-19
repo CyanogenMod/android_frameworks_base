@@ -941,7 +941,7 @@
     <string name="yes" msgid="5362982303337969312">"OK"</string>
     <string name="no" msgid="5141531044935541497">"Ακύρωση"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Προσοχή"</string>
-    <string name="loading" msgid="7933681260296021180">"Φόρτωση…"</string>
+    <string name="loading" msgid="7933681260296021180">"Φόρτωση\u2026"</string>
     <string name="capital_on" msgid="1544682755514494298">"Ενεργό"</string>
     <string name="capital_off" msgid="6815870386972805832">"Ανενεργό"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Ολοκλήρωση ενέργειας με τη χρήση"</string>
@@ -1011,8 +1011,6 @@
     <item quantity="other" msgid="7915895323644292768">"Υπάρχουν διαθέσιμα ανοικτά δίκτυα Wi-Fi"</item>
   </plurals>
     <string name="wifi_available_sign_in" msgid="4029489716605255386">"Σύνδεση στο δίκτυο Wi-Fi"</string>
-    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
-    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Δεν είναι δυνατή η σύνδεση στο Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" έχει κακή σύνδεση στο Διαδίκτυο."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1277,7 +1275,7 @@
     <string name="share_action_provider_share_with" msgid="5247684435979149216">"Κοινή χρήση με"</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Η συσκευή κλειδώθηκε."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
-    <string name="sending" msgid="3245653681008218030">"Γίνεται αποστολή…"</string>
+    <string name="sending" msgid="3245653681008218030">"Γίνεται αποστολή\u2026"</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Εκκίνηση προγράμματος περιήγησης;"</string>
     <string name="SetupCallDefault" msgid="5834948469253758575">"Αποδοχή κλήσης;"</string>
     <string name="activity_resolver_use_always" msgid="8017770747801494933">"Πάντα"</string>
@@ -1314,10 +1312,10 @@
     <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
 
     <!-- label for item that screenshots in phone options dialog -->
-    <string name="global_action_screenshot">Screenshot</string>
+    <string name="global_action_screenshot">Στιγμιότυπο οθόνης</string>
 
     <!-- label for item that toggles expand desktop mode -->
-    <string name="global_actions_toggle_expanded_desktop_mode">Επέκταση επιφάνειας εργασίας</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Επέκταση επιφάνειας</string>
     <!-- status message in phone options dialog for when expand desktop mode is on -->
     <string name="global_actions_expanded_desktop_mode_on_status">Ενεργή</string>
     <!-- status message in phone options dialog for when expand desktop mode is off -->
@@ -1339,7 +1337,8 @@
     <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
     <string name="reboot_progress">Επανεκκίνηση\u2026</string>
     <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
-    <string name="reboot_confirm">Το τηλέφωνό σας θα κάνει επανεκκίνηση.</string>
+    <string name="reboot_confirm" product="tablet">Το tablet σας θα κάνει επανεκκίνηση.</string>
+    <string name="reboot_confirm" product="default">Το τηλέφωνό σας θα κάνει επανεκκίνηση.</string>
 
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">Επανεκκίνηση</string>
