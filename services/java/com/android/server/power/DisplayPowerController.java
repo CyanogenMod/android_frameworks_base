@@ -408,8 +408,7 @@ final class DisplayPowerController {
             updateAutomaticBrightnessSettings();
         }
 
-        mElectronBeamFadesConfig = resources.getBoolean(
-                com.android.internal.R.bool.config_animateScreenLights);
+        mElectronBeamFadesConfig = true;
 
         if (!DEBUG_PRETEND_PROXIMITY_SENSOR_ABSENT) {
             mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
