@@ -16,18 +16,27 @@
 
 package android.app;
 
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.media.AudioManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.ParcelUuid;
 import android.os.Parcelable;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -71,6 +80,8 @@ public final class Profile implements Parcelable, Comparable {
     private RingModeSettings mRingMode = new RingModeSettings();
 
     private AirplaneModeSettings mAirplaneMode = new AirplaneModeSettings();
+
+    private WallpaperSettings mWallpaper = new WallpaperSettings();
 
     private int mScreenLockMode = LockMode.DEFAULT;
 
@@ -184,6 +195,7 @@ public final class Profile implements Parcelable, Comparable {
         dest.writeParcelable(mRingMode, flags);
         dest.writeParcelable(mAirplaneMode, flags);
         dest.writeInt(mScreenLockMode);
+        dest.writeParcelable(mWallpaper, flags);
     }
 
     /** @hide */
@@ -216,6 +228,7 @@ public final class Profile implements Parcelable, Comparable {
         mRingMode = (RingModeSettings) in.readParcelable(null);
         mAirplaneMode = (AirplaneModeSettings) in.readParcelable(null);
         mScreenLockMode = in.readInt();
+        mWallpaper = (WallpaperSettings) in.readParcelable(null);
     }
 
     public String getName() {
@@ -303,6 +316,46 @@ public final class Profile implements Parcelable, Comparable {
         mDirty = true;
     }
 
+    public WallpaperSettings getWallpaper() {
+    	return mWallpaper;
+    }
+
+    public void setWallpaper(WallpaperSettings descriptor) {
+        mWallpaper = descriptor;
+        mDirty = true;
+    }
+    
+    public void deleteWallpaperOverride(Context context) {
+    	try {
+			Context contextSettings = context.createPackageContext("com.android.settings", Context.CONTEXT_IGNORE_SECURITY);
+            String filename = "wallpaper_" + mUuid.toString() + ".jpg";
+			contextSettings.deleteFile(filename);
+		} catch (Exception e) {
+	        Log.e(TAG, "Failed to delete wallpaper for profile " + mName + ".");
+		}
+    }
+
+    public void setWallpaperOverride(Context context) {
+		try {
+			Context contextSettings = context.createPackageContext("com.android.settings", Context.CONTEXT_IGNORE_SECURITY);
+            // Get picked wallpaper as bitmap
+            WallpaperManager wm = WallpaperManager.getInstance( context );
+            Drawable drWallpaper = wm.getDrawable();
+            Integer width = drWallpaper.getIntrinsicWidth();
+            Integer height = drWallpaper.getIntrinsicHeight();
+            Bitmap biWallpaper = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(biWallpaper);
+            drWallpaper.setBounds(0, 0, width, height);
+            drWallpaper.draw(canvas);
+            // Store cropped wallpaper to local storage
+            String filename = "wallpaper_" + mUuid.toString() + ".jpg";
+            FileOutputStream fos = contextSettings.openFileOutput(filename, Context.MODE_PRIVATE);
+            biWallpaper.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+		} catch (Exception e) {
+            Log.e(TAG, "Failed to write wallpaper for profile " + mName + ".");
+		}
+    }
+
     public AirplaneModeSettings getAirplaneMode() {
         return mAirplaneMode;
     }
@@ -375,6 +428,8 @@ public final class Profile implements Parcelable, Comparable {
         builder.append(mScreenLockMode);
         builder.append("</screen-lock-mode>\n");
 
+        mWallpaper.getXmlString(builder, context);
+        
         mAirplaneMode.getXmlString(builder, context);
 
         mRingMode.getXmlString(builder, context);
@@ -474,6 +529,10 @@ public final class Profile implements Parcelable, Comparable {
                     AirplaneModeSettings amd = AirplaneModeSettings.fromXml(xpp, context);
                     profile.setAirplaneMode(amd);
                 }
+                if (name.equals("wallpaperDescriptor")) {
+                    WallpaperSettings wd = WallpaperSettings.fromXml(xpp, context);
+                    profile.setWallpaper(wd);
+                }
                 if (name.equals("screen-lock-mode")) {
                     profile.setScreenLockMode(Integer.valueOf(xpp.nextText()));
                 }
@@ -518,6 +577,8 @@ public final class Profile implements Parcelable, Comparable {
         mRingMode.processOverride(context);
         // Set airplane mode
         mAirplaneMode.processOverride(context);
+        // Set wallpaper
+        mWallpaper.processOverride(context, mUuid);
     }
 
     /** @hide */
