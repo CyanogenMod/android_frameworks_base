@@ -1450,7 +1450,7 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Você desenhou sua sequência de desbloqueio incorretamente <xliff:g id="NUMBER_0">%d</xliff:g> vezes. Se fizer mais <xliff:g id="NUMBER_1">%d</xliff:g> tentativas incorretas, será solicitado que você use o login do Google para desbloquear."\n\n" Tente novamente em <xliff:g id="NUMBER_2">%d</xliff:g> segundos."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" — "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Remover"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Aumentar o volume acima do nível seguro?"\n"A audição em volume elevado por períodos longos pode prejudicar sua audição."</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Aumentar o volume acima do nível seguro?"\n"Ouvir em volume elevado por períodos longos pode prejudicar sua audição."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Mantenha pressionado com dois dedos para ativar a acessibilidade."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Acessibilidade ativada."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Acessibilidade cancelada."</string>
@@ -1468,6 +1468,7 @@
     <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">Outro</string>
     <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="reboot_system" product="default">Reiniciar telefone</string>
     <string name="global_action_screenshot">Capturar tela</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Área de trabalho expandida</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Ativada</string>
@@ -1481,12 +1482,16 @@
     <string name="reboot_progress">Reiniciando\u2026</string>
     <string name="reboot_confirm">Seu telefone vai reiniciar.</string>
     <string name="permlab_preventpower">substituir tecla de energia</string>
-    <string name="permdesc_preventpower">Permite a uma aplicação a substituir o tecla de energia</string>
+    <string name="permdesc_preventpower">Permite que o aplicativo substitua a tecla de energia</string>
     <string name="lockscreen_discharging">Descarregando, <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%%</xliff:g></string>
-    <string name="app_killed_message">Aplicação terminada</string>
+    <string name="app_killed_message">Aplicativo terminado</string>
     <string name="global_action_reboot">Reiniciar</string>
     <string name="global_action_choose_profile">Perfil</string>
     <string name="toast_rotation_unlocked">Rotação da tela está destravada</string>
     <string name="toast_rotation_locked">Rotação da tela está travada</string>
     <string name="storage_sd_dock_card">Dock cartão SD</string>
+    <string name="permlab_fm_radio_receiver">controlar receptor FM</string>
+    <string name="permdesc_fm_radio_receiver">Permite que o aplicativo controle o receptor FM</string>
+    <string name="permlab_fm_radio_transmitter">controlar transmissor FM</string>
+    <string name="permdesc_fm_radio_transmitter">Permite que o aplicativo controle o transmissor FM</string>
 </resources>
