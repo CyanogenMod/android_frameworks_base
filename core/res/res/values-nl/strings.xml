@@ -1471,6 +1471,7 @@
     <string name="profileGroupSMS">Sms</string>
     <string name="wildcardProfile">Anders</string>
     <string name="reboot_system" product="tablet">Tablet herstarten</string>
+    <string name="reboot_system" product="default">Telefoon herstarten</string>
     <string name="global_action_screenshot">Schermafdruk</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Uitgebreid bureaublad</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Ingeschakeld</string>
