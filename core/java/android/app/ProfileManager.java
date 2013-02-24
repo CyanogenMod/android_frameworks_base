@@ -18,6 +18,8 @@ package android.app;
 
 import java.util.UUID;
 
+import android.annotation.SdkConstant;
+import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Context;
 import android.os.Handler;
 import android.os.IBinder;
@@ -42,6 +44,41 @@ public class ProfileManager {
     private static final String TAG = "ProfileManager";
 
     private static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
+
+    /**
+     * Broadcast intent action indicating that Profiles has been enabled or disabled.
+     * One extra provides this state as an int.
+     *
+     * @see #EXTRA_PROFILES_STATE
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String PROFILES_STATE_CHANGED_ACTION =
+        "android.app.profiles.PROFILES_STATE_CHANGED";
+    /**
+     * The lookup key for an int that indicates whether Profiles are enabled or
+     * disabled. Retrieve it with {@link android.content.Intent#getIntExtra(String,int)}.
+     *
+     * @see #PROFILES_STATE_DISABLED
+     * @see #PROFILES_STATE_ENABLED
+     * @hide
+     */
+    public static final String EXTRA_PROFILES_STATE = "profile_state";
+
+    /**
+     * Profiles are disabled.
+     *
+     * @see #PROFILES_STATE_CHANGED_ACTION
+     * @hide
+     */
+    public static final int PROFILES_STATE_DISABLED = 0;
+    /**
+     * Profiles are enabled.
+     *
+     * @see #PROFILES_STATE_CHANGED_ACTION
+     * @hide
+     */
+    public static final int PROFILES_STATE_ENABLED = 1;
 
     // A blank profile that is created to be returned if profiles disabled
     private static Profile mEmptyProfile;
