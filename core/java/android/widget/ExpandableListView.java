@@ -591,6 +591,14 @@ public class ExpandableListView extends ListView {
         if (adapter != null) {
             // Create the connector
             mConnector = new ExpandableListConnector(adapter);
+            /*
+             * ExpandableListView is created with all groups as collapsed.
+             * Notify the same to the specified adapter.
+             */
+            final int groupCount = adapter.getGroupCount();
+            for (int i=0; i<groupCount; i++) {
+                 mConnector.collapseGroup(i);
+            }
         } else {
             mConnector = null;
         }
