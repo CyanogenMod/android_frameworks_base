@@ -1721,6 +1721,13 @@
         android:label="@string/permlab_manageCaCertificates"
         android:description="@string/permdesc_manageCaCertificates" />
 
+    <!-- Allows an application to access Superuser binary. This is a hack to avoid
+         Android Issue #25906 {@link https://code.google.com/p/android/issues/detail?id=25906 } -->
+    <permission android:name="android.permission.ACCESS_SUPERUSER"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_accessSuperuser"
+        android:description="@string/permdesc_accessSuperuser" />
+
     <!-- ========================================= -->
     <!-- Permissions for special development tools -->
     <!-- ========================================= -->
