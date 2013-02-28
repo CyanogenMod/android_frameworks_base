@@ -113,6 +113,7 @@ public class WifiStateMachine extends StateMachine {
     private ConnectivityManager mCm;
 
     private final boolean mP2pSupported;
+    private boolean mIbssSupported;
     private final AtomicBoolean mP2pConnected = new AtomicBoolean(false);
     private boolean mTemporarilyDisconnectWifi = false;
     private final String mPrimaryDeviceType;
@@ -368,6 +369,9 @@ public class WifiStateMachine extends StateMachine {
      * been disabled */
     public static final int CMD_DISABLE_P2P_REQ           = BASE + 132;
     public static final int CMD_DISABLE_P2P_RSP           = BASE + 133;
+
+    /* Is IBSS mode supported by the driver? */
+    public static final int CMD_GET_IBSS_SUPPORTED        = BASE + 134;
 
     private static final int CONNECT_MODE   = 1;
     private static final int SCAN_ONLY_MODE = 2;
@@ -1088,6 +1092,13 @@ public class WifiStateMachine extends StateMachine {
      */
     public String getCountryCode() {
         return mCountryCode;
+    }
+
+    public int syncIsIbssSupported(AsyncChannel channel) {
+        Message resultMsg = channel.sendMessageSynchronously(CMD_GET_IBSS_SUPPORTED);
+        int result = resultMsg.arg1;
+        resultMsg.recycle();
+        return result;
     }
 
     /**
@@ -1936,6 +1947,7 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_ADD_OR_UPDATE_NETWORK:
                 case CMD_REMOVE_NETWORK:
                 case CMD_SAVE_CONFIG:
+                case CMD_GET_IBSS_SUPPORTED:
                     replyToMessage(message, message.what, FAILURE);
                     break;
                 case CMD_GET_CONFIGURED_NETWORKS:
@@ -2406,6 +2418,8 @@ public class WifiStateMachine extends StateMachine {
                     mWifiConfigStore.initialize();
                     initializeWpsDetails();
 
+                    mIbssSupported = mWifiNative.getModeCapability("IBSS");
+
                     sendSupplicantConnectionChangedBroadcast(true);
                     transitionTo(mDriverStartedState);
                     break;
@@ -2437,6 +2451,7 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_SET_FREQUENCY_BAND:
                 case CMD_START_PACKET_FILTERING:
                 case CMD_STOP_PACKET_FILTERING:
+                case CMD_GET_IBSS_SUPPORTED:
                     deferMessage(message);
                     break;
                 default:
@@ -2582,6 +2597,9 @@ public class WifiStateMachine extends StateMachine {
                         replyToMessage(message, WifiManager.FORGET_NETWORK_FAILED,
                                 WifiManager.ERROR);
                     }
+                    break;
+                case CMD_GET_IBSS_SUPPORTED:
+                    deferMessage(message);
                     break;
                 default:
                     return NOT_HANDLED;
@@ -2926,6 +2944,9 @@ public class WifiStateMachine extends StateMachine {
                     } else {
                         setSuspendOptimizationsNative(SUSPEND_DUE_TO_HIGH_PERF, true);
                     }
+                    break;
+                case CMD_GET_IBSS_SUPPORTED:
+                    replyToMessage(message, message.what, mIbssSupported ? 1 : 0);
                     break;
                 default:
                     return NOT_HANDLED;
