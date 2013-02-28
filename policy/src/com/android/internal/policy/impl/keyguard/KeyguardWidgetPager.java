@@ -53,7 +53,8 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
 
     private static final String[] CLOCK_WIDGET_PACKAGES = new String[] {
         "com.cyanogenmod.lockclock",
-        "com.android.deskclock"
+        "com.android.deskclock",
+        "com.google.android.apps.dashclock"
     };
 
     protected KeyguardViewStateManager mViewStateManager;
