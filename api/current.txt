@@ -13453,6 +13453,7 @@ package android.net.wifi {
     method public java.util.List<android.net.wifi.ScanResult> getScanResults();
     method public int getWifiState();
     method public boolean isWifiEnabled();
+    method public boolean isIbssSupported();
     method public boolean pingSupplicant();
     method public boolean reassociate();
     method public boolean reconnect();
