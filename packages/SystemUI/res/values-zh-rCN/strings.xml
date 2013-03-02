@@ -182,8 +182,8 @@
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"屏幕锁定为横向模式。"</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"屏幕锁定为纵向模式。"</string>
     <string name="jelly_bean_dream_name" msgid="5992026543636816792">"果冻豆大乱舞"</string>
-    <string name="bean_dream_settings_cid_title">使用 CID 头像</string>
-    <string name="bean_dream_settings_cid_summary">在大乱舞内使用 CID 的头像代替果冻豆</string>
+    <string name="bean_dream_settings_cid_title">使用 Cid 的头像</string>
+    <string name="bean_dream_settings_cid_summary">在大乱舞内使用 Cid 的头像替代果冻豆</string>
     <string name="start_dreams" msgid="7219575858348719790">"互动屏保"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"以太网"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"飞行模式"</string>
@@ -244,6 +244,8 @@
     <string name="quick_settings_wifiap_off">Wi-Fi 热点已关闭</string>
     <string name="quick_settings_quiethours">安静时段</string>
     <string name="quick_settings_quiethours_off">安静时段已关闭</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE 已关闭</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">选择指定的行为</string>
