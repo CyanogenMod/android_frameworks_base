@@ -26,7 +26,7 @@
     <string name="gigabyteShort" msgid="3259882455212193214">"GB"</string>
     <string name="terabyteShort" msgid="231613018159186962">"TB"</string>
     <string name="petabyteShort" msgid="5637816680144990219">"PB"</string>
-    <string name="fileSizeSuffix" msgid="9164292791500531949">"<xliff:g id="UNIT">%2$s</xliff:g><xliff:g id="NUMBER">%1$s</xliff:g>"</string>
+    <string name="fileSizeSuffix" msgid="9164292791500531949">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
     <string name="untitled" msgid="4638956954852782576">"&lt;Titelloos&gt;"</string>
     <string name="ellipsis" msgid="7899829516048813237">"…"</string>
     <string name="ellipsis_two_dots" msgid="1228078994866030736">"‥"</string>
@@ -761,7 +761,7 @@
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Probeer weer"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Probeer weer"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Maksimum gesigontsluit-pogings oorskry"</string>
-    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Laai, (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
+    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Laai, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Gelaai"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Koppel jou herlaaier."</string>
@@ -1066,8 +1066,8 @@
     <string name="smv_application" msgid="3307209192155442829">"Die program <xliff:g id="APPLICATION">%1$s</xliff:g> (proses <xliff:g id="PROCESS">%2$s</xliff:g>) het sy selfopgelegde StrictMode-beleid oortree."</string>
     <string name="smv_process" msgid="5120397012047462446">"Die proses <xliff:g id="PROCESS">%1$s</xliff:g> het die selfopgelegde StrictMode-beleid geskend."</string>
     <string name="android_upgrading_title" msgid="1584192285441405746">"Android gradeer tans op..."</string>
-    <string name="android_upgrading_apk" msgid="7904042682111526169">"Optimeer program <xliff:g id="NUMBER_0">%1$d</xliff:g> van <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
-    <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Begin programme."</string>
+    <string name="android_upgrading_apk" msgid="7904042682111526169">"Optimaliseer program <xliff:g id="NUMBER_0">%1$d</xliff:g> van <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
+    <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Programme is besig om te begin."</string>
     <string name="android_upgrading_complete" msgid="1405954754112999229">"Voltooi herlaai."</string>
     <string name="heavy_weight_notification" msgid="9087063985776626166">"<xliff:g id="APP">%1$s</xliff:g> loop"</string>
     <string name="heavy_weight_notification_detail" msgid="1721681741617898865">"Raak om na program te wissel"</string>
@@ -1456,4 +1456,39 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Toeganklikheid gekanselleer."</string>
     <string name="user_switched" msgid="3768006783166984410">"Huidige gebruiker <xliff:g id="NAME">%1$s</xliff:g> ."</string>
     <string name="owner_name" msgid="2716755460376028154">"Eienaar"</string>
+
+    <!-- CYANOGENMOD ADDITIONS START -->
+    <string name="profileNameDefault">Normaal</string>
+    <string name="profileNameWork">Werk</string>
+    <string name="profileNameHome">Huis</string>
+    <string name="profileNameSilent">Stil</string>
+    <string name="profileNameNight">Nag</string>
+    <string name="profileGroupPhone">Foon</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Epos</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Ander</string>
+    <string name="reboot_system" product="tablet">Herlaai tablet</string>
+    <string name="reboot_system" product="default">Herlaai foon</string>
+    <string name="global_action_screenshot">Skermfoto</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Volskerm</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Aan</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Af</string>
+    <string name="reboot_reboot">Herlaai</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Herlaai\u2026</string>
+    <string name="reboot_confirm" product="tablet">Jou tablet gaan herlaai.</string>
+    <string name="reboot_confirm" product="default">Jou foon gaan herlaai.</string>
+    <string name="global_action_reboot">Herlaai</string>
+    <string name="global_action_choose_profile">Profiel</string>
+    <string name="toast_rotation_unlocked">Skerm rotasie ontsluit</string>
+    <string name="toast_rotation_locked">Skerm rotasie gesluit</string>
+
+    <!-- CYANOGENMOD ADDITIONS END -->
+
 </resources>
