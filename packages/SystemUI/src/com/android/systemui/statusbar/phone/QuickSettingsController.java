@@ -111,7 +111,7 @@ public class QuickSettingsController {
     private ContentObserver mObserver;
     public PhoneStatusBar mStatusBarService;
 
-    private InputMethodTile IMETile;
+    private InputMethodTile mIMETile;
 
     public QuickSettingsController(Context context, QuickSettingsContainerView container, PhoneStatusBar statusBarService) {
         mContext = context;
@@ -230,9 +230,9 @@ public class QuickSettingsController {
             mQuickSettingsTiles.add(qs);
         }
         if (Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_IME, 1) == 1) {
-            QuickSettingsTile qs = new InputMethodTile(mContext, inflater, mContainerView, this);
-            qs.setupQuickSettingsTile();
-            mQuickSettingsTiles.add(qs);
+            mIMETile = new InputMethodTile(mContext, inflater, mContainerView, this);
+            mIMETile.setupQuickSettingsTile();
+            mQuickSettingsTiles.add(mIMETile);
         }
         if (deviceSupportsUsbTether(mContext) && Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_USBTETHER, 1) == 1) {
             QuickSettingsTile qs = new UsbTetherTile(mContext, inflater, mContainerView, this);
@@ -333,8 +333,8 @@ public class QuickSettingsController {
     }
 
     public void setImeWindowStatus(boolean visible) {
-        if (IMETile != null) {
-            IMETile.toggleVisibility(visible);
+        if (mIMETile != null) {
+            mIMETile.toggleVisibility(visible);
         }
     }
 
