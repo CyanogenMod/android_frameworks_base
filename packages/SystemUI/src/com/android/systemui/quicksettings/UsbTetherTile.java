@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbManager;
 import android.net.ConnectivityManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -50,12 +49,7 @@ public class UsbTetherTile extends QuickSettingsTile {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(ConnectivityManager.ACTION_TETHER_STATE_CHANGED)) {
-            Log.d(TAG,"ACTION_TETHER_STATE_CHANGED");
-        }
-
         if (intent.getAction().equals(UsbManager.ACTION_USB_STATE)) {
-            Log.d(TAG,"ACTION_USB_STATE");
             mUsbConnected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
         }
 
