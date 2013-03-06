@@ -239,6 +239,8 @@
     <string name="quick_settings_wifiap_off">Wi-Fi AP OFF</string>
     <string name="quick_settings_quiethours">Periodo quiete</string>
     <string name="quick_settings_quiethours_off">Periodo quiete OFF</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE OFF</string>
     <string name="navbar_dialog_title">Azione da associare</string>
     <string name="navbar_home_button">Pulsante Home</string>
     <string name="navbar_recent_button">Pulsante Recenti</string>
