@@ -1487,4 +1487,9 @@
     <string name="global_action_choose_profile">Profiili</string>
     <string name="toast_rotation_unlocked">Näytön asento auki</string>
     <string name="toast_rotation_locked">Näytön asento lukittu</string>
+    <string name="permlab_fm_radio_receiver">Ohjaa FM-vastaanotinta</string>
+    <string name="permdesc_fm_radio_receiver">Sallii sovelluksen ohjata FM-vastaanotinta.</string>
+    <string name="permlab_fm_radio_transmitter">Ohjaa FM-lähetintä</string>
+    <string name="permdesc_fm_radio_transmitter">Sallii sovelluksen ohjata FM-lähetintä.</string>
+    <string name="storage_sd_dock_card">Telakoi SD-kortti</string>
 </resources>
