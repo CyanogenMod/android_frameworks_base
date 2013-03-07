@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-/* //device/apps/common/assets/res/any/strings.xml
-**
-** Copyright 2006, The Android Open Source Project
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
- -->
+<!-- //device/apps/common/assets/res/any/strings.xml
+
+     Copyright (C) 2006 The Android Open Source Project
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="byteShort" msgid="8340973892742019101">"O"</string>
-    <string name="kilobyteShort" msgid="5973789783504771878">"Ko"</string>
+    <string name="byteShort" msgid="8340973892742019101">"o"</string>
+    <string name="kilobyteShort" msgid="5973789783504771878">"ko"</string>
     <string name="megabyteShort" msgid="6355851576770428922">"Mo"</string>
     <string name="gigabyteShort" msgid="3259882455212193214">"Go"</string>
     <string name="terabyteShort" msgid="231613018159186962">"To"</string>
     <string name="petabyteShort" msgid="5637816680144990219">"Po"</string>
-    <string name="fileSizeSuffix" msgid="7670819340156489359">"<xliff:g id="NUMBER">%1$s</xliff:g> <xliff:g id="UNIT">%2$s</xliff:g>"</string>
-    <string name="untitled" msgid="6071602020171759109">"&lt;sans titre&gt;"</string>
-    <string name="ellipsis" msgid="7899829516048813237">"…"</string>
+    <string name="fileSizeSuffix" msgid="7670819340156489359">"<xliff:g id="number">%1$s</xliff:g> <xliff:g id="unit">%2$s</xliff:g>"</string>
+    <string name="untitled" msgid="6071602020171759109">"&lt;Sans nom&gt;"</string>
+    <string name="ellipsis" msgid="7899829516048813237">"\u2026"</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">"(Aucun numéro de téléphone)"</string>
     <string name="unknownName" msgid="2277556546742746522">"(Inconnu)"</string>
     <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"Messagerie vocale"</string>
@@ -45,9 +44,9 @@
     <string name="profileGroupGmail">"Gmail"</string>
     <string name="profileGroupEmail">"Email"</string>
     <string name="profileGroupSMS">"SMS"</string>
-    <string name="wildcardProfile">"Autre"</string>
+    <string name="wildcardProfile">"Autres"</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Le service a été activé."</string>
-    <string name="serviceEnabledFor" msgid="6856228140453471041">"Ce service a été activé pour :"</string>
+    <string name="serviceEnabledFor" msgid="6856228140453471041">"Ce service a été activé pour\u00A0:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Ce service a été désactivé."</string>
     <string name="serviceRegistered" msgid="6275019082598102493">"Enregistrement réussi."</string>
     <string name="serviceErased" msgid="1288584695297200972">"Effacement réussi."</string>
@@ -72,10 +71,10 @@
     <string name="RuacMmi" msgid="7827887459138308886">"Rejeter les appels indésirables"</string>
     <string name="CndMmi" msgid="3116446237081575808">"Livraison du numéro d\'appel"</string>
     <string name="DndMmi" msgid="1265478932418334331">"Ne pas déranger"</string>
-    <string name="CLIRDefaultOnNextCallOn" msgid="429415409145781923">"Par défaut, les numéros des appelants ne sont pas restreints. Appel suivant : restreint"</string>
-    <string name="CLIRDefaultOnNextCallOff" msgid="3092918006077864624">"Par défaut, les numéros des appelants ne sont pas restreints. Appel suivant : non restreint"</string>
-    <string name="CLIRDefaultOffNextCallOn" msgid="6179425182856418465">"Par défaut, les numéros des appelants ne sont pas restreints. Appel suivant : restreint"</string>
-    <string name="CLIRDefaultOffNextCallOff" msgid="2567998633124408552">"Par défaut, les numéros des appelants ne sont pas restreints. Appel suivant : non restreint"</string>
+    <string name="CLIRDefaultOnNextCallOn" msgid="429415409145781923">"Par défaut, les numéros des appelants ne sont pas restreints. Appel suivant\u00A0: restreint"</string>
+    <string name="CLIRDefaultOnNextCallOff" msgid="3092918006077864624">"Par défaut, les numéros des appelants ne sont pas restreints. Appel suivant\u00A0: non restreint"</string>
+    <string name="CLIRDefaultOffNextCallOn" msgid="6179425182856418465">"Par défaut, les numéros des appelants ne sont pas restreints. Appel suivant\u00A0: restreint"</string>
+    <string name="CLIRDefaultOffNextCallOff" msgid="2567998633124408552">"Par défaut, les numéros des appelants ne sont pas restreints. Appel suivant\u00A0: non restreint"</string>
     <string name="serviceNotProvisioned" msgid="8614830180508686666">"Ce service n\'est pas pris en charge."</string>
     <string name="CLIRPermanent" msgid="5460892159398802465">"Le paramètre Numéro de l\'appelant ne peut pas être modifié."</string>
     <string name="RestrictedChangedTitle" msgid="5592189398956187498">"L\'accès limité a été modifié."</string>
@@ -100,20 +99,20 @@
     <string name="roamingText2" msgid="8969929049081268115">"Indicateur d\'itinérance clignotant"</string>
     <string name="roamingText3" msgid="5148255027043943317">"Hors zone"</string>
     <string name="roamingText4" msgid="8808456682550796530">"Hors du bâtiment"</string>
-    <string name="roamingText5" msgid="7604063252850354350">"Itinérance - Système préféré"</string>
-    <string name="roamingText6" msgid="2059440825782871513">"Itinérance - Système disponible"</string>
-    <string name="roamingText7" msgid="7112078724097233605">"Itinérance - Partenaire Alliance"</string>
-    <string name="roamingText8" msgid="5989569778604089291">"Itinérance - Partenaire Premium"</string>
-    <string name="roamingText9" msgid="7969296811355152491">"Itinérance - Tous services disponibles"</string>
-    <string name="roamingText10" msgid="3992906999815316417">"Itinérance - Services partiellement disponibles"</string>
+    <string name="roamingText5" msgid="7604063252850354350">"Itinérance\u00A0-\u00A0Système préféré"</string>
+    <string name="roamingText6" msgid="2059440825782871513">"Itinérance\u00A0-\u00A0Système disponible"</string>
+    <string name="roamingText7" msgid="7112078724097233605">"Itinérance\u00A0-\u00A0Partenaire Alliance"</string>
+    <string name="roamingText8" msgid="5989569778604089291">"Itinérance\u00A0-\u00A0Partenaire Premium"</string>
+    <string name="roamingText9" msgid="7969296811355152491">"Itinérance\u00A0-\u00A0Tous services disponibles"</string>
+    <string name="roamingText10" msgid="3992906999815316417">"Itinérance\u00A0-\u00A0Services partiellement disponibles"</string>
     <string name="roamingText11" msgid="4154476854426920970">"Bannière d\'itinérance activée"</string>
     <string name="roamingText12" msgid="1189071119992726320">"Bannière d\'itinérance désactivée"</string>
     <string name="roamingTextSearching" msgid="8360141885972279963">"Recherche des services disponibles"</string>
-    <string name="cfTemplateNotForwarded" msgid="1683685883841272560">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g> : non transféré"</string>
-    <string name="cfTemplateForwarded" msgid="1302922117498590521">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g> : <xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
-    <string name="cfTemplateForwardedTime" msgid="9206251736527085256">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g> : <xliff:g id="DIALING_NUMBER">{1}</xliff:g> au bout de <xliff:g id="TIME_DELAY">{2}</xliff:g> secondes"</string>
-    <string name="cfTemplateRegistered" msgid="5073237827620166285">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g> : non transféré"</string>
-    <string name="cfTemplateRegisteredTime" msgid="6781621964320635172">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g> : non transféré"</string>
+    <string name="cfTemplateNotForwarded" msgid="1683685883841272560">"<xliff:g id="bearer_service_code">{0}</xliff:g>\u00A0: non transféré"</string>
+    <string name="cfTemplateForwarded" msgid="1302922117498590521">"<xliff:g id="bearer_service_code">{0}</xliff:g>\u00A0: <xliff:g id="dialing_number">{1}</xliff:g>"</string>
+    <string name="cfTemplateForwardedTime" msgid="9206251736527085256">"<xliff:g id="bearer_service_code">{0}</xliff:g>\u00A0: <xliff:g id="dialing_number">{1}</xliff:g> au bout de <xliff:g id="time_delay">{2}</xliff:g> secondes"</string>
+    <string name="cfTemplateRegistered" msgid="5073237827620166285">"<xliff:g id="bearer_service_code">{0}</xliff:g>\u00A0: non transféré"</string>
+    <string name="cfTemplateRegisteredTime" msgid="6781621964320635172">"<xliff:g id="bearer_service_code">{0}</xliff:g>\u00A0: non transféré"</string>
     <string name="fcComplete" msgid="3118848230966886575">"Code de service terminé"</string>
     <string name="fcError" msgid="3327560126588500777">"Problème de connexion ou code de service non valide"</string>
     <string name="httpErrorOk" msgid="1191919378083472204">"OK"</string>
@@ -132,10 +131,10 @@
     <string name="httpErrorFile" msgid="8250549644091165175">"Impossible d\'accéder au fichier."</string>
     <string name="httpErrorFileNotFound" msgid="5588380756326017105">"Le fichier demandé est introuvable."</string>
     <string name="httpErrorTooManyRequests" msgid="1235396927087188253">"Trop de requêtes sont en cours de traitement. Veuillez réessayer ultérieurement."</string>
-    <string name="notification_title" msgid="1259940370369187045">"Erreur de connexion au compte <xliff:g id="ACCOUNT">%1$s</xliff:g>"</string>
+    <string name="notification_title" msgid="1259940370369187045">"Erreur de connexion au compte <xliff:g id="account">%1$s</xliff:g>"</string>
     <string name="contentServiceSync" msgid="8353523060269335667">"Synchroniser"</string>
     <string name="contentServiceSyncNotificationTitle" msgid="397743349191901458">"Synchronisation"</string>
-    <string name="contentServiceTooManyDeletesNotificationDesc" msgid="8100981435080696431">"Trop de contenus supprimés (<xliff:g id="CONTENT_TYPE">%s</xliff:g>)."</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc" msgid="8100981435080696431">"Trop de contenus supprimés (<xliff:g id="content_type">%s</xliff:g>)."</string>
     <string name="low_memory" msgid="6632412458436461203">"La mémoire du téléphone est pleine. Supprimez des fichiers pour libérer de l\'espace."</string>
     <string name="me" msgid="6545696007631404292">"Moi"</string>
     <string name="power_dialog" msgid="1319919075463988638">"Options du téléphone"</string>
@@ -144,15 +143,23 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Désactiver le mode sans fil"</string>
     <string name="screen_lock" msgid="799094655496098153">"Verrouillage de l\'écran"</string>
     <string name="power_off" msgid="4266614107412865048">"Éteindre"</string>
-    <string name="reboot_system">"Redémarrer"</string>
-    <string name="reboot_reboot">"Redémarrage"</string>
-    <string name="shutdown_progress" msgid="2281079257329981203">"Arrêt en cours..."</string>
-    <string name="reboot_progress">"Redémarrage en cours..."</string>
+    <string name="reboot_system">"Redémarrage du téléphone"</string>
+    <string name="reboot_reboot">"Redémarrer"</string>
+    <string name="reboot_recovery">"Recovery"</string>
+    <string name="reboot_bootloader">"Bootloader"</string>
+    <string name="reboot_bootmenu">"Bootmenu"</string>
+    <string name="reboot_fastboot">"Fastboot"</string>
+    <string name="reboot_download">"Download"</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Arrêt en cours\u2026"</string>
+    <string name="reboot_progress">"Redémarrage en cours\u2026"</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Votre téléphone va s\'éteindre."</string>
     <string name="reboot_confirm">"Votre téléphone va redémarrer."</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Récentes"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Aucune application récente"</string>
     <string name="global_actions" msgid="2406416831541615258">"Options du téléphone"</string>
+    <string name="global_action_home">"Accueil"</string>
+    <string name="global_action_menu">"Menu"</string>
+    <string name="global_action_back">"Retour"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Verrouillage de l\'écran"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Éteindre"</string>
     <string name="global_action_reboot">"Redémarrer"</string>
@@ -163,6 +170,7 @@
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Mode Avion"</string>
     <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Le mode Avion est activé."</string>
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Le mode Avion est désactivé."</string>
+    <string name="global_action_screenshot">"Capture d\'écran"</string>
     <string name="safeMode" msgid="2788228061547930246">"Mode sécurisé"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Système Android"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Services payants"</string>
@@ -217,7 +225,7 @@
     <string name="permlab_setDebugApp" msgid="4339730312925176742">"Activation du débogage de l\'application"</string>
     <string name="permdesc_setDebugApp" msgid="5584310661711990702">"Permet à une application d\'activer le mode de débogage d\'une autre application. Des applications malveillantes peuvent utiliser cette fonctionnalité pour interrompre d\'autres applications de façon inopinée."</string>
     <string name="permlab_changeConfiguration" msgid="8214475779521218295">"Modification des paramètres de l\'IU"</string>
-    <string name="permdesc_changeConfiguration" msgid="3465121501528064399">"Permet à une application de modifier la configuration actuelle (par ex. : la taille de la police générale ou des paramètres régionaux)."</string>
+    <string name="permdesc_changeConfiguration" msgid="3465121501528064399">"Permet à une application de modifier la configuration actuelle (par ex.\u00A0: la taille de la police générale ou des paramètres régionaux)."</string>
     <string name="permlab_enableCarMode" msgid="5684504058192921098">"activer le mode voiture"</string>
     <string name="permdesc_enableCarMode" msgid="5673461159384850628">"Permet à une application d\'activer le mode voiture."</string>
     <string name="permlab_killBackgroundProcesses" msgid="8373714752793061963">"arrêter les processus en arrière-plan"</string>
@@ -429,7 +437,7 @@
     <string name="permlab_nfc" msgid="4423351274757876953">"contrôler la communication en champ proche"</string>
     <string name="permdesc_nfc" msgid="9171401851954407226">"Permet à une application de communiquer avec des tags, cartes et lecteurs prenant en charge la communication en champ proche (NFC)."</string>
     <string name="permlab_disableKeyguard" msgid="4977406164311535092">"Désactivation du verrouillage des touches"</string>
-    <string name="permdesc_disableKeyguard" msgid="3189763479326302017">"Permet à une application de désactiver le verrouillage des touches et toute sécurité par mot de passe. Exemple : Votre téléphone désactive le verrouillage du clavier lorsque vous recevez un appel, puis le réactive lorsque vous raccrochez."</string>
+    <string name="permdesc_disableKeyguard" msgid="3189763479326302017">"Permet à une application de désactiver le verrouillage des touches et toute sécurité par mot de passe. Exemple\u00A0: Votre téléphone désactive le verrouillage du clavier lorsque vous recevez un appel, puis le réactive lorsque vous raccrochez."</string>
     <string name="permlab_readSyncSettings" msgid="6201810008230503052">"Lecture des paramètres de synchronisation"</string>
     <string name="permdesc_readSyncSettings" msgid="5315925706353341823">"Permet à une application de lire les paramètres de synchronisation (par ex. savoir si la synchronisation est activée pour les Contacts)."</string>
     <string name="permlab_writeSyncSettings" msgid="6297138566442486462">"Écriture des paramètres de synchronisation"</string>
@@ -462,49 +470,56 @@
     <string name="policydesc_forceLock" msgid="5696964126226028442">"Gérer le mode et les conditions de verrouillage de l\'écran"</string>
     <string name="policylab_wipeData" msgid="3910545446758639713">"Effacer toutes les données"</string>
     <string name="policydesc_wipeData" msgid="7669895333814222586">"Effacer les données du téléphone sans avertissement, en restaurant la configuration usine"</string>
-  <string-array name="phoneTypes">
-    <item msgid="8901098336658710359">"Domicile"</item>
-    <item msgid="869923650527136615">"Mobile"</item>
-    <item msgid="7897544654242874543">"Bureau"</item>
-    <item msgid="1103601433382158155">"Télécopie bureau"</item>
-    <item msgid="1735177144948329370">"Télécopie domicile"</item>
-    <item msgid="603878674477207394">"Récepteur d\'appel"</item>
-    <item msgid="1650824275177931637">"Autre"</item>
-    <item msgid="9192514806975898961">"Personnalisé"</item>
-  </string-array>
-  <string-array name="emailAddressTypes">
-    <item msgid="8073994352956129127">"Domicile"</item>
-    <item msgid="7084237356602625604">"Bureau"</item>
-    <item msgid="1112044410659011023">"Autre"</item>
-    <item msgid="2374913952870110618">"Personnalisée"</item>
-  </string-array>
-  <string-array name="postalAddressTypes">
-    <item msgid="6880257626740047286">"Domicile"</item>
-    <item msgid="5629153956045109251">"Bureau"</item>
-    <item msgid="4966604264500343469">"Autre"</item>
-    <item msgid="4932682847595299369">"Personnalisée"</item>
-  </string-array>
-  <string-array name="imAddressTypes">
-    <item msgid="1738585194601476694">"Domicile"</item>
-    <item msgid="1359644565647383708">"Bureau"</item>
-    <item msgid="7868549401053615677">"Autre"</item>
-    <item msgid="3145118944639869809">"Personnalisé"</item>
-  </string-array>
-  <string-array name="organizationTypes">
-    <item msgid="7546335612189115615">"Bureau"</item>
-    <item msgid="4378074129049520373">"Autre"</item>
-    <item msgid="3455047468583965104">"Personnalisée"</item>
-  </string-array>
-  <string-array name="imProtocols">
-    <item msgid="8595261363518459565">"AIM"</item>
-    <item msgid="7390473628275490700">"Windows Live"</item>
-    <item msgid="7882877134931458217">"Yahoo"</item>
-    <item msgid="5035376313200585242">"Skype"</item>
-    <item msgid="7532363178459444943">"QQ"</item>
-    <item msgid="3713441034299660749">"Google Talk"</item>
-    <item msgid="2506857312718630823">"ICQ"</item>
-    <item msgid="1648797903785279353">"Jabber"</item>
-  </string-array>
+
+    <string-array name="phoneTypes">
+        <item msgid="8901098336658710359">"Domicile"</item>
+        <item msgid="869923650527136615">"Mobile"</item>
+        <item msgid="7897544654242874543">"Bureau"</item>
+        <item msgid="1103601433382158155">"Télécopie bureau"</item>
+        <item msgid="1735177144948329370">"Télécopie domicile"</item>
+        <item msgid="603878674477207394">"Récepteur d\'appel"</item>
+        <item msgid="1650824275177931637">"Autre"</item>
+        <item msgid="9192514806975898961">"Personnalisé"</item>
+    </string-array>
+
+    <string-array name="emailAddressTypes">
+        <item msgid="8073994352956129127">"Domicile"</item>
+        <item msgid="7084237356602625604">"Bureau"</item>
+        <item msgid="1112044410659011023">"Autre"</item>
+        <item msgid="2374913952870110618">"Personnalisée"</item>
+    </string-array>
+
+    <string-array name="postalAddressTypes">
+        <item msgid="6880257626740047286">"Domicile"</item>
+        <item msgid="5629153956045109251">"Bureau"</item>
+        <item msgid="4966604264500343469">"Autre"</item>
+        <item msgid="4932682847595299369">"Personnalisée"</item>
+    </string-array>
+
+    <string-array name="imAddressTypes">
+        <item msgid="1738585194601476694">"Domicile"</item>
+        <item msgid="1359644565647383708">"Bureau"</item>
+        <item msgid="7868549401053615677">"Autre"</item>
+        <item msgid="3145118944639869809">"Personnalisé"</item>
+    </string-array>
+
+    <string-array name="organizationTypes">
+        <item msgid="7546335612189115615">"Bureau"</item>
+        <item msgid="4378074129049520373">"Autre"</item>
+        <item msgid="3455047468583965104">"Personnalisée"</item>
+    </string-array>
+
+    <string-array name="imProtocols">
+        <item msgid="8595261363518459565">"AIM"</item>
+        <item msgid="7390473628275490700">"Windows Live"</item>
+        <item msgid="7882877134931458217">"Yahoo"</item>
+        <item msgid="5035376313200585242">"Skype"</item>
+        <item msgid="7532363178459444943">"QQ"</item>
+        <item msgid="3713441034299660749">"Google Talk"</item>
+        <item msgid="2506857312718630823">"ICQ"</item>
+        <item msgid="1648797903785279353">"Jabber"</item>
+    </string-array>
+
     <string name="phoneTypeCustom" msgid="1644738059053355820">"Personnalisé"</string>
     <string name="phoneTypeHome" msgid="2570923463033985887">"Domicile"</string>
     <string name="phoneTypeMobile" msgid="6501463557754751037">"Mobile"</string>
@@ -559,11 +574,11 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Accueil"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Professionnelle"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Autre"</string>
-    <string name="contact_status_update_attribution" msgid="5112589886094402795">"via <xliff:g id="SOURCE">%1$s</xliff:g>"</string>
-    <string name="contact_status_update_attribution_with_date" msgid="5945386376369979909">"<xliff:g id="DATE">%1$s</xliff:g> via <xliff:g id="SOURCE">%2$s</xliff:g>"</string>
+    <string name="contact_status_update_attribution" msgid="5112589886094402795">"via <xliff:g id="source">%1$s</xliff:g>"</string>
+    <string name="contact_status_update_attribution_with_date" msgid="5945386376369979909">"<xliff:g id="date">%1$s</xliff:g> via <xliff:g id="source">%2$s</xliff:g>"</string>
     <string name="keyguard_password_enter_pin_code" msgid="3731488827218876115">"Saisissez le code PIN"</string>
     <string name="keyguard_password_enter_password_code" msgid="9138158344813213754">"Saisissez le mot de passe pour procéder au déverrouillage."</string>
-    <string name="keyguard_password_wrong_pin_code" msgid="1295984114338107718">"Le code PIN est incorrect !"</string>
+    <string name="keyguard_password_wrong_pin_code" msgid="1295984114338107718">"Le code PIN est incorrect\u00A0!"</string>
     <string name="keyguard_label_text" msgid="861796461028298424">"Pour déverrouiller le clavier, appuyez sur \"Menu\" puis sur 0."</string>
     <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"Numéro d\'urgence"</string>
     <string name="lockscreen_carrier_default" msgid="8812714795156374435">"(Aucun service)"</string>
@@ -573,12 +588,13 @@
     <string name="lockscreen_pattern_instructions" msgid="7478703254964810302">"Dessinez un schéma pour déverrouiller le téléphone"</string>
     <string name="lockscreen_emergency_call" msgid="5347633784401285225">"Appel d\'urgence"</string>
     <string name="lockscreen_return_to_call" msgid="5244259785500040021">"Retour à l\'appel"</string>
-    <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Combinaison correcte !"</string>
+    <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Combinaison correcte\u00A0!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Incorrect. Merci de réessayer."</string>
-    <string name="lockscreen_plugged_in" msgid="613343852842944435">"Chargement (<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>)"</string>
-    <string name="lockscreen_charged" msgid="4938930459620989972">"Chargé"</string>
-    <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Branchez votre chargeur."</string>
+    <string name="lockscreen_plugged_in" msgid="613343852842944435">"Chargement, (<xliff:g id="number">%d</xliff:g> <xliff:g id="percent">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">"Batterie, (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)"</string>
+    <string name="lockscreen_charged" msgid="4938930459620989972">"Chargé."</string>
+    <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="number">%d</xliff:g> <xliff:g id="percent">%%</xliff:g>"</string>
+    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Branchez votre chargeur, (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"Aucune carte SIM n\'a été trouvée."</string>
     <string name="lockscreen_missing_sim_message" msgid="2186920585695169078">"Aucune carte SIM n\'est insérée dans le téléphone."</string>
     <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"Insérez une carte SIM."</string>
@@ -587,37 +603,37 @@
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"La carte SIM est verrouillée par clé PUK."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"Veuillez consulter le guide d\'utilisation ou contacter l\'assistance clientèle."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"La carte SIM est verrouillée."</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Déblocage de la carte SIM..."</string>
-    <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"Vous avez mal reproduit le schéma de déverrouillage <xliff:g id="NUMBER_0">%d</xliff:g> fois. "\n\n"Veuillez réessayer dans <xliff:g id="NUMBER_1">%d</xliff:g> secondes."</string>
-    <string name="lockscreen_failed_attempts_almost_glogin" msgid="3351013842320127827">"Vous avez mal saisi le schéma de déverrouillage <xliff:g id="NUMBER_0">%d</xliff:g> fois. Au bout de <xliff:g id="NUMBER_1">%d</xliff:g> tentatives supplémentaires, vous devrez déverrouiller votre téléphone à l\'aide de votre identifiant Google."\n\n"Merci de réessayer dans <xliff:g id="NUMBER_2">%d</xliff:g> secondes."</string>
-    <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"Réessayez dans <xliff:g id="NUMBER">%d</xliff:g> secondes."</string>
-    <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"Schéma oublié ?"</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Déblocage de la carte SIM\u2026"</string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"Vous avez mal reproduit le schéma de déverrouillage <xliff:g id="number_0">%d</xliff:g> fois. "\n\n"Veuillez réessayer dans <xliff:g id="number_1">%d</xliff:g> secondes."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin" msgid="3351013842320127827">"Vous avez mal saisi le schéma de déverrouillage <xliff:g id="number_0">%d</xliff:g> fois. Au bout de <xliff:g id="number_1">%d</xliff:g> tentatives supplémentaires, vous devrez déverrouiller votre téléphone à l\'aide de votre identifiant Google."\n\n"Merci de réessayer dans <xliff:g id="number_2">%d</xliff:g> secondes."</string>
+    <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"Réessayez dans <xliff:g id="number">%d</xliff:g> secondes."</string>
+    <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"Schéma oublié\u00A0?"</string>
     <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"Déverrouillage du compte"</string>
-    <string name="lockscreen_glogin_too_many_attempts" msgid="2446246026221678244">"Trop de tentatives !"</string>
+    <string name="lockscreen_glogin_too_many_attempts" msgid="2446246026221678244">"Trop de tentatives\u00A0!"</string>
     <string name="lockscreen_glogin_instructions" msgid="1816635201812207709">"Pour déverrouiller le téléphone, connectez-vous à l\'aide de votre compte Google."</string>
     <string name="lockscreen_glogin_username_hint" msgid="8846881424106484447">"Nom d\'utilisateur (e-mail)"</string>
     <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">"Mot de passe"</string>
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Se connecter"</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"Nom d\'utilisateur ou mot de passe incorrect."</string>
-    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Vérification..."</string>
+    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Vérification\u2026"</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Déverrouiller"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Son activé"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Son désactivé"</string>
-    <string name="lockscreen_phone_label">Téléphone</string>
+    <string name="lockscreen_phone_label">"Téléphone"</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
-    <string name="hour_ampm" msgid="4329881288269772723">"<xliff:g id="HOUR">%-l</xliff:g><xliff:g id="AMPM">%P</xliff:g>"</string>
-    <string name="hour_cap_ampm" msgid="1829009197680861107">"<xliff:g id="HOUR">%-l</xliff:g><xliff:g id="AMPM">%p</xliff:g>"</string>
+    <string name="hour_ampm" msgid="4329881288269772723">"<xliff:g id="hour">%-l</xliff:g><xliff:g id="ampm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm" msgid="1829009197680861107">"<xliff:g id="hour">%-l</xliff:g><xliff:g id="ampm">%p</xliff:g>"</string>
     <string name="factorytest_failed" msgid="5410270329114212041">"Échec du test usine"</string>
     <string name="factorytest_not_system" msgid="4435201656767276723">"L\'action FACTORY_TEST est uniquement prise en charge pour les paquets de données installés dans in/system/app."</string>
     <string name="factorytest_no_action" msgid="872991874799998561">"Impossible de trouver un paquet proposant l\'action FACTORY_TEST."</string>
     <string name="factorytest_reboot" msgid="6320168203050791643">"Redémarrer"</string>
-    <string name="js_dialog_title" msgid="8143918455087008109">"La page \"<xliff:g id="TITLE">%s</xliff:g>\" affirme :"</string>
+    <string name="js_dialog_title" msgid="8143918455087008109">"La page \"<xliff:g id="title">%s</xliff:g>\" affirme\u00A0:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="1901675448179653089">"Vous souhaitez quitter cette page ?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Sélectionnez OK pour continuer ou Annuler pour rester sur la page actuelle."</string>
+    <string name="js_dialog_before_unload" msgid="1901675448179653089">"Voulez-vous quitter cette page\u00A0?"\n\n"<xliff:g id="message">%s</xliff:g>"\n\n"Appuyez sur \"OK\" pour continuer ou \"Annuler\" pour rester sur la page actuelle."</string>
     <string name="save_password_label" msgid="6860261758665825069">"Confirmer"</string>
-    <string name="double_tap_toast" msgid="1068216937244567247">"Conseil : Appuyez deux fois pour effectuer un zoom avant ou arrière."</string>
+    <string name="double_tap_toast" msgid="1068216937244567247">"Conseil\u00A0: Appuyez deux fois pour effectuer un zoom avant ou arrière."</string>
     <string name="permlab_readHistoryBookmarks" msgid="1284843728203412135">"lire l\'historique et les favoris du navigateur"</string>
     <string name="permdesc_readHistoryBookmarks" msgid="4981489815467617191">"Autorise l\'application à lire toutes les URL auxquelles le navigateur a accédé et tous ses favoris."</string>
     <string name="permlab_writeHistoryBookmarks" msgid="9009434109836280374">"écrire dans l\'historique et les favoris du navigateur"</string>
@@ -626,7 +642,7 @@
     <string name="permdesc_setAlarm" msgid="5966966598149875082">"Permet à l\'application de définir une alarme dans un utilitaire faisant office de réveil. Certains réveils risquent ne pas prendre en charge cette fonctionnalité."</string>
     <string name="permlab_writeGeolocationPermissions" msgid="4715212655598275532">"Modifier les autorisations de géolocalisation du navigateur"</string>
     <string name="permdesc_writeGeolocationPermissions" msgid="4011908282980861679">"Permet à une application de modifier les autorisations de géolocalisation du navigateur. Les applications malveillantes peuvent se servir de cette fonctionnalité pour envoyer des informations de lieu à des sites Web arbitraires."</string>
-    <string name="save_password_message" msgid="767344687139195790">"Voulez-vous que le navigateur se souvienne de ce mot de passe ?"</string>
+    <string name="save_password_message" msgid="767344687139195790">"Voulez-vous que le navigateur se souvienne de ce mot de passe\u00A0?"</string>
     <string name="save_password_notnow" msgid="6389675316706699758">"Pas maintenant"</string>
     <string name="save_password_remember" msgid="6491879678996749466">"Mémoriser"</string>
     <string name="save_password_never" msgid="8274330296785855105">"Jamais"</string>
@@ -640,78 +656,97 @@
     <string name="search_go" msgid="8298016669822141719">"Rechercher"</string>
     <string name="oneMonthDurationPast" msgid="7396384508953779925">"Il y a 1 mois"</string>
     <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Il y a plus d\'un mois"</string>
-  <plurals name="num_seconds_ago">
-    <item quantity="one" msgid="4869870056547896011">"Il y a 1 seconde"</item>
-    <item quantity="other" msgid="3903706804349556379">"Il y a <xliff:g id="COUNT">%d</xliff:g> secondes"</item>
-  </plurals>
-  <plurals name="num_minutes_ago">
-    <item quantity="one" msgid="3306787433088810191">"Il y a 1 minute"</item>
-    <item quantity="other" msgid="2176942008915455116">"Il y a <xliff:g id="COUNT">%d</xliff:g> minutes"</item>
-  </plurals>
-  <plurals name="num_hours_ago">
-    <item quantity="one" msgid="9150797944610821849">"il y a 1 heure"</item>
-    <item quantity="other" msgid="2467273239587587569">"Il y a <xliff:g id="COUNT">%d</xliff:g> heures"</item>
-  </plurals>
-  <plurals name="last_num_days">
-    <item quantity="other" msgid="3069992808164318268">"Les <xliff:g id="COUNT">%d</xliff:g> derniers jours"</item>
-  </plurals>
+
+    <plurals name="num_seconds_ago">
+        <item quantity="one" msgid="4869870056547896011">"Il y a 1 seconde"</item>
+        <item quantity="other" msgid="3903706804349556379">"Il y a <xliff:g id="count">%d</xliff:g> secondes"</item>
+    </plurals>
+
+    <plurals name="num_minutes_ago">
+        <item quantity="one" msgid="3306787433088810191">"Il y a 1 minute"</item>
+        <item quantity="other" msgid="2176942008915455116">"Il y a <xliff:g id="count">%d</xliff:g> minutes"</item>
+    </plurals>
+
+    <plurals name="num_hours_ago">
+        <item quantity="one" msgid="9150797944610821849">"il y a 1 heure"</item>
+        <item quantity="other" msgid="2467273239587587569">"Il y a <xliff:g id="count">%d</xliff:g> heures"</item>
+    </plurals>
+
+    <plurals name="last_num_days">
+        <item quantity="other" msgid="3069992808164318268">"Les <xliff:g id="count">%d</xliff:g> derniers jours"</item>
+    </plurals>
+
     <string name="last_month" msgid="3959346739979055432">"Le mois dernier"</string>
     <string name="older" msgid="5211975022815554840">"Préc."</string>
-  <plurals name="num_days_ago">
-    <item quantity="one" msgid="861358534398115820">"hier"</item>
-    <item quantity="other" msgid="2479586466153314633">"Il y a <xliff:g id="COUNT">%d</xliff:g> jours"</item>
-  </plurals>
-  <plurals name="in_num_seconds">
-    <item quantity="one" msgid="2729745560954905102">"dans 1 seconde"</item>
-    <item quantity="other" msgid="1241926116443974687">"dans <xliff:g id="COUNT">%d</xliff:g> secondes"</item>
-  </plurals>
-  <plurals name="in_num_minutes">
-    <item quantity="one" msgid="8793095251325200395">"dans 1 minute"</item>
-    <item quantity="other" msgid="3330713936399448749">"dans <xliff:g id="COUNT">%d</xliff:g> minutes"</item>
-  </plurals>
-  <plurals name="in_num_hours">
-    <item quantity="one" msgid="7164353342477769999">"dans 1 heure"</item>
-    <item quantity="other" msgid="547290677353727389">"dans <xliff:g id="COUNT">%d</xliff:g> heures"</item>
-  </plurals>
-  <plurals name="in_num_days">
-    <item quantity="one" msgid="5413088743009839518">"demain"</item>
-    <item quantity="other" msgid="5109449375100953247">"dans <xliff:g id="COUNT">%d</xliff:g> jours"</item>
-  </plurals>
-  <plurals name="abbrev_num_seconds_ago">
-    <item quantity="one" msgid="1849036840200069118">"il y a 1 seconde"</item>
-    <item quantity="other" msgid="3699169366650930415">"il y a <xliff:g id="COUNT">%d</xliff:g> secondes"</item>
-  </plurals>
-  <plurals name="abbrev_num_minutes_ago">
-    <item quantity="one" msgid="6361490147113871545">"il y a 1 minute"</item>
-    <item quantity="other" msgid="851164968597150710">"il y a <xliff:g id="COUNT">%d</xliff:g> minutes"</item>
-  </plurals>
-  <plurals name="abbrev_num_hours_ago">
-    <item quantity="one" msgid="4796212039724722116">"il y a 1 heure"</item>
-    <item quantity="other" msgid="6889970745748538901">"Il y a <xliff:g id="COUNT">%d</xliff:g> heures"</item>
-  </plurals>
-  <plurals name="abbrev_num_days_ago">
-    <item quantity="one" msgid="8463161711492680309">"hier"</item>
-    <item quantity="other" msgid="3453342639616481191">"Il y a <xliff:g id="COUNT">%d</xliff:g> jours"</item>
-  </plurals>
-  <plurals name="abbrev_in_num_seconds">
-    <item quantity="one" msgid="5842225370795066299">"dans 1 seconde"</item>
-    <item quantity="other" msgid="5495880108825805108">"dans <xliff:g id="COUNT">%d</xliff:g> secondes"</item>
-  </plurals>
-  <plurals name="abbrev_in_num_minutes">
-    <item quantity="one" msgid="562786149928284878">"dans 1 minute"</item>
-    <item quantity="other" msgid="4216113292706568726">"dans <xliff:g id="COUNT">%d</xliff:g> minutes"</item>
-  </plurals>
-  <plurals name="abbrev_in_num_hours">
-    <item quantity="one" msgid="3274708118124045246">"dans 1 heure"</item>
-    <item quantity="other" msgid="3705373766798013406">"dans <xliff:g id="COUNT">%d</xliff:g> heures"</item>
-  </plurals>
-  <plurals name="abbrev_in_num_days">
-    <item quantity="one" msgid="2178576254385739855">"demain"</item>
-    <item quantity="other" msgid="2973062968038355991">"dans <xliff:g id="COUNT">%d</xliff:g> jours"</item>
-  </plurals>
-    <string name="preposition_for_date" msgid="9093949757757445117">"le <xliff:g id="DATE">%s</xliff:g>"</string>
-    <string name="preposition_for_time" msgid="5506831244263083793">"à <xliff:g id="TIME">%s</xliff:g>"</string>
-    <string name="preposition_for_year" msgid="5040395640711867177">"en <xliff:g id="YEAR">%s</xliff:g>"</string>
+
+    <plurals name="num_days_ago">
+        <item quantity="one" msgid="861358534398115820">"hier"</item>
+        <item quantity="other" msgid="2479586466153314633">"Il y a <xliff:g id="count">%d</xliff:g> jours"</item>
+    </plurals>
+
+    <plurals name="in_num_seconds">
+        <item quantity="one" msgid="2729745560954905102">"dans 1 seconde"</item>
+        <item quantity="other" msgid="1241926116443974687">"dans <xliff:g id="count">%d</xliff:g> secondes"</item>
+    </plurals>
+
+    <plurals name="in_num_minutes">
+        <item quantity="one" msgid="8793095251325200395">"dans 1 minute"</item>
+        <item quantity="other" msgid="3330713936399448749">"dans <xliff:g id="count">%d</xliff:g> minutes"</item>
+    </plurals>
+
+    <plurals name="in_num_hours">
+        <item quantity="one" msgid="7164353342477769999">"dans 1 heure"</item>
+        <item quantity="other" msgid="547290677353727389">"dans <xliff:g id="count">%d</xliff:g> heures"</item>
+    </plurals>
+
+    <plurals name="in_num_days">
+        <item quantity="one" msgid="5413088743009839518">"demain"</item>
+        <item quantity="other" msgid="5109449375100953247">"dans <xliff:g id="count">%d</xliff:g> jours"</item>
+    </plurals>
+
+    <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one" msgid="1849036840200069118">"il y a 1 seconde"</item>
+        <item quantity="other" msgid="3699169366650930415">"il y a <xliff:g id="count">%d</xliff:g> secondes"</item>
+    </plurals>
+
+    <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one" msgid="6361490147113871545">"il y a 1 minute"</item>
+        <item quantity="other" msgid="851164968597150710">"il y a <xliff:g id="count">%d</xliff:g> minutes"</item>
+    </plurals>
+
+    <plurals name="abbrev_num_hours_ago">
+        <item quantity="one" msgid="4796212039724722116">"il y a 1 heure"</item>
+        <item quantity="other" msgid="6889970745748538901">"Il y a <xliff:g id="count">%d</xliff:g> heures"</item>
+    </plurals>
+
+    <plurals name="abbrev_num_days_ago">
+        <item quantity="one" msgid="8463161711492680309">"hier"</item>
+        <item quantity="other" msgid="3453342639616481191">"Il y a <xliff:g id="count">%d</xliff:g> jours"</item>
+    </plurals>
+
+    <plurals name="abbrev_in_num_seconds">
+        <item quantity="one" msgid="5842225370795066299">"dans 1 seconde"</item>
+        <item quantity="other" msgid="5495880108825805108">"dans <xliff:g id="count">%d</xliff:g> secondes"</item>
+    </plurals>
+
+    <plurals name="abbrev_in_num_minutes">
+        <item quantity="one" msgid="562786149928284878">"dans 1 minute"</item>
+        <item quantity="other" msgid="4216113292706568726">"dans <xliff:g id="count">%d</xliff:g> minutes"</item>
+    </plurals>
+
+    <plurals name="abbrev_in_num_hours">
+        <item quantity="one" msgid="3274708118124045246">"dans 1 heure"</item>
+        <item quantity="other" msgid="3705373766798013406">"dans <xliff:g id="count">%d</xliff:g> heures"</item>
+    </plurals>
+
+    <plurals name="abbrev_in_num_days">
+        <item quantity="one" msgid="2178576254385739855">"demain"</item>
+        <item quantity="other" msgid="2973062968038355991">"dans <xliff:g id="count">%d</xliff:g> jours"</item>
+    </plurals>
+
+    <string name="preposition_for_date" msgid="9093949757757445117">"le <xliff:g id="date">%s</xliff:g>"</string>
+    <string name="preposition_for_time" msgid="5506831244263083793">"à <xliff:g id="time">%s</xliff:g>"</string>
+    <string name="preposition_for_year" msgid="5040395640711867177">"en <xliff:g id="year">%s</xliff:g>"</string>
     <string name="day" msgid="8144195776058119424">"jour"</string>
     <string name="days" msgid="4774547661021344602">"jours"</string>
     <string name="hour" msgid="2126771916426189481">"heure"</string>
@@ -728,22 +763,22 @@
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="897920883624437033">"Désolé, cette vidéo ne peut être lue sur cet appareil."</string>
     <string name="VideoView_error_text_unknown" msgid="710301040038083944">"Désolé, impossible de lire cette vidéo."</string>
     <string name="VideoView_error_button" msgid="2822238215100679592">"OK"</string>
-    <string name="relative_time" msgid="1818557177829411417">"<xliff:g id="DATE">%1$s</xliff:g>, <xliff:g id="TIME">%2$s</xliff:g>"</string>
+    <string name="relative_time" msgid="1818557177829411417">"<xliff:g id="date">%1$s</xliff:g>, <xliff:g id="time">%2$s</xliff:g>"</string>
     <string name="noon" msgid="7245353528818587908">"midi"</string>
     <string name="Noon" msgid="3342127745230013127">"Midi"</string>
     <string name="midnight" msgid="7166259508850457595">"minuit"</string>
     <string name="Midnight" msgid="5630806906897892201">"Minuit"</string>
-    <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
-    <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
+    <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="minutes">%1$02d</xliff:g>:<xliff:g id="seconds">%2$02d</xliff:g>"</string>
+    <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="hours">%1$d</xliff:g>:<xliff:g id="minutes">%2$02d</xliff:g>:<xliff:g id="seconds">%3$02d</xliff:g>"</string>
     <string name="selectAll" msgid="6876518925844129331">"Tout sélectionner"</string>
-    <string name="copyAll">Tout copier</string>
+    <string name="copyAll">"Tout copier"</string>
     <string name="selectText" msgid="4862359311088898878">"Sélectionner le mot"</string>
     <string name="cut" msgid="3092569408438626261">"Couper"</string>
     <string name="copy" msgid="2681946229533511987">"Copier"</string>
     <string name="paste" msgid="5629880836805036433">"Coller"</string>
     <string name="copyUrl" msgid="2538211579596067402">"Copier l\'URL"</string>
     <string name="inputMethod" msgid="1653630062304567879">"Mode de saisie"</string>
-    <string name="addToDictionary" msgid="8793624991686948709">"Ajouter \"<xliff:g id="WORD">%s</xliff:g>\" au dictionnaire"</string>
+    <string name="addToDictionary" msgid="8793624991686948709">"Ajouter \"<xliff:g id="word">%s</xliff:g>\" au dictionnaire"</string>
     <string name="editTextMenuTitle" msgid="1672989176958581452">"Modifier le texte"</string>
     <string name="low_internal_storage_view_title" msgid="1399732408701697546">"Espace disponible faible"</string>
     <string name="low_internal_storage_view_text" msgid="635106544616378836">"La mémoire du téléphone commence à être pleine."</string>
@@ -760,29 +795,33 @@
     <string name="chooseActivity" msgid="1009246475582238425">"Sélectionner une action"</string>
     <string name="chooseUsbActivity" msgid="7892597146032121735">"Sélectionnez une application pour le périphérique USB"</string>
     <string name="noApplications" msgid="1691104391758345586">"Aucune application ne peut effectuer cette action."</string>
-    <string name="aerr_title" msgid="653922989522758100">"Désolé !"</string>
-    <string name="aerr_application" msgid="4683614104336409186">"Fermeture soudaine de l\'application <xliff:g id="APPLICATION">%1$s</xliff:g> (du processus <xliff:g id="PROCESS">%2$s</xliff:g>). Merci de réessayer."</string>
-    <string name="aerr_process" msgid="1551785535966089511">"Le processus <xliff:g id="PROCESS">%1$s</xliff:g> s\'est interrompu de façon inopinée. Merci de réessayer."</string>
-    <string name="anr_title" msgid="3100070910664756057">"Désolé !"</string>
-    <string name="anr_activity_application" msgid="3538242413112507636">"L\'activité <xliff:g id="ACTIVITY">%1$s</xliff:g> (de l\'application <xliff:g id="APPLICATION">%2$s</xliff:g>) ne répond pas."</string>
-    <string name="anr_activity_process" msgid="5420826626009561014">"L\'activité <xliff:g id="ACTIVITY">%1$s</xliff:g> (du processus <xliff:g id="PROCESS">%2$s</xliff:g>) ne répond pas."</string>
-    <string name="anr_application_process" msgid="4185842666452210193">"L\'application <xliff:g id="APPLICATION">%1$s</xliff:g> (du processus <xliff:g id="PROCESS">%2$s</xliff:g>) ne répond pas."</string>
-    <string name="anr_process" msgid="1246866008169975783">"Le processus <xliff:g id="PROCESS">%1$s</xliff:g> ne répond pas."</string>
+    <string name="aerr_title" msgid="653922989522758100">"Désolé\u00A0!"</string>
+    <string name="aerr_application" msgid="4683614104336409186">"Fermeture soudaine de l\'application <xliff:g id="application">%1$s</xliff:g> (du processus <xliff:g id="process">%2$s</xliff:g>). Merci de réessayer."</string>
+    <string name="aerr_process" msgid="1551785535966089511">"Le processus <xliff:g id="process">%1$s</xliff:g> s\'est interrompu de façon inopinée. Merci de réessayer."</string>
+    <string name="aerr_revoked_application">"L\'application <xliff:g id="application">%1$s</xliff:g> (du processus <xliff:g id="process">%2$s</xliff:g>) s\'est interrompu de façon inopinée.\nAVERTISSEMENT\u00A0!\nUne ou plusieurs autorisations de cette application ont été RÉVOQUÉES, pouvant entraîner des dysfonctionnements. Veuillez accorder ses autorisations et essayer à nouveau."</string>
+    <string name="aerr_revoked_process">"Le processus <xliff:g id="process">%1$s</xliff:g> s\'est interrompu de façon inopinée.\nAVERTISSEMENT\u00A0!\nUne ou plusieurs autorisations de ce processus ont été RÉVOQUÉES, pouvant entraîner des dysfonctionnements. Veuillez accorder ses autorisations et essayer à nouveau."</string>
+    <string name="anr_title" msgid="3100070910664756057">"Désolé\u00A0!"</string>
+    <string name="anr_activity_application" msgid="3538242413112507636">"L\'activité <xliff:g id="activity">%1$s</xliff:g> (de l\'application <xliff:g id="application">%2$s</xliff:g>) ne répond pas."</string>
+    <string name="anr_activity_process" msgid="5420826626009561014">"L\'activité <xliff:g id="activity">%1$s</xliff:g> (du processus <xliff:g id="process">%2$s</xliff:g>) ne répond pas."</string>
+    <string name="anr_application_process" msgid="4185842666452210193">"L\'application <xliff:g id="application">%1$s</xliff:g> (du processus <xliff:g id="process">%2$s</xliff:g>) ne répond pas."</string>
+    <string name="anr_process" msgid="1246866008169975783">"Le processus <xliff:g id="process">%1$s</xliff:g> ne répond pas."</string>
     <string name="force_close" msgid="3653416315450806396">"Forcer la fermeture"</string>
     <string name="report" msgid="4060218260984795706">"Rapport"</string>
+    <string name="edit_perms">"Modifier les autorisations"</string>
+    <string name="reset_perms">"Réinitialiser les autorisations"</string>
     <string name="wait" msgid="7147118217226317732">"Attendre"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Application redirigée"</string>
-    <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> est maintenant lancée."</string>
-    <string name="launch_warning_original" msgid="188102023021668683">"Application lancée initialement : <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
-    <string name="smv_application" msgid="295583804361236288">"L\'application <xliff:g id="APPLICATION">%1$s</xliff:g> (processus <xliff:g id="PROCESS">%2$s</xliff:g>) a enfreint ses propres règles du mode strict."</string>
-    <string name="smv_process" msgid="5120397012047462446">"Le processus <xliff:g id="PROCESS">%1$s</xliff:g> a enfreint ses propres règles du mode strict."</string>
-    <string name="heavy_weight_notification" msgid="9087063985776626166">"<xliff:g id="APP">%1$s</xliff:g> en cours d\'exécution"</string>
+    <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="app_name">%1$s</xliff:g> est maintenant lancée."</string>
+    <string name="launch_warning_original" msgid="188102023021668683">"Application lancée initialement\u00A0: <xliff:g id="app_name">%1$s</xliff:g>."</string>
+    <string name="smv_application" msgid="295583804361236288">"L\'application <xliff:g id="application">%1$s</xliff:g> (processus <xliff:g id="process">%2$s</xliff:g>) a enfreint ses propres règles du mode strict."</string>
+    <string name="smv_process" msgid="5120397012047462446">"Le processus <xliff:g id="process">%1$s</xliff:g> a enfreint ses propres règles du mode strict."</string>
+    <string name="heavy_weight_notification" msgid="9087063985776626166">"<xliff:g id="app">%1$s</xliff:g> en cours d\'exécution"</string>
     <string name="heavy_weight_notification_detail" msgid="2423977499339403402">"Sélectionner pour changer d\'application"</string>
-    <string name="heavy_weight_switcher_title" msgid="1135403633766694316">"Passer d\'une application à l\'autre ?"</string>
+    <string name="heavy_weight_switcher_title" msgid="1135403633766694316">"Passer d\'une application à l\'autre\u00A0?"</string>
     <string name="heavy_weight_switcher_text" msgid="4592075610079319667">"Une autre application est déjà en cours d\'exécution. Veuillez l\'arrêter avant d\'en démarrer une nouvelle."</string>
-    <string name="old_app_action" msgid="493129172238566282">"Revenir à <xliff:g id="OLD_APP">%1$s</xliff:g>"</string>
+    <string name="old_app_action" msgid="493129172238566282">"Revenir à <xliff:g id="old_app">%1$s</xliff:g>"</string>
     <string name="old_app_description" msgid="942967900237208466">"Ne pas démarrer la nouvelle application"</string>
-    <string name="new_app_action" msgid="5472756926945440706">"Démarrer <xliff:g id="OLD_APP">%1$s</xliff:g>"</string>
+    <string name="new_app_action" msgid="5472756926945440706">"Démarrer <xliff:g id="old_app">%1$s</xliff:g>"</string>
     <string name="new_app_description" msgid="6830398339826789493">"Arrêtez l\'ancienne application sans enregistrer."</string>
     <string name="sendText" msgid="5132506121645618310">"Sélectionner une action pour le texte"</string>
     <string name="volume_ringtone" msgid="6885421406845734650">"Volume de la sonnerie"</string>
@@ -795,18 +834,21 @@
     <string name="volume_notification" msgid="2422265656744276715">"Volume des notifications"</string>
     <string name="volume_unknown" msgid="1400219669770445902">"Volume"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"Sonnerie par défaut"</string>
-    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Sonnerie par défaut (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
+    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Sonnerie par défaut (<xliff:g id="actual_ringtone">%1$s</xliff:g>)"</string>
     <string name="ringtone_silent" msgid="4440324407807468713">"Silencieux"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Sonneries"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Sonnerie inconnue"</string>
-  <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Réseau Wi-Fi disponible"</item>
-    <item quantity="other" msgid="4192424489168397386">"Réseaux Wi-Fi disponibles"</item>
-  </plurals>
-  <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Réseau Wi-Fi ouvert disponible"</item>
-    <item quantity="other" msgid="7915895323644292768">"Réseaux Wi-Fi ouverts disponibles"</item>
-  </plurals>
+
+    <plurals name="wifi_available">
+        <item quantity="one" msgid="6654123987418168693">"Réseau Wi-Fi disponible"</item>
+        <item quantity="other" msgid="4192424489168397386">"Réseaux Wi-Fi disponibles"</item>
+    </plurals>
+
+    <plurals name="wifi_available_detailed">
+        <item quantity="one" msgid="1634101450343277345">"Réseau Wi-Fi ouvert disponible"</item>
+        <item quantity="other" msgid="7915895323644292768">"Réseaux Wi-Fi ouverts disponibles"</item>
+    </plurals>
+
     <string name="select_character" msgid="3365550120617701745">"Insérer un caractère"</string>
     <string name="sms_control_default_app_name" msgid="7630529934366549163">"Application inconnue"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"Envoi de messages SMS"</string>
@@ -840,16 +882,16 @@
     <string name="dlg_ok" msgid="7376953167039865701">"OK"</string>
     <string name="extmedia_format_title" product="nosdcard" msgid="7980995592595097841">"Formater la mémoire USB"</string>
     <string name="extmedia_format_title" product="default" msgid="8663247929551095854">"Formater la carte SD"</string>
-    <string name="extmedia_format_message" product="nosdcard" msgid="8296908079722897772">"Formater la mémoire de stockage USB en effaçant tous les fichiers ? Cette action est irréversible."</string>
-    <string name="extmedia_format_message" product="default" msgid="3621369962433523619">"Voulez-vous vraiment formater la carte SD ? Toutes les données de cette carte seront perdues."</string>
+    <string name="extmedia_format_message" product="nosdcard" msgid="8296908079722897772">"Formater la mémoire de stockage USB en effaçant tous les fichiers\u00A0? Cette action est irréversible."</string>
+    <string name="extmedia_format_message" product="default" msgid="3621369962433523619">"Voulez-vous vraiment formater la carte SD\u00A0? Toutes les données de cette carte seront perdues."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Format"</string>
     <string name="adb_active_notification_title">Débogage via USB connecté</string>
     <string name="adb_active_notification_message">Désactiver le débogage android USB (adb).</string>
     <string name="adb_net_enabled_notification_title">Débogage via TCP/IP activé</string>
     <string name="adb_net_enabled_notification_message">Désactiver le débogage android (adb).</string>
     <string name="select_input_method" msgid="6865512749462072765">"Sélectionner un mode de saisie"</string>
-    <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+    <string name="fast_scroll_alphabet" msgid="5433275485499039199">"\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+    <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">"\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="candidates_style" msgid="4333913089637062257"><u>"candidats"</u></string>
     <string name="ext_media_checking_notification_title" product="nosdcard" msgid="3449816005351468560">"Préparation de la mémoire de stockage USB"</string>
     <string name="ext_media_checking_notification_title" product="default" msgid="5457603418970994050">"Préparation de la carte SD"</string>
@@ -887,17 +929,17 @@
     <string name="ime_action_next" msgid="3138843904009813834">"Suivant"</string>
     <string name="ime_action_done" msgid="8971516117910934605">"OK"</string>
     <string name="ime_action_default" msgid="2840921885558045721">"Exécuter"</string>
-    <string name="dial_number_using" msgid="5789176425167573586">"Composer le numéro"\n"en utilisant <xliff:g id="NUMBER">%s</xliff:g>"</string>
-    <string name="create_contact_using" msgid="4947405226788104538">"Ajouter un contact"\n"en utilisant <xliff:g id="NUMBER">%s</xliff:g>"</string>
+    <string name="dial_number_using" msgid="5789176425167573586">"Composer le numéro"\n"en utilisant <xliff:g id="number">%s</xliff:g>"</string>
+    <string name="create_contact_using" msgid="4947405226788104538">"Ajouter un contact"\n"en utilisant <xliff:g id="number">%s</xliff:g>"</string>
     <string name="accessibility_compound_button_selected" msgid="5612776946036285686">"sélectionné"</string>
     <string name="accessibility_compound_button_unselected" msgid="8864512895673924091">"non sélectionné"</string>
     <string name="grant_credentials_permission_message_header" msgid="6824538733852821001">"Les applications suivantes demandent l\'autorisation d\'accéder à votre compte à partir de maintenant."</string>
-    <string name="grant_credentials_permission_message_footer" msgid="3125211343379376561">"Voulez-vous autoriser cette demande ?"</string>
+    <string name="grant_credentials_permission_message_footer" msgid="3125211343379376561">"Voulez-vous autoriser cette demande\u00A0?"</string>
     <string name="grant_permissions_header_text" msgid="2722567482180797717">"Demande d\'accès"</string>
     <string name="allow" msgid="7225948811296386551">"Autoriser"</string>
     <string name="deny" msgid="2081879885755434506">"Refuser"</string>
     <string name="permission_request_notification_title" msgid="5390555465778213840">"Autorisation demandée"</string>
-    <string name="permission_request_notification_with_subtitle" msgid="4325409589686688000">"Autorisation demandée"\n"pour le compte <xliff:g id="ACCOUNT">%s</xliff:g>"</string>
+    <string name="permission_request_notification_with_subtitle" msgid="4325409589686688000">"Autorisation demandée"\n"pour le compte <xliff:g id="account">%s</xliff:g>"</string>
     <string name="input_method_binding_label" msgid="1283557179944992649">"Mode de saisie"</string>
     <string name="sync_binding_label" msgid="3687969138375092423">"Synchronisation"</string>
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Accessibilité"</string>
@@ -920,10 +962,10 @@
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Touchez pour en savoir plus sur l\'utilisation des données mobiles"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"Quota d\'utilisation des données mobiles dépassé"</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"Touchez pour en savoir plus sur l\'utilisation des données mobiles"</string>
-    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"Désinstallation de la mémoire de stockage USB..."</string>
-    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"Désinstallation de la carte SD..."</string>
-    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"Effacement de la mémoire de stockage USB..."</string>
-    <string name="progress_erasing" product="default" msgid="2115214724367534095">"Effacement de la carte SD..."</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"Désinstallation de la mémoire de stockage USB\u2026"</string>
+    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"Désinstallation de la carte SD\u2026"</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"Effacement de la mémoire de stockage USB\u2026"</string>
+    <string name="progress_erasing" product="default" msgid="2115214724367534095">"Effacement de la carte SD\u2026"</string>
     <string name="format_error" product="nosdcard" msgid="4320339096529911637">"Impossible d\'effacer la mémoire de stockage USB"</string>
     <string name="format_error" product="default" msgid="1343380371925238343">"Impossible d\'effacer la carte SD"</string>
     <string name="media_bad_removal" msgid="7960864061016603281">"La carte SD a été retirée sans avoir été désinstallée."</string>
@@ -933,31 +975,92 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"La mémoire de stockage USB est en cours d\'utilisation par l\'ordinateur."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"La carte SD est en cours d\'utilisation par l\'ordinateur."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"État du support externe inconnu"</string>
+
     <!--Application killed toast -->
-    <string name="app_killed_message">Application tuée</string>
+    <string name="app_killed_message">"Application tuée"</string>
 
     <!-- Phone goggles -->
-    <string name="phone_goggles_problem_count">Problème #%1$d : </string>
-    <string name="phone_goggles_description">Répondez aux %1$d problèmes mathématiques suivants en moins de %2$d secondes pour autoriser la communication.</string>
+    <string name="phone_goggles_problem_count">"Problème #%1$d\u00A0: "</string>
+    <string name="phone_goggles_description">"Répondez aux %1$d problèmes mathématiques suivants en moins de %2$d secondes pour autoriser la communication."</string>
     <plurals name="phone_goggles_countdown">
-        <item quantity="one">%d seconde restante</item>
-        <item quantity="other">%d secondes restantes</item>
+        <item quantity="one">"%d seconde restante"</item>
+        <item quantity="other">"%d secondes restantes"</item>
     </plurals>
 
-    <string name="keyguard_finger_please_swipe">Passez le doigt sur le capteur pour déverrouiller</string>
-    <string name="keyguard_finger_ui_timeout">Délai d\'attente de l\'interface utilisateur !</string>
-    <string name="keyguard_finger_failed_to_unlock">Échec du déverrouillage !</string>
-    <string name="keyguard_finger_screen_off">Écran désactivé</string>
-    <string name="keyguard_finger_screen_on">Écran activé</string>
-    <string name="keyguard_finger_match">Le doigt correspond, déverrouillage de l\'écran...</string>
-    <string name="keyguard_finger_not_match">Le doigt ne correspond pas...</string>
-    <string name="keyguard_finger_swipe_too_far_right">Faites glisser le doigt au centre.</string>
-    <string name="keyguard_finger_swipe_too_far_left">Faites glisser le doigt au centre.</string>
-    <string name="keyguard_finger_swipe_too_fast">Vous avez fait glisser votre doigt trop rapidement.</string>
-    <string name="keyguard_finger_swipe_too_short">La distance sur laquelle vous avez fait glisser votre doigt est trop courte.</string>
-    <string name="keyguard_finger_swipe_too_slow">Vous avez fait glisser votre doigt trop lentement.</string>
-    <string name="keyguard_finger_swipe_too_skewed">Vous avez fait glisser votre doigt de travers.</string>
-    <string name="lockscreen_too_many_failed_fingers_dialog_message">L\'identification avec votre empreinte digitale à échoué %1$d fois.\n\nVeuillez réessayer dans %2$d secondes.</string>
-    <string name="lockscreen_failed_fingers_almost_glogin">L\'identification avec votre empreinte digitale à échoué %1$d fois. Après %2$d autres échecs d\'identification, il vous sera demandé de déverrouiller votre téléphone à l\'aide de votre connexion Google.\n\n Veuillez réessayer dans %3$d secondes.</string>
-    <string name="lockscreen_forgot_finger_button_text">Vous ne vous souvenez plus du doigt utilisé ?</string>
+    <!-- Title of an application permission that lets an application view/edit revoked permissions. -->
+    <string name="permlab_revokePermissions">"Permet la visualisation et la modification des autorisations révoquées. Ne pas utiliser pour les applications normales."</string>
+    <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
+    <string name="permdesc_revokePermissions">"Permet la lecture et l\'écriture des autorisations révoquées. Ne pas utiliser pour les applications normales."</string>
+
+    <string name="keyguard_finger_please_swipe">"Passez le doigt sur le capteur pour déverrouiller"</string>
+    <string name="keyguard_finger_ui_timeout">"Délai d\'attente de l\'interface utilisateur\u00A0!"</string>
+    <string name="keyguard_finger_failed_to_unlock">"Échec du déverrouillage\u00A0!"</string>
+    <string name="keyguard_finger_screen_off">"Écran désactivé"</string>
+    <string name="keyguard_finger_screen_on">"Écran activé"</string>
+    <string name="keyguard_finger_match">"Le doigt correspond, déverrouillage de l\'écran\u2026"</string>
+    <string name="keyguard_finger_not_match">"Le doigt ne correspond pas\u2026"</string>
+    <string name="keyguard_finger_swipe_too_far_right">"Faites glisser le doigt au centre."</string>
+    <string name="keyguard_finger_swipe_too_far_left">"Faites glisser le doigt au centre."</string>
+    <string name="keyguard_finger_swipe_too_fast">"Vous avez fait glisser votre doigt trop rapidement."</string>
+    <string name="keyguard_finger_swipe_too_short">"La distance sur laquelle vous avez fait glisser votre doigt est trop courte."</string>
+    <string name="keyguard_finger_swipe_too_slow">"Vous avez fait glisser votre doigt trop lentement."</string>
+    <string name="keyguard_finger_swipe_too_skewed">"Vous avez fait glisser votre doigt de travers."</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">"L\'identification avec votre empreinte digitale à échoué %1$d fois.\n\nVeuillez réessayer dans %2$d secondes."</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">"L\'identification avec votre empreinte digitale à échoué %1$d fois. Après %2$d autres échecs d\'identification, il vous sera demandé de déverrouiller votre téléphone à l\'aide de votre connexion Google.\n\n Veuillez réessayer dans %3$d secondes."</string>
+    <string name="lockscreen_forgot_finger_button_text">"Vous ne vous souvenez plus du doigt utilisé\u00A0?"</string>
+
+    <!-- Options that show upon long-pressing a key on the physical keyboard -->
+    <string name="symbol_picker_A">\u00C0\u00C1\u00C2\u00C4\u00C6\u00C3\u00C5\u0104\u0100</string>
+    <string name="symbol_picker_C">\u00C7\u0106\u010C</string>
+    <string name="symbol_picker_D">\u010E</string>
+    <string name="symbol_picker_E">\u00C8\u00C9\u00CA\u00CB\u0118\u011A\u0112</string>
+    <string name="symbol_picker_G">\u011E</string>
+    <string name="symbol_picker_L">\u0141</string>
+    <string name="symbol_picker_I">\u00CC\u00CD\u00CE\u00CF\u012A\u0130</string>
+    <string name="symbol_picker_N">\u00D1\u0143\u0147</string>
+    <string name="symbol_picker_O">\u00D8\u0152\u00D5\u00D2\u00D3\u00D4\u00D6\u014C</string>
+    <string name="symbol_picker_R">\u0158</string>
+    <string name="symbol_picker_S">\u015A\u0160\u015E</string>
+    <string name="symbol_picker_T">\u0164</string>
+    <string name="symbol_picker_U">\u00D9\u00DA\u00DB\u00DC\u016E\u016A</string>
+    <string name="symbol_picker_Y">\u00DD\u0178</string>
+    <string name="symbol_picker_Z">\u0179\u017B\u017D</string>
+    <string name="symbol_picker_a">\u00E0\u00E1\u00E2\u00E4\u00E6\u00E3\u00E5\u0105\u0101</string>
+    <string name="symbol_picker_c">\u00E7\u0107\u010D</string>
+    <string name="symbol_picker_d">\u010F</string>
+    <string name="symbol_picker_e">\u00E8\u00E9\u00EA\u00EB\u0119\u011B\u0113</string>
+    <string name="symbol_picker_g">\u011F</string>
+    <string name="symbol_picker_i">\u00EC\u00ED\u00EE\u00EF\u012B\u0131</string>
+    <string name="symbol_picker_l">\u0142</string>
+    <string name="symbol_picker_n">\u00F1\u0144\u0148</string>
+    <string name="symbol_picker_o">\u00F8\u0153\u00F5\u00F2\u00F3\u00F4\u00F6\u014D</string>
+    <string name="symbol_picker_r">\u0159</string>
+    <string name="symbol_picker_s">\u00A7\u00DF\u015B\u0161\u015F</string>
+    <string name="symbol_picker_t">\u0165</string>
+    <string name="symbol_picker_u">\u00F9\u00FA\u00FB\u00FC\u016F\u016B</string>
+    <string name="symbol_picker_y">\u00FD\u00FF</string>
+    <string name="symbol_picker_z">\u017A\u017C\u017E</string>
+    <string name="symbol_picker_sym">\u2026\u00A5\u2022\u00AE\u00A9\u00B1[]{}\u003C>`^\\|</string>
+    <string name="symbol_picker_slash">\\</string>
+    <string name="symbol_picker_1">\u00b9\u00bd\u2153\u00bc\u215b</string>
+    <string name="symbol_picker_2">\u00b2\u2154</string>
+    <string name="symbol_picker_3">\u00b3\u00be\u215c</string>
+    <string name="symbol_picker_4">\u2074</string>
+    <string name="symbol_picker_5">\u215d</string>
+    <string name="symbol_picker_7">\u215e</string>
+    <string name="symbol_picker_0">\u207f\u2205</string>
+    <string name="symbol_picker_dollar">\u00a2\u00a3\u20ac\u00a5\u20a3\u20a4\u20b1</string>
+    <string name="symbol_picker_percent">\u2030</string>
+    <string name="symbol_picker_star">\u2020\u2021</string>
+    <string name="symbol_picker_minus">\u2013\u2014</string>
+    <string name="symbol_picker_plus">\u00b1</string>
+    <string name="symbol_picker_opening_parenthesis">[{\u003C</string>
+    <string name="symbol_picker_closing_parenthesis">]}></string>
+    <string name="symbol_picker_exclamation">\u00a1</string>
+    <string name="symbol_picker_quote">\u201c\u201d\u00ab\u00bb\u02dd</string>
+    <string name="symbol_picker_question">\u00bf</string>
+    <string name="symbol_picker_comma">\u201a\u201e</string>
+    <string name="symbol_picker_equal">\u2260\u2248\u221e</string>
+    <string name="symbol_picker_lt">\u2264\u00ab\u2039</string>
+    <string name="symbol_picker_gt">\u2265\u00bb\u203a</string>
 </resources>
