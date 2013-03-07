@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-/**
- * Copyright (c) 2009, The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- *
- *     http://www.apache.org/licenses/LICENSE-2.0 
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License.
- */
- -->
+<!-- Copyright (C) 2009 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -210,6 +207,8 @@
     <string name="quick_settings_gps_off">GPS</string>
     <string name="quick_settings_label_enabled">Activado</string>
     <string name="quick_settings_label_disabled">Desactivado</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE</string>
     <string name="quick_settings_lockscreen">Bloqueo</string>
     <string name="quick_settings_network_type">Red móvil</string>
     <string name="quick_settings_nfc">NFC</string>
@@ -236,8 +235,8 @@
     <string name="quick_settings_wifiap_off">Wi-Fi AP</string>
     <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Usar a CID</string>
-    <string name="bean_dream_settings_cid_summary">Usar el icono CID para el salvapantallas en vez del icono Jellybean</string>
+    <string name="bean_dream_settings_cid_title">Usar a Cid</string>
+    <string name="bean_dream_settings_cid_summary">Usar el icono Cid para el salvapantallas en vez del icono Jellybean</string>
     <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
     <string name="navbar_dialog_title">Seleccionar botón a mostrar</string>
     <string name="navbar_home_button">Botón Inicio</string>
