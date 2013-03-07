@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -16,7 +16,8 @@
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
--->
+ -->
+
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="byteShort" msgid="8340973892742019101">"B"</string>
@@ -842,7 +843,7 @@
     <string name="factorytest_not_system" msgid="4435201656767276723">"La acción FACTORY_TEST solo es compatible con los paquetes instalados en /system/app."</string>
     <string name="factorytest_no_action" msgid="872991874799998561">"No se ha encontrado ningún paquete que proporcione la acción FACTORY_TEST."</string>
     <string name="factorytest_reboot" msgid="6320168203050791643">"Reiniciar"</string>
-    <string name="js_dialog_title" msgid="1987483977834603872">"La página \"<xliff:g id="TITLE">%s</xliff:g>\" dice:"</string>
+    <string name="js_dialog_title" msgid="1987483977834603872">"La página \u00AB<xliff:g id="TITLE">%s</xliff:g>\u00BB dice:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
     <string name="js_dialog_before_unload" msgid="730366588032430474">"¿Quieres salir de esta página?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Toca Aceptar para continuar o Cancelar para permanecer en la página actual."</string>
     <string name="save_password_label" msgid="6860261758665825069">"Confirmar"</string>
