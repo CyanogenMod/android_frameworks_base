@@ -23,6 +23,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.os.BatteryManager;
 import android.os.Handler;
@@ -61,6 +62,8 @@ public class BatteryController extends BroadcastReceiver {
     private int mBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
     private int mBatteryStyle;
 
+    protected final boolean mSupportBatteryStatus;
+
     Handler mHandler;
 
     class SettingsObserver extends ContentObserver {
@@ -89,6 +92,10 @@ public class BatteryController extends BroadcastReceiver {
     public BatteryController(Context context) {
         mContext = context;
         mHandler = new Handler();
+
+        Resources res = context.getResources();
+        mSupportBatteryStatus =
+                res.getBoolean(com.android.internal.R.bool.config_supportBatteryStatus);
 
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
@@ -146,10 +153,14 @@ public class BatteryController extends BroadcastReceiver {
     }
 
     private boolean isBatteryStatusUnknown() {
+        // For devices without a valid battery status support, do not report unknown status
+        if (!mSupportBatteryStatus) return false;
         return getBatteryStatus() == BatteryManager.BATTERY_STATUS_UNKNOWN;
     }
 
     private boolean isBatteryStatusCharging() {
+        // For devices without a valid battery status support, just report the plugged status
+        if (!mSupportBatteryStatus) isBatteryPlugged();
         return getBatteryStatus() == BatteryManager.BATTERY_STATUS_CHARGING;
     }
 

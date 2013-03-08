@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -69,6 +70,8 @@ class KeyguardMessageArea extends TextView {
     // Shadowed text values
     protected boolean mBatteryCharged;
     protected boolean mBatteryIsLow;
+
+    private final boolean mSupportBatteryStatus;
 
     private Handler mHandler;
 
@@ -138,8 +141,12 @@ class KeyguardMessageArea extends TextView {
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onRefreshBatteryInfo(KeyguardUpdateMonitor.BatteryStatus status) {
-            mCharging = status.status == BatteryManager.BATTERY_STATUS_CHARGING
-                     || status.status == BatteryManager.BATTERY_STATUS_FULL;
+            if (!mSupportBatteryStatus) {
+                mCharging = status.isPluggedIn();
+            } else {
+                mCharging = status.status == BatteryManager.BATTERY_STATUS_CHARGING
+                         || status.status == BatteryManager.BATTERY_STATUS_FULL;
+            }
             mBatteryLevel = status.level;
             mBatteryCharged = status.isCharged();
             mBatteryIsLow = status.isBatteryLow();
@@ -165,6 +172,10 @@ class KeyguardMessageArea extends TextView {
         mUpdateMonitor = KeyguardUpdateMonitor.getInstance(getContext());
         mUpdateMonitor.registerCallback(mInfoCallback);
         mHandler = new Handler(Looper.myLooper());
+
+        Resources res = context.getResources();
+        mSupportBatteryStatus =
+                res.getBoolean(com.android.internal.R.bool.config_supportBatteryStatus);
 
         mSeparator = getResources().getString(R.string.kg_text_message_separator);
 
