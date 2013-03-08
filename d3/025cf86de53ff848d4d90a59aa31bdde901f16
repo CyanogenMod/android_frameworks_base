@@ -1,0 +1,9 @@
+Change-Id: I45f7e6f0606ea9824fa5372633a0b0e1a73e9ba9
+Code-Review+2: Marco Brohet <therbom@gmail.com>
+Verified+1: Marco Brohet <therbom@gmail.com>
+Code-Review+1: Thibault LEMOINE <thibaultblizz@gmail.com>
+Submitted-by: Marco Brohet <therbom@gmail.com>
+Submitted-at: Fri, 08 Mar 2013 14:20:00 -0800
+Reviewed-on: http://review.cyanogenmod.org/33356
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/gingerbread
