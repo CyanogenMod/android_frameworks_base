@@ -1111,6 +1111,12 @@
     <!-- Dock battery compatibility (disabled by default) -->
     <bool name="config_hasDockBattery">false</bool>
 
+    <!-- When the device supports a full battery status report or just plugged
+         status. Disable it when the device doesn't handle battery status correctly, xe:
+         when "/sys/class/power_supply/battery/status" doesn't report the real battery status
+         (by default supported) -->
+    <bool name="config_supportBatteryStatus">true</bool>
+
     <!-- The list absolute paths of jar/apk files containing the device specific handlers,
          delimited by File.pathSeparator, which defaults to ":" on Android -->
     <string name="config_deviceHandlersLib" translatable="false"></string>

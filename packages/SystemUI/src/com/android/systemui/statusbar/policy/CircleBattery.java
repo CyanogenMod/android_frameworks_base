@@ -56,6 +56,8 @@ public class CircleBattery extends ImageView {
     private BatteryReceiver mBatteryReceiver = null;
     private SettingsObserver mObserver;
 
+    protected final boolean mSupportBatteryStatus;
+
     // state variables
     private boolean mAttached;      // whether or not attached to a window
     private boolean mActivated;     // whether or not activated due to system settings
@@ -201,6 +203,8 @@ public class CircleBattery extends ImageView {
         // initialize and setup all paint variables
         // stroke width is later set in initSizeBasedStuff()
         Resources res = getResources();
+        mSupportBatteryStatus =
+                res.getBoolean(com.android.internal.R.bool.config_supportBatteryStatus);
 
         mPaintFont = new Paint();
         mPaintFont.setAntiAlias(true);
@@ -245,10 +249,14 @@ public class CircleBattery extends ImageView {
     }
 
     private boolean isBatteryStatusUnknown() {
+        // For devices without a valid battery status support, do not report unknown status
+        if (!mSupportBatteryStatus) return false;
         return getBatteryStatus() == BatteryManager.BATTERY_STATUS_UNKNOWN;
     }
 
     private boolean isBatteryStatusCharging() {
+        // For devices without a valid battery status support, just report the plugged status
+        if (!mSupportBatteryStatus) isBatteryPlugged();
         return getBatteryStatus() == BatteryManager.BATTERY_STATUS_CHARGING;
     }
 
