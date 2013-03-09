@@ -394,6 +394,12 @@ public class ActivityInfo extends ComponentInfo
     public static final int CONFIG_UI_MODE = 0x0200;
     /**
      * Bit in {@link #configChanges} that indicates that the activity
+     * can itself handle the inverted ui mode. Set from the
+     * {@link android.R.attr#configChanges} attribute.
+     */
+    public static final int CONFIG_UI_INVERTED_MODE = 0x0300;
+    /**
+     * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle the screen size. Set from the
      * {@link android.R.attr#configChanges} attribute.  This will be
      * set by default for applications that target an earlier version
@@ -452,6 +458,7 @@ public class ActivityInfo extends ComponentInfo
         Configuration.NATIVE_CONFIG_NAVIGATION,             // NAVIGATION
         Configuration.NATIVE_CONFIG_ORIENTATION,            // ORIENTATION
         Configuration.NATIVE_CONFIG_SCREEN_LAYOUT,          // SCREEN LAYOUT
+        Configuration.NATIVE_CONFIG_UI_INVERTED_MODE,       // UI INVERTED MODE
         Configuration.NATIVE_CONFIG_UI_MODE,                // UI MODE
         Configuration.NATIVE_CONFIG_SCREEN_SIZE,            // SCREEN SIZE
         Configuration.NATIVE_CONFIG_SMALLEST_SCREEN_SIZE,   // SMALLEST SCREEN SIZE

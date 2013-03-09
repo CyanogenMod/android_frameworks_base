@@ -1006,6 +1006,15 @@ struct ResTable_config
         uint32_t screenSizeDp;
     };
 
+    enum {
+        // uiMode bits for inverted mode.
+        UI_INVERTED_MODE_ANY = ACONFIGURATION_UI_INVERTED_MODE_ANY,
+        UI_INVERTED_MODE_NORMAL = ACONFIGURATION_UI_INVERTED_MODE_NORMAL,
+        UI_INVERTED_MODE_YES = ACONFIGURATION_UI_INVERTED_MODE_YES,
+        UI_INVERTED_MODE_NO = ACONFIGURATION_UI_INVERTED_MODE_NO,
+    };
+    uint8_t uiInvertedMode;
+
     void copyFromDeviceNoSwap(const ResTable_config& o);
     
     void copyFromDtoH(const ResTable_config& o);
@@ -1032,6 +1041,7 @@ struct ResTable_config
         CONFIG_SMALLEST_SCREEN_SIZE = ACONFIGURATION_SMALLEST_SCREEN_SIZE,
         CONFIG_VERSION = ACONFIGURATION_VERSION,
         CONFIG_SCREEN_LAYOUT = ACONFIGURATION_SCREEN_LAYOUT,
+        CONFIG_UI_INVERTED_MODE = ACONFIGURATION_UI_INVERTED_MODE,
         CONFIG_UI_MODE = ACONFIGURATION_UI_MODE,
         CONFIG_LAYOUTDIR = ACONFIGURATION_LAYOUTDIR,
     };

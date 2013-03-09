@@ -232,6 +232,13 @@ AaptGroupEntry::parseNamePart(const String8& part, int* axis, uint32_t* value)
         return 0;
     }
 
+    // ui inverted mode
+    if (getUiInvertedModeName(part.string(), &config)) {
+        *axis = AXIS_UIINVERTEDMODE;
+        *value = config.uiInvertedMode;
+        return 0;
+    }
+
     // ui mode type
     if (getUiModeTypeName(part.string(), &config)) {
         *axis = AXIS_UIMODETYPE;
@@ -322,6 +329,8 @@ AaptGroupEntry::getConfigValueForAxis(const ResTable_config& config, int axis)
             return config.screenLayout&ResTable_config::MASK_SCREENSIZE;
         case AXIS_ORIENTATION:
             return config.orientation;
+        case AXIS_UIINVERTEDMODE:
+            return config.uiInvertedMode;
         case AXIS_UIMODETYPE:
             return (config.uiMode&ResTable_config::MASK_UI_MODE_TYPE);
         case AXIS_UIMODENIGHT:
@@ -374,7 +383,7 @@ AaptGroupEntry::initFromDirName(const char* dir, String8* resType)
 
     String8 mcc, mnc, loc, layoutsize, layoutlong, orient, den;
     String8 touch, key, keysHidden, nav, navHidden, size, layoutDir, vers;
-    String8 uiModeType, uiModeNight, smallestwidthdp, widthdp, heightdp;
+    String8 uiInvertedMode, uiModeType, uiModeNight, smallestwidthdp, widthdp, heightdp;
 
     const char *p = dir;
     const char *q;
@@ -546,6 +555,19 @@ AaptGroupEntry::initFromDirName(const char* dir, String8* resType)
         //printf("not orientation: %s\n", part.string());
     }
 
+    // ui inverted mode
+    if (getUiInvertedModeName(part.string())) {
+        uiInvertedMode = part;
+
+        index++;
+        if (index == N) {
+            goto success;
+        }
+        part = parts[index];
+    } else {
+        //printf("no ui inverted mode: %s\n", part.string());
+    }
+
     // ui mode type
     if (getUiModeTypeName(part.string())) {
         uiModeType = part;
@@ -686,6 +708,7 @@ success:
     this->screenWidthDp = widthdp;
     this->screenHeightDp = heightdp;
     this->orientation = orient;
+    this->uiInvertedMode = uiInvertedMode;
     this->uiModeType = uiModeType;
     this->uiModeNight = uiModeNight;
     this->density = den;
@@ -726,6 +749,8 @@ AaptGroupEntry::toString() const
     s += screenLayoutLong;
     s += ",";
     s += this->orientation;
+    s += ",";
+    s += uiInvertedMode;
     s += ",";
     s += uiModeType;
     s += ",";
@@ -812,6 +837,12 @@ AaptGroupEntry::toDirName(const String8& resType) const
             s += "-";
         }
         s += orientation;
+    }
+    if (this->uiInvertedMode != "") {
+        if (s.length() > 0) {
+            s += "-";
+        }
+        s += uiInvertedMode;
     }
     if (this->uiModeType != "") {
         if (s.length() > 0) {
@@ -1083,6 +1114,23 @@ bool AaptGroupEntry::getOrientationName(const char* name,
         return true;
     } else if (strcmp(name, "square") == 0) {
         if (out) out->orientation = out->ORIENTATION_SQUARE;
+        return true;
+    }
+
+    return false;
+}
+
+bool AaptGroupEntry::getUiInvertedModeName(const char* name,
+                                        ResTable_config* out)
+{
+    if (strcmp(name, kWildcardName) == 0) {
+        if (out) out->uiInvertedMode = out->UI_INVERTED_MODE_ANY;
+        return true;
+    } else if (strcmp(name, "inverted") == 0) {
+        if (out) out->uiInvertedMode = out->UI_INVERTED_MODE_YES;
+        return true;
+    } else if (strcmp(name, "notinverted") == 0) {
+        if (out) out->uiInvertedMode = out->UI_INVERTED_MODE_NO;
         return true;
     }
 
@@ -1483,6 +1531,7 @@ int AaptGroupEntry::compare(const AaptGroupEntry& o) const
     if (v == 0) v = screenLayoutSize.compare(o.screenLayoutSize);
     if (v == 0) v = screenLayoutLong.compare(o.screenLayoutLong);
     if (v == 0) v = orientation.compare(o.orientation);
+    if (v == 0) v = uiInvertedMode.compare(o.uiInvertedMode);
     if (v == 0) v = uiModeType.compare(o.uiModeType);
     if (v == 0) v = uiModeNight.compare(o.uiModeNight);
     if (v == 0) v = density.compare(o.density);
@@ -1515,6 +1564,7 @@ const ResTable_config& AaptGroupEntry::toParams() const
     getScreenLayoutSizeName(screenLayoutSize.string(), &params);
     getScreenLayoutLongName(screenLayoutLong.string(), &params);
     getOrientationName(orientation.string(), &params);
+    getUiInvertedModeName(uiInvertedMode.string(), &params);
     getUiModeTypeName(uiModeType.string(), &params);
     getUiModeNightName(uiModeNight.string(), &params);
     getDensityName(density.string(), &params);
@@ -1535,7 +1585,8 @@ const ResTable_config& AaptGroupEntry::toParams() const
     } else if ((params.uiMode&ResTable_config::MASK_UI_MODE_TYPE)
                 != ResTable_config::UI_MODE_TYPE_ANY
             ||  (params.uiMode&ResTable_config::MASK_UI_MODE_NIGHT)
-                != ResTable_config::UI_MODE_NIGHT_ANY) {
+                != ResTable_config::UI_MODE_NIGHT_ANY
+            ||  params.uiInvertedMode != ResTable_config::UI_INVERTED_MODE_ANY) {
         minSdk = SDK_FROYO;
     } else if ((params.screenLayout&ResTable_config::MASK_SCREENSIZE)
                 != ResTable_config::SCREENSIZE_ANY

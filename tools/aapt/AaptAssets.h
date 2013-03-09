@@ -41,6 +41,7 @@ enum {
     AXIS_SCREENLAYOUTSIZE,
     AXIS_SCREENLAYOUTLONG,
     AXIS_ORIENTATION,
+    AXIS_UIINVERTEDMODE,
     AXIS_UIMODETYPE,
     AXIS_UIMODENIGHT,
     AXIS_DENSITY,
@@ -86,6 +87,7 @@ public:
     static bool getScreenLayoutSizeName(const char* name, ResTable_config* out = NULL);
     static bool getScreenLayoutLongName(const char* name, ResTable_config* out = NULL);
     static bool getOrientationName(const char* name, ResTable_config* out = NULL);
+    static bool getUiInvertedModeName(const char* name, ResTable_config* out = NULL);
     static bool getUiModeTypeName(const char* name, ResTable_config* out = NULL);
     static bool getUiModeNightName(const char* name, ResTable_config* out = NULL);
     static bool getDensityName(const char* name, ResTable_config* out = NULL);
@@ -128,6 +130,7 @@ private:
     String8 screenLayoutSize;
     String8 screenLayoutLong;
     String8 orientation;
+    String8 uiInvertedMode;
     String8 uiModeType;
     String8 uiModeNight;
     String8 density;
