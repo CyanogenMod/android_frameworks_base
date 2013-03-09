@@ -998,7 +998,7 @@
     <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> seconden"</item>
   </plurals>
   <plurals name="duration_minutes">
-    <item quantity="one" msgid="4915414002546085617">"1 minuut"</item>
+    <item quantity="one" msgid="4915414002546085617">"1 minuut"</item>
     <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> minuten"</item>
   </plurals>
   <plurals name="duration_hours">
@@ -1136,7 +1136,7 @@
     <string name="sms_short_code_confirm_allow" msgid="4458878637111023413">"Verzenden"</string>
     <string name="sms_short_code_confirm_deny" msgid="2927389840209170706">"Annuleren"</string>
     <string name="sms_short_code_remember_choice" msgid="5289538592272218136">"Mijn keuze onthouden"</string>
-    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"U kunt dit later wijzigen in \'Instellingen\' &gt; \'Apps\'"</string>
+    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"U kunt dit later wijzigen in \'Instellingen\' &gt; \'Apps\'"</string>
     <string name="sms_short_code_confirm_always_allow" msgid="3241181154869493368">"Altijd toestaan"</string>
     <string name="sms_short_code_confirm_never_allow" msgid="446992765774269673">"Nooit toestaan"</string>
     <string name="sim_removed_title" msgid="6227712319223226185">"Simkaart verwijderd"</string>
@@ -1457,8 +1457,7 @@
     <string name="user_switched" msgid="3768006783166984410">"Huidige gebruiker <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Eigenaar"</string>
 
-    <!-- CYANOGENMOD EDITS -->
-
+    <!-- CYANOGENMOD ADDITIONS -->
     <string name="profileNameDefault">Standaard</string>
     <string name="profileNameWork">Zakelijk</string>
     <string name="profileNameHome">Thuis</string>
