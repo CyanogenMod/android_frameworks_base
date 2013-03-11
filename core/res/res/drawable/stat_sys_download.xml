@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/* //device/apps/common/res/drawable/status_icon_background.xml
-**
 ** Copyright 2008, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -17,14 +15,27 @@
 ** limitations under the License.
 */
 -->
-<animation-list
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:oneshot="false">
-    <item android:drawable="@drawable/stat_sys_download_anim0" android:duration="200" />
-    <item android:drawable="@drawable/stat_sys_download_anim1" android:duration="200" />
-    <item android:drawable="@drawable/stat_sys_download_anim2" android:duration="200" />
-    <item android:drawable="@drawable/stat_sys_download_anim3" android:duration="200" />
-    <item android:drawable="@drawable/stat_sys_download_anim4" android:duration="200" />
-    <item android:drawable="@drawable/stat_sys_download_anim5" android:duration="200" />
-</animation-list>
 
+<animation-list android:oneshot="false"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim0" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim1" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim2" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim3" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim4" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim5" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim6" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim7" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim8" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim9" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim10" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim11" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim12" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim13" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim14" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim15" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim16" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim17" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim18" />
+    <item android:duration="80" android:drawable="@drawable/stat_sys_download_anim19" />
+</animation-list>
