@@ -560,7 +560,14 @@ class ExpandableListConnector extends BaseAdapter implements Filterable {
              * another class's method unless we have to (so do a subtraction)
              */
             if ((curGm.lastChildFlPos == GroupMetadata.REFRESH) || forceChildrenCountRefresh) {
-                gChildrenCount = mExpandableListAdapter.getChildrenCount(curGm.gPos);
+                /*
+                 * Consider children count only if the group is expanded.
+                 */
+                if (isGroupExpanded(curGm.gPos)) {
+                    gChildrenCount = mExpandableListAdapter.getChildrenCount(curGm.gPos);
+                } else {
+                    gChildrenCount = 0;
+                }
             } else {
                 /* Num children for this group is its last child's fl pos minus
                  * the group's fl pos
