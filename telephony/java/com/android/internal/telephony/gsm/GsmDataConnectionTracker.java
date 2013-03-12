@@ -626,6 +626,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             notifyOffApnsOfAvailability(Phone.REASON_DATA_ATTACHED);
         }
 
+        mAutoAttachOnCreation = true;
         setupDataOnReadyApns(Phone.REASON_DATA_ATTACHED);
     }
 
