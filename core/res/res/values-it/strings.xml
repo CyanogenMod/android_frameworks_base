@@ -153,7 +153,7 @@
     <string name="reboot_system" product="tablet">Riavvia tablet</string>
     <string name="reboot_system" product="default">Riavvia telefono</string>
     <string name="global_action_screenshot">Cattura schermata</string>
-    <string name="global_actions_toggle_expanded_desktop_mode">Desktop espanso</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Desktop esteso</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Attivato</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Disattivato</string>
     <string name="reboot_reboot">Riavvia</string>
