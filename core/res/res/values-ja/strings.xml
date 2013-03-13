@@ -1457,7 +1457,7 @@
     <string name="user_switched" msgid="3768006783166984410">"現在のユーザーは<xliff:g id="NAME">%1$s</xliff:g>です。"</string>
     <string name="owner_name" msgid="2716755460376028154">"所有者"</string>
 
-    <!-- CM Extra entries -->
+    <!-- **** CYANOGENMOD ADDITIONS **** -->
     <string name="lockscreen_discharging">放電中, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="global_actions_toggle_expanded_desktop_mode">拡張デスクトップ</string>
     <string name="global_actions_expanded_desktop_mode_on_status">有効</string>
@@ -1466,6 +1466,17 @@
     <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
     <string name="toast_rotation_unlocked">ディスプレイの回転をロック解除しました</string>
     <string name="toast_rotation_locked">ディスプレイの回転をロックしました</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fm_radio_receiver">FMレシーバの制御</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fm_radio_receiver">FMレシーバの制御をアプリに許可します。</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fm_radio_transmitter">FMトランスミッターの制御</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fm_radio_transmitter">FMトランスミッターの制御をアプリに許可します。</string>
+
 
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system" product="tablet">タブレットを再起動</string>
@@ -1495,7 +1506,7 @@
 
     <string name="permlab_preventpower">電源キーを保護</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_preventpower">アプリケーションが電源キーを置き換えるのを許可する</string>
+    <string name="permdesc_preventpower">電源キーを置き換えるのをアプリに許可します。</string>
 
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_choose_profile">プロファイル選択</string>
@@ -1517,5 +1528,5 @@
     <string name="wildcardProfile">その他</string>
 
     <string name="app_killed_message">アプリケーションを強制終了しました</string>
-
+    <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
