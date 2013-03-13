@@ -239,6 +239,7 @@
     <string name="quick_settings_quiethours_off">Csendes órák ki</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE ki</string>
+    <string name="quick_settings_volume">Hangerő</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Válasszon eseményt</string>
