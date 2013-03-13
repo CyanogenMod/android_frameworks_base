@@ -42,7 +42,7 @@ FMRadioDataSource::FMRadioDataSource() {
     mFlags = 0;
     mOverwrittenBytes = 0;
     mInputClientId = AUDIO_INPUT_CLIENT_PLAYBACK;
-    int inputSource = AUDIO_SOURCE_FM_RADIO_RX;
+    int inputSource = AUDIO_SOURCE_FM_RX;
 
     mStream = (android_audio_legacy::AudioStreamIn*) AudioSystem::getInput(inputSource,mSampleRate, mFormat, mChannels,
                                               (audio_in_acoustics_t)mFlags,0,&mInputClientId);
