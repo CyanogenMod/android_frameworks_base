@@ -998,7 +998,7 @@
     <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> seconden"</item>
   </plurals>
   <plurals name="duration_minutes">
-    <item quantity="one" msgid="4915414002546085617">"1 minuut"</item>
+    <item quantity="one" msgid="4915414002546085617">"1 minuut"</item>
     <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> minuten"</item>
   </plurals>
   <plurals name="duration_hours">
@@ -1136,7 +1136,7 @@
     <string name="sms_short_code_confirm_allow" msgid="4458878637111023413">"Verzenden"</string>
     <string name="sms_short_code_confirm_deny" msgid="2927389840209170706">"Annuleren"</string>
     <string name="sms_short_code_remember_choice" msgid="5289538592272218136">"Mijn keuze onthouden"</string>
-    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"U kunt dit later wijzigen in \'Instellingen\' &gt; \'Apps\'"</string>
+    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"U kunt dit later wijzigen in \'Instellingen\' &gt; \'Apps\'"</string>
     <string name="sms_short_code_confirm_always_allow" msgid="3241181154869493368">"Altijd toestaan"</string>
     <string name="sms_short_code_confirm_never_allow" msgid="446992765774269673">"Nooit toestaan"</string>
     <string name="sim_removed_title" msgid="6227712319223226185">"Simkaart verwijderd"</string>
@@ -1456,42 +1456,4 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Toegankelijkheid geannuleerd."</string>
     <string name="user_switched" msgid="3768006783166984410">"Huidige gebruiker <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Eigenaar"</string>
-
-    <!-- CYANOGENMOD EDITS -->
-
-    <string name="profileNameDefault">Standaard</string>
-    <string name="profileNameWork">Zakelijk</string>
-    <string name="profileNameHome">Thuis</string>
-    <string name="profileNameSilent">Stil</string>
-    <string name="profileNameNight">\'s Nachts</string>
-    <string name="profileGroupPhone">Telefoon</string>
-    <string name="profileGroupCalendar">Agenda</string>
-    <string name="profileGroupGmail">Gmail</string>
-    <string name="profileGroupEmail">E-mail</string>
-    <string name="profileGroupSMS">Sms</string>
-    <string name="wildcardProfile">Anders</string>
-    <string name="reboot_system" product="tablet">Tablet herstarten</string>
-    <string name="reboot_system" product="default">Telefoon herstarten</string>
-    <string name="global_action_screenshot">Schermafdruk</string>
-    <string name="global_actions_toggle_expanded_desktop_mode">Uitgebreid bureaublad</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">Ingeschakeld</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">Uitgeschakeld</string>
-    <string name="reboot_reboot">Herstarten</string>
-    <string name="reboot_recovery">Recovery</string>
-    <string name="reboot_bootloader">Bootloader</string>
-    <string name="reboot_bootmenu">Bootmenu</string>
-    <string name="reboot_fastboot">Fastboot</string>
-    <string name="reboot_download">Download</string>
-    <string name="reboot_progress">Herstarten\u2026</string>
-    <string name="reboot_confirm" product="tablet">Uw tablet wordt herstart.</string>
-    <string name="reboot_confirm" product="default">Uw telefoon wordt herstart.</string>
-    <string name="permlab_preventpower">aan/uit-knop beheren</string>
-    <string name="permdesc_preventpower">Hiermee kan een app het gedrag van de aan/uit-knop wijzigen</string>
-    <string name="lockscreen_discharging">Ontladen, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-    <string name="app_killed_message">App afgesloten</string>
-    <string name="global_action_reboot">Herstarten</string>
-    <string name="global_action_choose_profile">Profiel</string>
-    <string name="toast_rotation_unlocked">Scherm wordt automatisch gedraaid</string>
-    <string name="toast_rotation_locked">Scherm wordt niet automatisch gedraaid</string>
-    <string name="storage_sd_dock_card">SD-kaart in dock</string>
 </resources>
