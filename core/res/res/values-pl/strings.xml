@@ -36,6 +36,22 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Problem z połączeniem lub błędny kod MMI."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Operacja jest ograniczona wyłącznie do numerów ustalonych."</string>
+<!-- Names of default profiles. -->
+    <string name="profileNameDefault">Domyślny</string>
+    <string name="profileNameWork">Praca</string>
+    <string name="profileNameHome">Dom</string>
+    <string name="profileNameSilent">Wyciszony</string>
+    <string name="profileNameNight">Noc</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalendarz</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Inny</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Usługa została włączona."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Usługa została włączona dla:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Usługa została wyłączona."</string>
@@ -139,6 +155,41 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Wyłącz połączenia bezprzewodowe"</string>
     <string name="screen_lock" msgid="799094655496098153">"Blokada ekranu"</string>
     <string name="power_off" msgid="4266614107412865048">"Wyłącz"</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Uruchom ponownie tablet</string>
+    <string name="reboot_system" product="default">Uruchom ponownie telefon</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Zrzut ekranu</string>
+
+    <!-- label for item that toggles expand desktop mode -->
+    <string name="global_actions_toggle_expanded_desktop_mode">Rozszerzony pulpit</string>
+    <!-- status message in phone options dialog for when expand desktop mode is on -->
+    <string name="global_actions_expanded_desktop_mode_on_status">Włączony</string>
+    <!-- status message in phone options dialog for when expand desktop mode is off -->
+    <string name="global_actions_expanded_desktop_mode_off_status">Wyłączony</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Uruchom ponownie</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Uruchom Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Uruchom Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Uruchom Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Uruchom Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Uruchom Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Ponowne uruchamianie\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm" product="tablet">Tablet zostanie uruchomiony ponownie.</string>
+    <string name="reboot_confirm" product="default">Telefon zostanie uruchomiony ponownie.</string>
+
     <string name="silent_mode_silent" msgid="319298163018473078">"Dzwonek wyłączony"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Dzwonek z wibracjami"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Dzwonek włączony"</string>
@@ -1456,4 +1507,14 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Ułatwienia dostępu zostały anulowane."</string>
     <string name="user_switched" msgid="3768006783166984410">"Bieżący użytkownik: <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Właściciel"</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Uruchom ponownie</string>
+
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">Profil</string>
+
+    <!-- Hardware Rotation lock string -->
+    <string name="toast_rotation_unlocked">Obracanie obrazu odblokowane</string>
+    <string name="toast_rotation_locked">Obracanie obrazu zablokowane</string>
 </resources>
