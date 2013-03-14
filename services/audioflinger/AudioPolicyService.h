@@ -83,7 +83,7 @@ public:
                                 int session = 0);
     virtual void releaseOutput(audio_io_handle_t output);
 #ifdef WITH_QCOM_LPA
-	virtual status_t pauseSession(audio_io_handle_t output, audio_stream_type_t stream);
+    virtual status_t pauseSession(audio_io_handle_t output, audio_stream_type_t stream);
     virtual status_t resumeSession(audio_io_handle_t output, audio_stream_type_t stream);
     virtual status_t closeSession(audio_io_handle_t output);
 #endif
@@ -149,6 +149,9 @@ public:
     virtual status_t startTone(audio_policy_tone_t tone, audio_stream_type_t stream);
     virtual status_t stopTone();
     virtual status_t setVoiceVolume(float volume, int delayMs = 0);
+#if defined(QCOM_HARDWARE) && defined(HAVE_FM_RADIO)
+    virtual status_t setFmVolume(float volume, int delayMs = 0);
+#endif
 
 private:
                         AudioPolicyService();
@@ -172,7 +175,10 @@ private:
             STOP_TONE,
             SET_VOLUME,
             SET_PARAMETERS,
-            SET_VOICE_VOLUME
+            SET_VOICE_VOLUME,
+#if defined(QCOM_HARDWARE) && defined(HAVE_FM_RADIO)
+            SET_FM_VOLUME
+#endif
         };
 
         AudioCommandThread (String8 name);
@@ -190,6 +196,9 @@ private:
                     status_t    volumeCommand(int stream, float volume, int output, int delayMs = 0);
                     status_t    parametersCommand(int ioHandle, const char *keyValuePairs, int delayMs = 0);
                     status_t    voiceVolumeCommand(float volume, int delayMs = 0);
+#if defined(QCOM_HARDWARE) && defined(HAVE_FM_RADIO)
+                    status_t    fmVolumeCommand(float volume, int delayMs = 0);
+#endif
                     void        insertCommand_l(AudioCommand *command, int delayMs = 0);
 
     private:
@@ -233,6 +242,13 @@ private:
         public:
             float mVolume;
         };
+
+#if defined(QCOM_HARDWARE) && defined(HAVE_FM_RADIO)
+        class FmVolumeData {
+        public:
+            float mVolume;
+        };
+#endif
 
         Mutex   mLock;
         Condition mWaitWorkCV;

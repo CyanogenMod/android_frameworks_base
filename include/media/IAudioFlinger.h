@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -203,6 +204,11 @@ public:
 #ifdef STE_AUDIO
     virtual size_t readInput(uint32_t *input, uint32_t inputClientId, void *buffer, uint32_t bytes, uint32_t *pOverwrittenBytes) = 0;
 #endif
+
+#if defined(QCOM_HARDWARE) && defined(HAVE_FM_RADIO)
+    virtual status_t setFmVolume(float volume) = 0;
+#endif
+
 };
 
 

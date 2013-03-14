@@ -1,6 +1,7 @@
 /*
 **
 ** Copyright 2007, The Android Open Source Project
+** Copyright (c) 2012, Code Aurora Forum. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -89,10 +90,12 @@ enum {
     READ_INPUT,
 #endif
 #ifdef WITH_QCOM_LPA
-    SET_FM_VOLUME,
     CREATE_SESSION,
     DELETE_SESSION,
-    APPLY_EFFECTS
+    APPLY_EFFECTS,
+#endif
+#if defined(QCOM_HARDWARE) && defined(HAVE_FM_RADIO)
+    SET_FM_VOLUME
 #endif
 };
 
@@ -861,6 +864,17 @@ public:
         remote()->transact(MOVE_EFFECTS, data, &reply);
         return reply.readInt32();
     }
+
+#if defined(QCOM_HARDWARE) && defined(HAVE_FM_RADIO)
+    virtual status_t setFmVolume(float volume)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioFlinger::getInterfaceDescriptor());
+        data.writeFloat(volume);
+        remote()->transact(SET_FM_VOLUME, data, &reply);
+        return reply.readInt32();
+    }
+#endif
 };
 
 IMPLEMENT_META_INTERFACE(AudioFlinger, "android.media.IAudioFlinger");
@@ -1322,6 +1336,14 @@ status_t BnAudioFlinger::onTransact(
             uint32_t bytes = data.readInt32();
             uint32_t *pOverwrittenBytes = (uint32_t*) data.readIntPtr();
             reply->writeInt32(readInput(input, inputClientId, buffer, bytes, pOverwrittenBytes));
+            return NO_ERROR;
+        } break;
+#endif
+#if defined(QCOM_HARDWARE) && defined(HAVE_FM_RADIO)
+        case SET_FM_VOLUME: {
+            CHECK_INTERFACE(IAudioFlinger, data, reply);
+            float volume = data.readFloat();
+            reply->writeInt32( setFmVolume(volume) );
             return NO_ERROR;
         } break;
 #endif
