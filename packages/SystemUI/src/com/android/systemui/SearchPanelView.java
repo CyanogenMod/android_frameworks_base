@@ -222,7 +222,7 @@ public class SearchPanelView extends FrameLayout implements
         mShowing = show;
         if (show && hasValidTargets()) {
             for (int i = 0; i < mTargetActivities.length; i++) {
-                NavigationRingHelpers.updateRingerIconIfNeeded(mContext, mGlowPadView,
+                NavigationRingHelpers.updateDynamicIconIfNeeded(mContext, mGlowPadView,
                         mTargetActivities[i], i + mStartPosOffset);
             }
             NavigationRingHelpers.swapSearchIconIfNeeded(mContext, mGlowPadView);

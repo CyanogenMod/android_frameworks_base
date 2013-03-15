@@ -1922,7 +1922,8 @@
   <java-symbol type="drawable" name="ic_navigation_ring_screenshot" />
   <java-symbol type="drawable" name="ic_navigation_ring_silent" />
   <java-symbol type="drawable" name="ic_navigation_ring_sound_on" />
-  <java-symbol type="drawable" name="ic_navigation_ring_torch" />
+  <java-symbol type="drawable" name="ic_navigation_ring_torch_on" />
+  <java-symbol type="drawable" name="ic_navigation_ring_torch_off" />
   <java-symbol type="drawable" name="ic_navigation_ring_vibrate" />
 
 </resources>
