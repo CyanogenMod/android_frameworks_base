@@ -1466,7 +1466,8 @@
     <string name="global_actions_expanded_desktop_mode_off_status">Выключен</string>
     <string name="reboot_reboot">Перезагрузка</string>
     <string name="reboot_progress">Перезагрузка\u2026</string>
-    <string name="reboot_confirm">Ваш телефон будет перезагружен</string>
+    <string name="reboot_confirm" product="tablet">Ваш планшетный ПК будет перезагружен</string>
+    <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен</string>
     <string name="global_action_reboot">Перезагрузка</string>
     <string name="global_action_choose_profile">Выбрать профиль</string>
     <string name="app_killed_message">Приложение закрыто</string>
