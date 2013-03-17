@@ -22,6 +22,8 @@ import android.os.BatteryManager;
 
 import com.android.systemui.R;
 
+import java.util.ArrayList;
+
 public class DockBatteryController extends BatteryController {
     private static final String TAG = "StatusBar.DockBatteryController";
 
@@ -30,7 +32,11 @@ public class DockBatteryController extends BatteryController {
     private boolean mBatteryPresent = false;
 
     public DockBatteryController(Context context) {
-        super(context);
+        this(context, true);
+    }
+
+    public DockBatteryController(Context context, boolean ui) {
+        super(context, ui);
     }
 
     @Override
@@ -46,6 +52,28 @@ public class DockBatteryController extends BatteryController {
             updateViews(level);
             updateBattery();
         }
+    }
+
+    @Override
+    protected void updateViews(int level) {
+        if (isUiController()) {
+            super.updateViews(level);
+        }
+
+        for (DockBatteryStateChangeCallback cb : mChangeCallbacks) {
+            cb.onDockBatteryLevelChanged(level, isBatteryPresent(), isBatteryStatusCharging());
+        }
+    }
+
+    private ArrayList<DockBatteryStateChangeCallback> mChangeCallbacks =
+            new ArrayList<DockBatteryStateChangeCallback>();
+
+    public interface DockBatteryStateChangeCallback {
+        public void onDockBatteryLevelChanged(int level, boolean present, boolean pluggedIn);
+    }
+
+    public void addStateChangedCallback(DockBatteryStateChangeCallback cb) {
+        mChangeCallbacks.add(cb);
     }
 
     @Override

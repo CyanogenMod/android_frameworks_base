@@ -2936,6 +2936,10 @@ public class PhoneStatusBar extends BaseStatusBar {
                     false, this);
 
             cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QS_DYNAMIC_DOCK_BATTERY),
+                    false, this);
+
+            cr.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.QS_DYNAMIC_IME),
                     false, this);
 
