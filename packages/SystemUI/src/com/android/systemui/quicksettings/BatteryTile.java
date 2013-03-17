@@ -41,7 +41,7 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     @Override
     void onPostCreate() {
         updateTile();
-        BatteryController controller = new BatteryController(mContext);
+        BatteryController controller = new BatteryController(mContext, false);
         controller.addStateChangedCallback(this);
         super.onPostCreate();
     }

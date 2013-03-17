@@ -51,4 +51,9 @@ public class QSUtils {
             final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
             return (tm.getLteOnCdmaMode() == PhoneConstants.LTE_ON_CDMA_TRUE) || tm.getLteOnGsmMode() != 0;
         }
+
+        public static boolean deviceSupportsDockBattery(Context ctx) {
+            Resources res = ctx.getResources();
+            return res.getBoolean(com.android.internal.R.bool.config_hasDockBattery);
+        }
 }
