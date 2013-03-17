@@ -3686,6 +3686,7 @@
   <java-symbol type="bool" name="config_screenOffAnimation" />
   <java-symbol type="bool" name="config_hasRotationLockSwitch" />
   <java-symbol type="bool" name="config_hasDockBattery" />
+  <java-symbol type="bool" name="config_supportBatteryStatus" />
   <java-symbol type="bool" name="config_noDelayInATwoDP" />
   <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
   <java-symbol type="integer" name="config_deviceHardwareKeys" />

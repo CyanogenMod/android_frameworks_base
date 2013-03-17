@@ -934,6 +934,12 @@
     <!-- Asus dock compatibility disabled by default -->
     <bool name="config_hasDockBattery">false</bool>
 
+    <!-- When the device supports a full battery status report or just plugged
+         status. Disable it when the device doesn't handle battery status correctly, xe:
+         when "/sys/class/power_supply/battery/status" doesn't report the real battery status
+         (by default supported) -->
+    <bool name="config_supportBatteryStatus">true</bool>
+
     <!-- If true, adds support for no delay A2DP in Samsung devices -->
     <bool name="config_noDelayInATwoDP">false</bool>
 

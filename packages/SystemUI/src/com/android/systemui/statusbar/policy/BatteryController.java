@@ -23,6 +23,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.os.BatteryManager;
 import android.os.Handler;
@@ -69,6 +70,8 @@ public class BatteryController extends BroadcastReceiver {
 
     Handler mHandler;
 
+    private final boolean hasCorrectBatteryStatus;
+
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -97,6 +100,10 @@ public class BatteryController extends BroadcastReceiver {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         context.registerReceiver(this, filter);
+
+        Resources res = context.getResources();
+        hasCorrectBatteryStatus =
+                res.getBoolean(com.android.internal.R.bool.config_supportBatteryStatus);
     }
 
     public void addIconView(ImageView v) {
@@ -112,7 +119,14 @@ public class BatteryController extends BroadcastReceiver {
         if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             final int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             mBatteryPlugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
-            mBatteryCharging = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN) == BatteryManager.BATTERY_STATUS_CHARGING;
+            if (hasCorrectBatteryStatus) {
+                int status = intent.getIntExtra(
+                        BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
+                mBatteryCharging = status == BatteryManager.BATTERY_STATUS_CHARGING;
+            } else {
+                mBatteryCharging = mBatteryPlugged;
+            }
+
             int N = mIconViews.size();
             for (int i=0; i<N; i++) {
                 ImageView v = mIconViews.get(i);

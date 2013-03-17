@@ -82,6 +82,8 @@ public class CircleBattery extends ImageView {
     private Paint   mPaintSystem;
     private Paint   mPaintRed;
 
+    private final boolean hasCorrectBatteryStatus;
+
     // runnable to invalidate view via mHandler.postDelayed() call
     private final Runnable mInvalidate = new Runnable() {
         public void run() {
@@ -135,7 +137,13 @@ public class CircleBattery extends ImageView {
             final String action = intent.getAction();
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 mLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                mIsCharging = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
+                if (hasCorrectBatteryStatus) {
+                    int status = intent.getIntExtra(
+                            BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
+                    mIsCharging = status == BatteryManager.BATTERY_STATUS_CHARGING;
+                } else {
+                    mIsCharging = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
+                }
 
                 mDockLevel = intent.getIntExtra(BatteryManager.EXTRA_DOCK_LEVEL, 0);
                 mDockIsCharging = intent.getIntExtra(BatteryManager.EXTRA_DOCK_STATUS,
@@ -194,8 +202,11 @@ public class CircleBattery extends ImageView {
     public CircleBattery(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        Resources res = getResources();
         mContext = context;
         mHandler = new Handler();
+        hasCorrectBatteryStatus =
+                res.getBoolean(com.android.internal.R.bool.config_supportBatteryStatus);
 
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
@@ -203,8 +214,6 @@ public class CircleBattery extends ImageView {
 
         // initialize and setup all paint variables
         // stroke width is later set in initSizeBasedStuff()
-        Resources res = getResources();
-
         mPaintFont = new Paint();
         mPaintFont.setAntiAlias(true);
         mPaintFont.setDither(true);

@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import static android.os.BatteryManager.BATTERY_STATUS_CHARGING;
 import static android.os.BatteryManager.BATTERY_STATUS_DISCHARGING;
@@ -94,6 +95,8 @@ public class KeyguardUpdateMonitor {
     private ContentObserver mContentObserver;
     private int mRingMode;
     private int mPhoneState;
+
+    private final boolean hasCorrectBatteryStatus;
 
     // messages for the handler
     private static final int MSG_TIME_UPDATE = 301;
@@ -218,6 +221,10 @@ public class KeyguardUpdateMonitor {
                 }
             }
         };
+
+        Resources res = context.getResources();
+        hasCorrectBatteryStatus =
+                res.getBoolean(com.android.internal.R.bool.config_supportBatteryStatus);
 
         mDeviceProvisioned = Settings.Secure.getInt(
                 mContext.getContentResolver(), Settings.Secure.DEVICE_PROVISIONED, 0) != 0;
@@ -439,7 +446,10 @@ public class KeyguardUpdateMonitor {
                 || status.plugged == BatteryManager.BATTERY_PLUGGED_USB;
     }
 
-    private static boolean isCharging(BatteryStatus status) {
+    private boolean isCharging(BatteryStatus status) {
+        if (!hasCorrectBatteryStatus) {
+            return isPluggedIn(status);
+        }
         return status.status == BatteryManager.BATTERY_STATUS_CHARGING;
     }
 
