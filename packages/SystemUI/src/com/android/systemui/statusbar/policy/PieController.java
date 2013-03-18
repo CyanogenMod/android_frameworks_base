@@ -23,6 +23,8 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 
 import android.app.ActivityOptions;
+import android.app.KeyguardManager;
+import android.app.NotificationManager;
 import android.app.SearchManager;
 import android.app.StatusBarManager;
 import android.content.ActivityNotFoundException;
@@ -43,6 +45,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.Vibrator;
@@ -51,6 +55,7 @@ import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.util.Slog;
 import android.view.HapticFeedbackConstants;
+import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,6 +86,8 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
     public static final String BUTTON_RECENT = "##recent##";
     public static final String BUTTON_MENU = "##menu##";
     public static final String BUTTON_SEARCH = "##search##";
+    public static final String BUTTON_SEARCHLIGHT = "##light##";
+
 
     public static final float EMPTY_ANGLE = 10;
     public static final float START_ANGLE = 180 + EMPTY_ANGLE;
@@ -94,6 +101,7 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
      */
     private BaseStatusBar mStatusBar;
     private Vibrator mVibrator;
+    private IWindowManager mWm;
     private boolean mTelephony;
     private int mBatteryLevel;
 
@@ -101,6 +109,7 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
     private PieSliceContainer mNavigationSlice;
     private PieSysInfo mSysInfo;
     private PieItem mMenuButton;
+    private PieItem mSearchLight;
 
     private int mNavigationIconHints = 0;
     private int mDisabledFlags = 0;
@@ -232,10 +241,16 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
 
     private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
 
-    private BroadcastReceiver mBatteryReceiver = new BroadcastReceiver(){
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context arg0, Intent intent) {
-            mBatteryLevel = intent.getIntExtra("level", 0);
+            final String action = intent.getAction();
+            if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+                mBatteryLevel = intent.getIntExtra("level", 0);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                if (mPieContainer != null)
+                    mPieContainer.exit();
+            }
         }
     };
 
@@ -243,6 +258,7 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
         mContext = context;
 
         mVibrator = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        mWm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
         mTelephony = mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
 
         final Resources res = mContext.getResources();
@@ -284,8 +300,11 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
 
         // start listening for changes
         mSettingsObserver.observe();
-        mContext.registerReceiver(mBatteryReceiver,
-                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        mSettingsObserver.observe();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        mContext.registerReceiver(mBroadcastReceiver, filter);
     }
 
     private void setupNavigationItems() {
@@ -298,6 +317,9 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
         if (Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_SEARCH, 0) == 1) {
             mNavigationSlice.addItem(constructItem(1, BUTTON_SEARCH, R.drawable.ic_sysbar_search_side, minimumImageSize));
         }
+        // search light has a width of 6 to take the complete space that normaly BACk HOME RECENT would occupy
+        mSearchLight = constructItem(6, BUTTON_SEARCHLIGHT, R.drawable.search_light, minimumImageSize);
+        mNavigationSlice.addItem(mSearchLight);
         mMenuButton = constructItem(1, BUTTON_MENU, R.drawable.ic_sysbar_menu, minimumImageSize);
         mNavigationSlice.addItem(mMenuButton);
 
@@ -375,6 +397,8 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
         if (mMenuButton != null) mMenuButton.show(!disableRecent);
         item = mNavigationSlice.findItem(BUTTON_SEARCH);
         if (item != null) item.show(!disableRecent && !disableSearch);
+        // enable searchlight when nothing except search is enabled
+        mSearchLight.show(disableHome && disableRecent && disableBack && !disableSearch);
     }
 
     @Override
@@ -416,24 +440,40 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
         } else if (name.equals(BUTTON_RECENT)) {
             if (mStatusBar != null)
                 mStatusBar.toggleRecentApps();
-        } else if (name.equals(BUTTON_SEARCH)) {
-            launchAssistAction();
+        } else if (name.equals(BUTTON_SEARCH) || name.equals(BUTTON_SEARCHLIGHT)) {
+            launchAssistAction(name.equals(BUTTON_SEARCHLIGHT));
         }
     }
 
-    private void launchAssistAction() {
-        Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-                .getAssistIntent(mContext, UserHandle.USER_CURRENT);
+    private void launchAssistAction(boolean force) {
+        boolean isKeyguardShowing = false;
+        try {
+            isKeyguardShowing = mWm.isKeyguardLocked();
+        } catch (RemoteException e) {
+            // oh damn ...
+        }
 
-        if(intent != null) {
+        if (isKeyguardShowing && force) {
+            // Have keyguard show the bouncer and launch the activity if the user succeeds.
             try {
-                ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
-                        R.anim.search_launch_enter, R.anim.search_launch_exit);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivityAsUser(intent, opts.toBundle(),
-                        new UserHandle(UserHandle.USER_CURRENT));
-            } catch (ActivityNotFoundException ignored) {
-                // fall through
+                mWm.showAssistant();
+            } catch (RemoteException e) {
+                // too bad, so sad...
+            }
+        } else {
+            Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
+                    .getAssistIntent(mContext, UserHandle.USER_CURRENT);
+
+            if(intent != null) {
+                try {
+                    ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
+                            R.anim.search_launch_enter, R.anim.search_launch_exit);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivityAsUser(intent, opts.toBundle(),
+                            new UserHandle(UserHandle.USER_CURRENT));
+                } catch (ActivityNotFoundException ignored) {
+                    // fall through
+                }
             }
         }
     }
@@ -447,8 +487,7 @@ public class PieController implements BaseStatusBar.NavigationHintCallback, Base
     }
 
     public String getBatteryLevelReadable() {
-        return mContext.getString(R.string.battery_low_percent_format, mBatteryLevel)
-                .toUpperCase();
+        return mContext.getString(R.string.battery_low_percent_format, mBatteryLevel).toUpperCase();
     }
 
     public boolean hasTelephony() {
