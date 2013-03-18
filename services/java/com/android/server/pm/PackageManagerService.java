@@ -85,7 +85,6 @@ import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
-import android.content.pm.SELinuxMMAC;
 import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
 import android.content.pm.ManifestDigest;
@@ -1041,6 +1040,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             readPermissions();
 
+            mFoundPolicyFile = SELinuxMMAC.readInstallPolicy();
+
             mRestoredSettings = mSettings.readLPw(sUserManager.getUsers(false),
                     mSdkVersion, mOnlyCore);
             long startTime = SystemClock.uptimeMillis();
@@ -1163,13 +1164,6 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
             }
-
-            // Find potential SELinux install policy
-            long startPolicyTime = SystemClock.uptimeMillis();
-            mFoundPolicyFile = SELinuxMMAC.readInstallPolicy();
-            Slog.i(TAG, "Time to scan SELinux install policy: "
-                   + ((SystemClock.uptimeMillis()-startPolicyTime)/1000f)
-                   + " seconds");
 
             // Find base frameworks (resource packages without code).
             mFrameworkInstallObserver = new AppDirObserver(
@@ -3659,14 +3653,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         mScanningPath = scanFile;
 
-        if (mFoundPolicyFile && !SELinuxMMAC.passInstallPolicyChecks(pkg) &&
-                SELinuxMMAC.getEnforcingMode()) {
-            Slog.w(TAG, "Installing application package " + pkg.packageName
-                   + " failed due to policy.");
-            mLastScanError = PackageManager.INSTALL_FAILED_POLICY_REJECTED_PERMISSION;
-            return null;
-        }
-
         if ((parseFlags&PackageParser.PARSE_IS_SYSTEM) != 0) {
             pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SYSTEM;
         }
@@ -3895,6 +3881,12 @@ public class PackageManagerService extends IPackageManager.Stub {
             
             if (mSettings.isDisabledSystemPackageLPr(pkg.packageName)) {
                 pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+            } else if (mFoundPolicyFile && !SELinuxMMAC.passInstallPolicyChecks(pkg) &&
+                       SELinuxMMAC.getEnforcingMode()) {
+                Slog.w(TAG, "Installing application package " + pkg.packageName
+                       + " failed due to policy.");
+                mLastScanError = PackageManager.INSTALL_FAILED_POLICY_REJECTED_PERMISSION;
+                return null;
             }
 
             pkg.applicationInfo.uid = pkgSetting.appId;
