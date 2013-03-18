@@ -35,4 +35,12 @@
     <!-- the darkening filter applied to notifications -->
     <drawable name="notification_icon_area_smoke">#aa000000</drawable>
     <color name="notification_panel_scrim_color">#B0000000</color>
+
+    <!-- ==================== pie controls ==================== -->
+    <color name="pie_text_color">#ffffffff</color>
+    <color name="pie_foreground_color">#ffffffff</color>
+    <color name="pie_background_color">#ffff8000</color>
+    <color name="pie_selected_color">#ffdbff00</color>
+    <color name="pie_outline_color">#ffffffff</color>
+
 </resources>
