@@ -106,6 +106,7 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.OnSizeChangedListener;
 import com.android.systemui.statusbar.policy.Prefs;
+import com.android.systemui.statusbar.policy.PieController.Position;
 import com.android.systemui.statusbar.powerwidget.PowerWidget;
 
 public class PhoneStatusBar extends BaseStatusBar {
@@ -1389,7 +1390,13 @@ public class PhoneStatusBar extends BaseStatusBar {
                         | StatusBarManager.DISABLE_BACK
                         | StatusBarManager.DISABLE_SEARCH)) != 0) {
             // the nav bar will take care of these
-            if (mNavigationBarView != null) mNavigationBarView.setDisabledFlags(state);
+            if (mPieController != null) {
+                mPieController.setDisabledFlags(state, false);
+            }
+
+            if (mNavigationBarView != null) {
+                mNavigationBarView.setDisabledFlags(state);
+            }
 
             if ((state & StatusBarManager.DISABLE_RECENT) != 0) {
                 // close recents if it's visible
@@ -2220,6 +2227,17 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
         if (mNavigationBarView != null) {
             mNavigationBarView.setMenuVisibility(showMenu);
+        }
+
+        // hide pie triggers when keyguard is visible
+        try {
+            if (mWindowManagerService.isKeyguardLocked()) {
+                updatePieTriggerMask(Position.BOTTOM.FLAG | Position.TOP.FLAG);
+            } else {
+                updatePieTriggerMask(Position.LEFT.FLAG | Position.BOTTOM.FLAG | Position.RIGHT.FLAG | Position.TOP.FLAG);
+            }
+        } catch (RemoteException e) {
+            // nothing else to do ...
         }
 
         // See above re: lights-out policy for legacy apps.
