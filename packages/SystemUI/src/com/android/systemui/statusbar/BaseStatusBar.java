@@ -127,6 +127,22 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected FrameLayout mStatusBarContainer;
 
+    // Navigation hint callback
+    public interface NavigationHintCallback {
+
+        public abstract void setNavigationIconHints(int hints, boolean force);
+
+    };
+    private ArrayList<NavigationHintCallback> mNavigationCallbacks = new ArrayList<NavigationHintCallback>();
+
+    // Menu-key visibility callback
+    public interface MenuVisibilityCallback {
+
+        public abstract void setMenuVisibility(boolean showMenu);
+
+    }
+    private ArrayList<MenuVisibilityCallback> mMenuVisibilityCallbacks = new ArrayList<MenuVisibilityCallback>();
+
     // UI-specific methods
 
     /**
@@ -1156,5 +1172,29 @@ public abstract class BaseStatusBar extends SystemUI implements
     public boolean inKeyguardRestrictedInputMode() {
         KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
+    }
+
+    public void addNavigationHintCallback(NavigationHintCallback callback) {
+        mNavigationCallbacks.add(callback);
+    }
+
+    protected void propagateNavigationIconHints(int hints, boolean force) {
+        for (NavigationHintCallback callback : mNavigationCallbacks) {
+            if (callback == null) {
+                Slog.w(TAG, "Found NULL callback on navigation hint propagation!");
+                continue;
+            }
+            callback.setNavigationIconHints(hints, force);
+        }
+    }
+
+    public void addMenuVisibilityCallback(MenuVisibilityCallback callback) {
+        mMenuVisibilityCallbacks.add(callback);
+    }
+
+    protected void propagateMenuVisibility(boolean showMenu) {
+        for (MenuVisibilityCallback callback : mMenuVisibilityCallbacks) {
+            callback.setMenuVisibility(showMenu);
+        }
     }
 }

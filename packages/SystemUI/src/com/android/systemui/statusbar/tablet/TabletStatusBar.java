@@ -1111,6 +1111,8 @@ public class TabletStatusBar extends BaseStatusBar implements
             (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT))
                 ? R.drawable.ic_sysbar_back_ime
                 : R.drawable.ic_sysbar_back);
+
+        propagateNavigationIconHints(hints, false);
     }
 
     private void notifyUiVisibilityChanged() {
@@ -1160,6 +1162,7 @@ public class TabletStatusBar extends BaseStatusBar implements
             Slog.d(TAG, (showMenu?"showing":"hiding") + " the MENU button");
         }
         mMenuButton.setVisibility(showMenu ? View.VISIBLE : View.GONE);
+        propagateMenuVisibility(showMenu);
 
         // See above re: lights-out policy for legacy apps.
         if (showMenu) setLightsOn(true);
