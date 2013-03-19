@@ -1997,6 +1997,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 R.bool.def_haptic_feedback);
         loadIntegerSetting(stmt, Settings.System.LOCKSCREEN_SOUNDS_ENABLED,
             R.integer.def_lockscreen_sounds_enabled);
+        loadIntegerSetting(stmt, Settings.Global.POWER_NOTIFICATIONS_ENABLED,
+            R.integer.def_power_notifications_enabled);
+        loadIntegerSetting(stmt, Settings.Global.POWER_NOTIFICATIONS_USE_DEFAULT_ENABLED,
+            R.integer.def_power_notifications_use_default_enabled);
+        loadStringSetting(stmt, Settings.Global.POWER_NOTIFICATIONS_RINGTONE,
+            R.string.def_power_notifications_ringtone);
     }
 
     private void loadDefaultAnimationSettings(SQLiteStatement stmt) {
