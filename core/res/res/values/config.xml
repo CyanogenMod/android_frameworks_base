@@ -981,6 +981,21 @@
     players. -->
     <integer name="config_safe_media_volume_index">10</integer>
 
+    <!-- Default number of steps in volume, the more steps the more fine grained volume control is.
+    When changing this, change the safe media volume as well. -->
+    <integer-array name="config_max_stream_volume">
+        <item>5</item>  <!-- STREAM_VOICE_CALL -->
+        <item>7</item>  <!-- STREAM_SYSTEM -->
+        <item>7</item>  <!-- STREAM_RING -->
+        <item>15</item> <!-- STREAM_MUSIC -->
+        <item>7</item>  <!-- STREAM_ALARM -->
+        <item>7</item>  <!-- STREAM_NOTIFICATION -->
+        <item>15</item> <!-- STREAM_BLUETOOTH_SCO -->
+        <item>7</item>  <!-- STREAM_SYSTEM_ENFORCED -->
+        <item>15</item> <!-- STREAM_DTMF -->
+        <item>15</item> <!-- STREAM_TTS -->
+    </integer-array>
+
     <!-- Whether WiFi display is supported by this device.
          There are many prerequisites for this feature to work correctly.
          Here are a few of them:

@@ -227,18 +227,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     };
 
    /** @hide Maximum volume index values for audio streams */
-    private final int[] MAX_STREAM_VOLUME = new int[] {
-        5,  // STREAM_VOICE_CALL
-        7,  // STREAM_SYSTEM
-        7,  // STREAM_RING
-        15, // STREAM_MUSIC
-        7,  // STREAM_ALARM
-        7,  // STREAM_NOTIFICATION
-        15, // STREAM_BLUETOOTH_SCO
-        7,  // STREAM_SYSTEM_ENFORCED
-        15, // STREAM_DTMF
-        15  // STREAM_TTS
-    };
+    private final int[] MAX_STREAM_VOLUME;
+
     /* mStreamVolumeAlias[] indicates for each stream if it uses the volume settings
      * of another stream: This avoids multiplying the volume settings for hidden
      * stream types that follow other stream behavior for volume settings
@@ -465,6 +455,10 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = vibrator == null ? false : vibrator.hasVibrator();
+
+        // Set max_stream_volume values from config
+        MAX_STREAM_VOLUME = mContext.getResources().getIntArray(
+                com.android.internal.R.array.config_max_stream_volume);
 
        // Intialized volume
         MAX_STREAM_VOLUME[AudioSystem.STREAM_VOICE_CALL] = SystemProperties.getInt(
