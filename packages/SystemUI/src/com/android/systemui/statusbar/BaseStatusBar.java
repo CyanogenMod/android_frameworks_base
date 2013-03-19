@@ -28,7 +28,10 @@ import com.android.systemui.SystemUI;
 import com.android.systemui.recent.RecentTasksLoader;
 import com.android.systemui.recent.RecentsActivity;
 import com.android.systemui.recent.TaskDescription;
+import com.android.systemui.statusbar.pie.PieLayout;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
+import com.android.systemui.statusbar.policy.PieController;
+import com.android.systemui.statusbar.policy.PieController.Position;
 import com.android.systemui.statusbar.tablet.StatusBarPanel;
 
 import android.app.ActivityManager;
@@ -39,9 +42,11 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
@@ -49,6 +54,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -86,6 +92,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         CommandQueue.Callbacks {
     public static final String TAG = "StatusBar";
     public static final boolean DEBUG = false;
+    public static final boolean DEBUG_INPUT = false;
     public static final boolean MULTIUSER_DEBUG = false;
 
     protected static final int MSG_TOGGLE_RECENTS_PANEL = 1020;
@@ -153,6 +160,83 @@ public abstract class BaseStatusBar extends SystemUI implements
     };
     private ArrayList<NavigationBarCallback> mNavigationCallbacks =
             new ArrayList<NavigationBarCallback>();
+
+    // Pie Control
+    protected PieController mPieController;
+    protected PieLayout mPieContainer;
+    private int mPieTriggerSlots;
+    private View[] mPieTrigger = new View[Position.values().length];
+    private PieSettingsObserver mSettingsObserver;
+
+    private View.OnTouchListener mPieTriggerOnTouchHandler = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            final int action = event.getAction();
+            final PieController.Tracker tracker = (PieController.Tracker)v.getTag();
+
+            if (tracker == null) {
+                if (DEBUG_INPUT) {
+                    Slog.v(TAG, "Pie trigger onTouch: action: " + action + ", ("
+                            + event.getAxisValue(MotionEvent.AXIS_X) + ","
+                            + event.getAxisValue(MotionEvent.AXIS_Y) + ") position: NULL returning: false");
+                }
+                return false;
+            }
+
+            if (!mPieController.isShowing()) {
+                if (event.getPointerCount() > 1) {
+                    if (DEBUG_INPUT) {
+                        Slog.v(TAG, "Pie trigger onTouch: action: " + action
+                                + ", (to many pointers) position: " + tracker.position.name()
+                                + " returning: false");
+                    }
+                    return false;
+                }
+
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        tracker.start(event);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (tracker.move(event)) {
+                            if (DEBUG) {
+                                Slog.v(TAG, "Pie control activated on: ("
+                                        + event.getAxisValue(MotionEvent.AXIS_X) + ","
+                                        + event.getAxisValue(MotionEvent.AXIS_Y) + ") with position: "
+                                        + tracker.position.name());
+                            }
+                            // send the activation to the controller
+                            mPieController.activateFromTrigger(v, event, tracker.position);
+                            // forward a spoofed ACTION_DOWN event
+                            MotionEvent echo = event.copy();
+                            echo.setAction(MotionEvent.ACTION_DOWN);
+                            return mPieContainer.onTouch(v, echo);
+                        }
+                        break;
+                    default:
+                        // whatever it was, we are giving up on this one
+                        tracker.active = false;
+                        break;
+                }
+            } else {
+                if (DEBUG_INPUT) {
+                    Slog.v(TAG, "Pie trigger onTouch: action: " + action + ", ("
+                            + event.getAxisValue(MotionEvent.AXIS_X) + ","
+                            + event.getAxisValue(MotionEvent.AXIS_Y)
+                            + ") position: " + tracker.position.name() + " delegating");
+                }
+                return mPieContainer.onTouch(v, event);
+            }
+            if (DEBUG_INPUT) {
+                Slog.v(TAG, "Pie trigger onTouch: action: " + action + ", ("
+                        + event.getAxisValue(MotionEvent.AXIS_X) + ","
+                        + event.getAxisValue(MotionEvent.AXIS_Y) + ") position: "
+                        + tracker.position.name() + " returning: " + tracker.active);
+            }
+            return tracker.active;
+        }
+
+    };
 
     // UI-specific methods
 
@@ -310,7 +394,19 @@ public abstract class BaseStatusBar extends SystemUI implements
                     if (true) Slog.v(TAG, "userId " + mCurrentUserId + " is in the house");
                     userSwitched(mCurrentUserId);
                 }
-            }}, filter);
+            }
+        }, filter);
+
+        mPieController = new PieController(mContext);
+        mPieController.attachTo(this);
+        addNavigationBarCallback(mPieController);
+
+        mSettingsObserver = new PieSettingsObserver(new Handler());
+
+        // this calls attachPie() implicitly
+        mSettingsObserver.onChange(true);
+
+        mSettingsObserver.observe();
     }
 
     public void userSwitched(int newUserId) {
@@ -1206,4 +1302,147 @@ public abstract class BaseStatusBar extends SystemUI implements
             callback.setDisabledFlags(disabledFlags);
         }
     }
+
+    // Pie Controls
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (DEBUG) Slog.d(TAG, "Configuration changed! Update pie triggers");
+
+        attachPie();
+    }
+
+    private final class PieSettingsObserver extends ContentObserver {
+        PieSettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_GRAVITY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STATE), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            for (int i = 0; i < mPieTrigger.length; i++) {
+                if (mPieTrigger[i] != null) {
+                    mWindowManager.removeView(mPieTrigger[i]);
+                    mPieTrigger[i] = null;
+                }
+            }
+            mPieTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.PIE_GRAVITY, Position.BOTTOM.FLAG);
+
+            attachPie();
+        }
+    }
+
+    private boolean isPieEnabled() {
+        boolean expanded = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
+        boolean pie = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_CONTROLS, 0) == 1;
+
+        return (pie && expanded);
+    }
+
+    private void attachPie() {
+        if (isPieEnabled()) {
+
+            // Create our container, if it does not exist already
+            if (mPieContainer == null) {
+                mPieContainer = new PieLayout(mContext);
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                        | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                        PixelFormat.TRANSLUCENT);
+                lp.setTitle("PieControlPanel");
+                lp.windowAnimations = android.R.style.Animation;
+                lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_BEHIND;
+
+                mWindowManager.addView(mPieContainer, lp);
+                mPieController.attachTo(mPieContainer);
+            }
+
+            // add or update pie triggers
+            if (DEBUG) Slog.d(TAG, "AttachPie with trigger gravity flags: " + mPieTriggerSlots);
+
+            for (Position g : Position.values()) {
+                if ((mPieTriggerSlots & g.FLAG) != 0) {
+                    addOrUpdatePieTrigger(g.INDEX, g);
+                }
+            }
+
+        } else {
+            for (int i = 0; i < mPieTrigger.length; i++) {
+                if (mPieTrigger[i] != null) {
+                    mWindowManager.removeView(mPieTrigger[i]);
+                    mPieTrigger[i] = null;
+                }
+            }
+        }
+    }
+
+    private void addOrUpdatePieTrigger(int index, Position position) {
+        if (mPieTrigger[index] == null) {
+            View trigger = new View(mContext);
+            trigger.setClickable(false);
+            trigger.setLongClickable(false);
+            mPieTrigger[index] = trigger;
+
+            if (DEBUG) {
+                trigger.setVisibility(View.VISIBLE);
+                trigger.setBackgroundColor(0x77ff0000);
+                Slog.d(TAG, "addPieTrigger on " + index
+                        + " with position: " + position + " : " + trigger.toString());
+            }
+            mWindowManager.addView(trigger, getPieTriggerLayoutParams(position));
+        } else {
+            mWindowManager.updateViewLayout(mPieTrigger[index], getPieTriggerLayoutParams(position));
+        }
+        mPieTrigger[index].setTag(mPieController.buildTracker(position));
+        mPieTrigger[index].setOnTouchListener(mPieTriggerOnTouchHandler);
+    }
+
+    private WindowManager.LayoutParams getPieTriggerLayoutParams(Position position) {
+        final Resources res = mContext.getResources();
+
+        int width = (int) (res.getDisplayMetrics().widthPixels * 0.8f);
+        int height = (int) (res.getDisplayMetrics().heightPixels * 0.8f);
+        int triggerThickness = (int) (res.getDimensionPixelSize(R.dimen.pie_trigger_height));
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                (position == Position.TOP || position == Position.BOTTOM
+                        ? width : triggerThickness),
+                (position == Position.LEFT || position == Position.RIGHT
+                        ? height : triggerThickness),
+                WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                        /* | WindowManager.LayoutParams.FLAG_SLIPPERY */,
+                PixelFormat.TRANSLUCENT);
+        if (position == Position.LEFT || position == Position.RIGHT) {
+            lp.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
+                    | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+        } else {
+            lp.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED
+                    | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING;
+        }
+        lp.gravity = position.ANDROID_GRAVITY;
+        return lp;
+    }
+
 }
