@@ -77,6 +77,9 @@ public class PowerUI extends SystemUI {
 
     private long mScreenOffTime = -1;
 
+    // For filtering ACTION_POWER_DISCONNECTED on boot
+    boolean mIgnoreFirstPowerEvent = true;
+
     public void start() {
 
         mLowBatteryAlertCloseLevel = mContext.getResources().getInteger(
@@ -99,6 +102,8 @@ public class PowerUI extends SystemUI {
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_POWER_CONNECTED);
+        filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
     }
 
@@ -215,6 +220,10 @@ public class PowerUI extends SystemUI {
                 final boolean plugged = mPlugType != 0;
                 final boolean oldPlugged = oldPlugType != 0;
 
+                if (mIgnoreFirstPowerEvent && plugged) {
+                    mIgnoreFirstPowerEvent = false;
+                }
+
                 int oldBucket = findBatteryLevelBucket(oldBatteryLevel);
                 int bucket = findBatteryLevelBucket(mBatteryLevel);
 
@@ -266,6 +275,18 @@ public class PowerUI extends SystemUI {
                 mScreenOffTime = SystemClock.elapsedRealtime();
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 mScreenOffTime = -1;
+            } else if (action.equals(Intent.ACTION_POWER_CONNECTED)
+                    || action.equals(Intent.ACTION_POWER_DISCONNECTED)) {
+                final ContentResolver cr = mContext.getContentResolver();
+
+                if (mIgnoreFirstPowerEvent) {
+                    mIgnoreFirstPowerEvent = false;
+                } else {
+                    if (Settings.Global.getInt(cr,
+                            Settings.Global.POWER_NOTIFICATIONS_ENABLED, 0) == 1) {
+                        playPowerNotificationSound();
+                    }
+                }
             } else {
                 Slog.w(TAG, "unknown intent: " + intent);
             }
@@ -439,6 +460,34 @@ public class PowerUI extends SystemUI {
         d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         d.show();
         mInvalidChargerDialog = d;
+    }
+
+    void playPowerNotificationSound() {
+        final ContentResolver cr = mContext.getContentResolver();
+        final String soundPath =
+                Settings.Global.getString(cr, Settings.Global.POWER_NOTIFICATIONS_RINGTONE);
+
+        NotificationManager notificationManager =
+                (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+            return;
+        }
+
+        Notification powerNotify=new Notification();
+        powerNotify.defaults = Notification.DEFAULT_ALL;
+        if (soundPath != null) {
+            powerNotify.sound = Uri.parse(soundPath);
+            if (powerNotify.sound != null) {
+                // DEFAULT_SOUND overrides so flip off
+                powerNotify.defaults &= ~Notification.DEFAULT_SOUND;
+            }
+        }
+        if (Settings.Global.getInt(cr,
+                Settings.Global.POWER_NOTIFICATIONS_VIBRATE, 0) == 0) {
+            powerNotify.defaults &= ~Notification.DEFAULT_VIBRATE;
+        }
+
+        notificationManager.notify(0, powerNotify);
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
