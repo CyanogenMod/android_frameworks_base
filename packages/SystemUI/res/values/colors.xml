@@ -35,4 +35,15 @@
     <!-- the darkening filter applied to notifications -->
     <drawable name="notification_icon_area_smoke">#aa000000</drawable>
     <color name="notification_panel_scrim_color">#B0000000</color>
+
+    <!-- ==================== pie controls ==================== -->
+    <!-- this color is used to darkening the whole screen when pie controls are active -->
+    <color name="pie_overlay_color">#cc000000</color>
+    <!-- color of an active snap point (inactive are blended with a 0x40 alpha channel) -->
+    <color name="pie_snap_color">@android:color/holo_blue_light</color>
+    <color name="pie_text_color">#ffffffff</color>
+    <color name="pie_foreground_color">#ffffffff</color>
+    <color name="pie_background_color">#dd0099cc</color>
+    <color name="pie_selected_color">@android:color/holo_blue_light</color>
+    <color name="pie_outline_color">#dd0099cc</color>
 </resources>
