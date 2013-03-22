@@ -34,6 +34,8 @@ import android.hardware.input.InputManager;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.Vibrator;
@@ -43,6 +45,7 @@ import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Slog;
 import android.view.HapticFeedbackConstants;
+import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -74,7 +77,8 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         HOME,
         RECENT,
         MENU,
-        SEARCH
+        SEARCH,
+        SEARCHLIGHT
     };
 
     public static final float EMPTY_ANGLE = 10;
@@ -89,6 +93,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
      */
     private BaseStatusBar mStatusBar;
     private Vibrator mVibrator;
+    private IWindowManager mWm;
     private int mBatteryLevel;
     private int mBatteryStatus;
     private boolean mHasTelephony;
@@ -98,6 +103,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
     private PieSliceContainer mNavigationSlice;
     private PieSysInfo mSysInfo;
     private PieItem mMenuButton;
+    private PieItem mSearchLight;
 
     private int mNavigationIconHints = 0;
     private int mDisabledFlags = 0;
@@ -249,12 +255,20 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
 
     private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
 
-    private BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            mBatteryStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
-                    BatteryManager.BATTERY_STATUS_UNKNOWN);
+            final String action = intent.getAction();
+            if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+                mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                mBatteryStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
+                         BatteryManager.BATTERY_STATUS_UNKNOWN);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                // Give up on screen off. what's the point in pie controls if you don't see them?
+                if (mPieContainer != null) {
+                    mPieContainer.exit();
+                }
+            }
         }
     };
 
@@ -269,6 +283,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         mContext = context;
 
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        mWm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
 
         final PackageManager pm = mContext.getPackageManager();
         mHasTelephony = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
@@ -314,8 +329,13 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
 
         // start listening for changes
         mSettingsObserver.observe();
-        mContext.registerReceiver(mBatteryReceiver,
+
+        mContext.registerReceiver(mBroadcastReceiver,
                 new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        mContext.registerReceiver(mBroadcastReceiver, filter);
 
         if (mHasTelephony) {
             TelephonyManager telephonyManager =
@@ -339,6 +359,12 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
             mNavigationSlice.addItem(constructItem(1, ButtonType.SEARCH,
                     R.drawable.ic_sysbar_search_side, minimumImageSize));
         }
+
+        // search light has a width of 6 to take the complete space that normally
+        // BACK HOME RECENT would occupy
+        mSearchLight = constructItem(6, ButtonType.SEARCHLIGHT,
+                R.drawable.search_light, minimumImageSize);
+        mNavigationSlice.addItem(mSearchLight);
 
         mMenuButton = constructItem(1, ButtonType.MENU,
                 R.drawable.ic_sysbar_menu, minimumImageSize);
@@ -443,13 +469,25 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         final boolean disableSearch = ((disabledFlags & View.STATUS_BAR_DISABLE_SEARCH) != 0);
 
         PieItem item = findItem(ButtonType.BACK);
-        if (item != null) item.show(!disableBack);
+        if (item != null) {
+            item.show(!disableBack);
+        }
         item = findItem(ButtonType.HOME);
-        if (item != null) item.show(!disableHome);
+        if (item != null) {
+            item.show(!disableHome);
+        }
         item = findItem(ButtonType.RECENT);
-        if (item != null) item.show(!disableRecent);
+        if (item != null) {
+            item.show(!disableRecent);
+        }
         item = findItem(ButtonType.SEARCH);
-        if (item != null) item.show(!disableRecent && !disableSearch);
+        if (item != null) {
+            item.show(!disableRecent && !disableSearch);
+        }
+        // enable searchlight when nothing except search is enabled
+        if (mSearchLight != null) {
+            mSearchLight.show(disableHome && disableRecent && disableBack && !disableSearch);
+        }
         setMenuVisibility(mShowMenu);
     }
 
@@ -508,7 +546,8 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
                 }
                 break;
             case SEARCH:
-                launchAssistAction();
+            case SEARCHLIGHT:
+                launchAssistAction(type == ButtonType.SEARCHLIGHT);
                 break;
         }
     }
@@ -525,25 +564,45 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         }
     }
 
-    private void launchAssistAction() {
-        Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-                .getAssistIntent(mContext, UserHandle.USER_CURRENT);
+    private void launchAssistAction(boolean force) {
+        boolean isKeyguardShowing = false;
+        try {
+            isKeyguardShowing = mWm.isKeyguardLocked();
+        } catch (RemoteException e) {
+            // oh damn ...
+        }
 
-        if (intent != null) {
+        if (isKeyguardShowing && force) {
+            // Have keyguard show the bouncer and launch the activity if the user succeeds.
             try {
-                ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
-                        R.anim.search_launch_enter, R.anim.search_launch_exit);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivityAsUser(intent, opts.toBundle(),
-                        new UserHandle(UserHandle.USER_CURRENT));
-            } catch (ActivityNotFoundException ignored) {
-                // fall through
+                mWm.showAssistant();
+            } catch (RemoteException e) {
+                // too bad, so sad...
+            }
+        } else {
+            Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
+                    .getAssistIntent(mContext, UserHandle.USER_CURRENT);
+
+            if (intent != null) {
+                try {
+                    ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
+                            R.anim.search_launch_enter, R.anim.search_launch_exit);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivityAsUser(intent, opts.toBundle(),
+                            new UserHandle(UserHandle.USER_CURRENT));
+                } catch (ActivityNotFoundException ignored) {
+                    // fall through
+                }
             }
         }
     }
 
     public boolean isShowing() {
         return mPieContainer != null && mPieContainer.isShowing();
+    }
+
+    public boolean isSearchLightEnabled() {
+        return mSearchLight != null && (mSearchLight.flags & PieDrawable.VISIBLE) != 0;
     }
 
     public String getOperatorState() {
