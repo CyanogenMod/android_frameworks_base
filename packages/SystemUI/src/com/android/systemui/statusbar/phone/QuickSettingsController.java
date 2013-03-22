@@ -23,6 +23,7 @@ import static com.android.internal.util.cm.QSConstants.TILE_BATTERY;
 import static com.android.internal.util.cm.QSConstants.TILE_BLUETOOTH;
 import static com.android.internal.util.cm.QSConstants.TILE_BRIGHTNESS;
 import static com.android.internal.util.cm.QSConstants.TILE_DELIMITER;
+import static com.android.internal.util.cm.QSConstants.TILE_EXPANDEDDESKTOP;
 import static com.android.internal.util.cm.QSConstants.TILE_GPS;
 import static com.android.internal.util.cm.QSConstants.TILE_LOCKSCREEN;
 import static com.android.internal.util.cm.QSConstants.TILE_LTE;
@@ -47,6 +48,7 @@ import static com.android.internal.util.cm.QSUtils.deviceSupportsDockBattery;
 import static com.android.internal.util.cm.QSUtils.deviceSupportsImeSwitcher;
 import static com.android.internal.util.cm.QSUtils.deviceSupportsTelephony;
 import static com.android.internal.util.cm.QSUtils.deviceSupportsUsbTether;
+import static com.android.internal.util.cm.QSUtils.expandedDesktopEnabled;
 import static com.android.internal.util.cm.QSUtils.systemProfilesEnabled;
 import static com.android.internal.util.cm.QSUtils.deviceSupportsLte;
 
@@ -58,6 +60,7 @@ import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -71,6 +74,7 @@ import com.android.systemui.quicksettings.BluetoothTile;
 import com.android.systemui.quicksettings.BrightnessTile;
 import com.android.systemui.quicksettings.BugReportTile;
 import com.android.systemui.quicksettings.DockBatteryTile;
+import com.android.systemui.quicksettings.ExpandedDesktopTile;
 import com.android.systemui.quicksettings.GPSTile;
 import com.android.systemui.quicksettings.InputMethodTile;
 import com.android.systemui.quicksettings.LteTile;
@@ -175,7 +179,7 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_GPS)) {
                 qs = new GPSTile(mContext, inflater, mContainerView, this);
             } else if (tile.equals(TILE_BLUETOOTH) && bluetoothSupported) {
-                    qs = new BluetoothTile(mContext, inflater, mContainerView, this);
+                qs = new BluetoothTile(mContext, inflater, mContainerView, this);
             } else if (tile.equals(TILE_BRIGHTNESS)) {
                 qs = new BrightnessTile(mContext, inflater, mContainerView, this, mHandler);
             } else if (tile.equals(TILE_RINGER)) {
@@ -214,7 +218,11 @@ public class QuickSettingsController {
                 qs = new QuietHoursTile(mContext, inflater, mContainerView, this);
             } else if (tile.equals(TILE_VOLUME)) {
                 qs = new VolumeTile(mContext, inflater, mContainerView, this, mHandler);
+            } else if (tile.equals(TILE_EXPANDEDDESKTOP) && expandedDesktopEnabled(resolver)) {
+                // Tile is only visible if the expanded desktop feature is enabled
+                qs = new ExpandedDesktopTile(mContext, inflater, mContainerView, this, mHandler);
             }
+
             if (qs != null) {
                 qs.setupQuickSettingsTile();
                 mQuickSettingsTiles.add(qs);
