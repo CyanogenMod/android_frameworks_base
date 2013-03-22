@@ -165,6 +165,10 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected PieController mPieController;
     protected PieLayout mPieContainer;
     private int mPieTriggerSlots;
+    private int mPieTriggerMask = Position.LEFT.FLAG
+            | Position.BOTTOM.FLAG
+            | Position.RIGHT.FLAG
+            | Position.TOP.FLAG;
     private View[] mPieTrigger = new View[Position.values().length];
     private PieSettingsObserver mSettingsObserver;
 
@@ -1378,10 +1382,13 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
 
             // add or update pie triggers
-            if (DEBUG) Slog.d(TAG, "AttachPie with trigger position flags: " + mPieTriggerSlots);
+            if (DEBUG) {
+                Slog.d(TAG, "AttachPie with trigger position flags: "
+                        + mPieTriggerSlots + " masked: " + (mPieTriggerSlots & mPieTriggerMask));
+            }
 
             for (Position g : Position.values()) {
-                if ((mPieTriggerSlots & g.FLAG) != 0) {
+                if ((mPieTriggerSlots & mPieTriggerMask & g.FLAG) != 0) {
                     addOrUpdatePieTrigger(g.INDEX, g);
                 }
             }
@@ -1394,6 +1401,22 @@ public abstract class BaseStatusBar extends SystemUI implements
                 }
             }
         }
+    }
+
+    public void updatePieTriggerMask(int newMask) {
+        if ((mPieTriggerSlots & mPieTriggerMask) != (mPieTriggerSlots & newMask)) {
+            for (Position g : Position.values()) {
+                if ((mPieTriggerSlots & newMask & g.FLAG) != 0) {
+                    addOrUpdatePieTrigger(g.INDEX, g);
+                } else {
+                    if (mPieTrigger[g.INDEX] != null) {
+                        mWindowManager.removeView(mPieTrigger[g.INDEX]);
+                        mPieTrigger[g.INDEX] = null;
+                    }
+                }
+            }
+        }
+        mPieTriggerMask = newMask;
     }
 
     private void addOrUpdatePieTrigger(int index, Position position) {
