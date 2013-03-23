@@ -61,21 +61,21 @@
     <string name="day_of_week_long_friday">Vendredi</string>
     <string name="day_of_week_long_saturday">Samedi</string>
 
-    <string name="day_of_week_medium_sunday">Dim.</string>
-    <string name="day_of_week_medium_monday">Lun.</string>
-    <string name="day_of_week_medium_tuesday">Mar.</string>
-    <string name="day_of_week_medium_wednesday">Mer.</string>
-    <string name="day_of_week_medium_thursday">Jeu.</string>
-    <string name="day_of_week_medium_friday">Ven.</string>
-    <string name="day_of_week_medium_saturday">Sam.</string>
+    <string name="day_of_week_medium_sunday">Dim</string>
+    <string name="day_of_week_medium_monday">Lun</string>
+    <string name="day_of_week_medium_tuesday">Mar</string>
+    <string name="day_of_week_medium_wednesday">Mer</string>
+    <string name="day_of_week_medium_thursday">Jeu</string>
+    <string name="day_of_week_medium_friday">Ven</string>
+    <string name="day_of_week_medium_saturday">Sam</string>
 
-    <string name="day_of_week_short_sunday">Dim.</string>
-    <string name="day_of_week_short_monday">Lun.</string>
-    <string name="day_of_week_short_tuesday">Mar.</string>
-    <string name="day_of_week_short_wednesday">Mer.</string>
-    <string name="day_of_week_short_thursday">Jeu.</string>
-    <string name="day_of_week_short_friday">Ven.</string>
-    <string name="day_of_week_short_saturday">Sam.</string>
+    <string name="day_of_week_short_sunday">Dim</string>
+    <string name="day_of_week_short_monday">Lun</string>
+    <string name="day_of_week_short_tuesday">Mar</string>
+    <string name="day_of_week_short_wednesday">Mer</string>
+    <string name="day_of_week_short_thursday">Jeu</string>
+    <string name="day_of_week_short_friday">Ven</string>
+    <string name="day_of_week_short_saturday">Sam</string>
 
     <string name="day_of_week_shortest_sunday">D</string>
     <string name="day_of_week_shortest_monday">L</string>
