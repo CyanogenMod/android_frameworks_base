@@ -134,6 +134,12 @@ public class NavigationRingHelpers {
                 PackageManager pm = context.getPackageManager();
                 ActivityInfo info = intent.resolveActivityInfo(pm, PackageManager.GET_ACTIVITIES);
 
+                if (info == null) {
+                        TargetDrawable drawable = new TargetDrawable(res, com.android.internal.R.drawable.ic_navigation_ring_empty);
+                        drawable.setEnabled(false);
+                        return drawable;
+                    }
+
                 Drawable activityIcon = info.loadIcon(pm);
                 Drawable iconBg = res.getDrawable(
                         com.android.internal.R.drawable.ic_navigation_ring_blank_normal);
