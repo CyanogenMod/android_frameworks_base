@@ -155,8 +155,6 @@
     <string name="accessibility_quick_settings_airplane" msgid="4196876722090224753">"Repülős üzemmód <xliff:g id="STATE">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_bluetooth" msgid="5749054971341882340">"Bluetooth <xliff:g id="STATE">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_alarm" msgid="3959908972897295660">"Ébresztés időpontja: <xliff:g id="TIME">%s</xliff:g>."</string>
-    <string name="accessibility_quick_settings_ringer">Hang <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="accessibility_quick_settings_vibration">Rezgés <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="data_usage_disabled_dialog_3g_title" msgid="5257833881698644687">"2G-3G adatforgalom letiltva"</string>
     <string name="data_usage_disabled_dialog_4g_title" msgid="4789143363492682629">"4G adatforgalom letiltva"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="1046047248844821202">"Mobil adatforgalom letiltva"</string>
@@ -176,8 +174,6 @@
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"A képernyő zárolva van fekvő tájolásban."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"A képernyő zárolva van álló tájolásban."</string>
     <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
-    <string name="bean_dream_settings_cid_title">CID fej használata</string>
-    <string name="bean_dream_settings_cid_summary">A képernyővédőn űrlényfejek jelennek meg a zselés cukorkák helyett</string>
     <string name="start_dreams" msgid="7219575858348719790">"Álmodozás"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Repülőgép üzemmód"</string>
@@ -203,13 +199,19 @@
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi ki"</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Wi-Fi kijelző"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Vezeték nélküli kijelző"</string>
-    <string name="quick_settings_profile_label">Profil</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Fényerő"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"automatikus"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Az értesítések itt jelennek meg."</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Bármikor elérheti őket, ha lefelé húzza az ujját."\n"Húzza le az ujját még egyszer a rendszerbeállítások eléréséhez."</string>
-    <string name="powerwidget_screen_timeout_toast">Képernyő időkorlátja: %1$d %2$s</string>
 
+    <!-- CYANOGENMOD ADDITIONS START -->
+
+    <string name="accessibility_quick_settings_ringer">Hang <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Rezgés <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">CID fej használata</string>
+    <string name="bean_dream_settings_cid_summary">A képernyővédőn űrlényfejek jelennek meg a zselés cukorkák helyett</string>
+    <string name="quick_settings_profile_label">Profil</string>
+    <string name="powerwidget_screen_timeout_toast">Képernyő időkorlátja: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS ki</string>
     <string name="quick_settings_screen_sleep">Alvó mód</string>
@@ -240,8 +242,6 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE ki</string>
     <string name="quick_settings_volume">Hangerő</string>
-
-    <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Válasszon eseményt</string>
     <string name="navbar_home_button">Kezdőgomb</string>
     <string name="navbar_recent_button">Alkalmazás előzmények gomb</string>
@@ -251,5 +251,13 @@
     <string name="navbar_menu_conditional_button">Menü (auto elrejtés)</string>
     <string name="navbar_menu_always_button">Menü (mindig látszik)</string>
     <string name="navbar_menu_big_button">Menü gomb</string>
+    <string name="pie_battery_status_charging">Töltés (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Feltöltve</string>
+    <string name="pie_battery_status_discharging">Akkumulátor: <xliff:g id="percent">%d</xliff:g>%%</string>
+    <string name="pie_phone_status_no_service">Nincs szolgáltatás</string>
+    <string name="pie_phone_status_airplane_mode">Replülőgép üzemmmód</string>
+    <string name="pie_phone_status_emergency_only">Csak segélyhívás</string>
+
+    <!-- CYANOGENMOD ADDITIONS END -->
 
 </resources>
