@@ -461,38 +461,49 @@ public final class SELinuxMMAC {
      */
     public static boolean passInstallPolicyChecks(PackageParser.Package pkg) {
 
-        // We just want one of the signatures to match.
-        for (Signature s : pkg.mSignatures) {
-            if (s == null) {
-                continue;
+        /*
+         * Non system installed apps should be treated the same. This
+         * means that any post-loaded apk will be assigned the default
+         * tag, if one exists in the policy, else null, without respect
+         * to the signing key.
+         */
+        /*
+        if (((pkg.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ||
+            ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0)) {
+        */
+
+            // We just want one of the signatures to match.
+            for (Signature s : pkg.mSignatures) {
+                if (s == null)
+                    continue;
+
+                // Check for a non default signature policy.
+                if (SIG_POLICY.containsKey(s)) {
+                    InstallPolicy policy = SIG_POLICY.get(s);
+                    if (policy.passedPolicyChecks(pkg)) {
+                        String seinfo = pkg.applicationInfo.seinfo = policy.getSEinfo(pkg.packageName);
+                        if (DEBUG_POLICY_INSTALL)
+                            Slog.i(TAG, "package (" + pkg.packageName + ") installed with " +
+                                   " seinfo=" + (seinfo == null ? "null" : seinfo));
+                        return true;
+                    }
+                }
             }
 
-            // Check for a non default signature policy.
-            if (SIG_POLICY.containsKey(s)) {
-                InstallPolicy policy = SIG_POLICY.get(s);
+            // Check for a global per-package policy.
+            if (PKG_POLICY.containsKey(pkg.packageName)) {
+                boolean passed = false;
+                InstallPolicy policy = PKG_POLICY.get(pkg.packageName);
                 if (policy.passedPolicyChecks(pkg)) {
                     String seinfo = pkg.applicationInfo.seinfo = policy.getSEinfo(pkg.packageName);
                     if (DEBUG_POLICY_INSTALL)
                         Slog.i(TAG, "package (" + pkg.packageName + ") installed with " +
                                " seinfo=" + (seinfo == null ? "null" : seinfo));
-                    return true;
+                    passed = true;
                 }
+                return passed;
             }
-        }
-
-        // Check for a global per-package policy.
-        if (PKG_POLICY.containsKey(pkg.packageName)) {
-            boolean passed = false;
-            InstallPolicy policy = PKG_POLICY.get(pkg.packageName);
-            if (policy.passedPolicyChecks(pkg)) {
-                String seinfo = pkg.applicationInfo.seinfo = policy.getSEinfo(pkg.packageName);
-                if (DEBUG_POLICY_INSTALL)
-                    Slog.i(TAG, "package (" + pkg.packageName + ") installed with " +
-                           " seinfo=" + (seinfo == null ? "null" : seinfo));
-                passed = true;
-            }
-            return passed;
-        }
+        //}
 
         // Check for a default policy.
         if (SIG_POLICY.containsKey(null)) {
