@@ -70,6 +70,10 @@
     <!-- SIM messages --><skip />
     <!-- When the user inserts a sim card from an unsupported network, it becomes network locked -->
     <string name="keyguard_network_locked_message">Network locked</string>
+
+    <!-- When the user inserts a sim card with some personalization enabled -->
+    <string name="keyguard_perso_locked_message">SIM/RUIM is Perso locked</string>
+
     <!-- Shown when there is no SIM card. -->
     <string name="keyguard_missing_sim_message_short">No SIM card</string>
     <!-- Shown when there is no SIM card. -->
