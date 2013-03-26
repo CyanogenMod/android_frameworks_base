@@ -4690,6 +4690,25 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         return true;
     }
 
+    /* Constant to identify focus stack entry that is used to hold the audio focus for QCHAT client
+     */
+    private static final String CLIENT_ID_QCHAT = "QCHAT";
+
+    /**
+     * Helper function:
+     * Returns true if the system is in a state where the focus can be reevaluated, false otherwise.
+     */
+    private boolean canReassignAudioFocusFromQchat(int streamType, String clientId) {
+        // Focus request is rejected for Music Player and for QChat client if the focus is already
+        // acquired by a QChat client
+        if (!mFocusStack.isEmpty() &&
+            mFocusStack.peek().mClientId.contains(CLIENT_ID_QCHAT) &&
+            (clientId.contains(CLIENT_ID_QCHAT) || (streamType == AudioManager.STREAM_MUSIC))) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Inner class to monitor audio focus client deaths, and remove them from the audio focus
      * stack if necessary.
@@ -4729,6 +4748,9 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
         synchronized(mAudioFocusLock) {
             if (!canReassignAudioFocusTo(clientId)) {
+                return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
+            }
+            if (!canReassignAudioFocusFromQchat(mainStreamType, clientId)) {
                 return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
             }
 
