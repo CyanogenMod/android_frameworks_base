@@ -100,7 +100,7 @@ public interface TelephonyProperties
     //****** SIM Card
     /**
      * One of <code>"UNKNOWN"</code> <code>"ABSENT"</code> <code>"PIN_REQUIRED"</code>
-     * <code>"PUK_REQUIRED"</code> <code>"NETWORK_LOCKED"</code> or <code>"READY"</code>
+     * <code>"PUK_REQUIRED"</code> <code>"PERSO_LOCKED"</code> or <code>"READY"</code>
      */
     static String PROPERTY_SIM_STATE = "gsm.sim.state";
 
