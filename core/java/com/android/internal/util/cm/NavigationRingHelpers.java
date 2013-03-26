@@ -134,27 +134,14 @@ public class NavigationRingHelpers {
                 PackageManager pm = context.getPackageManager();
                 ActivityInfo info = intent.resolveActivityInfo(pm, PackageManager.GET_ACTIVITIES);
 
-                Drawable activityIcon = info.loadIcon(pm);
-                Drawable iconBg = res.getDrawable(
-                        com.android.internal.R.drawable.ic_navigation_ring_blank_normal);
-                Drawable iconBgActivated = res.getDrawable(
-                        com.android.internal.R.drawable.ic_navigation_ring_blank_activated);
-
-                int margin = (int)(iconBg.getIntrinsicHeight() / 3);
-                LayerDrawable icon = new LayerDrawable (new Drawable[] { iconBg, activityIcon });
-                LayerDrawable iconActivated = new LayerDrawable (new Drawable[] { iconBgActivated, activityIcon });
-
-                icon.setLayerInset(1, margin, margin, margin, margin);
-                iconActivated.setLayerInset(1, margin, margin, margin, margin);
-
-                StateListDrawable selector = new StateListDrawable();
-                selector.addState(TargetDrawable.STATE_INACTIVE, icon);
-                selector.addState(TargetDrawable.STATE_ACTIVE, iconActivated);
-                selector.addState(TargetDrawable.STATE_FOCUSED, iconActivated);
-                return new TargetDrawable(res, selector);
+                if (info != null) {
+                    return createDrawableForActivity(res, info.loadIcon(pm));
+                }
             } catch (URISyntaxException e) {
-                resourceId = com.android.internal.R.drawable.ic_navigation_ring_empty;
+                // treat as empty
             }
+
+            resourceId = com.android.internal.R.drawable.ic_navigation_ring_empty;
         }
 
         TargetDrawable drawable = new TargetDrawable(res, resourceId);
@@ -162,6 +149,27 @@ public class NavigationRingHelpers {
             drawable.setEnabled(false);
         }
         return drawable;
+    }
+
+    private static TargetDrawable createDrawableForActivity(Resources res, Drawable activityIcon) {
+        Drawable iconBg = res.getDrawable(
+                com.android.internal.R.drawable.ic_navigation_ring_blank_normal);
+        Drawable iconBgActivated = res.getDrawable(
+                com.android.internal.R.drawable.ic_navigation_ring_blank_activated);
+
+        int margin = (int)(iconBg.getIntrinsicHeight() / 3);
+        LayerDrawable icon = new LayerDrawable (new Drawable[] { iconBg, activityIcon });
+        LayerDrawable iconActivated = new LayerDrawable (new Drawable[] { iconBgActivated, activityIcon });
+
+        icon.setLayerInset(1, margin, margin, margin, margin);
+        iconActivated.setLayerInset(1, margin, margin, margin, margin);
+
+        StateListDrawable selector = new StateListDrawable();
+        selector.addState(TargetDrawable.STATE_INACTIVE, icon);
+        selector.addState(TargetDrawable.STATE_ACTIVE, iconActivated);
+        selector.addState(TargetDrawable.STATE_FOCUSED, iconActivated);
+
+        return new TargetDrawable(res, selector);
     }
 
     private static int getVibrateDrawableResId(Context context) {
