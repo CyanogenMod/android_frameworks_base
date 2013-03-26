@@ -99,7 +99,7 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
             if (simState == IccCardConstants.State.READY ||
                 simState == IccCardConstants.State.PIN_REQUIRED ||
                 simState == IccCardConstants.State.PUK_REQUIRED ||
-                simState == IccCardConstants.State.NETWORK_LOCKED) {
+                simState == IccCardConstants.State.PERSO_LOCKED) {
                 numCardsConfigured++;
             }
         }
