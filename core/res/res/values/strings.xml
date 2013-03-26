@@ -2236,6 +2236,8 @@
          locked -->
     <string name="lockscreen_network_locked_message">Network locked</string>
 
+    <!-- When the user inserts a sim card with some personalization enabled -->
+    <string name="lockscreen_perso_locked_message">SIM/RUIM is Perso locked</string>
 
     <!-- When the user enters a wrong sim pin too many times, it becomes
          PUK locked (Pin Unlock Kode) -->

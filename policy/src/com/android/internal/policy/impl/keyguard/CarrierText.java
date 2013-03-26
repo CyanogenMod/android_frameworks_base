@@ -57,7 +57,7 @@ public class CarrierText extends TextView {
      */
     private static enum StatusMode {
         Normal, // Normal case (sim card present, it's not locked)
-        NetworkLocked, // SIM card is 'network locked'.
+        PersoLocked, // SIM card is 'perso locked'.
         SimMissing, // SIM card is missing.
         SimMissingLocked, // SIM card is missing, and device isn't provisioned; don't allow access
         SimPukLocked, // SIM card is PUK locked because SIM entered wrong too many times
@@ -129,9 +129,10 @@ public class CarrierText extends TextView {
                 carrierText = null; // nothing to display yet.
                 break;
 
-            case NetworkLocked:
+            case PersoLocked:
                 carrierText = makeCarrierStringOnEmergencyCapable(
-                        mContext.getText(R.string.lockscreen_network_locked_message), plmn);
+                        getContext().getText(R.string.lockscreen_perso_locked_message),
+                        plmn);
                 break;
 
             case SimMissing:
@@ -202,13 +203,13 @@ public class CarrierText extends TextView {
                 && (simState == IccCardConstants.State.ABSENT ||
                         simState == IccCardConstants.State.PERM_DISABLED);
 
-        // Assume we're NETWORK_LOCKED if not provisioned
-        simState = missingAndNotProvisioned ? IccCardConstants.State.NETWORK_LOCKED : simState;
+        // Assume we're PERSO_LOCKED if not provisioned
+        simState = missingAndNotProvisioned ? IccCardConstants.State.PERSO_LOCKED : simState;
         switch (simState) {
             case ABSENT:
                 return StatusMode.SimMissing;
-            case NETWORK_LOCKED:
-                return StatusMode.SimMissingLocked;
+            case PERSO_LOCKED:
+                return StatusMode.PersoLocked;
             case NOT_READY:
                 return StatusMode.SimNotReady;
             case PIN_REQUIRED:
@@ -246,7 +247,7 @@ public class CarrierText extends TextView {
         int carrierHelpTextId = 0;
         StatusMode status = getStatusForIccState(simState);
         switch (status) {
-            case NetworkLocked:
+            case PersoLocked:
                 carrierHelpTextId = R.string.lockscreen_instructions_when_pattern_disabled;
                 break;
 

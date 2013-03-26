@@ -897,7 +897,7 @@ public class TelephonyManager {
         else if ("PUK_REQUIRED".equals(prop)) {
             return SIM_STATE_PUK_REQUIRED;
         }
-        else if ("NETWORK_LOCKED".equals(prop)) {
+        else if ("PERSO_LOCKED".equals(prop)) {
             return SIM_STATE_NETWORK_LOCKED;
         }
         else if ("READY".equals(prop)) {

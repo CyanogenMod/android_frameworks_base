@@ -1469,6 +1469,7 @@
   <java-symbol type="string" name="lockscreen_missing_sim_instructions_long" />
   <java-symbol type="string" name="lockscreen_missing_sim_message_short" />
   <java-symbol type="string" name="lockscreen_network_locked_message" />
+  <java-symbol type="string" name="lockscreen_perso_locked_message" />
   <java-symbol type="string" name="lockscreen_password_wrong" />
   <java-symbol type="string" name="lockscreen_pattern_instructions" />
   <java-symbol type="string" name="lockscreen_pattern_wrong" />
