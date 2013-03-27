@@ -51,6 +51,8 @@ import com.android.internal.statusbar.IStatusBarService;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.DelegateViewHelper;
+import com.android.systemui.statusbar.NavigationButtons;
+import com.android.systemui.statusbar.NavigationButtons.ButtonInfo;
 import com.android.systemui.statusbar.policy.DeadZone;
 
 public class NavigationBarView extends LinearLayout implements BaseStatusBar.NavigationBarCallback {
@@ -155,19 +157,19 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     }
 
     protected void toggleButtonListener(boolean enable) {
-        View recentView = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
+        View recentView = mCurrentView.findViewWithTag(NavigationButtons.RECENT);
         if (recentView != null) {
             recentView.setOnClickListener(enable ? mRecentsClickListener : null);
             recentView.setOnTouchListener(enable ? mRecentsPreloadListener : null);
         }
-        View homeView = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_HOME);
+        View homeView = mCurrentView.findViewWithTag(NavigationButtons.HOME);
         if (homeView != null) {
             homeView.setOnTouchListener(enable ? mHomeSearchActionListener : null);
         }
     }
 
-    private void setButtonWithTagVisibility(String string, int visibility) {
-        View findView = mCurrentView.findViewWithTag(string);
+    private void setButtonWithTagVisibility(ButtonInfo type, int visibility) {
+        View findView = mCurrentView.findViewWithTag(type);
         if (findView != null) {
             findView.setVisibility(visibility);
         }
@@ -276,17 +278,17 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
 
         mNavigationIconHints = hints;
 
-        View button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_HOME);
+        View button = mCurrentView.findViewWithTag(NavigationButtons.HOME);
         if (button != null) {
             button.setAlpha(
                     (0 != (hints & StatusBarManager.NAVIGATION_HINT_HOME_NOP)) ? 0.5f : 1.0f);
         }
-        button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
+        button = mCurrentView.findViewWithTag(NavigationButtons.RECENT);
         if (button != null) {
             button.setAlpha(
                     (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_NOP)) ? 0.5f : 1.0f);
         }
-        button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_BACK);
+        button = mCurrentView.findViewWithTag(NavigationButtons.BACK);
         if (button != null) {
             button.setAlpha(
                     (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_NOP)) ? 0.5f : 1.0f);
@@ -328,13 +330,13 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
             }
         }
 
-        setButtonWithTagVisibility(NavbarEditor.NAVBAR_BACK, disableBack ? View.INVISIBLE : View.VISIBLE);
-        setButtonWithTagVisibility(NavbarEditor.NAVBAR_HOME, disableHome ? View.INVISIBLE : View.VISIBLE);
-        setButtonWithTagVisibility(NavbarEditor.NAVBAR_RECENT, disableRecent ? View.INVISIBLE : View.VISIBLE);
-        setButtonWithTagVisibility(NavbarEditor.NAVBAR_RECENT, disableRecent ? View.INVISIBLE : View.VISIBLE);
-        setButtonWithTagVisibility(NavbarEditor.NAVBAR_ALWAYS_MENU, disableRecent ? View.INVISIBLE : View.VISIBLE);
-        setButtonWithTagVisibility(NavbarEditor.NAVBAR_MENU_BIG, disableRecent ? View.INVISIBLE : View.VISIBLE);
-        setButtonWithTagVisibility(NavbarEditor.NAVBAR_SEARCH, disableRecent ? View.INVISIBLE : View.VISIBLE);
+        setButtonWithTagVisibility(NavigationButtons.BACK, disableBack ? View.INVISIBLE : View.VISIBLE);
+        setButtonWithTagVisibility(NavigationButtons.HOME, disableHome ? View.INVISIBLE : View.VISIBLE);
+        setButtonWithTagVisibility(NavigationButtons.RECENT, disableRecent ? View.INVISIBLE : View.VISIBLE);
+        setButtonWithTagVisibility(NavigationButtons.RECENT, disableRecent ? View.INVISIBLE : View.VISIBLE);
+        setButtonWithTagVisibility(NavigationButtons.ALWAYS_MENU, disableRecent ? View.INVISIBLE : View.VISIBLE);
+        setButtonWithTagVisibility(NavigationButtons.MENU_BIG, disableRecent ? View.INVISIBLE : View.VISIBLE);
+        setButtonWithTagVisibility(NavigationButtons.SEARCH, disableRecent ? View.INVISIBLE : View.VISIBLE);
         getSearchLight().setVisibility((disableHome && !disableSearch) ? View.VISIBLE : View.GONE);
     }
 
@@ -364,7 +366,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
 
         mShowMenu = show;
 
-        setButtonWithTagVisibility(NavbarEditor.NAVBAR_CONDITIONAL_MENU, mShowMenu ? View.VISIBLE : View.INVISIBLE);
+        setButtonWithTagVisibility(NavigationButtons.CONDITIONAL_MENU, mShowMenu ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setLowProfile(final boolean lightsOut) {
