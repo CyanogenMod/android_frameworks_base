@@ -234,6 +234,8 @@
     <string name="quick_settings_usb_tether_on_label">Tethering</string>
     <string name="quick_settings_wifiap">Hotspot</string>
     <string name="quick_settings_wifiap_off">Hotspot aus</string>
+    <string name="quick_settings_expanded_desktop">Erweitert</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Funktion zuweisen</string>
@@ -249,6 +251,16 @@
     <!-- BeanFlinger daydream -->
     <string name="bean_dream_settings_cid_title">Cid\'s Kopf verwenden</string>
     <string name="bean_dream_settings_cid_summary">Den Kopf des CyanogenMod-Maskottchens anstelle der \"Jellybeans\" im Daydream verwenden</string>
+
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Lädt (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Aufgeladen</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% verbleibend</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Kein Dienst</string>
+    <string name="pie_phone_status_airplane_mode">Flugmodus</string>
+    <string name="pie_phone_status_emergency_only">Nur Notrufe</string>
 
     <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
