@@ -256,7 +256,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_SIZE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_GRAVITY), false, this);
+                    Settings.System.PIE_POSITIONS), false, this);
         }
 
         @Override
@@ -279,7 +279,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         getColors();
 
         mTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_GRAVITY, Position.BOTTOM.FLAG);
+                Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
     }
 
     public void setOnSnapListener(OnSnapListener onSnapListener) {
@@ -317,7 +317,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     private void setupSnapPoints(int width, int height, boolean force) {
         if (force) {
             mTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.PIE_GRAVITY, Position.BOTTOM.FLAG);
+                    Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
         }
 
         mActiveSnap = null;
