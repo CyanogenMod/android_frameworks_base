@@ -555,6 +555,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         int msg = MSG_OPEN_SEARCH_PANEL;
         mHandler.removeMessages(msg);
         mHandler.sendEmptyMessage(msg);
+
     }
 
     @Override
@@ -562,6 +563,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         int msg = MSG_CLOSE_SEARCH_PANEL;
         mHandler.removeMessages(msg);
         mHandler.sendEmptyMessage(msg);
+
     }
 
     protected abstract WindowManager.LayoutParams getRecentsLayoutParams(
@@ -1353,7 +1355,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_CONTROLS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_GRAVITY), false, this);
+                    Settings.System.PIE_POSITIONS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), false, this);
         }
@@ -1361,7 +1363,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         @Override
         public void onChange(boolean selfChange) {
             mPieTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.PIE_GRAVITY, Position.BOTTOM.FLAG);
+                    Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
 
             attachPie();
         }
