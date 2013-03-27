@@ -2513,19 +2513,15 @@ public final class Settings {
         public static final String POINTER_SPEED = "pointer_speed";
 
         /**
-         * Whether to enable pie controls on expanded screen?
-         * The value is boolean (1 or 0).
+         * Whether to enable pie controls?
+         * The value is integer:
+         * 2 = always on
+         * 1 = expanded desktop
+         * 0 = off
          * Default: 0
          * @hide
          */
         public static final String PIE_CONTROLS = "pie_controls";
-
-        /**
-         * Display search button in pie?
-         * The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String PIE_SEARCH = "pie_search";
 
         /**
          * Locations of the pie in the screen.
@@ -2536,7 +2532,7 @@ public final class Settings {
          * Default: BOTTOM
          * @hide
          */
-        public static final String PIE_GRAVITY = "pie_gravity";
+        public static final String PIE_POSITIONS = "pie_positions";
 
         /**
          * Relative pie size (fraction)

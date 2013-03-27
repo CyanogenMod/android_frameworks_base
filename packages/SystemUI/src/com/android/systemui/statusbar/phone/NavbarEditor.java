@@ -3,7 +3,7 @@ package com.android.systemui.statusbar.phone;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 import com.android.internal.util.ArrayUtils;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.NavigationButtons;
+import com.android.systemui.statusbar.NavigationButtons.ButtonInfo;
 import com.android.systemui.statusbar.policy.KeyButtonView;
 
 /**
@@ -40,22 +42,18 @@ import com.android.systemui.statusbar.policy.KeyButtonView;
 public class NavbarEditor implements OnTouchListener {
 
     /**
-     * Holds reference to all assignable button ids
+     * Holds reference to all assignable button ids.
+     * Hold this in sync with {@link NavigationButtons#BUTTON_COUNT}
      */
     ArrayList<Integer> mIds = new ArrayList<Integer>(Arrays.asList(R.id.one, R.id.two, R.id.three,
             R.id.four, R.id.five,R.id.six));
 
     /**
      * Subset of mIds, to differentiate small/side buttons
-     * since they can be assigned additional functionality
+     * since they can be assigned additional functionality.
+     * Hold this in sync with {@link NavigationButtons#BUTTON_IS_SMALL}
      */
     public static final int[] smallButtonIds = {R.id.one, R.id.six};
-
-    /**
-     * Map which holds references to supported/available buttons.
-     */
-    public static final LinkedHashMap<String, ButtonInfo> buttonMap =
-            new LinkedHashMap<String,ButtonInfo>();
 
     protected static int visibleCount = 4;
     private static Boolean mIsDevicePhone = null;
@@ -77,43 +75,6 @@ public class NavbarEditor implements OnTouchListener {
     boolean mVertical,mLongPressed;
 
     private Context mContext;
-
-    //Available buttons
-    public static final String NAVBAR_EMPTY = "empty";
-    public static final String NAVBAR_HOME = "home";
-    public static final String NAVBAR_BACK = "back";
-    public static final String NAVBAR_SEARCH = "search";
-    public static final String NAVBAR_RECENT = "recent";
-    public static final String NAVBAR_CONDITIONAL_MENU = "menu0";
-    public static final String NAVBAR_ALWAYS_MENU = "menu1";
-    public static final String NAVBAR_MENU_BIG = "menu2";
-
-    static {
-        buttonMap.put(NAVBAR_HOME,
-                new ButtonInfo(R.string.navbar_home_button, R.string.accessibility_home, KeyEvent.KEYCODE_HOME, R.drawable.ic_sysbar_home,
-                        R.drawable.ic_sysbar_home_land, R.drawable.ic_sysbar_home));
-        buttonMap.put(NAVBAR_CONDITIONAL_MENU,
-                new ButtonInfo(R.string.navbar_menu_conditional_button, R.string.accessibility_menu, KeyEvent.KEYCODE_MENU, R.drawable.ic_sysbar_menu,
-                        R.drawable.ic_sysbar_menu_land, R.drawable.ic_sysbar_menu));
-        buttonMap.put(NAVBAR_ALWAYS_MENU,
-                new ButtonInfo(R.string.navbar_menu_always_button, R.string.accessibility_menu, KeyEvent.KEYCODE_MENU, R.drawable.ic_sysbar_menu,
-                        R.drawable.ic_sysbar_menu_land, R.drawable.ic_sysbar_menu));
-        buttonMap.put(NAVBAR_MENU_BIG,
-                new ButtonInfo(R.string.navbar_menu_big_button, R.string.accessibility_menu, KeyEvent.KEYCODE_MENU, R.drawable.ic_sysbar_menu_big,
-                        R.drawable.ic_sysbar_menu_big_land, 0));
-        buttonMap.put(NAVBAR_BACK,
-                new ButtonInfo(R.string.navbar_back_button, R.string.accessibility_back,KeyEvent.KEYCODE_BACK, R.drawable.ic_sysbar_back,
-                        R.drawable.ic_sysbar_back_land, R.drawable.ic_sysbar_back_side));
-        buttonMap.put(NAVBAR_SEARCH,
-                new ButtonInfo(R.string.navbar_search_button, R.string.accessibility_back, KeyEvent.KEYCODE_SEARCH, R.drawable.ic_sysbar_search,
-                        R.drawable.ic_sysbar_search_land, R.drawable.ic_sysbar_search_side));
-        buttonMap.put(NAVBAR_RECENT,
-                new ButtonInfo(R.string.navbar_recent_button, R.string.accessibility_recent,0, R.drawable.ic_sysbar_recent,
-                        R.drawable.ic_sysbar_recent_land, R.drawable.ic_sysbar_recent_side));
-        buttonMap.put(NAVBAR_EMPTY,
-                new ButtonInfo(R.string.navbar_empty_button, R.string.accessibility_clear_all,0, R.drawable.ic_sysbar_add,
-                        R.drawable.ic_sysbar_add_land, R.drawable.ic_sysbar_add_side));
-    }
 
     public NavbarEditor (ViewGroup parent, Boolean orientation) {
         mParent = parent;
@@ -245,7 +206,7 @@ public class NavbarEditor implements OnTouchListener {
                 builder.setAdapter(list, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((KeyButtonView) view).setInfo(list.getItem(which).toString(), mVertical);
+                        ((KeyButtonView) view).setInfo((ButtonInfo) list.getItem(which), mVertical);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -301,16 +262,13 @@ public class NavbarEditor implements OnTouchListener {
     @SuppressWarnings("unchecked")
     protected void saveKeys() {
         ((ViewGroup) mParent.findViewById(R.id.mid_nav_buttons)).setLayoutTransition(null);
-        StringBuilder saveValue = new StringBuilder();
-        String delim = "";
-        ArrayList<Integer> idMap = (ArrayList<Integer>) mIds.clone();
+        ButtonInfo[] buttons = new ButtonInfo[NavigationButtons.SLOT_COUNT];
+        List<Integer> idMap = (List<Integer>) mIds.clone();
         if (mVertical) Collections.reverse(idMap);
-        for (int id : idMap) {
-            saveValue.append(delim);
-            delim="|";
-            saveValue.append(mParent.findViewById(id).getTag());
+        for (int i = 0; i < NavigationButtons.SLOT_COUNT; i++) {
+            buttons[i] = (ButtonInfo) mParent.findViewById(idMap.get(i)).getTag();
         }
-        Settings.System.putString(mContext.getContentResolver(), Settings.System.NAV_BUTTONS, saveValue.toString());
+        NavigationButtons.storeButtonMap(mContext, buttons);
     }
 
     /**
@@ -332,19 +290,16 @@ public class NavbarEditor implements OnTouchListener {
      */
     @SuppressWarnings("unchecked")
     protected void updateKeys() {
-        String saved = Settings.System.getString(mContext.getContentResolver(), Settings.System.NAV_BUTTONS);
-        if (saved == null) {
-            saved = "empty|back|home|recent|empty|menu0";
-        }
+        ButtonInfo[] buttons = NavigationButtons.loadButtonMap(mContext);
         int cc = 0;
         ArrayList<Integer> idMap = (ArrayList<Integer>) mIds.clone();
         if (mVertical) Collections.reverse(idMap);
         visibleCount = 0;
-        for (String buttons : saved.split("\\|")) {
+        for (ButtonInfo bi : buttons) {
             KeyButtonView curView = (KeyButtonView) mParent.findViewById(idMap.get(cc));
-            boolean isSmallButton = ArrayUtils.contains(NavbarEditor.smallButtonIds, curView.getId());
-            curView.setInfo(buttons, mVertical);
-            if (!curView.getTag().equals(NAVBAR_EMPTY) && !isSmallButton) {
+            boolean isSmallButton = NavigationButtons.IS_SLOT_SMALL[cc];
+            curView.setInfo(bi, mVertical);
+            if (!curView.getTag().equals(NavigationButtons.EMPTY) && !isSmallButton) {
                 visibleCount++;
             }
             cc++;
@@ -367,13 +322,14 @@ public class NavbarEditor implements OnTouchListener {
                 View nextPadding = viewParent.getChildAt(v+1);
                 if (nextPadding != null) {
                     View nextKey = viewParent.getChildAt(v+2);
-                    String nextTag = NAVBAR_EMPTY;
+                    ButtonInfo nextBi = NavigationButtons.EMPTY;
                     if (nextKey != null) {
-                        nextTag = (String) nextKey.getTag();
+                        nextBi = (ButtonInfo) nextKey.getTag();
                     }
-                    String curTag = (String) cView.getTag();
-                    if (nextKey != null && nextTag != null && curTag != null && !curTag.equals(NAVBAR_EMPTY)) {
-                        if (!nextTag.equals(NAVBAR_EMPTY)){
+                    ButtonInfo curBi = (ButtonInfo) cView.getTag();
+                    if (nextKey != null && nextBi != null
+                            && curBi != null && curBi != NavigationButtons.EMPTY) {
+                        if (nextBi != NavigationButtons.EMPTY){
                             nextPadding.setVisibility(View.VISIBLE);
                         } else {
                             if (sCount > 1) {
@@ -416,63 +372,34 @@ public class NavbarEditor implements OnTouchListener {
         }
     }
 
-    /**
-     * Class to store info about supported buttons
-     */
-    public static final class ButtonInfo {
-        public int displayId;
-        public int contentDescription;
-        public int keyCode;
-        public int portResource;
-        public int landResource;
-        public int sideResource;
-        /**
-         * Constructor for new button type
-         * @param rId - resource id of text shown to user in choose dialog
-         * @param cD  - accessibility information regarding button
-         * @param mC  - keyCode to execute on button press
-         * @param pR  - portrait resource used to display button
-         * @param lR  - landscape resource used to display button
-         * @param sR  - smaller scaled resource for side buttons
-         */
-        ButtonInfo (int rId, int cD, int mC, int pR, int lR, int sR) {
-            displayId = rId;
-            contentDescription = cD;
-            keyCode = mC;
-            portResource = pR;
-            landResource = lR;
-            sideResource = sR;
-        }
-    }
-
     private class ButtonAdapter implements ListAdapter {
 
         /**
          * Already assigned items
          */
-        ArrayList<String> takenItems;
-        ArrayList<String> items;
+        ArrayList<ButtonInfo> takenItems;
+        ArrayList<ButtonInfo> items;
         LayoutInflater inflater;
 
         ButtonAdapter (boolean smallButtons) {
             inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            takenItems = new ArrayList<String>();
+            takenItems = new ArrayList<ButtonInfo>();
             for (int id : mIds) {
-                String vTag = (String) mParent.findViewById(id).getTag();
-                if (vTag == null || vTag.equals(NAVBAR_EMPTY)) {
+                ButtonInfo vTag = (ButtonInfo) mParent.findViewById(id).getTag();
+                if (vTag == null || vTag == NavigationButtons.EMPTY) {
                     continue;
                 }
                 takenItems.add(vTag);
             }
-            items = new ArrayList<String>(buttonMap.keySet());
+            items = new ArrayList<ButtonInfo>(NavigationButtons.BUTTON_MAP.values());
             // home button is not assignable
-            items.remove(NAVBAR_HOME);
+            items.remove(NavigationButtons.HOME);
             // menu buttons can only be assigned to side buttons
             if (!smallButtons) {
-                items.remove(NAVBAR_CONDITIONAL_MENU);
-                items.remove(NAVBAR_ALWAYS_MENU);
+                items.remove(NavigationButtons.CONDITIONAL_MENU);
+                items.remove(NavigationButtons.ALWAYS_MENU);
             } else {
-                items.remove(NAVBAR_MENU_BIG);
+                items.remove(NavigationButtons.MENU_BIG);
             }
         }
 
@@ -507,7 +434,7 @@ public class NavbarEditor implements OnTouchListener {
             } else {
                 text.setBackground(null);
             }
-            text.setText(mParent.getResources().getString(buttonMap.get(items.get(arg0)).displayId));
+            text.setText(mParent.getResources().getString(items.get(arg0).displayId));
             return convertView;
         }
 
