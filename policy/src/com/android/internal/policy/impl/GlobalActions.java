@@ -222,7 +222,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         mExpandDesktopModeOn = new ToggleAction(
                 R.drawable.ic_lock_expanded_desktop,
-                R.drawable.ic_lock_expanded_desktop,
+                R.drawable.ic_lock_expanded_desktop_off,
                 R.string.global_actions_toggle_expanded_desktop_mode,
                 R.string.global_actions_expanded_desktop_mode_on_status,
                 R.string.global_actions_expanded_desktop_mode_off_status) {
