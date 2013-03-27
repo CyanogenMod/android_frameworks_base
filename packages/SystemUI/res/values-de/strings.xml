@@ -251,4 +251,14 @@
     <string name="bean_dream_settings_cid_summary">Den Kopf des CyanogenMod-Maskottchens anstelle der \"Jellybeans\" im Daydream verwenden</string>
 
     <!-- **** CYANOGENMOD ADDITIONS END **** -->
+
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Lädt, (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Aufgeladen</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% verbleibend</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Kein Dienst</string>
+    <string name="pie_phone_status_airplane_mode">Flugmodus</string>
+    <string name="pie_phone_status_emergency_only">Nur Notrufe</string>
 </resources>
