@@ -250,4 +250,15 @@
     <string name="navbar_menu_conditional_button">Меню (скрывающ.)</string>
     <string name="navbar_menu_always_button">Меню (не скрывающ.)</string>
     <string name="navbar_menu_big_button">Меню</string>
+
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Зарядка батареи (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Заряжено</string>
+    <string name="pie_battery_status_discharging">Разрядка батареи (<xliff:g id="percent">%d</xliff:g>%%)</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Нет сети</string>
+    <string name="pie_phone_status_airplane_mode">Режим полёта</string>
+    <string name="pie_phone_status_emergency_only">Только экстренный вызов</string>
+
 </resources>
