@@ -298,7 +298,7 @@ public class WallpaperManager {
         private Bitmap getDefaultWallpaperLocked(Context context) {
             try {
                 InputStream is = context.getResources().openRawResource(
-                        com.android.internal.R.drawable.default_wallpaper);
+                        com.android.internal.R.drawable.cm_default_wallpaper);
                 if (is != null) {
                     int width = mService.getWidthHint();
                     int height = mService.getHeightHint();
@@ -786,7 +786,7 @@ public class WallpaperManager {
      * wallpaper.
      */
     public void clear() throws IOException {
-        setResource(com.android.internal.R.drawable.default_wallpaper);
+        setResource(com.android.internal.R.drawable.cm_default_wallpaper);
     }
     
     static Bitmap generateBitmap(Context context, Bitmap bm, int width, int height) {
