@@ -1928,4 +1928,6 @@
 
   <!-- IME Picker showing upon pressing Sym Key -->
   <java-symbol type="bool" name="config_symKeyShowsImePicker" />
+
+  <java-symbol type="drawable" name="cm_default_wallpaper" />
 </resources>
