@@ -197,7 +197,7 @@ public abstract class KeyguardActivityLauncher {
         }
     }
 
-    private void dismissKeyguardOnNextActivity() {
+    protected void dismissKeyguardOnNextActivity() {
         try {
             ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
         } catch (RemoteException e) {
