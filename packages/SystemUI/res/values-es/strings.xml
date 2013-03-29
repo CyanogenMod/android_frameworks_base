@@ -206,6 +206,12 @@
 
     <!-- CYANOGENMOD ADDITIONS START -->
 
+    <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Usar a Cid</string>
+    <string name="bean_dream_settings_cid_summary">Emplear el icono Cid como salvapantallas en lugar del icono Jellybean</string>
+
+    <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS</string>
     <string name="quick_settings_label_enabled">Activado</string>
@@ -237,11 +243,6 @@
     <string name="quick_settings_volume">Volumen</string>
     <string name="quick_settings_wifiap">Wi-Fi AP</string>
     <string name="quick_settings_wifiap_off">Wi-Fi AP</string>
-    <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
-    <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Usar a Cid</string>
-    <string name="bean_dream_settings_cid_summary">Usar el icono Cid como salvapantallas en vez del icono Jellybean</string>
-    <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
     <string name="navbar_dialog_title">Seleccionar botón a mostrar</string>
     <string name="navbar_home_button">Botón Inicio</string>
     <string name="navbar_recent_button">Botón Recientes</string>
@@ -251,6 +252,12 @@
     <string name="navbar_menu_conditional_button">Botón Menú (auto-ocultar)</string>
     <string name="navbar_menu_always_button">Botón Menú (siempre visible)</string>
     <string name="navbar_menu_big_button">Botón Menú</string>
+    <string name="pie_battery_status_charging">Cargando (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Cargada</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% restante</string>
+    <string name="pie_phone_status_no_service">Sin servicio</string>
+    <string name="pie_phone_status_airplane_mode">Modo avión</string>
+    <string name="pie_phone_status_emergency_only">Sólo llamadas de emergencia</string>
 
     <!-- CYANOGENMOD ADDITIONS END -->
 </resources>
