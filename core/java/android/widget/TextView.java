@@ -1009,6 +1009,11 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         }
         a.recycle();
 
+	// if the TextView is from Talk and autoLink is set to 'all' then make the text selectable
+	if(getContext().getPackageName().equals("com.google.android.talk") && mAutoLinkMask==0x0f) {
+		setTextIsSelectable(true);
+	}
+
         BufferType bufferType = BufferType.EDITABLE;
 
         final int variation =
