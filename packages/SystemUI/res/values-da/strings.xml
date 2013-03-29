@@ -259,5 +259,14 @@
     <string name="navbar_menu_always_button">Menuknap (vis altid)</string>
     <string name="navbar_menu_big_button">Menuknap</string>
 
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Oplader (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Opladt</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% tilbage</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Ingen tjeneste</string>
+    <string name="pie_phone_status_airplane_mode">Flytilstand til</string>
+    <string name="pie_phone_status_emergency_only">Kun nødopkald</string>
     <!-- CYANOGENMOD ADDITIONS END -->
 </resources>
