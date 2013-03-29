@@ -196,7 +196,7 @@
     <string name="quick_settings_wifi_label" msgid="9135344704899546041">"Wi-Fi"</string>
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"Brak połączenia"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"Brak sieci"</string>
-    <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wyłącz Wi-Fi"</string>
+    <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi wył."</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Wyświetlacz Wi-Fi"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Wyświetlacz bezprzewodowy"</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Jasność"</string>
@@ -249,6 +249,16 @@
     <string name="navbar_menu_conditional_button">Przycisk Menu (autoukrywaj)</string>
     <string name="navbar_menu_always_button">Przycisk Menu (zawsze pokazuj)</string>
     <string name="navbar_menu_big_button">Przycisk Menu</string>
+
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Ładowanie (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Naładowana</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% pozostało</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Brak usługi</string>
+    <string name="pie_phone_status_airplane_mode">Tryb samolotowy aktywny</string>
+    <string name="pie_phone_status_emergency_only">Tylko połączenia alarmowe</string>
 
     <!-- END CYANOGENMOD ADDITIONS -->
 </resources>
