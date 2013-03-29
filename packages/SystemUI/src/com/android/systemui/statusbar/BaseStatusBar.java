@@ -162,6 +162,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             new ArrayList<NavigationBarCallback>();
 
     // Pie Control
+    protected int mExpandedDesktopState;
     protected PieController mPieController;
     protected PieLayout mPieContainer;
     private int mPieTriggerSlots;
@@ -1356,24 +1357,35 @@ public abstract class BaseStatusBar extends SystemUI implements
                     Settings.System.PIE_GRAVITY), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STYLE), false, this);
         }
 
         @Override
         public void onChange(boolean selfChange) {
-            mPieTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
+            ContentResolver resolver = mContext.getContentResolver();
+
+            mPieTriggerSlots = Settings.System.getInt(resolver,
                     Settings.System.PIE_GRAVITY, Position.BOTTOM.FLAG);
+
+            boolean expanded = Settings.System.getInt(resolver,
+                    Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
+            if (expanded) {
+                mExpandedDesktopState = Settings.System.getInt(resolver,
+                        Settings.System.EXPANDED_DESKTOP_STYLE, 0);
+            } else {
+                mExpandedDesktopState = 0;
+            }
 
             attachPie();
         }
     }
 
     private boolean isPieEnabled() {
-        boolean expanded = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
         int pie = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.PIE_CONTROLS, 0);
 
-        return (pie == 1 && expanded) || pie == 2;
+        return (pie == 1 && mExpandedDesktopState != 0) || pie == 2;
     }
 
     private void attachPie() {
