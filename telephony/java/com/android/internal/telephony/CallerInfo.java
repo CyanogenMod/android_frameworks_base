@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -52,6 +53,7 @@ public class CallerInfo {
     public static final String PRIVATE_NUMBER = "-2";
     public static final String PAYPHONE_NUMBER = "-3";
 
+    private static final String GEO_AUTHORITY = "com.android.i18n.phonenumbers.geocoding";
     /**
      * Please note that, any one of these member variables can be null,
      * and any accesses to them should be prepared to handle such a case.
@@ -551,6 +553,19 @@ public class CallerInfo {
         }
 
         if (pn != null) {
+
+            ContentResolver contentResolver = context.getContentResolver();
+            try {
+                Uri uri = Uri.parse("content://" + GEO_AUTHORITY + "/" + countryIso + "/" + number);
+                Cursor cursor = contentResolver.query(uri, null, null, null, null);
+
+                if(cursor != null && cursor.getCount() > 0){
+                    cursor.moveToFirst();
+                    return cursor.getString(0);
+                }
+            } catch (Exception e) {
+            }
+
             String description = geocoder.getDescriptionForNumber(pn, locale);
             if (VDBG) Log.v(TAG, "- got description: '" + description + "'");
             return description;
