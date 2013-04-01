@@ -765,7 +765,7 @@
     <string name="lockscreen_discharging">Разрядка батареи (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Заряжено"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Подключите зарядное устройство"</string>
+    <string name="lockscreen_low_battery" msgid="1482873981919249740">Подключите зарядное устройство (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Нет SIM-карты"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"SIM-карта не установлена."</string>
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"SIM-карта не установлена."</string>
@@ -1466,7 +1466,8 @@
     <string name="global_actions_expanded_desktop_mode_off_status">Выключен</string>
     <string name="reboot_reboot">Перезагрузка</string>
     <string name="reboot_progress">Перезагрузка\u2026</string>
-    <string name="reboot_confirm">Ваш телефон будет перезагружен</string>
+    <string name="reboot_confirm" product="tablet">Ваш планшетный ПК будет перезагружен.</string>
+    <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
     <string name="global_action_reboot">Перезагрузка</string>
     <string name="global_action_choose_profile">Выбрать профиль</string>
     <string name="app_killed_message">Приложение закрыто</string>
@@ -1478,4 +1479,13 @@
     <string name="profileGroupPhone">Телефон</string>
     <string name="profileGroupCalendar">Календарь</string>
     <string name="wildcardProfile">Другой</string>
+    <string name="permlab_preventpower">блокировать кнопку питания</string>
+    <string name="permdesc_preventpower">Приложение сможет переопределять кнопку питания.</string>
+    <string name="permlab_fm_radio_receiver">управлять приёмником FM</string>
+    <string name="permdesc_fm_radio_receiver">Приложение сможет управлять FM-приёмником.</string>
+    <string name="permlab_fm_radio_transmitter">управлять передатчиком FM</string>
+    <string name="permdesc_fm_radio_transmitter">Приложение сможет управлять FM-передатчиком.</string>
+    <string name="storage_sd_dock_card">SD-карта док-станции</string>
+    <string name="toast_rotation_unlocked">Поворот экрана разблокирован</string>
+    <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
 </resources>
