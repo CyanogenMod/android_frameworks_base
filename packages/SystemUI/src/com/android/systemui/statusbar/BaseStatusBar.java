@@ -1354,7 +1354,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_CONTROLS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_GRAVITY), false, this);
+                    Settings.System.PIE_POSITIONS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1366,7 +1366,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             ContentResolver resolver = mContext.getContentResolver();
 
             mPieTriggerSlots = Settings.System.getInt(resolver,
-                    Settings.System.PIE_GRAVITY, Position.BOTTOM.FLAG);
+                    Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
 
             boolean expanded = Settings.System.getInt(resolver,
                     Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
