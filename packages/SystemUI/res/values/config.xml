@@ -27,7 +27,7 @@
 
     <!-- Whether recents thumbnails should stretch in both x and y to fill their
      ImageView -->
-    <bool name="config_recents_thumbnail_image_fits_to_xy">false</bool>
+    <bool name="config_recents_thumbnail_image_fits_to_xy">true</bool>
 
     <!-- Control whether status bar should distinguish HSPA data icon form UMTS
     data icon on devices -->
