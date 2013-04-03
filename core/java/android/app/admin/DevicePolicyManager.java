@@ -30,6 +30,7 @@ import android.os.RemoteCallback;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
+import android.security.KeyStore;
 import android.util.Log;
 
 import com.android.org.conscrypt.TrustedCertificateStore;
@@ -1680,5 +1681,21 @@ public class DevicePolicyManager {
             }
         }
         return null;
+    }
+
+    /*
+     * CM: check if secure keyguard is required
+     * @hide
+     */
+    public boolean requireSecureKeyguard() {
+        int encryptionStatus = getStorageEncryptionStatus();
+        if (getPasswordQuality(null) > PASSWORD_QUALITY_UNSPECIFIED ||
+                !KeyStore.getInstance().isEmpty() ||
+                encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE ||
+                encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
+            // Require secure keyguard
+            return true;
+        }
+        return false;
     }
 }
