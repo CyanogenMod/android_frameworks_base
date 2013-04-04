@@ -2,6 +2,7 @@
 <resources>
     <string name="app_label">Vstupní zařízení</string>
     <string name="keyboard_layouts_label">Klávesnice Android</string>
+    <string name="keyboard_layout_english_uk_label">Anglická (UK)</string>
     <string name="keyboard_layout_english_us_label">Anglická (US)</string>
     <string name="keyboard_layout_english_us_colemak_label">Anglická (US), Colemak</string>
     <string name="keyboard_layout_english_us_dvorak_label">Anglická (US), Dvorak</string>
