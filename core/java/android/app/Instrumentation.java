@@ -1700,8 +1700,8 @@ public class Instrumentation {
             try {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
             } catch (RuntimeException e) {
-                Log.w(TAG, "Exception setting priority of instrumentation thread "                                            
-                        + Process.myTid(), e);                                                                             
+                Log.w(TAG, "Exception setting priority of instrumentation thread "
+                        + Process.myTid(), e);
             }
             if (mAutomaticPerformanceSnapshots) {
                 startPerformanceSnapshot();
