@@ -256,4 +256,5 @@
     <string name="pie_phone_status_airplane_mode">Modo avião ligado</string>
     <string name="pie_phone_status_emergency_only">Somente chamadas de emergência</string>
     <string name="pie_battery_status_discharging"><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g>%% restando</string>
+    <string name="quick_settings_expanded_desktop">Expandida</string>
 </resources>
