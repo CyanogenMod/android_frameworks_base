@@ -924,7 +924,7 @@ public class KeyguardViewMediator {
         Profile profile = mProfileManager.getActiveProfile();
         if (profile != null) {
             if (!lockedOrMissing
-                    && profile.getScreenLockMode() == Profile.LockMode.DISABLE) {
+                    && profile.getScreenLockModeWithDPM(mContext) == Profile.LockMode.DISABLE) {
                 if (DEBUG) Log.d(TAG, "doKeyguard: not showing because of profile override");
                 return;
             }

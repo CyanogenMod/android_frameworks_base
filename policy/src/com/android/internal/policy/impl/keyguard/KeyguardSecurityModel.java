@@ -88,7 +88,7 @@ public class KeyguardSecurityModel {
         } else if (simState == IccCardConstants.State.PUK_REQUIRED
                 && mLockPatternUtils.isPukUnlockScreenEnable()) {
             mode = SecurityMode.SimPuk;
-        } else if (mProfileManager.getActiveProfile().getScreenLockMode() != Profile.LockMode.INSECURE) {
+        } else if (mProfileManager.getActiveProfile().getScreenLockModeWithDPM(mContext) != Profile.LockMode.INSECURE) {
             final int security = mLockPatternUtils.getKeyguardStoredPasswordQuality();
             switch (security) {
                 case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
