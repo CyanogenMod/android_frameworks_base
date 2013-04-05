@@ -239,7 +239,6 @@
     <string name="quick_settings_lte_off">LTE wył.</string>
     <string name="quick_settings_volume">Głośność</string>
 
-    <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Wybierz akcję do przypisania</string>
     <string name="navbar_home_button">Przycisk Home</string>
     <string name="navbar_recent_button">Przycisk Ostatnie aplikacje</string>
@@ -250,15 +249,16 @@
     <string name="navbar_menu_always_button">Przycisk Menu (zawsze pokazuj)</string>
     <string name="navbar_menu_big_button">Przycisk Menu</string>
 
-    <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">Ładowanie (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">Naładowana</string>
     <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% pozostało</string>
 
-    <!-- Phone status in pie controls -->
     <string name="pie_phone_status_no_service">Brak usługi</string>
     <string name="pie_phone_status_airplane_mode">Tryb samolotowy aktywny</string>
     <string name="pie_phone_status_emergency_only">Tylko połączenia alarmowe</string>
+
+    <string name="quick_settings_expanded_desktop">Rozszerzony</string>
+    <string name="quick_settings_expanded_desktop_off">Normalny</string>
 
     <!-- END CYANOGENMOD ADDITIONS -->
 </resources>
