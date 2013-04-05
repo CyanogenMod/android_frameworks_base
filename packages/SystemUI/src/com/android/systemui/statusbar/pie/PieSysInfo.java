@@ -30,10 +30,9 @@ import android.net.wifi.WifiSsid;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 
+import com.android.internal.util.pie.Position;
 import com.android.systemui.R;
-import com.android.systemui.statusbar.pie.PieLayout.PieDrawable;
 import com.android.systemui.statusbar.policy.PieController;
-import com.android.systemui.statusbar.policy.PieController.Position;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -97,8 +96,6 @@ public class PieSysInfo extends PieSliceContainer implements ValueAnimator.Anima
         mInfoPaint.setAlpha(0);
 
         final Resources res = mContext.getResources();
-        final RectF innerBB = new RectF(-mInner * scale, -mInner * scale,
-                mInner * scale, mInner * scale);
         int textsize = res.getDimensionPixelSize(R.dimen.pie_textsize);
 
         mInfoPaint.setTextSize(textsize * scale);

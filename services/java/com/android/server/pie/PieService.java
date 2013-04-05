@@ -124,6 +124,7 @@ public class PieService extends IPieService.Stub {
                 Slog.d(TAG, "Restore listener state");
             }
             if (mActive) {
+                mInputFilter.unlockFilter();
                 mActive = false;
                 synchronized (mListenerLock) {
                     mActiveRecord = null;
