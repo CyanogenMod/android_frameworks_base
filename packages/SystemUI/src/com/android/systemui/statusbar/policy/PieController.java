@@ -141,7 +141,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         public final int FLAG;
         public final int ANDROID_GRAVITY;
         /**
-         * This is 1 when the position is not at the axis (like {@link Position.RIGHT} is
+         * This is 1 when the position is not at the axis (like {@link PiePosition.RIGHT} is
          * at {@code Layout.getWidth()} not at {@code 0}).
          */
         public final int FACTOR;

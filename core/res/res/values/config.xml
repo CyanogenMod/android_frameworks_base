@@ -1129,4 +1129,8 @@
 
     <!-- Boolean to enable Stylus gestures -->
     <bool name="config_stylusGestures">false</bool>
+
+    <!-- True if the pie service should be started at system start. This is must be true
+         to support pie controls. -->
+    <bool name="config_allowPieService">true</bool>
 </resources>
