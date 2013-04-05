@@ -1,0 +1,12 @@
+Change-Id: Ic153bdb1dad506e6da8feda322f8fca879a32f10
+Code-Review+1: Pavel Volkov <marshmollow@gmail.com>
+Code-Review+2: Marco Brohet <therbom@gmail.com>
+Code-Review+1: Dmitriy Chermenev <chdiman86@gmail.com>
+Verified+1: Cid
+Code-Review+1: Vladislav Koldobskiy <nevergone.ru@gmail.com>
+Code-Review+1: Vladimir Belkov <belladimir@gmail.com>
+Submitted-by: Marco Brohet <therbom@gmail.com>
+Submitted-at: Fri, 05 Apr 2013 16:42:54 -0700
+Reviewed-on: http://review.cyanogenmod.org/34619
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/cm-10.1
