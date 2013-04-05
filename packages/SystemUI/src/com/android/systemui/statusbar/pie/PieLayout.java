@@ -22,7 +22,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
@@ -36,7 +35,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
-import com.android.systemui.statusbar.policy.PieController.Position;
+import com.android.internal.util.pie.Position;
 import com.android.systemui.R;
 
 import java.util.ArrayList;
@@ -59,8 +58,6 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
 
     private static final int TIME_FADEIN = 300;
     private static final int TIME_FADEIN_DELAY = 400;
-
-    private static final int COLOR_BACKGROUND = 0xee000000;
 
     private Paint mBackgroundPaint = new Paint();
     private float mBackgroundFraction;
@@ -249,6 +246,11 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     }
     private OnSnapListener mOnSnapListener = null;
 
+    public interface OnExitListener {
+        void onExit();
+    }
+    private OnExitListener mOnExitListener = null;
+
     private final class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -288,6 +290,10 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
 
     public void setOnSnapListener(OnSnapListener onSnapListener) {
         mOnSnapListener = onSnapListener;
+    }
+
+    public void setOnExitListener(OnExitListener onExitListener) {
+        mOnExitListener = onExitListener;
     }
 
     private void getDimensions() {
@@ -618,6 +624,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     }
 
     public void exit() {
+        if (DEBUG) {
+            Slog.d(TAG, "Exiting pie now");
+        }
         setVisibility(View.GONE);
         mBackgroundAnimator.cancel();
 
@@ -631,6 +640,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         updateActiveItem(null, false);
 
         mActive = false;
+        if (mOnExitListener != null) {
+            mOnExitListener.onExit();
+        }
     }
 
     public void clearSlices() {

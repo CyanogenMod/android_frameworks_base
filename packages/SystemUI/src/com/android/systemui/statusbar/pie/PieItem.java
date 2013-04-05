@@ -28,9 +28,9 @@ import android.graphics.PorterDuff.Mode;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.android.internal.util.pie.Position;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.pie.PieLayout.PieDrawable;
-import com.android.systemui.statusbar.policy.PieController.Position;
 
 /**
  * A clickable pie menu item.

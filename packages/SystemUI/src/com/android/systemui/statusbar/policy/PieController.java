@@ -53,15 +53,14 @@ import android.view.IWindowManager;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.internal.util.cm.DevUtils;
+import com.android.internal.util.pie.Position;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.NavigationButtons;
@@ -120,120 +119,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
     private Drawable mBackIcon;
     private Drawable mBackAltIcon;
 
-    /**
-     * Defines the positions in which pie controls may appear. This enumeration is used to store
-     * an index, a flag and the android gravity for each position.
-     */
-    public enum Position {
-        LEFT(0, 0, android.view.Gravity.LEFT),
-        BOTTOM(1, 1, android.view.Gravity.BOTTOM),
-        RIGHT(2, 1, android.view.Gravity.RIGHT),
-        TOP(3, 0, android.view.Gravity.TOP);
-
-        Position(int index, int factor, int android_gravity) {
-            INDEX = index;
-            FLAG = (0x01<<index);
-            ANDROID_GRAVITY = android_gravity;
-            FACTOR = factor;
-        }
-
-        public final int INDEX;
-        public final int FLAG;
-        public final int ANDROID_GRAVITY;
-        /**
-         * This is 1 when the position is not at the axis (like {@link Position.RIGHT} is
-         * at {@code Layout.getWidth()} not at {@code 0}).
-         */
-        public final int FACTOR;
-    }
-
     private Position mPosition;
-
-    public static class Tracker {
-        public static float sDistance;
-        private float initialX = 0;
-        private float initialY = 0;
-        private float gracePeriod = 0;
-
-        private Tracker(Position position) {
-            this.position = position;
-        }
-
-        public void start(MotionEvent event) {
-            initialX = event.getX();
-            initialY = event.getY();
-            switch (position) {
-                case LEFT:
-                    gracePeriod = initialX + sDistance / 3.0f;
-                    break;
-                case RIGHT:
-                    gracePeriod = initialX - sDistance / 3.0f;
-                    break;
-            }
-            active = true;
-        }
-
-        public boolean move(MotionEvent event) {
-            final float x = event.getX();
-            final float y = event.getY();
-            if (!active) {
-                return false;
-            }
-
-            // Unroll the complete logic here - we want to be fast and out of the
-            // event chain as fast as possible.
-            boolean loaded = false;
-            switch (position) {
-                case LEFT:
-                    if (x < gracePeriod) {
-                        initialY = y;
-                    }
-                    if (initialY - y < sDistance && y - initialY < sDistance) {
-                        if (x - initialX <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-                case BOTTOM:
-                    if (initialX - x < sDistance && x - initialX < sDistance) {
-                        if (initialY - y <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-                case TOP:
-                    if (initialX - x < sDistance && x - initialX < sDistance) {
-                        if (y - initialY <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-                case RIGHT:
-                    if (x > gracePeriod) {
-                        initialY = y;
-                    }
-                    if (initialY - y < sDistance && y - initialY < sDistance) {
-                        if (initialX - x <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-            }
-            active = false;
-            return loaded;
-        }
-
-        public boolean active = false;
-        public final Position position;
-    }
-
-    public Tracker buildTracker(Position position) {
-        return new Tracker(position);
-    }
 
     private class H extends Handler {
         public void handleMessage(Message m) {
@@ -325,7 +211,6 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         mHasTelephony = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
 
         final Resources res = mContext.getResources();
-        Tracker.sDistance = res.getDimensionPixelSize(R.dimen.pie_trigger_distance);
 
         mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
         mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
@@ -448,15 +333,19 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         }
     }
 
-    public void activateFromTrigger(View view, MotionEvent event, Position position) {
+    public void activateFromListener(int touchX, int touchY, Position position) {
         if (mPieContainer != null && !isShowing()) {
             doHapticTriggerFeedback();
 
             mPosition = position;
-            Point center = new Point((int) event.getRawX(), (int) event.getRawY());
+            Point center = new Point(touchX, touchY);
             mPieContainer.activate(center, position);
             mPieContainer.invalidate();
         }
+    }
+
+    public void exit() {
+        mPieContainer.exit();
     }
 
     @Override
