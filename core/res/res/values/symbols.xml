@@ -1929,4 +1929,9 @@
 
   <!-- IME Picker showing upon pressing Sym Key -->
   <java-symbol type="bool" name="config_symKeyShowsImePicker" />
+
+  <!-- Pie Controls -->
+  <java-symbol type="bool" name="config_allowPieService" />
+  <java-symbol type="dimen" name="pie_trigger_thickness" />
+  <java-symbol type="dimen" name="pie_trigger_distance" />
 </resources>
