@@ -18,8 +18,8 @@ package com.android.systemui.statusbar.pie;
 import android.graphics.Canvas;
 import android.util.Slog;
 
+import com.android.internal.util.pie.Position;
 import com.android.systemui.statusbar.pie.PieLayout.PieDrawable;
-import com.android.systemui.statusbar.policy.PieController.Position;
 
 import java.util.ArrayList;
 import java.util.List;
