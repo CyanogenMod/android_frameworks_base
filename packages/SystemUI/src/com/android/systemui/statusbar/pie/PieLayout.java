@@ -239,6 +239,11 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     }
     private OnSnapListener mOnSnapListener = null;
 
+    public interface OnExitListener {
+        void onExit();
+    }
+    private OnExitListener mOnExitListener = null;
+
     private final class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -277,6 +282,10 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
 
     public void setOnSnapListener(OnSnapListener onSnapListener) {
         mOnSnapListener = onSnapListener;
+    }
+
+    public void setOnExitListener(OnExitListener onExitListener) {
+        mOnExitListener = onExitListener;
     }
 
     private void getDimensions() {
@@ -584,6 +593,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     }
 
     public void exit() {
+        if (DEBUG) {
+            Slog.d(TAG, "Exiting pie now");
+        }
         setVisibility(View.GONE);
         mBackgroundAnimator.cancel();
 
@@ -600,6 +612,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         mActiveItem = null;
 
         mActive = false;
+        if (mOnExitListener != null) {
+            mOnExitListener.onExit();
+        }
     }
 
     public void clearSlices() {
