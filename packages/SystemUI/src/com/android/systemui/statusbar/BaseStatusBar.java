@@ -60,11 +60,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.service.pie.PieManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -103,6 +105,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_CLOSE_SEARCH_PANEL = 1025;
     protected static final int MSG_SHOW_INTRUDER = 1026;
     protected static final int MSG_HIDE_INTRUDER = 1027;
+    protected static final int MSG_PIE_GAIN_FOCUS = 6666;
 
     protected static final boolean ENABLE_INTRUDERS = false;
 
@@ -162,6 +165,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             new ArrayList<NavigationBarCallback>();
 
     // Pie Control
+    protected PieManager mPieManager;
     protected int mExpandedDesktopState;
     protected PieController mPieController;
     protected PieLayout mPieContainer;
@@ -173,6 +177,25 @@ public abstract class BaseStatusBar extends SystemUI implements
     private View[] mPieTrigger = new View[Position.values().length];
     private PieSettingsObserver mSettingsObserver;
 
+    private PieManager.PieActivationListener mPieActivationListener =
+            new PieManager.PieActivationListener(Looper.getMainLooper()) {
+        @Override
+        public void onPieActivation(int touchX, int touchY, int positionIndex, int flags) {
+            if (positionIndex < Position.values().length) {
+                Position position = Position.values()[positionIndex];
+
+                if (position == Position.BOTTOM && mPieController.isSearchLightEnabled()) {
+                    // if we are at the bottom and nothing else is there, use a
+                    // search light!
+                    showSearchPanel();
+                } else {
+                    mPieController.activateFromListener(touchX, touchY, position);
+                    // give the main thread some time to do the bookkeeping
+                    mHandler.obtainMessage(MSG_PIE_GAIN_FOCUS).sendToTarget();
+                }
+            }
+        }
+    };
     private View.OnTouchListener mPieTriggerOnTouchHandler = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -412,6 +435,11 @@ public abstract class BaseStatusBar extends SystemUI implements
         mPieController = new PieController(mContext);
         mPieController.attachTo(this);
         addNavigationBarCallback(mPieController);
+
+        if (PieManager.getInstance().isActive()) {
+            mPieManager = PieManager.getInstance();
+            mPieManager.setPieActivationListener(mPieActivationListener);
+        }
 
         mSettingsObserver = new PieSettingsObserver(new Handler());
 
@@ -830,6 +858,11 @@ public abstract class BaseStatusBar extends SystemUI implements
                          lp.flags &= ~WindowManager.LayoutParams.FLAG_SLIPPERY;
                          mWindowManager.updateViewLayout(bottom, lp);
                      }
+                 }
+                 break;
+             case MSG_PIE_GAIN_FOCUS:
+                 if (!mPieActivationListener.gainTouchFocus(mPieContainer.getWindowToken())) {
+                     mPieController.exit();
                  }
                  break;
             }
@@ -1411,6 +1444,13 @@ public abstract class BaseStatusBar extends SystemUI implements
 
                 mWindowManager.addView(mPieContainer, lp);
                 mPieController.attachTo(mPieContainer);
+                if (mPieManager != null) {
+                    mPieContainer.setOnExitListener(new PieLayout.OnExitListener() {
+                        public void onExit() {
+                            mPieActivationListener.restoreListenerState();
+                        }
+                    });
+                }
             }
 
             // add or update pie triggers
@@ -1419,15 +1459,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                         + mPieTriggerSlots + " masked: " + (mPieTriggerSlots & mPieTriggerMask));
             }
 
-            refreshPieTriggers();
+            refreshPieTriggers(mPieTriggerSlots);
 
         } else {
-            for (int i = 0; i < mPieTrigger.length; i++) {
-                if (mPieTrigger[i] != null) {
-                    mWindowManager.removeView(mPieTrigger[i]);
-                    mPieTrigger[i] = null;
-                }
-            }
+            refreshPieTriggers(0);
         }
     }
 
@@ -1438,35 +1473,42 @@ public abstract class BaseStatusBar extends SystemUI implements
         // first we check, if it would make a change
         if ((mPieTriggerSlots & mPieTriggerMask) != oldState) {
             if (isPieEnabled()) {
-                refreshPieTriggers();
+                refreshPieTriggers(mPieTriggerSlots);
             }
         }
     }
 
     // This should only be called, when is is clear that the pie controls are active
-    private void refreshPieTriggers() {
-        for (Position g : Position.values()) {
-            View trigger = mPieTrigger[g.INDEX];
-            if (trigger == null && (mPieTriggerSlots & mPieTriggerMask & g.FLAG) != 0) {
-                trigger = new View(mContext);
-                trigger.setClickable(false);
-                trigger.setLongClickable(false);
-                trigger.setTag(mPieController.buildTracker(g));
-                trigger.setOnTouchListener(mPieTriggerOnTouchHandler);
+    private void refreshPieTriggers(int triggerSlots) {
+        // check if the service is available for us
+        if (mPieManager != null) {
+            mPieManager.updatePieActivationListener(mPieActivationListener,
+                    triggerSlots & mPieTriggerMask);
+        } else {
+            // otherwise use the plain old method
+            for (Position g : Position.values()) {
+                View trigger = mPieTrigger[g.INDEX];
+                if (trigger == null && (triggerSlots & mPieTriggerMask & g.FLAG) != 0) {
+                    trigger = new View(mContext);
+                    trigger.setClickable(false);
+                    trigger.setLongClickable(false);
+                    trigger.setTag(mPieController.buildTracker(g));
+                    trigger.setOnTouchListener(mPieTriggerOnTouchHandler);
 
-                if (DEBUG) {
-                    trigger.setVisibility(View.VISIBLE);
-                    trigger.setBackgroundColor(0x77ff0000);
-                    Slog.d(TAG, "addPieTrigger on " + g.INDEX
-                            + " with position: " + g + " : " + trigger.toString());
+                    if (DEBUG) {
+                        trigger.setVisibility(View.VISIBLE);
+                        trigger.setBackgroundColor(0x77ff0000);
+                        Slog.d(TAG, "addPieTrigger on " + g.INDEX
+                                + " with position: " + g + " : " + trigger.toString());
+                    }
+                    mWindowManager.addView(trigger, getPieTriggerLayoutParams(g));
+                    mPieTrigger[g.INDEX] = trigger;
+                } else if (trigger != null && (triggerSlots & mPieTriggerMask & g.FLAG) == 0) {
+                    mWindowManager.removeView(trigger);
+                    mPieTrigger[g.INDEX] = null;
+                } else if (trigger != null) {
+                    mWindowManager.updateViewLayout(trigger, getPieTriggerLayoutParams(g));
                 }
-                mWindowManager.addView(trigger, getPieTriggerLayoutParams(g));
-                mPieTrigger[g.INDEX] = trigger;
-            } else if (trigger != null && (mPieTriggerSlots & mPieTriggerMask & g.FLAG) == 0) {
-                mWindowManager.removeView(trigger);
-                mPieTrigger[g.INDEX] = null;
-            } else if (trigger != null) {
-                mWindowManager.updateViewLayout(trigger, getPieTriggerLayoutParams(g));
             }
         }
     }
