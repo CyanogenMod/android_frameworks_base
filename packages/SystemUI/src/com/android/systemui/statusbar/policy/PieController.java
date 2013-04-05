@@ -440,6 +440,21 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         }
     }
 
+    public void activateFromListener(int touchX, int touchY, Position position) {
+        if (mPieContainer != null && !isShowing()) {
+            doHapticTriggerFeedback();
+
+            mPosition = position;
+            Point center = new Point(touchX, touchY);
+            mPieContainer.activate(center, position);
+            mPieContainer.invalidate();
+        }
+    }
+
+    public void exit() {
+        mPieContainer.exit();
+    }
+
     @Override
     public void setNavigationIconHints(int hints) {
         // this call may come from outside
