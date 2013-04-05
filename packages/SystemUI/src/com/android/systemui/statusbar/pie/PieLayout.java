@@ -22,7 +22,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
@@ -36,7 +35,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
-import com.android.systemui.statusbar.policy.PieController.Position;
+import com.android.internal.util.pie.PiePosition;
 import com.android.systemui.R;
 
 import java.util.ArrayList;
@@ -60,8 +59,6 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     private static final int TIME_FADEIN = 300;
     private static final int TIME_FADEIN_DELAY = 400;
 
-    private static final int COLOR_BACKGROUND = 0xee000000;
-
     private Paint mBackgroundPaint = new Paint();
     private float mBackgroundFraction;
     private int mBackgroundTargetAlpha;
@@ -79,8 +76,8 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     private boolean mActive = false;
     private int mPointerId;
     private Point mCenter = new Point(0, 0);
-    private Position mPosition = Position.BOTTOM;
-    private Position mLayoutDoneForPosition;
+    private PiePosition mPosition = PiePosition.BOTTOM;
+    private PiePosition mLayoutDoneForPosition;
 
     private Handler mHandler;
     private Runnable mLongPressRunnable = new Runnable() {
@@ -122,8 +119,8 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
      * <p>
      * This defines the basic geometry of a pie thing and provides the
      * interface to trigger positioning and draw preparations
-     * ({@link #prepare(Position, float)}), drawing
-     * ({@link #draw(Canvas, Position)}) as well as user interaction
+     * ({@link #prepare(PiePosition, float)}), drawing
+     * ({@link #draw(Canvas, PiePosition)}) as well as user interaction
      * ({@link #interact(float, int)}).
      */
     public abstract static class PieDrawable {
@@ -132,9 +129,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         protected int mInner;
         protected int mOuter;
 
-        abstract public void prepare(Position position, float scale);
+        abstract public void prepare(PiePosition position, float scale);
 
-        abstract public void draw(Canvas canvas, Position position);
+        abstract public void draw(Canvas canvas, PiePosition position);
 
         abstract public PieItem interact(float alpha, int radius);
 
@@ -146,14 +143,14 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         }
 
         // Display on all positions
-        public final static int DISPLAY_ALL = Position.LEFT.FLAG
-                | Position.BOTTOM.FLAG
-                | Position.RIGHT.FLAG
-                | Position.TOP.FLAG;
+        public final static int DISPLAY_ALL = PiePosition.LEFT.FLAG
+                | PiePosition.BOTTOM.FLAG
+                | PiePosition.RIGHT.FLAG
+                | PiePosition.TOP.FLAG;
         // Display on all except the TOP position
-        public final static int DISPLAY_NOT_AT_TOP = Position.LEFT.FLAG
-                | Position.BOTTOM.FLAG
-                | Position.RIGHT.FLAG;
+        public final static int DISPLAY_NOT_AT_TOP = PiePosition.LEFT.FLAG
+                | PiePosition.BOTTOM.FLAG
+                | PiePosition.RIGHT.FLAG;
         // The PieDrawable is visible, note that slice visibility overrides item visibility
         public final static int VISIBLE = 0x10;
 
@@ -194,7 +191,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         private final int mY;
         private float mActivity;
 
-        public SnapPoint(int x, int y, Position gravity) {
+        public SnapPoint(int x, int y, PiePosition gravity) {
             mX = x;
             mY = y;
             mActivity = 0.0f;
@@ -234,20 +231,25 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
             return false;
         }
 
-        public final Position position;
+        public final PiePosition position;
     }
 
     private int mTriggerSlots;
-    private SnapPoint[] mSnapPoints = new SnapPoint[Position.values().length];
+    private SnapPoint[] mSnapPoints = new SnapPoint[PiePosition.values().length];
     private SnapPoint mActiveSnap = null;
 
     /**
      * Listener interface for snap events on {@link SnapPoint}s.
      */
     public interface OnSnapListener {
-        void onSnap(Position position);
+        void onSnap(PiePosition position);
     }
     private OnSnapListener mOnSnapListener = null;
+
+    public interface OnExitListener {
+        void onExit();
+    }
+    private OnExitListener mOnExitListener = null;
 
     private final class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -283,11 +285,15 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         getColors();
 
         mTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
+                Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG);
     }
 
     public void setOnSnapListener(OnSnapListener onSnapListener) {
         mOnSnapListener = onSnapListener;
+    }
+
+    public void setOnExitListener(OnExitListener onExitListener) {
+        mOnExitListener = onExitListener;
     }
 
     private void getDimensions() {
@@ -321,13 +327,13 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     private void setupSnapPoints(int width, int height, boolean force) {
         if (force) {
             mTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
+                    Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG);
         }
 
         mActiveSnap = null;
-        for (Position g : Position.values()) {
+        for (PiePosition g : PiePosition.values()) {
             if ((mTriggerSlots & g.FLAG) == 0) {
-                if (g == Position.LEFT || g == Position.RIGHT) {
+                if (g == PiePosition.LEFT || g == PiePosition.RIGHT) {
                     mSnapPoints[g.INDEX] = new SnapPoint(g.FACTOR * width, height / 2, g);
                 } else {
                     mSnapPoints[g.INDEX] = new SnapPoint(width / 2, g.FACTOR * height, g);
@@ -552,7 +558,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
             }
         }
 
-        if (mPosition == Position.LEFT || mPosition == Position.RIGHT) {
+        if (mPosition == PiePosition.LEFT || mPosition == PiePosition.RIGHT) {
             mCenter.x = mPadding + (int) ((getWidth() - 2 * mPadding) * mPosition.FACTOR);
             if (estimatedWidth * 1.3f > getHeight()) {
                 mCenter.y = getHeight() / 2;
@@ -584,7 +590,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         getDimensions();
     }
 
-    public void activate(Point center, Position position) {
+    public void activate(Point center, PiePosition position) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             Slog.w(TAG, "Activation not on main thread: " + Thread.currentThread().getName());
         }
@@ -618,6 +624,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     }
 
     public void exit() {
+        if (DEBUG) {
+            Slog.d(TAG, "Exiting pie now");
+        }
         setVisibility(View.GONE);
         mBackgroundAnimator.cancel();
 
@@ -631,6 +640,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         updateActiveItem(null, false);
 
         mActive = false;
+        if (mOnExitListener != null) {
+            mOnExitListener.onExit();
+        }
     }
 
     public void clearSlices() {

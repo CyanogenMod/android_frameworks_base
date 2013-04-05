@@ -18,8 +18,8 @@ package com.android.systemui.statusbar.pie;
 import android.graphics.Canvas;
 import android.util.Slog;
 
+import com.android.internal.util.pie.PiePosition;
 import com.android.systemui.statusbar.pie.PieLayout.PieDrawable;
-import com.android.systemui.statusbar.policy.PieController.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class PieSliceContainer extends PieLayout.PieSlice {
     }
 
     @Override
-    public void prepare(Position position, float scale) {
+    public void prepare(PiePosition position, float scale) {
         if (hasItems()) {
             int totalWidth = 0;
             for (PieItem item : mItems) {
@@ -55,11 +55,11 @@ public class PieSliceContainer extends PieLayout.PieSlice {
 
             float gapMinder = ((totalWidth * GAP * 2.0f) / (mOuter + mInner));
             float deltaSweep = mSweep / totalWidth;
-            int width = position != Position.TOP ? 0 : totalWidth;
+            int width = position != PiePosition.TOP ? 0 : totalWidth;
 
             int viewMask = PieDrawable.VISIBLE | position.FLAG;
 
-            boolean top = position == Position.TOP;
+            boolean top = position == PiePosition.TOP;
             for (PieItem item : mItems) {
                 if ((item.flags & viewMask) == viewMask) {
                     if (top) width -= item.width;
@@ -81,7 +81,7 @@ public class PieSliceContainer extends PieLayout.PieSlice {
     }
 
     @Override
-    public void draw(Canvas canvas, Position gravity) {
+    public void draw(Canvas canvas, PiePosition gravity) {
     }
 
     @Override

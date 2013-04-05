@@ -28,9 +28,9 @@ import android.graphics.PorterDuff.Mode;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.android.internal.util.pie.PiePosition;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.pie.PieLayout.PieDrawable;
-import com.android.systemui.statusbar.policy.PieController.Position;
 
 /**
  * A clickable pie menu item.
@@ -168,7 +168,7 @@ public class PieItem extends PieLayout.PieDrawable {
     }
 
     @Override
-    public void prepare(Position position, float scale) {
+    public void prepare(PiePosition position, float scale) {
         mPath = getOutline(scale);
         if (mView != null) {
             mView.measure(mView.getLayoutParams().width, mView.getLayoutParams().height);
@@ -188,7 +188,7 @@ public class PieItem extends PieLayout.PieDrawable {
     }
 
     @Override
-    public void draw(Canvas canvas, Position position) {
+    public void draw(Canvas canvas, PiePosition position) {
         if ((flags & SELECTED) != 0) {
             Paint paint = (flags & LONG_PRESSED) == 0
                     ? mSelectedPaint : mLongPressPaint;
@@ -202,7 +202,7 @@ public class PieItem extends PieLayout.PieDrawable {
             int state = canvas.save();
             canvas.translate(mView.getLeft(), mView.getTop());
             // keep icons "upright" if we get displayed on TOP position
-            if (position != Position.TOP) {
+            if (position != PiePosition.TOP) {
                 canvas.rotate(mStart + mSweep / 2 - 270);
             } else {
                 canvas.rotate(mStart + mSweep / 2 - 90);
