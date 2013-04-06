@@ -1474,7 +1474,6 @@
     <string name="global_action_screenshot">Capture d\'écran</string>
     <string name="global_action_choose_profile">Profils</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Bureau étendu</string>
-
     <string name="app_killed_message">Application arrêtée</string>
     <string name="lockscreen_discharging">Déchargement, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">Dock carte SD</string>
@@ -1484,29 +1483,19 @@
     <string name="permdesc_fm_radio_receiver">Permettre à l\'application de contrôler le récepteur FM</string>
     <string name="permlab_fm_radio_transmitter">contrôle du transmetteur FM</string>
     <string name="permdesc_fm_radio_transmitter">Permettre à l\'application de contrôler le transmetteur FM</string>
-
-    <!-- label for item that toggles expand desktop mode -->
     <string name="global_actions_expanded_desktop_mode_on_status">Activé</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Désactivé</string>
-
-    <!-- Names of default profiles. -->
     <string name="profileNameDefault">Défaut</string>
     <string name="profileNameWork">Bureau</string>
     <string name="profileNameHome">Maison</string>
     <string name="profileNameSilent">Silencieux</string>
     <string name="profileNameNight">Nuit</string>
-
-    <!-- Names of application groups. -->
     <string name="profileGroupPhone">Téléphone</string>
     <string name="profileGroupCalendar">Agenda</string>
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">Email</string>
     <string name="profileGroupSMS">SMS</string>
-
-    <!-- Name of wildcard profile. -->
     <string name="wildcardProfile">Autres</string>
-
-    <!-- Hardware Rotation lock string -->
     <string name="toast_rotation_unlocked">Rotation de l\'écran déverrouillée</string>
     <string name="toast_rotation_locked">Rotation de l\'écran verrouillée</string>
 </resources>
