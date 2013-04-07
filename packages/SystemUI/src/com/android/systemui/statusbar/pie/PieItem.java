@@ -68,12 +68,17 @@ public class PieItem extends PieLayout.PieDrawable {
     }
     private PieOnClickListener mOnClickListener = null;
 
-    public PieItem(Context context, PieLayout parent, int width, Object tag, View view) {
+    /**
+     * The item is selected / has the focus from the gesture.
+     */
+    public final static int SELECTED = 0x100;
+
+    public PieItem(Context context, PieLayout parent, int flags, int width, Object tag, View view) {
         mView = view;
         mPieLayout = parent;
         this.tag = tag;
         this.width = width;
-        flags = PieDrawable.VISIBLE | PieDrawable.DISPLAY_ALL;
+        this.flags = flags | PieDrawable.VISIBLE | PieDrawable.DISPLAY_ALL;
 
         final Resources res = context.getResources();
 
@@ -108,9 +113,9 @@ public class PieItem extends PieLayout.PieDrawable {
     public void setSelected(boolean selected) {
         mPieLayout.postInvalidate();
         if (selected) {
-            flags |= PieLayout.PieDrawable.SELECTED;
+            flags |= SELECTED;
         } else {
-            flags &= ~PieLayout.PieDrawable.SELECTED;
+            flags &= ~SELECTED;
         }
     }
 
@@ -158,9 +163,9 @@ public class PieItem extends PieLayout.PieDrawable {
 
     @Override
     public void draw(Canvas canvas, Position position) {
-        canvas.drawPath(mPath, (flags & PieDrawable.SELECTED) != 0
+        canvas.drawPath(mPath, (flags & SELECTED) != 0
                 ? mSelectedPaint : mBackgroundPaint);
-        canvas.drawPath(mPath, (flags & PieDrawable.SELECTED) != 0
+        canvas.drawPath(mPath, (flags & SELECTED) != 0
                 ? mSelectedPaint : mOutlinePaint);
 
         if (mView != null) {
@@ -191,6 +196,11 @@ public class PieItem extends PieLayout.PieDrawable {
         if (mOnClickListener != null) {
             mOnClickListener.onClick(this);
         }
+    }
+
+    private boolean hit(float alpha, int radius) {
+        return (alpha > mStart) && (alpha < mStart + mSweep)
+                && (radius > mInner && radius < mOuter);
     }
 
     private Path getOutline(float scale) {
