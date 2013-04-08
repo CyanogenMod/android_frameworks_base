@@ -45,5 +45,6 @@
     <color name="pie_foreground_color">#ffffffff</color>
     <color name="pie_background_color">#dd0099cc</color>
     <color name="pie_selected_color">@android:color/holo_blue_light</color>
+    <color name="pie_long_pressed_color">#ff8ad5f0</color>
     <color name="pie_outline_color">#dd0099cc</color>
 </resources>
