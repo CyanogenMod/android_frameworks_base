@@ -18,6 +18,9 @@
     <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
 
+    <!-- Content description of the data connection type DC-HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+
     <string name="accessibility_quick_settings_ringer">Sound <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state" example="Off">%s</xliff:g>.</string>
 
