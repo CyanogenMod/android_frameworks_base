@@ -2542,6 +2542,14 @@ public final class Settings {
         public static final String PIE_SIZE = "pie_size";
 
         /**
+         * Pie color settings.
+         * Default: blank
+         * See class PieColorUtils for more information on this.
+         * @hide
+         */
+        public static final String PIE_COLORS = "pie_colors";
+
+        /**
          * Quick Settings Panel Tiles to Use
          *
          * @hide
