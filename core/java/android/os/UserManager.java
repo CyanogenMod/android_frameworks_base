@@ -80,7 +80,7 @@ public class UserManager {
      * @return whether the user making this call is a goat 
      */
     public boolean isUserAGoat() {
-        return false;
+        return true;
     }
  
     /**
