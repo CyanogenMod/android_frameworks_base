@@ -1910,8 +1910,8 @@ extern "C" sp<CameraHardwareInterface> openCameraHardware(int cameraId);
 
 extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
 {
-    LOGV("openCameraHardware: call createInstance");
-    return openCameraHardware(cameraId);
+    LOGV("HAL_openCameraHardware: call createInstance");
+    return HAL_openCameraHardware(cameraId);
 }
 #endif
 #ifdef OMAP3_FW3A_LIBCAMERA
