@@ -59,4 +59,14 @@
     <string name="navbar_menu_conditional_button">Menuknop (altijd verbergen)</string>
     <string name="navbar_menu_always_button">Menuknop (altijd tonen)</string>
     <string name="navbar_menu_big_button">Menuknop</string>
+    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
+    <string name="quick_settings_volume">Volume</string>
+    <string name="quick_settings_expanded_desktop">Uitgebreid</string>
+    <string name="quick_settings_expanded_desktop_off">Normaal</string>
+    <string name="pie_battery_status_charging">Opladen (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Opgeladen</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% over</string>
+    <string name="pie_phone_status_no_service">Geen service</string>
+    <string name="pie_phone_status_airplane_mode">Vliegmodus aan</string>
+    <string name="pie_phone_status_emergency_only">Alleen noodoproepen</string>
 </resources>
