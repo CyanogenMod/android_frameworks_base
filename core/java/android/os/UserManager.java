@@ -23,6 +23,7 @@ import android.content.pm.UserInfo;
 import android.graphics.Bitmap;
 import android.content.res.Resources;
 import android.util.Log;
+import android.provider.Settings;
 
 import java.util.List;
 
@@ -80,7 +81,16 @@ public class UserManager {
      * @return whether the user making this call is a goat 
      */
     public boolean isUserAGoat() {
-        return false;
+        try {
+            if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.CMSTATS_ANONYMOUS_OPT_IN) == 1) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch(android.provider.Settings.SettingNotFoundException ex) {
+            return false;
+        }
     }
  
     /**
