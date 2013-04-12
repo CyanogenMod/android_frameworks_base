@@ -878,6 +878,11 @@ public final class Settings {
      */
     public static final class System extends NameValueTable {
         public static final String SYS_PROP_SETTING_VERSION = "sys.settings_system_version";
+        /**
+         * Whether the user has opted-in to submit anonymous stats to cyanogenmod
+         * @hide
+         */
+        public static final String CMSTATS_ANONYMOUS_OPT_IN = "cmstats_anonymous_opt_in";
 
         /**
          * The content:// style URL for this table
