@@ -1126,4 +1126,7 @@
 
     <!-- True if the Sym key should open the InputMethodPicker (default) -->
     <bool name="config_symKeyShowsImePicker">true</bool>
+
+    <!-- Boolean to enable Stylus gestures -->
+    <bool name="config_stylusGestures">false</bool>
 </resources>
