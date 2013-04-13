@@ -1494,4 +1494,5 @@
     <string name="permdesc_fm_radio_receiver">Permite que o aplicativo controle o receptor FM</string>
     <string name="permlab_fm_radio_transmitter">controlar transmissor FM</string>
     <string name="permdesc_fm_radio_transmitter">Permite que o aplicativo controle o transmissor FM</string>
+    <string name="stylus_app_not_installed">%s não está instalado</string>
 </resources>
