@@ -1458,6 +1458,8 @@
     <string name="user_switched" msgid="3768006783166984410">"Выбран аккаунт пользователя <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Владелец"</string>
 
+    <!-- **** CYANOGENMOD ADDITIONS START **** -->
+
     <string name="reboot_system" product="tablet">Перезагрузка планшетного ПК</string>
     <string name="reboot_system" product="default">Перезагрузка телефона</string>
     <string name="global_action_screenshot">Скриншот</string>
@@ -1488,4 +1490,10 @@
     <string name="storage_sd_dock_card">SD-карта док-станции</string>
     <string name="toast_rotation_unlocked">Поворот экрана разблокирован</string>
     <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
+
+    <!-- stylus gestures support -->
+    <string name="stylus_app_not_installed">%s не установлено</string>
+
+    <!-- **** CYANOGENMOD ADDITIONS END **** -->
+
 </resources>
