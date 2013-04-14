@@ -16,10 +16,9 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 public class ExpandedDesktopTile extends QuickSettingsTile {
     private boolean mEnabled = false;
 
-    public ExpandedDesktopTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container,
+    public ExpandedDesktopTile(Context context, 
             QuickSettingsController qsc, Handler handler) {
-        super(context, inflater, container, qsc);
+        super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
             @Override

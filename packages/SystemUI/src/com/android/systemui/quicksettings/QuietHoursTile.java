@@ -17,9 +17,8 @@ public class QuietHoursTile extends QuickSettingsTile {
 
     private boolean mEnabled;
 
-    public QuietHoursTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+    public QuietHoursTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
             @Override

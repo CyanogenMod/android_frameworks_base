@@ -16,10 +16,9 @@ public class NfcTile extends QuickSettingsTile {
     private static NfcAdapter mNfcAdapter;
     private static final int NFC_ADAPTER_UNKNOWN = -100;
 
-    public NfcTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container,
+    public NfcTile(Context context, 
             QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+        super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
             @Override

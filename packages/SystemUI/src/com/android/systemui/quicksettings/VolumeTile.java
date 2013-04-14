@@ -13,10 +13,9 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class VolumeTile extends QuickSettingsTile {
 
-    public VolumeTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container,
+    public VolumeTile(Context context, 
             final QuickSettingsController qsc, Handler handler) {
-        super(context, inflater, container, qsc);
+        super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
 

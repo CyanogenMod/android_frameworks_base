@@ -17,10 +17,9 @@ import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 
 public class AlarmTile extends QuickSettingsTile {
 
-    public AlarmTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container,
+    public AlarmTile(Context context, 
             QuickSettingsController qsc, Handler handler) {
-        super(context, inflater, container, qsc);
+        super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
             @Override

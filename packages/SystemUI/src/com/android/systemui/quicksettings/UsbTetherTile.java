@@ -20,9 +20,8 @@ public class UsbTetherTile extends QuickSettingsTile {
 
     private final String TAG = "UsbTetherTile";
 
-    public UsbTetherTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+    public UsbTetherTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
             @Override
