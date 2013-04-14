@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2012-13 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="profileNameDefault">Normaal</string>
+    <string name="profileNameWork">Werk</string>
+    <string name="profileNameHome">Huis</string>
+    <string name="profileNameSilent">Stil</string>
+    <string name="profileNameNight">Nag</string>
+    <string name="profileGroupPhone">Foon</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Epos</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Ander</string>
+    <string name="reboot_system" product="tablet">Herlaai tablet</string>
+    <string name="reboot_system" product="default">Herlaai foon</string>
+    <string name="global_action_screenshot">Skermfoto</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Volskerm</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Aan</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Af</string>
+    <string name="reboot_reboot">Herlaai</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Herlaai\u2026</string>
+    <string name="reboot_confirm" product="tablet">Jou tablet gaan herlaai.</string>
+    <string name="reboot_confirm" product="default">Jou foon gaan herlaai.</string>
+    <string name="global_action_reboot">Herlaai</string>
+    <string name="global_action_choose_profile">Profiel</string>
+    <string name="toast_rotation_unlocked">Skerm rotasie ontsluit</string>
+    <string name="toast_rotation_locked">Skerm rotasie gesluit</string>
+</resources>
