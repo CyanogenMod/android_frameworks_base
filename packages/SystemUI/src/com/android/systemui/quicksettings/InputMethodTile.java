@@ -26,9 +26,8 @@ public class InputMethodTile extends QuickSettingsTile {
     private boolean showTile = false;
     private static final String TAG_TRY_SUPPRESSING_IME_SWITCHER = "TrySuppressingImeSwitcher";
 
-    public InputMethodTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+    public InputMethodTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc);
 
         mImm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 

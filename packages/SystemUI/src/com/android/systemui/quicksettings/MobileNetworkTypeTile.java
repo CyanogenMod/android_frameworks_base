@@ -44,9 +44,8 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
     private int mState;
 
     public MobileNetworkTypeTile(Context context,
-            LayoutInflater inflater, QuickSettingsContainerView container,
             QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+        super(context, qsc);
 
         mOnClick = new OnClickListener() {
             @Override

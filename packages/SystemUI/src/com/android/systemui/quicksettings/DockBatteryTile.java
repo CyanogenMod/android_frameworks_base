@@ -25,11 +25,8 @@ public class DockBatteryTile extends QuickSettingsTile implements DockBatterySta
     private LevelListDrawable mDockBatteryLevels;
     private LevelListDrawable mChargingDockBatteryLevels;
 
-    public DockBatteryTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
-
-        mTileLayout = R.layout.quick_settings_tile_dock_battery;
+    public DockBatteryTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc, R.layout.quick_settings_tile_dock_battery);
 
         mOnClick = new View.OnClickListener() {
             @Override
