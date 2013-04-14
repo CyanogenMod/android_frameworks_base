@@ -26,10 +26,9 @@ public class BugReportTile extends QuickSettingsTile{
     private boolean enabled = false;
     private final Handler mHandler;
 
-    public BugReportTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container,
+    public BugReportTile(Context context, 
             QuickSettingsController qsc, Handler handler) {
-        super(context, inflater, container, qsc);
+        super(context, qsc);
 
         mHandler = handler;
 

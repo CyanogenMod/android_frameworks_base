@@ -16,10 +16,8 @@ public class SyncTile extends QuickSettingsTile {
 
     private Object mSyncObserverHandle = null;
     private Handler mHandler;
-    public SyncTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container,
-            QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+    public SyncTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
             @Override
@@ -65,9 +63,8 @@ public class SyncTile extends QuickSettingsTile {
     }
 
     @Override
-    public void setupQuickSettingsTile() {
-        super.setupQuickSettingsTile();
-
+    public void setupQuickSettingsTile(LayoutInflater inflater, QuickSettingsContainerView container) {
+        super.setupQuickSettingsTile(inflater, container);
         if(mSyncObserverHandle != null) {
             //Unregistering sync state listener
             ContentResolver.removeStatusChangeListener(mSyncObserverHandle);

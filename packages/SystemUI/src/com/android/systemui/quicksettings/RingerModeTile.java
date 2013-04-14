@@ -37,9 +37,8 @@ public class RingerModeTile extends QuickSettingsTile {
 
     private AudioManager mAudioManager;
 
-    public RingerModeTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+    public RingerModeTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc);
 
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 

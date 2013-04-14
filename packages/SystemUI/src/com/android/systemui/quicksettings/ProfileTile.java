@@ -37,10 +37,9 @@ public class ProfileTile extends QuickSettingsTile {
     private Profile mChosenProfile;
     private ProfileManager mProfileManager;
 
-    public ProfileTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container,
+    public ProfileTile(Context context, 
             QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+        super(context, qsc);
 
         qsc.registerAction(ProfileManagerService.INTENT_ACTION_PROFILE_SELECTED, this);
 

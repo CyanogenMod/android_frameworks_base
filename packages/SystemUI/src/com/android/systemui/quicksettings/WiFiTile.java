@@ -19,9 +19,8 @@ public class WiFiTile extends QuickSettingsTile implements NetworkSignalChangedC
     private int mWifiSignalIconId;
     private String mDescription;
 
-    public WiFiTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+    public WiFiTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc);
         mOnClick = new View.OnClickListener() {
 
             @Override

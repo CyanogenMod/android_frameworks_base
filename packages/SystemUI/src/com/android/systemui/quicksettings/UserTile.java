@@ -34,11 +34,8 @@ public class UserTile extends QuickSettingsTile {
     private Drawable userAvatar;
     private AsyncTask<Void, Void, Pair<String, Drawable>> mUserInfoTask;
 
-    public UserTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
-
-        mTileLayout = R.layout.quick_settings_tile_user;
+    public UserTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc, R.layout.quick_settings_tile_user);
 
         mOnClick = new View.OnClickListener() {
             @Override

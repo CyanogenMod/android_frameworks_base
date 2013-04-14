@@ -26,9 +26,8 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
 
     ContentResolver mContentResolver;
 
-    public GPSTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+    public GPSTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc);
 
         mContentResolver = mContext.getContentResolver();
         LocationController controller = new LocationController(mContext);

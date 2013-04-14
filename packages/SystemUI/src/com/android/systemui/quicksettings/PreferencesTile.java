@@ -10,9 +10,8 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class PreferencesTile extends QuickSettingsTile{
 
-    public PreferencesTile(Context context, LayoutInflater inflater,
-            QuickSettingsContainerView container, QuickSettingsController qsc) {
-        super(context, inflater, container, qsc);
+    public PreferencesTile(Context context, QuickSettingsController qsc) {
+        super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
 

@@ -13,17 +13,19 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
-public class TorchTile extends QuickSettingsTile {
+public class ExpandedDesktopTile extends QuickSettingsTile {
+    private boolean mEnabled = false;
 
-    public TorchTile(Context context, 
+    public ExpandedDesktopTile(Context context, 
             QuickSettingsController qsc, Handler handler) {
         super(context, qsc);
 
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
-                mContext.sendBroadcast(i);
+                // Change the system setting
+                Settings.System.putInt(mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STATE, mEnabled ? 0 : 1);
             }
         };
 
@@ -31,16 +33,17 @@ public class TorchTile extends QuickSettingsTile {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setClassName("net.cactii.flash2", "net.cactii.flash2.MainActivity");
+                intent.setClassName("com.android.settings",
+                        "com.android.settings.Settings$SystemSettingsActivity");
                 startSettingsActivity(intent);
                 return true;
             }
         };
 
-        qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.TORCH_STATE), this);
+        Uri stateUri = Settings.System.getUriFor(Settings.System.EXPANDED_DESKTOP_STATE);
+        qsc.registerObservedContent(stateUri, this);
     }
 
-    @Override
     void onPostCreate() {
         updateTile();
         super.onPostCreate();
@@ -53,15 +56,14 @@ public class TorchTile extends QuickSettingsTile {
     }
 
     private synchronized void updateTile() {
-        boolean enabled = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.TORCH_STATE, 0) == 1;
-
-        if(enabled) {
-            mDrawable = R.drawable.ic_qs_torch_on;
-            mLabel = mContext.getString(R.string.quick_settings_torch);
+        mEnabled = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
+        if (mEnabled) {
+            mDrawable = R.drawable.ic_qs_expanded_desktop_on;
+            mLabel = mContext.getString(R.string.quick_settings_expanded_desktop);
         } else {
-            mDrawable = R.drawable.ic_qs_torch_off;
-            mLabel = mContext.getString(R.string.quick_settings_torch_off);
+            mDrawable = R.drawable.ic_qs_expanded_desktop_off;
+            mLabel = mContext.getString(R.string.quick_settings_expanded_desktop_off);
         }
     }
 
