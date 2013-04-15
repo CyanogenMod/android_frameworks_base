@@ -39,20 +39,6 @@
     <string name="mmiError" msgid="5154499457739052907">"Problém s připojením nebo neplatný kód MMI."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Operace je omezena pouze na povolená telefonní čísla."</string>
 
-    <string name="profileNameDefault">Výchozí</string>
-    <string name="profileNameWork">Práce</string>
-    <string name="profileNameHome">Doma</string>
-    <string name="profileNameSilent">Tichý</string>
-    <string name="profileNameNight">Noc</string>
-
-    <string name="profileGroupPhone">Telefon</string>
-    <string name="profileGroupCalendar">Kalendář</string>
-    <string name="profileGroupGmail">Gmail</string>
-    <string name="profileGroupEmail">E-mail</string>
-    <string name="profileGroupSMS">SMS</string>
-
-    <string name="wildcardProfile">Ostatní</string>
-
     <string name="serviceEnabled" msgid="8147278346414714315">"Služba byla zapnuta."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Služba byla zapnuta pro:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Služba byla vypnuta."</string>
@@ -169,21 +155,6 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Vypnout bezdrátové připojení"</string>
     <string name="screen_lock" msgid="799094655496098153">"Zámek obrazovky"</string>
     <string name="power_off" msgid="4266614107412865048">"Vypnout"</string>
-
-    <string name="reboot_system" product="tablet">Restartovat tablet</string>
-    <string name="reboot_system" product="default">Restartovat telefon</string>
-
-    <string name="global_action_screenshot">Snímek obrazovky</string>
-
-    <string name="global_actions_toggle_expanded_desktop_mode">Rozšířená plocha</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">Zapnuto</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">Vypnuto</string>
-
-    <!-- Reboot option dialog is intentionally untranslated -->
-
-    <string name="reboot_progress">Restart\u2026</string>
-    <string name="reboot_confirm" product="tablet">Tablet bude restartován.</string>
-    <string name="reboot_confirm" product="default">Telefon bude restartován.</string>
 
     <string name="silent_mode_silent" msgid="319298163018473078">"Vyzvánění vypnuto"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Vibrační vyzvánění"</string>
@@ -831,7 +802,6 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Zkusit znovu"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Překročili jste maximální povolený počet pokusů o odemknutí obličejem."</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Nabíjení - <xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_discharging">Vybíjení - <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Nabito"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Připojte dobíjecí zařízení."</string>
@@ -1614,6 +1584,43 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Usnadnění zrušeno."</string>
     <string name="user_switched" msgid="3768006783166984410">"Aktuální uživatel je <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Vlastník"</string>
+
+    <!-- CYANOGENMOD ADDITIONS -->
+    <string name="stylus_app_not_installed">Aplikace %s není nainstalována</string>
+
+    <string name="profileNameDefault">Výchozí</string>
+    <string name="profileNameWork">Práce</string>
+    <string name="profileNameHome">Doma</string>
+    <string name="profileNameSilent">Tichý</string>
+    <string name="profileNameNight">Noc</string>
+
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalendář</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-mail</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <string name="wildcardProfile">Ostatní</string>
+
+    <string name="reboot_system" product="tablet">Restartovat tablet</string>
+    <string name="reboot_system" product="default">Restartovat telefon</string>
+
+    <string name="global_action_screenshot">Snímek obrazovky</string>
+
+    <string name="global_actions_toggle_expanded_desktop_mode">Rozšířená plocha</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Zapnuto</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Vypnuto</string>
+
+    <string name="reboot_progress">Restart\u2026</string>
+    <string name="reboot_confirm" product="tablet">Tablet bude restartován.</string>
+    <string name="reboot_confirm" product="default">Telefon bude restartován.</string>
+
+    <string name="permlab_fm_radio_receiver">ovládání přijímače FM</string>
+    <string name="permdesc_fm_radio_receiver">Umožňuje ovládat přijímač FM (analogové rádio).</string>
+    <string name="permlab_fm_radio_transmitter">ovládání vysílače FM</string>
+    <string name="permdesc_fm_radio_transmitter">Umožňuje ovládat vysílač FM (analogové rádio).</string>
+
+    <string name="lockscreen_discharging">Vybíjení - <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
     <string name="global_action_reboot">Restartovat</string>
     <string name="global_action_choose_profile">Profil</string>
