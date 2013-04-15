@@ -169,9 +169,6 @@
     <string name="accessibility_quick_settings_bluetooth" msgid="5749054971341882340">"Bluetooth: <xliff:g id="STATE">%s</xliff:g>."</string>
     <string name="accessibility_quick_settings_alarm" msgid="3959908972897295660">"Budík je nastaven na <xliff:g id="TIME">%s</xliff:g>."</string>
 
-    <string name="accessibility_quick_settings_ringer">Zvuk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="accessibility_quick_settings_vibration">Vibrace <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-
     <string name="data_usage_disabled_dialog_3g_title" msgid="5257833881698644687">"Datové přenosy 2G a 3G jsou zakázány"</string>
     <string name="data_usage_disabled_dialog_4g_title" msgid="4789143363492682629">"Datové přenosy 4G jsou zakázány"</string>
     <string name="data_usage_disabled_dialog_mobile_title" msgid="1046047248844821202">"Mobilní data jsou zakázána"</string>
@@ -197,8 +194,6 @@
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Obrazovka je uzamčena v orientaci na výšku."</string>
 
     <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
-    <string name="bean_dream_settings_cid_title">Použít hlavu CIDa</string>
-    <string name="bean_dream_settings_cid_summary">Použít hlavu CIDa místo sladkých želé fazolí</string>
     <string name="start_dreams" msgid="7219575858348719790">"Spustit spořič"</string>
 
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
@@ -226,12 +221,20 @@
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi vypnuté"</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Zobrazení přes Wi-Fi"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Bezdrátové zobrazování"</string>
-    <string name="quick_settings_profile_label">Profil</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Jas"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTOMATICKY"</string>
 
     <string name="status_bar_help_title" msgid="1199237744086469217">"Zde se zobrazují oznámení"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Můžete je kdykoli zobrazit tím, že přejedete prstem dolů."\n"Přejedete-li prstem dolů ještě jednou, zobrazí se ovládací prvky systému."</string>
+
+    <!-- CYANOGENMOD ADDITIONS -->
+    <string name="accessibility_quick_settings_ringer">Zvuk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibrace <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+
+    <string name="bean_dream_settings_cid_title">Použít hlavu CIDa</string>
+    <string name="bean_dream_settings_cid_summary">Použít hlavu CIDa místo sladkých želé fazolí</string>
+
+    <string name="quick_settings_profile_label">Profil</string>
 
     <string name="powerwidget_screen_timeout_toast">Vypnutí obrazovky nastaveno na: %1$d %2$s</string>
 
@@ -250,7 +253,7 @@
     <string name="quick_settings_sync">Synch.</string>
     <string name="quick_settings_sync_off">Synch. vyp.</string>
     <string name="quick_settings_torch">Svítilna</string>
-    <string name="quick_settings_torch_off">Svítilna zap.</string>
+    <string name="quick_settings_torch_off">Svítilna vyp.</string>
     <string name="quick_settings_nfc_off">NFC vyp.</string>
     <string name="quick_settings_screen_timeout">Režim spánku</string>
     <string name="quick_settings_usb_tether_off_label">Odpojeno</string>
@@ -260,6 +263,11 @@
     <string name="quick_settings_wifiap_off">Wi-Fi AP vyp.</string>
     <string name="quick_settings_quiethours">Čas klidu</string>
     <string name="quick_settings_quiethours_off">Čas klidu vyp.</string>
+    <string name="quick_settings_lte_off">LTE vyp.</string>
+    <string name="quick_settings_volume">Hlasitost</string>
+
+    <string name="quick_settings_expanded_desktop">Rozšířený</string>
+    <string name="quick_settings_expanded_desktop_off">Normální</string>
 
     <string name="navbar_dialog_title">Vybrat akci k přiřazení</string>
     <string name="navbar_home_button">Tlačítko Domů</string>
@@ -271,4 +279,11 @@
     <string name="navbar_menu_always_button">Tlačítko (vždy zobrazit) Nabídka</string>
     <string name="navbar_menu_big_button">Tlačítko Nabídka</string>
 
+    <string name="pie_battery_status_charging">Nabíjení (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Nabito</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% zbývá</string>
+
+    <string name="pie_phone_status_no_service">Žádné připojení</string>
+    <string name="pie_phone_status_airplane_mode">Režim V letadle aktivovaný</string>
+    <string name="pie_phone_status_emergency_only">Pouze tísňová volání</string>
 </resources>
