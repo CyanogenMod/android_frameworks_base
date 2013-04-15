@@ -18,6 +18,8 @@ import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
 
+import static com.android.internal.util.cm.QSUtils.deviceSupportsMobileData;
+
 public class MobileNetworkTile extends QuickSettingsTile implements NetworkSignalChangedCallback{
 
     private static final int NO_OVERLAY = 0;
@@ -98,7 +100,7 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
             int mobileSignalIconId, String mobileSignalContentDescriptionId,
             int dataTypeIconId, String dataTypeContentDescriptionId,
             String description) {
-        if (deviceSupportsTelephony()) {
+        if (deviceSupportsMobileData(mContext)) {
             // TODO: If view is in awaiting state, disable
             Resources r = mContext.getResources();
             mDrawable = enabled && (mobileSignalIconId > 0)
@@ -126,11 +128,6 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
 
     @Override
     public void onAirplaneModeChanged(boolean enabled) {
-    }
-
-    boolean deviceSupportsTelephony() {
-        PackageManager pm = mContext.getPackageManager();
-        return pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
     }
 
     @Override
