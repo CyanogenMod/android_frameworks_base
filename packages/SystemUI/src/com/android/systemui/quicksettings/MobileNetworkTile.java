@@ -98,7 +98,7 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
             int mobileSignalIconId, String mobileSignalContentDescriptionId,
             int dataTypeIconId, String dataTypeContentDescriptionId,
             String description) {
-        if (deviceSupportsTelephony()) {
+        if (deviceSupportsMobileData()) {
             // TODO: If view is in awaiting state, disable
             Resources r = mContext.getResources();
             mDrawable = enabled && (mobileSignalIconId > 0)
@@ -128,9 +128,9 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
     public void onAirplaneModeChanged(boolean enabled) {
     }
 
-    boolean deviceSupportsTelephony() {
-        PackageManager pm = mContext.getPackageManager();
-        return pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+    boolean deviceSupportsMobileData() {
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null);
     }
 
     @Override
