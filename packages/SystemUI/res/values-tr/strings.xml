@@ -46,7 +46,7 @@
     <string name="status_bar_settings_mute_label" msgid="554682549917429396">"KAPAT"</string>
     <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"OTOMTK"</string>
     <string name="status_bar_settings_notifications" msgid="397146176280905137">"Bildirimler"</string>
-    <string name="bluetooth_tethered" msgid="7094101612161133267">"Bluetooth paylaşımı tamam"</string>
+    <string name="bluetooth_tethered">"Bluetooth paylaşımı etkin"</string>
     <string name="status_bar_input_method_settings_configure_input_methods" msgid="3504292471512317827">"Giriş yöntemlerini ayarla"</string>
     <string name="status_bar_use_physical_keyboard" msgid="7551903084416057810">"Fiziksel klavye"</string>
     <string name="usb_device_permission_prompt" msgid="834698001271562057">"<xliff:g id="APPLICATION">%1$s</xliff:g> uygulamasının USB cihazına erişmesine izin verilsin mi?"</string>

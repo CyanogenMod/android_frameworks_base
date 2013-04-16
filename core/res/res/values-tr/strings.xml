@@ -1037,8 +1037,12 @@
     <string name="no" msgid="5141531044935541497">"İptal"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Dikkat"</string>
     <string name="loading" msgid="7933681260296021180">"Yükleniyor..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"AÇIK"</string>
-    <string name="capital_off" msgid="6815870386972805832">"KAPALI"</string>
+<!-- #CM-MOD-START -->
+    <string name="capital_on" product="tablet">"AÇIK"</string>
+    <string name="capital_off" product="tablet">"KAPALI"</string>
+    <string name="capital_on" product="default">"AÇK"</string>
+    <string name="capital_off" product="default">"KPL"</string>
+<!-- #CM-MOD-END -->
     <string name="whichApplication" msgid="4533185947064773386">"İşlemi şunu kullanarak tamamla"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Varsayılan olarak bu işlem için kullan."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Sistem ayarları &gt; Uygulamalar &gt; İndirilen bölümünden varsayılanı temizleyin."</string>
