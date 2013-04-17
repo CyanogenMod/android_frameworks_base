@@ -487,6 +487,12 @@ public class WindowManagerService extends IWindowManager.Stub
 
     int mLastStatusBarVisibility = 0;
 
+    /**
+     * Mask used to control the visibility of the status and navigation bar for short periods
+     * of time. (e.g. during pie controls)
+     */
+    int mStatusBarVisibilityMask = 0;
+
     // State while inside of layoutAndPlaceSurfacesLocked().
     boolean mFocusMayChange;
 
@@ -10394,6 +10400,7 @@ public class WindowManagerService extends IWindowManager.Stub
         synchronized (mWindowMap) {
             mLastStatusBarVisibility = visibility;
             visibility = mPolicy.adjustSystemUiVisibilityLw(visibility);
+            visibility &= ~mStatusBarVisibilityMask;
             updateStatusBarVisibilityLocked(visibility);
         }
     }
@@ -10432,6 +10439,7 @@ public class WindowManagerService extends IWindowManager.Stub
     public void reevaluateStatusBarVisibility() {
         synchronized (mWindowMap) {
             int visibility = mPolicy.adjustSystemUiVisibilityLw(mLastStatusBarVisibility);
+            visibility &= ~mStatusBarVisibilityMask;
             updateStatusBarVisibilityLocked(visibility);
             performLayoutAndPlaceSurfacesLocked();
         }
@@ -10524,6 +10532,31 @@ public class WindowManagerService extends IWindowManager.Stub
         }
 
         Binder.restoreCallingIdentity(origId);
+    }
+
+    /**
+     * Tries to set the status bar visibilty mask. This will fail if the mask was set already.
+     *
+     * @param mask specifies the positive mask. E.g. all bit that should be masked out are set.
+     */
+    public boolean updateStatusBarVisibilityMask(int mask) {
+        boolean result = false;
+        synchronized(mWindowMap) {
+            if (mStatusBarVisibilityMask == 0) {
+                mStatusBarVisibilityMask = mask;
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Call this, only if {@link #updateStatusBarVisibilityMask(int)} returned {@code true}.
+     */
+    public void resetStatusBarVisibilityMask() {
+        synchronized(mWindowMap) {
+            mStatusBarVisibilityMask = 0;
+        }
     }
 
     void dumpPolicyLocked(PrintWriter pw, String[] args, boolean dumpAll) {
