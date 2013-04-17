@@ -36,24 +36,6 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"出现连接问题或 MMI 码无效。"</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"只能对固定拨号号码执行此类操作。"</string>
-
-    <!-- Names of default profiles. -->
-    <string name="profileNameDefault">默认</string>
-    <string name="profileNameWork">工作</string>
-    <string name="profileNameHome">住宅</string>
-    <string name="profileNameSilent">静音</string>
-    <string name="profileNameNight">夜晚</string>
-
-    <!-- Names of application groups. -->
-    <string name="profileGroupPhone">电话</string>
-    <string name="profileGroupCalendar">日历</string>
-    <string name="profileGroupGmail">Gmail</string>
-    <string name="profileGroupEmail">电子邮件</string>
-    <string name="profileGroupSMS">短信</string>
-
-    <!-- Name of wildcard profile. -->
-    <string name="wildcardProfile">其他</string>
-
     <string name="serviceEnabled" msgid="8147278346414714315">"已启用服务。"</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"已针对以下内容启用了服务："</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"已停用服务。"</string>
@@ -157,41 +139,6 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"关闭无线电"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
-
-    <!-- Button to reboot the phone, within the Phone Options dialog -->
-    <string name="reboot_system" product="tablet">重启平板</string>
-    <string name="reboot_system" product="default">重启手机</string>
-
-    <!-- label for item that screenshots in phone options dialog -->
-    <string name="global_action_screenshot">屏幕截图</string>
-
-    <!-- label for item that toggles expand desktop mode -->
-    <string name="global_actions_toggle_expanded_desktop_mode">扩展桌面</string>
-    <!-- status message in phone options dialog for when expand desktop mode is on -->
-    <string name="global_actions_expanded_desktop_mode_on_status">已启用</string>
-    <!-- status message in phone options dialog for when expand desktop mode is off -->
-    <string name="global_actions_expanded_desktop_mode_off_status">已禁用</string>
-
-    <!-- Button to reboot the phone, within the Reboot Options dialog -->
-    <string name="reboot_reboot">重新启动</string>
-    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
-    <string name="reboot_recovery">恢复模式</string>
-    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
-    <string name="reboot_bootloader">引导程序</string>
-    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
-    <string name="reboot_bootmenu">引导菜单</string>
-    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
-    <string name="reboot_fastboot">Fastboot</string>
-    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
-    <string name="reboot_download">下载模式</string>
-
-
-    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
-    <string name="reboot_progress">正在重启\u2026</string>
-    <!-- Reboot Confirmation Dialog. When the user chooses to reboot the phone, there will be a confirmation dialog. This is the message. -->
-    <string name="reboot_confirm" product="tablet">您的平板电脑将会重启.</string>
-    <string name="reboot_confirm" product="default">您的手机将会重启.</string>
-
     <string name="silent_mode_silent" msgid="319298163018473078">"振铃器关闭"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"振铃器振动"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"振铃器开启"</string>
@@ -427,12 +374,6 @@
     <string name="permdesc_clearAppCache" product="default" msgid="2459441021956436779">"允许该应用删除其他应用的缓存目录中的文件，从而释放手机存储空间。此权限可能会导致其他应用的启动速度变慢，因为应用必须重新检索数据。"</string>
     <string name="permlab_movePackage" msgid="3289890271645921411">"移动应用资源"</string>
     <string name="permdesc_movePackage" msgid="319562217778244524">"允许应用在内部与外部媒体之间移动应用资源。"</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_preventpower">阻止电源键</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_preventpower">允许应用程序完全掌控电源键</string>
-
     <string name="permlab_readLogs" msgid="6615778543198967614">"查阅敏感日志数据"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="82061313293455151">"允许应用从系统的各种日志文件中读取信息。这样，应用就可以发现关于您平板电脑使用情况的一般信息，其中可能包含个人信息或隐私信息。"</string>
     <string name="permdesc_readLogs" product="default" msgid="2063438140241560443">"允许应用从系统的各个日志文件中读取信息。这样，应用就可以发现关于您手机使用情况的一般信息，其中可能包含个人信息或隐私信息。"</string>
@@ -535,10 +476,6 @@
     <string name="permdesc_asec_rename" msgid="1794757588472127675">"允许应用重命名内存设备。"</string>
     <string name="permlab_vibrate" msgid="7696427026057705834">"控制振动"</string>
     <string name="permdesc_vibrate" msgid="6284989245902300945">"允许应用控制振动器。"</string>
-    <string name="permlab_fm_radio_receiver">控制 FM 接收器</string>
-    <string name="permdesc_fm_radio_receiver">允许应用控制 FM 接收器.</string>
-    <string name="permlab_fm_radio_transmitter">控制 FM 发射器</string>
-    <string name="permdesc_fm_radio_transmitter">允许应用控制 FM 发射器.</string>
     <string name="permlab_flashlight" msgid="2155920810121984215">"控制闪光灯"</string>
     <string name="permdesc_flashlight" msgid="6522284794568368310">"允许应用控制闪光灯。"</string>
     <string name="permlab_manageUsb" msgid="1113453430645402723">"管理 USB 设备的偏好设置和权限"</string>
@@ -825,7 +762,6 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"重试"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"已超过“人脸解锁”尝试次数上限"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"正在充电, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_discharging">正在放电, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_charged" msgid="321635745684060624">"充电完成"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"连接您的充电器, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>"</string>
@@ -1416,8 +1352,6 @@
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"更多选项"</string>
     <string name="storage_internal" msgid="4891916833657929263">"内存设备"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD 卡"</string>
-    <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
-    <string name="storage_sd_dock_card">底座 SD 卡</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB 存储器"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"修改"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"流量使用警告"</string>
@@ -1456,10 +1390,6 @@
     <string name="sending" msgid="3245653681008218030">"正在发送..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"要启动浏览器吗？"</string>
     <string name="SetupCallDefault" msgid="5834948469253758575">"要接听电话吗？"</string>
-
-    <!-- Long-press back kill application -->
-    <string name="app_killed_message">应用程序已被终止</string>
-
     <string name="activity_resolver_use_always" msgid="8017770747801494933">"始终"</string>
     <string name="activity_resolver_use_once" msgid="2404644797149173758">"仅此一次"</string>
     <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"平板电脑"</string>
@@ -1526,14 +1456,4 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"已取消辅助功能。"</string>
     <string name="user_switched" msgid="3768006783166984410">"当前用户是<xliff:g id="NAME">%1$s</xliff:g>。"</string>
     <string name="owner_name" msgid="2716755460376028154">"机主"</string>
-
-    <!-- label for item that reboots the phone in phone options dialog -->
-    <string name="global_action_reboot">重启</string>
-
-    <!-- label for item that opens the profile choosing dialog -->
-    <string name="global_action_choose_profile">情景模式</string>
-
-    <!-- Hardware Rotation lock string -->
-    <string name="toast_rotation_unlocked">屏幕方向已解锁</string>
-    <string name="toast_rotation_locked">屏幕方向已锁定</string>
 </resources>
