@@ -349,4 +349,15 @@
     <!-- Left padding of num pad key on keyguard -->
     <dimen name="kg_num_pad_key_padding_left">10dp</dimen>
 
+    <!-- Pie service: Distance a swipe must travel to be recognized as pie swipe.
+         Used by the pie service. -->
+    <dimen name="pie_trigger_distance">10dp</dimen>
+
+    <!-- Pie service: This is the distance a swipe can travel orthogonally to its actual swipe
+         direction to be still recognized as pie swipe.
+         Used by the pie service. -->
+    <dimen name="pie_perpendicular_distance">15dp</dimen>
+
+    <!-- Pie service: Thickness of the active trigger fields around the screen border -->
+    <dimen name="pie_trigger_thickness">6dp</dimen>
 </resources>
