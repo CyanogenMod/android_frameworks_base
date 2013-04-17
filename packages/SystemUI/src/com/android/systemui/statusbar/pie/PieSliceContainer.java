@@ -18,8 +18,8 @@ package com.android.systemui.statusbar.pie;
 import android.graphics.Canvas;
 import android.util.Slog;
 
-import com.android.systemui.statusbar.pie.PieLayout.PieDrawable;
-import com.android.systemui.statusbar.policy.PieController.Position;
+import com.android.internal.util.pie.PiePosition;
+import com.android.systemui.statusbar.pie.PieView.PieDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +27,19 @@ import java.util.List;
 /**
  * A generic container for {@link PieItems}.
  */
-public class PieSliceContainer extends PieLayout.PieSlice {
+public class PieSliceContainer extends PieView.PieSlice {
 
-    protected PieLayout mPieLayout;
+    protected PieView mPieLayout;
     private List<PieItem> mItems = new ArrayList<PieItem>();
 
-    public PieSliceContainer(PieLayout parent, int initialFlags) {
+    public PieSliceContainer(PieView parent, int initialFlags) {
         mPieLayout = parent;
 
-        flags = initialFlags | PieLayout.PieDrawable.VISIBLE;
+        flags = initialFlags | PieView.PieDrawable.VISIBLE;
     }
 
     @Override
-    public void prepare(Position position, float scale) {
+    public void prepare(PiePosition position, float scale) {
         if (hasItems()) {
             int totalWidth = 0;
             for (PieItem item : mItems) {
@@ -55,11 +55,11 @@ public class PieSliceContainer extends PieLayout.PieSlice {
 
             float gapMinder = ((totalWidth * GAP * 2.0f) / (mOuter + mInner));
             float deltaSweep = mSweep / totalWidth;
-            int width = position != Position.TOP ? 0 : totalWidth;
+            int width = position != PiePosition.TOP ? 0 : totalWidth;
 
             int viewMask = PieDrawable.VISIBLE | position.FLAG;
 
-            boolean top = position == Position.TOP;
+            boolean top = position == PiePosition.TOP;
             for (PieItem item : mItems) {
                 if ((item.flags & viewMask) == viewMask) {
                     if (top) width -= item.width;
@@ -68,8 +68,8 @@ public class PieSliceContainer extends PieLayout.PieSlice {
                             item.width * deltaSweep, mInner, mOuter);
                     item.setGap(deltaSweep * gapMinder);
 
-                    if (PieLayout.DEBUG) {
-                        Slog.d(PieLayout.TAG, "Layout " + item.tag + " : ("
+                    if (PieView.DEBUG) {
+                        Slog.d(PieView.TAG, "Layout " + item.tag + " : ("
                                 + (mStart + deltaSweep * width) + ","
                                 + (item.width * deltaSweep) + ")");
                     }
@@ -81,7 +81,7 @@ public class PieSliceContainer extends PieLayout.PieSlice {
     }
 
     @Override
-    public void draw(Canvas canvas, Position gravity) {
+    public void draw(Canvas canvas, PiePosition gravity) {
     }
 
     @Override
