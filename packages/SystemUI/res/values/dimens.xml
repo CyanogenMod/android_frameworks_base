@@ -218,10 +218,6 @@
     <dimen name="status_bar_battery_cluster_text_margin">-1dip</dimen>
 
     <!-- ==================== pie controls ==================== -->
-    <!-- Actual width/height of the trigger views placed on the UI -->
-    <dimen name="pie_trigger_height">3dp</dimen>
-    <!-- The distance a touch event must travel on the surface to trigger the pie control -->
-    <dimen name="pie_trigger_distance">8dp</dimen>
     <!-- Padding between the pie controls and the screen border -->
     <dimen name="pie_padding">16dp</dimen>
 
