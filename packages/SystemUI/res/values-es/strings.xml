@@ -183,8 +183,8 @@
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> dispositivos)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth"</string>
     <string name="quick_settings_brightness_label" msgid="6968372297018755815">"Brillo"</string>
-    <string name="quick_settings_rotation_unlocked_label" msgid="336054930362580584">"Automático"</string>
-    <string name="quick_settings_rotation_locked_label" msgid="8058646447242565486">"Bloqueado"</string>
+    <string name="quick_settings_rotation_unlocked_label" msgid="336054930362580584">"Girar automáticamente"</string>
+    <string name="quick_settings_rotation_locked_label" msgid="8058646447242565486">"Rotación bloqueada"</string>
     <string name="quick_settings_ime_label" msgid="7073463064369468429">"Método de entrada"</string>
     <string name="quick_settings_location_label" msgid="3292451598267467545">"Ubicación en uso"</string>
     <string name="quick_settings_media_device_label" msgid="1302906836372603762">"Dispositivo multimedia"</string>
@@ -203,64 +203,4 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTO"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Las notificaciones aparecen aquí"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Desliza el dedo hacia abajo para acceder al contenido."\n"Vuelve a deslizar el dedo hacia abajo para acceder a los controles del sistema."</string>
-
-    <!-- CYANOGENMOD ADDITIONS START -->
-
-    <string name="accessibility_data_connection_HP">HSPA+</string>
-    <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
-    <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Usar a Cid</string>
-    <string name="bean_dream_settings_cid_summary">Emplear el icono Cid como salvapantallas en lugar del icono Jellybean</string>
-
-    <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
-    <string name="quick_settings_expanded_desktop">Extendido</string>
-    <string name="quick_settings_expanded_desktop_off">Normal</string>
-    <string name="quick_settings_gps">GPS</string>
-    <string name="quick_settings_gps_off">GPS</string>
-    <string name="quick_settings_label_enabled">Activado</string>
-    <string name="quick_settings_label_disabled">Desactivado</string>
-    <string name="quick_settings_lte">LTE</string>
-    <string name="quick_settings_lte_off">LTE</string>
-    <string name="quick_settings_lockscreen">Bloqueo</string>
-    <string name="quick_settings_network_type">Red móvil</string>
-    <string name="quick_settings_nfc">NFC</string>
-    <string name="quick_settings_nfc_off">NFC</string>
-    <string name="quick_settings_profile_label">Perfil</string>
-    <string name="quick_settings_quiethours">Modo tranq.</string>
-    <string name="quick_settings_quiethours_off">Modo tranq.</string>
-    <string name="quick_settings_report_bug">Notificar error</string>
-    <string name="quick_settings_ringer_normal">Sonido</string>
-    <string name="quick_settings_ringer_on">Sonido</string>
-    <string name="quick_settings_ringer_off">Silencio</string>
-    <string name="quick_settings_screen_sleep">Bloquear</string>
-    <string name="quick_settings_screen_timeout">Tiempo espera</string>
-    <string name="quick_settings_sync">Sincronizar</string>
-    <string name="quick_settings_sync_off">Sincronizar</string>
-    <string name="quick_settings_torch">Linterna</string>
-    <string name="quick_settings_torch_off">Linterna</string>
-    <string name="quick_settings_usb_tether_off_label">Desconectado</string>
-    <string name="quick_settings_usb_tether_connected_label">Anclaje USB</string>
-    <string name="quick_settings_usb_tether_on_label">Anclaje USB</string>
-    <string name="quick_settings_vibration_on">Vibración</string>
-    <string name="quick_settings_vibration_off">Vibración</string>
-    <string name="quick_settings_volume">Volumen</string>
-    <string name="quick_settings_wifiap">Wi-Fi AP</string>
-    <string name="quick_settings_wifiap_off">Wi-Fi AP</string>
-    <string name="navbar_dialog_title">Seleccionar botón a mostrar</string>
-    <string name="navbar_home_button">Botón Inicio</string>
-    <string name="navbar_recent_button">Botón Recientes</string>
-    <string name="navbar_search_button">Botón Búsqueda</string>
-    <string name="navbar_back_button">Botón Atrás</string>
-    <string name="navbar_empty_button">Sin botón</string>
-    <string name="navbar_menu_conditional_button">Botón Menú (auto-ocultar)</string>
-    <string name="navbar_menu_always_button">Botón Menú (siempre visible)</string>
-    <string name="navbar_menu_big_button">Botón Menú</string>
-    <string name="pie_battery_status_charging">Cargando (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Cargada</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% restante</string>
-    <string name="pie_phone_status_no_service">Sin servicio</string>
-    <string name="pie_phone_status_airplane_mode">Modo avión</string>
-    <string name="pie_phone_status_emergency_only">Sólo llamadas de emergencia</string>
-
-    <!-- CYANOGENMOD ADDITIONS END -->
 </resources>

@@ -1395,7 +1395,7 @@
     <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"Tablet"</string>
     <string name="default_audio_route_name" product="default" msgid="4239291273420140123">"Teléfono"</string>
     <string name="default_audio_route_name_headphones" msgid="8119971843803439110">"Auriculares"</string>
-    <string name="default_audio_route_name_dock_speakers" msgid="6240602982276591864">"Altavoces de la base"</string>
+    <string name="default_audio_route_name_dock_speakers" msgid="6240602982276591864">"Altavoces del conector"</string>
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Sistema"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Audio Bluetooth"</string>
@@ -1456,47 +1456,4 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Accesibilidad cancelada"</string>
     <string name="user_switched" msgid="3768006783166984410">"Usuario actual: <xliff:g id="NAME">%1$s</xliff:g>"</string>
     <string name="owner_name" msgid="2716755460376028154">"Propietario"</string>
-
-    <!-- CYANOGENMOD ADDITIONS START -->
-
-    <string name="profileNameDefault">Predeterminado</string>
-    <string name="profileNameWork">Trabajo</string>
-    <string name="profileNameHome">Casa</string>
-    <string name="profileNameSilent">Silencio</string>
-    <string name="profileNameNight">Noche</string>
-    <string name="profileGroupPhone">Teléfono</string>
-    <string name="profileGroupCalendar">Calendario</string>
-    <string name="profileGroupGmail">Gmail</string>
-    <string name="profileGroupEmail">Email</string>
-    <string name="profileGroupSMS">SMS</string>
-    <string name="wildcardProfile">Otro</string>
-    <string name="reboot_system" product="tablet">Reiniciar tablet</string>
-    <string name="reboot_system" product="default">Reiniciar teléfono</string>
-    <string name="global_action_screenshot">Captura de pantalla</string>
-    <string name="global_actions_toggle_expanded_desktop_mode">Escritorio extendido</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">Activado</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">Desactivado</string>
-    <string name="reboot_reboot">Reiniciar</string>
-    <string name="reboot_recovery">Modo Recovery</string>
-    <string name="reboot_bootloader">Modo Bootloader</string>
-    <string name="reboot_bootmenu">Modo Bootmenu</string>
-    <string name="reboot_fastboot">Modo Fastboot</string>
-    <string name="reboot_download">Modo Download</string>
-    <string name="reboot_progress">Reiniciando\u2026</string>
-    <string name="reboot_confirm">El terminal se reiniciará</string>
-    <string name="permlab_preventpower">anular tecla encendido</string>
-    <string name="permdesc_preventpower">Permite que una aplicación cambie el comportamiento de la tecla de encendido.</string>
-    <string name="lockscreen_discharging">Descargando, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-    <string name="app_killed_message">Aplicación finalizada</string>
-    <string name="global_action_reboot">Reiniciar</string>
-    <string name="global_action_choose_profile">Perfil</string>
-    <string name="permlab_fm_radio_receiver">controlar receptor FM</string>
-    <string name="permdesc_fm_radio_receiver">Permite que una aplicación controle el receptor FM.</string>
-    <string name="permlab_fm_radio_transmitter">controlar transmisor FM</string>
-    <string name="permdesc_fm_radio_transmitter">Permite que una aplicación controle el transmisor FM.</string>
-    <string name="storage_sd_dock_card">Tarjeta SD de la base</string>
-    <string name="toast_rotation_unlocked">Rotación de pantalla desbloqueada</string>
-    <string name="toast_rotation_locked">Rotación de pantalla bloqueada</string>
-
-    <!-- CYANOGENMOD ADDITIONS END -->
 </resources>
