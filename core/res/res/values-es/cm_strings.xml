@@ -39,7 +39,8 @@
     <string name="reboot_fastboot">Modo Fastboot</string>
     <string name="reboot_download">Modo Download</string>
     <string name="reboot_progress">Reiniciando\u2026</string>
-    <string name="reboot_confirm">El terminal se reiniciará</string>
+    <string name="reboot_confirm" product="tablet">El tablet se reiniciará.</string>
+    <string name="reboot_confirm" product="default">El teléfono se reiniciará.</string>
     <string name="permlab_preventpower">anular tecla encendido</string>
     <string name="permdesc_preventpower">Permite que una aplicación cambie el comportamiento de la tecla de encendido.</string>
     <string name="lockscreen_discharging">Descargando, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
