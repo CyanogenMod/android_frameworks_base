@@ -42,7 +42,6 @@
     <string name="quick_settings_ringer_off">Silencio</string>
     <string name="quick_settings_screen_sleep">Bloquear</string>
     <string name="quick_settings_screen_timeout">Tiempo espera</string>
-    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
     <string name="quick_settings_sync">Sincronizar</string>
     <string name="quick_settings_sync_off">Sincronizar</string>
     <string name="quick_settings_torch">Linterna</string>

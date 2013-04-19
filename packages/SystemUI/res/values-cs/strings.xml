@@ -253,7 +253,6 @@
     <string name="quick_settings_torch_off">Svítilna zap.</string>
     <string name="quick_settings_nfc_off">NFC vyp.</string>
     <string name="quick_settings_screen_timeout">Režim spánku</string>
-    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">Odpojeno</string>
     <string name="quick_settings_usb_tether_connected_label">USB sdíl. vyp.</string>
     <string name="quick_settings_usb_tether_on_label">USB sdíl.</string>

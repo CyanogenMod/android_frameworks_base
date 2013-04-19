@@ -227,7 +227,6 @@
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC af</string>
     <string name="quick_settings_screen_timeout">Skerm afsnytyd</string>
-    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">Gediskonnekteer</string>
     <string name="quick_settings_usb_tether_connected_label">Verbinding af</string>
     <string name="quick_settings_usb_tether_on_label">Verbind</string>

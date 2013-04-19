@@ -229,7 +229,6 @@
     <string name="quick_settings_torch">פנס</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_screen_timeout">כיבוי מסך</string>
-    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">מנותק</string>
     <string name="quick_settings_usb_tether_connected_label">קשירה כבויה</string>
     <string name="quick_settings_usb_tether_on_label">קשירה</string>

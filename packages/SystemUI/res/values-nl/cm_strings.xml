@@ -59,7 +59,6 @@
     <string name="navbar_menu_conditional_button">Menuknop (altijd verbergen)</string>
     <string name="navbar_menu_always_button">Menuknop (altijd tonen)</string>
     <string name="navbar_menu_big_button">Menuknop</string>
-    <string name="quick_settings_screen_timeout_summary">%1$d %2$s</string>
     <string name="quick_settings_volume">Volume</string>
     <string name="quick_settings_expanded_desktop">Uitgebreid</string>
     <string name="quick_settings_expanded_desktop_off">Normaal</string>
