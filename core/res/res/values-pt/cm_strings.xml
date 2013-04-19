@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="profileNameDefault">Padrão</string>
+    <string name="profileNameWork">Trabalho</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silêncio</string>
+    <string name="profileNameNight">Noite</string>
+    <string name="profileGroupPhone">Telefone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Outro</string>
+    <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="reboot_system" product="default">Reiniciar telefone</string>
+    <string name="global_action_screenshot">Capturar tela</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Área de trabalho expandida</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Ativada</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Desativada</string>
+    <string name="reboot_reboot">Reiniciar</string>
+    <string name="reboot_recovery">Recuperação</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Menu de boot</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Reiniciando\u2026</string>
+    <string name="reboot_confirm">Seu telefone vai reiniciar.</string>
+    <string name="permlab_preventpower">substituir tecla de energia</string>
+    <string name="permdesc_preventpower">Permite que o aplicativo substitua a tecla de energia</string>
+    <string name="lockscreen_discharging">Descarregando, <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%%</xliff:g></string>
+    <string name="app_killed_message">Aplicativo terminado</string>
+    <string name="global_action_reboot">Reiniciar</string>
+    <string name="global_action_choose_profile">Perfil</string>
+    <string name="toast_rotation_unlocked">Rotação da tela está destravada</string>
+    <string name="toast_rotation_locked">Rotação da tela está travada</string>
+    <string name="storage_sd_dock_card">Dock cartão SD</string>
+    <string name="permlab_fm_radio_receiver">controlar receptor FM</string>
+    <string name="permdesc_fm_radio_receiver">Permite que o aplicativo controle o receptor FM</string>
+    <string name="permlab_fm_radio_transmitter">controlar transmissor FM</string>
+    <string name="permdesc_fm_radio_transmitter">Permite que o aplicativo controle o transmissor FM</string>
+    <string name="stylus_app_not_installed">%s não está instalado</string>
+</resources>
