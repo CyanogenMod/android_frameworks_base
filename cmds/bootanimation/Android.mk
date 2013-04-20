@@ -12,11 +12,11 @@ LOCAL_SHARED_LIBRARIES := \
 	libandroidfw \
 	libutils \
 	libbinder \
-    libui \
+        libui \
 	libskia \
-    libEGL \
-    libGLESv1_CM \
-    libgui
+        libEGL \
+        libGLESv1_CM \
+        libgui
 
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)
