@@ -126,6 +126,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import cyanogenmod.providers.CMSettings;
+
 /**
  * The implementation of the volume manager service.
  * <p>
@@ -590,6 +592,7 @@ public class AudioService extends IAudioService.Stub {
     private AudioManagerInternal.RingerModeDelegate mRingerModeDelegate;
     private VolumePolicy mVolumePolicy = VolumePolicy.DEFAULT;
     private long mLoweredFromNormalToVibrateTime;
+    private boolean mVolumeKeysControlRingStream;
 
     // Intent "extra" data keys.
     public static final String CONNECT_INTENT_KEY_PORT_NAME = "portName";
@@ -1166,6 +1169,10 @@ public class AudioService extends IAudioService.Stub {
 
             updateRingerModeAffectedStreams();
             readDockAudioSettings(cr);
+
+            mVolumeKeysControlRingStream = CMSettings.System.getIntForUser(cr,
+                    CMSettings.System.VOLUME_KEYS_CONTROL_RING_STREAM, 1,
+                    UserHandle.USER_CURRENT) == 1;
         }
 
         mLinkNotificationWithVolume = Settings.Secure.getInt(cr,
@@ -3607,10 +3614,16 @@ public class AudioService extends IAudioService.Stub {
                     if (DEBUG_VOL)
                         Log.v(TAG, "getActiveStreamType: Forcing STREAM_MUSIC stream active");
                     return AudioSystem.STREAM_MUSIC;
-                    } else {
+                } else {
+                    if (mVolumeKeysControlRingStream) {
                         if (DEBUG_VOL)
                             Log.v(TAG, "getActiveStreamType: Forcing STREAM_RING b/c default");
                         return AudioSystem.STREAM_RING;
+                    } else {
+                        if (DEBUG_VOL)
+                            Log.v(TAG, "getActiveStreamType: Forcing STREAM_MUSIC b/c default");
+                        return AudioSystem.STREAM_MUSIC;
+                    }
                 }
             } else if (isAfMusicActiveRecently(0)) {
                 if (DEBUG_VOL)
@@ -3645,9 +3658,16 @@ public class AudioService extends IAudioService.Stub {
                     if (DEBUG_VOL) Log.v(TAG, "getActiveStreamType: forcing STREAM_MUSIC");
                     return AudioSystem.STREAM_MUSIC;
                 } else {
-                    if (DEBUG_VOL) Log.v(TAG,
-                            "getActiveStreamType: using STREAM_NOTIFICATION as default");
-                    return AudioSystem.STREAM_NOTIFICATION;
+                    if (mVolumeKeysControlRingStream) {
+                        if (DEBUG_VOL)
+                            Log.v(TAG,
+                                    "getActiveStreamType: using STREAM_NOTIFICATION as default");
+                        return AudioSystem.STREAM_NOTIFICATION;
+                    } else {
+                        if (DEBUG_VOL)
+                            Log.v(TAG, "getActiveStreamType: Forcing STREAM_MUSIC b/c default");
+                        return AudioSystem.STREAM_MUSIC;
+                    }
                 }
             }
             break;
@@ -4726,6 +4746,8 @@ public class AudioService extends IAudioService.Stub {
                 Settings.Global.DOCK_AUDIO_MEDIA_ENABLED), false, this);
             mContentResolver.registerContentObserver(Settings.Secure.getUriFor(
                 Settings.Secure.VOLUME_LINK_NOTIFICATION), false, this);
+            mContentResolver.registerContentObserver(CMSettings.System.getUriFor(
+                CMSettings.System.VOLUME_KEYS_CONTROL_RING_STREAM), false, this);
         }
 
         @Override
@@ -4752,6 +4774,9 @@ public class AudioService extends IAudioService.Stub {
                     createStreamStates();
                     updateStreamVolumeAlias(true, TAG);
                 }
+                mVolumeKeysControlRingStream = CMSettings.System.getIntForUser(mContentResolver,
+                        CMSettings.System.VOLUME_KEYS_CONTROL_RING_STREAM, 1,
+                        UserHandle.USER_CURRENT) == 1;
             }
         }
     }
