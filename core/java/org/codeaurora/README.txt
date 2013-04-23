@@ -86,52 +86,66 @@ The following two methods are the PerfLock APIs
 
 The following resource optimizations are supported for MSM8960:
 
- ========================================================================================
-|         |                                 |                                            |
-| Section | Optimization                    | Description                                |
-|         |                                 |                                            |
- ========================================================================================
-|    1    | ALL_CPUS_PWR_CLPS_DIS           | Disables power collapse on all CPUs        |
-|         |                                 |                                            |
- ========================================================================================
-|    2    | CPUS_ON_MAX                     | Minimum of four cores on                   |
-|         |_________________________________|____________________________________________|
-|         | CPUS_ON_3                       | Minimum of three cores on                  |
-|         |_________________________________|____________________________________________|
-|         | CPUS_ON_2                       | Minimum of two cores on                    |
-|         |_________________________________|____________________________________________|
-|         | CPUS_ON_LIMIT_1                 | Maximum of one core on                     |
-|         |_________________________________|____________________________________________|
-|         | CPUS_ON_LIMIT_2                 | Maximum of two cores on                    |
-|         |_________________________________|____________________________________________|
-|         | CPUS_ON_LIMIT_3                 | Maximum of three cores on                  |
-|         |                                 |                                            |
- ========================================================================================
-|    3    | CPU0_FREQ_LVL_TURBO_MAX         | Set CPU0 minimum frequency to 1512 Mhz     |
-|         |_________________________________|____________________________________________|
-|         | CPU0_FREQ_LVL_NONTURBO_MAX      | Set CPU0 minimum frequency to 1026 Mhz     |
-|         |                                 |                                            |
- ========================================================================================
-|    4    | CPU1_FREQ_LVL_TURBO_MAX         | Set CPU1 minimum frequency to 1512 Mhz     |
-|         |_________________________________|____________________________________________|
-|         | CPU1_FREQ_LVL_NONTURBO_MAX      | Set CPU1 minimum frequency to 1026 Mhz     |
-|         |                                 |                                            |
- ========================================================================================
-|    5    | CPU2_FREQ_LVL_TURBO_MAX         | Set CPU2 minimum frequency to 1512 Mhz     |
-|         |_________________________________|____________________________________________|
-|         | CPU2_FREQ_LVL_NONTURBO_MAX      | Set CPU2 minimum frequency to 1026 Mhz     |
-|         |                                 |                                            |
- ========================================================================================
-|    6    | CPU3_FREQ_LVL_TURBO_MAX         | Set CPU3 minimum frequency to 1512 Mhz     |
-|         |_________________________________|____________________________________________|
-|         | CPU3_FREQ_LVL_NONTURBO_MAX      | Set CPU3 minimum frequency to 1026 Mhz     |
-|         |                                 |                                            |
- ========================================================================================
-|    7    | ALL_CPUS_FREQ_LVL_TURBO_MAX     | Set all online CPUs frequency to 1512 Mhz  |
-|         |_________________________________|__________________________   _______________|
-|         | ALL_CPUS_FREQ_LVL_NONTURBO_MAX  | Set all online CPUs frequency to 1026 Mhz  |
-|         |                                 |                                            |
- ========================================================================================
+ ===============================================================================================
+|         |                                        |                                            |
+| Section | Optimization                           | Description                                |
+|         |                                        |                                            |
+ ===============================================================================================
+|    1    | ALL_CPUS_PWR_CLPS_DIS                  | Disables power collapse on all CPUs        |
+|         |                                        |                                            |
+ ===============================================================================================
+|    2    | CPUS_ON_MAX                            | Minimum of four cores on                   |
+|         |________________________________________|____________________________________________|
+|         | CPUS_ON_3                              | Minimum of three cores on                  |
+|         |________________________________________|____________________________________________|
+|         | CPUS_ON_2                              | Minimum of two cores on                    |
+|         |________________________________________|____________________________________________|
+|         | CPUS_ON_LIMIT_1                        | Maximum of one core on                     |
+|         |________________________________________|____________________________________________|
+|         | CPUS_ON_LIMIT_2                        | Maximum of two cores on                    |
+|         |________________________________________|____________________________________________|
+|         | CPUS_ON_LIMIT_3                        | Maximum of three cores on                  |
+|         |                                        |                                            |
+ ===============================================================================================
+| For the following CPU FREQ resources, please read carefully on the usage.                     |
+| All frequencies available on the device are supported. In order to use an intermediate        |
+| frequency not specified with an enum, you will need to pass in a valid hex value.             |
+| The leftmost byte represents the CPU and the rightmost byte represents the frequency.         |
+| The hex value used will be multiplied by 10^5 to calculate the minimum frequency requested.   |
+| This calculated frequency or the next highest frequency available will be set.                |
+|                                                                                               |
+| Example: Set CPU0 frequency to a minimum of 700 Mhz                                           |
+|          Use 0x207.                                                                           |
+|                                                                                               |
+| Example: Set CPU1 frequency to a minimum of 2.0 Ghz                                           |
+|          Use 0x314.                                                                           |
+|                                                                                               |
+ ===============================================================================================
+|    3    | CPU0_FREQ_LVL_TURBO_MAX = 0x2FE        | Set CPU0 minimum frequency to device max   |
+|         |________________________________________|____________________________________________|
+|         | CPU0_FREQ_LVL_NONTURBO_MAX = 0x20A     | Set CPU0 minimum frequency to 1026 Mhz     |
+|         |                                        |                                            |
+ ===============================================================================================
+|    4    | CPU1_FREQ_LVL_TURBO_MAX = 0x3FE        | Set CPU1 minimum frequency to device max   |
+|         |________________________________________|____________________________________________|
+|         | CPU1_FREQ_LVL_NONTURBO_MAX = 0x30A     | Set CPU1 minimum frequency to 1026 Mhz     |
+|         |                                        |                                            |
+ ===============================================================================================
+|    5    | CPU2_FREQ_LVL_TURBO_MAX = 0x4FE        | Set CPU2 minimum frequency to device max   |
+|         |________________________________________|____________________________________________|
+|         | CPU2_FREQ_LVL_NONTURBO_MAX = 0x40A     | Set CPU2 minimum frequency to 1026 Mhz     |
+|         |                                        |                                            |
+ ===============================================================================================
+|    6    | CPU3_FREQ_LVL_TURBO_MAX = 0x5FE        | Set CPU3 minimum frequency to device max   |
+|         |________________________________________|____________________________________________|
+|         | CPU3_FREQ_LVL_NONTURBO_MAX = 0x50A     | Set CPU3 minimum frequency to 1026 Mhz     |
+|         |                                        |                                            |
+ ===============================================================================================
+|    7    | ALL_CPUS_FREQ_LVL_TURBO_MAX = 0x9FE    | Set all online CPUs frequency to device max|
+|         |________________________________________|____________________________________________|
+|         | ALL_CPUS_FREQ_LVL_NONTURBO_MAX = 0x90A | Set all online CPUs frequency to 1026 Mhz  |
+|         |                                        |                                            |
+ ===============================================================================================
 
 =========================================================================================
   PerfLock API usage in framework
