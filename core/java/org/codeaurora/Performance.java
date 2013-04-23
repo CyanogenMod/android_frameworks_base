@@ -42,17 +42,18 @@ public class Performance
     /* The following defined constants are to be used for PerfLock APIs*/
     /** @hide */ public static final int ALL_CPUS_PWR_CLPS_DIS = 0x100;
 
+    /* Please read the README.txt file for CPUx_FREQ usage and support*/
     /** @hide */ public static final int CPU0_FREQ_NONTURBO_MAX = 0x20A;
-    /** @hide */ public static final int CPU0_FREQ_TURBO_MAX = 0x20F;
+    /** @hide */ public static final int CPU0_FREQ_TURBO_MAX = 0x2FE;
 
     /** @hide */ public static final int CPU1_FREQ_NONTURBO_MAX = 0x30A;
-    /** @hide */ public static final int CPU1_FREQ_TURBO_MAX = 0x30F;
+    /** @hide */ public static final int CPU1_FREQ_TURBO_MAX = 0x3FE;
 
     /** @hide */ public static final int CPU2_FREQ_NONTURBO_MAX = 0x40A;
-    /** @hide */ public static final int CPU2_FREQ_TURBO_MAX = 0x40F;
+    /** @hide */ public static final int CPU2_FREQ_TURBO_MAX = 0x4FE;
 
     /** @hide */ public static final int CPU3_FREQ_NONTURBO_MAX = 0x50A;
-    /** @hide */ public static final int CPU3_FREQ_TURBO_MAX = 0x50F;
+    /** @hide */ public static final int CPU3_FREQ_TURBO_MAX = 0x5FE;
 
     /** @hide */ public static final int CPUS_ON_2 = 0x702;
     /** @hide */ public static final int CPUS_ON_3 = 0x703;
@@ -62,7 +63,7 @@ public class Performance
     /** @hide */ public static final int CPUS_ON_LIMIT_3 = 0x7FC;
 
     /** @hide */ public static final int ALL_CPUS_FREQ_NONTURBO_MAX = 0x90A;
-    /** @hide */ public static final int ALL_CPUS_FREQ_TURBO_MAX = 0x90F;
+    /** @hide */ public static final int ALL_CPUS_FREQ_TURBO_MAX = 0x9FE;
 
     /* The following are the PerfLock API return values*/
     /** @hide */ public static final int REQUEST_FAILED = -1;
