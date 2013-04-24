@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
- * Copyright (C) 2010-2012 CyanogenMod Project
+ * Copyright (C) 2010-2013 CyanogenMod Project
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +42,7 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IPowerManager;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -124,6 +126,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private boolean mHasVibrator;
     private Profile mChosenProfile;
     private final boolean mShowSilentToggle;
+    private boolean mEnableFastPowerOn;
 
     /**
      * @param context everything needs a context :(
@@ -291,26 +294,56 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         final ContentResolver cr = mContext.getContentResolver();
         mItems = new ArrayList<Action>();
+        mEnableFastPowerOn = Settings.System.getInt(
+                                mContext.getContentResolver(),
+                                Settings.System.ENABLE_FAST_POWERON, 1) == 1;
+        if (mEnableFastPowerOn) {
+            // add: fastboot
+            mItems.add(
+                new SinglePressAction(
+                        com.android.internal.R.drawable.ic_lock_power_off,
+                        R.string.global_action_power_off) {
 
-        // first: power off
-        mItems.add(
-            new SinglePressAction(
-                    com.android.internal.R.drawable.ic_lock_power_off,
-                    R.string.global_action_power_off) {
+                    public void onPress() {
+                        startFastBoot();
+                    }
 
-                public void onPress() {
-                    // shutdown by making sure radio and power are handled accordingly.
-                    mWindowManagerFuncs.shutdown(true);
-                }
+                    public boolean onLongPress() {
+                        mWindowManagerFuncs.shutdown(true);
+                        return true;
+                    }
 
-                public boolean showDuringKeyguard() {
-                    return true;
-                }
 
-                public boolean showBeforeProvisioning() {
-                    return true;
-                }
-            });
+                    public boolean showDuringKeyguard() {
+                        return true;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return true;
+                    }
+                });
+        } else {
+            // first: power off
+            mItems.add(
+                new SinglePressAction(
+                        com.android.internal.R.drawable.ic_lock_power_off,
+                        R.string.global_action_power_off) {
+
+                    public void onPress() {
+                        // shutdown by making sure radio and power are handled
+                        // accordingly.
+                        mWindowManagerFuncs.shutdown(true);
+                    }
+
+                    public boolean showDuringKeyguard() {
+                        return true;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return true;
+                    }
+                });
+        }
 
         // next: reboot
         // only shown if enabled, enabled by default
@@ -1254,6 +1287,19 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 mContext.getContentResolver(),
                 Settings.System.EXPANDED_DESKTOP_STATE,
                 on ? 1 : 0, UserHandle.USER_CURRENT);
+    }
+
+    /**
+     * Start Fast Boot
+     */
+    private void startFastBoot() {
+        synchronized (this) {
+            mAudioManager.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            Intent intent = new Intent(Intent.ACTION_FAST_BOOT_START);
+            intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+            intent.putExtra("state", true);
+            mContext.sendBroadcast(intent);
+        }
     }
 
     private static final class GlobalActionsDialog extends Dialog implements DialogInterface {
