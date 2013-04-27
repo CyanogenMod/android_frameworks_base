@@ -2512,9 +2512,9 @@ ResourceTable::addLocalization(const String16& name, const String8& locale)
  * Flag various sorts of localization problems.  '+' indicates checks already implemented;
  * '-' indicates checks that will be implemented in the future.
  *
- * + A localized string for which no default-locale version exists => warning
- * + A string for which no version in an explicitly-requested locale exists => warning
- * + A localized translation of an translateable="false" string => warning
+ * + A localized string for which no default-locale version exists => error
+ * + A string for which no version in an explicitly-requested locale exists => error
+ * + A localized translation of an translateable="false" string => error
  * - A localized string not provided in every locale used by the table
  */
 status_t
@@ -2531,15 +2531,17 @@ ResourceTable::validateLocalizations(void)
 
         // Look for strings with no default localization
         if (configSet.count(defaultLocale) == 0) {
-            fprintf(stdout, "aapt: warning: string '%s' has no default translation in %s; found:",
+            fprintf(stderr, "aapt: error: string '%s' has no default translation in %s; found:",
                     String8(nameIter->first).string(), mBundle->getResourceSourceDirs()[0]);
+            err = BAD_VALUE;
             for (set<String8>::const_iterator locales = configSet.begin();
                  locales != configSet.end();
                  locales++) {
-                fprintf(stdout, " %s", (*locales).string());
+                fprintf(stderr, " %s", (*locales).string());
+                err = BAD_VALUE;
             }
-            fprintf(stdout, "\n");
-            // !!! TODO: throw an error here in some circumstances
+            fprintf(stderr, "\n");
+            err = BAD_VALUE;
         }
 
         // Check that all requested localizations are present for this string
@@ -2568,12 +2570,13 @@ ResourceTable::validateLocalizations(void)
                         String8 region(config.string(), 2);
                         if (configSet.find(region) == configSet.end()) {
                             if (configSet.count(defaultLocale) == 0) {
-                                fprintf(stdout, "aapt: warning: "
+                                fprintf(stderr, "aapt: error: "
                                         "**** string '%s' has no default or required localization "
                                         "for '%s' in %s\n",
                                         String8(nameIter->first).string(),
                                         config.string(),
                                         mBundle->getResourceSourceDirs()[0]);
+                                err = BAD_VALUE;
                             }
                         }
                     }
