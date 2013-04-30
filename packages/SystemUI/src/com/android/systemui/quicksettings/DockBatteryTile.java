@@ -16,7 +16,7 @@ import com.android.systemui.statusbar.policy.DockBatteryController;
 import com.android.systemui.statusbar.policy.DockBatteryController.DockBatteryStateChangeCallback;
 
 public class DockBatteryTile extends QuickSettingsTile implements DockBatteryStateChangeCallback {
-
+    private DockBatteryController mController;
     private boolean mPresent = false;
     private boolean mCharging = false;
     private int mDockBatteryLevel = 0;
@@ -25,8 +25,10 @@ public class DockBatteryTile extends QuickSettingsTile implements DockBatterySta
     private LevelListDrawable mDockBatteryLevels;
     private LevelListDrawable mChargingDockBatteryLevels;
 
-    public DockBatteryTile(Context context, QuickSettingsController qsc) {
+    public DockBatteryTile(Context context, QuickSettingsController qsc, DockBatteryController controller) {
         super(context, qsc, R.layout.quick_settings_tile_dock_battery);
+
+        mController = controller;
 
         mOnClick = new View.OnClickListener() {
             @Override
@@ -39,9 +41,14 @@ public class DockBatteryTile extends QuickSettingsTile implements DockBatterySta
     @Override
     void onPostCreate() {
         updateTile();
-        DockBatteryController controller = new DockBatteryController(mContext);
-        controller.addStateChangedCallback(this);
+        mController.addStateChangedCallback(this);
         super.onPostCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        mController.removeStateChangedCallback(this);
+        super.onDestroy();
     }
 
     @Override

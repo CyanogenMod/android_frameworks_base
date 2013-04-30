@@ -164,15 +164,15 @@ public class QuickSettingsController {
             if (tile.equals(TILE_USER)) {
                 qs = new UserTile(mContext, this);
             } else if (tile.equals(TILE_BATTERY)) {
-                qs = new BatteryTile(mContext, this);
+                qs = new BatteryTile(mContext, this, mStatusBarService.mBatteryController);
             } else if (tile.equals(TILE_SETTINGS)) {
                 qs = new PreferencesTile(mContext, this);
             } else if (tile.equals(TILE_WIFI)) {
-                qs = new WiFiTile(mContext, this);
+                qs = new WiFiTile(mContext, this, mStatusBarService.mNetworkController);
             } else if (tile.equals(TILE_GPS)) {
                 qs = new GPSTile(mContext, this);
             } else if (tile.equals(TILE_BLUETOOTH) && bluetoothSupported) {
-                qs = new BluetoothTile(mContext, this);
+                qs = new BluetoothTile(mContext, this, mStatusBarService.mBluetoothController);
             } else if (tile.equals(TILE_BRIGHTNESS)) {
                 qs = new BrightnessTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_RINGER)) {
@@ -184,15 +184,15 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_SCREENTIMEOUT)) {
                 qs = new ScreenTimeoutTile(mContext, this);
             } else if (tile.equals(TILE_MOBILEDATA) && mobileDataSupported) {
-                qs = new MobileNetworkTile(mContext, this);
+                qs = new MobileNetworkTile(mContext, this, mStatusBarService.mNetworkController);
             } else if (tile.equals(TILE_LOCKSCREEN)) {
                 qs = new ToggleLockscreenTile(mContext, this);
             } else if (tile.equals(TILE_NETWORKMODE) && mobileDataSupported) {
-                qs = new MobileNetworkTypeTile(mContext, this);
+                qs = new MobileNetworkTypeTile(mContext, this, mStatusBarService.mNetworkController);
             } else if (tile.equals(TILE_AUTOROTATE)) {
                 qs = new AutoRotateTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_AIRPLANE)) {
-                qs = new AirplaneModeTile(mContext, this);
+                qs = new AirplaneModeTile(mContext, this, mStatusBarService.mNetworkController);
             } else if (tile.equals(TILE_TORCH)) {
                 qs = new TorchTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_SLEEP)) {
@@ -251,20 +251,25 @@ public class QuickSettingsController {
         }
     }
 
-    protected void setupQuickSettings() {
-        mQuickSettingsTiles.clear();
-        mContainerView.removeAllViews();
-        // Clear out old receiver
+
+    public void shutdown() {
+        if (mObserver != null) {
+            mContext.getContentResolver().unregisterContentObserver(mObserver);
+        }
         if (mReceiver != null) {
             mContext.unregisterReceiver(mReceiver);
         }
+        for (QuickSettingsTile qs : mQuickSettingsTiles) {
+            qs.onDestroy();
+        }
+        mQuickSettingsTiles.clear();
+        mContainerView.removeAllViews();
+    }
+
+    protected void setupQuickSettings() {
+        shutdown();
         mReceiver = new QSBroadcastReceiver();
         mReceiverMap.clear();
-        ContentResolver resolver = mContext.getContentResolver();
-        // Clear out old observer
-        if (mObserver != null) {
-            resolver.unregisterContentObserver(mObserver);
-        }
         mObserver = new QuickSettingsObserver(mHandler);
         mObserverMap.clear();
         loadTiles();
