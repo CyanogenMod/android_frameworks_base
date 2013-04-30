@@ -16,6 +16,7 @@ import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallback;
 
 public class BatteryTile extends QuickSettingsTile implements BatteryStateChangeCallback{
+    private BatteryController mController;
 
     private boolean charging = false;
     private int batteryLevel = 0;
@@ -24,8 +25,10 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     private LevelListDrawable batteryLevels;
     private LevelListDrawable chargingBatteryLevels;
 
-    public BatteryTile(Context context, QuickSettingsController qsc) {
+    public BatteryTile(Context context, QuickSettingsController qsc, BatteryController controller) {
         super(context, qsc, R.layout.quick_settings_tile_battery);
+
+        mController = controller;
 
         mOnClick = new View.OnClickListener() {
             @Override
@@ -38,9 +41,14 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     @Override
     void onPostCreate() {
         updateTile();
-        BatteryController controller = new BatteryController(mContext, false);
-        controller.addStateChangedCallback(this);
+        mController.addStateChangedCallback(this);
         super.onPostCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        mController.removeStateChangedCallback(this);
+        super.onDestroy();
     }
 
     @Override

@@ -38,14 +38,16 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
     private static final int CM_MODE_3GONLY = 1;
     private static final int CM_MODE_BOTH = 2;
 
+    private NetworkController mController;
     private int mMode = NO_NETWORK_MODE_YET;
     private int mIntendedMode = NO_NETWORK_MODE_YET;
     private int mInternalState = STATE_INTERMEDIATE;
     private int mState;
 
-    public MobileNetworkTypeTile(Context context,
-            QuickSettingsController qsc) {
+    public MobileNetworkTypeTile(Context context, QuickSettingsController qsc, NetworkController controller) {
         super(context, qsc);
+
+        mController = controller;
 
         mOnClick = new OnClickListener() {
             @Override
@@ -118,10 +120,15 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
 
     @Override
     void onPostCreate() {
-        NetworkController controller = new NetworkController(mContext);
-        controller.addNetworkSignalChangedCallback(this);
+        mController.addNetworkSignalChangedCallback(this);
         updateTile();
         super.onPostCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        mController.removeNetworkSignalChangedCallback(this);
+        super.onDestroy();
     }
 
     @Override

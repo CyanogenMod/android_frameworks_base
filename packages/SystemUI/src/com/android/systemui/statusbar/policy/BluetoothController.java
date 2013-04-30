@@ -73,6 +73,10 @@ public class BluetoothController extends BroadcastReceiver {
         mChangeCallbacks.add(cb);
     }
 
+    public void removeStateChangedCallback(BluetoothStateChangeCallback cb) {
+        mChangeCallbacks.remove(cb);
+    }
+
     public Set<BluetoothDevice> getBondedBluetoothDevices() {
         return mBondedDevices;
     }
