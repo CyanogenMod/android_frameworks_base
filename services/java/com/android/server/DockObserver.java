@@ -16,9 +16,12 @@
 
 package com.android.server;
 
+import android.content.BroadcastReceiver;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -33,6 +36,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.util.Slog;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
@@ -52,6 +56,8 @@ final class DockObserver extends UEventObserver {
     private int mDockState = Intent.EXTRA_DOCK_STATE_UNDOCKED;
     private int mPreviousDockState = Intent.EXTRA_DOCK_STATE_UNDOCKED;
 
+    private boolean dockAudioEnabled = false;
+
     private boolean mSystemReady;
 
     private final Context mContext;
@@ -64,8 +70,35 @@ final class DockObserver extends UEventObserver {
         mPowerManager = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
         mWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 
+        File f = new File("/sys/class/switch/dock/state");
+        if (f!=null && f.exists()) {
+            // Listen out for changes to the Dock Audio Settings changes for Samsung Docks
+            context.registerReceiver(new SettingsChangedReceiver(),
+            new IntentFilter("com.cyanogenmod.settings.SamsungDock"), null, null);
+        }
         init();  // set initial status
         startObserving(DOCK_UEVENT_MATCH);
+    }
+
+    /* 
+     * Listen for the setting change that allows audio via USB for a Samsung dock
+     * and if detected, change the dockAudioEnabled flag
+     */
+    private final class SettingsChangedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            Slog.e(TAG, "Recieved a Settings Changed Action " + action);
+            if (action.equals("com.cyanogenmod.settings.SamsungDock")) {
+                String data = intent.getStringExtra("data");
+                Slog.e(TAG, "DockObserver - Recieved a Dock Audio change " + data);
+                if (data != null && data.equals("1")) {
+                    dockAudioEnabled = true;
+                } else {
+                    dockAudioEnabled = false;
+                }
+            }
+        }
     }
 
     @Override
@@ -73,26 +106,36 @@ final class DockObserver extends UEventObserver {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Slog.v(TAG, "Dock UEVENT: " + event.toString());
         }
-
-        synchronized (mLock) {
+        
+            synchronized (mLock) {
             try {
-                int newState = Integer.parseInt(event.get("SWITCH_STATE"));
-                if (newState != mDockState) {
-                    mPreviousDockState = mDockState;
-                    mDockState = newState;
-                    if (mSystemReady) {
-                        // Wake up immediately when docked or undocked.
-                        mPowerManager.wakeUp(SystemClock.uptimeMillis());
+            	int newState = Integer.parseInt(event.get("SWITCH_STATE"));
+            	if  (newState != mDockState) {
+            		mPreviousDockState = mDockState;
+            		/* 
+            		 * If the dock is a Samsung dock and it identifies itself as a car dock then change it to be
+            		 * identifed as a EXTRA_DOCK_STATE_LE_DESK, which will allow USB Audio for analogue docks
+            		 */
+            		if ((dockAudioEnabled == true) && (newState == Intent.EXTRA_DOCK_STATE_CAR)) {
+            			mDockState = Intent.EXTRA_DOCK_STATE_LE_DESK;
+            			Slog.i(TAG, "Dock state " + newState + " detected. Changing to " + mDockState);
+            		}
+            		else {                  
+            			mDockState = newState;
+            		}
 
-                        updateLocked();
-                    }
-                }
+            		if (mSystemReady) {
+            			// Wake up immediately when docked or undocked.
+            			mPowerManager.wakeUp(SystemClock.uptimeMillis());
+            			updateLocked();
+            		}
+            	}
             } catch (NumberFormatException e) {
                 Slog.e(TAG, "Could not parse switch state from event " + event);
             }
         }
     }
-
+  
     private void init() {
         synchronized (mLock) {
             try {
@@ -130,7 +173,7 @@ final class DockObserver extends UEventObserver {
 
     private void handleDockStateChange() {
         synchronized (mLock) {
-            Slog.i(TAG, "Dock state changed: " + mDockState);
+        	Slog.i(TAG, "Dock state changed: " + mDockState);
 
             // Skip the dock intent if not yet provisioned.
             final ContentResolver cr = mContext.getContentResolver();
@@ -139,7 +182,6 @@ final class DockObserver extends UEventObserver {
                 Slog.i(TAG, "Device not provisioned, skipping dock broadcast");
                 return;
             }
-
             // Pack up the values and broadcast them to everyone
             Intent intent = new Intent(Intent.ACTION_DOCK_EVENT);
             intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
@@ -203,4 +245,5 @@ final class DockObserver extends UEventObserver {
             }
         }
     };
-}
+};
+
