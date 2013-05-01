@@ -16,9 +16,11 @@
 
 package com.android.server;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -32,7 +34,9 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Slog;
+import android.text.TextUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
@@ -52,6 +56,8 @@ final class DockObserver extends UEventObserver {
     private int mDockState = Intent.EXTRA_DOCK_STATE_UNDOCKED;
     private int mPreviousDockState = Intent.EXTRA_DOCK_STATE_UNDOCKED;
 
+    private boolean mDockAudioEnabled = false;
+
     private boolean mSystemReady;
 
     private final Context mContext;
@@ -64,8 +70,30 @@ final class DockObserver extends UEventObserver {
         mPowerManager = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
         mWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 
+        if (new File(DOCK_STATE_PATH).exists()) {
+            // Listen out for changes to the Dock Audio Settings changes for Samsung Docks
+            context.registerReceiver(new settingsChangedReceiver(),
+                    new IntentFilter("com.cyanogenmod.settings.SamsungDock"), null, null);
+        }
         init();  // set initial status
         startObserving(DOCK_UEVENT_MATCH);
+    }
+
+    /*
+    * Listen for the setting change that allows audio via USB for a Samsung dock
+    * and if detected, change the mDockAudioEnabled flag
+    */
+    private final class settingsChangedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            Slog.e(TAG, "Recieved a Settings Changed Action " + action);
+            if (action.equals("com.cyanogenmod.settings.SamsungDock")) {
+                String data = intent.getStringExtra("data");
+                Slog.e(TAG, "DockObserver - Recieved a Dock Audio change " + data);
+                mDockAudioEnabled = TextUtils.equals(data, "1");
+            }
+        }
     }
 
     @Override
@@ -79,7 +107,17 @@ final class DockObserver extends UEventObserver {
                 int newState = Integer.parseInt(event.get("SWITCH_STATE"));
                 if (newState != mDockState) {
                     mPreviousDockState = mDockState;
-                    mDockState = newState;
+                    /*
+                    * If the dock is a Samsung dock and it identifies itself as a car dock then change it to be
+                    * identifed as a EXTRA_DOCK_STATE_LE_DESK, which will allow USB Audio for analogue docks
+                    */
+                    if (mDockAudioEnabled && newState == Intent.EXTRA_DOCK_STATE_CAR) {
+                        mDockState = Intent.EXTRA_DOCK_STATE_LE_DESK;
+                        Slog.i(TAG, "Dock state " + newState + " detected. Changing to " + mDockState);
+                    }
+                    else {
+                        mDockState = newState;
+                    }
                     if (mSystemReady) {
                         // Wake up immediately when docked or undocked.
                         mPowerManager.wakeUp(SystemClock.uptimeMillis());
