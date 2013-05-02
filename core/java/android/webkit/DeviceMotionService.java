@@ -103,7 +103,9 @@ final class DeviceMotionService implements SensorEventListener {
                 mManager.onMotionChange(new Double(mLastAcceleration[0]),
                         new Double(mLastAcceleration[1]), new Double(mLastAcceleration[2]),
                         INTERVAL_MILLIS);
-                mHandler.postDelayed(mUpdateRunnable, INTERVAL_MILLIS);
+                if (mIsRunning) {
+                    mHandler.postDelayed(mUpdateRunnable, INTERVAL_MILLIS);
+                }
                 // Now that we have successfully sent some data, reset whether we've sent an error.
                 mHaveSentErrorEvent = false;
             }
