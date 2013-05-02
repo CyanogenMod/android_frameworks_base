@@ -662,6 +662,10 @@
          we rely on gravity to determine the effective orientation. -->
     <bool name="config_deskDockEnablesAccelerometer">true</bool>
 
+    <!-- Control whether a desk dock event should override the default bluetooth
+         audio routing, FORCE_BT_DESK_DOCK, with an analog dock, FORCE_ANALOG_DOCK. -->
+    <bool name="config_forceAnalogDeskDock">false</bool>
+
     <!-- Car dock behavior -->
 
     <!-- The number of degrees to rotate the display when the device is in a car dock.
@@ -679,6 +683,10 @@
          a car dock make the accelerometer more a physical input (like a lid). -->
 
     <bool name="config_carDockEnablesAccelerometer">true</bool>
+
+    <!-- Control whether a car dock event should override the default bluetooth
+         audio routing, FORCE_BT_CAR_DOCK, with an analog dock, FORCE_ANALOG_DOCK. -->
+    <bool name="config_forceAnalogCarDock">false</bool>
 
     <!-- HDMI behavior -->
 

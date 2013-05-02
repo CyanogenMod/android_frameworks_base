@@ -108,4 +108,9 @@
 
     <!-- Region locked prebundled packages -->
     <java-symbol type="array" name="config_region_locked_packages" />
+
+    <!-- Support Samsung docks -->
+    <java-symbol type="bool" name="config_forceAnalogCarDock" />
+    <java-symbol type="bool" name="config_forceAnalogDeskDock" />
+
 </resources>
