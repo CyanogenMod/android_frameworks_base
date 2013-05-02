@@ -77,6 +77,7 @@ interface ILocationManager
     void setTestProviderStatus(String provider, int status, in Bundle extras, long updateTime);
     void clearTestProviderStatus(String provider);
 
+
     boolean sendExtraCommand(String provider, String command, inout Bundle extras);
 
     // --- internal ---
@@ -89,5 +90,6 @@ interface ILocationManager
     // for reporting callback completion
     void locationCallbackFinished(ILocationListener listener);
 
-
+    // add set gps source
+    void setGPSSource(String device);
 }
