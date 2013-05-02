@@ -3870,12 +3870,19 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 int dockState = intent.getIntExtra(Intent.EXTRA_DOCK_STATE,
                         Intent.EXTRA_DOCK_STATE_UNDOCKED);
                 int config;
+                boolean mForceAnalogDeskDock;
+                boolean mForceAnalogCarDock;
+
                 switch (dockState) {
                     case Intent.EXTRA_DOCK_STATE_DESK:
-                        config = AudioSystem.FORCE_BT_DESK_DOCK;
+                        mForceAnalogDeskDock = mContext.getResources().getBoolean(
+                                com.android.internal.R.bool.config_forceAnalogDeskDock);
+                        config = mForceAnalogDeskDock ? AudioSystem.FORCE_ANALOG_DOCK : AudioSystem.FORCE_BT_DESK_DOCK;
                         break;
                     case Intent.EXTRA_DOCK_STATE_CAR:
-                        config = AudioSystem.FORCE_BT_CAR_DOCK;
+                        mForceAnalogCarDock = mContext.getResources().getBoolean(
+                                com.android.internal.R.bool.config_forceAnalogCarDock);
+                        config = mForceAnalogCarDock ? AudioSystem.FORCE_ANALOG_DOCK : AudioSystem.FORCE_BT_CAR_DOCK;
                         break;
                     case Intent.EXTRA_DOCK_STATE_LE_DESK:
                         config = AudioSystem.FORCE_ANALOG_DOCK;
