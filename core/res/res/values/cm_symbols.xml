@@ -375,4 +375,9 @@
 
     <!-- Show WiFi activity indicators on signal bar -->
     <java-symbol type="bool" name="config_showWifiActivityIndicators" />
+
+    <!-- Support Samsung docks -->
+    <java-symbol type="bool" name="config_forceAnalogCarDock" />
+    <java-symbol type="bool" name="config_forceAnalogDeskDock" />
+
 </resources>
