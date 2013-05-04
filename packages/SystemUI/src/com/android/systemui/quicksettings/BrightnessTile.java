@@ -115,6 +115,9 @@ public class BrightnessTile extends QuickSettingsTile implements BrightnessState
     @Override
     public void updateResources() {
         updateTile();
+        // Dismiss dialog before nullifying it.
+        mDismissBrightnessDialogRunnable.run();
+        mBrightnessDialog = null;
         super.updateResources();
     }
 
