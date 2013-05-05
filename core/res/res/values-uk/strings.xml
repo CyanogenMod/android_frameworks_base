@@ -1456,27 +1456,4 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Доступність скасовано."</string>
     <string name="user_switched" msgid="3768006783166984410">"Поточний користувач: <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Власник"</string>
-
-    <!-- CYANOGENMOD ADDITIONS -->
-
-    <string name="reboot_system" product="tablet">Перезавантаження планшету</string>
-    <string name="reboot_system" product="default">Перезавантаження телефону</string>
-    <string name="global_action_screenshot">Скріншот</string>
-    <string name="global_actions_toggle_expanded_desktop_mode">Розширений екран</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">Увімкнено</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">Вимкнено</string>
-    <string name="reboot_reboot">Перезавантаження</string>
-    <string name="reboot_progress">Перезавантаження\u2026</string>
-    <string name="reboot_confirm">Ваш телефон буде перезавантажено</string>
-    <string name="global_action_reboot">Перезавантаження</string>
-    <string name="global_action_choose_profile">Вибрати профіль</string>
-    <string name="app_killed_message">Програма закрита</string>
-    <string name="profileNameDefault">Стандартний</string>
-    <string name="profileNameWork">Робота</string>
-    <string name="profileNameHome">Дім</string>
-    <string name="profileNameSilent">Беззвучний</string>
-    <string name="profileNameNight">Ніч</string>
-    <string name="profileGroupPhone">Телефон</string>
-    <string name="profileGroupCalendar">Календар</string>
-    <string name="wildcardProfile">Інший</string>
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright (C) 2009 The Android Open Source Project
-     Copyright (C) 2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -199,79 +198,8 @@
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"WLAN aus"</string>
     <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"WLAN-Display"</string>
     <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Kabellose Übertragung"</string>
-    <!-- QuickSettings: Profile [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_profile_label">Profile</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Helligkeit"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTO"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"Benachrichtigungen erscheinen hier"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"Greifen Sie jederzeit auf sie zu, indem Sie nach unten wischen."\n"Wischen Sie für Systemeinstellungen erneut nach unten."</string>
-
-    <!-- **** CYANOGENMOD ADDITIONS START **** -->
-
-    <!-- Screen timeout toast -->
-    <string name="powerwidget_screen_timeout_toast">Bildschirmsperre nach: %1$d %2$s</string>
-
-    <!-- Quick settings -->
-    <string name="quick_settings_gps">GPS</string>
-    <string name="quick_settings_gps_off">GPS aus</string>
-    <string name="quick_settings_screen_sleep">Standby</string>
-    <string name="quick_settings_ringer_on">Klingelton an</string>
-    <string name="quick_settings_ringer_off">Klingelton aus</string>
-    <string name="quick_settings_vibration_on">Vibration an</string>
-    <string name="quick_settings_vibration_off">Vibration aus</string>
-    <string name="quick_settings_label_enabled">An</string>
-    <string name="quick_settings_label_disabled">Aus</string>
-    <string name="quick_settings_ringer_normal">Klingelmodus</string>
-    <string name="quick_settings_lockscreen">Sperren</string>
-    <string name="quick_settings_network_type">Netzmodus</string>
-    <string name="quick_settings_report_bug">Fehlerprotokollierung</string>
-    <string name="quick_settings_sync">Sync</string>
-    <string name="quick_settings_sync_off">Sync aus</string>
-    <string name="quick_settings_torch">Lampe</string>
-    <string name="quick_settings_torch_off">Lampe aus</string>
-    <string name="quick_settings_nfc">NFC</string>
-    <string name="quick_settings_nfc_off">NFC aus</string>
-    <string name="quick_settings_screen_timeout">Timeout</string>
-    <string name="quick_settings_usb_tether_off_label">Getrennt</string>
-    <string name="quick_settings_usb_tether_connected_label">Tethering aus</string>
-    <string name="quick_settings_usb_tether_on_label">Tethering</string>
-    <string name="quick_settings_wifiap">Hotspot</string>
-    <string name="quick_settings_wifiap_off">Hotspot aus</string>
-    <string name="quick_settings_expanded_desktop">Erweitert</string>
-    <string name="quick_settings_expanded_desktop_off">Normal</string>
-    <string name="quick_settings_quiethours">Ruhezeit</string>
-    <string name="quick_settings_quiethours_off">Ruhezeit aus</string>
-    <string name="quick_settings_lte">LTE</string>
-    <string name="quick_settings_lte_off">LTE aus</string>
-    <string name="quick_settings_volume">Lautstärke</string>
-
-    <string name="accessibility_quick_settings_ringer">Klingelton <xliff:g id="state">%s</xliff:g>.</string>
-    <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state">%s</xliff:g>.</string>
-
-    <!-- Dialog title for navigation bar button selection -->
-    <string name="navbar_dialog_title">Funktion zuweisen</string>
-    <string name="navbar_home_button">Home</string>
-    <string name="navbar_recent_button">Zuletzt verwendet</string>
-    <string name="navbar_search_button">Suche</string>
-    <string name="navbar_back_button">Zurück</string>
-    <string name="navbar_empty_button">Nicht belegt</string>
-    <string name="navbar_menu_conditional_button">Menü (automatisch ausblenden)</string>
-    <string name="navbar_menu_always_button">Menü (immer sichtbar)</string>
-    <string name="navbar_menu_big_button">Menü</string>
-
-    <!-- BeanFlinger daydream -->
-    <string name="bean_dream_settings_cid_title">Cid\'s Kopf verwenden</string>
-    <string name="bean_dream_settings_cid_summary">Den Kopf des CyanogenMod-Maskottchens anstelle der \"Jellybeans\" im Daydream verwenden</string>
-
-    <!-- Battery status in pie controls -->
-    <string name="pie_battery_status_charging">Lädt (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Aufgeladen</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% verbleibend</string>
-
-    <!-- Phone status in pie controls -->
-    <string name="pie_phone_status_no_service">Kein Dienst</string>
-    <string name="pie_phone_status_airplane_mode">Flugmodus</string>
-    <string name="pie_phone_status_emergency_only">Nur Notrufe</string>
-
-    <!-- **** CYANOGENMOD ADDITIONS END **** -->
 </resources>
