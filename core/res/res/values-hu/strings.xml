@@ -1456,5 +1456,4 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Hozzáférés megszakítva."</string>
     <string name="user_switched" msgid="3768006783166984410">"<xliff:g id="NAME">%1$s</xliff:g> az aktuális felhasználó."</string>
     <string name="owner_name" msgid="2716755460376028154">"Tulajdonos"</string>
-
 </resources>

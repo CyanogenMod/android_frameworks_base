@@ -13,57 +13,39 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
     <string name="profileNameDefault">Výchozí</string>
     <string name="profileNameWork">Práce</string>
     <string name="profileNameHome">Doma</string>
     <string name="profileNameSilent">Tichý</string>
     <string name="profileNameNight">Noc</string>
-
     <string name="profileGroupPhone">Telefon</string>
     <string name="profileGroupCalendar">Kalendář</string>
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">E-mail</string>
     <string name="profileGroupSMS">SMS</string>
-
     <string name="wildcardProfile">Ostatní</string>
-
     <string name="reboot_system" product="tablet">Restartovat tablet</string>
     <string name="reboot_system" product="default">Restartovat telefon</string>
-
     <string name="global_action_screenshot">Snímek obrazovky</string>
-
     <string name="global_actions_toggle_expanded_desktop_mode">Rozšířená plocha</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Zapnuto</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Vypnuto</string>
-
     <string name="reboot_progress">Restart\u2026</string>
     <string name="reboot_confirm" product="tablet">Tablet bude restartován.</string>
     <string name="reboot_confirm" product="default">Telefon bude restartován.</string>
-
     <string name="permlab_preventpower">zachovat tlačítko vypínání</string>
     <string name="permdesc_preventpower">Umožní změnit chování tlačítka pro zapínání a vypínání</string>
-
     <string name="permlab_fm_radio_receiver">ovládání přijímače FM</string>
     <string name="permdesc_fm_radio_receiver">Umožňuje ovládat přijímač FM (analogové rádio).</string>
-
     <string name="permlab_fm_radio_transmitter">ovládání vysílače FM</string>
     <string name="permdesc_fm_radio_transmitter">Umožňuje ovládat vysílač FM (analogové rádio).</string>
-
     <string name="lockscreen_discharging">Vybíjení - <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-
     <string name="storage_sd_dock_card">SD karta doku</string>
-
     <string name="app_killed_message">Aplikace ukončena</string>
-
     <string name="global_action_reboot">Restartovat</string>
-
     <string name="global_action_choose_profile">Profil</string>
-
     <string name="toast_rotation_unlocked">Otáčení zobrazení povoleno</string>
     <string name="toast_rotation_locked">Otáčení zobrazení zakázáno</string>
-
     <string name="stylus_app_not_installed">Aplikace %s není nainstalována</string>
 </resources>

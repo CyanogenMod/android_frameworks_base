@@ -13,17 +13,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="accessibility_quick_settings_ringer">声音：<xliff:g id="state" example="Off">%s</xliff:g>。</string>
     <string name="accessibility_quick_settings_vibration">震动：<xliff:g id="state" example="Off">%s</xliff:g>。</string>
-
     <string name="powerwidget_screen_timeout_toast">屏幕超时设为: %1$d %2$s</string>
-
     <string name="bean_dream_settings_cid_title">使用 Cid 的头像</string>
     <string name="bean_dream_settings_cid_summary">在大乱舞内使用 Cid 的头像替代果冻豆</string>
-
     <string name="quick_settings_profile_label">情景模式</string>
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS 已关闭</string>
@@ -57,7 +53,6 @@
     <string name="quick_settings_volume">音量</string>
     <string name="quick_settings_expanded_desktop">已扩展</string>
     <string name="quick_settings_expanded_desktop_off">正常</string>
-
     <string name="navbar_dialog_title">选择指定的行为</string>
     <string name="navbar_home_button">Home 键</string>
     <string name="navbar_recent_button">最近应用键</string>
@@ -67,14 +62,10 @@
     <string name="navbar_menu_conditional_button">菜单键 (自动隐藏)</string>
     <string name="navbar_menu_always_button">菜单键 (总是显示)</string>
     <string name="navbar_menu_big_button">菜单键</string>
-
-
     <string name="pie_battery_status_charging">正在充电 (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">已充满</string>
     <string name="pie_battery_status_discharging">剩余 <xliff:g id="percent">%d</xliff:g>%%</string>
-
     <string name="pie_phone_status_no_service">无服务</string>
     <string name="pie_phone_status_airplane_mode">正处于飞行模式</string>
     <string name="pie_phone_status_emergency_only">只能拨打紧急呼叫电话</string>
 </resources>
-

@@ -13,19 +13,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
     <string name="accessibility_quick_settings_ringer">Zvuk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibrace <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-
     <string name="bean_dream_settings_cid_title">Použít hlavu CIDa</string>
     <string name="bean_dream_settings_cid_summary">Použít hlavu CIDa místo sladkých želé fazolí</string>
-
     <string name="quick_settings_profile_label">Profil</string>
-
     <string name="powerwidget_screen_timeout_toast">Vypnutí obrazovky nastaveno na: %1$d %2$s</string>
-
     <string name="quick_settings_gps_off">GPS vyp.</string>
     <string name="quick_settings_screen_sleep">Uspat</string>
     <string name="quick_settings_ringer_on">Zvuk zap.</string>
@@ -53,10 +47,8 @@
     <string name="quick_settings_quiethours_off">Čas klidu vyp.</string>
     <string name="quick_settings_lte_off">LTE vyp.</string>
     <string name="quick_settings_volume">Hlasitost</string>
-
     <string name="quick_settings_expanded_desktop">Rozšířený</string>
     <string name="quick_settings_expanded_desktop_off">Normální</string>
-
     <string name="navbar_dialog_title">Vybrat akci k přiřazení</string>
     <string name="navbar_home_button">Tlačítko Domů</string>
     <string name="navbar_recent_button">Tlačítko Nedávné</string>
@@ -66,11 +58,9 @@
     <string name="navbar_menu_conditional_button">Tlačítko (skrývat) Nabídka</string>
     <string name="navbar_menu_always_button">Tlačítko (vždy zobrazit) Nabídka</string>
     <string name="navbar_menu_big_button">Tlačítko Nabídka</string>
-
     <string name="pie_battery_status_charging">Nabíjení (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">Nabito</string>
     <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% zbývá</string>
-
     <string name="pie_phone_status_no_service">Žádné připojení</string>
     <string name="pie_phone_status_airplane_mode">Režim V letadle aktivovaný</string>
     <string name="pie_phone_status_emergency_only">Pouze tísňová volání</string>
