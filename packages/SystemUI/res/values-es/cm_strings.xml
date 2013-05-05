@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Usar a Cid</string>
+    <string name="bean_dream_settings_cid_summary">Emplear el icono Cid como salvapantallas en lugar del icono Jellybean</string>
+    <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
+    <string name="quick_settings_expanded_desktop">Extendido</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS</string>
+    <string name="quick_settings_label_enabled">Activado</string>
+    <string name="quick_settings_label_disabled">Desactivado</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE</string>
+    <string name="quick_settings_lockscreen">Bloqueo</string>
+    <string name="quick_settings_network_type">Red móvil</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC</string>
+    <string name="quick_settings_profile_label">Perfil</string>
+    <string name="quick_settings_quiethours">Modo tranq.</string>
+    <string name="quick_settings_quiethours_off">Modo tranq.</string>
+    <string name="quick_settings_report_bug">Notificar error</string>
+    <string name="quick_settings_ringer_normal">Sonido</string>
+    <string name="quick_settings_ringer_on">Sonido</string>
+    <string name="quick_settings_ringer_off">Silencio</string>
+    <string name="quick_settings_screen_sleep">Bloquear</string>
+    <string name="quick_settings_screen_timeout">Tiempo espera</string>
+    <string name="quick_settings_sync">Sincronizar</string>
+    <string name="quick_settings_sync_off">Sincronizar</string>
+    <string name="quick_settings_torch">Linterna</string>
+    <string name="quick_settings_torch_off">Linterna</string>
+    <string name="quick_settings_usb_tether_off_label">Desconectado</string>
+    <string name="quick_settings_usb_tether_connected_label">Anclaje USB</string>
+    <string name="quick_settings_usb_tether_on_label">Anclaje USB</string>
+    <string name="quick_settings_vibration_on">Vibración</string>
+    <string name="quick_settings_vibration_off">Vibración</string>
+    <string name="quick_settings_volume">Volumen</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP</string>
+    <string name="navbar_dialog_title">Seleccionar botón a mostrar</string>
+    <string name="navbar_home_button">Botón Inicio</string>
+    <string name="navbar_recent_button">Botón Recientes</string>
+    <string name="navbar_search_button">Botón Búsqueda</string>
+    <string name="navbar_back_button">Botón Atrás</string>
+    <string name="navbar_empty_button">Sin botón</string>
+    <string name="navbar_menu_conditional_button">Botón Menú (auto-ocultar)</string>
+    <string name="navbar_menu_always_button">Botón Menú (siempre visible)</string>
+    <string name="navbar_menu_big_button">Botón Menú</string>
+    <string name="pie_battery_status_charging">Cargando (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Cargada</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% restante</string>
+    <string name="pie_phone_status_no_service">Sin servicio</string>
+    <string name="pie_phone_status_airplane_mode">Modo avión</string>
+    <string name="pie_phone_status_emergency_only">Sólo llamadas de emergencia</string>
+</resources>

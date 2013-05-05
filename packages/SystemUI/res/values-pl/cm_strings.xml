@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="powerwidget_screen_timeout_toast">Wygaszanie ekranu po: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS wył.</string>
+    <string name="quick_settings_screen_sleep">Uśpij</string>
+    <string name="quick_settings_ringer_on">Dźwięk wł.</string>
+    <string name="quick_settings_ringer_off">Dźwięk wył.</string>
+    <string name="quick_settings_vibration_on">Wibracje wł.</string>
+    <string name="quick_settings_vibration_off">Wibracje wył.</string>
+    <string name="quick_settings_label_enabled">Wł.</string>
+    <string name="quick_settings_label_disabled">Wył.</string>
+    <string name="quick_settings_ringer_normal">Dźwięk</string>
+    <string name="quick_settings_lockscreen">Ekran blokady</string>
+    <string name="quick_settings_network_type">Tryb sieci</string>
+    <string name="quick_settings_report_bug">Raportuj błąd</string>
+    <string name="quick_settings_sync">Synchronizacja</string>
+    <string name="quick_settings_sync_off">Synchronizacja wył.</string>
+    <string name="quick_settings_torch">Latarka</string>
+    <string name="quick_settings_torch_off">Latarka wył.</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC wył.</string>
+    <string name="quick_settings_screen_timeout">Limit czasu</string>
+    <string name="quick_settings_usb_tether_off_label">Rozłączony</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering wył.</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP wył.</string>
+    <string name="quick_settings_quiethours">Ciche godziny</string>
+    <string name="quick_settings_quiethours_off">Ciche godziny wył.</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE wył.</string>
+    <string name="quick_settings_volume">Głośność</string>
+    <string name="navbar_dialog_title">Wybierz akcję do przypisania</string>
+    <string name="navbar_home_button">Przycisk Home</string>
+    <string name="navbar_recent_button">Przycisk Ostatnie aplikacje</string>
+    <string name="navbar_search_button">Przycisk Szukaj</string>
+    <string name="navbar_back_button">Przycisk Wstecz</string>
+    <string name="navbar_empty_button">Brak przycisku</string>
+    <string name="navbar_menu_conditional_button">Przycisk Menu (autoukrywaj)</string>
+    <string name="navbar_menu_always_button">Przycisk Menu (zawsze pokazuj)</string>
+    <string name="navbar_menu_big_button">Przycisk Menu</string>
+    <string name="pie_battery_status_charging">Ładowanie (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Naładowana</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% pozostało</string>
+    <string name="pie_phone_status_no_service">Brak usługi</string>
+    <string name="pie_phone_status_airplane_mode">Tryb samolotowy aktywny</string>
+    <string name="pie_phone_status_emergency_only">Tylko połączenia alarmowe</string>
+    <string name="quick_settings_expanded_desktop">Rozszerzony</string>
+    <string name="quick_settings_expanded_desktop_off">Normalny</string>
+</resources>

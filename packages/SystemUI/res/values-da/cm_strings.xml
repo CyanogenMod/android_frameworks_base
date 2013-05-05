@@ -13,20 +13,14 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_data_connection_HP">HSPA+</string>
-
     <string name="accessibility_quick_settings_ringer">Lyd <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-
     <string name="bean_dream_settings_cid_title">Brug Cid\'s hoved</string>
     <string name="bean_dream_settings_cid_summary">Brug Cid\'s hoved i stedet for en jellybean inden i drømmen</string>
-
     <string name="quick_settings_profile_label">Profil</string>
-
     <string name="powerwidget_screen_timeout_toast">Skærm-timeout sat til: %1$d %2$s</string>
-
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS fra</string>
     <string name="quick_settings_screen_sleep">Gå i dvale</string>
@@ -57,10 +51,8 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE fra</string>
     <string name="quick_settings_volume">Lydstyrke</string>
-
     <string name="quick_settings_expanded_desktop">Udvidet</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
-
     <string name="navbar_dialog_title">Vælg handling at tildele</string>
     <string name="navbar_home_button">Startknap</string>
     <string name="navbar_recent_button">Seneste-knap</string>
@@ -70,11 +62,9 @@
     <string name="navbar_menu_conditional_button">Menuknap (auto-skjul)</string>
     <string name="navbar_menu_always_button">Menuknap (vis altid)</string>
     <string name="navbar_menu_big_button">Menuknap</string>
-
     <string name="pie_battery_status_charging">Oplader (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">Opladt</string>
     <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% tilbage</string>
-
     <string name="pie_phone_status_no_service">Ingen tjeneste</string>
     <string name="pie_phone_status_airplane_mode">Flytilstand til</string>
     <string name="pie_phone_status_emergency_only">Kun nødopkald</string>

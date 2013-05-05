@@ -44,8 +44,5 @@
     <string name="storage_sd_dock_card">SD-карта док-станции</string>
     <string name="toast_rotation_unlocked">Поворот экрана разблокирован</string>
     <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
-
-    <!-- stylus gestures support -->
     <string name="stylus_app_not_installed">%s не установлено</string>
-
 </resources>

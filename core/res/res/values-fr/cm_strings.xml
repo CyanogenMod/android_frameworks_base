@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="reboot_system" product="tablet">Redémarrage de la tablette</string>
+    <string name="reboot_system" product="default">Redémarrage du téléphone</string>
+    <string name="reboot_reboot">Redémarrer</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_confirm" product="tablet">Votre tablette va redémarrer</string>
+    <string name="reboot_confirm" product="default">Votre téléphone va redémarrer</string>
+    <string name="reboot_progress">Redémarrage en cours\u2026</string>
+    <string name="global_action_reboot">Redémarrer</string>
+    <string name="global_action_screenshot">Capture d\'écran</string>
+    <string name="global_action_choose_profile">Profils</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Bureau étendu</string>
+    <string name="app_killed_message">Application arrêtée</string>
+    <string name="lockscreen_discharging">Déchargement, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="storage_sd_dock_card">Dock carte SD</string>
+    <string name="permlab_preventpower">outrepasser le bouton d\'alimentation</string>
+    <string name="permdesc_preventpower">Autoriser une application à outrepasser le bouton d\'alimentation</string>
+    <string name="permlab_fm_radio_receiver">contrôle du récepteur FM</string>
+    <string name="permdesc_fm_radio_receiver">Permettre à l\'application de contrôler le récepteur FM</string>
+    <string name="permlab_fm_radio_transmitter">contrôle du transmetteur FM</string>
+    <string name="permdesc_fm_radio_transmitter">Permettre à l\'application de contrôler le transmetteur FM</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Activé</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Désactivé</string>
+    <string name="profileNameDefault">Défaut</string>
+    <string name="profileNameWork">Bureau</string>
+    <string name="profileNameHome">Maison</string>
+    <string name="profileNameSilent">Silencieux</string>
+    <string name="profileNameNight">Nuit</string>
+    <string name="profileGroupPhone">Téléphone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Autres</string>
+    <string name="toast_rotation_unlocked">Rotation de l\'écran déverrouillée</string>
+    <string name="toast_rotation_locked">Rotation de l\'écran verrouillée</string>
+    <string name="stylus_app_not_installed">%s n\'est pas installé</string>
+</resources>
