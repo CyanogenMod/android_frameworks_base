@@ -1,0 +1,8 @@
+Change-Id: Ia164da5312f4302768e57f5454fae8c57a8e008b
+Code-Review+2: Steve Kondik <shade@chemlab.org>
+Verified+1: Steve Kondik <shade@chemlab.org>
+Submitted-by: Steve Kondik <shade@chemlab.org>
+Submitted-at: Sun, 05 May 2013 21:26:56 -0700
+Reviewed-on: http://review.cyanogenmod.org/36529
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/cm-10.1
