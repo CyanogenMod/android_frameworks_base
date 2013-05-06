@@ -1389,11 +1389,11 @@ status_t compileResourceFile(Bundle* bundle,
                             curIsFormatted = false;
                             // Untranslatable strings must only exist in the default [empty] locale
                             if (locale.size() > 0) {
-                                fprintf(stderr, "aapt: error: string-array '%s' in %s marked untranslatable but exists"
+                                fprintf(stderr, "aapt: warning: string-array '%s' in %s marked untranslatable but exists"
                                         " in locale '%s'\n", String8(name).string(),
                                         bundle->getResourceSourceDirs()[0],
                                         locale.string());
-                                hasErrors = localHasErrors = true;
+                                //hasErrors = localHasErrors = true;
                             }
                             break;
                         }
