@@ -183,6 +183,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     private WirelessChargerDetector mWirelessChargerDetector;
     private SettingsObserver mSettingsObserver;
     private DreamManagerService mDreamManager;
+    private AutoBrightnessHandler mAutoBrightnessHandler;
     private LightsService.Light mAttentionLight;
     private LightsService.Light mButtonsLight;
     private LightsService.Light mKeyboardLight;
@@ -418,6 +419,9 @@ public final class PowerManagerService extends IPowerManager.Stub
         // activity manager is not running when the constructor is called, so we
         // have to defer setting the screen state until this point.
         mDisplayBlanker.unblankAllDisplays();
+
+        mAutoBrightnessHandler = new AutoBrightnessHandler(context);
+
     }
 
     public void setPolicy(WindowManagerPolicy policy) {
@@ -567,9 +571,14 @@ public final class PowerManagerService extends IPowerManager.Stub
             mTemporaryScreenAutoBrightnessAdjustmentSettingOverride = Float.NaN;
         }
 
+        final int oldScreenBrightnessModeSetting =
+                mScreenBrightnessModeSetting;
         mScreenBrightnessModeSetting = Settings.System.getIntForUser(resolver,
                 Settings.System.SCREEN_BRIGHTNESS_MODE,
                 Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL, UserHandle.USER_CURRENT);
+        if (oldScreenBrightnessModeSetting != mScreenBrightnessModeSetting) {
+            mAutoBrightnessHandler.onAutoBrightnessChanged(mScreenBrightnessModeSetting);
+        }
 
         mDirty |= DIRTY_SETTINGS;
     }
@@ -906,10 +915,13 @@ public final class PowerManagerService extends IPowerManager.Stub
             if (mKeyboardVisible != visible) {
                 mKeyboardVisible = visible;
                 if (!visible) {
-                    mKeyboardLight.turnOff();
                     // If hiding keyboard, turn off leds
                     setKeyboardLight(false, 1);
                     setKeyboardLight(false, 2);
+                }
+                synchronized (mLock) {
+                    mDirty |= DIRTY_USER_ACTIVITY;
+                    updatePowerStateLocked();
                 }
             }
         }
@@ -1352,15 +1364,14 @@ public final class PowerManagerService extends IPowerManager.Stub
                     nextTimeout = mLastUserActivityTime
                             + screenOffTimeout - screenDimDuration;
                     if (now < nextTimeout) {
+                        int brightness = mButtonBrightnessOverrideFromWindowManager >= 0
+                                ? mButtonBrightnessOverrideFromWindowManager
+                                : mDisplayPowerRequest.screenBrightness;
+                        mKeyboardLight.setBrightness(mKeyboardVisible ? brightness : 0);
                         if (now > mLastUserActivityTime + BUTTON_ON_DURATION) {
                             mButtonsLight.setBrightness(0);
-                            mKeyboardLight.setBrightness(0);
                         } else {
-                            int brightness = mButtonBrightnessOverrideFromWindowManager >= 0
-                                    ? mButtonBrightnessOverrideFromWindowManager
-                                    : mDisplayPowerRequest.screenBrightness;
                             mButtonsLight.setBrightness(brightness);
-                            mKeyboardLight.setBrightness(mKeyboardVisible ? brightness : 0);
                             if (brightness != 0) {
                                 nextTimeout = now + BUTTON_ON_DURATION;
                             }
@@ -1369,6 +1380,7 @@ public final class PowerManagerService extends IPowerManager.Stub
                     } else {
                         nextTimeout = mLastUserActivityTime + screenOffTimeout;
                         if (now < nextTimeout) {
+                            mKeyboardLight.setBrightness(0);
                             mUserActivitySummary |= USER_ACTIVITY_SCREEN_DIM;
                         }
                     }

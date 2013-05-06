@@ -1934,6 +1934,9 @@
   <java-symbol type="bool" name="config_stylusGestures" />
   <java-symbol type="string" name="stylus_app_not_installed" />
 
+  <!-- Panel auto brightness -->
+  <java-symbol type="integer" name="config_panelAutoBrightnessValue" />
+
   <!-- Options that show upon long-pressing a key on the physical keyboard -->
   <java-symbol type="string" name="symbol_picker_0" />
   <java-symbol type="string" name="symbol_picker_1" />
