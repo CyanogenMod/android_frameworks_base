@@ -60,4 +60,10 @@
     <string name="pie_phone_status_no_service">Geen diens</string>
     <string name="pie_phone_status_airplane_mode">Vliegtuigmodus aan</string>
     <string name="pie_phone_status_emergency_only">Slegs noodoproepe</string>
+    <string name="accessibility_quick_settings_ringer">Klank <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibrasie <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="quick_settings_profile_label">Profiel</string>
+    <string name="quick_settings_expanded_desktop">Uitgebrei</string>
+    <string name="quick_settings_expanded_desktop_off">Normaal</string>
+
 </resources>
