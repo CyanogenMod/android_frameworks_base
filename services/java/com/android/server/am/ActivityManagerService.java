@@ -2015,12 +2015,14 @@ public final class ActivityManagerService  extends ActivityManagerNative
             ProcessRecord p = mLruProcesses.get(i);
             // If this app shouldn't be in front of the first N background
             // apps, then skip over that many that are currently hidden.
-            if (skipTop > 0 && p.setAdj >= ProcessList.HIDDEN_APP_MIN_ADJ) {
-                skipTop--;
-            }
-            if (p.lruWeight <= app.lruWeight || i < bestPos) {
-                mLruProcesses.add(i+1, app);
-                break;
+            if (p != null && p.thread != null) {
+                if (skipTop > 0 && p.setAdj >= ProcessList.HIDDEN_APP_MIN_ADJ) {
+                    skipTop--;
+                }
+                if (p.lruWeight <= app.lruWeight || i < bestPos) {
+                    mLruProcesses.add(i+1, app);
+                    break;
+                }
             }
             i--;
         }
