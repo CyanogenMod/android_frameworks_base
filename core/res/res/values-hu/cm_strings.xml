@@ -27,8 +27,8 @@
     <string name="reboot_fastboot">Fastboot</string>
     <string name="reboot_download">Download</string>
     <string name="reboot_progress">Újraindítás\u2026</string>
-    <string name="reboot_confirm" product="tablet">A telefon újraindul.</string>
-    <string name="reboot_confirm" product="default">A táblagép újraindul.</string>
+    <string name="reboot_confirm" product="tablet">A táblagép újraindul.</string>
+    <string name="reboot_confirm" product="default">A telefon újraindul.</string>
     <string name="permlab_preventpower">kikapcsológomb felülbírálata</string>
     <string name="permdesc_preventpower">Lehetővé teszi egy alkalmazás számára a kikapcsológomb felülbírálatát</string>
     <string name="permlab_fm_radio_receiver">FM rádióvevő vezérlése</string>
