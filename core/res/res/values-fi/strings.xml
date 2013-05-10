@@ -1456,40 +1456,4 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Esteettömyystila peruutettu."</string>
     <string name="user_switched" msgid="3768006783166984410">"Nykyinen käyttäjä: <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Omistaja"</string>
-    <string name="profileNameDefault">Oletus</string>
-    <string name="profileNameWork">Työ</string>
-    <string name="profileNameHome">Koti</string>
-    <string name="profileNameSilent">Äänetön</string>
-    <string name="profileNameNight">Yö</string>
-    <string name="profileGroupPhone">Puhelin</string>
-    <string name="profileGroupCalendar">Kalenteri</string>
-    <string name="profileGroupGmail">Gmail</string>
-    <string name="profileGroupEmail">Sähköposti</string>
-    <string name="profileGroupSMS">Tekstiviesti</string>
-    <string name="wildcardProfile">Muu</string>
-    <string name="reboot_system" product="tablet">Käynnistä tablet uudelleen</string>
-    <string name="reboot_system" product="default">Käynnistä puhelin uudelleen</string>
-    <string name="global_action_screenshot">Kuvakaappaus</string>
-    <string name="global_actions_toggle_expanded_desktop_mode">Laajennettu työpöytä</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">Käytössä</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">Pois käytöstä</string>
-    <string name="reboot_reboot">Käynnistä uudelleen</string>
-    <string name="reboot_recovery">Recovery-tila</string>
-    <string name="reboot_bootloader">Bootloader-tila</string>
-    <string name="reboot_bootmenu">Käynnistysvalikko</string>
-    <string name="reboot_fastboot">Fastboot-tila</string>
-    <string name="reboot_download">Download-tila</string>
-    <string name="reboot_progress">Käynnistetään uudelleen\u2026</string>
-    <string name="reboot_confirm">Puhelimesi käynnistyy uudelleen.</string>
-    <string name="lockscreen_discharging">Puretaan latausta, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-    <string name="app_killed_message">Sovellus tapettu</string>
-    <string name="global_action_reboot">Käynnistä uudelleen</string>
-    <string name="global_action_choose_profile">Profiili</string>
-    <string name="toast_rotation_unlocked">Näytön asento auki</string>
-    <string name="toast_rotation_locked">Näytön asento lukittu</string>
-    <string name="permlab_fm_radio_receiver">Ohjaa FM-vastaanotinta</string>
-    <string name="permdesc_fm_radio_receiver">Sallii sovelluksen ohjata FM-vastaanotinta.</string>
-    <string name="permlab_fm_radio_transmitter">Ohjaa FM-lähetintä</string>
-    <string name="permdesc_fm_radio_transmitter">Sallii sovelluksen ohjata FM-lähetintä.</string>
-    <string name="storage_sd_dock_card">Telakoi SD-kortti</string>
 </resources>

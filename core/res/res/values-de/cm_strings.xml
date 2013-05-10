@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="profileNameDefault">Standard</string>
+    <string name="profileNameWork">Arbeit</string>
+    <string name="profileNameHome">Zu Hause</string>
+    <string name="profileNameSilent">Lautlos</string>
+    <string name="profileNameNight">Nacht</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-Mail</string>
+    <string name="profileGroupSMS">SMS/MMS</string>
+    <string name="wildcardProfile">Anderes</string>
+    <string name="reboot_system" product="tablet">Tablet neu starten</string>
+    <string name="reboot_system" product="default">Telefon neu starten</string>
+    <string name="global_action_screenshot">Bildschirmfoto</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Erweiterter Desktop</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Aktiviert</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Deaktiviert</string>
+    <string name="reboot_reboot">Neu starten</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenü</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Neu starten\u2026</string>
+    <string name="reboot_confirm" product="tablet">Tablet wird neu gestartet</string>
+    <string name="reboot_confirm" product="default">Telefon wird neu gestartet</string>
+    <string name="global_action_reboot">Neu starten</string>
+    <string name="global_action_choose_profile">Profile</string>
+    <string name="app_killed_message">Anwendung beendet</string>
+    <string name="toast_rotation_unlocked">Bildschirmausrichtung sperren</string>
+    <string name="toast_rotation_locked">Bildschirmausrichtung entsperren</string>
+</resources>

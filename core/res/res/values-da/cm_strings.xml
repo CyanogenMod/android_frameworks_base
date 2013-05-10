@@ -13,65 +13,47 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="profileNameDefault">Standard</string>
     <string name="profileNameWork">Arbejde</string>
     <string name="profileNameHome">Hjem</string>
     <string name="profileNameSilent">Lydløs</string>
     <string name="profileNameNight">Nat</string>
-
     <string name="profileGroupPhone">Telefon</string>
     <string name="profileGroupCalendar">Kalender</string>
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">Email</string>
     <string name="profileGroupSMS">SMS</string>
-
     <string name="wildcardProfile">Andre</string>
-
     <string name="reboot_system" product="tablet">Genstart tablet</string>
     <string name="reboot_system" product="default">Genstart telefon</string>
     <string name="global_action_screenshot">Skærmbillede</string>
-
     <string name="global_actions_toggle_expanded_desktop_mode">Udvidet skrivebord</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Til</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Fra</string>
-
     <string name="reboot_reboot">Genstart</string>
     <string name="reboot_recovery">Recovery</string>
     <string name="reboot_bootloader">Bootloader</string>
     <string name="reboot_bootmenu">Bootmenu</string>
     <string name="reboot_fastboot">Fastboot</string>
     <string name="reboot_download">Download</string>
-
     <string name="reboot_progress">Genstarter\u2026</string>
     <string name="reboot_confirm" product="tablet">Din tablet vil genstarte.</string>
     <string name="reboot_confirm" product="default">Din telefon vil genstarte.</string>
-
     <string name="permlab_preventpower">undgå tænd/sluk-knappen</string>
     <string name="permdesc_preventpower">Tillader app\'en at tilsidesætte tænd/sluk-knappen</string>
-
     <string name="permlab_fm_radio_receiver">kontrollér FM-modtager</string>
     <string name="permdesc_fm_radio_receiver">Tillader app\'en at kontrollere FM-modtageren.</string>
-
     <string name="permlab_fm_radio_transmitter">kontrollér FM-modtager</string>
     <string name="permdesc_fm_radio_transmitter">Tillader app\'en at kontrollere FM-senderen.</string>
-
     <string name="lockscreen_discharging">Aflader, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-
     <string name="storage_sd_dock_card">Dock SD-kort</string>
-
     <string name="app_killed_message">App lukket</string>
-
     <string name="global_action_reboot">Genstart</string>
-
     <string name="global_action_choose_profile">Profil</string>
-
     <string name="toast_rotation_unlocked">Skærmrotation ulåst</string>
     <string name="toast_rotation_locked">Skærmrotation låst</string>
-
     <string name="stylus_app_not_installed">%s er ikke installeret</string>
-
     <string name="symbol_picker_A">\u00C0\u00C1\u00C2\u00C4\u00C6\u00C3\u00C5\u0104\u0100</string>
     <string name="symbol_picker_C">\u00C7\u0106\u010C</string>
     <string name="symbol_picker_D">\u010E</string>

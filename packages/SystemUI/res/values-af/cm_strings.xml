@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--  Copyright (C) 2012-13 The CyanogenMod Project
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
- -->
+-->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="powerwidget_screen_timeout_toast">Skerm afsnytyd ingestel op: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
@@ -60,4 +60,10 @@
     <string name="pie_phone_status_no_service">Geen diens</string>
     <string name="pie_phone_status_airplane_mode">Vliegtuigmodus aan</string>
     <string name="pie_phone_status_emergency_only">Slegs noodoproepe</string>
+    <string name="accessibility_quick_settings_ringer">Klank <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibrasie <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="quick_settings_profile_label">Profiel</string>
+    <string name="quick_settings_expanded_desktop">Uitgebrei</string>
+    <string name="quick_settings_expanded_desktop_off">Normaal</string>
+
 </resources>
