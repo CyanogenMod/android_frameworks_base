@@ -548,7 +548,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
 
         for (PieSlice slice : mSlices) {
             if ((slice.flags & viewMask) == viewMask && (slice.flags & PieSlice.IMPORTANT) != 0) {
-                estimatedWidth = Math.max(estimatedWidth, slice.estimateWidth());
+                estimatedWidth = Math.max(estimatedWidth, slice.estimateWidth()) * mPieScale;
             }
         }
 
