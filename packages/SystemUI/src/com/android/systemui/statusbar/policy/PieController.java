@@ -254,6 +254,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
     }
 
     private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
+    private boolean mSettingsObserverRegistered = false;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -271,6 +272,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
             }
         }
     };
+    private boolean mBroadcastReceiverRegistered = false;
 
     private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
@@ -293,6 +295,21 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
 
         mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
         mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
+    }
+
+    public void detachContainer() {
+        if (mPieContainer != null) {
+            mPieContainer.clearSlices();
+            mPieContainer = null;
+        }
+        if (mBroadcastReceiverRegistered) {
+            mBroadcastReceiverRegistered = false;
+            mContext.unregisterReceiver(mBroadcastReceiver);
+        }
+        if (mSettingsObserverRegistered) {
+            mSettingsObserverRegistered = false;
+            mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
+        }
     }
 
     public void attachTo(BaseStatusBar statusBar) {
@@ -329,13 +346,13 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
 
         // start listening for changes
         mSettingsObserver.observe();
+        mSettingsObserverRegistered = true;
 
-        mContext.registerReceiver(mBroadcastReceiver,
-                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         mContext.registerReceiver(mBroadcastReceiver, filter);
+        mBroadcastReceiverRegistered = true;
 
         if (mHasTelephony) {
             TelephonyManager telephonyManager =

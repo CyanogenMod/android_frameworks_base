@@ -20,7 +20,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -249,27 +248,6 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     }
     private OnSnapListener mOnSnapListener = null;
 
-    private final class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_SIZE), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_POSITIONS), false, this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            getDimensions();
-            setupSnapPoints(getWidth(), getHeight(), true);
-        }
-    }
-    private SettingsObserver mSettingsObserver;
-
     public PieLayout(Context context) {
         super(context);
 
@@ -278,6 +256,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
 
         setDrawingCacheEnabled(false);
         setVisibility(View.GONE);
+        setWillNotDraw(false);
+        setFocusable(true);
+        setOnTouchListener(this);
 
         getDimensions();
         getColors();
@@ -336,16 +317,6 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
                 mSnapPoints[g.INDEX] = null;
             }
         }
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        setWillNotDraw(false);
-        setFocusable(true);
-        setOnTouchListener(this);
-
-        mSettingsObserver = new SettingsObserver(new Handler());
-        mSettingsObserver.observe();
     }
 
     @Override
@@ -590,6 +561,9 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         }
 
         mActivateStartDebug = SystemClock.uptimeMillis();
+
+        getDimensions();
+        setupSnapPoints(getWidth(), getHeight(), true);
 
         mPosition = position;
         mLayoutDoneForPosition = null;
