@@ -409,15 +409,10 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
         }, filter);
 
-        mPieController = new PieController(mContext);
-        mPieController.attachTo(this);
-        addNavigationBarCallback(mPieController);
-
         mSettingsObserver = new PieSettingsObserver(new Handler());
 
         // this calls attachPie() implicitly
         mSettingsObserver.onChange(true);
-
         mSettingsObserver.observe();
     }
 
@@ -1406,7 +1401,13 @@ public abstract class BaseStatusBar extends SystemUI implements
                 lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_BEHIND;
 
                 mWindowManager.addView(mPieContainer, lp);
-                mPieController.attachTo(mPieContainer);
+                // once we need a pie controller, we create one and keep it forever ...
+                if (mPieController == null) {
+                    mPieController = new PieController(mContext);
+                    mPieController.attachStatusBar(this);
+                    addNavigationBarCallback(mPieController);
+                }
+                mPieController.attachContainer(mPieContainer);
             }
 
             // add or update pie triggers
@@ -1423,6 +1424,11 @@ public abstract class BaseStatusBar extends SystemUI implements
                     mWindowManager.removeView(mPieTrigger[i]);
                     mPieTrigger[i] = null;
                 }
+            }
+            // detach from the pie container and unregister observers and receivers
+            if (mPieController != null) {
+                mPieController.detachContainer();
+                mPieContainer = null;
             }
         }
     }
