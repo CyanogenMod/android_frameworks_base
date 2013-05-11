@@ -162,68 +162,32 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         public void start(MotionEvent event) {
             initialX = event.getX();
             initialY = event.getY();
-            switch (position) {
-                case LEFT:
-                    gracePeriod = initialX + sDistance / 3.0f;
-                    break;
-                case RIGHT:
-                    gracePeriod = initialX - sDistance / 3.0f;
-                    break;
-            }
             active = true;
         }
 
         public boolean move(MotionEvent event) {
-            final float x = event.getX();
-            final float y = event.getY();
             if (!active) {
                 return false;
             }
-
             // Unroll the complete logic here - we want to be fast and out of the
             // event chain as fast as possible.
+            float distance = 0;
             boolean loaded = false;
             switch (position) {
-                case LEFT:
-                    if (x < gracePeriod) {
-                        initialY = y;
-                    }
-                    if (initialY - y < sDistance && y - initialY < sDistance) {
-                        if (x - initialX <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-                case BOTTOM:
-                    if (initialX - x < sDistance && x - initialX < sDistance) {
-                        if (initialY - y <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
                 case TOP:
-                    if (initialX - x < sDistance && x - initialX < sDistance) {
-                        if (y - initialY <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
+                case BOTTOM:
+                    distance = Math.abs(event.getY() - initialY);
                     break;
+                case LEFT:
                 case RIGHT:
-                    if (x > gracePeriod) {
-                        initialY = y;
-                    }
-                    if (initialY - y < sDistance && y - initialY < sDistance) {
-                        if (initialX - x <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
+                    distance = Math.abs(event.getX() - initialX);
                     break;
             }
-            active = false;
+            // Swipe up
+            if (distance > sDistance) {
+                loaded = true;
+                active = false;
+            }
             return loaded;
         }
 
