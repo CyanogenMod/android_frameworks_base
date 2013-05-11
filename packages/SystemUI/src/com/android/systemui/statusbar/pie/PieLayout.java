@@ -77,6 +77,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     private int mPadding;
 
     private boolean mActive = false;
+    private boolean mSettingsObserverRegistered = false;
     private int mPointerId;
     private Point mCenter = new Point(0, 0);
     private Position mPosition = Position.BOTTOM;
@@ -346,6 +347,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
 
         mSettingsObserver = new SettingsObserver(new Handler());
         mSettingsObserver.observe();
+        mSettingsObserverRegistered = true;
     }
 
     @Override
@@ -641,6 +643,14 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
             mAnimationListenerCache.clear();
             mDrawableCache.clear();
             updateActiveItem(null, false);
+        }
+    }
+
+    public void destroyPieContainer() {
+        clearSlices();
+        if (mSettingsObserverRegistered) {
+            mSettingsObserverRegistered = false;
+            mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
         }
     }
 
