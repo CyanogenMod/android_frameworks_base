@@ -1424,6 +1424,9 @@ public abstract class BaseStatusBar extends SystemUI implements
                     mPieTrigger[i] = null;
                 }
             }
+            // detach from the pie container and unregister observers and receivers
+            mPieController.detachContainer();
+            mPieContainer = null;
         }
     }
 
