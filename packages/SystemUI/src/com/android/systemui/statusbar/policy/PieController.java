@@ -106,6 +106,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
     private int mBatteryLevel;
     private int mBatteryStatus;
     private boolean mHasTelephony;
+    private TelephonyManager mTelephonyManager;
     private ServiceState mServiceState;
 
     // all pie slices that are managed by the controller
@@ -331,6 +332,23 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
     }
 
+    public void detachContainer() {
+        if (mPieContainer == null) {
+            return;
+        }
+
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+            mTelephonyManager = null;
+        }
+
+        mContext.unregisterReceiver(mBroadcastReceiver);
+        mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
+
+        mPieContainer.clearSlices();
+        mPieContainer = null;
+    }
+
     public void attachTo(BaseStatusBar statusBar) {
         mStatusBar = statusBar;
     }
@@ -366,17 +384,15 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         // start listening for changes
         mSettingsObserver.observe();
 
-        mContext.registerReceiver(mBroadcastReceiver,
-                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         mContext.registerReceiver(mBroadcastReceiver, filter);
 
         if (mHasTelephony) {
-            TelephonyManager telephonyManager =
+            mTelephonyManager =
                     (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-            telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
         }
     }
 
