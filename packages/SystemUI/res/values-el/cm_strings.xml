@@ -15,6 +15,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Ήχος <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Δόνηση <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="bean_dream_settings_cid_title">Χρήση κεφαλιού του Cid</string>
@@ -68,4 +69,5 @@
     <string name="pie_phone_status_no_service">Καμία υπηρεσία</string>
     <string name="pie_phone_status_airplane_mode">Λειτουργία πτήσης ενεργή</string>
     <string name="pie_phone_status_emergency_only">Μόνο κλήσεις έκτακτης ανάγκης</string>
+    <string name="accessibility_battery_level" msgid="7451474187113371965">"Μπαταρία <xliff:g id="NUMBER">%d</xliff:g> τοις εκατό."</string>
 </resources>
