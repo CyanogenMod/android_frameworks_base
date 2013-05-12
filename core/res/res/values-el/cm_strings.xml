@@ -107,4 +107,5 @@
     <string name="symbol_picker_equal">\u2260\u2248\u221e</string>
     <string name="symbol_picker_lt">\u2264\u00ab\u2039</string>
     <string name="symbol_picker_gt">\u2265\u00bb\u203a</string>
+    <string name="accessibility_battery_level" msgid="7451474187113371965">"Μπαταρία <xliff:g id="NUMBER">%d</xliff:g> τοις εκατό."</string>
 </resources>
