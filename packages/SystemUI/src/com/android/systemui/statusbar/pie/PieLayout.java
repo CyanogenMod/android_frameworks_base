@@ -551,6 +551,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
                 estimatedWidth = Math.max(estimatedWidth, slice.estimateWidth());
             }
         }
+        estimatedWidth = estimatedWidth  * mPieScale;
 
         if (mPosition == Position.LEFT || mPosition == Position.RIGHT) {
             mCenter.x = mPadding + (int) ((getWidth() - 2 * mPadding) * mPosition.FACTOR);
