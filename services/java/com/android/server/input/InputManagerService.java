@@ -182,6 +182,7 @@ public class InputManagerService extends IInputManager.Stub
     private static native void nativeSetPointerSpeed(int ptr, int speed);
     private static native void nativeSetShowTouches(int ptr, boolean enabled);
     private static native void nativeSetStylusIconEnabled(int ptr, boolean enabled);
+    private static native void nativeSetVolumeKeysRotation(int ptr, int mode);
     private static native void nativeVibrate(int ptr, int deviceId, long[] pattern,
             int repeat, int token);
     private static native void nativeCancelVibrate(int ptr, int deviceId, int token);
@@ -273,6 +274,7 @@ public class InputManagerService extends IInputManager.Stub
         registerPointerSpeedSettingObserver();
         registerShowTouchesSettingObserver();
         registerStylusIconEnabledSettingObserver();
+        registerVolumeKeysRotationSettingObserver();
 
         mContext.registerReceiver(new BroadcastReceiver() {
             @Override
@@ -285,6 +287,7 @@ public class InputManagerService extends IInputManager.Stub
         updatePointerSpeedFromSettings();
         updateShowTouchesFromSettings();
         updateStylusIconEnabledFromSettings();
+        updateVolumeKeysRotationFromSettings();
     }
 
     // TODO(BT) Pass in paramter for bluetooth system
@@ -1192,6 +1195,32 @@ public class InputManagerService extends IInputManager.Stub
         try {
             result = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STYLUS_ICON_ENABLED);
+        } catch (SettingNotFoundException snfe) {
+        }
+        return result;
+    }
+
+    public void updateVolumeKeysRotationFromSettings() {
+        int mode = getVolumeKeysRotation(0);
+        nativeSetVolumeKeysRotation(mPtr, mode);
+    }
+
+    public void registerVolumeKeysRotationSettingObserver() {
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION), false,
+                new ContentObserver(mHandler) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateVolumeKeysRotationFromSettings();
+                    }
+                });
+    }
+
+    private int getVolumeKeysRotation(int defaultValue) {
+        int result = defaultValue;
+        try {
+            result = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION);
         } catch (SettingNotFoundException snfe) {
         }
         return result;
