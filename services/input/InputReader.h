@@ -140,6 +140,9 @@ struct InputReaderConfiguration {
         // Stylus icon option changed.
         CHANGE_STYLUS_ICON_ENABLED = 1 << 6,
 
+        // Volume keys rotation option changed.
+        CHANGE_VOLUME_KEYS_ROTATION = 1 << 7,
+
         // All devices must be reopened.
         CHANGE_MUST_REOPEN = 1 << 31,
     };
@@ -230,6 +233,10 @@ struct InputReaderConfiguration {
     // True to show the pointer icon when a stylus is used.
     bool stylusIconEnabled;
 
+    // Remap volume keys according to display rotation
+    // 4 - disabled, 2 - phone or hybrid rotation mode, 0 - tablet rotation mode
+    int volumeKeysRotationMapStartIndex;
+
     // Ignore finger touches this long after the stylus has been used (including hover)
     nsecs_t stylusPalmRejectionTime;
 
@@ -249,9 +256,10 @@ struct InputReaderConfiguration {
             pointerGestureSwipeMaxWidthRatio(0.25f),
             pointerGestureMovementSpeedRatio(0.8f),
             pointerGestureZoomSpeedRatio(0.3f),
-	    showTouches(false),
+            showTouches(false),
             stylusIconEnabled(false),
-            stylusPalmRejectionTime(50 * 10000000LL) // 50 ms
+            stylusPalmRejectionTime(50 * 10000000LL), // 50 ms
+            volumeKeysRotationMapStartIndex(4)
     { }
 
     bool getDisplayInfo(bool external, DisplayViewport* outViewport) const;
@@ -1039,6 +1047,7 @@ private:
     uint32_t mSource;
     int32_t mKeyboardType;
 
+    int32_t mVolumeKeysRotationMapStartIndex;
     int32_t mOrientation; // orientation for dpad keys
 
     Vector<KeyDown> mKeyDowns; // keys that are down
