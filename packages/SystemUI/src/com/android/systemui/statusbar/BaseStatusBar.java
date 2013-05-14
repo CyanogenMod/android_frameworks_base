@@ -1447,6 +1447,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     // This should only be called, when is is clear that the pie controls are active
     private void refreshPieTriggers() {
+        // pass actual trigger mask and slots to the attached container
+        mPieContainer.setPieTriggers(mPieTriggerMask, mPieTriggerSlots);
         for (Position g : Position.values()) {
             View trigger = mPieTrigger[g.INDEX];
             if (trigger == null && (mPieTriggerSlots & mPieTriggerMask & g.FLAG) != 0) {
