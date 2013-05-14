@@ -14,8 +14,11 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="accessibility_quick_settings_ringer">Son <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibreur <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Utiliser la tête de Cid</string>
+    <string name="bean_dream_settings_cid_summary">Utiliser la tête de Cid au lieu des bonbons dans le rêve</string>
     <string name="powerwidget_screen_timeout_toast">Verrouillage de l\'écran défini à : %1$d %2$s</string>
     <string name="quick_settings_profile_label">Profil</string>
     <string name="quick_settings_gps">GPS</string>
@@ -59,10 +62,11 @@
     <string name="navbar_menu_conditional_button">Bouton Menu (masquage auto)</string>
     <string name="navbar_menu_always_button">Bouton Menu (toujours visible)</string>
     <string name="navbar_menu_big_button">Bouton Menu</string>
-    <string name="pie_battery_status_charging">Chargement (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_charging">Chargement (<xliff:g id="percent">%d</xliff:g> %%)</string>
     <string name="pie_battery_status_full">Chargé</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% restant</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g> %% restant(s)</string>
     <string name="pie_phone_status_no_service">Aucun service</string>
     <string name="pie_phone_status_airplane_mode">Mode avion activé</string>
     <string name="pie_phone_status_emergency_only">Appels d\'urgence uniquement</string>
+    <string name="accessibility_battery_level">Batterie <xliff:g id="number">%d</xliff:g> %%.</string>
 </resources>
