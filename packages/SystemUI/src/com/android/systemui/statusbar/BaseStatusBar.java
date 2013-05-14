@@ -216,6 +216,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                                 // search light!
                                 showSearchPanel();
                             } else {
+                                // set the snap points depending on current trigger and mask
+                                mPieContainer.setSnapPoints(mPieTriggerMask & ~mPieTriggerSlots);
                                 // send the activation to the controller
                                 mPieController.activateFromTrigger(v, event, tracker.position);
                                 // forward a spoofed ACTION_DOWN event

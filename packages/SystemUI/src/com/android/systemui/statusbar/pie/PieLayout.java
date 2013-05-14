@@ -239,7 +239,7 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
         public final Position position;
     }
 
-    private int mTriggerSlots;
+    private int mSnapPointMask = 0;
     private SnapPoint[] mSnapPoints = new SnapPoint[Position.values().length];
     private SnapPoint mActiveSnap = null;
 
@@ -265,13 +265,18 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
 
         getDimensions();
         getColors();
-
-        mTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
     }
 
     public void setOnSnapListener(OnSnapListener onSnapListener) {
         mOnSnapListener = onSnapListener;
+    }
+
+    /**
+     * Tells the Layout where to show snap points.
+     * @param mask is a mask that corresponds to {@link Position}{@code .FLAG}.
+     */
+    public void setSnapPoints(int mask) {
+        mSnapPointMask = mask;
     }
 
     private void getDimensions() {
@@ -303,13 +308,10 @@ public class PieLayout extends FrameLayout implements View.OnTouchListener {
     }
 
     private void setupSnapPoints(int width, int height) {
-        mTriggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
-
         mActiveSnap = null;
         // reuse already created snap points
         for (Position g : Position.values()) {
-            if ((mTriggerSlots & g.FLAG) == 0) {
+            if ((mSnapPointMask & g.FLAG) != 0) {
                 int x = width / 2;
                 int y = height / 2;
                 if (g == Position.LEFT || g == Position.RIGHT) {
