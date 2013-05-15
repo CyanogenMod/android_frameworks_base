@@ -1312,6 +1312,15 @@ public class NotificationManagerService extends INotificationManager.Stub
             if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0
                     && canInterrupt) {
                 mLights.add(r);
+                // give the light to the most recent notification, but only if the current one
+                // doesn't force the light on after screen off (otherwise the light will be
+                // turned off completely at the time the screen is turned off)
+                if (mLedNotification == null || !mScreenOn) {
+                    mLedNotification = r;
+                } else if ((mLedNotification.notification.flags &
+                        Notification.FLAG_FORCE_LED_SCREEN_OFF) == 0) {
+                    mLedNotification = r;
+                }
                 updateLightsLocked();
             } else {
                 if (old != null
