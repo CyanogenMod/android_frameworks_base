@@ -1141,4 +1141,7 @@
     <!-- Integer to configure panel auto brightness mode when changed -->
     <integer name="config_panelAutoBrightnessValue">-1</integer>
 
+    <!-- True if the pie service should be started at system start. This is must be true
+         to support pie controls. -->
+    <bool name="config_allowPieService">true</bool>
 </resources>
