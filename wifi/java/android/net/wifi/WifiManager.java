@@ -977,7 +977,7 @@ public class WifiManager {
         } else {
             float inputRange = (MAX_RSSI - MIN_RSSI);
             float outputRange = (numLevels - 1);
-            return (int)((float)(rssi - MIN_RSSI) * outputRange / inputRange);
+            return (int)((rssi - MIN_RSSI) * outputRange / inputRange);
         }
     }
 
