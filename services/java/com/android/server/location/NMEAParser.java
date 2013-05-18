@@ -27,7 +27,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -80,7 +82,7 @@ public class NMEAParser {
     private long mFixTimestampDelta=500;
 
     private boolean mSatsReady = true;
-    private Location loc = new Location(provider);
+    private Location loc = new Location(LocationManager.GPS_PROVIDER);
 
     /**
      * @param prov  Location provider name
@@ -91,6 +93,8 @@ public class NMEAParser {
         parseMap.put("GPGGA", new GPGGAParser());
         parseMap.put("GPGSA", new GPGSAParser());
         parseMap.put("GPGSV", new GPGSVParser());
+        parseMap.put("GPZDA", new GPZDAParser());
+        parseMap.put("GPGLL", new GPGLLParser());
 
         provider = prov;
         timeFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -144,6 +148,7 @@ public class NMEAParser {
     public Location getLocation() {
         loc.reset();
         if (mFixDateTimeStamp != 0) loc.setTime(mFixDateTimeStamp);
+        loc.setProvider(provider);
         loc.setLatitude(mFixLatitude);
         loc.setLongitude(mFixLongitude);
         Bundle extras = new Bundle();
@@ -153,6 +158,13 @@ public class NMEAParser {
         loc.setAltitude(mFixAltitude);
         loc.setSpeed(mFixSpeed);
         loc.setBearing(mFixBearing);
+        
+        // It would be nice to push the elapsed real-time timestamp
+        // further down the stack, but this is still useful
+        loc.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+
+        Log.d(TAG,"getLocation returning loc");
+        
         return loc;
     }
 
@@ -267,6 +279,100 @@ Where:
                 mFixLongitude = parseCoordinate(tmp[5], tmp[6]);
                 mFixSpeed = parseSpeedInKnots(tmp[7]);
                 mFixBearing = parseStringToFloat(tmp[8]);
+            }
+        }
+    }
+
+    public class GPGLLParser implements ParseInterface {
+        /*
+         *$GPGLL,4916.45,N,12311.12,W,225444,A
+                    1    2     3    4 5      6
+
+	Where
+	       GLL       Geographic Position, Latitude / Longitude and time
+      1    4916.45   Current latitude
+      2    N         North/South
+      3    12311.12  Current longitude
+      4    W         East/West
+      5    225444    Fix taken at 22:54:44 UTC
+      6    A         Status
+      
+      
+          $GPGLL,5133.81,N,00042.25,W*75
+                    1    2     3    4 5
+
+	Where
+      1    5133.81   Current latitude
+      2    N         North/South
+      3    00042.25  Current longitude
+      4    W         East/West
+      5    *75       checksum
+         */
+        @Override
+        public void parse(String sentence) {
+            String[] tmp = sentence.split(delim);
+            if (tmp.length > 4) {
+            	// fits example 1
+                updateTimeStamp(parseTimeToDate(tmp[5]));
+                if (!"A".equals(tmp[6])) {
+                    return;
+                }
+                mFixLatitude = parseCoordinate(tmp[1], tmp[2]);
+                mFixLongitude = parseCoordinate(tmp[3], tmp[4]);
+            } else if (tmp.length > 3) {
+            	// fits example 2
+                mFixLatitude = parseCoordinate(tmp[1], tmp[2]);
+                mFixLongitude = parseCoordinate(tmp[3], tmp[4]);
+            }
+        }
+    }
+
+    public class GPZDAParser implements ParseInterface {
+        /*
+         *$GPZDA,hhmmss.ss,xx,xx,xxxx,xx,xx
+                      1     2  3    4  5 6
+                      
+Where
+      ZDA   Date & Time
+      1     hhmmss.ss = UTC 
+      2     xx = Day, 01 to 31 
+      3     xx = Month, 01 to 12 
+      4     xxxx = Year 
+      5     xx = Local zone description, 00 to +/- 13 hours 
+      6     xx = Local zone minutes description (same sign as hours)
+
+         */
+        @Override
+        public void parse(String sentence) {
+            String[] tmp = sentence.split(delim);
+            if (tmp.length > 5) {
+            	try {
+                   
+	            	Date btTime = timeFormatter.parse(tmp[1]);
+	            	
+	            	// Timezone code
+	            	/*
+	            	int timeZone = parseStringToInt(tmp[5]);
+	            	int offSetMinutes;
+	            	if (timeZone < 0) {
+	            		offSetMinutes = timeZone*60 - parseStringToInt(tmp[6]);
+	            	} else {
+	            		offSetMinutes = timeZone*60 + parseStringToInt(tmp[6]);
+	            	}
+	            	TimeZone myGPSTimezone = TimeZone.getTimeZone("UTC");
+	            	myGPSTimezone.setRawOffset(offSetMinutes*60*1000);
+	            	*/
+	                GPSCalendar.setTimeInMillis(btTime.getTime());
+	                GPSCalendar.set(parseStringToInt(tmp[4]), parseStringToInt(tmp[3]), parseStringToInt(tmp[2]));
+	            	
+	                updateTimeStamp(GPSCalendar.getTimeInMillis());
+	                if (!"A".equals(tmp[6])) {
+	                    return;
+	                }
+                } catch (ParseException e) {
+                    Log.e(TAG, "Could not parse: " + tmp[1]);
+                    return;
+                }
             }
         }
     }
@@ -456,6 +562,7 @@ Where:
                     return false;
                 }
             }
+            Log.d(TAG, "Parsing nmeaSentence: " + nmeaSentence);
             ParseInterface parser = getParser(command);
             if (parser != null) {
                 try {

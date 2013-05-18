@@ -29,6 +29,7 @@ import android.location.Criteria;
 import android.location.IGpsStatusListener;
 import android.location.IGpsStatusProvider;
 import android.location.ILocationManager;
+import android.location.INetInitiatedListener;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationProvider;
@@ -60,14 +61,14 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
     private static final boolean D = true;
     private final String PROVIDER = "External Bleutooth Location Provider";
     private final String TAG = "BTGpsLocationProvider";
-    private final NMEAParser nmeaparser = new NMEAParser(PROVIDER);
+    private final NMEAParser nmeaparser = new NMEAParser(LocationManager.GPS_PROVIDER);
 
     private final BluetoothAdapter mAdapter = BluetoothAdapter.getDefaultAdapter();
 
 
     private static final ProviderProperties PROPERTIES = new ProviderProperties(
     		false, false, false, false, true, true, true,
-    		Criteria.POWER_LOW, Criteria.ACCURACY_HIGH);
+    		Criteria.POWER_LOW, Criteria.ACCURACY_FINE);
 
     /** simpler wrapper for ProviderRequest + Worksource */
     private static class GpsRequest {
@@ -97,19 +98,6 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
 
     private final IBatteryStats mBatteryStats;
     private final SparseIntArray mClientUids = new SparseIntArray();
-    // Handler messages
-    /*
-    private static final int CHECK_LOCATION = 1;
-    private static final int ENABLE = 2;
-    private static final int ENABLE_TRACKING = 3;
-    private static final int UPDATE_NETWORK_STATE = 4;
-    private static final int INJECT_NTP_TIME = 5;
-    private static final int DOWNLOAD_XTRA_DATA = 6;
-    private static final int UPDATE_LOCATION = 7;
-    private static final int ADD_LISTENER = 8;
-    private static final int REMOVE_LISTENER = 9;
-    private static final int REQUEST_SINGLE_SHOT = 10;
-	*/
     
     // Handler messages
     private static final int CHECK_LOCATION = 1;
@@ -145,7 +133,7 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
     private int mStatus = LocationProvider.TEMPORARILY_UNAVAILABLE;
 
     private Bundle mLocationExtras = new Bundle();
-    private Location mLocation = new Location(PROVIDER);
+    private Location mLocation = new Location(LocationManager.GPS_PROVIDER);
 
     private final Context mContext;
     private final ILocationManager mLocationManager;
@@ -208,15 +196,15 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
                     int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                             BluetoothAdapter.ERROR);
                     switch (state) {
-                    case BluetoothAdapter.STATE_ON:
-                        if (D) Log.i(TAG, "BT turned on -> notify services?");
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_OFF:
-                        if (btsvc.getServiceState() != BTGPSService.STATE_NONE) {
-                            if (D) Log.i(TAG, "BT turned off -> stopping services");
-                            btsvc.stop();
-                        }
-                        break;
+	                    case BluetoothAdapter.STATE_ON:
+	                        if (D) Log.i(TAG, "BT turned on -> notify services?");
+	                        break;
+	                    case BluetoothAdapter.STATE_TURNING_OFF:
+	                        if (btsvc.getServiceState() != BTGPSService.STATE_NONE) {
+	                            if (D) Log.i(TAG, "BT turned off -> stopping services");
+	                            btsvc.stop();
+	                        }
+	                        break;
                     }
                 }
             }
@@ -468,6 +456,27 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
         sendMessage(SET_REQUEST, 0, new GpsRequest(request, source));
     }
 
+    //=============================================================
+    // NI Client support
+    //=============================================================
+    private final INetInitiatedListener mNetInitiatedListener = new INetInitiatedListener.Stub() {
+        // Sends a response for an NI reqeust to HAL.
+        @Override
+        public boolean sendNiResponse(int notificationId, int userResponse)
+        {
+            // TODO Add Permission check
+
+            if (D) Log.d(TAG, "sendNiResponse, notifId: " + notificationId +
+                    ", response: " + userResponse);
+            native_send_ni_response(notificationId, userResponse);
+            return true;
+        }
+    };
+
+    public INetInitiatedListener getNetInitiatedListener() {
+        return mNetInitiatedListener;
+    }
+    
 //    @Override
     public boolean hasMonetaryCost() {
         return false;
@@ -566,8 +575,8 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
      * @param isValid   true if fix was valid
      */
     private void reportLocation(Location loc, boolean isValid) {
-
         if (!isValid) {
+        	
             if (mStatus == LocationProvider.AVAILABLE && mTTFF > 0) {
                 if (D) Log.d(TAG, "Invalid sat fix -> sending notification to system");
                 // send an intent to notify that the GPS is no longer receiving fixes.
@@ -580,6 +589,18 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
         }
 
         synchronized (mLocation) {
+            
+        	if (D) Log.d(TAG, "Reporting Location (" + loc.isComplete() + "): Lng: " + loc.getLatitude() +
+        			"Lng: " + loc.getLongitude());
+        	
+        	if (D && !loc.isComplete()) {
+        		Log.d(TAG, "Location: hasProvider? '" + loc.getProvider() + "'" + 
+    					", hasAccuracy? '" + loc.hasAccuracy() + "'" + 
+    					", hasTime? '" + loc.getTime() + "'" + 
+    					", mElapsedRealtimeNanos? '" + loc.getElapsedRealtimeNanos() + "'");
+        		
+        	}
+        	
             mLocation.set(loc);
             mLocation.setProvider(this.getName());
             if (D) {
@@ -923,4 +944,7 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
             }
         }
     }
+    
+    // Network-initiated (NI) Support
+    private native void native_send_ni_response(int notificationId, int userResponse);
 }

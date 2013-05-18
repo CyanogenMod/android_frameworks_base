@@ -326,6 +326,24 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
     private void loadProvidersLocked() {
     	
 
+    	
+        // create a passive location provider, which is always enabled
+        PassiveProvider passiveProvider = new PassiveProvider(this);
+        addProviderLocked(passiveProvider);
+        mEnabledProviders.add(passiveProvider.getName());
+        mPassiveProvider = passiveProvider;
+
+        /*
+        if (GpsLocationProvider.isSupported()) {
+            // Create a gps location provider
+            GpsLocationProvider gpsProvider = new GpsLocationProvider(mContext, this);
+            mGpsStatusProvider = gpsProvider.getGpsStatusProvider();
+            mNetInitiatedListener = gpsProvider.getNetInitiatedListener();
+            addProviderLocked(gpsProvider);
+            mRealProviders.put(LocationManager.GPS_PROVIDER, gpsProvider);
+        }
+        */
+        
         // Create a gps location provider based on the setting EXTERNAL_GPS_BT_DEVICE
         String btDevice = Settings.System.getString(mContext.getContentResolver(),
                 Settings.Secure.EXTERNAL_GPS_BT_DEVICE);
@@ -335,22 +353,9 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
             Settings.System.putString(mContext.getContentResolver(),
                     Settings.Secure.EXTERNAL_GPS_BT_DEVICE, btDevice);
         }
+        // disables the other Providers and adds the bluetooth device as the only provider
         setGPSSource(btDevice);
-    	
-        // create a passive location provider, which is always enabled
-        PassiveProvider passiveProvider = new PassiveProvider(this);
-        addProviderLocked(passiveProvider);
-        mEnabledProviders.add(passiveProvider.getName());
-        mPassiveProvider = passiveProvider;
 
-        if (GpsLocationProvider.isSupported()) {
-            // Create a gps location provider
-            GpsLocationProvider gpsProvider = new GpsLocationProvider(mContext, this);
-            mGpsStatusProvider = gpsProvider.getGpsStatusProvider();
-            mNetInitiatedListener = gpsProvider.getNetInitiatedListener();
-            addProviderLocked(gpsProvider);
-            mRealProviders.put(LocationManager.GPS_PROVIDER, gpsProvider);
-        }
 
         /*
         Load package name(s) containing location provider support.
@@ -412,40 +417,36 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
     }
     
     public void setGPSSource(String device) {	
+    	
     	synchronized (mLock) {	
-    		/*
-    		if (mGpsLocationProvider != null &&	
-    				mProvidersByName.containsKey(mGpsLocationProvider.getName())) {	
-    			Slog.i(TAG, "Disable and removing provider " + mGpsLocationProvider.getName());	
-    			mGpsLocationProvider.disable();	
-    			Settings.Secure.setLocationProviderEnabled(mContext.getContentResolver(),	
-    					LocationManager.GPS_PROVIDER, false);	
-    			removeProvider(mGpsLocationProvider);	
-    			mGpsLocationProvider = null;	
-    		}	
-    		*/
+    		
     		if (mProvidersByName.containsKey(LocationManager.GPS_PROVIDER)) {
     			LocationProviderInterface mGpsLocationProvider = mProvidersByName.get(LocationManager.GPS_PROVIDER);
     			removeProviderLocked(mGpsLocationProvider);		
     			Settings.Secure.setLocationProviderEnabled(mContext.getContentResolver(),	
     					LocationManager.GPS_PROVIDER, false);
     		}
+    		
     		Slog.i(TAG, "Setting GPS Source to: " + device);	
     		if ("0".equals(device)) {	
-    			if (!GpsLocationProvider.isSupported())	
-    				return;	
-    			GpsLocationProvider gpsProvider = new GpsLocationProvider(mContext, this);	
-    			mGpsStatusProvider = gpsProvider.getGpsStatusProvider();	
-    			mNetInitiatedListener = gpsProvider.getNetInitiatedListener();	
-    			addProviderLocked(gpsProvider);	
-    			// LocationProviderInterface mGpsLocationProvider = gpsProvider;	
-    		} else {	
+    			if (GpsLocationProvider.isSupported())	{
+		            // Create a gps location provider
+		            GpsLocationProvider gpsProvider = new GpsLocationProvider(mContext, this);
+		            mGpsStatusProvider = gpsProvider.getGpsStatusProvider();
+		            mNetInitiatedListener = gpsProvider.getNetInitiatedListener();
+		            addProviderLocked(gpsProvider);
+		            mRealProviders.put(LocationManager.GPS_PROVIDER, gpsProvider);
+    			}
+    		} else {
+
     			BTGpsLocationProvider gpsProvider = new BTGpsLocationProvider(mContext, this);	
     			mGpsStatusProvider = gpsProvider.getGpsStatusProvider();	
     			mNetInitiatedListener = null;	
     			addProviderLocked(gpsProvider);	
+    			mRealProviders.put(LocationManager.GPS_PROVIDER, gpsProvider);
     			// LocationProviderInterface mGpsLocationProvider = gpsProvider;	
-    		}	
+    		}
+
     	}	
     }
 
