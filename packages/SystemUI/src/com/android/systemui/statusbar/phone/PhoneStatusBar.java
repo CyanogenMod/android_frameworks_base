@@ -88,6 +88,7 @@ import android.widget.TextView;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarNotification;
+import com.android.internal.util.pie.PiePosition;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.CommandQueue;
@@ -106,7 +107,6 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.OnSizeChangedListener;
 import com.android.systemui.statusbar.policy.Prefs;
-import com.android.systemui.statusbar.policy.PieController.Position;
 import com.android.systemui.statusbar.powerwidget.PowerWidget;
 
 public class PhoneStatusBar extends BaseStatusBar {
@@ -485,7 +485,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         try {
             boolean showNav = mWindowManagerService.hasNavigationBar();
             if (DEBUG) Slog.v(TAG, "hasNavigationBar=" + showNav);
-            if (showNav && !mRecreating) {
+            if (mNavigationBarView == null && showNav && !mRecreating) {
                 mNavigationBarView =
                     (NavigationBarView) View.inflate(context, R.layout.navigation_bar, null);
 
@@ -1598,7 +1598,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
         // don't allow expanding via e.g. service call while status bar is hidden
         // due to expanded desktop
-        if (mExpandedDesktopState == 2) {
+        if (getExpandedDesktopMode() == 2) {
             return;
         }
 
@@ -1670,7 +1670,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
         // don't allow expanding via e.g. service call while status bar is hidden
         // due to expanded desktop
-        if (mExpandedDesktopState == 2) {
+        if (getExpandedDesktopMode() == 2) {
             return;
         }
 
@@ -2238,13 +2238,13 @@ public class PhoneStatusBar extends BaseStatusBar {
         // hide pie triggers when keyguard is visible
         try {
             if (mWindowManagerService.isKeyguardLocked()) {
-                updatePieTriggerMask(Position.BOTTOM.FLAG
-                        | Position.TOP.FLAG);
+                updatePieTriggerMask(PiePosition.BOTTOM.FLAG
+                        | PiePosition.TOP.FLAG);
             } else {
-                updatePieTriggerMask(Position.LEFT.FLAG
-                        | Position.BOTTOM.FLAG
-                        | Position.RIGHT.FLAG
-                        | Position.TOP.FLAG);
+                updatePieTriggerMask(PiePosition.LEFT.FLAG
+                        | PiePosition.BOTTOM.FLAG
+                        | PiePosition.RIGHT.FLAG
+                        | PiePosition.TOP.FLAG);
             }
         } catch (RemoteException e) {
             // nothing else to do ...
