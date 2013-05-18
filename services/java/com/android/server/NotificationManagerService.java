@@ -149,7 +149,6 @@ public class NotificationManagerService extends INotificationManager.Stub
 
     // for enabling and disabling notification pulse behaviour
     private boolean mScreenOn = true;
-    private boolean mWasScreenOn = false;
     private boolean mInCall = false;
     private boolean mNotificationPulseEnabled;
     private HashMap<String, NotificationLedValues> mNotificationPulseCustomLedValues;
@@ -587,8 +586,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                 mScreenOn = true;
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
-                mWasScreenOn = true;
-                updateLightsLocked();
+                updateNotificationPulse();
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(
                         TelephonyManager.EXTRA_STATE_OFFHOOK));
@@ -1312,6 +1310,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0
                     && canInterrupt) {
                 mLights.add(r);
+                // force reevaluation of active light
+                mLedNotification = null;
                 updateLightsLocked();
             } else {
                 if (old != null
@@ -1582,32 +1582,17 @@ public class NotificationManagerService extends INotificationManager.Stub
     {
         // handle notification lights
         if (mLedNotification == null) {
-            // get next notification, if any
-            int n = mLights.size();
-            if (n > 0) {
-                mLedNotification = mLights.get(n-1);
+            // use most recent light with highest score
+            for (int i = mLights.size(); i > 0; i--) {
+                NotificationRecord r = mLights.get(i - 1);
+                if (mLedNotification == null || r.score > mLedNotification.score) {
+                    mLedNotification = r;
+                }
             }
         }
 
-        boolean wasScreenOn = mWasScreenOn;
-        mWasScreenOn = false;
-
-        if (mLedNotification == null) {
-            mNotificationLight.turnOff();
-            return;
-        }
-
-        // We can assume that if the user turned the screen off while there was
-        // still an active notification then they wanted to keep the notification
-        // for later. In this case we shouldn't flash the notification light.
-        // For special notifications that automatically turn the screen on (such
-        // as missed calls), we use this flag to force the notification light
-        // even if the screen was turned off.
-        boolean forceWithScreenOff = (mLedNotification.notification.flags &
-                Notification.FLAG_FORCE_LED_SCREEN_OFF) != 0;
-
         // Don't flash while we are in a call, screen is on or we are in quiet hours with light dimmed
-        if (mInCall || mScreenOn || (inQuietHours() && mQuietHoursDim) || (wasScreenOn && !forceWithScreenOff)) {
+        if (mLedNotification == null || mInCall || mScreenOn || (inQuietHours() && mQuietHoursDim)) {
             mNotificationLight.turnOff();
         } else {
             int ledARGB;
@@ -1757,6 +1742,7 @@ public class NotificationManagerService extends INotificationManager.Stub
 
             pw.println("  mSoundNotification=" + mSoundNotification);
             pw.println("  mVibrateNotification=" + mVibrateNotification);
+            pw.println("  mLedNotification=" + mLedNotification);
             pw.println("  mDisabledNotifications=0x" + Integer.toHexString(mDisabledNotifications));
             pw.println("  mSystemReady=" + mSystemReady);
         }
