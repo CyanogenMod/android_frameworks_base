@@ -359,5 +359,5 @@
     <dimen name="pie_perpendicular_distance">15dp</dimen>
 
     <!-- Pie service: Thickness of the active trigger fields around the screen border -->
-    <dimen name="pie_trigger_thickness">6dp</dimen>
+    <dimen name="pie_trigger_thickness">15dp</dimen>
 </resources>
