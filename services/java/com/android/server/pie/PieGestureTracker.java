@@ -15,6 +15,9 @@
  */
 package com.android.server.pie;
 
+import static com.android.internal.util.pie.PieServiceConstants.SENSITIVITY_HIGHEST;
+import static com.android.internal.util.pie.PieServiceConstants.SENSITIVITY_LOWEST;
+
 import android.graphics.Point;
 import android.os.SystemClock;
 import android.util.Slog;
@@ -35,9 +38,15 @@ public class PieGestureTracker {
     public final static long TRIGGER_TIME_MS = 140;
     public final static int PIXEL_SWIPE_OFFTAKE_SLOP = 2;
 
-    private final int mTriggerThickness;
-    private final int mTriggerDistance;
-    private final int mPerpendicularDistance;
+    private final int mBaseThickness;
+    private final int mBaseTriggerDistance;
+    private final int mBasePerpendicularDistance;
+
+    private int mThickness;
+    private int mTriggerDistance;
+    private int mPerpendicularDistance;
+    private int mGracePeriodDistance;
+    private long mTimeOut;
 
     private int mDisplayWidth;
     private int mDisplayHeight;
@@ -59,9 +68,29 @@ public class PieGestureTracker {
         if (DEBUG) {
             Slog.d(TAG, "init: " + thickness + "," + distance);
         }
-        mTriggerThickness = thickness;
-        mTriggerDistance = distance;
-        mPerpendicularDistance = perpendicular;
+        mBaseThickness = thickness;
+        mBaseTriggerDistance = distance;
+        mBasePerpendicularDistance = perpendicular;
+        setSensitivity(0);
+    }
+
+    private void setSensitivity(int sensitivity) {
+        float factor = 0.0f;
+        if (sensitivity >= 1) {
+             factor = (sensitivity - 1) / 4.0f;
+        }
+        if (DEBUG) {
+            Slog.d(TAG, "sensitivity: " + sensitivity + " => factor:" + factor);
+        }
+        // default values (without overlay):
+        // 140ms ... 210ms
+        mTimeOut = (long) (TRIGGER_TIME_MS * (factor + 1.0f));
+        // 12dp ... 18dp
+        mThickness = (int) (mBaseThickness * (factor + 1.0f));
+        // 12dp ... 6dp
+        mTriggerDistance = (int) (mBaseTriggerDistance * (1.0f - factor));
+        mPerpendicularDistance = (int) (mBasePerpendicularDistance * (1.0f - factor));
+        mGracePeriodDistance = (int) (mThickness / 3.0f);
     }
 
     public void setOnActivationListener(OnActivationListener listener) {
@@ -82,32 +111,35 @@ public class PieGestureTracker {
         }
     }
 
-    public boolean start(MotionEvent motionEvent, int positions) {
+    public boolean start(MotionEvent motionEvent, int positions, int sensitivity) {
         final int x = (int) motionEvent.getX();
         final float fx = motionEvent.getX() / mDisplayWidth;
         final int y = (int) motionEvent.getY();
         final float fy = motionEvent.getY() / mDisplayHeight;
 
+        // calculate trigger geometry based on sensitivity
+        setSensitivity(sensitivity);
+
         if ((positions & PiePosition.LEFT.FLAG) != 0) {
-            if (x < mTriggerThickness && fy > 0.1f && fy < 0.9f) {
+            if (x < mThickness && fy > 0.1f && fy < 0.9f) {
                 startWithPosition(motionEvent, PiePosition.LEFT);
                 return true;
             }
         }
         if ((positions & PiePosition.BOTTOM.FLAG) != 0) {
-            if (y > mDisplayHeight - mTriggerThickness && fx > 0.1f && fx < 0.9f) {
+            if (y > mDisplayHeight - mThickness && fx > 0.1f && fx < 0.9f) {
                 startWithPosition(motionEvent, PiePosition.BOTTOM);
                 return true;
             }
         }
         if ((positions & PiePosition.RIGHT.FLAG) != 0) {
-            if (x > mDisplayWidth - mTriggerThickness && fy > 0.1f && fy < 0.9f) {
+            if (x > mDisplayWidth - mThickness && fy > 0.1f && fy < 0.9f) {
                 startWithPosition(motionEvent, PiePosition.RIGHT);
                 return true;
             }
         }
         if ((positions & PiePosition.TOP.FLAG) != 0) {
-            if (y < mTriggerThickness && fx > 0.1f && fx < 0.9f) {
+            if (y < mThickness && fx > 0.1f && fx < 0.9f) {
                 startWithPosition(motionEvent, PiePosition.TOP);
                 return true;
             }
@@ -126,14 +158,14 @@ public class PieGestureTracker {
         mInitialY = (int) motionEvent.getY();
         switch (position) {
             case LEFT:
-                mGracePeriod = (int) (mTriggerDistance / 3.0f);
+                mGracePeriod = mGracePeriodDistance;
                 mOffTake = mInitialX - PIXEL_SWIPE_OFFTAKE_SLOP;
                 break;
             case BOTTOM:
                 mOffTake = mInitialY + PIXEL_SWIPE_OFFTAKE_SLOP;
                 break;
             case RIGHT:
-                mGracePeriod = mDisplayWidth - (int) (mTriggerDistance / 3.0f);
+                mGracePeriod = mDisplayWidth - mGracePeriodDistance;
                 mOffTake = mInitialX + PIXEL_SWIPE_OFFTAKE_SLOP;
                 break;
             case TOP:
@@ -144,7 +176,7 @@ public class PieGestureTracker {
     }
 
     public boolean move(MotionEvent motionEvent) {
-        if (!mActive || motionEvent.getEventTime() - mDownTime > TRIGGER_TIME_MS) {
+        if (!mActive || motionEvent.getEventTime() - mDownTime > mTimeOut) {
             Slog.d(TAG, "pie gesture timeout: " + (motionEvent.getEventTime() - mDownTime));
             mActive = false;
             return false;
