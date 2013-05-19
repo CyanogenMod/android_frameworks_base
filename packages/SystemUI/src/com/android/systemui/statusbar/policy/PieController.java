@@ -63,6 +63,7 @@ import android.widget.Toast;
 
 import com.android.internal.util.cm.DevUtils;
 import com.android.internal.util.pie.PiePosition;
+import com.android.internal.util.pie.PieServiceConsts;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.NavigationButtons;
@@ -87,6 +88,13 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
 
     private static final ButtonInfo SEARCHLIGHT = new ButtonInfo(0, 0, 0,
             R.drawable.search_light, R.drawable.search_light, 0);
+
+    private static final int[] SENSITIVITY_MAPPING = {
+        PieServiceConsts.SENSITIVITY_NONE,
+        PieServiceConsts.SENSITIVITY_LOW,
+        PieServiceConsts.SENSITIVITY_MEDIUM,
+        PieServiceConsts.SENSITIVITY_HIGH
+    };
 
     public static final float EMPTY_ANGLE = 10;
     public static final float START_ANGLE = 180 + EMPTY_ANGLE;
@@ -215,6 +223,8 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
             // trigger setupListener()
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_POSITIONS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_SENSITIVITY), false, this);
         }
 
         @Override
@@ -351,8 +361,17 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
 
         mPieTriggerSlots = Settings.System.getInt(resolver,
                 Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG);
+
+        int sensitivity = Settings.System.getInt(resolver,
+                Settings.System.PIE_SENSITIVITY, 3);
+        if (sensitivity <= SENSITIVITY_MAPPING.length) {
+            sensitivity = SENSITIVITY_MAPPING[sensitivity];
+        } else {
+            sensitivity = PieServiceConsts.SENSITIVITY_HIGH;
+        }
+
         mPieManager.updatePieActivationListener(mPieActivationListener,
-                mPieTriggerSlots & mPieTriggerMask);
+                sensitivity | mPieTriggerSlots & mPieTriggerMask);
     }
 
     private void setupNavigationItems() {

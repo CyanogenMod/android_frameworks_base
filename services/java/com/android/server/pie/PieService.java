@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.android.internal.util.pie.PiePosition;
+import com.android.internal.util.pie.PieServiceConsts;
 import com.android.server.input.InputManagerService;
 import com.android.server.wm.WindowManagerService;
 
@@ -55,12 +56,11 @@ import java.util.List;
  */
 public class PieService extends IPieService.Stub {
     public static final String TAG = "PieService";
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     public static final boolean DEBUG_INPUT = false;
 
     public static final int MSG_PIE_ACTIVATION = 32023;
-    public static final int MSG_PIE_DEACTIVATION = 32024;
-    public static final int MSG_UPDATE_POSITIONS = 32025;
+    public static final int MSG_UPDATE_SERVICE = 32025;
 
     private final Context mContext;
     private final InputManagerService mInputManager;
@@ -74,6 +74,7 @@ public class PieService extends IPieService.Stub {
     private PieInputFilter mInputFilter;
 
     private int mGlobalPositions = 0;
+    private int mGlobalSensitivity = 3;
     private boolean mIsMonitoring = false;
 
     private final class PieActivationListenerRecord extends IPieHostCallback.Stub implements DeathRecipient {
@@ -88,8 +89,9 @@ public class PieService extends IPieService.Stub {
             removeListenerRecord(this);
         }
 
-        public void updatePositions(int positions) {
-            this.positions = positions;
+        public void updateFlags(int flags) {
+            this.positions = flags & PieServiceConsts.POSITION_MASK;
+            this.sensitivity = (flags & PieServiceConsts.SENSITIVITY_MASK) >> 28;
         }
 
         public boolean eligibleForActivation(int positionFlag) {
@@ -131,7 +133,9 @@ public class PieService extends IPieService.Stub {
                 mActive = false;
                 synchronized (mLock) {
                     mActiveRecord = null;
-                    mHandler.obtainMessage(MSG_PIE_DEACTIVATION, mGlobalPositions, 0).sendToTarget();
+                    // restore input filter state by updating
+                    mHandler.obtainMessage(MSG_UPDATE_SERVICE,
+                            mGlobalPositions, mGlobalSensitivity).sendToTarget();
                 }
             }
         }
@@ -145,6 +149,7 @@ public class PieService extends IPieService.Stub {
         }
 
         public int positions;
+        public int sensitivity;
         public final IPieActivationListener listener;
     }
     private final List<PieActivationListenerRecord> mPieActivationListener =
@@ -177,7 +182,8 @@ public class PieService extends IPieService.Stub {
         });
         mDisplayObserver = new DisplayObserver(mContext, mHandler);
         // check if anyone registered during startup
-        mHandler.obtainMessage(MSG_UPDATE_POSITIONS, mGlobalPositions, 0).sendToTarget();
+        mHandler.obtainMessage(MSG_UPDATE_SERVICE,
+                mGlobalPositions, mGlobalSensitivity).sendToTarget();
         updateMonitoring();
     }
 
@@ -249,10 +255,12 @@ public class PieService extends IPieService.Stub {
                 Slog.w(TAG, "Unknown listener on update listener. Register first?");
                 throw new IllegalStateException("listener not registered");
             }
-            record.updatePositions(positionFlags);
+            record.updateFlags(positionFlags);
             updatePositionsLocked();
+            updateSensitivityLocked();
             if (mActiveRecord == null && mHandler != null) {
-                mHandler.obtainMessage(MSG_UPDATE_POSITIONS, mGlobalPositions, 0).sendToTarget();
+                mHandler.obtainMessage(MSG_UPDATE_SERVICE,
+                        mGlobalPositions, mGlobalSensitivity).sendToTarget();
             }
         }
         updateMonitoring();
@@ -274,13 +282,28 @@ public class PieService extends IPieService.Stub {
         }
     }
 
+    private void updateSensitivityLocked() {
+        mGlobalSensitivity = 0;
+        for (PieActivationListenerRecord temp : mPieActivationListener) {
+            if (temp.sensitivity != 0) {
+                mGlobalSensitivity = Math.max(mGlobalSensitivity, temp.sensitivity);
+            }
+        }
+        // if no special sensitivity is requested, we settle on HIGH
+        if (mGlobalSensitivity == 0) {
+            mGlobalSensitivity = 3;
+        }
+    }
+
     private void removeListenerRecord(PieActivationListenerRecord record) {
         synchronized(mLock) {
             mPieActivationListener.remove(record);
             updatePositionsLocked();
             // check if the record was the active one
             if (record == mActiveRecord) {
-                mHandler.obtainMessage(MSG_PIE_DEACTIVATION, mGlobalPositions, 0).sendToTarget();
+                // restore input filter state by updating
+                mHandler.obtainMessage(MSG_UPDATE_SERVICE,
+                        mGlobalPositions, mGlobalSensitivity).sendToTarget();
             }
         }
         updateMonitoring();
@@ -382,28 +405,24 @@ public class PieService extends IPieService.Stub {
                     removeMessages(MSG_PIE_ACTIVATION);
                     if (propagateActivation(m.arg1, m.arg2, (PiePosition) m.obj)) {
                         // switch off all positions for the time of activation
-                        updatePositionsHandler(0);
+                        updateServiceHandler(0, 0);
                     }
                     break;
-                case MSG_PIE_DEACTIVATION:
+                case MSG_UPDATE_SERVICE:
                     if (DEBUG) {
-                        Slog.d(TAG, "Deactivating pie with positions 0x" + Integer.toHexString(m.arg1));
+                        Slog.d(TAG, "Updating positions 0x" + Integer.toHexString(m.arg1)
+                                + " sensitivity: " + m.arg2);
                     }
-                    // switch back on the positions we need
-                    updatePositionsHandler(m.arg1);
+                    updateServiceHandler(m.arg1, m.arg2);
                     break;
-                case MSG_UPDATE_POSITIONS:
-                    if (DEBUG) {
-                        Slog.d(TAG, "Updating positions 0x" + Integer.toHexString(m.arg1));
-                    }
-                    updatePositionsHandler(m.arg1);
                 }
         }
 
-        private void updatePositionsHandler(int positions) {
+        private void updateServiceHandler(int positions, int sensitivity) {
             synchronized (mLock) {
                 if (mInputFilter != null) {
                     mInputFilter.updatePositions(positions);
+                    mInputFilter.updateSensitivity(sensitivity);
                 }
             }
         }
