@@ -483,17 +483,6 @@ public final class SELinuxMMAC {
      * @return boolean Indicates whether the package passed policy.
      */
     public static boolean passInstallPolicyChecks(PackageParser.Package pkg) {
-
-        /*
-         * Non system installed apps should be treated the same. This
-         * means that any post-loaded apk will be assigned the default
-         * tag, if one exists in the policy, else null, without respect
-         * to the signing key.
-         */
-
-        if (((pkg.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ||
-            ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0)) {
-
             // We just want one of the signatures to match.
             for (Signature s : pkg.mSignatures) {
                 if (s == null)
@@ -525,7 +514,6 @@ public final class SELinuxMMAC {
                 }
                 return passed;
             }
-        }
 
         // Check for a default policy.
         if (SIG_POLICY.containsKey(null)) {
