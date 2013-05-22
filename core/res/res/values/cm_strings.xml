@@ -163,4 +163,10 @@
     <string name="permdesc_changePrivacyGuardState">Allows the application to change whether another application runs with Privacy Guard. When an application is running with Privacy Guard, it will not have access to personal data such as contacts, call logs, or messages.</string>
     <string name="privacy_guard_notification">Privacy Guard active</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> will not be able to access personal data</string>
+
+    <!-- The title of the profile picker dialog. -->
+    <string name="profile_picker_title">Profiles</string>
+
+    <!-- The item label for the no profile selection item. -->
+    <string name="profile_none">None</string>
 </resources>
