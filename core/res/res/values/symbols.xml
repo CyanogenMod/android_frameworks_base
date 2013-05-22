@@ -2058,6 +2058,12 @@
   <java-symbol type="dimen" name="datepicker_year_label_height" />
   <java-symbol type="dimen" name="datepicker_year_picker_padding_top" />
 
+  <!-- Profiles -->
+  <java-symbol type="xml" name="profile_default" />
+  <java-symbol type="string" name="wildcardProfile" />
+  <java-symbol type="string" name="profile_picker_title" />
+  <java-symbol type="string" name="profile_none" />
+
   <java-symbol type="color" name="timepicker_default_text_color_holo_light" />
   <java-symbol type="color" name="timepicker_default_ampm_unselected_background_color_holo_light" />
   <java-symbol type="color" name="timepicker_default_ampm_selected_background_color_holo_light" />
