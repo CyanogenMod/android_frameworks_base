@@ -46,6 +46,72 @@ public class ProfileManager {
     private static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
 
     /**
+     * Activity Action: Shows a profile picker.
+     * <p>
+     * Input: {@link #EXTRA_PROFILE_EXISTING_UUID}, {@link #EXTRA_PROFILE_SHOW_NONE},
+     * {@link #EXTRA_PROFILE_TITLE}.
+     * <p>
+     * Output: {@link #EXTRA_PROFILE_PICKED_UUID}.
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_PROFILE_PICKER = "android.intent.action.PROFILE_PICKER";
+
+    /**
+     * @hide
+     */
+    public static final UUID NO_PROFILE =
+            UUID.fromString("00000000-0000-0000-0000-000000000000");
+
+    /**
+     * Given to the profile picker as a boolean. Whether to show an item for
+     * deselect the profile. If the "None" item is picked,
+     * {@link #EXTRA_PROFILE_PICKED_UUID} will be {@link #NO_PROFILE}.
+     *
+     * @see #ACTION_PROFILE_PICKER
+     * @hide
+     */
+    public static final String EXTRA_PROFILE_SHOW_NONE =
+            "android.intent.extra.profile.SHOW_NONE";
+
+    /**
+     * Given to the profile picker as a {@link UUID} string representation. The {@link UUID}
+     * representation of the current profile, which will be used to show a checkmark next to
+     * the item for this {@link UUID}. If the item is {@link #NO_PROFILE} then "None" item
+     * is selected if {@link EXTRA_PROFILE_SHOW_NONE} is enabled. Otherwise, the current
+     * profile is selected.
+     *
+     * @see #ACTION_PROFILE_PICKER
+     * @hide
+     */
+    public static final String EXTRA_PROFILE_EXISTING_UUID =
+            "android.intent.extra.profile.EXISTING_UUID";
+
+    /**
+     * Given to the profile picker as a {@link CharSequence}. The title to
+     * show for the profile picker. This has a default value that is suitable
+     * in most cases.
+     *
+     * @see #ACTION_PROFILE_PICKER
+     * @hide
+     */
+    public static final String EXTRA_PROFILE_TITLE = "android.intent.extra.profile.TITLE";
+
+    /**
+     * Returned from the profile picker as a {@link UUID} string representation.
+     * <p>
+     * It will be one of:
+     * <li> the picked profile,
+     * <li> null if the "None" item was picked.
+     *
+     * @see #ACTION_PROFILE_PICKER
+     * @hide
+     */
+    public static final String EXTRA_PROFILE_PICKED_UUID =
+            "android.intent.extra.profile.PICKED_UUID";
+
+
+    /**
      * Broadcast intent action indicating that Profiles has been enabled or disabled.
      * One extra provides this state as an int.
      *

@@ -1881,6 +1881,8 @@
   <!-- Profiles -->
   <java-symbol type="xml" name="profile_default" />
   <java-symbol type="string" name="wildcardProfile" />
+  <java-symbol type="string" name="profile_picker_title" />
+  <java-symbol type="string" name="profile_none" />
 
   <!-- Power widget -->
   <java-symbol type="string" name="hour" />
