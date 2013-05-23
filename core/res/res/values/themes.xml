@@ -1013,6 +1013,10 @@ please see themes_device_defaults.xml.
         <item name="findOnPageNextDrawable">@android:drawable/ic_find_next_holo_dark</item>
         <item name="findOnPagePreviousDrawable">@android:drawable/ic_find_previous_holo_dark</item>
 
+        <item name="drawer_background">@android:drawable/drawer_background_holo_dark</item>
+        <item name="drawer_shadow">@android:drawable/drawer_shadow_holo_dark</item>
+        <item name="ic_drawer">@android:drawable/ic_drawer_holo_dark</item>
+
         <!-- Gallery attributes -->
         <item name="galleryItemBackground">@android:drawable/gallery_item_background</item>
         
@@ -1327,6 +1331,10 @@ please see themes_device_defaults.xml.
         <item name="listDividerAlertDialog">@android:drawable/list_divider_holo_light</item>
         <item name="findOnPageNextDrawable">@android:drawable/ic_find_next_holo_light</item>
         <item name="findOnPagePreviousDrawable">@android:drawable/ic_find_previous_holo_light</item>
+
+        <item name="drawer_background">@android:drawable/drawer_background_holo_light</item>
+        <item name="drawer_shadow">@android:drawable/drawer_shadow_holo_light</item>
+        <item name="ic_drawer">@android:drawable/ic_drawer_holo_light</item>
 
         <!-- Gallery attributes -->
         <item name="galleryItemBackground">@android:drawable/gallery_item_background</item>

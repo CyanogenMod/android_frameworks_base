@@ -6156,4 +6156,9 @@
         <attr name="textView" format="reference" />
     </declare-styleable>
 
+    <!-- Navigation drawer -->
+     <attr name="drawer_shadow" format="reference" />
+     <attr name="ic_drawer" format="reference" />
+     <attr name="drawer_background" format="reference" />
+
 </resources>
