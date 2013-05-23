@@ -25,6 +25,7 @@ import com.android.server.wm.WindowManagerService;
 import android.graphics.Point;
 import android.util.Slog;
 import android.view.Display;
+import android.os.SystemProperties;
 
 /**
  * Activity manager code dealing with processes.
@@ -101,7 +102,7 @@ class ProcessList {
     // The maximum number of hidden processes we will keep around before
     // killing them; this is just a control to not let us go too crazy with
     // keeping around processes on devices with large amounts of RAM.
-    static final int MAX_HIDDEN_APPS = 24;
+    static final int MAX_HIDDEN_APPS = SystemProperties.getInt("ro.sys.fw.bg_apps_limit", 24);
 
     // We allow empty processes to stick around for at most 30 minutes.
     static final long MAX_EMPTY_TIME = 30*60*1000;
