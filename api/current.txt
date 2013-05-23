@@ -9804,7 +9804,6 @@ package android.hardware {
     method public int getJpegQuality();
     method public int getJpegThumbnailQuality();
     method public android.hardware.Camera.Size getJpegThumbnailSize();
-    method public java.lang.String getPowerMode();
     method public int getMaxExposureCompensation();
     method public int getMaxNumDetectedFaces();
     method public int getMaxNumFocusAreas();
@@ -9814,6 +9813,7 @@ package android.hardware {
     method public int getMinExposureCompensation();
     method public int getPictureFormat();
     method public android.hardware.Camera.Size getPictureSize();
+    method public java.lang.String getPowerMode();
     method public android.hardware.Camera.Size getPreferredPreviewSizeForVideo();
     method public int getPreviewFormat();
     method public void getPreviewFpsRange(int[]);
@@ -21012,6 +21012,7 @@ package android.telephony {
     field public static final java.lang.String EXTRA_STATE_RINGING;
     field public static final int NETWORK_TYPE_1xRTT = 7; // 0x7
     field public static final int NETWORK_TYPE_CDMA = 4; // 0x4
+    field public static final int NETWORK_TYPE_DCHSPAP = 30; // 0x1e
     field public static final int NETWORK_TYPE_EDGE = 2; // 0x2
     field public static final int NETWORK_TYPE_EHRPD = 14; // 0xe
     field public static final int NETWORK_TYPE_EVDO_0 = 5; // 0x5
@@ -41334,8 +41335,8 @@ package java.util.zip {
 
   public class ZipFile {
     ctor public ZipFile(java.io.File) throws java.io.IOException, java.util.zip.ZipException;
-    ctor public ZipFile(java.lang.String) throws java.io.IOException;
     ctor public ZipFile(java.io.File, int) throws java.io.IOException;
+    ctor public ZipFile(java.lang.String) throws java.io.IOException;
     method public void close() throws java.io.IOException;
     method public java.util.Enumeration<? extends java.util.zip.ZipEntry> entries();
     method public java.util.zip.ZipEntry getEntry(java.lang.String);
