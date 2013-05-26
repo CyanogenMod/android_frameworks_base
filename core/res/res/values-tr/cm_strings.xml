@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="profileNameDefault">Varsayılan</string>
+    <string name="profileNameWork">İş</string>
+    <string name="profileNameHome">Ev</string>
+    <string name="profileNameSilent">Sessiz</string>
+    <string name="profileNameNight">Gece</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Takvim</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Eposta</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Diğer</string>
+    <string name="reboot_system" product="tablet">Tableti Yeniden Başlat</string>
+    <string name="reboot_system" product="default">Telefonu Yeniden Başlat</string>
+    <string name="global_action_screenshot">Ekran görüntüsü</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Genişletilmiş Masaüstü</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Etkin</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Devre dışı</string>
+    <string name="reboot_reboot">Yeniden Başlat</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Yeniden başlatılıyor\u2026</string>
+    <string name="reboot_confirm" product="tablet">Tabletiniz yeniden başlatılacak.</string>
+    <string name="reboot_confirm" product="default">Telefonunuz yeniden başlatılacak.</string>
+    <string name="permlab_preventpower">güç tuşunu engelle</string>
+    <string name="permdesc_preventpower">Uygulamanın güç tuşunun işlevini değiştirmesine izin verir.</string>
+    <string name="permlab_fm_radio_receiver">FM alıcıyı kontrol et</string>
+    <string name="permdesc_fm_radio_receiver">Uygulamanın FM alıcıyı kontrol etmesine izin verir.</string>
+    <string name="permlab_fm_radio_transmitter">FM vericiyi kontrol et</string>
+    <string name="permdesc_fm_radio_transmitter">Uygulamanın FM vericiyi kontrol etmesine izin verir.</string>
+    <string name="lockscreen_discharging">Şarj olmuyor, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="storage_sd_dock_card">SD kart genişletmesi</string>
+    <string name="app_killed_message">Uygulama zorla sonlandırıldı</string>
+    <string name="global_action_reboot">Yeniden başlat</string>
+    <string name="global_action_choose_profile">Profil</string>
+    <string name="toast_rotation_unlocked">Ekran döndürme kilitli değil</string>
+    <string name="toast_rotation_locked">Ekran döndürme kilitli</string>
+    <string name="stylus_app_not_installed">%s yüklü değil</string>
+</resources>
