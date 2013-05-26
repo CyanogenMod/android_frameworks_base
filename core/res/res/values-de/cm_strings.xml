@@ -40,9 +40,18 @@
     <string name="reboot_progress">Neu starten\u2026</string>
     <string name="reboot_confirm" product="tablet">Tablet wird neu gestartet</string>
     <string name="reboot_confirm" product="default">Telefon wird neu gestartet</string>
+    <string name="permlab_preventpower">Ein/Aus-Taste umbelegen</string>
+    <string name="permdesc_preventpower">Ermöglicht der App, der Ein/Aus-Taste eine andere Funktion zuzuweisen</string>
+    <string name="permlab_fm_radio_receiver">UKW-Empfänger steuern</string>
+    <string name="permdesc_fm_radio_receiver">Ermöglicht der App, den UKW-Empfänger zu steuern.</string>
+    <string name="permlab_fm_radio_transmitter">UKW-Sender steuern</string>
+    <string name="permdesc_fm_radio_transmitter">Ermöglicht der App, den UKW-Sender zu steuern.</string>
+    <string name="lockscreen_discharging">"Entlädt\u2026 (<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="storage_sd_dock_card">SD-Karte des Docks</string>
     <string name="global_action_reboot">Neu starten</string>
     <string name="global_action_choose_profile">Profile</string>
     <string name="app_killed_message">Anwendung beendet</string>
     <string name="toast_rotation_unlocked">Bildschirmausrichtung sperren</string>
     <string name="toast_rotation_locked">Bildschirmausrichtung entsperren</string>
+    <string name="stylus_app_not_installed">%s ist nicht installiert</string>
 </resources>
