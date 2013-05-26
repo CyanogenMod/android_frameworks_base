@@ -49,4 +49,9 @@
     <string name="toast_rotation_unlocked">Scherm wordt automatisch gedraaid</string>
     <string name="toast_rotation_locked">Scherm wordt niet automatisch gedraaid</string>
     <string name="storage_sd_dock_card">SD-kaart in dock</string>
+    <string name="permlab_fm_radio_receiver">FM-ontvanger beheren</string>
+    <string name="permdesc_fm_radio_receiver">Hiermee kan de app de FM-ontvanger beheren.</string>
+    <string name="permlab_fm_radio_transmitter">FM-zender beheren</string>
+    <string name="permdesc_fm_radio_transmitter">Hiermee kan de app de FM-zender beheren.</string>
+    <string name="stylus_app_not_installed">%s is niet geïnstalleerd</string>
 </resources>
