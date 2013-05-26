@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_quick_settings_ringer">Ses <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Titreşim <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Cid\'in kafasını kullan</string>
+    <string name="bean_dream_settings_cid_summary">Hayalde jelibonlar yerine Cid\'in kafasını kullan</string>
+    <string name="quick_settings_profile_label">Profil</string>
+    <string name="powerwidget_screen_timeout_toast">Ekran zaman aşımı şuna ayarlandı: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS kapalı</string>
+    <string name="quick_settings_screen_sleep">Uyku moduna geç</string>
+    <string name="quick_settings_ringer_on">Ses açık</string>
+    <string name="quick_settings_ringer_off">Ses kapalı</string>
+    <string name="quick_settings_vibration_on">Titreşim açık</string>
+    <string name="quick_settings_vibration_off">Titreşim kapalı</string>
+    <string name="quick_settings_label_enabled">Açık</string>
+    <string name="quick_settings_label_disabled">Kapalı</string>
+    <string name="quick_settings_ringer_normal">Ses</string>
+    <string name="quick_settings_lockscreen">Kilit Ekranı</string>
+    <string name="quick_settings_network_type">Ağ modu</string>
+    <string name="quick_settings_report_bug">Hata bildir</string>
+    <string name="quick_settings_sync">Senkronizasyon</string>
+    <string name="quick_settings_sync_off">Senk. Kapalı</string>
+    <string name="quick_settings_torch">El feneri</string>
+    <string name="quick_settings_torch_off">El feneri kapalı</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC kapalı</string>
+    <string name="quick_settings_screen_timeout">Zaman aşımı</string>
+    <string name="quick_settings_usb_tether_off_label">Bağlı değil</string>
+    <string name="quick_settings_usb_tether_connected_label">USB Int. payl. kapalı</string>
+    <string name="quick_settings_usb_tether_on_label">USB Internet payl.</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP kapalı</string>
+    <string name="quick_settings_quiethours">Sessiz saatler</string>
+    <string name="quick_settings_quiethours_off">Sessiz saatler kapalı</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE kapalı</string>
+    <string name="quick_settings_volume">Ses</string>
+    <string name="quick_settings_expanded_desktop">Genişletilmiş</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="navbar_dialog_title">Atamak için işlev seçin</string>
+    <string name="navbar_home_button">Ev tuşu</string>
+    <string name="navbar_recent_button">Son uyg. tuşu</string>
+    <string name="navbar_search_button">Arama tuşu</string>
+    <string name="navbar_back_button">Geri tuşu</string>
+    <string name="navbar_empty_button">Boş tuş</string>
+    <string name="navbar_menu_conditional_button">Menu (otoGizle) tuşu</string>
+    <string name="navbar_menu_always_button">Menü (otoGoster) tuşu</string>
+    <string name="navbar_menu_big_button">Menü tuşu</string>
+    <string name="pie_battery_status_charging">Şarj oluyor (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Şarj oldu</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% kaldı</string>
+    <string name="pie_phone_status_no_service">Hizmet yok</string>
+    <string name="pie_phone_status_airplane_mode">Uçak modu açık</string>
+    <string name="pie_phone_status_emergency_only">Sadece acil aramalar</string>
+</resources>
