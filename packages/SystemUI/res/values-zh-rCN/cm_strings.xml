@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_battery_level">电池 <xliff:g id="number">%d</xliff:g>%%。</string>
     <string name="accessibility_quick_settings_ringer">声音：<xliff:g id="state" example="Off">%s</xliff:g>。</string>
     <string name="accessibility_quick_settings_vibration">震动：<xliff:g id="state" example="Off">%s</xliff:g>。</string>
     <string name="powerwidget_screen_timeout_toast">屏幕超时设为: %1$d %2$s</string>
