@@ -43,9 +43,9 @@
     <string name="permlab_preventpower">阻止电源键</string>
     <string name="permdesc_preventpower">允许应用程序完全掌控电源键</string>
     <string name="permlab_fm_radio_receiver">控制 FM 接收器</string>
-    <string name="permdesc_fm_radio_receiver">允许应用控制 FM 接收器.</string>
+    <string name="permdesc_fm_radio_receiver">允许应用控制 FM 接收器。</string>
     <string name="permlab_fm_radio_transmitter">控制 FM 发射器</string>
-    <string name="permdesc_fm_radio_transmitter">允许应用控制 FM 发射器.</string>
+    <string name="permdesc_fm_radio_transmitter">允许应用控制 FM 发射器。</string>
     <string name="lockscreen_discharging">正在放电, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">底座 SD 卡</string>
     <string name="app_killed_message">应用程序已被终止</string>
