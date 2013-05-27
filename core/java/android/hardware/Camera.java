@@ -18,18 +18,24 @@ package android.hardware;
 
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
+import android.app.ActivityThread;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.database.ContentObserver;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.media.IAudioService;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.text.TextUtils;
 import android.view.Surface;
@@ -299,6 +305,7 @@ public class Camera {
      * @see android.app.admin.DevicePolicyManager#getCameraDisabled(android.content.ComponentName)
      */
     public static Camera open(int cameraId) {
+        lockAndEnforceTorchFlashModeOff();
         return new Camera(cameraId);
     }
 
@@ -314,6 +321,7 @@ public class Camera {
         for (int i = 0; i < numberOfCameras; i++) {
             getCameraInfo(i, cameraInfo);
             if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
+                lockAndEnforceTorchFlashModeOff();
                 return new Camera(i);
             }
         }
@@ -338,6 +346,111 @@ public class Camera {
         }
 
         native_setup(new WeakReference<Camera>(this), cameraId);
+    }
+
+
+    private static final Uri TORCH_SETTINGS_URI =
+            Settings.System.getUriFor(Settings.System.TORCH_STATE);
+
+    private static class TorchContentObservable extends ContentObserver {
+
+        private final Object mSync;
+
+        public TorchContentObservable(Handler handler, Object sync) {
+            super(handler);
+            mSync = sync;
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (TORCH_SETTINGS_URI.equals(uri)) {
+                synchronized (mSync) {
+                    mSync.notify();
+                }
+            }
+        }
+    }
+
+    private synchronized static void lockAndEnforceTorchFlashModeOff() {
+        // Are we in the UI Thread? Otherwise we need to run in the UI
+        // thread to ensure the access to ActivityThread
+        if  (Looper.myLooper() == Looper.getMainLooper()) {
+            enforceTorchFlashModeOff();
+        } else {
+            try {
+                final Object handlerSync = new Object();
+                Handler h = new Handler(Looper.getMainLooper());
+                h.postAtFrontOfQueue(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            enforceTorchFlashModeOff();
+                        } finally {
+                            // Exit from the UI thread
+                            synchronized (handlerSync) {
+                                handlerSync.notify();
+                            }
+                        }
+                    }
+                });
+                synchronized (handlerSync) {
+                    handlerSync.wait();
+                }
+            } catch (InterruptedException iex) {
+                // Ignore.
+            }
+        }
+    }
+
+    private static void enforceTorchFlashModeOff() {
+        final Context context = ActivityThread.currentApplication();
+        if (context != null) {
+            ContentResolver cr = context.getContentResolver();
+            if (Settings.System.getInt(cr, Settings.System.TORCH_STATE, 0) == 1) {
+                Log.d(TAG, "Torch flash mode is active. Turning off...");
+
+                // We have to wait until the touch flash focus will be released. For that
+                // we used a content observer over the TORCH_STATE setting.
+                final Object sync = new Object();
+                Handler handler = new Handler();
+                TorchContentObservable observable = new TorchContentObservable(handler, sync);
+                cr.registerContentObserver(TORCH_SETTINGS_URI, false, observable);
+                try {
+                    Thread mTorch = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent("net.cactii.flash2.TURNOFF_FLASHLIGHT");
+                            context.sendBroadcast(i);
+
+                            // Now wait for
+                            synchronized (sync) {
+                                try {
+                                    sync.wait(2000L);  // We can't wait indefinitely
+                                } catch (InterruptedException iex) {
+                                    // Ignored
+                                }
+                            }
+                            Log.d(TAG, "Torch flash mode turned off...");
+                        }
+                    });
+                    mTorch.start();
+                    mTorch.join();
+
+                    // If we are here by the timeout, this means that torch is
+                    // not active. Just update the setting state
+                    Settings.System.putInt(cr, Settings.System.TORCH_STATE, 0);
+
+                } catch (InterruptedException iex) {
+                    // Ignored. Probably the camera will crash
+
+                } finally {
+                    cr.unregisterContentObserver(observable);
+                }
+            }
+        } else {
+            Log.d(TAG, "There is not current context for " +
+                    String.valueOf(ActivityThread.currentPackageName()));
+        }
     }
 
     /**
