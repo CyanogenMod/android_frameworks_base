@@ -19,7 +19,7 @@
     <string name="reboot_reboot">"Repornire"</string>
     <string name="reboot_progress">"Repornire..."</string>
     <string name="reboot_recovery">"Recuperare"</string>
-    <string name="reboot_confirm">"Telefonul dvs. va reporni."</string>
+    <string name="reboot_confirm" product="default">"Telefonul dvs. va reporni."</string>
     <string name="profileNameDefault">"General"</string>
     <string name="profileNameWork">"Serviciu"</string>
     <string name="profileNameHome">"Acasă"</string>
