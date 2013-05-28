@@ -158,6 +158,7 @@ public class PieInputFilter implements IInputFilter {
     private State mState = State.LISTEN; // guarded by mLock
     private PieGestureTracker mTracker; // guarded by mLock
     private volatile int mPositions; // written by handler / read by dispatcher
+    private volatile int mSensitivity; // written by handler / read by dispatcher
 
     // only used by dispatcher
     private long mSyntheticDownTime = -1;
@@ -192,6 +193,11 @@ public class PieInputFilter implements IInputFilter {
     // called from handler thread (lock taken)
     public void updatePositions(int positions) {
         mPositions = positions;
+    }
+
+    // called from handler thread (lock taken)
+    public void updateSensitivity(int sensitivity) {
+        mSensitivity = sensitivity;
     }
 
     // called from handler thread
@@ -267,7 +273,8 @@ public class PieInputFilter implements IInputFilter {
             switch (mState) {
                 case LISTEN:
                     if (action ==  MotionEvent.ACTION_DOWN) {
-                        boolean hit = mPositions != 0 && mTracker.start(motionEvent, mPositions);
+                        boolean hit = mPositions != 0
+                                && mTracker.start(motionEvent, mPositions, mSensitivity);
                         if (DEBUG) Slog.d(TAG, "start:" + hit);
                         if (hit) {
                             // cache the down event
