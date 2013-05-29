@@ -15,6 +15,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
     <string name="bean_dream_settings_cid_title">Usar a Cid</string>
@@ -33,8 +34,8 @@
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC</string>
     <string name="quick_settings_profile_label">Perfil</string>
-    <string name="quick_settings_quiethours">Modo tranq.</string>
-    <string name="quick_settings_quiethours_off">Modo tranq.</string>
+    <string name="quick_settings_quiethours">M. descanso</string>
+    <string name="quick_settings_quiethours_off">M. descanso</string>
     <string name="quick_settings_report_bug">Notificar error</string>
     <string name="quick_settings_ringer_normal">Sonido</string>
     <string name="quick_settings_ringer_on">Sonido</string>
