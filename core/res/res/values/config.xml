@@ -1095,6 +1095,10 @@
          config to 7. -->
     <integer name="config_deviceHardwareKeys">15</integer>
 
+    <!-- 0: Turn off overflow button by default
+         1: Turn on overflow button by default -->
+    <bool name="config_defaultShowOverflow">false</bool>
+
     <!-- Maximum wallpaper width for devices with very high-res screen (1920x1200)
          the wallpaper width suggestion by the launcher may be too large for
          the GPU to handle. -->
@@ -1144,4 +1148,5 @@
     <!-- True if the pie service should be started at system start. This is must be true
          to support pie controls. -->
     <bool name="config_allowPieService">true</bool>
+
 </resources>
