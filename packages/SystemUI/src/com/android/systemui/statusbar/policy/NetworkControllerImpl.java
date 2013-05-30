@@ -775,6 +775,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         // fall through
                     }
                 case TelephonyManager.NETWORK_TYPE_UMTS:
+                case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
                     mDataIconList = TelephonyIcons.DATA_3G[inetCondition];
                     mDataTypeIconId = showDataTypeIcon ?
                                 R.drawable.stat_sys_data_fully_connected_3g : 0;
