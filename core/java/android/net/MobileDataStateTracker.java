@@ -398,6 +398,7 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             networkTypeStr = "edge";
             break;
         case TelephonyManager.NETWORK_TYPE_UMTS:
+        case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
             networkTypeStr = "umts";
             break;
         case TelephonyManager.NETWORK_TYPE_HSDPA:
