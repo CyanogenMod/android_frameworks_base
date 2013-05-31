@@ -508,4 +508,9 @@ public class IWindowManagerImpl implements IWindowManager {
             throws RemoteException {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public boolean hasMenuKeyEnabled() {
+        return true;
+    }
 }

@@ -374,6 +374,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHasMenuKey;
     boolean mHasAssistKey;
     boolean mHasAppSwitchKey;
+    boolean mHasMenuKeyEnabled;
 
     // The last window we were told about in focusChanged.
     WindowState mFocusedWindow;
@@ -1334,6 +1335,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             boolean keyRebindingEnabled = Settings.System.getInt(resolver,
                     Settings.System.HARDWARE_KEY_REBINDING, 0) == 1;
 
+            mHasMenuKeyEnabled = false;
+
             if (!keyRebindingEnabled) {
                 if (mHasHomeKey) {
                     if (mHasAppSwitchKey) {
@@ -1349,6 +1352,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     } else {
                         mLongPressOnMenuBehavior = KEY_ACTION_SEARCH;
                     }
+                    mHasMenuKeyEnabled = true;
                 }
                 if (mHasAssistKey) {
                     mPressOnAssistBehavior = KEY_ACTION_SEARCH;
@@ -1367,6 +1371,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         mLongPressOnHomeBehavior = Settings.System.getInt(resolver,
                                 Settings.System.KEY_HOME_LONG_PRESS_ACTION, KEY_ACTION_APP_SWITCH);
                     }
+                    mHasMenuKeyEnabled = (mLongPressOnHomeBehavior == KEY_ACTION_MENU);
                 }
                 if (mHasMenuKey) {
                     mPressOnMenuBehavior = Settings.System.getInt(resolver,
@@ -1378,18 +1383,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         mLongPressOnMenuBehavior = Settings.System.getInt(resolver,
                                 Settings.System.KEY_MENU_LONG_PRESS_ACTION, KEY_ACTION_SEARCH);
                     }
+                    mHasMenuKeyEnabled |= (mPressOnMenuBehavior == KEY_ACTION_MENU) ||
+                        (mLongPressOnMenuBehavior == KEY_ACTION_MENU);
                 }
                 if (mHasAssistKey) {
                     mPressOnAssistBehavior = Settings.System.getInt(resolver,
                             Settings.System.KEY_ASSIST_ACTION, KEY_ACTION_SEARCH);
                     mLongPressOnAssistBehavior = Settings.System.getInt(resolver,
                             Settings.System.KEY_ASSIST_LONG_PRESS_ACTION, KEY_ACTION_VOICE_SEARCH);
+                    mHasMenuKeyEnabled |= (mPressOnAssistBehavior == KEY_ACTION_MENU) ||
+                        (mLongPressOnAssistBehavior == KEY_ACTION_MENU);
                 }
                 if (mHasAppSwitchKey) {
                     mPressOnAppSwitchBehavior = Settings.System.getInt(resolver,
                             Settings.System.KEY_APP_SWITCH_ACTION, KEY_ACTION_APP_SWITCH);
                     mLongPressOnAppSwitchBehavior = Settings.System.getInt(resolver,
                             Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION, KEY_ACTION_NOTHING);
+                    mHasMenuKeyEnabled |= (mPressOnAppSwitchBehavior == KEY_ACTION_MENU) ||
+                        (mLongPressOnAppSwitchBehavior == KEY_ACTION_MENU);
                 }
             }
 
@@ -5174,6 +5185,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // overridden by qemu.hw.mainkeys in the emulator.
     public boolean hasNavigationBar() {
         return mHasNavigationBar;
+    }
+
+    @Override
+    public boolean hasMenuKeyEnabled() {
+        return mHasMenuKeyEnabled;
     }
 
     @Override

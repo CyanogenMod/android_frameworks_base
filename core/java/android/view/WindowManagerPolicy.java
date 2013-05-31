@@ -1101,6 +1101,11 @@ public interface WindowManagerPolicy {
     public boolean hasNavigationBar();
 
     /**
+     * Specifies whether device can generate KEY_ACTION_MENU keypress
+     */
+    public boolean hasMenuKeyEnabled();
+
+    /**
      * Lock the device now.
      */
     public void lockNow(Bundle options);
