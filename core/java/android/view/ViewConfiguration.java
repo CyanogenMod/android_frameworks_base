@@ -17,10 +17,13 @@
 package android.view;
 
 import android.app.AppGlobals;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Point;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
@@ -205,6 +208,24 @@ public class ViewConfiguration {
      */
     private static final int OVERFLING_DISTANCE = 6;
 
+    // Available custom actions to perform on a key press.
+    // Must match values for KEY_HOME_LONG_PRESS_ACTION in:
+    // core/java/android/provider/Settings.java
+    private static final int KEY_ACTION_NOTHING = 0;
+    private static final int KEY_ACTION_MENU = 1;
+    private static final int KEY_ACTION_APP_SWITCH = 2;
+    private static final int KEY_ACTION_SEARCH = 3;
+    private static final int KEY_ACTION_VOICE_SEARCH = 4;
+    private static final int KEY_ACTION_IN_APP_SEARCH = 5;
+
+    // Masks for checking presence of hardware keys.
+    // Must match values in core/res/res/values/config.xml
+    private static final int KEY_MASK_HOME = 0x01;
+    private static final int KEY_MASK_BACK = 0x02;
+    private static final int KEY_MASK_MENU = 0x04;
+    private static final int KEY_MASK_ASSIST = 0x08;
+    private static final int KEY_MASK_APP_SWITCH = 0x10;
+
     private final int mEdgeSlop;
     private final int mFadingEdgeLength;
     private final int mMinimumFlingVelocity;
@@ -219,9 +240,6 @@ public class ViewConfiguration {
     private final int mOverscrollDistance;
     private final int mOverflingDistance;
     private final boolean mFadingMarqueeEnabled;
-
-    private boolean sHasPermanentMenuKey;
-    private boolean sHasPermanentMenuKeySet;
 
     private Context mContext;
 
@@ -274,6 +292,8 @@ public class ViewConfiguration {
 
         mContext = context;
 
+        GlobalSettingsObserver.getInstance(context) {
+
         mEdgeSlop = (int) (sizeAndDensity * EDGE_SLOP + 0.5f);
         mFadingEdgeLength = (int) (sizeAndDensity * FADING_EDGE_LENGTH + 0.5f);
         mMinimumFlingVelocity = (int) (density * MINIMUM_FLING_VELOCITY + 0.5f);
@@ -291,16 +311,6 @@ public class ViewConfiguration {
 
         mOverscrollDistance = (int) (sizeAndDensity * OVERSCROLL_DISTANCE + 0.5f);
         mOverflingDistance = (int) (sizeAndDensity * OVERFLING_DISTANCE + 0.5f);
-
-        if (!sHasPermanentMenuKeySet) {
-            IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
-            try {
-                sHasPermanentMenuKey = !wm.hasSystemNavBar() && !wm.hasNavigationBar();
-                sHasPermanentMenuKeySet = true;
-            } catch (RemoteException ex) {
-                sHasPermanentMenuKey = false;
-            }
-        }
 
         mFadingMarqueeEnabled = res.getBoolean(
                 com.android.internal.R.bool.config_ui_enableFadingMarquee);
@@ -329,6 +339,135 @@ public class ViewConfiguration {
         }
 
         return configuration;
+    }
+
+    static class GlobalSettingsObserver extends ContentObserver {
+        private static GlobalSettingsObserver sInstance;
+        private Context mObserverContext;
+        private boolean mHasPermanentMenuKey;
+
+        GlobalSettingsObserver(Handler handler, Context context) {
+            super(handler);
+            mObserverContext = context.getApplicationContext();
+            mHasPermanentMenuKey = false;
+        }
+
+        public static GlobalSettingsObserver getInstance(Context context) {
+            if (sInstance == null) {
+                sInstance = new GlobalSettingsObserver(null, context);
+                sInstance.observe();
+            }
+            return sInstance;
+        }
+
+        public void observe() {
+            ContentResolver res = mObserverContext.getContentResolver();
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_LONG_PRESS_ACTION), false, this);
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_MENU_ACTION), false, this);
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_MENU_LONG_PRESS_ACTION), false, this);
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_ASSIST_ACTION), false, this);
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_ASSIST_LONG_PRESS_ACTION), false, this);
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_APP_SWITCH_ACTION), false, this);
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION), false, this);
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HARDWARE_KEY_REBINDING), false, this);
+            res.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.UI_FORCE_OVERFLOW_BUTTON), false, this);
+
+            updateHasPermanentMenuKey();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateHasPermanentMenuKey();
+        }
+
+        public boolean hasPermanentMenuKey() {
+            return mHasPermanentMenuKey;
+        }
+
+        private void updateHasPermanentMenuKey() {
+            IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
+            try {
+                if (wm.hasSystemNavBar() || wm.hasNavigationBar()) {
+                    mHasPermanentMenuKey = false;
+                    return;
+                }
+            } catch (RemoteException ex) {
+                // do nothing, continue trying to guess
+            }
+
+            ContentResolver res = mObserverContext.getContentResolver();
+
+            boolean forceOverflowButton = Settings.System.getInt(res,
+                    Settings.System.UI_FORCE_OVERFLOW_BUTTON, 0) == 1;
+            if (forceOverflowButton) {
+                // force mHasPermanentMenuKey false so the framework
+                // always shows the overflow menu
+                mHasPermanentMenuKey = false;
+                return;
+            }
+
+            boolean hasMenuKeyEnabled = false;
+
+            int deviceHardwareKeys = mObserverContext.getResources().getInteger(
+                    com.android.internal.R.integer.config_deviceHardwareKeys);
+
+            boolean keyRebindingEnabled = Settings.System.getInt(res,
+                    Settings.System.HARDWARE_KEY_REBINDING, 0) == 1;
+
+            if (keyRebindingEnabled) {
+                // sets hasMenuKeyEnabled to true if any keys are currently
+                // remapped to act as the menu key
+                if ((deviceHardwareKeys & KEY_MASK_HOME) != 0) {
+                    int longPressHomeAction = Settings.System.getInt(res,
+                            Settings.System.KEY_HOME_LONG_PRESS_ACTION,
+                            KEY_ACTION_NOTHING);
+                    hasMenuKeyEnabled |= (longPressHomeAction == KEY_ACTION_MENU);
+                }
+
+                if ((deviceHardwareKeys & KEY_MASK_MENU) != 0) {
+                    int pressMenuAction = Settings.System.getInt(res,
+                            Settings.System.KEY_MENU_ACTION, KEY_ACTION_MENU);
+                    int longPressMenuAction = Settings.System.getInt(res,
+                            Settings.System.KEY_MENU_LONG_PRESS_ACTION,
+                            KEY_ACTION_NOTHING);
+                    hasMenuKeyEnabled |= (pressMenuAction == KEY_ACTION_MENU) ||
+                        (longPressMenuAction == KEY_ACTION_MENU);
+                }
+
+                if ((deviceHardwareKeys & KEY_MASK_ASSIST) != 0) {
+                    int pressAssistAction = Settings.System.getInt(res,
+                            Settings.System.KEY_ASSIST_ACTION, KEY_ACTION_SEARCH);
+                    int longPressAssistAction = Settings.System.getInt(res,
+                            Settings.System.KEY_ASSIST_LONG_PRESS_ACTION,
+                            KEY_ACTION_VOICE_SEARCH);
+                    hasMenuKeyEnabled |= (pressAssistAction == KEY_ACTION_MENU) ||
+                        (longPressAssistAction == KEY_ACTION_MENU);
+                }
+
+                if ((deviceHardwareKeys & KEY_MASK_APP_SWITCH) != 0) {
+                    int pressAppSwitchAction = Settings.System.getInt(res,
+                            Settings.System.KEY_APP_SWITCH_ACTION,
+                            KEY_ACTION_APP_SWITCH);
+                    int longPressAppSwitchAction = Settings.System.getInt(res,
+                            Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION,
+                            KEY_ACTION_NOTHING);
+                    hasMenuKeyEnabled |= (pressAppSwitchAction == KEY_ACTION_MENU) ||
+                        (longPressAppSwitchAction == KEY_ACTION_MENU);
+                }
+            } else {
+                hasMenuKeyEnabled = ((deviceHardwareKeys & KEY_MASK_MENU) != 0);
+            }
+            mHasPermanentMenuKey = hasMenuKeyEnabled;
+        }
     }
 
     /**
@@ -682,18 +821,7 @@ public class ViewConfiguration {
      * @return true if a permanent menu key is present, false otherwise.
      */
     public boolean hasPermanentMenuKey() {
-        // The action overflow button within app UI can
-        // be controlled with a system setting
-        int showOverflowButton = Settings.System.getInt(
-                mContext.getContentResolver(),
-                Settings.System.UI_FORCE_OVERFLOW_BUTTON, 0);
-        if (showOverflowButton == 1) {
-            // Force overflow button on by reporting that
-            // the device has no permanent menu key
-            return false;
-        } else {
-            return sHasPermanentMenuKey;
-        }
+        return GlobalSettingsObserver.getInstance(mContext).hasPermanentMenuKey();
     }
 
     /**
