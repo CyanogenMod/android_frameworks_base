@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.CountryDetector;
+import android.location.Country;
 import android.net.Uri;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Data;
@@ -566,14 +567,17 @@ public class CallerInfo {
      */
     private static String getCurrentCountryIso(Context context, Locale locale) {
       String countryIso;
+      Country country;
       CountryDetector detector = (CountryDetector) context.getSystemService(
           Context.COUNTRY_DETECTOR);
-      if (detector != null) {
-        countryIso = detector.detectCountry().getCountryIso();
+      if ((detector != null) && ((country = detector.detectCountry()) != null)) {
+              countryIso = country.getCountryIso();
+      } else if (locale != null) {
+           countryIso = locale.getCountry();
+           Rlog.w(TAG, "No CountryDetector; falling back to countryIso based on locale: "
+                  + countryIso);
       } else {
-        countryIso = locale.getCountry();
-        Rlog.w(TAG, "No CountryDetector; falling back to countryIso based on locale: "
-              + countryIso);
+           countryIso = "US"; //default value is "US"
       }
       return countryIso;
     }
