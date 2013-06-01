@@ -456,6 +456,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 PixelFormat.TRANSLUCENT);
+        lp.privateFlags = WindowManager.LayoutParams.PRIVATE_FLAG_FORCE_SHOW_NAV_BAR;
         // This title is for debugging only. See: dumpsys window
         lp.setTitle("PieControlPanel");
         lp.windowAnimations = android.R.style.Animation;
