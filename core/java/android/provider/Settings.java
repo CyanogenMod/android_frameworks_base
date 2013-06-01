@@ -1754,13 +1754,13 @@ public final class Settings {
          * Whether to enable the electron beam animation when turning screen on
          *
          * @hide */
-        public static final String ELECTRON_BEAM_ANIMATION_ON = "electron_beam_animation_on";
+        public static final String ELECTRON_BEAM_ON = "electron_beam_animation_on";
 
         /**
          * Whether to enable the electron beam animation when turning screen off
          *
          * @hide */
-        public static final String ELECTRON_BEAM_ANIMATION_OFF = "electron_beam_animation_off";
+        public static final String ELECTRON_BEAM_OFF = "electron_beam_animation_off";
 
         /**
          * Control whether the process CPU usage meter should be shown.
