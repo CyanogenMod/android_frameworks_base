@@ -41,7 +41,7 @@ public final class Bmgr {
         try {
             new Bmgr().run(args);
         } catch (Exception e) {
-            System.err.println("Exception caught: e.toString()");
+            System.err.println("Exception caught: " + e.toString());
             e.printStackTrace();
         }
     }
