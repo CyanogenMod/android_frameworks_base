@@ -133,7 +133,6 @@ public class PieService extends IPieService.Stub {
                 Slog.d(TAG, "Restore listener state");
             }
             if (mActive) {
-                mWindowManager.resetStatusBarVisibilityMask();
                 mInputFilter.unlockFilter();
                 mActive = false;
                 synchronized (mLock) {
@@ -319,9 +318,6 @@ public class PieService extends IPieService.Stub {
         if (mActiveRecord != null) {
             Slog.w(TAG, "Handing activition while another activition is still in progress");
         }
-        if (!mWindowManager.updateStatusBarVisibilityMask(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)) {
-            return false;
-        }
         synchronized(mLock) {
             PieActivationListenerRecord target = null;
             for (PieActivationListenerRecord record : mPieActivationListener) {
@@ -337,11 +333,6 @@ public class PieService extends IPieService.Stub {
             if (target != null && target.notifyPieActivation(touchX, touchY, position)) {
                 mActiveRecord = target;
             }
-        }
-        if (mActiveRecord != null) {
-            mWindowManager.reevaluateStatusBarVisibility();
-        } else {
-            mWindowManager.resetStatusBarVisibilityMask();
         }
         return mActiveRecord != null;
     }
