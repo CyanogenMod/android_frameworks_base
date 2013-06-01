@@ -767,7 +767,8 @@ final class DisplayPowerController {
                         blockScreenOn();
                     } else {
                         unblockScreenOn();
-                        if (USE_ELECTRON_BEAM_ON_ANIMATION) {
+                        // Check if Screen-on animation is enabled and show electron beam
+                        if (useScreenOnAnimation()) {
                             if (!mElectronBeamOnAnimator.isStarted()) {
                                 if (mPowerState.getElectronBeamLevel() == 1.0f) {
                                     mPowerState.dismissElectronBeam();
@@ -788,19 +789,22 @@ final class DisplayPowerController {
                 }
             } else {
                 // Want screen off.
-                // Wait for previous on animation to complete beforehand.
-                if (!mElectronBeamOnAnimator.isStarted()) {
-                    if (!mElectronBeamOffAnimator.isStarted()) {
-                        if (mPowerState.getElectronBeamLevel() == 0.0f) {
-                            setScreenOn(false);
-                        } else if (mPowerState.prepareElectronBeam(
-                                mElectronBeamFadesConfig ?
-                                        ElectronBeam.MODE_FADE :
-                                                ElectronBeam.MODE_COOL_DOWN)
-                                && mPowerState.isScreenOn()) {
-                            mElectronBeamOffAnimator.start();
-                        } else {
-                            mElectronBeamOffAnimator.end();
+                // Check if Screen-off animation is enabled and show electron beam
+                if (useScreenOffAnimation()) {
+                    // Wait for previous on animation to complete beforehand.
+                    if (!mElectronBeamOnAnimator.isStarted()) {
+                        if (!mElectronBeamOffAnimator.isStarted()) {
+                            if (mPowerState.getElectronBeamLevel() == 0.0f) {
+                                setScreenOn(false);
+                            } else if (mPowerState.prepareElectronBeam(
+                                    mElectronBeamFadesConfig ?
+                                            ElectronBeam.MODE_FADE :
+                                                    ElectronBeam.MODE_COOL_DOWN)
+                                    && mPowerState.isScreenOn()) {
+                                mElectronBeamOffAnimator.start();
+                            } else {
+                                mElectronBeamOffAnimator.end();
+                            }
                         }
                     }
                 }
@@ -1454,4 +1458,14 @@ final class DisplayPowerController {
             updatePowerState();
         }
     };
+
+    private boolean useScreenOnAnimation() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_ON_ANIMATION, 0) == 1;
+    }
+
+    private boolean useScreenOffAnimation() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_OFF_ANIMATION, 1) == 1;
+    }
 }
