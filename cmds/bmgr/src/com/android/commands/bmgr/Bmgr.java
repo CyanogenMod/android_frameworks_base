@@ -32,7 +32,7 @@ public final class Bmgr {
     static final String BMGR_NOT_RUNNING_ERR =
             "Error: Could not access the Backup Manager.  Is the system running?";
     static final String TRANSPORT_NOT_RUNNING_ERR =
-        "Error: Could not access the backup transport.  Is the system running?";
+            "Error: Could not access the backup transport.  Is the system running?";
 
     private String[] mArgs;
     private int mNextArg;
@@ -41,7 +41,7 @@ public final class Bmgr {
         try {
             new Bmgr().run(args);
         } catch (Exception e) {
-            System.err.println("Exception caught:");
+            System.err.println("Exception caught: e.toString()");
             e.printStackTrace();
         }
     }
