@@ -1533,14 +1533,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // 600+dp: "phone" UI with modifications for larger screens
             mHasSystemNavBar = false;
             mNavigationBarCanMove = false;
-        Settings.System.putInt(mContext.getContentResolver(),
-            Settings.System.CURRENT_UI_MODE, 2);
+            Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.CURRENT_UI_MODE, 2);
         } else if (mSystemUiLayout == 1000) {
             // 1000dp: "tablet" UI with a single combined status & navigation bar
+            mNavBarAutoHide = false; // TabUI, No AutoHide for you! 
             mHasSystemNavBar = true;
             mNavigationBarCanMove = false;
             Settings.System.putInt(mContext.getContentResolver(),
-            Settings.System.CURRENT_UI_MODE, 1);
+                Settings.System.CURRENT_UI_MODE, 1);
         }
    
         mHasNavigationBar = !mHasSystemNavBar;
