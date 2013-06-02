@@ -22,7 +22,7 @@
     <string name="global_actions_expanded_desktop_mode_off_status">Вимкнено</string>
     <string name="reboot_reboot">Перезавантаження</string>
     <string name="reboot_progress">Перезавантаження\u2026</string>
-    <string name="reboot_confirm">Ваш телефон буде перезавантажено</string>
+    <string name="reboot_confirm" product="default">Ваш телефон буде перезавантажено</string>
     <string name="global_action_reboot">Перезавантаження</string>
     <string name="global_action_choose_profile">Вибрати профіль</string>
     <string name="app_killed_message">Програма закрита</string>
