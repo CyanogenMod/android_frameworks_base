@@ -290,23 +290,22 @@ public class ExtendedPropertiesUtils {
 
     }
 
-    /**
+/**
      * Returns whether if device is on tablet UI or not
      * 
      * @return device is tablet
      */
     public static boolean isTablet() {
-        int dpi;
-        String prop = readProperty("com.android.systemui.dpi", "0");
+        int layout;
+        String prop = readProperty("com.android.systemui.layout", "0");
         if (isParsableToInt(prop)) {
-            dpi = Integer.parseInt(prop);
+            layout = Integer.parseInt(prop);
         } else {
-            dpi = getActualProperty(prop);
+            layout = getActualProperty(prop);
         }
         return layout >= 1000;
 
     }
-
     /**
      * Returns an {@link ApplicationInfo}, with the given path.
      * 
