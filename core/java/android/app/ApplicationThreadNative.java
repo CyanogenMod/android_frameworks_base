@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** {@hide} */
 public abstract class ApplicationThreadNative extends Binder
         implements IApplicationThread {
     /**

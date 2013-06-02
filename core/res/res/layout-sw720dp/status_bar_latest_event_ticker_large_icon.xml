@@ -37,14 +37,13 @@
         android:gravity="bottom"
         android:singleLine="true"
         />
-    <ImageView android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="13dip"
-        android:scaleType="center"
-        android:layout_marginEnd="4dip"
-        android:layout_marginStart="16dip"
+    <ImageView android:id="@+id/right_icon"
+        android:layout_width="16dip"
+        android:layout_height="16dip"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:layout_marginRight="4dip"
+        android:layout_marginLeft="16dip"
         />
 </LinearLayout>
 

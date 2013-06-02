@@ -34,11 +34,6 @@
          (the screen is in landscape). This may be either a fraction or a dimension.-->
     <item type="dimen" name="dialog_fixed_height_minor">90%</item>
 
-    <!-- The width that is used when creating thumbnails of applications. -->
-    <dimen name="thumbnail_width">230dp</dimen>
-    <!-- The height that is used when creating thumbnails of applications. -->
-    <dimen name="thumbnail_height">135dp</dimen>
-
     <!-- Preference activity, vertical padding for the header list -->
     <dimen name="preference_screen_header_vertical_padding">32dp</dimen>
     <dimen name="preference_screen_side_margin">0dp</dimen>
@@ -57,19 +52,19 @@
     <dimen name="default_app_widget_padding_bottom">20dp</dimen>
 
     <!-- Preference fragment padding, sides -->
-    <dimen name="preference_fragment_padding_side">32dp</dimen>
+    <dimen name="preference_fragment_padding_side">10dp</dimen>
     <!-- Padding to the left of the preference panel breadcrumb -->
-    <dimen name="preference_breadcrumb_paddingLeft">32dp</dimen>
+    <dimen name="preference_breadcrumb_paddingLeft">10dp</dimen>
     <!-- Padding to the right of the preference panel breadcrumb -->
-    <dimen name="preference_breadcrumb_paddingRight">32dp</dimen>
+    <dimen name="preference_breadcrumb_paddingRight">10dp</dimen>
     <!-- Weight of the left pane in a multi-pane preference layout. -->
-    <integer name="preferences_left_pane_weight">1</integer>
+    <integer name="preferences_left_pane_weight">3</integer>
     <!-- Weight of the right pane in a multi-pane preference layout. So the split is 1:2 -->
-    <integer name="preferences_right_pane_weight">2</integer>
+    <integer name="preferences_right_pane_weight">5</integer>
     <!-- Minimum space to allocate to the left of a preference item for an icon.
         This helps in aligning titles when some items have icons and some don't. When space is
         at a premium, we don't pre-allocate any space. -->
-    <dimen name="preference_icon_minWidth">56dp</dimen>
+    <dimen name="preference_icon_minWidth">0dp</dimen>
 
     <!-- Keyguard dimensions -->
     <!-- Size of the clock font in keyguard's status view -->

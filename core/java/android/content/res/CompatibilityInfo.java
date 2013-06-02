@@ -32,7 +32,6 @@ import android.view.WindowManager.LayoutParams;
  * CompatibilityInfo class keeps the information about compatibility mode that the application is
  * running under.
  * 
- *  {@hide} 
  */
 public class CompatibilityInfo implements Parcelable {
     /** default compatibility info object for compatible applications */
@@ -292,7 +291,6 @@ public class CompatibilityInfo implements Parcelable {
 
     /**
      * A helper object to translate the screen and window coordinates back and forth.
-     * @hide
      */
     public class Translator {
         final public float applicationScale;

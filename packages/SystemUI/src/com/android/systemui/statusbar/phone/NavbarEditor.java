@@ -13,6 +13,7 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.ExtendedPropertiesUtils;
 import android.view.DisplayInfo;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -129,15 +130,11 @@ public class NavbarEditor implements OnTouchListener {
         }
     };
 
-    protected static boolean isDevicePhone(Context con) {
+    protected static boolean isDevicePhone() {
+        int mSysUILayout = ExtendedPropertiesUtils.getActualProperty(
+                "com.android.systemui.layout");
         if (mIsDevicePhone == null) {
-            WindowManager wm = (WindowManager)con.getSystemService(Context.WINDOW_SERVICE);
-            DisplayInfo outDisplayInfo = new DisplayInfo();
-            wm.getDefaultDisplay().getDisplayInfo(outDisplayInfo);
-            int shortSize = Math.min(outDisplayInfo.logicalHeight, outDisplayInfo.logicalWidth);
-            int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / outDisplayInfo.logicalDensityDpi;
-            if (shortSizeDp < 600) {
-                // 0-599dp: "phone" UI with a separate status & navigation bar
+            if (mSysUILayout < 600) {
                 mIsDevicePhone = true;
             } else {
                 mIsDevicePhone = false;
@@ -304,7 +301,7 @@ public class NavbarEditor implements OnTouchListener {
             }
             cc++;
         }
-        if (isDevicePhone(mContext)) {
+        if (isDevicePhone()) {
             adjustPadding();
         }
     }

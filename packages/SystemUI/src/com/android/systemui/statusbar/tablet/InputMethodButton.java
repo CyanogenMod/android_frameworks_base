@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 import android.view.View;
 import android.widget.ImageView;
+import android.util.ExtendedPropertiesUtils;
 
 import com.android.systemui.R;
 
@@ -114,7 +115,7 @@ public class InputMethodButton extends ImageView {
     }
 
     private boolean needsToShowIMEButton() {
-        if (!mShowButton || mScreenLocked) return false;
+        if (!mShowButton || mScreenLocked || ExtendedPropertiesUtils.isTablet()) return false;
 
         if (mHardKeyboardAvailable) {
             return true;

@@ -1143,4 +1143,9 @@ public interface WindowManagerPolicy {
      * {@link android.content.Intent#ACTION_ASSIST}
      */
     public void showAssistant();
+
+    /**
+     * name of package being worked on durring boot time message.
+     */
+    public void setPackageName(String pkgName);
 }

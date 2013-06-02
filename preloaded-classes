@@ -841,6 +841,7 @@ android.util.Base64$Coder
 android.util.DisplayMetrics
 android.util.EventLog
 android.util.EventLog$Event
+android.util.ExtendedPropertiesUtils
 android.util.FinitePool
 android.util.FloatMath
 android.util.FloatProperty

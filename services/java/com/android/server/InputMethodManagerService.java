@@ -83,6 +83,7 @@ import android.text.TextUtils;
 import android.text.style.SuggestionSpan;
 import android.util.AtomicFile;
 import android.util.EventLog;
+import android.util.ExtendedPropertiesUtils;
 import android.util.LruCache;
 import android.util.Pair;
 import android.util.PrintWriterPrinter;
@@ -1442,7 +1443,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     }
 
     private boolean needsToShowImeSwitchOngoingNotification() {
-        if (!mShowOngoingImeSwitcherForPhones) return false;
+        if (!mShowOngoingImeSwitcherForPhones || ExtendedPropertiesUtils.isTablet()) return false;
         if (isScreenLocked()) return false;
         synchronized (mMethodMap) {
             List<InputMethodInfo> imis = mSettings.getEnabledInputMethodListLocked();

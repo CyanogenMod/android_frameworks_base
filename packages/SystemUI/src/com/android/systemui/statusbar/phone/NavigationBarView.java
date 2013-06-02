@@ -442,7 +442,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         }
         mCurrentView = mRotatedViews[rot];
         mCurrentView.setVisibility(View.VISIBLE);
-        if (NavbarEditor.isDevicePhone(mContext)) {
+        if (NavbarEditor.isDevicePhone()) {
             rot = mDisplay.getRotation();
             mVertical = (rot == Surface.ROTATION_90 || rot == Surface.ROTATION_270);
         } else {

@@ -19,6 +19,7 @@ package android.graphics;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
+import android.util.ExtendedPropertiesUtils;
 
 import java.io.OutputStream;
 import java.nio.Buffer;
@@ -80,9 +81,9 @@ public final class Bitmap implements Parcelable {
 
     static int getDefaultDensity() {
         if (sDefaultDensity >= 0) {
-            return sDefaultDensity;
+            return ExtendedPropertiesUtils.mGlobalHook.dpi == 0 ? sDefaultDensity : ExtendedPropertiesUtils.mGlobalHook.dpi;
         }
-        sDefaultDensity = DisplayMetrics.DENSITY_DEVICE;
+        sDefaultDensity = DisplayMetrics.getDeviceDensity();
         return sDefaultDensity;
     }
 

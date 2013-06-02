@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.ExtendedPropertiesUtils;
 import android.util.Log;
 import android.util.Slog;
 import android.util.TypedValue;
@@ -67,7 +68,7 @@ import libcore.icu.NativePluralRules;
  * <p>For more information about using resources, see the documentation about <a
  * href="{@docRoot}guide/topics/resources/index.html">Application Resources</a>.</p>
  */
-public class Resources {
+public class Resources extends ExtendedPropertiesUtils {
     static final String TAG = "Resources";
     private static final boolean DEBUG_LOAD = false;
     private static final boolean DEBUG_CONFIG = false;
@@ -117,6 +118,22 @@ public class Resources {
     private NativePluralRules mPluralRule;
     
     private CompatibilityInfo mCompatibilityInfo;
+
+    /**
+    * Override current object with temp properties stored in enum interface
+    */
+   public void paranoidHook() {
+       mConfiguration.active = true;        
+       mConfiguration.overrideHook(this, OverrideMode.ExtendedProperties);
+       mConfiguration.paranoidHook();
+
+       mTmpConfig.active = true;        
+       mTmpConfig.overrideHook(this, OverrideMode.ExtendedProperties);
+       mTmpConfig.paranoidHook();
+
+       mMetrics.overrideHook(this, OverrideMode.ExtendedProperties);
+       mMetrics.paranoidHook();
+   }
 
     /** @hide */
     public static int selectDefaultTheme(int curTheme, int targetSdkVersion) {
@@ -184,6 +201,8 @@ public class Resources {
             Configuration config, CompatibilityInfo compInfo) {
         mAssets = assets;
         mMetrics.setToDefaults();
+        overrideHook(assets, OverrideMode.ExtendedProperties);
+        paranoidHook();
         mCompatibilityInfo = compInfo;
         updateConfiguration(config, metrics);
         assets.ensureStringBlocks();
@@ -1464,6 +1483,7 @@ public class Resources {
             if (mConfiguration.densityDpi != Configuration.DENSITY_DPI_UNDEFINED) {
                 mMetrics.densityDpi = mConfiguration.densityDpi;
                 mMetrics.density = mConfiguration.densityDpi * DisplayMetrics.DENSITY_DEFAULT_SCALE;
+                mMetrics.paranoidHook();
             }
             mMetrics.scaledDensity = mMetrics.density * mConfiguration.fontScale;
 
