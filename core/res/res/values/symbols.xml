@@ -1402,6 +1402,7 @@
   <java-symbol type="id" name="multi_pane_challenge" />
   <java-symbol type="id" name="keyguard_user_selector" />
   <java-symbol type="id" name="key_enter" />
+  <java-symbol type="id" name="key_cancel" />
   <java-symbol type="id" name="keyguard_selector_view_frame" />
   <java-symbol type="integer" name="config_carDockRotation" />
   <java-symbol type="integer" name="config_defaultUiModeType" />
@@ -1878,6 +1879,19 @@
   <!-- From Chromium-WebView -->
   <java-symbol type="attr" name="actionModeWebSearchDrawable" />
   <java-symbol type="string" name="websearch" />
+
+  <!-- Multi SIM related -->
+  <java-symbol type="string" name="msim_kg_sim_pin_msg_format" />
+  <java-symbol type="string" name="msim_carrier_text_format" />
+
+  <java-symbol type="id" name="msim_keyguard_sim_pin_view" />
+  <java-symbol type="id" name="msim_keyguard_sim_puk_view" />
+  <java-symbol type="id" name="msim_keyguard_carrier_area" />
+  <java-symbol type="id" name="stub_msim_carrier_text" />
+
+  <java-symbol type="layout" name="msim_keyguard_sim_pin_view" />
+  <java-symbol type="layout" name="msim_keyguard_sim_puk_view" />
+  <java-symbol type="layout" name="msim_keyguard_carrier_area" />
 
 <!-- ===============================================================
    Resources added in version 10 of CyanogenMod

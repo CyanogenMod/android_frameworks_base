@@ -1,6 +1,9 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
  *
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -43,8 +46,8 @@ import com.android.internal.R;
 public class KeyguardSimPinView extends KeyguardAbsKeyInputView
         implements KeyguardSecurityView, OnEditorActionListener, TextWatcher {
 
-    private ProgressDialog mSimUnlockProgressDialog = null;
-    private volatile boolean mSimCheckInProgress;
+    protected ProgressDialog mSimUnlockProgressDialog = null;
+    protected volatile boolean mSimCheckInProgress;
 
     public KeyguardSimPinView(Context context) {
         this(context, null);
@@ -52,6 +55,18 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
 
     public KeyguardSimPinView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    protected void showCancelButton() {
+        final View cancel = findViewById(R.id.key_cancel);
+        if (cancel != null) {
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doHapticKeyClick();
+                }
+            });
+        }
     }
 
     public void resetState() {
@@ -91,6 +106,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                 }
             });
         }
+        showCancelButton();
 
         // The delete button is of the PIN keyboard itself in some (e.g. tablet) layouts,
         // not a separate view
@@ -168,7 +184,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
         }
     }
 
-    private Dialog getSimUnlockProgressDialog() {
+    protected Dialog getSimUnlockProgressDialog() {
         if (mSimUnlockProgressDialog == null) {
             mSimUnlockProgressDialog = new ProgressDialog(mContext);
             mSimUnlockProgressDialog.setMessage(

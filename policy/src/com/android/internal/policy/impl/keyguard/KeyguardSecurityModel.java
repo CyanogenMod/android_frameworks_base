@@ -1,6 +1,9 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
  *
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,6 +22,7 @@ import android.app.Profile;
 import android.app.ProfileManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.IccCardConstants;
@@ -81,7 +85,20 @@ public class KeyguardSecurityModel {
 
     SecurityMode getSecurityMode() {
         KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
-        final IccCardConstants.State simState = updateMonitor.getSimState();
+        IccCardConstants.State simState = updateMonitor.getSimState();
+
+        int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
+        for (int i = 0; i < numPhones; i++) {
+            simState = updateMonitor.getSimState(i);
+            // We are intereseted only in PIN_REQUIRED or PUK_REQUIRED
+            // So continue to the next sub if the sim state is other
+            // than these two.
+            if (simState == IccCardConstants.State.PIN_REQUIRED
+                    || simState == IccCardConstants.State.PUK_REQUIRED) {
+                break;
+            }
+        }
+
         SecurityMode mode = SecurityMode.None;
         if (simState == IccCardConstants.State.PIN_REQUIRED) {
             mode = SecurityMode.SimPin;

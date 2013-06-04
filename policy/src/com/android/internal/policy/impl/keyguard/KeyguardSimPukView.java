@@ -1,6 +1,9 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
  *
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -41,18 +44,18 @@ import com.android.internal.R;
 public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         implements KeyguardSecurityView, OnEditorActionListener, TextWatcher {
 
-    private ProgressDialog mSimUnlockProgressDialog = null;
-    private volatile boolean mCheckInProgress;
-    private String mPukText;
-    private String mPinText;
-    private StateMachine mStateMachine = new StateMachine();
+    protected ProgressDialog mSimUnlockProgressDialog = null;
+    protected volatile boolean mCheckInProgress;
+    protected String mPukText;
+    protected String mPinText;
+    protected StateMachine mStateMachine = new StateMachine();
 
-    private class StateMachine {
+    protected class StateMachine {
         final int ENTER_PUK = 0;
         final int ENTER_PIN = 1;
         final int CONFIRM_PIN = 2;
         final int DONE = 3;
-        private int state = ENTER_PUK;
+        protected int state = ENTER_PUK;
 
         public void next() {
             int msg = 0;
@@ -226,7 +229,7 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         }
     }
 
-    private Dialog getSimUnlockProgressDialog() {
+    protected Dialog getSimUnlockProgressDialog() {
         if (mSimUnlockProgressDialog == null) {
             mSimUnlockProgressDialog = new ProgressDialog(mContext);
             mSimUnlockProgressDialog.setMessage(
@@ -241,7 +244,7 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         return mSimUnlockProgressDialog;
     }
 
-    private boolean checkPuk() {
+    protected boolean checkPuk() {
         // make sure the puk is at least 8 digits long.
         if (mPasswordEntry.getText().length() >= 8) {
             mPukText = mPasswordEntry.getText().toString();
@@ -250,7 +253,7 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         return false;
     }
 
-    private boolean checkPin() {
+    protected boolean checkPin() {
         // make sure the PIN is between 4 and 8 digits
         int length = mPasswordEntry.getText().length();
         if (length >= 4 && length <= 8) {
@@ -264,7 +267,7 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         return mPinText.equals(mPasswordEntry.getText().toString());
     }
 
-    private void updateSim() {
+    protected void updateSim() {
         getSimUnlockProgressDialog().show();
 
         if (!mCheckInProgress) {
