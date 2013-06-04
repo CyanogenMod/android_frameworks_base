@@ -34,7 +34,7 @@
     <string name="wday1_date1_time1_wday2_date2_time2">du %1$s %2$s à %3$s au %4$s %5$s à %6$s</string>
     <string name="wday1_date1_wday2_date2">du %1$s %2$s au %4$s %5$s</string>
     <string name="date1_time1_date2_time2">du %2$s à %3$s au %5$s à %6$s</string>
-    <string name="time_wday_date">%2$s %3$s à %1$s</string>
+    <string name="time_wday_date">%2$s %3$s, %1$s</string>
     <string name="wday_date">%2$s %3$s</string>
     <string name="time_wday">%2$s à %1$s</string>
     <string name="same_year_md1_md2">du %3$s %2$s au %8$s %7$s</string>
