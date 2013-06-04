@@ -24,6 +24,9 @@ import android.os.Bundle;
 
 import java.util.Map;
 
+/**
+ * {@hide}
+ */
 public class ResultInfo implements Parcelable {
     public final String mResultWho;
     public final int mRequestCode;

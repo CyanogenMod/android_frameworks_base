@@ -24,6 +24,7 @@ import android.os.Bundle;
  * activity manager as part of registering for an intent broadcasts, and is
  * called when it receives intents.
  *
+ * {@hide}
  */
 oneway interface IIntentReceiver {
     void performReceive(in Intent intent, int resultCode, String data,

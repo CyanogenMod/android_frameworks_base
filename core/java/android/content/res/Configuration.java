@@ -18,13 +18,10 @@
 package android.content.res;
 
 import android.content.pm.ActivityInfo;
-import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.view.Surface;
 import android.view.View;
-import android.util.ExtendedPropertiesUtils;
 import android.util.Log;
 import android.os.SystemProperties;
 import android.text.TextUtils;
@@ -41,7 +38,7 @@ import java.util.Locale;
  * with {@link android.app.Activity#getResources}:</p>
  * <pre>Configuration config = getResources().getConfiguration();</pre>
  */
-public final class Configuration extends ExtendedPropertiesUtils implements Parcelable, Comparable<Configuration> {
+public final class Configuration implements Parcelable, Comparable<Configuration> {
     /** @hide */
     public static final Configuration EMPTY = new Configuration();
 
@@ -566,36 +563,6 @@ public final class Configuration extends ExtendedPropertiesUtils implements Parc
      */
     public int seq;
     
-    public boolean active;
-
-    /**
-     * Process layout changes for current hook
-     */
-    public void paranoidHook() {        
-        if (getLayout() != 0 && active) {
-
-            /*int dpi = getDpi(), layout = 600;
-            if (dpi <= 213) {
-                layout = 720;
-            } else if (dpi > 213) {
-                layout = 360;
-            }*/
-            if (mDisplay == null) return;
-            Point size = new Point();
-            mDisplay.getSize(size);
-            float factor = (float)Math.max(size.x, size.y) / (float)Math.min(size.x, size.y);
-            screenWidthDp = getLayout();
-            screenHeightDp = (int)(screenWidthDp * factor);
-            smallestScreenWidthDp = getLayout();           
-            /*if (getLarge()) {
-                screenLayout |= SCREENLAYOUT_SIZE_XLARGE;
-            }*/
-            compatScreenWidthDp = screenWidthDp;
-            compatScreenHeightDp = screenHeightDp;
-            compatSmallestScreenWidthDp = smallestScreenWidthDp;
-        }
-    }
-    
     /**
      * Construct an invalid Configuration.  You must call {@link #setToDefaults}
      * for this object to be valid.  {@more}
@@ -636,7 +603,6 @@ public final class Configuration extends ExtendedPropertiesUtils implements Parc
         compatScreenHeightDp = o.compatScreenHeightDp;
         compatSmallestScreenWidthDp = o.compatSmallestScreenWidthDp;
         seq = o.seq;
-        paranoidHook();
         if (o.customTheme != null) {
             customTheme = (CustomTheme) o.customTheme.clone();
         }

@@ -18,6 +18,7 @@ package android.view;
 
 import android.content.res.CompatibilityInfo;
 
+/** @hide */
 public class CompatibilityInfoHolder {
     private volatile CompatibilityInfo mCompatInfo = CompatibilityInfo.DEFAULT_COMPATIBILITY_INFO;
 

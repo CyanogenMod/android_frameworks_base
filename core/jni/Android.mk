@@ -82,7 +82,6 @@ LOCAL_SRC_FILES:= \
 	android_util_AssetManager.cpp \
 	android_util_Binder.cpp \
 	android_util_EventLog.cpp \
-	android_util_ExtendedPropertiesUtils.cpp \
 	android_util_Log.cpp \
 	android_util_FloatMath.cpp \
 	android_util_Process.cpp \

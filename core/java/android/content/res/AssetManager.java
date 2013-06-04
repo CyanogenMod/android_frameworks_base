@@ -18,7 +18,6 @@
 package android.content.res;
 
 import android.os.ParcelFileDescriptor;
-import android.util.ExtendedPropertiesUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -35,7 +34,7 @@ import java.util.HashMap;
  * files that have been bundled with the application as a simple stream of
  * bytes.
  */
-public final class AssetManager extends ExtendedPropertiesUtils {
+public final class AssetManager {
     /* modes used when opening an asset */
 
     /**

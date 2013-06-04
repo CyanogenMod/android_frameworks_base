@@ -26,7 +26,7 @@ import android.os.SystemProperties;
  * <pre> DisplayMetrics metrics = new DisplayMetrics();
  * getWindowManager().getDefaultDisplay().getMetrics(metrics);</pre>
  */
-public class DisplayMetrics extends ExtendedPropertiesUtils {
+public class DisplayMetrics {
     /**
      * Standard quantized DPI for low-density screens.
      */
@@ -92,12 +92,7 @@ public class DisplayMetrics extends ExtendedPropertiesUtils {
      * density for a display in {@link #densityDpi}.
      */
     @Deprecated
-    public static int DENSITY_DEVICE;
-
-    static {
-        DENSITY_DEVICE = SystemProperties.getInt("qemu.sf.lcd_density", SystemProperties
-            .getInt("ro.sf.lcd_density", DENSITY_DEFAULT));
-    }
+    public static int DENSITY_DEVICE = getDeviceDensity();
 
     /**
      * The absolute width of the display in pixels.
@@ -188,21 +183,6 @@ public class DisplayMetrics extends ExtendedPropertiesUtils {
      */
     public float noncompatYdpi;
 
-    /**
-     * Process DPI for current hook.
-     */
-    public void paranoidHook() {
-        if (getActive()) {
-
-            density = getDensity() == 0 ? density : getDensity();
-            scaledDensity = getScaledDensity() == 0 ? scaledDensity : getScaledDensity();
-            densityDpi = getDpi() == 0 ? densityDpi : getDpi();
-            noncompatDensity = densityDpi;
-            noncompatDensityDpi = densityDpi;
-            noncompatScaledDensity = scaledDensity;
-        }
-    }
-
     public DisplayMetrics() {
     }
     
@@ -221,7 +201,6 @@ public class DisplayMetrics extends ExtendedPropertiesUtils {
         noncompatScaledDensity = o.noncompatScaledDensity;
         noncompatXdpi = o.noncompatXdpi;
         noncompatYdpi = o.noncompatYdpi;
-        paranoidHook();
     }
     
     public void setToDefaults() {
@@ -294,7 +273,13 @@ public class DisplayMetrics extends ExtendedPropertiesUtils {
             ", height=" + heightPixels + ", scaledDensity=" + scaledDensity +
             ", xdpi=" + xdpi + ", ydpi=" + ydpi + "}";
     }
-    public static int getDeviceDensity() {
-        return mGlobalHook.dpi == 0 ? DENSITY_DEVICE : mGlobalHook.dpi;
+
+    private static int getDeviceDensity() {
+        // qemu.sf.lcd_density can be used to override ro.sf.lcd_density
+        // when running in the emulator, allowing for dynamic configurations.
+        // The reason for this is that ro.sf.lcd_density is write-once and is
+        // set by the init process when it parses build.prop before anything else.
+        return SystemProperties.getInt("qemu.sf.lcd_density",
+                SystemProperties.getInt("ro.sf.lcd_density", DENSITY_DEFAULT));
     }
 }

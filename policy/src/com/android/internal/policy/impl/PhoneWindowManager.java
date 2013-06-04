@@ -20,7 +20,6 @@ package com.android.internal.policy.impl;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManagerNative;
-import android.app.AppGlobals;
 import android.app.IActivityManager;
 import android.app.IUiModeManager;
 import android.app.KeyguardManager;
@@ -84,7 +83,6 @@ import com.android.internal.widget.PointerLocationView;
 
 import android.util.DisplayMetrics;
 import android.util.EventLog;
-import android.util.ExtendedPropertiesUtils;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
@@ -562,12 +560,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private long mPowerKeyTime;
     private KeyguardManager mKeyguardManager;
 
-    private int mSystemDpi = 0;
-    private int mSystemUiDpi = 0;
-    private int mSystemUiLayout = 0;
-    private int mNavBarDpi = 0;
-    private int mStatusBarDpi = 0;
-
     SettingsObserver mSettingsObserver;
     ShortcutManager mShortcutManager;
     PowerManager.WakeLock mBroadcastWakeLock;
@@ -657,6 +649,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim"), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STATE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -679,9 +674,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             updateSettings();
         }
 
-        @Override
-        public void onChange(boolean selfChange) {
-            update(false);
+        @Override public void onChange(boolean selfChange) {
+            updateSettings();
+            updateRotation(false);
         }
     }
     
@@ -1098,61 +1093,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         try {
             mOrientationListener.setCurrentRotation(windowManager.getRotation());
         } catch (RemoteException ex) { }
-
-        updateHybridLayout();
-
         mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
-
-        // SystemUI reboot
-        mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.USER_INTERFACE_STATE), false, new ContentObserver(new Handler()) {
-            @Override
-            public void onChange(boolean selfChange) {
-                // Return for reset triggers
-                if (Settings.System.getInt(mContext.getContentResolver(), 
-                    Settings.System.USER_INTERFACE_STATE, 0) == 0) {
-                    return;
-                }
-
-                // Update layout
-                update(true);
-                
-                // Reset trigger
-                Settings.System.putInt(mContext.getContentResolver(), Settings.System.USER_INTERFACE_STATE, 0);
-            }});
-
-        // Expanded desktop
-        mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.EXPANDED_DESKTOP_STATE),
-                    false, new ContentObserver(new Handler()) {
-            @Override
-            public void onChange(boolean selfChange) {
-                updateHybridLayout();
-                update(false);
-
-                // Restart default launcher activity
-                final PackageManager mPm = mContext.getPackageManager();
-                final ActivityManager am = (ActivityManager)mContext
-                        .getSystemService(Context.ACTIVITY_SERVICE);
-                final Intent intent = new Intent(Intent.ACTION_MAIN); 
-                intent.addCategory(Intent.CATEGORY_HOME); 
-                final ResolveInfo res = mPm.resolveActivity(intent, 0);
-
-                // Launcher is running task #1
-                List<ActivityManager.RunningTaskInfo> runningTasks = am.getRunningTasks(1);
-                if (runningTasks != null) {
-                    for (ActivityManager.RunningTaskInfo task : runningTasks) {
-                        String packageName = task.baseActivity.getPackageName();
-                        if (packageName.equals(res.activityInfo.packageName)) {
-                            closeApplication(packageName);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
         mShortcutManager = new ShortcutManager(context, mHandler);
         mShortcutManager.observe();
         mUiMode = context.getResources().getInteger(
@@ -1289,8 +1231,75 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
-        getDimensions();
-   
+        mStatusBarHeight = mContext.getResources().getDimensionPixelSize(
+                com.android.internal.R.dimen.status_bar_height);
+
+        // Height of the navigation bar when presented horizontally at bottom
+        mNavigationBarHeightForRotation[mPortraitRotation] =
+        mNavigationBarHeightForRotation[mUpsideDownRotation] =
+                mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height);
+        mNavigationBarHeightForRotation[mLandscapeRotation] =
+        mNavigationBarHeightForRotation[mSeascapeRotation] =
+                mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height_landscape);
+
+        // Width of the navigation bar when presented vertically along one side
+        mNavigationBarWidthForRotation[mPortraitRotation] =
+        mNavigationBarWidthForRotation[mUpsideDownRotation] =
+        mNavigationBarWidthForRotation[mLandscapeRotation] =
+        mNavigationBarWidthForRotation[mSeascapeRotation] =
+                mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_width);
+
+        // SystemUI (status bar) layout policy
+        int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / density;
+
+        if (shortSizeDp < 600) {
+            // 0-599dp: "phone" UI with a separate status & navigation bar
+            mHasSystemNavBar = false;
+            mNavigationBarCanMove = true;
+        } else if (shortSizeDp < 720) {
+            // 600+dp: "phone" UI with modifications for larger screens
+            mHasSystemNavBar = false;
+            mNavigationBarCanMove = false;
+        }
+
+        if (!mHasSystemNavBar) {
+            mHasNavigationBar = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_showNavigationBar);
+            // Allow a system property to override this. Used by the emulator.
+            // See also hasNavigationBar().
+            String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
+            if (! "".equals(navBarOverride)) {
+                if      (navBarOverride.equals("1")) mHasNavigationBar = false;
+                else if (navBarOverride.equals("0")) mHasNavigationBar = true;
+            }
+        } else {
+            mHasNavigationBar = false;
+        }
+
+        if (mHasSystemNavBar) {
+            // The system bar is always at the bottom.  If you are watching
+            // a video in landscape, we don't need to hide it if we can still
+            // show a 16:9 aspect ratio with it.
+            int longSizeDp = longSize * DisplayMetrics.DENSITY_DEFAULT / density;
+            int barHeightDp = mNavigationBarHeightForRotation[mLandscapeRotation]
+                    * DisplayMetrics.DENSITY_DEFAULT / density;
+            int aspect = ((shortSizeDp-barHeightDp) * 16) / longSizeDp;
+            // We have computed the aspect ratio with the bar height taken
+            // out to be 16:aspect.  If this is less than 9, then hiding
+            // the navigation bar will provide more useful space for wide
+            // screen movies.
+            mCanHideNavigationBar = aspect < 9;
+        } else if (mHasNavigationBar) {
+            // The navigation bar is at the right in landscape; it seems always
+            // useful to hide it for showing a video.
+            mCanHideNavigationBar = true;
+        } else {
+            mCanHideNavigationBar = false;
+        }
+
         // For demo purposes, allow the rotation of the HDMI display to be controlled.
         // By default, HDMI locks rotation to landscape.
         if ("portrait".equals(SystemProperties.get("persist.demo.hdmirotation"))) {
@@ -1299,43 +1308,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mHdmiRotation = mLandscapeRotation;
         }
         mHdmiRotationLock = SystemProperties.getBoolean("persist.demo.hdmirotationlock", true);
-    }
-
-    private void closeApplication(String packageName) {
-        try {
-            ActivityManagerNative.getDefault().killApplicationProcess(
-                    packageName, AppGlobals.getPackageManager().getPackageUid(
-                    packageName, UserHandle.myUserId()));
-        } catch (RemoteException e) {
-            // Good luck next time!
-        }
-    }
-   
-    private void update(boolean updateUi) {
-        if (updateUi) {
-            updateHybridLayout();
-        }
-
-        updateSettings();
-        updateRotation(false);
-
-        if (updateUi) closeApplication("com.android.systemui");
-    }
-    
-    private int updateHybridLayout() {
-        boolean expDesktop = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
-        int oldSystemUILayout = mSystemUiLayout == 0 ?
-                ExtendedPropertiesUtils.getActualProperty("com.android.systemui.layout") : mSystemUiLayout;
-        ExtendedPropertiesUtils.refreshProperties();
-        mSystemDpi = ExtendedPropertiesUtils.getActualProperty("android.dpi");
-        mSystemUiDpi = ExtendedPropertiesUtils.getActualProperty("com.android.systemui.dpi");
-        mSystemUiLayout = ExtendedPropertiesUtils.getActualProperty("com.android.systemui.layout");
-        int mNavigationBarPercent = expDesktop ? 0 : Integer.parseInt(ExtendedPropertiesUtils.getProperty("com.android.systemui.navbar.dpi", "100"));
-        mNavBarDpi = mNavigationBarPercent * mSystemUiDpi / 100;
-        int mStatusBarPercent = Integer.parseInt(ExtendedPropertiesUtils.getProperty("com.android.systemui.statusbar.dpi", "100"));
-        mStatusBarDpi = mStatusBarPercent * mSystemUiDpi / 100;
-        return oldSystemUILayout;
     }
 
     public void updateSettings() {
@@ -1358,10 +1330,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mVolBtnMusicControls = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1);
-
-            mHasNavigationBar = !mHasSystemNavBar;
-
-            getDimensions();
 
             boolean keyRebindingEnabled = Settings.System.getInt(resolver,
                     Settings.System.HARDWARE_KEY_REBINDING, 0) == 1;
@@ -1487,6 +1455,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             updateDisplayMetrics();
         }
     }
+<<<<<<< HEAD
     
     public void getDimensions(){
         float statusBarHeight = ((float)mContext.getResources().getDimensionPixelSize(
@@ -1570,6 +1539,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
     }
+=======
+>>>>>>> parent of 8c07abf... frameworks: Port PA's hybrid Settings
 
     private void enablePointerLocation() {
         if (mPointerLocationView == null) {
@@ -4405,6 +4376,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // observing the relevant settings for the newly-active user,
                 // and then updates our own bookkeeping based on the now-
                 // current user.
+                mSettingsObserver.onChange(false);
 
                 // force a re-application of focused window sysui visibility.
                 // the window may never have been shown for this user
@@ -4871,18 +4843,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     ProgressDialog mBootMsgDialog = null;
 
-    /**
-     * name of package currently being dex optimized
-     * as shown through this.showBootMessage(msg, always);
-     */
-    static String currentPackageName;
-    public void setPackageName(String pkgName) {
-        if (pkgName == null) {
-            pkgName = "stop.looking.at.me.swan";
-        }
-        this.currentPackageName = pkgName;
-    }
-
     /** {@inheritDoc} */
     public void showBootMessage(final CharSequence msg, final boolean always) {
         if (mHeadless) return;
@@ -4928,14 +4888,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mBootMsgDialog.show();
                 }
                 mBootMsgDialog.setMessage(msg);
-                if (currentPackageName != null) {
-                    mBootMsgDialog.setTitle(msg);
-                    mBootMsgDialog.setMessage(currentPackageName);
-                }
-                if (msg.equals(mContext.getResources().getString(R.string.android_upgrading_starting_apps))) {
-                    mBootMsgDialog.setTitle(R.string.android_upgrading_title);
-                    mBootMsgDialog.setMessage(mContext.getResources().getString(R.string.android_upgrading_starting_apps));
-                }
             }
         });
     }

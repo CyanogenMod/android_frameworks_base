@@ -20,6 +20,7 @@ package android.app;
 import android.content.ComponentName;
 import android.os.Bundle;
 
+/** @hide */
 interface IInstrumentationWatcher
 {
     void instrumentationStatus(in ComponentName name, int resultCode,

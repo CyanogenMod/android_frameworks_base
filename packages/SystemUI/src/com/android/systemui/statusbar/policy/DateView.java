@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewParent;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.systemui.R;
@@ -41,7 +42,7 @@ import java.util.Date;
 public class DateView extends TextView implements OnClickListener, OnLongClickListener {
     private static final String TAG = "DateView";
 
-    private View mParent;
+    private RelativeLayout mParent;
 
     private boolean mAttachedToWindow;
     private boolean mWindowVisible;
@@ -87,7 +88,7 @@ public class DateView extends TextView implements OnClickListener, OnLongClickLi
     @Override
     protected void onDraw(Canvas canvas) {
         if (mParent == null) {
-            mParent = (View) getParent();
+            mParent = (RelativeLayout) getParent();
             mParent.setOnClickListener(this);
             mParent.setOnLongClickListener(this);
         }
