@@ -2715,16 +2715,14 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         for (String sebool : sebools) {
             systemState = SELinux.getBooleanValue(sebool);
             desiredState = selinuxAdmin.sebools.get(sebool);
-            if (!firstBoot || !systemState) {
-                if (systemState != desiredState) {
-                    Slog.v(TAG, "SELinux boolean [" + sebool + "] : " + systemState + " -> " + desiredState);
-                    boolean res = SELinux.setBooleanValue(sebool, desiredState);
-                    Slog.v(TAG, "SELinux boolean " + sebool + " " + (res ? "succeeded" : "failed"));
-                    if (res == false) {
-                        // this really shouldn't ever happen
-                        resetSELinuxAdmin(selinuxAdmin);
-                        return false;
-                    }
+            if (systemState != desiredState) {
+                Slog.v(TAG, "SELinux boolean [" + sebool + "] : " + systemState + " -> " + desiredState);
+                boolean res = SELinux.setBooleanValue(sebool, desiredState);
+                Slog.v(TAG, "SELinux boolean " + sebool + " " + (res ? "succeeded" : "failed"));
+                if (res == false) {
+                    // this really shouldn't ever happen
+                    resetSELinuxAdmin(selinuxAdmin);
+                    return false;
                 }
             }
         }
