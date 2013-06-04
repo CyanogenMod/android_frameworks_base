@@ -48,6 +48,7 @@
     <string name="global_action_choose_profile">Profilo</string>
     <string name="toast_rotation_unlocked">Rotazione schermo sbloccata</string>
     <string name="toast_rotation_locked">Rotazione schermo bloccata</string>
+    <string name="stylus_app_not_installed">%s non è installato</string>
     <string name="storage_sd_dock_card">Scheda SD dock</string>
     <string name="permlab_fm_radio_receiver">controllo del ricevitore FM</string>
     <string name="permdesc_fm_radio_receiver">Consente all\'applicazione di controllare il ricevitore FM.</string>
