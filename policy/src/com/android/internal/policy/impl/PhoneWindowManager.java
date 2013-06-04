@@ -1456,6 +1456,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     public void getDimensions(){
         float statusBarHeight = ((float)mContext.getResources().getDimensionPixelSize(
@@ -1539,6 +1540,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
     }
+=======
+>>>>>>> parent of 8c07abf... frameworks: Port PA's hybrid Settings
 =======
 >>>>>>> parent of 8c07abf... frameworks: Port PA's hybrid Settings
 
