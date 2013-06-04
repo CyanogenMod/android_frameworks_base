@@ -40,7 +40,6 @@ import android.service.pie.IPieService;
 import android.util.Slog;
 import android.view.Display;
 import android.view.DisplayInfo;
-import android.view.View;
 import android.view.WindowManager;
 
 import com.android.internal.util.pie.PiePosition;
@@ -69,18 +68,16 @@ public class PieService extends IPieService.Stub {
 
     private final Context mContext;
     private final InputManagerService mInputManager;
-    private final WindowManagerService mWindowManager;
 
-    private HandlerThread mHandlerThread = new HandlerThread("Pie");
-
-    // Lock for thread, handler, mInputFilter, activations and listener related variables
-    private final Object mLock = new Object();
+    private final HandlerThread mHandlerThread = new HandlerThread("Pie");
     private Handler mHandler;
+
+    // Lock for mInputFilter, activations and listener related variables
+    private final Object mLock = new Object();
     private PieInputFilter mInputFilter;
 
     private int mGlobalPositions = 0;
     private int mGlobalSensitivity = 3;
-    private boolean mIsMonitoring = false;
 
     private final class PieActivationListenerRecord extends IPieHostCallback.Stub implements DeathRecipient {
         private boolean mActive;
@@ -94,16 +91,16 @@ public class PieService extends IPieService.Stub {
             removeListenerRecord(this);
         }
 
-        public void updateFlags(int flags) {
+        private void updateFlags(int flags) {
             this.positions = flags & POSITION_MASK;
             this.sensitivity = (flags & SENSITIVITY_MASK) >> SENSITIVITY_SHIFT;
         }
 
-        public boolean eligibleForActivation(int positionFlag) {
+        private boolean eligibleForActivation(int positionFlag) {
             return (positions & positionFlag) != 0;
         }
 
-        public boolean notifyPieActivation(int touchX, int touchY, PiePosition position) {
+        private boolean notifyPieActivation(int touchX, int touchY, PiePosition position) {
             if ((positions & position.FLAG) != 0) {
                 try {
                     listener.onPieActivation(touchX, touchY, position.INDEX, 0);
@@ -167,7 +164,6 @@ public class PieService extends IPieService.Stub {
     public PieService(Context context, WindowManagerService windowManager, InputManagerService inputManager) {
         mContext = context;
         mInputManager = inputManager;
-        mWindowManager = windowManager;
     }
 
     // called by system server
@@ -186,19 +182,41 @@ public class PieService extends IPieService.Stub {
         });
         mDisplayObserver = new DisplayObserver(mContext, mHandler);
         // check if anyone registered during startup
+        updateMonitoring();
         mHandler.obtainMessage(MSG_UPDATE_SERVICE,
                 mGlobalPositions, mGlobalSensitivity).sendToTarget();
-        updateMonitoring();
+    }
+
+
+    private void updateMonitoring() {
+        synchronized(mLock) {
+            mGlobalPositions = 0;
+            mGlobalSensitivity = SENSITIVITY_NONE;
+            for (PieActivationListenerRecord temp : mPieActivationListener) {
+                mGlobalPositions |= temp.positions;
+                if (temp.sensitivity != SENSITIVITY_NONE) {
+                    mGlobalSensitivity = Math.max(mGlobalSensitivity, temp.sensitivity);
+                }
+            }
+            // if no special sensitivity is requested, we settle on DEFAULT
+            if (mGlobalSensitivity == SENSITIVITY_NONE) {
+                mGlobalSensitivity = SENSITIVITY_DEFAULT;
+            }
+
+            if (mInputFilter == null && mGlobalPositions != 0) {
+                enforceMonitoringLocked();
+            } else if (mInputFilter != null && mGlobalPositions == 0) {
+                shutdownMonitoringLocked();
+            }
+        }
     }
 
     private void enforceMonitoringLocked() {
         if (DEBUG) {
             Slog.d(TAG, "Attempting to start monitoring input events ...");
         }
-        if (mInputFilter == null) {
-            mInputFilter = new PieInputFilter(mContext, mHandler);
-            mInputManager.registerSecondaryInputFilter(mInputFilter);
-        }
+        mInputFilter = new PieInputFilter(mContext, mHandler);
+        mInputManager.registerSecondaryInputFilter(mInputFilter);
         mDisplayObserver.observe();
     }
 
@@ -207,21 +225,8 @@ public class PieService extends IPieService.Stub {
             Slog.d(TAG, "Shutting down monitoring input events ...");
         }
         mDisplayObserver.unobserve();
-        if (mInputFilter != null) {
-            mInputManager.unregisterSecondaryInputFilter(mInputFilter);
-            mInputFilter = null;
-        }
-    }
-
-    private void updateMonitoring() {
-        synchronized(mLock) {
-            if (!mIsMonitoring && mGlobalPositions != 0) {
-                enforceMonitoringLocked();
-            } else if (mIsMonitoring && mGlobalPositions == 0) {
-                shutdownMonitoringLocked();
-            }
-            mIsMonitoring = mGlobalPositions != 0;
-        }
+        mInputManager.unregisterSecondaryInputFilter(mInputFilter);
+        mInputFilter = null;
     }
 
     // called through Binder
@@ -242,6 +247,12 @@ public class PieService extends IPieService.Stub {
             record = findListenerRecordLocked(listener.asBinder());
             if (record == null) {
                 record = new PieActivationListenerRecord(listener);
+                try {
+                    listener.asBinder().linkToDeath(record, 0);
+                } catch (RemoteException e) {
+                    Slog.w(TAG, "Recipient died during registration pid=" + Binder.getCallingPid());
+                    return null;
+                }
                 mPieActivationListener.add(record);
             }
         }
@@ -260,14 +271,13 @@ public class PieService extends IPieService.Stub {
                 throw new IllegalStateException("listener not registered");
             }
             record.updateFlags(positionFlags);
-            updatePositionsLocked();
-            updateSensitivityLocked();
+            updateMonitoring();
+            // update input filter only when not being active and #systemReady() was called
             if (mActiveRecord == null && mHandler != null) {
                 mHandler.obtainMessage(MSG_UPDATE_SERVICE,
                         mGlobalPositions, mGlobalSensitivity).sendToTarget();
             }
         }
-        updateMonitoring();
     }
 
     private PieActivationListenerRecord findListenerRecordLocked(IBinder listener) {
@@ -279,38 +289,18 @@ public class PieService extends IPieService.Stub {
         return null;
     }
 
-    private void updatePositionsLocked() {
-        mGlobalPositions = 0;
-        for (PieActivationListenerRecord temp : mPieActivationListener) {
-            mGlobalPositions |= temp.positions;
-        }
-    }
-
-    private void updateSensitivityLocked() {
-        mGlobalSensitivity = SENSITIVITY_NONE;
-        for (PieActivationListenerRecord temp : mPieActivationListener) {
-            if (temp.sensitivity != SENSITIVITY_NONE) {
-                mGlobalSensitivity = Math.max(mGlobalSensitivity, temp.sensitivity);
-            }
-        }
-        // if no special sensitivity is requested, we settle on DEFAULT
-        if (mGlobalSensitivity == SENSITIVITY_NONE) {
-            mGlobalSensitivity = SENSITIVITY_DEFAULT;
-        }
-    }
-
     private void removeListenerRecord(PieActivationListenerRecord record) {
         synchronized(mLock) {
             mPieActivationListener.remove(record);
-            updatePositionsLocked();
+            updateMonitoring();
             // check if the record was the active one
             if (record == mActiveRecord) {
                 // restore input filter state by updating
                 mHandler.obtainMessage(MSG_UPDATE_SERVICE,
                         mGlobalPositions, mGlobalSensitivity).sendToTarget();
+                mActiveRecord = null;
             }
         }
-        updateMonitoring();
     }
 
     // called by handler thread
@@ -333,54 +323,7 @@ public class PieService extends IPieService.Stub {
             if (target != null && target.notifyPieActivation(touchX, touchY, position)) {
                 mActiveRecord = target;
             }
-        }
-        return mActiveRecord != null;
-    }
-
-    @Override
-    public boolean onTransact(int code, Parcel data, Parcel reply, int flags)
-            throws RemoteException {
-        try {
-            return super.onTransact(code, data, reply, flags);
-        } catch (RuntimeException e) {
-            // let's log all exceptions we do not know about.
-            if (!(e instanceof IllegalArgumentException || e instanceof IllegalStateException)) {
-                Slog.e(TAG, "PieService crashed: ", e);
-            }
-            throw e;
-        }
-    }
-
-    @Override
-    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-        if (mContext.checkCallingOrSelfPermission(Manifest.permission.DUMP)
-                != PackageManager.PERMISSION_GRANTED) {
-            pw.println("Permission Denial: can't dump PieService from from pid="
-                    + Binder.getCallingPid()
-                    + ", uid=" + Binder.getCallingUid());
-            return;
-        }
-
-        pw.println("PIE SERVICE (dumpsys pieservice)\n");
-        synchronized(mLock) {
-            pw.println("  mIsMonitoring=" + mIsMonitoring);
-            pw.println("  mInputFilter=" + mInputFilter);
-            if (mInputFilter != null) {
-                mInputFilter.dump(pw, "    ");
-            }
-            pw.println("  mGlobalPositions=0x" + Integer.toHexString(mGlobalPositions));
-            int i = 0;
-            for (PieActivationListenerRecord record : mPieActivationListener) {
-                if (record == mActiveRecord) break;
-                i++;
-            }
-            pw.println("  mActiveRecord=" + (mActiveRecord != null ? ("#" + i) : "null"));
-            i = 0;
-            for (PieActivationListenerRecord record : mPieActivationListener) {
-                pw.println("  Listener #" + i + ":");
-                record.dump(pw, "    ");
-                i++;
-            }
+            return mActiveRecord != null;
         }
     }
 
@@ -479,6 +422,53 @@ public class PieService extends IPieService.Stub {
         @Override
         public void onDisplayChanged(int displayId) {
             updateDisplayInfo();
+        }
+    }
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags)
+            throws RemoteException {
+        try {
+            return super.onTransact(code, data, reply, flags);
+        } catch (RuntimeException e) {
+            // let's log all exceptions we do not know about.
+            if (!(e instanceof IllegalArgumentException || e instanceof IllegalStateException)) {
+                Slog.e(TAG, "PieService crashed: ", e);
+            }
+            throw e;
+        }
+    }
+
+    @Override
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        if (mContext.checkCallingOrSelfPermission(Manifest.permission.DUMP)
+                != PackageManager.PERMISSION_GRANTED) {
+            pw.println("Permission Denial: can't dump PieService from from pid="
+                    + Binder.getCallingPid()
+                    + ", uid=" + Binder.getCallingUid());
+            return;
+        }
+
+        pw.println("PIE SERVICE (dumpsys pieservice)\n");
+        synchronized(mLock) {
+            pw.println("  mInputFilter=" + mInputFilter);
+            if (mInputFilter != null) {
+                mInputFilter.dump(pw, "    ");
+            }
+            pw.println("  mGlobalPositions=0x" + Integer.toHexString(mGlobalPositions));
+            pw.println("  mGlobalSensitivity=" + mGlobalSensitivity);
+            int i = 0;
+            for (PieActivationListenerRecord record : mPieActivationListener) {
+                if (record == mActiveRecord) break;
+                i++;
+            }
+            pw.println("  mActiveRecord=" + (mActiveRecord != null ? ("#" + i) : "null"));
+            i = 0;
+            for (PieActivationListenerRecord record : mPieActivationListener) {
+                pw.println("  Listener #" + i + ":");
+                record.dump(pw, "    ");
+                i++;
+            }
         }
     }
 }
