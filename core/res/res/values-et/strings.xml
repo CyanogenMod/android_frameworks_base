@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -8,7 +8,7 @@
 ** you may not use this file except in compliance with the License.
 ** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0
+** http://www.apache.org/licenses/LICENSE-2.0
 **
 ** Unless required by applicable law or agreed to in writing, software
 ** distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,7 @@
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
- -->
+-->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -843,7 +843,7 @@
     <string name="factorytest_not_system" msgid="4435201656767276723">"Toimingut FACTORY_TEST toetatakse ainult kausta \\system\\app installitud pakettide puhul."</string>
     <string name="factorytest_no_action" msgid="872991874799998561">"Ei leitud ühtegi paketti, mis võimaldaks toimingut FACTORY_TEST."</string>
     <string name="factorytest_reboot" msgid="6320168203050791643">"Taaskäivita"</string>
-    <string name="js_dialog_title" msgid="1987483977834603872">"Leht  „<xliff:g id="TITLE">%s</xliff:g>” ütleb järgmist."</string>
+    <string name="js_dialog_title" msgid="1987483977834603872">"Leht „<xliff:g id="TITLE">%s</xliff:g>” ütleb järgmist."</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
     <string name="js_dialog_before_unload" msgid="730366588032430474">"Kas soovite sellelt lehelt lahkuda?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Jätkamiseks puudutage valikut OK, praegusele lehele jäämiseks valikut Tühista."</string>
     <string name="save_password_label" msgid="6860261758665825069">"Kinnita"</string>
@@ -1136,7 +1136,7 @@
     <string name="sms_short_code_confirm_allow" msgid="4458878637111023413">"Saada"</string>
     <string name="sms_short_code_confirm_deny" msgid="2927389840209170706">"Tühista"</string>
     <string name="sms_short_code_remember_choice" msgid="5289538592272218136">"Jäta minu valik meelde"</string>
-    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"Saate muuta jaotises Seaded &gt; Rakendused"</string>
+    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"Saate muuta jaotises Seaded &gt; Rakendused"</string>
     <string name="sms_short_code_confirm_always_allow" msgid="3241181154869493368">"Luba alati"</string>
     <string name="sms_short_code_confirm_never_allow" msgid="446992765774269673">"Ära luba"</string>
     <string name="sim_removed_title" msgid="6227712319223226185">"SIM-kaart eemaldatud"</string>
@@ -1456,4 +1456,40 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Hõlbustus on tühistatud."</string>
     <string name="user_switched" msgid="3768006783166984410">"Praegune kasutaja <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Omanik"</string>
+    <string name="profileNameDefault">Vaikimisi</string>
+    <string name="profileNameWork">Töö</string>
+    <string name="profileNameHome">Kodu</string>
+    <string name="profileNameSilent">Hääletu</string>
+    <string name="profileNameNight">Öö</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-post</string>
+    <string name="profileGroupSMS">Tekstsõnum</string>
+    <string name="wildcardProfile">Muu</string>
+    <string name="reboot_system" product="tablet">Käivitage tahvelarvut uuesti</string>
+    <string name="reboot_system" product="default">Käivitage telefon uuesti</string>
+    <string name="global_action_screenshot">Kuvatõmmis</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Laiendatud töölaud</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Sees</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Väljas</string>
+    <string name="reboot_reboot">Taaskäivita</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Käivitusmenüü</string>
+    <string name="reboot_fastboot">Fastboot-režiim</string>
+    <string name="reboot_download">Download-režiim</string>
+    <string name="reboot_progress">Käivitatakse uuesti\u2026</string>
+    <string name="reboot_confirm">Telefon käivitub uuesti.</string>
+    <string name="lockscreen_discharging">Lossitakse allalaadimist, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="app_killed_message">Rakendus tapetud</string>
+    <string name="global_action_reboot">Taaskäivita</string>
+    <string name="global_action_choose_profile">Profiil</string>
+    <string name="toast_rotation_unlocked">Ekraani asend lahti</string>
+    <string name="toast_rotation_locked">Ekraani asend lukustatud</string>
+    <string name="permlab_fm_radio_receiver">Juhib FM vastuvõtjat</string>
+    <string name="permdesc_fm_radio_receiver">Lubab rakendusel juhtida FM vastuvõtjat.</string>
+    <string name="permlab_fm_radio_transmitter">Juhub FM saatjat</string>
+    <string name="permdesc_fm_radio_transmitter">Lubab rakendusel juhtida FM saatjat.</string>
+    <string name="storage_sd_dock_card">Dokki SD kaart</string>
 </resources>
