@@ -53,4 +53,5 @@
     <string name="permdesc_fm_radio_receiver">Consente all\'applicazione di controllare il ricevitore FM.</string>
     <string name="permlab_fm_radio_transmitter">controllo del trasmettitore FM</string>
     <string name="permdesc_fm_radio_transmitter">Consente all\'applicazione di controllare il trasmettitore FM.</string>
+    <string name="stylus_app_not_installed">%s non è installato</string>
 </resources>
