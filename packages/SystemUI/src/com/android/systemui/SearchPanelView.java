@@ -137,6 +137,8 @@ public class SearchPanelView extends FrameLayout implements
         // TODO: fetch views
         mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view);
         mGlowPadView.setOnTriggerListener(mGlowPadViewListener);
+        updateSettings();
+        setDrawables();
     }
 
     private void setDrawables() {
@@ -277,8 +279,6 @@ public class SearchPanelView extends FrameLayout implements
         super.onAttachedToWindow();
 
         mObserver.observe();
-        updateSettings();
-        setDrawables();
     }
 
     @Override
