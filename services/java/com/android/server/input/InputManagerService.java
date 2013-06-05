@@ -1656,7 +1656,11 @@ public class InputManagerService extends IInputManager.Stub
                                 policyFlags | WindowManagerPolicy.FLAG_FILTERED);
                     } else {
                         try {
-                            mNext.mInputFilter.filterInputEvent(event, policyFlags);
+                            // We need to pass a copy into filterInputEvent as it assumes
+                            // the callee takes responsibility and recycles it - in case
+                            // multiple filters are chained, calling into the second filter
+                            // will cause event to be recycled twice
+                            mNext.mInputFilter.filterInputEvent(event.copy(), policyFlags);
                         } catch (RemoteException e) {
                             /* ignore */
                         }
