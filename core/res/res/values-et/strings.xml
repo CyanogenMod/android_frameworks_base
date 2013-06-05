@@ -1480,7 +1480,7 @@
     <string name="reboot_fastboot">Fastboot-režiim</string>
     <string name="reboot_download">Download-režiim</string>
     <string name="reboot_progress">Käivitatakse uuesti\u2026</string>
-    <string name="reboot_confirm">Telefon käivitub uuesti.</string>
+    <string name="reboot_confirm" product="default">Telefon käivitub uuesti.</string>
     <string name="lockscreen_discharging">Lossitakse allalaadimist, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="app_killed_message">Rakendus tapetud</string>
     <string name="global_action_reboot">Taaskäivita</string>
