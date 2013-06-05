@@ -1655,8 +1655,9 @@ public class InputManagerService extends IInputManager.Stub
                                 InputManager.INJECT_INPUT_EVENT_MODE_ASYNC, 0,
                                 policyFlags | WindowManagerPolicy.FLAG_FILTERED);
                     } else {
+                        InputEvent copy = event.copy();
                         try {
-                            mNext.mInputFilter.filterInputEvent(event, policyFlags);
+                            mNext.mInputFilter.filterInputEvent(copy, policyFlags);
                         } catch (RemoteException e) {
                             /* ignore */
                         }
