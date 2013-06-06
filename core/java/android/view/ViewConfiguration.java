@@ -221,6 +221,9 @@ public class ViewConfiguration {
     private final int mOverflingDistance;
     private final boolean mFadingMarqueeEnabled;
 
+    private boolean sHasPermanentMenuKey;
+    private boolean sHasPermanentMenuKeySet;
+
     private Context mContext;
 
     static final SparseArray<ViewConfiguration> sConfigurations =
@@ -289,6 +292,16 @@ public class ViewConfiguration {
 
         mOverscrollDistance = (int) (sizeAndDensity * OVERSCROLL_DISTANCE + 0.5f);
         mOverflingDistance = (int) (sizeAndDensity * OVERFLING_DISTANCE + 0.5f);
+
+        if (!sHasPermanentMenuKeySet) {
+            IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
+            try {
+                sHasPermanentMenuKey = !wm.hasSystemNavBar() && !wm.hasNavigationBar();
+                sHasPermanentMenuKeySet = true;
+            } catch (RemoteException ex) {
+                sHasPermanentMenuKey = false;
+            }
+        }
 
         mFadingMarqueeEnabled = res.getBoolean(
                 com.android.internal.R.bool.config_ui_enableFadingMarquee);
@@ -671,15 +684,6 @@ public class ViewConfiguration {
      */
     public boolean hasPermanentMenuKey() {
         IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
-        // Report no menu key if device has soft buttons
-        try {
-            if (wm.hasSystemNavBar() || wm.hasNavigationBar()) {
-                return false;
-            }
-        } catch (RemoteException ex) {
-            // do nothing, continue trying to guess
-        }
-
         // Report no menu key if overflow button is forced to enabled
         ContentResolver res = mContext.getContentResolver();
         boolean forceOverflowButton = Settings.System.getInt(res,
@@ -690,9 +694,9 @@ public class ViewConfiguration {
 
         // Report menu key presence based on hardware key rebinding
         try {
-            return wm.hasMenuKeyEnabled();
+            return sHasPermanentMenuKey || wm.hasMenuKeyEnabled();
         } catch (RemoteException ex) {
-            return true;
+            return sHasPermanentMenuKey;
         }
     }
 
