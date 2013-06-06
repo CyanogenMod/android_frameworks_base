@@ -178,15 +178,10 @@ public class NotificationPanelView extends PanelView {
                     if (y > maxy) maxy = y;
                 }
                 if (maxy - miny < mHandleBarHeight) {
-                    if (getMeasuredHeight() < mHandleBarHeight) {
+                    if (mJustPeeked || getMeasuredHeight() < mHandleBarHeight) {
                         mStatusBar.switchToSettings();
                     } else {
-                        // Do not flip if the drag event started within the top bar
-                        if (MotionEvent.ACTION_DOWN == event.getActionMasked() && event.getY(0) < mHandleBarHeight ) {
-                            mStatusBar.switchToSettings();
-                        } else {
-                            mStatusBar.flipToSettings();
-                        }
+                        mStatusBar.flipToSettings();
                     }
                     mOkToFlip = false;
                 }
