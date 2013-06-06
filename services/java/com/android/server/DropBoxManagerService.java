@@ -60,7 +60,7 @@ import java.util.zip.GZIPOutputStream;
 public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
     private static final String TAG = "DropBoxManagerService";
     private static final int DEFAULT_AGE_SECONDS = 3 * 86400;
-    private static final int DEFAULT_MAX_FILES = 1000;
+    private static final int DEFAULT_MAX_FILES = 500;
     private static final int DEFAULT_QUOTA_KB = 5 * 1024;
     private static final int DEFAULT_QUOTA_PERCENT = 10;
     private static final int DEFAULT_RESERVE_PERCENT = 10;
@@ -312,7 +312,6 @@ public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
         try {
             init();
         } catch (IOException e) {
-            pw.println("Can't initialize: " + e);
             Slog.e(TAG, "Can't init", e);
             return;
         }

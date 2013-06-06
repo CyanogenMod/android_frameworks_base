@@ -1679,8 +1679,12 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                     } else {
                         mSavedPeerConfig.wps.setup = WpsInfo.PBC;
                     }
-                    if (!sendConnectNoticeToApp(mSavedProvDiscDevice, mSavedPeerConfig)) {
-                        transitionTo(mUserAuthorizingJoinState);
+                    Slog.d(TAG, "mGroup.isGroupOwner()" + mGroup.isGroupOwner());
+                    if (mGroup.isGroupOwner()) {
+                        Slog.d(TAG, "Local device is Group Owner, transiting to mUserAuthorizingJoinState");
+                        if (!sendConnectNoticeToApp(mSavedProvDiscDevice, mSavedPeerConfig)) {
+                            transitionTo(mUserAuthorizingJoinState);
+                        }
                     }
                     break;
                 case WifiMonitor.P2P_GROUP_STARTED_EVENT:

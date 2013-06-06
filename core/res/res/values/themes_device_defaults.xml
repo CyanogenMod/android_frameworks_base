@@ -49,7 +49,7 @@ easier.
          Type.DeviceDefault.Etc (for example, {@code Widget.DeviceDefault.Button} and
          {@code TextAppearance.DeviceDefault.Widget.PopupMenu.Large}).</p>
           -->
-    <style name="Theme.DeviceDefault" parent="Theme.Holo" >
+    <style name="Theme.DeviceDefault" parent="Theme.Holo.Light" >
         <!-- Text styles -->
         <item name="textAppearance">@android:style/TextAppearance.DeviceDefault</item>
         <item name="textAppearanceInverse">@android:style/TextAppearance.DeviceDefault.Inverse</item>

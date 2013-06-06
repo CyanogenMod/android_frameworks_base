@@ -51,7 +51,7 @@ import android.util.Slog;
 public class EntropyMixer extends Binder {
     private static final String TAG = "EntropyMixer";
     private static final int ENTROPY_WHAT = 1;
-    private static final int ENTROPY_WRITE_PERIOD = 3 * 60 * 60 * 1000;  // 3 hrs
+    private static final int ENTROPY_WRITE_PERIOD = 6 * 60 * 60 * 1000;  // 3 hrs
     private static final long START_TIME = System.currentTimeMillis();
     private static final long START_NANOTIME = System.nanoTime();
 

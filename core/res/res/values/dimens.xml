@@ -98,7 +98,7 @@
     <!-- Preference fragment padding, bottom -->
     <dimen name="preference_fragment_padding_bottom">0dp</dimen>
     <!-- Preference fragment padding, sides -->
-    <dimen name="preference_fragment_padding_side">16dp</dimen>
+    <dimen name="preference_fragment_padding_side">0dp</dimen>
     <!-- Weight of the left pane in a multi-pane preference layout. -->
     <integer name="preferences_left_pane_weight">4</integer>
     <!-- Weight of the right pane in a multi-pane preference layout. So the split is 40:60 -->
@@ -132,7 +132,7 @@
     <!-- Preference activity, vertical padding for the header list -->
     <dimen name="preference_screen_header_vertical_padding">0dp</dimen>
 
-    <dimen name="preference_screen_header_padding_side">16dip</dimen>
+    <dimen name="preference_screen_header_padding_side">0dip</dimen>
     <integer name="preference_screen_header_scrollbarStyle">0x02000000</integer> <!-- outsideOverlay -->
 
     <integer name="preference_fragment_scrollbarStyle">0x02000000</integer> <!-- outsideOverlay -->

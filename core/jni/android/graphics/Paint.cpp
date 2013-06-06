@@ -740,7 +740,23 @@ public:
             jfloat* array = autoMeasured.ptr();
             array[0] = SkScalarToFloat(measured);
         }
-        return bytes >> 1;
+
+        //we've got the number of glyphs processed, but we need the number of characters
+        int measuredCount = bytes >> 1;
+        int charCount = 0;
+        int advanceCount = value->getAdvancesCount();
+        const jfloat* advances = value->getAdvances();
+        for (; charCount < advanceCount; charCount ++) {
+        	//0 length means ZWSP, which is added in case a glyphs is for more than 1 chars
+        	if (advances[charCount] > 0) {
+        		measuredCount --;
+        		if (measuredCount < 0) {
+        			break;
+        		}
+        	}
+        }
+
+        return charCount;
     }
 
     static int breakTextC(JNIEnv* env, jobject jpaint, jcharArray jtext,
