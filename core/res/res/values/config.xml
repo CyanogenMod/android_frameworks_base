@@ -545,7 +545,7 @@
     <bool name="config_enableLockBeforeUnlockScreen">false</bool>
 
     <!-- Diable lockscreen rotation by default -->
-    <bool name="config_enableLockScreenRotation">false</bool>
+    <bool name="config_enableLockScreenRotation">true</bool>
 
     <!-- Enable puk unlockscreen by default.
          If unlock screen is disabled, the puk should be unlocked through Emergency Dialer -->
@@ -936,9 +936,9 @@
     <!-- Is the dreams feature supported? -->
     <bool name="config_dreamsSupported">true</bool>
     <!-- If supported, are dreams enabled? (by default) -->
-    <bool name="config_dreamsEnabledByDefault">false</bool>
+    <bool name="config_dreamsEnabledByDefault">true</bool>
     <!-- If supported and enabled, are dreams activated when docked? (by default) -->
-    <bool name="config_dreamsActivatedOnDockByDefault">false</bool>
+    <bool name="config_dreamsActivatedOnDockByDefault">true</bool>
     <!-- If supported and enabled, are dreams activated when asleep and charging? (by default) -->
     <bool name="config_dreamsActivatedOnSleepByDefault">false</bool>
     <!-- ComponentName of the default dream (Settings.Secure.SCREENSAVER_COMPONENT) -->
@@ -966,7 +966,7 @@
     <bool name="config_syncstorageengine_masterSyncAutomatically">true</bool>
 
     <!--  Maximum number of supported users -->
-    <integer name="config_multiuserMaximumUsers">1</integer>
+    <integer name="config_multiuserMaximumUsers">5</integer>
 
     <!-- Minimum span needed to begin a touch scaling gesture.
          If the span is equal to or greater than this size, a scaling gesture
@@ -1001,7 +1001,7 @@
          * The remote submix module "audio.r_submix.default" must be installed on the device.
          * The device must be provisioned with HDCP keys (for protected content).
     -->
-    <bool name="config_enableWifiDisplay">false</bool>
+    <bool name="config_enableWifiDisplay">true</bool>
 
     <!-- When true use the linux /dev/input/event subsystem to detect the switch changes
          on the headphone/microphone jack. When false use the older uevent framework. -->
@@ -1139,5 +1139,5 @@
 
     <!-- True if the pie service should be started at system start. This is must be true
          to support pie controls. -->
-    <bool name="config_allowPieService">true</bool>
+    <bool name="config_allowPieService">true</bool> 
 </resources>
