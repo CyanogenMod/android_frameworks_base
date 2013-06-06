@@ -30,7 +30,6 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.GestureRecorder;
 
 public class NotificationPanelView extends PanelView {
-
     private static final float STATUS_BAR_SETTINGS_LEFT_PERCENTAGE = 0.8f;
     private static final float STATUS_BAR_SETTINGS_RIGHT_PERCENTAGE = 0.2f;
     private static final float STATUS_BAR_SWIPE_TRIGGER_PERCENTAGE = 0.05f;
@@ -178,15 +177,10 @@ public class NotificationPanelView extends PanelView {
                     if (y > maxy) maxy = y;
                 }
                 if (maxy - miny < mHandleBarHeight) {
-                    if (getMeasuredHeight() < mHandleBarHeight) {
+                    if (mJustPeeked || getMeasuredHeight() < mHandleBarHeight) {
                         mStatusBar.switchToSettings();
                     } else {
-                        // Do not flip if the drag event started within the top bar
-                        if (MotionEvent.ACTION_DOWN == event.getActionMasked() && event.getY(0) < mHandleBarHeight ) {
-                            mStatusBar.switchToSettings();
-                        } else {
-                            mStatusBar.flipToSettings();
-                        }
+                        mStatusBar.flipToSettings();
                     }
                     mOkToFlip = false;
                 }
