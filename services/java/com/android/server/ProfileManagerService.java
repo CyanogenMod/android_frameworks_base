@@ -29,6 +29,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.XmlResourceParser;
+import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiManager;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.text.TextUtils;
@@ -84,6 +86,9 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     private Context mContext;
     private boolean mDirty;
+    
+    private WifiManager mWifimanager;
+    private static String lastConnectedSsid = "";
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -95,12 +100,37 @@ public class ProfileManagerService extends IProfileManager.Stub {
                 initialize();
             } else if (action.equals(Intent.ACTION_SHUTDOWN)) {
                 persistIfDirty();
+                
+            } else if(action.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)){
+                SupplicantState state = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE);
+                int triggerstate;
+                if (state == SupplicantState.COMPLETED) {
+                        triggerstate = Profile.TriggerState.ON_CONNECT;
+                        lastConnectedSsid = mWifimanager.getConnectionInfo().getSSID().replace("\"", "");
+                }else if (state == SupplicantState.DISCONNECTED){ 
+                        triggerstate = Profile.TriggerState.ON_DISCONNECT;
+                }else{
+                    return;
+                }
+                for (Profile p : mProfiles.values()) {
+                    if ( triggerstate ==  p.getWifiTrigger(lastConnectedSsid)){
+                        try {
+                            setActiveProfile(p, true);
+                        } catch (RemoteException e) {
+                            Log.e(TAG, "Something went wrong while setting profile", e);
+                        }
+                    }
+                }
+                
             }
         }
     };
 
     public ProfileManagerService(Context context) {
         mContext = context;
+        mWifimanager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
+        lastConnectedSsid = mWifimanager.getConnectionInfo().getSSID().replace("\"", "");
+        
 
         mWildcardGroup = new NotificationGroup(
                 context.getString(com.android.internal.R.string.wildcardProfile),
@@ -112,6 +142,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         filter.addAction(Intent.ACTION_SHUTDOWN);
+        filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
         mContext.registerReceiver(mIntentReceiver, filter);
     }
 

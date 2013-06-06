@@ -66,6 +66,8 @@ public final class Profile implements Parcelable, Comparable {
     private static final int TOGGLE_TYPE = 0;
 
     private Map<Integer, StreamSettings> streams = new HashMap<Integer, StreamSettings>();
+    
+    private Map<String, Integer> mWifiTriggers = new HashMap<String, Integer>();
 
     private Map<Integer, ConnectionSettings> connections = new HashMap<Integer, ConnectionSettings>();
 
@@ -81,6 +83,14 @@ public final class Profile implements Parcelable, Comparable {
         public static final int INSECURE = 1;
         public static final int DISABLE = 2;
     }
+    
+    /** @hide */
+    public static class TriggerState {
+        public static final int ON_CONNECT = 0;
+        public static final int ON_DISCONNECT = 1;
+        public static final int DISABLED = 2;
+    }
+    
 
     /** @hide */
     public static final Parcelable.Creator<Profile> CREATOR = new Parcelable.Creator<Profile>() {
@@ -109,6 +119,24 @@ public final class Profile implements Parcelable, Comparable {
 
     private Profile(Parcel in) {
         readFromParcel(in);
+    }
+    
+    public int getWifiTrigger(String ssid) {
+        if (mWifiTriggers.containsKey(ssid)){
+            Integer nr = mWifiTriggers.get(ssid);
+            return nr.intValue();
+        }
+        return 2;
+    }
+    
+    public void setWifiTrigger(String ssid, int value) {
+        if (value == 2 && mWifiTriggers.containsKey(ssid)){
+            mWifiTriggers.remove(ssid);
+        }
+        else{
+            mWifiTriggers.put(ssid, new Integer(value));
+        }
+        mDirty = true;
     }
 
     public int compareTo(Object obj)
@@ -185,6 +213,7 @@ public final class Profile implements Parcelable, Comparable {
         dest.writeParcelable(mRingMode, flags);
         dest.writeParcelable(mAirplaneMode, flags);
         dest.writeInt(mScreenLockMode);
+        dest.writeMap(mWifiTriggers);
     }
 
     /** @hide */
@@ -217,6 +246,7 @@ public final class Profile implements Parcelable, Comparable {
         mRingMode = (RingModeSettings) in.readParcelable(null);
         mAirplaneMode = (AirplaneModeSettings) in.readParcelable(null);
         mScreenLockMode = in.readInt();
+        in.readMap(mWifiTriggers, null);
     }
 
     public String getName() {
@@ -401,6 +431,18 @@ public final class Profile implements Parcelable, Comparable {
         for (ConnectionSettings cs : connections.values()) {
             cs.getXmlString(builder, context);
         }
+        if (!mWifiTriggers.isEmpty()){
+            builder.append("<wifitriggers>\n");
+            for (Map.Entry<String,Integer> e : mWifiTriggers.entrySet()) {
+                builder.append("<trigger name=\"");
+                builder.append(e.getKey());
+                builder.append("\" value=\"");
+                builder.append(e.getValue());
+                builder.append("\"></trigger>\n");
+            }
+            builder.append("</wifitriggers>\n");
+        }
+
         builder.append("</profile>\n");
         mDirty = false;
     }
@@ -426,6 +468,22 @@ public final class Profile implements Parcelable, Comparable {
             event = xpp.next();
         }
         return uuids;
+    }
+    
+    private static HashMap<String, Integer> readWifiTriggersFromXml(XmlPullParser xpp, Context context)
+            throws XmlPullParserException,
+            IOException {
+        int event = xpp.next();
+        HashMap<String, Integer> triggers = new HashMap<String,Integer>();
+        while(event != XmlPullParser.END_TAG || xpp.getName().equals("trigger")){
+            if (event == XmlPullParser.START_TAG){
+                String ssid = xpp.getAttributeValue(null, "name");
+                String value = xpp.getAttributeValue(null, "value");
+                triggers.put(ssid, new Integer(value));
+            }
+            event = xpp.next();
+        }
+        return triggers;
     }
 
     /** @hide */
@@ -502,6 +560,10 @@ public final class Profile implements Parcelable, Comparable {
                     ConnectionSettings cs = ConnectionSettings.fromXml(xpp, context);
                     profile.connections.put(cs.getConnectionId(), cs);
                 }
+                if (name.equals("wifitriggers")) {
+                    profile.mWifiTriggers = readWifiTriggersFromXml(xpp, context);
+                }
+                
             }
             event = xpp.next();
         }
