@@ -193,4 +193,7 @@
 
     <!-- Default for Settings.System.LOCKSCREEN_TARGETS. -->
     <string name="def_lockscreen_targets" translatable="false"></string>
+
+    <!-- Default for Settings.System.UI_FORCE_OVERFLOW_BUTTON. -->
+    <integer name="def_force_overflow_button">0</integer>
 </resources>
