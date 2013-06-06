@@ -16,10 +16,7 @@
  */
 package com.android.systemui.statusbar.policy;
 
-import android.app.ActivityManager.RunningAppProcessInfo;
-import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
-import android.app.IActivityManager;
 import android.app.SearchManager;
 import android.app.StatusBarManager;
 import android.content.ActivityNotFoundException;
@@ -28,15 +25,17 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.hardware.input.InputManager;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -44,6 +43,7 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.service.pie.PieManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -53,27 +53,27 @@ import android.view.IWindowManager;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
-import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.internal.util.cm.DevUtils;
+import com.android.internal.util.pie.PiePosition;
+import com.android.internal.util.pie.PieServiceConstants;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.NavigationButtons;
 import com.android.systemui.statusbar.NavigationButtons.ButtonInfo;
 import com.android.systemui.statusbar.pie.PieItem;
-import com.android.systemui.statusbar.pie.PieLayout;
-import com.android.systemui.statusbar.pie.PieLayout.PieDrawable;
-import com.android.systemui.statusbar.pie.PieLayout.PieSlice;
+import com.android.systemui.statusbar.pie.PieView;
+import com.android.systemui.statusbar.pie.PieView.PieDrawable;
+import com.android.systemui.statusbar.pie.PieView.PieSlice;
 import com.android.systemui.statusbar.pie.PieSliceContainer;
 import com.android.systemui.statusbar.pie.PieSysInfo;
-
-import java.util.List;
 
 /**
  * Controller class for the default pie control.
@@ -81,8 +81,8 @@ import java.util.List;
  * This class is responsible for setting up the pie control, activating it, and defining and
  * executing the actions that can be triggered by the pie control.
  */
-public class PieController implements BaseStatusBar.NavigationBarCallback,
-        PieLayout.OnSnapListener, PieItem.PieOnClickListener, PieItem.PieOnLongClickListener {
+public class PieController implements BaseStatusBar.NavigationBarCallback, PieView.OnExitListener,
+        PieView.OnSnapListener, PieItem.PieOnClickListener, PieItem.PieOnLongClickListener {
     public static final String TAG = "PieController";
     public static final boolean DEBUG = false;
 
@@ -94,18 +94,23 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
 
     private static final int MSG_INJECT_KEY_DOWN = 1066;
     private static final int MSG_INJECT_KEY_UP = 1067;
+    private static final int MSG_PIE_GAIN_FOCUS = 1068;
+    private static final int MSG_PIE_RESTORE_LISTENER_STATE = 1069;
 
     private Context mContext;
-    private PieLayout mPieContainer;
+    private PieManager mPieManager;
+    private PieView mPieContainer;
+    private boolean mIsDetaching = false;
     /**
-     * This is only needed for #toggleRecentApps()
+     * This is only needed for #toggleRecentApps() and #showSearchPanel()
      */
     private BaseStatusBar mStatusBar;
     private Vibrator mVibrator;
+    private WindowManager mWindowManager;
     private IWindowManager mWm;
     private int mBatteryLevel;
     private int mBatteryStatus;
-    private boolean mHasTelephony;
+    private TelephonyManager mTelephonyManager;
     private ServiceState mServiceState;
 
     // all pie slices that are managed by the controller
@@ -120,138 +125,62 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
     private Drawable mBackIcon;
     private Drawable mBackAltIcon;
 
-    /**
-     * Defines the positions in which pie controls may appear. This enumeration is used to store
-     * an index, a flag and the android gravity for each position.
-     */
-    public enum Position {
-        LEFT(0, 0, android.view.Gravity.LEFT),
-        BOTTOM(1, 1, android.view.Gravity.BOTTOM),
-        RIGHT(2, 1, android.view.Gravity.RIGHT),
-        TOP(3, 0, android.view.Gravity.TOP);
+    protected int mExpandedDesktopState;
+    private int mPieTriggerSlots;
+    private int mPieTriggerMask = PiePosition.LEFT.FLAG
+            | PiePosition.BOTTOM.FLAG
+            | PiePosition.RIGHT.FLAG
+            | PiePosition.TOP.FLAG;
+    private PiePosition mPosition;
 
-        Position(int index, int factor, int android_gravity) {
-            INDEX = index;
-            FLAG = (0x01<<index);
-            ANDROID_GRAVITY = android_gravity;
-            FACTOR = factor;
-        }
-
-        public final int INDEX;
-        public final int FLAG;
-        public final int ANDROID_GRAVITY;
-        /**
-         * This is 1 when the position is not at the axis (like {@link Position.RIGHT} is
-         * at {@code Layout.getWidth()} not at {@code 0}).
-         */
-        public final int FACTOR;
-    }
-
-    private Position mPosition;
-
-    public static class Tracker {
-        public static float sDistance;
-        private float initialX = 0;
-        private float initialY = 0;
-        private float gracePeriod = 0;
-
-        private Tracker(Position position) {
-            this.position = position;
-        }
-
-        public void start(MotionEvent event) {
-            initialX = event.getX();
-            initialY = event.getY();
-            switch (position) {
-                case LEFT:
-                    gracePeriod = initialX + sDistance / 3.0f;
-                    break;
-                case RIGHT:
-                    gracePeriod = initialX - sDistance / 3.0f;
-                    break;
+    private PieManager.PieActivationListener mPieActivationListener =
+            new PieManager.PieActivationListener(Looper.getMainLooper()) {
+        @Override
+        public void onPieActivation(int touchX, int touchY, PiePosition position, int flags) {
+            if (position == PiePosition.BOTTOM && isSearchLightEnabled() && mStatusBar != null) {
+                // if we are at the bottom and nothing else is there, use a
+                // search light!
+                mStatusBar.showSearchPanel();
+                // restore listener state immediately (after the bookkeeping), and since the
+                // search panel is a single gesture we will not trigger again
+                mHandler.obtainMessage(MSG_PIE_RESTORE_LISTENER_STATE).sendToTarget();
+            } else if (mPieContainer != null && activateFromListener(touchX, touchY, position)) {
+                // give the main thread some time to do the bookkeeping
+                mHandler.obtainMessage(MSG_PIE_GAIN_FOCUS).sendToTarget();
+            } else {
+                // if anything goes wrong, just quit the ongoing activation
+                mPieActivationListener.restoreListenerState();
             }
-            active = true;
         }
+    };
 
-        public boolean move(MotionEvent event) {
-            final float x = event.getX();
-            final float y = event.getY();
-            if (!active) {
-                return false;
-            }
-
-            // Unroll the complete logic here - we want to be fast and out of the
-            // event chain as fast as possible.
-            boolean loaded = false;
-            switch (position) {
-                case LEFT:
-                    if (x < gracePeriod) {
-                        initialY = y;
-                    }
-                    if (initialY - y < sDistance && y - initialY < sDistance) {
-                        if (x - initialX <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-                case BOTTOM:
-                    if (initialX - x < sDistance && x - initialX < sDistance) {
-                        if (initialY - y <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-                case TOP:
-                    if (initialX - x < sDistance && x - initialX < sDistance) {
-                        if (y - initialY <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-                case RIGHT:
-                    if (x > gracePeriod) {
-                        initialY = y;
-                    }
-                    if (initialY - y < sDistance && y - initialY < sDistance) {
-                        if (initialX - x <= sDistance) {
-                            return false;
-                        }
-                        loaded = true;
-                    }
-                    break;
-            }
-            active = false;
-            return loaded;
-        }
-
-        public boolean active = false;
-        public final Position position;
-    }
-
-    public Tracker buildTracker(Position position) {
-        return new Tracker(position);
-    }
-
-    private class H extends Handler {
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message m) {
             final InputManager inputManager = InputManager.getInstance();
             switch (m.what) {
                 case MSG_INJECT_KEY_DOWN:
                     inputManager.injectInputEvent((KeyEvent) m.obj,
                             InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
-                    mPieContainer.playSoundEffect(SoundEffectConstants.CLICK);
                     break;
                 case MSG_INJECT_KEY_UP:
                     inputManager.injectInputEvent((KeyEvent) m.obj,
                             InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
                     break;
+                case MSG_PIE_GAIN_FOCUS:
+                    if (mPieContainer != null) {
+                        if (!mPieActivationListener.gainTouchFocus(mPieContainer.getWindowToken())) {
+                            mPieContainer.exit();
+                        }
+                    } else {
+                        mPieActivationListener.restoreListenerState();
+                    }
+                    break;
+                case MSG_PIE_RESTORE_LISTENER_STATE:
+                    mPieActivationListener.restoreListenerState();
+                    break;
             }
         }
-    }
-    private H mHandler = new H();
+    };
 
     private void injectKeyDelayed(int keyCode, long when) {
         mHandler.removeMessages(MSG_INJECT_KEY_DOWN);
@@ -277,15 +206,46 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
+            // trigger setupNavigationItems()
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAV_BUTTONS), false, this);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.KILL_APP_LONGPRESS_BACK), false, this);
+            // trigger setupContainer()
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STATE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STYLE), false, this);
+            // trigger setupListener()
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_POSITIONS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_SENSITIVITY), false, this);
         }
 
         @Override
         public void onChange(boolean selfChange) {
-            setupNavigationItems();
+            ContentResolver resolver = mContext.getContentResolver();
+            boolean expanded = Settings.System.getInt(resolver,
+                    Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
+            if (expanded) {
+                mExpandedDesktopState = Settings.System.getInt(resolver,
+                        Settings.System.EXPANDED_DESKTOP_STYLE, 0);
+            } else {
+                mExpandedDesktopState = 0;
+            }
+            if (isEnabled()) {
+                setupContainer();
+                setupNavigationItems();
+                setupListener();
+            } else if (!isShowing()) {
+                detachContainer();
+            } else {
+                // delay detach to #onExit()
+                mIsDetaching = true;
+            }
         }
     }
 
@@ -301,7 +261,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
                          BatteryManager.BATTERY_STATUS_UNKNOWN);
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                 // Give up on screen off. what's the point in pie controls if you don't see them?
-                if (mPieContainer != null) {
+                if (isShowing()) {
                     mPieContainer.exit();
                 }
             }
@@ -318,32 +278,49 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
     public PieController(Context context) {
         mContext = context;
 
+        mPieManager = PieManager.getInstance();
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        mWindowManager = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         mWm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
 
-        final PackageManager pm = mContext.getPackageManager();
-        mHasTelephony = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+        if (mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            mTelephonyManager =
+                    (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        }
 
         final Resources res = mContext.getResources();
-        Tracker.sDistance = res.getDimensionPixelSize(R.dimen.pie_trigger_distance);
 
         mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
         mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
+
+        mPieManager.setPieActivationListener(mPieActivationListener);
+
+        // start listening for changes (calls setupListener & setupNavigationItems)
+        mSettingsObserver.observe();
+        mSettingsObserver.onChange(true);
     }
 
-    public void attachTo(BaseStatusBar statusBar) {
+    public void attachStatusBar(BaseStatusBar statusBar) {
         mStatusBar = statusBar;
     }
 
-    public void attachTo(PieLayout container) {
-        mPieContainer = container;
-        mPieContainer.clearSlices();
+    private void setupContainer() {
+        if (mPieContainer == null) {
+            mPieContainer = new PieView(mContext);
+            mPieContainer.setOnSnapListener(this);
+            mPieContainer.setOnExitListener(this);
 
-        if (DEBUG) {
-            Slog.d(TAG, "Attaching to container: " + container);
+            if (mTelephonyManager != null) {
+                mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+            }
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            mContext.registerReceiver(mBroadcastReceiver, filter);
         }
 
-        mPieContainer.setOnSnapListener(this);
+        mPieContainer.clearSlices();
 
         final Resources res = mContext.getResources();
 
@@ -353,7 +330,6 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         mNavigationSlice = new PieSliceContainer(mPieContainer, PieSlice.IMPORTANT
                 | PieDrawable.DISPLAY_ALL);
         mNavigationSlice.setGeometry(START_ANGLE, 180 - 2 * EMPTY_ANGLE, inner, outer);
-        setupNavigationItems();
         mPieContainer.addSlice(mNavigationSlice);
 
         // construct sysinfo slice
@@ -362,22 +338,51 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         mSysInfo = new PieSysInfo(mContext, mPieContainer, this, PieDrawable.DISPLAY_NOT_AT_TOP);
         mSysInfo.setGeometry(START_ANGLE, 180 - 2 * EMPTY_ANGLE, inner, outer);
         mPieContainer.addSlice(mSysInfo);
+    }
 
-        // start listening for changes
-        mSettingsObserver.observe();
-
-        mContext.registerReceiver(mBroadcastReceiver,
-                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        mContext.registerReceiver(mBroadcastReceiver, filter);
-
-        if (mHasTelephony) {
-            TelephonyManager telephonyManager =
-                    (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-            telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+    @Override
+    public void onExit() {
+        mWindowManager.removeView(mPieContainer);
+        mPieActivationListener.restoreListenerState();
+        if (mIsDetaching) {
+            detachContainer();
+            mIsDetaching = false;
         }
+    }
+
+    private void detachContainer() {
+        if (mPieContainer == null) {
+            return;
+        }
+
+        mPieManager.updatePieActivationListener(mPieActivationListener, 0);
+
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
+
+        mContext.unregisterReceiver(mBroadcastReceiver);
+
+        mPieContainer.clearSlices();
+        mPieContainer = null;
+    }
+
+    private void setupListener() {
+        ContentResolver resolver = mContext.getContentResolver();
+
+        mPieTriggerSlots = Settings.System.getInt(resolver,
+                Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG);
+
+        int sensitivity = Settings.System.getInt(resolver,
+                Settings.System.PIE_SENSITIVITY, 3);
+        if (sensitivity < PieServiceConstants.SENSITIVITY_LOWEST
+                || sensitivity > PieServiceConstants.SENSITIVITY_HIGHEST) {
+            sensitivity = PieServiceConstants.SENSITIVITY_DEFAULT;
+        }
+
+        mPieManager.updatePieActivationListener(mPieActivationListener,
+                sensitivity<<PieServiceConstants.SENSITIVITY_SHIFT
+                | mPieTriggerSlots & mPieTriggerMask);
     }
 
     private void setupNavigationItems() {
@@ -437,7 +442,6 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
                 return item;
             }
         }
-
         return null;
     }
 
@@ -448,14 +452,47 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         }
     }
 
-    public void activateFromTrigger(View view, MotionEvent event, Position position) {
-        if (mPieContainer != null && !isShowing()) {
-            doHapticTriggerFeedback();
+    public boolean activateFromListener(int touchX, int touchY, PiePosition position) {
+        if (isShowing()) {
+            return false;
+        }
 
-            mPosition = position;
-            Point center = new Point((int) event.getRawX(), (int) event.getRawY());
-            mPieContainer.activate(center, position);
-            mPieContainer.invalidate();
+        doHapticTriggerFeedback();
+
+        mPosition = position;
+        Point center = new Point(touchX, touchY);
+        mPieContainer.setSnapPoints(mPieTriggerMask & ~mPieTriggerSlots);
+        mPieContainer.activate(center, position);
+        mWindowManager.addView(mPieContainer, generateLayoutParam());
+
+        return true;
+    }
+
+    private WindowManager.LayoutParams generateLayoutParam() {
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                PixelFormat.TRANSLUCENT);
+        lp.privateFlags = WindowManager.LayoutParams.PRIVATE_FLAG_FORCE_SHOW_NAV_BAR;
+        // This title is for debugging only. See: dumpsys window
+        lp.setTitle("PieControlPanel");
+        lp.windowAnimations = android.R.style.Animation;
+        lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_BEHIND;
+        return lp;
+    }
+
+    public void updatePieTriggerMask(int newMask) {
+        int oldState = mPieTriggerSlots & mPieTriggerMask;
+        mPieTriggerMask = newMask;
+
+        // check if we are active and if it would make a change at all
+        if (mPieContainer != null && ((mPieTriggerSlots & mPieTriggerMask) != oldState)) {
+            setupListener();
         }
     }
 
@@ -543,7 +580,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
     }
 
     @Override
-    public void onSnap(Position position) {
+    public void onSnap(PiePosition position) {
         if (position == mPosition) {
             return;
         }
@@ -555,7 +592,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         }
 
         int triggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_POSITIONS, Position.BOTTOM.FLAG);
+                Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG);
 
         triggerSlots = triggerSlots & ~mPosition.FLAG | position.FLAG;
 
@@ -568,12 +605,14 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         long when = SystemClock.uptimeMillis();
         ButtonInfo bi = (ButtonInfo) item.tag;
 
+        // play sound effect directly, since detaching the container will prevent to play the sound
+        // at a later time.
+        mPieContainer.playSoundEffect(SoundEffectConstants.CLICK);
         if (bi.keyCode != 0) {
             injectKeyDelayed(bi.keyCode, when);
         } else {
             // provide the same haptic feedback as if a virtual key is pressed
             mPieContainer.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            mPieContainer.playSoundEffect(SoundEffectConstants.CLICK);
             if (bi == NavigationButtons.RECENT) {
                 if (mStatusBar != null) {
                     mStatusBar.toggleRecentApps();
@@ -653,8 +692,15 @@ public class PieController implements BaseStatusBar.NavigationBarCallback,
         return mSearchLight != null && (mSearchLight.flags & PieDrawable.VISIBLE) != 0;
     }
 
+    public boolean isEnabled() {
+        int pie = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_CONTROLS, 0);
+
+        return (pie == 1 && mExpandedDesktopState != 0) || pie == 2;
+    }
+
     public String getOperatorState() {
-        if (!mHasTelephony) {
+        if (mTelephonyManager == null) {
             return null;
         }
         if (mServiceState == null || mServiceState.getState() == ServiceState.STATE_OUT_OF_SERVICE) {
