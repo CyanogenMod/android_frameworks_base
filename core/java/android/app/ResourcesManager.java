@@ -358,7 +358,7 @@ public class ResourcesManager {
         }
         PackageInfo pi = null;
         try {
-            pi = getPackageManager().getPackageInfo(theme.getThemePackageName(), 0, 0);
+            pi = getPackageManager().getPackageInfo(theme.getThemePackageName(), 0, UserHandle.myUserId());
         } catch (RemoteException e) {
         }
         if (pi != null && pi.applicationInfo != null && pi.themeInfos != null) {
