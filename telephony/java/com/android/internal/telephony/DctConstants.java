@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,6 +97,7 @@ public class DctConstants {
     public static final int EVENT_DISCONNECT_DC_RETRYING = BASE + 34;
     public static final int EVENT_DATA_SETUP_COMPLETE_ERROR = BASE + 35;
     public static final int EVENT_TETHERED_MODE_STATE_CHANGED = BASE + 36;
+    public static final int EVENT_MODEM_DATA_PROFILE_READY= BASE + 37;
 
     public static final int CMD_SET_ENABLE_FAIL_FAST_MOBILE_DATA = BASE + 38;
     public static final int CMD_ENABLE_MOBILE_PROVISIONING = BASE + 39;
