@@ -30,10 +30,9 @@ import android.net.wifi.WifiSsid;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 
+import com.android.internal.util.pie.PiePosition;
 import com.android.systemui.R;
-import com.android.systemui.statusbar.pie.PieLayout.PieDrawable;
 import com.android.systemui.statusbar.policy.PieController;
-import com.android.systemui.statusbar.policy.PieController.Position;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,7 +65,7 @@ public class PieSysInfo extends PieSliceContainer implements ValueAnimator.Anima
     private String mTimeFormatString;
     private SimpleDateFormat mTimeFormat;
 
-    public PieSysInfo(Context context, PieLayout parent,
+    public PieSysInfo(Context context, PieView parent,
             PieController controller, int initialFlags) {
         super(parent, initialFlags);
         mController = controller;
@@ -84,7 +83,7 @@ public class PieSysInfo extends PieSliceContainer implements ValueAnimator.Anima
     }
 
     @Override
-    public void prepare(Position position, float scale) {
+    public void prepare(PiePosition position, float scale) {
 
         // We are updating data later when we starting to get visible.
         // This does not save work on the main thread, but for fast gestures
@@ -97,8 +96,6 @@ public class PieSysInfo extends PieSliceContainer implements ValueAnimator.Anima
         mInfoPaint.setAlpha(0);
 
         final Resources res = mContext.getResources();
-        final RectF innerBB = new RectF(-mInner * scale, -mInner * scale,
-                mInner * scale, mInner * scale);
         int textsize = res.getDimensionPixelSize(R.dimen.pie_textsize);
 
         mInfoPaint.setTextSize(textsize * scale);
@@ -120,7 +117,7 @@ public class PieSysInfo extends PieSliceContainer implements ValueAnimator.Anima
     }
 
     @Override
-    public void draw(Canvas canvas, Position position) {
+    public void draw(Canvas canvas, PiePosition position) {
         // as long as there is no new data, we don't need to draw anything.
         if (mStaleData) {
             return;
