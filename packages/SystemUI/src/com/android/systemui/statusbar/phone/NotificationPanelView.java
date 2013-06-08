@@ -178,7 +178,7 @@ public class NotificationPanelView extends PanelView {
                     if (y > maxy) maxy = y;
                 }
                 if (maxy - miny < mHandleBarHeight) {
-                    if (mJustPeeked || getMeasuredHeight() < mHandleBarHeight) {
+                    if (mJustPeeked || getExpandedHeight() < mHandleBarHeight) {
                         mStatusBar.switchToSettings();
                     } else {
                         mStatusBar.flipToSettings();
