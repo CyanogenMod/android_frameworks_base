@@ -48,7 +48,7 @@ public final class CellInfoGsm extends CellInfo implements Parcelable {
     public CellIdentityGsm getCellIdentity() {
         return mCellIdentityGsm;
     }
-    /** @hide */
+
     public void setCellIdentity(CellIdentityGsm cid) {
         mCellIdentityGsm = cid;
     }

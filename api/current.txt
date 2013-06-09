@@ -20692,6 +20692,7 @@ package android.telephony {
   public final class CellInfoGsm extends android.telephony.CellInfo implements android.os.Parcelable {
     method public android.telephony.CellIdentityGsm getCellIdentity();
     method public android.telephony.CellSignalStrengthGsm getCellSignalStrength();
+    method public void setCellIdentity(android.telephony.CellIdentityGsm);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator CREATOR;
   }
