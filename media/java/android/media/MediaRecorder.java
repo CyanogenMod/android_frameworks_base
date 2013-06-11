@@ -179,6 +179,18 @@ public class MediaRecorder
          *  is applied.
          */
         public static final int VOICE_COMMUNICATION = 7;
+
+        /**
+         * @hide
+         * Audio source for remote submix.
+         */
+        public static final int REMOTE_SUBMIX_SOURCE = 8;
+
+        /** @hide */
+        public static final int FM_RX = 9;
+
+        /** @hide */
+        public static final int FM_RX_A2DP = 10;
     }
 
     /**
@@ -307,7 +319,10 @@ public class MediaRecorder
      * @see android.media.MediaRecorder.AudioSource
      */
     public static final int getAudioSourceMax() {
-        return AudioSource.VOICE_COMMUNICATION;
+        // FIXME disable selection of the remote submxi source selection once test code
+        //       doesn't rely on it
+        return AudioSource.FM_RX_A2DP;
+        //return AudioSource.VOICE_COMMUNICATION;
     }
 
     /**
