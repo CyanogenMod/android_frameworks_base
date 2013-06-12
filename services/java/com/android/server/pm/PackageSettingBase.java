@@ -197,6 +197,14 @@ class PackageSettingBase extends GrantedPermissions {
         return readUserState(userId).enabled;
     }
 
+    void setIncognitoMode(boolean incognitoEnabled, int userId) {
+        modifyUserState(userId).incognito = incognitoEnabled;
+    }
+
+    boolean isIncognitoMode(int userId) {
+        return readUserState(userId).incognito;
+    }
+
     void setInstalled(boolean inst, int userId) {
         modifyUserState(userId).installed = inst;
     }
@@ -249,13 +257,14 @@ class PackageSettingBase extends GrantedPermissions {
     }
 
     void setUserState(int userId, int enabled, boolean installed, boolean stopped,
-            boolean notLaunched, HashSet<String> enabledComponents,
+            boolean notLaunched, boolean incognito, HashSet<String> enabledComponents,
             HashSet<String> disabledComponents) {
         PackageUserState state = modifyUserState(userId);
         state.enabled = enabled;
         state.installed = installed;
         state.stopped = stopped;
         state.notLaunched = notLaunched;
+        state.incognito = incognito;
         state.enabledComponents = enabledComponents;
         state.disabledComponents = disabledComponents;
     }

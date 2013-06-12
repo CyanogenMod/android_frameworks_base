@@ -8490,6 +8490,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                         false, //installed
                         true,  //stopped
                         true,  //notLaunched
+                        false, //incognito
                         null, null);
                 if (ps.isAnyInstalled(sUserManager.getUserIds())) {
                     // Other user still have this package installed, so all
@@ -9030,6 +9031,55 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         return num;
+    }
+
+    @Override
+    public void setIncognitoModeSetting(String appPackageName,
+            boolean enabled, int userId) {
+        if (!sUserManager.exists(userId)) return;
+        setIncognitoMode(appPackageName, enabled, userId);
+    }
+
+    @Override
+    public boolean getIncognitoModeSetting(String packageName, int userId) {
+        if (!sUserManager.exists(userId)) return false;
+        int uid = Binder.getCallingUid();
+        enforceCrossUserPermission(uid, userId, false, "get incognito");
+        // reader
+        synchronized (mPackages) {
+            return mSettings.getIncognitoModeSettingLPr(packageName, userId);
+        }
+    }
+
+    private void setIncognitoMode(final String packageName,
+            final boolean enabled, final int userId) {
+        PackageSetting pkgSetting;
+        final int uid = Binder.getCallingUid();
+        final int permission = mContext.checkCallingPermission(
+                android.Manifest.permission.CHANGE_APP_INCOGNITO_STATE);
+        final boolean allowedByPermission = (permission == PackageManager.PERMISSION_GRANTED);
+        enforceCrossUserPermission(uid, userId, false, "set incognito");
+
+        synchronized (mPackages) {
+            pkgSetting = mSettings.mPackages.get(packageName);
+            if (pkgSetting == null) {
+                throw new IllegalArgumentException(
+                        "Unknown package: " + packageName);
+            }
+            // Allow root and verify that userId is not being specified by a different user
+            if (!allowedByPermission && !UserHandle.isSameApp(uid, pkgSetting.appId)) {
+                throw new SecurityException(
+                        "Permission Denial: attempt to change incognito state from pid="
+                        + Binder.getCallingPid()
+                        + ", uid=" + uid + ", package uid=" + pkgSetting.appId);
+            }
+            if (pkgSetting.isIncognitoMode(userId) == enabled) {
+                // Nothing to do
+                return;
+            }
+            pkgSetting.setIncognitoMode(enabled, userId);
+            // TODO: Kill currently running instances
+        }
     }
 
     @Override

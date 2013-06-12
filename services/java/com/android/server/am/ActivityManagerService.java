@@ -120,6 +120,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.provider.Telephony.Sms.Intents;
 import android.text.format.Time;
 import android.util.EventLog;
 import android.util.Log;
@@ -7424,6 +7425,30 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
 
         return KEY_DISPATCHING_TIMEOUT;
+    }
+
+    public boolean isProcessIncognito(int pid) {
+        ProcessRecord proc;
+        synchronized (mPidsSelfLocked) {
+            proc = mPidsSelfLocked.get(pid);
+        }
+        if (proc == null) {
+            return false;
+        }
+        try {
+            return AppGlobals.getPackageManager().getIncognitoModeSetting(
+                    proc.info.packageName, proc.userId);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return false;
+    }
+
+    public boolean isFilteredByIncognitoMode(String intent) {
+        return  Intents.SMS_RECEIVED_ACTION.equals(intent) ||
+                Intents.DATA_SMS_RECEIVED_ACTION.equals(intent) ||
+                Intents.SMS_EMERGENCY_CB_RECEIVED_ACTION.equals(intent) ||
+                Intents.SMS_CB_RECEIVED_ACTION.equals(intent);
     }
 
     public void registerProcessObserver(IProcessObserver observer) {
