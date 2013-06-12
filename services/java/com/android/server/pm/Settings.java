@@ -100,6 +100,7 @@ final class Settings {
     private static final String ATTR_ENABLED = "enabled";
     private static final String ATTR_STOPPED = "stopped";
     private static final String ATTR_INSTALLED = "inst";
+    private static final String ATTR_INCOGNITO = "incognito";
 
     private final File mSettingsFilename;
     private final File mBackupSettingsFilename;
@@ -447,6 +448,7 @@ final class Settings {
                                     installed,
                                     true, // stopped,
                                     true, // notLaunched
+                                    false, // incognito
                                     null, null);
                             writePackageRestrictionsLPr(user.id);
                         }
@@ -844,6 +846,7 @@ final class Settings {
                                 true,   // installed
                                 false,  // stopped
                                 false,  // notLaunched
+                                false,  // incognito
                                 null, null);
                     }
                     return;
@@ -898,6 +901,9 @@ final class Settings {
                     final String notLaunchedStr = parser.getAttributeValue(null, ATTR_NOT_LAUNCHED);
                     final boolean notLaunched = stoppedStr == null
                             ? false : Boolean.parseBoolean(notLaunchedStr);
+                    final String incognitoStr = parser.getAttributeValue(null, ATTR_INCOGNITO);
+                    final boolean incognito = incognitoStr == null
+                            ? false : Boolean.parseBoolean(incognitoStr);
 
                     HashSet<String> enabledComponents = null;
                     HashSet<String> disabledComponents = null;
@@ -918,7 +924,7 @@ final class Settings {
                         }
                     }
 
-                    ps.setUserState(userId, enabled, installed, stopped, notLaunched,
+                    ps.setUserState(userId, enabled, installed, stopped, notLaunched, incognito,
                             enabledComponents, disabledComponents);
                 } else if (tagName.equals("preferred-activities")) {
                     readPreferredActivitiesLPw(parser, userId);
@@ -1046,6 +1052,9 @@ final class Settings {
                     if (ustate.enabled != COMPONENT_ENABLED_STATE_DEFAULT) {
                         serializer.attribute(null, ATTR_ENABLED,
                                 Integer.toString(ustate.enabled));
+                    }
+                    if (ustate.incognito) {
+                        serializer.attribute(null, ATTR_INCOGNITO, "true");
                     }
                     if (ustate.enabledComponents != null
                             && ustate.enabledComponents.size() > 0) {
@@ -2435,6 +2444,14 @@ final class Settings {
             throw new IllegalArgumentException("Unknown package: " + packageName);
         }
         return pkg.installerPackageName;
+    }
+
+    boolean getIncognitoModeSettingLPr(String packageName, int userId) {
+        final PackageSetting pkg = mPackages.get(packageName);
+        if (pkg == null) {
+            throw new IllegalArgumentException("Unknown package: " + packageName);
+        }
+        return pkg.isIncognitoMode(userId);
     }
 
     int getApplicationEnabledSettingLPr(String packageName, int userId) {

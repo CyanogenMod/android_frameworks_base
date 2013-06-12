@@ -2267,6 +2267,16 @@ public abstract class Context {
     public static final String USER_SERVICE = "user";
 
     /**
+     * Determine whether the application or calling application is in
+     * incognito mode. This is a privacy feature intended to permit the user
+     * to control access to personal data. Applications and content providers
+     * can check this value if they wish to honor incognito mode.
+     *
+     * @hide
+     */
+    public abstract boolean isIncognito();
+
+    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *
