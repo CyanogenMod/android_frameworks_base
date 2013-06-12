@@ -214,7 +214,11 @@ interface IPackageManager {
 
     int getPreferredActivities(out List<IntentFilter> outFilters,
             out List<ComponentName> outActivities, String packageName);
-    
+
+    boolean getIncognitoModeSetting(in String packageName, int userId);
+
+    void setIncognitoModeSetting(in String packageName, boolean enabled, int userId);
+
     /**
      * As per {@link android.content.pm.PackageManager#setComponentEnabledSetting}.
      */

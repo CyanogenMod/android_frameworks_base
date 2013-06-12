@@ -7426,6 +7426,23 @@ public final class ActivityManagerService extends ActivityManagerNative
         return KEY_DISPATCHING_TIMEOUT;
     }
 
+    public boolean isProcessIncognito(int pid) {
+        ProcessRecord proc;
+        synchronized (mPidsSelfLocked) {
+            proc = mPidsSelfLocked.get(pid);
+        }
+        if (proc == null) {
+            return false;
+        }
+        try {
+            return AppGlobals.getPackageManager().getIncognitoModeSetting(
+                    proc.info.packageName, proc.userId);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return false;
+    }
+
     public void registerProcessObserver(IProcessObserver observer) {
         enforceCallingPermission(android.Manifest.permission.SET_ACTIVITY_WATCHER,
                 "registerProcessObserver()");

@@ -496,6 +496,11 @@ public class ContextWrapper extends Context {
     }
 
     @Override
+    public boolean isIncognito() {
+        return mBase.isIncognito();
+    }
+
+    @Override
     public int checkPermission(String permission, int pid, int uid) {
         return mBase.checkPermission(permission, pid, uid);
     }

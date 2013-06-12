@@ -1050,6 +1050,11 @@
     for hardware-specific diagnostics by the manufacturer or operator.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeIncognitoState">enable or disable application privacy mode</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changeIncognitoState">Allows the app to change whether an application runs in Incognito Mode. When an app is running Incognito, it will not have access to personal data such as contacts, call logs, or messages.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_changeComponentState">enable or disable app components</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changeComponentState" product="tablet">Allows the app to change whether a
