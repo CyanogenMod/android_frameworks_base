@@ -2941,6 +2941,22 @@ public abstract class PackageManager {
     public abstract int getApplicationEnabledSetting(String packageName);
 
     /**
+     * @param packageName
+     * @return
+     *
+     * @hide
+     */
+    public abstract boolean getPrivacyGuardSetting(String packageName);
+
+    /**
+     * @param packageName
+     * @param enabled
+     *
+     * @hide
+     */
+    public abstract void setPrivacyGuardSetting(String packageName, boolean enabled);
+
+    /**
      * Return whether the device has been booted into safe mode.
      */
     public abstract boolean isSafeMode();
