@@ -8485,11 +8485,16 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // The caller is asking that the package only be deleted for a single
                 // user.  To do this, we just mark its uninstalled state and delete
                 // its data.
+                boolean privacyGuard = android.provider.Settings.Secure.getIntForUser(
+                        mContext.getContentResolver(),
+                        android.provider.Settings.Secure.PRIVACY_GUARD_DEFAULT,
+                        0, user.getIdentifier()) == 1;
                 ps.setUserState(user.getIdentifier(),
                         COMPONENT_ENABLED_STATE_DEFAULT,
                         false, //installed
                         true,  //stopped
                         true,  //notLaunched
+                        privacyGuard,
                         null, null);
                 if (ps.isAnyInstalled(sUserManager.getUserIds())) {
                     // Other user still have this package installed, so all
@@ -9030,6 +9035,60 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         return num;
+    }
+
+    @Override
+    public void setPrivacyGuardSetting(String appPackageName,
+            boolean enabled, int userId) {
+        if (!sUserManager.exists(userId)) return;
+        setPrivacyGuard(appPackageName, enabled, userId);
+    }
+
+    @Override
+    public boolean getPrivacyGuardSetting(String packageName, int userId) {
+        if (!sUserManager.exists(userId)) return false;
+        int uid = Binder.getCallingUid();
+        enforceCrossUserPermission(uid, userId, false, "get privacy guard");
+        // reader
+        synchronized (mPackages) {
+            return mSettings.getPrivacyGuardSettingLPr(packageName, userId);
+        }
+    }
+
+    private void setPrivacyGuard(final String packageName,
+            final boolean enabled, final int userId) {
+        PackageSetting pkgSetting;
+        final int uid = Binder.getCallingUid();
+        final int permission = mContext.checkCallingPermission(
+                android.Manifest.permission.CHANGE_PRIVACY_GUARD_STATE);
+        final boolean allowedByPermission = (permission == PackageManager.PERMISSION_GRANTED);
+        enforceCrossUserPermission(uid, userId, false, "set privacy guard");
+
+        synchronized (mPackages) {
+            pkgSetting = mSettings.mPackages.get(packageName);
+            if (pkgSetting == null) {
+                throw new IllegalArgumentException(
+                        "Unknown package: " + packageName);
+            }
+            // Allow root and verify that userId is not being specified by a different user
+            if (!allowedByPermission && !UserHandle.isSameApp(uid, pkgSetting.appId)) {
+                throw new SecurityException(
+                        "Permission Denial: attempt to change privacy guard state from pid="
+                        + Binder.getCallingPid()
+                        + ", uid=" + uid + ", package uid=" + pkgSetting.appId);
+            }
+            if (pkgSetting.isPrivacyGuard(userId) == enabled) {
+                // Nothing to do
+                return;
+            }
+            pkgSetting.setPrivacyGuard(enabled, userId);
+            mSettings.writePackageRestrictionsLPr(userId);
+            try {
+                ActivityManagerNative.getDefault().forceStopPackage(packageName, userId);
+            } catch (RemoteException e) {
+                //nothing
+            }
+        }
     }
 
     @Override

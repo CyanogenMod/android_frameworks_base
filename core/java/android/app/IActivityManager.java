@@ -190,7 +190,9 @@ public interface IActivityManager extends IInterface {
     
     public void setProcessForeground(IBinder token, int pid,
             boolean isForeground) throws RemoteException;
-    
+
+    public boolean isPrivacyGuardEnabledForProcess(int pid) throws RemoteException;
+
     public int checkPermission(String permission, int pid, int uid)
             throws RemoteException;
 
@@ -624,4 +626,5 @@ public interface IActivityManager extends IInterface {
     int INPUT_DISPATCHING_TIMED_OUT_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+158;
     int CLEAR_PENDING_BACKUP_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+159;
     int GET_INTENT_FOR_INTENT_SENDER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+160;
+    int IS_PRIVACY_GUARD_ENABLED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+161;
 }
