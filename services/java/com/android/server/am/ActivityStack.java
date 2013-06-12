@@ -1803,7 +1803,41 @@ final class ActivityStack {
             startSpecificActivityLocked(next, true, true);
         }
 
+        handlePrivacyGuardNotification(prev, next);
+
         return true;
+    }
+
+    private final void handlePrivacyGuardNotification(ActivityRecord prev, ActivityRecord next) {
+        boolean curPrivacy = false;
+        boolean prevPrivacy = false;
+
+        if (next != null) {
+            try {
+                curPrivacy = AppGlobals.getPackageManager().getPrivacyGuardSetting(
+                        next.packageName, next.userId);
+            } catch (RemoteException e) {
+                // nothing
+            }
+        }
+        if (prev != null) {
+            try {
+                prevPrivacy = AppGlobals.getPackageManager().getPrivacyGuardSetting(
+                        prev.packageName, prev.userId);
+            } catch (RemoteException e) {
+                // nothing
+            }
+        }
+        if (prevPrivacy && !curPrivacy) {
+            Message msg = mService.mHandler.obtainMessage(
+                    ActivityManagerService.CANCEL_PRIVACY_NOTIFICATION_MSG, prev.userId);
+            msg.sendToTarget();
+        } else if ((!prevPrivacy && curPrivacy) ||
+                (prevPrivacy && curPrivacy && !next.packageName.equals(prev.packageName))) {
+            Message msg = mService.mHandler.obtainMessage(
+                    ActivityManagerService.POST_PRIVACY_NOTIFICATION_MSG, next);
+            msg.sendToTarget();
+        }
     }
 
     private final void startActivityLocked(ActivityRecord r, boolean newTask,
