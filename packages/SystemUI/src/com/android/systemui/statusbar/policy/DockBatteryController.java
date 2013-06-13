@@ -28,6 +28,7 @@ public class DockBatteryController extends BatteryController {
     private static final String TAG = "StatusBar.DockBatteryController";
 
     private int mDockBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
+    private int mBatteryLevel = 0;
     private boolean mBatteryPlugged = false;
     private boolean mBatteryPresent = false;
 
@@ -43,25 +44,25 @@ public class DockBatteryController extends BatteryController {
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-            final int level = intent.getIntExtra(BatteryManager.EXTRA_DOCK_LEVEL, 0);
+            mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_DOCK_LEVEL, 0);
             mDockBatteryStatus = intent.getIntExtra(
                                         BatteryManager.EXTRA_DOCK_STATUS,
                                         BatteryManager.BATTERY_STATUS_UNKNOWN);
             mBatteryPlugged = intent.getIntExtra(BatteryManager.EXTRA_DOCK_PLUGGED, 0) != 0;
             mBatteryPresent = intent.getBooleanExtra(BatteryManager.EXTRA_DOCK_PRESENT, false);
-            updateViews(level);
+            updateViews();
             updateBattery();
         }
     }
 
     @Override
-    protected void updateViews(int level) {
+    protected void updateViews() {
         if (isUiController()) {
-            super.updateViews(level);
+            super.updateViews();
         }
 
         for (DockBatteryStateChangeCallback cb : mChangeCallbacks) {
-            cb.onDockBatteryLevelChanged(level, isBatteryPresent(), isBatteryStatusCharging());
+            cb.onDockBatteryLevelChanged(mBatteryLevel, isBatteryPresent(), isBatteryStatusCharging());
         }
     }
 
@@ -74,6 +75,8 @@ public class DockBatteryController extends BatteryController {
 
     public void addStateChangedCallback(DockBatteryStateChangeCallback cb) {
         mChangeCallbacks.add(cb);
+        // trigger initial update
+        cb.onDockBatteryLevelChanged(mBatteryLevel, isBatteryPresent(), isBatteryStatusCharging());
     }
 
     public void removeStateChangedCallback(DockBatteryStateChangeCallback cb) {
