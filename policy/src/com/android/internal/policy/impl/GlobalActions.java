@@ -30,6 +30,7 @@ import android.app.Profile;
 import android.app.ProfileManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -114,15 +115,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private MyAdapter mAdapter;
 
-    private boolean mKeyguardShowing = false;
+    private boolean mKeyguardLocked = false;
     private boolean mDeviceProvisioned = false;
     private ToggleAction.State mAirplaneState = ToggleAction.State.Off;
     private boolean mIsWaitingForEcmExit = false;
     private boolean mHasTelephony;
     private boolean mHasVibrator;
-    private final boolean mShowSilentToggle;
-
     private Profile mChosenProfile;
+    private final boolean mShowSilentToggle;
 
     /**
      * @param context everything needs a context :(
@@ -162,10 +162,10 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     /**
      * Show the global actions dialog (creating if necessary)
-     * @param keyguardShowing True if keyguard is showing
+     * @param keyguardLocked True if keyguard is locked
      */
-    public void showDialog(boolean keyguardShowing, boolean isDeviceProvisioned) {
-        mKeyguardShowing = keyguardShowing;
+    public void showDialog(boolean keyguardLocked, boolean isDeviceProvisioned) {
+        mKeyguardLocked = keyguardLocked;
         mDeviceProvisioned = isDeviceProvisioned;
         if (mDialog != null) {
             if (mUiContext != null) {
@@ -223,6 +223,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         } else {
             mSilentModeAction = new SilentModeTriStateAction(mContext, mAudioManager, mHandler);
         }
+
         mAirplaneModeOn = new ToggleAction(
                 R.drawable.ic_lock_airplane_mode,
                 R.drawable.ic_lock_airplane_mode_off,
@@ -266,6 +267,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         };
         onAirplaneModeChanged();
 
+        final ContentResolver cr = mContext.getContentResolver();
         mItems = new ArrayList<Action>();
 
         // first: power off
@@ -290,8 +292,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         // next: reboot
         // only shown if enabled, enabled by default
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.POWER_MENU_REBOOT_ENABLED, 1) == 1) {
+        boolean showReboot = Settings.System.getIntForUser(cr,
+                Settings.System.POWER_MENU_REBOOT_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+        if (showReboot) {
             mItems.add(
                 new SinglePressAction(R.drawable.ic_lock_reboot, R.string.global_action_reboot) {
                     public void onPress() {
@@ -315,10 +318,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         // next: profile
         // only shown if both system profiles and the menu item is enabled, enabled by default
-        if ((Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) &&
-                (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWER_MENU_PROFILES_ENABLED, 1) == 1)) {
+        boolean showProfiles =
+                Settings.System.getIntForUser(cr,
+                        Settings.System.SYSTEM_PROFILES_ENABLED, 1, UserHandle.USER_CURRENT) == 1
+                && Settings.System.getIntForUser(cr,
+                        Settings.System.POWER_MENU_PROFILES_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+        if (showProfiles) {
             mItems.add(
                 new ProfileChooseAction() {
                     public void onPress() {
@@ -341,8 +346,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         // next: screenshot
         // only shown if enabled, disabled by default
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.POWER_MENU_SCREENSHOT_ENABLED, 0) == 1) {
+        boolean showScreenshot = Settings.System.getIntForUser(cr,
+                Settings.System.POWER_MENU_SCREENSHOT_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+        if (showScreenshot) {
             mItems.add(
                 new SinglePressAction(R.drawable.ic_lock_screenshot, R.string.global_action_screenshot) {
                     public void onPress() {
@@ -360,14 +366,16 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
 
         // next: airplane mode
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.POWER_MENU_AIRPLANE_ENABLED, 1) == 1) {
+        boolean showAirplaneMode = Settings.System.getIntForUser(cr,
+                Settings.System.POWER_MENU_AIRPLANE_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+        if (showAirplaneMode) {
             mItems.add(mAirplaneModeOn);
         }
 
         // next: bug report, if enabled
-        if (Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.BUGREPORT_IN_POWER_MENU, 0) != 0 && isCurrentUserOwner()) {
+        boolean showBugReport = (Settings.Global.getInt(cr,
+                Settings.Global.BUGREPORT_IN_POWER_MENU, 0) != 0 && isCurrentUserOwner());
+        if (showBugReport) {
             mItems.add(
                 new SinglePressAction(com.android.internal.R.drawable.stat_sys_adb,
                         R.string.global_action_bug_report) {
@@ -415,15 +423,16 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
 
         // next: optionally add a list of users to switch to
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.POWER_MENU_USER_ENABLED, 0) == 1) {
+        boolean showUsers = Settings.System.getIntForUser(cr,
+                Settings.System.POWER_MENU_USER_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+        if (showUsers) {
             addUsersToMenu(mItems);
         }
 
         // last: silent mode
-        if ((Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.POWER_MENU_SOUND_ENABLED, 1) == 1) &&
-                (mShowSilentToggle)) {
+        boolean showSoundMode = SHOW_SILENT_TOGGLE && Settings.System.getIntForUser(cr,
+                Settings.System.POWER_MENU_SOUND_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+        if (showSoundMode) {
             mItems.add(mSilentModeAction);
         }
 
@@ -613,7 +622,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 @Override
                 public void onServiceDisconnected(ComponentName name) {}
             };
-            if (mContext.bindService(intent, conn, Context.BIND_AUTO_CREATE, UserHandle.USER_CURRENT)) {
+
+            if (mContext.bindServiceAsUser(intent, conn, Context.BIND_AUTO_CREATE, UserHandle.CURRENT)) {
                 mScreenshotConnection = conn;
                 mHandler.postDelayed(mScreenshotTimeout, 10000);
             }
@@ -625,7 +635,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mAirplaneModeOn.updateState(mAirplaneState);
         mAdapter.notifyDataSetChanged();
         mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+
         mDialog.setTitle(R.string.global_actions);
+
         if (mShowSilentToggle) {
             IntentFilter filter = new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION);
             mContext.registerReceiver(mRingerModeReceiver, filter);
@@ -664,7 +676,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     /**
      * The adapter used for the list within the global actions dialog, taking
      * into account whether the keyguard is showing via
-     * {@link GlobalActions#mKeyguardShowing} and whether the device is provisioned
+     * {@link GlobalActions#mKeyguardLocked} and whether the device is provisioned
      * via {@link GlobalActions#mDeviceProvisioned}.
      */
     private class MyAdapter extends BaseAdapter {
@@ -675,7 +687,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             for (int i = 0; i < mItems.size(); i++) {
                 final Action action = mItems.get(i);
 
-                if (mKeyguardShowing && !action.showDuringKeyguard()) {
+                if (mKeyguardLocked && !action.showDuringKeyguard()) {
                     continue;
                 }
                 if (!mDeviceProvisioned && !action.showBeforeProvisioning()) {
@@ -701,7 +713,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             int filteredPos = 0;
             for (int i = 0; i < mItems.size(); i++) {
                 final Action action = mItems.get(i);
-                if (mKeyguardShowing && !action.showDuringKeyguard()) {
+                if (mKeyguardLocked && !action.showDuringKeyguard()) {
                     continue;
                 }
                 if (!mDeviceProvisioned && !action.showBeforeProvisioning()) {
@@ -716,7 +728,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             throw new IllegalArgumentException("position " + position
                     + " out of range of showable actions"
                     + ", filtered count=" + getCount()
-                    + ", keyguardshowing=" + mKeyguardShowing
+                    + ", keyguardlocked=" + mKeyguardLocked
                     + ", provisioned=" + mDeviceProvisioned);
         }
 
