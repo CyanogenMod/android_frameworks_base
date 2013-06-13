@@ -572,22 +572,18 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
                         mLowProfile ? "true" : "false",
                         mShowMenu ? "true" : "false"));
 
-        final View back = mCurrentView.findViewWithTag("back");
-        final View home = mCurrentView.findViewWithTag("home");
-        final View recent = mCurrentView.findViewWithTag("recent");
+        final View back = mCurrentView.findViewWithTag(NavigationButtons.BACK);
+        final View home = mCurrentView.findViewWithTag(NavigationButtons.HOME);
+        final View recent = mCurrentView.findViewWithTag(NavigationButtons.RECENT);
 
-        pw.println("      back: "
-                + PhoneStatusBar.viewInfo(back)
-                + " " + visibilityToString(back.getVisibility())
-                );
-        pw.println("      home: "
-                + PhoneStatusBar.viewInfo(home)
-                + " " + visibilityToString(home.getVisibility())
-                );
-        pw.println("      rcnt: "
-                + PhoneStatusBar.viewInfo(recent)
-                + " " + visibilityToString(recent.getVisibility())
-                );
+        pw.println("      back: " + back != null ?
+                PhoneStatusBar.viewInfo(back) + " " + visibilityToString(back.getVisibility())
+                : "null" );
+        pw.println("      home: " +
+                PhoneStatusBar.viewInfo(home) + " " + visibilityToString(home.getVisibility()));
+        pw.println("      rcnt: " + recent != null ?
+                PhoneStatusBar.viewInfo(recent) + " " + visibilityToString(recent.getVisibility())
+                : "null" );
         pw.println("    }");
     }
 
