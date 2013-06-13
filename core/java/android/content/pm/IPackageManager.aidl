@@ -144,8 +144,6 @@ interface IPackageManager {
     ParceledListSlice getPackagesHoldingPermissions(in String[] permissions,
             int flags, int userId);
 
-    List<PackageInfo> getInstalledThemePackages();
-
     /**
      * This implements getInstalledApplications via a "last returned row"
      * mechanism that is not exposed in the API. This is to get around the IPC

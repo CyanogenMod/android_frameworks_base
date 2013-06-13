@@ -3245,20 +3245,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         list.add(pi);
     }
 
-    public List<PackageInfo> getInstalledThemePackages() {
-        // Returns a list of theme APKs.
-        ArrayList<PackageInfo> finalList = new ArrayList<PackageInfo>();
-        List<PackageInfo> installedPackagesList = mContext.getPackageManager().getInstalledPackages(0);
-        Iterator<PackageInfo> i = installedPackagesList.iterator();
-        while (i.hasNext()) {
-            final PackageInfo pi = i.next();
-            if (pi != null && pi.isThemeApk) {
-                finalList.add(pi);
-            }
-        }
-        return finalList;
-    }
-
     @Override
     public ParceledListSlice<PackageInfo> getPackagesHoldingPermissions(
             String[] permissions, int flags, int userId) {
