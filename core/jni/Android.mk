@@ -152,6 +152,7 @@ LOCAL_SRC_FILES:= \
 	com_android_internal_net_NetworkStatsFactory.cpp
         ifeq ($(call is-vendor-board-platform,QCOM),true)
         LOCAL_SRC_FILES += com_android_internal_app_ActivityTrigger.cpp
+        LOCAL_SRC_FILES += org_codeaurora_Performance.cpp
         endif
 
 LOCAL_C_INCLUDES += \
