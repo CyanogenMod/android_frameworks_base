@@ -1,0 +1,48 @@
+package com.android.systemui.statusbar.pie;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+
+import com.android.systemui.statusbar.pie.PieView.PieSlice;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PieView2 extends ViewGroup {
+
+    private List<PieSlice> mSlices = new ArrayList<PieSlice>();
+    
+    
+    public PieView2(Context context) {
+        super(context);
+        // TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public void addView(View child, int index, LayoutParams params) {
+        // TODO Auto-generated method stub
+        super.addView(child, index, params);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // TODO Auto-generated method stub
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        // TODO Auto-generated method stub
+        super.onDraw(canvas);
+    }
+
+}
