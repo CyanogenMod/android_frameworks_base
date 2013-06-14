@@ -53,6 +53,9 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
 
         mController = controller;
 
+        mBatteryLevel = mController.getBatteryLevel();
+        mPluggedIn = mController.isBatteryStatusCharging();
+
         mOnClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
