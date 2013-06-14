@@ -983,6 +983,8 @@ final class ActivityRecord {
                 service.scheduleAppGcsLocked();
             }
         }
+        Log.i(ActivityManagerService.TAG, "Timeline: Activity_windows_visible id: "
+                + this + " time:" + SystemClock.uptimeMillis());
     }
 
     public void windowsGone() {
