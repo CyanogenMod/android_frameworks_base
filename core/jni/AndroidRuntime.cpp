@@ -190,6 +190,9 @@ extern int register_com_android_internal_content_NativeLibraryHelper(JNIEnv *env
 extern int register_com_android_internal_net_NetworkStatsFactory(JNIEnv *env);
 extern int register_com_android_internal_os_Zygote(JNIEnv *env);
 extern int register_com_android_internal_util_VirtualRefBasePtr(JNIEnv *env);
+#ifndef NON_QCOM_TARGET
+extern int register_org_codeaurora_Performance(JNIEnv *env);
+#endif
 
 static AndroidRuntime* gCurRuntime = NULL;
 
@@ -1363,6 +1366,9 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_animation_PropertyValuesHolder),
     REG_JNI(register_com_android_internal_content_NativeLibraryHelper),
     REG_JNI(register_com_android_internal_net_NetworkStatsFactory),
+#ifndef NON_QCOM_TARGET
+    REG_JNI(register_org_codeaurora_Performance),
+#endif
 };
 
 /*
