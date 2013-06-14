@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -8,7 +8,7 @@
  *    * Redistributions in binary form must reproduce the above copyright
  *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * Neither the name of Code Aurora nor
+ *    * Neither the name of The Linux Foundation nor
  *      the names of its contributors may be used to endorse or promote
  *      products derived from this software without specific prior written
  *      permission.
@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define LOG_TAG "ActTriggerJNI"
+#define LOG_TAG "ANDR-PERF-JNI"
 
 #include "jni.h"
 #include "JNIHelp.h"
@@ -39,22 +39,22 @@
 #include <cutils/properties.h>
 #include <utils/Log.h>
 
-#define LIBRARY_PATH_PREFIX_OLD	"/system/lib/"
-#define LIBRARY_PATH_PREFIX "/vendor/lib/"
+#define LIBRARY_PATH_PREFIX	        "/vendor/lib/"
+#define LIBRARY_PATH_PREFIX_OLD	    "/system/lib/"
 
 namespace android
 {
 
 // ----------------------------------------------------------------------------
-
-static void (*startActivity)(const char *)  = NULL;
-static void (*resumeActivity)(const char *) = NULL;
-static void *dlhandle                       = NULL;
+static int  (*cpu_setoptions)(int, int)             = NULL;
+static int  (*perf_lock_acq)(int, int, int[], int)  = NULL;
+static int  (*perf_lock_rel)(int)                   = NULL;
+static void *dlhandle                               = NULL;
 
 // ----------------------------------------------------------------------------
 
 static void
-com_android_internal_app_ActivityTrigger_native_at_init()
+org_codeaurora_performance_native_init()
 {
     const char *rc;
     void (*init)(void);
@@ -69,8 +69,8 @@ com_android_internal_app_ActivityTrigger_native_at_init()
     /* Sanity check - ensure */
     buf[PROPERTY_VALUE_MAX-1] = '\0';
     if (((strncmp(buf, LIBRARY_PATH_PREFIX, sizeof(LIBRARY_PATH_PREFIX) - 1) != 0)
-	&&
-	(strncmp(buf, LIBRARY_PATH_PREFIX_OLD, sizeof(LIBRARY_PATH_PREFIX_OLD) - 1) != 0))
+        &&
+        (strncmp(buf, LIBRARY_PATH_PREFIX_OLD, sizeof(LIBRARY_PATH_PREFIX_OLD) - 1) != 0))
         ||
         (strstr(buf, "..") != NULL)) {
         return;
@@ -83,15 +83,22 @@ com_android_internal_app_ActivityTrigger_native_at_init()
 
     dlerror();
 
-    *(void **) (&startActivity) = dlsym(dlhandle, "activity_trigger_start");
+    cpu_setoptions = (int (*) (int, int))dlsym(dlhandle, "perf_cpu_setoptions");
     if ((rc = dlerror()) != NULL) {
         goto cleanup;
     }
-    *(void **) (&resumeActivity) = dlsym(dlhandle, "activity_trigger_resume");
+
+    perf_lock_acq = (int (*) (int, int, int[], int))dlsym(dlhandle, "perf_lock_acq");
     if ((rc = dlerror()) != NULL) {
         goto cleanup;
     }
-    *(void **) (&init) = dlsym(dlhandle, "activity_trigger_init");
+
+    perf_lock_rel = (int (*) (int))dlsym(dlhandle, "perf_lock_rel");
+    if ((rc = dlerror()) != NULL) {
+        goto cleanup;
+    }
+
+    init = (void (*) ())dlsym(dlhandle, "libqc_opt_init");
     if ((rc = dlerror()) != NULL) {
         goto cleanup;
     }
@@ -99,8 +106,9 @@ com_android_internal_app_ActivityTrigger_native_at_init()
     return;
 
 cleanup:
-    startActivity  = NULL;
-    resumeActivity = NULL;
+    cpu_setoptions = NULL;
+    perf_lock_acq  = NULL;
+    perf_lock_rel  = NULL;
     if (dlhandle) {
         dlclose(dlhandle);
         dlhandle = NULL;
@@ -108,15 +116,16 @@ cleanup:
 }
 
 static void
-com_android_internal_app_ActivityTrigger_native_at_deinit(JNIEnv *env, jobject clazz)
+org_codeaurora_performance_native_deinit(JNIEnv *env, jobject clazz)
 {
     void (*deinit)(void);
 
     if (dlhandle) {
-        startActivity  = NULL;
-        resumeActivity = NULL;
+        cpu_setoptions = NULL;
+        perf_lock_acq  = NULL;
+        perf_lock_rel  = NULL;
 
-        *(void **) (&deinit) = dlsym(dlhandle, "activity_trigger_deinit");
+        deinit = (void (*) ())dlsym(dlhandle, "libqc_opt_deinit");
         if (deinit) {
             (*deinit)();
         }
@@ -126,45 +135,60 @@ com_android_internal_app_ActivityTrigger_native_at_deinit(JNIEnv *env, jobject c
     }
 }
 
-static void
-com_android_internal_app_ActivityTrigger_native_at_startActivity(JNIEnv *env, jobject clazz, jstring activity)
+static jint
+org_codeaurora_performance_native_cpu_setoptions(JNIEnv *env, jobject clazz,
+                                                 jint reqtype, jint reqvalue)
 {
-    if (startActivity && activity) {
-        const char *actStr = env->GetStringUTFChars(activity, NULL);
-        if (actStr) {
-            (*startActivity)(actStr);
-            env->ReleaseStringUTFChars(activity, actStr);
-        }
+    if (cpu_setoptions) {
+        return (*cpu_setoptions)(reqtype, reqvalue);
     }
+    return 0;
 }
 
-static void
-com_android_internal_app_ActivityTrigger_native_at_resumeActivity(JNIEnv *env, jobject clazz, jstring activity)
+static jint
+org_codeaurora_performance_native_perf_lock_acq(JNIEnv *env, jobject clazz, jint handle, jint duration, jintArray list)
 {
-    if (resumeActivity && activity) {
-        const char *actStr = env->GetStringUTFChars(activity, NULL);
-        if (actStr) {
-            (*resumeActivity)(actStr);
-            env->ReleaseStringUTFChars(activity, actStr);
-        }
+    jint listlen = env->GetArrayLength(list);
+    jint buf[listlen];
+    int i=0;
+    env->GetIntArrayRegion(list, 0, listlen, buf);
+
+    if (dlhandle == NULL) {
+        org_codeaurora_performance_native_init();
     }
+    if (perf_lock_acq) {
+        return (*perf_lock_acq)(handle, duration, buf, listlen);
+    }
+    return 0;
 }
 
+static jint
+org_codeaurora_performance_native_perf_lock_rel(JNIEnv *env, jobject clazz, jint handle)
+{
+    if (dlhandle == NULL) {
+        org_codeaurora_performance_native_init();
+    }
+    if (perf_lock_rel) {
+        return (*perf_lock_rel)(handle);
+    }
+    return 0;
+}
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gMethods[] = {
-    {"native_at_startActivity",  "(Ljava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_startActivity},
-    {"native_at_resumeActivity", "(Ljava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_resumeActivity},
-    {"native_at_deinit",         "()V",                   (void *)com_android_internal_app_ActivityTrigger_native_at_deinit},
+    {"native_cpu_setoptions", "(II)I",                 (int *)org_codeaurora_performance_native_cpu_setoptions},
+    {"native_perf_lock_acq",  "(II[I)I",               (int *)org_codeaurora_performance_native_perf_lock_acq},
+    {"native_perf_lock_rel",  "(I)I",                  (int *)org_codeaurora_performance_native_perf_lock_rel},
+    {"native_deinit",         "()V",                   (void *)org_codeaurora_performance_native_deinit},
 };
 
 
-int register_com_android_internal_app_ActivityTrigger(JNIEnv *env)
+int register_org_codeaurora_Performance(JNIEnv *env)
 {
-    com_android_internal_app_ActivityTrigger_native_at_init();
+    org_codeaurora_performance_native_init();
 
     return AndroidRuntime::registerNativeMethods(env,
-            "com/android/internal/app/ActivityTrigger", gMethods, NELEM(gMethods));
+            "org/codeaurora/Performance", gMethods, NELEM(gMethods));
 }
 
 }   // namespace android
