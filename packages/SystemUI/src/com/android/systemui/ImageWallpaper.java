@@ -26,12 +26,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.Region.Op;
+import android.opengl.GLES10;
 import android.opengl.GLUtils;
 import android.os.SystemProperties;
 import android.renderscript.Matrix4f;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
@@ -222,7 +222,18 @@ public class ImageWallpaper extends WallpaperService {
                 // Used a fixed size surface, because we are special.  We can do
                 // this because we know the current design of window animations doesn't
                 // cause this to break.
-                surfaceHolder.setFixedSize(getDesiredMinimumWidth(), getDesiredMinimumHeight());
+
+                // ... but we need to adhere to the rules of openGL nonetheless. Check if the
+                // surface size might exceed the maximum allowed on this device.
+                int width = getDesiredMinimumWidth();
+                int height = getDesiredMinimumHeight();
+                if (mIsHwAccelerated) {
+                    int[] maxSize = new int[1];
+                    GLES10.glGetIntegerv(GLES10.GL_MAX_TEXTURE_SIZE, maxSize, 0);
+                    width = Math.min(width, maxSize[0]);
+                    height = Math.min(height, maxSize[0]);
+                }
+                surfaceHolder.setFixedSize(width, height);
             } else {
                 surfaceHolder.setSizeFromLayout();
             }
@@ -345,12 +356,16 @@ public class ImageWallpaper extends WallpaperService {
                     }
                     return;
                 }
-                if (DEBUG) {
-                    if (dw != mBackground.getWidth() || dh != mBackground.getHeight()) {
-                        Log.d(TAG, "Surface != bitmap dimensions: surface w/h, bitmap w/h: " +
+                if (dw < mBackground.getWidth() || dh < mBackground.getHeight()) {
+                    if (DEBUG) {
+                        Log.d(TAG, "Surface < bitmap dimensions: surface w/h, bitmap w/h: " +
                                 dw + ", " + dh + ", " + mBackground.getWidth() + ", " +
                                 mBackground.getHeight());
                     }
+                    mWallpaperManager.forgetLoadedWallpaper(); // drop all pointers to the bitmap
+                    mBackground = Bitmap.createBitmap(mBackground,
+                            (mBackground.getWidth() - dw) / 2,
+                            (mBackground.getHeight() - dh) / 2, dw, dh);
                 }
             }
 
