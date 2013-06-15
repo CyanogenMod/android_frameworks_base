@@ -3494,7 +3494,13 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_MAXIMIZE_WIDGETS = "lockscreen_maximize_widgets";
-
+      
+        /**
+         * HALO enabled, should default to 0 (no, HALO is disabled)
+         * @hide
+         */
+         public static final String HALO_ENABLED = "halo_enabled";
+     
         /**
          * HALO, should default to 0 (no, do not show)
          * @hide
