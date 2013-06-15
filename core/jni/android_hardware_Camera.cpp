@@ -648,9 +648,11 @@ static void android_hardware_Camera_cancelAutoFocus(JNIEnv *env, jobject thiz)
     sp<Camera> c = get_native_camera(env, thiz, &context);
     if (c == 0) return;
 
+#ifndef CONFIG_MSM8960_NO_CANCEL_AUTOFOCUS
     if (c->cancelAutoFocus() != NO_ERROR) {
         jniThrowRuntimeException(env, "cancelAutoFocus failed");
     }
+#endif
 }
 
 static void android_hardware_Camera_takePicture(JNIEnv *env, jobject thiz, int msgType)
