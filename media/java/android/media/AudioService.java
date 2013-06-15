@@ -306,6 +306,8 @@ public class AudioService extends IAudioService.Stub {
      */
     // protected by mSettingsLock
     private int mRingerMode;
+    // last non-normal ringer mode
+    private int mLastSilentRingerMode = -1;
 
     /** @see System#MODE_RINGER_STREAMS_AFFECTED */
     private int mRingerModeAffectedStreams = 0;
@@ -1009,8 +1011,14 @@ public class AudioService extends IAudioService.Stub {
                 (mStreamVolumeAlias[streamType] == getMasterStreamType())) {
             int newRingerMode;
             if (index == 0) {
-                newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
-                                              : AudioManager.RINGER_MODE_SILENT;
+                synchronized (mSettingsLock) {
+                    if (mLastSilentRingerMode != -1) {
+                        newRingerMode = mLastSilentRingerMode;
+                    } else {
+                        newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
+                            : AudioManager.RINGER_MODE_SILENT;
+                    }
+                }
             } else {
                 newRingerMode = AudioManager.RINGER_MODE_NORMAL;
             }
@@ -1437,6 +1445,9 @@ public class AudioService extends IAudioService.Stub {
     private void setRingerModeInt(int ringerMode, boolean persist) {
         synchronized(mSettingsLock) {
             mRingerMode = ringerMode;
+            if (ringerMode != AudioManager.RINGER_MODE_NORMAL) {
+                mLastSilentRingerMode = ringerMode;
+            }
         }
 
         // Mute stream if not previously muted by ringer mode and ringer mode
