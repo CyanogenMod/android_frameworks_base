@@ -31,7 +31,6 @@ import android.os.SystemProperties;
 import android.renderscript.Matrix4f;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
@@ -645,8 +644,8 @@ public class ImageWallpaper extends WallpaperService {
     
             if (mEglSurface == null || mEglSurface == EGL_NO_SURFACE) {
                 int error = mEgl.eglGetError();
-                if (error == EGL_BAD_NATIVE_WINDOW) {
-                    Log.e(GL_LOG_TAG, "createWindowSurface returned EGL_BAD_NATIVE_WINDOW.");
+                if (error == EGL_BAD_NATIVE_WINDOW || error == EGL_BAD_ALLOC) {
+                    Log.e(GL_LOG_TAG, "createWindowSurface returned " + error);
                     return false;
                 }
                 throw new RuntimeException("createWindowSurface failed " +
