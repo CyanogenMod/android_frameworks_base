@@ -25,6 +25,8 @@ import android.app.IProfileManager;
 import android.app.NotificationGroup;
 import android.app.Profile;
 import android.app.ProfileGroup;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -95,7 +97,6 @@ public class ProfileManagerService extends IProfileManager.Stub {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-
             if (action.equals(Intent.ACTION_LOCALE_CHANGED)) {
                 persistIfDirty();
                 initialize();
@@ -125,6 +126,18 @@ public class ProfileManagerService extends IProfileManager.Stub {
                         }
                     }
                 }
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED) || action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
+                int triggerState = action.equals(BluetoothDevice.ACTION_ACL_CONNECTED) ? Profile.TriggerState.ON_CONNECT : Profile.TriggerState.ON_DISCONNECT;
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                for (Profile p : mProfiles.values()) {
+                    if (triggerState ==  p.getBluetoothTrigger(device.getAddress())) {
+                        try {
+                            setActiveProfile(p, true);
+                        } catch (RemoteException e) {
+                            Log.e(TAG, "Could not update profile on wifi AP change", e);
+                        }
+                    }
+                }
             }
         }
     };
@@ -145,6 +158,8 @@ public class ProfileManagerService extends IProfileManager.Stub {
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         filter.addAction(Intent.ACTION_SHUTDOWN);
         filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         mContext.registerReceiver(mIntentReceiver, filter);
     }
 

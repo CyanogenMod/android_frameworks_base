@@ -69,6 +69,8 @@ public final class Profile implements Parcelable, Comparable {
 
     private Map<String, Integer> mWifiTriggers = new HashMap<String, Integer>();
 
+    private Map<String, Integer> mBluetoothTriggers = new HashMap<String, Integer>();
+
     private Map<Integer, ConnectionSettings> connections = new HashMap<Integer, ConnectionSettings>();
 
     private RingModeSettings mRingMode = new RingModeSettings();
@@ -138,6 +140,26 @@ public final class Profile implements Parcelable, Comparable {
         }
         mDirty = true;
     }
+
+    public int getBluetoothTrigger(String btmac) {
+        if (btmac != null && mBluetoothTriggers.containsKey(btmac)) {
+            return mBluetoothTriggers.get(btmac);
+        }
+        return TriggerState.DISABLED;
+    }
+
+    public void setBluetoothTrigger(String btmac, int value) {
+        if (btmac == null || value < TriggerState.ON_CONNECT || value > TriggerState.DISABLED) {
+            return;
+        }
+        if (value == TriggerState.DISABLED && mBluetoothTriggers.containsKey(btmac)) {
+            mBluetoothTriggers.remove(btmac);
+        } else {
+            mBluetoothTriggers.put(btmac, value);
+        }
+        mDirty = true;
+    }
+
 
     public int compareTo(Object obj) {
         Profile tmp = (Profile) obj;
@@ -213,6 +235,7 @@ public final class Profile implements Parcelable, Comparable {
         dest.writeParcelable(mAirplaneMode, flags);
         dest.writeInt(mScreenLockMode);
         dest.writeMap(mWifiTriggers);
+        dest.writeMap(mBluetoothTriggers);
     }
 
     /** @hide */
@@ -246,6 +269,7 @@ public final class Profile implements Parcelable, Comparable {
         mAirplaneMode = (AirplaneModeSettings) in.readParcelable(null);
         mScreenLockMode = in.readInt();
         in.readMap(mWifiTriggers, null);
+        in.readMap(mBluetoothTriggers, null);
     }
 
     public String getName() {
@@ -430,7 +454,7 @@ public final class Profile implements Parcelable, Comparable {
         for (ConnectionSettings cs : connections.values()) {
             cs.getXmlString(builder, context);
         }
-        if (!mWifiTriggers.isEmpty()) {
+        if (!mWifiTriggers.isEmpty() || !mBluetoothTriggers.isEmpty()) {
             builder.append("<triggers>\n");
             for (Map.Entry<String,Integer> e : mWifiTriggers.entrySet()) {
                 builder.append("<wifiAP ssid=\"");
@@ -438,6 +462,13 @@ public final class Profile implements Parcelable, Comparable {
                 builder.append("\" state=\"");
                 builder.append(e.getValue());
                 builder.append("\"></wifiAP>\n");
+            }
+            for (Map.Entry<String,Integer> e : mBluetoothTriggers.entrySet()) {
+                builder.append("<bluetoothDev btmac=\"");
+                builder.append(e.getKey());
+                builder.append("\" state=\"");
+                builder.append(e.getValue());
+                builder.append("\"></bluetoothDev>\n");
             }
             builder.append("</triggers>\n");
         }
@@ -469,20 +500,22 @@ public final class Profile implements Parcelable, Comparable {
         return uuids;
     }
 
-    private static HashMap<String, Integer> readWifiTriggersFromXml(XmlPullParser xpp, Context context)
+    private static void readTriggersFromXml(XmlPullParser xpp, Context context, Map<String, Integer> wifiTriggers, Map<String, Integer> btTriggers)
             throws XmlPullParserException,
             IOException {
         int event = xpp.next();
-        HashMap<String, Integer> triggers = new HashMap<String, Integer>();
-        while (event != XmlPullParser.END_TAG || xpp.getName().equals("wifiAP")) {
-            if (event == XmlPullParser.START_TAG){
+        while (event != XmlPullParser.END_TAG || xpp.getName().equals("wifiAP") || xpp.getName().equals("bluetoothDev")) {
+            if (event == XmlPullParser.START_TAG && xpp.getName().equals("wifiAP")){
                 String ssid = xpp.getAttributeValue(null, "ssid");
                 String state = xpp.getAttributeValue(null, "state");
-                triggers.put(ssid, Integer.valueOf(state));
+                wifiTriggers.put(ssid, Integer.valueOf(state));
+            } else if (event == XmlPullParser.START_TAG && xpp.getName().equals("bluetoothDev")) {
+                String btmac = xpp.getAttributeValue(null, "btmac");
+                String state = xpp.getAttributeValue(null, "state");
+                btTriggers.put(btmac, Integer.valueOf(state));
             }
             event = xpp.next();
         }
-        return triggers;
     }
 
     /** @hide */
@@ -560,7 +593,7 @@ public final class Profile implements Parcelable, Comparable {
                     profile.connections.put(cs.getConnectionId(), cs);
                 }
                 if (name.equals("triggers")) {
-                    profile.mWifiTriggers = readWifiTriggersFromXml(xpp, context);
+                    readTriggersFromXml(xpp, context, profile.mWifiTriggers, profile.mBluetoothTriggers);
                 }
             }
             event = xpp.next();
