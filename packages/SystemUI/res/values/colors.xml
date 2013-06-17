@@ -29,6 +29,7 @@
     <drawable name="notification_item_background_legacy_color">#ffaaaaaa</drawable>
     <drawable name="intruder_bg_pressed">#ff33B5E5</drawable>
     <drawable name="notification_header_bg">#FF000000</drawable>
+    <drawable name="nav_bar_bg">#ff000000</drawable>
 
     <!-- ==================== system bar only ==================== -->
     <drawable name="system_bar_background">#ff000000</drawable>

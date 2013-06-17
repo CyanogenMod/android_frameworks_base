@@ -599,6 +599,18 @@ public interface WindowManagerPolicy {
      */
     public int getConfigDisplayHeight(int fullWidth, int fullHeight, int rotation);
 
+    public int getWallpaperHeight(int rotation);
+
+    public int getWallpaperWidth(int rotation);
+
+    public int getWallpaperTop(int rot);
+
+    public int getWallpaperLeft(int rot);
+
+    public int getWallpaperBottom(int rot);
+
+    public int getWallpaperRight(int rot);	
+
     /**
      * Return whether the given window should forcibly hide everything
      * behind it.  Typically returns true for the keyguard.
