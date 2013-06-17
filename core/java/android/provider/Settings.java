@@ -3014,6 +3014,12 @@ public final class Settings {
         */
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
 
+       /**
+         * HALO enabled, should default to 0 (HALO is disabled)
+         * @hide
+         */
+        public static final String HALO_ENABLED = "halo_enabled";
+
         /**
         * Notification Power Widget - Custom Torch Mode
         * @hide
