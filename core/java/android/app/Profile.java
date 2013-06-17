@@ -67,7 +67,7 @@ public final class Profile implements Parcelable, Comparable {
 
     private Map<Integer, StreamSettings> streams = new HashMap<Integer, StreamSettings>();
 
-    private Map<String, Integer> mWifiTriggers = new HashMap<String, Integer>();
+    private Map<String, ProfileTrigger> mTriggers = new HashMap<String, ProfileTrigger>();
 
     private Map<Integer, ConnectionSettings> connections = new HashMap<Integer, ConnectionSettings>();
 
@@ -85,10 +85,95 @@ public final class Profile implements Parcelable, Comparable {
     }
 
     /** @hide */
+    public static class TriggerType {
+        public static final int WIFI = 0;
+        public static final int BLUETOOTH = 1;
+    }
+
+    /** @hide */
     public static class TriggerState {
         public static final int ON_CONNECT = 0;
         public static final int ON_DISCONNECT = 1;
         public static final int DISABLED = 2;
+    }
+
+    private static class ProfileTrigger implements Parcelable {
+        private int mType;
+        private String mId;
+        private int mState;
+
+        public ProfileTrigger(int type, String id, int state) {
+            mType = type;
+            mId = id;
+            mState = state;
+        }
+
+        private ProfileTrigger(Parcel in) {
+            mType = in.readInt();
+            mId = in.readString();
+            mState = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(mType);
+            dest.writeString(mId);
+            dest.writeInt(mState);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public void getXmlString(StringBuilder builder, Context context) {
+            final String itemType = mType == TriggerType.WIFI ? "wifiAP" : "btDevice";
+
+            builder.append("<");
+            builder.append(itemType);
+            builder.append(" ");
+            builder.append(getIdType(mType));
+            builder.append("=\"");
+            builder.append(mId);
+            builder.append("\" state=\"");
+            builder.append(mState);
+            builder.append("\"></");
+            builder.append(itemType);
+            builder.append(">\n");
+        }
+
+        public static ProfileTrigger fromXml(XmlPullParser xpp, Context context) {
+            final String name = xpp.getName();
+            final int type;
+
+            if (name.equals("wifiAP")) {
+                type = TriggerType.WIFI;
+            } else if (name.equals("btDevice")) {
+                type = TriggerType.BLUETOOTH;
+            } else {
+                return null;
+            }
+
+            String id = xpp.getAttributeValue(null, getIdType(type));
+            int state = Integer.valueOf(xpp.getAttributeValue(null, "state"));
+
+            return new ProfileTrigger(type, id, state);
+        }
+
+        private static String getIdType(int type) {
+            return type == TriggerType.WIFI ? "ssid" : "address";
+        }
+
+        public static final Parcelable.Creator<ProfileTrigger> CREATOR = new Parcelable.Creator<ProfileTrigger>() {
+            public ProfileTrigger createFromParcel(Parcel in) {
+                return new ProfileTrigger(in);
+            }
+
+            @Override
+            public ProfileTrigger[] newArray(int size) {
+                return new ProfileTrigger[size];
+            }
+        };
     }
 
     /** @hide */
@@ -120,22 +205,33 @@ public final class Profile implements Parcelable, Comparable {
         readFromParcel(in);
     }
 
-    public int getWifiTrigger(String ssid) {
-        if (ssid != null && mWifiTriggers.containsKey(ssid)) {
-            return mWifiTriggers.get(ssid);
+    public int getTrigger(int type, String id) {
+        ProfileTrigger trigger = id != null ? mTriggers.get(id) : null;
+        if (trigger != null) {
+            return trigger.mState;
         }
         return TriggerState.DISABLED;
     }
 
-    public void setWifiTrigger(String ssid, int value) {
-        if (ssid == null || value < TriggerState.ON_CONNECT || value > TriggerState.DISABLED) {
+    public void setTrigger(int type, String id, int state) {
+        if (id == null
+                || type < TriggerType.WIFI || type > TriggerType.BLUETOOTH
+                || state < TriggerState.ON_CONNECT || state > TriggerState.DISABLED) {
             return;
         }
-        if (value == TriggerState.DISABLED && mWifiTriggers.containsKey(ssid)) {
-            mWifiTriggers.remove(ssid);
+
+        ProfileTrigger trigger = mTriggers.get(id);
+
+        if (state == TriggerState.DISABLED) {
+            if (trigger != null) {
+                mTriggers.remove(id);
+            }
+        } else if (trigger != null) {
+            trigger.mState = state;
         } else {
-            mWifiTriggers.put(ssid, value);
+            mTriggers.put(id, new ProfileTrigger(type, id, state));
         }
+
         mDirty = true;
     }
 
@@ -212,7 +308,7 @@ public final class Profile implements Parcelable, Comparable {
         dest.writeParcelable(mRingMode, flags);
         dest.writeParcelable(mAirplaneMode, flags);
         dest.writeInt(mScreenLockMode);
-        dest.writeMap(mWifiTriggers);
+        dest.writeMap(mTriggers);
     }
 
     /** @hide */
@@ -245,7 +341,7 @@ public final class Profile implements Parcelable, Comparable {
         mRingMode = (RingModeSettings) in.readParcelable(null);
         mAirplaneMode = (AirplaneModeSettings) in.readParcelable(null);
         mScreenLockMode = in.readInt();
-        in.readMap(mWifiTriggers, null);
+        in.readMap(mTriggers, null);
     }
 
     public String getName() {
@@ -430,14 +526,10 @@ public final class Profile implements Parcelable, Comparable {
         for (ConnectionSettings cs : connections.values()) {
             cs.getXmlString(builder, context);
         }
-        if (!mWifiTriggers.isEmpty()) {
+        if (!mTriggers.isEmpty()) {
             builder.append("<triggers>\n");
-            for (Map.Entry<String,Integer> e : mWifiTriggers.entrySet()) {
-                builder.append("<wifiAP ssid=\"");
-                builder.append(e.getKey());
-                builder.append("\" state=\"");
-                builder.append(e.getValue());
-                builder.append("\"></wifiAP>\n");
+            for (ProfileTrigger trigger : mTriggers.values()) {
+                trigger.getXmlString(builder, context);
             }
             builder.append("</triggers>\n");
         }
@@ -469,20 +561,18 @@ public final class Profile implements Parcelable, Comparable {
         return uuids;
     }
 
-    private static HashMap<String, Integer> readWifiTriggersFromXml(XmlPullParser xpp, Context context)
-            throws XmlPullParserException,
-            IOException {
+    private static void readTriggersFromXml(XmlPullParser xpp, Context context, Profile profile)
+            throws XmlPullParserException, IOException {
         int event = xpp.next();
-        HashMap<String, Integer> triggers = new HashMap<String, Integer>();
-        while (event != XmlPullParser.END_TAG || xpp.getName().equals("wifiAP")) {
-            if (event == XmlPullParser.START_TAG){
-                String ssid = xpp.getAttributeValue(null, "ssid");
-                String state = xpp.getAttributeValue(null, "state");
-                triggers.put(ssid, Integer.valueOf(state));
+        while (event != XmlPullParser.END_TAG || !xpp.getName().equals("triggers")) {
+            if (event == XmlPullParser.START_TAG) {
+                ProfileTrigger trigger = ProfileTrigger.fromXml(xpp, context);
+                if (trigger != null) {
+                    profile.mTriggers.put(trigger.mId, trigger);
+                }
             }
             event = xpp.next();
         }
-        return triggers;
     }
 
     /** @hide */
@@ -560,7 +650,7 @@ public final class Profile implements Parcelable, Comparable {
                     profile.connections.put(cs.getConnectionId(), cs);
                 }
                 if (name.equals("triggers")) {
-                    profile.mWifiTriggers = readWifiTriggersFromXml(xpp, context);
+                    readTriggersFromXml(xpp, context, profile);
                 }
             }
             event = xpp.next();
