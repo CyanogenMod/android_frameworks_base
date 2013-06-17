@@ -101,8 +101,8 @@
     </profile>
     <profile nameres="profileNameHome">
         <profileGroup uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
-            <sound>content://media/external/audio/media/11</sound>
-            <ringer>content://media/external/audio/media/5</ringer>
+            <sound>content://settings/system/notification_sound</sound>
+            <ringer>content://settings/system/ringtone</ringer>
             <soundMode>OVERRIDE</soundMode>
             <ringerMode>OVERRIDE</ringerMode>
             <vibrateMode>OVERRIDE</vibrateMode>
