@@ -144,6 +144,13 @@ public class FileUtils {
         }
     }
 
+    /** returns the UUID for the volume mounted
+     * at the given mount point, or -1 for failure
+     * @param mountPoint point for volume
+     * @return UUID or -1
+     */
+    public static native int getVolumeUUID(String mountPoint);
+
     /**
      * Perform an fsync on the given FileOutputStream.  The stream at this
      * point must be flushed but not yet closed.
