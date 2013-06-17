@@ -2694,6 +2694,13 @@ public final class Settings {
         public static final String LOCKSCREEN_TARGETS = "lockscreen_targets";
 
         /**
+         * Screen-On Notification Light,
+         * should default to 1 (yes, Notification Light is enabled when screen is on)
+         * @hide
+         */
+        public static final String SCREEN_ON_NOTIFICATION_LED = "screen_on_notification_led";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
          * instead
          * @hide
@@ -3001,7 +3008,7 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
- 
+
         /**
          * AM/PM Style for clock options
          * 0 - Normal AM/PM
@@ -3019,7 +3026,7 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_CLOCK_STYLE = "statusbar_clock_style";
- 
+
         /**
          * @hide
          * Shows custom date before clock time
@@ -3028,7 +3035,7 @@ public final class Settings {
          * 2 - Normal Date
          */
         public static final String STATUSBAR_CLOCK_DATE_DISPLAY = "statusbar_clock_date_display";
- 
+
         /**
          * @hide
          * Sets the date string style
@@ -3037,7 +3044,7 @@ public final class Settings {
          * 2 - Uppercase
          */
         public static final String STATUSBAR_CLOCK_DATE_STYLE = "statusbar_clock_date_style";
- 
+
          /**
          * @hide
          * Stores the java DateFormat string for the date
