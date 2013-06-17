@@ -34,11 +34,11 @@ import com.android.systemui.R;
  * @see CircleBattery
  */
 
-public class CircleDockBattery extends CircleBattery {
+public class CircleDockBattery extends CircleBattery
+        implements DockBatteryController.DockBatteryStateChangeCallback {
 
     private int mLevel;
     private int mDockBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
-    private boolean mBatteryPlugged = false;
     private boolean mBatteryPresent = false;
 
     private final Context mContext;
@@ -94,7 +94,15 @@ public class CircleDockBattery extends CircleBattery {
     }
 
     @Override
-    protected int getLevel() {
+    public void onDockBatteryLevelChanged(int level, boolean present, int status) {
+        mLevel = level;
+        mBatteryPresent = present;
+        mDockBatteryStatus = status;
+        updateVisibility();
+    }
+
+    @Override
+    protected int getBatteryLevel() {
         return mLevel;
     }
 
@@ -104,23 +112,8 @@ public class CircleDockBattery extends CircleBattery {
     }
 
     @Override
-    protected boolean isBatteryPlugged() {
-        return mBatteryPlugged;
-    }
-
-    @Override
     protected boolean isBatteryPresent() {
         return mBatteryPresent;
-    }
-
-    @Override
-    protected void onBatteryStatusChange(Intent intent) {
-        mLevel = intent.getIntExtra(BatteryManager.EXTRA_DOCK_LEVEL, 0);
-        mDockBatteryStatus = intent.getIntExtra(
-                                    BatteryManager.EXTRA_DOCK_STATUS,
-                                    BatteryManager.BATTERY_STATUS_UNKNOWN);
-        mBatteryPlugged = intent.getIntExtra(BatteryManager.EXTRA_DOCK_PLUGGED, 0) != 0;
-        mBatteryPresent = intent.getBooleanExtra(BatteryManager.EXTRA_DOCK_PRESENT, false);
     }
 
     @Override
