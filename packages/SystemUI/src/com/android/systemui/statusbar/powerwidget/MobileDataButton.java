@@ -7,14 +7,23 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.provider.Settings;
 
 import com.android.internal.telephony.TelephonyIntents;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MobileDataButton extends PowerButton {
 
     public static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
     public static final String EXTRA_NETWORK_MODE = "networkMode";
+
+    private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
+    static {
+        OBSERVED_URIS.add(Settings.Global.getUriFor(Settings.Global.MOBILE_DATA));
+    }
 
     public MobileDataButton() { mType = BUTTON_MOBILEDATA; }
 
@@ -58,6 +67,11 @@ public class MobileDataButton extends PowerButton {
         IntentFilter filter = new IntentFilter();
         filter.addAction(TelephonyIntents.ACTION_ANY_DATA_CONNECTION_STATE_CHANGED);
         return filter;
+    }
+
+    @Override
+    protected List<Uri> getObservedUris() {
+        return OBSERVED_URIS;
     }
 
     private boolean getDataState(Context context) {
