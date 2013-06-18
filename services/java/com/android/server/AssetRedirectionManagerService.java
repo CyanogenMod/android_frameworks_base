@@ -8,11 +8,13 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.PackageRedirectionMap;
 import android.content.res.Resources;
+import android.os.Binder;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
@@ -203,6 +205,16 @@ public class AssetRedirectionManagerService extends IAssetRedirectionManager.Stu
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         synchronized (mRedirections) {
             final ArrayList<RedirectionKey> filteredKeySet = new ArrayList<RedirectionKey>();
+
+            if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                pw.println("Permission Denial: can't dump assetredirectionservice from from pid="
+                        + Binder.getCallingPid()
+                        + ", uid=" + Binder.getCallingUid());
+                return;
+            }
+
             for (Map.Entry<RedirectionKey, PackageRedirectionMap> entry: mRedirections.entrySet()) {
                 PackageRedirectionMap map = entry.getValue();
                 if (map != null && map.getPackageId() != -1) {
