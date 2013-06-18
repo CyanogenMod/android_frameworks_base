@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +39,7 @@ import android.text.TextUtils;
 import android.telephony.Rlog;
 import android.util.SparseIntArray;
 
+import static com.android.internal.telephony.MSimConstants.SUBSCRIPTION_KEY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_IDP_STRING;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY;
@@ -166,6 +170,12 @@ public class PhoneNumberUtils
         // TODO: We don't check for SecurityException here (requires
         // CALL_PRIVILEGED permission).
         if (scheme.equals("voicemail")) {
+            if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                int subscription = intent.getIntExtra(SUBSCRIPTION_KEY,
+                        MSimTelephonyManager.getDefault().getDefaultSubscription());
+                return MSimTelephonyManager.getDefault()
+                        .getCompleteVoiceMailNumber(subscription);
+            }
             return TelephonyManager.getDefault().getCompleteVoiceMailNumber();
         }
 
@@ -1831,7 +1841,13 @@ public class PhoneNumberUtils
         String vmNumber;
 
         try {
-            vmNumber = TelephonyManager.getDefault().getVoiceMailNumber();
+            if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                int subscription = MSimTelephonyManager.getDefault()
+                        .getPreferredVoiceSubscription();
+                vmNumber = MSimTelephonyManager.getDefault().getVoiceMailNumber(subscription);
+            } else {
+                vmNumber = TelephonyManager.getDefault().getVoiceMailNumber();
+            }
         } catch (SecurityException ex) {
             return false;
         }
