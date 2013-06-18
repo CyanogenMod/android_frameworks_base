@@ -209,7 +209,7 @@ public class KeyButtonView extends ImageView {
         super.setPressed(pressed);
     }
 
-    public void setInfo(NavigationButtons.ButtonInfo buttonInfo, boolean isVertical) {
+    public void setInfo(NavigationButtons.ButtonInfo buttonInfo, boolean isVertical, boolean smallButtonsEmpty) {
         setTag(buttonInfo);
         final Resources res = getResources();
         setContentDescription(res.getString(buttonInfo.contentDescription));
@@ -228,7 +228,7 @@ public class KeyButtonView extends ImageView {
         //because otherwise the setX/setY attributes which are post layout cause it to mess up the layout.
         setImageDrawable(keyD);
         if (buttonInfo == NavigationButtons.EMPTY) {
-            if (isSmallButton) {
+            if (isSmallButton && !smallButtonsEmpty) {
                 setVisibility(NavigationBarView.getEditMode() ? View.VISIBLE : View.INVISIBLE);
             } else {
                 setVisibility(NavigationBarView.getEditMode() ? View.VISIBLE : View.GONE);
@@ -306,11 +306,11 @@ public class KeyButtonView extends ImageView {
         return true;
     }
 
-    void sendEvent(int action, int flags) {
+    public void sendEvent(int action, int flags) {
         sendEvent(action, flags, SystemClock.uptimeMillis());
     }
 
-    void sendEvent(int action, int flags, long when) {
+    public void sendEvent(int action, int flags, long when) {
         final int repeatCount = (flags & KeyEvent.FLAG_LONG_PRESS) != 0 ? 1 : 0;
         final KeyEvent ev = new KeyEvent(mDownTime, when, action, mCode, repeatCount,
                 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,

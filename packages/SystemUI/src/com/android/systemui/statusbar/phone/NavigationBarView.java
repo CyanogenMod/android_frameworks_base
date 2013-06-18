@@ -32,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.animation.AccelerateInterpolator;
@@ -40,6 +41,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Surface;
 import android.view.ViewGroup;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,6 +75,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     private OnClickListener mRecentsClickListener;
     private OnTouchListener mRecentsPreloadListener;
     private OnTouchListener mHomeSearchActionListener;
+    private OnTouchListener mHomeSearchActionWithRecentsListener;
 
     protected IStatusBarService mBarService;
     final Display mDisplay;
@@ -149,11 +152,13 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     public static boolean getEditMode() {
         return EDIT_MODE;
     }
-    
-    protected void setListener(OnClickListener RecentsClickListener, OnTouchListener RecentsPreloadListener, OnTouchListener HomeSearchActionListener) {
+
+    protected void setListener(OnClickListener RecentsClickListener, OnTouchListener RecentsPreloadListener,
+                               OnTouchListener HomeSearchActionListener, OnTouchListener HomeSearchActionWithRecentsListener) {
         mRecentsClickListener = RecentsClickListener;
         mRecentsPreloadListener = RecentsPreloadListener;
         mHomeSearchActionListener = HomeSearchActionListener;
+        mHomeSearchActionWithRecentsListener = HomeSearchActionWithRecentsListener;
     }
 
     protected void toggleButtonListener(boolean enable) {
@@ -164,7 +169,11 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         }
         View homeView = mCurrentView.findViewWithTag(NavigationButtons.HOME);
         if (homeView != null) {
-            homeView.setOnTouchListener(enable ? mHomeSearchActionListener : null);
+            if (recentView == null) {
+                homeView.setOnTouchListener(enable ? mHomeSearchActionWithRecentsListener : null);
+            } else {
+                homeView.setOnTouchListener(enable ? mHomeSearchActionListener : null);
+            }
         }
     }
 
@@ -220,6 +229,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
                     toggleButtonListener(false);
                     mEditBar.setupListeners();
                     mEditBar.updateKeys();
+                    SystemProperties.set(ViewConfiguration.NAVBAR_HAS_MENU_KEY_PROP, "0");
                 } else {
                     mEditBar.dismissDialog();
                     if (save) {
@@ -228,6 +238,9 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
                     mEditBar.reInflate();
                     mEditBar = new NavbarEditor((ViewGroup) mCurrentView.findViewById(R.id.container), mVertical);
                     mEditBar.updateKeys();
+                    boolean hasAlwaysMenu = (mCurrentView.findViewWithTag(NavigationButtons.ALWAYS_MENU) != null)
+                                          || (mCurrentView.findViewWithTag(NavigationButtons.MENU_BIG) != null);
+                    SystemProperties.set(ViewConfiguration.NAVBAR_HAS_MENU_KEY_PROP, hasAlwaysMenu ? "1" : "0");
                     toggleButtonListener(true);
                     if (save) {
                         mEditBar.updateLowLights(mCurrentView);
@@ -450,6 +463,9 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         }
         mEditBar = new NavbarEditor((ViewGroup) mCurrentView.findViewById(R.id.container), mVertical);
         mEditBar.updateKeys();
+        boolean hasAlwaysMenu = (mCurrentView.findViewWithTag(NavigationButtons.ALWAYS_MENU) != null)
+                                || (mCurrentView.findViewWithTag(NavigationButtons.MENU_BIG) != null);
+        SystemProperties.set(ViewConfiguration.NAVBAR_HAS_MENU_KEY_PROP, hasAlwaysMenu ? "1" : "0");
         mEditBar.updateLowLights(mCurrentView);
         toggleButtonListener(true);
 
