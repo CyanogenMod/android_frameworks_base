@@ -206,7 +206,7 @@ public class NavbarEditor implements OnTouchListener {
                 builder.setAdapter(list, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((KeyButtonView) view).setInfo((ButtonInfo) list.getItem(which), mVertical);
+                        ((KeyButtonView) view).setInfo((ButtonInfo) list.getItem(which), mVertical, false);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -291,14 +291,37 @@ public class NavbarEditor implements OnTouchListener {
     @SuppressWarnings("unchecked")
     protected void updateKeys() {
         ButtonInfo[] buttons = NavigationButtons.loadButtonMap(mContext);
-        int cc = 0;
+        int cc, mainButtonsCount;
+        boolean smallButtonsEmpty = !NavigationBarView.getEditMode();
+        boolean isSmallButton;
         ArrayList<Integer> idMap = (ArrayList<Integer>) mIds.clone();
         if (mVertical) Collections.reverse(idMap);
+        if (smallButtonsEmpty) {
+            cc = 0;
+            mainButtonsCount = 0;
+            for (ButtonInfo bi : buttons) {
+                isSmallButton = NavigationButtons.IS_SLOT_SMALL[cc];
+                if (!bi.equals(NavigationButtons.EMPTY)) {
+                    if (isSmallButton) {
+                        smallButtonsEmpty = false;
+                        break;
+                    } else {
+                        mainButtonsCount++;
+                    }
+                }
+                cc++;
+            }
+            // only consider hiding the small buttons completely if we have 4 button mode
+            if (smallButtonsEmpty && mainButtonsCount < 4) {
+                smallButtonsEmpty = false;
+            }
+        }
         visibleCount = 0;
+        cc = 0;
         for (ButtonInfo bi : buttons) {
             KeyButtonView curView = (KeyButtonView) mParent.findViewById(idMap.get(cc));
-            boolean isSmallButton = NavigationButtons.IS_SLOT_SMALL[cc];
-            curView.setInfo(bi, mVertical);
+            isSmallButton = NavigationButtons.IS_SLOT_SMALL[cc];
+            curView.setInfo(bi, mVertical, smallButtonsEmpty);
             if (!curView.getTag().equals(NavigationButtons.EMPTY) && !isSmallButton) {
                 visibleCount++;
             }
