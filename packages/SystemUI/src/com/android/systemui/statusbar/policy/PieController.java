@@ -210,14 +210,14 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAV_BUTTONS), false, this);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.KILL_APP_LONGPRESS_BACK), false, this);
+                    Settings.Secure.KILL_APP_LONGPRESS_BACK), false, this, UserHandle.USER_ALL);
             // trigger setupContainer()
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_CONTROLS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.EXPANDED_DESKTOP_STATE), false, this);
+                    Settings.System.EXPANDED_DESKTOP_STATE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.EXPANDED_DESKTOP_STYLE), false, this);
+                    Settings.System.EXPANDED_DESKTOP_STYLE), false, this, UserHandle.USER_ALL);
             // trigger setupListener()
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_POSITIONS), false, this);
@@ -228,11 +228,11 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         @Override
         public void onChange(boolean selfChange) {
             ContentResolver resolver = mContext.getContentResolver();
-            boolean expanded = Settings.System.getInt(resolver,
-                    Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
+            boolean expanded = Settings.System.getIntForUser(resolver,
+                    Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 1;
             if (expanded) {
-                mExpandedDesktopState = Settings.System.getInt(resolver,
-                        Settings.System.EXPANDED_DESKTOP_STYLE, 0);
+                mExpandedDesktopState = Settings.System.getIntForUser(resolver,
+                        Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
             } else {
                 mExpandedDesktopState = 0;
             }
@@ -297,6 +297,10 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
 
         // start listening for changes (calls setupListener & setupNavigationItems)
         mSettingsObserver.observe();
+        mSettingsObserver.onChange(true);
+    }
+
+    public void userSwitched(int newUserId) {
         mSettingsObserver.onChange(true);
     }
 
@@ -387,8 +391,8 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
 
     private void setupNavigationItems() {
         int minimumImageSize = (int)mContext.getResources().getDimension(R.dimen.pie_item_size);
-        boolean killAppLongPress = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1;
+        boolean killAppLongPress = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.KILL_APP_LONGPRESS_BACK, 0, UserHandle.USER_CURRENT) == 1;
         ButtonInfo[] buttons = NavigationButtons.loadButtonMap(mContext);
 
         mNavigationSlice.clear();
