@@ -208,31 +208,31 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
             ContentResolver resolver = mContext.getContentResolver();
             // trigger setupNavigationItems()
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAV_BUTTONS), false, this);
+                    Settings.System.NAV_BUTTONS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.KILL_APP_LONGPRESS_BACK), false, this);
+                    Settings.Secure.KILL_APP_LONGPRESS_BACK), false, this, UserHandle.USER_ALL);
             // trigger setupContainer()
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_CONTROLS), false, this);
+                    Settings.System.PIE_CONTROLS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.EXPANDED_DESKTOP_STATE), false, this);
+                    Settings.System.EXPANDED_DESKTOP_STATE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.EXPANDED_DESKTOP_STYLE), false, this);
+                    Settings.System.EXPANDED_DESKTOP_STYLE), false, this, UserHandle.USER_ALL);
             // trigger setupListener()
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_POSITIONS), false, this);
+                    Settings.System.PIE_POSITIONS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_SENSITIVITY), false, this);
+                    Settings.System.PIE_SENSITIVITY), false, this, UserHandle.USER_ALL);
         }
 
         @Override
         public void onChange(boolean selfChange) {
             ContentResolver resolver = mContext.getContentResolver();
-            boolean expanded = Settings.System.getInt(resolver,
-                    Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
+            boolean expanded = Settings.System.getIntForUser(resolver,
+                    Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 1;
             if (expanded) {
-                mExpandedDesktopState = Settings.System.getInt(resolver,
-                        Settings.System.EXPANDED_DESKTOP_STYLE, 0);
+                mExpandedDesktopState = Settings.System.getIntForUser(resolver,
+                        Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
             } else {
                 mExpandedDesktopState = 0;
             }
@@ -297,6 +297,10 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
 
         // start listening for changes (calls setupListener & setupNavigationItems)
         mSettingsObserver.observe();
+        mSettingsObserver.onChange(true);
+    }
+
+    public void userSwitched(int newUserId) {
         mSettingsObserver.onChange(true);
     }
 
@@ -370,11 +374,11 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
     private void setupListener() {
         ContentResolver resolver = mContext.getContentResolver();
 
-        mPieTriggerSlots = Settings.System.getInt(resolver,
-                Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG);
+        mPieTriggerSlots = Settings.System.getIntForUser(resolver,
+                Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG, UserHandle.USER_CURRENT);
 
-        int sensitivity = Settings.System.getInt(resolver,
-                Settings.System.PIE_SENSITIVITY, 3);
+        int sensitivity = Settings.System.getIntForUser(resolver,
+                Settings.System.PIE_SENSITIVITY, 3, UserHandle.USER_CURRENT);
         if (sensitivity < PieServiceConstants.SENSITIVITY_LOWEST
                 || sensitivity > PieServiceConstants.SENSITIVITY_HIGHEST) {
             sensitivity = PieServiceConstants.SENSITIVITY_DEFAULT;
@@ -387,8 +391,8 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
 
     private void setupNavigationItems() {
         int minimumImageSize = (int)mContext.getResources().getDimension(R.dimen.pie_item_size);
-        boolean killAppLongPress = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1;
+        boolean killAppLongPress = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.KILL_APP_LONGPRESS_BACK, 0, UserHandle.USER_CURRENT) == 1;
         ButtonInfo[] buttons = NavigationButtons.loadButtonMap(mContext);
 
         mNavigationSlice.clear();
@@ -591,13 +595,13 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
             Slog.d(TAG, "onSnap from " + position.name());
         }
 
-        int triggerSlots = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG);
+        int triggerSlots = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_POSITIONS, PiePosition.BOTTOM.FLAG, UserHandle.USER_CURRENT);
 
         triggerSlots = triggerSlots & ~mPosition.FLAG | position.FLAG;
 
-        Settings.System.putInt(mContext.getContentResolver(),
-                Settings.System.PIE_POSITIONS, triggerSlots);
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_POSITIONS, triggerSlots, UserHandle.USER_CURRENT);
     }
 
     @Override
@@ -693,8 +697,8 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
     }
 
     public boolean isEnabled() {
-        int pie = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_CONTROLS, 0);
+        int pie = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_CONTROLS, 0, UserHandle.USER_CURRENT);
 
         return (pie == 1 && mExpandedDesktopState != 0) || pie == 2;
     }
