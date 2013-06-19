@@ -166,11 +166,14 @@ public class NotificationRowLayout
         return NotificationData.setUserLocked(v, userLocked);
     }
 
-    public void onChildDismissed(View v) {
+    public void onChildDismissed(View v, boolean fromUser) {
         if (DEBUG) Slog.v(TAG, "onChildDismissed: " + v + " mRemoveViews=" + mRemoveViews);
         final View veto = v.findViewById(R.id.veto);
         if (veto != null && veto.getVisibility() != View.GONE && mRemoveViews) {
             veto.performClick();
+        }
+        if (fromUser) {
+            NotificationData.setUserCleared(v);
         }
     }
 
