@@ -175,6 +175,25 @@ public class Patterns {
                 + "([0-9][0-9\\- \\.]+[0-9])"); // <digit><digit|sdd>+<digit>
 
     /**
+     * Regular expression pattern to match MMI codes as detailed in
+     * TS 22.030 6.5.2 "Structure of the MMI"
+     * Same pattern as telephony GsmMmiCode and CdmaMmiCode source
+     * code.
+     *
+     * @hide
+     */
+    public static final Pattern MMICODE
+        = Pattern.compile(
+                "((\\*|#|\\*#|\\*\\*|##)"  // action
+                + "(\\d{2,3})"             // service code
+                + "(\\*([^*#]*)"           // SIA
+                + "(\\*([^*#]*)"           // SIB
+                + "(\\*([^*#]*)"           // SIC
+                + "(\\*([^*#]*))"          // PWD
+                + "?)?)?)?#)"              //
+                + "("+PHONE+")*");         // DIALING NUMBER
+
+    /**
      *  Convenience method to take all of the non-null matching groups in a
      *  regex Matcher and return them as a concatenated string.
      *

@@ -95,6 +95,21 @@ public class Linkify {
     private static final int PHONE_NUMBER_MINIMUM_DIGITS = 5;
 
     /**
+     * Double check MMI service codes to skip those not using SEND function
+     */
+    private static final Pattern MMI_SERVICECODE = Pattern.compile(
+        "(\\*|#|\\*#|\\*\\*|##)(\\d{2,3})(.*)");
+
+    static final int GROUP_SERVICECODE = 2;
+    static final String MMI_CHARSET = "0123456789*#";
+
+    static final int SC_PIN  = 4;
+    static final int SC_PIN2 = 42;
+    static final int SC_PUK  = 5;
+    static final int SC_PUK2 = 52;
+    static final int SC_IMEI = 6;
+
+    /**
      *  Filters out web URL matches that occur after an at-sign (@).  This is
      *  to prevent turning the domain name in an email address into a web link.
      */
@@ -142,6 +157,55 @@ public class Linkify {
     public static final TransformFilter sPhoneNumberTransformFilter = new TransformFilter() {
         public final String transformUrl(final Matcher match, String url) {
             return Patterns.digitsAndPlusOnly(match);
+        }
+    };
+
+    /**
+     *  Filters out MMI codes that dont use the SEND function (codes that are directly
+     *  handled while typing on the dialer) and reduces false positives by dropping matches
+     *  that are bounded with characters belonging to the MMI code character set.
+     */
+    private static final MatchFilter sMMICodeMatchFilter = new MatchFilter() {
+        public final boolean acceptMatch(CharSequence s, int start, int end) {
+            Matcher m = MMI_SERVICECODE.matcher(s.subSequence(start, end));
+            if (m.matches()){
+                int sc = Integer.parseInt(m.group(GROUP_SERVICECODE));
+                switch (sc){
+                    case SC_PIN:
+                    case SC_PIN2:
+                    case SC_PUK:
+                    case SC_PUK2:
+                    case SC_IMEI:
+                        return false;
+                    default:
+                        break;
+                 }
+                 if (start > 0 &&
+                     MMI_CHARSET.contains(Character.toString(s.charAt(start - 1)))) {
+                     return false;
+                 }
+                 if (end < s.length() &&
+                     MMI_CHARSET.contains(Character.toString(s.charAt(end)))) {
+                     return false;
+                 }
+                 return true;
+            }
+            return false;
+        }
+    };
+
+    /**
+     *  Transforms matched MMI codes into something suitable
+     *  to be used in a tel: URL.
+     */
+    private static final TransformFilter sMMICodeTransformFilter = new TransformFilter() {
+        public final String transformUrl(final Matcher match, String mmi) {
+            try {
+                return URLEncoder.encode(mmi,"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                // unlikely to go here
+                return mmi;
+            }
         }
     };
 
@@ -228,6 +292,9 @@ public class Linkify {
 
         if ((mask & PHONE_NUMBERS) != 0) {
             gatherTelLinks(links, text);
+            gatherLinks(links, text, Patterns.MMICODE,
+                new String[] { "tel:" },
+                sMMICodeMatchFilter, sMMICodeTransformFilter);
         }
 
         if ((mask & MAP_ADDRESSES) != 0) {
