@@ -17,6 +17,7 @@
 package com.android.internal.app;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -32,9 +33,25 @@ public class ThemeUtils {
     private static final String DATA_TYPE_TMOBILE_THEME = "vnd.tmobile.cursor.item/theme";
     private static final String ACTION_TMOBILE_THEME_CHANGED = "com.tmobile.intent.action.THEME_CHANGED";
 
+    private static class ThemedUiContext extends ContextWrapper {
+        public ThemedUiContext(Context context) {
+            super(context);
+        }
+
+        @Override
+        public String getPackageName() {
+            return "android";
+        }
+    }
+
     public static Context createUiContext(final Context context) {
         try {
-            return context.createPackageContext("com.android.systemui", Context.CONTEXT_RESTRICTED);
+            Context uiContext = context.createPackageContext("com.android.systemui", Context.CONTEXT_RESTRICTED);
+            /* Retain the magic system package name */
+            if (context.getPackageName().equals("android")) {
+                return new ThemedUiContext(uiContext);
+            }
+            return uiContext;
         } catch (PackageManager.NameNotFoundException e) {
         }
 
