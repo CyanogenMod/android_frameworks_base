@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar;
 
 import android.content.Context;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.KeyEvent;
 
@@ -168,8 +169,8 @@ public class NavigationButtons {
      * @return the current button map, or the default button map.
      */
     public static ButtonInfo[] loadButtonMap(Context context) {
-        String saved = Settings.System.getString(context.getContentResolver(),
-                Settings.System.NAV_BUTTONS);
+        String saved = Settings.System.getStringForUser(context.getContentResolver(),
+                Settings.System.NAV_BUTTONS, UserHandle.USER_CURRENT);
         if (saved == null) {
             saved = NavigationButtons.DEFAULT_SETTING_STRING;
         }
@@ -198,7 +199,7 @@ public class NavigationButtons {
             if (i != 0) sb.append("|");
             sb.append(map[i].key);
         }
-        Settings.System.putString(context.getContentResolver(),
-                Settings.System.NAV_BUTTONS, sb.toString());
+        Settings.System.putStringForUser(context.getContentResolver(),
+                Settings.System.NAV_BUTTONS, sb.toString(), UserHandle.USER_CURRENT);
     }
 }
