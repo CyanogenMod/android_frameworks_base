@@ -44,7 +44,7 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.FrameLayout;
 
-import static com.android.internal.util.cm.NavigationRingConstants.*;
+import com.android.internal.util.cm.NavigationRingConstants;
 import com.android.internal.util.cm.NavigationRingHelpers;
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.GlowPadView.OnTriggerListener;
