@@ -71,8 +71,8 @@ public class StatusBarIconView extends AnimatedImageView {
         mNumberPain.setTypeface(Typeface.DEFAULT_BOLD);
         mNumberPain.setTextSize(scaledPx);
         mNotification = notification;
-        mShowNotificationCount = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1;
+        mShowNotificationCount = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_NOTIF_COUNT, 0, UserHandle.USER_CURRENT) == 1;
         setContentDescription(notification);
 
         mObserver = GlobalSettingsObserver.getInstance(context);
@@ -362,8 +362,8 @@ public class StatusBarIconView extends AnimatedImageView {
 
         @Override
         public void onChange(boolean selfChange) {
-            boolean showIconCount = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1;
+            boolean showIconCount = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.STATUS_BAR_NOTIF_COUNT, 0, UserHandle.USER_CURRENT) == 1;
             for (StatusBarIconView sbiv : mIconViews) {
                 sbiv.mShowNotificationCount = showIconCount;
                 sbiv.set(sbiv.mIcon, true);

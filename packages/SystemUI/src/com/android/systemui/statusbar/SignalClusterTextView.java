@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
@@ -73,7 +74,8 @@ public class SignalClusterTextView
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_SIGNAL_TEXT), false, this);
+                    Settings.System.STATUS_BAR_SIGNAL_TEXT), false, this,
+                    UserHandle.USER_ALL);
         }
 
         void unobserve() {
@@ -171,10 +173,10 @@ public class SignalClusterTextView
         }
     };
 
-    private void updateSettings() {
+    public void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
-        mSignalClusterStyle = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_SIGNAL_TEXT, SIGNAL_CLUSTER_STYLE_NORMAL));
+        mSignalClusterStyle = (Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_SIGNAL_TEXT, SIGNAL_CLUSTER_STYLE_NORMAL, UserHandle.USER_CURRENT));
         updateSignalText();
     }
 }

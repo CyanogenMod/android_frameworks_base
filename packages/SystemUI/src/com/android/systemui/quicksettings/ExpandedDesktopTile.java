@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,9 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
             @Override
             public void onClick(View v) {
                 // Change the system setting
-                Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.EXPANDED_DESKTOP_STATE, mEnabled ? 0 : 1);
+                Settings.System.putIntForUser(mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STATE, mEnabled ? 0 : 1,
+                        UserHandle.USER_CURRENT);
             }
         };
 
@@ -56,8 +58,8 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
     }
 
     private synchronized void updateTile() {
-        mEnabled = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
+        mEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 1;
         if (mEnabled) {
             mDrawable = R.drawable.ic_qs_expanded_desktop_on;
             mLabel = mContext.getString(R.string.quick_settings_expanded_desktop);

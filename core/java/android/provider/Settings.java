@@ -2504,6 +2504,7 @@ public final class Settings {
 
         /**
          * Torch state (flashlight)
+         * FIXME: move me to global state
          * @hide
          */
         public static final String TORCH_STATE = "torch_state";
