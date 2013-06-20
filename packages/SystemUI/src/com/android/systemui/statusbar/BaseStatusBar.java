@@ -173,8 +173,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     private boolean mDeviceProvisioned = false;
 
-    private boolean mShowNotificationCounts;
-
     public IStatusBarService getStatusBarService() {
         return mBarService;
     }
@@ -239,9 +237,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
-
-        mShowNotificationCounts = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1;
 
         mStatusBarContainer = new FrameLayout(mContext);
 
@@ -326,7 +321,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     public void userSwitched(int newUserId) {
-        // should be overridden
+        StatusBarIconView.GlobalSettingsObserver.getInstance(mContext).onChange(true);
     }
 
     public boolean notificationIsForCurrentUser(StatusBarNotification n) {
@@ -1205,10 +1200,11 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     public int getExpandedDesktopMode() {
         ContentResolver resolver = mContext.getContentResolver();
-        boolean expanded = Settings.System.getInt(resolver,
-                Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
+        boolean expanded = Settings.System.getIntForUser(resolver,
+                Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 1;
         if (expanded) {
-            return Settings.System.getInt(resolver, Settings.System.EXPANDED_DESKTOP_STYLE, 0);
+            return Settings.System.getIntForUser(resolver,
+                    Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
         }
         return 0;
     }
