@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
@@ -249,10 +250,11 @@ public class BatteryController extends BroadcastReceiver {
         }
     }
 
-    private void updateSettings() {
+    public void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
-        mBatteryStyle = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_BATTERY, BATTERY_STYLE_NORMAL));
+        mBatteryStyle = (Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_BATTERY, BATTERY_STYLE_NORMAL,
+                UserHandle.USER_CURRENT));
         updateBattery();
     }
 }
