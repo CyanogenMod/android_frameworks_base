@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_quick_settings_ringer">音效<xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">震動<xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">使用Cid\'s head</string>
+    <string name="bean_dream_settings_cid_summary">在休眠模式使用Cid\'s head而非jellybeans</string>
+    <string name="quick_settings_profile_label">設定檔</string>
+    <string name="powerwidget_screen_timeout_toast">進入休眠設為：%1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS關閉</string>
+    <string name="quick_settings_screen_sleep">進入休眠</string>
+    <string name="quick_settings_ringer_on">音效開啟</string>
+    <string name="quick_settings_ringer_off">音效關閉</string>
+    <string name="quick_settings_vibration_on">震動開啟</string>
+    <string name="quick_settings_vibration_off">震動關閉</string>
+    <string name="quick_settings_label_enabled">開啟</string>
+    <string name="quick_settings_label_disabled">關閉</string>
+    <string name="quick_settings_ringer_normal">音效</string>
+    <string name="quick_settings_lockscreen">鎖定螢幕</string>
+    <string name="quick_settings_network_type">行動網路模式</string>
+    <string name="quick_settings_report_bug">回報錯誤</string>
+    <string name="quick_settings_sync">同步處理</string>
+    <string name="quick_settings_sync_off">同步處理關閉</string>
+    <string name="quick_settings_torch">手電筒</string>
+    <string name="quick_settings_torch_off">手電筒關閉</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC關閉</string>
+    <string name="quick_settings_screen_timeout">時限</string>
+    <string name="quick_settings_usb_tether_off_label">已中斷連線</string>
+    <string name="quick_settings_usb_tether_connected_label">網路共用關閉</string>
+    <string name="quick_settings_usb_tether_on_label">網路共用</string>
+    <string name="quick_settings_wifiap">WiFi無線網路基地台</string>
+    <string name="quick_settings_wifiap_off">WiFi無線網路基地台關閉</string>
+    <string name="quick_settings_quiethours">安靜時刻</string>
+    <string name="quick_settings_quiethours_off">安靜時刻關閉</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE關閉</string>
+    <string name="quick_settings_volume">音量</string>
+    <string name="quick_settings_expanded_desktop">已擴展</string>
+    <string name="quick_settings_expanded_desktop_off">正常</string>
+    <string name="navbar_dialog_title">選擇指派動作</string>
+    <string name="navbar_home_button">主螢幕鍵</string>
+    <string name="navbar_recent_button">多工鍵</string>
+    <string name="navbar_search_button">搜尋鍵</string>
+    <string name="navbar_back_button">返回鍵</string>
+    <string name="navbar_empty_button">空的按鍵</string>
+    <string name="navbar_menu_conditional_button">選單鍵(自動隱藏)</string>
+    <string name="navbar_menu_always_button">選單鍵(一律顯示)</string>
+    <string name="navbar_menu_big_button">選單鍵</string>
+    <string name="pie_battery_status_charging">充電中(<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">充電完成</string>
+    <string name="pie_battery_status_discharging">剩餘<xliff:g id="percent">%d</xliff:g>%% </string>
+    <string name="pie_phone_status_no_service">沒有服務</string>
+    <string name="pie_phone_status_airplane_mode">飛航模式開啟</string>
+    <string name="pie_phone_status_emergency_only">僅可撥打緊急電話</string>
+</resources>
