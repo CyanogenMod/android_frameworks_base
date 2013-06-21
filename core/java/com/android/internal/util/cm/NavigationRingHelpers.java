@@ -21,6 +21,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -42,6 +43,10 @@ public class NavigationRingHelpers {
     public static final int MAX_ACTIONS = 3;
 
     private static final String ASSIST_ICON_METADATA_NAME = "com.android.systemui.action_assist_icon";
+
+    private static final IntentFilter TORCH_STATE_FILTER =
+            new IntentFilter("net.cactii.flash2.TORCH_STATE_CHANGED");
+    private static final String EXTRA_TORCH_STATE = "state";
 
     private NavigationRingHelpers() {
     }
@@ -204,8 +209,8 @@ public class NavigationRingHelpers {
     }
 
     private static int getTorchDrawableResId(Context context) {
-        boolean active = Settings.System.getInt(context.getContentResolver(),
-                Settings.System.TORCH_STATE, 0) != 0;
+        Intent stateIntent = context.registerReceiver(null, TORCH_STATE_FILTER);
+        boolean active = stateIntent != null && stateIntent.getIntExtra(EXTRA_TORCH_STATE, 0) != 0;
 
         if (active) {
             return com.android.internal.R.drawable.ic_navigation_ring_torch_on;
