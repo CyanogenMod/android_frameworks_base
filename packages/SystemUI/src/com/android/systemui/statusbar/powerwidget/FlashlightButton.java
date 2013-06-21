@@ -1,30 +1,27 @@
 package com.android.systemui.statusbar.powerwidget;
 
-import com.android.systemui.R;
-
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.UserHandle;
 import android.provider.Settings;
+
+import com.android.internal.util.cm.TorchConstants;
+import com.android.systemui.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FlashlightButton extends PowerButton {
-
-    private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
-    static {
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.TORCH_STATE));
-    }
+    private static final IntentFilter STATE_FILTER =
+            new IntentFilter(TorchConstants.ACTION_STATE_CHANGED);
+    private boolean mActive = false;
 
     public FlashlightButton() { mType = BUTTON_FLASHLIGHT; }
 
     @Override
     protected void updateState(Context context) {
-        boolean enabled = Settings.System.getIntForUser(context.getContentResolver(),
-                Settings.System.TORCH_STATE, 0, UserHandle.USER_CURRENT) == 1;
-        if(enabled) {
+        if (mActive) {
             mIcon = R.drawable.stat_flashlight_on;
             mState = STATE_ENABLED;
         } else {
@@ -37,24 +34,26 @@ public class FlashlightButton extends PowerButton {
     protected void toggleState(Context context) {
         boolean bright = Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.EXPANDED_FLASH_MODE, 0, UserHandle.USER_CURRENT) == 1;
-        Intent i = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
-        i.putExtra("bright", bright);
+        Intent i = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
+        i.putExtra(TorchConstants.EXTRA_BRIGHT_MODE, bright);
         context.sendBroadcast(i);
     }
 
     @Override
     protected boolean handleLongClick(Context context) {
-        // it may be better to make an Intent action for the Torch
-        // we may want to look at that option later
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setClassName("net.cactii.flash2", "net.cactii.flash2.MainActivity");
+        Intent intent = new Intent(TorchConstants.INTENT_LAUNCH_APP);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         return true;
     }
 
     @Override
-    protected List<Uri> getObservedUris() {
-        return OBSERVED_URIS;
+    protected IntentFilter getBroadcastIntentFilter() {
+        return STATE_FILTER;
+    }
+
+    @Override
+    protected void onReceive(Context context, Intent intent) {
+        mActive = intent.getIntExtra(TorchConstants.EXTRA_CURRENT_STATE, 0) != 0;
     }
 }

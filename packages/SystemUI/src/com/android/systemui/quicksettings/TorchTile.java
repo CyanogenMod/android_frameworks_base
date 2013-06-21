@@ -10,11 +10,13 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.android.internal.util.cm.TorchConstants;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class TorchTile extends QuickSettingsTile {
+    private boolean mActive = false;
 
     public TorchTile(Context context, 
             QuickSettingsController qsc, Handler handler) {
@@ -23,7 +25,7 @@ public class TorchTile extends QuickSettingsTile {
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
+                Intent i = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
                 mContext.sendBroadcast(i);
             }
         };
@@ -31,14 +33,12 @@ public class TorchTile extends QuickSettingsTile {
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setClassName("net.cactii.flash2", "net.cactii.flash2.MainActivity");
-                startSettingsActivity(intent);
+                startSettingsActivity(TorchConstants.INTENT_LAUNCH_APP);
                 return true;
             }
         };
 
-        qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.TORCH_STATE), this);
+        qsc.registerAction(TorchConstants.ACTION_STATE_CHANGED, this);
     }
 
     @Override
@@ -54,10 +54,7 @@ public class TorchTile extends QuickSettingsTile {
     }
 
     private synchronized void updateTile() {
-        boolean enabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.TORCH_STATE, 0, UserHandle.USER_CURRENT) == 1;
-
-        if (enabled) {
+        if (mActive) {
             mDrawable = R.drawable.ic_qs_torch_on;
             mLabel = mContext.getString(R.string.quick_settings_torch);
         } else {
@@ -67,7 +64,8 @@ public class TorchTile extends QuickSettingsTile {
     }
 
     @Override
-    public void onChangeUri(ContentResolver resolver, Uri uri) {
+    public void onReceive(Context context, Intent intent) {
+        mActive = intent.getIntExtra(TorchConstants.EXTRA_CURRENT_STATE, 0) != 0;
         updateResources();
     }
 }

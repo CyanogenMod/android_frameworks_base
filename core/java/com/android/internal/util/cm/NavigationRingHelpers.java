@@ -21,6 +21,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -33,6 +34,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 
 import static com.android.internal.util.cm.NavigationRingConstants.*;
+import com.android.internal.util.cm.TorchConstants;
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.TargetDrawable;
 
@@ -42,6 +44,9 @@ public class NavigationRingHelpers {
     public static final int MAX_ACTIONS = 3;
 
     private static final String ASSIST_ICON_METADATA_NAME = "com.android.systemui.action_assist_icon";
+
+    private static final IntentFilter TORCH_STATE_FILTER =
+            new IntentFilter(TorchConstants.ACTION_STATE_CHANGED);
 
     private NavigationRingHelpers() {
     }
@@ -94,7 +99,7 @@ public class NavigationRingHelpers {
     public static boolean isTorchAvailable(Context context) {
         PackageManager pm = context.getPackageManager();
         try {
-            return pm.getPackageInfo("net.cactii.flash2", 0) != null;
+            return pm.getPackageInfo(TorchConstants.APP_PACKAGE_NAME, 0) != null;
         } catch (PackageManager.NameNotFoundException e) {
             // ignored, just catched so we can return false below
         }
@@ -204,8 +209,9 @@ public class NavigationRingHelpers {
     }
 
     private static int getTorchDrawableResId(Context context) {
-        boolean active = Settings.System.getInt(context.getContentResolver(),
-                Settings.System.TORCH_STATE, 0) != 0;
+        Intent stateIntent = context.registerReceiver(null, TORCH_STATE_FILTER);
+        boolean active = stateIntent != null
+                && stateIntent.getIntExtra(TorchConstants.EXTRA_CURRENT_STATE, 0) != 0;
 
         if (active) {
             return com.android.internal.R.drawable.ic_navigation_ring_torch_on;

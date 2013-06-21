@@ -77,7 +77,7 @@ public class QuickSettingsTile implements OnClickListener {
         tv.setText(mLabel);
     }
 
-    void startSettingsActivity(String action){
+    void startSettingsActivity(String action) {
         Intent intent = new Intent(action);
         startSettingsActivity(intent);
     }

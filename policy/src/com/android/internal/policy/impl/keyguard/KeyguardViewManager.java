@@ -46,6 +46,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.android.internal.R;
+import com.android.internal.util.cm.TorchConstants;
 import com.android.internal.widget.LockPatternUtils;
 
 /**
@@ -239,7 +240,7 @@ public class KeyguardViewManager {
 
     private static boolean runAction(Context context, String uri) {
         if ("FLASHLIGHT".equals(uri)) {
-            context.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
+            context.sendBroadcast(new Intent(TorchConstants.ACTION_TOGGLE_STATE));
             return true;
         } else if ("NEXT".equals(uri)) {
             sendMediaButtonEvent(context, KeyEvent.KEYCODE_MEDIA_NEXT);
