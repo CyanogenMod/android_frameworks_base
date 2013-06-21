@@ -291,9 +291,16 @@ public class QuickSettingsController {
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            ContentResolver resolver = mContext.getContentResolver();
-            for (QuickSettingsTile tile : mObserverMap.get(uri)) {
-                tile.onChangeUri(resolver, uri);
+            if (mTileStatusUris.contains(uri)) {
+                mHandler.removeMessages(MSG_UPDATE_TILES);
+                mHandler.sendEmptyMessage(MSG_UPDATE_TILES);
+            } else {
+                ContentResolver resolver = mContext.getContentResolver();
+                if (mObserverMap != null && mObserverMap.get(uri) != null) {
+                    for (QuickSettingsTile tile : mObserverMap.get(uri)) {
+                        tile.onChangeUri(resolver, uri);
+                    }
+                }
             }
         }
     }
