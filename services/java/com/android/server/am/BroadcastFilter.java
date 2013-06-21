@@ -29,15 +29,17 @@ class BroadcastFilter extends IntentFilter {
     final String requiredPermission;
     final int owningUid;
     final int owningUserId;
+    final boolean isSystem;
 
     BroadcastFilter(IntentFilter _filter, ReceiverList _receiverList,
-            String _packageName, String _requiredPermission, int _owningUid, int _userId) {
+            String _packageName, String _requiredPermission, int _owningUid, int _userId, boolean _isSystem) {
         super(_filter);
         receiverList = _receiverList;
         packageName = _packageName;
         requiredPermission = _requiredPermission;
         owningUid = _owningUid;
         owningUserId = _userId;
+        isSystem = _isSystem;
     }
     
     public void dump(PrintWriter pw, String prefix) {
@@ -70,5 +72,17 @@ class BroadcastFilter extends IntentFilter {
         sb.append(receiverList);
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public int onCompareTie(IntentFilter other) {
+        // in case of a tie when sorting ordered broadcasts,
+        // favor system apps.
+        BroadcastFilter bf = (BroadcastFilter)other;
+        if (isSystem)
+            return -1;
+        if (bf.isSystem)
+            return 1;
+        return 0;
     }
 }
