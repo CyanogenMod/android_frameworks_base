@@ -351,8 +351,10 @@ public class QuickSettingsController {
                 mHandler.sendEmptyMessage(MSG_UPDATE_TILES);
             } else {
                 ContentResolver resolver = mContext.getContentResolver();
-                for (QuickSettingsTile tile : mObserverMap.get(uri)) {
-                    tile.onChangeUri(resolver, uri);
+                if (mObserverMap != null && mObserverMap.get(uri) != null) {
+                    for (QuickSettingsTile tile : mObserverMap.get(uri)) {
+                        tile.onChangeUri(resolver, uri);
+                    }
                 }
             }
         }
