@@ -390,7 +390,7 @@ public class QuickSettingsController {
         }
     }
 
-    public void registerAction(Object action, QuickSettingsTile tile) {
+    public void registerAction(String action, QuickSettingsTile tile) {
         registerInMap(action, tile, mReceiverMap);
     }
 
