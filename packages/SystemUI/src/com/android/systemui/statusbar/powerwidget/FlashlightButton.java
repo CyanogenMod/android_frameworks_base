@@ -4,7 +4,7 @@ import com.android.systemui.R;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.UserHandle;
 import android.provider.Settings;
 
@@ -12,19 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlashlightButton extends PowerButton {
-
-    private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
-    static {
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.TORCH_STATE));
-    }
+    private static final IntentFilter STATE_FILTER =
+            new IntentFilter("net.cactii.flash2.TORCH_STATE_CHANGED");
+    private boolean mActive = false;
 
     public FlashlightButton() { mType = BUTTON_FLASHLIGHT; }
 
     @Override
     protected void updateState(Context context) {
-        boolean enabled = Settings.System.getIntForUser(context.getContentResolver(),
-                Settings.System.TORCH_STATE, 0, UserHandle.USER_CURRENT) == 1;
-        if(enabled) {
+        if (mActive) {
             mIcon = R.drawable.stat_flashlight_on;
             mState = STATE_ENABLED;
         } else {
@@ -54,7 +50,12 @@ public class FlashlightButton extends PowerButton {
     }
 
     @Override
-    protected List<Uri> getObservedUris() {
-        return OBSERVED_URIS;
+    protected IntentFilter getBroadcastIntentFilter() {
+        return STATE_FILTER;
+    }
+
+    @Override
+    protected void onReceive(Context context, Intent intent) {
+        mActive = intent.getIntExtra("state", 0) != 0;
     }
 }
