@@ -2453,8 +2453,15 @@
         android:description="@string/permdesc_broadcastPackageRemoved"
         android:protectionLevel="signature" />
 
-    <!-- Allows an application to broadcast an SMS receipt notification.
-    <p>Not for use by third-party applications. -->
+    <!-- Allows an application to intercept and rewrite outgoing SMS
+         @hide -->
+    <permission android:name="android.permission.INTERCEPT_SMS"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_interceptSmsSent"
+        android:description="@string/permdesc_interceptSmsSent"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to broadcast an SMS receipt notification -->
     <permission android:name="android.permission.BROADCAST_SMS"
         android:permissionGroup="android.permission-group.MESSAGES"
         android:label="@string/permlab_broadcastSmsReceived"
