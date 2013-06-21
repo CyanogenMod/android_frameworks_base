@@ -766,7 +766,8 @@ public abstract class IntentResolver<F extends IntentFilter, R extends Object> {
         public int compare(Object o1, Object o2) {
             final int q1 = ((IntentFilter) o1).getPriority();
             final int q2 = ((IntentFilter) o2).getPriority();
-            return (q1 > q2) ? -1 : ((q1 < q2) ? 1 : 0);
+            return (q1 > q2) ? -1 : ((q1 < q2) ? 1 :
+                    ((IntentFilter) o1).onCompareTie((IntentFilter) o2));
         }
     };
 
