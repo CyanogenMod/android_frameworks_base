@@ -1617,6 +1617,15 @@ public class IntentFilter implements Parcelable {
     }
 
     /**
+     * {@hide}
+     * @param other
+     * @return
+     */
+    public int onCompareTie(IntentFilter other) {
+        return 0;
+    }
+
+    /**
      * For debugging -- perform a check on the filter, return true if it passed
      * or false if it failed.
      *
