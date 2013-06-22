@@ -1140,4 +1140,7 @@
     <!-- True if the pie service should be started at system start. This is must be true
          to support pie controls. -->
     <bool name="config_allowPieService">true</bool>
+
+    <!-- True if the Irda service should be started at system start -->
+    <bool name="config_enableIrdaManagerService">false</bool>
 </resources>
