@@ -87,6 +87,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.IPowerManager;
 import android.os.IUserManager;
+import android.hardware.IIrdaManager;
+import android.hardware.IrdaManager;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.Process;
@@ -573,6 +575,13 @@ class ContextImpl extends Context {
                     IBinder b = ServiceManager.getService("fm_transmitter");
                     IFmTransmitter service = IFmTransmitter.Stub.asInterface(b);
                     return new FmTransmitterImpl(service);
+                }});
+
+        registerService(IRDA_SERVICE, new StaticServiceFetcher() {
+                public Object createStaticService() {
+                    IBinder b = ServiceManager.getService(IRDA_SERVICE);
+                    IIrdaManager service = IIrdaManager.Stub.asInterface(b);
+                    return new IrdaManager(service);
                 }});
     }
 
