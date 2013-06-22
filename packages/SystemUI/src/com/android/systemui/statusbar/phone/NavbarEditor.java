@@ -45,8 +45,10 @@ public class NavbarEditor implements OnTouchListener {
      * Holds reference to all assignable button ids.
      * Hold this in sync with {@link NavigationButtons#BUTTON_COUNT}
      */
-    ArrayList<Integer> mIds = new ArrayList<Integer>(Arrays.asList(R.id.one, R.id.two, R.id.three,
-            R.id.four, R.id.five,R.id.six));
+    static final ArrayList<Integer> BUTTON_IDS = new ArrayList<Integer>(
+            Arrays.asList(R.id.one, R.id.two, R.id.three, R.id.four, R.id.five, R.id.six));
+
+    private final ArrayList<Integer> mIds = new ArrayList<Integer>(BUTTON_IDS);
 
     /**
      * Subset of mIds, to differentiate small/side buttons
@@ -55,8 +57,9 @@ public class NavbarEditor implements OnTouchListener {
      */
     public static final int[] smallButtonIds = {R.id.one, R.id.six};
 
-    protected static int visibleCount = 4;
-    private static Boolean mIsDevicePhone = null;
+    private static Boolean sIsDevicePhone = null;
+    protected int mVisibleCount = 4;
+    private boolean mInEditMode = false;
 
     /**
      * Holds reference to the parent/root of the inflated view
@@ -80,16 +83,6 @@ public class NavbarEditor implements OnTouchListener {
         mParent = parent;
         mVertical = orientation;
         mContext = parent.getContext();
-    }
-
-    /**
-     * Set the button listeners to this
-     * class when in edit mode
-     */
-    protected void setupListeners() {
-        for (int id : mIds) {
-            mParent.findViewById(id).setOnTouchListener(this);
-        }
     }
 
     /**
@@ -121,7 +114,7 @@ public class NavbarEditor implements OnTouchListener {
      */
     Runnable mCheckLongPress = new Runnable() {
         public void run() {
-            if (NavigationBarView.getEditMode()) {
+            if (mInEditMode) {
                 mLongPressed = true;
                 mParent.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 return;
@@ -129,8 +122,22 @@ public class NavbarEditor implements OnTouchListener {
         }
     };
 
+    public void setEditMode(boolean editMode) {
+        mInEditMode = editMode;
+        for (Integer id : BUTTON_IDS) {
+            KeyButtonView button = (KeyButtonView) mParent.findViewById(id);
+            if (button != null) {
+                button.setEditMode(editMode);
+                button.setOnTouchListener(editMode ? this : null);
+            }
+        }
+        if (!editMode && mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
     protected static boolean isDevicePhone(Context con) {
-        if (mIsDevicePhone == null) {
+        if (sIsDevicePhone == null) {
             WindowManager wm = (WindowManager)con.getSystemService(Context.WINDOW_SERVICE);
             DisplayInfo outDisplayInfo = new DisplayInfo();
             wm.getDefaultDisplay().getDisplayInfo(outDisplayInfo);
@@ -138,17 +145,17 @@ public class NavbarEditor implements OnTouchListener {
             int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / outDisplayInfo.logicalDensityDpi;
             if (shortSizeDp < 600) {
                 // 0-599dp: "phone" UI with a separate status & navigation bar
-                mIsDevicePhone = true;
+                sIsDevicePhone = true;
             } else {
-                mIsDevicePhone = false;
+                sIsDevicePhone = false;
             }
         }
-        return mIsDevicePhone;
+        return sIsDevicePhone;
     }
 
     @Override
     public boolean onTouch(final View view, MotionEvent event) {
-        if (!NavigationBarView.getEditMode() || (mDialog != null && mDialog.isShowing())) {
+        if (!mInEditMode || (mDialog != null && mDialog.isShowing())) {
             return false;
         }
         float curPos = 0;
@@ -162,11 +169,7 @@ public class NavbarEditor implements OnTouchListener {
             view.setPressed(true);
             view.getLocationOnScreen(screenLoc);
             // Store the starting view position in the parent's tag
-            if (!mVertical) {
-                mParent.setTag(Float.valueOf(screenLoc[0]));
-            } else {
-                mParent.setTag(Float.valueOf(screenLoc[1]));
-            }
+            mParent.setTag(Float.valueOf(screenLoc[mVertical ? 1 : 0]));
             view.postDelayed(mCheckLongPress, ViewConfiguration.getLongPressTimeout());
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             view.setPressed(false);
@@ -175,53 +178,58 @@ public class NavbarEditor implements OnTouchListener {
             }
             view.bringToFront();
             ViewGroup viewParent = (ViewGroup) view.getParent();
-            float buttonSize = 0;
-            if (!mVertical) {
-                buttonSize = view.getWidth();
-            } else {
-                buttonSize = view.getHeight();
-            }
+            float buttonSize = mVertical ? view.getHeight() : view.getWidth();
+            float min = mVertical ? viewParent.getTop() : (viewParent.getLeft() - buttonSize / 2);
+            float max = mVertical ? (viewParent.getTop() + viewParent.getHeight())
+                    : (viewParent.getLeft() + viewParent.getWidth());
             // Prevents user from dragging view outside of bounds
-            if ((!mVertical && ((curPos)  > (viewParent.getWidth() + viewParent.getLeft()) || (curPos - buttonSize/2 <= viewParent.getLeft()))) ||
-                (mVertical && ((curPos  > (viewParent.getHeight() + viewParent.getTop())) || (curPos < viewParent.getTop())))) {
+            if (curPos < min || curPos > max) {
                 return false;
             }
             if (!mVertical) {
-                view.setX(curPos - viewParent.getLeft() - buttonSize/2);
+                view.setX(curPos - viewParent.getLeft() - buttonSize / 2);
             } else {
-                view.setY(curPos - viewParent.getTop() - buttonSize/2);
+                view.setY(curPos - viewParent.getTop() - buttonSize / 2);
             }
             int affectedViewPosition = findInterceptingViewIndex(curPos, view);
             if (affectedViewPosition == -1) {
                 return false;
             }
             switchId(mIds.indexOf(view.getId()), affectedViewPosition, view);
-        } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+        } else if (event.getAction() == MotionEvent.ACTION_UP
+                || event.getAction() == MotionEvent.ACTION_CANCEL) {
             view.setPressed(false);
             view.removeCallbacks(mCheckLongPress);
-            if (!mLongPressed && !view.getTag().equals("home")) {
-                final ButtonAdapter list = new ButtonAdapter(ArrayUtils.contains(smallButtonIds, view.getId()) ? true : false);
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle(mContext.getString(R.string.navbar_dialog_title));
-                builder.setAdapter(list, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((KeyButtonView) view).setInfo((ButtonInfo) list.getItem(which), mVertical);
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+            if (!mLongPressed && !view.getTag().equals(NavigationButtons.HOME)) {
+                final ButtonAdapter list =
+                        new ButtonAdapter(ArrayUtils.contains(smallButtonIds, view.getId()));
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                        .setTitle(mContext.getString(R.string.navbar_dialog_title))
+                        .setAdapter(list, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                KeyButtonView button = (KeyButtonView) view;
+                                ButtonInfo info = (ButtonInfo) list.getItem(which);
+
+                                button.setInfo(info, mVertical);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
                 mDialog = builder.create();
-                mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
                 mDialog.setCanceledOnTouchOutside(false);
                 mDialog.show();
-                mLongPressed=false;
+                mLongPressed = false;
+
                 return true;
             }
-            mLongPressed=false;
+            mLongPressed = false;
             // Reset the dragged view to its original location
             ViewGroup vParent = (ViewGroup) view.getParent();
             if (!mVertical) {
@@ -252,58 +260,45 @@ public class NavbarEditor implements OnTouchListener {
             tView.setY((Float) mParent.getTag() - a.getTop());
             mParent.setTag(Float.valueOf(screenLoc[1]));
         }
-        Collections.swap(mIds,to,from);
+        Collections.swap(mIds, to, from);
     }
 
     /**
      * Saves the current key arrangement
      * to the settings provider
      */
-    @SuppressWarnings("unchecked")
     protected void saveKeys() {
-        ((ViewGroup) mParent.findViewById(R.id.mid_nav_buttons)).setLayoutTransition(null);
         ButtonInfo[] buttons = new ButtonInfo[NavigationButtons.SLOT_COUNT];
-        List<Integer> idMap = (List<Integer>) mIds.clone();
-        if (mVertical) Collections.reverse(idMap);
         for (int i = 0; i < NavigationButtons.SLOT_COUNT; i++) {
-            buttons[i] = (ButtonInfo) mParent.findViewById(idMap.get(i)).getTag();
+            int idIndex = mVertical ? NavigationButtons.SLOT_COUNT - i : i;
+            buttons[i] = (ButtonInfo) mParent.findViewById(mIds.get(idIndex)).getTag();
         }
         NavigationButtons.storeButtonMap(mContext, buttons);
-    }
-
-    /**
-     * Reinflates navigation bar on demand
-     * base on current orientation
-     */
-    protected void reInflate() {
-        ((ViewGroup)mParent).removeAllViews();
-        if (mVertical) {
-            View.inflate(mContext, R.layout.mid_navigation_bar_land, (ViewGroup) mParent);
-        } else {
-            View.inflate(mContext, R.layout.mid_navigation_bar_port, (ViewGroup) mParent);
-        }
     }
 
     /**
      * Updates the buttons according to the
      * key arrangement stored in settings provider
      */
-    @SuppressWarnings("unchecked")
     protected void updateKeys() {
         ButtonInfo[] buttons = NavigationButtons.loadButtonMap(mContext);
-        int cc = 0;
-        ArrayList<Integer> idMap = (ArrayList<Integer>) mIds.clone();
-        if (mVertical) Collections.reverse(idMap);
-        visibleCount = 0;
-        for (ButtonInfo bi : buttons) {
-            KeyButtonView curView = (KeyButtonView) mParent.findViewById(idMap.get(cc));
-            boolean isSmallButton = NavigationButtons.IS_SLOT_SMALL[cc];
-            curView.setInfo(bi, mVertical);
-            if (!curView.getTag().equals(NavigationButtons.EMPTY) && !isSmallButton) {
-                visibleCount++;
+
+        mVisibleCount = 0;
+
+        for (int i = 0; i < buttons.length; i++) {
+            int id = BUTTON_IDS.get(i);
+            ButtonInfo info = buttons[i];
+            KeyButtonView button = (KeyButtonView) mParent.findViewById(id);
+            boolean isSmallButton = NavigationButtons.IS_SLOT_SMALL[i];
+
+            button.setInfo(info, mVertical);
+            if (!info.equals(NavigationButtons.EMPTY) && !isSmallButton) {
+                mVisibleCount++;
             }
-            cc++;
+
+            button.setTranslationX(0);
         }
+
         if (isDevicePhone(mContext)) {
             adjustPadding();
         }
@@ -315,7 +310,7 @@ public class NavbarEditor implements OnTouchListener {
      */
     private void adjustPadding() {
         ViewGroup viewParent = (ViewGroup) mParent.findViewById(R.id.mid_nav_buttons);
-        int sCount = visibleCount;
+        int sCount = mVisibleCount;
         for (int v = 0; v < viewParent.getChildCount();v++) {
             View cView = viewParent.getChildAt(v);
             if (cView instanceof KeyButtonView) {
@@ -350,8 +345,8 @@ public class NavbarEditor implements OnTouchListener {
     protected void updateLowLights(View current) {
         ViewGroup lowLights = (ViewGroup) current.findViewById(R.id.lights_out);
         int totalViews = lowLights.getChildCount();
-        int visibleCount = NavbarEditor.visibleCount;
-        for (int v = 0;v<totalViews;v++) {
+        int visibleCount = mVisibleCount;
+        for (int v = 0;v < totalViews; v++) {
             if (lowLights.getChildAt(v) instanceof ImageView) {
                 View blank = lowLights.getChildAt(v+1);
                 if (visibleCount <= 0) {
@@ -373,7 +368,6 @@ public class NavbarEditor implements OnTouchListener {
     }
 
     private class ButtonAdapter implements ListAdapter {
-
         /**
          * Already assigned items
          */
@@ -473,13 +467,5 @@ public class NavbarEditor implements OnTouchListener {
             }
             return true;
         }
-
     }
-
-    final void dismissDialog() {
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
-    }
-
 }
