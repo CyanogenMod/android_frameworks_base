@@ -1401,4 +1401,7 @@
          config to 7. -->
     <integer name="config_deviceHardwareKeys">15</integer>
 
+    <!-- Boolean to enable adb by default on a per-device basis -->
+    <bool name="config_enableAdbByDefault">false</bool>
+
 </resources>
