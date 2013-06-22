@@ -2003,4 +2003,7 @@
   <!-- Electron Beam -->
   <java-symbol type="bool" name="config_screenOffAnimation" />
 
+  <!-- Irda Service Samsung Galaxy S4-->
+  <java-symbol type="bool" name="config_enableIrdaManagerService" />
+
 </resources>
