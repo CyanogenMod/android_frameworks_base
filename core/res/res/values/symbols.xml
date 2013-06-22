@@ -2038,4 +2038,7 @@
   <java-symbol type="string" name="privacy_guard_notification_detail" />
   <java-symbol type="drawable" name="stat_notify_privacy_guard" />
 
+  <!-- Irda Service -->
+  <java-symbol type="bool" name="config_enableIrdaManagerService" />
+
 </resources>
