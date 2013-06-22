@@ -125,7 +125,9 @@ public class UsbDeviceManager {
         @Override
         public void onChange(boolean selfChange) {
             boolean enable = (Settings.Global.getInt(mContentResolver,
-                    Settings.Global.ADB_ENABLED, 0) > 0);
+                    Settings.Global.ADB_ENABLED, 
+                    mContext.getResources().getBoolean(
+                        com.android.internal.R.bool.config_enableAdbByDefault) ? 1 : 0) > 0);
             mHandler.sendMessage(MSG_ENABLE_ADB, enable);
         }
     }
