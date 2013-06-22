@@ -67,7 +67,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     final static boolean ANIMATE_HIDE_TRANSITION = false; // turned off because it introduces unsightly delay when videos goes to full screen
     final static String NAVBAR_EDIT = "android.intent.action.NAVBAR_EDIT";
 
-    private static boolean EDIT_MODE;
+    private boolean mInEditMode;
     private NavbarEditor mEditBar;
     private NavBarReceiver mNavBarReceiver;
     private OnClickListener mRecentsClickListener;
@@ -146,25 +146,36 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
 
     private H mHandler = new H();
 
-    public static boolean getEditMode() {
-        return EDIT_MODE;
-    }
-    
-    protected void setListener(OnClickListener RecentsClickListener, OnTouchListener RecentsPreloadListener, OnTouchListener HomeSearchActionListener) {
-        mRecentsClickListener = RecentsClickListener;
-        mRecentsPreloadListener = RecentsPreloadListener;
-        mHomeSearchActionListener = HomeSearchActionListener;
+    public boolean isInEditMode() {
+        return mInEditMode;
     }
 
-    protected void toggleButtonListener(boolean enable) {
+    protected void setListener(OnClickListener recentsClickListener,
+            OnTouchListener recentsPreloadListener, OnTouchListener homeSearchActionListener) {
+        mRecentsClickListener = recentsClickListener;
+        mRecentsPreloadListener = recentsPreloadListener;
+        mHomeSearchActionListener = homeSearchActionListener;
+    }
+
+    private void removeButtonListeners() {
+        for (Integer id : mEditBar.BUTTON_IDS) {
+            View button = mCurrentView.findViewById(id);
+            if (button != null) {
+                button.setOnClickListener(null);
+                button.setOnTouchListener(null);
+            }
+        }
+    }
+
+    protected void updateButtonListeners() {
         View recentView = mCurrentView.findViewWithTag(NavigationButtons.RECENT);
         if (recentView != null) {
-            recentView.setOnClickListener(enable ? mRecentsClickListener : null);
-            recentView.setOnTouchListener(enable ? mRecentsPreloadListener : null);
+            recentView.setOnClickListener(mRecentsClickListener);
+            recentView.setOnTouchListener(mRecentsPreloadListener);
         }
         View homeView = mCurrentView.findViewWithTag(NavigationButtons.HOME);
         if (homeView != null) {
-            homeView.setOnTouchListener(enable ? mHomeSearchActionListener : null);
+            homeView.setOnTouchListener(mHomeSearchActionListener);
         }
     }
 
@@ -214,29 +225,28 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         public void onReceive(Context context, Intent intent) {
             boolean edit = intent.getBooleanExtra("edit", false);
             boolean save = intent.getBooleanExtra("save", false);
-            if (edit != EDIT_MODE) {
-                EDIT_MODE = edit;
-                if (EDIT_MODE) {
-                    toggleButtonListener(false);
-                    mEditBar.setupListeners();
-                    mEditBar.updateKeys();
+            if (edit != mInEditMode) {
+                mInEditMode = edit;
+                if (edit) {
+                    removeButtonListeners();
+                    mEditBar.setEditMode(true);
                 } else {
-                    mEditBar.dismissDialog();
                     if (save) {
                         mEditBar.saveKeys();
                     }
-                    mEditBar.reInflate();
-                    mEditBar = new NavbarEditor((ViewGroup) mCurrentView.findViewById(R.id.container), mVertical);
-                    mEditBar.updateKeys();
-                    toggleButtonListener(true);
-                    if (save) {
-                        mEditBar.updateLowLights(mCurrentView);
-                    }
-                    ((ViewGroup) mCurrentView.findViewById(R.id.mid_nav_buttons)).setLayoutTransition(
-                            new LayoutTransition());
+                    mEditBar.setEditMode(false);
+                    updateSettings();
                 }
             }
         }
+    }
+
+    public void updateSettings() {
+        mEditBar.updateKeys();
+        removeButtonListeners();
+        updateButtonListeners();
+        mEditBar.updateLowLights(mCurrentView);
+        setDisabledFlags(mDisabledFlags, true /* force */);
     }
 
     public void notifyScreenOn(boolean screenOn) {
@@ -449,9 +459,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
             mVertical = getWidth() > 0 && getHeight() > getWidth();
         }
         mEditBar = new NavbarEditor((ViewGroup) mCurrentView.findViewById(R.id.container), mVertical);
-        mEditBar.updateKeys();
-        mEditBar.updateLowLights(mCurrentView);
-        toggleButtonListener(true);
+        updateSettings();
 
         mDeadZone = (DeadZone) mCurrentView.findViewById(R.id.deadzone);
 
