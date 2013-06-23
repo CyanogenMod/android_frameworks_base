@@ -45,6 +45,7 @@
     <uses-permission android:name="android.permission.UPDATE_DEVICE_STATS" />
     <uses-permission android:name="android.permission.MASTER_CLEAR" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- ActivityManager -->
     <uses-permission android:name="android.permission.GET_TASKS" />
