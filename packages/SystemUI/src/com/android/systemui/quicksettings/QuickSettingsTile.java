@@ -73,8 +73,10 @@ public class QuickSettingsTile implements OnClickListener {
 
     void updateQuickSettings(){
         TextView tv = (TextView) mTile.findViewById(R.id.tile_textview);
-        tv.setCompoundDrawablesWithIntrinsicBounds(0, mDrawable, 0, 0);
-        tv.setText(mLabel);
+        if (tv != null) {
+            tv.setCompoundDrawablesWithIntrinsicBounds(0, mDrawable, 0, 0);
+            tv.setText(mLabel);
+        }
     }
 
     void startSettingsActivity(String action){
@@ -100,7 +102,7 @@ public class QuickSettingsTile implements OnClickListener {
 
     @Override
     public final void onClick(View v) {
-        mOnClick.onClick(v);
+        if (mOnClick != null) mOnClick.onClick(v);
         ContentResolver resolver = mContext.getContentResolver();
         boolean shouldCollapse = Settings.System.getInt(resolver, Settings.System.QS_COLLAPSE_PANEL, 0) == 1;
         if (shouldCollapse) {
