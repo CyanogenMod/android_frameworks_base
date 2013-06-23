@@ -252,6 +252,10 @@ LOCAL_SRC_FILES += \
 	fmradio/java/com/stericsson/hardware/fm/IOnAutomaticSwitchListener.aidl
 #
 
+ifneq ($(BOARD_RIL_CLASS),)
+LOCAL_SRC_FILES += $(call find-other-java-files,$(BOARD_RIL_CLASS))
+endif
+
 
 # FRAMEWORKS_BASE_JAVA_SRC_DIRS comes from build/core/pathmap.mk
 LOCAL_AIDL_INCLUDES += $(FRAMEWORKS_BASE_JAVA_SRC_DIRS)
