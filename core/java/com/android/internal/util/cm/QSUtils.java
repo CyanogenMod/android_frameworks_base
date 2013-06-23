@@ -3,8 +3,8 @@ package com.android.internal.util.cm;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.hardware.Camera;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.WifiDisplayStatus;
 import android.net.ConnectivityManager;
@@ -61,5 +61,9 @@ public class QSUtils {
         public static boolean deviceSupportsDockBattery(Context ctx) {
             Resources res = ctx.getResources();
             return res.getBoolean(com.android.internal.R.bool.config_hasDockBattery);
+        }
+
+        public static boolean deviceSupportsCamera() {
+            return Camera.getNumberOfCameras() > 0;
         }
 }
