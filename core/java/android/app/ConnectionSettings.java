@@ -3,6 +3,7 @@ package android.app;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -11,6 +12,7 @@ import android.nfc.NfcAdapter;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.Settings;
+import com.android.internal.telephony.RILConstants;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -33,6 +35,15 @@ public final class ConnectionSettings implements Parcelable {
     public static final int PROFILE_CONNECTION_SYNC = 5;
     public static final int PROFILE_CONNECTION_BLUETOOTH = 7;
     public static final int PROFILE_CONNECTION_NFC = 8;
+    public static final int PROFILE_CONNECTION_2G3G = 9;
+
+    // retrieved from Phone.apk
+    private static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
+    private static final String EXTRA_NETWORK_MODE = "networkMode";
+
+    private static final int CM_MODE_2G = 0;
+    private static final int CM_MODE_3G = 1;
+    private static final int CM_MODE_BOTH = 2;
 
     /** @hide */
     public static final Parcelable.Creator<ConnectionSettings> CREATOR = new Parcelable.Creator<ConnectionSettings>() {
@@ -110,6 +121,23 @@ public final class ConnectionSettings implements Parcelable {
                 if (forcedState != currentState) {
                     cm.setMobileDataEnabled(forcedState);
                 }
+                break;
+            case PROFILE_CONNECTION_2G3G:
+                Intent intent = new Intent(ACTION_MODIFY_NETWORK_MODE);
+                switch(getValue()) {
+                    case CM_MODE_2G:
+                        intent.putExtra(EXTRA_NETWORK_MODE, RILConstants.NETWORK_MODE_GSM_ONLY);
+                        break;
+                    case CM_MODE_3G:
+                        intent.putExtra(EXTRA_NETWORK_MODE, RILConstants.NETWORK_MODE_WCDMA_ONLY);
+                        break;
+                    case CM_MODE_BOTH:
+                        intent.putExtra(EXTRA_NETWORK_MODE, RILConstants.NETWORK_MODE_WCDMA_PREF);
+                        break;
+                    default:
+                        return;
+                }
+                context.sendBroadcast(intent);
                 break;
             case PROFILE_CONNECTION_BLUETOOTH:
                 int btstate = bta.getState();
