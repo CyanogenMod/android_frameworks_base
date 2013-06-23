@@ -65,10 +65,14 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE off</string>
     <string name="quick_settings_volume">Volume</string>
+    <string name="quick_settings_camera_label">Camera</string>
 
     <!-- Expanded desktop strings break the rules a bit - the icon identifies the feature, the string indicates current state -->
     <string name="quick_settings_expanded_desktop">Expanded</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
+
+    <!-- Camera tile toasts -->
+    <string name="quick_settings_camera_error_connect">Can\'t connect to camera</string>
 
     <!-- Text to display next to the minimal graphical battery meter.  [CHAR LIMIT=3] -->
     <string name="status_bar_settings_battery_meter_min_format" translatable="false">
