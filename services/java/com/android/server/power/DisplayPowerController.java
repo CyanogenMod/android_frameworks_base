@@ -357,6 +357,9 @@ final class DisplayPowerController {
     private boolean mTwilightChanged;
     private boolean mAutoBrightnessSettingsChanged;
 
+    // Device-specific auto brightness handler for sysfs interaction when brightness changes
+    private AutoBrightnessDeviceHandler mAutoBrightnessDeviceHandler;
+
     /**
      * Creates the display power controller.
      */
@@ -378,6 +381,8 @@ final class DisplayPowerController {
         mDisplayManager = displayManager;
 
         final Resources resources = context.getResources();
+
+        mAutoBrightnessDeviceHandler = new AutoBrightnessDeviceHandler(context);
 
         mScreenBrightnessDimConfig = clampAbsoluteBrightness(resources.getInteger(
                 com.android.internal.R.integer.config_screenBrightnessDim));
@@ -1211,6 +1216,8 @@ final class DisplayPowerController {
                         + mScreenAutoBrightness + ", newScreenAutoBrightness="
                         + newScreenAutoBrightness);
             }
+
+            mAutoBrightnessDeviceHandler.onUpdateAutoBrightness(mAmbientLux);
 
             mScreenAutoBrightness = newScreenAutoBrightness;
             mLastScreenAutoBrightnessGamma = gamma;
