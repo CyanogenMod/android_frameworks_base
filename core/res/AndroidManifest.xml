@@ -1856,7 +1856,7 @@
         android:description="@string/permdesc_movePackage"
         android:protectionLevel="signature|system" />
 
-    <!-- Allows an application to change privacy guard state -->
+    <!-- @hide Allows an application to change privacy guard state -->
     <permission android:name="android.permission.CHANGE_PRIVACY_GUARD_STATE"
         android:label="@string/permlab_changePrivacyGuardState"
         android:description="@string/permdesc_changePrivacyGuardState"

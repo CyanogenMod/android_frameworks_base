@@ -431,6 +431,7 @@ public class MockContext extends Context {
         throw new UnsupportedOperationException();
     }
 
+    /** @hide */
     @Override
     public boolean isPrivacyGuardEnabled() {
         throw new UnsupportedOperationException();
