@@ -45,4 +45,10 @@
     <string name="toast_rotation_unlocked">Поворот экрана разблокирован</string>
     <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
     <string name="stylus_app_not_installed">%s не установлено</string>
+
+    <!-- Privacy Guard -->
+    <string name="permlab_changePrivacyGuardState">включать или выключать режим инкогнито</string>
+    <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в режиме инкогнито. Когда приложение запущено в режиме инкогнито, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
+    <string name="privacy_guard_notification">Режим инкогнито активен</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> не сможет получать доступ к персональным данным</string>
 </resources>
