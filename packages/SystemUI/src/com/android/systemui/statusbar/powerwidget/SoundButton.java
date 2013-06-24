@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
@@ -128,8 +129,8 @@ public class SoundButton extends PowerButton {
     }
 
     private void updateSettings(ContentResolver resolver) {
-        String[] modes = parseStoredValue(Settings.System.getString(
-                resolver, Settings.System.EXPANDED_RING_MODE));
+        String[] modes = parseStoredValue(Settings.System.getStringForUser(
+                resolver, Settings.System.EXPANDED_RING_MODE, UserHandle.USER_CURRENT));
         if (modes == null || modes.length == 0) {
             mRingerValues = new int[] {
                     0, 1, 2, 3
@@ -146,8 +147,8 @@ public class SoundButton extends PowerButton {
         ensureAudioManager(context);
 
             ContentResolver resolver = context.getContentResolver();
-            boolean vibrateWhenRinging = Settings.System.getInt(resolver,
-                    Settings.System.VIBRATE_WHEN_RINGING, 0) == 1;
+            boolean vibrateWhenRinging = Settings.System.getIntForUser(resolver,
+                    Settings.System.VIBRATE_WHEN_RINGING, 0, UserHandle.USER_CURRENT) == 1;
             int ringerMode = mAudioManager.getRingerMode();
             Ringer ringer = new Ringer(ringerMode, vibrateWhenRinging);
             for (int i = 0; i < mRingers.length; i++) {
@@ -183,8 +184,8 @@ public class SoundButton extends PowerButton {
 
             // Set the desired state
             ContentResolver resolver = context.getContentResolver();
-            Settings.System.putInt(resolver, Settings.System.VIBRATE_WHEN_RINGING,
-                    (mVibrateWhenRinging ? 1 : 0));
+            Settings.System.putIntForUser(resolver, Settings.System.VIBRATE_WHEN_RINGING,
+                    (mVibrateWhenRinging ? 1 : 0), UserHandle.USER_CURRENT);
             mAudioManager.setRingerMode(mRingerMode);
         }
 

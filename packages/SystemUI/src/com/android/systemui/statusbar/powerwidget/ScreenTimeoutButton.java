@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
@@ -98,9 +99,9 @@ public class ScreenTimeoutButton extends PowerButton {
             screenTimeout = SCREEN_TIMEOUT_MIN;
         }
 
-        Settings.System.putInt(
+        Settings.System.putIntForUser(
                 context.getContentResolver(),
-                Settings.System.SCREEN_OFF_TIMEOUT, screenTimeout);
+                Settings.System.SCREEN_OFF_TIMEOUT, screenTimeout, UserHandle.USER_CURRENT);
 
         // cancel any previous toast
         if (mToast != null) {
@@ -160,15 +161,15 @@ public class ScreenTimeoutButton extends PowerButton {
     }
 
     private static int getScreenTimeout(Context context) {
-        return Settings.System.getInt(
+        return Settings.System.getIntForUser(
                 context.getContentResolver(),
-                Settings.System.SCREEN_OFF_TIMEOUT, 0);
+                Settings.System.SCREEN_OFF_TIMEOUT, 0, UserHandle.USER_CURRENT);
     }
 
     private static int getCurrentCMMode(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
+        return Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.EXPANDED_SCREENTIMEOUT_MODE,
-                CM_MODE_15_60_300);
+                CM_MODE_15_60_300, UserHandle.USER_CURRENT);
     }
 }
 
