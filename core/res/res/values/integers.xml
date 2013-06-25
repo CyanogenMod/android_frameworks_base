@@ -21,4 +21,7 @@
     <integer name="kg_security_flip_duration">100</integer>
     <integer name="kg_security_fade_duration">100</integer>
     <integer name="kg_glowpad_rotation_offset">0</integer>
+
+    <!-- Minimum prediction score required to pass a gesture as recognized -->
+    <integer name="min_gesture_prediction_score">2</integer>
 </resources>

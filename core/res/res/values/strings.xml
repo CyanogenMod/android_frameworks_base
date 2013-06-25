@@ -2160,6 +2160,12 @@
     <string name="lockscreen_pattern_wrong">Try again</string>
     <!-- On the unlock password screen, shown when the user enters the wrong lock password and must try again. -->
     <string name="lockscreen_password_wrong">Try again</string>
+    <!-- On the unlock gesture screen, shown at the top of the unlock screen to tell the user what to do. Below this text is the place for the user to draw the gesture. -->
+    <string name="lockscreen_gesture_instructions">Draw gesture to unlock</string>
+    <!-- Shown to confirm that the user entered their lock gesture correctly. -->
+    <string name="lockscreen_gesture_correct">Correct!</string>
+    <!-- On the unlock gesture screen, shown when the user enters the wrong lock gesture and must try again. -->
+    <string name="lockscreen_gesture_wrong">Try again</string>
     <!-- Shown when face unlock failed multiple times so we're just using the backup -->
     <string name="faceunlock_multiple_failures">Maximum Face Unlock attempts exceeded</string>
 
@@ -2371,6 +2377,8 @@
     <string name="keyguard_accessibility_slide_unlock">Slide unlock.</string>
     <!-- Accessibility description of the pattern unlock. [CHAR_LIMIT=none] -->
     <string name="keyguard_accessibility_pattern_unlock">Pattern unlock.</string>
+    <!-- Accessibility description of the gesture unlock. [CHAR_LIMIT=none] -->
+    <string name="keyguard_accessibility_gesture_unlock">Gesture unlock.</string>
     <!-- Accessibility description of the face unlock. [CHAR_LIMIT=none] -->
     <string name="keyguard_accessibility_face_unlock">Face unlock.</string>
     <!-- Accessibility description of the pin lock. [CHAR_LIMIT=none] -->
@@ -2379,6 +2387,8 @@
     <string name="keyguard_accessibility_password_unlock">Password unlock.</string>
     <!-- Accessibility description of the unlock pattern area. [CHAR_LIMIT=none] -->
     <string name="keyguard_accessibility_pattern_area">Pattern area.</string>
+    <!-- Accessibility description of the unlock gesture area. [CHAR_LIMIT=none] -->
+    <string name="keyguard_accessibility_gesture_area">Gesture area.</string>
     <!-- Accessibility description of the unlock slide area. [CHAR_LIMIT=none] -->
     <string name="keyguard_accessibility_slide_area">Slide area.</string>
 
@@ -3983,6 +3993,10 @@
     <string name="kg_forgot_pattern_button_text">Forgot Pattern</string>
     <!-- Message shown when user enters wrong pattern -->
     <string name="kg_wrong_pattern">Wrong Pattern</string>
+    <!-- Message shown in gesture unlock after some number of unsuccessful attempts -->
+    <string name="kg_forgot_gesture_button_text">Forgot Gesture</string>
+    <!-- Message shown when user enters wrong pattern -->
+    <string name="kg_wrong_gesture">Wrong Gesture</string>
     <!-- Message shown when user enters wrong password -->
     <string name="kg_wrong_password">Wrong Password</string>
     <!-- Message shown when user enters wrong PIN -->
@@ -3991,6 +4005,8 @@
     <string name="kg_too_many_failed_attempts_countdown">Try again in <xliff:g id="number">%d</xliff:g> seconds.</string>
     <!-- Instructions for using the pattern unlock screen -->
     <string name="kg_pattern_instructions">Draw your pattern</string>
+    <!-- Instructions for using the gesture unlock screen -->
+    <string name="kg_gesture_instructions">Draw your gesture</string>
     <!-- Instructions for using the SIM PIN unlock screen -->
     <string name="kg_sim_pin_instructions">Enter SIM PIN</string>
     <!-- Instructions for using the PIN unlock screen -->
@@ -4043,6 +4059,10 @@
     </string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message">
         You have incorrectly drawn your unlock pattern <xliff:g id="number">%d</xliff:g> times.
+        \n\nTry again in <xliff:g id="number">%d</xliff:g> seconds.
+    </string>
+    <string name="kg_too_many_failed_gesture_attempts_dialog_message">
+        You have incorrectly drawn your unlock gesture <xliff:g id="number">%d</xliff:g> times.
         \n\nTry again in <xliff:g id="number">%d</xliff:g> seconds.
     </string>
     <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. -->
