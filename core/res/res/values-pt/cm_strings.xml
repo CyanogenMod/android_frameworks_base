@@ -53,4 +53,8 @@
     <string name="permlab_fm_radio_transmitter">controlar transmissor FM</string>
     <string name="permdesc_fm_radio_transmitter">Permite que o aplicativo controle o transmissor FM</string>
     <string name="stylus_app_not_installed">%s não está instalado</string>
+    <string name="permlab_changePrivacyGuardState">ativar ou desativar proteção à privacidade</string>
+    <string name="permdesc_changePrivacyGuardState">Permite ao aplicativo alterar se outra aplicação executa com Proteção à Privacidade. Quando um aplicativo estiver executando com Proteção à Privacidade, ela será capaz de acessar dados pessoais como contatos, registro de chamadas, ou mensagens.</string>
+    <string name="privacy_guard_notification">Proteção à Privacidade ativa</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s</xliff:g> não será capaz de acessar dados pessoais</string>
 </resources>
