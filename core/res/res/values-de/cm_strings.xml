@@ -54,4 +54,8 @@
     <string name="toast_rotation_unlocked">Bildschirmausrichtung sperren</string>
     <string name="toast_rotation_locked">Bildschirmausrichtung entsperren</string>
     <string name="stylus_app_not_installed">%s ist nicht installiert</string>
+    <string name="permlab_changePrivacyGuardState">Privatsphären-Schutz aktivieren oder deaktivieren</string>
+    <string name="permdesc_changePrivacyGuardState">Ermöglicht der App, den Privatsphären-Schutz für andere Apps zu aktivieren oder deaktivieren. Wenn eine App mit Privatsphären-Schutz läuft, hat sie keinen Zugriff auf persönliche Daten wie Kontakte, Nachrichten oder das Anrufprotokoll.</string>
+    <string name="privacy_guard_notification">Privatsphären-Schutz aktiv</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> hat keinen Zugriff auf persönliche Daten</string>
 </resources>
