@@ -54,4 +54,10 @@
     <string name="toast_rotation_unlocked">Rotation de l\'écran déverrouillée</string>
     <string name="toast_rotation_locked">Rotation de l\'écran verrouillée</string>
     <string name="stylus_app_not_installed">%s n\'est pas installé</string>
+    <string name="permlab_changePrivacyGuardState">active ou désactive la protection des données</string>
+    <string name="permdesc_changePrivacyGuardState">Permet à l\'application d\'en exécuter une autre avec la protection des données. Lorsqu\'une application est exécutée avec la protection des données, elle n\'aura pas accès aux données personnelles telles que les contacts, les journaux d\'appels ou les messages.</string>
+    <string name="privacy_guard_notification">Protection des données activée</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne sera pas en mesure d\'accéder aux données personnelles</string>
+    <string name="profile_picker_title">Profils</string>
+    <string name="profile_none">Aucun</string>
 </resources>
