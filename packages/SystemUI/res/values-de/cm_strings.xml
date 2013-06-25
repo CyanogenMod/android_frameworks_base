@@ -50,6 +50,8 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE aus</string>
     <string name="quick_settings_volume">Lautstärke</string>
+    <string name="quick_settings_camera_label">Kamera</string>
+    <string name="quick_settings_camera_error_connect">Keine Verbindung zur Kamera möglich</string>
     <string name="accessibility_quick_settings_ringer">Klingelton <xliff:g id="state">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state">%s</xliff:g>.</string>
     <string name="navbar_dialog_title">Funktion zuweisen</string>

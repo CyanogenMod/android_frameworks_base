@@ -54,4 +54,12 @@
     <string name="toast_rotation_unlocked">Bildschirmausrichtung sperren</string>
     <string name="toast_rotation_locked">Bildschirmausrichtung entsperren</string>
     <string name="stylus_app_not_installed">%s ist nicht installiert</string>
+    <string name="permlab_changePrivacyGuardState">Datenschutz aktivieren oder deaktivieren</string>
+    <string name="permdesc_changePrivacyGuardState">Ermöglicht der App, den Datenschutz für andere Apps zu aktivieren oder deaktivieren. Eine App mit aktiviertem Datenschutz hat keinen Zugriff auf persönliche Daten wie Kontakte, Nachrichten oder das Anrufprotokoll.</string>
+    <string name="privacy_guard_notification">Datenschutz aktiv</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> hat keinen Zugriff auf persönliche Daten</string>
+    <string name="profile_picker_title">Profil</string>
+    <string name="profile_none">Kein Profil</string>
+    <string name="permlab_interceptSmsSent">verschickte SMS abfangen</string>
+    <string name="permdesc_interceptSmsSent">Ermöglicht der App, verschickte SMS abzufangen. Schädliche Apps können so das Versenden von SMS verhindern.</string>
 </resources>
