@@ -54,4 +54,8 @@
     <string name="toast_rotation_unlocked">Rotación de pantalla desbloqueada</string>
     <string name="toast_rotation_locked">Rotación de pantalla bloqueada</string>
     <string name="stylus_app_not_installed">%s no está instalada</string>
+    <string name="permlab_changePrivacyGuardState">habilitar o deshabilitar la privacidad</string>
+    <string name="permdesc_changePrivacyGuardState">Permite que una aplicación cambie el estado de privacidad de otra. Cuando una aplicación se ejecuta con la privacidad habilitada, no podrá acceder a los datos personales, tales como contactos, mensajes o registros de llamadas.</string>
+    <string name="privacy_guard_notification">Privacidad activada</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> no podrá acceder a los datos personales</string>
 </resources>
