@@ -97,6 +97,12 @@ public class GlowPadView extends View {
      */
     public final static String EMPTY_TARGET = "empty";
 
+    /**
+     * Target used to toggle ringer mode
+     * @hide
+     */
+    public final static String TOGGLE_RINGER_TARGET = "toggle_ringer";
+
     // Animation properties.
     private static final float SNAP_MARGIN_DEFAULT = 20.0f; // distance to ring before we snap to it
 
@@ -112,7 +118,6 @@ public class GlowPadView extends View {
 
     // Tuneable parameters for animation
     private static final int WAVE_ANIMATION_DURATION = 1350;
-    private static final int RETURN_TO_HOME_DELAY = 1200;
     private static final int RETURN_TO_HOME_DURATION = 200;
     private static final int HIDE_ANIMATION_DELAY = 200;
     private static final int HIDE_ANIMATION_DURATION = 200;
@@ -502,7 +507,7 @@ public class GlowPadView extends View {
             highlightSelected(activeTarget);
 
             // Inform listener of any active targets.  Typically only one will be active.
-            hideGlow(RETURN_TO_HOME_DURATION, RETURN_TO_HOME_DELAY, 0.0f, mResetListener);
+            hideGlow(RETURN_TO_HOME_DURATION, 0, 0.0f, mResetListener);
             dispatchTriggerEvent(activeTarget);
             if (!mAlwaysTrackFinger) {
                 // Force ring and targets to finish animation to final expanded state

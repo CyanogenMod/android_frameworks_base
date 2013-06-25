@@ -46,6 +46,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.media.AudioManager;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -121,11 +122,26 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                         if (mStoredTargets[target].equals(GlowPadView.EMPTY_TARGET)) {
                             mCallback.dismiss(false);
                         } else {
-                            try {
-                                Intent launchIntent = Intent.parseUri(mStoredTargets[target], 0);
-                                mActivityLauncher.launchActivity(launchIntent, false, true, null, null);
-                                return;
-                            } catch (URISyntaxException e) {
+                            if (mStoredTargets[target].equals(GlowPadView.TOGGLE_RINGER_TARGET)) {
+                                AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+                                if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                    final boolean vibe = (Settings.System.getInt(
+                                        mContext.getContentResolver(),
+                                        Settings.System.VIBRATE_IN_SILENT, 1) == 1);
+                                    audioManager.setRingerMode(vibe
+                                        ? AudioManager.RINGER_MODE_VIBRATE
+                                        : AudioManager.RINGER_MODE_SILENT);
+                                } else {
+                                    audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                                }
+                                updateResources();
+                            } else {
+                                try {
+                                    Intent launchIntent = Intent.parseUri(mStoredTargets[target], 0);
+                                    mActivityLauncher.launchActivity(launchIntent, false, true, null, null);
+                                    return;
+                                } catch (URISyntaxException e) {
+                                }
                             }
                         }
                     }
@@ -348,66 +364,83 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                     String uri = mStoredTargets[i];
                     if (!uri.equals(GlowPadView.EMPTY_TARGET)) {
                         try {
-                            Intent in = Intent.parseUri(uri,0);
                             Drawable front = null;
                             Drawable back = activeBack;
                             boolean frontBlank = false;
-                            if (in.hasExtra(GlowPadView.ICON_FILE)) {
-                                String fSource = in.getStringExtra(GlowPadView.ICON_FILE);
-                                if (fSource != null) {
-                                    File fPath = new File(fSource);
-                                    if (fPath.exists()) {
-                                        front = new BitmapDrawable(res, getRoundedCornerBitmap(BitmapFactory.decodeFile(fSource)));
-                                        tmpInset = tmpInset + 5;
-                                    }
+                            if (uri.equals(GlowPadView.TOGGLE_RINGER_TARGET)) {
+                                String iconResource = "ic_lockscreen";
+                                AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+                                if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                                    iconResource = iconResource.concat("_silence");
+                                } else {
+                                    iconResource = iconResource.concat("_speaker");
                                 }
-                            } else if (in.hasExtra(GlowPadView.ICON_RESOURCE)) {
-                                String rSource = in.getStringExtra(GlowPadView.ICON_RESOURCE);
-                                String rPackage = in.getStringExtra(GlowPadView.ICON_PACKAGE);
-                                if (rSource != null) {
-                                    if (rPackage != null) {
-                                        try {
-                                            Context rContext = mContext.createPackageContext(rPackage, 0);
-                                            int id = rContext.getResources().getIdentifier(rSource, "drawable", rPackage);
-                                            front = rContext.getResources().getDrawable(id);
-                                            id = rContext.getResources().getIdentifier(rSource.replaceAll("_normal", "_activated"),
-                                                    "drawable", rPackage);
-                                            back = rContext.getResources().getDrawable(id);
+                                front = res.getDrawable(res.getIdentifier(
+                                    new StringBuilder().append(iconResource).append("_normal").toString(), "drawable", "android"));
+                                back = res.getDrawable(res.getIdentifier(
+                                    new StringBuilder().append(iconResource).append("_activated").toString(), "drawable", "android"));
+                                tmpInset = 0;
+                                frontBlank = true;
+                                storedDraw.add(new TargetDrawable(res, getLayeredDrawable(back, front, tmpInset, frontBlank)));
+                            } else {
+                                Intent in = Intent.parseUri(uri,0);
+                                if (in.hasExtra(GlowPadView.ICON_FILE)) {
+                                    String fSource = in.getStringExtra(GlowPadView.ICON_FILE);
+                                    if (fSource != null) {
+                                        File fPath = new File(fSource);
+                                        if (fPath.exists()) {
+                                            front = new BitmapDrawable(res, getRoundedCornerBitmap(BitmapFactory.decodeFile(fSource)));
+                                            tmpInset = tmpInset + 5;
+                                        }
+                                    }
+                                } else if (in.hasExtra(GlowPadView.ICON_RESOURCE)) {
+                                    String rSource = in.getStringExtra(GlowPadView.ICON_RESOURCE);
+                                    String rPackage = in.getStringExtra(GlowPadView.ICON_PACKAGE);
+                                    if (rSource != null) {
+                                        if (rPackage != null) {
+                                            try {
+                                                Context rContext = mContext.createPackageContext(rPackage, 0);
+                                                int id = rContext.getResources().getIdentifier(rSource, "drawable", rPackage);
+                                                front = rContext.getResources().getDrawable(id);
+                                                id = rContext.getResources().getIdentifier(rSource.replaceAll("_normal", "_activated"),
+                                                        "drawable", rPackage);
+                                                back = rContext.getResources().getDrawable(id);
+                                                tmpInset = 0;
+                                                frontBlank = true;
+                                            } catch (NameNotFoundException e) {
+                                                e.printStackTrace();
+                                            } catch (NotFoundException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            front = res.getDrawable(res.getIdentifier(rSource, "drawable", "android"));
+                                            back = res.getDrawable(res.getIdentifier(
+                                                    rSource.replaceAll("_normal", "_activated"), "drawable", "android"));
                                             tmpInset = 0;
                                             frontBlank = true;
-                                        } catch (NameNotFoundException e) {
-                                            e.printStackTrace();
-                                        } catch (NotFoundException e) {
-                                            e.printStackTrace();
                                         }
-                                    } else {
-                                        front = res.getDrawable(res.getIdentifier(rSource, "drawable", "android"));
-                                        back = res.getDrawable(res.getIdentifier(
-                                                rSource.replaceAll("_normal", "_activated"), "drawable", "android"));
-                                        tmpInset = 0;
-                                        frontBlank = true;
                                     }
                                 }
-                            }
-                            if (front == null || back == null) {
-                                ActivityInfo aInfo = in.resolveActivityInfo(packMan, PackageManager.GET_ACTIVITIES);
-                                if (aInfo != null) {
-                                    front = aInfo.loadIcon(packMan);
-                                } else {
-                                    front = res.getDrawable(android.R.drawable.sym_def_app_icon);
+                                if (front == null || back == null) {
+                                    ActivityInfo aInfo = in.resolveActivityInfo(packMan, PackageManager.GET_ACTIVITIES);
+                                    if (aInfo != null) {
+                                        front = aInfo.loadIcon(packMan);
+                                    } else {
+                                        front = res.getDrawable(android.R.drawable.sym_def_app_icon);
+                                    }
                                 }
-                            }
-                            TargetDrawable nDrawable = new TargetDrawable(res, getLayeredDrawable(back,front, tmpInset, frontBlank));
-                            ComponentName compName = in.getComponent();
-                            if (compName != null) {
-                                String cls = compName.getClassName();
-                                if (cls.equals("com.android.camera.CameraLauncher")) {
-                                    nDrawable.setEnabled(!mCameraDisabled);
-                                } else if (cls.equals("SearchActivity")) {
-                                    nDrawable.setEnabled(!mSearchDisabled);
+                                TargetDrawable nDrawable = new TargetDrawable(res, getLayeredDrawable(back,front, tmpInset, frontBlank));
+                                ComponentName compName = in.getComponent();
+                                if (compName != null) {
+                                    String cls = compName.getClassName();
+                                    if (cls.equals("com.android.camera.CameraLauncher")) {
+                                        nDrawable.setEnabled(!mCameraDisabled);
+                                    } else if (cls.equals("SearchActivity")) {
+                                        nDrawable.setEnabled(!mSearchDisabled);
+                                    }
                                 }
+                                storedDraw.add(nDrawable);
                             }
-                            storedDraw.add(nDrawable);
                         } catch (Exception e) {
                             storedDraw.add(new TargetDrawable(res, 0));
                         }
