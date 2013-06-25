@@ -283,7 +283,7 @@ public class NavbarEditor implements View.OnTouchListener {
     protected void saveKeys() {
         ButtonInfo[] buttons = new ButtonInfo[NavigationButtons.SLOT_COUNT];
         for (int i = 0; i < NavigationButtons.SLOT_COUNT; i++) {
-            int idIndex = mVertical ? NavigationButtons.SLOT_COUNT - i : i;
+            int idIndex = mVertical ? NavigationButtons.SLOT_COUNT - i - 1 : i;
             buttons[i] = (ButtonInfo) mButtonViews.get(idIndex).getTag();
         }
         NavigationButtons.storeButtonMap(mContext, buttons);
@@ -299,7 +299,7 @@ public class NavbarEditor implements View.OnTouchListener {
 
         for (int i = 0; i < buttons.length; i++) {
             int id = BUTTON_IDS[i];
-            ButtonInfo info = buttons[i];
+            ButtonInfo info = buttons[mVertical ? buttons.length - i - 1 : i];
             KeyButtonView button = (KeyButtonView) mParent.findViewById(id);
             boolean isSmallButton = NavigationButtons.IS_SLOT_SMALL[i];
 
