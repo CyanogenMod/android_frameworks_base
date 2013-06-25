@@ -17,9 +17,11 @@
 
 package com.android.server.location;
 
+import android.app.AppGlobals;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
@@ -84,6 +86,14 @@ public final class LocationBlacklist extends ContentObserver {
      */
     public boolean isBlacklisted(String packageName) {
         synchronized (mLock) {
+            try {
+                if (AppGlobals.getPackageManager().getPrivacyGuardSetting(packageName, mCurrentUserId)) {
+                    Log.d(TAG, "dropping location due to privacy guard package=" + packageName);
+                    return true;
+                }
+            } catch (RemoteException e) {
+                // nothing
+            }
             for (String black : mBlacklist) {
                 if (packageName.startsWith(black)) {
                     if (inWhitelist(packageName)) {
