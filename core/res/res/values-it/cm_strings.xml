@@ -54,4 +54,10 @@
     <string name="permlab_fm_radio_transmitter">controllo del trasmettitore FM</string>
     <string name="permdesc_fm_radio_transmitter">Consente all\'applicazione di controllare il trasmettitore FM.</string>
     <string name="stylus_app_not_installed">%s non è installato</string>
+    <string name="permlab_changePrivacyGuardState">abilita o disabilita Privacy Guard</string>
+    <string name="permdesc_changePrivacyGuardState">Consente all\'applicazione di decidere se un\'altra applicazione viene eseguita con Privacy Guard. Quando un\'applicazione viene eseguita con Privacy Guard, non ha accesso a dati personali come contatti, lista chiamate o messaggi.</string>
+    <string name="privacy_guard_notification">Privacy Guard attiva</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> non sarà in grado di accedere ai dati personali</string>
+    <string name="profile_picker_title">Profili</string>
+    <string name="profile_none">Nessuno</string>
 </resources>
