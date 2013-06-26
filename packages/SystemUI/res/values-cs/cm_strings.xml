@@ -47,8 +47,10 @@
     <string name="quick_settings_quiethours_off">Čas klidu vyp.</string>
     <string name="quick_settings_lte_off">LTE vyp.</string>
     <string name="quick_settings_volume">Hlasitost</string>
+    <string name="quick_settings_camera_label">Fotoaparát</string>
     <string name="quick_settings_expanded_desktop">Rozšířený</string>
     <string name="quick_settings_expanded_desktop_off">Normální</string>
+    <string name="quick_settings_camera_error_connect">Fotoaparát nelze spustit</string>
     <string name="navbar_dialog_title">Vybrat akci k přiřazení</string>
     <string name="navbar_home_button">Tlačítko Domů</string>
     <string name="navbar_recent_button">Tlačítko Nedávné</string>
