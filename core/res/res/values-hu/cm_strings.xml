@@ -54,4 +54,10 @@
     <string name="toast_rotation_unlocked">Képernyő elforgatás engedélyezve</string>
     <string name="toast_rotation_locked">Képernyő elforgatás letiltva</string>
     <string name="stylus_app_not_installed">%s nincs telepítve</string>
+    <string name="permlab_changePrivacyGuardState">adatvédelem engedélyezése vagy tiltása</string>
+    <string name="permdesc_changePrivacyGuardState">Lehetővé teszi, hogy más alkalmazások számára engedélyezze, vagy letiltsa az adatvédelmet. Amikor az alkalmazás adatvédelmi módban fut, nem fog hozzáférni az Ön személyes adataihoz, mint a névjegyzékéhez, üzeneteihez, vagy a hívásnaplójához.</string>
+    <string name="privacy_guard_notification">Adatvédelem aktív</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nem fog hozzáférni a személyes adataihoz</string>
+    <string name="profile_picker_title">Profilok</string>
+    <string name="profile_none">Nincs</string>
 </resources>
