@@ -65,4 +65,11 @@
     <string name="pie_phone_status_emergency_only">Somente chamadas de emergência</string>
     <string name="pie_battery_status_discharging"><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g>%% restando</string>
     <string name="quick_settings_expanded_desktop">Expandida</string>
+    <string name="quick_settings_camera_label">Câmera</string>
+    <string name="quick_settings_camera_error_connect">Não foi possível conectar à câmera</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_volume">Volume</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
 </resources>
