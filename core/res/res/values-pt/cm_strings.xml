@@ -57,4 +57,6 @@
     <string name="permdesc_changePrivacyGuardState">Permite ao aplicativo alterar se outra aplicação executa com Proteção à Privacidade. Quando um aplicativo estiver executando com Proteção à Privacidade, ela será capaz de acessar dados pessoais como contatos, registro de chamadas, ou mensagens.</string>
     <string name="privacy_guard_notification">Proteção à Privacidade ativa</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s</xliff:g> não será capaz de acessar dados pessoais</string>
+    <string name="profile_picker_title">Perfis</string>
+    <string name="profile_none">Nenhum</string>
 </resources>
