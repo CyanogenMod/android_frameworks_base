@@ -51,4 +51,10 @@
     <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в режиме инкогнито. Когда приложение запущено в режиме инкогнито, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
     <string name="privacy_guard_notification">Режим инкогнито активен</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> не сможет получать доступ к персональным данным</string>
+
+    <!-- The title of the profile picker dialog. -->
+    <string name="profile_picker_title">Профили</string>
+
+    <!-- The item label for the no profile selection item. -->
+    <string name="profile_none">Не выбран</string>
 </resources>

@@ -47,6 +47,7 @@
     <string name="quick_settings_quiethours_off">Тихие часы выкл.</string>
     <string name="quick_settings_lte_off">LTE выкл.</string>
     <string name="quick_settings_volume">Громкость</string>
+    <string name="quick_settings_camera_label">Камера</string>
     <string name="quick_settings_expanded_desktop">Расширенный</string>
     <string name="quick_settings_expanded_desktop_off">Обычный</string>
     <string name="navbar_dialog_title">Выберите действие</string>
@@ -64,4 +65,7 @@
     <string name="pie_phone_status_no_service">Нет сети</string>
     <string name="pie_phone_status_airplane_mode">Режим полёта</string>
     <string name="pie_phone_status_emergency_only">Только экстренный вызов</string>
+
+    <!-- Camera tile toasts -->
+    <string name="quick_settings_camera_error_connect">Не удаётся подключиться к камере</string>
 </resources>
