@@ -375,14 +375,37 @@ public class AssetRedirectionManagerService extends IAssetRedirectionManager.Stu
             }
         }
 
+        /* Limit themeability to well-known visual resource types. Strings, booleans, integers,
+           and other resource types are very likely to be internal to applications or the system,
+           and should not be overridden */
+
+        private boolean checkAllowedResType(String name) {
+            String allowedResourceTypes[] = { "color", "dimen", "drawable", "mipmap", "style" };
+
+            for (String resType : allowedResourceTypes) {
+                if (name.startsWith(resType)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void processItemTag() throws XmlPullParserException, IOException {
             XmlPullParser parser = mParser;
             String fromName = parser.getAttributeValue(null, "name");
+
             if (TextUtils.isEmpty(fromName)) {
                 Log.w(TAG, "Missing android:name attribute on <item> tag at " + getResourceLabel() + " " +
                         parser.getPositionDescription());
                 return;
             }
+
+            if (!checkAllowedResType(fromName)) {
+                Log.w(TAG, "Attempting to redirect unauthorized resource " + fromName + " at " + getResourceLabel() + " " +
+                        parser.getPositionDescription());
+                return;
+            }
+
             String toName = parser.nextText();
             if (TextUtils.isEmpty(toName)) {
                 Log.w(TAG, "Missing <item> text at " + getResourceLabel() + " " +
