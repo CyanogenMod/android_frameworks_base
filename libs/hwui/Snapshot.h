@@ -104,6 +104,18 @@ public:
      */
     const Rect& getLocalClip();
 
+#ifdef QCOM_HARDWARE
+    /**
+     * Sets the current tile clip.
+     */
+    void setTileClip(float left, float top, float right, float bottom);
+
+    /**
+     * Returns the current tile clip in local coordinates.
+     */
+    const Rect& getTileClip();
+#endif
+
     /**
      * Resets the clip to the specified rect.
      */
@@ -233,6 +245,9 @@ private:
     mat4 mTransformRoot;
     Rect mClipRectRoot;
     Rect mLocalClip;
+#ifdef QCOM_HARDWARE
+    Rect mTileClip;
+#endif
 
 #if STENCIL_BUFFER_SIZE
     SkRegion mClipRegionRoot;
