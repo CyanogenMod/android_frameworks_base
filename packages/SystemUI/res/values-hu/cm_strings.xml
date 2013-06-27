@@ -50,7 +50,9 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE ki</string>
     <string name="quick_settings_volume">Hangerő</string>
+    <string name="quick_settings_camera_label">Kamera</string>
     <string name="quick_settings_expanded_desktop">Kiterjesztett</string>
+    <string name="quick_settings_camera_error_connect">Nem lehet csatlakozni a kamerához</string>
     <string name="quick_settings_expanded_desktop_off">Normál</string>
     <string name="navbar_dialog_title">Válasszon eseményt</string>
     <string name="navbar_home_button">Kezdőgomb</string>
