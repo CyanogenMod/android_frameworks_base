@@ -52,8 +52,10 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE OFF</string>
     <string name="quick_settings_volume">Volume</string>
+    <string name="quick_settings_camera_label">Fotocamera</string>
     <string name="quick_settings_expanded_desktop">Esteso</string>
     <string name="quick_settings_expanded_desktop_off">Normale</string>
+    <string name="quick_settings_camera_error_connect">Impossibile connettersi alla fotocamera</string>
     <string name="navbar_dialog_title">Azione da associare</string>
     <string name="navbar_home_button">Pulsante Home</string>
     <string name="navbar_recent_button">Pulsante Recenti</string>
