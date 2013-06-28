@@ -171,7 +171,7 @@ public class PhoneStatusBarView extends PanelBar {
         mBar.updatePieTriggerMask(PiePosition.LEFT.FLAG
                 | PiePosition.TOP.FLAG
                 | PiePosition.RIGHT.FLAG
-                | PiePosition.TOP.FLAG);
+                | PiePosition.BOTTOM.FLAG);
     }
 
     @Override
