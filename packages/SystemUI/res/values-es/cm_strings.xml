@@ -52,8 +52,10 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE</string>
     <string name="quick_settings_volume">Volumen</string>
+    <string name="quick_settings_camera_label">Cámara</string>
     <string name="quick_settings_expanded_desktop">Extendido</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_camera_error_connect">Imposible conectar con la cámara</string>
     <string name="navbar_dialog_title">Seleccionar botón a mostrar</string>
     <string name="navbar_home_button">Botón Inicio</string>
     <string name="navbar_recent_button">Botón Recientes</string>
