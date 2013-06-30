@@ -69,10 +69,32 @@ public class KeyguardDisableHandler extends Handler {
                 break;
 
             case KEYGUARD_POLICY_CHANGED:
-                mPolicy.enableKeyguard(true);
-                // lazily evaluate this next time we're asked to disable keyguard
-                mAllowDisableKeyguard = ALLOW_DISABLE_UNKNOWN;
+                if (mKeyguardTokenWatcher.isAcquired()) {
+                    updateAllowDisableState();
+                } else {
+                    // lazily evaluate this next time we're asked to disable keyguard
+                    mAllowDisableKeyguard = ALLOW_DISABLE_UNKNOWN;
+                }
+                if (mAllowDisableKeyguard != ALLOW_DISABLE_YES) {
+                    mPolicy.enableKeyguard(true);
+                }
                 break;
+        }
+    }
+
+    private void updateAllowDisableState() {
+        DevicePolicyManager dpm = (DevicePolicyManager) mContext.getSystemService(
+                Context.DEVICE_POLICY_SERVICE);
+        if (dpm != null) {
+            try {
+                int userId = ActivityManagerNative.getDefault().getCurrentUser().id;
+                int quality = dpm.getPasswordQuality(null,  userId);
+
+                mAllowDisableKeyguard = quality == DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED
+                        ? ALLOW_DISABLE_YES : ALLOW_DISABLE_NO;
+            } catch (RemoteException re) {
+                // Nothing much we can do
+            }
         }
     }
 
@@ -87,18 +109,7 @@ public class KeyguardDisableHandler extends Handler {
             // We fail safe and prevent disabling keyguard in the unlikely event this gets
             // called before DevicePolicyManagerService has started.
             if (mAllowDisableKeyguard == ALLOW_DISABLE_UNKNOWN) {
-                DevicePolicyManager dpm = (DevicePolicyManager) mContext.getSystemService(
-                        Context.DEVICE_POLICY_SERVICE);
-                if (dpm != null) {
-                    try {
-                        mAllowDisableKeyguard = dpm.getPasswordQuality(null, 
-                                ActivityManagerNative.getDefault().getCurrentUser().id)
-                                == DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED ?
-                                        ALLOW_DISABLE_YES : ALLOW_DISABLE_NO;
-                    } catch (RemoteException re) {
-                        // Nothing much we can do
-                    }
-                }
+                updateAllowDisableState();
             }
             if (mAllowDisableKeyguard == ALLOW_DISABLE_YES) {
                 mPolicy.enableKeyguard(false);
