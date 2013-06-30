@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (c) 2006, The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+-->
+<resources>
+    <!-- Margin at the edge of the screen to ignore touch events for in the windowshade. -->
+    <dimen name="status_bar_edge_ignore">5dp</dimen>
+
+    <!-- Recent Applications parameters -->
+    <!-- Upper width limit for application icon -->
+    <dimen name="status_bar_recents_app_icon_max_width">48dp</dimen>
+    <!-- Upper height limit for application icon -->
+    <dimen name="status_bar_recents_app_icon_max_height">48dp</dimen>
+
+    <!-- Size of application thumbnail -->
+    <dimen name="status_bar_recents_thumbnail_width">164dp</dimen>
+    <dimen name="status_bar_recents_thumbnail_height">145dp</dimen>
+    <dimen name="status_bar_recents_thumbnail_bg_padding">4dp</dimen>
+
+    <!-- Size of application label text -->
+    <dimen name="status_bar_recents_app_label_text_size">14dip</dimen>
+    <!-- Size of application description text -->
+    <dimen name="status_bar_recents_app_description_text_size">14dip</dimen>
+    <!-- Size of fading edge for text -->
+    <dimen name="status_bar_recents_text_fading_edge_length">20dip</dimen>
+    <!-- Size of fading edge for scrolling -->
+    <dimen name="status_bar_recents_scroll_fading_edge_length">10dip</dimen>
+    <!-- Margin between recents container and glow on the right -->
+    <dimen name="status_bar_recents_right_glow_margin">100dip</dimen>
+    <!-- How far the thumbnail for a recent app appears from left edge -->
+    <dimen name="status_bar_recents_thumbnail_left_margin">20dp</dimen>
+    <!-- Padding for text descriptions -->
+    <dimen name="status_bar_recents_text_description_padding">8dp</dimen>
+    <!-- Width of application label text -->
+    <dimen name="status_bar_recents_app_label_width">88dip</dimen>
+    <!-- Left margin of application label text -->
+    <dimen name="status_bar_recents_app_label_left_margin">0dip</dimen>
+    <!-- Padding between recents items -->
+    <dimen name="status_bar_recents_item_padding">0dip</dimen>
+    <!-- When recents first appears, how far the icon and label of the primary activity
+         travel -->
+    <dimen name="status_bar_recents_app_icon_translate_distance">35dip</dimen>
+
+    <!-- Where to place the app icon over the thumbnail -->
+    <dimen name="status_bar_recents_app_icon_left_margin">0dp</dimen>
+    <dimen name="status_bar_recents_app_icon_top_margin">8dp</dimen>
+
+    <!-- Amount to offset bottom of notification peek window from top of status bar. -->
+    <dimen name="peek_window_y_offset">-12dp</dimen>
+
+    <!-- thickness (height) of the navigation bar on phones that require it -->
+    <dimen name="navigation_bar_size">@*android:dimen/navigation_bar_height</dimen>
+
+    <!-- thickness (height) of the dead zone at the top of the navigation bar,
+         reducing false presses on navbar buttons; approx 2mm -->
+    <dimen name="navigation_bar_deadzone_size">12dp</dimen>
+    <!-- size of the dead zone when touches have recently occurred elsewhere on screen -->
+    <dimen name="navigation_bar_deadzone_size_max">32dp</dimen>
+
+    <!-- Height of notification icons in the status bar -->
+    <dimen name="status_bar_icon_size">@*android:dimen/status_bar_icon_size</dimen>
+
+    <!-- Height of a small notification in the status bar -->
+    <dimen name="notification_min_height">64dp</dimen>
+
+    <!-- Height of a large notification in the status bar -->
+    <dimen name="notification_max_height">256dp</dimen>
+
+    <!-- Height of a small notification in the status bar plus glow, padding, etc -->
+    <dimen name="notification_row_min_height">70dp</dimen>
+
+    <!-- Height of a large notification in the status bar plus glow, padding, etc -->
+    <dimen name="notification_row_max_height">260dp</dimen>
+
+    <!-- size at which Notification icons will be drawn in the status bar -->
+    <dimen name="status_bar_icon_drawing_size">18dip</dimen>
+
+    <!-- opacity at which Notification icons will be drawn in the status bar -->
+    <item type="dimen" name="status_bar_icon_drawing_alpha">65%</item>
+
+    <!-- gap on either side of status bar notification icons -->
+    <dimen name="status_bar_icon_padding">0dp</dimen>
+
+    <!-- half the distance between notifications in the panel -->
+    <dimen name="notification_divider_height">3dp</dimen>
+
+    <!-- Notification drawer tuning parameters (phone UI) -->
+    <!-- Initial velocity of the shade when expanding on its own -->
+    <dimen name="self_expand_velocity">2000dp</dimen>
+    <!-- Initial velocity of the shade when collapsing on its own -->
+    <dimen name="self_collapse_velocity">2000dp</dimen>
+    <!-- Minimum final velocity of gestures interpreted as expand requests -->
+    <dimen name="fling_expand_min_velocity">100dp</dimen>
+    <!-- Minimum final velocity of gestures interpreted as collapse requests -->
+    <dimen name="fling_collapse_min_velocity">100dp</dimen>
+    <!-- Cap on contribution of x dimension of gesture to overall velocity -->
+    <dimen name="fling_gesture_max_x_velocity">200dp</dimen>
+    <!-- Cap on overall resulting fling speed (s^-1) -->
+    <dimen name="fling_gesture_max_output_velocity">3000dp</dimen>
+
+    <!-- Minimum distance a fling must travel (anti-jitter) -->
+    <dimen name="fling_gesture_min_dist">20dp</dimen>
+
+    <!-- Minimum fraction of the display a gesture must travel, at any velocity, to qualify as a
+         collapse request -->
+    <item type="dimen" name="collapse_min_display_fraction">10%</item>
+    <!-- Minimum fraction of the display a gesture must travel to qualify as an expand request -->
+    <item type="dimen" name="expand_min_display_fraction">50%</item>
+
+    <!-- Initial acceleration of an expand animation after fling -->
+    <dimen name="expand_accel">2000dp</dimen>
+    <!-- Initial acceleration of an collapse animation after fling -->
+    <dimen name="collapse_accel">2000dp</dimen>
+
+    <!-- The padding on the global screenshot background image -->
+    <dimen name="global_screenshot_bg_padding">20dp</dimen>
+
+    <!-- The width of the view containing non-menu status bar icons -->
+    <dimen name="navigation_key_width">80dip</dimen>
+
+    <!-- The width of the view containing the menu status bar icon -->
+    <dimen name="navigation_menu_key_width">40dip</dimen>
+
+    <!-- Default distance beyond which snaps to the matching target -->
+    <dimen name="navbar_search_snap_margin">40dip</dimen>
+
+    <!-- Diameter of outer shape drawable shown in navbar search-->
+    <dimen name="navbar_search_outerring_diameter">340dp</dimen>
+
+    <!-- Diameter of outer shape drawable shown in navbar search. Should be 1/2 of above value -->
+    <dimen name="navbar_search_outerring_radius">170dp</dimen>
+
+    <!-- Threshold for swipe-up gesture to activate search dialog -->
+    <dimen name="navbar_search_up_threshhold">40dip</dimen>
+
+    <!-- Height of search panel including navigation bar height -->
+    <dimen name="navbar_search_panel_height">230dip</dimen>
+
+    <!-- Height of the draggable handle at the bottom of the phone notification panel -->
+    <dimen name="close_handle_height">36dp</dimen>
+
+    <!-- Amount of close_handle that will NOT overlap the notification list -->
+    <dimen name="close_handle_underlap">32dp</dimen>
+
+    <!-- Height of the notification panel header bar -->
+    <dimen name="notification_panel_header_height">48dp</dimen>
+
+    <!-- Height of the notification panel widget bar -->
+    <dimen name="notification_panel_widget_height">48dp</dimen>
+
+    <!-- Height of the notification panel header and widget -->
+    <dimen name="notification_panel_header_and_widget">96dp</dimen>
+
+    <!-- Extra space above the panel -->
+    <dimen name="notification_panel_padding_top">0dp</dimen>
+
+    <!-- Extra space above the clock in the panel -->
+    <dimen name="notification_panel_header_padding_top">0dp</dimen>
+
+    <!-- Layout parameters for the notification panel -->
+    <dimen name="notification_panel_margin_bottom">0dp</dimen>
+    <dimen name="notification_panel_margin_left">0dp</dimen>
+
+    <!-- Gravity for the notification & quick settings panels -->
+    <!-- 0x37 = fill_horizontal|top -->
+    <integer name="notification_panel_layout_gravity">0x37</integer>
+    <integer name="settings_panel_layout_gravity">0x37</integer>
+
+    <!-- Fraction of the status bar that, when dragged, will produce the quick settings panel
+         instead of the notification panel. See also @dimen/settings_panel_dragzone_min.
+         If zero, the settings panel will not be directly draggable from the status bar. -->
+    <item type="dimen" name="settings_panel_dragzone_fraction">0%</item>
+
+    <!-- Quick settings dragzone, if used, should be at least this big (may be zero). -->
+    <dimen name="settings_panel_dragzone_min">100dp</dimen>
+
+    <!-- Height of the carrier/wifi name label -->
+    <dimen name="carrier_label_height">24dp</dimen>
+
+    <!-- The distance you can pull a notification before it pops open -->
+    <dimen name="one_finger_pop_limit">32dp</dimen>
+
+    <!-- The fixed height of each tile -->
+    <dimen name="quick_settings_cell_height">110dp</dimen>
+
+    <!-- The padding between each tile within the QuickSettings layout -->
+    <dimen name="quick_settings_cell_gap">4dp</dimen>
+
+    <!-- Minimum fraction of the screen that should be taken up by the notification panel.
+         Not used at this screen size. -->
+    <item type="dimen" name="notification_panel_min_height_frac">0%</item>
+
+    <dimen name="blinds_pop_threshold">32dp</dimen>
+
+    <!-- The size of the gesture span needed to activate the "pull" notification expansion -->
+    <dimen name="pull_span_min">25dp</dimen>
+
+    <!-- How far to slide the panel out when you touch it -->
+    <!-- For phones, this is close_handle_height + header_height -->
+    <dimen name="peek_height">84dp</dimen>
+
+    <!-- The padding of the items of the battery cluster -->
+    <dimen name="status_bar_battery_cluster_padding">2dip</dimen>
+    <!-- The margin adjusment of the text items of the battery cluster -->
+    <dimen name="status_bar_battery_cluster_text_margin">-1dip</dimen>
+
+    <!-- ==================== pie controls ==================== -->
+    <!-- Padding between the pie controls and the screen border -->
+    <dimen name="pie_padding">16dp</dimen>
+
+    <!-- Radius of the snap points a the border of the screen -->
+    <dimen name="pie_snap_radius">30dp</dimen>
+    <!-- Stroke width of the snap points -->
+    <dimen name="pie_snap_outline">4dp</dimen>
+
+    <dimen name="pie_outline">2dp</dimen>
+    <!-- Text size of "normal" / small text on the pie control -->
+    <dimen name="pie_textsize">12sp</dimen>
+    <!-- Minimum size of imageviews placed within pie items -->
+    <dimen name="pie_item_size">30dp</dimen>
+
+    <dimen name="pie_navbar_radius">70dp</dimen>
+    <dimen name="pie_navbar_height">85dp</dimen>
+
+    <dimen name="pie_sysinfo_radius">165dp</dimen>
+    <dimen name="pie_sysinfo_height">85sp</dimen>
+</resources>

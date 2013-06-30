@@ -14,4 +14,13 @@
   public void setGlowScale(float);
 }
 
+-keep class com.android.systemui.statusbar.halo.HaloProperties {
+  public int getHaloX();
+  public int getHaloY();
+  public float getHaloContentAlpha();
+  public void setHaloX(int);
+  public void setHaloY(int);
+  public void setHaloContentAlpha(float);
+} 
+
 -keep class com.android.systemui.statusbar.tv.TvStatusBar

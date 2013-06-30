@@ -237,4 +237,7 @@
 
     <dimen name="pie_sysinfo_radius">165dp</dimen>
     <dimen name="pie_sysinfo_height">85sp</dimen>
+
+	<dimen name="halo_content_max_width">250dp</dimen>
+
 </resources>
