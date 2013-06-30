@@ -57,4 +57,9 @@
 
     <!-- The item label for the no profile selection item. -->
     <string name="profile_none">Не выбран</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_interceptSmsSent">перехват исходящих SMS</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения смогут использовать это, чтобы препятствовать отправке SMS-сообщений.</string>
 </resources>
