@@ -444,10 +444,13 @@ final class Settings {
                             final boolean installed = installUser == null
                                     || installUser.getIdentifier() == UserHandle.USER_ALL
                                     || installUser.getIdentifier() == user.id;
-                            final boolean privacyGuard = android.provider.Settings.Secure.getIntForUser(
+                            boolean privacyGuard = false;
+                            if (installUser != null) {
+                                privacyGuard = android.provider.Settings.Secure.getIntForUser(
                                     mContext.getContentResolver(),
                                     android.provider.Settings.Secure.PRIVACY_GUARD_DEFAULT,
                                     0, user.id) == 1;
+                            }
                             p.setUserState(user.id, COMPONENT_ENABLED_STATE_DEFAULT,
                                     installed,
                                     true, // stopped,
