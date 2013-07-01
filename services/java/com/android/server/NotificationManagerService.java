@@ -175,7 +175,6 @@ public class NotificationManagerService extends INotificationManager.Stub
     private boolean mQuietHoursDim = true;
 
     // Notification control database. For now just contains disabled packages.
-    private AtomicFile mPolicyFile;
 	private AtomicFile mPolicyFile, mHaloPolicyFile; 
     private HashSet<String> mBlockedPackages = new HashSet<String>();
 	private HashSet<String> mHaloBlacklist = new HashSet<String>();
