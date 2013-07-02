@@ -41,7 +41,7 @@
     <string name="reboot_confirm" product="tablet">Uw tablet wordt herstart.</string>
     <string name="reboot_confirm" product="default">Uw telefoon wordt herstart.</string>
     <string name="permlab_preventpower">aan/uit-knop beheren</string>
-    <string name="permdesc_preventpower">Hiermee kan een app het gedrag van de aan/uit-knop wijzigen</string>
+    <string name="permdesc_preventpower">Hiermee kan de app het gedrag van de aan/uit-knop wijzigen</string>
     <string name="lockscreen_discharging">Ontladen, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="app_killed_message">App afgesloten</string>
     <string name="global_action_reboot">Herstarten</string>
@@ -54,4 +54,12 @@
     <string name="permlab_fm_radio_transmitter">FM-zender beheren</string>
     <string name="permdesc_fm_radio_transmitter">Hiermee kan de app de FM-zender beheren.</string>
     <string name="stylus_app_not_installed">%s is niet geïnstalleerd</string>
+    <string name="permlab_changePrivacyGuardState">Privacybescherming in- of uitschakelen</string>
+    <string name="permdesc_changePrivacyGuardState">Hiermee kan de app bepalen of een andere app start met Privacybescherming. Als een app start met Privacybescherming, zal het geen toegang hebben tot persoonsgegevens zoals contacten, berichten of gespreksstatistieken.</string>
+    <string name="privacy_guard_notification">Privacybescherming actief</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> zal geen toegang hebben tot persoonsgegevens</string>
+    <string name="profile_picker_title">Profielen</string>
+    <string name="profile_none">Geen</string>
+    <string name="permlab_interceptSmsSent">uitgaand sms-bericht onderscheppen</string>
+    <string name="permdesc_interceptSmsSent">Hiermee kan de app een uitgaand sms-bericht onderscheppen. Schadelijke apps kunnen dit gebruiken om uitgaande sms-berichten te blokkeren.</string>
 </resources>
