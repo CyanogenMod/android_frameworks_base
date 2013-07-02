@@ -876,11 +876,10 @@ public class KeyguardViewMediator {
 
     /**
      * Given the state of the keyguard, is the input restricted?
-     * Input is restricted when the keyguard is showing, or when the keyguard
-     * was suppressed by an app that disabled the keyguard or we haven't been provisioned yet.
+     * Input is restricted when the keyguard is showing or we haven't been provisioned yet.
      */
     public boolean isInputRestricted() {
-        return mShowing || mNeedToReshowWhenReenabled || !mUpdateMonitor.isDeviceProvisioned();
+        return mShowing || !mUpdateMonitor.isDeviceProvisioned();
     }
 
     private void doKeyguardLocked() {
