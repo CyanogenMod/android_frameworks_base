@@ -1363,13 +1363,13 @@ public class NotificationManagerService extends INotificationManager.Stub
     private boolean shouldConvertSoundToVibration() {
         return Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.NOTIFICATION_CONVERT_SOUND_TO_VIBRATION,
-                1, UserHandle.USER_CURRENT) != 0;
+                1, UserHandle.USER_CURRENT_OR_SELF) != 0;
     }
 
     private boolean canVibrateDuringAlertsDisabled() {
         return Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.NOTIFICATION_VIBRATE_DURING_ALERTS_DISABLED,
-                0, UserHandle.USER_CURRENT) != 0;
+                0, UserHandle.USER_CURRENT_OR_SELF) != 0;
     }
 
     private boolean inQuietHours() {
