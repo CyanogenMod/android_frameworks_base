@@ -2297,6 +2297,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.Global.LOW_BATTERY_SOUND_TIMEOUT,
                     R.integer.def_low_battery_sound_timeout);
 
+            // Set the preferred cdma subscription source to target desired value or default
+            // value defined in CdmaSubscriptionSourceManager
+            type = SystemProperties.getInt("ro.telephony.default_cdma_sub",
+                        CdmaSubscriptionSourceManager.PREFERRED_CDMA_SUBSCRIPTION);
+            loadSetting(stmt, Settings.Global.CDMA_SUBSCRIPTION_MODE, type);
+
             // --- New global settings start here
             loadIntegerSetting(stmt, Settings.Global.TETHER_DUN_REQUIRED,
                     R.integer.def_tether_dun_required);
