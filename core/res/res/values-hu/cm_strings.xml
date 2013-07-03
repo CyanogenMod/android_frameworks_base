@@ -60,4 +60,6 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nem fog hozzáférni a személyes adataihoz</string>
     <string name="profile_picker_title">Profilok</string>
     <string name="profile_none">Nincs</string>
+    <string name="permlab_interceptSmsSent">kimenő SMS üzenetek elfogása</string>
+    <string name="permdesc_interceptSmsSent">Lehetővé teszi az alkalmazás számára, hogy elfogja a kimenő SMS üzeneteket. A rosszindulatú alkalmazások ezt felhasználhatják az SMS-küldés blokkolására.</string>
 </resources>
