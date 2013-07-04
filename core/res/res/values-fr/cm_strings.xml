@@ -60,4 +60,6 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne sera pas en mesure d\'accéder aux données personnelles</string>
     <string name="profile_picker_title">Profils</string>
     <string name="profile_none">Aucun</string>
+    <string name="permlab_interceptSmsSent">intercepte les SMS sortants</string>
+    <string name="permdesc_interceptSmsSent">Permet à l\'application d\'intercepter un SMS sortant. Des applications malveillantes peuvent utiliser cette option pour empêcher les SMS d\'être envoyés.</string>
 </resources>
