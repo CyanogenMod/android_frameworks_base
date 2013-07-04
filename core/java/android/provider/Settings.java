@@ -6947,6 +6947,15 @@ public final class Settings {
           */
         public static final String MULTI_SIM_SMS_SUBSCRIPTION = "multi_sim_sms";
 
+       /**
+          * Used to provide option to user to select subscription during send SMS.
+          * The value 1 - enable, 0 - disable
+          * @hide
+          */
+        public static final String MULTI_SIM_SMS_PROMPT = "multi_sim_sms_prompt";
+
+
+
         /** User preferred subscriptions setting.
           * This holds the details of the user selected subscription from the card and
           * the activation status. Each settings string have the coma separated values
