@@ -49,7 +49,7 @@ public class KeyButtonView extends ImageView {
 
     long mDownTime;
     int mCode;
-    boolean mIsSmall;
+    boolean mIsSmall, mSmallButtonsEmpty;
     int mTouchSlop;
     Drawable mGlowBG;
     int mGlowWidth, mGlowHeight;
@@ -213,12 +213,13 @@ public class KeyButtonView extends ImageView {
         updateVisibility();
     }
 
-    public void setInfo(NavigationButtons.ButtonInfo buttonInfo, boolean isVertical, boolean isSmall) {
+    public void setInfo(NavigationButtons.ButtonInfo buttonInfo, boolean isVertical, boolean isSmall, boolean smallButtonsEmpty) {
         final Resources res = getResources();
         final int keyDrawableResId;
 
         mCode = buttonInfo.keyCode;
         mIsSmall = isSmall;
+        mSmallButtonsEmpty = smallButtonsEmpty;
 
         setTag(buttonInfo);
         setContentDescription(res.getString(buttonInfo.contentDescription));
@@ -247,7 +248,7 @@ public class KeyButtonView extends ImageView {
 
         NavigationButtons.ButtonInfo buttonInfo = (NavigationButtons.ButtonInfo) getTag();
         if (buttonInfo == NavigationButtons.EMPTY) {
-            setVisibility(mIsSmall ? View.INVISIBLE : View.GONE);
+            setVisibility((mIsSmall && !mSmallButtonsEmpty) ? View.INVISIBLE : View.GONE);
         } else if (buttonInfo == NavigationButtons.CONDITIONAL_MENU) {
             setVisibility(View.INVISIBLE);
         }

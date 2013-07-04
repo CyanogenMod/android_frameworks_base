@@ -32,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.util.Slog;
@@ -41,6 +42,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Surface;
 import android.view.ViewGroup;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -75,6 +77,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     private OnClickListener mRecentsClickListener;
     private OnTouchListener mRecentsPreloadListener;
     private OnTouchListener mHomeSearchActionListener;
+    private OnTouchListener mHomeSearchActionWithRecentsListener;
 
     protected IStatusBarService mBarService;
     final Display mDisplay;
@@ -152,11 +155,12 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         return mInEditMode;
     }
 
-    /* package */ void setListeners(OnClickListener recentsClickListener,
-            OnTouchListener recentsPreloadListener, OnTouchListener homeSearchActionListener) {
+    /* package */ void setListeners(OnClickListener recentsClickListener, OnTouchListener recentsPreloadListener,
+            OnTouchListener homeSearchActionListener, OnTouchListener HomeSearchActionWithRecentsListener) {
         mRecentsClickListener = recentsClickListener;
         mRecentsPreloadListener = recentsPreloadListener;
         mHomeSearchActionListener = homeSearchActionListener;
+        mHomeSearchActionWithRecentsListener = HomeSearchActionWithRecentsListener;
     }
 
     private void removeButtonListeners() {
@@ -179,7 +183,11 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         }
         View homeView = mCurrentView.findViewWithTag(NavigationButtons.HOME);
         if (homeView != null) {
-            homeView.setOnTouchListener(mHomeSearchActionListener);
+            if (recentView == null) {
+                homeView.setOnTouchListener(mHomeSearchActionWithRecentsListener);
+            } else {
+                homeView.setOnTouchListener(mHomeSearchActionListener);
+            }
         }
     }
 
@@ -235,12 +243,16 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
                 if (edit) {
                     removeButtonListeners();
                     mEditBar.setEditMode(true);
+                    SystemProperties.set(ViewConfiguration.NAVBAR_HAS_MENU_KEY_PROP, "0");
                 } else {
                     if (save) {
                         mEditBar.saveKeys();
                     }
                     mEditBar.setEditMode(false);
                     updateSettings();
+                    boolean hasAlwaysMenu = (mCurrentView.findViewWithTag(NavigationButtons.ALWAYS_MENU) != null)
+                                          || (mCurrentView.findViewWithTag(NavigationButtons.MENU_BIG) != null);
+                    SystemProperties.set(ViewConfiguration.NAVBAR_HAS_MENU_KEY_PROP, hasAlwaysMenu ? "1" : "0");
                 }
             }
         }
@@ -464,6 +476,9 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         }
         mEditBar = new NavbarEditor(mCurrentView, mVertical);
         updateSettings();
+        boolean hasAlwaysMenu = (mCurrentView.findViewWithTag(NavigationButtons.ALWAYS_MENU) != null)
+                                || (mCurrentView.findViewWithTag(NavigationButtons.MENU_BIG) != null);
+        SystemProperties.set(ViewConfiguration.NAVBAR_HAS_MENU_KEY_PROP, hasAlwaysMenu ? "1" : "0");
 
         mDeadZone = (DeadZone) mCurrentView.findViewById(R.id.deadzone);
 
