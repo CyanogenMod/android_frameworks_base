@@ -106,6 +106,7 @@ import com.android.systemui.statusbar.policy.DockBatteryController;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.IntruderAlertView;
+import com.android.systemui.statusbar.policy.KeyButtonView;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
@@ -922,6 +923,43 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
     };
 
+    private final Runnable mShowRecents = new Runnable() {
+        @Override
+        public void run() {
+            toggleRecentApps();
+        }
+    };
+
+    View.OnTouchListener mHomeSearchActionWithRecentsListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (!shouldDisableNavbarGestures()) {
+                    mHandler.removeCallbacks(mShowSearchPanel);
+                    mHandler.postDelayed(mShowSearchPanel, mShowSearchHoldoff);
+                }
+            break;
+
+            case MotionEvent.ACTION_UP:
+                mHandler.removeCallbacks(mShowSearchPanel);
+                awakenDreams();
+                if (v.isPressed() && (mSearchPanelView.getVisibility() == View.VISIBLE)) {
+                    v.setPressed(false);
+                    mHandler.removeCallbacks(mShowRecents);
+                    mHandler.postDelayed(mShowRecents, 200);
+                }
+            break;
+
+            case MotionEvent.ACTION_CANCEL:
+                mHandler.removeCallbacks(mShowSearchPanel);
+                awakenDreams();
+            break;
+        }
+        return false;
+        }
+    };
+
     private void awakenDreams() {
         if (mDreamManager != null) {
             try {
@@ -934,8 +972,8 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
-        mNavigationBarView.setListeners(mRecentsClickListener,
-                mRecentsPreloadOnTouchListener, mHomeSearchActionListener);
+        mNavigationBarView.setListeners(mRecentsClickListener, mRecentsPreloadOnTouchListener,
+                mHomeSearchActionListener, mHomeSearchActionWithRecentsListener);
         updateSearchPanel();
     }
 

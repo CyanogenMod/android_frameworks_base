@@ -224,7 +224,7 @@ public class NavbarEditor implements View.OnTouchListener {
                                 KeyButtonView button = (KeyButtonView) view;
                                 ButtonInfo info = (ButtonInfo) list.getItem(which);
 
-                                button.setInfo(info, mVertical, isSmallButton);
+                                button.setInfo(info, mVertical, isSmallButton, false);
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -296,6 +296,27 @@ public class NavbarEditor implements View.OnTouchListener {
     protected void updateKeys() {
         ButtonInfo[] buttons = NavigationButtons.loadButtonMap(mContext);
         int visibleCount = 0;
+        boolean smallButtonsEmpty = !mInEditMode;
+
+        if (smallButtonsEmpty) {
+            int mainButtonsCount = 0;
+            for (int i = 0; i < buttons.length; i++) {
+                ButtonInfo info = buttons[mVertical ? buttons.length - i - 1 : i];
+                boolean isSmallButton = NavigationButtons.IS_SLOT_SMALL[i];
+                if (!info.equals(NavigationButtons.EMPTY)) {
+                    if (isSmallButton) {
+                        smallButtonsEmpty = false;
+                        break;
+                    } else {
+                        mainButtonsCount++;
+                    }
+                }
+            }
+            // only consider hiding the small buttons completely if we have 4 button mode
+            if (smallButtonsEmpty && mainButtonsCount < 4) {
+                smallButtonsEmpty = false;
+            }
+        }
 
         for (int i = 0; i < buttons.length; i++) {
             int id = BUTTON_IDS[i];
@@ -303,7 +324,7 @@ public class NavbarEditor implements View.OnTouchListener {
             KeyButtonView button = (KeyButtonView) mParent.findViewById(id);
             boolean isSmallButton = NavigationButtons.IS_SLOT_SMALL[i];
 
-            button.setInfo(info, mVertical, isSmallButton);
+            button.setInfo(info, mVertical, isSmallButton, smallButtonsEmpty);
             if (!info.equals(NavigationButtons.EMPTY) && !isSmallButton) {
                 visibleCount++;
             }

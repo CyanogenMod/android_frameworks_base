@@ -23,6 +23,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
@@ -223,6 +224,11 @@ public class ViewConfiguration {
 
     private boolean sHasPermanentMenuKey;
     private boolean sHasPermanentMenuKeySet;
+
+    /**
+     * The system property to see whether navbar has always menu key
+     */
+    public static final String NAVBAR_HAS_MENU_KEY_PROP = "sys.navbar.has_menu_key";
 
     private Context mContext;
 
@@ -683,10 +689,6 @@ public class ViewConfiguration {
      * @return true if a permanent menu key is present, false otherwise.
      */
     public boolean hasPermanentMenuKey() {
-        // Report no menu key if only soft buttons are available
-        if (!sHasPermanentMenuKey) {
-            return false;
-        }
 
         // Report no menu key if overflow button is forced to enabled
         ContentResolver res = mContext.getContentResolver();
@@ -694,6 +696,12 @@ public class ViewConfiguration {
                 Settings.System.UI_FORCE_OVERFLOW_BUTTON, 0) == 1;
         if (forceOverflowButton) {
             return false;
+        }
+
+        // Report no menu key if only soft buttons are available
+        if (!sHasPermanentMenuKey) {
+            //but check if there isn't menu on the navbar via properties
+            return SystemProperties.getInt(NAVBAR_HAS_MENU_KEY_PROP, 0) != 0;
         }
 
         // Report menu key presence based on hardware key rebinding
