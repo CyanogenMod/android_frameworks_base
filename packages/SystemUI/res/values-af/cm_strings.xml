@@ -45,6 +45,7 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE af</string>
     <string name="quick_settings_volume">Volume</string>
+    <string name="quick_settings_camera_label">Kamera</string>
     <string name="navbar_dialog_title">Kies \'n aksie om toe te ken</string>
     <string name="navbar_home_button">Tuis-knoppie</string>
     <string name="navbar_recent_button">Onlangse programme knoppie</string>
@@ -69,4 +70,5 @@
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="bean_dream_settings_cid_title">Gebruik Cid</string>
     <string name="bean_dream_settings_cid_summary">Gebruik Cid in plaas van jellybeans vir die droom agtergrond</string>
+    <string name="quick_settings_camera_error_connect">Kan nie aan Kamera konnekteer nie</string>
 </resources>

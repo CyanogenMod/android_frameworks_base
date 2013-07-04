@@ -54,4 +54,13 @@
     <string name="toast_rotation_unlocked">Skerm rotasie ontsluit</string>
     <string name="toast_rotation_locked">Skerm rotasie gesluit</string>
     <string name="stylus_app_not_installed">%s is nie geïnstalleer nie</string>
+    <string name="permlab_changePrivacyGuardState">aktiveer of deaktiveer privaatheidswag</string>
+    <string name="permdesc_changePrivacyGuardState">Laat \'n program toe om te bepaal of \'n ander program met of sonder Privaatheidswag kan loop. Wanneer Privaatheidswag geaktiveer is kan die program nie toegang kry tot persoonlike data soos kontakte, boodskappe en oproep geskiedenis nie.</string>
+    <string name="privacy_guard_notification">Privaatheidswag aktief</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> het nie toegang tot persoonlike data nie</string>
+    <string name="profile_picker_title">Profiele</string>
+    <string name="profile_none">Geen</string>
+    <string name="permlab_interceptSmsSent">onderskep uitgaande SMS</string>
+    <string name="permdesc_interceptSmsSent">Laat \'n program toe om uitgaande SMS boodskappe te onderskep. Kwaadwillige programme kan die reg misbruik om uitgaande SMS boodskappe te verhoed.</string>
+
 </resources>
