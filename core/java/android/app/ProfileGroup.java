@@ -20,6 +20,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcel;
@@ -216,6 +217,33 @@ public final class ProfileGroup implements Parcelable {
             case DEFAULT:
         }
         return notification;
+    }
+
+    private boolean validateOverrideUri(Context context, Uri uri) {
+        if (RingtoneManager.isDefault(uri)) {
+            return true;
+        }
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        boolean valid = false;
+
+        if (cursor != null) {
+            valid = cursor.moveToFirst();
+            cursor.close();
+        }
+        return valid;
+    }
+
+    void validateOverrideUris(Context context) {
+        if (!validateOverrideUri(context, mSoundOverride)) {
+            mSoundOverride = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            mSoundMode = Mode.DEFAULT;
+            mDirty = true;
+        }
+        if (!validateOverrideUri(context, mRingerOverride)) {
+            mRingerOverride = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            mRingerMode = Mode.DEFAULT;
+            mDirty = true;
+        }
     }
 
     private void silenceNotification(Notification notification) {
