@@ -982,7 +982,8 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
 
         if (records != null) {
             for (UpdateRecord record : records) {
-                if (UserHandle.getUserId(record.mReceiver.mUid) == mCurrentUserId) {
+                if (UserHandle.getUserId(record.mReceiver.mUid) == mCurrentUserId &&
+                        !mBlacklist.isBlacklisted(record.mReceiver.mPackageName)) {
                     LocationRequest locationRequest = record.mRequest;
                     providerRequest.locationRequests.add(locationRequest);
                     if (locationRequest.getInterval() < providerRequest.interval) {
