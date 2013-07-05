@@ -25,6 +25,7 @@ import android.app.IProfileManager;
 import android.app.NotificationGroup;
 import android.app.Profile;
 import android.app.ProfileGroup;
+import android.app.backup.BackupManager;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,12 +35,14 @@ import android.content.res.XmlResourceParser;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiSsid;
 import android.net.wifi.WifiInfo;
+import android.os.Environment;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.os.ParcelUuid;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -70,7 +73,8 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     public static final String PERMISSION_CHANGE_SETTINGS = "android.permission.WRITE_SETTINGS";
 
-    private static final String PROFILE_FILENAME = "/data/system/profiles.xml";
+    /* package */ static final File PROFILE_FILE =
+            new File(Environment.getSystemSecureDirectory(), "profiles.xml");
 
     private static final String TAG = "ProfileService";
 
@@ -89,7 +93,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     private Context mContext;
     private boolean mDirty;
-
+    private BackupManager mBackupManager;
     private WifiManager mWifiManager;
     private String mLastConnectedSSID;
 
@@ -142,7 +146,8 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     public ProfileManagerService(Context context) {
         mContext = context;
-        mWifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
+        mBackupManager = new BackupManager(mContext);
+        mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         mLastConnectedSSID = getActiveSSID();
 
         mWildcardGroup = new NotificationGroup(
@@ -173,7 +178,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
         boolean init = skipFile;
 
-        if (! skipFile) {
+        if (!skipFile) {
             try {
                 loadFromFile();
             } catch (RemoteException e) {
@@ -498,10 +503,19 @@ public class ProfileManagerService extends IProfileManager.Stub {
         return null;
     }
 
+    // Called by SystemBackupAgent after files are restored to disk.
+    void settingsRestored() {
+        initialize();
+        for (Profile p : mProfiles.values()) {
+            p.validateRingtones(mContext);
+        }
+        persistIfDirty();
+    }
+
     private void loadFromFile() throws RemoteException, XmlPullParserException, IOException {
         XmlPullParserFactory xppf = XmlPullParserFactory.newInstance();
         XmlPullParser xpp = xppf.newPullParser();
-        FileReader fr = new FileReader(PROFILE_FILENAME);
+        FileReader fr = new FileReader(PROFILE_FILE);
         xpp.setInput(fr);
         loadXml(xpp, mContext);
         fr.close();
@@ -530,7 +544,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
                     addNotificationGroupInternal(ng);
                 }
             } else if (event == XmlPullParser.END_DOCUMENT) {
-                throw new IOException("Premature end of file while reading " + PROFILE_FILENAME);
+                throw new IOException("Premature end of file while reading " + PROFILE_FILE);
             }
             event = xpp.next();
         }
@@ -609,11 +623,15 @@ public class ProfileManagerService extends IProfileManager.Stub {
         if (dirty) {
             try {
                 Log.d(TAG, "Saving profile data...");
-                FileWriter fw = new FileWriter(PROFILE_FILENAME);
+                FileWriter fw = new FileWriter(PROFILE_FILE);
                 fw.write(getXmlString());
                 fw.close();
                 Log.d(TAG, "Save completed.");
                 mDirty = false;
+
+                long token = clearCallingIdentity();
+                mBackupManager.dataChanged();
+                restoreCallingIdentity(token);
             } catch (Throwable e) {
                 e.printStackTrace();
             }

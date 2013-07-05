@@ -614,6 +614,13 @@ public final class Profile implements Parcelable, Comparable {
     }
 
     /** @hide */
+    public void validateRingtones(Context context) {
+        for (ProfileGroup pg : profileGroups.values()) {
+            pg.validateOverrideUris(context);
+        }
+    }
+
+    /** @hide */
     public static Profile fromXml(XmlPullParser xpp, Context context)
             throws XmlPullParserException, IOException {
         String value = xpp.getAttributeValue(null, "nameres");
