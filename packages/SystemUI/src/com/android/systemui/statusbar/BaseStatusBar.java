@@ -922,7 +922,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
             if (mIntent != null) {
 
-				if (mFloat && !"android".equals(mPkg) && !"com.paranoid.halo".equals(mPkg)) {
+				if (mFloat && !"android".equals(mPkg)) {
                     Intent transparent = new Intent(mContext, com.android.systemui.Transparent.class);
                     transparent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_FLOATING_WINDOW);
                     mContext.startActivity(transparent);

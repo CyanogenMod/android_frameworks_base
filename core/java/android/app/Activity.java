@@ -5067,7 +5067,7 @@ public class Activity extends ContextThemeWrapper
 
         mFragments.attachActivity(this, mContainer, null);
         
-	boolean floating = (intent.getFlags()&Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+		boolean floating = (intent.getFlags()&Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
         if (intent != null && floating) {
             TypedArray styleArray = context.obtainStyledAttributes(info.theme, com.android.internal.R.styleable.Window);
             TypedValue backgroundValue = styleArray.peekValue(com.android.internal.R.styleable.Window_windowBackground);
@@ -5090,12 +5090,14 @@ public class Activity extends ContextThemeWrapper
             mWindow.setCloseOnTouchOutsideIfNotSet(true);
             mWindow.setGravity(Gravity.CENTER);
 
-            mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
-                    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            WindowManager.LayoutParams params = mWindow.getAttributes(); 
-            params.alpha = 1f;
-            params.dimAmount = 0.25f;
-            mWindow.setAttributes((android.view.WindowManager.LayoutParams) params);
+            if (this instanceof LayerActivity || android.os.Process.myUid() == android.os.Process.SYSTEM_UID) {
+                mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
+                        WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                WindowManager.LayoutParams params = mWindow.getAttributes();
+                params.alpha = 1f;
+                params.dimAmount = 0.25f;
+                mWindow.setAttributes((android.view.WindowManager.LayoutParams) params);
+            } 
 
             // Scale it
             scaleFloatingWindow(context);

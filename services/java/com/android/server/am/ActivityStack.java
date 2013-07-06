@@ -58,6 +58,7 @@ import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -1531,7 +1532,7 @@ final class ActivityStack {
         
         // We need to start pausing the current activity so the top one
         // can be resumed...
-        if (mResumedActivity != null && !next.floatingWindow) {
+        if (mResumedActivity != null && (pauseActiveAppWhenUsingHalo() || !next.floatingWindow)) {
             if (DEBUG_SWITCH) Slog.v(TAG, "Skip resume: need to start pausing");
             // At this point we want to put the upcoming activity's process
             // at the top of the LRU list, since we know we will be needing it
@@ -2674,9 +2675,12 @@ final class ActivityStack {
         if ((launchFlags &
                 (Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_TASK_ON_HOME))
                 == (Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_TASK_ON_HOME)) {
-            // Caller wants to appear on home activity, so before starting
-            // their own activity we will bring home to the front.
-            moveHomeToFrontLocked();
+            boolean floating = (launchFlags&Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+            if (!floating) {
+                // Caller wants to appear on home activity, so before starting
+                // their own activity we will bring home to the front.
+                moveHomeToFrontLocked();
+            } 
         }
     }
 
@@ -3282,6 +3286,12 @@ final class ActivityStack {
         try {
             synchronized (mService) {
 
+				// we must resolve if the last intent in the stack is floating to give the flag to the previous
+                boolean floating = false;
+                if (intents.length > 0) {
+                    floating = (intents[intents.length - 1].getFlags()&Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+                } 
+
                 for (int i=0; i<intents.length; i++) {
                     Intent intent = intents[i];
                     if (intent == null) {
@@ -3309,6 +3319,10 @@ final class ActivityStack {
                         throw new IllegalArgumentException(
                                 "FLAG_CANT_SAVE_STATE not supported here");
                     }
+
+					if (floating) {
+                        intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+                    } 
 
                     Bundle theseOptions;
                     if (options != null && i == intents.length-1) {
@@ -4755,6 +4769,12 @@ final class ActivityStack {
         return true;
     }
     
+	private boolean pauseActiveAppWhenUsingHalo() {
+        int isLowRAM = (ActivityManager.isLargeRAM()) ? 0 : 1;
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HALO_PAUSE, isLowRAM) == 1;
+    } 
+
     public void dismissKeyguardOnNextActivityLocked() {
         mDismissKeyguardOnNextActivity = true;
     }

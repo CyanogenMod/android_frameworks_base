@@ -32,6 +32,7 @@ import android.animation.Keyframe;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.ContentResolver;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -140,6 +141,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
     private View mRoot;
     private int mIconSize, mIconHalfSize;
     
+	private boolean mAttached = false; 
     private boolean isBeingDragged = false;
     private boolean mHapticFeedback;
     private Vibrator mVibrator;
@@ -209,6 +211,28 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         }
     }
 
+	@Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        if (!mAttached) {
+            mAttached = true;
+            mSettingsObserver = new SettingsObserver(new Handler());
+            mSettingsObserver.observe();
+            mSettingsObserver.onChange(true);
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        if (mAttached) {
+            mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
+            mAttached = false;
+        }
+    } 
+
     public Halo(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -226,10 +250,6 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         mGestureDetector = new GestureDetector(mContext, new GestureListener());
         mHandler = new Handler();
         mRoot = this;
-
-        mSettingsObserver = new SettingsObserver(new Handler());
-        mSettingsObserver.observe();
-        mSettingsObserver.onChange(true);
 
         // Init variables
         BitmapDrawable bd = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.halo_bg);
@@ -274,24 +294,40 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         mScreenWidth = mEffect.getWidth();
         mScreenHeight = mEffect.getHeight();
 
+		// Halo dock position
+        preferences = mContext.getSharedPreferences("Halo", 0);
+        int msavePositionX = preferences.getInt(KEY_HALO_POSITION_X, 0);
+        int msavePositionY = preferences.getInt(KEY_HALO_POSITION_Y, mScreenHeight / 2 - mIconHalfSize);
+
         mKillX = mScreenWidth / 2;
         mKillY = mIconHalfSize;
 
         if (!mFirstStart) {
-            if (mEffect.getHaloY() < 0) mEffect.setHaloY(0);
-            if (mEffect.getHaloY() > mScreenHeight-mIconSize) mEffect.setHaloY(mScreenHeight-mIconSize);
+            if (msavePositionY < 0) mEffect.setHaloY(0);
+            float mTmpHaloY = (float) msavePositionY / mScreenWidth * (mScreenHeight);
+            if (msavePositionY > mScreenHeight-mIconSize) {
+                mEffect.setHaloY((int)mTmpHaloY);
+            } else {
+                mEffect.setHaloY(isLandscapeMod() ? msavePositionY : (int)mTmpHaloY);
+            } 
             mEffect.nap(500);
             if (mHideTicker) mEffect.sleep(HaloEffect.SNAP_TIME + HaloEffect.NAP_TIME + 2500, HaloEffect.SLEEP_TIME);
         } else {
             // Do the startup animations only once
             mFirstStart = false;
-            updateTriggerPosition(0, mScreenHeight / 2 - mIconHalfSize);
-            mEffect.setHaloX(0);
-            mEffect.setHaloY(mScreenHeight / 2 - mIconHalfSize);
+            // Halo dock position
+            mTickerLeft = msavePositionX == 0 ? true : false;
+            updateTriggerPosition(msavePositionX, msavePositionY);
+            mEffect.setHaloX(msavePositionX);
+            mEffect.setHaloY(msavePositionY); 
             mEffect.nap(500);
             if (mHideTicker) mEffect.sleep(HaloEffect.SNAP_TIME + HaloEffect.NAP_TIME + 2500, HaloEffect.SLEEP_TIME);
         }
     }    
+
+	private boolean isLandscapeMod() {
+        return mScreenWidth < mScreenHeight;
+    }
 
     private void updateTriggerPosition(int x, int y) {
         try {
@@ -418,7 +454,11 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
     private float initialX = 0;
     private float initialY = 0;        
     private int oldIconIndex = -1;
-    private boolean hiddenState = false;
+
+	// Halo dock position
+    SharedPreferences preferences;
+    private String KEY_HALO_POSITION_Y = "halo_position_y";
+    private String KEY_HALO_POSITION_X = "halo_position_x";
 
 		@Override
 		public boolean onTouchEvent(MotionEvent event) {
@@ -468,6 +508,10 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                         return true;
                     }
                     
+					// Halo dock position
+                	float mTmpHaloY = (float) mEffect.mHaloY / mScreenHeight * mScreenWidth;
+                	preferences.edit().putInt(KEY_HALO_POSITION_X, mTickerLeft ? 0 : mScreenWidth - mIconSize).putInt(KEY_HALO_POSITION_Y, isLandscapeMod() ? mEffect.mHaloY : (int)mTmpHaloY).apply();
+
                     if (mGesture == Gesture.TASK) {
                         // Launch tasks
                         if (mTaskIntent != null) {
