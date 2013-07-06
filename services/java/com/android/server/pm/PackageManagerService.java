@@ -368,6 +368,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     final ActivityIntentResolver mReceivers =
             new ActivityIntentResolver();
 
+    final HashSet<String> mAllowances = new HashSet<String>();
+
     // All available services, for your resolving pleasure.
     final ServiceIntentResolver mServices = new ServiceIntentResolver();
 
@@ -1519,7 +1521,23 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                     perms.add(perm);
                     XmlUtils.skipCurrentTag(parser);
-
+                } else if ("allow-permission".equals(name)) {
+                    String perm = parser.getAttributeValue(null, "name");
+                    if (perm == null) {
+                        Slog.w(TAG, "<allow-permission> without name at "
+                                + parser.getPositionDescription());
+                        XmlUtils.skipCurrentTag(parser);
+                        continue;
+                    }
+                    String pkgName = parser.getAttributeValue(null, "package");
+                    if (pkgName == null) {
+                        Slog.w(TAG, "<allow-permission> without package at "
+                                + parser.getPositionDescription());
+                        XmlUtils.skipCurrentTag(parser);
+                        continue;
+                    }
+                    mAllowances.add(pkgName + ":" + perm);
+                    XmlUtils.skipCurrentTag(parser);
                 } else if ("library".equals(name)) {
                     String lname = parser.getAttributeValue(null, "name");
                     String lfile = parser.getAttributeValue(null, "file");
@@ -4879,7 +4897,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                             bp.packageSetting.signatures.mSignatures, pkg.mSignatures)
                                     == PackageManager.SIGNATURE_MATCH)
                             || (compareSignatures(mPlatformPackage.mSignatures, pkg.mSignatures)
-                                    == PackageManager.SIGNATURE_MATCH);
+                                    == PackageManager.SIGNATURE_MATCH)
+                            || mAllowances.contains(pkg.packageName + ":" + name);
                     if (!allowed && (bp.protectionLevel
                             & PermissionInfo.PROTECTION_FLAG_SYSTEM) != 0) {
                         if (isSystemApp(pkg)) {
