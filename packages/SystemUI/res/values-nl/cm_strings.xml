@@ -33,6 +33,11 @@
     <string name="quick_settings_label_disabled">Uit</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE uit</string>
+    <string name="quick_settings_volume">Volume</string>
+    <string name="quick_settings_camera_label">Camera</string>
+    <string name="quick_settings_expanded_desktop">Uitgebreid</string>
+    <string name="quick_settings_expanded_desktop_off">Normaal</string>
+    <string name="quick_settings_camera_error_connect">Kan geen verbinding maken met de camera.</string>
     <string name="quick_settings_ringer_normal">Geluid</string>
     <string name="quick_settings_lockscreen">Vergrendelscherm</string>
     <string name="quick_settings_network_type">Netwerkstand</string>
@@ -60,9 +65,6 @@
     <string name="navbar_menu_conditional_button">Menuknop (altijd verbergen)</string>
     <string name="navbar_menu_always_button">Menuknop (altijd tonen)</string>
     <string name="navbar_menu_big_button">Menuknop</string>
-    <string name="quick_settings_volume">Volume</string>
-    <string name="quick_settings_expanded_desktop">Uitgebreid</string>
-    <string name="quick_settings_expanded_desktop_off">Normaal</string>
     <string name="pie_battery_status_charging">Opladen (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">Opgeladen</string>
     <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% over</string>
