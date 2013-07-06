@@ -1583,6 +1583,10 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     void checkCallerIsSystemOrSameApp(String pkg) {
+        if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.CANCEL_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         int uid = Binder.getCallingUid();
         if (UserHandle.getAppId(uid) == Process.SYSTEM_UID || uid == 0) {
             return;
