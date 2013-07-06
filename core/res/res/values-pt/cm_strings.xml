@@ -38,7 +38,8 @@
     <string name="reboot_fastboot">Fastboot</string>
     <string name="reboot_download">Download</string>
     <string name="reboot_progress">Reiniciando\u2026</string>
-    <string name="reboot_confirm" product="default">Seu telefone vai reiniciar.</string>
+    <string name="reboot_confirm" product="tablet">Seu tablet irá reiniciar.</string>
+    <string name="reboot_confirm" product="default">Seu telefone irá reiniciar.</string>
     <string name="permlab_preventpower">substituir tecla de energia</string>
     <string name="permdesc_preventpower">Permite que o aplicativo substitua a tecla de energia</string>
     <string name="lockscreen_discharging">Descarregando, <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%%</xliff:g></string>
@@ -114,4 +115,6 @@
     <string name="symbol_picker_gt">\u2265\u00bb\u203a</string>
     <string name="permlab_interceptSmsSent">interceptar SMS enviados</string>
     <string name="permdesc_interceptSmsSent">Permite ao aplicativo interceptar um SMS enviado. Aplicativos maliciosos podem usar isso para evitar que as mensagens SMS sejam enviadas.</string>
+    <string name="permlab_cancelNotifications">cancelar notificações da aplicação</string>
+    <string name="permdesc_cancelNotifications">Permite ao aplicativo cancelar notificações criadas por outros aplicativos.</string>
 </resources>
