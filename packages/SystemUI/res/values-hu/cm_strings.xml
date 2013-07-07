@@ -69,4 +69,6 @@
     <string name="pie_phone_status_no_service">Nincs szolgáltatás</string>
     <string name="pie_phone_status_airplane_mode">Replülőgép üzemmmód</string>
     <string name="pie_phone_status_emergency_only">Csak segélyhívás</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
 </resources>
