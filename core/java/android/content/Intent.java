@@ -2293,6 +2293,25 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.action.NEW_OUTGOING_CALL";
 
     /**
+     * Broadcast Action: An outgoing sms is about to be sent.
+     *
+     * The Intent will have the following extras:
+     * destAddr - the phone number originally intended to be dialled
+     * scAddr - the service center address
+     * multipart - indicate whether this is a multipart or single message
+     * parts - ArrayList<String> of text parts (one item if multipart=false)
+     * sentIntents - ArrayList<PendingIntent> to send on send
+     * deliveryIntents - ArrayList<PendingIntent> to send on delivery
+     *
+     * Once the broadcast is finished, resultData is used as the actual
+     * number to text.
+     *
+     * @hide
+     */
+    public static final String ACTION_NEW_OUTGOING_SMS =
+            "android.intent.action.NEW_OUTGOING_SMS";
+
+    /**
      * Broadcast Action: Have the device reboot.  This is only for use by
      * system code.
      *
