@@ -62,4 +62,6 @@
     <string name="profile_none">Kein Profil</string>
     <string name="permlab_interceptSmsSent">verschickte SMS abfangen</string>
     <string name="permdesc_interceptSmsSent">Ermöglicht der App, verschickte SMS abzufangen. Schädliche Apps können so das Versenden von SMS verhindern.</string>
+    <string name="permlab_cancelNotifications">Anwendungs-Benachrichtigungen entfernen</string>
+    <string name="permdesc_cancelNotifications">Ermöglicht der App, von anderen Apps erstellte Benachrichtigungen zu entfernen.</string>
 </resources>
