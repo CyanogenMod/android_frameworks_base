@@ -1942,7 +1942,7 @@
         android:description="@string/permdesc_broadcastPackageRemoved"
         android:protectionLevel="signature" />
 
-    <!-- Allows an application to cancel notifications from other apps
+    <!-- @hide Allows an application to cancel notifications from other apps
          -->
     <permission android:name="android.permission.CANCEL_NOTIFICATIONS"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
