@@ -58,6 +58,10 @@
     <!-- The item label for the no profile selection item. -->
     <string name="profile_none">Не выбран</string>
 
+    <string name="permlab_cancelNotifications">отключать уведомления</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_cancelNotifications">Разрешить приложению отключать уведомления, созданные другими приложениями.</string>
+
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_interceptSmsSent">перехват исходящих SMS</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
