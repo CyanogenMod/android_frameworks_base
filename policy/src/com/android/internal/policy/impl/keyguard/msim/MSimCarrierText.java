@@ -34,19 +34,11 @@ import android.telephony.MSimTelephonyManager;
 
 public class MSimCarrierText extends CarrierText {
     private static final String TAG = "MSimCarrierText";
+    private CharSequence []mPlmn;
+    private CharSequence []mSpn;
+    private State []mSimState;
 
     private KeyguardUpdateMonitorCallback mMSimCallback = new KeyguardUpdateMonitorCallback() {
-        private CharSequence []mPlmn;
-        private CharSequence []mSpn;
-        private State []mSimState;
-
-        @Override
-        public void initialize() {
-            int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
-            mPlmn = new CharSequence[numPhones];
-            mSpn = new CharSequence[numPhones];
-            mSimState = new State[numPhones];
-        }
 
         @Override
         public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int sub) {
@@ -62,13 +54,20 @@ public class MSimCarrierText extends CarrierText {
         }
     };
 
+    private void initialize() {
+        int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
+        mPlmn = new CharSequence[numPhones];
+        mSpn = new CharSequence[numPhones];
+        mSimState = new State[numPhones];
+    }
+
     public MSimCarrierText(Context context) {
         this(context, null);
     }
 
     public MSimCarrierText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mMSimCallback.initialize();
+        initialize();
     }
 
     protected void updateCarrierText(State []simState, CharSequence []plmn, CharSequence []spn) {

@@ -175,6 +175,12 @@ interface ITelephonyMSim {
     boolean supplyPuk(String puk, String pin, int subscription);
 
     /**
+    * Gets the number of attempts remaining for PIN1/PUK1 unlock.
+    * @param subscription for which attempts remaining is required.
+    */
+    int getIccPin1RetryCount(int subscription);
+
+    /**
      * Handles PIN MMI commands (PIN/PIN2/PUK/PUK2), which are initiated
      * without SEND (so <code>dial</code> is not appropriate) for
      * a particular subscription.

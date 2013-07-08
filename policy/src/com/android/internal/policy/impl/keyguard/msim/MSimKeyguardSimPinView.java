@@ -38,6 +38,7 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
     private final static boolean DEBUG = KeyguardViewMediator.DEBUG;
     private static String TAG = "MSimKeyguardSimPinView";
     private static int sCancelledCount = 0;
+    private int mSubscription = -1;
 
     public MSimKeyguardSimPinView(Context context) {
         this(context, null);
@@ -55,34 +56,63 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
                 @Override
                 public void onClick(View v) {
                     doHapticKeyClick();
-                    MSimKeyguardSimPinView.sCancelledCount++;
                     closeKeyGuard(false);
                 }
             });
         }
     }
 
+    /*
+    * CloseKeyGuard: Method used to Close the keyguard.
+    * @param bAuthenticated:
+    *               true:  user entered correct PIN and pressed OK.
+    *               false: user pressed cancel.
+    *
+    * Description: used to close keyguard when user presses cancel or
+    * user enters correct PIN and presses OK
+    *
+    * Logic:
+    * 1. Calculate number of SIMs configured i.e. selected from MultiSIM settings
+    * 2. Calculate number of SIMs which are PIN Locked
+    * 3. sCancelledCount will tell us number of keyguards got cancelled. If user tries to cancel
+    *    all Keyguard screens, do not allow him to close Keyguard as atleast one SIM has to
+    *    be authenticated before allowing user to access HomeScreen.
+    * 4. If present keyguard screen is last one we are about to show HomeScreen after closing this
+    *    keyguard so reset the sCancelledCount.
+    * 5. Report SIM unlocked to KGUpdateMonitor so that keyguard is closed right away without
+    *    waiting for indication from framework.
+    */
     private void closeKeyGuard(boolean bAuthenticated) {
         KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(getContext());
-        int numCardsPresent = 0;
+        int numCardsConfigured = 0;
         int numPinLocked = 0;
         IccCardConstants.State simState = IccCardConstants.State.UNKNOWN;
 
         int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
         for (int i = 0; i < numPhones; i++) {
             simState = updateMonitor.getSimState(i);
-            if (simState.isPinLocked()) {
+            if (simState == IccCardConstants.State.PIN_REQUIRED) {
                 numPinLocked++;
             }
 
-            if (simState.iccCardExist()) {
-                numCardsPresent++;
+            //Get number of cards that are present and configured.
+            //Exclude cards with DETECTED state as they are not configured and are not used.
+            if (simState == IccCardConstants.State.READY ||
+                simState == IccCardConstants.State.PIN_REQUIRED ||
+                simState == IccCardConstants.State.PUK_REQUIRED ||
+                simState == IccCardConstants.State.PERSO_LOCKED) {
+                numCardsConfigured++;
             }
         }
-        //If Cancel is pressed for last sub, don't allow cancel and decrement Count.
-        if (!bAuthenticated && MSimKeyguardSimPinView.sCancelledCount >= numCardsPresent) {
-            MSimKeyguardSimPinView.sCancelledCount--;
-            return;
+
+        //If Cancel is pressed for last configured sub return without incrementing sCancelledCount
+        // else increment sCancelledCount.
+        if (!bAuthenticated) {
+            if (MSimKeyguardSimPinView.sCancelledCount >= (numCardsConfigured - 1)) {
+                return;
+            } else {
+                MSimKeyguardSimPinView.sCancelledCount++;
+            }
         }
 
         //If this is last PIN lock screen, we will show HomeScreen now.
@@ -91,13 +121,35 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
             MSimKeyguardSimPinView.sCancelledCount = 0;
         }
 
-        updateMonitor.reportSimUnlocked(updateMonitor.getPinLockedSubscription());
+        //If Cancel is pressed get current locked sub,
+        //In case user presses OK we anyways have locked sub, no need to get again.
+        if (!bAuthenticated) mSubscription = updateMonitor.getPinLockedSubscription();
+
+        //Before closing the keyguard, report back that the sim is unlocked
+        //so it knows right away.
+        if (mSubscription >= 0) updateMonitor.reportSimUnlocked(mSubscription);
         mCallback.dismiss(true);
     }
 
     public void resetState() {
-        mSecurityMessageDisplay.setMessage(
-                getSecurityMessageDisplay(R.string.kg_sim_pin_instructions), true);
+        String  displayMessage = "";
+        try {
+            mSubscription = KeyguardUpdateMonitor.getInstance(mContext)
+                    .getPinLockedSubscription();
+            int attemptsRemaining = ITelephonyMSim.Stub.asInterface(ServiceManager
+                    .checkService("phone_msim")).getIccPin1RetryCount(mSubscription);
+
+            if (attemptsRemaining >= 0) {
+                displayMessage = getContext().getString(R.string.keyguard_password_wrong_pin_code)
+                        + getContext().getString(R.string.pinpuk_attempts)
+                        + attemptsRemaining + ". ";
+            }
+        } catch (RemoteException ex) {
+            displayMessage = getContext().getString(R.string.keyguard_password_pin_failed);
+        }
+        displayMessage = getSecurityMessageDisplay(R.string.kg_sim_pin_instructions)
+                + displayMessage;
+        mSecurityMessageDisplay.setMessage(displayMessage, true);
         mPasswordEntry.setEnabled(true);
     }
 
@@ -107,7 +159,6 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
      */
     private abstract class MSimCheckSimPin extends Thread {
         private final String mPin;
-        protected final int mSubscription;
 
         protected MSimCheckSimPin(String pin, int sub) {
             mPin = pin;

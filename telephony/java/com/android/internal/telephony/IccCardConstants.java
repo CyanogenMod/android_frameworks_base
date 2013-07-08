@@ -66,7 +66,8 @@ public class IccCardConstants {
         READY,
         NOT_READY,
         PERM_DISABLED,
-        CARD_IO_ERROR;
+        CARD_IO_ERROR,
+        DETECTED;
 
         public boolean isPinLocked() {
             return ((this == PIN_REQUIRED) || (this == PUK_REQUIRED));
@@ -75,7 +76,8 @@ public class IccCardConstants {
         public boolean iccCardExist() {
             return ((this == PIN_REQUIRED) || (this == PUK_REQUIRED)
                     || (this == PERSO_LOCKED) || (this == READY)
-                    || (this == PERM_DISABLED) || (this == CARD_IO_ERROR));
+                    || (this == PERM_DISABLED) || (this == CARD_IO_ERROR)
+                    || (this == DETECTED));
         }
     }
 }

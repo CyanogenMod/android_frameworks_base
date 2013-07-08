@@ -753,19 +753,15 @@ public class KeyguardUpdateMonitor {
         final IccCardConstants.State state = simArgs.simState;
         final int subscription = simArgs.subscription;
 
-        if (DEBUG) {
-            Log.d(TAG, "handleSimStateChange: intentValue = " + simArgs + " "
-                    + "state resolved to " + state.toString() + " "
-                    + "subscription =" + subscription);
-        }
+        Log.d(TAG, "handleSimStateChange: intentValue = " + simArgs + " "
+                + "state resolved to " + state.toString() + " "
+                + "subscription =" + subscription);
 
-        //Incase of MultiSim,unconfigured app state APPSTATE_DETECTED is reported as UNKNOWN.
-        //UNKNOWN state is captured to get correct number of cards configured based on state.
-        mSimState[subscription] = state;
         if (state != IccCardConstants.State.UNKNOWN && state != mSimState[subscription]) {
             if (DEBUG_SIM_STATES) Log.v(TAG, "dispatching state: " + state
                     + "subscription: " + subscription);
 
+            mSimState[subscription] = state;
             for (int i = 0; i < mCallbacks.size(); i++) {
                 KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
                 if (cb != null) {
@@ -1000,7 +996,7 @@ public class KeyguardUpdateMonitor {
     }
 
     public void reportSimUnlocked(int subscription) {
-        if (DEBUG) Log.d(TAG, "--msim--: reportSimUnlocked(" + subscription + ")");
+        if (DEBUG) Log.d(TAG, "reportSimUnlocked(" + subscription + ")");
         mSimState[subscription] = IccCardConstants.State.READY;
         handleSimStateChange(new SimArgs(mSimState[subscription], subscription));
     }

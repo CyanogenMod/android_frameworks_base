@@ -150,6 +150,4 @@ class KeyguardUpdateMonitorCallback {
      * @param subscription The subscription for which onRefreshCarrierInfo is meant
      */
     void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int subscription) { }
-
-    void initialize() { }
 }

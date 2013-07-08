@@ -69,11 +69,27 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
         }
 
         void reset() {
+            String  displayMessage = "";
+            try {
+                int attemptsRemaining = ITelephonyMSim.Stub.asInterface(ServiceManager
+                        .checkService("phone_msim")).getIccPin1RetryCount(KeyguardUpdateMonitor
+                        .getInstance(mContext).getPukLockedSubscription());
+                if (attemptsRemaining >= 0) {
+                    displayMessage = getContext().getString(
+                            R.string.keyguard_password_wrong_puk_code)
+                            + getContext().getString(R.string.pinpuk_attempts)
+                            + attemptsRemaining + ". ";
+                }
+            } catch (RemoteException ex) {
+                displayMessage = getContext().getString(
+                        R.string.keyguard_password_puk_failed);
+            }
+            displayMessage = getSecurityMessageDisplay(R.string.kg_puk_enter_puk_hint)
+                    + displayMessage;
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
-            mSecurityMessageDisplay.setMessage(
-                    getSecurityMessageDisplay(R.string.kg_puk_enter_puk_hint), true);
+            mSecurityMessageDisplay.setMessage(displayMessage, true);
             mPasswordEntry.requestFocus();
         }
     }
