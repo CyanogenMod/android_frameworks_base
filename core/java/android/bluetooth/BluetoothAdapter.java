@@ -1189,6 +1189,9 @@ public final class BluetoothAdapter {
         } else if (profile == BluetoothProfile.PAN) {
             BluetoothPan pan = new BluetoothPan(context, listener);
             return true;
+        } else if (profile == BluetoothProfile.SAP) {
+            BluetoothSap sap = new BluetoothSap(context, listener);
+            return true;
         } else if (profile == BluetoothProfile.HEALTH) {
             BluetoothHealth health = new BluetoothHealth(context, listener);
             return true;
@@ -1230,6 +1233,10 @@ public final class BluetoothAdapter {
             case BluetoothProfile.PAN:
                 BluetoothPan pan = (BluetoothPan)proxy;
                 pan.close();
+                break;
+            case BluetoothProfile.SAP:
+                BluetoothSap sap = (BluetoothSap)proxy;
+                sap.close();
                 break;
             case BluetoothProfile.HEALTH:
                 BluetoothHealth health = (BluetoothHealth)proxy;
