@@ -88,4 +88,3 @@ public class CustomObjectAnimator {
         if (animator != null) animator.cancel();
     }
 }
-
