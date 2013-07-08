@@ -54,5 +54,9 @@
     <string name="global_action_choose_profile">Profil</string>
     <string name="toast_rotation_unlocked">Otočenie obrazovky odomknuté</string>
     <string name="toast_rotation_locked">Otočenie obrazovky uzamknuté</string>
-    <string name="stylus_app_not_installed">%s is not installed</string>
+    <string name="stylus_app_not_installed">Aplikácia %s nie je nainštalovaná</string>
+    <string name="permlab_changePrivacyGuardState">povoliť alebo zakázať ochranu súkromia</string>
+    <string name="permdesc_changePrivacyGuardState">Umožňuje aplikácii určiť, či má byť iná aplikácia spustená s ochranou súkromia. Keď je aplikácia spustená s ochranou súkromia, nemá umožnený prístup k osobným údajom ako sú kontakty, denníky hovorov, alebo správy.</string>
+    <string name="privacy_guard_notification">Ochrana súkromia je aktívna</string>
+    <string name="privacy_guard_notification_detail">Aplikácii <xliff:g id="app">%1$s</xliff:g> nebude umožnený prístup k osobným údajom</string>
 </resources>
