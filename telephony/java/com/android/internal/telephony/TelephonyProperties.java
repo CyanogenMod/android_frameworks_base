@@ -227,7 +227,7 @@ public interface TelephonyProperties
     /**
      * Property to store default subscription.
      */
-    static final String PROPERTY_DEFAULT_SUBSCRIPTION = "persist.default.subscription";
+    static final String PROPERTY_DEFAULT_SUBSCRIPTION = "persist.radio.default.sub";
 
     /**
      * Property to enable MMS Mode.
