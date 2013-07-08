@@ -550,6 +550,8 @@ public class CallerInfo {
             if (VDBG) Rlog.v(TAG, "- parsed number: " + pn);
         } catch (NumberParseException e) {
             Rlog.w(TAG, "getGeoDescription: NumberParseException for incoming number '" + number + "'");
+        } catch (Exception e) {
+            Log.w(TAG, "Exception Caught" + e);
         }
 
         if (pn != null) {

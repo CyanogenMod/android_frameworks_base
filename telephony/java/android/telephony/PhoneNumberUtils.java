@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.CountryDetector;
+import android.location.Country;
 import android.net.Uri;
 import android.os.SystemProperties;
 import android.provider.Contacts;
@@ -1812,16 +1813,21 @@ public class PhoneNumberUtils
     private static boolean isLocalEmergencyNumberInternal(String number,
                                                           Context context,
                                                           boolean useExactMatch) {
-        String countryIso;
+        String countryIso = null;
+        Country country;
         CountryDetector detector = (CountryDetector) context.getSystemService(
                 Context.COUNTRY_DETECTOR);
-        if (detector != null) {
-            countryIso = detector.detectCountry().getCountryIso();
+        if ((detector != null) && ((country = detector.detectCountry()) != null)) {
+            countryIso = country.getCountryIso();
         } else {
             Locale locale = context.getResources().getConfiguration().locale;
-            countryIso = locale.getCountry();
-            Rlog.w(LOG_TAG, "No CountryDetector; falling back to countryIso based on locale: "
-                    + countryIso);
+            if(locale != null) {
+                countryIso = locale.getCountry();
+                Rlog.w(LOG_TAG, "No CountryDetector; falling back to countryIso based on locale: "
+                        + countryIso);
+            } else {
+                countryIso = "US"; //default value is "US"
+            }
         }
         return isEmergencyNumberInternal(number, countryIso, useExactMatch);
     }
