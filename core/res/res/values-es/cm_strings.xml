@@ -41,23 +41,27 @@
     <string name="reboot_confirm" product="tablet">El tablet se reiniciará.</string>
     <string name="reboot_confirm" product="default">El teléfono se reiniciará.</string>
     <string name="permlab_preventpower">anular tecla encendido</string>
-    <string name="permdesc_preventpower">Permite que una aplicación cambie el comportamiento de la tecla de encendido.</string>
+    <string name="permdesc_preventpower">Permite que la aplicación cambie el comportamiento de la tecla de encendido.</string>
     <string name="lockscreen_discharging">Descargando, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="app_killed_message">Aplicación finalizada</string>
     <string name="global_action_reboot">Reiniciar</string>
     <string name="global_action_choose_profile">Perfil</string>
     <string name="permlab_fm_radio_receiver">controlar receptor FM</string>
-    <string name="permdesc_fm_radio_receiver">Permite que una aplicación controle el receptor FM.</string>
+    <string name="permdesc_fm_radio_receiver">Permite que la aplicación controle el receptor FM.</string>
     <string name="permlab_fm_radio_transmitter">controlar transmisor FM</string>
-    <string name="permdesc_fm_radio_transmitter">Permite que una aplicación controle el transmisor FM.</string>
+    <string name="permdesc_fm_radio_transmitter">Permite que la aplicación controle el transmisor FM.</string>
     <string name="storage_sd_dock_card">Tarjeta SD de la base</string>
     <string name="toast_rotation_unlocked">Rotación de pantalla desbloqueada</string>
     <string name="toast_rotation_locked">Rotación de pantalla bloqueada</string>
     <string name="stylus_app_not_installed">%s no está instalada</string>
     <string name="permlab_changePrivacyGuardState">habilitar o deshabilitar la privacidad</string>
-    <string name="permdesc_changePrivacyGuardState">Permite que una aplicación cambie el estado de privacidad de otra. Cuando una aplicación se ejecuta con la privacidad habilitada, no podrá acceder a los datos personales, tales como contactos, mensajes o registros de llamadas.</string>
+    <string name="permdesc_changePrivacyGuardState">Permite que la aplicación cambie el estado de privacidad de otra. Cuando una aplicación se ejecuta con la privacidad habilitada, no podrá acceder a los datos personales, tales como contactos, mensajes o registros de llamadas.</string>
     <string name="privacy_guard_notification">Privacidad activada</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> no podrá acceder a los datos personales</string>
     <string name="profile_picker_title">Perfiles</string>
     <string name="profile_none">Ninguno</string>
+    <string name="permlab_cancelNotifications">cancelar notificaciones de aplicaciones</string>
+    <string name="permdesc_cancelNotifications">Permite que la aplicación cancele las notificaciones creadas por otras.</string>
+    <string name="permlab_interceptSmsSent">interceptar mensajes SMS salientes</string>
+    <string name="permdesc_interceptSmsSent">Permite que la aplicación intercepte mensajes SMS salientes. Las aplicaciones maliciosas pueden impedir los mensajes SMS salientes.</string>
 </resources>
