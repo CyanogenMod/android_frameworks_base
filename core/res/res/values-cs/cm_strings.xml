@@ -57,6 +57,9 @@
     <string name="profile_picker_title">Profily</string>
     <string name="profile_none">Žádný</string>
 
+    <string name="permlab_cancelNotifications">zrušit upozornění aplikace</string>
+    <string name="permdesc_cancelNotifications">Umožní zrušit upozornění vytvořené jinými aplikacemi.</string>
+
     <string name="permlab_interceptSmsSent">zachytit odchozí SMS</string>
     <string name="permdesc_interceptSmsSent">Umožní odchytit odchozí SMS. Škodlivé aplikace mohou pomocí odchycení SMS zabránit její odeslání příjemci.</string>
 </resources>
