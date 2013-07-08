@@ -5068,7 +5068,8 @@ public class Activity extends ContextThemeWrapper
         mFragments.attachActivity(this, mContainer, null);
         
 		boolean floating = (intent.getFlags()&Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
-        if (intent != null && floating) {
+        boolean history = (intent.getFlags()&Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
+        if (intent != null && floating && !history) { 
             TypedArray styleArray = context.obtainStyledAttributes(info.theme, com.android.internal.R.styleable.Window);
             TypedValue backgroundValue = styleArray.peekValue(com.android.internal.R.styleable.Window_windowBackground);
 
@@ -5328,14 +5329,6 @@ public class Activity extends ContextThemeWrapper
             mStopped = true;
         }
         mResumed = false;
-
-	// Floatingwindows activities should be kept volatile to prevent new activities taking
-        // up front in a minimized space. Every stop call, for instance when pressing home,
-        // will terminate the activity. If the activity is already finishing we might just
-        // as well let it go.
-        if (!mChangingConfigurations && mWindow != null && mWindow.mIsFloatingWindow && !isFinishing()) {
-            finish();
-        } 
     }
 
     final void performDestroy() {
