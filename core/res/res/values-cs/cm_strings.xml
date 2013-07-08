@@ -49,13 +49,16 @@
     <string name="toast_rotation_locked">Otáčení zobrazení zakázáno</string>
     <string name="stylus_app_not_installed">Aplikace %s není nainstalována</string>
 
-    <string name="permlab_changePrivacyGuardState">povolit či zakázat Ochránce soukromí</string>
-    <string name="permdesc_changePrivacyGuardState">Umožní změnit pravidla, zda bude některá aplikace spuštěna v režimu Ochránce soukromí. Pokud je aplikace spuštěna v režimu Ochránce soukromí, tato aplikace nemá umožněn přístup k osobním datům jako jsou kontakty, historie volání nebo zprávy.</string>
-    <string name="privacy_guard_notification">Ochránce soukromí aktivní</string>
+    <string name="permlab_changePrivacyGuardState">povolit či zakázat Ochranu soukromí</string>
+    <string name="permdesc_changePrivacyGuardState">Umožní změnit pravidla, zda bude některá aplikace spuštěna v režimu Ochrany soukromí. Pokud je aplikace spuštěna v režimu Ochrany soukromí, tato aplikace nemá umožněn přístup k osobním datům jako jsou kontakty, historie volání nebo zprávy.</string>
+    <string name="privacy_guard_notification">Ochrana soukromí aktivní</string>
     <string name="privacy_guard_notification_detail">Aplikaci <xliff:g id="app">%1$s</xliff:g> nebude umožňen přístup k osobním údajům</string>
 
     <string name="profile_picker_title">Profily</string>
     <string name="profile_none">Žádný</string>
+
+    <string name="permlab_cancelNotifications">zrušit upozornění aplikace</string>
+    <string name="permdesc_cancelNotifications">Umožní zrušit upozornění vytvořené jinými aplikacemi.</string>
 
     <string name="permlab_interceptSmsSent">zachytit odchozí SMS</string>
     <string name="permdesc_interceptSmsSent">Umožní odchytit odchozí SMS. Škodlivé aplikace mohou pomocí odchycení SMS zabránit její odeslání příjemci.</string>
