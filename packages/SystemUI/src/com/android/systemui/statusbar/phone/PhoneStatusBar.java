@@ -1671,7 +1671,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         mHaloButtonAnim = start(
             ObjectAnimator.ofFloat(mHaloButton, View.ALPHA, 1f)
                 .setDuration(FLIP_DURATION)); 
-        mClearButton.setVisibility(View.VISIBLE);
+        mClearButton.setVisibility(View.GONE);
         mClearButton.setAlpha(0f);
         setAreThereNotifications(); // this will show/hide the button as necessary
         mNotificationPanel.postDelayed(new Runnable() {
