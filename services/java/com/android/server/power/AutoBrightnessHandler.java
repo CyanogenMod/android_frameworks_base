@@ -39,20 +39,29 @@ public class AutoBrightnessHandler {
     private static final String NODE = "/sys/class/lcd/panel/panel/auto_brightness";
 
     private static final String ALT_BRIGHTNESS_PROP = "persist.sys.alt.brightness";
+    private static final String ALT_BRIGHTNESS_SYSFS_PROP = "persist.sys.alt.brightness.node";
 
     private static final int PANEL_MANUAL = 0;
 
     private final int mPanelAutoValue;
+    private final String mNode;
 
     public AutoBrightnessHandler(Context context) {
         mPanelAutoValue = context.getResources().getInteger(
                 com.android.internal.R.integer.config_panelAutoBrightnessValue);
+
+        String node = SystemProperties.get(ALT_BRIGHTNESS_SYSFS_PROP);
+        if (node.isEmpty()) {
+            mNode = NODE;
+        } else {
+            mNode = node;
+        }
     }
 
     public void onAutoBrightnessChanged(int mode) {
         if (mPanelAutoValue > -1) {
             int override = SystemProperties.getInt(ALT_BRIGHTNESS_PROP, -1);
-            writeValue(NODE, mode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC ?
+            writeValue(mNode, mode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC ?
                     (override > -1 ? override : mPanelAutoValue) : PANEL_MANUAL);
         }
     }
