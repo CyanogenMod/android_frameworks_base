@@ -1941,6 +1941,7 @@
 
   <!-- Panel auto brightness -->
   <java-symbol type="integer" name="config_panelAutoBrightnessValue" />
+  <java-symbol type="string" name="config_panelAutoBrightnessSysfsFile" />
 
   <!-- Options that show upon long-pressing a key on the physical keyboard -->
   <java-symbol type="string" name="symbol_picker_0" />
