@@ -1146,6 +1146,9 @@
 
     <!-- Integer to configure panel auto brightness mode when changed -->
     <integer name="config_panelAutoBrightnessValue">-1</integer>
+    
+    <!-- Sysfs node to to set a special value when using panel auto brightness -->
+    <string name="config_panelAutoBrightnessSysfsFile" translatable="false"></string>
 
     <!-- True if the pie service should be started at system start. This is must be true
          to support pie controls. -->
