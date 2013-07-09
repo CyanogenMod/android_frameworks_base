@@ -296,6 +296,15 @@ class WifiConfigStore {
      */
     boolean forgetNetwork(int netId) {
         if (mWifiNative.removeNetwork(netId)) {
+            for(WifiConfiguration config : mConfiguredNetworks.values()) {
+                if(config != null && config.status == Status.DISABLED) {
+                    if(mWifiNative.enableNetwork(config.networkId, false)) {
+                        config.status = Status.ENABLED;
+                    } else {
+                        loge("Enable network failed on " + config.networkId);
+                    }
+                }
+            }
             mWifiNative.saveConfig();
             removeConfigAndSendBroadcastIfNeeded(netId);
             return true;
