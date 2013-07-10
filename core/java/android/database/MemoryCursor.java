@@ -26,7 +26,7 @@ import android.database.DatabaseUtils;
  * @hide
  */
 public class MemoryCursor extends AbstractWindowedCursor {
-
+    private CursorWindow mDeactivatedWindow;
     private final String[] mColumnNames;
 
     public MemoryCursor(String name, String[] columnNames) {
@@ -46,5 +46,29 @@ public class MemoryCursor extends AbstractWindowedCursor {
     @Override
     public String[] getColumnNames() {
         return mColumnNames;
+    }
+
+    @Override
+    public boolean requery() {
+        if (mDeactivatedWindow != null) {
+            setWindow(mDeactivatedWindow);
+            mDeactivatedWindow = null;
+        }
+        return super.requery();
+    }
+
+    @Override
+    protected void onDeactivateOrClose() {
+        // when deactivating the cursor, we need to keep our in-memory cursor
+        // window as we have no chance of requerying it later on
+        if (!isClosed() && getWindow() != null) {
+            mDeactivatedWindow = getWindow();
+            mWindow = null;
+        }
+        super.onDeactivateOrClose();
+        if (isClosed() && mDeactivatedWindow != null) {
+            mDeactivatedWindow.close();
+            mDeactivatedWindow = null;
+        }
     }
 }
