@@ -5808,14 +5808,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // mUserRotationMode and mUserRotation will be assigned by the content observer
         if (mode == WindowManagerPolicy.USER_ROTATION_LOCKED) {
-            Settings.System.putIntForUser(res,
-                    Settings.System.USER_ROTATION,
-                    rot,
-                    UserHandle.USER_CURRENT);
-            Settings.System.putIntForUser(res,
-                    Settings.System.ACCELEROMETER_ROTATION,
-                    0,
-                    UserHandle.USER_CURRENT);
+            synchronized (mLock) {
+                Settings.System.putIntForUser(res,
+                        Settings.System.USER_ROTATION,
+                        rot,
+                        UserHandle.USER_CURRENT);
+                Settings.System.putIntForUser(res,
+                        Settings.System.ACCELEROMETER_ROTATION,
+                        0,
+                        UserHandle.USER_CURRENT);
+            }
         } else {
             Settings.System.putIntForUser(res,
                     Settings.System.ACCELEROMETER_ROTATION,
