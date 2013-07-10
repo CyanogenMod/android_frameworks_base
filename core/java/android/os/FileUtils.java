@@ -54,6 +54,13 @@ public class FileUtils {
 
     public static native int setPermissions(String file, int mode, int uid, int gid);
 
+    /** returns the UUID for the volume mounted
+     * at the given mount point, or -1 for failure
+     * @param mountPoint point for volume
+     * @return UUID or -1
+     */
+    public static native int getVolumeUUID(String mountPoint);
+
     /** returns the FAT file system volume ID for the volume mounted 
      * at the given mount point, or -1 for failure
      * @param mountPoint point for FAT volume
