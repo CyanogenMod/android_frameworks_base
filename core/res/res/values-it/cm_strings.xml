@@ -60,4 +60,8 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> non sarà in grado di accedere ai dati personali</string>
     <string name="profile_picker_title">Profili</string>
     <string name="profile_none">Nessuno</string>
+    <string name="permlab_cancelNotifications">cancella le notifiche delle applicazioni</string>
+    <string name="permdesc_cancelNotifications">Consente all\'applicazione di cancellare le notifiche create da altre applicazioni.</string>
+    <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>
+    <string name="permdesc_interceptSmsSent">Consente all\'applicazione di intercettare un SMS in uscita. Le applicazioni maligne potrebbero usarlo per impedire la spedizione di SMS.</string>
 </resources>
