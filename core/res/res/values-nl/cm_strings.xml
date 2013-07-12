@@ -60,6 +60,8 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> zal geen toegang hebben tot persoonsgegevens</string>
     <string name="profile_picker_title">Profielen</string>
     <string name="profile_none">Geen</string>
+    <string name="permlab_cancelNotifications">app-meldingen sluiten</string>
+    <string name="permdesc_cancelNotifications">Hiermee kan de app meldingen gecreeërd door andere apps sluiten.</string>
     <string name="permlab_interceptSmsSent">uitgaand sms-bericht onderscheppen</string>
     <string name="permdesc_interceptSmsSent">Hiermee kan de app een uitgaand sms-bericht onderscheppen. Schadelijke apps kunnen dit gebruiken om uitgaande sms-berichten te blokkeren.</string>
 </resources>
