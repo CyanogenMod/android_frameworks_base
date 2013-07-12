@@ -79,7 +79,6 @@ public class KeyguardTransportControlView extends FrameLayout implements OnClick
     private IRemoteControlDisplayWeak mIRCD;
     private boolean mMusicClientPresent = true;
     private boolean mShouldBeShown = true;
-    private boolean mAttachNotified = false;
 
     /**
      * The metadata which should be populated into the view once we've been attached
@@ -217,13 +216,13 @@ public class KeyguardTransportControlView extends FrameLayout implements OnClick
     protected void onListenerDetached() {
         mMusicClientPresent = false;
         if (DEBUG) Log.v(TAG, "onListenerDetached()");
-        callCallbackIfNeeded();
+        callAppropriateCallback();
     }
 
     private void onListenerAttached() {
         mMusicClientPresent = true;
         if (DEBUG) Log.v(TAG, "onListenerAttached()");
-        callCallbackIfNeeded();
+        callAppropriateCallback();
     }
 
     private void updateSettings() {
@@ -232,7 +231,7 @@ public class KeyguardTransportControlView extends FrameLayout implements OnClick
                 Settings.System.LOCKSCREEN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) != 0;
         if (DEBUG) Log.v(TAG, "updateSettings(): mShouldBeShown=" + mShouldBeShown);
         if (oldShown != mShouldBeShown) {
-            callCallbackIfNeeded();
+            callAppropriateCallback();
             if (mShouldBeShown && mMusicClientPresent
                     && mCurrentPlayState != RemoteControlClient.PLAYSTATE_NONE) {
                 // send out the play state change event that we suppressed earlier
@@ -241,24 +240,19 @@ public class KeyguardTransportControlView extends FrameLayout implements OnClick
         }
     }
 
-    private void callCallbackIfNeeded() {
+    private void callAppropriateCallback() {
         if (mTransportCallback == null) {
-            Log.w(TAG, "callCallbackIfNeeded: no callback");
+            Log.w(TAG, "callAppropriateCallback: no callback");
             return;
         }
 
         boolean shouldBeAttached = mMusicClientPresent && mShouldBeShown;
-        if (DEBUG) {
-            Log.v(TAG, "callCallbackIfNeeded(): shouldBeAttached=" + shouldBeAttached +
-                    ", mAttachNotified=" + mAttachNotified);
-        }
+        if (DEBUG) Log.v(TAG, "callAppropriateCallback(): shouldBeAttached=" + shouldBeAttached);
 
-        if (shouldBeAttached && !mAttachNotified) {
+        if (shouldBeAttached) {
             mTransportCallback.onListenerAttached();
-            mAttachNotified = true;
-        } else if (!shouldBeAttached && mAttachNotified) {
+        } else {
             mTransportCallback.onListenerDetached();
-            mAttachNotified = false;
         }
     }
 
