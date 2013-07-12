@@ -140,8 +140,6 @@ public class PhoneStatusBar extends BaseStatusBar {
     // will likely move to a resource or other tunable param at some point
     private static final int INTRUDER_ALERT_DECAY_MS = 0; // disabled, was 10000;
 
-    private static final boolean CLOSE_PANEL_WHEN_EMPTIED = true;
-
     private static final int NOTIFICATION_PRIORITY_MULTIPLIER = 10; // see NotificationManagerService
     private static final int HIDE_ICONS_BELOW_SCORE = Notification.PRIORITY_LOW * NOTIFICATION_PRIORITY_MULTIPLIER;
 
@@ -1115,11 +1113,6 @@ public class PhoneStatusBar extends BaseStatusBar {
 
             if (ENABLE_INTRUDERS && old == mCurrentlyIntrudingNotification) {
                 mHandler.sendEmptyMessage(MSG_HIDE_INTRUDER);
-            }
-
-            if (CLOSE_PANEL_WHEN_EMPTIED && mNotificationData.size() == 0 && !mAnimating
-                    && !isShowingSettings()) {
-                animateCollapsePanels();
             }
         }
 
