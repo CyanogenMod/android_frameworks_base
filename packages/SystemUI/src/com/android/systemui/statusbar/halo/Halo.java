@@ -782,7 +782,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         protected int pingMaxRadius = 0;        
         private boolean mPingAllowed = true;
 
-        private Bitmap mMarker, mMarkerL, mMarkerT, mMarkerR, mMarkerB;
+        private Bitmap mMarker, mMarkerT, mMarkerB;
         private Bitmap mBigRed;
         private Paint mMarkerPaint = new Paint();
         private Paint xPaint = new Paint();
@@ -801,12 +801,8 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                     R.drawable.halo_bigred);
             mMarker = BitmapFactory.decodeResource(mContext.getResources(),
                     R.drawable.halo_marker);
-            mMarkerL = BitmapFactory.decodeResource(mContext.getResources(),
-                    R.drawable.halo_marker_l);
             mMarkerT = BitmapFactory.decodeResource(mContext.getResources(),
                     R.drawable.halo_marker_t);
-            mMarkerR = BitmapFactory.decodeResource(mContext.getResources(),
-                    R.drawable.halo_marker_r);
             mMarkerB = BitmapFactory.decodeResource(mContext.getResources(),
                     R.drawable.halo_marker_b);
 
