@@ -313,6 +313,8 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
  
             if (mState == State.HIDDEN) {
                 mEffect.setHaloX((int)(mTickerLeft ? -mIconSize*0.8f : mScreenWidth - mIconSize*0.2f));
+                final int triggerWidth = (int)(mTickerLeft ? -mIconSize*0.7f : mScreenWidth - mIconSize*0.3f);
+                updateTriggerPosition(triggerWidth, mEffect.mHaloY);
             } else {
                 mEffect.nap(500);
                 if (mHideTicker) mEffect.sleep(HaloEffect.SNAP_TIME + HaloEffect.NAP_TIME + 2500, HaloEffect.SLEEP_TIME);
