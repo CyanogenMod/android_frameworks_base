@@ -65,7 +65,9 @@
     <string name="pie_battery_status_charging">正在充电 (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">已充满</string>
     <string name="pie_battery_status_discharging">剩余 <xliff:g id="percent">%d</xliff:g>%%</string>
+    <string name="quick_settings_camera_label">相机</string>
     <string name="pie_phone_status_no_service">无服务</string>
     <string name="pie_phone_status_airplane_mode">正处于飞行模式</string>
     <string name="pie_phone_status_emergency_only">只能拨打紧急呼叫电话</string>
+    <string name="quick_settings_camera_error_connect">无法连接到相机</string>
 </resources>
