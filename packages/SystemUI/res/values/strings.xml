@@ -523,6 +523,6 @@
 	<string name="halo_dismiss">Dismiss notification</string>
     <string name="halo_hide">Hide HALO</string>
     <string name="halo_clear_all">Clear all notifications</string>
-    <string name="halo_silence">Silence HALO until woken</string> 
+    <string name="halo_silence">Hide and Silence HALO until woken</string> 
 
 </resources>
