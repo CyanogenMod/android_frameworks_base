@@ -33,6 +33,7 @@ import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.PieController;
 import com.android.systemui.statusbar.tablet.StatusBarPanel;
 import com.android.systemui.statusbar.phone.Ticker;
+import com.android.systemui.statusbar.tablet.TabletTicker;
 
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
@@ -171,6 +172,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 	// Halo
     protected Halo mHalo = null;
     protected Ticker mTicker;
+	protected TabletTicker mTabletTicker;
     protected boolean mHaloActive;
     protected boolean mHaloTaskerActive = false;
     protected ImageView mHaloButton;
@@ -194,6 +196,10 @@ public abstract class BaseStatusBar extends SystemUI implements
 
 	public Ticker getTicker() {
         return mTicker;
+    }
+
+	public TabletTicker getTabletTicker() {
+        return mTabletTicker;
     }
 
     public IStatusBarService getStatusBarService() {

@@ -29,6 +29,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Slog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -80,6 +81,19 @@ public class TabletTicker
     private LayoutTransition mLayoutTransition;
     private boolean mWindowShouldClose;
 
+    private TabletTickerCallback mEvent;
+
+    public interface TabletTickerCallback  
+    {  
+        public void updateTicker(StatusBarNotification notification);
+        public void updateTicker(StatusBarNotification notification, String text);
+    }  
+
+    public void setUpdateEvent(TabletTickerCallback event) {
+        mEvent = event;
+    }
+
+
     public TabletTicker(TabletStatusBar bar) {
         mBar = bar;
         mContext = bar.getContext();
@@ -93,6 +107,11 @@ public class TabletTicker
         if (false) {
             Slog.d(TAG, "add 1 mCurrentNotification=" + mCurrentNotification
                     + " mQueuePos=" + mQueuePos + " mQueue=" + Arrays.toString(mQueue));
+        }
+
+		if (isDisabled()) {
+            mEvent.updateTicker(notification, notification.notification.tickerText.toString());
+            return;
         }
 
         // If it's already in here, remove whatever's in there and put the new one at the end.
@@ -116,6 +135,10 @@ public class TabletTicker
     }
 
     public void remove(IBinder key, boolean advance) {
+		if (isDisabled()) {
+            mEvent.updateTicker(null);
+            return;
+        }
         if (mCurrentKey == key) {
             // Showing now
             if (advance) {
@@ -142,6 +165,7 @@ public class TabletTicker
     }
 
     public void halt() {
+		if (isDisabled()) return;
         removeMessages(MSG_ADVANCE);
         if (mCurrentView != null || mQueuePos != 0) {
             for (int i=0; i<QUEUE_LENGTH; i++) {
@@ -162,6 +186,7 @@ public class TabletTicker
     }
 
     private void advance() {
+		if (isDisabled()) return;
         // Out with the old...
         if (mCurrentView != null) {
             if (mWindow != null) {
@@ -191,6 +216,11 @@ public class TabletTicker
 
         // if there's nothing left, close the window
         mWindowShouldClose = (mCurrentView == null && mWindow != null);
+    }
+
+    private boolean isDisabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HALO_ACTIVE, 0) == 1;
     }
 
     private void dequeue() {
