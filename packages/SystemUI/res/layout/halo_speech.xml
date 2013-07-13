@@ -18,33 +18,36 @@
                 android:id="@+id/bubble_r"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="17dp"
-                android:paddingBottom="30dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="25dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="14dp"
                 android:background="@drawable/bubble_black_r"
                 android:singleLine="false"
-                android:textColor="#ffffff"
-                android:maxLines = "3"
-                android:visibility="gone"/>
+                android:maxLines = "2"
+                android:visibility="gone"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/bubble_l"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="17dp"
-                android:paddingBottom="30dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="14dp"
                 android:background="@drawable/bubble_black_l"
                 android:singleLine="false"
-                android:textColor="#ffffff"
-                android:maxLines = "3"
-                android:visibility="gone"/>
+                android:maxLines = "2"
+                android:visibility="gone"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
 
         </RelativeLayout>
 
     </RelativeLayout>
 
 </LinearLayout>
-
