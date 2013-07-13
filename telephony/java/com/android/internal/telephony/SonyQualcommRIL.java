@@ -234,7 +234,9 @@ public class SonyQualcommRIL extends QualcommSharedRIL implements CommandsInterf
             rr.mp.writeInt(uusInfo.getDcs());
             rr.mp.writeByteArray(uusInfo.getUserData());
         }
-        rr.mp.writeInt(255);
+
+        if (!needsOldRilFeature("qcomdsds"))
+            rr.mp.writeInt(255);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
@@ -246,7 +248,7 @@ public class SonyQualcommRIL extends QualcommSharedRIL implements CommandsInterf
         RILRequest rr;
 
         if (operatorNumeric == null)
-           rr = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_AUTOMATIC, response);
+            rr = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_AUTOMATIC, response);
         else
             rr = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_MANUAL, response);
 
