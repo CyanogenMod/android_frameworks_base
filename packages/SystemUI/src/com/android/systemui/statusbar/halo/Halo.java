@@ -555,8 +555,22 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                         // system process is dead if we're here.
                     }
                     
-                    loadLastNotification(true);
+                    mCurrentNotficationEntry = null;
+                    if (mNotificationData.size() > 0) {
+                        if (mNotificationData.size() > 0) {
+                            for (int i = mNotificationData.size() - 1; i >= 0; i--) {
+                                NotificationData.Entry item = mNotificationData.get(i);
+                                if (!((item.notification.notification.flags &
+                                        Notification.FLAG_AUTO_CANCEL) == Notification.FLAG_AUTO_CANCEL)) {
+                                    tick(item, "", 0, 0);
+                                    break;
+                                }
+                            }
+                        }
+                    }
 
+                    if (mCurrentNotficationEntry == null) clearTicker();
+                    mLastNotificationEntry = null;
                 } else if (mGesture == Gesture.UP1) {
                     // Dismiss notification
                     playSoundEffect(SoundEffectConstants.CLICK);
