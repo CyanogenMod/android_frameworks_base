@@ -116,8 +116,10 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
     enum Gesture {
         NONE,
         TASK,
-        UP,
-        DOWN
+        UP1,
+        UP2,
+        DOWN1,
+        DOWN2
     }
 
     private Context mContext;
@@ -460,6 +462,13 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         }
     }
 
+    private boolean verticalGesture() {
+        return (mGesture == Gesture.UP1
+                || mGesture == Gesture.DOWN1
+                || mGesture == Gesture.UP2
+                || mGesture == Gesture.DOWN2);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mGestureDetector.onTouchEvent(event);
@@ -521,11 +530,11 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                     }
                     mEffect.nap(0);
                     if (mHideTicker) mEffect.sleep(HaloEffect.NAP_TIME + 1500, HaloEffect.SLEEP_TIME);
-                } else if (mGesture == Gesture.DOWN) {
+                } else if (mGesture == Gesture.DOWN1) {
                     // Hide from sight
                     playSoundEffect(SoundEffectConstants.CLICK);
                     mEffect.sleep(0, HaloEffect.NAP_TIME / 2);
-                } else if (mGesture == Gesture.UP) {
+                } else if (mGesture == Gesture.UP1) {
                     // Dismiss notification
                     playSoundEffect(SoundEffectConstants.CLICK);
 
@@ -645,7 +654,8 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                     int deltaX = (int)(mTickerLeft ? event.getRawX() : mScreenWidth - event.getRawX());
                     int deltaY = (int)(mEffect.getHaloY() - event.getRawY() + mIconSize);
                     int horizontalThreshold = (int)(mIconSize * 1.5f);
-                    int verticalThreshold = mIconSize;
+                    int verticalThreshold = mIconHalfSize;
+                    int verticalSteps = (int)(mIconSize * 0.6f);
                     String gestureText = mNotificationText;
 
                     // Switch icons
@@ -674,21 +684,32 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                         mMarkerIndex = -1;
 
                         boolean gestureChanged = false;
-                        int newDeltaY = Math.abs(deltaY) - verticalThreshold;                        
-                        if (deltaY > 0) {
-                            if (mGesture != Gesture.UP) {
-                                mGesture = Gesture.UP;
+                        final int deltaIndex = (Math.abs(deltaY) - verticalThreshold) / verticalSteps;
+                        if (deltaY > 0) {                           
+                            if (deltaIndex < 2 && mGesture != Gesture.UP1) {
+                                mGesture = Gesture.UP1;
                                 gestureChanged = true;
                                 mEffect.setHaloOverlay(HaloProperties.Overlay.DISMISS, 1f);
                                 gestureText = mContext.getResources().getString(R.string.halo_dismiss);
+                            } else if (deltaIndex > 1 && mGesture != Gesture.UP2) {
+                                mGesture = Gesture.UP2;
+                                gestureChanged = true;
+                                mEffect.setHaloOverlay(HaloProperties.Overlay.CLEAR_ALL, 1f);
+                                gestureText = mContext.getResources().getString(R.string.halo_clear_all);
                             }
+
                         } else {
-                            if (mGesture != Gesture.DOWN) {
-                                mGesture = Gesture.DOWN;
+                            if (deltaIndex < 2 && mGesture != Gesture.DOWN1) {
+                                mGesture = Gesture.DOWN1;
                                 gestureChanged = true;
                                 mEffect.setHaloOverlay(mTickerLeft ? HaloProperties.Overlay.BACK_LEFT
                                         : HaloProperties.Overlay.BACK_RIGHT, 1f);
                                 gestureText = mContext.getResources().getString(R.string.halo_hide);
+                            } else if (deltaIndex > 1 && mGesture != Gesture.DOWN2) {
+                                mGesture = Gesture.DOWN2;
+                                gestureChanged = true;
+                                mEffect.setHaloOverlay(HaloProperties.Overlay.SILENCE, 1f);
+                                gestureText = mContext.getResources().getString(R.string.halo_silence);
                             }
                         }
 
@@ -708,7 +729,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                         mMarkerIndex = -1;
                         if (mGesture != Gesture.NONE) {
                             mEffect.setHaloOverlay(HaloProperties.Overlay.NONE, 0f);
-                            if (mGesture == Gesture.UP || mGesture == Gesture.DOWN) mEffect.killTicker();
+                            if (verticalGesture()) mEffect.killTicker();
                         }
                         mGesture = Gesture.NONE;
                     }
@@ -991,14 +1012,24 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                 }
             }
 
-            // Vertical Marker
-            if (mGesture == Gesture.UP || mGesture == Gesture.DOWN) {
+            // Vertical Markers
+            if (verticalGesture()) {
                 int xPos = mHaloX + mIconHalfSize - mMarkerT.getWidth() / 2;
-                int yTop = (int)(mHaloY + mIconHalfSize - mIconSize * 1.2f - mMarkerT.getHeight() / 2);
-                int yButtom = (int)(mHaloY + mIconHalfSize + mIconSize * 1.2f - mMarkerT.getHeight() / 2);
-                mMarkerPaint.setAlpha(mGesture == Gesture.UP ? 255 : 100);
+                                
+                mMarkerPaint.setAlpha(mGesture == Gesture.UP1 ? 255 : 100);
+                int yTop = (int)(mHaloY + mIconHalfSize - mIconSize - mMarkerT.getHeight() / 2);
                 canvas.drawBitmap(mMarkerT, xPos, yTop, mMarkerPaint);
-                mMarkerPaint.setAlpha(mGesture == Gesture.DOWN ? 255 : 100);
+
+                mMarkerPaint.setAlpha(mGesture == Gesture.UP2 ? 255 : 100);
+                yTop = yTop - (int)(mIconSize * 0.6f);
+                canvas.drawBitmap(mMarkerT, xPos, yTop, mMarkerPaint);
+
+                mMarkerPaint.setAlpha(mGesture == Gesture.DOWN1 ? 255 : 100);
+                int yButtom = (int)(mHaloY + mIconHalfSize + mIconSize - mMarkerT.getHeight() / 2);
+                canvas.drawBitmap(mMarkerB, xPos, yButtom, mMarkerPaint);
+
+                mMarkerPaint.setAlpha(mGesture == Gesture.DOWN2 ? 255 : 100);
+                yButtom = yButtom + (int)(mIconSize * 0.6f);
                 canvas.drawBitmap(mMarkerB, xPos, yButtom, mMarkerPaint);
             }
 
@@ -1010,7 +1041,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
             canvas.restoreToCount(state);
 
             // Number
-            if (mState == State.IDLE || mState == State.GESTURES && !(mGesture == Gesture.UP || mGesture == Gesture.DOWN)) {
+            if (mState == State.IDLE || mState == State.GESTURES && !verticalGesture()) {
                 state = canvas.save();
                 canvas.translate(mTickerLeft ? mHaloX + mIconSize - mHaloNumber.getMeasuredWidth() : mHaloX, mHaloY);
                 mHaloNumberView.draw(canvas);
