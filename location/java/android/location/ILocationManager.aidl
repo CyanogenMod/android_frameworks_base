@@ -60,6 +60,8 @@ interface ILocationManager
 
     boolean sendNiResponse(int notifId, int userResponse);
 
+    void setGpsSource(String device);
+
     // --- deprecated ---
     List<String> getAllProviders();
     List<String> getProviders(in Criteria criteria, boolean enabledOnly);
