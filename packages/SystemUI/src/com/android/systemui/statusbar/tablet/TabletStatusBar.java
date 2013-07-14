@@ -383,6 +383,11 @@ public class TabletStatusBar extends BaseStatusBar implements
         return getNotificationPanelHeight();
     }
 
+    @Override
+    protected boolean isNotificationPanelFullyVisible() {
+        return mNotificationPanel.getVisibility() == View.VISIBLE;
+    }
+
     private int getNotificationPanelHeight() {
         final Resources res = mContext.getResources();
         final Display d = mWindowManager.getDefaultDisplay();
