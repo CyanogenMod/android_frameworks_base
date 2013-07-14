@@ -61,7 +61,6 @@ import android.os.ServiceManager;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.ExtendedPropertiesUtils;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -103,6 +102,7 @@ import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.phone.Ticker;
 import com.android.systemui.statusbar.tablet.TabletTicker;
+import com.android.systemui.statusbar.halo.ExtendedPropertiesUtils;
 
 public class Halo extends FrameLayout implements Ticker.TickerCallback, TabletTicker.TabletTickerCallback {
 
