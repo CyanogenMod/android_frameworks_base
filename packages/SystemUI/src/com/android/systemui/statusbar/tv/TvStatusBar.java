@@ -132,6 +132,16 @@ public class TvStatusBar extends BaseStatusBar {
     }
 
     @Override
+    protected boolean isNotificationPanelFullyVisible() {
+        return false;
+    }
+
+    @Override
+    protected boolean isTrackingNotificationPanel() {
+        return false;
+    }
+
+    @Override
     protected boolean shouldDisableNavbarGestures() {
         return true;
     }
