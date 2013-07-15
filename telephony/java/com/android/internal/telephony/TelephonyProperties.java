@@ -200,6 +200,11 @@ public interface TelephonyProperties
     static final String CALLS_ON_IMS_ENABLED_PROPERTY = "persist.radio.calls.on.ims";
 
     /**
+     * Specify if Android supports CSVT calls.
+     */
+    static final String PROPERTY_CSVT_ENABLED = "persist.radio.csvt.enabled";
+
+    /**
      * Ignore RIL_UNSOL_NITZ_TIME_RECEIVED completely, used for debugging/testing.
      */
     static final String PROPERTY_IGNORE_NITZ = "telephony.test.ignore.nitz";
