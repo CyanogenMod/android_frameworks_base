@@ -183,6 +183,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected Display mDisplay;
 
     private boolean mDeviceProvisioned = false;
+    private boolean mCollapseAfterDismiss;
 
     public IStatusBarService getStatusBarService() {
         return mBarService;
@@ -192,7 +193,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         return mDeviceProvisioned;
     }
 
-    private ContentObserver mProvisioningObserver = new ContentObserver(new Handler()) {
+    private ContentObserver mProvisioningObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
             final boolean provisioned = 0 != Settings.Global.getInt(
@@ -203,6 +204,33 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
         }
     };
+
+    private class SettingsObserver extends ContentObserver {
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        public void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_COLLAPSE_ON_DISMISS), false, this);
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        private void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            mCollapseAfterDismiss = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_COLLAPSE_ON_DISMISS,
+                    1, UserHandle.USER_CURRENT) != 0;
+        }
+    };
+
+    private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
         @Override
@@ -245,6 +273,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         mContext.getContentResolver().registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED), true,
                 mProvisioningObserver);
+
+        mSettingsObserver.observe();
 
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
@@ -950,9 +980,14 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (rowParent != null) rowParent.removeView(entry.row);
         updateExpansionStates();
         updateNotificationIcons();
+        maybeCollapseAfterNotificationRemoval(entry.userDismissed());
 
-        if (CLOSE_PANEL_WHEN_EMPTIED && isNotificationPanelFullyVisible()) {
-            if (entry.userDismissed() && !mNotificationData.hasClearableItems()) {
+        return entry.notification;
+    }
+
+    protected void maybeCollapseAfterNotificationRemoval(boolean userDismissed) {
+        if (mCollapseAfterDismiss && isNotificationPanelFullyVisible()) {
+            if (userDismissed && !mNotificationData.hasClearableItems()) {
                 mHandler.removeCallbacks(mPanelCollapseRunnable);
                 mHandler.postDelayed(mPanelCollapseRunnable, COLLAPSE_AFTER_DISMISS_DELAY);
             } else if (mNotificationData.size() == 0) {
@@ -960,8 +995,6 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mHandler.postDelayed(mPanelCollapseRunnable, COLLAPSE_AFTER_REMOVE_DELAY);
             }
         }
-
-        return entry.notification;
     }
 
     protected StatusBarIconView addNotificationViews(IBinder key,
