@@ -2668,7 +2668,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 }
 
                 if (snapshot.isEmpty()) {
-                    animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+                    maybeCollapseAfterNotificationRemoval(true);
                     return;
                 }
 
