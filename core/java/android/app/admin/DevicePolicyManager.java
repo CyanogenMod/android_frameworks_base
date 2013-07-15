@@ -1442,6 +1442,7 @@ public class DevicePolicyManager {
      * wishes to give back control of SELinux
      * @return true if the operation succeeded, false if the operation failed or
      * SELinux was not enabled on the device.
+     * @hide
      */
     public boolean setSELinuxAdmin(ComponentName admin, boolean control) {
         return setSELinuxAdmin(admin, control, UserHandle.myUserId());
@@ -1469,6 +1470,7 @@ public class DevicePolicyManager {
      * @param admin Which {@link DeviceAdminReceiver} this request is associated,
      * must be self
      * @return true if admin app can control SELinux policy, false otherwise
+     * @hide
      */
     public boolean isSELinuxAdmin(ComponentName admin) {
         return isSELinuxAdmin(admin, UserHandle.myUserId());
@@ -1496,6 +1498,7 @@ public class DevicePolicyManager {
      * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
      * @param enforcing true for enforcing mode, false for permissive mode.
      * @return false if Android was unable to set the desired mode
+     * @hide
      */
     public boolean setSELinuxEnforcing(ComponentName admin, boolean enforcing) {
         return setSELinuxEnforcing(admin, enforcing, UserHandle.myUserId());
@@ -1525,6 +1528,7 @@ public class DevicePolicyManager {
      * SELinux admin.
      *
      * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     * @hide
      */
     public boolean getSELinuxEnforcing(ComponentName admin) {
         return getSELinuxEnforcing(admin, UserHandle.myUserId());
@@ -1553,6 +1557,7 @@ public class DevicePolicyManager {
      * SELinux admin.
      *
      * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
+     * @hide
      */
     public List<String> getSELinuxBooleanNames(ComponentName admin) {
         return getSELinuxBooleanNames(admin, UserHandle.myUserId());
@@ -1583,6 +1588,7 @@ public class DevicePolicyManager {
      * @param admin Which {@link DeviceAdminReceiver} this request is associated with.
      * @param name the name of the SELinux boolean
      * @return the value of the SELinux boolean
+     * @hide
      */
     public boolean getSELinuxBooleanValue(ComponentName admin, String name) {
         return getSELinuxBooleanValue(admin, name, UserHandle.myUserId());
@@ -1614,6 +1620,7 @@ public class DevicePolicyManager {
      * @param name the name of the SELinux boolean
      * @param value the desired value for the boolean
      * @return false if Android was unable to set the desired mode
+     * @hide
      */
     public boolean setSELinuxBooleanValue(ComponentName admin, String name,
             boolean value) {
@@ -1635,10 +1642,15 @@ public class DevicePolicyManager {
 
     // Before changing these values, be sure to update
     // DevicePolicyManagerService.java's POLICY_DESCRIPTIONS array.
+    /** @hide */
     public static final int SEPOLICY_FILE_SEPOLICY = 0;
+    /** @hide */
     public static final int SEPOLICY_FILE_PROPCTXS = 1;
+    /** @hide */
     public static final int SEPOLICY_FILE_FILECTXS = 2;
+    /** @hide */
     public static final int SEPOLICY_FILE_SEAPPCTXS = 3;
+    /** @hide */
     public static final int SEPOLICY_FILE_COUNT = SEPOLICY_FILE_SEAPPCTXS+1;
 
     /**
@@ -1665,6 +1677,7 @@ public class DevicePolicyManager {
      * @param policy the new policy file in bytes, or null if you wish to revert to
      * the default policy
      * @return false if Android was unable to set the new policy
+     * @hide
      */
     public boolean setCustomPolicyFile(ComponentName admin, int policyType, byte[] policy) {
         return setCustomPolicyFile(admin, policyType, policy, UserHandle.myUserId());
@@ -1700,6 +1713,7 @@ public class DevicePolicyManager {
      * @param policyType one of {@link #SEPOLICY_FILE_SEPOLICY}, {@link #SEPOLICY_FILE_PROPCTXS},
      * {@link #SEPOLICY_FILE_FILECTXS}, or {@link #SEPOLICY_FILE_SEAPPCTXS}
      * @return true if the admin set a custom policy file
+     * @hide
      */
     public boolean isCustomPolicyFile(ComponentName admin, int policyType) {
         return isCustomPolicyFile(admin, policyType, UserHandle.myUserId());

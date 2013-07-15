@@ -147,6 +147,7 @@ public final class DeviceAdminInfo implements Parcelable {
     public static final int USES_POLICY_DISABLE_KEYGUARD_FEATURES = 9;
 
     /**
+     * @hide
      * A type of policy that this device admin can use: enforce SELinux policy.
      *
      * <p>To control this policy, the device admin must have a "enforce-selinux"
