@@ -1421,9 +1421,9 @@ public class WifiStateMachine extends StateMachine {
     private static final String DELIMITER_STR = "====";
     private static final String END_STR = "####";
 
+
     /**
      * Format:
-     *
      * id=1
      * bssid=68:7f:76:d7:1a:6e
      * freq=2412
@@ -1464,22 +1464,21 @@ public class WifiStateMachine extends StateMachine {
                 if (lines[i].startsWith(END_STR)) {
                     break;
                 } else if (lines[i].startsWith(ID_STR)) {
-                    try {
-                        sid = Integer.parseInt(lines[i].substring(ID_STR.length())) + 1;
-                    } catch (NumberFormatException e) {
-                        // Nothing to do
-                    }
-                    break;
+                   try {
+                       sid = Integer.parseInt(lines[i].substring(ID_STR.length())) + 1;
+                   } catch (NumberFormatException e) {
+                       // Nothing to do
+                   }
+                   break;
                 }
             }
             if (sid == -1) break;
-        }
+         }
 
         scanResults = scanResultsBuf.toString();
         if (TextUtils.isEmpty(scanResults)) {
            return;
         }
-
         synchronized(mScanResultCache) {
             mScanResults = new ArrayList<ScanResult>();
             String[] lines = scanResults.split("\n");
