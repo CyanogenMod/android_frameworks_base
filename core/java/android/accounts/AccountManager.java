@@ -1439,7 +1439,9 @@ public class AccountManager {
         handler.post(new Runnable() {
             public void run() {
                 try {
-                    listener.onAccountsUpdated(accountsCopy);
+                    if (mAccountsUpdatedListeners.containsKey(listener)) {
+                        listener.onAccountsUpdated(accountsCopy);
+                    }
                 } catch (SQLException e) {
                     // Better luck next time.  If the problem was disk-full,
                     // the STORAGE_OK intent will re-trigger the update.
