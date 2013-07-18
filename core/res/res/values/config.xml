@@ -321,7 +321,7 @@
 
     <!-- XXXXXX END OF RESOURCES USING WRONG NAMING CONVENTION -->
 
-    <!-- If this is true, the screen will come on when you unplug usb/power/whatever. -->
+    <!-- If this is true, the screen will come on when you unplug usb/power/whatever. -->       
     <bool name="config_unplugTurnsOnScreen">false</bool>
 
     <!-- If this is true, the screen will fade off. -->
