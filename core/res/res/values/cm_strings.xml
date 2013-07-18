@@ -181,4 +181,13 @@
         intercept an outgoing SMS.
         Malicious apps may use this to prevent outgoing SMS messages.</string>
 
+    <!-- Title of policy access to start enforcing SELinux policy [CHAR LIMIT=30]-->
+    <string name="policylab_enforceSelinux">Enforce SELinux</string>
+    <!-- Description of policy access to start enforcing SELinux policy [CHAR LIMIT=110]-->
+    <string name="policydesc_enforceSelinux">Toggle SELinux policy enforcing or permissive mode.</string>
+    <!-- Title of policy access to start enforcing MMAC policy [CHAR LIMIT=30]-->
+    <string name="policylab_enforceMmac">Enforce MMAC</string>
+    <!-- Description of policy access to start enforcing MMAC policy [CHAR LIMIT=110]-->
+    <string name="policydesc_enforceMmac">Toggle MMAC policy enforcing or permissive mode.</string>
+
 </resources>
