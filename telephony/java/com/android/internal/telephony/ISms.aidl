@@ -121,6 +121,35 @@ interface ISms {
             in PendingIntent sentIntent, in PendingIntent deliveryIntent);
 
     /**
+     * Send an SMS.
+     *
+     * @param destAddr the address to send the message to
+     * @param smsc the SMSC to send the message through, or NULL for the
+     *  default SMSC
+     * @param text the body of the message to send
+     * @param sentIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is sucessfully sent, or failed.
+     *  The result code will be <code>Activity.RESULT_OK<code> for success,
+     *  or one of these errors:<br>
+     *  <code>RESULT_ERROR_GENERIC_FAILURE</code><br>
+     *  <code>RESULT_ERROR_RADIO_OFF</code><br>
+     *  <code>RESULT_ERROR_NULL_PDU</code><br>
+     *  For <code>RESULT_ERROR_GENERIC_FAILURE</code> the sentIntent may include
+     *  the extra "errorCode" containing a radio technology specific value,
+     *  generally only useful for troubleshooting.<br>
+     *  The per-application based SMS control checks sentIntent. If sentIntent
+     *  is NULL the caller will be checked against all unknown applications,
+     *  which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is delivered to the recipient.  The
+     *  raw pdu of the status report is in the extended data ("pdu").
+     * @param priority Priority level of the message
+     */
+    void sendTextWithPriority(in String destAddr, in String scAddr, in String text,
+            in PendingIntent sentIntent, in PendingIntent deliveryIntent,
+            in int priority);
+
+    /**
      * Send a multi-part text based SMS.
      *
      * @param destinationAddress the address to send the message to
