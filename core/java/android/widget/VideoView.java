@@ -63,6 +63,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private static final int STATE_PLAYING            = 3;
     private static final int STATE_PAUSED             = 4;
     private static final int STATE_PLAYBACK_COMPLETED = 5;
+    private static final int STATE_SUSPENDED          = 6;
 
     // mCurrentState is a VideoView object's current state.
     // mTargetState is the state that a method caller intends to reach.
@@ -298,6 +299,22 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
     }
 
+    private boolean isHTTPStreaming(Uri mUri) {
+        if (mUri != null){
+            String scheme = mUri.toString();
+            if (scheme.startsWith("http://") || scheme.startsWith("https://")) {
+                if (scheme.endsWith(".m3u8") || scheme.endsWith(".m3u")
+                    || scheme.contains("m3u8") || scheme.endsWith(".mpd")) {
+                    // HLS or DASH streaming source
+                    return false;
+                }
+                // HTTP streaming
+                return true;
+            }
+        }
+        return false;
+    }
+
     MediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
         new MediaPlayer.OnVideoSizeChangedListener() {
             public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
@@ -343,7 +360,6 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 seekTo(seekToPosition);
             }
             if (mVideoWidth != 0 && mVideoHeight != 0) {
-                //Log.i("@@@@", "video size: " + mVideoWidth +"/"+ mVideoHeight);
                 getHolder().setFixedSize(mVideoWidth, mVideoHeight);
                 if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
                     // We didn't actually change the size (it was already at the size
@@ -509,6 +525,22 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
         public void surfaceCreated(SurfaceHolder holder)
         {
+            if (mCurrentState == STATE_SUSPENDED) {
+                mSurfaceHolder = holder;
+                mMediaPlayer.setDisplay(mSurfaceHolder);
+                if (mMediaPlayer.resume()) {
+                    mCurrentState = STATE_PREPARED;
+                    if (mSeekWhenPrepared != 0) {
+                        seekTo(mSeekWhenPrepared);
+                    }
+                    if (mTargetState == STATE_PLAYING) {
+                        start();
+                    }
+                    return;
+                } else {
+                    release(false);
+                }
+            }
             mSurfaceHolder = holder;
             openVideo();
         }
@@ -518,6 +550,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             // after we return from this we can't use the surface any more
             mSurfaceHolder = null;
             if (mMediaController != null) mMediaController.hide();
+            if (isHTTPStreaming(mUri) && mCurrentState == STATE_SUSPENDED) {
+                // Don't call release() while run suspend operation
+                return;
+            }
             release(true);
         }
     };
@@ -624,10 +660,44 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     }
 
     public void suspend() {
+        // HTTP streaming will call mMediaPlayer->suspend(), others will call release()
+
+        if (isHTTPStreaming(mUri) && mCurrentState != STATE_PREPARING) {
+            if (mMediaPlayer.suspend()) {
+                mTargetState = mCurrentState;
+                mCurrentState = STATE_SUSPENDED;
+                return;
+            }
+        }
+
         release(false);
     }
 
     public void resume() {
+        // HTTP streaming (with suspended status) will call mMediaPlayer->resume(), others will call openVideo()
+
+        if (mCurrentState == STATE_SUSPENDED) {
+            if (mSurfaceHolder != null) {
+                // The surface hasn't been destroyed
+                if (mMediaPlayer.resume()) {
+                    mCurrentState = STATE_PREPARED;
+                    if (mSeekWhenPrepared !=0) {
+                        seekTo(mSeekWhenPrepared);
+                    }
+                    if (mTargetState == STATE_PLAYING) {
+                        start();
+                    }
+                    return;
+                } else {
+                    // resume failed, so call release() before openVideo()
+                    release(false);
+                }
+            } else {
+                // The surface has been destroyed, resume operation will be done after surface created
+                return;
+            }
+        }
+
         openVideo();
     }
 
@@ -675,7 +745,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         return (mMediaPlayer != null &&
                 mCurrentState != STATE_ERROR &&
                 mCurrentState != STATE_IDLE &&
-                mCurrentState != STATE_PREPARING);
+                mCurrentState != STATE_PREPARING &&
+                mCurrentState != STATE_SUSPENDED);
     }
 
     @Override

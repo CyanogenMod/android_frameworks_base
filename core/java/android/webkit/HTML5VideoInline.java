@@ -54,6 +54,9 @@ public class HTML5VideoInline extends HTML5VideoView{
 
     @Override
     public void decideDisplayMode() {
+        if (mCurrentState == STATE_SUSPENDED) {
+            mSurfaceTexture = null;
+        }
         SurfaceTexture surfaceTexture = getSurfaceTexture(getVideoLayerId());
         Surface surface = new Surface(surfaceTexture);
         mPlayer.setSurface(surface);

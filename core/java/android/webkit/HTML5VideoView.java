@@ -48,6 +48,7 @@ public class HTML5VideoView implements MediaPlayer.OnPreparedListener {
     static final int STATE_PLAYING            = 3;
     static final int STATE_RESETTED           = 4;
     static final int STATE_RELEASED           = 5;
+    static final int STATE_SUSPENDED          = 6;
 
     protected HTML5VideoViewProxy mProxy;
 
@@ -108,6 +109,34 @@ public class HTML5VideoView implements MediaPlayer.OnPreparedListener {
         }
     }
 
+    public boolean suspend() {
+        if (mPlayer.suspend()) {
+            // Delete the Timer to stop it since there is no stop call.
+            if (mTimer != null) {
+                mTimer.purge();
+                mTimer.cancel();
+                mTimer = null;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean resume() {
+        if (mPlayer.resume()) {
+            mCurrentState = STATE_PREPARED;
+            if (mSaveSeekTime > 0) {
+                seekTo(mSaveSeekTime);
+            }
+
+            if (mProxy != null) {
+                mProxy.resume(mPlayer);
+            }
+            return true;
+        }
+        return false;
+    }
+
     public int getDuration() {
         if (mCurrentState == STATE_PREPARED) {
             return mPlayer.getDuration();
@@ -124,14 +153,14 @@ public class HTML5VideoView implements MediaPlayer.OnPreparedListener {
     }
 
     public void seekTo(int pos) {
-        if (mCurrentState == STATE_PREPARED)
+        if (mCurrentState == STATE_PREPARED || mCurrentState == STATE_SUSPENDED)
             mPlayer.seekTo(pos);
         else
             mSaveSeekTime = pos;
     }
 
     public boolean isPlaying() {
-        if (mCurrentState == STATE_PREPARED) {
+        if (mCurrentState == STATE_PREPARED || mCurrentState == STATE_SUSPENDED) {
             return mPlayer.isPlaying();
         } else {
             return false;
@@ -246,7 +275,14 @@ public class HTML5VideoView implements MediaPlayer.OnPreparedListener {
             // don't need to call prepare again, we just need to call onPrepared
             // to refresh the state here.
             if (mCurrentState >= STATE_PREPARED) {
-                onPrepared(mPlayer);
+                if (mCurrentState == STATE_SUSPENDED) {
+                    if (!resume()) {
+                        mSkipPrepare = false;
+                        prepareDataCommon(proxy);
+                    }
+                } else {
+                    onPrepared(mPlayer);
+                }
             }
             mSkipPrepare = false;
         }
@@ -301,6 +337,10 @@ public class HTML5VideoView implements MediaPlayer.OnPreparedListener {
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        if (mCurrentState ==  STATE_SUSPENDED) {
+            suspend();
+            return;
+        }
         mCurrentState = STATE_PREPARED;
         seekTo(mSaveSeekTime);
         if (mProxy != null) {
@@ -317,6 +357,19 @@ public class HTML5VideoView implements MediaPlayer.OnPreparedListener {
         pause();
         if (proxy != null) {
             proxy.dispatchOnPaused();
+        }
+    }
+
+    // Suspend the player and update the play/pause button
+    public void suspendAndDispatch(HTML5VideoViewProxy proxy) {
+        if (suspend()) {
+            mCurrentState = STATE_SUSPENDED;
+            mSkipPrepare = true;
+            if (proxy != null) {
+                proxy.dispatchOnPaused();
+            }
+        } else {
+            release();
         }
     }
 
@@ -380,4 +433,7 @@ public class HTML5VideoView implements MediaPlayer.OnPreparedListener {
     public void showControllerInFullScreen() {
     }
 
+    public boolean isSuspended() {
+        return (mCurrentState == STATE_SUSPENDED);
+    }
 }
