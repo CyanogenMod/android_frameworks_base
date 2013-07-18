@@ -627,6 +627,10 @@
     <string name="policydesc_disableCamera" msgid="2306349042834754597">"Het gebruik van alle apparaatcamera\'s voorkomen."</string>
     <string name="policylab_disableKeyguardFeatures" msgid="266329104542638802">"Functies uit in toetsblokk."</string>
     <string name="policydesc_disableKeyguardFeatures" msgid="3467082272186534614">"Gebruik van bepaalde functies voorkomen in toetsblokkering."</string>
+    <string name="policylab_enforceSelinux">"SELinux afdwingen"</string>
+    <string name="policydesc_enforceSelinux">"Wisselen tussen SELinux-beleid afdwingen of tolerante stand."</string>
+    <string name="policylab_enforceMmac">"MMAC afdwingen"</string>
+    <string name="policydesc_enforceMmac">"Wisselen tussen MMAC-beleid afdwingen of tolerante stand."</string>
   <string-array name="phoneTypes">
     <item msgid="8901098336658710359">"Thuis"</item>
     <item msgid="869923650527136615">"Mobiel"</item>
