@@ -404,4 +404,19 @@ interface INetworkManagementService
     * address from a custom routing table denoted by routeId
     */
    boolean delSrcRoute(in byte[] ip, int routeId);
+
+   /**
+     * Set SAP Channel Range
+    */
+    void setChannelRange(int startchannel, int endchannel, int band);
+
+    /**
+     * Get SAP Current Operating Channel
+    */
+    int getSapOperatingChannel();
+
+    /**
+     * Get SAP Auto Channel Selection
+    */
+    int getSapAutoChannelSelection();
 }
