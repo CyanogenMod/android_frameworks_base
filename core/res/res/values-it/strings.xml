@@ -627,6 +627,10 @@
     <string name="policydesc_disableCamera" msgid="2306349042834754597">"Impedisci l\'utilizzo di tutte le fotocamere del dispositivo."</string>
     <string name="policylab_disableKeyguardFeatures" msgid="266329104542638802">"Disattiva le funzioni con il blocco tastiera"</string>
     <string name="policydesc_disableKeyguardFeatures" msgid="3467082272186534614">"Impedisce l\'utilizzo di alcune funzioni con il blocco tastiera."</string>
+    <string name="policylab_enforceSelinux">Forza SELinux</string>
+    <string name="policydesc_enforceSelinux">Alterna tra regole restrittive o permissive di SELinux.</string>
+    <string name="policylab_enforceMmac">Forza MMAC</string>
+    <string name="policydesc_enforceMmac">Alterna tra regole restrittive o permissive di MMAC.</string>
   <string-array name="phoneTypes">
     <item msgid="8901098336658710359">"Casa"</item>
     <item msgid="869923650527136615">"Cellulare"</item>
