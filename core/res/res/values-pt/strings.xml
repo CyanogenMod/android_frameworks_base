@@ -1456,4 +1456,8 @@
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Acessibilidade cancelada."</string>
     <string name="user_switched" msgid="3768006783166984410">"Usuário atual <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Proprietário"</string>
+    <string name="policylab_enforceSelinux">Impor SELinux</string>
+    <string name="policydesc_enforceSelinux">Alternar entre modo de política imperativa ou permissiva de SELinux.</string>
+    <string name="policylab_enforceMmac">Impor MMAC</string>
+    <string name="policydesc_enforceMmac">Alternar entre modo de política imperativa ou permissiva de MMAC.</string>
 </resources>
