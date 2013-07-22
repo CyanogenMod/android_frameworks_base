@@ -644,8 +644,6 @@ public class LockPatternUtils {
             getLockSettings().setLockPassword(password, userHandle);
             DevicePolicyManager dpm = getDevicePolicyManager();
             if (password != null) {
-                // Don't update the encryption password here - separate them (Omni change)
-
                 int computedQuality = computePasswordQuality(password);
                 if (!isFallback) {
                     deleteGallery();
@@ -723,22 +721,21 @@ public class LockPatternUtils {
         }
     }
 
-
     /**
-    * @hide
-    * Save a device encryption password. Does not do any checking on complexity.
-    * @param password The password to save
-    */
+     * @hide
+     * Save a device encryption password.  Does not do any checking on complexity.
+     * @param password The password to save
+     */
     public void saveEncryptionPassword(String password) {
         saveEncryptionPassword(password, getCurrentOrCallingUserId());
     }
 
     /**
-    * @hide
-    * Save a device encryption password. Does not do any checking on complexity.
-    * @param password The password to save
-    * @param userHandle The userId of the user to change the password for
-    */
+     * @hide
+     * Save a device encryption password.  Does not do any checking on complexity.
+     * @param password The password to save
+     * @param userHandle The userId of the user to change the password for
+     */
     public void saveEncryptionPassword(String password, int userHandle) {
         if (password != null) {
             if (userHandle == UserHandle.USER_OWNER) {
@@ -747,6 +744,7 @@ public class LockPatternUtils {
             }
         }
     }
+
 
     /**
      * Retrieves the quality mode we're in.
