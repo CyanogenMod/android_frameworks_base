@@ -476,6 +476,10 @@
     <string name="quick_settings_rssi_label">RSSI</string>
     <!-- QuickSettings: RSSI (No network) [CHAR LIMIT=NONE] -->
     <string name="quick_settings_rssi_emergency_only">Emergency Calls Only</string>
+    <!-- QuickSettings: Mobile Data On [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_data_on">Data on</string>
+    <!-- QuickSettings: Mobile Data Off [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_data_off">Data off</string>
     <!-- QuickSettings: Settings [CHAR LIMIT=NONE] -->
     <string name="quick_settings_settings_label">Settings</string>
     <!-- QuickSettings: Time [CHAR LIMIT=NONE] -->
@@ -496,6 +500,8 @@
     <string name="quick_settings_brightness_dialog_title">Brightness</string>
     <!-- QuickSettings: Brightness dialog auto brightness button [CHAR LIMIT=NONE] -->
     <string name="quick_settings_brightness_dialog_auto_brightness_label">AUTO</string>
+    <!-- QuickSettings: Apn switcher button label [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_apn_switch_label">APN switch</string>
 
 
     <!-- Glyph to be overlaid atop the battery when the level is extremely low. Do not translate. -->

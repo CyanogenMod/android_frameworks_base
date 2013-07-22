@@ -17,6 +17,9 @@
 package com.android.systemui.statusbar.phone;
 
 import android.animation.ValueAnimator;
+import com.android.internal.telephony.MSimConstants;
+import com.android.internal.telephony.TelephonyIntents;
+
 import android.app.ActivityManagerNative;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -51,6 +54,7 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Profile;
 import android.provider.Settings;
 import android.security.KeyChain;
+import android.telephony.MSimTelephonyManager;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -63,6 +67,8 @@ import android.widget.TextView;
 
 import com.android.internal.app.MediaRouteDialogPresenter;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.ExtQuickSettingsModel;
+import com.android.systemui.statusbar.phone.ExtQuickSettingsModel.ApnState;
 import com.android.systemui.statusbar.phone.QuickSettingsModel.ActivityState;
 import com.android.systemui.statusbar.phone.QuickSettingsModel.BluetoothState;
 import com.android.systemui.statusbar.phone.QuickSettingsModel.RSSIState;
@@ -89,7 +95,7 @@ class QuickSettings {
 
     private Context mContext;
     private PanelBar mBar;
-    private QuickSettingsModel mModel;
+    private ExtQuickSettingsModel mModel;
     private ViewGroup mContainerView;
 
     private DevicePolicyManager mDevicePolicyManager;
@@ -120,7 +126,7 @@ class QuickSettings {
             = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         mContext = context;
         mContainerView = container;
-        mModel = new QuickSettingsModel(context);
+        mModel = new ExtQuickSettingsModel(context);
         mBluetoothState = new QuickSettingsModel.BluetoothState();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -134,6 +140,11 @@ class QuickSettings {
         filter.addAction(Intent.ACTION_USER_SWITCHED);
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
         filter.addAction(KeyChain.ACTION_STORAGE_CHANGED);
+
+        if (showRoamingSetting()) {
+            filter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
+        }
+
         mContext.registerReceiver(mReceiver, filter);
 
         IntentFilter profileFilter = new IntentFilter();
@@ -432,19 +443,35 @@ class QuickSettings {
 
         if (mModel.deviceHasMobileData()) {
             // RSSI
-            QuickSettingsTileView rssiTile = (QuickSettingsTileView)
+            final QuickSettingsTileView rssiTile = (QuickSettingsTileView)
                     inflater.inflate(R.layout.quick_settings_tile, parent, false);
             rssiTile.setContent(R.layout.quick_settings_tile_rssi, inflater);
             rssiTile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setComponent(new ComponentName(
+                    if (mModel.dataSwitchEnabled()) {
+                        mModel.switchMobileDataState();
+                    } else {
+                        Intent intent = new Intent();
+                        intent.setComponent(new ComponentName(
                             "com.android.settings",
                             "com.android.settings.Settings$DataUsageSummaryActivity"));
-                    startSettingsActivity(intent);
+                        startSettingsActivity(intent);
+                    }
                 }
             });
+
+            if (mModel.dataSwitchEnabled() && LONG_PRESS_TOGGLES) {
+                rssiTile.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        mModel.switchMobileDataState();
+                        rssiTile.setPressed(false);
+                        return true;
+                    }
+                });
+            }
+
             mModel.addRSSITile(rssiTile, new NetworkActivityCallback() {
                 @Override
                 public void refreshView(QuickSettingsTileView view, State state) {
@@ -452,6 +479,18 @@ class QuickSettings {
                     ImageView iv = (ImageView) view.findViewById(R.id.rssi_image);
                     ImageView iov = (ImageView) view.findViewById(R.id.rssi_overlay_image);
                     TextView tv = (TextView) view.findViewById(R.id.rssi_textview);
+
+                    if (mModel.dataSwitchEnabled()) {
+                        Resources r = mContext.getResources();
+                        rssiState.signalIconId = rssiState.enabled
+                                ? R.drawable.ic_qs_data_on
+                                : R.drawable.ic_qs_data_off;
+                        rssiState.label = rssiState.enabled
+                                ? r.getString(R.string.quick_settings_data_on)
+                                : r.getString(R.string.quick_settings_data_off);
+                        rssiState.dataTypeIconId = 0;
+                    }
+
                     // Force refresh
                     iv.setImageDrawable(null);
                     iv.setImageResource(rssiState.signalIconId);
@@ -778,6 +817,48 @@ class QuickSettings {
                 new QuickSettingsModel.BasicRefreshCallback(sslCaCertWarningTile)
                         .setShowWhenEnabled(true));
         parent.addView(sslCaCertWarningTile);
+
+        // APN switch
+        if (mContext.getResources().getBoolean(R.bool.config_showApnSwitch)) {
+            final QuickSettingsBasicTile apnTile = new QuickSettingsBasicTile(mContext);
+            apnTile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startSettingsActivity(android.provider.Settings.ACTION_APN_SETTINGS);
+                }
+            });
+            if (LONG_PRESS_TOGGLES) {
+                apnTile.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (mModel != null && mModel.getApnState() != null) {
+                            mModel.getApnState().switchToNextApn(null);
+                        }
+                        apnTile.setPressed(false);
+                        return true;
+                    }
+                });
+            }
+            mModel.addApnTile(apnTile, new QuickSettingsModel.RefreshCallback() {
+                @Override
+                public void refreshView(QuickSettingsTileView view, State state) {
+                    ApnState apnState = (ApnState) state;
+                    QuickSettingsBasicTile apnTileView = (QuickSettingsBasicTile)view;
+
+                    apnTileView.setImageResource(apnState.iconId);
+                    apnTileView.setText(apnState.label);
+                    apnTileView.setVisibility(apnState.enabled ? View.VISIBLE : View.GONE);
+                }
+            });
+            parent.addView(apnTile);
+        }
+
+        if (showRoamingSetting()) {
+            // Roaming tile
+            QuickSettingsBasicTile roamingTile = mModel.addRoamingTile();
+            parent.addView(roamingTile);
+        }
+
     }
 
     void updateResources() {
@@ -875,6 +956,12 @@ class QuickSettings {
                 }
             } else if (KeyChain.ACTION_STORAGE_CHANGED.equals(action)) {
                 queryForSslCaCerts();
+            } else if (TelephonyIntents.ACTION_SERVICE_STATE_CHANGED.equals(action)) {
+                int sub = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY, MSimConstants.SUB1);
+                if (sub == MSimConstants.SUB1
+                        && showRoamingSetting()) {
+                    mModel.onRoamingVisibleChanged();
+                }
             }
         }
     };
@@ -919,5 +1006,9 @@ class QuickSettings {
                     .start();
             }
         }
+    }
+
+    private boolean showRoamingSetting() {
+        return mContext.getResources().getBoolean(R.bool.config_showRoamingSetting);
     }
 }
