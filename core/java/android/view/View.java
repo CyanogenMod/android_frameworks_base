@@ -7306,6 +7306,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * @return True if the event was handled by the view, false otherwise.
      */
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
+        int ret = sendTreatAsTouchEvent(event);
+        if (ret != 0) {
+            return (ret == 1 ? true : false);
+        }
+
         if (mInputEventConsistencyVerifier != null) {
             mInputEventConsistencyVerifier.onGenericMotionEvent(event, 0);
         }
@@ -18406,5 +18411,40 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         final String key = (prefix > 0 ? name.substring(0, prefix) : name) + bits + name;
         final String output = bits + " " + name;
         found.put(key, output);
+    }
+
+    /**
+     * @hide
+     */
+    private boolean mProcessGenericMotionAsPointer = false;
+
+    /**
+     * @hide
+     */
+    public void setProcessGenericMotionAsPointer(boolean b) {
+        mProcessGenericMotionAsPointer = b;
+    }
+
+    /**
+     * @hide
+     */
+    public int sendTreatAsTouchEvent(MotionEvent event) {
+        int ret = 0;
+        boolean doIt = false;
+
+        if (android.os.Build.BRAND.startsWith("SEMC")
+                && android.os.Build.MODEL.startsWith("R800")) {
+            doIt = event.getSource() == InputDevice.SOURCE_TOUCHPAD;
+            if (doIt) {
+                doIt = mProcessGenericMotionAsPointer;
+                if (!doIt) {
+                    doIt = (android.os.SystemProperties.getInt("mod.touchpad.activated",0) == 1);
+                }
+                if (doIt) {
+                    ret = (dispatchTouchEvent(event) ? 1 : 2);
+                }
+            }
+        }
+        return ret;
     }
 }
