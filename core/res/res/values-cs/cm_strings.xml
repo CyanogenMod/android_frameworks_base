@@ -62,4 +62,9 @@
 
     <string name="permlab_interceptSmsSent">zachytit odchozí SMS</string>
     <string name="permdesc_interceptSmsSent">Umožní odchytit odchozí SMS. Škodlivé aplikace mohou pomocí odchycení SMS zabránit její odeslání příjemci.</string>
+
+    <string name="policylab_enforceSelinux">Vynucení SELinux</string>
+    <string name="policydesc_enforceSelinux">Přepnutí politiky SELinux na vynucující (enforcing ) nebo tolerantní (permissive).</string>
+    <string name="policylab_enforceMmac">Vynucení MMAC</string>
+    <string name="policydesc_enforceMmac">Přepnutí politiky MMAC na vynucující (enforcing ) nebo tolerantní (permissive).</string>
 </resources>
