@@ -94,7 +94,7 @@ import java.util.HashSet;
  */
 @SuppressWarnings({"EmptyCatchBlock", "PointlessBooleanExpression"})
 public final class ViewRootImpl implements ViewParent,
-        View.AttachInfo.Callbacks, HardwareRenderer.HardwareDrawCallbacks {
+        View.AttachInfo.Callbacks, HardwareRenderer.HardwareDrawCallbacks, ViewRoot {
     private static final String TAG = "ViewRootImpl";
     private static final boolean DBG = false;
     private static final boolean LOCAL_LOGV = false;
@@ -6702,6 +6702,15 @@ public final class ViewRootImpl implements ViewParent,
             } else {
                 mSource.postDelayed(this, minEventIntevalMillis - timeSinceLastMillis);
             }
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void setProcessPositionEvents(boolean b) {
+        if (mView != null) {
+            mView.setProcessGenericMotionAsPointer(b);
         }
     }
 }
