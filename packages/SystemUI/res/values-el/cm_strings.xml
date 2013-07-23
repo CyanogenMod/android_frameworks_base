@@ -52,8 +52,10 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE ανενεργό</string>
     <string name="quick_settings_volume">Ένταση</string>
+    <string name="quick_settings_camera_label">Φωτογρ. μηχανή</string>
     <string name="quick_settings_expanded_desktop">Επεκταμένη</string>
     <string name="quick_settings_expanded_desktop_off">Κανονική</string>
+    <string name="quick_settings_camera_error_connect">Δεν είναι δυνατή η σύνδεση με την φωτογραφ. μηχανή</string>
     <string name="navbar_dialog_title">Επιλέξτε λειτουργία για εκχώρηση</string>
     <string name="navbar_home_button">Πλήκτρο Home</string>
     <string name="navbar_recent_button">Πλήκτρο Recent</string>

@@ -107,4 +107,18 @@
     <string name="symbol_picker_equal">\u2260\u2248\u221e</string>
     <string name="symbol_picker_lt">\u2264\u00ab\u2039</string>
     <string name="symbol_picker_gt">\u2265\u00bb\u203a</string>
+    <string name="permlab_changePrivacyGuardState">ενεργοποίηση ή απενεργοποίηση του privacy guard</string>
+    <string name="permdesc_changePrivacyGuardState">Επιτρέπει σε μια εφαρμογή τον χειρισμό άλλων εφαρμογών με το Privacy Guard. Όταν μια εφαρμογή τρέχει με το Privacy Guard, δεν θα έχει πρόσβαση στα προσωπικά σας δεδομένα όπως επαφές, μηνύματα ή το αρχείο κλήσεων.</string>
+    <string name="privacy_guard_notification">Privacy Guard ενεργό</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> δεν θα μπορεί να έχει πρόσβαση στα προσωπικά σας δεδομένα</string>
+    <string name="profile_picker_title">Προφίλ</string>
+    <string name="profile_none">Κανένα</string>
+    <string name="permlab_cancelNotifications">ακύρωση ειδοποιήσεων εφαρμογών</string>
+    <string name="permdesc_cancelNotifications">Επιτρέπει σε μια εφαρμογή την ακύρωση ειδοποιήσεων που προέρχονται από άλλες εφαρμογές.</string>
+    <string name="permlab_interceptSmsSent">παρεμπόδιση εξερχόμενων SMS</string>
+    <string name="permdesc_interceptSmsSent">Επιτρέπει σε μια εφαρμογή να παρεμποδίσει τα εξερχόμενα SMS. Κακόβουλες εφαρμογές μπορεί να το χρησιμοποιήσουν για να εμποδίσουν τη αποστολή SMS.</string>
+    <string name="policylab_enforceSelinux">Εξαναγκασμός SELinux</string>
+    <string name="policydesc_enforceSelinux">Εναλλαγή πολιτικής SELinux σε εξαναγκασμένη ή επιτρεπόμενη.</string>
+    <string name="policylab_enforceMmac">Εξαναγκασμός MMAC</string>
+    <string name="policydesc_enforceMmac">Εναλλαγή πολιτικής MMAC σε εξαναγκασμένη ή επιτρεπόμενη.</string>
 </resources>
