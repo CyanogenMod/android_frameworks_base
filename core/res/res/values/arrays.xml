@@ -330,18 +330,6 @@
         <item>#ffffffff</item>
     </array>
 
-    <!-- Used in LocalePicker -->
-    <string-array translatable="false" name="special_locale_codes">
-        <item>zh_CN</item>
-        <item>zh_TW</item>
-    </string-array>
-
-    <!-- Used in LocalePicker -->
-    <string-array translatable="false" name="special_locale_names">
-        <item>中文 (简体)</item>
-        <item>中文 (繁體)</item>
-    </string-array>
-
     <!-- Resources for GlowPadView in LockScreen -->
     <array name="lockscreen_targets_when_silent">
         <item>@drawable/ic_lockscreen_unlock</item>
