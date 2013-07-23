@@ -332,14 +332,12 @@
 
     <!-- Used in LocalePicker -->
     <string-array translatable="false" name="special_locale_codes">
-        <item>zh_CN</item>
-        <item>zh_TW</item>
+        <item>zh_HK</item>
     </string-array>
 
     <!-- Used in LocalePicker -->
     <string-array translatable="false" name="special_locale_names">
-        <item>中文 (简体)</item>
-        <item>中文 (繁體)</item>
+        <item>中文 (香港)</item>
     </string-array>
 
     <!-- Resources for GlowPadView in LockScreen -->
