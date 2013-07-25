@@ -298,8 +298,6 @@ public class NavigationBarView extends LinearLayout {
                 ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
                 : (mVertical ? mBackLandIcon : mBackIcon));
 
-        ((ImageView)getRecentsButton()).setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
-
         setDisabledFlags(mDisabledFlags, true);
     }
 
