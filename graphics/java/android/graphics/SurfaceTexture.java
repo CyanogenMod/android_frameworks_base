@@ -66,9 +66,10 @@ public class SurfaceTexture {
     private OnFrameAvailableListener mOnFrameAvailableListener;
 
     /**
-     * This field is used by native code, do not access or modify.
+     * These fields are used by native code, do not access or modify.
      */
     private int mSurfaceTexture;
+    private int mFrameAvailableListener;
 
     /**
      * Callback interface for being notified that a new stream frame is available.
@@ -196,7 +197,7 @@ public class SurfaceTexture {
     public void attachToGLContext(int texName) {
         int err = nativeAttachToGLContext(texName);
         if (err != 0) {
-            throw new RuntimeException("Error during detachFromGLContext (see logcat for details)");
+            throw new RuntimeException("Error during attachToGLContext (see logcat for details)");
         }
     }
 
@@ -245,7 +246,7 @@ public class SurfaceTexture {
      * release() frees all the buffers and puts the SurfaceTexture into the
      * 'abandoned' state. Once put in this state the SurfaceTexture can never
      * leave it. When in the 'abandoned' state, all methods of the
-     * ISurfaceTexture interface will fail with the NO_INIT error.
+     * IGraphicBufferProducer interface will fail with the NO_INIT error.
      *
      * Note that while calling this method causes all the buffers to be freed
      * from the perspective of the the SurfaceTexture, if there are additional

@@ -56,8 +56,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.harmony.security.provider.cert.X509CertImpl;
-import org.apache.harmony.xnet.provider.jsse.OpenSSLDSAPrivateKey;
-import org.apache.harmony.xnet.provider.jsse.OpenSSLRSAPrivateKey;
+import org.apache.harmony.xnet.provider.jsse.OpenSSLKey;
+import org.apache.harmony.xnet.provider.jsse.OpenSSLKeyHolder;
 
 class BrowserFrame extends Handler {
 
@@ -227,8 +227,6 @@ class BrowserFrame extends Handler {
             } else {
                 sJavaBridge.setCacheSize(4 * 1024 * 1024);
             }
-            // initialize CacheManager
-            CacheManager.init(appContext);
             // create CookieSyncManager with current Context
             CookieSyncManager.createInstance(appContext);
             // create PluginManager with current Context
@@ -503,8 +501,9 @@ class BrowserFrame extends Handler {
                         WebAddress uri = new WebAddress(item.getUrl());
                         String schemePlusHost = uri.getScheme() + SCHEME_HOST_DELIMITER +
                                 uri.getHost();
-                        String[] up = mDatabase.getUsernamePassword(
-                                schemePlusHost);
+                        String[] up =
+                                WebViewDatabaseClassic.getInstance(mContext)
+                                        .getUsernamePassword(schemePlusHost);
                         if (up == null) { // no row found, try again using the legacy method
                             schemePlusHost = uri.getScheme() + uri.getHost();
                             up = mDatabase.getUsernamePassword(schemePlusHost);
@@ -764,12 +763,15 @@ class BrowserFrame extends Handler {
                 return null;
             }
         } else if (url.startsWith(ANDROID_ASSET)) {
-            url = url.replaceFirst(ANDROID_ASSET, "");
+            String assetUrl = url.replaceFirst(ANDROID_ASSET, "");
             try {
                 AssetManager assets = mContext.getAssets();
-                Uri uri = Uri.parse(url);
+                Uri uri = Uri.parse(assetUrl);
                 return assets.open(uri.getPath(), AssetManager.ACCESS_STREAMING);
             } catch (IOException e) {
+                return null;
+            } catch (Exception e) {
+                Log.w(LOGTAG, "Problem loading url: " + url, e);
                 return null;
             }
         } else if (mSettings.getAllowContentAccess() &&
@@ -1135,13 +1137,10 @@ class BrowserFrame extends Handler {
         if (table.IsAllowed(hostAndPort)) {
             // previously allowed
             PrivateKey pkey = table.PrivateKey(hostAndPort);
-            if (pkey instanceof OpenSSLRSAPrivateKey) {
+            if (pkey instanceof OpenSSLKeyHolder) {
+                OpenSSLKey sslKey = ((OpenSSLKeyHolder) pkey).getOpenSSLKey();
                 nativeSslClientCert(handle,
-                                    ((OpenSSLRSAPrivateKey)pkey).getPkeyContext(),
-                                    table.CertificateChain(hostAndPort));
-            } else if (pkey instanceof OpenSSLDSAPrivateKey) {
-                nativeSslClientCert(handle,
-                                    ((OpenSSLDSAPrivateKey)pkey).getPkeyContext(),
+                                    sslKey.getPkeyContext(),
                                     table.CertificateChain(hostAndPort));
             } else {
                 nativeSslClientCert(handle,
@@ -1333,7 +1332,7 @@ class BrowserFrame extends Handler {
     private native void nativeSslCertErrorCancel(int handle, int certError);
 
     native void nativeSslClientCert(int handle,
-                                    int ctx,
+                                    long ctx,
                                     byte[][] asn1DerEncodedCertificateChain);
 
     native void nativeSslClientCert(int handle,

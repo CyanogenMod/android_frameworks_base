@@ -56,7 +56,9 @@ public class LockdownVpnTracker {
     private static final int MAX_ERROR_COUNT = 4;
 
     private static final String ACTION_LOCKDOWN_RESET = "com.android.server.action.LOCKDOWN_RESET";
+
     private static final String ACTION_VPN_SETTINGS = "android.net.vpn.SETTINGS";
+    private static final String EXTRA_PICK_LOCKDOWN = "android.net.vpn.PICK_LOCKDOWN";
 
     private final Context mContext;
     private final INetworkManagementService mNetService;
@@ -66,7 +68,8 @@ public class LockdownVpnTracker {
 
     private final Object mStateLock = new Object();
 
-    private PendingIntent mResetIntent;
+    private final PendingIntent mConfigIntent;
+    private final PendingIntent mResetIntent;
 
     private String mAcceptedEgressIface;
     private String mAcceptedIface;
@@ -85,6 +88,10 @@ public class LockdownVpnTracker {
         mConnService = Preconditions.checkNotNull(connService);
         mVpn = Preconditions.checkNotNull(vpn);
         mProfile = Preconditions.checkNotNull(profile);
+
+        final Intent configIntent = new Intent(ACTION_VPN_SETTINGS);
+        configIntent.putExtra(EXTRA_PICK_LOCKDOWN, true);
+        mConfigIntent = PendingIntent.getActivity(mContext, 0, configIntent, 0);
 
         final Intent resetIntent = new Intent(ACTION_LOCKDOWN_RESET);
         resetIntent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
@@ -121,7 +128,10 @@ public class LockdownVpnTracker {
             mAcceptedEgressIface = null;
             mVpn.stopLegacyVpn();
         }
-        if (egressDisconnected) return;
+        if (egressDisconnected) {
+            hideNotification();
+            return;
+        }
 
         final int egressType = egressInfo.getType();
         if (vpnInfo.getDetailedState() == DetailedState.FAILED) {
@@ -185,6 +195,7 @@ public class LockdownVpnTracker {
         Slog.d(TAG, "initLocked()");
 
         mVpn.setEnableNotifications(false);
+        mVpn.setEnableTeardown(false);
 
         final IntentFilter resetFilter = new IntentFilter(ACTION_LOCKDOWN_RESET);
         mContext.registerReceiver(mResetReceiver, resetFilter, CONNECTIVITY_INTERNAL, null);
@@ -193,6 +204,7 @@ public class LockdownVpnTracker {
             // TODO: support non-standard port numbers
             mNetService.setFirewallEgressDestRule(mProfile.server, 500, true);
             mNetService.setFirewallEgressDestRule(mProfile.server, 4500, true);
+            mNetService.setFirewallEgressDestRule(mProfile.server, 1701, true);
         } catch (RemoteException e) {
             throw new RuntimeException("Problem setting firewall rules", e);
         }
@@ -218,6 +230,7 @@ public class LockdownVpnTracker {
         try {
             mNetService.setFirewallEgressDestRule(mProfile.server, 500, false);
             mNetService.setFirewallEgressDestRule(mProfile.server, 4500, false);
+            mNetService.setFirewallEgressDestRule(mProfile.server, 1701, false);
         } catch (RemoteException e) {
             throw new RuntimeException("Problem setting firewall rules", e);
         }
@@ -226,6 +239,7 @@ public class LockdownVpnTracker {
 
         mContext.unregisterReceiver(mResetReceiver);
         mVpn.setEnableNotifications(true);
+        mVpn.setEnableTeardown(true);
     }
 
     public void reset() {
@@ -281,10 +295,13 @@ public class LockdownVpnTracker {
         builder.setWhen(0);
         builder.setSmallIcon(iconRes);
         builder.setContentTitle(mContext.getString(titleRes));
-        builder.setContentText(mContext.getString(R.string.vpn_lockdown_reset));
-        builder.setContentIntent(mResetIntent);
+        builder.setContentText(mContext.getString(R.string.vpn_lockdown_config));
+        builder.setContentIntent(mConfigIntent);
         builder.setPriority(Notification.PRIORITY_LOW);
         builder.setOngoing(true);
+        builder.addAction(
+                R.drawable.ic_menu_refresh, mContext.getString(R.string.reset), mResetIntent);
+
         NotificationManager.from(mContext).notify(TAG, 0, builder.build());
     }
 

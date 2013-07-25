@@ -1,6 +1,4 @@
-page.title=Using the Android Emulator
-parent.title=Managing Virtual Devices
-parent.link=index.html
+page.title=Using the Emulator
 @jd:body
 
 <div id="qv-wrapper">
@@ -898,7 +896,7 @@ to a specified guest port on the router, while the router directs traffic
 to/from that port to the emulated device's host port. </p>
 
 <p>To set up the network redirection, you create a mapping of host and guest
-ports/addresses on the the emulator instance. There are two ways to set up
+ports/addresses on the emulator instance. There are two ways to set up
 network redirection: using emulator console commands and using the ADB tool, as
 described below. </p>
 
@@ -1254,7 +1252,7 @@ syntax for this command is as follows: </p>
 <td>&nbsp;</td>
 </tr>
 <tr>
-  <td><code>power health &lt;percent&gt;</code></td>
+  <td><code>capacity &lt;percent&gt;</code></td>
   <td>Set remaining battery capacity state (0-100).</td>
 <td>&nbsp;</td>
 </tr>

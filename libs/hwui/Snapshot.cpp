@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#define LOG_TAG "OpenGLRenderer"
+
 #include "Snapshot.h"
 
 #include <SkCanvas.h>
@@ -31,7 +33,7 @@ Snapshot::Snapshot(): flags(0), previous(NULL), layer(NULL), fbo(0),
     transform = &mTransformRoot;
     clipRect = &mClipRectRoot;
     region = NULL;
-    clipRegion = NULL;
+    clipRegion = &mClipRegionRoot;
 }
 
 /**
@@ -39,11 +41,9 @@ Snapshot::Snapshot(): flags(0), previous(NULL), layer(NULL), fbo(0),
  * the previous snapshot.
  */
 Snapshot::Snapshot(const sp<Snapshot>& s, int saveFlags):
-        flags(0), previous(s), layer(NULL), fbo(s->fbo),
+        flags(0), previous(s), layer(s->layer), fbo(s->fbo),
         invisible(s->invisible), empty(false),
         viewport(s->viewport), height(s->height), alpha(s->alpha) {
-
-    clipRegion = NULL;
 
     if (saveFlags & SkCanvas::kMatrix_SaveFlag) {
         mTransformRoot.load(*s->transform);
@@ -55,17 +55,13 @@ Snapshot::Snapshot(const sp<Snapshot>& s, int saveFlags):
     if (saveFlags & SkCanvas::kClip_SaveFlag) {
         mClipRectRoot.set(*s->clipRect);
         clipRect = &mClipRectRoot;
-#if STENCIL_BUFFER_SIZE
-        if (s->clipRegion) {
+        if (!s->clipRegion->isEmpty()) {
             mClipRegionRoot.op(*s->clipRegion, SkRegion::kUnion_Op);
-            clipRegion = &mClipRegionRoot;
         }
-#endif
+        clipRegion = &mClipRegionRoot;
     } else {
         clipRect = s->clipRect;
-#if STENCIL_BUFFER_SIZE
         clipRegion = s->clipRegion;
-#endif
     }
 
     if (s->flags & Snapshot::kFlagFboTarget) {
@@ -74,9 +70,6 @@ Snapshot::Snapshot(const sp<Snapshot>& s, int saveFlags):
     } else {
         region = NULL;
     }
-#ifdef QCOM_HARDWARE
-    mTileClip.set(s->getTileClip());
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -84,41 +77,38 @@ Snapshot::Snapshot(const sp<Snapshot>& s, int saveFlags):
 ///////////////////////////////////////////////////////////////////////////////
 
 void Snapshot::ensureClipRegion() {
-#if STENCIL_BUFFER_SIZE
-    if (!clipRegion) {
-        clipRegion = &mClipRegionRoot;
+    if (clipRegion->isEmpty()) {
         clipRegion->setRect(clipRect->left, clipRect->top, clipRect->right, clipRect->bottom);
     }
-#endif
 }
 
 void Snapshot::copyClipRectFromRegion() {
-#if STENCIL_BUFFER_SIZE
     if (!clipRegion->isEmpty()) {
         const SkIRect& bounds = clipRegion->getBounds();
         clipRect->set(bounds.fLeft, bounds.fTop, bounds.fRight, bounds.fBottom);
 
         if (clipRegion->isRect()) {
             clipRegion->setEmpty();
-            clipRegion = NULL;
         }
     } else {
         clipRect->setEmpty();
-        clipRegion = NULL;
     }
-#endif
 }
 
 bool Snapshot::clipRegionOp(float left, float top, float right, float bottom, SkRegion::Op op) {
-#if STENCIL_BUFFER_SIZE
     SkIRect tmp;
     tmp.set(left, top, right, bottom);
     clipRegion->op(tmp, op);
     copyClipRectFromRegion();
     return true;
-#else
-    return false;
-#endif
+}
+
+bool Snapshot::clipRegionTransformed(const SkRegion& region, SkRegion::Op op) {
+    ensureClipRegion();
+    clipRegion->op(region, op);
+    copyClipRectFromRegion();
+    flags |= Snapshot::kFlagClipSet;
+    return true;
 }
 
 bool Snapshot::clip(float left, float top, float right, float bottom, SkRegion::Op op) {
@@ -132,7 +122,8 @@ bool Snapshot::clipTransformed(const Rect& r, SkRegion::Op op) {
 
     switch (op) {
         case SkRegion::kIntersect_Op: {
-            if (CC_UNLIKELY(clipRegion)) {
+            if (CC_UNLIKELY(!clipRegion->isEmpty())) {
+                ensureClipRegion();
                 clipped = clipRegionOp(r.left, r.top, r.right, r.bottom, SkRegion::kIntersect_Op);
             } else {
                 clipped = clipRect->intersect(r);
@@ -140,14 +131,6 @@ bool Snapshot::clipTransformed(const Rect& r, SkRegion::Op op) {
                     clipRect->setEmpty();
                     clipped = true;
                 }
-            }
-            break;
-        }
-        case SkRegion::kUnion_Op: {
-            if (CC_UNLIKELY(clipRegion)) {
-                clipped = clipRegionOp(r.left, r.top, r.right, r.bottom, SkRegion::kUnion_Op);
-            } else {
-                clipped = clipRect->unionWith(r);
             }
             break;
         }
@@ -172,12 +155,9 @@ bool Snapshot::clipTransformed(const Rect& r, SkRegion::Op op) {
 
 void Snapshot::setClip(float left, float top, float right, float bottom) {
     clipRect->set(left, top, right, bottom);
-#if STENCIL_BUFFER_SIZE
-    if (clipRegion) {
+    if (!clipRegion->isEmpty()) {
         clipRegion->setEmpty();
-        clipRegion = NULL;
     }
-#endif
     flags |= Snapshot::kFlagClipSet;
 }
 
@@ -195,18 +175,12 @@ const Rect& Snapshot::getLocalClip() {
     return mLocalClip;
 }
 
-#ifdef QCOM_HARDWARE
-void Snapshot::setTileClip(float left, float top, float right, float bottom) {
-    mTileClip.set(left, top, right, bottom);
-}
-
-const Rect& Snapshot::getTileClip() {
-    return mTileClip;
-}
-#endif
-
 void Snapshot::resetClip(float left, float top, float right, float bottom) {
+    // TODO: This is incorrect, when we start rendering into a new layer,
+    // we may have to modify the previous snapshot's clip rect and clip
+    // region if the previous restore() call did not restore the clip
     clipRect = &mClipRectRoot;
+    clipRegion = &mClipRegionRoot;
     setClip(left, top, right, bottom);
 }
 
@@ -225,6 +199,15 @@ void Snapshot::resetTransform(float x, float y, float z) {
 
 bool Snapshot::isIgnored() const {
     return invisible || empty;
+}
+
+void Snapshot::dump() const {
+    ALOGD("Snapshot %p, flags %x, prev %p, height %d, ignored %d, hasComplexClip %d",
+            this, flags, previous.get(), height, isIgnored(), clipRegion && !clipRegion->isEmpty());
+    ALOGD("  ClipRect (at %p) %.1f %.1f %.1f %.1f",
+            clipRect, clipRect->left, clipRect->top, clipRect->right, clipRect->bottom);
+    ALOGD("  Transform (at %p):", transform);
+    transform->dump();
 }
 
 }; // namespace uirenderer

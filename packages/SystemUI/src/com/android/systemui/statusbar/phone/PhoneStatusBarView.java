@@ -22,17 +22,20 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.util.AttributeSet;
+import android.util.EventLog;
 import android.util.Slog;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.android.internal.util.pie.PiePosition;
+import com.android.systemui.EventLogTags;
 import com.android.systemui.R;
 
 public class PhoneStatusBarView extends PanelBar {
     private static final String TAG = "PhoneStatusBarView";
     private static final boolean DEBUG = PhoneStatusBar.DEBUG;
+    private static final boolean DEBUG_GESTURES = true;
 
     PhoneStatusBar mBar;
     int mScrimColor;
@@ -114,6 +117,7 @@ public class PhoneStatusBarView extends PanelBar {
     @Override
     public PanelView selectPanelForTouch(MotionEvent touch) {
         final float x = touch.getX();
+        final boolean isLayoutRtl = isLayoutRtl();
 
         if (mFullWidthNotifications) {
             // No double swiping. If either panel is open, nothing else can be pulled down.
@@ -138,7 +142,8 @@ public class PhoneStatusBarView extends PanelBar {
 
         if (region < mSettingsPanelDragzoneMin) region = mSettingsPanelDragzoneMin;
 
-        return (w - x < region) ? mSettingsPanel : mNotificationPanel;
+        final boolean showSettings = isLayoutRtl ? (x < region) : (w - region < x);
+        return showSettings ? mSettingsPanel : mNotificationPanel;
     }
 
     @Override
@@ -195,7 +200,17 @@ public class PhoneStatusBarView extends PanelBar {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return mBar.interceptTouchEvent(event) || super.onTouchEvent(event);
+        boolean barConsumedEvent = mBar.interceptTouchEvent(event);
+
+        if (DEBUG_GESTURES) {
+            if (event.getActionMasked() != MotionEvent.ACTION_MOVE) {
+                EventLog.writeEvent(EventLogTags.SYSUI_PANELBAR_TOUCH,
+                        event.getActionMasked(), (int) event.getX(), (int) event.getY(),
+                        barConsumedEvent ? 1 : 0);
+            }
+        }
+
+        return barConsumedEvent || super.onTouchEvent(event);
     }
 
     @Override

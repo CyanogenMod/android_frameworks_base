@@ -16,6 +16,7 @@
 
 package com.android.server.wm;
 
+import android.view.IWindowId;
 import com.android.internal.view.IInputContext;
 import com.android.internal.view.IInputMethodClient;
 import com.android.internal.view.IInputMethodManager;
@@ -40,6 +41,7 @@ import android.view.IWindow;
 import android.view.IWindowSession;
 import android.view.InputChannel;
 import android.view.Surface;
+import android.view.SurfaceControl;
 import android.view.SurfaceSession;
 import android.view.WindowManager;
 
@@ -181,13 +183,13 @@ final class Session extends IWindowSession.Stub
 
     public int relayout(IWindow window, int seq, WindowManager.LayoutParams attrs,
             int requestedWidth, int requestedHeight, int viewFlags,
-            int flags, Rect outFrame, Rect outContentInsets,
+            int flags, Rect outFrame, Rect outOverscanInsets, Rect outContentInsets,
             Rect outVisibleInsets, Configuration outConfig, Surface outSurface) {
         if (false) Slog.d(WindowManagerService.TAG, ">>>>>> ENTERED relayout from "
                 + Binder.getCallingPid());
         int res = mService.relayoutWindow(this, window, seq, attrs,
                 requestedWidth, requestedHeight, viewFlags, flags,
-                outFrame, outContentInsets, outVisibleInsets,
+                outFrame, outOverscanInsets, outContentInsets, outVisibleInsets,
                 outConfig, outSurface);
         if (false) Slog.d(WindowManagerService.TAG, "<<<<<< EXITING relayout to "
                 + Binder.getCallingPid());
@@ -313,19 +315,19 @@ final class Session extends IWindowSession.Stub
             mService.mDragState.mThumbOffsetY = thumbCenterY;
 
             // Make the surface visible at the proper location
-            final Surface surface = mService.mDragState.mSurface;
+            final SurfaceControl surfaceControl = mService.mDragState.mSurfaceControl;
             if (WindowManagerService.SHOW_LIGHT_TRANSACTIONS) Slog.i(
                     WindowManagerService.TAG, ">>> OPEN TRANSACTION performDrag");
-            Surface.openTransaction();
+            SurfaceControl.openTransaction();
             try {
-                surface.setPosition(touchX - thumbCenterX,
+                surfaceControl.setPosition(touchX - thumbCenterX,
                         touchY - thumbCenterY);
-                surface.setAlpha(.7071f);
-                surface.setLayer(mService.mDragState.getDragLayerLw());
-                surface.setLayerStack(display.getLayerStack());
-                surface.show();
+                surfaceControl.setAlpha(.7071f);
+                surfaceControl.setLayer(mService.mDragState.getDragLayerLw());
+                surfaceControl.setLayerStack(display.getLayerStack());
+                surfaceControl.show();
             } finally {
-                Surface.closeTransaction();
+                SurfaceControl.closeTransaction();
                 if (WindowManagerService.SHOW_LIGHT_TRANSACTIONS) Slog.i(
                         WindowManagerService.TAG, "<<< CLOSE TRANSACTION performDrag");
             }
@@ -444,6 +446,10 @@ final class Session extends IWindowSession.Stub
                 Binder.restoreCallingIdentity(identity);
             }
         }
+    }
+
+    public IWindowId getWindowId(IBinder window) {
+        return mService.getWindowId(window);
     }
 
     void windowAddedLocked() {

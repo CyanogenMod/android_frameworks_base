@@ -49,12 +49,14 @@ public class BitmapFactory {
          * If set, decode methods that take the Options object will attempt to
          * reuse this bitmap when loading content. If the decode operation cannot
          * use this bitmap, the decode method will return <code>null</code> and
-         * will throw an IllegalArgumentException. The
-         * current implementation necessitates that the reused bitmap be of the
-         * same size as the source content and in jpeg or png format (whether as a
-         * resource or as a stream). The {@link android.graphics.Bitmap.Config
+         * will throw an IllegalArgumentException. The current implementation
+         * necessitates that the reused bitmap be mutable and of the same size as the
+         * source content. The source content must be in jpeg or png format (whether as
+         * a resource or as a stream). The {@link android.graphics.Bitmap.Config
          * configuration} of the reused bitmap will override the setting of
-         * {@link #inPreferredConfig}, if set.
+         * {@link #inPreferredConfig}, if set. The reused bitmap will continue to
+         * remain mutable even when decoding a resource which would normally result
+         * in an immutable bitmap.
          *
          * <p>You should still always use the returned Bitmap of the decode
          * method and not assume that reusing the bitmap worked, due to the
@@ -88,9 +90,8 @@ public class BitmapFactory {
          * pixel in the decoded bitmap. For example, inSampleSize == 4 returns
          * an image that is 1/4 the width/height of the original, and 1/16 the
          * number of pixels. Any value <= 1 is treated the same as 1. Note: the
-         * decoder will try to fulfill this request, but the resulting bitmap
-         * may have different dimensions that precisely what has been requested.
-         * Also, powers of 2 are often faster/easier for the decoder to honor.
+         * decoder uses a final value based on powers of 2, any other value will
+         * be rounded down to the nearest power of 2.
          */
         public int inSampleSize;
 
@@ -564,8 +565,9 @@ public class BitmapFactory {
             float scale = targetDensity / (float) density;
             if (scale != 1.0f) {
                 final Bitmap oldBitmap = bm;
-                bm = Bitmap.createScaledBitmap(oldBitmap, (int) (bm.getWidth() * scale + 0.5f),
-                        (int) (bm.getHeight() * scale + 0.5f), true);
+                bm = Bitmap.createScaledBitmap(oldBitmap,
+                        Math.max(1, (int) (bm.getWidth() * scale + 0.5f)),
+                        Math.max(1, (int) (bm.getHeight() * scale + 0.5f)), true);
                 if (bm != oldBitmap) oldBitmap.recycle();
 
                 if (isNinePatch) {

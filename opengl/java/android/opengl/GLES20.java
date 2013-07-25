@@ -296,6 +296,10 @@ public class GLES20 {
     public static final int GL_RGB5_A1                                 = 0x8057;
     public static final int GL_RGB565                                  = 0x8D62;
     public static final int GL_DEPTH_COMPONENT16                       = 0x81A5;
+    // GL_STENCIL_INDEX does not appear in gl2.h or gl2ext.h, and there is no
+    // token with value 0x1901.
+    //
+    @Deprecated
     public static final int GL_STENCIL_INDEX                           = 0x1901;
     public static final int GL_STENCIL_INDEX8                          = 0x8D48;
     public static final int GL_RENDERBUFFER_WIDTH                      = 0x8D42;
@@ -327,7 +331,7 @@ public class GLES20 {
 
     native private static void _nativeClassInit();
     static {
-	    _nativeClassInit();
+        _nativeClassInit();
     }
     // C function void glActiveTexture ( GLenum texture )
 
@@ -914,7 +918,7 @@ public class GLES20 {
         java.nio.IntBuffer shaders
     );
 
-    // C function int glGetAttribLocation ( GLuint program, const char *name )
+    // C function GLint glGetAttribLocation ( GLuint program, const char *name )
 
     public static native int glGetAttribLocation(
         int program,
@@ -1024,24 +1028,8 @@ public class GLES20 {
         java.nio.IntBuffer params
     );
 
-/*
- * Copyright (C) 2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
     // C function void glGetProgramInfoLog( GLuint program, GLsizei maxLength, GLsizei * length,
- 	//     GLchar * infoLog);
+    //     GLchar * infoLog);
 
     public static native String glGetProgramInfoLog(
         int program
@@ -1080,24 +1068,8 @@ public class GLES20 {
         java.nio.IntBuffer params
     );
 
-/*
- * Copyright (C) 2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
     // C function void glGetShaderInfoLog( GLuint shader, GLsizei maxLength, GLsizei * length,
- 	//     GLchar * infoLog);
+    //     GLchar * infoLog);
 
     public static native String glGetShaderInfoLog(
         int shader
@@ -1147,22 +1119,6 @@ public class GLES20 {
     public static native String glGetShaderSource(
         int shader
     );
-/*
- * Copyright (C) 2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
     // C function const GLubyte * glGetString ( GLenum name )
 
     public static native String glGetString(
@@ -1236,7 +1192,7 @@ public class GLES20 {
         java.nio.IntBuffer params
     );
 
-    // C function int glGetUniformLocation ( GLuint program, const char *name )
+    // C function GLint glGetUniformLocation ( GLuint program, const char *name )
 
     public static native int glGetUniformLocation(
         int program,
@@ -1414,22 +1370,6 @@ public class GLES20 {
         java.nio.Buffer binary,
         int length
     );
-
-/*
- * Copyright (C) 2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
     // C function void glShaderSource ( GLuint shader, GLsizei count, const GLchar ** string, const GLint* length )
 

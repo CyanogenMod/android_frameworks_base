@@ -24,23 +24,19 @@ import com.android.mediaframeworktest.MediaTestUtil;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
+import android.media.CamcorderProfile;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.media.EncoderCapabilities.VideoEncoderCap;
 import android.os.ConditionVariable;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.test.suitebuilder.annotation.Suppress;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
 import java.util.List;
 import java.io.BufferedReader;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,7 +45,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 
-import android.media.MediaMetadataRetriever;
 import com.android.mediaframeworktest.MediaProfileReader;
 
 /**
@@ -63,7 +58,6 @@ public class MediaPlayerPerformance extends ActivityInstrumentationTestCase2<Med
 
     private String TAG = "MediaPlayerPerformance";
 
-    private SQLiteDatabase mDB;
     private SurfaceHolder mSurfaceHolder = null;
     private static final int NUM_STRESS_LOOP = 10;
     private static final int NUM_PLAYBACk_IN_EACH_LOOP = 20;
@@ -92,7 +86,9 @@ public class MediaPlayerPerformance extends ActivityInstrumentationTestCase2<Med
     private Writer mProcMemWriter;
     private Writer mMemWriter;
 
-    private static List<VideoEncoderCap> videoEncoders = MediaProfileReader.getVideoEncoders();
+    private CamcorderProfile mCamcorderProfile = CamcorderProfile.get(CAMERA_ID);
+    private int mVideoWidth = mCamcorderProfile.videoFrameWidth;
+    private int mVideoHeight = mCamcorderProfile.videoFrameHeight;
 
     Camera mCamera;
 
@@ -328,7 +324,15 @@ public class MediaPlayerPerformance extends ActivityInstrumentationTestCase2<Med
             Log.v(TAG, e.toString());
         }
         String[] poList = memoryUsage.split("\r|\n|\r\n");
-        String memusage = poList[1].concat("\n");
+        // A new media.log is enabled with ro.test_harness is set.
+        // The output of "ps mediaserver" will include the
+        // media.log process in the first line. Update the parsing
+        // to only read the thrid line.
+        // Smaple ps mediaserver output:
+        // USER     PID   PPID  VSIZE  RSS     WCHAN    PC         NAME
+        // media     131   1     13676  4796  ffffffff 400b1bd0 S media.log
+        // media     219   131   37768  6892  ffffffff 400b236c S /system/bin/mediaserver
+        String memusage = poList[2].concat("\n");
         return memusage;
     }
 
@@ -407,13 +411,13 @@ public class MediaPlayerPerformance extends ActivityInstrumentationTestCase2<Med
     @LargeTest
     public void testH263RecordVideoOnlyMemoryUsage() throws Exception {
         boolean memoryResult = false;
-
         mStartPid = getMediaserverPid();
         int frameRate = MediaProfileReader.getMaxFrameRateForCodec(MediaRecorder.VideoEncoder.H263);
         assertTrue("H263 video recording frame rate", frameRate != -1);
         for (int i = 0; i < NUM_STRESS_LOOP; i++) {
-            assertTrue(stressVideoRecord(frameRate, 352, 288, MediaRecorder.VideoEncoder.H263,
-                    MediaRecorder.OutputFormat.MPEG_4, MediaNames.RECORDED_VIDEO_3GP, true));
+            assertTrue(stressVideoRecord(frameRate, mVideoWidth, mVideoHeight,
+                    MediaRecorder.VideoEncoder.H263, MediaRecorder.OutputFormat.MPEG_4,
+                    MediaNames.RECORDED_VIDEO_3GP, true));
             getMemoryWriteToLog(i);
             writeProcmemInfo();
         }
@@ -427,11 +431,13 @@ public class MediaPlayerPerformance extends ActivityInstrumentationTestCase2<Med
         boolean memoryResult = false;
 
         mStartPid = getMediaserverPid();
-        int frameRate = MediaProfileReader.getMaxFrameRateForCodec(MediaRecorder.VideoEncoder.MPEG_4_SP);
+        int frameRate = MediaProfileReader.getMaxFrameRateForCodec
+                (MediaRecorder.VideoEncoder.MPEG_4_SP);
         assertTrue("MPEG4 video recording frame rate", frameRate != -1);
         for (int i = 0; i < NUM_STRESS_LOOP; i++) {
-            assertTrue(stressVideoRecord(frameRate, 352, 288, MediaRecorder.VideoEncoder.MPEG_4_SP,
-                    MediaRecorder.OutputFormat.MPEG_4, MediaNames.RECORDED_VIDEO_3GP, true));
+            assertTrue(stressVideoRecord(frameRate, mVideoWidth, mVideoHeight,
+                    MediaRecorder.VideoEncoder.MPEG_4_SP, MediaRecorder.OutputFormat.MPEG_4,
+                    MediaNames.RECORDED_VIDEO_3GP, true));
             getMemoryWriteToLog(i);
             writeProcmemInfo();
         }
@@ -449,8 +455,9 @@ public class MediaPlayerPerformance extends ActivityInstrumentationTestCase2<Med
         int frameRate = MediaProfileReader.getMaxFrameRateForCodec(MediaRecorder.VideoEncoder.H263);
         assertTrue("H263 video recording frame rate", frameRate != -1);
         for (int i = 0; i < NUM_STRESS_LOOP; i++) {
-            assertTrue(stressVideoRecord(frameRate, 352, 288, MediaRecorder.VideoEncoder.H263,
-                    MediaRecorder.OutputFormat.MPEG_4, MediaNames.RECORDED_VIDEO_3GP, false));
+            assertTrue(stressVideoRecord(frameRate, mVideoWidth, mVideoHeight,
+                    MediaRecorder.VideoEncoder.H263, MediaRecorder.OutputFormat.MPEG_4,
+                    MediaNames.RECORDED_VIDEO_3GP, false));
             getMemoryWriteToLog(i);
             writeProcmemInfo();
         }

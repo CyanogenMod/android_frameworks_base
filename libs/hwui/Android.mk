@@ -5,15 +5,20 @@ include $(CLEAR_VARS)
 # defined in the current device/board configuration
 ifeq ($(USE_OPENGL_RENDERER),true)
 	LOCAL_SRC_FILES:= \
+		utils/Blur.cpp \
 		utils/SortedListImpl.cpp \
+		thread/TaskManager.cpp \
 		font/CacheTexture.cpp \
 		font/Font.cpp \
 		FontRenderer.cpp \
 		GammaFontRenderer.cpp \
 		Caches.cpp \
+		DisplayList.cpp \
+		DeferredDisplayList.cpp \
 		DisplayListLogBuffer.cpp \
 		DisplayListRenderer.cpp \
 		Dither.cpp \
+		Extensions.cpp \
 		FboCache.cpp \
 		GradientCache.cpp \
 		Layer.cpp \
@@ -21,14 +26,15 @@ ifeq ($(USE_OPENGL_RENDERER),true)
 		LayerRenderer.cpp \
 		Matrix.cpp \
 		OpenGLRenderer.cpp \
-		PathRenderer.cpp \
 		Patch.cpp \
 		PatchCache.cpp \
 		PathCache.cpp \
+		PathTessellator.cpp \
+		PixelBuffer.cpp \
 		Program.cpp \
 		ProgramCache.cpp \
+		RenderBufferCache.cpp \
 		ResourceCache.cpp \
-		ShapeCache.cpp \
 		SkiaColorFilter.cpp \
 		SkiaShader.cpp \
 		Snapshot.cpp \
@@ -36,18 +42,24 @@ ifeq ($(USE_OPENGL_RENDERER),true)
 		TextureCache.cpp \
 		TextDropShadowCache.cpp
 
+	intermediates := $(call intermediates-dir-for,STATIC_LIBRARIES,libRS,TARGET,)
+
 	LOCAL_C_INCLUDES += \
 		$(JNI_H_INCLUDE) \
 		$(LOCAL_PATH)/../../include/utils \
 		external/skia/include/core \
 		external/skia/include/effects \
 		external/skia/include/images \
+		external/skia/src/core \
 		external/skia/src/ports \
-		external/skia/include/utils
+		external/skia/include/utils \
+		$(intermediates) \
+		frameworks/rs/cpp \
+		frameworks/rs
 
 	LOCAL_CFLAGS += -DUSE_OPENGL_RENDERER -DGL_GLEXT_PROTOTYPES
 	LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-	LOCAL_SHARED_LIBRARIES := libcutils libutils libGLESv2 libskia libui
+	LOCAL_SHARED_LIBRARIES := liblog libcutils libutils libGLESv2 libskia libui libRS libRScpp
 	LOCAL_MODULE := libhwui
 	LOCAL_MODULE_TAGS := optional
 
@@ -61,5 +73,5 @@ ifeq ($(USE_OPENGL_RENDERER),true)
 
 	include $(BUILD_SHARED_LIBRARY)
 
-    include $(call all-makefiles-under,$(LOCAL_PATH))
+	include $(call all-makefiles-under,$(LOCAL_PATH))
 endif

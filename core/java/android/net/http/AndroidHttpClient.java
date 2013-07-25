@@ -17,6 +17,7 @@
 package android.net.http;
 
 import com.android.internal.http.HttpDateTime;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -25,18 +26,18 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
-import org.apache.http.entity.AbstractHttpEntity;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.entity.AbstractHttpEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.RequestWrapper;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -44,30 +45,29 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.BasicHttpProcessor;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.protocol.BasicHttpContext;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import java.net.URI;
-
-import android.content.Context;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.net.SSLCertificateSocketFactory;
 import android.net.SSLSessionCache;
 import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
 /**
  * Implementation of the Apache {@link DefaultHttpClient} that is configured with
- * reasonable default settings and registered schemes for Android, and
- * also lets the user add {@link HttpRequestInterceptor} classes.
+ * reasonable default settings and registered schemes for Android.
  * Don't create this directly, use the {@link #newInstance} factory method.
  *
  * <p>This client processes cookies but does not retain them by default.
@@ -267,7 +267,7 @@ public final class AndroidHttpClient implements HttpClient {
         return delegate.execute(target, request, context);
     }
 
-    public <T> T execute(HttpUriRequest request, 
+    public <T> T execute(HttpUriRequest request,
             ResponseHandler<? extends T> responseHandler)
             throws IOException, ClientProtocolException {
         return delegate.execute(request, responseHandler);
@@ -404,6 +404,11 @@ public final class AndroidHttpClient implements HttpClient {
         StringBuilder builder = new StringBuilder();
 
         builder.append("curl ");
+
+        // add in the method
+        builder.append("-X ");
+        builder.append(request.getMethod());
+        builder.append(" ");
 
         for (Header header: request.getAllHeaders()) {
             if (!logAuthToken

@@ -13,11 +13,40 @@
 ?>
 
 <ul id="nav">
+
   <li class="nav-section">
-    <div class="nav-section-header empty"><a href="<?cs var:toroot ?>google/index.html">
-        <span class="en">Overview</span>
+    <div class="nav-section-header empty"><a href="<?cs var:toroot?>google/index.html">
+          <span class="en">Overview</span>
       </a></div>
   </li>
+
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="<?cs var:toroot?>google/play-services/games.html">
+          <span class="en">Games</span>
+      </a></div>
+  </li>
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="<?cs var:toroot?>google/play-services/location.html">
+          <span class="en">Location</span>
+      </a></div>
+  </li>
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="<?cs var:toroot?>google/play-services/plus.html">
+          <span class="en">Google+</span>
+                </a></div>
+  </li>
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="<?cs var:toroot?>google/play-services/maps.html">
+          <span class="en">Google Maps</span>
+      </a></div>
+  </li>
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="<?cs var:toroot?>google/play-services/auth.html">
+          <span class="en">Authorization</span>
+      </a></div>
+  </li>
+
+
 
   <li class="nav-section">
     <div class="nav-section-header"><a href="<?cs var:toroot ?>google/play-services/index.html">
@@ -27,19 +56,6 @@
       <li><a href="<?cs var:toroot?>google/play-services/setup.html">
           <span class="en">Setup</span></a>
       </li>
-
-      <li><a href="<?cs var:toroot?>google/play-services/auth.html">
-          <span class="en">Authorization</span></a>
-      </li>
-
-      <li><a href="<?cs var:toroot?>google/play-services/plus.html">
-          <span class="en">Google+</span></a>
-      </li>
-
-      <li><a href="<?cs var:toroot?>google/play-services/maps.html">
-          <span class="en">Google Maps</span></a>
-      </li>
-
       <li id="gms-tree-list" class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>reference/gms-packages.html">
@@ -47,7 +63,6 @@
           </a>
         <div>
       </li>
-
     </ul>
   </li>
 
@@ -80,6 +95,9 @@
               <span class="en">Reference</span></a></li>
               </ul>
       </li>
+      <li><a href="<?cs var:toroot?>google/play/billing/billing_subscriptions.html">
+              <span class="en">Subscriptions</span></a>
+      </li>
       <li><a href="<?cs var:toroot?>google/play/billing/billing_best_practices.html">
               <span class="en">Security and Design</span></a>
       </li>
@@ -89,10 +107,54 @@
       <li><a href="<?cs var:toroot?>google/play/billing/billing_admin.html">
               <span class="en">Administering In-app Billing</span></a>
       </li>
+      <li><a href="<?cs var:toroot?>google/play/billing/gp-purchase-status-api.html">
+              <span class="en">Purchase Status API</span></a>
+      </li>
       <li><a href="<?cs var:toroot?>google/play/billing/versions.html">
               <span class="en">Version Notes</span></a>
       </li>
     </ul>
+  </li>
+
+
+
+  <li class="nav-section">
+      <div class="nav-section-header"><a href="<?cs var:toroot ?>google/gcm/index.html">
+        <span class="en">Google Cloud Messaging</span></a>
+      </div>
+      <ul>
+        <li><a href="<?cs var:toroot?>google/gcm/gs.html">
+            <span class="en">Getting Started</span></a>
+        </li>
+        <li><a href="<?cs var:toroot?>google/gcm/gcm.html">
+            <span class="en">Architectural Overview</span></a>
+        </li>
+         <li><a href="<?cs var:toroot?>google/gcm/ccs.html">
+              <span class="en">Cloud Connection Server</span></a>
+        </li>
+        <li><a href="<?cs var:toroot?>google/gcm/notifications.html">
+              <span class="en">User Notifications</span></a>
+        </li>
+        <li><a href="<?cs var:toroot?>google/gcm/client.html">
+            <span class="en">GCM Client</span></a>
+        </li>
+        <li><a href="<?cs var:toroot?>google/gcm/server.html">
+            <span class="en">GCM Server</span></a>
+        </li>
+        <li><a href="<?cs var:toroot?>google/gcm/adv.html">
+            <span class="en">Advanced Topics</span></a>
+        </li>
+        <li><a href="<?cs var:toroot?>google/gcm/c2dm.html">
+            <span class="en">Migration</span></a>
+        </li>
+        <li id="gcm-tree-list" class="nav-section">
+          <div class="nav-section-header">
+            <a href="<?cs var:toroot ?>reference/gcm-packages.html">
+              <span class="en">Reference</span>
+            </a>
+          <div>
+        </li>
+      </ul>
   </li>
 
   <li class="nav-section">
@@ -129,39 +191,6 @@
           </li>
         </ul>
       </li>
-    </ul>
-  </li>
-
-  <li class="nav-section">
-      <div class="nav-section-header"><a href="<?cs var:toroot ?>google/gcm/index.html">
-        <span class="en">Google Cloud Messaging</span></a>
-      </div>
-      <ul>
-        <li><a href="<?cs var:toroot?>google/gcm/gs.html">
-            <span class="en">Getting Started</span></a>
-        </li>
-        <li><a href="<?cs var:toroot?>google/gcm/gcm.html">
-            <span class="en">Architectural Overview</span></a>
-        </li>
-        <li><a href="<?cs var:toroot?>google/gcm/demo.html">
-            <span class="en">Demo App Tutorial</span></a>
-        </li>
-        <li><a href="<?cs var:toroot?>google/gcm/adv.html">
-            <span class="en">Advanced Topics</span></a>
-        </li>
-        <li><a href="<?cs var:toroot?>google/gcm/c2dm.html">
-            <span class="en">Migration</span></a>
-        </li>
-        <li id="gcm-tree-list" class="nav-section">
-          <div class="nav-section-header">
-            <a href="<?cs var:toroot ?>reference/gcm-packages.html">
-              <span class="en">Reference</span>
-            </a>
-          <div>
-        </li>
-      </ul>
-  </li>
-
 
   <li class="nav-section">
     <div class="nav-section-header"><a href="<?cs var:toroot ?>google/backup/index.html">
@@ -173,6 +202,12 @@
       </li>
     </ul>
   </li>
+
+  </ul>
+
+</li>
+
+
 
 </ul>
 

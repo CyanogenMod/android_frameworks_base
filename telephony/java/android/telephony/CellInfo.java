@@ -31,6 +31,8 @@ public abstract class CellInfo implements Parcelable {
     protected static final int TYPE_CDMA = 2;
     /** @hide */
     protected static final int TYPE_LTE = 3;
+    /** @hide */
+    protected static final int TYPE_WCDMA = 4;
 
     // Type to distinguish where time stamp gets recorded.
 
@@ -149,7 +151,7 @@ public abstract class CellInfo implements Parcelable {
         StringBuffer sb = new StringBuffer();
         String timeStampType;
 
-        sb.append(" mRegistered=").append(mRegistered ? "YES" : "NO");
+        sb.append("mRegistered=").append(mRegistered ? "YES" : "NO");
         timeStampType = timeStampTypeToString(mTimeStampType);
         sb.append(" mTimeStampType=").append(timeStampType);
         sb.append(" mTimeStamp=").append(mTimeStamp).append("ns");
@@ -201,6 +203,7 @@ public abstract class CellInfo implements Parcelable {
                     case TYPE_GSM: return CellInfoGsm.createFromParcelBody(in);
                     case TYPE_CDMA: return CellInfoCdma.createFromParcelBody(in);
                     case TYPE_LTE: return CellInfoLte.createFromParcelBody(in);
+                    case TYPE_WCDMA: return CellInfoWcdma.createFromParcelBody(in);
                     default: throw new RuntimeException("Bad CellInfo Parcel");
                 }
         }

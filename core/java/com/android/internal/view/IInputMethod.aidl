@@ -16,17 +16,15 @@
 
 package com.android.internal.view;
 
-import android.graphics.Rect;
 import android.os.IBinder;
 import android.os.ResultReceiver;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
+import android.view.InputChannel;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputBinding;
 import android.view.inputmethod.InputMethodSubtype;
 import com.android.internal.view.IInputContext;
-import com.android.internal.view.IInputMethodCallback;
 import com.android.internal.view.IInputMethodSession;
+import com.android.internal.view.IInputSessionCallback;
 
 /**
  * Top-level interface to an input method component (implemented in a
@@ -35,23 +33,23 @@ import com.android.internal.view.IInputMethodSession;
  */
 oneway interface IInputMethod {
     void attachToken(IBinder token);
-    
+
     void bindInput(in InputBinding binding);
-    
+
     void unbindInput();
 
     void startInput(in IInputContext inputContext, in EditorInfo attribute);
 
     void restartInput(in IInputContext inputContext, in EditorInfo attribute);
 
-    void createSession(IInputMethodCallback callback);
-    
+    void createSession(in InputChannel channel, IInputSessionCallback callback);
+
     void setSessionEnabled(IInputMethodSession session, boolean enabled);
-    
+
     void revokeSession(IInputMethodSession session);
-    
+
     void showSoftInput(int flags, in ResultReceiver resultReceiver);
-    
+
     void hideSoftInput(int flags, in ResultReceiver resultReceiver);
 
     void changeInputMethodSubtype(in InputMethodSubtype subtype);

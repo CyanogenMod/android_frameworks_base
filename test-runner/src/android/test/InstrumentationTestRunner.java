@@ -390,12 +390,11 @@ public class InstrumentationTestRunner extends Instrumentation implements TestSu
     }
 
     /**
-     * Get the Bundle object that contains the arguments
+     * Get the arguments passed to this instrumentation.
      *
      * @return the Bundle object
-     * @hide
      */
-    public Bundle getBundle(){
+    public Bundle getArguments() {
         return mArguments;
     }
 
@@ -555,7 +554,7 @@ public class InstrumentationTestRunner extends Instrumentation implements TestSu
                 mTestRunner.runTest();
                 long runTime = System.currentTimeMillis() - startTime;
 
-                resultPrinter.print(mTestRunner.getTestResult(), runTime);
+                resultPrinter.printResult(mTestRunner.getTestResult(), runTime);
             } catch (Throwable t) {
                 // catch all exceptions so a more verbose error message can be outputted
                 writer.println(String.format("Test run aborted due to unexpected exception: %s",
@@ -656,7 +655,7 @@ public class InstrumentationTestRunner extends Instrumentation implements TestSu
             super(writer);
         }
 
-        synchronized void print(TestResult result, long runTime) {
+        public synchronized void printResult(TestResult result, long runTime) {
             printHeader(runTime);
             printFooter(result);
         }

@@ -1,4 +1,5 @@
 page.title=SDK Tools
+excludeFromSuggestions=true
 @jd:body
 
 <p>SDK Tools is a downloadable component for the Android SDK. It includes the
@@ -28,6 +29,137 @@ href="http://tools.android.com/knownissues">http://tools.android.com/knownissues
 <div class="toggle-content opened">
   <p><a href="#" onclick="return toggleContent(this)">
     <img src="{@docRoot}assets/images/triangle-opened.png" class="toggle-content-img"
+      alt=""/>SDK Tools, Revision 22.0.1</a> <em>(May 2013)</em>
+  </p>
+
+  <div class="toggle-content-toggleme">
+
+    <dl>
+    <dt>Dependencies:</dt>
+    <dd>
+      <ul>
+        <li>Android SDK Platform-tools revision 16 or later.</li>
+        <li>If you are developing in Eclipse with ADT, note that the SDK Tools r22.0.1 is
+          designed for use with ADT 22.0.1 and later. If you haven't already, update your
+        <a href="{@docRoot}tools/sdk/eclipse-adt.html">ADT Plugin</a> to 22.0.1.</li>
+        <li>If you are developing outside Eclipse, you must have
+          <a href="http://ant.apache.org/">Apache Ant</a> 1.8 or later.</li>
+      </ul>
+    </dd>
+
+    <dt>General Notes:</dt>
+    <dd>
+      <ul>
+        <li>Fixed issue with Lint ServiceCast check and fully qualified class names.
+          (<a href="http://code.google.com/p/android/issues/detail?id=55403">Issue 55403</a>)</li>
+        <li>Fixed crash issue with Lint ArraySizeDetector check.
+          (<a href="http://code.google.com/p/android/issues/detail?id=54887">Issue 54887</a>)</li>
+        <li>Fixed a problem with the monkeyrunner tool failing to import standard python classes.
+          (<a href="http://code.google.com/p/android/issues/detail?id=55632">Issue 55632</a>)</li>
+        <li>Fixed a problem with DDMS monitor not opening heap and network statistics views due to
+          a class not found exception.
+          (<a href="http://code.google.com/p/android/issues/detail?id=55394">Issue 55394</a>)</li>
+      </ul>
+
+    </dd>
+    </dl>
+  </div>
+</div>
+
+
+<div class="toggle-content closed">
+  <p><a href="#" onclick="return toggleContent(this)">
+    <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-content-img"
+      alt=""/>SDK Tools, Revision 22</a> <em>(May 2013)</em>
+  </p>
+
+  <div class="toggle-content-toggleme">
+
+    <dl>
+    <dt>Dependencies:</dt>
+    <dd>
+      <ul>
+        <li>Android SDK Platform-tools revision 16 or later.</li>
+        <li>If you are developing in Eclipse with ADT, note that the SDK Tools r22 is
+          designed for use with ADT 22.0.0 and later. If you haven't already, update your
+        <a href="{@docRoot}tools/sdk/eclipse-adt.html">ADT Plugin</a> to 22.0.0.</li>
+        <li>If you are developing outside Eclipse, you must have
+          <a href="http://ant.apache.org/">Apache Ant</a> 1.8 or later.</li>
+    </ul>
+    </dd>
+
+    <dt>General Notes:</dt>
+    <dd>
+      <ul>
+        <li>Changed the structure of the SDK by adding a new build tool SDK Component, which is
+          based on the existing platform-tools component. This change decouples the build tools
+          versions from the IDE versions, allowing updates to the tools without requiring an
+          IDE update.</li>
+        <li>Updated tools to allow libraries to share the same package name as the applications
+          that use them.</li>
+        <li>Updated {@code draw9patch} tool to allow easier changing of markers.</li>
+        <li>Added new Lint checks, including checks for layout consistency,
+          {@link android.widget.RelativeLayout} siblings, {@link android.os.Parcel} creator,
+          JavaScript interfaces, {@link android.app.Service} casting, quantity strings, manifest
+          typos, orientation tags in layouts, overlapping names for 9-patches and images, and class
+          existence checks.</li>
+        <li>Updated build tools to sign applications using the BouncyCastle library instead of
+          relying on Sun JVM specific APIs.</li>
+        <li>Released some of the Android tools into <a href="http://www.maven.org">Maven
+          Central</a> to assist third-party tool developers. The following tools are available
+          in the repository: {@code manifest-merger}, {@code common/sdk_common}, {@code ddmlib},
+          {@code dvlib}, {@code layoutlib_api}, {@code sdklib}, and {@code lint}.</li>
+      </ul>
+    </dd>
+
+    <dt>Bug fixes:</dt>
+    <dd>
+      <ul>
+        <li>Fixed a number of minor bugs in the SDK and build system.</li>
+    </ul>
+    </dd>
+    </dl>
+  </div>
+</div>
+
+<div class="toggle-content closed">
+  <p><a href="#" onclick="return toggleContent(this)">
+    <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-content-img"
+      alt=""/>SDK Tools, Revision 21.1</a> <em>(February 2013)</em>
+  </p>
+
+  <div class="toggle-content-toggleme">
+
+    <dl>
+    <dt>Dependencies:</dt>
+    <dd>
+      <ul>
+        <li>Android SDK Platform-tools revision 16 or later.</li>
+        <li>If you are developing in Eclipse with ADT, note that the SDK Tools r21.1 is
+          designed for use with ADT 21.1.0 and later. If you haven't already, update your
+        <a href="{@docRoot}tools/sdk/eclipse-adt.html">ADT Plugin</a> to 21.1.0.</li>
+        <li>If you are developing outside Eclipse, you must have
+          <a href="http://ant.apache.org/">Apache Ant</a> 1.8 or later.</li>
+    </ul>
+    </dd>
+
+    <dt>General Notes:</dt>
+    <dd>
+      <ul>
+        <li>Improved error reporting in {@code dx} when dex merging fails in the build
+          system.</li>
+        <li>Added more than 15 new Lint checks, including checks for overriding older APIs, XML
+          resource problems, graphic asset issues and manifest tags.</li>
+        <li>Added new aapt feature to compile resources.</li>
+      </ul>
+    </dd>
+    </dl>
+  </div>
+</div>
+
+<div class="toggle-content closed">
+  <p><a href="#" onclick="return toggleContent(this)">
+    <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-content-img"
       alt=""/>SDK Tools, Revision 21.0.1</a> <em>(December 2012)</em>
   </p>
 
@@ -40,7 +172,7 @@ href="http://tools.android.com/knownissues">http://tools.android.com/knownissues
         <li>Android SDK Platform-tools revision 16 or later.</li>
         <li>If you are developing in Eclipse with ADT, note that the SDK Tools r21.0.1 is
           designed for use with ADT 21.0.1 and later. If you haven't already, update your
-        <a href="{@docRoot}tools/sdk/eclipse-adt.html">ADT Plugin</a> to 21.0.0.</li>
+        <a href="{@docRoot}tools/sdk/eclipse-adt.html">ADT Plugin</a> to 21.0.1.</li>
         <li>If you are developing outside Eclipse, you must have
           <a href="http://ant.apache.org/">Apache Ant</a> 1.8 or later.</li>
     </ul>

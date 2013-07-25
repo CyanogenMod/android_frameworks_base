@@ -50,28 +50,28 @@
         android:animateLayoutChanges="true">
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/two"
-            android:layout_width="128dp" android:paddingLeft="25dp" android:paddingRight="25dp"
+            android:layout_width="128dp" android:paddingStart="25dp" android:paddingEnd="25dp"
             android:layout_height="match_parent"
             systemui:keyRepeat="true"
             android:layout_weight="0"
             systemui:glowBackground="@drawable/ic_sysbar_highlight" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/three"
-            android:layout_width="128dp" android:paddingLeft="25dp" android:paddingRight="25dp"
+            android:layout_width="128dp" android:paddingStart="25dp" android:paddingEnd="25dp"
             android:layout_height="match_parent"
             systemui:keyRepeat="true"
             android:layout_weight="0"
             systemui:glowBackground="@drawable/ic_sysbar_highlight" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/four"
-            android:layout_width="128dp" android:paddingLeft="25dp" android:paddingRight="25dp"
+            android:layout_width="128dp" android:paddingStart="25dp" android:paddingEnd="25dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
             systemui:keyRepeat="true"
             systemui:glowBackground="@drawable/ic_sysbar_highlight" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/five"
-            android:layout_width="128dp" android:paddingLeft="25dp" android:paddingRight="25dp"
+            android:layout_width="128dp" android:paddingStart="25dp" android:paddingEnd="25dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
             systemui:keyRepeat="true"

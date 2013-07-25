@@ -557,6 +557,25 @@ public class NetworkPolicyManagerServiceTest extends AndroidTestCase {
         }
     }
 
+    public void testCycleTodayJanuary() throws Exception {
+        final NetworkPolicy policy = new NetworkPolicy(
+                sTemplateWifi, 14, "US/Pacific", 1024L, 1024L, false);
+
+        assertTimeEquals(parseTime("2013-01-14T00:00:00.000-08:00"),
+                computeNextCycleBoundary(parseTime("2013-01-13T23:59:59.000-08:00"), policy));
+        assertTimeEquals(parseTime("2013-02-14T00:00:00.000-08:00"),
+                computeNextCycleBoundary(parseTime("2013-01-14T00:00:01.000-08:00"), policy));
+        assertTimeEquals(parseTime("2013-02-14T00:00:00.000-08:00"),
+                computeNextCycleBoundary(parseTime("2013-01-14T15:11:00.000-08:00"), policy));
+
+        assertTimeEquals(parseTime("2012-12-14T00:00:00.000-08:00"),
+                computeLastCycleBoundary(parseTime("2013-01-13T23:59:59.000-08:00"), policy));
+        assertTimeEquals(parseTime("2013-01-14T00:00:00.000-08:00"),
+                computeLastCycleBoundary(parseTime("2013-01-14T00:00:01.000-08:00"), policy));
+        assertTimeEquals(parseTime("2013-01-14T00:00:00.000-08:00"),
+                computeLastCycleBoundary(parseTime("2013-01-14T15:11:00.000-08:00"), policy));
+    }
+
     public void testNetworkPolicyAppliedCycleLastMonth() throws Exception {
         NetworkState[] state = null;
         NetworkStats stats = null;
@@ -845,7 +864,8 @@ public class NetworkPolicyManagerServiceTest extends AndroidTestCase {
 
     private Future<String> expectEnqueueNotification() throws Exception {
         final FutureCapture<String> tag = new FutureCapture<String>();
-        mNotifManager.enqueueNotificationWithTag(isA(String.class), capture(tag.capture), anyInt(),
+        mNotifManager.enqueueNotificationWithTag(isA(String.class), isA(String.class),
+                capture(tag.capture), anyInt(),
                 isA(Notification.class), isA(int[].class), UserHandle.myUserId());
         return tag;
     }

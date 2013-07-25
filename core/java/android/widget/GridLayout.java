@@ -605,7 +605,7 @@ public class GridLayout extends ViewGroup {
     }
 
     private int getDefaultMargin(View c, boolean isAtEdge, boolean horizontal, boolean leading) {
-        return isAtEdge ? DEFAULT_CONTAINER_MARGIN : getDefaultMargin(c, horizontal, leading);
+        return /*isAtEdge ? DEFAULT_CONTAINER_MARGIN :*/ getDefaultMargin(c, horizontal, leading);
     }
 
     private int getDefaultMargin(View c, LayoutParams p, boolean horizontal, boolean leading) {
@@ -824,13 +824,11 @@ public class GridLayout extends ViewGroup {
     // Draw grid
 
     private void drawLine(Canvas graphics, int x1, int y1, int x2, int y2, Paint paint) {
-        int dx = getPaddingLeft();
-        int dy = getPaddingTop();
         if (isLayoutRtl()) {
             int width = getWidth();
-            graphics.drawLine(width - dx - x1, dy + y1, width - dx - x2, dy + y2, paint);
+            graphics.drawLine(width - x1, y1, width - x2, y2, paint);
         } else {
-            graphics.drawLine(dx + x1, dy + y1, dx + x2, dy + y2, paint);
+            graphics.drawLine(x1, y1, x2, y2, paint);
         }
     }
 
@@ -838,18 +836,17 @@ public class GridLayout extends ViewGroup {
      * @hide
      */
     @Override
-    protected void onDebugDrawMargins(Canvas canvas) {
+    protected void onDebugDrawMargins(Canvas canvas, Paint paint) {
         // Apply defaults, so as to remove UNDEFINED values
         LayoutParams lp = new LayoutParams();
         for (int i = 0; i < getChildCount(); i++) {
             View c = getChildAt(i);
-            Insets insets = getLayoutMode() == OPTICAL_BOUNDS ? c.getOpticalInsets() : Insets.NONE;
             lp.setMargins(
-                    getMargin1(c, true, true) - insets.left,
-                    getMargin1(c, false, true) - insets.top,
-                    getMargin1(c, true, false) - insets.right,
-                    getMargin1(c, false, false) - insets.bottom);
-            lp.onDebugDraw(c, canvas);
+                    getMargin1(c, true, true),
+                    getMargin1(c, false, true),
+                    getMargin1(c, true, false),
+                    getMargin1(c, false, false));
+            lp.onDebugDraw(c, canvas, paint);
         }
     }
 
@@ -858,26 +855,30 @@ public class GridLayout extends ViewGroup {
      */
     @Override
     protected void onDebugDraw(Canvas canvas) {
-        int height = getHeight() - getPaddingTop() - getPaddingBottom();
-        int width = getWidth() - getPaddingLeft() - getPaddingRight();
-
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.argb(50, 255, 255, 255));
 
+        Insets insets = getOpticalInsets();
+
+        int top    =               getPaddingTop()    + insets.top;
+        int left   =               getPaddingLeft()   + insets.left;
+        int right  = getWidth()  - getPaddingRight()  - insets.right;
+        int bottom = getHeight() - getPaddingBottom() - insets.bottom;
+
         int[] xs = horizontalAxis.locations;
         if (xs != null) {
             for (int i = 0, length = xs.length; i < length; i++) {
-                int x = xs[i];
-                drawLine(canvas, x, 0, x, height - 1, paint);
+                int x = left + xs[i];
+                drawLine(canvas, x, top, x, bottom, paint);
             }
         }
 
         int[] ys = verticalAxis.locations;
         if (ys != null) {
             for (int i = 0, length = ys.length; i < length; i++) {
-                int y = ys[i];
-                drawLine(canvas, 0, y, width - 1, y, paint);
+                int y = top + ys[i];
+                drawLine(canvas, left, y, right, y, paint);
             }
         }
 
@@ -943,15 +944,17 @@ public class GridLayout extends ViewGroup {
 
     // Measurement
 
+    // Note: padding has already been removed from the supplied specs
     private void measureChildWithMargins2(View child, int parentWidthSpec, int parentHeightSpec,
             int childWidth, int childHeight) {
         int childWidthSpec = getChildMeasureSpec(parentWidthSpec,
-                mPaddingLeft + mPaddingRight + getTotalMargin(child, true), childWidth);
+                getTotalMargin(child, true), childWidth);
         int childHeightSpec = getChildMeasureSpec(parentHeightSpec,
-                mPaddingTop + mPaddingBottom + getTotalMargin(child, false), childHeight);
+                getTotalMargin(child, false), childHeight);
         child.measure(childWidthSpec, childHeightSpec);
     }
 
+    // Note: padding has already been removed from the supplied specs
     private void measureChildrenWithMargins(int widthSpec, int heightSpec, boolean firstPass) {
         for (int i = 0, N = getChildCount(); i < N; i++) {
             View c = getChildAt(i);
@@ -978,6 +981,11 @@ public class GridLayout extends ViewGroup {
         }
     }
 
+    static int adjust(int measureSpec, int delta) {
+        return makeMeasureSpec(
+                MeasureSpec.getSize(measureSpec + delta),  MeasureSpec.getMode(measureSpec));
+    }
+
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
         consistencyCheck();
@@ -986,39 +994,38 @@ public class GridLayout extends ViewGroup {
          *  is  likely to have changed. We must invalidate if so. */
         invalidateValues();
 
-        measureChildrenWithMargins(widthSpec, heightSpec, true);
+        int hPadding = getPaddingLeft() + getPaddingRight();
+        int vPadding = getPaddingTop()  + getPaddingBottom();
 
-        int width, height;
+        int widthSpecSansPadding =  adjust( widthSpec, -hPadding);
+        int heightSpecSansPadding = adjust(heightSpec, -vPadding);
+
+        measureChildrenWithMargins(widthSpecSansPadding, heightSpecSansPadding, true);
+
+        int widthSansPadding;
+        int heightSansPadding;
 
         // Use the orientation property to decide which axis should be laid out first.
         if (orientation == HORIZONTAL) {
-            width = horizontalAxis.getMeasure(widthSpec);
-            measureChildrenWithMargins(widthSpec, heightSpec, false);
-            height = verticalAxis.getMeasure(heightSpec);
+            widthSansPadding = horizontalAxis.getMeasure(widthSpecSansPadding);
+            measureChildrenWithMargins(widthSpecSansPadding, heightSpecSansPadding, false);
+            heightSansPadding = verticalAxis.getMeasure(heightSpecSansPadding);
         } else {
-            height = verticalAxis.getMeasure(heightSpec);
-            measureChildrenWithMargins(widthSpec, heightSpec, false);
-            width = horizontalAxis.getMeasure(widthSpec);
+            heightSansPadding = verticalAxis.getMeasure(heightSpecSansPadding);
+            measureChildrenWithMargins(widthSpecSansPadding, heightSpecSansPadding, false);
+            widthSansPadding = horizontalAxis.getMeasure(widthSpecSansPadding);
         }
 
-        int hPadding = getPaddingLeft() + getPaddingRight();
-        int vPadding = getPaddingTop() + getPaddingBottom();
-
-        int measuredWidth = Math.max(hPadding + width, getSuggestedMinimumWidth());
-        int measuredHeight = Math.max(vPadding + height, getSuggestedMinimumHeight());
+        int measuredWidth  = Math.max(widthSansPadding  + hPadding, getSuggestedMinimumWidth());
+        int measuredHeight = Math.max(heightSansPadding + vPadding, getSuggestedMinimumHeight());
 
         setMeasuredDimension(
-                resolveSizeAndState(measuredWidth, widthSpec, 0),
+                resolveSizeAndState(measuredWidth,   widthSpec, 0),
                 resolveSizeAndState(measuredHeight, heightSpec, 0));
     }
 
     private int getMeasurement(View c, boolean horizontal) {
-        int result = horizontal ? c.getMeasuredWidth() : c.getMeasuredHeight();
-        if (getLayoutMode() == OPTICAL_BOUNDS) {
-            Insets insets = c.getOpticalInsets();
-            return result - (horizontal ? insets.left + insets.right : insets.top + insets.bottom);
-        }
-        return result;
+        return horizontal ? c.getMeasuredWidth() : c.getMeasuredHeight();
     }
 
     final int getMeasurementIncludingMargin(View c, boolean horizontal) {
@@ -1124,14 +1131,6 @@ public class GridLayout extends ViewGroup {
                     targetWidth - width - paddingRight - rightMargin - dx;
             int cy = paddingTop + y1 + gravityOffsetY + alignmentOffsetY + topMargin;
 
-            boolean useLayoutBounds = getLayoutMode() == OPTICAL_BOUNDS;
-            if (useLayoutBounds) {
-                Insets insets = c.getOpticalInsets();
-                cx -= insets.left;
-                cy -= insets.top;
-                width += (insets.left + insets.right);
-                height += (insets.top + insets.bottom);
-            }
             if (width != c.getMeasuredWidth() || height != c.getMeasuredHeight()) {
                 c.measure(makeMeasureSpec(width, EXACTLY), makeMeasureSpec(height, EXACTLY));
             }
@@ -2418,6 +2417,8 @@ public class GridLayout extends ViewGroup {
      *     <li> {@code spec.span = [start, start + size]} </li>
      *     <li> {@code spec.alignment = alignment} </li>
      * </ul>
+     * <p>
+     * To leave the start index undefined, use the value {@link #UNDEFINED}.
      *
      * @param start     the start
      * @param size      the size
@@ -2433,9 +2434,13 @@ public class GridLayout extends ViewGroup {
      *     <li> {@code spec.span = [start, start + 1]} </li>
      *     <li> {@code spec.alignment = alignment} </li>
      * </ul>
+     * <p>
+     * To leave the start index undefined, use the value {@link #UNDEFINED}.
      *
      * @param start     the start index
      * @param alignment the alignment
+     *
+     * @see #spec(int, int, Alignment)
      */
     public static Spec spec(int start, Alignment alignment) {
         return spec(start, 1, alignment);
@@ -2446,9 +2451,13 @@ public class GridLayout extends ViewGroup {
      * <ul>
      *     <li> {@code spec.span = [start, start + size]} </li>
      * </ul>
+     * <p>
+     * To leave the start index undefined, use the value {@link #UNDEFINED}.
      *
      * @param start     the start
      * @param size      the size
+     *
+     * @see #spec(int, Alignment)
      */
     public static Spec spec(int start, int size) {
         return spec(start, size, UNDEFINED_ALIGNMENT);
@@ -2459,8 +2468,12 @@ public class GridLayout extends ViewGroup {
      * <ul>
      *     <li> {@code spec.span = [start, start + 1]} </li>
      * </ul>
+     * <p>
+     * To leave the start index undefined, use the value {@link #UNDEFINED}.
      *
      * @param start     the start index
+     *
+     * @see #spec(int, int)
      */
     public static Spec spec(int start) {
         return spec(start, 1);
@@ -2654,14 +2667,7 @@ public class GridLayout extends ViewGroup {
         @Override
         public int getAlignmentValue(View view, int viewSize, int mode) {
             int baseline = view.getBaseline();
-            if (baseline == -1) {
-                return UNDEFINED;
-            } else {
-                if (mode == OPTICAL_BOUNDS) {
-                    return baseline - view.getOpticalInsets().top;
-                }
-                return baseline;
-            }
+            return baseline == -1 ? UNDEFINED : baseline;
         }
 
         @Override

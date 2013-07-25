@@ -73,37 +73,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <html>
 <head>
+
+
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -121,15 +95,9 @@ href="//fonts.googleapis.com/css?family=Roboto:regular,medium,thin,italic,medium
 <script src="/assets/js/android_3p-bundle.js" type="text/javascript"></script>
 <script type="text/javascript">
   var toRoot = "/";
-  
   var devsite = false;
-  
 </script>
 <script src="/assets/js/docs.js" type="text/javascript"></script>
-
-<script src="/gms_navtree_data.js" type="text/javascript"></script>
-<script src="/gcm_navtree_data.js" type="text/javascript"></script>
-
 
 <script type="text/javascript">
   var _gaq = _gaq || [];
@@ -148,7 +116,8 @@ href="//fonts.googleapis.com/css?family=Roboto:regular,medium,thin,italic,medium
   <div id="doc-api-level" class="" style="display:none"></div>
   <a name="top"></a>
 
-  
+<a name="top"></a>
+
     <!-- Header -->
     <div id="header">
         <div class="wrap" id="header-wrap">
@@ -163,25 +132,25 @@ href="//fonts.googleapis.com/css?family=Roboto:regular,medium,thin,italic,medium
           </div>
             <ul class="nav-x col-9">
                 <li class="design">
-                  <a href="/design/index.html" 
-                  zh-TW-lang="設計"
-                  zh-CN-lang="设计"
+                  <a href="/design/index.html"
+                  zh-tw-lang="設計"
+                  zh-cn-lang="设计"
                   ru-lang="Проектирование"
                   ko-lang="디자인"
                   ja-lang="設計"
                   es-lang="Diseñar"               
                   >Design</a></li>
-                <li class="develop"><a href="/develop/index.html" class="selected"
-                  zh-TW-lang="開發"
-                  zh-CN-lang="开发"
+                <li class="develop"><a href="/develop/index.html"
+                  zh-tw-lang="開發"
+                  zh-cn-lang="开发"
                   ru-lang="Разработка"
                   ko-lang="개발"
                   ja-lang="開発"
                   es-lang="Desarrollar"               
                   >Develop</a></li>
-                <li class="distribute last"><a href="/distribute/index.html" 
-                  zh-TW-lang="發佈"
-                  zh-CN-lang="分发"
+                <li class="distribute last"><a href="/distribute/index.html"
+                  zh-tw-lang="發佈"
+                  zh-cn-lang="分发"
                   ru-lang="Распространение"
                   ko-lang="배포"
                   ja-lang="配布"
@@ -210,7 +179,6 @@ href="//fonts.googleapis.com/css?family=Roboto:regular,medium,thin,italic,medium
         <li><a href="http://source.android.com">Android Open Source Project</a></li>
       </ul>
       
-
       
       
         <div class="header">Language</div>
@@ -221,8 +189,8 @@ href="//fonts.googleapis.com/css?family=Roboto:regular,medium,thin,italic,medium
                 <option value="ja">日本語</option>
                 <option value="ko">한국어</option>
                 <option value="ru">Русский</option>
-                <option value="zh-CN">中文 (中国)</option>
-                <option value="zh-TW">中文 (台灣)</option>
+                <option value="zh-cn">中文 (中国)</option>
+                <option value="zh-tw">中文 (台灣)</option>
             </select>
           </div>
         <script type="text/javascript">
@@ -254,13 +222,34 @@ onkeyup="return search_changed(event, false, '/')" />
         <div class="right"></div>
     </div>
   </div>
-  <div id="search_filtered_wrapper">
-    <div id="search_filtered_div" class="no-display">
-        <ul id="search_filtered">
-        </ul>
+
+  <div class="search_filtered_wrapper reference">
+    <div class="suggest-card reference no-display">
+      <ul class="search_filtered">
+      </ul>
     </div>
   </div>
-  
+
+  <div class="search_filtered_wrapper docs">
+    <div class="suggest-card dummy no-display">&nbsp;</div>
+    <div class="suggest-card develop no-display">
+      <ul class="search_filtered">
+      </ul>
+      <div class="child-card guides no-display">
+      </div>
+      <div class="child-card training no-display">
+      </div>
+    </div>
+    <div class="suggest-card design no-display">
+      <ul class="search_filtered">
+      </ul>
+    </div>
+    <div class="suggest-card distribute no-display">
+      <ul class="search_filtered">
+      </ul>
+    </div>
+  </div>
+
   </div>
   <!-- /New Search>
           
@@ -281,32 +270,32 @@ onkeyup="return search_changed(event, false, '/')" />
                     <li class="develop">
                       <ul>
                         <li><a href="/training/index.html"
-                          zh-TW-lang="訓練課程"
-                          zh-CN-lang="培训"
+                          zh-tw-lang="訓練課程"
+                          zh-cn-lang="培训"
                           ru-lang="Курсы"
                           ko-lang="교육"
                           ja-lang="トレーニング"
                           es-lang="Capacitación"               
                           >Training</a></li>
                         <li><a href="/guide/components/index.html"
-                          zh-TW-lang="API 指南"
-                          zh-CN-lang="API 指南"
+                          zh-tw-lang="API 指南"
+                          zh-cn-lang="API 指南"
                           ru-lang="Руководства по API"
                           ko-lang="API 가이드"
                           ja-lang="API ガイド"
                           es-lang="Guías de la API"               
                           >API Guides</a></li>
                         <li><a href="/reference/packages.html"
-                          zh-TW-lang="參考資源"
-                          zh-CN-lang="参考"
+                          zh-tw-lang="參考資源"
+                          zh-cn-lang="参考"
                           ru-lang="Справочник"
                           ko-lang="참조문서"
                           ja-lang="リファレンス"
                           es-lang="Referencia"               
                           >Reference</a></li>
                         <li><a href="/tools/index.html"
-                          zh-TW-lang="相關工具"
-                          zh-CN-lang="工具"
+                          zh-tw-lang="相關工具"
+                          zh-cn-lang="工具"
                           ru-lang="Инструменты"
                           ko-lang="도구"
                           ja-lang="ツール"
@@ -342,45 +331,44 @@ onkeyup="return search_changed(event, false, '/')" />
   </div>
     
     
-    
-
+  
     <!-- Secondary x-nav -->
     <div id="nav-x">
         <div class="wrap">
             <ul class="nav-x col-9 develop" style="width:100%">
-                <li><a href="/training/index.html" 
-                  zh-TW-lang="訓練課程"
-                  zh-CN-lang="培训"
+                <li class="training"><a href="/training/index.html"
+                  zh-tw-lang="訓練課程"
+                  zh-cn-lang="培训"
                   ru-lang="Курсы"
                   ko-lang="교육"
                   ja-lang="トレーニング"
                   es-lang="Capacitación"               
                   >Training</a></li>
-                <li><a href="/guide/components/index.html" 
-                  zh-TW-lang="API 指南"
-                  zh-CN-lang="API 指南"
+                <li class="guide"><a href="/guide/components/index.html"
+                  zh-tw-lang="API 指南"
+                  zh-cn-lang="API 指南"
                   ru-lang="Руководства по API"
                   ko-lang="API 가이드"
                   ja-lang="API ガイド"
                   es-lang="Guías de la API"               
                   >API Guides</a></li>
-                <li><a href="/reference/packages.html" 
-                  zh-TW-lang="參考資源"
-                  zh-CN-lang="参考"
+                <li class="reference"><a href="/reference/packages.html"
+                  zh-tw-lang="參考資源"
+                  zh-cn-lang="参考"
                   ru-lang="Справочник"
                   ko-lang="참조문서"
                   ja-lang="リファレンス"
                   es-lang="Referencia"               
                   >Reference</a></li>
-                <li><a href="/tools/index.html" 
-                  zh-TW-lang="相關工具"
-                  zh-CN-lang="工具"
+                <li class="tools"><a href="/tools/index.html"
+                  zh-tw-lang="相關工具"
+                  zh-cn-lang="工具"
                   ru-lang="Инструменты"
                   ko-lang="도구"
                   ja-lang="ツール"
                   es-lang="Herramientas"
                   >Tools</a></li>
-                <li><a href="/google/index.html" class="selected"
+                <li class="google"><a href="/google/index.html"
                   >Google Services</a>
                 </li>
             </ul>
@@ -388,9 +376,13 @@ onkeyup="return search_changed(event, false, '/')" />
         
     </div>
     <!-- /Sendondary x-nav -->
+  
+
+
+
 
   
-  
+
 
   
   <div class="wrap clearfix" id="body-content">
@@ -401,11 +393,40 @@ onkeyup="return search_changed(event, false, '/')" />
 
 
 <ul id="nav">
+
   <li class="nav-section">
     <div class="nav-section-header empty"><a href="/google/index.html">
-        <span class="en">Overview</span>
+          <span class="en">Overview</span>
       </a></div>
   </li>
+
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="/google/play-services/games.html">
+          <span class="en">Games</span>
+      </a></div>
+  </li>
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="/google/play-services/location.html">
+          <span class="en">Location</span>
+      </a></div>
+  </li>
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="/google/play-services/plus.html">
+          <span class="en">Google+</span>
+                </a></div>
+  </li>
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="/google/play-services/maps.html">
+          <span class="en">Google Maps</span>
+      </a></div>
+  </li>
+  <li class="nav-section">
+    <div class="nav-section-header empty"><a href="/google/play-services/auth.html">
+          <span class="en">Authorization</span>
+      </a></div>
+  </li>
+
+
 
   <li class="nav-section">
     <div class="nav-section-header"><a href="/google/play-services/index.html">
@@ -415,19 +436,6 @@ onkeyup="return search_changed(event, false, '/')" />
       <li><a href="/google/play-services/setup.html">
           <span class="en">Setup</span></a>
       </li>
-
-      <li><a href="/google/play-services/auth.html">
-          <span class="en">Authorization</span></a>
-      </li>
-
-      <li><a href="/google/play-services/plus.html">
-          <span class="en">Google+</span></a>
-      </li>
-
-      <li><a href="/google/play-services/maps.html">
-          <span class="en">Google Maps</span></a>
-      </li>
-
       <li id="gms-tree-list" class="nav-section">
         <div class="nav-section-header">
           <a href="/reference/gms-packages.html">
@@ -435,7 +443,6 @@ onkeyup="return search_changed(event, false, '/')" />
           </a>
         <div>
       </li>
-
     </ul>
   </li>
 
@@ -468,6 +475,9 @@ onkeyup="return search_changed(event, false, '/')" />
               <span class="en">Reference</span></a></li>
               </ul>
       </li>
+      <li><a href="/google/play/billing/billing_subscriptions.html">
+              <span class="en">Subscriptions</span></a>
+      </li>
       <li><a href="/google/play/billing/billing_best_practices.html">
               <span class="en">Security and Design</span></a>
       </li>
@@ -477,10 +487,54 @@ onkeyup="return search_changed(event, false, '/')" />
       <li><a href="/google/play/billing/billing_admin.html">
               <span class="en">Administering In-app Billing</span></a>
       </li>
+      <li><a href="/google/play/billing/gp-purchase-status-api.html">
+              <span class="en">Purchase Status API</span></a>
+      </li>
       <li><a href="/google/play/billing/versions.html">
               <span class="en">Version Notes</span></a>
       </li>
     </ul>
+  </li>
+
+
+
+  <li class="nav-section">
+      <div class="nav-section-header"><a href="/google/gcm/index.html">
+        <span class="en">Google Cloud Messaging</span></a>
+      </div>
+      <ul>
+        <li><a href="/google/gcm/gs.html">
+            <span class="en">Getting Started</span></a>
+        </li>
+        <li><a href="/google/gcm/gcm.html">
+            <span class="en">Architectural Overview</span></a>
+        </li>
+         <li><a href="/google/gcm/ccs.html">
+              <span class="en">Cloud Connection Server</span></a>
+        </li>
+        <li><a href="/google/gcm/notifications.html">
+              <span class="en">User Notifications</span></a>
+        </li>
+        <li><a href="/google/gcm/client.html">
+            <span class="en">GCM Client</span></a>
+        </li>
+        <li><a href="/google/gcm/server.html">
+            <span class="en">GCM Server</span></a>
+        </li>
+        <li><a href="/google/gcm/adv.html">
+            <span class="en">Advanced Topics</span></a>
+        </li>
+        <li><a href="/google/gcm/c2dm.html">
+            <span class="en">Migration</span></a>
+        </li>
+        <li id="gcm-tree-list" class="nav-section">
+          <div class="nav-section-header">
+            <a href="/reference/gcm-packages.html">
+              <span class="en">Reference</span>
+            </a>
+          <div>
+        </li>
+      </ul>
   </li>
 
   <li class="nav-section">
@@ -517,39 +571,6 @@ onkeyup="return search_changed(event, false, '/')" />
           </li>
         </ul>
       </li>
-    </ul>
-  </li>
-
-  <li class="nav-section">
-      <div class="nav-section-header"><a href="/google/gcm/index.html">
-        <span class="en">Google Cloud Messaging</span></a>
-      </div>
-      <ul>
-        <li><a href="/google/gcm/gs.html">
-            <span class="en">Getting Started</span></a>
-        </li>
-        <li><a href="/google/gcm/gcm.html">
-            <span class="en">Architectural Overview</span></a>
-        </li>
-        <li><a href="/google/gcm/demo.html">
-            <span class="en">Demo App Tutorial</span></a>
-        </li>
-        <li><a href="/google/gcm/adv.html">
-            <span class="en">Advanced Topics</span></a>
-        </li>
-        <li><a href="/google/gcm/c2dm.html">
-            <span class="en">Migration</span></a>
-        </li>
-        <li id="gcm-tree-list" class="nav-section">
-          <div class="nav-section-header">
-            <a href="/reference/gcm-packages.html">
-              <span class="en">Reference</span>
-            </a>
-          <div>
-        </li>
-      </ul>
-  </li>
-
 
   <li class="nav-section">
     <div class="nav-section-header"><a href="/google/backup/index.html">
@@ -561,6 +582,12 @@ onkeyup="return search_changed(event, false, '/')" />
       </li>
     </ul>
   </li>
+
+  </ul>
+
+</li>
+
+
 
 </ul>
 
@@ -579,7 +606,6 @@ onkeyup="return search_changed(event, false, '/')" />
        showGoogleRefTree();
     
       </script>
-
     </div> <!-- end side-nav -->
     <script>
       $(document).ready(function() {
@@ -752,7 +778,7 @@ Summary:
           static
           
           int</nobr></td>
-          <td class="jd-linkcol"><a href="/reference/com/google/android/gms/R.id.html#none">none</a></td>
+          <td class="jd-linkcol"><a href="/reference/com/google/android/gms/R.id.html#hybrid">hybrid</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
@@ -763,7 +789,7 @@ Summary:
           static
           
           int</nobr></td>
-          <td class="jd-linkcol"><a href="/reference/com/google/android/gms/R.id.html#normal">normal</a></td>
+          <td class="jd-linkcol"><a href="/reference/com/google/android/gms/R.id.html#none">none</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
@@ -774,12 +800,23 @@ Summary:
           static
           
           int</nobr></td>
-          <td class="jd-linkcol"><a href="/reference/com/google/android/gms/R.id.html#satellite">satellite</a></td>
+          <td class="jd-linkcol"><a href="/reference/com/google/android/gms/R.id.html#normal">normal</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
     
       <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          public
+          static
+          
+          int</nobr></td>
+          <td class="jd-linkcol"><a href="/reference/com/google/android/gms/R.id.html#satellite">satellite</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
           <td class="jd-typecol"><nobr>
           public
           static
@@ -1072,6 +1109,34 @@ From class
 
 
 
+<A NAME="hybrid"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+        int
+      </span>
+        hybrid
+    </h4>
+      <div class="api-level">
+        
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+    </div>
+</div>
+
+
+
 <A NAME="none"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1242,7 +1307,6 @@ From class
 <!-- ========= END OF CLASS DATA ========= -->
 <A NAME="navbar_top"></A>
 
-
 <div id="footer" class="wrap" >
         
 
@@ -1271,7 +1335,6 @@ From class
   </div>
 
 </div> <!-- end footer -->
-
 </div> <!-- jd-content -->
 
 </div><!-- end doc-content -->

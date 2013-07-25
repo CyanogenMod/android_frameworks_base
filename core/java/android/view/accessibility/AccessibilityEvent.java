@@ -19,6 +19,7 @@ package android.view.accessibility;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Pools.SynchronizedPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -686,11 +687,8 @@ public final class AccessibilityEvent extends AccessibilityRecord implements Par
     public static final int TYPES_ALL_MASK = 0xFFFFFFFF;
 
     private static final int MAX_POOL_SIZE = 10;
-    private static final Object sPoolLock = new Object();
-    private static AccessibilityEvent sPool;
-    private static int sPoolSize;
-    private AccessibilityEvent mNext;
-    private boolean mIsInPool;
+    private static final SynchronizedPool<AccessibilityEvent> sPool =
+            new SynchronizedPool<AccessibilityEvent>(MAX_POOL_SIZE);
 
     private int mEventType;
     private CharSequence mPackageName;
@@ -916,17 +914,8 @@ public final class AccessibilityEvent extends AccessibilityRecord implements Par
      * @return An instance.
      */
     public static AccessibilityEvent obtain() {
-        synchronized (sPoolLock) {
-            if (sPool != null) {
-                AccessibilityEvent event = sPool;
-                sPool = sPool.mNext;
-                sPoolSize--;
-                event.mNext = null;
-                event.mIsInPool = false;
-                return event;
-            }
-            return new AccessibilityEvent();
-        }
+        AccessibilityEvent event = sPool.acquire();
+        return (event != null) ? event : new AccessibilityEvent();
     }
 
     /**
@@ -939,18 +928,8 @@ public final class AccessibilityEvent extends AccessibilityRecord implements Par
      */
     @Override
     public void recycle() {
-        if (mIsInPool) {
-            throw new IllegalStateException("Event already recycled!");
-        }
         clear();
-        synchronized (sPoolLock) {
-            if (sPoolSize <= MAX_POOL_SIZE) {
-                mNext = sPool;
-                sPool = this;
-                mIsInPool = true;
-                sPoolSize++;
-            }
-        }
+        sPool.release(this);
     }
 
     /**
@@ -1137,54 +1116,176 @@ public final class AccessibilityEvent extends AccessibilityRecord implements Par
      * @return The string representation.
      */
     public static String eventTypeToString(int eventType) {
-        switch (eventType) {
-            case TYPE_VIEW_CLICKED:
-                return "TYPE_VIEW_CLICKED";
-            case TYPE_VIEW_LONG_CLICKED:
-                return "TYPE_VIEW_LONG_CLICKED";
-            case TYPE_VIEW_SELECTED:
-                return "TYPE_VIEW_SELECTED";
-            case TYPE_VIEW_FOCUSED:
-                return "TYPE_VIEW_FOCUSED";
-            case TYPE_VIEW_TEXT_CHANGED:
-                return "TYPE_VIEW_TEXT_CHANGED";
-            case TYPE_WINDOW_STATE_CHANGED:
-                return "TYPE_WINDOW_STATE_CHANGED";
-            case TYPE_VIEW_HOVER_ENTER:
-                return "TYPE_VIEW_HOVER_ENTER";
-            case TYPE_VIEW_HOVER_EXIT:
-                return "TYPE_VIEW_HOVER_EXIT";
-            case TYPE_NOTIFICATION_STATE_CHANGED:
-                return "TYPE_NOTIFICATION_STATE_CHANGED";  
-            case TYPE_TOUCH_EXPLORATION_GESTURE_START:
-                return "TYPE_TOUCH_EXPLORATION_GESTURE_START";
-            case TYPE_TOUCH_EXPLORATION_GESTURE_END:
-                return "TYPE_TOUCH_EXPLORATION_GESTURE_END";
-            case TYPE_WINDOW_CONTENT_CHANGED:
-                return "TYPE_WINDOW_CONTENT_CHANGED";
-            case TYPE_VIEW_TEXT_SELECTION_CHANGED:
-                return "TYPE_VIEW_TEXT_SELECTION_CHANGED";
-            case TYPE_VIEW_SCROLLED:
-                return "TYPE_VIEW_SCROLLED";
-            case TYPE_ANNOUNCEMENT:
-                return "TYPE_ANNOUNCEMENT";
-            case TYPE_VIEW_ACCESSIBILITY_FOCUSED:
-                return "TYPE_VIEW_ACCESSIBILITY_FOCUSED";
-            case TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED:
-                return "TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED";
-            case TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY:
-                return "TYPE_CURRENT_AT_GRANULARITY_MOVEMENT_CHANGED";
-            case TYPE_GESTURE_DETECTION_START:
-                return "TYPE_GESTURE_DETECTION_START";
-            case TYPE_GESTURE_DETECTION_END:
-                return "TYPE_GESTURE_DETECTION_END";
-            case TYPE_TOUCH_INTERACTION_START:
-                return "TYPE_TOUCH_INTERACTION_START";
-            case TYPE_TOUCH_INTERACTION_END:
-                return "TYPE_TOUCH_INTERACTION_END";
-            default:
-                return null;
+        if (eventType == TYPES_ALL_MASK) {
+            return "TYPES_ALL_MASK";
         }
+        StringBuilder builder = new StringBuilder();
+        int eventTypeCount = 0;
+        while (eventType != 0) {
+            final int eventTypeFlag = 1 << Integer.numberOfTrailingZeros(eventType);
+            eventType &= ~eventTypeFlag;
+            switch (eventTypeFlag) {
+                case TYPE_VIEW_CLICKED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_CLICKED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_LONG_CLICKED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_LONG_CLICKED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_SELECTED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_SELECTED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_FOCUSED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_FOCUSED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_TEXT_CHANGED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_TEXT_CHANGED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_WINDOW_STATE_CHANGED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_WINDOW_STATE_CHANGED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_HOVER_ENTER: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_HOVER_ENTER");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_HOVER_EXIT: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_HOVER_EXIT");
+                    eventTypeCount++;
+                } break;
+                case TYPE_NOTIFICATION_STATE_CHANGED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_NOTIFICATION_STATE_CHANGED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_TOUCH_EXPLORATION_GESTURE_START: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_TOUCH_EXPLORATION_GESTURE_START");
+                    eventTypeCount++;
+                } break;
+                case TYPE_TOUCH_EXPLORATION_GESTURE_END: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_TOUCH_EXPLORATION_GESTURE_END");
+                    eventTypeCount++;
+                } break;
+                case TYPE_WINDOW_CONTENT_CHANGED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_WINDOW_CONTENT_CHANGED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_TEXT_SELECTION_CHANGED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_TEXT_SELECTION_CHANGED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_SCROLLED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_SCROLLED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_ANNOUNCEMENT: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_ANNOUNCEMENT");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_ACCESSIBILITY_FOCUSED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_ACCESSIBILITY_FOCUSED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED");
+                    eventTypeCount++;
+                } break;
+                case TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY");
+                    eventTypeCount++;
+                } break;
+                case TYPE_GESTURE_DETECTION_START: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_GESTURE_DETECTION_START");
+                    eventTypeCount++;
+                } break;
+                case TYPE_GESTURE_DETECTION_END: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_GESTURE_DETECTION_END");
+                    eventTypeCount++;
+                } break;
+                case TYPE_TOUCH_INTERACTION_START: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_TOUCH_INTERACTION_START");
+                    eventTypeCount++;
+                } break;
+                case TYPE_TOUCH_INTERACTION_END: {
+                    if (eventTypeCount > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append("TYPE_TOUCH_INTERACTION_END");
+                    eventTypeCount++;
+                } break;
+            }
+        }
+        if (eventTypeCount > 1) {
+            builder.insert(0, '[');
+            builder.append(']');
+        }
+        return builder.toString();
     }
 
     /**

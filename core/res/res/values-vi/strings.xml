@@ -200,6 +200,8 @@
     <string name="permgroupdesc_microphone" msgid="7106618286905738408">"Truy cập trực tiếp vào micrô để ghi âm."</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Máy ảnh"</string>
     <string name="permgroupdesc_camera" msgid="2933667372289567714">"Truy cập trực tiếp vào máy ảnh để chụp ảnh hoặc quay video."</string>
+    <string name="permgrouplab_screenlock" msgid="8275500173330718168">"Khóa màn hình"</string>
+    <string name="permgroupdesc_screenlock" msgid="7067497128925499401">"Có thể ảnh hưởng đến thao tác của màn hình khóa trên thiết bị của bạn."</string>
     <string name="permgrouplab_appInfo" msgid="8028789762634147725">"Thông tin về các ứng dụng của bạn"</string>
     <string name="permgroupdesc_appInfo" msgid="3950378538049625907">"Khả năng ảnh hưởng tới hoạt động của các ứng dụng khác trên thiết bị của bạn."</string>
     <string name="permgrouplab_wallpaper" msgid="3850280158041175998">"Hình nền"</string>
@@ -225,6 +227,16 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Dung lượng"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"Truy cập bộ nhớ USB."</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Truy cập thẻ SD."</string>
+    <string name="permgrouplab_accessibilityFeatures" msgid="7919025602283593907">"Tính năng hỗ trợ truy cập"</string>
+    <string name="permgroupdesc_accessibilityFeatures" msgid="4205196881678144335">"Tính năng mà công nghệ hỗ trợ có thể yêu cầu."</string>
+    <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"Truy xuất nội dung cửa sổ"</string>
+    <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"Kiểm tra nội dung của cửa sổ bạn đang tương tác."</string>
+    <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"Bật Khám phá bằng cách chạm"</string>
+    <string name="capability_desc_canRequestTouchExploration" msgid="5800552516779249356">"Mục đã chạm sẽ được nói to và bạn có thể khám phá màn hình bằng cử chỉ."</string>
+    <string name="capability_title_canRequestEnhancedWebAccessibility" msgid="1739881766522594073">"Bật khả năng truy cập web nâng cao"</string>
+    <string name="capability_desc_canRequestEnhancedWebAccessibility" msgid="7881063961507511765">"Tập lệnh có thể được cài đặt để làm cho nội dung ứng dụng dễ truy cập hơn."</string>
+    <string name="capability_title_canRequestFilterKeyEvents" msgid="2103440391902412174">"Xem nội dung bạn nhập"</string>
+    <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"Bao gồm dữ liệu cá nhân chẳng hạn như số thẻ tín dụng và mật khẩu."</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"vô hiệu hóa hoặc sửa đổi thanh trạng thái"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"Cho phép ứng dụng vô hiệu hóa thanh trạng thái hoặc thêm và xóa biểu tượng hệ thống."</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"thanh trạng thái"</string>
@@ -243,8 +255,8 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Cho phép ứng dụng đọc tin nhắn quảng bá mà thiết bị của bạn nhận được. Tin nhắn quảng bá cảnh báo được gửi ở một số địa điểm nhằm cảnh báo cho bạn về các tình huống khẩn cấp. Các ứng dụng độc hại có thể gây ảnh hưởng đến hiệu suất hoặc hoạt động của thiết bị của bạn khi nhận được tin nhắn quảng bá khẩn cấp."</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"gửi tin nhắn SMS"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"Cho phép ứng dụng gửi tin nhắn SMS. Việc này có thể dẫn đến các khoản phí không mong muốn. Các ứng dụng độc hai có thể khiến bạn tốn tiền bằng cách gửi tin nhắn mà không cần sự xác nhận của bạn."</string>
-    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"gửi tin nhắn SMS mà không cần xác nhận"</string>
-    <string name="permdesc_sendSmsNoConfirmation" msgid="402569800862935907">"Cho phép ứng dụng gửi tin nhắn SMS. Việc này có thể dẫn đến các khoản phí không mong muốn. Các ứng dụng độc hai có thể khiến bạn tốn tiền bằng cách gửi tin nhắn mà không cần sự xác nhận của bạn."</string>
+    <string name="permlab_sendRespondViaMessageRequest" msgid="8713889105305943200">"gửi sự kiện trả lời qua tin nhắn"</string>
+    <string name="permdesc_sendRespondViaMessageRequest" msgid="7107648548468778734">"Cho phép ứng dụng gửi yêu cầu đến ứng dụng nhắn tin khác để xử lý các sự kiện trả lời qua tin nhắn cho các cuộc gọi đến."</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"đọc tin nhắn văn bản của bạn (SMS hoặc MMS)"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"Cho phép ứng dụng đọc tin nhắn SMS được lưu trữ trên máy tính bảng hoặc thẻ SIM của bạn. Việc này cho phép ứng dụng đọc tất cả tin nhắn SMS, bất kể nội dung hay tính bí mật là gì."</string>
     <string name="permdesc_readSms" product="default" msgid="3695967533457240550">"Cho phép ứng dụng đọc tin nhắn SMS được lưu trữ trên điện thoại hoặc thẻ SIM của bạn. Việc này cho phép ứng dụng đọc tất cả tin nhắn SMS, bất kể nội dung hay tính bí mật là gì."</string>
@@ -299,6 +311,8 @@
     <string name="permdesc_shutdown" msgid="7046500838746291775">"Đặt trình quản lý hoạt động sang trạng thái tắt. Không thực hiện tắt hoàn toàn."</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"ngăn chuyển đổi ứng dụng"</string>
     <string name="permdesc_stopAppSwitches" msgid="8262195802582255021">"Ngăn người dùng chuyển sang ứng dụng khác."</string>
+    <string name="permlab_getTopActivityInfo" msgid="2537922311411546016">"truy cập thông tin ứng dụng hiện tại"</string>
+    <string name="permdesc_getTopActivityInfo" msgid="2512448855496067131">"Cho phép chủ sở hữu truy xuất thông tin cá nhân về ứng dụng hiện tại ở nền trước của màn hình."</string>
     <string name="permlab_runSetActivityWatcher" msgid="892239094867182656">"giám sát và kiểm soát tất cả hoạt động khởi chạy ứng dụng"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="6003603162578577406">"Cho phép ứng dụng giám sát và kiểm soát cách hệ thống khởi chạy các hoạt động. Ứng dụng độc hại hoàn toàn có thể làm tổn hại hệ thống. Quyền này chỉ cần cho mục đích phát triển, không dành cho mục đích sử dụng thông thường."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"gửi truyền phát đã xóa của gói"</string>
@@ -315,6 +329,10 @@
     <string name="permdesc_batteryStats" msgid="5897346582882915114">"Cho phép ứng dụng đọc dữ liệu sử dụng pin mức thấp hiện tại. Có thể cho phép ứng dụng biết thông tin chi tiết về ứng dụng bạn sử dụng."</string>
     <string name="permlab_updateBatteryStats" msgid="3719689764536379557">"sửa đổi số liệu thống kê về pin"</string>
     <string name="permdesc_updateBatteryStats" msgid="6862817857178025002">"Cho phép ứng dụng sửa đổi các số liệu thống kê về pin đã được thu thập. Không dành cho các ứng dụng thông thường."</string>
+    <string name="permlab_getAppOpsStats" msgid="1508779687436585744">"truy xuất số liệu thống kê hoạt động của ứng dụng"</string>
+    <string name="permdesc_getAppOpsStats" msgid="6243887041577912877">"Cho phép ứng dụng truy xuất số liệu thống kê hoạt động của ứng dụng đã thu thập. Không dành cho ứng dụng thông thường."</string>
+    <string name="permlab_updateAppOpsStats" msgid="8829097373851521505">"sửa đổi số liệu thống kê hoạt động của ứng dụng"</string>
+    <string name="permdesc_updateAppOpsStats" msgid="50784596594403483">"Cho phép ứng dụng sửa đổi số liệu thống kê hoạt động của ứng dụng đã thu thập. Không dành cho ứng dụng thông thường."</string>
     <string name="permlab_backup" msgid="470013022865453920">"kiểm soát sao lưu và khôi phục hệ thống"</string>
     <string name="permdesc_backup" msgid="6912230525140589891">"Cho phép ứng dụng kiểm soát cơ chế sao lưu và khôi phục của hệ thống. Không dành cho các ứng dụng thông thường."</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"xác nhận bản sao lưu đầy đủ hoặc khôi phục hoạt động"</string>
@@ -440,16 +458,18 @@
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Cho phép ứng dụng sử dụng các tính năng SurfaceFlinger cấp độ thấp."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"đọc bộ đệm khung"</string>
     <string name="permdesc_readFrameBuffer" msgid="4937405521809454680">"Cho phép ứng dụng đọc nội dung của bộ đệm khung."</string>
-    <string name="permlab_configureWifiDisplay" msgid="5595661694746742168">"định cấu hình màn hình Wifi"</string>
-    <string name="permdesc_configureWifiDisplay" msgid="7916815158690218065">"Cho phép ứng dụng định cấu hình và kết nối với màn hình Wifi."</string>
-    <string name="permlab_controlWifiDisplay" msgid="393641276723695496">"kiểm soát màn hình Wifi"</string>
-    <string name="permdesc_controlWifiDisplay" msgid="4543912292681826986">"Cho phép ứng dụng kiểm soát các tính năng cấp thấp của màn hình Wifi."</string>
+    <string name="permlab_configureWifiDisplay" msgid="5595661694746742168">"định cấu hình màn hình Wi-Fi"</string>
+    <string name="permdesc_configureWifiDisplay" msgid="7916815158690218065">"Cho phép ứng dụng định cấu hình và kết nối với màn hình Wi-Fi."</string>
+    <string name="permlab_controlWifiDisplay" msgid="393641276723695496">"kiểm soát màn hình Wi-Fi"</string>
+    <string name="permdesc_controlWifiDisplay" msgid="4543912292681826986">"Cho phép ứng dụng kiểm soát các tính năng cấp thấp của màn hình Wi-Fi."</string>
     <string name="permlab_modifyAudioSettings" msgid="6095859937069146086">"thay đổi cài đặt âm thanh của bạn"</string>
     <string name="permdesc_modifyAudioSettings" msgid="3522565366806248517">"Cho phép ứng dụng sửa đổi cài đặt âm thanh chung chẳng hạn như âm lượng và loa nào được sử dụng cho thiết bị ra."</string>
     <string name="permlab_recordAudio" msgid="3876049771427466323">"ghi âm"</string>
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"Cho phép ứng dụng ghi âm bằng micrô. Quyền này cho phép ứng dụng ghi âm bất kỳ lúc nào mà không cần sự xác nhận của bạn."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"chụp ảnh và quay video"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"Cho phép ứng dụng chụp ảnh và quay video bằng máy ảnh. Quyền này cho phép ứng dụng sử dụng máy ảnh bất kỳ lúc nào mà không cần sự xác nhận của bạn."</string>
+    <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">"vô hiệu hóa tính năng phát đèn LED chỉ báo khi máy ảnh đang được sử dụng"</string>
+    <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">"Cho phép cài đặt trước ứng dụng hệ thống để vô hiệu hóa việc máy ảnh sử dụng đèn LED chỉ báo."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"vô hiệu hóa vĩnh viễn máy tính bảng"</string>
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"vĩnh viễn vô hiệu hóa điện thoại"</string>
     <string name="permdesc_brick" product="tablet" msgid="4334818808001699530">"Cho phép ứng dụng vô hiệu hóa vĩnh viễn toàn bộ máy tính bảng. Điều này rất nguy hiểm."</string>
@@ -605,6 +625,10 @@
     <string name="permdesc_manageNetworkPolicy" msgid="7537586771559370668">"Cho phép ứng dụng quản lý chính sách mạng và xác định quy tắc dành riêng cho ứng dụng."</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"sửa đổi hạch toán sử dụng mạng"</string>
     <string name="permdesc_modifyNetworkAccounting" msgid="5443412866746198123">"Cho phép ứng dụng sửa đổi cách tính mức sử dụng mạng so với ứng dụng. Không dành cho các ứng dụng thông thường."</string>
+    <string name="permlab_accessNotifications" msgid="7673416487873432268">"truy cập thông báo"</string>
+    <string name="permdesc_accessNotifications" msgid="458457742683431387">"Cho phép ứng dụng truy xuất, kiểm tra và xóa thông báo, bao gồm những thông báo được đăng bởi các ứng dụng khác."</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"liên kết với dịch vụ trình xử lý thông báo"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Cho phép chủ sở hữu liên kết với giao diện cấp cao nhất của dịch vụ trình xử lý thông báo. Không cần thiết cho các ứng dụng thông thường."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Đặt quy tắc mật khẩu"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"Kiểm soát độ dài và ký tự được phép trong mật khẩu mở khóa màn hình."</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"Giám sát những lần thử mở khóa màn hình"</string>
@@ -714,7 +738,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
@@ -762,7 +787,7 @@
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Thử lại"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Đã vượt quá số lần Mở khóa bằng khuôn mặt tối đa"</string>
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Đang sạc, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_charged" msgid="321635745684060624">"Bị tính phí"</string>
+    <string name="lockscreen_charged" msgid="321635745684060624">"Pin đầy"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Kết nối bộ sạc của bạn."</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Không có thẻ SIM nào"</string>
@@ -810,6 +835,7 @@
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"Đã xóa hình"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"Đã thêm ô"</string>
     <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"Đã vẽ xong hình"</string>
+    <string name="keyguard_accessibility_widget_changed" msgid="5678624624681400191">"%1$s. Tiện ích %2$d trong số %3$d."</string>
     <string name="keyguard_accessibility_add_widget" msgid="8273277058724924654">"Thêm tiện ích."</string>
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"Trống"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"Đã mở rộng vùng khóa."</string>
@@ -845,7 +871,10 @@
     <string name="factorytest_reboot" msgid="6320168203050791643">"Khởi động lại"</string>
     <string name="js_dialog_title" msgid="1987483977834603872">"Trang tại \"<xliff:g id="TITLE">%s</xliff:g>\" cho biết:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="730366588032430474">"Điều hướng khỏi trang này?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Chạm OK để tiếp tục hoặc Hủy để ở lại trang hiện tại."</string>
+    <string name="js_dialog_before_unload_title" msgid="2619376555525116593">"Xác nhận điều hướng"</string>
+    <string name="js_dialog_before_unload_positive_button" msgid="3112752010600484130">"Rời khỏi trang này"</string>
+    <string name="js_dialog_before_unload_negative_button" msgid="5614861293026099715">"Ở lại trang này"</string>
+    <string name="js_dialog_before_unload" msgid="3468816357095378590">"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Bạn có chắc chắn muốn điều hướng khỏi trang này không?"</string>
     <string name="save_password_label" msgid="6860261758665825069">"Xác nhận"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"Mẹo: Nhấn đúp để phóng to và thu nhỏ."</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"Tự động điền"</string>
@@ -1031,6 +1060,8 @@
     <string name="editTextMenuTitle" msgid="4909135564941815494">"Tác vụ văn bản"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Sắp hết dung lượng lưu trữ"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Một số chức năng hệ thống có thể không hoạt động"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"<xliff:g id="APP_NAME">%1$s</xliff:g> đang chạy"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"Chạm để xem thêm thông tin hoặc dừng ứng dụng."</string>
     <string name="ok" msgid="5970060430562524910">"OK"</string>
     <string name="cancel" msgid="6442560571259935130">"Hủy"</string>
     <string name="yes" msgid="5362982303337969312">"OK"</string>
@@ -1124,7 +1155,8 @@
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"Người nhận:"</string>
     <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Nhập PIN bắt buộc:"</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"Mã PIN:"</string>
-    <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"Điện thoại sẽ tạm thời ngắt kết nối khỏi Wi-Fi trong khi điện thoại được kết nối với <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"Máy tính bảng sẽ tạm thời ngắt kết nối khỏi Wi-Fi trong khi máy tính bảng được kết nối với <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"Điện thoại sẽ tạm thời ngắt kết nối khỏi Wi-Fi trong khi điện thoại được kết nối với <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
     <string name="select_character" msgid="3365550120617701745">"Chèn ký tự"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"Đang gửi tin nhắn SMS"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; đang gửi rất nhiều tin nhắn SMS. Bạn có muốn cho phép ứng dụng này tiếp tục gửi tin nhắn không?"</string>
@@ -1247,6 +1279,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Khả năng truy cập"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Hình nền"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Thay đổi hình nền"</string>
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Trình xử lý thông báo"</string>
     <string name="vpn_title" msgid="19615213552042827">"Đã kích hoạt VPN"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"VPN được <xliff:g id="APP">%s</xliff:g> kích hoạt"</string>
     <string name="vpn_text" msgid="3011306607126450322">"Chạm để quản lý mạng."</string>
@@ -1254,7 +1287,7 @@
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Đang kết nối VPN luôn bật…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Đã kết nối VPN luôn bật"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Lỗi VPN luôn bật"</string>
-    <string name="vpn_lockdown_reset" msgid="5365010427963548932">"Chạm để đặt lại kết nối"</string>
+    <string name="vpn_lockdown_config" msgid="6415899150671537970">"Chạm để định cấu hình"</string>
     <string name="upload_file" msgid="2897957172366730416">"Chọn tệp"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Không có tệp nào được chọn"</string>
     <string name="reset" msgid="2448168080964209908">"Đặt lại"</string>
@@ -1350,6 +1383,8 @@
     <string name="action_bar_home_description" msgid="5293600496601490216">"Điều hướng về trang chủ"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"Điều hướng lên trên"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Tùy chọn khác"</string>
+    <string name="action_bar_home_description_format" msgid="7965984360903693903">"%1$s, %2$s"</string>
+    <string name="action_bar_home_subtitle_description_format" msgid="6985546530471780727">"%1$s, %2$s, %3$s"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Bộ nhớ trong"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"Thẻ SD"</string>
     <string name="storage_usb" msgid="3017954059538517278">"Bộ lưu trữ USB"</string>
@@ -1399,6 +1434,7 @@
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Hệ thống"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Âm thanh Bluetooth"</string>
+    <string name="wireless_display_route_description" msgid="9070346425023979651">"Hiển thị không dây"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Xong"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Đầu ra phương tiện"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"Đang quét..."</string>
@@ -1450,10 +1486,14 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Bạn đã <xliff:g id="NUMBER_0">%d</xliff:g> lần vẽ không chính xác hình mở khóa của mình. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần thử không thành công nữa, bạn sẽ được yêu cầu mở khóa điện thoại bằng tài khoản email."\n\n" Vui lòng thử lại sau <xliff:g id="NUMBER_2">%d</xliff:g> giây."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" — "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Xóa"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Tăng âm lượng trên mức an toàn?"\n"Nghe ở âm lượng cao trong thời gian dài có thể gây hại cho thính giác của bạn."</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"Tăng âm lượng trên mức được đề xuất?"\n"Nghe ở mức âm lượng cao trong thời gian dài có thể gây hại cho thính giác của bạn."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Tiếp tục giữ hai ngón tay để bật trợ năng."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Trợ năng đã được bật."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Đã hủy trợ năng."</string>
     <string name="user_switched" msgid="3768006783166984410">"Người dùng hiện tại <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Chủ sở hữu"</string>
+    <string name="error_message_title" msgid="4510373083082500195">"Lỗi"</string>
+    <string name="app_no_restricted_accounts" msgid="4011285085817350390">"Ứng dụng này không hỗ trợ tài khoản cho các tiểu sử bị hạn chế"</string>
+    <string name="app_not_found" msgid="3429141853498927379">"Không tìm thấy ứng dụng nào để xử lý tác vụ này"</string>
+    <string name="revoke" msgid="5404479185228271586">"Thu hồi"</string>
 </resources>

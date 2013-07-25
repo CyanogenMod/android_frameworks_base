@@ -20,6 +20,7 @@ import com.android.internal.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -66,20 +67,18 @@ public class AppSecurityPermissions {
 
     private final static String TAG = "AppSecurityPermissions";
     private final static boolean localLOGV = false;
-    private Context mContext;
-    private LayoutInflater mInflater;
-    private PackageManager mPm;
-    private PackageInfo mInstalledPackageInfo;
+    private final Context mContext;
+    private final LayoutInflater mInflater;
+    private final PackageManager mPm;
     private final Map<String, MyPermissionGroupInfo> mPermGroups
             = new HashMap<String, MyPermissionGroupInfo>();
     private final List<MyPermissionGroupInfo> mPermGroupsList
             = new ArrayList<MyPermissionGroupInfo>();
-    private final PermissionGroupInfoComparator mPermGroupComparator;
-    private final PermissionInfoComparator mPermComparator;
-    private List<MyPermissionInfo> mPermsList;
-    private CharSequence mNewPermPrefix;
-    private Drawable mNormalIcon;
-    private Drawable mDangerousIcon;
+    private final PermissionGroupInfoComparator mPermGroupComparator = new PermissionGroupInfoComparator();
+    private final PermissionInfoComparator mPermComparator = new PermissionInfoComparator();
+    private final List<MyPermissionInfo> mPermsList = new ArrayList<MyPermissionInfo>();
+    private final CharSequence mNewPermPrefix;
+    private String mPackageName;
 
     static class MyPermissionGroupInfo extends PermissionGroupInfo {
         CharSequence mLabel;
@@ -113,7 +112,7 @@ public class AppSecurityPermissions {
         }
     }
 
-    static class MyPermissionInfo extends PermissionInfo {
+    private static class MyPermissionInfo extends PermissionInfo {
         CharSequence mLabel;
 
         /**
@@ -132,18 +131,8 @@ public class AppSecurityPermissions {
          */
         boolean mNew;
 
-        MyPermissionInfo() {
-        }
-
         MyPermissionInfo(PermissionInfo info) {
             super(info);
-        }
-
-        MyPermissionInfo(MyPermissionInfo info) {
-            super(info);
-            mNewReqFlags = info.mNewReqFlags;
-            mExistingReqFlags = info.mExistingReqFlags;
-            mNew = info.mNew;
         }
     }
 
@@ -151,6 +140,8 @@ public class AppSecurityPermissions {
         MyPermissionGroupInfo mGroup;
         MyPermissionInfo mPerm;
         AlertDialog mDialog;
+        private boolean mShowRevokeUI = false;
+        private String mPackageName;
 
         public PermissionItemView(Context context, AttributeSet attrs) {
             super(context, attrs);
@@ -158,9 +149,12 @@ public class AppSecurityPermissions {
         }
 
         public void setPermission(MyPermissionGroupInfo grp, MyPermissionInfo perm,
-                boolean first, CharSequence newPermPrefix) {
+                boolean first, CharSequence newPermPrefix, String packageName,
+                boolean showRevokeUI) {
             mGroup = grp;
             mPerm = perm;
+            mShowRevokeUI = showRevokeUI;
+            mPackageName = packageName;
 
             ImageView permGrpIcon = (ImageView) findViewById(R.id.perm_icon);
             TextView permNameView = (TextView) findViewById(R.id.perm_name);
@@ -219,6 +213,7 @@ public class AppSecurityPermissions {
                 }
                 builder.setCancelable(true);
                 builder.setIcon(mGroup.loadGroupIcon(pm));
+                addRevokeUIIfNecessary(builder);
                 mDialog = builder.show();
                 mDialog.setCanceledOnTouchOutside(true);
             }
@@ -231,27 +226,43 @@ public class AppSecurityPermissions {
                 mDialog.dismiss();
             }
         }
+
+        private void addRevokeUIIfNecessary(AlertDialog.Builder builder) {
+            if (!mShowRevokeUI) {
+                return;
+            }
+
+            final boolean isRequired =
+                    ((mPerm.mExistingReqFlags & PackageInfo.REQUESTED_PERMISSION_REQUIRED) != 0);
+
+            if (isRequired) {
+                return;
+            }
+
+            DialogInterface.OnClickListener ocl = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    PackageManager pm = getContext().getPackageManager();
+                    pm.revokePermission(mPackageName, mPerm.name);
+                    PermissionItemView.this.setVisibility(View.GONE);
+                }
+            };
+            builder.setNegativeButton(R.string.revoke, ocl);
+            builder.setPositiveButton(R.string.ok, null);
+        }
     }
 
-    public AppSecurityPermissions(Context context, List<PermissionInfo> permList) {
+    private AppSecurityPermissions(Context context) {
         mContext = context;
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPm = mContext.getPackageManager();
-        loadResources();
-        mPermComparator = new PermissionInfoComparator();
-        mPermGroupComparator = new PermissionGroupInfoComparator();
-        for (PermissionInfo pi : permList) {
-            mPermsList.add(new MyPermissionInfo(pi));
-        }
-        setPermissions(mPermsList);
+        // Pick up from framework resources instead.
+        mNewPermPrefix = mContext.getText(R.string.perms_new_perm_prefix);
     }
-    
+
     public AppSecurityPermissions(Context context, String packageName) {
-        mContext = context;
-        mPm = mContext.getPackageManager();
-        loadResources();
-        mPermComparator = new PermissionInfoComparator();
-        mPermGroupComparator = new PermissionGroupInfoComparator();
-        mPermsList = new ArrayList<MyPermissionInfo>();
+        this(context);
+        mPackageName = packageName;
         Set<MyPermissionInfo> permSet = new HashSet<MyPermissionInfo>();
         PackageInfo pkgInfo;
         try {
@@ -264,23 +275,17 @@ public class AppSecurityPermissions {
         if((pkgInfo.applicationInfo != null) && (pkgInfo.applicationInfo.uid != -1)) {
             getAllUsedPermissions(pkgInfo.applicationInfo.uid, permSet);
         }
-        for(MyPermissionInfo tmpInfo : permSet) {
-            mPermsList.add(tmpInfo);
-        }
+        mPermsList.addAll(permSet);
         setPermissions(mPermsList);
     }
 
     public AppSecurityPermissions(Context context, PackageInfo info) {
-        mContext = context;
-        mPm = mContext.getPackageManager();
-        loadResources();
-        mPermComparator = new PermissionInfoComparator();
-        mPermGroupComparator = new PermissionGroupInfoComparator();
-        mPermsList = new ArrayList<MyPermissionInfo>();
+        this(context);
         Set<MyPermissionInfo> permSet = new HashSet<MyPermissionInfo>();
         if(info == null) {
             return;
         }
+        mPackageName = info.packageName;
 
         // Convert to a PackageInfo
         PackageInfo installedPkgInfo = null;
@@ -300,21 +305,12 @@ public class AppSecurityPermissions {
                 sharedUid = mPm.getUidForSharedUser(info.sharedUserId);
                 getAllUsedPermissions(sharedUid, permSet);
             } catch (NameNotFoundException e) {
-                Log.w(TAG, "Could'nt retrieve shared user id for:"+info.packageName);
+                Log.w(TAG, "Couldn't retrieve shared user id for: " + info.packageName);
             }
         }
         // Retrieve list of permissions
-        for (MyPermissionInfo tmpInfo : permSet) {
-            mPermsList.add(tmpInfo);
-        }
+        mPermsList.addAll(permSet);
         setPermissions(mPermsList);
-    }
-
-    private void loadResources() {
-        // Pick up from framework resources instead.
-        mNewPermPrefix = mContext.getText(R.string.perms_new_perm_prefix);
-        mNormalIcon = mContext.getResources().getDrawable(R.drawable.ic_text_dot);
-        mDangerousIcon = mContext.getResources().getDrawable(R.drawable.ic_bullet_key_permission);
     }
 
     /**
@@ -332,10 +328,6 @@ public class AppSecurityPermissions {
                 description, dangerous, icon);
     }
     
-    public PackageInfo getInstalledPackageInfo() {
-        return mInstalledPackageInfo;
-    }
-
     private void getAllUsedPermissions(int sharedUid, Set<MyPermissionInfo> permSet) {
         String sharedPkgList[] = mPm.getPackagesForUid(sharedUid);
         if(sharedPkgList == null || (sharedPkgList.length == 0)) {
@@ -346,17 +338,12 @@ public class AppSecurityPermissions {
         }
     }
     
-    private void getPermissionsForPackage(String packageName, 
-            Set<MyPermissionInfo> permSet) {
-        PackageInfo pkgInfo;
+    private void getPermissionsForPackage(String packageName, Set<MyPermissionInfo> permSet) {
         try {
-            pkgInfo = mPm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
-        } catch (NameNotFoundException e) {
-            Log.w(TAG, "Couldn't retrieve permissions for package:"+packageName);
-            return;
-        }
-        if ((pkgInfo != null) && (pkgInfo.requestedPermissions != null)) {
+            PackageInfo pkgInfo = mPm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
             extractPerms(pkgInfo, permSet, pkgInfo);
+        } catch (NameNotFoundException e) {
+            Log.w(TAG, "Couldn't retrieve permissions for package: " + packageName);
         }
     }
 
@@ -367,7 +354,6 @@ public class AppSecurityPermissions {
         if ((strList == null) || (strList.length == 0)) {
             return;
         }
-        mInstalledPackageInfo = installedPkgInfo;
         for (int i=0; i<strList.length; i++) {
             String permName = strList[i];
             // If we are only looking at an existing app, then we only
@@ -467,17 +453,23 @@ public class AppSecurityPermissions {
     }
 
     public View getPermissionsView() {
-        return getPermissionsView(WHICH_ALL);
+        return getPermissionsView(WHICH_ALL, false);
+    }
+
+    public View getPermissionsViewWithRevokeButtons() {
+        return getPermissionsView(WHICH_ALL, true);
     }
 
     public View getPermissionsView(int which) {
-        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        return getPermissionsView(which, false);
+    }
 
+    private View getPermissionsView(int which, boolean showRevokeUI) {
         LinearLayout permsView = (LinearLayout) mInflater.inflate(R.layout.app_perms_summary, null);
         LinearLayout displayList = (LinearLayout) permsView.findViewById(R.id.perms_list);
         View noPermsView = permsView.findViewById(R.id.no_permissions);
 
-        displayPermissions(mPermGroupsList, displayList, which);
+        displayPermissions(mPermGroupsList, displayList, which, showRevokeUI);
         if (displayList.getChildCount() <= 0) {
             noPermsView.setVisibility(View.VISIBLE);
         }
@@ -490,7 +482,7 @@ public class AppSecurityPermissions {
      * list of permission descriptions.
      */
     private void displayPermissions(List<MyPermissionGroupInfo> groups,
-            LinearLayout permListView, int which) {
+            LinearLayout permListView, int which, boolean showRevokeUI) {
         permListView.removeAllViews();
 
         int spacing = (int)(8*mContext.getResources().getDisplayMetrics().density);
@@ -501,7 +493,7 @@ public class AppSecurityPermissions {
             for (int j=0; j<perms.size(); j++) {
                 MyPermissionInfo perm = perms.get(j);
                 View view = getPermissionItemView(grp, perm, j == 0,
-                        which != WHICH_NEW ? mNewPermPrefix : null);
+                        which != WHICH_NEW ? mNewPermPrefix : null, showRevokeUI);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -520,18 +512,19 @@ public class AppSecurityPermissions {
     }
 
     private PermissionItemView getPermissionItemView(MyPermissionGroupInfo grp,
-            MyPermissionInfo perm, boolean first, CharSequence newPermPrefix) {
-        return getPermissionItemView(mContext, mInflater, grp, perm, first, newPermPrefix);
+            MyPermissionInfo perm, boolean first, CharSequence newPermPrefix, boolean showRevokeUI) {
+        return getPermissionItemView(mContext, mInflater, grp, perm, first, newPermPrefix,
+                mPackageName, showRevokeUI);
     }
 
     private static PermissionItemView getPermissionItemView(Context context, LayoutInflater inflater,
             MyPermissionGroupInfo grp, MyPermissionInfo perm, boolean first,
-            CharSequence newPermPrefix) {
-        PermissionItemView permView = (PermissionItemView)inflater.inflate(
+            CharSequence newPermPrefix, String packageName, boolean showRevokeUI) {
+            PermissionItemView permView = (PermissionItemView)inflater.inflate(
                 (perm.flags & PermissionInfo.FLAG_COSTS_MONEY) != 0
                         ? R.layout.app_permission_item_money : R.layout.app_permission_item,
                 null);
-        permView.setPermission(grp, perm, first, newPermPrefix);
+        permView.setPermission(grp, perm, first, newPermPrefix, packageName, showRevokeUI);
         return permView;
     }
 
@@ -557,16 +550,27 @@ public class AppSecurityPermissions {
     private boolean isDisplayablePermission(PermissionInfo pInfo, int newReqFlags,
             int existingReqFlags) {
         final int base = pInfo.protectionLevel & PermissionInfo.PROTECTION_MASK_BASE;
-        // Dangerous and normal permissions are always shown to the user.
-        if (base == PermissionInfo.PROTECTION_DANGEROUS ||
-                base == PermissionInfo.PROTECTION_NORMAL) {
+        final boolean isNormal = (base == PermissionInfo.PROTECTION_NORMAL);
+        final boolean isDangerous = (base == PermissionInfo.PROTECTION_DANGEROUS);
+        final boolean isRequired =
+                ((newReqFlags&PackageInfo.REQUESTED_PERMISSION_REQUIRED) != 0);
+        final boolean isDevelopment =
+                ((pInfo.protectionLevel&PermissionInfo.PROTECTION_FLAG_DEVELOPMENT) != 0);
+        final boolean wasGranted =
+                ((existingReqFlags&PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0);
+        final boolean isGranted =
+                ((newReqFlags&PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0);
+
+        // Dangerous and normal permissions are always shown to the user if the permission
+        // is required, or it was previously granted
+        if ((isNormal || isDangerous) && (isRequired || wasGranted || isGranted)) {
             return true;
         }
+
         // Development permissions are only shown to the user if they are already
         // granted to the app -- if we are installing an app and they are not
         // already granted, they will not be granted as part of the install.
-        if ((existingReqFlags&PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0
-                && (pInfo.protectionLevel & PermissionInfo.PROTECTION_FLAG_DEVELOPMENT) != 0) {
+        if (isDevelopment && wasGranted) {
             if (localLOGV) Log.i(TAG, "Special perm " + pInfo.name
                     + ": protlevel=0x" + Integer.toHexString(pInfo.protectionLevel));
             return true;

@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Debug;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -43,8 +44,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Various debugging/tracing tools related to {@link View} and the view hierarchy.
@@ -406,7 +413,7 @@ public class ViewDebug {
         view = view.getRootView();
 
         if (REMOTE_COMMAND_DUMP.equalsIgnoreCase(command)) {
-            dump(view, clientStream);
+            dump(view, false, true, clientStream);
         } else if (REMOTE_COMMAND_CAPTURE_LAYERS.equalsIgnoreCase(command)) {
             captureLayers(view, new DataOutputStream(clientStream));
         } else {
@@ -425,7 +432,8 @@ public class ViewDebug {
         }
     }
 
-    private static View findView(View root, String parameter) {
+    /** @hide */
+    public static View findView(View root, String parameter) {
         // Look by type/hashcode
         if (parameter.indexOf('@') != -1) {
             final String[] ids = parameter.split("@");
@@ -488,7 +496,8 @@ public class ViewDebug {
         }
     }
 
-    private static void profileViewAndChildren(final View view, BufferedWriter out)
+    /** @hide */
+    public static void profileViewAndChildren(final View view, BufferedWriter out)
             throws IOException {
         profileViewAndChildren(view, out, true);
     }
@@ -623,7 +632,8 @@ public class ViewDebug {
         return duration[0];
     }
 
-    private static void captureLayers(View root, final DataOutputStream clientStream)
+    /** @hide */
+    public static void captureLayers(View root, final DataOutputStream clientStream)
             throws IOException {
 
         try {
@@ -695,10 +705,21 @@ public class ViewDebug {
         view.getViewRootImpl().outputDisplayList(view);
     }
 
+    /** @hide */
+    public static void outputDisplayList(View root, View target) {
+        root.getViewRootImpl().outputDisplayList(target);
+    }
+
     private static void capture(View root, final OutputStream clientStream, String parameter)
             throws IOException {
 
         final View captureView = findView(root, parameter);
+        capture(root, clientStream, captureView);
+    }
+
+    /** @hide */
+    public static void capture(View root, final OutputStream clientStream, View captureView)
+            throws IOException {
         Bitmap b = performViewCapture(captureView, false);
 
         if (b == null) {
@@ -752,14 +773,20 @@ public class ViewDebug {
         return null;
     }
 
-    private static void dump(View root, OutputStream clientStream) throws IOException {
+    /**
+     * Dumps the view hierarchy starting from the given view.
+     * @hide
+     */
+    public static void dump(View root, boolean skipChildren, boolean includeProperties,
+            OutputStream clientStream) throws IOException {
         BufferedWriter out = null;
         try {
             out = new BufferedWriter(new OutputStreamWriter(clientStream, "utf-8"), 32 * 1024);
             View view = root.getRootView();
             if (view instanceof ViewGroup) {
                 ViewGroup group = (ViewGroup) view;
-                dumpViewHierarchyWithProperties(group.getContext(), group, out, 0);
+                dumpViewHierarchy(group.getContext(), group, out, 0,
+                        skipChildren, includeProperties);
             }
             out.write("DONE.");
             out.newLine();
@@ -804,9 +831,13 @@ public class ViewDebug {
         return view.getClass().getName().equals(className) && view.hashCode() == hashCode;
     }
 
-    private static void dumpViewHierarchyWithProperties(Context context, ViewGroup group,
-            BufferedWriter out, int level) {
-        if (!dumpViewWithProperties(context, group, out, level)) {
+    private static void dumpViewHierarchy(Context context, ViewGroup group,
+            BufferedWriter out, int level, boolean skipChildren, boolean includeProperties) {
+        if (!dumpView(context, group, out, level, includeProperties)) {
+            return;
+        }
+
+        if (skipChildren) {
             return;
         }
 
@@ -814,9 +845,10 @@ public class ViewDebug {
         for (int i = 0; i < count; i++) {
             final View view = group.getChildAt(i);
             if (view instanceof ViewGroup) {
-                dumpViewHierarchyWithProperties(context, (ViewGroup) view, out, level + 1);
+                dumpViewHierarchy(context, (ViewGroup) view, out, level + 1, skipChildren,
+                        includeProperties);
             } else {
-                dumpViewWithProperties(context, view, out, level + 1);
+                dumpView(context, view, out, level + 1, includeProperties);
             }
         }
         if (group instanceof HierarchyHandler) {
@@ -824,8 +856,8 @@ public class ViewDebug {
         }
     }
 
-    private static boolean dumpViewWithProperties(Context context, View view,
-            BufferedWriter out, int level) {
+    private static boolean dumpView(Context context, View view,
+            BufferedWriter out, int level, boolean includeProperties) {
 
         try {
             for (int i = 0; i < level; i++) {
@@ -835,7 +867,9 @@ public class ViewDebug {
             out.write('@');
             out.write(Integer.toHexString(view.hashCode()));
             out.write(' ');
-            dumpViewProperties(context, view, out);
+            if (includeProperties) {
+                dumpViewProperties(context, view, out);
+            }
             out.newLine();
         } catch (IOException e) {
             Log.w("View", "Error while dumping hierarchy tree");
@@ -936,6 +970,48 @@ public class ViewDebug {
         } while (klass != Object.class);
     }
 
+    private static Object callMethodOnAppropriateTheadBlocking(final Method method,
+            final Object object) throws IllegalAccessException, InvocationTargetException,
+            TimeoutException {
+        if (!(object instanceof View)) {
+            return method.invoke(object, (Object[]) null);
+        }
+
+        final View view = (View) object;
+        Callable<Object> callable = new Callable<Object>() {
+                @Override
+                public Object call() throws IllegalAccessException, InvocationTargetException {
+                    return method.invoke(view, (Object[]) null);
+                }
+        };
+        FutureTask<Object> future = new FutureTask<Object>(callable);
+        // Try to use the handler provided by the view
+        Handler handler = view.getHandler();
+        // Fall back on using the main thread
+        if (handler == null) {
+            handler = new Handler(android.os.Looper.getMainLooper());
+        }
+        handler.post(future);
+        while (true) {
+            try {
+                return future.get(CAPTURE_TIMEOUT, java.util.concurrent.TimeUnit.MILLISECONDS);
+            } catch (ExecutionException e) {
+                Throwable t = e.getCause();
+                if (t instanceof IllegalAccessException) {
+                    throw (IllegalAccessException)t;
+                }
+                if (t instanceof InvocationTargetException) {
+                    throw (InvocationTargetException)t;
+                }
+                throw new RuntimeException("Unexpected exception", t);
+            } catch (InterruptedException e) {
+                // Call get again
+            } catch (CancellationException e) {
+                throw new RuntimeException("Unexpected cancellation exception", e);
+            }
+        }
+    }
+
     private static void exportMethods(Context context, Object view, BufferedWriter out,
             Class<?> klass, String prefix) throws IOException {
 
@@ -946,8 +1022,7 @@ public class ViewDebug {
             final Method method = methods[i];
             //noinspection EmptyCatchBlock
             try {
-                // TODO: This should happen on the UI thread
-                Object methodValue = method.invoke(view, (Object[]) null);
+                Object methodValue = callMethodOnAppropriateTheadBlocking(method, view);
                 final Class<?> returnType = method.getReturnType();
                 final ExportedProperty property = sAnnotations.get(method);
                 String categoryPrefix =
@@ -1005,6 +1080,7 @@ public class ViewDebug {
                 writeEntry(out, categoryPrefix + prefix, method.getName(), "()", methodValue);
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {
+            } catch (TimeoutException e) {
             }
         }
     }
@@ -1026,8 +1102,7 @@ public class ViewDebug {
                 String categoryPrefix =
                         property.category().length() != 0 ? property.category() + ":" : "";
 
-                if (type == int.class) {
-
+                if (type == int.class || type == byte.class) {
                     if (property.resolveId() && context != null) {
                         final int id = field.getInt(view);
                         fieldValue = resolveId(context, id);
@@ -1346,5 +1421,69 @@ public class ViewDebug {
         sb.append(capturedViewExportFields(view, klass, ""));
         sb.append(capturedViewExportMethods(view, klass, ""));
         Log.d(tag, sb.toString());
+    }
+
+    /**
+     * Invoke a particular method on given view.
+     * The given method is always invoked on the UI thread. The caller thread will stall until the
+     * method invocation is complete. Returns an object equal to the result of the method
+     * invocation, null if the method is declared to return void
+     * @throws Exception if the method invocation caused any exception
+     * @hide
+     */
+    public static Object invokeViewMethod(final View view, final Method method,
+            final Object[] args) {
+        final CountDownLatch latch = new CountDownLatch(1);
+        final AtomicReference<Object> result = new AtomicReference<Object>();
+        final AtomicReference<Throwable> exception = new AtomicReference<Throwable>();
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    result.set(method.invoke(view, args));
+                } catch (InvocationTargetException e) {
+                    exception.set(e.getCause());
+                } catch (Exception e) {
+                    exception.set(e);
+                }
+
+                latch.countDown();
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (exception.get() != null) {
+            throw new RuntimeException(exception.get());
+        }
+
+        return result.get();
+    }
+
+    /**
+     * @hide
+     */
+    public static void setLayoutParameter(final View view, final String param, final int value)
+            throws NoSuchFieldException, IllegalAccessException {
+        final ViewGroup.LayoutParams p = view.getLayoutParams();
+        final Field f = p.getClass().getField(param);
+        if (f.getType() != int.class) {
+            throw new RuntimeException("Only integer layout parameters can be set. Field "
+                        + param + " is of type " + f.getType().getSimpleName());
+        }
+
+        f.set(p, Integer.valueOf(value));
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                view.setLayoutParams(p);
+            }
+        });
     }
 }

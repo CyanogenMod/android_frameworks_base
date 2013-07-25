@@ -48,6 +48,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.WindowManager.BadTokenException;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
@@ -435,7 +436,13 @@ public class InputMethodService extends AbstractInputMethodService {
             boolean wasVis = isInputViewShown();
             mShowInputFlags = 0;
             if (onShowInputRequested(flags, false)) {
-                showWindow(true);
+                try {
+                    showWindow(true);
+                } catch (BadTokenException e) {
+                    if (DEBUG) Log.v(TAG, "BadTokenException: IME is done.");
+                    mWindowVisible = false;
+                    mWindowAdded = false;
+                }
             }
             // If user uses hard keyboard, IME button should always be shown.
             boolean showing = onEvaluateInputViewShown();
@@ -1997,7 +2004,7 @@ public class InputMethodService extends AbstractInputMethodService {
         ic.sendKeyEvent(new KeyEvent(eventTime, eventTime,
                 KeyEvent.ACTION_DOWN, keyEventCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD|KeyEvent.FLAG_KEEP_TOUCH_MODE));
-        ic.sendKeyEvent(new KeyEvent(SystemClock.uptimeMillis(), eventTime,
+        ic.sendKeyEvent(new KeyEvent(eventTime, SystemClock.uptimeMillis(),
                 KeyEvent.ACTION_UP, keyEventCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD|KeyEvent.FLAG_KEEP_TOUCH_MODE));
     }

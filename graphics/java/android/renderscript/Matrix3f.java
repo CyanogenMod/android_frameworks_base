@@ -21,7 +21,7 @@ import android.util.Log;
 
 
 /**
- * Class for exposing the native Renderscript rs_matrix3x3 type back to the Android system.
+ * Class for exposing the native RenderScript rs_matrix3x3 type back to the Android system.
  *
  **/
 public class Matrix3f {
@@ -138,9 +138,9 @@ public class Matrix3f {
         mMat[6] =  zx*nc + ys;
         mMat[1] =  xy*nc + zs;
         mMat[4] = y*y*nc +  c;
-        mMat[9] =  yz*nc - xs;
+        mMat[7] =  yz*nc - xs;
         mMat[2] =  zx*nc - ys;
-        mMat[6] =  yz*nc + xs;
+        mMat[5] =  yz*nc + xs;
         mMat[8] = z*z*nc +  c;
     }
 

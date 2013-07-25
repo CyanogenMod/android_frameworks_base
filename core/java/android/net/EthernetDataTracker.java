@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.INetworkManagementService;
 import android.os.Message;
+import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
@@ -74,7 +75,7 @@ public class EthernetDataTracker implements NetworkStateTracker {
         }
 
         public void interfaceLinkStateChanged(String iface, boolean up) {
-            if (mIface.equals(iface) && mLinkUp != up) {
+            if (mIface.equals(iface)) {
                 Log.d(TAG, "Interface " + iface + " link " + (up ? "up" : "down"));
                 mLinkUp = up;
                 mTracker.mNetworkInfo.setIsAvailable(up);
@@ -170,13 +171,12 @@ public class EthernetDataTracker implements NetworkStateTracker {
     private void runDhcp() {
         Thread dhcpThread = new Thread(new Runnable() {
             public void run() {
-                DhcpInfoInternal dhcpInfoInternal = new DhcpInfoInternal();
-                if (!NetworkUtils.runDhcp(mIface, dhcpInfoInternal)) {
+                DhcpResults dhcpResults = new DhcpResults();
+                if (!NetworkUtils.runDhcp(mIface, dhcpResults)) {
                     Log.e(TAG, "DHCP request error:" + NetworkUtils.getDhcpError());
                     return;
                 }
-                mLinkProperties = dhcpInfoInternal.makeLinkProperties();
-                mLinkProperties.setInterfaceName(mIface);
+                mLinkProperties = dhcpResults.linkProperties;
 
                 mNetworkInfo.setDetailedState(DetailedState.CONNECTED, null, mHwAddr);
                 Message msg = mCsHandler.obtainMessage(EVENT_STATE_CHANGED, mNetworkInfo);
@@ -406,6 +406,21 @@ public class EthernetDataTracker implements NetworkStateTracker {
     }
 
     public void setDependencyMet(boolean met) {
+        // not supported on this network
+    }
+
+    @Override
+    public void addStackedLink(LinkProperties link) {
+        mLinkProperties.addStackedLink(link);
+    }
+
+    @Override
+    public void removeStackedLink(LinkProperties link) {
+        mLinkProperties.removeStackedLink(link);
+    }
+
+    @Override
+    public void supplyMessenger(Messenger messenger) {
         // not supported on this network
     }
 }

@@ -23,28 +23,48 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Slog;
 import android.view.View;
 import android.widget.TextView;
 
 import libcore.util.MutableInt;
 
+import java.lang.ref.WeakReference;
+
 import com.android.internal.R;
+import com.android.internal.widget.ILockSettings;
+import com.android.internal.widget.LockPatternUtils;
 
 /***
  * Manages a number of views inside of the given layout. See below for a list of widgets.
  */
 class KeyguardMessageArea extends TextView {
+    /** Handler token posted with accessibility announcement runnables. */
+    private static final Object ANNOUNCE_TOKEN = new Object();
+
+    /**
+     * Delay before speaking an accessibility announcement. Used to prevent
+     * lift-to-type from interrupting itself.
+     */
+    private static final long ANNOUNCEMENT_DELAY = 250;
+
     static final int CHARGING_ICON = 0; //R.drawable.ic_lock_idle_charging;
     static final int BATTERY_LOW_ICON = 0; //R.drawable.ic_lock_idle_low_battery;
     static final int DISCHARGING_ICON = 0; // no icon used in ics+ currently
 
     static final int SECURITY_MESSAGE_DURATION = 5000;
     protected static final int FADE_DURATION = 750;
+
+    private static final String TAG = "KeyguardMessageArea";
 
     // are we showing battery information?
     boolean mShowingBatteryInfo = false;
@@ -74,6 +94,9 @@ class KeyguardMessageArea extends TextView {
 
     CharSequence mMessage;
     boolean mShowingMessage;
+    private CharSequence mSeparator;
+    private LockPatternUtils mLockPatternUtils;
+
     Runnable mClearMessageRunnable = new Runnable() {
         @Override
         public void run() {
@@ -149,14 +172,14 @@ class KeyguardMessageArea extends TextView {
         }
     };
 
-    private CharSequence mSeparator;
-
     public KeyguardMessageArea(Context context) {
         this(context, null);
     }
 
     public KeyguardMessageArea(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mLockPatternUtils = new LockPatternUtils(context);
 
         // This is required to ensure marquee works
         setSelected(true);
@@ -179,7 +202,9 @@ class KeyguardMessageArea extends TextView {
         if (mTimeout > 0) {
             mHandler.postDelayed(mClearMessageRunnable, mTimeout);
         }
-        announceForAccessibility(getText());
+        mHandler.removeCallbacksAndMessages(ANNOUNCE_TOKEN);
+        mHandler.postAtTime(new AnnounceRunnable(this, getText()), ANNOUNCE_TOKEN,
+                (SystemClock.uptimeMillis() + ANNOUNCEMENT_DELAY));
     }
 
     /**
@@ -219,11 +244,12 @@ class KeyguardMessageArea extends TextView {
 
     String getOwnerInfo() {
         ContentResolver res = getContext().getContentResolver();
-        final boolean ownerInfoEnabled = Settings.Secure.getIntForUser(res,
-                Settings.Secure.LOCK_SCREEN_OWNER_INFO_ENABLED, 1, UserHandle.USER_CURRENT) != 0;
-        return ownerInfoEnabled && !mShowingMessage ?
-                Settings.Secure.getStringForUser(res, Settings.Secure.LOCK_SCREEN_OWNER_INFO,
-                        UserHandle.USER_CURRENT) : null;
+        String info = null;
+        final boolean ownerInfoEnabled = mLockPatternUtils.isOwnerInfoEnabled();
+        if (ownerInfoEnabled && !mShowingMessage) {
+            info = mLockPatternUtils.getOwnerInfo(mLockPatternUtils.getCurrentUser());
+        }
+        return info;
     }
 
     private CharSequence getChargeInfo(MutableInt icon) {
@@ -278,6 +304,27 @@ class KeyguardMessageArea extends TextView {
             anim.start();
         } else {
             setAlpha(1f);
+        }
+    }
+
+    /**
+     * Runnable used to delay accessibility announcements.
+     */
+    private static class AnnounceRunnable implements Runnable {
+        private final WeakReference<View> mHost;
+        private final CharSequence mTextToAnnounce;
+
+        public AnnounceRunnable(View host, CharSequence textToAnnounce) {
+            mHost = new WeakReference<View>(host);
+            mTextToAnnounce = textToAnnounce;
+        }
+
+        @Override
+        public void run() {
+            final View host = mHost.get();
+            if (host != null) {
+                host.announceForAccessibility(mTextToAnnounce);
+            }
         }
     }
 }

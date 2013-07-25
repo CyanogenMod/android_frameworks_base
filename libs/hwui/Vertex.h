@@ -33,7 +33,7 @@ struct Vertex {
 }; // struct Vertex
 
 /**
- * Simple structure to describe a vertex with a position and a texture.
+ * Simple structure to describe a vertex with a position and texture UV.
  */
 struct TextureVertex {
     float position[2];
@@ -53,6 +53,24 @@ struct TextureVertex {
 }; // struct TextureVertex
 
 /**
+ * Simple structure to describe a vertex with a position, texture UV and ARGB color.
+ */
+struct ColorTextureVertex : TextureVertex {
+    float color[4];
+
+    static inline void set(ColorTextureVertex* vertex, float x, float y,
+            float u, float v, int color) {
+        TextureVertex::set(vertex, x, y, u, v);
+
+        const float a = ((color >> 24) & 0xff) / 255.0f;
+        vertex[0].color[0] = a * ((color >> 16) & 0xff) / 255.0f;
+        vertex[0].color[1] = a * ((color >>  8) & 0xff) / 255.0f;
+        vertex[0].color[2] = a * ((color      ) & 0xff) / 255.0f;
+        vertex[0].color[3] = a;
+    }
+}; // struct ColorTextureVertex
+
+/**
  * Simple structure to describe a vertex with a position and an alpha value.
  */
 struct AlphaVertex : Vertex {
@@ -65,25 +83,6 @@ struct AlphaVertex : Vertex {
 
     static inline void setColor(AlphaVertex* vertex, float alpha) {
         vertex[0].alpha = alpha;
-    }
-}; // struct AlphaVertex
-
-/**
- * Simple structure to describe a vertex with a position and an alpha value.
- */
-struct AAVertex : Vertex {
-    float width;
-    float length;
-
-    static inline void set(AAVertex* vertex, float x, float y, float width, float length) {
-        Vertex::set(vertex, x, y);
-        vertex[0].width = width;
-        vertex[0].length = length;
-    }
-
-    static inline void setColor(AAVertex* vertex, float width, float length) {
-        vertex[0].width = width;
-        vertex[0].length = length;
     }
 }; // struct AlphaVertex
 

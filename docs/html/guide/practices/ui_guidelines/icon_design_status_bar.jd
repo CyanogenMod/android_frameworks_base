@@ -1,4 +1,5 @@
 page.title=Status Bar Icons
+excludeFromSuggestions=true
 parent.title=Icon Design Guidelines
 parent.link=icon_design.html
 @jd:body
@@ -155,7 +156,7 @@ finished icon dimensions for each generalized screen density.</p>
     </th>
   </tr>
   <tr>
-    <th style="background-color:#f3f3f3;font-weight:normal">
+    <th>
       Status Bar Icon Size<br><small>(Android 3.0 and Later)</small>
     </th>
     <td>

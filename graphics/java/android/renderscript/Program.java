@@ -26,6 +26,7 @@ import android.util.Log;
 
 
 /**
+ * @hide
  *
  * Program is a base class for all the objects that modify
  * various stages of the graphics pipeline
@@ -275,7 +276,7 @@ public class Program extends BaseObj {
             try {
                 mShader = new String(str, 0, strLength, "UTF-8");
             } catch (UnsupportedEncodingException e) {
-                Log.e("Renderscript shader creation", "Could not decode shader string");
+                Log.e("RenderScript shader creation", "Could not decode shader string");
             }
 
             return this;

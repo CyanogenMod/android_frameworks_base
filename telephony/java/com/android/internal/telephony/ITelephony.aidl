@@ -42,7 +42,7 @@ interface ITelephony {
      * Place a call to the specified number.
      * @param number the number to be called.
      */
-    void call(String number);
+    void call(String callingPackage, String number);
 
     /**
      * Toggle between 3G and LTE (NT_MODE_CDMA, NT_MODE_GLOBAL)
@@ -180,6 +180,11 @@ interface ITelephony {
     boolean setRadio(boolean turnOn);
 
     /**
+     * Set the radio to on or off unconditionally
+     */
+    boolean setRadioPower(boolean turnOn);
+
+    /**
      * Request to update location information in service state
      */
     void updateServiceLocation();
@@ -224,7 +229,7 @@ interface ITelephony {
     /**
      * Returns the neighboring cell information of the device.
      */
-    List<NeighboringCellInfo> getNeighboringCellInfo();
+    List<NeighboringCellInfo> getNeighboringCellInfo(String callingPkg);
 
      int getCallState();
      int getDataActivity();
@@ -267,9 +272,19 @@ interface ITelephony {
     int getVoiceMessageCount();
 
     /**
-      * Returns the network type
+      * Returns the network type for data transmission
       */
     int getNetworkType();
+
+    /**
+      * Returns the network type for data transmission
+      */
+    int getDataNetworkType();
+
+    /**
+      * Returns the network type for voice
+      */
+    int getVoiceNetworkType();
 
     /**
      * Return true if an ICC card is present
@@ -290,6 +305,11 @@ interface ITelephony {
      * Returns the all observed cell information of the device.
      */
     List<CellInfo> getAllCellInfo();
+
+    /**
+     * Sets minimum time in milli-seconds between onCellInfoChanged
+     */
+    void setCellInfoListRate(int rateInMillis);
 
     int getLteOnGsmMode();
 }

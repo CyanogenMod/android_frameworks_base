@@ -22,6 +22,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 import junit.framework.TestCase;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class LinkPropertiesTest extends TestCase {
     private static String ADDRV4 = "75.208.6.1";
@@ -32,14 +33,41 @@ public class LinkPropertiesTest extends TestCase {
     private static String GATEWAY2 = "69.78.8.1";
     private static String NAME = "qmi0";
 
+    public void assertLinkPropertiesEqual(LinkProperties source, LinkProperties target) {
+        // Check implementation of equals(), element by element.
+        assertTrue(source.isIdenticalInterfaceName(target));
+        assertTrue(target.isIdenticalInterfaceName(source));
+
+        assertTrue(source.isIdenticalAddresses(target));
+        assertTrue(target.isIdenticalAddresses(source));
+
+        assertTrue(source.isIdenticalDnses(target));
+        assertTrue(target.isIdenticalDnses(source));
+
+        assertTrue(source.isIdenticalRoutes(target));
+        assertTrue(target.isIdenticalRoutes(source));
+
+        assertTrue(source.isIdenticalHttpProxy(target));
+        assertTrue(target.isIdenticalHttpProxy(source));
+
+        assertTrue(source.isIdenticalStackedLinks(target));
+        assertTrue(target.isIdenticalStackedLinks(source));
+
+        // Check result of equals().
+        assertTrue(source.equals(target));
+        assertTrue(target.equals(source));
+
+        // Check hashCode.
+        assertEquals(source.hashCode(), target.hashCode());
+    }
+
     @SmallTest
     public void testEqualsNull() {
         LinkProperties source = new LinkProperties();
         LinkProperties target = new LinkProperties();
 
         assertFalse(source == target);
-        assertTrue(source.equals(target));
-        assertTrue(source.hashCode() == target.hashCode());
+        assertLinkPropertiesEqual(source, target);
     }
 
     @SmallTest
@@ -72,8 +100,7 @@ public class LinkPropertiesTest extends TestCase {
             target.addRoute(new RouteInfo(NetworkUtils.numericToInetAddress(GATEWAY1)));
             target.addRoute(new RouteInfo(NetworkUtils.numericToInetAddress(GATEWAY2)));
 
-            assertTrue(source.equals(target));
-            assertTrue(source.hashCode() == target.hashCode());
+            assertLinkPropertiesEqual(source, target);
 
             target.clear();
             // change Interface Name
@@ -162,8 +189,7 @@ public class LinkPropertiesTest extends TestCase {
             target.addRoute(new RouteInfo(NetworkUtils.numericToInetAddress(GATEWAY2)));
             target.addRoute(new RouteInfo(NetworkUtils.numericToInetAddress(GATEWAY1)));
 
-            assertTrue(source.equals(target));
-            assertTrue(source.hashCode() == target.hashCode());
+            assertLinkPropertiesEqual(source, target);
         } catch (Exception e) {
             fail();
         }
@@ -190,11 +216,95 @@ public class LinkPropertiesTest extends TestCase {
             target.addLinkAddress(new LinkAddress(
                     NetworkUtils.numericToInetAddress(ADDRV6), 128));
 
-            assertTrue(source.equals(target));
-            assertTrue(source.hashCode() == target.hashCode());
+            assertLinkPropertiesEqual(source, target);
         } catch (Exception e) {
             fail();
         }
     }
 
+    private void assertAllRoutesHaveInterface(String iface, LinkProperties lp) {
+        for (RouteInfo r : lp.getRoutes()) {
+            assertEquals(iface, r.getInterface());
+        }
+    }
+
+    @SmallTest
+    public void testRouteInterfaces() {
+        LinkAddress prefix = new LinkAddress(
+            NetworkUtils.numericToInetAddress("2001:db8::"), 32);
+        InetAddress address = NetworkUtils.numericToInetAddress(ADDRV6);
+
+        // Add a route with no interface to a LinkProperties with no interface. No errors.
+        LinkProperties lp = new LinkProperties();
+        RouteInfo r = new RouteInfo(prefix, address, null);
+        lp.addRoute(r);
+        assertEquals(1, lp.getRoutes().size());
+        assertAllRoutesHaveInterface(null, lp);
+
+        // Add a route with an interface. Except an exception.
+        r = new RouteInfo(prefix, address, "wlan0");
+        try {
+          lp.addRoute(r);
+          fail("Adding wlan0 route to LP with no interface, expect exception");
+        } catch (IllegalArgumentException expected) {}
+
+        // Change the interface name. All the routes should change their interface name too.
+        lp.setInterfaceName("rmnet0");
+        assertAllRoutesHaveInterface("rmnet0", lp);
+
+        // Now add a route with the wrong interface. This causes an exception too.
+        try {
+          lp.addRoute(r);
+          fail("Adding wlan0 route to rmnet0 LP, expect exception");
+        } catch (IllegalArgumentException expected) {}
+
+        // If the interface name matches, the route is added.
+        lp.setInterfaceName("wlan0");
+        lp.addRoute(r);
+        assertEquals(2, lp.getRoutes().size());
+        assertAllRoutesHaveInterface("wlan0", lp);
+
+        // Routes with null interfaces are converted to wlan0.
+        r = RouteInfo.makeHostRoute(NetworkUtils.numericToInetAddress(ADDRV6), null);
+        lp.addRoute(r);
+        assertEquals(3, lp.getRoutes().size());
+        assertAllRoutesHaveInterface("wlan0", lp);
+
+        // Check comparisons work.
+        LinkProperties lp2 = new LinkProperties(lp);
+        assertAllRoutesHaveInterface("wlan0", lp);
+        assertEquals(0, lp.compareRoutes(lp2).added.size());
+        assertEquals(0, lp.compareRoutes(lp2).removed.size());
+
+        lp2.setInterfaceName("p2p0");
+        assertAllRoutesHaveInterface("p2p0", lp2);
+        assertEquals(3, lp.compareRoutes(lp2).added.size());
+        assertEquals(3, lp.compareRoutes(lp2).removed.size());
+    }
+
+    @SmallTest
+    public void testStackedInterfaces() {
+        LinkProperties rmnet0 = new LinkProperties();
+        rmnet0.setInterfaceName("rmnet0");
+
+        LinkProperties clat4 = new LinkProperties();
+        clat4.setInterfaceName("clat4");
+
+        assertEquals(0, rmnet0.getStackedLinks().size());
+        rmnet0.addStackedLink(clat4);
+        assertEquals(1, rmnet0.getStackedLinks().size());
+        rmnet0.addStackedLink(clat4);
+        assertEquals(1, rmnet0.getStackedLinks().size());
+        assertEquals(0, clat4.getStackedLinks().size());
+
+        // Modify an item in the returned collection to see what happens.
+        for (LinkProperties link : rmnet0.getStackedLinks()) {
+            if (link.getInterfaceName().equals("clat4")) {
+               link.setInterfaceName("newname");
+            }
+        }
+        for (LinkProperties link : rmnet0.getStackedLinks()) {
+            assertFalse("newname".equals(link.getInterfaceName()));
+        }
+    }
 }

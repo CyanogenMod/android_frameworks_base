@@ -20,7 +20,7 @@
 
 #include <SkCanvas.h>
 
-#include <utils/threads.h>
+#include <utils/Mutex.h>
 
 #include "Caches.h"
 #include "TextureCache.h"
@@ -34,7 +34,7 @@ namespace uirenderer {
 ///////////////////////////////////////////////////////////////////////////////
 
 TextureCache::TextureCache():
-        mCache(GenerationCache<SkBitmap*, Texture*>::kUnlimitedCapacity),
+        mCache(LruCache<SkBitmap*, Texture*>::kUnlimitedCapacity),
         mSize(0), mMaxSize(MB(DEFAULT_TEXTURE_CACHE_SIZE)),
         mFlushRate(DEFAULT_TEXTURE_CACHE_FLUSH_RATE) {
     char property[PROPERTY_VALUE_MAX];
@@ -58,7 +58,7 @@ TextureCache::TextureCache():
 }
 
 TextureCache::TextureCache(uint32_t maxByteSize):
-        mCache(GenerationCache<SkBitmap*, Texture*>::kUnlimitedCapacity),
+        mCache(LruCache<SkBitmap*, Texture*>::kUnlimitedCapacity),
         mSize(0), mMaxSize(maxByteSize) {
     init();
 }
@@ -219,7 +219,7 @@ void TextureCache::generateTexture(SkBitmap* bitmap, Texture* texture, bool rege
 
     // We could also enable mipmapping if both bitmap dimensions are powers
     // of 2 but we'd have to deal with size changes. Let's keep this simple
-    const bool canMipMap = Caches::getInstance().extensions.hasNPot();
+    const bool canMipMap = Extensions::getInstance().hasNPot();
 
     // If the texture had mipmap enabled but not anymore,
     // force a glTexImage2D to discard the mipmap levels

@@ -16,6 +16,8 @@
 
 package android.os;
 
+import android.app.ActivityThread;
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -26,10 +28,18 @@ import android.util.Log;
 public class SystemVibrator extends Vibrator {
     private static final String TAG = "Vibrator";
 
+    private final String mPackageName;
     private final IVibratorService mService;
     private final Binder mToken = new Binder();
 
     public SystemVibrator() {
+        mPackageName = ActivityThread.currentPackageName();
+        mService = IVibratorService.Stub.asInterface(
+                ServiceManager.getService("vibrator"));
+    }
+
+    public SystemVibrator(Context context) {
+        mPackageName = context.getBasePackageName();
         mService = IVibratorService.Stub.asInterface(
                 ServiceManager.getService("vibrator"));
     }
@@ -49,19 +59,35 @@ public class SystemVibrator extends Vibrator {
 
     @Override
     public void vibrate(long milliseconds) {
+        vibrate(Process.myUid(), mPackageName, milliseconds);
+    }
+
+    @Override
+    public void vibrate(long[] pattern, int repeat) {
+        vibrate(Process.myUid(), mPackageName, pattern, repeat);
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void vibrate(int owningUid, String owningPackage, long milliseconds) {
         if (mService == null) {
             Log.w(TAG, "Failed to vibrate; no vibrator service.");
             return;
         }
         try {
-            mService.vibrate(milliseconds, mToken);
+            mService.vibrate(owningUid, owningPackage, milliseconds, mToken);
         } catch (RemoteException e) {
             Log.w(TAG, "Failed to vibrate.", e);
         }
     }
 
+    /**
+     * @hide
+     */
     @Override
-    public void vibrate(long[] pattern, int repeat) {
+    public void vibrate(int owningUid, String owningPackage, long[] pattern, int repeat) {
         if (mService == null) {
             Log.w(TAG, "Failed to vibrate; no vibrator service.");
             return;
@@ -71,7 +97,7 @@ public class SystemVibrator extends Vibrator {
         // anyway
         if (repeat < pattern.length) {
             try {
-                mService.vibratePattern(pattern, repeat, mToken);
+                mService.vibratePattern(owningUid, owningPackage, pattern, repeat, mToken);
             } catch (RemoteException e) {
                 Log.w(TAG, "Failed to vibrate.", e);
             }

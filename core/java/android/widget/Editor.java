@@ -20,6 +20,8 @@ import com.android.internal.util.ArrayUtils;
 import com.android.internal.widget.EditableInputConnection;
 
 import android.R;
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.content.ClipData;
 import android.content.ClipData.Item;
 import android.content.Context;
@@ -124,7 +126,6 @@ public class Editor {
     InputMethodState mInputMethodState;
 
     DisplayList[] mTextDisplayLists;
-    int mLastLayoutHeight;
 
     boolean mFrozenWithFocus;
     boolean mSelectionMoved;
@@ -315,7 +316,7 @@ public class Editor {
     private void setErrorIcon(Drawable icon) {
         Drawables dr = mTextView.mDrawables;
         if (dr == null) {
-            mTextView.mDrawables = dr = new Drawables();
+            mTextView.mDrawables = dr = new Drawables(mTextView.getContext());
         }
         dr.setErrorDrawable(icon, mTextView);
 
@@ -1289,20 +1290,11 @@ public class Editor {
                 mTextDisplayLists = new DisplayList[ArrayUtils.idealObjectArraySize(0)];
             }
 
-            // If the height of the layout changes (usually when inserting or deleting a line,
-            // but could be changes within a span), invalidate everything. We could optimize
-            // more aggressively (for example, adding offsets to blocks) but it would be more
-            // complex and we would only get the benefit in some cases.
-            int layoutHeight = layout.getHeight();
-            if (mLastLayoutHeight != layoutHeight) {
-                invalidateTextDisplayList();
-                mLastLayoutHeight = layoutHeight;
-            }
-
             DynamicLayout dynamicLayout = (DynamicLayout) layout;
             int[] blockEndLines = dynamicLayout.getBlockEndLines();
             int[] blockIndices = dynamicLayout.getBlockIndices();
             final int numberOfBlocks = dynamicLayout.getNumberOfBlocks();
+            final int indexFirstChangedBlock = dynamicLayout.getIndexFirstChangedBlock();
 
             int endOfPreviousBlock = -1;
             int searchStartIndex = 0;
@@ -1324,10 +1316,11 @@ public class Editor {
                     blockDisplayList = mTextDisplayLists[blockIndex] =
                             mTextView.getHardwareRenderer().createDisplayList("Text " + blockIndex);
                 } else {
-                    if (blockIsInvalid) blockDisplayList.invalidate();
+                    if (blockIsInvalid) blockDisplayList.clear();
                 }
 
-                if (!blockDisplayList.isValid()) {
+                final boolean blockDisplayListIsInvalid = !blockDisplayList.isValid();
+                if (i >= indexFirstChangedBlock || blockDisplayListIsInvalid) {
                     final int blockBeginLine = endOfPreviousBlock + 1;
                     final int top = layout.getLineTop(blockBeginLine);
                     final int bottom = layout.getLineBottom(blockEndLine);
@@ -1344,24 +1337,27 @@ public class Editor {
                         right = (int) (max + 0.5f);
                     }
 
-                    final HardwareCanvas hardwareCanvas = blockDisplayList.start();
-                    try {
-                        // Tighten the bounds of the viewport to the actual text size
-                        hardwareCanvas.setViewport(right - left, bottom - top);
-                        // The dirty rect should always be null for a display list
-                        hardwareCanvas.onPreDraw(null);
-                        // drawText is always relative to TextView's origin, this translation brings
-                        // this range of text back to the top left corner of the viewport
-                        hardwareCanvas.translate(-left, -top);
-                        layout.drawText(hardwareCanvas, blockBeginLine, blockEndLine);
-                        // No need to untranslate, previous context is popped after drawDisplayList
-                    } finally {
-                        hardwareCanvas.onPostDraw();
-                        blockDisplayList.end();
-                        blockDisplayList.setLeftTopRightBottom(left, top, right, bottom);
-                        // Same as drawDisplayList below, handled by our TextView's parent
-                        blockDisplayList.setClipChildren(false);
+                    // Rebuild display list if it is invalid
+                    if (blockDisplayListIsInvalid) {
+                        final HardwareCanvas hardwareCanvas = blockDisplayList.start(
+                                right - left, bottom - top);
+                        try {
+                            // drawText is always relative to TextView's origin, this translation
+                            // brings this range of text back to the top left corner of the viewport
+                            hardwareCanvas.translate(-left, -top);
+                            layout.drawText(hardwareCanvas, blockBeginLine, blockEndLine);
+                            // No need to untranslate, previous context is popped after
+                            // drawDisplayList
+                        } finally {
+                            blockDisplayList.end();
+                            // Same as drawDisplayList below, handled by our TextView's parent
+                            blockDisplayList.setClipToBounds(false);
+                        }
                     }
+
+                    // Valid disply list whose index is >= indexFirstChangedBlock
+                    // only needs to update its drawing location.
+                    blockDisplayList.setLeftTopRightBottom(left, top, right, bottom);
                 }
 
                 ((HardwareCanvas) canvas).drawDisplayList(blockDisplayList, null,
@@ -1369,6 +1365,8 @@ public class Editor {
 
                 endOfPreviousBlock = blockEndLine;
             }
+
+            dynamicLayout.setIndexFirstChangedBlock(numberOfBlocks);
         } else {
             // Boring layout is used for empty and hint text
             layout.drawText(canvas, firstLine, lastLine);
@@ -1431,7 +1429,7 @@ public class Editor {
             while (i < numberOfBlocks) {
                 final int blockIndex = blockIndices[i];
                 if (blockIndex != DynamicLayout.INVALID_BLOCK_INDEX) {
-                    mTextDisplayLists[blockIndex].invalidate();
+                    mTextDisplayLists[blockIndex].clear();
                 }
                 if (blockEndLines[i] >= lastLine) break;
                 i++;
@@ -1442,7 +1440,7 @@ public class Editor {
     void invalidateTextDisplayList() {
         if (mTextDisplayLists != null) {
             for (int i = 0; i < mTextDisplayLists.length; i++) {
-                if (mTextDisplayLists[i] != null) mTextDisplayLists[i].invalidate();
+                if (mTextDisplayLists[i] != null) mTextDisplayLists[i].clear();
             }
         }
     }
@@ -1468,20 +1466,24 @@ public class Editor {
             middle = (top + bottom) >> 1;
         }
 
-        updateCursorPosition(0, top, middle, getPrimaryHorizontal(layout, hintLayout, offset));
+        boolean clamped = layout.shouldClampCursor(line);
+        updateCursorPosition(0, top, middle,
+                getPrimaryHorizontal(layout, hintLayout, offset, clamped));
 
         if (mCursorCount == 2) {
-            updateCursorPosition(1, middle, bottom, layout.getSecondaryHorizontal(offset));
+            updateCursorPosition(1, middle, bottom,
+                    layout.getSecondaryHorizontal(offset, clamped));
         }
     }
 
-    private float getPrimaryHorizontal(Layout layout, Layout hintLayout, int offset) {
+    private float getPrimaryHorizontal(Layout layout, Layout hintLayout, int offset,
+            boolean clamped) {
         if (TextUtils.isEmpty(layout.getText()) &&
                 hintLayout != null &&
                 !TextUtils.isEmpty(hintLayout.getText())) {
-            return hintLayout.getPrimaryHorizontal(offset);
+            return hintLayout.getPrimaryHorizontal(offset, clamped);
         } else {
-            return layout.getPrimaryHorizontal(offset);
+            return layout.getPrimaryHorizontal(offset, clamped);
         }
     }
 
@@ -1890,10 +1892,23 @@ public class Editor {
 
                 // Make sure there is only at most one EasyEditSpan in the text
                 if (mPopupWindow.mEasyEditSpan != null) {
-                    text.removeSpan(mPopupWindow.mEasyEditSpan);
+                    mPopupWindow.mEasyEditSpan.setDeleteEnabled(false);
                 }
 
                 mPopupWindow.setEasyEditSpan((EasyEditSpan) span);
+                mPopupWindow.setOnDeleteListener(new EasyEditDeleteListener() {
+                    @Override
+                    public void onDeleteClick(EasyEditSpan span) {
+                        Editable editable = (Editable) mTextView.getText();
+                        int start = editable.getSpanStart(span);
+                        int end = editable.getSpanEnd(span);
+                        if (start >= 0 && end >= 0) {
+                            sendNotification(EasyEditSpan.TEXT_DELETED, span);
+                            mTextView.deleteText_internal(start, end);
+                        }
+                        editable.removeSpan(span);
+                    }
+                });
 
                 if (mTextView.getWindowVisibility() != View.VISIBLE) {
                     // The window is not visible yet, ignore the text change.
@@ -1927,8 +1942,10 @@ public class Editor {
         @Override
         public void onSpanChanged(Spannable text, Object span, int previousStart, int previousEnd,
                 int newStart, int newEnd) {
-            if (mPopupWindow != null && span == mPopupWindow.mEasyEditSpan) {
-                text.removeSpan(mPopupWindow.mEasyEditSpan);
+            if (mPopupWindow != null && span instanceof EasyEditSpan) {
+                EasyEditSpan easyEditSpan = (EasyEditSpan) span;
+                sendNotification(EasyEditSpan.TEXT_MODIFIED, easyEditSpan);
+                text.removeSpan(easyEditSpan);
             }
         }
 
@@ -1938,6 +1955,31 @@ public class Editor {
                 mTextView.removeCallbacks(mHidePopup);
             }
         }
+
+        private void sendNotification(int textChangedType, EasyEditSpan span) {
+            try {
+                PendingIntent pendingIntent = span.getPendingIntent();
+                if (pendingIntent != null) {
+                    Intent intent = new Intent();
+                    intent.putExtra(EasyEditSpan.EXTRA_TEXT_CHANGED_TYPE, textChangedType);
+                    pendingIntent.send(mTextView.getContext(), 0, intent);
+                }
+            } catch (CanceledException e) {
+                // This should not happen, as we should try to send the intent only once.
+                Log.w(TAG, "PendingIntent for notification cannot be sent", e);
+            }
+        }
+    }
+
+    /**
+     * Listens for the delete event triggered by {@link EasyEditPopupWindow}.
+     */
+    private interface EasyEditDeleteListener {
+
+        /**
+         * Clicks the delete pop-up.
+         */
+        void onDeleteClick(EasyEditSpan span);
     }
 
     /**
@@ -1950,6 +1992,7 @@ public class Editor {
                 com.android.internal.R.layout.text_edit_action_popup_text;
         private TextView mDeleteTextView;
         private EasyEditSpan mEasyEditSpan;
+        private EasyEditDeleteListener mOnDeleteListener;
 
         @Override
         protected void createPopupWindow() {
@@ -1984,16 +2027,26 @@ public class Editor {
             mEasyEditSpan = easyEditSpan;
         }
 
+        private void setOnDeleteListener(EasyEditDeleteListener listener) {
+            mOnDeleteListener = listener;
+        }
+
         @Override
         public void onClick(View view) {
-            if (view == mDeleteTextView) {
-                Editable editable = (Editable) mTextView.getText();
-                int start = editable.getSpanStart(mEasyEditSpan);
-                int end = editable.getSpanEnd(mEasyEditSpan);
-                if (start >= 0 && end >= 0) {
-                    mTextView.deleteText_internal(start, end);
-                }
+            if (view == mDeleteTextView
+                    && mEasyEditSpan != null && mEasyEditSpan.isDeleteEnabled()
+                    && mOnDeleteListener != null) {
+                mOnDeleteListener.onDeleteClick(mEasyEditSpan);
             }
+        }
+
+        @Override
+        public void hide() {
+            if (mEasyEditSpan != null) {
+                mEasyEditSpan.setDeleteEnabled(false);
+            }
+            mOnDeleteListener = null;
+            super.hide();
         }
 
         @Override
@@ -2647,15 +2700,10 @@ public class Editor {
                         suggestionStart, suggestionEnd).toString();
                 mTextView.replaceText_internal(spanStart, spanEnd, suggestion);
 
-                // Notify source IME of the suggestion pick. Do this before swaping texts.
-                if (!TextUtils.isEmpty(
-                        suggestionInfo.suggestionSpan.getNotificationTargetClassName())) {
-                    InputMethodManager imm = InputMethodManager.peekInstance();
-                    if (imm != null) {
-                        imm.notifySuggestionPicked(suggestionInfo.suggestionSpan, originalText,
-                                suggestionInfo.suggestionIndex);
-                    }
-                }
+                // Notify source IME of the suggestion pick. Do this before
+                // swaping texts.
+                suggestionInfo.suggestionSpan.notifySelection(
+                        mTextView.getContext(), originalText, suggestionInfo.suggestionIndex);
 
                 // Swap text content between actual text and Suggestion span
                 String[] suggestions = suggestionInfo.suggestionSpan.getSuggestions();
@@ -2696,23 +2744,14 @@ public class Editor {
             TypedArray styledAttributes = mTextView.getContext().obtainStyledAttributes(
                     com.android.internal.R.styleable.SelectionModeDrawables);
 
-            boolean allowText = mTextView.getContext().getResources().getBoolean(
-                    com.android.internal.R.bool.config_allowActionMenuItemTextWithIcon);
-
             mode.setTitle(mTextView.getContext().getString(
                     com.android.internal.R.string.textSelectionCABTitle));
             mode.setSubtitle(null);
             mode.setTitleOptionalHint(true);
 
-            int selectAllIconId = 0; // No icon by default
-            if (!allowText) {
-                // Provide an icon, text will not be displayed on smaller screens.
-                selectAllIconId = styledAttributes.getResourceId(
-                        R.styleable.SelectionModeDrawables_actionModeSelectAllDrawable, 0);
-            }
-
             menu.add(0, TextView.ID_SELECT_ALL, 0, com.android.internal.R.string.selectAll).
-                    setIcon(selectAllIconId).
+                    setIcon(styledAttributes.getResourceId(
+                            R.styleable.SelectionModeDrawables_actionModeSelectAllDrawable, 0)).
                     setAlphabeticShortcut('a').
                     setShowAsAction(
                             MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);

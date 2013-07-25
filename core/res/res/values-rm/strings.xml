@@ -271,6 +271,10 @@
     <skip />
     <!-- no translation found for permgroupdesc_camera (2933667372289567714) -->
     <skip />
+    <!-- no translation found for permgrouplab_screenlock (8275500173330718168) -->
+    <skip />
+    <!-- no translation found for permgroupdesc_screenlock (7067497128925499401) -->
+    <skip />
     <!-- no translation found for permgrouplab_appInfo (8028789762634147725) -->
     <skip />
     <!-- no translation found for permgroupdesc_appInfo (3950378538049625907) -->
@@ -310,6 +314,26 @@
     <!-- no translation found for permgroupdesc_storage (7442318502446874999) -->
     <skip />
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Access a la carta SD."</string>
+    <!-- no translation found for permgrouplab_accessibilityFeatures (7919025602283593907) -->
+    <skip />
+    <!-- no translation found for permgroupdesc_accessibilityFeatures (4205196881678144335) -->
+    <skip />
+    <!-- no translation found for capability_title_canRetrieveWindowContent (3901717936930170320) -->
+    <skip />
+    <!-- no translation found for capability_desc_canRetrieveWindowContent (3772225008605310672) -->
+    <skip />
+    <!-- no translation found for capability_title_canRequestTouchExploration (3108723364676667320) -->
+    <skip />
+    <!-- no translation found for capability_desc_canRequestTouchExploration (5800552516779249356) -->
+    <skip />
+    <!-- no translation found for capability_title_canRequestEnhancedWebAccessibility (1739881766522594073) -->
+    <skip />
+    <!-- no translation found for capability_desc_canRequestEnhancedWebAccessibility (7881063961507511765) -->
+    <skip />
+    <!-- no translation found for capability_title_canRequestFilterKeyEvents (2103440391902412174) -->
+    <skip />
+    <!-- no translation found for capability_desc_canRequestFilterKeyEvents (7463135292204152818) -->
+    <skip />
     <string name="permlab_statusBar" msgid="7417192629601890791">"deactivar u modifitgar la trav da status"</string>
     <!-- no translation found for permdesc_statusBar (8434669549504290975) -->
     <skip />
@@ -342,9 +366,9 @@
     <string name="permlab_sendSms" msgid="5600830612147671529">"trametter messadis SMS"</string>
     <!-- no translation found for permdesc_sendSms (7094729298204937667) -->
     <skip />
-    <!-- no translation found for permlab_sendSmsNoConfirmation (4781483105951730228) -->
+    <!-- no translation found for permlab_sendRespondViaMessageRequest (8713889105305943200) -->
     <skip />
-    <!-- no translation found for permdesc_sendSmsNoConfirmation (402569800862935907) -->
+    <!-- no translation found for permdesc_sendRespondViaMessageRequest (7107648548468778734) -->
     <skip />
     <!-- no translation found for permlab_readSms (8745086572213270480) -->
     <skip />
@@ -449,6 +473,10 @@
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"evitar il midar tranter applicaziuns"</string>
     <!-- no translation found for permdesc_stopAppSwitches (8262195802582255021) -->
     <skip />
+    <!-- no translation found for permlab_getTopActivityInfo (2537922311411546016) -->
+    <skip />
+    <!-- no translation found for permdesc_getTopActivityInfo (2512448855496067131) -->
+    <skip />
     <!-- no translation found for permlab_runSetActivityWatcher (892239094867182656) -->
     <skip />
     <!-- no translation found for permdesc_runSetActivityWatcher (6003603162578577406) -->
@@ -476,6 +504,14 @@
     <!-- no translation found for permlab_updateBatteryStats (3719689764536379557) -->
     <skip />
     <!-- no translation found for permdesc_updateBatteryStats (6862817857178025002) -->
+    <skip />
+    <!-- no translation found for permlab_getAppOpsStats (1508779687436585744) -->
+    <skip />
+    <!-- no translation found for permdesc_getAppOpsStats (6243887041577912877) -->
+    <skip />
+    <!-- no translation found for permlab_updateAppOpsStats (8829097373851521505) -->
+    <skip />
+    <!-- no translation found for permdesc_updateAppOpsStats (50784596594403483) -->
     <skip />
     <string name="permlab_backup" msgid="470013022865453920">"controllar las copias da segirezza e la restauraziun dal sistem"</string>
     <!-- no translation found for permdesc_backup (6912230525140589891) -->
@@ -725,6 +761,10 @@
     <skip />
     <string name="permlab_camera" msgid="3616391919559751192">"fotografar e registrar videos"</string>
     <!-- no translation found for permdesc_camera (8497216524735535009) -->
+    <skip />
+    <!-- no translation found for permlab_cameraDisableTransmitLed (2651072630501126222) -->
+    <skip />
+    <!-- no translation found for permdesc_cameraDisableTransmitLed (4764585465480295341) -->
     <skip />
     <!-- no translation found for permlab_brick (2961292205764488304) -->
     <skip />
@@ -1008,6 +1048,14 @@
     <skip />
     <!-- no translation found for permdesc_modifyNetworkAccounting (5443412866746198123) -->
     <skip />
+    <!-- no translation found for permlab_accessNotifications (7673416487873432268) -->
+    <skip />
+    <!-- no translation found for permdesc_accessNotifications (458457742683431387) -->
+    <skip />
+    <!-- no translation found for permlab_bindNotificationListenerService (7057764742211656654) -->
+    <skip />
+    <!-- no translation found for permdesc_bindNotificationListenerService (985697918576902986) -->
+    <skip />
     <!-- no translation found for policylab_limitPassword (4497420728857585791) -->
     <skip />
     <!-- no translation found for policydesc_limitPassword (3252114203919510394) -->
@@ -1138,7 +1186,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
@@ -1298,6 +1347,8 @@
     <skip />
     <!-- no translation found for lockscreen_access_pattern_detected (4988730895554057058) -->
     <skip />
+    <!-- no translation found for keyguard_accessibility_widget_changed (5678624624681400191) -->
+    <skip />
     <!-- no translation found for keyguard_accessibility_add_widget (8273277058724924654) -->
     <skip />
     <!-- no translation found for keyguard_accessibility_widget_empty_slot (1281505703307930757) -->
@@ -1360,7 +1411,13 @@
     <!-- no translation found for js_dialog_title (1987483977834603872) -->
     <skip />
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <!-- no translation found for js_dialog_before_unload (730366588032430474) -->
+    <!-- no translation found for js_dialog_before_unload_title (2619376555525116593) -->
+    <skip />
+    <!-- no translation found for js_dialog_before_unload_positive_button (3112752010600484130) -->
+    <skip />
+    <!-- no translation found for js_dialog_before_unload_negative_button (5614861293026099715) -->
+    <skip />
+    <!-- no translation found for js_dialog_before_unload (3468816357095378590) -->
     <skip />
     <string name="save_password_label" msgid="6860261758665825069">"Confermar"</string>
     <!-- no translation found for double_tap_toast (4595046515400268881) -->
@@ -1600,6 +1657,10 @@
     <skip />
     <!-- no translation found for low_internal_storage_view_text (6640505817617414371) -->
     <skip />
+    <!-- no translation found for app_running_notification_title (8718335121060787914) -->
+    <skip />
+    <!-- no translation found for app_running_notification_text (4653586947747330058) -->
+    <skip />
     <string name="ok" msgid="5970060430562524910">"OK"</string>
     <string name="cancel" msgid="6442560571259935130">"Interrumper"</string>
     <string name="yes" msgid="5362982303337969312">"OK"</string>
@@ -1746,6 +1807,8 @@
     <!-- no translation found for wifi_p2p_enter_pin_message (5920929550367828970) -->
     <skip />
     <!-- no translation found for wifi_p2p_show_pin_message (8530563323880921094) -->
+    <skip />
+    <!-- no translation found for wifi_p2p_frequency_conflict_message (8012981257742232475) -->
     <skip />
     <!-- no translation found for wifi_p2p_frequency_conflict_message (7363907213787469151) -->
     <skip />
@@ -1949,6 +2012,8 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Agids d\'access"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Fund davos"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Midar il fund davos"</string>
+    <!-- no translation found for notification_listener_binding_label (2014162835481906429) -->
+    <skip />
     <!-- no translation found for vpn_title (19615213552042827) -->
     <skip />
     <!-- no translation found for vpn_title_long (6400714798049252294) -->
@@ -1963,7 +2028,7 @@
     <skip />
     <!-- no translation found for vpn_lockdown_error (6009249814034708175) -->
     <skip />
-    <!-- no translation found for vpn_lockdown_reset (5365010427963548932) -->
+    <!-- no translation found for vpn_lockdown_config (6415899150671537970) -->
     <skip />
     <string name="upload_file" msgid="2897957172366730416">"Tscherner ina datoteca"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Nagina datoteca tschernida"</string>
@@ -2138,6 +2203,10 @@
     <skip />
     <!-- no translation found for action_menu_overflow_description (2295659037509008453) -->
     <skip />
+    <!-- no translation found for action_bar_home_description_format (7965984360903693903) -->
+    <skip />
+    <!-- no translation found for action_bar_home_subtitle_description_format (6985546530471780727) -->
+    <skip />
     <!-- no translation found for storage_internal (4891916833657929263) -->
     <skip />
     <!-- no translation found for storage_sd_card (3282948861378286745) -->
@@ -2235,6 +2304,8 @@
     <!-- no translation found for default_audio_route_category_name (3722811174003886946) -->
     <skip />
     <!-- no translation found for bluetooth_a2dp_audio_route_name (8575624030406771015) -->
+    <skip />
+    <!-- no translation found for wireless_display_route_description (9070346425023979651) -->
     <skip />
     <!-- no translation found for media_route_chooser_grouping_done (7966438307723317169) -->
     <skip />
@@ -2338,7 +2409,7 @@
     <skip />
     <!-- no translation found for kg_reordering_delete_drop_target_text (7899202978204438708) -->
     <skip />
-    <!-- no translation found for safe_media_volume_warning (7382971871993371648) -->
+    <!-- no translation found for safe_media_volume_warning (7324161939475478066) -->
     <skip />
     <!-- no translation found for continue_to_enable_accessibility (1626427372316070258) -->
     <skip />
@@ -2350,5 +2421,13 @@
     <skip />
     <!-- no translation found for owner_name (2716755460376028154) -->
     <!-- no translation found for owner_name (3879126011135546571) -->
+    <skip />
+    <!-- no translation found for error_message_title (4510373083082500195) -->
+    <skip />
+    <!-- no translation found for app_no_restricted_accounts (4011285085817350390) -->
+    <skip />
+    <!-- no translation found for app_not_found (3429141853498927379) -->
+    <skip />
+    <!-- no translation found for revoke (5404479185228271586) -->
     <skip />
 </resources>

@@ -22,6 +22,7 @@ import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.IApplicationThread;
 import android.app.IInstrumentationWatcher;
+import android.app.IUiAutomationConnection;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -95,6 +96,7 @@ class ProcessRecord {
     ApplicationInfo instrumentationInfo; // the application being instrumented
     String instrumentationProfileFile; // where to save profiling
     IInstrumentationWatcher instrumentationWatcher; // who is waiting
+    IUiAutomationConnection instrumentationUiAutomationConnection; // Connection to use the UI introspection APIs.
     Bundle instrumentationArguments;// as given to us
     ComponentName instrumentationResultClass;// copy of instrumentationClass
     boolean usingWrapper;       // Set to true when process was launched with a wrapper attached
@@ -136,6 +138,7 @@ class ProcessRecord {
     boolean persistent;         // always keep this application running?
     boolean crashing;           // are we in the process of crashing?
     Dialog crashDialog;         // dialog being displayed due to crash.
+    boolean forceCrashReport;   // suppress normal auto-dismiss of crash dialog & report UI?
     boolean notResponding;      // does the app have a not responding dialog?
     Dialog anrDialog;           // dialog being displayed due to app not resp.
     boolean removed;            // has app package been removed from device?

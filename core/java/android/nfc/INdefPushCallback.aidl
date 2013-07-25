@@ -16,15 +16,13 @@
 
 package android.nfc;
 
-import android.nfc.NdefMessage;
-import android.net.Uri;
+import android.nfc.BeamShareData;
 
 /**
  * @hide
  */
 interface INdefPushCallback
 {
-    NdefMessage createMessage();
-    Uri[] getUris();
+    BeamShareData createBeamShareData();
     void onNdefPushComplete();
 }

@@ -239,12 +239,14 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
     private static class WarningDialogReceiver extends BroadcastReceiver
             implements DialogInterface.OnDismissListener {
-        private Context mContext;
-        private Dialog mDialog;
+        private final Context mContext;
+        private final Dialog mDialog;
+        private final VolumePanel mVolumePanel;
 
-        WarningDialogReceiver(Context context, Dialog dialog) {
+        WarningDialogReceiver(Context context, Dialog dialog, VolumePanel volumePanel) {
             mContext = context;
             mDialog = dialog;
+            mVolumePanel = volumePanel;
             IntentFilter filter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             context.registerReceiver(this, filter);
         }
@@ -252,16 +254,20 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
         @Override
         public void onReceive(Context context, Intent intent) {
             mDialog.cancel();
-            synchronized (sConfirmSafeVolumeLock) {
-                sConfirmSafeVolumeDialog = null;
-            }
+            cleanUp();
         }
 
         public void onDismiss(DialogInterface unused) {
             mContext.unregisterReceiver(this);
+            cleanUp();
+        }
+
+        private void cleanUp() {
             synchronized (sConfirmSafeVolumeLock) {
                 sConfirmSafeVolumeDialog = null;
             }
+            mVolumePanel.forceTimeout();
+            mVolumePanel.updateStates();
         }
     }
 
@@ -297,7 +303,8 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
         mDialog = new Dialog(context, R.style.Theme_Panel_Volume) {
             public boolean onTouchEvent(MotionEvent event) {
-                if (isShowing() && event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                if (isShowing() && event.getAction() == MotionEvent.ACTION_OUTSIDE &&
+                        sConfirmSafeVolumeDialog == null) {
                     forceTimeout();
                     return true;
                 }
@@ -357,6 +364,11 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
         mMoreButton.setOnClickListener(this);
         listenToRingerMode();
+    }
+
+    public void setLayoutDirection(int layoutDirection) {
+        mPanel.setLayoutDirection(layoutDirection);
+        updateStates();
     }
 
     private void listenToRingerMode() {
@@ -523,8 +535,11 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
     private void updateSlider(StreamControl sc) {
         sc.seekbarView.setProgress(getStreamVolume(sc.streamType));
         final boolean muted = isMuted(sc.streamType);
+        // Force reloading the image resource
+        sc.icon.setImageDrawable(null);
         sc.icon.setImageResource(muted ? sc.iconMuteRes : sc.iconRes);
-        if (sc.streamType == AudioManager.STREAM_RING &&
+        if (((sc.streamType == AudioManager.STREAM_RING) ||
+                (sc.streamType == AudioManager.STREAM_NOTIFICATION)) &&
                 mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
             sc.icon.setImageResource(R.drawable.ic_audio_ring_notif_vibrate);
         }
@@ -532,7 +547,8 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             // never disable touch interactions for remote playback, the muting is not tied to
             // the state of the phone.
             sc.seekbarView.setEnabled(true);
-        } else if (sc.streamType != mAudioManager.getMasterStreamType() && muted) {
+        } else if ((sc.streamType != mAudioManager.getMasterStreamType() && muted) ||
+                        (sConfirmSafeVolumeDialog != null)) {
             sc.seekbarView.setEnabled(false);
         } else {
             sc.seekbarView.setEnabled(true);
@@ -573,7 +589,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
         }
     }
 
-    private void updateStates() {
+    public void updateStates() {
         final int count = mSliderGroup.getChildCount();
         for (int i = 0; i < count; i++) {
             StreamControl sc = (StreamControl) mSliderGroup.getChildAt(i).getTag();
@@ -645,9 +661,9 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
         postMuteChanged(STREAM_MASTER, flags);
     }
 
-    public void postDisplaySafeVolumeWarning() {
+    public void postDisplaySafeVolumeWarning(int flags) {
         if (hasMessages(MSG_DISPLAY_SAFE_VOLUME_WARNING)) return;
-        obtainMessage(MSG_DISPLAY_SAFE_VOLUME_WARNING, 0, 0).sendToTarget();
+        obtainMessage(MSG_DISPLAY_SAFE_VOLUME_WARNING, flags, 0).sendToTarget();
     }
 
     /**
@@ -684,7 +700,6 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
         removeMessages(MSG_FREE_RESOURCES);
         sendMessageDelayed(obtainMessage(MSG_FREE_RESOURCES), FREE_DELAY);
-
         resetTimeout();
     }
 
@@ -790,7 +805,8 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             if (((flags & AudioManager.FLAG_FIXED_VOLUME) != 0) ||
                     (streamType != mAudioManager.getMasterStreamType() &&
                      streamType != AudioService.STREAM_REMOTE_MUSIC &&
-                     isMuted(streamType))) {
+                     isMuted(streamType)) ||
+                     sConfirmSafeVolumeDialog != null) {
                 sc.seekbarView.setEnabled(false);
             } else {
                 sc.seekbarView.setEnabled(true);
@@ -899,7 +915,6 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
         removeMessages(MSG_FREE_RESOURCES);
         sendMessageDelayed(obtainMessage(MSG_FREE_RESOURCES), FREE_DELAY);
-
         resetTimeout();
     }
 
@@ -935,30 +950,34 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
         }
     }
 
-    protected void onDisplaySafeVolumeWarning() {
-        synchronized (sConfirmSafeVolumeLock) {
-            if (sConfirmSafeVolumeDialog != null) {
-                return;
-            }
-            sConfirmSafeVolumeDialog = new AlertDialog.Builder(mContext)
-                    .setMessage(com.android.internal.R.string.safe_media_volume_warning)
-                    .setPositiveButton(com.android.internal.R.string.yes,
-                                        new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            mAudioService.disableSafeMediaVolume();
-                        }
-                    })
-                    .setNegativeButton(com.android.internal.R.string.no, null)
-                    .setIconAttribute(android.R.attr.alertDialogIcon)
-                    .create();
-            final WarningDialogReceiver warning = new WarningDialogReceiver(mContext,
-                    sConfirmSafeVolumeDialog);
+    protected void onDisplaySafeVolumeWarning(int flags) {
+        if ((flags & AudioManager.FLAG_SHOW_UI) != 0 || mDialog.isShowing()) {
+            synchronized (sConfirmSafeVolumeLock) {
+                if (sConfirmSafeVolumeDialog != null) {
+                    return;
+                }
+                sConfirmSafeVolumeDialog = new AlertDialog.Builder(mContext)
+                        .setMessage(com.android.internal.R.string.safe_media_volume_warning)
+                        .setPositiveButton(com.android.internal.R.string.yes,
+                                            new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                mAudioService.disableSafeMediaVolume();
+                            }
+                        })
+                        .setNegativeButton(com.android.internal.R.string.no, null)
+                        .setIconAttribute(android.R.attr.alertDialogIcon)
+                        .create();
+                final WarningDialogReceiver warning = new WarningDialogReceiver(mContext,
+                        sConfirmSafeVolumeDialog, this);
 
-            sConfirmSafeVolumeDialog.setOnDismissListener(warning);
-            sConfirmSafeVolumeDialog.getWindow().setType(
-                                                    WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
-            sConfirmSafeVolumeDialog.show();
+                sConfirmSafeVolumeDialog.setOnDismissListener(warning);
+                sConfirmSafeVolumeDialog.getWindow().setType(
+                                                WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+                sConfirmSafeVolumeDialog.show();
+            }
+            updateStates();
         }
+        resetTimeout();
     }
 
     /**
@@ -1054,6 +1073,11 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                     mDialog.dismiss();
                     mActiveStreamType = -1;
                 }
+                synchronized (sConfirmSafeVolumeLock) {
+                    if (sConfirmSafeVolumeDialog != null) {
+                        sConfirmSafeVolumeDialog.dismiss();
+                    }
+                }
                 break;
             }
             case MSG_RINGER_MODE_CHANGED: {
@@ -1077,7 +1101,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 break;
 
             case MSG_DISPLAY_SAFE_VOLUME_WARNING:
-                onDisplaySafeVolumeWarning();
+                onDisplaySafeVolumeWarning(msg.arg1);
                 break;
         }
     }

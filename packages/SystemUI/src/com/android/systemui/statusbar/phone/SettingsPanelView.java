@@ -22,7 +22,11 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.util.EventLog;
+import android.view.MotionEvent;
+import android.view.accessibility.AccessibilityEvent;
 
+import com.android.systemui.EventLogTags;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.GestureRecorder;
 import com.android.systemui.statusbar.policy.BatteryController;
@@ -31,6 +35,7 @@ import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NetworkController;
 
 public class SettingsPanelView extends PanelView {
+    public static final boolean DEBUG_GESTURES = true;
 
     private QuickSettingsController mQS;
     private QuickSettingsContainerView mQSContainer;
@@ -53,9 +58,6 @@ public class SettingsPanelView extends PanelView {
         mHandleBar = resources.getDrawable(R.drawable.status_bar_close);
         mHandleBarHeight = resources.getDimensionPixelSize(R.dimen.close_handle_height);
         mHandleView = findViewById(R.id.handle);
-
-        setContentDescription(resources.getString(R.string.accessibility_desc_quick_settings));
-
     }
 
     public void setQuickSettings(QuickSettingsController qs) {
@@ -94,6 +96,17 @@ public class SettingsPanelView extends PanelView {
         }
     }
 
+    @Override
+    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            event.getText()
+                    .add(getContext().getString(R.string.accessibility_desc_quick_settings));
+            return true;
+        }
+
+        return super.dispatchPopulateAccessibilityEvent(event);
+    }
+
     // We draw the handle ourselves so that it's always glued to the bottom of the window.
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -115,4 +128,14 @@ public class SettingsPanelView extends PanelView {
         canvas.translate(0, -off);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (DEBUG_GESTURES) {
+            if (event.getActionMasked() != MotionEvent.ACTION_MOVE) {
+                EventLog.writeEvent(EventLogTags.SYSUI_QUICKPANEL_TOUCH,
+                       event.getActionMasked(), (int) event.getX(), (int) event.getY());
+            }
+        }
+        return super.onTouchEvent(event);
+    }
 }

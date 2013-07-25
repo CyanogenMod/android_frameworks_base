@@ -1,4 +1,5 @@
 page.title=In-app Billing Version 2
+excludeFromSuggestions=true
 @jd:body
 
 <div style="background-color:#fffdeb;width:100%;margin-bottom:1em;padding:.5em;">In-app Billing Version 2 is superseded. Please <a href="{@docRoot}google/play/billing/billing_overview.html#migration">migrate to Version 3</a> at your earliest convenience.</div>
@@ -38,15 +39,6 @@ Version 2, rather than Version 3. </p>
 
 <p>If you do not need to sell subscriptions, you
 should implement In-app Billing Version 3 instead.</p>
-
-<div class="sidebox-wrapper">
-<div class="sidebox">
-  <h2>New in In-app Billing V2</h2>
-  <p><strong>Free trials</strong>—You can now offer users a configurable free trial period for
-  your in-app subscriptions. You can set up trials with a simple change in the Developer
-  Console—no change to your app code is needed.</p>
-</div>
-</div>
 
 <h2 id="billing-types">Product Types</h2>
 

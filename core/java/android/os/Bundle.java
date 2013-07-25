@@ -218,7 +218,7 @@ public final class Bundle implements Parcelable, Cloneable {
             return;
         }
         if (mMap == null) {
-            mMap = new HashMap<String, Object>();
+            mMap = new HashMap<String, Object>(N);
         }
         mParcelledData.readMapInternal(mMap, N, mClassLoader);
         mParcelledData.recycle();
@@ -742,6 +742,25 @@ public final class Bundle implements Parcelable, Cloneable {
     }
 
     /**
+     * Inserts an {@link IBinder} value into the mapping of this Bundle, replacing
+     * any existing value for the given key.  Either key or value may be null.
+     *
+     * <p class="note">You should be very careful when using this function.  In many
+     * places where Bundles are used (such as inside of Intent objects), the Bundle
+     * can live longer inside of another process than the process that had originally
+     * created it.  In that case, the IBinder you supply here will become invalid
+     * when your process goes away, and no longer usable, even if a new process is
+     * created for you later on.</p>
+     *
+     * @param key a String, or null
+     * @param value an IBinder object, or null
+     */
+    public void putBinder(String key, IBinder value) {
+        unparcel();
+        mMap.put(key, value);
+    }
+
+    /**
      * Inserts an IBinder value into the mapping of this Bundle, replacing
      * any existing value for the given key.  Either key or value may be null.
      *
@@ -749,7 +768,7 @@ public final class Bundle implements Parcelable, Cloneable {
      * @param value an IBinder object, or null
      *
      * @deprecated
-     * @hide
+     * @hide This is the old name of the function.
      */
     @Deprecated
     public void putIBinder(String key, IBinder value) {
@@ -1061,10 +1080,7 @@ public final class Bundle implements Parcelable, Cloneable {
      */
     public String getString(String key) {
         unparcel();
-        Object o = mMap.get(key);
-        if (o == null) {
-            return null;
-        }
+        final Object o = mMap.get(key);
         try {
             return (String) o;
         } catch (ClassCastException e) {
@@ -1079,20 +1095,12 @@ public final class Bundle implements Parcelable, Cloneable {
      *
      * @param key a String, or null
      * @param defaultValue Value to return if key does not exist
-     * @return a String value, or null
+     * @return the String value associated with the given key, or defaultValue
+     *     if no valid String object is currently mapped to that key.
      */
     public String getString(String key, String defaultValue) {
-        unparcel();
-        Object o = mMap.get(key);
-        if (o == null) {
-            return defaultValue;
-        }
-        try {
-            return (String) o;
-        } catch (ClassCastException e) {
-            typeWarning(key, o, "String", e);
-            return defaultValue;
-        }
+        final String s = getString(key);
+        return (s == null) ? defaultValue : s;
     }
 
     /**
@@ -1105,10 +1113,7 @@ public final class Bundle implements Parcelable, Cloneable {
      */
     public CharSequence getCharSequence(String key) {
         unparcel();
-        Object o = mMap.get(key);
-        if (o == null) {
-            return null;
-        }
+        final Object o = mMap.get(key);
         try {
             return (CharSequence) o;
         } catch (ClassCastException e) {
@@ -1123,20 +1128,12 @@ public final class Bundle implements Parcelable, Cloneable {
      *
      * @param key a String, or null
      * @param defaultValue Value to return if key does not exist
-     * @return a CharSequence value, or null
+     * @return the CharSequence value associated with the given key, or defaultValue
+     *     if no valid CharSequence object is currently mapped to that key.
      */
     public CharSequence getCharSequence(String key, CharSequence defaultValue) {
-        unparcel();
-        Object o = mMap.get(key);
-        if (o == null) {
-            return defaultValue;
-        }
-        try {
-            return (CharSequence) o;
-        } catch (ClassCastException e) {
-            typeWarning(key, o, "CharSequence", e);
-            return defaultValue;
-        }
+        final CharSequence cs = getCharSequence(key);
+        return (cs == null) ? defaultValue : cs;
     }
 
     /**
@@ -1565,9 +1562,31 @@ public final class Bundle implements Parcelable, Cloneable {
      *
      * @param key a String, or null
      * @return an IBinder value, or null
+     */
+    public IBinder getBinder(String key) {
+        unparcel();
+        Object o = mMap.get(key);
+        if (o == null) {
+            return null;
+        }
+        try {
+            return (IBinder) o;
+        } catch (ClassCastException e) {
+            typeWarning(key, o, "IBinder", e);
+            return null;
+        }
+    }
+
+    /**
+     * Returns the value associated with the given key, or null if
+     * no mapping of the desired type exists for the given key or a null
+     * value is explicitly associated with the key.
+     *
+     * @param key a String, or null
+     * @return an IBinder value, or null
      *
      * @deprecated
-     * @hide
+     * @hide This is the old name of the function.
      */
     @Deprecated
     public IBinder getIBinder(String key) {

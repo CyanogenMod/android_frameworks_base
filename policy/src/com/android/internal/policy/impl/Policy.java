@@ -25,9 +25,6 @@ import android.view.WindowManagerPolicy;
 
 import com.android.internal.os.IDeviceHandler;
 import com.android.internal.policy.IPolicy;
-import com.android.internal.policy.impl.PhoneLayoutInflater;
-import com.android.internal.policy.impl.PhoneWindow;
-import com.android.internal.policy.impl.PhoneWindowManager;
 
 /**
  * {@hide}

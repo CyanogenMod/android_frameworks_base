@@ -20,6 +20,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.GeocoderParams;
 import android.location.IGeocodeProvider;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.util.Log;
@@ -39,8 +40,10 @@ public class GeocoderProxy {
     private final ServiceWatcher mServiceWatcher;
 
     public static GeocoderProxy createAndBind(Context context,
-            List<String> initialPackageNames, int userId) {
-        GeocoderProxy proxy = new GeocoderProxy(context, initialPackageNames, userId);
+            int overlaySwitchResId, int defaultServicePackageNameResId,
+            int initialPackageNamesResId, Handler handler) {
+        GeocoderProxy proxy = new GeocoderProxy(context, overlaySwitchResId,
+            defaultServicePackageNameResId, initialPackageNamesResId, handler);
         if (proxy.bind()) {
             return proxy;
         } else {
@@ -48,11 +51,13 @@ public class GeocoderProxy {
         }
     }
 
-    public GeocoderProxy(Context context, List<String> initialPackageNames, int userId) {
+    private GeocoderProxy(Context context,
+            int overlaySwitchResId, int defaultServicePackageNameResId,
+            int initialPackageNamesResId, Handler handler) {
         mContext = context;
 
-        mServiceWatcher = new ServiceWatcher(mContext, TAG, SERVICE_ACTION, initialPackageNames,
-                null, null, userId);
+        mServiceWatcher = new ServiceWatcher(mContext, TAG, SERVICE_ACTION, overlaySwitchResId,
+            defaultServicePackageNameResId, initialPackageNamesResId, null, handler);
     }
 
     private boolean bind () {

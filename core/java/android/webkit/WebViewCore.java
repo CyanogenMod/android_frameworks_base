@@ -45,6 +45,8 @@ import android.view.View;
 import android.webkit.WebViewClassic.FocusNodeHref;
 import android.webkit.WebViewInputDispatcher.WebKitCallbacks;
 
+import com.android.internal.os.SomeArgs;
+
 import junit.framework.Assert;
 
 import java.io.OutputStream;
@@ -1550,12 +1552,14 @@ public final class WebViewCore {
                         case MODIFY_SELECTION:
                             mTextSelectionChangeReason
                                     = TextSelectionData.REASON_ACCESSIBILITY_INJECTOR;
-                            String modifiedSelectionString =
-                                nativeModifySelection(mNativeClass, msg.arg1,
-                                        msg.arg2);
-                            mWebViewClassic.mPrivateHandler.obtainMessage(
-                                    WebViewClassic.SELECTION_STRING_CHANGED,
-                                    modifiedSelectionString).sendToTarget();
+                            final SomeArgs args = (SomeArgs) msg.obj;
+                            final String modifiedSelectionString = nativeModifySelection(
+                                    mNativeClass, args.argi1, args.argi2);
+                            // If accessibility is on, the main thread may be
+                            // waiting for a response. Send on webcore thread.
+                            mWebViewClassic.handleSelectionChangedWebCoreThread(
+                                    modifiedSelectionString, args.argi3);
+                            args.recycle();
                             mTextSelectionChangeReason
                                     = TextSelectionData.REASON_UNKNOWN;
                             break;
@@ -2010,9 +2014,6 @@ public final class WebViewCore {
 
     private void clearCache(boolean includeDiskFiles) {
         mBrowserFrame.clearCache();
-        if (includeDiskFiles) {
-            CacheManager.removeAllCacheFiles();
-        }
     }
 
     private void loadUrl(String url, Map<String, String> extraHeaders) {

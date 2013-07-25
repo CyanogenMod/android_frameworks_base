@@ -37,8 +37,8 @@ import javax.microedition.khronos.opengles.GL;
  * Canvas and Drawables</a> developer guide.</p></div>
  */
 public class Canvas {
-    // assigned in constructors, freed in finalizer
-    final int mNativeCanvas;
+    // assigned in constructors or setBitmap, freed in finalizer
+    int mNativeCanvas;
     
     // may be null
     private Bitmap mBitmap;
@@ -83,7 +83,7 @@ public class Canvas {
     private final CanvasFinalizer mFinalizer;
 
     private static class CanvasFinalizer {
-        private final int mNativeCanvas;
+        private int mNativeCanvas;
 
         public CanvasFinalizer(int nativeCanvas) {
             mNativeCanvas = nativeCanvas;
@@ -143,6 +143,20 @@ public class Canvas {
     }
 
     /**
+     * Replace existing canvas while ensuring that the swap has occurred before
+     * the previous native canvas is unreferenced.
+     */
+    private void safeCanvasSwap(int nativeCanvas, boolean copyState) {
+        final int oldCanvas = mNativeCanvas;
+        mNativeCanvas = nativeCanvas;
+        mFinalizer.mNativeCanvas = nativeCanvas;
+        if (copyState) {
+            copyNativeCanvasState(oldCanvas, mNativeCanvas);
+        }
+        finalizer(oldCanvas);
+    }
+    
+    /**
      * Returns null.
      * 
      * @deprecated This method is not supported and should not be invoked.
@@ -168,11 +182,12 @@ public class Canvas {
     }
 
     /**
-     * Specify a bitmap for the canvas to draw into.  As a side-effect, also
-     * updates the canvas's target density to match that of the bitmap.
+     * Specify a bitmap for the canvas to draw into. All canvas state such as 
+     * layers, filters, and the save/restore stack are reset with the exception
+     * of the current matrix and clip stack. Additionally, as a side-effect
+     * the canvas' target density is updated to match that of the bitmap.
      *
      * @param bitmap Specifies a mutable bitmap for the canvas to draw into.
-     * 
      * @see #setDensity(int)
      * @see #getDensity()
      */
@@ -181,17 +196,19 @@ public class Canvas {
             throw new RuntimeException("Can't set a bitmap device on a GL canvas");
         }
 
-        int pointer = 0;
-        if (bitmap != null) {
+        if (bitmap == null) {
+            safeCanvasSwap(initRaster(0), false);
+            mDensity = Bitmap.DENSITY_NONE;
+        } else {
             if (!bitmap.isMutable()) {
                 throw new IllegalStateException();
             }
             throwIfRecycled(bitmap);
+
+            safeCanvasSwap(initRaster(bitmap.ni()), true);
             mDensity = bitmap.mDensity;
-            pointer = bitmap.ni();
         }
 
-        native_setBitmap(mNativeCanvas, pointer);
         mBitmap = bitmap;
     }
     
@@ -681,8 +698,16 @@ public class Canvas {
     }
 
     public enum EdgeType {
+
+        /**
+         * Black-and-White: Treat edges by just rounding to nearest pixel boundary
+         */
         BW(0),  //!< treat edges by just rounding to nearest pixel boundary
-        AA(1);  //!< treat edges by rounding-out, since they may be antialiased
+
+        /**
+         * Antialiased: Treat edges by rounding-out, since they may be antialiased
+         */
+        AA(1);
         
         EdgeType(int nativeInt) {
             this.nativeInt = nativeInt;
@@ -701,12 +726,14 @@ public class Canvas {
      * therefore you can skip making the draw calls).
      *
      * @param rect  the rect to compare with the current clip
-     * @param type  specifies how to treat the edges (BW or antialiased)
+     * @param type  {@link Canvas.EdgeType#AA} if the path should be considered antialiased,
+     *              since that means it may affect a larger area (more pixels) than
+     *              non-antialiased ({@link Canvas.EdgeType#BW}).
      * @return      true if the rect (transformed by the canvas' matrix)
      *              does not intersect with the canvas' clip
      */
     public boolean quickReject(RectF rect, EdgeType type) {
-        return native_quickReject(mNativeCanvas, rect, type.nativeInt);
+        return native_quickReject(mNativeCanvas, rect);
     }
 
     /**
@@ -718,15 +745,14 @@ public class Canvas {
      * (i.e. the bounds of the path intersects, but the path does not).
      *
      * @param path        The path to compare with the current clip
-     * @param type        true if the path should be considered antialiased,
-     *                    since that means it may
-     *                    affect a larger area (more pixels) than
-     *                    non-antialiased.
+     * @param type        {@link Canvas.EdgeType#AA} if the path should be considered antialiased,
+     *                    since that means it may affect a larger area (more pixels) than
+     *                    non-antialiased ({@link Canvas.EdgeType#BW}).
      * @return            true if the path (transformed by the canvas' matrix)
      *                    does not intersect with the canvas' clip
      */
     public boolean quickReject(Path path, EdgeType type) {
-        return native_quickReject(mNativeCanvas, path.ni(), type.nativeInt);
+        return native_quickReject(mNativeCanvas, path.ni());
     }
 
     /**
@@ -743,19 +769,22 @@ public class Canvas {
      *                    current clip
      * @param bottom      The bottom of the rectangle to compare with the
      *                    current clip
-     * @param type        true if the rect should be considered antialiased,
-     *                    since that means it may affect a larger area (more
-     *                    pixels) than non-antialiased.
+     * @param type        {@link Canvas.EdgeType#AA} if the path should be considered antialiased,
+     *                    since that means it may affect a larger area (more pixels) than
+     *                    non-antialiased ({@link Canvas.EdgeType#BW}).
      * @return            true if the rect (transformed by the canvas' matrix)
      *                    does not intersect with the canvas' clip
      */
-    public boolean quickReject(float left, float top, float right, float bottom, EdgeType type) {
-        return native_quickReject(mNativeCanvas, left, top, right, bottom,
-                                  type.nativeInt);
+    public boolean quickReject(float left, float top, float right, float bottom,
+                               EdgeType type) {
+        return native_quickReject(mNativeCanvas, left, top, right, bottom);
     }
 
     /**
-     * Retrieve the clip bounds, returning true if they are non-empty.
+     * Return the bounds of the current clip (in local coordinates) in the
+     * bounds parameter, and return true if it is non-empty. This can be useful
+     * in a way similar to quickReject, in that it tells you that drawing
+     * outside of these bounds will be clipped out.
      *
      * @param bounds Return the clip bounds here. If it is null, ignore it but
      *               still return true if the current clip is non-empty.
@@ -766,7 +795,7 @@ public class Canvas {
     }
     
     /**
-     * Retrieve the clip bounds.
+     * Retrieve the bounds of the current clip (in local coordinates).
      *
      * @return the clip bounds, or [0, 0, 0, 0] if the clip is empty.
      */
@@ -865,8 +894,11 @@ public class Canvas {
 
     /**
      * Draw a line segment with the specified start and stop x,y coordinates,
-     * using the specified paint. NOTE: since a line is always "framed", the
-     * Style is ignored in the paint.
+     * using the specified paint.
+     *
+     * <p>Note that since a line is always "framed", the Style is ignored in the paint.</p>
+     *
+     * <p>Degenerate lines (length is 0) will not be drawn.</p>
      *
      * @param startX The x-coordinate of the start point of the line
      * @param startY The y-coordinate of the start point of the line
@@ -1211,7 +1243,7 @@ public class Canvas {
      * meshHeight+1 vertices down. The verts array is accessed in row-major
      * order, so that the first meshWidth+1 vertices are distributed across the
      * top of the bitmap from left to right. A more general version of this
-     * methid is drawVertices().
+     * method is drawVertices().
      *
      * @param bitmap The bitmap to draw using the mesh
      * @param meshWidth The number of columns in the mesh. Nothing is drawn if
@@ -1220,7 +1252,7 @@ public class Canvas {
      *                   this is 0
      * @param verts Array of x,y pairs, specifying where the mesh should be
      *              drawn. There must be at least
-     *              (meshWidth+1) * (meshHeight+1) * 2 + meshOffset values
+     *              (meshWidth+1) * (meshHeight+1) * 2 + vertOffset values
      *              in the array
      * @param vertOffset Number of verts elements to skip before drawing
      * @param colors May be null. Specifies a color at each vertex, which is
@@ -1575,6 +1607,10 @@ public class Canvas {
      * Save the canvas state, draw the picture, and restore the canvas state.
      * This differs from picture.draw(canvas), which does not perform any
      * save/restore.
+     *
+     * <p>
+     * <strong>Note:</strong> This forces the picture to internally call
+     * {@link Picture#endRecording} in order to prepare for playback.
      * 
      * @param picture  The picture to be drawn
      */
@@ -1625,7 +1661,7 @@ public class Canvas {
     public static native void freeTextLayoutCaches();
 
     private static native int initRaster(int nativeBitmapOrZero);
-    private static native void native_setBitmap(int nativeCanvas, int bitmap);
+    private static native void copyNativeCanvasState(int srcCanvas, int dstCanvas);
     private static native int native_saveLayer(int nativeCanvas, RectF bounds,
                                                int paint, int layerFlags);
     private static native int native_saveLayer(int nativeCanvas, float l,
@@ -1656,15 +1692,12 @@ public class Canvas {
                                                        Rect bounds);
     private static native void native_getCTM(int canvas, int matrix);
     private static native boolean native_quickReject(int nativeCanvas,
-                                                     RectF rect,
-                                                     int native_edgeType);
+                                                     RectF rect);
     private static native boolean native_quickReject(int nativeCanvas,
-                                                     int path,
-                                                     int native_edgeType);
+                                                     int path);
     private static native boolean native_quickReject(int nativeCanvas,
                                                      float left, float top,
-                                                     float right, float bottom,
-                                                     int native_edgeType);
+                                                     float right, float bottom);
     private static native void native_drawRGB(int nativeCanvas, int r, int g,
                                               int b);
     private static native void native_drawARGB(int nativeCanvas, int a, int r,

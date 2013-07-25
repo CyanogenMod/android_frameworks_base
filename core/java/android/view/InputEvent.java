@@ -70,7 +70,6 @@ public abstract class InputEvent implements Parcelable {
      * Gets the source of the event.
      * 
      * @return The event source or {@link InputDevice#SOURCE_UNKNOWN} if unknown.
-     * @see InputDevice#getSourceInfo
      */
     public abstract int getSource();
 
@@ -81,6 +80,18 @@ public abstract class InputEvent implements Parcelable {
      * @hide
      */
     public abstract void setSource(int source);
+
+    /**
+     * Determines whether the event is from the given source.
+     *
+     * @param source The input source to check against. This can be a specific device type, such as
+     * {@link InputDevice#SOURCE_TOUCH_NAVIGATION}, or a more generic device class, such as
+     * {@link InputDevice#SOURCE_CLASS_POINTER}.
+     * @return Whether the event is from the given source.
+     */
+    public boolean isFromSource(int source) {
+        return (getSource() & source) == source;
+    }
 
     /**
      * Copies the event.

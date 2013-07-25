@@ -17,6 +17,7 @@
 #ifndef ANDROID_HWUI_FONT_RENDERER_H
 #define ANDROID_HWUI_FONT_RENDERER_H
 
+#include <utils/LruCache.h>
 #include <utils/Vector.h>
 
 #include <SkPaint.h>
@@ -27,7 +28,17 @@
 #include "font/CacheTexture.h"
 #include "font/CachedGlyphInfo.h"
 #include "font/Font.h"
+#include "utils/SortedList.h"
+#include "Matrix.h"
 #include "Properties.h"
+
+namespace RSC {
+    class Element;
+    class RS;
+    class ScriptIntrinsicBlur;
+}
+
+class Functor;
 
 namespace android {
 namespace uirenderer {
@@ -47,16 +58,16 @@ public:
         mGammaTable = gammaTable;
     }
 
-    void setFont(SkPaint* paint, uint32_t fontId, float fontSize);
+    void setFont(SkPaint* paint, const mat4& matrix);
 
-    void precache(SkPaint* paint, const char* text, int numGlyphs);
+    void precache(SkPaint* paint, const char* text, int numGlyphs, const mat4& matrix);
+    void endPrecaching();
 
-    // bounds is an out parameter
-    bool renderText(SkPaint* paint, const Rect* clip, const char *text, uint32_t startIndex,
-            uint32_t len, int numGlyphs, int x, int y, Rect* bounds);
     // bounds is an out parameter
     bool renderPosText(SkPaint* paint, const Rect* clip, const char *text, uint32_t startIndex,
-            uint32_t len, int numGlyphs, int x, int y, const float* positions, Rect* bounds);
+            uint32_t len, int numGlyphs, int x, int y, const float* positions, Rect* bounds,
+            Functor* functor, bool forceFinish = true);
+
     // bounds is an out parameter
     bool renderTextOnPath(SkPaint* paint, const Rect* clip, const char *text, uint32_t startIndex,
             uint32_t len, int numGlyphs, SkPath* path, float hOffset, float vOffset, Rect* bounds);
@@ -82,28 +93,16 @@ public:
     DropShadow renderDropShadow(SkPaint* paint, const char *text, uint32_t startIndex,
             uint32_t len, int numGlyphs, uint32_t radius, const float* positions);
 
-    GLuint getTexture(bool linearFiltering = false) {
-        checkInit();
-
-        mCurrentCacheTexture->setLinearFiltering(linearFiltering);
+    void setTextureFiltering(bool linearFiltering) {
         mLinearFiltering = linearFiltering;
-
-        return mCurrentCacheTexture->getTextureId();
     }
 
-    uint32_t getCacheSize() const {
-        uint32_t size = 0;
-        for (uint32_t i = 0; i < mCacheTextures.size(); i++) {
-            CacheTexture* cacheTexture = mCacheTextures[i];
-            if (cacheTexture && cacheTexture->getTexture()) {
-                size += cacheTexture->getWidth() * cacheTexture->getHeight();
-            }
-        }
-        return size;
-    }
+    uint32_t getCacheSize() const;
 
 private:
     friend class Font;
+
+    static const uint32_t gMaxNumberOfQuads = 2048;
 
     const uint8_t* mGammaTable;
 
@@ -119,7 +118,7 @@ private:
     void initVertexArrayBuffers();
 
     void checkInit();
-    void initRender(const Rect* clip, Rect* bounds);
+    void initRender(const Rect* clip, Rect* bounds, Functor* functor);
     void finishRender();
 
     void issueDrawCommand();
@@ -152,20 +151,15 @@ private:
     Vector<CacheTexture*> mCacheTextures;
 
     Font* mCurrentFont;
-    Vector<Font*> mActiveFonts;
+    LruCache<Font::FontDescription, Font*> mActiveFonts;
 
     CacheTexture* mCurrentCacheTexture;
-    CacheTexture* mLastCacheTexture;
 
     bool mUploadTexture;
 
-    // Pointer to vertex data to speed up frame to frame work
-    float* mTextMesh;
-    uint32_t mCurrentQuadIndex;
-    uint32_t mMaxNumberOfQuads;
-
     uint32_t mIndexBufferID;
 
+    Functor* mFunctor;
     const Rect* mClip;
     Rect* mBounds;
     bool mDrawn;
@@ -174,13 +168,19 @@ private:
 
     bool mLinearFiltering;
 
-    /** We should consider multi-threading this code or using Renderscript **/
+    // RS constructs
+    sp<RSC::RS> mRs;
+    sp<const RSC::Element> mRsElement;
+    sp<RSC::ScriptIntrinsicBlur> mRsScript;
+
     static void computeGaussianWeights(float* weights, int32_t radius);
     static void horizontalBlur(float* weights, int32_t radius, const uint8_t *source, uint8_t *dest,
             int32_t width, int32_t height);
     static void verticalBlur(float* weights, int32_t radius, const uint8_t *source, uint8_t *dest,
             int32_t width, int32_t height);
-    static void blurImage(uint8_t* image, int32_t width, int32_t height, int32_t radius);
+
+    // the input image handle may have its pointer replaced (to avoid copies)
+    void blurImage(uint8_t** image, int32_t width, int32_t height, int32_t radius);
 };
 
 }; // namespace uirenderer

@@ -18,8 +18,7 @@ page.title=Support Library
 <h2>See also</h2>
 <ol>
   <li><a
-href="{@docRoot}guide/practices/optimizing-for-3.0.html">Optimizing Apps for Android 3.0</a></li>
-  <li><a href="http://code.google.com/p/iosched/">Google I/O App source code</a></li>
+href="{@docRoot}training/basics/fragments/support-lib.html">Using the Support Library</a></li>
 </ol>
 
 </div>
@@ -46,10 +45,74 @@ by the directory name, such as {@code v4/} and {@code v13/}.</p>
 <p>The sections below provide notes about successive releases of
 the Support Package, as denoted by revision number.</p>
 
-
 <div class="toggle-content opened">
   <p><a href="#" onclick="return toggleContent(this)">
     <img src="{@docRoot}assets/images/triangle-opened.png" class="toggle-content-img" alt=""
+/>Support Package, revision 13</a> <em>(May 2013)</em>
+  </p>
+  <div class="toggle-content-toggleme">
+    <dl>
+      <dt>Changes for v4 support library:</dt>
+      <dd>
+        <ul>
+          <li>Added {@link android.support.v4.widget.DrawerLayout} for creating a
+            <a href="{@docRoot}training/implementing-navigation/nav-drawer.html">Navigation
+            Drawer</a> that can be pulled in from the edge of a window.</li>
+          <li>Added {@link android.support.v4.widget.SlidingPaneLayout} widget for creating linked
+            summary and detail views that appropriately adapt to various screen sizes.</li>
+          <li>Added {@link android.support.v4.app.ActionBarDrawerToggle} as a way to tie
+            together the functions of {@link android.support.v4.widget.DrawerLayout} and {@link
+            android.app.ActionBar}.</li>
+          <li>Added {@link android.support.v4.widget.ViewDragHelper} as a new common component
+            for dragging views within a parent view.</li>
+          <li>Added {@link android.support.v4.widget.ScrollerCompat} to provide {@link
+            android.widget.Scroller} and {@link android.widget.OverScroller} compatibility support.
+            </li>
+          <li>Added {@link android.support.v4.content.FileProvider} to allow sharing of private
+            files between applications.</li>
+          <li>Updated {@link android.support.v4.view.ViewPager} to throw an exception if the
+            associated {@link android.support.v4.view.PagerAdapter} class is modified without a call
+            to {@link android.support.v4.view.PagerAdapter#notifyDataSetChanged notifyDataSetChanged()}.
+            </li>
+          <li>Fixed an issue with {@link android.support.v4.view.ViewPager} children drawing sort
+            order.</li>
+          <li>Fixed {@link android.support.v4.view.GestureDetectorCompat} to dispatch missing
+            {@link android.view.GestureDetector.SimpleOnGestureListener#onSingleTapConfirmed} calls
+            between tap timeout and long press events.</li>
+        </ul>
+      </dd>
+    </dl>
+  </div>
+</div>
+
+
+<div class="toggle-content closed">
+  <p><a href="#" onclick="return toggleContent(this)">
+    <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-content-img" alt=""
+/>Support Package, revision 12</a> <em>(February 2013)</em>
+  </p>
+  <div class="toggle-content-toggleme">
+    <dl>
+      <dt>Changes for v4 support library:</dt>
+      <dd>
+        <ul>
+          <li>Improved interaction behavior for {@link android.support.v4.view.ViewPager}.</li>
+          <li>Fixed a bug that could cause {@link android.support.v4.view.ViewPager} to select the
+            wrong page.</li>
+          <li>Fixed use of {@link android.support.v4.view.ViewPager#removeView removeView()} method
+            during layout for {@link android.support.v4.view.ViewPager}.</li>
+          <li>Fixed issue with {@link android.support.v4.widget.SearchViewCompat} where using the
+            back button to dismiss does not clear the search text. This fix only applies to
+            host API levels 14 and higher.</li>
+        </ul>
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<div class="toggle-content closed">
+  <p><a href="#" onclick="return toggleContent(this)">
+    <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-content-img" alt=""
 />Support Package, revision 11</a> <em>(November 2012)</em>
   </p>
   <div class="toggle-content-toggleme">
@@ -119,7 +182,7 @@ the Support Package, as denoted by revision number.</p>
       <dt>Changes for v4 support library:</dt>
       <dd>
         <ul>
-          <li>Added support for notification features introduced in Android 4.1 (API Level 16) with
+          <li>Added support for notification features introduced in Android 4.1 (API level 16) with
           additions to {@link android.support.v4.app.NotificationCompat}.</li>
         </ul>
       </dd>
@@ -210,7 +273,7 @@ isActiveNetworkMetered()} method.</li>
           <li>Fixed intent flags for {@link android.app.PendingIntent} objects generated
             by {@link android.support.v4.app.TaskStackBuilder}.</li>
           <li>Removed unused attributes from the gridlayout library projects to make sure
-            the library can be built with API Level 7 and higher.</li>
+            the library can be built with API level 7 and higher.</li>
           <li>Added {@code .classpath} and {@code .project} files for the gridlayout
             library project.</li>
         </ul>
@@ -501,7 +564,7 @@ and click <strong>Install selected</strong>.</li>
   <li>Proceed to install the package.</li>
 </ol>
 
-<p>When done, all files (including source code, samples, and the {@code .jar} files) are saved
+<p>When done, all files (including source code, samples, and the JAR files) are saved
 into the <code>&lt;sdk&gt;/extras/android/support/</code> directory. This directory contains
 each of the different support libraries, such as the library for API level 4 and up and the library
 for API level 13 and up, each named with the respective version (such as {@code v4/}).</p>
@@ -510,20 +573,57 @@ for API level 13 and up, each named with the respective version (such as {@code 
 <h2 id="SettingUp">Setting Up a Project to Use a Library</h2>
 
 <p>To add one of the libraries to your Android project:</p>
+<dl>
+    <dt>
+        Add the JAR file to your project.
+    </dt>
+    <dd>
+        Copy the JAR file for the library you want to use into your Android project. To do this:
+        <ul>
+            <li>
+                Create the directory {@code libs/} at the root of your project
+                (next to {@code src/}, {@code res/}, and so forth).
+            </li>
+            <li>
+                Locate the JAR file for the library you want to use and copy it into the
+                {@code libs/} directory.
+                <p>
+                    For example, the library that supports API level 4 and up is located at
+                    {@code &lt;sdk&gt;/extras/android/support/v4/android-support-v4.jar}.
+                </p>
+            </li>
+        </ul>
+        <p>
+            Your build system may expect to find the JAR file in a directory other than
+            {@code libs}. Read the documentation for your build system to learn where to put the
+            JAR file.
+        </p>
+    </dd>
+    <dt>
+        If necessary, add the {@code libs/} directory to your build path.
+    </dt>
+    <dd>
+        Read the documentation for your build system to learn how to add the JAR file to the
+        build path.
+    </dd>
+</dl>
+<p>
+    To confirm that you've added the JAR file to the correct directory and added it to the build
+    path:
+</p>
 <ol>
-  <li>In your Android project, create a directory named {@code libs} at the root of your
-project (next to {@code src/}, {@code res/}, etc.)</li>
-  <li>Locate the JAR file for the library you want to use and copy it into the {@code
-libs/} directory.
-    <p>For example, the library that supports API level 4 and up is located at {@code
-&lt;sdk&gt;/extras/android/support/v4/android-support-v4.jar}.</p>
-  </li>
-  <li>Add the JAR to your project build path.
-    <p>In Eclipse, right-click the JAR file in the Package Explorer, select <strong>Build
-Path</strong> &gt; <strong>Add to Build Path</strong>.</p>
-  </li>
+    <li>
+        Edit one of your source files to add an {@code import} statement that imports a
+        class from the {@code android.support.*} package.
+    </li>
+    <li>
+        Build your app. The code should compile cleanly.
+    </li>
+    <li>
+        As a double-check, run your app. It should run correctly, without any runtime exceptions
+        indicating that the class in {@code android.support.*} can't be found.
+    </li>
 </ol>
-
 <p>Your application is now ready to use the library APIs. All the
 provided APIs are available in the {@code android.support} package (for
 example, {@code android.support.v4}).</p>
@@ -607,8 +707,8 @@ each activity when running on Android 3.0 and higher.</p>
 </div>
 
 <p>For more information about how you can optimize your application for the latest
-Android-powered devices, read <a href="{@docRoot}guide/practices/optimizing-for-3.0.html">Optimizing
-Apps for Android 3.0</a>.</p>
+Android-powered devices, read <a href="{@docRoot}guide/practices/tablets-and-handsets.html"
+>Supporting Tablets and Handsets</a>.</p>
 
 
 <h2 id="Docs">Reference Docs</h2>

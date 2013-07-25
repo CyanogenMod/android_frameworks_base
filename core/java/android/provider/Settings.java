@@ -52,7 +52,6 @@ import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.util.AndroidException;
 import android.util.Log;
-import android.view.WindowOrientationListener;
 
 import com.android.internal.widget.ILockSettings;
 
@@ -458,6 +457,18 @@ public final class Settings {
             "android.settings.APPLICATION_DETAILS_SETTINGS";
 
     /**
+     * @hide
+     * Activity Action: Show the "app ops" settings screen.
+     * <p>
+     * Input: Nothing.
+     * <p>
+     * Output: Nothing.
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_APP_OPS_SETTINGS =
+            "android.settings.APP_OPS_SETTINGS";
+
+    /**
      * Activity Action: Show settings for system update functionality.
      * <p>
      * In some cases, a matching Activity may not exist, so ensure you
@@ -501,6 +512,9 @@ public final class Settings {
      * The account types available to add may be restricted by adding an {@link #EXTRA_AUTHORITIES}
      * extra to the Intent with one or more syncable content provider's authorities.  Only account
      * types which can sync with that content provider will be offered to the user.
+     * <p>
+     * Account types can also be filtered by adding an {@link #EXTRA_ACCOUNT_TYPES} extra to the
+     * Intent with one or more account types.
      * <p>
      * Input: Nothing.
      * <p>
@@ -638,10 +652,25 @@ public final class Settings {
      * <p>
      * Output: Nothing.
      * @see android.service.dreams.DreamService
-     * @hide
      */
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_DREAM_SETTINGS = "android.settings.DREAM_SETTINGS";
+
+    /**
+     * Activity Action: Show Notification listener settings.
+     * <p>
+     * In some cases, a matching Activity may not exist, so ensure you
+     * safeguard against this.
+     * <p>
+     * Input: Nothing.
+     * <p>
+     * Output: Nothing.
+     * @see android.service.notification.NotificationListenerService
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_NOTIFICATION_LISTENER_SETTINGS
+            = "android.settings.NOTIFICATION_LISTENER_SETTINGS";
 
     // End of Intent actions for Settings
 
@@ -684,8 +713,20 @@ public final class Settings {
      * Example: The {@link #ACTION_ADD_ACCOUNT} intent restricts the account types available based
      * on the authority given.
      */
-    public static final String EXTRA_AUTHORITIES =
-            "authorities";
+    public static final String EXTRA_AUTHORITIES = "authorities";
+
+    /**
+     * Activity Extra: Limit available options in launched activity based on the given account
+     * types.
+     * <p>
+     * This can be passed as an extra field in an Activity Intent with one or more account types
+     * as a String[]. This field is used by some intents to alter the behavior of the called
+     * activity.
+     * <p>
+     * Example: The {@link #ACTION_ADD_ACCOUNT} intent restricts the account types to the specified
+     * list.
+     */
+    public static final String EXTRA_ACCOUNT_TYPES = "account_types";
 
     public static final String EXTRA_INPUT_METHOD_ID = "input_method_id";
 
@@ -776,7 +817,7 @@ public final class Settings {
                 arg.putString(Settings.NameValueTable.VALUE, value);
                 arg.putInt(CALL_METHOD_USER_KEY, userHandle);
                 IContentProvider cp = lazyGetProvider(cr);
-                cp.call(mCallSetCommand, name, arg);
+                cp.call(cr.getPackageName(), mCallSetCommand, name, arg);
             } catch (RemoteException e) {
                 Log.w(TAG, "Can't set key " + name + " in " + mUri, e);
                 return false;
@@ -823,7 +864,7 @@ public final class Settings {
                         args = new Bundle();
                         args.putInt(CALL_METHOD_USER_KEY, userHandle);
                     }
-                    Bundle b = cp.call(mCallGetCommand, name, args);
+                    Bundle b = cp.call(cr.getPackageName(), mCallGetCommand, name, args);
                     if (b != null) {
                         String value = b.getPairValue();
                         // Don't update our cache for reads of other users' data
@@ -848,7 +889,7 @@ public final class Settings {
 
             Cursor c = null;
             try {
-                c = cp.query(mUri, SELECT_VALUE, NAME_EQ_PLACEHOLDER,
+                c = cp.query(cr.getPackageName(), mUri, SELECT_VALUE, NAME_EQ_PLACEHOLDER,
                              new String[]{name}, null, null);
                 if (c == null) {
                     Log.w(TAG, "Can't get key " + name + " from " + mUri);
@@ -2427,13 +2468,6 @@ public final class Settings {
         public static final String LOCKSCREEN_TARGETS = "lockscreen_targets";
 
         /**
-         * Whether music controls should be shown on the lockscreen if a supporting
-         * music player is active.
-         * @hide
-         */
-        public static final String LOCKSCREEN_MUSIC_CONTROLS = "lockscreen_music_controls";
-
-        /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
          * instead
          * @hide
@@ -3537,6 +3571,7 @@ public final class Settings {
             MOVED_TO_GLOBAL.add(Settings.Global.ADB_ENABLED);
             MOVED_TO_GLOBAL.add(Settings.Global.ASSISTED_GPS_ENABLED);
             MOVED_TO_GLOBAL.add(Settings.Global.BLUETOOTH_ON);
+            MOVED_TO_GLOBAL.add(Settings.Global.BUGREPORT_IN_POWER_MENU);
             MOVED_TO_GLOBAL.add(Settings.Global.CDMA_CELL_BROADCAST_SMS);
             MOVED_TO_GLOBAL.add(Settings.Global.CDMA_ROAMING_MODE);
             MOVED_TO_GLOBAL.add(Settings.Global.CDMA_SUBSCRIPTION_MODE);
@@ -3586,13 +3621,6 @@ public final class Settings {
             MOVED_TO_GLOBAL.add(Settings.Global.TETHER_DUN_APN);
             MOVED_TO_GLOBAL.add(Settings.Global.TETHER_DUN_REQUIRED);
             MOVED_TO_GLOBAL.add(Settings.Global.TETHER_SUPPORTED);
-            MOVED_TO_GLOBAL.add(Settings.Global.THROTTLE_HELP_URI);
-            MOVED_TO_GLOBAL.add(Settings.Global.THROTTLE_MAX_NTP_CACHE_AGE_SEC);
-            MOVED_TO_GLOBAL.add(Settings.Global.THROTTLE_NOTIFICATION_TYPE);
-            MOVED_TO_GLOBAL.add(Settings.Global.THROTTLE_POLLING_SEC);
-            MOVED_TO_GLOBAL.add(Settings.Global.THROTTLE_RESET_DAY);
-            MOVED_TO_GLOBAL.add(Settings.Global.THROTTLE_THRESHOLD_BYTES);
-            MOVED_TO_GLOBAL.add(Settings.Global.THROTTLE_VALUE_KBITSPS);
             MOVED_TO_GLOBAL.add(Settings.Global.USB_MASS_STORAGE_ENABLED);
             MOVED_TO_GLOBAL.add(Settings.Global.USE_GOOGLE_MAIL);
             MOVED_TO_GLOBAL.add(Settings.Global.WEB_AUTOFILL_QUERY_URL);
@@ -4008,8 +4036,10 @@ public final class Settings {
         /**
          * When the user has enable the option to have a "bug report" command
          * in the power menu.
+         * @deprecated Use {@link android.provider.Settings.Global#BUGREPORT_IN_POWER_MENU} instead
          * @hide
          */
+        @Deprecated
         public static final String BUGREPORT_IN_POWER_MENU = "bugreport_in_power_menu";
 
         /**
@@ -4190,6 +4220,7 @@ public final class Settings {
         /**
          * This preference contains the string that shows for owner info on LockScreen.
          * @hide
+         * @deprecated
          */
         public static final String LOCK_SCREEN_OWNER_INFO = "lock_screen_owner_info";
 
@@ -4217,6 +4248,7 @@ public final class Settings {
         /**
          * This preference enables showing the owner info on LockScreen.
          * @hide
+         * @deprecated
          */
         public static final String LOCK_SCREEN_OWNER_INFO_ENABLED =
             "lock_screen_owner_info_enabled";
@@ -5055,6 +5087,20 @@ public final class Settings {
         public static final String SCREENSAVER_DEFAULT_COMPONENT = "screensaver_default_component";
 
         /**
+         * Name of a package that the current user has explicitly allowed to see all of that
+         * user's notifications.
+         *
+         * @hide
+         */
+        public static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
+
+        /**
+         * Whether or not to enable the dial pad autocomplete functionality.
+         *
+         * @hide
+         */
+        public static final String DIALPAD_AUTOCOMPLETE = "dialpad_autocomplete";
+        /**
          * Whether to allow killing of the foreground app by long-pressing the Back button
          * @hide
          */
@@ -5082,7 +5128,7 @@ public final class Settings {
          * @hide
          */
         public static final String[] SETTINGS_TO_BACKUP = {
-            BUGREPORT_IN_POWER_MENU,
+            BUGREPORT_IN_POWER_MENU,                            // moved to global
             ALLOW_MOCK_LOCATION,
             PARENTAL_CONTROL_ENABLED,
             PARENTAL_CONTROL_REDIRECT_URL,
@@ -5115,6 +5161,7 @@ public final class Settings {
             MOUNT_UMS_PROMPT,
             MOUNT_UMS_NOTIFY_ENABLED,
             UI_NIGHT_MODE,
+            DIALPAD_AUTOCOMPLETE,
             LOCK_SCREEN_OWNER_INFO,
             LOCK_SCREEN_OWNER_INFO_ENABLED,
             ADVANCED_REBOOT,
@@ -5390,6 +5437,13 @@ public final class Settings {
         public static final String STAY_ON_WHILE_PLUGGED_IN = "stay_on_while_plugged_in";
 
         /**
+         * When the user has enable the option to have a "bug report" command
+         * in the power menu.
+         * @hide
+         */
+        public static final String BUGREPORT_IN_POWER_MENU = "bugreport_in_power_menu";
+
+        /**
          * Whether ADB is enabled.
          */
         public static final String ADB_ENABLED = "adb_enabled";
@@ -5457,6 +5511,14 @@ public final class Settings {
         * Whether or not data roaming is enabled. (0 = false, 1 = true)
         */
        public static final String DATA_ROAMING = "data_roaming";
+
+       /**
+        * The value passed to a Mobile DataConnection via bringUp which defines the
+        * number of retries to preform when setting up the initial connection. The default
+        * value defined in DataConnectionTrackerBase#DEFAULT_MDC_INITIAL_RETRY is currently 1.
+        * @hide
+        */
+       public static final String MDC_INITIAL_MAX_RETRY = "mdc_initial_max_retry";
 
        /**
         * Whether user has enabled development settings.
@@ -5759,50 +5821,6 @@ public final class Settings {
        public static final String TETHER_DUN_APN = "tether_dun_apn";
 
        /**
-        * The bandwidth throttle polling freqency in seconds
-        * @hide
-        */
-       public static final String THROTTLE_POLLING_SEC = "throttle_polling_sec";
-
-       /**
-        * The bandwidth throttle threshold (long)
-        * @hide
-        */
-       public static final String THROTTLE_THRESHOLD_BYTES = "throttle_threshold_bytes";
-
-       /**
-        * The bandwidth throttle value (kbps)
-        * @hide
-        */
-       public static final String THROTTLE_VALUE_KBITSPS = "throttle_value_kbitsps";
-
-       /**
-        * The bandwidth throttle reset calendar day (1-28)
-        * @hide
-        */
-       public static final String THROTTLE_RESET_DAY = "throttle_reset_day";
-
-       /**
-        * The throttling notifications we should send
-        * @hide
-        */
-       public static final String THROTTLE_NOTIFICATION_TYPE = "throttle_notification_type";
-
-       /**
-        * Help URI for data throttling policy
-        * @hide
-        */
-       public static final String THROTTLE_HELP_URI = "throttle_help_uri";
-
-       /**
-        * The length of time in Sec that we allow our notion of NTP time
-        * to be cached before we refresh it
-        * @hide
-        */
-       public static final String THROTTLE_MAX_NTP_CACHE_AGE_SEC =
-               "throttle_max_ntp_cache_age_sec";
-
-       /**
         * USB Mass Storage Enabled
         */
        public static final String USB_MASS_STORAGE_ENABLED = "usb_mass_storage_enabled";
@@ -5884,6 +5902,13 @@ public final class Settings {
        public static final String WIFI_ON = "wifi_on";
 
        /**
+        * Setting to allow scans to be enabled even wifi is turned off for connectivity.
+        * @hide
+        */
+       public static final String WIFI_SCAN_ALWAYS_AVAILABLE =
+                "wifi_scan_always_enabled";
+
+       /**
         * Used to save the Wifi_ON state prior to tethering.
         * This state will be checked to restore Wifi after
         * the user turns off tethering.
@@ -5956,6 +5981,12 @@ public final class Settings {
         * @hide
         */
        public static final String WIFI_P2P_DEVICE_NAME = "wifi_p2p_device_name";
+
+       /**
+        * The min time between wifi disable and wifi enable
+        * @hide
+        */
+       public static final String WIFI_REENABLE_DELAY_MS = "wifi_reenable_delay";
 
        /**
         * The number of milliseconds to delay when checking for data stalls during
@@ -6417,6 +6448,76 @@ public final class Settings {
         public static final String AUDIO_SAFE_VOLUME_STATE = "audio_safe_volume_state";
 
         /**
+         * URL for tzinfo (time zone) updates
+         * @hide
+         */
+        public static final String TZINFO_UPDATE_CONTENT_URL = "tzinfo_content_url";
+
+        /**
+         * URL for tzinfo (time zone) update metadata
+         * @hide
+         */
+        public static final String TZINFO_UPDATE_METADATA_URL = "tzinfo_metadata_url";
+
+        /**
+         * URL for selinux (mandatory access control) updates
+         * @hide
+         */
+        public static final String SELINUX_UPDATE_CONTENT_URL = "selinux_content_url";
+
+        /**
+         * URL for selinux (mandatory access control) update metadata
+         * @hide
+         */
+        public static final String SELINUX_UPDATE_METADATA_URL = "selinux_metadata_url";
+
+        /**
+         * URL for sms short code updates
+         * @hide
+         */
+        public static final String SMS_SHORT_CODES_UPDATE_CONTENT_URL =
+                "sms_short_codes_content_url";
+
+        /**
+         * URL for sms short code update metadata
+         * @hide
+         */
+        public static final String SMS_SHORT_CODES_UPDATE_METADATA_URL =
+                "sms_short_codes_metadata_url";
+
+        /**
+         * URL for cert pinlist updates
+         * @hide
+         */
+        public static final String CERT_PIN_UPDATE_CONTENT_URL = "cert_pin_content_url";
+
+        /**
+         * URL for cert pinlist updates
+         * @hide
+         */
+        public static final String CERT_PIN_UPDATE_METADATA_URL = "cert_pin_metadata_url";
+
+        /**
+         * URL for intent firewall updates
+         * @hide
+         */
+        public static final String INTENT_FIREWALL_UPDATE_CONTENT_URL =
+                "intent_firewall_content_url";
+
+        /**
+         * URL for intent firewall update metadata
+         * @hide
+         */
+        public static final String INTENT_FIREWALL_UPDATE_METADATA_URL =
+                "intent_firewall_metadata_url";
+
+        /**
+         * SELinux enforcement status. If 0, permissive; if 1, enforcing.
+         * @hide
+         */
+        public static final String SELINUX_STATUS = "selinux_status";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -6433,6 +6534,7 @@ public final class Settings {
          * @hide
          */
         public static final String[] SETTINGS_TO_BACKUP = {
+            BUGREPORT_IN_POWER_MENU,
             STAY_ON_WHILE_PLUGGED_IN,
             MODE_RINGER,
             AUTO_TIME,

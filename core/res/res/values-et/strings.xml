@@ -200,6 +200,8 @@
     <string name="permgroupdesc_microphone" msgid="7106618286905738408">"Otsene juurdepääs mikrofonile heli salvestamiseks."</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Kaamera"</string>
     <string name="permgroupdesc_camera" msgid="2933667372289567714">"Otsene juurdepääs kaamerale fotode või videote jäädvustamiseks."</string>
+    <string name="permgrouplab_screenlock" msgid="8275500173330718168">"Lukustuskuva"</string>
+    <string name="permgroupdesc_screenlock" msgid="7067497128925499401">"Võime mõjutada lukustuskuva käitumist seadmes."</string>
     <string name="permgrouplab_appInfo" msgid="8028789762634147725">"Teie rakenduste teave"</string>
     <string name="permgroupdesc_appInfo" msgid="3950378538049625907">"Võime mõjutada teiste seadmes olevate rakenduste käitumist."</string>
     <string name="permgrouplab_wallpaper" msgid="3850280158041175998">"Taustapilt"</string>
@@ -225,6 +227,16 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Mäluruum"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"Juurdepääs USB-mäluseadmele."</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Juurdepääs SD-kaardile."</string>
+    <string name="permgrouplab_accessibilityFeatures" msgid="7919025602283593907">"Pääsufunktsioonid"</string>
+    <string name="permgroupdesc_accessibilityFeatures" msgid="4205196881678144335">"Funktsioonid, mida saab taotleda abistav tehnoloogia."</string>
+    <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"Akna sisu toomine"</string>
+    <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"Tutvuge kasutatava akna sisuga."</string>
+    <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"Puudutusega sirvimise sisselülitamine"</string>
+    <string name="capability_desc_canRequestTouchExploration" msgid="5800552516779249356">"Puudutatud üksuste nimesid esitatakse häälega ning ekraani saab sirvida puudutustega."</string>
+    <string name="capability_title_canRequestEnhancedWebAccessibility" msgid="1739881766522594073">"Veebi täiustatud juurdepääsu sisselülitamine"</string>
+    <string name="capability_desc_canRequestEnhancedWebAccessibility" msgid="7881063961507511765">"Rakenduse sisu kättesaadavamaks muutmiseks võidakse installida skripte."</string>
+    <string name="capability_title_canRequestFilterKeyEvents" msgid="2103440391902412174">"Sisestatud teksti jälgimine"</string>
+    <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"Sisaldab isiklikke andmeid, nt krediitkaardi numbreid ja paroole."</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"keela või muuda olekuriba"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"Võimaldab rakendusel keelata olekuriba või lisada ja eemaldada süsteemiikoone."</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"olekuriba"</string>
@@ -243,8 +255,8 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Võimaldab rakendusel lugeda seadme vastu võetud mobiilsidesõnumeid. Mobiilsidemärguandeid edastatakse mõnes asukohas eriolukorrast teavitamiseks. Pahatahtlikud rakendused võivad segada seadme toimivust või tööd eriolukorra sõnumi vastuvõtmisel."</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"saada SMS-sõnumeid"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"Võimaldab rakendusel saata SMS-sõnumeid. See võib kaasa tuua ootamatuid tasusid. Pahatahtlikud rakendused võivad teile tekitada kulusid, saates sõnumeid teie kinnituseta."</string>
-    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"lühisõnumite saatmine ilma kinnituseta"</string>
-    <string name="permdesc_sendSmsNoConfirmation" msgid="402569800862935907">"Võimaldab rakendusel saata SMS-sõnumeid. See võib kaasa tuua ootamatuid tasusid. Pahatahtlikud rakendused võivad teile tekitada kulusid, saates sõnumeid teie kinnituseta."</string>
+    <string name="permlab_sendRespondViaMessageRequest" msgid="8713889105305943200">"sõnumiga vastamise sündmuste saatmine"</string>
+    <string name="permdesc_sendRespondViaMessageRequest" msgid="7107648548468778734">"Lubab rakendusel saata taotlusi teistele sõnumiside rakendustele, et käsitleda sissetulevate kõnedele sõnumiga vastamise sündmusi."</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"lugege oma tekstisõnumeid (SMS või MMS)"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"Võimaldab rakendusel lugeda tahvelarvutisse või SIM-kaardile salvestatud SMS-sõnumeid. See võimaldab rakendusel lugeda kõiki SMS-sõnumeid sisust või konfidentsiaalsusest hoolimata."</string>
     <string name="permdesc_readSms" product="default" msgid="3695967533457240550">"Võimaldab rakendusel lugeda telefoni või SIM-kaardile salvestatud SMS-sõnumeid. See võimaldab rakendusel lugeda kõiki SMS-sõnumeid sisust või konfidentsiaalsusest hoolimata."</string>
@@ -299,6 +311,8 @@
     <string name="permdesc_shutdown" msgid="7046500838746291775">"Lülitab tegevushalduri väljalülitusolekusse. Ei lülita lõplikult välja."</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"väldi rakenduste ümberlülitamist"</string>
     <string name="permdesc_stopAppSwitches" msgid="8262195802582255021">"Takistab kasutaja lülitumist teisele rakendusele."</string>
+    <string name="permlab_getTopActivityInfo" msgid="2537922311411546016">"aktiivse rakenduse teabe hankimine"</string>
+    <string name="permdesc_getTopActivityInfo" msgid="2512448855496067131">"Lubab õiguste saajal hankida privaatset teavet ekraanil esiplaanil oleva aktiivse rakenduse kohta."</string>
     <string name="permlab_runSetActivityWatcher" msgid="892239094867182656">"Kõigi rakenduste käivitumise jälgimine ja juhtimine"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="6003603162578577406">"Võimaldab rakendusel jälgida ja juhtida, kuidas süsteem tegevusi käivitab. Pahatahtlikud rakendused võivad süsteemi täielikult rikkuda. Seda õigust on vaja ainult arenduseks, mitte tavakasutuse korral."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"saada paketist eemaldatud saade"</string>
@@ -315,6 +329,10 @@
     <string name="permdesc_batteryStats" msgid="5897346582882915114">"Lubab rakendusel lugeda madala akutaseme kasutusandmeid. Võib lubada rakendusel hankida üksikasjalikku teavet selle kohta, mis rakendusi te kasutate."</string>
     <string name="permlab_updateBatteryStats" msgid="3719689764536379557">"aku statistika muutmine"</string>
     <string name="permdesc_updateBatteryStats" msgid="6862817857178025002">"Võimaldab rakendusel muuta aku kohta kogutud statistikat. Mitte kasutada tavarakenduste puhul."</string>
+    <string name="permlab_getAppOpsStats" msgid="1508779687436585744">"rakenduse tööstatistika hankimine"</string>
+    <string name="permdesc_getAppOpsStats" msgid="6243887041577912877">"Võimaldab rakendusel hankida kogutud rakenduse tööstatistikat. Mitte kasutada tavarakenduste puhul."</string>
+    <string name="permlab_updateAppOpsStats" msgid="8829097373851521505">"rakenduse tööstatistika muutmine"</string>
+    <string name="permdesc_updateAppOpsStats" msgid="50784596594403483">"Võimaldab rakendusel muuta kogutud rakenduse tööstatistikat. Mitte kasutada tavarakenduste puhul."</string>
     <string name="permlab_backup" msgid="470013022865453920">"juhi süsteemi varundust ja taastet"</string>
     <string name="permdesc_backup" msgid="6912230525140589891">"Võimaldab rakendusel juhtida süsteemi varundus- ja taastemehhanismi. Mitte kasutada tavarakenduste puhul."</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"täieliku varukoopia kinnitamine või toimingu taastamine"</string>
@@ -450,6 +468,8 @@
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"Võimaldab rakendusel salvestada mikrofoniga heli. See luba võimaldab rakendusel salvestada heli igal ajal ilma teie kinnituseta."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"piltide ja videote tegemine"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"Võimaldab rakendusel teha kaameraga pilte ja videoid. See luba võimaldab rakendusel kasutada kaamerat mis tahes ajal teie kinnituseta."</string>
+    <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">"keela kaamera kasutamisel näidikutule kasutamine"</string>
+    <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">"Lubab eelinstallitud süsteemirakendusel keelata kaamera näidikutule kasutamise."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"blokeeri tahvelarvuti jäädavalt"</string>
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"blokeeri telefon jäädavalt"</string>
     <string name="permdesc_brick" product="tablet" msgid="4334818808001699530">"Võimaldab rakendusel kogu tahvelarvuti jäädavalt keelata. See on väga ohtlik."</string>
@@ -605,6 +625,10 @@
     <string name="permdesc_manageNetworkPolicy" msgid="7537586771559370668">"Võimaldab rakendusel hallata võrgueeskirju ja määratleda rakendusespetsiifilisi reegleid."</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"võrgukasutuse arvestamise muutmine"</string>
     <string name="permdesc_modifyNetworkAccounting" msgid="5443412866746198123">"Võimaldab rakendusel muuta võrgukasutuse loendamist rakenduste suhtes. Mitte kasutada tavarakenduste puhul."</string>
+    <string name="permlab_accessNotifications" msgid="7673416487873432268">"juurdepääsu märguanded"</string>
+    <string name="permdesc_accessNotifications" msgid="458457742683431387">"Võimaldab rakendusel tuua, kontrollida ja kustutada märguandeid, sh neid, mille on postitanud teised rakendused."</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"seo märguannete kuulamisteenusega"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Võimaldab omanikul siduda märguannete kuulamisteenuse ülemise taseme kasutajaliidese. Seda ei tohiks tavarakenduste puhul kunagi vaja olla."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Parooli reeglite määramine"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"Kontrollige ekraaniluku avamise paroolide pikkust ja tähemärke."</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"Ekraani avamiskatsed"</string>
@@ -714,7 +738,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
@@ -810,6 +835,7 @@
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"Muster on kustutatud"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"Lahter on lisatud"</string>
     <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"Muster on valmis"</string>
+    <string name="keyguard_accessibility_widget_changed" msgid="5678624624681400191">"%1$s. Vidin %2$d/%3$d."</string>
     <string name="keyguard_accessibility_add_widget" msgid="8273277058724924654">"Vidina lisamine."</string>
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"Tühi"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"Avamisala on laiendatud."</string>
@@ -845,7 +871,10 @@
     <string name="factorytest_reboot" msgid="6320168203050791643">"Taaskäivita"</string>
     <string name="js_dialog_title" msgid="1987483977834603872">"Leht  „<xliff:g id="TITLE">%s</xliff:g>” ütleb järgmist."</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="730366588032430474">"Kas soovite sellelt lehelt lahkuda?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Jätkamiseks puudutage valikut OK, praegusele lehele jäämiseks valikut Tühista."</string>
+    <string name="js_dialog_before_unload_title" msgid="2619376555525116593">"Navigeerimise kinnitamine"</string>
+    <string name="js_dialog_before_unload_positive_button" msgid="3112752010600484130">"Lahku sellelt lehelt"</string>
+    <string name="js_dialog_before_unload_negative_button" msgid="5614861293026099715">"Jää sellele lehele"</string>
+    <string name="js_dialog_before_unload" msgid="3468816357095378590">"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Kas soovite kindlasti sellelt lehelt lahkuda?"</string>
     <string name="save_password_label" msgid="6860261758665825069">"Kinnita"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"Vihje: suurendamiseks ja vähendamiseks puudutage kaks korda."</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"Automaatne täitmine"</string>
@@ -1031,6 +1060,8 @@
     <string name="editTextMenuTitle" msgid="4909135564941815494">"Tekstitoimingud"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Talletusruum saab täis"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Mõned süsteemifunktsioonid ei pruugi töötada"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"<xliff:g id="APP_NAME">%1$s</xliff:g> töötab"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"Puudutage lisateabe saamiseks või rakenduse peatamiseks."</string>
     <string name="ok" msgid="5970060430562524910">"OK"</string>
     <string name="cancel" msgid="6442560571259935130">"Tühista"</string>
     <string name="yes" msgid="5362982303337969312">"OK"</string>
@@ -1124,7 +1155,8 @@
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"Saaja:"</string>
     <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Sisestage nõutav PIN-kood:"</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN-kood:"</string>
-    <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"Telefoni ühendus WiFi-ga katkestatakse ajutiselt, kui see on ühendatud seadmega <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"Tahvelarvuti ühendus WiFi-ga katkestatakse ajutiselt, kui see on ühendatud seadmega <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"Telefoni ühendus WiFi-ga katkestatakse ajutiselt, kui see on ühendatud seadmega <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
     <string name="select_character" msgid="3365550120617701745">"Sisesta tähemärk"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"SMS-sõnumite saatmine"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; saadab suurel hulgal SMS-sõnumeid. Kas tahate lubada sellel rakendusel ka edaspidi sõnumeid saata?"</string>
@@ -1247,6 +1279,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Juurdepääsetavus"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Taustapilt"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Muutke taustapilti"</string>
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Märguannete kuulamisteenus"</string>
     <string name="vpn_title" msgid="19615213552042827">"VPN on aktiveeritud"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"VPN-i aktiveeris <xliff:g id="APP">%s</xliff:g>"</string>
     <string name="vpn_text" msgid="3011306607126450322">"Võrgu haldamiseks puudutage."</string>
@@ -1254,7 +1287,7 @@
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Ühendamine alati sees VPN-iga …"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Ühendatud alati sees VPN-iga"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Alati sees VPN-i viga"</string>
-    <string name="vpn_lockdown_reset" msgid="5365010427963548932">"Ühenduse lähtestamiseks puudutage"</string>
+    <string name="vpn_lockdown_config" msgid="6415899150671537970">"Puudutage seadistamiseks"</string>
     <string name="upload_file" msgid="2897957172366730416">"Valige fail"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Ühtegi faili pole valitud"</string>
     <string name="reset" msgid="2448168080964209908">"Lähtesta"</string>
@@ -1350,6 +1383,8 @@
     <string name="action_bar_home_description" msgid="5293600496601490216">"Liigu avalehele"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"Liigu üles"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Rohkem valikuid"</string>
+    <string name="action_bar_home_description_format" msgid="7965984360903693903">"%1$s, %2$s"</string>
+    <string name="action_bar_home_subtitle_description_format" msgid="6985546530471780727">"%1$s, %2$s, %3$s"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Sisemine salvestusruum"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD-kaart"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB-mäluseade"</string>
@@ -1399,6 +1434,7 @@
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Süsteem"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Bluetooth-heli"</string>
+    <string name="wireless_display_route_description" msgid="9070346425023979651">"Juhtmeta ekraan"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Valmis"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Meediaväljund"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"Skaneering ..."</string>
@@ -1450,10 +1486,14 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Joonistasite oma avamismustri <xliff:g id="NUMBER_0">%d</xliff:g> korda valesti. Pärast veel <xliff:g id="NUMBER_1">%d</xliff:g> ebaõnnestunud katset palutakse teil telefon avada meilikontoga."\n\n" Proovige uuesti <xliff:g id="NUMBER_2">%d</xliff:g> sekundi pärast."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" — "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Eemalda"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Kas suurendada helitugevust üle ohutu piiri?"\n"Pikaajaline suure helitugevusega muusika kuulamine võib kahjustada kuulmist."</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"Kas suurendada helitugevust üle soovitatud taseme?"\n"Pikaajaline suure helitugevusega muusika kuulamine võib kahjustada kuulmist."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Hõlbustuse lubamiseks hoidke kaht sõrme all."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Hõlbustus on lubatud."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Hõlbustus on tühistatud."</string>
     <string name="user_switched" msgid="3768006783166984410">"Praegune kasutaja <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Omanik"</string>
+    <string name="error_message_title" msgid="4510373083082500195">"Viga"</string>
+    <string name="app_no_restricted_accounts" msgid="4011285085817350390">"See rakendus ei toeta piiratud profiilide kontosid"</string>
+    <string name="app_not_found" msgid="3429141853498927379">"Selle toimingu käsitlemiseks ei leitud ühtegi rakendust"</string>
+    <string name="revoke" msgid="5404479185228271586">"Tühista"</string>
 </resources>

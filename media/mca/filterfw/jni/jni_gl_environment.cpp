@@ -23,8 +23,8 @@
 #include <media/mediarecorder.h>
 #include "native/core/gl_env.h"
 
-#include <gui/ISurfaceTexture.h>
-#include <gui/SurfaceTextureClient.h>
+#include <gui/IGraphicBufferProducer.h>
+#include <gui/Surface.h>
 #include <utils/Errors.h>
 #include <system/window.h>
 
@@ -33,8 +33,8 @@ using android::filterfw::GLEnv;
 using android::filterfw::WindowHandle;
 using android::MediaRecorder;
 using android::sp;
-using android::ISurfaceTexture;
-using android::SurfaceTextureClient;
+using android::IGraphicBufferProducer;
+using android::Surface;
 
 
 class NativeWindowHandle : public WindowHandle {
@@ -284,13 +284,13 @@ jint Java_android_filterfw_core_GLEnvironment_nativeAddSurfaceFromMediaRecorder(
     // Ask the mediarecorder to return a handle to a surfacemediasource
     // This will talk to the StageFrightRecorder via MediaRecorderClient
     // over binder calls
-    sp<ISurfaceTexture> surfaceMS = mr->querySurfaceMediaSourceFromMediaServer();
+    sp<IGraphicBufferProducer> surfaceMS = mr->querySurfaceMediaSourceFromMediaServer();
     if (surfaceMS == NULL) {
       ALOGE("GLEnvironment: Error- MediaRecorder returned a null \
-              <ISurfaceTexture> handle.");
+              <IGraphicBufferProducer> handle.");
       return -1;
     }
-    sp<SurfaceTextureClient> surfaceTC = new SurfaceTextureClient(surfaceMS);
+    sp<Surface> surfaceTC = new Surface(surfaceMS);
     // Get the ANativeWindow
     sp<ANativeWindow> window = surfaceTC;
 

@@ -272,7 +272,7 @@ public interface WindowManager extends ViewManager {
         public static final int TYPE_APPLICATION_PANEL  = FIRST_SUB_WINDOW;
     
         /**
-         * Window type: window for showing media (e.g. video).  These windows
+         * Window type: window for showing media (such as video).  These windows
          * are displayed behind their attached window.
          */
         public static final int TYPE_APPLICATION_MEDIA  = FIRST_SUB_WINDOW+1;
@@ -584,14 +584,14 @@ public interface WindowManager extends ViewManager {
         /** Window flag: this window can never receive touch events. */
         public static final int FLAG_NOT_TOUCHABLE      = 0x00000010;
         
-        /** Window flag: Even when this window is focusable (its
-         * {@link #FLAG_NOT_FOCUSABLE is not set), allow any pointer events
+        /** Window flag: even when this window is focusable (its
+         * {@link #FLAG_NOT_FOCUSABLE} is not set), allow any pointer events
          * outside of the window to be sent to the windows behind it.  Otherwise
          * it will consume all pointer events itself, regardless of whether they
          * are inside of the window. */
         public static final int FLAG_NOT_TOUCH_MODAL    = 0x00000020;
         
-        /** Window flag: When set, if the device is asleep when the touch
+        /** Window flag: when set, if the device is asleep when the touch
          * screen is pressed, you will receive this first touch event.  Usually
          * the first touch event is consumed by the system since the user can
          * not see what they are pressing on.
@@ -603,7 +603,7 @@ public interface WindowManager extends ViewManager {
         public static final int FLAG_KEEP_SCREEN_ON     = 0x00000080;
         
         /** Window flag: place the window within the entire screen, ignoring
-         *  decorations around the border (a.k.a. the status bar).  The
+         *  decorations around the border (such as the status bar).  The
          *  window must correctly position its contents to take the screen
          *  decoration into account.  This flag is normally set for you
          *  by Window as described in {@link Window#setFlags}. */
@@ -612,14 +612,30 @@ public interface WindowManager extends ViewManager {
         /** Window flag: allow window to extend outside of the screen. */
         public static final int FLAG_LAYOUT_NO_LIMITS   = 0x00000200;
         
-        /** Window flag: Hide all screen decorations (e.g. status bar) while
+        /**
+         * Window flag: hide all screen decorations (such as the status bar) while
          * this window is displayed.  This allows the window to use the entire
          * display space for itself -- the status bar will be hidden when
-         * an app window with this flag set is on the top layer. */
+         * an app window with this flag set is on the top layer. A fullscreen window
+         * will ignore a value of {@link #SOFT_INPUT_ADJUST_RESIZE} for the window's
+         * {@link #softInputMode} field; the window will stay fullscreen
+         * and will not resize.
+         *
+         * <p>This flag can be controlled in your theme through the
+         * {@link android.R.attr#windowFullscreen} attribute; this attribute
+         * is automatically set for you in the standard fullscreen themes
+         * such as {@link android.R.style#Theme_NoTitleBar_Fullscreen},
+         * {@link android.R.style#Theme_Black_NoTitleBar_Fullscreen},
+         * {@link android.R.style#Theme_Light_NoTitleBar_Fullscreen},
+         * {@link android.R.style#Theme_Holo_NoActionBar_Fullscreen},
+         * {@link android.R.style#Theme_Holo_Light_NoActionBar_Fullscreen},
+         * {@link android.R.style#Theme_DeviceDefault_NoActionBar_Fullscreen}, and
+         * {@link android.R.style#Theme_DeviceDefault_Light_NoActionBar_Fullscreen}.</p>
+         */
         public static final int FLAG_FULLSCREEN      = 0x00000400;
         
-        /** Window flag: Override {@link #FLAG_FULLSCREEN and force the
-         *  screen decorations (such as status bar) to be shown. */
+        /** Window flag: override {@link #FLAG_FULLSCREEN} and force the
+         *  screen decorations (such as the status bar) to be shown. */
         public static final int FLAG_FORCE_NOT_FULLSCREEN   = 0x00000800;
         
         /** Window flag: turn on dithering when compositing this window to
@@ -628,7 +644,7 @@ public interface WindowManager extends ViewManager {
         @Deprecated
         public static final int FLAG_DITHER             = 0x00001000;
         
-        /** Window flag: Treat the content of the window as secure, preventing
+        /** Window flag: treat the content of the window as secure, preventing
          * it from appearing in screenshots or from being viewed on non-secure
          * displays.
          *
@@ -697,6 +713,17 @@ public interface WindowManager extends ViewManager {
          * to actually see the wallpaper behind it; this flag just ensures
          * that the wallpaper surface will be there if this window actually
          * has translucent regions.
+         *
+         * <p>This flag can be controlled in your theme through the
+         * {@link android.R.attr#windowShowWallpaper} attribute; this attribute
+         * is automatically set for you in the standard wallpaper themes
+         * such as {@link android.R.style#Theme_Wallpaper},
+         * {@link android.R.style#Theme_Wallpaper_NoTitleBar},
+         * {@link android.R.style#Theme_Wallpaper_NoTitleBar_Fullscreen},
+         * {@link android.R.style#Theme_Holo_Wallpaper},
+         * {@link android.R.style#Theme_Holo_Wallpaper_NoTitleBar},
+         * {@link android.R.style#Theme_DeviceDefault_Wallpaper}, and
+         * {@link android.R.style#Theme_DeviceDefault_Wallpaper_NoTitleBar}.</p>
          */
         public static final int FLAG_SHOW_WALLPAPER = 0x00100000;
         
@@ -735,20 +762,20 @@ public interface WindowManager extends ViewManager {
         /**
          * <p>Indicates whether this window should be hardware accelerated.
          * Requesting hardware acceleration does not guarantee it will happen.</p>
-         * 
+         *
          * <p>This flag can be controlled programmatically <em>only</em> to enable
          * hardware acceleration. To enable hardware acceleration for a given
          * window programmatically, do the following:</p>
-         * 
+         *
          * <pre>
          * Window w = activity.getWindow(); // in Activity's onCreate() for instance
          * w.setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
          *         WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
          * </pre>
-         * 
+         *
          * <p>It is important to remember that this flag <strong>must</strong>
          * be set before setting the content view of your activity or dialog.</p>
-         * 
+         *
          * <p>This flag cannot be used to disable hardware acceleration after it
          * was enabled in your manifest using
          * {@link android.R.attr#hardwareAccelerated}. If you need to selectively
@@ -756,12 +783,45 @@ public interface WindowManager extends ViewManager {
          * for instance), make sure it is turned off in your manifest and enable it
          * on your activity or dialog when you need it instead, using the method
          * described above.</p>
-         * 
+         *
          * <p>This flag is automatically set by the system if the
          * {@link android.R.attr#hardwareAccelerated android:hardwareAccelerated}
          * XML attribute is set to true on an activity or on the application.</p>
          */
         public static final int FLAG_HARDWARE_ACCELERATED = 0x01000000;
+
+        /**
+         * Window flag: allow window contents to extend in to the screen's
+         * overscan area, if there is one.  The window should still correctly
+         * position its contents to take the overscan area into account.
+         *
+         * <p>This flag can be controlled in your theme through the
+         * {@link android.R.attr#windowOverscan} attribute; this attribute
+         * is automatically set for you in the standard overscan themes
+         * such as
+         * {@link android.R.style#Theme_Holo_NoActionBar_Overscan},
+         * {@link android.R.style#Theme_Holo_Light_NoActionBar_Overscan},
+         * {@link android.R.style#Theme_DeviceDefault_NoActionBar_Overscan}, and
+         * {@link android.R.style#Theme_DeviceDefault_Light_NoActionBar_Overscan}.</p>
+         *
+         * <p>When this flag is enabled for a window, its normal content may be obscured
+         * to some degree by the overscan region of the display.  To ensure key parts of
+         * that content are visible to the user, you can use
+         * {@link View#setFitsSystemWindows(boolean) View.setFitsSystemWindows(boolean)}
+         * to set the point in the view hierarchy where the appropriate offsets should
+         * be applied.  (This can be done either by directly calling this function, using
+         * the {@link android.R.attr#fitsSystemWindows} attribute in your view hierarchy,
+         * or implementing you own {@link View#fitSystemWindows(android.graphics.Rect)
+         * View.fitSystemWindows(Rect)} method).</p>
+         *
+         * <p>This mechanism for positioning content elements is identical to its equivalent
+         * use with layout and {@link View#setSystemUiVisibility(int)
+         * View.setSystemUiVisibility(int)}; here is an example layout that will correctly
+         * position its UI elements with this overscan flag is set:</p>
+         *
+         * {@sample development/samples/ApiDemos/res/layout/overscan_activity.xml complete}
+         */
+        public static final int FLAG_LAYOUT_IN_OVERSCAN = 0x02000000;
 
         // ----- HIDDEN FLAGS.
         // These start at the high bit and go down.
@@ -957,6 +1017,12 @@ public interface WindowManager extends ViewManager {
         public static final int PRIVATE_FLAG_FORCE_SHOW_NAV_BAR = 0x00000020;
 
         /**
+         * Never animate position changes of the window.
+         *
+         * {@hide} */
+        public static final int PRIVATE_FLAG_NO_MOVE_ANIMATION = 0x00000040;
+
+        /**
          * Control flags that are private to the platform.
          * @hide
          */
@@ -1047,7 +1113,10 @@ public interface WindowManager extends ViewManager {
          * method.  This can <em>not</em> be combined with
          * {@link #SOFT_INPUT_ADJUST_PAN}; if
          * neither of these are set, then the system will try to pick one or
-         * the other depending on the contents of the window.
+         * the other depending on the contents of the window. If the window's
+         * layout parameter flags include {@link #FLAG_FULLSCREEN}, this
+         * value for {@link #softInputMode} will be ignored; the window will
+         * not resize, but will stay fullscreen.
          */
         public static final int SOFT_INPUT_ADJUST_RESIZE = 0x10;
         
@@ -1089,6 +1158,11 @@ public interface WindowManager extends ViewManager {
          * {@link #SOFT_INPUT_ADJUST_UNSPECIFIED},
          * {@link #SOFT_INPUT_ADJUST_RESIZE}, or
          * {@link #SOFT_INPUT_ADJUST_PAN}.
+         * </ul>
+         *
+         *
+         * <p>This flag can be controlled in your theme through the
+         * {@link android.R.attr#windowSoftInputMode} attribute.</p>
          */
         public int softInputMode;
         
@@ -1191,6 +1265,38 @@ public interface WindowManager extends ViewManager {
         public float buttonBrightness = BRIGHTNESS_OVERRIDE_NONE;
 
         /**
+         * Value for {@link #rotationAnimation} to define the animation used to
+         * specify that this window will rotate in or out following a rotation.
+         */
+        public static final int ROTATION_ANIMATION_ROTATE = 0;
+
+        /**
+         * Value for {@link #rotationAnimation} to define the animation used to
+         * specify that this window will fade in or out following a rotation.
+         */
+        public static final int ROTATION_ANIMATION_CROSSFADE = 1;
+
+        /**
+         * Value for {@link #rotationAnimation} to define the animation used to
+         * specify that this window will immediately disappear or appear following
+         * a rotation.
+         */
+        public static final int ROTATION_ANIMATION_JUMPCUT = 2;
+
+        /**
+         * Define the exit and entry animations used on this window when the device is rotated.
+         * This only has an affect if the incoming and outgoing topmost
+         * opaque windows have the #FLAG_FULLSCREEN bit set and are not covered
+         * by other windows. All other situations default to the
+         * {@link #ROTATION_ANIMATION_ROTATE} behavior.
+         * 
+         * @see #ROTATION_ANIMATION_ROTATE
+         * @see #ROTATION_ANIMATION_CROSSFADE
+         * @see #ROTATION_ANIMATION_JUMPCUT
+         */
+        public int rotationAnimation = ROTATION_ANIMATION_ROTATE;
+
+        /**
          * Identifier for this window.  This will usually be filled in for
          * you.
          */
@@ -1267,7 +1373,7 @@ public interface WindowManager extends ViewManager {
         /**
          * Control special features of the input subsystem.
          *
-         * @see #INPUT_FEATURE_DISABLE_TOUCH_PAD_GESTURES
+         * @see #INPUT_FEATURE_DISABLE_POINTER_GESTURES
          * @see #INPUT_FEATURE_NO_INPUT_CHANNEL
          * @see #INPUT_FEATURE_DISABLE_USER_ACTIVITY
          * @hide
@@ -1365,6 +1471,7 @@ public interface WindowManager extends ViewManager {
             out.writeFloat(dimAmount);
             out.writeFloat(screenBrightness);
             out.writeFloat(buttonBrightness);
+            out.writeInt(rotationAnimation);
             out.writeStrongBinder(token);
             out.writeString(packageName);
             TextUtils.writeToParcel(mTitle, out, parcelableFlags);
@@ -1406,6 +1513,7 @@ public interface WindowManager extends ViewManager {
             dimAmount = in.readFloat();
             screenBrightness = in.readFloat();
             buttonBrightness = in.readFloat();
+            rotationAnimation = in.readInt();
             token = in.readStrongBinder();
             packageName = in.readString();
             mTitle = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(in);
@@ -1430,18 +1538,19 @@ public interface WindowManager extends ViewManager {
         public static final int SOFT_INPUT_MODE_CHANGED = 1<<9;
         public static final int SCREEN_ORIENTATION_CHANGED = 1<<10;
         public static final int SCREEN_BRIGHTNESS_CHANGED = 1<<11;
+        public static final int ROTATION_ANIMATION_CHANGED = 1<<12;
         /** {@hide} */
-        public static final int BUTTON_BRIGHTNESS_CHANGED = 1<<12;
+        public static final int BUTTON_BRIGHTNESS_CHANGED = 1<<13;
         /** {@hide} */
-        public static final int SYSTEM_UI_VISIBILITY_CHANGED = 1<<13;
+        public static final int SYSTEM_UI_VISIBILITY_CHANGED = 1<<14;
         /** {@hide} */
-        public static final int SYSTEM_UI_LISTENER_CHANGED = 1<<14;
+        public static final int SYSTEM_UI_LISTENER_CHANGED = 1<<15;
         /** {@hide} */
-        public static final int INPUT_FEATURES_CHANGED = 1<<15;
+        public static final int INPUT_FEATURES_CHANGED = 1<<16;
         /** {@hide} */
-        public static final int PRIVATE_FLAGS_CHANGED = 1<<16;
+        public static final int PRIVATE_FLAGS_CHANGED = 1<<17;
         /** {@hide} */
-        public static final int USER_ACTIVITY_TIMEOUT_CHANGED = 1<<17;
+        public static final int USER_ACTIVITY_TIMEOUT_CHANGED = 1<<18;
         /** {@hide} */
         public static final int EVERYTHING_CHANGED = 0xffffffff;
 
@@ -1540,6 +1649,10 @@ public interface WindowManager extends ViewManager {
             if (buttonBrightness != o.buttonBrightness) {
                 buttonBrightness = o.buttonBrightness;
                 changes |= BUTTON_BRIGHTNESS_CHANGED;
+            }
+            if (rotationAnimation != o.rotationAnimation) {
+                rotationAnimation = o.rotationAnimation;
+                changes |= ROTATION_ANIMATION_CHANGED;
             }
     
             if (screenOrientation != o.screenOrientation) {
@@ -1642,6 +1755,10 @@ public interface WindowManager extends ViewManager {
             if (buttonBrightness != BRIGHTNESS_OVERRIDE_NONE) {
                 sb.append(" bbrt=");
                 sb.append(buttonBrightness);
+            }
+            if (rotationAnimation != ROTATION_ANIMATION_ROTATE) {
+                sb.append(" rotAnim=");
+                sb.append(rotationAnimation);
             }
             if ((flags & FLAG_COMPATIBLE_WINDOW) != 0) {
                 sb.append(" compatible=true");

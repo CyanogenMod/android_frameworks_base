@@ -200,6 +200,8 @@
     <string name="permgroupdesc_microphone" msgid="7106618286905738408">"Direct access to the microphone to record audio."</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Camera"</string>
     <string name="permgroupdesc_camera" msgid="2933667372289567714">"Direct access to camera for image or video capture."</string>
+    <string name="permgrouplab_screenlock" msgid="8275500173330718168">"Lock screen"</string>
+    <string name="permgroupdesc_screenlock" msgid="7067497128925499401">"Ability to affect behaviour of the lock screen on your device."</string>
     <string name="permgrouplab_appInfo" msgid="8028789762634147725">"Your applications information"</string>
     <string name="permgroupdesc_appInfo" msgid="3950378538049625907">"Ability to affect behaviour of other applications on your device."</string>
     <string name="permgrouplab_wallpaper" msgid="3850280158041175998">"Wallpaper"</string>
@@ -225,6 +227,16 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Storage"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"Access the USB storage."</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Access the SD card."</string>
+    <string name="permgrouplab_accessibilityFeatures" msgid="7919025602283593907">"Accessibility features"</string>
+    <string name="permgroupdesc_accessibilityFeatures" msgid="4205196881678144335">"Features that assistive technology can request."</string>
+    <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"Retrieve window content"</string>
+    <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"Inspect the content of a window that you\'re interacting with."</string>
+    <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"Turn on Explore by Touch"</string>
+    <string name="capability_desc_canRequestTouchExploration" msgid="5800552516779249356">"Touched items will be spoken aloud and the screen can be explored using gestures."</string>
+    <string name="capability_title_canRequestEnhancedWebAccessibility" msgid="1739881766522594073">"Turn on enhanced web accessibility"</string>
+    <string name="capability_desc_canRequestEnhancedWebAccessibility" msgid="7881063961507511765">"Scripts may be installed to make app content more accessible."</string>
+    <string name="capability_title_canRequestFilterKeyEvents" msgid="2103440391902412174">"Observe text that you type"</string>
+    <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"Includes personal data such as credit card numbers and passwords."</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"disable or modify status bar"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"Allows the app to disable the status bar or add and remove system icons."</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"status bar"</string>
@@ -243,8 +255,8 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Allows the app to read mobile broadcast messages received by your device. Cell broadcast alerts are delivered in some locations to warn you of emergency situations. Malicious apps may interfere with the performance or operation of your device when an emergency mobile broadcast is received."</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"send SMS messages"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"Allows the app to send SMS messages. This may result in unexpected charges. Malicious apps may cost you money by sending messages without your confirmation."</string>
-    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"send SMS messages with no confirmation"</string>
-    <string name="permdesc_sendSmsNoConfirmation" msgid="402569800862935907">"Allows the app to send SMS messages. This may result in unexpected charges. Malicious apps may cost you money by sending messages without your confirmation."</string>
+    <string name="permlab_sendRespondViaMessageRequest" msgid="8713889105305943200">"send respond-via-message events"</string>
+    <string name="permdesc_sendRespondViaMessageRequest" msgid="7107648548468778734">"Allows the app to send requests to other messaging apps to handle respond-via-message events for incoming calls."</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"read your text messages (SMS or MMS)"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"Allows the app to read SMS messages stored on your tablet or SIM card. This allows the app to read all SMS messages, regardless of content or confidentiality."</string>
     <string name="permdesc_readSms" product="default" msgid="3695967533457240550">"Allows the app to read SMS messages stored on your phone or SIM card. This allows the app to read all SMS messages, regardless of content or confidentiality."</string>
@@ -299,6 +311,8 @@
     <string name="permdesc_shutdown" msgid="7046500838746291775">"Puts the activity manager into a shut-down state. Does not perform a complete shut down."</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"prevent app switches"</string>
     <string name="permdesc_stopAppSwitches" msgid="8262195802582255021">"Prevents the user from switching to another app."</string>
+    <string name="permlab_getTopActivityInfo" msgid="2537922311411546016">"get current app info"</string>
+    <string name="permdesc_getTopActivityInfo" msgid="2512448855496067131">"Allows the holder to retrieve private information about the current application in the foreground of the screen."</string>
     <string name="permlab_runSetActivityWatcher" msgid="892239094867182656">"monitor and control all app launching"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="6003603162578577406">"Allows the app to monitor and control how the system launches activities. Malicious apps may completely compromise the system. This permission is only needed for development, never for normal use."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"send package removed broadcast"</string>
@@ -315,6 +329,10 @@
     <string name="permdesc_batteryStats" msgid="5897346582882915114">"Allows an application to read the current low-level battery use data. May allow the application to find out detailed information about which apps you use."</string>
     <string name="permlab_updateBatteryStats" msgid="3719689764536379557">"modify battery statistics"</string>
     <string name="permdesc_updateBatteryStats" msgid="6862817857178025002">"Allows the app to modify collected battery statistics. Not for use by normal apps."</string>
+    <string name="permlab_getAppOpsStats" msgid="1508779687436585744">"retrieve app ops statistics"</string>
+    <string name="permdesc_getAppOpsStats" msgid="6243887041577912877">"Allows the app to retrieve collected application operation statistics. Not for use by normal apps."</string>
+    <string name="permlab_updateAppOpsStats" msgid="8829097373851521505">"modify app ops statistics"</string>
+    <string name="permdesc_updateAppOpsStats" msgid="50784596594403483">"Allows the app to modify collected component usage statistics. Not for use by normal apps."</string>
     <string name="permlab_backup" msgid="470013022865453920">"control system back up and restore"</string>
     <string name="permdesc_backup" msgid="6912230525140589891">"Allows the app to control the system\'s backup and restore mechanism. Not for use by normal apps."</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"confirm a full backup or restore operation"</string>
@@ -450,6 +468,8 @@
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"Allows the app to record audio with the microphone. This permission allows the app to record audio at any time without your confirmation."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"take pictures and videos"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"Allows the app to take pictures and videos with the camera. This permission allows the app to use the camera at any time without your confirmation."</string>
+    <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">"disable transmit indicator LED when camera is in use"</string>
+    <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">"Allows a pre-installed system application to disable the camera use indicator LED."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"permanently disable tablet"</string>
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"permanently disable phone"</string>
     <string name="permdesc_brick" product="tablet" msgid="4334818808001699530">"Allows the app to permanently disable the entire tablet. This is very dangerous."</string>
@@ -548,12 +568,12 @@
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"change background data usage setting"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Allows the app to change the background data usage setting."</string>
     <string name="permlab_accessWifiState" msgid="5202012949247040011">"view Wi-Fi connections"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Allows the app to view information about Wi-FI networking, such as whether Wi-FI is enabled and name of connected Wi-FI devices."</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Allows the app to view information about Wi-Fi networking, such as whether Wi-Fi is enabled and name of connected Wi-Fi devices."</string>
     <string name="permlab_changeWifiState" msgid="6550641188749128035">"connect and disconnect from Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Allows the app to connect to and disconnect from Wi-FI access points and to make changes to device configuration for Wi-FI networks."</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Allows the app to connect to and disconnect from Wi-Fi access points and to make changes to device configuration for Wi-Fi networks."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"allow Wi-Fi Multicast reception"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Allows the app to receive packets sent to all devices on a Wi-FI network using multicast addresses, not just your tablet. It uses more power than the non-multicast mode."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Allows the app to receive packets sent to all devices on a Wi-FI network using multicast addresses, not just your phone. It uses more power than the non-multicast mode."</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Allows the app to receive packets sent to all devices on a Wi-Fi network using multicast addresses, not just your tablet. It uses more power than the non-multicast mode."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Allows the app to receive packets sent to all devices on a Wi-Fi network using multicast addresses, not just your phone. It uses more power than the non-multicast mode."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"access Bluetooth settings"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Allows the app to configure the local Bluetooth tablet and to discover and pair with remote devices."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Allows the app to configure the local Bluetooth phone and to discover and pair with remote devices."</string>
@@ -605,6 +625,10 @@
     <string name="permdesc_manageNetworkPolicy" msgid="7537586771559370668">"Allows the app to manage network policies and define app-specific rules."</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"modify network usage accounting"</string>
     <string name="permdesc_modifyNetworkAccounting" msgid="5443412866746198123">"Allows the app to modify how network usage is accounted against apps. Not for use by normal apps."</string>
+    <string name="permlab_accessNotifications" msgid="7673416487873432268">"access notifications"</string>
+    <string name="permdesc_accessNotifications" msgid="458457742683431387">"Allows the app to retrieve, examine, and clear notifications, including those posted by other apps."</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"bind to a notification listener service"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Allows the holder to bind to the top-level interface of a notification listener service. Should never be needed for normal apps."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Set password rules"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"Control the length and the characters allowed in screen-unlock passwords."</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"Monitor screen-unlock attempts"</string>
@@ -714,7 +738,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"Net Meeting"</string>
@@ -810,6 +835,7 @@
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"Pattern cleared"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"Cell added"</string>
     <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"Pattern completed"</string>
+    <string name="keyguard_accessibility_widget_changed" msgid="5678624624681400191">"%1$s. Widget %2$d of %3$d."</string>
     <string name="keyguard_accessibility_add_widget" msgid="8273277058724924654">"Add widget"</string>
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"Empty"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"Unlock area expanded."</string>
@@ -845,7 +871,10 @@
     <string name="factorytest_reboot" msgid="6320168203050791643">"Reboot"</string>
     <string name="js_dialog_title" msgid="1987483977834603872">"The page at \"<xliff:g id="TITLE">%s</xliff:g>\" says:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="730366588032430474">"Navigate away from this page?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Touch OK to continue or Cancel to stay on the current page."</string>
+    <string name="js_dialog_before_unload_title" msgid="2619376555525116593">"Confirm Navigation"</string>
+    <string name="js_dialog_before_unload_positive_button" msgid="3112752010600484130">"Leave this Page"</string>
+    <string name="js_dialog_before_unload_negative_button" msgid="5614861293026099715">"Stay on this Page"</string>
+    <string name="js_dialog_before_unload" msgid="3468816357095378590">"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Are you sure you want to navigate away from this page?"</string>
     <string name="save_password_label" msgid="6860261758665825069">"Confirm"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"Tip: double-tap to zoom in and out."</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"Auto-fill"</string>
@@ -1031,6 +1060,8 @@
     <string name="editTextMenuTitle" msgid="4909135564941815494">"Text actions"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Storage space running out"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Some system functions may not work"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"<xliff:g id="APP_NAME">%1$s</xliff:g> is running"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"Touch for more information or to stop the app."</string>
     <string name="ok" msgid="5970060430562524910">"OK"</string>
     <string name="cancel" msgid="6442560571259935130">"Cancel"</string>
     <string name="yes" msgid="5362982303337969312">"OK"</string>
@@ -1094,8 +1125,7 @@
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"Notification volume"</string>
     <string name="ringtone_default" msgid="3789758980357696936">"Default ringtone"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Default ringtone (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
-    <!-- no translation found for ringtone_silent (7937634392408977062) -->
-    <skip />
+    <string name="ringtone_silent" msgid="7937634392408977062">"None"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Ringtones"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Unknown ringtone"</string>
   <plurals name="wifi_available">
@@ -1125,7 +1155,8 @@
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"To:"</string>
     <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Type the required PIN:"</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN:"</string>
-    <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"The phone will temporarily disconnect from Wi-FI while it\'s connected to <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"The tablet will temporarily disconnect from Wi-Fi while it\'s connected to <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"The phone will temporarily disconnect from Wi-Fi while it\'s connected to <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
     <string name="select_character" msgid="3365550120617701745">"Insert character"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"Sending SMS messages"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; is sending a large number of SMS messages. Do you want to allow this app to continue sending messages?"</string>
@@ -1248,6 +1279,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Accessibility"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Wallpaper"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Change wallpaper"</string>
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Notification listener"</string>
     <string name="vpn_title" msgid="19615213552042827">"VPN activated"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"VPN is activated by <xliff:g id="APP">%s</xliff:g>"</string>
     <string name="vpn_text" msgid="3011306607126450322">"Touch to manage the network."</string>
@@ -1255,7 +1287,7 @@
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Always-on VPN connecting…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Always-on VPN connected"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Always-on VPN error"</string>
-    <string name="vpn_lockdown_reset" msgid="5365010427963548932">"Touch to reset connection"</string>
+    <string name="vpn_lockdown_config" msgid="6415899150671537970">"Touch to configure"</string>
     <string name="upload_file" msgid="2897957172366730416">"Choose file"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"No file chosen"</string>
     <string name="reset" msgid="2448168080964209908">"Reset"</string>
@@ -1351,6 +1383,8 @@
     <string name="action_bar_home_description" msgid="5293600496601490216">"Navigate home"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"Navigate up"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"More options"</string>
+    <string name="action_bar_home_description_format" msgid="7965984360903693903">"%1$s, %2$s"</string>
+    <string name="action_bar_home_subtitle_description_format" msgid="6985546530471780727">"%1$s, %2$s, %3$s"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Internal storage"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD card"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB storage"</string>
@@ -1400,6 +1434,7 @@
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"System"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Bluetooth audio"</string>
+    <string name="wireless_display_route_description" msgid="9070346425023979651">"Wireless display"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Done"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Media output"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"Scanning..."</string>
@@ -1451,10 +1486,14 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"You have incorrectly drawn your unlock pattern <xliff:g id="NUMBER_0">%d</xliff:g> times. After <xliff:g id="NUMBER_1">%d</xliff:g> more unsuccessful attempts, you will be asked to unlock your phone using an email account."\n\n" Try again in <xliff:g id="NUMBER_2">%d</xliff:g> seconds."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" — "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Remove"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Raise volume above safe level?"\n"Listening at high volume for long periods may damage your hearing."</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"Raise volume above recommended level?"\n"Listening at high volume for long periods may damage your hearing."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Keep holding down two fingers to enable accessibility."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Accessibility enabled."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Accessibility cancelled."</string>
     <string name="user_switched" msgid="3768006783166984410">"Current user <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Owner"</string>
+    <string name="error_message_title" msgid="4510373083082500195">"Error"</string>
+    <string name="app_no_restricted_accounts" msgid="4011285085817350390">"This application does not support accounts for restricted profiles"</string>
+    <string name="app_not_found" msgid="3429141853498927379">"No application found to handle this action"</string>
+    <string name="revoke" msgid="5404479185228271586">"Revoke"</string>
 </resources>

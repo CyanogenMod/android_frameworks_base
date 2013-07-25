@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.StrictMode;
 import android.os.UserHandle;
 import android.util.Log;
 
@@ -126,11 +127,14 @@ public class NotificationManager
         String pkg = mContext.getPackageName();
         if (notification.sound != null) {
             notification.sound = notification.sound.getCanonicalUri();
+            if (StrictMode.vmFileUriExposureEnabled()) {
+                notification.sound.checkFileUriExposed("Notification.sound");
+            }
         }
         if (localLOGV) Log.v(TAG, pkg + ": notify(" + id + ", " + notification + ")");
         try {
-            service.enqueueNotificationWithTag(pkg, tag, id, notification, idOut,
-                    UserHandle.myUserId());
+            service.enqueueNotificationWithTag(pkg, mContext.getBasePackageName(), tag, id,
+                    notification, idOut, UserHandle.myUserId());
             if (id != idOut[0]) {
                 Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);
             }
@@ -148,11 +152,14 @@ public class NotificationManager
         String pkg = mContext.getPackageName();
         if (notification.sound != null) {
             notification.sound = notification.sound.getCanonicalUri();
+            if (StrictMode.vmFileUriExposureEnabled()) {
+                notification.sound.checkFileUriExposed("Notification.sound");
+            }
         }
         if (localLOGV) Log.v(TAG, pkg + ": notify(" + id + ", " + notification + ")");
         try {
-            service.enqueueNotificationWithTag(pkg, tag, id, notification, idOut,
-                    user.getIdentifier());
+            service.enqueueNotificationWithTag(pkg, mContext.getBasePackageName(), tag, id,
+                    notification, idOut, user.getIdentifier());
             if (id != idOut[0]) {
                 Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);
             }

@@ -24,6 +24,7 @@
 
 #include <SkXfermode.h>
 
+#include "Debug.h"
 #include "Matrix.h"
 #include "Properties.h"
 
@@ -81,7 +82,9 @@ namespace uirenderer {
 
 #define PROGRAM_IS_SIMPLE_GRADIENT 41
 
-#define PROGRAM_IS_VERTEX_SHAPE_SHIFT 42
+#define PROGRAM_HAS_COLORS 42
+
+#define PROGRAM_HAS_DEBUG_HIGHLIGHT 43
 
 ///////////////////////////////////////////////////////////////////////////////
 // Types
@@ -122,6 +125,9 @@ struct ProgramDescription {
     bool hasExternalTexture;
     bool hasTextureTransform;
 
+    // Color attribute
+    bool hasColors;
+
     // Modulate, this should only be set when setColor() return true
     bool modulate;
 
@@ -129,8 +135,7 @@ struct ProgramDescription {
     bool hasBitmap;
     bool isBitmapNpot;
 
-    bool isAA;
-    bool isVertexShape;
+    bool isAA; // drawing with a per-vertex alpha
 
     bool hasGradient;
     Gradient gradientType;
@@ -157,6 +162,8 @@ struct ProgramDescription {
     bool hasGammaCorrection;
     float gamma;
 
+    bool hasDebugHighlight;
+
     /**
      * Resets this description. All fields are reset back to the default
      * values they hold after building a new instance.
@@ -167,8 +174,9 @@ struct ProgramDescription {
         hasExternalTexture = false;
         hasTextureTransform = false;
 
+        hasColors = false;
+
         isAA = false;
-        isVertexShape = false;
 
         modulate = false;
 
@@ -196,6 +204,8 @@ struct ProgramDescription {
 
         hasGammaCorrection = false;
         gamma = 2.2f;
+
+        hasDebugHighlight = false;
     }
 
     /**
@@ -263,7 +273,8 @@ struct ProgramDescription {
         if (hasTextureTransform) key |= programid(0x1) << PROGRAM_HAS_TEXTURE_TRANSFORM_SHIFT;
         if (hasGammaCorrection) key |= programid(0x1) << PROGRAM_HAS_GAMMA_CORRECTION;
         if (isSimpleGradient) key |= programid(0x1) << PROGRAM_IS_SIMPLE_GRADIENT;
-        if (isVertexShape) key |= programid(0x1) << PROGRAM_IS_VERTEX_SHAPE_SHIFT;
+        if (hasColors) key |= programid(0x1) << PROGRAM_HAS_COLORS;
+        if (hasDebugHighlight) key |= programid(0x1) << PROGRAM_HAS_DEBUG_HIGHLIGHT;
         return key;
     }
 

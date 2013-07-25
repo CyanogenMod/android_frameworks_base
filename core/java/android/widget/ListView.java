@@ -41,6 +41,7 @@ import android.view.ViewParent;
 import android.view.ViewRootImpl;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeProvider;
 import android.widget.RemoteViews.RemoteView;
 
 import java.util.ArrayList;
@@ -1550,6 +1551,32 @@ public class ListView extends AbsListView {
 
             setSelectedPositionInt(mNextSelectedPosition);
 
+            // Remember which child, if any, had accessibility focus. This must
+            // occur before recycling any views, since that will clear
+            // accessibility focus.
+            final ViewRootImpl viewRootImpl = getViewRootImpl();
+            if (viewRootImpl != null) {
+                final View accessFocusedView = viewRootImpl.getAccessibilityFocusedHost();
+                if (accessFocusedView != null) {
+                    final View accessFocusedChild = findAccessibilityFocusedChild(
+                            accessFocusedView);
+                    if (accessFocusedChild != null) {
+                        if (!dataChanged || isDirectChildHeaderOrFooter(accessFocusedChild)) {
+                            // If the views won't be changing, try to maintain
+                            // focus on the current view host and (if
+                            // applicable) its virtual view.
+                            accessibilityFocusLayoutRestoreView = accessFocusedView;
+                            accessibilityFocusLayoutRestoreNode = viewRootImpl
+                                    .getAccessibilityFocusedVirtualView();
+                        } else {
+                            // Otherwise, try to maintain focus at the same
+                            // position.
+                            accessibilityFocusPosition = getPositionForView(accessFocusedChild);
+                        }
+                    }
+                }
+            }
+
             // Pull all children into the RecycleBin.
             // These views will be reused if possible
             final int firstPosition = mFirstPosition;
@@ -1588,30 +1615,6 @@ public class ListView extends AbsListView {
                     }
                 }
                 requestFocus();
-            }
-
-            // Remember which child, if any, had accessibility focus.
-            final ViewRootImpl viewRootImpl = getViewRootImpl();
-            if (viewRootImpl != null) {
-                final View accessFocusedView = viewRootImpl.getAccessibilityFocusedHost();
-                if (accessFocusedView != null) {
-                    final View accessFocusedChild = findAccessibilityFocusedChild(
-                            accessFocusedView);
-                    if (accessFocusedChild != null) {
-                        if (!dataChanged || isDirectChildHeaderOrFooter(accessFocusedChild)) {
-                            // If the views won't be changing, try to maintain
-                            // focus on the current view host and (if
-                            // applicable) its virtual view.
-                            accessibilityFocusLayoutRestoreView = accessFocusedView;
-                            accessibilityFocusLayoutRestoreNode = viewRootImpl
-                                    .getAccessibilityFocusedVirtualView();
-                        } else {
-                            // Otherwise, try to maintain focus at the same
-                            // position.
-                            accessibilityFocusPosition = getPositionForView(accessFocusedChild);
-                        }
-                    }
-                }
             }
 
             // Clear out old views
@@ -1713,11 +1716,17 @@ public class ListView extends AbsListView {
             }
 
             // Attempt to restore accessibility focus.
-            if (accessibilityFocusLayoutRestoreNode != null) {
-                accessibilityFocusLayoutRestoreNode.performAction(
-                        AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
-            } else if (accessibilityFocusLayoutRestoreView != null) {
-                accessibilityFocusLayoutRestoreView.requestAccessibilityFocus();
+            if (accessibilityFocusLayoutRestoreView != null) {
+                final AccessibilityNodeProvider provider =
+                        accessibilityFocusLayoutRestoreView.getAccessibilityNodeProvider();
+                if ((accessibilityFocusLayoutRestoreNode != null) && (provider != null)) {
+                    final int virtualViewId = AccessibilityNodeInfo.getVirtualDescendantId(
+                            accessibilityFocusLayoutRestoreNode.getSourceNodeId());
+                    provider.performAction(virtualViewId,
+                            AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null);
+                } else {
+                    accessibilityFocusLayoutRestoreView.requestAccessibilityFocus();
+                }
             } else if (accessibilityFocusPosition != INVALID_POSITION) {
                 // Bound the position within the visible children.
                 final int position = MathUtils.constrain(
@@ -2415,6 +2424,34 @@ public class ListView extends AbsListView {
     }
 
     /**
+     * Used by {@link #arrowScrollImpl(int)} to help determine the next selected position
+     * to move to. This can return a position currently not represented by a view on screen
+     * but only in the direction given.
+     *
+     * @param selectedPos Current selected position to move from
+     * @param direction Direction to move in
+     * @return Desired selected position after moving in the given direction
+     */
+    private final int nextSelectedPositionForDirection(int selectedPos, int direction) {
+        int nextSelected;
+        if (direction == View.FOCUS_DOWN) {
+            nextSelected = selectedPos != INVALID_POSITION && selectedPos >= mFirstPosition ?
+                    selectedPos + 1 :
+                    mFirstPosition;
+        } else {
+            final int lastPos = mFirstPosition + getChildCount() - 1;
+            nextSelected = selectedPos != INVALID_POSITION && selectedPos <= lastPos ?
+                    selectedPos - 1 :
+                    lastPos;
+        }
+
+        if (nextSelected < 0 || nextSelected >= mAdapter.getCount()) {
+            return INVALID_POSITION;
+        }
+        return lookForSelectablePosition(nextSelected, direction == View.FOCUS_DOWN);
+    }
+
+    /**
      * Handle an arrow scroll going up or down.  Take into account whether items are selectable,
      * whether there are focusable items etc.
      *
@@ -2429,7 +2466,7 @@ public class ListView extends AbsListView {
         View selectedView = getSelectedView();
         int selectedPos = mSelectedPosition;
 
-        int nextSelectedPosition = lookForSelectablePositionOnScreen(direction);
+        int nextSelectedPosition = nextSelectedPositionForDirection(selectedPos, direction);
         int amountToScroll = amountToScroll(direction, nextSelectedPosition);
 
         // if we are moving focus, we may OVERRIDE the default behavior
@@ -2641,14 +2678,18 @@ public class ListView extends AbsListView {
         final int listBottom = getHeight() - mListPadding.bottom;
         final int listTop = mListPadding.top;
 
-        final int numChildren = getChildCount();
+        int numChildren = getChildCount();
 
         if (direction == View.FOCUS_DOWN) {
             int indexToMakeVisible = numChildren - 1;
             if (nextSelectedPosition != INVALID_POSITION) {
                 indexToMakeVisible = nextSelectedPosition - mFirstPosition;
             }
-
+            while (numChildren <= indexToMakeVisible) {
+                // Child to view is not attached yet.
+                addViewBelow(getChildAt(numChildren - 1), mFirstPosition + numChildren - 1);
+                numChildren++;
+            }
             final int positionToMakeVisible = mFirstPosition + indexToMakeVisible;
             final View viewToMakeVisible = getChildAt(indexToMakeVisible);
 
@@ -2680,6 +2721,12 @@ public class ListView extends AbsListView {
         } else {
             int indexToMakeVisible = 0;
             if (nextSelectedPosition != INVALID_POSITION) {
+                indexToMakeVisible = nextSelectedPosition - mFirstPosition;
+            }
+            while (indexToMakeVisible < 0) {
+                // Child to view is not attached yet.
+                addViewAbove(getChildAt(0), mFirstPosition);
+                mFirstPosition--;
                 indexToMakeVisible = nextSelectedPosition - mFirstPosition;
             }
             final int positionToMakeVisible = mFirstPosition + indexToMakeVisible;
@@ -2981,11 +3028,9 @@ public class ListView extends AbsListView {
             while (first.getBottom() < listTop) {
                 AbsListView.LayoutParams layoutParams = (LayoutParams) first.getLayoutParams();
                 if (recycleBin.shouldRecycleViewType(layoutParams.viewType)) {
-                    detachViewFromParent(first);
                     recycleBin.addScrapView(first, mFirstPosition);
-                } else {
-                    removeViewInLayout(first);
                 }
+                detachViewFromParent(first);
                 first = getChildAt(0);
                 mFirstPosition++;
             }
@@ -3012,11 +3057,9 @@ public class ListView extends AbsListView {
             while (last.getTop() > listBottom) {
                 AbsListView.LayoutParams layoutParams = (LayoutParams) last.getLayoutParams();
                 if (recycleBin.shouldRecycleViewType(layoutParams.viewType)) {
-                    detachViewFromParent(last);
                     recycleBin.addScrapView(last, mFirstPosition+lastIndex);
-                } else {
-                    removeViewInLayout(last);
                 }
+                detachViewFromParent(last);
                 last = getChildAt(--lastIndex);
             }
         }

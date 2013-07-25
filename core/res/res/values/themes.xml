@@ -166,6 +166,7 @@ please see themes_device_defaults.xml.
         <item name="windowFrame">@null</item>
         <item name="windowNoTitle">false</item>
         <item name="windowFullscreen">false</item>
+        <item name="windowOverscan">false</item>
         <item name="windowIsFloating">false</item>
         <item name="windowContentOverlay">@null</item>
         <item name="windowShowWallpaper">false</item>
@@ -397,7 +398,8 @@ please see themes_device_defaults.xml.
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <!-- Variant of {@link #Theme} that has no title bar and no status bar -->
+    <!-- Variant of {@link #Theme} that has no title bar and no status bar.  This theme
+         sets {@link android.R.attr#windowFullscreen} to true.  -->
     <style name="Theme.NoTitleBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -489,7 +491,8 @@ please see themes_device_defaults.xml.
     </style>
 
     <!-- Variant of {@link #Theme_Light} that has no title bar and
-         no status bar -->
+         no status bar.  This theme
+         sets {@link android.R.attr#windowFullscreen} to true. -->
     <style name="Theme.Light.NoTitleBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -510,12 +513,13 @@ please see themes_device_defaults.xml.
     </style>
 
     <!-- Variant of {@link #Theme_Black} that has no title bar and
-         no status bar -->
+         no status bar.  This theme
+         sets {@link android.R.attr#windowFullscreen} to true.  -->
     <style name="Theme.Black.NoTitleBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-    
+
     <!-- Theme for windows that want to have the user's selected
          wallpaper appear behind them (for API level 10 and lower).  -->
     <style name="Theme.Wallpaper">
@@ -1010,6 +1014,7 @@ please see themes_device_defaults.xml.
         <item name="windowFrame">@null</item>
         <item name="windowNoTitle">false</item>
         <item name="windowFullscreen">false</item>
+        <item name="windowOverscan">false</item>
         <item name="windowIsFloating">false</item>
         <item name="windowContentOverlay">@null</item>
         <item name="windowShowWallpaper">false</item>
@@ -1324,6 +1329,7 @@ please see themes_device_defaults.xml.
         <item name="windowFrame">@null</item>
         <item name="windowNoTitle">false</item>
         <item name="windowFullscreen">false</item>
+        <item name="windowOverscan">false</item>
         <item name="windowIsFloating">false</item>
         <item name="android:windowContentOverlay">@android:drawable/ab_solid_shadow_holo</item>
         <item name="windowShowWallpaper">false</item>
@@ -1557,9 +1563,20 @@ please see themes_device_defaults.xml.
     </style>
     
     <!-- Variant of the holographic (dark) theme that has no title bar and fills
-         the entire screen -->
+         the entire screen.  This theme
+         sets {@link android.R.attr#windowFullscreen} to true.  -->
     <style name="Theme.Holo.NoActionBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Variant of the holographic (dark) theme that has no title bar and fills
+         the entire screen and extends into the display overscan region.  This theme
+         sets {@link android.R.attr#windowFullscreen} and {@link android.R.attr#windowOverscan}
+         to true. -->
+    <style name="Theme.Holo.NoActionBar.Overscan">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowOverscan">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
@@ -1570,12 +1587,23 @@ please see themes_device_defaults.xml.
     </style>
 
     <!-- Variant of the holographic (light) theme that has no title bar and fills
-         the entire screen -->
+         the entire screen.  This theme
+         sets {@link android.R.attr#windowFullscreen} to true.  -->
     <style name="Theme.Holo.Light.NoActionBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
  
+    <!-- Variant of the holographic (light) theme that has no title bar and fills
+         the entire screen and extends into the display overscan region.  This theme
+         sets {@link android.R.attr#windowFullscreen} and {@link android.R.attr#windowOverscan}
+         to true. -->
+    <style name="Theme.Holo.Light.NoActionBar.Overscan">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowOverscan">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
     <!-- Dialog themes for Holo -->
     <eat-comment />
 

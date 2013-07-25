@@ -34,6 +34,7 @@ import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.os.Binder;
 import android.os.Environment;
+import android.os.Process;
 import android.os.UserHandle;
 import android.util.AtomicFile;
 import android.util.Log;
@@ -364,8 +365,9 @@ class UsbSettingsManager {
         }
 
         @Override
-        public void onPackageChanged(String packageName, int uid, String[] components) {
+        public boolean onPackageChanged(String packageName, int uid, String[] components) {
             handlePackageUpdate(packageName);
+            return false;
         }
 
         @Override
@@ -852,21 +854,29 @@ class UsbSettingsManager {
 
     public boolean hasPermission(UsbDevice device) {
         synchronized (mLock) {
+            int uid = Binder.getCallingUid();
+            if (uid == Process.SYSTEM_UID) {
+                return true;
+            }
             SparseBooleanArray uidList = mDevicePermissionMap.get(device.getDeviceName());
             if (uidList == null) {
                 return false;
             }
-            return uidList.get(Binder.getCallingUid());
+            return uidList.get(uid);
         }
     }
 
     public boolean hasPermission(UsbAccessory accessory) {
         synchronized (mLock) {
+            int uid = Binder.getCallingUid();
+            if (uid == Process.SYSTEM_UID) {
+                return true;
+            }
             SparseBooleanArray uidList = mAccessoryPermissionMap.get(accessory);
             if (uidList == null) {
                 return false;
             }
-            return uidList.get(Binder.getCallingUid());
+            return uidList.get(uid);
         }
     }
 

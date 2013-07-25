@@ -35,9 +35,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.RemoteException;
-import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Pair;
@@ -939,6 +937,15 @@ public final class ContactsContract {
          * its row id changed as a result of a sync or aggregation.
          */
         public static final String LOOKUP_KEY = "lookup";
+
+        /**
+         * Timestamp (milliseconds since epoch) of when this contact was last updated.  This
+         * includes updates to all data associated with this contact including raw contacts.  Any
+         * modification (including deletes and inserts) of underlying contact data are also
+         * reflected in this timestamp.
+         */
+        public static final String CONTACT_LAST_UPDATED_TIMESTAMP =
+                "contact_last_updated_timestamp";
     }
 
     /**
@@ -1359,7 +1366,7 @@ public final class ContactsContract {
      * status definitions. Automatically computed as the highest presence of all
      * constituent raw contacts. The provider may choose not to store this value
      * in persistent storage. The expectation is that presence status will be
-     * updated on a regular basic.</td>
+     * updated on a regular basis.</td>
      * </tr>
      * <tr>
      * <td>String</td>
@@ -2113,6 +2120,56 @@ public final class ContactsContract {
         return id >= Profile.MIN_ID;
     }
 
+    protected interface DeletedContactsColumns {
+
+        /**
+         * A reference to the {@link ContactsContract.Contacts#_ID} that was deleted.
+         * <P>Type: INTEGER</P>
+         */
+        public static final String CONTACT_ID = "contact_id";
+
+        /**
+         * Time (milliseconds since epoch) that the contact was deleted.
+         */
+        public static final String CONTACT_DELETED_TIMESTAMP = "contact_deleted_timestamp";
+    }
+
+    /**
+     * Constants for the deleted contact table.  This table holds a log of deleted contacts.
+     * <p>
+     * Log older than {@link #DAYS_KEPT_MILLISECONDS} may be deleted.
+     */
+    public static final class DeletedContacts implements DeletedContactsColumns {
+
+        /**
+         * This utility class cannot be instantiated
+         */
+        private DeletedContacts() {
+        }
+
+        /**
+         * The content:// style URI for this table, which requests a directory of raw contact rows
+         * matching the selection criteria.
+         */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI,
+                "deleted_contacts");
+
+        /**
+         * Number of days that the delete log will be kept.  After this time, delete records may be
+         * deleted.
+         *
+         * @hide
+         */
+        private static final int DAYS_KEPT = 30;
+
+        /**
+         * Milliseconds that the delete log will be kept.  After this time, delete records may be
+         * deleted.
+         */
+        public static final long DAYS_KEPT_MILLISECONDS = 1000L * 60L * 60L * 24L * (long)DAYS_KEPT;
+    }
+
+
     protected interface RawContactsColumns {
         /**
          * A reference to the {@link ContactsContract.Contacts#_ID} that this
@@ -2326,7 +2383,7 @@ public final class ContactsContract {
      * parameters.  The latter approach is preferable, especially when you can reuse the
      * URI:
      * <pre>
-     * Uri rawContactUri = RawContacts.URI.buildUpon()
+     * Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
      *          .appendQueryParameter(RawContacts.ACCOUNT_NAME, accountName)
      *          .appendQueryParameter(RawContacts.ACCOUNT_TYPE, accountType)
      *          .build();
@@ -3793,13 +3850,24 @@ public final class ContactsContract {
     }
 
     /**
+     * Columns in the Data_Usage_Stat table
+     */
+    protected interface DataUsageStatColumns {
+        /** The last time (in milliseconds) this {@link Data} was used. */
+        public static final String LAST_TIME_USED = "last_time_used";
+
+        /** The number of times the referenced {@link Data} has been used. */
+        public static final String TIMES_USED = "times_used";
+    }
+
+    /**
      * Combines all columns returned by {@link ContactsContract.Data} table queries.
      *
      * @see ContactsContract.Data
      */
     protected interface DataColumnsWithJoins extends BaseColumns, DataColumns, StatusColumns,
             RawContactsColumns, ContactsColumns, ContactNameColumns, ContactOptionsColumns,
-            ContactStatusColumns {
+            ContactStatusColumns, DataUsageStatColumns {
     }
 
     /**
@@ -4131,7 +4199,7 @@ public final class ContactsContract {
      * all IM rows. See {@link StatusUpdates} for individual status definitions.
      * The provider may choose not to store this value
      * in persistent storage. The expectation is that presence status will be
-     * updated on a regular basic.
+     * updated on a regular basis.
      * </td>
      * </tr>
      * <tr>
@@ -4323,6 +4391,13 @@ public final class ContactsContract {
          * of data rows matching the selection criteria.
          */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "data");
+
+        /**
+         * A boolean parameter for {@link Data#CONTENT_URI}.
+         * This specifies whether or not the returned data items should be filtered to show
+         * data items belonging to visible contacts only.
+         */
+        public static final String VISIBLE_CONTACTS_ONLY = "visible_contacts_only";
 
         /**
          * The MIME type of the results from {@link #CONTENT_URI}.
@@ -6833,6 +6908,38 @@ public final class ContactsContract {
             public static final Uri CONTENT_FILTER_URI = Uri.withAppendedPath(CONTENT_URI,
                     "filter");
         }
+
+        /**
+         * A special class of data items, used to refer to types of data that can be used to attempt
+         * to start communicating with a person ({@link Phone} and {@link Email}). Note that this
+         * is NOT a separate data kind.
+         *
+         * This URI allows the ContactsProvider to return a unified result for data items that users
+         * can use to initiate communications with another contact. {@link Phone} and {@link Email}
+         * are the current data types in this category.
+         */
+        public static final class Contactables implements DataColumnsWithJoins, CommonColumns {
+            /**
+             * The content:// style URI for these data items, which requests a directory of data
+             * rows matching the selection criteria.
+             */
+            public static final Uri CONTENT_URI = Uri.withAppendedPath(Data.CONTENT_URI,
+                    "contactables");
+
+            /**
+             * The content:// style URI for these data items, which allows for a query parameter to
+             * be appended onto the end to filter for data items matching the query.
+             */
+            public static final Uri CONTENT_FILTER_URI = Uri.withAppendedPath(
+                    Contactables.CONTENT_URI, "filter");
+
+            /**
+             * A boolean parameter for {@link Data#CONTENT_URI}.
+             * This specifies whether or not the returned data items should be filtered to show
+             * data items belonging to visible contacts only.
+             */
+            public static final String VISIBLE_CONTACTS_ONLY = "visible_contacts_only";
+        }
     }
 
     /**
@@ -7857,6 +7964,13 @@ public final class ContactsContract {
          */
         public static final String SEARCH_SUGGESTION_CREATE_CONTACT_CLICKED =
                 "android.provider.Contacts.SEARCH_SUGGESTION_CREATE_CONTACT_CLICKED";
+
+        /**
+         * This is the intent that is fired when the contacts database is created. <p> The
+         * READ_CONTACT permission is required to receive these broadcasts.
+         */
+        public static final String CONTACTS_DATABASE_CREATED =
+                "android.provider.Contacts.DATABASE_CREATED";
 
         /**
          * Starts an Activity that lets the user pick a contact to attach an image to.

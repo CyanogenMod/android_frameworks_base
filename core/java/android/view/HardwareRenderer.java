@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Copyright (C) 2013 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 package android.view;
 
@@ -29,6 +28,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Trace;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import com.google.android.gles_jni.EGLImpl;
 
@@ -42,13 +42,14 @@ import javax.microedition.khronos.opengles.GL;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static javax.microedition.khronos.egl.EGL10.*;
 
 /**
- * Interface for rendering a ViewAncestor using hardware acceleration.
- * 
+ * Interface for rendering a view hierarchy using hardware acceleration.
+ *
  * @hide
  */
 public abstract class HardwareRenderer {
@@ -62,9 +63,9 @@ public abstract class HardwareRenderer {
     /**
      * Turn on to only refresh the parts of the screen that need updating.
      * When turned on the property defined by {@link #RENDER_DIRTY_REGIONS_PROPERTY}
-     * must also have the value "true". 
+     * must also have the value "true".
      */
-    public static final boolean RENDER_DIRTY_REGIONS = true;
+    static final boolean RENDER_DIRTY_REGIONS = true;
 
     /**
      * System property used to enable or disable dirty regions invalidation.
@@ -76,16 +77,6 @@ public abstract class HardwareRenderer {
      * "false", to disable partial invalidates
      */
     static final String RENDER_DIRTY_REGIONS_PROPERTY = "debug.hwui.render_dirty_regions";
-    
-    /**
-     * System property used to enable or disable vsync.
-     * The default value of this property is assumed to be false.
-     * 
-     * Possible values:
-     * "true", to disable vsync
-     * "false", to enable vsync
-     */
-    static final String DISABLE_VSYNC_PROPERTY = "debug.hwui.disable_vsync";
 
     /**
      * System property used to enable or disable hardware rendering profiling.
@@ -97,11 +88,32 @@ public abstract class HardwareRenderer {
      *
      * Possible values:
      * "true", to enable profiling
+     * "visual_bars", to enable profiling and visualize the results on screen
+     * "visual_lines", to enable profiling and visualize the results on screen
      * "false", to disable profiling
-     * 
+     *
+     * @see #PROFILE_PROPERTY_VISUALIZE_BARS
+     * @see #PROFILE_PROPERTY_VISUALIZE_LINES
+     *
      * @hide
      */
     public static final String PROFILE_PROPERTY = "debug.hwui.profile";
+
+    /**
+     * Value for {@link #PROFILE_PROPERTY}. When the property is set to this
+     * value, profiling data will be visualized on screen as a bar chart.
+     *
+     * @hide
+     */
+    public static final String PROFILE_PROPERTY_VISUALIZE_BARS = "visual_bars";
+
+    /**
+     * Value for {@link #PROFILE_PROPERTY}. When the property is set to this
+     * value, profiling data will be visualized on screen as a line chart.
+     *
+     * @hide
+     */
+    public static final String PROFILE_PROPERTY_VISUALIZE_LINES = "visual_lines";
 
     /**
      * System property used to specify the number of frames to be used
@@ -159,6 +171,19 @@ public abstract class HardwareRenderer {
      * @hide
      */
     public static final String DEBUG_SHOW_OVERDRAW_PROPERTY = "debug.hwui.show_overdraw";
+
+    /**
+     * Turn on to debug non-rectangular clip operations.
+     *
+     * Possible values:
+     * "hide", to disable this debug mode
+     * "highlight", highlight drawing commands tested against a non-rectangular clip
+     * "stencil", renders the clip region on screen when set
+     *
+     * @hide
+     */
+    public static final String DEBUG_SHOW_NON_RECTANGULAR_CLIP_PROPERTY =
+            "debug.hwui.show_non_rect_clip";
 
     /**
      * A process can set this flag to false to prevent the use of hardware
@@ -323,10 +348,26 @@ public abstract class HardwareRenderer {
     abstract long getFrameCount();
 
     /**
+     * Loads system properties used by the renderer. This method is invoked
+     * whenever system properties are modified. Implementations can use this
+     * to trigger live updates of the renderer based on properties.
+     *
+     * @param surface The surface to update with the new properties.
+     *                Can be null.
+     *
+     * @return True if a property has changed.
+     */
+    abstract boolean loadSystemProperties(Surface surface);
+
+    private static native boolean nLoadProperties();
+
+    /**
      * Sets the directory to use as a persistent storage for hardware rendering
      * resources.
      * 
      * @param cacheDir A directory the current process can write to
+     *
+     * @hide
      */
     public static void setupDiskCache(File cacheDir) {
         nSetupShadersDiskCache(new File(cacheDir, CACHE_PATH_SHADERS).getAbsolutePath());
@@ -338,7 +379,7 @@ public abstract class HardwareRenderer {
      * Notifies EGL that the frame is about to be rendered.
      * @param size
      */
-    private static void beginFrame(int[] size) {
+    static void beginFrame(int[] size) {
         nBeginFrame(size);
     }
 
@@ -373,15 +414,6 @@ public abstract class HardwareRenderer {
     private static native boolean nIsBackBufferPreserved();
 
     /**
-     * Disables v-sync. For performance testing only.
-     */
-    static void disableVsync() {
-        nDisableVsync();
-    }
-
-    private static native void nDisableVsync();
-
-    /**
      * Indicates that the specified hardware layer needs to be updated
      * as soon as possible.
      * 
@@ -396,6 +428,8 @@ public abstract class HardwareRenderer {
     interface HardwareDrawCallbacks {
         /**
          * Invoked before a view is drawn by a hardware renderer.
+         * This method can be used to apply transformations to the
+         * canvas but no drawing command should be issued.
          * 
          * @param canvas The Canvas used to render the view.
          */
@@ -403,6 +437,7 @@ public abstract class HardwareRenderer {
 
         /**
          * Invoked after a view is drawn by a hardware renderer.
+         * It is safe to invoke drawing commands from this method.
          * 
          * @param canvas The Canvas used to render the view.
          */
@@ -416,20 +451,19 @@ public abstract class HardwareRenderer {
      * @param attachInfo AttachInfo tied to the specified view.
      * @param callbacks Callbacks invoked when drawing happens.
      * @param dirty The dirty rectangle to update, can be null.
-     * 
-     * @return true if the dirty rect was ignored, false otherwise
      */
-    abstract boolean draw(View view, View.AttachInfo attachInfo, HardwareDrawCallbacks callbacks,
+    abstract void draw(View view, View.AttachInfo attachInfo, HardwareDrawCallbacks callbacks,
             Rect dirty);
 
     /**
      * Creates a new display list that can be used to record batches of
      * drawing operations.
      * 
-     * @param name The name of the display list, used for debugging purpose.
-     *             May be null
+     * @param name The name of the display list, used for debugging purpose. May be null.
      * 
      * @return A new display list.
+     *
+     * @hide
      */
     public abstract DisplayList createDisplayList(String name);
 
@@ -457,7 +491,6 @@ public abstract class HardwareRenderer {
     /**
      * Creates a new {@link SurfaceTexture} that can be used to render into the
      * specified hardware layer.
-     * 
      *
      * @param layer The layer to render into using a {@link android.graphics.SurfaceTexture}
      * 
@@ -524,6 +557,13 @@ public abstract class HardwareRenderer {
         }
         return false;
     }
+
+    /**
+     * Optional, sets the name of the renderer. Useful for debugging purposes.
+     *
+     * @param name The name of this renderer, can be null
+     */
+    abstract void setName(String name);
 
     /**
      * Creates a hardware renderer using OpenGL.
@@ -612,6 +652,100 @@ public abstract class HardwareRenderer {
         mRequested = requested;
     }
 
+    /**
+     * Describes a series of frames that should be drawn on screen as a graph.
+     * Each frame is composed of 1 or more elements.
+     */
+    abstract class GraphDataProvider {
+        /**
+         * Draws the graph as bars. Frame elements are stacked on top of
+         * each other.
+         */
+        public static final int GRAPH_TYPE_BARS = 0;
+        /**
+         * Draws the graph as lines. The number of series drawn corresponds
+         * to the number of elements.
+         */
+        public static final int GRAPH_TYPE_LINES = 1;
+
+        /**
+         * Returns the type of graph to render.
+         *
+         * @return {@link #GRAPH_TYPE_BARS} or {@link #GRAPH_TYPE_LINES}
+         */
+        abstract int getGraphType();
+
+        /**
+         * This method is invoked before the graph is drawn. This method
+         * can be used to compute sizes, etc.
+         *
+         * @param metrics The display metrics
+         */
+        abstract void prepare(DisplayMetrics metrics);
+
+        /**
+         * @return The size in pixels of a vertical unit.
+         */
+        abstract int getVerticalUnitSize();
+
+        /**
+         * @return The size in pixels of a horizontal unit.
+         */
+        abstract int getHorizontalUnitSize();
+
+        /**
+         * @return The size in pixels of the margin between horizontal units.
+         */
+        abstract int getHorizontaUnitMargin();
+
+        /**
+         * An optional threshold value.
+         *
+         * @return A value >= 0 to draw the threshold, a negative value
+         *         to ignore it.
+         */
+        abstract float getThreshold();
+
+        /**
+         * The data to draw in the graph. The number of elements in the
+         * array must be at least {@link #getFrameCount()} * {@link #getElementCount()}.
+         * If a value is negative the following values will be ignored.
+         */
+        abstract float[] getData();
+
+        /**
+         * Returns the number of frames to render in the graph.
+         */
+        abstract int getFrameCount();
+
+        /**
+         * Returns the number of elements in each frame. This directly affects
+         * the number of series drawn in the graph.
+         */
+        abstract int getElementCount();
+
+        /**
+         * Returns the current frame, if any. If the returned value is negative
+         * the current frame is ignored.
+         */
+        abstract int getCurrentFrame();
+
+        /**
+         * Prepares the paint to draw the specified element (or series.)
+         */
+        abstract void setupGraphPaint(Paint paint, int elementIndex);
+
+        /**
+         * Prepares the paint to draw the threshold.
+         */
+        abstract void setupThresholdPaint(Paint paint);
+
+        /**
+         * Prepares the paint to draw the current frame indicator.
+         */
+        abstract void setupCurrentFramePaint(Paint paint);
+    }
+
     @SuppressWarnings({"deprecation"})
     static abstract class GlRenderer extends HardwareRenderer {
         static final int SURFACE_STATE_ERROR = 0;
@@ -619,6 +753,14 @@ public abstract class HardwareRenderer {
         static final int SURFACE_STATE_UPDATED = 2;
 
         static final int FUNCTOR_PROCESS_DELAY = 4;
+
+        private static final int PROFILE_DRAW_MARGIN = 0;
+        private static final int PROFILE_DRAW_WIDTH = 3;
+        private static final int[] PROFILE_DRAW_COLORS = { 0xcf3e66cc, 0xcfdc3912, 0xcfe69800 };
+        private static final int PROFILE_DRAW_CURRENT_FRAME_COLOR = 0xcf5faa4d;
+        private static final int PROFILE_DRAW_THRESHOLD_COLOR = 0xff5faa4d;
+        private static final int PROFILE_DRAW_THRESHOLD_STROKE_WIDTH = 2;
+        private static final int PROFILE_DRAW_DP_PER_MS = 7;
 
         static EGL10 sEgl;
         static EGLDisplay sEglDisplay;
@@ -637,6 +779,8 @@ public abstract class HardwareRenderer {
         GL mGl;
         HardwareCanvas mCanvas;
 
+        String mName;
+
         long mFrameCount;
         Paint mDebugPaint;
 
@@ -652,15 +796,18 @@ public abstract class HardwareRenderer {
         boolean mDirtyRegionsEnabled;
         boolean mUpdateDirtyRegions;
 
-        final boolean mVsyncDisabled;
-
-        final boolean mProfileEnabled;
-        final float[] mProfileData;
-        final ReentrantLock mProfileLock;
+        boolean mProfileEnabled;
+        int mProfileVisualizerType = -1;
+        float[] mProfileData;
+        ReentrantLock mProfileLock;
         int mProfileCurrentFrame = -PROFILE_FRAME_DATA_COUNT;
-        
-        final boolean mDebugDirtyRegions;
-        final boolean mShowOverdraw;
+
+        GraphDataProvider mDebugDataProvider;
+        float[][] mProfileShapes;
+        Paint mProfilePaint;
+
+        boolean mDebugDirtyRegions;
+        boolean mShowOverdraw;
 
         final int mGlVersion;
         final boolean mTranslucent;
@@ -675,44 +822,90 @@ public abstract class HardwareRenderer {
         GlRenderer(int glVersion, boolean translucent) {
             mGlVersion = glVersion;
             mTranslucent = translucent;
-            
-            String property;
 
-            property = SystemProperties.get(DISABLE_VSYNC_PROPERTY, "false");
-            mVsyncDisabled = "true".equalsIgnoreCase(property);
-            if (mVsyncDisabled) {
-                Log.d(LOG_TAG, "Disabling v-sync");
+            loadSystemProperties(null);
+        }
+
+        private static final String[] VISUALIZERS = {
+                PROFILE_PROPERTY_VISUALIZE_BARS,
+                PROFILE_PROPERTY_VISUALIZE_LINES
+        };
+
+        @Override
+        boolean loadSystemProperties(Surface surface) {
+            boolean value;
+            boolean changed = false;
+
+            String profiling = SystemProperties.get(PROFILE_PROPERTY);
+            int graphType = Arrays.binarySearch(VISUALIZERS, profiling);
+            value = graphType >= 0;
+
+            if (graphType != mProfileVisualizerType) {
+                changed = true;
+                mProfileVisualizerType = graphType;
+
+                mProfileShapes = null;
+                mProfilePaint = null;
+
+                if (value) {
+                    mDebugDataProvider = new DrawPerformanceDataProvider(graphType);
+                } else {
+                    mDebugDataProvider = null;
+                }
             }
 
-            property = SystemProperties.get(PROFILE_PROPERTY, "false");
-            mProfileEnabled = "true".equalsIgnoreCase(property);
-            if (mProfileEnabled) {
-                Log.d(LOG_TAG, "Profiling hardware renderer");
+            // If on-screen profiling is not enabled, we need to check whether
+            // console profiling only is enabled
+            if (!value) {
+                value = Boolean.parseBoolean(profiling);
             }
 
-            if (mProfileEnabled) {
-                property = SystemProperties.get(PROFILE_MAXFRAMES_PROPERTY,
-                        Integer.toString(PROFILE_MAX_FRAMES));
-                int maxProfileFrames = Integer.valueOf(property);
-                mProfileData = new float[maxProfileFrames * PROFILE_FRAME_DATA_COUNT];
-                for (int i = 0; i < mProfileData.length; i += PROFILE_FRAME_DATA_COUNT) {
-                    mProfileData[i] = mProfileData[i + 1] = mProfileData[i + 2] = -1;
+            if (value != mProfileEnabled) {
+                changed = true;
+                mProfileEnabled = value;
+
+                if (mProfileEnabled) {
+                    Log.d(LOG_TAG, "Profiling hardware renderer");
+
+                    int maxProfileFrames = SystemProperties.getInt(PROFILE_MAXFRAMES_PROPERTY,
+                            PROFILE_MAX_FRAMES);
+                    mProfileData = new float[maxProfileFrames * PROFILE_FRAME_DATA_COUNT];
+                    for (int i = 0; i < mProfileData.length; i += PROFILE_FRAME_DATA_COUNT) {
+                        mProfileData[i] = mProfileData[i + 1] = mProfileData[i + 2] = -1;
+                    }
+
+                    mProfileLock = new ReentrantLock();
+                } else {
+                    mProfileData = null;
+                    mProfileLock = null;
+                    mProfileVisualizerType = -1;
                 }
 
-                mProfileLock = new ReentrantLock();
-            } else {
-                mProfileData = null;
-                mProfileLock = null;
+                mProfileCurrentFrame = -PROFILE_FRAME_DATA_COUNT;
             }
 
-            property = SystemProperties.get(DEBUG_DIRTY_REGIONS_PROPERTY, "false");
-            mDebugDirtyRegions = "true".equalsIgnoreCase(property);
-            if (mDebugDirtyRegions) {
-                Log.d(LOG_TAG, "Debugging dirty regions");
+            value = SystemProperties.getBoolean(DEBUG_DIRTY_REGIONS_PROPERTY, false);
+            if (value != mDebugDirtyRegions) {
+                changed = true;
+                mDebugDirtyRegions = value;
+
+                if (mDebugDirtyRegions) {
+                    Log.d(LOG_TAG, "Debugging dirty regions");
+                }
             }
 
-            mShowOverdraw = SystemProperties.getBoolean(
+            value = SystemProperties.getBoolean(
                     HardwareRenderer.DEBUG_SHOW_OVERDRAW_PROPERTY, false);
+            if (value != mShowOverdraw) {
+                changed = true;
+                mShowOverdraw = value;
+            }
+
+            if (nLoadProperties()) {
+                changed = true;
+            }
+
+            return changed;
         }
 
         @Override
@@ -795,12 +988,9 @@ public abstract class HardwareRenderer {
                     } else {
                         if (mCanvas == null) {
                             mCanvas = createCanvas();
+                            mCanvas.setName(mName);
                         }
-                        if (mCanvas != null) {
-                            setEnabled(true);
-                        } else {
-                            Log.w(LOG_TAG, "Hardware accelerated Canvas could not be created");
-                        }
+                        setEnabled(true);
                     }
 
                     return mCanvas != null;
@@ -842,19 +1032,7 @@ public abstract class HardwareRenderer {
 
                     checkEglErrorsForced();
 
-                    sEglConfig = chooseEglConfig();
-                    if (sEglConfig == null) {
-                        // We tried to use EGL_SWAP_BEHAVIOR_PRESERVED_BIT, try again without
-                        if (sDirtyRegions) {
-                            sDirtyRegions = false;
-                            sEglConfig = chooseEglConfig();
-                            if (sEglConfig == null) {
-                                throw new RuntimeException("eglConfig not initialized");
-                            }
-                        } else {
-                            throw new RuntimeException("eglConfig not initialized");
-                        }
-                    }
+                    sEglConfig = loadEglConfig();
                 }
             }
 
@@ -866,6 +1044,23 @@ public abstract class HardwareRenderer {
                 mEglContext = createContext(sEgl, sEglDisplay, sEglConfig);
                 sEglContextStorage.set(createManagedContext(mEglContext));
             }
+        }
+
+        private EGLConfig loadEglConfig() {
+            EGLConfig eglConfig = chooseEglConfig();
+            if (eglConfig == null) {
+                // We tried to use EGL_SWAP_BEHAVIOR_PRESERVED_BIT, try again without
+                if (sDirtyRegions) {
+                    sDirtyRegions = false;
+                    eglConfig = chooseEglConfig();
+                    if (eglConfig == null) {
+                        throw new RuntimeException("eglConfig not initialized");
+                    }
+                } else {
+                    throw new RuntimeException("eglConfig not initialized");
+                }
+            }
+            return eglConfig;
         }
 
         abstract ManagedEGLContext createManagedContext(EGLContext eglContext);
@@ -1104,6 +1299,11 @@ public abstract class HardwareRenderer {
             return mCanvas;
         }
 
+        @Override
+        void setName(String name) {
+            mName = name;
+        }
+
         boolean canDraw() {
             return mGl != null && mCanvas != null;
         }        
@@ -1134,7 +1334,7 @@ public abstract class HardwareRenderer {
         }
 
         @Override
-        boolean draw(View view, View.AttachInfo attachInfo, HardwareDrawCallbacks callbacks,
+        void draw(View view, View.AttachInfo attachInfo, HardwareDrawCallbacks callbacks,
                 Rect dirty) {
             if (canDraw()) {
                 if (!hasDirtyRegions()) {
@@ -1154,93 +1354,27 @@ public abstract class HardwareRenderer {
                         mProfileLock.lock();
                     }
 
-                    // We had to change the current surface and/or context, redraw everything
-                    if (surfaceState == SURFACE_STATE_UPDATED) {
-                        dirty = null;
-                        beginFrame(null);
-                    } else {
-                        int[] size = mSurfaceSize;
-                        beginFrame(size);
+                    dirty = beginFrame(canvas, dirty, surfaceState);
 
-                        if (size[1] != mHeight || size[0] != mWidth) {
-                            mWidth = size[0];
-                            mHeight = size[1];
-
-                            canvas.setViewport(mWidth, mHeight);
-
-                            dirty = null;
-                        }
-                    }
+                    DisplayList displayList = buildDisplayList(view, canvas);
 
                     int saveCount = 0;
                     int status = DisplayList.STATUS_DONE;
 
                     try {
-                        view.mRecreateDisplayList = (view.mPrivateFlags & View.PFLAG_INVALIDATED)
-                                == View.PFLAG_INVALIDATED;
-                        view.mPrivateFlags &= ~View.PFLAG_INVALIDATED;
+                        status = prepareFrame(dirty);
 
-                        long getDisplayListStartTime = 0;
-                        if (mProfileEnabled) {
-                            mProfileCurrentFrame += PROFILE_FRAME_DATA_COUNT;
-                            if (mProfileCurrentFrame >= mProfileData.length) {
-                                mProfileCurrentFrame = 0;
-                            }
-
-                            getDisplayListStartTime = System.nanoTime();
-                        }
-
-                        canvas.clearLayerUpdates();
-
-                        DisplayList displayList;
-                        Trace.traceBegin(Trace.TRACE_TAG_VIEW, "getDisplayList");
-                        try {
-                            displayList = view.getDisplayList();
-                        } finally {
-                            Trace.traceEnd(Trace.TRACE_TAG_VIEW);
-                        }
-
-                        Trace.traceBegin(Trace.TRACE_TAG_VIEW, "prepareFrame");
-                        try {
-                            status = onPreDraw(dirty);
-                        } finally {
-                            Trace.traceEnd(Trace.TRACE_TAG_VIEW);
-                        }
                         saveCount = canvas.save();
                         callbacks.onHardwarePreDraw(canvas);
 
-                        if (mProfileEnabled) {
-                            long now = System.nanoTime();
-                            float total = (now - getDisplayListStartTime) * 0.000001f;
-                            //noinspection PointlessArithmeticExpression
-                            mProfileData[mProfileCurrentFrame] = total;
-                        }
-
                         if (displayList != null) {
-                            long drawDisplayListStartTime = 0;
-                            if (mProfileEnabled) {
-                                drawDisplayListStartTime = System.nanoTime();
-                            }
-
-                            Trace.traceBegin(Trace.TRACE_TAG_VIEW, "drawDisplayList");
-                            try {
-                                status |= canvas.drawDisplayList(displayList, mRedrawClip,
-                                        DisplayList.FLAG_CLIP_CHILDREN);
-                            } finally {
-                                Trace.traceEnd(Trace.TRACE_TAG_VIEW);
-                            }
-
-                            if (mProfileEnabled) {
-                                long now = System.nanoTime();
-                                float total = (now - drawDisplayListStartTime) * 0.000001f;
-                                mProfileData[mProfileCurrentFrame + 1] = total;
-                            }
-
-                            handleFunctorStatus(attachInfo, status);
+                            status |= drawDisplayList(attachInfo, canvas, displayList, status);
                         } else {
                             // Shouldn't reach here
                             view.draw(canvas);
                         }
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "An error has occurred while drawing:", e);
                     } finally {
                         callbacks.onHardwarePostDraw(canvas);
                         canvas.restoreToCount(saveCount);
@@ -1248,48 +1382,154 @@ public abstract class HardwareRenderer {
 
                         mFrameCount++;
 
-                        if (mDebugDirtyRegions) {
-                            if (mDebugPaint == null) {
-                                mDebugPaint = new Paint();
-                                mDebugPaint.setColor(0x7fff0000);
-                            }
-
-                            if (dirty != null && (mFrameCount & 1) == 0) {
-                                canvas.drawRect(dirty, mDebugPaint);
-                            }
-                        }
+                        debugDirtyRegions(dirty, canvas);
+                        drawProfileData(attachInfo);
                     }
 
                     onPostDraw();
 
-                    attachInfo.mIgnoreDirtyState = false;
-                    
-                    if ((status & DisplayList.STATUS_DREW) == DisplayList.STATUS_DREW) {
-                        long eglSwapBuffersStartTime = 0;
-                        if (mProfileEnabled) {
-                            eglSwapBuffersStartTime = System.nanoTime();
-                        }
-    
-                        sEgl.eglSwapBuffers(sEglDisplay, mEglSurface);
-    
-                        if (mProfileEnabled) {
-                            long now = System.nanoTime();
-                            float total = (now - eglSwapBuffersStartTime) * 0.000001f;
-                            mProfileData[mProfileCurrentFrame + 2] = total;
-                        }
-    
-                        checkEglErrors();
-                    }
+                    swapBuffers(status);
 
                     if (mProfileEnabled) {
                         mProfileLock.unlock();
                     }
 
-                    return dirty == null;
+                    attachInfo.mIgnoreDirtyState = false;
+                }
+            }
+        }
+
+        private DisplayList buildDisplayList(View view, HardwareCanvas canvas) {
+            view.mRecreateDisplayList = (view.mPrivateFlags & View.PFLAG_INVALIDATED)
+                    == View.PFLAG_INVALIDATED;
+            view.mPrivateFlags &= ~View.PFLAG_INVALIDATED;
+
+            long buildDisplayListStartTime = startBuildDisplayListProfiling();
+            canvas.clearLayerUpdates();
+
+            Trace.traceBegin(Trace.TRACE_TAG_VIEW, "getDisplayList");
+            DisplayList displayList = view.getDisplayList();
+            Trace.traceEnd(Trace.TRACE_TAG_VIEW);
+
+            endBuildDisplayListProfiling(buildDisplayListStartTime);
+
+            return displayList;
+        }
+
+        abstract void drawProfileData(View.AttachInfo attachInfo);
+
+        private Rect beginFrame(HardwareCanvas canvas, Rect dirty, int surfaceState) {
+            // We had to change the current surface and/or context, redraw everything
+            if (surfaceState == SURFACE_STATE_UPDATED) {
+                dirty = null;
+                beginFrame(null);
+            } else {
+                int[] size = mSurfaceSize;
+                beginFrame(size);
+
+                if (size[1] != mHeight || size[0] != mWidth) {
+                    mWidth = size[0];
+                    mHeight = size[1];
+
+                    canvas.setViewport(mWidth, mHeight);
+
+                    dirty = null;
                 }
             }
 
-            return false;
+            if (mDebugDataProvider != null) dirty = null;
+
+            return dirty;
+        }
+
+        private long startBuildDisplayListProfiling() {
+            if (mProfileEnabled) {
+                mProfileCurrentFrame += PROFILE_FRAME_DATA_COUNT;
+                if (mProfileCurrentFrame >= mProfileData.length) {
+                    mProfileCurrentFrame = 0;
+                }
+
+                return System.nanoTime();
+            }
+            return 0;
+        }
+
+        private void endBuildDisplayListProfiling(long getDisplayListStartTime) {
+            if (mProfileEnabled) {
+                long now = System.nanoTime();
+                float total = (now - getDisplayListStartTime) * 0.000001f;
+                //noinspection PointlessArithmeticExpression
+                mProfileData[mProfileCurrentFrame] = total;
+            }
+        }
+
+        private int prepareFrame(Rect dirty) {
+            int status;
+            Trace.traceBegin(Trace.TRACE_TAG_VIEW, "prepareFrame");
+            try {
+                status = onPreDraw(dirty);
+            } finally {
+                Trace.traceEnd(Trace.TRACE_TAG_VIEW);
+            }
+            return status;
+        }
+
+        private int drawDisplayList(View.AttachInfo attachInfo, HardwareCanvas canvas,
+                DisplayList displayList, int status) {
+
+            long drawDisplayListStartTime = 0;
+            if (mProfileEnabled) {
+                drawDisplayListStartTime = System.nanoTime();
+            }
+
+            Trace.traceBegin(Trace.TRACE_TAG_VIEW, "drawDisplayList");
+            try {
+                status |= canvas.drawDisplayList(displayList, mRedrawClip,
+                        DisplayList.FLAG_CLIP_CHILDREN);
+            } finally {
+                Trace.traceEnd(Trace.TRACE_TAG_VIEW);
+            }
+
+            if (mProfileEnabled) {
+                long now = System.nanoTime();
+                float total = (now - drawDisplayListStartTime) * 0.000001f;
+                mProfileData[mProfileCurrentFrame + 1] = total;
+            }
+
+            handleFunctorStatus(attachInfo, status);
+            return status;
+        }
+
+        private void swapBuffers(int status) {
+            if ((status & DisplayList.STATUS_DREW) == DisplayList.STATUS_DREW) {
+                long eglSwapBuffersStartTime = 0;
+                if (mProfileEnabled) {
+                    eglSwapBuffersStartTime = System.nanoTime();
+                }
+
+                sEgl.eglSwapBuffers(sEglDisplay, mEglSurface);
+
+                if (mProfileEnabled) {
+                    long now = System.nanoTime();
+                    float total = (now - eglSwapBuffersStartTime) * 0.000001f;
+                    mProfileData[mProfileCurrentFrame + 2] = total;
+                }
+
+                checkEglErrors();
+            }
+        }
+
+        private void debugDirtyRegions(Rect dirty, HardwareCanvas canvas) {
+            if (mDebugDirtyRegions) {
+                if (mDebugPaint == null) {
+                    mDebugPaint = new Paint();
+                    mDebugPaint.setColor(0x7fff0000);
+                }
+
+                if (dirty != null && (mFrameCount & 1) == 0) {
+                    canvas.drawRect(dirty, mDebugPaint);
+                }
+            }
         }
 
         private void handleFunctorStatus(View.AttachInfo attachInfo, int status) {
@@ -1362,6 +1602,96 @@ public abstract class HardwareRenderer {
             }
             return SURFACE_STATE_SUCCESS;
         }
+
+        private static int dpToPx(int dp, float density) {
+            return (int) (dp * density + 0.5f);
+        }
+
+        class DrawPerformanceDataProvider extends GraphDataProvider {
+            private final int mGraphType;
+
+            private int mVerticalUnit;
+            private int mHorizontalUnit;
+            private int mHorizontalMargin;
+            private int mThresholdStroke;
+
+            DrawPerformanceDataProvider(int graphType) {
+                mGraphType = graphType;
+            }
+
+            @Override
+            void prepare(DisplayMetrics metrics) {
+                final float density = metrics.density;
+
+                mVerticalUnit = dpToPx(PROFILE_DRAW_DP_PER_MS, density);
+                mHorizontalUnit = dpToPx(PROFILE_DRAW_WIDTH, density);
+                mHorizontalMargin = dpToPx(PROFILE_DRAW_MARGIN, density);
+                mThresholdStroke = dpToPx(PROFILE_DRAW_THRESHOLD_STROKE_WIDTH, density);
+            }
+
+            @Override
+            int getGraphType() {
+                return mGraphType;
+            }
+
+            @Override
+            int getVerticalUnitSize() {
+                return mVerticalUnit;
+            }
+
+            @Override
+            int getHorizontalUnitSize() {
+                return mHorizontalUnit;
+            }
+
+            @Override
+            int getHorizontaUnitMargin() {
+                return mHorizontalMargin;
+            }
+
+            @Override
+            float[] getData() {
+                return mProfileData;
+            }
+
+            @Override
+            float getThreshold() {
+                return 16;
+            }
+
+            @Override
+            int getFrameCount() {
+                return mProfileData.length / PROFILE_FRAME_DATA_COUNT;
+            }
+
+            @Override
+            int getElementCount() {
+                return PROFILE_FRAME_DATA_COUNT;
+            }
+
+            @Override
+            int getCurrentFrame() {
+                return mProfileCurrentFrame / PROFILE_FRAME_DATA_COUNT;
+            }
+
+            @Override
+            void setupGraphPaint(Paint paint, int elementIndex) {
+                paint.setColor(PROFILE_DRAW_COLORS[elementIndex]);
+                if (mGraphType == GRAPH_TYPE_LINES) paint.setStrokeWidth(mThresholdStroke);
+            }
+
+            @Override
+            void setupThresholdPaint(Paint paint) {
+                paint.setColor(PROFILE_DRAW_THRESHOLD_COLOR);
+                paint.setStrokeWidth(mThresholdStroke);
+            }
+
+            @Override
+            void setupCurrentFramePaint(Paint paint) {
+                paint.setColor(PROFILE_DRAW_CURRENT_FRAME_COLOR);
+                if (mGraphType == GRAPH_TYPE_LINES) paint.setStrokeWidth(mThresholdStroke);
+            }
+        }
     }
 
     /**
@@ -1369,6 +1699,8 @@ public abstract class HardwareRenderer {
      */
     static class Gl20Renderer extends GlRenderer {
         private GLES20Canvas mGlCanvas;
+
+        private DisplayMetrics mDisplayMetrics;
 
         private static EGLSurface sPbuffer;
         private static final Object[] sPbufferLock = new Object[0];
@@ -1436,6 +1768,10 @@ public abstract class HardwareRenderer {
 
         @Override
         int[] getConfig(boolean dirtyRegions) {
+            //noinspection PointlessBooleanExpression,ConstantConditions
+            final int stencilSize = GLES20Canvas.getStencilSize();
+            final int swapBehavior = dirtyRegions ? EGL14.EGL_SWAP_BEHAVIOR_PRESERVED_BIT : 0;
+
             return new int[] {
                     EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
                     EGL_RED_SIZE, 8,
@@ -1444,14 +1780,12 @@ public abstract class HardwareRenderer {
                     EGL_ALPHA_SIZE, 8,
                     EGL_DEPTH_SIZE, 0,
                     EGL_CONFIG_CAVEAT, EGL_NONE,
-                    // TODO: Find a better way to choose the stencil size
-                    EGL_STENCIL_SIZE, mShowOverdraw ? GLES20Canvas.getStencilSize() : 0,
-                    EGL_SURFACE_TYPE, EGL_WINDOW_BIT |
-                            (dirtyRegions ? EGL14.EGL_SWAP_BEHAVIOR_PRESERVED_BIT : 0),
+                    EGL_STENCIL_SIZE, stencilSize,
+                    EGL_SURFACE_TYPE, EGL_WINDOW_BIT | swapBehavior,
                     EGL_NONE
             };
         }
-        
+
         @Override
         void initCaches() {
             GLES20Canvas.initCaches();
@@ -1473,6 +1807,153 @@ public abstract class HardwareRenderer {
         }
 
         @Override
+        void drawProfileData(View.AttachInfo attachInfo) {
+            if (mDebugDataProvider != null) {
+                final GraphDataProvider provider = mDebugDataProvider;
+                initProfileDrawData(attachInfo, provider);
+
+                final int height = provider.getVerticalUnitSize();
+                final int margin = provider.getHorizontaUnitMargin();
+                final int width = provider.getHorizontalUnitSize();
+
+                int x = 0;
+                int count = 0;
+                int current = 0;
+
+                final float[] data = provider.getData();
+                final int elementCount = provider.getElementCount();
+                final int graphType = provider.getGraphType();
+
+                int totalCount = provider.getFrameCount() * elementCount;
+                if (graphType == GraphDataProvider.GRAPH_TYPE_LINES) {
+                    totalCount -= elementCount;
+                }
+
+                for (int i = 0; i < totalCount; i += elementCount) {
+                    if (data[i] < 0.0f) break;
+
+                    int index = count * 4;
+                    if (i == provider.getCurrentFrame() * elementCount) current = index;
+
+                    x += margin;
+                    int x2 = x + width;
+
+                    int y2 = mHeight;
+                    int y1 = (int) (y2 - data[i] * height);
+
+                    switch (graphType) {
+                        case GraphDataProvider.GRAPH_TYPE_BARS: {
+                            for (int j = 0; j < elementCount; j++) {
+                                //noinspection MismatchedReadAndWriteOfArray
+                                final float[] r = mProfileShapes[j];
+                                r[index] = x;
+                                r[index + 1] = y1;
+                                r[index + 2] = x2;
+                                r[index + 3] = y2;
+
+                                y2 = y1;
+                                if (j < elementCount - 1) {
+                                    y1 = (int) (y2 - data[i + j + 1] * height);
+                                }
+                            }
+                        } break;
+                        case GraphDataProvider.GRAPH_TYPE_LINES: {
+                            for (int j = 0; j < elementCount; j++) {
+                                //noinspection MismatchedReadAndWriteOfArray
+                                final float[] r = mProfileShapes[j];
+                                r[index] = (x + x2) * 0.5f;
+                                r[index + 1] = index == 0 ? y1 : r[index - 1];
+                                r[index + 2] = r[index] + width;
+                                r[index + 3] = y1;
+
+                                y2 = y1;
+                                if (j < elementCount - 1) {
+                                    y1 = (int) (y2 - data[i + j + 1] * height);
+                                }
+                            }
+                        } break;
+                    }
+
+
+                    x += width;
+                    count++;
+                }
+
+                x += margin;
+
+                drawGraph(graphType, count);
+                drawCurrentFrame(graphType, current);
+                drawThreshold(x, height);
+            }
+        }
+
+        private void drawGraph(int graphType, int count) {
+            for (int i = 0; i < mProfileShapes.length; i++) {
+                mDebugDataProvider.setupGraphPaint(mProfilePaint, i);
+                switch (graphType) {
+                    case GraphDataProvider.GRAPH_TYPE_BARS:
+                        mGlCanvas.drawRects(mProfileShapes[i], count * 4, mProfilePaint);
+                        break;
+                    case GraphDataProvider.GRAPH_TYPE_LINES:
+                        mGlCanvas.drawLines(mProfileShapes[i], 0, count * 4, mProfilePaint);
+                        break;
+                }
+            }
+        }
+
+        private void drawCurrentFrame(int graphType, int index) {
+            if (index >= 0) {
+                mDebugDataProvider.setupCurrentFramePaint(mProfilePaint);
+                switch (graphType) {
+                    case GraphDataProvider.GRAPH_TYPE_BARS:
+                        mGlCanvas.drawRect(mProfileShapes[2][index], mProfileShapes[2][index + 1],
+                                mProfileShapes[2][index + 2], mProfileShapes[0][index + 3],
+                                mProfilePaint);
+                        break;
+                    case GraphDataProvider.GRAPH_TYPE_LINES:
+                        mGlCanvas.drawLine(mProfileShapes[2][index], mProfileShapes[2][index + 1],
+                                mProfileShapes[2][index], mHeight, mProfilePaint);
+                        break;
+                }
+            }
+        }
+
+        private void drawThreshold(int x, int height) {
+            float threshold = mDebugDataProvider.getThreshold();
+            if (threshold > 0.0f) {
+                mDebugDataProvider.setupThresholdPaint(mProfilePaint);
+                int y = (int) (mHeight - threshold * height);
+                mGlCanvas.drawLine(0.0f, y, x, y, mProfilePaint);
+            }
+        }
+
+        private void initProfileDrawData(View.AttachInfo attachInfo, GraphDataProvider provider) {
+            if (mProfileShapes == null) {
+                final int elementCount = provider.getElementCount();
+                final int frameCount = provider.getFrameCount();
+
+                mProfileShapes = new float[elementCount][];
+                for (int i = 0; i < elementCount; i++) {
+                    mProfileShapes[i] = new float[frameCount * 4];
+                }
+
+                mProfilePaint = new Paint();
+            }
+
+            mProfilePaint.reset();
+            if (provider.getGraphType() == GraphDataProvider.GRAPH_TYPE_LINES) {
+                mProfilePaint.setAntiAlias(true);
+            }
+
+            if (mDisplayMetrics == null) {
+                mDisplayMetrics = new DisplayMetrics();
+            }
+
+            attachInfo.mDisplay.getMetrics(mDisplayMetrics);
+            provider.prepare(mDisplayMetrics);
+        }
+
+        @Override
         void destroy(boolean full) {
             try {
                 super.destroy(full);
@@ -1480,14 +1961,6 @@ public abstract class HardwareRenderer {
                 if (full && mGlCanvas != null) {
                     mGlCanvas = null;
                 }
-            }
-        }
-
-        @Override
-        void setup(int width, int height) {
-            super.setup(width, height);
-            if (mVsyncDisabled) {
-                disableVsync();
             }
         }
 
@@ -1507,12 +1980,12 @@ public abstract class HardwareRenderer {
         }
 
         @Override
-        HardwareLayer createHardwareLayer(int width, int height, boolean isOpaque) {
+        public HardwareLayer createHardwareLayer(int width, int height, boolean isOpaque) {
             return new GLES20RenderLayer(width, height, isOpaque);
         }
 
         @Override
-        SurfaceTexture createSurfaceTexture(HardwareLayer layer) {
+        public SurfaceTexture createSurfaceTexture(HardwareLayer layer) {
             return ((GLES20TextureLayer) layer).getSurfaceTexture();
         }
 

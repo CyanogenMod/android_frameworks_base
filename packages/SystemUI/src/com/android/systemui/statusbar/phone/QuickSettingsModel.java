@@ -44,9 +44,9 @@ import android.view.inputmethod.InputMethodSubtype;
 
 import com.android.internal.view.RotationPolicy;
 import com.android.systemui.R;
+import com.android.systemui.settings.CurrentUserTracker;
+import com.android.systemui.settings.BrightnessController.BrightnessStateChangeCallback;
 import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallback;
-import com.android.systemui.statusbar.policy.BrightnessController.BrightnessStateChangeCallback;
-import com.android.systemui.statusbar.policy.CurrentUserTracker;
 import com.android.systemui.statusbar.policy.LocationController.LocationGpsStateChangeCallback;
 import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
 
@@ -96,6 +96,31 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         public void refreshView(QuickSettingsTileView view, State state);
     }
 
+    public static class BasicRefreshCallback implements RefreshCallback {
+        private final QuickSettingsBasicTile mView;
+        private boolean mShowWhenEnabled;
+
+        public BasicRefreshCallback(QuickSettingsBasicTile v) {
+            mView = v;
+        }
+        public void refreshView(QuickSettingsTileView ignored, State state) {
+            if (mShowWhenEnabled) {
+                mView.setVisibility(state.enabled ? View.VISIBLE : View.GONE);
+            }
+            if (state.iconId != 0) {
+                mView.setImageDrawable(null); // needed to flush any cached IDs
+                mView.setImageResource(state.iconId);
+            }
+            if (state.label != null) {
+                mView.setText(state.label);
+            }
+        }
+        public BasicRefreshCallback setShowWhenEnabled(boolean swe) {
+            mShowWhenEnabled = swe;
+            return this;
+        }
+    }
+
     /** Broadcast receive to determine if there is an alarm set. */
     private BroadcastReceiver mAlarmIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -139,7 +164,7 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         public void startObserving() {
             final ContentResolver cr = mContext.getContentResolver();
             cr.registerContentObserver(
-                    Settings.Secure.getUriFor(Settings.Secure.BUGREPORT_IN_POWER_MENU), false, this);
+                    Settings.Global.getUriFor(Settings.Global.BUGREPORT_IN_POWER_MENU), false, this);
         }
     }
 
@@ -239,10 +264,12 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         mContext = context;
         mHandler = new Handler();
         mUserTracker = new CurrentUserTracker(mContext) {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                super.onReceive(context, intent);
-                onUserSwitched();
+            public void onUserSwitched(int newUserId) {
+                mBrightnessObserver.startObserving();
+                onRotationLockChanged();
+                onBrightnessLevelChanged();
+                onNextAlarmChanged();
+                onBugreportChanged();
             }
         };
 
@@ -544,7 +571,7 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         final ContentResolver cr = mContext.getContentResolver();
         boolean enabled = false;
         try {
-            enabled = (Settings.Secure.getInt(cr, Settings.Secure.BUGREPORT_IN_POWER_MENU) != 0);
+            enabled = (Settings.Global.getInt(cr, Settings.Global.BUGREPORT_IN_POWER_MENU) != 0);
         } catch (SettingNotFoundException e) {
         }
 
@@ -704,14 +731,5 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     }
     void refreshBrightnessTile() {
         onBrightnessLevelChanged();
-    }
-
-    // User switch: need to update visuals of all tiles known to have per-user state
-    void onUserSwitched() {
-        mBrightnessObserver.startObserving();
-        onRotationLockChanged();
-        onBrightnessLevelChanged();
-        onNextAlarmChanged();
-        onBugreportChanged();
     }
 }

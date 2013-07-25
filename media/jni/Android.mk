@@ -5,7 +5,9 @@ LOCAL_SRC_FILES:= \
     android_media_MediaCrypto.cpp \
     android_media_MediaCodec.cpp \
     android_media_MediaCodecList.cpp \
+    android_media_MediaDrm.cpp \
     android_media_MediaExtractor.cpp \
+    android_media_MediaMuxer.cpp \
     android_media_MediaPlayer.cpp \
     android_media_MediaRecorder.cpp \
     android_media_MediaScanner.cpp \
@@ -24,9 +26,9 @@ LOCAL_SHARED_LIBRARIES := \
     libutils \
     libbinder \
     libmedia \
-    libmedia_native \
     libskia \
     libui \
+    liblog \
     libcutils \
     libgui \
     libstagefright \

@@ -17,7 +17,7 @@
 <!-- package name must be unique so suffix with "tests" so package loader doesn't ignore us -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.android.connectivitymanagertest"
-  android:sharedUserId="com.android.uid.test">
+  android:sharedUserId="android.uid.system">
 
     <!-- We add an application tag here just so that we can indicate that
          this package needs to link against the android.test library,
@@ -32,6 +32,7 @@
             </intent-filter>
         </activity>
     </application>
+
     <!--
     This declares that this app uses the instrumentation test runner targeting
     the package of connectivitymanagertest. To run the tests use the command:
@@ -61,6 +62,16 @@
     <instrumentation android:name=".ConnectivityManagerStressTestRunner"
         android:targetPackage="com.android.connectivitymanagertest"
         android:label="Test runner for Connectivity Manager Stress Tests"
+    />
+
+    <!-- run associate test:
+      "adb shell am instrument -e ssid <ssid> -e password <password>
+       -e ecurity-type [OPEN|WEP64|WEP128|WPA_TKIP|WPA2_AES] -e frequency-band [2.4|5.0|auto]
+       -w com.android.connectivitymanagertest/.WifiAssociationTestRunner"
+    -->
+    <instrumentation android:name=".WifiAssociationTestRunner"
+        android:targetPackage="com.android.connectivitymanagertest"
+        android:label="Test runner for Wifi association test"
     />
 
     <uses-permission android:name="android.permission.INTERNET" />

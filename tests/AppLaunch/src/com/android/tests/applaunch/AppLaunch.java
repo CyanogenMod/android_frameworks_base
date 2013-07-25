@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2013 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.android.tests.applaunch;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ActivityManager;
 import android.app.ActivityManager.ProcessErrorStateInfo;
 import android.app.ActivityManagerNative;
@@ -32,9 +34,12 @@ import android.test.InstrumentationTestCase;
 import android.test.InstrumentationTestRunner;
 import android.util.Log;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This test is intended to measure the time it takes for the apps to start.
@@ -48,43 +53,88 @@ import java.util.Map;
 public class AppLaunch extends InstrumentationTestCase {
 
     private static final int JOIN_TIMEOUT = 10000;
-    private static final String TAG = "AppLaunch";
+    private static final String TAG = AppLaunch.class.getSimpleName();
     private static final String KEY_APPS = "apps";
+    private static final String KEY_LAUNCH_ITERATIONS = "launch_iterations";
+    // optional parameter: comma separated list of required account types before proceeding
+    // with the app launch
+    private static final String KEY_REQUIRED_ACCOUNTS = "required_accounts";
+    private static final int INITIAL_LAUNCH_IDLE_TIMEOUT = 7500; //7.5s to allow app to idle
+    private static final int POST_LAUNCH_IDLE_TIMEOUT = 750; //750ms idle for non initial launches
+    private static final int BETWEEN_LAUNCH_SLEEP_TIMEOUT = 2000; //2s between launching apps
 
     private Map<String, Intent> mNameToIntent;
     private Map<String, String> mNameToProcess;
     private Map<String, String> mNameToResultKey;
-
+    private Map<String, Long> mNameToLaunchTime;
     private IActivityManager mAm;
+    private int mLaunchIterations = 10;
+    private Bundle mResult = new Bundle();
+    private Set<String> mRequiredAccounts;
 
-    public void testMeasureStartUpTime() throws RemoteException {
+    public void testMeasureStartUpTime() throws RemoteException, NameNotFoundException {
         InstrumentationTestRunner instrumentation =
                 (InstrumentationTestRunner)getInstrumentation();
-        Bundle args = instrumentation.getBundle();
+        Bundle args = instrumentation.getArguments();
         mAm = ActivityManagerNative.getDefault();
 
         createMappings();
         parseArgs(args);
+        checkAccountSignIn();
 
-        Bundle results = new Bundle();
+        // do initial app launch, without force stopping
         for (String app : mNameToResultKey.keySet()) {
-            try {
-                startApp(app, results);
-                sleep(750);
-                closeApp(app);
-                sleep(2000);
-            } catch (NameNotFoundException e) {
-                Log.i(TAG, "Application " + app + " not found");
+            long launchTime = startApp(app, false);
+            if (launchTime <=0 ) {
+                mNameToLaunchTime.put(app, -1L);
+                // simply pass the app if launch isn't successful
+                // error should have already been logged by startApp
+                continue;
             }
-
+            sleep(INITIAL_LAUNCH_IDLE_TIMEOUT);
+            closeApp(app, false);
+            sleep(BETWEEN_LAUNCH_SLEEP_TIMEOUT);
         }
-        instrumentation.sendStatus(0, results);
+        // do the real app launch now
+        for (int i = 0; i < mLaunchIterations; i++) {
+            for (String app : mNameToResultKey.keySet()) {
+                long totalLaunchTime = mNameToLaunchTime.get(app);
+                long launchTime = 0;
+                if (totalLaunchTime < 0) {
+                    // skip if the app has previous failures
+                    continue;
+                }
+                launchTime = startApp(app, true);
+                if (launchTime <= 0) {
+                    // if it fails once, skip the rest of the launches
+                    mNameToLaunchTime.put(app, -1L);
+                    continue;
+                }
+                totalLaunchTime += launchTime;
+                mNameToLaunchTime.put(app, totalLaunchTime);
+                sleep(POST_LAUNCH_IDLE_TIMEOUT);
+                closeApp(app, true);
+                sleep(BETWEEN_LAUNCH_SLEEP_TIMEOUT);
+            }
+        }
+        for (String app : mNameToResultKey.keySet()) {
+            long totalLaunchTime = mNameToLaunchTime.get(app);
+            if (totalLaunchTime != -1) {
+                mResult.putDouble(mNameToResultKey.get(app),
+                        ((double) totalLaunchTime) / mLaunchIterations);
+            }
+        }
+        instrumentation.sendStatus(0, mResult);
     }
 
     private void parseArgs(Bundle args) {
         mNameToResultKey = new LinkedHashMap<String, String>();
+        mNameToLaunchTime = new HashMap<String, Long>();
+        String launchIterations = args.getString(KEY_LAUNCH_ITERATIONS);
+        if (launchIterations != null) {
+            mLaunchIterations = Integer.parseInt(launchIterations);
+        }
         String appList = args.getString(KEY_APPS);
-
         if (appList == null)
             return;
 
@@ -97,6 +147,14 @@ public class AppLaunch extends InstrumentationTestCase {
             }
 
             mNameToResultKey.put(parts[0], parts[1]);
+            mNameToLaunchTime.put(parts[0], 0L);
+        }
+        String requiredAccounts = args.getString(KEY_REQUIRED_ACCOUNTS);
+        if (requiredAccounts != null) {
+            mRequiredAccounts = new HashSet<String>();
+            for (String accountType : requiredAccounts.split(",")) {
+                mRequiredAccounts.add(accountType);
+            }
         }
     }
 
@@ -118,23 +176,26 @@ public class AppLaunch extends InstrumentationTestCase {
                         | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                 startIntent.setClassName(ri.activityInfo.packageName,
                         ri.activityInfo.name);
-                mNameToIntent.put(ri.loadLabel(pm).toString(), startIntent);
-                mNameToProcess.put(ri.loadLabel(pm).toString(),
-                        ri.activityInfo.processName);
+                String appName = ri.loadLabel(pm).toString();
+                if (appName != null) {
+                    mNameToIntent.put(appName, startIntent);
+                    mNameToProcess.put(appName, ri.activityInfo.processName);
+                }
             }
         }
     }
 
-    private void startApp(String appName, Bundle results)
+    private long startApp(String appName, boolean forceStopBeforeLaunch)
             throws NameNotFoundException, RemoteException {
         Log.i(TAG, "Starting " + appName);
 
         Intent startIntent = mNameToIntent.get(appName);
         if (startIntent == null) {
             Log.w(TAG, "App does not exist: " + appName);
-            return;
+            mResult.putString(mNameToResultKey.get(appName), "App does not exist");
+            return -1;
         }
-        AppLaunchRunnable runnable = new AppLaunchRunnable(startIntent);
+        AppLaunchRunnable runnable = new AppLaunchRunnable(startIntent, forceStopBeforeLaunch);
         Thread t = new Thread(runnable);
         t.start();
         try {
@@ -143,27 +204,69 @@ public class AppLaunch extends InstrumentationTestCase {
             // ignore
         }
         WaitResult result = runnable.getResult();
-        if(t.isAlive() || (result != null && result.result != ActivityManager.START_SUCCESS)) {
+        // report error if any of the following is true:
+        // * launch thread is alive
+        // * result is not null, but:
+        //   * result is not START_SUCESS
+        //   * or in case of no force stop, result is not TASK_TO_FRONT either
+        if (t.isAlive() || (result != null
+                && ((result.result != ActivityManager.START_SUCCESS)
+                        && (!forceStopBeforeLaunch
+                                && result.result != ActivityManager.START_TASK_TO_FRONT)))) {
             Log.w(TAG, "Assuming app " + appName + " crashed.");
-            reportError(appName, mNameToProcess.get(appName), results);
-            return;
+            reportError(appName, mNameToProcess.get(appName));
+            return -1;
         }
-        results.putString(mNameToResultKey.get(appName), String.valueOf(result.thisTime));
+        return result.thisTime;
     }
 
-    private void closeApp(String appName) {
+    private void checkAccountSignIn() {
+        // ensure that the device has the required account types before starting test
+        // e.g. device must have a valid Google account sign in to measure a meaningful launch time
+        // for Gmail
+        if (mRequiredAccounts == null || mRequiredAccounts.isEmpty()) {
+            return;
+        }
+        final AccountManager am =
+                (AccountManager) getInstrumentation().getTargetContext().getSystemService(
+                        Context.ACCOUNT_SERVICE);
+        Account[] accounts = am.getAccounts();
+        // use set here in case device has multiple accounts of the same type
+        Set<String> foundAccounts = new HashSet<String>();
+        for (Account account : accounts) {
+            if (mRequiredAccounts.contains(account.type)) {
+                foundAccounts.add(account.type);
+            }
+        }
+        // check if account type matches, if not, fail test with message on what account types
+        // are missing
+        if (mRequiredAccounts.size() != foundAccounts.size()) {
+            mRequiredAccounts.removeAll(foundAccounts);
+            StringBuilder sb = new StringBuilder("Device missing these accounts:");
+            for (String account : mRequiredAccounts) {
+                sb.append(' ');
+                sb.append(account);
+            }
+            fail(sb.toString());
+        }
+    }
+
+    private void closeApp(String appName, boolean forceStopApp) {
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory(Intent.CATEGORY_HOME);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         getInstrumentation().getContext().startActivity(homeIntent);
-        Intent startIntent = mNameToIntent.get(appName);
-        if (startIntent != null) {
-            String packageName = startIntent.getComponent().getPackageName();
-            try {
-                mAm.forceStopPackage(packageName, UserHandle.USER_CURRENT);
-            } catch (RemoteException e) {
-                Log.w(TAG, "Error closing app", e);
+        sleep(POST_LAUNCH_IDLE_TIMEOUT);
+        if (forceStopApp) {
+            Intent startIntent = mNameToIntent.get(appName);
+            if (startIntent != null) {
+                String packageName = startIntent.getComponent().getPackageName();
+                try {
+                    mAm.forceStopPackage(packageName, UserHandle.USER_CURRENT);
+                } catch (RemoteException e) {
+                    Log.w(TAG, "Error closing app", e);
+                }
             }
         }
     }
@@ -176,7 +279,7 @@ public class AppLaunch extends InstrumentationTestCase {
         }
     }
 
-    private void reportError(String appName, String processName, Bundle results) {
+    private void reportError(String appName, String processName) {
         ActivityManager am = (ActivityManager) getInstrumentation()
                 .getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ProcessErrorStateInfo> crashes = am.getProcessesInErrorState();
@@ -186,12 +289,12 @@ public class AppLaunch extends InstrumentationTestCase {
                     continue;
 
                 Log.w(TAG, appName + " crashed: " + crash.shortMsg);
-                results.putString(mNameToResultKey.get(appName), crash.shortMsg);
+                mResult.putString(mNameToResultKey.get(appName), crash.shortMsg);
                 return;
             }
         }
 
-        results.putString(mNameToResultKey.get(appName),
+        mResult.putString(mNameToResultKey.get(appName),
                 "Crashed for unknown reason");
         Log.w(TAG, appName
                 + " not found in process list, most likely it is crashed");
@@ -200,8 +303,11 @@ public class AppLaunch extends InstrumentationTestCase {
     private class AppLaunchRunnable implements Runnable {
         private Intent mLaunchIntent;
         private IActivityManager.WaitResult mResult;
-        public AppLaunchRunnable(Intent intent) {
+        private boolean mForceStopBeforeLaunch;
+
+        public AppLaunchRunnable(Intent intent, boolean forceStopBeforeLaunch) {
             mLaunchIntent = intent;
+            mForceStopBeforeLaunch = forceStopBeforeLaunch;
         }
 
         public IActivityManager.WaitResult getResult() {
@@ -211,7 +317,9 @@ public class AppLaunch extends InstrumentationTestCase {
         public void run() {
             try {
                 String packageName = mLaunchIntent.getComponent().getPackageName();
-                mAm.forceStopPackage(packageName, UserHandle.USER_CURRENT);
+                if (mForceStopBeforeLaunch) {
+                    mAm.forceStopPackage(packageName, UserHandle.USER_CURRENT);
+                }
                 String mimeType = mLaunchIntent.getType();
                 if (mimeType == null && mLaunchIntent.getData() != null
                         && "content".equals(mLaunchIntent.getData().getScheme())) {
@@ -219,7 +327,7 @@ public class AppLaunch extends InstrumentationTestCase {
                             UserHandle.USER_CURRENT);
                 }
 
-                mResult = mAm.startActivityAndWait(null, mLaunchIntent, mimeType,
+                mResult = mAm.startActivityAndWait(null, null, mLaunchIntent, mimeType,
                         null, null, 0, mLaunchIntent.getFlags(), null, null, null,
                         UserHandle.USER_CURRENT);
             } catch (RemoteException e) {

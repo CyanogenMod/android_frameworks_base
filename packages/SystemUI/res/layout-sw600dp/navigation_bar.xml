@@ -59,31 +59,31 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/lights_out"
                 android:visibility="gone">
                 <ImageView
-                    android:layout_width="128dp" android:paddingLeft="25dp" android:paddingRight="25dp"
+                    android:layout_width="128dp" android:paddingStart="25dp" android:paddingEnd="25dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_sysbar_lights_out_dot_large"
                     android:scaleType="center"
                     />
                 <ImageView
-                    android:layout_width="128dp" android:paddingLeft="25dp" android:paddingRight="25dp"
+                    android:layout_width="128dp" android:paddingStart="25dp" android:paddingEnd="25dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_sysbar_lights_out_dot_large"
                     android:scaleType="center"
                     />
                 <ImageView
-                    android:layout_width="128dp" android:paddingLeft="25dp" android:paddingRight="25dp"
+                    android:layout_width="128dp" android:paddingStart="25dp" android:paddingEnd="25dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_sysbar_lights_out_dot_large"
                     android:scaleType="center"
                     />
                 <ImageView
-                    android:layout_width="128dp" android:paddingLeft="25dp" android:paddingRight="25dp"
+                    android:layout_width="128dp" android:paddingStart="25dp" android:paddingEnd="25dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_sysbar_lights_out_dot_large"
                     android:scaleType="center"
@@ -159,31 +159,31 @@
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:id="@+id/lights_out"
                 android:visibility="gone"
                 >
                 <ImageView
-                    android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+                    android:layout_width="162dp" android:paddingStart="42dp" android:paddingEnd="42dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_sysbar_lights_out_dot_large"
                     android:scaleType="center"
                     />
                 <ImageView
-                    android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+                    android:layout_width="162dp" android:paddingStart="42dp" android:paddingEnd="42dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_sysbar_lights_out_dot_large"
                     android:scaleType="center"
                     />
                 <ImageView
-                    android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+                    android:layout_width="162dp" android:paddingStart="42dp" android:paddingEnd="42dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_sysbar_lights_out_dot_large"
                     android:scaleType="center"
                     />
                 <ImageView
-                    android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+                    android:layout_width="162dp" android:paddingStart="42dp" android:paddingEnd="42dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_sysbar_lights_out_dot_large"
                     android:scaleType="center"

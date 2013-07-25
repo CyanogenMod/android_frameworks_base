@@ -4,8 +4,10 @@ package com.android.server.wm;
 
 import android.graphics.Matrix;
 import android.util.Slog;
+import android.util.TimeUtils;
 import android.view.Display;
 import android.view.Surface;
+import android.view.SurfaceControl;
 import android.view.WindowManagerPolicy;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -22,13 +24,17 @@ public class AppWindowAnimator {
 
     boolean animating;
     Animation animation;
-    boolean animInitialized;
     boolean hasTransformation;
     final Transformation transformation = new Transformation();
 
     // Have we been asked to have this token keep the screen frozen?
     // Protect with mAnimator.
     boolean freezingScreen;
+
+    /**
+     * How long we last kept the screen frozen.
+     */
+    int lastFreezeDuration;
 
     // Offset to the window of all layers in the token, for use by
     // AppWindowToken animations.
@@ -39,7 +45,7 @@ public class AppWindowAnimator {
     boolean allDrawn;
 
     // Special surface for thumbnail animation.
-    Surface thumbnail;
+    SurfaceControl thumbnail;
     int thumbnailTransactionSeq;
     int thumbnailX;
     int thumbnailY;
@@ -58,12 +64,15 @@ public class AppWindowAnimator {
         mAnimator = atoken.mAnimator;
     }
 
-    public void setAnimation(Animation anim, boolean initialized) {
-        if (WindowManagerService.localLOGV) Slog.v(
-            TAG, "Setting animation in " + mAppToken + ": " + anim);
+    public void setAnimation(Animation anim, int width, int height) {
+        if (WindowManagerService.localLOGV) Slog.v(TAG, "Setting animation in " + mAppToken
+                + ": " + anim + " wxh=" + width + "x" + height
+                + " isVisible=" + mAppToken.isVisible());
         animation = anim;
         animating = false;
-        animInitialized = initialized;
+        if (!anim.isInitialized()) {
+            anim.initialize(width, height, width, height);
+        }
         anim.restrictDuration(WindowManagerService.MAX_ANIMATION_DURATION);
         anim.scaleCurrentDuration(mService.mTransitionAnimationScale);
         int zorder = anim.getZAdjustment();
@@ -80,26 +89,29 @@ public class AppWindowAnimator {
         }
         // Start out animation gone if window is gone, or visible if window is visible.
         transformation.clear();
-        transformation.setAlpha(mAppToken.reportedVisible ? 1 : 0);
+        transformation.setAlpha(mAppToken.isVisible() ? 1 : 0);
         hasTransformation = true;
     }
 
     public void setDummyAnimation() {
-        if (WindowManagerService.localLOGV) Slog.v(TAG, "Setting dummy animation in " + mAppToken);
+        if (WindowManagerService.localLOGV) Slog.v(TAG, "Setting dummy animation in " + mAppToken
+                + " isVisible=" + mAppToken.isVisible());
         animation = sDummyAnimation;
-        animInitialized = false;
         hasTransformation = true;
         transformation.clear();
-        transformation.setAlpha(mAppToken.reportedVisible ? 1 : 0);
+        transformation.setAlpha(mAppToken.isVisible() ? 1 : 0);
     }
 
     public void clearAnimation() {
         if (animation != null) {
             animation = null;
             animating = true;
-            animInitialized = false;
         }
         clearThumbnail();
+        if (mAppToken.deferClearAllDrawn) {
+            mAppToken.allDrawn = false;
+            mAppToken.deferClearAllDrawn = false;
+        }
     }
 
     public void clearThumbnail() {
@@ -125,7 +137,7 @@ public class AppWindowAnimator {
             if (w == mService.mInputMethodTarget && !mService.mInputMethodTargetWaitingAnim) {
                 mService.setInputMethodAnimLayerAdjustment(adj);
             }
-            if (w == mAnimator.mWallpaperTarget && mAnimator.mLowerWallpaperTarget == null) {
+            if (w == mService.mWallpaperTarget && mService.mLowerWallpaperTarget == null) {
                 mService.setWallpaperAnimLayerAdjustmentLocked(adj);
             }
         }
@@ -185,7 +197,7 @@ public class AppWindowAnimator {
     }
 
     // This must be called while inside a transaction.
-    boolean stepAnimationLocked(long currentTime, int dw, int dh) {
+    boolean stepAnimationLocked(long currentTime) {
         if (mService.okToDisplay()) {
             // We will run animations as long as the display isn't frozen.
 
@@ -202,12 +214,8 @@ public class AppWindowAnimator {
                 if (!animating) {
                     if (WindowManagerService.DEBUG_ANIM) Slog.v(
                         TAG, "Starting animation in " + mAppToken +
-                        " @ " + currentTime + ": dw=" + dw + " dh=" + dh
-                        + " scale=" + mService.mTransitionAnimationScale
+                        " @ " + currentTime + " scale=" + mService.mTransitionAnimationScale
                         + " allDrawn=" + mAppToken.allDrawn + " animating=" + animating);
-                    if (!animInitialized) {
-                        animation.initialize(dw, dh, dw, dh);
-                    }
                     animation.setStartTime(currentTime);
                     animating = true;
                     if (thumbnail != null) {
@@ -285,9 +293,12 @@ public class AppWindowAnimator {
         pw.print(prefix); pw.print("freezingScreen="); pw.print(freezingScreen);
                 pw.print(" allDrawn="); pw.print(allDrawn);
                 pw.print(" animLayerAdjustment="); pw.println(animLayerAdjustment);
+        if (lastFreezeDuration != 0) {
+            pw.print(prefix); pw.print("lastFreezeDuration=");
+                    TimeUtils.formatDuration(lastFreezeDuration, pw); pw.println();
+        }
         if (animating || animation != null) {
-            pw.print(prefix); pw.print("animating="); pw.print(animating);
-                    pw.print(" animInitialized="); pw.println(animInitialized);
+            pw.print(prefix); pw.print("animating="); pw.println(animating);
             pw.print(prefix); pw.print("animation="); pw.println(animation);
         }
         if (hasTransformation) {

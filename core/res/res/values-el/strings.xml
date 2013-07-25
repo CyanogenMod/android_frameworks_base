@@ -200,6 +200,8 @@
     <string name="permgroupdesc_microphone" msgid="7106618286905738408">"Άμεση πρόσβαση στο μικρόφωνο για την εγγραφή ήχου."</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Κάμερα"</string>
     <string name="permgroupdesc_camera" msgid="2933667372289567714">"Άμεση πρόσβαση σε κάμερα για λήψη εικόνας ή βίντεο."</string>
+    <string name="permgrouplab_screenlock" msgid="8275500173330718168">"Κλείδωμα οθόνης"</string>
+    <string name="permgroupdesc_screenlock" msgid="7067497128925499401">"Δυνατότητα επίδρασης της συμπεριφοράς της οθόνης κλειδώματος στη συσκευή σας."</string>
     <string name="permgrouplab_appInfo" msgid="8028789762634147725">"Οι πληροφορίες των εφαρμογών σας"</string>
     <string name="permgroupdesc_appInfo" msgid="3950378538049625907">"Δυνατότητα επιρροής συμπεριφοράς άλλων εφαρμογών στη συσκευή σας."</string>
     <string name="permgrouplab_wallpaper" msgid="3850280158041175998">"Ταπετσαρία"</string>
@@ -225,6 +227,16 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Αποθηκευτικός χώρος"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"Πρόσβαση στον χώρο αποθ. USB."</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Πρόσβαση στην κάρτα SD."</string>
+    <string name="permgrouplab_accessibilityFeatures" msgid="7919025602283593907">"Λειτουργίες προσβασιμότητας"</string>
+    <string name="permgroupdesc_accessibilityFeatures" msgid="4205196881678144335">"Λειτουργίες που μπορεί να ζητήσει η τεχνολογία υποβοήθησης."</string>
+    <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"Ανάκτηση του περιεχομένου του παραθύρου"</string>
+    <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"Έλεγχος του περιεχομένου ενός παραθύρου με το οποίο αλληλεπιδράτε."</string>
+    <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"Ενεργοποίηση της \"Εξερεύνησης με άγγιγμα\""</string>
+    <string name="capability_desc_canRequestTouchExploration" msgid="5800552516779249356">"Τα στοιχεία που αγγίζετε θα εκφωνούνται και η εξερεύνηση της οθόνης μπορεί να γίνει με κινήσεις."</string>
+    <string name="capability_title_canRequestEnhancedWebAccessibility" msgid="1739881766522594073">"Ενεργοποίηση της βελτιωμένης προσβασιμότητας ιστού"</string>
+    <string name="capability_desc_canRequestEnhancedWebAccessibility" msgid="7881063961507511765">"Ενδέχεται να εγκατασταθούν σενάρια για τη βελτίωση της πρόσβασης στο περιεχόμενο της εφαρμογής."</string>
+    <string name="capability_title_canRequestFilterKeyEvents" msgid="2103440391902412174">"Παρακολούθηση του κειμένου που πληκτρολογείτε"</string>
+    <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"Περιλαμβάνει προσωπικά δεδομένα, όπως είναι οι αριθμοί πιστωτικών καρτών και οι κωδικοί πρόσβασης."</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"απενεργοποίηση ή τροποποίηση γραμμής κατάστασης"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"Επιτρέπει στην εφαρμογή να απενεργοποιεί τη γραμμή κατάστασης ή να προσθέτει και να αφαιρεί εικονίδια συστήματος."</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"γραμμή κατάστασης"</string>
@@ -243,8 +255,8 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Επιτρέπει στην εφαρμογή την ανάγνωση μηνυμάτων που έχουν μεταδοθεί μέσω κινητού τηλεφώνου και έχουν ληφθεί από τη συσκευή σας. Ειδοποιήσεις που μεταδίδονται μέσω κινητού παραδίδονται σε ορισμένες τοποθεσίες για να σας προειδοποιήσουν για καταστάσεις έκτακτης ανάγκης. Κακόβουλες εφαρμογές ενδέχεται να παρεμποδίσουν την απόδοση ή τη λειτουργία της συσκευής σας κατά τη λήψη μετάδοσης μέσω κινητού σχετικά με μια επείγουσα κατάσταση."</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"αποστολή μηνυμάτων SMS"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"Επιτρέπει στην εφαρμογή των αποστολή μηνυμάτων SMS. Αυτό μπορεί να προκαλέσει μη αναμενόμενες χρεώσεις. Οι κακόβουλες εφαρμογές ενδέχεται να σας κοστίσουν χρήματα, αποστέλλοντας μηνύματα χωρίς την έγκρισή σας."</string>
-    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"αποστολή μηνυμάτων SMS χωρίς επιβεβαίωση"</string>
-    <string name="permdesc_sendSmsNoConfirmation" msgid="402569800862935907">"Επιτρέπει στην εφαρμογή των αποστολή μηνυμάτων SMS. Αυτό μπορεί να προκαλέσει μη αναμενόμενες χρεώσεις. Οι κακόβουλες εφαρμογές ενδέχεται να σας κοστίσουν χρήματα, αποστέλλοντας μηνύματα χωρίς την έγκρισή σας."</string>
+    <string name="permlab_sendRespondViaMessageRequest" msgid="8713889105305943200">"αποστολή συμβάντων απόκρισης μέσω μηνύματος"</string>
+    <string name="permdesc_sendRespondViaMessageRequest" msgid="7107648548468778734">"Επιτρέπει στην εφαρμογή να στέλνει μηνύματα σε άλλες εφαρμογές ανταλλαγής μηνυμάτων για τη διαχείριση συμβάντων απόκρισης μέσω μηνύματος για εισερχόμενες κλήσεις."</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"ανάγνωση των μηνυμάτων κειμένου σας (SMS ή MMS)"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"Επιτρέπει στην εφαρμογή την ανάγνωση μηνυμάτων SMS που είναι αποθηκευμένα στο tablet σας ή στην κάρτα σας SIM. Αυτό δίνει τη δυνατότητα στην εφαρμογή να διαβάζει όλα τα μηνύματα SMS, ανεξάρτητα από το περιεχόμενο ή το επίπεδο εμπιστευτικότητάς τους."</string>
     <string name="permdesc_readSms" product="default" msgid="3695967533457240550">"Επιτρέπει στην εφαρμογή την ανάγνωση μηνυμάτων SMS που είναι αποθηκευμένα στο τηλέφωνό σας ή στην κάρτα σας SIM. Αυτό δίνει τη δυνατότητα στην εφαρμογή να διαβάζει όλα τα μηνύματα SMS, ανεξάρτητα από το περιεχόμενο ή το επίπεδο εμπιστευτικότητάς τους."</string>
@@ -299,6 +311,8 @@
     <string name="permdesc_shutdown" msgid="7046500838746291775">"Θέτει το πρόγραμμα διαχείρισης δραστηριοτήτων σε κατάσταση τερματισμού λειτουργιών. Δεν εκτελεί πλήρη τερματισμό λειτουργιών."</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"αποτροπή εναλλαγών εφαρμογών"</string>
     <string name="permdesc_stopAppSwitches" msgid="8262195802582255021">"Δεν επιτρέπει στο χρήστη να μεταβεί σε άλλη εφαρμογή."</string>
+    <string name="permlab_getTopActivityInfo" msgid="2537922311411546016">"λήψη πληροφοριών σχετικά με την τρέχουσα εφαρμογή"</string>
+    <string name="permdesc_getTopActivityInfo" msgid="2512448855496067131">"Δίνει στον κάτοχο τη δυνατότητα ανάκτησης απόρρητων πληροφοριών σχετικά με την τρέχουσα εφαρμογή στο προσκήνιο της οθόνης."</string>
     <string name="permlab_runSetActivityWatcher" msgid="892239094867182656">"παρακολούθηση και έλεγχος όλων των εκκινήσεων εφαρμογών"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="6003603162578577406">"Επιτρέπει στην εφαρμογή να παρακολουθεί και να ελέγχει τον τρόπο με τον οποίο το σύστημα εκκινεί δραστηριότητες. Τυχόν κακόβουλες εφαρμογές ενδέχεται να θέσουν σε κίνδυνο το σύστημα. Αυτή η άδεια είναι απαραίτητη μόνο για σκοπούς ανάπτυξης και ποτέ για συνήθη χρήση."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"αποστολή εκπομπής χωρίς πακέτο"</string>
@@ -315,6 +329,10 @@
     <string name="permdesc_batteryStats" msgid="5897346582882915114">"Επιτρέπει σε μια εφαρμογή να διαβάζει τα δεδομένα τρέχουσας χαμηλού επιπέδου χρήσης μπαταρίας. Ενδέχεται να επιτρέπει στην εφαρμογή να εντοπίσει λεπτομερείς πληροφορίες σχετικά με τις εφαρμογές που χρησιμοποιείτε."</string>
     <string name="permlab_updateBatteryStats" msgid="3719689764536379557">"τροποποίηση στατιστικών στοιχείων μπαταρίας"</string>
     <string name="permdesc_updateBatteryStats" msgid="6862817857178025002">"Επιτρέπει στην εφαρμογή την τροποποίηση στατιστικών στοιχείων μπαταρίας που έχουν συλλεχθεί. Δεν πρέπει να χρησιμοποιείται από συνήθεις εφαρμογές."</string>
+    <string name="permlab_getAppOpsStats" msgid="1508779687436585744">"ανάκτηση στατιστικών στοιχείων λειτουργίας για εφαρμογές"</string>
+    <string name="permdesc_getAppOpsStats" msgid="6243887041577912877">"Επιτρέπει στην εφαρμογή την ανάκτηση των στατιστικών στοιχείων λειτουργίας για τις εφαρμογές που έχουν συλλεχθεί. Δεν προορίζεται για χρήση από κανονικές εφαρμογές."</string>
+    <string name="permlab_updateAppOpsStats" msgid="8829097373851521505">"τροποποίηση στατιστικών στοιχείων λειτουργιών εφαρμογών"</string>
+    <string name="permdesc_updateAppOpsStats" msgid="50784596594403483">"Επιτρέπει στην εφαρμογή την τροποποίηση των στατιστικών στοιχείων λειτουργίας εφαρμογών που έχουν συλλεχθεί. Δεν προορίζεται για χρήση από κανονικές εφαρμογές."</string>
     <string name="permlab_backup" msgid="470013022865453920">"αντίγραφο ασφαλείας και επαναφορά συστήματος"</string>
     <string name="permdesc_backup" msgid="6912230525140589891">"Επιτρέπει στην εφαρμογή τον έλεγχο του μηχανισμού δημιουργίας αντιγράφων ασφάλειας και ανάκτησης. Δεν προορίζεται για χρήση με συνήθεις εφαρμογές."</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"επιβεβαίωση δημιουργίας πλήρους αντιγράφου ασφαλείας ή επαναφοράς λειτουργίας"</string>
@@ -450,6 +468,8 @@
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"Επιτρέπει στην εφαρμογή την εγγραφή ήχου με το μικρόφωνο. Αυτή η άδεια δίνει τη δυνατότητα στην εφαρμογή να εγγράφει ήχο ανά πάσα στιγμή χωρίς την έγκρισή σας."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"λήψη φωτογραφιών και βίντεο"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"Επιτρέπει στην εφαρμογή τη λήψη φωτογραφιών και βίντεο με τη φωτογραφική μηχανή. Αυτή η άδεια δίνει τη δυνατότητα στην εφαρμογή να χρησιμοποιεί τη φωτογραφική μηχανή ανά πάσα στιγμή χωρίς την έγκρισή σας."</string>
+    <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">"απενεργοποίηση ένδειξης LED μετάδοσης όταν χρησιμοποιείται η φωτογραφική μηχανή"</string>
+    <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">"Επιτρέπει σε μια προεγκατεστημένη εφαρμογή συστήματος να απενεργοποιήσει την ένδειξη LED χρήσης της φωτογραφικής μηχανής."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"μόνιμη απενεργοποίηση του tablet"</string>
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"μόνιμη απενεργοποίηση τηλεφώνου"</string>
     <string name="permdesc_brick" product="tablet" msgid="4334818808001699530">"Επιτρέπει στην εφαρμογή τη μόνιμη απενεργοποίηση όλων των λειτουργιών του tablet, το οποίο είναι εξαιρετικά επικίνδυνο."</string>
@@ -587,7 +607,7 @@
     <string name="permlab_sdcardRead" product="default" msgid="8235341515605559677">"δοκιμή πρόσβασης σε προστατευμένο χώρο αποθήκευσης"</string>
     <string name="permdesc_sdcardRead" product="nosdcard" msgid="3642473292348132072">"Επιτρέπει USB για άλλες συσκ."</string>
     <string name="permdesc_sdcardRead" product="default" msgid="5914402684685848828">"Επιτρέπει στην εφαρμογή τη δοκιμή μια άδειας για την κάρτα SD που θα διατίθεται σε μελλοντικές συσκευές."</string>
-    <string name="permlab_sdcardWrite" product="nosdcard" msgid="8485979062254666748">"τροπ. ή διαγρ. περιεχ. αποθ. χώρ. USB"</string>
+    <string name="permlab_sdcardWrite" product="nosdcard" msgid="8485979062254666748">"τροπ. ή διαγρ. του USB"</string>
     <string name="permlab_sdcardWrite" product="default" msgid="8805693630050458763">"τροποποίηση ή διαγραφή των περιεχομένων της κάρτας SD"</string>
     <string name="permdesc_sdcardWrite" product="nosdcard" msgid="6175406299445710888">"Επιτρέπει στην εφαρμογή την εγγραφή στον αποθηκευτικό χώρο USB."</string>
     <string name="permdesc_sdcardWrite" product="default" msgid="4337417790936632090">"Επιτρέπει στην εφαρμογή την εγγραφή στην κάρτα SD."</string>
@@ -605,6 +625,10 @@
     <string name="permdesc_manageNetworkPolicy" msgid="7537586771559370668">"Επιτρέπει στην εφαρμογή τη διαχείριση των πολιτικών δικτύου και τον ορισμό κανόνων για ορισμένες εφαρμογές."</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"τροποποίηση υπολογισμού χρήσης δικτύου"</string>
     <string name="permdesc_modifyNetworkAccounting" msgid="5443412866746198123">"Επιτρέπει στην εφαρμογή την τροποποίηση του τρόπου υπολογισμού της χρήσης δικτύου έναντι των εφαρμογών. Δεν προορίζεται για χρήση από συνήθεις εφαρμογές."</string>
+    <string name="permlab_accessNotifications" msgid="7673416487873432268">"πρόσβαση στις ειδοποιήσεις"</string>
+    <string name="permdesc_accessNotifications" msgid="458457742683431387">"Επιτρέπει στην εφαρμογή να ανακτά, να εξετάζει και να απαλείφει ειδοποιήσεις, συμπεριλαμβανομένων εκείνων που δημοσιεύονται από άλλες εφαρμογές."</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"δέσμευση σε υπηρεσία ακρόασης ειδοποίησης"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Επιτρέπει στον κάτοχο τη δέσμευση στη διεπαφή ανωτάτου επιπέδου μιας υπηρεσίας ακρόασης ειδοποιήσεων. Δεν απαιτείται σε κανονικές εφαρμογές."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Ορισμός κανόνων κωδικού πρόσβασης"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"Έλεγχος του μεγέθους και των χαρακτήρων που επιτρέπονται στους κωδικούς πρόσβασης ξεκλειδώματος οθόνης."</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"Παρακολούθηση προσπαθειών ξεκλειδώματος οθόνης"</string>
@@ -714,7 +738,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
@@ -810,6 +835,7 @@
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"Το μοτίβο απαλείφθηκε"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"Προστέθηκε κελί"</string>
     <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"Το μοτίβο ολοκληρώθηκε"</string>
+    <string name="keyguard_accessibility_widget_changed" msgid="5678624624681400191">"%1$s. Γραφικό στοιχείο %2$d από %3$d."</string>
     <string name="keyguard_accessibility_add_widget" msgid="8273277058724924654">"Προσθήκη γραφικού στοιχείου"</string>
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"Κενή"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"Ανάπτυξη της περιοχής ξεκλειδώματος."</string>
@@ -845,7 +871,10 @@
     <string name="factorytest_reboot" msgid="6320168203050791643">"Επανεκκίνηση"</string>
     <string name="js_dialog_title" msgid="1987483977834603872">"Η σελίδα στον τίτλο \"<xliff:g id="TITLE">%s</xliff:g>\" λέει:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="730366588032430474">"Απομάκρυνση από αυτή τη σελίδα;"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Αγγίξτε το στοιχείο \"OK\" για συνέχεια ή \"Ακύρωση\" για παραμονή στην τρέχουσα σελίδα."</string>
+    <string name="js_dialog_before_unload_title" msgid="2619376555525116593">"Επιβεβαίωση πλοήγησης"</string>
+    <string name="js_dialog_before_unload_positive_button" msgid="3112752010600484130">"Αποχώρηση από αυτήν τη σελίδα"</string>
+    <string name="js_dialog_before_unload_negative_button" msgid="5614861293026099715">"Παραμονή σε αυτήν τη σελίδα"</string>
+    <string name="js_dialog_before_unload" msgid="3468816357095378590">"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Είστε βέβαιοι ότι θέλετε να απομακρυνθείτε από αυτήν τη σελίδα;"</string>
     <string name="save_password_label" msgid="6860261758665825069">"Επιβεβαίωση"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"Συμβουλή: Πατήστε δύο φορές για μεγέθυνση και σμίκρυνση."</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"Αυτόματη συμπλήρωση"</string>
@@ -1031,6 +1060,8 @@
     <string name="editTextMenuTitle" msgid="4909135564941815494">"Ενέργειες κειμένου"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Ο χώρος αποθήκευσης εξαντλείται"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Ορισμένες λειτουργίες συστήματος ενδέχεται να μην λειτουργούν"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"Η εφαρμογή <xliff:g id="APP_NAME">%1$s</xliff:g> εκτελείται"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"Αγγίξτε για περισσότερες πληροφορίες ή για να διακόψετε την εκτέλεση της εφαρμογής."</string>
     <string name="ok" msgid="5970060430562524910">"OK"</string>
     <string name="cancel" msgid="6442560571259935130">"Ακύρωση"</string>
     <string name="yes" msgid="5362982303337969312">"OK"</string>
@@ -1124,7 +1155,8 @@
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"Προς:"</string>
     <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Πληκτρολογήστε τον απαιτούμενο κωδικό PIN:"</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN:"</string>
-    <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"Το τηλέφωνο θα αποσυνδεθεί προσωρινά από το δίκτυο Wi-Fi ενώ συνδέεται στη συσκευή <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"Το tablet θα αποσυνδεθεί προσωρινά από το δίκτυο Wi-Fi ενώ συνδέεται στη συσκευή <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"Το τηλέφωνο θα αποσυνδεθεί προσωρινά από το δίκτυο Wi-Fi ενώ συνδέεται στη συσκευή <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
     <string name="select_character" msgid="3365550120617701745">"Εισαγωγή χαρακτήρα"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"Αποστολή μηνυμάτων SMS"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"Η εφαρμογή &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; στέλνει έναν μεγάλο αριθμό μηνυμάτων SMS. Θέλετε να επιτρέψετε σε αυτήν την εφαρμογή να συνεχίσει να στέλνει μηνύματα;"</string>
@@ -1247,6 +1279,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Προσβασιμότητα"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Ταπετσαρία"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Αλλαγή ταπετσαρίας"</string>
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Υπηρεσία ακρόασης ειδοποίησης"</string>
     <string name="vpn_title" msgid="19615213552042827">"Το VPN ενεργοποιήθηκε"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"Το VPN ενεργοποιήθηκε από την εφαρμογή <xliff:g id="APP">%s</xliff:g>"</string>
     <string name="vpn_text" msgid="3011306607126450322">"Αγγίξτε για τη διαχείριση του δικτύου."</string>
@@ -1254,7 +1287,7 @@
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Σύνδεση πάντα ενεργοποιημένου VPN…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Έχει συνδεθεί πάντα ενεργοποιημένο VPN"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Σφάλμα πάντα ενεργοποιημένου VPN"</string>
-    <string name="vpn_lockdown_reset" msgid="5365010427963548932">"Αγγίξτε για επαναφορά της σύνδεσης"</string>
+    <string name="vpn_lockdown_config" msgid="6415899150671537970">"Αγγίξτε για διαμόρφωση"</string>
     <string name="upload_file" msgid="2897957172366730416">"Επιλογή αρχείου"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Δεν έχει επιλεγεί αρχείο"</string>
     <string name="reset" msgid="2448168080964209908">"Επαναφορά"</string>
@@ -1276,7 +1309,7 @@
     <item quantity="one" msgid="8167147081136579439">"1 αποτέλεσμα"</item>
     <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g> από <xliff:g id="TOTAL">%d</xliff:g>"</item>
   </plurals>
-    <string name="action_mode_done" msgid="7217581640461922289">"Ολοκληρώθηκε"</string>
+    <string name="action_mode_done" msgid="7217581640461922289">"Τέλος"</string>
     <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">"Αποσύνδεση του χώρου αποθήκευσης USB..."</string>
     <string name="progress_unmounting" product="default" msgid="1327894998409537190">"Αφαίρεση κάρτας SD..."</string>
     <string name="progress_erasing" product="nosdcard" msgid="4521573321524340058">"Διαγραφή χώρου αποθήκευσης USB..."</string>
@@ -1350,6 +1383,8 @@
     <string name="action_bar_home_description" msgid="5293600496601490216">"Πλοήγηση στην αρχική σελίδα"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"Πλοήγηση προς τα επάνω"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Περισσότερες επιλογές"</string>
+    <string name="action_bar_home_description_format" msgid="7965984360903693903">"%1$s, %2$s"</string>
+    <string name="action_bar_home_subtitle_description_format" msgid="6985546530471780727">"%1$s, %2$s, %3$s"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Εσωτερικός χώρος αποθήκευσης"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"Κάρτα SD"</string>
     <string name="storage_usb" msgid="3017954059538517278">"Χώρος αποθήκευσης USB"</string>
@@ -1399,6 +1434,7 @@
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Σύστημα"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Ήχος Bluetooth"</string>
+    <string name="wireless_display_route_description" msgid="9070346425023979651">"Ασύρματη οθόνη"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Τέλος"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Έξοδος μέσων"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"Σάρωση…"</string>
@@ -1450,10 +1486,14 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Σχεδιάσατε το μοτίβο ξεκλειδώματος εσφαλμένα <xliff:g id="NUMBER_0">%d</xliff:g> φορές. Μετά από <xliff:g id="NUMBER_1">%d</xliff:g> ανεπιτυχείς προσπάθειες ακόμη, θα σας ζητηθεί να ξεκλειδώσετε το τηλέφωνό σας με τη χρήση ενός λογαριασμού ηλεκτρονικού ταχυδρομείου."\n\n" Δοκιμάστε ξανά σε <xliff:g id="NUMBER_2">%d</xliff:g> δευτερόλεπτα."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" — "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Κατάργηση"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Αύξηση έντασης ήχου πάνω από το επίπεδο ασφαλείας;"\n"Αν ακούτε μουσική σε υψηλή ένταση για μεγάλο χρονικό διάστημα ενδέχεται να προκληθεί βλάβη στην ακοή σας."</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"Αυξάνετε την ένταση ήχου πάνω από το επίπεδο ασφαλείας;"\n"Αν ακούτε μουσική σε υψηλή ένταση για μεγάλο χρονικό διάστημα ενδέχεται να προκληθεί βλάβη στην ακοή σας."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Αγγίξτε παρατεταμένα με δύο δάχτυλα για να ενεργοποιήσετε τη λειτουργία προσβασιμότητας."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Ενεργοποιήθηκε η προσβασιμότητα."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Η λειτουργία προσβασιμότητας ακυρώθηκε."</string>
     <string name="user_switched" msgid="3768006783166984410">"Τρέχων χρήστης <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Κάτοχος"</string>
+    <string name="error_message_title" msgid="4510373083082500195">"Σφάλμα"</string>
+    <string name="app_no_restricted_accounts" msgid="4011285085817350390">"Αυτή η εφαρμογή δεν υποστηρίζει λογαριασμούς για περιορισμένα προφίλ"</string>
+    <string name="app_not_found" msgid="3429141853498927379">"Δεν υπάρχει εφαρμογή για τη διαχείριση αυτής της ενέργειας"</string>
+    <string name="revoke" msgid="5404479185228271586">"Ανάκληση"</string>
 </resources>

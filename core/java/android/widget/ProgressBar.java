@@ -38,10 +38,7 @@ import android.graphics.drawable.shapes.Shape;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Pool;
-import android.util.Poolable;
-import android.util.PoolableManager;
-import android.util.Pools;
+import android.util.Pools.SynchronizedPool;
 import android.view.Gravity;
 import android.view.RemotableViewMethod;
 import android.view.View;
@@ -187,6 +184,7 @@ import java.util.ArrayList;
  * @attr ref android.R.styleable#ProgressBar_maxWidth
  * @attr ref android.R.styleable#ProgressBar_minHeight
  * @attr ref android.R.styleable#ProgressBar_minWidth
+ * @attr ref android.R.styleable#ProgressBar_mirrorForRtl
  * @attr ref android.R.styleable#ProgressBar_progress
  * @attr ref android.R.styleable#ProgressBar_progressDrawable
  * @attr ref android.R.styleable#ProgressBar_secondaryProgress
@@ -225,6 +223,8 @@ public class ProgressBar extends View {
     private boolean mInDrawing;
     private boolean mAttached;
     private boolean mRefreshIsPosted;
+
+    boolean mMirrorForRtl = false;
 
     private final ArrayList<RefreshData> mRefreshData = new ArrayList<RefreshData>();
 
@@ -304,6 +304,8 @@ public class ProgressBar extends View {
 
         setIndeterminate(mOnlyIndeterminate || a.getBoolean(
                 R.styleable.ProgressBar_indeterminate, mIndeterminate));
+
+        mMirrorForRtl = a.getBoolean(R.styleable.ProgressBar_mirrorForRtl, mMirrorForRtl);
 
         a.recycle();
     }
@@ -604,33 +606,20 @@ public class ProgressBar extends View {
         }
     }
 
-    private static class RefreshData implements Poolable<RefreshData> {
+    private static class RefreshData {
+        private static final int POOL_MAX = 24;
+        private static final SynchronizedPool<RefreshData> sPool =
+                new SynchronizedPool<RefreshData>(POOL_MAX);
+
         public int id;
         public int progress;
         public boolean fromUser;
-        
-        private RefreshData mNext;
-        private boolean mIsPooled;
-        
-        private static final int POOL_MAX = 24;
-        private static final Pool<RefreshData> sPool = Pools.synchronizedPool(
-                Pools.finitePool(new PoolableManager<RefreshData>() {
-                    @Override
-                    public RefreshData newInstance() {
-                        return new RefreshData();
-                    }
-
-                    @Override
-                    public void onAcquired(RefreshData element) {
-                    }
-
-                    @Override
-                    public void onReleased(RefreshData element) {
-                    }
-                }, POOL_MAX));
 
         public static RefreshData obtain(int id, int progress, boolean fromUser) {
             RefreshData rd = sPool.acquire();
+            if (rd == null) {
+                rd = new RefreshData();
+            }
             rd.id = id;
             rd.progress = progress;
             rd.fromUser = fromUser;
@@ -640,28 +629,8 @@ public class ProgressBar extends View {
         public void recycle() {
             sPool.release(this);
         }
-
-        @Override
-        public void setNextPoolable(RefreshData element) {
-            mNext = element;
-        }
-
-        @Override
-        public RefreshData getNextPoolable() {
-            return mNext;
-        }
-
-        @Override
-        public boolean isPooled() {
-            return mIsPooled;
-        }
-
-        @Override
-        public void setPooled(boolean isPooled) {
-            mIsPooled = isPooled;
-        }
     }
-    
+
     private synchronized void doRefreshProgress(int id, int progress, boolean fromUser,
             boolean callBackToApp) {
         float scale = mMax > 0 ? (float) progress / (float) mMax : 0;
@@ -1040,7 +1009,7 @@ public class ProgressBar extends View {
                     }
                 }
             }
-            if (isLayoutRtl()) {
+            if (isLayoutRtl() && mMirrorForRtl) {
                 int tempLeft = left;
                 left = w - right;
                 right = w - tempLeft;
@@ -1062,7 +1031,7 @@ public class ProgressBar extends View {
             // Translate canvas so a indeterminate circular progress bar with padding
             // rotates properly in its animation
             canvas.save();
-            if(isLayoutRtl()) {
+            if(isLayoutRtl() && mMirrorForRtl) {
                 canvas.translate(getWidth() - mPaddingRight, mPaddingTop);
                 canvas.scale(-1.0f, 1.0f);
             } else {

@@ -36,7 +36,7 @@
         <LinearLayout
             android:layout_width="450dip"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dip"
+            android:layout_marginStart="20dip"
             android:orientation="vertical"
             android:background="@drawable/notify_panel_clock_bg">
             <!-- Hard keyboard switch -->
@@ -57,8 +57,8 @@
                         android:minHeight="?android:attr/listPreferredItemHeight"
                         android:background="?android:attr/selectableItemBackground"
                         android:orientation="vertical"
-                        android:paddingRight="6dip"
-                        android:paddingLeft="30dip"
+                        android:paddingEnd="6dip"
+                        android:paddingStart="30dip"
                         android:paddingTop="5dip"
                         android:paddingBottom="5dip"
                         android:gravity="center_vertical"
@@ -71,7 +71,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="16dip" />
+                        android:layout_marginEnd="16dip" />
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"
@@ -103,8 +103,8 @@
                 android:minHeight="?android:attr/listPreferredItemHeight"
                 android:background="?android:attr/selectableItemBackground"
                 android:orientation="vertical"
-                android:paddingRight="6dip"
-                android:paddingLeft="30dip"
+                android:paddingEnd="6dip"
+                android:paddingStart="30dip"
                 android:paddingTop="5dip"
                 android:paddingBottom="5dip"
                 android:gravity="center_vertical"

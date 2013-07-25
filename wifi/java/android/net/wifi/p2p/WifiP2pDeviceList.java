@@ -44,7 +44,7 @@ public class WifiP2pDeviceList implements Parcelable {
     public WifiP2pDeviceList(WifiP2pDeviceList source) {
         if (source != null) {
             for (WifiP2pDevice d : source.getDeviceList()) {
-                mDevices.put(d.deviceAddress, d);
+                mDevices.put(d.deviceAddress, new WifiP2pDevice(d));
             }
         }
     }
@@ -53,21 +53,45 @@ public class WifiP2pDeviceList implements Parcelable {
     public WifiP2pDeviceList(ArrayList<WifiP2pDevice> devices) {
         for (WifiP2pDevice device : devices) {
             if (device.deviceAddress != null) {
-                mDevices.put(device.deviceAddress, device);
+                mDevices.put(device.deviceAddress, new WifiP2pDevice(device));
             }
         }
     }
 
-    /** @hide */
+    private void validateDevice(WifiP2pDevice device) {
+        if (device == null) throw new IllegalArgumentException("Null device");
+        if (TextUtils.isEmpty(device.deviceAddress)) {
+            throw new IllegalArgumentException("Empty deviceAddress");
+        }
+    }
+
+    private void validateDeviceAddress(String deviceAddress) {
+        if (TextUtils.isEmpty(deviceAddress)) {
+            throw new IllegalArgumentException("Empty deviceAddress");
+        }
+    }
+
+    /** Clear the list @hide */
     public boolean clear() {
         if (mDevices.isEmpty()) return false;
         mDevices.clear();
         return true;
     }
 
-    /** @hide */
+    /**
+     * Add/update a device to the list. If the device is not found, a new device entry
+     * is created. If the device is already found, the device details are updated
+     * @param device to be updated
+     * @hide
+     */
     public void update(WifiP2pDevice device) {
-        if (device == null || device.deviceAddress == null) return;
+        updateSupplicantDetails(device);
+        mDevices.get(device.deviceAddress).status = device.status;
+    }
+
+    /** Only updates details fetched from the supplicant @hide */
+    void updateSupplicantDetails(WifiP2pDevice device) {
+        validateDevice(device);
         WifiP2pDevice d = mDevices.get(device.deviceAddress);
         if (d != null) {
             d.deviceName = device.deviceName;
@@ -84,8 +108,8 @@ public class WifiP2pDeviceList implements Parcelable {
     }
 
     /** @hide */
-    public void updateGroupCapability(String deviceAddress, int groupCapab) {
-        if (TextUtils.isEmpty(deviceAddress)) return;
+    void updateGroupCapability(String deviceAddress, int groupCapab) {
+        validateDeviceAddress(deviceAddress);
         WifiP2pDevice d = mDevices.get(deviceAddress);
         if (d != null) {
             d.groupCapability = groupCapab;
@@ -93,25 +117,39 @@ public class WifiP2pDeviceList implements Parcelable {
     }
 
     /** @hide */
-    public void updateStatus(String deviceAddress, int status) {
-        if (TextUtils.isEmpty(deviceAddress)) return;
+    void updateStatus(String deviceAddress, int status) {
+        validateDeviceAddress(deviceAddress);
         WifiP2pDevice d = mDevices.get(deviceAddress);
         if (d != null) {
             d.status = status;
         }
     }
 
-    /** @hide */
+    /**
+     * Fetch a device from the list
+     * @param deviceAddress is the address of the device
+     * @return WifiP2pDevice device found, or null if none found
+     */
     public WifiP2pDevice get(String deviceAddress) {
-        if (deviceAddress == null) return null;
-
+        validateDeviceAddress(deviceAddress);
         return mDevices.get(deviceAddress);
     }
 
     /** @hide */
     public boolean remove(WifiP2pDevice device) {
-        if (device == null || device.deviceAddress == null) return false;
+        validateDevice(device);
         return mDevices.remove(device.deviceAddress) != null;
+    }
+
+    /**
+     * Remove a device from the list
+     * @param deviceAddress is the address of the device
+     * @return WifiP2pDevice device removed, or null if none removed
+     * @hide
+     */
+    public WifiP2pDevice remove(String deviceAddress) {
+        validateDeviceAddress(deviceAddress);
+        return mDevices.remove(deviceAddress);
     }
 
     /** Returns true if any device the list was removed @hide */
@@ -130,11 +168,12 @@ public class WifiP2pDeviceList implements Parcelable {
 
     /** @hide */
     public boolean isGroupOwner(String deviceAddress) {
-        if (deviceAddress != null) {
-            WifiP2pDevice device = mDevices.get(deviceAddress);
-            if (device != null) return device.isGroupOwner();
+        validateDeviceAddress(deviceAddress);
+        WifiP2pDevice device = mDevices.get(deviceAddress);
+        if (device == null) {
+            throw new IllegalArgumentException("Device not found " + deviceAddress);
         }
-        return false;
+        return device.isGroupOwner();
     }
 
     public String toString() {

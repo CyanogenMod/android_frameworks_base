@@ -154,6 +154,19 @@ public class SwipeHelper implements Gefingerpoken {
         return Math.max(mMinAlpha, result);
     }
 
+    private void updateAlphaFromOffset(View animView, boolean dismissable) {
+        if (FADE_OUT_DURING_SWIPE && dismissable) {
+            float alpha = getAlphaForOffset(animView);
+            if (alpha != 0f && alpha != 1f) {
+                animView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            } else {
+                animView.setLayerType(View.LAYER_TYPE_NONE, null);
+            }
+            animView.setAlpha(getAlphaForOffset(animView));
+        }
+        invalidateGlobalRegion(animView);
+    }
+
     // invalidate the view's own bounds all the way up the view hierarchy
     public static void invalidateGlobalRegion(View view) {
         invalidateGlobalRegion(
@@ -294,10 +307,7 @@ public class SwipeHelper implements Gefingerpoken {
         });
         anim.addUpdateListener(new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                if (FADE_OUT_DURING_SWIPE && canAnimViewBeDismissed) {
-                    animView.setAlpha(getAlphaForOffset(animView));
-                }
-                invalidateGlobalRegion(animView);
+                updateAlphaFromOffset(animView, canAnimViewBeDismissed);
             }
         });
         anim.start();
@@ -311,10 +321,12 @@ public class SwipeHelper implements Gefingerpoken {
         anim.setDuration(duration);
         anim.addUpdateListener(new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                if (FADE_OUT_DURING_SWIPE && canAnimViewBeDismissed) {
-                    animView.setAlpha(getAlphaForOffset(animView));
-                }
-                invalidateGlobalRegion(animView);
+                updateAlphaFromOffset(animView, canAnimViewBeDismissed);
+            }
+        });
+        anim.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                updateAlphaFromOffset(animView, canAnimViewBeDismissed);
             }
         });
         anim.start();
@@ -351,10 +363,8 @@ public class SwipeHelper implements Gefingerpoken {
                         }
                     }
                     setTranslation(mCurrAnimView, delta);
-                    if (FADE_OUT_DURING_SWIPE && mCanCurrViewBeDimissed) {
-                        mCurrAnimView.setAlpha(getAlphaForOffset(mCurrAnimView));
-                    }
-                    invalidateGlobalRegion(mCurrView);
+
+                    updateAlphaFromOffset(mCurrAnimView, mCanCurrViewBeDimissed);
                 }
                 break;
             case MotionEvent.ACTION_UP:

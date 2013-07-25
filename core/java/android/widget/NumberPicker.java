@@ -470,6 +470,11 @@ public class NumberPicker extends LinearLayout {
     private final PressedStateHelper mPressedStateHelper;
 
     /**
+     * The keycode of the last handled DPAD down event.
+     */
+    private int mLastHandledDownDpadKeyCode = -1;
+
+    /**
      * Interface to listen for changes of the current value.
      */
     public interface OnValueChangeListener {
@@ -936,6 +941,31 @@ public class NumberPicker extends LinearLayout {
             case KeyEvent.KEYCODE_ENTER:
                 removeAllCallbacks();
                 break;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_DPAD_UP:
+                if (!mHasSelectorWheel) {
+                    break;
+                }
+                switch (event.getAction()) {
+                    case KeyEvent.ACTION_DOWN:
+                        if (mWrapSelectorWheel || (keyCode == KeyEvent.KEYCODE_DPAD_DOWN)
+                                ? getValue() < getMaxValue() : getValue() > getMinValue()) {
+                            requestFocus();
+                            mLastHandledDownDpadKeyCode = keyCode;
+                            removeAllCallbacks();
+                            if (mFlingScroller.isFinished()) {
+                                changeValueByOne(keyCode == KeyEvent.KEYCODE_DPAD_DOWN);
+                            }
+                            return true;
+                        }
+                        break;
+                    case KeyEvent.ACTION_UP:
+                        if (mLastHandledDownDpadKeyCode == keyCode) {
+                            mLastHandledDownDpadKeyCode = -1;
+                            return true;
+                        }
+                        break;
+                }
         }
         return super.dispatchKeyEvent(event);
     }
@@ -1939,8 +1969,10 @@ public class NumberPicker extends LinearLayout {
                  * Ensure the user can't type in a value greater than the max
                  * allowed. We have to allow less than min as the user might
                  * want to delete some numbers and then type a new number.
+                 * And prevent multiple-"0" that exceeds the length of upper
+                 * bound number.
                  */
-                if (val > mMaxValue) {
+                if (val > mMaxValue || result.length() > String.valueOf(mMaxValue).length()) {
                     return "";
                 } else {
                     return filtered;
@@ -2153,7 +2185,10 @@ public class NumberPicker extends LinearLayout {
                             mScrollX + (mRight - mLeft),
                             mTopSelectionDividerTop + mSelectionDividerHeight);
                 case VIRTUAL_VIEW_ID_INPUT:
-                    return createAccessibiltyNodeInfoForInputText();
+                    return createAccessibiltyNodeInfoForInputText(mScrollX,
+                            mTopSelectionDividerTop + mSelectionDividerHeight,
+                            mScrollX + (mRight - mLeft),
+                            mBottomSelectionDividerBottom - mSelectionDividerHeight);
                 case VIRTUAL_VIEW_ID_INCREMENT:
                     return createAccessibilityNodeInfoForVirtualButton(VIRTUAL_VIEW_ID_INCREMENT,
                             getVirtualIncrementButtonText(), mScrollX,
@@ -2414,7 +2449,8 @@ public class NumberPicker extends LinearLayout {
             }
         }
 
-        private AccessibilityNodeInfo createAccessibiltyNodeInfoForInputText() {
+        private AccessibilityNodeInfo createAccessibiltyNodeInfoForInputText(
+                int left, int top, int right, int bottom) {
             AccessibilityNodeInfo info = mInputText.createAccessibilityNodeInfo();
             info.setSource(NumberPicker.this, VIRTUAL_VIEW_ID_INPUT);
             if (mAccessibilityFocusedView != VIRTUAL_VIEW_ID_INPUT) {
@@ -2423,6 +2459,15 @@ public class NumberPicker extends LinearLayout {
             if (mAccessibilityFocusedView == VIRTUAL_VIEW_ID_INPUT) {
                 info.addAction(AccessibilityNodeInfo.ACTION_CLEAR_ACCESSIBILITY_FOCUS);
             }
+            Rect boundsInParent = mTempRect;
+            boundsInParent.set(left, top, right, bottom);
+            info.setVisibleToUser(isVisibleToUser(boundsInParent));
+            info.setBoundsInParent(boundsInParent);
+            Rect boundsInScreen = boundsInParent;
+            int[] locationOnScreen = mTempArray;
+            getLocationOnScreen(locationOnScreen);
+            boundsInScreen.offset(locationOnScreen[0], locationOnScreen[1]);
+            info.setBoundsInScreen(boundsInScreen);
             return info;
         }
 

@@ -39,7 +39,6 @@ public class DateUtils
 {
     private static final Object sLock = new Object();
     private static Configuration sLastConfig;
-    private static java.text.DateFormat sStatusTimeFormat;
     private static String sElapsedFormatMMSS;
     private static String sElapsedFormatHMMSS;
 
@@ -95,14 +94,14 @@ public class DateUtils
     // translated.
     /**
      * This is not actually the preferred 24-hour date format in all locales.
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static final String HOUR_MINUTE_24 = "%H:%M";
     public static final String MONTH_FORMAT = "%B";
     /**
      * This is not actually a useful month name in all locales.
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static final String ABBREV_MONTH_FORMAT = "%b";
@@ -118,7 +117,7 @@ public class DateUtils
     // The index is constructed from a bit-wise OR of the boolean values:
     // {showTime, showYear, showWeekDay}.  For example, if showYear and
     // showWeekDay are both true, then the index would be 3.
-    /** @deprecated do not use. */
+    /** @deprecated Do not use. */
     public static final int sameYearTable[] = {
         com.android.internal.R.string.same_year_md1_md2,
         com.android.internal.R.string.same_year_wday1_md1_wday2_md2,
@@ -145,7 +144,7 @@ public class DateUtils
     // The index is constructed from a bit-wise OR of the boolean values:
     // {showTime, showYear, showWeekDay}.  For example, if showYear and
     // showWeekDay are both true, then the index would be 3.
-    /** @deprecated do not use. */
+    /** @deprecated Do not use. */
     public static final int sameMonthTable[] = {
         com.android.internal.R.string.same_month_md1_md2,
         com.android.internal.R.string.same_month_wday1_md1_wday2_md2,
@@ -172,7 +171,7 @@ public class DateUtils
      *
      * @more <p>
      *       e.g. "Sunday" or "January"
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static final int LENGTH_LONG = 10;
@@ -183,7 +182,7 @@ public class DateUtils
      *
      * @more <p>
      *       e.g. "Sun" or "Jan"
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static final int LENGTH_MEDIUM = 20;
@@ -195,7 +194,7 @@ public class DateUtils
      * <p>e.g. "Su" or "Jan"
      * <p>In most languages, the results returned for LENGTH_SHORT will be the same as
      * the results returned for {@link #LENGTH_MEDIUM}.
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static final int LENGTH_SHORT = 30;
@@ -204,7 +203,7 @@ public class DateUtils
      * Request an even shorter abbreviated version of the name.
      * Do not use this.  Currently this will always return the same result
      * as {@link #LENGTH_SHORT}.
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static final int LENGTH_SHORTER = 40;
@@ -216,7 +215,7 @@ public class DateUtils
      * <p>e.g. "S", "T", "T" or "J"
      * <p>In some languages, the results returned for LENGTH_SHORTEST will be the same as
      * the results returned for {@link #LENGTH_SHORT}.
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static final int LENGTH_SHORTEST = 50;
@@ -232,7 +231,7 @@ public class DateUtils
      *               Undefined lengths will return {@link #LENGTH_MEDIUM}
      *               but may return something different in the future.
      * @throws IndexOutOfBoundsException if the dayOfWeek is out of bounds.
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static String getDayOfWeekString(int dayOfWeek, int abbrev) {
@@ -254,7 +253,7 @@ public class DateUtils
      * @param ampm Either {@link Calendar#AM Calendar.AM} or {@link Calendar#PM Calendar.PM}.
      * @throws IndexOutOfBoundsException if the ampm is out of bounds.
      * @return Localized version of "AM" or "PM".
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static String getAMPMString(int ampm) {
@@ -270,53 +269,14 @@ public class DateUtils
      *               Undefined lengths will return {@link #LENGTH_MEDIUM}
      *               but may return something different in the future.
      * @return Localized month of the year.
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
+     * @deprecated Use {@link java.text.SimpleDateFormat} instead.
      */
     @Deprecated
     public static String getMonthString(int month, int abbrev) {
-        // Note that here we use d.shortMonthNames for MEDIUM, SHORT and SHORTER.
-        // This is a shortcut to not spam the translators with too many variations
-        // of the same string.  If we find that in a language the distinction
-        // is necessary, we can can add more without changing this API.
         LocaleData d = LocaleData.get(Locale.getDefault());
         String[] names;
         switch (abbrev) {
             case LENGTH_LONG:       names = d.longMonthNames;  break;
-            case LENGTH_MEDIUM:     names = d.shortMonthNames; break;
-            case LENGTH_SHORT:      names = d.shortMonthNames; break;
-            case LENGTH_SHORTER:    names = d.shortMonthNames; break;
-            case LENGTH_SHORTEST:   names = d.tinyMonthNames;  break;
-            default:                names = d.shortMonthNames; break;
-        }
-        return names[month];
-    }
-
-    /**
-     * Return a localized string for the month of the year, for
-     * contexts where the month is not formatted together with
-     * a day of the month.
-     *
-     * @param month One of {@link Calendar#JANUARY Calendar.JANUARY},
-     *               {@link Calendar#FEBRUARY Calendar.FEBRUARY}, etc.
-     * @param abbrev One of {@link #LENGTH_LONG}, {@link #LENGTH_MEDIUM},
-     *               or {@link #LENGTH_SHORTEST}.
-     *               Undefined lengths will return {@link #LENGTH_MEDIUM}
-     *               but may return something different in the future.
-     * @return Localized month of the year.
-     * @hide Pending API council approval
-     * @deprecated use {@link java.text.SimpleDateFormat} instead.
-     */
-    @Deprecated
-    public static String getStandaloneMonthString(int month, int abbrev) {
-        // Note that here we use d.shortMonthNames for MEDIUM, SHORT and SHORTER.
-        // This is a shortcut to not spam the translators with too many variations
-        // of the same string.  If we find that in a language the distinction
-        // is necessary, we can can add more without changing this API.
-        LocaleData d = LocaleData.get(Locale.getDefault());
-        String[] names;
-        switch (abbrev) {
-            case LENGTH_LONG:       names = d.longStandAloneMonthNames;
-                                                            break;
             case LENGTH_MEDIUM:     names = d.shortMonthNames; break;
             case LENGTH_SHORT:      names = d.shortMonthNames; break;
             case LENGTH_SHORTER:    names = d.shortMonthNames; break;
@@ -429,20 +389,7 @@ public class DateUtils
                 }
             }
         } else if (duration < WEEK_IN_MILLIS && minResolution < WEEK_IN_MILLIS) {
-            count = getNumberOfDaysPassed(time, now);
-            if (past) {
-                if (abbrevRelative) {
-                    resId = com.android.internal.R.plurals.abbrev_num_days_ago;
-                } else {
-                    resId = com.android.internal.R.plurals.num_days_ago;
-                }
-            } else {
-                if (abbrevRelative) {
-                    resId = com.android.internal.R.plurals.abbrev_in_num_days;
-                } else {
-                    resId = com.android.internal.R.plurals.in_num_days;
-                }
-            }
+            return getRelativeDayString(r, time, now);
         } else {
             // We know that we won't be showing the time, so it is safe to pass
             // in a null context.
@@ -451,24 +398,6 @@ public class DateUtils
 
         String format = r.getQuantityString(resId, (int) count);
         return String.format(format, count);
-    }
-
-    /**
-     * Returns the number of days passed between two dates.
-     *
-     * @param date1 first date
-     * @param date2 second date
-     * @return number of days passed between to dates.
-     */
-    private synchronized static long getNumberOfDaysPassed(long date1, long date2) {
-        if (sThenTime == null) {
-            sThenTime = new Time();
-        }
-        sThenTime.set(date1);
-        int day1 = Time.getJulianDay(date1, sThenTime.gmtoff);
-        sThenTime.set(date2);
-        int day2 = Time.getJulianDay(date2, sThenTime.gmtoff);
-        return Math.abs(day2 - day1);
     }
 
     /**
@@ -529,28 +458,29 @@ public class DateUtils
      * today this function returns "Today", if the day was a week ago it returns "7 days ago", and
      * if the day is in 2 weeks it returns "in 14 days".
      *
-     * @param r the resources to get the strings from
+     * @param r the resources
      * @param day the relative day to describe in UTC milliseconds
      * @param today the current time in UTC milliseconds
-     * @return a formatting string
      */
     private static final String getRelativeDayString(Resources r, long day, long today) {
+        Locale locale = r.getConfiguration().locale;
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        // TODO: use TimeZone.getOffset instead.
         Time startTime = new Time();
         startTime.set(day);
+        int startDay = Time.getJulianDay(day, startTime.gmtoff);
+
         Time currentTime = new Time();
         currentTime.set(today);
-
-        int startDay = Time.getJulianDay(day, startTime.gmtoff);
         int currentDay = Time.getJulianDay(today, currentTime.gmtoff);
 
         int days = Math.abs(currentDay - startDay);
         boolean past = (today > day);
 
         // TODO: some locales name other days too, such as de_DE's "Vorgestern" (today - 2).
-        Locale locale = r.getConfiguration().locale;
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
         if (days == 1) {
             if (past) {
                 return LocaleData.get(locale).yesterday;
@@ -583,21 +513,8 @@ public class DateUtils
         Configuration cfg = r.getConfiguration();
         if (sLastConfig == null || !sLastConfig.equals(cfg)) {
             sLastConfig = cfg;
-            sStatusTimeFormat = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT);
             sElapsedFormatMMSS = r.getString(com.android.internal.R.string.elapsed_time_short_format_mm_ss);
             sElapsedFormatHMMSS = r.getString(com.android.internal.R.string.elapsed_time_short_format_h_mm_ss);
-        }
-    }
-
-    /**
-     * Format a time so it appears like it would in the status bar clock.
-     * @deprecated use {@link #DateFormat.getTimeFormat(Context)} instead.
-     * @hide
-     */
-    public static final CharSequence timeString(long millis) {
-        synchronized (sLock) {
-            initFormatStringsLocked();
-            return sStatusTimeFormat.format(millis);
         }
     }
 
@@ -672,10 +589,6 @@ public class DateUtils
         initFormatStrings();
         if (hours > 0) {
             return f.format(sElapsedFormatHMMSS, hours, minutes, seconds).toString();
-        } else if (minutes < 10) {
-            /* For MR1 Holo CTS, the minutes can't be zero-padded */
-            String FAST_FORMAT_MMSS = "%1$d:%2$02d";
-            return f.format(FAST_FORMAT_MMSS, minutes, seconds).toString();
         } else {
             return f.format(sElapsedFormatMMSS, minutes, seconds).toString();
         }
@@ -719,18 +632,6 @@ public class DateUtils
     }
 
     /**
-     * @hide
-     * @deprecated use {@link android.text.format.Time}
-     */
-    public static Calendar newCalendar(boolean zulu)
-    {
-        if (zulu)
-            return Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-
-        return Calendar.getInstance();
-    }
-
-    /**
      * @return true if the supplied when is today else false
      */
     public static boolean isToday(long when) {
@@ -745,127 +646,6 @@ public class DateUtils
         return (thenYear == time.year)
                 && (thenMonth == time.month)
                 && (thenMonthDay == time.monthDay);
-    }
-
-    /**
-     * @hide
-     * @deprecated use {@link android.text.format.Time}
-     * Return true if this date string is local time
-     */
-    public static boolean isUTC(String s)
-    {
-        if (s.length() == 16 && s.charAt(15) == 'Z') {
-            return true;
-        }
-        if (s.length() == 9 && s.charAt(8) == 'Z') {
-            // XXX not sure if this case possible/valid
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Return a string containing the date and time in RFC2445 format.
-     * Ensures that the time is written in UTC.  The Calendar class doesn't
-     * really help out with this, so this is slower than it ought to be.
-     *
-     * @param cal the date and time to write
-     * @hide
-     * @deprecated use {@link android.text.format.Time}
-     */
-    public static String writeDateTime(Calendar cal)
-    {
-        TimeZone tz = TimeZone.getTimeZone("GMT");
-        GregorianCalendar c = new GregorianCalendar(tz);
-        c.setTimeInMillis(cal.getTimeInMillis());
-        return writeDateTime(c, true);
-    }
-
-    /**
-     * Return a string containing the date and time in RFC2445 format.
-     *
-     * @param cal the date and time to write
-     * @param zulu If the calendar is in UTC, pass true, and a Z will
-     * be written at the end as per RFC2445.  Otherwise, the time is
-     * considered in localtime.
-     * @hide
-     * @deprecated use {@link android.text.format.Time}
-     */
-    public static String writeDateTime(Calendar cal, boolean zulu)
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.ensureCapacity(16);
-        if (zulu) {
-            sb.setLength(16);
-            sb.setCharAt(15, 'Z');
-        } else {
-            sb.setLength(15);
-        }
-        return writeDateTime(cal, sb);
-    }
-
-    /**
-     * Return a string containing the date and time in RFC2445 format.
-     *
-     * @param cal the date and time to write
-     * @param sb a StringBuilder to use.  It is assumed that setLength
-     *           has already been called on sb to the appropriate length
-     *           which is sb.setLength(zulu ? 16 : 15)
-     * @hide
-     * @deprecated use {@link android.text.format.Time}
-     */
-    public static String writeDateTime(Calendar cal, StringBuilder sb)
-    {
-        int n;
-
-        n = cal.get(Calendar.YEAR);
-        sb.setCharAt(3, (char)('0'+n%10));
-        n /= 10;
-        sb.setCharAt(2, (char)('0'+n%10));
-        n /= 10;
-        sb.setCharAt(1, (char)('0'+n%10));
-        n /= 10;
-        sb.setCharAt(0, (char)('0'+n%10));
-
-        n = cal.get(Calendar.MONTH) + 1;
-        sb.setCharAt(5, (char)('0'+n%10));
-        n /= 10;
-        sb.setCharAt(4, (char)('0'+n%10));
-
-        n = cal.get(Calendar.DAY_OF_MONTH);
-        sb.setCharAt(7, (char)('0'+n%10));
-        n /= 10;
-        sb.setCharAt(6, (char)('0'+n%10));
-
-        sb.setCharAt(8, 'T');
-
-        n = cal.get(Calendar.HOUR_OF_DAY);
-        sb.setCharAt(10, (char)('0'+n%10));
-        n /= 10;
-        sb.setCharAt(9, (char)('0'+n%10));
-
-        n = cal.get(Calendar.MINUTE);
-        sb.setCharAt(12, (char)('0'+n%10));
-        n /= 10;
-        sb.setCharAt(11, (char)('0'+n%10));
-
-        n = cal.get(Calendar.SECOND);
-        sb.setCharAt(14, (char)('0'+n%10));
-        n /= 10;
-        sb.setCharAt(13, (char)('0'+n%10));
-
-        return sb.toString();
-    }
-
-    /**
-     * @hide
-     * @deprecated use {@link android.text.format.Time}
-     */
-    public static void assign(Calendar lval, Calendar rval)
-    {
-        // there should be a faster way.
-        lval.clear();
-        lval.setTimeInMillis(rval.getTimeInMillis());
     }
 
     /**
@@ -1100,30 +880,34 @@ public class DateUtils
         // computation below that'd otherwise be thrown out.
         boolean isInstant = (startMillis == endMillis);
 
-        Time startDate;
+        Calendar startCalendar, endCalendar;
+        Time startDate = new Time();
         if (timeZone != null) {
-            startDate = new Time(timeZone);
+            startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
         } else if (useUTC) {
-            startDate = new Time(Time.TIMEZONE_UTC);
+            startCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         } else {
-            startDate = new Time();
+            startCalendar = Calendar.getInstance();
         }
-        startDate.set(startMillis);
+        startCalendar.setTimeInMillis(startMillis);
+        setTimeFromCalendar(startDate, startCalendar);
 
-        Time endDate;
+        Time endDate = new Time();
         int dayDistance;
         if (isInstant) {
             endDate = startDate;
             dayDistance = 0;
         } else {
             if (timeZone != null) {
-                endDate = new Time(timeZone);
+                endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
             } else if (useUTC) {
-                endDate = new Time(Time.TIMEZONE_UTC);
+                endCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
             } else {
-                endDate = new Time();
+                endCalendar = Calendar.getInstance();
             }
-            endDate.set(endMillis);
+            endCalendar.setTimeInMillis(endMillis);
+            setTimeFromCalendar(endDate, endCalendar);
+
             int startJulianDay = Time.getJulianDay(startMillis, startDate.gmtoff);
             int endJulianDay = Time.getJulianDay(endMillis, endDate.gmtoff);
             dayDistance = endJulianDay - startJulianDay;
@@ -1464,6 +1248,20 @@ public class DateUtils
         // The values that are used in a fullFormat string are specified
         // by position.
         return formatter.format(fullFormat, timeString, startWeekDayString, dateString);
+    }
+
+    private static void setTimeFromCalendar(Time t, Calendar c) {
+        t.hour = c.get(Calendar.HOUR_OF_DAY);
+        t.minute = c.get(Calendar.MINUTE);
+        t.month = c.get(Calendar.MONTH);
+        t.monthDay = c.get(Calendar.DAY_OF_MONTH);
+        t.second = c.get(Calendar.SECOND);
+        t.weekDay = c.get(Calendar.DAY_OF_WEEK) - 1;
+        t.year = c.get(Calendar.YEAR);
+        t.yearDay = c.get(Calendar.DAY_OF_YEAR);
+        t.isDst = (c.get(Calendar.DST_OFFSET) != 0) ? 1 : 0;
+        t.gmtoff = c.get(Calendar.ZONE_OFFSET) + c.get(Calendar.DST_OFFSET);
+        t.timezone = c.getTimeZone().getID();
     }
 
     /**

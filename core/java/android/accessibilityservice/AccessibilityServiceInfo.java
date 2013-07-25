@@ -29,15 +29,22 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.util.Xml;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.android.internal.R;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class describes an {@link AccessibilityService}. The system notifies an
@@ -51,6 +58,18 @@ import java.io.IOException;
  * developer guide.</p>
  * </div>
  *
+ * @attr ref android.R.styleable#AccessibilityService_accessibilityEventTypes
+ * @attr ref android.R.styleable#AccessibilityService_accessibilityFeedbackType
+ * @attr ref android.R.styleable#AccessibilityService_accessibilityFlags
+ * @attr ref android.R.styleable#AccessibilityService_canRequestEnhancedWebAccessibility
+ * @attr ref android.R.styleable#AccessibilityService_canRequestFilterKeyEvents
+ * @attr ref android.R.styleable#AccessibilityService_canRequestTouchExplorationMode
+ * @attr ref android.R.styleable#AccessibilityService_canRetrieveWindowContent
+ * @attr ref android.R.styleable#AccessibilityService_description
+ * @attr ref android.R.styleable#AccessibilityService_notificationTimeout
+ * @attr ref android.R.styleable#AccessibilityService_packageNames
+ * @attr ref android.R.styleable#AccessibilityService_settingsActivity
+ *
  * @see AccessibilityService
  * @see android.view.accessibility.AccessibilityEvent
  * @see android.view.accessibility.AccessibilityManager
@@ -58,6 +77,53 @@ import java.io.IOException;
 public class AccessibilityServiceInfo implements Parcelable {
 
     private static final String TAG_ACCESSIBILITY_SERVICE = "accessibility-service";
+
+    /**
+     * Capability: This accessibility service can retrieve the active window content.
+     * @see android.R.styleable#AccessibilityService_canRetrieveWindowContent
+     */
+    public static final int CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT = 0x00000001;
+
+    /**
+     * Capability: This accessibility service can request touch exploration mode in which
+     * touched items are spoken aloud and the UI can be explored via gestures.
+     * @see android.R.styleable#AccessibilityService_canRequestTouchExplorationMode
+     */
+    public static final int CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION = 0x00000002;
+
+    /**
+     * Capability: This accessibility service can request enhanced web accessibility
+     * enhancements. For example, installing scripts to make app content more accessible.
+     * @see android.R.styleable#AccessibilityService_canRequestEnhancedWebAccessibility
+     */
+    public static final int CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY = 0x00000004;
+
+    /**
+     * Capability: This accessibility service can request to filter the key event stream.
+     * @see android.R.styleable#AccessibilityService_canRequestFilterKeyEvents
+     */
+    public static final int CAPABILITY_CAN_REQUEST_FILTER_KEY_EVENTS = 0x00000008;
+
+    private static final SparseArray<CapabilityInfo> sAvailableCapabilityInfos =
+            new SparseArray<CapabilityInfo>();
+    static {
+        sAvailableCapabilityInfos.put(CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT,
+                new CapabilityInfo(CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT,
+                        R.string.capability_title_canRetrieveWindowContent,
+                        R.string.capability_desc_canRetrieveWindowContent));
+        sAvailableCapabilityInfos.put(CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION,
+                new CapabilityInfo(CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION,
+                        R.string.capability_title_canRequestTouchExploration,
+                        R.string.capability_desc_canRequestTouchExploration));
+        sAvailableCapabilityInfos.put(CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY,
+                new CapabilityInfo(CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY,
+                        R.string.capability_title_canRequestEnhancedWebAccessibility,
+                        R.string.capability_desc_canRequestEnhancedWebAccessibility));
+        sAvailableCapabilityInfos.put(CAPABILITY_CAN_REQUEST_FILTER_KEY_EVENTS,
+                new CapabilityInfo(CAPABILITY_CAN_REQUEST_FILTER_KEY_EVENTS,
+                        R.string.capability_title_canRequestFilterKeyEvents,
+                        R.string.capability_desc_canRequestFilterKeyEvents));
+    }
 
     /**
      * Denotes spoken feedback.
@@ -148,8 +214,73 @@ public class AccessibilityServiceInfo implements Parcelable {
      * accessibility service that has this flag set. Hence, clearing this
      * flag does not guarantee that the device will not be in touch exploration
      * mode since there may be another enabled service that requested it.
+     * <p>
+     * For accessibility services targeting API version higher than
+     * {@link Build.VERSION_CODES#JELLY_BEAN_MR1} that want to set
+     * this flag have to declare this capability in their meta-data by setting
+     * the attribute {@link android.R.attr#canRequestTouchExplorationMode
+     * canRequestTouchExplorationMode} to true, otherwise this flag will
+     * be ignored. For how to declare the meta-data of a service refer to
+     * {@value AccessibilityService#SERVICE_META_DATA}.
+     * </p>
+     * <p>
+     * Services targeting API version equal to or lower than
+     * {@link Build.VERSION_CODES#JELLY_BEAN_MR1} will work normally, i.e.
+     * the first time they are run, if this flag is specified, a dialog is
+     * shown to the user to confirm enabling explore by touch.
+     * </p>
+     * @see android.R.styleable#AccessibilityService_canRequestTouchExplorationMode
      */
-    public static final int FLAG_REQUEST_TOUCH_EXPLORATION_MODE= 0x0000004;
+    public static final int FLAG_REQUEST_TOUCH_EXPLORATION_MODE = 0x0000004;
+
+    /**
+     * This flag requests from the system to enable web accessibility enhancing
+     * extensions. Such extensions aim to provide improved accessibility support
+     * for content presented in a {@link android.webkit.WebView}. An example of such
+     * an extension is injecting JavaScript from a secure source. The system will enable
+     * enhanced web accessibility if there is at least one accessibility service
+     * that has this flag set. Hence, clearing this flag does not guarantee that the
+     * device will not have enhanced web accessibility enabled since there may be
+     * another enabled service that requested it.
+     * <p>
+     * Services that want to set this flag have to declare this capability
+     * in their meta-data by setting the attribute {@link android.R.attr
+     * #canRequestEnhancedWebAccessibility canRequestEnhancedWebAccessibility} to
+     * true, otherwise this flag will be ignored. For how to declare the meta-data
+     * of a service refer to {@value AccessibilityService#SERVICE_META_DATA}.
+     * </p>
+     * @see android.R.styleable#AccessibilityService_canRequestEnhancedWebAccessibility
+     */
+    public static final int FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY = 0x00000008;
+
+    /**
+     * This flag requests that the {@link AccessibilityNodeInfo}s obtained
+     * by an {@link AccessibilityService} contain the id of the source view.
+     * The source view id will be a fully qualified resource name of the
+     * form "package:id/name", for example "foo.bar:id/my_list", and it is
+     * useful for UI test automation. This flag is not set by default.
+     */
+    public static final int FLAG_REPORT_VIEW_IDS = 0x00000010;
+
+    /**
+     * This flag requests from the system to filter key events. If this flag
+     * is set the accessibility service will receive the key events before
+     * applications allowing it implement global shortcuts. Setting this flag
+     * does not guarantee that this service will filter key events since only
+     * one service can do so at any given time. This avoids user confusion due
+     * to behavior change in case different key filtering services are enabled.
+     * If there is already another key filtering service enabled, this one will
+     * not receive key events.
+     * <p>
+     * Services that want to set this flag have to declare this capability
+     * in their meta-data by setting the attribute {@link android.R.attr
+     * #canRequestFilterKeyEvents canRequestFilterKeyEvents} to true,
+     * otherwise this flag will be ignored. For how to declare the meta-data
+     * of a service refer to {@value AccessibilityService#SERVICE_META_DATA}.
+     * </p>
+     * @see android.R.styleable#AccessibilityService_canRequestFilterKeyEvents
+     */
+    public static final int FLAG_REQUEST_FILTER_KEY_EVENTS = 0x00000020;
 
     /**
      * The event types an {@link AccessibilityService} is interested in.
@@ -219,6 +350,9 @@ public class AccessibilityServiceInfo implements Parcelable {
      * @see #DEFAULT
      * @see #FLAG_INCLUDE_NOT_IMPORTANT_VIEWS
      * @see #FLAG_REQUEST_TOUCH_EXPLORATION_MODE
+     * @see #FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY
+     * @see #FLAG_REQUEST_FILTER_KEY_EVENTS
+     * @see #FLAG_REPORT_VIEW_IDS
      */
     public int flags;
 
@@ -239,9 +373,9 @@ public class AccessibilityServiceInfo implements Parcelable {
     private String mSettingsActivityName;
 
     /**
-     * Flag whether this accessibility service can retrieve window content.
+     * Bit mask with capabilities of this service.
      */
-    private boolean mCanRetrieveWindowContent;
+    private int mCapabilities;
 
     /**
      * Resource id of the description of the accessibility service.
@@ -320,9 +454,22 @@ public class AccessibilityServiceInfo implements Parcelable {
                     com.android.internal.R.styleable.AccessibilityService_accessibilityFlags, 0);
             mSettingsActivityName = asAttributes.getString(
                     com.android.internal.R.styleable.AccessibilityService_settingsActivity);
-            mCanRetrieveWindowContent = asAttributes.getBoolean(
-                    com.android.internal.R.styleable.AccessibilityService_canRetrieveWindowContent,
-                    false);
+            if (asAttributes.getBoolean(com.android.internal.R.styleable
+                    .AccessibilityService_canRetrieveWindowContent, false)) {
+                mCapabilities |= CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT;
+            }
+            if (asAttributes.getBoolean(com.android.internal.R.styleable
+                    .AccessibilityService_canRequestTouchExplorationMode, false)) {
+                mCapabilities |= CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION;
+            }
+            if (asAttributes.getBoolean(com.android.internal.R.styleable
+                        .AccessibilityService_canRequestEnhancedWebAccessibility, false)) {
+                    mCapabilities |= CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY;
+            }
+            if (asAttributes.getBoolean(com.android.internal.R.styleable
+                    .AccessibilityService_canRequestFilterKeyEvents, false)) {
+                mCapabilities |= CAPABILITY_CAN_REQUEST_FILTER_KEY_EVENTS;
+            }
             TypedValue peekedValue = asAttributes.peekValue(
                     com.android.internal.R.styleable.AccessibilityService_description);
             if (peekedValue != null) {
@@ -356,6 +503,13 @@ public class AccessibilityServiceInfo implements Parcelable {
         feedbackType = other.feedbackType;
         notificationTimeout = other.notificationTimeout;
         flags = other.flags;
+    }
+
+    /**
+     * @hide
+     */
+    public void setComponentName(ComponentName component) {
+        mId = component.flattenToShortString();
     }
 
     /**
@@ -399,9 +553,43 @@ public class AccessibilityServiceInfo implements Parcelable {
      *    {@link AccessibilityService#SERVICE_META_DATA meta-data}.</strong>
      * </p>
      * @return True if window content can be retrieved.
+     *
+     * @deprecated Use {@link #getCapabilities()}.
      */
     public boolean getCanRetrieveWindowContent() {
-        return mCanRetrieveWindowContent;
+        return (mCapabilities & CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT) != 0;
+    }
+
+    /**
+     * Returns the bit mask of capabilities this accessibility service has such as
+     * being able to retrieve the active window content, etc.
+     *
+     * @return The capability bit mask.
+     *
+     * @see #CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT
+     * @see #CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION
+     * @see #CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY
+     * @see #CAPABILITY_FILTER_KEY_EVENTS
+     */
+    public int getCapabilities() {
+        return mCapabilities;
+    }
+
+    /**
+     * Sets the bit mask of capabilities this accessibility service has such as
+     * being able to retrieve the active window content, etc.
+     *
+     * @param capabilities The capability bit mask.
+     *
+     * @see #CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT
+     * @see #CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION
+     * @see #CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY
+     * @see #CAPABILITY_FILTER_KEY_EVENTS
+     *
+     * @hide
+     */
+    public void setCapabilities(int capabilities) {
+        mCapabilities = capabilities;
     }
 
     /**
@@ -455,7 +643,7 @@ public class AccessibilityServiceInfo implements Parcelable {
         parcel.writeString(mId);
         parcel.writeParcelable(mResolveInfo, 0);
         parcel.writeString(mSettingsActivityName);
-        parcel.writeInt(mCanRetrieveWindowContent ? 1 : 0);
+        parcel.writeInt(mCapabilities);
         parcel.writeInt(mDescriptionResId);
         parcel.writeString(mNonLocalizedDescription);
     }
@@ -469,9 +657,36 @@ public class AccessibilityServiceInfo implements Parcelable {
         mId = parcel.readString();
         mResolveInfo = parcel.readParcelable(null);
         mSettingsActivityName = parcel.readString();
-        mCanRetrieveWindowContent = (parcel.readInt() == 1);
+        mCapabilities = parcel.readInt();
         mDescriptionResId = parcel.readInt();
         mNonLocalizedDescription = parcel.readString();
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * 1 + ((mId == null) ? 0 : mId.hashCode());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        AccessibilityServiceInfo other = (AccessibilityServiceInfo) obj;
+        if (mId == null) {
+            if (other.mId != null) {
+                return false;
+            }
+        } else if (!mId.equals(other.mId)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -493,7 +708,7 @@ public class AccessibilityServiceInfo implements Parcelable {
         stringBuilder.append(", ");
         stringBuilder.append("settingsActivityName: ").append(mSettingsActivityName);
         stringBuilder.append(", ");
-        stringBuilder.append("retrieveScreenContent: ").append(mCanRetrieveWindowContent);
+        appendCapabilities(stringBuilder, mCapabilities);
         return stringBuilder.toString();
     }
 
@@ -548,6 +763,20 @@ public class AccessibilityServiceInfo implements Parcelable {
             stringBuilder.append(flagToString(flagBit));
             flags &= ~flagBit;
             if (flags != 0) {
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append("]");
+    }
+
+    private static void appendCapabilities(StringBuilder stringBuilder, int capabilities) {
+        stringBuilder.append("capabilities:");
+        stringBuilder.append("[");
+        while (capabilities != 0) {
+            final int capabilityBit = (1 << Integer.numberOfTrailingZeros(capabilities));
+            stringBuilder.append(capabilityToString(capabilityBit));
+            capabilities &= ~capabilityBit;
+            if (capabilities != 0) {
                 stringBuilder.append(", ");
             }
         }
@@ -625,8 +854,73 @@ public class AccessibilityServiceInfo implements Parcelable {
                 return "FLAG_INCLUDE_NOT_IMPORTANT_VIEWS";
             case FLAG_REQUEST_TOUCH_EXPLORATION_MODE:
                 return "FLAG_REQUEST_TOUCH_EXPLORATION_MODE";
+            case FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY:
+                return "FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY";
+            case FLAG_REPORT_VIEW_IDS:
+                return "FLAG_REPORT_VIEW_IDS";
+            case FLAG_REQUEST_FILTER_KEY_EVENTS:
+                return "FLAG_REQUEST_FILTER_KEY_EVENTS";
             default:
                 return null;
+        }
+    }
+
+    /**
+     * Returns the string representation of a capability. For example,
+     * {@link #CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT} is represented
+     * by the string CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT.
+     *
+     * @param capability The capability.
+     * @return The string representation.
+     */
+    public static String capabilityToString(int capability) {
+        switch (capability) {
+            case CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT:
+                return "CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT";
+            case CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION:
+                return "CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION";
+            case CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY:
+                return "CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY";
+            case CAPABILITY_CAN_REQUEST_FILTER_KEY_EVENTS:
+                return "CAPABILITY_CAN_FILTER_KEY_EVENTS";
+            default:
+                return "UNKNOWN";
+        }
+    }
+
+    /**
+     * @hide
+     * @return The list of {@link CapabilityInfo} objects.
+     */
+    public List<CapabilityInfo> getCapabilityInfos() {
+        if (mCapabilities == 0) {
+            return Collections.emptyList();
+        }
+        int capabilities = mCapabilities;
+        List<CapabilityInfo> capabilityInfos = new ArrayList<CapabilityInfo>();
+        while (capabilities != 0) {
+            final int capabilityBit = 1 << Integer.numberOfTrailingZeros(capabilities);
+            capabilities &= ~capabilityBit;
+            CapabilityInfo capabilityInfo = sAvailableCapabilityInfos.get(capabilityBit);
+            if (capabilityInfo != null) {
+                capabilityInfos.add(capabilityInfo);
+            }
+        }
+        return capabilityInfos;
+    }
+
+    /**
+     * @hide
+     */
+    public static final class CapabilityInfo {
+        public final int capability;
+        public final int titleResId;
+        public final int descResId;
+
+        public CapabilityInfo(int capability, int titleResId, int descResId) {
+            this.capability = capability;
+            this.titleResId = titleResId;
+            this.descResId = descResId;
         }
     }
 

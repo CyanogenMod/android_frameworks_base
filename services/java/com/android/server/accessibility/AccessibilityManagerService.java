@@ -17,7 +17,6 @@
 package com.android.server.accessibility;
 
 import static android.accessibilityservice.AccessibilityServiceInfo.DEFAULT;
-import static android.accessibilityservice.AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
 
 import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
@@ -62,16 +61,20 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.TextUtils.SimpleStringSplitter;
+import android.util.Pools.Pool;
+import android.util.Pools.SimplePool;
 import android.util.Slog;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.IWindow;
 import android.view.IWindowManager;
 import android.view.InputDevice;
+import android.view.InputEventConsistencyVerifier;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
-import android.view.WindowInfo;
+import android.view.MagnificationSpec;
 import android.view.WindowManager;
+import android.view.WindowManagerPolicy;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityInteractionClient;
 import android.view.accessibility.AccessibilityManager;
@@ -87,9 +90,12 @@ import com.android.internal.statusbar.IStatusBarService;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.FileDescriptor;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -122,9 +128,16 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
     private static final String TEMPORARY_ENABLE_ACCESSIBILITY_UNTIL_KEYGUARD_REMOVED =
             "temporaryEnableAccessibilityStateUntilKeyguardRemoved";
 
+    private static final ComponentName sFakeAccessibilityServiceComponentName =
+            new ComponentName("foo.bar", "FakeService");
+
+    private static final String FUNCTION_DUMP = "dump";
+
     private static final char COMPONENT_NAME_SEPARATOR = ':';
 
     private static final int OWN_PROCESS_ID = android.os.Process.myPid();
+
+    private static final int MAX_POOL_SIZE = 10;
 
     private static int sIdCounter = 0;
 
@@ -133,6 +146,9 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
     private final Context mContext;
 
     private final Object mLock = new Object();
+
+    private final Pool<PendingEvent> mPendingEventPool =
+            new SimplePool<PendingEvent>(MAX_POOL_SIZE);
 
     private final SimpleStringSplitter mStringColonSplitter =
             new SimpleStringSplitter(COMPONENT_NAME_SEPARATOR);
@@ -154,8 +170,6 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
 
     private final MainHandler mMainHandler;
 
-    private Service mUiAutomationService;
-
     private Service mQueryBridge;
 
     private AlertDialog mEnableTouchExplorationDialog;
@@ -163,6 +177,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
     private AccessibilityInputFilter mInputFilter;
 
     private boolean mHasInputFilter;
+
+    private final Set<ComponentName> mTempComponentNameSet = new HashSet<ComponentName>();
+
+    private final List<AccessibilityServiceInfo> mTempAccessibilityServiceInfoList =
+            new ArrayList<AccessibilityServiceInfo>();
 
     private final RemoteCallbackList<IAccessibilityManagerClient> mGlobalClients =
             new RemoteCallbackList<IAccessibilityManagerClient>();
@@ -174,10 +193,10 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
 
     private final SparseArray<UserState> mUserStates = new SparseArray<UserState>();
 
-    private final TempUserStateChangeMemento mTempStateChangeForCurrentUserMemento =
-            new TempUserStateChangeMemento();
-
     private int mCurrentUserId = UserHandle.USER_OWNER;
+
+    //TODO: Remove this hack
+    private boolean mInitialized;
 
     private UserState getCurrentUserStateLocked() {
         return getUserStateLocked(mCurrentUserId);
@@ -221,10 +240,16 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                         return;
                     }
                     // We will update when the automation service dies.
-                    if (mUiAutomationService == null) {
-                        UserState userState = getCurrentUserStateLocked();
-                        populateInstalledAccessibilityServiceLocked(userState);
-                        manageServicesLocked(userState);
+                    UserState userState = getCurrentUserStateLocked();
+                    // We have to reload the installed services since some services may
+                    // have different attributes, resolve info (does not support equals),
+                    // etc. Remove them then to force reload. Do it even if automation is
+                    // running since when it goes away, we will have to reload as well.
+                    userState.mInstalledServices.clear();
+                    if (userState.mUiAutomationService == null) {
+                        if (readConfigurationForUserStateLocked(userState)) {
+                            onUserStateChangedLocked(userState);
+                        }
                     }
                 }
             }
@@ -236,8 +261,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     if (userId != mCurrentUserId) {
                         return;
                     }
-                    UserState state = getUserStateLocked(userId);
-                    Iterator<ComponentName> it = state.mEnabledServices.iterator();
+                    UserState userState = getUserStateLocked(userId);
+                    Iterator<ComponentName> it = userState.mEnabledServices.iterator();
                     while (it.hasNext()) {
                         ComponentName comp = it.next();
                         String compPkg = comp.getPackageName();
@@ -246,13 +271,17 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                             // Update the enabled services setting.
                             persistComponentNamesToSettingLocked(
                                     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
-                                    state.mEnabledServices, userId);
+                                    userState.mEnabledServices, userId);
                             // Update the touch exploration granted services setting.
-                            state.mTouchExplorationGrantedServices.remove(comp);
+                            userState.mTouchExplorationGrantedServices.remove(comp);
                             persistComponentNamesToSettingLocked(
                                     Settings.Secure.
-                                            TOUCH_EXPLORATION_GRANTED_ACCESSIBILITY_SERVICES,
-                                    state.mEnabledServices, userId);
+                                    TOUCH_EXPLORATION_GRANTED_ACCESSIBILITY_SERVICES,
+                                    userState.mTouchExplorationGrantedServices, userId);
+                            // We will update when the automation service dies.
+                            if (userState.mUiAutomationService == null) {
+                                onUserStateChangedLocked(userState);
+                            }
                             return;
                         }
                     }
@@ -267,8 +296,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     if (userId != mCurrentUserId) {
                         return false;
                     }
-                    UserState state = getUserStateLocked(userId);
-                    Iterator<ComponentName> it = state.mEnabledServices.iterator();
+                    UserState userState = getUserStateLocked(userId);
+                    Iterator<ComponentName> it = userState.mEnabledServices.iterator();
                     while (it.hasNext()) {
                         ComponentName comp = it.next();
                         String compPkg = comp.getPackageName();
@@ -280,7 +309,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                                 it.remove();
                                 persistComponentNamesToSettingLocked(
                                         Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
-                                        state.mEnabledServices, userId);
+                                        userState.mEnabledServices, userId);
+                                // We will update when the automation service dies.
+                                if (userState.mUiAutomationService == null) {
+                                    onUserStateChangedLocked(userState);
+                                }
                             }
                         }
                     }
@@ -307,7 +340,13 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 } else if (Intent.ACTION_USER_REMOVED.equals(action)) {
                     removeUser(intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0));
                 } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
-                    restoreStateFromMementoIfNeeded();
+                    // We will update when the automation service dies.
+                    UserState userState = getCurrentUserStateLocked();
+                    if (userState.mUiAutomationService == null) {
+                        if (readConfigurationForUserStateLocked(userState)) {
+                            onUserStateChangedLocked(userState);
+                        }
+                    }
                 }
             }
         }, UserHandle.ALL, intentFilter, null, null);
@@ -326,7 +365,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 if (DEBUG) {
                     Slog.i(LOG_TAG, "Added global client for pid:" + Binder.getCallingPid());
                 }
-                return getClientState(userState);
+                return userState.getClientState();
             } else {
                 userState.mClients.register(client);
                 // If this client is not for the current user we do not
@@ -336,7 +375,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     Slog.i(LOG_TAG, "Added user client for pid:" + Binder.getCallingPid()
                             + " and userId:" + mCurrentUserId);
                 }
-                return (resolvedUserId == mCurrentUserId) ? getClientState(userState) : 0;
+                return (resolvedUserId == mCurrentUserId) ? userState.getClientState() : 0;
             }
         }
     }
@@ -370,7 +409,17 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         synchronized (mLock) {
             final int resolvedUserId = mSecurityPolicy
                     .resolveCallingUserIdEnforcingPermissionsLocked(userId);
-            return getUserStateLocked(resolvedUserId).mInstalledServices;
+            // The automation service is a fake one and should not be reported
+            // to clients as being installed - it really is not.
+            UserState userState = getUserStateLocked(resolvedUserId);
+            if (userState.mUiAutomationService != null) {
+                List<AccessibilityServiceInfo> installedServices =
+                        new ArrayList<AccessibilityServiceInfo>();
+                installedServices.addAll(userState.mInstalledServices);
+                installedServices.remove(userState.mUiAutomationService);
+                return installedServices;
+            }
+            return userState.mInstalledServices;
         }
     }
 
@@ -380,9 +429,18 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         synchronized (mLock) {
             final int resolvedUserId = mSecurityPolicy
                     .resolveCallingUserIdEnforcingPermissionsLocked(userId);
+
+            // The automation service is a fake one and should not be reported
+            // to clients as being enabled. The automation service is always the
+            // only active one, if it exists.
+            UserState userState = getUserStateLocked(resolvedUserId);
+            if (userState.mUiAutomationService != null) {
+                return Collections.emptyList();
+            }
+
             result = mEnabledServicesForFeedbackTempList;
             result.clear();
-            List<Service> services = getUserStateLocked(resolvedUserId).mServices;
+            List<Service> services = userState.mBoundServices;
             while (feedbackType != 0) {
                 final int feedbackTypeBit = (1 << Integer.numberOfTrailingZeros(feedbackType));
                 feedbackType &= ~feedbackTypeBit;
@@ -407,7 +465,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             if (resolvedUserId != mCurrentUserId) {
                 return;
             }
-            services = getUserStateLocked(resolvedUserId).mServices;
+            services = getUserStateLocked(resolvedUserId).mBoundServices;
         }
         for (int i = 0, count = services.size(); i < count; i++) {
             Service service = services.get(i);
@@ -507,33 +565,63 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         return -1;
     }
 
-    public void registerUiTestAutomationService(IAccessibilityServiceClient serviceClient,
+    public void registerUiTestAutomationService(IBinder owner,
+            IAccessibilityServiceClient serviceClient,
             AccessibilityServiceInfo accessibilityServiceInfo) {
         mSecurityPolicy.enforceCallingPermission(Manifest.permission.RETRIEVE_WINDOW_CONTENT,
                 FUNCTION_REGISTER_UI_TEST_AUTOMATION_SERVICE);
-        ComponentName componentName = new ComponentName("foo.bar",
-                "AutomationAccessibilityService");
+
+        accessibilityServiceInfo.setComponentName(sFakeAccessibilityServiceComponentName);
+
         synchronized (mLock) {
-            // If an automation services is connected to the system all services are stopped
-            // so the automation one is the only one running. Settings are not changed so when
-            // the automation service goes away the state is restored from the settings.
             UserState userState = getCurrentUserStateLocked();
-            unbindAllServicesLocked(userState);
 
-            // If necessary enable accessibility and announce that.
-            if (!userState.mIsAccessibilityEnabled) {
-                userState.mIsAccessibilityEnabled = true;
+            if (userState.mUiAutomationService != null) {
+                throw new IllegalStateException("UiAutomationService " + serviceClient
+                        + "already registered!");
             }
-            // No touch exploration.
+
+            try {
+                owner.linkToDeath(userState.mUiAutomationSerivceOnwerDeathRecipient, 0);
+            } catch (RemoteException re) {
+                Slog.e(LOG_TAG, "Couldn't register for the death of a"
+                        + " UiTestAutomationService!", re);
+                return;
+            }
+
+            userState.mUiAutomationServiceOwner = owner;
+            userState.mUiAutomationServiceClient = serviceClient;
+
+            // Set the temporary state.
+            userState.mIsAccessibilityEnabled = true;
             userState.mIsTouchExplorationEnabled = false;
+            userState.mIsEnhancedWebAccessibilityEnabled = false;
+            userState.mIsDisplayMagnificationEnabled = false;
+            userState.mInstalledServices.add(accessibilityServiceInfo);
+            userState.mEnabledServices.clear();
+            userState.mEnabledServices.add(sFakeAccessibilityServiceComponentName);
+            userState.mTouchExplorationGrantedServices.add(sFakeAccessibilityServiceComponentName);
 
-            // Hook the automation service up.
-            mUiAutomationService = new Service(mCurrentUserId, componentName,
-                    accessibilityServiceInfo, true);
-            mUiAutomationService.onServiceConnected(componentName, serviceClient.asBinder());
+            // Use the new state instead of settings.
+            onUserStateChangedLocked(userState);
+        }
+    }
 
-            updateInputFilterLocked(userState);
-            scheduleSendStateToClientsLocked(userState);
+    public void unregisterUiTestAutomationService(IAccessibilityServiceClient serviceClient) {
+        synchronized (mLock) {
+            UserState userState = getCurrentUserStateLocked();
+            // Automation service is not bound, so pretend it died to perform clean up.
+            if (userState.mUiAutomationService != null
+                    && serviceClient != null
+                    && userState.mUiAutomationService != null
+                    && userState.mUiAutomationService.mServiceInterface != null
+                    && userState.mUiAutomationService.mServiceInterface.asBinder()
+                    == serviceClient.asBinder()) {
+                userState.mUiAutomationService.binderDied();
+            } else {
+                throw new IllegalStateException("UiAutomationService " + serviceClient
+                        + " not registered!");
+            }
         }
     }
 
@@ -550,32 +638,26 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             return;
         }
         synchronized (mLock) {
-            UserState userState = getCurrentUserStateLocked();
-            // Stash the old state so we can restore it when the keyguard is gone.
-            mTempStateChangeForCurrentUserMemento.initialize(mCurrentUserId, getCurrentUserStateLocked());
             // Set the temporary state.
+            UserState userState = getCurrentUserStateLocked();
+
+            // This is a nop if UI automation is enabled.
+            if (userState.mUiAutomationService != null) {
+                return;
+            }
+
             userState.mIsAccessibilityEnabled = true;
-            userState.mIsTouchExplorationEnabled= touchExplorationEnabled;
+            userState.mIsTouchExplorationEnabled = touchExplorationEnabled;
+            userState.mIsEnhancedWebAccessibilityEnabled = false;
             userState.mIsDisplayMagnificationEnabled = false;
             userState.mEnabledServices.clear();
             userState.mEnabledServices.add(service);
+            userState.mBindingServices.clear();
             userState.mTouchExplorationGrantedServices.clear();
             userState.mTouchExplorationGrantedServices.add(service);
-            // Update the internal state.
-            performServiceManagementLocked(userState);
-            updateInputFilterLocked(userState);
-            scheduleSendStateToClientsLocked(userState);
-        }
-    }
 
-    public void unregisterUiTestAutomationService(IAccessibilityServiceClient serviceClient) {
-        synchronized (mLock) {
-            // Automation service is not bound, so pretend it died to perform clean up.
-            if (mUiAutomationService != null && mUiAutomationService.mServiceInterface != null
-                    && serviceClient != null && mUiAutomationService.mServiceInterface
-                            .asBinder() == serviceClient.asBinder()) {
-                mUiAutomationService.binderDied();
-            }
+            // User the current state instead settings.
+            onUserStateChangedLocked(userState);
         }
     }
 
@@ -584,6 +666,17 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             boolean handled = notifyGestureLocked(gestureId, false);
             if (!handled) {
                 handled = notifyGestureLocked(gestureId, true);
+            }
+            return handled;
+        }
+    }
+
+    boolean notifyKeyEvent(KeyEvent event, int policyFlags) {
+        synchronized (mLock) {
+            KeyEvent localClone = KeyEvent.obtain(event);
+            boolean handled = notifyKeyEventLocked(localClone, policyFlags, false);
+            if (!handled) {
+                handled = notifyKeyEventLocked(localClone, policyFlags, true);
             }
             return handled;
         }
@@ -617,6 +710,13 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 return false;
             }
             focus.getBoundsInScreen(outBounds);
+
+            MagnificationSpec spec = service.getCompatibleMagnificationSpec(focus.getWindowId());
+            if (spec != null && !spec.isNop()) {
+                outBounds.offset((int) -spec.offsetX, (int) -spec.offsetY);
+                outBounds.scale(1 / spec.scale);
+            }
+
             // Clip to the window rectangle.
             Rect windowBounds = mTempRect;
             getActiveWindowBounds(windowBounds);
@@ -624,6 +724,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             // Clip to the screen rectangle.
             mDefaultDisplay.getRealSize(mTempPoint);
             outBounds.intersect(0,  0,  mTempPoint.x, mTempPoint.y);
+
             return true;
         } finally {
             client.removeConnection(connectionId);
@@ -644,19 +745,13 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 token = getCurrentUserStateLocked().mWindowTokens.get(windowId);
             }
         }
-        WindowInfo info = null;
         try {
-            info = mWindowManagerService.getWindowInfo(token);
-            if (info != null) {
-                outBounds.set(info.frame);
+            mWindowManagerService.getWindowFrame(token, outBounds);
+            if (!outBounds.isEmpty()) {
                 return true;
             }
         } catch (RemoteException re) {
             /* ignore */
-        } finally {
-            if (info != null) {
-                info.recycle();
-            }
         }
         return false;
     }
@@ -673,15 +768,19 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         mSecurityPolicy.onTouchInteractionEnd();
     }
 
+    void onMagnificationStateChanged() {
+        notifyClearAccessibilityNodeInfoCacheLocked();
+    }
+
     private void switchUser(int userId) {
         synchronized (mLock) {
-            // The user switched so we do not need to restore the current user
-            // state since we will fully rebuild it when he becomes current again.
-            mTempStateChangeForCurrentUserMemento.clear();
+            if (mCurrentUserId == userId && mInitialized) {
+                return;
+            }
 
             // Disconnect from services for the old user.
             UserState oldUserState = getUserStateLocked(mCurrentUserId);
-            unbindAllServicesLocked(oldUserState);
+            oldUserState.onSwitchToAnotherUser();
 
             // Disable the local managers for the old user.
             if (oldUserState.mClients.getRegisteredCallbackCount() > 0) {
@@ -696,9 +795,17 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             // The user changed.
             mCurrentUserId = userId;
 
-            // Recreate the internal state for the new user.
-            mMainHandler.obtainMessage(MainHandler.MSG_SEND_RECREATE_INTERNAL_STATE,
-                    mCurrentUserId, 0).sendToTarget();
+            UserState userState = getCurrentUserStateLocked();
+            if (userState.mUiAutomationService != null) {
+                // Switching users disables the UI automation service.
+                userState.mUiAutomationService.binderDied();
+            }
+
+            readConfigurationForUserStateLocked(userState);
+            // Even if reading did not yield change, we have to update
+            // the state since the context in which the current user
+            // state was used has changed since it was inactive.
+            onUserStateChangedLocked(userState);
 
             if (announceNewUser) {
                 // Schedule announcement of the current user if needed.
@@ -714,25 +821,12 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         }
     }
 
-    private void restoreStateFromMementoIfNeeded() {
-        synchronized (mLock) {
-            if (mTempStateChangeForCurrentUserMemento.mUserId != UserHandle.USER_NULL) {
-                UserState userState = getCurrentUserStateLocked();
-                // Restore the state from the memento.
-                mTempStateChangeForCurrentUserMemento.applyTo(userState);
-                mTempStateChangeForCurrentUserMemento.clear();
-                // Update the internal state.
-                performServiceManagementLocked(userState);
-                updateInputFilterLocked(userState);
-                scheduleSendStateToClientsLocked(userState);
-            }
-        }
-    }
-
     private Service getQueryBridge() {
         if (mQueryBridge == null) {
             AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-            mQueryBridge = new Service(UserHandle.USER_NULL, null, info, true);
+            info.setCapabilities(AccessibilityServiceInfo.CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT);
+            mQueryBridge = new Service(UserHandle.USER_NULL,
+                    sFakeAccessibilityServiceComponentName, info);
         }
         return mQueryBridge;
     }
@@ -748,14 +842,47 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         //       behavior is observed from different combinations of
         //       enabled accessibility services.
         UserState state = getCurrentUserStateLocked();
-        for (int i = state.mServices.size() - 1; i >= 0; i--) {
-            Service service = state.mServices.get(i);
+        for (int i = state.mBoundServices.size() - 1; i >= 0; i--) {
+            Service service = state.mBoundServices.get(i);
             if (service.mRequestTouchExplorationMode && service.mIsDefault == isDefault) {
                 service.notifyGesture(gestureId);
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean notifyKeyEventLocked(KeyEvent event, int policyFlags, boolean isDefault) {
+        // TODO: Now we are giving the key events to the last enabled
+        //       service that can handle them Ideally, the user should
+        //       make the call which service handles key events. However,
+        //       only one service should handle key events to avoid user
+        //       frustration when different behavior is observed from
+        //       different combinations of enabled accessibility services.
+        UserState state = getCurrentUserStateLocked();
+        for (int i = state.mBoundServices.size() - 1; i >= 0; i--) {
+            Service service = state.mBoundServices.get(i);
+            // Key events are handled only by services that declared
+            // this capability and requested to filter key events.
+            if (!service.mRequestFilterKeyEvents ||
+                    (service.mAccessibilityServiceInfo.getCapabilities() & AccessibilityServiceInfo
+                            .CAPABILITY_CAN_REQUEST_FILTER_KEY_EVENTS) == 0) {
+                continue;
+            }
+            if (service.mIsDefault == isDefault) {
+                service.notifyKeyEvent(event, policyFlags);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void notifyClearAccessibilityNodeInfoCacheLocked() {
+        UserState state = getCurrentUserStateLocked();
+        for (int i = state.mBoundServices.size() - 1; i >= 0; i--) {
+            Service service = state.mBoundServices.get(i);
+            service.notifyClearAccessibilityNodeInfoCache();
+        }
     }
 
     /**
@@ -779,8 +906,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         }
     }
 
-    private void populateInstalledAccessibilityServiceLocked(UserState userState) {
-        userState.mInstalledServices.clear();
+    private boolean readInstalledAccessibilityServiceLocked(UserState userState) {
+        mTempAccessibilityServiceInfoList.clear();
 
         List<ResolveInfo> installedServices = mPackageManager.queryIntentServicesAsUser(
                 new Intent(AccessibilityService.SERVICE_INTERFACE),
@@ -801,28 +928,53 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             AccessibilityServiceInfo accessibilityServiceInfo;
             try {
                 accessibilityServiceInfo = new AccessibilityServiceInfo(resolveInfo, mContext);
-                userState.mInstalledServices.add(accessibilityServiceInfo);
+                mTempAccessibilityServiceInfoList.add(accessibilityServiceInfo);
             } catch (XmlPullParserException xppe) {
                 Slog.e(LOG_TAG, "Error while initializing AccessibilityServiceInfo", xppe);
             } catch (IOException ioe) {
                 Slog.e(LOG_TAG, "Error while initializing AccessibilityServiceInfo", ioe);
             }
         }
+
+        if (!mTempAccessibilityServiceInfoList.equals(userState.mInstalledServices)) {
+            userState.mInstalledServices.clear();
+            userState.mInstalledServices.addAll(mTempAccessibilityServiceInfoList);
+            mTempAccessibilityServiceInfoList.clear();
+            return true;
+        }
+
+        mTempAccessibilityServiceInfoList.clear();
+        return false;
     }
 
-    private void populateEnabledAccessibilityServicesLocked(UserState userState) {
-        populateComponentNamesFromSettingLocked(
-                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
-                userState.mUserId,
-                userState.mEnabledServices);
+    private boolean readEnabledAccessibilityServicesLocked(UserState userState) {
+        mTempComponentNameSet.clear();
+        readComponentNamesFromSettingLocked(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
+                userState.mUserId, mTempComponentNameSet);
+        if (!mTempComponentNameSet.equals(userState.mEnabledServices)) {
+            userState.mEnabledServices.clear();
+            userState.mEnabledServices.addAll(mTempComponentNameSet);
+            mTempComponentNameSet.clear();
+            return true;
+        }
+        mTempComponentNameSet.clear();
+        return false;
     }
 
-    private void populateTouchExplorationGrantedAccessibilityServicesLocked(
+    private boolean readTouchExplorationGrantedAccessibilityServicesLocked(
             UserState userState) {
-        populateComponentNamesFromSettingLocked(
+        mTempComponentNameSet.clear();
+        readComponentNamesFromSettingLocked(
                 Settings.Secure.TOUCH_EXPLORATION_GRANTED_ACCESSIBILITY_SERVICES,
-                userState.mUserId,
-                userState.mTouchExplorationGrantedServices);
+                userState.mUserId, mTempComponentNameSet);
+        if (!mTempComponentNameSet.equals(userState.mTouchExplorationGrantedServices)) {
+            userState.mTouchExplorationGrantedServices.clear();
+            userState.mTouchExplorationGrantedServices.addAll(mTempComponentNameSet);
+            mTempComponentNameSet.clear();
+            return true;
+        }
+        mTempComponentNameSet.clear();
+        return false;
     }
 
     /**
@@ -836,8 +988,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             boolean isDefault) {
         try {
             UserState state = getCurrentUserStateLocked();
-            for (int i = 0, count = state.mServices.size(); i < count; i++) {
-                Service service = state.mServices.get(i);
+            for (int i = 0, count = state.mBoundServices.size(); i < count; i++) {
+                Service service = state.mBoundServices.get(i);
 
                 if (service.mIsDefault == isDefault) {
                     if (canDispathEventLocked(service, event, state.mHandledFeedbackTypes)) {
@@ -854,24 +1006,12 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         }
     }
 
-    /**
-     * Adds a service for a user.
-     *
-     * @param service The service to add.
-     * @param userId The user id.
-     */
-    private void tryAddServiceLocked(Service service, int userId) {
+    private void addServiceLocked(Service service, UserState userState) {
         try {
-            UserState userState = getUserStateLocked(userId);
-            if (userState.mServices.contains(service)) {
-                return;
-            }
-            service.linkToOwnDeath();
-            userState.mServices.add(service);
+            service.linkToOwnDeathLocked();
+            userState.mBoundServices.add(service);
             userState.mComponentNameToServiceMap.put(service.mComponentName, service);
-            updateInputFilterLocked(userState);
-            tryEnableTouchExplorationLocked(service);
-        } catch (RemoteException e) {
+        } catch (RemoteException re) {
             /* do nothing */
         }
     }
@@ -882,18 +1022,10 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
      * @param service The service.
      * @return True if the service was removed, false otherwise.
      */
-    private boolean tryRemoveServiceLocked(Service service) {
-        UserState userState = getUserStateLocked(service.mUserId);
-        final boolean removed = userState.mServices.remove(service);
-        if (!removed) {
-            return false;
-        }
+    private void removeServiceLocked(Service service, UserState userState) {
+        userState.mBoundServices.remove(service);
         userState.mComponentNameToServiceMap.remove(service.mComponentName);
-        service.unlinkToOwnDeath();
-        service.dispose();
-        updateInputFilterLocked(userState);
-        tryDisableTouchExplorationLocked(service);
-        return removed;
+        service.unlinkToOwnDeathLocked();
     }
 
     /**
@@ -912,12 +1044,13 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
     private boolean canDispathEventLocked(Service service, AccessibilityEvent event,
             int handledFeedbackTypes) {
 
-        if (!service.canReceiveEvents()) {
+        if (!service.canReceiveEventsLocked()) {
             return false;
         }
 
         if (!event.isImportantForAccessibility()
-                && !service.mIncludeNotImportantViews) {
+                && (service.mFetchFlags
+                        & AccessibilityNodeInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS) == 0) {
             return false;
         }
 
@@ -940,29 +1073,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         return false;
     }
 
-    /**
-     * Manages services by starting enabled ones and stopping disabled ones.
-     */
-    private void manageServicesLocked(UserState userState) {
-        final int enabledInstalledServicesCount = updateServicesStateLocked(userState);
-        // No enabled installed services => disable accessibility to avoid
-        // sending accessibility events with no recipient across processes.
-        if (userState.mIsAccessibilityEnabled && enabledInstalledServicesCount == 0) {
-            Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                    Settings.Secure.ACCESSIBILITY_ENABLED, 0, userState.mUserId);
-        }
-    }
-
-    /**
-     * Unbinds all bound services for a user.
-     *
-     * @param userState The user state.
-     */
     private void unbindAllServicesLocked(UserState userState) {
-        List<Service> services = userState.mServices;
+        List<Service> services = userState.mBoundServices;
         for (int i = 0, count = services.size(); i < count; i++) {
             Service service = services.get(i);
-            if (service.unbind()) {
+            if (service.unbindLocked()) {
                 i--;
                 count--;
             }
@@ -977,7 +1092,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
      * @param userId The user id.
      * @param outComponentNames The output component names.
      */
-    private void populateComponentNamesFromSettingLocked(String settingName, int userId,
+    private void readComponentNamesFromSettingLocked(String settingName, int userId,
             Set<ComponentName> outComponentNames) {
         String settingValue = Settings.Secure.getStringForUser(mContext.getContentResolver(),
                 settingName, userId);
@@ -1018,19 +1133,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 settingName, builder.toString(), userId);
     }
 
-    /**
-     * Updates the state of each service by starting (or keeping running) enabled ones and
-     * stopping the rest.
-     *
-     * @param userState The user state for which to do that.
-     * @return The number of enabled installed services.
-     */
-    private int updateServicesStateLocked(UserState userState) {
+    private void manageServicesLocked(UserState userState) {
         Map<ComponentName, Service> componentNameToServiceMap =
                 userState.mComponentNameToServiceMap;
         boolean isEnabled = userState.mIsAccessibilityEnabled;
 
-        int enabledInstalledServices = 0;
         for (int i = 0, count = userState.mInstalledServices.size(); i < count; i++) {
             AccessibilityServiceInfo installedService = userState.mInstalledServices.get(i);
             ComponentName componentName = ComponentName.unflattenFromString(
@@ -1038,43 +1145,71 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             Service service = componentNameToServiceMap.get(componentName);
 
             if (isEnabled) {
+                // Wait for the binding if it is in process.
+                if (userState.mBindingServices.contains(componentName)) {
+                    continue;
+                }
                 if (userState.mEnabledServices.contains(componentName)) {
                     if (service == null) {
-                        service = new Service(userState.mUserId, componentName,
-                                installedService, false);
+                        service = new Service(userState.mUserId, componentName, installedService);
+                    } else if (userState.mBoundServices.contains(service)) {
+                        continue;
                     }
-                    service.bind();
-                    enabledInstalledServices++;
+                    service.bindLocked();
                 } else {
                     if (service != null) {
-                        service.unbind();
+                        service.unbindLocked();
                     }
                 }
             } else {
                 if (service != null) {
-                    service.unbind();
+                    service.unbindLocked();
+                } else {
+                    userState.mBindingServices.remove(componentName);
                 }
             }
         }
 
-        return enabledInstalledServices;
+        // No enabled installed services => disable accessibility to avoid
+        // sending accessibility events with no recipient across processes.
+        if (isEnabled && userState.mEnabledServices.isEmpty()) {
+            userState.mIsAccessibilityEnabled = false;
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.ACCESSIBILITY_ENABLED, 0, userState.mUserId);
+        }
     }
 
-    private void scheduleSendStateToClientsLocked(UserState userState) {
-        if (mGlobalClients.getRegisteredCallbackCount() > 0
-                || userState.mClients.getRegisteredCallbackCount() > 0) {
-            final int clientState = getClientState(userState);
+    private void scheduleUpdateClientsIfNeededLocked(UserState userState) {
+        final int clientState = userState.getClientState();
+        if (userState.mLastSentClientState != clientState
+                && (mGlobalClients.getRegisteredCallbackCount() > 0
+                        || userState.mClients.getRegisteredCallbackCount() > 0)) {
+            userState.mLastSentClientState = clientState;
             mMainHandler.obtainMessage(MainHandler.MSG_SEND_STATE_TO_CLIENTS,
                     clientState, userState.mUserId) .sendToTarget();
         }
     }
 
-    private void updateInputFilterLocked(UserState userState) {
+    private void scheduleUpdateInputFilter(UserState userState) {
+        mMainHandler.obtainMessage(MainHandler.MSG_UPDATE_INPUT_FILTER, userState).sendToTarget();
+    }
+
+    private void updateInputFilter(UserState userState) {
         boolean setInputFilter = false;
         AccessibilityInputFilter inputFilter = null;
         synchronized (mLock) {
-            if ((userState.mIsAccessibilityEnabled && userState.mIsTouchExplorationEnabled)
-                    || userState.mIsDisplayMagnificationEnabled) {
+            int flags = 0;
+            if (userState.mIsDisplayMagnificationEnabled) {
+                flags |= AccessibilityInputFilter.FLAG_FEATURE_SCREEN_MAGNIFIER;
+            }
+            // Touch exploration without accessibility makes no sense.
+            if (userState.mIsAccessibilityEnabled && userState.mIsTouchExplorationEnabled) {
+                flags |= AccessibilityInputFilter.FLAG_FEATURE_TOUCH_EXPLORATION;
+            }
+            if (userState.mIsFilterKeyEventsEnabled) {
+                flags |= AccessibilityInputFilter.FLAG_FEATURE_FILTER_KEY_EVENTS;
+            }
+            if (flags != 0) {
                 if (!mHasInputFilter) {
                     mHasInputFilter = true;
                     if (mInputFilter == null) {
@@ -1084,18 +1219,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     inputFilter = mInputFilter;
                     setInputFilter = true;
                 }
-                int flags = 0;
-                if (userState.mIsDisplayMagnificationEnabled) {
-                    flags |= AccessibilityInputFilter.FLAG_FEATURE_SCREEN_MAGNIFIER;
-                }
-                if (userState.mIsTouchExplorationEnabled) {
-                    flags |= AccessibilityInputFilter.FLAG_FEATURE_TOUCH_EXPLORATION;
-                }
                 mInputFilter.setEnabledFeatures(flags);
             } else {
                 if (mHasInputFilter) {
                     mHasInputFilter = false;
-                    mInputFilter.setEnabledFeatures(0);
+                    mInputFilter.disableFeatures();
                     inputFilter = null;
                     setInputFilter = true;
                 }
@@ -1111,9 +1239,10 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
     }
 
     private void showEnableTouchExplorationDialog(final Service service) {
-        String label = service.mResolveInfo.loadLabel(
-                mContext.getPackageManager()).toString();
         synchronized (mLock) {
+            String label = service.mResolveInfo.loadLabel(
+            mContext.getPackageManager()).toString();
+
             final UserState state = getCurrentUserStateLocked();
             if (state.mIsTouchExplorationEnabled) {
                 return;
@@ -1125,136 +1254,273 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             mEnableTouchExplorationDialog = new AlertDialog.Builder(mContext)
                 .setIconAttribute(android.R.attr.alertDialogIcon)
                 .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The user allowed the service to toggle touch exploration.
-                        state.mTouchExplorationGrantedServices.add(service.mComponentName);
-                        persistComponentNamesToSettingLocked(
-                                Settings.Secure.TOUCH_EXPLORATION_GRANTED_ACCESSIBILITY_SERVICES,
-                                       state.mTouchExplorationGrantedServices, state.mUserId);
-                        // Enable touch exploration.
-                        Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                                Settings.Secure.TOUCH_EXPLORATION_ENABLED, 1,
-                                service.mUserId);
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setTitle(R.string.enable_explore_by_touch_warning_title)
-                .setMessage(mContext.getString(
-                        R.string.enable_explore_by_touch_warning_message, label))
-                .create();
-            mEnableTouchExplorationDialog.getWindow().setType(
-                    WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            mEnableTouchExplorationDialog.getWindow().getAttributes().privateFlags
-                    |= WindowManager.LayoutParams.PRIVATE_FLAG_SHOW_FOR_ALL_USERS;
-            mEnableTouchExplorationDialog.setCanceledOnTouchOutside(true);
-            mEnableTouchExplorationDialog.show();
+                     @Override
+                     public void onClick(DialogInterface dialog, int which) {
+                         // The user allowed the service to toggle touch exploration.
+                         state.mTouchExplorationGrantedServices.add(service.mComponentName);
+                         persistComponentNamesToSettingLocked(
+                                 Settings.Secure.TOUCH_EXPLORATION_GRANTED_ACCESSIBILITY_SERVICES,
+                                 state.mTouchExplorationGrantedServices, state.mUserId);
+                         // Enable touch exploration.
+                         UserState userState = getUserStateLocked(service.mUserId);
+                         userState.mIsTouchExplorationEnabled = true;
+                         Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                                 Settings.Secure.TOUCH_EXPLORATION_ENABLED, 1,
+                                 service.mUserId);
+                         onUserStateChangedLocked(userState);
+                     }
+                 })
+                 .setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialog, int which) {
+                         dialog.dismiss();
+                     }
+                 })
+                 .setTitle(R.string.enable_explore_by_touch_warning_title)
+                 .setMessage(mContext.getString(
+                         R.string.enable_explore_by_touch_warning_message, label))
+                 .create();
+             mEnableTouchExplorationDialog.getWindow().setType(
+                     WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+             mEnableTouchExplorationDialog.getWindow().getAttributes().privateFlags
+                     |= WindowManager.LayoutParams.PRIVATE_FLAG_SHOW_FOR_ALL_USERS;
+             mEnableTouchExplorationDialog.setCanceledOnTouchOutside(true);
+             mEnableTouchExplorationDialog.show();
         }
     }
 
-    private int getClientState(UserState userState) {
-        int clientState = 0;
+    private void onUserStateChangedLocked(UserState userState) {
+        // TODO: Remove this hack
+        mInitialized = true;
+        updateLegacyCapabilities(userState);
+        updateServicesLocked(userState);
+        updateFilterKeyEventsLocked(userState);
+        updateTouchExplorationLocked(userState);
+        updateEnhancedWebAccessibilityLocked(userState);
+        scheduleUpdateInputFilter(userState);
+        scheduleUpdateClientsIfNeededLocked(userState);
+    }
+
+    private void updateLegacyCapabilities(UserState userState) {
+        // Up to JB-MR1 we had a white list with services that can enable touch
+        // exploration. When a service is first started we show a dialog to the
+        // use to get a permission to white list the service.
+        final int installedServiceCount = userState.mInstalledServices.size();
+        for (int i = 0; i < installedServiceCount; i++) {
+            AccessibilityServiceInfo serviceInfo = userState.mInstalledServices.get(i);
+            ResolveInfo resolveInfo = serviceInfo.getResolveInfo();
+            if ((serviceInfo.getCapabilities()
+                        & AccessibilityServiceInfo.CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION) == 0
+                    && resolveInfo.serviceInfo.applicationInfo.targetSdkVersion
+                        <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                ComponentName componentName = new ComponentName(
+                        resolveInfo.serviceInfo.packageName, resolveInfo.serviceInfo.name);
+                if (userState.mTouchExplorationGrantedServices.contains(componentName)) {
+                    serviceInfo.setCapabilities(serviceInfo.getCapabilities()
+                            | AccessibilityServiceInfo.CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION);
+                }
+            }
+        }
+    }
+
+    private void updateFilterKeyEventsLocked(UserState userState) {
+        final int serviceCount = userState.mBoundServices.size();
+        for (int i = 0; i < serviceCount; i++) {
+            Service service = userState.mBoundServices.get(i);
+            if (service.mRequestFilterKeyEvents
+                    && (service.mAccessibilityServiceInfo.getCapabilities()
+                            & AccessibilityServiceInfo
+                            .CAPABILITY_CAN_REQUEST_FILTER_KEY_EVENTS) != 0) {
+                userState.mIsFilterKeyEventsEnabled = true;
+                return;
+            }
+        }
+        userState.mIsFilterKeyEventsEnabled = false;
+    }
+
+    private void updateServicesLocked(UserState userState) {
         if (userState.mIsAccessibilityEnabled) {
-            clientState |= AccessibilityManager.STATE_FLAG_ACCESSIBILITY_ENABLED;
-        }
-        // Touch exploration relies on enabled accessibility.
-        if (userState.mIsAccessibilityEnabled && userState.mIsTouchExplorationEnabled) {
-            clientState |= AccessibilityManager.STATE_FLAG_TOUCH_EXPLORATION_ENABLED;
-        }
-        return clientState;
-    }
-
-    private void recreateInternalStateLocked(UserState userState) {
-        populateInstalledAccessibilityServiceLocked(userState);
-        populateEnabledAccessibilityServicesLocked(userState);
-        populateTouchExplorationGrantedAccessibilityServicesLocked(userState);
-
-        handleTouchExplorationEnabledSettingChangedLocked(userState);
-        handleDisplayMagnificationEnabledSettingChangedLocked(userState);
-        handleAccessibilityEnabledSettingChangedLocked(userState);
-
-        performServiceManagementLocked(userState);
-        updateInputFilterLocked(userState);
-        scheduleSendStateToClientsLocked(userState);
-    }
-
-    private void handleAccessibilityEnabledSettingChangedLocked(UserState userState) {
-        userState.mIsAccessibilityEnabled = Settings.Secure.getIntForUser(
-               mContext.getContentResolver(),
-               Settings.Secure.ACCESSIBILITY_ENABLED, 0, userState.mUserId) == 1;
-    }
-
-    private void performServiceManagementLocked(UserState userState) {
-        if (userState.mIsAccessibilityEnabled ) {
             manageServicesLocked(userState);
         } else {
             unbindAllServicesLocked(userState);
         }
     }
 
-    private void handleTouchExplorationEnabledSettingChangedLocked(UserState userState) {
-        userState.mIsTouchExplorationEnabled = Settings.Secure.getIntForUser(
-                mContext.getContentResolver(),
-                Settings.Secure.TOUCH_EXPLORATION_ENABLED, 0, userState.mUserId) == 1;
+    private boolean readConfigurationForUserStateLocked(UserState userState) {
+        boolean somthingChanged = false;
+        somthingChanged |= readAccessibilityEnabledSettingLocked(userState);
+        somthingChanged |= readInstalledAccessibilityServiceLocked(userState);
+        somthingChanged |= readEnabledAccessibilityServicesLocked(userState);
+        somthingChanged |= readTouchExplorationGrantedAccessibilityServicesLocked(userState);
+        somthingChanged |= readTouchExplorationEnabledSettingLocked(userState);
+        somthingChanged |= readEnhancedWebAccessibilityEnabledChangedLocked(userState);
+        somthingChanged |= readDisplayMagnificationEnabledSettingLocked(userState);
+        return somthingChanged;
     }
 
-    private void handleDisplayMagnificationEnabledSettingChangedLocked(UserState userState) {
-        userState.mIsDisplayMagnificationEnabled = Settings.Secure.getIntForUser(
+    private boolean readAccessibilityEnabledSettingLocked(UserState userState) {
+        final boolean accessibilityEnabled = Settings.Secure.getIntForUser(
+               mContext.getContentResolver(),
+               Settings.Secure.ACCESSIBILITY_ENABLED, 0, userState.mUserId) == 1;
+        if (accessibilityEnabled != userState.mIsAccessibilityEnabled) {
+            userState.mIsAccessibilityEnabled = accessibilityEnabled;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean readTouchExplorationEnabledSettingLocked(UserState userState) {
+        final boolean touchExplorationEnabled = Settings.Secure.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.Secure.TOUCH_EXPLORATION_ENABLED, 0, userState.mUserId) == 1;
+        if (touchExplorationEnabled != userState.mIsTouchExplorationEnabled) {
+            userState.mIsTouchExplorationEnabled = touchExplorationEnabled;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean readDisplayMagnificationEnabledSettingLocked(UserState userState) {
+        final boolean displayMagnificationEnabled = Settings.Secure.getIntForUser(
                 mContext.getContentResolver(),
                 Settings.Secure.ACCESSIBILITY_DISPLAY_MAGNIFICATION_ENABLED,
                 0, userState.mUserId) == 1;
+        if (displayMagnificationEnabled != userState.mIsDisplayMagnificationEnabled) {
+            userState.mIsDisplayMagnificationEnabled = displayMagnificationEnabled;
+            return true;
+        }
+        return false;
     }
 
-    private void handleTouchExplorationGrantedAccessibilityServicesChangedLocked(
-            UserState userState) {
-        final int serviceCount = userState.mServices.size();
+    private boolean readEnhancedWebAccessibilityEnabledChangedLocked(UserState userState) {
+         final boolean enhancedWeAccessibilityEnabled = Settings.Secure.getIntForUser(
+                mContext.getContentResolver(), Settings.Secure.ACCESSIBILITY_SCRIPT_INJECTION,
+                0, userState.mUserId) == 1;
+         if (enhancedWeAccessibilityEnabled != userState.mIsEnhancedWebAccessibilityEnabled) {
+             userState.mIsEnhancedWebAccessibilityEnabled = enhancedWeAccessibilityEnabled;
+             return true;
+         }
+         return false;
+    }
+
+    private void updateTouchExplorationLocked(UserState userState) {
+        boolean enabled = false;
+        final int serviceCount = userState.mBoundServices.size();
         for (int i = 0; i < serviceCount; i++) {
-            Service service = userState.mServices.get(i);
-            if (service.mRequestTouchExplorationMode
-                    && userState.mTouchExplorationGrantedServices.contains(
-                            service.mComponentName)) {
-                tryEnableTouchExplorationLocked(service);
-                return;
+            Service service = userState.mBoundServices.get(i);
+            if (canRequestAndRequestsTouchExplorationLocked(service)) {
+                enabled = true;
+                break;
             }
         }
-        if (userState.mIsTouchExplorationEnabled) {
+        if (enabled != userState.mIsTouchExplorationEnabled) {
+            userState.mIsTouchExplorationEnabled = enabled;
             Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                    Settings.Secure.TOUCH_EXPLORATION_ENABLED, 0, userState.mUserId);
+                    Settings.Secure.TOUCH_EXPLORATION_ENABLED, enabled ? 1 : 0,
+                    userState.mUserId);
         }
     }
 
-    private void tryEnableTouchExplorationLocked(final Service service) {
-        UserState userState = getUserStateLocked(service.mUserId);
-        if (!userState.mIsTouchExplorationEnabled && service.mRequestTouchExplorationMode
-                && service.canReceiveEvents()) {
-            final boolean canToggleTouchExploration =
-                    userState.mTouchExplorationGrantedServices.contains(service.mComponentName);
-            if (!service.mIsAutomation && !canToggleTouchExploration) {
-                showEnableTouchExplorationDialog(service);
-            } else {
-                Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                        Settings.Secure.TOUCH_EXPLORATION_ENABLED, 1, userState.mUserId);
+    private boolean canRequestAndRequestsTouchExplorationLocked(Service service) {
+        // Service not ready or cannot request the feature - well nothing to do.
+        if (!service.canReceiveEventsLocked() || !service.mRequestTouchExplorationMode) {
+            return false;
+        }
+        // UI test automation service can always enable it.
+        if (service.mIsAutomation) {
+            return true;
+        }
+        if (service.mResolveInfo.serviceInfo.applicationInfo.targetSdkVersion
+                <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            // Up to JB-MR1 we had a white list with services that can enable touch
+            // exploration. When a service is first started we show a dialog to the
+            // use to get a permission to white list the service.
+            UserState userState = getUserStateLocked(service.mUserId);
+            if (userState.mTouchExplorationGrantedServices.contains(service.mComponentName)) {
+                return true;
+            } else if (mEnableTouchExplorationDialog == null
+                    || !mEnableTouchExplorationDialog.isShowing()) {
+                mMainHandler.obtainMessage(
+                        MainHandler.MSG_SHOW_ENABLED_TOUCH_EXPLORATION_DIALOG,
+                        service).sendToTarget();
+            }
+        } else {
+            // Starting in JB-MR2 we request an accessibility service to declare
+            // certain capabilities in its meta-data to allow it to enable the
+            // corresponding features.
+            if ((service.mAccessibilityServiceInfo.getCapabilities()
+                    & AccessibilityServiceInfo.CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION) != 0) {
+                return true;
             }
         }
+        return false;
     }
 
-    private void tryDisableTouchExplorationLocked(Service service) {
-        UserState userState = getUserStateLocked(service.mUserId);
-        if (userState.mIsTouchExplorationEnabled) {
-            final int serviceCount = userState.mServices.size();
-            for (int i = 0; i < serviceCount; i++) {
-                Service other = userState.mServices.get(i);
-                if (other != service && other.mRequestTouchExplorationMode) {
-                    return;
+    private void updateEnhancedWebAccessibilityLocked(UserState userState) {
+        boolean enabled = false;
+        final int serviceCount = userState.mBoundServices.size();
+        for (int i = 0; i < serviceCount; i++) {
+            Service service = userState.mBoundServices.get(i);
+            if (canRequestAndRequestsEnhancedWebAccessibilityLocked(service)) {
+                enabled = true;
+                break;
+            }
+        }
+        if (enabled != userState.mIsEnhancedWebAccessibilityEnabled) {
+            userState.mIsEnhancedWebAccessibilityEnabled = enabled;
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.ACCESSIBILITY_SCRIPT_INJECTION, enabled ? 1 : 0,
+                    userState.mUserId);
+        }
+    }
+
+    private boolean canRequestAndRequestsEnhancedWebAccessibilityLocked(Service service) {
+        if (!service.canReceiveEventsLocked() || !service.mRequestEnhancedWebAccessibility ) {
+            return false;
+        }
+        if (service.mIsAutomation || (service.mAccessibilityServiceInfo.getCapabilities()
+               & AccessibilityServiceInfo.CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY) != 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void dump(FileDescriptor fd, final PrintWriter pw, String[] args) {
+        mSecurityPolicy.enforceCallingPermission(Manifest.permission.DUMP, FUNCTION_DUMP);
+        synchronized (mLock) {
+            pw.println("ACCESSIBILITY MANAGER (dumpsys accessibility)");
+            pw.println();
+            final int userCount = mUserStates.size();
+            for (int i = 0; i < userCount; i++) {
+                UserState userState = mUserStates.valueAt(i);
+                pw.append("User state[attributes:{id=" + userState.mUserId);
+                pw.append(", currentUser=" + (userState.mUserId == mCurrentUserId));
+                pw.append(", accessibilityEnabled=" + userState.mIsAccessibilityEnabled);
+                pw.append(", touchExplorationEnabled=" + userState.mIsTouchExplorationEnabled);
+                pw.append(", displayMagnificationEnabled="
+                        + userState.mIsDisplayMagnificationEnabled);
+                if (userState.mUiAutomationService != null) {
+                    pw.append(", ");
+                    userState.mUiAutomationService.dump(fd, pw, args);
+                    pw.println();
                 }
+                pw.append("}");
+                pw.println();
+                pw.append("           services:{");
+                final int serviceCount = userState.mBoundServices.size();
+                for (int j = 0; j < serviceCount; j++) {
+                    if (j > 0) {
+                        pw.append(", ");
+                        pw.println();
+                        pw.append("                     ");
+                    }
+                    Service service = userState.mBoundServices.get(j);
+                    service.dump(fd, pw, args);
+                }
+                pw.println("}]");
+                pw.println();
             }
-            Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                    Settings.Secure.TOUCH_EXPLORATION_ENABLED, 0, userState.mUserId);
         }
     }
 
@@ -1291,9 +1557,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         public static final int MSG_SEND_ACCESSIBILITY_EVENT_TO_INPUT_FILTER = 1;
         public static final int MSG_SEND_STATE_TO_CLIENTS = 2;
         public static final int MSG_SEND_CLEARED_STATE_TO_CLIENTS_FOR_USER = 3;
-        public static final int MSG_SEND_RECREATE_INTERNAL_STATE = 4;
-        public static final int MSG_UPDATE_ACTIVE_WINDOW = 5;
-        public static final int MSG_ANNOUNCE_NEW_USER_IF_NEEDED = 6;
+        public static final int MSG_UPDATE_ACTIVE_WINDOW = 4;
+        public static final int MSG_ANNOUNCE_NEW_USER_IF_NEEDED = 5;
+        public static final int MSG_UPDATE_INPUT_FILTER = 6;
+        public static final int MSG_SHOW_ENABLED_TOUCH_EXPLORATION_DIALOG = 7;
+        public static final int MSG_SEND_KEY_EVENT_TO_INPUT_FILTER = 8;
 
         public MainHandler(Looper looper) {
             super(looper);
@@ -1312,6 +1580,16 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     }
                     event.recycle();
                 } break;
+                case MSG_SEND_KEY_EVENT_TO_INPUT_FILTER: {
+                    KeyEvent event = (KeyEvent) msg.obj;
+                    final int policyFlags = msg.arg1;
+                    synchronized (mLock) {
+                        if (mHasInputFilter && mInputFilter != null) {
+                            mInputFilter.sendInputEvent(event, policyFlags);
+                        }
+                    }
+                    event.recycle();
+                } break;
                 case MSG_SEND_STATE_TO_CLIENTS: {
                     final int clientState = msg.arg1;
                     final int userId = msg.arg2;
@@ -1322,13 +1600,6 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     final int userId = msg.arg1;
                     sendStateToClientsForUser(0, userId);
                 } break;
-                case MSG_SEND_RECREATE_INTERNAL_STATE: {
-                    final int userId = msg.arg1;
-                    synchronized (mLock) {
-                        UserState userState = getUserStateLocked(userId);
-                        recreateInternalStateLocked(userState);
-                    }
-                } break;
                 case MSG_UPDATE_ACTIVE_WINDOW: {
                     final int windowId = msg.arg1;
                     final int eventType = msg.arg2;
@@ -1336,6 +1607,14 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 } break;
                 case MSG_ANNOUNCE_NEW_USER_IF_NEEDED: {
                     announceNewUserIfNeeded();
+                } break;
+                case MSG_UPDATE_INPUT_FILTER: {
+                    UserState userState = (UserState) msg.obj;
+                    updateInputFilter(userState);
+                } break;
+                case MSG_SHOW_ENABLED_TOUCH_EXPLORATION_DIALOG: {
+                    Service service = (Service) msg.obj;
+                    showEnableTouchExplorationDialog(service);
                 } break;
             }
         }
@@ -1383,6 +1662,22 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         }
     }
 
+    private PendingEvent obtainPendingEventLocked(KeyEvent event, int policyFlags, int sequence) {
+        PendingEvent pendingEvent = mPendingEventPool.acquire();
+        if (pendingEvent == null) {
+            pendingEvent = new PendingEvent();
+        }
+        pendingEvent.event = event;
+        pendingEvent.policyFlags = policyFlags;
+        pendingEvent.sequence = sequence;
+        return pendingEvent;
+    }
+
+    private void recyclePendingEventLocked(PendingEvent pendingEvent) {
+        pendingEvent.clear();
+        mPendingEventPool.release(pendingEvent);
+    }
+
     /**
      * This class represents an accessibility service. It stores all per service
      * data required for the service management, provides API for starting/stopping the
@@ -1392,11 +1687,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
      * connection for the service.
      */
     class Service extends IAccessibilityServiceConnection.Stub
-            implements ServiceConnection, DeathRecipient {
-
-        // We pick the MSB to avoid collision since accessibility event types are
-        // used as message types allowing us to remove messages per event type. 
-        private static final int MSG_ON_GESTURE = 0x80000000;
+            implements ServiceConnection, DeathRecipient {;
 
         final int mUserId;
 
@@ -1418,15 +1709,17 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
 
         boolean mRequestTouchExplorationMode;
 
-        boolean mIncludeNotImportantViews;
+        boolean mRequestEnhancedWebAccessibility;
+
+        boolean mRequestFilterKeyEvents;
+
+        int mFetchFlags;
 
         long mNotificationTimeout;
 
         ComponentName mComponentName;
 
         Intent mIntent;
-
-        boolean mCanRetrieveScreenContent;
 
         boolean mIsAutomation;
 
@@ -1438,46 +1731,38 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         final SparseArray<AccessibilityEvent> mPendingEvents =
             new SparseArray<AccessibilityEvent>();
 
-        /**
-         * Handler for delayed event dispatch.
-         */
-        public Handler mHandler = new Handler(mMainHandler.getLooper()) {
+        final KeyEventDispatcher mKeyEventDispatcher = new KeyEventDispatcher();
+
+        boolean mWasConnectedAndDied;
+
+        // Handler only for dispatching accessibility events since we use event
+        // types as message types allowing us to remove messages per event type.
+        public Handler mEventDispatchHandler = new Handler(mMainHandler.getLooper()) {
             @Override
             public void handleMessage(Message message) {
-                final int type = message.what;
-                switch (type) {
-                    case MSG_ON_GESTURE: {
-                        final int gestureId = message.arg1;
-                        notifyGestureInternal(gestureId);
-                    } break;
-                    default: {
-                        final int eventType = type;
-                        notifyAccessibilityEventInternal(eventType);
-                    } break;
-                }
+                final int eventType =  message.what;
+                notifyAccessibilityEventInternal(eventType);
             }
         };
 
+        // Handler for scheduling method invocations on the main thread.
+        public InvocationHandler mInvocationHandler = new InvocationHandler(
+                mMainHandler.getLooper());
+
         public Service(int userId, ComponentName componentName,
-                AccessibilityServiceInfo accessibilityServiceInfo, boolean isAutomation) {
+                AccessibilityServiceInfo accessibilityServiceInfo) {
             mUserId = userId;
             mResolveInfo = accessibilityServiceInfo.getResolveInfo();
             mId = sIdCounter++;
             mComponentName = componentName;
             mAccessibilityServiceInfo = accessibilityServiceInfo;
-            mIsAutomation = isAutomation;
-            if (!isAutomation) {
-                mCanRetrieveScreenContent = accessibilityServiceInfo.getCanRetrieveWindowContent();
-                mRequestTouchExplorationMode =
-                    (accessibilityServiceInfo.flags
-                            & AccessibilityServiceInfo.FLAG_REQUEST_TOUCH_EXPLORATION_MODE) != 0;
+            mIsAutomation = (sFakeAccessibilityServiceComponentName.equals(componentName));
+            if (!mIsAutomation) {
                 mIntent = new Intent().setComponent(mComponentName);
                 mIntent.putExtra(Intent.EXTRA_CLIENT_LABEL,
                         com.android.internal.R.string.accessibility_binding_label);
                 mIntent.putExtra(Intent.EXTRA_CLIENT_INTENT, PendingIntent.getActivity(
                         mContext, 0, new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), 0));
-            } else {
-                mCanRetrieveScreenContent = true;
             }
             setDynamicallyConfigurableProperties(accessibilityServiceInfo);
         }
@@ -1494,24 +1779,25 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
 
             if (mIsAutomation || info.getResolveInfo().serviceInfo.applicationInfo.targetSdkVersion
                     >= Build.VERSION_CODES.JELLY_BEAN) {
-                mIncludeNotImportantViews =
-                    (info.flags & FLAG_INCLUDE_NOT_IMPORTANT_VIEWS) != 0;
+                if ((info.flags & AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS) != 0) {
+                    mFetchFlags |= AccessibilityNodeInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
+                } else {
+                    mFetchFlags &= ~AccessibilityNodeInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
+                }
+            }
+
+            if ((info.flags & AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS) != 0) {
+                mFetchFlags |= AccessibilityNodeInfo.FLAG_REPORT_VIEW_IDS;
+            } else {
+                mFetchFlags &= ~AccessibilityNodeInfo.FLAG_REPORT_VIEW_IDS;
             }
 
             mRequestTouchExplorationMode = (info.flags
                     & AccessibilityServiceInfo.FLAG_REQUEST_TOUCH_EXPLORATION_MODE) != 0;
-
-            // If this service is up and running we may have to enable touch
-            // exploration, otherwise this will happen when the service connects.
-            synchronized (mLock) {
-                if (canReceiveEvents()) {
-                    if (mRequestTouchExplorationMode) {
-                        tryEnableTouchExplorationLocked(this);
-                    } else {
-                        tryDisableTouchExplorationLocked(this);
-                    }
-                }
-            }
+            mRequestEnhancedWebAccessibility = (info.flags
+                    & AccessibilityServiceInfo.FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY) != 0;
+            mRequestFilterKeyEvents = (info.flags
+                    & AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS)  != 0;
         }
 
         /**
@@ -1519,9 +1805,18 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
          *
          * @return True if binding is successful.
          */
-        public boolean bind() {
-            if (!mIsAutomation && mService == null) {
-                return mContext.bindService(mIntent, this, Context.BIND_AUTO_CREATE, mUserId);
+        public boolean bindLocked() {
+            UserState userState = getUserStateLocked(mUserId);
+            if (!mIsAutomation) {
+                if (mService == null && mContext.bindServiceAsUser(
+                        mIntent, this, Context.BIND_AUTO_CREATE, new UserHandle(mUserId))) {
+                    userState.mBindingServices.add(mComponentName);
+                }
+            } else {
+                userState.mBindingServices.add(mComponentName);
+                mService = userState.mUiAutomationServiceClient.asBinder();
+                onServiceConnected(mComponentName, mService);
+                userState.mUiAutomationService = this;
             }
             return false;
         }
@@ -1532,21 +1827,29 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
          *
          * @return True if unbinding is successful.
          */
-        public boolean unbind() {
-            if (mService != null) {
-                synchronized (mLock) {
-                    tryRemoveServiceLocked(this);
-                }
-                if (!mIsAutomation) {
-                    mContext.unbindService(this);
-                }
-                return true;
+        public boolean unbindLocked() {
+            if (mService == null) {
+                return false;
             }
-            return false;
+            UserState userState = getUserStateLocked(mUserId);
+            mKeyEventDispatcher.flush();
+            if (!mIsAutomation) {
+                mContext.unbindService(this);
+            } else {
+                userState.destroyUiAutomationService();
+            }
+            removeServiceLocked(this, userState);
+            resetLocked();
+            return true;
         }
 
-        public boolean canReceiveEvents() {
+        public boolean canReceiveEventsLocked() {
             return (mEventTypes != 0 && mFeedbackType != 0 && mService != null);
+        }
+
+        @Override
+        public void setOnKeyEventResult(boolean handled, int sequence) {
+            mKeyEventDispatcher.setOnKeyEventResult(handled, sequence);
         }
 
         @Override
@@ -1571,6 +1874,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     } else {
                         setDynamicallyConfigurableProperties(info);
                     }
+                    UserState userState = getUserStateLocked(mUserId);
+                    onUserStateChangedLocked(userState);
                 }
             } finally {
                 Binder.restoreCallingIdentity(identity);
@@ -1579,21 +1884,31 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mService = service;
-            mServiceInterface = IAccessibilityServiceClient.Stub.asInterface(service);
-            try {
-                mServiceInterface.setConnection(this, mId);
-                synchronized (mLock) {
-                    tryAddServiceLocked(this, mUserId);
+            synchronized (mLock) {
+                mService = service;
+                mServiceInterface = IAccessibilityServiceClient.Stub.asInterface(service);
+                UserState userState = getUserStateLocked(mUserId);
+                addServiceLocked(this, userState);
+                if (userState.mBindingServices.contains(mComponentName) || mWasConnectedAndDied) {
+                    userState.mBindingServices.remove(mComponentName);
+                    mWasConnectedAndDied = false;
+                    try {
+                       mServiceInterface.setConnection(this, mId);
+                       onUserStateChangedLocked(userState);
+                    } catch (RemoteException re) {
+                        Slog.w(LOG_TAG, "Error while setting connection for service: "
+                                + service, re);
+                        binderDied();
+                    }
+                } else {
+                    binderDied();
                 }
-            } catch (RemoteException re) {
-                Slog.w(LOG_TAG, "Error while setting Controller for service: " + service, re);
             }
         }
 
         @Override
-        public float findAccessibilityNodeInfoByViewId(int accessibilityWindowId,
-                long accessibilityNodeId, int viewId, int interactionId,
+        public boolean findAccessibilityNodeInfosByViewId(int accessibilityWindowId,
+                long accessibilityNodeId, String viewIdResName, int interactionId,
                 IAccessibilityInteractionConnectionCallback callback, long interrogatingTid)
                 throws RemoteException {
             final int resolvedWindowId;
@@ -1603,28 +1918,28 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                         .resolveCallingUserIdEnforcingPermissionsLocked(
                                 UserHandle.getCallingUserId());
                 if (resolvedUserId != mCurrentUserId) {
-                    return -1;
+                    return false;
                 }
                 mSecurityPolicy.enforceCanRetrieveWindowContent(this);
                 final boolean permissionGranted = mSecurityPolicy.canRetrieveWindowContent(this);
                 if (!permissionGranted) {
-                    return 0;
+                    return false;
                 } else {
                     resolvedWindowId = resolveAccessibilityWindowIdLocked(accessibilityWindowId);
                     connection = getConnectionLocked(resolvedWindowId);
                     if (connection == null) {
-                        return 0;
+                        return false;
                     }
                 }
             }
-            final int flags = (mIncludeNotImportantViews) ?
-                    AccessibilityNodeInfo.INCLUDE_NOT_IMPORTANT_VIEWS : 0;
             final int interrogatingPid = Binder.getCallingPid();
             final long identityToken = Binder.clearCallingIdentity();
+            MagnificationSpec spec = getCompatibleMagnificationSpec(resolvedWindowId);
             try {
-                connection.findAccessibilityNodeInfoByViewId(accessibilityNodeId, viewId,
-                        interactionId, callback, flags, interrogatingPid, interrogatingTid);
-                return getCompatibilityScale(resolvedWindowId);
+                connection.findAccessibilityNodeInfosByViewId(accessibilityNodeId,
+                        viewIdResName, interactionId, callback, mFetchFlags, interrogatingPid,
+                        interrogatingTid, spec);
+                return true;
             } catch (RemoteException re) {
                 if (DEBUG) {
                     Slog.e(LOG_TAG, "Error findAccessibilityNodeInfoByViewId().");
@@ -1632,11 +1947,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             } finally {
                 Binder.restoreCallingIdentity(identityToken);
             }
-            return 0;
+            return false;
         }
 
         @Override
-        public float findAccessibilityNodeInfosByText(int accessibilityWindowId,
+        public boolean findAccessibilityNodeInfosByText(int accessibilityWindowId,
                 long accessibilityNodeId, String text, int interactionId,
                 IAccessibilityInteractionConnectionCallback callback, long interrogatingTid)
                 throws RemoteException {
@@ -1647,30 +1962,29 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                         .resolveCallingUserIdEnforcingPermissionsLocked(
                         UserHandle.getCallingUserId());
                 if (resolvedUserId != mCurrentUserId) {
-                    return -1;
+                    return false;
                 }
                 mSecurityPolicy.enforceCanRetrieveWindowContent(this);
                 resolvedWindowId = resolveAccessibilityWindowIdLocked(accessibilityWindowId);
                 final boolean permissionGranted =
                     mSecurityPolicy.canGetAccessibilityNodeInfoLocked(this, resolvedWindowId);
                 if (!permissionGranted) {
-                    return 0;
+                    return false;
                 } else {
                     connection = getConnectionLocked(resolvedWindowId);
                     if (connection == null) {
-                        return 0;
+                        return false;
                     }
                 }
             }
-            final int flags = (mIncludeNotImportantViews) ?
-                    AccessibilityNodeInfo.INCLUDE_NOT_IMPORTANT_VIEWS : 0;
             final int interrogatingPid = Binder.getCallingPid();
             final long identityToken = Binder.clearCallingIdentity();
+            MagnificationSpec spec = getCompatibleMagnificationSpec(resolvedWindowId);
             try {
                 connection.findAccessibilityNodeInfosByText(accessibilityNodeId, text,
-                        interactionId, callback, flags, interrogatingPid,
-                        interrogatingTid);
-                return getCompatibilityScale(resolvedWindowId);
+                        interactionId, callback, mFetchFlags, interrogatingPid, interrogatingTid,
+                        spec);
+                return true;
             } catch (RemoteException re) {
                 if (DEBUG) {
                     Slog.e(LOG_TAG, "Error calling findAccessibilityNodeInfosByText()");
@@ -1678,12 +1992,12 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             } finally {
                 Binder.restoreCallingIdentity(identityToken);
             }
-            return 0;
+            return false;
         }
 
         @Override
-        public float findAccessibilityNodeInfoByAccessibilityId(int accessibilityWindowId,
-                long accessibilityNodeId, int interactionId,
+        public boolean findAccessibilityNodeInfoByAccessibilityId(
+                int accessibilityWindowId, long accessibilityNodeId, int interactionId,
                 IAccessibilityInteractionConnectionCallback callback, int flags,
                 long interrogatingTid) throws RemoteException {
             final int resolvedWindowId;
@@ -1693,29 +2007,29 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                         .resolveCallingUserIdEnforcingPermissionsLocked(
                         UserHandle.getCallingUserId());
                 if (resolvedUserId != mCurrentUserId) {
-                    return -1;
+                    return false;
                 }
                 mSecurityPolicy.enforceCanRetrieveWindowContent(this);
                 resolvedWindowId = resolveAccessibilityWindowIdLocked(accessibilityWindowId);
                 final boolean permissionGranted =
                     mSecurityPolicy.canGetAccessibilityNodeInfoLocked(this, resolvedWindowId);
                 if (!permissionGranted) {
-                    return 0;
+                    return false;
                 } else {
                     connection = getConnectionLocked(resolvedWindowId);
                     if (connection == null) {
-                        return 0;
+                        return false;
                     }
                 }
             }
-            final int allFlags = flags | ((mIncludeNotImportantViews) ?
-                    AccessibilityNodeInfo.INCLUDE_NOT_IMPORTANT_VIEWS : 0);
             final int interrogatingPid = Binder.getCallingPid();
             final long identityToken = Binder.clearCallingIdentity();
+            MagnificationSpec spec = getCompatibleMagnificationSpec(resolvedWindowId);
             try {
                 connection.findAccessibilityNodeInfoByAccessibilityId(accessibilityNodeId,
-                        interactionId, callback, allFlags, interrogatingPid, interrogatingTid);
-                return getCompatibilityScale(resolvedWindowId);
+                        interactionId, callback, mFetchFlags | flags, interrogatingPid,
+                        interrogatingTid, spec);
+                return true;
             } catch (RemoteException re) {
                 if (DEBUG) {
                     Slog.e(LOG_TAG, "Error calling findAccessibilityNodeInfoByAccessibilityId()");
@@ -1723,11 +2037,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             } finally {
                 Binder.restoreCallingIdentity(identityToken);
             }
-            return 0;
+            return false;
         }
 
         @Override
-        public float findFocus(int accessibilityWindowId, long accessibilityNodeId,
+        public boolean findFocus(int accessibilityWindowId, long accessibilityNodeId,
                 int focusType, int interactionId,
                 IAccessibilityInteractionConnectionCallback callback, long interrogatingTid)
                 throws RemoteException {
@@ -1738,29 +2052,28 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                         .resolveCallingUserIdEnforcingPermissionsLocked(
                         UserHandle.getCallingUserId());
                 if (resolvedUserId != mCurrentUserId) {
-                    return -1;
+                    return false;
                 }
                 mSecurityPolicy.enforceCanRetrieveWindowContent(this);
                 resolvedWindowId = resolveAccessibilityWindowIdLocked(accessibilityWindowId);
                 final boolean permissionGranted =
                     mSecurityPolicy.canGetAccessibilityNodeInfoLocked(this, resolvedWindowId);
                 if (!permissionGranted) {
-                    return 0;
+                    return false;
                 } else {
                     connection = getConnectionLocked(resolvedWindowId);
                     if (connection == null) {
-                        return 0;
+                        return false;
                     }
                 }
             }
-            final int flags = (mIncludeNotImportantViews) ?
-                    AccessibilityNodeInfo.INCLUDE_NOT_IMPORTANT_VIEWS : 0;
             final int interrogatingPid = Binder.getCallingPid();
             final long identityToken = Binder.clearCallingIdentity();
+            MagnificationSpec spec = getCompatibleMagnificationSpec(resolvedWindowId);
             try {
                 connection.findFocus(accessibilityNodeId, focusType, interactionId, callback,
-                        flags, interrogatingPid, interrogatingTid);
-                return getCompatibilityScale(resolvedWindowId);
+                        mFetchFlags, interrogatingPid, interrogatingTid, spec);
+                return true;
             } catch (RemoteException re) {
                 if (DEBUG) {
                     Slog.e(LOG_TAG, "Error calling findAccessibilityFocus()");
@@ -1768,11 +2081,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             } finally {
                 Binder.restoreCallingIdentity(identityToken);
             }
-            return 0;
+            return false;
         }
 
         @Override
-        public float focusSearch(int accessibilityWindowId, long accessibilityNodeId,
+        public boolean focusSearch(int accessibilityWindowId, long accessibilityNodeId,
                 int direction, int interactionId,
                 IAccessibilityInteractionConnectionCallback callback, long interrogatingTid)
                 throws RemoteException {
@@ -1783,29 +2096,28 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                         .resolveCallingUserIdEnforcingPermissionsLocked(
                         UserHandle.getCallingUserId());
                 if (resolvedUserId != mCurrentUserId) {
-                    return -1;
+                    return false;
                 }
                 mSecurityPolicy.enforceCanRetrieveWindowContent(this);
                 resolvedWindowId = resolveAccessibilityWindowIdLocked(accessibilityWindowId);
                 final boolean permissionGranted =
                     mSecurityPolicy.canGetAccessibilityNodeInfoLocked(this, resolvedWindowId);
                 if (!permissionGranted) {
-                    return 0;
+                    return false;
                 } else {
                     connection = getConnectionLocked(resolvedWindowId);
                     if (connection == null) {
-                        return 0;
+                        return false;
                     }
                 }
             }
-            final int flags = (mIncludeNotImportantViews) ?
-                    AccessibilityNodeInfo.INCLUDE_NOT_IMPORTANT_VIEWS : 0;
             final int interrogatingPid = Binder.getCallingPid();
             final long identityToken = Binder.clearCallingIdentity();
+            MagnificationSpec spec = getCompatibleMagnificationSpec(resolvedWindowId);
             try {
                 connection.focusSearch(accessibilityNodeId, direction, interactionId, callback,
-                        flags, interrogatingPid, interrogatingTid);
-                return getCompatibilityScale(resolvedWindowId);
+                        mFetchFlags, interrogatingPid, interrogatingTid, spec);
+                return true;
             } catch (RemoteException re) {
                 if (DEBUG) {
                     Slog.e(LOG_TAG, "Error calling accessibilityFocusSearch()");
@@ -1813,7 +2125,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             } finally {
                 Binder.restoreCallingIdentity(identityToken);
             }
-            return 0;
+            return false;
         }
 
         @Override
@@ -1843,13 +2155,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     }
                 }
             }
-            final int flags = (mIncludeNotImportantViews) ?
-                    AccessibilityNodeInfo.INCLUDE_NOT_IMPORTANT_VIEWS : 0;
             final int interrogatingPid = Binder.getCallingPid();
             final long identityToken = Binder.clearCallingIdentity();
             try {
                 connection.performAccessibilityAction(accessibilityNodeId, action, arguments,
-                        interactionId, callback, flags, interrogatingPid, interrogatingTid);
+                        interactionId, callback, mFetchFlags, interrogatingPid, interrogatingTid);
             } catch (RemoteException re) {
                 if (DEBUG) {
                     Slog.e(LOG_TAG, "Error calling performAccessibilityAction()");
@@ -1894,19 +2204,36 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             }
         }
 
+        @Override
+        public void dump(FileDescriptor fd, final PrintWriter pw, String[] args) {
+            mSecurityPolicy.enforceCallingPermission(Manifest.permission.DUMP, FUNCTION_DUMP);
+            synchronized (mLock) {
+                pw.append("Service[label=" + mAccessibilityServiceInfo.getResolveInfo()
+                        .loadLabel(mContext.getPackageManager()));
+                pw.append(", feedbackType"
+                        + AccessibilityServiceInfo.feedbackTypeToString(mFeedbackType));
+                pw.append(", capabilities=" + mAccessibilityServiceInfo.getCapabilities());
+                pw.append(", eventTypes="
+                        + AccessibilityEvent.eventTypeToString(mEventTypes));
+                pw.append(", notificationTimeout=" + mNotificationTimeout);
+                pw.append("]");
+            }
+        }
+
+        @Override
         public void onServiceDisconnected(ComponentName componentName) {
             /* do nothing - #binderDied takes care */
         }
 
-        public void linkToOwnDeath() throws RemoteException {
+        public void linkToOwnDeathLocked() throws RemoteException {
             mService.linkToDeath(this, 0);
         }
 
-        public void unlinkToOwnDeath() {
+        public void unlinkToOwnDeathLocked() {
             mService.unlinkToDeath(this, 0);
         }
 
-        public void dispose() {
+        public void resetLocked() {
             try {
                 // Clear the proxy in the other process so this
                 // IAccessibilityServiceConnection can be garbage collected.
@@ -1918,15 +2245,31 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             mServiceInterface = null;
         }
 
+        public boolean isConnectedLocked() {
+            return (mService != null);
+        }
+
         public void binderDied() {
             synchronized (mLock) {
-                // The death recipient is unregistered in tryRemoveServiceLocked
-                tryRemoveServiceLocked(this);
-                // We no longer have an automation service, so restore
-                // the state based on values in the settings database.
+                // It is possible that this service's package was force stopped during
+                // whose handling the death recipient is unlinked and still get a call
+                // on binderDied since the call was made before we unlink but was
+                // waiting on the lock we held during the force stop handling.
+                if (!isConnectedLocked()) {
+                    return;
+                }
+                mWasConnectedAndDied = true;
+                mKeyEventDispatcher.flush();
+                UserState userState = getUserStateLocked(mUserId);
+                // The death recipient is unregistered in removeServiceLocked
+                removeServiceLocked(this, userState);
+                resetLocked();
                 if (mIsAutomation) {
-                    mUiAutomationService = null;
-                    recreateInternalStateLocked(getUserStateLocked(mUserId));
+                    // We no longer have an automation service, so restore
+                    // the state based on values in the settings database.
+                    userState.mInstalledServices.remove(mAccessibilityServiceInfo);
+                    userState.mEnabledServices.remove(mComponentName);
+                    userState.destroyUiAutomationService();
                 }
             }
         }
@@ -1948,12 +2291,12 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
 
                 final int what = eventType;
                 if (oldEvent != null) {
-                    mHandler.removeMessages(what);
+                    mEventDispatchHandler.removeMessages(what);
                     oldEvent.recycle();
                 }
 
-                Message message = mHandler.obtainMessage(what);
-                mHandler.sendMessageDelayed(message, mNotificationTimeout);
+                Message message = mEventDispatchHandler.obtainMessage(what);
+                mEventDispatchHandler.sendMessageDelayed(message, mNotificationTimeout);
             }
         }
 
@@ -2018,7 +2361,18 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         }
 
         public void notifyGesture(int gestureId) {
-            mHandler.obtainMessage(MSG_ON_GESTURE, gestureId, 0).sendToTarget();
+            mInvocationHandler.obtainMessage(InvocationHandler.MSG_ON_GESTURE,
+                    gestureId, 0).sendToTarget();
+        }
+
+        public void notifyKeyEvent(KeyEvent event, int policyFlags) {
+            mInvocationHandler.obtainMessage(InvocationHandler.MSG_ON_KEY_EVENT,
+                    policyFlags, 0, event).sendToTarget();
+        }
+
+        public void notifyClearAccessibilityNodeInfoCache() {
+            mInvocationHandler.sendEmptyMessage(
+                    InvocationHandler.MSG_CLEAR_ACCESSIBILITY_NODE_INFO_CACHE);
         }
 
         private void notifyGestureInternal(int gestureId) {
@@ -2029,6 +2383,22 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 } catch (RemoteException re) {
                     Slog.e(LOG_TAG, "Error during sending gesture " + gestureId
                             + " to " + mService, re);
+                }
+            }
+        }
+
+        private void notifyKeyEventInternal(KeyEvent event, int policyFlags) {
+            mKeyEventDispatcher.notifyKeyEvent(event, policyFlags);
+        }
+
+        private void notifyClearAccessibilityNodeInfoCacheInternal() {
+            IAccessibilityServiceClient listener = mServiceInterface;
+            if (listener != null) {
+                try {
+                    listener.clearAccessibilityNodeInfoCache();
+                } catch (RemoteException re) {
+                    Slog.e(LOG_TAG, "Error during requesting accessibility info cache"
+                            + " to be cleared.", re);
                 }
             }
         }
@@ -2115,20 +2485,193 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             return accessibilityWindowId;
         }
 
-        private float getCompatibilityScale(int windowId) {
+        private MagnificationSpec getCompatibleMagnificationSpec(int windowId) {
             try {
                 IBinder windowToken = mGlobalWindowTokens.get(windowId);
+                if (windowToken == null) {
+                    windowToken = getCurrentUserStateLocked().mWindowTokens.get(windowId);
+                }                    
                 if (windowToken != null) {
-                    return mWindowManagerService.getWindowCompatibilityScale(windowToken);
-                }
-                windowToken = getCurrentUserStateLocked().mWindowTokens.get(windowId);
-                if (windowToken != null) {
-                    return mWindowManagerService.getWindowCompatibilityScale(windowToken);
+                    return mWindowManagerService.getCompatibleMagnificationSpecForWindow(
+                            windowToken);
                 }
             } catch (RemoteException re) {
                 /* ignore */
             }
-            return 1.0f;
+            return null;
+        }
+
+        private final class InvocationHandler extends Handler {
+
+            public static final int MSG_ON_GESTURE = 1;
+            public static final int MSG_ON_KEY_EVENT = 2;
+            public static final int MSG_CLEAR_ACCESSIBILITY_NODE_INFO_CACHE = 3;
+            public static final int MSG_ON_KEY_EVENT_TIMEOUT = 4;
+
+            public InvocationHandler(Looper looper) {
+                super(looper, null, true);
+            }
+
+            @Override
+            public void handleMessage(Message message) {
+                final int type = message.what;
+                switch (type) {
+                    case MSG_ON_GESTURE: {
+                        final int gestureId = message.arg1;
+                        notifyGestureInternal(gestureId);
+                    } break;
+                    case MSG_ON_KEY_EVENT: {
+                        KeyEvent event = (KeyEvent) message.obj;
+                        final int policyFlags = message.arg1;
+                        notifyKeyEventInternal(event, policyFlags);
+                    } break;
+                    case MSG_CLEAR_ACCESSIBILITY_NODE_INFO_CACHE: {
+                        notifyClearAccessibilityNodeInfoCacheInternal();
+                    } break;
+                    case MSG_ON_KEY_EVENT_TIMEOUT: {
+                        PendingEvent eventState = (PendingEvent) message.obj;
+                        setOnKeyEventResult(false, eventState.sequence);
+                    } break;
+                    default: {
+                        throw new IllegalArgumentException("Unknown message: " + type);
+                    }
+                }
+            }
+        }
+
+        private final class KeyEventDispatcher {
+
+            private static final long ON_KEY_EVENT_TIMEOUT_MILLIS = 500;
+
+            private PendingEvent mPendingEvents;
+
+            private final InputEventConsistencyVerifier mSentEventsVerifier =
+                    InputEventConsistencyVerifier.isInstrumentationEnabled()
+                            ? new InputEventConsistencyVerifier(
+                                    this, 0, KeyEventDispatcher.class.getSimpleName()) : null;
+
+            public void notifyKeyEvent(KeyEvent event, int policyFlags) {
+                final PendingEvent pendingEvent;
+
+                synchronized (mLock) {
+                    pendingEvent = addPendingEventLocked(event, policyFlags);
+                }
+
+                Message message = mInvocationHandler.obtainMessage(
+                        InvocationHandler.MSG_ON_KEY_EVENT_TIMEOUT, pendingEvent);
+                mInvocationHandler.sendMessageDelayed(message, ON_KEY_EVENT_TIMEOUT_MILLIS);
+
+                try {
+                    // Accessibility services are exclusively not in the system
+                    // process, therefore no need to clone the motion event to
+                    // prevent tampering. It will be cloned in the IPC call.
+                    mServiceInterface.onKeyEvent(pendingEvent.event, pendingEvent.sequence);
+                } catch (RemoteException re) {
+                    setOnKeyEventResult(false, pendingEvent.sequence);
+                }
+            }
+
+            public void setOnKeyEventResult(boolean handled, int sequence) {
+                synchronized (mLock) {
+                    PendingEvent pendingEvent = removePendingEventLocked(sequence);
+                    if (pendingEvent != null) {
+                        mInvocationHandler.removeMessages(
+                                InvocationHandler.MSG_ON_KEY_EVENT_TIMEOUT,
+                                pendingEvent);
+                        pendingEvent.handled = handled;
+                        finishPendingEventLocked(pendingEvent);
+                    }
+                }
+            }
+
+            public void flush() {
+                synchronized (mLock) {
+                    cancelAllPendingEventsLocked();
+                    if (mSentEventsVerifier != null) {
+                        mSentEventsVerifier.reset();
+                    }
+                }
+            }
+
+            private PendingEvent addPendingEventLocked(KeyEvent event, int policyFlags) {
+                final int sequence = event.getSequenceNumber();
+                PendingEvent pendingEvent = obtainPendingEventLocked(event, policyFlags, sequence);
+                pendingEvent.next = mPendingEvents;
+                mPendingEvents = pendingEvent;
+                return pendingEvent;
+            }
+
+            private PendingEvent removePendingEventLocked(int sequence) {
+                PendingEvent previous = null;
+                PendingEvent current = mPendingEvents;
+
+                while (current != null) {
+                    if (current.sequence == sequence) {
+                        if (previous != null) {
+                            previous.next = current.next;
+                        } else {
+                            mPendingEvents = current.next;
+                        }
+                        current.next = null;
+                        return current;
+                    }
+                    previous = current;
+                    current = current.next;
+                }
+                return null;
+            }
+
+            private void finishPendingEventLocked(PendingEvent pendingEvent) {
+                if (!pendingEvent.handled) {
+                    sendKeyEventToInputFilter(pendingEvent.event, pendingEvent.policyFlags);
+                }
+                // Nullify the event since we do not want it to be
+                // recycled yet. It will be sent to the input filter.
+                pendingEvent.event = null;
+                recyclePendingEventLocked(pendingEvent);
+            }
+
+            private void sendKeyEventToInputFilter(KeyEvent event, int policyFlags) {
+                if (DEBUG) {
+                    Slog.i(LOG_TAG, "Injecting event: " + event);
+                }
+                if (mSentEventsVerifier != null) {
+                    mSentEventsVerifier.onKeyEvent(event, 0);
+                }
+                policyFlags |= WindowManagerPolicy.FLAG_PASS_TO_USER;
+                mMainHandler.obtainMessage(MainHandler.MSG_SEND_KEY_EVENT_TO_INPUT_FILTER,
+                        policyFlags, 0, event).sendToTarget();
+            }
+
+            private void cancelAllPendingEventsLocked() {
+                while (mPendingEvents != null) {
+                    PendingEvent pendingEvent = removePendingEventLocked(mPendingEvents.sequence);
+                    pendingEvent.handled = false;
+                    mInvocationHandler.removeMessages(InvocationHandler.MSG_ON_KEY_EVENT_TIMEOUT,
+                            pendingEvent);
+                    finishPendingEventLocked(pendingEvent);
+                }
+            }
+        }
+    }
+
+    private static final class PendingEvent {
+        PendingEvent next;
+
+        KeyEvent event;
+        int policyFlags;
+        int sequence;
+        boolean handled;
+
+        public void clear() {
+            if (event != null) {
+                event.recycle();
+                event = null;
+            }
+            next = null;
+            policyFlags = 0;
+            sequence = 0;
+            handled = false;
         }
     }
 
@@ -2147,7 +2690,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             | AccessibilityNodeInfo.ACTION_NEXT_HTML_ELEMENT
             | AccessibilityNodeInfo.ACTION_PREVIOUS_HTML_ELEMENT
             | AccessibilityNodeInfo.ACTION_SCROLL_FORWARD
-            | AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD;
+            | AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD
+            | AccessibilityNodeInfo.ACTION_COPY
+            | AccessibilityNodeInfo.ACTION_PASTE
+            | AccessibilityNodeInfo.ACTION_CUT
+            | AccessibilityNodeInfo.ACTION_SET_SELECTION;
 
         private static final int RETRIEVAL_ALLOWING_EVENT_TYPES =
             AccessibilityEvent.TYPE_VIEW_CLICKED
@@ -2255,7 +2802,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         }
 
         public boolean canRetrieveWindowContent(Service service) {
-            return service.mCanRetrieveScreenContent;
+            return (service.mAccessibilityServiceInfo.getCapabilities()
+                    & AccessibilityServiceInfo.CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT) != 0;
         }
 
         public void enforceCanRetrieveWindowContent(Service service) throws RemoteException {
@@ -2313,7 +2861,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             }
             if (!hasPermission(permission)) {
                 throw new SecurityException("You do not have " + permission
-                        + " required to call " + function);
+                        + " required to call " + function + " from pid="
+                        + Binder.getCallingPid() + ", uid=" + Binder.getCallingUid());
             }
         }
 
@@ -2357,10 +2906,20 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
     private class UserState {
         public final int mUserId;
 
-        public final CopyOnWriteArrayList<Service> mServices = new CopyOnWriteArrayList<Service>();
+        // Non-transient state.
 
         public final RemoteCallbackList<IAccessibilityManagerClient> mClients =
             new RemoteCallbackList<IAccessibilityManagerClient>();
+
+        public final SparseArray<AccessibilityConnectionWrapper> mInteractionConnections =
+                new SparseArray<AccessibilityConnectionWrapper>();
+
+        public final SparseArray<IBinder> mWindowTokens = new SparseArray<IBinder>();
+
+        // Transient state.
+
+        public final CopyOnWriteArrayList<Service> mBoundServices =
+                new CopyOnWriteArrayList<Service>();
 
         public final Map<ComponentName, Service> mComponentNameToServiceMap =
                 new HashMap<ComponentName, Service>();
@@ -2368,65 +2927,90 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         public final List<AccessibilityServiceInfo> mInstalledServices =
                 new ArrayList<AccessibilityServiceInfo>();
 
+        public final Set<ComponentName> mBindingServices = new HashSet<ComponentName>();
+
         public final Set<ComponentName> mEnabledServices = new HashSet<ComponentName>();
 
         public final Set<ComponentName> mTouchExplorationGrantedServices =
                 new HashSet<ComponentName>();
 
-        public final SparseArray<AccessibilityConnectionWrapper>
-                mInteractionConnections =
-                new SparseArray<AccessibilityConnectionWrapper>();
-
-        public final SparseArray<IBinder> mWindowTokens = new SparseArray<IBinder>();
-
         public int mHandledFeedbackTypes = 0;
+
+        public int mLastSentClientState = -1;
 
         public boolean mIsAccessibilityEnabled;
         public boolean mIsTouchExplorationEnabled;
+        public boolean mIsEnhancedWebAccessibilityEnabled;
         public boolean mIsDisplayMagnificationEnabled;
+        public boolean mIsFilterKeyEventsEnabled;
+
+        private Service mUiAutomationService;
+        private IAccessibilityServiceClient mUiAutomationServiceClient;
+
+        private IBinder mUiAutomationServiceOwner;
+        private final DeathRecipient mUiAutomationSerivceOnwerDeathRecipient =
+                new DeathRecipient() {
+            @Override
+            public void binderDied() {
+                mUiAutomationServiceOwner.unlinkToDeath(
+                        mUiAutomationSerivceOnwerDeathRecipient, 0);
+                mUiAutomationServiceOwner = null;
+                if (mUiAutomationService != null) {
+                    mUiAutomationService.binderDied();
+                }
+            }
+        };
 
         public UserState(int userId) {
             mUserId = userId;
         }
-    }
 
-    private class TempUserStateChangeMemento {
-        public int mUserId = UserHandle.USER_NULL;
-        public boolean mIsAccessibilityEnabled;
-        public boolean mIsTouchExplorationEnabled;
-        public boolean mIsDisplayMagnificationEnabled;
-        public final Set<ComponentName> mEnabledServices = new HashSet<ComponentName>();
-        public final Set<ComponentName> mTouchExplorationGrantedServices =
-                new HashSet<ComponentName>();
+        public int getClientState() {
+            int clientState = 0;
+            if (mIsAccessibilityEnabled) {
+                clientState |= AccessibilityManager.STATE_FLAG_ACCESSIBILITY_ENABLED;
+            }
+            // Touch exploration relies on enabled accessibility.
+            if (mIsAccessibilityEnabled && mIsTouchExplorationEnabled) {
+                clientState |= AccessibilityManager.STATE_FLAG_TOUCH_EXPLORATION_ENABLED;
+            }
+            return clientState;
+        }
 
-        public void initialize(int userId, UserState userState) {
-            mUserId = userId;
-            mIsAccessibilityEnabled = userState.mIsAccessibilityEnabled;
-            mIsTouchExplorationEnabled = userState.mIsTouchExplorationEnabled;
-            mIsDisplayMagnificationEnabled = userState.mIsDisplayMagnificationEnabled;
+        public void onSwitchToAnotherUser() {
+            // Clear UI test automation state.
+            if (mUiAutomationService != null) {
+                mUiAutomationService.binderDied();
+            }
+
+            // Unbind all services.
+            unbindAllServicesLocked(this);
+
+            // Clear service management state.
+            mBoundServices.clear();
+            mBindingServices.clear();
+
+            // Clear event management state.
+            mHandledFeedbackTypes = 0;
+            mLastSentClientState = -1;
+
+            // Clear state persisted in settings.
             mEnabledServices.clear();
-            mEnabledServices.addAll(userState.mEnabledServices);
             mTouchExplorationGrantedServices.clear();
-            mTouchExplorationGrantedServices.addAll(userState.mTouchExplorationGrantedServices);
-        }
-
-        public void applyTo(UserState userState) {
-            userState.mIsAccessibilityEnabled = mIsAccessibilityEnabled;
-            userState.mIsTouchExplorationEnabled = mIsTouchExplorationEnabled;
-            userState.mIsDisplayMagnificationEnabled = mIsDisplayMagnificationEnabled;
-            userState.mEnabledServices.clear();
-            userState.mEnabledServices.addAll(mEnabledServices);
-            userState.mTouchExplorationGrantedServices.clear();
-            userState.mTouchExplorationGrantedServices.addAll(mTouchExplorationGrantedServices);
-        }
-
-        public void clear() {
-            mUserId = UserHandle.USER_NULL;
             mIsAccessibilityEnabled = false;
             mIsTouchExplorationEnabled = false;
+            mIsEnhancedWebAccessibilityEnabled = false;
             mIsDisplayMagnificationEnabled = false;
-            mEnabledServices.clear();
-            mTouchExplorationGrantedServices.clear();
+        }
+
+        public void destroyUiAutomationService() {
+            mUiAutomationService = null;
+            mUiAutomationServiceClient = null;
+            if (mUiAutomationServiceOwner != null) {
+                mUiAutomationServiceOwner.unlinkToDeath(
+                        mUiAutomationSerivceOnwerDeathRecipient, 0);
+                mUiAutomationServiceOwner = null;
+            }
         }
     }
 
@@ -2447,6 +3031,9 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         private final Uri mTouchExplorationGrantedAccessibilityServicesUri = Settings.Secure
                 .getUriFor(Settings.Secure.TOUCH_EXPLORATION_GRANTED_ACCESSIBILITY_SERVICES);
 
+        private final Uri mEnhancedWebAccessibilityUri = Settings.Secure
+                .getUriFor(Settings.Secure.ACCESSIBILITY_SCRIPT_INJECTION);
+
         public AccessibilityContentObserver(Handler handler) {
             super(handler);
         }
@@ -2463,6 +3050,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             contentResolver.registerContentObserver(
                     mTouchExplorationGrantedAccessibilityServicesUri,
                     false, this, UserHandle.USER_ALL);
+            contentResolver.registerContentObserver(mEnhancedWebAccessibilityUri,
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -2470,50 +3059,61 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             if (mAccessibilityEnabledUri.equals(uri)) {
                 synchronized (mLock) {
                     // We will update when the automation service dies.
-                    if (mUiAutomationService == null) {
-                        UserState userState = getCurrentUserStateLocked();
-                        handleAccessibilityEnabledSettingChangedLocked(userState);
-                        performServiceManagementLocked(userState);
-                        updateInputFilterLocked(userState);
-                        scheduleSendStateToClientsLocked(userState);
+                    UserState userState = getCurrentUserStateLocked();
+                    if (userState.mUiAutomationService == null) {
+                        if (readAccessibilityEnabledSettingLocked(userState)) {
+                            onUserStateChangedLocked(userState);
+                        }
                     }
                 }
             } else if (mTouchExplorationEnabledUri.equals(uri)) {
                 synchronized (mLock) {
                     // We will update when the automation service dies.
-                    if (mUiAutomationService == null) {
-                        UserState userState = getCurrentUserStateLocked();
-                        handleTouchExplorationEnabledSettingChangedLocked(userState);
-                        updateInputFilterLocked(userState);
-                        scheduleSendStateToClientsLocked(userState);
+                    UserState userState = getCurrentUserStateLocked();
+                    if (userState.mUiAutomationService == null) {
+                        if (readTouchExplorationEnabledSettingLocked(userState)) {
+                            onUserStateChangedLocked(userState);
+                        }
                     }
                 }
             } else if (mDisplayMagnificationEnabledUri.equals(uri)) {
                 synchronized (mLock) {
                     // We will update when the automation service dies.
-                    if (mUiAutomationService == null) {
-                        UserState userState = getCurrentUserStateLocked();
-                        handleDisplayMagnificationEnabledSettingChangedLocked(userState);
-                        updateInputFilterLocked(userState);
-                        scheduleSendStateToClientsLocked(userState);
+                    UserState userState = getCurrentUserStateLocked();
+                    if (userState.mUiAutomationService == null) {
+                        if (readDisplayMagnificationEnabledSettingLocked(userState)) {
+                            onUserStateChangedLocked(userState);
+                        }
                     }
                 }
             } else if (mEnabledAccessibilityServicesUri.equals(uri)) {
                 synchronized (mLock) {
                     // We will update when the automation service dies.
-                    if (mUiAutomationService == null) {
-                        UserState userState = getCurrentUserStateLocked();
-                        populateEnabledAccessibilityServicesLocked(userState);
-                        manageServicesLocked(userState);
+                    UserState userState = getCurrentUserStateLocked();
+                    if (userState.mUiAutomationService == null) {
+                        if (readEnabledAccessibilityServicesLocked(userState)) {
+                            onUserStateChangedLocked(userState);
+                        }
                     }
                 }
             } else if (mTouchExplorationGrantedAccessibilityServicesUri.equals(uri)) {
                 synchronized (mLock) {
                     // We will update when the automation service dies.
-                    if (mUiAutomationService == null) {
-                        UserState userState = getCurrentUserStateLocked();
-                        populateTouchExplorationGrantedAccessibilityServicesLocked(userState);
-                        handleTouchExplorationGrantedAccessibilityServicesChangedLocked(userState);
+                    UserState userState = getCurrentUserStateLocked();
+                    if (userState.mUiAutomationService == null) {
+                        if (readTouchExplorationGrantedAccessibilityServicesLocked(userState)) {
+                            onUserStateChangedLocked(userState);
+                        }
+                    }
+                }
+            } else if (mEnhancedWebAccessibilityUri.equals(uri)) {
+                synchronized (mLock) {
+                    // We will update when the automation service dies.
+                    UserState userState = getCurrentUserStateLocked();
+                    if (userState.mUiAutomationService == null) {
+                        if (readEnhancedWebAccessibilityEnabledChangedLocked(userState)) {
+                            onUserStateChangedLocked(userState);
+                        }
                     }
                 }
             }

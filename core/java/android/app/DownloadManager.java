@@ -461,45 +461,69 @@ public class DownloadManager {
         }
 
         /**
-         * Set the local destination for the downloaded file to a path within the application's
-         * external files directory (as returned by {@link Context#getExternalFilesDir(String)}.
+         * Set the local destination for the downloaded file to a path within
+         * the application's external files directory (as returned by
+         * {@link Context#getExternalFilesDir(String)}.
          * <p>
-         * The downloaded file is not scanned by MediaScanner.
-         * But it can be made scannable by calling {@link #allowScanningByMediaScanner()}.
+         * The downloaded file is not scanned by MediaScanner. But it can be
+         * made scannable by calling {@link #allowScanningByMediaScanner()}.
          *
-         * @param context the {@link Context} to use in determining the external files directory
-         * @param dirType the directory type to pass to {@link Context#getExternalFilesDir(String)}
-         * @param subPath the path within the external directory, including the destination filename
+         * @param context the {@link Context} to use in determining the external
+         *            files directory
+         * @param dirType the directory type to pass to
+         *            {@link Context#getExternalFilesDir(String)}
+         * @param subPath the path within the external directory, including the
+         *            destination filename
          * @return this object
+         * @throws IllegalStateException If the external storage directory
+         *             cannot be found or created.
          */
         public Request setDestinationInExternalFilesDir(Context context, String dirType,
                 String subPath) {
-            setDestinationFromBase(context.getExternalFilesDir(dirType), subPath);
-            return this;
-        }
-
-        /**
-         * Set the local destination for the downloaded file to a path within the public external
-         * storage directory (as returned by
-         * {@link Environment#getExternalStoragePublicDirectory(String)}.
-         *<p>
-         * The downloaded file is not scanned by MediaScanner.
-         * But it can be made scannable by calling {@link #allowScanningByMediaScanner()}.
-         *
-         * @param dirType the directory type to pass to
-         *        {@link Environment#getExternalStoragePublicDirectory(String)}
-         * @param subPath the path within the external directory, including the destination filename
-         * @return this object
-         */
-        public Request setDestinationInExternalPublicDir(String dirType, String subPath) {
-            File file = Environment.getExternalStoragePublicDirectory(dirType);
-            if (file.exists()) {
+            final File file = context.getExternalFilesDir(dirType);
+            if (file == null) {
+                throw new IllegalStateException("Failed to get external storage files directory");
+            } else if (file.exists()) {
                 if (!file.isDirectory()) {
                     throw new IllegalStateException(file.getAbsolutePath() +
                             " already exists and is not a directory");
                 }
             } else {
-                if (!file.mkdir()) {
+                if (!file.mkdirs()) {
+                    throw new IllegalStateException("Unable to create directory: "+
+                            file.getAbsolutePath());
+                }
+            }
+            setDestinationFromBase(file, subPath);
+            return this;
+        }
+
+        /**
+         * Set the local destination for the downloaded file to a path within
+         * the public external storage directory (as returned by
+         * {@link Environment#getExternalStoragePublicDirectory(String)}).
+         * <p>
+         * The downloaded file is not scanned by MediaScanner. But it can be
+         * made scannable by calling {@link #allowScanningByMediaScanner()}.
+         *
+         * @param dirType the directory type to pass to {@link Environment#getExternalStoragePublicDirectory(String)}
+         * @param subPath the path within the external directory, including the
+         *            destination filename
+         * @return this object
+         * @throws IllegalStateException If the external storage directory
+         *             cannot be found or created.
+         */
+        public Request setDestinationInExternalPublicDir(String dirType, String subPath) {
+            File file = Environment.getExternalStoragePublicDirectory(dirType);
+            if (file == null) {
+                throw new IllegalStateException("Failed to get external storage public directory");
+            } else if (file.exists()) {
+                if (!file.isDirectory()) {
+                    throw new IllegalStateException(file.getAbsolutePath() +
+                            " already exists and is not a directory");
+                }
+            } else {
+                if (!file.mkdirs()) {
                     throw new IllegalStateException("Unable to create directory: "+
                             file.getAbsolutePath());
                 }
@@ -1085,6 +1109,7 @@ public class DownloadManager {
         values.put(Downloads.Impl.COLUMN_TOTAL_BYTES, -1);
         values.putNull(Downloads.Impl._DATA);
         values.put(Downloads.Impl.COLUMN_STATUS, Downloads.Impl.STATUS_PENDING);
+        values.put(Downloads.Impl.COLUMN_FAILED_CONNECTIONS, 0);
         mResolver.update(mBaseUri, values, getWhereClauseForIds(ids), getWhereArgsForIds(ids));
     }
 

@@ -16,42 +16,78 @@
 
 package com.android.test.hwui;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Region;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 @SuppressWarnings({"UnusedDeclaration"})
 public class ClipRegionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final RegionView view = new RegionView(this);
-        setContentView(view);
+
+        final RegionView group = new RegionView(this);
+
+        final TextView text = new TextView(this);
+        text.setText(buildText());
+        group.addView(text);
+
+        setContentView(group);
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(group, "clipPosition", 0.0f, 1.0f);
+        animator.setDuration(3000);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.start();
     }
 
-    public static class RegionView extends View {
+    private static CharSequence buildText() {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < 10; i++) {
+            buffer.append(LOREM_IPSUM);
+        }
+        return buffer;
+    }
+
+    public static class RegionView extends FrameLayout {
+        private final Path mClipPath = new Path();
+        private float mClipPosition = 0.0f;
+
         public RegionView(Context c) {
             super(c);
+            setAlpha(0.5f);
+        }
+
+        public float getClipPosition() {
+            return mClipPosition;
+        }
+
+        public void setClipPosition(float clipPosition) {
+            mClipPosition = clipPosition;
+            invalidate();
         }
 
         @Override
-        protected void onDraw(Canvas canvas) {
-            super.onDraw(canvas);
+        protected void dispatchDraw(Canvas canvas) {
 
             canvas.save();
-            canvas.clipRect(100.0f, 100.0f, getWidth() - 100.0f, getHeight() - 100.0f,
-                    Region.Op.DIFFERENCE);
-            canvas.drawARGB(255, 255, 0, 0);
+
+            mClipPath.reset();
+            mClipPath.addCircle(mClipPosition * getWidth(), getHeight() / 2.0f,
+                    getWidth() / 4.0f, Path.Direction.CW);
+
+            canvas.clipPath(mClipPath);
+            super.dispatchDraw(canvas);
+
             canvas.restore();
         }
     }
+
+    private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sagittis molestie aliquam. Donec metus metus, laoreet nec sagittis vitae, ultricies sit amet eros. Suspendisse sed massa sit amet felis consectetur gravida. In vitae erat mi, in egestas nisl. Phasellus quis ipsum massa, at scelerisque arcu. Nam lectus est, pellentesque eget lacinia non, congue vitae augue. Aliquam erat volutpat. Pellentesque bibendum tincidunt viverra. Aliquam erat volutpat. Maecenas pretium vulputate placerat. Nulla varius elementum rutrum. Aenean mollis blandit imperdiet. Pellentesque interdum fringilla ligula.";
 }

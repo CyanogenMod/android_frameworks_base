@@ -31,6 +31,8 @@ public class PackageUserState {
     public int enabled;
     public boolean privacyGuard;
 
+    public String lastDisableAppCaller;
+
     public HashSet<String> disabledComponents;
     public HashSet<String> enabledComponents;
 
@@ -46,6 +48,7 @@ public class PackageUserState {
         notLaunched = o.notLaunched;
         enabled = o.enabled;
         privacyGuard = o.privacyGuard;
+        lastDisableAppCaller = o.lastDisableAppCaller;
         disabledComponents = o.disabledComponents != null
                 ? new HashSet<String>(o.disabledComponents) : null;
         enabledComponents = o.enabledComponents != null

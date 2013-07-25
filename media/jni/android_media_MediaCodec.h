@@ -30,9 +30,9 @@ struct ALooper;
 struct AMessage;
 struct AString;
 struct ICrypto;
-struct ISurfaceTexture;
+struct IGraphicBufferProducer;
 struct MediaCodec;
-struct SurfaceTextureClient;
+class Surface;
 
 struct JMediaCodec : public RefBase {
     JMediaCodec(
@@ -43,9 +43,11 @@ struct JMediaCodec : public RefBase {
 
     status_t configure(
             const sp<AMessage> &format,
-            const sp<ISurfaceTexture> &surfaceTexture,
+            const sp<IGraphicBufferProducer> &bufferProducer,
             const sp<ICrypto> &crypto,
             int flags);
+
+    status_t createInputSurface(sp<IGraphicBufferProducer>* bufferProducer);
 
     status_t start();
     status_t stop();
@@ -76,10 +78,14 @@ struct JMediaCodec : public RefBase {
 
     status_t releaseOutputBuffer(size_t index, bool render);
 
+    status_t signalEndOfInputStream();
+
     status_t getOutputFormat(JNIEnv *env, jobject *format) const;
 
     status_t getBuffers(
             JNIEnv *env, bool input, jobjectArray *bufArray) const;
+
+    status_t getName(JNIEnv *env, jstring *name) const;
 
     void setVideoScalingMode(int mode);
 
@@ -89,7 +95,7 @@ protected:
 private:
     jclass mClass;
     jweak mObject;
-    sp<SurfaceTextureClient> mSurfaceTextureClient;
+    sp<Surface> mSurfaceTextureClient;
 
     sp<ALooper> mLooper;
     sp<MediaCodec> mCodec;

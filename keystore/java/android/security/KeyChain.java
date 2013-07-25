@@ -336,7 +336,12 @@ public final class KeyChain {
         KeyChainConnection keyChainConnection = bind(context);
         try {
             IKeyChainService keyChainService = keyChainConnection.getService();
-            byte[] certificateBytes = keyChainService.getCertificate(alias);
+
+            final byte[] certificateBytes = keyChainService.getCertificate(alias);
+            if (certificateBytes == null) {
+                return null;
+            }
+
             TrustedCertificateStore store = new TrustedCertificateStore();
             List<X509Certificate> chain = store
                     .getCertificateChain(toCertificate(certificateBytes));
@@ -349,6 +354,30 @@ public final class KeyChain {
         } finally {
             keyChainConnection.close();
         }
+    }
+
+    /**
+     * Returns {@code true} if the current device's {@code KeyChain} supports a
+     * specific {@code PrivateKey} type indicated by {@code algorithm} (e.g.,
+     * "RSA").
+     */
+    public static boolean isKeyAlgorithmSupported(String algorithm) {
+        return "RSA".equals(algorithm);
+    }
+
+    /**
+     * Returns {@code true} if the current device's {@code KeyChain} binds any
+     * {@code PrivateKey} of the given {@code algorithm} to the device once
+     * imported or generated. This can be used to tell if there is special
+     * hardware support that can be used to bind keys to the device in a way
+     * that makes it non-exportable.
+     */
+    public static boolean isBoundKeyAlgorithm(String algorithm) {
+        if (!isKeyAlgorithmSupported(algorithm)) {
+            return false;
+        }
+
+        return KeyStore.getInstance().isHardwareBacked();
     }
 
     private static X509Certificate toCertificate(byte[] bytes) {

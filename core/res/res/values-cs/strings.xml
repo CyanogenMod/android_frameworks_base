@@ -175,10 +175,8 @@
     <string name="global_action_lock" msgid="2844945191792119712">"Zámek obrazovky"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Vypnout"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Hlášení chyb"</string>
-
     <string name="bugreport_title" msgid="2667494803742548533">"Zaznamenat zprávu o chybě"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Shromažďují se informace o aktuálním stavu zařízení. Tyto informace je následně možné poslat v e-mailové zprávě, chvíli však potrvá, než bude hlášení o chybě připraveno k odeslání. Buďte prosím trpěliví."</string>
-
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Tichý režim"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Zvuk je VYPNUTÝ."</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Zvuk je ZAPNUTÝ"</string>
@@ -224,6 +222,8 @@
     <string name="permgroupdesc_microphone" msgid="7106618286905738408">"Umožní přímý přístup k mikrofonu a možnost nahrávání zvuku"</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Fotoaparát"</string>
     <string name="permgroupdesc_camera" msgid="2933667372289567714">"Umožní přístup k fotoaparátu a možnost pořizování fotografií a videa"</string>
+    <string name="permgrouplab_screenlock" msgid="8275500173330718168">"Obrazovka uzamčení"</string>
+    <string name="permgroupdesc_screenlock" msgid="7067497128925499401">"Možnost ovlivnit chování obrazovky uzamčení v zařízení."</string>
     <string name="permgrouplab_appInfo" msgid="8028789762634147725">"Informace o vašich aplikacích"</string>
     <string name="permgroupdesc_appInfo" msgid="3950378538049625907">"Umožní ovlivnit chování dalších aplikací v zařízení"</string>
     <string name="permgrouplab_wallpaper" msgid="3850280158041175998">"Tapeta"</string>
@@ -249,7 +249,16 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Úložiště"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"Umožní přístup do úložiště USB."</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Umožní přístup ke kartě SD."</string>
-
+    <string name="permgrouplab_accessibilityFeatures" msgid="7919025602283593907">"Funkce usnadnění"</string>
+    <string name="permgroupdesc_accessibilityFeatures" msgid="4205196881678144335">"Funkce, o které může asistenční technologie požádat."</string>
+    <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"Načíst obsah okna"</string>
+    <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"Můžete prozkoumat obsah okna, se kterým pracujete."</string>
+    <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"Zapnout funkci Prozkoumání dotykem"</string>
+    <string name="capability_desc_canRequestTouchExploration" msgid="5800552516779249356">"Položky, na které klepnete, budou přečteny nahlas a obrazovku bude možné procházet pomocí gest."</string>
+    <string name="capability_title_canRequestEnhancedWebAccessibility" msgid="1739881766522594073">"Zapnout vylepšené usnadnění přístupu k webu"</string>
+    <string name="capability_desc_canRequestEnhancedWebAccessibility" msgid="7881063961507511765">"Za účelem usnadnění přístupu k obsahu aplikací mohou být nainstalovány skripty."</string>
+    <string name="capability_title_canRequestFilterKeyEvents" msgid="2103440391902412174">"Sledovat zadávaný text"</string>
+    <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"Zahrnuje osobní údaje, jako jsou například čísla kreditních karet a hesla."</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"zakázání či změny stavového řádku"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"Umožňuje zakázat stavový řádek nebo přidat či odebrat systémové ikony."</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"stavový řádek"</string>
@@ -268,8 +277,8 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Umožňuje číst zprávy informační služby přijaté ve vašem zařízení. Upozornění informační služby jsou v některých oblastech odesílána za účelem varování před mimořádnými událostmi. Škodlivé aplikace mohou narušit výkon či provoz vašeho zařízení během přijímání zpráv informační služby."</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"odesílaní zpráv SMS"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"Umožňuje odesílat zprávy SMS. Může to mít za následek účtování neočekávaných poplatků. Škodlivé aplikace vás mohou připravit o peníze odesíláním zpráv bez vašeho svolení."</string>
-    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"posílat zprávy SMS bez potvrzení"</string>
-    <string name="permdesc_sendSmsNoConfirmation" msgid="402569800862935907">"Umožňuje odesílat zprávy SMS. Může to mít za následek účtování neočekávaných poplatků. Škodlivé aplikace vás mohou připravit o peníze odesíláním zpráv bez vašeho svolení."</string>
+    <string name="permlab_sendRespondViaMessageRequest" msgid="8713889105305943200">"odesílání událostí typu „odpovězte zprávou“"</string>
+    <string name="permdesc_sendRespondViaMessageRequest" msgid="7107648548468778734">"Umožňuje aplikaci odesílat ostatním aplikacím požadavky na zpracování událostí typu „odpovězte zprávou“ pro příchozí volání."</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"čtení textových zpráv (SMS nebo MMS)"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"Umožňuje číst zprávy SMS uložené v tabletu nebo na SIM kartě.Toto oprávnění umožňuje aplikaci číst zprávy SMS bez ohledu na jejich obsah nebo důvěrnost."</string>
     <string name="permdesc_readSms" product="default" msgid="3695967533457240550">"Umožňuje číst zprávy SMS uložené v telefonu nebo na SIM kartě. Toto oprávnění umožňuje aplikaci číst zprávy SMS bez ohledu na jejich obsah nebo důvěrnost."</string>
@@ -324,6 +333,8 @@
     <string name="permdesc_shutdown" msgid="7046500838746291775">"Uvede správce činností do vypnutého stavu. Nedojde však k úplnému vypnutí."</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"zabránění přepínání aplikací"</string>
     <string name="permdesc_stopAppSwitches" msgid="8262195802582255021">"Zabrání uživateli přepnout na jinou aplikaci."</string>
+    <string name="permlab_getTopActivityInfo" msgid="2537922311411546016">"získat informace o aktuální aplikaci"</string>
+    <string name="permdesc_getTopActivityInfo" msgid="2512448855496067131">"Umožňuje držiteli získat soukromé informace o aktuální aplikaci na popředí obrazovky."</string>
     <string name="permlab_runSetActivityWatcher" msgid="892239094867182656">"sledování a řízení spouštění všech aplikací"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="6003603162578577406">"Umožňuje sledovat a řídit spouštění činností systémem. Škodlivé aplikace mohou systém zcela ovládnout. Toto oprávnění je požadováno pouze pro účely vývoje, nikdy pro běžné použití."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"odeslání události o odstranění balíčku"</string>
@@ -340,6 +351,10 @@
     <string name="permdesc_batteryStats" msgid="5897346582882915114">"Umožňuje číst aktuální podrobné údaje o využití baterie. Aplikace to může využít k získání podrobných informací o tom, které aplikace používáte."</string>
     <string name="permlab_updateBatteryStats" msgid="3719689764536379557">"změna statistických údajů o baterii"</string>
     <string name="permdesc_updateBatteryStats" msgid="6862817857178025002">"Umožňuje upravit shromážděné statistiky o baterii. Toto oprávnění není určeno pro běžné aplikace."</string>
+    <string name="permlab_getAppOpsStats" msgid="1508779687436585744">"načtení statistik operací aplikace"</string>
+    <string name="permdesc_getAppOpsStats" msgid="6243887041577912877">"Umožňuje aplikaci načíst shromážděné statistiky operací aplikace. Toto oprávnění není určeno pro běžné aplikace."</string>
+    <string name="permlab_updateAppOpsStats" msgid="8829097373851521505">"upravit statistiky operací aplikace"</string>
+    <string name="permdesc_updateAppOpsStats" msgid="50784596594403483">"Umožňuje aplikaci upravit shromážděné statistiky operací aplikace. Toto oprávnění není určeno pro běžné aplikace."</string>
     <string name="permlab_backup" msgid="470013022865453920">"ovládání zálohování a obnovy systému"</string>
     <string name="permdesc_backup" msgid="6912230525140589891">"Umožňuje řídit mechanismy zálohování a obnovení systému. Toto oprávnění není určeno pro běžné aplikace."</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"potvrzení operace úplné zálohy nebo úplného obnovení"</string>
@@ -475,6 +490,8 @@
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"Umožňuje aplikaci zaznamenat zvuk pomocí mikrofonu. Toto oprávnění umožňuje aplikaci kdykoliv zaznamenat zvuk bez vašeho svolení."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"pořizování fotografií a videí"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"Umožňuje pořizovat fotografie a videa pomocí fotoaparátu. Toto oprávnění umožňuje aplikaci používat fotoaparát kdykoliv i bez vašeho svolení."</string>
+    <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">"vypnutí indikátoru LED přenosu při použití fotoaparátu"</string>
+    <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">"Umožňuje předinstalované systémové aplikaci vypnout kontrolku LED fotoaparátu."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"trvalé vypnutí tabletu"</string>
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"trvalé vypnutí telefonu"</string>
     <string name="permdesc_brick" product="tablet" msgid="4334818808001699530">"Umožňuje trvale vypnout celý tablet. To je velmi nebezpečné oprávnění."</string>
@@ -630,7 +647,10 @@
     <string name="permdesc_manageNetworkPolicy" msgid="7537586771559370668">"Umožňuje spravovat zásady sítě a definovat pravidla pro konkrétní aplikace."</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"upravit kontrolu používání sítě"</string>
     <string name="permdesc_modifyNetworkAccounting" msgid="5443412866746198123">"Umožňuje upravit způsob přidělování sítě aplikacím. Toto oprávnění není určeno pro běžné aplikace."</string>
-
+    <string name="permlab_accessNotifications" msgid="7673416487873432268">"přístup k oznámením"</string>
+    <string name="permdesc_accessNotifications" msgid="458457742683431387">"Umožňuje aplikacím načítat, zobrazovat a mazat oznámení včetně těch přidaných jinými aplikacemi."</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"navázání na službu pro poslouchání oznámení"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Umožňuje držiteli navázat se na nejvyšší úroveň služby pro poslouchání oznámení. Běžné aplikace by toto oprávnění neměly nikdy požadovat."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Nastavit pravidla pro heslo"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"Řídit délku hesel pro odemčení obrazovky a povolené znaky."</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"Sledovat pokusy o odemčení obrazovky"</string>
@@ -747,7 +767,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
@@ -852,7 +873,7 @@
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"Bezpečnostní gesto vymazáno"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"Buňka přidána"</string>
     <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"Bezpečnostní gesto dokončeno"</string>
-
+    <string name="keyguard_accessibility_widget_changed" msgid="5678624624681400191">"%1$s. Widget %2$d z %3$d."</string>
     <string name="keyguard_accessibility_add_widget" msgid="8273277058724924654">"Přidat widget"</string>
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"Prázdné"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"Oblast odemknutí byla rozšířena."</string>
@@ -893,8 +914,10 @@
 
     <string name="js_dialog_title" msgid="1987483977834603872">"Stránka <xliff:g id="TITLE">%s</xliff:g> uvádí:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="730366588032430474">"Chcete opustit tuto stránku?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Chcete-li pokračovat, klepněte na OK. Chcete-li zůstat na aktuální stránce, klepněte na Zrušit."</string>
-
+    <string name="js_dialog_before_unload_title" msgid="2619376555525116593">"Potvrďte přechod"</string>
+    <string name="js_dialog_before_unload_positive_button" msgid="3112752010600484130">"Opustit stránku"</string>
+    <string name="js_dialog_before_unload_negative_button" msgid="5614861293026099715">"Zůstat na této stránce"</string>
+    <string name="js_dialog_before_unload" msgid="3468816357095378590">"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Opravdu tuto stránku chcete opustit?"</string>
     <string name="save_password_label" msgid="6860261758665825069">"Potvrdit"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"Tip: Dvojitým klepnutím můžete zobrazení přiblížit nebo oddálit."</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"Aut.vyp."</string>
@@ -981,59 +1004,58 @@
     </plurals>
     <string name="last_month" msgid="3959346739979055432">"Poslední měsíc"</string>
     <string name="older" msgid="5211975022815554840">"Starší"</string>
-    <plurals name="num_days_ago">
-        <item quantity="one" msgid="861358534398115820">"včera"</item>
-        <item quantity="other" msgid="2479586466153314633">"před <xliff:g id="COUNT">%d</xliff:g> dny"</item>
-    </plurals>
-    <plurals name="in_num_seconds">
-        <item quantity="one" msgid="2729745560954905102">"za 1 sekundu"</item>
-        <item quantity="other" msgid="1241926116443974687">"za <xliff:g id="COUNT">%d</xliff:g> s"</item>
-    </plurals>
-    <plurals name="in_num_minutes">
-        <item quantity="one" msgid="8793095251325200395">"za 1 minutu"</item>
-        <item quantity="other" msgid="3330713936399448749">"za <xliff:g id="COUNT">%d</xliff:g> min"</item>
-    </plurals>
-    <plurals name="in_num_hours">
-        <item quantity="one" msgid="7164353342477769999">"za 1 hodinu"</item>
-        <item quantity="other" msgid="547290677353727389">"za <xliff:g id="COUNT">%d</xliff:g> hod."</item>
-    </plurals>
-    <plurals name="in_num_days">
-        <item quantity="one" msgid="5413088743009839518">"zítra"</item>
-        <item quantity="other" msgid="5109449375100953247">"zbývající počet dní: <xliff:g id="COUNT">%d</xliff:g>"</item>
-    </plurals>
-    <plurals name="abbrev_num_seconds_ago">
-        <item quantity="one" msgid="1849036840200069118">"před 1 s"</item>
-        <item quantity="other" msgid="3699169366650930415">"před <xliff:g id="COUNT">%d</xliff:g> s"</item>
-    </plurals>
-    <plurals name="abbrev_num_minutes_ago">
-        <item quantity="one" msgid="6361490147113871545">"před 1 min"</item>
-        <item quantity="other" msgid="851164968597150710">"před <xliff:g id="COUNT">%d</xliff:g> min"</item>
-    </plurals>
-    <plurals name="abbrev_num_hours_ago">
-        <item quantity="one" msgid="4796212039724722116">"před 1 h"</item>
-        <item quantity="other" msgid="6889970745748538901">"před <xliff:g id="COUNT">%d</xliff:g> h"</item>
-    </plurals>
-    <plurals name="abbrev_num_days_ago">
-        <item quantity="one" msgid="8463161711492680309">"včera"</item>
-        <item quantity="other" msgid="3453342639616481191">"před <xliff:g id="COUNT">%d</xliff:g> dny"</item>
-    </plurals>
-    <plurals name="abbrev_in_num_seconds">
-        <item quantity="one" msgid="5842225370795066299">"za 1 s"</item>
-        <item quantity="other" msgid="5495880108825805108">"za <xliff:g id="COUNT">%d</xliff:g> s"</item>
-    </plurals>
-    <plurals name="abbrev_in_num_minutes">
-        <item quantity="one" msgid="562786149928284878">"za 1 min"</item>
-        <item quantity="other" msgid="4216113292706568726">"za <xliff:g id="COUNT">%d</xliff:g> min"</item>
-    </plurals>
-    <plurals name="abbrev_in_num_hours">
-        <item quantity="one" msgid="3274708118124045246">"za 1 hodinu"</item>
-        <item quantity="other" msgid="3705373766798013406">"za <xliff:g id="COUNT">%d</xliff:g> hod."</item>
-    </plurals>
-    <plurals name="abbrev_in_num_days">
-        <item quantity="one" msgid="2178576254385739855">"zítra"</item>
-        <item quantity="other" msgid="2973062968038355991">"zbývající počet dní: <xliff:g id="COUNT">%d</xliff:g>"</item>
-    </plurals>
-
+  <plurals name="num_days_ago">
+    <item quantity="one" msgid="861358534398115820">"včera"</item>
+    <item quantity="other" msgid="2479586466153314633">"před <xliff:g id="COUNT">%d</xliff:g> dny"</item>
+  </plurals>
+  <plurals name="in_num_seconds">
+    <item quantity="one" msgid="2729745560954905102">"za 1 sekundu"</item>
+    <item quantity="other" msgid="1241926116443974687">"za <xliff:g id="COUNT">%d</xliff:g> s"</item>
+  </plurals>
+  <plurals name="in_num_minutes">
+    <item quantity="one" msgid="8793095251325200395">"za 1 minutu"</item>
+    <item quantity="other" msgid="3330713936399448749">"za <xliff:g id="COUNT">%d</xliff:g> min"</item>
+  </plurals>
+  <plurals name="in_num_hours">
+    <item quantity="one" msgid="7164353342477769999">"za 1 hodinu"</item>
+    <item quantity="other" msgid="547290677353727389">"za <xliff:g id="COUNT">%d</xliff:g> hod."</item>
+  </plurals>
+  <plurals name="in_num_days">
+    <item quantity="one" msgid="5413088743009839518">"zítra"</item>
+    <item quantity="other" msgid="5109449375100953247">"za <xliff:g id="COUNT">%d</xliff:g> dny"</item>
+  </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+    <item quantity="one" msgid="1849036840200069118">"před 1 s"</item>
+    <item quantity="other" msgid="3699169366650930415">"před <xliff:g id="COUNT">%d</xliff:g> s"</item>
+  </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+    <item quantity="one" msgid="6361490147113871545">"před 1 min"</item>
+    <item quantity="other" msgid="851164968597150710">"před <xliff:g id="COUNT">%d</xliff:g> min"</item>
+  </plurals>
+  <plurals name="abbrev_num_hours_ago">
+    <item quantity="one" msgid="4796212039724722116">"před 1 h"</item>
+    <item quantity="other" msgid="6889970745748538901">"před <xliff:g id="COUNT">%d</xliff:g> h"</item>
+  </plurals>
+  <plurals name="abbrev_num_days_ago">
+    <item quantity="one" msgid="8463161711492680309">"včera"</item>
+    <item quantity="other" msgid="3453342639616481191">"před <xliff:g id="COUNT">%d</xliff:g> dny"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_seconds">
+    <item quantity="one" msgid="5842225370795066299">"za 1 s"</item>
+    <item quantity="other" msgid="5495880108825805108">"za <xliff:g id="COUNT">%d</xliff:g> s"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_minutes">
+    <item quantity="one" msgid="562786149928284878">"za 1 min"</item>
+    <item quantity="other" msgid="4216113292706568726">"za <xliff:g id="COUNT">%d</xliff:g> min"</item>
+  </plurals>
+  <plurals name="abbrev_in_num_hours">
+    <item quantity="one" msgid="3274708118124045246">"za 1 hodinu"</item>
+    <item quantity="other" msgid="3705373766798013406">"za <xliff:g id="COUNT">%d</xliff:g> hod."</item>
+  </plurals>
+  <plurals name="abbrev_in_num_days">
+    <item quantity="one" msgid="2178576254385739855">"zítra"</item>
+    <item quantity="other" msgid="2973062968038355991">"za <xliff:g id="COUNT">%d</xliff:g> dny"</item>
+  </plurals>
     <string name="preposition_for_date" msgid="9093949757757445117">"dne <xliff:g id="DATE">%s</xliff:g>"</string>
     <string name="preposition_for_time" msgid="5506831244263083793">"v <xliff:g id="TIME">%s</xliff:g>"</string>
     <string name="preposition_for_year" msgid="5040395640711867177">"roku <xliff:g id="YEAR">%s</xliff:g>"</string>
@@ -1093,7 +1115,8 @@
 
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"V úložišti je málo místa"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Některé systémové funkce nemusí fungovat"</string>
-
+    <string name="app_running_notification_title" msgid="8718335121060787914">"Aplikace <xliff:g id="APP_NAME">%1$s</xliff:g> je spuštěna"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"Klepnutím zobrazíte další informace nebo ukončíte aplikaci."</string>
     <string name="ok" msgid="5970060430562524910">"OK"</string>
     <string name="cancel" msgid="6442560571259935130">"Zrušit"</string>
     <string name="yes" msgid="5362982303337969312">"OK"</string>
@@ -1120,7 +1143,7 @@
     <string name="anr_application_process" msgid="8941757607340481057">"Aplikace <xliff:g id="APPLICATION">%1$s</xliff:g> nereaguje. Chcete ji ukončit?"</string>
     <string name="anr_process" msgid="6513209874880517125">"Proces <xliff:g id="PROCESS">%1$s</xliff:g> nereaguje."\n\n"Chcete jej ukončit?"</string>
     <string name="force_close" msgid="8346072094521265605">"OK"</string>
-    <string name="report" msgid="4060218260984795706">"Nahlásit"</string>
+    <string name="report" msgid="4060218260984795706">"Hlášení"</string>
     <string name="wait" msgid="7147118217226317732">"Počkat"</string>
     <string name="webpage_unresponsive" msgid="3272758351138122503">"Stránka nereaguje."\n\n"Chcete ji zavřít?"</string>
     <string name="launch_warning_title" msgid="1547997780506713581">"Přesměrování aplikace"</string>
@@ -1168,15 +1191,14 @@
     <string name="ringtone_silent" msgid="7937634392408977062">"Žádné"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Vyzváněcí tóny"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Neznámý vyzváněcí tón"</string>
-
-    <plurals name="wifi_available">
-        <item quantity="one" msgid="6654123987418168693">"K dispozici je síť Wi-Fi."</item>
-        <item quantity="other" msgid="4192424489168397386">"K dispozici jsou síťě Wi-Fi."</item>
-    </plurals>
-    <plurals name="wifi_available_detailed">
-        <item quantity="one" msgid="1634101450343277345">"K dispozici je veřejná síť Wi-Fi"</item>
-        <item quantity="other" msgid="7915895323644292768">"K dispozici jsou veřejné sítě Wi-Fi"</item>
-    </plurals>
+  <plurals name="wifi_available">
+    <item quantity="one" msgid="6654123987418168693">"K dispozici je síť Wi-Fi."</item>
+    <item quantity="other" msgid="4192424489168397386">"Jsou k dispozici sítě Wi-Fi."</item>
+  </plurals>
+  <plurals name="wifi_available_detailed">
+    <item quantity="one" msgid="1634101450343277345">"K dispozici je veřejná síť Wi-Fi"</item>
+    <item quantity="other" msgid="7915895323644292768">"Jsou k dispozici veřejné sítě Wi-Fi"</item>
+  </plurals>
     <string name="wifi_available_sign_in" msgid="4029489716605255386">"Přihlásit se k síti Wi-Fi"</string>
     <string name="network_available_sign_in" msgid="8495155593358054676">"Přihlášení k síti"</string>
     <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
@@ -1199,8 +1221,8 @@
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"Komu:"</string>
     <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Zadejte požadovaný kód PIN:"</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN:"</string>
-    <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"Telefon se při připojení k zařízení <xliff:g id="DEVICE_NAME">%1$s</xliff:g> dočasně odpojí od sítě Wi-Fi"</string>
-
+    <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"Tablet se při připojení k zařízení <xliff:g id="DEVICE_NAME">%1$s</xliff:g> dočasně odpojí od sítě Wi-Fi"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"Telefon se při připojení k zařízení <xliff:g id="DEVICE_NAME">%1$s</xliff:g> dočasně odpojí od sítě Wi-Fi"</string>
     <string name="select_character" msgid="3365550120617701745">"Vkládání znaků"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"Odesílání zpráv SMS"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"Aplikace &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;odesílá velký počet SMS zpráv. Chcete aplikaci povolit, aby zprávy odesílala i nadále?"</string>
@@ -1342,7 +1364,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Usnadnění"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Tapeta"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Změnit tapetu"</string>
-
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Aplikace poslouchající oznámení"</string>
     <string name="vpn_title" msgid="19615213552042827">"Síť VPN je aktivována"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"Aplikace <xliff:g id="APP">%s</xliff:g> aktivovala síť VPN"</string>
     <string name="vpn_text" msgid="3011306607126450322">"Klepnutím zobrazíte správu sítě."</string>
@@ -1351,7 +1373,6 @@
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Je připojena trvalá síť VPN"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Chyba trvalé sítě VPN"</string>
     <string name="vpn_lockdown_reset" msgid="5365010427963548932">"Klepnutím resetujete připojení"</string>
-
     <string name="upload_file" msgid="2897957172366730416">"Zvolit soubor"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Není vybrán žádný soubor"</string>
     <string name="reset" msgid="2448168080964209908">"Resetovat"</string>
@@ -1461,7 +1482,8 @@
     <string name="action_bar_home_description" msgid="5293600496601490216">"Přejít na plochu"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"Přejít nahoru"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Další možnosti"</string>
-
+    <string name="action_bar_home_description_format" msgid="7965984360903693903">"%1$s – %2$s"</string>
+    <string name="action_bar_home_subtitle_description_format" msgid="6985546530471780727">"%1$s, %2$s – %3$s"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Interní úložiště"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"Karta SD"</string>
     <string name="storage_usb" msgid="3017954059538517278">"Úložiště USB"</string>
@@ -1516,7 +1538,7 @@
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Systém"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Zvuk Bluetooth"</string>
-
+    <string name="wireless_display_route_description" msgid="9070346425023979651">"Bezdrátový displej"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Hotovo"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Výstup médií"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"Vyhledávání\u2026"</string>
@@ -1573,11 +1595,14 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Nakreslili jste špatně své heslo odemknutí <xliff:g id="NUMBER_0">%d</xliff:g>krát. Po <xliff:g id="NUMBER_1">%d</xliff:g> dalších neúspěšných pokusech budete požádáni o odemčení telefonu pomocí e-mailového účtu."\n\n"Zkuste to znovu za <xliff:g id="NUMBER_2">%d</xliff:g> s."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" \u2014 "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Odebrat"</string>
-
     <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Chcete hlasitost zvýšit nad bezpečnou úroveň?"\n"Dlouhodobý poslech hlasitého zvuku může poškodit sluch."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Usnadnění zapnete dlouhým stisknutím dvěma prsty."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Usnadnění přístupu je aktivováno."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Usnadnění zrušeno."</string>
     <string name="user_switched" msgid="3768006783166984410">"Aktuální uživatel je <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Vlastník"</string>
+    <string name="error_message_title" msgid="4510373083082500195">"Chyba"</string>
+    <string name="app_no_restricted_accounts" msgid="4011285085817350390">"Tato aplikace nepodporuje účty pro omezené profily."</string>
+    <string name="app_not_found" msgid="3429141853498927379">"Aplikace potřebná k provedení této akce nebyla nalezena"</string>
+    <string name="revoke" msgid="5404479185228271586">"Zrušit"</string>
 </resources>

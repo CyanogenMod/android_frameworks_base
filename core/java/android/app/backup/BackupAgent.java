@@ -17,13 +17,17 @@
 package android.app.backup;
 
 import android.app.IBackupAgent;
+import android.app.QueuedWork;
 import android.app.backup.IBackupManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.ParcelFileDescriptor;
+import android.os.Process;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -32,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.concurrent.CountDownLatch;
 
 import libcore.io.ErrnoException;
 import libcore.io.Libcore;
@@ -120,6 +125,32 @@ public abstract class BackupAgent extends ContextWrapper {
 
     /** @hide */
     public static final int TYPE_SYMLINK = 3;
+
+    Handler mHandler = null;
+
+    class SharedPrefsSynchronizer implements Runnable {
+        public final CountDownLatch mLatch = new CountDownLatch(1);
+
+        @Override
+        public void run() {
+            QueuedWork.waitToFinish();
+            mLatch.countDown();
+        }
+    };
+
+    // Syncing shared preferences deferred writes needs to happen on the main looper thread
+    private void waitForSharedPrefs() {
+        if (mHandler == null) {
+            mHandler = new Handler(Looper.getMainLooper());
+        }
+
+        final SharedPrefsSynchronizer s = new SharedPrefsSynchronizer();
+        mHandler.postAtFrontOfQueue(s);
+        try {
+            s.mLatch.await();
+        } catch (InterruptedException e) { /* ignored */ }
+    }
+
 
     public BackupAgent() {
         super(null);
@@ -254,6 +285,21 @@ public abstract class BackupAgent extends ContextWrapper {
         filterSet.add(databaseDir);
         filterSet.remove(sharedPrefsDir);
         fullBackupFileTree(packageName, FullBackup.SHAREDPREFS_TREE_TOKEN, sharedPrefsDir, filterSet, data);
+
+        // getExternalFilesDir() location associated with this app.  Technically there should
+        // not be any files here if the app does not properly have permission to access
+        // external storage, but edge cases happen. fullBackupFileTree() catches
+        // IOExceptions and similar, and treats them as non-fatal, so we rely on that; and
+        // we know a priori that processes running as the system UID are not permitted to
+        // access external storage, so we check for that as well to avoid nastygrams in
+        // the log.
+        if (Process.myUid() != Process.SYSTEM_UID) {
+            File efLocation = getExternalFilesDir(null);
+            if (efLocation != null) {
+                fullBackupFileTree(packageName, FullBackup.MANAGED_EXTERNAL_TREE_TOKEN,
+                        efLocation.getCanonicalPath(), null, data);
+            }
+        }
     }
 
     /**
@@ -274,6 +320,7 @@ public abstract class BackupAgent extends ContextWrapper {
         String spDir;
         String cacheDir;
         String libDir;
+        String efDir = null;
         String filePath;
 
         ApplicationInfo appInfo = getApplicationInfo();
@@ -287,6 +334,14 @@ public abstract class BackupAgent extends ContextWrapper {
             libDir = (appInfo.nativeLibraryDir == null)
                     ? null
                     : new File(appInfo.nativeLibraryDir).getCanonicalPath();
+
+            // may or may not have external files access to attempt backup/restore there
+            if (Process.myUid() != Process.SYSTEM_UID) {
+                File efLocation = getExternalFilesDir(null);
+                if (efLocation != null) {
+                    efDir = efLocation.getCanonicalPath();
+                }
+            }
 
             // Now figure out which well-defined tree the file is placed in, working from
             // most to least specific.  We also specifically exclude the lib and cache dirs.
@@ -315,6 +370,9 @@ public abstract class BackupAgent extends ContextWrapper {
         } else if (filePath.startsWith(mainDir)) {
             domain = FullBackup.ROOT_TREE_TOKEN;
             rootpath = mainDir;
+        } else if ((efDir != null) && filePath.startsWith(efDir)) {
+            domain = FullBackup.MANAGED_EXTERNAL_TREE_TOKEN;
+            rootpath = efDir;
         } else {
             Log.w(TAG, "File " + filePath + " is in an unsupported location; skipping");
             return;
@@ -438,6 +496,15 @@ public abstract class BackupAgent extends ContextWrapper {
             basePath = getSharedPrefsFile("foo").getParentFile().getCanonicalPath();
         } else if (domain.equals(FullBackup.CACHE_TREE_TOKEN)) {
             basePath = getCacheDir().getCanonicalPath();
+        } else if (domain.equals(FullBackup.MANAGED_EXTERNAL_TREE_TOKEN)) {
+            // make sure we can try to restore here before proceeding
+            if (Process.myUid() != Process.SYSTEM_UID) {
+                File efLocation = getExternalFilesDir(null);
+                if (efLocation != null) {
+                    basePath = getExternalFilesDir(null).getCanonicalPath();
+                    mode = -1;  // < 0 is a token to skip attempting a chmod()
+                }
+            }
         } else {
             // Not a supported location
             Log.i(TAG, "Unrecognized domain " + domain);
@@ -505,6 +572,11 @@ public abstract class BackupAgent extends ContextWrapper {
                 Log.d(TAG, "onBackup (" + BackupAgent.this.getClass().getName() + ") threw", ex);
                 throw ex;
             } finally {
+                // Ensure that any SharedPreferences writes have landed after the backup,
+                // in case the app code has side effects (since apps cannot provide this
+                // guarantee themselves).
+                waitForSharedPrefs();
+
                 Binder.restoreCallingIdentity(ident);
                 try {
                     callbackBinder.opComplete(token);
@@ -532,6 +604,9 @@ public abstract class BackupAgent extends ContextWrapper {
                 Log.d(TAG, "onRestore (" + BackupAgent.this.getClass().getName() + ") threw", ex);
                 throw ex;
             } finally {
+                // Ensure that any side-effect SharedPreferences writes have landed
+                waitForSharedPrefs();
+
                 Binder.restoreCallingIdentity(ident);
                 try {
                     callbackBinder.opComplete(token);
@@ -549,6 +624,10 @@ public abstract class BackupAgent extends ContextWrapper {
 
             if (DEBUG) Log.v(TAG, "doFullBackup() invoked");
 
+            // Ensure that any SharedPreferences writes have landed *before*
+            // we potentially try to back up the underlying files directly.
+            waitForSharedPrefs();
+
             try {
                 BackupAgent.this.onFullBackup(new FullBackupDataOutput(data));
             } catch (IOException ex) {
@@ -558,6 +637,9 @@ public abstract class BackupAgent extends ContextWrapper {
                 Log.d(TAG, "onBackup (" + BackupAgent.this.getClass().getName() + ") threw", ex);
                 throw ex;
             } finally {
+                // ... and then again after, as in the doBackup() case
+                waitForSharedPrefs();
+
                 // Send the EOD marker indicating that there is no more data
                 // forthcoming from this agent.
                 try {
@@ -587,6 +669,9 @@ public abstract class BackupAgent extends ContextWrapper {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } finally {
+                // Ensure that any side-effect SharedPreferences writes have landed
+                waitForSharedPrefs();
+
                 Binder.restoreCallingIdentity(ident);
                 try {
                     callbackBinder.opComplete(token);

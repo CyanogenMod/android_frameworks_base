@@ -120,27 +120,80 @@ interface IAudioService {
     oneway void dispatchMediaKeyEvent(in KeyEvent keyEvent);
     void dispatchMediaKeyEventUnderWakelock(in KeyEvent keyEvent);
 
-    oneway void registerMediaButtonIntent(in PendingIntent pi, in ComponentName c);
-    oneway void unregisterMediaButtonIntent(in PendingIntent pi,  in ComponentName c);
+           void registerMediaButtonIntent(in PendingIntent pi, in ComponentName c, IBinder token);
+    oneway void unregisterMediaButtonIntent(in PendingIntent pi);
 
     oneway void registerMediaButtonEventReceiverForCalls(in ComponentName c);
     oneway void unregisterMediaButtonEventReceiverForCalls();
 
-    int registerRemoteControlClient(in PendingIntent mediaIntent,
-           in IRemoteControlClient rcClient, in String callingPackageName);
-    oneway void unregisterRemoteControlClient(in PendingIntent mediaIntent,
-           in IRemoteControlClient rcClient);
-
-    oneway void   registerRemoteControlDisplay(in IRemoteControlDisplay rcd);
+    /**
+     * Register an IRemoteControlDisplay.
+     * Notify all IRemoteControlClient of the new display and cause the RemoteControlClient
+     * at the top of the stack to update the new display with its information.
+     * @param rcd the IRemoteControlDisplay to register. No effect if null.
+     * @param w the maximum width of the expected bitmap. Negative or zero values indicate this
+     *   display doesn't need to receive artwork.
+     * @param h the maximum height of the expected bitmap. Negative or zero values indicate this
+     *   display doesn't need to receive artwork.
+     */
+    oneway void   registerRemoteControlDisplay(in IRemoteControlDisplay rcd, int w, int h);
+    /**
+     * Unregister an IRemoteControlDisplay.
+     * No effect if the IRemoteControlDisplay hasn't been successfully registered.
+     * @param rcd the IRemoteControlDisplay to unregister. No effect if null.
+     */
     oneway void unregisterRemoteControlDisplay(in IRemoteControlDisplay rcd);
+    /**
+     * Update the size of the artwork used by an IRemoteControlDisplay.
+     * @param rcd the IRemoteControlDisplay with the new artwork size requirement
+     * @param w the maximum width of the expected bitmap. Negative or zero values indicate this
+     *   display doesn't need to receive artwork.
+     * @param h the maximum height of the expected bitmap. Negative or zero values indicate this
+     *   display doesn't need to receive artwork.
+     */
     oneway void remoteControlDisplayUsesBitmapSize(in IRemoteControlDisplay rcd, int w, int h);
+    /**
+     * Controls whether a remote control display needs periodic checks of the RemoteControlClient
+     * playback position to verify that the estimated position has not drifted from the actual
+     * position. By default the check is not performed.
+     * The IRemoteControlDisplay must have been previously registered for this to have any effect.
+     * @param rcd the IRemoteControlDisplay for which the anti-drift mechanism will be enabled
+     *     or disabled. Not null.
+     * @param wantsSync if true, RemoteControlClient instances which expose their playback position
+     *     to the framework will regularly compare the estimated playback position with the actual
+     *     position, and will update the IRemoteControlDisplay implementation whenever a drift is
+     *     detected.
+     */
+    oneway void remoteControlDisplayWantsPlaybackPositionSync(in IRemoteControlDisplay rcd,
+            boolean wantsSync);
+    /**
+     * Request the user of a RemoteControlClient to seek to the given playback position.
+     * @param generationId the RemoteControlClient generation counter for which this request is
+     *         issued. Requests for an older generation than current one will be ignored.
+     * @param timeMs the time in ms to seek to, must be positive.
+     */
+     void setRemoteControlClientPlaybackPosition(int generationId, long timeMs);
+
+    /**
+     * Do not use directly, use instead
+     *     {@link android.media.AudioManager#registerRemoteControlClient(RemoteControlClient)}
+     */
+    int registerRemoteControlClient(in PendingIntent mediaIntent,
+            in IRemoteControlClient rcClient, in String callingPackageName);
+    /**
+     * Do not use directly, use instead
+     *     {@link android.media.AudioManager#unregisterRemoteControlClient(RemoteControlClient)}
+     */
+    oneway void unregisterRemoteControlClient(in PendingIntent mediaIntent,
+            in IRemoteControlClient rcClient);
 
     oneway void setPlaybackInfoForRcc(int rccId, int what, int value);
+    void setPlaybackStateForRcc(int rccId, int state, long timeMs, float speed);
            int  getRemoteStreamMaxVolume();
            int  getRemoteStreamVolume();
     oneway void registerRemoteVolumeObserverForRcc(int rccId, in IRemoteVolumeObserver rvo);
 
-    void startBluetoothSco(IBinder cb);
+    void startBluetoothSco(IBinder cb, int targetSdkVersion);
     void stopBluetoothSco(IBinder cb);
 
     void forceVolumeControlStream(int streamType, IBinder cb);

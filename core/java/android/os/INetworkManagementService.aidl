@@ -152,16 +152,6 @@ interface INetworkManagementService
     boolean isTetheringStarted();
 
     /**
-     * Start bluetooth reverse tethering services
-     */
-    void startReverseTethering(in String iface);
-
-    /**
-     * Stop currently running bluetooth reserse tethering services
-     */
-    void stopReverseTethering();
-
-    /**
      * Tethers the specified interface
      */
     void tetherInterface(String iface);
@@ -306,23 +296,6 @@ interface INetworkManagementService
     boolean isBandwidthControlEnabled();
 
     /**
-     * Configures bandwidth throttling on an interface.
-     */
-    void setInterfaceThrottle(String iface, int rxKbps, int txKbps);
-
-    /**
-     * Returns the currently configured RX throttle values
-     * for the specified interface
-     */
-    int getInterfaceRxThrottle(String iface);
-
-    /**
-     * Returns the currently configured TX throttle values
-     * for the specified interface
-     */
-    int getInterfaceTxThrottle(String iface);
-
-    /**
      * Sets idletimer for an interface.
      *
      * This either initializes a new idletimer or increases its
@@ -351,7 +324,7 @@ interface INetworkManagementService
     /**
      * Bind name servers to an interface in the DNS resolver.
      */
-    void setDnsServersForInterface(String iface, in String[] servers);
+    void setDnsServersForInterface(String iface, in String[] servers, String domains);
 
     /**
      * Flush the DNS cache associated with the default interface.
@@ -369,4 +342,29 @@ interface INetworkManagementService
     void setFirewallEgressSourceRule(String addr, boolean allow);
     void setFirewallEgressDestRule(String addr, int port, boolean allow);
     void setFirewallUidRule(int uid, boolean allow);
+
+    /**
+     * Set a process (pid) to use the name servers associated with the specified interface.
+     */
+    void setDnsInterfaceForPid(String iface, int pid);
+
+    /**
+     * Clear a process (pid) from being associated with an interface.
+     */
+    void clearDnsInterfaceForPid(int pid);
+
+    /**
+     * Start the clatd (464xlat) service
+     */
+    void startClatd(String interfaceName);
+
+    /**
+     * Stop the clatd (464xlat) service
+     */
+    void stopClatd();
+
+    /**
+     * Determine whether the clatd (464xlat) service has been started
+     */
+    boolean isClatdStarted();
 }

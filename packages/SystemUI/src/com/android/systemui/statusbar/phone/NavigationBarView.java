@@ -90,7 +90,9 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     int mNavigationIconHints = 0;
 
     private Drawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon;
-    
+    private Drawable mRecentIcon;
+    private Drawable mRecentLandIcon;
+
     private DelegateViewHelper mDelegateHelper;
     private DeadZone mDeadZone;
 
@@ -223,6 +225,8 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         mBackLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_land);
         mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
         mBackAltLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime_land);
+        mRecentIcon = res.getDrawable(R.drawable.ic_sysbar_recent);
+        mRecentLandIcon = res.getDrawable(R.drawable.ic_sysbar_recent_land);
     }
 
     public class NavBarReceiver extends BroadcastReceiver {
@@ -251,6 +255,13 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         removeButtonListeners();
         updateButtonListeners();
         setDisabledFlags(mDisabledFlags, true /* force */);
+    }
+
+    @Override
+    public void setLayoutDirection(int layoutDirection) {
+        updateResources();
+
+        super.setLayoutDirection(layoutDirection);
     }
 
     public void notifyScreenOn(boolean screenOn) {
@@ -311,6 +322,8 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
                     ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
                             : (mVertical ? mBackLandIcon : mBackIcon));
         }
+        ((ImageView)getRecentsButton()).setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
+
         setDisabledFlags(mDisabledFlags, true);
     }
 

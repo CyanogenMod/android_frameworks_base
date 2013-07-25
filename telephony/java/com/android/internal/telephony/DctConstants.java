@@ -23,7 +23,6 @@ import com.android.internal.util.Protocol;
 public class DctConstants {
     /**
      * IDLE: ready to start data connection setup, default state
-     * INITING: state of issued setupDefaultPDP() but not finish yet
      * CONNECTING: state of issued startPppd() but not finish yet
      * SCANNING: data connection fails with one apn but other apns are available
      *           ready to start data connection on other apns (before INITING)
@@ -31,20 +30,21 @@ public class DctConstants {
      * DISCONNECTING: Connection.disconnect() has been called, but PDP
      *                context is not yet deactivated
      * FAILED: data connection fail for all apns settings
+     * RETRYING: data connection failed but we're going to retry.
      *
      * getDataConnectionState() maps State to DataState
      *      FAILED or IDLE : DISCONNECTED
-     *      INITING or CONNECTING or SCANNING: CONNECTING
+     *      RETRYING or CONNECTING or SCANNING: CONNECTING
      *      CONNECTED : CONNECTED or DISCONNECTING
      */
     public enum State {
         IDLE,
-        INITING,
         CONNECTING,
         SCANNING,
         CONNECTED,
         DISCONNECTING,
-        FAILED
+        FAILED,
+        RETRYING
     }
 
     public enum Activity {
@@ -91,6 +91,9 @@ public class DctConstants {
     public static final int CMD_SET_DEPENDENCY_MET = BASE + 31;
     public static final int CMD_SET_POLICY_DATA_ENABLE = BASE + 32;
     public static final int EVENT_ICC_CHANGED = BASE + 33;
+    public static final int EVENT_DISCONNECT_DC_RETRYING = BASE + 34;
+    public static final int EVENT_DATA_SETUP_COMPLETE_ERROR = BASE + 35;
+    public static final int CMD_SET_ENABLE_FAIL_FAST_MOBILE_DATA = BASE + 36;
 
     /***** Constants *****/
 
@@ -109,8 +112,4 @@ public class DctConstants {
     public static final int ENABLED = 1;
 
     public static final String APN_TYPE_KEY = "apnType";
-    public static String ACTION_DATA_CONNECTION_TRACKER_MESSENGER =
-        "com.android.internal.telephony";
-    public static String EXTRA_MESSENGER = "EXTRA_MESSENGER";
 }
-

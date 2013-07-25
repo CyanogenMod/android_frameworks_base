@@ -52,7 +52,6 @@ import static android.net.NetworkTemplate.MATCH_MOBILE_ALL;
 import static android.net.NetworkTemplate.MATCH_WIFI;
 import static android.net.NetworkTemplate.buildTemplateMobileAll;
 import static android.net.TrafficStats.MB_IN_BYTES;
-import static android.net.wifi.WifiInfo.removeDoubleQuotes;
 import static android.net.wifi.WifiManager.CHANGE_REASON_ADDED;
 import static android.net.wifi.WifiManager.CHANGE_REASON_REMOVED;
 import static android.net.wifi.WifiManager.CONFIGURED_NETWORKS_CHANGED_ACTION;
@@ -64,13 +63,13 @@ import static android.telephony.TelephonyManager.SIM_STATE_READY;
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static com.android.internal.util.ArrayUtils.appendInt;
 import static com.android.internal.util.Preconditions.checkNotNull;
+import static com.android.internal.util.XmlUtils.readBooleanAttribute;
+import static com.android.internal.util.XmlUtils.readIntAttribute;
+import static com.android.internal.util.XmlUtils.readLongAttribute;
+import static com.android.internal.util.XmlUtils.writeBooleanAttribute;
+import static com.android.internal.util.XmlUtils.writeIntAttribute;
+import static com.android.internal.util.XmlUtils.writeLongAttribute;
 import static com.android.server.NetworkManagementService.LIMIT_GLOBAL_ALERT;
-import static com.android.server.net.NetworkPolicyManagerService.XmlUtils.readBooleanAttribute;
-import static com.android.server.net.NetworkPolicyManagerService.XmlUtils.readIntAttribute;
-import static com.android.server.net.NetworkPolicyManagerService.XmlUtils.readLongAttribute;
-import static com.android.server.net.NetworkPolicyManagerService.XmlUtils.writeBooleanAttribute;
-import static com.android.server.net.NetworkPolicyManagerService.XmlUtils.writeIntAttribute;
-import static com.android.server.net.NetworkPolicyManagerService.XmlUtils.writeLongAttribute;
 import static com.android.server.net.NetworkStatsService.ACTION_NETWORK_STATS_UPDATED;
 import static org.xmlpull.v1.XmlPullParser.END_DOCUMENT;
 import static org.xmlpull.v1.XmlPullParser.START_TAG;
@@ -150,7 +149,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ProtocolException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -425,11 +423,9 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     private BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            synchronized (mRulesLock) {
-                // screen-related broadcasts are protected by system, no need
-                // for permissions check.
-                mHandler.obtainMessage(MSG_SCREEN_ON_CHANGED).sendToTarget();
-            }
+            // screen-related broadcasts are protected by system, no need
+            // for permissions check.
+            mHandler.obtainMessage(MSG_SCREEN_ON_CHANGED).sendToTarget();
         }
     };
 
@@ -553,8 +549,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                 final WifiConfiguration config = intent.getParcelableExtra(
                         EXTRA_WIFI_CONFIGURATION);
                 if (config.SSID != null) {
-                    final NetworkTemplate template = NetworkTemplate.buildTemplateWifi(
-                            removeDoubleQuotes(config.SSID));
+                    final NetworkTemplate template = NetworkTemplate.buildTemplateWifi(config.SSID);
                     synchronized (mRulesLock) {
                         if (mNetworkPolicy.containsKey(template)) {
                             mNetworkPolicy.remove(template);
@@ -583,8 +578,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             final WifiInfo info = intent.getParcelableExtra(EXTRA_WIFI_INFO);
             final boolean meteredHint = info.getMeteredHint();
 
-            final NetworkTemplate template = NetworkTemplate.buildTemplateWifi(
-                    removeDoubleQuotes(info.getSSID()));
+            final NetworkTemplate template = NetworkTemplate.buildTemplateWifi(info.getSSID());
             synchronized (mRulesLock) {
                 NetworkPolicy policy = mNetworkPolicy.get(template);
                 if (policy == null && meteredHint) {
@@ -833,7 +827,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             final String packageName = mContext.getPackageName();
             final int[] idReceived = new int[1];
             mNotifManager.enqueueNotificationWithTag(
-                    packageName, tag, 0x0, builder.getNotification(), idReceived,
+                    packageName, packageName, tag, 0x0, builder.getNotification(), idReceived,
                     UserHandle.USER_OWNER);
             mActiveNotifs.add(tag);
         } catch (RemoteException e) {
@@ -868,7 +862,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         try {
             final String packageName = mContext.getPackageName();
             final int[] idReceived = new int[1];
-            mNotifManager.enqueueNotificationWithTag(packageName, tag,
+            mNotifManager.enqueueNotificationWithTag(packageName, packageName, tag,
                     0x0, builder.getNotification(), idReceived, UserHandle.USER_OWNER);
             mActiveNotifs.add(tag);
         } catch (RemoteException e) {
@@ -2092,45 +2086,5 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             if (i < size - 1) fout.print(",");
         }
         fout.print("]");
-    }
-
-    public static class XmlUtils {
-        public static int readIntAttribute(XmlPullParser in, String name) throws IOException {
-            final String value = in.getAttributeValue(null, name);
-            try {
-                return Integer.parseInt(value);
-            } catch (NumberFormatException e) {
-                throw new ProtocolException("problem parsing " + name + "=" + value + " as int");
-            }
-        }
-
-        public static void writeIntAttribute(XmlSerializer out, String name, int value)
-                throws IOException {
-            out.attribute(null, name, Integer.toString(value));
-        }
-
-        public static long readLongAttribute(XmlPullParser in, String name) throws IOException {
-            final String value = in.getAttributeValue(null, name);
-            try {
-                return Long.parseLong(value);
-            } catch (NumberFormatException e) {
-                throw new ProtocolException("problem parsing " + name + "=" + value + " as long");
-            }
-        }
-
-        public static void writeLongAttribute(XmlSerializer out, String name, long value)
-                throws IOException {
-            out.attribute(null, name, Long.toString(value));
-        }
-
-        public static boolean readBooleanAttribute(XmlPullParser in, String name) {
-            final String value = in.getAttributeValue(null, name);
-            return Boolean.parseBoolean(value);
-        }
-
-        public static void writeBooleanAttribute(XmlSerializer out, String name, boolean value)
-                throws IOException {
-            out.attribute(null, name, Boolean.toString(value));
-        }
     }
 }

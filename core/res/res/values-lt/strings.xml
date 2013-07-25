@@ -200,6 +200,8 @@
     <string name="permgroupdesc_microphone" msgid="7106618286905738408">"Tiesioginė prieiga prie mikrofono, kad būtų galima įrašyti garsą."</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Fotoaparatas"</string>
     <string name="permgroupdesc_camera" msgid="2933667372289567714">"Tiesioginė prieiga prie fotoaparato, kad būtų galima fotografuoti vaizdus arba įrašyti vaizdo įrašus."</string>
+    <string name="permgrouplab_screenlock" msgid="8275500173330718168">"Užrakinti ekraną"</string>
+    <string name="permgroupdesc_screenlock" msgid="7067497128925499401">"Galimybė paveikti užrakinimo ekrano veikimą įrenginyje."</string>
     <string name="permgrouplab_appInfo" msgid="8028789762634147725">"Programų informacija"</string>
     <string name="permgroupdesc_appInfo" msgid="3950378538049625907">"Galimybė paveikti kitų įrenginio programų veikimą."</string>
     <string name="permgrouplab_wallpaper" msgid="3850280158041175998">"Ekrano fonas"</string>
@@ -225,6 +227,16 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Saugykla"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"Pasiekti USB atmintinę."</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Pasiekite SD kortelę."</string>
+    <string name="permgrouplab_accessibilityFeatures" msgid="7919025602283593907">"Pritaikymo neįgaliesiems funkcijos"</string>
+    <string name="permgroupdesc_accessibilityFeatures" msgid="4205196881678144335">"Funkcijos, kurių užklausas gali teikti pagalbinė technologija."</string>
+    <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"Gauti lango turinį"</string>
+    <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"Tikrinti lango, su kuriuo sąveikaujate, turinį."</string>
+    <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"Įjungti „Naršyti paliečiant“"</string>
+    <string name="capability_desc_canRequestTouchExploration" msgid="5800552516779249356">"Paliesti elementai bus ištariami garsiai. Be to, ekrane gali būti naršoma naudojant gestus."</string>
+    <string name="capability_title_canRequestEnhancedWebAccessibility" msgid="1739881766522594073">"Įjungti patobulintą žiniatinklio pasiekiamumą"</string>
+    <string name="capability_desc_canRequestEnhancedWebAccessibility" msgid="7881063961507511765">"Gali būti įdiegti scenarijai, kad būtų lengviau pasiekti programų turinį."</string>
+    <string name="capability_title_canRequestFilterKeyEvents" msgid="2103440391902412174">"Stebėti jūsų įvedamą tekstą"</string>
+    <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"Įtraukiami asmeniniai duomenys, pavyzdžiui, kredito kortelių numeriai ir slaptažodžiai."</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"išjungti ar keisti būsenos juostą"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"Leidžiama programai neleisti būsenos juostos arba pridėti ir pašalinti sistemos piktogramas."</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"būsenos juosta"</string>
@@ -243,8 +255,8 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Programai leidžiama skaityti mobiliuoju transliuojamus pranešimus, gaunamus jūsų įrenginyje. Mobiliuoju transliuojami įspėjimai pristatomi kai kuriose vietose, kad įspėtų apie kritines situacijas. Kai gaunamas  mobiliuoju transliuojamas pranešimas apie kritinę situaciją, kenkėjiškos programos gali trukdyti įrenginiui veikti ar jį naudoti."</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"siųsti SMS pranešimus"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"Leidžiama programai siųsti SMS pranešimus. Dėl to gali atsirasti nenumatytų apmokestinimų. Kenkėjiškos programos gali siųsti mokamus pranešimus be jūsų patvirtinimo."</string>
-    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"siųsti SMS pranešimus be patvirtinimo"</string>
-    <string name="permdesc_sendSmsNoConfirmation" msgid="402569800862935907">"Leidžiama programai siųsti SMS pranešimus. Dėl to gali atsirasti nenumatytų apmokestinimų. Kenkėjiškos programos gali siųsti mokamus pranešimus be jūsų patvirtinimo."</string>
+    <string name="permlab_sendRespondViaMessageRequest" msgid="8713889105305943200">"siųsti atsakymų pranešimu įvykius"</string>
+    <string name="permdesc_sendRespondViaMessageRequest" msgid="7107648548468778734">"Programai leidžiama siųsti užklausas į kitas susirašinėjimo pranešimais programas, kad būtų galima apdoroti atsakymų pranešimu įvykius, susijusius su gaunamaisiais skambučiais."</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"skaityti teksto pranešimus (SMS arba MMS)"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"Leidžiama programai skaityti planšetiniame kompiuteryje ar SIM kortelėje saugomus SMS pranešimus. Taip programai leidžiama skaityti visus SMS pranešimus, neatsižvelgiant į turinį ar konfidencialumą."</string>
     <string name="permdesc_readSms" product="default" msgid="3695967533457240550">"Leidžiama programai skaityti telefone ar SIM kortelėje saugomus SMS pranešimus. Taip programai leidžiama skaityti visus SMS pranešimus, neatsižvelgiant į turinį ar konfidencialumą."</string>
@@ -299,6 +311,8 @@
     <string name="permdesc_shutdown" msgid="7046500838746291775">"Veiklos tvarkyklę perjungia į išsijungimo būseną. Neišjungia visiškai."</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"neleisti perjungti programų"</string>
     <string name="permdesc_stopAppSwitches" msgid="8262195802582255021">"Neleidžiama naudotojui perjungti į kitą programą."</string>
+    <string name="permlab_getTopActivityInfo" msgid="2537922311411546016">"gauti esamos programos informaciją"</string>
+    <string name="permdesc_getTopActivityInfo" msgid="2512448855496067131">"Savininkui leidžiama gauti privačią esamos pirmaeilės ekrano programos informaciją."</string>
     <string name="permlab_runSetActivityWatcher" msgid="892239094867182656">"stebėti ir valdyti visų programų paleidimą"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="6003603162578577406">"Leidžiama programai stebėti ir valdyti, kaip sistema paleidžia veiklą. Kenkėjiškos programos gali visiškai pažeisti sistemą. Šis leidimas reikalingas tik kuriant ir jo niekada nereikia naudojant įprastai."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"siųsti pašalinto paketo perdavimą"</string>
@@ -315,6 +329,10 @@
     <string name="permdesc_batteryStats" msgid="5897346582882915114">"Leidžiama programai skaityti dabartinius išsikraunančio akumuliatoriaus naudojimo duomenis. Gali būti leidžiama programai sužinoti išsamią informaciją apie jūsų naudojamas programas."</string>
     <string name="permlab_updateBatteryStats" msgid="3719689764536379557">"keisti akumuliatoriaus statistiką"</string>
     <string name="permdesc_updateBatteryStats" msgid="6862817857178025002">"Leidžiama programai keisti surinktą akumuliatoriaus statistiką. Neskirta naudoti įprastoms programoms."</string>
+    <string name="permlab_getAppOpsStats" msgid="1508779687436585744">"nuskaityti programos naudojimo statistiką"</string>
+    <string name="permdesc_getAppOpsStats" msgid="6243887041577912877">"Programai leidžiama nuskaityti surinktą programos naudojimo statistiką. Neskirta naudoti įprastoms programoms."</string>
+    <string name="permlab_updateAppOpsStats" msgid="8829097373851521505">"keisti programos naudojimo statistiką"</string>
+    <string name="permdesc_updateAppOpsStats" msgid="50784596594403483">"Programai leidžiama keisti surinktą programos naudojimo statistiką. Neskirta naudoti įprastoms programoms."</string>
     <string name="permlab_backup" msgid="470013022865453920">"valdyti sistemos atsarginę kopiją ir atkūrimą"</string>
     <string name="permdesc_backup" msgid="6912230525140589891">"Leidžiama programai valdyti sistemos atsarginės kopijos ir atkūrimo mechanizmą. Neskirta naudoti įprastose programose."</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"patvirtinkite visos atsarginės kopijos kūrimą arba atkurkite operaciją"</string>
@@ -450,6 +468,8 @@
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"Leidžiama programai įrašyti garsą naudojant mikrofoną. Šis leidimas suteikia galimybę programai įrašyti garsą bet kada be jūsų patvirtinimo."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"fotografuoti ir filmuoti"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"Leidžiama programai fotografuoti ir filmuoti kamera. Šis leidimas suteikia teisę programai naudoti kamerą bet kada be jūsų patvirtinimo."</string>
+    <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">"neleisti perduoti LED indikatoriaus, kai naudojamas fotoaparatas"</string>
+    <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">"Leidžiama iš anksto įdiegtai sistemos programai išjungti fotoaparato naudojimo indikatoriaus LED."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"visam laikui neleisti planšetinio kompiuterio"</string>
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"visam laikui išjungti telefoną"</string>
     <string name="permdesc_brick" product="tablet" msgid="4334818808001699530">"Leidžiama programai visam laikui išjungti visą planšetinį kompiuterį. Tai labai pavojinga."</string>
@@ -605,6 +625,10 @@
     <string name="permdesc_manageNetworkPolicy" msgid="7537586771559370668">"Leidžiama programai valdyti tinklo politiką ir apibrėžti konkrečios programos taisykles."</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"keisti tinklo naudojimo apskaitą"</string>
     <string name="permdesc_modifyNetworkAccounting" msgid="5443412866746198123">"Leidžiama programai keisti, kaip tinklas naudojamas, palyginti su programomis. Neskirta naudoti įprastoms programoms."</string>
+    <string name="permlab_accessNotifications" msgid="7673416487873432268">"pasiekti pranešimus"</string>
+    <string name="permdesc_accessNotifications" msgid="458457742683431387">"Programai leidžiama gauti, patikrinti ir išvalyti pranešimus, įskaitant pranešimus, kuriuos paskelbė kitos programos."</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"susisaistyti su pranešimų skaitymo priemonės paslauga"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Leidžiama turėtojui susisaistyti su pranešimų skaitymo priemonės paslaugos aukščiausio lygio sąsaja. Įprastoms programoms to neturėtų prireikti."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Nustatyti slaptažodžio taisykles"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"Valdyti leidžiamą ekrano atrakinimo slaptažodžių ilgį ir leidžiamus naudoti simbolius."</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"Stebėti bandymus atrakinti ekraną"</string>
@@ -714,7 +738,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"„Google“ pokalbiai"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"„Jabber“"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
@@ -810,6 +835,7 @@
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"Šablonas išvalytas"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"Pridėtas langelis"</string>
     <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"Šablonas užbaigtas"</string>
+    <string name="keyguard_accessibility_widget_changed" msgid="5678624624681400191">"%1$s. %2$d valdiklis iš %3$d."</string>
     <string name="keyguard_accessibility_add_widget" msgid="8273277058724924654">"Pridėti valdiklį."</string>
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"Tuščia"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"Atrakinimo sritis išplėsta."</string>
@@ -845,7 +871,10 @@
     <string name="factorytest_reboot" msgid="6320168203050791643">"Pakartotinai įkelti"</string>
     <string name="js_dialog_title" msgid="1987483977834603872">"Puslapyje šiuo adresu: <xliff:g id="TITLE">%s</xliff:g>, teigiama:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="730366588032430474">"Išeiti iš šio puslapio?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Palieskite „Gerai“, jei norite tęsti, arba palieskite „Atšaukti“, jei norite likti dabartiniame puslapyje."</string>
+    <string name="js_dialog_before_unload_title" msgid="2619376555525116593">"Patvirtinti išėjimą"</string>
+    <string name="js_dialog_before_unload_positive_button" msgid="3112752010600484130">"Išeiti iš šio puslapio"</string>
+    <string name="js_dialog_before_unload_negative_button" msgid="5614861293026099715">"Likti šiame puslapyje"</string>
+    <string name="js_dialog_before_unload" msgid="3468816357095378590">"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Tikrai norite išeiti iš šio puslapio?"</string>
     <string name="save_password_label" msgid="6860261758665825069">"Patvirtinti"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"Patarimas: palieskite dukart, kad padidintumėte ar sumažintumėte mastelį."</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"Automatinis pildymas"</string>
@@ -1031,6 +1060,8 @@
     <string name="editTextMenuTitle" msgid="4909135564941815494">"Teksto veiksmai"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Mažėja laisvos saugyklos vietos"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Kai kurios sistemos funkcijos gali neveikti"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"„<xliff:g id="APP_NAME">%1$s</xliff:g>“ vykdoma"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"Palieskite, jei norite gauti daugiau informacijos arba sustabdyti programą."</string>
     <string name="ok" msgid="5970060430562524910">"Gerai"</string>
     <string name="cancel" msgid="6442560571259935130">"Atšaukti"</string>
     <string name="yes" msgid="5362982303337969312">"Gerai"</string>
@@ -1124,7 +1155,8 @@
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"Skirta:"</string>
     <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Įveskite reikiamą PIN kodą:"</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN kodas:"</string>
-    <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"Telefonas bus laikinai atjungtas nuo „Wi-Fi“, kol bus prijungtas prie „<xliff:g id="DEVICE_NAME">%1$s</xliff:g>“"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"Planšetinis kompiuteris bus laikinai atjungtas nuo „Wi-Fi“, kol jis prijungtas prie „<xliff:g id="DEVICE_NAME">%1$s</xliff:g>“"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"Telefonas bus laikinai atjungtas nuo „Wi-Fi“, kol bus prijungtas prie „<xliff:g id="DEVICE_NAME">%1$s</xliff:g>“"</string>
     <string name="select_character" msgid="3365550120617701745">"Įterpti simbolį"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"SMS pranešimų siuntimas"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"Naudojant &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; siunčiama daug SMS pranešimų. Ar norite leisti šiai programai toliau siųsti pranešimus?"</string>
@@ -1247,6 +1279,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Pasiekiamumas"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Darbalaukio fonas"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Keisti darbalaukio foną"</string>
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Pranešimų skaitymo priemonė"</string>
     <string name="vpn_title" msgid="19615213552042827">"VPN suaktyvintas"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"VPN suaktyvino „<xliff:g id="APP">%s</xliff:g>“"</string>
     <string name="vpn_text" msgid="3011306607126450322">"Palieskite, kad valdytumėte tinklą."</string>
@@ -1254,7 +1287,7 @@
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Prisijungiama prie visada įjungto VPN…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Prisijungta prie visada įjungto VPN"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Visada įjungto VPN klaida"</string>
-    <string name="vpn_lockdown_reset" msgid="5365010427963548932">"Palieskite, kad iš naujo nustatytumėte ryšį"</string>
+    <string name="vpn_lockdown_config" msgid="6415899150671537970">"Jei norite konfigūruoti, palieskite."</string>
     <string name="upload_file" msgid="2897957172366730416">"Pasirinkti failą"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Nepasirinktas joks failas"</string>
     <string name="reset" msgid="2448168080964209908">"Atstatyti"</string>
@@ -1350,6 +1383,8 @@
     <string name="action_bar_home_description" msgid="5293600496601490216">"Naršyti pagrindinį puslapį"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"Naršyti į viršų"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Daugiau parinkčių"</string>
+    <string name="action_bar_home_description_format" msgid="7965984360903693903">"%1$s, %2$s"</string>
+    <string name="action_bar_home_subtitle_description_format" msgid="6985546530471780727">"%1$s, %2$s, %3$s"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Vidinė atmintis"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD kortelė"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB atmintis"</string>
@@ -1399,6 +1434,7 @@
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Sistema"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"„Bluetooth“ garsas"</string>
+    <string name="wireless_display_route_description" msgid="9070346425023979651">"Belaidis rodymas"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Atlikta"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Medijos išvestis"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"Nuskaitoma..."</string>
@@ -1450,10 +1486,14 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Netinkamai nupiešėte atrakinimo piešinį <xliff:g id="NUMBER_0">%d</xliff:g> k. Po dar <xliff:g id="NUMBER_1">%d</xliff:g> nesėkm. band. būsite paprašyti atrakinti telefoną naudodami „Google“ prisijungimo duomenis."\n\n" Bandykite dar kartą po <xliff:g id="NUMBER_2">%d</xliff:g> sek."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" – "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Pašalinti"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Padidinti garsumą viršijant saugų lygį?"\n"Ilgai klausantis dideliu garsumu gali sutrikti klausa."</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"Padidinti garsumą viršijant saugų lygį?"\n"Ilgai klausantis dideliu garsumu gali sutrikti klausa."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Laikykite palietę dviem pirštais, kad įgalintumėte pritaikymo neįgaliesiems režimą."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Pritaikymas neįgaliesiems įgalintas."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Pritaikymo neįgaliesiems režimas atšauktas."</string>
     <string name="user_switched" msgid="3768006783166984410">"Dabartinis naudotojas: <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Savininkas"</string>
+    <string name="error_message_title" msgid="4510373083082500195">"Klaida"</string>
+    <string name="app_no_restricted_accounts" msgid="4011285085817350390">"Ši programa nepalaiko apribotų profilių paskyrų"</string>
+    <string name="app_not_found" msgid="3429141853498927379">"Nerasta programa šiam veiksmui apdoroti"</string>
+    <string name="revoke" msgid="5404479185228271586">"Anuliuoti"</string>
 </resources>

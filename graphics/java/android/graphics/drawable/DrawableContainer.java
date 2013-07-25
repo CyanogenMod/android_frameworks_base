@@ -95,8 +95,8 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
      * @hide
      */
     @Override
-    public Insets getLayoutInsets() {
-        return (mCurrDrawable == null) ? Insets.NONE : mCurrDrawable.getLayoutInsets();
+    public Insets getOpticalInsets() {
+        return (mCurrDrawable == null) ? Insets.NONE : mCurrDrawable.getOpticalInsets();
     }
 
     @Override
@@ -324,6 +324,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
                 d.setState(getState());
                 d.setLevel(getLevel());
                 d.setBounds(getBounds());
+                d.setLayoutDirection(getLayoutDirection());
             }
         } else {
             mCurrDrawable = null;
@@ -480,6 +481,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
                         mDrawables[i] = origDr[i].getConstantState().newDrawable();
                     }
                     mDrawables[i].setCallback(owner);
+                    mDrawables[i].setLayoutDirection(origDr[i].getLayoutDirection());
                 }
 
                 mCheckedConstantState = mCanConstantState = true;
@@ -512,7 +514,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
         
         @Override
         public int getChangingConfigurations() {
-            return mChangingConfigurations;
+            return mChangingConfigurations | mChildrenChangingConfigurations;
         }
 
         public final int addChild(Drawable dr) {

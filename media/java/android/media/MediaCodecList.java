@@ -19,9 +19,10 @@ package android.media;
 import android.media.MediaCodecInfo;
 
 /**
- * MediaCodecList class can be used to enumerate available codecs,
+ * Allows you to enumerate available codecs, each specified as a {@link MediaCodecInfo} object,
  * find a codec supporting a given format and query the capabilities
  * of a given codec.
+ * <p>See {@link MediaCodecInfo} for sample usage.
  */
 final public class MediaCodecList {
     /**
@@ -45,6 +46,8 @@ final public class MediaCodecList {
 
     /* package private */ static native final MediaCodecInfo.CodecCapabilities
         getCodecCapabilities(int index, String type);
+
+    /* package private */ static native final int findCodecByName(String codec);
 
     private static native final void native_init();
 

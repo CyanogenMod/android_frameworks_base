@@ -16,30 +16,31 @@
 
 package com.android.server.power;
 
-import com.android.server.display.DisplayManagerService;
-import com.android.server.display.DisplayTransactionListener;
+import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
-import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.graphics.SurfaceTexture;
 import android.opengl.EGL14;
 import android.opengl.EGLConfig;
 import android.opengl.EGLContext;
 import android.opengl.EGLDisplay;
 import android.opengl.EGLSurface;
 import android.opengl.GLES10;
-import android.opengl.GLUtils;
+import android.opengl.GLES11Ext;
 import android.os.Looper;
 import android.util.FloatMath;
 import android.util.Slog;
 import android.view.Display;
 import android.view.DisplayInfo;
 import android.view.Surface;
+import android.view.SurfaceControl;
 import android.view.SurfaceSession;
 
-import java.io.PrintWriter;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import com.android.server.display.DisplayManagerService;
+import com.android.server.display.DisplayTransactionListener;
 
 /**
  * Bzzzoooop!  *crackle*
@@ -80,6 +81,7 @@ final class ElectronBeam {
     private int mDisplayWidth;      // real width, not rotated
     private int mDisplayHeight;     // real height, not rotated
     private SurfaceSession mSurfaceSession;
+    private SurfaceControl mSurfaceControl;
     private Surface mSurface;
     private NaturalSurfaceLayout mSurfaceLayout;
     private EGLDisplay mEglDisplay;
@@ -92,6 +94,7 @@ final class ElectronBeam {
     // Texture names.  We only use one texture, which contains the screenshot.
     private final int[] mTexNames = new int[1];
     private boolean mTexNamesGenerated;
+    private float mTexMatrix[] = new float[16];
 
     // Vertex and corresponding texture coordinates.
     // We have 4 2D vertices, so 8 elements.  The vertices form a quad.
@@ -112,6 +115,7 @@ final class ElectronBeam {
      * Animates a simple dim layer to fade the contents of the screen in or out progressively.
      */
     public static final int MODE_FADE = 2;
+
 
     public ElectronBeam(DisplayManagerService displayManager) {
         mDisplayManager = displayManager;
@@ -262,19 +266,23 @@ final class ElectronBeam {
         GLES10.glVertexPointer(2, GLES10.GL_FLOAT, 0, mVertexBuffer);
         GLES10.glEnableClientState(GLES10.GL_VERTEX_ARRAY);
 
+        // set-up texturing
+        GLES10.glDisable(GLES10.GL_TEXTURE_2D);
+        GLES10.glEnable(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+
         // bind texture and set blending for drawing planes
-        GLES10.glBindTexture(GLES10.GL_TEXTURE_2D, mTexNames[0]);
+        GLES10.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTexNames[0]);
         GLES10.glTexEnvx(GLES10.GL_TEXTURE_ENV, GLES10.GL_TEXTURE_ENV_MODE,
                 mMode == MODE_WARM_UP ? GLES10.GL_MODULATE : GLES10.GL_REPLACE);
-        GLES10.glTexParameterx(GLES10.GL_TEXTURE_2D,
+        GLES10.glTexParameterx(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
                 GLES10.GL_TEXTURE_MAG_FILTER, GLES10.GL_LINEAR);
-        GLES10.glTexParameterx(GLES10.GL_TEXTURE_2D,
+        GLES10.glTexParameterx(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
                 GLES10.GL_TEXTURE_MIN_FILTER, GLES10.GL_LINEAR);
-        GLES10.glTexParameterx(GLES10.GL_TEXTURE_2D,
+        GLES10.glTexParameterx(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
                 GLES10.GL_TEXTURE_WRAP_S, GLES10.GL_CLAMP_TO_EDGE);
-        GLES10.glTexParameterx(GLES10.GL_TEXTURE_2D,
+        GLES10.glTexParameterx(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
                 GLES10.GL_TEXTURE_WRAP_T, GLES10.GL_CLAMP_TO_EDGE);
-        GLES10.glEnable(GLES10.GL_TEXTURE_2D);
+        GLES10.glEnable(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
         GLES10.glTexCoordPointer(2, GLES10.GL_FLOAT, 0, mTexCoordBuffer);
         GLES10.glEnableClientState(GLES10.GL_TEXTURE_COORD_ARRAY);
 
@@ -294,7 +302,7 @@ final class ElectronBeam {
         GLES10.glDrawArrays(GLES10.GL_TRIANGLE_FAN, 0, 4);
 
         // clean up after drawing planes
-        GLES10.glDisable(GLES10.GL_TEXTURE_2D);
+        GLES10.glDisable(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
         GLES10.glDisableClientState(GLES10.GL_TEXTURE_COORD_ARRAY);
         GLES10.glColorMask(true, true, true, true);
 
@@ -369,81 +377,50 @@ final class ElectronBeam {
     }
 
     private boolean captureScreenshotTextureAndSetViewport() {
-        // TODO: Use a SurfaceTexture to avoid the extra texture upload.
-        Bitmap bitmap = Surface.screenshot(mDisplayWidth, mDisplayHeight,
-                0, ELECTRON_BEAM_LAYER - 1);
-        if (bitmap == null) {
-            Slog.e(TAG, "Could not take a screenshot!");
+        if (!attachEglContext()) {
             return false;
         }
         try {
-            if (!attachEglContext()) {
-                return false;
-            }
-            try {
-                if (!mTexNamesGenerated) {
-                    GLES10.glGenTextures(1, mTexNames, 0);
-                    if (checkGlErrors("glGenTextures")) {
-                        return false;
-                    }
-                    mTexNamesGenerated = true;
-                }
-
-                GLES10.glBindTexture(GLES10.GL_TEXTURE_2D, mTexNames[0]);
-                if (checkGlErrors("glBindTexture")) {
+            if (!mTexNamesGenerated) {
+                GLES10.glGenTextures(1, mTexNames, 0);
+                if (checkGlErrors("glGenTextures")) {
                     return false;
                 }
-
-                float u = 1.0f;
-                float v = 1.0f;
-                GLUtils.texImage2D(GLES10.GL_TEXTURE_2D, 0, bitmap, 0);
-                if (checkGlErrors("glTexImage2D, first try", false)) {
-                    // Try a power of two size texture instead.
-                    int tw = nextPowerOfTwo(mDisplayWidth);
-                    int th = nextPowerOfTwo(mDisplayHeight);
-                    int format = GLUtils.getInternalFormat(bitmap);
-                    GLES10.glTexImage2D(GLES10.GL_TEXTURE_2D, 0,
-                            format, tw, th, 0,
-                            format, GLES10.GL_UNSIGNED_BYTE, null);
-                    if (checkGlErrors("glTexImage2D, second try")) {
-                        return false;
-                    }
-
-                    GLUtils.texSubImage2D(GLES10.GL_TEXTURE_2D, 0, 0, 0, bitmap);
-                    if (checkGlErrors("glTexSubImage2D")) {
-                        return false;
-                    }
-
-                    u = (float)mDisplayWidth / tw;
-                    v = (float)mDisplayHeight / th;
-                }
-
-                // Set up texture coordinates for a quad.
-                // We might need to change this if the texture ends up being
-                // a different size from the display for some reason.
-                mTexCoordBuffer.put(0, 0f);
-                mTexCoordBuffer.put(1, v);
-                mTexCoordBuffer.put(2, 0f);
-                mTexCoordBuffer.put(3, 0f);
-                mTexCoordBuffer.put(4, u);
-                mTexCoordBuffer.put(5, 0f);
-                mTexCoordBuffer.put(6, u);
-                mTexCoordBuffer.put(7, v);
-
-                // Set up our viewport.
-                GLES10.glViewport(0, 0, mDisplayWidth, mDisplayHeight);
-                GLES10.glMatrixMode(GLES10.GL_PROJECTION);
-                GLES10.glLoadIdentity();
-                GLES10.glOrthof(0, mDisplayWidth, 0, mDisplayHeight, 0, 1);
-                GLES10.glMatrixMode(GLES10.GL_MODELVIEW);
-                GLES10.glLoadIdentity();
-                GLES10.glMatrixMode(GLES10.GL_TEXTURE);
-                GLES10.glLoadIdentity();
-            } finally {
-                detachEglContext();
+                mTexNamesGenerated = true;
             }
+
+            final SurfaceTexture st = new SurfaceTexture(mTexNames[0]);
+            final Surface s = new Surface(st);
+            try {
+                SurfaceControl.screenshot(SurfaceControl.getBuiltInDisplay(
+                        SurfaceControl.BUILT_IN_DISPLAY_ID_MAIN), s);
+            } finally {
+                s.release();
+            }
+
+            st.updateTexImage();
+            st.getTransformMatrix(mTexMatrix);
+
+            // Set up texture coordinates for a quad.
+            // We might need to change this if the texture ends up being
+            // a different size from the display for some reason.
+            mTexCoordBuffer.put(0, 0f); mTexCoordBuffer.put(1, 0f);
+            mTexCoordBuffer.put(2, 0f); mTexCoordBuffer.put(3, 1f);
+            mTexCoordBuffer.put(4, 1f); mTexCoordBuffer.put(5, 1f);
+            mTexCoordBuffer.put(6, 1f); mTexCoordBuffer.put(7, 0f);
+
+            // Set up our viewport.
+            GLES10.glViewport(0, 0, mDisplayWidth, mDisplayHeight);
+            GLES10.glMatrixMode(GLES10.GL_PROJECTION);
+            GLES10.glLoadIdentity();
+            GLES10.glOrthof(0, mDisplayWidth, 0, mDisplayHeight, 0, 1);
+            GLES10.glMatrixMode(GLES10.GL_MODELVIEW);
+            GLES10.glLoadIdentity();
+            GLES10.glMatrixMode(GLES10.GL_TEXTURE);
+            GLES10.glLoadIdentity();
+            GLES10.glLoadMatrixf(mTexMatrix, 0);
         } finally {
-            bitmap.recycle();
+            detachEglContext();
         }
         return true;
     }
@@ -525,32 +502,34 @@ final class ElectronBeam {
             mSurfaceSession = new SurfaceSession();
         }
 
-        Surface.openTransaction();
+        SurfaceControl.openTransaction();
         try {
-            if (mSurface == null) {
+            if (mSurfaceControl == null) {
                 try {
                     int flags;
                     if (mMode == MODE_FADE) {
-                        flags = Surface.FX_SURFACE_DIM | Surface.HIDDEN;
+                        flags = SurfaceControl.FX_SURFACE_DIM | SurfaceControl.HIDDEN;
                     } else {
-                        flags = Surface.OPAQUE | Surface.HIDDEN;
+                        flags = SurfaceControl.OPAQUE | SurfaceControl.HIDDEN;
                     }
-                    mSurface = new Surface(mSurfaceSession,
+                    mSurfaceControl = new SurfaceControl(mSurfaceSession,
                             "ElectronBeam", mDisplayWidth, mDisplayHeight,
                             PixelFormat.OPAQUE, flags);
-                } catch (Surface.OutOfResourcesException ex) {
+                } catch (SurfaceControl.OutOfResourcesException ex) {
                     Slog.e(TAG, "Unable to create surface.", ex);
                     return false;
                 }
             }
 
-            mSurface.setLayerStack(mDisplayLayerStack);
-            mSurface.setSize(mDisplayWidth, mDisplayHeight);
-
-            mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager, mSurface);
+            mSurfaceControl.setLayerStack(mDisplayLayerStack);
+            mSurfaceControl.setSize(mDisplayWidth, mDisplayHeight);
+            mSurface = new Surface();
+            mSurface.copyFrom(mSurfaceControl);
+            
+            mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager, mSurfaceControl);
             mSurfaceLayout.onDisplayTransaction();
         } finally {
-            Surface.closeTransaction();
+            SurfaceControl.closeTransaction();
         }
         return true;
     }
@@ -560,6 +539,7 @@ final class ElectronBeam {
             int[] eglSurfaceAttribList = new int[] {
                     EGL14.EGL_NONE
             };
+            // turn our SurfaceControl into a Surface
             mEglSurface = EGL14.eglCreateWindowSurface(mEglDisplay, mEglConfig, mSurface,
                     eglSurfaceAttribList, 0);
             if (mEglSurface == null) {
@@ -580,16 +560,17 @@ final class ElectronBeam {
     }
 
     private void destroySurface() {
-        if (mSurface != null) {
+        if (mSurfaceControl != null) {
             mSurfaceLayout.dispose();
             mSurfaceLayout = null;
-            Surface.openTransaction();
+            SurfaceControl.openTransaction();
             try {
-                mSurface.destroy();
+                mSurfaceControl.destroy();
+                mSurface.release();
             } finally {
-                Surface.closeTransaction();
+                SurfaceControl.closeTransaction();
             }
-            mSurface = null;
+            mSurfaceControl = null;
             mSurfaceVisible = false;
             mSurfaceAlpha = 0f;
         }
@@ -597,13 +578,13 @@ final class ElectronBeam {
 
     private boolean showSurface(float alpha) {
         if (!mSurfaceVisible || mSurfaceAlpha != alpha) {
-            Surface.openTransaction();
+            SurfaceControl.openTransaction();
             try {
-                mSurface.setLayer(ELECTRON_BEAM_LAYER);
-                mSurface.setAlpha(alpha);
-                mSurface.show();
+                mSurfaceControl.setLayer(ELECTRON_BEAM_LAYER);
+                mSurfaceControl.setAlpha(alpha);
+                mSurfaceControl.show();
             } finally {
-                Surface.closeTransaction();
+                SurfaceControl.closeTransaction();
             }
             mSurfaceVisible = true;
             mSurfaceAlpha = alpha;
@@ -657,10 +638,6 @@ final class ElectronBeam {
         return 1.0f / (1.0f + FloatMath.exp(-x * s));
     }
 
-    private static int nextPowerOfTwo(int value) {
-        return 1 << (32 - Integer.numberOfLeadingZeros(value));
-    }
-
     private static FloatBuffer createNativeFloatBuffer(int size) {
         ByteBuffer bb = ByteBuffer.allocateDirect(size * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -708,17 +685,17 @@ final class ElectronBeam {
      */
     private static final class NaturalSurfaceLayout implements DisplayTransactionListener {
         private final DisplayManagerService mDisplayManager;
-        private Surface mSurface;
+        private SurfaceControl mSurfaceControl;
 
-        public NaturalSurfaceLayout(DisplayManagerService displayManager, Surface surface) {
+        public NaturalSurfaceLayout(DisplayManagerService displayManager, SurfaceControl surfaceControl) {
             mDisplayManager = displayManager;
-            mSurface = surface;
+            mSurfaceControl = surfaceControl;
             mDisplayManager.registerDisplayTransactionListener(this);
         }
 
         public void dispose() {
             synchronized (this) {
-                mSurface = null;
+                mSurfaceControl = null;
             }
             mDisplayManager.unregisterDisplayTransactionListener(this);
         }
@@ -726,27 +703,27 @@ final class ElectronBeam {
         @Override
         public void onDisplayTransaction() {
             synchronized (this) {
-                if (mSurface == null) {
+                if (mSurfaceControl == null) {
                     return;
                 }
 
                 DisplayInfo displayInfo = mDisplayManager.getDisplayInfo(Display.DEFAULT_DISPLAY);
                 switch (displayInfo.rotation) {
                     case Surface.ROTATION_0:
-                        mSurface.setPosition(0, 0);
-                        mSurface.setMatrix(1, 0, 0, 1);
+                        mSurfaceControl.setPosition(0, 0);
+                        mSurfaceControl.setMatrix(1, 0, 0, 1);
                         break;
                     case Surface.ROTATION_90:
-                        mSurface.setPosition(0, displayInfo.logicalHeight);
-                        mSurface.setMatrix(0, -1, 1, 0);
+                        mSurfaceControl.setPosition(0, displayInfo.logicalHeight);
+                        mSurfaceControl.setMatrix(0, -1, 1, 0);
                         break;
                     case Surface.ROTATION_180:
-                        mSurface.setPosition(displayInfo.logicalWidth, displayInfo.logicalHeight);
-                        mSurface.setMatrix(-1, 0, 0, -1);
+                        mSurfaceControl.setPosition(displayInfo.logicalWidth, displayInfo.logicalHeight);
+                        mSurfaceControl.setMatrix(-1, 0, 0, -1);
                         break;
                     case Surface.ROTATION_270:
-                        mSurface.setPosition(displayInfo.logicalWidth, 0);
-                        mSurface.setMatrix(0, 1, -1, 0);
+                        mSurfaceControl.setPosition(displayInfo.logicalWidth, 0);
+                        mSurfaceControl.setMatrix(0, 1, -1, 0);
                         break;
                 }
             }

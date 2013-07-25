@@ -15,6 +15,7 @@
  */
 package com.android.internal.policy.impl.keyguard;
 
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.media.AudioManager;
 
@@ -85,9 +86,14 @@ class KeyguardUpdateMonitorCallback {
     void onDevicePolicyManagerStateChanged() { }
 
     /**
-     * Called when the user changes.
+     * Called when the user change begins.
      */
-    void onUserSwitched(int userId) { }
+    void onUserSwitching(int userId) { }
+
+    /**
+     * Called when the user change is complete.
+     */
+    void onUserSwitchComplete(int userId) { }
 
     /**
      * Called when the SIM state changes.
@@ -101,10 +107,28 @@ class KeyguardUpdateMonitorCallback {
     void onUserRemoved(int userId) { }
 
     /**
+     * Called when the user's info changed.
+     */
+    void onUserInfoChanged(int userId) { }
+
+    /**
      * Called when boot completed.
      *
      * Note, this callback will only be received if boot complete occurs after registering with
      * KeyguardUpdateMonitor.
      */
     void onBootCompleted() { }
+
+    /**
+     * Called when audio client attaches or detaches from AudioManager.
+     */
+    void onMusicClientIdChanged(int clientGeneration, boolean clearing, PendingIntent intent) { }
+
+    /**
+     * Called when the audio playback state changes.
+     * @param playbackState
+     * @param eventTime
+     */
+    public void onMusicPlaybackStateChanged(int playbackState, long eventTime) { }
+
 }

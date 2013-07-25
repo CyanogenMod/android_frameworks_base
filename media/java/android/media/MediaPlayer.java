@@ -16,9 +16,14 @@
 
 package android.media;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
+import android.net.Proxy;
+import android.net.ProxyProperties;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -328,8 +333,8 @@ import java.lang.ref.WeakReference;
  *         the state. Calling this method in an invalid state transfers the
  *         object to the <em>Error</em> state. </p></td></tr>
  * <tr><td>pause </p></td>
- *     <td>{Started, Paused}</p></td>
- *     <td>{Idle, Initialized, Prepared, Stopped, PlaybackCompleted, Error}</p></td>
+ *     <td>{Started, Paused, PlaybackCompleted}</p></td>
+ *     <td>{Idle, Initialized, Prepared, Stopped, Error}</p></td>
  *     <td>Successful invoke of this method in a valid state transfers the
  *         object to the <em>Paused</em> state. Calling this method in an
  *         invalid state transfers the object to the <em>Error</em> state.</p></td></tr>
@@ -864,6 +869,7 @@ public class MediaPlayer
      */
     public void setDataSource(Context context, Uri uri, Map<String, String> headers)
         throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
+        disableProxyListener();
 
         String scheme = uri.getScheme();
         if(scheme == null || scheme.equals("file")) {
@@ -896,8 +902,13 @@ public class MediaPlayer
         }
 
         Log.d(TAG, "Couldn't open file on client side, trying server side");
+
         setDataSource(uri.toString(), headers);
-        return;
+
+        if (scheme.equalsIgnoreCase("http")
+                || scheme.equalsIgnoreCase("https")) {
+            setupProxyListener(context);
+        }
     }
 
     /**
@@ -948,7 +959,14 @@ public class MediaPlayer
 
     private void setDataSource(String path, String[] keys, String[] values)
             throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
-        File file = new File(path);
+        disableProxyListener();
+
+        final Uri uri = Uri.parse(path);
+        if ("file".equals(uri.getScheme())) {
+            path = uri.getPath();
+        }
+
+        final File file = new File(path);
         if (file.exists()) {
             FileInputStream is = new FileInputStream(file);
             FileDescriptor fd = is.getFD();
@@ -986,7 +1004,13 @@ public class MediaPlayer
      * @param length the length in bytes of the data to be played
      * @throws IllegalStateException if it is called in an invalid state
      */
-    public native void setDataSource(FileDescriptor fd, long offset, long length)
+    public void setDataSource(FileDescriptor fd, long offset, long length)
+            throws IOException, IllegalArgumentException, IllegalStateException {
+        disableProxyListener();
+        _setDataSource(fd, offset, length);
+    }
+
+    private native void _setDataSource(FileDescriptor fd, long offset, long length)
             throws IOException, IllegalArgumentException, IllegalStateException;
 
     /**
@@ -1176,7 +1200,8 @@ public class MediaPlayer
     /**
      * Gets the duration of the file.
      *
-     * @return the duration in milliseconds
+     * @return the duration in milliseconds, if no duration is available
+     *         (for example, if streaming live content), -1 is returned.
      */
     public native int getDuration();
 
@@ -1325,6 +1350,8 @@ public class MediaPlayer
         _reset();
         // make sure none of the listeners get called anymore
         mEventHandler.removeCallbacksAndMessages(null);
+
+        disableProxyListener();
     }
 
     private native void _reset();
@@ -1360,13 +1387,26 @@ public class MediaPlayer
      * within an application. Unless you are writing an application to
      * control user settings, this API should be used in preference to
      * {@link AudioManager#setStreamVolume(int, int, int)} which sets the volume of ALL streams of
-     * a particular type. Note that the passed volume values are raw scalars.
+     * a particular type. Note that the passed volume values are raw scalars in range 0.0 to 1.0.
      * UI controls should be scaled logarithmically.
      *
      * @param leftVolume left volume scalar
      * @param rightVolume right volume scalar
      */
+    /*
+     * FIXME: Merge this into javadoc comment above when setVolume(float) is not @hide.
+     * The single parameter form below is preferred if the channel volumes don't need
+     * to be set independently.
+     */
     public native void setVolume(float leftVolume, float rightVolume);
+
+    /**
+     * Similar, excepts sets volume of all channels to same value.
+     * @hide
+     */
+    public void setVolume(float volume) {
+        setVolume(volume, volume);
+    }
 
     /**
      * Currently not implemented, returns null.
@@ -2429,4 +2469,57 @@ public class MediaPlayer
         return (mode == VIDEO_SCALING_MODE_SCALE_TO_FIT ||
                 mode == VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
     }
+
+    private Context mProxyContext = null;
+    private ProxyReceiver mProxyReceiver = null;
+
+    private void setupProxyListener(Context context) {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Proxy.PROXY_CHANGE_ACTION);
+        mProxyReceiver = new ProxyReceiver();
+        mProxyContext = context;
+
+        Intent currentProxy =
+            context.getApplicationContext().registerReceiver(mProxyReceiver, filter);
+
+        if (currentProxy != null) {
+            handleProxyBroadcast(currentProxy);
+        }
+    }
+
+    private void disableProxyListener() {
+        if (mProxyReceiver == null) {
+            return;
+        }
+
+        Context appContext = mProxyContext.getApplicationContext();
+        if (appContext != null) {
+            appContext.unregisterReceiver(mProxyReceiver);
+        }
+
+        mProxyReceiver = null;
+        mProxyContext = null;
+    }
+
+    private void handleProxyBroadcast(Intent intent) {
+        ProxyProperties props =
+            (ProxyProperties)intent.getExtra(Proxy.EXTRA_PROXY_INFO);
+
+        if (props == null || props.getHost() == null) {
+            updateProxyConfig(null);
+        } else {
+            updateProxyConfig(props);
+        }
+    }
+
+    private class ProxyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Proxy.PROXY_CHANGE_ACTION)) {
+                handleProxyBroadcast(intent);
+            }
+        }
+    }
+
+    private native void updateProxyConfig(ProxyProperties props);
 }

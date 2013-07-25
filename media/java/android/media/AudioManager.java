@@ -26,6 +26,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -54,6 +55,7 @@ public class AudioManager {
     private long mVolumeKeyUpTime;
     private final boolean mUseMasterVolume;
     private final boolean mUseVolumeKeySounds;
+    private final Binder mToken = new Binder();
     private static String TAG = "AudioManager";
     private final ProfileManager mProfileManager;
     private final WindowManager mWindowManager;
@@ -1244,6 +1246,11 @@ public class AudioManager {
      * call {@link #stopBluetoothSco()} to clear the request and turn down the bluetooth connection.
      * <p>Even if a SCO connection is established, the following restrictions apply on audio
      * output streams so that they can be routed to SCO headset:
+     * <p>NOTE: up to and including API version
+     * {@link android.os.Build.VERSION_CODES#JELLY_BEAN_MR1}, this method initiates a virtual
+     * voice call to the bluetooth headset.
+     * After API version {@link android.os.Build.VERSION_CODES#JELLY_BEAN_MR2} only a raw SCO audio
+     * connection is established.
      * <ul>
      *   <li> the stream type must be {@link #STREAM_VOICE_CALL} </li>
      *   <li> the format must be mono </li>
@@ -1265,7 +1272,7 @@ public class AudioManager {
     public void startBluetoothSco(){
         IAudioService service = getService();
         try {
-            service.startBluetoothSco(mICallBack);
+            service.startBluetoothSco(mICallBack, mContext.getApplicationInfo().targetSdkVersion);
         } catch (RemoteException e) {
             Log.e(TAG, "Dead object in startBluetoothSco", e);
         }
@@ -1566,6 +1573,16 @@ public class AudioManager {
 
     /**
      * @hide
+     * Checks whether any music or media is actively playing on a remote device (e.g. wireless
+     *   display). Note that BT audio sinks are not considered remote devices.
+     * @return true if {@link AudioManager#STREAM_MUSIC} is active on a remote device
+     */
+    public boolean isMusicActiveRemotely() {
+        return AudioSystem.isStreamActiveRemotely(STREAM_MUSIC, 0);
+    }
+
+    /**
+     * @hide
      * Checks whether speech recognition is active
      * @return true if a recording with source {@link MediaRecorder.AudioSource#VOICE_RECOGNITION}
      *    is underway.
@@ -1623,7 +1640,7 @@ public class AudioManager {
     }
 
     /**
-     * Sets a varaible number of parameter values to audio hardware.
+     * Gets a variable number of parameter values from audio hardware.
      *
      * @param keys list of parameters
      * @return list of parameters key value pairs in the form:
@@ -2077,18 +2094,36 @@ public class AudioManager {
     }
 
     /**
+     * Register a component to be the sole receiver of MEDIA_BUTTON intents.  This is like
+     * {@link #registerMediaButtonEventReceiver(android.content.ComponentName)}, but allows
+     * the buttons to go to any PendingIntent.  Note that you should only use this form if
+     * you know you will continue running for the full time until unregistering the
+     * PendingIntent.
+     * @param eventReceiver target that will receive media button intents.  The PendingIntent
+     * will be sent as-is when a media button action occurs, with {@link Intent#EXTRA_KEY_EVENT}
+     * added and holding the key code of the media button that was pressed.
+     */
+    public void registerMediaButtonEventReceiver(PendingIntent eventReceiver) {
+        if (eventReceiver == null) {
+            return;
+        }
+        registerMediaButtonIntent(eventReceiver, null);
+    }
+
+    /**
      * @hide
      * no-op if (pi == null) or (eventReceiver == null)
      */
     public void registerMediaButtonIntent(PendingIntent pi, ComponentName eventReceiver) {
-        if ((pi == null) || (eventReceiver == null)) {
+        if (pi == null) {
             Log.e(TAG, "Cannot call registerMediaButtonIntent() with a null parameter");
             return;
         }
         IAudioService service = getService();
         try {
             // pi != null
-            service.registerMediaButtonIntent(pi, eventReceiver);
+            service.registerMediaButtonIntent(pi, eventReceiver,
+                    eventReceiver == null ? mToken : null);
         } catch (RemoteException e) {
             Log.e(TAG, "Dead object in registerMediaButtonIntent"+e);
         }
@@ -2140,16 +2175,28 @@ public class AudioManager {
         mediaButtonIntent.setComponent(eventReceiver);
         PendingIntent pi = PendingIntent.getBroadcast(mContext,
                 0/*requestCode, ignored*/, mediaButtonIntent, 0/*flags*/);
-        unregisterMediaButtonIntent(pi, eventReceiver);
+        unregisterMediaButtonIntent(pi);
+    }
+
+    /**
+     * Unregister the receiver of MEDIA_BUTTON intents.
+     * @param eventReceiver same PendingIntent that was registed with
+     *      {@link #registerMediaButtonEventReceiver(PendingIntent)}.
+     */
+    public void unregisterMediaButtonEventReceiver(PendingIntent eventReceiver) {
+        if (eventReceiver == null) {
+            return;
+        }
+        unregisterMediaButtonIntent(eventReceiver);
     }
 
     /**
      * @hide
      */
-    public void unregisterMediaButtonIntent(PendingIntent pi, ComponentName eventReceiver) {
+    public void unregisterMediaButtonIntent(PendingIntent pi) {
         IAudioService service = getService();
         try {
-            service.unregisterMediaButtonIntent(pi, eventReceiver);
+            service.unregisterMediaButtonIntent(pi);
         } catch (RemoteException e) {
             Log.e(TAG, "Dead object in unregisterMediaButtonIntent"+e);
         }
@@ -2201,15 +2248,36 @@ public class AudioManager {
     /**
      * @hide
      * Registers a remote control display that will be sent information by remote control clients.
-     * @param rcd
+     * Use this method if your IRemoteControlDisplay is not going to display artwork, otherwise
+     * use {@link #registerRemoteControlDisplay(IRemoteControlDisplay, int, int)} to pass the
+     * artwork size directly, or
+     * {@link #remoteControlDisplayUsesBitmapSize(IRemoteControlDisplay, int, int)} later if artwork
+     * is not yet needed.
+     * @param rcd the IRemoteControlDisplay
      */
     public void registerRemoteControlDisplay(IRemoteControlDisplay rcd) {
+        // passing a negative value for art work width and height as they are unknown at this stage
+        registerRemoteControlDisplay(rcd, /*w*/-1, /*h*/ -1);
+    }
+
+    /**
+     * @hide
+     * Registers a remote control display that will be sent information by remote control clients.
+     * @param rcd
+     * @param w the maximum width of the expected bitmap. Negative values indicate it is
+     *   useless to send artwork.
+     * @param h the maximum height of the expected bitmap. Negative values indicate it is
+     *   useless to send artwork.
+     */
+    public void registerRemoteControlDisplay(IRemoteControlDisplay rcd, int w, int h) {
         if (rcd == null) {
             return;
         }
         IAudioService service = getService();
         try {
-            service.registerRemoteControlDisplay(rcd);
+            // passing a negative value for art work width and height as they are unknown at
+            // this stage
+            service.registerRemoteControlDisplay(rcd, w, h);
         } catch (RemoteException e) {
             Log.e(TAG, "Dead object in registerRemoteControlDisplay " + e);
         }
@@ -2253,62 +2321,51 @@ public class AudioManager {
         }
     }
 
-    // FIXME remove because we are not using intents anymore between AudioService and RcDisplay
     /**
      * @hide
-     * Broadcast intent action indicating that the displays on the remote controls
-     * should be updated because a new remote control client is now active. If there is no
-     * {@link #EXTRA_REMOTE_CONTROL_CLIENT}, the remote control display should be cleared
-     * because there is no valid client to supply it with information.
-     *
-     * @see #EXTRA_REMOTE_CONTROL_CLIENT
+     * Controls whether a remote control display needs periodic checks of the RemoteControlClient
+     * playback position to verify that the estimated position has not drifted from the actual
+     * position. By default the check is not performed.
+     * The IRemoteControlDisplay must have been previously registered for this to have any effect.
+     * @param rcd the IRemoteControlDisplay for which the anti-drift mechanism will be enabled
+     *     or disabled. No effect is null.
+     * @param wantsSync if true, RemoteControlClient instances which expose their playback position
+     *     to the framework will regularly compare the estimated playback position with the actual
+     *     position, and will update the IRemoteControlDisplay implementation whenever a drift is
+     *     detected.
      */
-    public static final String REMOTE_CONTROL_CLIENT_CHANGED =
-            "android.media.REMOTE_CONTROL_CLIENT_CHANGED";
+    public void remoteControlDisplayWantsPlaybackPositionSync(IRemoteControlDisplay rcd,
+            boolean wantsSync) {
+        if (rcd == null) {
+            return;
+        }
+        IAudioService service = getService();
+        try {
+            service.remoteControlDisplayWantsPlaybackPositionSync(rcd, wantsSync);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Dead object in remoteControlDisplayWantsPlaybackPositionSync " + e);
+        }
+    }
 
-    // FIXME remove because we are not using intents anymore between AudioService and RcDisplay
     /**
      * @hide
-     * The IRemoteControlClientDispatcher monotonically increasing generation counter.
-     *
-     * @see #REMOTE_CONTROL_CLIENT_CHANGED_ACTION
+     * Request the user of a RemoteControlClient to seek to the given playback position.
+     * @param generationId the RemoteControlClient generation counter for which this request is
+     *         issued. Requests for an older generation than current one will be ignored.
+     * @param timeMs the time in ms to seek to, must be positive.
      */
-    public static final String EXTRA_REMOTE_CONTROL_CLIENT_GENERATION =
-            "android.media.EXTRA_REMOTE_CONTROL_CLIENT_GENERATION";
-
-    // FIXME remove because we are not using intents anymore between AudioService and RcDisplay
-    /**
-     * @hide
-     * The name of the RemoteControlClient.
-     * This String is passed as the client name when calling methods from the
-     * IRemoteControlClientDispatcher interface.
-     *
-     * @see #REMOTE_CONTROL_CLIENT_CHANGED_ACTION
-     */
-    public static final String EXTRA_REMOTE_CONTROL_CLIENT_NAME =
-            "android.media.EXTRA_REMOTE_CONTROL_CLIENT_NAME";
-
-    // FIXME remove because we are not using intents anymore between AudioService and RcDisplay
-    /**
-     * @hide
-     * The media button event receiver associated with the RemoteControlClient.
-     * The {@link android.content.ComponentName} value of the event receiver can be retrieved with
-     * {@link android.content.ComponentName#unflattenFromString(String)}
-     *
-     * @see #REMOTE_CONTROL_CLIENT_CHANGED_ACTION
-     */
-    public static final String EXTRA_REMOTE_CONTROL_EVENT_RECEIVER =
-            "android.media.EXTRA_REMOTE_CONTROL_EVENT_RECEIVER";
-
-    // FIXME remove because we are not using intents anymore between AudioService and RcDisplay
-    /**
-     * @hide
-     * The flags describing what information has changed in the current remote control client.
-     *
-     * @see #REMOTE_CONTROL_CLIENT_CHANGED_ACTION
-     */
-    public static final String EXTRA_REMOTE_CONTROL_CLIENT_INFO_CHANGED =
-            "android.media.EXTRA_REMOTE_CONTROL_CLIENT_INFO_CHANGED";
+    public void setRemoteControlClientPlaybackPosition(int generationId, long timeMs) {
+        if (timeMs < 0) {
+            return;
+        }
+        IAudioService service = getService();
+        try {
+            service.setRemoteControlClientPlaybackPosition(generationId, timeMs);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Dead object in setRccPlaybackPosition("+ generationId + ", "
+                    + timeMs + ")", e);
+        }
+    }
 
     /**
      *  @hide
@@ -2534,6 +2591,17 @@ public class AudioManager {
             // null or unknown key
             return null;
         }
+    }
+
+    /**
+     * Returns the estimated latency for the given stream type in milliseconds.
+     *
+     * DO NOT UNHIDE. The existing approach for doing A/V sync has too many problems. We need
+     * a better solution.
+     * @hide
+     */
+    public int getOutputLatency(int streamType) {
+        return AudioSystem.getOutputLatency(streamType);
     }
 
 }

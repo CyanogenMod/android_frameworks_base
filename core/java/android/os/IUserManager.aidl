@@ -17,8 +17,10 @@
 
 package android.os;
 
+import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.content.pm.UserInfo;
+import android.content.RestrictionEntry;
 import android.graphics.Bitmap;
 
 /**
@@ -32,9 +34,16 @@ interface IUserManager {
     Bitmap getUserIcon(int userHandle);
     List<UserInfo> getUsers(boolean excludeDying);
     UserInfo getUserInfo(int userHandle);
+    boolean isRestricted();
     void setGuestEnabled(boolean enable);
     boolean isGuestEnabled();
     void wipeUser(int userHandle);
     int getUserSerialNumber(int userHandle);
     int getUserHandle(int userSerialNumber);
+    Bundle getUserRestrictions(int userHandle);
+    void setUserRestrictions(in Bundle restrictions, int userHandle);
+    void setApplicationRestrictions(in String packageName, in Bundle restrictions,
+            int userHandle);
+    Bundle getApplicationRestrictions(in String packageName);
+    Bundle getApplicationRestrictionsForUser(in String packageName, int userHandle);
 }

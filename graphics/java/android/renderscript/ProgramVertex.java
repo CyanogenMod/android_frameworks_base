@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
- /**
- * <p>The Renderscript vertex program, also known as a vertex shader, describes a stage in
+/**
+ * @hide
+ * <p>The RenderScript vertex program, also known as a vertex shader, describes a stage in
  * the graphics pipeline responsible for manipulating geometric data in a user-defined way.
- * The object is constructed by providing the Renderscript system with the following data:</p>
+ * The object is constructed by providing the RenderScript system with the following data:</p>
  * <ul>
  *   <li>Element describing its varying inputs or attributes</li>
  *   <li>GLSL shader string that defines the body of the program</li>
@@ -27,7 +28,7 @@
  * <p>Once the program is created, you bind it to the graphics context, RenderScriptGL, and it will be used for
  * all subsequent draw calls until you bind a new program. If the program has constant inputs,
  * the user needs to bind an allocation containing those inputs. The allocation's type must match
- * the one provided during creation. The Renderscript library then does all the necessary plumbing
+ * the one provided during creation. The RenderScript library then does all the necessary plumbing
  * to send those constants to the graphics hardware. Varying inputs to the shader, such as position, normal,
  * and texture coordinates are matched by name between the input Element and the Mesh object being drawn.
  * The signatures don't have to be exact or in any strict order. As long as the input name in the shader
@@ -43,6 +44,7 @@ import android.util.Log;
 
 
 /**
+ * @hide
  * @deprecated in API 16
  * ProgramVertex, also know as a vertex shader, describes a
  * stage in the graphics pipeline responsible for manipulating
@@ -76,14 +78,15 @@ public class ProgramVertex extends Program {
     }
 
     /**
-    * @deprecated in API 16
-    * Builder class for creating ProgramVertex objects.
-    * The builder starts empty and the user must minimally provide
-    * the GLSL shader code, and the varying inputs. Constant, or
-    * uniform parameters to the shader may optionally be provided as
-    * well.
-    *
-    **/
+     * @hide
+     * @deprecated in API 16
+     * Builder class for creating ProgramVertex objects.
+     * The builder starts empty and the user must minimally provide
+     * the GLSL shader code, and the varying inputs. Constant, or
+     * uniform parameters to the shader may optionally be provided as
+     * well.
+     *
+     **/
     public static class Builder extends BaseProgramBuilder {
         /**
          * @deprecated in API 16

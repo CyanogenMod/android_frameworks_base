@@ -217,7 +217,7 @@ group animation elements together inside the <code>&lt;set&gt;</code> element, i
     </dd>
 
 <dt id="val-animator-element"><code>&lt;animator&gt;</code></dt>
-    <dd>Animates a over a specified amount of time.
+    <dd>Performs an animation over a specified amount of time.
     Represents a {@link android.animation.ValueAnimator}.
 
       <p class="caps">attributes:</p>
@@ -593,7 +593,7 @@ attribute, the value of which is a reference to an interpolator resource.</p>
 <p>All interpolators available in Android are subclasses of the {@link
 android.view.animation.Interpolator} class. For each interpolator class, Android
 includes a public resource you can reference in order to apply the interpolator to an animation
-using the the {@code android:interpolator} attribute.
+using the {@code android:interpolator} attribute.
 The following table specifies the resource to use for each interpolator:</p>
 
 <table>

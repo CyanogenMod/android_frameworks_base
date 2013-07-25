@@ -54,6 +54,7 @@ public final class InputChannel implements Parcelable {
     private native void nativeTransferTo(InputChannel other);
     private native void nativeReadFromParcel(Parcel parcel);
     private native void nativeWriteToParcel(Parcel parcel);
+    private native void nativeDup(InputChannel target);
     
     private native String nativeGetName();
 
@@ -64,7 +65,7 @@ public final class InputChannel implements Parcelable {
      */
     public InputChannel() {
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -78,7 +79,9 @@ public final class InputChannel implements Parcelable {
      * Creates a new input channel pair.  One channel should be provided to the input
      * dispatcher and the other to the application's input queue.
      * @param name The descriptive (non-unique) name of the channel pair.
-     * @return A pair of input channels.  They are symmetric and indistinguishable.
+     * @return A pair of input channels.  The first channel is designated as the
+     * server channel and should be used to publish input events.  The second channel
+     * is designated as the client channel and should be used to consume input events.
      */
     public static InputChannel[] openInputChannelPair(String name) {
         if (name == null) {
@@ -123,10 +126,20 @@ public final class InputChannel implements Parcelable {
         nativeTransferTo(outParameter);
     }
 
+    /**
+     * Duplicates the input channel.
+     */
+    public InputChannel dup() {
+        InputChannel target = new InputChannel();
+        nativeDup(target);
+        return target;
+    }
+
+    @Override
     public int describeContents() {
         return Parcelable.CONTENTS_FILE_DESCRIPTOR;
     }
-    
+
     public void readFromParcel(Parcel in) {
         if (in == null) {
             throw new IllegalArgumentException("in must not be null");
@@ -134,7 +147,8 @@ public final class InputChannel implements Parcelable {
         
         nativeReadFromParcel(in);
     }
-    
+
+    @Override
     public void writeToParcel(Parcel out, int flags) {
         if (out == null) {
             throw new IllegalArgumentException("out must not be null");

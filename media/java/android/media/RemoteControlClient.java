@@ -36,6 +36,8 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import java.lang.IllegalArgumentException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * RemoteControlClient enables exposing information meant to be consumed by remote controls
@@ -63,6 +65,7 @@ import java.lang.IllegalArgumentException;
 public class RemoteControlClient
 {
     private final static String TAG = "RemoteControlClient";
+    private final static boolean DEBUG = false;
 
     /**
      * Playback state of a RemoteControlClient which is stopped.
@@ -170,6 +173,23 @@ public class RemoteControlClient
      */
     public final static int PLAYBACKINFO_INVALID_VALUE = Integer.MIN_VALUE;
 
+    /**
+     * @hide
+     * An unknown or invalid playback position value.
+     */
+    public final static long PLAYBACK_POSITION_INVALID = -1;
+    /**
+     * @hide
+     * An invalid playback position value associated with the use of {@link #setPlaybackState(int)}
+     * used to indicate that playback position will remain unknown.
+     */
+    public final static long PLAYBACK_POSITION_ALWAYS_UNKNOWN = 0x8019771980198300L;
+    /**
+     * @hide
+     * The default playback speed, 1x.
+     */
+    public final static float PLAYBACK_SPEED_1X = 1.0f;
+
     //==========================================
     // Public keys for playback information
     /**
@@ -206,15 +226,7 @@ public class RemoteControlClient
     public final static int PLAYBACKINFO_USES_STREAM = 5;
 
     //==========================================
-    // Private keys for playback information
-    /**
-     * @hide
-     * Used internally to relay playback state (set by the application with
-     * {@link #setPlaybackState(int)}) to AudioService
-     */
-    public final static int PLAYBACKINFO_PLAYSTATE = 255;
-
-
+    // Public flags for the supported transport control capabilities
     /**
      * Flag indicating a RemoteControlClient makes use of the "previous" media key.
      *
@@ -271,6 +283,16 @@ public class RemoteControlClient
      * @see android.view.KeyEvent#KEYCODE_MEDIA_NEXT
      */
     public final static int FLAG_KEY_MEDIA_NEXT = 1 << 7;
+    /**
+     * Flag indicating a RemoteControlClient can receive changes in the media playback position
+     * through the {@link OnPlaybackPositionUpdateListener} interface. This flag must be set
+     * in order for components that display the RemoteControlClient information, to display and
+     * let the user control media playback position.
+     * @see #setTransportControlFlags(int)
+     * @see #setOnGetPlaybackPositionListener(OnGetPlaybackPositionListener)
+     * @see #setPlaybackPositionUpdateListener(OnPlaybackPositionUpdateListener)
+     */
+    public final static int FLAG_KEY_MEDIA_POSITION_UPDATE = 1 << 8;
 
     /**
      * @hide
@@ -498,13 +520,7 @@ public class RemoteControlClient
             if (key != BITMAP_KEY_ARTWORK) {
                 throw(new IllegalArgumentException("Invalid type 'Bitmap' for key "+ key));
             }
-            if ((mArtworkExpectedWidth > 0) && (mArtworkExpectedHeight > 0)) {
-                mEditorArtwork = scaleBitmapIfTooBig(bitmap,
-                        mArtworkExpectedWidth, mArtworkExpectedHeight);
-            } else {
-                // no valid resize dimensions, store as is
-                mEditorArtwork = bitmap;
-            }
+            mEditorArtwork = bitmap;
             mArtworkChanged = true;
             return this;
         }
@@ -536,10 +552,10 @@ public class RemoteControlClient
             synchronized(mCacheLock) {
                 // assign the edited data
                 mMetadata = new Bundle(mEditorMetadata);
-                if ((mArtwork != null) && (!mArtwork.equals(mEditorArtwork))) {
-                    mArtwork.recycle();
+                if ((mOriginalArtwork != null) && (!mOriginalArtwork.equals(mEditorArtwork))) {
+                    mOriginalArtwork.recycle();
                 }
-                mArtwork = mEditorArtwork;
+                mOriginalArtwork = mEditorArtwork;
                 mEditorArtwork = null;
                 if (mMetadataChanged & mArtworkChanged) {
                     // send to remote control display if conditions are met
@@ -571,7 +587,7 @@ public class RemoteControlClient
             editor.mArtworkChanged = true;
         } else {
             editor.mEditorMetadata = new Bundle(mMetadata);
-            editor.mEditorArtwork = mArtwork;
+            editor.mEditorArtwork = mOriginalArtwork;
             editor.mMetadataChanged = false;
             editor.mArtworkChanged = false;
         }
@@ -592,17 +608,122 @@ public class RemoteControlClient
      *       {@link #PLAYSTATE_ERROR}.
      */
     public void setPlaybackState(int state) {
+        setPlaybackStateInt(state, PLAYBACK_POSITION_ALWAYS_UNKNOWN, PLAYBACK_SPEED_1X,
+                false /* legacy API, converting to method with position and speed */);
+    }
+
+    /**
+     * Sets the current playback state and the matching media position for the current playback
+     *   speed.
+     * @param state The current playback state, one of the following values:
+     *       {@link #PLAYSTATE_STOPPED},
+     *       {@link #PLAYSTATE_PAUSED},
+     *       {@link #PLAYSTATE_PLAYING},
+     *       {@link #PLAYSTATE_FAST_FORWARDING},
+     *       {@link #PLAYSTATE_REWINDING},
+     *       {@link #PLAYSTATE_SKIPPING_FORWARDS},
+     *       {@link #PLAYSTATE_SKIPPING_BACKWARDS},
+     *       {@link #PLAYSTATE_BUFFERING},
+     *       {@link #PLAYSTATE_ERROR}.
+     * @param timeInMs a 0 or positive value for the current media position expressed in ms
+     *    (same unit as for when sending the media duration, if applicable, with
+     *    {@link android.media.MediaMetadataRetriever#METADATA_KEY_DURATION} in the
+     *    {@link RemoteControlClient.MetadataEditor}). Negative values imply that position is not
+     *    known (e.g. listening to a live stream of a radio) or not applicable (e.g. when state
+     *    is {@link #PLAYSTATE_BUFFERING} and nothing had played yet).
+     * @param playbackSpeed a value expressed as a ratio of 1x playback: 1.0f is normal playback,
+     *    2.0f is 2x, 0.5f is half-speed, -2.0f is rewind at 2x speed. 0.0f means nothing is
+     *    playing (e.g. when state is {@link #PLAYSTATE_ERROR}).
+     */
+    public void setPlaybackState(int state, long timeInMs, float playbackSpeed) {
+        setPlaybackStateInt(state, timeInMs, playbackSpeed, true);
+    }
+
+    private void setPlaybackStateInt(int state, long timeInMs, float playbackSpeed,
+            boolean hasPosition) {
         synchronized(mCacheLock) {
-            if (mPlaybackState != state) {
+            if ((mPlaybackState != state) || (mPlaybackPositionMs != timeInMs)
+                    || (mPlaybackSpeed != playbackSpeed)) {
                 // store locally
                 mPlaybackState = state;
+                // distinguish between an application not knowing the current playback position
+                // at the moment and an application using the API where only the playback state
+                // is passed, not the playback position.
+                if (hasPosition) {
+                    if (timeInMs < 0) {
+                        mPlaybackPositionMs = PLAYBACK_POSITION_INVALID;
+                    } else {
+                        mPlaybackPositionMs = timeInMs;
+                    }
+                } else {
+                    mPlaybackPositionMs = PLAYBACK_POSITION_ALWAYS_UNKNOWN;
+                }
+                mPlaybackSpeed = playbackSpeed;
                 // keep track of when the state change occurred
                 mPlaybackStateChangeTimeMs = SystemClock.elapsedRealtime();
 
                 // send to remote control display if conditions are met
                 sendPlaybackState_syncCacheLock();
                 // update AudioService
-                sendAudioServiceNewPlaybackInfo_syncCacheLock(PLAYBACKINFO_PLAYSTATE, state);
+                sendAudioServiceNewPlaybackState_syncCacheLock();
+
+                // handle automatic playback position refreshes
+                initiateCheckForDrift_syncCacheLock();
+            }
+        }
+    }
+
+    private void initiateCheckForDrift_syncCacheLock() {
+        if (mEventHandler == null) {
+            return;
+        }
+        mEventHandler.removeMessages(MSG_POSITION_DRIFT_CHECK);
+        if (!mNeedsPositionSync) {
+            return;
+        }
+        if (mPlaybackPositionMs < 0) {
+            // the current playback state has no known playback position, it's no use
+            // trying to see if there is any drift at this point
+            // (this also bypasses this mechanism for older apps that use the old
+            //  setPlaybackState(int) API)
+            return;
+        }
+        if (playbackPositionShouldMove(mPlaybackState)) {
+            // playback position moving, schedule next position drift check
+            mEventHandler.sendMessageDelayed(
+                    mEventHandler.obtainMessage(MSG_POSITION_DRIFT_CHECK),
+                    getCheckPeriodFromSpeed(mPlaybackSpeed));
+        }
+    }
+
+    private void onPositionDriftCheck() {
+        if (DEBUG) { Log.d(TAG, "onPositionDriftCheck()"); }
+        synchronized(mCacheLock) {
+            if ((mEventHandler == null) || (mPositionProvider == null) || !mNeedsPositionSync) {
+                return;
+            }
+            if ((mPlaybackPositionMs < 0) || (mPlaybackSpeed == 0.0f)) {
+                if (DEBUG) { Log.d(TAG, " no valid position or 0 speed, no check needed"); }
+                return;
+            }
+            long estPos = mPlaybackPositionMs + (long)
+                    ((SystemClock.elapsedRealtime() - mPlaybackStateChangeTimeMs) / mPlaybackSpeed);
+            long actPos = mPositionProvider.onGetPlaybackPosition();
+            if (actPos >= 0) {
+                if (Math.abs(estPos - actPos) > POSITION_DRIFT_MAX_MS) {
+                    // drift happened, report the new position
+                    if (DEBUG) { Log.w(TAG, " drift detected: actual=" +actPos +"  est=" +estPos); }
+                    setPlaybackState(mPlaybackState, actPos, mPlaybackSpeed);
+                } else {
+                    if (DEBUG) { Log.d(TAG, " no drift: actual=" + actPos +"  est=" + estPos); }
+                    // no drift, schedule the next drift check
+                    mEventHandler.sendMessageDelayed(
+                            mEventHandler.obtainMessage(MSG_POSITION_DRIFT_CHECK),
+                            getCheckPeriodFromSpeed(mPlaybackSpeed));
+                }
+            } else {
+                // invalid position (negative value), can't check for drift
+                mEventHandler.removeMessages(MSG_POSITION_DRIFT_CHECK);
             }
         }
     }
@@ -617,7 +738,8 @@ public class RemoteControlClient
      *      {@link #FLAG_KEY_MEDIA_PAUSE},
      *      {@link #FLAG_KEY_MEDIA_STOP},
      *      {@link #FLAG_KEY_MEDIA_FAST_FORWARD},
-     *      {@link #FLAG_KEY_MEDIA_NEXT}
+     *      {@link #FLAG_KEY_MEDIA_NEXT},
+     *      {@link #FLAG_KEY_MEDIA_POSITION_UPDATE}
      */
     public void setTransportControlFlags(int transportControlFlags) {
         synchronized(mCacheLock) {
@@ -625,9 +747,114 @@ public class RemoteControlClient
             mTransportControlFlags = transportControlFlags;
 
             // send to remote control display if conditions are met
-            sendTransportControlFlags_syncCacheLock();
+            sendTransportControlInfo_syncCacheLock();
         }
     }
+
+    /**
+     * Interface definition for a callback to be invoked when the media playback position is
+     * requested to be updated.
+     * @see RemoteControlClient#FLAG_KEY_MEDIA_POSITION_UPDATE
+     */
+    public interface OnPlaybackPositionUpdateListener {
+        /**
+         * Called on the implementer to notify it that the playback head should be set at the given
+         * position. If the position can be changed from its current value, the implementor of
+         * the interface must also update the playback position using
+         * {@link #setPlaybackState(int, long, float)} to reflect the actual new
+         * position being used, regardless of whether it differs from the requested position.
+         * Failure to do so would cause the system to not know the new actual playback position,
+         * and user interface components would fail to show the user where playback resumed after
+         * the position was updated.
+         * @param newPositionMs the new requested position in the current media, expressed in ms.
+         */
+        void onPlaybackPositionUpdate(long newPositionMs);
+    }
+
+    /**
+     * Interface definition for a callback to be invoked when the media playback position is
+     * queried.
+     * @see RemoteControlClient#FLAG_KEY_MEDIA_POSITION_UPDATE
+     */
+    public interface OnGetPlaybackPositionListener {
+        /**
+         * Called on the implementer of the interface to query the current playback position.
+         * @return a negative value if the current playback position (or the last valid playback
+         *     position) is not known, or a zero or positive value expressed in ms indicating the
+         *     current position, or the last valid known position.
+         */
+        long onGetPlaybackPosition();
+    }
+
+    /**
+     * Sets the listener to be called whenever the media playback position is requested
+     * to be updated.
+     * Notifications will be received in the same thread as the one in which RemoteControlClient
+     * was created.
+     * @param l the position update listener to be called
+     */
+    public void setPlaybackPositionUpdateListener(OnPlaybackPositionUpdateListener l) {
+        synchronized(mCacheLock) {
+            int oldCapa = mPlaybackPositionCapabilities;
+            if (l != null) {
+                mPlaybackPositionCapabilities |= MEDIA_POSITION_WRITABLE;
+            } else {
+                mPlaybackPositionCapabilities &= ~MEDIA_POSITION_WRITABLE;
+            }
+            mPositionUpdateListener = l;
+            if (oldCapa != mPlaybackPositionCapabilities) {
+                // tell RCDs that this RCC's playback position capabilities have changed
+                sendTransportControlInfo_syncCacheLock();
+            }
+        }
+    }
+
+    /**
+     * Sets the listener to be called whenever the media current playback position is needed.
+     * Queries will be received in the same thread as the one in which RemoteControlClient
+     * was created.
+     * @param l the listener to be called to retrieve the playback position
+     */
+    public void setOnGetPlaybackPositionListener(OnGetPlaybackPositionListener l) {
+        synchronized(mCacheLock) {
+            int oldCapa = mPlaybackPositionCapabilities;
+            if (l != null) {
+                mPlaybackPositionCapabilities |= MEDIA_POSITION_READABLE;
+            } else {
+                mPlaybackPositionCapabilities &= ~MEDIA_POSITION_READABLE;
+            }
+            mPositionProvider = l;
+            if (oldCapa != mPlaybackPositionCapabilities) {
+                // tell RCDs that this RCC's playback position capabilities have changed
+                sendTransportControlInfo_syncCacheLock();
+            }
+            if ((mPositionProvider != null) && (mEventHandler != null)
+                    && playbackPositionShouldMove(mPlaybackState)) {
+                // playback position is already moving, but now we have a position provider,
+                // so schedule a drift check right now
+                mEventHandler.sendMessageDelayed(
+                        mEventHandler.obtainMessage(MSG_POSITION_DRIFT_CHECK),
+                        0 /*check now*/);
+            }
+        }
+    }
+
+    /**
+     * @hide
+     * Flag to reflect that the application controlling this RemoteControlClient sends playback
+     * position updates. The playback position being "readable" is considered from the application's
+     * point of view.
+     */
+    public static int MEDIA_POSITION_READABLE = 1 << 0;
+    /**
+     * @hide
+     * Flag to reflect that the application controlling this RemoteControlClient can receive
+     * playback position updates. The playback position being "writable"
+     * is considered from the application's point of view.
+     */
+    public static int MEDIA_POSITION_WRITABLE = 1 << 1;
+
+    private int mPlaybackPositionCapabilities = 0;
 
     /** @hide */
     public final static int DEFAULT_PLAYBACK_VOLUME_HANDLING = PLAYBACK_VOLUME_VARIABLE;
@@ -760,17 +987,21 @@ public class RemoteControlClient
      */
     private long mPlaybackStateChangeTimeMs = 0;
     /**
+     * Last playback position in ms reported by the user
+     */
+    private long mPlaybackPositionMs = PLAYBACK_POSITION_INVALID;
+    /**
+     * Last playback speed reported by the user
+     */
+    private float mPlaybackSpeed = PLAYBACK_SPEED_1X;
+    /**
      * Cache for the artwork bitmap.
      * Access synchronized on mCacheLock
      * Artwork and metadata are not kept in one Bundle because the bitmap sometimes needs to be
      * accessed to be resized, in which case a copy will be made. This would add overhead in
      * Bundle operations.
      */
-    private Bitmap mArtwork;
-    private final int ARTWORK_DEFAULT_SIZE = 256;
-    private final int ARTWORK_INVALID_SIZE = -1;
-    private int mArtworkExpectedWidth = ARTWORK_DEFAULT_SIZE;
-    private int mArtworkExpectedHeight = ARTWORK_DEFAULT_SIZE;
+    private Bitmap mOriginalArtwork;
     /**
      * Cache for the transport control mask.
      * Access synchronized on mCacheLock
@@ -782,9 +1013,17 @@ public class RemoteControlClient
      * This is re-initialized in apply() and so cannot be final.
      */
     private Bundle mMetadata = new Bundle();
-
     /**
-     * The current remote control client generation ID across the system
+     * Listener registered by user of RemoteControlClient to receive requests for playback position
+     * update requests.
+     */
+    private OnPlaybackPositionUpdateListener mPositionUpdateListener;
+    /**
+     * Provider registered by user of RemoteControlClient to provide the current playback position.
+     */
+    private OnGetPlaybackPositionListener mPositionProvider;
+    /**
+     * The current remote control client generation ID across the system, as known by this object
      */
     private int mCurrentClientGenId = -1;
     /**
@@ -797,15 +1036,40 @@ public class RemoteControlClient
 
     /**
      * The media button intent description associated with this remote control client
-     * (can / should include target component for intent handling)
+     * (can / should include target component for intent handling, used when persisting media
+     *    button event receiver across reboots).
      */
     private final PendingIntent mRcMediaIntent;
 
     /**
-     * The remote control display to which this client will send information.
-     * NOTE: Only one IRemoteControlDisplay supported in this implementation
+     * Reflects whether any "plugged in" IRemoteControlDisplay has mWantsPositonSync set to true.
      */
-    private IRemoteControlDisplay mRcDisplay;
+    // TODO consider using a ref count for IRemoteControlDisplay requiring sync instead
+    private boolean mNeedsPositionSync = false;
+
+    /**
+     * A class to encapsulate all the information about a remote control display.
+     * A RemoteControlClient's metadata and state may be displayed on multiple IRemoteControlDisplay
+     */
+    private class DisplayInfoForClient {
+        /** may never be null */
+        private IRemoteControlDisplay mRcDisplay;
+        private int mArtworkExpectedWidth;
+        private int mArtworkExpectedHeight;
+        private boolean mWantsPositionSync = false;
+
+        DisplayInfoForClient(IRemoteControlDisplay rcd, int w, int h) {
+            mRcDisplay = rcd;
+            mArtworkExpectedWidth = w;
+            mArtworkExpectedHeight = h;
+        }
+    }
+
+    /**
+     * The list of remote control displays to which this client will send information.
+     * Accessed and modified synchronized on mCacheLock
+     */
+    private ArrayList<DisplayInfoForClient> mRcDisplays = new ArrayList<DisplayInfoForClient>(1);
 
     /**
      * @hide
@@ -827,28 +1091,25 @@ public class RemoteControlClient
      */
     private final IRemoteControlClient mIRCC = new IRemoteControlClient.Stub() {
 
-        public void onInformationRequested(int clientGeneration, int infoFlags,
-                int artWidth, int artHeight) {
+        public void onInformationRequested(int generationId, int infoFlags) {
             // only post messages, we can't block here
             if (mEventHandler != null) {
                 // signal new client
                 mEventHandler.removeMessages(MSG_NEW_INTERNAL_CLIENT_GEN);
-                mEventHandler.dispatchMessage(
-                        mEventHandler.obtainMessage(
-                                MSG_NEW_INTERNAL_CLIENT_GEN,
-                                artWidth, artHeight,
-                                new Integer(clientGeneration)));
+                mEventHandler.sendMessage(
+                        mEventHandler.obtainMessage(MSG_NEW_INTERNAL_CLIENT_GEN,
+                                /*arg1*/ generationId, /*arg2, ignored*/ 0));
                 // send the information
                 mEventHandler.removeMessages(MSG_REQUEST_PLAYBACK_STATE);
                 mEventHandler.removeMessages(MSG_REQUEST_METADATA);
                 mEventHandler.removeMessages(MSG_REQUEST_TRANSPORTCONTROL);
                 mEventHandler.removeMessages(MSG_REQUEST_ARTWORK);
-                mEventHandler.dispatchMessage(
+                mEventHandler.sendMessage(
                         mEventHandler.obtainMessage(MSG_REQUEST_PLAYBACK_STATE));
-                mEventHandler.dispatchMessage(
+                mEventHandler.sendMessage(
                         mEventHandler.obtainMessage(MSG_REQUEST_TRANSPORTCONTROL));
-                mEventHandler.dispatchMessage(mEventHandler.obtainMessage(MSG_REQUEST_METADATA));
-                mEventHandler.dispatchMessage(mEventHandler.obtainMessage(MSG_REQUEST_ARTWORK));
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(MSG_REQUEST_METADATA));
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(MSG_REQUEST_ARTWORK));
             }
         }
 
@@ -856,24 +1117,50 @@ public class RemoteControlClient
             // only post messages, we can't block here
             if (mEventHandler != null) {
                 mEventHandler.removeMessages(MSG_NEW_CURRENT_CLIENT_GEN);
-                mEventHandler.dispatchMessage(mEventHandler.obtainMessage(
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
                         MSG_NEW_CURRENT_CLIENT_GEN, clientGeneration, 0/*ignored*/));
             }
         }
 
-        public void plugRemoteControlDisplay(IRemoteControlDisplay rcd) {
+        public void plugRemoteControlDisplay(IRemoteControlDisplay rcd, int w, int h) {
             // only post messages, we can't block here
-            if (mEventHandler != null) {
-                mEventHandler.dispatchMessage(mEventHandler.obtainMessage(
-                        MSG_PLUG_DISPLAY, rcd));
+            if ((mEventHandler != null) && (rcd != null)) {
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
+                        MSG_PLUG_DISPLAY, w, h, rcd));
             }
         }
 
         public void unplugRemoteControlDisplay(IRemoteControlDisplay rcd) {
             // only post messages, we can't block here
-            if (mEventHandler != null) {
-                mEventHandler.dispatchMessage(mEventHandler.obtainMessage(
+            if ((mEventHandler != null) && (rcd != null)) {
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
                         MSG_UNPLUG_DISPLAY, rcd));
+            }
+        }
+
+        public void setBitmapSizeForDisplay(IRemoteControlDisplay rcd, int w, int h) {
+            // only post messages, we can't block here
+            if ((mEventHandler != null) && (rcd != null)) {
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
+                        MSG_UPDATE_DISPLAY_ARTWORK_SIZE, w, h, rcd));
+            }
+        }
+
+        public void setWantsSyncForDisplay(IRemoteControlDisplay rcd, boolean wantsSync) {
+            // only post messages, we can't block here
+            if ((mEventHandler != null) && (rcd != null)) {
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
+                        MSG_DISPLAY_WANTS_POS_SYNC, wantsSync ? 1 : 0, 0/*arg2 ignored*/, rcd));
+            }
+        }
+
+        public void seekTo(int generationId, long timeMs) {
+            // only post messages, we can't block here
+            if (mEventHandler != null) {
+                mEventHandler.removeMessages(MSG_SEEK_TO);
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
+                        MSG_SEEK_TO, generationId /* arg1 */, 0 /* arg2, ignored */,
+                        new Long(timeMs)));
             }
         }
     };
@@ -915,6 +1202,10 @@ public class RemoteControlClient
     private final static int MSG_NEW_CURRENT_CLIENT_GEN = 6;
     private final static int MSG_PLUG_DISPLAY = 7;
     private final static int MSG_UNPLUG_DISPLAY = 8;
+    private final static int MSG_UPDATE_DISPLAY_ARTWORK_SIZE = 9;
+    private final static int MSG_SEEK_TO = 10;
+    private final static int MSG_POSITION_DRIFT_CHECK = 11;
+    private final static int MSG_DISPLAY_WANTS_POS_SYNC = 12;
 
     private class EventHandler extends Handler {
         public EventHandler(RemoteControlClient rcc, Looper looper) {
@@ -936,7 +1227,7 @@ public class RemoteControlClient
                     break;
                 case MSG_REQUEST_TRANSPORTCONTROL:
                     synchronized (mCacheLock) {
-                        sendTransportControlFlags_syncCacheLock();
+                        sendTransportControlInfo_syncCacheLock();
                     }
                     break;
                 case MSG_REQUEST_ARTWORK:
@@ -945,16 +1236,28 @@ public class RemoteControlClient
                     }
                     break;
                 case MSG_NEW_INTERNAL_CLIENT_GEN:
-                    onNewInternalClientGen((Integer)msg.obj, msg.arg1, msg.arg2);
+                    onNewInternalClientGen(msg.arg1);
                     break;
                 case MSG_NEW_CURRENT_CLIENT_GEN:
                     onNewCurrentClientGen(msg.arg1);
                     break;
                 case MSG_PLUG_DISPLAY:
-                    onPlugDisplay((IRemoteControlDisplay)msg.obj);
+                    onPlugDisplay((IRemoteControlDisplay)msg.obj, msg.arg1, msg.arg2);
                     break;
                 case MSG_UNPLUG_DISPLAY:
                     onUnplugDisplay((IRemoteControlDisplay)msg.obj);
+                    break;
+                case MSG_UPDATE_DISPLAY_ARTWORK_SIZE:
+                    onUpdateDisplayArtworkSize((IRemoteControlDisplay)msg.obj, msg.arg1, msg.arg2);
+                    break;
+                case MSG_SEEK_TO:
+                    onSeekTo(msg.arg1, ((Long)msg.obj).longValue());
+                    break;
+                case MSG_POSITION_DRIFT_CHECK:
+                    onPositionDriftCheck();
+                    break;
+                case MSG_DISPLAY_WANTS_POS_SYNC:
+                    onDisplayWantsSync((IRemoteControlDisplay)msg.obj, msg.arg1 == 1);
                     break;
                 default:
                     Log.e(TAG, "Unknown event " + msg.what + " in RemoteControlClient handler");
@@ -963,75 +1266,107 @@ public class RemoteControlClient
     }
 
     //===========================================================
-    // Communication with IRemoteControlDisplay
-
-    private void detachFromDisplay_syncCacheLock() {
-        mRcDisplay = null;
-        mArtworkExpectedWidth = ARTWORK_INVALID_SIZE;
-        mArtworkExpectedHeight = ARTWORK_INVALID_SIZE;
-    }
+    // Communication with the IRemoteControlDisplay (the displays known to the system)
 
     private void sendPlaybackState_syncCacheLock() {
-        if ((mCurrentClientGenId == mInternalClientGenId) && (mRcDisplay != null)) {
-            try {
-                mRcDisplay.setPlaybackState(mInternalClientGenId, mPlaybackState,
-                        mPlaybackStateChangeTimeMs);
-            } catch (RemoteException e) {
-                Log.e(TAG, "Error in setPlaybackState(), dead display "+e);
-                detachFromDisplay_syncCacheLock();
+        if (mCurrentClientGenId == mInternalClientGenId) {
+            final Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext()) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                try {
+                    di.mRcDisplay.setPlaybackState(mInternalClientGenId,
+                            mPlaybackState, mPlaybackStateChangeTimeMs, mPlaybackPositionMs,
+                            mPlaybackSpeed);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Error in setPlaybackState(), dead display " + di.mRcDisplay, e);
+                    displayIterator.remove();
+                }
             }
         }
     }
 
     private void sendMetadata_syncCacheLock() {
-        if ((mCurrentClientGenId == mInternalClientGenId) && (mRcDisplay != null)) {
-            try {
-                mRcDisplay.setMetadata(mInternalClientGenId, mMetadata);
-            } catch (RemoteException e) {
-                Log.e(TAG, "Error in sendPlaybackState(), dead display "+e);
-                detachFromDisplay_syncCacheLock();
+        if (mCurrentClientGenId == mInternalClientGenId) {
+            final Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext()) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                try {
+                    di.mRcDisplay.setMetadata(mInternalClientGenId, mMetadata);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Error in setMetadata(), dead display " + di.mRcDisplay, e);
+                    displayIterator.remove();
+                }
             }
         }
     }
 
-    private void sendTransportControlFlags_syncCacheLock() {
-        if ((mCurrentClientGenId == mInternalClientGenId) && (mRcDisplay != null)) {
-            try {
-                mRcDisplay.setTransportControlFlags(mInternalClientGenId,
-                        mTransportControlFlags);
-            } catch (RemoteException e) {
-                Log.e(TAG, "Error in sendTransportControlFlags(), dead display "+e);
-                detachFromDisplay_syncCacheLock();
+    private void sendTransportControlInfo_syncCacheLock() {
+        if (mCurrentClientGenId == mInternalClientGenId) {
+            final Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext()) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                try {
+                    di.mRcDisplay.setTransportControlInfo(mInternalClientGenId,
+                            mTransportControlFlags, mPlaybackPositionCapabilities);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Error in setTransportControlFlags(), dead display " + di.mRcDisplay,
+                            e);
+                    displayIterator.remove();
+                }
             }
         }
     }
 
     private void sendArtwork_syncCacheLock() {
-        if ((mCurrentClientGenId == mInternalClientGenId) && (mRcDisplay != null)) {
-            // even though we have already scaled in setArtwork(), when this client needs to
-            // send the bitmap, there might be newer and smaller expected dimensions, so we have
-            // to check again.
-            mArtwork = scaleBitmapIfTooBig(mArtwork, mArtworkExpectedWidth, mArtworkExpectedHeight);
-            try {
-                mRcDisplay.setArtwork(mInternalClientGenId, mArtwork);
-            } catch (RemoteException e) {
-                Log.e(TAG, "Error in sendArtwork(), dead display "+e);
-                detachFromDisplay_syncCacheLock();
+        // FIXME modify to cache all requested sizes?
+        if (mCurrentClientGenId == mInternalClientGenId) {
+            final Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext()) {
+                if (!sendArtworkToDisplay((DisplayInfoForClient) displayIterator.next())) {
+                    displayIterator.remove();
+                }
             }
         }
     }
 
-    private void sendMetadataWithArtwork_syncCacheLock() {
-        if ((mCurrentClientGenId == mInternalClientGenId) && (mRcDisplay != null)) {
-            // even though we have already scaled in setArtwork(), when this client needs to
-            // send the bitmap, there might be newer and smaller expected dimensions, so we have
-            // to check again.
-            mArtwork = scaleBitmapIfTooBig(mArtwork, mArtworkExpectedWidth, mArtworkExpectedHeight);
+    /**
+     * Send artwork to an IRemoteControlDisplay.
+     * @param di encapsulates the IRemoteControlDisplay that will receive the artwork, and its
+     *    dimension requirements.
+     * @return false if there was an error communicating with the IRemoteControlDisplay.
+     */
+    private boolean sendArtworkToDisplay(DisplayInfoForClient di) {
+        if ((di.mArtworkExpectedWidth > 0) && (di.mArtworkExpectedHeight > 0)) {
+            Bitmap artwork = scaleBitmapIfTooBig(mOriginalArtwork,
+                    di.mArtworkExpectedWidth, di.mArtworkExpectedHeight);
             try {
-                mRcDisplay.setAllMetadata(mInternalClientGenId, mMetadata, mArtwork);
+                di.mRcDisplay.setArtwork(mInternalClientGenId, artwork);
             } catch (RemoteException e) {
-                Log.e(TAG, "Error in setAllMetadata(), dead display "+e);
-                detachFromDisplay_syncCacheLock();
+                Log.e(TAG, "Error in sendArtworkToDisplay(), dead display " + di.mRcDisplay, e);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void sendMetadataWithArtwork_syncCacheLock() {
+        // FIXME modify to cache all requested sizes?
+        if (mCurrentClientGenId == mInternalClientGenId) {
+            final Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext()) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                try {
+                    if ((di.mArtworkExpectedWidth > 0) && (di.mArtworkExpectedHeight > 0)) {
+                        Bitmap artwork = scaleBitmapIfTooBig(mOriginalArtwork,
+                                di.mArtworkExpectedWidth, di.mArtworkExpectedHeight);
+                        di.mRcDisplay.setAllMetadata(mInternalClientGenId, mMetadata, artwork);
+                    } else {
+                        di.mRcDisplay.setMetadata(mInternalClientGenId, mMetadata);
+                    }
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Error when setting metadata, dead display " + di.mRcDisplay, e);
+                    displayIterator.remove();
+                }
             }
         }
     }
@@ -1060,22 +1395,31 @@ public class RemoteControlClient
         try {
             service.setPlaybackInfoForRcc(mRcseId, what, value);
         } catch (RemoteException e) {
-            Log.e(TAG, "Dead object in sendAudioServiceNewPlaybackInfo_syncCacheLock", e);
+            Log.e(TAG, "Dead object in setPlaybackInfoForRcc", e);
+        }
+    }
+
+    private void sendAudioServiceNewPlaybackState_syncCacheLock() {
+        if (mRcseId == RCSE_ID_UNREGISTERED) {
+            return;
+        }
+        IAudioService service = getService();
+        try {
+            service.setPlaybackStateForRcc(mRcseId,
+                    mPlaybackState, mPlaybackPositionMs, mPlaybackSpeed);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Dead object in setPlaybackStateForRcc", e);
         }
     }
 
     //===========================================================
     // Message handlers
 
-    private void onNewInternalClientGen(Integer clientGeneration, int artWidth, int artHeight) {
+    private void onNewInternalClientGen(int clientGeneration) {
         synchronized (mCacheLock) {
             // this remote control client is told it is the "focused" one:
             // it implies that now (mCurrentClientGenId == mInternalClientGenId) is true
-            mInternalClientGenId = clientGeneration.intValue();
-            if (artWidth > 0) {
-                mArtworkExpectedWidth = artWidth;
-                mArtworkExpectedHeight = artHeight;
-            }
+            mInternalClientGenId = clientGeneration;
         }
     }
 
@@ -1085,18 +1429,111 @@ public class RemoteControlClient
         }
     }
 
-    private void onPlugDisplay(IRemoteControlDisplay rcd) {
+    /** pre-condition rcd != null */
+    private void onPlugDisplay(IRemoteControlDisplay rcd, int w, int h) {
         synchronized(mCacheLock) {
-            mRcDisplay = rcd;
+            // do we have this display already?
+            boolean displayKnown = false;
+            final Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext() && !displayKnown) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                displayKnown = di.mRcDisplay.asBinder().equals(rcd.asBinder());
+                if (displayKnown) {
+                    // this display was known but the change in artwork size will cause the
+                    // artwork to be refreshed
+                    if ((di.mArtworkExpectedWidth != w) || (di.mArtworkExpectedHeight != h)) {
+                        di.mArtworkExpectedWidth = w;
+                        di.mArtworkExpectedHeight = h;
+                        if (!sendArtworkToDisplay(di)) {
+                            displayIterator.remove();
+                        }
+                    }
+                }
+            }
+            if (!displayKnown) {
+                mRcDisplays.add(new DisplayInfoForClient(rcd, w, h));
+            }
         }
     }
 
+    /** pre-condition rcd != null */
     private void onUnplugDisplay(IRemoteControlDisplay rcd) {
         synchronized(mCacheLock) {
-            if ((mRcDisplay != null) && (mRcDisplay.asBinder().equals(rcd.asBinder()))) {
-                mRcDisplay = null;
-                mArtworkExpectedWidth = ARTWORK_DEFAULT_SIZE;
-                mArtworkExpectedHeight = ARTWORK_DEFAULT_SIZE;
+            Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext()) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                if (di.mRcDisplay.asBinder().equals(rcd.asBinder())) {
+                    displayIterator.remove();
+                    break;
+                }
+            }
+            // list of RCDs has changed, reevaluate whether position check is still needed
+            boolean oldNeedsPositionSync = mNeedsPositionSync;
+            boolean newNeedsPositionSync = false;
+            displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext()) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                if (di.mWantsPositionSync) {
+                    newNeedsPositionSync = true;
+                    break;
+                }
+            }
+            mNeedsPositionSync = newNeedsPositionSync;
+            if (oldNeedsPositionSync != mNeedsPositionSync) {
+                // update needed?
+                initiateCheckForDrift_syncCacheLock();
+            }
+        }
+    }
+
+    /** pre-condition rcd != null */
+    private void onUpdateDisplayArtworkSize(IRemoteControlDisplay rcd, int w, int h) {
+        synchronized(mCacheLock) {
+            final Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            while (displayIterator.hasNext()) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                if (di.mRcDisplay.asBinder().equals(rcd.asBinder()) &&
+                        ((di.mArtworkExpectedWidth != w) || (di.mArtworkExpectedHeight != h))) {
+                    di.mArtworkExpectedWidth = w;
+                    di.mArtworkExpectedHeight = h;
+                    if (!sendArtworkToDisplay(di)) {
+                        displayIterator.remove();
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    /** pre-condition rcd != null */
+    private void onDisplayWantsSync(IRemoteControlDisplay rcd, boolean wantsSync) {
+        synchronized(mCacheLock) {
+            boolean oldNeedsPositionSync = mNeedsPositionSync;
+            boolean newNeedsPositionSync = false;
+            final Iterator<DisplayInfoForClient> displayIterator = mRcDisplays.iterator();
+            // go through the list of RCDs and for each entry, check both whether this is the RCD
+            //  that gets upated, and whether the list has one entry that wants position sync
+            while (displayIterator.hasNext()) {
+                final DisplayInfoForClient di = (DisplayInfoForClient) displayIterator.next();
+                if (di.mRcDisplay.asBinder().equals(rcd.asBinder())) {
+                    di.mWantsPositionSync = wantsSync;
+                }
+                if (di.mWantsPositionSync) {
+                    newNeedsPositionSync = true;
+                }
+            }
+            mNeedsPositionSync = newNeedsPositionSync;
+            if (oldNeedsPositionSync != mNeedsPositionSync) {
+                // update needed?
+                initiateCheckForDrift_syncCacheLock();
+            }
+        }
+    }
+
+    private void onSeekTo(int generationId, long timeMs) {
+        synchronized (mCacheLock) {
+            if ((mCurrentClientGenId == generationId) && (mPositionUpdateListener != null)) {
+                mPositionUpdateListener.onPlaybackPositionUpdate(timeMs);
             }
         }
     }
@@ -1155,6 +1592,59 @@ public class RemoteControlClient
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
+        }
+    }
+
+    /**
+     * Returns whether, for the given playback state, the playback position is expected to
+     * be changing.
+     * @param playstate the playback state to evaluate
+     * @return true during any form of playback, false if it's not playing anything while in this
+     *     playback state
+     */
+    private static boolean playbackPositionShouldMove(int playstate) {
+        switch(playstate) {
+            case PLAYSTATE_STOPPED:
+            case PLAYSTATE_PAUSED:
+            case PLAYSTATE_BUFFERING:
+            case PLAYSTATE_ERROR:
+            case PLAYSTATE_SKIPPING_FORWARDS:
+            case PLAYSTATE_SKIPPING_BACKWARDS:
+                return false;
+            case PLAYSTATE_PLAYING:
+            case PLAYSTATE_FAST_FORWARDING:
+            case PLAYSTATE_REWINDING:
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Period for playback position drift checks, 15s when playing at 1x or slower.
+     */
+    private final static long POSITION_REFRESH_PERIOD_PLAYING_MS = 15000;
+    /**
+     * Minimum period for playback position drift checks, never more often when every 2s, when
+     * fast forwarding or rewinding.
+     */
+    private final static long POSITION_REFRESH_PERIOD_MIN_MS = 2000;
+    /**
+     * The value above which the difference between client-reported playback position and
+     * estimated position is considered a drift.
+     */
+    private final static long POSITION_DRIFT_MAX_MS = 500;
+    /**
+     * Compute the period at which the estimated playback position should be compared against the
+     * actual playback position. Is a funciton of playback speed.
+     * @param speed 1.0f is normal playback speed
+     * @return the period in ms
+     */
+    private static long getCheckPeriodFromSpeed(float speed) {
+        if (Math.abs(speed) <= 1.0f) {
+            return POSITION_REFRESH_PERIOD_PLAYING_MS;
+        } else {
+            return Math.max((long)(POSITION_REFRESH_PERIOD_PLAYING_MS / Math.abs(speed)),
+                    POSITION_REFRESH_PERIOD_MIN_MS);
         }
     }
 }

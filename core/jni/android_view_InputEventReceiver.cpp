@@ -27,12 +27,15 @@
 #include <android_runtime/AndroidRuntime.h>
 #include <utils/Log.h>
 #include <utils/Looper.h>
+#include <utils/Vector.h>
 #include <utils/threads.h>
 #include <androidfw/InputTransport.h>
 #include "android_os_MessageQueue.h"
 #include "android_view_InputChannel.h"
 #include "android_view_KeyEvent.h"
 #include "android_view_MotionEvent.h"
+
+#include <ScopedLocalRef.h>
 
 namespace android {
 
@@ -47,7 +50,7 @@ static struct {
 class NativeInputEventReceiver : public LooperCallback {
 public:
     NativeInputEventReceiver(JNIEnv* env,
-            jobject receiverObj, const sp<InputChannel>& inputChannel,
+            jobject receiverWeak, const sp<InputChannel>& inputChannel,
             const sp<MessageQueue>& messageQueue);
 
     status_t initialize();
@@ -59,11 +62,20 @@ protected:
     virtual ~NativeInputEventReceiver();
 
 private:
-    jobject mReceiverObjGlobal;
+    struct Finish {
+        uint32_t seq;
+        bool handled;
+    };
+
+    jobject mReceiverWeakGlobal;
     InputConsumer mInputConsumer;
     sp<MessageQueue> mMessageQueue;
     PreallocatedInputEventFactory mInputEventFactory;
     bool mBatchedInputEventPending;
+    int mFdEvents;
+    Vector<Finish> mFinishQueue;
+
+    void setFdEvents(int events);
 
     const char* getInputChannelName() {
         return mInputConsumer.getChannel()->getName().string();
@@ -74,11 +86,11 @@ private:
 
 
 NativeInputEventReceiver::NativeInputEventReceiver(JNIEnv* env,
-        jobject receiverObj, const sp<InputChannel>& inputChannel,
+        jobject receiverWeak, const sp<InputChannel>& inputChannel,
         const sp<MessageQueue>& messageQueue) :
-        mReceiverObjGlobal(env->NewGlobalRef(receiverObj)),
+        mReceiverWeakGlobal(env->NewGlobalRef(receiverWeak)),
         mInputConsumer(inputChannel), mMessageQueue(messageQueue),
-        mBatchedInputEventPending(false) {
+        mBatchedInputEventPending(false), mFdEvents(0) {
 #if DEBUG_DISPATCH_CYCLE
     ALOGD("channel '%s' ~ Initializing input event receiver.", getInputChannelName());
 #endif
@@ -86,12 +98,11 @@ NativeInputEventReceiver::NativeInputEventReceiver(JNIEnv* env,
 
 NativeInputEventReceiver::~NativeInputEventReceiver() {
     JNIEnv* env = AndroidRuntime::getJNIEnv();
-    env->DeleteGlobalRef(mReceiverObjGlobal);
+    env->DeleteGlobalRef(mReceiverWeakGlobal);
 }
 
 status_t NativeInputEventReceiver::initialize() {
-    int receiveFd = mInputConsumer.getChannel()->getFd();
-    mMessageQueue->getLooper()->addFd(receiveFd, 0, ALOOPER_EVENT_INPUT, this, NULL);
+    setFdEvents(ALOOPER_EVENT_INPUT);
     return OK;
 }
 
@@ -100,7 +111,7 @@ void NativeInputEventReceiver::dispose() {
     ALOGD("channel '%s' ~ Disposing input event receiver.", getInputChannelName());
 #endif
 
-    mMessageQueue->getLooper()->removeFd(mInputConsumer.getChannel()->getFd());
+    setFdEvents(0);
 }
 
 status_t NativeInputEventReceiver::finishInputEvent(uint32_t seq, bool handled) {
@@ -110,29 +121,96 @@ status_t NativeInputEventReceiver::finishInputEvent(uint32_t seq, bool handled) 
 
     status_t status = mInputConsumer.sendFinishedSignal(seq, handled);
     if (status) {
+        if (status == WOULD_BLOCK) {
+#if DEBUG_DISPATCH_CYCLE
+            ALOGD("channel '%s' ~ Could not send finished signal immediately.  "
+                    "Enqueued for later.", getInputChannelName());
+#endif
+            Finish finish;
+            finish.seq = seq;
+            finish.handled = handled;
+            mFinishQueue.add(finish);
+            if (mFinishQueue.size() == 1) {
+                setFdEvents(ALOOPER_EVENT_INPUT | ALOOPER_EVENT_OUTPUT);
+            }
+            return OK;
+        }
         ALOGW("Failed to send finished signal on channel '%s'.  status=%d",
                 getInputChannelName(), status);
     }
     return status;
 }
 
+void NativeInputEventReceiver::setFdEvents(int events) {
+    if (mFdEvents != events) {
+        mFdEvents = events;
+        int fd = mInputConsumer.getChannel()->getFd();
+        if (events) {
+            mMessageQueue->getLooper()->addFd(fd, 0, events, this, NULL);
+        } else {
+            mMessageQueue->getLooper()->removeFd(fd);
+        }
+    }
+}
+
 int NativeInputEventReceiver::handleEvent(int receiveFd, int events, void* data) {
     if (events & (ALOOPER_EVENT_ERROR | ALOOPER_EVENT_HANGUP)) {
-        ALOGE("channel '%s' ~ Publisher closed input channel or an error occurred.  "
+#if DEBUG_DISPATCH_CYCLE
+        // This error typically occurs when the publisher has closed the input channel
+        // as part of removing a window or finishing an IME session, in which case
+        // the consumer will soon be disposed as well.
+        ALOGD("channel '%s' ~ Publisher closed input channel or an error occurred.  "
                 "events=0x%x", getInputChannelName(), events);
+#endif
         return 0; // remove the callback
     }
 
-    if (!(events & ALOOPER_EVENT_INPUT)) {
-        ALOGW("channel '%s' ~ Received spurious callback for unhandled poll event.  "
-                "events=0x%x", getInputChannelName(), events);
+    if (events & ALOOPER_EVENT_INPUT) {
+        JNIEnv* env = AndroidRuntime::getJNIEnv();
+        status_t status = consumeEvents(env, false /*consumeBatches*/, -1);
+        mMessageQueue->raiseAndClearException(env, "handleReceiveCallback");
+        return status == OK || status == NO_MEMORY ? 1 : 0;
+    }
+
+    if (events & ALOOPER_EVENT_OUTPUT) {
+        for (size_t i = 0; i < mFinishQueue.size(); i++) {
+            const Finish& finish = mFinishQueue.itemAt(i);
+            status_t status = mInputConsumer.sendFinishedSignal(finish.seq, finish.handled);
+            if (status) {
+                mFinishQueue.removeItemsAt(0, i);
+
+                if (status == WOULD_BLOCK) {
+#if DEBUG_DISPATCH_CYCLE
+                    ALOGD("channel '%s' ~ Sent %u queued finish events; %u left.",
+                            getInputChannelName(), i, mFinishQueue.size());
+#endif
+                    return 1; // keep the callback, try again later
+                }
+
+                ALOGW("Failed to send finished signal on channel '%s'.  status=%d",
+                        getInputChannelName(), status);
+                if (status != DEAD_OBJECT) {
+                    JNIEnv* env = AndroidRuntime::getJNIEnv();
+                    String8 message;
+                    message.appendFormat("Failed to finish input event.  status=%d", status);
+                    jniThrowRuntimeException(env, message.string());
+                    mMessageQueue->raiseAndClearException(env, "finishInputEvent");
+                }
+                return 0; // remove the callback
+            }
+        }
+#if DEBUG_DISPATCH_CYCLE
+        ALOGD("channel '%s' ~ Sent %u queued finish events; none left.",
+                getInputChannelName(), mFinishQueue.size());
+#endif
+        mFinishQueue.clear();
+        setFdEvents(ALOOPER_EVENT_INPUT);
         return 1;
     }
 
-    JNIEnv* env = AndroidRuntime::getJNIEnv();
-    status_t status = consumeEvents(env, false /*consumeBatches*/, -1);
-    mMessageQueue->raiseAndClearException(env, "handleReceiveCallback");
-    return status == OK || status == NO_MEMORY ? 1 : 0;
+    ALOGW("channel '%s' ~ Received spurious callback for unhandled poll event.  "
+            "events=0x%x", getInputChannelName(), events);
+    return 1;
 }
 
 status_t NativeInputEventReceiver::consumeEvents(JNIEnv* env,
@@ -146,6 +224,7 @@ status_t NativeInputEventReceiver::consumeEvents(JNIEnv* env,
         mBatchedInputEventPending = false;
     }
 
+    ScopedLocalRef<jobject> receiverObj(env, NULL);
     bool skipCallbacks = false;
     for (;;) {
         uint32_t seq;
@@ -157,12 +236,21 @@ status_t NativeInputEventReceiver::consumeEvents(JNIEnv* env,
                 if (!skipCallbacks && !mBatchedInputEventPending
                         && mInputConsumer.hasPendingBatch()) {
                     // There is a pending batch.  Come back later.
+                    if (!receiverObj.get()) {
+                        receiverObj.reset(jniGetReferent(env, mReceiverWeakGlobal));
+                        if (!receiverObj.get()) {
+                            ALOGW("channel '%s' ~ Receiver object was finalized "
+                                    "without being disposed.", getInputChannelName());
+                            return DEAD_OBJECT;
+                        }
+                    }
+
                     mBatchedInputEventPending = true;
 #if DEBUG_DISPATCH_CYCLE
                     ALOGD("channel '%s' ~ Dispatching batched input event pending notification.",
                             getInputChannelName());
 #endif
-                    env->CallVoidMethod(mReceiverObjGlobal,
+                    env->CallVoidMethod(receiverObj.get(),
                             gInputEventReceiverClassInfo.dispatchBatchedInputEventPending);
                     if (env->ExceptionCheck()) {
                         ALOGE("Exception dispatching batched input events.");
@@ -178,6 +266,15 @@ status_t NativeInputEventReceiver::consumeEvents(JNIEnv* env,
         assert(inputEvent);
 
         if (!skipCallbacks) {
+            if (!receiverObj.get()) {
+                receiverObj.reset(jniGetReferent(env, mReceiverWeakGlobal));
+                if (!receiverObj.get()) {
+                    ALOGW("channel '%s' ~ Receiver object was finalized "
+                            "without being disposed.", getInputChannelName());
+                    return DEAD_OBJECT;
+                }
+            }
+
             jobject inputEventObj;
             switch (inputEvent->getType()) {
             case AINPUT_EVENT_TYPE_KEY:
@@ -205,12 +302,13 @@ status_t NativeInputEventReceiver::consumeEvents(JNIEnv* env,
 #if DEBUG_DISPATCH_CYCLE
                 ALOGD("channel '%s' ~ Dispatching input event.", getInputChannelName());
 #endif
-                env->CallVoidMethod(mReceiverObjGlobal,
+                env->CallVoidMethod(receiverObj.get(),
                         gInputEventReceiverClassInfo.dispatchInputEvent, seq, inputEventObj);
                 if (env->ExceptionCheck()) {
                     ALOGE("Exception dispatching input event.");
                     skipCallbacks = true;
                 }
+                env->DeleteLocalRef(inputEventObj);
             } else {
                 ALOGW("channel '%s' ~ Failed to obtain event object.", getInputChannelName());
                 skipCallbacks = true;
@@ -224,7 +322,7 @@ status_t NativeInputEventReceiver::consumeEvents(JNIEnv* env,
 }
 
 
-static jint nativeInit(JNIEnv* env, jclass clazz, jobject receiverObj,
+static jint nativeInit(JNIEnv* env, jclass clazz, jobject receiverWeak,
         jobject inputChannelObj, jobject messageQueueObj) {
     sp<InputChannel> inputChannel = android_view_InputChannel_getInputChannel(env,
             inputChannelObj);
@@ -240,7 +338,7 @@ static jint nativeInit(JNIEnv* env, jclass clazz, jobject receiverObj,
     }
 
     sp<NativeInputEventReceiver> receiver = new NativeInputEventReceiver(env,
-            receiverObj, inputChannel, messageQueue);
+            receiverWeak, inputChannel, messageQueue);
     status_t status = receiver->initialize();
     if (status) {
         String8 message;
@@ -288,7 +386,7 @@ static void nativeConsumeBatchedInputEvents(JNIEnv* env, jclass clazz, jint rece
 static JNINativeMethod gMethods[] = {
     /* name, signature, funcPtr */
     { "nativeInit",
-            "(Landroid/view/InputEventReceiver;Landroid/view/InputChannel;Landroid/os/MessageQueue;)I",
+            "(Ljava/lang/ref/WeakReference;Landroid/view/InputChannel;Landroid/os/MessageQueue;)I",
             (void*)nativeInit },
     { "nativeDispose", "(I)V",
             (void*)nativeDispose },

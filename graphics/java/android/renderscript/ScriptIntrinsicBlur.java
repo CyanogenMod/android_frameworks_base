@@ -40,13 +40,13 @@ public final class ScriptIntrinsicBlur extends ScriptIntrinsic {
      *
      * Supported elements types are {@link Element#U8_4}
      *
-     * @param rs The Renderscript context
+     * @param rs The RenderScript context
      * @param e Element type for inputs and outputs
      *
      * @return ScriptIntrinsicBlur
      */
     public static ScriptIntrinsicBlur create(RenderScript rs, Element e) {
-        if (e != Element.U8_4(rs)) {
+        if ((!e.isCompatible(Element.U8_4(rs))) && (!e.isCompatible(Element.U8(rs)))) {
             throw new RSIllegalArgumentException("Unsuported element type.");
         }
         int id = rs.nScriptIntrinsicCreate(5, e.getID(rs));

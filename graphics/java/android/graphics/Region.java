@@ -18,8 +18,15 @@ package android.graphics;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Pools.SynchronizedPool;
 
 public class Region implements Parcelable {
+
+    private static final int MAX_POOL_SIZE = 10;
+
+    private static final SynchronizedPool<Region> sPool =
+            new SynchronizedPool<Region>(MAX_POOL_SIZE);
+
     /**
      * @hide
      */
@@ -80,7 +87,8 @@ public class Region implements Parcelable {
     /** Set the region to the specified region.
     */
     public boolean set(Region region) {
-        return nativeSetRegion(mNativeRegion, region.mNativeRegion);
+        nativeSetRegion(mNativeRegion, region.mNativeRegion);
+        return true;
     }
 
     /** Set the region to the specified rectangle
@@ -291,6 +299,39 @@ public class Region implements Parcelable {
         return nativeToString(mNativeRegion);
     }
 
+    /**
+     * @return An instance from a pool if such or a new one.
+     *
+     * @hide
+     */
+    public static Region obtain() {
+        Region region = sPool.acquire();
+        return (region != null) ? region : new Region();
+    }
+
+    /**
+     * @return An instance from a pool if such or a new one.
+     *
+     * @param other Region to copy values from for initialization.
+     *
+     * @hide
+     */
+    public static Region obtain(Region other) {
+        Region region = obtain();
+        region.set(other);
+        return region;
+    }
+
+    /**
+     * Recycles an instance.
+     *
+     * @hide
+     */
+    public void recycle() {
+        setEmpty();
+        sPool.release(this);
+    }
+
     //////////////////////////////////////////////////////////////////////////
     
     public static final Parcelable.Creator<Region> CREATOR
@@ -366,8 +407,7 @@ public class Region implements Parcelable {
     private static native int nativeConstructor();
     private static native void nativeDestructor(int native_region);
 
-    private static native boolean nativeSetRegion(int native_dst,
-                                                  int native_src);
+    private static native void nativeSetRegion(int native_dst, int native_src);
     private static native boolean nativeSetRect(int native_dst, int left,
                                                 int top, int right, int bottom);
     private static native boolean nativeSetPath(int native_dst, int native_path,

@@ -23,9 +23,12 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
-#include <binder/IMemory.h>
+#include <binder/ProcessState.h>
+
 #include <gui/SurfaceComposerClient.h>
 #include <gui/ISurfaceComposer.h>
+
+#include <ui/PixelFormat.h>
 
 #include <SkImageEncoder.h>
 #include <SkBitmap.h>
@@ -89,6 +92,8 @@ static status_t vinfoToPixelFormat(const fb_var_screeninfo& vinfo,
 
 int main(int argc, char** argv)
 {
+    ProcessState::self()->startThreadPool();
+
     const char* pname = argv[0];
     bool png = false;
     int32_t displayId = DEFAULT_DISPLAY_ID;
@@ -135,7 +140,7 @@ int main(int argc, char** argv)
     ssize_t mapsize = -1;
 
     void const* base = 0;
-    uint32_t w, h, f;
+    uint32_t w, s, h, f;
     size_t size = 0;
 
     ScreenshotClient screenshot;
@@ -144,6 +149,7 @@ int main(int argc, char** argv)
         base = screenshot.getPixels();
         w = screenshot.getWidth();
         h = screenshot.getHeight();
+        s = screenshot.getStride();
         f = screenshot.getFormat();
         size = screenshot.getSize();
     } else {
@@ -157,6 +163,7 @@ int main(int argc, char** argv)
                     size_t offset = (vinfo.xoffset + vinfo.yoffset*vinfo.xres) * bytespp;
                     w = vinfo.xres;
                     h = vinfo.yres;
+                    s = vinfo.xres;
                     size = w*h*bytespp;
                     mapsize = offset + size;
                     mapbase = mmap(0, mapsize, PROT_READ, MAP_PRIVATE, fb, 0);
@@ -172,7 +179,7 @@ int main(int argc, char** argv)
     if (base) {
         if (png) {
             SkBitmap b;
-            b.setConfig(flinger2skia(f), w, h);
+            b.setConfig(flinger2skia(f), w, h, s*bytesPerPixel(f));
             b.setPixels((void*)base);
             SkDynamicMemoryWStream stream;
             SkImageEncoder::EncodeStream(&stream, b,
@@ -184,7 +191,11 @@ int main(int argc, char** argv)
             write(fd, &w, 4);
             write(fd, &h, 4);
             write(fd, &f, 4);
-            write(fd, base, size);
+            size_t Bpp = bytesPerPixel(f);
+            for (size_t y=0 ; y<h ; y++) {
+                write(fd, base, w*Bpp);
+                base = (void *)((char *)base + s*Bpp);
+            }
         }
     }
     close(fd);

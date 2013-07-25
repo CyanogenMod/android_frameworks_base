@@ -20,7 +20,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemProperties;
-import android.util.Log;
+import android.telephony.Rlog;
 
 /**
  * Contains phone signal strength related information.
@@ -272,6 +272,33 @@ public class SignalStrength implements Parcelable {
         mLteRssnr = in.readInt();
         mLteCqi = in.readInt();
         isGsm = (in.readInt() != 0);
+    }
+
+    /**
+     * Make a SignalStrength object from the given parcel as passed up by
+     * the ril which does not have isGsm. isGsm will be changed by ServiceStateTracker
+     * so the default is a don't care.
+     *
+     * @hide
+     */
+    public static SignalStrength makeSignalStrengthFromRilParcel(Parcel in) {
+        if (DBG) log("Size of signalstrength parcel:" + in.dataSize());
+
+        SignalStrength ss = new SignalStrength();
+        ss.mGsmSignalStrength = in.readInt();
+        ss.mGsmBitErrorRate = in.readInt();
+        ss.mCdmaDbm = in.readInt();
+        ss.mCdmaEcio = in.readInt();
+        ss.mEvdoDbm = in.readInt();
+        ss.mEvdoEcio = in.readInt();
+        ss.mEvdoSnr = in.readInt();
+        ss.mLteSignalStrength = in.readInt();
+        ss.mLteRsrp = in.readInt();
+        ss.mLteRsrq = in.readInt();
+        ss.mLteRssnr = in.readInt();
+        ss.mLteCqi = in.readInt();
+
+        return ss;
     }
 
     /**
@@ -936,6 +963,6 @@ public class SignalStrength implements Parcelable {
      * log
      */
     private static void log(String s) {
-        Log.w(LOG_TAG, s);
+        Rlog.w(LOG_TAG, s);
     }
 }

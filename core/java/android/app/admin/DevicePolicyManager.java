@@ -1976,6 +1976,74 @@ public class DevicePolicyManager {
     }
 
     /**
+     * @hide
+     * Sets the given package as the device owner. The package must already be installed and there
+     * shouldn't be an existing device owner registered, for this call to succeed. Also, this
+     * method must be called before the device is provisioned.
+     * @param packageName the package name of the application to be registered as the device owner.
+     * @return whether the package was successfully registered as the device owner.
+     * @throws IllegalArgumentException if the package name is null or invalid
+     * @throws IllegalStateException if a device owner is already registered or the device has
+     *         already been provisioned.
+     */
+    public boolean setDeviceOwner(String packageName) throws IllegalArgumentException,
+            IllegalStateException {
+        if (mService != null) {
+            try {
+                return mService.setDeviceOwner(packageName);
+            } catch (RemoteException re) {
+                Log.w(TAG, "Failed to set device owner");
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Used to determine if a particular package has been registered as a Device Owner app.
+     * A device owner app is a special device admin that cannot be deactivated by the user, once
+     * activated as a device admin. It also cannot be uninstalled. To check if a particular
+     * package is currently registered as the device owner app, pass in the package name from
+     * {@link Context#getPackageName()} to this method.<p/>This is useful for device
+     * admin apps that want to check if they are also registered as the device owner app. The
+     * exact mechanism by which a device admin app is registered as a device owner app is defined by
+     * the setup process.
+     * @param packageName the package name of the app, to compare with the registered device owner
+     * app, if any.
+     * @return whether or not the package is registered as the device owner app.
+     */
+    public boolean isDeviceOwnerApp(String packageName) {
+        if (mService != null) {
+            try {
+                return mService.isDeviceOwner(packageName);
+            } catch (RemoteException re) {
+                Log.w(TAG, "Failed to check device owner");
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @hide
+     * Redirect to isDeviceOwnerApp.
+     */
+    public boolean isDeviceOwner(String packageName) {
+        return isDeviceOwnerApp(packageName);
+    }
+
+    /** @hide */
+    public String getDeviceOwner() {
+        if (mService != null) {
+            try {
+                return mService.getDeviceOwner();
+            } catch (RemoteException re) {
+                Log.w(TAG, "Failed to get device owner");
+            }
+        }
+        return null;
+    }
+
+    /**
      * CM: check if secure keyguard is required
      * @hide
      */

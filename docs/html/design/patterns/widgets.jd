@@ -1,5 +1,13 @@
 page.title=Widgets
+page.tags="appwidget","home"
 @jd:body
+
+<a class="notice-developers" href="{@docRoot}guide/topics/appwidgets/index.html">
+  <div>
+    <h3>Developer Docs</h3>
+    <p>App Widgets</p>
+  </div>
+</a>
 
 <p>Widgets are an essential aspect of home screen customization. You can imagine them as "at-a-glance" views of an app's most important data and functionality that is accessible right from the user's home screen. Users can move widgets across their home screen panels, and, if supported, resize them to tailor the amount of information within a widget to their preference.</p>
 
@@ -15,7 +23,7 @@ page.title=Widgets
 <div class="layout-content-row">
   <div class="layout-content-col span-6">
     <h3>Collection widgets</h3>
-    <p>As the name implies, collection widgets specialize on displaying multitude elements of the same type, such as a collection of pictures from a gallery app, a collection of articles from a news app or a collection of emails/messages from a communication app. Collection widgets typically focus on two use cases: browsing the collection, and opening an element of the collection to its detail view for consumption. Collection widgets can scroll vertically.</p>
+    <p>As the name implies, collection widgets specialize in displaying multitude elements of the same type, such as a collection of pictures from a gallery app, a collection of articles from a news app or a collection of emails/messages from a communication app. Collection widgets typically focus on two use cases: browsing the collection, and opening an element of the collection to its detail view for consumption. Collection widgets can scroll vertically.</p>
   </div>
   <div class="layout-content-col span-3">
     <img src="{@docRoot}design/media/widgets_collection_gmail.png">
@@ -122,13 +130,6 @@ A music player widget is primarily a control widget, but also keeps the user inf
   </div>
 </div>
 
-
-<div class="note develop">
-<p><strong>Developer Guide</strong></p>
-  <p>For information about how to build widgets for the home screen, see the
-  <a href="{@docRoot}guide/topics/appwidgets/index.html">App Widgets</a>
-  API guide.</p>
-</div>
 
 <h2>Checklist</h2>
 <ul>

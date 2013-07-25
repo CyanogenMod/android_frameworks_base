@@ -6,12 +6,12 @@ LOCAL_SRC_FILES:= \
 	android_media_Visualizer.cpp
 
 LOCAL_SHARED_LIBRARIES := \
+	liblog \
 	libcutils \
 	libutils \
 	libandroid_runtime \
 	libnativehelper \
-	libmedia \
-	libmedia_native
+	libmedia
 
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, audio-effects)

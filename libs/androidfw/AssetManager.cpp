@@ -20,6 +20,7 @@
 //
 
 #define LOG_TAG "asset"
+#define ATRACE_TAG ATRACE_TAG_RESOURCES
 //#define LOG_NDEBUG 0
 
 #include <androidfw/Asset.h>
@@ -33,6 +34,9 @@
 #include <utils/threads.h>
 #include <utils/Timers.h>
 #include <utils/ZipFileRO.h>
+#ifdef HAVE_ANDROID_OS
+#include <cutils/trace.h>
+#endif
 
 #include <assert.h>
 #include <dirent.h>
@@ -50,6 +54,14 @@
         _rc = (exp);                       \
     } while (_rc == -1 && errno == EINTR); \
     _rc; })
+#endif
+
+#ifdef HAVE_ANDROID_OS
+#define MY_TRACE_BEGIN(x) ATRACE_BEGIN(x)
+#define MY_TRACE_END() ATRACE_END()
+#else
+#define MY_TRACE_BEGIN(x)
+#define MY_TRACE_END()
 #endif
 
 using namespace android;

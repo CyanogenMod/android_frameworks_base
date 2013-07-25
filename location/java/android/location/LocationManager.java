@@ -1461,7 +1461,7 @@ public class LocationManager {
         }
         try {
             GpsStatusListenerTransport transport = new GpsStatusListenerTransport(listener);
-            result = mService.addGpsStatusListener(transport);
+            result = mService.addGpsStatusListener(transport, mContext.getPackageName());
             if (result) {
                 mGpsStatusListeners.put(listener, transport);
             }
@@ -1507,7 +1507,7 @@ public class LocationManager {
         }
         try {
             GpsStatusListenerTransport transport = new GpsStatusListenerTransport(listener);
-            result = mService.addGpsStatusListener(transport);
+            result = mService.addGpsStatusListener(transport, mContext.getPackageName());
             if (result) {
                 mNmeaListeners.put(listener, transport);
             }
@@ -1549,9 +1549,9 @@ public class LocationManager {
     public GpsStatus getGpsStatus(GpsStatus status) {
         if (status == null) {
             status = new GpsStatus();
-       }
-       status.setStatus(mGpsStatus);
-       return status;
+        }
+        status.setStatus(mGpsStatus);
+        return status;
     }
 
     /**

@@ -22,6 +22,8 @@
 
 #include <EGL/egl_cache.h>
 
+#include <Caches.h>
+
 #ifdef USE_OPENGL_RENDERER
     EGLAPI void EGLAPIENTRY eglBeginFrame(EGLDisplay dpy, EGLSurface surface);
 #endif
@@ -84,21 +86,16 @@ static jboolean android_view_HardwareRenderer_isBackBufferPreserved(JNIEnv* env,
     return error == EGL_SUCCESS && value == EGL_BUFFER_PRESERVED;
 }
 
-static void android_view_HardwareRenderer_disableVsync(JNIEnv* env, jobject clazz) {
-    EGLDisplay display = eglGetCurrentDisplay();
-
-    eglGetError();
-    eglSwapInterval(display, 0);
-
-    EGLint error = eglGetError();
-    if (error != EGL_SUCCESS) {
-        RENDERER_LOGD("Could not disable v-sync (%x)", error);
-    }
-}
-
 // ----------------------------------------------------------------------------
 // Tracing and debugging
 // ----------------------------------------------------------------------------
+
+static bool android_view_HardwareRenderer_loadProperties(JNIEnv* env, jobject clazz) {
+    if (uirenderer::Caches::hasInstance()) {
+        return uirenderer::Caches::getInstance().initProperties();
+    }
+    return false;
+}
 
 static void android_view_HardwareRenderer_beginFrame(JNIEnv* env, jobject clazz,
         jintArray size) {
@@ -146,7 +143,7 @@ static JNINativeMethod gMethods[] = {
 #ifdef USE_OPENGL_RENDERER
     { "nIsBackBufferPreserved", "()Z",   (void*) android_view_HardwareRenderer_isBackBufferPreserved },
     { "nPreserveBackBuffer",    "()Z",   (void*) android_view_HardwareRenderer_preserveBackBuffer },
-    { "nDisableVsync",          "()V",   (void*) android_view_HardwareRenderer_disableVsync },
+    { "nLoadProperties",        "()Z",   (void*) android_view_HardwareRenderer_loadProperties },
 
     { "nBeginFrame",            "([I)V", (void*) android_view_HardwareRenderer_beginFrame },
 #endif

@@ -72,6 +72,8 @@ bool KeyEvent::hasDefaultAction(int32_t keyCode) {
         case AKEYCODE_MEDIA_RECORD:
         case AKEYCODE_MEDIA_FAST_FORWARD:
         case AKEYCODE_MUTE:
+        case AKEYCODE_BRIGHTNESS_DOWN:
+        case AKEYCODE_BRIGHTNESS_UP:
             return true;
     }
     
@@ -108,6 +110,8 @@ bool KeyEvent::isSystemKey(int32_t keyCode) {
         case AKEYCODE_CAMERA:
         case AKEYCODE_FOCUS:
         case AKEYCODE_SEARCH:
+        case AKEYCODE_BRIGHTNESS_DOWN:
+        case AKEYCODE_BRIGHTNESS_UP:
             return true;
     }
     
@@ -221,7 +225,7 @@ status_t PointerCoords::readFromParcel(Parcel* parcel) {
     }
 
     for (uint32_t i = 0; i < count; i++) {
-        values[i] = parcel->readInt32();
+        values[i] = parcel->readFloat();
     }
     return OK;
 }
@@ -231,7 +235,7 @@ status_t PointerCoords::writeToParcel(Parcel* parcel) const {
 
     uint32_t count = __builtin_popcountll(bits);
     for (uint32_t i = 0; i < count; i++) {
-        parcel->writeInt32(values[i]);
+        parcel->writeFloat(values[i]);
     }
     return OK;
 }

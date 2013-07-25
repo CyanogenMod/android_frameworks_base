@@ -1,12 +1,21 @@
-page.title=Publishing Checklist for Google Play
+page.title=Launch Checklist
+page.tags="publishing","launch","Google Play", "Developer Console"
 @jd:body
+<div id="butterbar-wrapper" >
+  <div id="butterbar" >
+    <div id="butterbar-message">
+<a target="_blank" href="https://docs.google.com/a/google.com/forms/d/1EHLPGqhbxj2HungHRRN4_0K9TGpc-Izy-u46vBDgS8Q/viewform">
+      Take the Android Developer Survey</a>
+    </div>
+  </div>
+</div>
 
 <div id="qv-wrapper"><div id="qv">
-<h2>Checklist:</h2>
+<h2>Checklist</h2>
 <ol>
 <li><a href="#process">1. Understand the publishing process</a></li>
 <li><a href="#policies">2. Understand Google Play policies</a></li>
-<li><a href="#core-app-quality">3. Test for Core App Quality</a></li>
+<li><a href="#core-app-quality">3. Test for core app quality</a></li>
 <li><a href="#rating">4. Determine your content rating</a></li>
 <li><a href="#countries">5. Determine country distribution</a></li>
 <li><a href="#size">6. Confirm the app's overall size</a></li>
@@ -17,10 +26,11 @@ page.title=Publishing Checklist for Google Play
 <li><a href="#localize">11. Start localization early</a></li>
 <li><a href="#graphics">12. Prepare promotional graphics</a></li>
 <li><a href="#apk">13. Build the release-ready APK</a></li>
-<li><a href="#product-page">14. Complete the product details</a></li>
-<li><a href="#badges">15. Use Google Play badges</a></li>
-<li><a href="#final-checks">16. Final checks and publishing</a></li>
-<li><a href="#support">17. Support users after launch</a></li>
+<li><a href="#beta">14. Plan a beta release</a></li>
+<li><a href="#product-page">15. Complete the product details</a></li>
+<li><a href="#badges">16. Use Google Play badges</a></li>
+<li><a href="#final-checks">17. Final checks and publishing</a></li>
+<li><a href="#support">18. Support users after launch</a></li>
 </ol>
 </div></div>
 
@@ -79,6 +89,10 @@ violations, termination of your developer account. </p>
 <tr>
 <td><p>Related resources:</p>
 <ul style="margin-top:-.5em;">
+
+<li><strong><a href="{@docRoot}distribute/googleplay/policies/index.html">Google Play Policies and Guidelines</a></strong> &mdash; An overview of Google Play policies for spam, intellectual property, and ads, with examples of common problems. </li>
+</a></strong> &mdash; Help Center document describing various content policies and processes.</li>
+
 <li><strong><a href="http://support.google.com/googleplay/android-developer/bin/topic.py?hl=en&topic=2364761&parent=2365624&ctx=topic">Policy and Best Practices
 </a></strong> &mdash; Help Center document describing various content policies and processes.</li>
 
@@ -171,10 +185,14 @@ your localization needs are, both in your app and in its Google Play listing
 details, and start the work of localization well in advance of your
 launch target date.</p>
 
+<p>See <a href="{@docRoot}distribute/googleplay/publish/localizing.html">Localization
+Checklist</a> for key steps and considerations in the localizing process. </p>
+
 <table>
 <tr>
 <td><p>Related resources:</p>
 <ul style="margin-top:-.5em;">
+<li><strong><a href="{@docRoot}distribute/googleplay/publish/localizing.html">Localization Checklist</a></strong> &mdash; Overview of key steps and considerations for localizing your Android app.</li>
 <li><strong><a href="http://support.google.com/googleplay/android-developer/bin/answer.py?hl=en&answer=138294&topic=2365624&ctx=topic">Supported locations for distributing applications</a></strong> on Google Play.
 .</li>
 </ul>
@@ -203,11 +221,19 @@ distributing large apps. However, the use of APK Expansion Files requires some
 changes in your app binary, so you will need to make those changes before
 creating your release-ready APK.</p>
 
+<p>To minimize the size of your app binary, make sure that you run the
+<a href="{@docRoot}tools/help/proguard.html">Proguard</a> tool on your code when
+building your release-ready APK.</p>
+
 <table>
 <tr>
 <td><p>Related resources:</p>
 <ul style="margin-top:-.5em;">
-<li><strong><a href="{@docRoot}google/play/expansion-files.html">APK Expansion Files</a></strong> &mdash; Developer documentation describing APK Expansion Files and how to support them in your app.</li>
+<li><strong><a href="{@docRoot}google/play/expansion-files.html">APK Expansion Files</a></strong>
+&mdash; Developer documentation describing APK Expansion Files and how to support them in your app.</li>
+<li><strong><a href="{@docRoot}tools/help/proguard.html">ProGuard</a></strong> &mdash; Developer
+documentation describing how to use ProGuard to shrink, optimize, and obfuscate your code prior
+to release.</li>
 </ul>
 </td>
 </tr>
@@ -270,7 +296,7 @@ priced). You can also sell in-app products and subscriptions. </li>
 </ul>
 
 <p> If your app is be priced, or if you'll be selling in-app products,
-you need set up a Checkout Merchant Account before you can publish.</p>
+you need set up a Google Wallet merchant account before you can publish.</p>
 
 <table>
 <tr>
@@ -355,10 +381,7 @@ launch date.</p>
 <li>Localizing the app's graphic assets, screenshots, and videos that accompany your store listing.</li>
 </ul>
 
-<p>To get started localizing your app, work with your development team to extract
-any resource or coded strings for translation. Also identify images, icons, or
-other assets that should be language- or locale-specific. Hand these off to  
-a translator.</p>
+<p>See <a href="{@docRoot}distribute/googleplay/publish/localizing.html">Localization Checklist</a> for key steps and considerations in the localizing process. </p>
 
 <p>To localize your store listing, first create and finalize your app title, description, 
 and promotional text. Collect and send all of these for localization. You can optionally
@@ -383,7 +406,8 @@ when you upload assets and configure your product details.</p>
 <tr>
 <td><p>Related resources:</p>
 <ul style="margin-top:-.5em;">
-<li><strong><a href="{@docRoot}guide/topics/resources/localization.html">Localization</a></strong> &mdash; How to supply localized resources in your app.</li>
+<li><strong><a href="{@docRoot}distribute/googleplay/publish/localizing.html">Localization Checklist</a></strong> &mdash; Overview of key steps and considerations for localizing your Android app.</li>
+<li><strong><a href="{@docRoot}guide/topics/resources/localization.html">Localizing with Resources</a></strong> &mdash; Developer guide to localizing resources in your app.</li>
 </ul>
 </td>
 </tr>
@@ -399,14 +423,6 @@ attracts and engages users, so you should consider having a professional produce
 them for you. Screen shots and videos are also very important, because they show
 what your app looks like, how it's used or played, and what makes it different.</p>
 
-<div class="sidebox-wrapper">
-<div class="sidebox">
-<h3>Localize your promotional graphics and videos<span class="new"> new!</span></h3>
-<p>Google Play now lets you provide different promotional graphics for each
-language you support. Localizing your graphics helps you reach your global
-user base more effectively and is highly recommended.</p>
-</div>
-</div>
 <p>All of your graphic assets should be designed so that they are easy to see
 and highlight your app or brand in a colorful, interesting way. The assets
 should reference the same logo and icon as users will actually find in the All
@@ -417,8 +433,8 @@ be also be displayed to users on your product details page. </p>
 <p>To help you market your app more effectively to a global audience, Google
 Play lets you create localized versions of your promotional graphics,
 screenshots, and videos and upload them to the Developer Console. When a user
-visits your app's store listing, Google Play displays the promotional graphic
-and video that you've provided for the user's language.</p>
+visits your app's store listing, Google Play displays the promotional graphic,
+screenshots and video that you've provided for the user's language.</p>
 
 <p>To localize your promotional graphics, you can translate any embedded text, use
 different imagery or presentation, or change your marketing approach to best address the needs
@@ -427,11 +443,11 @@ includes and embedded product name or tag line, you can translate that text
 and add it to a localized version of the promotional graphic.</p>
 
 <p>Because your localized graphic assets and videos are so important, you should get
-started on creating them and localizing them as needed, well in advance of your target
+started on creating them and localizing them well in advance of your target
 publishing date. </p>
 
-<p class="note"><strong>Note:</strong> Localized promotional graphics and videos are supported
-in the Developer Console Preview only.</p>
+<p class="note"><strong>Note:</strong> Localized promotional graphics and videos
+are supported only in the new Developer Console design.</p>
 
 <table>
 <tr>
@@ -478,7 +494,33 @@ recent version before publishing. </p>
 </tr>
 </table>
 
-<h2 id="product-page">14. Complete the app's product details</h2>
+<h2 id="beta">14. Plan a beta release</h2>
+
+<div class="sidebox-wrapper">
+<div class="sidebox">
+<h2>Easy beta testing</h2>
+<p>Google Play now lets you set up groups of alpha and beta testers, anywhere around the world. Check out this powerful feature next time you sign in to the Developer Console.</p>
+</div>
+</div>
+
+<p>Before launching your app, it's always valuable to get real-world feedback
+from users &mdash; even more so when you are launching a new app. It's highly
+recommended that you distribute a pre-release version of your app to users
+across your key markets and provide an easy means for them to provide feedback
+and report bugs. </p>
+
+<p>Google Play can help you set up a beta program for your app. After you sign
+in to the Developer Console and upload your APK, you can set up groups of users
+for alpha testing and beta testing the app. You can start with a small group of
+alpha testers, then move to a larger group of beta testers. Once users are
+added, they access your app's store listing and install the app. User feedback
+from alpha and beta testers goes directly to you and is not posted as public
+reviews. </p>
+
+<p>The feedback you receive will help you adjust your UI, translations, and
+store listing to ensure a great experience for users. </p>
+
+<h2 id="product-page">15. Complete the app's product details</h2>
 
 <p>On Google Play, your app's product information is shown to users on its
 product details page, the page that users visit to learn more about your app and
@@ -523,7 +565,7 @@ in the app description, release notes, promotional campaigns, and elsewhere.</p>
 </tr>
 </table>
 
-<h2 id="badges">15. Use Google Play badges and links in your promotional
+<h2 id="badges">16. Use Google Play badges and links in your promotional
 campaigns</h2>
 
 <p>Google Play badges give you an officially branded way of promoting your app
@@ -552,15 +594,15 @@ and reviews, or any other channel available.</p>
 </tr>
 </table>
 
-<h2 id="final-checks">16. Final checks and publishing</h2> 
+<h2 id="final-checks">17. Final checks and publishing</h2> 
 
 <p>When you think you are ready to publish, sign in to the Developer Console and take a few moments for a few
-final checks:</p>
+final checks.</p>
 
 <p>Make sure that: </p>
 
 <ul>
-<li>Your developer profile has the correct information and is linked to the proper Google Checkout Merchant account (if you are selling products).</li>
+<li>Your developer profile has the correct information and is linked to the proper Google Wallet merchant account (if you are selling products).</li>
 <li>You have the right version of the app uploaded.</li>
 <li>All parts of your Product Details are ready, including all graphic assets, screenshots, video, localized descriptions, and so on. </li>
 <li>You have set your app's pricing to free or priced.</li>
@@ -590,7 +632,7 @@ final checks:</p>
 </table>
 
 
-<h2 id="support">17. Support users after launch</h2>
+<h2 id="support">18. Support users after launch</h2>
 
 <p>After you publish an app or an app update, it's crucial for you to support
 your customers. Prompt and courteous support can provide a better experience for

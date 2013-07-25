@@ -212,8 +212,10 @@ public final class InputManager {
                 } catch (RemoteException ex) {
                     throw new RuntimeException("Could not get input device information.", ex);
                 }
+                if (inputDevice != null) {
+                    mInputDevices.setValueAt(index, inputDevice);
+                }
             }
-            mInputDevices.setValueAt(index, inputDevice);
             return inputDevice;
         }
     }
@@ -241,6 +243,8 @@ public final class InputManager {
                         inputDevice = mIm.getInputDevice(id);
                     } catch (RemoteException ex) {
                         // Ignore the problem for the purposes of this method.
+                    }
+                    if (inputDevice == null) {
                         continue;
                     }
                     mInputDevices.setValueAt(i, inputDevice);
@@ -807,6 +811,22 @@ public final class InputManager {
             } catch (RemoteException ex) {
                 Log.w(TAG, "Failed to vibrate.", ex);
             }
+        }
+
+        /**
+         * @hide
+         */
+        @Override
+        public void vibrate(int owningUid, String owningPackage, long milliseconds) {
+            vibrate(milliseconds);
+        }
+
+        /**
+         * @hide
+         */
+        @Override
+        public void vibrate(int owningUid, String owningPackage, long[] pattern, int repeat) {
+            vibrate(pattern, repeat);
         }
 
         @Override

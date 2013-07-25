@@ -37,6 +37,10 @@ public abstract class WebSettings {
      *   <li>SINGLE_COLUMN moves all content into one column that is the width of the
      *       view.</li>
      *   <li>NARROW_COLUMNS makes all columns no wider than the screen if possible.</li>
+     *   <li>TEXT_AUTOSIZING boosts font size of paragraphs based on heuristics to make
+     *       the text readable when viewing a wide-viewport layout in the overview mode.
+     *       It is recommended to enable zoom support {@link #setSupportZoom} when
+     *       using this mode.</li>
      * </ul>
      */
     // XXX: These must match LayoutAlgorithm in Settings.h in WebCore.
@@ -47,7 +51,11 @@ public abstract class WebSettings {
          */
         @Deprecated
         SINGLE_COLUMN,
-        NARROW_COLUMNS
+        NARROW_COLUMNS,
+        /**
+         * @hide
+         */
+        TEXT_AUTOSIZING
     }
 
     /**
@@ -89,6 +97,14 @@ public abstract class WebSettings {
         ZoomDensity(int size) {
             value = size;
         }
+
+        /**
+         * @hide Only for use by WebViewProvider implementations
+         */
+        public int getValue() {
+            return value;
+        }
+
         int value;
     }
 
@@ -388,16 +404,14 @@ public abstract class WebSettings {
     }
 
     /**
-     * Sets whether the WebView should save form data. The default is true,
-     * unless in private browsing mode, when the value is always false.
+     * Sets whether the WebView should save form data. The default is true.
      */
     public void setSaveFormData(boolean save) {
         throw new MustOverrideException();
     }
 
     /**
-     * Gets whether the WebView saves form data. Always false in private
-     * browsing mode.
+     * Gets whether the WebView saves form data.
      *
      * @return whether the WebView saves form data
      * @see #setSaveFormData
@@ -408,7 +422,9 @@ public abstract class WebSettings {
 
     /**
      * Sets whether the WebView should save passwords. The default is true.
+     * @deprecated Saving passwords in WebView will not be supported in future versions.
      */
+    @Deprecated
     public void setSavePassword(boolean save) {
         throw new MustOverrideException();
     }
@@ -418,7 +434,9 @@ public abstract class WebSettings {
      *
      * @return whether the WebView saves passwords
      * @see #setSavePassword
+     * @deprecated Saving passwords in WebView will not be supported in future versions.
      */
+    @Deprecated
     public boolean getSavePassword() {
         throw new MustOverrideException();
     }
@@ -501,18 +519,20 @@ public abstract class WebSettings {
 
     /**
      * Enables using light touches to make a selection and activate mouseovers.
-     * The default is false.
+     * @deprecated From {@link android.os.Build.VERSION_CODES#JELLY_BEAN} this
+     *             setting is obsolete and has no effect.
      */
+    @Deprecated
     public void setLightTouchEnabled(boolean enabled) {
         throw new MustOverrideException();
     }
 
     /**
      * Gets whether light touches are enabled.
-     *
-     * @return whether light touches are enabled
      * @see #setLightTouchEnabled
+     * @deprecated This setting is obsolete.
      */
+    @Deprecated
     public boolean getLightTouchEnabled() {
         throw new MustOverrideException();
     }
@@ -580,18 +600,25 @@ public abstract class WebSettings {
     }
 
     /**
-     * Tells the WebView to use a wide viewport. The default is false.
+     * Sets whether the WebView should enable support for the &quot;viewport&quot;
+     * HTML meta tag or should use a wide viewport.
+     * When the value of the setting is false, the layout width is always set to the
+     * width of the WebView control in device-independent (CSS) pixels.
+     * When the value is true and the page contains the viewport meta tag, the value
+     * of the width specified in the tag is used. If the page does not contain the tag or
+     * does not provide a width, then a wide viewport will be used.
      *
-     * @param use whether to use a wide viewport
+     * @param use whether to enable support for the viewport meta tag
      */
     public synchronized void setUseWideViewPort(boolean use) {
         throw new MustOverrideException();
     }
 
     /**
-     * Gets whether the WebView is using a wide viewport.
+     * Gets whether the WebView supports the &quot;viewport&quot;
+     * HTML meta tag or will use a wide viewport.
      *
-     * @return true if the WebView is using a wide viewport
+     * @return true if the WebView supports the viewport meta tag
      * @see #setUseWideViewPort
      */
     public synchronized boolean getUseWideViewPort() {
@@ -936,6 +963,9 @@ public abstract class WebSettings {
      * access to content from other file scheme URLs. See
      * {@link #setAllowFileAccessFromFileURLs}. To enable the most restrictive,
      * and therefore secure policy, this setting should be disabled.
+     * Note that this setting affects only JavaScript access to file scheme
+     * resources. Other access to such resources, for example, from image HTML
+     * elements, is unaffected.
      * <p>
      * The default value is true for API level
      * {@link android.os.Build.VERSION_CODES#ICE_CREAM_SANDWICH_MR1} and below,
@@ -953,6 +983,9 @@ public abstract class WebSettings {
      * enable the most restrictive, and therefore secure policy, this setting
      * should be disabled. Note that the value of this setting is ignored if
      * the value of {@link #getAllowUniversalAccessFromFileURLs} is true.
+     * Note too, that this setting affects only JavaScript access to file scheme
+     * resources. Other access to such resources, for example, from image HTML
+     * elements, is unaffected.
      * <p>
      * The default value is true for API level
      * {@link android.os.Build.VERSION_CODES#ICE_CREAM_SANDWICH_MR1} and below,
@@ -971,6 +1004,7 @@ public abstract class WebSettings {
      * @param flag true if plugins should be enabled
      * @deprecated This method has been deprecated in favor of
      *             {@link #setPluginState}
+     * @hide Since API level {@link android.os.Build.VERSION_CODES#JELLY_BEAN_MR2}
      */
     @Deprecated
     public synchronized void setPluginsEnabled(boolean flag) {
@@ -985,7 +1019,9 @@ public abstract class WebSettings {
      * {@link PluginState#OFF}.
      *
      * @param state a PluginState value
+     * @deprecated Plugins will not be supported in future, and should not be used.
      */
+    @Deprecated
     public synchronized void setPluginState(PluginState state) {
         throw new MustOverrideException();
     }
@@ -997,6 +1033,7 @@ public abstract class WebSettings {
      * @param pluginsPath a String path to the directory containing plugins
      * @deprecated This method is no longer used as plugins are loaded from
      *             their own APK via the system's package manager.
+     * @hide Since API level {@link android.os.Build.VERSION_CODES#JELLY_BEAN_MR2}
      */
     @Deprecated
     public synchronized void setPluginsPath(String pluginsPath) {
@@ -1052,7 +1089,7 @@ public abstract class WebSettings {
      *
      * @param appCachePath a String path to the directory containing
      *                     Application Caches files.
-     * @see setAppCacheEnabled
+     * @see #setAppCacheEnabled
      */
     public synchronized void setAppCachePath(String appCachePath) {
         throw new MustOverrideException();
@@ -1064,9 +1101,12 @@ public abstract class WebSettings {
      * this should be viewed as a guide, not a hard limit. Setting the
      * size to a value less than current database size does not cause the
      * database to be trimmed. The default size is {@link Long#MAX_VALUE}.
+     * It is recommended to leave the maximum size set to the default value.
      *
      * @param appCacheMaxSize the maximum size in bytes
+     * @deprecated In future quota will be managed automatically.
      */
+    @Deprecated
     public synchronized void setAppCacheMaxSize(long appCacheMaxSize) {
         throw new MustOverrideException();
     }
@@ -1075,6 +1115,11 @@ public abstract class WebSettings {
      * Sets whether the database storage API is enabled. The default value is
      * false. See also {@link #setDatabasePath} for how to correctly set up the
      * database storage API.
+     *
+     * This setting is global in effect, across all WebView instances in a process.
+     * Note you should only modify this setting prior to making <b>any</b> WebView
+     * page load within a given process, as the WebView implementation may ignore
+     * changes to this setting after that point.
      *
      * @param flag true if the WebView should use the database storage API
      */
@@ -1141,9 +1186,22 @@ public abstract class WebSettings {
     }
 
     /**
-     * Sets whether Geolocation is enabled. The default is true. See also
-     * {@link #setGeolocationDatabasePath} for how to correctly set up
-     * Geolocation.
+     * Sets whether Geolocation is enabled. The default is true.
+     * <p>
+     * Please note that in order for the Geolocation API to be usable
+     * by a page in the WebView, the following requirements must be met:
+     * <ul>
+     *   <li>an application must have permission to access the device location,
+     *   see {@link android.Manifest.permission#ACCESS_COARSE_LOCATION},
+     *   {@link android.Manifest.permission#ACCESS_FINE_LOCATION};
+     *   <li>an application must provide an implementation of the
+     *   {@link WebChromeClient#onGeolocationPermissionsShowPrompt} callback
+     *   to receive notifications that a page is requesting access to location
+     *   via the JavaScript Geolocation API.
+     * </ul>
+     * <p>
+     * As an option, it is possible to store previous locations and web origin
+     * permissions in a database. See {@link #setGeolocationDatabasePath}.
      *
      * @param flag whether Geolocation should be enabled
      */
@@ -1188,6 +1246,7 @@ public abstract class WebSettings {
      * @return true if plugins are enabled
      * @see #setPluginsEnabled
      * @deprecated This method has been replaced by {@link #getPluginState}
+     * @hide Since API level {@link android.os.Build.VERSION_CODES#JELLY_BEAN_MR2}
      */
     @Deprecated
     public synchronized boolean getPluginsEnabled() {
@@ -1199,7 +1258,9 @@ public abstract class WebSettings {
      *
      * @return the plugin state as a {@link PluginState} value
      * @see #setPluginState
+     * @deprecated Plugins will not be supported in future, and should not be used.
      */
+    @Deprecated
     public synchronized PluginState getPluginState() {
         throw new MustOverrideException();
     }
@@ -1211,6 +1272,7 @@ public abstract class WebSettings {
      * @return an empty string
      * @deprecated This method is no longer used as plugins are loaded from
      * their own APK via the system's package manager.
+     * @hide Since API level {@link android.os.Build.VERSION_CODES#JELLY_BEAN_MR2}
      */
     @Deprecated
     public synchronized String getPluginsPath() {
@@ -1304,7 +1366,10 @@ public abstract class WebSettings {
      * {@link RenderPriority#NORMAL}.
      *
      * @param priority the priority
+     * @deprecated It is not recommended to adjust thread priorities, and this will
+     *             not be supported in future versions.
      */
+    @Deprecated
     public synchronized void setRenderPriority(RenderPriority priority) {
         throw new MustOverrideException();
     }
@@ -1315,7 +1380,7 @@ public abstract class WebSettings {
      * and content is re-validated as needed. When navigating back, content is
      * not revalidated, instead the content is just retrieved from the cache.
      * This method allows the client to override this behavior by specifying
-     * one of {@link #LOAD_DEFAULT}, {@link #LOAD_NORMAL},
+     * one of {@link #LOAD_DEFAULT},
      * {@link #LOAD_CACHE_ELSE_NETWORK}, {@link #LOAD_NO_CACHE} or
      * {@link #LOAD_CACHE_ONLY}. The default value is {@link #LOAD_DEFAULT}.
      *

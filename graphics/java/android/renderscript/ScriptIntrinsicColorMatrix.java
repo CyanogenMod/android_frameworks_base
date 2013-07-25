@@ -16,8 +16,6 @@
 
 package android.renderscript;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 
 /**
@@ -43,13 +41,13 @@ public final class ScriptIntrinsicColorMatrix extends ScriptIntrinsic {
      *
      * Supported elements types are {@link Element#U8_4}
      *
-     * @param rs The Renderscript context
+     * @param rs The RenderScript context
      * @param e Element type for intputs and outputs
      *
      * @return ScriptIntrinsicColorMatrix
      */
     public static ScriptIntrinsicColorMatrix create(RenderScript rs, Element e) {
-        if (e != Element.U8_4(rs)) {
+        if (!e.isCompatible(Element.U8_4(rs))) {
             throw new RSIllegalArgumentException("Unsuported element type.");
         }
         int id = rs.nScriptIntrinsicCreate(2, e.getID(rs));

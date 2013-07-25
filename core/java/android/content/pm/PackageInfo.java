@@ -231,6 +231,15 @@ public class PackageInfo implements Parcelable {
      */
     public ThemeInfo [] themeInfos;
 
+    /** @hide */
+    public boolean requiredForAllUsers;
+
+    /** @hide */
+    public String restrictedAccountType;
+
+    /** @hide */
+    public String requiredAccountType;
+
     public PackageInfo() {
     }
 
@@ -319,6 +328,9 @@ public class PackageInfo implements Parcelable {
         dest.writeTypedArray(configPreferences, parcelableFlags);
         dest.writeTypedArray(reqFeatures, parcelableFlags);
         dest.writeInt(installLocation);
+        dest.writeInt(requiredForAllUsers ? 1 : 0);
+        dest.writeString(restrictedAccountType);
+        dest.writeString(requiredAccountType);
 
         /* Theme-specific. */
         dest.writeInt((isThemeApk)? 1 : 0);
@@ -363,6 +375,9 @@ public class PackageInfo implements Parcelable {
         configPreferences = source.createTypedArray(ConfigurationInfo.CREATOR);
         reqFeatures = source.createTypedArray(FeatureInfo.CREATOR);
         installLocation = source.readInt();
+        requiredForAllUsers = source.readInt() != 0;
+        restrictedAccountType = source.readString();
+        requiredAccountType = source.readString();
 
         /* Theme-specific. */
         isThemeApk = (source.readInt() != 0);

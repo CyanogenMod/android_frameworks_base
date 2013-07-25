@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2012 The Android Open Source Project
+ * Copyright (C) 2013 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,31 +20,37 @@ import java.lang.reflect.Field;
 import android.util.Log;
 
 /**
- * <p>The most basic data type. An element represents one cell of a memory allocation.
- * Element is the basic data type of Renderscript. An element can be of two forms: Basic elements or Complex forms.
- * Examples of basic elements are:</p>
- * <ul>
- *  <li>Single float value</li>
- *  <li>4 element float vector</li>
- *  <li>single RGB-565 color</li>
- *  <li>single unsigned int 16</li>
- * </ul>
- * <p>Complex elements contain a list of sub-elements and names that
- * represents a structure of data. The fields can be accessed by name
- * from a script or shader. The memory layout is defined and ordered. Data
- * alignment is determined by the most basic primitive type. i.e. a float4
- * vector will be aligned to sizeof(float) and not sizeof(float4). The
- * ordering of elements in memory will be the order in which they were added
- * with each component aligned as necessary. No re-ordering will be done.</p>
+ * <p>An Element represents one item within an {@link
+ * android.renderscript.Allocation}.  An Element is roughly equivalent to a C
+ * type in a RenderScript kernel. Elements may be basic or complex. Some basic
+ * elements are</p> <ul> <li>A single float value (equivalent to a float in a
+ * kernel)</li> <li>A four-element float vector (equivalent to a float4 in a
+ * kernel)</li> <li>An unsigned 32-bit integer (equivalent to an unsigned int in
+ * a kernel)</li> <li>A single signed 8-bit integer (equivalent to a char in a
+ * kernel)</li> </ul> <p>A complex element is roughly equivalent to a C struct
+ * and contains a number of basic or complex Elements. From Java code, a complex
+ * element contains a list of sub-elements and names that represents a
+ * particular data structure. Structs used in RS scripts are available to Java
+ * code by using the {@code ScriptField_structname} class that is reflected from
+ * a particular script.</p>
  *
- * <p>The primary source of elements are from scripts. A script that exports a
- * bind point for a data structure generates a Renderscript element to represent the
- * data exported by the script. The other common source of elements is from bitmap formats.</p>
+ * <p>Basic Elements are comprised of a {@link
+ * android.renderscript.Element.DataType} and a {@link
+ * android.renderscript.Element.DataKind}. The DataType encodes C type
+ * information of an Element, while the DataKind encodes how that Element should
+ * be interpreted by a {@link android.renderscript.Sampler}. Note that {@link
+ * android.renderscript.Allocation} objects with DataKind {@link
+ * android.renderscript.Element.DataKind#USER} cannot be used as input for a
+ * {@link android.renderscript.Sampler}. In general, {@link
+ * android.renderscript.Allocation} objects that are intended for use with a
+ * {@link android.renderscript.Sampler} should use bitmap-derived Elements such
+ * as {@link android.renderscript.Element#RGBA_8888} or {@link
+ * android.renderscript#Element.A_8}.</p>
  *
  * <div class="special reference">
  * <h3>Developer Guides</h3>
- * <p>For more information about creating an application that uses Renderscript, read the
- * <a href="{@docRoot}guide/topics/renderscript/index.html">Renderscript</a> developer guide.</p>
+ * <p>For more information about creating an application that uses RenderScript, read the
+ * <a href="{@docRoot}guide/topics/renderscript/index.html">RenderScript</a> developer guide.</p>
  * </div>
  **/
 public class Element extends BaseObj {
@@ -171,7 +177,8 @@ public class Element extends BaseObj {
         PIXEL_LA (9),
         PIXEL_RGB (10),
         PIXEL_RGBA (11),
-        PIXEL_DEPTH (12);
+        PIXEL_DEPTH (12),
+        PIXEL_YUV(13);
 
         int mID;
         DataKind(int id) {
@@ -905,7 +912,8 @@ public class Element extends BaseObj {
               dk == DataKind.PIXEL_LA ||
               dk == DataKind.PIXEL_RGB ||
               dk == DataKind.PIXEL_RGBA ||
-              dk == DataKind.PIXEL_DEPTH)) {
+              dk == DataKind.PIXEL_DEPTH ||
+              dk == DataKind.PIXEL_YUV)) {
             throw new RSIllegalArgumentException("Unsupported DataKind");
         }
         if (!(dt == DataType.UNSIGNED_8 ||

@@ -43,6 +43,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.storage.IMountService;
@@ -63,6 +64,7 @@ import com.android.internal.app.IMediaContainerService;
 import com.android.internal.util.Preconditions;
 import com.android.internal.util.XmlUtils;
 import com.android.server.NativeDaemonConnector.Command;
+import com.android.server.NativeDaemonConnector.SensitiveArg;
 import com.android.server.am.ActivityManagerService;
 import com.android.server.pm.PackageManagerService;
 import com.android.server.pm.UserManagerService;
@@ -173,6 +175,11 @@ class MountService extends IMountService.Stub
         public static final int VolumeDiskInserted             = 630;
         public static final int VolumeDiskRemoved              = 631;
         public static final int VolumeBadRemoval               = 632;
+
+        /*
+         * 700 series - fstrim
+         */
+        public static final int FstrimCompleted                = 700;
     }
 
     private Context mContext;
@@ -603,6 +610,27 @@ class MountService extends IMountService.Stub
         }
     };
 
+    private final BroadcastReceiver mIdleMaintenanceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            waitForReady();
+            String action = intent.getAction();
+            // Since fstrim will be run on a daily basis we do not expect
+            // fstrim to be too long, so it is not interruptible. We will
+            // implement interruption only in case we see issues.
+            if (Intent.ACTION_IDLE_MAINTENANCE_START.equals(action)) {
+                try {
+                    // This method runs on the handler thread,
+                    // so it is safe to directly call into vold.
+                    mConnector.execute("fstrim", "dotrim");
+                    EventLogTags.writeFstrimStart(SystemClock.elapsedRealtime());
+                } catch (NativeDaemonConnectorException ndce) {
+                    Slog.e(TAG, "Failed to run fstrim!");
+                }
+            }
+        }
+    };
+
     private final class MountServiceBinderListener implements IBinder.DeathRecipient {
         final IMountServiceListener mListener;
 
@@ -844,6 +872,8 @@ class MountService extends IMountService.Stub
                 if (DEBUG_EVENTS) Slog.i(TAG, "Sending media bad removal");
                 updatePublicVolumeState(volume, Environment.MEDIA_BAD_REMOVAL);
                 action = Intent.ACTION_MEDIA_BAD_REMOVAL;
+            } else if (code == VoldResponseCode.FstrimCompleted) {
+                EventLogTags.writeFstrimFinish(SystemClock.elapsedRealtime());
             } else {
                 Slog.e(TAG, String.format("Unknown code {%d}", code));
             }
@@ -1317,6 +1347,12 @@ class MountService extends IMountService.Stub
                     mUsbReceiver, new IntentFilter(UsbManager.ACTION_USB_STATE), null, mHandler);
         }
 
+        // Watch for idle maintenance changes
+        IntentFilter idleMaintenanceFilter = new IntentFilter();
+        idleMaintenanceFilter.addAction(Intent.ACTION_IDLE_MAINTENANCE_START);
+        mContext.registerReceiverAsUser(mIdleMaintenanceReceiver, UserHandle.ALL,
+                idleMaintenanceFilter, null, mHandler);
+
         // Add OBB Action Handler to MountService thread.
         mObbActionHandler = new ObbActionHandler(mHandlerThread.getLooper());
 
@@ -1618,7 +1654,7 @@ class MountService extends IMountService.Stub
             boolean mounted = false;
             try {
                 mounted = Environment.MEDIA_MOUNTED.equals(getVolumeState(primary.getPath()));
-            } catch (IllegalStateException e) {
+            } catch (IllegalArgumentException e) {
             }
 
             if (!mounted) {
@@ -1648,8 +1684,8 @@ class MountService extends IMountService.Stub
 
         int rc = StorageResultCode.OperationSucceeded;
         try {
-            mConnector.execute("asec", "create", id, sizeMb, fstype, key, ownerUid,
-                    external ? "1" : "0");
+            mConnector.execute("asec", "create", id, sizeMb, fstype, new SensitiveArg(key),
+                    ownerUid, external ? "1" : "0");
         } catch (NativeDaemonConnectorException e) {
             rc = StorageResultCode.OperationFailedInternalError;
         }
@@ -1749,7 +1785,7 @@ class MountService extends IMountService.Stub
 
         int rc = StorageResultCode.OperationSucceeded;
         try {
-            mConnector.execute("asec", "mount", id, key, ownerUid);
+            mConnector.execute("asec", "mount", id, new SensitiveArg(key), ownerUid);
         } catch (NativeDaemonConnectorException e) {
             int code = e.getCode();
             if (code != VoldResponseCode.OpFailedStorageBusy) {
@@ -2025,7 +2061,7 @@ class MountService extends IMountService.Stub
 
         final NativeDaemonEvent event;
         try {
-            event = mConnector.execute("cryptfs", "checkpw", password);
+            event = mConnector.execute("cryptfs", "checkpw", new SensitiveArg(password));
 
             final int code = Integer.parseInt(event.getMessage());
             if (code == 0) {
@@ -2064,7 +2100,7 @@ class MountService extends IMountService.Stub
         }
 
         try {
-            mConnector.execute("cryptfs", "enablecrypto", "inplace", password);
+            mConnector.execute("cryptfs", "enablecrypto", "inplace", new SensitiveArg(password));
         } catch (NativeDaemonConnectorException e) {
             // Encryption failed
             return e.getCode();
@@ -2089,7 +2125,7 @@ class MountService extends IMountService.Stub
 
         final NativeDaemonEvent event;
         try {
-            event = mConnector.execute("cryptfs", "changepw", password);
+            event = mConnector.execute("cryptfs", "changepw", new SensitiveArg(password));
             return Integer.parseInt(event.getMessage());
         } catch (NativeDaemonConnectorException e) {
             // Encryption failed
@@ -2122,7 +2158,7 @@ class MountService extends IMountService.Stub
 
         final NativeDaemonEvent event;
         try {
-            event = mConnector.execute("cryptfs", "verifypw", password);
+            event = mConnector.execute("cryptfs", "verifypw", new SensitiveArg(password));
             Slog.i(TAG, "cryptfs verifypw => " + event.getMessage());
             return Integer.parseInt(event.getMessage());
         } catch (NativeDaemonConnectorException e) {
@@ -2488,8 +2524,8 @@ class MountService extends IMountService.Stub
 
             int rc = StorageResultCode.OperationSucceeded;
             try {
-                mConnector.execute(
-                        "obb", "mount", mObbState.voldPath, hashedKey, mObbState.ownerGid);
+                mConnector.execute("obb", "mount", mObbState.voldPath, new SensitiveArg(hashedKey),
+                        mObbState.ownerGid);
             } catch (NativeDaemonConnectorException e) {
                 int code = e.getCode();
                 if (code != VoldResponseCode.OpFailedStorageBusy) {

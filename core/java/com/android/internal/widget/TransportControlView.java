@@ -143,7 +143,8 @@ public class TransportControlView extends FrameLayout implements OnClickListener
             mLocalHandler = new WeakReference<Handler>(handler);
         }
 
-        public void setPlaybackState(int generationId, int state, long stateChangeTimeMs) {
+        public void setPlaybackState(int generationId, int state, long stateChangeTimeMs,
+                long currentPosMs, float speed) {
             Handler handler = mLocalHandler.get();
             if (handler != null) {
                 handler.obtainMessage(MSG_UPDATE_STATE, generationId, state).sendToTarget();
@@ -157,7 +158,7 @@ public class TransportControlView extends FrameLayout implements OnClickListener
             }
         }
 
-        public void setTransportControlFlags(int generationId, int flags) {
+        public void setTransportControlInfo(int generationId, int flags, int posCapabilities) {
             Handler handler = mLocalHandler.get();
             if (handler != null) {
                 handler.obtainMessage(MSG_SET_TRANSPORT_CONTROLS, generationId, flags)

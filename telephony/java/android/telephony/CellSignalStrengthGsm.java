@@ -18,10 +18,10 @@ package android.telephony;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+import android.telephony.Rlog;
 
 /**
- * LTE signal strength related information.
+ * GSM signal strength related information.
  */
 public final class CellSignalStrengthGsm extends CellSignalStrength implements Parcelable {
 
@@ -30,7 +30,7 @@ public final class CellSignalStrengthGsm extends CellSignalStrength implements P
 
     private static final int GSM_SIGNAL_STRENGTH_GREAT = 12;
     private static final int GSM_SIGNAL_STRENGTH_GOOD = 8;
-    private static final int GSM_SIGNAL_STRENGTH_MODERATE = 8;
+    private static final int GSM_SIGNAL_STRENGTH_MODERATE = 5;
 
     private int mSignalStrength; // Valid values are (0-31, 99) as defined in TS 27.007 8.5
     private int mBitErrorRate;   // bit error rate (0-7, 99) as defined in TS 27.007 8.5
@@ -67,7 +67,8 @@ public final class CellSignalStrengthGsm extends CellSignalStrength implements P
     /**
      * Initialize all the values
      *
-     * @param SignalStrength
+     * @param ss SignalStrength as ASU value
+     * @param ber is Bit Error Rate
      *
      * @hide
      */
@@ -139,7 +140,7 @@ public final class CellSignalStrengthGsm extends CellSignalStrength implements P
     }
 
     /**
-     * Get the LTE signal level as an asu value between 0..97, 99 is unknown
+     * Get the signal level as an asu value between 0..31, 99 is unknown
      * Asu is calculated based on 3GPP RSRP. Refer to 3GPP 27.007 (Ver 10.3.0) Sec 8.69
      */
     @Override
@@ -229,6 +230,6 @@ public final class CellSignalStrengthGsm extends CellSignalStrength implements P
      * log
      */
     private static void log(String s) {
-        Log.w(LOG_TAG, s);
+        Rlog.w(LOG_TAG, s);
     }
 }

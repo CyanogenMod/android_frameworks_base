@@ -24,6 +24,7 @@ import android.content.IContentProvider;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.UserHandle;
 import android.text.TextUtils;
@@ -83,25 +84,31 @@ public class Content {
         + "  Example:\n"
         + "  # Change \"new_setting\" secure setting to \"newer_value\".\n"
         + "  adb shell content update --uri content://settings/secure --bind"
-                + " value:s:newer_value --where \"name=\\'new_setting\\'\"\n"
+                + " value:s:newer_value --where \"name=\'new_setting\'\"\n"
         + "\n"
         + "usage: adb shell content delete --uri <URI> [--user <USER_ID>] --bind <BINDING>"
                 + " [--bind <BINDING>...] [--where <WHERE>]\n"
         + "  Example:\n"
         + "  # Remove \"new_setting\" secure setting.\n"
         + "  adb shell content delete --uri content://settings/secure "
-                + "--where \"name=\\'new_setting\\'\"\n"
+                + "--where \"name=\'new_setting\'\"\n"
         + "\n"
         + "usage: adb shell content query --uri <URI> [--user <USER_ID>]"
                 + " [--projection <PROJECTION>] [--where <WHERE>] [--sort <SORT_ORDER>]\n"
         + "  <PROJECTION> is a list of colon separated column names and is formatted:\n"
         + "  <COLUMN_NAME>[:<COLUMN_NAME>...]\n"
-        + "  <SORT_OREDER> is the order in which rows in the result should be sorted.\n"
+        + "  <SORT_ORDER> is the order in which rows in the result should be sorted.\n"
         + "  Example:\n"
         + "  # Select \"name\" and \"value\" columns from secure settings where \"name\" is "
                 + "equal to \"new_setting\" and sort the result by name in ascending order.\n"
         + "  adb shell content query --uri content://settings/secure --projection name:value"
-                + " --where \"name=\\'new_setting\\'\" --sort \"name ASC\"\n"
+                + " --where \"name=\'new_setting\'\" --sort \"name ASC\"\n"
+        + "\n"
+        + "usage: adb shell content call --uri <URI> --method <METHOD> [--arg <ARG>]\n"
+        + "       [--extra <BINDING> ...]\n"
+        + "  <METHOD> is the name of a provider-defined method\n"
+        + "  <ARG> is an optional string argument\n"
+        + "  <BINDING> is like --bind above, typed data of the form <KEY>:{b,s,i,l,f,d}:<VAL>\n"
         + "\n";
 
     private static class Parser {
@@ -109,12 +116,16 @@ public class Content {
         private static final String ARGUMENT_DELETE = "delete";
         private static final String ARGUMENT_UPDATE = "update";
         private static final String ARGUMENT_QUERY = "query";
+        private static final String ARGUMENT_CALL = "call";
         private static final String ARGUMENT_WHERE = "--where";
         private static final String ARGUMENT_BIND = "--bind";
         private static final String ARGUMENT_URI = "--uri";
         private static final String ARGUMENT_USER = "--user";
         private static final String ARGUMENT_PROJECTION = "--projection";
         private static final String ARGUMENT_SORT = "--sort";
+        private static final String ARGUMENT_METHOD = "--method";
+        private static final String ARGUMENT_ARG = "--arg";
+        private static final String ARGUMENT_EXTRA = "--extra";
         private static final String TYPE_BOOLEAN = "b";
         private static final String TYPE_STRING = "s";
         private static final String TYPE_INTEGER = "i";
@@ -141,6 +152,8 @@ public class Content {
                     return parseUpdateCommand();
                 } else if (ARGUMENT_QUERY.equals(operation)) {
                     return parseQueryCommand();
+                } else if (ARGUMENT_CALL.equals(operation)) {
+                    return parseCallCommand();
                 } else {
                     throw new IllegalArgumentException("Unsupported operation: " + operation);
                 }
@@ -226,6 +239,38 @@ public class Content {
                         + " Did you specify --bind argument(s)?");
             }
             return new UpdateCommand(uri, userId, values, where);
+        }
+
+        public CallCommand parseCallCommand() {
+            String method = null;
+            int userId = UserHandle.USER_OWNER;
+            String arg = null;
+            Uri uri = null;
+            ContentValues values = new ContentValues();
+            for (String argument; (argument = mTokenizer.nextArg())!= null;) {
+                if (ARGUMENT_URI.equals(argument)) {
+                    uri = Uri.parse(argumentValueRequired(argument));
+                } else if (ARGUMENT_USER.equals(argument)) {
+                    userId = Integer.parseInt(argumentValueRequired(argument));
+                } else if (ARGUMENT_METHOD.equals(argument)) {
+                    method = argumentValueRequired(argument);
+                } else if (ARGUMENT_ARG.equals(argument)) {
+                    arg = argumentValueRequired(argument);
+                } else if (ARGUMENT_EXTRA.equals(argument)) {
+                    parseBindValue(values);
+                } else {
+                    throw new IllegalArgumentException("Unsupported argument: " + argument);
+                }
+
+            }
+            if (uri == null) {
+                throw new IllegalArgumentException("Content provider URI not specified."
+                        + " Did you specify --uri argument?");
+            }
+            if (method == null) {
+                throw new IllegalArgumentException("Content provider method not specified.");
+            }
+            return new CallCommand(uri, userId, method, arg, values);
         }
 
         public QueryCommand parseQueryCommand() {
@@ -358,7 +403,7 @@ public class Content {
 
         @Override
         public void onExecute(IContentProvider provider) throws Exception {
-            provider.insert(mUri, mContentValues);
+            provider.insert(null, mUri, mContentValues);
         }
     }
 
@@ -372,7 +417,44 @@ public class Content {
 
         @Override
         public void onExecute(IContentProvider provider) throws Exception {
-            provider.delete(mUri, mWhere, null);
+            provider.delete(null, mUri, mWhere, null);
+        }
+    }
+
+    private static class CallCommand extends Command {
+        final String mMethod, mArg;
+        Bundle mExtras = null;
+
+        public CallCommand(Uri uri, int userId, String method, String arg, ContentValues values) {
+            super(uri, userId);
+            mMethod = method;
+            mArg = arg;
+            if (values != null) {
+                mExtras = new Bundle();
+                for (String key : values.keySet()) {
+                    final Object val = values.get(key);
+                    if (val instanceof String) {
+                        mExtras.putString(key, (String) val);
+                    } else if (val instanceof Float) {
+                        mExtras.putFloat(key, (Float) val);
+                    } else if (val instanceof Double) {
+                        mExtras.putDouble(key, (Double) val);
+                    } else if (val instanceof Boolean) {
+                        mExtras.putBoolean(key, (Boolean) val);
+                    } else if (val instanceof Integer) {
+                        mExtras.putInt(key, (Integer) val);
+                    } else if (val instanceof Long) {
+                        mExtras.putLong(key, (Long) val);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onExecute(IContentProvider provider) throws Exception {
+            Bundle result = provider.call(null, mMethod, mArg, mExtras);
+            final int size = result.size(); // unpack
+            System.out.println("Result: " + result);
         }
     }
 
@@ -389,7 +471,7 @@ public class Content {
 
         @Override
         public void onExecute(IContentProvider provider) throws Exception {
-            Cursor cursor = provider.query(mUri, mProjection, mWhere, null, mSortOrder, null);
+            Cursor cursor = provider.query(null, mUri, mProjection, mWhere, null, mSortOrder, null);
             if (cursor == null) {
                 System.out.println("No result found.");
                 return;
@@ -433,7 +515,7 @@ public class Content {
                         System.out.println(builder);
                     } while (cursor.moveToNext());
                 } else {
-                    System.out.println("No reuslt found.");
+                    System.out.println("No result found.");
                 }
             } finally {
                 cursor.close();
@@ -451,7 +533,7 @@ public class Content {
 
         @Override
         public void onExecute(IContentProvider provider) throws Exception {
-            provider.update(mUri, mContentValues, mWhere, null);
+            provider.update(null, mUri, mContentValues, mWhere, null);
         }
     }
 

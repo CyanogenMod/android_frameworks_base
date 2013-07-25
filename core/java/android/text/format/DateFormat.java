@@ -31,179 +31,89 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 
+import libcore.icu.ICU;
+import libcore.icu.LocaleData;
+
 /**
-    Utility class for producing strings with formatted date/time.
-
-    <p>
-    Most callers should avoid supplying their own format strings to this
-    class' {@code format} methods and rely on the correctly localized ones
-    supplied by the system. This class' factory methods return
-    appropriately-localized {@link java.text.DateFormat} instances, suitable
-    for both formatting and parsing dates. For the canonical documentation
-    of format strings, see {@link java.text.SimpleDateFormat}.
-    </p>
-    <p>
-    The format methods in this class takes as inputs a format string and a representation of a date/time.
-    The format string controls how the output is generated.
-    This class only supports a subset of the full Unicode specification.
-    Use {@link java.text.SimpleDateFormat} if you need more.
-    Formatting characters may be repeated in order to get more detailed representations
-    of that field.  For instance, the format character &apos;M&apos; is used to
-    represent the month.  Depending on how many times that character is repeated
-    you get a different representation.
-    </p>
-    <p>
-    For the month of September:<br/>
-    M -&gt; 9<br/>
-    MM -&gt; 09<br/>
-    MMM -&gt; Sep<br/>
-    MMMM -&gt; September
-    </p>
-    <p>
-    The effects of the duplication vary depending on the nature of the field.
-    See the notes on the individual field formatters for details.  For purely numeric
-    fields such as <code>HOUR</code> adding more copies of the designator will
-    zero-pad the value to that number of characters.
-    </p>
-    <p>
-    For 7 minutes past the hour:<br/>
-    m -&gt; 7<br/>
-    mm -&gt; 07<br/>
-    mmm -&gt; 007<br/>
-    mmmm -&gt; 0007
-    </p>
-    <p>
-    Examples for April 6, 1970 at 3:23am:<br/>
-    &quot;MM/dd/yy h:mmaa&quot; -&gt; &quot;04/06/70 3:23am&quot<br/>
-    &quot;MMM dd, yyyy h:mmaa&quot; -&gt; &quot;Apr 6, 1970 3:23am&quot<br/>
-    &quot;MMMM dd, yyyy h:mmaa&quot; -&gt; &quot;April 6, 1970 3:23am&quot<br/>
-    &quot;E, MMMM dd, yyyy h:mmaa&quot; -&gt; &quot;Mon, April 6, 1970 3:23am&<br/>
-    &quot;EEEE, MMMM dd, yyyy h:mmaa&quot; -&gt; &quot;Monday, April 6, 1970 3:23am&quot;<br/>
-    &quot;&apos;Noteworthy day: &apos;M/d/yy&quot; -&gt; &quot;Noteworthy day: 4/6/70&quot;
+ * Utility class for producing strings with formatted date/time.
+ *
+ * <p>Most callers should avoid supplying their own format strings to this
+ * class' {@code format} methods and rely on the correctly localized ones
+ * supplied by the system. This class' factory methods return
+ * appropriately-localized {@link java.text.DateFormat} instances, suitable
+ * for both formatting and parsing dates. For the canonical documentation
+ * of format strings, see {@link java.text.SimpleDateFormat}.
+ *
+ * <p>In cases where the system does not provide a suitable pattern,
+ * this class offers the {@link #getBestDateTimePattern} method.
+ *
+ * <p>The {@code format} methods in this class implement a subset of Unicode
+ * <a href="http://www.unicode.org/reports/tr35/#Date_Format_Patterns">UTS #35</a> patterns.
+ * The subset currently supported by this class includes the following format characters:
+ * {@code acdEHhLKkLMmsyz}. Up to API level 17, only {@code adEhkMmszy} were supported.
+ * Note that this class incorrectly implements {@code k} as if it were {@code H} for backwards
+ * compatibility.
+ *
+ * <p>See {@link java.text.SimpleDateFormat} for more documentation
+ * about patterns, or if you need a more complete or correct implementation.
+ * Note that the non-{@code format} methods in this class are implemented by
+ * {@code SimpleDateFormat}.
  */
-
 public class DateFormat {
-    /**
-        Text in the format string that should be copied verbatim rather that
-        interpreted as formatting codes must be surrounded by the <code>QUOTE</code>
-        character.  If you need to embed a literal <code>QUOTE</code> character in
-        the output text then use two in a row.
-     */
+    /** @deprecated Use a literal {@code '} instead. */
+    @Deprecated
     public  static final char    QUOTE                  =    '\'';
-    
-    /**
-        This designator indicates whether the <code>HOUR</code> field is before
-        or after noon.  The output is lower-case.
-     
-        Examples:
-        a -> a or p
-        aa -> am or pm
-     */
+
+    /** @deprecated Use a literal {@code 'a'} instead. */
+    @Deprecated
     public  static final char    AM_PM                  =    'a';
 
-    /**
-        This designator indicates whether the <code>HOUR</code> field is before
-        or after noon.  The output is capitalized.
-     
-        Examples:
-        A -> A or P
-        AA -> AM or PM
-     */
+    /** @deprecated Use a literal {@code 'a'} instead; 'A' was always equivalent to 'a'. */
+    @Deprecated
     public  static final char    CAPITAL_AM_PM          =    'A';
 
-    /**
-        This designator indicates the day of the month.
-         
-        Examples for the 9th of the month:
-        d -> 9
-        dd -> 09
-     */
+    /** @deprecated Use a literal {@code 'd'} instead. */
+    @Deprecated
     public  static final char    DATE                   =    'd';
 
-    /**
-        This designator indicates the name of the day of the week.
-     
-        Examples for Sunday:
-        E -> Sun
-        EEEE -> Sunday
-     */
+    /** @deprecated Use a literal {@code 'E'} instead. */
+    @Deprecated
     public  static final char    DAY                    =    'E';
 
-    /**
-        This designator indicates the hour of the day in 12 hour format.
-     
-        Examples for 3pm:
-        h -> 3
-        hh -> 03
-     */
+    /** @deprecated Use a literal {@code 'h'} instead. */
+    @Deprecated
     public  static final char    HOUR                   =    'h';
 
     /**
-        This designator indicates the hour of the day in 24 hour format.
-     
-        Example for 3pm:
-        k -> 15
-
-        Examples for midnight:
-        k -> 0
-        kk -> 00
+     * @deprecated Use a literal {@code 'H'} (for compatibility with {@link SimpleDateFormat}
+     * and Unicode) or {@code 'k'} (for compatibility with Android releases up to and including
+     * Jelly Bean MR-1) instead. Note that the two are incompatible.
      */
+    @Deprecated
     public  static final char    HOUR_OF_DAY            =    'k';
 
-    /**
-        This designator indicates the minute of the hour.
-     
-        Examples for 7 minutes past the hour:
-        m -> 7
-        mm -> 07
-     */
+    /** @deprecated Use a literal {@code 'm'} instead. */
+    @Deprecated
     public  static final char    MINUTE                 =    'm';
 
-    /**
-        This designator indicates the month of the year. See also
-        {@link #STANDALONE_MONTH}.
-     
-        Examples for September:
-        M -> 9
-        MM -> 09
-        MMM -> Sep
-        MMMM -> September
-     */
+    /** @deprecated Use a literal {@code 'M'} instead. */
+    @Deprecated
     public  static final char    MONTH                  =    'M';
 
-    /**
-        This designator indicates the standalone month of the year,
-        necessary in some format strings in some languages. For
-        example, Russian distinguishes between the "June" in
-        "June" and that in "June 2010".
-     */
+    /** @deprecated Use a literal {@code 'L'} instead. */
+    @Deprecated
     public  static final char    STANDALONE_MONTH       =    'L';
 
-    /**
-        This designator indicates the seconds of the minute.
-     
-        Examples for 7 seconds past the minute:
-        s -> 7
-        ss -> 07
-     */
+    /** @deprecated Use a literal {@code 's'} instead. */
+    @Deprecated
     public  static final char    SECONDS                =    's';
 
-    /**
-        This designator indicates the offset of the timezone from GMT.
-     
-        Example for US/Pacific timezone:
-        z -> -0800
-        zz -> PST
-     */
+    /** @deprecated Use a literal {@code 'z'} instead. */
+    @Deprecated
     public  static final char    TIME_ZONE              =    'z';
 
-    /**
-        This designator indicates the year.
-     
-        Examples for 2006
-        y -> 06
-        yyyy -> 2006
-     */
+    /** @deprecated Use a literal {@code 'y'} instead. */
+    @Deprecated
     public  static final char    YEAR                   =    'y';
 
 
@@ -231,8 +141,7 @@ public class DateFormat {
             }
 
             java.text.DateFormat natural =
-                java.text.DateFormat.getTimeInstance(
-                    java.text.DateFormat.LONG, locale);
+                java.text.DateFormat.getTimeInstance(java.text.DateFormat.LONG, locale);
 
             if (natural instanceof SimpleDateFormat) {
                 SimpleDateFormat sdf = (SimpleDateFormat) natural;
@@ -259,26 +168,59 @@ public class DateFormat {
     }
 
     /**
+     * Returns the best possible localized form of the given skeleton for the given
+     * locale. A skeleton is similar to, and uses the same format characters as, a Unicode
+     * <a href="http://www.unicode.org/reports/tr35/#Date_Format_Patterns">UTS #35</a>
+     * pattern.
+     *
+     * <p>One difference is that order is irrelevant. For example, "MMMMd" will return
+     * "MMMM d" in the {@code en_US} locale, but "d. MMMM" in the {@code de_CH} locale.
+     *
+     * <p>Note also in that second example that the necessary punctuation for German was
+     * added. For the same input in {@code es_ES}, we'd have even more extra text:
+     * "d 'de' MMMM".
+     *
+     * <p>This method will automatically correct for grammatical necessity. Given the
+     * same "MMMMd" input, this method will return "d LLLL" in the {@code fa_IR} locale,
+     * where stand-alone months are necessary. Lengths are preserved where meaningful,
+     * so "Md" would give a different result to "MMMd", say, except in a locale such as
+     * {@code ja_JP} where there is only one length of month.
+     *
+     * <p>This method will only return patterns that are in CLDR, and is useful whenever
+     * you know what elements you want in your format string but don't want to make your
+     * code specific to any one locale.
+     *
+     * @param locale the locale into which the skeleton should be localized
+     * @param skeleton a skeleton as described above
+     * @return a string pattern suitable for use with {@link java.text.SimpleDateFormat}.
+     */
+    public static String getBestDateTimePattern(Locale locale, String skeleton) {
+        return ICU.getBestDateTimePattern(skeleton, locale.toString());
+    }
+
+    /**
      * Returns a {@link java.text.DateFormat} object that can format the time according
      * to the current locale and the user's 12-/24-hour clock preference.
      * @param context the application context
      * @return the {@link java.text.DateFormat} object that properly formats the time.
      */
     public static java.text.DateFormat getTimeFormat(Context context) {
-        boolean b24 = is24HourFormat(context);
-        int res;
-
-        if (b24) {
-            res = R.string.twenty_four_hour_time_format;
-        } else {
-            res = R.string.twelve_hour_time_format;
-        }
-
-        return new java.text.SimpleDateFormat(context.getString(res));
+        return new java.text.SimpleDateFormat(getTimeFormatString(context));
     }
 
     /**
-     * Returns a {@link java.text.DateFormat} object that can format the date 
+     * Returns a String pattern that can be used to format the time according
+     * to the current locale and the user's 12-/24-hour clock preference.
+     * @param context the application context
+     * @hide
+     */
+    public static String getTimeFormatString(Context context) {
+        LocaleData d = LocaleData.get(context.getResources().getConfiguration().locale);
+        return is24HourFormat(context) ? d.timeFormat24 : d.timeFormat12;
+    }
+
+    /**
+     * Returns a {@link java.text.DateFormat} object that can format the date
      * in short form (such as 12/31/1999) according
      * to the current locale and the user's date-order preference.
      * @param context the application context
@@ -303,7 +245,6 @@ public class DateFormat {
     public static java.text.DateFormat getDateFormatForSetting(Context context,
                                                                String value) {
         String format = getDateFormatStringForSetting(context, value);
-
         return new java.text.SimpleDateFormat(format);
     }
 
@@ -347,10 +288,10 @@ public class DateFormat {
         value = context.getString(R.string.numeric_date_format);
         return value;
     }
-    
+
     /**
      * Returns a {@link java.text.DateFormat} object that can format the date
-     * in long form (such as December 31, 1999) for the current locale.
+     * in long form (such as {@code Monday, January 3, 2000}) for the current locale.
      * @param context the application context
      * @return the {@link java.text.DateFormat} object that formats the date in long form.
      */
@@ -360,7 +301,7 @@ public class DateFormat {
 
     /**
      * Returns a {@link java.text.DateFormat} object that can format the date
-     * in medium form (such as Dec. 31, 1999) for the current locale.
+     * in medium form (such as {@code Jan 3, 2000}) for the current locale.
      * @param context the application context
      * @return the {@link java.text.DateFormat} object that formats the date in long form.
      */
@@ -370,13 +311,13 @@ public class DateFormat {
 
     /**
      * Gets the current date format stored as a char array. The array will contain
-     * 3 elements ({@link #DATE}, {@link #MONTH}, and {@link #YEAR}) in the order    
+     * 3 elements ({@link #DATE}, {@link #MONTH}, and {@link #YEAR}) in the order
      * specified by the user's format preference.  Note that this order is
      * only appropriate for all-numeric dates; spelled-out (MEDIUM and LONG)
      * dates will generally contain other punctuation, spaces, or words,
      * not just the day, month, and year, and not necessarily in the same
      * order returned here.
-     */    
+     */
     public static char[] getDateFormatOrder(Context context) {
         char[] order = new char[] {DATE, MONTH, YEAR};
         String value = getDateFormatString(context);
@@ -406,7 +347,7 @@ public class DateFormat {
         }
         return order;
     }
-    
+
     private static String getDateFormatString(Context context) {
         String value = Settings.System.getString(context.getContentResolver(),
                 Settings.System.DATE_FORMAT);
@@ -415,7 +356,7 @@ public class DateFormat {
     }
 
     /**
-     * Given a format string and a time in milliseconds since Jan 1, 1970 GMT, returns a 
+     * Given a format string and a time in milliseconds since Jan 1, 1970 GMT, returns a
      * CharSequence containing the requested date.
      * @param inFormat the format string, as described in {@link android.text.format.DateFormat}
      * @param inTimeInMillis in milliseconds since Jan 1, 1970 GMT
@@ -433,25 +374,33 @@ public class DateFormat {
      * @return a {@link CharSequence} containing the requested text
      */
     public static CharSequence format(CharSequence inFormat, Date inDate) {
-        Calendar    c = new GregorianCalendar();
-        
+        Calendar c = new GregorianCalendar();
         c.setTime(inDate);
-        
         return format(inFormat, c);
     }
 
     /**
      * Indicates whether the specified format string contains seconds.
-     * 
+     *
      * Always returns false if the input format is null.
-     * 
+     *
      * @param inFormat the format string, as described in {@link android.text.format.DateFormat}
-     *                 
+     *
      * @return true if the format string contains {@link #SECONDS}, false otherwise
-     * 
+     *
      * @hide
      */
     public static boolean hasSeconds(CharSequence inFormat) {
+        return hasDesignator(inFormat, SECONDS);
+    }
+
+    /**
+     * Test if a format string contains the given designator. Always returns
+     * {@code false} if the input format is {@code null}.
+     *
+     * @hide
+     */
+    public static boolean hasDesignator(CharSequence inFormat, char designator) {
         if (inFormat == null) return false;
 
         final int length = inFormat.length();
@@ -465,7 +414,7 @@ public class DateFormat {
 
             if (c == QUOTE) {
                 count = skipQuotedText(inFormat, i, length);
-            } else if (c == SECONDS) {
+            } else if (c == designator) {
                 return true;
             }
         }
@@ -503,24 +452,23 @@ public class DateFormat {
     }
 
     /**
-     * Given a format string and a {@link java.util.Calendar} object, returns a CharSequence 
+     * Given a format string and a {@link java.util.Calendar} object, returns a CharSequence
      * containing the requested date.
      * @param inFormat the format string, as described in {@link android.text.format.DateFormat}
      * @param inDate the date to format
      * @return a {@link CharSequence} containing the requested text
      */
     public static CharSequence format(CharSequence inFormat, Calendar inDate) {
-        SpannableStringBuilder      s = new SpannableStringBuilder(inFormat);
-        int             c;
-        int             count;
+        SpannableStringBuilder s = new SpannableStringBuilder(inFormat);
+        int count;
+
+        LocaleData localeData = LocaleData.get(Locale.getDefault());
 
         int len = inFormat.length();
 
         for (int i = 0; i < len; i += count) {
-            int temp;
-
             count = 1;
-            c = s.charAt(i);
+            int c = s.charAt(i);
 
             if (c == QUOTE) {
                 count = appendQuotedText(s, i, len);
@@ -533,102 +481,105 @@ public class DateFormat {
             }
 
             String replacement;
-
             switch (c) {
-                case AM_PM:
-                    replacement = DateUtils.getAMPMString(inDate.get(Calendar.AM_PM));
+                case 'A':
+                case 'a':
+                    replacement = localeData.amPm[inDate.get(Calendar.AM_PM) - Calendar.AM];
                     break;
-                                        
-                case CAPITAL_AM_PM:
-                    //FIXME: this is the same as AM_PM? no capital?
-                    replacement = DateUtils.getAMPMString(inDate.get(Calendar.AM_PM));
-                    break;
-                
-                case DATE:
+                case 'd':
                     replacement = zeroPad(inDate.get(Calendar.DATE), count);
                     break;
-                    
-                case DAY:
-                    temp = inDate.get(Calendar.DAY_OF_WEEK);
-                    replacement = DateUtils.getDayOfWeekString(temp,
-                                                               count < 4 ? 
-                                                               DateUtils.LENGTH_MEDIUM : 
-                                                               DateUtils.LENGTH_LONG);
+                case 'c':
+                case 'E':
+                    replacement = getDayOfWeekString(localeData,
+                                                     inDate.get(Calendar.DAY_OF_WEEK), count, c);
                     break;
-                    
-                case HOUR:
-                    temp = inDate.get(Calendar.HOUR);
-
-                    if (0 == temp)
-                        temp = 12;
-                    
-                    replacement = zeroPad(temp, count);
+                case 'K': // hour in am/pm (0-11)
+                case 'h': // hour in am/pm (1-12)
+                    {
+                        int hour = inDate.get(Calendar.HOUR);
+                        if (c == 'h' && hour == 0) {
+                            hour = 12;
+                        }
+                        replacement = zeroPad(hour, count);
+                    }
                     break;
-                    
-                case HOUR_OF_DAY:
-                    replacement = zeroPad(inDate.get(Calendar.HOUR_OF_DAY), count);
+                case 'H': // hour in day (0-23)
+                case 'k': // hour in day (1-24) [but see note below]
+                    {
+                        int hour = inDate.get(Calendar.HOUR_OF_DAY);
+                        // Historically on Android 'k' was interpreted as 'H', which wasn't
+                        // implemented, so pretty much all callers that want to format 24-hour
+                        // times are abusing 'k'. http://b/8359981.
+                        if (false && c == 'k' && hour == 0) {
+                            hour = 24;
+                        }
+                        replacement = zeroPad(hour, count);
+                    }
                     break;
-                    
-                case MINUTE:
+                case 'L':
+                case 'M':
+                    replacement = getMonthString(localeData,
+                                                 inDate.get(Calendar.MONTH), count, c);
+                    break;
+                case 'm':
                     replacement = zeroPad(inDate.get(Calendar.MINUTE), count);
                     break;
-                    
-                case MONTH:
-                case STANDALONE_MONTH:
-                    replacement = getMonthString(inDate, count, c);
-                    break;
-
-                case SECONDS:
+                case 's':
                     replacement = zeroPad(inDate.get(Calendar.SECOND), count);
                     break;
-                    
-                case TIME_ZONE:
+                case 'y':
+                    replacement = getYearString(inDate.get(Calendar.YEAR), count);
+                    break;
+                case 'z':
                     replacement = getTimeZoneString(inDate, count);
                     break;
-                    
-                case YEAR:
-                    replacement = getYearString(inDate, count);
-                    break;
-
                 default:
                     replacement = null;
                     break;
             }
-            
+
             if (replacement != null) {
                 s.replace(i, i + count, replacement);
                 count = replacement.length(); // CARE: count is used in the for loop above
                 len = s.length();
             }
         }
-        
-        if (inFormat instanceof Spanned)
+
+        if (inFormat instanceof Spanned) {
             return new SpannedString(s);
-        else
+        } else {
             return s.toString();
+        }
     }
-    
-    private static String getMonthString(Calendar inDate, int count, int kind) {
-        boolean standalone = (kind == STANDALONE_MONTH);
-        int month = inDate.get(Calendar.MONTH);
-        
-        if (count >= 4) {
-            return standalone
-                ? DateUtils.getStandaloneMonthString(month, DateUtils.LENGTH_LONG)
-                : DateUtils.getMonthString(month, DateUtils.LENGTH_LONG);
+
+    private static String getDayOfWeekString(LocaleData ld, int day, int count, int kind) {
+        boolean standalone = (kind == 'c');
+        if (count == 5) {
+            return standalone ? ld.tinyStandAloneWeekdayNames[day] : ld.tinyWeekdayNames[day];
+        } else if (count == 4) {
+            return standalone ? ld.longStandAloneWeekdayNames[day] : ld.longWeekdayNames[day];
+        } else {
+            return standalone ? ld.shortStandAloneWeekdayNames[day] : ld.shortWeekdayNames[day];
+        }
+    }
+
+    private static String getMonthString(LocaleData ld, int month, int count, int kind) {
+        boolean standalone = (kind == 'L');
+        if (count == 5) {
+            return standalone ? ld.tinyStandAloneMonthNames[month] : ld.tinyMonthNames[month];
+        } else if (count == 4) {
+            return standalone ? ld.longStandAloneMonthNames[month] : ld.longMonthNames[month];
         } else if (count == 3) {
-            return standalone
-                ? DateUtils.getStandaloneMonthString(month, DateUtils.LENGTH_MEDIUM)
-                : DateUtils.getMonthString(month, DateUtils.LENGTH_MEDIUM);
+            return standalone ? ld.shortStandAloneMonthNames[month] : ld.shortMonthNames[month];
         } else {
             // Calendar.JANUARY == 0, so add 1 to month.
             return zeroPad(month+1, count);
         }
     }
-        
+
     private static String getTimeZoneString(Calendar inDate, int count) {
         TimeZone tz = inDate.getTimeZone();
-        
         if (count < 2) { // FIXME: shouldn't this be <= 2 ?
             return formatZoneOffset(inDate.get(Calendar.DST_OFFSET) +
                                     inDate.get(Calendar.ZONE_OFFSET),
@@ -657,13 +608,12 @@ public class DateFormat {
         tb.append(zeroPad(minutes, 2));
         return tb.toString();
     }
-    
-    private static String getYearString(Calendar inDate, int count) {
-        int year = inDate.get(Calendar.YEAR);
+
+    private static String getYearString(int year, int count) {
         return (count <= 2) ? zeroPad(year % 100, 2)
                             : String.format(Locale.getDefault(), "%d", year);
     }
-   
+
     private static int appendQuotedText(SpannableStringBuilder s, int i, int len) {
         if (i + 1 < len && s.charAt(i + 1) == QUOTE) {
             s.delete(i, i + 1);

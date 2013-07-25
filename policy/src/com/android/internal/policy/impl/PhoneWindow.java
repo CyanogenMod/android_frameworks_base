@@ -20,11 +20,7 @@ import static android.view.View.MeasureSpec.EXACTLY;
 import static android.view.View.MeasureSpec.getMode;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
-import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR;
-import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
-import static android.view.WindowManager.LayoutParams.FLAG_SPLIT_TOUCH;
+import static android.view.WindowManager.LayoutParams.*;
 
 import com.android.internal.view.RootViewSurfaceTaker;
 import com.android.internal.view.StandaloneActionMode;
@@ -37,6 +33,7 @@ import com.android.internal.view.menu.MenuPresenter;
 import com.android.internal.view.menu.MenuView;
 import com.android.internal.widget.ActionBarContainer;
 import com.android.internal.widget.ActionBarContextView;
+import com.android.internal.widget.ActionBarOverlayLayout;
 import com.android.internal.widget.ActionBarView;
 
 import android.app.KeyguardManager;
@@ -436,6 +433,15 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             st.createdPanelView = cb.onCreatePanelView(st.featureId);
         }
 
+        final boolean isActionBarMenu =
+                (st.featureId == FEATURE_OPTIONS_PANEL || st.featureId == FEATURE_ACTION_BAR);
+
+        if (isActionBarMenu && mActionBar != null) {
+            // Enforce ordering guarantees around events so that the action bar never
+            // dispatches menu-related events before the panel is prepared.
+            mActionBar.setMenuPrepared();
+        }
+
         if (st.createdPanelView == null) {
             // Init the panel state's menu--return false if init failed
             if (st.menu == null || st.refreshMenuContent) {
@@ -445,7 +451,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     }
                 }
 
-                if (mActionBar != null) {
+                if (isActionBarMenu && mActionBar != null) {
                     if (mActionMenuPresenterCallback == null) {
                         mActionMenuPresenterCallback = new ActionMenuPresenterCallback();
                     }
@@ -461,7 +467,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     // Ditch the menu created above
                     st.setMenu(null);
 
-                    if (mActionBar != null) {
+                    if (isActionBarMenu && mActionBar != null) {
                         // Don't show it in the action bar either
                         mActionBar.setMenu(null, mActionMenuPresenterCallback);
                     }
@@ -486,7 +492,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             }
 
             if (!cb.onPreparePanel(st.featureId, st.createdPanelView, st.menu)) {
-                if (mActionBar != null) {
+                if (isActionBarMenu && mActionBar != null) {
                     // The app didn't want to show the menu for now but it still exists.
                     // Clear it out of the action bar.
                     mActionBar.setMenu(null, mActionMenuPresenterCallback);
@@ -1045,6 +1051,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             final Callback cb = getCallback();
             if (!mActionBar.isOverflowMenuShowing() || !toggleMenuMode) {
                 if (cb != null && !isDestroyed() && mActionBar.getVisibility() == View.VISIBLE) {
+                    // If we have a menu invalidation pending, do it now.
+                    if (mInvalidatePanelMenuPosted &&
+                            (mInvalidatePanelMenuFeatures & (1 << FEATURE_OPTIONS_PANEL)) != 0) {
+                        mDecor.removeCallbacks(mInvalidatePanelMenuRunnable);
+                        mInvalidatePanelMenuRunnable.run();
+                    }
+
                     final PanelFeatureState st = getPanelState(FEATURE_OPTIONS_PANEL, true);
 
                     // If we don't have a menu or we're waiting for a full content refresh,
@@ -2528,8 +2541,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                         mActionModeView = new ActionBarContextView(mContext);
                         mActionModePopup = new PopupWindow(mContext, null,
                                 com.android.internal.R.attr.actionModePopupWindowStyle);
-                        mActionModePopup.setLayoutInScreenEnabled(true);
-                        mActionModePopup.setLayoutInsetDecor(true);
                         mActionModePopup.setWindowLayoutType(
                                 WindowManager.LayoutParams.TYPE_APPLICATION);
                         mActionModePopup.setContentView(mActionModeView);
@@ -2907,7 +2918,11 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
 
         if (a.getBoolean(com.android.internal.R.styleable.Window_windowFullscreen, false)) {
-            setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN&(~getForcedWindowFlags()));
+            setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN & (~getForcedWindowFlags()));
+        }
+
+        if (a.getBoolean(com.android.internal.R.styleable.Window_windowOverscan, false)) {
+            setFlags(FLAG_LAYOUT_IN_OVERSCAN, FLAG_LAYOUT_IN_OVERSCAN&(~getForcedWindowFlags()));
         }
 
         if (a.getBoolean(com.android.internal.R.styleable.Window_windowShowWallpaper, false)) {
@@ -3056,11 +3071,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                         com.android.internal.R.attr.dialogTitleDecorLayout, res, true);
                 layoutResource = res.resourceId;
             } else if ((features & (1 << FEATURE_ACTION_BAR)) != 0) {
-                if ((features & (1 << FEATURE_ACTION_BAR_OVERLAY)) != 0) {
-                    layoutResource = com.android.internal.R.layout.screen_action_bar_overlay;
-                } else {
-                    layoutResource = com.android.internal.R.layout.screen_action_bar;
-                }
+                layoutResource = com.android.internal.R.layout.screen_action_bar;
             } else {
                 layoutResource = com.android.internal.R.layout.screen_title;
             }

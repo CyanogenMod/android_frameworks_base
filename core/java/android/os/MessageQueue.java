@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * <p>You can retrieve the MessageQueue for the current thread with
  * {@link Looper#myQueue() Looper.myQueue()}.
  */
-public class MessageQueue {
+public final class MessageQueue {
     // True if the message queue can be quit.
     private final boolean mQuitAllowed;
 
@@ -48,10 +48,10 @@ public class MessageQueue {
     // Barriers are indicated by messages with a null target whose arg1 field carries the token.
     private int mNextBarrierToken;
 
-    private native void nativeInit();
-    private native void nativeDestroy();
-    private native void nativePollOnce(int ptr, int timeoutMillis);
-    private native void nativeWake(int ptr);
+    private native static int nativeInit();
+    private native static void nativeDestroy(int ptr);
+    private native static void nativePollOnce(int ptr, int timeoutMillis);
+    private native static void nativeWake(int ptr);
 
     /**
      * Callback interface for discovering when a thread is going to block
@@ -78,7 +78,7 @@ public class MessageQueue {
      * 
      * @param handler The IdleHandler to be added.
      */
-    public final void addIdleHandler(IdleHandler handler) {
+    public void addIdleHandler(IdleHandler handler) {
         if (handler == null) {
             throw new NullPointerException("Can't add a null IdleHandler");
         }
@@ -94,7 +94,7 @@ public class MessageQueue {
      * 
      * @param handler The IdleHandler to be removed.
      */
-    public final void removeIdleHandler(IdleHandler handler) {
+    public void removeIdleHandler(IdleHandler handler) {
         synchronized (this) {
             mIdleHandlers.remove(handler);
         }
@@ -102,19 +102,26 @@ public class MessageQueue {
 
     MessageQueue(boolean quitAllowed) {
         mQuitAllowed = quitAllowed;
-        nativeInit();
+        mPtr = nativeInit();
     }
 
     @Override
     protected void finalize() throws Throwable {
         try {
-            nativeDestroy();
+            dispose();
         } finally {
             super.finalize();
         }
     }
 
-    final Message next() {
+    private void dispose() {
+        if (mPtr != 0) {
+            nativeDestroy(mPtr);
+            mPtr = 0;
+        }
+    }
+
+    Message next() {
         int pendingIdleHandlerCount = -1; // -1 only during first iteration
         int nextPollTimeoutMillis = 0;
 
@@ -125,10 +132,6 @@ public class MessageQueue {
             nativePollOnce(mPtr, nextPollTimeoutMillis);
 
             synchronized (this) {
-                if (mQuiting) {
-                    return null;
-                }
-
                 // Try to retrieve the next message.  Return if found.
                 final long now = SystemClock.uptimeMillis();
                 Message prevMsg = null;
@@ -160,6 +163,12 @@ public class MessageQueue {
                 } else {
                     // No more messages.
                     nextPollTimeoutMillis = -1;
+                }
+
+                // Process the quit message now that all pending messages have been handled.
+                if (mQuiting) {
+                    dispose();
+                    return null;
                 }
 
                 // If first time idle, then get the number of idlers to run.
@@ -210,7 +219,7 @@ public class MessageQueue {
         }
     }
 
-    final void quit() {
+    void quit(boolean safe) {
         if (!mQuitAllowed) {
             throw new RuntimeException("Main thread not allowed to quit.");
         }
@@ -220,11 +229,17 @@ public class MessageQueue {
                 return;
             }
             mQuiting = true;
+
+            if (safe) {
+                removeAllFutureMessagesLocked();
+            } else {
+                removeAllMessagesLocked();
+            }
         }
         nativeWake(mPtr);
     }
 
-    final int enqueueSyncBarrier(long when) {
+    int enqueueSyncBarrier(long when) {
         // Enqueue a new sync barrier token.
         // We don't need to wake the queue because the purpose of a barrier is to stall it.
         synchronized (this) {
@@ -251,7 +266,7 @@ public class MessageQueue {
         }
     }
 
-    final void removeSyncBarrier(int token) {
+    void removeSyncBarrier(int token) {
         // Remove a sync barrier token from the queue.
         // If the queue is no longer stalled by a barrier then wake it.
         final boolean needWake;
@@ -280,7 +295,7 @@ public class MessageQueue {
         }
     }
 
-    final boolean enqueueMessage(Message msg, long when) {
+    boolean enqueueMessage(Message msg, long when) {
         if (msg.isInUse()) {
             throw new AndroidRuntimeException(msg + " This message is already in use.");
         }
@@ -330,7 +345,7 @@ public class MessageQueue {
         return true;
     }
 
-    final boolean hasMessages(Handler h, int what, Object object) {
+    boolean hasMessages(Handler h, int what, Object object) {
         if (h == null) {
             return false;
         }
@@ -347,7 +362,7 @@ public class MessageQueue {
         }
     }
 
-    final boolean hasMessages(Handler h, Runnable r, Object object) {
+    boolean hasMessages(Handler h, Runnable r, Object object) {
         if (h == null) {
             return false;
         }
@@ -364,7 +379,7 @@ public class MessageQueue {
         }
     }
 
-    final void removeMessages(Handler h, int what, Object object) {
+    void removeMessages(Handler h, int what, Object object) {
         if (h == null) {
             return;
         }
@@ -398,7 +413,7 @@ public class MessageQueue {
         }
     }
 
-    final void removeMessages(Handler h, Runnable r, Object object) {
+    void removeMessages(Handler h, Runnable r, Object object) {
         if (h == null || r == null) {
             return;
         }
@@ -432,7 +447,7 @@ public class MessageQueue {
         }
     }
 
-    final void removeCallbacksAndMessages(Handler h, Object object) {
+    void removeCallbacksAndMessages(Handler h, Object object) {
         if (h == null) {
             return;
         }
@@ -461,6 +476,44 @@ public class MessageQueue {
                     }
                 }
                 p = n;
+            }
+        }
+    }
+
+    private void removeAllMessagesLocked() {
+        Message p = mMessages;
+        while (p != null) {
+            Message n = p.next;
+            p.recycle();
+            p = n;
+        }
+        mMessages = null;
+    }
+
+    private void removeAllFutureMessagesLocked() {
+        final long now = SystemClock.uptimeMillis();
+        Message p = mMessages;
+        if (p != null) {
+            if (p.when > now) {
+                removeAllMessagesLocked();
+            } else {
+                Message n;
+                for (;;) {
+                    n = p.next;
+                    if (n == null) {
+                        return;
+                    }
+                    if (n.when > now) {
+                        break;
+                    }
+                    p = n;
+                }
+                p.next = null;
+                do {
+                    p = n;
+                    n = p.next;
+                    p.recycle();
+                } while (n != null);
             }
         }
     }

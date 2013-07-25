@@ -24,19 +24,25 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 /**
@@ -139,7 +145,10 @@ public class TextToSpeech {
      * Listener that will be called when the TTS service has
      * completed synthesizing an utterance. This is only called if the utterance
      * has an utterance ID (see {@link TextToSpeech.Engine#KEY_PARAM_UTTERANCE_ID}).
+     *
+     * @deprecated Use {@link UtteranceProgressListener} instead.
      */
+    @Deprecated
     public interface OnUtteranceCompletedListener {
         /**
          * Called when an utterance has been synthesized.
@@ -235,19 +244,28 @@ public class TextToSpeech {
         /**
          * Indicates erroneous data when checking the installation status of the resources used by
          * the TextToSpeech engine with the {@link #ACTION_CHECK_TTS_DATA} intent.
+         *
+         * @deprecated Use CHECK_VOICE_DATA_FAIL instead.
          */
+        @Deprecated
         public static final int CHECK_VOICE_DATA_BAD_DATA = -1;
 
         /**
          * Indicates missing resources when checking the installation status of the resources used
          * by the TextToSpeech engine with the {@link #ACTION_CHECK_TTS_DATA} intent.
+         *
+         * @deprecated Use CHECK_VOICE_DATA_FAIL instead.
          */
+        @Deprecated
         public static final int CHECK_VOICE_DATA_MISSING_DATA = -2;
 
         /**
          * Indicates missing storage volume when checking the installation status of the resources
          * used by the TextToSpeech engine with the {@link #ACTION_CHECK_TTS_DATA} intent.
+         *
+         * @deprecated Use CHECK_VOICE_DATA_FAIL instead.
          */
+        @Deprecated
         public static final int CHECK_VOICE_DATA_MISSING_VOLUME = -3;
 
         /**
@@ -283,9 +301,8 @@ public class TextToSpeech {
                 "android.speech.tts.engine.INSTALL_TTS_DATA";
 
         /**
-         * Broadcast Action: broadcast to signal the completion of the installation of
-         * the data files used by the synthesis engine. Success or failure is indicated in the
-         * {@link #EXTRA_TTS_DATA_INSTALLED} extra.
+         * Broadcast Action: broadcast to signal the change in the list of available
+         * languages or/and their features.
          */
         @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
         public static final String ACTION_TTS_DATA_INSTALLED =
@@ -298,20 +315,16 @@ public class TextToSpeech {
          * return one of the following codes:
          * {@link #CHECK_VOICE_DATA_PASS},
          * {@link #CHECK_VOICE_DATA_FAIL},
-         * {@link #CHECK_VOICE_DATA_BAD_DATA},
-         * {@link #CHECK_VOICE_DATA_MISSING_DATA}, or
-         * {@link #CHECK_VOICE_DATA_MISSING_VOLUME}.
          * <p> Moreover, the data received in the activity result will contain the following
          * fields:
          * <ul>
-         *   <li>{@link #EXTRA_VOICE_DATA_ROOT_DIRECTORY} which
-         *       indicates the path to the location of the resource files,</li>
-         *   <li>{@link #EXTRA_VOICE_DATA_FILES} which contains
-         *       the list of all the resource files,</li>
-         *   <li>and {@link #EXTRA_VOICE_DATA_FILES_INFO} which
-         *       contains, for each resource file, the description of the language covered by
-         *       the file in the xxx-YYY format, where xxx is the 3-letter ISO language code,
-         *       and YYY is the 3-letter ISO country code.</li>
+         *   <li>{@link #EXTRA_AVAILABLE_VOICES} which contains an ArrayList<String> of all the
+         *   available voices. The format of each voice is: lang-COUNTRY-variant where COUNTRY and
+         *   variant are optional (ie, "eng" or "eng-USA" or "eng-USA-FEMALE").</li>
+         *   <li>{@link #EXTRA_UNAVAILABLE_VOICES} which contains an ArrayList<String> of all the
+         *   unavailable voices (ones that user can install). The format of each voice is:
+         *   lang-COUNTRY-variant where COUNTRY and variant are optional (ie, "eng" or
+         *   "eng-USA" or "eng-USA-FEMALE").</li>
          * </ul>
          */
         @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
@@ -319,37 +332,33 @@ public class TextToSpeech {
                 "android.speech.tts.engine.CHECK_TTS_DATA";
 
         /**
-         * Activity intent for getting some sample text to use for demonstrating TTS.
+         * Activity intent for getting some sample text to use for demonstrating TTS. Specific
+         * locale have to be requested by passing following extra parameters:
+         * <ul>
+         *   <li>language</li>
+         *   <li>country</li>
+         *   <li>variant</li>
+         * </ul>
          *
-         * @hide This intent was used by engines written against the old API.
-         * Not sure if it should be exposed.
+         * Upon completion, the activity result may contain the following fields:
+         * <ul>
+         *   <li>{@link #EXTRA_SAMPLE_TEXT} which contains an String with sample text.</li>
+         * </ul>
          */
         @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
         public static final String ACTION_GET_SAMPLE_TEXT =
                 "android.speech.tts.engine.GET_SAMPLE_TEXT";
 
+        /**
+         * Extra information received with the {@link #ACTION_GET_SAMPLE_TEXT} intent result where
+         * the TextToSpeech engine returns an String with sample text for requested voice
+         */
+        public static final String EXTRA_SAMPLE_TEXT = "sampleText";
+
+
         // extras for a TTS engine's check data activity
         /**
-         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent where
-         * the TextToSpeech engine specifies the path to its resources.
-         */
-        public static final String EXTRA_VOICE_DATA_ROOT_DIRECTORY = "dataRoot";
-
-        /**
-         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent where
-         * the TextToSpeech engine specifies the file names of its resources under the
-         * resource path.
-         */
-        public static final String EXTRA_VOICE_DATA_FILES = "dataFiles";
-
-        /**
-         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent where
-         * the TextToSpeech engine specifies the locale associated with each resource file.
-         */
-        public static final String EXTRA_VOICE_DATA_FILES_INFO = "dataFilesInfo";
-
-        /**
-         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent where
+         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent result where
          * the TextToSpeech engine returns an ArrayList<String> of all the available voices.
          * The format of each voice is: lang-COUNTRY-variant where COUNTRY and variant are
          * optional (ie, "eng" or "eng-USA" or "eng-USA-FEMALE").
@@ -357,7 +366,7 @@ public class TextToSpeech {
         public static final String EXTRA_AVAILABLE_VOICES = "availableVoices";
 
         /**
-         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent where
+         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent result where
          * the TextToSpeech engine returns an ArrayList<String> of all the unavailable voices.
          * The format of each voice is: lang-COUNTRY-variant where COUNTRY and variant are
          * optional (ie, "eng" or "eng-USA" or "eng-USA-FEMALE").
@@ -365,22 +374,63 @@ public class TextToSpeech {
         public static final String EXTRA_UNAVAILABLE_VOICES = "unavailableVoices";
 
         /**
+         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent result where
+         * the TextToSpeech engine specifies the path to its resources.
+         *
+         * It may be used by language packages to find out where to put their data.
+         *
+         * @deprecated TTS engine implementation detail, this information has no use for
+         * text-to-speech API client.
+         */
+        @Deprecated
+        public static final String EXTRA_VOICE_DATA_ROOT_DIRECTORY = "dataRoot";
+
+        /**
+         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent result where
+         * the TextToSpeech engine specifies the file names of its resources under the
+         * resource path.
+         *
+         * @deprecated TTS engine implementation detail, this information has no use for
+         * text-to-speech API client.
+         */
+        @Deprecated
+        public static final String EXTRA_VOICE_DATA_FILES = "dataFiles";
+
+        /**
+         * Extra information received with the {@link #ACTION_CHECK_TTS_DATA} intent result where
+         * the TextToSpeech engine specifies the locale associated with each resource file.
+         *
+         * @deprecated TTS engine implementation detail, this information has no use for
+         * text-to-speech API client.
+         */
+        @Deprecated
+        public static final String EXTRA_VOICE_DATA_FILES_INFO = "dataFilesInfo";
+
+        /**
          * Extra information sent with the {@link #ACTION_CHECK_TTS_DATA} intent where the
          * caller indicates to the TextToSpeech engine which specific sets of voice data to
          * check for by sending an ArrayList<String> of the voices that are of interest.
          * The format of each voice is: lang-COUNTRY-variant where COUNTRY and variant are
          * optional (ie, "eng" or "eng-USA" or "eng-USA-FEMALE").
+         *
+         * @deprecated Redundant functionality, checking for existence of specific sets of voice
+         * data can be done on client side.
          */
+        @Deprecated
         public static final String EXTRA_CHECK_VOICE_DATA_FOR = "checkVoiceDataFor";
 
         // extras for a TTS engine's data installation
         /**
-         * Extra information received with the {@link #ACTION_TTS_DATA_INSTALLED} intent.
+         * Extra information received with the {@link #ACTION_TTS_DATA_INSTALLED} intent result.
          * It indicates whether the data files for the synthesis engine were successfully
          * installed. The installation was initiated with the  {@link #ACTION_INSTALL_TTS_DATA}
          * intent. The possible values for this extra are
          * {@link TextToSpeech#SUCCESS} and {@link TextToSpeech#ERROR}.
+         *
+         * @deprecated No longer in use. If client ise interested in information about what
+         * changed, is should send ACTION_CHECK_TTS_DATA intent to discover available voices.
          */
+        @Deprecated
         public static final String EXTRA_TTS_DATA_INSTALLED = "dataInstalled";
 
         // keys for the parameters passed with speak commands. Hidden keys are used internally
@@ -473,11 +523,16 @@ public class TextToSpeech {
          * for a description of how feature keys work. If set and supported by the engine
          * as per {@link TextToSpeech#getFeatures(Locale)}, the engine must synthesize
          * text on-device (without making network requests).
+         *
+         * @see TextToSpeech#speak(String, int, java.util.HashMap)
+         * @see TextToSpeech#synthesizeToFile(String, java.util.HashMap, String)
+         * @see TextToSpeech#getFeatures(java.util.Locale)
          */
         public static final String KEY_FEATURE_EMBEDDED_SYNTHESIS = "embeddedTts";
     }
 
     private final Context mContext;
+    private Connection mConnectingServiceConnection;
     private Connection mServiceConnection;
     private OnInitListener mInitListener;
     // Written from an unspecified application thread, read from
@@ -553,21 +608,24 @@ public class TextToSpeech {
         initTts();
     }
 
-    private <R> R runActionNoReconnect(Action<R> action, R errorResult, String method) {
-        return runAction(action, errorResult, method, false);
+    private <R> R runActionNoReconnect(Action<R> action, R errorResult, String method,
+            boolean onlyEstablishedConnection) {
+        return runAction(action, errorResult, method, false, onlyEstablishedConnection);
     }
 
     private <R> R runAction(Action<R> action, R errorResult, String method) {
-        return runAction(action, errorResult, method, true);
+        return runAction(action, errorResult, method, true, true);
     }
 
-    private <R> R runAction(Action<R> action, R errorResult, String method, boolean reconnect) {
+    private <R> R runAction(Action<R> action, R errorResult, String method,
+            boolean reconnect, boolean onlyEstablishedConnection) {
         synchronized (mStartLock) {
             if (mServiceConnection == null) {
                 Log.w(TAG, method + " failed: not bound to TTS engine");
                 return errorResult;
             }
-            return mServiceConnection.runAction(action, errorResult, method, reconnect);
+            return mServiceConnection.runAction(action, errorResult, method, reconnect,
+                    onlyEstablishedConnection);
         }
     }
 
@@ -630,6 +688,7 @@ public class TextToSpeech {
             return false;
         } else {
             Log.i(TAG, "Sucessfully bound to " + engine);
+            mConnectingServiceConnection = connection;
             return true;
         }
     }
@@ -653,6 +712,16 @@ public class TextToSpeech {
      * so the TextToSpeech engine can be cleanly stopped.
      */
     public void shutdown() {
+        // Special case, we are asked to shutdown connection that did finalize its connection.
+        synchronized (mStartLock) {
+            if (mConnectingServiceConnection != null) {
+                mContext.unbindService(mConnectingServiceConnection);
+                mConnectingServiceConnection = null;
+                return;
+            }
+        }
+
+        // Post connection case
         runActionNoReconnect(new Action<Void>() {
             @Override
             public Void run(ITextToSpeechService service) throws RemoteException {
@@ -670,7 +739,7 @@ public class TextToSpeech {
                 mCurrentEngine = null;
                 return null;
             }
-        }, null, "shutdown");
+        }, null, "shutdown", false);
     }
 
     /**
@@ -793,10 +862,16 @@ public class TextToSpeech {
     }
 
     /**
-     * Speaks the string using the specified queuing strategy and speech
-     * parameters.
+     * Speaks the string using the specified queuing strategy and speech parameters.
+     * This method is asynchronous, i.e. the method just adds the request to the queue of TTS
+     * requests and then returns. The synthesis might not have finished (or even started!) at the
+     * time when this method returns. In order to reliably detect errors during synthesis,
+     * we recommend setting an utterance progress listener (see
+     * {@link #setOnUtteranceProgressListener}) and using the
+     * {@link Engine#KEY_PARAM_UTTERANCE_ID} parameter.
      *
-     * @param text The string of text to be spoken.
+     * @param text The string of text to be spoken. No longer than
+     *            {@link #getMaxSpeechInputLength()} characters.
      * @param queueMode The queuing strategy to use, {@link #QUEUE_ADD} or {@link #QUEUE_FLUSH}.
      * @param params Parameters for the request. Can be null.
      *            Supported parameter names:
@@ -809,7 +884,7 @@ public class TextToSpeech {
      *            the keys "com.svox.pico_foo" and "com.svox.pico:bar" will be passed to the
      *            engine named "com.svox.pico" if it is being used.
      *
-     * @return {@link #ERROR} or {@link #SUCCESS}.
+     * @return {@link #ERROR} or {@link #SUCCESS} of <b>queuing</b> the speak operation.
      */
     public int speak(final String text, final int queueMode, final HashMap<String, String> params) {
         return runAction(new Action<Integer>() {
@@ -830,6 +905,12 @@ public class TextToSpeech {
      * Plays the earcon using the specified queueing mode and parameters.
      * The earcon must already have been added with {@link #addEarcon(String, String)} or
      * {@link #addEarcon(String, String, int)}.
+     * This method is asynchronous, i.e. the method just adds the request to the queue of TTS
+     * requests and then returns. The synthesis might not have finished (or even started!) at the
+     * time when this method returns. In order to reliably detect errors during synthesis,
+     * we recommend setting an utterance progress listener (see
+     * {@link #setOnUtteranceProgressListener}) and using the
+     * {@link Engine#KEY_PARAM_UTTERANCE_ID} parameter.
      *
      * @param earcon The earcon that should be played
      * @param queueMode {@link #QUEUE_ADD} or {@link #QUEUE_FLUSH}.
@@ -842,7 +923,7 @@ public class TextToSpeech {
      *            the keys "com.svox.pico_foo" and "com.svox.pico:bar" will be passed to the
      *            engine named "com.svox.pico" if it is being used.
      *
-     * @return {@link #ERROR} or {@link #SUCCESS}.
+     * @return {@link #ERROR} or {@link #SUCCESS} of <b>queuing</b> the playEarcon operation.
      */
     public int playEarcon(final String earcon, final int queueMode,
             final HashMap<String, String> params) {
@@ -862,6 +943,12 @@ public class TextToSpeech {
     /**
      * Plays silence for the specified amount of time using the specified
      * queue mode.
+     * This method is asynchronous, i.e. the method just adds the request to the queue of TTS
+     * requests and then returns. The synthesis might not have finished (or even started!) at the
+     * time when this method returns. In order to reliably detect errors during synthesis,
+     * we recommend setting an utterance progress listener (see
+     * {@link #setOnUtteranceProgressListener}) and using the
+     * {@link Engine#KEY_PARAM_UTTERANCE_ID} parameter.
      *
      * @param durationInMs The duration of the silence.
      * @param queueMode {@link #QUEUE_ADD} or {@link #QUEUE_FLUSH}.
@@ -873,7 +960,7 @@ public class TextToSpeech {
      *            the keys "com.svox.pico_foo" and "com.svox.pico:bar" will be passed to the
      *            engine named "com.svox.pico" if it is being used.
      *
-     * @return {@link #ERROR} or {@link #SUCCESS}.
+     * @return {@link #ERROR} or {@link #SUCCESS} of <b>queuing</b> the playSilence operation.
      */
     public int playSilence(final long durationInMs, final int queueMode,
             final HashMap<String, String> params) {
@@ -1005,6 +1092,24 @@ public class TextToSpeech {
     }
 
     /**
+     * Returns a Locale instance describing the language currently being used as the default
+     * Text-to-speech language.
+     *
+     * @return language, country (if any) and variant (if any) used by the client stored in a
+     *     Locale instance, or {@code null} on error.
+     */
+    public Locale getDefaultLanguage() {
+        return runAction(new Action<Locale>() {
+            @Override
+            public Locale run(ITextToSpeechService service) throws RemoteException {
+                String[] defaultLanguage = service.getClientDefaultLanguage();
+
+                return new Locale(defaultLanguage[0], defaultLanguage[1], defaultLanguage[2]);
+            }
+        }, null, "getDefaultLanguage");
+    }
+
+    /**
      * Sets the text-to-speech language.
      * The TTS engine will try to use the closest match to the specified
      * language as represented by the Locale, but there is no guarantee that the exact same Locale
@@ -1024,14 +1129,29 @@ public class TextToSpeech {
                 if (loc == null) {
                     return LANG_NOT_SUPPORTED;
                 }
-                String language = loc.getISO3Language();
-                String country = loc.getISO3Country();
+                String language = null, country = null;
+                try {
+                    language = loc.getISO3Language();
+                } catch (MissingResourceException e) {
+                    Log.w(TAG, "Couldn't retrieve ISO 639-2/T language code for locale: " + loc, e);
+                    return LANG_NOT_SUPPORTED;
+                }
+
+                try {
+                    country = loc.getISO3Country();
+                } catch (MissingResourceException e) {
+                    Log.w(TAG, "Couldn't retrieve ISO 3166 country code for locale: " + loc, e);
+                    return LANG_NOT_SUPPORTED;
+                }
+
                 String variant = loc.getVariant();
+
                 // Check if the language, country, variant are available, and cache
                 // the available parts.
                 // Note that the language is not actually set here, instead it is cached so it
                 // will be associated with all upcoming utterances.
-                int result = service.loadLanguage(language, country, variant);
+
+                int result = service.loadLanguage(getCallerIdentity(), language, country, variant);
                 if (result >= LANG_AVAILABLE){
                     if (result < LANG_COUNTRY_VAR_AVAILABLE) {
                         variant = "";
@@ -1049,21 +1169,30 @@ public class TextToSpeech {
     }
 
     /**
-     * Returns a Locale instance describing the language currently being used by the TextToSpeech
-     * engine.
+     * Returns a Locale instance describing the language currently being used for synthesis
+     * requests sent to the TextToSpeech engine.
      *
-     * @return language, country (if any) and variant (if any) used by the engine stored in a Locale
-     *     instance, or {@code null} on error.
+     * In Android 4.2 and before (API <= 17) this function returns the language that is currently
+     * being used by the TTS engine. That is the last language set by this or any other
+     * client by a {@link TextToSpeech#setLanguage} call to the same engine.
+     *
+     * In Android versions after 4.2 this function returns the language that is currently being
+     * used for the synthesis requests sent from this client. That is the last language set
+     * by a {@link TextToSpeech#setLanguage} call on this instance.
+     *
+     * @return language, country (if any) and variant (if any) used by the client stored in a
+     *     Locale instance, or {@code null} on error.
      */
     public Locale getLanguage() {
         return runAction(new Action<Locale>() {
             @Override
-            public Locale run(ITextToSpeechService service) throws RemoteException {
-                String[] locStrings = service.getLanguage();
-                if (locStrings != null && locStrings.length == 3) {
-                    return new Locale(locStrings[0], locStrings[1], locStrings[2]);
-                }
-                return null;
+            public Locale run(ITextToSpeechService service) {
+                /* No service call, but we're accessing mParams, hence need for
+                   wrapping it as an Action instance */
+                String lang = mParams.getString(Engine.KEY_PARAM_LANGUAGE, "");
+                String country = mParams.getString(Engine.KEY_PARAM_COUNTRY, "");
+                String variant = mParams.getString(Engine.KEY_PARAM_VARIANT, "");
+                return new Locale(lang, country, variant);
             }
         }, null, "getLanguage");
     }
@@ -1081,16 +1210,38 @@ public class TextToSpeech {
         return runAction(new Action<Integer>() {
             @Override
             public Integer run(ITextToSpeechService service) throws RemoteException {
-                return service.isLanguageAvailable(loc.getISO3Language(),
-                        loc.getISO3Country(), loc.getVariant());
+                String language = null, country = null;
+
+                try {
+                    language = loc.getISO3Language();
+                } catch (MissingResourceException e) {
+                    Log.w(TAG, "Couldn't retrieve ISO 639-2/T language code for locale: " + loc, e);
+                    return LANG_NOT_SUPPORTED;
+                }
+
+                try {
+                    country = loc.getISO3Country();
+                } catch (MissingResourceException e) {
+                    Log.w(TAG, "Couldn't retrieve ISO 3166 country code for locale: " + loc, e);
+                    return LANG_NOT_SUPPORTED;
+                }
+
+                return service.isLanguageAvailable(language, country, loc.getVariant());
             }
         }, LANG_NOT_SUPPORTED, "isLanguageAvailable");
     }
 
     /**
      * Synthesizes the given text to a file using the specified parameters.
+     * This method is asynchronous, i.e. the method just adds the request to the queue of TTS
+     * requests and then returns. The synthesis might not have finished (or even started!) at the
+     * time when this method returns. In order to reliably detect errors during synthesis,
+     * we recommend setting an utterance progress listener (see
+     * {@link #setOnUtteranceProgressListener}) and using the
+     * {@link Engine#KEY_PARAM_UTTERANCE_ID} parameter.
      *
-     * @param text The text that should be synthesized
+     * @param text The text that should be synthesized. No longer than
+     *            {@link #getMaxSpeechInputLength()} characters.
      * @param params Parameters for the request. Can be null.
      *            Supported parameter names:
      *            {@link Engine#KEY_PARAM_UTTERANCE_ID}.
@@ -1101,15 +1252,36 @@ public class TextToSpeech {
      * @param filename Absolute file filename to write the generated audio data to.It should be
      *            something like "/sdcard/myappsounds/mysound.wav".
      *
-     * @return {@link #ERROR} or {@link #SUCCESS}.
+     * @return {@link #ERROR} or {@link #SUCCESS} of <b>queuing</b> the synthesizeToFile operation.
      */
     public int synthesizeToFile(final String text, final HashMap<String, String> params,
             final String filename) {
         return runAction(new Action<Integer>() {
             @Override
             public Integer run(ITextToSpeechService service) throws RemoteException {
-                return service.synthesizeToFile(getCallerIdentity(), text, filename,
-                        getParams(params));
+                ParcelFileDescriptor fileDescriptor;
+                int returnValue;
+                try {
+                    File file = new File(filename);
+                    if(file.exists() && !file.canWrite()) {
+                        Log.e(TAG, "Can't write to " + filename);
+                        return ERROR;
+                    }
+                    fileDescriptor = ParcelFileDescriptor.open(file,
+                            ParcelFileDescriptor.MODE_WRITE_ONLY |
+                            ParcelFileDescriptor.MODE_CREATE |
+                            ParcelFileDescriptor.MODE_TRUNCATE);
+                    returnValue = service.synthesizeToFileDescriptor(getCallerIdentity(), text,
+                            fileDescriptor, getParams(params));
+                    fileDescriptor.close();
+                    return returnValue;
+                } catch (FileNotFoundException e) {
+                    Log.e(TAG, "Opening file " + filename + " failed", e);
+                    return ERROR;
+                } catch (IOException e) {
+                    Log.e(TAG, "Closing file " + filename + " failed", e);
+                    return ERROR;
+                }
             }
         }, ERROR, "synthesizeToFile");
     }
@@ -1253,9 +1425,13 @@ public class TextToSpeech {
         return mEnginesHelper.getEngines();
     }
 
-
     private class Connection implements ServiceConnection {
         private ITextToSpeechService mService;
+
+        private SetupConnectionAsyncTask mOnSetupConnectionAsyncTask;
+
+        private boolean mEstablished;
+
         private final ITextToSpeechCallback.Stub mCallback = new ITextToSpeechCallback.Stub() {
             @Override
             public void onDone(String utteranceId) {
@@ -1282,23 +1458,66 @@ public class TextToSpeech {
             }
         };
 
+        private class SetupConnectionAsyncTask extends AsyncTask<Void, Void, Integer> {
+            private final ComponentName mName;
+
+            public SetupConnectionAsyncTask(ComponentName name) {
+                mName = name;
+            }
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                synchronized(mStartLock) {
+                    if (isCancelled()) {
+                        return null;
+                    }
+
+                    try {
+                        mService.setCallback(getCallerIdentity(), mCallback);
+                        String[] defaultLanguage = mService.getClientDefaultLanguage();
+
+                        mParams.putString(Engine.KEY_PARAM_LANGUAGE, defaultLanguage[0]);
+                        mParams.putString(Engine.KEY_PARAM_COUNTRY, defaultLanguage[1]);
+                        mParams.putString(Engine.KEY_PARAM_VARIANT, defaultLanguage[2]);
+
+                        Log.i(TAG, "Set up connection to " + mName);
+                        return SUCCESS;
+                    } catch (RemoteException re) {
+                        Log.e(TAG, "Error connecting to service, setCallback() failed");
+                        return ERROR;
+                    }
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                synchronized(mStartLock) {
+                    if (mOnSetupConnectionAsyncTask == this) {
+                        mOnSetupConnectionAsyncTask = null;
+                    }
+                    mEstablished = true;
+                    dispatchOnInit(result);
+                }
+            }
+        }
+
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.i(TAG, "Connected to " + name);
             synchronized(mStartLock) {
-                if (mServiceConnection != null) {
-                    // Disconnect any previous service connection
-                    mServiceConnection.disconnect();
+                mConnectingServiceConnection = null;
+
+                Log.i(TAG, "Connected to " + name);
+
+                if (mOnSetupConnectionAsyncTask != null) {
+                    mOnSetupConnectionAsyncTask.cancel(false);
                 }
-                mServiceConnection = this;
+
                 mService = ITextToSpeechService.Stub.asInterface(service);
-                try {
-                    mService.setCallback(getCallerIdentity(), mCallback);
-                    dispatchOnInit(SUCCESS);
-                } catch (RemoteException re) {
-                    Log.e(TAG, "Error connecting to service, setCallback() failed");
-                    dispatchOnInit(ERROR);
-                }
+                mServiceConnection = Connection.this;
+
+                mEstablished = false;
+                mOnSetupConnectionAsyncTask = new SetupConnectionAsyncTask(name);
+                mOnSetupConnectionAsyncTask.execute();
             }
         }
 
@@ -1306,35 +1525,61 @@ public class TextToSpeech {
             return mCallback;
         }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
+        /**
+         * Clear connection related fields and cancel mOnServiceConnectedAsyncTask if set.
+         *
+         * @return true if we cancel mOnSetupConnectionAsyncTask in progress.
+         */
+        private boolean clearServiceConnection() {
             synchronized(mStartLock) {
+                boolean result = false;
+                if (mOnSetupConnectionAsyncTask != null) {
+                    result = mOnSetupConnectionAsyncTask.cancel(false);
+                    mOnSetupConnectionAsyncTask = null;
+                }
+
                 mService = null;
                 // If this is the active connection, clear it
                 if (mServiceConnection == this) {
                     mServiceConnection = null;
                 }
+                return result;
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.i(TAG, "Asked to disconnect from " + name);
+            if (clearServiceConnection()) {
+                /* We need to protect against a rare case where engine
+                 * dies just after successful connection - and we process onServiceDisconnected
+                 * before OnServiceConnectedAsyncTask.onPostExecute. onServiceDisconnected cancels
+                 * OnServiceConnectedAsyncTask.onPostExecute and we don't call dispatchOnInit
+                 * with ERROR as argument.
+                 */
+                dispatchOnInit(ERROR);
             }
         }
 
         public void disconnect() {
             mContext.unbindService(this);
-
-            synchronized (mStartLock) {
-                mService = null;
-                // If this is the active connection, clear it
-                if (mServiceConnection == this) {
-                    mServiceConnection = null;
-                }
-
-            }
+            clearServiceConnection();
         }
 
-        public <R> R runAction(Action<R> action, R errorResult, String method, boolean reconnect) {
+        public boolean isEstablished() {
+            return mService != null && mEstablished;
+        }
+
+        public <R> R runAction(Action<R> action, R errorResult, String method,
+                boolean reconnect, boolean onlyEstablishedConnection) {
             synchronized (mStartLock) {
                 try {
                     if (mService == null) {
                         Log.w(TAG, method + " failed: not connected to TTS engine");
+                        return errorResult;
+                    }
+                    if (onlyEstablishedConnection && !isEstablished()) {
+                        Log.w(TAG, method + " failed: TTS engine connection not fully set up");
                         return errorResult;
                     }
                     return action.run(mService);
@@ -1394,4 +1639,13 @@ public class TextToSpeech {
 
     }
 
+    /**
+     * Limit of length of input string passed to speak and synthesizeToFile.
+     *
+     * @see #speak
+     * @see #synthesizeToFile
+     */
+    public static int getMaxSpeechInputLength() {
+        return 4000;
+    }
 }

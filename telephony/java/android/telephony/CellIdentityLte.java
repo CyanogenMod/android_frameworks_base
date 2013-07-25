@@ -18,7 +18,7 @@ package android.telephony;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+import android.telephony.Rlog;
 
 /**
  * CellIdentity is to represent a unique LTE cell
@@ -81,35 +81,35 @@ public final class CellIdentityLte implements Parcelable {
     }
 
     /**
-     * @return 3-digit Mobile Country Code, 0..999
+     * @return 3-digit Mobile Country Code, 0..999, Integer.MAX_VALUE if unknown
      */
     public int getMcc() {
         return mMcc;
     }
 
     /**
-     * @return 2 or 3-digit Mobile Network Code, 0..999
+     * @return 2 or 3-digit Mobile Network Code, 0..999, Integer.MAX_VALUE if unknown
      */
     public int getMnc() {
         return mMnc;
     }
 
     /**
-     * @return 28-bit Cell Identity
+     * @return 28-bit Cell Identity, Integer.MAX_VALUE if unknown
      */
     public int getCi() {
         return mCi;
     }
 
     /**
-     * @return Physical Cell Id 0..503
+     * @return Physical Cell Id 0..503, Integer.MAX_VALUE if unknown
      */
     public int getPci() {
         return mPci;
     }
 
     /**
-     * @return 16-bit Tracking Area Code
+     * @return 16-bit Tracking Area Code, Integer.MAX_VALUE if unknown
      */
     public int getTac() {
         return mTac;
@@ -142,13 +142,13 @@ public final class CellIdentityLte implements Parcelable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("LteCellIdentitiy:");
-        sb.append(super.toString());
+        StringBuilder sb = new StringBuilder("CellIdentityLte:{");
         sb.append(" mMcc="); sb.append(mMcc);
         sb.append(" mMnc="); sb.append(mMnc);
         sb.append(" mCi="); sb.append(mCi);
         sb.append(" mPci="); sb.append(mPci);
         sb.append(" mTac="); sb.append(mTac);
+        sb.append("}");
 
         return sb.toString();
     }
@@ -199,6 +199,6 @@ public final class CellIdentityLte implements Parcelable {
      * log
      */
     private static void log(String s) {
-        Log.w(LOG_TAG, s);
+        Rlog.w(LOG_TAG, s);
     }
 }

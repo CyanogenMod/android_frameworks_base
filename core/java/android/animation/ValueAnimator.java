@@ -16,10 +16,8 @@
 
 package android.animation;
 
-import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.os.SystemProperties;
+import android.os.Trace;
 import android.util.AndroidRuntimeException;
 import android.view.Choreographer;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -48,6 +46,7 @@ import java.util.HashMap;
  * Animation</a> developer guide.</p>
  * </div>
  */
+@SuppressWarnings("unchecked")
 public class ValueAnimator extends Animator {
 
     /**
@@ -83,7 +82,10 @@ public class ValueAnimator extends Animator {
 
     // The static sAnimationHandler processes the internal timing loop on which all animations
     // are based
-    private static ThreadLocal<AnimationHandler> sAnimationHandler =
+    /**
+     * @hide
+     */
+    protected static ThreadLocal<AnimationHandler> sAnimationHandler =
             new ThreadLocal<AnimationHandler>();
 
     // The time interpolator to be used if none is set on the animation
@@ -337,7 +339,7 @@ public class ValueAnimator extends Animator {
             return;
         }
         if (mValues == null || mValues.length == 0) {
-            setValues(new PropertyValuesHolder[]{PropertyValuesHolder.ofInt("", values)});
+            setValues(PropertyValuesHolder.ofInt("", values));
         } else {
             PropertyValuesHolder valuesHolder = mValues[0];
             valuesHolder.setIntValues(values);
@@ -365,7 +367,7 @@ public class ValueAnimator extends Animator {
             return;
         }
         if (mValues == null || mValues.length == 0) {
-            setValues(new PropertyValuesHolder[]{PropertyValuesHolder.ofFloat("", values)});
+            setValues(PropertyValuesHolder.ofFloat("", values));
         } else {
             PropertyValuesHolder valuesHolder = mValues[0];
             valuesHolder.setFloatValues(values);
@@ -397,8 +399,7 @@ public class ValueAnimator extends Animator {
             return;
         }
         if (mValues == null || mValues.length == 0) {
-            setValues(new PropertyValuesHolder[]{PropertyValuesHolder.ofObject("",
-                    (TypeEvaluator)null, values)});
+            setValues(PropertyValuesHolder.ofObject("", null, values));
         } else {
             PropertyValuesHolder valuesHolder = mValues[0];
             valuesHolder.setObjectValues(values);
@@ -420,7 +421,7 @@ public class ValueAnimator extends Animator {
         mValues = values;
         mValuesMap = new HashMap<String, PropertyValuesHolder>(numValues);
         for (int i = 0; i < numValues; ++i) {
-            PropertyValuesHolder valuesHolder = (PropertyValuesHolder) values[i];
+            PropertyValuesHolder valuesHolder = values[i];
             mValuesMap.put(valuesHolder.getPropertyName(), valuesHolder);
         }
         // New property/values/target should cause re-initialization prior to starting
@@ -531,22 +532,28 @@ public class ValueAnimator extends Animator {
      * animations possible.
      *
      * The handler uses the Choreographer for executing periodic callbacks.
+     *
+     * @hide
      */
-    private static class AnimationHandler implements Runnable {
+    @SuppressWarnings("unchecked")
+    protected static class AnimationHandler implements Runnable {
         // The per-thread list of all active animations
-        private final ArrayList<ValueAnimator> mAnimations = new ArrayList<ValueAnimator>();
+        /** @hide */
+        protected final ArrayList<ValueAnimator> mAnimations = new ArrayList<ValueAnimator>();
 
         // Used in doAnimationFrame() to avoid concurrent modifications of mAnimations
         private final ArrayList<ValueAnimator> mTmpAnimations = new ArrayList<ValueAnimator>();
 
         // The per-thread set of animations to be started on the next animation frame
-        private final ArrayList<ValueAnimator> mPendingAnimations = new ArrayList<ValueAnimator>();
+        /** @hide */
+        protected final ArrayList<ValueAnimator> mPendingAnimations = new ArrayList<ValueAnimator>();
 
         /**
          * Internal per-thread collections used to avoid set collisions as animations start and end
          * while being processed.
+         * @hide
          */
-        private final ArrayList<ValueAnimator> mDelayedAnims = new ArrayList<ValueAnimator>();
+        protected final ArrayList<ValueAnimator> mDelayedAnims = new ArrayList<ValueAnimator>();
         private final ArrayList<ValueAnimator> mEndingAnims = new ArrayList<ValueAnimator>();
         private final ArrayList<ValueAnimator> mReadyAnims = new ArrayList<ValueAnimator>();
 
@@ -846,6 +853,7 @@ public class ValueAnimator extends Animator {
      *
      * @return The timing interpolator for this ValueAnimator.
      */
+    @Override
     public TimeInterpolator getInterpolator() {
         return mInterpolator;
     }
@@ -1015,6 +1023,9 @@ public class ValueAnimator extends Animator {
         mRunning = false;
         mStarted = false;
         mStartListenersCalled = false;
+        mPlayingBackwards = false;
+        Trace.asyncTraceEnd(Trace.TRACE_TAG_VIEW, "animator",
+                System.identityHashCode(this));
     }
 
     /**
@@ -1022,6 +1033,8 @@ public class ValueAnimator extends Animator {
      * called on the UI thread.
      */
     private void startAnimation(AnimationHandler handler) {
+        Trace.asyncTraceBegin(Trace.TRACE_TAG_VIEW, "animator",
+                System.identityHashCode(this));
         initAnimation();
         handler.mAnimations.add(this);
         if (mStartDelay > 0 && mListeners != null) {
@@ -1086,7 +1099,7 @@ public class ValueAnimator extends Animator {
                         }
                     }
                     if (mRepeatMode == REVERSE) {
-                        mPlayingBackwards = mPlayingBackwards ? false : true;
+                        mPlayingBackwards = !mPlayingBackwards;
                     }
                     mCurrentIteration += (int)fraction;
                     fraction = fraction % 1f;
@@ -1243,7 +1256,7 @@ public class ValueAnimator extends Animator {
         }
     }
 
-    private AnimationHandler getOrCreateAnimationHandler() {
+    private static AnimationHandler getOrCreateAnimationHandler() {
         AnimationHandler handler = sAnimationHandler.get();
         if (handler == null) {
             handler = new AnimationHandler();

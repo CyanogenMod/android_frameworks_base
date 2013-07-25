@@ -211,7 +211,7 @@ exact location of the
 <h2 id="Drivers">OEM Drivers</h2>
 
 <p class="note"><strong>Note:</strong> If your device is one of the Android Developer Phones
-(purchased from the Google Play publisher site), a Nexus One, or a Nexus S, then you need
+(purchased from the Google Play Developer Console), a Nexus One, or a Nexus S, then you need
 the <a href="{@docRoot}sdk/win-usb.html">Google USB Driver</a>, instead of an OEM driver. The Galaxy
 Nexus driver, however, is distributed by <a
 href="http://www.samsung.com/us/support/downloads/verizon-wireless/SCH-I515MSAVZW">Samsung</a>
@@ -245,14 +245,6 @@ href="http://drivers.cmcs.com.tw/">http://drivers.cmcs.com.tw/</a></td>
   <tr>
     <td>
       Fujitsu
-    </td>
-    <td><a
-href="http://www.fmworld.net/product/phone/sp/android/develop/">http://www.fmworld.net/product/phone/sp/android/develop/</a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Fujitsu Toshiba
     </td>
     <td><a
 href="http://www.fmworld.net/product/phone/sp/android/develop/">http://www.fmworld.net/product/phone/sp/android/develop/</a>
@@ -299,9 +291,18 @@ href="http://www.kttech.co.kr/cscenter/download05.asp">http://www.kttech.co.kr/c
   </tr>
   <tr><td>LGE</td>	<td><a
 href="http://www.lg.com/us/mobile-phones/mobile-support/mobile-lg-mobile-phone-support.jsp">http://www.lg.com/us/mobile-phones/mobile-support/mobile-lg-mobile-phone-support.jsp</a></td>
-</tr><tr><td>Motorola</td>	<td><a
+</tr>
+<tr><td>Motorola</td> <td><a
 href="http://developer.motorola.com/docstools/USB_Drivers/">http://developer.motorola.com/docstools/USB_Drivers/</a></td>
-</tr><tr><td>Pantech</td>	<td><a
+</tr>
+<tr><td>MTK</td> <td><a
+href="http://online.mediatek.com/Public%20Documents/MTK_Android_USB_Driver.zip">http://online.mediatek.com/Public%20Documents/MTK_Android_USB_Driver.zip</a></td>
+</tr>
+<tr><td>Oppo</td> <td><a
+href="http://www.oppo.com/index.php?q=software/view&sw_id=631"
+>http://www.oppo.com/index.php?q=software/view&sw_id=631</a></td>
+</tr>
+<tr><td>Pantech</td>	<td><a
 href="http://www.isky.co.kr/cs/software/software.sky?fromUrl=index">http://www.isky.co.kr/cs/software/software.sky?fromUrl=index</a></td>
 </tr><tr><td>Pegatron</td>	<td><a
 href="http://www.pegatroncorp.com/download/New_Duke_PC_Driver_0705.zip">http://www.pegatroncorp.com/download/New_Duke_PC_Driver_0705.zip</a> (ZIP download)</td>
@@ -318,10 +319,17 @@ href="http://developer.sonymobile.com/downloads/drivers/">http://developer.sonym
 href="http://www.teleepoch.com/android.html">http://www.teleepoch.com/android.html</a></td>
 </tr>
 
+<tr><td>Toshiba</td>  <td><a
+href="http://support.toshiba.com/sscontent?docId=4001814">http://support.toshiba.com/sscontent?docId=4001814</a></td>
+</tr>
+
 <tr><td>Yulong Coolpad</td>	<td><a
 href="http://www.yulong.com/product/product/product/downloadList.html#downListUL">http://www.yulong.com/product/product/product/downloadList.html#downListUL</a></td>
 </tr>
 
+<tr><td>Xiaomi</td>  <td><a
+href="http://www.xiaomi.com/c/driver/index.html">http://www.xiaomi.com/c/driver/index.html</a></td>
+</tr>
 <tr>
 <td>ZTE</td>	<td><a
 href="http://support.zte.com.cn/support/news/NewsDetail.aspx?newsId=1000442">http://support.zte.com.cn/support/news/NewsDetail.aspx?newsId=1000442</a></td></tr>

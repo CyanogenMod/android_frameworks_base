@@ -1,4 +1,5 @@
 page.title=In-app Billing Reference <span style="font-size:16px;">(IAB Version 2)</span>
+excludeFromSuggestions=true
 @jd:body
 
 <div style="background-color:#fffdeb;width:100%;margin-bottom:1em;padding:.5em;">In-app Billing Version 2 is superseded. Please <a href="{@docRoot}google/play/billing/billing_overview.html#migration">migrate to Version 3</a> at your earliest convenience.</div>
@@ -143,7 +144,7 @@ pairs, which are summarized in table 7.</p>
   <td>Required for <code>REQUEST_PURCHASE</code> requests.</td>
   <td>The product ID of the item you are making a billing request for. Every in-app item that you
   sell using Google Play's In-app Billing service must have a unique product ID, which you
-  specify on the Google Play publisher site.</td>
+  specify on the Google Play Developer Console.</td>
 </tr>
 <tr>
   <td><code>NONCE</code></td>
@@ -380,7 +381,7 @@ a <code>PURCHASE_STATE_CHANGED</code> intent.</p>
 <tr>
   <td>productId</td>
   <td>The item's product identifier. Every item has a product ID, which you must specify in the
-  application's product list on the Google Play publisher site.</td>
+  application's product list on the Google Play Developer Console.</td>
 </tr>
 <tr>
   <td>purchaseTime</td>
@@ -412,4 +413,4 @@ a <code>PURCHASE_STATE_CHANGED</code> intent.</p>
 implemention. </p> -->
 
 <h3 id="http-api">REST API for subscriptions</h3>
-<p>Google Play offers an HTTP-based API that you can use to remotely query the validity of a specific subscription at any time or cancel a subscription. The API is designed to be used from your backend servers as a way of securely managing subscriptions, as well as extending and integrating subscriptions with other services. See <a href="{@docRoot}google/play/billing/v2/billing_subscriptions.html#play-dev-api"> Google Play Android Developer API</a> for more information.</p>
+<p>Google Play offers an HTTP-based API that you can use to remotely query the validity of a specific subscription at any time or cancel a subscription. The API is designed to be used from your backend servers as a way of securely managing subscriptions, as well as extending and integrating subscriptions with other services. See <a href="{@docRoot}google/play/billing/gp-purchase-status-api.html">Purchase Status API</a> for more information.</p>

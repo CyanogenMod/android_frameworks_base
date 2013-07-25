@@ -200,6 +200,8 @@
     <string name="permgroupdesc_microphone" msgid="7106618286905738408">"Осъществяване на директен достъп до микрофона с цел записване на звук."</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"Камера"</string>
     <string name="permgroupdesc_camera" msgid="2933667372289567714">"Осъществяване на директен достъп до камерата с цел заснемане на снимки или видеоклипове."</string>
+    <string name="permgrouplab_screenlock" msgid="8275500173330718168">"Заключване на екрана"</string>
+    <string name="permgroupdesc_screenlock" msgid="7067497128925499401">"Възможност за оказване на влияние върху поведението на заключения екран на устройството ви."</string>
     <string name="permgrouplab_appInfo" msgid="8028789762634147725">"Информация за приложенията ви"</string>
     <string name="permgroupdesc_appInfo" msgid="3950378538049625907">"Възможност за оказване на влияние върху поведението на други приложения на устройството ви."</string>
     <string name="permgrouplab_wallpaper" msgid="3850280158041175998">"Тапет"</string>
@@ -225,6 +227,16 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Съхранение"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"Достъп до USB хранилището."</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Достъп до SD картата."</string>
+    <string name="permgrouplab_accessibilityFeatures" msgid="7919025602283593907">"Функции за достъпност"</string>
+    <string name="permgroupdesc_accessibilityFeatures" msgid="4205196881678144335">"Функции, които подпомагащата технология може да заяви."</string>
+    <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"Извличане на съдържанието от прозореца"</string>
+    <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"Инспектиране на съдържанието на прозорец, с който взаимодействате."</string>
+    <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"Включване на изследването чрез докосване"</string>
+    <string name="capability_desc_canRequestTouchExploration" msgid="5800552516779249356">"Докосваните елементи ще бъдат изговаряни на глас и екранът може да бъде изследван посредством жестове."</string>
+    <string name="capability_title_canRequestEnhancedWebAccessibility" msgid="1739881766522594073">"Включване на подобрената достъпност в мрежата"</string>
+    <string name="capability_desc_canRequestEnhancedWebAccessibility" msgid="7881063961507511765">"Скриптовете може да бъдат инсталирани, за да направят съдържанието от приложенията по-достъпно."</string>
+    <string name="capability_title_canRequestFilterKeyEvents" msgid="2103440391902412174">"Наблюдение на въвеждания от вас текст"</string>
+    <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"Включва лични данни, като например номера на кредитни карти и пароли."</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"деактивиране или промяна на лентата на състоянието"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"Разрешава на приложението да деактивира лентата на състоянието или да добавя и премахва системни икони."</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"лента на състоянието"</string>
@@ -243,8 +255,8 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Разрешава на приложението да чете съобщения с клетъчно излъчване, получени от устройството ви. Сигналите с клетъчно излъчване се получават на някои местоположения, за да ви предупредят за спешни ситуации. Злонамерените приложения могат да възпрепятстват изпълнението или работата на устройството ви при получаване на такова спешно излъчване."</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"изпращане на SMS съобщения"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"Разрешава на приложението да изпраща SMS съобщения. Това може да доведе до неочаквано таксуване. Злонамерените приложения могат да ви въвлекат в разходи, като изпращат съобщения без потвърждение от ваша страна."</string>
-    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"изпращане на SMS съобщения без потвърждаване"</string>
-    <string name="permdesc_sendSmsNoConfirmation" msgid="402569800862935907">"Разрешава на приложението да изпраща SMS съобщения. Това може да доведе до неочаквано таксуване. Злонамерените приложения могат да ви въвлекат в разходи, като изпращат съобщения без потвърждение от ваша страна."</string>
+    <string name="permlab_sendRespondViaMessageRequest" msgid="8713889105305943200">"изпращане на покани за отговор чрез съобщение"</string>
+    <string name="permdesc_sendRespondViaMessageRequest" msgid="7107648548468778734">"Разрешава на приложението да изпраща заявки до други приложения за съобщения, за да обработва покани за отговор чрез SMS за входящите обаждания."</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"четене на текстовите ви съобщения (SMS или MMS)"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"Разрешава на приложението да чете SMS съобщенията, съхранени на таблета или SIM картата ви. Това разрешение му позволява да чете всички съобщения независимо от съдържанието или поверителността."</string>
     <string name="permdesc_readSms" product="default" msgid="3695967533457240550">"Разрешава на приложението да чете SMS съобщенията, съхранени на телефона или SIM картата ви. Това разрешение му позволява да чете всички съобщения независимо от съдържанието или поверителността."</string>
@@ -299,6 +311,8 @@
     <string name="permdesc_shutdown" msgid="7046500838746291775">"Изключва диспечера на дейностите. Не извършва пълно изключване."</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"предотвратяване на превключването между приложения"</string>
     <string name="permdesc_stopAppSwitches" msgid="8262195802582255021">"Не позволява на потребителя да превключва към друго приложение."</string>
+    <string name="permlab_getTopActivityInfo" msgid="2537922311411546016">"извличане на информация за текущото приложение"</string>
+    <string name="permdesc_getTopActivityInfo" msgid="2512448855496067131">"Разрешава на собственика да извлича частна информация за текущото приложение на преден план на екрана."</string>
     <string name="permlab_runSetActivityWatcher" msgid="892239094867182656">"наблюдение и контрол на стартирането на всички приложения"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="6003603162578577406">"Разрешава на приложението да наблюдава и контролира как системата стартира дейности. Злонамерените приложения могат изцяло да компрометират системата. Това разрешение е нужно само за програмиране, никога за нормална употреба."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"изпращане на излъчване при премахнат пакет"</string>
@@ -315,6 +329,10 @@
     <string name="permdesc_batteryStats" msgid="5897346582882915114">"Разрешава на приложението да чете текущите данни за работа при ниско ниво на батерията. Може да му разреши да намери подробна информация за ползваните от вас приложения."</string>
     <string name="permlab_updateBatteryStats" msgid="3719689764536379557">"промяна на статистическите данни за батерията"</string>
     <string name="permdesc_updateBatteryStats" msgid="6862817857178025002">"Разрешава на приложението да променя събраните статистически данни за батерията. Не е предназначено за нормални приложения."</string>
+    <string name="permlab_getAppOpsStats" msgid="1508779687436585744">"извличане на статистическите данни за операциите на приложението"</string>
+    <string name="permdesc_getAppOpsStats" msgid="6243887041577912877">"Разрешава на приложението да извлича събраните статистически данни за операциите си. Не е предназначено за нормални приложения."</string>
+    <string name="permlab_updateAppOpsStats" msgid="8829097373851521505">"промяна на статистическите данни за операциите на приложението"</string>
+    <string name="permdesc_updateAppOpsStats" msgid="50784596594403483">"Разрешава на приложението да променя събраните статистически данни за операциите си. Не е предназначено за нормални приложения."</string>
     <string name="permlab_backup" msgid="470013022865453920">"контролиране на създаването и възстановяването на резервни копия на системата"</string>
     <string name="permdesc_backup" msgid="6912230525140589891">"Разрешава на приложението да контролира системния механизъм за създаване и възстановяване на резервни копия. Не е предназначено за нормални приложения."</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"потвърждаване на пълно резервно копие или възстановяване на операцията"</string>
@@ -450,6 +468,8 @@
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"Разрешава на приложението да записва звук с микрофона. Това разрешение му позволява да го прави по всяко време без потвърждение от ваша страна."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"правене на снимки и видеоклипове"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"Разрешава на приложението да прави снимки и видеоклипове с камерата. Това разрешение му позволява да я използва по всяко време без потвърждение от ваша страна."</string>
+    <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">"деактивиране на светодиодния индикатор за предаване, когато камерата се използва"</string>
+    <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">"Разрешава на предварително инсталирано системно приложение да деактивира светодиодния индикатор за използване на камерата."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"деактивиране на таблета за постоянно"</string>
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"деактивиране на телефона за постоянно"</string>
     <string name="permdesc_brick" product="tablet" msgid="4334818808001699530">"Разрешава на приложението да деактивира целия таблет за постоянно. Това е много опасно."</string>
@@ -605,6 +625,10 @@
     <string name="permdesc_manageNetworkPolicy" msgid="7537586771559370668">"Разрешава на приложението да управлява правилата на мрежата и да определя такива за конкретно приложение."</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"промяна на отчетността на употребата на мрежа"</string>
     <string name="permdesc_modifyNetworkAccounting" msgid="5443412866746198123">"Разрешава на приложението да променя това как употребата на мрежа се отчита спрямо приложенията. Не е предназначено за нормални приложения."</string>
+    <string name="permlab_accessNotifications" msgid="7673416487873432268">"достъп до известията"</string>
+    <string name="permdesc_accessNotifications" msgid="458457742683431387">"Разрешава на приложението да извлича, преглежда и изчиства известия, включително публикуваните от други приложения."</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"обвързване с услуга за слушател на известия"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Разрешава на притежателя да се обвърже с интерфейса от първо ниво на услуга за слушател на известия. Нормалните приложения не би трябвало никога да се нуждаят от това."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Задаване на правила за паролата"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"Контролирайте дължината и разрешените знаци за паролите за отключване на екрана."</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"Наблюдаване на опитите за отключване на екрана"</string>
@@ -714,7 +738,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
@@ -810,6 +835,7 @@
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"Фигурата е изчистена"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"Клетката е добавена"</string>
     <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"Фигурата е завършена"</string>
+    <string name="keyguard_accessibility_widget_changed" msgid="5678624624681400191">"%1$s. Приспособление %2$d от %3$d."</string>
     <string name="keyguard_accessibility_add_widget" msgid="8273277058724924654">"Добавяне на приспособление."</string>
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"Празно"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"Областта за отключване е разгъната."</string>
@@ -845,7 +871,10 @@
     <string name="factorytest_reboot" msgid="6320168203050791643">"Рестартиране"</string>
     <string name="js_dialog_title" msgid="1987483977834603872">"Страницата на адрес „<xliff:g id="TITLE">%s</xliff:g>“ съобщава:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="730366588032430474">"Искате ли да напуснете тази страница?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Докоснете „OK“, за да продължите, или „Отказ“, за да останете на нея."</string>
+    <string name="js_dialog_before_unload_title" msgid="2619376555525116593">"Потвърждаване на придвижването"</string>
+    <string name="js_dialog_before_unload_positive_button" msgid="3112752010600484130">"Напускане на тази страница"</string>
+    <string name="js_dialog_before_unload_negative_button" msgid="5614861293026099715">"Оставане на тази страница"</string>
+    <string name="js_dialog_before_unload" msgid="3468816357095378590">"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Наистина ли искате да излезете от тази страница?"</string>
     <string name="save_password_label" msgid="6860261758665825069">"Потвърждение"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"Съвет: Докоснете двукратно, за да увеличите или намалите мащаба."</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"Автопоп."</string>
@@ -1031,6 +1060,8 @@
     <string name="editTextMenuTitle" msgid="4909135564941815494">"Действия с текста"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Мястото в хранилището е на изчерпване"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Възможно е някои функции на системата да не работят"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"<xliff:g id="APP_NAME">%1$s</xliff:g> се изпълнява"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"Докоснете за още информация или за да спрете приложението."</string>
     <string name="ok" msgid="5970060430562524910">"OK"</string>
     <string name="cancel" msgid="6442560571259935130">"Отказ"</string>
     <string name="yes" msgid="5362982303337969312">"OK"</string>
@@ -1124,7 +1155,8 @@
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"До:"</string>
     <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Въведете задължителния ПИН:"</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"ПИН:"</string>
-    <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"Телефонът временно ще прекрати връзката с Wi-Fi, докато е свързан с/ъс <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"Таблетът временно ще прекъсне връзката с Wi-Fi, докато е свързан с/ъс <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"Телефонът временно ще прекрати връзката с Wi-Fi, докато е свързан с/ъс <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
     <string name="select_character" msgid="3365550120617701745">"Вмъкване на знак"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"Изпращане на SMS съобщения"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; изпраща голям брой SMS съобщения. Искате ли да разрешите на това приложение да продължи да го прави?"</string>
@@ -1247,6 +1279,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Достъпност"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Тапет"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Промяна на тапета"</string>
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Слушател на известия"</string>
     <string name="vpn_title" msgid="19615213552042827">"VPN е активирана"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"VPN е активирана от <xliff:g id="APP">%s</xliff:g>"</string>
     <string name="vpn_text" msgid="3011306607126450322">"Докоснете за управление на мрежата."</string>
@@ -1254,7 +1287,7 @@
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Установява се връзка с винаги включената виртуална частна мрежа (VPN)…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Установена е връзка с винаги включената виртуална частна мрежа (VPN)"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Грешка във винаги включената виртуална частна мрежа (VPN)"</string>
-    <string name="vpn_lockdown_reset" msgid="5365010427963548932">"Докоснете, за да възстановите връзката"</string>
+    <string name="vpn_lockdown_config" msgid="6415899150671537970">"Докоснете, за да конфигурирате"</string>
     <string name="upload_file" msgid="2897957172366730416">"Избор на файл"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Няма избран файл"</string>
     <string name="reset" msgid="2448168080964209908">"Повторно задаване"</string>
@@ -1350,6 +1383,8 @@
     <string name="action_bar_home_description" msgid="5293600496601490216">"Придвижване към „Начало“"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"Придвижване нагоре"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"Още опции"</string>
+    <string name="action_bar_home_description_format" msgid="7965984360903693903">"„%1$s“ – %2$s"</string>
+    <string name="action_bar_home_subtitle_description_format" msgid="6985546530471780727">"„%1$s“, „%2$s“ – %3$s"</string>
     <string name="storage_internal" msgid="4891916833657929263">"Вътрешно хранилище"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD карта"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB хранилище"</string>
@@ -1399,6 +1434,7 @@
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"Система"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Звук през Bluetooth"</string>
+    <string name="wireless_display_route_description" msgid="9070346425023979651">"Безжичен дисплей"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Готово"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Изходяща мултимедия"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"Сканира се..."</string>
@@ -1450,10 +1486,14 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Начертахте неправилно фигурата си за отключване <xliff:g id="NUMBER_0">%d</xliff:g> пъти. След още <xliff:g id="NUMBER_1">%d</xliff:g> неуспешни опита ще бъдете помолени да отключите телефона посредством имейл адрес."\n\n" Опитайте отново след <xliff:g id="NUMBER_2">%d</xliff:g> секунди."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" – "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Премахване"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"Да се увеличи ли силата на звука над безопасното ниво?"\n"Продължителното слушане при висока сила на звука може да увреди слуха ви."</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"Да се увеличи ли силата на звука над препоръчаното ниво?"\n"Продължителното слушане при висока сила на звука може да увреди слуха ви."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Продължете да натискате с два пръста, за да активирате функцията за достъпност."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Достъпността е активирана."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Функцията за достъпност е анулирана."</string>
     <string name="user_switched" msgid="3768006783166984410">"Текущ потребител <xliff:g id="NAME">%1$s</xliff:g>."</string>
     <string name="owner_name" msgid="2716755460376028154">"Собственик"</string>
+    <string name="error_message_title" msgid="4510373083082500195">"Грешка"</string>
+    <string name="app_no_restricted_accounts" msgid="4011285085817350390">"Това приложение не поддържа профили за потребителски профили с ограничена функционалност"</string>
+    <string name="app_not_found" msgid="3429141853498927379">"Няма намерено приложение за извършване на това действие"</string>
+    <string name="revoke" msgid="5404479185228271586">"Отмяна"</string>
 </resources>

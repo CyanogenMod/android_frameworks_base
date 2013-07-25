@@ -22,7 +22,9 @@ import android.net.NetworkQuotaInfo;
 import android.net.NetworkState;
 import android.net.ProxyProperties;
 import android.os.IBinder;
+import android.os.Messenger;
 import android.os.ParcelFileDescriptor;
+import android.os.ResultReceiver;
 
 import com.android.internal.net.LegacyVpnInfo;
 import com.android.internal.net.VpnConfig;
@@ -126,4 +128,12 @@ interface IConnectivityManager
     boolean updateLockdownVpn();
 
     void captivePortalCheckComplete(in NetworkInfo info);
+
+    void supplyMessenger(int networkType, in Messenger messenger);
+
+    int findConnectionTypeForIface(in String iface);
+
+    int checkMobileProvisioning(boolean sendNotification, int suggestedTimeOutMs, in ResultReceiver resultReceiver);
+
+    String getMobileProvisioningUrl();
 }

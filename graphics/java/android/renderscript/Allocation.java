@@ -18,6 +18,7 @@ package android.renderscript;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import android.content.res.Resources;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -26,48 +27,32 @@ import android.view.Surface;
 import android.graphics.SurfaceTexture;
 import android.util.Log;
 import android.util.TypedValue;
+import android.graphics.Canvas;
 
 /**
- * <p>
- * Memory allocation class for renderscript.  An allocation combines a
- * {@link android.renderscript.Type} with the memory to provide storage for user data and objects.
- * This implies that all memory in Renderscript is typed.
- * </p>
+ * <p> This class provides the primary method through which data is passed to
+ * and from RenderScript kernels.  An Allocation provides the backing store for
+ * a given {@link android.renderscript.Type}.  </p>
  *
- * <p>Allocations are the primary way data moves into and out of scripts. Memory is user
- * synchronized and it's possible for allocations to exist in multiple memory spaces
- * concurrently. Currently those spaces are:</p>
- * <ul>
- * <li>Script: accessable by RS scripts.</li>
- * <li>Graphics Texture: accessable as a graphics texture.</li>
- * <li>Graphics Vertex: accessable as graphical vertex data.</li>
- * <li>Graphics Constants: Accessable as constants in user shaders</li>
- * </ul>
- * </p>
- * <p>
- * For example, when creating a allocation for a texture, the user can
- * specify its memory spaces as both script and textures. This means that it can both
- * be used as script binding and as a GPU texture for rendering. To maintain
- * synchronization if a script modifies an allocation used by other targets it must
- * call a synchronizing function to push the updates to the memory, otherwise the results
- * are undefined.
- * </p>
- * <p>By default, Android system side updates are always applied to the script accessable
- * memory. If this is not present, they are then applied to the various HW
- * memory types.  A {@link android.renderscript.Allocation#syncAll syncAll()}
- * call is necessary after the script data is updated to
- * keep the other memory spaces in sync.</p>
+ * <p>An Allocation also contains a set of usage flags that denote how the
+ * Allocation could be used. For example, an Allocation may have usage flags
+ * specifying that it can be used from a script as well as input to a {@link
+ * android.renderscript.Sampler}. A developer must synchronize across these
+ * different usages using {@link android.renderscript.Allocation#syncAll} in
+ * order to ensure that different users of the Allocation have a consistent view
+ * of memory. For example, in the case where an Allocation is used as the output
+ * of one kernel and as Sampler input in a later kernel, a developer must call
+ * {@link #syncAll syncAll(Allocation.USAGE_SCRIPT)} prior to launching the
+ * second kernel to ensure correctness.
  *
- * <p>Allocation data is uploaded in one of two primary ways. For simple
- * arrays there are copyFrom() functions that take an array from the control code and
- * copy it to the slave memory store. Both type checked and unchecked copies are provided.
- * The unchecked variants exist to allow apps to copy over arrays of structures from a
- * control language that does not support structures.</p>
+ * <p>An Allocation can be populated with the {@link #copyFrom} routines. For
+ * more complex Element types, the {@link #copyFromUnchecked} methods can be
+ * used to copy from byte arrays or similar constructs.</p>
  *
  * <div class="special reference">
  * <h3>Developer Guides</h3>
- * <p>For more information about creating an application that uses Renderscript, read the
- * <a href="{@docRoot}guide/topics/renderscript/index.html">Renderscript</a> developer guide.</p>
+ * <p>For more information about creating an application that uses RenderScript, read the
+ * <a href="{@docRoot}guide/topics/renderscript/index.html">RenderScript</a> developer guide.</p>
  * </div>
  **/
 public class Allocation extends BaseObj {
@@ -91,85 +76,106 @@ public class Allocation extends BaseObj {
     int mCurrentDimY;
     int mCurrentDimZ;
     int mCurrentCount;
-
+    static HashMap<Integer, Allocation> mAllocationMap =
+            new HashMap<Integer, Allocation>();
+    IoInputNotifier mBufferNotifier;
 
     /**
-     * The usage of the allocation.  These signal to renderscript
-     * where to place the allocation in memory.
+     * The usage of the Allocation.  These signal to RenderScript where to place
+     * the Allocation in memory.
      *
-     * SCRIPT The allocation will be bound to and accessed by
-     * scripts.
+     */
+
+    /**
+     * The Allocation will be bound to and accessed by scripts.
      */
     public static final int USAGE_SCRIPT = 0x0001;
 
     /**
-     * GRAPHICS_TEXTURE The allocation will be used as a texture
-     * source by one or more graphics programs.
+     * The Allocation will be used as a texture source by one or more graphics
+     * programs.
      *
      */
     public static final int USAGE_GRAPHICS_TEXTURE = 0x0002;
 
     /**
-     * GRAPHICS_VERTEX The allocation will be used as a graphics
-     * mesh.
+     * The Allocation will be used as a graphics mesh.
+     *
+     * This was deprecated in API level 16.
      *
      */
     public static final int USAGE_GRAPHICS_VERTEX = 0x0004;
 
 
     /**
-     * GRAPHICS_CONSTANTS The allocation will be used as the source
-     * of shader constants by one or more programs.
+     * The Allocation will be used as the source of shader constants by one or
+     * more programs.
+     *
+     * This was deprecated in API level 16.
      *
      */
     public static final int USAGE_GRAPHICS_CONSTANTS = 0x0008;
 
     /**
-     * USAGE_GRAPHICS_RENDER_TARGET The allocation will be used as a
-     * target for offscreen rendering
+     * The Allocation will be used as a target for offscreen rendering
+     *
+     * This was deprecated in API level 16.
      *
      */
     public static final int USAGE_GRAPHICS_RENDER_TARGET = 0x0010;
 
     /**
-     * USAGE_IO_INPUT The allocation will be used as SurfaceTexture
-     * consumer.  This usage will cause the allocation to be created
-     * read only.
+     * The Allocation will be used as a {@link android.graphics.SurfaceTexture}
+     * consumer.  This usage will cause the Allocation to be created as
+     * read-only.
      *
      */
     public static final int USAGE_IO_INPUT = 0x0020;
 
     /**
-     * USAGE_IO_OUTPUT The allocation will be used as a
-     * SurfaceTexture producer.  The dimensions and format of the
-     * SurfaceTexture will be forced to those of the allocation.
+     * The Allocation will be used as a {@link android.graphics.SurfaceTexture}
+     * producer.  The dimensions and format of the {@link
+     * android.graphics.SurfaceTexture} will be forced to those of the
+     * Allocation.
      *
      */
     public static final int USAGE_IO_OUTPUT = 0x0040;
 
     /**
-     * Controls mipmap behavior when using the bitmap creation and
-     * update functions.
+     * The Allocation's backing store will be inherited from another object
+     * (usually a {@link android.graphics.Bitmap}); copying to or from the
+     * original source Bitmap will cause a synchronization rather than a full
+     * copy.  {@link #syncAll} may also be used to synchronize the Allocation
+     * and the source Bitmap.
+     *
+     * <p>This is set by default for allocations created with {@link
+     * #createFromBitmap} in API version 18 and higher.</p>
+     *
+     */
+    public static final int USAGE_SHARED = 0x0080;
+
+    /**
+     * Controls mipmap behavior when using the bitmap creation and update
+     * functions.
      */
     public enum MipmapControl {
         /**
-         * No mipmaps will be generated and the type generated from the
-         * incoming bitmap will not contain additional LODs.
+         * No mipmaps will be generated and the type generated from the incoming
+         * bitmap will not contain additional LODs.
          */
         MIPMAP_NONE(0),
 
         /**
-         * A Full mipmap chain will be created in script memory.  The
-         * type of the allocation will contain a full mipmap chain.  On
-         * upload to graphics the full chain will be transfered.
+         * A full mipmap chain will be created in script memory.  The Type of
+         * the Allocation will contain a full mipmap chain.  On upload, the full
+         * chain will be transferred.
          */
         MIPMAP_FULL(1),
 
         /**
-         * The type of the allocation will be the same as MIPMAP_NONE.
-         * It will not contain mipmaps.  On upload to graphics the
-         * graphics copy of the allocation data will contain a full
-         * mipmap chain generated from the top level in script memory.
+         * The Type of the Allocation will be the same as MIPMAP_NONE.  It will
+         * not contain mipmaps.  On upload, the allocation data will contain a
+         * full mipmap chain generated from the top level in script memory.
          */
         MIPMAP_ON_SYNC_TO_TEXTURE(2);
 
@@ -189,10 +195,10 @@ public class Allocation extends BaseObj {
 
 
    /**
-     * Get the element of the type of the Allocation.
+     * Get the {@link android.renderscript.Element} of the {@link
+     * android.renderscript.Type} of the Allocation.
      *
-     * @return Element that describes the structure of data in the
-     *         allocation
+     * @return Element
      *
      */
     public Element getElement() {
@@ -202,8 +208,7 @@ public class Allocation extends BaseObj {
     /**
      * Get the usage flags of the Allocation.
      *
-     * @return usage flags associated with the allocation. e.g.
-     *         script, texture, etc.
+     * @return usage this Allocation's set of the USAGE_* flags OR'd together
      *
      */
     public int getUsage() {
@@ -233,6 +238,10 @@ public class Allocation extends BaseObj {
         }
     }
 
+    private void setBitmap(Bitmap b) {
+        mBitmap = b;
+    }
+
     Allocation(int id, RenderScript rs, Type t, int usage) {
         super(id, rs);
         if ((usage & ~(USAGE_SCRIPT |
@@ -241,7 +250,8 @@ public class Allocation extends BaseObj {
                        USAGE_GRAPHICS_CONSTANTS |
                        USAGE_GRAPHICS_RENDER_TARGET |
                        USAGE_IO_INPUT |
-                       USAGE_IO_OUTPUT)) != 0) {
+                       USAGE_IO_OUTPUT |
+                       USAGE_SHARED)) != 0) {
             throw new RSIllegalArgumentException("Unknown usage specified.");
         }
 
@@ -327,7 +337,7 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Get the type of the Allocation.
+     * Get the {@link android.renderscript.Type} of the Allocation.
      *
      * @return Type
      *
@@ -337,16 +347,25 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Propagate changes from one usage of the allocation to the
-     * remaining usages of the allocation.
+     * Propagate changes from one usage of the Allocation to the
+     * other usages of the Allocation.
      *
      */
     public void syncAll(int srcLocation) {
         switch (srcLocation) {
-        case USAGE_SCRIPT:
-        case USAGE_GRAPHICS_CONSTANTS:
         case USAGE_GRAPHICS_TEXTURE:
+        case USAGE_SCRIPT:
+            if ((mUsage & USAGE_SHARED) != 0) {
+                copyFrom(mBitmap);
+            }
+            break;
+        case USAGE_GRAPHICS_CONSTANTS:
         case USAGE_GRAPHICS_VERTEX:
+            break;
+        case USAGE_SHARED:
+            if ((mUsage & USAGE_SHARED) != 0) {
+                copyTo(mBitmap);
+            }
             break;
         default:
             throw new RSIllegalArgumentException("Source must be exactly one usage type.");
@@ -356,8 +375,10 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Send a buffer to the output stream.  The contents of the
-     * Allocation will be undefined after this operation.
+     * Send a buffer to the output stream.  The contents of the Allocation will
+     * be undefined after this operation. This operation is only valid if {@link
+     * #USAGE_IO_OUTPUT} is set on the Allocation.
+     *
      *
      */
     public void ioSend() {
@@ -378,7 +399,8 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Receive the latest input into the Allocation.
+     * Receive the latest input into the Allocation. This operation
+     * is only valid if {@link #USAGE_IO_INPUT} is set on the Allocation.
      *
      */
     public void ioReceive() {
@@ -391,7 +413,7 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy an array of RS objects to the allocation.
+     * Copy an array of RS objects to the Allocation.
      *
      * @param d Source array.
      */
@@ -411,6 +433,9 @@ public class Allocation extends BaseObj {
 
     private void validateBitmapFormat(Bitmap b) {
         Bitmap.Config bc = b.getConfig();
+        if (bc == null) {
+            throw new RSIllegalArgumentException("Bitmap has an unsupported format for this operation");
+        }
         switch (bc) {
         case ALPHA_8:
             if (mType.getElement().mKind != Element.DataKind.PIXEL_A) {
@@ -462,114 +487,191 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy an allocation from an array.  This variant is not type
-     * checked which allows an application to fill in structured
-     * data from an array.
+     * Copy into this Allocation from an array. This method does not guarantee
+     * that the Allocation is compatible with the input buffer; it copies memory
+     * without reinterpretation.
      *
      * @param d the source data array
      */
     public void copyFromUnchecked(int[] d) {
         mRS.validate();
-        copy1DRangeFromUnchecked(0, mCurrentCount, d);
+        if (mCurrentDimZ > 0) {
+            copy3DRangeFromUnchecked(0, 0, 0, mCurrentDimX, mCurrentDimY, mCurrentDimZ, d);
+        } else if (mCurrentDimY > 0) {
+            copy2DRangeFromUnchecked(0, 0, mCurrentDimX, mCurrentDimY, d);
+        } else {
+            copy1DRangeFromUnchecked(0, mCurrentCount, d);
+        }
     }
     /**
-     * Copy an allocation from an array.  This variant is not type
-     * checked which allows an application to fill in structured
-     * data from an array.
+     * Copy into this Allocation from an array. This method does not guarantee
+     * that the Allocation is compatible with the input buffer; it copies memory
+     * without reinterpretation.
      *
      * @param d the source data array
      */
     public void copyFromUnchecked(short[] d) {
         mRS.validate();
-        copy1DRangeFromUnchecked(0, mCurrentCount, d);
+        if (mCurrentDimZ > 0) {
+            copy3DRangeFromUnchecked(0, 0, 0, mCurrentDimX, mCurrentDimY, mCurrentDimZ, d);
+        } else if (mCurrentDimY > 0) {
+            copy2DRangeFromUnchecked(0, 0, mCurrentDimX, mCurrentDimY, d);
+        } else {
+            copy1DRangeFromUnchecked(0, mCurrentCount, d);
+        }
     }
     /**
-     * Copy an allocation from an array.  This variant is not type
-     * checked which allows an application to fill in structured
-     * data from an array.
+     * Copy into this Allocation from an array. This method does not guarantee
+     * that the Allocation is compatible with the input buffer; it copies memory
+     * without reinterpretation.
      *
      * @param d the source data array
      */
     public void copyFromUnchecked(byte[] d) {
         mRS.validate();
-        copy1DRangeFromUnchecked(0, mCurrentCount, d);
+        if (mCurrentDimZ > 0) {
+            copy3DRangeFromUnchecked(0, 0, 0, mCurrentDimX, mCurrentDimY, mCurrentDimZ, d);
+        } else if (mCurrentDimY > 0) {
+            copy2DRangeFromUnchecked(0, 0, mCurrentDimX, mCurrentDimY, d);
+        } else {
+            copy1DRangeFromUnchecked(0, mCurrentCount, d);
+        }
     }
     /**
-     * Copy an allocation from an array.  This variant is not type
-     * checked which allows an application to fill in structured
-     * data from an array.
+     * Copy into this Allocation from an array. This method does not guarantee
+     * that the Allocation is compatible with the input buffer; it copies memory
+     * without reinterpretation.
      *
      * @param d the source data array
      */
     public void copyFromUnchecked(float[] d) {
         mRS.validate();
-        copy1DRangeFromUnchecked(0, mCurrentCount, d);
+        if (mCurrentDimZ > 0) {
+            copy3DRangeFromUnchecked(0, 0, 0, mCurrentDimX, mCurrentDimY, mCurrentDimZ, d);
+        } else if (mCurrentDimY > 0) {
+            copy2DRangeFromUnchecked(0, 0, mCurrentDimX, mCurrentDimY, d);
+        } else {
+            copy1DRangeFromUnchecked(0, mCurrentCount, d);
+        }
     }
 
     /**
-     * Copy an allocation from an array.  This variant is type
-     * checked and will generate exceptions if the Allocation type
-     * is not a 32 bit integer type.
+     * Copy into this Allocation from an array.  This variant is type checked
+     * and will generate exceptions if the Allocation's {@link
+     * android.renderscript.Element} is not a 32 bit integer type.
      *
      * @param d the source data array
      */
     public void copyFrom(int[] d) {
         mRS.validate();
-        copy1DRangeFrom(0, mCurrentCount, d);
+        if (mCurrentDimZ > 0) {
+            copy3DRangeFrom(0, 0, 0, mCurrentDimX, mCurrentDimY, mCurrentDimZ, d);
+        } else if (mCurrentDimY > 0) {
+            copy2DRangeFrom(0, 0, mCurrentDimX, mCurrentDimY, d);
+        } else {
+            copy1DRangeFrom(0, mCurrentCount, d);
+        }
     }
 
     /**
-     * Copy an allocation from an array.  This variant is type
-     * checked and will generate exceptions if the Allocation type
-     * is not a 16 bit integer type.
+     * Copy into this Allocation from an array.  This variant is type checked
+     * and will generate exceptions if the Allocation's {@link
+     * android.renderscript.Element} is not a 16 bit integer type.
      *
      * @param d the source data array
      */
     public void copyFrom(short[] d) {
         mRS.validate();
-        copy1DRangeFrom(0, mCurrentCount, d);
+        if (mCurrentDimZ > 0) {
+            copy3DRangeFrom(0, 0, 0, mCurrentDimX, mCurrentDimY, mCurrentDimZ, d);
+        } else if (mCurrentDimY > 0) {
+            copy2DRangeFrom(0, 0, mCurrentDimX, mCurrentDimY, d);
+        } else {
+            copy1DRangeFrom(0, mCurrentCount, d);
+        }
     }
 
     /**
-     * Copy an allocation from an array.  This variant is type
-     * checked and will generate exceptions if the Allocation type
-     * is not a 8 bit integer type.
+     * Copy into this Allocation from an array.  This variant is type checked
+     * and will generate exceptions if the Allocation's {@link
+     * android.renderscript.Element} is not an 8 bit integer type.
      *
      * @param d the source data array
      */
     public void copyFrom(byte[] d) {
         mRS.validate();
-        copy1DRangeFrom(0, mCurrentCount, d);
+        if (mCurrentDimZ > 0) {
+            copy3DRangeFrom(0, 0, 0, mCurrentDimX, mCurrentDimY, mCurrentDimZ, d);
+        } else if (mCurrentDimY > 0) {
+            copy2DRangeFrom(0, 0, mCurrentDimX, mCurrentDimY, d);
+        } else {
+            copy1DRangeFrom(0, mCurrentCount, d);
+        }
     }
 
     /**
-     * Copy an allocation from an array.  This variant is type
-     * checked and will generate exceptions if the Allocation type
-     * is not a 32 bit float type.
+     * Copy into this Allocation from an array.  This variant is type checked
+     * and will generate exceptions if the Allocation's {@link
+     * android.renderscript.Element} is not a 32 bit float type.
      *
      * @param d the source data array
      */
     public void copyFrom(float[] d) {
         mRS.validate();
-        copy1DRangeFrom(0, mCurrentCount, d);
+        if (mCurrentDimZ > 0) {
+            copy3DRangeFrom(0, 0, 0, mCurrentDimX, mCurrentDimY, mCurrentDimZ, d);
+        } else if (mCurrentDimY > 0) {
+            copy2DRangeFrom(0, 0, mCurrentDimX, mCurrentDimY, d);
+        } else {
+            copy1DRangeFrom(0, mCurrentCount, d);
+        }
     }
 
     /**
-     * Copy an allocation from a bitmap.  The height, width, and
-     * format of the bitmap must match the existing allocation.
+     * Copy into an Allocation from a {@link android.graphics.Bitmap}.  The
+     * height, width, and format of the bitmap must match the existing
+     * allocation.
+     *
+     * <p>If the {@link android.graphics.Bitmap} is the same as the {@link
+     * android.graphics.Bitmap} used to create the Allocation with {@link
+     * #createFromBitmap} and {@link #USAGE_SHARED} is set on the Allocation,
+     * this will synchronize the Allocation with the latest data from the {@link
+     * android.graphics.Bitmap}, potentially avoiding the actual copy.</p>
      *
      * @param b the source bitmap
      */
     public void copyFrom(Bitmap b) {
         mRS.validate();
+        if (b.getConfig() == null) {
+            Bitmap newBitmap = Bitmap.createBitmap(b.getWidth(), b.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(newBitmap);
+            c.drawBitmap(b, 0, 0, null);
+            copyFrom(newBitmap);
+            return;
+        }
         validateBitmapSize(b);
         validateBitmapFormat(b);
         mRS.nAllocationCopyFromBitmap(getID(mRS), b);
     }
 
     /**
-     * This is only intended to be used by auto-generate code reflected from the
-     * renderscript script files.
+     * Copy an Allocation from an Allocation.  The types of both allocations
+     * must be identical.
+     *
+     * @param a the source allocation
+     */
+    public void copyFrom(Allocation a) {
+        mRS.validate();
+        if (!mType.equals(a.getType())) {
+            throw new RSIllegalArgumentException("Types of allocations must match.");
+        }
+        copy2DRangeFrom(0, 0, mCurrentDimX, mCurrentDimY, a, 0, 0);
+    }
+
+
+    /**
+     * This is only intended to be used by auto-generated code reflected from
+     * the RenderScript script files and should not be used by developers.
      *
      * @param xoff
      * @param fp
@@ -588,8 +690,8 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * This is only intended to be used by auto-generate code reflected from the
-     * renderscript script files.
+     * This is only intended to be used by auto-generated code reflected from
+     * the RenderScript script files.
      *
      * @param xoff
      * @param component_number
@@ -635,23 +737,22 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Generate a mipmap chain.  Requires the type of the allocation
-     * include mipmaps.
+     * Generate a mipmap chain. This is only valid if the Type of the Allocation
+     * includes mipmaps.
      *
-     * This function will generate a complete set of mipmaps from
-     * the top level lod and place them into the script memoryspace.
+     * <p>This function will generate a complete set of mipmaps from the top
+     * level LOD and place them into the script memory space.</p>
      *
-     * If the allocation is also using other memory spaces a
-     * followup sync will be required.
+     * <p>If the Allocation is also using other memory spaces, a call to {@link
+     * #syncAll syncAll(Allocation.USAGE_SCRIPT)} is required.</p>
      */
     public void generateMipmaps() {
         mRS.nAllocationGenerateMipmaps(getID(mRS));
     }
 
     /**
-     * Copy part of an allocation from an array.  This variant is
-     * not type checked which allows an application to fill in
-     * structured data from an array.
+     * Copy an array into part of this Allocation.  This method does not
+     * guarantee that the Allocation is compatible with the input buffer.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -663,9 +764,8 @@ public class Allocation extends BaseObj {
         mRS.nAllocationData1D(getIDSafe(), off, mSelectedLOD, count, d, dataSize);
     }
     /**
-     * Copy part of an allocation from an array.  This variant is
-     * not type checked which allows an application to fill in
-     * structured data from an array.
+     * Copy an array into part of this Allocation.  This method does not
+     * guarantee that the Allocation is compatible with the input buffer.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -677,9 +777,8 @@ public class Allocation extends BaseObj {
         mRS.nAllocationData1D(getIDSafe(), off, mSelectedLOD, count, d, dataSize);
     }
     /**
-     * Copy part of an allocation from an array.  This variant is
-     * not type checked which allows an application to fill in
-     * structured data from an array.
+     * Copy an array into part of this Allocation.  This method does not
+     * guarantee that the Allocation is compatible with the input buffer.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -691,9 +790,8 @@ public class Allocation extends BaseObj {
         mRS.nAllocationData1D(getIDSafe(), off, mSelectedLOD, count, d, dataSize);
     }
     /**
-     * Copy part of an allocation from an array.  This variant is
-     * not type checked which allows an application to fill in
-     * structured data from an array.
+     * Copy an array into part of this Allocation.  This method does not
+     * guarantee that the Allocation is compatible with the input buffer.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -706,9 +804,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy part of an allocation from an array.  This variant is
-     * type checked and will generate exceptions if the Allocation
-     * type is not a 32 bit integer type.
+     * Copy an array into part of this Allocation.  This variant is type checked
+     * and will generate exceptions if the Allocation type is not a 32 bit
+     * integer type.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -720,9 +818,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy part of an allocation from an array.  This variant is
-     * type checked and will generate exceptions if the Allocation
-     * type is not a 16 bit integer type.
+     * Copy an array into part of this Allocation.  This variant is type checked
+     * and will generate exceptions if the Allocation type is not a 16 bit
+     * integer type.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -734,9 +832,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy part of an allocation from an array.  This variant is
-     * type checked and will generate exceptions if the Allocation
-     * type is not a 8 bit integer type.
+     * Copy an array into part of this Allocation.  This variant is type checked
+     * and will generate exceptions if the Allocation type is not an 8 bit
+     * integer type.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -748,9 +846,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy part of an allocation from an array.  This variant is
-     * type checked and will generate exceptions if the Allocation
-     * type is not a 32 bit float type.
+     * Copy an array into part of this Allocation.  This variant is type checked
+     * and will generate exceptions if the Allocation type is not a 32 bit float
+     * type.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -762,7 +860,7 @@ public class Allocation extends BaseObj {
     }
 
      /**
-     * Copy part of an allocation from another allocation.
+     * Copy part of an Allocation into this Allocation.
      *
      * @param off The offset of the first element to be copied.
      * @param count The number of elements to be copied.
@@ -794,55 +892,106 @@ public class Allocation extends BaseObj {
         }
     }
 
-    /**
-     * Copy a rectangular region from the array into the allocation.
-     * The incoming array is assumed to be tightly packed.
-     *
-     * @param xoff X offset of the region to update
-     * @param yoff Y offset of the region to update
-     * @param w Width of the incoming region to update
-     * @param h Height of the incoming region to update
-     * @param data to be placed into the allocation
-     */
-    public void copy2DRangeFrom(int xoff, int yoff, int w, int h, byte[] data) {
+    void copy2DRangeFromUnchecked(int xoff, int yoff, int w, int h, byte[] data) {
         mRS.validate();
         validate2DRange(xoff, yoff, w, h);
         mRS.nAllocationData2D(getIDSafe(), xoff, yoff, mSelectedLOD, mSelectedFace.mID,
                               w, h, data, data.length);
     }
 
-    public void copy2DRangeFrom(int xoff, int yoff, int w, int h, short[] data) {
+    void copy2DRangeFromUnchecked(int xoff, int yoff, int w, int h, short[] data) {
         mRS.validate();
         validate2DRange(xoff, yoff, w, h);
         mRS.nAllocationData2D(getIDSafe(), xoff, yoff, mSelectedLOD, mSelectedFace.mID,
                               w, h, data, data.length * 2);
     }
 
-    public void copy2DRangeFrom(int xoff, int yoff, int w, int h, int[] data) {
+    void copy2DRangeFromUnchecked(int xoff, int yoff, int w, int h, int[] data) {
         mRS.validate();
         validate2DRange(xoff, yoff, w, h);
         mRS.nAllocationData2D(getIDSafe(), xoff, yoff, mSelectedLOD, mSelectedFace.mID,
                               w, h, data, data.length * 4);
     }
 
-    public void copy2DRangeFrom(int xoff, int yoff, int w, int h, float[] data) {
+    void copy2DRangeFromUnchecked(int xoff, int yoff, int w, int h, float[] data) {
         mRS.validate();
         validate2DRange(xoff, yoff, w, h);
         mRS.nAllocationData2D(getIDSafe(), xoff, yoff, mSelectedLOD, mSelectedFace.mID,
                               w, h, data, data.length * 4);
+    }
+
+
+    /**
+     * Copy from an array into a rectangular region in this Allocation.  The
+     * array is assumed to be tightly packed.
+     *
+     * @param xoff X offset of the region to update in this Allocation
+     * @param yoff Y offset of the region to update in this Allocation
+     * @param w Width of the region to update
+     * @param h Height of the region to update
+     * @param data to be placed into the Allocation
+     */
+    public void copy2DRangeFrom(int xoff, int yoff, int w, int h, byte[] data) {
+        validateIsInt8();
+        copy2DRangeFromUnchecked(xoff, yoff, w, h, data);
     }
 
     /**
-     * Copy a rectangular region into the allocation from another
-     * allocation.
+     * Copy from an array into a rectangular region in this Allocation.  The
+     * array is assumed to be tightly packed.
      *
-     * @param xoff X offset of the region to update.
-     * @param yoff Y offset of the region to update.
-     * @param w Width of the incoming region to update.
-     * @param h Height of the incoming region to update.
-     * @param data source allocation.
-     * @param dataXoff X offset in data of the region to update.
-     * @param dataYoff Y offset in data of the region to update.
+     * @param xoff X offset of the region to update in this Allocation
+     * @param yoff Y offset of the region to update in this Allocation
+     * @param w Width of the region to update
+     * @param h Height of the region to update
+     * @param data to be placed into the Allocation
+     */
+    public void copy2DRangeFrom(int xoff, int yoff, int w, int h, short[] data) {
+        validateIsInt16();
+        copy2DRangeFromUnchecked(xoff, yoff, w, h, data);
+    }
+
+    /**
+     * Copy from an array into a rectangular region in this Allocation.  The
+     * array is assumed to be tightly packed.
+     *
+     * @param xoff X offset of the region to update in this Allocation
+     * @param yoff Y offset of the region to update in this Allocation
+     * @param w Width of the region to update
+     * @param h Height of the region to update
+     * @param data to be placed into the Allocation
+     */
+    public void copy2DRangeFrom(int xoff, int yoff, int w, int h, int[] data) {
+        validateIsInt32();
+        copy2DRangeFromUnchecked(xoff, yoff, w, h, data);
+    }
+
+    /**
+     * Copy from an array into a rectangular region in this Allocation.  The
+     * array is assumed to be tightly packed.
+     *
+     * @param xoff X offset of the region to update in this Allocation
+     * @param yoff Y offset of the region to update in this Allocation
+     * @param w Width of the region to update
+     * @param h Height of the region to update
+     * @param data to be placed into the Allocation
+     */
+    public void copy2DRangeFrom(int xoff, int yoff, int w, int h, float[] data) {
+        validateIsFloat32();
+        copy2DRangeFromUnchecked(xoff, yoff, w, h, data);
+    }
+
+    /**
+     * Copy a rectangular region from an Allocation into a rectangular region in
+     * this Allocation.
+     *
+     * @param xoff X offset of the region in this Allocation
+     * @param yoff Y offset of the region in this Allocation
+     * @param w Width of the region to update.
+     * @param h Height of the region to update.
+     * @param data source Allocation.
+     * @param dataXoff X offset in source Allocation
+     * @param dataYoff Y offset in source Allocation
      */
     public void copy2DRangeFrom(int xoff, int yoff, int w, int h,
                                 Allocation data, int dataXoff, int dataYoff) {
@@ -855,25 +1004,164 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy a bitmap into an allocation.  The height and width of
-     * the update will use the height and width of the incoming
-     * bitmap.
+     * Copy a {@link android.graphics.Bitmap} into an Allocation.  The height
+     * and width of the update will use the height and width of the {@link
+     * android.graphics.Bitmap}.
      *
-     * @param xoff X offset of the region to update
-     * @param yoff Y offset of the region to update
-     * @param data the bitmap to be copied
+     * @param xoff X offset of the region to update in this Allocation
+     * @param yoff Y offset of the region to update in this Allocation
+     * @param data the Bitmap to be copied
      */
     public void copy2DRangeFrom(int xoff, int yoff, Bitmap data) {
         mRS.validate();
+        if (data.getConfig() == null) {
+            Bitmap newBitmap = Bitmap.createBitmap(data.getWidth(), data.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(newBitmap);
+            c.drawBitmap(data, 0, 0, null);
+            copy2DRangeFrom(xoff, yoff, newBitmap);
+            return;
+        }
         validateBitmapFormat(data);
         validate2DRange(xoff, yoff, data.getWidth(), data.getHeight());
         mRS.nAllocationData2D(getIDSafe(), xoff, yoff, mSelectedLOD, mSelectedFace.mID, data);
     }
 
+    private void validate3DRange(int xoff, int yoff, int zoff, int w, int h, int d) {
+        if (mAdaptedAllocation != null) {
+
+        } else {
+
+            if (xoff < 0 || yoff < 0 || zoff < 0) {
+                throw new RSIllegalArgumentException("Offset cannot be negative.");
+            }
+            if (h < 0 || w < 0 || d < 0) {
+                throw new RSIllegalArgumentException("Height or width cannot be negative.");
+            }
+            if (((xoff + w) > mCurrentDimX) || ((yoff + h) > mCurrentDimY) || ((zoff + d) > mCurrentDimZ)) {
+                throw new RSIllegalArgumentException("Updated region larger than allocation.");
+            }
+        }
+    }
 
     /**
-     * Copy from the Allocation into a Bitmap.  The bitmap must
-     * match the dimensions of the Allocation.
+     * @hide
+     *
+     */
+    void copy3DRangeFromUnchecked(int xoff, int yoff, int zoff, int w, int h, int d, byte[] data) {
+        mRS.validate();
+        validate3DRange(xoff, yoff, zoff, w, h, d);
+        mRS.nAllocationData3D(getIDSafe(), xoff, yoff, zoff, mSelectedLOD,
+                              w, h, d, data, data.length);
+    }
+
+    /**
+     * @hide
+     *
+     */
+    void copy3DRangeFromUnchecked(int xoff, int yoff, int zoff, int w, int h, int d, short[] data) {
+        mRS.validate();
+        validate3DRange(xoff, yoff, zoff, w, h, d);
+        mRS.nAllocationData3D(getIDSafe(), xoff, yoff, zoff, mSelectedLOD,
+                              w, h, d, data, data.length * 2);
+    }
+
+    /**
+     * @hide
+     *
+     */
+    void copy3DRangeFromUnchecked(int xoff, int yoff, int zoff, int w, int h, int d, int[] data) {
+        mRS.validate();
+        validate3DRange(xoff, yoff, zoff, w, h, d);
+        mRS.nAllocationData3D(getIDSafe(), xoff, yoff, zoff, mSelectedLOD,
+                              w, h, d, data, data.length * 4);
+    }
+
+    /**
+     * @hide
+     *
+     */
+    void copy3DRangeFromUnchecked(int xoff, int yoff, int zoff, int w, int h, int d, float[] data) {
+        mRS.validate();
+        validate3DRange(xoff, yoff, zoff, w, h, d);
+        mRS.nAllocationData3D(getIDSafe(), xoff, yoff, zoff, mSelectedLOD,
+                              w, h, d, data, data.length * 4);
+    }
+
+
+    /**
+     * @hide
+     * Copy a rectangular region from the array into the allocation.
+     * The array is assumed to be tightly packed.
+     *
+     * @param xoff X offset of the region to update in this Allocation
+     * @param yoff Y offset of the region to update in this Allocation
+     * @param zoff Z offset of the region to update in this Allocation
+     * @param w Width of the region to update
+     * @param h Height of the region to update
+     * @param d Depth of the region to update
+     * @param data to be placed into the allocation
+     */
+    public void copy3DRangeFrom(int xoff, int yoff, int zoff, int w, int h, int d, byte[] data) {
+        validateIsInt8();
+        copy3DRangeFromUnchecked(xoff, yoff, zoff, w, h, d, data);
+    }
+
+    /**
+     * @hide
+     *
+     */
+    public void copy3DRangeFrom(int xoff, int yoff, int zoff, int w, int h, int d, short[] data) {
+        validateIsInt16();
+        copy3DRangeFromUnchecked(xoff, yoff, zoff, w, h, d, data);
+    }
+
+    /**
+     * @hide
+     *
+     */
+    public void copy3DRangeFrom(int xoff, int yoff, int zoff, int w, int h, int d, int[] data) {
+        validateIsInt32();
+        copy3DRangeFromUnchecked(xoff, yoff, zoff, w, h, d, data);
+    }
+
+    /**
+     * @hide
+     *
+     */
+    public void copy3DRangeFrom(int xoff, int yoff, int zoff, int w, int h, int d, float[] data) {
+        validateIsFloat32();
+        copy3DRangeFromUnchecked(xoff, yoff, zoff, w, h, d, data);
+    }
+
+    /**
+     * @hide
+     * Copy a rectangular region into the allocation from another
+     * allocation.
+     *
+     * @param xoff X offset of the region to update in this Allocation
+     * @param yoff Y offset of the region to update in this Allocation
+     * @param zoff Z offset of the region to update in this Allocation
+     * @param w Width of the region to update.
+     * @param h Height of the region to update.
+     * @param d Depth of the region to update.
+     * @param data source allocation.
+     * @param dataXoff X offset of the region in the source Allocation
+     * @param dataYoff Y offset of the region in the source Allocation
+     * @param dataZoff Z offset of the region in the source Allocation
+     */
+    public void copy3DRangeFrom(int xoff, int yoff, int zoff, int w, int h, int d,
+                                Allocation data, int dataXoff, int dataYoff, int dataZoff) {
+        mRS.validate();
+        validate3DRange(xoff, yoff, zoff, w, h, d);
+        mRS.nAllocationData3D(getIDSafe(), xoff, yoff, zoff, mSelectedLOD,
+                              w, h, d, data.getID(mRS), dataXoff, dataYoff, dataZoff,
+                              data.mSelectedLOD);
+    }
+
+
+    /**
+     * Copy from the Allocation into a {@link android.graphics.Bitmap}.  The
+     * bitmap must match the dimensions of the Allocation.
      *
      * @param b The bitmap to be set from the Allocation.
      */
@@ -885,9 +1173,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy from the Allocation into a byte array.  The array must
-     * be at least as large as the Allocation.  The allocation must
-     * be of an 8 bit elemental type.
+     * Copy from the Allocation into a byte array.  The array must be at least
+     * as large as the Allocation.  The allocation must be of an 8 bit integer
+     * {@link android.renderscript.Element} type.
      *
      * @param d The array to be set from the Allocation.
      */
@@ -898,9 +1186,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy from the Allocation into a short array.  The array must
-     * be at least as large as the Allocation.  The allocation must
-     * be of an 16 bit elemental type.
+     * Copy from the Allocation into a short array.  The array must be at least
+     * as large as the Allocation.  The allocation must be of an 16 bit integer
+     * {@link android.renderscript.Element} type.
      *
      * @param d The array to be set from the Allocation.
      */
@@ -911,9 +1199,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy from the Allocation into a int array.  The array must be
-     * at least as large as the Allocation.  The allocation must be
-     * of an 32 bit elemental type.
+     * Copy from the Allocation into a int array.  The array must be at least as
+     * large as the Allocation.  The allocation must be of an 32 bit integer
+     * {@link android.renderscript.Element} type.
      *
      * @param d The array to be set from the Allocation.
      */
@@ -924,9 +1212,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Copy from the Allocation into a float array.  The array must
-     * be at least as large as the Allocation.  The allocation must
-     * be of an 32 bit float elemental type.
+     * Copy from the Allocation into a float array.  The array must be at least
+     * as large as the Allocation.  The allocation must be of an 32 bit float
+     * {@link android.renderscript.Element} type.
      *
      * @param d The array to be set from the Allocation.
      */
@@ -937,16 +1225,19 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Resize a 1D allocation.  The contents of the allocation are
-     * preserved.  If new elements are allocated objects are created
-     * with null contents and the new region is otherwise undefined.
+     * Resize a 1D allocation.  The contents of the allocation are preserved.
+     * If new elements are allocated objects are created with null contents and
+     * the new region is otherwise undefined.
      *
-     * If the new region is smaller the references of any objects
-     * outside the new region will be released.
+     * <p>If the new region is smaller the references of any objects outside the
+     * new region will be released.</p>
      *
-     * A new type will be created with the new dimension.
+     * <p>A new type will be created with the new dimension.</p>
      *
      * @param dimX The new size of the allocation.
+     *
+     * @deprecated RenderScript objects should be immutable once created.  The
+     * replacement is to create a new allocation and copy the contents.
      */
     public synchronized void resize(int dimX) {
         if ((mType.getY() > 0)|| (mType.getZ() > 0) || mType.hasFaces() || mType.hasMipmaps()) {
@@ -961,39 +1252,6 @@ public class Allocation extends BaseObj {
         updateCacheInfo(mType);
     }
 
-    /**
-     * Resize a 2D allocation.  The contents of the allocation are
-     * preserved.  If new elements are allocated objects are created
-     * with null contents and the new region is otherwise undefined.
-     *
-     * If the new region is smaller the references of any objects
-     * outside the new region will be released.
-     *
-     * A new type will be created with the new dimension.
-     *
-     * @hide
-     * @param dimX The new size of the allocation.
-     * @param dimY The new size of the allocation.
-     */
-    public void resize(int dimX, int dimY) {
-        if ((mType.getZ() > 0) || mType.hasFaces() || mType.hasMipmaps()) {
-            throw new RSInvalidStateException(
-                "Resize only support for 2D allocations at this time.");
-        }
-        if (mType.getY() == 0) {
-            throw new RSInvalidStateException(
-                "Resize only support for 2D allocations at this time.");
-        }
-        mRS.nAllocationResize2D(getID(mRS), dimX, dimY);
-        mRS.finish();  // Necessary because resize is fifoed and update is async.
-
-        int typeID = mRS.nAllocationGetType(getID(mRS));
-        mType = new Type(typeID, mRS);
-        mType.updateFromNative();
-        updateCacheInfo(mType);
-    }
-
-
 
     // creation
 
@@ -1003,11 +1261,13 @@ public class Allocation extends BaseObj {
     }
 
     /**
+     * Creates a new Allocation with the given {@link
+     * android.renderscript.Type}, mipmap flag, and usage flags.
      *
-     * @param type renderscript type describing data layout
+     * @param type RenderScript type describing data layout
      * @param mips specifies desired mipmap behaviour for the
      *             allocation
-     * @param usage bit field specifying how the allocation is
+     * @param usage bit field specifying how the Allocation is
      *              utilized
      */
     static public Allocation createTyped(RenderScript rs, Type type, MipmapControl mips, int usage) {
@@ -1023,8 +1283,8 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a renderscript allocation with the size specified by
-     * the type and no mipmaps generated by default
+     * Creates an Allocation with the size specified by the type and no mipmaps
+     * generated by default
      *
      * @param rs Context to which the allocation will belong.
      * @param type renderscript type describing data layout
@@ -1038,12 +1298,11 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a renderscript allocation for use by the script with
-     * the size specified by the type and no mipmaps generated by
-     * default
+     * Creates an Allocation for use by scripts with a given {@link
+     * android.renderscript.Type} and no mipmaps
      *
-     * @param rs Context to which the allocation will belong.
-     * @param type renderscript type describing data layout
+     * @param rs Context to which the Allocation will belong.
+     * @param type RenderScript Type describing data layout
      *
      * @return allocation
      */
@@ -1052,13 +1311,12 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a renderscript allocation with a specified number of
-     * given elements
+     * Creates an Allocation with a specified number of given elements
      *
-     * @param rs Context to which the allocation will belong.
-     * @param e describes what each element of an allocation is
-     * @param count specifies the number of element in the allocation
-     * @param usage bit field specifying how the allocation is
+     * @param rs Context to which the Allocation will belong.
+     * @param e Element to use in the Allocation
+     * @param count the number of Elements in the Allocation
+     * @param usage bit field specifying how the Allocation is
      *              utilized
      *
      * @return allocation
@@ -1078,12 +1336,11 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a renderscript allocation with a specified number of
-     * given elements
+     * Creates an Allocation with a specified number of given elements
      *
-     * @param rs Context to which the allocation will belong.
-     * @param e describes what each element of an allocation is
-     * @param count specifies the number of element in the allocation
+     * @param rs Context to which the Allocation will belong.
+     * @param e Element to use in the Allocation
+     * @param count the number of Elements in the Allocation
      *
      * @return allocation
      */
@@ -1119,23 +1376,51 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a renderscript allocation from a bitmap
+     * Creates an Allocation from a {@link android.graphics.Bitmap}.
      *
      * @param rs Context to which the allocation will belong.
-     * @param b bitmap source for the allocation data
+     * @param b Bitmap source for the allocation data
      * @param mips specifies desired mipmap behaviour for the
      *             allocation
      * @param usage bit field specifying how the allocation is
      *              utilized
      *
-     * @return renderscript allocation containing bitmap data
+     * @return Allocation containing bitmap data
      *
      */
     static public Allocation createFromBitmap(RenderScript rs, Bitmap b,
                                               MipmapControl mips,
                                               int usage) {
         rs.validate();
+
+        // WAR undocumented color formats
+        if (b.getConfig() == null) {
+            if ((usage & USAGE_SHARED) != 0) {
+                throw new RSIllegalArgumentException("USAGE_SHARED cannot be used with a Bitmap that has a null config.");
+            }
+            Bitmap newBitmap = Bitmap.createBitmap(b.getWidth(), b.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(newBitmap);
+            c.drawBitmap(b, 0, 0, null);
+            return createFromBitmap(rs, newBitmap, mips, usage);
+        }
+
         Type t = typeFromBitmap(rs, b, mips);
+
+        // enable optimized bitmap path only with no mipmap and script-only usage
+        if (mips == MipmapControl.MIPMAP_NONE &&
+            t.getElement().isCompatible(Element.RGBA_8888(rs)) &&
+            usage == (USAGE_SHARED | USAGE_SCRIPT | USAGE_GRAPHICS_TEXTURE)) {
+            int id = rs.nAllocationCreateBitmapBackedAllocation(t.getID(rs), mips.mID, b, usage);
+            if (id == 0) {
+                throw new RSRuntimeException("Load failed.");
+            }
+
+            // keep a reference to the Bitmap around to prevent GC
+            Allocation alloc = new Allocation(id, rs, t, usage);
+            alloc.setBitmap(b);
+            return alloc;
+        }
+
 
         int id = rs.nAllocationCreateFromBitmap(t.getID(rs), mips.mID, b, usage);
         if (id == 0) {
@@ -1145,37 +1430,30 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     *
-     *
-     * @hide
-     *
-     */
-    public SurfaceTexture getSurfaceTexture() {
-        if ((mUsage & USAGE_IO_INPUT) == 0) {
-            throw new RSInvalidStateException("Allocation is not a surface texture.");
-        }
-
-        int id = mRS.nAllocationGetSurfaceTextureID(getID(mRS));
-        SurfaceTexture st = new SurfaceTexture(id);
-        mRS.nAllocationGetSurfaceTextureID2(getID(mRS), st);
-
-        return st;
-    }
-
-    /**
-     * For allocations used with io operations, returns the handle
-     * onto a raw buffer that is being managed by the screen
-     * compositor.
+     * Returns the handle to a raw buffer that is being managed by the screen
+     * compositor. This operation is only valid for Allocations with {@link
+     * #USAGE_IO_INPUT}.
      *
      * @return Surface object associated with allocation
      *
      */
     public Surface getSurface() {
-        return new Surface(getSurfaceTexture());
+        if ((mUsage & USAGE_IO_INPUT) == 0) {
+            throw new RSInvalidStateException("Allocation is not a surface texture.");
+        }
+        return mRS.nAllocationGetSurface(getID(mRS));
     }
 
     /**
-     * Associate a surface for io output with this allocation
+     * @hide
+     */
+    public void setSurfaceTexture(SurfaceTexture st) {
+        setSurface(new Surface(st));
+    }
+
+    /**
+     * Associate a {@link android.view.Surface} with this Allocation. This
+     * operation is only valid for Allocations with {@link #USAGE_IO_OUTPUT}.
      *
      * @param sur Surface to associate with allocation
      */
@@ -1189,40 +1467,36 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * @hide
-     */
-    public void setSurfaceTexture(SurfaceTexture st) {
-        mRS.validate();
-        if ((mUsage & USAGE_IO_OUTPUT) == 0) {
-            throw new RSInvalidStateException("Allocation is not USAGE_IO_OUTPUT.");
-        }
-
-        Surface s = new Surface(st);
-        mRS.nAllocationSetSurface(getID(mRS), s);
-    }
-
-    /**
-     * Creates a non-mipmapped renderscript allocation to use as a
-     * graphics texture
+     * Creates an Allocation from a {@link android.graphics.Bitmap}.
+     *
+     * <p>With target API version 18 or greater, this Allocation will be created
+     * with {@link #USAGE_SHARED}, {@link #USAGE_SCRIPT}, and {@link
+     * #USAGE_GRAPHICS_TEXTURE}. With target API version 17 or lower, this
+     * Allocation will be created with {@link #USAGE_GRAPHICS_TEXTURE}.</p>
      *
      * @param rs Context to which the allocation will belong.
      * @param b bitmap source for the allocation data
      *
-     * @return renderscript allocation containing bitmap data
+     * @return Allocation containing bitmap data
      *
      */
     static public Allocation createFromBitmap(RenderScript rs, Bitmap b) {
+        if (rs.getApplicationContext().getApplicationInfo().targetSdkVersion >= 18) {
+            return createFromBitmap(rs, b, MipmapControl.MIPMAP_NONE,
+                                    USAGE_SHARED | USAGE_SCRIPT | USAGE_GRAPHICS_TEXTURE);
+        }
         return createFromBitmap(rs, b, MipmapControl.MIPMAP_NONE,
                                 USAGE_GRAPHICS_TEXTURE);
     }
 
     /**
-     * Creates a cubemap allocation from a bitmap containing the
-     * horizontal list of cube faces. Each individual face must be
-     * the same size and power of 2
+     * Creates a cubemap Allocation from a {@link android.graphics.Bitmap}
+     * containing the horizontal list of cube faces. Each face must be a square,
+     * have the same size as all other faces, and have a width that is a power
+     * of 2.
      *
      * @param rs Context to which the allocation will belong.
-     * @param b bitmap with cubemap faces layed out in the following
+     * @param b Bitmap with cubemap faces layed out in the following
      *          format: right, left, top, bottom, front, back
      * @param mips specifies desired mipmap behaviour for the cubemap
      * @param usage bit field specifying how the cubemap is utilized
@@ -1265,10 +1539,10 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a non-mipmapped cubemap allocation for use as a
-     * graphics texture from a bitmap containing the horizontal list
-     * of cube faces. Each individual face must be the same size and
-     * power of 2
+     * Creates a non-mipmapped cubemap Allocation for use as a graphics texture
+     * from a {@link android.graphics.Bitmap} containing the horizontal list of
+     * cube faces. Each face must be a square, have the same size as all other
+     * faces, and have a width that is a power of 2.
      *
      * @param rs Context to which the allocation will belong.
      * @param b bitmap with cubemap faces layed out in the following
@@ -1284,9 +1558,9 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a cubemap allocation from 6 bitmaps containing
-     * the cube faces. All the faces must be the same size and
-     * power of 2
+     * Creates a cubemap Allocation from 6 {@link android.graphics.Bitmap}
+     * objects containing the cube faces. Each face must be a square, have the
+     * same size as all other faces, and have a width that is a power of 2.
      *
      * @param rs Context to which the allocation will belong.
      * @param xpos cubemap face in the positive x direction
@@ -1351,10 +1625,10 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a non-mipmapped cubemap allocation for use as a
-     * graphics texture from 6 bitmaps containing
-     * the cube faces. All the faces must be the same size and
-     * power of 2
+     * Creates a non-mipmapped cubemap Allocation for use as a sampler input
+     * from 6 {@link android.graphics.Bitmap} objects containing the cube
+     * faces. Each face must be a square, have the same size as all other faces,
+     * and have a width that is a power of 2.
      *
      * @param rs Context to which the allocation will belong.
      * @param xpos cubemap face in the positive x direction
@@ -1380,8 +1654,8 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a renderscript allocation from the bitmap referenced
-     * by resource id
+     * Creates an Allocation from the Bitmap referenced
+     * by resource ID.
      *
      * @param rs Context to which the allocation will belong.
      * @param res application resources
@@ -1391,7 +1665,7 @@ public class Allocation extends BaseObj {
      * @param usage bit field specifying how the allocation is
      *              utilized
      *
-     * @return renderscript allocation containing resource data
+     * @return Allocation containing resource data
      *
      */
     static public Allocation createFromBitmapResource(RenderScript rs,
@@ -1401,6 +1675,9 @@ public class Allocation extends BaseObj {
                                                       int usage) {
 
         rs.validate();
+        if ((usage & (USAGE_SHARED | USAGE_IO_INPUT | USAGE_IO_OUTPUT)) != 0) {
+            throw new RSIllegalArgumentException("Unsupported usage specified.");
+        }
         Bitmap b = BitmapFactory.decodeResource(res, id);
         Allocation alloc = createFromBitmap(rs, b, mips, usage);
         b.recycle();
@@ -1408,27 +1685,36 @@ public class Allocation extends BaseObj {
     }
 
     /**
-     * Creates a non-mipmapped renderscript allocation to use as a
-     * graphics texture from the bitmap referenced by resource id
+     * Creates a non-mipmapped Allocation to use as a graphics texture from the
+     * {@link android.graphics.Bitmap} referenced by resource ID.
+     *
+     * <p>With target API version 18 or greater, this allocation will be created
+     * with {@link #USAGE_SCRIPT} and {@link #USAGE_GRAPHICS_TEXTURE}. With
+     * target API version 17 or lower, this allocation will be created with
+     * {@link #USAGE_GRAPHICS_TEXTURE}.</p>
      *
      * @param rs Context to which the allocation will belong.
      * @param res application resources
      * @param id resource id to load the data from
      *
-     * @return renderscript allocation containing resource data
+     * @return Allocation containing resource data
      *
      */
     static public Allocation createFromBitmapResource(RenderScript rs,
                                                       Resources res,
                                                       int id) {
+        if (rs.getApplicationContext().getApplicationInfo().targetSdkVersion >= 18) {
+            return createFromBitmapResource(rs, res, id,
+                                            MipmapControl.MIPMAP_NONE,
+                                            USAGE_SCRIPT | USAGE_GRAPHICS_TEXTURE);
+        }
         return createFromBitmapResource(rs, res, id,
                                         MipmapControl.MIPMAP_NONE,
                                         USAGE_GRAPHICS_TEXTURE);
     }
 
     /**
-     * Creates a renderscript allocation containing string data
-     * encoded in UTF-8 format
+     * Creates an Allocation containing string data encoded in UTF-8 format.
      *
      * @param rs Context to which the allocation will belong.
      * @param str string to create the allocation from
@@ -1451,6 +1737,43 @@ public class Allocation extends BaseObj {
             throw new RSRuntimeException("Could not convert string to utf-8.");
         }
     }
-}
 
+    /**
+     * @hide
+     *
+     * Interface to handle notification when new buffers are available via
+     * {@link #USAGE_IO_INPUT}. An application will receive one notification
+     * when a buffer is available. Additional buffers will not trigger new
+     * notifications until a buffer is processed.
+     */
+    public interface IoInputNotifier {
+        public void onBufferAvailable(Allocation a);
+    }
+
+    /**
+     * @hide
+     *
+     * Set a notification handler for {@link #USAGE_IO_INPUT}.
+     *
+     * @param callback instance of the IoInputNotifier class to be called
+     *                 when buffer arrive.
+     */
+    public void setIoInputNotificationHandler(IoInputNotifier callback) {
+        synchronized(mAllocationMap) {
+            mAllocationMap.put(new Integer(getID(mRS)), this);
+            mBufferNotifier = callback;
+        }
+    }
+
+    static void sendBufferNotification(int id) {
+        synchronized(mAllocationMap) {
+            Allocation a = mAllocationMap.get(new Integer(id));
+
+            if ((a != null) && (a.mBufferNotifier != null)) {
+                a.mBufferNotifier.onBufferAvailable(a);
+            }
+        }
+    }
+
+}
 

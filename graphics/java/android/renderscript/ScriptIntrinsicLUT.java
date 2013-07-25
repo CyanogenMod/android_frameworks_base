@@ -16,8 +16,6 @@
 
 package android.renderscript;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 
 /**
@@ -49,7 +47,7 @@ public final class ScriptIntrinsicLUT extends ScriptIntrinsic {
      *
      * The defaults tables are identity.
      *
-     * @param rs The Renderscript context
+     * @param rs The RenderScript context
      * @param e Element type for intputs and outputs
      *
      * @return ScriptIntrinsicLUT

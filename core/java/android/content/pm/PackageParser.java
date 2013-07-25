@@ -25,7 +25,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PatternMatcher;
@@ -55,10 +54,9 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
 
 import com.android.internal.util.XmlUtils;
 
@@ -316,6 +314,12 @@ public class PackageParser {
         }
         pi.applicationInfo = generateApplicationInfo(p, flags, state, userId);
         pi.installLocation = p.installLocation;
+        if ((pi.applicationInfo.flags&ApplicationInfo.FLAG_SYSTEM) != 0
+                || (pi.applicationInfo.flags&ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) {
+            pi.requiredForAllUsers = p.mRequiredForAllUsers;
+        }
+        pi.restrictedAccountType = p.mRestrictedAccountType;
+        pi.requiredAccountType = p.mRequiredAccountType;
         pi.firstInstallTime = firstInstallTime;
         pi.lastUpdateTime = lastUpdateTime;
         if ((flags&PackageManager.GET_GIDS) != 0) {
@@ -592,6 +596,28 @@ public class PackageParser {
         return pkg;
     }
 
+    /**
+     * Gathers the {@link ManifestDigest} for {@code pkg} if it exists in the
+     * APK. If it successfully scanned the package and found the
+     * {@code AndroidManifest.xml}, {@code true} is returned.
+     */
+    public boolean collectManifestDigest(Package pkg) {
+        try {
+            final JarFile jarFile = new JarFile(mArchiveSourcePath);
+            try {
+                final ZipEntry je = jarFile.getEntry(ANDROID_MANIFEST_FILENAME);
+                if (je != null) {
+                    pkg.manifestDigest = ManifestDigest.fromInputStream(jarFile.getInputStream(je));
+                }
+            } finally {
+                jarFile.close();
+            }
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     public boolean collectCertificates(Package pkg, int flags) {
         pkg.mSignatures = null;
 
@@ -643,7 +669,6 @@ public class PackageParser {
                 }
             } else {
                 Enumeration<JarEntry> entries = jarFile.entries();
-                final Manifest manifest = jarFile.getManifest();
                 while (entries.hasMoreElements()) {
                     final JarEntry je = entries.nextElement();
                     if (je.isDirectory()) continue;
@@ -654,8 +679,8 @@ public class PackageParser {
                         continue;
 
                     if (ANDROID_MANIFEST_FILENAME.equals(name)) {
-                        final Attributes attributes = manifest.getAttributes(name);
-                        pkg.manifestDigest = ManifestDigest.fromAttributes(attributes);
+                        pkg.manifestDigest =
+                                ManifestDigest.fromInputStream(jarFile.getInputStream(je));
                     }
 
                     final Certificate[] localCerts = loadCertificates(jarFile, je, readBuffer);
@@ -1042,26 +1067,9 @@ public class PackageParser {
                     return null;
                 }
             } else if (tagName.equals("uses-permission")) {
-                sa = res.obtainAttributes(attrs,
-                        com.android.internal.R.styleable.AndroidManifestUsesPermission);
-
-                // Note: don't allow this value to be a reference to a resource
-                // that may change.
-                String name = sa.getNonResourceString(
-                        com.android.internal.R.styleable.AndroidManifestUsesPermission_name);
-                /* Not supporting optional permissions yet.
-                boolean required = sa.getBoolean(
-                        com.android.internal.R.styleable.AndroidManifestUsesPermission_required, true);
-                */
-
-                sa.recycle();
-
-                if (name != null && !pkg.requestedPermissions.contains(name)) {
-                    pkg.requestedPermissions.add(name.intern());
-                    pkg.requestedPermissionsRequired.add(Boolean.TRUE);
+                if (!parseUsesPermission(pkg, res, parser, attrs, outError)) {
+                    return null;
                 }
-
-                XmlUtils.skipCurrentTag(parser);
 
             } else if (tagName.equals("uses-configuration")) {
                 ConfigurationInfo cPref = new ConfigurationInfo();
@@ -1412,7 +1420,54 @@ public class PackageParser {
             pkg.applicationInfo.isThemeable = false;
         }
 
+        /*
+         * b/8528162: Ignore the <uses-permission android:required> attribute if
+         * targetSdkVersion < JELLY_BEAN_MR2. There are lots of apps in the wild
+         * which are improperly using this attribute, even though it never worked.
+         */
+        if (pkg.applicationInfo.targetSdkVersion < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            for (int i = 0; i < pkg.requestedPermissionsRequired.size(); i++) {
+                pkg.requestedPermissionsRequired.set(i, Boolean.TRUE);
+            }
+        }
+
         return pkg;
+    }
+
+    private boolean parseUsesPermission(Package pkg, Resources res, XmlResourceParser parser,
+                                        AttributeSet attrs, String[] outError)
+            throws XmlPullParserException, IOException {
+        TypedArray sa = res.obtainAttributes(attrs,
+                com.android.internal.R.styleable.AndroidManifestUsesPermission);
+
+        // Note: don't allow this value to be a reference to a resource
+        // that may change.
+        String name = sa.getNonResourceString(
+                com.android.internal.R.styleable.AndroidManifestUsesPermission_name);
+/*
+        boolean required = sa.getBoolean(
+                com.android.internal.R.styleable.AndroidManifestUsesPermission_required, true);
+*/
+        boolean required = true; // Optional <uses-permission> not supported
+
+        sa.recycle();
+
+        if (name != null) {
+            int index = pkg.requestedPermissions.indexOf(name);
+            if (index == -1) {
+                pkg.requestedPermissions.add(name.intern());
+                pkg.requestedPermissionsRequired.add(required ? Boolean.TRUE : Boolean.FALSE);
+            } else {
+                if (pkg.requestedPermissionsRequired.get(index) != required) {
+                    outError[0] = "conflicting <uses-permission> entries";
+                    mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                    return false;
+                }
+            }
+        }
+
+        XmlUtils.skipCurrentTag(parser);
+        return true;
     }
 
     private static String buildClassName(String pkg, CharSequence clsSeq,
@@ -1827,6 +1882,24 @@ public class PackageParser {
         }
 
         if (sa.getBoolean(
+                com.android.internal.R.styleable.AndroidManifestApplication_requiredForAllUsers,
+                false)) {
+            owner.mRequiredForAllUsers = true;
+        }
+
+        String restrictedAccountType = sa.getString(com.android.internal.R.styleable
+                .AndroidManifestApplication_restrictedAccountType);
+        if (restrictedAccountType != null && restrictedAccountType.length() > 0) {
+            owner.mRestrictedAccountType = restrictedAccountType;
+        }
+
+        String requiredAccountType = sa.getString(com.android.internal.R.styleable
+                .AndroidManifestApplication_requiredAccountType);
+        if (requiredAccountType != null && requiredAccountType.length() > 0) {
+            owner.mRequiredAccountType = requiredAccountType;
+        }
+
+        if (sa.getBoolean(
                 com.android.internal.R.styleable.AndroidManifestApplication_debuggable,
                 false)) {
             ai.flags |= ApplicationInfo.FLAG_DEBUGGABLE;
@@ -2004,6 +2077,28 @@ public class PackageParser {
                     mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
                     return false;
                 }
+
+            } else if (tagName.equals("library")) {
+                sa = res.obtainAttributes(attrs,
+                        com.android.internal.R.styleable.AndroidManifestLibrary);
+
+                // Note: don't allow this value to be a reference to a resource
+                // that may change.
+                String lname = sa.getNonResourceString(
+                        com.android.internal.R.styleable.AndroidManifestLibrary_name);
+
+                sa.recycle();
+
+                if (lname != null) {
+                    if (owner.libraryNames == null) {
+                        owner.libraryNames = new ArrayList<String>();
+                    }
+                    if (!owner.libraryNames.contains(lname)) {
+                        owner.libraryNames.add(lname.intern());
+                    }
+                }
+
+                XmlUtils.skipCurrentTag(parser);
 
             } else if (tagName.equals("uses-library")) {
                 sa = res.obtainAttributes(attrs,
@@ -3231,6 +3326,7 @@ public class PackageParser {
     }
 
     public final static class Package {
+
         public String packageName;
 
         // For now we only support one application per package.
@@ -3248,7 +3344,8 @@ public class PackageParser {
         public final ArrayList<Boolean> requestedPermissionsRequired = new ArrayList<Boolean>();
 
         public ArrayList<String> protectedBroadcasts;
-        
+
+        public ArrayList<String> libraryNames = null;
         public ArrayList<String> usesLibraries = null;
         public ArrayList<String> usesOptionalLibraries = null;
         public String[] usesLibraryFiles = null;
@@ -3319,6 +3416,15 @@ public class PackageParser {
         public ArrayList<FeatureInfo> reqFeatures = null;
 
         public int installLocation;
+
+        /* An app that's required for all users and cannot be uninstalled for a user */
+        public boolean mRequiredForAllUsers;
+
+        /* The restricted account authenticator type that is used by this application */
+        public String mRestrictedAccountType;
+
+        /* The required account type without which this application will not function */
+        public String mRequiredAccountType;
 
         /**
          * Digest suitable for comparing whether this package's manifest is the
@@ -3599,29 +3705,45 @@ public class PackageParser {
         return generateApplicationInfo(p, flags, state, UserHandle.getCallingUserId());
     }
 
+    private static void updateApplicationInfo(ApplicationInfo ai, int flags,
+            PackageUserState state) {
+        // CompatibilityMode is global state.
+        if (!sCompatibilityModeEnabled) {
+            ai.disableCompatibilityMode();
+        }
+        if (state.installed) {
+            ai.flags |= ApplicationInfo.FLAG_INSTALLED;
+        } else {
+            ai.flags &= ~ApplicationInfo.FLAG_INSTALLED;
+        }
+        if (state.enabled == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
+            ai.enabled = true;
+        } else if (state.enabled == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED) {
+            ai.enabled = (flags&PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS) != 0;
+        } else if (state.enabled == PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                || state.enabled == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) {
+            ai.enabled = false;
+        }
+        ai.enabledSetting = state.enabled;
+    }
+
     public static ApplicationInfo generateApplicationInfo(Package p, int flags,
             PackageUserState state, int userId) {
         if (p == null) return null;
         if (!checkUseInstalled(flags, state)) {
             return null;
         }
-        if (!copyNeeded(flags, p, state, null, userId)) {
-            // CompatibilityMode is global state. It's safe to modify the instance
-            // of the package.
-            if (!sCompatibilityModeEnabled) {
-                p.applicationInfo.disableCompatibilityMode();
-            }
-            // Make sure we report as installed.  Also safe to do, since the
-            // default state should be installed (we will always copy if we
-            // need to report it is not installed).
-            p.applicationInfo.flags |= ApplicationInfo.FLAG_INSTALLED;
-            if (state.enabled == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
-                p.applicationInfo.enabled = true;
-            } else if (state.enabled == PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-                    || state.enabled == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) {
-                p.applicationInfo.enabled = false;
-            }
-            p.applicationInfo.enabledSetting = state.enabled;
+        if (!copyNeeded(flags, p, state, null, userId)
+                && ((flags&PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS) == 0
+                        || state.enabled != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED)) {
+            // In this case it is safe to directly modify the internal ApplicationInfo state:
+            // - CompatibilityMode is global state, so will be the same for every call.
+            // - We only come in to here if the app should reported as installed; this is the
+            // default state, and we will do a copy otherwise.
+            // - The enable state will always be reported the same for the application across
+            // calls; the only exception is for the UNTIL_USED mode, and in that case we will
+            // be doing a copy.
+            updateApplicationInfo(p.applicationInfo, flags, state);
             return p.applicationInfo;
         }
 
@@ -3637,26 +3759,12 @@ public class PackageParser {
         if ((flags & PackageManager.GET_SHARED_LIBRARY_FILES) != 0) {
             ai.sharedLibraryFiles = p.usesLibraryFiles;
         }
-        if (!sCompatibilityModeEnabled) {
-            ai.disableCompatibilityMode();
-        }
         if (state.stopped) {
             ai.flags |= ApplicationInfo.FLAG_STOPPED;
         } else {
             ai.flags &= ~ApplicationInfo.FLAG_STOPPED;
         }
-        if (state.installed) {
-            ai.flags |= ApplicationInfo.FLAG_INSTALLED;
-        } else {
-            ai.flags &= ~ApplicationInfo.FLAG_INSTALLED;
-        }
-        if (state.enabled == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
-            ai.enabled = true;
-        } else if (state.enabled == PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-                || state.enabled == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) {
-            ai.enabled = false;
-        }
-        ai.enabledSetting = state.enabled;
+        updateApplicationInfo(ai, flags, state);
         return ai;
     }
 

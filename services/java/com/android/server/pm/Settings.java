@@ -18,14 +18,20 @@ package com.android.server.pm;
 
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
+import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
+import android.os.PatternMatcher;
+import android.util.LogPrinter;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.JournaledFile;
 import com.android.internal.util.XmlUtils;
-import com.android.server.IntentResolver;
 import com.android.server.pm.PackageManagerService.DumpState;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -98,6 +104,7 @@ final class Settings {
     private static final String ATTR_CODE = "code";
     private static final String ATTR_NOT_LAUNCHED = "nl";
     private static final String ATTR_ENABLED = "enabled";
+    private static final String ATTR_ENABLED_CALLER = "enabledCaller";
     private static final String ATTR_STOPPED = "stopped";
     private static final String ATTR_INSTALLED = "inst";
     private static final String ATTR_PRIVACY_GUARD = "privacy-guard";
@@ -456,7 +463,7 @@ final class Settings {
                                     true, // stopped,
                                     true, // notLaunched
                                     privacyGuard,
-                                    null, null);
+                                    null, null, null);
                             writePackageRestrictionsLPr(user.id);
                         }
                     }
@@ -854,7 +861,7 @@ final class Settings {
                                 false,  // stopped
                                 false,  // notLaunched
                                 false,  // privacy guard
-                                null, null);
+                                null, null, null);
                     }
                     return;
                 }
@@ -899,6 +906,8 @@ final class Settings {
                     final String enabledStr = parser.getAttributeValue(null, ATTR_ENABLED);
                     final int enabled = enabledStr == null
                             ? COMPONENT_ENABLED_STATE_DEFAULT : Integer.parseInt(enabledStr);
+                    final String enabledCaller = parser.getAttributeValue(null,
+                            ATTR_ENABLED_CALLER);
                     final String installedStr = parser.getAttributeValue(null, ATTR_INSTALLED);
                     final boolean installed = installedStr == null
                             ? true : Boolean.parseBoolean(installedStr);
@@ -932,7 +941,7 @@ final class Settings {
                     }
 
                     ps.setUserState(userId, enabled, installed, stopped, notLaunched, privacyGuard,
-                            enabledComponents, disabledComponents);
+                            enabledCaller, enabledComponents, disabledComponents);
                 } else if (tagName.equals("preferred-activities")) {
                     readPreferredActivitiesLPw(parser, userId);
                 } else {
@@ -984,14 +993,14 @@ final class Settings {
         return components;
     }
 
-    void writePreferredActivitiesLPr(XmlSerializer serializer, int userId)
+    void writePreferredActivitiesLPr(XmlSerializer serializer, int userId, boolean full)
             throws IllegalArgumentException, IllegalStateException, IOException {
         serializer.startTag(null, "preferred-activities");
         PreferredIntentResolver pir = mPreferredActivities.get(userId);
         if (pir != null) {
             for (final PreferredActivity pa : pir.filterSet()) {
                 serializer.startTag(null, TAG_ITEM);
-                pa.writeToXml(serializer);
+                pa.writeToXml(serializer, full);
                 serializer.endTag(null, TAG_ITEM);
             }
         }
@@ -1059,6 +1068,10 @@ final class Settings {
                     if (ustate.enabled != COMPONENT_ENABLED_STATE_DEFAULT) {
                         serializer.attribute(null, ATTR_ENABLED,
                                 Integer.toString(ustate.enabled));
+                        if (ustate.lastDisableAppCaller != null) {
+                            serializer.attribute(null, ATTR_ENABLED_CALLER,
+                                    ustate.lastDisableAppCaller);
+                        }
                     }
                     if (ustate.privacyGuard) {
                         serializer.attribute(null, ATTR_PRIVACY_GUARD, "true");
@@ -1087,7 +1100,7 @@ final class Settings {
                 }
             }
 
-            writePreferredActivitiesLPr(serializer, userId);
+            writePreferredActivitiesLPr(serializer, userId, true);
 
             serializer.endTag(null, TAG_PACKAGE_RESTRICTIONS);
 
@@ -1575,7 +1588,8 @@ final class Settings {
         }
     }
 
-    boolean readLPw(List<UserInfo> users, int sdkVersion, boolean onlyCore) {
+    boolean readLPw(PackageManagerService service, List<UserInfo> users, int sdkVersion,
+            boolean onlyCore) {
         FileInputStream str = null;
         if (mBackupSettingsFilename.exists()) {
             try {
@@ -1605,9 +1619,6 @@ final class Settings {
                     mReadMessages.append("No settings file found\n");
                     PackageManagerService.reportSettingsProblem(Log.INFO,
                             "No settings file; creating initial state");
-                    if (!onlyCore) {
-                        readDefaultPreferredAppsLPw(0);
-                    }
                     mInternalSdkPlatform = mExternalSdkPlatform = sdkVersion;
                     return false;
                 }
@@ -1789,7 +1800,7 @@ final class Settings {
         return true;
     }
 
-    private void readDefaultPreferredAppsLPw(int userId) {
+    void readDefaultPreferredAppsLPw(PackageManagerService service, int userId) {
         // Read preferred apps from .../etc/preferred-apps directory.
         File preferredDir = new File(Environment.getRootDirectory(), "etc/preferred-apps");
         if (!preferredDir.exists() || !preferredDir.isDirectory()) {
@@ -1811,6 +1822,7 @@ final class Settings {
                 continue;
             }
 
+            if (PackageManagerService.DEBUG_PREFERRED) Log.d(TAG, "Reading default preferred " + f);
             FileInputStream str = null;
             try {
                 str = new FileInputStream(f);
@@ -1832,7 +1844,7 @@ final class Settings {
                             + " does not start with 'preferred-activities'");
                     continue;
                 }
-                readPreferredActivitiesLPw(parser, userId);
+                readDefaultPreferredActivitiesLPw(service, parser, userId);
             } catch (XmlPullParserException e) {
                 Slog.w(TAG, "Error reading apps file " + f, e);
             } catch (IOException e) {
@@ -1844,6 +1856,112 @@ final class Settings {
                     } catch (IOException e) {
                     }
                 }
+            }
+        }
+    }
+
+    private void readDefaultPreferredActivitiesLPw(PackageManagerService service,
+            XmlPullParser parser, int userId)
+            throws XmlPullParserException, IOException {
+        int outerDepth = parser.getDepth();
+        int type;
+        while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
+                && (type != XmlPullParser.END_TAG || parser.getDepth() > outerDepth)) {
+            if (type == XmlPullParser.END_TAG || type == XmlPullParser.TEXT) {
+                continue;
+            }
+
+            String tagName = parser.getName();
+            if (tagName.equals(TAG_ITEM)) {
+                PreferredActivity tmpPa = new PreferredActivity(parser);
+                if (tmpPa.mPref.getParseError() == null) {
+                    // The initial preferences only specify the target activity
+                    // component and intent-filter, not the set of matches.  So we
+                    // now need to query for the matches to build the correct
+                    // preferred activity entry.
+                    if (PackageManagerService.DEBUG_PREFERRED) {
+                        Log.d(TAG, "Processing preferred:");
+                        tmpPa.dump(new LogPrinter(Log.DEBUG, TAG), "  ");
+                    }
+                    final ComponentName cn = tmpPa.mPref.mComponent;
+                    Intent intent = new Intent();
+                    int flags = 0;
+                    intent.setAction(tmpPa.getAction(0));
+                    for (int i=0; i<tmpPa.countCategories(); i++) {
+                        String cat = tmpPa.getCategory(i);
+                        if (cat.equals(Intent.CATEGORY_DEFAULT)) {
+                            flags |= PackageManager.MATCH_DEFAULT_ONLY;
+                        } else {
+                            intent.addCategory(cat);
+                        }
+                    }
+                    if (tmpPa.countDataSchemes() > 0) {
+                        Uri.Builder builder = new Uri.Builder();
+                        builder.scheme(tmpPa.getDataScheme(0));
+                        if (tmpPa.countDataAuthorities() > 0) {
+                            IntentFilter.AuthorityEntry auth = tmpPa.getDataAuthority(0);
+                            if (auth.getHost() != null) {
+                                builder.authority(auth.getHost());
+                            }
+                        }
+                        if (tmpPa.countDataPaths() > 0) {
+                            PatternMatcher path = tmpPa.getDataPath(0);
+                            builder.path(path.getPath());
+                        }
+                        intent.setData(builder.build());
+                    } else if (tmpPa.countDataTypes() > 0) {
+                        intent.setType(tmpPa.getDataType(0));
+                    }
+                    List<ResolveInfo> ri = service.mActivities.queryIntent(intent,
+                            intent.getType(), flags, 0);
+                    if (PackageManagerService.DEBUG_PREFERRED) Log.d(TAG, "Queried " + intent
+                            + " results: " + ri);
+                    int match = 0;
+                    if (ri != null && ri.size() > 1) {
+                        boolean haveAct = false;
+                        boolean haveNonSys = false;
+                        ComponentName[] set = new ComponentName[ri.size()];
+                        for (int i=0; i<ri.size(); i++) {
+                            ActivityInfo ai = ri.get(i).activityInfo;
+                            set[i] = new ComponentName(ai.packageName, ai.name);
+                            if ((ai.applicationInfo.flags&ApplicationInfo.FLAG_SYSTEM) == 0) {
+                                // If any of the matches are not system apps, then
+                                // there is a third party app that is now an option...
+                                // so don't set a default since we don't want to hide it.
+                                if (PackageManagerService.DEBUG_PREFERRED) Log.d(TAG, "Result "
+                                        + ai.packageName + "/" + ai.name + ": non-system!");
+                                haveNonSys = true;
+                                break;
+                            } else if (cn.getPackageName().equals(ai.packageName)
+                                    && cn.getClassName().equals(ai.name)) {
+                                if (PackageManagerService.DEBUG_PREFERRED) Log.d(TAG, "Result "
+                                        + ai.packageName + "/" + ai.name + ": default!");
+                                haveAct = true;
+                                match = ri.get(i).match;
+                            } else {
+                                if (PackageManagerService.DEBUG_PREFERRED) Log.d(TAG, "Result "
+                                        + ai.packageName + "/" + ai.name + ": skipped");
+                            }
+                        }
+                        if (haveAct && !haveNonSys) {
+                            PreferredActivity pa = new PreferredActivity(tmpPa, match, set,
+                                    tmpPa.mPref.mComponent);
+                            editPreferredActivitiesLPw(userId).addFilter(pa);
+                        } else if (!haveNonSys) {
+                            Slog.w(TAG, "No component found for default preferred activity "
+                                    + tmpPa.mPref.mComponent);
+                        }
+                    }
+                } else {
+                    PackageManagerService.reportSettingsProblem(Log.WARN,
+                            "Error in package manager settings: <preferred-activity> "
+                                    + tmpPa.mPref.getParseError() + " at "
+                                    + parser.getPositionDescription());
+                }
+            } else {
+                PackageManagerService.reportSettingsProblem(Log.WARN,
+                        "Unknown element under <preferred-activities>: " + parser.getName());
+                XmlUtils.skipCurrentTag(parser);
             }
         }
     }
@@ -2144,14 +2262,14 @@ final class Settings {
             final String enabledStr = parser.getAttributeValue(null, ATTR_ENABLED);
             if (enabledStr != null) {
                 try {
-                    packageSetting.setEnabled(Integer.parseInt(enabledStr), 0 /* userId */);
+                    packageSetting.setEnabled(Integer.parseInt(enabledStr), 0 /* userId */, null);
                 } catch (NumberFormatException e) {
                     if (enabledStr.equalsIgnoreCase("true")) {
-                        packageSetting.setEnabled(COMPONENT_ENABLED_STATE_ENABLED, 0);
+                        packageSetting.setEnabled(COMPONENT_ENABLED_STATE_ENABLED, 0, null);
                     } else if (enabledStr.equalsIgnoreCase("false")) {
-                        packageSetting.setEnabled(COMPONENT_ENABLED_STATE_DISABLED, 0);
+                        packageSetting.setEnabled(COMPONENT_ENABLED_STATE_DISABLED, 0, null);
                     } else if (enabledStr.equalsIgnoreCase("default")) {
-                        packageSetting.setEnabled(COMPONENT_ENABLED_STATE_DEFAULT, 0);
+                        packageSetting.setEnabled(COMPONENT_ENABLED_STATE_DEFAULT, 0, null);
                     } else {
                         PackageManagerService.reportSettingsProblem(Log.WARN,
                                 "Error in package manager settings: package " + name
@@ -2160,7 +2278,7 @@ final class Settings {
                     }
                 }
             } else {
-                packageSetting.setEnabled(COMPONENT_ENABLED_STATE_DEFAULT, 0);
+                packageSetting.setEnabled(COMPONENT_ENABLED_STATE_DEFAULT, 0, null);
             }
 
             final String installStatusStr = parser.getAttributeValue(null, "installStatus");
@@ -2347,7 +2465,8 @@ final class Settings {
         }
     }
 
-    void createNewUserLILPw(Installer installer, int userHandle, File path) {
+    void createNewUserLILPw(PackageManagerService service, Installer installer,
+            int userHandle, File path) {
         path.mkdir();
         FileUtils.setPermissions(path.toString(), FileUtils.S_IRWXU | FileUtils.S_IRWXG
                 | FileUtils.S_IXOTH, -1, -1);
@@ -2359,7 +2478,7 @@ final class Settings {
                     UserHandle.getUid(userHandle, ps.appId), userHandle,
                     ps.pkg.applicationInfo.seinfo);
         }
-        readDefaultPreferredAppsLPw(userHandle);
+        readDefaultPreferredAppsLPw(service, userHandle);
         writePackageRestrictionsLPr(userHandle);
     }
 
@@ -2432,8 +2551,14 @@ final class Settings {
             return false;
         }
         PackageUserState ustate = packageSettings.readUserState(userId);
+        if ((flags&PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS) != 0) {
+            if (ustate.enabled == COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED) {
+                return true;
+            }
+        }
         if (ustate.enabled == COMPONENT_ENABLED_STATE_DISABLED
                 || ustate.enabled == COMPONENT_ENABLED_STATE_DISABLED_USER
+                || ustate.enabled == COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED
                 || (packageSettings.pkg != null && !packageSettings.pkg.applicationInfo.enabled
                     && ustate.enabled == COMPONENT_ENABLED_STATE_DEFAULT)) {
             return false;
@@ -2563,6 +2688,167 @@ final class Settings {
         ApplicationInfo.FLAG_CANT_SAVE_STATE, "CANT_SAVE_STATE",
     };
 
+    void dumpPackageLPr(PrintWriter pw, String prefix, PackageSetting ps, SimpleDateFormat sdf,
+            Date date, List<UserInfo> users) {
+        pw.print(prefix); pw.print("Package [");
+            pw.print(ps.realName != null ? ps.realName : ps.name);
+            pw.print("] (");
+            pw.print(Integer.toHexString(System.identityHashCode(ps)));
+            pw.println("):");
+
+        if (ps.realName != null) {
+            pw.print(prefix); pw.print("  compat name=");
+            pw.println(ps.name);
+        }
+
+        pw.print(prefix); pw.print("  userId="); pw.print(ps.appId);
+                pw.print(" gids="); pw.println(PackageManagerService.arrayToString(ps.gids));
+        if (ps.sharedUser != null) {
+            pw.print(prefix); pw.print("  sharedUser="); pw.println(ps.sharedUser);
+        }
+        pw.print(prefix); pw.print("  pkg="); pw.println(ps.pkg);
+        pw.print(prefix); pw.print("  codePath="); pw.println(ps.codePathString);
+        pw.print(prefix); pw.print("  resourcePath="); pw.println(ps.resourcePathString);
+        pw.print(prefix); pw.print("  nativeLibraryPath="); pw.println(ps.nativeLibraryPathString);
+        pw.print(prefix); pw.print("  versionCode="); pw.print(ps.versionCode);
+        if (ps.pkg != null) {
+            pw.print(" targetSdk="); pw.print(ps.pkg.applicationInfo.targetSdkVersion);
+        }
+        pw.println();
+        if (ps.pkg != null) {
+            pw.print(prefix); pw.print("  versionName="); pw.println(ps.pkg.mVersionName);
+            pw.print(prefix); pw.print("  applicationInfo=");
+                pw.println(ps.pkg.applicationInfo.toString());
+            pw.print(prefix); pw.print("  flags="); printFlags(pw, ps.pkg.applicationInfo.flags,
+                    FLAG_DUMP_SPEC); pw.println();
+            pw.print(prefix); pw.print("  dataDir="); pw.println(ps.pkg.applicationInfo.dataDir);
+            if (ps.pkg.mOperationPending) {
+                pw.print(prefix); pw.println("  mOperationPending=true");
+            }
+            pw.print(prefix); pw.print("  supportsScreens=[");
+            boolean first = true;
+            if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_SMALL_SCREENS) != 0) {
+                if (!first)
+                    pw.print(", ");
+                first = false;
+                pw.print("small");
+            }
+            if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_NORMAL_SCREENS) != 0) {
+                if (!first)
+                    pw.print(", ");
+                first = false;
+                pw.print("medium");
+            }
+            if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_LARGE_SCREENS) != 0) {
+                if (!first)
+                    pw.print(", ");
+                first = false;
+                pw.print("large");
+            }
+            if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_XLARGE_SCREENS) != 0) {
+                if (!first)
+                    pw.print(", ");
+                first = false;
+                pw.print("xlarge");
+            }
+            if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_RESIZEABLE_FOR_SCREENS) != 0) {
+                if (!first)
+                    pw.print(", ");
+                first = false;
+                pw.print("resizeable");
+            }
+            if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_SCREEN_DENSITIES) != 0) {
+                if (!first)
+                    pw.print(", ");
+                first = false;
+                pw.print("anyDensity");
+            }
+            pw.println("]");
+            if (ps.pkg.libraryNames != null && ps.pkg.libraryNames.size() > 0) {
+                pw.print(prefix); pw.println("  libraries:");
+                for (int i=0; i<ps.pkg.libraryNames.size(); i++) {
+                    pw.print(prefix); pw.print("    "); pw.println(ps.pkg.libraryNames.get(i));
+                }
+            }
+            if (ps.pkg.usesLibraries != null && ps.pkg.usesLibraries.size() > 0) {
+                pw.print(prefix); pw.println("  usesLibraries:");
+                for (int i=0; i<ps.pkg.usesLibraries.size(); i++) {
+                    pw.print(prefix); pw.print("    "); pw.println(ps.pkg.usesLibraries.get(i));
+                }
+            }
+            if (ps.pkg.usesOptionalLibraries != null
+                    && ps.pkg.usesOptionalLibraries.size() > 0) {
+                pw.print(prefix); pw.println("  usesOptionalLibraries:");
+                for (int i=0; i<ps.pkg.usesOptionalLibraries.size(); i++) {
+                    pw.print(prefix); pw.print("    ");
+                        pw.println(ps.pkg.usesOptionalLibraries.get(i));
+                }
+            }
+            if (ps.pkg.usesLibraryFiles != null
+                    && ps.pkg.usesLibraryFiles.length > 0) {
+                pw.print(prefix); pw.println("  usesLibraryFiles:");
+                for (int i=0; i<ps.pkg.usesLibraryFiles.length; i++) {
+                    pw.print(prefix); pw.print("    "); pw.println(ps.pkg.usesLibraryFiles[i]);
+                }
+            }
+        }
+        pw.print(prefix); pw.print("  timeStamp=");
+            date.setTime(ps.timeStamp);
+            pw.println(sdf.format(date));
+        pw.print(prefix); pw.print("  firstInstallTime=");
+            date.setTime(ps.firstInstallTime);
+            pw.println(sdf.format(date));
+        pw.print(prefix); pw.print("  lastUpdateTime=");
+            date.setTime(ps.lastUpdateTime);
+            pw.println(sdf.format(date));
+        if (ps.installerPackageName != null) {
+            pw.print(prefix); pw.print("  installerPackageName=");
+                    pw.println(ps.installerPackageName);
+        }
+        pw.print(prefix); pw.print("  signatures="); pw.println(ps.signatures);
+        pw.print(prefix); pw.print("  permissionsFixed="); pw.print(ps.permissionsFixed);
+                pw.print(" haveGids="); pw.print(ps.haveGids);
+                pw.print(" installStatus="); pw.println(ps.installStatus);
+        pw.print(prefix); pw.print("  pkgFlags="); printFlags(pw, ps.pkgFlags, FLAG_DUMP_SPEC);
+                pw.println();
+        for (UserInfo user : users) {
+            pw.print(prefix); pw.print("  User "); pw.print(user.id); pw.print(": ");
+            pw.print(" installed=");
+            pw.print(ps.getInstalled(user.id));
+            pw.print(" stopped=");
+            pw.print(ps.getStopped(user.id));
+            pw.print(" notLaunched=");
+            pw.print(ps.getNotLaunched(user.id));
+            pw.print(" enabled=");
+            pw.println(ps.getEnabled(user.id));
+            String lastDisabledAppCaller = ps.getLastDisabledAppCaller(user.id);
+            if (lastDisabledAppCaller != null) {
+                pw.print(prefix); pw.print("    lastDisabledCaller: ");
+                        pw.println(lastDisabledAppCaller);
+            }
+            HashSet<String> cmp = ps.getDisabledComponents(user.id);
+            if (cmp != null && cmp.size() > 0) {
+                pw.print(prefix); pw.println("    disabledComponents:");
+                for (String s : cmp) {
+                    pw.print(prefix); pw.print("    "); pw.println(s);
+                }
+            }
+            cmp = ps.getEnabledComponents(user.id);
+            if (cmp != null && cmp.size() > 0) {
+                pw.print(prefix); pw.println("    enabledComponents:");
+                for (String s : cmp) {
+                    pw.print(prefix); pw.print("    "); pw.println(s);
+                }
+            }
+        }
+        if (ps.grantedPermissions.size() > 0) {
+            pw.print(prefix); pw.println("  grantedPermissions:");
+            for (String s : ps.grantedPermissions) {
+                pw.print(prefix); pw.print("    "); pw.println(s);
+            }
+        }
+    }
+
     void dumpPackagesLPr(PrintWriter pw, String packageName, DumpState dumpState) {
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Date date = new Date();
@@ -2584,123 +2870,7 @@ final class Settings {
                 pw.println("Packages:");
                 printedSomething = true;
             }
-            pw.print("  Package [");
-                pw.print(ps.realName != null ? ps.realName : ps.name);
-                pw.print("] (");
-                pw.print(Integer.toHexString(System.identityHashCode(ps)));
-                pw.println("):");
-
-            if (ps.realName != null) {
-                pw.print("    compat name=");
-                pw.println(ps.name);
-            }
-
-            pw.print("    userId="); pw.print(ps.appId);
-            pw.print(" gids="); pw.println(PackageManagerService.arrayToString(ps.gids));
-            pw.print("    sharedUser="); pw.println(ps.sharedUser);
-            pw.print("    pkg="); pw.println(ps.pkg);
-            pw.print("    codePath="); pw.println(ps.codePathString);
-            pw.print("    resourcePath="); pw.println(ps.resourcePathString);
-            pw.print("    nativeLibraryPath="); pw.println(ps.nativeLibraryPathString);
-            pw.print("    versionCode="); pw.println(ps.versionCode);
-            if (ps.pkg != null) {
-                pw.print("    applicationInfo="); pw.println(ps.pkg.applicationInfo.toString());
-                pw.print("    flags="); printFlags(pw, ps.pkg.applicationInfo.flags, FLAG_DUMP_SPEC); pw.println();
-                pw.print("    versionName="); pw.println(ps.pkg.mVersionName);
-                pw.print("    dataDir="); pw.println(ps.pkg.applicationInfo.dataDir);
-                pw.print("    targetSdk="); pw.println(ps.pkg.applicationInfo.targetSdkVersion);
-                if (ps.pkg.mOperationPending) {
-                    pw.println("    mOperationPending=true");
-                }
-                pw.print("    supportsScreens=[");
-                boolean first = true;
-                if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_SMALL_SCREENS) != 0) {
-                    if (!first)
-                        pw.print(", ");
-                    first = false;
-                    pw.print("small");
-                }
-                if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_NORMAL_SCREENS) != 0) {
-                    if (!first)
-                        pw.print(", ");
-                    first = false;
-                    pw.print("medium");
-                }
-                if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_LARGE_SCREENS) != 0) {
-                    if (!first)
-                        pw.print(", ");
-                    first = false;
-                    pw.print("large");
-                }
-                if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_XLARGE_SCREENS) != 0) {
-                    if (!first)
-                        pw.print(", ");
-                    first = false;
-                    pw.print("xlarge");
-                }
-                if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_RESIZEABLE_FOR_SCREENS) != 0) {
-                    if (!first)
-                        pw.print(", ");
-                    first = false;
-                    pw.print("resizeable");
-                }
-                if ((ps.pkg.applicationInfo.flags & ApplicationInfo.FLAG_SUPPORTS_SCREEN_DENSITIES) != 0) {
-                    if (!first)
-                        pw.print(", ");
-                    first = false;
-                    pw.print("anyDensity");
-                }
-                pw.println("]");
-            }
-            pw.print("    timeStamp=");
-                date.setTime(ps.timeStamp);
-                pw.println(sdf.format(date));
-            pw.print("    firstInstallTime=");
-                date.setTime(ps.firstInstallTime);
-                pw.println(sdf.format(date));
-            pw.print("    lastUpdateTime=");
-                date.setTime(ps.lastUpdateTime);
-                pw.println(sdf.format(date));
-            if (ps.installerPackageName != null) {
-                pw.print("    installerPackageName="); pw.println(ps.installerPackageName);
-            }
-            pw.print("    signatures="); pw.println(ps.signatures);
-            pw.print("    permissionsFixed="); pw.print(ps.permissionsFixed);
-                    pw.print(" haveGids="); pw.print(ps.haveGids);
-                    pw.print(" installStatus="); pw.println(ps.installStatus);
-            pw.print("    pkgFlags="); printFlags(pw, ps.pkgFlags, FLAG_DUMP_SPEC);
-                    pw.println();
-            for (UserInfo user : users) {
-                pw.print("    User "); pw.print(user.id); pw.print(": ");
-                pw.print(" installed=");
-                pw.print(ps.getInstalled(user.id));
-                pw.print(" stopped=");
-                pw.print(ps.getStopped(user.id));
-                pw.print(" notLaunched=");
-                pw.print(ps.getNotLaunched(user.id));
-                pw.print(" enabled=");
-                pw.println(ps.getEnabled(user.id));
-                HashSet<String> cmp = ps.getDisabledComponents(user.id);
-                if (cmp != null && cmp.size() > 0) {
-                    pw.println("      disabledComponents:");
-                    for (String s : cmp) {
-                        pw.print("      "); pw.println(s);
-                    }
-                }
-                cmp = ps.getEnabledComponents(user.id);
-                if (cmp != null && cmp.size() > 0) {
-                    pw.println("      enabledComponents:");
-                    for (String s : cmp) {
-                        pw.print("      "); pw.println(s);
-                    }
-                }
-            }
-            if (ps.grantedPermissions.size() > 0) {
-                pw.println("    grantedPermissions:");
-                for (String s : ps.grantedPermissions) {
-                    pw.print("      "); pw.println(s);
-                }
-            }
+            dumpPackageLPr(pw, "  ", ps, sdf, date, users);
         }
 
         printedSomething = false;
@@ -2736,27 +2906,7 @@ final class Settings {
                     pw.println("Hidden system packages:");
                     printedSomething = true;
                 }
-                pw.print("  Package [");
-                pw.print(ps.realName != null ? ps.realName : ps.name);
-                pw.print("] (");
-                pw.print(Integer.toHexString(System.identityHashCode(ps)));
-                pw.println("):");
-                if (ps.realName != null) {
-                    pw.print("    compat name=");
-                    pw.println(ps.name);
-                }
-                if (ps.pkg != null && ps.pkg.applicationInfo != null) {
-                    pw.print("    applicationInfo=");
-                    pw.println(ps.pkg.applicationInfo.toString());
-                }
-                pw.print("    userId=");
-                pw.println(ps.appId);
-                pw.print("    sharedUser=");
-                pw.println(ps.sharedUser);
-                pw.print("    codePath=");
-                pw.println(ps.codePathString);
-                pw.print("    resourcePath=");
-                pw.println(ps.resourcePathString);
+                dumpPackageLPr(pw, "  ", ps, sdf, date, users);
             }
         }
     }

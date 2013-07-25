@@ -690,6 +690,10 @@ static jint android_content_AssetManager_loadResourceValue(JNIEnv* env, jobject 
                                                            jobject outValue,
                                                            jboolean resolve)
 {
+    if (outValue == NULL) {
+         jniThrowNullPointerException(env, "outValue");
+         return NULL;
+    }
     AssetManager* am = assetManagerForJavaObject(env, clazz);
     if (am == NULL) {
         return 0;
@@ -1958,7 +1962,7 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_getAssetLength },
     { "getAssetRemainingLength", "(I)J",
         (void*) android_content_AssetManager_getAssetRemainingLength },
-    { "addAssetPath",   "(Ljava/lang/String;)I",
+    { "addAssetPathNative", "(Ljava/lang/String;)I",
         (void*) android_content_AssetManager_addAssetPath },
     { "isUpToDate",     "()Z",
         (void*) android_content_AssetManager_isUpToDate },

@@ -18,6 +18,7 @@ package android.net;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Messenger;
 
 import com.android.internal.util.Preconditions;
 
@@ -154,5 +155,20 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     @Override
     public void setDependencyMet(boolean met) {
         // Base tracker doesn't handle dependencies
+    }
+
+    @Override
+    public void addStackedLink(LinkProperties link) {
+        mLinkProperties.addStackedLink(link);
+    }
+
+    @Override
+    public void removeStackedLink(LinkProperties link) {
+        mLinkProperties.removeStackedLink(link);
+    }
+
+    @Override
+    public void supplyMessenger(Messenger messenger) {
+        // not supported on this network
     }
 }

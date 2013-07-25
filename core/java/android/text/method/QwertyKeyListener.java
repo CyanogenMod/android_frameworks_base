@@ -186,6 +186,7 @@ public class QwertyKeyListener extends BaseKeyListener {
                     if (composed != 0) {
                         i = composed;
                         replace = true;
+                        dead = false;
                     }
                 }
 

@@ -25,15 +25,17 @@
 
 #include <cutils/compiler.h>
 
-#include "Extensions.h"
+#include "thread/TaskProcessor.h"
+#include "thread/TaskManager.h"
+
 #include "FontRenderer.h"
 #include "GammaFontRenderer.h"
 #include "TextureCache.h"
 #include "LayerCache.h"
+#include "RenderBufferCache.h"
 #include "GradientCache.h"
 #include "PatchCache.h"
 #include "ProgramCache.h"
-#include "ShapeCache.h"
 #include "PathCache.h"
 #include "TextDropShadowCache.h"
 #include "FboCache.h"
@@ -66,7 +68,6 @@ static const TextureVertex gMeshVertices[] = {
 static const GLsizei gMeshStride = sizeof(TextureVertex);
 static const GLsizei gVertexStride = sizeof(Vertex);
 static const GLsizei gAlphaVertexStride = sizeof(AlphaVertex);
-static const GLsizei gAAVertexStride = sizeof(AAVertex);
 static const GLsizei gMeshTextureOffset = 2 * sizeof(float);
 static const GLsizei gVertexAlphaOffset = 2 * sizeof(float);
 static const GLsizei gVertexAAWidthOffset = 2 * sizeof(float);
@@ -113,6 +114,11 @@ public:
      * Initialize caches.
      */
     void init();
+
+    /**
+     * Initialize global system properties.
+     */
+    bool initProperties();
 
     /**
      * Flush the cache.
@@ -170,6 +176,16 @@ public:
     bool unbindIndicesBuffer();
 
     /**
+     * Binds the specified buffer as the current GL unpack pixel buffer.
+     */
+    bool bindPixelBuffer(const GLuint buffer);
+
+    /**
+     * Resets the current unpack pixel buffer to 0 (default value.)
+     */
+    bool unbindPixelBuffer();
+
+    /**
      * Binds an attrib to the specified float vertex pointer.
      * Assumes a stride of gMeshStride and a size of 2.
      */
@@ -179,7 +195,7 @@ public:
      * Binds an attrib to the specified float vertex pointer.
      * Assumes a stride of gMeshStride and a size of 2.
      */
-    void bindTexCoordsVertexPointer(bool force, GLvoid* vertices);
+    void bindTexCoordsVertexPointer(bool force, GLvoid* vertices, GLsizei stride = gMeshStride);
 
     /**
      * Resets the vertex pointers.
@@ -188,7 +204,7 @@ public:
     void resetTexCoordsVertexPointer();
 
     void enableTexCoordsVertexArray();
-    void disbaleTexCoordsVertexArray();
+    void disableTexCoordsVertexArray();
 
     /**
      * Activate the specified texture unit. The texture unit must
@@ -210,7 +226,7 @@ public:
     bool disableScissor();
     void setScissorEnabled(bool enabled);
 
-    void startTiling(GLuint x, GLuint y, GLuint width, GLuint height, bool opaque);
+    void startTiling(GLuint x, GLuint y, GLuint width, GLuint height, bool discard);
     void endTiling();
 
     /**
@@ -236,27 +252,32 @@ public:
     Program* currentProgram;
     bool scissorEnabled;
 
+    bool drawDeferDisabled;
+    bool drawReorderDisabled;
+
     // VBO to draw with
     GLuint meshBuffer;
 
-    // GL extensions
-    Extensions extensions;
-
     // Misc
     GLint maxTextureSize;
+
+    // Debugging
     bool debugLayersUpdates;
     bool debugOverdraw;
 
+    enum StencilClipDebug {
+        kStencilHide,
+        kStencilShowHighlight,
+        kStencilShowRegion
+    };
+    StencilClipDebug debugStencilClip;
+
     TextureCache textureCache;
     LayerCache layerCache;
+    RenderBufferCache renderBufferCache;
     GradientCache gradientCache;
     ProgramCache programCache;
     PathCache pathCache;
-    RoundRectShapeCache roundRectShapeCache;
-    CircleShapeCache circleShapeCache;
-    OvalShapeCache ovalShapeCache;
-    RectShapeCache rectShapeCache;
-    ArcShapeCache arcShapeCache;
     PatchCache patchCache;
     TextDropShadowCache dropShadowCache;
     FboCache fboCache;
@@ -264,10 +285,10 @@ public:
 
     GammaFontRenderer* fontRenderer;
 
+    TaskManager tasks;
+
     Dither dither;
-#if STENCIL_BUFFER_SIZE
     Stencil stencil;
-#endif
 
     // Debug methods
     PFNGLINSERTEVENTMARKEREXTPROC eventMark;
@@ -281,7 +302,6 @@ private:
     void initFont();
     void initExtensions();
     void initConstraints();
-    void initProperties();
 
     static void eventMarkNull(GLsizei length, const GLchar* marker) { }
     static void startMarkNull(GLsizei length, const GLchar* marker) { }
@@ -297,9 +317,11 @@ private:
 
     GLuint mCurrentBuffer;
     GLuint mCurrentIndicesBuffer;
+    GLuint mCurrentPixelBuffer;
     void* mCurrentPositionPointer;
     GLsizei mCurrentPositionStride;
     void* mCurrentTexCoordsPointer;
+    GLsizei mCurrentTexCoordsStride;
 
     bool mTexCoordsArrayEnabled;
 
@@ -309,6 +331,8 @@ private:
     GLint mScissorY;
     GLint mScissorWidth;
     GLint mScissorHeight;
+
+    Extensions& mExtensions;
 
     // Used to render layers
     TextureVertex* mRegionMesh;

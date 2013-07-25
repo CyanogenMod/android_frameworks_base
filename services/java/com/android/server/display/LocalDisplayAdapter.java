@@ -25,7 +25,8 @@ import android.util.SparseArray;
 import android.view.Display;
 import android.view.DisplayEventReceiver;
 import android.view.Surface;
-import android.view.Surface.PhysicalDisplayInfo;
+import android.view.SurfaceControl;
+import android.view.SurfaceControl.PhysicalDisplayInfo;
 
 import java.io.PrintWriter;
 
@@ -39,15 +40,15 @@ final class LocalDisplayAdapter extends DisplayAdapter {
     private static final String TAG = "LocalDisplayAdapter";
 
     private static final int[] BUILT_IN_DISPLAY_IDS_TO_SCAN = new int[] {
-            Surface.BUILT_IN_DISPLAY_ID_MAIN,
-            Surface.BUILT_IN_DISPLAY_ID_HDMI,
+            SurfaceControl.BUILT_IN_DISPLAY_ID_MAIN,
+            SurfaceControl.BUILT_IN_DISPLAY_ID_HDMI,
     };
 
     private final SparseArray<LocalDisplayDevice> mDevices =
             new SparseArray<LocalDisplayDevice>();
     private HotplugDisplayEventReceiver mHotplugReceiver;
 
-    private final PhysicalDisplayInfo mTempPhys = new PhysicalDisplayInfo();
+    private final SurfaceControl.PhysicalDisplayInfo mTempPhys = new SurfaceControl.PhysicalDisplayInfo();
 
     // Called with SyncRoot lock held.
     public LocalDisplayAdapter(DisplayManagerService.SyncRoot syncRoot,
@@ -60,50 +61,57 @@ final class LocalDisplayAdapter extends DisplayAdapter {
         super.registerLocked();
 
         mHotplugReceiver = new HotplugDisplayEventReceiver(getHandler().getLooper());
-        scanDisplaysLocked();
+
+        for (int builtInDisplayId : BUILT_IN_DISPLAY_IDS_TO_SCAN) {
+            tryConnectDisplayLocked(builtInDisplayId);
+        }
     }
 
-    private void scanDisplaysLocked() {
-        for (int builtInDisplayId : BUILT_IN_DISPLAY_IDS_TO_SCAN) {
-            IBinder displayToken = Surface.getBuiltInDisplay(builtInDisplayId);
-            if (displayToken != null && Surface.getDisplayInfo(displayToken, mTempPhys)) {
-                LocalDisplayDevice device = mDevices.get(builtInDisplayId);
-                if (device == null) {
-                    // Display was added.
-                    device = new LocalDisplayDevice(displayToken, builtInDisplayId, mTempPhys);
-                    mDevices.put(builtInDisplayId, device);
-                    sendDisplayDeviceEventLocked(device, DISPLAY_DEVICE_EVENT_ADDED);
-                } else if (device.updatePhysicalDisplayInfoLocked(mTempPhys)) {
-                    // Display properties changed.
-                    sendDisplayDeviceEventLocked(device, DISPLAY_DEVICE_EVENT_CHANGED);
-                }
-            } else {
-                LocalDisplayDevice device = mDevices.get(builtInDisplayId);
-                if (device != null) {
-                    // Display was removed.
-                    mDevices.remove(builtInDisplayId);
-                    sendDisplayDeviceEventLocked(device, DISPLAY_DEVICE_EVENT_REMOVED);
-                }
+    private void tryConnectDisplayLocked(int builtInDisplayId) {
+        IBinder displayToken = SurfaceControl.getBuiltInDisplay(builtInDisplayId);
+        if (displayToken != null && SurfaceControl.getDisplayInfo(displayToken, mTempPhys)) {
+            LocalDisplayDevice device = mDevices.get(builtInDisplayId);
+            if (device == null) {
+                // Display was added.
+                device = new LocalDisplayDevice(displayToken, builtInDisplayId, mTempPhys);
+                mDevices.put(builtInDisplayId, device);
+                sendDisplayDeviceEventLocked(device, DISPLAY_DEVICE_EVENT_ADDED);
+            } else if (device.updatePhysicalDisplayInfoLocked(mTempPhys)) {
+                // Display properties changed.
+                sendDisplayDeviceEventLocked(device, DISPLAY_DEVICE_EVENT_CHANGED);
             }
+        } else {
+            // The display is no longer available. Ignore the attempt to add it.
+            // If it was connected but has already been disconnected, we'll get a
+            // disconnect event that will remove it from mDevices.
+        }
+    }
+
+    private void tryDisconnectDisplayLocked(int builtInDisplayId) {
+        LocalDisplayDevice device = mDevices.get(builtInDisplayId);
+        if (device != null) {
+            // Display was removed.
+            mDevices.remove(builtInDisplayId);
+            sendDisplayDeviceEventLocked(device, DISPLAY_DEVICE_EVENT_REMOVED);
         }
     }
 
     private final class LocalDisplayDevice extends DisplayDevice {
         private final int mBuiltInDisplayId;
-        private final PhysicalDisplayInfo mPhys;
+        private final SurfaceControl.PhysicalDisplayInfo mPhys;
 
         private DisplayDeviceInfo mInfo;
         private boolean mHavePendingChanges;
         private boolean mBlanked;
 
         public LocalDisplayDevice(IBinder displayToken, int builtInDisplayId,
-                PhysicalDisplayInfo phys) {
+                SurfaceControl.PhysicalDisplayInfo phys) {
             super(LocalDisplayAdapter.this, displayToken);
             mBuiltInDisplayId = builtInDisplayId;
-            mPhys = new PhysicalDisplayInfo(phys);
+            mPhys = new SurfaceControl.PhysicalDisplayInfo(phys);
         }
 
-        public boolean updatePhysicalDisplayInfoLocked(PhysicalDisplayInfo phys) {
+        public boolean updatePhysicalDisplayInfoLocked(SurfaceControl.PhysicalDisplayInfo phys) {
             if (!mPhys.equals(phys)) {
                 mPhys.copyFrom(phys);
                 mHavePendingChanges = true;
@@ -135,7 +143,7 @@ final class LocalDisplayAdapter extends DisplayAdapter {
                             | DisplayDeviceInfo.FLAG_SUPPORTS_PROTECTED_BUFFERS;
                 }
 
-                if (mBuiltInDisplayId == Surface.BUILT_IN_DISPLAY_ID_MAIN) {
+                if (mBuiltInDisplayId == SurfaceControl.BUILT_IN_DISPLAY_ID_MAIN) {
                     mInfo.name = getContext().getResources().getString(
                             com.android.internal.R.string.display_manager_built_in_display_name);
                     mInfo.flags |= DisplayDeviceInfo.FLAG_DEFAULT_DISPLAY
@@ -165,13 +173,13 @@ final class LocalDisplayAdapter extends DisplayAdapter {
         @Override
         public void blankLocked() {
             mBlanked = true;
-            Surface.blankDisplay(getDisplayTokenLocked());
+            SurfaceControl.blankDisplay(getDisplayTokenLocked());
         }
 
         @Override
         public void unblankLocked() {
             mBlanked = false;
-            Surface.unblankDisplay(getDisplayTokenLocked());
+            SurfaceControl.unblankDisplay(getDisplayTokenLocked());
         }
 
         @Override
@@ -191,7 +199,11 @@ final class LocalDisplayAdapter extends DisplayAdapter {
         @Override
         public void onHotplug(long timestampNanos, int builtInDisplayId, boolean connected) {
             synchronized (getSyncRoot()) {
-                scanDisplaysLocked();
+                if (connected) {
+                    tryConnectDisplayLocked(builtInDisplayId);
+                } else {
+                    tryDisconnectDisplayLocked(builtInDisplayId);
+                }
             }
         }
     }

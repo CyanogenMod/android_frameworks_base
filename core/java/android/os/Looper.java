@@ -50,7 +50,7 @@ import android.util.PrefixPrinter;
   *      }
   *  }</pre>
   */
-public class Looper {
+public final class Looper {
     private static final String TAG = "Looper";
 
     // sThreadLocal.get() will return null unless you've called prepare().
@@ -192,12 +192,47 @@ public class Looper {
     }
 
     /**
+     * Returns true if the current thread is this looper's thread.
+     * @hide
+     */
+    public boolean isCurrentThread() {
+        return Thread.currentThread() == mThread;
+    }
+
+    /**
      * Quits the looper.
+     * <p>
+     * Causes the {@link #loop} method to terminate without processing any
+     * more messages in the message queue.
+     * </p><p>
+     * Any attempt to post messages to the queue after the looper is asked to quit will fail.
+     * For example, the {@link Handler#sendMessage(Message)} method will return false.
+     * </p><p class="note">
+     * Using this method may be unsafe because some messages may not be delivered
+     * before the looper terminates.  Consider using {@link #quitSafely} instead to ensure
+     * that all pending work is completed in an orderly manner.
+     * </p>
      *
-     * Causes the {@link #loop} method to terminate as soon as possible.
+     * @see #quitSafely
      */
     public void quit() {
-        mQueue.quit();
+        mQueue.quit(false);
+    }
+
+    /**
+     * Quits the looper safely.
+     * <p>
+     * Causes the {@link #loop} method to terminate as soon as all remaining messages
+     * in the message queue that are already due to be delivered have been handled.
+     * However pending delayed messages with due times in the future will not be
+     * delivered before the loop terminates.
+     * </p><p>
+     * Any attempt to post messages to the queue after the looper is asked to quit will fail.
+     * For example, the {@link Handler#sendMessage(Message)} method will return false.
+     * </p>
+     */
+    public void quitSafely() {
+        mQueue.quit(true);
     }
 
     /**
@@ -223,7 +258,7 @@ public class Looper {
      *
      * @hide
      */
-    public final int postSyncBarrier() {
+    public int postSyncBarrier() {
         return mQueue.enqueueSyncBarrier(SystemClock.uptimeMillis());
     }
 
@@ -238,7 +273,7 @@ public class Looper {
      *
      * @hide
      */
-    public final void removeSyncBarrier(int token) {
+    public void removeSyncBarrier(int token) {
         mQueue.removeSyncBarrier(token);
     }
 

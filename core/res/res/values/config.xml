@@ -280,8 +280,6 @@
     <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
     <bool translatable="false" name="config_wifi_dual_band_support">false</bool>
 
-    <!-- Boolean indicating whether the wifi chipset has p2p support -->
-    <bool translatable="false" name="config_wifi_p2p_support">false</bool>
     <!-- Device type information conforming to Annex B format in WiFi Direct specification.
          The default represents a dual-mode smartphone -->
     <string translatable="false" name="config_wifi_p2p_device_type">10-0050F204-5</string>
@@ -353,6 +351,12 @@
     <!-- The number of degrees to rotate the display when the device is in a car dock.
          A value of -1 means no change in orientation by default. -->
     <integer name="config_carDockRotation">-1</integer>
+
+    <!-- The number of degrees to rotate the display when the device has HDMI connected
+         but is not in a dock.  A value of -1 means no change in orientation by default.
+         Use -1 except on older devices whose Hardware Composer HAL does not
+         provide full support for multiple displays.  -->
+    <integer name="config_undockedHdmiRotation">-1</integer>
 
     <!-- Control the default UI mode type to use when there is no other type override
          happening.  One of the following values (See Configuration.java):
@@ -558,12 +562,20 @@
 
     <!-- Control the behavior when the user long presses the home button.
             0 - Nothing
-            1 - Recent apps dialog
-            2 - Recent apps view in SystemUI
+            1 - Recent apps view in SystemUI
+            2 - Launch assist intent
          This needs to match the constants in
          policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
     -->
-    <integer name="config_longPressOnHomeBehavior">2</integer>
+    <integer name="config_longPressOnHomeBehavior">1</integer>
+
+    <!-- Control the behavior when the user double-taps the home button.
+            0 - Nothing
+            1 - Recent apps view in SystemUI
+         This needs to match the constants in
+         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+    -->
+    <integer name="config_doubleTapOnHomeBehavior">0</integer>
 
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
          The N entries of this array define N + 1 control points as follows:
@@ -651,6 +663,60 @@
     <!-- True if WallpaperService is enabled -->
     <bool name="config_enableWallpaperService">true</bool>
 
+    <!-- Whether to enable network location overlay which allows network
+         location provider to be replaced by an app at run-time. When disabled,
+         only the config_networkLocationProviderPackageName package will be
+         searched for network location provider, otherwise packages whose
+         signature matches the signatures of config_locationProviderPackageNames
+         will be searched, and the service with the highest version number will
+         be picked. Anyone who wants to disable the overlay mechanism can set it
+         to false.
+         -->
+    <bool name="config_enableNetworkLocationOverlay" translatable="false">true</bool>
+    <!-- Package name providing network location support. Used only when
+         config_enableNetworkLocationOverlay is false. -->
+    <string name="config_networkLocationProviderPackageName" translatable="false">@null</string>
+
+    <!-- Whether to enable fused location provider overlay which allows fused
+         location provider to be replaced by an app at run-time. When disabled,
+         only the config_fusedLocationProviderPackageName package will be
+         searched for fused location provider, otherwise packages whose
+         signature matches the signatures of config_locationProviderPackageNames
+         will be searched, and the service with the highest version number will
+         be picked. Anyone who wants to disable the overlay mechanism can set it
+         to false.
+         -->
+    <bool name="config_enableFusedLocationOverlay" translatable="false">true</bool>
+    <!-- Package name providing fused location support. Used only when
+         config_enableFusedLocationOverlay is false. -->
+    <string name="config_fusedLocationProviderPackageName" translatable="false">com.android.location.fused</string>
+
+    <!-- Whether to enable geocoder overlay which allows geocoder to be replaced
+         by an app at run-time. When disabled, only the
+         config_geocoderProviderPackageName package will be searched for
+         geocoder, otherwise packages whose signature matches the signatures of
+         config_locationProviderPackageNames will be searched, and the service
+         with the highest version number will be picked. Anyone who wants to
+         disable the overlay mechanism can set it to false.
+         -->
+    <bool name="config_enableGeocoderOverlay" translatable="false">true</bool>
+    <!-- Package name providing geocoder API support. Used only when
+         config_enableGeocoderOverlay is false. -->
+    <string name="config_geocoderProviderPackageName" translatable="false">@null</string>
+
+    <!-- Whether to enable geofence overlay which allows geofence to be replaced
+         by an app at run-time. When disabled, only the
+         config_geofenceProviderPackageName package will be searched for
+         geofence implementation, otherwise packages whose signature matches the
+         signatures of config_locationProviderPackageNames will be searched, and
+         the service with the highest version number will be picked. Anyone who
+         wants to disable the overlay mechanism can set it to false.
+         -->
+    <bool name="config_enableGeofenceOverlay" translatable="false">true</bool>
+    <!-- Package name providing geofence API support. Used only when
+         config_enableGeofenceOverlay is false. -->
+    <string name="config_geofenceProviderPackageName" translatable="false">@null</string>
+
     <!-- Package name(s) containing location provider support.
          These packages can contain services implementing location providers,
          such as the Geocode Provider, Network Location Provider, and
@@ -729,6 +795,15 @@
 
     <!-- IP address of the dns server to use if nobody else suggests one -->
     <string name="config_default_dns_server" translatable="false">8.8.8.8</string>
+
+    <!-- The default mobile provisioning url. Empty by default, maybe overridden by
+         an mcc/mnc specific config.xml -->
+    <string name="mobile_provisioning_url" translatable="false"></string>
+
+    <!-- This url is used as the default url when redirection is detected. Any
+         should work as all url's get redirected. But maybe overridden by
+         if needed. -->
+    <string name="mobile_redirected_provisioning_url" translatable="false">http://google.com</string>
 
     <!-- The default character set for GsmAlphabet -->
     <!-- Empty string means MBCS is not considered -->
@@ -914,6 +989,16 @@
 
     <!-- Remote server that can provide NTP responses. -->
     <string translatable="false" name="config_ntpServer">2.android.pool.ntp.org</string>
+    <!-- Normal polling frequency in milliseconds -->
+    <integer name="config_ntpPollingInterval">864000000</integer>
+    <!-- Try-again polling interval in milliseconds, in case the network request failed -->
+    <integer name="config_ntpPollingIntervalShorter">60000</integer>
+    <!-- Number of times to try again with the shorter interval, before backing
+         off until the normal polling interval. A value < 0 indicates infinite. -->
+    <integer name="config_ntpRetry">3</integer>
+    <!-- If the time difference is greater than this threshold in milliseconds,
+         then update the time. -->
+    <integer name="config_ntpThreshold">5000</integer>
     <!-- Timeout to wait for NTP server response. -->
     <integer name="config_ntpTimeout">20000</integer>
 
@@ -1067,6 +1152,38 @@
     <!-- Flag indicating if the speed up audio on mt call code should be executed -->
     <bool name="config_speed_up_audio_on_mt_calls">false</bool>
 
+    <!-- Class name of the framework account picker activity.
+         Can be customized for other product types -->
+    <string name="config_chooseAccountActivity"
+            >android/android.accounts.ChooseAccountActivity</string>
+    <!-- Class name of the account type and account picker activity.
+         Can be customized for other product types -->
+    <string name="config_chooseTypeAndAccountActivity"
+            >android/android.accounts.ChooseTypeAndAccountActivity</string>
+
+    <!-- Apps that are authorized to access shared accounts, overridden by product overlays -->
+    <string name="config_appsAuthorizedForSharedAccounts">;com.android.settings;</string>
+
+    <!-- Flag indicating that the media framework should not allow changes or mute on any
+         stream or master volumes. -->
+    <bool name="config_useFixedVolume">false</bool>
+
+    <!-- The list of IMEs which should be disabled until used.
+         This function suppresses update notifications for these pre-installed apps.
+         We need to set this configuration carefully that they should not have functionarities
+         other than "IME" or "Spell Checker". In InputMethodManagerService,
+         the listed IMEs are disabled until used when all of the following conditions are met.
+         1. Not selected as an enabled IME in the Settings
+         2. Not selected as a spell checker in the Settings
+         3. Installed
+         4. A pre-installed IME
+         5. Not enabled
+         And the disabled_until_used state for an IME is released by InputMethodManagerService
+         when the IME is selected as an enabled IME. -->
+    <string-array name="config_disabledUntilUsedPreinstalledImes" translatable="false">
+        <item>com.android.inputmethod.latin</item>
+    </string-array>
+
     <!-- True will enable the electron beam screen-off animation. -->
     <bool name="config_screenOffAnimation">true</bool>
 
@@ -1150,4 +1267,5 @@
     <!-- True if the pie service should be started at system start. This is must be true
          to support pie controls. -->
     <bool name="config_allowPieService">true</bool>
+
 </resources>

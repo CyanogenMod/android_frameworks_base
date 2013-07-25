@@ -509,10 +509,6 @@ status_t ResStringPool::getError() const
 void ResStringPool::uninit()
 {
     mError = NO_INIT;
-    if (mOwnedData) {
-        free(mOwnedData);
-        mOwnedData = NULL;
-    }
     if (mHeader != NULL && mCache != NULL) {
         for (size_t x = 0; x < mHeader->stringCount; x++) {
             if (mCache[x] != NULL) {
@@ -522,6 +518,10 @@ void ResStringPool::uninit()
         }
         free(mCache);
         mCache = NULL;
+    }
+    if (mOwnedData) {
+        free(mOwnedData);
+        mOwnedData = NULL;
     }
 }
 
@@ -1211,6 +1211,10 @@ status_t ResXMLTree::setTo(const void* data, size_t size, bool copyData)
 {
     uninit();
     mEventCode = START_DOCUMENT;
+
+    if (!data || !size) {
+        return (mError=BAD_TYPE);
+    }
 
     if (copyData) {
         mOwnedData = malloc(size);

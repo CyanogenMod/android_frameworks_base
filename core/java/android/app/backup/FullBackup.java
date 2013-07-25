@@ -46,6 +46,7 @@ public class FullBackup {
     public static final String DATA_TREE_TOKEN = "f";
     public static final String DATABASE_TREE_TOKEN = "db";
     public static final String SHAREDPREFS_TREE_TOKEN = "sp";
+    public static final String MANAGED_EXTERNAL_TREE_TOKEN = "ef";
     public static final String CACHE_TREE_TOKEN = "c";
     public static final String SHARED_STORAGE_TOKEN = "shared";
 
@@ -88,7 +89,7 @@ public class FullBackup {
      *    last modification time of the output file.  if the {@code mode} parameter is
      *    negative then this parameter will be ignored.
      * @param outFile Location within the filesystem to place the data.  This must point
-     *    to a location that is writeable by the caller, prefereably using an absolute path.
+     *    to a location that is writeable by the caller, preferably using an absolute path.
      * @throws IOException
      */
     static public void restoreFile(ParcelFileDescriptor data,

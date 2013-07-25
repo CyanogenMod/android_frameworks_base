@@ -45,10 +45,12 @@ import android.os.Environment;
 import android.os.Process;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.Surface;
+import android.view.SurfaceControl;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -72,6 +74,15 @@ class SaveImageInBackgroundData {
     Runnable finisher;
     int iconSize;
     int result;
+
+    void clearImage() {
+        image = null;
+        imageUri = null;
+        iconSize = 0;
+    }
+    void clearContext() {
+        context = null;
+    }
 }
 
 /**
@@ -79,17 +90,22 @@ class SaveImageInBackgroundData {
  */
 class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Void,
         SaveImageInBackgroundData> {
+    private static final String TAG = "SaveImageInBackgroundTask";
+
     private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
     private static final String SCREENSHOT_FILE_NAME_TEMPLATE = "Screenshot_%s.png";
-    private static final String SCREENSHOT_FILE_PATH_TEMPLATE = "%s/%s/%s";
+    private static final String SCREENSHOT_SHARE_SUBJECT_TEMPLATE = "Screenshot (%s)";
 
-    private int mNotificationId;
-    private NotificationManager mNotificationManager;
-    private Notification.Builder mNotificationBuilder;
-    private String mImageFileName;
-    private String mImageFilePath;
-    private long mImageTime;
-    private BigPictureStyle mNotificationStyle;
+    private final int mNotificationId;
+    private final NotificationManager mNotificationManager;
+    private final Notification.Builder mNotificationBuilder;
+    private final File mScreenshotDir;
+    private final String mImageFileName;
+    private final String mImageFilePath;
+    private final long mImageTime;
+    private final BigPictureStyle mNotificationStyle;
+    private final int mImageWidth;
+    private final int mImageHeight;
 
     // WORKAROUND: We want the same notification across screenshots that we update so that we don't
     // spam a user's notification drawer.  However, we only show the ticker for the saving state
@@ -105,18 +121,18 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
         // Prepare all the output metadata
         mImageTime = System.currentTimeMillis();
         String imageDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(mImageTime));
-        String imageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES).getAbsolutePath();
         mImageFileName = String.format(SCREENSHOT_FILE_NAME_TEMPLATE, imageDate);
-        mImageFilePath = String.format(SCREENSHOT_FILE_PATH_TEMPLATE, imageDir,
-                SCREENSHOTS_DIR_NAME, mImageFileName);
+
+        mScreenshotDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), SCREENSHOTS_DIR_NAME);
+        mImageFilePath = new File(mScreenshotDir, mImageFileName).getAbsolutePath();
 
         // Create the large notification icon
-        int imageWidth = data.image.getWidth();
-        int imageHeight = data.image.getHeight();
+        mImageWidth = data.image.getWidth();
+        mImageHeight = data.image.getHeight();
         int iconSize = data.iconSize;
 
-        final int shortSide = imageWidth < imageHeight ? imageWidth : imageHeight;
+        final int shortSide = mImageWidth < mImageHeight ? mImageWidth : mImageHeight;
         Bitmap preview = Bitmap.createBitmap(shortSide, shortSide, data.image.getConfig());
         Canvas c = new Canvas(preview);
         Paint paint = new Paint();
@@ -124,10 +140,11 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
         desat.setSaturation(0.25f);
         paint.setColorFilter(new ColorMatrixColorFilter(desat));
         Matrix matrix = new Matrix();
-        matrix.postTranslate((shortSide - imageWidth) / 2,
-                            (shortSide - imageHeight) / 2);
+        matrix.postTranslate((shortSide - mImageWidth) / 2,
+                            (shortSide - mImageHeight) / 2);
         c.drawBitmap(data.image, matrix, paint);
         c.drawColor(0x40FFFFFF);
+        c.setBitmap(null);
 
         Bitmap croppedIcon = Bitmap.createScaledBitmap(preview, iconSize, iconSize, true);
 
@@ -162,6 +179,11 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
     @Override
     protected SaveImageInBackgroundData doInBackground(SaveImageInBackgroundData... params) {
         if (params.length != 1) return null;
+        if (isCancelled()) {
+            params[0].clearImage();
+            params[0].clearContext();
+            return null;
+        }
 
         // By default, AsyncTask sets the worker thread to have background thread priority, so bump
         // it back up so that we save a little quicker.
@@ -172,6 +194,9 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
         Resources r = context.getResources();
 
         try {
+            // Create screenshot directory if it doesn't exist
+            mScreenshotDir.mkdirs();
+
             // Save the screenshot to the MediaStore
             ContentValues values = new ContentValues();
             ContentResolver resolver = context.getContentResolver();
@@ -182,11 +207,17 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
             values.put(MediaStore.Images.ImageColumns.DATE_ADDED, mImageTime);
             values.put(MediaStore.Images.ImageColumns.DATE_MODIFIED, mImageTime);
             values.put(MediaStore.Images.ImageColumns.MIME_TYPE, "image/png");
+            values.put(MediaStore.Images.ImageColumns.WIDTH, mImageWidth);
+            values.put(MediaStore.Images.ImageColumns.HEIGHT, mImageHeight);
             Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
+            String subjectDate = new SimpleDateFormat("hh:mma, MMM dd, yyyy")
+                .format(new Date(mImageTime));
+            String subject = String.format(SCREENSHOT_SHARE_SUBJECT_TEMPLATE, subjectDate);
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("image/png");
             sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
 
             Intent chooserIntent = Intent.createChooser(sharingIntent, null);
             chooserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK 
@@ -208,11 +239,18 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
             resolver.update(uri, values, null, null);
 
             params[0].imageUri = uri;
+            params[0].image = null;
             params[0].result = 0;
         } catch (Exception e) {
             // IOException/UnsupportedOperationException may be thrown if external storage is not
             // mounted
+            params[0].clearImage();
             params[0].result = 1;
+        }
+
+        // Recycle the bitmap data
+        if (image != null) {
+            image.recycle();
         }
 
         return params[0];
@@ -220,6 +258,13 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
 
     @Override
     protected void onPostExecute(SaveImageInBackgroundData params) {
+        if (isCancelled()) {
+            params.finisher.run();
+            params.clearImage();
+            params.clearContext();
+            return;
+        }
+
         if (params.result > 0) {
             // Show a message that we've failed to save the image to disk
             GlobalScreenshot.notifyScreenshotError(params.context, mNotificationManager);
@@ -244,6 +289,7 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
             mNotificationManager.notify(mNotificationId, n);
         }
         params.finisher.run();
+        params.clearContext();
     }
 }
 
@@ -254,6 +300,8 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
  *     type of gallery?
  */
 class GlobalScreenshot {
+    private static final String TAG = "GlobalScreenshot";
+
     private static final int SCREENSHOT_NOTIFICATION_ID = 789;
     private static final int SCREENSHOT_FLASH_TO_PEAK_DURATION = 130;
     private static final int SCREENSHOT_DROP_IN_DURATION = 430;
@@ -287,6 +335,8 @@ class GlobalScreenshot {
     private int mNotificationIconSize;
     private float mBgPadding;
     private float mBgPaddingScale;
+
+    private AsyncTask<SaveImageInBackgroundData, Void, SaveImageInBackgroundData> mSaveInBgTask;
 
     private MediaActionSound mCameraSound;
 
@@ -354,7 +404,10 @@ class GlobalScreenshot {
         data.image = mScreenBitmap;
         data.iconSize = mNotificationIconSize;
         data.finisher = finisher;
-        new SaveImageInBackgroundTask(mContext, data, mNotificationManager,
+        if (mSaveInBgTask != null) {
+            mSaveInBgTask.cancel(false);
+        }
+        mSaveInBgTask = new SaveImageInBackgroundTask(mContext, data, mNotificationManager,
                 SCREENSHOT_NOTIFICATION_ID).execute(data);
     }
 
@@ -396,7 +449,7 @@ class GlobalScreenshot {
         }
 
         // Take the screenshot
-        mScreenBitmap = Surface.screenshot((int) dims[0], (int) dims[1]);
+        mScreenBitmap = SurfaceControl.screenshot((int) dims[0], (int) dims[1]);
         if (mScreenBitmap == null) {
             notifyScreenshotError(mContext, mNotificationManager);
             finisher.run();
@@ -413,6 +466,8 @@ class GlobalScreenshot {
             c.translate(-dims[0] / 2, -dims[1] / 2);
             c.drawBitmap(mScreenBitmap, 0, 0, null);
             c.setBitmap(null);
+            // Recycle the previous bitmap
+            mScreenBitmap.recycle();
             mScreenBitmap = ss;
         }
 
@@ -438,6 +493,7 @@ class GlobalScreenshot {
         // Setup the animation with the screenshot just taken
         if (mScreenshotAnimation != null) {
             mScreenshotAnimation.end();
+            mScreenshotAnimation.removeAllListeners();
         }
 
         mWindowManager.addView(mScreenshotLayout, mWindowLayoutParams);
@@ -452,6 +508,10 @@ class GlobalScreenshot {
                 // Save the screenshot once we have a bit of time now
                 saveScreenshotInWorkerThread(finisher);
                 mWindowManager.removeView(mScreenshotLayout);
+
+                // Clear any references to the bitmap
+                mScreenBitmap = null;
+                mScreenshotView.setImageBitmap(null);
             }
         });
         mScreenshotLayout.post(new Runnable() {
@@ -603,14 +663,17 @@ class GlobalScreenshot {
         Resources r = context.getResources();
 
         // Clear all existing notification, compose the new notification and show it
-        Notification n = new Notification.Builder(context)
+        Notification.Builder b = new Notification.Builder(context)
             .setTicker(r.getString(R.string.screenshot_failed_title))
             .setContentTitle(r.getString(R.string.screenshot_failed_title))
             .setContentText(r.getString(R.string.screenshot_failed_text))
             .setSmallIcon(R.drawable.stat_notify_image_error)
             .setWhen(System.currentTimeMillis())
-            .setAutoCancel(true)
-            .getNotification();
+            .setAutoCancel(true);
+        Notification n =
+            new Notification.BigTextStyle(b)
+                .bigText(r.getString(R.string.screenshot_failed_text))
+                .build();
         nManager.notify(SCREENSHOT_NOTIFICATION_ID, n);
     }
 }

@@ -31,6 +31,7 @@ public class WebViewClient {
      * proper handler for the url. If WebViewClient is provided, return true
      * means the host application handles the url, while return false means the
      * current WebView handles the url.
+     * This method is not called for requests using the POST "method".
      *
      * @param view The WebView that is initiating the callback.
      * @param url The url to be loaded.
@@ -82,9 +83,9 @@ public class WebViewClient {
      * Notify the host application of a resource request and allow the
      * application to return the data.  If the return value is null, the WebView
      * will continue to load the resource as usual.  Otherwise, the return
-     * response and data will be used.  NOTE: This method is called by the
-     * network thread so clients should exercise caution when accessing private
-     * data.
+     * response and data will be used.  NOTE: This method is called on a thread
+     * other than the UI thread so clients should exercise caution
+     * when accessing private data or the view system.
      *
      * @param view The {@link android.webkit.WebView} that is requesting the
      *             resource.
@@ -213,7 +214,7 @@ public class WebViewClient {
      * @param handler the HttpAuthHandler used to set the WebView's response
      * @param host the host requiring authentication
      * @param realm the realm for which authentication is required
-     * @see Webview#getHttpAuthUsernamePassword
+     * @see WebView#getHttpAuthUsernamePassword
      */
     public void onReceivedHttpAuthRequest(WebView view,
             HttpAuthHandler handler, String host, String realm) {

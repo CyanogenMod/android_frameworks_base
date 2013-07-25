@@ -323,6 +323,15 @@ public class ViewPropertyAnimator {
     }
 
     /**
+     * Returns the timing interpolator that this animation uses.
+     *
+     * @return The timing interpolator for this animation.
+     */
+    public TimeInterpolator getInterpolator() {
+        return null;
+    }
+
+    /**
      * Sets a listener for events in the underlying Animators that run the property
      * animations.
      *
@@ -829,7 +838,7 @@ public class ViewPropertyAnimator {
         NameValuesHolder nameValuePair = new NameValuesHolder(constantName, startValue, byValue);
         mPendingAnimations.add(nameValuePair);
         mView.removeCallbacks(mAnimationStarter);
-        mView.post(mAnimationStarter);
+        mView.postOnAnimation(mAnimationStarter);
     }
 
     /**

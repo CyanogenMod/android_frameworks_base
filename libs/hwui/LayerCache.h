@@ -19,7 +19,6 @@
 
 #include "Debug.h"
 #include "Layer.h"
-#include "Properties.h"
 #include "utils/SortedList.h"
 
 namespace android {
@@ -54,7 +53,7 @@ public:
      * size of the cache goes down.
      *
      * @param width The desired width of the layer
-     * @param width The desired height of the layer
+     * @param height The desired height of the layer
      */
     Layer* get(const uint32_t width, const uint32_t height);
 
@@ -72,17 +71,6 @@ public:
      * Clears the cache. This causes all layers to be deleted.
      */
     void clear();
-    /**
-     * Resize the specified layer if needed.
-     *
-     * @param layer The layer to resize
-     * @param width The new width of the layer
-     * @param height The new height of the layer
-     *
-     * @return True if the layer was resized or nothing happened, false if
-     *         a failure occurred during the resizing operation
-     */
-    bool resize(Layer* layer, const uint32_t width, const uint32_t height);
 
     /**
      * Sets the maximum size of the cache in bytes.
@@ -103,37 +91,44 @@ public:
     void dump();
 
 private:
-    void deleteLayer(Layer* layer);
-
     struct LayerEntry {
         LayerEntry():
             mLayer(NULL), mWidth(0), mHeight(0) {
         }
 
         LayerEntry(const uint32_t layerWidth, const uint32_t layerHeight): mLayer(NULL) {
-            mWidth = uint32_t(ceilf(layerWidth / float(LAYER_SIZE)) * LAYER_SIZE);
-            mHeight = uint32_t(ceilf(layerHeight / float(LAYER_SIZE)) * LAYER_SIZE);
+            mWidth = Layer::computeIdealWidth(layerWidth);
+            mHeight = Layer::computeIdealHeight(layerHeight);
         }
 
         LayerEntry(Layer* layer):
             mLayer(layer), mWidth(layer->getWidth()), mHeight(layer->getHeight()) {
         }
 
-        bool operator<(const LayerEntry& rhs) const {
-            if (mWidth == rhs.mWidth) {
-                return mHeight < rhs.mHeight;
-            }
-            return mWidth < rhs.mWidth;
+        static int compare(const LayerEntry& lhs, const LayerEntry& rhs);
+
+        bool operator==(const LayerEntry& other) const {
+            return compare(*this, other) == 0;
         }
 
-        bool operator==(const LayerEntry& rhs) const {
-            return mWidth == rhs.mWidth && mHeight == rhs.mHeight;
+        bool operator!=(const LayerEntry& other) const {
+            return compare(*this, other) != 0;
+        }
+
+        friend inline int strictly_order_type(const LayerEntry& lhs, const LayerEntry& rhs) {
+            return LayerEntry::compare(lhs, rhs) < 0;
+        }
+
+        friend inline int compare_type(const LayerEntry& lhs, const LayerEntry& rhs) {
+            return LayerEntry::compare(lhs, rhs);
         }
 
         Layer* mLayer;
         uint32_t mWidth;
         uint32_t mHeight;
     }; // struct LayerEntry
+
+    void deleteLayer(Layer* layer);
 
     SortedList<LayerEntry> mCache;
 

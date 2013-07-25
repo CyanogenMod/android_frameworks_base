@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.ActivityManager;
+import android.app.AppOpsManager;
 import android.app.backup.BackupManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentProvider;
@@ -43,6 +44,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.DropBoxManager;
 import android.os.FileObserver;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemProperties;
@@ -107,6 +109,9 @@ public class SettingsProvider extends ContentProvider {
      */
     static final HashSet<String> sSecureGlobalKeys;
     static final HashSet<String> sSystemGlobalKeys;
+
+    private static final String DROPBOX_TAG_USERLOG = "restricted_profile_ssaid";
+
     static {
         // Keys (name column) from the 'secure' table that are now in the owner user's 'global'
         // table, shared across all users
@@ -322,8 +327,9 @@ public class SettingsProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mBackupManager = new BackupManager(getContext());
-        mUserManager = (UserManager) getContext().getSystemService(Context.USER_SERVICE);
+        mUserManager = UserManager.get(getContext());
 
+        setAppOps(AppOpsManager.OP_NONE, AppOpsManager.OP_WRITE_SETTINGS);
         establishDbTracking(UserHandle.USER_OWNER);
 
         IntentFilter userFilter = new IntentFilter();
@@ -485,6 +491,16 @@ public class SettingsProvider extends ContentProvider {
                 }
                 Slog.d(TAG, "Generated and saved new ANDROID_ID [" + newAndroidIdValue
                         + "] for user " + userHandle);
+                // Write a dropbox entry if it's a restricted profile
+                if (mUserManager.getUserInfo(userHandle).isRestricted()) {
+                    DropBoxManager dbm = (DropBoxManager)
+                            getContext().getSystemService(Context.DROPBOX_SERVICE);
+                    if (dbm != null && dbm.isTagEnabled(DROPBOX_TAG_USERLOG)) {
+                        dbm.addText(DROPBOX_TAG_USERLOG, System.currentTimeMillis()
+                                + ",restricted_profile_ssaid,"
+                                + newAndroidIdValue + "\n");
+                    }
+                }
             }
             return true;
         } finally {
@@ -545,7 +561,8 @@ public class SettingsProvider extends ContentProvider {
      * Fast path that avoids the use of chatty remoted Cursors.
      */
     @Override
-    public Bundle call(String method, String request, Bundle args) {
+    public Bundle callFromPackage(String callingPackage, String method, String request,
+            Bundle args) {
         int callingUser = UserHandle.getCallingUserId();
         if (args != null) {
             int reqUser = args.getInt(Settings.CALL_METHOD_USER_KEY, callingUser);
@@ -587,7 +604,22 @@ public class SettingsProvider extends ContentProvider {
         // Put methods - new value is in the args bundle under the key named by
         // the Settings.NameValueTable.VALUE static.
         final String newValue = (args == null)
-        ? null : args.getString(Settings.NameValueTable.VALUE);
+                ? null : args.getString(Settings.NameValueTable.VALUE);
+
+        // Framework can't do automatic permission checking for calls, so we need
+        // to do it here.
+        if (getContext().checkCallingOrSelfPermission(android.Manifest.permission.WRITE_SETTINGS)
+                != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    String.format("Permission denial: writing to settings requires %1$s",
+                                  android.Manifest.permission.WRITE_SETTINGS));
+        }
+
+        // Also need to take care of app op.
+        if (getAppOpsManager().noteOp(AppOpsManager.OP_WRITE_SETTINGS, Binder.getCallingUid(),
+                callingPackage) != AppOpsManager.MODE_ALLOWED) {
+            return null;
+        }
 
         final ContentValues values = new ContentValues();
         values.put(Settings.NameValueTable.NAME, request);
@@ -758,7 +790,7 @@ public class SettingsProvider extends ContentProvider {
      * @returns whether the database needs to be updated or not, also modifying
      *     'initialValues' if needed.
      */
-    private boolean parseProviderList(Uri url, ContentValues initialValues) {
+    private boolean parseProviderList(Uri url, ContentValues initialValues, int desiredUser) {
         String value = initialValues.getAsString(Settings.Secure.VALUE);
         String newProviders = null;
         if (value != null && value.length() > 1) {
@@ -771,7 +803,7 @@ public class SettingsProvider extends ContentProvider {
                 String providers = "";
                 String[] columns = {Settings.Secure.VALUE};
                 String where = Settings.Secure.NAME + "=\'" + Settings.Secure.LOCATION_PROVIDERS_ALLOWED + "\'";
-                Cursor cursor = query(url, columns, where, null, null);
+                Cursor cursor = queryForUser(url, columns, where, null, null, desiredUser);
                 if (cursor != null && cursor.getCount() == 1) {
                     try {
                         cursor.moveToFirst();
@@ -848,7 +880,7 @@ public class SettingsProvider extends ContentProvider {
         // Support enabling/disabling a single provider (using "+" or "-" prefix)
         String name = initialValues.getAsString(Settings.Secure.NAME);
         if (Settings.Secure.LOCATION_PROVIDERS_ALLOWED.equals(name)) {
-            if (!parseProviderList(url, initialValues)) return null;
+            if (!parseProviderList(url, initialValues, desiredUserHandle)) return null;
         }
 
         // If this is an insert() of a key that has been migrated to the global store,

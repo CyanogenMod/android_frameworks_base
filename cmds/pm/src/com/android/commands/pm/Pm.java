@@ -135,6 +135,11 @@ public final class Pm {
             return;
         }
 
+        if ("disable-until-used".equals(op)) {
+            runSetEnabledSetting(PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED);
+            return;
+        }
+
         if ("grant".equals(op)) {
             runGrantRevokePermission(true);
             return;
@@ -321,17 +326,8 @@ public final class Pm {
     @SuppressWarnings("unchecked")
     private List<PackageInfo> getInstalledPackages(IPackageManager pm, int flags, int userId)
             throws RemoteException {
-        final List<PackageInfo> packageInfos = new ArrayList<PackageInfo>();
-        PackageInfo lastItem = null;
-        ParceledListSlice<PackageInfo> slice;
-
-        do {
-            final String lastKey = lastItem != null ? lastItem.packageName : null;
-            slice = pm.getInstalledPackages(flags, lastKey, userId);
-            lastItem = slice.populateList(packageInfos, PackageInfo.CREATOR);
-        } while (!slice.isLastSlice());
-
-        return packageInfos;
+        ParceledListSlice<PackageInfo> slice = pm.getInstalledPackages(flags, userId);
+        return slice.getList();
     }
 
     /**
@@ -1098,7 +1094,7 @@ public final class Pm {
     private boolean deletePackage(String pkg, int unInstallFlags) {
         PackageDeleteObserver obs = new PackageDeleteObserver();
         try {
-            mPm.deletePackage(pkg, obs, unInstallFlags);
+            mPm.deletePackageAsUser(pkg, obs, UserHandle.USER_OWNER, unInstallFlags);
 
             synchronized (obs) {
                 while (!obs.finished) {
@@ -1153,10 +1149,7 @@ public final class Pm {
 
         ClearDataObserver obs = new ClearDataObserver();
         try {
-            if (!ActivityManagerNative.getDefault().clearApplicationUserData(pkg, obs, userId)) {
-                System.err.println("Failed");
-            }
-
+            ActivityManagerNative.getDefault().clearApplicationUserData(pkg, obs, userId);
             synchronized (obs) {
                 while (!obs.finished) {
                     try {
@@ -1187,6 +1180,8 @@ public final class Pm {
                 return "disabled";
             case PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER:
                 return "disabled-user";
+            case PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED:
+                return "disabled-until-used";
         }
         return "unknown";
     }
@@ -1223,7 +1218,8 @@ public final class Pm {
         ComponentName cn = ComponentName.unflattenFromString(pkg);
         if (cn == null) {
             try {
-                mPm.setApplicationEnabledSetting(pkg, state, 0, userId);
+                mPm.setApplicationEnabledSetting(pkg, state, 0, userId,
+                        "shell:" + android.os.Process.myUid());
                 System.err.println("Package " + pkg + " new state: "
                         + enabledSettingToString(
                         mPm.getApplicationEnabledSetting(pkg, userId)));
@@ -1468,6 +1464,7 @@ public final class Pm {
         System.err.println("       pm enable [--user USER_ID] PACKAGE_OR_COMPONENT");
         System.err.println("       pm disable [--user USER_ID] PACKAGE_OR_COMPONENT");
         System.err.println("       pm disable-user [--user USER_ID] PACKAGE_OR_COMPONENT");
+        System.err.println("       pm disable-until-used [--user USER_ID] PACKAGE_OR_COMPONENT");
         System.err.println("       pm grant PACKAGE PERMISSION");
         System.err.println("       pm revoke PACKAGE PERMISSION");
         System.err.println("       pm set-install-location [0/auto] [1/internal] [2/external]");
@@ -1523,8 +1520,9 @@ public final class Pm {
         System.err.println("");
         System.err.println("pm clear: deletes all data associated with a package.");
         System.err.println("");
-        System.err.println("pm enable, disable, disable-user: these commands change the enabled state");
-        System.err.println("  of a given package or component (written as \"package/class\").");
+        System.err.println("pm enable, disable, disable-user, disable-until-used: these commands");
+        System.err.println("  change the enabled state of a given package or component (written");
+        System.err.println("  as \"package/class\").");
         System.err.println("");
         System.err.println("pm grant, revoke: these commands either grant or revoke permissions");
         System.err.println("  to applications.  Only optional permissions the application has");

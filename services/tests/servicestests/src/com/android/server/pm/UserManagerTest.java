@@ -21,8 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.UserInfo;
-import android.os.Debug;
-import android.os.Environment;
+import android.os.Bundle;
+import android.os.UserHandle;
 import android.os.UserManager;
 import android.test.AndroidTestCase;
 
@@ -65,6 +65,9 @@ public class UserManagerTest extends AndroidTestCase {
                     && !user.isAdmin()
                     && !user.isPrimary()) {
                 found = true;
+                Bundle restrictions = mUserManager.getUserRestrictions(user.getUserHandle());
+                assertFalse("New user should have DISALLOW_CONFIG_WIFI =false by default",
+                        restrictions.getBoolean(UserManager.DISALLOW_CONFIG_WIFI));
             }
         }
         assertTrue(found);
@@ -140,6 +143,20 @@ public class UserManagerTest extends AndroidTestCase {
         }
     }
 
+    public void testRestrictions() {
+        List<UserInfo> users = mUserManager.getUsers();
+        if (users.size() > 1) {
+            Bundle restrictions = new Bundle();
+            restrictions.putBoolean(UserManager.DISALLOW_INSTALL_APPS, true);
+            restrictions.putBoolean(UserManager.DISALLOW_CONFIG_WIFI, false);
+            mUserManager.setUserRestrictions(restrictions, new UserHandle(users.get(1).id));
+            Bundle stored = mUserManager.getUserRestrictions(new UserHandle(users.get(1).id));
+            assertEquals(stored.getBoolean(UserManager.DISALLOW_CONFIG_WIFI), false);
+            assertEquals(stored.getBoolean(UserManager.DISALLOW_UNINSTALL_APPS), false);
+            assertEquals(stored.getBoolean(UserManager.DISALLOW_INSTALL_APPS), true);
+        }
+    }
+
     private void removeUser(int userId) {
         synchronized (mUserLock) {
             mUserManager.removeUser(userId);
@@ -151,4 +168,5 @@ public class UserManagerTest extends AndroidTestCase {
             }
         }
     }
+
 }

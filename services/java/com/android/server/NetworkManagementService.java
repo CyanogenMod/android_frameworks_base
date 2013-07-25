@@ -23,10 +23,9 @@ import static android.net.NetworkStats.SET_DEFAULT;
 import static android.net.NetworkStats.TAG_NONE;
 import static android.net.NetworkStats.UID_ALL;
 import static android.net.TrafficStats.UID_TETHERING;
+import static com.android.server.NetworkManagementService.NetdResponseCode.ClatdStatusResult;
 import static com.android.server.NetworkManagementService.NetdResponseCode.InterfaceGetCfgResult;
 import static com.android.server.NetworkManagementService.NetdResponseCode.InterfaceListResult;
-import static com.android.server.NetworkManagementService.NetdResponseCode.InterfaceRxThrottleResult;
-import static com.android.server.NetworkManagementService.NetdResponseCode.InterfaceTxThrottleResult;
 import static com.android.server.NetworkManagementService.NetdResponseCode.IpFwdStatusResult;
 import static com.android.server.NetworkManagementService.NetdResponseCode.TetherDnsFwdTgtListResult;
 import static com.android.server.NetworkManagementService.NetdResponseCode.TetherInterfaceListResult;
@@ -35,7 +34,6 @@ import static com.android.server.NetworkManagementService.NetdResponseCode.Tethe
 import static com.android.server.NetworkManagementService.NetdResponseCode.TtyListResult;
 import static com.android.server.NetworkManagementSocketTagger.PROP_QTAGUID_ENABLED;
 
-import android.bluetooth.BluetoothTetheringDataTracker;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.INetworkManagementEventObserver;
@@ -61,6 +59,7 @@ import android.util.SparseBooleanArray;
 import com.android.internal.net.NetworkStatsFactory;
 import com.android.internal.util.Preconditions;
 import com.android.server.NativeDaemonConnector.Command;
+import com.android.server.NativeDaemonConnector.SensitiveArg;
 import com.android.server.net.LockdownVpnTracker;
 import com.google.android.collect.Maps;
 
@@ -122,11 +121,10 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         public static final int SoftapStatusResult        = 214;
         public static final int InterfaceRxCounterResult  = 216;
         public static final int InterfaceTxCounterResult  = 217;
-        public static final int InterfaceRxThrottleResult = 218;
-        public static final int InterfaceTxThrottleResult = 219;
         public static final int QuotaCounterResult        = 220;
         public static final int TetheringStatsResult      = 221;
         public static final int DnsProxyQueryResult       = 222;
+        public static final int ClatdStatusResult         = 223;
 
         public static final int InterfaceChange           = 600;
         public static final int BandwidthControl          = 601;
@@ -236,6 +234,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             try {
                 mObservers.getBroadcastItem(i).interfaceStatusChanged(iface, up);
             } catch (RemoteException e) {
+            } catch (RuntimeException e) {
             }
         }
         mObservers.finishBroadcast();
@@ -251,6 +250,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             try {
                 mObservers.getBroadcastItem(i).interfaceLinkStateChanged(iface, up);
             } catch (RemoteException e) {
+            } catch (RuntimeException e) {
             }
         }
         mObservers.finishBroadcast();
@@ -265,6 +265,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             try {
                 mObservers.getBroadcastItem(i).interfaceAdded(iface);
             } catch (RemoteException e) {
+            } catch (RuntimeException e) {
             }
         }
         mObservers.finishBroadcast();
@@ -284,6 +285,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             try {
                 mObservers.getBroadcastItem(i).interfaceRemoved(iface);
             } catch (RemoteException e) {
+            } catch (RuntimeException e) {
             }
         }
         mObservers.finishBroadcast();
@@ -298,6 +300,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             try {
                 mObservers.getBroadcastItem(i).limitReached(limitName, iface);
             } catch (RemoteException e) {
+            } catch (RuntimeException e) {
             }
         }
         mObservers.finishBroadcast();
@@ -312,6 +315,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             try {
                 mObservers.getBroadcastItem(i).interfaceClassDataActivityChanged(label, active);
             } catch (RemoteException e) {
+            } catch (RuntimeException e) {
             }
         }
         mObservers.finishBroadcast();
@@ -836,36 +840,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         return event.getMessage().endsWith("started");
     }
 
-    // TODO(BT) Remove
-    public void startReverseTethering(String iface)
-             throws IllegalStateException {
-        if (DBG) Slog.d(TAG, "startReverseTethering in");
-        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        // cmd is "tether start first_start first_stop second_start second_stop ..."
-        // an odd number of addrs will fail
-        String cmd = "tether start-reverse";
-        cmd += " " + iface;
-        if (DBG) Slog.d(TAG, "startReverseTethering cmd: " + cmd);
-        try {
-            mConnector.doCommand(cmd);
-        } catch (NativeDaemonConnectorException e) {
-            throw new IllegalStateException("Unable to communicate to native daemon");
-        }
-        BluetoothTetheringDataTracker.getInstance().startReverseTether(iface);
-
-    }
-
-    // TODO(BT) Remove
-    public void stopReverseTethering() throws IllegalStateException {
-        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        try {
-            mConnector.doCommand("tether stop-reverse");
-        } catch (NativeDaemonConnectorException e) {
-            throw new IllegalStateException("Unable to communicate to native daemon to stop tether");
-        }
-        BluetoothTetheringDataTracker.getInstance().stopReverseTether();
-    }
-
     @Override
     public void tetherInterface(String iface) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
@@ -1024,7 +998,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                 mConnector.execute("softap", "set", wlanIface);
             } else {
                 mConnector.execute("softap", "set", wlanIface, wifiConfig.SSID,
-                        getSecurityType(wifiConfig), wifiConfig.preSharedKey);
+                        getSecurityType(wifiConfig), new SensitiveArg(wifiConfig.preSharedKey));
             }
             mConnector.execute("softap", "startap");
         } catch (NativeDaemonConnectorException e) {
@@ -1073,7 +1047,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                 mConnector.execute("softap", "set", wlanIface);
             } else {
                 mConnector.execute("softap", "set", wlanIface, wifiConfig.SSID,
-                        getSecurityType(wifiConfig), wifiConfig.preSharedKey);
+                        getSecurityType(wifiConfig), new SensitiveArg(wifiConfig.preSharedKey));
             }
         } catch (NativeDaemonConnectorException e) {
             throw e.rethrowAsParcelableException();
@@ -1128,19 +1102,31 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     @Override
     public NetworkStats getNetworkStatsSummaryDev() {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        return mStatsFactory.readNetworkStatsSummaryDev();
+        try {
+            return mStatsFactory.readNetworkStatsSummaryDev();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
     public NetworkStats getNetworkStatsSummaryXt() {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        return mStatsFactory.readNetworkStatsSummaryXt();
+        try {
+            return mStatsFactory.readNetworkStatsSummaryXt();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
     public NetworkStats getNetworkStatsDetail() {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        return mStatsFactory.readNetworkStatsDetail(UID_ALL);
+        try {
+            return mStatsFactory.readNetworkStatsDetail(UID_ALL);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
@@ -1297,7 +1283,11 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     @Override
     public NetworkStats getNetworkStatsUidDetail(int uid) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        return mStatsFactory.readNetworkStatsDetail(uid);
+        try {
+            return mStatsFactory.readNetworkStatsDetail(uid);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
@@ -1353,49 +1343,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     @Override
-    public void setInterfaceThrottle(String iface, int rxKbps, int txKbps) {
-        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        try {
-            mConnector.execute("interface", "setthrottle", iface, rxKbps, txKbps);
-        } catch (NativeDaemonConnectorException e) {
-            throw e.rethrowAsParcelableException();
-        }
-    }
-
-    private int getInterfaceThrottle(String iface, boolean rx) {
-        final NativeDaemonEvent event;
-        try {
-            event = mConnector.execute("interface", "getthrottle", iface, rx ? "rx" : "tx");
-        } catch (NativeDaemonConnectorException e) {
-            throw e.rethrowAsParcelableException();
-        }
-
-        if (rx) {
-            event.checkCode(InterfaceRxThrottleResult);
-        } else {
-            event.checkCode(InterfaceTxThrottleResult);
-        }
-
-        try {
-            return Integer.parseInt(event.getMessage());
-        } catch (NumberFormatException e) {
-            throw new IllegalStateException("unexpected response:" + event);
-        }
-    }
-
-    @Override
-    public int getInterfaceRxThrottle(String iface) {
-        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        return getInterfaceThrottle(iface, true);
-    }
-
-    @Override
-    public int getInterfaceTxThrottle(String iface) {
-        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        return getInterfaceThrottle(iface, false);
-    }
-
-    @Override
     public void setDefaultInterfaceForDns(String iface) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
         try {
@@ -1406,10 +1353,12 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     @Override
-    public void setDnsServersForInterface(String iface, String[] servers) {
+    public void setDnsServersForInterface(String iface, String[] servers, String domains) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
 
-        final Command cmd = new Command("resolver", "setifdns", iface);
+        final Command cmd = new Command("resolver", "setifdns", iface,
+                (domains == null ? "" : domains));
+
         for (String s : servers) {
             InetAddress a = NetworkUtils.numericToInetAddress(s);
             if (a.isAnyLocalAddress() == false) {
@@ -1516,6 +1465,66 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         }
     }
 
+    @Override
+    public void setDnsInterfaceForPid(String iface, int pid) throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+        try {
+            mConnector.execute("resolver", "setifaceforpid", iface, pid);
+        } catch (NativeDaemonConnectorException e) {
+            throw new IllegalStateException(
+                    "Error communicating with native deamon to set interface for pid" + iface, e);
+        }
+    }
+
+    @Override
+    public void clearDnsInterfaceForPid(int pid) throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+        try {
+            mConnector.execute("resolver", "clearifaceforpid", pid);
+        } catch (NativeDaemonConnectorException e) {
+            throw new IllegalStateException(
+                    "Error communicating with native deamon to clear interface for pid " + pid, e);
+        }
+    }
+
+    @Override
+    public void startClatd(String interfaceName) throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+
+        try {
+            mConnector.execute("clatd", "start", interfaceName);
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
+    }
+
+    @Override
+    public void stopClatd() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+
+        try {
+            mConnector.execute("clatd", "stop");
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
+    }
+
+    @Override
+    public boolean isClatdStarted() {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+
+        final NativeDaemonEvent event;
+        try {
+            event = mConnector.execute("clatd", "status");
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
+
+        event.checkCode(ClatdStatusResult);
+        return event.getMessage().endsWith("started");
+    }
+
+    /** {@inheritDoc} */
     @Override
     public void monitor() {
         if (mConnector != null) {

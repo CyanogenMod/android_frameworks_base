@@ -37,10 +37,10 @@ LOCAL_SHARED_LIBRARIES := libstlport \
                           libdl \
                           libcutils \
                           libutils \
+                          liblog \
                           libandroid \
                           libjnigraphics \
-                          libmedia \
-                          libmedia_native
+                          libmedia
 
 # Don't prelink this library.  For more efficient code, you may want
 # to add this library to the prelink map and set this to true. However,
@@ -49,5 +49,3 @@ LOCAL_SHARED_LIBRARIES := libstlport \
 LOCAL_PRELINK_MODULE := false
 
 include $(BUILD_SHARED_LIBRARY)
-
-

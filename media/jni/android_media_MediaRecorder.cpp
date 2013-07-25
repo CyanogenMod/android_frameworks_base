@@ -34,6 +34,7 @@
 #include "android_runtime/AndroidRuntime.h"
 
 #include <system/audio.h>
+#include <android_runtime/android_view_Surface.h>
 
 // ----------------------------------------------------------------------------
 
@@ -47,8 +48,6 @@ extern sp<Camera> get_native_camera(JNIEnv *env, jobject thiz, struct JNICameraC
 struct fields_t {
     jfieldID    context;
     jfieldID    surface;
-    /* actually in android.view.Surface XXX */
-    jfieldID    surface_native;
 
     jmethodID   post_event;
 };
@@ -109,8 +108,7 @@ void JNIMediaRecorderListener::notify(int msg, int ext1, int ext2)
 static sp<Surface> get_surface(JNIEnv* env, jobject clazz)
 {
     ALOGV("get_surface");
-    Surface* const p = (Surface*)env->GetIntField(clazz, fields.surface_native);
-    return sp<Surface>(p);
+    return android_view_Surface_getSurface(env, clazz);
 }
 
 // Returns true if it throws an exception.
@@ -328,8 +326,8 @@ android_media_MediaRecorder_prepare(JNIEnv *env, jobject thiz)
             return;
         }
 
-        ALOGI("prepare: surface=%p (identity=%d)", native_surface.get(), native_surface->getIdentity());
-        if (process_media_recorder_call(env, mr->setPreviewSurface(native_surface), "java/lang/RuntimeException", "setPreviewSurface failed.")) {
+        ALOGI("prepare: surface=%p", native_surface.get());
+        if (process_media_recorder_call(env, mr->setPreviewSurface(native_surface->getIGraphicBufferProducer()), "java/lang/RuntimeException", "setPreviewSurface failed.")) {
             return;
         }
     }
@@ -409,11 +407,6 @@ android_media_MediaRecorder_native_init(JNIEnv *env)
         return;
     }
 
-    fields.surface_native = env->GetFieldID(surface, ANDROID_VIEW_SURFACE_JNI_ID, "I");
-    if (fields.surface_native == NULL) {
-        return;
-    }
-
     fields.post_event = env->GetStaticMethodID(clazz, "postEventFromNative",
                                                "(Ljava/lang/Object;IIILjava/lang/Object;)V");
     if (fields.post_event == NULL) {
@@ -423,9 +416,11 @@ android_media_MediaRecorder_native_init(JNIEnv *env)
 
 
 static void
-android_media_MediaRecorder_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
+android_media_MediaRecorder_native_setup(JNIEnv *env, jobject thiz, jobject weak_this,
+                                         jstring packageName)
 {
     ALOGV("setup");
+
     sp<MediaRecorder> mr = new MediaRecorder();
     if (mr == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
@@ -439,6 +434,15 @@ android_media_MediaRecorder_native_setup(JNIEnv *env, jobject thiz, jobject weak
     // create new listener and give it to MediaRecorder
     sp<JNIMediaRecorderListener> listener = new JNIMediaRecorderListener(env, thiz, weak_this);
     mr->setListener(listener);
+
+   // Convert client name jstring to String16
+    const char16_t *rawClientName = env->GetStringChars(packageName, NULL);
+    jsize rawClientNameLen = env->GetStringLength(packageName);
+    String16 clientName(rawClientName, rawClientNameLen);
+    env->ReleaseStringChars(packageName, rawClientName);
+
+    // pass client package name for permissions tracking
+    mr->setClientName(clientName);
 
     setMediaRecorder(env, thiz, mr);
 }
@@ -472,7 +476,7 @@ static JNINativeMethod gMethods[] = {
     {"native_reset",         "()V",                             (void *)android_media_MediaRecorder_native_reset},
     {"release",              "()V",                             (void *)android_media_MediaRecorder_release},
     {"native_init",          "()V",                             (void *)android_media_MediaRecorder_native_init},
-    {"native_setup",         "(Ljava/lang/Object;)V",           (void *)android_media_MediaRecorder_native_setup},
+    {"native_setup",         "(Ljava/lang/Object;Ljava/lang/String;)V", (void *)android_media_MediaRecorder_native_setup},
     {"native_finalize",      "()V",                             (void *)android_media_MediaRecorder_native_finalize},
 };
 

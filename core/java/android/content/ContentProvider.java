@@ -16,8 +16,10 @@
 
 package android.content;
 
+import static android.content.pm.PackageManager.GET_PROVIDERS;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import android.app.AppOpsManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PathPermission;
 import android.content.pm.ProviderInfo;
@@ -100,6 +102,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
     private String mWritePermission;
     private PathPermission[] mPathPermissions;
     private boolean mExported;
+    private boolean mNoPerms;
 
     private Transport mTransport = new Transport();
 
@@ -154,8 +157,8 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      *
      * @param abstractInterface The ContentProvider interface that is to be
      *              coerced.
-     * @return If the IContentProvider is non-null and local, returns its actual
-     * ContentProvider instance.  Otherwise returns null.
+     * @return If the IContentProvider is non-{@code null} and local, returns its actual
+     * ContentProvider instance.  Otherwise returns {@code null}.
      * @hide
      */
     public static ContentProvider coerceToLocalContentProvider(
@@ -172,6 +175,10 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * @hide
      */
     class Transport extends ContentProviderNative {
+        AppOpsManager mAppOpsManager = null;
+        int mReadOp = AppOpsManager.OP_NONE;
+        int mWriteOp = AppOpsManager.OP_NONE;
+
         ContentProvider getContentProvider() {
             return ContentProvider.this;
         }
@@ -182,10 +189,13 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
         }
 
         @Override
-        public Cursor query(Uri uri, String[] projection,
+        public Cursor query(String callingPkg, Uri uri, String[] projection,
                 String selection, String[] selectionArgs, String sortOrder,
                 ICancellationSignal cancellationSignal) {
-            enforceReadPermission(uri);
+            if (enforceReadPermission(callingPkg, uri) != AppOpsManager.MODE_ALLOWED) {
+                return rejectQuery(uri, projection, selection, selectionArgs, sortOrder,
+                        CancellationSignal.fromTransport(cancellationSignal));
+            }
             return ContentProvider.this.query(uri, projection, selection, selectionArgs, sortOrder,
                     CancellationSignal.fromTransport(cancellationSignal));
         }
@@ -196,64 +206,77 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
         }
 
         @Override
-        public Uri insert(Uri uri, ContentValues initialValues) {
-            enforceWritePermission(uri);
+        public Uri insert(String callingPkg, Uri uri, ContentValues initialValues) {
+            if (enforceWritePermission(callingPkg, uri) != AppOpsManager.MODE_ALLOWED) {
+                return rejectInsert(uri, initialValues);
+            }
             return ContentProvider.this.insert(uri, initialValues);
         }
 
         @Override
-        public int bulkInsert(Uri uri, ContentValues[] initialValues) {
-            enforceWritePermission(uri);
+        public int bulkInsert(String callingPkg, Uri uri, ContentValues[] initialValues) {
+            if (enforceWritePermission(callingPkg, uri) != AppOpsManager.MODE_ALLOWED) {
+                return 0;
+            }
             return ContentProvider.this.bulkInsert(uri, initialValues);
         }
 
         @Override
-        public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
+        public ContentProviderResult[] applyBatch(String callingPkg,
+                ArrayList<ContentProviderOperation> operations)
                 throws OperationApplicationException {
             for (ContentProviderOperation operation : operations) {
                 if (operation.isReadOperation()) {
-                    enforceReadPermission(operation.getUri());
+                    if (enforceReadPermission(callingPkg, operation.getUri())
+                            != AppOpsManager.MODE_ALLOWED) {
+                        throw new OperationApplicationException("App op not allowed", 0);
+                    }
                 }
 
                 if (operation.isWriteOperation()) {
-                    enforceWritePermission(operation.getUri());
+                    if (enforceWritePermission(callingPkg, operation.getUri())
+                            != AppOpsManager.MODE_ALLOWED) {
+                        throw new OperationApplicationException("App op not allowed", 0);
+                    }
                 }
             }
             return ContentProvider.this.applyBatch(operations);
         }
 
         @Override
-        public int delete(Uri uri, String selection, String[] selectionArgs) {
-            enforceWritePermission(uri);
+        public int delete(String callingPkg, Uri uri, String selection, String[] selectionArgs) {
+            if (enforceWritePermission(callingPkg, uri) != AppOpsManager.MODE_ALLOWED) {
+                return 0;
+            }
             return ContentProvider.this.delete(uri, selection, selectionArgs);
         }
 
         @Override
-        public int update(Uri uri, ContentValues values, String selection,
+        public int update(String callingPkg, Uri uri, ContentValues values, String selection,
                 String[] selectionArgs) {
-            enforceWritePermission(uri);
+            if (enforceWritePermission(callingPkg, uri) != AppOpsManager.MODE_ALLOWED) {
+                return 0;
+            }
             return ContentProvider.this.update(uri, values, selection, selectionArgs);
         }
 
         @Override
-        public ParcelFileDescriptor openFile(Uri uri, String mode)
+        public ParcelFileDescriptor openFile(String callingPkg, Uri uri, String mode)
                 throws FileNotFoundException {
-            if (mode != null && mode.indexOf('w') != -1) enforceWritePermission(uri);
-            else enforceReadPermission(uri);
+            enforceFilePermission(callingPkg, uri, mode);
             return ContentProvider.this.openFile(uri, mode);
         }
 
         @Override
-        public AssetFileDescriptor openAssetFile(Uri uri, String mode)
+        public AssetFileDescriptor openAssetFile(String callingPkg, Uri uri, String mode)
                 throws FileNotFoundException {
-            if (mode != null && mode.indexOf('w') != -1) enforceWritePermission(uri);
-            else enforceReadPermission(uri);
+            enforceFilePermission(callingPkg, uri, mode);
             return ContentProvider.this.openAssetFile(uri, mode);
         }
 
         @Override
-        public Bundle call(String method, String arg, Bundle extras) {
-            return ContentProvider.this.call(method, arg, extras);
+        public Bundle call(String callingPkg, String method, String arg, Bundle extras) {
+            return ContentProvider.this.callFromPackage(callingPkg, method, arg, extras);
         }
 
         @Override
@@ -262,9 +285,9 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
         }
 
         @Override
-        public AssetFileDescriptor openTypedAssetFile(Uri uri, String mimeType, Bundle opts)
-                throws FileNotFoundException {
-            enforceReadPermission(uri);
+        public AssetFileDescriptor openTypedAssetFile(String callingPkg, Uri uri, String mimeType,
+                Bundle opts) throws FileNotFoundException {
+            enforceFilePermission(callingPkg, uri, "r");
             return ContentProvider.this.openTypedAssetFile(uri, mimeType, opts);
         }
 
@@ -273,7 +296,28 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
             return CancellationSignal.createTransport();
         }
 
-        private void enforceReadPermission(Uri uri) throws SecurityException {
+        private void enforceFilePermission(String callingPkg, Uri uri, String mode)
+                throws FileNotFoundException, SecurityException {
+            if (mode != null && mode.indexOf('w') != -1) {
+                if (enforceWritePermission(callingPkg, uri) != AppOpsManager.MODE_ALLOWED) {
+                    throw new FileNotFoundException("App op not allowed");
+                }
+            } else {
+                if (enforceReadPermission(callingPkg, uri) != AppOpsManager.MODE_ALLOWED) {
+                    throw new FileNotFoundException("App op not allowed");
+                }
+            }
+        }
+
+        private int enforceReadPermission(String callingPkg, Uri uri) throws SecurityException {
+            enforceReadPermissionInner(uri);
+            if (mReadOp != AppOpsManager.OP_NONE) {
+                return mAppOpsManager.noteOp(mReadOp, Binder.getCallingUid(), callingPkg);
+            }
+            return AppOpsManager.MODE_ALLOWED;
+        }
+
+        private void enforceReadPermissionInner(Uri uri) throws SecurityException {
             final Context context = getContext();
             final int pid = Binder.getCallingPid();
             final int uid = Binder.getCallingUid();
@@ -334,7 +378,15 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
                     + ", uid=" + uid + failReason);
         }
 
-        private void enforceWritePermission(Uri uri) throws SecurityException {
+        private int enforceWritePermission(String callingPkg, Uri uri) throws SecurityException {
+            enforceWritePermissionInner(uri);
+            if (mWriteOp != AppOpsManager.OP_NONE) {
+                return mAppOpsManager.noteOp(mWriteOp, Binder.getCallingUid(), callingPkg);
+            }
+            return AppOpsManager.MODE_ALLOWED;
+        }
+
+        private void enforceWritePermissionInner(Uri uri) throws SecurityException {
             final Context context = getContext();
             final int pid = Binder.getCallingPid();
             final int uid = Binder.getCallingUid();
@@ -398,7 +450,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
 
     /**
      * Retrieves the Context this provider is running in.  Only available once
-     * {@link #onCreate} has been called -- this will return null in the
+     * {@link #onCreate} has been called -- this will return {@code null} in the
      * constructor.
      */
     public final Context getContext() {
@@ -471,6 +523,21 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
         return mPathPermissions;
     }
 
+    /** @hide */
+    public final void setAppOps(int readOp, int writeOp) {
+        if (!mNoPerms) {
+            mTransport.mAppOpsManager = (AppOpsManager)mContext.getSystemService(
+                    Context.APP_OPS_SERVICE);
+            mTransport.mReadOp = readOp;
+            mTransport.mWriteOp = writeOp;
+        }
+    }
+
+    /** @hide */
+    public AppOpsManager getAppOpsManager() {
+        return mTransport.mAppOpsManager;
+    }
+
     /**
      * Implement this to initialize your content provider on startup.
      * This method is called for all registered content providers on the
@@ -526,6 +593,31 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
     }
 
     /**
+     * @hide
+     * Implementation when a caller has performed a query on the content
+     * provider, but that call has been rejected for the operation given
+     * to {@link #setAppOps(int, int)}.  The default implementation
+     * rewrites the <var>selection</var> argument to include a condition
+     * that is never true (so will always result in an empty cursor)
+     * and calls through to {@link #query(android.net.Uri, String[], String, String[],
+     * String, android.os.CancellationSignal)} with that.
+     */
+    public Cursor rejectQuery(Uri uri, String[] projection,
+            String selection, String[] selectionArgs, String sortOrder,
+            CancellationSignal cancellationSignal) {
+        // The read is not allowed...  to fake it out, we replace the given
+        // selection statement with a dummy one that will always be false.
+        // This way we will get a cursor back that has the correct structure
+        // but contains no rows.
+        if (selection == null || selection.isEmpty()) {
+            selection = "'A' = 'B'";
+        } else {
+            selection = "'A' = 'B' AND (" + selection + ")";
+        }
+        return query(uri, projection, selection, selectionArgs, sortOrder, cancellationSignal);
+    }
+
+    /**
      * Implement this to handle query requests from clients.
      * This method can be called from multiple threads, as described in
      * <a href="{@docRoot}guide/topics/fundamentals/processes-and-threads.html#Threads">Processes
@@ -570,15 +662,15 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      *      that the implementation should parse and add to a WHERE or HAVING clause, specifying
      *      that _id value.
      * @param projection The list of columns to put into the cursor. If
-     *      null all columns are included.
+     *      {@code null} all columns are included.
      * @param selection A selection criteria to apply when filtering rows.
-     *      If null then all rows are included.
+     *      If {@code null} then all rows are included.
      * @param selectionArgs You may include ?s in selection, which will be replaced by
      *      the values from selectionArgs, in order that they appear in the selection.
      *      The values will be bound as Strings.
      * @param sortOrder How the rows in the cursor should be sorted.
-     *      If null then the provider is free to define the sort order.
-     * @return a Cursor or null.
+     *      If {@code null} then the provider is free to define the sort order.
+     * @return a Cursor or {@code null}.
      */
     public abstract Cursor query(Uri uri, String[] projection,
             String selection, String[] selectionArgs, String sortOrder);
@@ -633,18 +725,18 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      *      that the implementation should parse and add to a WHERE or HAVING clause, specifying
      *      that _id value.
      * @param projection The list of columns to put into the cursor. If
-     *      null all columns are included.
+     *      {@code null} all columns are included.
      * @param selection A selection criteria to apply when filtering rows.
-     *      If null then all rows are included.
+     *      If {@code null} then all rows are included.
      * @param selectionArgs You may include ?s in selection, which will be replaced by
      *      the values from selectionArgs, in order that they appear in the selection.
      *      The values will be bound as Strings.
      * @param sortOrder How the rows in the cursor should be sorted.
-     *      If null then the provider is free to define the sort order.
-     * @param cancellationSignal A signal to cancel the operation in progress, or null if none.
+     *      If {@code null} then the provider is free to define the sort order.
+     * @param cancellationSignal A signal to cancel the operation in progress, or {@code null} if none.
      * If the operation is canceled, then {@link OperationCanceledException} will be thrown
      * when the query is executed.
-     * @return a Cursor or null.
+     * @return a Cursor or {@code null}.
      */
     public Cursor query(Uri uri, String[] projection,
             String selection, String[] selectionArgs, String sortOrder,
@@ -668,9 +760,26 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * to retrieve the MIME type for a URI when dispatching intents.
      *
      * @param uri the URI to query.
-     * @return a MIME type string, or null if there is no type.
+     * @return a MIME type string, or {@code null} if there is no type.
      */
     public abstract String getType(Uri uri);
+
+    /**
+     * @hide
+     * Implementation when a caller has performed an insert on the content
+     * provider, but that call has been rejected for the operation given
+     * to {@link #setAppOps(int, int)}.  The default implementation simply
+     * returns a dummy URI that is the base URI with a 0 path element
+     * appended.
+     */
+    public Uri rejectInsert(Uri uri, ContentValues values) {
+        // If not allowed, we need to return some reasonable URI.  Maybe the
+        // content provider should be responsible for this, but for now we
+        // will just return the base URI with a dummy '0' tagged on to it.
+        // You shouldn't be able to read if you can't write, anyway, so it
+        // shouldn't matter much what is returned.
+        return uri.buildUpon().appendPath("0").build();
+    }
 
     /**
      * Implement this to handle requests to insert a new row.
@@ -679,8 +788,9 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * This method can be called from multiple threads, as described in
      * <a href="{@docRoot}guide/topics/fundamentals/processes-and-threads.html#Threads">Processes
      * and Threads</a>.
-     * @param uri The content:// URI of the insertion request.
+     * @param uri The content:// URI of the insertion request. This must not be {@code null}.
      * @param values A set of column_name/value pairs to add to the database.
+     *     This must not be {@code null}.
      * @return The URI for the newly inserted item.
      */
     public abstract Uri insert(Uri uri, ContentValues values);
@@ -697,6 +807,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      *
      * @param uri The content:// URI of the insertion request.
      * @param values An array of sets of column_name/value pairs to add to the database.
+     *    This must not be {@code null}.
      * @return The number of values that were inserted.
      */
     public int bulkInsert(Uri uri, ContentValues[] values) {
@@ -741,8 +852,8 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      *
      * @param uri The URI to query. This can potentially have a record ID if this
      * is an update request for a specific record.
-     * @param values A Bundle mapping from column names to new column values (NULL is a
-     *               valid value).
+     * @param values A set of column_name/value pairs to update in the database.
+     *     This must not be {@code null}.
      * @param selection An optional filter to match rows to update.
      * @return the number of rows affected.
      */
@@ -764,6 +875,18 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * their responsibility to close it when done.  That is, the implementation
      * of this method should create a new ParcelFileDescriptor for each call.
      *
+     * <p class="note">For use in Intents, you will want to implement {@link #getType}
+     * to return the appropriate MIME type for the data returned here with
+     * the same URI.  This will allow intent resolution to automatically determine the data MIME
+     * type and select the appropriate matching targets as part of its operation.</p>
+     *
+     * <p class="note">For better interoperability with other applications, it is recommended
+     * that for any URIs that can be opened, you also support queries on them
+     * containing at least the columns specified by {@link android.provider.OpenableColumns}.
+     * You may also want to support other common columns if you have additional meta-data
+     * to supply, such as {@link android.provider.MediaStore.MediaColumns#DATE_ADDED}
+     * in {@link android.provider.MediaStore.MediaColumns}.</p>
+     *
      * @param uri The URI whose file is to be opened.
      * @param mode Access mode for the file.  May be "r" for read-only access,
      * "rw" for read and write access, or "rwt" for read and write access
@@ -779,6 +902,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      *
      * @see #openAssetFile(Uri, String)
      * @see #openFileHelper(Uri, String)
+     * @see #getType(android.net.Uri)
      */
     public ParcelFileDescriptor openFile(Uri uri, String mode)
             throws FileNotFoundException {
@@ -806,6 +930,15 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * {@link AssetFileDescriptor#UNKNOWN_LENGTH} to be compatible with
      * applications that can not handle sub-sections of files.</p>
      *
+     * <p class="note">For use in Intents, you will want to implement {@link #getType}
+     * to return the appropriate MIME type for the data returned here with
+     * the same URI.  This will allow intent resolution to automatically determine the data MIME
+     * type and select the appropriate matching targets as part of its operation.</p>
+     *
+     * <p class="note">For better interoperability with other applications, it is recommended
+     * that for any URIs that can be opened, you also support queries on them
+     * containing at least the columns specified by {@link android.provider.OpenableColumns}.</p>
+     *
      * @param uri The URI whose file is to be opened.
      * @param mode Access mode for the file.  May be "r" for read-only access,
      * "w" for write-only access (erasing whatever data is currently in
@@ -823,6 +956,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * 
      * @see #openFile(Uri, String)
      * @see #openFileHelper(Uri, String)
+     * @see #getType(android.net.Uri)
      */
     public AssetFileDescriptor openAssetFile(Uri uri, String mode)
             throws FileNotFoundException {
@@ -875,7 +1009,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
     /**
      * Called by a client to determine the types of data streams that this
      * content provider supports for the given URI.  The default implementation
-     * returns null, meaning no types.  If your content provider stores data
+     * returns {@code null}, meaning no types.  If your content provider stores data
      * of a particular type, return that MIME type if it matches the given
      * mimeTypeFilter.  If it can perform type conversions, return an array
      * of all supported MIME types that match mimeTypeFilter.
@@ -883,7 +1017,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * @param uri The data in the content provider being queried.
      * @param mimeTypeFilter The type of data the client desires.  May be
      * a pattern, such as *\/* to retrieve all possible data types.
-     * @return Returns null if there are no possible data streams for the
+     * @return Returns {@code null} if there are no possible data streams for the
      * given mimeTypeFilter.  Otherwise returns an array of all available
      * concrete MIME types.
      *
@@ -902,11 +1036,18 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * perform data conversions to generate data of the desired type.
      *
      * <p>The default implementation compares the given mimeType against the
-     * result of {@link #getType(Uri)} and, if the match, simple calls
+     * result of {@link #getType(Uri)} and, if they match, simply calls
      * {@link #openAssetFile(Uri, String)}.
      *
      * <p>See {@link ClipData} for examples of the use and implementation
      * of this method.
+     *
+     * <p class="note">For better interoperability with other applications, it is recommended
+     * that for any URIs that can be opened, you also support queries on them
+     * containing at least the columns specified by {@link android.provider.OpenableColumns}.
+     * You may also want to support other common columns if you have additional meta-data
+     * to supply, such as {@link android.provider.MediaStore.MediaColumns#DATE_ADDED}
+     * in {@link android.provider.MediaStore.MediaColumns}.</p>
      *
      * @param uri The data in the content provider being queried.
      * @param mimeTypeFilter The type of data the client desires.  May be
@@ -1029,6 +1170,15 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
     }
 
     /**
+     * Like {@link #attachInfo(Context, android.content.pm.ProviderInfo)}, but for use
+     * when directly instantiating the provider for testing.
+     * @hide
+     */
+    public void attachInfoForTesting(Context context, ProviderInfo info) {
+        attachInfo(context, info, true);
+    }
+
+    /**
      * After being instantiated, this is called to tell the content provider
      * about itself.
      *
@@ -1036,11 +1186,17 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * @param info Registered information about this content provider
      */
     public void attachInfo(Context context, ProviderInfo info) {
+        attachInfo(context, info, false);
+    }
+
+    private void attachInfo(Context context, ProviderInfo info, boolean testing) {
         /*
          * We may be using AsyncTask from binder threads.  Make it init here
          * so its static handler is on the main thread.
          */
         AsyncTask.init();
+
+        mNoPerms = testing;
 
         /*
          * Only allow it to be set once, so after the content service gives
@@ -1087,14 +1243,30 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
     }
 
     /**
+     * @hide
+     * Front-end to {@link #call(String, String, android.os.Bundle)} that provides the name
+     * of the calling package.
+     */
+    public Bundle callFromPackage(String callingPackag, String method, String arg, Bundle extras) {
+        return call(method, arg, extras);
+    }
+
+    /**
      * Call a provider-defined method.  This can be used to implement
      * interfaces that are cheaper and/or unnatural for a table-like
      * model.
      *
-     * @param method method name to call.  Opaque to framework, but should not be null.
-     * @param arg provider-defined String argument.  May be null.
-     * @param extras provider-defined Bundle argument.  May be null.
-     * @return provider-defined return value.  May be null.  Null is also
+     * <p class="note"><strong>WARNING:</strong> The framework does no permission checking
+     * on this entry into the content provider besides the basic ability for the application
+     * to get access to the provider at all.  For example, it has no idea whether the call
+     * being executed may read or write data in the provider, so can't enforce those
+     * individual permissions.  Any implementation of this method <strong>must</strong>
+     * do its own permission checks on incoming calls to make sure they are allowed.</p>
+     *
+     * @param method method name to call.  Opaque to framework, but should not be {@code null}.
+     * @param arg provider-defined String argument.  May be {@code null}.
+     * @param extras provider-defined Bundle argument.  May be {@code null}.
+     * @return provider-defined return value.  May be {@code null}, which is also
      *   the default for providers which don't implement any call methods.
      */
     public Bundle call(String method, String arg, Bundle extras) {
@@ -1132,12 +1304,10 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * Print the Provider's state into the given stream.  This gets invoked if
      * you run "adb shell dumpsys activity provider &lt;provider_component_name&gt;".
      *
-     * @param prefix Desired prefix to prepend at each line of output.
      * @param fd The raw file descriptor that the dump is being sent to.
      * @param writer The PrintWriter to which you should dump your state.  This will be
      * closed for you after you return.
      * @param args additional arguments to the dump request.
-     * @hide
      */
     public void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
         writer.println("nothing to dump");

@@ -166,11 +166,6 @@ public class Process {
     public static final int LAST_SHARED_APPLICATION_GID = 59999;
 
     /**
-     * Defines a secondary group id for access to the bluetooth hardware.
-     */
-    public static final int BLUETOOTH_GID = 2000;
-
-    /**
      * Standard priority of application threads.
      * Use with {@link #setThreadPriority(int)} and
      * {@link #setThreadPriority(int, int)}, <b>not</b> with the normal
@@ -806,7 +801,15 @@ public class Process {
      */
     public static final native void setProcessGroup(int pid, int group)
             throws IllegalArgumentException, SecurityException;
-    
+
+    /**
+     * Return the scheduling group of requested process.
+     *
+     * @hide
+     */
+    public static final native int getProcessGroup(int pid)
+            throws IllegalArgumentException, SecurityException;
+
     /**
      * Set the priority of the calling thread, based on Linux priorities.  See
      * {@link #setThreadPriority(int, int)} for more information.

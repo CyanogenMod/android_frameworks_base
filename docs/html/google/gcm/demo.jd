@@ -1,6 +1,22 @@
 page.title=GCM Demo Application
 @jd:body
 
+<div id="deprecatedSticker">
+  <a href="#" 
+     onclick="$('#naMessage').show();$('#deprecatedSticker').hide();return false">
+    <strong>This doc is deprecated</strong></a>
+</div>
+
+
+<div id="naMessage" style="display:block">
+<div><p><strong>The information in this document has been superseded by <a href="server.html">GCM Server</a> and <a href="client.html">GCM Client</a></strong>. Please use the <a href="{@docRoot}reference/com/google/android/gms/gcm/GoogleCloudMessaging.html">{@code GoogleCloudMessaging}</a> API instead of the GCM client helper library. The GCM server helper library is still valid.</p>
+
+ <input style="margin-top:1em;padding:5px" type="button"
+        value="That's nice, but I still want to read this document"
+onclick="$('#naMessage').hide();$('#deprecatedSticker').show()" />
+</div>
+</div>
+
 <div id="qv-wrapper">
 <div id="qv">
 
@@ -29,6 +45,8 @@ page.title=GCM Demo Application
 
 </div>
 </div>
+
+<p class="note"><strong>Note:</strong> This tutorial describes how to develop GCM-enabled apps using the helper libraries. This is just one approach. For a more comprehensive discussion of the available APIs and development paths, see <a href="gs.html">Getting Started</a>.
 
 <p>The Google Cloud Messaging (GCM) Demo demonstrates how to use the Google Cloud Messaging framework in your Android application. This tutorial walks you through setting up and running the demo.</p>
 
@@ -106,7 +124,7 @@ Total time: 0 seconds
   </li>
 </ol>
 <p class="note"><strong>Note:</strong> You can get the IP by running <code>ifconfig</code> on Linux or MacOS, or <code>ipconfig</code> on Windows. </p>
-<p><img src="{@docRoot}images/gcm/gcm-demo-homepage.png" class="screenshot" /></p>
+
 <p> You server is now ready.</p>
 <h3 id="appengine-setup">Using App Engine for Java</h3>
 
@@ -157,7 +175,6 @@ runserver:
   
   <p class="note"><strong>Note:</strong> You can get the IP by running <code>ifconfig</code> on Linux or MacOS, or <code>ipconfig</code> on Windows.</p>
   
-  <p><img src="{@docRoot}images/gcm/gcm-demo-homepage-appengine.png" class="screenshot" /></p>
 </ol>
 <p> You server is now ready.</p>
 <h2 id="device-setup">Setting Up the Device</h2>

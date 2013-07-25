@@ -62,6 +62,7 @@ status_t LayerRenderer::prepareDirty(float left, float top, float right, float b
         android::Rect r(dirty.left, dirty.top, dirty.right, dirty.bottom);
         mLayer->region.subtractSelf(r);
     }
+    mLayer->clipRect.set(dirty);
 
     return OpenGLRenderer::prepareDirty(dirty.left, dirty.top, dirty.right, dirty.bottom, opaque);
 }
@@ -91,41 +92,45 @@ void LayerRenderer::finish() {
     // who will invoke OpenGLRenderer::resume()
 }
 
-GLint LayerRenderer::getTargetFbo() {
+GLint LayerRenderer::getTargetFbo() const {
     return mLayer->getFbo();
 }
 
-bool LayerRenderer::suppressErrorChecks() {
+bool LayerRenderer::suppressErrorChecks() const {
     return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Layer support
+///////////////////////////////////////////////////////////////////////////////
+
+bool LayerRenderer::hasLayer() const {
+    return true;
+}
+
+void LayerRenderer::ensureStencilBuffer() {
+    attachStencilBufferToLayer(mLayer);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Dirty region tracking
 ///////////////////////////////////////////////////////////////////////////////
 
-bool LayerRenderer::hasLayer() {
-    return true;
-}
-
-Region* LayerRenderer::getRegion() {
+Region* LayerRenderer::getRegion() const {
     if (getSnapshot()->flags & Snapshot::kFlagFboTarget) {
         return OpenGLRenderer::getRegion();
     }
     return &mLayer->region;
 }
 
-// TODO: This implementation is flawed and can generate T-junctions
-//       in the mesh, which will in turn produce cracks when the
-//       mesh is rotated/skewed. The easiest way to fix this would
-//       be, for each row, to add new vertices shared with the previous
-//       row when the two rows share an edge.
-//       In practice, T-junctions do not appear often so this has yet
-//       to be fixed.
+// TODO: This implementation uses a very simple approach to fixing T-junctions which keeps the
+//       results as rectangles, and is thus not necessarily efficient in the geometry
+//       produced. Eventually, it may be better to develop triangle-based mechanism.
 void LayerRenderer::generateMesh() {
     if (mLayer->region.isRect() || mLayer->region.isEmpty()) {
         if (mLayer->mesh) {
-            delete mLayer->mesh;
-            delete mLayer->meshIndices;
+            delete[] mLayer->mesh;
+            delete[] mLayer->meshIndices;
 
             mLayer->mesh = NULL;
             mLayer->meshIndices = NULL;
@@ -136,14 +141,20 @@ void LayerRenderer::generateMesh() {
         return;
     }
 
+    // avoid T-junctions as they cause artifacts in between the resultant
+    // geometry when complex transforms occur.
+    // TODO: generate the safeRegion only if necessary based on drawing transform (see
+    // OpenGLRenderer::composeLayerRegion())
+    Region safeRegion = Region::createTJunctionFreeRegion(mLayer->region);
+
     size_t count;
-    const android::Rect* rects = mLayer->region.getArray(&count);
+    const android::Rect* rects = safeRegion.getArray(&count);
 
     GLsizei elementCount = count * 6;
 
     if (mLayer->mesh && mLayer->meshElementCount < elementCount) {
-        delete mLayer->mesh;
-        delete mLayer->meshIndices;
+        delete[] mLayer->mesh;
+        delete[] mLayer->meshIndices;
 
         mLayer->mesh = NULL;
         mLayer->meshIndices = NULL;
@@ -211,6 +222,21 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
         return NULL;
     }
 
+    // We first obtain a layer before comparing against the max texture size
+    // because layers are not allocated at the exact desired size. They are
+    // always created slighly larger to improve recycling
+    const uint32_t maxTextureSize = caches.maxTextureSize;
+    if (layer->getWidth() > maxTextureSize || layer->getHeight() > maxTextureSize) {
+        ALOGW("Layer exceeds max. dimensions supported by the GPU (%dx%d, max=%dx%d)",
+                width, height, maxTextureSize, maxTextureSize);
+
+        // Creating a new layer always increment its refcount by 1, this allows
+        // us to destroy the layer object if one was created for us
+        Caches::getInstance().resourceCache.decrementRefcount(layer);
+
+        return NULL;
+    }
+
     layer->setFbo(fbo);
     layer->layer.set(0.0f, 0.0f, width, height);
     layer->texCoords.set(0.0f, height / float(layer->getHeight()),
@@ -230,16 +256,13 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
     // Initialize the texture if needed
     if (layer->isEmpty()) {
         layer->setEmpty(false);
-        layer->allocateTexture(GL_RGBA, GL_UNSIGNED_BYTE);
+        layer->allocateTexture();
 
+        // This should only happen if we run out of memory
         if (glGetError() != GL_NO_ERROR) {
-            ALOGD("Could not allocate texture for layer (fbo=%d %dx%d)",
-                    fbo, width, height);
-
+            ALOGE("Could not allocate texture for layer (fbo=%d %dx%d)", fbo, width, height);
             glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
-
-            Caches::getInstance().resourceCache.decrementRefcount(layer);
-
+            caches.resourceCache.decrementRefcount(layer);
             return NULL;
         }
     }
@@ -256,12 +279,11 @@ bool LayerRenderer::resizeLayer(Layer* layer, uint32_t width, uint32_t height) {
     if (layer) {
         LAYER_RENDERER_LOGD("Resizing layer fbo = %d to %dx%d", layer->getFbo(), width, height);
 
-        if (Caches::getInstance().layerCache.resize(layer, width, height)) {
+        if (layer->resize(width, height)) {
             layer->layer.set(0.0f, 0.0f, width, height);
             layer->texCoords.set(0.0f, height / float(layer->getHeight()),
                     width / float(layer->getWidth()), 0.0f);
         } else {
-            Caches::getInstance().resourceCache.decrementRefcount(layer);
             return false;
         }
     }
@@ -342,7 +364,7 @@ void LayerRenderer::flushLayer(Layer* layer) {
     if (layer && fbo) {
         // If possible, discard any enqueud operations on deferred
         // rendering architectures
-        if (Caches::getInstance().extensions.hasDiscardFramebuffer()) {
+        if (Extensions::getInstance().hasDiscardFramebuffer()) {
             GLuint previousFbo;
             glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &previousFbo);
             if (fbo != previousFbo) glBindFramebuffer(GL_FRAMEBUFFER, fbo);

@@ -200,6 +200,8 @@
     <string name="permgroupdesc_microphone" msgid="7106618286905738408">"直接使用麦克风以录制音频。"</string>
     <string name="permgrouplab_camera" msgid="4820372495894586615">"相机"</string>
     <string name="permgroupdesc_camera" msgid="2933667372289567714">"直接使用相机以拍摄图片或视频。"</string>
+    <string name="permgrouplab_screenlock" msgid="8275500173330718168">"锁定屏幕"</string>
+    <string name="permgroupdesc_screenlock" msgid="7067497128925499401">"影响设备的锁定屏幕。"</string>
     <string name="permgrouplab_appInfo" msgid="8028789762634147725">"您的应用信息"</string>
     <string name="permgroupdesc_appInfo" msgid="3950378538049625907">"能够影响设备上其他应用的行为。"</string>
     <string name="permgrouplab_wallpaper" msgid="3850280158041175998">"壁纸"</string>
@@ -225,6 +227,16 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"存储"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"访问 USB 存储设备。"</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"访问 SD 卡。"</string>
+    <string name="permgrouplab_accessibilityFeatures" msgid="7919025602283593907">"辅助功能"</string>
+    <string name="permgroupdesc_accessibilityFeatures" msgid="4205196881678144335">"辅助技术可请求启用的功能。"</string>
+    <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"检索窗口内容"</string>
+    <string name="capability_desc_canRetrieveWindowContent" msgid="3772225008605310672">"检查您正与其进行互动的窗口的内容。"</string>
+    <string name="capability_title_canRequestTouchExploration" msgid="3108723364676667320">"启用触摸浏览"</string>
+    <string name="capability_desc_canRequestTouchExploration" msgid="5800552516779249356">"设备可大声读出用户触摸的内容，而用户可以通过手势浏览屏幕。"</string>
+    <string name="capability_title_canRequestEnhancedWebAccessibility" msgid="1739881766522594073">"启用网页辅助增强功能"</string>
+    <string name="capability_desc_canRequestEnhancedWebAccessibility" msgid="7881063961507511765">"安装脚本以方便访问应用的内容。"</string>
+    <string name="capability_title_canRequestFilterKeyEvents" msgid="2103440391902412174">"监测您输入的文字"</string>
+    <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"包含个人数据，例如信用卡号和密码。"</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"停用或修改状态栏"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"允许应用停用状态栏或者增删系统图标。"</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"状态栏"</string>
@@ -243,8 +255,8 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"允许应用读取您的设备收到的小区广播消息。小区广播消息是在某些地区发送的、用于发布紧急情况警告的提醒信息。恶意应用可能会在您收到小区紧急广播时干扰您设备的性能或操作。"</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"发送短信"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"允许该应用发送短信。此权限可能会导致意外收费。恶意应用可能会未经您的确认而发送短信，由此产生相关费用。"</string>
-    <string name="permlab_sendSmsNoConfirmation" msgid="4781483105951730228">"不经确认直接发送短信"</string>
-    <string name="permdesc_sendSmsNoConfirmation" msgid="402569800862935907">"允许该应用发送短信。此权限可能会导致意外收费。恶意应用可能会未经您的确认而发送短信，由此产生相关费用。"</string>
+    <string name="permlab_sendRespondViaMessageRequest" msgid="8713889105305943200">"发送“通过信息回复”事件"</string>
+    <string name="permdesc_sendRespondViaMessageRequest" msgid="7107648548468778734">"允许应用向其他信息应用发送请求，以便处理来电的“通过信息回复”事件。"</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"读取您的文字讯息（短信或彩信）"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"允许该应用读取您平板电脑或 SIM 卡上存储的短信。此权限可让该应用读取所有短信，而不考虑短信内容或机密性。"</string>
     <string name="permdesc_readSms" product="default" msgid="3695967533457240550">"允许该应用读取您手机或 SIM 卡上存储的短信。此权限可让该应用读取所有短信，而不考虑短信内容或机密性。"</string>
@@ -299,6 +311,8 @@
     <string name="permdesc_shutdown" msgid="7046500838746291775">"使活动管理器进入关闭状态。不执行彻底关机。"</string>
     <string name="permlab_stopAppSwitches" msgid="4138608610717425573">"禁止切换应用"</string>
     <string name="permdesc_stopAppSwitches" msgid="8262195802582255021">"阻止用户切换到其他应用。"</string>
+    <string name="permlab_getTopActivityInfo" msgid="2537922311411546016">"获取当前应用的信息"</string>
+    <string name="permdesc_getTopActivityInfo" msgid="2512448855496067131">"允许应用检索目前在屏幕前台运行的应用专有的信息。"</string>
     <string name="permlab_runSetActivityWatcher" msgid="892239094867182656">"监控所有应用的启动"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="6003603162578577406">"允许应用监视和控制系统是如何启动活动的。恶意应用可能会完全破坏系统。此权限只有在进行开发时才需要，正常使用情况下绝不需要。"</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"发送包删除的广播"</string>
@@ -315,8 +329,12 @@
     <string name="permdesc_batteryStats" msgid="5897346582882915114">"允许应用读取当前电量使用情况的基础数据，此权限可让应用了解关于您使用了哪些应用的详细信息。"</string>
     <string name="permlab_updateBatteryStats" msgid="3719689764536379557">"修改电池使用统计信息"</string>
     <string name="permdesc_updateBatteryStats" msgid="6862817857178025002">"允许该应用修改收集到的电池统计信息。普通应用不应使用此权限。"</string>
+    <string name="permlab_getAppOpsStats" msgid="1508779687436585744">"检索应用操作统计信息"</string>
+    <string name="permdesc_getAppOpsStats" msgid="6243887041577912877">"允许该应用检索收集到的应用操作统计信息。普通应用不应使用此权限。"</string>
+    <string name="permlab_updateAppOpsStats" msgid="8829097373851521505">"修改应用操作统计信息"</string>
+    <string name="permdesc_updateAppOpsStats" msgid="50784596594403483">"允许该应用修改收集到的应用操作统计信息。普通应用不应使用此权限。"</string>
     <string name="permlab_backup" msgid="470013022865453920">"控制系统备份和还原"</string>
-    <string name="permdesc_backup" msgid="6912230525140589891">"允许应用控制系统的备份和还原机制。普通应用不能使用此权限。"</string>
+    <string name="permdesc_backup" msgid="6912230525140589891">"允许应用控制系统的备份和还原机制。普通应用不应使用此权限。"</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"确认完整备份或恢复操作"</string>
     <string name="permdesc_confirm_full_backup" msgid="1748762171637699562">"允许应用启动完整备份确认用户界面。不用于任何应用。"</string>
     <string name="permlab_internalSystemWindow" msgid="2148563628140193231">"显示未授权的窗口"</string>
@@ -391,9 +409,9 @@
     <string name="permlab_writeSettings" msgid="2226195290955224730">"修改系统设置"</string>
     <string name="permdesc_writeSettings" msgid="7775723441558907181">"允许应用修改系统的设置数据。恶意应用可能会破坏您的系统配置。"</string>
     <string name="permlab_writeSecureSettings" msgid="204676251876718288">"修改安全系统设置"</string>
-    <string name="permdesc_writeSecureSettings" msgid="8159535613020137391">"允许应用修改系统的安全设置数据。普通应用不能使用此权限。"</string>
+    <string name="permdesc_writeSecureSettings" msgid="8159535613020137391">"允许应用修改系统的安全设置数据。普通应用不应使用此权限。"</string>
     <string name="permlab_writeGservices" msgid="2149426664226152185">"修改 Google 服务地图"</string>
-    <string name="permdesc_writeGservices" msgid="1287309437638380229">"允许应用修改 Google 服务地图。普通应用不能使用此权限。"</string>
+    <string name="permdesc_writeGservices" msgid="1287309437638380229">"允许应用修改 Google 服务地图。普通应用不应使用此权限。"</string>
     <string name="permlab_receiveBootCompleted" msgid="5312965565987800025">"开机启动"</string>
     <string name="permdesc_receiveBootCompleted" product="tablet" msgid="7390304664116880704">"允许应用在系统完成引导后立即自动启动。这样可能会延长平板电脑的启动时间，并允许应用始终运行，从而导致平板电脑总体运行速度减慢。"</string>
     <string name="permdesc_receiveBootCompleted" product="default" msgid="513950589102617504">"允许应用在系统完成引导后立即自动启动。这样可能会延长手机的启动时间，并允许应用始终运行，从而导致手机总体运行速度减慢。"</string>
@@ -416,9 +434,9 @@
     <string name="permdesc_readProfile" product="default" msgid="5462475151849888848">"允许该应用读取您设备上存储的个人资料信息，例如您的姓名和联系信息。这意味着该应用可以识别您的身份，并可能将您的个人资料信息发送给他人。"</string>
     <string name="permlab_writeProfile" msgid="907793628777397643">"修改您自己的名片"</string>
     <string name="permdesc_writeProfile" product="default" msgid="5552084294598465899">"允许该应用更改或添加您设备上存储的个人资料信息，例如您的姓名和联系信息。这意味着该应用可以识别您的身份，并可能将您的个人资料信息发送给他人。"</string>
-    <string name="permlab_readSocialStream" product="default" msgid="1268920956152419170">"读取您的社交视频流"</string>
+    <string name="permlab_readSocialStream" product="default" msgid="1268920956152419170">"读取您的社交信息流"</string>
     <string name="permdesc_readSocialStream" product="default" msgid="4255706027172050872">"允许该应用访问并同步您和朋友的社交动态信息。在分享信息时一定要小心，因为此权限可让该应用读取您与社交网络上的朋友之间的交流信息。"</string>
-    <string name="permlab_writeSocialStream" product="default" msgid="3504179222493235645">"写入您的社交视频流"</string>
+    <string name="permlab_writeSocialStream" product="default" msgid="3504179222493235645">"写入您的社交信息流"</string>
     <string name="permdesc_writeSocialStream" product="default" msgid="3086557552204114849">"允许该应用显示您朋友的社交动态信息。在分享信息时一定要小心，因为此权限可让该应用冒充某个朋友编写消息。请注意：此权限可能不适用于所有社交网络。"</string>
     <string name="permlab_readCalendar" msgid="5972727560257612398">"读取日历活动和机密信息"</string>
     <string name="permdesc_readCalendar" product="tablet" msgid="4216462049057658723">"允许该应用读取您平板电脑上存储的所有日历活动，包括朋友或同事的活动。此权限可让该应用分享或保存您的日历数据，而不论这些数据是否属于机密或敏感内容。"</string>
@@ -433,23 +451,25 @@
     <string name="permlab_installLocationProvider" msgid="6578101199825193873">"允许安装位置信息提供程序"</string>
     <string name="permdesc_installLocationProvider" msgid="9066146120470591509">"创建用于测试的模拟位置源或安装新的位置提供程序。此权限可让该应用覆盖由其他位置源（如 GPS）或位置提供程序返回的位置和/或状态信息。"</string>
     <string name="permlab_accessFineLocation" msgid="1191898061965273372">"精确位置（基于 GPS 和网络）"</string>
-    <string name="permdesc_accessFineLocation" msgid="5295047563564981250">"允许该应用通过全球定位系统 (GPS) 或网络位置信息源（例如基站和 Wi-Fi）获取您的精确位置信息。您必须在设备上开启这些位置服务，应用才能获得位置信息。应用会使用此类服务确定您的位置，这可能会消耗更多电量。"</string>
+    <string name="permdesc_accessFineLocation" msgid="5295047563564981250">"允许该应用通过全球定位系统 (GPS) 或网络位置信息源（例如基站和 WLAN）获取您的精确位置信息。您必须在设备上开启这些位置服务，应用才能获得位置信息。应用会使用此类服务确定您的位置，这可能会消耗更多电量。"</string>
     <string name="permlab_accessCoarseLocation" msgid="4887895362354239628">"大致位置（基于网络）"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="2538200184373302295">"允许该应用获取您的大致位置信息。这类位置信息来自于使用网络位置信息源（例如基站和 Wi-Fi）的位置服务。您必须在设备上开启这些位置服务，应用才能获得位置信息。应用会使用此类服务确定您的大概位置。"</string>
+    <string name="permdesc_accessCoarseLocation" msgid="2538200184373302295">"允许该应用获取您的大致位置信息。这类位置信息来自于使用网络位置信息源（例如基站和 WLAN）的位置服务。您必须在设备上开启这些位置服务，应用才能获得位置信息。应用会使用此类服务确定您的大概位置。"</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"访问 SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"允许应用使用 SurfaceFlinger 低级功能。"</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"读取帧缓冲区"</string>
     <string name="permdesc_readFrameBuffer" msgid="4937405521809454680">"允许应用读取帧缓冲区的内容。"</string>
-    <string name="permlab_configureWifiDisplay" msgid="5595661694746742168">"配置 Wi-Fi 显示设备"</string>
-    <string name="permdesc_configureWifiDisplay" msgid="7916815158690218065">"允许应用配置并连接到 Wi-Fi 显示设备。"</string>
-    <string name="permlab_controlWifiDisplay" msgid="393641276723695496">"控制 Wi-Fi 显示设备"</string>
-    <string name="permdesc_controlWifiDisplay" msgid="4543912292681826986">"允许应用控制 Wi-Fi 显示设备的基础功能。"</string>
+    <string name="permlab_configureWifiDisplay" msgid="5595661694746742168">"配置 WLAN 显示设备"</string>
+    <string name="permdesc_configureWifiDisplay" msgid="7916815158690218065">"允许应用配置并连接到 WLAN 显示设备。"</string>
+    <string name="permlab_controlWifiDisplay" msgid="393641276723695496">"控制 WLAN 显示设备"</string>
+    <string name="permdesc_controlWifiDisplay" msgid="4543912292681826986">"允许应用控制 WLAN 显示设备的基础功能。"</string>
     <string name="permlab_modifyAudioSettings" msgid="6095859937069146086">"更改您的音频设置"</string>
     <string name="permdesc_modifyAudioSettings" msgid="3522565366806248517">"允许该应用修改全局音频设置，例如音量和用于输出的扬声器。"</string>
     <string name="permlab_recordAudio" msgid="3876049771427466323">"录音"</string>
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"允许该应用使用麦克风录制音频。此权限可让该应用不经您的确认即可随时录制音频。"</string>
     <string name="permlab_camera" msgid="3616391919559751192">"拍摄照片和视频"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"允许该应用使用相机拍摄照片和视频。此权限可让该应用随时使用相机，而无需您的确认。"</string>
+    <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">"在相机使用过程中停用传输指示灯 LED"</string>
+    <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">"允许预装的系统应用禁止相机使用指示灯 LED。"</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"永久停用平板电脑"</string>
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"永久停用手机"</string>
     <string name="permdesc_brick" product="tablet" msgid="4334818808001699530">"允许应用永久停用整个平板电脑，但这样非常危险。"</string>
@@ -492,9 +512,9 @@
     <string name="permlab_performCdmaProvisioning" product="default" msgid="5604848095315421425">"直接启动 CDMA 电话设置"</string>
     <string name="permdesc_performCdmaProvisioning" msgid="1994193538802314186">"允许应用启动 CDMA 配置。恶意应用可能会无端启动 CDMA 配置。"</string>
     <string name="permlab_locationUpdates" msgid="7785408253364335740">"控制位置更新通知"</string>
-    <string name="permdesc_locationUpdates" msgid="1120741557891438876">"允许应用启用/停用来自无线装置的位置更新通知。普通应用不能使用此权限。"</string>
+    <string name="permdesc_locationUpdates" msgid="1120741557891438876">"允许应用启用/停用来自无线装置的位置更新通知。普通应用不应使用此权限。"</string>
     <string name="permlab_checkinProperties" msgid="7855259461268734914">"访问检入属性"</string>
-    <string name="permdesc_checkinProperties" msgid="4024526968630194128">"允许应用对登记服务上传的属性拥有读取/写入权限。普通应用不能使用此权限。"</string>
+    <string name="permdesc_checkinProperties" msgid="4024526968630194128">"允许应用对登记服务上传的属性拥有读取/写入权限。普通应用不应使用此权限。"</string>
     <string name="permlab_bindGadget" msgid="776905339015863471">"选择小部件"</string>
     <string name="permdesc_bindGadget" msgid="8261326938599049290">"允许应用告知系统哪些小部件可供哪个应用使用。拥有此权限的应用可向其他应用授予对个人资料的访问权限。普通应用不应使用此权限。"</string>
     <string name="permlab_modifyPhoneState" msgid="8423923777659292228">"修改手机状态"</string>
@@ -547,13 +567,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"允许应用更改绑定网络连接的状态。"</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"更改后台数据使用设置"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"允许应用更改后台数据使用设置。"</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"查看 Wi-Fi 连接"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"允许该应用查看 Wi-Fi 网络的相关信息，例如是否启用了 Wi-Fi 以及连接的 Wi-Fi 设备的名称。"</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"连接 Wi-Fi 和断开连接"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"允许该应用与 Wi-Fi 接入点建立和断开连接，以及更改 Wi-Fi 网络的设备配置。"</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收 Wi-Fi 多播"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"允许该应用使用多播地址接收发送到 Wi-Fi 网络上所有设备（而不仅仅是您的平板电脑）的数据包。该操作的耗电量比非多播模式要大。"</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"允许该应用使用多播地址接收发送到 Wi-Fi 网络上所有设备（而不仅仅是您的手机）的数据包。该操作的耗电量比非多播模式要大。"</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"查看 WLAN 连接"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"允许该应用查看 WLAN 网络的相关信息，例如是否启用了 WLAN 以及连接的 WLAN 设备的名称。"</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"连接 WLAN 和断开连接"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"允许该应用与 WLAN 接入点建立和断开连接，以及更改 WLAN 网络的设备配置。"</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收 WLAN 多播"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"允许该应用使用多播地址接收发送到 WLAN 网络上所有设备（而不仅仅是您的平板电脑）的数据包。该操作的耗电量比非多播模式要大。"</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"允许该应用使用多播地址接收发送到 WLAN 网络上所有设备（而不仅仅是您的手机）的数据包。该操作的耗电量比非多播模式要大。"</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"访问蓝牙设置"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"允许应用配置本地蓝牙平板电脑，以及发现远程设备并进行配对。"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"允许应用配置本地蓝牙手机，以及发现远程设备并进行配对。"</string>
@@ -605,6 +625,10 @@
     <string name="permdesc_manageNetworkPolicy" msgid="7537586771559370668">"允许应用管理网络政策和定义专门针对应用的规则。"</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"修改网络使用情况记录方式"</string>
     <string name="permdesc_modifyNetworkAccounting" msgid="5443412866746198123">"允许该应用修改对于各应用的网络使用情况的统计方式。普通应用不应使用此权限。"</string>
+    <string name="permlab_accessNotifications" msgid="7673416487873432268">"访问通知"</string>
+    <string name="permdesc_accessNotifications" msgid="458457742683431387">"允许该应用检索、检查并清除通知，包括其他应用发布的通知。"</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"绑定到通知侦听器服务"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"允许应用绑定到通知侦听器服务的顶级接口（普通应用绝不需要此权限）。"</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"设置密码规则"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"控制屏幕解锁密码所允许的长度和字符。"</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"监视屏幕解锁尝试次数"</string>
@@ -714,7 +738,8 @@
     <string name="imProtocolYahoo" msgid="8271439408469021273">"雅虎"</string>
     <string name="imProtocolSkype" msgid="9019296744622832951">"Skype"</string>
     <string name="imProtocolQq" msgid="8887484379494111884">"QQ"</string>
-    <string name="imProtocolGoogleTalk" msgid="3808393979157698766">"Google Talk"</string>
+    <!-- no translation found for imProtocolGoogleTalk (493902321140277304) -->
+    <skip />
     <string name="imProtocolIcq" msgid="1574870433606517315">"ICQ"</string>
     <string name="imProtocolJabber" msgid="2279917630875771722">"Jabber"</string>
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
@@ -810,6 +835,7 @@
     <string name="lockscreen_access_pattern_cleared" msgid="5583479721001639579">"图案已清除"</string>
     <string name="lockscreen_access_pattern_cell_added" msgid="6756031208359292487">"已添加单元格"</string>
     <string name="lockscreen_access_pattern_detected" msgid="4988730895554057058">"图案绘制完成"</string>
+    <string name="keyguard_accessibility_widget_changed" msgid="5678624624681400191">"%1$s。%3$d的小部件%2$d。"</string>
     <string name="keyguard_accessibility_add_widget" msgid="8273277058724924654">"添加小部件。"</string>
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"空白"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"已展开解锁区域。"</string>
@@ -845,7 +871,10 @@
     <string name="factorytest_reboot" msgid="6320168203050791643">"重新启动"</string>
     <string name="js_dialog_title" msgid="1987483977834603872">"网址为“<xliff:g id="TITLE">%s</xliff:g>”的网页显示："</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
-    <string name="js_dialog_before_unload" msgid="730366588032430474">"要从此页面导航至其他页面吗？"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"触摸“确定”继续，或触摸“取消”留在当前页面。"</string>
+    <string name="js_dialog_before_unload_title" msgid="2619376555525116593">"确认离开"</string>
+    <string name="js_dialog_before_unload_positive_button" msgid="3112752010600484130">"离开此页"</string>
+    <string name="js_dialog_before_unload_negative_button" msgid="5614861293026099715">"留在此页"</string>
+    <string name="js_dialog_before_unload" msgid="3468816357095378590">"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"您确定要离开此页面吗？"</string>
     <string name="save_password_label" msgid="6860261758665825069">"确认"</string>
     <string name="double_tap_toast" msgid="4595046515400268881">"提示：点按两次可放大或缩小。"</string>
     <string name="autofill_this_form" msgid="4616758841157816676">"自动填充"</string>
@@ -855,9 +884,9 @@
     <string name="autofill_address_summary_separator" msgid="7483307893170324129">"， "</string>
     <string name="autofill_address_summary_format" msgid="4874459455786827344">"$1$2$3"</string>
     <string name="autofill_province" msgid="2231806553863422300">"省/直辖市/自治区"</string>
-    <string name="autofill_postal_code" msgid="4696430407689377108">"邮政编码"</string>
+    <string name="autofill_postal_code" msgid="4696430407689377108">"邮编"</string>
     <string name="autofill_state" msgid="6988894195520044613">"州"</string>
-    <string name="autofill_zip_code" msgid="8697544592627322946">"邮政编码"</string>
+    <string name="autofill_zip_code" msgid="8697544592627322946">"邮编"</string>
     <string name="autofill_county" msgid="237073771020362891">"郡"</string>
     <string name="autofill_island" msgid="4020100875984667025">"岛"</string>
     <string name="autofill_district" msgid="8400735073392267672">"地区"</string>
@@ -1031,6 +1060,8 @@
     <string name="editTextMenuTitle" msgid="4909135564941815494">"文字操作"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"存储空间不足"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"某些系统功能可能无法正常使用"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"“<xliff:g id="APP_NAME">%1$s</xliff:g>”正在运行"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"触摸即可了解详情或停止应用。"</string>
     <string name="ok" msgid="5970060430562524910">"确定"</string>
     <string name="cancel" msgid="6442560571259935130">"取消"</string>
     <string name="yes" msgid="5362982303337969312">"确定"</string>
@@ -1098,23 +1129,23 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"铃声"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"未知铃声"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"有可用的 Wi-Fi 网络"</item>
-    <item quantity="other" msgid="4192424489168397386">"有可用的 Wi-Fi 网络"</item>
+    <item quantity="one" msgid="6654123987418168693">"有可用的 WLAN 网络"</item>
+    <item quantity="other" msgid="4192424489168397386">"有可用的 WLAN 网络"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"打开可用的 Wi-Fi 网络"</item>
-    <item quantity="other" msgid="7915895323644292768">"打开可用的 Wi-Fi 网络"</item>
+    <item quantity="one" msgid="1634101450343277345">"打开可用的 WLAN 网络"</item>
+    <item quantity="other" msgid="7915895323644292768">"打开可用的 WLAN 网络"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"登录到 Wi-Fi 网络"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"登录到 WLAN 网络"</string>
     <string name="network_available_sign_in" msgid="8495155593358054676">"登录网络"</string>
     <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"无法连接到 Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"无法连接到 WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" 互联网连接状况不佳。"</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"启动 Wi-Fi Direct。此操作将会关闭 Wi-Fi 客户端/热点。"</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"无法启动 Wi-Fi Direct。"</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"已启用 Wi-Fi Direct"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"启动 WLAN Direct。此操作将会关闭 WLAN 客户端/热点。"</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"无法启动 WLAN Direct。"</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"已启用 WLAN Direct"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"通过触摸进行设置"</string>
     <string name="accept" msgid="1645267259272829559">"接受"</string>
     <string name="decline" msgid="2112225451706137894">"拒绝"</string>
@@ -1124,7 +1155,8 @@
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"收件人："</string>
     <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"键入所需的 PIN："</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN："</string>
-    <string name="wifi_p2p_frequency_conflict_message" msgid="7363907213787469151">"手机连接到<xliff:g id="DEVICE_NAME">%1$s</xliff:g>时会暂时断开与 Wi-Fi 的连接。"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"平板电脑连接到“<xliff:g id="DEVICE_NAME">%1$s</xliff:g>”时会暂时断开与 WLAN 的连接"</string>
+    <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"手机连接到<xliff:g id="DEVICE_NAME">%1$s</xliff:g>时会暂时断开与 WLAN 的连接。"</string>
     <string name="select_character" msgid="3365550120617701745">"插入字符"</string>
     <string name="sms_control_title" msgid="7296612781128917719">"正在发送短信"</string>
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;在发送大量短信。是否允许该应用继续发送短信？"</string>
@@ -1219,9 +1251,9 @@
     <string name="ext_media_nomedia_notification_message" product="default" msgid="3870120652983659641">"SD 卡已移除。请插入新的 SD 卡。"</string>
     <string name="activity_list_empty" msgid="1675388330786841066">"未找到匹配的活动。"</string>
     <string name="permlab_pkgUsageStats" msgid="8787352074326748892">"更新组件使用情况统计"</string>
-    <string name="permdesc_pkgUsageStats" msgid="1106612424254277630">"允许应用修改收集到的组件使用情况统计信息。普通应用不能使用此权限。"</string>
+    <string name="permdesc_pkgUsageStats" msgid="1106612424254277630">"允许应用修改收集到的组件使用情况统计信息。普通应用不应使用此权限。"</string>
     <string name="permlab_copyProtectedData" msgid="4341036311211406692">"复制内容"</string>
-    <string name="permdesc_copyProtectedData" msgid="4390697124288317831">"允许应用调用默认的容器服务，以便复制内容。普通应用不能使用此权限。"</string>
+    <string name="permdesc_copyProtectedData" msgid="4390697124288317831">"允许应用调用默认的容器服务，以便复制内容。普通应用不应使用此权限。"</string>
     <string name="permlab_route_media_output" msgid="1642024455750414694">"更改媒体输出线路"</string>
     <string name="permdesc_route_media_output" msgid="4932818749547244346">"允许该应用将媒体输出线路更改到其他外部设备。"</string>
     <string name="tutorial_double_tap_to_zoom_message_short" msgid="4070433208160063538">"触摸两次可进行缩放控制"</string>
@@ -1247,6 +1279,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"辅助功能"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"壁纸"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"更改壁纸"</string>
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"通知侦听器"</string>
     <string name="vpn_title" msgid="19615213552042827">"VPN 已激活"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"“<xliff:g id="APP">%s</xliff:g>”已激活 VPN"</string>
     <string name="vpn_text" msgid="3011306607126450322">"触摸可管理网络。"</string>
@@ -1254,7 +1287,7 @@
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"正在连接到始终开启的 VPN…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"已连接到始终开启的 VPN"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"始终开启的 VPN 出现错误"</string>
-    <string name="vpn_lockdown_reset" msgid="5365010427963548932">"触摸即可重置连接"</string>
+    <string name="vpn_lockdown_config" msgid="6415899150671537970">"触摸即可进行配置"</string>
     <string name="upload_file" msgid="2897957172366730416">"选择文件"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"未选定任何文件"</string>
     <string name="reset" msgid="2448168080964209908">"重置"</string>
@@ -1332,8 +1365,8 @@
     <string name="keyboardview_keycode_shift" msgid="2270748814315147690">"Shift"</string>
     <string name="keyboardview_keycode_enter" msgid="2985864015076059467">"Enter"</string>
     <string name="activitychooserview_choose_application" msgid="2125168057199941199">"选择应用"</string>
-    <string name="shareactionprovider_share_with" msgid="806688056141131819">"共享对象"</string>
-    <string name="shareactionprovider_share_with_application" msgid="5627411384638389738">"与“<xliff:g id="APPLICATION_NAME">%s</xliff:g>”共享"</string>
+    <string name="shareactionprovider_share_with" msgid="806688056141131819">"分享方式"</string>
+    <string name="shareactionprovider_share_with_application" msgid="5627411384638389738">"使用<xliff:g id="APPLICATION_NAME">%s</xliff:g>分享"</string>
     <string name="content_description_sliding_handle" msgid="415975056159262248">"滑动手柄。触摸并按住。"</string>
     <string name="description_direction_up" msgid="7169032478259485180">"向上滑动以<xliff:g id="TARGET_DESCRIPTION">%s</xliff:g>。"</string>
     <string name="description_direction_down" msgid="5087739728639014595">"向下滑动以<xliff:g id="TARGET_DESCRIPTION">%s</xliff:g>。"</string>
@@ -1350,6 +1383,8 @@
     <string name="action_bar_home_description" msgid="5293600496601490216">"导航首页"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"向上导航"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"更多选项"</string>
+    <string name="action_bar_home_description_format" msgid="7965984360903693903">"%1$s：%2$s"</string>
+    <string name="action_bar_home_subtitle_description_format" msgid="6985546530471780727">"%1$s - %2$s：%3$s"</string>
     <string name="storage_internal" msgid="4891916833657929263">"内存设备"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD 卡"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB 存储器"</string>
@@ -1359,12 +1394,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G 数据已停用"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G 数据已停用"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"移动数据已停用"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi 数据网络已停用"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN 数据网络已停用"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"触摸可启用。"</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"已超出 2G-3G 数据流量限制"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"已超出 4G 数据使用上限"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"已超出移动数据流量上限"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"超出了 Wi-Fi 数据流量上限"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"超出了 WLAN 数据流量上限"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"超出规定上限 <xliff:g id="SIZE">%s</xliff:g>。"</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"后台数据受限制"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"触摸可去除限制。"</string>
@@ -1384,7 +1419,7 @@
     <string name="sha1_fingerprint" msgid="7930330235269404581">"SHA-1 指纹："</string>
     <string name="activity_chooser_view_see_all" msgid="4292569383976636200">"查看全部"</string>
     <string name="activity_chooser_view_dialog_title_default" msgid="4710013864974040615">"选择活动"</string>
-    <string name="share_action_provider_share_with" msgid="5247684435979149216">"分享对象"</string>
+    <string name="share_action_provider_share_with" msgid="5247684435979149216">"分享方式"</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"设备已锁定。"</string>
     <string name="list_delimeter" msgid="3975117572185494152">"、 "</string>
     <string name="sending" msgid="3245653681008218030">"正在发送..."</string>
@@ -1399,6 +1434,7 @@
     <string name="default_media_route_name_hdmi" msgid="2450970399023478055">"HDMI"</string>
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"系统"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"蓝牙音频"</string>
+    <string name="wireless_display_route_description" msgid="9070346425023979651">"无线显示"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"完成"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"媒体输出线路"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"正在扫描..."</string>
@@ -1450,10 +1486,14 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地绘制了解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐户解锁手机。"\n\n"请在 <xliff:g id="NUMBER_2">%d</xliff:g> 秒后重试。"</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" — "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"删除"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7382971871993371648">"将音量调高到安全级别以上？"\n"长时间聆听高音量可能会损伤听力。"</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"将音量调高到推荐级别以上？"\n"长时间聆听高音量可能会损伤听力。"</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"持续按住双指即可启用辅助功能。"</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"辅助功能已启用。"</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"已取消辅助功能。"</string>
     <string name="user_switched" msgid="3768006783166984410">"当前用户是<xliff:g id="NAME">%1$s</xliff:g>。"</string>
     <string name="owner_name" msgid="2716755460376028154">"机主"</string>
+    <string name="error_message_title" msgid="4510373083082500195">"错误"</string>
+    <string name="app_no_restricted_accounts" msgid="4011285085817350390">"此应用不支持受限个人资料的帐户"</string>
+    <string name="app_not_found" msgid="3429141853498927379">"找不到可处理此操作的应用"</string>
+    <string name="revoke" msgid="5404479185228271586">"撤消"</string>
 </resources>

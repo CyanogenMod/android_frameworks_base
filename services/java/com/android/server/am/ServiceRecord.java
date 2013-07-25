@@ -16,6 +16,9 @@
 
 package com.android.server.am;
 
+import android.app.PendingIntent;
+import android.net.Uri;
+import android.provider.Settings;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.server.NotificationManagerService;
 
@@ -368,9 +371,55 @@ class ServiceRecord extends Binder {
                         return;
                     }
                     try {
+                        if (localForegroundNoti.icon == 0) {
+                            // It is not correct for the caller to supply a notification
+                            // icon, but this used to be able to slip through, so for
+                            // those dirty apps give it the app's icon.
+                            localForegroundNoti.icon = appInfo.icon;
+
+                            // Do not allow apps to present a sneaky invisible content view either.
+                            localForegroundNoti.contentView = null;
+                            localForegroundNoti.bigContentView = null;
+                            CharSequence appName = appInfo.loadLabel(
+                                    ams.mContext.getPackageManager());
+                            if (appName == null) {
+                                appName = appInfo.packageName;
+                            }
+                            Context ctx = null;
+                            try {
+                                ctx = ams.mContext.createPackageContext(
+                                        appInfo.packageName, 0);
+                                Intent runningIntent = new Intent(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                runningIntent.setData(Uri.fromParts("package",
+                                        appInfo.packageName, null));
+                                PendingIntent pi = PendingIntent.getActivity(ams.mContext, 0,
+                                        runningIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                localForegroundNoti.setLatestEventInfo(ctx,
+                                        ams.mContext.getString(
+                                                com.android.internal.R.string
+                                                        .app_running_notification_title,
+                                                appName),
+                                        ams.mContext.getString(
+                                                com.android.internal.R.string
+                                                        .app_running_notification_text,
+                                                appName),
+                                        pi);
+                            } catch (PackageManager.NameNotFoundException e) {
+                                localForegroundNoti.icon = 0;
+                            }
+                        }
+                        if (localForegroundNoti.icon == 0) {
+                            // Notifications whose icon is 0 are defined to not show
+                            // a notification, silently ignoring it.  We don't want to
+                            // just ignore it, we want to prevent the service from
+                            // being foreground.
+                            throw new RuntimeException("icon must be non-zero");
+                        }
                         int[] outId = new int[1];
-                        nm.enqueueNotificationInternal(localPackageName, appUid, appPid,
-                                null, localForegroundId, localForegroundNoti, outId, userId);
+                        nm.enqueueNotificationInternal(localPackageName, localPackageName,
+                                appUid, appPid, null, localForegroundId, localForegroundNoti,
+                                outId, userId);
                     } catch (RuntimeException e) {
                         Slog.w(ActivityManagerService.TAG,
                                 "Error showing notification for service", e);

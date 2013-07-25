@@ -21,6 +21,7 @@ import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.IConnectivityManager;
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceResponse;
 import android.net.wifi.p2p.nsd.WifiP2pServiceInfo;
@@ -29,7 +30,6 @@ import android.net.wifi.p2p.nsd.WifiP2pServiceResponse;
 import android.net.wifi.p2p.nsd.WifiP2pUpnpServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pUpnpServiceResponse;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +38,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.WorkSource;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.util.AsyncChannel;
@@ -172,10 +173,12 @@ public class WifiP2pManager {
      * Broadcast intent action indicating that the state of Wi-Fi p2p connectivity
      * has changed. One extra {@link #EXTRA_WIFI_P2P_INFO} provides the p2p connection info in
      * the form of a {@link WifiP2pInfo} object. Another extra {@link #EXTRA_NETWORK_INFO} provides
-     * the network info in the form of a {@link android.net.NetworkInfo}.
+     * the network info in the form of a {@link android.net.NetworkInfo}. A third extra provides
+     * the details of the group.
      *
      * @see #EXTRA_WIFI_P2P_INFO
      * @see #EXTRA_NETWORK_INFO
+     * @see #EXTRA_WIFI_P2P_GROUP
      */
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String WIFI_P2P_CONNECTION_CHANGED_ACTION =
@@ -189,41 +192,46 @@ public class WifiP2pManager {
 
     /**
      * The lookup key for a {@link android.net.NetworkInfo} object associated with the
-     * Wi-Fi network. Retrieve with
+     * p2p network. Retrieve with
      * {@link android.content.Intent#getParcelableExtra(String)}.
      */
     public static final String EXTRA_NETWORK_INFO = "networkInfo";
 
     /**
-     * The lookup key for a {@link android.net.LinkProperties} object associated with the
-     * network. Retrieve with
+     * The lookup key for a {@link android.net.wifi.p2p.WifiP2pGroup} object
+     * associated with the p2p network. Retrieve with
      * {@link android.content.Intent#getParcelableExtra(String)}.
-     * @hide
      */
-    public static final String EXTRA_LINK_PROPERTIES = "linkProperties";
+    public static final String EXTRA_WIFI_P2P_GROUP = "p2pGroupInfo";
 
     /**
-     * The lookup key for a {@link android.net.LinkCapabilities} object associated with the
-     * network. Retrieve with
-     * {@link android.content.Intent#getParcelableExtra(String)}.
-     * @hide
-     */
-    public static final String EXTRA_LINK_CAPABILITIES = "linkCapabilities";
-
-    /**
-     * Broadcast intent action indicating that the available peer list has changed. Fetch
-     * the changed list of peers with {@link #requestPeers}
+     * Broadcast intent action indicating that the available peer list has changed. This
+     * can be sent as a result of peers being found, lost or updated.
+     *
+     * <p> An extra {@link #EXTRA_P2P_DEVICE_LIST} provides the full list of
+     * current peers. The full list of peers can also be obtained any time with
+     * {@link #requestPeers}.
+     *
+     * @see #EXTRA_P2P_DEVICE_LIST
      */
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String WIFI_P2P_PEERS_CHANGED_ACTION =
         "android.net.wifi.p2p.PEERS_CHANGED";
+
+     /**
+      * The lookup key for a {@link android.net.wifi.p2p.WifiP2pDeviceList} object representing
+      * the new peer list when {@link #WIFI_P2P_PEERS_CHANGED_ACTION} broadcast is sent.
+      *
+      * <p>Retrieve with {@link android.content.Intent#getParcelableExtra(String)}.
+      */
+     public static final String EXTRA_P2P_DEVICE_LIST = "wifiP2pDeviceList";
 
     /**
      * Broadcast intent action indicating that peer discovery has either started or stopped.
      * One extra {@link #EXTRA_DISCOVERY_STATE} indicates whether discovery has started
      * or stopped.
      *
-     * Note that discovery will be stopped during a connection setup. If the application tries
+     * <p>Note that discovery will be stopped during a connection setup. If the application tries
      * to re-initiate discovery during this time, it can fail.
      */
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
@@ -272,41 +280,6 @@ public class WifiP2pManager {
      */
     public static final String WIFI_P2P_PERSISTENT_GROUPS_CHANGED_ACTION =
         "android.net.wifi.p2p.PERSISTENT_GROUPS_CHANGED";
-
-    /**
-     * The lookup key for a {@link #String} object.
-     * Retrieve with {@link android.os.Bundle#getString(String)}.
-     * @hide
-     */
-    public static final String APP_PKG_BUNDLE_KEY = "appPkgName";
-
-    /**
-     * The lookup key for a {@link #Boolean} object.
-     * Retrieve with {@link android.os.Bundle#getBoolean(String)}.
-     * @hide
-     */
-    public static final String RESET_DIALOG_LISTENER_BUNDLE_KEY = "dialogResetFlag";
-
-    /**
-     * The lookup key for a {@link #String} object.
-     * Retrieve with {@link android.os.Bundle#getString(String)}.
-     * @hide
-     */
-    public static final String WPS_PIN_BUNDLE_KEY = "wpsPin";
-
-    /**
-     * The lookup key for a {@link android.net.wifi.p2p.WifiP2pDevice} object
-     * Retrieve with {@link android.os.Bundle#getParcelable(String)}.
-     * @hide
-     */
-    public static final String P2P_DEV_BUNDLE_KEY = "wifiP2pDevice";
-
-    /**
-     * The lookup key for a {@link android.net.wifi.p2p.WifiP2pConfig} object
-     * Retrieve with {@link android.os.Bundle#getParcelable(String)}.
-     * @hide
-     */
-    public static final String P2P_CONFIG_BUNDLE_KEY = "wifiP2pConfig";
 
     IWifiP2pManager mService;
 
@@ -432,35 +405,30 @@ public class WifiP2pManager {
     public static final int SET_DEVICE_NAME_SUCCEEDED               = BASE + 53;
 
     /** @hide */
-    public static final int SET_DIALOG_LISTENER                     = BASE + 54;
+    public static final int DELETE_PERSISTENT_GROUP                 = BASE + 54;
     /** @hide */
-    public static final int DIALOG_LISTENER_DETACHED                = BASE + 55;
+    public static final int DELETE_PERSISTENT_GROUP_FAILED          = BASE + 55;
     /** @hide */
-    public static final int DIALOG_LISTENER_ATTACHED                = BASE + 56;
+    public static final int DELETE_PERSISTENT_GROUP_SUCCEEDED       = BASE + 56;
 
     /** @hide */
-    public static final int CONNECTION_REQUESTED                    = BASE + 57;
+    public static final int REQUEST_PERSISTENT_GROUP_INFO           = BASE + 57;
     /** @hide */
-    public static final int SHOW_PIN_REQUESTED                      = BASE + 58;
+    public static final int RESPONSE_PERSISTENT_GROUP_INFO          = BASE + 58;
 
     /** @hide */
-    public static final int DELETE_PERSISTENT_GROUP                 = BASE + 59;
+    public static final int SET_WFD_INFO                            = BASE + 59;
     /** @hide */
-    public static final int DELETE_PERSISTENT_GROUP_FAILED          = BASE + 60;
+    public static final int SET_WFD_INFO_FAILED                     = BASE + 60;
     /** @hide */
-    public static final int DELETE_PERSISTENT_GROUP_SUCCEEDED       = BASE + 61;
+    public static final int SET_WFD_INFO_SUCCEEDED                  = BASE + 61;
 
     /** @hide */
-    public static final int REQUEST_PERSISTENT_GROUP_INFO           = BASE + 62;
+    public static final int START_WPS                               = BASE + 62;
     /** @hide */
-    public static final int RESPONSE_PERSISTENT_GROUP_INFO          = BASE + 63;
-
+    public static final int START_WPS_FAILED                        = BASE + 63;
     /** @hide */
-    public static final int SET_WFD_INFO                            = BASE + 64;
-    /** @hide */
-    public static final int SET_WFD_INFO_FAILED                     = BASE + 65;
-    /** @hide */
-    public static final int SET_WFD_INFO_SUCCEEDED                  = BASE + 66;
+    public static final int START_WPS_SUCCEEDED                     = BASE + 64;
 
     /**
      * Create a new WifiP2pManager instance. Applications use
@@ -500,14 +468,6 @@ public class WifiP2pManager {
      * request.
      */
     public static final int NO_SERVICE_REQUESTS = 3;
-
-    /**
-     * Passed with {@link DialogListener#onDetached}.
-     * Indicates that the registered listener was detached from the system because
-     * the application went into background.
-     * @hide
-     */
-    public static final int NOT_IN_FOREGROUND   = 4;
 
     /** Interface for callback invocation when framework channel is lost */
     public interface ChannelListener {
@@ -640,49 +600,6 @@ public class WifiP2pManager {
     }
 
 
-    /**
-     * Interface for callback invocation when dialog events are received.
-     * see {@link #setDialogListener}.
-     * @hide
-     */
-    public interface DialogListener {
-
-        /**
-         * Called by the system when a request to show WPS pin is received.
-         *
-         * @param pin WPS pin.
-         */
-        public void onShowPinRequested(String pin);
-
-        /**
-         * Called by the system when a request to establish the connection is received.
-         *
-         * Application can then call {@link #connect} with the given config if the request
-         * is acceptable.
-         *
-         * @param device the source device.
-         * @param config p2p configuration.
-         */
-        public void onConnectionRequested(WifiP2pDevice device, WifiP2pConfig config);
-
-        /**
-         * Called by the system when this listener was attached to the system.
-         */
-        public void onAttached();
-
-        /**
-         * Called by the system when this listener was detached from the system or
-         * failed to attach.
-         *
-         * Application can request again using {@link #setDialogListener} when it is
-         * in the foreground.
-         *
-         * @param reason The reason for failure could be one of {@link #ERROR},
-         * {@link #BUSY}, {@link #P2P_UNSUPPORTED} or {@link #NOT_IN_FOREGROUND}
-         */
-        public void onDetached(int reason);
-    }
-
     /** Interface for callback invocation when stored group info list is available {@hide}*/
     public interface PersistentGroupInfoListener {
         /**
@@ -713,7 +630,6 @@ public class WifiP2pManager {
         private HashMap<Integer, Object> mListenerMap = new HashMap<Integer, Object>();
         private Object mListenerMapLock = new Object();
         private int mListenerKey = 0;
-        private DialogListener mDialogListener;
 
         private AsyncChannel mAsyncChannel;
         private P2pHandler mHandler;
@@ -734,98 +650,72 @@ public class WifiP2pManager {
                         }
                         break;
                     /* ActionListeners grouped together */
-                    case WifiP2pManager.DISCOVER_PEERS_FAILED:
-                    case WifiP2pManager.STOP_DISCOVERY_FAILED:
-                    case WifiP2pManager.DISCOVER_SERVICES_FAILED:
-                    case WifiP2pManager.CONNECT_FAILED:
-                    case WifiP2pManager.CANCEL_CONNECT_FAILED:
-                    case WifiP2pManager.CREATE_GROUP_FAILED:
-                    case WifiP2pManager.REMOVE_GROUP_FAILED:
-                    case WifiP2pManager.ADD_LOCAL_SERVICE_FAILED:
-                    case WifiP2pManager.REMOVE_LOCAL_SERVICE_FAILED:
-                    case WifiP2pManager.CLEAR_LOCAL_SERVICES_FAILED:
-                    case WifiP2pManager.ADD_SERVICE_REQUEST_FAILED:
-                    case WifiP2pManager.REMOVE_SERVICE_REQUEST_FAILED:
-                    case WifiP2pManager.CLEAR_SERVICE_REQUESTS_FAILED:
-                    case WifiP2pManager.SET_DEVICE_NAME_FAILED:
-                    case WifiP2pManager.DELETE_PERSISTENT_GROUP_FAILED:
-                    case WifiP2pManager.SET_WFD_INFO_FAILED:
+                    case DISCOVER_PEERS_FAILED:
+                    case STOP_DISCOVERY_FAILED:
+                    case DISCOVER_SERVICES_FAILED:
+                    case CONNECT_FAILED:
+                    case CANCEL_CONNECT_FAILED:
+                    case CREATE_GROUP_FAILED:
+                    case REMOVE_GROUP_FAILED:
+                    case ADD_LOCAL_SERVICE_FAILED:
+                    case REMOVE_LOCAL_SERVICE_FAILED:
+                    case CLEAR_LOCAL_SERVICES_FAILED:
+                    case ADD_SERVICE_REQUEST_FAILED:
+                    case REMOVE_SERVICE_REQUEST_FAILED:
+                    case CLEAR_SERVICE_REQUESTS_FAILED:
+                    case SET_DEVICE_NAME_FAILED:
+                    case DELETE_PERSISTENT_GROUP_FAILED:
+                    case SET_WFD_INFO_FAILED:
+                    case START_WPS_FAILED:
                         if (listener != null) {
                             ((ActionListener) listener).onFailure(message.arg1);
                         }
                         break;
                     /* ActionListeners grouped together */
-                    case WifiP2pManager.DISCOVER_PEERS_SUCCEEDED:
-                    case WifiP2pManager.STOP_DISCOVERY_SUCCEEDED:
-                    case WifiP2pManager.DISCOVER_SERVICES_SUCCEEDED:
-                    case WifiP2pManager.CONNECT_SUCCEEDED:
-                    case WifiP2pManager.CANCEL_CONNECT_SUCCEEDED:
-                    case WifiP2pManager.CREATE_GROUP_SUCCEEDED:
-                    case WifiP2pManager.REMOVE_GROUP_SUCCEEDED:
-                    case WifiP2pManager.ADD_LOCAL_SERVICE_SUCCEEDED:
-                    case WifiP2pManager.REMOVE_LOCAL_SERVICE_SUCCEEDED:
-                    case WifiP2pManager.CLEAR_LOCAL_SERVICES_SUCCEEDED:
-                    case WifiP2pManager.ADD_SERVICE_REQUEST_SUCCEEDED:
-                    case WifiP2pManager.REMOVE_SERVICE_REQUEST_SUCCEEDED:
-                    case WifiP2pManager.CLEAR_SERVICE_REQUESTS_SUCCEEDED:
-                    case WifiP2pManager.SET_DEVICE_NAME_SUCCEEDED:
-                    case WifiP2pManager.DELETE_PERSISTENT_GROUP_SUCCEEDED:
-                    case WifiP2pManager.SET_WFD_INFO_SUCCEEDED:
+                    case DISCOVER_PEERS_SUCCEEDED:
+                    case STOP_DISCOVERY_SUCCEEDED:
+                    case DISCOVER_SERVICES_SUCCEEDED:
+                    case CONNECT_SUCCEEDED:
+                    case CANCEL_CONNECT_SUCCEEDED:
+                    case CREATE_GROUP_SUCCEEDED:
+                    case REMOVE_GROUP_SUCCEEDED:
+                    case ADD_LOCAL_SERVICE_SUCCEEDED:
+                    case REMOVE_LOCAL_SERVICE_SUCCEEDED:
+                    case CLEAR_LOCAL_SERVICES_SUCCEEDED:
+                    case ADD_SERVICE_REQUEST_SUCCEEDED:
+                    case REMOVE_SERVICE_REQUEST_SUCCEEDED:
+                    case CLEAR_SERVICE_REQUESTS_SUCCEEDED:
+                    case SET_DEVICE_NAME_SUCCEEDED:
+                    case DELETE_PERSISTENT_GROUP_SUCCEEDED:
+                    case SET_WFD_INFO_SUCCEEDED:
+                    case START_WPS_SUCCEEDED:
                         if (listener != null) {
                             ((ActionListener) listener).onSuccess();
                         }
                         break;
-                    case WifiP2pManager.RESPONSE_PEERS:
+                    case RESPONSE_PEERS:
                         WifiP2pDeviceList peers = (WifiP2pDeviceList) message.obj;
                         if (listener != null) {
                             ((PeerListListener) listener).onPeersAvailable(peers);
                         }
                         break;
-                    case WifiP2pManager.RESPONSE_CONNECTION_INFO:
+                    case RESPONSE_CONNECTION_INFO:
                         WifiP2pInfo wifiP2pInfo = (WifiP2pInfo) message.obj;
                         if (listener != null) {
                             ((ConnectionInfoListener) listener).onConnectionInfoAvailable(wifiP2pInfo);
                         }
                         break;
-                    case WifiP2pManager.RESPONSE_GROUP_INFO:
+                    case RESPONSE_GROUP_INFO:
                         WifiP2pGroup group = (WifiP2pGroup) message.obj;
                         if (listener != null) {
                             ((GroupInfoListener) listener).onGroupInfoAvailable(group);
                         }
                         break;
-                    case WifiP2pManager.RESPONSE_SERVICE:
+                    case RESPONSE_SERVICE:
                         WifiP2pServiceResponse resp = (WifiP2pServiceResponse) message.obj;
                         handleServiceResponse(resp);
                         break;
-                    case WifiP2pManager.CONNECTION_REQUESTED:
-                        if (mDialogListener != null) {
-                            Bundle bundle = message.getData();
-                            mDialogListener.onConnectionRequested(
-                                    (WifiP2pDevice)bundle.getParcelable(
-                                            P2P_DEV_BUNDLE_KEY),
-                                    (WifiP2pConfig)bundle.getParcelable(
-                                            P2P_CONFIG_BUNDLE_KEY));
-                        }
-                        break;
-                    case WifiP2pManager.SHOW_PIN_REQUESTED:
-                        if (mDialogListener != null) {
-                            Bundle bundle = message.getData();
-                            mDialogListener.onShowPinRequested(
-                                    bundle.getString(WPS_PIN_BUNDLE_KEY));
-                        }
-                        break;
-                    case WifiP2pManager.DIALOG_LISTENER_ATTACHED:
-                        if (mDialogListener != null) {
-                            mDialogListener.onAttached();
-                        }
-                        break;
-                    case WifiP2pManager.DIALOG_LISTENER_DETACHED:
-                        if (mDialogListener != null) {
-                            mDialogListener.onDetached(message.arg1);
-                            mDialogListener = null;
-                        }
-                        break;
-                    case WifiP2pManager.RESPONSE_PERSISTENT_GROUP_INFO:
+                    case RESPONSE_PERSISTENT_GROUP_INFO:
                         WifiP2pGroupList groups = (WifiP2pGroupList) message.obj;
                         if (listener != null) {
                             ((PersistentGroupInfoListener) listener).
@@ -897,10 +787,6 @@ public class WifiP2pManager {
                 return mListenerMap.remove(key);
             }
         }
-
-        private void setDialogListener(DialogListener listener) {
-            mDialogListener = listener;
-        }
     }
 
     private static void checkChannel(Channel c) {
@@ -913,6 +799,13 @@ public class WifiP2pManager {
 
     private static void checkServiceRequest(WifiP2pServiceRequest req) {
         if (req == null) throw new IllegalArgumentException("service request is null");
+    }
+
+    private static void checkP2pConfig(WifiP2pConfig c) {
+        if (c == null) throw new IllegalArgumentException("config cannot be null");
+        if (TextUtils.isEmpty(c.deviceAddress)) {
+            throw new IllegalArgumentException("deviceAddress cannot be empty");
+        }
     }
 
     /**
@@ -1001,6 +894,7 @@ public class WifiP2pManager {
      */
     public void connect(Channel c, WifiP2pConfig config, ActionListener listener) {
         checkChannel(c);
+        checkP2pConfig(config);
         c.mAsyncChannel.sendMessage(CONNECT, 0, c.putListener(listener), config);
     }
 
@@ -1059,6 +953,21 @@ public class WifiP2pManager {
     public void removeGroup(Channel c, ActionListener listener) {
         checkChannel(c);
         c.mAsyncChannel.sendMessage(REMOVE_GROUP, 0, c.putListener(listener));
+    }
+
+    /**
+     * Start a Wi-Fi Protected Setup (WPS) session.
+     *
+     * <p> The function call immediately returns after sending a request to start a
+     * WPS session. Currently, this is only valid if the current device is running
+     * as a group owner to allow any new clients to join the group. The application
+     * is notified of a success or failure to initiate WPS through listener callbacks
+     * {@link ActionListener#onSuccess} or {@link ActionListener#onFailure}.
+     * @hide
+     */
+    public void startWps(Channel c, WpsInfo wps, ActionListener listener) {
+        checkChannel(c);
+        c.mAsyncChannel.sendMessage(START_WPS, 0, c.putListener(listener), wps);
     }
 
     /**
@@ -1314,41 +1223,6 @@ public class WifiP2pManager {
         c.mAsyncChannel.sendMessage(SET_WFD_INFO, 0, c.putListener(listener), wfdInfo);
     }
 
-    /**
-     * Set dialog listener to over-ride system dialogs on p2p events. This function
-     * allows an application to receive notifications on connection requests from
-     * peers so that it can customize the user experience for connection with
-     * peers.
-     *
-     * <p> The function call immediately returns after sending a request
-     * to the framework. The application is notified of a success or failure to attach
-     * to the system through listener callbacks {@link DialogListener#onAttached} or
-     * {@link DialogListener#onDetached}.
-     *
-     * <p> Note that only foreground application will be successful in overriding the
-     * system dialogs.
-     * @hide
-     *
-     * @param c is the channel created at {@link #initialize}
-     * @param listener for callback on a dialog event.
-     */
-    public void setDialogListener(Channel c, DialogListener listener) {
-        checkChannel(c);
-        c.setDialogListener(listener);
-
-        /**
-         * mAsyncChannel should always stay private and inaccessible from the app
-         * to prevent an app from sending a message with a fake app name to gain
-         * control over the dialogs
-         */
-        Message msg = Message.obtain();
-        Bundle bundle = new Bundle();
-        bundle.putString(APP_PKG_BUNDLE_KEY, c.mContext.getPackageName());
-        bundle.putBoolean(RESET_DIALOG_LISTENER_BUNDLE_KEY, listener == null);
-        msg.what = SET_DIALOG_LISTENER;
-        msg.setData(bundle);
-        c.mAsyncChannel.sendMessage(msg);
-    }
 
     /**
      * Delete a stored persistent group from the system settings.
@@ -1382,6 +1256,21 @@ public class WifiP2pManager {
     public void requestPersistentGroupInfo(Channel c, PersistentGroupInfoListener listener) {
         checkChannel(c);
         c.mAsyncChannel.sendMessage(REQUEST_PERSISTENT_GROUP_INFO, 0, c.putListener(listener));
+    }
+
+    /** @hide */
+    public static final int MIRACAST_DISABLED = 0;
+    /** @hide */
+    public static final int MIRACAST_SOURCE   = 1;
+    /** @hide */
+    public static final int MIRACAST_SINK     = 2;
+    /** Internal use only @hide */
+    public void setMiracastMode(int mode) {
+        try {
+            mService.setMiracastMode(mode);
+        } catch(RemoteException e) {
+           // ignore
+        }
     }
 
     /**

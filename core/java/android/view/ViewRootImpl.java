@@ -42,7 +42,6 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
-import android.os.LatencyTimer;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
@@ -107,6 +106,7 @@ public final class ViewRootImpl implements ViewParent,
     private static final boolean DEBUG_IMF = false || LOCAL_LOGV;
     private static final boolean DEBUG_CONFIGURATION = false || LOCAL_LOGV;
     private static final boolean DEBUG_FPS = false;
+    private static final boolean DEBUG_INPUT_PROCESSING = false || LOCAL_LOGV;
 
     private static final boolean USE_RENDER_THREAD = false;
 
@@ -114,10 +114,7 @@ public final class ViewRootImpl implements ViewParent,
      * Set this system property to true to force the view hierarchy to render
      * at 60 Hz. This can be used to measure the potential framerate.
      */
-    private static final String PROPERTY_PROFILE_RENDERING = "viewancestor.profile_rendering";    
-    
-    private static final boolean MEASURE_LATENCY = false;
-    private static LatencyTimer lt;
+    private static final String PROPERTY_PROFILE_RENDERING = "viewancestor.profile_rendering";
 
     /**
      * Maximum time we allow the user to roll the trackball enough to generate
@@ -137,23 +134,15 @@ public final class ViewRootImpl implements ViewParent,
     private static boolean sRenderThreadQueried = false;
     private static final Object[] sRenderThreadQueryLock = new Object[0];
 
+    final Context mContext;
     final IWindowSession mWindowSession;
     final Display mDisplay;
-
-    long mLastTrackballTime = 0;
-    final TrackballAxis mTrackballAxisX = new TrackballAxis();
-    final TrackballAxis mTrackballAxisY = new TrackballAxis();
-
-    int mLastJoystickXDirection;
-    int mLastJoystickYDirection;
-    int mLastJoystickXKeyCode;
-    int mLastJoystickYKeyCode;
+    final String mBasePackageName;
 
     final int[] mTmpLocation = new int[2];
 
     final TypedValue mTmpValue = new TypedValue();
-    
-    final InputMethodCallback mInputMethodCallback;
+
     final Thread mThread;
 
     final WindowLeaked mLocation;
@@ -167,9 +156,6 @@ public final class ViewRootImpl implements ViewParent,
     int mSeq;
 
     View mView;
-    View mFocusedView;
-    View mRealFocusedView;  // this is not set to null in touch mode
-    View mOldFocusedView;
 
     View mAccessibilityFocusedHost;
     AccessibilityNodeInfo mAccessibilityFocusedVirtualView;
@@ -196,7 +182,6 @@ public final class ViewRootImpl implements ViewParent,
     int mHeight;
     Rect mDirty;
     final Rect mCurrentDirty = new Rect();
-    final Rect mPreviousDirty = new Rect();
     boolean mIsAnimating;
 
     CompatibilityInfo.Translator mTranslator;
@@ -226,19 +211,29 @@ public final class ViewRootImpl implements ViewParent,
     boolean mHasHadWindowFocus;
     boolean mLastWasImTarget;
     boolean mWindowsAnimating;
+    boolean mDrawDuringWindowsAnimating;
     boolean mIsDrawing;
     int mLastSystemUiVisibility;
     int mClientWindowLayoutFlags;
+    boolean mLastOverscanRequested;
 
     // Pool of queued input events.
     private static final int MAX_QUEUED_INPUT_EVENT_POOL_SIZE = 10;
     private QueuedInputEvent mQueuedInputEventPool;
     private int mQueuedInputEventPoolSize;
 
-    // Input event queue.
-    QueuedInputEvent mFirstPendingInputEvent;
-    QueuedInputEvent mCurrentInputEvent;
+    /* Input event queue.
+     * Pending input events are input events waiting to be delivered to the input stages
+     * and handled by the application.
+     */
+    QueuedInputEvent mPendingInputEventHead;
+    QueuedInputEvent mPendingInputEventTail;
+    int mPendingInputEventCount;
     boolean mProcessInputEventsScheduled;
+    String mPendingInputEventQueueLengthCounterName = "pq";
+
+    InputStage mFirstInputStage;
+    InputStage mFirstPostImeInputStage;
 
     boolean mWindowAttributesChanged = false;
     int mWindowAttributesChangesFlag = 0;
@@ -255,6 +250,7 @@ public final class ViewRootImpl implements ViewParent,
     // These are accessed by multiple threads.
     final Rect mWinFrame; // frame given by window manager.
 
+    final Rect mPendingOverscanInsets = new Rect();
     final Rect mPendingVisibleInsets = new Rect();
     final Rect mPendingContentInsets = new Rect();
     final ViewTreeObserver.InternalInsetsInfo mLastGivenInsets
@@ -267,7 +263,7 @@ public final class ViewRootImpl implements ViewParent,
 
     boolean mScrollMayChange;
     int mSoftInputMode;
-    View mLastScrolledFocus;
+    WeakReference<View> mLastScrolledFocus;
     int mScrollY;
     int mCurScrollY;
     Scroller mScroller;
@@ -287,15 +283,15 @@ public final class ViewRootImpl implements ViewParent,
     final PointF mLastTouchPoint = new PointF();
     
     private boolean mProfileRendering;    
-    private Thread mRenderProfiler;
-    private volatile boolean mRenderProfilingEnabled;
+    private Choreographer.FrameCallback mRenderProfiler;
+    private boolean mRenderProfilingEnabled;
 
     // Variables to track frames per second, enabled via DEBUG_FPS flag
     private long mFpsStartTime = -1;
     private long mFpsPrevTime = -1;
     private int mFpsNumFrames;
 
-    private final ArrayList<DisplayList> mDisplayLists = new ArrayList<DisplayList>(24);
+    private final ArrayList<DisplayList> mDisplayLists = new ArrayList<DisplayList>();
     
     /**
      * see {@link #playSoundEffect(int)}
@@ -315,6 +311,10 @@ public final class ViewRootImpl implements ViewParent,
     private final int mDensity;
     private final int mNoncompatDensity;
 
+    private boolean mInLayout = false;
+    ArrayList<View> mLayoutRequesters = new ArrayList<View>();
+    boolean mHandlingLayoutInLayoutRequest = false;
+
     private int mViewLayoutDirectionInitial;
 
     /**
@@ -332,19 +332,10 @@ public final class ViewRootImpl implements ViewParent,
     }
     
     public ViewRootImpl(Context context, Display display) {
-        super();
-
-        if (MEASURE_LATENCY) {
-            if (lt == null) {
-                lt = new LatencyTimer(100, 1000);
-            }
-        }
-
-        // Initialize the statics when this class is first instantiated. This is
-        // done here instead of in the static block because Zygote does not
-        // allow the spawning of threads.
-        mWindowSession = WindowManagerGlobal.getWindowSession(context.getMainLooper());
+        mContext = context;
+        mWindowSession = WindowManagerGlobal.getWindowSession();
         mDisplay = display;
+        mBasePackageName = context.getBasePackageName();
 
         CompatibilityInfoHolder cih = display.getCompatibilityInfo();
         mCompatibilityInfo = cih != null ? cih : new CompatibilityInfoHolder();
@@ -360,7 +351,6 @@ public final class ViewRootImpl implements ViewParent,
         mWinFrame = new Rect();
         mWindow = new W(this);
         mTargetSdkVersion = context.getApplicationInfo().targetSdkVersion;
-        mInputMethodCallback = new InputMethodCallback(this);
         mViewVisibility = View.GONE;
         mTransparentRegion = new Region();
         mPreviousTransparentRegion = new Region();
@@ -376,8 +366,6 @@ public final class ViewRootImpl implements ViewParent,
         mDensity = context.getResources().getDisplayMetrics().densityDpi;
         mNoncompatDensity = context.getResources().getDisplayMetrics().noncompatDensityDpi;
         mFallbackEventHandler = PolicyManager.makeNewFallbackEventHandler(context);
-        mProfileRendering = Boolean.parseBoolean(
-                SystemProperties.get(PROPERTY_PROFILE_RENDERING, "false"));
         mChoreographer = Choreographer.getInstance();
 
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -468,6 +456,9 @@ public final class ViewRootImpl implements ViewParent,
                 mViewLayoutDirectionInitial = mView.getRawLayoutDirection();
                 mFallbackEventHandler.setView(view);
                 mWindowAttributes.copyFrom(attrs);
+                if (mWindowAttributes.packageName == null) {
+                    mWindowAttributes.packageName = mBasePackageName;
+                }
                 attrs = mWindowAttributes;
                 // Keep track of the actual window flags supplied by the client.
                 mClientWindowLayoutFlags = attrs.flags;
@@ -552,6 +543,7 @@ public final class ViewRootImpl implements ViewParent,
                 if (mTranslator != null) {
                     mTranslator.translateRectInScreenToAppWindow(mAttachInfo.mContentInsets);
                 }
+                mPendingOverscanInsets.set(0, 0, 0, 0);
                 mPendingContentInsets.set(mAttachInfo.mContentInsets);
                 mPendingVisibleInsets.set(0, 0, 0, 0);
                 if (DEBUG_LAYOUT) Log.v(TAG, "Added window " + mWindow);
@@ -606,12 +598,11 @@ public final class ViewRootImpl implements ViewParent,
                 }
                 if (mInputChannel != null) {
                     if (mInputQueueCallback != null) {
-                        mInputQueue = new InputQueue(mInputChannel);
+                        mInputQueue = new InputQueue();
                         mInputQueueCallback.onInputQueueCreated(mInputQueue);
-                    } else {
-                        mInputEventReceiver = new WindowInputEventReceiver(mInputChannel,
-                                Looper.myLooper());
                     }
+                    mInputEventReceiver = new WindowInputEventReceiver(mInputChannel,
+                            Looper.myLooper());
                 }
 
                 view.assignParent(this);
@@ -625,6 +616,23 @@ public final class ViewRootImpl implements ViewParent,
                 if (view.getImportantForAccessibility() == View.IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
                     view.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
                 }
+
+                // Set up the input pipeline.
+                CharSequence counterSuffix = attrs.getTitle();
+                InputStage syntheticStage = new SyntheticInputStage();
+                InputStage viewPostImeStage = new ViewPostImeInputStage(syntheticStage);
+                InputStage nativePostImeStage = new NativePostImeInputStage(viewPostImeStage,
+                        "aq:native-post-ime:" + counterSuffix);
+                InputStage earlyPostImeStage = new EarlyPostImeInputStage(nativePostImeStage);
+                InputStage imeStage = new ImeInputStage(earlyPostImeStage,
+                        "aq:ime:" + counterSuffix);
+                InputStage viewPreImeStage = new ViewPreImeInputStage(imeStage);
+                InputStage nativePreImeStage = new NativePreImeInputStage(viewPreImeStage,
+                        "aq:native-pre-ime:" + counterSuffix);
+
+                mFirstInputStage = nativePreImeStage;
+                mFirstPostImeInputStage = earlyPostImeStage;
+                mPendingInputEventQueueLengthCounterName = "aq:pending:" + counterSuffix;
             }
         }
     }
@@ -730,9 +738,11 @@ public final class ViewRootImpl implements ViewParent,
 
                 final boolean translucent = attrs.format != PixelFormat.OPAQUE;
                 mAttachInfo.mHardwareRenderer = HardwareRenderer.createGlRenderer(2, translucent);
-                mAttachInfo.mHardwareAccelerated = mAttachInfo.mHardwareAccelerationRequested
-                        = mAttachInfo.mHardwareRenderer != null;
-
+                if (mAttachInfo.mHardwareRenderer != null) {
+                    mAttachInfo.mHardwareRenderer.setName(attrs.getTitle().toString());
+                    mAttachInfo.mHardwareAccelerated =
+                            mAttachInfo.mHardwareAccelerationRequested = true;
+                }
             } else if (fakeHwAccelerated) {
                 // The window had wanted to use hardware acceleration, but this
                 // is not allowed in its process.  By setting this flag, it can
@@ -764,6 +774,9 @@ public final class ViewRootImpl implements ViewParent,
             attrs.systemUiVisibility = mWindowAttributes.systemUiVisibility;
             attrs.subtreeSystemUiVisibility = mWindowAttributes.subtreeSystemUiVisibility;
             mWindowAttributesChangesFlag = mWindowAttributes.copyFrom(attrs);
+            if (mWindowAttributes.packageName == null) {
+                mWindowAttributes.packageName = mBasePackageName;
+            }
             mWindowAttributes.flags |= compatibleWindowFlag;
 
             applyKeepScreenOnFlag(mWindowAttributes);
@@ -820,9 +833,11 @@ public final class ViewRootImpl implements ViewParent,
 
     @Override
     public void requestLayout() {
-        checkThread();
-        mLayoutRequested = true;
-        scheduleTraversals();
+        if (!mHandlingLayoutInLayoutRequest) {
+            checkThread();
+            mLayoutRequested = true;
+            scheduleTraversals();
+        }
     }
 
     @Override
@@ -1190,6 +1205,7 @@ public final class ViewRootImpl implements ViewParent,
                 host.setLayoutDirection(mLastConfiguration.getLayoutDirection());
             }
             host.dispatchAttachedToWindow(attachInfo, 0);
+            attachInfo.mTreeObserver.dispatchOnWindowAttachedChange(true);
             mFitSystemWindowsInsets.set(mAttachInfo.mContentInsets);
             host.fitSystemWindows(mFitSystemWindowsInsets);
             //Log.i(TAG, "Screen on initialized: " + attachInfo.mKeepScreenOn);
@@ -1235,6 +1251,9 @@ public final class ViewRootImpl implements ViewParent,
                 mAttachInfo.mInTouchMode = !mAddedTouchMode;
                 ensureTouchModeLocally(mAddedTouchMode);
             } else {
+                if (!mPendingOverscanInsets.equals(mAttachInfo.mOverscanInsets)) {
+                    insetsChanged = true;
+                }
                 if (!mPendingContentInsets.equals(mAttachInfo.mContentInsets)) {
                     insetsChanged = true;
                 }
@@ -1300,15 +1319,20 @@ public final class ViewRootImpl implements ViewParent,
             }
         }
 
-        if (params != null && (host.mPrivateFlags & View.PFLAG_REQUEST_TRANSPARENT_REGIONS) != 0) {
-            if (!PixelFormat.formatHasAlpha(params.format)) {
-                params.format = PixelFormat.TRANSLUCENT;
+        if (params != null) {
+            if ((host.mPrivateFlags & View.PFLAG_REQUEST_TRANSPARENT_REGIONS) != 0) {
+                if (!PixelFormat.formatHasAlpha(params.format)) {
+                    params.format = PixelFormat.TRANSLUCENT;
+                }
             }
+            mAttachInfo.mOverscanRequested = (params.flags
+                    & WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN) != 0;
         }
 
         if (mFitSystemWindowsRequested) {
             mFitSystemWindowsRequested = false;
             mFitSystemWindowsInsets.set(mAttachInfo.mContentInsets);
+            mLastOverscanRequested = mAttachInfo.mOverscanRequested;
             host.fitSystemWindows(mFitSystemWindowsInsets);
             if (mLayoutRequested) {
                 // Short-circuit catching a new layout request here, so
@@ -1363,7 +1387,6 @@ public final class ViewRootImpl implements ViewParent,
 
             boolean hwInitialized = false;
             boolean contentInsetsChanged = false;
-            boolean visibleInsetsChanged;
             boolean hadSurface = mSurface.isValid();
 
             try {
@@ -1374,8 +1397,13 @@ public final class ViewRootImpl implements ViewParent,
 
                 final int surfaceGenerationId = mSurface.getGenerationId();
                 relayoutResult = relayoutWindow(params, viewVisibility, insetsPending);
+                if (!mDrawDuringWindowsAnimating) {
+                    mWindowsAnimating |=
+                            (relayoutResult & WindowManagerGlobal.RELAYOUT_RES_ANIMATING) != 0;
+                }
 
                 if (DEBUG_LAYOUT) Log.v(TAG, "relayout: frame=" + frame.toShortString()
+                        + " overscan=" + mPendingOverscanInsets.toShortString()
                         + " content=" + mPendingContentInsets.toShortString()
                         + " visible=" + mPendingVisibleInsets.toShortString()
                         + " surface=" + mSurface);
@@ -1387,9 +1415,11 @@ public final class ViewRootImpl implements ViewParent,
                     mPendingConfiguration.seq = 0;
                 }
 
+                final boolean overscanInsetsChanged = !mPendingOverscanInsets.equals(
+                        mAttachInfo.mOverscanInsets);
                 contentInsetsChanged = !mPendingContentInsets.equals(
                         mAttachInfo.mContentInsets);
-                visibleInsetsChanged = !mPendingVisibleInsets.equals(
+                final boolean visibleInsetsChanged = !mPendingVisibleInsets.equals(
                         mAttachInfo.mVisibleInsets);
                 if (contentInsetsChanged) {
                     if (mWidth > 0 && mHeight > 0 && lp != null &&
@@ -1417,8 +1447,6 @@ public final class ViewRootImpl implements ViewParent,
                             }
                             // TODO: should handle create/resize failure
                             layerCanvas = mResizeBuffer.start(hwRendererCanvas);
-                            layerCanvas.setViewport(mWidth, mHeight);
-                            layerCanvas.onPreDraw(null);
                             final int restoreCount = layerCanvas.save();
 
                             int yoff;
@@ -1455,9 +1483,6 @@ public final class ViewRootImpl implements ViewParent,
                         } catch (OutOfMemoryError e) {
                             Log.w(TAG, "Not enough memory for content change anim buffer", e);
                         } finally {
-                            if (layerCanvas != null) {
-                                layerCanvas.onPostDraw();
-                            }
                             if (mResizeBuffer != null) {
                                 mResizeBuffer.end(hwRendererCanvas);
                                 if (!completed) {
@@ -1471,9 +1496,18 @@ public final class ViewRootImpl implements ViewParent,
                     if (DEBUG_LAYOUT) Log.v(TAG, "Content insets changing to: "
                             + mAttachInfo.mContentInsets);
                 }
+                if (overscanInsetsChanged) {
+                    mAttachInfo.mOverscanInsets.set(mPendingOverscanInsets);
+                    if (DEBUG_LAYOUT) Log.v(TAG, "Overscan insets changing to: "
+                            + mAttachInfo.mOverscanInsets);
+                    // Need to relayout with content insets.
+                    contentInsetsChanged = true;
+                }
                 if (contentInsetsChanged || mLastSystemUiVisibility !=
-                        mAttachInfo.mSystemUiVisibility || mFitSystemWindowsRequested) {
+                        mAttachInfo.mSystemUiVisibility || mFitSystemWindowsRequested
+                        || mLastOverscanRequested != mAttachInfo.mOverscanRequested) {
                     mLastSystemUiVisibility = mAttachInfo.mSystemUiVisibility;
+                    mLastOverscanRequested = mAttachInfo.mOverscanRequested;
                     mFitSystemWindowsRequested = false;
                     mFitSystemWindowsInsets.set(mAttachInfo.mContentInsets);
                     host.fitSystemWindows(mFitSystemWindowsInsets);
@@ -1502,16 +1536,7 @@ public final class ViewRootImpl implements ViewParent,
                                 hwInitialized = mAttachInfo.mHardwareRenderer.initialize(
                                         mHolder.getSurface());
                             } catch (Surface.OutOfResourcesException e) {
-                                Log.e(TAG, "OutOfResourcesException initializing HW surface", e);
-                                try {
-                                    if (!mWindowSession.outOfMemory(mWindow) &&
-                                            Process.myUid() != Process.SYSTEM_UID) {
-                                        Slog.w(TAG, "No processes killed for memory; killing self");
-                                        Process.killProcess(Process.myPid());
-                                    }
-                                } catch (RemoteException ex) {
-                                }
-                                mLayoutRequested = true;    // ask wm for a new surface next time.
+                                handleOutOfResourcesException(e);
                                 return;
                             }
                         }
@@ -1519,7 +1544,9 @@ public final class ViewRootImpl implements ViewParent,
                 } else if (!mSurface.isValid()) {
                     // If the surface has been removed, then reset the scroll
                     // positions.
-                    mLastScrolledFocus = null;
+                    if (mLastScrolledFocus != null) {
+                        mLastScrolledFocus.clear();
+                    }
                     mScrollY = mCurScrollY = 0;
                     if (mScroller != null) {
                         mScroller.abortAnimation();
@@ -1536,15 +1563,7 @@ public final class ViewRootImpl implements ViewParent,
                     try {
                         mAttachInfo.mHardwareRenderer.updateSurface(mHolder.getSurface());
                     } catch (Surface.OutOfResourcesException e) {
-                        Log.e(TAG, "OutOfResourcesException updating HW surface", e);
-                        try {
-                            if (!mWindowSession.outOfMemory(mWindow)) {
-                                Slog.w(TAG, "No processes killed for memory; killing self");
-                                Process.killProcess(Process.myPid());
-                            }
-                        } catch (RemoteException ex) {
-                        }
-                        mLayoutRequested = true;    // ask wm for a new surface next time.
+                        handleOutOfResourcesException(e);
                         return;
                     }
                 }
@@ -1620,7 +1639,7 @@ public final class ViewRootImpl implements ViewParent,
 
             if (mAttachInfo.mHardwareRenderer != null &&
                     mAttachInfo.mHardwareRenderer.isEnabled()) {
-                if (hwInitialized || windowShouldResize ||
+                if (hwInitialized ||
                         mWidth != mAttachInfo.mHardwareRenderer.getWidth() ||
                         mHeight != mAttachInfo.mHardwareRenderer.getHeight()) {
                     mAttachInfo.mHardwareRenderer.setup(mWidth, mHeight);
@@ -1708,9 +1727,9 @@ public final class ViewRootImpl implements ViewParent,
         boolean triggerGlobalLayoutListener = didLayout
                 || attachInfo.mRecomputeGlobalAttributes;
         if (didLayout) {
-            performLayout();
+            performLayout(lp, desiredWindowWidth, desiredWindowHeight);
 
-            // By this point all views have been sized and positionned
+            // By this point all views have been sized and positioned
             // We can compute the transparent area
 
             if ((host.mPrivateFlags & View.PFLAG_REQUEST_TRANSPARENT_REGIONS) != 0) {
@@ -1728,6 +1747,7 @@ public final class ViewRootImpl implements ViewParent,
 
                 if (!mTransparentRegion.equals(mPreviousTransparentRegion)) {
                     mPreviousTransparentRegion.set(mTransparentRegion);
+                    mFullRedrawNeeded = true;
                     // reconfigure window manager
                     try {
                         mWindowSession.setTransparentRegion(mWindow, mTransparentRegion);
@@ -1795,13 +1815,11 @@ public final class ViewRootImpl implements ViewParent,
             if (mView != null) {
                 if (!mView.hasFocus()) {
                     mView.requestFocus(View.FOCUS_FORWARD);
-                    mFocusedView = mRealFocusedView = mView.findFocus();
                     if (DEBUG_INPUT_RESIZE) Log.v(TAG, "First: requested focused view="
-                            + mFocusedView);
+                            + mView.findFocus());
                 } else {
-                    mRealFocusedView = mView.findFocus();
                     if (DEBUG_INPUT_RESIZE) Log.v(TAG, "First: existing focused view="
-                            + mRealFocusedView);
+                            + mView.findFocus());
                 }
             }
             if ((relayoutResult & WindowManagerGlobal.RELAYOUT_RES_ANIMATING) != 0) {
@@ -1868,6 +1886,19 @@ public final class ViewRootImpl implements ViewParent,
         mIsInTraversal = false;
     }
 
+    private void handleOutOfResourcesException(Surface.OutOfResourcesException e) {
+        Log.e(TAG, "OutOfResourcesException initializing HW surface", e);
+        try {
+            if (!mWindowSession.outOfMemory(mWindow) &&
+                    Process.myUid() != Process.SYSTEM_UID) {
+                Slog.w(TAG, "No processes killed for memory; killing self");
+                Process.killProcess(Process.myPid());
+            }
+        } catch (RemoteException ex) {
+        }
+        mLayoutRequested = true;    // ask wm for a new surface next time.
+    }
+
     private void performMeasure(int childWidthMeasureSpec, int childHeightMeasureSpec) {
         Trace.traceBegin(Trace.TRACE_TAG_VIEW, "measure");
         try {
@@ -1877,9 +1908,62 @@ public final class ViewRootImpl implements ViewParent,
         }
     }
 
-    private void performLayout() {
+    /**
+     * Called by {@link android.view.View#isInLayout()} to determine whether the view hierarchy
+     * is currently undergoing a layout pass.
+     *
+     * @return whether the view hierarchy is currently undergoing a layout pass
+     */
+    boolean isInLayout() {
+        return mInLayout;
+    }
+
+    /**
+     * Called by {@link android.view.View#requestLayout()} if the view hierarchy is currently
+     * undergoing a layout pass. requestLayout() should not generally be called during layout,
+     * unless the container hierarchy knows what it is doing (i.e., it is fine as long as
+     * all children in that container hierarchy are measured and laid out at the end of the layout
+     * pass for that container). If requestLayout() is called anyway, we handle it correctly
+     * by registering all requesters during a frame as it proceeds. At the end of the frame,
+     * we check all of those views to see if any still have pending layout requests, which
+     * indicates that they were not correctly handled by their container hierarchy. If that is
+     * the case, we clear all such flags in the tree, to remove the buggy flag state that leads
+     * to blank containers, and force a second request/measure/layout pass in this frame. If
+     * more requestLayout() calls are received during that second layout pass, we post those
+     * requests to the next frame to avoid possible infinite loops.
+     *
+     * <p>The return value from this method indicates whether the request should proceed
+     * (if it is a request during the first layout pass) or should be skipped and posted to the
+     * next frame (if it is a request during the second layout pass).</p>
+     *
+     * @param view the view that requested the layout.
+     *
+     * @return true if request should proceed, false otherwise.
+     */
+    boolean requestLayoutDuringLayout(final View view) {
+        if (view.mParent == null || view.mAttachInfo == null) {
+            // Would not normally trigger another layout, so just let it pass through as usual
+            return true;
+        }
+        if (!mLayoutRequesters.contains(view)) {
+            mLayoutRequesters.add(view);
+        }
+        if (!mHandlingLayoutInLayoutRequest) {
+            // Let the request proceed normally; it will be processed in a second layout pass
+            // if necessary
+            return true;
+        } else {
+            // Don't let the request proceed during the second layout pass.
+            // It will post to the next frame instead.
+            return false;
+        }
+    }
+
+    private void performLayout(WindowManager.LayoutParams lp, int desiredWindowWidth,
+            int desiredWindowHeight) {
         mLayoutRequested = false;
         mScrollMayChange = true;
+        mInLayout = true;
 
         final View host = mView;
         if (DEBUG_ORIENTATION || DEBUG_LAYOUT) {
@@ -1890,9 +1974,125 @@ public final class ViewRootImpl implements ViewParent,
         Trace.traceBegin(Trace.TRACE_TAG_VIEW, "layout");
         try {
             host.layout(0, 0, host.getMeasuredWidth(), host.getMeasuredHeight());
+
+            mInLayout = false;
+            int numViewsRequestingLayout = mLayoutRequesters.size();
+            if (numViewsRequestingLayout > 0) {
+                // requestLayout() was called during layout.
+                // If no layout-request flags are set on the requesting views, there is no problem.
+                // If some requests are still pending, then we need to clear those flags and do
+                // a full request/measure/layout pass to handle this situation.
+                ArrayList<View> validLayoutRequesters = getValidLayoutRequesters(mLayoutRequesters,
+                        false);
+                if (validLayoutRequesters != null) {
+                    // Set this flag to indicate that any further requests are happening during
+                    // the second pass, which may result in posting those requests to the next
+                    // frame instead
+                    mHandlingLayoutInLayoutRequest = true;
+
+                    // Process fresh layout requests, then measure and layout
+                    int numValidRequests = validLayoutRequesters.size();
+                    for (int i = 0; i < numValidRequests; ++i) {
+                        final View view = validLayoutRequesters.get(i);
+                        Log.w("View", "requestLayout() improperly called by " + view +
+                                " during layout: running second layout pass");
+                        view.requestLayout();
+                    }
+                    measureHierarchy(host, lp, mView.getContext().getResources(),
+                            desiredWindowWidth, desiredWindowHeight);
+                    mInLayout = true;
+                    host.layout(0, 0, host.getMeasuredWidth(), host.getMeasuredHeight());
+
+                    mHandlingLayoutInLayoutRequest = false;
+
+                    // Check the valid requests again, this time without checking/clearing the
+                    // layout flags, since requests happening during the second pass get noop'd
+                    validLayoutRequesters = getValidLayoutRequesters(mLayoutRequesters, true);
+                    if (validLayoutRequesters != null) {
+                        final ArrayList<View> finalRequesters = validLayoutRequesters;
+                        // Post second-pass requests to the next frame
+                        getRunQueue().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                int numValidRequests = finalRequesters.size();
+                                for (int i = 0; i < numValidRequests; ++i) {
+                                    final View view = finalRequesters.get(i);
+                                    Log.w("View", "requestLayout() improperly called by " + view +
+                                            " during second layout pass: posting in next frame");
+                                    view.requestLayout();
+                                }
+                            }
+                        });
+                    }
+                }
+
+            }
         } finally {
             Trace.traceEnd(Trace.TRACE_TAG_VIEW);
         }
+        mInLayout = false;
+    }
+
+    /**
+     * This method is called during layout when there have been calls to requestLayout() during
+     * layout. It walks through the list of views that requested layout to determine which ones
+     * still need it, based on visibility in the hierarchy and whether they have already been
+     * handled (as is usually the case with ListView children).
+     *
+     * @param layoutRequesters The list of views that requested layout during layout
+     * @param secondLayoutRequests Whether the requests were issued during the second layout pass.
+     * If so, the FORCE_LAYOUT flag was not set on requesters.
+     * @return A list of the actual views that still need to be laid out.
+     */
+    private ArrayList<View> getValidLayoutRequesters(ArrayList<View> layoutRequesters,
+            boolean secondLayoutRequests) {
+
+        int numViewsRequestingLayout = layoutRequesters.size();
+        ArrayList<View> validLayoutRequesters = null;
+        for (int i = 0; i < numViewsRequestingLayout; ++i) {
+            View view = layoutRequesters.get(i);
+            if (view != null && view.mAttachInfo != null && view.mParent != null &&
+                    (secondLayoutRequests || (view.mPrivateFlags & View.PFLAG_FORCE_LAYOUT) ==
+                            View.PFLAG_FORCE_LAYOUT)) {
+                boolean gone = false;
+                View parent = view;
+                // Only trigger new requests for views in a non-GONE hierarchy
+                while (parent != null) {
+                    if ((parent.mViewFlags & View.VISIBILITY_MASK) == View.GONE) {
+                        gone = true;
+                        break;
+                    }
+                    if (parent.mParent instanceof View) {
+                        parent = (View) parent.mParent;
+                    } else {
+                        parent = null;
+                    }
+                }
+                if (!gone) {
+                    if (validLayoutRequesters == null) {
+                        validLayoutRequesters = new ArrayList<View>();
+                    }
+                    validLayoutRequesters.add(view);
+                }
+            }
+        }
+        if (!secondLayoutRequests) {
+            // If we're checking the layout flags, then we need to clean them up also
+            for (int i = 0; i < numViewsRequestingLayout; ++i) {
+                View view = layoutRequesters.get(i);
+                while (view != null &&
+                        (view.mPrivateFlags & View.PFLAG_FORCE_LAYOUT) != 0) {
+                    view.mPrivateFlags &= ~View.PFLAG_FORCE_LAYOUT;
+                    if (view.mParent instanceof View) {
+                        view = (View) view.mParent;
+                    } else {
+                        view = null;
+                    }
+                }
+            }
+        }
+        layoutRequesters.clear();
+        return validLayoutRequesters;
     }
 
     public void requestTransparentRegion(View child) {
@@ -1975,31 +2175,25 @@ public final class ViewRootImpl implements ViewParent,
     private void profileRendering(boolean enabled) {
         if (mProfileRendering) {
             mRenderProfilingEnabled = enabled;
-            if (mRenderProfiler == null) {
-                mRenderProfiler = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "Starting profiling thread");
-                        while (mRenderProfilingEnabled) {
-                            mAttachInfo.mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mDirty.set(0, 0, mWidth, mHeight);
-                                    scheduleTraversals();
-                                }
-                            });
-                            try {
-                                // TODO: This should use vsync when we get an API
-                                Thread.sleep(15);
-                            } catch (InterruptedException e) {
-                                Log.d(TAG, "Exiting profiling thread");
-                            }                            
+
+            if (mRenderProfiler != null) {
+                mChoreographer.removeFrameCallback(mRenderProfiler);
+            }
+            if (mRenderProfilingEnabled) {
+                if (mRenderProfiler == null) {
+                    mRenderProfiler = new Choreographer.FrameCallback() {
+                        @Override
+                        public void doFrame(long frameTimeNanos) {
+                            mDirty.set(0, 0, mWidth, mHeight);
+                            scheduleTraversals();
+                            if (mRenderProfilingEnabled) {
+                                mChoreographer.postFrameCallback(mRenderProfiler);
+                            }
                         }
-                    }
-                }, "Rendering Profiler");
-                mRenderProfiler.start();
+                    };
+                }
+                mChoreographer.postFrameCallback(mRenderProfiler);
             } else {
-                mRenderProfiler.interrupt();
                 mRenderProfiler = null;
             }
         }
@@ -2075,7 +2269,7 @@ public final class ViewRootImpl implements ViewParent,
 
     private void draw(boolean fullRedrawNeeded) {
         Surface surface = mSurface;
-        if (surface == null || !surface.isValid()) {
+        if (!surface.isValid()) {
             return;
         }
 
@@ -2156,6 +2350,8 @@ public final class ViewRootImpl implements ViewParent,
                     appScale + ", width=" + mWidth + ", height=" + mHeight);
         }
 
+        invalidateDisplayLists();
+
         attachInfo.mTreeObserver.dispatchOnDraw();
 
         if (!dirty.isEmpty() || mIsAnimating) {
@@ -2166,16 +2362,39 @@ public final class ViewRootImpl implements ViewParent,
                 mResizeAlpha = resizeAlpha;
 
                 mCurrentDirty.set(dirty);
-                mCurrentDirty.union(mPreviousDirty);
-                mPreviousDirty.set(dirty);
                 dirty.setEmpty();
 
-                if (attachInfo.mHardwareRenderer.draw(mView, attachInfo, this,
-                        animating ? null : mCurrentDirty)) {
-                    mPreviousDirty.set(0, 0, mWidth, mHeight);
+                attachInfo.mHardwareRenderer.draw(mView, attachInfo, this,
+                        animating ? null : mCurrentDirty);
+            } else {
+                // If we get here with a disabled & requested hardware renderer, something went
+                // wrong (an invalidate posted right before we destroyed the hardware surface
+                // for instance) so we should just bail out. Locking the surface with software
+                // rendering at this point would lock it forever and prevent hardware renderer
+                // from doing its job when it comes back.
+                // Before we request a new frame we must however attempt to reinitiliaze the
+                // hardware renderer if it's in requested state. This would happen after an
+                // eglTerminate() for instance.
+                if (attachInfo.mHardwareRenderer != null &&
+                        !attachInfo.mHardwareRenderer.isEnabled() &&
+                        attachInfo.mHardwareRenderer.isRequested()) {
+
+                    try {
+                        attachInfo.mHardwareRenderer.initializeIfNeeded(mWidth, mHeight,
+                                mHolder.getSurface());
+                    } catch (Surface.OutOfResourcesException e) {
+                        handleOutOfResourcesException(e);
+                        return;
+                    }
+
+                    mFullRedrawNeeded = true;
+                    scheduleTraversals();
+                    return;
                 }
-            } else if (!drawSoftware(surface, attachInfo, yoff, scalingRequired, dirty)) {
-                return;
+
+                if (!drawSoftware(surface, attachInfo, yoff, scalingRequired, dirty)) {
+                    return;
+                }
             }
         }
 
@@ -2191,18 +2410,6 @@ public final class ViewRootImpl implements ViewParent,
     private boolean drawSoftware(Surface surface, AttachInfo attachInfo, int yoff,
             boolean scalingRequired, Rect dirty) {
 
-        // If we get here with a disabled & requested hardware renderer, something went
-        // wrong (an invalidate posted right before we destroyed the hardware surface
-        // for instance) so we should just bail out. Locking the surface with software
-        // rendering at this point would lock it forever and prevent hardware renderer
-        // from doing its job when it comes back.
-        if (attachInfo.mHardwareRenderer != null && !attachInfo.mHardwareRenderer.isEnabled() &&
-                attachInfo.mHardwareRenderer.isRequested()) {
-            mFullRedrawNeeded = true;
-            scheduleTraversals();
-            return false;
-        }
-
         // Draw with software renderer.
         Canvas canvas;
         try {
@@ -2213,6 +2420,8 @@ public final class ViewRootImpl implements ViewParent,
 
             canvas = mSurface.lockCanvas(dirty);
 
+            // The dirty rectangle can be modified by Surface.lockCanvas()
+            //noinspection ConstantConditions
             if (left != dirty.left || top != dirty.top || right != dirty.right ||
                     bottom != dirty.bottom) {
                 attachInfo.mIgnoreDirtyState = true;
@@ -2221,15 +2430,7 @@ public final class ViewRootImpl implements ViewParent,
             // TODO: Do this in native
             canvas.setDensity(mDensity);
         } catch (Surface.OutOfResourcesException e) {
-            Log.e(TAG, "OutOfResourcesException locking surface", e);
-            try {
-                if (!mWindowSession.outOfMemory(mWindow)) {
-                    Slog.w(TAG, "No processes killed for memory; killing self");
-                    Process.killProcess(Process.myPid());
-                }
-            } catch (RemoteException ex) {
-            }
-            mLayoutRequested = true;    // ask wm for a new surface next time.
+            handleOutOfResourcesException(e);
             return false;
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "Could not lock surface", e);
@@ -2366,11 +2567,22 @@ public final class ViewRootImpl implements ViewParent,
 
         for (int i = 0; i < count; i++) {
             final DisplayList displayList = displayLists.get(i);
-            displayList.invalidate();
-            displayList.clear();
+            if (displayList.isDirty()) {
+                displayList.clear();
+            }
         }
 
         displayLists.clear();
+    }
+
+    /**
+     * @hide
+     */
+    public void setDrawDuringWindowsAnimating(boolean value) {
+        mDrawDuringWindowsAnimating = value;
+        if (value) {
+            handleDispatchDoneAnimating();
+        }
     }
 
     boolean scrollToRectOrFocus(Rect rectangle, boolean immediate) {
@@ -2393,17 +2605,12 @@ public final class ViewRootImpl implements ViewParent,
             // requestChildRectangleOnScreen() call (in which case 'rectangle'
             // is non-null and we just want to scroll to whatever that
             // rectangle is).
-            View focus = mRealFocusedView;
-
-            // When in touch mode, focus points to the previously focused view,
-            // which may have been removed from the view hierarchy. The following
-            // line checks whether the view is still in our hierarchy.
-            if (focus == null || focus.mAttachInfo != mAttachInfo) {
-                mRealFocusedView = null;
+            final View focus = mView.findFocus();
+            if (focus == null) {
                 return false;
             }
-
-            if (focus != mLastScrolledFocus) {
+            View lastScrolledFocus = (mLastScrolledFocus != null) ? mLastScrolledFocus.get() : null;
+            if (focus != lastScrolledFocus) {
                 // If the focus has changed, then ignore any requests to scroll
                 // to a rectangle; first we want to make sure the entire focus
                 // view is visible.
@@ -2412,18 +2619,17 @@ public final class ViewRootImpl implements ViewParent,
             if (DEBUG_INPUT_RESIZE) Log.v(TAG, "Eval scroll: focus=" + focus
                     + " rectangle=" + rectangle + " ci=" + ci
                     + " vi=" + vi);
-            if (focus == mLastScrolledFocus && !mScrollMayChange
-                    && rectangle == null) {
+            if (focus == lastScrolledFocus && !mScrollMayChange && rectangle == null) {
                 // Optimization: if the focus hasn't changed since last
                 // time, and no layout has happened, then just leave things
                 // as they are.
                 if (DEBUG_INPUT_RESIZE) Log.v(TAG, "Keeping scroll y="
                         + mScrollY + " vi=" + vi.toShortString());
-            } else if (focus != null) {
+            } else {
                 // We need to determine if the currently focused view is
                 // within the visible part of the window and, if not, apply
                 // a pan so it can be seen.
-                mLastScrolledFocus = focus;
+                mLastScrolledFocus = new WeakReference<View>(focus);
                 mScrollMayChange = false;
                 if (DEBUG_INPUT_RESIZE) Log.v(TAG, "Need to scroll?");
                 // Try to find the rectangle from the focus view.
@@ -2516,7 +2722,6 @@ public final class ViewRootImpl implements ViewParent,
 
             AccessibilityNodeInfo focusNode = mAccessibilityFocusedVirtualView;
             View focusHost = mAccessibilityFocusedHost;
-            focusHost.clearAccessibilityFocusNoCallbacks();
 
             // Wipe the state of the current accessibility focus since
             // the call into the provider to clear accessibility focus
@@ -2525,6 +2730,10 @@ public final class ViewRootImpl implements ViewParent,
             // invocation happens.
             mAccessibilityFocusedHost = null;
             mAccessibilityFocusedVirtualView = null;
+
+            // Clear accessibility focus on the host after clearing state since
+            // this method may be reentrant.
+            focusHost.clearAccessibilityFocusNoCallbacks();
 
             AccessibilityNodeProvider provider = focusHost.getAccessibilityNodeProvider();
             if (provider != null) {
@@ -2550,33 +2759,19 @@ public final class ViewRootImpl implements ViewParent,
     }
 
     public void requestChildFocus(View child, View focused) {
-        checkThread();
-
         if (DEBUG_INPUT_RESIZE) {
             Log.v(TAG, "Request child focus: focus now " + focused);
         }
-
-        mAttachInfo.mTreeObserver.dispatchOnGlobalFocusChange(mOldFocusedView, focused);
+        checkThread();
         scheduleTraversals();
-
-        mFocusedView = mRealFocusedView = focused;
     }
 
     public void clearChildFocus(View child) {
-        checkThread();
-
         if (DEBUG_INPUT_RESIZE) {
             Log.v(TAG, "Clearing child focus");
         }
-
-        mOldFocusedView = mFocusedView;
-
-        // Invoke the listener only if there is no view to take focus
-        if (focusSearch(null, View.FOCUS_FORWARD) == null) {
-            mAttachInfo.mTreeObserver.dispatchOnGlobalFocusChange(mOldFocusedView, null);
-        }
-
-        mFocusedView = mRealFocusedView = null;
+        checkThread();
+        scheduleTraversals();
     }
 
     @Override
@@ -2593,14 +2788,13 @@ public final class ViewRootImpl implements ViewParent,
                 // the one case where will transfer focus away from the current one
                 // is if the current view is a view group that prefers to give focus
                 // to its children first AND the view is a descendant of it.
-                mFocusedView = mView.findFocus();
-                boolean descendantsHaveDibsOnFocus =
-                        (mFocusedView instanceof ViewGroup) &&
-                            (((ViewGroup) mFocusedView).getDescendantFocusability() ==
-                                    ViewGroup.FOCUS_AFTER_DESCENDANTS);
-                if (descendantsHaveDibsOnFocus && isViewDescendantOf(v, mFocusedView)) {
-                    // If a view gets the focus, the listener will be invoked from requestChildFocus()
-                    v.requestFocus();
+                View focused = mView.findFocus();
+                if (focused instanceof ViewGroup) {
+                    ViewGroup group = (ViewGroup) focused;
+                    if (group.getDescendantFocusability() == ViewGroup.FOCUS_AFTER_DESCENDANTS
+                            && isViewDescendantOf(v, focused)) {
+                        v.requestFocus();
+                    }
                 }
             }
         }
@@ -2622,6 +2816,7 @@ public final class ViewRootImpl implements ViewParent,
                     mAttachInfo.mHardwareRenderer.isEnabled()) {
                 mAttachInfo.mHardwareRenderer.validate();
             }
+            mAttachInfo.mTreeObserver.dispatchOnWindowAttachedChange(false);
             mView.dispatchDetachedFromWindow();
         }
 
@@ -2634,6 +2829,7 @@ public final class ViewRootImpl implements ViewParent,
 
         setAccessibilityFocus(null, null);
 
+        mView.assignParent(null);
         mView = null;
         mAttachInfo.mRootView = null;
         mAttachInfo.mSurface = null;
@@ -2642,9 +2838,11 @@ public final class ViewRootImpl implements ViewParent,
 
         if (mInputQueueCallback != null && mInputQueue != null) {
             mInputQueueCallback.onInputQueueDestroyed(mInputQueue);
+            mInputQueue.dispose();
             mInputQueueCallback = null;
             mInputQueue = null;
-        } else if (mInputEventReceiver != null) {
+        }
+        if (mInputEventReceiver != null) {
             mInputEventReceiver.dispose();
             mInputEventReceiver = null;
         }
@@ -2652,7 +2850,7 @@ public final class ViewRootImpl implements ViewParent,
             mWindowSession.remove(mWindow);
         } catch (RemoteException e) {
         }
-        
+
         // Dispose the input channel after removing the window so the Window Manager
         // doesn't interpret the input channel being closed as an abnormal termination.
         if (mInputChannel != null) {
@@ -2730,7 +2928,6 @@ public final class ViewRootImpl implements ViewParent,
     private final static int MSG_DISPATCH_KEY = 7;
     private final static int MSG_DISPATCH_APP_VISIBILITY = 8;
     private final static int MSG_DISPATCH_GET_NEW_SURFACE = 9;
-    private final static int MSG_IME_FINISHED_EVENT = 10;
     private final static int MSG_DISPATCH_KEY_FROM_IME = 11;
     private final static int MSG_FINISH_INPUT_CONNECTION = 12;
     private final static int MSG_CHECK_FOCUS = 13;
@@ -2741,11 +2938,10 @@ public final class ViewRootImpl implements ViewParent,
     private final static int MSG_UPDATE_CONFIGURATION = 18;
     private final static int MSG_PROCESS_INPUT_EVENTS = 19;
     private final static int MSG_DISPATCH_SCREEN_STATE = 20;
-    private final static int MSG_INVALIDATE_DISPLAY_LIST = 21;
-    private final static int MSG_CLEAR_ACCESSIBILITY_FOCUS_HOST = 22;
-    private final static int MSG_DISPATCH_DONE_ANIMATING = 23;
-    private final static int MSG_INVALIDATE_WORLD = 24;
-    private final static int MSG_WINDOW_MOVED = 25;
+    private final static int MSG_CLEAR_ACCESSIBILITY_FOCUS_HOST = 21;
+    private final static int MSG_DISPATCH_DONE_ANIMATING = 22;
+    private final static int MSG_INVALIDATE_WORLD = 23;
+    private final static int MSG_WINDOW_MOVED = 24;
 
     final class ViewRootHandler extends Handler {
         @Override
@@ -2769,8 +2965,6 @@ public final class ViewRootImpl implements ViewParent,
                     return "MSG_DISPATCH_APP_VISIBILITY";
                 case MSG_DISPATCH_GET_NEW_SURFACE:
                     return "MSG_DISPATCH_GET_NEW_SURFACE";
-                case MSG_IME_FINISHED_EVENT:
-                    return "MSG_IME_FINISHED_EVENT";
                 case MSG_DISPATCH_KEY_FROM_IME:
                     return "MSG_DISPATCH_KEY_FROM_IME";
                 case MSG_FINISH_INPUT_CONNECTION:
@@ -2791,8 +2985,6 @@ public final class ViewRootImpl implements ViewParent,
                     return "MSG_PROCESS_INPUT_EVENTS";
                 case MSG_DISPATCH_SCREEN_STATE:
                     return "MSG_DISPATCH_SCREEN_STATE";
-                case MSG_INVALIDATE_DISPLAY_LIST:
-                    return "MSG_INVALIDATE_DISPLAY_LIST";
                 case MSG_CLEAR_ACCESSIBILITY_FOCUS_HOST:
                     return "MSG_CLEAR_ACCESSIBILITY_FOCUS_HOST";
                 case MSG_DISPATCH_DONE_ANIMATING:
@@ -2812,10 +3004,7 @@ public final class ViewRootImpl implements ViewParent,
             case MSG_INVALIDATE_RECT:
                 final View.AttachInfo.InvalidateInfo info = (View.AttachInfo.InvalidateInfo) msg.obj;
                 info.target.invalidate(info.left, info.top, info.right, info.bottom);
-                info.release();
-                break;
-            case MSG_IME_FINISHED_EVENT:
-                handleImeFinishedEvent(msg.arg1, msg.arg2 != 0);
+                info.recycle();
                 break;
             case MSG_PROCESS_INPUT_EVENTS:
                 mProcessInputEventsScheduled = false;
@@ -2831,6 +3020,7 @@ public final class ViewRootImpl implements ViewParent,
                 // Recycled in the fall through...
                 SomeArgs args = (SomeArgs) msg.obj;
                 if (mWinFrame.equals(args.arg1)
+                        && mPendingOverscanInsets.equals(args.arg5)
                         && mPendingContentInsets.equals(args.arg2)
                         && mPendingVisibleInsets.equals(args.arg3)
                         && args.arg4 == null) {
@@ -2847,6 +3037,7 @@ public final class ViewRootImpl implements ViewParent,
                     }
 
                     mWinFrame.set((Rect) args.arg1);
+                    mPendingOverscanInsets.set((Rect) args.arg5);
                     mPendingContentInsets.set((Rect) args.arg2);
                     mPendingVisibleInsets.set((Rect) args.arg3);
 
@@ -2891,14 +3082,11 @@ public final class ViewRootImpl implements ViewParent,
                         boolean inTouchMode = msg.arg2 != 0;
                         ensureTouchModeLocally(inTouchMode);
 
-                        if (mAttachInfo.mHardwareRenderer != null &&
-                                mSurface != null && mSurface.isValid()) {
+                        if (mAttachInfo.mHardwareRenderer != null && mSurface.isValid()){
                             mFullRedrawNeeded = true;
                             try {
-                                if (mAttachInfo.mHardwareRenderer.initializeIfNeeded(
-                                        mWidth, mHeight, mHolder.getSurface())) {
-                                    mFullRedrawNeeded = true;
-                                }
+                                mAttachInfo.mHardwareRenderer.initializeIfNeeded(
+                                        mWidth, mHeight, mHolder.getSurface());
                             } catch (Surface.OutOfResourcesException e) {
                                 Log.e(TAG, "OutOfResourcesException locking surface", e);
                                 try {
@@ -2925,6 +3113,7 @@ public final class ViewRootImpl implements ViewParent,
                         }
                         mAttachInfo.mKeyDispatchState.reset();
                         mView.dispatchWindowFocusChanged(hasWindowFocus);
+                        mAttachInfo.mTreeObserver.dispatchOnWindowFocusChange(hasWindowFocus);
                     }
 
                     // Note: must be done after the focus change callbacks,
@@ -2999,7 +3188,7 @@ public final class ViewRootImpl implements ViewParent,
                 handleDragEvent(event);
             } break;
             case MSG_DISPATCH_SYSTEM_UI_VISIBILITY: {
-                handleDispatchSystemUiVisibilityChanged((SystemUiVisibilityInfo)msg.obj);
+                handleDispatchSystemUiVisibilityChanged((SystemUiVisibilityInfo) msg.obj);
             } break;
             case MSG_UPDATE_CONFIGURATION: {
                 Configuration config = (Configuration)msg.obj;
@@ -3012,9 +3201,6 @@ public final class ViewRootImpl implements ViewParent,
                 if (mView != null) {
                     handleScreenStateChange(msg.arg1 == 1);
                 }
-            } break;
-            case MSG_INVALIDATE_DISPLAY_LIST: {
-                invalidateDisplayLists();
             } break;
             case MSG_CLEAR_ACCESSIBILITY_FOCUS_HOST: {
                 setAccessibilityFocus(null, null);
@@ -3084,7 +3270,6 @@ public final class ViewRootImpl implements ViewParent,
                 // set yet.
                 final View focused = mView.findFocus();
                 if (focused != null && !focused.isFocusableInTouchMode()) {
-
                     final ViewGroup ancestorToTakeFocus =
                             findAncestorToTakeFocusInTouchMode(focused);
                     if (ancestorToTakeFocus != null) {
@@ -3093,10 +3278,7 @@ public final class ViewRootImpl implements ViewParent,
                         return ancestorToTakeFocus.requestFocus();
                     } else {
                         // nothing appropriate to have focus in touch mode, clear it out
-                        mView.unFocus();
-                        mAttachInfo.mTreeObserver.dispatchOnGlobalFocusChange(focused, null);
-                        mFocusedView = null;
-                        mOldFocusedView = null;
+                        focused.unFocus();
                         return true;
                     }
                 }
@@ -3131,12 +3313,11 @@ public final class ViewRootImpl implements ViewParent,
     private boolean leaveTouchMode() {
         if (mView != null) {
             if (mView.hasFocus()) {
-                // i learned the hard way to not trust mFocusedView :)
-                mFocusedView = mView.findFocus();
-                if (!(mFocusedView instanceof ViewGroup)) {
+                View focusedView = mView.findFocus();
+                if (!(focusedView instanceof ViewGroup)) {
                     // some view has focus, let it keep it
                     return false;
-                } else if (((ViewGroup)mFocusedView).getDescendantFocusability() !=
+                } else if (((ViewGroup) focusedView).getDescendantFocusability() !=
                         ViewGroup.FOCUS_AFTER_DESCENDANTS) {
                     // some view group has focus, and doesn't prefer its children
                     // over itself for focus, so let them keep it.
@@ -3154,367 +3335,1454 @@ public final class ViewRootImpl implements ViewParent,
         return false;
     }
 
-    private void deliverInputEvent(QueuedInputEvent q) {
-        Trace.traceBegin(Trace.TRACE_TAG_VIEW, "deliverInputEvent");
-        try {
+    /**
+     * Base class for implementing a stage in the chain of responsibility
+     * for processing input events.
+     * <p>
+     * Events are delivered to the stage by the {@link #deliver} method.  The stage
+     * then has the choice of finishing the event or forwarding it to the next stage.
+     * </p>
+     */
+    abstract class InputStage {
+        private final InputStage mNext;
+
+        protected static final int FORWARD = 0;
+        protected static final int FINISH_HANDLED = 1;
+        protected static final int FINISH_NOT_HANDLED = 2;
+
+        /**
+         * Creates an input stage.
+         * @param next The next stage to which events should be forwarded.
+         */
+        public InputStage(InputStage next) {
+            mNext = next;
+        }
+
+        /**
+         * Delivers an event to be processed.
+         */
+        public final void deliver(QueuedInputEvent q) {
+            if ((q.mFlags & QueuedInputEvent.FLAG_FINISHED) != 0) {
+                forward(q);
+            } else if (mView == null || !mAdded) {
+                Slog.w(TAG, "Dropping event due to root view being removed: " + q.mEvent);
+                finish(q, false);
+            } else if (!mAttachInfo.mHasWindowFocus &&
+                  !q.mEvent.isFromSource(InputDevice.SOURCE_CLASS_POINTER) &&
+                  !isTerminalInputEvent(q.mEvent)) {
+                // If this is a focused event and the window doesn't currently have input focus,
+                // then drop this event.  This could be an event that came back from the previous
+                // stage but the window has lost focus in the meantime.
+                Slog.w(TAG, "Dropping event due to no window focus: " + q.mEvent);
+                finish(q, false);
+            } else {
+                apply(q, onProcess(q));
+            }
+        }
+
+        /**
+         * Marks the the input event as finished then forwards it to the next stage.
+         */
+        protected void finish(QueuedInputEvent q, boolean handled) {
+            q.mFlags |= QueuedInputEvent.FLAG_FINISHED;
+            if (handled) {
+                q.mFlags |= QueuedInputEvent.FLAG_FINISHED_HANDLED;
+            }
+            forward(q);
+        }
+
+        /**
+         * Forwards the event to the next stage.
+         */
+        protected void forward(QueuedInputEvent q) {
+            onDeliverToNext(q);
+        }
+
+        /**
+         * Applies a result code from {@link #onProcess} to the specified event.
+         */
+        protected void apply(QueuedInputEvent q, int result) {
+            if (result == FORWARD) {
+                forward(q);
+            } else if (result == FINISH_HANDLED) {
+                finish(q, true);
+            } else if (result == FINISH_NOT_HANDLED) {
+                finish(q, false);
+            } else {
+                throw new IllegalArgumentException("Invalid result: " + result);
+            }
+        }
+
+        /**
+         * Called when an event is ready to be processed.
+         * @return A result code indicating how the event was handled.
+         */
+        protected int onProcess(QueuedInputEvent q) {
+            return FORWARD;
+        }
+
+        /**
+         * Called when an event is being delivered to the next stage.
+         */
+        protected void onDeliverToNext(QueuedInputEvent q) {
+            if (mNext != null) {
+                mNext.deliver(q);
+            } else {
+                finishInputEvent(q);
+            }
+        }
+    }
+
+    /**
+     * Base class for implementing an input pipeline stage that supports
+     * asynchronous and out-of-order processing of input events.
+     * <p>
+     * In addition to what a normal input stage can do, an asynchronous
+     * input stage may also defer an input event that has been delivered to it
+     * and finish or forward it later.
+     * </p>
+     */
+    abstract class AsyncInputStage extends InputStage {
+        private final String mTraceCounter;
+
+        private QueuedInputEvent mQueueHead;
+        private QueuedInputEvent mQueueTail;
+        private int mQueueLength;
+
+        protected static final int DEFER = 3;
+
+        /**
+         * Creates an asynchronous input stage.
+         * @param next The next stage to which events should be forwarded.
+         * @param traceCounter The name of a counter to record the size of
+         * the queue of pending events.
+         */
+        public AsyncInputStage(InputStage next, String traceCounter) {
+            super(next);
+            mTraceCounter = traceCounter;
+        }
+
+        /**
+         * Marks the event as deferred, which is to say that it will be handled
+         * asynchronously.  The caller is responsible for calling {@link #forward}
+         * or {@link #finish} later when it is done handling the event.
+         */
+        protected void defer(QueuedInputEvent q) {
+            q.mFlags |= QueuedInputEvent.FLAG_DEFERRED;
+            enqueue(q);
+        }
+
+        @Override
+        protected void forward(QueuedInputEvent q) {
+            // Clear the deferred flag.
+            q.mFlags &= ~QueuedInputEvent.FLAG_DEFERRED;
+
+            // Fast path if the queue is empty.
+            QueuedInputEvent curr = mQueueHead;
+            if (curr == null) {
+                super.forward(q);
+                return;
+            }
+
+            // Determine whether the event must be serialized behind any others
+            // before it can be delivered to the next stage.  This is done because
+            // deferred events might be handled out of order by the stage.
+            final int deviceId = q.mEvent.getDeviceId();
+            QueuedInputEvent prev = null;
+            boolean blocked = false;
+            while (curr != null && curr != q) {
+                if (!blocked && deviceId == curr.mEvent.getDeviceId()) {
+                    blocked = true;
+                }
+                prev = curr;
+                curr = curr.mNext;
+            }
+
+            // If the event is blocked, then leave it in the queue to be delivered later.
+            // Note that the event might not yet be in the queue if it was not previously
+            // deferred so we will enqueue it if needed.
+            if (blocked) {
+                if (curr == null) {
+                    enqueue(q);
+                }
+                return;
+            }
+
+            // The event is not blocked.  Deliver it immediately.
+            if (curr != null) {
+                curr = curr.mNext;
+                dequeue(q, prev);
+            }
+            super.forward(q);
+
+            // Dequeuing this event may have unblocked successors.  Deliver them.
+            while (curr != null) {
+                if (deviceId == curr.mEvent.getDeviceId()) {
+                    if ((curr.mFlags & QueuedInputEvent.FLAG_DEFERRED) != 0) {
+                        break;
+                    }
+                    QueuedInputEvent next = curr.mNext;
+                    dequeue(curr, prev);
+                    super.forward(curr);
+                    curr = next;
+                } else {
+                    prev = curr;
+                    curr = curr.mNext;
+                }
+            }
+        }
+
+        @Override
+        protected void apply(QueuedInputEvent q, int result) {
+            if (result == DEFER) {
+                defer(q);
+            } else {
+                super.apply(q, result);
+            }
+        }
+
+        private void enqueue(QueuedInputEvent q) {
+            if (mQueueTail == null) {
+                mQueueHead = q;
+                mQueueTail = q;
+            } else {
+                mQueueTail.mNext = q;
+                mQueueTail = q;
+            }
+
+            mQueueLength += 1;
+            Trace.traceCounter(Trace.TRACE_TAG_INPUT, mTraceCounter, mQueueLength);
+        }
+
+        private void dequeue(QueuedInputEvent q, QueuedInputEvent prev) {
+            if (prev == null) {
+                mQueueHead = q.mNext;
+            } else {
+                prev.mNext = q.mNext;
+            }
+            if (mQueueTail == q) {
+                mQueueTail = prev;
+            }
+            q.mNext = null;
+
+            mQueueLength -= 1;
+            Trace.traceCounter(Trace.TRACE_TAG_INPUT, mTraceCounter, mQueueLength);
+        }
+    }
+
+    /**
+     * Delivers pre-ime input events to a native activity.
+     * Does not support pointer events.
+     */
+    final class NativePreImeInputStage extends AsyncInputStage
+            implements InputQueue.FinishedInputEventCallback {
+        public NativePreImeInputStage(InputStage next, String traceCounter) {
+            super(next, traceCounter);
+        }
+
+        @Override
+        protected int onProcess(QueuedInputEvent q) {
+            if (mInputQueue != null && q.mEvent instanceof KeyEvent) {
+                mInputQueue.sendInputEvent(q.mEvent, q, true, this);
+                return DEFER;
+            }
+            return FORWARD;
+        }
+
+        @Override
+        public void onFinishedInputEvent(Object token, boolean handled) {
+            QueuedInputEvent q = (QueuedInputEvent)token;
+            if (handled) {
+                finish(q, true);
+                return;
+            }
+            forward(q);
+        }
+    }
+
+    /**
+     * Delivers pre-ime input events to the view hierarchy.
+     * Does not support pointer events.
+     */
+    final class ViewPreImeInputStage extends InputStage {
+        public ViewPreImeInputStage(InputStage next) {
+            super(next);
+        }
+
+        @Override
+        protected int onProcess(QueuedInputEvent q) {
             if (q.mEvent instanceof KeyEvent) {
-                deliverKeyEvent(q);
+                return processKeyEvent(q);
+            }
+            return FORWARD;
+        }
+
+        private int processKeyEvent(QueuedInputEvent q) {
+            final KeyEvent event = (KeyEvent)q.mEvent;
+            if (mView.dispatchKeyEventPreIme(event)) {
+                return FINISH_HANDLED;
+            }
+            return FORWARD;
+        }
+    }
+
+    /**
+     * Delivers input events to the ime.
+     * Does not support pointer events.
+     */
+    final class ImeInputStage extends AsyncInputStage
+            implements InputMethodManager.FinishedInputEventCallback {
+        public ImeInputStage(InputStage next, String traceCounter) {
+            super(next, traceCounter);
+        }
+
+        @Override
+        protected int onProcess(QueuedInputEvent q) {
+            if (mLastWasImTarget) {
+                InputMethodManager imm = InputMethodManager.peekInstance();
+                if (imm != null) {
+                    final InputEvent event = q.mEvent;
+                    if (DEBUG_IMF) Log.v(TAG, "Sending input event to IME: " + event);
+                    int result = imm.dispatchInputEvent(event, q, this, mHandler);
+                    if (result == InputMethodManager.DISPATCH_HANDLED) {
+                        return FINISH_HANDLED;
+                    } else if (result == InputMethodManager.DISPATCH_NOT_HANDLED) {
+                        return FINISH_NOT_HANDLED;
+                    } else {
+                        return DEFER; // callback will be invoked later
+                    }
+                }
+            }
+            return FORWARD;
+        }
+
+        @Override
+        public void onFinishedInputEvent(Object token, boolean handled) {
+            QueuedInputEvent q = (QueuedInputEvent)token;
+            if (handled) {
+                finish(q, true);
+                return;
+            }
+            forward(q);
+        }
+    }
+
+    /**
+     * Performs early processing of post-ime input events.
+     */
+    final class EarlyPostImeInputStage extends InputStage {
+        public EarlyPostImeInputStage(InputStage next) {
+            super(next);
+        }
+
+        @Override
+        protected int onProcess(QueuedInputEvent q) {
+            if (q.mEvent instanceof KeyEvent) {
+                return processKeyEvent(q);
             } else {
                 final int source = q.mEvent.getSource();
                 if ((source & InputDevice.SOURCE_CLASS_POINTER) != 0) {
-                    deliverPointerEvent(q);
-                } else if ((source & InputDevice.SOURCE_CLASS_TRACKBALL) != 0) {
-                    deliverTrackballEvent(q);
-                } else {
-                    deliverGenericMotionEvent(q);
+                    return processPointerEvent(q);
                 }
             }
-        } finally {
-            Trace.traceEnd(Trace.TRACE_TAG_VIEW);
+            return FORWARD;
+        }
+
+        private int processKeyEvent(QueuedInputEvent q) {
+            final KeyEvent event = (KeyEvent)q.mEvent;
+
+            // If the key's purpose is to exit touch mode then we consume it
+            // and consider it handled.
+            if (checkForLeavingTouchModeAndConsume(event)) {
+                return FINISH_HANDLED;
+            }
+
+            // Make sure the fallback event policy sees all keys that will be
+            // delivered to the view hierarchy.
+            mFallbackEventHandler.preDispatchKeyEvent(event);
+            return FORWARD;
+        }
+
+        private int processPointerEvent(QueuedInputEvent q) {
+            final MotionEvent event = (MotionEvent)q.mEvent;
+
+            // Translate the pointer event for compatibility, if needed.
+            if (mTranslator != null) {
+                mTranslator.translateEventInScreenToAppWindow(event);
+            }
+
+            // Enter touch mode on down or scroll.
+            final int action = event.getAction();
+            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_SCROLL) {
+                ensureTouchMode(true);
+            }
+
+            // Offset the scroll position.
+            if (mCurScrollY != 0) {
+                event.offsetLocation(0, mCurScrollY);
+            }
+
+            // Remember the touch position for possible drag-initiation.
+            if (event.isTouchEvent()) {
+                mLastTouchPoint.x = event.getRawX();
+                mLastTouchPoint.y = event.getRawY();
+            }
+            return FORWARD;
         }
     }
 
-    private void deliverPointerEvent(QueuedInputEvent q) {
-        final MotionEvent event = (MotionEvent)q.mEvent;
-        final boolean isTouchEvent = event.isTouchEvent();
-        if (mInputEventConsistencyVerifier != null) {
-            if (isTouchEvent) {
-                mInputEventConsistencyVerifier.onTouchEvent(event, 0);
+    /**
+     * Delivers post-ime input events to a native activity.
+     */
+    final class NativePostImeInputStage extends AsyncInputStage
+            implements InputQueue.FinishedInputEventCallback {
+        public NativePostImeInputStage(InputStage next, String traceCounter) {
+            super(next, traceCounter);
+        }
+
+        @Override
+        protected int onProcess(QueuedInputEvent q) {
+            if (mInputQueue != null) {
+                mInputQueue.sendInputEvent(q.mEvent, q, false, this);
+                return DEFER;
+            }
+            return FORWARD;
+        }
+
+        @Override
+        public void onFinishedInputEvent(Object token, boolean handled) {
+            QueuedInputEvent q = (QueuedInputEvent)token;
+            if (handled) {
+                finish(q, true);
+                return;
+            }
+            forward(q);
+        }
+    }
+
+    /**
+     * Delivers post-ime input events to the view hierarchy.
+     */
+    final class ViewPostImeInputStage extends InputStage {
+        public ViewPostImeInputStage(InputStage next) {
+            super(next);
+        }
+
+        @Override
+        protected int onProcess(QueuedInputEvent q) {
+            if (q.mEvent instanceof KeyEvent) {
+                return processKeyEvent(q);
             } else {
-                mInputEventConsistencyVerifier.onGenericMotionEvent(event, 0);
-            }
-        }
-
-        // If there is no view, then the event will not be handled.
-        if (mView == null || !mAdded) {
-            finishInputEvent(q, false);
-            return;
-        }
-
-        // Translate the pointer event for compatibility, if needed.
-        if (mTranslator != null) {
-            mTranslator.translateEventInScreenToAppWindow(event);
-        }
-
-        // Enter touch mode on down or scroll.
-        final int action = event.getAction();
-        if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_SCROLL) {
-            ensureTouchMode(true);
-        }
-
-        // Offset the scroll position.
-        if (mCurScrollY != 0) {
-            event.offsetLocation(0, mCurScrollY);
-        }
-        if (MEASURE_LATENCY) {
-            lt.sample("A Dispatching PointerEvents", System.nanoTime() - event.getEventTimeNano());
-        }
-
-        // Remember the touch position for possible drag-initiation.
-        if (isTouchEvent) {
-            mLastTouchPoint.x = event.getRawX();
-            mLastTouchPoint.y = event.getRawY();
-        }
-
-        // Dispatch touch to view hierarchy.
-        boolean handled = mView.dispatchPointerEvent(event);
-        if (MEASURE_LATENCY) {
-            lt.sample("B Dispatched PointerEvents ", System.nanoTime() - event.getEventTimeNano());
-        }
-        if (handled) {
-            finishInputEvent(q, true);
-            return;
-        }
-
-        // Pointer event was unhandled.
-        finishInputEvent(q, false);
-    }
-
-    private void deliverTrackballEvent(QueuedInputEvent q) {
-        final MotionEvent event = (MotionEvent)q.mEvent;
-        if (mInputEventConsistencyVerifier != null) {
-            mInputEventConsistencyVerifier.onTrackballEvent(event, 0);
-        }
-
-        if (mView != null && mAdded && (q.mFlags & QueuedInputEvent.FLAG_DELIVER_POST_IME) == 0) {
-            if (LOCAL_LOGV)
-                Log.v(TAG, "Dispatching trackball " + event + " to " + mView);
-
-            // Dispatch to the IME before propagating down the view hierarchy.
-            // The IME will eventually call back into handleImeFinishedEvent.
-            if (mLastWasImTarget) {
-                InputMethodManager imm = InputMethodManager.peekInstance();
-                if (imm != null) {
-                    final int seq = event.getSequenceNumber();
-                    if (DEBUG_IMF)
-                        Log.v(TAG, "Sending trackball event to IME: seq="
-                                + seq + " event=" + event);
-                    imm.dispatchTrackballEvent(mView.getContext(), seq, event,
-                            mInputMethodCallback);
-                    return;
+                final int source = q.mEvent.getSource();
+                if ((source & InputDevice.SOURCE_CLASS_POINTER) != 0) {
+                    return processPointerEvent(q);
+                } else if ((source & InputDevice.SOURCE_CLASS_TRACKBALL) != 0) {
+                    return processTrackballEvent(q);
+                } else {
+                    return processGenericMotionEvent(q);
                 }
             }
         }
 
-        // Not dispatching to IME, continue with post IME actions.
-        deliverTrackballEventPostIme(q);
+        private int processKeyEvent(QueuedInputEvent q) {
+            final KeyEvent event = (KeyEvent)q.mEvent;
+
+            // Deliver the key to the view hierarchy.
+            if (mView.dispatchKeyEvent(event)) {
+                return FINISH_HANDLED;
+            }
+
+            // If the Control modifier is held, try to interpret the key as a shortcut.
+            if (event.getAction() == KeyEvent.ACTION_DOWN
+                    && event.isCtrlPressed()
+                    && event.getRepeatCount() == 0
+                    && !KeyEvent.isModifierKey(event.getKeyCode())) {
+                if (mView.dispatchKeyShortcutEvent(event)) {
+                    return FINISH_HANDLED;
+                }
+            }
+
+            // Apply the fallback event policy.
+            if (mFallbackEventHandler.dispatchKeyEvent(event)) {
+                return FINISH_HANDLED;
+            }
+
+            // Handle automatic focus changes.
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                int direction = 0;
+                switch (event.getKeyCode()) {
+                    case KeyEvent.KEYCODE_DPAD_LEFT:
+                        if (event.hasNoModifiers()) {
+                            direction = View.FOCUS_LEFT;
+                        }
+                        break;
+                    case KeyEvent.KEYCODE_DPAD_RIGHT:
+                        if (event.hasNoModifiers()) {
+                            direction = View.FOCUS_RIGHT;
+                        }
+                        break;
+                    case KeyEvent.KEYCODE_DPAD_UP:
+                        if (event.hasNoModifiers()) {
+                            direction = View.FOCUS_UP;
+                        }
+                        break;
+                    case KeyEvent.KEYCODE_DPAD_DOWN:
+                        if (event.hasNoModifiers()) {
+                            direction = View.FOCUS_DOWN;
+                        }
+                        break;
+                    case KeyEvent.KEYCODE_TAB:
+                        if (event.hasNoModifiers()) {
+                            direction = View.FOCUS_FORWARD;
+                        } else if (event.hasModifiers(KeyEvent.META_SHIFT_ON)) {
+                            direction = View.FOCUS_BACKWARD;
+                        }
+                        break;
+                }
+                if (direction != 0) {
+                    View focused = mView.findFocus();
+                    if (focused != null) {
+                        View v = focused.focusSearch(direction);
+                        if (v != null && v != focused) {
+                            // do the math the get the interesting rect
+                            // of previous focused into the coord system of
+                            // newly focused view
+                            focused.getFocusedRect(mTempRect);
+                            if (mView instanceof ViewGroup) {
+                                ((ViewGroup) mView).offsetDescendantRectToMyCoords(
+                                        focused, mTempRect);
+                                ((ViewGroup) mView).offsetRectIntoDescendantCoords(
+                                        v, mTempRect);
+                            }
+                            if (v.requestFocus(direction, mTempRect)) {
+                                playSoundEffect(SoundEffectConstants
+                                        .getContantForFocusDirection(direction));
+                                return FINISH_HANDLED;
+                            }
+                        }
+
+                        // Give the focused view a last chance to handle the dpad key.
+                        if (mView.dispatchUnhandledMove(focused, direction)) {
+                            return FINISH_HANDLED;
+                        }
+                    } else {
+                        // find the best view to give focus to in this non-touch-mode with no-focus
+                        View v = focusSearch(null, direction);
+                        if (v != null && v.requestFocus(direction)) {
+                            return FINISH_HANDLED;
+                        }
+                    }
+                }
+            }
+            return FORWARD;
+        }
+
+        private int processPointerEvent(QueuedInputEvent q) {
+            final MotionEvent event = (MotionEvent)q.mEvent;
+
+            if (mView.dispatchPointerEvent(event)) {
+                return FINISH_HANDLED;
+            }
+            return FORWARD;
+        }
+
+        private int processTrackballEvent(QueuedInputEvent q) {
+            final MotionEvent event = (MotionEvent)q.mEvent;
+
+            if (mView.dispatchTrackballEvent(event)) {
+                return FINISH_HANDLED;
+            }
+            return FORWARD;
+        }
+
+        private int processGenericMotionEvent(QueuedInputEvent q) {
+            final MotionEvent event = (MotionEvent)q.mEvent;
+
+            // Deliver the event to the view.
+            if (mView.dispatchGenericMotionEvent(event)) {
+                return FINISH_HANDLED;
+            }
+            return FORWARD;
+        }
     }
 
-    private void deliverTrackballEventPostIme(QueuedInputEvent q) {
-        final MotionEvent event = (MotionEvent) q.mEvent;
+    /**
+     * Performs synthesis of new input events from unhandled input events.
+     */
+    final class SyntheticInputStage extends InputStage {
+        private final SyntheticTrackballHandler mTrackball = new SyntheticTrackballHandler();
+        private final SyntheticJoystickHandler mJoystick = new SyntheticJoystickHandler();
+        private final SyntheticTouchNavigationHandler mTouchNavigation =
+                new SyntheticTouchNavigationHandler();
 
-        // If there is no view, then the event will not be handled.
-        if (mView == null || !mAdded) {
-            finishInputEvent(q, false);
-            return;
+        public SyntheticInputStage() {
+            super(null);
         }
 
-        // Deliver the trackball event to the view.
-        if (mView.dispatchTrackballEvent(event)) {
-            // If we reach this, we delivered a trackball event to mView and
-            // mView consumed it. Because we will not translate the trackball
-            // event into a key event, touch mode will not exit, so we exit
-            // touch mode here.
-            ensureTouchMode(false);
-
-            finishInputEvent(q, true);
-            mLastTrackballTime = Integer.MIN_VALUE;
-            return;
-        }
-
-        // Translate the trackball event into DPAD keys and try to deliver those.
-        final TrackballAxis x = mTrackballAxisX;
-        final TrackballAxis y = mTrackballAxisY;
-
-        long curTime = SystemClock.uptimeMillis();
-        if ((mLastTrackballTime + MAX_TRACKBALL_DELAY) < curTime) {
-            // It has been too long since the last movement,
-            // so restart at the beginning.
-            x.reset(0);
-            y.reset(0);
-            mLastTrackballTime = curTime;
-        }
-
-        final int action = event.getAction();
-        final int metaState = event.getMetaState();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                x.reset(2);
-                y.reset(2);
-                enqueueInputEvent(new KeyEvent(curTime, curTime,
-                        KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_CENTER, 0, metaState,
-                        KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
-                        InputDevice.SOURCE_KEYBOARD));
-                break;
-            case MotionEvent.ACTION_UP:
-                x.reset(2);
-                y.reset(2);
-                enqueueInputEvent(new KeyEvent(curTime, curTime,
-                        KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_CENTER, 0, metaState,
-                        KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
-                        InputDevice.SOURCE_KEYBOARD));
-                break;
-        }
-
-        if (DEBUG_TRACKBALL) Log.v(TAG, "TB X=" + x.position + " step="
-                + x.step + " dir=" + x.dir + " acc=" + x.acceleration
-                + " move=" + event.getX()
-                + " / Y=" + y.position + " step="
-                + y.step + " dir=" + y.dir + " acc=" + y.acceleration
-                + " move=" + event.getY());
-        final float xOff = x.collect(event.getX(), event.getEventTime(), "X");
-        final float yOff = y.collect(event.getY(), event.getEventTime(), "Y");
-
-        // Generate DPAD events based on the trackball movement.
-        // We pick the axis that has moved the most as the direction of
-        // the DPAD.  When we generate DPAD events for one axis, then the
-        // other axis is reset -- we don't want to perform DPAD jumps due
-        // to slight movements in the trackball when making major movements
-        // along the other axis.
-        int keycode = 0;
-        int movement = 0;
-        float accel = 1;
-        if (xOff > yOff) {
-            movement = x.generate((2/event.getXPrecision()));
-            if (movement != 0) {
-                keycode = movement > 0 ? KeyEvent.KEYCODE_DPAD_RIGHT
-                        : KeyEvent.KEYCODE_DPAD_LEFT;
-                accel = x.acceleration;
-                y.reset(2);
+        @Override
+        protected int onProcess(QueuedInputEvent q) {
+            q.mFlags |= QueuedInputEvent.FLAG_RESYNTHESIZED;
+            if (q.mEvent instanceof MotionEvent) {
+                final MotionEvent event = (MotionEvent)q.mEvent;
+                final int source = event.getSource();
+                if ((source & InputDevice.SOURCE_CLASS_TRACKBALL) != 0) {
+                    mTrackball.process(event);
+                    return FINISH_HANDLED;
+                } else if ((source & InputDevice.SOURCE_CLASS_JOYSTICK) != 0) {
+                    mJoystick.process(event);
+                    return FINISH_HANDLED;
+                } else if ((source & InputDevice.SOURCE_TOUCH_NAVIGATION)
+                        == InputDevice.SOURCE_TOUCH_NAVIGATION) {
+                    mTouchNavigation.process(event);
+                    return FINISH_HANDLED;
+                }
             }
-        } else if (yOff > 0) {
-            movement = y.generate((2/event.getYPrecision()));
-            if (movement != 0) {
-                keycode = movement > 0 ? KeyEvent.KEYCODE_DPAD_DOWN
-                        : KeyEvent.KEYCODE_DPAD_UP;
-                accel = y.acceleration;
-                x.reset(2);
-            }
+            return FORWARD;
         }
 
-        if (keycode != 0) {
-            if (movement < 0) movement = -movement;
-            int accelMovement = (int)(movement * accel);
-            if (DEBUG_TRACKBALL) Log.v(TAG, "Move: movement=" + movement
-                    + " accelMovement=" + accelMovement
-                    + " accel=" + accel);
-            if (accelMovement > movement) {
-                if (DEBUG_TRACKBALL) Log.v("foo", "Delivering fake DPAD: "
-                        + keycode);
-                movement--;
-                int repeatCount = accelMovement - movement;
-                enqueueInputEvent(new KeyEvent(curTime, curTime,
-                        KeyEvent.ACTION_MULTIPLE, keycode, repeatCount, metaState,
-                        KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
-                        InputDevice.SOURCE_KEYBOARD));
+        @Override
+        protected void onDeliverToNext(QueuedInputEvent q) {
+            if ((q.mFlags & QueuedInputEvent.FLAG_RESYNTHESIZED) == 0) {
+                // Cancel related synthetic events if any prior stage has handled the event.
+                if (q.mEvent instanceof MotionEvent) {
+                    final MotionEvent event = (MotionEvent)q.mEvent;
+                    final int source = event.getSource();
+                    if ((source & InputDevice.SOURCE_CLASS_TRACKBALL) != 0) {
+                        mTrackball.cancel(event);
+                    } else if ((source & InputDevice.SOURCE_CLASS_JOYSTICK) != 0) {
+                        mJoystick.cancel(event);
+                    } else if ((source & InputDevice.SOURCE_TOUCH_NAVIGATION)
+                            == InputDevice.SOURCE_TOUCH_NAVIGATION) {
+                        mTouchNavigation.cancel(event);
+                    }
+                }
             }
-            while (movement > 0) {
-                if (DEBUG_TRACKBALL) Log.v("foo", "Delivering fake DPAD: "
-                        + keycode);
-                movement--;
-                curTime = SystemClock.uptimeMillis();
-                enqueueInputEvent(new KeyEvent(curTime, curTime,
-                        KeyEvent.ACTION_DOWN, keycode, 0, metaState,
-                        KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
-                        InputDevice.SOURCE_KEYBOARD));
-                enqueueInputEvent(new KeyEvent(curTime, curTime,
-                        KeyEvent.ACTION_UP, keycode, 0, metaState,
-                        KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
-                        InputDevice.SOURCE_KEYBOARD));
-            }
-            mLastTrackballTime = curTime;
+            super.onDeliverToNext(q);
         }
-
-        // Unfortunately we can't tell whether the application consumed the keys, so
-        // we always consider the trackball event handled.
-        finishInputEvent(q, true);
     }
 
-    private void deliverGenericMotionEvent(QueuedInputEvent q) {
-        final MotionEvent event = (MotionEvent)q.mEvent;
-        if (mInputEventConsistencyVerifier != null) {
-            mInputEventConsistencyVerifier.onGenericMotionEvent(event, 0);
+    /**
+     * Creates dpad events from unhandled trackball movements.
+     */
+    final class SyntheticTrackballHandler {
+        private final TrackballAxis mX = new TrackballAxis();
+        private final TrackballAxis mY = new TrackballAxis();
+        private long mLastTime;
+
+        public void process(MotionEvent event) {
+            // Translate the trackball event into DPAD keys and try to deliver those.
+            long curTime = SystemClock.uptimeMillis();
+            if ((mLastTime + MAX_TRACKBALL_DELAY) < curTime) {
+                // It has been too long since the last movement,
+                // so restart at the beginning.
+                mX.reset(0);
+                mY.reset(0);
+                mLastTime = curTime;
+            }
+
+            final int action = event.getAction();
+            final int metaState = event.getMetaState();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    mX.reset(2);
+                    mY.reset(2);
+                    enqueueInputEvent(new KeyEvent(curTime, curTime,
+                            KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_CENTER, 0, metaState,
+                            KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
+                            InputDevice.SOURCE_KEYBOARD));
+                    break;
+                case MotionEvent.ACTION_UP:
+                    mX.reset(2);
+                    mY.reset(2);
+                    enqueueInputEvent(new KeyEvent(curTime, curTime,
+                            KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_CENTER, 0, metaState,
+                            KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
+                            InputDevice.SOURCE_KEYBOARD));
+                    break;
+            }
+
+            if (DEBUG_TRACKBALL) Log.v(TAG, "TB X=" + mX.position + " step="
+                    + mX.step + " dir=" + mX.dir + " acc=" + mX.acceleration
+                    + " move=" + event.getX()
+                    + " / Y=" + mY.position + " step="
+                    + mY.step + " dir=" + mY.dir + " acc=" + mY.acceleration
+                    + " move=" + event.getY());
+            final float xOff = mX.collect(event.getX(), event.getEventTime(), "X");
+            final float yOff = mY.collect(event.getY(), event.getEventTime(), "Y");
+
+            // Generate DPAD events based on the trackball movement.
+            // We pick the axis that has moved the most as the direction of
+            // the DPAD.  When we generate DPAD events for one axis, then the
+            // other axis is reset -- we don't want to perform DPAD jumps due
+            // to slight movements in the trackball when making major movements
+            // along the other axis.
+            int keycode = 0;
+            int movement = 0;
+            float accel = 1;
+            if (xOff > yOff) {
+                movement = mX.generate();
+                if (movement != 0) {
+                    keycode = movement > 0 ? KeyEvent.KEYCODE_DPAD_RIGHT
+                            : KeyEvent.KEYCODE_DPAD_LEFT;
+                    accel = mX.acceleration;
+                    mY.reset(2);
+                }
+            } else if (yOff > 0) {
+                movement = mY.generate();
+                if (movement != 0) {
+                    keycode = movement > 0 ? KeyEvent.KEYCODE_DPAD_DOWN
+                            : KeyEvent.KEYCODE_DPAD_UP;
+                    accel = mY.acceleration;
+                    mX.reset(2);
+                }
+            }
+
+            if (keycode != 0) {
+                if (movement < 0) movement = -movement;
+                int accelMovement = (int)(movement * accel);
+                if (DEBUG_TRACKBALL) Log.v(TAG, "Move: movement=" + movement
+                        + " accelMovement=" + accelMovement
+                        + " accel=" + accel);
+                if (accelMovement > movement) {
+                    if (DEBUG_TRACKBALL) Log.v(TAG, "Delivering fake DPAD: "
+                            + keycode);
+                    movement--;
+                    int repeatCount = accelMovement - movement;
+                    enqueueInputEvent(new KeyEvent(curTime, curTime,
+                            KeyEvent.ACTION_MULTIPLE, keycode, repeatCount, metaState,
+                            KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
+                            InputDevice.SOURCE_KEYBOARD));
+                }
+                while (movement > 0) {
+                    if (DEBUG_TRACKBALL) Log.v(TAG, "Delivering fake DPAD: "
+                            + keycode);
+                    movement--;
+                    curTime = SystemClock.uptimeMillis();
+                    enqueueInputEvent(new KeyEvent(curTime, curTime,
+                            KeyEvent.ACTION_DOWN, keycode, 0, metaState,
+                            KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
+                            InputDevice.SOURCE_KEYBOARD));
+                    enqueueInputEvent(new KeyEvent(curTime, curTime,
+                            KeyEvent.ACTION_UP, keycode, 0, metaState,
+                            KeyCharacterMap.VIRTUAL_KEYBOARD, 0, KeyEvent.FLAG_FALLBACK,
+                            InputDevice.SOURCE_KEYBOARD));
+                }
+                mLastTime = curTime;
+            }
         }
 
-        if (mView != null && mAdded && (q.mFlags & QueuedInputEvent.FLAG_DELIVER_POST_IME) == 0) {
-            if (LOCAL_LOGV)
-                Log.v(TAG, "Dispatching generic motion " + event + " to " + mView);
+        public void cancel(MotionEvent event) {
+            mLastTime = Integer.MIN_VALUE;
 
-            // Dispatch to the IME before propagating down the view hierarchy.
-            // The IME will eventually call back into handleImeFinishedEvent.
-            if (mLastWasImTarget) {
-                InputMethodManager imm = InputMethodManager.peekInstance();
-                if (imm != null) {
-                    final int seq = event.getSequenceNumber();
-                    if (DEBUG_IMF)
-                        Log.v(TAG, "Sending generic motion event to IME: seq="
-                                + seq + " event=" + event);
-                    imm.dispatchGenericMotionEvent(mView.getContext(), seq, event,
-                            mInputMethodCallback);
-                    return;
+            // If we reach this, we consumed a trackball event.
+            // Because we will not translate the trackball event into a key event,
+            // touch mode will not exit, so we exit touch mode here.
+            if (mView != null && mAdded) {
+                ensureTouchMode(false);
+            }
+        }
+    }
+
+    /**
+     * Maintains state information for a single trackball axis, generating
+     * discrete (DPAD) movements based on raw trackball motion.
+     */
+    static final class TrackballAxis {
+        /**
+         * The maximum amount of acceleration we will apply.
+         */
+        static final float MAX_ACCELERATION = 20;
+
+        /**
+         * The maximum amount of time (in milliseconds) between events in order
+         * for us to consider the user to be doing fast trackball movements,
+         * and thus apply an acceleration.
+         */
+        static final long FAST_MOVE_TIME = 150;
+
+        /**
+         * Scaling factor to the time (in milliseconds) between events to how
+         * much to multiple/divide the current acceleration.  When movement
+         * is < FAST_MOVE_TIME this multiplies the acceleration; when >
+         * FAST_MOVE_TIME it divides it.
+         */
+        static final float ACCEL_MOVE_SCALING_FACTOR = (1.0f/40);
+
+        static final float FIRST_MOVEMENT_THRESHOLD = 0.5f;
+        static final float SECOND_CUMULATIVE_MOVEMENT_THRESHOLD = 2.0f;
+        static final float SUBSEQUENT_INCREMENTAL_MOVEMENT_THRESHOLD = 1.0f;
+
+        float position;
+        float acceleration = 1;
+        long lastMoveTime = 0;
+        int step;
+        int dir;
+        int nonAccelMovement;
+
+        void reset(int _step) {
+            position = 0;
+            acceleration = 1;
+            lastMoveTime = 0;
+            step = _step;
+            dir = 0;
+        }
+
+        /**
+         * Add trackball movement into the state.  If the direction of movement
+         * has been reversed, the state is reset before adding the
+         * movement (so that you don't have to compensate for any previously
+         * collected movement before see the result of the movement in the
+         * new direction).
+         *
+         * @return Returns the absolute value of the amount of movement
+         * collected so far.
+         */
+        float collect(float off, long time, String axis) {
+            long normTime;
+            if (off > 0) {
+                normTime = (long)(off * FAST_MOVE_TIME);
+                if (dir < 0) {
+                    if (DEBUG_TRACKBALL) Log.v(TAG, axis + " reversed to positive!");
+                    position = 0;
+                    step = 0;
+                    acceleration = 1;
+                    lastMoveTime = 0;
+                }
+                dir = 1;
+            } else if (off < 0) {
+                normTime = (long)((-off) * FAST_MOVE_TIME);
+                if (dir > 0) {
+                    if (DEBUG_TRACKBALL) Log.v(TAG, axis + " reversed to negative!");
+                    position = 0;
+                    step = 0;
+                    acceleration = 1;
+                    lastMoveTime = 0;
+                }
+                dir = -1;
+            } else {
+                normTime = 0;
+            }
+
+            // The number of milliseconds between each movement that is
+            // considered "normal" and will not result in any acceleration
+            // or deceleration, scaled by the offset we have here.
+            if (normTime > 0) {
+                long delta = time - lastMoveTime;
+                lastMoveTime = time;
+                float acc = acceleration;
+                if (delta < normTime) {
+                    // The user is scrolling rapidly, so increase acceleration.
+                    float scale = (normTime-delta) * ACCEL_MOVE_SCALING_FACTOR;
+                    if (scale > 1) acc *= scale;
+                    if (DEBUG_TRACKBALL) Log.v(TAG, axis + " accelerate: off="
+                            + off + " normTime=" + normTime + " delta=" + delta
+                            + " scale=" + scale + " acc=" + acc);
+                    acceleration = acc < MAX_ACCELERATION ? acc : MAX_ACCELERATION;
+                } else {
+                    // The user is scrolling slowly, so decrease acceleration.
+                    float scale = (delta-normTime) * ACCEL_MOVE_SCALING_FACTOR;
+                    if (scale > 1) acc /= scale;
+                    if (DEBUG_TRACKBALL) Log.v(TAG, axis + " deccelerate: off="
+                            + off + " normTime=" + normTime + " delta=" + delta
+                            + " scale=" + scale + " acc=" + acc);
+                    acceleration = acc > 1 ? acc : 1;
+                }
+            }
+            position += off;
+            return Math.abs(position);
+        }
+
+        /**
+         * Generate the number of discrete movement events appropriate for
+         * the currently collected trackball movement.
+         *
+         * @return Returns the number of discrete movements, either positive
+         * or negative, or 0 if there is not enough trackball movement yet
+         * for a discrete movement.
+         */
+        int generate() {
+            int movement = 0;
+            nonAccelMovement = 0;
+            do {
+                final int dir = position >= 0 ? 1 : -1;
+                switch (step) {
+                    // If we are going to execute the first step, then we want
+                    // to do this as soon as possible instead of waiting for
+                    // a full movement, in order to make things look responsive.
+                    case 0:
+                        if (Math.abs(position) < FIRST_MOVEMENT_THRESHOLD) {
+                            return movement;
+                        }
+                        movement += dir;
+                        nonAccelMovement += dir;
+                        step = 1;
+                        break;
+                    // If we have generated the first movement, then we need
+                    // to wait for the second complete trackball motion before
+                    // generating the second discrete movement.
+                    case 1:
+                        if (Math.abs(position) < SECOND_CUMULATIVE_MOVEMENT_THRESHOLD) {
+                            return movement;
+                        }
+                        movement += dir;
+                        nonAccelMovement += dir;
+                        position -= SECOND_CUMULATIVE_MOVEMENT_THRESHOLD * dir;
+                        step = 2;
+                        break;
+                    // After the first two, we generate discrete movements
+                    // consistently with the trackball, applying an acceleration
+                    // if the trackball is moving quickly.  This is a simple
+                    // acceleration on top of what we already compute based
+                    // on how quickly the wheel is being turned, to apply
+                    // a longer increasing acceleration to continuous movement
+                    // in one direction.
+                    default:
+                        if (Math.abs(position) < SUBSEQUENT_INCREMENTAL_MOVEMENT_THRESHOLD) {
+                            return movement;
+                        }
+                        movement += dir;
+                        position -= dir * SUBSEQUENT_INCREMENTAL_MOVEMENT_THRESHOLD;
+                        float acc = acceleration;
+                        acc *= 1.1f;
+                        acceleration = acc < MAX_ACCELERATION ? acc : acceleration;
+                        break;
+                }
+            } while (true);
+        }
+    }
+
+    /**
+     * Creates dpad events from unhandled joystick movements.
+     */
+    final class SyntheticJoystickHandler extends Handler {
+        private final static int MSG_ENQUEUE_X_AXIS_KEY_REPEAT = 1;
+        private final static int MSG_ENQUEUE_Y_AXIS_KEY_REPEAT = 2;
+
+        private int mLastXDirection;
+        private int mLastYDirection;
+        private int mLastXKeyCode;
+        private int mLastYKeyCode;
+
+        public SyntheticJoystickHandler() {
+            super(true);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_ENQUEUE_X_AXIS_KEY_REPEAT:
+                case MSG_ENQUEUE_Y_AXIS_KEY_REPEAT: {
+                    KeyEvent oldEvent = (KeyEvent)msg.obj;
+                    KeyEvent e = KeyEvent.changeTimeRepeat(oldEvent,
+                            SystemClock.uptimeMillis(),
+                            oldEvent.getRepeatCount() + 1);
+                    if (mAttachInfo.mHasWindowFocus) {
+                        enqueueInputEvent(e);
+                        Message m = obtainMessage(msg.what, e);
+                        m.setAsynchronous(true);
+                        sendMessageDelayed(m, ViewConfiguration.getKeyRepeatDelay());
+                    }
+                } break;
+            }
+        }
+
+        public void process(MotionEvent event) {
+            update(event, true);
+        }
+
+        public void cancel(MotionEvent event) {
+            update(event, false);
+        }
+
+        private void update(MotionEvent event, boolean synthesizeNewKeys) {
+            final long time = event.getEventTime();
+            final int metaState = event.getMetaState();
+            final int deviceId = event.getDeviceId();
+            final int source = event.getSource();
+
+            int xDirection = joystickAxisValueToDirection(
+                    event.getAxisValue(MotionEvent.AXIS_HAT_X));
+            if (xDirection == 0) {
+                xDirection = joystickAxisValueToDirection(event.getX());
+            }
+
+            int yDirection = joystickAxisValueToDirection(
+                    event.getAxisValue(MotionEvent.AXIS_HAT_Y));
+            if (yDirection == 0) {
+                yDirection = joystickAxisValueToDirection(event.getY());
+            }
+
+            if (xDirection != mLastXDirection) {
+                if (mLastXKeyCode != 0) {
+                    removeMessages(MSG_ENQUEUE_X_AXIS_KEY_REPEAT);
+                    enqueueInputEvent(new KeyEvent(time, time,
+                            KeyEvent.ACTION_UP, mLastXKeyCode, 0, metaState,
+                            deviceId, 0, KeyEvent.FLAG_FALLBACK, source));
+                    mLastXKeyCode = 0;
+                }
+
+                mLastXDirection = xDirection;
+
+                if (xDirection != 0 && synthesizeNewKeys) {
+                    mLastXKeyCode = xDirection > 0
+                            ? KeyEvent.KEYCODE_DPAD_RIGHT : KeyEvent.KEYCODE_DPAD_LEFT;
+                    final KeyEvent e = new KeyEvent(time, time,
+                            KeyEvent.ACTION_DOWN, mLastXKeyCode, 0, metaState,
+                            deviceId, 0, KeyEvent.FLAG_FALLBACK, source);
+                    enqueueInputEvent(e);
+                    Message m = obtainMessage(MSG_ENQUEUE_X_AXIS_KEY_REPEAT, e);
+                    m.setAsynchronous(true);
+                    sendMessageDelayed(m, ViewConfiguration.getKeyRepeatTimeout());
+                }
+            }
+
+            if (yDirection != mLastYDirection) {
+                if (mLastYKeyCode != 0) {
+                    removeMessages(MSG_ENQUEUE_Y_AXIS_KEY_REPEAT);
+                    enqueueInputEvent(new KeyEvent(time, time,
+                            KeyEvent.ACTION_UP, mLastYKeyCode, 0, metaState,
+                            deviceId, 0, KeyEvent.FLAG_FALLBACK, source));
+                    mLastYKeyCode = 0;
+                }
+
+                mLastYDirection = yDirection;
+
+                if (yDirection != 0 && synthesizeNewKeys) {
+                    mLastYKeyCode = yDirection > 0
+                            ? KeyEvent.KEYCODE_DPAD_DOWN : KeyEvent.KEYCODE_DPAD_UP;
+                    final KeyEvent e = new KeyEvent(time, time,
+                            KeyEvent.ACTION_DOWN, mLastYKeyCode, 0, metaState,
+                            deviceId, 0, KeyEvent.FLAG_FALLBACK, source);
+                    enqueueInputEvent(e);
+                    Message m = obtainMessage(MSG_ENQUEUE_Y_AXIS_KEY_REPEAT, e);
+                    m.setAsynchronous(true);
+                    sendMessageDelayed(m, ViewConfiguration.getKeyRepeatTimeout());
                 }
             }
         }
 
-        // Not dispatching to IME, continue with post IME actions.
-        deliverGenericMotionEventPostIme(q);
-    }
-
-    private void deliverGenericMotionEventPostIme(QueuedInputEvent q) {
-        final MotionEvent event = (MotionEvent) q.mEvent;
-        final boolean isJoystick = (event.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0;
-
-        // If there is no view, then the event will not be handled.
-        if (mView == null || !mAdded) {
-            if (isJoystick) {
-                updateJoystickDirection(event, false);
-            }
-            finishInputEvent(q, false);
-            return;
-        }
-
-        // Deliver the event to the view.
-        if (mView.dispatchGenericMotionEvent(event)) {
-            if (isJoystick) {
-                updateJoystickDirection(event, false);
-            }
-            finishInputEvent(q, true);
-            return;
-        }
-
-        if (isJoystick) {
-            // Translate the joystick event into DPAD keys and try to deliver
-            // those.
-            updateJoystickDirection(event, true);
-            finishInputEvent(q, true);
-        } else {
-            finishInputEvent(q, false);
-        }
-    }
-
-    private void updateJoystickDirection(MotionEvent event, boolean synthesizeNewKeys) {
-        final long time = event.getEventTime();
-        final int metaState = event.getMetaState();
-        final int deviceId = event.getDeviceId();
-        final int source = event.getSource();
-
-        int xDirection = joystickAxisValueToDirection(event.getAxisValue(MotionEvent.AXIS_HAT_X));
-        if (xDirection == 0) {
-            xDirection = joystickAxisValueToDirection(event.getX());
-        }
-
-        int yDirection = joystickAxisValueToDirection(event.getAxisValue(MotionEvent.AXIS_HAT_Y));
-        if (yDirection == 0) {
-            yDirection = joystickAxisValueToDirection(event.getY());
-        }
-
-        if (xDirection != mLastJoystickXDirection) {
-            if (mLastJoystickXKeyCode != 0) {
-                enqueueInputEvent(new KeyEvent(time, time,
-                        KeyEvent.ACTION_UP, mLastJoystickXKeyCode, 0, metaState,
-                        deviceId, 0, KeyEvent.FLAG_FALLBACK, source));
-                mLastJoystickXKeyCode = 0;
-            }
-
-            mLastJoystickXDirection = xDirection;
-
-            if (xDirection != 0 && synthesizeNewKeys) {
-                mLastJoystickXKeyCode = xDirection > 0
-                        ? KeyEvent.KEYCODE_DPAD_RIGHT : KeyEvent.KEYCODE_DPAD_LEFT;
-                enqueueInputEvent(new KeyEvent(time, time,
-                        KeyEvent.ACTION_DOWN, mLastJoystickXKeyCode, 0, metaState,
-                        deviceId, 0, KeyEvent.FLAG_FALLBACK, source));
-            }
-        }
-
-        if (yDirection != mLastJoystickYDirection) {
-            if (mLastJoystickYKeyCode != 0) {
-                enqueueInputEvent(new KeyEvent(time, time,
-                        KeyEvent.ACTION_UP, mLastJoystickYKeyCode, 0, metaState,
-                        deviceId, 0, KeyEvent.FLAG_FALLBACK, source));
-                mLastJoystickYKeyCode = 0;
-            }
-
-            mLastJoystickYDirection = yDirection;
-
-            if (yDirection != 0 && synthesizeNewKeys) {
-                mLastJoystickYKeyCode = yDirection > 0
-                        ? KeyEvent.KEYCODE_DPAD_DOWN : KeyEvent.KEYCODE_DPAD_UP;
-                enqueueInputEvent(new KeyEvent(time, time,
-                        KeyEvent.ACTION_DOWN, mLastJoystickYKeyCode, 0, metaState,
-                        deviceId, 0, KeyEvent.FLAG_FALLBACK, source));
+        private int joystickAxisValueToDirection(float value) {
+            if (value >= 0.5f) {
+                return 1;
+            } else if (value <= -0.5f) {
+                return -1;
+            } else {
+                return 0;
             }
         }
     }
 
-    private static int joystickAxisValueToDirection(float value) {
-        if (value >= 0.5f) {
-            return 1;
-        } else if (value <= -0.5f) {
-            return -1;
-        } else {
-            return 0;
+    /**
+     * Creates dpad events from unhandled touch navigation movements.
+     */
+    final class SyntheticTouchNavigationHandler extends Handler {
+        private static final String LOCAL_TAG = "SyntheticTouchNavigationHandler";
+        private static final boolean LOCAL_DEBUG = false;
+
+        // Assumed nominal width and height in millimeters of a touch navigation pad,
+        // if no resolution information is available from the input system.
+        private static final float DEFAULT_WIDTH_MILLIMETERS = 48;
+        private static final float DEFAULT_HEIGHT_MILLIMETERS = 48;
+
+        /* TODO: These constants should eventually be moved to ViewConfiguration. */
+
+        // Tap timeout in milliseconds.
+        private static final int TAP_TIMEOUT = 250;
+
+        // The maximum distance traveled for a gesture to be considered a tap in millimeters.
+        private static final int TAP_SLOP_MILLIMETERS = 5;
+
+        // The nominal distance traveled to move by one unit.
+        private static final int TICK_DISTANCE_MILLIMETERS = 12;
+
+        // Minimum and maximum fling velocity in ticks per second.
+        // The minimum velocity should be set such that we perform enough ticks per
+        // second that the fling appears to be fluid.  For example, if we set the minimum
+        // to 2 ticks per second, then there may be up to half a second delay between the next
+        // to last and last ticks which is noticeably discrete and jerky.  This value should
+        // probably not be set to anything less than about 4.
+        // If fling accuracy is a problem then consider tuning the tick distance instead.
+        private static final float MIN_FLING_VELOCITY_TICKS_PER_SECOND = 6f;
+        private static final float MAX_FLING_VELOCITY_TICKS_PER_SECOND = 20f;
+
+        // Fling velocity decay factor applied after each new key is emitted.
+        // This parameter controls the deceleration and overall duration of the fling.
+        // The fling stops automatically when its velocity drops below the minimum
+        // fling velocity defined above.
+        private static final float FLING_TICK_DECAY = 0.8f;
+
+        /* The input device that we are tracking. */
+
+        private int mCurrentDeviceId = -1;
+        private int mCurrentSource;
+        private boolean mCurrentDeviceSupported;
+
+        /* Configuration for the current input device. */
+
+        // The tap timeout and scaled slop.
+        private int mConfigTapTimeout;
+        private float mConfigTapSlop;
+
+        // The scaled tick distance.  A movement of this amount should generally translate
+        // into a single dpad event in a given direction.
+        private float mConfigTickDistance;
+
+        // The minimum and maximum scaled fling velocity.
+        private float mConfigMinFlingVelocity;
+        private float mConfigMaxFlingVelocity;
+
+        /* Tracking state. */
+
+        // The velocity tracker for detecting flings.
+        private VelocityTracker mVelocityTracker;
+
+        // The active pointer id, or -1 if none.
+        private int mActivePointerId = -1;
+
+        // Time and location where tracking started.
+        private long mStartTime;
+        private float mStartX;
+        private float mStartY;
+
+        // Most recently observed position.
+        private float mLastX;
+        private float mLastY;
+
+        // Accumulated movement delta since the last direction key was sent.
+        private float mAccumulatedX;
+        private float mAccumulatedY;
+
+        // Set to true if any movement was delivered to the app.
+        // Implies that tap slop was exceeded.
+        private boolean mConsumedMovement;
+
+        // The most recently sent key down event.
+        // The keycode remains set until the direction changes or a fling ends
+        // so that repeated key events may be generated as required.
+        private long mPendingKeyDownTime;
+        private int mPendingKeyCode = KeyEvent.KEYCODE_UNKNOWN;
+        private int mPendingKeyRepeatCount;
+        private int mPendingKeyMetaState;
+
+        // The current fling velocity while a fling is in progress.
+        private boolean mFlinging;
+        private float mFlingVelocity;
+
+        public SyntheticTouchNavigationHandler() {
+            super(true);
         }
+
+        public void process(MotionEvent event) {
+            // Update the current device information.
+            final long time = event.getEventTime();
+            final int deviceId = event.getDeviceId();
+            final int source = event.getSource();
+            if (mCurrentDeviceId != deviceId || mCurrentSource != source) {
+                finishKeys(time);
+                finishTracking(time);
+                mCurrentDeviceId = deviceId;
+                mCurrentSource = source;
+                mCurrentDeviceSupported = false;
+                InputDevice device = event.getDevice();
+                if (device != null) {
+                    // In order to support an input device, we must know certain
+                    // characteristics about it, such as its size and resolution.
+                    InputDevice.MotionRange xRange = device.getMotionRange(MotionEvent.AXIS_X);
+                    InputDevice.MotionRange yRange = device.getMotionRange(MotionEvent.AXIS_Y);
+                    if (xRange != null && yRange != null) {
+                        mCurrentDeviceSupported = true;
+
+                        // Infer the resolution if it not actually known.
+                        float xRes = xRange.getResolution();
+                        if (xRes <= 0) {
+                            xRes = xRange.getRange() / DEFAULT_WIDTH_MILLIMETERS;
+                        }
+                        float yRes = yRange.getResolution();
+                        if (yRes <= 0) {
+                            yRes = yRange.getRange() / DEFAULT_HEIGHT_MILLIMETERS;
+                        }
+                        float nominalRes = (xRes + yRes) * 0.5f;
+
+                        // Precompute all of the configuration thresholds we will need.
+                        mConfigTapTimeout = TAP_TIMEOUT;
+                        mConfigTapSlop = TAP_SLOP_MILLIMETERS * nominalRes;
+                        mConfigTickDistance = TICK_DISTANCE_MILLIMETERS * nominalRes;
+                        mConfigMinFlingVelocity =
+                                MIN_FLING_VELOCITY_TICKS_PER_SECOND * mConfigTickDistance;
+                        mConfigMaxFlingVelocity =
+                                MAX_FLING_VELOCITY_TICKS_PER_SECOND * mConfigTickDistance;
+
+                        if (LOCAL_DEBUG) {
+                            Log.d(LOCAL_TAG, "Configured device " + mCurrentDeviceId
+                                    + " (" + Integer.toHexString(mCurrentSource) + "): "
+                                    + "mConfigTapTimeout=" + mConfigTapTimeout
+                                    + ", mConfigTapSlop=" + mConfigTapSlop
+                                    + ", mConfigTickDistance=" + mConfigTickDistance
+                                    + ", mConfigMinFlingVelocity=" + mConfigMinFlingVelocity
+                                    + ", mConfigMaxFlingVelocity=" + mConfigMaxFlingVelocity);
+                        }
+                    }
+                }
+            }
+            if (!mCurrentDeviceSupported) {
+                return;
+            }
+
+            // Handle the event.
+            final int action = event.getActionMasked();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN: {
+                    boolean caughtFling = mFlinging;
+                    finishKeys(time);
+                    finishTracking(time);
+                    mActivePointerId = event.getPointerId(0);
+                    mVelocityTracker = VelocityTracker.obtain();
+                    mVelocityTracker.addMovement(event);
+                    mStartTime = time;
+                    mStartX = event.getX();
+                    mStartY = event.getY();
+                    mLastX = mStartX;
+                    mLastY = mStartY;
+                    mAccumulatedX = 0;
+                    mAccumulatedY = 0;
+
+                    // If we caught a fling, then pretend that the tap slop has already
+                    // been exceeded to suppress taps whose only purpose is to stop the fling.
+                    mConsumedMovement = caughtFling;
+                    break;
+                }
+
+                case MotionEvent.ACTION_MOVE:
+                case MotionEvent.ACTION_UP: {
+                    if (mActivePointerId < 0) {
+                        break;
+                    }
+                    final int index = event.findPointerIndex(mActivePointerId);
+                    if (index < 0) {
+                        finishKeys(time);
+                        finishTracking(time);
+                        break;
+                    }
+
+                    mVelocityTracker.addMovement(event);
+                    final float x = event.getX(index);
+                    final float y = event.getY(index);
+                    mAccumulatedX += x - mLastX;
+                    mAccumulatedY += y - mLastY;
+                    mLastX = x;
+                    mLastY = y;
+
+                    // Consume any accumulated movement so far.
+                    final int metaState = event.getMetaState();
+                    consumeAccumulatedMovement(time, metaState);
+
+                    // Detect taps and flings.
+                    if (action == MotionEvent.ACTION_UP) {
+                        if (!mConsumedMovement
+                                && Math.hypot(mLastX - mStartX, mLastY - mStartY) < mConfigTapSlop
+                                && time <= mStartTime + mConfigTapTimeout) {
+                            // It's a tap!
+                            finishKeys(time);
+                            sendKeyDownOrRepeat(time, KeyEvent.KEYCODE_DPAD_CENTER, metaState);
+                            sendKeyUp(time);
+                        } else if (mConsumedMovement
+                                && mPendingKeyCode != KeyEvent.KEYCODE_UNKNOWN) {
+                            // It might be a fling.
+                            mVelocityTracker.computeCurrentVelocity(1000, mConfigMaxFlingVelocity);
+                            final float vx = mVelocityTracker.getXVelocity(mActivePointerId);
+                            final float vy = mVelocityTracker.getYVelocity(mActivePointerId);
+                            if (!startFling(time, vx, vy)) {
+                                finishKeys(time);
+                            }
+                        }
+                        finishTracking(time);
+                    }
+                    break;
+                }
+
+                case MotionEvent.ACTION_CANCEL: {
+                    finishKeys(time);
+                    finishTracking(time);
+                    break;
+                }
+            }
+        }
+
+        public void cancel(MotionEvent event) {
+            if (mCurrentDeviceId == event.getDeviceId()
+                    && mCurrentSource == event.getSource()) {
+                final long time = event.getEventTime();
+                finishKeys(time);
+                finishTracking(time);
+            }
+        }
+
+        private void finishKeys(long time) {
+            cancelFling();
+            sendKeyUp(time);
+        }
+
+        private void finishTracking(long time) {
+            if (mActivePointerId >= 0) {
+                mActivePointerId = -1;
+                mVelocityTracker.recycle();
+                mVelocityTracker = null;
+            }
+        }
+
+        private void consumeAccumulatedMovement(long time, int metaState) {
+            final float absX = Math.abs(mAccumulatedX);
+            final float absY = Math.abs(mAccumulatedY);
+            if (absX >= absY) {
+                if (absX >= mConfigTickDistance) {
+                    mAccumulatedX = consumeAccumulatedMovement(time, metaState, mAccumulatedX,
+                            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT);
+                    mAccumulatedY = 0;
+                    mConsumedMovement = true;
+                }
+            } else {
+                if (absY >= mConfigTickDistance) {
+                    mAccumulatedY = consumeAccumulatedMovement(time, metaState, mAccumulatedY,
+                            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN);
+                    mAccumulatedX = 0;
+                    mConsumedMovement = true;
+                }
+            }
+        }
+
+        private float consumeAccumulatedMovement(long time, int metaState,
+                float accumulator, int negativeKeyCode, int positiveKeyCode) {
+            while (accumulator <= -mConfigTickDistance) {
+                sendKeyDownOrRepeat(time, negativeKeyCode, metaState);
+                accumulator += mConfigTickDistance;
+            }
+            while (accumulator >= mConfigTickDistance) {
+                sendKeyDownOrRepeat(time, positiveKeyCode, metaState);
+                accumulator -= mConfigTickDistance;
+            }
+            return accumulator;
+        }
+
+        private void sendKeyDownOrRepeat(long time, int keyCode, int metaState) {
+            if (mPendingKeyCode != keyCode) {
+                sendKeyUp(time);
+                mPendingKeyDownTime = time;
+                mPendingKeyCode = keyCode;
+                mPendingKeyRepeatCount = 0;
+            } else {
+                mPendingKeyRepeatCount += 1;
+            }
+            mPendingKeyMetaState = metaState;
+
+            // Note: Normally we would pass FLAG_LONG_PRESS when the repeat count is 1
+            // but it doesn't quite make sense when simulating the events in this way.
+            if (LOCAL_DEBUG) {
+                Log.d(LOCAL_TAG, "Sending key down: keyCode=" + mPendingKeyCode
+                        + ", repeatCount=" + mPendingKeyRepeatCount
+                        + ", metaState=" + Integer.toHexString(mPendingKeyMetaState));
+            }
+            enqueueInputEvent(new KeyEvent(mPendingKeyDownTime, time,
+                    KeyEvent.ACTION_DOWN, mPendingKeyCode, mPendingKeyRepeatCount,
+                    mPendingKeyMetaState, mCurrentDeviceId,
+                    KeyEvent.FLAG_FALLBACK, mCurrentSource));
+        }
+
+        private void sendKeyUp(long time) {
+            if (mPendingKeyCode != KeyEvent.KEYCODE_UNKNOWN) {
+                if (LOCAL_DEBUG) {
+                    Log.d(LOCAL_TAG, "Sending key up: keyCode=" + mPendingKeyCode
+                            + ", metaState=" + Integer.toHexString(mPendingKeyMetaState));
+                }
+                enqueueInputEvent(new KeyEvent(mPendingKeyDownTime, time,
+                        KeyEvent.ACTION_UP, mPendingKeyCode, 0, mPendingKeyMetaState,
+                        mCurrentDeviceId, 0, KeyEvent.FLAG_FALLBACK,
+                        mCurrentSource));
+                mPendingKeyCode = KeyEvent.KEYCODE_UNKNOWN;
+            }
+        }
+
+        private boolean startFling(long time, float vx, float vy) {
+            if (LOCAL_DEBUG) {
+                Log.d(LOCAL_TAG, "Considering fling: vx=" + vx + ", vy=" + vy
+                        + ", min=" + mConfigMinFlingVelocity);
+            }
+
+            // Flings must be oriented in the same direction as the preceding movements.
+            switch (mPendingKeyCode) {
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    if (-vx >= mConfigMinFlingVelocity
+                            && Math.abs(vy) < mConfigMinFlingVelocity) {
+                        mFlingVelocity = -vx;
+                        break;
+                    }
+                    return false;
+
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    if (vx >= mConfigMinFlingVelocity
+                            && Math.abs(vy) < mConfigMinFlingVelocity) {
+                        mFlingVelocity = vx;
+                        break;
+                    }
+                    return false;
+
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    if (-vy >= mConfigMinFlingVelocity
+                            && Math.abs(vx) < mConfigMinFlingVelocity) {
+                        mFlingVelocity = -vy;
+                        break;
+                    }
+                    return false;
+
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    if (vy >= mConfigMinFlingVelocity
+                            && Math.abs(vx) < mConfigMinFlingVelocity) {
+                        mFlingVelocity = vy;
+                        break;
+                    }
+                    return false;
+            }
+
+            // Post the first fling event.
+            mFlinging = postFling(time);
+            return mFlinging;
+        }
+
+        private boolean postFling(long time) {
+            // The idea here is to estimate the time when the pointer would have
+            // traveled one tick distance unit given the current fling velocity.
+            // This effect creates continuity of motion.
+            if (mFlingVelocity >= mConfigMinFlingVelocity) {
+                long delay = (long)(mConfigTickDistance / mFlingVelocity * 1000);
+                postAtTime(mFlingRunnable, time + delay);
+                if (LOCAL_DEBUG) {
+                    Log.d(LOCAL_TAG, "Posted fling: velocity="
+                            + mFlingVelocity + ", delay=" + delay
+                            + ", keyCode=" + mPendingKeyCode);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private void cancelFling() {
+            if (mFlinging) {
+                removeCallbacks(mFlingRunnable);
+                mFlinging = false;
+            }
+        }
+
+        private final Runnable mFlingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                final long time = SystemClock.uptimeMillis();
+                sendKeyDownOrRepeat(time, mPendingKeyCode, mPendingKeyMetaState);
+                mFlingVelocity *= FLING_TICK_DECAY;
+                if (!postFling(time)) {
+                    mFlinging = false;
+                    finishKeys(time);
+                }
+            }
+        };
     }
 
     /**
@@ -3591,201 +4859,6 @@ public final class ViewRootImpl implements ViewParent,
         }
 
         return false;
-    }
-
-    private void deliverKeyEvent(QueuedInputEvent q) {
-        final KeyEvent event = (KeyEvent)q.mEvent;
-        if (mInputEventConsistencyVerifier != null) {
-            mInputEventConsistencyVerifier.onKeyEvent(event, 0);
-        }
-
-        if (mView != null && mAdded && (q.mFlags & QueuedInputEvent.FLAG_DELIVER_POST_IME) == 0) {
-            if (LOCAL_LOGV) Log.v(TAG, "Dispatching key " + event + " to " + mView);
-
-            // Perform predispatching before the IME.
-            if (mView.dispatchKeyEventPreIme(event)) {
-                finishInputEvent(q, true);
-                return;
-            }
-
-            // Dispatch to the IME before propagating down the view hierarchy.
-            // The IME will eventually call back into handleImeFinishedEvent.
-            if (mLastWasImTarget) {
-                InputMethodManager imm = InputMethodManager.peekInstance();
-                if (imm != null) {
-                    final int seq = event.getSequenceNumber();
-                    if (DEBUG_IMF) Log.v(TAG, "Sending key event to IME: seq="
-                            + seq + " event=" + event);
-                    imm.dispatchKeyEvent(mView.getContext(), seq, event, mInputMethodCallback);
-                    return;
-                }
-            }
-        }
-
-        // Not dispatching to IME, continue with post IME actions.
-        deliverKeyEventPostIme(q);
-    }
-
-    void handleImeFinishedEvent(int seq, boolean handled) {
-        final QueuedInputEvent q = mCurrentInputEvent;
-        if (q != null && q.mEvent.getSequenceNumber() == seq) {
-            if (DEBUG_IMF) {
-                Log.v(TAG, "IME finished event: seq=" + seq
-                        + " handled=" + handled + " event=" + q);
-            }
-            if (handled) {
-                finishInputEvent(q, true);
-            } else {
-                if (q.mEvent instanceof KeyEvent) {
-                    KeyEvent event = (KeyEvent)q.mEvent;
-                    if (event.getAction() != KeyEvent.ACTION_UP) {
-                        // If the window doesn't currently have input focus, then drop
-                        // this event.  This could be an event that came back from the
-                        // IME dispatch but the window has lost focus in the meantime.
-                        if (!mAttachInfo.mHasWindowFocus) {
-                            Slog.w(TAG, "Dropping event due to no window focus: " + event);
-                            finishInputEvent(q, true);
-                            return;
-                        }
-                    }
-                    deliverKeyEventPostIme(q);
-                } else {
-                    MotionEvent event = (MotionEvent)q.mEvent;
-                    if (event.getAction() != MotionEvent.ACTION_CANCEL
-                            && event.getAction() != MotionEvent.ACTION_UP) {
-                        // If the window doesn't currently have input focus, then drop
-                        // this event.  This could be an event that came back from the
-                        // IME dispatch but the window has lost focus in the meantime.
-                        if (!mAttachInfo.mHasWindowFocus) {
-                            Slog.w(TAG, "Dropping event due to no window focus: " + event);
-                            finishInputEvent(q, true);
-                            return;
-                        }
-                    }
-                    final int source = q.mEvent.getSource();
-                    if ((source & InputDevice.SOURCE_CLASS_TRACKBALL) != 0) {
-                        deliverTrackballEventPostIme(q);
-                    } else {
-                        deliverGenericMotionEventPostIme(q);
-                    }
-                }
-            }
-        } else {
-            if (DEBUG_IMF) {
-                Log.v(TAG, "IME finished event: seq=" + seq
-                        + " handled=" + handled + ", event not found!");
-            }
-        }
-    }
-
-    private void deliverKeyEventPostIme(QueuedInputEvent q) {
-        final KeyEvent event = (KeyEvent)q.mEvent;
-
-        // If the view went away, then the event will not be handled.
-        if (mView == null || !mAdded) {
-            finishInputEvent(q, false);
-            return;
-        }
-
-        // If the key's purpose is to exit touch mode then we consume it and consider it handled.
-        if (checkForLeavingTouchModeAndConsume(event)) {
-            finishInputEvent(q, true);
-            return;
-        }
-
-        // Make sure the fallback event policy sees all keys that will be delivered to the
-        // view hierarchy.
-        mFallbackEventHandler.preDispatchKeyEvent(event);
-
-        // Deliver the key to the view hierarchy.
-        if (mView.dispatchKeyEvent(event)) {
-            finishInputEvent(q, true);
-            return;
-        }
-
-        // If the Control modifier is held, try to interpret the key as a shortcut.
-        if (event.getAction() == KeyEvent.ACTION_DOWN
-                && event.isCtrlPressed()
-                && event.getRepeatCount() == 0
-                && !KeyEvent.isModifierKey(event.getKeyCode())) {
-            if (mView.dispatchKeyShortcutEvent(event)) {
-                finishInputEvent(q, true);
-                return;
-            }
-        }
-
-        // Apply the fallback event policy.
-        if (mFallbackEventHandler.dispatchKeyEvent(event)) {
-            finishInputEvent(q, true);
-            return;
-        }
-
-        // Handle automatic focus changes.
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            int direction = 0;
-            switch (event.getKeyCode()) {
-                case KeyEvent.KEYCODE_DPAD_LEFT:
-                    if (event.hasNoModifiers()) {
-                        direction = View.FOCUS_LEFT;
-                    }
-                    break;
-                case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    if (event.hasNoModifiers()) {
-                        direction = View.FOCUS_RIGHT;
-                    }
-                    break;
-                case KeyEvent.KEYCODE_DPAD_UP:
-                    if (event.hasNoModifiers()) {
-                        direction = View.FOCUS_UP;
-                    }
-                    break;
-                case KeyEvent.KEYCODE_DPAD_DOWN:
-                    if (event.hasNoModifiers()) {
-                        direction = View.FOCUS_DOWN;
-                    }
-                    break;
-                case KeyEvent.KEYCODE_TAB:
-                    if (event.hasNoModifiers()) {
-                        direction = View.FOCUS_FORWARD;
-                    } else if (event.hasModifiers(KeyEvent.META_SHIFT_ON)) {
-                        direction = View.FOCUS_BACKWARD;
-                    }
-                    break;
-            }
-            if (direction != 0) {
-                View focused = mView.findFocus();
-                if (focused != null) {
-                    View v = focused.focusSearch(direction);
-                    if (v != null && v != focused) {
-                        // do the math the get the interesting rect
-                        // of previous focused into the coord system of
-                        // newly focused view
-                        focused.getFocusedRect(mTempRect);
-                        if (mView instanceof ViewGroup) {
-                            ((ViewGroup) mView).offsetDescendantRectToMyCoords(
-                                    focused, mTempRect);
-                            ((ViewGroup) mView).offsetRectIntoDescendantCoords(
-                                    v, mTempRect);
-                        }
-                        if (v.requestFocus(direction, mTempRect)) {
-                            playSoundEffect(SoundEffectConstants
-                                    .getContantForFocusDirection(direction));
-                            finishInputEvent(q, true);
-                            return;
-                        }
-                    }
-
-                    // Give the focused view a last chance to handle the dpad key.
-                    if (mView.dispatchUnhandledMove(focused, direction)) {
-                        finishInputEvent(q, true);
-                        return;
-                    }
-                }
-            }
-        }
-
-        // Key was unhandled.
-        finishInputEvent(q, false);
     }
 
     /* drag/drop */
@@ -3897,7 +4970,7 @@ public final class ViewRootImpl implements ViewParent,
     public void handleDispatchDoneAnimating() {
         if (mWindowsAnimating) {
             mWindowsAnimating = false;
-            if (!mDirty.isEmpty() || mIsAnimating)  {
+            if (!mDirty.isEmpty() || mIsAnimating || mFullRedrawNeeded)  {
                 scheduleTraversals();
             }
         }
@@ -3963,7 +5036,7 @@ public final class ViewRootImpl implements ViewParent,
                 (int) (mView.getMeasuredWidth() * appScale + 0.5f),
                 (int) (mView.getMeasuredHeight() * appScale + 0.5f),
                 viewVisibility, insetsPending ? WindowManagerGlobal.RELAYOUT_INSETS_PENDING : 0,
-                mWinFrame, mPendingContentInsets, mPendingVisibleInsets,
+                mWinFrame, mPendingOverscanInsets, mPendingContentInsets, mPendingVisibleInsets,
                 mPendingConfiguration, mSurface);
         //Log.d(TAG, "<<<<<< BACK FROM relayout");
         if (restore) {
@@ -3972,6 +5045,7 @@ public final class ViewRootImpl implements ViewParent,
         
         if (mTranslator != null) {
             mTranslator.translateRectInScreenToAppWinFrame(mWinFrame);
+            mTranslator.translateRectInScreenToAppWindow(mPendingOverscanInsets);
             mTranslator.translateRectInScreenToAppWindow(mPendingContentInsets);
             mTranslator.translateRectInScreenToAppWindow(mPendingVisibleInsets);
         }
@@ -4089,6 +5163,7 @@ public final class ViewRootImpl implements ViewParent,
             }
 
             if (mAdded && !mFirst) {
+                invalidateDisplayLists();
                 destroyHardwareRenderer();
 
                 if (mView != null) {
@@ -4121,14 +5196,30 @@ public final class ViewRootImpl implements ViewParent,
     }
 
     public void loadSystemProperties() {
-        boolean layout = SystemProperties.getBoolean(
-                View.DEBUG_LAYOUT_PROPERTY, false);
-        if (layout != mAttachInfo.mDebugLayout) {
-            mAttachInfo.mDebugLayout = layout;
-            if (!mHandler.hasMessages(MSG_INVALIDATE_WORLD)) {
-                mHandler.sendEmptyMessageDelayed(MSG_INVALIDATE_WORLD, 200);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                // Profiling
+                mProfileRendering = SystemProperties.getBoolean(PROPERTY_PROFILE_RENDERING, false);
+                profileRendering(mAttachInfo.mHasWindowFocus);
+
+                // Hardware rendering
+                if (mAttachInfo.mHardwareRenderer != null) {
+                    if (mAttachInfo.mHardwareRenderer.loadSystemProperties(mHolder.getSurface())) {
+                        invalidate();
+                    }
+                }
+
+                // Layout debugging
+                boolean layout = SystemProperties.getBoolean(View.DEBUG_LAYOUT_PROPERTY, false);
+                if (layout != mAttachInfo.mDebugLayout) {
+                    mAttachInfo.mDebugLayout = layout;
+                    if (!mHandler.hasMessages(MSG_INVALIDATE_WORLD)) {
+                        mHandler.sendEmptyMessageDelayed(MSG_INVALIDATE_WORLD, 200);
+                    }
+                }
             }
-        }
+        });
     }
 
     private void destroyHardwareRenderer() {
@@ -4147,20 +5238,12 @@ public final class ViewRootImpl implements ViewParent,
         }
     }
 
-    void dispatchImeFinishedEvent(int seq, boolean handled) {
-        Message msg = mHandler.obtainMessage(MSG_IME_FINISHED_EVENT);
-        msg.arg1 = seq;
-        msg.arg2 = handled ? 1 : 0;
-        msg.setAsynchronous(true);
-        mHandler.sendMessage(msg);
-    }
-
     public void dispatchFinishInputConnection(InputConnection connection) {
         Message msg = mHandler.obtainMessage(MSG_FINISH_INPUT_CONNECTION, connection);
         mHandler.sendMessage(msg);
     }
 
-    public void dispatchResized(Rect frame, Rect contentInsets,
+    public void dispatchResized(Rect frame, Rect overscanInsets, Rect contentInsets,
             Rect visibleInsets, boolean reportDraw, Configuration newConfig) {
         if (DEBUG_LAYOUT) Log.v(TAG, "Resizing " + this + ": frame=" + frame.toShortString()
                 + " contentInsets=" + contentInsets.toShortString()
@@ -4169,6 +5252,7 @@ public final class ViewRootImpl implements ViewParent,
         Message msg = mHandler.obtainMessage(reportDraw ? MSG_RESIZED_REPORT : MSG_RESIZED);
         if (mTranslator != null) {
             mTranslator.translateRectInScreenToAppWindow(frame);
+            mTranslator.translateRectInScreenToAppWindow(overscanInsets);
             mTranslator.translateRectInScreenToAppWindow(contentInsets);
             mTranslator.translateRectInScreenToAppWindow(visibleInsets);
         }
@@ -4178,6 +5262,7 @@ public final class ViewRootImpl implements ViewParent,
         args.arg2 = sameProcessCall ? new Rect(contentInsets) : contentInsets;
         args.arg3 = sameProcessCall ? new Rect(visibleInsets) : visibleInsets;
         args.arg4 = sameProcessCall && newConfig != null ? new Configuration(newConfig) : newConfig;
+        args.arg5 = sameProcessCall ? new Rect(overscanInsets) : overscanInsets;
         msg.obj = args;
         mHandler.sendMessage(msg);
     }
@@ -4207,13 +5292,25 @@ public final class ViewRootImpl implements ViewParent,
      * needing a queue on the application's side.
      */
     private static final class QueuedInputEvent {
-        public static final int FLAG_DELIVER_POST_IME = 1;
+        public static final int FLAG_DELIVER_POST_IME = 1 << 0;
+        public static final int FLAG_DEFERRED = 1 << 1;
+        public static final int FLAG_FINISHED = 1 << 2;
+        public static final int FLAG_FINISHED_HANDLED = 1 << 3;
+        public static final int FLAG_RESYNTHESIZED = 1 << 4;
 
         public QueuedInputEvent mNext;
 
         public InputEvent mEvent;
         public InputEventReceiver mReceiver;
         public int mFlags;
+
+        public boolean shouldSkipIme() {
+            if ((mFlags & FLAG_DELIVER_POST_IME) != 0) {
+                return true;
+            }
+            return mEvent instanceof MotionEvent
+                    && mEvent.isFromSource(InputDevice.SOURCE_CLASS_POINTER);
+        }
     }
 
     private QueuedInputEvent obtainQueuedInputEvent(InputEvent event,
@@ -4257,15 +5354,17 @@ public final class ViewRootImpl implements ViewParent,
         // in response to touch events and we want to ensure that the injected keys
         // are processed in the order they were received and we cannot trust that
         // the time stamp of injected events are monotonic.
-        QueuedInputEvent last = mFirstPendingInputEvent;
+        QueuedInputEvent last = mPendingInputEventTail;
         if (last == null) {
-            mFirstPendingInputEvent = q;
+            mPendingInputEventHead = q;
+            mPendingInputEventTail = q;
         } else {
-            while (last.mNext != null) {
-                last = last.mNext;
-            }
             last.mNext = q;
+            mPendingInputEventTail = q;
         }
+        mPendingInputEventCount += 1;
+        Trace.traceCounter(Trace.TRACE_TAG_INPUT, mPendingInputEventQueueLengthCounterName,
+                mPendingInputEventCount);
 
         if (processImmediately) {
             doProcessInputEvents();
@@ -4284,11 +5383,19 @@ public final class ViewRootImpl implements ViewParent,
     }
 
     void doProcessInputEvents() {
-        while (mCurrentInputEvent == null && mFirstPendingInputEvent != null) {
-            QueuedInputEvent q = mFirstPendingInputEvent;
-            mFirstPendingInputEvent = q.mNext;
+        // Deliver all pending input events in the queue.
+        while (mPendingInputEventHead != null) {
+            QueuedInputEvent q = mPendingInputEventHead;
+            mPendingInputEventHead = q.mNext;
+            if (mPendingInputEventHead == null) {
+                mPendingInputEventTail = null;
+            }
             q.mNext = null;
-            mCurrentInputEvent = q;
+
+            mPendingInputEventCount -= 1;
+            Trace.traceCounter(Trace.TRACE_TAG_INPUT, mPendingInputEventQueueLengthCounterName,
+                    mPendingInputEventCount);
+
             deliverInputEvent(q);
         }
 
@@ -4300,22 +5407,45 @@ public final class ViewRootImpl implements ViewParent,
         }
     }
 
-    private void finishInputEvent(QueuedInputEvent q, boolean handled) {
-        if (q != mCurrentInputEvent) {
-            throw new IllegalStateException("finished input event out of order");
-        }
+    private void deliverInputEvent(QueuedInputEvent q) {
+        Trace.traceBegin(Trace.TRACE_TAG_VIEW, "deliverInputEvent");
+        try {
+            if (mInputEventConsistencyVerifier != null) {
+                mInputEventConsistencyVerifier.onInputEvent(q.mEvent, 0);
+            }
 
+            InputStage stage = q.shouldSkipIme() ? mFirstPostImeInputStage : mFirstInputStage;
+            if (stage != null) {
+                stage.deliver(q);
+            } else {
+                finishInputEvent(q);
+            }
+        } finally {
+            Trace.traceEnd(Trace.TRACE_TAG_VIEW);
+        }
+    }
+
+    private void finishInputEvent(QueuedInputEvent q) {
         if (q.mReceiver != null) {
+            boolean handled = (q.mFlags & QueuedInputEvent.FLAG_FINISHED_HANDLED) != 0;
             q.mReceiver.finishInputEvent(q.mEvent, handled);
         } else {
             q.mEvent.recycleIfNeededAfterDispatch();
         }
 
         recycleQueuedInputEvent(q);
+    }
 
-        mCurrentInputEvent = null;
-        if (mFirstPendingInputEvent != null) {
-            scheduleProcessInputEvents();
+    static boolean isTerminalInputEvent(InputEvent event) {
+        if (event instanceof KeyEvent) {
+            final KeyEvent keyEvent = (KeyEvent)event;
+            return keyEvent.getAction() == KeyEvent.ACTION_UP;
+        } else {
+            final MotionEvent motionEvent = (MotionEvent)event;
+            final int action = motionEvent.getAction();
+            return action == MotionEvent.ACTION_UP
+                    || action == MotionEvent.ACTION_CANCEL
+                    || action == MotionEvent.ACTION_HOVER_EXIT;
         }
     }
 
@@ -4416,7 +5546,7 @@ public final class ViewRootImpl implements ViewParent,
                     AttachInfo.InvalidateInfo info = mViewRects.get(i);
                     if (info.target == view) {
                         mViewRects.remove(i);
-                        info.release();
+                        info.recycle();
                     }
                 }
 
@@ -4457,7 +5587,7 @@ public final class ViewRootImpl implements ViewParent,
             for (int i = 0; i < viewRectCount; i++) {
                 final View.AttachInfo.InvalidateInfo info = mTempViewRects[i];
                 info.target.invalidate(info.left, info.top, info.right, info.bottom);
-                info.release();
+                info.recycle();
             }
         }
 
@@ -4492,19 +5622,6 @@ public final class ViewRootImpl implements ViewParent,
 
     public void enqueueDisplayList(DisplayList displayList) {
         mDisplayLists.add(displayList);
-
-        mHandler.removeMessages(MSG_INVALIDATE_DISPLAY_LIST);
-        Message msg = mHandler.obtainMessage(MSG_INVALIDATE_DISPLAY_LIST);
-        mHandler.sendMessage(msg);
-    }
-
-    public void dequeueDisplayList(DisplayList displayList) {
-        if (mDisplayLists.remove(displayList)) {
-            displayList.invalidate();
-            if (mDisplayLists.size() == 0) {
-                mHandler.removeMessages(MSG_INVALIDATE_DISPLAY_LIST);
-            }
-        }
     }
 
     public void cancelInvalidate(View view) {
@@ -4706,6 +5823,51 @@ public final class ViewRootImpl implements ViewParent,
         postSendWindowContentChangedCallback(child);
     }
 
+    @Override
+    public boolean canResolveLayoutDirection() {
+        return true;
+    }
+
+    @Override
+    public boolean isLayoutDirectionResolved() {
+        return true;
+    }
+
+    @Override
+    public int getLayoutDirection() {
+        return View.LAYOUT_DIRECTION_RESOLVED_DEFAULT;
+    }
+
+    @Override
+    public boolean canResolveTextDirection() {
+        return true;
+    }
+
+    @Override
+    public boolean isTextDirectionResolved() {
+        return true;
+    }
+
+    @Override
+    public int getTextDirection() {
+        return View.TEXT_DIRECTION_RESOLVED_DEFAULT;
+    }
+
+    @Override
+    public boolean canResolveTextAlignment() {
+        return true;
+    }
+
+    @Override
+    public boolean isTextAlignmentResolved() {
+        return true;
+    }
+
+    @Override
+    public int getTextAlignment() {
+        return View.TEXT_ALIGNMENT_RESOLVED_DEFAULT;
+    }
+
     private View getCommonPredecessor(View first, View second) {
         if (mAttachInfo != null) {
             if (mTempHashSet == null) {
@@ -4810,22 +5972,6 @@ public final class ViewRootImpl implements ViewParent,
             ((RootViewSurfaceTaker)mView).setSurfaceKeepScreenOn(screenOn);
         }
     }
-    
-    static final class InputMethodCallback implements InputMethodManager.FinishedEventCallback {
-        private WeakReference<ViewRootImpl> mViewAncestor;
-
-        public InputMethodCallback(ViewRootImpl viewAncestor) {
-            mViewAncestor = new WeakReference<ViewRootImpl>(viewAncestor);
-        }
-
-        @Override
-        public void finishedEvent(int seq, boolean handled) {
-            final ViewRootImpl viewAncestor = mViewAncestor.get();
-            if (viewAncestor != null) {
-                viewAncestor.dispatchImeFinishedEvent(seq, handled);
-            }
-        }
-    }
 
     static class W extends IWindow.Stub {
         private final WeakReference<ViewRootImpl> mViewAncestor;
@@ -4836,11 +5982,11 @@ public final class ViewRootImpl implements ViewParent,
             mWindowSession = viewAncestor.mWindowSession;
         }
 
-        public void resized(Rect frame, Rect contentInsets,
+        public void resized(Rect frame, Rect overscanInsets, Rect contentInsets,
                 Rect visibleInsets, boolean reportDraw, Configuration newConfig) {
             final ViewRootImpl viewAncestor = mViewAncestor.get();
             if (viewAncestor != null) {
-                viewAncestor.dispatchResized(frame, contentInsets,
+                viewAncestor.dispatchResized(frame, overscanInsets, contentInsets,
                         visibleInsets, reportDraw, newConfig);
             }
         }
@@ -4970,176 +6116,6 @@ public final class ViewRootImpl implements ViewParent,
             if (viewAncestor != null) {
                 viewAncestor.dispatchDoneAnimating();
             }
-        }
-    }
-
-    /**
-     * Maintains state information for a single trackball axis, generating
-     * discrete (DPAD) movements based on raw trackball motion.
-     */
-    static final class TrackballAxis {
-        /**
-         * The maximum amount of acceleration we will apply.
-         */
-        static final float MAX_ACCELERATION = 20;
-
-        /**
-         * The maximum amount of time (in milliseconds) between events in order
-         * for us to consider the user to be doing fast trackball movements,
-         * and thus apply an acceleration.
-         */
-        static final long FAST_MOVE_TIME = 150;
-
-        /**
-         * Scaling factor to the time (in milliseconds) between events to how
-         * much to multiple/divide the current acceleration.  When movement
-         * is < FAST_MOVE_TIME this multiplies the acceleration; when >
-         * FAST_MOVE_TIME it divides it.
-         */
-        static final float ACCEL_MOVE_SCALING_FACTOR = (1.0f/40);
-
-        float position;
-        float absPosition;
-        float acceleration = 1;
-        long lastMoveTime = 0;
-        int step;
-        int dir;
-        int nonAccelMovement;
-
-        void reset(int _step) {
-            position = 0;
-            acceleration = 1;
-            lastMoveTime = 0;
-            step = _step;
-            dir = 0;
-        }
-
-        /**
-         * Add trackball movement into the state.  If the direction of movement
-         * has been reversed, the state is reset before adding the
-         * movement (so that you don't have to compensate for any previously
-         * collected movement before see the result of the movement in the
-         * new direction).
-         *
-         * @return Returns the absolute value of the amount of movement
-         * collected so far.
-         */
-        float collect(float off, long time, String axis) {
-            long normTime;
-            if (off > 0) {
-                normTime = (long)(off * FAST_MOVE_TIME);
-                if (dir < 0) {
-                    if (DEBUG_TRACKBALL) Log.v(TAG, axis + " reversed to positive!");
-                    position = 0;
-                    step = 0;
-                    acceleration = 1;
-                    lastMoveTime = 0;
-                }
-                dir = 1;
-            } else if (off < 0) {
-                normTime = (long)((-off) * FAST_MOVE_TIME);
-                if (dir > 0) {
-                    if (DEBUG_TRACKBALL) Log.v(TAG, axis + " reversed to negative!");
-                    position = 0;
-                    step = 0;
-                    acceleration = 1;
-                    lastMoveTime = 0;
-                }
-                dir = -1;
-            } else {
-                normTime = 0;
-            }
-
-            // The number of milliseconds between each movement that is
-            // considered "normal" and will not result in any acceleration
-            // or deceleration, scaled by the offset we have here.
-            if (normTime > 0) {
-                long delta = time - lastMoveTime;
-                lastMoveTime = time;
-                float acc = acceleration;
-                if (delta < normTime) {
-                    // The user is scrolling rapidly, so increase acceleration.
-                    float scale = (normTime-delta) * ACCEL_MOVE_SCALING_FACTOR;
-                    if (scale > 1) acc *= scale;
-                    if (DEBUG_TRACKBALL) Log.v(TAG, axis + " accelerate: off="
-                            + off + " normTime=" + normTime + " delta=" + delta
-                            + " scale=" + scale + " acc=" + acc);
-                    acceleration = acc < MAX_ACCELERATION ? acc : MAX_ACCELERATION;
-                } else {
-                    // The user is scrolling slowly, so decrease acceleration.
-                    float scale = (delta-normTime) * ACCEL_MOVE_SCALING_FACTOR;
-                    if (scale > 1) acc /= scale;
-                    if (DEBUG_TRACKBALL) Log.v(TAG, axis + " deccelerate: off="
-                            + off + " normTime=" + normTime + " delta=" + delta
-                            + " scale=" + scale + " acc=" + acc);
-                    acceleration = acc > 1 ? acc : 1;
-                }
-            }
-            position += off;
-            return (absPosition = Math.abs(position));
-        }
-
-        /**
-         * Generate the number of discrete movement events appropriate for
-         * the currently collected trackball movement.
-         *
-         * @param precision The minimum movement required to generate the
-         * first discrete movement.
-         *
-         * @return Returns the number of discrete movements, either positive
-         * or negative, or 0 if there is not enough trackball movement yet
-         * for a discrete movement.
-         */
-        int generate(float precision) {
-            int movement = 0;
-            nonAccelMovement = 0;
-            do {
-                final int dir = position >= 0 ? 1 : -1;
-                switch (step) {
-                    // If we are going to execute the first step, then we want
-                    // to do this as soon as possible instead of waiting for
-                    // a full movement, in order to make things look responsive.
-                    case 0:
-                        if (absPosition < precision) {
-                            return movement;
-                        }
-                        movement += dir;
-                        nonAccelMovement += dir;
-                        step = 1;
-                        break;
-                    // If we have generated the first movement, then we need
-                    // to wait for the second complete trackball motion before
-                    // generating the second discrete movement.
-                    case 1:
-                        if (absPosition < 2) {
-                            return movement;
-                        }
-                        movement += dir;
-                        nonAccelMovement += dir;
-                        position += dir > 0 ? -2 : 2;
-                        absPosition = Math.abs(position);
-                        step = 2;
-                        break;
-                    // After the first two, we generate discrete movements
-                    // consistently with the trackball, applying an acceleration
-                    // if the trackball is moving quickly.  This is a simple
-                    // acceleration on top of what we already compute based
-                    // on how quickly the wheel is being turned, to apply
-                    // a longer increasing acceleration to continuous movement
-                    // in one direction.
-                    default:
-                        if (absPosition < 1) {
-                            return movement;
-                        }
-                        movement += dir;
-                        position += dir >= 0 ? -1 : 1;
-                        absPosition = Math.abs(position);
-                        float acc = acceleration;
-                        acc *= 1.1f;
-                        acceleration = acc < MAX_ACCELERATION ? acc : acceleration;
-                        break;
-                }
-            } while (true);
         }
     }
 
@@ -5341,12 +6317,13 @@ public final class ViewRootImpl implements ViewParent,
         @Override
         public void findAccessibilityNodeInfoByAccessibilityId(long accessibilityNodeId,
                 int interactionId, IAccessibilityInteractionConnectionCallback callback, int flags,
-                int interrogatingPid, long interrogatingTid) {
+                int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
             ViewRootImpl viewRootImpl = mViewRootImpl.get();
             if (viewRootImpl != null && viewRootImpl.mView != null) {
                 viewRootImpl.getAccessibilityInteractionController()
                     .findAccessibilityNodeInfoByAccessibilityIdClientThread(accessibilityNodeId,
-                            interactionId, callback, flags, interrogatingPid, interrogatingTid);
+                            interactionId, callback, flags, interrogatingPid, interrogatingTid,
+                            spec);
             } else {
                 // We cannot make the call and notify the caller so it does not wait.
                 try {
@@ -5378,14 +6355,16 @@ public final class ViewRootImpl implements ViewParent,
         }
 
         @Override
-        public void findAccessibilityNodeInfoByViewId(long accessibilityNodeId, int viewId,
-                int interactionId, IAccessibilityInteractionConnectionCallback callback, int flags,
-                int interrogatingPid, long interrogatingTid) {
+        public void findAccessibilityNodeInfosByViewId(long accessibilityNodeId,
+                String viewId, int interactionId,
+                IAccessibilityInteractionConnectionCallback callback, int flags,
+                int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
             ViewRootImpl viewRootImpl = mViewRootImpl.get();
             if (viewRootImpl != null && viewRootImpl.mView != null) {
                 viewRootImpl.getAccessibilityInteractionController()
-                    .findAccessibilityNodeInfoByViewIdClientThread(accessibilityNodeId, viewId,
-                            interactionId, callback, flags, interrogatingPid, interrogatingTid);
+                    .findAccessibilityNodeInfosByViewIdClientThread(accessibilityNodeId,
+                            viewId, interactionId, callback, flags, interrogatingPid,
+                            interrogatingTid, spec);
             } else {
                 // We cannot make the call and notify the caller so it does not wait.
                 try {
@@ -5399,12 +6378,13 @@ public final class ViewRootImpl implements ViewParent,
         @Override
         public void findAccessibilityNodeInfosByText(long accessibilityNodeId, String text,
                 int interactionId, IAccessibilityInteractionConnectionCallback callback, int flags,
-                int interrogatingPid, long interrogatingTid) {
+                int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
             ViewRootImpl viewRootImpl = mViewRootImpl.get();
             if (viewRootImpl != null && viewRootImpl.mView != null) {
                 viewRootImpl.getAccessibilityInteractionController()
                     .findAccessibilityNodeInfosByTextClientThread(accessibilityNodeId, text,
-                            interactionId, callback, flags, interrogatingPid, interrogatingTid);
+                            interactionId, callback, flags, interrogatingPid, interrogatingTid,
+                            spec);
             } else {
                 // We cannot make the call and notify the caller so it does not wait.
                 try {
@@ -5418,12 +6398,12 @@ public final class ViewRootImpl implements ViewParent,
         @Override
         public void findFocus(long accessibilityNodeId, int focusType, int interactionId,
                 IAccessibilityInteractionConnectionCallback callback, int flags,
-                int interrogatingPid, long interrogatingTid) {
+                int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
             ViewRootImpl viewRootImpl = mViewRootImpl.get();
             if (viewRootImpl != null && viewRootImpl.mView != null) {
                 viewRootImpl.getAccessibilityInteractionController()
                     .findFocusClientThread(accessibilityNodeId, focusType, interactionId, callback,
-                            flags, interrogatingPid, interrogatingTid);
+                            flags, interrogatingPid, interrogatingTid, spec);
             } else {
                 // We cannot make the call and notify the caller so it does not wait.
                 try {
@@ -5437,12 +6417,12 @@ public final class ViewRootImpl implements ViewParent,
         @Override
         public void focusSearch(long accessibilityNodeId, int direction, int interactionId,
                 IAccessibilityInteractionConnectionCallback callback, int flags,
-                int interrogatingPid, long interrogatingTid) {
+                int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
             ViewRootImpl viewRootImpl = mViewRootImpl.get();
             if (viewRootImpl != null && viewRootImpl.mView != null) {
                 viewRootImpl.getAccessibilityInteractionController()
                     .focusSearchClientThread(accessibilityNodeId, direction, interactionId,
-                            callback, flags, interrogatingPid, interrogatingTid);
+                            callback, flags, interrogatingPid, interrogatingTid, spec);
             } else {
                 // We cannot make the call and notify the caller so it does not wait.
                 try {

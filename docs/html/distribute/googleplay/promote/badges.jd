@@ -1,5 +1,13 @@
 page.title=Google Play Badges
 @jd:body
+<div id="butterbar-wrapper" >
+  <div id="butterbar" >
+    <div id="butterbar-message">
+<a target="_blank" href="https://docs.google.com/a/google.com/forms/d/1EHLPGqhbxj2HungHRRN4_0K9TGpc-Izy-u46vBDgS8Q/viewform">
+      Take the Android Developer Survey</a>
+    </div>
+  </div>
+</div>
 
 <p itemprop="description">Google Play badges allow you to promote your app with official branding
 in your online ads, promotional materials, or anywhere else you want a link to your app.</p>
@@ -86,10 +94,11 @@ function buildButton(form) {
 
   if (form["package"].value != "com.example.android") {
     $("#preview").show();
-    $("#snippet").show().html(linkStartCode + "apps/details?id=" + form["package"].value
+    var packageName = escapeHTML(form["package"].value);
+    $("#snippet").show().html(linkStartCode + "apps/details?id=" + packageName
             + imageStartCode + altText + imageSrcCode
             + selectedValue + imageEndCode);
-    $("#button-preview").html(linkStart + "apps/details?id=" + form["package"].value
+    $("#button-preview").html(linkStart + "apps/details?id=" + packageName
             + imageStart + altText + imageSrc
             + selectedValue + imageEnd);
             
@@ -97,10 +106,11 @@ function buildButton(form) {
     _gaq.push(['_trackEvent', 'Distribute', 'Create Google Play Badge', 'Package ' + selectedValue]);
   } else if (form["publisher"].value != "Example, Inc.") {
     $("#preview").show();
-    $("#snippet").show().html(linkStartCode + "search?q=pub:" + form["publisher"].value
+    var publisherName = escapeHTML(form["publisher"].value);
+    $("#snippet").show().html(linkStartCode + "search?q=pub:" + publisherName
             + imageStartCode + altText + imageSrcCode
             + selectedValue + imageEndCode);
-    $("#button-preview").html(linkStart + "search?q=pub:" + form["publisher"].value
+    $("#button-preview").html(linkStart + "search?q=pub:" + publisherName
             + imageStart + altText + imageSrc
             + selectedValue + imageEnd);
    
@@ -199,10 +209,8 @@ $(document).ready(function() {
           onchange="changeBadgeLang()">
     <option title="Afrikaans"
             value="af">Afrikaans</option>
-<!--
     <option title="Arabic"
             value="ar">العربية</option>
--->
     <option title="Belarusian"
             value="be">Беларуская</option>
     <option title="Bulgarian"

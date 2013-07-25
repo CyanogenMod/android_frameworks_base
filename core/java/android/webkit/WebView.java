@@ -26,6 +26,7 @@ import android.graphics.Picture;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.http.SslCertificate;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
@@ -208,8 +209,7 @@ import java.util.Map;
  * and default scaling is not applied to the web page; if the value is "1.5", then the device is
  * considered a high density device (hdpi) and the page content is scaled 1.5x; if the
  * value is "0.75", then the device is considered a low density device (ldpi) and the content is
- * scaled 0.75x. However, if you specify the {@code "target-densitydpi"} meta property
- * (discussed below), then you can stop this default scaling behavior.</li>
+ * scaled 0.75x.</li>
  * <li>The {@code -webkit-device-pixel-ratio} CSS media query. Use this to specify the screen
  * densities for which this style sheet is to be used. The corresponding value should be either
  * "0.75", "1", or "1.5", to indicate that the styles are for devices with low density, medium
@@ -219,29 +219,6 @@ import java.util.Map;
  * <p>The {@code hdpi.css} stylesheet is only used for devices with a screen pixel ration of 1.5,
  * which is the high density pixel ratio.</p>
  * </li>
- * <li>The {@code target-densitydpi} property for the {@code viewport} meta tag. You can use
- * this to specify the target density for which the web page is designed, using the following
- * values:
- * <ul>
- * <li>{@code device-dpi} - Use the device's native dpi as the target dpi. Default scaling never
- * occurs.</li>
- * <li>{@code high-dpi} - Use hdpi as the target dpi. Medium and low density screens scale down
- * as appropriate.</li>
- * <li>{@code medium-dpi} - Use mdpi as the target dpi. High density screens scale up and
- * low density screens scale down. This is also the default behavior.</li>
- * <li>{@code low-dpi} - Use ldpi as the target dpi. Medium and high density screens scale up
- * as appropriate.</li>
- * <li><em>{@code <value>}</em> - Specify a dpi value to use as the target dpi (accepted
- * values are 70-400).</li>
- * </ul>
- * <p>Here's an example meta tag to specify the target density:</p>
- * <pre>&lt;meta name="viewport" content="target-densitydpi=device-dpi" /&gt;</pre></li>
- * </ul>
- * <p>If you want to modify your web page for different densities, by using the {@code
- * -webkit-device-pixel-ratio} CSS media query and/or the {@code
- * window.devicePixelRatio} DOM property, then you should set the {@code target-densitydpi} meta
- * property to {@code device-dpi}. This stops Android from performing scaling in your web page and
- * allows you to make the necessary adjustments for each density via CSS and JavaScript.</p>
  *
  * <h3>HTML5 Video support</h3>
  *
@@ -264,6 +241,11 @@ public class WebView extends AbsoluteLayout
         ViewGroup.OnHierarchyChangeListener, ViewDebug.HierarchyHandler {
 
     private static final String LOGTAG = "webview_proxy";
+
+    // Throwing an exception for incorrect thread usage if the
+    // build target is JB MR2 or newer. Defaults to false, and is
+    // set in the WebView constructor.
+    private static Boolean sEnforceThreadChecking = false;
 
     /**
      *  Transportation object for returning WebView across thread boundaries.
@@ -334,7 +316,9 @@ public class WebView extends AbsoluteLayout
          * See {@link WebView#capturePicture} for details of the picture.
          *
          * @param view the WebView that owns the picture
-         * @param picture the new picture
+         * @param picture the new picture. Applications targeting
+         *     {@link android.os.Build.VERSION_CODES#JELLY_BEAN_MR2} or above
+         *     will always receive a null Picture.
          * @deprecated Deprecated due to internal changes.
          */
         @Deprecated
@@ -505,6 +489,8 @@ public class WebView extends AbsoluteLayout
         if (context == null) {
             throw new IllegalArgumentException("Invalid context argument");
         }
+        sEnforceThreadChecking = context.getApplicationInfo().targetSdkVersion >=
+                Build.VERSION_CODES.JELLY_BEAN_MR2;
         checkThread();
 
         ensureProviderCreated();
@@ -601,7 +587,9 @@ public class WebView extends AbsoluteLayout
      * @param password the password for the given host
      * @see WebViewDatabase#clearUsernamePassword
      * @see WebViewDatabase#hasUsernamePassword
+     * @deprecated Saving passwords in WebView will not be supported in future versions.
      */
+    @Deprecated
     public void savePassword(String host, String username, String password) {
         checkThread();
         mProvider.savePassword(host, username, password);
@@ -616,7 +604,7 @@ public class WebView extends AbsoluteLayout
      * @param realm the realm to which the credentials apply
      * @param username the username
      * @param password the password
-     * @see getHttpAuthUsernamePassword
+     * @see #getHttpAuthUsernamePassword
      * @see WebViewDatabase#hasHttpAuthUsernamePassword
      * @see WebViewDatabase#clearHttpAuthUsernamePassword
      */
@@ -636,7 +624,7 @@ public class WebView extends AbsoluteLayout
      * @return the credentials as a String array, if found. The first element
      *         is the username and the second element is the password. Null if
      *         no credentials are found.
-     * @see setHttpAuthUsernamePassword
+     * @see #setHttpAuthUsernamePassword
      * @see WebViewDatabase#hasHttpAuthUsernamePassword
      * @see WebViewDatabase#clearHttpAuthUsernamePassword
      */
@@ -853,7 +841,7 @@ public class WebView extends AbsoluteLayout
      *                 defaults to 'text/html'.
      * @param encoding the encoding of the data
      * @param historyUrl the URL to use as the history entry. If null defaults
-     *                   to 'about:blank'.
+     *                   to 'about:blank'. If non-null, this must be a valid URL.
      */
     public void loadDataWithBaseURL(String baseUrl, String data,
             String mimeType, String encoding, String historyUrl) {
@@ -998,7 +986,10 @@ public class WebView extends AbsoluteLayout
     /**
      * Clears this WebView so that onDraw() will draw nothing but white background,
      * and onMeasure() will return 0 if MeasureSpec is not MeasureSpec.EXACTLY.
+     * @deprecated Use WebView.loadUrl("about:blank") to reliably reset the view state
+     *             and release page resources (including any running JavaScript).
      */
+    @Deprecated
     public void clearView() {
         checkThread();
         mProvider.clearView();
@@ -1330,7 +1321,8 @@ public class WebView extends AbsoluteLayout
      */
     public void setFindListener(FindListener listener) {
         checkThread();
-        mProvider.setFindListener(listener);
+        setupFindListenerIfNeeded();
+        mFindListener.mUserFindListener = listener;
     }
 
     /**
@@ -1387,7 +1379,11 @@ public class WebView extends AbsoluteLayout
      * @param showIme if true, show the IME, assuming the user will begin typing.
      *                If false and text is non-null, perform a find all.
      * @return true if the find dialog is shown, false otherwise
+     * @deprecated This method does not work reliably on all Android versions;
+     *             implementing a custom find dialog using WebView.findAllAsync()
+     *             provides a more robust solution.
      */
+    @Deprecated
     public boolean showFindDialog(String text, boolean showIme) {
         checkThread();
         return mProvider.showFindDialog(text, showIme);
@@ -1851,10 +1847,59 @@ public class WebView extends AbsoluteLayout
     }
 
     //-------------------------------------------------------------------------
+    // Package-private internal stuff
+    //-------------------------------------------------------------------------
+
+    // Only used by android.webkit.FindActionModeCallback.
+    void setFindDialogFindListener(FindListener listener) {
+        checkThread();
+        setupFindListenerIfNeeded();
+        mFindListener.mFindDialogFindListener = listener;
+    }
+
+    // Only used by android.webkit.FindActionModeCallback.
+    void notifyFindDialogDismissed() {
+        checkThread();
+        mProvider.notifyFindDialogDismissed();
+    }
+
+    //-------------------------------------------------------------------------
     // Private internal stuff
     //-------------------------------------------------------------------------
 
     private WebViewProvider mProvider;
+
+    /**
+     * In addition to the FindListener that the user may set via the WebView.setFindListener
+     * API, FindActionModeCallback will register it's own FindListener. We keep them separate
+     * via this class so that that the two FindListeners can potentially exist at once.
+     */
+    private class FindListenerDistributor implements FindListener {
+        private FindListener mFindDialogFindListener;
+        private FindListener mUserFindListener;
+
+        @Override
+        public void onFindResultReceived(int activeMatchOrdinal, int numberOfMatches,
+                boolean isDoneCounting) {
+            if (mFindDialogFindListener != null) {
+                mFindDialogFindListener.onFindResultReceived(activeMatchOrdinal, numberOfMatches,
+                        isDoneCounting);
+            }
+
+            if (mUserFindListener != null) {
+                mUserFindListener.onFindResultReceived(activeMatchOrdinal, numberOfMatches,
+                        isDoneCounting);
+            }
+        }
+    }
+    private FindListenerDistributor mFindListener;
+
+    private void setupFindListenerIfNeeded() {
+        if (mFindListener == null) {
+            mFindListener = new FindListenerDistributor();
+            mProvider.setFindListener(mFindListener);
+        }
+    }
 
     private void ensureProviderCreated() {
         checkThread();
@@ -1866,9 +1911,6 @@ public class WebView extends AbsoluteLayout
     }
 
     private static synchronized WebViewFactoryProvider getFactory() {
-        // For now the main purpose of this function (and the factory abstration) is to keep
-        // us honest and minimize usage of WebViewClassic internals when binding the proxy.
-        checkThread();
         return WebViewFactory.getProvider();
     }
 
@@ -1881,6 +1923,10 @@ public class WebView extends AbsoluteLayout
                     "Future versions of WebView may not support use on other threads.");
             Log.w(LOGTAG, Log.getStackTraceString(throwable));
             StrictMode.onWebViewMethodCalledOnWrongThread(throwable);
+
+            if (sEnforceThreadChecking) {
+                throw new RuntimeException(throwable);
+            }
         }
     }
 
@@ -1911,9 +1957,8 @@ public class WebView extends AbsoluteLayout
     @Override
     public void setOverScrollMode(int mode) {
         super.setOverScrollMode(mode);
-        // This method may called in the constructor chain, before the WebView provider is
-        // created. (Fortunately, this is the only method we override that can get called by
-        // any of the base class constructors).
+        // This method may be called in the constructor chain, before the WebView provider is
+        // created.
         ensureProviderCreated();
         mProvider.getViewDelegate().setOverScrollMode(mode);
     }
@@ -2073,6 +2118,9 @@ public class WebView extends AbsoluteLayout
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
+        // This method may be called in the constructor chain, before the WebView provider is
+        // created.
+        ensureProviderCreated();
         mProvider.getViewDelegate().onVisibilityChanged(changedView, visibility);
     }
 
@@ -2137,5 +2185,11 @@ public class WebView extends AbsoluteLayout
     public void setLayerType(int layerType, Paint paint) {
         super.setLayerType(layerType, paint);
         mProvider.getViewDelegate().setLayerType(layerType, paint);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        mProvider.getViewDelegate().preDispatchDraw(canvas);
+        super.dispatchDraw(canvas);
     }
 }

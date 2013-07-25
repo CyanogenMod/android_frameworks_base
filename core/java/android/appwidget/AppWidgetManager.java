@@ -16,6 +16,7 @@
 
 package android.appwidget;
 
+import android.app.ActivityManagerNative;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -48,8 +49,8 @@ public class AppWidgetManager {
     static final String TAG = "AppWidgetManager";
 
     /**
-     * Send this from your {@link AppWidgetHost} activity when you want to pick an AppWidget to display.
-     * The AppWidget picker activity will be launched.
+     * Activity action to launch from your {@link AppWidgetHost} activity when you want to
+     * pick an AppWidget to display.  The AppWidget picker activity will be launched.
      * <p>
      * You must supply the following extras:
      * <table>
@@ -88,8 +89,8 @@ public class AppWidgetManager {
             ACTION_KEYGUARD_APPWIDGET_PICK = "android.appwidget.action.KEYGUARD_APPWIDGET_PICK";
 
     /**
-     * Send this from your {@link AppWidgetHost} activity when you want to bind an AppWidget to
-     * display and bindAppWidgetIdIfAllowed returns false.
+     * Activity action to launch from your {@link AppWidgetHost} activity when you want to bind
+     * an AppWidget to display and bindAppWidgetIdIfAllowed returns false.
      * <p>
      * You must supply the following extras:
      * <table>
@@ -268,8 +269,11 @@ public class AppWidgetManager {
     /**
      * Sent when the custom extras for an AppWidget change.
      *
-     * @see AppWidgetProvider#onAppWidgetOptionsChanged 
-     *      AppWidgetProvider.onAppWidgetOptionsChanged(Context context, 
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     *
+     * @see AppWidgetProvider#onAppWidgetOptionsChanged
+     *      AppWidgetProvider.onAppWidgetOptionsChanged(Context context,
      *      AppWidgetManager appWidgetManager, int appWidgetId, Bundle newExtras)
      */
     public static final String ACTION_APPWIDGET_OPTIONS_CHANGED = "android.appwidget.action.APPWIDGET_UPDATE_OPTIONS";
@@ -277,12 +281,18 @@ public class AppWidgetManager {
     /**
      * Sent when an instance of an AppWidget is deleted from its host.
      *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     *
      * @see AppWidgetProvider#onDeleted AppWidgetProvider.onDeleted(Context context, int[] appWidgetIds)
      */
     public static final String ACTION_APPWIDGET_DELETED = "android.appwidget.action.APPWIDGET_DELETED";
 
     /**
      * Sent when an instance of an AppWidget is removed from the last host.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
      *
      * @see AppWidgetProvider#onEnabled AppWidgetProvider.onEnabled(Context context)
      */
@@ -292,6 +302,9 @@ public class AppWidgetManager {
      * Sent when an instance of an AppWidget is added to a host for the first time.
      * This broadcast is sent at boot time if there is a AppWidgetHost installed with
      * an instance for this provider.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
      *
      * @see AppWidgetProvider#onEnabled AppWidgetProvider.onEnabled(Context context)
      */
@@ -352,7 +365,7 @@ public class AppWidgetManager {
      * It is okay to call this method both inside an {@link #ACTION_APPWIDGET_UPDATE} broadcast,
      * and outside of the handler.
      * This method will only work when called from the uid that owns the AppWidget provider.
-     * 
+     *
      * <p>
      * The total Bitmap memory used by the RemoteViews object cannot exceed that required to
      * fill the screen 1.5 times, ie. (screen width x screen height x 4 x 1.5) bytes.
@@ -362,7 +375,7 @@ public class AppWidgetManager {
      */
     public void updateAppWidget(int[] appWidgetIds, RemoteViews views) {
         try {
-            sService.updateAppWidgetIds(appWidgetIds, views);
+            sService.updateAppWidgetIds(appWidgetIds, views, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -382,7 +395,7 @@ public class AppWidgetManager {
      */
     public void updateAppWidgetOptions(int appWidgetId, Bundle options) {
         try {
-            sService.updateAppWidgetOptions(appWidgetId, options);
+            sService.updateAppWidgetOptions(appWidgetId, options, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -402,7 +415,7 @@ public class AppWidgetManager {
      */
     public Bundle getAppWidgetOptions(int appWidgetId) {
         try {
-            return sService.getAppWidgetOptions(appWidgetId);
+            return sService.getAppWidgetOptions(appWidgetId, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -436,7 +449,7 @@ public class AppWidgetManager {
      * Perform an incremental update or command on the widget(s) specified by appWidgetIds.
      *
      * This update  differs from {@link #updateAppWidget(int[], RemoteViews)} in that the
-     * RemoteViews object which is passed is understood to be an incomplete representation of the 
+     * RemoteViews object which is passed is understood to be an incomplete representation of the
      * widget, and hence does not replace the cached representation of the widget. As of API
      * level 17, the new properties set within the views objects will be appended to the cached
      * representation of the widget, and hence will persist.
@@ -458,7 +471,7 @@ public class AppWidgetManager {
      */
     public void partiallyUpdateAppWidget(int[] appWidgetIds, RemoteViews views) {
         try {
-            sService.partiallyUpdateAppWidgetIds(appWidgetIds, views);
+            sService.partiallyUpdateAppWidgetIds(appWidgetIds, views, mContext.getUserId());
         } catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
         }
@@ -507,7 +520,7 @@ public class AppWidgetManager {
      */
     public void updateAppWidget(ComponentName provider, RemoteViews views) {
         try {
-            sService.updateAppWidgetProvider(provider, views);
+            sService.updateAppWidgetProvider(provider, views, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -516,14 +529,14 @@ public class AppWidgetManager {
 
     /**
      * Notifies the specified collection view in all the specified AppWidget instances
-     * to invalidate their currently data.
+     * to invalidate their data.
      *
-     * @param appWidgetIds  The AppWidget instances for which to notify of view data changes.
+     * @param appWidgetIds  The AppWidget instances to notify of view data changes.
      * @param viewId        The collection view id.
      */
     public void notifyAppWidgetViewDataChanged(int[] appWidgetIds, int viewId) {
         try {
-            sService.notifyAppWidgetViewDataChanged(appWidgetIds, viewId);
+            sService.notifyAppWidgetViewDataChanged(appWidgetIds, viewId, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -531,11 +544,11 @@ public class AppWidgetManager {
     }
 
     /**
-     * Notifies the specified collection view in all the specified AppWidget instance
-     * to invalidate it's currently data.
+     * Notifies the specified collection view in the specified AppWidget instance
+     * to invalidate its data.
      *
-     * @param appWidgetId  The AppWidget instance for which to notify of view data changes.
-     * @param viewId        The collection view id.
+     * @param appWidgetId  The AppWidget instance to notify of view data changes.
+     * @param viewId       The collection view id.
      */
     public void notifyAppWidgetViewDataChanged(int appWidgetId, int viewId) {
         notifyAppWidgetViewDataChanged(new int[] { appWidgetId }, viewId);
@@ -557,7 +570,8 @@ public class AppWidgetManager {
      */
     public List<AppWidgetProviderInfo> getInstalledProviders(int categoryFilter) {
         try {
-            List<AppWidgetProviderInfo> providers = sService.getInstalledProviders(categoryFilter);
+            List<AppWidgetProviderInfo> providers = sService.getInstalledProviders(categoryFilter,
+                    mContext.getUserId());
             for (AppWidgetProviderInfo info : providers) {
                 // Converting complex to dp.
                 info.minWidth =
@@ -584,7 +598,8 @@ public class AppWidgetManager {
      */
     public AppWidgetProviderInfo getAppWidgetInfo(int appWidgetId) {
         try {
-            AppWidgetProviderInfo info = sService.getAppWidgetInfo(appWidgetId);
+            AppWidgetProviderInfo info = sService.getAppWidgetInfo(appWidgetId,
+                    mContext.getUserId());
             if (info != null) {
                 // Converting complex to dp.
                 info.minWidth =
@@ -617,7 +632,7 @@ public class AppWidgetManager {
      */
     public void bindAppWidgetId(int appWidgetId, ComponentName provider) {
         try {
-            sService.bindAppWidgetId(appWidgetId, provider, null);
+            sService.bindAppWidgetId(appWidgetId, provider, null, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -641,7 +656,7 @@ public class AppWidgetManager {
      */
     public void bindAppWidgetId(int appWidgetId, ComponentName provider, Bundle options) {
         try {
-            sService.bindAppWidgetId(appWidgetId, provider, options);
+            sService.bindAppWidgetId(appWidgetId, provider, options, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -667,7 +682,7 @@ public class AppWidgetManager {
         }
         try {
             return sService.bindAppWidgetIdIfAllowed(
-                    mContext.getPackageName(), appWidgetId, provider, null);
+                    mContext.getPackageName(), appWidgetId, provider, null, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -696,8 +711,8 @@ public class AppWidgetManager {
             return false;
         }
         try {
-            return sService.bindAppWidgetIdIfAllowed(
-                    mContext.getPackageName(), appWidgetId, provider, options);
+            return sService.bindAppWidgetIdIfAllowed(mContext.getPackageName(), appWidgetId,
+                    provider, options, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -715,7 +730,7 @@ public class AppWidgetManager {
      */
     public boolean hasBindAppWidgetPermission(String packageName) {
         try {
-            return sService.hasBindAppWidgetPermission(packageName);
+            return sService.hasBindAppWidgetPermission(packageName, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -733,7 +748,7 @@ public class AppWidgetManager {
      */
     public void setBindAppWidgetPermission(String packageName, boolean permission) {
         try {
-            sService.setBindAppWidgetPermission(packageName, permission);
+            sService.setBindAppWidgetPermission(packageName, permission, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);
@@ -794,7 +809,7 @@ public class AppWidgetManager {
      */
     public int[] getAppWidgetIds(ComponentName provider) {
         try {
-            return sService.getAppWidgetIds(provider);
+            return sService.getAppWidgetIds(provider, mContext.getUserId());
         }
         catch (RemoteException e) {
             throw new RuntimeException("system server dead?", e);

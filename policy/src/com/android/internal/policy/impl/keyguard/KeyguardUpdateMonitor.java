@@ -18,12 +18,15 @@ package com.android.internal.policy.impl.keyguard;
 
 import android.app.ActivityManagerNative;
 import android.app.IUserSwitchObserver;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
+
 import static android.os.BatteryManager.BATTERY_STATUS_FULL;
 import static android.os.BatteryManager.BATTERY_STATUS_UNKNOWN;
 import static android.os.BatteryManager.BATTERY_HEALTH_UNKNOWN;
@@ -32,7 +35,9 @@ import static android.os.BatteryManager.EXTRA_PLUGGED;
 import static android.os.BatteryManager.EXTRA_LEVEL;
 import static android.os.BatteryManager.EXTRA_HEALTH;
 import android.media.AudioManager;
+import android.media.IRemoteControlDisplay;
 import android.os.BatteryManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IRemoteCallback;
 import android.os.Message;
@@ -79,10 +84,14 @@ public class KeyguardUpdateMonitor {
     private static final int MSG_CLOCK_VISIBILITY_CHANGED = 307;
     private static final int MSG_DEVICE_PROVISIONED = 308;
     private static final int MSG_DPM_STATE_CHANGED = 309;
-    private static final int MSG_USER_SWITCHED = 310;
+    private static final int MSG_USER_SWITCHING = 310;
     private static final int MSG_USER_REMOVED = 311;
     private static final int MSG_KEYGUARD_VISIBILITY_CHANGED = 312;
     protected static final int MSG_BOOT_COMPLETED = 313;
+    private static final int MSG_USER_SWITCH_COMPLETE = 314;
+    private static final int MSG_SET_CURRENT_CLIENT_ID = 315;
+    protected static final int MSG_SET_PLAYBACK_STATE = 316;
+    protected static final int MSG_USER_INFO_CHANGED = 317;
 
 
     private static KeyguardUpdateMonitor sInstance;
@@ -116,6 +125,8 @@ public class KeyguardUpdateMonitor {
             mCallbacks = Lists.newArrayList();
     private ContentObserver mDeviceProvisionedObserver;
 
+    private boolean mSwitchingUser;
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -147,8 +158,11 @@ public class KeyguardUpdateMonitor {
                 case MSG_DPM_STATE_CHANGED:
                     handleDevicePolicyManagerStateChanged();
                     break;
-                case MSG_USER_SWITCHED:
-                    handleUserSwitched(msg.arg1, (IRemoteCallback)msg.obj);
+                case MSG_USER_SWITCHING:
+                    handleUserSwitching(msg.arg1, (IRemoteCallback)msg.obj);
+                    break;
+                case MSG_USER_SWITCH_COMPLETE:
+                    handleUserSwitchComplete(msg.arg1);
                     break;
                 case MSG_USER_REMOVED:
                     handleUserRemoved(msg.arg1);
@@ -159,8 +173,67 @@ public class KeyguardUpdateMonitor {
                 case MSG_BOOT_COMPLETED:
                     handleBootCompleted();
                     break;
-
+                case MSG_SET_CURRENT_CLIENT_ID:
+                    handleSetGenerationId(msg.arg1, msg.arg2 != 0, (PendingIntent) msg.obj);
+                    break;
+                case MSG_SET_PLAYBACK_STATE:
+                    handleSetPlaybackState(msg.arg1, msg.arg2, (Long) msg.obj);
+                    break;
+                case MSG_USER_INFO_CHANGED:
+                    handleUserInfoChanged(msg.arg1);
+                    break;
             }
+        }
+    };
+
+    private AudioManager mAudioManager;
+
+    static class DisplayClientState {
+        public int clientGeneration;
+        public boolean clearing;
+        public PendingIntent intent;
+        public int playbackState;
+        public long playbackEventTime;
+    }
+
+    private DisplayClientState mDisplayClientState = new DisplayClientState();
+
+    /**
+     * This currently implements the bare minimum required to enable showing and hiding
+     * KeyguardTransportControl.  There's a lot of client state to maintain which is why
+     * KeyguardTransportControl maintains an independent connection while it's showing.
+     */
+    private final IRemoteControlDisplay.Stub mRemoteControlDisplay =
+                new IRemoteControlDisplay.Stub() {
+
+        public void setPlaybackState(int generationId, int state, long stateChangeTimeMs,
+                long currentPosMs, float speed) {
+            Message msg = mHandler.obtainMessage(MSG_SET_PLAYBACK_STATE,
+                    generationId, state, stateChangeTimeMs);
+            mHandler.sendMessage(msg);
+        }
+
+        public void setMetadata(int generationId, Bundle metadata) {
+
+        }
+
+        public void setTransportControlInfo(int generationId, int flags, int posCapabilities) {
+
+        }
+
+        public void setArtwork(int generationId, Bitmap bitmap) {
+
+        }
+
+        public void setAllMetadata(int generationId, Bundle metadata, Bitmap bitmap) {
+
+        }
+
+        public void setCurrentClientId(int clientGeneration, PendingIntent mediaIntent,
+                boolean clearing) throws RemoteException {
+            Message msg = mHandler.obtainMessage(MSG_SET_CURRENT_CLIENT_ID,
+                        clientGeneration, (clearing ? 1 : 0), mediaIntent);
+            mHandler.sendMessage(msg);
         }
     };
 
@@ -207,6 +280,17 @@ public class KeyguardUpdateMonitor {
                        intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0), 0));
             } else if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_BOOT_COMPLETED));
+            }
+        }
+    };
+
+    private final BroadcastReceiver mBroadcastAllReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (Intent.ACTION_USER_INFO_CHANGED.equals(action)) {
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_INFO_CHANGED,
+                        intent.getIntExtra(Intent.EXTRA_USER_HANDLE, getSendingUserId()), 0));
             }
         }
     };
@@ -320,6 +404,47 @@ public class KeyguardUpdateMonitor {
         return sInstance;
     }
 
+    protected void handleSetGenerationId(int clientGeneration, boolean clearing, PendingIntent p) {
+        mDisplayClientState.clientGeneration = clientGeneration;
+        mDisplayClientState.clearing = clearing;
+        mDisplayClientState.intent = p;
+        if (DEBUG)
+            Log.v(TAG, "handleSetGenerationId(g=" + clientGeneration + ", clear=" + clearing + ")");
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onMusicClientIdChanged(clientGeneration, clearing, p);
+            }
+        }
+    }
+
+    protected void handleSetPlaybackState(int generationId, int playbackState, long eventTime) {
+        if (DEBUG)
+            Log.v(TAG, "handleSetPlaybackState(gen=" + generationId
+                + ", state=" + playbackState + ", t=" + eventTime + ")");
+        mDisplayClientState.playbackState = playbackState;
+        mDisplayClientState.playbackEventTime = eventTime;
+        if (generationId == mDisplayClientState.clientGeneration) {
+            for (int i = 0; i < mCallbacks.size(); i++) {
+                KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+                if (cb != null) {
+                    cb.onMusicPlaybackStateChanged(playbackState, eventTime);
+                }
+            }
+        } else {
+            Log.w(TAG, "Ignoring generation id " + generationId + " because it's not current");
+        }
+    }
+
+    private void handleUserInfoChanged(int userId) {
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onUserInfoChanged(userId);
+            }
+        }
+    }
+
     private KeyguardUpdateMonitor(Context context) {
         mContext = context;
 
@@ -354,16 +479,24 @@ public class KeyguardUpdateMonitor {
         bootCompleteFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
         context.registerReceiver(mBroadcastReceiver, bootCompleteFilter);
 
+        final IntentFilter userInfoFilter = new IntentFilter(Intent.ACTION_USER_INFO_CHANGED);
+        context.registerReceiverAsUser(mBroadcastAllReceiver, UserHandle.ALL, userInfoFilter,
+                null, null);
+
         try {
             ActivityManagerNative.getDefault().registerUserSwitchObserver(
                     new IUserSwitchObserver.Stub() {
                         @Override
                         public void onUserSwitching(int newUserId, IRemoteCallback reply) {
-                            mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_SWITCHED,
+                            mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_SWITCHING,
                                     newUserId, 0, reply));
+                            mSwitchingUser = true;
                         }
                         @Override
                         public void onUserSwitchComplete(int newUserId) throws RemoteException {
+                            mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_SWITCH_COMPLETE,
+                                    newUserId));
+                            mSwitchingUser = false;
                         }
                     });
         } catch (RemoteException e) {
@@ -418,19 +551,30 @@ public class KeyguardUpdateMonitor {
     }
 
     /**
-     * Handle {@link #MSG_USER_SWITCHED}
+     * Handle {@link #MSG_USER_SWITCHING}
      */
-    protected void handleUserSwitched(int userId, IRemoteCallback reply) {
+    protected void handleUserSwitching(int userId, IRemoteCallback reply) {
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
             if (cb != null) {
-                cb.onUserSwitched(userId);
+                cb.onUserSwitching(userId);
             }
         }
-        setAlternateUnlockEnabled(false);
         try {
             reply.sendResult(null);
         } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * Handle {@link #MSG_USER_SWITCH_COMPLETE}
+     */
+    protected void handleUserSwitchComplete(int userId) {
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onUserSwitchComplete(userId);
+            }
         }
     }
 
@@ -439,6 +583,8 @@ public class KeyguardUpdateMonitor {
      */
     protected void handleBootCompleted() {
         mBootCompleted = true;
+        mAudioManager = new AudioManager(mContext);
+        mAudioManager.registerRemoteControlDisplay(mRemoteControlDisplay);
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
             if (cb != null) {
@@ -448,7 +594,7 @@ public class KeyguardUpdateMonitor {
     }
 
     /**
-     * We need to store this state in the KeyguardUpdateMonitor since this class will not be 
+     * We need to store this state in the KeyguardUpdateMonitor since this class will not be
      * destroyed.
      */
     public boolean hasBootCompleted() {
@@ -456,7 +602,7 @@ public class KeyguardUpdateMonitor {
     }
 
     /**
-     * Handle {@link #MSG_USER_SWITCHED}
+     * Handle {@link #MSG_USER_REMOVED}
      */
     protected void handleUserRemoved(int userId) {
         for (int i = 0; i < mCallbacks.size(); i++) {
@@ -617,6 +763,10 @@ public class KeyguardUpdateMonitor {
         return mKeyguardIsVisible;
     }
 
+    public boolean isSwitchingUser() {
+        return mSwitchingUser;
+    }
+
     private static boolean isBatteryUpdateInteresting(BatteryStatus old, BatteryStatus current, Context context) {
         final boolean nowPluggedIn = current.isPluggedIn();
         final boolean wasPluggedIn = old.isPluggedIn();
@@ -723,6 +873,12 @@ public class KeyguardUpdateMonitor {
         callback.onRefreshCarrierInfo(mTelephonyPlmn, mTelephonySpn);
         callback.onClockVisibilityChanged();
         callback.onSimStateChanged(mSimState);
+        callback.onMusicClientIdChanged(
+                mDisplayClientState.clientGeneration,
+                mDisplayClientState.clearing,
+                mDisplayClientState.intent);
+        callback.onMusicPlaybackStateChanged(mDisplayClientState.playbackState,
+                mDisplayClientState.playbackEventTime);
     }
 
     public void sendKeyguardVisibilityChanged(boolean showing) {
@@ -825,5 +981,9 @@ public class KeyguardUpdateMonitor {
         return (simState == IccCardConstants.State.PIN_REQUIRED
                 || simState == IccCardConstants.State.PUK_REQUIRED
                 || simState == IccCardConstants.State.PERM_DISABLED);
+    }
+
+    public DisplayClientState getCachedDisplayClientState() {
+        return mDisplayClientState;
     }
 }

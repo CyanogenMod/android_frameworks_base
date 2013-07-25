@@ -46,19 +46,18 @@ public class SyncStatusInfo implements Parcelable {
 
     private static final String TAG = "Sync";
 
-    SyncStatusInfo(int authorityId) {
+    public SyncStatusInfo(int authorityId) {
         this.authorityId = authorityId;
     }
 
     public int getLastFailureMesgAsInt(int def) {
-        try {
-            if (lastFailureMesg != null) {
-                return Integer.parseInt(lastFailureMesg);
-            }
-        } catch (NumberFormatException e) {
-            Log.d(TAG, "error parsing lastFailureMesg of " + lastFailureMesg, e);
+        final int i = ContentResolver.syncErrorStringToInt(lastFailureMesg);
+        if (i > 0) {
+            return i;
+        } else {
+            Log.d(TAG, "Unknown lastFailureMesg:" + lastFailureMesg);
+            return def;
         }
-        return def;
     }
 
     public int describeContents() {
@@ -92,7 +91,7 @@ public class SyncStatusInfo implements Parcelable {
         }
     }
 
-    SyncStatusInfo(Parcel parcel) {
+    public SyncStatusInfo(Parcel parcel) {
         int version = parcel.readInt();
         if (version != VERSION && version != 1) {
             Log.w("SyncStatusInfo", "Unknown version: " + version);

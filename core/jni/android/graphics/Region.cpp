@@ -177,7 +177,7 @@ static SkRegion* Region_createFromParcel(JNIEnv* env, jobject clazz, jobject par
 
     SkRegion* region = new SkRegion;
     size_t size = p->readInt32();
-    region->unflatten(p->readInplace(size));
+    region->readFromMemory(p->readInplace(size));
 
     return region;
 }
@@ -190,9 +190,9 @@ static jboolean Region_writeToParcel(JNIEnv* env, jobject clazz, const SkRegion*
 
     android::Parcel* p = android::parcelForJavaObject(env, parcel);
 
-    size_t size = region->flatten(NULL);
+    size_t size = region->writeToMemory(NULL);
     p->writeInt32(size);
-    region->flatten(p->writeInplace(size));
+    region->writeToMemory(p->writeInplace(size));
 
     return true;
 }
@@ -255,7 +255,7 @@ static JNINativeMethod gRegionMethods[] = {
     // these are static methods
     { "nativeConstructor",      "()I",                              (void*)Region_constructor       },
     { "nativeDestructor",       "(I)V",                             (void*)Region_destructor        },
-    { "nativeSetRegion",        "(II)Z",                            (void*)Region_setRegion         },
+    { "nativeSetRegion",        "(II)V",                            (void*)Region_setRegion         },
     { "nativeSetRect",          "(IIIII)Z",                         (void*)Region_setRect           },
     { "nativeSetPath",          "(III)Z",                           (void*)Region_setPath           },
     { "nativeGetBounds",        "(ILandroid/graphics/Rect;)Z",      (void*)Region_getBounds         },

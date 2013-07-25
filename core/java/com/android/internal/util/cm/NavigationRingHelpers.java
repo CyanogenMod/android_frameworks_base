@@ -93,7 +93,7 @@ public class NavigationRingHelpers {
 
     public static boolean isAssistantAvailable(Context context) {
         return ((SearchManager) context.getSystemService(Context.SEARCH_SERVICE))
-                .getAssistIntent(context, UserHandle.USER_CURRENT) != null;
+                .getAssistIntent(context, true, UserHandle.USER_CURRENT) != null;
     }
 
     public static boolean isTorchAvailable(Context context) {
@@ -241,7 +241,7 @@ public class NavigationRingHelpers {
 
     public static void swapSearchIconIfNeeded(Context context, GlowPadView view) {
         Intent intent = ((SearchManager) context.getSystemService(Context.SEARCH_SERVICE))
-                .getAssistIntent(context, UserHandle.USER_CURRENT);
+                .getAssistIntent(context, true, UserHandle.USER_CURRENT);
         if (intent != null) {
             ComponentName component = intent.getComponent();
             if (component != null) {

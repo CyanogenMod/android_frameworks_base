@@ -19,6 +19,7 @@
 #include <utils/String8.h>
 
 #include "Caches.h"
+#include "Dither.h"
 #include "ProgramCache.h"
 
 namespace android {
@@ -32,6 +33,9 @@ namespace uirenderer {
 #define MODULATE_OP_MODULATE 1
 #define MODULATE_OP_MODULATE_A8 2
 
+#define STR(x) STR1(x)
+#define STR1(x) #x
+
 ///////////////////////////////////////////////////////////////////////////////
 // Vertex shaders snippets
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,9 +44,8 @@ const char* gVS_Header_Attributes =
         "attribute vec4 position;\n";
 const char* gVS_Header_Attributes_TexCoords =
         "attribute vec2 texCoords;\n";
-const char* gVS_Header_Attributes_AALineParameters =
-        "attribute float vtxWidth;\n"
-        "attribute float vtxLength;\n";
+const char* gVS_Header_Attributes_Colors =
+        "attribute vec4 colors;\n";
 const char* gVS_Header_Attributes_AAVertexShapeParameters =
         "attribute float vtxAlpha;\n";
 const char* gVS_Header_Uniforms_TextureTransform =
@@ -52,25 +55,15 @@ const char* gVS_Header_Uniforms =
         "uniform mat4 transform;\n";
 const char* gVS_Header_Uniforms_IsPoint =
         "uniform mediump float pointSize;\n";
-const char* gVS_Header_Uniforms_HasGradient[3] = {
-        // Linear
-        "uniform mat4 screenSpace;\n"
-        "uniform float ditherSize;\n",
-        // Circular
-        "uniform mat4 screenSpace;\n"
-        "uniform float ditherSize;\n",
-        // Sweep
-        "uniform mat4 screenSpace;\n"
-        "uniform float ditherSize;\n"
-};
+const char* gVS_Header_Uniforms_HasGradient =
+        "uniform mat4 screenSpace;\n";
 const char* gVS_Header_Uniforms_HasBitmap =
         "uniform mat4 textureTransform;\n"
         "uniform mediump vec2 textureDimension;\n";
 const char* gVS_Header_Varyings_HasTexture =
         "varying vec2 outTexCoords;\n";
-const char* gVS_Header_Varyings_IsAALine =
-        "varying float widthProportion;\n"
-        "varying float lengthProportion;\n";
+const char* gVS_Header_Varyings_HasColors =
+        "varying vec4 outColors;\n";
 const char* gVS_Header_Varyings_IsAAVertexShape =
         "varying float alpha;\n";
 const char* gVS_Header_Varyings_HasBitmap =
@@ -100,26 +93,28 @@ const char* gVS_Main =
         "\nvoid main(void) {\n";
 const char* gVS_Main_OutTexCoords =
         "    outTexCoords = texCoords;\n";
+const char* gVS_Main_OutColors =
+        "    outColors = colors;\n";
 const char* gVS_Main_OutTransformedTexCoords =
         "    outTexCoords = (mainTextureTransform * vec4(texCoords, 0.0, 1.0)).xy;\n";
 const char* gVS_Main_OutGradient[6] = {
         // Linear
         "    linear = vec2((screenSpace * position).x, 0.5);\n"
-        "    ditherTexCoords = (transform * position).xy * ditherSize;\n",
+        "    ditherTexCoords = (transform * position).xy * " STR(DITHER_KERNEL_SIZE_INV) ";\n",
         "    linear = (screenSpace * position).x;\n"
-        "    ditherTexCoords = (transform * position).xy * ditherSize;\n",
+        "    ditherTexCoords = (transform * position).xy * " STR(DITHER_KERNEL_SIZE_INV) ";\n",
 
         // Circular
         "    circular = (screenSpace * position).xy;\n"
-        "    ditherTexCoords = (transform * position).xy * ditherSize;\n",
+        "    ditherTexCoords = (transform * position).xy * " STR(DITHER_KERNEL_SIZE_INV) ";\n",
         "    circular = (screenSpace * position).xy;\n"
-        "    ditherTexCoords = (transform * position).xy * ditherSize;\n",
+        "    ditherTexCoords = (transform * position).xy * " STR(DITHER_KERNEL_SIZE_INV) ";\n",
 
         // Sweep
         "    sweep = (screenSpace * position).xy;\n"
-        "    ditherTexCoords = (transform * position).xy * ditherSize;\n",
+        "    ditherTexCoords = (transform * position).xy * " STR(DITHER_KERNEL_SIZE_INV) ";\n",
         "    sweep = (screenSpace * position).xy;\n"
-        "    ditherTexCoords = (transform * position).xy * ditherSize;\n",
+        "    ditherTexCoords = (transform * position).xy * " STR(DITHER_KERNEL_SIZE_INV) ";\n",
 };
 const char* gVS_Main_OutBitmapTexCoords =
         "    outBitmapTexCoords = (textureTransform * position).xy * textureDimension;\n";
@@ -129,9 +124,6 @@ const char* gVS_Main_Position =
         "    gl_Position = projection * transform * position;\n";
 const char* gVS_Main_PointSize =
         "    gl_PointSize = pointSize;\n";
-const char* gVS_Main_AALine =
-        "    widthProportion = vtxWidth;\n"
-        "    lengthProportion = vtxLength;\n";
 const char* gVS_Main_AAVertexShape =
         "    alpha = vtxAlpha;\n";
 const char* gVS_Footer =
@@ -149,9 +141,6 @@ const char* gFS_Header =
         "precision mediump float;\n\n";
 const char* gFS_Uniforms_Color =
         "uniform vec4 color;\n";
-const char* gFS_Uniforms_AALine =
-        "uniform float boundaryWidth;\n"
-        "uniform float boundaryLength;\n";
 const char* gFS_Header_Uniforms_PointHasBitmap =
         "uniform vec2 textureDimension;\n"
         "uniform float pointSize;\n";
@@ -159,24 +148,14 @@ const char* gFS_Uniforms_TextureSampler =
         "uniform sampler2D baseSampler;\n";
 const char* gFS_Uniforms_ExternalTextureSampler =
         "uniform samplerExternalOES baseSampler;\n";
-#define FS_UNIFORMS_DITHER \
-        "uniform float ditherSizeSquared;\n" \
-        "uniform sampler2D ditherSampler;\n"
-#define FS_UNIFORMS_GRADIENT \
-        "uniform vec4 startColor;\n" \
+const char* gFS_Uniforms_Dither =
+        "uniform sampler2D ditherSampler;";
+const char* gFS_Uniforms_GradientSampler[2] = {
+        "%s\n"
+        "uniform sampler2D gradientSampler;\n",
+        "%s\n"
+        "uniform vec4 startColor;\n"
         "uniform vec4 endColor;\n"
-const char* gFS_Uniforms_GradientSampler[6] = {
-        // Linear
-        FS_UNIFORMS_DITHER "uniform sampler2D gradientSampler;\n",
-        FS_UNIFORMS_DITHER FS_UNIFORMS_GRADIENT,
-
-        // Circular
-        FS_UNIFORMS_DITHER "uniform sampler2D gradientSampler;\n",
-        FS_UNIFORMS_DITHER FS_UNIFORMS_GRADIENT,
-
-        // Sweep
-        FS_UNIFORMS_DITHER "uniform sampler2D gradientSampler;\n",
-        FS_UNIFORMS_DITHER FS_UNIFORMS_GRADIENT
 };
 const char* gFS_Uniforms_BitmapSampler =
         "uniform sampler2D bitmapSampler;\n";
@@ -203,10 +182,14 @@ const char* gFS_Main_PointBitmapTexCoords =
         "    highp vec2 outBitmapTexCoords = outPointBitmapTexCoords + "
         "((gl_PointCoord - vec2(0.5, 0.5)) * textureDimension * vec2(pointSize, pointSize));\n";
 
-#define FS_MAIN_DITHER \
-        "texture2D(ditherSampler, ditherTexCoords).a * ditherSizeSquared"
+const char* gFS_Main_Dither[2] = {
+        // ES 2.0
+        "texture2D(ditherSampler, ditherTexCoords).a * " STR(DITHER_KERNEL_SIZE_INV_SQUARE),
+        // ES 3.0
+        "texture2D(ditherSampler, ditherTexCoords).a"
+};
 const char* gFS_Main_AddDitherToGradient =
-        "    gradientColor += " FS_MAIN_DITHER ";\n";
+        "    gradientColor += %s;\n";
 
 // Fast cases
 const char* gFS_Fast_SingleColor =
@@ -239,18 +222,18 @@ const char* gFS_Fast_SingleModulateA8Texture_ApplyGamma =
         "}\n\n";
 const char* gFS_Fast_SingleGradient[2] = {
         "\nvoid main(void) {\n"
-        "    gl_FragColor = " FS_MAIN_DITHER " + texture2D(gradientSampler, linear);\n"
+        "    gl_FragColor = %s + texture2D(gradientSampler, linear);\n"
         "}\n\n",
         "\nvoid main(void) {\n"
-        "    gl_FragColor = " FS_MAIN_DITHER " + mix(startColor, endColor, clamp(linear, 0.0, 1.0));\n"
-        "}\n\n"
+        "    gl_FragColor = %s + mix(startColor, endColor, clamp(linear, 0.0, 1.0));\n"
+        "}\n\n",
 };
 const char* gFS_Fast_SingleModulateGradient[2] = {
         "\nvoid main(void) {\n"
-        "    gl_FragColor = " FS_MAIN_DITHER " + color.a * texture2D(gradientSampler, linear);\n"
+        "    gl_FragColor = %s + color.a * texture2D(gradientSampler, linear);\n"
         "}\n\n",
         "\nvoid main(void) {\n"
-        "    gl_FragColor = " FS_MAIN_DITHER " + color.a * mix(startColor, endColor, clamp(linear, 0.0, 1.0));\n"
+        "    gl_FragColor = %s + color.a * mix(startColor, endColor, clamp(linear, 0.0, 1.0));\n"
         "}\n\n"
 };
 
@@ -259,9 +242,6 @@ const char* gFS_Main_FetchColor =
         "    fragColor = color;\n";
 const char* gFS_Main_ModulateColor =
         "    fragColor *= color.a;\n";
-const char* gFS_Main_AccountForAALine =
-        "    fragColor *= (1.0 - smoothstep(boundaryWidth, 0.5, abs(0.5 - widthProportion)))\n"
-        "               * (1.0 - smoothstep(boundaryLength, 0.5, abs(0.5 - lengthProportion)));\n";
 const char* gFS_Main_AccountForAAVertexShape =
         "    fragColor *= alpha;\n";
 
@@ -340,6 +320,8 @@ const char* gFS_Main_BitmapShader_Modulate[6] = {
     };
 const char* gFS_Main_FragColor =
         "    gl_FragColor = fragColor;\n";
+const char* gFS_Main_FragColor_HasColors =
+        "    gl_FragColor *= outColors;\n";
 const char* gFS_Main_FragColor_Blend =
         "    gl_FragColor = blendFramebuffer(fragColor, gl_LastFragColor);\n";
 const char* gFS_Main_FragColor_Blend_Swap =
@@ -358,6 +340,8 @@ const char* gFS_Main_ApplyColorOp[4] = {
         // PorterDuff
         "    fragColor = blendColors(colorBlend, fragColor);\n"
 };
+const char* gFS_Main_DebugHighlight =
+        "    gl_FragColor.rgb = vec3(0.0, gl_FragColor.a, 0.0);\n";
 const char* gFS_Footer =
         "}\n\n";
 
@@ -415,7 +399,7 @@ const char* gBlendOps[18] = {
 // Constructors/destructors
 ///////////////////////////////////////////////////////////////////////////////
 
-ProgramCache::ProgramCache() {
+ProgramCache::ProgramCache(): mHasES3(Extensions::getInstance().getMajorGlVersion() >= 3) {
 }
 
 ProgramCache::~ProgramCache() {
@@ -438,6 +422,12 @@ void ProgramCache::clear() {
 
 Program* ProgramCache::get(const ProgramDescription& description) {
     programid key = description.key();
+    if (key == (PROGRAM_KEY_TEXTURE | PROGRAM_KEY_A8_TEXTURE)) {
+        // program for A8, unmodulated, texture w/o shader (black text/path textures) is equivalent
+        // to standard texture program (bitmaps, patches). Consider them equivalent.
+        key = PROGRAM_KEY_TEXTURE;
+    }
+
     ssize_t index = mCache.indexOfKey(key);
     Program* program = NULL;
     if (index < 0) {
@@ -472,11 +462,10 @@ String8 ProgramCache::generateVertexShader(const ProgramDescription& description
         shader.append(gVS_Header_Attributes_TexCoords);
     }
     if (description.isAA) {
-        if (description.isVertexShape) {
-            shader.append(gVS_Header_Attributes_AAVertexShapeParameters);
-        } else {
-            shader.append(gVS_Header_Attributes_AALineParameters);
-        }
+        shader.append(gVS_Header_Attributes_AAVertexShapeParameters);
+    }
+    if (description.hasColors) {
+        shader.append(gVS_Header_Attributes_Colors);
     }
     // Uniforms
     shader.append(gVS_Header_Uniforms);
@@ -484,7 +473,7 @@ String8 ProgramCache::generateVertexShader(const ProgramDescription& description
         shader.append(gVS_Header_Uniforms_TextureTransform);
     }
     if (description.hasGradient) {
-        shader.append(gVS_Header_Uniforms_HasGradient[description.gradientType]);
+        shader.append(gVS_Header_Uniforms_HasGradient);
     }
     if (description.hasBitmap) {
         shader.append(gVS_Header_Uniforms_HasBitmap);
@@ -497,11 +486,10 @@ String8 ProgramCache::generateVertexShader(const ProgramDescription& description
         shader.append(gVS_Header_Varyings_HasTexture);
     }
     if (description.isAA) {
-        if (description.isVertexShape) {
-            shader.append(gVS_Header_Varyings_IsAAVertexShape);
-        } else {
-            shader.append(gVS_Header_Varyings_IsAALine);
-        }
+        shader.append(gVS_Header_Varyings_IsAAVertexShape);
+    }
+    if (description.hasColors) {
+        shader.append(gVS_Header_Varyings_HasColors);
     }
     if (description.hasGradient) {
         shader.append(gVS_Header_Varyings_HasGradient[gradientIndex(description)]);
@@ -520,11 +508,10 @@ String8 ProgramCache::generateVertexShader(const ProgramDescription& description
             shader.append(gVS_Main_OutTexCoords);
         }
         if (description.isAA) {
-            if (description.isVertexShape) {
-                shader.append(gVS_Main_AAVertexShape);
-            } else {
-                shader.append(gVS_Main_AALine);
-            }
+            shader.append(gVS_Main_AAVertexShape);
+        }
+        if (description.hasColors) {
+            shader.append(gVS_Main_OutColors);
         }
         if (description.hasBitmap) {
             shader.append(description.isPoint ?
@@ -574,11 +561,10 @@ String8 ProgramCache::generateFragmentShader(const ProgramDescription& descripti
         shader.append(gVS_Header_Varyings_HasTexture);
     }
     if (description.isAA) {
-        if (description.isVertexShape) {
-            shader.append(gVS_Header_Varyings_IsAAVertexShape);
-        } else {
-            shader.append(gVS_Header_Varyings_IsAALine);
-        }
+        shader.append(gVS_Header_Varyings_IsAAVertexShape);
+    }
+    if (description.hasColors) {
+        shader.append(gVS_Header_Varyings_HasColors);
     }
     if (description.hasGradient) {
         shader.append(gVS_Header_Varyings_HasGradient[gradientIndex(description)]);
@@ -603,11 +589,9 @@ String8 ProgramCache::generateFragmentShader(const ProgramDescription& descripti
     } else if (description.hasExternalTexture) {
         shader.append(gFS_Uniforms_ExternalTextureSampler);
     }
-    if (description.isAA && !description.isVertexShape) {
-        shader.append(gFS_Uniforms_AALine);
-    }
     if (description.hasGradient) {
-        shader.append(gFS_Uniforms_GradientSampler[gradientIndex(description)]);
+        shader.appendFormat(gFS_Uniforms_GradientSampler[description.isSimpleGradient],
+                gFS_Uniforms_Dither);
     }
     if (description.hasBitmap && description.isPoint) {
         shader.append(gFS_Header_Uniforms_PointHasBitmap);
@@ -617,9 +601,9 @@ String8 ProgramCache::generateFragmentShader(const ProgramDescription& descripti
     }
 
     // Optimization for common cases
-    if (!description.isAA && !blendFramebuffer &&
+    if (!description.isAA && !blendFramebuffer && !description.hasColors &&
             description.colorOp == ProgramDescription::kColorNone &&
-            !description.isPoint && !description.isVertexShape) {
+            !description.isPoint && !description.hasDebugHighlight) {
         bool fast = false;
 
         const bool noShader = !description.hasGradient && !description.hasBitmap;
@@ -658,9 +642,11 @@ String8 ProgramCache::generateFragmentShader(const ProgramDescription& descripti
             fast = true;
         } else if (singleGradient) {
             if (!description.modulate) {
-                shader.append(gFS_Fast_SingleGradient[description.isSimpleGradient]);
+                shader.appendFormat(gFS_Fast_SingleGradient[description.isSimpleGradient],
+                        gFS_Main_Dither[mHasES3]);
             } else {
-                shader.append(gFS_Fast_SingleModulateGradient[description.isSimpleGradient]);
+                shader.appendFormat(gFS_Fast_SingleModulateGradient[description.isSimpleGradient],
+                        gFS_Main_Dither[mHasES3]);
             }
             fast = true;
         }
@@ -714,7 +700,7 @@ String8 ProgramCache::generateFragmentShader(const ProgramDescription& descripti
         }
         if (description.hasGradient) {
             shader.append(gFS_Main_FetchGradient[gradientIndex(description)]);
-            shader.append(gFS_Main_AddDitherToGradient);
+            shader.appendFormat(gFS_Main_AddDitherToGradient, gFS_Main_Dither[mHasES3]);
         }
         if (description.hasBitmap) {
             if (description.isPoint) {
@@ -754,11 +740,7 @@ String8 ProgramCache::generateFragmentShader(const ProgramDescription& descripti
         shader.append(gFS_Main_ApplyColorOp[description.colorOp]);
 
         if (description.isAA) {
-            if (description.isVertexShape) {
-                shader.append(gFS_Main_AccountForAAVertexShape);
-            } else {
-                shader.append(gFS_Main_AccountForAALine);
-            }
+            shader.append(gFS_Main_AccountForAAVertexShape);
         }
 
         // Output the fragment
@@ -767,6 +749,12 @@ String8 ProgramCache::generateFragmentShader(const ProgramDescription& descripti
         } else {
             shader.append(!description.swapSrcDst ?
                     gFS_Main_FragColor_Blend : gFS_Main_FragColor_Blend_Swap);
+        }
+        if (description.hasColors) {
+            shader.append(gFS_Main_FragColor_HasColors);
+        }
+        if (description.hasDebugHighlight) {
+            shader.append(gFS_Main_DebugHighlight);
         }
     }
     // End the shader

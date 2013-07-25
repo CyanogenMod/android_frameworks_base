@@ -39,6 +39,7 @@ import com.android.internal.util.Protocol;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
 
+import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 
@@ -76,7 +77,6 @@ public class WifiWatchdogStateMachine extends StateMachine {
 
     /* STOPSHIP: Keep this configurable for debugging until ship */
     private static boolean DBG = false;
-    private static final String TAG = "WifiWatchdogStateMachine";
 
     private static final int BASE = Protocol.BASE_WIFI_WATCHDOG;
 
@@ -305,7 +305,7 @@ public class WifiWatchdogStateMachine extends StateMachine {
      *                       (all other states)
      */
     private WifiWatchdogStateMachine(Context context) {
-        super(TAG);
+        super("WifiWatchdogStateMachine");
         mContext = context;
         mContentResolver = context.getContentResolver();
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -332,6 +332,8 @@ public class WifiWatchdogStateMachine extends StateMachine {
         } else {
             setInitialState(mWatchdogDisabledState);
         }
+        setLogRecSize(25);
+        setLogOnlyTransitions(true);
         updateSettings();
     }
 
@@ -417,9 +419,8 @@ public class WifiWatchdogStateMachine extends StateMachine {
                 false, contentObserver);
     }
 
-    public void dump(PrintWriter pw) {
-        pw.print("WatchdogStatus: ");
-        pw.print("State: " + getCurrentState());
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        super.dump(fd, pw, args);
         pw.println("mWifiInfo: [" + mWifiInfo + "]");
         pw.println("mLinkProperties: [" + mLinkProperties + "]");
         pw.println("mCurrentSignalLevel: [" + mCurrentSignalLevel + "]");
@@ -586,8 +587,9 @@ public class WifiWatchdogStateMachine extends StateMachine {
                     break;
 
                 case EVENT_WIFI_RADIO_STATE_CHANGE:
-                    if ((Integer) msg.obj == WifiManager.WIFI_STATE_DISABLING)
+                    if (msg.arg1 == WifiManager.WIFI_STATE_DISABLING) {
                         transitionTo(mNotConnectedState);
+                    }
                     break;
 
                 default:
@@ -964,14 +966,6 @@ public class WifiWatchdogStateMachine extends StateMachine {
      */
     private static boolean putSettingsGlobalBoolean(ContentResolver cr, String name, boolean value) {
         return Settings.Global.putInt(cr, name, value ? 1 : 0);
-    }
-
-    private static void logd(String s) {
-        Log.d(TAG, s);
-    }
-
-    private static void loge(String s) {
-        Log.e(TAG, s);
     }
 
     /**

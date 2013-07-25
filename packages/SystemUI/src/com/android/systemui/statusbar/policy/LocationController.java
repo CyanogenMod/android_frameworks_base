@@ -28,13 +28,9 @@ import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.util.Slog;
-import android.view.View;
-import android.widget.ImageView;
 
 // private NM API
 import android.app.INotificationManager;
-import com.android.internal.statusbar.StatusBarNotification;
 
 import com.android.systemui.R;
 
@@ -119,7 +115,7 @@ public class LocationController extends BroadcastReceiver {
 
                 int[] idOut = new int[1];
                 mNotificationService.enqueueNotificationWithTag(
-                        mContext.getPackageName(),
+                        mContext.getPackageName(), mContext.getBasePackageName(),
                         null, 
                         GPS_NOTIFICATION_ID, 
                         n,

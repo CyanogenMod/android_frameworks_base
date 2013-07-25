@@ -882,8 +882,9 @@ void InputDevice::dump(String8& dump) {
                 snprintf(name, sizeof(name), "%d", range.axis);
             }
             dump.appendFormat(INDENT3 "%s: source=0x%08x, "
-                    "min=%0.3f, max=%0.3f, flat=%0.3f, fuzz=%0.3f\n",
-                    name, range.source, range.min, range.max, range.flat, range.fuzz);
+                    "min=%0.3f, max=%0.3f, flat=%0.3f, fuzz=%0.3f, resolution=%0.3f\n",
+                    name, range.source, range.min, range.max, range.flat, range.fuzz,
+                    range.resolution);
         }
     }
 
@@ -2270,20 +2271,20 @@ void CursorInputMapper::populateDeviceInfo(InputDeviceInfo* info) {
     if (mParameters.mode == Parameters::MODE_POINTER) {
         float minX, minY, maxX, maxY;
         if (mPointerController->getBounds(&minX, &minY, &maxX, &maxY)) {
-            info->addMotionRange(AMOTION_EVENT_AXIS_X, mSource, minX, maxX, 0.0f, 0.0f);
-            info->addMotionRange(AMOTION_EVENT_AXIS_Y, mSource, minY, maxY, 0.0f, 0.0f);
+            info->addMotionRange(AMOTION_EVENT_AXIS_X, mSource, minX, maxX, 0.0f, 0.0f, 0.0f);
+            info->addMotionRange(AMOTION_EVENT_AXIS_Y, mSource, minY, maxY, 0.0f, 0.0f, 0.0f);
         }
     } else {
-        info->addMotionRange(AMOTION_EVENT_AXIS_X, mSource, -1.0f, 1.0f, 0.0f, mXScale);
-        info->addMotionRange(AMOTION_EVENT_AXIS_Y, mSource, -1.0f, 1.0f, 0.0f, mYScale);
+        info->addMotionRange(AMOTION_EVENT_AXIS_X, mSource, -1.0f, 1.0f, 0.0f, mXScale, 0.0f);
+        info->addMotionRange(AMOTION_EVENT_AXIS_Y, mSource, -1.0f, 1.0f, 0.0f, mYScale, 0.0f);
     }
-    info->addMotionRange(AMOTION_EVENT_AXIS_PRESSURE, mSource, 0.0f, 1.0f, 0.0f, 0.0f);
+    info->addMotionRange(AMOTION_EVENT_AXIS_PRESSURE, mSource, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
 
     if (mCursorScrollAccumulator.haveRelativeVWheel()) {
-        info->addMotionRange(AMOTION_EVENT_AXIS_VSCROLL, mSource, -1.0f, 1.0f, 0.0f, 0.0f);
+        info->addMotionRange(AMOTION_EVENT_AXIS_VSCROLL, mSource, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
     }
     if (mCursorScrollAccumulator.haveRelativeHWheel()) {
-        info->addMotionRange(AMOTION_EVENT_AXIS_HSCROLL, mSource, -1.0f, 1.0f, 0.0f, 0.0f);
+        info->addMotionRange(AMOTION_EVENT_AXIS_HSCROLL, mSource, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
     }
 }
 
@@ -2641,10 +2642,24 @@ void TouchInputMapper::populateDeviceInfo(InputDeviceInfo* info) {
         }
 
         if (mCursorScrollAccumulator.haveRelativeVWheel()) {
-            info->addMotionRange(AMOTION_EVENT_AXIS_VSCROLL, mSource, -1.0f, 1.0f, 0.0f, 0.0f);
+            info->addMotionRange(AMOTION_EVENT_AXIS_VSCROLL, mSource, -1.0f, 1.0f, 0.0f, 0.0f,
+                    0.0f);
         }
         if (mCursorScrollAccumulator.haveRelativeHWheel()) {
-            info->addMotionRange(AMOTION_EVENT_AXIS_HSCROLL, mSource, -1.0f, 1.0f, 0.0f, 0.0f);
+            info->addMotionRange(AMOTION_EVENT_AXIS_HSCROLL, mSource, -1.0f, 1.0f, 0.0f, 0.0f,
+                    0.0f);
+        }
+        if (mCalibration.coverageCalibration == Calibration::COVERAGE_CALIBRATION_BOX) {
+            const InputDeviceInfo::MotionRange& x = mOrientedRanges.x;
+            const InputDeviceInfo::MotionRange& y = mOrientedRanges.y;
+            info->addMotionRange(AMOTION_EVENT_AXIS_GENERIC_1, mSource, x.min, x.max, x.flat,
+                    x.fuzz, x.resolution);
+            info->addMotionRange(AMOTION_EVENT_AXIS_GENERIC_2, mSource, y.min, y.max, y.flat,
+                    y.fuzz, y.resolution);
+            info->addMotionRange(AMOTION_EVENT_AXIS_GENERIC_3, mSource, x.min, x.max, x.flat,
+                    x.fuzz, x.resolution);
+            info->addMotionRange(AMOTION_EVENT_AXIS_GENERIC_4, mSource, y.min, y.max, y.flat,
+                    y.fuzz, y.resolution);
         }
     }
 }
@@ -2819,6 +2834,8 @@ void TouchInputMapper::configureParameters() {
             mParameters.deviceType = Parameters::DEVICE_TYPE_TOUCH_SCREEN;
         } else if (deviceTypeString == "touchPad") {
             mParameters.deviceType = Parameters::DEVICE_TYPE_TOUCH_PAD;
+        } else if (deviceTypeString == "touchNavigation") {
+            mParameters.deviceType = Parameters::DEVICE_TYPE_TOUCH_NAVIGATION;
         } else if (deviceTypeString == "pointer") {
             mParameters.deviceType = Parameters::DEVICE_TYPE_POINTER;
         } else if (deviceTypeString != "default") {
@@ -2862,6 +2879,9 @@ void TouchInputMapper::dumpParameters(String8& dump) {
         break;
     case Parameters::DEVICE_TYPE_TOUCH_PAD:
         dump.append(INDENT4 "DeviceType: touchPad\n");
+        break;
+    case Parameters::DEVICE_TYPE_TOUCH_NAVIGATION:
+        dump.append(INDENT4 "DeviceType: touchNavigation\n");
         break;
     case Parameters::DEVICE_TYPE_POINTER:
         dump.append(INDENT4 "DeviceType: pointer\n");
@@ -2916,6 +2936,9 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
         if (hasStylus()) {
             mSource |= AINPUT_SOURCE_STYLUS;
         }
+    } else if (mParameters.deviceType == Parameters::DEVICE_TYPE_TOUCH_NAVIGATION) {
+        mSource = AINPUT_SOURCE_TOUCH_NAVIGATION;
+        mDeviceMode = DEVICE_MODE_NAVIGATION;
     } else {
         mSource = AINPUT_SOURCE_TOUCHPAD;
         mDeviceMode = DEVICE_MODE_UNSCALED;
@@ -3086,6 +3109,7 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.touchMajor.max = diagonalSize;
             mOrientedRanges.touchMajor.flat = 0;
             mOrientedRanges.touchMajor.fuzz = 0;
+            mOrientedRanges.touchMajor.resolution = 0;
 
             mOrientedRanges.touchMinor = mOrientedRanges.touchMajor;
             mOrientedRanges.touchMinor.axis = AMOTION_EVENT_AXIS_TOUCH_MINOR;
@@ -3096,6 +3120,7 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.toolMajor.max = diagonalSize;
             mOrientedRanges.toolMajor.flat = 0;
             mOrientedRanges.toolMajor.fuzz = 0;
+            mOrientedRanges.toolMajor.resolution = 0;
 
             mOrientedRanges.toolMinor = mOrientedRanges.toolMajor;
             mOrientedRanges.toolMinor.axis = AMOTION_EVENT_AXIS_TOOL_MINOR;
@@ -3106,6 +3131,7 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.size.max = 1.0;
             mOrientedRanges.size.flat = 0;
             mOrientedRanges.size.fuzz = 0;
+            mOrientedRanges.size.resolution = 0;
         } else {
             mSizeScale = 0.0f;
         }
@@ -3129,6 +3155,7 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
         mOrientedRanges.pressure.max = 1.0;
         mOrientedRanges.pressure.flat = 0;
         mOrientedRanges.pressure.fuzz = 0;
+        mOrientedRanges.pressure.resolution = 0;
 
         // Tilt
         mTiltXCenter = 0;
@@ -3152,6 +3179,7 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.tilt.max = M_PI_2;
             mOrientedRanges.tilt.flat = 0;
             mOrientedRanges.tilt.fuzz = 0;
+            mOrientedRanges.tilt.resolution = 0;
         }
 
         // Orientation
@@ -3165,6 +3193,7 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.orientation.max = M_PI;
             mOrientedRanges.orientation.flat = 0;
             mOrientedRanges.orientation.fuzz = 0;
+            mOrientedRanges.orientation.resolution = 0;
         } else if (mCalibration.orientationCalibration !=
                 Calibration::ORIENTATION_CALIBRATION_NONE) {
             if (mCalibration.orientationCalibration
@@ -3188,6 +3217,7 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.orientation.max = M_PI_2;
             mOrientedRanges.orientation.flat = 0;
             mOrientedRanges.orientation.fuzz = 0;
+            mOrientedRanges.orientation.resolution = 0;
         }
 
         // Distance
@@ -3213,6 +3243,7 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.distance.flat = 0;
             mOrientedRanges.distance.fuzz =
                     mRawPointerAxes.distance.fuzz * mDistanceScale;
+            mOrientedRanges.distance.resolution = 0;
         }
 
         // Compute oriented precision, scales and ranges.
@@ -3227,12 +3258,14 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.x.min = mYTranslate;
             mOrientedRanges.x.max = mSurfaceHeight + mYTranslate - 1;
             mOrientedRanges.x.flat = 0;
-            mOrientedRanges.x.fuzz = mYScale;
+            mOrientedRanges.x.fuzz = 0;
+            mOrientedRanges.x.resolution = mRawPointerAxes.y.resolution * mYScale;
 
             mOrientedRanges.y.min = mXTranslate;
             mOrientedRanges.y.max = mSurfaceWidth + mXTranslate - 1;
             mOrientedRanges.y.flat = 0;
-            mOrientedRanges.y.fuzz = mXScale;
+            mOrientedRanges.y.fuzz = 0;
+            mOrientedRanges.y.resolution = mRawPointerAxes.x.resolution * mXScale;
             break;
 
         default:
@@ -3242,17 +3275,19 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             mOrientedRanges.x.min = mXTranslate;
             mOrientedRanges.x.max = mSurfaceWidth + mXTranslate - 1;
             mOrientedRanges.x.flat = 0;
-            mOrientedRanges.x.fuzz = mXScale;
+            mOrientedRanges.x.fuzz = 0;
+            mOrientedRanges.x.resolution = mRawPointerAxes.x.resolution * mXScale;
 
             mOrientedRanges.y.min = mYTranslate;
             mOrientedRanges.y.max = mSurfaceHeight + mYTranslate - 1;
             mOrientedRanges.y.flat = 0;
-            mOrientedRanges.y.fuzz = mYScale;
+            mOrientedRanges.y.fuzz = 0;
+            mOrientedRanges.y.resolution = mRawPointerAxes.y.resolution * mYScale;
             break;
         }
 
-        // Compute pointer gesture detection parameters.
         if (mDeviceMode == DEVICE_MODE_POINTER) {
+            // Compute pointer gesture detection parameters.
             float rawDiagonal = hypotf(rawWidth, rawHeight);
             float displayDiagonal = hypotf(mSurfaceWidth, mSurfaceHeight);
 
@@ -3277,10 +3312,10 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
             // translated into freeform gestures.
             mPointerGestureMaxSwipeWidth =
                     mConfig.pointerGestureSwipeMaxWidthRatio * rawDiagonal;
-        }
 
-        // Abort current pointer usages because the state has changed.
-        abortPointerUsage(when, 0 /*policyFlags*/);
+            // Abort current pointer usages because the state has changed.
+            abortPointerUsage(when, 0 /*policyFlags*/);
+        }
 
         // Inform the dispatcher about the changes.
         *outResetNeeded = true;
@@ -3456,6 +3491,19 @@ void TouchInputMapper::parseCalibration() {
 
     out.haveDistanceScale = in.tryGetProperty(String8("touch.distance.scale"),
             out.distanceScale);
+
+    out.coverageCalibration = Calibration::COVERAGE_CALIBRATION_DEFAULT;
+    String8 coverageCalibrationString;
+    if (in.tryGetProperty(String8("touch.coverage.calibration"), coverageCalibrationString)) {
+        if (coverageCalibrationString == "none") {
+            out.coverageCalibration = Calibration::COVERAGE_CALIBRATION_NONE;
+        } else if (coverageCalibrationString == "box") {
+            out.coverageCalibration = Calibration::COVERAGE_CALIBRATION_BOX;
+        } else if (coverageCalibrationString != "default") {
+            ALOGW("Invalid value for touch.coverage.calibration: '%s'",
+                    coverageCalibrationString.string());
+        }
+    }
 }
 
 void TouchInputMapper::resolveCalibration() {
@@ -3493,6 +3541,11 @@ void TouchInputMapper::resolveCalibration() {
         }
     } else {
         mCalibration.distanceCalibration = Calibration::DISTANCE_CALIBRATION_NONE;
+    }
+
+    // Coverage
+    if (mCalibration.coverageCalibration == Calibration::COVERAGE_CALIBRATION_DEFAULT) {
+        mCalibration.coverageCalibration = Calibration::COVERAGE_CALIBRATION_NONE;
     }
 }
 
@@ -3585,6 +3638,17 @@ void TouchInputMapper::dumpCalibration(String8& dump) {
     if (mCalibration.haveDistanceScale) {
         dump.appendFormat(INDENT4 "touch.distance.scale: %0.3f\n",
                 mCalibration.distanceScale);
+    }
+
+    switch (mCalibration.coverageCalibration) {
+    case Calibration::COVERAGE_CALIBRATION_NONE:
+        dump.append(INDENT4 "touch.coverage.calibration: none\n");
+        break;
+    case Calibration::COVERAGE_CALIBRATION_BOX:
+        dump.append(INDENT4 "touch.coverage.calibration: box\n");
+        break;
+    default:
+        ALOG_ASSERT(false);
     }
 }
 
@@ -4193,13 +4257,31 @@ void TouchInputMapper::cookPointerData() {
             distance = 0;
         }
 
-        // X and Y
+        // Coverage
+        int32_t rawLeft, rawTop, rawRight, rawBottom;
+        switch (mCalibration.coverageCalibration) {
+        case Calibration::COVERAGE_CALIBRATION_BOX:
+            rawLeft = (in.toolMinor & 0xffff0000) >> 16;
+            rawRight = in.toolMinor & 0x0000ffff;
+            rawBottom = in.toolMajor & 0x0000ffff;
+            rawTop = (in.toolMajor & 0xffff0000) >> 16;
+            break;
+        default:
+            rawLeft = rawTop = rawRight = rawBottom = 0;
+            break;
+        }
+
+        // X, Y, and the bounding box for coverage information
         // Adjust coords for surface orientation.
-        float x, y;
+        float x, y, left, top, right, bottom;
         switch (mSurfaceOrientation) {
         case DISPLAY_ORIENTATION_90:
             x = float(in.y - mRawPointerAxes.y.minValue) * mYScale + mYTranslate;
             y = float(mRawPointerAxes.x.maxValue - in.x) * mXScale + mXTranslate;
+            left = float(rawTop - mRawPointerAxes.y.minValue) * mYScale + mYTranslate;
+            right = float(rawBottom- mRawPointerAxes.y.minValue) * mYScale + mYTranslate;
+            bottom = float(mRawPointerAxes.x.maxValue - rawLeft) * mXScale + mXTranslate;
+            top = float(mRawPointerAxes.x.maxValue - rawRight) * mXScale + mXTranslate;
             orientation -= M_PI_2;
             if (orientation < - M_PI_2) {
                 orientation += M_PI;
@@ -4208,10 +4290,18 @@ void TouchInputMapper::cookPointerData() {
         case DISPLAY_ORIENTATION_180:
             x = float(mRawPointerAxes.x.maxValue - in.x) * mXScale + mXTranslate;
             y = float(mRawPointerAxes.y.maxValue - in.y) * mYScale + mYTranslate;
+            left = float(mRawPointerAxes.x.maxValue - rawRight) * mXScale + mXTranslate;
+            right = float(mRawPointerAxes.x.maxValue - rawLeft) * mXScale + mXTranslate;
+            bottom = float(mRawPointerAxes.y.maxValue - rawTop) * mYScale + mYTranslate;
+            top = float(mRawPointerAxes.y.maxValue - rawBottom) * mYScale + mYTranslate;
             break;
         case DISPLAY_ORIENTATION_270:
             x = float(mRawPointerAxes.y.maxValue - in.y) * mYScale + mYTranslate;
             y = float(in.x - mRawPointerAxes.x.minValue) * mXScale + mXTranslate;
+            left = float(mRawPointerAxes.y.maxValue - rawBottom) * mYScale + mYTranslate;
+            right = float(mRawPointerAxes.y.maxValue - rawTop) * mYScale + mYTranslate;
+            bottom = float(rawRight - mRawPointerAxes.x.minValue) * mXScale + mXTranslate;
+            top = float(rawLeft - mRawPointerAxes.x.minValue) * mXScale + mXTranslate;
             orientation += M_PI_2;
             if (orientation > M_PI_2) {
                 orientation -= M_PI;
@@ -4220,6 +4310,10 @@ void TouchInputMapper::cookPointerData() {
         default:
             x = float(in.x - mRawPointerAxes.x.minValue) * mXScale + mXTranslate;
             y = float(in.y - mRawPointerAxes.y.minValue) * mYScale + mYTranslate;
+            left = float(rawLeft - mRawPointerAxes.x.minValue) * mXScale + mXTranslate;
+            right = float(rawRight - mRawPointerAxes.x.minValue) * mXScale + mXTranslate;
+            bottom = float(rawBottom - mRawPointerAxes.y.minValue) * mYScale + mYTranslate;
+            top = float(rawTop - mRawPointerAxes.y.minValue) * mYScale + mYTranslate;
             break;
         }
 
@@ -4232,11 +4326,18 @@ void TouchInputMapper::cookPointerData() {
         out.setAxisValue(AMOTION_EVENT_AXIS_SIZE, size);
         out.setAxisValue(AMOTION_EVENT_AXIS_TOUCH_MAJOR, touchMajor);
         out.setAxisValue(AMOTION_EVENT_AXIS_TOUCH_MINOR, touchMinor);
-        out.setAxisValue(AMOTION_EVENT_AXIS_TOOL_MAJOR, toolMajor);
-        out.setAxisValue(AMOTION_EVENT_AXIS_TOOL_MINOR, toolMinor);
         out.setAxisValue(AMOTION_EVENT_AXIS_ORIENTATION, orientation);
         out.setAxisValue(AMOTION_EVENT_AXIS_TILT, tilt);
         out.setAxisValue(AMOTION_EVENT_AXIS_DISTANCE, distance);
+        if (mCalibration.coverageCalibration == Calibration::COVERAGE_CALIBRATION_BOX) {
+            out.setAxisValue(AMOTION_EVENT_AXIS_GENERIC_1, left);
+            out.setAxisValue(AMOTION_EVENT_AXIS_GENERIC_2, top);
+            out.setAxisValue(AMOTION_EVENT_AXIS_GENERIC_3, right);
+            out.setAxisValue(AMOTION_EVENT_AXIS_GENERIC_4, bottom);
+        } else {
+            out.setAxisValue(AMOTION_EVENT_AXIS_TOOL_MAJOR, toolMajor);
+            out.setAxisValue(AMOTION_EVENT_AXIS_TOOL_MINOR, toolMinor);
+        }
 
         // Write output properties.
         PointerProperties& properties = mCurrentCookedPointerData.pointerProperties[i];
@@ -6098,13 +6199,40 @@ void JoystickInputMapper::populateDeviceInfo(InputDeviceInfo* info) {
 
     for (size_t i = 0; i < mAxes.size(); i++) {
         const Axis& axis = mAxes.valueAt(i);
-        info->addMotionRange(axis.axisInfo.axis, AINPUT_SOURCE_JOYSTICK,
-                axis.min, axis.max, axis.flat, axis.fuzz);
+        addMotionRange(axis.axisInfo.axis, axis, info);
+
         if (axis.axisInfo.mode == AxisInfo::MODE_SPLIT) {
-            info->addMotionRange(axis.axisInfo.highAxis, AINPUT_SOURCE_JOYSTICK,
-                    axis.min, axis.max, axis.flat, axis.fuzz);
+            addMotionRange(axis.axisInfo.highAxis, axis, info);
+
         }
     }
+}
+
+void JoystickInputMapper::addMotionRange(int32_t axisId, const Axis& axis,
+        InputDeviceInfo* info) {
+    info->addMotionRange(axisId, AINPUT_SOURCE_JOYSTICK,
+            axis.min, axis.max, axis.flat, axis.fuzz, axis.resolution);
+    /* In order to ease the transition for developers from using the old axes
+     * to the newer, more semantically correct axes, we'll continue to register
+     * the old axes as duplicates of their corresponding new ones.  */
+    int32_t compatAxis = getCompatAxis(axisId);
+    if (compatAxis >= 0) {
+        info->addMotionRange(compatAxis, AINPUT_SOURCE_JOYSTICK,
+                axis.min, axis.max, axis.flat, axis.fuzz, axis.resolution);
+    }
+}
+
+/* A mapping from axes the joystick actually has to the axes that should be
+ * artificially created for compatibility purposes.
+ * Returns -1 if no compatibility axis is needed. */
+int32_t JoystickInputMapper::getCompatAxis(int32_t axis) {
+    switch(axis) {
+    case AMOTION_EVENT_AXIS_LTRIGGER:
+        return AMOTION_EVENT_AXIS_BRAKE;
+    case AMOTION_EVENT_AXIS_RTRIGGER:
+        return AMOTION_EVENT_AXIS_GAS;
+    }
+    return -1;
 }
 
 void JoystickInputMapper::dump(String8& dump) {
@@ -6132,8 +6260,8 @@ void JoystickInputMapper::dump(String8& dump) {
             dump.append(" (invert)");
         }
 
-        dump.appendFormat(": min=%0.5f, max=%0.5f, flat=%0.5f, fuzz=%0.5f\n",
-                axis.min, axis.max, axis.flat, axis.fuzz);
+        dump.appendFormat(": min=%0.5f, max=%0.5f, flat=%0.5f, fuzz=%0.5f, resolution=%0.5f\n",
+                axis.min, axis.max, axis.flat, axis.fuzz, axis.resolution);
         dump.appendFormat(INDENT4 "  scale=%0.5f, offset=%0.5f, "
                 "highScale=%0.5f, highOffset=%0.5f\n",
                 axis.scale, axis.offset, axis.highScale, axis.highOffset);
@@ -6179,18 +6307,21 @@ void JoystickInputMapper::configure(nsecs_t when,
                     float highScale = 1.0f / (rawAxisInfo.maxValue - axisInfo.splitValue);
                     axis.initialize(rawAxisInfo, axisInfo, explicitlyMapped,
                             scale, 0.0f, highScale, 0.0f,
-                            0.0f, 1.0f, rawFlat * scale, rawAxisInfo.fuzz * scale);
+                            0.0f, 1.0f, rawFlat * scale, rawAxisInfo.fuzz * scale,
+                            rawAxisInfo.resolution * scale);
                 } else if (isCenteredAxis(axisInfo.axis)) {
                     float scale = 2.0f / (rawAxisInfo.maxValue - rawAxisInfo.minValue);
                     float offset = avg(rawAxisInfo.minValue, rawAxisInfo.maxValue) * -scale;
                     axis.initialize(rawAxisInfo, axisInfo, explicitlyMapped,
                             scale, offset, scale, offset,
-                            -1.0f, 1.0f, rawFlat * scale, rawAxisInfo.fuzz * scale);
+                            -1.0f, 1.0f, rawFlat * scale, rawAxisInfo.fuzz * scale,
+                            rawAxisInfo.resolution * scale);
                 } else {
                     float scale = 1.0f / (rawAxisInfo.maxValue - rawAxisInfo.minValue);
                     axis.initialize(rawAxisInfo, axisInfo, explicitlyMapped,
                             scale, 0.0f, scale, 0.0f,
-                            0.0f, 1.0f, rawFlat * scale, rawAxisInfo.fuzz * scale);
+                            0.0f, 1.0f, rawFlat * scale, rawAxisInfo.fuzz * scale,
+                            rawAxisInfo.resolution * scale);
                 }
 
                 // To eliminate noise while the joystick is at rest, filter out small variations
@@ -6358,9 +6489,10 @@ void JoystickInputMapper::sync(nsecs_t when, bool force) {
     size_t numAxes = mAxes.size();
     for (size_t i = 0; i < numAxes; i++) {
         const Axis& axis = mAxes.valueAt(i);
-        pointerCoords.setAxisValue(axis.axisInfo.axis, axis.currentValue);
+        setPointerCoordsAxisValue(&pointerCoords, axis.axisInfo.axis, axis.currentValue);
         if (axis.axisInfo.mode == AxisInfo::MODE_SPLIT) {
-            pointerCoords.setAxisValue(axis.axisInfo.highAxis, axis.highCurrentValue);
+            setPointerCoordsAxisValue(&pointerCoords, axis.axisInfo.highAxis,
+                    axis.highCurrentValue);
         }
     }
 
@@ -6374,6 +6506,19 @@ void JoystickInputMapper::sync(nsecs_t when, bool force) {
             AMOTION_EVENT_ACTION_MOVE, 0, metaState, buttonState, AMOTION_EVENT_EDGE_FLAG_NONE,
             ADISPLAY_ID_NONE, 1, &pointerProperties, &pointerCoords, 0, 0, 0);
     getListener()->notifyMotion(&args);
+}
+
+void JoystickInputMapper::setPointerCoordsAxisValue(PointerCoords* pointerCoords,
+        int32_t axis, float value) {
+    pointerCoords->setAxisValue(axis, value);
+    /* In order to ease the transition for developers from using the old axes
+     * to the newer, more semantically correct axes, we'll continue to produce
+     * values for the old axes as mirrors of the value of their corresponding
+     * new axes. */
+    int32_t compatAxis = getCompatAxis(axis);
+    if (compatAxis >= 0) {
+        pointerCoords->setAxisValue(compatAxis, value);
+    }
 }
 
 bool JoystickInputMapper::filterAxes(bool force) {

@@ -146,9 +146,13 @@ public interface ViewParent {
     public View focusSearch(View v, int direction);
 
     /**
-     * Change the z order of the child so it's on top of all other children
+     * Change the z order of the child so it's on top of all other children.
+     * This ordering change may affect layout, if this container
+     * uses an order-dependent layout scheme (e.g., LinearLayout). This
+     * method should be followed by calls to {@link #requestLayout()} and
+     * {@link View#invalidate()} on this parent.
      * 
-     * @param child
+     * @param child The child to bring to the top of the z order
      */
     public void bringChildToFront(View child);
 
@@ -295,4 +299,105 @@ public interface ViewParent {
      * @hide
      */
     public void childAccessibilityStateChanged(View child);
+
+    /**
+     * Tells if this view parent can resolve the layout direction.
+     * See {@link View#setLayoutDirection(int)}
+     *
+     * @return True if this view parent can resolve the layout direction.
+     *
+     * @hide
+     */
+    public boolean canResolveLayoutDirection();
+
+    /**
+     * Tells if this view parent layout direction is resolved.
+     * See {@link View#setLayoutDirection(int)}
+     *
+     * @return True if this view parent layout direction is resolved.
+     *
+     * @hide
+     */
+    public boolean isLayoutDirectionResolved();
+
+    /**
+     * Return this view parent layout direction. See {@link View#getLayoutDirection()}
+     *
+     * @return {@link View#LAYOUT_DIRECTION_RTL} if the layout direction is RTL or returns
+     * {@link View#LAYOUT_DIRECTION_LTR} if the layout direction is not RTL.
+     *
+     * @hide
+     */
+    public int getLayoutDirection();
+
+    /**
+     * Tells if this view parent can resolve the text direction.
+     * See {@link View#setTextDirection(int)}
+     *
+     * @return True if this view parent can resolve the text direction.
+     *
+     * @hide
+     */
+    public boolean canResolveTextDirection();
+
+    /**
+     * Tells if this view parent text direction is resolved.
+     * See {@link View#setTextDirection(int)}
+     *
+     * @return True if this view parent text direction is resolved.
+     *
+     * @hide
+     */
+    public boolean isTextDirectionResolved();
+
+    /**
+     * Return this view parent text direction. See {@link View#getTextDirection()}
+     *
+     * @return the resolved text direction. Returns one of:
+     *
+     * {@link View#TEXT_DIRECTION_FIRST_STRONG}
+     * {@link View#TEXT_DIRECTION_ANY_RTL},
+     * {@link View#TEXT_DIRECTION_LTR},
+     * {@link View#TEXT_DIRECTION_RTL},
+     * {@link View#TEXT_DIRECTION_LOCALE}
+     *
+     * @hide
+     */
+    public int getTextDirection();
+
+    /**
+     * Tells if this view parent can resolve the text alignment.
+     * See {@link View#setTextAlignment(int)}
+     *
+     * @return True if this view parent can resolve the text alignment.
+     *
+     * @hide
+     */
+    public boolean canResolveTextAlignment();
+
+    /**
+     * Tells if this view parent text alignment is resolved.
+     * See {@link View#setTextAlignment(int)}
+     *
+     * @return True if this view parent text alignment is resolved.
+     *
+     * @hide
+     */
+    public boolean isTextAlignmentResolved();
+
+    /**
+     * Return this view parent text alignment. See {@link android.view.View#getTextAlignment()}
+     *
+     * @return the resolved text alignment. Returns one of:
+     *
+     * {@link View#TEXT_ALIGNMENT_GRAVITY},
+     * {@link View#TEXT_ALIGNMENT_CENTER},
+     * {@link View#TEXT_ALIGNMENT_TEXT_START},
+     * {@link View#TEXT_ALIGNMENT_TEXT_END},
+     * {@link View#TEXT_ALIGNMENT_VIEW_START},
+     * {@link View#TEXT_ALIGNMENT_VIEW_END}
+     *
+     * @hide
+     */
+    public int getTextAlignment();
 }

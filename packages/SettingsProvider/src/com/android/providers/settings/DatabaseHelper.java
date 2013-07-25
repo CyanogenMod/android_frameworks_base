@@ -71,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 95;
+    private static final int DATABASE_VERSION = 97;
 
     private Context mContext;
     private int mUserHandle;
@@ -112,7 +112,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, dbNameForUser(userHandle), null, DATABASE_VERSION);
         mContext = context;
         mUserHandle = userHandle;
-        setWriteAheadLoggingEnabled(true);
     }
 
     public static boolean isValidTable(String name) {
@@ -1490,7 +1489,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Redo this step, since somehow it didn't work the first time for some users
             if (mUserHandle == UserHandle.USER_OWNER) {
                 db.beginTransaction();
-                SQLiteStatement stmt = null;
                 try {
                     // Migrate now-global settings
                     String[] settingsToMove = hashsetToStringArray(SettingsProvider.sSystemGlobalKeys);
@@ -1501,7 +1499,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
-                    if (stmt != null) stmt.close();
                 }
             }
             upgradeVersion = 94;
@@ -1524,6 +1521,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
             }
             upgradeVersion = 95;
+        }
+
+        if (upgradeVersion == 95) {
+            if (mUserHandle == UserHandle.USER_OWNER) {
+                db.beginTransaction();
+                try {
+                    String[] settingsToMove = { Settings.Global.BUGREPORT_IN_POWER_MENU };
+                    moveSettingsToNewTable(db, TABLE_SECURE, TABLE_GLOBAL, settingsToMove, true);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+            upgradeVersion = 96;
+        }
+
+        if (upgradeVersion == 96) {
+            // NOP bump due to a reverted change that some people got on upgrade.
+            upgradeVersion = 97;
         }
 
         // *** Remember to update DATABASE_VERSION above!
@@ -2198,9 +2214,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.Global.INSTALL_NON_MARKET_APPS,
                     R.bool.def_install_non_market_apps);
 
-            loadIntegerSetting(stmt, Settings.Global.NETWORK_PREFERENCE,
-                    R.integer.def_network_preference);
-
             loadBooleanSetting(stmt, Settings.Global.USB_MASS_STORAGE_ENABLED,
                     R.bool.def_usb_mass_storage_enabled);
 
@@ -2230,6 +2243,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.string.def_car_undock_sound);
             loadStringSetting(stmt, Settings.Global.WIRELESS_CHARGING_STARTED_SOUND,
                     R.string.def_wireless_charging_started_sound);
+            loadIntegerSetting(stmt, Settings.Global.DOCK_AUDIO_MEDIA_ENABLED,
+                    R.integer.def_dock_audio_media_enabled);
 
             loadBooleanSetting(stmt, Settings.Global.POWER_NOTIFICATIONS_ENABLED,
                     R.bool.def_power_notifications_enabled);

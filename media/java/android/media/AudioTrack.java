@@ -17,13 +17,10 @@
 package android.media;
 
 import java.lang.ref.WeakReference;
-import java.lang.IllegalArgumentException;
-import java.lang.IllegalStateException;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.media.AudioManager;
 import android.util.Log;
 
 
@@ -68,6 +65,11 @@ public class AudioTrack
     private static final float VOLUME_MIN = 0.0f;
     /** Maximum value for a channel volume */
     private static final float VOLUME_MAX = 1.0f;
+
+    /** Minimum value for sample rate */
+    private static final int SAMPLE_RATE_HZ_MIN = 4000;
+    /** Maximum value for sample rate */
+    private static final int SAMPLE_RATE_HZ_MAX = 48000;
 
     /** indicates AudioTrack state is stopped */
     public static final int PLAYSTATE_STOPPED = 1;  // matches SL_PLAYSTATE_STOPPED
@@ -138,7 +140,7 @@ public class AudioTrack
      */
     private static final int NATIVE_EVENT_NEW_POS = 4;
 
-    private final static String TAG = "AudioTrack-Java";
+    private final static String TAG = "android.media.AudioTrack";
 
 
     //--------------------------------------------------------------------------
@@ -157,27 +159,17 @@ public class AudioTrack
      */
     private final Object mPlayStateLock = new Object();
     /**
-     * The listener the AudioTrack notifies when the playback position reaches a marker
-     * or for periodic updates during the progression of the playback head.
-     *  @see #setPlaybackPositionUpdateListener(OnPlaybackPositionUpdateListener)
-     */
-    private OnPlaybackPositionUpdateListener mPositionListener = null;
-    /**
-     * Lock to protect event listener updates against event notifications.
-     */
-    private final Object mPositionListenerLock = new Object();
-    /**
      * Size of the native audio buffer.
      */
     private int mNativeBufferSizeInBytes = 0;
     /**
      * Handler for marker events coming from the native code.
      */
-    private NativeEventHandlerDelegate mEventHandlerDelegate = null;
+    private NativeEventHandlerDelegate mEventHandlerDelegate;
     /**
      * Looper associated with the thread that creates the AudioTrack instance.
      */
-    private Looper mInitializationLooper = null;
+    private final Looper mInitializationLooper;
     /**
      * The audio data sampling rate in Hz.
      */
@@ -305,19 +297,21 @@ public class AudioTrack
     public AudioTrack(int streamType, int sampleRateInHz, int channelConfig, int audioFormat,
             int bufferSizeInBytes, int mode, int sessionId)
     throws IllegalArgumentException {
-        mState = STATE_UNINITIALIZED;
+        // mState already == STATE_UNINITIALIZED
 
         // remember which looper is associated with the AudioTrack instantiation
-        if ((mInitializationLooper = Looper.myLooper()) == null) {
-            mInitializationLooper = Looper.getMainLooper();
+        Looper looper;
+        if ((looper = Looper.myLooper()) == null) {
+            looper = Looper.getMainLooper();
         }
+        mInitializationLooper = looper;
 
         audioParamCheck(streamType, sampleRateInHz, channelConfig, audioFormat, mode);
 
         audioBuffSizeCheck(bufferSizeInBytes);
 
         if (sessionId < 0) {
-            throw (new IllegalArgumentException("Invalid audio session ID: "+sessionId));
+            throw new IllegalArgumentException("Invalid audio session ID: "+sessionId);
         }
 
         int[] session = new int[1];
@@ -370,7 +364,7 @@ public class AudioTrack
            && (streamType != AudioManager.STREAM_NOTIFICATION)
            && (streamType != AudioManager.STREAM_BLUETOOTH_SCO)
            && (streamType != AudioManager.STREAM_DTMF)) {
-            throw (new IllegalArgumentException("Invalid stream type."));
+            throw new IllegalArgumentException("Invalid stream type.");
         } else {
             mStreamType = streamType;
         }
@@ -378,8 +372,8 @@ public class AudioTrack
         //--------------
         // sample rate, note these values are subject to change
         if ( (sampleRateInHz < 4000) || (sampleRateInHz > 48000) ) {
-            throw (new IllegalArgumentException(sampleRateInHz
-                    + "Hz is not a supported sample rate."));
+            throw new IllegalArgumentException(sampleRateInHz
+                    + "Hz is not a supported sample rate.");
         } else {
             mSampleRate = sampleRateInHz;
         }
@@ -406,7 +400,7 @@ public class AudioTrack
                 mChannelCount = 0;
                 mChannels = AudioFormat.CHANNEL_INVALID;
                 mChannelConfiguration = AudioFormat.CHANNEL_INVALID;
-                throw(new IllegalArgumentException("Unsupported channel configuration."));
+                throw new IllegalArgumentException("Unsupported channel configuration.");
             } else {
                 mChannels = channelConfig;
                 mChannelCount = Integer.bitCount(channelConfig);
@@ -430,14 +424,14 @@ public class AudioTrack
             break;
         default:
             mAudioFormat = AudioFormat.ENCODING_INVALID;
-            throw(new IllegalArgumentException("Unsupported sample encoding."
-                + " Should be ENCODING_PCM_8BIT or ENCODING_PCM_16BIT."));
+            throw new IllegalArgumentException("Unsupported sample encoding."
+                + " Should be ENCODING_PCM_8BIT or ENCODING_PCM_16BIT.");
         }
 
         //--------------
         // audio load mode
         if ( (mode != MODE_STREAM) && (mode != MODE_STATIC) ) {
-            throw(new IllegalArgumentException("Invalid mode."));
+            throw new IllegalArgumentException("Invalid mode.");
         } else {
             mDataLoadMode = mode;
         }
@@ -451,7 +445,7 @@ public class AudioTrack
     private static boolean isMultichannelConfigSupported(int channelConfig) {
         // check for unsupported channels
         if ((channelConfig & SUPPORTED_OUT_CHANNELS) != channelConfig) {
-            Log.e(TAG, "Channel configuration features unsupported channels");
+            loge("Channel configuration features unsupported channels");
             return false;
         }
         // check for unsupported multichannel combinations:
@@ -460,14 +454,14 @@ public class AudioTrack
         final int frontPair =
                 AudioFormat.CHANNEL_OUT_FRONT_LEFT | AudioFormat.CHANNEL_OUT_FRONT_RIGHT;
         if ((channelConfig & frontPair) != frontPair) {
-                Log.e(TAG, "Front channels must be present in multichannel configurations");
+                loge("Front channels must be present in multichannel configurations");
                 return false;
         }
         final int backPair =
                 AudioFormat.CHANNEL_OUT_BACK_LEFT | AudioFormat.CHANNEL_OUT_BACK_RIGHT;
         if ((channelConfig & backPair) != 0) {
             if ((channelConfig & backPair) != backPair) {
-                Log.e(TAG, "Rear channels can't be used independently");
+                loge("Rear channels can't be used independently");
                 return false;
             }
         }
@@ -487,7 +481,7 @@ public class AudioTrack
         int frameSizeInBytes = mChannelCount
                 * (mAudioFormat == AudioFormat.ENCODING_PCM_8BIT ? 1 : 2);
         if ((audioBufferSize % frameSizeInBytes != 0) || (audioBufferSize < 1)) {
-            throw (new IllegalArgumentException("Invalid audio buffer size."));
+            throw new IllegalArgumentException("Invalid audio buffer size.");
         }
 
         mNativeBufferSizeInBytes = audioBufferSize;
@@ -523,7 +517,7 @@ public class AudioTrack
      * @return the minimum volume expressed as a linear attenuation.
      */
     static public float getMinVolume() {
-        return AudioTrack.VOLUME_MIN;
+        return VOLUME_MIN;
     }
 
     /**
@@ -532,7 +526,7 @@ public class AudioTrack
      * @return the maximum volume expressed as a linear attenuation.
      */
     static public float getMaxVolume() {
-        return AudioTrack.VOLUME_MAX;
+        return VOLUME_MAX;
     }
 
     /**
@@ -639,6 +633,18 @@ public class AudioTrack
     }
 
     /**
+     * Returns this track's estimated latency in milliseconds. This includes the latency due
+     * to AudioTrack buffer size, AudioMixer (if any) and audio hardware driver.
+     *
+     * DO NOT UNHIDE. The existing approach for doing A/V sync has too many problems. We need
+     * a better solution.
+     * @hide
+     */
+    public int getLatency() {
+        return native_get_latency();
+    }
+
+    /**
      *  Returns the hardware output sample rate
      */
     static public int getNativeOutputSampleRate(int streamType) {
@@ -677,7 +683,7 @@ public class AudioTrack
             if ((channelConfig & SUPPORTED_OUT_CHANNELS) != channelConfig) {
                 // input channel configuration features unsupported channels
                 loge("getMinBufferSize(): Invalid channel configuration.");
-                return AudioTrack.ERROR_BAD_VALUE;
+                return ERROR_BAD_VALUE;
             } else {
                 channelCount = Integer.bitCount(channelConfig);
             }
@@ -691,19 +697,19 @@ public class AudioTrack
             && (audioFormat != AudioFormat.ENCODING_EVRCB)
             && (audioFormat != AudioFormat.ENCODING_EVRCWB)) {
             loge("getMinBufferSize(): Invalid audio format.");
-            return AudioTrack.ERROR_BAD_VALUE;
+            return ERROR_BAD_VALUE;
         }
 
         // sample rate, note these values are subject to change
-        if ( (sampleRateInHz < 4000) || (sampleRateInHz > 48000) ) {
-            loge("getMinBufferSize(): " + sampleRateInHz +"Hz is not a supported sample rate.");
-            return AudioTrack.ERROR_BAD_VALUE;
+        if ( (sampleRateInHz < SAMPLE_RATE_HZ_MIN) || (sampleRateInHz > SAMPLE_RATE_HZ_MAX) ) {
+            loge("getMinBufferSize(): " + sampleRateInHz + " Hz is not a supported sample rate.");
+            return ERROR_BAD_VALUE;
         }
 
         int size = native_get_min_buff_size(sampleRateInHz, channelCount, audioFormat);
-        if ((size == -1) || (size == 0)) {
+        if (size <= 0) {
             loge("getMinBufferSize(): error querying hardware");
-            return AudioTrack.ERROR;
+            return ERROR;
         }
         else {
             return size;
@@ -743,13 +749,11 @@ public class AudioTrack
      */
     public void setPlaybackPositionUpdateListener(OnPlaybackPositionUpdateListener listener,
                                                     Handler handler) {
-        synchronized (mPositionListenerLock) {
-            mPositionListener = listener;
-        }
         if (listener != null) {
-            mEventHandlerDelegate = new NativeEventHandlerDelegate(this, handler);
+            mEventHandlerDelegate = new NativeEventHandlerDelegate(this, listener, handler);
+        } else {
+            mEventHandlerDelegate = null;
         }
-
     }
 
 
@@ -764,7 +768,7 @@ public class AudioTrack
      *    {@link #ERROR_INVALID_OPERATION}
      */
     public int setStereoVolume(float leftVolume, float rightVolume) {
-        if (mState != STATE_INITIALIZED) {
+        if (mState == STATE_UNINITIALIZED) {
             return ERROR_INVALID_OPERATION;
         }
 
@@ -785,6 +789,15 @@ public class AudioTrack
         native_setVolume(leftVolume, rightVolume);
 
         return SUCCESS;
+    }
+
+
+    /**
+     * Similar, except set volume of all channels to same value.
+     * @hide
+     */
+    public int setVolume(float volume) {
+        return setStereoVolume(volume, volume);
     }
 
 
@@ -817,7 +830,7 @@ public class AudioTrack
      *  {@link #ERROR_INVALID_OPERATION}
      */
     public int setNotificationMarkerPosition(int markerInFrames) {
-        if (mState != STATE_INITIALIZED) {
+        if (mState == STATE_UNINITIALIZED) {
             return ERROR_INVALID_OPERATION;
         }
         return native_set_marker_pos(markerInFrames);
@@ -830,7 +843,7 @@ public class AudioTrack
      * @return error code or success, see {@link #SUCCESS}, {@link #ERROR_INVALID_OPERATION}
      */
     public int setPositionNotificationPeriod(int periodInFrames) {
-        if (mState != STATE_INITIALIZED) {
+        if (mState == STATE_UNINITIALIZED) {
             return ERROR_INVALID_OPERATION;
         }
         return native_set_pos_update_period(periodInFrames);
@@ -838,23 +851,26 @@ public class AudioTrack
 
 
     /**
-     * Sets the playback head position. The track must be stopped for the position to be changed.
+     * Sets the playback head position.
+     * The track must be stopped or paused for the position to be changed,
+     * and must use the {@link #MODE_STATIC} mode.
      * @param positionInFrames playback head position expressed in frames
      * @return error code or success, see {@link #SUCCESS}, {@link #ERROR_BAD_VALUE},
      *    {@link #ERROR_INVALID_OPERATION}
      */
     public int setPlaybackHeadPosition(int positionInFrames) {
-        synchronized(mPlayStateLock) {
-            if ((mPlayState == PLAYSTATE_STOPPED) || (mPlayState == PLAYSTATE_PAUSED)) {
-                return native_set_position(positionInFrames);
-            } else {
-                return ERROR_INVALID_OPERATION;
-            }
+        if (mDataLoadMode == MODE_STREAM || mState != STATE_INITIALIZED ||
+                getPlayState() == PLAYSTATE_PLAYING) {
+            return ERROR_INVALID_OPERATION;
         }
+        return native_set_position(positionInFrames);
     }
 
     /**
      * Sets the loop points and the loop count. The loop can be infinite.
+     * Similarly to setPlaybackHeadPosition,
+     * the track must be stopped or paused for the position to be changed,
+     * and must use the {@link #MODE_STATIC} mode.
      * @param startInFrames loop start marker expressed in frames
      * @param endInFrames loop end marker expressed in frames
      * @param loopCount the number of times the loop is looped.
@@ -863,7 +879,8 @@ public class AudioTrack
      *    {@link #ERROR_INVALID_OPERATION}
      */
     public int setLoopPoints(int startInFrames, int endInFrames, int loopCount) {
-        if (mDataLoadMode == MODE_STREAM) {
+        if (mDataLoadMode == MODE_STREAM || mState != STATE_INITIALIZED ||
+                getPlayState() == PLAYSTATE_PLAYING) {
             return ERROR_INVALID_OPERATION;
         }
         return native_set_loop(startInFrames, endInFrames, loopCount);
@@ -890,7 +907,7 @@ public class AudioTrack
     public void play()
     throws IllegalStateException {
         if (mState != STATE_INITIALIZED) {
-            throw(new IllegalStateException("play() called on uninitialized AudioTrack."));
+            throw new IllegalStateException("play() called on uninitialized AudioTrack.");
         }
 
         synchronized(mPlayStateLock) {
@@ -910,7 +927,7 @@ public class AudioTrack
     public void stop()
     throws IllegalStateException {
         if (mState != STATE_INITIALIZED) {
-            throw(new IllegalStateException("stop() called on uninitialized AudioTrack."));
+            throw new IllegalStateException("stop() called on uninitialized AudioTrack.");
         }
 
         // stop playing
@@ -930,7 +947,7 @@ public class AudioTrack
     public void pause()
     throws IllegalStateException {
         if (mState != STATE_INITIALIZED) {
-            throw(new IllegalStateException("pause() called on uninitialized AudioTrack."));
+            throw new IllegalStateException("pause() called on uninitialized AudioTrack.");
         }
         //logd("pause()");
 
@@ -975,22 +992,27 @@ public class AudioTrack
      */
 
     public int write(byte[] audioData, int offsetInBytes, int sizeInBytes) {
-        if ((mDataLoadMode == MODE_STATIC)
-                && (mState == STATE_NO_STATIC_DATA)
-                && (sizeInBytes > 0)) {
-            mState = STATE_INITIALIZED;
-        }
 
-        if (mState != STATE_INITIALIZED) {
+        if (mState == STATE_UNINITIALIZED) {
             return ERROR_INVALID_OPERATION;
         }
 
         if ( (audioData == null) || (offsetInBytes < 0 ) || (sizeInBytes < 0)
+                || (offsetInBytes + sizeInBytes < 0)    // detect integer overflow
                 || (offsetInBytes + sizeInBytes > audioData.length)) {
             return ERROR_BAD_VALUE;
         }
 
-        return native_write_byte(audioData, offsetInBytes, sizeInBytes, mAudioFormat);
+        int ret = native_write_byte(audioData, offsetInBytes, sizeInBytes, mAudioFormat);
+
+        if ((mDataLoadMode == MODE_STATIC)
+                && (mState == STATE_NO_STATIC_DATA)
+                && (ret > 0)) {
+            // benign race with respect to other APIs that read mState
+            mState = STATE_INITIALIZED;
+        }
+
+        return ret;
     }
 
 
@@ -1011,22 +1033,27 @@ public class AudioTrack
      */
 
     public int write(short[] audioData, int offsetInShorts, int sizeInShorts) {
-        if ((mDataLoadMode == MODE_STATIC)
-                && (mState == STATE_NO_STATIC_DATA)
-                && (sizeInShorts > 0)) {
-            mState = STATE_INITIALIZED;
-        }
 
-        if (mState != STATE_INITIALIZED) {
+        if (mState == STATE_UNINITIALIZED) {
             return ERROR_INVALID_OPERATION;
         }
 
         if ( (audioData == null) || (offsetInShorts < 0 ) || (sizeInShorts < 0)
+                || (offsetInShorts + sizeInShorts < 0)  // detect integer overflow
                 || (offsetInShorts + sizeInShorts > audioData.length)) {
             return ERROR_BAD_VALUE;
         }
 
-        return native_write_short(audioData, offsetInShorts, sizeInShorts, mAudioFormat);
+        int ret = native_write_short(audioData, offsetInShorts, sizeInShorts, mAudioFormat);
+
+        if ((mDataLoadMode == MODE_STATIC)
+                && (mState == STATE_NO_STATIC_DATA)
+                && (ret > 0)) {
+            // benign race with respect to other APIs that read mState
+            mState = STATE_INITIALIZED;
+        }
+
+        return ret;
     }
 
 
@@ -1038,7 +1065,7 @@ public class AudioTrack
      *  {@link #ERROR_INVALID_OPERATION}
      */
     public int reloadStaticData() {
-        if (mDataLoadMode == MODE_STREAM) {
+        if (mDataLoadMode == MODE_STREAM || mState != STATE_INITIALIZED) {
             return ERROR_INVALID_OPERATION;
         }
         return native_reload_static();
@@ -1066,7 +1093,7 @@ public class AudioTrack
      *    {@link #ERROR_INVALID_OPERATION}, {@link #ERROR_BAD_VALUE}
      */
     public int attachAuxEffect(int effectId) {
-        if (mState != STATE_INITIALIZED) {
+        if (mState == STATE_UNINITIALIZED) {
             return ERROR_INVALID_OPERATION;
         }
         return native_attachAuxEffect(effectId);
@@ -1088,7 +1115,7 @@ public class AudioTrack
      *    {@link #ERROR_INVALID_OPERATION}
      */
     public int setAuxEffectSendLevel(float level) {
-        if (mState != STATE_INITIALIZED) {
+        if (mState == STATE_UNINITIALIZED) {
             return ERROR_INVALID_OPERATION;
         }
         // clamp the level
@@ -1132,11 +1159,11 @@ public class AudioTrack
      * (potentially) handled in a different thread
      */
     private class NativeEventHandlerDelegate {
-        private final AudioTrack mAudioTrack;
         private final Handler mHandler;
 
-        NativeEventHandlerDelegate(AudioTrack track, Handler handler) {
-            mAudioTrack = track;
+        NativeEventHandlerDelegate(final AudioTrack track,
+                                   final OnPlaybackPositionUpdateListener listener,
+                                   Handler handler) {
             // find the looper for our new event handler
             Looper looper;
             if (handler != null) {
@@ -1152,27 +1179,22 @@ public class AudioTrack
                 mHandler = new Handler(looper) {
                     @Override
                     public void handleMessage(Message msg) {
-                        if (mAudioTrack == null) {
+                        if (track == null) {
                             return;
-                        }
-                        OnPlaybackPositionUpdateListener listener = null;
-                        synchronized (mPositionListenerLock) {
-                            listener = mAudioTrack.mPositionListener;
                         }
                         switch(msg.what) {
                         case NATIVE_EVENT_MARKER:
                             if (listener != null) {
-                                listener.onMarkerReached(mAudioTrack);
+                                listener.onMarkerReached(track);
                             }
                             break;
                         case NATIVE_EVENT_NEW_POS:
                             if (listener != null) {
-                                listener.onPeriodicNotification(mAudioTrack);
+                                listener.onPeriodicNotification(track);
                             }
                             break;
                         default:
-                            Log.e(TAG, "[ android.media.AudioTrack.NativeEventHandler ] " +
-                                    "Unknown event type: " + msg.what);
+                            loge("Unknown native event type: " + msg.what);
                             break;
                         }
                     }
@@ -1200,10 +1222,13 @@ public class AudioTrack
             return;
         }
 
-        if (track.mEventHandlerDelegate != null) {
-            Message m =
-                track.mEventHandlerDelegate.getHandler().obtainMessage(what, arg1, arg2, obj);
-            track.mEventHandlerDelegate.getHandler().sendMessage(m);
+        NativeEventHandlerDelegate delegate = track.mEventHandlerDelegate;
+        if (delegate != null) {
+            Handler handler = delegate.getHandler();
+            if (handler != null) {
+                Message m = handler.obtainMessage(what, arg1, arg2, obj);
+                handler.sendMessage(m);
+            }
         }
 
     }
@@ -1253,13 +1278,13 @@ public class AudioTrack
     private native final int native_set_position(int position);
     private native final int native_get_position();
 
+    private native final int native_get_latency();
+
     private native final int native_set_loop(int start, int end, int loopCount);
 
     static private native final int native_get_output_sample_rate(int streamType);
     static private native final int native_get_min_buff_size(
             int sampleRateInHz, int channelConfig, int audioFormat);
-
-    private native final int native_get_session_id();
 
     private native final int native_attachAuxEffect(int effectId);
     private native final void native_setAuxEffectSendLevel(float level);
@@ -1269,11 +1294,11 @@ public class AudioTrack
     //------------------
 
     private static void logd(String msg) {
-        Log.d(TAG, "[ android.media.AudioTrack ] " + msg);
+        Log.d(TAG, msg);
     }
 
     private static void loge(String msg) {
-        Log.e(TAG, "[ android.media.AudioTrack ] " + msg);
+        Log.e(TAG, msg);
     }
 
 }

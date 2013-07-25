@@ -302,27 +302,27 @@ public class KeyEvent extends InputEvent implements Parcelable {
     public static final int KEYCODE_SWITCH_CHARSET  = 95;   // switch char-sets (Kanji,Katakana)
     /** Key code constant: A Button key.
      * On a game controller, the A button should be either the button labeled A
-     * or the first button on the upper row of controller buttons. */
+     * or the first button on the bottom row of controller buttons. */
     public static final int KEYCODE_BUTTON_A        = 96;
     /** Key code constant: B Button key.
      * On a game controller, the B button should be either the button labeled B
-     * or the second button on the upper row of controller buttons. */
+     * or the second button on the bottom row of controller buttons. */
     public static final int KEYCODE_BUTTON_B        = 97;
     /** Key code constant: C Button key.
      * On a game controller, the C button should be either the button labeled C
-     * or the third button on the upper row of controller buttons. */
+     * or the third button on the bottom row of controller buttons. */
     public static final int KEYCODE_BUTTON_C        = 98;
     /** Key code constant: X Button key.
      * On a game controller, the X button should be either the button labeled X
-     * or the first button on the lower row of controller buttons. */
+     * or the first button on the upper row of controller buttons. */
     public static final int KEYCODE_BUTTON_X        = 99;
     /** Key code constant: Y Button key.
      * On a game controller, the Y button should be either the button labeled Y
-     * or the second button on the lower row of controller buttons. */
+     * or the second button on the upper row of controller buttons. */
     public static final int KEYCODE_BUTTON_Y        = 100;
     /** Key code constant: Z Button key.
      * On a game controller, the Z button should be either the button labeled Z
-     * or the third button on the lower row of controller buttons. */
+     * or the third button on the upper row of controller buttons. */
     public static final int KEYCODE_BUTTON_Z        = 101;
     /** Key code constant: L1 Button key.
      * On a game controller, the L1 button should be either the button labeled L1 (or L)
@@ -623,8 +623,14 @@ public class KeyEvent extends InputEvent implements Parcelable {
     /** Key code constant: Assist key.
      * Launches the global assist activity.  Not delivered to applications. */
     public static final int KEYCODE_ASSIST          = 219;
+    /** Key code constant: Brightness Down key.
+     * Adjusts the screen brightness down. */
+    public static final int KEYCODE_BRIGHTNESS_DOWN = 220;
+    /** Key code constant: Brightness Up key.
+     * Adjusts the screen brightness up. */
+    public static final int KEYCODE_BRIGHTNESS_UP   = 221;
 
-    private static final int LAST_KEYCODE           = KEYCODE_ASSIST;
+    private static final int LAST_KEYCODE           = KEYCODE_BRIGHTNESS_UP;
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
@@ -866,6 +872,8 @@ public class KeyEvent extends InputEvent implements Parcelable {
         names.append(KEYCODE_RO, "KEYCODE_RO");
         names.append(KEYCODE_KANA, "KEYCODE_KANA");
         names.append(KEYCODE_ASSIST, "KEYCODE_ASSIST");
+        names.append(KEYCODE_BRIGHTNESS_DOWN, "KEYCODE_BRIGHTNESS_DOWN");
+        names.append(KEYCODE_BRIGHTNESS_UP, "KEYCODE_BRIGHTNESS_UP");
     };
 
     // Symbolic names of all metakeys in bit order from least significant to most significant.
@@ -1223,6 +1231,12 @@ public class KeyEvent extends InputEvent implements Parcelable {
      * keys when numlock is off).
      */
     public static final int FLAG_FALLBACK = 0x400;
+
+    /**
+     * Signifies that the key is being predispatched.
+     * @hide
+     */
+    public static final int FLAG_PREDISPATCH = 0x20000000;
 
     /**
      * Private control to determine when an app is tracking a key sequence.
@@ -2808,7 +2822,7 @@ public class KeyEvent extends InputEvent implements Parcelable {
      *
      * @param symbolicName The symbolic name of the keycode.
      * @return The keycode or {@link #KEYCODE_UNKNOWN} if not found.
-     * @see #keycodeToString
+     * @see #keycodeToString(int)
      */
     public static int keyCodeFromString(String symbolicName) {
         if (symbolicName == null) {

@@ -43,6 +43,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.RemoteControlClient;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -64,6 +65,7 @@ import android.widget.RemoteViews.OnClickHandler;
 
 import com.android.internal.R;
 import com.android.internal.policy.impl.keyguard.KeyguardSecurityModel.SecurityMode;
+import com.android.internal.policy.impl.keyguard.KeyguardUpdateMonitor.DisplayClientState;
 import com.android.internal.widget.LockPatternUtils;
 
 import java.io.File;
@@ -71,9 +73,16 @@ import java.util.List;
 
 public class KeyguardHostView extends KeyguardViewBase {
     private static final String TAG = "KeyguardHostView";
+    // Transport control states.
+    static final int TRANSPORT_GONE = 0;
+    static final int TRANSPORT_INVISIBLE = 1;
+    static final int TRANSPORT_VISIBLE = 2;
+
+    private int mTransportState = TRANSPORT_GONE;
 
     // Use this to debug all of keyguard
     public static boolean DEBUG = KeyguardViewMediator.DEBUG;
+    public static boolean DEBUGXPORT = true; // debug music transport control
 
     // Found in KeyguardAppWidgetPickActivity.java
     static final int APPWIDGET_HOST_ID = 0x4B455947;
@@ -112,14 +121,14 @@ public class KeyguardHostView extends KeyguardViewBase {
     private boolean mSafeModeEnabled;
 
     private boolean mUserSetupCompleted;
-    // User for whom this host view was created
-    private int mUserId;
 
-    /*package*/ interface TransportCallback {
-        void onListenerDetached();
-        void onListenerAttached();
-        void onPlayStateChanged();
-    }
+    // User for whom this host view was created.  Final because we should never change the
+    // id without reconstructing an instance of KeyguardHostView. See note below...
+    private final int mUserId;
+
+    private KeyguardMultiUserSelectorView mKeyguardMultiUserSelectorView;
+
+    protected int mClientGeneration;
 
     /*package*/ interface UserSwitcherCallback {
         void hideSecurityView(int duration);
@@ -139,19 +148,19 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     public KeyguardHostView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        if (DEBUG) Log.e(TAG, "KeyguardHostView()");
+
         mLockPatternUtils = new LockPatternUtils(context);
+
+        // Note: This depends on KeyguardHostView getting reconstructed every time the
+        // user switches, since mUserId will be used for the entire session.
+        // Once created, keyguard should *never* re-use this instance with another user.
+        // In other words, mUserId should never change - hence it's marked final.
         mUserId = mLockPatternUtils.getCurrentUser();
-        mAppWidgetHost = new AppWidgetHost(
-                context, APPWIDGET_HOST_ID, mOnClickHandler, Looper.myLooper());
-        mAppWidgetHost.setUserId(mUserId);
-
-        mAppWidgetManager = AppWidgetManager.getInstance(mContext);
-        mSecurityModel = new KeyguardSecurityModel(context);
-
-        mViewStateManager = new KeyguardViewStateManager(this);
 
         DevicePolicyManager dpm =
-            (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
+                (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
         if (dpm != null) {
             mDisabledFeatures = getDisabledFeatures(dpm);
             mCameraDisabled = dpm.getCameraDisabled(null);
@@ -159,8 +168,36 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         cleanupAppWidgetIds();
         mSafeModeEnabled = LockPatternUtils.isSafeModeEnabled();
+
+        // These need to be created with the user context...
+        Context userContext = null;
+        try {
+            final String packageName = "system";
+            userContext = mContext.createPackageContextAsUser(packageName, 0,
+                    new UserHandle(mUserId));
+
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+            // This should never happen, but it's better to have no widgets than to crash.
+            userContext = context;
+        }
+
+        mAppWidgetHost = new AppWidgetHost(userContext, APPWIDGET_HOST_ID, mOnClickHandler,
+                Looper.myLooper());
+
+        cleanupAppWidgetIds();
+
+        mAppWidgetManager = AppWidgetManager.getInstance(userContext);
+
+        mSecurityModel = new KeyguardSecurityModel(context);
+
+        mViewStateManager = new KeyguardViewStateManager(this);
+
         mUserSetupCompleted = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.USER_SETUP_COMPLETE, 0, UserHandle.USER_CURRENT) != 0;
+
+        // Ensure we have the current state *before* we call showAppropriateWidgetPage()
+        getInitialTransportState();
 
         if (mSafeModeEnabled) {
             Log.v(TAG, "Keyguard widgets disabled by safe mode");
@@ -173,6 +210,16 @@ public class KeyguardHostView extends KeyguardViewBase {
         }
     }
 
+    private void getInitialTransportState() {
+        DisplayClientState dcs = KeyguardUpdateMonitor.getInstance(mContext)
+                .getCachedDisplayClientState();
+        mTransportState = (dcs.clearing ? TRANSPORT_GONE :
+            (isMusicPlaying(dcs.playbackState) ? TRANSPORT_VISIBLE : TRANSPORT_INVISIBLE));
+
+        if (DEBUG) Log.v(TAG, "Initial transport state: "
+                + mTransportState + ", pbstate=" + dcs.playbackState);
+    }
+
     private void cleanupAppWidgetIds() {
         // Since this method may delete a widget (which we can't do until boot completed) we
         // may have to defer it until after boot complete.
@@ -180,32 +227,34 @@ public class KeyguardHostView extends KeyguardViewBase {
             mCleanupAppWidgetsOnBootCompleted = true;
             return;
         }
-        // Clean up appWidgetIds that are bound to lockscreen, but not actually used
-        // This is only to clean up after another bug: we used to not call
-        // deleteAppWidgetId when a user manually deleted a widget in keyguard. This code
-        // shouldn't have to run more than once per user. AppWidgetProviders rely on callbacks
-        // that are triggered by deleteAppWidgetId, which is why we're doing this
-        int[] appWidgetIdsInKeyguardSettings = mLockPatternUtils.getAppWidgets();
-        int[] appWidgetIdsBoundToHost = mAppWidgetHost.getAppWidgetIds();
-        int fallbackWidgetId = mLockPatternUtils.getFallbackAppWidgetId();
-        for (int i = 0; i < appWidgetIdsBoundToHost.length; i++) {
-            int appWidgetId = appWidgetIdsBoundToHost[i];
-            if (!contains(appWidgetIdsInKeyguardSettings, appWidgetId)) {
-                if (appWidgetId == fallbackWidgetId) {
-                    if (widgetsDisabledByDpm()) {
-                        // Ignore attempts to delete the fallback widget when widgets
-                        // are disabled
-                        continue;
-                    } else {
-                        // Reset fallback widget id in the event that widgets have been
-                        // enabled, and fallback widget is being deleted
-                        mLockPatternUtils.writeFallbackAppWidgetId(
-                                AppWidgetManager.INVALID_APPWIDGET_ID);
+        if (!mSafeModeEnabled && !widgetsDisabledByDpm()) {
+            // Clean up appWidgetIds that are bound to lockscreen, but not actually used
+            // This is only to clean up after another bug: we used to not call
+            // deleteAppWidgetId when a user manually deleted a widget in keyguard. This code
+            // shouldn't have to run more than once per user. AppWidgetProviders rely on callbacks
+            // that are triggered by deleteAppWidgetId, which is why we're doing this
+            int[] appWidgetIdsInKeyguardSettings = mLockPatternUtils.getAppWidgets();
+            int[] appWidgetIdsBoundToHost = mAppWidgetHost.getAppWidgetIds();
+            int fallbackWidgetId = mLockPatternUtils.getFallbackAppWidgetId();
+            for (int i = 0; i < appWidgetIdsBoundToHost.length; i++) {
+                int appWidgetId = appWidgetIdsBoundToHost[i];
+                if (!contains(appWidgetIdsInKeyguardSettings, appWidgetId)) {
+                    if (appWidgetId == fallbackWidgetId) {
+                        if (widgetsDisabledByDpm()) {
+                            // Ignore attempts to delete the fallback widget when widgets
+                            // are disabled
+                            continue;
+                        } else {
+                            // Reset fallback widget id in the event that widgets have been
+                            // enabled, and fallback widget is being deleted
+                            mLockPatternUtils.writeFallbackAppWidgetId(
+                                    AppWidgetManager.INVALID_APPWIDGET_ID);
+                        }
                     }
+                    Log.d(TAG, "Found a appWidgetId that's not being used by keyguard, deleting id "
+                            + appWidgetId);
+                    mAppWidgetHost.deleteAppWidgetId(appWidgetId);
                 }
-                Log.d(TAG, "Found a appWidgetId that's not being used by keyguard, deleting id "
-                        + appWidgetId);
-                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
             }
         }
     }
@@ -233,7 +282,58 @@ public class KeyguardHostView extends KeyguardViewBase {
                 mCleanupAppWidgetsOnBootCompleted = false;
             }
         }
+        @Override
+        public void onUserSwitchComplete(int userId) {
+            if (mKeyguardMultiUserSelectorView != null) {
+                mKeyguardMultiUserSelectorView.finalizeActiveUserView(true);
+            }
+        }
+        @Override
+        void onMusicClientIdChanged(
+                int clientGeneration, boolean clearing, android.app.PendingIntent intent) {
+            // Set transport state to invisible until we know music is playing (below)
+            if (DEBUGXPORT && (mClientGeneration != clientGeneration || clearing)) {
+                Log.v(TAG, (clearing ? "hide" : "show") + " transport, gen:" + clientGeneration);
+            }
+            mClientGeneration = clientGeneration;
+            final int newState = (clearing ? TRANSPORT_GONE
+                    : (mTransportState == TRANSPORT_VISIBLE ?
+                    TRANSPORT_VISIBLE : TRANSPORT_INVISIBLE));
+            if (newState != mTransportState) {
+                mTransportState = newState;
+                if (DEBUGXPORT) Log.v(TAG, "update widget: transport state changed");
+                KeyguardHostView.this.post(mSwitchPageRunnable);
+            }
+        }
+        @Override
+        public void onMusicPlaybackStateChanged(int playbackState, long eventTime) {
+            if (DEBUGXPORT) Log.v(TAG, "music state changed: " + playbackState);
+            if (mTransportState != TRANSPORT_GONE) {
+                final int newState = (isMusicPlaying(playbackState) ?
+                        TRANSPORT_VISIBLE : TRANSPORT_INVISIBLE);
+                if (newState != mTransportState) {
+                    mTransportState = newState;
+                    if (DEBUGXPORT) Log.v(TAG, "update widget: play state changed");
+                    KeyguardHostView.this.post(mSwitchPageRunnable);
+                }
+            }
+        }
     };
+
+    private static final boolean isMusicPlaying(int playbackState) {
+        // This should agree with the list in AudioService.isPlaystateActive()
+        switch (playbackState) {
+            case RemoteControlClient.PLAYSTATE_PLAYING:
+            case RemoteControlClient.PLAYSTATE_BUFFERING:
+            case RemoteControlClient.PLAYSTATE_FAST_FORWARDING:
+            case RemoteControlClient.PLAYSTATE_REWINDING:
+            case RemoteControlClient.PLAYSTATE_SKIPPING_BACKWARDS:
+            case RemoteControlClient.PLAYSTATE_SKIPPING_FORWARDS:
+                return true;
+            default:
+                return false;
+        }
+    }
 
     private SlidingChallengeLayout mSlidingChallengeLayout;
 
@@ -257,10 +357,15 @@ public class KeyguardHostView extends KeyguardViewBase {
     }
 
     private int getWidgetPosition(int id) {
-        final int children = mAppWidgetContainer.getChildCount();
+        final KeyguardWidgetPager appWidgetContainer = mAppWidgetContainer;
+        final int children = appWidgetContainer.getChildCount();
         for (int i = 0; i < children; i++) {
-            if (mAppWidgetContainer.getWidgetPageAt(i).getContent().getId() == id) {
+            final View content = appWidgetContainer.getWidgetPageAt(i).getContent();
+            if (content != null && content.getId() == id) {
                 return i;
+            } else if (content == null) {
+                // Attempt to track down bug #8886916
+                Log.w(TAG, "*** Null content at " + "i=" + i + ",id=" + id + ",N=" + children);
             }
         }
         return -1;
@@ -294,9 +399,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         mKeyguardSelectorView = (KeyguardSelectorView) findViewById(R.id.keyguard_selector_view);
         mViewStateManager.setSecurityViewContainer(mSecurityViewContainer);
 
-        if (!(mContext instanceof Activity)) {
-            setSystemUiVisibility(getSystemUiVisibility() | View.STATUS_BAR_DISABLE_BACK);
-        }
+        setBackButtonEnabled(false);
 
         updateBackground();
         addDefaultWidgets();
@@ -364,6 +467,13 @@ public class KeyguardHostView extends KeyguardViewBase {
         }
     }
 
+    private void setBackButtonEnabled(boolean enabled) {
+        if (mContext instanceof Activity) return;  // always enabled in activity mode
+        setSystemUiVisibility(enabled ?
+                getSystemUiVisibility() & ~View.STATUS_BAR_DISABLE_BACK :
+                getSystemUiVisibility() | View.STATUS_BAR_DISABLE_BACK);
+    }
+
     private boolean shouldEnableAddWidget() {
         return numWidgets() < MAX_WIDGETS && mUserSetupCompleted;
     }
@@ -417,19 +527,15 @@ public class KeyguardHostView extends KeyguardViewBase {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mAppWidgetHost.startListeningAsUser(mUserId);
+        mAppWidgetHost.startListening();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mUpdateMonitorCallbacks);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mAppWidgetHost.stopListeningAsUser(mUserId);
+        mAppWidgetHost.stopListening();
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mUpdateMonitorCallbacks);
-    }
-
-    private AppWidgetHost getAppWidgetHost() {
-        return mAppWidgetHost;
     }
 
     void addWidget(AppWidgetHostView view, int pageIndex) {
@@ -474,6 +580,12 @@ public class KeyguardHostView extends KeyguardViewBase {
             }
         }
     };
+
+    public void initializeSwitchingUserState(boolean switching) {
+        if (!switching && mKeyguardMultiUserSelectorView != null) {
+            mKeyguardMultiUserSelectorView.finalizeActiveUserView(false);
+        }
+    }
 
     public void userActivity() {
         if (mViewMediatorCallback != null) {
@@ -941,6 +1053,10 @@ public class KeyguardHostView extends KeyguardViewBase {
             // Discard current runnable if we're switching back to the selector view
             setOnDismissAction(null);
         }
+        if (securityMode == SecurityMode.Account && !mLockPatternUtils.isPermanentlyLocked()) {
+            // we're showing account as a backup, provide a way to get back to primary
+            setBackButtonEnabled(true);
+        }
         mCurrentSecuritySelection = securityMode;
     }
 
@@ -1073,12 +1189,13 @@ public class KeyguardHostView extends KeyguardViewBase {
     private boolean addWidget(int appId, int pageIndex, boolean updateDbIfFailed) {
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appId);
         if (appWidgetInfo != null) {
-            AppWidgetHostView view = getAppWidgetHost().createView(mContext, appId, appWidgetInfo);
+            AppWidgetHostView view = mAppWidgetHost.createView(mContext, appId, appWidgetInfo);
             addWidget(view, pageIndex);
             return true;
         } else {
             if (updateDbIfFailed) {
-                Log.w(TAG, "AppWidgetInfo for app widget id " + appId + " was null, deleting");
+                Log.w(TAG, "*** AppWidgetInfo for app widget id " + appId + "  was null for user"
+                        + mUserId + ", deleting");
                 mAppWidgetHost.deleteAppWidgetId(appId);
                 mLockPatternUtils.removeAppWidget(appId);
             }
@@ -1145,10 +1262,8 @@ public class KeyguardHostView extends KeyguardViewBase {
     }
 
     private void addDefaultWidgets() {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        inflater.inflate(R.layout.keyguard_transport_control_view, this, true);
-
         if (!mSafeModeEnabled && !widgetsDisabledByDpm()) {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
             View addWidget = inflater.inflate(R.layout.keyguard_add_widget, this, false);
             mAppWidgetContainer.addWidget(addWidget, 0);
             View addWidgetButton = addWidget.findViewById(R.id.keyguard_add_widget_view);
@@ -1174,66 +1289,19 @@ public class KeyguardHostView extends KeyguardViewBase {
         }
 
         enableUserSelectorIfNecessary();
-        initializeTransportControl();
     }
 
-    private boolean removeTransportFromWidgetPager() {
-        int page = getWidgetPosition(R.id.keyguard_transport_control);
-        if (page != -1) {
-            mAppWidgetContainer.removeWidget(mTransportControl);
-
-            // XXX keep view attached so we still get show/hide events from AudioManager
-            KeyguardHostView.this.addView(mTransportControl);
-            mTransportControl.setVisibility(View.GONE);
-            mViewStateManager.setTransportState(KeyguardViewStateManager.TRANSPORT_GONE);
-            return true;
+    /**
+     * Create KeyguardTransportControlView on demand.
+     * @return
+     */
+    private KeyguardTransportControlView getOrCreateTransportControl() {
+        if (mTransportControl == null) {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            mTransportControl = (KeyguardTransportControlView)
+                    inflater.inflate(R.layout.keyguard_transport_control_view, this, false);
         }
-        return false;
-    }
-
-    private void addTransportToWidgetPager() {
-        if (getWidgetPosition(R.id.keyguard_transport_control) == -1) {
-            KeyguardHostView.this.removeView(mTransportControl);
-            // insert to left of camera if it exists, otherwise after right-most widget
-            int lastWidget = mAppWidgetContainer.getChildCount() - 1;
-            int position = 0; // handle no widget case
-            if (lastWidget >= 0) {
-                position = mAppWidgetContainer.isCameraPage(lastWidget) ?
-                        lastWidget : lastWidget + 1;
-            }
-            mAppWidgetContainer.addWidget(mTransportControl, position);
-            mTransportControl.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void initializeTransportControl() {
-        mTransportControl =
-            (KeyguardTransportControlView) findViewById(R.id.keyguard_transport_control);
-        mTransportControl.setVisibility(View.GONE);
-
-        // This code manages showing/hiding the transport control. We keep it around and only
-        // add it to the hierarchy if it needs to be present.
-        if (mTransportControl != null) {
-            mTransportControl.setKeyguardCallback(new TransportCallback() {
-                @Override
-                public void onListenerDetached() {
-                    if (removeTransportFromWidgetPager()) {
-                        mTransportControl.post(mSwitchPageRunnable);
-                    }
-                }
-
-                @Override
-                public void onListenerAttached() {
-                    // Transport will be added when playstate changes...
-                    mTransportControl.post(mSwitchPageRunnable);
-                }
-
-                @Override
-                public void onPlayStateChanged() {
-                    mTransportControl.post(mSwitchPageRunnable);
-                }
-            });
-        }
+        return mTransportControl;
     }
 
     private int getInsertPageIndex() {
@@ -1402,25 +1470,28 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     @Override
     public Parcelable onSaveInstanceState() {
-        if (DEBUG) Log.d(TAG, "onSaveInstanceState");
+        if (DEBUG) Log.d(TAG, "onSaveInstanceState, tstate=" + mTransportState);
         Parcelable superState = super.onSaveInstanceState();
         SavedState ss = new SavedState(superState);
-        ss.transportState = mViewStateManager.getTransportState();
+        // If the transport is showing, force it to show it on restore.
+        final boolean showing = mTransportControl != null
+                && mAppWidgetContainer.getWidgetPageIndex(mTransportControl) >= 0;
+        ss.transportState =  showing ? TRANSPORT_VISIBLE : mTransportState;
         ss.appWidgetToShow = mAppWidgetToShow;
         return ss;
     }
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
-        if (DEBUG) Log.d(TAG, "onRestoreInstanceState");
         if (!(state instanceof SavedState)) {
             super.onRestoreInstanceState(state);
             return;
         }
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        mViewStateManager.setTransportState(ss.transportState);
+        mTransportState = (ss.transportState);
         mAppWidgetToShow = ss.appWidgetToShow;
+        if (DEBUG) Log.d(TAG, "onRestoreInstanceState, transport=" + mTransportState);
         post(mSwitchPageRunnable);
     }
 
@@ -1440,17 +1511,52 @@ public class KeyguardHostView extends KeyguardViewBase {
     }
 
     private void showAppropriateWidgetPage() {
-        int state = mViewStateManager.getTransportState();
-        boolean isMusicPlaying = mTransportControl.isMusicPlaying()
-                || state == KeyguardViewStateManager.TRANSPORT_VISIBLE;
-        if (isMusicPlaying) {
-            mViewStateManager.setTransportState(KeyguardViewStateManager.TRANSPORT_VISIBLE);
-            addTransportToWidgetPager();
-        } else if (state == KeyguardViewStateManager.TRANSPORT_VISIBLE) {
-            mViewStateManager.setTransportState(KeyguardViewStateManager.TRANSPORT_INVISIBLE);
-        }
-        int pageToShow = getAppropriateWidgetPage(isMusicPlaying);
+        int state = mTransportState;
+        ensureTransportPresentOrRemoved(state);
+        int pageToShow = getAppropriateWidgetPage(state);
         mAppWidgetContainer.setCurrentPage(pageToShow);
+    }
+
+    /**
+     * Examines the current state and adds the transport to the widget pager when the state changes.
+     *
+     * Showing the initial transport and keeping it around is a bit tricky because the signals
+     * coming from music players aren't always clear. Here's how the states are handled:
+     *
+     * {@link TRANSPORT_GONE} means we have no reason to show the transport - remove it if present.
+     *
+     * {@link TRANSPORT_INVISIBLE} means we have potential to show the transport because a music
+     * player is registered but not currently playing music (or we don't know the state yet). The
+     * code adds it conditionally on play state.
+     *
+     * {@link #TRANSPORT_VISIBLE} means a music player is active and transport should be showing.
+     *
+     * Once the transport is showing, we always show it until keyguard is dismissed. This state is
+     * maintained by onSave/RestoreInstanceState(). This state is cleared in
+     * {@link KeyguardViewManager#hide} when keyguard is dismissed, which causes the transport to be
+     * gone when keyguard is restarted until we get an update with the current state.
+     *
+     * @param state
+     */
+    private void ensureTransportPresentOrRemoved(int state) {
+        final boolean showing = getWidgetPosition(R.id.keyguard_transport_control) != -1;
+        final boolean visible = state == TRANSPORT_VISIBLE;
+        final boolean shouldBeVisible = state == TRANSPORT_INVISIBLE && isMusicPlaying(state);
+        if (!showing && (visible || shouldBeVisible)) {
+            if (DEBUGXPORT) Log.v(TAG, "add transport");
+            // insert to left of camera if it exists, otherwise after right-most widget
+            int lastWidget = mAppWidgetContainer.getChildCount() - 1;
+            int position = 0; // handle no widget case
+            if (lastWidget >= 0) {
+                position = mAppWidgetContainer.isCameraPage(lastWidget) ?
+                        lastWidget : lastWidget + 1;
+            }
+            mAppWidgetContainer.addWidget(getOrCreateTransportControl(), position);
+        } else if (showing && state == TRANSPORT_GONE) {
+            if (DEBUGXPORT) Log.v(TAG, "remove transport");
+            mAppWidgetContainer.removeWidget(getOrCreateTransportControl());
+            mTransportControl = null;
+        }
     }
 
     private CameraWidgetFrame findCameraPage() {
@@ -1466,7 +1572,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         return pageIndex >= 0 && pageIndex == getWidgetPosition(R.id.keyguard_transport_control);
     }
 
-    private int getAppropriateWidgetPage(boolean isMusicPlaying) {
+    private int getAppropriateWidgetPage(int musicTransportState) {
         // assumes at least one widget (besides camera + add)
         if (mAppWidgetToShow != AppWidgetManager.INVALID_APPWIDGET_ID) {
             final int childCount = mAppWidgetContainer.getChildCount();
@@ -1479,9 +1585,9 @@ public class KeyguardHostView extends KeyguardViewBase {
             mAppWidgetToShow = AppWidgetManager.INVALID_APPWIDGET_ID;
         }
         // if music playing, show transport
-        if (isMusicPlaying) {
+        if (musicTransportState == TRANSPORT_VISIBLE) {
             if (DEBUG) Log.d(TAG, "Music playing, show transport");
-            return mAppWidgetContainer.getWidgetPageIndex(mTransportControl);
+            return mAppWidgetContainer.getWidgetPageIndex(getOrCreateTransportControl());
         }
 
         // else show the right-most widget (except for camera)
@@ -1524,10 +1630,9 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         if (users.size() > 1) {
             if (multiUserView instanceof KeyguardMultiUserSelectorView) {
-                KeyguardMultiUserSelectorView multiUser =
-                        (KeyguardMultiUserSelectorView) multiUserView;
-                multiUser.setVisibility(View.VISIBLE);
-                multiUser.addUsers(users);
+                mKeyguardMultiUserSelectorView = (KeyguardMultiUserSelectorView) multiUserView;
+                mKeyguardMultiUserSelectorView.setVisibility(View.VISIBLE);
+                mKeyguardMultiUserSelectorView.addUsers(users);
                 UserSwitcherCallback callback = new UserSwitcherCallback() {
                     @Override
                     public void hideSecurityView(int duration) {
@@ -1553,7 +1658,7 @@ public class KeyguardHostView extends KeyguardViewBase {
                         }
                     }
                 };
-                multiUser.setCallback(callback);
+                mKeyguardMultiUserSelectorView.setCallback(callback);
             } else {
                 Throwable t = new Throwable();
                 t.fillInStackTrace();
@@ -1568,7 +1673,13 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     @Override
     public void cleanUp() {
-
+        // Make sure we let go of all widgets and their package contexts promptly. If we don't do
+        // this, and the associated application is uninstalled, it can cause a soft reboot.
+        int count = mAppWidgetContainer.getChildCount();
+        for (int i = 0; i < count; i++) {
+            KeyguardWidgetFrame frame = mAppWidgetContainer.getWidgetPageAt(i);
+            frame.removeAllViews();
+        }
     }
 
     /**
@@ -1622,6 +1733,12 @@ public class KeyguardHostView extends KeyguardViewBase {
     }
 
     public boolean handleBackKey() {
+        if (mCurrentSecuritySelection == SecurityMode.Account) {
+            // go back to primary screen and re-disable back
+            setBackButtonEnabled(false);
+            showPrimarySecurityScreen(false /*turningOff*/);
+            return true;
+        }
         if (mCurrentSecuritySelection != SecurityMode.None) {
             mCallback.dismiss(false);
             return true;
@@ -1638,7 +1755,7 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     public void showAssistant() {
         final Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-          .getAssistIntent(mContext, UserHandle.USER_CURRENT);
+          .getAssistIntent(mContext, true, UserHandle.USER_CURRENT);
 
         if (intent == null) return;
 

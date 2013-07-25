@@ -193,9 +193,9 @@
       </li>
     </ul>
   </li><!-- end getting started -->
-  
-  
-  
+
+
+
 
   <li class="nav-section">
     <div class="nav-section-header">
@@ -204,7 +204,7 @@
       </a>
     </div>
     <ul>
-      
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/managing-audio/index.html"
@@ -255,8 +255,8 @@
     </ul>
   </li>
   <!-- End multimedia -->
-      
-      
+
+
 
   <li class="nav-section">
     <div class="nav-section-header">
@@ -265,7 +265,7 @@
       </a>
     </div>
     <ul>
-      
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/displaying-bitmaps/index.html"
@@ -285,6 +285,10 @@
           </li>
           <li><a href="<?cs var:toroot ?>training/displaying-bitmaps/cache-bitmap.html">
             Caching Bitmaps
+          </a>
+          </li>
+          <li><a href="<?cs var:toroot ?>training/displaying-bitmaps/manage-memory.html">
+            Managing Bitmap Memory
           </a>
           </li>
           <li><a href="<?cs var:toroot ?>training/displaying-bitmaps/display-bitmap.html">
@@ -360,7 +364,7 @@
     </ul>
   </li>
   <!-- End graphics and animation -->
-      
+
 
   <li class="nav-section">
     <div class="nav-section-header">
@@ -370,7 +374,6 @@
       </a>
     </div>
     <ul>
-
 
       <li class="nav-section">
         <div class="nav-section-header">
@@ -395,7 +398,7 @@
           </li>
         </ul>
       </li>
-      
+
        <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/basics/network-ops/index.html"
@@ -465,12 +468,49 @@
           </a>
           </li>
         </ul>
+        <li><a href="<?cs var:toroot ?>training/cloudsave/conflict-res.html"
+           description=
+           "How to design a robust conflict resolution strategy for apps that save data to the cloud."
+           >Resolving Cloud Save Conflicts
+          </a>
+          </li>
       </li>
+      <li class="nav-section">
+        <div class="nav-section-header">
+          <a href="<?cs var:toroot ?>training/sync-adapters/index.html"
+             description="How to transfer data between the cloud and the device using the Android
+             sync adapter framework"
+             >Transferring Data Using Sync Adapters</a>
+        </div>
+        <ul>
+            <li>
+                <a href="<?cs var:toroot ?>training/sync-adapters/creating-authenticator.html">
+                Creating a Stub Authenticator
+                </a>
+            </li>
+            <li>
+                <a href="<?cs var:toroot ?>training/sync-adapters/creating-stub-provider.html">
+                Creating a Stub Content Provider
+                </a>
+            </li>
+            <li>
+                <a href="<?cs var:toroot ?>training/sync-adapters/creating-sync-adapter.html">
+                Creating a Sync Adapter
+                </a>
+            </li>
+            <li>
+                <a href="<?cs var:toroot ?>training/sync-adapters/running-sync-adapter.html">
+                Running a Sync Adapter
+                </a>
+            </li>
+        </ul>
+      </li>
+
     </ul>
   </li>
   <!-- End connectivity and cloud -->
-  
-  
+
+
 
   <li class="nav-section">
     <div class="nav-section-header">
@@ -480,7 +520,37 @@
       </a>
     </div>
     <ul>
-    
+      <li class="nav-section">
+        <div class="nav-section-header">
+          <a href="<?cs var:toroot ?>training/contacts-provider/index.html"
+             description=
+             "How to use Android's central address book, the Contacts Provider, to
+             display contacts and their details and modify contact information.">
+          Accessing Contacts Data</a>
+        </div>
+        <ul>
+          <li>
+                <a href="<?cs var:toroot ?>training/contacts-provider/retrieve-names.html">
+                Retrieving a List of Contacts
+                </a>
+          </li>
+          <li>
+                <a href="<?cs var:toroot ?>training/contacts-provider/retrieve-details.html">
+                Retrieving Details for a Contact
+                </a>
+          </li>
+          <li>
+                <a href="<?cs var:toroot ?>training/contacts-provider/modify-data.html">
+                Modifying Contacts Using Intents
+                </a>
+          </li>
+          <li>
+                <a href="<?cs var:toroot ?>training/contacts-provider/display-contact-badge.html">
+                Displaying the Quick Contact Badge
+                </a>
+          </li>
+        </ul>
+      </li>
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/id-auth/index.html"
@@ -507,23 +577,33 @@
 
       <li class="nav-section">
         <div class="nav-section-header">
-          <a href="<?cs var:toroot ?>training/basics/location/index.html"
-             description=
-             "How to add location-aware features to your app by aqcuiring the user's current
-             location."
-            >Making Your App Location Aware</a>
+          <a href="<?cs var:toroot ?>training/location/index.html"
+             description="How to add location-aware features to your app by getting the user's current location.">
+             Making Your App Location-Aware
+          </a>
         </div>
         <ul>
-          <li><a href="<?cs var:toroot ?>training/basics/location/locationmanager.html">
-            Using the Location Manager
-          </a>
+          <li>
+            <a href="<?cs var:toroot ?>training/location/retrieve-current.html">
+            Retrieving the Current Location
+            </a>
           </li>
-          <li><a href="<?cs var:toroot ?>training/basics/location/currentlocation.html">
-            Obtaining the Current Location
-          </a>
+          <li>
+            <a href="<?cs var:toroot ?>training/location/receive-location-updates.html">
+            Receiving Location Updates
+            </a>
           </li>
-          <li><a href="<?cs var:toroot ?>training/basics/location/geocoding.html">
+          <li>
+            <a href="<?cs var:toroot ?>training/location/display-address.html">
             Displaying a Location Address
+          </a>
+          </li>
+          <li><a href="<?cs var:toroot ?>training/location/geofencing.html">
+            Creating and Monitoring Geofences
+          </a>
+          </li>
+          <li><a href="<?cs var:toroot ?>training/location/activity-recognition.html">
+          Recognizing the User's Current Activity
           </a>
           </li>
         </ul>
@@ -531,8 +611,8 @@
     </ul>
   </li>
   <!-- End privacy and location -->
-      
-      
+
+
 
   <li class="nav-section">
     <div class="nav-section-header">
@@ -580,20 +660,25 @@
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/implementing-navigation/index.html"
              description=
-             "How to implement various navigation patterns such as swipe views and up navigation."
+             "How to implement various navigation patterns such as swipe views,
+             a navigation drawer, and up navigation."
             >Implementing Effective Navigation</a>
         </div>
         <ul>
           <li><a href="<?cs var:toroot ?>training/implementing-navigation/lateral.html">
-            Implementing Lateral Navigation
+            Creating Swipe Views with Tabs
+          </a>
+          </li>
+          <li><a href="<?cs var:toroot ?>training/implementing-navigation/nav-drawer.html">
+            Creating a Navigation Drawer
           </a>
           </li>
           <li><a href="<?cs var:toroot ?>training/implementing-navigation/ancestral.html">
-            Implementing Ancestral Navigation
+            Providing Up Navigation
           </a>
           </li>
           <li><a href="<?cs var:toroot ?>training/implementing-navigation/temporal.html">
-            Implementing Temporal Navigation
+            Providing Proper Back Navigation
           </a>
           </li>
           <li><a href="<?cs var:toroot ?>training/implementing-navigation/descendant.html">
@@ -662,12 +747,12 @@
           </li>
         </ul>
       </li>
-      
-      
+
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="/training/multiscreen/index.html"
-             zh-CN-lang="针对多种屏幕进行设计"
+             zh-cn-lang="针对多种屏幕进行设计"
              ja-lang="複数画面のデザイン"
              es-lang="Cómo diseñar aplicaciones para varias pantallas"
              description=
@@ -678,20 +763,20 @@
         </div>
         <ul>
           <li><a href="/training/multiscreen/screensizes.html"
-            zh-CN-lang="支持各种屏幕尺寸"
+            zh-cn-lang="支持各种屏幕尺寸"
             ko-lang="다양한 화면 크기 지원"
             ja-lang="さまざまな画面サイズのサポート"
             es-lang="Cómo admitir varios tamaños de pantalla"
             >Supporting Different Screen Sizes</a>
           </li>
           <li><a href="/training/multiscreen/screendensities.html"
-            zh-CN-lang="支持各种屏幕密度"
+            zh-cn-lang="支持各种屏幕密度"
             ja-lang="さまざまな画面密度のサポート"
             es-lang="Cómo admitir varias densidades de pantalla"
             >Supporting Different Screen Densities</a>
           </li>
           <li><a href="/training/multiscreen/adaptui.html"
-            zh-CN-lang="实施自适应用户界面流程"
+            zh-cn-lang="实施自适应用户界面流程"
             ja-lang="順応性のある UI フローの実装"
             es-lang="Cómo implementar interfaces de usuario adaptables"
             >Implementing Adaptive UI Flows</a>
@@ -721,7 +806,7 @@
           </li>
         </ul>
       </li>
-      
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/custom-views/index.html"
@@ -776,7 +861,7 @@
           </li>
         </ul>
       </li>
-      
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/accessibility/index.html"
@@ -796,11 +881,11 @@
           </li>
         </ul>
       </li>
-      
+
     </ul>
   </li>
   <!-- End best UX and UI -->
-  
+
 
   <li class="nav-section">
     <div class="nav-section-header">
@@ -810,7 +895,7 @@
       </a>
     </div>
     <ul>
-         
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/gestures/index.html"
@@ -845,7 +930,7 @@
           </li>
         </ul>
       </li>
-      
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/keyboard-input/index.html"
@@ -875,7 +960,7 @@
         </ul>
       </li>
     </ul>
-  </li> <!-- end of User Input -->    
+  </li> <!-- end of User Input -->
 
   <li class="nav-section">
     <div class="nav-section-header">
@@ -885,7 +970,7 @@
       </a>
     </div>
     <ul>
-      
+
       <li>
         <a href="<?cs var:toroot ?>training/articles/perf-tips.html"
            description=
@@ -893,7 +978,7 @@
            responsiveness and battery efficiency."
           >Performance Tips</a>
       </li>
-      
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/improving-layouts/index.html"
@@ -962,11 +1047,11 @@
           </li>
         </ul>
       </li>
-      
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="/training/monitoring-device-state/index.html"
-             zh-CN-lang="优化电池使用时间"
+             zh-cn-lang="优化电池使用时间"
              ja-lang="電池消費量の最適化"
              es-lang="Cómo optimizar la duración de la batería"
              description=
@@ -976,25 +1061,25 @@
         </div>
         <ul>
           <li><a href="/training/monitoring-device-state/battery-monitoring.html"
-            zh-CN-lang="监控电池电量和充电状态"
+            zh-cn-lang="监控电池电量和充电状态"
             ja-lang="電池残量と充電状態の監視"
             es-lang="Cómo controlar el nivel de batería y el estado de carga"
             >Monitoring the Battery Level and Charging State</a>
           </li>
           <li><a href="/training/monitoring-device-state/docking-monitoring.html"
-            zh-CN-lang="确定和监控基座对接状态和类型"
+            zh-cn-lang="确定和监控基座对接状态和类型"
             ja-lang="ホルダーの装着状態とタイプの特定と監視"
             es-lang="Cómo determinar y controlar el tipo de conector y el estado de la conexión"
             >Determining and Monitoring the Docking State and Type</a>
           </li>
           <li><a href="/training/monitoring-device-state/connectivity-monitoring.html"
-            zh-CN-lang="确定和监控网络连接状态"
+            zh-cn-lang="确定和监控网络连接状态"
             ja-lang="接続状態の特定と監視"
             es-lang="Cómo determinar y controlar el estado de la conectividad"
             >Determining and Monitoring the Connectivity Status</a>
           </li>
           <li><a href="/training/monitoring-device-state/manifest-receivers.html"
-            zh-CN-lang="根据需要操作广播接收器"
+            zh-cn-lang="根据需要操作广播接收器"
             ja-lang="オンデマンドでのブロードキャスト レシーバ操作"
             es-lang="Cómo manipular los receptores de emisión bajo demanda"
             >Manipulating Broadcast Receivers On Demand</a>
@@ -1028,7 +1113,7 @@
           </li>
         </ul>
       </li>
-      
+
       <li>
         <a href="<?cs var:toroot ?>training/articles/perf-anr.html"
            description=
@@ -1036,7 +1121,7 @@
            display an &quot;Application Not Responding&quot; dialog."
           >Keeping Your App Responsive</a>
       </li>
-      
+
       <li>
         <a href="<?cs var:toroot ?>training/articles/perf-jni.html"
            description=
@@ -1051,8 +1136,8 @@
       </li>
     </ul>
   </li> <!-- end of Performance -->
-      
-      
+
+
 
   <li class="nav-section">
     <div class="nav-section-header">
@@ -1069,7 +1154,14 @@
            "How to perform various tasks and keep your app's data and your user's data secure."
           >Security Tips</a>
       </li>
-      
+
+      <li>
+        <a href="<?cs var:toroot ?>training/articles/security-ssl.html"
+           description=
+           "How to ensure that your app is secure when performing network transactions."
+          >Security with HTTPS and SSL</a>
+      </li>
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/enterprise/index.html"
@@ -1121,7 +1213,7 @@
           </li>
         </ul>
       </li>
-      
+
       <li class="nav-section">
         <div class="nav-section-header">
           <a href="<?cs var:toroot ?>training/multiple-apks/index.html"

@@ -30,21 +30,18 @@ import android.view.View;
 import android.view.WindowManager;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 /**
  * Version of WindowToken that is specifically for a particular application (or
  * really activity) that is displaying windows.
  */
 class AppWindowToken extends WindowToken {
-    // The user who owns this app window token.
-    final int userId;
     // Non-null only for application tokens.
     final IApplicationToken appToken;
 
     // All of the windows and child windows that are included in this
     // application token.  Note this list is NOT sorted!
-    final ArrayList<WindowState> allAppWindows = new ArrayList<WindowState>();
+    final WindowList allAppWindows = new WindowList();
     final AppWindowAnimator mAppAnimator;
 
     final WindowAnimator mAnimator;
@@ -66,6 +63,9 @@ class AppWindowToken extends WindowToken {
     int numDrawnWindows;
     boolean inPendingTransaction;
     boolean allDrawn;
+    // Set to true when this app creates a surface while in the middle of an animation. In that
+    // case do not clear allDrawn until the animation completes.
+    boolean deferClearAllDrawn;
 
     // Is this token going to be hidden in a little while?  If so, it
     // won't be taken into account for setting the screen orientation.
@@ -100,10 +100,9 @@ class AppWindowToken extends WindowToken {
     // Input application handle used by the input dispatcher.
     final InputApplicationHandle mInputApplicationHandle;
 
-    AppWindowToken(WindowManagerService _service, int _userId, IApplicationToken _token) {
+    AppWindowToken(WindowManagerService _service, IApplicationToken _token) {
         super(_service, _token.asBinder(),
                 WindowManager.LayoutParams.TYPE_APPLICATION, true);
-        userId = _userId;
         appWindowToken = this;
         appToken = _token;
         mInputApplicationHandle = new InputApplicationHandle(this);
@@ -154,7 +153,7 @@ class AppWindowToken extends WindowToken {
                         + win.isDrawnLw()
                         + ", isAnimating=" + win.mWinAnimator.isAnimating());
                 if (!win.isDrawnLw()) {
-                    Slog.v(WindowManagerService.TAG, "Not displayed: s=" + win.mWinAnimator.mSurface
+                    Slog.v(WindowManagerService.TAG, "Not displayed: s=" + win.mWinAnimator.mSurfaceControl
                             + " pv=" + win.mPolicyVisibility
                             + " mDrawState=" + win.mWinAnimator.mDrawState
                             + " ah=" + win.mAttachedHidden
@@ -224,12 +223,26 @@ class AppWindowToken extends WindowToken {
         return null;
     }
 
+    boolean isVisible() {
+        final int N = allAppWindows.size();
+        for (int i=0; i<N; i++) {
+            WindowState win = allAppWindows.get(i);
+            if (!win.mAppFreezing
+                    && (win.mViewVisibility == View.VISIBLE ||
+                        (win.mWinAnimator.isAnimating() &&
+                                !service.mAppTransition.isTransitionSet()))
+                    && !win.mDestroying && win.isDrawnLw()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     void dump(PrintWriter pw, String prefix) {
         super.dump(pw, prefix);
         if (appToken != null) {
-            pw.print(prefix); pw.print("app=true");
-                    pw.print(" userId="); pw.println(userId);
+            pw.print(prefix); pw.println("app=true");
         }
         if (allAppWindows.size() > 0) {
             pw.print(prefix); pw.print("allAppWindows="); pw.println(allAppWindows);
