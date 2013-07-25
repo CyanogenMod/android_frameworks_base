@@ -22,9 +22,9 @@ import android.widget.ImageView;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
-import com.android.systemui.statusbar.policy.BrightnessController;
-import com.android.systemui.statusbar.policy.BrightnessController.BrightnessStateChangeCallback;
-import com.android.systemui.statusbar.policy.ToggleSlider;
+import com.android.systemui.settings.BrightnessController;
+import com.android.systemui.settings.BrightnessController.BrightnessStateChangeCallback;
+import com.android.systemui.settings.ToggleSlider;
 
 public class BrightnessTile extends QuickSettingsTile implements BrightnessStateChangeCallback {
 

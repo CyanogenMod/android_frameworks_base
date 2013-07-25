@@ -191,15 +191,8 @@ public class PieSysInfo extends PieSliceContainer implements ValueAnimator.Anima
     }
 
     private SimpleDateFormat getTimeFormat() {
-        int formatResId;
 
-        if (DateFormat.is24HourFormat(mContext)) {
-            formatResId = com.android.internal.R.string.twenty_four_hour_time_format;
-        } else {
-            formatResId = com.android.internal.R.string.twelve_hour_time_format;
-        }
-
-        String format = mContext.getString(formatResId);
+        String format = DateFormat.getTimeFormatString(mContext);
         if (format.equals(mTimeFormatString)) {
             return mTimeFormat;
         }
