@@ -105,7 +105,7 @@ jint android_os_Process_getUidForName(JNIEnv* env, jobject clazz, jstring name)
     const jchar* str16 = env->GetStringCritical(name, 0);
     String8 name8;
     if (str16) {
-        name8 = String8(str16, env->GetStringLength(name));
+        name8 = String8((char16_t*)str16, env->GetStringLength(name));
         env->ReleaseStringCritical(name, str16);
     }
 
@@ -136,7 +136,7 @@ jint android_os_Process_getGidForName(JNIEnv* env, jobject clazz, jstring name)
     const jchar* str16 = env->GetStringCritical(name, 0);
     String8 name8;
     if (str16) {
-        name8 = String8(str16, env->GetStringLength(name));
+        name8 = String8((char16_t*)str16, env->GetStringLength(name));
         env->ReleaseStringCritical(name, str16);
     }
 
@@ -397,7 +397,7 @@ void android_os_Process_setArgV0(JNIEnv* env, jobject clazz, jstring name)
     const jchar* str = env->GetStringCritical(name, 0);
     String8 name8;
     if (str) {
-        name8 = String8(str, env->GetStringLength(name));
+        name8 = String8((char16_t*)str, env->GetStringLength(name));
         env->ReleaseStringCritical(name, str);
     }
 

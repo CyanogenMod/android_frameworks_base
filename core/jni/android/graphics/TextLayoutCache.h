@@ -80,7 +80,7 @@ public:
 
     static int compare(const TextLayoutCacheKey& lhs, const TextLayoutCacheKey& rhs);
 
-    inline const UChar* getText() const { return textCopy.string(); }
+    inline const UChar* getText() const { return (UChar*)textCopy.string(); }
 
     bool operator==(const TextLayoutCacheKey& other) const {
         return compare(*this, other) == 0;

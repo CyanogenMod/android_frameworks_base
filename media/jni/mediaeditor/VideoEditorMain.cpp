@@ -269,15 +269,15 @@ static void videoEditor_clearSurface(JNIEnv* pEnv,
                                     jobject surface);
 
 static JNINativeMethod gManualEditMethods[] = {
-    {"getVersion",               "()L"VERSION_CLASS_NAME";",
+    {"getVersion",               "()L" VERSION_CLASS_NAME ";",
                                 (void *)videoEditor_getVersion      },
     {"_init",                    "(Ljava/lang/String;Ljava/lang/String;)V",
                                 (void *)videoEditor_init    },
     {"nativeStartPreview",       "(Landroid/view/Surface;JJIZ)V",
                                 (void *)videoEditor_startPreview    },
     {"nativePopulateSettings",
-            "(L"EDIT_SETTINGS_CLASS_NAME";L"PREVIEW_PROPERTIES_CLASS_NAME";L"
-            AUDIO_SETTINGS_CLASS_NAME";)V",
+            "(L" EDIT_SETTINGS_CLASS_NAME ";L" PREVIEW_PROPERTIES_CLASS_NAME ";L"
+            AUDIO_SETTINGS_CLASS_NAME ";)V",
                                 (void *)videoEditor_populateSettings    },
     {"nativeRenderPreviewFrame", "(Landroid/view/Surface;JII)I",
                                 (int *)videoEditor_renderPreviewFrame     },
@@ -301,7 +301,7 @@ static JNINativeMethod gManualEditMethods[] = {
                                 (int *)videoEditor_generateAudioWaveFormSync },
     {"nativeGenerateRawAudio",  "(Ljava/lang/String;Ljava/lang/String;)I",
                                 (int *)videoEditor_generateAudioRawFile      },
-    {"nativeGenerateClip",      "(L"EDIT_SETTINGS_CLASS_NAME";)I",
+    {"nativeGenerateClip",      "(L" EDIT_SETTINGS_CLASS_NAME ";)I",
                                 (void *)videoEditor_generateClip  },
     {"nativeClearSurface",       "(Landroid/view/Surface;)V",
                                 (void *)videoEditor_clearSurface  },
@@ -1585,7 +1585,7 @@ videoEditor_populateSettings(
                                      "not initialized");
 
     jfieldID fid = pEnv->GetFieldID(mPreviewClipPropClazz,"clipProperties",
-            "[L"PROPERTIES_CLASS_NAME";"  );
+            "[L" PROPERTIES_CLASS_NAME ";"  );
     videoEditJava_checkAndThrowIllegalStateException(&needToBeLoaded, pEnv,
                                      (M4OSA_NULL == fid),
                                      "not initialized");
@@ -1655,7 +1655,7 @@ videoEditor_populateSettings(
             M4OSA_TRACE1_0("cannot find object field for mEffectsClazz");
             goto videoEditor_populateSettings_cleanup;
         }
-        fid = pEnv->GetFieldID(mEditClazz,"effectSettingsArray", "[L"EFFECT_SETTINGS_CLASS_NAME";"  );
+        fid = pEnv->GetFieldID(mEditClazz,"effectSettingsArray", "[L" EFFECT_SETTINGS_CLASS_NAME ";"  );
         if(fid == M4OSA_NULL)
         {
             M4OSA_TRACE1_0("cannot find field for effectSettingsArray Array");

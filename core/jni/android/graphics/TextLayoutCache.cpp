@@ -407,7 +407,7 @@ void TextLayoutShaper::computeValues(const SkPaint* paint, const UChar* chars,
                     } else if (!U_SUCCESS(status) || rc < 1) {
                         ALOGW("Need to force to single run -- string = '%s',"
                                 " status = %d, rc = %d",
-                                String8(chars + start, count).string(), status, int(rc));
+				String8((const char16_t*)chars + start, count).string(), status, int(rc));
                         isRTL = (paraDir == 1);
                         useSingleRun = true;
                     } else {
@@ -918,7 +918,7 @@ sp<TextLayoutValue> TextLayoutEngine::getValue(const SkPaint* paint, const jchar
             contextCount, dirFlags);
     if (value == NULL) {
         ALOGE("Cannot get TextLayoutCache value for text = '%s'",
-                String8(text + start, count).string());
+		String8((const char16_t*)text + start, count).string());
     }
 #else
     value = new TextLayoutValue(count);
