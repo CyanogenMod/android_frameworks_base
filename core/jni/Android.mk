@@ -7,6 +7,7 @@ LOCAL_CFLAGS += -U__APPLE__
 LOCAL_CFLAGS += -Wno-unused-parameter -Wno-int-to-pointer-cast
 LOCAL_CFLAGS += -Wno-maybe-uninitialized -Wno-parentheses
 LOCAL_CPPFLAGS += -Wno-conversion-null
+LOCAL_CFLAGS += -fno-strict-aliasing
 
 ifeq ($(TARGET_ARCH), arm)
 	LOCAL_CFLAGS += -DPACKED="__attribute__ ((packed))"
