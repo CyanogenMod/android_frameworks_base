@@ -492,6 +492,7 @@ public class AudioService extends IAudioService.Stub {
         sSoundEffectVolumeDb = context.getResources().getInteger(
                 com.android.internal.R.integer.config_soundEffectVolumeDb);
 
+        mVolumePanel = new VolumePanel(context, this);
         mForcedUseForComm = AudioSystem.FORCE_NONE;
 
         createAudioSystemThread();
