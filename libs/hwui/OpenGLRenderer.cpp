@@ -190,6 +190,7 @@ void OpenGLRenderer::setupFrameState(float left, float top,
     mSaveCount = 1;
 
     mSnapshot->setClip(left, top, right, bottom);
+    mTilingClip.set(left, top, right, bottom);
 }
 
 status_t OpenGLRenderer::startFrame() {
