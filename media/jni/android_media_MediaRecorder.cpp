@@ -444,10 +444,10 @@ android_media_MediaRecorder_native_setup(JNIEnv *env, jobject thiz, jobject weak
     mr->setListener(listener);
 
    // Convert client name jstring to String16
-    const char16_t *rawClientName = env->GetStringChars(packageName, NULL);
+    const char16_t *rawClientName = (char16_t*)env->GetStringChars(packageName, NULL);
     jsize rawClientNameLen = env->GetStringLength(packageName);
     String16 clientName(rawClientName, rawClientNameLen);
-    env->ReleaseStringChars(packageName, rawClientName);
+    env->ReleaseStringChars(packageName, (jchar*)rawClientName);
 
     // pass client package name for permissions tracking
     mr->setClientName(clientName);
