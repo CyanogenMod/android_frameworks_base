@@ -321,6 +321,18 @@ public final class HeaderSet {
                     }
                 }
                 break;
+            case CONNECTION_ID:
+                if (headerValue == null) {
+                    mConnectionID = null;
+                } else {
+                    if (!(headerValue instanceof byte[])) {
+                        throw new IllegalArgumentException("Connection ID must be a byte array");
+                    } else {
+                        mConnectionID = new byte[((byte[])headerValue).length];
+                        System.arraycopy(headerValue, 0, mConnectionID, 0, mConnectionID.length);
+                    }
+                }
+                break;
             case HTTP:
                 if (headerValue == null) {
                     mHttpHeader = null;
@@ -444,6 +456,8 @@ public final class HeaderSet {
     public Object getHeader(int headerID) throws IOException {
 
         switch (headerID) {
+            case CONNECTION_ID:
+                return mConnectionID;
             case COUNT:
                 return mCount;
             case NAME:
@@ -503,6 +517,9 @@ public final class HeaderSet {
     public int[] getHeaderList() throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
+        if (mConnectionID != null) {
+            out.write(CONNECTION_ID);
+        }
         if (mCount != null) {
             out.write(COUNT);
         }
