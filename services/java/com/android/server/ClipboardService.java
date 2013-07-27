@@ -34,6 +34,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Process;
@@ -58,6 +59,7 @@ public class ClipboardService extends IClipboard.Stub {
     private final PackageManager mPm;
     private final AppOpsManager mAppOps;
     private final IBinder mPermissionOwner;
+    private final Handler mHandler = new Handler();
 
     private class ListenerInfo {
         final int mUid;
@@ -160,9 +162,22 @@ public class ClipboardService extends IClipboard.Stub {
             }
             checkDataOwnerLocked(clip, Binder.getCallingUid());
             clearActiveOwnersLocked();
-            PerUserClipboard clipboard = getClipboard();
+            final PerUserClipboard clipboard = getClipboard();
             clipboard.primaryClip = clip;
+
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    callPrimaryClipListeners(clipboard);
+                }
+            });
+        }
+    }
+
+    private void callPrimaryClipListeners(PerUserClipboard clipboard) {
+        synchronized (this) {
             final int n = clipboard.primaryClipListeners.beginBroadcast();
+
             for (int i = 0; i < n; i++) {
                 try {
                     ListenerInfo li = (ListenerInfo)
@@ -173,11 +188,11 @@ public class ClipboardService extends IClipboard.Stub {
                                 .dispatchPrimaryClipChanged();
                     }
                 } catch (RemoteException e) {
-
                     // The RemoteCallbackList will take care of removing
                     // the dead object for us.
                 }
             }
+
             clipboard.primaryClipListeners.finishBroadcast();
         }
     }
