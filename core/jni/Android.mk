@@ -226,7 +226,7 @@ ifeq ($(TARGET_ARCH), arm)
     LOCAL_SRC_FILES+= \
 		android/graphics/Bitmap.cpp.arm
   else
-    ifeq ($(TARGET_ARCH_VARIANT_CPU), cortex-a15)
+    ifeq ($(TARGET_CPU_VARIANT), cortex-a15)
       TARGET_arm_CFLAGS += -DUSE_NEON_BITMAP_OPTS -mvectorize-with-neon-quad
       LOCAL_SRC_FILES+= \
 		android/graphics/Bitmap.cpp.arm
