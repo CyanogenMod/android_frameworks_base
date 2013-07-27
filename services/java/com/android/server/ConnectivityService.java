@@ -932,6 +932,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     @Override
     public boolean isNetworkSupported(int networkType) {
+        log("CODEWORKX: isNetworkSupported() networkType = " + networkType);
+        log("CODEWORKX: isNetworkSupported() isNetworkTypeValid() = " + isNetworkTypeValid(networkType));
+        log("CODEWORKX: isNetworkSupported() mNetTrackers[networkType] = " + mNetTrackers[networkType]);
         enforceAccessPermission();
         return (isNetworkTypeValid(networkType) && (mNetTrackers[networkType] != null));
     }
