@@ -2111,6 +2111,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     Settings.Secure.ACCESSIBILITY_DISPLAY_MAGNIFICATION_AUTO_UPDATE,
                     R.bool.def_accessibility_display_magnification_auto_update);
 
+            loadIntegerSetting(stmt, Settings.Secure.DIALPAD_AUTOCOMPLETE,
+                    R.integer.def_dialpad_autocomplete);
+
             loadBooleanSetting(stmt, Settings.Secure.USER_SETUP_COMPLETE,
                     R.bool.def_user_setup_complete);
         } finally {
