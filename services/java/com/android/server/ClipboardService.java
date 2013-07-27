@@ -162,6 +162,9 @@ public class ClipboardService extends IClipboard.Stub {
             clearActiveOwnersLocked();
             PerUserClipboard clipboard = getClipboard();
             clipboard.primaryClip = clip;
+
+            // Check and call listeners as the service itself
+            long token = Binder.clearCallingIdentity();
             final int n = clipboard.primaryClipListeners.beginBroadcast();
             for (int i = 0; i < n; i++) {
                 try {
@@ -179,6 +182,7 @@ public class ClipboardService extends IClipboard.Stub {
                 }
             }
             clipboard.primaryClipListeners.finishBroadcast();
+            Binder.restoreCallingIdentity(token);
         }
     }
     
