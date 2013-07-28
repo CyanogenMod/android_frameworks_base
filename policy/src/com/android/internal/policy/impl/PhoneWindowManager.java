@@ -1221,6 +1221,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
      * eg. Disable long press on home goes to recents on sw600dp.
      */
     private void readConfigurationDependentBehaviors() {
+        /* TEMP DISABLE: This conflicts with CM's own multi-behavior code 
         mLongPressOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_longPressOnHomeBehavior);
         if (mLongPressOnHomeBehavior < LONG_PRESS_HOME_NOTHING ||
@@ -1234,6 +1235,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mDoubleTapOnHomeBehavior > DOUBLE_TAP_HOME_RECENT_SYSTEM_UI) {
             mDoubleTapOnHomeBehavior = LONG_PRESS_HOME_NOTHING;
         }
+        */
     }
 
     @Override
@@ -2388,6 +2390,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                 }
 
+                /* TEMP DISABLE: This conflicts with CM's own multi-behavior code 
                 // Delay handling home if a double-tap is possible.
                 if (mDoubleTapOnHomeBehavior != DOUBLE_TAP_HOME_NOTHING) {
                     mHandler.removeCallbacks(mHomeDoubleTapTimeoutRunnable); // just in case
@@ -2400,6 +2403,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // Go home!
                 launchHomeFromHotKey();
                 return -1;
+                */
             }
 
             // If a system window has focus, then it doesn't make sense
