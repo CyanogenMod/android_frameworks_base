@@ -31,7 +31,8 @@
         android:background="@drawable/status_bar_recents_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:fitsSystemWindows="true">
 
         <com.android.systemui.recent.RecentsVerticalScrollView
             android:id="@+id/recents_container"
@@ -45,8 +46,7 @@
             android:fadingEdgeLength="@dimen/status_bar_recents_scroll_fading_edge_length"
             android:layout_gravity="bottom|start"
             android:clipToPadding="false"
-            android:clipChildren="false"
-            android:fitsSystemWindows="true">
+            android:clipChildren="false">
 
             <LinearLayout android:id="@+id/recents_linear_layout"
                 android:layout_width="match_parent"
