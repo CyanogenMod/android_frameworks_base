@@ -42,7 +42,6 @@
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC vyp.</string>
     <string name="quick_settings_screen_timeout">Časový limit</string>
-    <string name="quick_settings_screen_timeout_summary" translatable="false">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">Odpojené</string>
     <string name="quick_settings_usb_tether_connected_label">Tethering off</string>
     <string name="quick_settings_usb_tether_on_label">Tethering</string>
