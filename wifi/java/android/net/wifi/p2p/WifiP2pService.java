@@ -1874,7 +1874,6 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                                     mSavedPeerConfig.deviceAddress, false)) {
                                 // not found the client on the list
                                 loge("Already removed the client, ignore");
-                                break;
                             }
                             // try invitation.
                             sendMessage(WifiP2pManager.CONNECT, mSavedPeerConfig);
