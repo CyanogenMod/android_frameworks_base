@@ -1319,6 +1319,10 @@ public class NotificationManagerService extends INotificationManager.Stub
                 parseNotificationPulseCustomValuesString(Settings.System.getStringForUser(resolver,
                         Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES, UserHandle.USER_CURRENT));
             }
+
+            if (uri == null || ENABLED_NOTIFICATION_LISTENERS_URI.equals(uri)) {
+                rebindListenerServices();
+            }
         }
     }
 
