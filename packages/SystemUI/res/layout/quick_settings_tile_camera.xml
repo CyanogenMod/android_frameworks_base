@@ -18,15 +18,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView android:id="@+id/camera_text"
-        style="@style/TextAppearance.QuickSettings.TileView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:drawableTop="@drawable/ic_qs_camera"
-        android:text="@string/quick_settings_camera_label"
-        android:singleLine="true" />
+    <LinearLayout
+        android:id="@+id/icon_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
+            android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
+            android:src="@drawable/ic_qs_camera"
+            />
+
+        <TextView
+            style="@style/TextAppearance.QuickSettings.TileView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/quick_settings_camera_label"
+            />
+
+    </LinearLayout>
 
     <FrameLayout android:id="@+id/camera_surface_holder"
         android:layout_width="match_parent"

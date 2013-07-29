@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -48,7 +47,7 @@ public class CameraTile extends QuickSettingsTile {
     private static final int CAMERA_ID = 0;
 
     private Handler mHandler;
-    private TextView mTextView;
+    private View mIconContainer;
     private FrameLayout mSurfaceLayout;
     private SurfaceView mSurfaceView;
     private View mFlashView;
@@ -138,7 +137,7 @@ public class CameraTile extends QuickSettingsTile {
                 }
             }, 100);
 
-            mTextView.setVisibility(View.GONE);
+            mIconContainer.setVisibility(View.GONE);
             mSurfaceView = new CameraPreview(mContext, mCamera);
             mSurfaceView.setVisibility(View.VISIBLE);
             mSurfaceLayout.addView(mSurfaceView, 0);
@@ -225,7 +224,7 @@ public class CameraTile extends QuickSettingsTile {
             mCameraStarted = false;
             mCameraOrientationListener.disable();
 
-            mTextView.setVisibility(View.VISIBLE);
+            mIconContainer.setVisibility(View.VISIBLE);
             mSurfaceView.setVisibility(View.GONE);
             mSurfaceLayout.removeView(mSurfaceView);
             mSurfaceView = null;
@@ -276,7 +275,7 @@ public class CameraTile extends QuickSettingsTile {
             }
         };
 
-        mTextView = (TextView) mTile.findViewById(R.id.camera_text);
+        mIconContainer = mTile.findViewById(R.id.icon_container);
         mSurfaceLayout = (FrameLayout) mTile.findViewById(R.id.camera_surface_holder);
         mFlashView = mTile.findViewById(R.id.camera_surface_flash_overlay);
 
