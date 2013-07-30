@@ -64,4 +64,8 @@
     <string name="permdesc_cancelNotifications">Consente all\'applicazione di cancellare le notifiche create da altre applicazioni.</string>
     <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>
     <string name="permdesc_interceptSmsSent">Consente all\'applicazione di intercettare un SMS in uscita. Le applicazioni maligne potrebbero usarlo per impedire la spedizione di SMS.</string>
+    <string name="policylab_enforceSelinux">Forza SELinux</string>
+    <string name="policydesc_enforceSelinux">Alterna tra regole restrittive o permissive di SELinux.</string>
+    <string name="policylab_enforceMmac">Forza MMAC</string>
+    <string name="policydesc_enforceMmac">Alterna tra regole restrittive o permissive di MMAC.</string>
 </resources>
