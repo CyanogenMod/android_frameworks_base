@@ -101,7 +101,7 @@ public class IntruderAlertView extends LinearLayout implements SwipeHelper.Callb
         return true;
     }
 
-    public void onChildDismissed(View v, boolean fromUser) {
+    public void onChildDismissed(View v) {
         Slog.v(TAG, "User swiped intruder to dismiss");
         mBar.dismissIntruder();
     }
