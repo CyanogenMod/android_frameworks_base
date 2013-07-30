@@ -27,6 +27,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -114,7 +115,24 @@ public class SearchPanelView extends FrameLayout implements
 
         public void onTrigger(View v, final int target) {
             final int resId = mGlowPadView.getResourceIdForTarget(target);
-            mActionTarget.launchAction(mTargetActivities[target - mStartPosOffset]);
+            String action = mTargetActivities[target - mStartPosOffset];
+            boolean isAssist = NavigationRingConstants.ACTION_ASSIST.equals(action);
+            Bundle options = null;
+
+            if (isAssist) {
+                ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
+                        R.anim.search_launch_enter, R.anim.search_launch_exit,
+                        getHandler(), SearchPanelView.this);
+                options = opts.toBundle();
+                mWaitingForLaunch = true;
+                vibrate();
+            }
+
+            boolean result = mActionTarget.launchAction(
+                    mTargetActivities[target - mStartPosOffset], options);
+            if (!result && isAssist) {
+                onAnimationStarted();
+            }
         }
 
         public void onFinishFinalAnimation() {
