@@ -2549,7 +2549,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 }
 
                 if (snapshot.isEmpty()) {
-                    animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+                    maybeCollapseAfterNotificationRemoval(true);
                     return;
                 }
 
