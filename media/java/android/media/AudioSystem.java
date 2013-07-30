@@ -108,12 +108,17 @@ public class AudioSystem
     public static final long VOICE2_VSID            = 0x10DC1000;
     /* @hide VSID for IMS Multimode */
     public static final long IMS_VSID               = 0x10C02000;
+    /* @hide VSID for QCHAT */
+    public static final long QCHAT_VSID             = 0x10803000;
 
     /* @hide Key for vsid used in setParameters */
     public static final String VSID_KEY             = "vsid";
 
     /* @hide Key for call_state used in setParameters */
     public static final String CALL_STATE_KEY       = "call_state";
+
+    /* @hide Key for all_call_states used in getParameters */
+    public static final String ALL_CALL_STATES_KEY  = "all_call_states";
 
     /* Routing bits for the former setRouting/getRouting API */
     /** @deprecated */
