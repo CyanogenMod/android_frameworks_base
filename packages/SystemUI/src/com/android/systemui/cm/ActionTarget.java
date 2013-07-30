@@ -28,6 +28,7 @@ import android.content.pm.ResolveInfo;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -35,6 +36,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.os.UserHandle;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,8 +47,8 @@ import android.widget.Toast;
 
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.cm.TorchConstants;
-import com.android.internal.R;
 import static com.android.internal.util.cm.NavigationRingConstants.*;
+import com.android.systemui.R;
 import com.android.systemui.screenshot.TakeScreenshotService;
 
 import java.net.URISyntaxException;
@@ -74,6 +76,10 @@ public class ActionTarget {
     }
 
     public boolean launchAction(String action) {
+        return launchAction(action, null);
+    }
+
+    public boolean launchAction(String action, Bundle opts) {
         try {
             ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
         } catch (RemoteException e) {
@@ -109,8 +115,15 @@ public class ActionTarget {
             return true;
         } else if (action.equals(ACTION_ASSIST)) {
             Intent intent = new Intent(Intent.ACTION_ASSIST);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(intent);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            try {
+                mContext.startActivityAsUser(intent, opts, UserHandle.CURRENT);
+            } catch (ActivityNotFoundException e) {
+                Log.w(TAG, "Activity not found for " + intent.getAction());
+                return false;
+            }
+
             return true;
         } else if (action.equals(ACTION_KILL)) {
             mHandler.post(mKillRunnable);
@@ -154,7 +167,7 @@ public class ActionTarget {
             try {
                 Intent intent = Intent.parseUri(action, 0);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
+                mContext.startActivityAsUser(intent, UserHandle.CURRENT);
                 return true;
             } catch (URISyntaxException e) {
                 Log.e(TAG, "URISyntaxException: [" + action + "]");
