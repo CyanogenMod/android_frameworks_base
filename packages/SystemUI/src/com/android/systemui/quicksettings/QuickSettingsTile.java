@@ -153,6 +153,11 @@ public class QuickSettingsTile implements OnClickListener {
         } catch (RemoteException e) {
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean floatingWindow = Settings.System.getBoolean(resolver, Settings.System.QS_FLOATING_WINDOW, false) == true;
+        if (floatingWindow) {
+            intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+        }
         mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
         mStatusbarService.animateCollapsePanels();
     }

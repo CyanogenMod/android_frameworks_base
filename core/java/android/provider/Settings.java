@@ -2901,6 +2901,13 @@ public final class Settings {
         public static final String QS_COLLAPSE_PANEL = "qs_collapse_panel";
 
         /**
+         * Quick Settings Launch in Floating Window
+         *
+         * @hide
+         */
+        public static final String QS_FLOATING_WINDOW = "qs_floating_window";
+
+        /**
          * Quick Settings Quick access ribbon
          *
          * @hide
