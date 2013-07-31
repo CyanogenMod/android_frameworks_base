@@ -221,6 +221,9 @@ final class DisplayPowerController {
     // True if auto-brightness should be used.
     private boolean mUseSoftwareAutoBrightnessConfig;
 
+    // True if twilight adjustment is enabled
+    private boolean mTwilightAdjustmentEnabled;
+
     // The auto-brightness spline adjustment.
     // The brightness values have been scaled to a range of 0..1.
     private Spline mScreenAutoBrightnessSpline;
@@ -411,6 +414,9 @@ final class DisplayPowerController {
             cr.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.AUTO_BRIGHTNESS_BACKLIGHT),
                     false, observer, UserHandle.USER_ALL);
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.AUTO_BRIGHTNESS_TWILIGHT_ADJUSTMENT),
+                    false, observer, UserHandle.USER_ALL);
 
             mLightSensorWarmUpTimeConfig = resources.getInteger(
                     com.android.internal.R.integer.config_lightSensorWarmupTime);
@@ -469,6 +475,10 @@ final class DisplayPowerController {
             mUseSoftwareAutoBrightnessConfig = false;
             return;
         }
+
+        mTwilightAdjustmentEnabled = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.AUTO_BRIGHTNESS_TWILIGHT_ADJUSTMENT,
+                0, UserHandle.USER_CURRENT) != 0;
     }
 
     private int[] getIntArrayForSetting(String setting) {
@@ -1178,7 +1188,7 @@ final class DisplayPowerController {
             }
         }
 
-        if (USE_TWILIGHT_ADJUSTMENT) {
+        if (USE_TWILIGHT_ADJUSTMENT && mTwilightAdjustmentEnabled) {
             TwilightState state = mTwilight.getCurrentState();
             if (state != null && state.isNight()) {
                 final long now = System.currentTimeMillis();
