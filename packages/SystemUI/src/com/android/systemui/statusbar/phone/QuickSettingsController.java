@@ -174,7 +174,7 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_BLUETOOTH) && bluetoothSupported) {
                 qs = new BluetoothTile(mContext, this, mStatusBarService.mBluetoothController);
             } else if (tile.equals(TILE_BRIGHTNESS)) {
-                qs = new BrightnessTile(mContext, this, mHandler);
+                qs = new BrightnessTile(mContext, this);
             } else if (tile.equals(TILE_RINGER)) {
                 qs = new RingerModeTile(mContext, this);
             } else if (tile.equals(TILE_SYNC)) {

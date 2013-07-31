@@ -24,6 +24,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:paddingStart="8dp"
         android:paddingEnd="10dp"
         android:src="@drawable/ic_qs_brightness_auto_off"
         />
@@ -35,5 +36,26 @@
         android:layout_marginEnd="2dp"
         android:layout_gravity="center_vertical"
         systemui:text="@string/status_bar_settings_auto_brightness_label"
+        />
+    <View
+        android:id="@+id/brightness_setup_button_placeholder"
+        android:layout_width="8dp"
+        android:layout_height="48dp"
+        />
+    <ImageView
+        android:id="@+id/brightness_setup_button_divider"
+        android:src="?android:attr/dividerVertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        />
+    <ImageView
+        android:id="@+id/brightness_setup_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
+        android:scaleType="center"
+        android:src="@drawable/ic_qs_settings"
+        android:background="?android:attr/selectableItemBackground"
         />
 </LinearLayout>
