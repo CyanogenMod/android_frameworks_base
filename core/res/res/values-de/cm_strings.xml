@@ -64,4 +64,8 @@
     <string name="permdesc_interceptSmsSent">Ermöglicht der App, verschickte SMS abzufangen. Schädliche Apps können so das Versenden von SMS verhindern.</string>
     <string name="permlab_cancelNotifications">Anwendungs-Benachrichtigungen entfernen</string>
     <string name="permdesc_cancelNotifications">Ermöglicht der App, von anderen Apps erstellte Benachrichtigungen zu entfernen.</string>
+    <string name="policylab_enforceSelinux">SELinux-Richtlinie wechseln</string>
+    <string name="policydesc_enforceSelinux">Ermöglicht der App, die SELinux-Richtlinie zwischen moderat und strikt umzuschalten.</string>
+    <string name="policylab_enforceMmac">MMAC-Richtlinie wechseln</string>
+    <string name="policydesc_enforceMmac">Ermöglicht der App, die MMAC-Richtlinie zwischen moderat und strikt umzuschalten.</string>
 </resources>
