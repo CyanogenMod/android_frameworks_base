@@ -98,6 +98,17 @@ class HTML5VideoViewProxy extends Handler
 
         private static boolean isVideoSelfEnded = false;
 
+        // Define states for when browser has exited fullscreen.
+        // These are used to determine whether to resume video playback
+        // after exiting fullscreen.
+        static final int EXIT_FULLSCREEN_STATE_NONE = 0;
+        // Video exited fullscreen mode in playing state
+        static final int EXIT_FULLSCREEN_STATE_PLAYING = 1;
+        // Video exited fullscreen mode in playing state but was paused
+        // before it resumed in inline mode.
+        static final int EXIT_FULLSCREEN_STATE_PAUSED = 2;
+        private static int mExitFullscreenState = EXIT_FULLSCREEN_STATE_NONE;
+
         private static void setPlayerBuffering(boolean playerBuffering) {
             mHTML5VideoView.setPlayerBuffering(playerBuffering);
         }
@@ -133,6 +144,9 @@ class HTML5VideoViewProxy extends Handler
         // When a WebView is paused, we also want to pause the video in it. (won't be used any more, use suspendAndDispatch())
         public static void pauseAndDispatch() {
             if (mHTML5VideoView != null) {
+                // Check if video was paused after it exited fullscreen in playing state
+                if (mExitFullscreenState == VideoPlayer.EXIT_FULLSCREEN_STATE_PLAYING)
+                    mExitFullscreenState = VideoPlayer.EXIT_FULLSCREEN_STATE_PAUSED;
                 mHTML5VideoView.pauseAndDispatch(mCurrentProxy);
             }
         }
@@ -293,9 +307,14 @@ class HTML5VideoViewProxy extends Handler
         }
 
         public static void onPrepared() {
-            if (!mHTML5VideoView.isFullScreenMode()) {
+            // Start the video playback only if the video was not paused
+            // while exiting fullscreen mode
+            if (!mHTML5VideoView.isFullScreenMode() &&
+                mExitFullscreenState != VideoPlayer.EXIT_FULLSCREEN_STATE_PAUSED) {
                 mHTML5VideoView.start();
             }
+            // Reset the exit fullscreen state after media is prepared
+            mExitFullscreenState = VideoPlayer.EXIT_FULLSCREEN_STATE_NONE;
         }
 
         public static void end() {
@@ -363,6 +382,9 @@ class HTML5VideoViewProxy extends Handler
 
     public void dispatchOnStopFullScreen(boolean stillPlaying) {
         Message msg = Message.obtain(mWebCoreHandler, STOPFULLSCREEN);
+        VideoPlayer.mExitFullscreenState = stillPlaying ?
+                VideoPlayer.EXIT_FULLSCREEN_STATE_PLAYING :
+                VideoPlayer.EXIT_FULLSCREEN_STATE_NONE;
         msg.arg1 = stillPlaying ? 1 : 0;
         mWebCoreHandler.sendMessage(msg);
     }
