@@ -1276,6 +1276,12 @@ public class KeyguardViewMediator {
             if (DEBUG) Log.d(TAG, "handleShow");
             if (!mSystemReady) return;
 
+            // Do this at the end to not slow down display of the keyguard.
+            // ^ from AOSP
+            // I'm not sure if the comment above actually makes sense.
+            // I don't see any slow down of the keyguard by moving this up.
+            playSounds(true);
+
             mKeyguardViewManager.show(options);
             mShowing = true;
             mKeyguardDonePending = false;
@@ -1286,9 +1292,6 @@ public class KeyguardViewMediator {
                 ActivityManagerNative.getDefault().closeSystemDialogs("lock");
             } catch (RemoteException e) {
             }
-
-            // Do this at the end to not slow down display of the keyguard.
-            playSounds(true);
 
             mShowKeyguardWakeLock.release();
         }
