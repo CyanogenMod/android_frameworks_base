@@ -1274,7 +1274,9 @@ class MountService extends IMountService.Stub
         }
 
         final UserEnvironment userEnv = new UserEnvironment(user.getIdentifier());
-        final File path = userEnv.getExternalStorageDirectory();
+        // Use default storage directory (remains /storage/emulated/0 even if switched
+        // external sdcard for user 0
+        final File path = userEnv.getDefaultExternalStorageDirectory();
         final StorageVolume volume = StorageVolume.fromTemplate(mEmulatedTemplate, path, user);
         volume.setStorageId(0);
         addVolumeLocked(volume);
