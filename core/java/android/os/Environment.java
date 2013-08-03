@@ -37,6 +37,7 @@ public class Environment {
     private static final String ENV_EMULATED_STORAGE_SOURCE = "EMULATED_STORAGE_SOURCE";
     private static final String ENV_EMULATED_STORAGE_TARGET = "EMULATED_STORAGE_TARGET";
     private static final String ENV_MEDIA_STORAGE = "MEDIA_STORAGE";
+    private static final String ENV_SECONDARY_STORAGE = "SECONDARY_STORAGE";
     private static final String ENV_ANDROID_ROOT = "ANDROID_ROOT";
 
     /** {@hide} */
@@ -49,6 +50,10 @@ public class Environment {
             ENV_EMULATED_STORAGE_TARGET);
 
     private static final String SYSTEM_PROPERTY_EFS_ENABLED = "persist.security.efs.enabled";
+
+    private static final String SYSTEM_PROPERTY_SECONDARY_STORAGE = "persist.sys.env.use_sec_storage";
+
+    private static boolean sUseSecondaryStorage;
 
     private static UserEnvironment sCurrentUser;
     private static boolean sUserRequired;
@@ -77,6 +82,8 @@ public class Environment {
     }
 
     static {
+        // No hotswap - read it just once
+        sUseSecondaryStorage = SystemProperties.getBoolean(SYSTEM_PROPERTY_SECONDARY_STORAGE, false);
         initForCurrentUser();
     }
 
@@ -95,6 +102,7 @@ public class Environment {
         // TODO: generalize further to create package-specific environment
 
         private final File mExternalStorage;
+        private final File mDefaultExternalStorage;
         private final File mExternalStorageAndroidData;
         private final File mExternalStorageAndroidMedia;
         private final File mExternalStorageAndroidObb;
@@ -105,6 +113,7 @@ public class Environment {
             String rawExternalStorage = System.getenv(ENV_EXTERNAL_STORAGE);
             String rawEmulatedStorageTarget = System.getenv(ENV_EMULATED_STORAGE_TARGET);
             String rawMediaStorage = System.getenv(ENV_MEDIA_STORAGE);
+            String rawSecondaryStorage = System.getenv(ENV_SECONDARY_STORAGE);
             if (TextUtils.isEmpty(rawMediaStorage)) {
                 rawMediaStorage = "/data/media";
             }
@@ -114,10 +123,22 @@ public class Environment {
                 // userId burned into them.
                 final String rawUserId = Integer.toString(userId);
                 final File emulatedBase = new File(rawEmulatedStorageTarget);
+
+                // Check if we are supposed to use external sdcard
+                if (userId == 0 && sUseSecondaryStorage && !TextUtils.isEmpty(rawSecondaryStorage)) {
+                    // /storage/sdcard1
+                    mExternalStorage = new File(rawSecondaryStorage);
+                    // /storage/emulated/0
+                    mDefaultExternalStorage = buildPath(emulatedBase, rawUserId);
+                } else {
+                    // /storage/emulated/0
+                    mExternalStorage = buildPath(emulatedBase, rawUserId);
+                    mDefaultExternalStorage = mExternalStorage;
+                }
+
+                // Media storage is also with userId burned into them
                 final File mediaBase = new File(rawMediaStorage);
 
-                // /storage/emulated/0
-                mExternalStorage = buildPath(emulatedBase, rawUserId);
                 // /data/media/0
                 mMediaStorage = buildPath(mediaBase, rawUserId);
 
@@ -130,6 +151,7 @@ public class Environment {
 
                 // /storage/sdcard0
                 mExternalStorage = new File(rawExternalStorage);
+                mDefaultExternalStorage = mExternalStorage;
                 // /data/media
                 mMediaStorage = new File(rawMediaStorage);
             }
@@ -141,6 +163,11 @@ public class Environment {
 
         public File getExternalStorageDirectory() {
             return mExternalStorage;
+        }
+
+        /** {@hide} */
+        public File getDefaultExternalStorageDirectory() {
+            return mDefaultExternalStorage;
         }
 
         public File getExternalStorageObbDirectory() {
