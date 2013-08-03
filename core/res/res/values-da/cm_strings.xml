@@ -107,4 +107,20 @@
     <string name="symbol_picker_equal">\u2260\u2248\u221e</string>
     <string name="symbol_picker_lt">\u2264\u00ab\u2039</string>
     <string name="symbol_picker_gt">\u2265\u00bb\u203a</string>
+    <string name="permlab_changePrivacyGuardState">aktivér eller deaktivér privatlivsvagt</string>
+    <string name="permdesc_changePrivacyGuardState">Tillader app\'en at ændre, om en anden app kører med Privatlivsvagt. Når en app kører med Privatlivsvagt, vil den ikke have adgang til personlige data såsom kontakter, opkaldslister eller beskeder.</string>
+    <string name="privacy_guard_notification">Privatlivsvagt aktiv</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> vil ikke kunne tilgå personlige data</string>
+    <string name="profile_picker_title">Profiler</string>
+    <string name="profile_none">Ingen</string>
+    <string name="permlab_cancelNotifications">annuller app-underretninger</string>
+    <string name="permdesc_cancelNotifications">Tillader app\'en at annullere underretninger, oprettet af andre apps.</string>
+    <string name="permlab_interceptSmsSent">blokér udgående SMS</string>
+    <string name="permdesc_interceptSmsSent">Tillader app\'en at
+        blokere en udgående SMS.
+        Ondsindede apps kan muligvis bruge dette til at forhindre udgående SMS-beskeder.</string>
+    <string name="policylab_enforceSelinux">Håndhæv SELinux</string>
+    <string name="policydesc_enforceSelinux">Slå håndhævning af SELinux-politikker eller tolerant tilstand til og fra.</string>
+    <string name="policylab_enforceMmac">Håndhæv MMAC</string>
+    <string name="policydesc_enforceMmac">Slå håndhævning af MMAC-politikker eller tolerant tilstand til og fra.</string>
 </resources>
