@@ -198,7 +198,7 @@ public class WindowManagerService extends IWindowManager.Stub
     static final boolean DEBUG_WALLPAPER_LIGHT = false || DEBUG_WALLPAPER;
     static final boolean DEBUG_DRAG = false;
     static final boolean DEBUG_SCREEN_ON = false;
-    static final boolean DEBUG_SCREENSHOT = false;
+    static final boolean DEBUG_SCREENSHOT = true;
     static final boolean DEBUG_BOOT = false;
     static final boolean DEBUG_LAYOUT_REPEATS = true;
     static final boolean DEBUG_SURFACE_TRACE = false;
@@ -5528,7 +5528,9 @@ public class WindowManagerService extends IWindowManager.Stub
         if (rawss == null) {
             Slog.w(TAG, "Screenshot failure taking screenshot for (" + dw + "x" + dh
                     + ") to layer " + maxLayer);
-            return null;
+
+            Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            return bm;
         }
 
         Bitmap bm = Bitmap.createBitmap(width, height, rawss.getConfig());
