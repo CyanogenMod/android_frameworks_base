@@ -2427,12 +2427,7 @@ public final class ActivityThread {
                     throw e;
 
                 } catch (Exception e) {
-                    if (!mInstrumentation.onException(r.activity, e)) {
-                        throw new RuntimeException(
-                                "Unable to pause activity "
-                                + r.intent.getComponent().toShortString()
-                                + ": " + e.toString(), e);
-                    }
+                    // Unable to resume activity 
                 }
                 r.paused = true;
             }

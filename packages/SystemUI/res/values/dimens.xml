@@ -245,6 +245,7 @@
     <dimen name="pie_sysinfo_radius">165dp</dimen>
     <dimen name="pie_sysinfo_height">85sp</dimen>
 
+<<<<<<< HEAD
     <!-- Network stats text size -->
     <dimen name="network_stats_text_size">10dp</dimen>
 
@@ -274,4 +275,7 @@
 
     <!-- AM/PM size in active display -->
     <dimen name="ad_ampm_font_size">32dp</dimen>
+=======
+    <dimen name="halo_content_max_width">250dp</dimen> 
+>>>>>>> 7897de7... Halo (1/2)
 </resources>

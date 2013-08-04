@@ -79,6 +79,9 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <!--Halo-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> 
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"
@@ -261,6 +264,7 @@
                 <category android:name="android.intent.category.DESK_DOCK" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
 
         <activity android:name=".statusbar.policy.activedisplay.DummyActivity"
                   android:label=""
@@ -269,6 +273,11 @@
                   android:exported="true"
                   android:theme="@style/Theme.DummyActivity">
         </activity>
+=======
+	
+	<activity android:name="com.android.systemui.Transparent"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> 
+>>>>>>> 7897de7... Halo (1/2)
 
     </application>
 </manifest>
