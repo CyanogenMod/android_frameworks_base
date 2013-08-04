@@ -64,4 +64,8 @@
     <string name="permdesc_cancelNotifications">Hiermee kan de app meldingen gecreeërd door andere apps sluiten.</string>
     <string name="permlab_interceptSmsSent">uitgaand sms-bericht onderscheppen</string>
     <string name="permdesc_interceptSmsSent">Hiermee kan de app een uitgaand sms-bericht onderscheppen. Schadelijke apps kunnen dit gebruiken om uitgaande sms-berichten te blokkeren.</string>
+    <string name="policylab_enforceSelinux">SELinux afdwingen</string>
+    <string name="policydesc_enforceSelinux">Wisselen tussen SELinux-beleid afdwingen of tolerante stand.</string>
+    <string name="policylab_enforceMmac">MMAC afdwingen</string>
+    <string name="policydesc_enforceMmac">Wisselen tussen MMAC-beleid afdwingen of tolerante stand.</string>
 </resources>
