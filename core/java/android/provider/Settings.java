@@ -2894,6 +2894,28 @@ public final class Settings {
         public static final String HALO_HIDE = "halo_hide"; 
 
 	/**
+<<<<<<< HEAD
+=======
+         * HALO size fraction, default is 1.0f (normal)
+         * @hide
+         */
+        public static final String HALO_SIZE = "halo_size";
+
+	/**
+         * HALO pause activities?, defaults to 0 (no, do not pause) on devices which isLargeRAM() == true
+         * otherwise it defaults to 1 (yes, do pause)
+         * @hide
+         */
+        public static final String HALO_PAUSE = "halo_pause";
+
+	/**
+         * Do you want popups/floating windows?
+         * @hide
+         */
+        public static final String WE_WANT_POPUPS = "we_want_popups"; 
+
+	/**
+>>>>>>> ce14c34... Floating window (1/2)
          * Sets transparency of statusbar
          * @hide
          */
