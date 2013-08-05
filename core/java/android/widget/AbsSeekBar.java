@@ -851,6 +851,13 @@ public abstract class AbsSeekBar extends ProgressBar {
     }
 
     /**
+     * @hide
+     */
+    protected int updateTouchProgress(int lastProgress, int newProgress) {
+        return newProgress;
+    }
+
+    /**
      * Tries to claim the user's drag motion, and requests disallowing any
      * ancestors from stealing events in the drag.
      */
