@@ -846,8 +846,8 @@ public abstract class AbsSeekBar extends ProgressBar {
         final int max = getMax();
         progress += scale * max;
 
-        setHotspot(x, y);
-        setProgressInternal(Math.round(progress), true, false);
+        setHotspot(x, (int) event.getY());
+        setProgress(updateTouchProgress(getProgress(), Math.round(progress)), true);
     }
 
     /**
