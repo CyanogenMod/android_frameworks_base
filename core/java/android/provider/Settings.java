@@ -2970,6 +2970,27 @@ public final class Settings {
         */
         public static final String NOTIFICATION_ALPHA = "notification_alpha";
 
+        /**
+         * Enable Menu key
+         *
+         * @hide
+         */
+        public static final String KEY_MENU_ENABLED = "key_menu_enabled";
+
+        /**
+         * Enable Back key
+         *
+         * @hide
+         */
+        public static final String KEY_BACK_ENABLED = "key_back_enabled";
+
+        /**
+         * Enable Home key
+         *
+         * @hide
+         */
+        public static final String KEY_HOME_ENABLED = "key_home_enabled";
+
        /**
         * Sets the portrait background of notification drawer
         * @hide
