@@ -12418,6 +12418,9 @@ public final class ActivityManagerService  extends ActivityManagerNative
             final int callingPid = Binder.getCallingPid();
             final int callingUid = Binder.getCallingUid();
             final long origId = Binder.clearCallingIdentity();
+            if (callerApp != null) {
+                intent.setSenderPackage(callerApp.info.packageName);
+            }
             int res = broadcastIntentLocked(callerApp,
                     callerApp != null ? callerApp.info.packageName : null,
                     intent, resolvedType, resultTo,
@@ -12434,7 +12437,9 @@ public final class ActivityManagerService  extends ActivityManagerNative
             String requiredPermission, boolean serialized, boolean sticky, int userId) {
         synchronized(this) {
             intent = verifyBroadcastLocked(intent);
-
+            if (packageName != null) {
+                intent.setSenderPackage(packageName);
+            }
             final long origId = Binder.clearCallingIdentity();
             int res = broadcastIntentLocked(null, packageName, intent, resolvedType,
                     resultTo, resultCode, resultData, map, requiredPermission,

@@ -3615,6 +3615,19 @@ public class Intent implements Parcelable, Cloneable {
     private Intent mSelector;
     private ClipData mClipData;
 
+    /** @hide */
+    private String mSenderPackage;
+
+    /** @hide */
+    public String getSenderPackage() {
+        return mSenderPackage;
+    }
+
+    /** @hide */
+    public void setSenderPackage(String pkg) {
+        mSenderPackage = pkg;
+    }
+
     // ---------------------------------------------------------------------
 
     /**
@@ -3627,6 +3640,7 @@ public class Intent implements Parcelable, Cloneable {
      * Copy constructor.
      */
     public Intent(Intent o) {
+        this.mSenderPackage = o.mSenderPackage;
         this.mAction = o.mAction;
         this.mData = o.mData;
         this.mType = o.mType;
@@ -3656,6 +3670,7 @@ public class Intent implements Parcelable, Cloneable {
     }
 
     private Intent(Intent o, boolean all) {
+        this.mSenderPackage = o.mSenderPackage;
         this.mAction = o.mAction;
         this.mData = o.mData;
         this.mType = o.mType;
@@ -6858,6 +6873,7 @@ public class Intent implements Parcelable, Cloneable {
     }
 
     public void writeToParcel(Parcel out, int flags) {
+        out.writeString(mSenderPackage);
         out.writeString(mAction);
         Uri.writeToParcel(out, mData);
         out.writeString(mType);
@@ -6914,6 +6930,7 @@ public class Intent implements Parcelable, Cloneable {
     }
 
     public void readFromParcel(Parcel in) {
+        setSenderPackage(in.readString());
         setAction(in.readString());
         mData = Uri.CREATOR.createFromParcel(in);
         mType = in.readString();
