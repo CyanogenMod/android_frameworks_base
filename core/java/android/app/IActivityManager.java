@@ -103,6 +103,7 @@ public interface IActivityManager extends IInterface {
     public void activitySlept(IBinder token) throws RemoteException;
     public void activityDestroyed(IBinder token) throws RemoteException;
     public String getCallingPackage(IBinder token) throws RemoteException;
+    public String getCallingPackageForBroadcast(boolean foreground) throws RemoteException;
     public ComponentName getCallingActivity(IBinder token) throws RemoteException;
     public List<RunningTaskInfo> getTasks(int maxNum, int flags,
                          IThumbnailReceiver receiver) throws RemoteException;
@@ -694,4 +695,5 @@ public interface IActivityManager extends IInterface {
     int RELEASE_PERSISTABLE_URI_PERMISSION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+180;
     int GET_PERSISTED_URI_PERMISSIONS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+181;
     int APP_NOT_RESPONDING_VIA_PROVIDER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+182;
+    int GET_CALLING_PACKAGE_FOR_BROADCAST_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+183;
 }
