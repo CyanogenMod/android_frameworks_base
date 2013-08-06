@@ -48,12 +48,10 @@
 
         <com.android.systemui.statusbar.policy.DateView android:id="@+id/date"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:singleLine="true"
+            android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
             android:layout_toEndOf="@id/clock"
-            android:layout_alignBaseline="@id/clock"
-            android:gravity="bottom"
+            android:layout_centerVertical="true"
             />
     </RelativeLayout>
 
