@@ -547,7 +547,7 @@ public class PhoneNumberUtils
         }
 
         // At least one string has matched completely;
-        if (matched >= MIN_MATCH && (ia < 0 || ib < 0)) {
+        if (matched >= MIN_MATCH && (ia <= 0 || ib <= 0)) {
             return true;
         }
 
