@@ -890,6 +890,9 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
             if (DBG) logd(getName() + message.toString());
             switch (message.what) {
                 case WifiMonitor.SUP_CONNECTION_EVENT:
+                   if (startSafeChannel!=0)
+                       mWifiNative.setPreferredChannel(
+                                        startSafeChannel, endSafeChannel);
                     if (DBG) logd("P2p socket connection successful");
                     mIsWifiP2pEnabled = true;
                     transitionTo(mInactiveState);
