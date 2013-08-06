@@ -51,8 +51,10 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE 已关闭</string>
     <string name="quick_settings_volume">音量</string>
+    <string name="quick_settings_camera_label">相机</string>
     <string name="quick_settings_expanded_desktop">已扩展</string>
     <string name="quick_settings_expanded_desktop_off">正常</string>
+    <string name="quick_settings_camera_error_connect">无法连接到相机</string>
     <string name="navbar_dialog_title">选择指定的行为</string>
     <string name="navbar_home_button">Home 键</string>
     <string name="navbar_recent_button">最近应用键</string>
