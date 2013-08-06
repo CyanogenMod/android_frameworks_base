@@ -4704,6 +4704,16 @@ public final class ActivityManagerService  extends ActivityManagerNative
         }
     }
 
+    public String getCallingPackageForBroadcast() {
+        if (mBgBroadcastQueue.mOrderedBroadcasts.size() > 0) {
+            BroadcastRecord r = mBgBroadcastQueue.mOrderedBroadcasts.get(0);
+            if (r != null) {
+                return r.callerPackage;
+            }
+        }
+        return null;
+    }
+
     private ActivityRecord getCallingRecordLocked(IBinder token) {
         ActivityRecord r = mMainStack.isInStackLocked(token);
         if (r == null) {
