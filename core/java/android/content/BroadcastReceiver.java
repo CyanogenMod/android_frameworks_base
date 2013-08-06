@@ -16,6 +16,7 @@
 
 package android.content;
 
+import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.ActivityThread;
 import android.app.IActivityManager;
@@ -743,6 +744,16 @@ public abstract class BroadcastReceiver {
     /** @hide */
     public int getSendingUserId() {
         return mPendingResult.mSendingUser;
+    }
+
+    /** @hide */
+    public String getSendingPackage() {
+        final IActivityManager mgr = ActivityManagerNative.getDefault();
+        try {
+            return mgr.getCallingPackageForBroadcast();
+        } catch (RemoteException ex) {
+            return null;
+        }
     }
 
     /**
