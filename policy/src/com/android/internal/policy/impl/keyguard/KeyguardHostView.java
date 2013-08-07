@@ -1588,7 +1588,7 @@ public class KeyguardHostView extends KeyguardViewBase {
             mAppWidgetToShow = AppWidgetManager.INVALID_APPWIDGET_ID;
         }
         // if music playing, show transport
-        if (musicTransportState == TRANSPORT_VISIBLE) {
+        if (musicTransportState == TRANSPORT_VISIBLE && mTransportShouldBeVisible) {
             if (DEBUG) Log.d(TAG, "Music playing, show transport");
             return mAppWidgetContainer.getWidgetPageIndex(getOrCreateTransportControl());
         }
