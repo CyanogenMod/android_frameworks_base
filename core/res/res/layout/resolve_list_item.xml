@@ -25,17 +25,6 @@
               android:background="@android:drawable/activity_picker_bg"
               android:padding="16dp">
 
-    <!-- Extended activity info to distinguish between duplicate activity names -->
-    <TextView android:id="@android:id/text2"
-              android:textAppearance="?android:attr/textAppearance"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:minLines="2"
-              android:maxLines="2"
-              android:paddingStart="4dip"
-              android:paddingEnd="4dip" />
-
     <!-- Activity icon when presenting dialog
          Size will be filled in by ResolverActivity -->
     <ImageView android:id="@+id/icon"
@@ -49,9 +38,22 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:gravity="center"
-              android:minLines="2"
+              android:minLines="1"
               android:maxLines="2"
               android:paddingStart="4dip"
               android:paddingEnd="4dip" />
+
+    <!-- Extended activity info to distinguish between duplicate activity names -->
+    <TextView android:id="@android:id/text2"
+              android:textAppearance="?android:attr/textAppearanceSmall"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:minLines="1"
+              android:maxLines="3"
+              android:alpha="0.65"
+              android:paddingStart="4dip"
+              android:paddingEnd="4dip" />
+
 </LinearLayout>
 
