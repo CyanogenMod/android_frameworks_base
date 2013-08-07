@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This file defines the base public resources exported by the
-   platform, which must always exist. -->
+     platform, which must always exist. -->
 
 <!-- ***************************************************************
-   ***************************************************************
-   IMPORTANT NOTE FOR ANYONE MODIFYING THIS FILE
-   READ THIS BEFORE YOU MAKE ANY CHANGES
+     ***************************************************************
+     IMPORTANT NOTE FOR ANYONE MODIFYING THIS FILE
+     READ THIS BEFORE YOU MAKE ANY CHANGES
 
-   This file defines the binary compatibility for resources.  As such,
-   you must be very careful when making changes here, or you will
-   completely break backwards compatibility with old applications.
+     This file defines the binary compatibility for resources.  As such,
+     you must be very careful when making changes here, or you will
+     completely break backwards compatibility with old applications.
 
-   To avoid breaking compatibility, all new resources must be placed
-   at the end of the list of resources of the same type.  Placing a resource
-   in the middle of type will cause all following resources to be
-   assigned new resource numbers, breaking compatibility.
+     To avoid breaking compatibility, all new resources must be placed
+     at the end of the list of resources of the same type.  Placing a resource
+     in the middle of type will cause all following resources to be
+     assigned new resource numbers, breaking compatibility.
 
-   ***************************************************************
-   *************************************************************** -->
+     ***************************************************************
+     *************************************************************** -->
 <resources>
 
 <!-- ===============================================================
-   Resources for version 1 of the platform.
-   =============================================================== -->
+     Resources for version 1 of the platform.
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="theme" id="0x01010000" />
@@ -927,15 +927,15 @@
   <public type="anim" name="decelerate_interpolator" id="0x010a0006" />
 
 <!-- ===============================================================
-   Resources added in version 2 of the platform.
-   =============================================================== -->
+     Resources added in version 2 of the platform.
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="marqueeRepeatLimit" id="0x0101021d" />
 
 <!-- ===============================================================
-   Resources added in version 3 of the platform (Cupcake).
-   =============================================================== -->
+     Resources added in version 3 of the platform (Cupcake).
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="windowNoDisplay" id="0x0101021e" />
@@ -1015,44 +1015,44 @@
   <public type="attr" name="imeExtractExitAnimation" id="0x01010269" />
 
   <!-- The part of the UI shown by an
-     {@link android.inputmethodservice.InputMethodService} that contains the
-     views for interacting with the user in extraction mode. -->
+       {@link android.inputmethodservice.InputMethodService} that contains the
+       views for interacting with the user in extraction mode. -->
   <public type="id" name="extractArea" id="0x0102001c" />
 
   <!-- The part of the UI shown by an
-     {@link android.inputmethodservice.InputMethodService} that contains the
-     views for displaying candidates for what the user has entered. -->
+       {@link android.inputmethodservice.InputMethodService} that contains the
+       views for displaying candidates for what the user has entered. -->
   <public type="id" name="candidatesArea" id="0x0102001d" />
 
   <!-- The part of the UI shown by an
-     {@link android.inputmethodservice.InputMethodService} that contains the
-     views for entering text using the screen. -->
+       {@link android.inputmethodservice.InputMethodService} that contains the
+       views for entering text using the screen. -->
   <public type="id" name="inputArea" id="0x0102001e" />
 
   <!-- Context menu ID for the "Select All" menu item to select all text
-     in a text view. -->
+       in a text view. -->
   <public type="id" name="selectAll" id="0x0102001f" />
   <!-- Context menu ID for the "Cut" menu item to copy and delete the currently
-     selected (or all) text in a text view to the clipboard. -->
+       selected (or all) text in a text view to the clipboard. -->
   <public type="id" name="cut" id="0x01020020" />
   <!-- Context menu ID for the "Copy" menu item to copy the currently
-     selected (or all) text in a text view to the clipboard. -->
+       selected (or all) text in a text view to the clipboard. -->
   <public type="id" name="copy" id="0x01020021" />
   <!-- Context menu ID for the "Paste" menu item to copy the current contents
-     of the clipboard into the text view. -->
+       of the clipboard into the text view. -->
   <public type="id" name="paste" id="0x01020022" />
   <!-- Context menu ID for the "Copy URL" menu item to copy the currently
-     selected URL from the text view to the clipboard. -->
+       selected URL from the text view to the clipboard. -->
   <public type="id" name="copyUrl" id="0x01020023" />
   <!-- Context menu ID for the "Input Method" menu item to being up the
-     input method picker dialog, allowing the user to switch to another
-     input method. -->
+       input method picker dialog, allowing the user to switch to another
+       input method. -->
   <public type="id" name="switchInputMethod" id="0x01020024" />
   <!-- View ID of the text editor inside of an extracted text layout. -->
   <public type="id" name="inputExtractEditText" id="0x01020025" />
 
   <!-- View ID of the {@link android.inputmethodservice.KeyboardView} within
-    an input method's input area. -->
+        an input method's input area. -->
   <public type="id" name="keyboardView" id="0x01020026" />
   <!-- View ID of a {@link android.view.View} to close a popup keyboard -->
   <public type="id" name="closeButton" id="0x01020027" />
@@ -1088,8 +1088,8 @@
   <public type="integer" name="config_longAnimTime" id="0x010e0002" />
 
 <!-- ===============================================================
-   Resources added in version 4 of the platform (Donut).
-   =============================================================== -->
+     Resources added in version 4 of the platform (Donut).
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="tension" id="0x0101026a" />
@@ -1145,8 +1145,8 @@
   <public type="anim" name="linear_interpolator" id="0x010a000b" />
 
 <!-- ===============================================================
-   Resources added in version 5 of the platform (Eclair).
-   =============================================================== -->
+     Resources added in version 5 of the platform (Eclair).
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="required" id="0x0101028e" />
@@ -1191,16 +1191,16 @@
   <public type="style" name="TextAppearance.SearchResult.Subtitle" id="0x01030064" />
 
   <!-- Semi-transparent background that can be used when placing a dark
-     themed UI on top of some arbitrary background (such as the
-     wallpaper).  This darkens the background sufficiently that the UI
-     can be seen. -->
+       themed UI on top of some arbitrary background (such as the
+       wallpaper).  This darkens the background sufficiently that the UI
+       can be seen. -->
   <public type="drawable" name="screen_background_dark_transparent" id="0x010800a9" />
   <public type="drawable" name="screen_background_light_transparent" id="0x010800aa" />
   <public type="drawable" name="stat_notify_sdcard_prepare" id="0x010800ab" />
 
 <!-- ===============================================================
-   Resources added in version 6 of the platform (Eclair 2.0.1).
-   =============================================================== -->
+     Resources added in version 6 of the platform (Eclair 2.0.1).
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="quickContactBadgeStyleWindowSmall" id="0x010102ae" />
@@ -1211,8 +1211,8 @@
   <public type="attr" name="quickContactBadgeStyleSmallWindowLarge" id="0x010102b3" />
 
 <!-- ===============================================================
-   Resources added in version 7 of the platform (Eclair MR1).
-   =============================================================== -->
+     Resources added in version 7 of the platform (Eclair MR1).
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="author" id="0x010102b4" />
@@ -1220,15 +1220,15 @@
 
 
 <!-- ===============================================================
-   Resources added in version 8 of the platform (Eclair MR2).
-   =============================================================== -->
+     Resources added in version 8 of the platform (Eclair MR2).
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="expandableListViewWhiteStyle" id="0x010102b6" />
 
 <!-- ===============================================================
-   Resources added in version 8 of the platform (Froyo / 2.2)
-   =============================================================== -->
+     Resources added in version 8 of the platform (Froyo / 2.2)
+     =============================================================== -->
   <eat-comment />
   <public type="attr" name="installLocation" id="0x010102b7" />
   <public type="attr" name="vmSafeMode" id="0x010102b8" />
@@ -1243,8 +1243,8 @@
   <public type="anim" name="cycle_interpolator" id="0x010a000c" />
 
 <!-- ===============================================================
-   Resources added in version 9 of the platform (Gingerbread / 2.3)
-   =============================================================== -->
+     Resources added in version 9 of the platform (Gingerbread / 2.3)
+     =============================================================== -->
   <eat-comment />
   <public type="attr" name="logo" id="0x010102be" />
   <public type="attr" name="xlargeScreens" id="0x010102bf" />
@@ -1275,8 +1275,8 @@
   <public type="style" name="TextAppearance.StatusBar.EventContent.Title" id="0x01030068" />
 
 <!-- ===============================================================
-   Resources added in version 11 of the platform (Honeycomb / 3.0).
-   =============================================================== -->
+     Resources added in version 11 of the platform (Honeycomb / 3.0).
+     =============================================================== -->
   <eat-comment />
 
   <public type="attr" name="allContactsName" id="0x010102cc" />
@@ -1454,22 +1454,22 @@
   <!-- An interpolator where the change starts backward then flings forward. -->
   <public type="interpolator" name="anticipate" id="0x010c0007" />
   <!-- An interpolator where the change flings forward and overshoots the last
-     value then comes back. -->
+       value then comes back. -->
   <public type="interpolator" name="overshoot" id="0x010c0008" />
   <!-- An interpolator where the change starts backward then flings forward and
-     overshoots the target value and finally goes back to the final value. -->
+       overshoots the target value and finally goes back to the final value. -->
   <public type="interpolator" name="anticipate_overshoot" id="0x010c0009" />
   <!-- An interpolator where the change bounces at the end. -->
   <public type="interpolator" name="bounce" id="0x010c000a" />
   <!-- An interpolator where the rate of change is constant. -->
   <public type="interpolator" name="linear" id="0x010c000b" />
   <!-- Repeats the animation for one cycle. The rate of change follows a
-     sinusoidal pattern. -->
+       sinusoidal pattern. -->
   <public type="interpolator" name="cycle" id="0x010c000c" />
 
   <public type="id" name="home" id="0x0102002c" />
   <!-- Context menu ID for the "Select text..." menu item to switch to text
-     selection context mode in text views. -->
+       selection context mode in text views. -->
   <public type="id" name="selectTextMode" id="0x0102002d" />
 
   <public type="dimen" name="dialog_min_width_major" id="0x01050003" />
@@ -1478,23 +1478,23 @@
   <public type="dimen" name="notification_large_icon_height" id="0x01050006" />
 
   <!-- Standard content view for a {@link android.app.ListFragment}.
-     If you are implementing a subclass of ListFragment with your
-     own customized content, you can include this layout in that
-     content to still retain all of the standard functionality of
-     the base class. -->
+       If you are implementing a subclass of ListFragment with your
+       own customized content, you can include this layout in that
+       content to still retain all of the standard functionality of
+       the base class. -->
   <public type="layout" name="list_content" id="0x01090014" />
 
   <!-- A simple ListView item layout which can contain text and support (single or multiple) item selection. -->
   <public type="layout" name="simple_selectable_list_item" id="0x01090015" />
 
   <!-- A version of {@link #simple_list_item_1} that is able to change its
-     background state to indicate when it is activated (that is checked by
-     a ListView). -->
+       background state to indicate when it is activated (that is checked by
+       a ListView). -->
   <public type="layout" name="simple_list_item_activated_1" id="0x01090016" />
 
   <!-- A version of {@link #simple_list_item_2} that is able to change its
-     background state to indicate when it is activated (that is checked by
-     a ListView). -->
+       background state to indicate when it is activated (that is checked by
+       a ListView). -->
   <public type="layout" name="simple_list_item_activated_2" id="0x01090017" />
 
   <public type="drawable" name="dialog_holo_dark_frame" id="0x010800b2" />
@@ -1642,15 +1642,15 @@
   <public type="mipmap" name="sym_def_app_icon" id="0x010d0000" />
 
 <!-- ===============================================================
-   Resources added in version 12 of the platform (Honeycomb MR 1 / 3.1)
-   =============================================================== -->
+     Resources added in version 12 of the platform (Honeycomb MR 1 / 3.1)
+     =============================================================== -->
   <eat-comment />
   <public type="attr" name="textCursorDrawable" id="0x01010362" />
   <public type="attr" name="resizeMode" id="0x01010363" />
 
 <!-- ===============================================================
-   Resources added in version 13 of the platform (Honeycomb MR 2 / 3.2)
-   =============================================================== -->
+     Resources added in version 13 of the platform (Honeycomb MR 2 / 3.2)
+     =============================================================== -->
   <eat-comment />
   <public type="attr" name="requiresSmallestWidthDp" id="0x01010364" />
   <public type="attr" name="compatibleWidthLimitDp" id="0x01010365" />
@@ -1699,8 +1699,8 @@
   <public type="style" name="TextAppearance.Holo.DialogWindowTitle" id="0x01030117" />
 
 <!-- ===============================================================
-   Resources added in version 14 of the platform (Ice Cream Sandwich / 4.0)
-   =============================================================== -->
+     Resources added in version 14 of the platform (Ice Cream Sandwich / 4.0)
+     =============================================================== -->
   <eat-comment />
   <public type="attr" name="state_hovered" id="0x01010367" />
   <public type="attr" name="state_drag_can_accept" id="0x01010368" />
@@ -1973,8 +1973,8 @@
   <public type="color" name="holo_blue_bright" id="0x0106001b" />
 
 <!-- ===============================================================
-   Resources added in version 16 of the platform (Jelly Bean)
-   =============================================================== -->
+     Resources added in version 16 of the platform (Jelly Bean)
+     =============================================================== -->
   <eat-comment />
   <public type="attr" name="parentActivityName" id="0x010103a7" />
   <public type="attr" name="isolatedProcess" id="0x010103a9" />
