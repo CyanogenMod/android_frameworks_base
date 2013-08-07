@@ -122,7 +122,8 @@ public class DateView extends TextView implements OnClickListener, OnLongClickLi
     protected void updateClock() {
         final String dateFormat = getContext().getString(R.string.system_ui_date_pattern);
         final Locale l = Locale.getDefault();
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, l);
+        String fmt = ICU.getBestDateTimePattern(dateFormat, l.toString());
+        SimpleDateFormat sdf = new SimpleDateFormat(fmt, l);
         setText(sdf.format(new Date()));
     }
 
