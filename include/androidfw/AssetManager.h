@@ -226,6 +226,7 @@ private:
         String8 idmap;
     };
 
+    void addAssetPathForOverlayRes(const asset_path& ap, const String8& overlayPath);
     Asset* openInPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
     Asset* openNonAssetInPathLocked(const char* fileName, AccessMode mode,

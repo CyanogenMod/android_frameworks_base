@@ -208,35 +208,46 @@ bool AssetManager::addAssetPath(const String8& path, void** cookie)
         *cookie = (void*)mAssetPaths.size();
     }
 
-    // add overlay packages for /system/framework; apps are handled by the
-    // (Java) package manager
+    // add overlay packages for /system/framework and /system/app
     if (strncmp(path.string(), "/system/framework/", 18) == 0) {
         // When there is an environment variable for /vendor, this
         // should be changed to something similar to how ANDROID_ROOT
         // and ANDROID_DATA are used in this file.
         String8 overlayPath("/vendor/overlay/framework/");
         overlayPath.append(path.getPathLeaf());
-        if (TEMP_FAILURE_RETRY(access(overlayPath.string(), R_OK)) == 0) {
-            asset_path oap;
-            oap.path = overlayPath;
-            oap.type = ::getFileType(overlayPath.string());
-            bool addOverlay = (oap.type == kFileTypeRegular); // only .apks supported as overlay
-            if (addOverlay) {
-                oap.idmap = idmapPathForPackagePath(overlayPath);
-
-                if (isIdmapStaleLocked(ap.path, oap.path, oap.idmap)) {
-                    addOverlay = createIdmapFileLocked(ap.path, oap.path, oap.idmap);
-                }
-            }
-            if (addOverlay) {
-                mAssetPaths.add(oap);
-            } else {
-                ALOGW("failed to add overlay package %s\n", overlayPath.string());
-            }
-        }
+        addAssetPathForOverlayRes(ap, overlayPath);
+    } else if (strncmp(path.string(), "/system/app/", 12) == 0) {
+        // When there is an environment variable for /vendor, this
+        // should be changed to something similar to how ANDROID_ROOT
+        // and ANDROID_DATA are used in this file.
+        String8 overlayPath("/vendor/overlay");
+        overlayPath.append(path.getBasePath());
+        overlayPath.append("-overlay.apk");
+        addAssetPathForOverlayRes(ap, overlayPath);
     }
 
     return true;
+}
+
+void AssetManager::addAssetPathForOverlayRes(const asset_path& ap, const String8& overlayPath) {
+    if (TEMP_FAILURE_RETRY(access(overlayPath.string(), R_OK)) == 0) {
+        asset_path oap;
+        oap.path = overlayPath;
+        oap.type = ::getFileType(overlayPath.string());
+        bool addOverlay = (oap.type == kFileTypeRegular); // only .apk supported as overlay
+        if (addOverlay) {
+            oap.idmap = idmapPathForPackagePath(overlayPath);
+
+            if (isIdmapStaleLocked(ap.path, oap.path, oap.idmap)) {
+                addOverlay = createIdmapFileLocked(ap.path, oap.path, oap.idmap);
+            }
+        }
+        if (addOverlay) {
+            mAssetPaths.add(oap);
+        } else {
+            ALOGW("failed to add overlay package %s\n", overlayPath.string());
+        }
+    }
 }
 
 bool AssetManager::isIdmapStaleLocked(const String8& originalPath, const String8& overlayPath,
@@ -324,6 +335,7 @@ bool AssetManager::createIdmapFileLocked(const String8& originalPath, const Stri
     int fd = 0;
     uint32_t* data = NULL;
     size_t size;
+    mode_t process_umask;
 
     for (int i = 0; i < 2; ++i) {
         asset_path ap;
@@ -352,10 +364,18 @@ bool AssetManager::createIdmapFileLocked(const String8& originalPath, const Stri
         goto error;
     }
 
+    // Set the mask to 0, caused by the current mask is "600", and it will create the idmap
+    // file as "600", but not the expected "644".
+    process_umask = umask(0);
+
     // This should be abstracted (eg replaced by a stand-alone
     // application like dexopt, triggered by something equivalent to
     // installd).
     fd = TEMP_FAILURE_RETRY(::open(idmapPath.string(), O_WRONLY | O_CREAT | O_TRUNC, 0644));
+
+    // Reset the mask.
+    umask(process_umask);
+
     if (fd == -1) {
         ALOGW("failed to write idmap file %s (open: %s)\n", idmapPath.string(), strerror(errno));
         goto error_free;
