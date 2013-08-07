@@ -290,6 +290,10 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     public void updateResources() {
         String storedVal = Settings.System.getStringForUser(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_TARGETS, UserHandle.USER_CURRENT);
+
+        // Enable magnetic targets
+        mGlowPadView.setMagneticTargets(true);
+
         if (storedVal == null) {
             // Update the search icon with drawable from the search .apk
             if (!mSearchDisabled) {
@@ -316,9 +320,6 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                     .ic_lockscreen_camera, !mCameraDisabled);
             mGlowPadView.setEnableTarget(com.android.internal.R.drawable
                     .ic_action_assist_generic, !mSearchDisabled);
-
-            // Enable magnetic targets
-            mGlowPadView.setMagneticTargets(true);
         } else {
             mStoredTargets = storedVal.split("\\|");
             mIsScreenLarge = isScreenLarge();
@@ -329,8 +330,7 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
             final boolean isLandscape = mCreationOrientation == Configuration.ORIENTATION_LANDSCAPE;
             final Drawable blankActiveDrawable = res.getDrawable(R.drawable.ic_lockscreen_target_activated);
             final InsetDrawable activeBack = new InsetDrawable(blankActiveDrawable, 0, 0, 0, 0);
-            // Disable magnetic target
-            mGlowPadView.setMagneticTargets(false);
+
             //Magnetic target replacement
             final Drawable blankInActiveDrawable = res.getDrawable(com.android.internal.R.drawable.ic_lockscreen_lock_pressed);
             final Drawable unlockActiveDrawable = res.getDrawable(com.android.internal.R.drawable.ic_lockscreen_unlock_activated);
@@ -411,6 +411,7 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                         } catch (Exception e) {
                             storedDraw.add(new TargetDrawable(res, 0));
                         }
+                        mGlowPadView.setMagneticTargets(false);
                     } else {
                         storedDraw.add(new TargetDrawable(res, getLayeredDrawable(unlockActiveDrawable, blankInActiveDrawable, tmpInset, true)));
                     }
