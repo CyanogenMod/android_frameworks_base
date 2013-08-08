@@ -21,6 +21,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemProperties;
 import android.telephony.Rlog;
+import android.content.res.Resources;
 
 /**
  * Contains phone signal strength related information.
@@ -761,6 +762,7 @@ public class SignalStrength implements Parcelable {
          * dB= Number of Resource blocksxRSRP/RSSI SNR = gain=signal/noise ratio
          * = -10log P1/P2 dB
          */
+        int rsrqIconLevel = -1;
         int rssiIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN, rsrpIconLevel = -1, snrIconLevel = -1;
 
         if (mLteRsrp > -44) rsrpIconLevel = -1;
@@ -770,36 +772,71 @@ public class SignalStrength implements Parcelable {
         else if (mLteRsrp >= -115) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
         else if (mLteRsrp >= -140) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
-        /*
-         * Values are -200 dB to +300 (SNR*10dB) RS_SNR >= 13.0 dB =>4 bars 4.5
-         * dB <= RS_SNR < 13.0 dB => 3 bars 1.0 dB <= RS_SNR < 4.5 dB => 2 bars
-         * -3.0 dB <= RS_SNR < 1.0 dB 1 bar RS_SNR < -3.0 dB/No Service Antenna
-         * Icon Only
-         */
-        if (mLteRssnr > 300) snrIconLevel = -1;
-        else if (mLteRssnr >= 130) snrIconLevel = SIGNAL_STRENGTH_GREAT;
-        else if (mLteRssnr >= 45) snrIconLevel = SIGNAL_STRENGTH_GOOD;
-        else if (mLteRssnr >= 10) snrIconLevel = SIGNAL_STRENGTH_MODERATE;
-        else if (mLteRssnr >= -30) snrIconLevel = SIGNAL_STRENGTH_POOR;
-        else if (mLteRssnr >= -200)
-            snrIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
-
-        if (DBG) log("getLTELevel - rsrp:" + mLteRsrp + " snr:" + mLteRssnr + " rsrpIconLevel:"
-                + rsrpIconLevel + " snrIconLevel:" + snrIconLevel);
-
-        /* Choose a measurement type to use for notification */
-        if (snrIconLevel != -1 && rsrpIconLevel != -1) {
+        int secondMetricType = Resources.getSystem().getInteger(com.android.internal.R.integer.config_LTE_antenna_bar_quantity_metric);
+        if (secondMetricType == 0){
             /*
-             * The number of bars displayed shall be the smaller of the bars
-             * associated with LTE RSRP and the bars associated with the LTE
-             * RS_SNR
+             * Values are -200 dB to +300 (SNR*10dB) RS_SNR >= 13.0 dB =>4 bars 4.5
+             * dB <= RS_SNR < 13.0 dB => 3 bars 1.0 dB <= RS_SNR < 4.5 dB => 2 bars
+             * -3.0 dB <= RS_SNR < 1.0 dB 1 bar RS_SNR < -3.0 dB/No Service Antenna
+             * Icon Only
              */
-            return (rsrpIconLevel < snrIconLevel ? rsrpIconLevel : snrIconLevel);
-        }
+            if (mLteRssnr > 300) snrIconLevel = -1;
+            else if (mLteRssnr >= 130) snrIconLevel = SIGNAL_STRENGTH_GREAT;
+            else if (mLteRssnr >= 45) snrIconLevel = SIGNAL_STRENGTH_GOOD;
+            else if (mLteRssnr >= 10) snrIconLevel = SIGNAL_STRENGTH_MODERATE;
+            else if (mLteRssnr >= -30) snrIconLevel = SIGNAL_STRENGTH_POOR;
+            else if (mLteRssnr >= -200)
+                snrIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
-        if (snrIconLevel != -1) return snrIconLevel;
+            if (DBG) log("getLTELevel - rsrp:" + mLteRsrp + " snr:" + mLteRssnr + " rsrpIconLevel:"
+                    + rsrpIconLevel + " snrIconLevel:" + snrIconLevel);
 
-        if (rsrpIconLevel != -1) return rsrpIconLevel;
+            /* Choose a measurement type to use for notification */
+            if (snrIconLevel != -1 && rsrpIconLevel != -1) {
+                /*
+                 * The number of bars displayed shall be the smaller of the bars
+                 * associated with LTE RSRP and the bars associated with the LTE
+                 * RS_SNR
+                 */
+                return (rsrpIconLevel < snrIconLevel ? rsrpIconLevel : snrIconLevel);
+            }
+
+            if (snrIconLevel != -1) return snrIconLevel;
+
+            if (rsrpIconLevel != -1) return rsrpIconLevel;
+       }
+       else if (secondMetricType == 1){
+            /*
+             * Values are -34 dB to -3dB RSRQ >= -12dB =>4 bars -14
+             * dB <= RSRQ < -12 dB => 3 bars -17 dB <= RSRQ < -14 dB => 2 bars
+             * -19 dB <= RSRQ < -17 dB 1 bar RS_SNR < -34 dB/No Service Antenna
+             * Icon Only
+             */
+            if (mLteRsrq > -3) rsrqIconLevel = -1;
+            else if (mLteRsrq >=  -12) rsrqIconLevel = SIGNAL_STRENGTH_GREAT;
+            else if (mLteRsrq >=  -14) rsrqIconLevel = SIGNAL_STRENGTH_GOOD;
+            else if (mLteRsrq >=  -17) rsrqIconLevel = SIGNAL_STRENGTH_MODERATE;
+            else if (mLteRsrq >=  -19) rsrqIconLevel = SIGNAL_STRENGTH_POOR;
+            else if (mLteRsrq >=  -34)
+                rsrqIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+
+            if (DBG) log("getLTELevel - rsrp:" + mLteRsrp + " rsrq:" + mLteRsrq + " rsrpIconLevel:"
+                    + rsrpIconLevel + " rsrqIconLevel:" + rsrqIconLevel);
+
+            /* Choose a measurement type to use for notification */
+            if (rsrqIconLevel != -1 && rsrpIconLevel != -1) {
+                /*
+                 * The number of bars displayed shall be the smaller of the bars
+                 * associated with LTE RSRP and the bars associated with the LTE
+                 * RSRQ
+                 */
+                return (rsrpIconLevel < rsrqIconLevel ? rsrpIconLevel : rsrqIconLevel);
+            }
+            
+            if (rsrqIconLevel != -1) return rsrqIconLevel;
+
+            if (rsrpIconLevel != -1) return rsrpIconLevel;
+       }
 
         /* Valid values are (0-63, 99) as defined in TS 36.331 */
         if (mLteSignalStrength > 63) rssiIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
@@ -807,6 +844,7 @@ public class SignalStrength implements Parcelable {
         else if (mLteSignalStrength >= 8) rssiIconLevel = SIGNAL_STRENGTH_GOOD;
         else if (mLteSignalStrength >= 5) rssiIconLevel = SIGNAL_STRENGTH_MODERATE;
         else if (mLteSignalStrength >= 0) rssiIconLevel = SIGNAL_STRENGTH_POOR;
+
         if (DBG) log("getLTELevel - rssi:" + mLteSignalStrength + " rssiIconLevel:"
                 + rssiIconLevel);
         return rssiIconLevel;
