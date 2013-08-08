@@ -98,6 +98,7 @@ public interface IActivityManager extends IInterface {
     public void activitySlept(IBinder token) throws RemoteException;
     public void activityDestroyed(IBinder token) throws RemoteException;
     public String getCallingPackage(IBinder token) throws RemoteException;
+    public String getCallingPackageForBroadcast(boolean foreground) throws RemoteException;
     public ComponentName getCallingActivity(IBinder token) throws RemoteException;
     public List getTasks(int maxNum, int flags,
                          IThumbnailReceiver receiver) throws RemoteException;
@@ -644,4 +645,5 @@ public interface IActivityManager extends IInterface {
     int SET_USER_IS_MONKEY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+165;
     int HANG_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+166;
     int IS_PRIVACY_GUARD_ENABLED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+167;
+    int GET_CALLING_PACKAGE_FOR_BROADCAST_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+168;
 }
