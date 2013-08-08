@@ -1105,21 +1105,21 @@ class WifiConfigStore {
 
         setVariables: {
 
-            if (config.SSID != null &&
-                    !mWifiNative.setNetworkVariable(
-                        netId,
-                        WifiConfiguration.ssidVarName,
-                        config.SSID)) {
-                loge("failed to set SSID: "+config.SSID);
-                break setVariables;
-            }
-
             if (config.BSSID != null &&
                     !mWifiNative.setNetworkVariable(
                         netId,
                         WifiConfiguration.bssidVarName,
                         config.BSSID)) {
                 loge("failed to set BSSID: "+config.BSSID);
+                break setVariables;
+            }
+
+            if (config.SSID != null &&
+                    !mWifiNative.setNetworkVariable(
+                        netId,
+                        WifiConfiguration.ssidVarName,
+                        config.SSID)) {
+                loge("failed to set SSID: "+config.SSID);
                 break setVariables;
             }
 
