@@ -38,16 +38,34 @@
     <string name="reboot_fastboot">Fastboot-tila</string>
     <string name="reboot_download">Download-tila</string>
     <string name="reboot_progress">Käynnistetään uudelleen\u2026</string>
-    <string name="reboot_confirm" product="default">Puhelimesi käynnistyy uudelleen.</string>
+    <string name="reboot_confirm" product="default">Puhelin käynnistyy uudelleen.</string>
+    <string name="reboot_confirm" product="tablet">Tablet käynnistyy uudelleen.</string>
     <string name="lockscreen_discharging">Puretaan latausta, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="app_killed_message">Sovellus tapettu</string>
     <string name="global_action_reboot">Käynnistä uudelleen</string>
     <string name="global_action_choose_profile">Profiili</string>
     <string name="toast_rotation_unlocked">Näytön asento auki</string>
     <string name="toast_rotation_locked">Näytön asento lukittu</string>
-    <string name="permlab_fm_radio_receiver">Ohjaa FM-vastaanotinta</string>
+    <string name="permlab_fm_radio_receiver">ohjaa fm-vastaanotinta</string>
     <string name="permdesc_fm_radio_receiver">Sallii sovelluksen ohjata FM-vastaanotinta.</string>
-    <string name="permlab_fm_radio_transmitter">Ohjaa FM-lähetintä</string>
+    <string name="permlab_fm_radio_transmitter">ohjaa fm-lähetintä</string>
     <string name="permdesc_fm_radio_transmitter">Sallii sovelluksen ohjata FM-lähetintä.</string>
     <string name="storage_sd_dock_card">Telakoi SD-kortti</string>
+    <string name="permlab_preventpower">estä virtapainike</string>
+    <string name="permdesc_preventpower">Sallii sovelluksen ohittaa virtapainikkeen käyttö</string>
+    <string name="stylus_app_not_installed">%s ei ole asennettu</string>
+    <string name="permlab_changePrivacyGuardState">ota privacy guard käyttöön tai poista se käytöstä</string>
+    <string name="permdesc_changePrivacyGuardState">Sallii sovelluksen valita milloin muut sovellukset käyttävät Privacy Guardia. Kun sovellus käyttää Privacy Guardia, sillä ei ole pääsyä henkilökohtaisiin tietoihin kuten yhteystietoihin, puhelulokeihin tai viesteihin.</string>
+    <string name="privacy_guard_notification">Privacy Guard aktiivinen</string>
+    <string name="privacy_guard_notification_detail">Sovelluksella <xliff:g id="app">%1$s</xliff:g> ei ole pääsyä henkilökohtaisiin tietoihin</string>
+    <string name="profile_picker_title">Profiilit</string>
+    <string name="profile_none">Ei mitään</string>
+    <string name="permlab_cancelNotifications">peruuta sovellusten ilmoitukset</string>
+    <string name="permdesc_cancelNotifications">Sallii sovelluksen peruuttaa muiden sovellusten luomat ilmoitukset.</string>
+    <string name="permlab_interceptSmsSent">estä lähtevät tekstiviestit</string>
+    <string name="permdesc_interceptSmsSent">Sallii sovelluksen pysäyttää lähtevät tekstiviestit. Haitalliset sovellukset saattavat käyttää tätä estääkseen kaikki lähtevät tekstiviestit.</string>
+    <string name="policylab_enforceSelinux">Pakota SELinux</string>
+    <string name="policydesc_enforceSelinux">Valitse SELinuxin käytännöksi pakotettu tai salliva tila.</string>
+    <string name="policylab_enforceMmac">Pakota MMAC</string>
+    <string name="policydesc_enforceMmac">Valitse MMAC:n käytännöksi pakotettu tai salliva tila.</string>
 </resources>
