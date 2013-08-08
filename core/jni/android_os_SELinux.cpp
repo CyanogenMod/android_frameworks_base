@@ -335,19 +335,20 @@ namespace android {
    * Exceptions: None
    */
   static jobjectArray getBooleanNames(JNIEnv *env, JNIEnv clazz) {
-#ifdef HAVE_SELINUX
-    if (isSELinuxDisabled)
-      return NULL;
+    jclass stringClass = env->FindClass("java/lang/String");
+    jobjectArray stringArray = env->NewObjectArray(0, stringClass, NULL);
 
+#ifdef HAVE_SELINUX
     char **list;
     int i, len, ret;
-    jclass stringClass;
-    jobjectArray stringArray = NULL;
+
+    if (isSELinuxDisabled)
+      return stringArray;
 
     if (security_get_boolean_names(&list, &len) == -1)
-      return NULL;
+      return stringArray;
 
-    stringClass = env->FindClass("java/lang/String");
+    env->DeleteLocalRef(stringArray);
     stringArray = env->NewObjectArray(len, stringClass, env->NewStringUTF(""));
     for (i = 0; i < len; i++) {
       jstring obj;
@@ -357,11 +358,8 @@ namespace android {
       free(list[i]);
     }
     free(list);
-
-    return stringArray;
-#else
-    return NULL;
 #endif
+    return stringArray;
   }
 
   /*
