@@ -57,7 +57,8 @@ public class PlatLogoActivity extends Activity {
         Typeface light = Typeface.create("sans-serif-light", Typeface.NORMAL);
         Typeface normal = Typeface.create("sans-serif", Typeface.BOLD);
 
-        final float size = 14 * metrics.density;
+        final int fontScale = metrics.density >= DENSITY_XXHIGH ? 12 : 14;
+        final float size = fontScale * metrics.density;
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
