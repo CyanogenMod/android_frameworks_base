@@ -177,6 +177,10 @@ public class PhoneStatusBarView extends PanelBar {
                 | PiePosition.TOP.FLAG
                 | PiePosition.RIGHT.FLAG
                 | PiePosition.BOTTOM.FLAG);
+        
+        if (mBar.mFullscreenView != null) {
+            mBar.removeFullscreenView();
+        }
     }
 
     @Override

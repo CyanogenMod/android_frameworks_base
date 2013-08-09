@@ -3278,6 +3278,13 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_KEYS_CONTROL_RING_STREAM = "volume_keys_control_ring_stream";
+        
+        /**
+         * Automatically unhide status bar temporarily in fullscreen on new notifications
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_AUTO_UNHIDE = "status_bar_auto_unhide";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
