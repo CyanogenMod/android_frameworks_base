@@ -56,6 +56,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_PRELOAD_RECENT_APPS        = 14 << MSG_SHIFT;
     private static final int MSG_CANCEL_PRELOAD_RECENT_APPS = 15 << MSG_SHIFT;
     private static final int MSG_SET_NAVIGATION_ICON_HINTS  = 16 << MSG_SHIFT;
+    private static final int MSG_SET_STATUS_BAR_HIDDEN_STATE = 17 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -90,6 +91,7 @@ public class CommandQueue extends IStatusBar.Stub {
         public void animateExpandSettingsPanel();
         public void setSystemUiVisibility(int vis, int mask);
         public void topAppWindowChanged(boolean visible);
+        public void setStatusBarHiddenState(boolean hidden);
         public void setImeWindowStatus(IBinder token, int vis, int backDisposition);
         public void setHardKeyboardStatus(boolean available, boolean enabled);
         public void toggleRecentApps();
@@ -184,6 +186,14 @@ public class CommandQueue extends IStatusBar.Stub {
         synchronized (mList) {
             mHandler.removeMessages(MSG_TOP_APP_WINDOW_CHANGED);
             mHandler.obtainMessage(MSG_TOP_APP_WINDOW_CHANGED, menuVisible ? 1 : 0, 0,
+                    null).sendToTarget();
+        }
+    }
+
+    public void setStatusBarHiddenState(boolean hidden) {
+        synchronized (mList) {
+            mHandler.removeMessages(MSG_SET_STATUS_BAR_HIDDEN_STATE);
+            mHandler.obtainMessage(MSG_SET_STATUS_BAR_HIDDEN_STATE, hidden ? 1 : 0, 0,
                     null).sendToTarget();
         }
     }
@@ -311,6 +321,9 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_SET_NAVIGATION_ICON_HINTS:
                     mCallbacks.setNavigationIconHints(msg.arg1);
+                    break;
+                case MSG_SET_STATUS_BAR_HIDDEN_STATE:
+                    mCallbacks.setStatusBarHiddenState(msg.arg1 != 0);
                     break;
             }
         }

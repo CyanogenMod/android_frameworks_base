@@ -285,6 +285,23 @@ public class StatusBarManagerService extends IStatusBarService.Stub
         }
     }
 
+    public void setStatusBarHiddenState(final boolean hidden) {
+        enforceStatusBarService();
+
+        synchronized(mLock) {
+            mHandler.post(new Runnable() {
+                    public void run() {
+                        if (mBar != null) {
+                            try {
+                                mBar.setStatusBarHiddenState(hidden);
+                            } catch (RemoteException ex) {
+                            }
+                        }
+                    }
+                });
+        }
+    }
+
     public void setImeWindowStatus(final IBinder token, final int vis, final int backDisposition) {
         enforceStatusBar();
 

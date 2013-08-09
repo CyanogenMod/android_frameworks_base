@@ -1638,6 +1638,10 @@ public class TabletStatusBar extends BaseStatusBar implements
         }
         super.userSwitched(newUserId);
     }
+
+    @Override
+    public void setStatusBarHiddenState(boolean hidden) {
+    }
 }
 
 

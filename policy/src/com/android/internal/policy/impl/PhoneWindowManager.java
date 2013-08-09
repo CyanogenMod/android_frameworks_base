@@ -20,6 +20,7 @@ package com.android.internal.policy.impl;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManagerNative;
+import android.app.StatusBarManager;
 import android.app.IActivityManager;
 import android.app.IUiModeManager;
 import android.app.KeyguardManager;
@@ -3855,6 +3856,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
+        if (topIsFullscreen != mTopIsFullscreen) {
+            final boolean hidden = topIsFullscreen;
+            mHandler.post(new Runnable() {
+                public void run() {
+                    try {
+                        IStatusBarService statusbar = getStatusBarService();
+                        if (statusbar != null) {
+                            statusbar.setStatusBarHiddenState(hidden);
+                        }
+                    } catch (RemoteException e) {
+                        // re-acquire status bar service next time it is needed.
+                        mStatusBarService = null;
+                    }
+                }
+            });
+        }
         mTopIsFullscreen = topIsFullscreen;
 
         // Hide the key guard if a visible window explicitly specifies that it wants to be
