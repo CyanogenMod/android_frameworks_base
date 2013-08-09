@@ -385,6 +385,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     final ActivityIntentResolver mReceivers =
             new ActivityIntentResolver();
 
+    final HashSet<String> mAllowances = new HashSet<String>();
+
     // All available services, for your resolving pleasure.
     final ServiceIntentResolver mServices = new ServiceIntentResolver();
 
@@ -1623,6 +1625,23 @@ public class PackageManagerService extends IPackageManager.Stub {
                     perms.add(perm);
                     XmlUtils.skipCurrentTag(parser);
 
+                } else if ("allow-permission".equals(name)) {
+                    String perm = parser.getAttributeValue(null, "name");
+                    if (perm == null) {
+                        Slog.w(TAG, "<allow-permission> without name at "
+                                + parser.getPositionDescription());
+                        XmlUtils.skipCurrentTag(parser);
+                        continue;
+                    }
+                    String pkgName = parser.getAttributeValue(null, "package");
+                    if (pkgName == null) {
+                        Slog.w(TAG, "<allow-permission> without package at "
+                                + parser.getPositionDescription());
+                        XmlUtils.skipCurrentTag(parser);
+                        continue;
+                    }
+                    mAllowances.add(pkgName + ":" + perm);
+                    XmlUtils.skipCurrentTag(parser);
                 } else if ("library".equals(name)) {
                     String lname = parser.getAttributeValue(null, "name");
                     String lfile = parser.getAttributeValue(null, "file");
@@ -5318,6 +5337,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             } else {
                 allowed = false;
             }
+            allowed |= mAllowances.contains(pkg.packageName + ":" + name);
             if (DEBUG_INSTALL) {
                 if (gp != ps) {
                     Log.i(TAG, "Package " + pkg.packageName + " granting " + perm);
