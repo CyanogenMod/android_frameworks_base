@@ -20,6 +20,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -357,6 +359,8 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_AUTO_UNHIDE), false, this);
             update();
         }
 
@@ -372,6 +376,8 @@ public class PhoneStatusBar extends BaseStatusBar {
             mBrightnessControl = brightnessValue != Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC
                     && Settings.System.getIntForUser(resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
                             0, UserHandle.USER_CURRENT) == 1;
+            mStatusBarAutoUnhide = Settings.System.getInt(
+                    resolver, Settings.System.STATUS_BAR_AUTO_UNHIDE, 0) == 1;
         }
     }
 
@@ -770,6 +776,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction("com.android.internal.policy.impl.PhoneWindowManager: mTopIsFullscreen Changed");
         context.registerReceiver(mBroadcastReceiver, filter);
 
         // listen for USER_SETUP_COMPLETE setting (per-user)
@@ -1050,7 +1057,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     }
 
     @Override
-    public void addNotification(IBinder key, StatusBarNotification notification) {
+    public void addNotification(IBinder key, final StatusBarNotification notification) {
         if (DEBUG) Slog.d(TAG, "addNotification score=" + notification.getScore());
         StatusBarIconView iconView = addNotificationViews(key, notification);
         if (iconView == null) return;
@@ -1116,7 +1123,23 @@ public class PhoneStatusBar extends BaseStatusBar {
 
             // show the ticker if there isn't an intruder too
             if (mCurrentlyIntrudingNotification == null) {
-                tick(null, notification, true);
+                if (mStatusBarAutoUnhide && mTopIsFullscreen && mFullscreenView == null) {
+                    showFullscreenView();
+
+                    final Handler handler = new Handler();
+                    final Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        public void run() {
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    tick(null, notification, true);
+                                }
+                            });
+                        }
+                    }, 250);
+                } else {
+                    tick(null, notification, true);
+                }
             }
         }
 
@@ -2371,6 +2394,20 @@ public class PhoneStatusBar extends BaseStatusBar {
             mStatusBarContents.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in, null));
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_down_out,
                         mTickingDoneListener));
+
+            if (mFullscreenView != null && !mExpandedVisible) {
+                final Handler handler = new Handler();
+                final Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    public void run() {
+                        handler.post(new Runnable() {
+                            public void run() {
+                                removeFullscreenView();
+                            }
+                        });
+                    }
+                }, 750);
+            }
         }
 
         @Override
@@ -2706,6 +2743,9 @@ public class PhoneStatusBar extends BaseStatusBar {
                 // work around problem where mDisplay.getRotation() is not stable while screen is off (bug 7086018)
                 repositionNavigationBar();
                 notifyNavigationBarScreenOn(true);
+            }
+            else if ("com.android.internal.policy.impl.PhoneWindowManager: mTopIsFullscreen Changed".equals(action)) {
+                mTopIsFullscreen = intent.getBooleanExtra("topIsFullscreen", false);
             }
         }
     };

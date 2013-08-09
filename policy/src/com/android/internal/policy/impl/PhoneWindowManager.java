@@ -3865,6 +3865,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
+        if (topIsFullscreen != mTopIsFullscreen) {
+            Intent intent = new Intent("com.android.internal.policy.impl.PhoneWindowManager: mTopIsFullscreen Changed");
+            intent.putExtra("topIsFullscreen", topIsFullscreen);
+            mContext.sendBroadcast(intent);
+        }
         mTopIsFullscreen = topIsFullscreen;
 
         // Hide the key guard if a visible window explicitly specifies that it wants to be
