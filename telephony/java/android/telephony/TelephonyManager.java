@@ -673,6 +673,7 @@ public class TelephonyManager {
     public static final int NETWORK_TYPE_HSPAP = 15;
     /** Current network is GSM {@hide} */
     public static final int NETWORK_TYPE_GSM = 16;
+
     /**
      * @return the NETWORK_TYPE_xxxx for current data connection.
      */
