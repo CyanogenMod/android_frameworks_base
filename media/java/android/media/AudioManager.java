@@ -1681,7 +1681,12 @@ public class AudioManager {
      *
      */
     public void setParameters(String keyValuePairs) {
-        AudioSystem.setParameters(keyValuePairs);
+        IAudioService service = getService();
+        try {
+            service.setParameters(keyValuePairs);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error in setParameters due to "+e);
+        }
     }
 
     /**
