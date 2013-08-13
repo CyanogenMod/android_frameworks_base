@@ -2341,43 +2341,38 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
             if (!down && mHomePressed) {
-                final boolean homeWasLongPressed = mHomeLongPressed;
-                mHomeLongPressed = false;
+                if (mRecentAppsPreloaded) {
+                    cancelPreloadRecentApps();
+                }
                 mHomePressed = false;
                 if (mHomeConsumed) {
                     mHomeConsumed = false;
                     return -1;
                 }
 
-                if (!homeWasLongPressed) {
-                    if (mRecentAppsPreloaded) {
-                        cancelPreloadRecentApps();
-                    }
-                    mHomePressed = false;
-                    if (!canceled) {
-                        boolean incomingRinging = false;
-                        try {
-                            ITelephony telephonyService = getTelephonyService();
-                            if (telephonyService != null) {
-                                incomingRinging = telephonyService.isRinging();
-                            }
-                            if (incomingRinging) {
-                                if ((mRingHomeBehavior
-                                            & Settings.Secure.RING_HOME_BUTTON_BEHAVIOR_ANSWER) != 0) {
-                                    Log.i(TAG, "Answering with HOME button.");
-                                    telephonyService.answerRingingCall();
-                                } else {
-                                    Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
-                                }
-                            } else {
-                                launchHomeFromHotKey();
-                            }
-                        } catch (RemoteException ex) {
-                            Log.w(TAG, "RemoteException from getPhoneInterface()", ex);
+                if (canceled) {
+                    Log.i(TAG, "Ignoring HOME; event canceled.");
+                    return -1;
+                }
+
+                // If an incoming call is ringing, HOME is totally disabled.
+                // (The user is already on the InCallScreen at this point,
+                // and his ONLY options are to answer or reject the call.)
+                try {
+                    ITelephony telephonyService = getTelephonyService();
+                    if (telephonyService != null && telephonyService.isRinging()) {
+                        if ((mRingHomeBehavior
+                                     & Settings.Secure.RING_HOME_BUTTON_BEHAVIOR_ANSWER) != 0) {
+                            Log.i(TAG, "Answering with HOME button.");
+                            telephonyService.answerRingingCall();
+                            return -1;
+                        } else {
+                            Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
+                            return -1;
                         }
-                    } else {
-                        Log.i(TAG, "Ignoring HOME; event canceled.");
                     }
+                } catch (RemoteException ex) {
+                    Log.w(TAG, "RemoteException from getPhoneInterface()", ex);
                 }
 
                 // Delay handling home if a double-tap is possible.
@@ -2389,6 +2384,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     return -1;
                 }
 
+                // Go home!
+                launchHomeFromHotKey();
                 return -1;
             }
 
