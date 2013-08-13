@@ -221,19 +221,13 @@ LOCAL_SHARED_LIBRARIES := \
 	libz
 
 ifeq ($(TARGET_ARCH), arm)
-  ifeq ($(TARGET_USE_KRAIT_BIONIC_OPTIMIZATION), true)
+  ifeq ($(ARCH_ARM_HAVE_NEON),true)
     TARGET_arm_CFLAGS += -DUSE_NEON_BITMAP_OPTS -mvectorize-with-neon-quad
     LOCAL_SRC_FILES+= \
 		android/graphics/Bitmap.cpp.arm
   else
-    ifeq ($(TARGET_CPU_VARIANT), cortex-a15)
-      TARGET_arm_CFLAGS += -DUSE_NEON_BITMAP_OPTS -mvectorize-with-neon-quad
-      LOCAL_SRC_FILES+= \
-		android/graphics/Bitmap.cpp.arm
-    else
-      LOCAL_SRC_FILES+= \
+    LOCAL_SRC_FILES+= \
 		android/graphics/Bitmap.cpp
-    endif
   endif
 else
     LOCAL_SRC_FILES+= \
