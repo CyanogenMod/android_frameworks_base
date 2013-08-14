@@ -226,7 +226,6 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     // top bar
     View mNotificationPanelHeader;
-    View mDateTimeView;
     View mClearButton;
     ImageView mSettingsButton, mNotificationButton;
 
@@ -252,9 +251,6 @@ public class PhoneStatusBar extends BaseStatusBar {
     // position
     int[] mPositionTmp = new int[2];
     boolean mExpandedVisible;
-
-    // the date view
-    DateView mDateView;
 
     // for immersive activities
     private IntruderAlertView mIntruderAlertView;
@@ -536,12 +532,9 @@ public class PhoneStatusBar extends BaseStatusBar {
         mClearButton.setAlpha(0f);
         mClearButton.setVisibility(View.INVISIBLE);
         mClearButton.setEnabled(false);
-        mDateView = (DateView)mStatusBarWindow.findViewById(R.id.date);
 
         mHasSettingsPanel = res.getBoolean(R.bool.config_hasSettingsPanel);
         mHasFlipSettings = res.getBoolean(R.bool.config_hasFlipSettingsPanel);
-
-        mDateTimeView = mNotificationPanelHeader.findViewById(R.id.datetime);
 
         mSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.settings_button);
         if (mSettingsButton != null) {
