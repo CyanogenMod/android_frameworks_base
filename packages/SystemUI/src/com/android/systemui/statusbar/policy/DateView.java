@@ -45,8 +45,6 @@ import libcore.icu.ICU;
 public class DateView extends TextView implements OnClickListener, OnLongClickListener {
     private static final String TAG = "DateView";
 
-    private RelativeLayout mParent;
-
     private boolean mAttachedToWindow;
     private boolean mWindowVisible;
     private boolean mUpdating;
@@ -81,23 +79,7 @@ public class DateView extends TextView implements OnClickListener, OnLongClickLi
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mAttachedToWindow = false;
-        if (mParent != null) {
-            mParent.setOnClickListener(null);
-            mParent.setOnLongClickListener(null);
-            mParent = null;
-        }
         setUpdates();
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        if (mParent == null) {
-            mParent = (RelativeLayout) getParent();
-            mParent.setOnClickListener(this);
-            mParent.setOnLongClickListener(this);
-        }
-
-        super.onDraw(canvas);
     }
 
     @Override
