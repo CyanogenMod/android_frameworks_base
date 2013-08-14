@@ -34,8 +34,10 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.internal.R;
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.TargetDrawable;
 
@@ -135,6 +137,21 @@ public final class LockscreenTargetUtils {
 
         return new BitmapDrawable(context.getResources(),
                 LockscreenTargetUtils.getRoundedCornerBitmap(BitmapFactory.decodeFile(fileName)));
+    }
+
+    public static int getInsetForIconType(Context context, String type) {
+        if (TextUtils.equals(type, GlowPadView.ICON_RESOURCE)) {
+            return 0;
+        }
+
+        final Resources res = context.getResources();
+        int inset = res.getDimensionPixelSize(R.dimen.lockscreen_target_inset);
+
+        if (TextUtils.equals(type, GlowPadView.ICON_FILE)) {
+            inset += res.getDimensionPixelSize(R.dimen.lockscreen_target_icon_file_inset);
+        }
+
+        return inset;
     }
 
     public static Drawable getDrawableFromResources(Context context,
