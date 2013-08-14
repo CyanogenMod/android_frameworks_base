@@ -29,6 +29,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.UserHandle;
@@ -283,8 +285,6 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
             ArrayList<TargetDrawable> storedDrawables = new ArrayList<TargetDrawable>();
 
             final Resources res = getResources();
-            final int targetInset = res.getDimensionPixelSize(
-                    com.android.internal.R.dimen.lockscreen_target_inset);
             final PackageManager pm = mContext.getPackageManager();
 
             final Drawable blankActiveDrawable = res.getDrawable(
@@ -310,7 +310,6 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                     res.getDrawable(R.drawable.ic_lockscreen_unlock)));
 
             for (int i = 0; i < 8 - mTargetOffset - 1; i++) {
-                int inset = targetInset;
                 if (i >= mStoredTargets.length) {
                     storedDrawables.add(new TargetDrawable(res, 0));
                     continue;
@@ -319,7 +318,8 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                 String uri = mStoredTargets[i];
                 if (uri.equals(GlowPadView.EMPTY_TARGET)) {
                     Drawable d = LockscreenTargetUtils.getLayeredDrawable(
-                            mContext, unlockActiveDrawable, blankInActiveDrawable, inset, true);
+                            mContext, unlockActiveDrawable, blankInActiveDrawable,
+                            LockscreenTargetUtils.getInsetForIconType(mContext, null), true);
                     storedDrawables.add(new TargetDrawable(res, d));
                     continue;
                 }
@@ -329,11 +329,12 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                     Drawable front = null;
                     Drawable back = activeBack;
                     boolean frontBlank = false;
+                    String type = null;
 
                     if (intent.hasExtra(GlowPadView.ICON_FILE)) {
+                        type = GlowPadView.ICON_FILE;
                         front = LockscreenTargetUtils.getDrawableFromFile(mContext,
                                 intent.getStringExtra(GlowPadView.ICON_FILE));
-                        inset += 5;
                     } else if (intent.hasExtra(GlowPadView.ICON_RESOURCE)) {
                         String source = intent.getStringExtra(GlowPadView.ICON_RESOURCE);
                         String packageName = intent.getStringExtra(GlowPadView.ICON_PACKAGE);
@@ -343,7 +344,7 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                                     packageName, source, false);
                             back = LockscreenTargetUtils.getDrawableFromResources(mContext,
                                     packageName, source, true);
-                            inset = 0;
+                            type = GlowPadView.ICON_RESOURCE;
                             frontBlank = true;
                         }
                     }
@@ -352,11 +353,14 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                                 PackageManager.GET_ACTIVITIES);
                         if (activityInfo != null) {
                             front = activityInfo.loadIcon(pm);
+                            Bitmap icon = LockscreenTargetUtils.resizeIconTarget(mContext, front);
+                            front = new BitmapDrawable(res, icon);
                         } else {
                             front = res.getDrawable(android.R.drawable.sym_def_app_icon);
                         }
                     }
 
+                    int inset = LockscreenTargetUtils.getInsetForIconType(mContext, type);
                     Drawable drawable = LockscreenTargetUtils.getLayeredDrawable(mContext,
                             back,front, inset, frontBlank);
                     TargetDrawable targetDrawable = new TargetDrawable(res, drawable);
