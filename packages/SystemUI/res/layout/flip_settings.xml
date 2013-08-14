@@ -14,18 +14,25 @@
      limitations under the License.
 -->
 
-<com.android.systemui.statusbar.phone.QuickSettingsScrollView
+<HorizontalScrollView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/close_handle_underlap"
-    android:overScrollMode="ifContentScrolls"
-    >
-    <com.android.systemui.statusbar.phone.QuickSettingsContainerView
-        android:id="@+id/quick_settings_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:columnCount="@integer/quick_settings_num_columns"
-        />
-</com.android.systemui.statusbar.phone.QuickSettingsScrollView>
+android:background="#55AA0000"
+    android:layout_height="@dimen/notification_min_height"
+    android:layout_marginBottom="@dimen/close_handle_underlap">
+	<com.android.systemui.statusbar.phone.QuickSettingsScrollView
+android:background="#5500AA00"
+	    android:layout_width="match_parent"
+	    android:layout_height="@dimen/notification_min_height"
+	    android:layout_marginBottom="@dimen/close_handle_underlap"
+	    android:overScrollMode="ifContentScrolls"
+	    >
+	    <com.android.systemui.statusbar.phone.QuickSettingsContainerView
+android:background="#550000AA"
+		android:id="@+id/quick_settings_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:animateLayoutChanges="true"
+		android:columnCount="@integer/quick_settings_num_columns" />
+	</com.android.systemui.statusbar.phone.QuickSettingsScrollView>
+</HorizontalScrollView>

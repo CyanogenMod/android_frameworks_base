@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
 
 public class QuickSettingsScrollView extends ScrollView {
@@ -47,10 +48,21 @@ public class QuickSettingsScrollView extends ScrollView {
         return scrollRange;
     }
 
+    int[] getParentVisibleDimensions() {
+        int a[] = new int[2];
+        a[0] = ((ViewGroup) getParent()).getWidth();
+        a[1] = ((ViewGroup) getParent()).getHeight();
+        return a;
+    }
+    
+    private boolean scrollingEnabled = true;
+    public void toggleScrollingState(boolean enable) {
+        scrollingEnabled = enable;
+    }
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         final int range = getScrollRange();
-        if (range == 0) {
+        if (range == 0 || !scrollingEnabled) {
             return false;
         }
 
