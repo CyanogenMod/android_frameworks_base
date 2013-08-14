@@ -1286,6 +1286,7 @@
   <java-symbol type="dimen" name="kg_squashed_layout_threshold" />
   <java-symbol type="dimen" name="kg_small_widget_height" />
   <java-symbol type="dimen" name="lockscreen_target_inset" />
+  <java-symbol type="dimen" name="lockscreen_target_icon_file_inset" />
   <java-symbol type="drawable" name="ic_jog_dial_sound_off" />
   <java-symbol type="drawable" name="ic_jog_dial_sound_on" />
   <java-symbol type="drawable" name="ic_jog_dial_unlock" />
