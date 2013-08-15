@@ -637,6 +637,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.KEY_HOME_LONG_PRESS_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.KEY_MENU_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1136,6 +1139,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHasMenuKey = ((mDeviceHardwareKeys & KEY_MASK_MENU) != 0);
         mHasAssistKey = ((mDeviceHardwareKeys & KEY_MASK_ASSIST) != 0);
         mHasAppSwitchKey = ((mDeviceHardwareKeys & KEY_MASK_APP_SWITCH) != 0);
+
         initializeKeyAssignments();
 
         // register for dock events
@@ -1394,7 +1398,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Settings.System.KEY_HOME_LONG_PRESS_ACTION,
                             mHasAppSwitchKey ? KEY_ACTION_NOTHING : KEY_ACTION_APP_SWITCH,
                             UserHandle.USER_CURRENT);
-                    mHasMenuKeyEnabled = (mLongPressOnHomeBehavior == KEY_ACTION_MENU);
+                    mDoubleTapOnHomeBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_HOME_DOUBLE_TAP_ACTION,
+                            mDoubleTapOnHomeBehavior, UserHandle.USER_CURRENT);
+                    mHasMenuKeyEnabled = ((mLongPressOnHomeBehavior == KEY_ACTION_MENU) ||
+                        (mDoubleTapOnHomeBehavior == KEY_ACTION_MENU));
                 }
                 if (mHasMenuKey) {
                     mPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
@@ -5713,6 +5721,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 pw.print(" mIncallPowerBehavior="); pw.print(mIncallPowerBehavior);
                 pw.print(" mRingHomeBehavior="); pw.print(mRingHomeBehavior);
                 pw.print(" mLongPressOnHomeBehavior="); pw.println(mLongPressOnHomeBehavior);
+                pw.print(" mDoubleTapOnHomeBehavior="); pw.println(mDoubleTapOnHomeBehavior);
         pw.print(prefix); pw.print("mLandscapeRotation="); pw.print(mLandscapeRotation);
                 pw.print(" mSeascapeRotation="); pw.println(mSeascapeRotation);
         pw.print(prefix); pw.print("mPortraitRotation="); pw.print(mPortraitRotation);
