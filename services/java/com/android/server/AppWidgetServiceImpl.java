@@ -48,6 +48,7 @@ import android.os.Looper;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.os.TransactionTooLargeException;
 import android.os.UserHandle;
 import android.util.AtomicFile;
 import android.util.AttributeSet;
@@ -1114,6 +1115,11 @@ class AppWidgetServiceImpl {
                 try {
                     // the lock is held, but this is a oneway call
                     id.host.callbacks.updateAppWidget(id.appWidgetId, views, mUserId);
+                } catch (TransactionTooLargeException e) {
+                    // The remote views are too large. As this is caused by the
+                    // provider and not the host, do not punish the host by
+                    // disabling it's callbacks
+                    e.printStackTrace();
                 } catch (RemoteException e) {
                     // It failed; remove the callback. No need to prune because
                     // we know that this host is still referenced by this instance.
