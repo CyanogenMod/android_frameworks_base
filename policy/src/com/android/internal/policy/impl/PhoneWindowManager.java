@@ -637,6 +637,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.KEY_HOME_LONG_PRESS_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.KEY_MENU_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1136,6 +1139,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHasMenuKey = ((mDeviceHardwareKeys & KEY_MASK_MENU) != 0);
         mHasAssistKey = ((mDeviceHardwareKeys & KEY_MASK_ASSIST) != 0);
         mHasAppSwitchKey = ((mDeviceHardwareKeys & KEY_MASK_APP_SWITCH) != 0);
+
         initializeKeyAssignments();
 
         // register for dock events
@@ -1204,6 +1208,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
      */
     private void initializeKeyAssignments() {
         mPressOnMenuBehavior = KEY_ACTION_MENU;
+        if (!mHasMenuKey || mHasAssistKey) {
+            mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
+        } else {
+            mLongPressOnMenuBehavior = KEY_ACTION_SEARCH;
+        }
         mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
         mPressOnAssistBehavior = KEY_ACTION_SEARCH;
         mLongPressOnAssistBehavior = KEY_ACTION_VOICE_SEARCH;
@@ -1376,55 +1385,32 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             boolean keyRebindingEnabled = Settings.System.getIntForUser(resolver,
                     Settings.System.HARDWARE_KEY_REBINDING, 0, UserHandle.USER_CURRENT) == 1;
 
-            mHasMenuKeyEnabled = false;
+            initializeKeyAssignments();
 
             if (!keyRebindingEnabled) {
-                // Grab default configuration for home key
-                initializeKeyAssignments();
-
-                if (mHasMenuKey) {
-                    mPressOnMenuBehavior = KEY_ACTION_MENU;
-                    if (mHasAssistKey) {
-                        mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
-                    } else {
-                        mLongPressOnMenuBehavior = KEY_ACTION_SEARCH;
-                    }
-                    mHasMenuKeyEnabled = true;
-                }
-                if (mHasAssistKey) {
-                    mPressOnAssistBehavior = KEY_ACTION_SEARCH;
-                    mLongPressOnAssistBehavior = KEY_ACTION_VOICE_SEARCH;
-                }
-                if (mHasAppSwitchKey) {
-                    mPressOnAppSwitchBehavior = KEY_ACTION_APP_SWITCH;
-                    mLongPressOnAppSwitchBehavior = KEY_ACTION_NOTHING;
-                }
+                mHasMenuKeyEnabled = mHasMenuKey;
             } else {
+                mHasMenuKeyEnabled = false;
+
                 if (mHasHomeKey) {
-                    if (mHasAppSwitchKey) {
-                        mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_HOME_LONG_PRESS_ACTION,
-                                KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
-                    } else {
-                        mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_HOME_LONG_PRESS_ACTION,
-                                KEY_ACTION_APP_SWITCH, UserHandle.USER_CURRENT);
-                    }
-                    mHasMenuKeyEnabled = (mLongPressOnHomeBehavior == KEY_ACTION_MENU);
+                    mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_HOME_LONG_PRESS_ACTION,
+                            mHasAppSwitchKey ? KEY_ACTION_NOTHING : KEY_ACTION_APP_SWITCH,
+                            UserHandle.USER_CURRENT);
+                    mDoubleTapOnHomeBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_HOME_DOUBLE_TAP_ACTION,
+                            mDoubleTapOnHomeBehavior, UserHandle.USER_CURRENT);
+                    mHasMenuKeyEnabled = ((mLongPressOnHomeBehavior == KEY_ACTION_MENU) ||
+                        (mDoubleTapOnHomeBehavior == KEY_ACTION_MENU));
                 }
                 if (mHasMenuKey) {
                     mPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
                             Settings.System.KEY_MENU_ACTION,
                             KEY_ACTION_MENU, UserHandle.USER_CURRENT);
-                    if (mHasAssistKey) {
-                        mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_MENU_LONG_PRESS_ACTION,
-                                KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
-                    } else {
-                        mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_MENU_LONG_PRESS_ACTION,
-                                KEY_ACTION_SEARCH, UserHandle.USER_CURRENT);
-                    }
+                    mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_MENU_LONG_PRESS_ACTION,
+                            mHasAssistKey ? KEY_ACTION_NOTHING : KEY_ACTION_SEARCH,
+                            UserHandle.USER_CURRENT);
                     mHasMenuKeyEnabled |= (mPressOnMenuBehavior == KEY_ACTION_MENU) ||
                         (mLongPressOnMenuBehavior == KEY_ACTION_MENU);
                 }
@@ -5734,6 +5720,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 pw.print(" mIncallPowerBehavior="); pw.print(mIncallPowerBehavior);
                 pw.print(" mRingHomeBehavior="); pw.print(mRingHomeBehavior);
                 pw.print(" mLongPressOnHomeBehavior="); pw.println(mLongPressOnHomeBehavior);
+                pw.print(" mDoubleTapOnHomeBehavior="); pw.println(mDoubleTapOnHomeBehavior);
         pw.print(prefix); pw.print("mLandscapeRotation="); pw.print(mLandscapeRotation);
                 pw.print(" mSeascapeRotation="); pw.println(mSeascapeRotation);
         pw.print(prefix); pw.print("mPortraitRotation="); pw.print(mPortraitRotation);
