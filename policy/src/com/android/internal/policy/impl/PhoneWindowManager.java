@@ -1212,18 +1212,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {
      * eg. Disable long press on home goes to recents on sw600dp.
      */
     private void readConfigurationDependentBehaviors() {
-        mLongPressOnHomeBehavior = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_longPressOnHomeBehavior);
-        if (mLongPressOnHomeBehavior < KEY_ACTION_NOTHING ||
-                mLongPressOnHomeBehavior > KEY_ACTION_IN_APP_SEARCH) {
-            mLongPressOnHomeBehavior = KEY_ACTION_NOTHING;
-        }
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean keyRebindingEnabled = Settings.System.getIntForUser(resolver,
+                Settings.System.HARDWARE_KEY_REBINDING, 0, UserHandle.USER_CURRENT) == 1;
 
-        mDoubleTapOnHomeBehavior = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_doubleTapOnHomeBehavior);
-        if (mDoubleTapOnHomeBehavior < KEY_ACTION_NOTHING ||
-                mDoubleTapOnHomeBehavior > KEY_ACTION_IN_APP_SEARCH) {
-            mDoubleTapOnHomeBehavior = KEY_ACTION_NOTHING;
+        if (!keyRebindingEnabled) {
+            mLongPressOnHomeBehavior = mContext.getResources().getInteger(
+                    com.android.internal.R.integer.config_longPressOnHomeBehavior);
+            if (mLongPressOnHomeBehavior < KEY_ACTION_NOTHING ||
+                    mLongPressOnHomeBehavior > KEY_ACTION_IN_APP_SEARCH) {
+                mLongPressOnHomeBehavior = KEY_ACTION_NOTHING;
+            }
+
+            mDoubleTapOnHomeBehavior = mContext.getResources().getInteger(
+                    com.android.internal.R.integer.config_doubleTapOnHomeBehavior);
+            if (mDoubleTapOnHomeBehavior < KEY_ACTION_NOTHING ||
+                    mDoubleTapOnHomeBehavior > KEY_ACTION_IN_APP_SEARCH) {
+                mDoubleTapOnHomeBehavior = KEY_ACTION_NOTHING;
+            }
         }
     }
 
