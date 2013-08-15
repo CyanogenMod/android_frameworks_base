@@ -14,15 +14,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="reboot_system" product="tablet">Перезагрузка планшетного ПК</string>
+    <string name="reboot_system" product="tablet">Перезагрузка планшета</string>
     <string name="reboot_system" product="default">Перезагрузка телефона</string>
     <string name="global_action_screenshot">Скриншот</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Расширенный экран</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">Включен</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Включён</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Выключен</string>
     <string name="reboot_reboot">Перезагрузка</string>
     <string name="reboot_progress">Перезагрузка\u2026</string>
-    <string name="reboot_confirm" product="tablet">Ваш планшетный ПК будет перезагружен.</string>
+    <string name="reboot_confirm" product="tablet">Ваш планшет будет перезагружен.</string>
     <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
     <string name="global_action_reboot">Перезагрузка</string>
     <string name="global_action_choose_profile">Выбрать профиль</string>
