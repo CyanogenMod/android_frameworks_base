@@ -223,14 +223,17 @@ public class KeyguardViewManager {
                     if (mKeyguardView.handleBackKey()) {
                         return true;
                     }
+                    break;
                 case KeyEvent.KEYCODE_HOME:
                     if (mKeyguardView.handleHomeKey()) {
                         return true;
                     }
+                    break;
                 case KeyEvent.KEYCODE_MENU:
                     if (mKeyguardView.handleMenuKey()) {
                         return true;
                     }
+                    break;
             }
         }
         return false;
