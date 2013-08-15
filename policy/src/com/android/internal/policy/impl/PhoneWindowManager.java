@@ -327,6 +327,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHasAssistKey;
     boolean mHasAppSwitchKey;
     boolean mHasMenuKeyEnabled;
+    boolean mKeyRebindingEnabled;
 
     // The last window we were told about in focusChanged.
     WindowState mFocusedWindow;
@@ -639,6 +640,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.KEY_HOME_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_DOUBLE_TAP_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.KEY_MENU_ACTION), false, this,
@@ -1146,7 +1150,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHasMenuKey = ((mDeviceHardwareKeys & KEY_MASK_MENU) != 0);
         mHasAssistKey = ((mDeviceHardwareKeys & KEY_MASK_ASSIST) != 0);
         mHasAppSwitchKey = ((mDeviceHardwareKeys & KEY_MASK_APP_SWITCH) != 0);
-        readConfigurationDependentBehaviors();
+        mKeyRebindingEnabled = (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HARDWARE_KEY_REBINDING, 0, UserHandle.USER_CURRENT) == 1);
+        readHomeKeyBehavior();
 
         // register for dock events
         IntentFilter filter = new IntentFilter();
@@ -1206,12 +1212,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    /**
-     * Read values from config.xml that may be overridden depending on
-     * the configuration of the device.
-     * eg. Disable long press on home goes to recents on sw600dp.
-     */
-    private void readConfigurationDependentBehaviors() {
+    private void readHomeKeyBehavior() {
         mLongPressOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_longPressOnHomeBehavior);
         if (mLongPressOnHomeBehavior < KEY_ACTION_NOTHING ||
@@ -1224,6 +1225,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (mDoubleTapOnHomeBehavior < KEY_ACTION_NOTHING ||
                 mDoubleTapOnHomeBehavior > KEY_ACTION_IN_APP_SEARCH) {
             mDoubleTapOnHomeBehavior = KEY_ACTION_NOTHING;
+        }
+    }
+
+    /**
+     * Read values from config.xml that may be overridden depending on
+     * the configuration of the device.
+     * eg. Disable long press on home goes to recents on sw600dp.
+     */
+    private void readConfigurationDependentBehaviors() {
+        if (!mKeyRebindingEnabled) {
+            readHomeKeyBehavior();
         }
     }
 
@@ -1374,16 +1386,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mVolBtnMusicControls = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1);
-
-            boolean keyRebindingEnabled = Settings.System.getIntForUser(resolver,
-                    Settings.System.HARDWARE_KEY_REBINDING, 0, UserHandle.USER_CURRENT) == 1;
+            mKeyRebindingEnabled = (Settings.System.getIntForUser(resolver,
+                    Settings.System.HARDWARE_KEY_REBINDING, 0, UserHandle.USER_CURRENT) == 1);
 
             mHasMenuKeyEnabled = false;
 
-            if (!keyRebindingEnabled) {
-                // Grab default configuration for home key
-                readConfigurationDependentBehaviors();
+            // Grab default configuration for home key
+            readHomeKeyBehavior();
 
+            if (!mKeyRebindingEnabled) {
                 if (mHasMenuKey) {
                     mPressOnMenuBehavior = KEY_ACTION_MENU;
                     if (mHasAssistKey) {
@@ -1412,7 +1423,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                 Settings.System.KEY_HOME_LONG_PRESS_ACTION,
                                 KEY_ACTION_APP_SWITCH, UserHandle.USER_CURRENT);
                     }
-                    mHasMenuKeyEnabled = (mLongPressOnHomeBehavior == KEY_ACTION_MENU);
+                    mDoubleTapOnHomeBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_HOME_DOUBLE_TAP_ACTION,
+                            mDoubleTapOnHomeBehavior, UserHandle.USER_CURRENT);
+                    mHasMenuKeyEnabled = ((mLongPressOnHomeBehavior == KEY_ACTION_MENU) ||
+                        (mDoubleTapOnHomeBehavior == KEY_ACTION_MENU));
                 }
                 if (mHasMenuKey) {
                     mPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
@@ -5735,6 +5750,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 pw.print(" mIncallPowerBehavior="); pw.print(mIncallPowerBehavior);
                 pw.print(" mRingHomeBehavior="); pw.print(mRingHomeBehavior);
                 pw.print(" mLongPressOnHomeBehavior="); pw.println(mLongPressOnHomeBehavior);
+                pw.print(" mDoubleTapOnHomeBehavior="); pw.println(mDoubleTapOnHomeBehavior);
         pw.print(prefix); pw.print("mLandscapeRotation="); pw.print(mLandscapeRotation);
                 pw.print(" mSeascapeRotation="); pw.println(mSeascapeRotation);
         pw.print(prefix); pw.print("mPortraitRotation="); pw.print(mPortraitRotation);
