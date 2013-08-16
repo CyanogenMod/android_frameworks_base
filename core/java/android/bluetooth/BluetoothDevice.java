@@ -973,6 +973,46 @@ public final class BluetoothDevice implements Parcelable {
     }
 
     /**
+     * Get trust state of a remote device.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH}.
+     * @return true/false
+     * @hide
+     */
+    public boolean getTrustState() {
+        if (sService == null) {
+            Log.e(TAG, "BT not enabled. Cannot get Remote Device Alias");
+            return false;
+        }
+
+        try {
+            return sService.getRemoteTrust(this);
+        } catch (RemoteException e) {
+            Log.e(TAG, "", e);
+        }
+        return false;
+    }
+
+    /**
+     * Set trust state for a remote device.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH_ADMIN}.
+     * @param value the trust state value (true or false)
+     * @return true/false
+     * @hide
+     */
+    public boolean setTrust(boolean trustValue) {
+        if (sService == null) {
+            Log.e(TAG, "BT not enabled. Cannot set Remote Device name");
+            return false;
+        }
+        try {
+            return sService.setRemoteTrust(this, trustValue);
+        } catch (RemoteException e) {
+            Log.e(TAG, "", e);
+        }
+        return false;
+    }
+
+    /**
      * Returns the supported features (UUIDs) of the remote device.
      *
      * <p>This method does not start a service discovery procedure to retrieve the UUIDs
