@@ -1015,8 +1015,14 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 (mStreamVolumeAlias[streamType] == getMasterStreamType())) {
             int newRingerMode;
             if (index == 0) {
-                newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
-                                              : AudioManager.RINGER_MODE_SILENT;
+                synchronized (mSettingsLock) {
+                    if (mLastSilentRingerMode != -1) {
+                        newRingerMode = mLastSilentRingerMode;
+                    } else {
+                        newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
+                                : AudioManager.RINGER_MODE_SILENT;
+                    }
+                }
             } else {
                 newRingerMode = AudioManager.RINGER_MODE_NORMAL;
             }
