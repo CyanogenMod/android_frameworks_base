@@ -1146,7 +1146,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHasMenuKey = ((mDeviceHardwareKeys & KEY_MASK_MENU) != 0);
         mHasAssistKey = ((mDeviceHardwareKeys & KEY_MASK_ASSIST) != 0);
         mHasAppSwitchKey = ((mDeviceHardwareKeys & KEY_MASK_APP_SWITCH) != 0);
-        readConfigurationDependentBehaviors();
+        initializeKeyAssignments();
 
         // register for dock events
         IntentFilter filter = new IntentFilter();
@@ -1207,11 +1207,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     /**
-     * Read values from config.xml that may be overridden depending on
-     * the configuration of the device.
+     * Initialize key assignments to their default values.
+     * For some keys, this reads values from config.xml that may
+     * be overridden depending on the configuration of the device.
      * eg. Disable long press on home goes to recents on sw600dp.
      */
-    private void readConfigurationDependentBehaviors() {
+    private void initializeKeyAssignments() {
+        mPressOnMenuBehavior = KEY_ACTION_MENU;
+        if (!mHasMenuKey || mHasAssistKey) {
+            mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
+        } else {
+            mLongPressOnMenuBehavior = KEY_ACTION_SEARCH;
+        }
+        mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
+        mPressOnAssistBehavior = KEY_ACTION_SEARCH;
+        mLongPressOnAssistBehavior = KEY_ACTION_VOICE_SEARCH;
+        mPressOnAppSwitchBehavior = KEY_ACTION_APP_SWITCH;
+        mLongPressOnAppSwitchBehavior = KEY_ACTION_NOTHING;
+
         mLongPressOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_longPressOnHomeBehavior);
         if (mLongPressOnHomeBehavior < KEY_ACTION_NOTHING ||
@@ -1378,55 +1391,29 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             boolean keyRebindingEnabled = Settings.System.getIntForUser(resolver,
                     Settings.System.HARDWARE_KEY_REBINDING, 0, UserHandle.USER_CURRENT) == 1;
 
-            mHasMenuKeyEnabled = false;
+            // Grab default configuration for all keys
+            initializeKeyAssignments();
 
             if (!keyRebindingEnabled) {
-                // Grab default configuration for home key
-                readConfigurationDependentBehaviors();
-
-                if (mHasMenuKey) {
-                    mPressOnMenuBehavior = KEY_ACTION_MENU;
-                    if (mHasAssistKey) {
-                        mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
-                    } else {
-                        mLongPressOnMenuBehavior = KEY_ACTION_SEARCH;
-                    }
-                    mHasMenuKeyEnabled = true;
-                }
-                if (mHasAssistKey) {
-                    mPressOnAssistBehavior = KEY_ACTION_SEARCH;
-                    mLongPressOnAssistBehavior = KEY_ACTION_VOICE_SEARCH;
-                }
-                if (mHasAppSwitchKey) {
-                    mPressOnAppSwitchBehavior = KEY_ACTION_APP_SWITCH;
-                    mLongPressOnAppSwitchBehavior = KEY_ACTION_NOTHING;
-                }
+                mHasMenuKeyEnabled = mHasMenuKey;
             } else {
+                mHasMenuKeyEnabled = false;
+
                 if (mHasHomeKey) {
-                    if (mHasAppSwitchKey) {
-                        mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_HOME_LONG_PRESS_ACTION,
-                                KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
-                    } else {
-                        mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_HOME_LONG_PRESS_ACTION,
-                                KEY_ACTION_APP_SWITCH, UserHandle.USER_CURRENT);
-                    }
+                    mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_HOME_LONG_PRESS_ACTION,
+                            mHasAppSwitchKey ? KEY_ACTION_NOTHING : KEY_ACTION_APP_SWITCH,
+                            UserHandle.USER_CURRENT);
                     mHasMenuKeyEnabled = (mLongPressOnHomeBehavior == KEY_ACTION_MENU);
                 }
                 if (mHasMenuKey) {
                     mPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
                             Settings.System.KEY_MENU_ACTION,
                             KEY_ACTION_MENU, UserHandle.USER_CURRENT);
-                    if (mHasAssistKey) {
-                        mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_MENU_LONG_PRESS_ACTION,
-                                KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
-                    } else {
-                        mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_MENU_LONG_PRESS_ACTION,
-                                KEY_ACTION_SEARCH, UserHandle.USER_CURRENT);
-                    }
+                    mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_MENU_LONG_PRESS_ACTION,
+                            mHasAssistKey ? KEY_ACTION_NOTHING : KEY_ACTION_SEARCH,
+                            UserHandle.USER_CURRENT);
                     mHasMenuKeyEnabled |= (mPressOnMenuBehavior == KEY_ACTION_MENU) ||
                         (mLongPressOnMenuBehavior == KEY_ACTION_MENU);
                 }
@@ -1714,7 +1701,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             int navigationPresence) {
         mHaveBuiltInKeyboard = (keyboardPresence & PRESENCE_INTERNAL) != 0;
 
-        readConfigurationDependentBehaviors();
+        initializeKeyAssignments();
         readLidState();
         applyLidSwitchState();
 
