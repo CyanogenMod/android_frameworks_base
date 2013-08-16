@@ -1146,7 +1146,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHasMenuKey = ((mDeviceHardwareKeys & KEY_MASK_MENU) != 0);
         mHasAssistKey = ((mDeviceHardwareKeys & KEY_MASK_ASSIST) != 0);
         mHasAppSwitchKey = ((mDeviceHardwareKeys & KEY_MASK_APP_SWITCH) != 0);
-        readConfigurationDependentBehaviors();
+        initializeKeyAssignments();
 
         // register for dock events
         IntentFilter filter = new IntentFilter();
@@ -1207,11 +1207,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     /**
-     * Read values from config.xml that may be overridden depending on
-     * the configuration of the device.
+     * Initialize key assignments to their default values.
+     * For some keys, this reads values from config.xml that may
+     * be overridden depending on the configuration of the device.
      * eg. Disable long press on home goes to recents on sw600dp.
      */
-    private void readConfigurationDependentBehaviors() {
+    private void initializeKeyAssignments() {
+        mPressOnMenuBehavior = KEY_ACTION_MENU;
+        mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
+        mPressOnAssistBehavior = KEY_ACTION_SEARCH;
+        mLongPressOnAssistBehavior = KEY_ACTION_VOICE_SEARCH;
+        mPressOnAppSwitchBehavior = KEY_ACTION_APP_SWITCH;
+        mLongPressOnAppSwitchBehavior = KEY_ACTION_NOTHING;
+
         mLongPressOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_longPressOnHomeBehavior);
         if (mLongPressOnHomeBehavior < KEY_ACTION_NOTHING ||
@@ -1382,7 +1390,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             if (!keyRebindingEnabled) {
                 // Grab default configuration for home key
-                readConfigurationDependentBehaviors();
+                initializeKeyAssignments();
 
                 if (mHasMenuKey) {
                     mPressOnMenuBehavior = KEY_ACTION_MENU;
@@ -1714,7 +1722,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             int navigationPresence) {
         mHaveBuiltInKeyboard = (keyboardPresence & PRESENCE_INTERNAL) != 0;
 
-        readConfigurationDependentBehaviors();
+        initializeKeyAssignments();
         readLidState();
         applyLidSwitchState();
 
