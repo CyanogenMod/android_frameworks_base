@@ -1384,69 +1384,73 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // Grab default configuration for home key
                 readConfigurationDependentBehaviors();
 
+                mPressOnMenuBehavior = KEY_ACTION_MENU;
+                if (mHasAssistKey) {
+                    mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
+                } else {
+                    mLongPressOnMenuBehavior = KEY_ACTION_SEARCH;
+                }
+
                 if (mHasMenuKey) {
-                    mPressOnMenuBehavior = KEY_ACTION_MENU;
-                    if (mHasAssistKey) {
-                        mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
-                    } else {
-                        mLongPressOnMenuBehavior = KEY_ACTION_SEARCH;
-                    }
                     mHasMenuKeyEnabled = true;
                 }
-                if (mHasAssistKey) {
-                    mPressOnAssistBehavior = KEY_ACTION_SEARCH;
-                    mLongPressOnAssistBehavior = KEY_ACTION_VOICE_SEARCH;
-                }
-                if (mHasAppSwitchKey) {
-                    mPressOnAppSwitchBehavior = KEY_ACTION_APP_SWITCH;
-                    mLongPressOnAppSwitchBehavior = KEY_ACTION_NOTHING;
-                }
+
+                mPressOnAssistBehavior = KEY_ACTION_SEARCH;
+                mLongPressOnAssistBehavior = KEY_ACTION_VOICE_SEARCH;
+
+                mPressOnAppSwitchBehavior = KEY_ACTION_APP_SWITCH;
+                mLongPressOnAppSwitchBehavior = KEY_ACTION_NOTHING;
             } else {
+                if (mHasAppSwitchKey) {
+                    mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_HOME_LONG_PRESS_ACTION,
+                            KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
+                } else {
+                    mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_HOME_LONG_PRESS_ACTION,
+                            KEY_ACTION_APP_SWITCH, UserHandle.USER_CURRENT);
+                }
+
                 if (mHasHomeKey) {
-                    if (mHasAppSwitchKey) {
-                        mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_HOME_LONG_PRESS_ACTION,
-                                KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
-                    } else {
-                        mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_HOME_LONG_PRESS_ACTION,
-                                KEY_ACTION_APP_SWITCH, UserHandle.USER_CURRENT);
-                    }
                     mHasMenuKeyEnabled = (mLongPressOnHomeBehavior == KEY_ACTION_MENU);
                 }
+
+                mPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
+                        Settings.System.KEY_MENU_ACTION,
+                        KEY_ACTION_MENU, UserHandle.USER_CURRENT);
+                if (mHasAssistKey) {
+                    mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_MENU_LONG_PRESS_ACTION,
+                            KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
+                } else {
+                    mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
+                            Settings.System.KEY_MENU_LONG_PRESS_ACTION,
+                            KEY_ACTION_SEARCH, UserHandle.USER_CURRENT);
+                }
+
                 if (mHasMenuKey) {
-                    mPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
-                            Settings.System.KEY_MENU_ACTION,
-                            KEY_ACTION_MENU, UserHandle.USER_CURRENT);
-                    if (mHasAssistKey) {
-                        mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_MENU_LONG_PRESS_ACTION,
-                                KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
-                    } else {
-                        mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
-                                Settings.System.KEY_MENU_LONG_PRESS_ACTION,
-                                KEY_ACTION_SEARCH, UserHandle.USER_CURRENT);
-                    }
                     mHasMenuKeyEnabled |= (mPressOnMenuBehavior == KEY_ACTION_MENU) ||
                         (mLongPressOnMenuBehavior == KEY_ACTION_MENU);
                 }
+
+                mPressOnAssistBehavior = Settings.System.getIntForUser(resolver,
+                        Settings.System.KEY_ASSIST_ACTION,
+                        KEY_ACTION_SEARCH, UserHandle.USER_CURRENT);
+                mLongPressOnAssistBehavior = Settings.System.getIntForUser(resolver,
+                        Settings.System.KEY_ASSIST_LONG_PRESS_ACTION,
+                        KEY_ACTION_VOICE_SEARCH, UserHandle.USER_CURRENT);
                 if (mHasAssistKey) {
-                    mPressOnAssistBehavior = Settings.System.getIntForUser(resolver,
-                            Settings.System.KEY_ASSIST_ACTION,
-                            KEY_ACTION_SEARCH, UserHandle.USER_CURRENT);
-                    mLongPressOnAssistBehavior = Settings.System.getIntForUser(resolver,
-                            Settings.System.KEY_ASSIST_LONG_PRESS_ACTION,
-                            KEY_ACTION_VOICE_SEARCH, UserHandle.USER_CURRENT);
                     mHasMenuKeyEnabled |= (mPressOnAssistBehavior == KEY_ACTION_MENU) ||
                         (mLongPressOnAssistBehavior == KEY_ACTION_MENU);
                 }
+
+                mPressOnAppSwitchBehavior = Settings.System.getIntForUser(resolver,
+                        Settings.System.KEY_APP_SWITCH_ACTION,
+                        KEY_ACTION_APP_SWITCH, UserHandle.USER_CURRENT);
+                mLongPressOnAppSwitchBehavior = Settings.System.getIntForUser(resolver,
+                        Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION,
+                        KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
                 if (mHasAppSwitchKey) {
-                    mPressOnAppSwitchBehavior = Settings.System.getIntForUser(resolver,
-                            Settings.System.KEY_APP_SWITCH_ACTION,
-                            KEY_ACTION_APP_SWITCH, UserHandle.USER_CURRENT);
-                    mLongPressOnAppSwitchBehavior = Settings.System.getIntForUser(resolver,
-                            Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION,
-                            KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
                     mHasMenuKeyEnabled |= (mPressOnAppSwitchBehavior == KEY_ACTION_MENU) ||
                         (mLongPressOnAppSwitchBehavior == KEY_ACTION_MENU);
                 }
