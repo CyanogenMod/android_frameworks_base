@@ -66,6 +66,8 @@ interface IBluetooth
     int getRemoteType(in BluetoothDevice device);
     String getRemoteAlias(in BluetoothDevice device);
     boolean setRemoteAlias(in BluetoothDevice device, in String name);
+    boolean setRemoteTrust(in BluetoothDevice device, in boolean value);
+    boolean getRemoteTrust(in BluetoothDevice device);
     int getRemoteClass(in BluetoothDevice device);
     ParcelUuid[] getRemoteUuids(in BluetoothDevice device);
     boolean fetchRemoteUuids(in BluetoothDevice device);
