@@ -2,6 +2,9 @@
 <!--
 /* //device/apps/common/assets/res/any/colors.xml
 **
+** Copyright (c) 2013, The Linux Foundation. All rights reserved.
+** Not a Contribution.
+**
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -416,5 +419,40 @@
         <item>PQRS</item><!-- 7 -->
         <item>TUV</item><!-- 8 -->
         <item>WXYZ</item><!-- 9 -->
+    </string-array>
+
+    <!-- User display names for app ops codes -->
+    <string-array name="app_ops_labels">
+        <item>Trying to access location</item>
+        <item>Trying to access location</item>
+        <item>Trying to access location</item>
+        <item>Trying to use vibrate</item>
+        <item>Trying to read contacts</item>
+        <item>Trying to modify contacts</item>
+        <item>Trying to read call log</item>
+        <item>Trying to modify call log</item>
+        <item>Trying to read calendar</item>
+        <item>Trying to modify calendar</item>
+        <item>Trying to access location</item>
+        <item>Trying to post notification</item>
+        <item>Trying to access location</item>
+        <item>Trying to make phone call</item>
+        <item>Trying to read SMS/MMS</item>
+        <item>Trying to write/modify SMS/MMS</item>
+        <item>Trying to receive SMS/MMS</item>
+        <item>Trying to receive SMS/MMS</item>
+        <item>Trying to receive SMS/MMS</item>
+        <item>Trying to receive SMS/MMS</item>
+        <item>Trying to send SMS/MMS</item>
+        <item>Trying to read SMS/MMS</item>
+        <item>Trying to write/modify SMS/MMS</item>
+        <item>Trying to modify settings</item>
+        <item>Trying to draw on top</item>
+        <item>Trying to access notifications</item>
+        <item>Trying to access Camera</item>
+        <item>Trying to record audio</item>
+        <item>Trying to play audio</item>
+        <item>Trying to read clipboard</item>
+        <item>Trying to modify clipboard</item>
     </string-array>
 </resources>
