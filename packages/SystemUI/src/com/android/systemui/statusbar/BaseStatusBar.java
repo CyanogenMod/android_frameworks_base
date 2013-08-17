@@ -675,7 +675,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                             .getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
                     float recentsItemTopPadding = statusBarHeight;
 
-                    if (getExpandedDesktopMode() == 2) {
+                    if (getExpandedDesktopMode()
+                            == Settings.System.EXPANDED_DESKTOP_STATUS_BAR_HIDDEN) {
                         statusBarHeight = 0;
                     }
 
