@@ -118,6 +118,7 @@ final class DisplayMagnifier {
         args.argi4 = rectangle.bottom;
         mHandler.obtainMessage(MyHandler.MESSAGE_NOTIFY_RECTANGLE_ON_SCREEN_REQUESTED,
                 args).sendToTarget();
+        args.recycle();
     }
 
     public void onWindowLayersChangedLocked() {
