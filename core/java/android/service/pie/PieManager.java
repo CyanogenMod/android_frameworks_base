@@ -97,6 +97,16 @@ public class PieManager {
             return false;
         }
 
+        public boolean dropNextEvents() {
+            try {
+                return mCallback.dropNextEvents();
+            } catch (RemoteException e) {
+                Slog.w(TAG, "gainTouchFocus failed: " + e.getMessage());
+                /* fall through */
+            }
+            return false;
+        }
+
         /**
          * Turns listening for pie activation gestures on again, after it was disabled during
          * the call to the listener.
