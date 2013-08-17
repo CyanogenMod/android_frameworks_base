@@ -2894,6 +2894,12 @@ public final class Settings {
         public static final String EXPANDED_DESKTOP_STYLE = "expanded_desktop_style";
 
         /**
+         * Show statusbar on top of fullscreen window (with status bar or without status bar)
+         * @hide
+         */
+        public static final String STATUS_BAR_ON_TOP_OF_FULLSCREEN = "status_bar_on_top_of_fullscreen";
+
+        /**
          * Whether to use a separate delay for "slide to unlock" and security
          * lock
          * @hide
