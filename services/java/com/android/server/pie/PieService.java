@@ -65,6 +65,7 @@ public class PieService extends IPieService.Stub {
 
     public static final int MSG_PIE_ACTIVATION = 32023;
     public static final int MSG_UPDATE_SERVICE = 32025;
+    public static final int MSG_PIE_GESTURE_FINISHED = 32027;
 
     private final Context mContext;
     private final InputManagerService mInputManager;
@@ -114,6 +115,15 @@ public class PieService extends IPieService.Stub {
             return mActive;
         }
 
+        private void notifyGestureFinished() {
+            try {
+                listener.onPieGestureFinished();
+            } catch (RemoteException e) {
+                Slog.w(TAG, "Failed to notify process, assuming it died.", e);
+                binderDied();
+            }
+        }
+
         // called through Binder
         public boolean gainTouchFocus(IBinder windowToken) {
             if (DEBUG) {
@@ -121,6 +131,16 @@ public class PieService extends IPieService.Stub {
             }
             if (mActive) {
                 return mInputFilter.unlockFilter();
+            }
+            return false;
+        }
+
+        public boolean dropNextEvents() {
+            if (DEBUG) {
+                Slog.d(TAG, "Will drop all next events till touch up");
+            }
+            if (mActive) {
+                return mInputFilter.dropSequence();
             }
             return false;
         }
@@ -346,6 +366,14 @@ public class PieService extends IPieService.Stub {
                     if (propagateActivation(m.arg1, m.arg2, (PiePosition) m.obj)) {
                         // switch off all positions for the time of activation
                         updateServiceHandler(0, 0);
+                    }
+                    break;
+                case MSG_PIE_GESTURE_FINISHED:
+                    if (DEBUG) {
+                        Slog.d(TAG, "Gesture was finished for "+mActiveRecord);
+                    }
+                    if (mActiveRecord != null) {
+                        mActiveRecord.notifyGestureFinished();
                     }
                     break;
                 case MSG_UPDATE_SERVICE:

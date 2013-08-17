@@ -54,6 +54,15 @@ public class PieManager {
                     }
                 });
             }
+
+            @Override
+            public void onPieGestureFinished() throws RemoteException {
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        PieActivationListener.this.onPieGestureFinished();
+                    }
+                });
+            }
         }
         private Delegator mDelegator;
 
@@ -82,6 +91,13 @@ public class PieManager {
         public abstract void onPieActivation(int touchX, int touchY, PiePosition position, int flags);
 
         /**
+         * Override this to receive callback when gesture is finished
+         * (ACTION_UP or ACTION_CANCEL event was receiver)
+         * @see IPieActivationListener#onPieGestureFinished()
+         */
+        public void onPieGestureFinished() {};
+
+        /**
          * After being activated, this allows the pie control to steal focus from the current
          * window.
          *
@@ -90,6 +106,16 @@ public class PieManager {
         public boolean gainTouchFocus(IBinder applicationWindowToken) {
             try {
                 return mCallback.gainTouchFocus(applicationWindowToken);
+            } catch (RemoteException e) {
+                Slog.w(TAG, "gainTouchFocus failed: " + e.getMessage());
+                /* fall through */
+            }
+            return false;
+        }
+
+        public boolean dropNextEvents() {
+            try {
+                return mCallback.dropNextEvents();
             } catch (RemoteException e) {
                 Slog.w(TAG, "gainTouchFocus failed: " + e.getMessage());
                 /* fall through */

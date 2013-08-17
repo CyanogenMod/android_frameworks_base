@@ -11,4 +11,9 @@ interface IPieActivationListener {
      * recover from this.
      */
     oneway void onPieActivation(int touchX, int touchY, int positionIndex, int flags);
+
+    /*
+     * Called when a gesture which triggered pie activation was ended
+     */
+    oneway void onPieGestureFinished();
 }
