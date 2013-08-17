@@ -1650,7 +1650,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
         // don't allow expanding via e.g. service call while status bar is hidden
         // due to expanded desktop
-        if (getExpandedDesktopMode() == 2) {
+        if (getExpandedDesktopMode() == 2 && !mExpandedVisible) {
             return;
         }
 
@@ -1722,7 +1722,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
         // don't allow expanding via e.g. service call while status bar is hidden
         // due to expanded desktop
-        if (getExpandedDesktopMode() == 2) {
+        if (getExpandedDesktopMode() == 2 && !mExpandedVisible) {
             return;
         }
 
