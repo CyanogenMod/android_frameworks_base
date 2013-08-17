@@ -124,6 +124,16 @@ public class PieService extends IPieService.Stub {
             return false;
         }
 
+        public boolean dropNextEvents() {
+            if (DEBUG) {
+                Slog.d(TAG, "Will drop all next events till touch up");
+            }
+            if (mActive) {
+                return mInputFilter.dropSequence();
+            }
+            return false;
+        }
+
         // called through Binder
         public void restoreListenerState() throws RemoteException {
             if (DEBUG) {
