@@ -21,6 +21,11 @@
     <string name="global_actions_expanded_desktop_mode_on_status">Включён</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Выключен</string>
     <string name="reboot_reboot">Перезагрузка</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
     <string name="reboot_progress">Перезагрузка\u2026</string>
     <string name="reboot_confirm" product="tablet">Ваш планшет будет перезагружен.</string>
     <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
@@ -34,36 +39,32 @@
     <string name="profileNameNight">Ночь</string>
     <string name="profileGroupPhone">Телефон</string>
     <string name="profileGroupCalendar">Календарь</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">Другой</string>
-    <string name="permlab_preventpower">блокировать кнопку питания</string>
+    <string name="permlab_preventpower">Блокировать кнопку питания</string>
     <string name="permdesc_preventpower">Приложение сможет переопределять кнопку питания.</string>
-    <string name="permlab_fm_radio_receiver">управлять приёмником FM</string>
+    <string name="permlab_fm_radio_receiver">Управлять приёмником FM</string>
     <string name="permdesc_fm_radio_receiver">Приложение сможет управлять FM-приёмником.</string>
-    <string name="permlab_fm_radio_transmitter">управлять передатчиком FM</string>
+    <string name="permlab_fm_radio_transmitter">Управлять передатчиком FM</string>
     <string name="permdesc_fm_radio_transmitter">Приложение сможет управлять FM-передатчиком.</string>
     <string name="storage_sd_dock_card">SD-карта док-станции</string>
     <string name="toast_rotation_unlocked">Поворот экрана разблокирован</string>
     <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
     <string name="stylus_app_not_installed">%s не установлено</string>
-
-    <!-- Privacy Guard -->
-    <string name="permlab_changePrivacyGuardState">включать или выключать режим инкогнито</string>
+    <string name="permlab_changePrivacyGuardState">Включать или выключать режим инкогнито</string>
     <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в режиме инкогнито. Когда приложение запущено в режиме инкогнито, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
     <string name="privacy_guard_notification">Режим инкогнито активен</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> не сможет получать доступ к персональным данным</string>
-
-    <!-- The title of the profile picker dialog. -->
     <string name="profile_picker_title">Профили</string>
-
-    <!-- The item label for the no profile selection item. -->
     <string name="profile_none">Не выбран</string>
-
-    <string name="permlab_cancelNotifications">отключать уведомления</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_cancelNotifications">Отключать уведомления</string>
     <string name="permdesc_cancelNotifications">Разрешить приложению отключать уведомления, созданные другими приложениями.</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_interceptSmsSent">перехват исходящих SMS</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_interceptSmsSent">Перехват исходящих SMS</string>
     <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения смогут использовать это, чтобы препятствовать отправке SMS-сообщений.</string>
+    <string name="policylab_enforceSelinux">Переключение режимов SELinux</string>
+    <string name="policydesc_enforceSelinux">Переключать принудительный и разрешающий режимы политики SELinux.</string>
+    <string name="policylab_enforceMmac">Переключение режимов MMAC</string>
+    <string name="policydesc_enforceMmac">Переключать принудительный и разрешающий режимы политики MMAC.</string>
 </resources>

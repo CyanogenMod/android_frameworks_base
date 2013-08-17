@@ -14,12 +14,16 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Звук <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Вибрация <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="bean_dream_settings_cid_title">Голова CID\'а</string>
     <string name="bean_dream_settings_cid_summary">Заменить желейные конфеты на голову CID\'а</string>
     <string name="quick_settings_battery_charged_label">Заряжено</string>
     <string name="quick_settings_profile_label">Профиль</string>
+    <string name="powerwidget_screen_timeout_toast">Задержка выкл. экрана: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS выкл.</string>
     <string name="quick_settings_screen_sleep">Сон</string>
     <string name="quick_settings_ringer_on">Вкл. звук</string>
@@ -36,6 +40,7 @@
     <string name="quick_settings_sync_off">Синхронизация выкл.</string>
     <string name="quick_settings_torch">Фонарик</string>
     <string name="quick_settings_torch_off">Фонарик выкл.</string>
+    <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC выкл.</string>
     <string name="quick_settings_screen_timeout">Тайм-аут</string>
     <string name="quick_settings_usb_tether_off_label">Отключено</string>
@@ -45,6 +50,7 @@
     <string name="quick_settings_wifiap_off">Wi-Fi модем выкл.</string>
     <string name="quick_settings_quiethours">Тихие часы</string>
     <string name="quick_settings_quiethours_off">Тихие часы выкл.</string>
+    <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE выкл.</string>
     <string name="quick_settings_volume">Громкость</string>
     <string name="quick_settings_camera_label">Камера</string>
@@ -65,7 +71,5 @@
     <string name="pie_phone_status_no_service">Нет сети</string>
     <string name="pie_phone_status_airplane_mode">Режим полёта</string>
     <string name="pie_phone_status_emergency_only">Только экстренный вызов</string>
-
-    <!-- Camera tile toasts -->
     <string name="quick_settings_camera_error_connect">Не удаётся подключиться к камере</string>
 </resources>
