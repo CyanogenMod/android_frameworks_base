@@ -153,7 +153,7 @@ public class PieInputFilter implements IInputFilter {
 
     private int mDeviceId; // dispatcher only
     private enum State {
-        LISTEN, DETECTING, LOCKED, SYNTHESIZE, POSTSYNTHESIZE;
+        LISTEN, DETECTING, LOCKED, SYNTHESIZE, POSTSYNTHESIZE, DROP;
     }
     private State mState = State.LISTEN; // guarded by mLock
     private PieGestureTracker mTracker; // guarded by mLock
@@ -206,6 +206,16 @@ public class PieInputFilter implements IInputFilter {
         synchronized (mLock) {
             if (mState == State.LOCKED) {
                 mState = State.SYNTHESIZE;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean dropSequence() {
+        synchronized (mLock) {
+            if (mState == State.LOCKED) {
+                mState = State.DROP;
                 return true;
             }
         }
@@ -325,6 +335,12 @@ public class PieInputFilter implements IInputFilter {
                         mSyntheticDownTime = -1;
                     }
                     sendInputEvent(motionEvent, policyFlags);
+                    break;
+                case DROP:
+                    if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                        clearDelayedMotionEventsLocked();
+                        mState = State.LISTEN;
+                    }
                     break;
             }
         }
