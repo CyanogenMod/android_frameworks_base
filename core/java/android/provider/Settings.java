@@ -2887,11 +2887,24 @@ public final class Settings {
          */
         public static final String EXPANDED_DESKTOP_STATE = "expanded_desktop_state";
 
+        /** @hide */
+        public static final int EXPANDED_DESKTOP_DISABLED = 0;
+        /** @hide */
+        public static final int EXPANDED_DESKTOP_STATUS_BAR_VISIBLE = 1;
+        /** @hide */
+        public static final int EXPANDED_DESKTOP_STATUS_BAR_HIDDEN = 2;
+
         /**
          * Expanded desktop style (with status bar or without status bar)
          * @hide
          */
         public static final String EXPANDED_DESKTOP_STYLE = "expanded_desktop_style";
+
+        /**
+         * Show statusbar on top of fullscreen window (with status bar or without status bar)
+         * @hide
+         */
+        public static final String STATUS_BAR_ON_TOP_OF_FULLSCREEN = "status_bar_on_top_of_fullscreen";
 
         /**
          * Whether to use a separate delay for "slide to unlock" and security
