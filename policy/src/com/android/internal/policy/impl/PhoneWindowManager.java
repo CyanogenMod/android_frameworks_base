@@ -96,8 +96,10 @@ import android.view.KeyCharacterMap.FallbackAction;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
@@ -368,6 +370,114 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     PointerLocationView mPointerLocationView;
     InputChannel mPointerLocationInputChannel;
 
+    private final class ShowStatusBarGestureReceiver extends InputEventReceiver {
+        private static final int STATUS_BAR_HIDE_DELAY = 2000; // 2 sec
+        private static final float MIN_VELOCITY = 450; // 450 dp/sec
+        private static final float MIN_DISTANCE = 120; // 120 dp
+
+        private float mStartY = -1;
+        private boolean mIsTracking = false;
+        private VelocityTracker mVelocity = VelocityTracker.obtain();
+        private float mMinVelocity;
+        private float mMinDistance;
+
+        public ShowStatusBarGestureReceiver(InputChannel inputChannel,
+                Looper looper) {
+            super(inputChannel, looper);
+
+            // Convert dp to px
+            final float multiplier = mContext.getResources().getDisplayMetrics().density;
+            mMinDistance = MIN_DISTANCE * multiplier;
+            mMinVelocity = MIN_VELOCITY * multiplier;
+        }
+
+        public void clearState() {
+            mHandler.removeMessages(MSG_HIDE_STATUS_BAR);
+            mStatusBarShownDueToGesture = false;
+            mIsTracking = false;
+            mVelocity.clear();
+        }
+
+        @Override
+        public void onInputEvent(InputEvent event) {
+            if (!(event instanceof MotionEvent)) {
+                finishInputEvent(event, false);
+                return;
+            }
+
+            boolean changed = false;
+            MotionEvent m = (MotionEvent) event;
+
+            switch (m.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    if ((mTopIsFullscreen || expandedDesktopHidesStatusBar())
+                            && mHideNavFakeWindow == null
+                            && !mStatusBarShownDueToGesture
+                            && m.getY() < mStatusBarHeight * 3) {
+                        mIsTracking = true;
+                        mStartY = m.getY();
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (mIsTracking) {
+                        if (m.getY() - mStartY > mMinDistance) {
+                            mStatusBarShownDueToGesture = true;
+                            changed = true;
+                            mHandler.removeMessages(MSG_HIDE_STATUS_BAR);
+                            mHandler.sendEmptyMessageDelayed(
+                                    MSG_HIDE_STATUS_BAR, STATUS_BAR_HIDE_DELAY);
+                            mVelocity.clear();
+                            mIsTracking = false;
+                        } else {
+                            mVelocity.addMovement(m);
+                        }
+                    } else if (mStatusBarShownDueToGesture && !mStatusBarHideAfterCollapsed) {
+                        if (isStatusbarExpanded()) {
+                            mHandler.removeMessages(MSG_HIDE_STATUS_BAR);
+                            mStatusBarHideAfterCollapsed = true;
+                        } else if (m.getY() <= mStatusBarHeight) {
+                            mHandler.removeMessages(MSG_HIDE_STATUS_BAR);
+                            mHandler.sendEmptyMessageDelayed(MSG_HIDE_STATUS_BAR,
+                                    STATUS_BAR_HIDE_DELAY);
+                        }
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (mIsTracking) {
+                        mVelocity.addMovement(m);
+                        mVelocity.computeCurrentVelocity(1000);
+                        final float velocity = mVelocity.getYVelocity();
+                        if (velocity > mMinVelocity) {
+                            mStatusBarShownDueToGesture = true;
+                            changed = true;
+                            mHandler.removeMessages(MSG_HIDE_STATUS_BAR);
+                            mHandler.sendEmptyMessageDelayed(
+                                    MSG_HIDE_STATUS_BAR, STATUS_BAR_HIDE_DELAY);
+                        }
+                        mVelocity.clear();
+                        mIsTracking = false;
+                    } else if (m.getY() <= mStatusBarHeight) {
+                        mHandler.removeMessages(MSG_HIDE_STATUS_BAR);
+                        mHandler.sendEmptyMessageDelayed(
+                                MSG_HIDE_STATUS_BAR, STATUS_BAR_HIDE_DELAY);
+                    }
+                    break;
+            }
+            if (changed) {
+                mWindowManagerFuncs.reevaluateStatusBarVisibility();
+            }
+            finishInputEvent(event, false);
+        }
+    }
+
+    // Show statusbar gesture receiver
+    ShowStatusBarGestureReceiver mShowStatusBarGestureReceiver;
+    InputChannel mShowStatusBarGestureInputChannel;
+
+    private boolean mShowStatusBarOnTopOfFullscreen = false;
+    private boolean mStatusBarShownDueToGesture = false;
+    private boolean mStatusBarHideAfterCollapsed = false;
+
     // The current size of the screen; really; extends into the overscan area of
     // the screen and doesn't account for any system elements like the status bar.
     int mOverscanScreenLeft, mOverscanScreenTop;
@@ -543,6 +653,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_DISPATCH_MEDIA_KEY_WITH_WAKE_LOCK = 3;
     private static final int MSG_DISPATCH_MEDIA_KEY_REPEAT_WITH_WAKE_LOCK = 4;
     private static final int MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK = 5;
+    private static final int MSG_ENABLE_STATUS_BAR_HIDE_RECEIVER = 6;
+    private static final int MSG_DISABLE_STATUS_BAR_HIDE_RECEIVER = 7;
+    private static final int MSG_HIDE_STATUS_BAR = 8;
 
     private class PolicyHandler extends Handler {
         @Override
@@ -564,6 +677,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mIsLongPress = true;
                     dispatchMediaKeyWithWakeLockToAudioService((KeyEvent)msg.obj);
                     dispatchMediaKeyWithWakeLockToAudioService(KeyEvent.changeAction((KeyEvent)msg.obj, KeyEvent.ACTION_UP));
+                    break;
+                case MSG_ENABLE_STATUS_BAR_HIDE_RECEIVER:
+                    enableStatusBarHideReceiver();
+                    break;
+                case MSG_DISABLE_STATUS_BAR_HIDE_RECEIVER:
+                    disableStatusBarHideReceiver();
+                    break;
+                case MSG_HIDE_STATUS_BAR:
+                    if (isStatusBarShownTemporarily()) {
+                        if (isStatusbarExpanded()) {
+                            mStatusBarHideAfterCollapsed = true;
+                        } else {
+                            mStatusBarShownDueToGesture = false;
+                            mWindowManagerFuncs.reevaluateStatusBarVisibility();
+                        }
+                    }
                     break;
             }
         }
@@ -656,6 +785,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HARDWARE_KEY_REBINDING), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_ON_TOP_OF_FULLSCREEN), false, this,
+                    UserHandle.USER_ALL);
 
             updateSettings();
         }
@@ -681,6 +813,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     public PhoneWindowManager(IDeviceHandler device) {
         mDeviceKeyHandler = (device != null) ? device.getDeviceKeyHandler() : null;
+    }
+
+    private boolean isStatusbarExpanded() {
+        if (mStatusBar != null) {
+            return mStatusBar.getAttrs().height == ViewGroup.LayoutParams.MATCH_PARENT;
+        }
+        return false;
     }
 
     IStatusBarService getStatusBarService() {
@@ -1433,9 +1572,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 expandedDesktopStyle = 0;
             }
 
+            boolean showStatusBarOnTopOfFullscreen = Settings.System.getIntForUser(
+                    resolver, Settings.System.STATUS_BAR_ON_TOP_OF_FULLSCREEN,
+                    0, UserHandle.USER_CURRENT) != 0;
+
             if (expandedDesktopStyle != mExpandedDesktopStyle) {
                 mExpandedDesktopStyle = expandedDesktopStyle;
                 updateDisplayMetrics = true;
+                updateShowStatusBarReceiverState();
+            }
+
+            if (showStatusBarOnTopOfFullscreen != mShowStatusBarOnTopOfFullscreen) {
+                mShowStatusBarOnTopOfFullscreen = showStatusBarOnTopOfFullscreen;
+                updateShowStatusBarReceiverState();
             }
 
             // Configure rotation lock.
@@ -1486,6 +1635,39 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             updateRotation(true);
         } else if (updateDisplayMetrics) {
             updateDisplayMetrics();
+        }
+    }
+
+    private void enableStatusBarHideReceiver() {
+        if (mShowStatusBarGestureReceiver == null) {
+            mShowStatusBarGestureInputChannel = mWindowManagerFuncs
+                    .monitorInput("ShowStatusBarGesture");
+            mShowStatusBarGestureReceiver = new ShowStatusBarGestureReceiver(
+                    mShowStatusBarGestureInputChannel, Looper.myLooper());
+        }
+    }
+
+    private void disableStatusBarHideReceiver() {
+        if (mShowStatusBarGestureReceiver != null) {
+            mShowStatusBarGestureReceiver.dispose();
+            mShowStatusBarGestureReceiver = null;
+        }
+        if (mShowStatusBarGestureInputChannel != null) {
+            mShowStatusBarGestureInputChannel.dispose();
+            mShowStatusBarGestureInputChannel = null;
+        }
+    }
+
+    private void updateShowStatusBarReceiverState() {
+        boolean needReceiver = mTopIsFullscreen
+                || mExpandedDesktopStyle == Settings.System.EXPANDED_DESKTOP_STATUS_BAR_HIDDEN;
+
+        if (mShowStatusBarOnTopOfFullscreen && needReceiver) {
+            mHandler.removeMessages(MSG_DISABLE_STATUS_BAR_HIDE_RECEIVER);
+            mHandler.sendEmptyMessage(MSG_ENABLE_STATUS_BAR_HIDE_RECEIVER);
+        } else {
+            mHandler.removeMessages(MSG_ENABLE_STATUS_BAR_HIDE_RECEIVER);
+            mHandler.sendEmptyMessage(MSG_DISABLE_STATUS_BAR_HIDE_RECEIVER);
         }
     }
 
@@ -3175,7 +3357,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
                 // If the status bar is hidden, we don't want to cause
                 // windows behind it to scroll.
-                if (mStatusBar.isVisibleLw()) {
+                if (mStatusBar.isVisibleLw() && !expandedDesktopHidesStatusBar()) {
                     // Status bar may go away, so the screen area it occupies
                     // is available to apps but just covering them when the
                     // status bar is visible.
@@ -3638,11 +3820,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private boolean expandedDesktopHidesStatusBar() {
-        return mExpandedDesktopStyle == 2;
+        return mExpandedDesktopStyle == Settings.System.EXPANDED_DESKTOP_STATUS_BAR_HIDDEN;
     }
 
     private boolean expandedDesktopHidesNavigationBar() {
-        return mExpandedDesktopStyle != 0;
+        return mExpandedDesktopStyle != Settings.System.EXPANDED_DESKTOP_DISABLED;
     }
 
     private boolean shouldHideNavigationBarLw(int systemUiVisibility) {
@@ -3784,9 +3966,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (DEBUG_LAYOUT) Log.i(TAG, "force=" + mForceStatusBar
                     + " forcefkg=" + mForceStatusBarFromKeyguard
                     + " top=" + mTopFullscreenOpaqueWindowState);
-            if (expandedDesktopHidesStatusBar()) {
+
+            if (mStatusBarHideAfterCollapsed && !isStatusbarExpanded()) {
+                mStatusBarHideAfterCollapsed = false;
+                mStatusBarShownDueToGesture = false;
+            }
+
+            if (expandedDesktopHidesStatusBar() && !isStatusBarShownTemporarily()) {
                 if (DEBUG_LAYOUT) Log.v(TAG, "Hiding status bar: expanded desktop enabled");
-                if (mStatusBar.hideLw(true)) changes |= FINISH_LAYOUT_REDO_LAYOUT;
+                if (mStatusBar.hideLw(true)) {
+                    changes |= FINISH_LAYOUT_REDO_LAYOUT;
+                    triggerStatusBarCollapse();
+                }
             } else if (mForceStatusBar || mForceStatusBarFromKeyguard) {
                 if (DEBUG_LAYOUT) Log.v(TAG, "Showing status bar: forced");
                 if (mStatusBar.showLw(true)) changes |= FINISH_LAYOUT_REDO_LAYOUT;
@@ -3803,24 +3994,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // and mTopIsFullscreen is that that mTopIsFullscreen is set only if the window
                 // has the FLAG_FULLSCREEN set.  Not sure if there is another way that to be the
                 // case though.
-                if (topIsFullscreen) {
+                if (topIsFullscreen && !isStatusBarShownTemporarily()) {
                     if (DEBUG_LAYOUT) Log.v(TAG, "** HIDING status bar");
                     if (mStatusBar.hideLw(true)) {
                         changes |= FINISH_LAYOUT_REDO_LAYOUT;
-
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                            try {
-                                IStatusBarService statusbar = getStatusBarService();
-                                if (statusbar != null) {
-                                    statusbar.collapsePanels();
-                                }
-                            } catch (RemoteException ex) {
-                                // re-acquire status bar service next time it is needed.
-                                mStatusBarService = null;
-                            }
-                        }});
+                        triggerStatusBarCollapse();
                     } else if (DEBUG_LAYOUT) {
                         Log.v(TAG, "Preventing status bar from hiding by policy");
                     }
@@ -3831,7 +4009,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
-        mTopIsFullscreen = topIsFullscreen;
+        if (topIsFullscreen != mTopIsFullscreen) {
+            mTopIsFullscreen = topIsFullscreen;
+            updateShowStatusBarReceiverState();
+        }
 
         // Hide the key guard if a visible window explicitly specifies that it wants to be
         // displayed when the screen is locked.
@@ -3896,6 +4077,27 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // update since mAllowLockscreenWhenOn might have changed
         updateLockScreenTimeout();
         return changes;
+    }
+
+    private void triggerStatusBarCollapse() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    IStatusBarService statusbar = getStatusBarService();
+                    if (statusbar != null) {
+                        statusbar.collapsePanels();
+                    }
+                } catch (RemoteException ex) {
+                    // re-acquire status bar service next time it is needed.
+                    mStatusBarService = null;
+                }
+            }
+        });
+    }
+
+    private boolean isStatusBarShownTemporarily() {
+        return mStatusBarShownDueToGesture;
     }
 
     public boolean allowAppAnimationsLw() {
