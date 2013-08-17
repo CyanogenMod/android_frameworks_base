@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  * Copyright (C) 2006 The Android Open Source Project
  * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
@@ -203,6 +204,11 @@ public class PackageManagerService extends IPackageManager.Stub {
     private static final int NFC_UID = Process.NFC_UID;
     private static final int BLUETOOTH_UID = Process.BLUETOOTH_UID;
     private static final int SHELL_UID = Process.SHELL_UID;
+
+    private static final int UID_NET_RAW = Process.UID_NET_RAW;
+    private static final int UID_NET_ADMIN = Process.UID_NET_ADMIN;
+    private static final int UID_QCOM_DIAG = 3009;
+    private static final int UID_QCOM_CAMERA = 1006;
 
     private static final boolean GET_CERTIFICATES = true;
 
@@ -1106,7 +1112,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         mSettings.addSharedUserLPw("android.uid.system", Process.SYSTEM_UID,
                 ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_PRIVILEGED);
         mSettings.addSharedUserLPw("android.uid.phone", RADIO_UID,
-                ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_PRIVILEGED);
+                ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_PRIVILEGED,
+                new int[] {UID_NET_RAW, UID_QCOM_DIAG, UID_NET_ADMIN, UID_QCOM_CAMERA});
         mSettings.addSharedUserLPw("android.uid.log", LOG_UID,
                 ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_PRIVILEGED);
         mSettings.addSharedUserLPw("android.uid.nfc", NFC_UID,

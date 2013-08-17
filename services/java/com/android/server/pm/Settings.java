@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  * Copyright (C) 2011 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -333,6 +334,12 @@ final class Settings {
     }
 
     SharedUserSetting addSharedUserLPw(String name, int uid, int pkgFlags) {
+        return addSharedUserLPw(name, uid, pkgFlags, null);
+    }
+
+    // This version of addSharedUserLPw adds the ability to set additional group ids
+    // that should be granted to this shared user
+    SharedUserSetting addSharedUserLPw(String name, int uid, int pkgFlags, int []gids) {
         SharedUserSetting s = mSharedUsers.get(name);
         if (s != null) {
             if (s.userId == uid) {
@@ -344,6 +351,9 @@ final class Settings {
         }
         s = new SharedUserSetting(name, pkgFlags);
         s.userId = uid;
+        if (gids != null) {
+            s.gids = gids.clone();
+        }
         if (addUserIdLPw(uid, s, name)) {
             mSharedUsers.put(name, s);
             return s;
