@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  * Copyright (C) 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,6 +99,20 @@ public class Process {
      * @hide
      */
     public static final int DRM_UID = 1019;
+
+    /**
+     * Defines the UID/GID for the AID_NET RAW process.
+     * AID_NET_RAW can create raw INET sockets
+     * @hide
+     */
+    public static final int UID_NET_RAW = 3004;
+
+    /**
+     * Defines the UID/GID for the AID_NET_ADMIN process.
+     * can configure interfaces and routing tables
+     * @hide
+     */
+    public static final int UID_NET_ADMIN = 3005;
 
     /**
      * Defines the UID/GID for the group that controls VPN services.
