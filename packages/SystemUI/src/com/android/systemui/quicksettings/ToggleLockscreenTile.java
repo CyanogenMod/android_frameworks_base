@@ -12,7 +12,6 @@ import android.view.View.OnLongClickListener;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
-import com.android.systemui.statusbar.powerwidget.PowerButton;
 
 @SuppressWarnings("deprecation")
 public class ToggleLockscreenTile extends QuickSettingsTile {
@@ -21,24 +20,15 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
     private static final String KEY_DISABLED = "lockscreen_disabled";
 
     private boolean mDisabledLockscreen;
-    private SharedPreferences mPrefs;
 
     public ToggleLockscreenTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
-
-        mPrefs = mContext.getSharedPreferences("PowerButton-" + PowerButton.BUTTON_LOCKSCREEN, Context.MODE_PRIVATE);
-        mDisabledLockscreen = mPrefs.getBoolean(KEY_DISABLED, false);
 
         mOnClick = new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 mDisabledLockscreen = !mDisabledLockscreen;
-
-                SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putBoolean(KEY_DISABLED, mDisabledLockscreen);
-                editor.apply();
-
                 updateResources();
             }
         };
