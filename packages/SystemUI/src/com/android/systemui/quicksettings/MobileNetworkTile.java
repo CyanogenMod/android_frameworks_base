@@ -139,7 +139,7 @@ public class MobileNetworkTile extends QuickSettingsTile implements NetworkSigna
 
     @Override
     void updateQuickSettings() {
-        TextView tv = (TextView) mTile.findViewById(R.id.rssi_textview);
+        TextView tv = (TextView) mTile.findViewById(R.id.text);
         ImageView iv = (ImageView) mTile.findViewById(R.id.rssi_image);
 
         iv.setImageResource(mDrawable);
