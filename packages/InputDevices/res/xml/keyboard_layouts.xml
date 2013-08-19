@@ -52,6 +52,10 @@
             android:label="@string/keyboard_layout_swiss_german_label"
             android:keyboardLayout="@raw/keyboard_layout_swiss_german" />
 
+    <keyboard-layout android:name="keyboard_layout_armenian_eastern"
+            android:label="@string/keyboard_layout_armenian_eastern_label"
+            android:keyboardLayout="@raw/keyboard_layout_armenian_eastern" />
+
     <keyboard-layout android:name="keyboard_layout_belgian"
             android:label="@string/keyboard_layout_belgian"
             android:keyboardLayout="@raw/keyboard_layout_belgian" />
