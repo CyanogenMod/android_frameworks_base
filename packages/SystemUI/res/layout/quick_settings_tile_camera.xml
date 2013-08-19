@@ -25,24 +25,36 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
-            android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
             android:src="@drawable/ic_qs_camera"
             />
-
+    <View
+        android:id="@+id/separator_padding"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"/>
         <TextView
             style="@style/TextAppearance.QuickSettings.TileView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            android:id="@+id/text"
             android:text="@string/quick_settings_camera_label"
             />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
     </LinearLayout>
 
     <FrameLayout android:id="@+id/camera_surface_holder"
