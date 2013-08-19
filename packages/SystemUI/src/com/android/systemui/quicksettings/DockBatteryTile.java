@@ -23,7 +23,7 @@ public class DockBatteryTile extends QuickSettingsTile implements DockBatterySta
     private Drawable mDockBatteryIcon;
 
     public DockBatteryTile(Context context, QuickSettingsController qsc, DockBatteryController controller) {
-        super(context, qsc, R.layout.quick_settings_tile_dock_battery);
+        super(context, qsc);
 
         mController = controller;
 
