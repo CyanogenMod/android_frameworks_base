@@ -34,6 +34,9 @@ public class QuickSettingsContainerView extends FrameLayout {
     // The number of columns in the QuickSettings grid
     private int mNumColumns;
 
+    private boolean mSingleRowMode;
+    private int mSingleRowModeHeight;
+
     // The gap between tiles in the QuickSettings grid
     private float mCellGap;
 
@@ -41,6 +44,10 @@ public class QuickSettingsContainerView extends FrameLayout {
         super(context, attrs);
 
         updateResources();
+    }
+
+    void setSingleRow(boolean singleRow) {
+        mSingleRowMode = singleRow;
     }
 
     @Override
@@ -55,22 +62,30 @@ public class QuickSettingsContainerView extends FrameLayout {
         Resources r = getContext().getResources();
         mCellGap = r.getDimension(R.dimen.quick_settings_cell_gap);
         mNumColumns = r.getInteger(R.integer.quick_settings_num_columns);
+        mSingleRowModeHeight = r.getDimensionPixelSize(R.dimen.notification_min_height);
         requestLayout();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // Calculate the cell width dynamically
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-        int availableWidth = (int) (width - getPaddingLeft() - getPaddingRight() -
-                (mNumColumns - 1) * mCellGap);
-        float cellWidth = (float) Math.ceil(((float) availableWidth) / mNumColumns);
+        // Get width from the horizontal scrollview
+        int width = ((ViewGroup) getParent().getParent()).getWidth();
+
+        float cellWidth = 0;
+
+        if (!mSingleRowMode) {
+            int availableWidth = (int) (width - getPaddingLeft() - getPaddingRight() -
+                    (mNumColumns - 1) * mCellGap);
+            cellWidth = (float) Math.ceil(((float) availableWidth) / mNumColumns);
+        } else {
+            cellWidth = mSingleRowModeHeight;
+        }
 
         // Update each of the children's widths accordingly to the cell width
         final int N = getChildCount();
         int cellHeight = 0;
         int cursor = 0;
+        int totalWidth = 0;
         for (int i = 0; i < N; ++i) {
             // Update the child's width
             QuickSettingsTileView v = (QuickSettingsTileView) getChildAt(i);
@@ -78,12 +93,12 @@ public class QuickSettingsContainerView extends FrameLayout {
                 ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
                 int colSpan = v.getColumnSpan();
                 lp.width = (int) ((colSpan * cellWidth) + (colSpan - 1) * mCellGap);
-
+                lp.height = (int) ((colSpan * cellWidth) + (colSpan - 1) * mCellGap);
                 // Measure the child
                 int newWidthSpec = MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY);
                 int newHeightSpec = MeasureSpec.makeMeasureSpec(lp.height, MeasureSpec.EXACTLY);
                 v.measure(newWidthSpec, newHeightSpec);
-
+                totalWidth += v.getMeasuredWidth() + mCellGap;
                 // Save the cell height
                 if (cellHeight <= 0) {
                     cellHeight = v.getMeasuredHeight();
@@ -97,7 +112,11 @@ public class QuickSettingsContainerView extends FrameLayout {
         int numRows = (int) Math.ceil((float) cursor / mNumColumns);
         int newHeight = (int) ((numRows * cellHeight) + ((numRows - 1) * mCellGap)) +
                 getPaddingTop() + getPaddingBottom();
-        setMeasuredDimension(width, newHeight);
+        if (!mSingleRowMode) {
+            setMeasuredDimension(width, newHeight);
+        } else {
+            setMeasuredDimension(totalWidth, cellHeight + getPaddingTop() + getPaddingBottom());
+        }
     }
 
     @Override
@@ -123,7 +142,7 @@ public class QuickSettingsContainerView extends FrameLayout {
                 int row = (int) (cursor / mNumColumns);
 
                 // Push the item to the next row if it can't fit on this one
-                if ((col + colSpan) > mNumColumns) {
+                if ((col + colSpan) > mNumColumns && !mSingleRowMode) {
                     x = getPaddingStart();
                     y += childHeight + mCellGap;
                     row++;
@@ -141,9 +160,9 @@ public class QuickSettingsContainerView extends FrameLayout {
                 // Offset the position by the cell gap or reset the position and cursor when we
                 // reach the end of the row
                 cursor += child.getColumnSpan();
-                if (cursor < (((row + 1) * mNumColumns))) {
+                if (cursor < (((row + 1) * mNumColumns)) || mSingleRowMode) {
                     x += childWidth + mCellGap;
-                } else {
+                } else if (!mSingleRowMode) {
                     x = getPaddingStart();
                     y += childHeight + mCellGap;
                 }
