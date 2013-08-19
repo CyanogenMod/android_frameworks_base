@@ -58,12 +58,10 @@
             android:layout_height="@dimen/notification_panel_header_height"
             />
 
-        <com.android.systemui.statusbar.powerwidget.PowerWidget
-            android:id="@+id/exp_power_stat"
+        <ViewStub android:id="@+id/flip_settings_stub"
+            android:layout="@layout/flip_settings"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/notification_panel_widget_height"
-            android:layout_marginTop="2dip"
-            android:visibility="gone"
+            android:layout_height="wrap_content"
         />
 
         <TextView
@@ -80,11 +78,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
-            <ViewStub android:id="@+id/flip_settings_stub"
-                android:layout="@layout/flip_settings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
     
             <ScrollView
                 android:id="@+id/scroll"
