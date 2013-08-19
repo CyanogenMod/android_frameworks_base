@@ -2444,6 +2444,13 @@ public final class Settings {
          */
         public static final String BATTERY_LIGHT_FULL_COLOR = "battery_light_full_color";
 
+        /**
+         * Whether the NVDIA SmartDimmer technology should be enabled. The value
+         * is boolean (1 or 0).
+         * @hide
+         */
+        public static final String ENABLE_SMARTDIMMER = "enable_smartdimmer";
+
         /** Sprint MWI Quirk: Show message wait indicator notifications
          * @hide
          */
@@ -3351,6 +3358,7 @@ public final class Settings {
             NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON,
             NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF,
             NOTIFICATION_VIBRATE_DURING_ALERTS_DISABLED,
+            ENABLE_SMARTDIMMER,
             SIP_CALL_OPTIONS,
             SIP_RECEIVE_CALLS,
             POINTER_SPEED,
