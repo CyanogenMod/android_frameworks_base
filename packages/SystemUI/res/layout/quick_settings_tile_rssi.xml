@@ -19,9 +19,11 @@
     android:layout_height="match_parent"
     android:layout_gravity="top"
     android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
     <FrameLayout
-        android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
-        android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
         android:layout_width="@dimen/qs_tile_icon_size"
         android:layout_height="@dimen/qs_tile_icon_size"
         android:layout_gravity="top|center_horizontal"
@@ -39,13 +41,22 @@
             android:layout_gravity="center"
             />
     </FrameLayout>
+    <View
+        android:id="@+id/separator_padding"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"/>
     <TextView
         style="@style/TextAppearance.QuickSettings.TileView"
-        android:id="@+id/rssi_textview"
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:gravity="top|center_horizontal"
         android:text="@string/quick_settings_rssi_label"
         />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
 </LinearLayout>
