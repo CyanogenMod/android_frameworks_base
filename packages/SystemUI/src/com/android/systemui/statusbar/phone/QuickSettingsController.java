@@ -427,4 +427,10 @@ public class QuickSettingsController {
             t.updateResources();
         }
     }
+
+    public void toggleTileTitles(boolean visible) {
+        for (QuickSettingsTile t : mQuickSettingsTiles) {
+            t.toggleTileLabels(visible);
+        }
+    }
 }
