@@ -24,6 +24,8 @@ import android.widget.ScrollView;
 
 public class QuickSettingsScrollView extends ScrollView {
 
+    private boolean scrollingEnabled = true;
+
     public QuickSettingsScrollView(Context context) {
         super(context);
     }
@@ -47,10 +49,14 @@ public class QuickSettingsScrollView extends ScrollView {
         return scrollRange;
     }
 
+    public void setScrollingEnabled(boolean enable) {
+        scrollingEnabled = enable;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         final int range = getScrollRange();
-        if (range == 0) {
+        if (range == 0 || !scrollingEnabled) {
             return false;
         }
 
