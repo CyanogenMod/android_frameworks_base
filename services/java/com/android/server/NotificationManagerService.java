@@ -2334,49 +2334,48 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     // lock on mNotificationList
-    private void updateLightsLocked()
-    {
+    private void updateLightsLocked() {
         // handle notification lights
         if (mLedNotification == null) {
             // use most recent light with highest score
             for (int i = mLights.size(); i > 0; i--) {
                 NotificationRecord r = mLights.get(i - 1);
-                if (mLedNotification == null || r.sbn.getScore() > mLedNotification.sbn.getScore()) {
+                if (mLedNotification == null
+                        || r.sbn.getScore() > mLedNotification.sbn.getScore()) {
                     mLedNotification = r;
                 }
             }
         }
 
-        // Don't flash while we are in a call, screen is on or we are in quiet hours with light dimmed
+        // Don't flash while we are in a call, screen is on or we are
+        // in quiet hours with light dimmed
         if (mLedNotification == null || mInCall
                 || (mScreenOn && !mDreaming) || (inQuietHours() && mQuietHoursDim)) {
             mNotificationLight.turnOff();
-        } else {
+        } else if (mNotificationPulseEnabled) {
             final Notification ledno = mLedNotification.sbn.getNotification();
+            final NotificationLedValues ledValues = getLedValuesForNotification(mLedNotification);
             int ledARGB;
             int ledOnMS;
             int ledOffMS;
-            NotificationLedValues ledValues = getLedValuesForNotification(mLedNotification);
+
             if (ledValues != null) {
                 ledARGB = ledValues.color != 0 ? ledValues.color : mDefaultNotificationColor;
                 ledOnMS = ledValues.onMS >= 0 ? ledValues.onMS : mDefaultNotificationLedOn;
                 ledOffMS = ledValues.offMS >= 0 ? ledValues.offMS : mDefaultNotificationLedOff;
+            } else if ((ledno.defaults & Notification.DEFAULT_LIGHTS) != 0) {
+                ledARGB = mDefaultNotificationColor;
+                ledOnMS = mDefaultNotificationLedOn;
+                ledOffMS = mDefaultNotificationLedOff;
             } else {
-                if ((mLedNotification.sbn.getNotification().defaults & Notification.DEFAULT_LIGHTS) != 0) {
-                    ledARGB = mDefaultNotificationColor;
-                    ledOnMS = mDefaultNotificationLedOn;
-                    ledOffMS = mDefaultNotificationLedOff;
-                } else {
-                    ledARGB = mLedNotification.sbn.getNotification().ledARGB;
-                    ledOnMS = mLedNotification.sbn.getNotification().ledOnMS;
-                    ledOffMS = mLedNotification.sbn.getNotification().ledOffMS;
-                }
+                ledARGB = ledno.ledARGB;
+                ledOnMS = ledno.ledOnMS;
+                ledOffMS = ledno.ledOffMS;
             }
-            if (mNotificationPulseEnabled) {
-                // pulse repeatedly
-                mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
-                        ledOnMS, ledOffMS);
-            }
+
+            // pulse repeatedly
+            mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
+                    ledOnMS, ledOffMS);
         }
     }
 
@@ -2394,7 +2393,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             String packageName = packageValues[0];
             String[] values = packageValues[1].split(";");
             if (values.length != 3) {
-                Log.e(TAG, "Error parsing custom led values '" + packageValues[1] + "' for " + packageName);
+                Log.e(TAG, "Error parsing custom led values '"
+                        + packageValues[1] + "' for " + packageName);
                 continue;
             }
             NotificationLedValues ledValues = new NotificationLedValues();
@@ -2403,7 +2403,8 @@ public class NotificationManagerService extends INotificationManager.Stub
                 ledValues.onMS = Integer.parseInt(values[1]);
                 ledValues.offMS = Integer.parseInt(values[2]);
             } catch (Exception e) {
-                Log.e(TAG, "Error parsing custom led values '" + packageValues[1] + "' for " + packageName);
+                Log.e(TAG, "Error parsing custom led values '"
+                        + packageValues[1] + "' for " + packageName);
                 continue;
             }
             mNotificationPulseCustomLedValues.put(packageName, ledValues);
@@ -2411,7 +2412,8 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     private NotificationLedValues getLedValuesForNotification(NotificationRecord ledNotification) {
-        return mNotificationPulseCustomLedValues.get(mapPackage(ledNotification.sbn.getPackageName()));
+        final String packageName = ledNotification.sbn.getPackageName();
+        return mNotificationPulseCustomLedValues.get(mapPackage(packageName));
     }
 
     private String mapPackage(String pkg) {
