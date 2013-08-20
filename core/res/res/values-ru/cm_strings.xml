@@ -66,4 +66,9 @@
     <string name="permlab_interceptSmsSent">перехват исходящих SMS</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения смогут использовать это, чтобы препятствовать отправке SMS-сообщений.</string>
+
+    <string name="policylab_enforceSelinux">Переключение режимов SELinux</string>
+    <string name="policydesc_enforceSelinux">Переключать принудительный и разрешающий режимы политики SELinux.</string>
+    <string name="policylab_enforceMmac">Переключение режимов MMAC</string>
+    <string name="policydesc_enforceMmac">Переключать принудительный и разрешающий режимы политики MMAC.</string>
 </resources>
