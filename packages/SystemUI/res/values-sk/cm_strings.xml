@@ -55,6 +55,8 @@
     <string name="quick_settings_expanded_desktop">Rozšírená</string>
     <string name="quick_settings_expanded_desktop_off">Normálna</string>
     <string name="navbar_dialog_title">Vyberte akciu na priradenie</string>
+    <string name="quick_settings_camera_label">Fotoaparát</string>
+    <string name="quick_settings_camera_error_connect">Nemožno sa pripojiť k fotoaparátu</string>
     <string name="navbar_home_button">Tlačidlo domov</string>
     <string name="navbar_recent_button">Tlačidlo nedávne</string>
     <string name="navbar_search_button">Tlačidlo hľadať</string>
