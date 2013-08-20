@@ -37,6 +37,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UEventObserver;
@@ -100,6 +102,7 @@ public class UsbDeviceManager {
 
     private static final String BOOT_MODE_PROPERTY = "ro.bootmode";
 
+private Handler mLockHandler;
     private UsbHandler mHandler;
     private boolean mBootCompleted;
 
@@ -110,6 +113,8 @@ public class UsbDeviceManager {
     @GuardedBy("mLock")
     private UsbSettingsManager mCurrentSettings;
     private NotificationManager mNotificationManager;
+private final PowerManager mPowerManager;	
+    private final PowerManager.WakeLock mWakeLock;
     private final boolean mHasUsbAccessory;
     private boolean mUseUsbNotification;
     private boolean mAdbEnabled;
@@ -161,6 +166,10 @@ public class UsbDeviceManager {
         mContentResolver = context.getContentResolver();
         PackageManager pm = mContext.getPackageManager();
         mHasUsbAccessory = pm.hasSystemFeature(PackageManager.FEATURE_USB_ACCESSORY);
+mPowerManager = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE)
+mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+                | PowerManager.ACQUIRE_CAUSES_WAKEUP, "usb_lock");
+        mWakeLock.setReferenceCounted(false);
         initRndisAddress();
 
         readOemUsbOverrideConfig();
@@ -575,6 +584,11 @@ public class UsbDeviceManager {
                     if (mBootCompleted) {
                         getCurrentSettings().accessoryDetached(mCurrentAccessory);
                     }
+if (mConnected && mConfigured) {
+                        mLockHandler.removeCallbacks(usbConLCDTask);
+                        mWakeLock.acquire();
+                        mLockHandler.postDelayed(usbConLCDTask, 10000);
+                    }
                     mCurrentAccessory = null;
                     mAccessoryStrings = null;
                 }
@@ -886,6 +900,13 @@ public class UsbDeviceManager {
         return usbFunctions;
     }
 
+private Runnable usbConLCDTask = new Runnable() {
+        public void run() {
+            if (mWakeLock.isHeld()) {
+                mWakeLock.release();
+            }
+        }
+    };
     public void allowUsbDebugging(boolean alwaysAllow, String publicKey) {
         if (mDebuggingManager != null) {
             mDebuggingManager.allowUsbDebugging(alwaysAllow, publicKey);
