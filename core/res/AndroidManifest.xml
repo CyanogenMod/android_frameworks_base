@@ -290,6 +290,13 @@
         android:label="@string/permlab_sendSms"
         android:description="@string/permdesc_sendSms" />
 
+    <!-- Allows an application to send mock SMS messages. -->
+    <permission android:name="android.permission.SEND_MOCK_SMS"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:protectionLevel="dangerous"
+        android:label="@string/permlab_sendMockSms"
+        android:description="@string/permdesc_sendMockSms" />
+
     <!-- Allows an application (Phone) to send a request to other applications
          to handle the respond-via-message action during incoming calls.
          <p>Not for use by third-party applications. -->
