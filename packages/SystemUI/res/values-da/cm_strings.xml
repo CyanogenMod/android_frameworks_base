@@ -15,6 +15,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Lyd <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="bean_dream_settings_cid_title">Brug Cid\'s hoved</string>
@@ -51,8 +52,10 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE fra</string>
     <string name="quick_settings_volume">Lydstyrke</string>
+    <string name="quick_settings_camera_label">Kamera</string>
     <string name="quick_settings_expanded_desktop">Udvidet</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_camera_error_connect">Kan ikke forbinde til kamera</string>
     <string name="navbar_dialog_title">Vælg handling at tildele</string>
     <string name="navbar_home_button">Startknap</string>
     <string name="navbar_recent_button">Seneste-knap</string>
