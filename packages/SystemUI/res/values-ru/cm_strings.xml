@@ -65,7 +65,6 @@
     <string name="pie_phone_status_no_service">Нет сети</string>
     <string name="pie_phone_status_airplane_mode">Режим полёта</string>
     <string name="pie_phone_status_emergency_only">Только экстренный вызов</string>
-
-    <!-- Camera tile toasts -->
     <string name="quick_settings_camera_error_connect">Не удаётся подключиться к камере</string>
+    <string name="powerwidget_screen_timeout_toast">Задержка выкл. экрана: %1$d %2$s</string>
 </resources>
