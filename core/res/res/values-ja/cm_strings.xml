@@ -52,4 +52,21 @@
     <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">その他</string>
     <string name="app_killed_message">アプリケーションを強制終了しました</string>
+    <string name="storage_sd_dock_card">SDカードを接続</string>
+    <string name="stylus_app_not_installed">%s はインストールされていません</string>
+    <string name="permlab_changePrivacyGuardState">プライバシー保護を有効/無効にする</string>
+    <string name="permdesc_changePrivacyGuardState">アプリに、他のアプリがプライバシー保護のもとで実行するかどうか変更することを許可します。アプリがプライバシー保護の元で実行されるとそのアプリは連絡先、通話履歴、メッセージなどの個人データにアクセスできなくなります。</string>
+    <string name="privacy_guard_notification">プライバシー保護はアクティブ</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> は、個人データにアクセスできません</string>
+    <string name="profile_picker_title">プロファイル</string>
+    <string name="profile_none">なし</string>
+    <string name="permlab_cancelNotifications">アプリの通知をキャンセル</string>
+    <string name="permdesc_cancelNotifications">アプリに、他のアプリで生成された通知をキャンセルすることを許可します。</string>
+    <string name="permlab_interceptSmsSent">SMS送信への割り込み</string>
+    <string name="permdesc_interceptSmsSent">アプリに送信するSMSを傍受することを許可します。
+        悪意のあるアプリはSMSメッセージの送信を妨害する可能性があります。</string>
+    <string name="policylab_enforceSelinux">SELinuxを強制</string>
+    <string name="policydesc_enforceSelinux">SELinuxポリシーを強制あるいは任意モードに切り替えます。</string>
+    <string name="policylab_enforceMmac">MMACを強制</string>
+    <string name="policydesc_enforceMmac">MMACポリシーを強制あるいは任意モードに切り替えます。</string>
 </resources>
