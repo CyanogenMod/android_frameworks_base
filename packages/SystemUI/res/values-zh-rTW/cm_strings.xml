@@ -53,8 +53,10 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE關閉</string>
     <string name="quick_settings_volume">音量</string>
+    <string name="quick_settings_camera_label">相機</string>
     <string name="quick_settings_expanded_desktop">已擴展</string>
     <string name="quick_settings_expanded_desktop_off">正常</string>
+    <string name="quick_settings_camera_error_connect">無法連線到相機</string>
     <string name="navbar_dialog_title">選擇指派動作</string>
     <string name="navbar_home_button">主螢幕鍵</string>
     <string name="navbar_recent_button">多工鍵</string>
