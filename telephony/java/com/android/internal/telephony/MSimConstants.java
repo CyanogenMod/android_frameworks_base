@@ -33,6 +33,8 @@ public class MSimConstants {
 
     public static final int DEFAULT_SUBSCRIPTION = 0;
 
+    public static final int INVALID_SUBSCRIPTION = -1;
+
     public static final int RIL_CARD_MAX_APPS    = 8;
 
     public static final int DEFAULT_CARD_INDEX   = 0;
