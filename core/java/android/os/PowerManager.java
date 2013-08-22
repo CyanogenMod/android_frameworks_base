@@ -885,5 +885,41 @@ public final class PowerManager {
         }
     }
 
+    /**
+     * Gets the maximum supported button brightness value.
+     * Will return 0 if button backlight is not supported.
+     * @hide
+     */
+    public int getMaximumButtonBrightness() {
+        return mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_buttonBrightnessSettingMaximum);
+    }
 
+    /**
+     * Gets the default button brightness value.
+     * @hide
+     */
+    public int getDefaultButtonBrightness() {
+        return mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_buttonBrightnessSettingDefault);
+    }
+
+    /**
+     * Gets the maximum supported keyboard brightness value.
+     * Will return 0 if keyboard backlight is not supported.
+     * @hide
+     */
+    public int getMaximumKeyboardBrightness() {
+        return mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_keyboardBrightnessSettingMaximum);
+    }
+
+    /**
+     * Gets the default keyboard brightness value.
+     * @hide
+     */
+    public int getDefaultKeyboardBrightness() {
+        return mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_keyboardBrightnessSettingDefault);
+    }
 }
