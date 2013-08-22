@@ -6527,6 +6527,14 @@ public final class Settings {
         public static final String DOCK_AUDIO_MEDIA_ENABLED = "dock_audio_media_enabled";
 
         /**
+         * Route audio to USB DAC if present:
+         *      0 = disabled
+         *      1 = enabled
+         * @hide
+         */
+        public static final String USB_AUDIO_ENABLED = "usb_audio_enabled";
+
+        /**
          * Persisted safe headphone volume management state by AudioService
          * @hide
          */
