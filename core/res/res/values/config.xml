@@ -464,12 +464,12 @@
     tablets are know to have soft buttons, but phones have hardware
     buttons. this might change in the future - especially when the
     honeycomb modifications become available for phones -->
-    <bool name="cm_default_is_tablet">false</bool>
+    <bool name="cm_default_is_tablet">true</bool>
 
     <!-- toggles weather device uses soft buttons or got hardware
     buttons. as the time of writing for android 2.3.3. all soft button
     enabled devices are tablets, all disabled are phones. -->
-    <bool name="cm_default_has_soft_buttons">false</bool>
+    <bool name="cm_default_has_soft_buttons">true</bool>
 
     <!-- if true, status bar is shown on bottom by default -->
     <bool name="cm_default_bottom_status_bar">false</bool>
@@ -487,11 +487,11 @@
     <!-- toggle which buttons to show if soft buttons enabled
     quickna: opens notification area with the press of one button
     instead of swiping the long way up/down on big tablets -->
-    <bool name="cm_default_show_soft_home">true</bool>
-    <bool name="cm_default_show_soft_menu">true</bool>
-    <bool name="cm_default_show_soft_back">true</bool>
+    <bool name="cm_default_show_soft_home">false</bool>
+    <bool name="cm_default_show_soft_menu">false</bool>
+    <bool name="cm_default_show_soft_back">false</bool>
     <bool name="cm_default_show_soft_search">false</bool>
-    <bool name="cm_default_show_soft_quick_na">true</bool>
+    <bool name="cm_default_show_soft_quick_na">false</bool>
 
     <!-- disables display of lockscreen both on boot as on
     power button press to wake devices. usful for devices you
@@ -519,9 +519,9 @@
 
     <!--  toggles which buttons to show on extended power menu.
     ignored if power menu disabled -->
-    <bool name="cm_default_power_menu_home">true</bool>
-    <bool name="cm_default_power_menu_menu">true</bool>
-    <bool name="cm_default_power_menu_back">true</bool>
+    <bool name="cm_default_power_menu_home">false</bool>
+    <bool name="cm_default_power_menu_menu">false</bool>
+    <bool name="cm_default_power_menu_back">false</bool>
 
     <!--  toggles behavior of volume buttons. default (false) triggers
     volume change when pressing, user action when long-pressing. enabling
