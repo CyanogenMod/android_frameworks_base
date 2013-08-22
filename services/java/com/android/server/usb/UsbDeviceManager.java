@@ -82,6 +82,7 @@ public class UsbDeviceManager {
             "/sys/class/android_usb/android0/f_rndis/ethaddr";
     private static final String AUDIO_SOURCE_PCM_PATH =
             "/sys/class/android_usb/android0/f_audio_source/pcm";
+    private static final String AUDIO_DEVICE_MAJOR_ID = "116";
 
     private static final int MSG_UPDATE_STATE = 0;
     private static final int MSG_ENABLE_ADB = 1;
@@ -89,6 +90,7 @@ public class UsbDeviceManager {
     private static final int MSG_SYSTEM_READY = 3;
     private static final int MSG_BOOT_COMPLETED = 4;
     private static final int MSG_USER_SWITCHED = 5;
+    private static final int MSG_AUDIO_DEVICE_PLUG = 6;
 
     private static final int AUDIO_MODE_NONE = 0;
     private static final int AUDIO_MODE_SOURCE = 1;
@@ -114,6 +116,7 @@ public class UsbDeviceManager {
     private boolean mUseUsbNotification;
     private boolean mAdbEnabled;
     private boolean mAudioSourceEnabled;
+    private boolean mUsbAudioEnabled;
     private Map<String, List<Pair<String, String>>> mOemModeMap;
     private String[] mAccessoryStrings;
     private UsbDebuggingManager mDebuggingManager;
@@ -145,6 +148,8 @@ public class UsbDeviceManager {
             } else if ("START".equals(accessory)) {
                 if (DEBUG) Slog.d(TAG, "got accessory start");
                 startAccessoryMode();
+            } else if (event.get("MAJOR").equals(AUDIO_DEVICE_MAJOR_ID)) {
+                handleUsbAudioDeviceEvent(event);
             }
         }
     };
@@ -224,6 +229,10 @@ public class UsbDeviceManager {
         // make sure the ADB_ENABLED setting value matches the current state
         Settings.Global.putInt(mContentResolver, Settings.Global.ADB_ENABLED, mAdbEnabled ? 1 : 0);
 
+        // Check if USB audio is enabled
+        mUsbAudioEnabled = ((Settings.System.getInt(mContentResolver,
+                Settings.System.USB_AUDIO_ENABLED, 0 ) == 1) ? true : false);
+
         mHandler.sendEmptyMessage(MSG_SYSTEM_READY);
     }
 
@@ -248,6 +257,49 @@ public class UsbDeviceManager {
         if (functions != null) {
             setCurrentFunctions(functions, false);
         }
+    }
+
+    private void handleUsbAudioDeviceEvent(UEventObserver.UEvent event) {
+        String devPath = event.get("DEVPATH");
+        // Only handle playback devices
+        if(!devPath.contains("usb") || !devPath.endsWith("p")) {
+            return;
+        }
+
+        if(DEBUG) {
+            Slog.v(TAG, "HANDLING USB AUDIO DEVICE UEVENT: " + event.toString());
+        }
+
+        String action = event.get("ACTION");
+        String devName = event.get("DEVNAME");
+        int connected = (action.equals("add") ? 1 : 0);
+        int card = Character.getNumericValue(devName.charAt(8));
+        int device = Character.getNumericValue(devName.charAt(10));
+
+        // Do not handle if USB audio is disabled, always handle disconnections
+        if(!mUsbAudioEnabled && connected == 1) {
+            return;
+        }
+
+        Message msg = Message.obtain(mHandler, MSG_AUDIO_DEVICE_PLUG);
+        msg.arg1 = connected;
+        msg.arg2 = card;
+        msg.obj = (int)device;
+        mHandler.sendMessage(msg);
+    }
+
+    private void setUsbAudioDeviceConnected(int connected, int card, int device) {
+        if(DEBUG) {
+            Slog.v(TAG, "REQUESTING AUDIO OUTPUT CHANGE: connected="
+                + connected + ", card=" + card + ", device=" + device);
+        }
+        // let the system know that we want to change the audio output device
+        Intent plugIntent = new Intent("android.intent.action.USB_AUDIO_DEVICE_PLUG");
+        plugIntent.putExtra("state", connected);
+        plugIntent.putExtra("card", card);
+        plugIntent.putExtra("device", device);
+        plugIntent.putExtra("channels", 2);
+        mContext.sendBroadcastAsUser(plugIntent, UserHandle.ALL);
     }
 
     private static void initRndisAddress() {
@@ -395,12 +447,23 @@ public class UsbDeviceManager {
                 );
 
                 mContentResolver.registerContentObserver(
+                        Settings.System.getUriFor(Settings.System.USB_AUDIO_ENABLED),
+                                false, new ContentObserver(null) {
+                            public void onChange(boolean selfChange) {
+                                mUsbAudioEnabled = (Settings.System.getInt(mContentResolver,
+                                    Settings.System.USB_AUDIO_ENABLED, 0) > 0);
+                            }
+                        }
+                );
+
+                mContentResolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
                                 false, new AdbSettingsObserver());
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
                 mUEventObserver.startObserving(ACCESSORY_START_MATCH);
+                mUEventObserver.startObserving("MAJOR=" + AUDIO_DEVICE_MAJOR_ID);
 
                 mContext.registerReceiver(
                         mBootCompletedReceiver, new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
@@ -678,6 +741,10 @@ public class UsbDeviceManager {
                         setUsbConfig(mCurrentFunctions);
                     }
                     mCurrentUser = msg.arg1;
+                    break;
+                }
+                case MSG_AUDIO_DEVICE_PLUG: {
+                    setUsbAudioDeviceConnected(msg.arg1, msg.arg2, (Integer)msg.obj);
                     break;
                 }
             }
