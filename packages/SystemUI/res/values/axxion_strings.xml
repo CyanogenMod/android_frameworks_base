@@ -30,4 +30,7 @@
     <!-- Title shown in recents popup for adding an application to the split view -->
     <string name="status_bar_recent_add_to_split_view">Add to Split View</string>
     
+    <!-- Title shown in notification popup for launching notification in floating mode -->
+    <string name="status_bar_notification_floating_item_title">Floating mode</string>
+    
 </resources>
