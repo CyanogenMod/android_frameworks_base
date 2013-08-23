@@ -3708,6 +3708,12 @@ public final class Settings {
          */
         public static final String QUIET_HOURS_END = "quiet_hours_end";
 
+	/**
+         * Configurable LTE or 4G icon - up to per user defined
+         * @hide
+         */
+        public static final String SHOW_LTE_OR_FOURGEE = "show_lte_or_fourgee";
+
         /**
          * Whether to remove the sound from phone ringing during quiet hours.
          * @hide

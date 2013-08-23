@@ -787,7 +787,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                             R.string.accessibility_data_connection_3g);
                     break;
                 case TelephonyManager.NETWORK_TYPE_LTE:
-                    boolean show4GforLTE = mContext.getResources().getBoolean(R.bool.config_show4GForLTE);
+                    boolean defValue = mContext.getResources().getBoolean(R.bool.config_show4GForLTE);
+                    boolean show4GforLTE = Settings.System.getBoolean(mContext.getContentResolver(),
++                    Settings.System.SHOW_LTE_OR_FOURGEE, defValue);
                     if (show4GforLTE) {
                         mDataIconList = TelephonyIcons.DATA_4G[mInetCondition];
                         mDataTypeIconId = R.drawable.stat_sys_data_fully_connected_4g;
