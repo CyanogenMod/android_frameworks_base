@@ -34,6 +34,8 @@ import android.view.ViewConfiguration;
 
 import com.android.internal.util.pie.PiePosition;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.BaseStatusBar;
+import com.android.systemui.statusbar.NavigationButtons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +111,8 @@ public class PieView extends View implements View.OnTouchListener {
         }
 
     };
+    private BaseStatusBar mStatusBar;
+    private boolean mRecentAppsPreloaded;
 
     /**
      * A {@code PieDrawable} is everything that can get displayed on the pie control.
@@ -284,6 +288,10 @@ public class PieView extends View implements View.OnTouchListener {
         mSnapPointMask = mask;
     }
 
+    public void attachStatusBar(BaseStatusBar statusBar) {
+        mStatusBar = statusBar;
+    }
+
     private void getDimensions() {
         mPieScale = Settings.System.getFloat(mContext.getContentResolver(),
                 Settings.System.PIE_SIZE, 1f);
@@ -404,7 +412,10 @@ public class PieView extends View implements View.OnTouchListener {
         if (mActive) {
             if (action == MotionEvent.ACTION_DOWN) {
                 mPointerId = event.getPointerId(0);
-            } else if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP) {
+            }
+
+            if (action == MotionEvent.ACTION_DOWN
+                    || action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP) {
                 mActiveSnap = null;
                 for (int i = 0; i < mSnapPoints.length; i++) {
                     if (mSnapPoints[i] != null) {
@@ -441,6 +452,16 @@ public class PieView extends View implements View.OnTouchListener {
                 updateActiveItem(newItem, mLongPressed);
             }
 
+            if ((action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE)
+                 && !mRecentAppsPreloaded && mActiveItem != null && mStatusBar != null) {
+                NavigationButtons.ButtonInfo bi =
+                        (NavigationButtons.ButtonInfo) mActiveItem.tag;
+                if (bi == NavigationButtons.RECENT) {
+                    mStatusBar.preloadRecentApps();
+                    mRecentAppsPreloaded = true;
+                }
+            }
+
             if (action == MotionEvent.ACTION_UP) {
                 // check if anything was active
                 if (mActiveSnap != null) {
@@ -450,6 +471,9 @@ public class PieView extends View implements View.OnTouchListener {
                 } else {
                     if (mActiveItem != null) {
                         mActiveItem.onClickCall(mLongPressed);
+                        if (mActiveItem.tag == NavigationButtons.RECENT) {
+                            mRecentAppsPreloaded = false;
+                        }
                     }
                 }
                 PieView.this.exit();
@@ -458,6 +482,11 @@ public class PieView extends View implements View.OnTouchListener {
             if (action == MotionEvent.ACTION_CANCEL) {
                 PieView.this.exit();
             }
+        }
+        if ((action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP)
+            && mRecentAppsPreloaded && mStatusBar != null) {
+            mStatusBar.cancelPreloadRecentApps();
+            mRecentAppsPreloaded = false;
         }
         return true;
     }
