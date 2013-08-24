@@ -136,6 +136,17 @@ public class QuickSettingsTile implements OnClickListener {
         mTile.setOnTouchListener(mGestureListener);
     }
 
+    public void setLabelVisibility(boolean visible) {
+        TextView tv = (TextView) mTile.findViewById(R.id.text);
+        if (tv != null) {
+            tv.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+        View sepPadding = mTile.findViewById(R.id.separator_padding);
+        if (sepPadding != null) {
+            sepPadding.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+    }
+
     void onPostCreate() {
     }
 

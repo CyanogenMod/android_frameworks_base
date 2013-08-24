@@ -19,6 +19,10 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
     <FrameLayout
         android:id="@+id/image"
         android:layout_width="@dimen/qs_tile_icon_size"
@@ -39,7 +43,7 @@
             android:layout_centerInParent="true"
             />
     </FrameLayout>
-    <ImageView
+        <ImageView
             android:id="@+id/activity_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +51,7 @@
             android:layout_toRightOf="@id/image"
             android:layout_alignBottom="@id/image"
             />
-    <ImageView
+        <ImageView
             android:id="@+id/activity_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,17 +59,27 @@
             android:layout_toRightOf="@id/image"
             android:layout_alignBottom="@id/image"
             />
-    <TextView
-        style="@style/TextAppearance.QuickSettings.TileView"
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:singleLine="true"
-        android:text="@string/quick_settings_rssi_label"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/image"
-        android:textAllCaps="@bool/quick_settings_rssi_tile_capitalization"
-        />
+        <View
+	        android:id="@+id/separator_padding"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="0.3"/>
+        <TextView
+	        style="@style/TextAppearance.QuickSettings.TileView"
+	        android:id="@+id/text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:gravity="center_horizontal"
+	        android:singleLine="true"
+	        android:text="@string/quick_settings_rssi_label"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@id/image"
+	        android:textAllCaps="@bool/quick_settings_rssi_tile_capitalization"
+	        />
+        <View
+	        android:id="@+id/separator_padding"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="0.3"/>
 </RelativeLayout>
