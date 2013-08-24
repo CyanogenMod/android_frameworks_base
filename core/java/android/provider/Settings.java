@@ -2728,47 +2728,11 @@ public final class Settings {
         public static final String QS_COLLAPSE_PANEL = "qs_collapse_panel";
 
         /**
-         * Use the Notification Power Widget? (Who wouldn't!)
+         * Quick Settings Quick access ribbon
          *
          * @hide
          */
-        public static final String EXPANDED_VIEW_WIDGET = "expanded_view_widget";
-
-        /**
-         * Whether to hide the notification screen after clicking on a widget
-         * button
-         *
-         * @hide
-         */
-        public static final String EXPANDED_HIDE_ONCHANGE = "expanded_hide_onchange";
-
-        /**
-         * Hide scroll bar in power widget
-         *
-         * @hide
-         */
-        public static final String EXPANDED_HIDE_SCROLLBAR = "expanded_hide_scrollbar";
-
-        /**
-         * Haptic feedback in power widget
-         *
-         * @hide
-         */
-        public static final String EXPANDED_HAPTIC_FEEDBACK = "expanded_haptic_feedback";
-
-        /**
-         * Widget Buttons to Use
-         *
-         * @hide
-         */
-        public static final String WIDGET_BUTTONS = "expanded_widget_buttons";
-
-        /**
-         * Widget Buttons to Use - Tablet
-         *
-         * @hide
-         */
-        public static final String WIDGET_BUTTONS_TABLET = "expanded_widget_buttons_tablet";
+        public static final String QS_QUICK_ACCESS = "qs_quick_access";
 
         /**
          * Navigation controls to Use
@@ -2778,34 +2742,22 @@ public final class Settings {
         public static final String NAV_BUTTONS = "nav_buttons";
 
         /**
-        * Notification Power Widget - Custom Brightness Mode
-        * @hide
-        */
-        public static final String EXPANDED_BRIGHTNESS_MODE = "expanded_brightness_mode";
-
-        /**
-        * Notification Power Widget - Custom Network Mode
+        * Quick Settings - Custom Network Mode
         * @hide
         */
         public static final String EXPANDED_NETWORK_MODE = "expanded_network_mode";
 
         /**
-        * Notification Power Widget - Custom Screen Timeout
+        * Quick Settings - Custom Screen Timeout
         * @hide
         */
         public static final String EXPANDED_SCREENTIMEOUT_MODE = "expanded_screentimeout_mode";
 
         /**
-        * Notification Power Widget - Custom Ring Mode
+        * Quick Settings - Custom Ring Mode
         * @hide
         */
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
-
-        /**
-        * Notification Power Widget - Custom Torch Mode
-        * @hide
-        */
-        public static final String EXPANDED_FLASH_MODE = "expanded_flash_mode";
 
         /**
         * AutoHide CombinedBar on tablets.
