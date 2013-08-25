@@ -30,6 +30,9 @@ public class RemoteDisplayTile extends QuickSettingsTile{
 
             @Override
             public void onClick(View v) {
+		if (isFlipTilesEnabled()) {
+                    flipTile(0);
+                }
                 startSettingsActivity(android.provider.Settings.ACTION_WIFI_DISPLAY_SETTINGS);
             }
         };

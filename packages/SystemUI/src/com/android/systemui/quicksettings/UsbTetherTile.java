@@ -28,6 +28,9 @@ public class UsbTetherTile extends QuickSettingsTile {
             public void onClick(View v) {
                 if (mUsbConnected) {
                     setUsbTethering(!mUsbTethered);
+		    if (isFlipTilesEnabled()) {
+                    flipTile(0);
+                    }
                 }
             }
         };
