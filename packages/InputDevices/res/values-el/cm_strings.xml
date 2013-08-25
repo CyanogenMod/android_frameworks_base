@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">Συσκευές εισόδου</string>
+    <string name="keyboard_layouts_label">Πληκτρολόγιο Android</string>
+    <string name="keyboard_layout_english_uk_label">Αγγλικά (Η.Β.)</string>
+    <string name="keyboard_layout_english_us_label">Αγγλικά (Η.Π.Α)</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Αγγλικά (Η.Π.Α.), στυλ Dvorak</string>
+    <string name="keyboard_layout_german_label">Γερμανικά</string>
+    <string name="keyboard_layout_french_label">Γαλλικά</string>
+    <string name="keyboard_layout_french_ca_label">Γαλλικά (Καναδάς)</string>
+    <string name="keyboard_layout_russian_label">Ρωσικά</string>
+    <string name="keyboard_layout_russian_mac_label">Ρωσικά, στυλ Mac</string>
+    <string name="keyboard_layout_spanish_label">Ισπανικά</string>
+    <string name="keyboard_layout_swiss_french_label">Γαλλικά Ελβετίας</string>
+    <string name="keyboard_layout_swiss_german_label">Γερμανικά Ελβετίας</string>
+    <string name="keyboard_layout_belgian">Βελγικά</string>
+    <string name="keyboard_layout_bulgarian">Βουλγαρικά</string>
+    <string name="keyboard_layout_italian">Ιταλικά</string>
+    <string name="keyboard_layout_danish">Δανικά</string>
+    <string name="keyboard_layout_norwegian">Νορβηγικά</string>
+    <string name="keyboard_layout_swedish">Σουηδικά</string>
+    <string name="keyboard_layout_finnish">Φινλανδικά</string>
+    <string name="keyboard_layout_croatian">Κροατικά</string>
+    <string name="keyboard_layout_czech">Τσέχικα</string>
+    <string name="keyboard_layout_estonian">Εσθονικά</string>
+    <string name="keyboard_layout_hungarian">Ουγγρικά</string>
+    <string name="keyboard_layout_icelandic">Ισλανδικά</string>
+    <string name="keyboard_layout_portuguese">Πορτογαλικά</string>
+    <string name="keyboard_layout_slovak">Σλοβακικά</string>
+    <string name="keyboard_layout_slovenian">Σλοβενικά</string>
+    <string name="keyboard_layout_turkish">Τουρκικά</string>
+    <string name="keyboard_layout_ukrainian">Ουκρανικά</string>
+    <string name="keyboard_layout_english_us_colemak_label">Αγγλικά (Η.Π.Α.), στυλ Colemak</string>
+    <string name="keyboard_layout_armenian_eastern_label">Ανατολικά Αρμενικά</string>
+</resources>
