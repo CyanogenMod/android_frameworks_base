@@ -121,4 +121,7 @@
     <string name="policydesc_enforceSelinux">Alternar entre modo de política imperativa ou permissiva de SELinux.</string>
     <string name="policylab_enforceMmac">Impor MMAC</string>
     <string name="policydesc_enforceMmac">Alternar entre modo de política imperativa ou permissiva de MMAC.</string>
+    <string name="permlab_sendMockSms">Simular envio de mensagens SMS</string>
+    <string name="permdesc_sendMockSms">Permite ao aplicativo simular envio de mensagens SMS.
+        Isto permite um aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
 </resources>
