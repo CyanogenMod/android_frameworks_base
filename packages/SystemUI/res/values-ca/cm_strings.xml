@@ -44,7 +44,6 @@
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC apagat</string>
     <string name="quick_settings_screen_timeout">Compte enrera</string>
-    <string name="quick_settings_screen_timeout_summary" translatable="false">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">Desconnectat</string>
     <string name="quick_settings_usb_tether_connected_label">Ancoratge apagat</string>
     <string name="quick_settings_usb_tether_on_label">Ancoratge</string>
