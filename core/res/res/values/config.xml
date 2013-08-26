@@ -651,6 +651,10 @@
     <integer-array name="config_autoBrightnessKeyboardBacklightValues">
     </integer-array>
 
+    <integer name="config_buttonBrightnessSettingDefault">255</integer>
+    <integer name="config_keyboardBrightnessSettingDefault">0</integer>
+    <bool name="config_deviceHasVariableButtonBrightness">false</bool>
+
     <!-- Amount of time it takes for the light sensor to warm up in milliseconds.
          For this time after the screen turns on, the Power Manager
          will not debounce light sensor readings -->
