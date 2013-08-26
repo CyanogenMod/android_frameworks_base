@@ -59,4 +59,14 @@
     <string name="permdesc_changePrivacyGuardState">Umožňuje aplikácii určiť, či má byť iná aplikácia spustená s ochranou súkromia. Keď je aplikácia spustená s ochranou súkromia, nemá umožnený prístup k osobným údajom ako sú kontakty, denníky hovorov, alebo správy.</string>
     <string name="privacy_guard_notification">Ochrana súkromia je aktívna</string>
     <string name="privacy_guard_notification_detail">Aplikácii <xliff:g id="app">%1$s</xliff:g> nebude umožnený prístup k osobným údajom</string>
+    <string name="profile_picker_title">Profily</string>   
+    <string name="profile_none">Žiadny</string>
+    <string name="permlab_cancelNotifications">zrušiť oznámenia aplikácií</string>
+    <string name="permdesc_cancelNotifications">Povolí aplikácii zrušiť oznámenia vytvorené inými aplikáciami.</string>
+    <string name="permlab_interceptSmsSent">zachytiť odchádzajúce SMS</string>
+    <string name="permdesc_interceptSmsSent">Povolí aplikácii zachytiť odchádzajúce SMS. Škodlivé aplikácie môžu pomocou odchytenia SMS zabrániť ich odoslaniu.</string>
+    <string name="policylab_enforceSelinux">vynútiť SELinux</string>
+    <string name="policydesc_enforceSelinux">Prepnúť stav zabezpečenia SELinux.</string>
+    <string name="policylab_enforceMmac">vynútiť MMAC</string>
+    <string name="policydesc_enforceMmac">Prepnúť stav zabezpečenia MMAC.</string>
 </resources>
