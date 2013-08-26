@@ -278,6 +278,83 @@ public class Environment {
     }
 
     /**
+     * Gets an external volume that supports having external apps.
+     * If such a volume does not exist (eg. devices that do not have an SD card
+     * and do not support USB-OTG), then null is returned.
+     * @return StorageVolume object representing a volume supporting external apps.
+     * @hide
+     */
+    private static StorageVolume getExternalAppsVolume() {
+        try {
+            IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                    .getService("mount"));
+            final StorageVolume[] volumes = mountService.getVolumeList();
+            for (StorageVolume volume : volumes) {
+                if (volume.isExternalApps()) {
+                    Log.v(TAG, "Found external apps volume: " + volume.getPath());
+                    return volume;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "couldn't talk to MountService", e);
+        }
+        return null;
+    }
+
+    /**
+     * Determine if there is a volume supporting external apps and if it's mounted.
+     * @return True if an external apps volume exists and is mounted, otherwise, false.
+     * @hide
+     */
+    public static boolean isExternalAppsAvailableAndMounted() {
+        if (getExternalAppsVolume() != null) {
+            String state = getExternalAppsVolumeState();
+
+            if (state.equals(MEDIA_MOUNTED)) {
+                final File temp = new File("/data/system/no-external-apps");
+                if (temp.exists()) {
+                    Log.v(TAG, "Application moving was explicitly disabled");
+                    return false;
+                }
+                return true;
+            }
+        } else {
+            Log.v(TAG, "External apps volume is NOT available");
+        }
+        return false;
+    }
+
+    /**
+     * Gets the current state of the external apps volume.
+     * @see #getExternalAppsVolumeDirectory()
+     * @return String containing the state of the external apps volume.
+     * @hide
+     */
+    public static String getExternalAppsVolumeState() {
+        try {
+            IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                    .getService("mount"));
+            return mountService.getVolumeState(getExternalAppsVolume().getPath());
+        } catch (RemoteException rex) {
+            Log.w(TAG, "Failed to read external SD state; assuming REMOVED: " + rex);
+            return Environment.MEDIA_REMOVED;
+        }
+    }
+
+    /**
+     * Gets the mount point/directory of the external apps volume.
+     * @return File object for the directory of the external apps volume.
+     * @hide
+     */
+    public static File getExternalAppsVolumeDirectory() {
+        StorageVolume volume = getExternalAppsVolume();
+        if (volume != null) {
+          return new File(volume.getPath());
+        }
+        return null;
+    }
+
+    /**
      * Return directory used for internal media storage, which is protected by
      * {@link android.Manifest.permission#WRITE_MEDIA_STORAGE}.
      *

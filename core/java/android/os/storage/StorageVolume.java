@@ -48,6 +48,7 @@ public class StorageVolume implements Parcelable {
     private final long mMaxFileSize;
     /** When set, indicates exclusive ownership of this volume */
     private final UserHandle mOwner;
+    private final boolean mExternalApps;
 
     private String mUuid;
     private String mUserLabel;
@@ -70,6 +71,22 @@ public class StorageVolume implements Parcelable {
         mAllowMassStorage = allowMassStorage;
         mMaxFileSize = maxFileSize;
         mOwner = owner;
+        mExternalApps = false;
+    }
+
+    public StorageVolume(File path, int descriptionId, boolean primary, boolean removable,
+            boolean emulated, int mtpReserveSpace, boolean allowMassStorage, long maxFileSize,
+            UserHandle owner, boolean externalApps) {
+        mPath = path;
+        mDescriptionId = descriptionId;
+        mPrimary = primary;
+        mRemovable = removable;
+        mEmulated = emulated;
+        mMtpReserveSpace = mtpReserveSpace;
+        mAllowMassStorage = allowMassStorage;
+        mMaxFileSize = maxFileSize;
+        mOwner = owner;
+        mExternalApps = externalApps;
     }
 
     private StorageVolume(Parcel in) {
@@ -83,6 +100,7 @@ public class StorageVolume implements Parcelable {
         mAllowMassStorage = in.readInt() != 0;
         mMaxFileSize = in.readLong();
         mOwner = in.readParcelable(null);
+        mExternalApps = in.readInt() != 0;
         mUuid = in.readString();
         mUserLabel = in.readString();
         mState = in.readString();
@@ -91,7 +109,7 @@ public class StorageVolume implements Parcelable {
     public static StorageVolume fromTemplate(StorageVolume template, File path, UserHandle owner) {
         return new StorageVolume(path, template.mDescriptionId, template.mPrimary,
                 template.mRemovable, template.mEmulated, template.mMtpReserveSpace,
-                template.mAllowMassStorage, template.mMaxFileSize, owner);
+                template.mAllowMassStorage, template.mMaxFileSize, owner, template.mExternalApps);
     }
 
     /**
@@ -140,6 +158,15 @@ public class StorageVolume implements Parcelable {
      */
     public boolean isEmulated() {
         return mEmulated;
+    }
+
+    /**
+     * Returns true if the volume supports external apps.
+     *
+     * @return supports external apps
+     */
+    public boolean isExternalApps() {
+        return mExternalApps;
     }
 
     /**
@@ -272,6 +299,7 @@ public class StorageVolume implements Parcelable {
         pw.printPair("mAllowMassStorage", mAllowMassStorage);
         pw.printPair("mMaxFileSize", mMaxFileSize);
         pw.printPair("mOwner", mOwner);
+        pw.printPair("mExternalApps", mExternalApps);
         pw.printPair("mUuid", mUuid);
         pw.printPair("mUserLabel", mUserLabel);
         pw.printPair("mState", mState);
@@ -307,6 +335,7 @@ public class StorageVolume implements Parcelable {
         parcel.writeInt(mAllowMassStorage ? 1 : 0);
         parcel.writeLong(mMaxFileSize);
         parcel.writeParcelable(mOwner, flags);
+        parcel.writeInt(mExternalApps ? 1 : 0);
         parcel.writeString(mUuid);
         parcel.writeString(mUserLabel);
         parcel.writeString(mState);
