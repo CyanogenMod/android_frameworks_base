@@ -6008,6 +6008,8 @@
         <attr name="allowMassStorage" format="boolean" />
         <!-- maximum file size for the volume in megabytes, zero or unspecified if it is unbounded -->
         <attr name="maxFileSize" format="integer" />
+        <!-- true if volume supports external apps -->
+        <attr name="externalApps" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="SwitchPreference">
