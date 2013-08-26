@@ -11,6 +11,8 @@
 #include <androidfw/ResourceTypes.h>
 #include <utils/ByteOrder.h>
 
+#include <zlib.h>
+
 #define NOISY(x) //x
 
 typedef struct png_memory_file_s {
@@ -22,7 +24,8 @@ typedef struct png_memory_file_s {
 static void
 png_write_aapt_file(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    status_t err = ((AaptFile*)png_ptr->io_ptr)->writeData(data, length);
+    AaptFile* aaptfile = (AaptFile*) png_get_io_ptr(png_ptr);
+    status_t err = aaptfile->writeData(data, length);
     if (err != NO_ERROR) {
         png_error(png_ptr, "Write Error");
     }
@@ -31,7 +34,8 @@ png_write_aapt_file(png_structp png_ptr, png_bytep data, png_size_t length)
 static void
 png_read_mem_file(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    status_t err = ((PngMemoryFile*)png_ptr->io_ptr)->read(data, length);
+    PngMemoryFile* pngFile = (PngMemoryFile*)  png_get_io_ptr(png_ptr);
+    status_t err = pngFile->read(data, length);
     if (err != NO_ERROR) {
         png_error(png_ptr, "Read Error");
     }
@@ -80,6 +84,12 @@ struct image_info
     png_bytepp allocRows;
 };
 
+static void log_warning(png_structp png_ptr, png_const_charp warning_message)
+{
+    const char* imageName = (const char*) png_get_error_ptr(png_ptr);
+    fprintf(stderr, "%s: libpng warning: %s\n", imageName, warning_message);
+}
+
 static void read_png(const char* imageName,
                      png_structp read_ptr, png_infop read_info,
                      image_info* outImageInfo)
@@ -88,6 +98,8 @@ static void read_png(const char* imageName,
     int bit_depth, interlace_type, compression_type;
     int i;
 
+    png_set_error_fn(read_ptr, const_cast<char*>(imageName),
+            NULL /* use default errorfn */, log_warning);
     png_read_info(read_ptr, read_info);
 
     png_get_IHDR(read_ptr, read_info, &outImageInfo->width,
@@ -102,7 +114,7 @@ static void read_png(const char* imageName,
         png_set_palette_to_rgb(read_ptr);
 
     if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
-        png_set_gray_1_2_4_to_8(read_ptr);
+        png_set_expand_gray_1_2_4_to_8(read_ptr);
 
     if (png_get_valid(read_ptr, read_info, PNG_INFO_tRNS)) {
         //printf("Has PNG_INFO_tRNS!\n");
@@ -118,10 +130,12 @@ static void read_png(const char* imageName,
     if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
         png_set_gray_to_rgb(read_ptr);
 
+    png_set_interlace_handling(read_ptr);
+
     png_read_update_info(read_ptr, read_info);
 
     outImageInfo->rows = (png_bytepp)malloc(
-        outImageInfo->height * png_sizeof(png_bytep));
+        outImageInfo->height * sizeof(png_bytep));
     outImageInfo->allocHeight = outImageInfo->height;
     outImageInfo->allocRows = outImageInfo->rows;
 
@@ -584,7 +598,7 @@ static status_t do_9patch(const char* imageName, image_info* image)
                  image->info9Patch.paddingTop, image->info9Patch.paddingBottom));
 
     // Remove frame from image.
-    image->rows = (png_bytepp)malloc((H-2) * png_sizeof(png_bytep));
+    image->rows = (png_bytepp)malloc((H-2) * sizeof(png_bytep));
     for (i=0; i<(H-2); i++) {
         image->rows[i] = image->allocRows[i+1];
         memmove(image->rows[i], image->rows[i]+4, (W-2)*4);
@@ -995,7 +1009,7 @@ static void write_png(const char* imageName,
     unknowns[0].data = NULL;
     unknowns[1].data = NULL;
 
-    png_bytepp outRows = (png_bytepp) malloc((int) imageInfo.height * png_sizeof(png_bytep));
+    png_bytepp outRows = (png_bytepp) malloc((int) imageInfo.height * sizeof(png_bytep));
     if (outRows == (png_bytepp) 0) {
         printf("Can't allocate output buffer!\n");
         exit(1);
@@ -1084,18 +1098,19 @@ static void write_png(const char* imageName,
             unknowns[b_index].size = chunk_size;
         }
 
+        for (int i = 0; i < chunk_count; i++) {
+            unknowns[i].location = PNG_HAVE_PLTE;
+        }
         png_set_keep_unknown_chunks(write_ptr, PNG_HANDLE_CHUNK_ALWAYS,
                                     chunk_names, chunk_count);
         png_set_unknown_chunks(write_ptr, write_info, unknowns, chunk_count);
-        // XXX I can't get this to work without forcibly changing
-        // the location to what I want...  which apparently is supposed
-        // to be a private API, but everything else I have tried results
-        // in the location being set to what I -last- wrote so I never
-        // get written. :p
+#if PNG_LIBPNG_VER < 10600
+        /* Deal with unknown chunk location bug in 1.5.x and earlier */
         png_set_unknown_chunk_location(write_ptr, write_info, 0, PNG_HAVE_PLTE);
         if (imageInfo.haveLayoutBounds) {
             png_set_unknown_chunk_location(write_ptr, write_info, 1, PNG_HAVE_PLTE);
         }
+#endif
     }
 
 
@@ -1103,7 +1118,9 @@ static void write_png(const char* imageName,
 
     png_bytepp rows;
     if (color_type == PNG_COLOR_TYPE_RGB || color_type == PNG_COLOR_TYPE_RGB_ALPHA) {
-        png_set_filler(write_ptr, 0, PNG_FILLER_AFTER);
+        if (color_type == PNG_COLOR_TYPE_RGB) {
+            png_set_filler(write_ptr, 0, PNG_FILLER_AFTER);
+        }
         rows = imageInfo.rows;
     } else {
         rows = outRows;
