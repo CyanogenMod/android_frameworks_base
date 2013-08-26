@@ -35,6 +35,8 @@
     <string name="permdesc_fm_radio_receiver">Lehetővé teszi az alkalmazás számára az FM rádióvevő vezérlését.</string>
     <string name="permlab_fm_radio_transmitter">FM rádióadó vezérlése</string>
     <string name="permdesc_fm_radio_transmitter">Lehetővé teszi az alkalmazás számára az FM rádióadó vezérlését.</string>
+    <string name="permlab_sendMockSms">SMS utánzatok küldése</string>
+    <string name="permdesc_sendMockSms">Lehetővé teszi az alkalmazás számára, hogy SMS utánzatokat hozzon létre. A rosszindulatú alkalmazások folyamatos üzenet létrehozással zavarhatják a felhasználót, és megbéníthatják az eszköz értesítési felületét.</string>
     <string name="lockscreen_discharging">Lemerítés, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">Dokkoló SD-kártyája</string>
     <string name="app_killed_message">Alkalmazás leállítva</string>
@@ -68,4 +70,5 @@
     <string name="policydesc_enforceSelinux">Váltás a biztonságos és az engedélyező SELinux mód között.</string>
     <string name="policylab_enforceMmac">MMAC</string>
     <string name="policydesc_enforceMmac">Váltás a biztonságos és az engedélyező MMAC mód között.</string>
+    <string name="progress_nomediapresent" product="default">Nincs eltávolítható memóriakártya\u2026</string>
 </resources>
