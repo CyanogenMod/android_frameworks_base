@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_label">Vstupné zariadenia</string>
+    <string name="keyboard_layouts_label">Android klávesnica</string>
+    <string name="keyboard_layout_english_uk_label">Angličtina (UK)</string>
+    <string name="keyboard_layout_english_us_label">Angličtina (US)</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Angličtina (US), štýl Dvorak</string>
+    <string name="keyboard_layout_german_label">Nemčina</string>
+    <string name="keyboard_layout_french_label">Francúzština</string>
+    <string name="keyboard_layout_french_ca_label">Francúzština (Kanada)</string>
+    <string name="keyboard_layout_russian_label">Ruština</string>
+    <string name="keyboard_layout_russian_mac_label">Ruština, štýl Mac</string>
+    <string name="keyboard_layout_spanish_label">Španielčina</string>
+    <string name="keyboard_layout_swiss_french_label">Švajčiarska francúzština</string>
+    <string name="keyboard_layout_swiss_german_label">Švajčiarska nemčina</string>
+    <string name="keyboard_layout_belgian">Belgičtina</string>
+    <string name="keyboard_layout_bulgarian">Bulharčina</string>
+    <string name="keyboard_layout_italian">Taliančina</string>
+    <string name="keyboard_layout_danish">Dánština</string>
+    <string name="keyboard_layout_norwegian">Nórčina</string>
+    <string name="keyboard_layout_swedish">Švédčina</string>
+    <string name="keyboard_layout_finnish">Fínština</string>
+    <string name="keyboard_layout_croatian">Chorvátčina</string>
+    <string name="keyboard_layout_czech">Čeština</string>
+    <string name="keyboard_layout_estonian">Estónčina</string>
+    <string name="keyboard_layout_hungarian">Maďarčina</string>
+    <string name="keyboard_layout_icelandic">Islandčina</string>
+    <string name="keyboard_layout_portuguese">Portugalčina</string>
+    <string name="keyboard_layout_slovak">Slovenčina</string>
+    <string name="keyboard_layout_slovenian">Slovinčina</string>
+    <string name="keyboard_layout_turkish">Turečtina</string>
+    <string name="keyboard_layout_ukrainian">Ukrajinčina</string>
+</resources>
