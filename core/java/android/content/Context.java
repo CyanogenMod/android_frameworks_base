@@ -1919,6 +1919,7 @@ public abstract class Context {
      *
      * @see #getSystemService
      * @see android.hardware.IrdaManager
+     * @hide
      */
     public static final String IRDA_SERVICE = "irda";
 

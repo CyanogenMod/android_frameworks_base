@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
+/** @hide */
+
 public class IrdaManagerService extends IIrdaManager.Stub {
     private static final String TAG = "IrdaManagerService";
     private IrdaWorkerHandler mHandler;
