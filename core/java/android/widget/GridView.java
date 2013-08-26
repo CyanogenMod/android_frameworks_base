@@ -139,6 +139,7 @@ public class GridView extends AbsListView {
         }
         
         a.recycle();
+	setGridView(true);
     }
 
     @Override
