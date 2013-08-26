@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="keyboard_layout_english_us_colemak_label">Angol (US), Colemak stílus</string>
+    <string name="keyboard_layout_armenian_eastern_label">Keleti örmény</string>
+    <string name="app_label">Beviteli eszközök</string>
+    <string name="keyboard_layouts_label">Android billentyűzet</string>
+    <string name="keyboard_layout_english_uk_label">Angol (UK)</string>
+    <string name="keyboard_layout_english_us_label">Angol (US)</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Angol (US), Dvorak stílus</string>
+    <string name="keyboard_layout_german_label">Német</string>
+    <string name="keyboard_layout_french_label">Francia</string>
+    <string name="keyboard_layout_french_ca_label">Francia (kanadai)</string>
+    <string name="keyboard_layout_russian_label">Orosz</string>
+    <string name="keyboard_layout_russian_mac_label">Orosz, Mac stílus</string>
+    <string name="keyboard_layout_spanish_label">Spanyol</string>
+    <string name="keyboard_layout_swiss_french_label">Svájci Francia</string>
+    <string name="keyboard_layout_swiss_german_label">Svájci Német</string>
+    <string name="keyboard_layout_belgian">Belga</string>
+    <string name="keyboard_layout_bulgarian">Bulgár</string>
+    <string name="keyboard_layout_italian">Olasz</string>
+    <string name="keyboard_layout_danish">Dán</string>
+    <string name="keyboard_layout_norwegian">Norvég</string>
+    <string name="keyboard_layout_swedish">Svéd</string>
+    <string name="keyboard_layout_finnish">Finn</string>
+    <string name="keyboard_layout_croatian">Horvát</string>
+    <string name="keyboard_layout_czech">Cseh</string>
+    <string name="keyboard_layout_estonian">Észt</string>
+    <string name="keyboard_layout_hungarian">Magyar</string>
+    <string name="keyboard_layout_icelandic">Izlandi</string>
+    <string name="keyboard_layout_portuguese">Portugál</string>
+    <string name="keyboard_layout_slovak">Szlovák</string>
+    <string name="keyboard_layout_slovenian">Szlovén</string>
+    <string name="keyboard_layout_turkish">Török</string>
+    <string name="keyboard_layout_ukrainian">Ukrán</string>
+</resources>
