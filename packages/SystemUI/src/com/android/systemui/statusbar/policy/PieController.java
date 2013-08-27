@@ -306,6 +306,9 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
 
     public void attachStatusBar(BaseStatusBar statusBar) {
         mStatusBar = statusBar;
+        if (mPieContainer != null) {
+            mPieContainer.attachStatusBar(statusBar);
+        }
     }
 
     private void setupContainer() {
@@ -313,6 +316,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
             mPieContainer = new PieView(mContext);
             mPieContainer.setOnSnapListener(this);
             mPieContainer.setOnExitListener(this);
+            mPieContainer.attachStatusBar(mStatusBar);
 
             if (mTelephonyManager != null) {
                 mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
