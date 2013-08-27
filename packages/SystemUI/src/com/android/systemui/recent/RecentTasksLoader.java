@@ -439,12 +439,15 @@ public class RecentTasksLoader implements View.OnTouchListener {
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
 
                 final List<ActivityManager.RecentTaskInfo> recentTasks =
-                        am.getRecentTasks(MAX_TASKS, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
+                        am.getRecentTasks(MAX_TASKS, ActivityManager.RECENT_IGNORE_UNAVAILABLE
+                                | ActivityManager.RECENT_WITH_EXCLUDED
+                                | ActivityManager.RECENT_DO_NOT_COUNT_EXCLUDED);
                 int numTasks = recentTasks.size();
                 ActivityInfo homeInfo = new Intent(Intent.ACTION_MAIN)
                         .addCategory(Intent.CATEGORY_HOME).resolveActivityInfo(pm, 0);
 
                 boolean firstScreenful = true;
+                boolean loadOneExcluded = true;
                 ArrayList<TaskDescription> tasks = new ArrayList<TaskDescription>();
 
                 // skip the first task - assume it's either the home screen or the current activity.
@@ -462,6 +465,7 @@ public class RecentTasksLoader implements View.OnTouchListener {
 
                     // Don't load the current home activity.
                     if (isCurrentHomeActivity(intent.getComponent(), homeInfo)) {
+                        loadOneExcluded = false;
                         continue;
                     }
 
@@ -469,6 +473,13 @@ public class RecentTasksLoader implements View.OnTouchListener {
                     if (intent.getComponent().getPackageName().equals(mContext.getPackageName())) {
                         continue;
                     }
+
+                    if (!loadOneExcluded && (recentInfo.baseIntent.getFlags()
+                            & Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS) != 0) {
+                        continue;
+                    }
+
+                    loadOneExcluded = false;
 
                     TaskDescription item = createTaskDescription(recentInfo.id,
                             recentInfo.persistentId, recentInfo.baseIntent,
