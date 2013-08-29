@@ -5275,26 +5275,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
-        if (intent == null) {
-            return null;
-        }
-
-        ActivityInfo ai = null;
-        ResolveInfo info = mContext.getPackageManager().resolveActivityAsUser(
-                intent,
-                PackageManager.MATCH_DEFAULT_ONLY,
-                UserHandle.USER_CURRENT);
-        if (info != null) {
-            ai = info.activityInfo;
-        }
-        if (ai != null
-                && ai.metaData != null
-                && ai.metaData.getBoolean(Intent.METADATA_DOCK_HOME)) {
-            intent = new Intent(intent);
-            intent.setClassName(ai.packageName, ai.name);
+        if (intent != null) {
             return intent;
         }
-
         return null;
     }
 
