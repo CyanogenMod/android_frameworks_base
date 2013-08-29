@@ -208,12 +208,18 @@ public class DummyDataStateTracker extends BaseNetworkStateTracker {
 
     @Override
     public void addStackedLink(LinkProperties link) {
-        mLinkProperties.addStackedLink(link);
+        if (null != mLinkProperties) {
+            mLinkProperties.addStackedLink(link);
+        } else {
+            mLinkProperties = new LinkProperties(link);
+        }
     }
 
     @Override
     public void removeStackedLink(LinkProperties link) {
-        mLinkProperties.removeStackedLink(link);
+        if (null != mLinkProperties) {
+            mLinkProperties.removeStackedLink(link);
+        }
     }
 
     @Override
