@@ -1312,6 +1312,7 @@
     <string name="action_mode_done" msgid="7217581640461922289">"Gereed"</string>
     <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">"USB-opslag ontkoppelen..."</string>
     <string name="progress_unmounting" product="default" msgid="1327894998409537190">"SD-kaart ontkoppelen..."</string>
+    <string name="progress_nomediapresent" product="default">Geen verwijderbare media aanwezig\u2026</string>
     <string name="progress_erasing" product="nosdcard" msgid="4521573321524340058">"USB-opslag wissen..."</string>
     <string name="progress_erasing" product="default" msgid="6596988875507043042">"SD-kaart wissen..."</string>
     <string name="format_error" product="nosdcard" msgid="6299769563624776948">"Kan USB-opslag niet wissen."</string>
