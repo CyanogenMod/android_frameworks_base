@@ -17,6 +17,8 @@
 
 package com.android.internal.policy.impl;
 
+import android.os.ServiceManager;
+import android.view.IWindowManager;
 import com.android.internal.app.AlertController;
 import com.android.internal.app.AlertController.AlertParams;
 import com.android.internal.telephony.TelephonyIntents;
@@ -124,6 +126,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private boolean mHasVibrator;
     private Profile mChosenProfile;
     private final boolean mShowSilentToggle;
+    private IWindowManager mWindowManager;
+    private float mDefaultAnimationDuration;
 
     /**
      * @param context everything needs a context :(
@@ -159,6 +163,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         mShowSilentToggle = SHOW_SILENT_TOGGLE && !mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_useFixedVolume);
+
+        mWindowManager = IWindowManager.Stub.asInterface(
+                ServiceManager.getService(Context.WINDOW_SERVICE));
+        mDefaultAnimationDuration = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_activityDefaultDur);
     }
 
     /**
@@ -1249,11 +1258,22 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     /**
      * Change the expand desktop mode system setting
      */
-    private void changeExpandDesktopModeSystemSetting(boolean on) {
-        Settings.System.putIntForUser(
-                mContext.getContentResolver(),
-                Settings.System.EXPANDED_DESKTOP_STATE,
-                on ? 1 : 0, UserHandle.USER_CURRENT);
+    private void changeExpandDesktopModeSystemSetting(final boolean on) {
+        float animScale = 1;
+        try {
+            animScale = mWindowManager.getAnimationScale(0);
+        } catch (RemoteException e) {
+            // Do nothing
+        }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Settings.System.putIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STATE,
+                        on ? 1 : 0, UserHandle.USER_CURRENT);
+            }
+        }, (long) (mDefaultAnimationDuration * animScale));
     }
 
     private static final class GlobalActionsDialog extends Dialog implements DialogInterface {
