@@ -42,7 +42,6 @@
 
     <FrameLayout
         android:id="@+id/ticker_expanded"
-        android:layout_weight="1"
         android:layout_height="@*android:dimen/system_bar_height"
         android:layout_width="match_parent"
         android:layout_toEndOf="@id/large_icon"
