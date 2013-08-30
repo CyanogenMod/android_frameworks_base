@@ -823,7 +823,7 @@
     <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Nabíjení - <xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Nabito"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Připojte dobíjecí zařízení."</string>
+    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Připojte dobíjecí zařízení - <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Není vložena SIM karta"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"V tabletu není SIM karta."</string>
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"V telefonu není SIM karta."</string>
@@ -1372,6 +1372,7 @@
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Připojování k trvalé síti VPN\u2026"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Je připojena trvalá síť VPN"</string>
     <string name="vpn_lockdown_error" msgid="6009249814034708175">"Chyba trvalé sítě VPN"</string>
+    <string name="vpn_lockdown_config">Dotykem nastavit</string>
     <string name="upload_file" msgid="2897957172366730416">"Zvolit soubor"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Není vybrán žádný soubor"</string>
     <string name="reset" msgid="2448168080964209908">"Resetovat"</string>
@@ -1402,6 +1403,7 @@
 
     <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">"Odpojování úložiště USB\u2026"</string>
     <string name="progress_unmounting" product="default" msgid="1327894998409537190">"Odpojování karty SD\u2026"</string>
+    <string name="progress_nomediapresent" product="default">Není dostupné žádné výměnné úložiště\u2026</string>
     <string name="progress_erasing" product="nosdcard" msgid="4521573321524340058">"Mazání úložiště USB\u2026"</string>
     <string name="progress_erasing" product="default" msgid="6596988875507043042">"Mazání karty SD\u2026"</string>
     <string name="format_error" product="nosdcard" msgid="6299769563624776948">"Úložiště USB nelze smazat."</string>
