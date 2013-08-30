@@ -61,6 +61,7 @@ public class RecentsScrollViewPerformanceHelper {
         mFadingEdgeLength = a.getDimensionPixelSize(android.R.styleable.View_fadingEdgeLength,
                 ViewConfiguration.get(context).getScaledFadingEdgeLength());
         mIsVertical = isVertical;
+        a.recycle();
     }
 
     public void onAttachedToWindowCallback(
