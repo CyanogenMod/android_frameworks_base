@@ -2768,7 +2768,7 @@ public final class Settings {
          *
          * @hide
          */
-        public static final String QUICK_SETTINGS_RIBBON_TILES = "quick_settings__ribbon_tiles";
+        public static final String QUICK_SETTINGS_RIBBON_TILES = "quick_settings_ribbon_tiles";
 
         /**
          * Navigation controls to Use
