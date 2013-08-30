@@ -137,7 +137,6 @@
                 android:layout_width="wrap_content"
                 android:scaleType="centerInside"
                 android:layout_gravity="center_vertical"
-                android:layout_alignBaseline="@id/wifi_signal"
                 android:paddingEnd="6dp"
                 android:contentDescription="@null"
                 />
