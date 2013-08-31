@@ -38,7 +38,6 @@
     <string name="quick_settings_torch_off">Ficklampa av</string>
     <string name="quick_settings_nfc_off">NFC av</string>
     <string name="quick_settings_screen_timeout">Tidsgräns</string>
-    <string name="quick_settings_screen_timeout_summary" translatable="false">%1$d %2$s</string>
     <string name="quick_settings_usb_tether_off_label">Frånkopplad</string>
     <string name="quick_settings_usb_tether_connected_label">Tethering av</string>
     <string name="quick_settings_usb_tether_on_label">Tethering</string>
