@@ -124,4 +124,5 @@
     <string name="permlab_sendMockSms">Simular envio de mensagens SMS</string>
     <string name="permdesc_sendMockSms">Permite ao aplicativo simular envio de mensagens SMS.
         Isto permite um aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
+    <string name="progress_nomediapresent" product="default">Nenhuma mídia removível presente\u2026</string>
 </resources>
