@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Stræk til fuld skærm"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Kompatibilitetszoom"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Når en app er udviklet til en mindre skærm, vises der en zoomfunktion ved uret."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Gemmer skærmbillede..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Gemmer skærmbillede..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Gemmer skærmbillede&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Gemmer skærmbillede&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Skærmbilledet gemmes."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Skærmbilledet er taget."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Tryk for at se dit skærmbillede."</string>

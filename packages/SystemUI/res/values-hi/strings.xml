@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"स्‍क्रीन को भरने के लिए खींचें"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"संगतता ज़ूम"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"जब किसी छोटी स्‍क्रीन के लिए एप्‍लिकेशन को डिज़ाइन किया जाता है, तो ज़ूम नियंत्रण क्लॉक के पास दिखाई देगा."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"स्क्रीनशॉट सहेजा जा रहा है..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"स्क्रीनशॉट सहेजा जा रहा है..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"स्क्रीनशॉट सहेजा जा रहा है&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"स्क्रीनशॉट सहेजा जा रहा है&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"स्क्रीनशॉट सहेजा जा रहा है."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"स्‍क्रीनशॉट कैप्‍चर किया गया."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"अपना स्‍क्रीनशॉट देखने के लिए स्‍पर्श करें."</string>

@@ -65,9 +65,9 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Растянуть на весь экран"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Масштаб и совместимость"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Если приложение рассчитано на экран меньших размеров, рядом с часами появятся средства масштабирования."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Сохранение..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Сохранение..."</string>
-    <string name="screenshot_saving_text" msgid="2419718443411738818">"Сохранение..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Сохранение&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Сохранение&#8230;"</string>
+    <string name="screenshot_saving_text" msgid="2419718443411738818">"Сохранение&#8230;"</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Скриншот сохранён"</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Нажмите, чтобы просмотреть"</string>
     <string name="screenshot_failed_title" msgid="705781116746922771">"Не удалось сохранить скриншот."</string>

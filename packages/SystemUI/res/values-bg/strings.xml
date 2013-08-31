@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Разпъване – запълва екрана"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Промяна на мащаба за съвместимост"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Когато дадено приложение е създадено за по-малък екран, до часовника ще се покаже управление за промяна на мащаба."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Екранната снимка се запазва..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Екранната снимка се запазва..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Екранната снимка се запазва&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Екранната снимка се запазва&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Екранната снимка се запазва."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Екранната снимка е заснета."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Докоснете, за да видите екранната си снимка."</string>

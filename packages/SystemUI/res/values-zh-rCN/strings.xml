@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"拉伸以填满屏幕"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"兼容性缩放"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"如果应用是针对较小屏幕设计的，则时钟旁会显示缩放控件。"</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"正在保存屏幕截图..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"正在保存屏幕截图..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"正在保存屏幕截图&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"正在保存屏幕截图&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"正在保存屏幕截图。"</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"已抓取屏幕截图。"</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"触摸可查看您的屏幕截图。"</string>

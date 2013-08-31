@@ -63,10 +63,10 @@
     <string name="usb_debugging_always" msgid="303335496705863070">"Mindig engedélyezze erről a számítógépről"</string>
     <string name="compat_mode_on" msgid="6623839244840638213">"Nagyítás a kitöltéshez"</string>
     <string name="compat_mode_off" msgid="4434467572461327898">"Nyújtás kitöltéshez"</string>
-    <string name="compat_mode_help_header" msgid="7969493989397529910">"Kompatibilitás -- nagyítás/kicsinyítés"</string>
+    <string name="compat_mode_help_header" msgid="7969493989397529910">"Kompatibilitás &#8212; nagyítás/kicsinyítés"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Ha egy alkalmazást kisebb képernyőre terveztek, akkor a nagyítás/kicsinyítés vezérlője az óra mellett jelenik meg."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Képernyőkép mentése..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Képernyőkép mentése..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Képernyőkép mentése&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Képernyőkép mentése&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Képernyőkép mentése."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Képernyőkép rögzítve."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Megérintésével megtekintheti a képernyőképet."</string>

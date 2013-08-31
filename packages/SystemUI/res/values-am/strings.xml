@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"ማያ ለመሙለት ሳብ"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"የተኳኋኝነት አጉላ"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"ትግበራ ለትንሽ ማያ ሲነደፍ፣ የአጉላ መቆመጣጠሪያ በሰዓት በኩል ብቅ ይላል።"</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"ቅጽበታዊ ገጽ እይታ በማስቀመጥ ላይ..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"ቅጽበታዊ ገጽ እይታ በማስቀመጥ ላይ..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"ቅጽበታዊ ገጽ እይታ በማስቀመጥ ላይ&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"ቅጽበታዊ ገጽ እይታ በማስቀመጥ ላይ&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"ቅጽበታዊ ገጽ እይታ እየተቀመጠ ነው::"</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"ቅጽበታዊ ገጽ እይታ ተቀርጿል"</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"የአንተን ቅጽበታዊ ገጽ እይታ ለማየት ንካ"</string>

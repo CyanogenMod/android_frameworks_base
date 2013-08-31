@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Venita ekraani täitmiseks"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Sobivussuum"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Kui rakendus on mõeldud väiksemale ekraanile, kuvatakse kella kõrval suumi juhtnupp."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Kuvatõmmise salvestamine ..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Kuvatõmmise salvestamine ..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Kuvatõmmise salvestamine &#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Kuvatõmmise salvestamine &#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Kuvatõmmist salvestatakse."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Ekraanipilt on jäädvustatud."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Puudutage kuvatõmmise vaatamiseks."</string>

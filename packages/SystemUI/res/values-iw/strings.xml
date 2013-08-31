@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"מתח כדי למלא את המסך"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"שינוי מרחק מתצוגה לצורך תאימות"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"כאשר יישום מיועד למסך קטן יותר, פקד של מרחק מתצוגה יופיע ליד השעון."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"שומר צילום מסך..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"שומר צילום מסך..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"שומר צילום מסך&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"שומר צילום מסך&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"מתבצעת שמירה של צילום המסך."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"צילום המסך בוצע."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"גע כדי להציג את צילום המסך שלך"</string>

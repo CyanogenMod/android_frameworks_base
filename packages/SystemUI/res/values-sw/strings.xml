@@ -63,8 +63,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Tanua ili kujaza skrini"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Kukuza kwa Utangamanifu"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Wakati programu ilibuniwa kwa skrini ndogo, kidhibiti cha kukuza kitaonekana kwa saa."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Inahifadhi picha ya skrini..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Inahifadhi picha ya skrini..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Inahifadhi picha ya skrini&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Inahifadhi picha ya skrini&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Picha ya skrini inahifadhiwa"</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Picha ya skrini imenaswa."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Gusa ili kuona picha yako ya skrini."</string>

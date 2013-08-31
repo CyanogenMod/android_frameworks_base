@@ -66,7 +66,7 @@
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Saderības tālummaiņa"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Ja lietotne ir paredzēta mazākam ekrānam, blakus pulkstenim tiks parādīta tālummaiņas vadīkla."</string>
     <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Saglabā ekrānuzņēmumu…"</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Notiek ekrānuzņēmuma saglabāšana..."</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Notiek ekrānuzņēmuma saglabāšana&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Notiek ekrānuzņēmuma saglabāšana."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Ekrānuzņēmums ir uzņemts."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Pieskarieties, lai skatītu ekrānuzņēmumu."</string>
@@ -164,7 +164,7 @@
     <string name="data_usage_disabled_dialog_enable" msgid="7729772039208664606">"Atkārtoti iespējot datus"</string>
     <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Nav interneta sav."</string>
     <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Izv. sav. ar Wi-Fi"</string>
-    <string name="gps_notification_searching_text" msgid="8574247005642736060">"Notiek GPS meklēšana..."</string>
+    <string name="gps_notification_searching_text" msgid="8574247005642736060">"Notiek GPS meklēšana&#8230;"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"GPS iestatītā atrašanās vieta"</string>
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Notīrīt visus paziņojumus"</string>
     <string name="status_bar_notification_inspect_item_title" msgid="1163547729015390250">"Informācija par lietotni"</string>

@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Ištempti, kad atit. ekr."</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Suderinamumo mastelio keitimas"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Kai programa bus pritaikyta mažesniam ekranui, mastelio keitimo valdiklis bus parodytas šalia laikrodžio."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Išsaugoma ekrano kopija..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Išsaugoma ekrano kopija..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Išsaugoma ekrano kopija&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Išsaugoma ekrano kopija&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Išsaugoma ekrano kopija."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Ekrano kopija užfiksuota."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Palieskite, kad peržiūrėtumėte ekrano kopiją."</string>

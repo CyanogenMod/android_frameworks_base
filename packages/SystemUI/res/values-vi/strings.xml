@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Giãn ra để lấp đầy m.hình"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Thu phóng tương thích"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Khi ứng dụng được thiết kế cho một màn hình nhỏ hơn, điều khiển thu phóng sẽ xuất hiện bên cạnh đồng hồ."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Đang lưu ảnh chụp màn hình..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Đang lưu ảnh chụp màn hình..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Đang lưu ảnh chụp màn hình&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Đang lưu ảnh chụp màn hình&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Ảnh chụp màn hình đang được lưu."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Đã chụp ảnh màn hình."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Chạm để xem ảnh chụp màn hình của bạn."</string>

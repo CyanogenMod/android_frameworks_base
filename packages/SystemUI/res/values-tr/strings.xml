@@ -65,8 +65,8 @@
     <string name="compat_mode_off" msgid="4434467572461327898">"Genişlet (ekran kapansın)"</string>
     <string name="compat_mode_help_header" msgid="7969493989397529910">"Uyumluluk yakınlaştırması"</string>
     <string name="compat_mode_help_body" msgid="4946726776359270040">"Uygulama küçük bir ekran için tasarlanmışsa saatin yanında bir yakınlaştırma denetimi görünür."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Ekran görüntüsü kaydediliyor..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Ekran görüntüsü kaydediliyor..."</string>
+    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Ekran görüntüsü kaydediliyor&#8230;"</string>
+    <string name="screenshot_saving_title" msgid="8242282144535555697">"Ekran görüntüsü kaydediliyor&#8230;"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"Ekran görüntüsü kaydediliyor."</string>
     <string name="screenshot_saved_title" msgid="6461865960961414961">"Ekran görüntüsü alındı."</string>
     <string name="screenshot_saved_text" msgid="1152839647677558815">"Ekran görüntünüzü izlemek için dokunun."</string>
