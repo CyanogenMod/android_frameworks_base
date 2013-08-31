@@ -1,6 +1,5 @@
 package com.android.systemui.statusbar.powerwidget;
 
-import android.app.ActivityManagerNative;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +13,7 @@ import android.os.RemoteException;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManagerGlobal;
 import android.widget.ImageView;
 
 import com.android.systemui.R;
@@ -168,9 +168,11 @@ public abstract class PowerButton {
                 mVibrator.vibrate(mLongClickPattern, -1);
             }
 
-            try {
-                ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-            } catch (RemoteException e) {
+            if (result) {
+                try {
+                    WindowManagerGlobal.getWindowManagerService().dismissKeyguard();
+                } catch (RemoteException e) {
+                }
             }
 
             if (result && mExternalLongClickListener != null) {
