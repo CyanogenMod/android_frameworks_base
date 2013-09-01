@@ -1150,4 +1150,8 @@
     <!-- True if the pie service should be started at system start. This is must be true
          to support pie controls. -->
     <bool name="config_allowPieService">true</bool>
+
+    <!-- The list of components which should be automatically disabled. -->
+    <string-array name="config_disabledComponents" translatable="false">
+    </string-array>
 </resources>
