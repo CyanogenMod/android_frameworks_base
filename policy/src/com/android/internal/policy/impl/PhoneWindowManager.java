@@ -337,6 +337,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
     boolean mIsLongPress;
+    private boolean mLockUpdateSettings;
+    private boolean mUpdateSettingsScheduled;
 
     private static final class PointerLocationInputEventReceiver extends InputEventReceiver {
         private final PointerLocationView mView;
@@ -661,7 +663,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         @Override public void onChange(boolean selfChange) {
-            updateSettings();
+            if (mLockUpdateSettings) {
+                mUpdateSettingsScheduled = true;
+            } else {
+                updateSettings();
+            }
             updateRotation(false);
         }
     }
@@ -5559,6 +5565,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         return true;
     }
+
+    public void unlockUpdateSettings() {
+        mLockUpdateSettings = false;
+        if (mUpdateSettingsScheduled) {
+            mUpdateSettingsScheduled = false;
+            updateSettings();
+        }
+    };
+    public void lockUpdateSettings() {
+        mLockUpdateSettings = true;
+    };
 
     @Override
     public void dump(String prefix, PrintWriter pw, String[] args) {
