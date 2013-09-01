@@ -4349,6 +4349,15 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+        /**
+         * Boolean value whether to allow the statusbar to be used as a
+         * brightness slider when collapsed
+         *
+         * @hide
+         */
+        public static final String STATUSBAR_BRIGHTNESS_SLIDER = "statusbar_brightness_slider";
+
     }
 
     /**
