@@ -1192,4 +1192,14 @@ public interface WindowManagerPolicy {
      * entering animation resource id is stored in anim[1].
      */
     public void selectDisplayMetricsUpdateAnimationLw(int anim[]);
+
+    /**
+     * A window animation has been scheduled
+     */
+    public void windowAnimationStarted();
+
+    /**
+     * Animating windows has finished
+     */
+    public void windowAnimationFinished();
 }
