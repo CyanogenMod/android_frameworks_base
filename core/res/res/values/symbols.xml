@@ -2353,4 +2353,8 @@
   <java-symbol type="string" name="adb_active_generic_notification_message" />
 
   <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />
+
+  <!-- Package Manager -->
+  <java-symbol type="array" name="config_disabledComponents" />
+
 </resources>
