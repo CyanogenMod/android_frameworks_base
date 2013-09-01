@@ -1183,4 +1183,7 @@ public interface WindowManagerPolicy {
      * @return True if the window is a top level one.
      */
     public boolean isTopLevelWindow(int windowType);
+
+    void lockUpdateSettings();
+    void unlockUpdateSettings();
 }
