@@ -79,8 +79,6 @@ import dalvik.system.Zygote;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
-import com.stericsson.hardware.fm.FmReceiverService;
-import com.stericsson.hardware.fm.FmTransmitterService;
 
 class ServerThread extends Thread {
     private static final String TAG = "SystemServer";
@@ -547,21 +545,6 @@ class ServerThread extends Thread {
                 reportWtf("starting Service Discovery Service", e);
             }
 
-            try {
-                Slog.i(TAG, "FM receiver Service");
-                ServiceManager.addService("fm_receiver",
-                        new FmReceiverService(context));
-            } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting FM receiver Service", e);
-            }
-
-            try {
-                Slog.i(TAG, "FM transmitter Service");
-                ServiceManager.addService("fm_transmitter",
-                        new FmTransmitterService(context));
-            } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting FM transmitter Service", e);
-            }
             try {
                 Slog.i(TAG, "UpdateLock Service");
                 ServiceManager.addService(Context.UPDATE_LOCK_SERVICE,
