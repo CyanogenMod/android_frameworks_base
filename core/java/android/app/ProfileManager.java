@@ -54,6 +54,34 @@ public class ProfileManager {
             "android.intent.action.PROFILE_SELECTED";
 
     /**
+     * Extra for {@link INTENT_ACTION_PROFILE_SELECTED} and {@link INTENT_ACTION_PROFILE_UPDATED}:
+     * The name of the newly activated or updated profile
+     * @hide
+     */
+    public static final String EXTRA_PROFILE_NAME = "name";
+
+    /**
+     * Extra for {@link INTENT_ACTION_PROFILE_SELECTED} and {@link INTENT_ACTION_PROFILE_UPDATED}:
+     * The string representation of the UUID of the newly activated or updated profile
+     * @hide
+     */
+    public static final String EXTRA_PROFILE_UUID = "uuid";
+
+    /**
+     * Extra for {@link INTENT_ACTION_PROFILE_SELECTED}:
+     * The name of the previously active profile
+     * @hide
+     */
+    public static final String EXTRA_LAST_PROFILE_NAME = "lastName";
+
+    /**
+     * Extra for {@link INTENT_ACTION_PROFILE_SELECTED}:
+     * The string representation of the UUID of the previously active profile
+     * @hide
+     */
+    public static final String EXTRA_LAST_PROFILE_UUID = "uuid";
+
+    /**
     * <p>Broadcast Action: Current profile has been updated. This is triggered every time the
     * currently active profile is updated, instead of selected.</p>
     * <p> For instance, this includes profile updates caused by a locale change, which doesn't
