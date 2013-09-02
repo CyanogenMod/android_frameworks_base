@@ -46,6 +46,24 @@ public class ProfileManager {
     private static final String SYSTEM_PROFILES_ENABLED = "system_profiles_enabled";
 
     /**
+     * <p>Broadcast Action: A new profile has been selected. This can be triggered by the user
+     * or by calls to the ProfileManagerService / Profile.</p>
+     * @hide
+     */
+    public static final String INTENT_ACTION_PROFILE_SELECTED =
+            "android.intent.action.PROFILE_SELECTED";
+
+    /**
+    * <p>Broadcast Action: Current profile has been updated. This is triggered every time the
+    * currently active profile is updated, instead of selected.</p>
+    * <p> For instance, this includes profile updates caused by a locale change, which doesn't
+    * trigger a profile selection, but causes its name to change.</p>
+    * @hide
+    */
+    public static final String INTENT_ACTION_PROFILE_UPDATED =
+            "android.intent.action.PROFILE_UPDATED";
+
+    /**
      * Activity Action: Shows a profile picker.
      * <p>
      * Input: {@link #EXTRA_PROFILE_EXISTING_UUID}, {@link #EXTRA_PROFILE_SHOW_NONE},
