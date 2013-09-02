@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Process;
 import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.Log;
@@ -551,6 +552,8 @@ public class FmReceiverService extends IFmReceiver.Stub {
         filter.addAction(Intent.ACTION_DOCK_EVENT);
 
         mContext.registerReceiver(mReceiver, filter);
+
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
     }
 
     public void start(FmBand band) {
