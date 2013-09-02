@@ -242,13 +242,17 @@ public final class Profile implements Parcelable, Comparable {
 
     public ArrayList<ProfileTrigger> getTriggersFromType(int type) {
         ArrayList<ProfileTrigger> result = new ArrayList<ProfileTrigger>();
-        for (Entry<String, ProfileTrigger> profileTrigger:  mTriggers.entrySet()) {
+        for (Entry<String, ProfileTrigger> profileTrigger : mTriggers.entrySet()) {
             ProfileTrigger trigger = profileTrigger.getValue();
             if (trigger.getType() == type) {
                 result.add(trigger);
             }
         }
         return result;
+    }
+
+    public Collection<ProfileTrigger> getTriggers() {
+        return mTriggers.values();
     }
 
     public void setTrigger(int type, String id, int state, String name) {

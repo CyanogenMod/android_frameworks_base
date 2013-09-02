@@ -95,7 +95,6 @@ public class ProfileManagerService extends IProfileManager.Stub {
     public ProfileManagerService(Context context) {
         mContext = context;
         mBackupManager = new BackupManager(mContext);
-        mTriggerHelper = new ProfileTriggerHelper(mContext, this);
 
         mWildcardGroup = new NotificationGroup(
                 context.getString(com.android.internal.R.string.wildcardProfile),
@@ -103,6 +102,8 @@ public class ProfileManagerService extends IProfileManager.Stub {
                 mWildcardUUID);
 
         initialize();
+
+        mTriggerHelper = new ProfileTriggerHelper(mContext, this);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
@@ -145,6 +146,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
     public void resetAll() {
         enforceChangePermissions();
         initialize(true);
+        mTriggerHelper.clearTriggerStack();
     }
 
     @Override
@@ -160,18 +162,22 @@ public class ProfileManagerService extends IProfileManager.Stub {
             Log.v(TAG, "setActiveProfile(String) found profile name in mProfileNames.");
         }
         setActiveProfile(mProfiles.get(mProfileNames.get(profileName)), true);
+        mTriggerHelper.clearTriggerStack();
         return true;
     }
 
     @Override
     public boolean setActiveProfile(ParcelUuid profileParcelUuid) {
-        return setActiveProfile(profileParcelUuid.getUuid(), true);
+        boolean result = setActiveProfile(profileParcelUuid.getUuid(), true);
+        if (result) {
+            mTriggerHelper.clearTriggerStack();
+        }
+        return result;
     }
 
-    private boolean setActiveProfile(UUID profileUuid, boolean doInit) {
+    /* package */ boolean setActiveProfile(UUID profileUuid, boolean doInit) {
         if (!mProfiles.containsKey(profileUuid)) {
-            Log.e(TAG, "Cannot set active profile to: "
-                    + profileUuid.toString() + " - does not exist.");
+            Log.e(TAG, "Cannot set active profile to: " + profileUuid + " - does not exist.");
             return false;
         }
 
@@ -180,7 +186,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
         return true;
     }
 
-    /* package */ void setActiveProfile(Profile newActiveProfile, boolean doInit) {
+    private void setActiveProfile(Profile newActiveProfile, boolean doInit) {
         /*
          * NOTE: Since this is not a public function, and all public functions
          * take either a string or a UUID, the active profile should always be
@@ -191,7 +197,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
         enforceChangePermissions();
 
-        Log.d(TAG, "Set active profile to: " + newActiveProfile.getUuid().toString()
+        Log.d(TAG, "Set active profile to: " + newActiveProfile.getUuid()
                 + " - " + newActiveProfile.getName());
 
         Profile lastProfile = mActiveProfile;
@@ -295,7 +301,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
         return getProfile(profileUuid);
     }
 
-    private Profile getProfile(UUID profileUuid) {
+    /* package */ Profile getProfile(UUID profileUuid) {
         // use primary UUID first
         if (mProfiles.containsKey(profileUuid)) {
             return mProfiles.get(profileUuid);
@@ -333,6 +339,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
         enforceChangePermissions();
         if (mProfileNames.remove(profile.getName()) != null
                 && mProfiles.remove(profile.getUuid()) != null) {
+            mTriggerHelper.removeFromTriggerStack(profile.getUuid());
             mDirty = true;
             persistIfDirty();
             return true;
@@ -356,6 +363,8 @@ public class ProfileManagerService extends IProfileManager.Stub {
         /* no need to set mDirty, if the profile was actually changed,
          * it's marked as dirty by itself */
         persistIfDirty();
+
+        mTriggerHelper.updateTriggerStateForProfile(profile.getUuid());
 
         // Also update if we changed the active profile
         if (mActiveProfile != null && mActiveProfile.getUuid().equals(profile.getUuid())) {
