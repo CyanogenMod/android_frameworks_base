@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -622,6 +625,14 @@ public abstract class PackageManager {
      * @hide
      */
     public static final int INSTALL_FAILED_VERSION_DOWNGRADE = -25;
+
+    /**
+     * Installation return code: this is passed to the {@link IPackageInstallObserver} by
+     * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)} if
+     * the package is from unknown sources but not trusted sources.
+     * @hide
+     */
+    public static final int INSTALL_FAILED_UNKNOWN_SOURCES = -26;
 
     /**
      * Installation parse return code: this is passed to the {@link IPackageInstallObserver} by
