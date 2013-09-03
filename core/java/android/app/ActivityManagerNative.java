@@ -692,6 +692,16 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
+        case GET_ACTIVITY_FOR_TASK_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            int task = data.readInt();
+            boolean onlyRoot = data.readInt() != 0;
+            IBinder res = getActivityForTask(task, onlyRoot);
+            reply.writeNoException();
+            reply.writeStrongBinder(res);
+            return true;
+        }
+
         case REPORT_THUMBNAIL_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             IBinder token = data.readStrongBinder();
@@ -2037,6 +2047,13 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             reply.writeNoException();
             return true;
         }
+
+        case NOTIFY_SPLIT_VIEW_LAYOUT_CHANGED: {
+            data.enforceInterface(IActivityManager.descriptor);
+            notifySplitViewLayoutChanged();
+            reply.writeNoException();
+            return true;
+        }
         }
 
         return super.onTransact(code, data, reply, flags);
@@ -2834,6 +2851,20 @@ class ActivityManagerProxy implements IActivityManager
         mRemote.transact(GET_TASK_FOR_ACTIVITY_TRANSACTION, data, reply, 0);
         reply.readException();
         int res = reply.readInt();
+        data.recycle();
+        reply.recycle();
+        return res;
+    }
+    public IBinder getActivityForTask(int task, boolean onlyRoot) throws RemoteException
+    {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(task);
+        data.writeInt(onlyRoot ? 1 : 0);
+        mRemote.transact(GET_ACTIVITY_FOR_TASK_TRANSACTION, data, reply, 0);
+        reply.readException();
+        IBinder res = reply.readStrongBinder();
         data.recycle();
         reply.recycle();
         return res;
@@ -4677,6 +4708,16 @@ class ActivityManagerProxy implements IActivityManager
         Parcel reply = Parcel.obtain();
         data.writeInterfaceToken(IActivityManager.descriptor);
         mRemote.transact(PERFORM_IDLE_MAINTENANCE_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }
+
+    public void notifySplitViewLayoutChanged() throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        mRemote.transact(NOTIFY_SPLIT_VIEW_LAYOUT_CHANGED, data, reply, 0);
         reply.readException();
         data.recycle();
         reply.recycle();
