@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -155,6 +158,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings.Secure;
 import android.security.KeyStore;
 import android.security.SystemKeyStore;
 import android.system.ErrnoException;
@@ -10395,6 +10399,14 @@ public class PackageManagerService extends IPackageManager.Stub {
                 res.setError(INSTALL_FAILED_TEST_ONLY, "installPackageLI");
                 return;
             }
+        }
+
+        if (android.app.AppOpsManager.isStrictEnable()
+                && ((installFlags & PackageManager.INSTALL_FROM_ADB) != 0)
+                && Secure.getInt(mContext.getContentResolver(),
+                        Secure.INSTALL_NON_MARKET_APPS, 0) <= 0) {
+            res.returnCode = PackageManager.INSTALL_FAILED_UNKNOWN_SOURCES;
+            return;
         }
 
         try {
