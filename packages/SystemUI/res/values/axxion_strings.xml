@@ -2,24 +2,7 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!--ScreenShot Trash-->
-    <string name="delete">Delete</string>
-
-    <!-- QS Battery Tile -->
-    <string name="quick_settings_battery_charging">Charging</string>
-    <string name="quick_settings_battery_discharging">Discharging</string>
-
-    <!-- Kill app toast -->
-    <string name="app_killed_message">App Killed</string>
-
-    <!-- Recents Ram Bar -->
-    <string name="memory">RAM</string>
-    <!-- [CHAR LIMIT=10] Running services, summary of background processes -->
-    <string name="service_free_mem"><xliff:g id="memory">%1$s</xliff:g> free</string>
-    <!-- [CHAR LIMIT=10] Running services, summary of foreground processes -->
-    <string name="service_used_mem"><xliff:g id="memory">%1$s</xliff:g> used</string>
-
-    <!-- Content description of the halo button in the notification panel for accessibility (not sho
+   <!-- Content description of the halo button in the notification panel for accessibility (not sho
          wn on the screen). [CHAR LIMIT=NONE] -->	
     <string name="accessibility_halo">Create notification halo.</string>	
 				
@@ -44,4 +27,7 @@
     <string name="halo_signal_bars_1">ONE BAR</string>	
     <string name="halo_signal_bars_none">NO BARS</string>
 
+    <!-- Title shown in recents popup for adding an application to the split view -->
+    <string name="status_bar_recent_add_to_split_view">Add to Split View</string>
+    
 </resources>

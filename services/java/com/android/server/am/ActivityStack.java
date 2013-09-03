@@ -78,9 +78,12 @@ import android.os.UserHandle;
 import android.text.TextUtils;
 import android.provider.Settings;
 import android.util.EventLog;
+import android.util.Log;
 import android.util.Slog;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
+import android.view.IWindowManager;
+import android.view.WindowManagerGlobal;
 import com.android.internal.app.ActivityTrigger;
 
 import java.io.FileDescriptor;
@@ -1156,7 +1159,16 @@ final class ActivityStack {
                     // Aggregate current change flags.
                     configChanges |= r.configChangeFlags;
 
-                    if (r.fullscreen) {
+                    boolean isSplitView = false;
+
+                    try {
+                        IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+                        isSplitView = wm.isTaskSplitView(r.task.taskId);
+                    } catch (RemoteException e) {
+                        Slog.e(TAG, "Cannot get split view status", e);
+                    }
+
+                    if (r.fullscreen && !isSplitView) {
                         // At this point, nothing else needs to be shown
                         if (DEBUG_VISBILITY) Slog.v(TAG, "Fullscreen: at " + r);
                         behindFullscreen = true;
@@ -1264,6 +1276,7 @@ final class ActivityStack {
      * nothing happened.
      */
     final boolean resumeTopActivityLocked(ActivityRecord prev) {
+		Log.e("XPLOD", "Resume Top Activity Locked " + prev);
         return resumeTopActivityLocked(prev, null);
     }
 
