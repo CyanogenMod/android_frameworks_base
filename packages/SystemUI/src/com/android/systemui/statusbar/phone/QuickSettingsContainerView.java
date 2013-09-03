@@ -44,6 +44,7 @@ public class QuickSettingsContainerView extends FrameLayout {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.QuickSettingsContainer, 0, 0);
         mSingleRow = a.getBoolean(R.styleable.QuickSettingsContainer_singleRow, false);
+        a.recycle();
         updateResources();
     }
 
