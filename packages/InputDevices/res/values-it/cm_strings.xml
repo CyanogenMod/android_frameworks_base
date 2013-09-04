@@ -46,4 +46,5 @@
     <string name="keyboard_layout_slovenian">Sloveno</string>
     <string name="keyboard_layout_turkish">Turco</string>
     <string name="keyboard_layout_ukrainian">Ucraino</string>
+    <string name="keyboard_layout_armenian_eastern_label">Armeno orientale</string>
 </resources>
