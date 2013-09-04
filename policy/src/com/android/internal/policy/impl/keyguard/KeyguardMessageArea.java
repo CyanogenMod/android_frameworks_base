@@ -69,9 +69,6 @@ class KeyguardMessageArea extends TextView {
     // are we showing battery information?
     boolean mShowingBatteryInfo = false;
 
-    // always show battery status?
-    boolean mAlwaysShowBattery = false;
-
     // is the bouncer up?
     boolean mShowingBouncer = false;
 
@@ -80,6 +77,10 @@ class KeyguardMessageArea extends TextView {
 
     // last known battery level
     int mBatteryLevel = 100;
+
+    // battery info visibility setting
+    int mBatteryInfoVisibility = Settings.System.getInt(getContext().getContentResolver(),
+            Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, 0);
 
     KeyguardUpdateMonitor mUpdateMonitor;
 
@@ -166,8 +167,10 @@ class KeyguardMessageArea extends TextView {
             mBatteryLevel = status.level;
             mBatteryCharged = status.isCharged();
             mBatteryIsLow = status.isBatteryLow();
-            mAlwaysShowBattery = KeyguardUpdateMonitor.shouldAlwaysShowBatteryInfo(getContext());
-            mShowingBatteryInfo = status.isPluggedIn() || status.isBatteryLow() || mAlwaysShowBattery;
+            if (mBatteryInfoVisibility != 2) {
+                mShowingBatteryInfo = status.isPluggedIn() || status.isBatteryLow()
+                         || mBatteryInfoVisibility == 1;
+            }
             update();
         }
     };
@@ -267,7 +270,7 @@ class KeyguardMessageArea extends TextView {
                 string = getContext().getString(
                         com.android.internal.R.string.lockscreen_low_battery, mBatteryLevel);
                 icon.value = BATTERY_LOW_ICON;
-            } else if (mAlwaysShowBattery) {
+            } else if (mBatteryInfoVisibility == 1) {
                 // Discharging
                 string = getContext().getString(R.string.lockscreen_discharging, mBatteryLevel);
                 icon.value = DISCHARGING_ICON;
