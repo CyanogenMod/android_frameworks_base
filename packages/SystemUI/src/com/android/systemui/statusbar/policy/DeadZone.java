@@ -79,6 +79,8 @@ public class DeadZone extends View {
                     + (mVertical ? " vertical" : " horizontal"));
 
         setFlashOnTouchCapture(context.getResources().getBoolean(R.bool.config_dead_zone_flash));
+
+        a.recycle();
     }
 
     static float lerp(float a, float b, float f) {
