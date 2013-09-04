@@ -81,6 +81,8 @@ class KeyguardMessageArea extends TextView {
     // last known battery level
     int mBatteryLevel = 100;
 
+    int mAlwaysShowBatteryOff = 0;
+
     KeyguardUpdateMonitor mUpdateMonitor;
 
     // Timeout before we reset the message to show charging/owner info
@@ -167,7 +169,11 @@ class KeyguardMessageArea extends TextView {
             mBatteryCharged = status.isCharged();
             mBatteryIsLow = status.isBatteryLow();
             mAlwaysShowBattery = KeyguardUpdateMonitor.shouldAlwaysShowBatteryInfo(getContext());
-            mShowingBatteryInfo = status.isPluggedIn() || status.isBatteryLow() || mAlwaysShowBattery;
+            mAlwaysShowBatteryOff = Settings.System.getInt(getContext().getContentResolver(),
+                    Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, 0);
+            if (mAlwaysShowBatteryOff != 2) {
+                 mShowingBatteryInfo = status.isPluggedIn() || status.isBatteryLow() || mAlwaysShowBattery;
+            }
             update();
         }
     };
