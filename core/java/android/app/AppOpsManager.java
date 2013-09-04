@@ -101,7 +101,8 @@ public class AppOpsManager {
     public static final int OP_READ_CLIPBOARD = 29;
     public static final int OP_WRITE_CLIPBOARD = 30;
     /** @hide */
-    public static final int _NUM_OP = 31;
+    public static final int OP_WIFI_CHANGE = 31;
+    public static final int _NUM_OP = 32;
 
     /**
      * Map to check if each operation is strict or not, to determine default
@@ -141,6 +142,7 @@ public class AppOpsManager {
         true,   //OP_PLAY_AUDIO
         false,  //OP_READ_CLIPBOARD
         false,  //OP_WRITE_CLIPBOARD
+        true,   //OP_WIFI_CHANGE
     };
 
     /**
@@ -183,6 +185,7 @@ public class AppOpsManager {
             OP_PLAY_AUDIO,
             OP_READ_CLIPBOARD,
             OP_WRITE_CLIPBOARD,
+            OP_WIFI_CHANGE,
     };
 
     /**
@@ -221,6 +224,7 @@ public class AppOpsManager {
             "PLAY_AUDIO",
             "READ_CLIPBOARD",
             "WRITE_CLIPBOARD",
+            "WIFI_CHANGE",
     };
 
     /**
@@ -259,6 +263,7 @@ public class AppOpsManager {
             null, // no permission for playing audio
             null, // no permission for reading clipboard
             null, // no permission for writing clipboard
+            android.Manifest.permission.CHANGE_WIFI_STATE,
     };
 
     /**
