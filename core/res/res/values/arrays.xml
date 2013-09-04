@@ -454,5 +454,6 @@
         <item>Trying to play audio</item>
         <item>Trying to read clipboard</item>
         <item>Trying to modify clipboard</item>
+        <item>Trying to turn on/off Wifi</item>
     </string-array>
 </resources>
