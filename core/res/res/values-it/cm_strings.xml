@@ -43,6 +43,7 @@
     <string name="permlab_preventpower">modifica azione tasto spegnimento</string>
     <string name="permdesc_preventpower">Consente a un\'applicazione di cambiare il comportamento del tasto di spegnimento</string>
     <string name="lockscreen_discharging">In uso, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="progress_nomediapresent" product="default">Nessun supporto rimovibile presente\u2026</string>
     <string name="app_killed_message">Applicazione terminata</string>
     <string name="global_action_reboot">Riavvia</string>
     <string name="global_action_choose_profile">Profilo</string>
@@ -53,6 +54,8 @@
     <string name="permdesc_fm_radio_receiver">Consente all\'applicazione di controllare il ricevitore FM.</string>
     <string name="permlab_fm_radio_transmitter">controllo del trasmettitore FM</string>
     <string name="permdesc_fm_radio_transmitter">Consente all\'applicazione di controllare il trasmettitore FM.</string>
+    <string name="permlab_sendMockSms">invia messaggi SMS fittizi</string>
+    <string name="permdesc_sendMockSms">Consente all\'applicazione di inviare messaggi SMS fittizi. Le applicazioni dannose potrebbero inviare messaggi in modo continuo, bloccando il sistema di notifica del dispositivo e disturbando l\'utente.</string>
     <string name="stylus_app_not_installed">%s non è installato</string>
     <string name="permlab_changePrivacyGuardState">abilita o disabilita Privacy Guard</string>
     <string name="permdesc_changePrivacyGuardState">Consente all\'applicazione di decidere se un\'altra applicazione viene eseguita con Privacy Guard. Quando un\'applicazione viene eseguita con Privacy Guard, non ha accesso a dati personali come contatti, lista chiamate o messaggi.</string>
