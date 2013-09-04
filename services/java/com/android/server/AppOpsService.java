@@ -71,6 +71,7 @@ public class AppOpsService extends IAppOpsService.Stub {
     static final String TAG = "AppOps";
     static final boolean DEBUG = false;
     static final String STRICT_PERMISSION_PROPERTY = "persist.sys.strict_op_enable";
+    static final String WHITELIST_FILE = "persist.sys.whitelist";
 
     // Write at most every 30 minutes.
     static final long WRITE_DELAY = DEBUG ? 1000 : 30*60*1000;
@@ -105,6 +106,8 @@ public class AppOpsService extends IAppOpsService.Stub {
             }
         }
     };
+
+    final ArrayList<String> mWhitelist = new ArrayList<String>();
 
     final SparseArray<HashMap<String, Ops>> mUidOps
             = new SparseArray<HashMap<String, Ops>>();
@@ -195,6 +198,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
             }
         };
+        readWhitelist();
         readState();
     }
 
@@ -532,7 +536,11 @@ public class AppOpsService extends IAppOpsService.Stub {
             return false;
 
         return ((uid > Process.FIRST_APPLICATION_UID) &&
-                (AppOpsManager.opStrict(code)));
+                (AppOpsManager.opStrict(code)) && !isInWhitelist(packageName));
+    }
+
+    private boolean isInWhitelist(String packageName) {
+        return mWhitelist.contains(packageName);
     }
 
     private void recordOperationLocked(int code, int uid, String packageName,
@@ -866,6 +874,79 @@ public class AppOpsService extends IAppOpsService.Stub {
         return op;
     }
 
+    void readWhitelist() {
+        // Read if whitelist file provided
+        String whitelistFileName = SystemProperties.get(WHITELIST_FILE);
+        if(!mStrictEnable || "".equals(whitelistFileName)) {
+            return;
+        }
+        final File whitelistFile = new File(whitelistFileName);
+        final AtomicFile mWhitelistFile = new AtomicFile(whitelistFile);
+        synchronized (mWhitelistFile) {
+            synchronized (this) {
+                FileInputStream stream;
+                try {
+                    stream = mWhitelistFile.openRead();
+                } catch (FileNotFoundException e) {
+                    Slog.i(TAG, "No existing app ops whitelist " + mWhitelistFile.getBaseFile());
+                    return;
+                }
+                boolean success = false;
+                try {
+                    XmlPullParser parser = Xml.newPullParser();
+                    parser.setInput(stream, null);
+                    int type;
+                    while ((type = parser.next()) != XmlPullParser.START_TAG
+                            && type != XmlPullParser.END_DOCUMENT) {
+                        ;
+                    }
+
+                    if (type != XmlPullParser.START_TAG) {
+                        throw new IllegalStateException("no start tag found");
+                    }
+
+                    int outerDepth = parser.getDepth();
+                    while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
+                            && (type != XmlPullParser.END_TAG || parser.getDepth() > outerDepth)) {
+                        if (type == XmlPullParser.END_TAG || type == XmlPullParser.TEXT) {
+                            continue;
+                        }
+
+                        String tagName = parser.getName();
+                        if (tagName.equals("pkg")) {
+                            String pkgName = parser.getAttributeValue(null, "name");
+                            mWhitelist.add(pkgName);
+                        } else {
+                            Slog.w(TAG, "Unknown element under <whitelist-pkgs>: "
+                                    + parser.getName());
+                            XmlUtils.skipCurrentTag(parser);
+                        }
+                    }
+                    success = true;
+                } catch (IllegalStateException e) {
+                    Slog.w(TAG, "Failed parsing " + e);
+                } catch (NullPointerException e) {
+                    Slog.w(TAG, "Failed parsing " + e);
+                } catch (NumberFormatException e) {
+                    Slog.w(TAG, "Failed parsing " + e);
+                } catch (XmlPullParserException e) {
+                    Slog.w(TAG, "Failed parsing " + e);
+                } catch (IOException e) {
+                    Slog.w(TAG, "Failed parsing " + e);
+                } catch (IndexOutOfBoundsException e) {
+                    Slog.w(TAG, "Failed parsing " + e);
+                } finally {
+                    if (!success) {
+                        mWhitelist.clear();
+                    }
+                    try {
+                        stream.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
+        }
+    }
     void readState() {
         synchronized (mFile) {
             synchronized (this) {
