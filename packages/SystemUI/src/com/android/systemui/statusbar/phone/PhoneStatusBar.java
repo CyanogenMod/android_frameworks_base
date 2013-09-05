@@ -758,6 +758,8 @@ public class PhoneStatusBar extends BaseStatusBar {
             mQuickAccessLayoutLinked = Settings.System.getIntForUser(resolver,
                     Settings.System.QS_QUICK_ACCESS_LINKED, 1, UserHandle.USER_CURRENT) == 1;
             if (mHasQuickAccessSettings) {
+                cleanupRibbon();
+                mRibbonView = null;
                 inflateRibbon();
             }
         }
