@@ -455,5 +455,6 @@
         <item>Trying to read clipboard</item>
         <item>Trying to modify clipboard</item>
         <item>Trying to turn on/off Wifi</item>
+        <item>Trying to turn on/off bluetooth</item>
     </string-array>
 </resources>
