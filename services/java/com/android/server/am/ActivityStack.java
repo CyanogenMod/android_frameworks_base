@@ -29,6 +29,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AppGlobals;
+import android.app.AppOpsManager;
 import android.app.IActivityManager;
 import android.app.IThumbnailRetriever;
 import android.app.IApplicationThread;
@@ -66,6 +67,7 @@ import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
 import android.view.Display;
+
 import com.android.internal.app.ActivityTrigger;
 
 import java.io.IOException;
@@ -288,6 +290,11 @@ final class ActivityStack {
     boolean mDismissKeyguardOnNextActivity = false;
 
     /**
+     * Is the privacy guard currently enabled?
+     */
+    String mPrivacyGuardPackageName = null;
+
+    /**
      * Save the most recent screenshot for reuse. This keeps Recents from taking two identical
      * screenshots, one for the Recents thumbnail and one for the pauseActivity thumbnail.
      */
@@ -324,6 +331,7 @@ final class ActivityStack {
     private static final ActivityTrigger mActivityTrigger;
 
     private final PowerManagerService mPm;
+    private final AppOpsManager mAppOps;
 
     static {
         if (SystemProperties.QCOM_HARDWARE) {
@@ -454,6 +462,7 @@ final class ActivityStack {
         mLaunchingActivity = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Launch");
         mPm = (PowerManagerService) ServiceManager.getService("power");
         mLaunchingActivity.setReferenceCounted(false);
+        mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
     }
 
     private boolean okToShow(ActivityRecord r) {
@@ -1278,6 +1287,7 @@ final class ActivityStack {
         } else {
             next.cpuTimeAtResume = 0; // Couldn't get the cpu time of process
         }
+        updatePrivacyGuardNotificationLocked(next);
     }
 
     /**
@@ -1833,6 +1843,28 @@ final class ActivityStack {
         }
 
         return true;
+    }
+
+    private final void updatePrivacyGuardNotificationLocked(ActivityRecord next) {
+
+        if (mPrivacyGuardPackageName != null && mPrivacyGuardPackageName.equals(next.packageName)) {
+            return;
+        }
+
+        boolean privacy = mAppOps.getPrivacyGuardSettingForPackage(
+                next.app.uid, next.packageName);
+
+        if (mPrivacyGuardPackageName != null && !privacy) {
+            Message msg = mService.mHandler.obtainMessage(
+                    ActivityManagerService.CANCEL_PRIVACY_NOTIFICATION_MSG, next.userId);
+            msg.sendToTarget();
+            mPrivacyGuardPackageName = null;
+        } else if (privacy) {
+            Message msg = mService.mHandler.obtainMessage(
+                    ActivityManagerService.POST_PRIVACY_NOTIFICATION_MSG, next);
+            msg.sendToTarget();
+            mPrivacyGuardPackageName = next.packageName;
+        }
     }
 
     private final void startActivityLocked(ActivityRecord r, boolean newTask,

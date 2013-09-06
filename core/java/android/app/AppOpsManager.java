@@ -17,6 +17,7 @@
 package android.app;
 
 import android.Manifest;
+
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IAppOpsCallback;
 
@@ -214,6 +215,14 @@ public class AppOpsManager {
             null, // no permission for playing audio
             null, // no permission for reading clipboard
             null, // no permission for writing clipboard
+    };
+
+    private static final int[] PRIVACY_GUARD_OP_STATES = new int[] {
+        OP_COARSE_LOCATION,
+        OP_READ_CALL_LOG,
+        OP_READ_CONTACTS,
+        OP_READ_CALENDAR,
+        OP_READ_SMS
     };
 
     /**
@@ -537,5 +546,25 @@ public class AppOpsManager {
 
     public void finishOp(int op) {
         finishOp(op, Process.myUid(), mContext.getBasePackageName());
+    }
+
+    public boolean getPrivacyGuardSettingForPackage(int uid, String packageName) {
+        for (int op : PRIVACY_GUARD_OP_STATES) {
+            int switchOp = AppOpsManager.opToSwitch(op);
+            if (checkOp(op, uid, packageName)
+                    != AppOpsManager.MODE_ALLOWED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setPrivacyGuardSettingForPackage(int uid,String packageName,
+            boolean state) {
+        for (int op : PRIVACY_GUARD_OP_STATES) {
+            int switchOp = AppOpsManager.opToSwitch(op);
+            setMode(switchOp, uid, packageName, state
+                    ? AppOpsManager.MODE_IGNORED : AppOpsManager.MODE_ALLOWED);
+        }
     }
 }
