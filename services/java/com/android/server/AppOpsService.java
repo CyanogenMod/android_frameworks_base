@@ -70,6 +70,14 @@ public class AppOpsService extends IAppOpsService.Stub {
     final AtomicFile mFile;
     final Handler mHandler;
 
+    private static final int[] PRIVACY_GUARD_OP_STATES = new int[] {
+        AppOpsManager.OP_COARSE_LOCATION,
+        AppOpsManager.OP_READ_CALL_LOG,
+        AppOpsManager.OP_READ_CONTACTS,
+        AppOpsManager.OP_READ_CALENDAR,
+        AppOpsManager.OP_READ_SMS
+    };
+
     boolean mWriteScheduled;
     final Runnable mWriteRunner = new Runnable() {
         public void run() {
@@ -1078,6 +1086,27 @@ public class AppOpsService extends IAppOpsService.Stub {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public boolean getPrivacyGuardSettingForPackage(int uid, String packageName) {
+        for (int op : PRIVACY_GUARD_OP_STATES) {
+            int switchOp = AppOpsManager.opToSwitch(op);
+            if (checkOperation(op, uid, packageName)
+                    != AppOpsManager.MODE_ALLOWED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void setPrivacyGuardSettingForPackage(int uid, String packageName, boolean state) {
+        for (int op : PRIVACY_GUARD_OP_STATES) {
+            int switchOp = AppOpsManager.opToSwitch(op);
+            setMode(switchOp, uid, packageName, state
+                    ? AppOpsManager.MODE_IGNORED : AppOpsManager.MODE_ALLOWED);
         }
     }
 }
