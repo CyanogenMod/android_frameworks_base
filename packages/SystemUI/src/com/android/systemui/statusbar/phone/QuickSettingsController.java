@@ -214,7 +214,7 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_MOBILEDATA) && mobileDataSupported) {
                 qs = new MobileNetworkTile(mContext, this, mStatusBarService.mNetworkController);
             } else if (tile.equals(TILE_LOCKSCREEN)) {
-                qs = new ToggleLockscreenTile(mContext, this);
+                qs = new ToggleLockscreenTile(mContext, this, mStatusBarService.getKeyguardLock());
             } else if (tile.equals(TILE_NETWORKMODE) && mobileDataSupported) {
                 qs = new MobileNetworkTypeTile(mContext, this, mStatusBarService.mNetworkController);
             } else if (tile.equals(TILE_AUTOROTATE)) {

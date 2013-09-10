@@ -28,6 +28,7 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
@@ -296,6 +297,9 @@ public class PhoneStatusBar extends BaseStatusBar {
     int mLinger;
     int mInitialTouchX;
     int mInitialTouchY;
+
+    @SuppressWarnings("deprecation")
+    private KeyguardManager.KeyguardLock mLock = null;
 
     // for disabling the status bar
     int mDisabled = 0;
@@ -3130,5 +3134,15 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.getUriFor(Settings.System.QUICK_SETTINGS_RIBBON_TILES),
                     false, this, UserHandle.USER_ALL);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    KeyguardManager.KeyguardLock getKeyguardLock() {
+        if (mLock == null) {
+            KeyguardManager keyguardManager = (KeyguardManager)
+                    mContext.getSystemService(Context.KEYGUARD_SERVICE);
+            mLock = keyguardManager.newKeyguardLock("LockscreenTile");
+        }
+        return mLock;
     }
 }
