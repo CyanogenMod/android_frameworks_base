@@ -49,6 +49,7 @@
     <string name="quick_settings_lte_off">LTE wył.</string>
     <string name="quick_settings_volume">Głośność</string>
     <string name="quick_settings_camera_label">Kamera</string>
+    <string name="quick_settings_wifiadb_disabled_label">Wi-Fi ADB Wył.</string>
     <string name="navbar_dialog_title">Wybierz akcję do przypisania</string>
     <string name="navbar_home_button">Przycisk Home</string>
     <string name="navbar_recent_button">Przycisk Ostatnie aplikacje</string>

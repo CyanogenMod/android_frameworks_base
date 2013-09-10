@@ -44,6 +44,7 @@ import static com.android.internal.util.cm.QSConstants.TILE_VOLUME;
 import static com.android.internal.util.cm.QSConstants.TILE_WIFI;
 import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
 import static com.android.internal.util.cm.QSConstants.TILE_WIMAX;
+import static com.android.internal.util.cm.QSConstants.TILE_WIFIADB;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -90,6 +91,7 @@ import com.android.systemui.quicksettings.TorchTile;
 import com.android.systemui.quicksettings.UsbTetherTile;
 import com.android.systemui.quicksettings.UserTile;
 import com.android.systemui.quicksettings.VolumeTile;
+import com.android.systemui.quicksettings.WiFiADBTile;
 import com.android.systemui.quicksettings.WiFiDisplayTile;
 import com.android.systemui.quicksettings.WiFiTile;
 import com.android.systemui.quicksettings.WifiAPTile;
@@ -247,6 +249,8 @@ public class QuickSettingsController {
                 if (QSUtils.expandedDesktopEnabled(resolver)) {
                     qs = new ExpandedDesktopTile(mContext, this, mHandler);
                 }
+            }else if (tile.equals(TILE_WIFIADB)) {
+                qs = new WiFiADBTile(mContext, this);
             }
 
             if (qs != null) {
