@@ -43,6 +43,7 @@ public class QSConstants {
         public static final String TILE_QUICKRECORD = "toggleQuickRecord";
         public static final String TILE_QUIETHOURS = "toggleQuietHours";
         public static final String TILE_VOLUME = "toggleVolume";
+        public static final String TILE_NETWORKADB = "toggleNetworkAdb";
         public static final String TILE_EXPANDEDDESKTOP = "toggleExpandedDesktop";
         public static final String TILE_MUSIC = "toggleMusic";
         public static final String TILE_REBOOT = "toggleReboot";
