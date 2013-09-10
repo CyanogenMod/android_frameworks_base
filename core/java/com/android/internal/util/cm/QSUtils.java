@@ -1,3 +1,4 @@
+
 package com.android.internal.util.cm;
 
 import android.bluetooth.BluetoothAdapter;
@@ -65,5 +66,9 @@ public class QSUtils {
 
         public static boolean deviceSupportsCamera() {
             return Camera.getNumberOfCameras() > 0;
+        }
+
+        public static boolean adbEnabled(ContentResolver resolver) {
+            return (Settings.Global.getInt(resolver, Settings.Global.ADB_ENABLED, 0)) == 1;
         }
 }
