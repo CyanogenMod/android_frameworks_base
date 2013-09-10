@@ -51,4 +51,7 @@ public class QSUtils {
             final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
             return (tm.getLteOnCdmaMode() == PhoneConstants.LTE_ON_CDMA_TRUE) || tm.getLteOnGsmMode() != 0;
         }
+        public static boolean adbEnabled(ContentResolver resolver) {
+            return (Settings.Global.getInt(resolver, Settings.Global.ADB_ENABLED, 0)) == 1;
+        }
 }
