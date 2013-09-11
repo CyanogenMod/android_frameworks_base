@@ -786,8 +786,8 @@
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Повторите попытку"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Повторите попытку"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Все попытки войти с помощью Фейсконтроля использованы"</string>
-    <string name="lockscreen_plugged_in">Зарядка батареи (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)</string>
-    <string name="lockscreen_discharging">Разрядка батареи (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Идет зарядка (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Заряд батареи: <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Заряжено"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">Подключите зарядное устройство (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
@@ -940,16 +940,19 @@
     <string name="oneMonthDurationPast" msgid="7396384508953779925">"1 месяц назад"</string>
     <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Более месяца назад"</string>
   <plurals name="num_seconds_ago">
-    <item quantity="one" msgid="4869870056547896011">"1 секунду назад"</item>
-    <item quantity="other" msgid="3903706804349556379">"<xliff:g id="COUNT">%d</xliff:g> с. назад"</item>
+    <item quantity="one" msgid="4869870056547896011">"<xliff:g id="COUNT">%d</xliff:g> секунду назад"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> секунды назад"</item>
+    <item quantity="other" msgid="3903706804349556379">"<xliff:g id="COUNT">%d</xliff:g> секунд назад"</item>
   </plurals>
   <plurals name="num_minutes_ago">
-    <item quantity="one" msgid="3306787433088810191">"1 минуту назад"</item>
-    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> мин. назад"</item>
+    <item quantity="one" msgid="3306787433088810191">"<xliff:g id="COUNT">%d</xliff:g> минуту назад"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> минуты назад"</item>
+    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> минут назад"</item>
   </plurals>
   <plurals name="num_hours_ago">
-    <item quantity="one" msgid="9150797944610821849">"1 час назад"</item>
-    <item quantity="other" msgid="2467273239587587569">"<xliff:g id="COUNT">%d</xliff:g> ч. назад"</item>
+    <item quantity="one" msgid="9150797944610821849">"<xliff:g id="COUNT">%d</xliff:g> час назад"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> часа назад"</item>
+    <item quantity="other" msgid="2467273239587587569">"<xliff:g id="COUNT">%d</xliff:g> часов назад"</item>
   </plurals>
   <plurals name="last_num_days">
     <item quantity="other" msgid="3069992808164318268">"Последние <xliff:g id="COUNT">%d</xliff:g> дн."</item>
@@ -961,12 +964,14 @@
     <item quantity="other" msgid="2479586466153314633">"<xliff:g id="COUNT">%d</xliff:g> дн. назад"</item>
   </plurals>
   <plurals name="in_num_seconds">
-    <item quantity="one" msgid="2729745560954905102">"через 1 секунду"</item>
-    <item quantity="other" msgid="1241926116443974687">"через <xliff:g id="COUNT">%d</xliff:g> с."</item>
+    <item quantity="one" msgid="2729745560954905102">"через <xliff:g id="COUNT">%d</xliff:g> секунду"</item>
+    <item quantity="few">"через <xliff:g id="COUNT">%d</xliff:g> секунды"</item>
+    <item quantity="other" msgid="1241926116443974687">"через <xliff:g id="COUNT">%d</xliff:g> секунд"</item>
   </plurals>
   <plurals name="in_num_minutes">
-    <item quantity="one" msgid="8793095251325200395">"через 1 минуту"</item>
-    <item quantity="other" msgid="3330713936399448749">"через <xliff:g id="COUNT">%d</xliff:g> мин."</item>
+    <item quantity="one" msgid="8793095251325200395">"через <xliff:g id="COUNT">%d</xliff:g> минуту"</item>
+    <item quantity="few">"через <xliff:g id="COUNT">%d</xliff:g> минуты"</item>
+    <item quantity="other" msgid="3330713936399448749">"через <xliff:g id="COUNT">%d</xliff:g> минут"</item>
   </plurals>
   <plurals name="in_num_hours">
     <item quantity="one" msgid="7164353342477769999">"через 1 час"</item>
@@ -977,15 +982,12 @@
     <item quantity="other" msgid="5109449375100953247">"через <xliff:g id="COUNT">%d</xliff:g> дн."</item>
   </plurals>
   <plurals name="abbrev_num_seconds_ago">
-    <item quantity="one" msgid="1849036840200069118">"1 сек. назад"</item>
     <item quantity="other" msgid="3699169366650930415">"<xliff:g id="COUNT">%d</xliff:g> сек. назад"</item>
   </plurals>
   <plurals name="abbrev_num_minutes_ago">
-    <item quantity="one" msgid="6361490147113871545">"1 мин. назад"</item>
     <item quantity="other" msgid="851164968597150710">"<xliff:g id="COUNT">%d</xliff:g> мин. назад"</item>
   </plurals>
   <plurals name="abbrev_num_hours_ago">
-    <item quantity="one" msgid="4796212039724722116">"1 час назад"</item>
     <item quantity="other" msgid="6889970745748538901">"<xliff:g id="COUNT">%d</xliff:g> ч. назад"</item>
   </plurals>
   <plurals name="abbrev_num_days_ago">
@@ -993,15 +995,12 @@
     <item quantity="other" msgid="3453342639616481191">"<xliff:g id="COUNT">%d</xliff:g> дн. назад"</item>
   </plurals>
   <plurals name="abbrev_in_num_seconds">
-    <item quantity="one" msgid="5842225370795066299">"через 1 с."</item>
     <item quantity="other" msgid="5495880108825805108">"через <xliff:g id="COUNT">%d</xliff:g> с."</item>
   </plurals>
   <plurals name="abbrev_in_num_minutes">
-    <item quantity="one" msgid="562786149928284878">"через 1 мин."</item>
     <item quantity="other" msgid="4216113292706568726">"через <xliff:g id="COUNT">%d</xliff:g> мин."</item>
   </plurals>
   <plurals name="abbrev_in_num_hours">
-    <item quantity="one" msgid="3274708118124045246">"через 1 час"</item>
     <item quantity="other" msgid="3705373766798013406">"через <xliff:g id="COUNT">%d</xliff:g> ч."</item>
   </plurals>
   <plurals name="abbrev_in_num_days">
@@ -1024,16 +1023,19 @@
     <string name="year" msgid="4001118221013892076">"г."</string>
     <string name="years" msgid="6881577717993213522">"г."</string>
   <plurals name="duration_seconds">
-    <item quantity="one" msgid="6962015528372969481">"1 сек."</item>
-    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> сек."</item>
+    <item quantity="one" msgid="6962015528372969481">"<xliff:g id="COUNT">%d</xliff:g> секунда"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> секунды"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> секунд"</item>
   </plurals>
   <plurals name="duration_minutes">
-    <item quantity="one" msgid="4915414002546085617">"1 мин."</item>
-    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> мин."</item>
+    <item quantity="one" msgid="4915414002546085617">"<xliff:g id="COUNT">%d</xliff:g> минута"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> минуты"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> минут"</item>
   </plurals>
   <plurals name="duration_hours">
-    <item quantity="one" msgid="8917467491248809972">"1 ч."</item>
-    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> ч."</item>
+    <item quantity="one" msgid="8917467491248809972">"<xliff:g id="COUNT">%d</xliff:g> час"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> часы"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> часов"</item>
   </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Ошибка"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"Это видео не предназначено для потокового воспроизведения на данном устройстве."</string>
@@ -1307,7 +1309,6 @@
     <string name="no_matches" msgid="8129421908915840737">"Нет совпадений"</string>
     <string name="find_on_page" msgid="1946799233822820384">"Найти на странице"</string>
   <plurals name="matches_found">
-    <item quantity="one" msgid="8167147081136579439">"1 совпадение"</item>
     <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g> из <xliff:g id="TOTAL">%d</xliff:g>"</item>
   </plurals>
     <string name="action_mode_done" msgid="7217581640461922289">"Готово"</string>
