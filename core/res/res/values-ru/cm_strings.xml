@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="lockscreen_discharging">Заряд батареи: <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="reboot_system" product="tablet">Перезагрузка планшета</string>
     <string name="reboot_system" product="default">Перезагрузка телефона</string>
     <string name="global_action_screenshot">Скриншот</string>
