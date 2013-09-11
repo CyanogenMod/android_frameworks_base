@@ -2175,6 +2175,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     @Override
+    public void selectDisplayMetricsUpdateAnimationLw(int anim[]) {
+        anim[0] = R.anim.shrink_fade_out_center;
+        anim[1] = R.anim.grow_fade_in_center;
+    }
+
+    @Override
     public boolean validateRotationAnimationLw(int exitAnimId, int enterAnimId,
             boolean forceDefault) {
         switch (exitAnimId) {
