@@ -1966,5 +1966,10 @@
         <item>Trying to delete contacts</item>
         <item>Trying to delete call log</item>
         <item>Trying to turn on mobile data</item>
+
     </string-array>
+
+    <!-- Whether cpu boost is enabled for overscroller fling. -->
+    <bool name="config_enableCpuBoostForOverScrollerFling">false</bool>
+
 </resources>

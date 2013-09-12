@@ -2122,4 +2122,8 @@
   <!-- Data Connectivity Error Configurations -->
   <java-symbol type="bool" name="config_reject_ggsn_perm_failure" />
   <java-symbol type="bool" name="config_protocol_errors_perm_failure" />
+
+  <!-- cpu boost for overscroller fling -->
+  <java-symbol type="bool" name="config_enableCpuBoostForOverScrollerFling" />
+
 </resources>
