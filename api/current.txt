@@ -32618,6 +32618,8 @@ package android.widget {
   }
 
   public static class TextView.SavedState extends android.view.View.BaseSavedState {
+    ctor public TextView.SavedState(android.os.Parcelable);
+    ctor public TextView.SavedState(android.os.Parcel);
     field public static final android.os.Parcelable.Creator CREATOR;
   }
 
