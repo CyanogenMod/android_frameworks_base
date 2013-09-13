@@ -596,6 +596,7 @@ public class NavigationBarView extends LinearLayout {
         if (NavbarEditor.isDevicePhone(mContext)) {
             int rotation = mDisplay.getRotation();
             mVertical = rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270;
+            mDelegateHelper.setSwapXY(mVertical);
         } else {
             mVertical = getWidth() > 0 && getHeight() > getWidth();
         }
