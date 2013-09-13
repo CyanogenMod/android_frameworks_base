@@ -3745,40 +3745,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             // Start off with notification off
             setProvNotificationVisible(false, ConnectivityManager.TYPE_NONE, null, null);
 
-            // See if we've alreadying determined if we've got a provsioning connection
-            // if so we don't need to do anything active
-            MobileDataStateTracker mdstDefault = (MobileDataStateTracker)
-                    mNetTrackers[ConnectivityManager.TYPE_MOBILE];
-            boolean isDefaultProvisioning = mdstDefault.isProvisioningNetwork();
-
-            MobileDataStateTracker mdstHipri = (MobileDataStateTracker)
-                    mNetTrackers[ConnectivityManager.TYPE_MOBILE_HIPRI];
-            boolean isHipriProvisioning = mdstHipri.isProvisioningNetwork();
-
-            if (isDefaultProvisioning || isHipriProvisioning) {
-                if (mIsNotificationVisible) {
-                    if (DBG) {
-                        log("checkMobileProvisioning: provisioning-ignore notification is visible");
-                    }
-                } else {
-                    NetworkInfo ni = null;
-                    if (isDefaultProvisioning) {
-                        ni = mdstDefault.getNetworkInfo();
-                    }
-                    if (isHipriProvisioning) {
-                        ni = mdstHipri.getNetworkInfo();
-                    }
-                    String url = getMobileProvisioningUrl();
-                    if ((ni != null) && (!TextUtils.isEmpty(url))) {
-                        setProvNotificationVisible(true, ni.getType(), ni.getExtraInfo(), url);
-                    } else {
-                        if (DBG) log("checkMobileProvisioning: provisioning but no url, ignore");
-                    }
-                }
-                mIsCheckingMobileProvisioning.set(false);
-                return timeOutMs;
-            }
-
             CheckMp checkMp = new CheckMp(mContext, this);
             CheckMp.CallBack cb = new CheckMp.CallBack() {
                 @Override
@@ -3912,8 +3878,26 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             mParams = params;
 
             if (mCs.isNetworkSupported(ConnectivityManager.TYPE_MOBILE) == false) {
-                log("isMobileOk: not mobile capable");
                 result = CMP_RESULT_CODE_NO_CONNECTION;
+                log("isMobileOk: X not mobile capable result=" + result);
+                return result;
+            }
+
+            // See if we've already determined we've got a provisioning connection,
+            // if so we don't need to do anything active.
+            MobileDataStateTracker mdstDefault = (MobileDataStateTracker)
+                    mCs.mNetTrackers[ConnectivityManager.TYPE_MOBILE];
+            boolean isDefaultProvisioning = mdstDefault.isProvisioningNetwork();
+            log("isMobileOk: isDefaultProvisioning=" + isDefaultProvisioning);
+
+            MobileDataStateTracker mdstHipri = (MobileDataStateTracker)
+                    mCs.mNetTrackers[ConnectivityManager.TYPE_MOBILE_HIPRI];
+            boolean isHipriProvisioning = mdstHipri.isProvisioningNetwork();
+            log("isMobileOk: isHipriProvisioning=" + isHipriProvisioning);
+
+            if (isDefaultProvisioning || isHipriProvisioning) {
+                result = CMP_RESULT_CODE_PROVISIONING_NETWORK;
+                log("isMobileOk: X default || hipri is provisioning result=" + result);
                 return result;
             }
 
@@ -3975,8 +3959,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         MobileDataStateTracker mdst = (MobileDataStateTracker)
                                 mCs.mNetTrackers[ConnectivityManager.TYPE_MOBILE_HIPRI];
                         if (mdst.isProvisioningNetwork()) {
-                            if (DBG) log("isMobileOk: isProvisioningNetwork is true");
                             result = CMP_RESULT_CODE_PROVISIONING_NETWORK;
+                            if (DBG) log("isMobileOk: X isProvisioningNetwork result=" + result);
                             return result;
                         } else {
                             if (DBG) log("isMobileOk: isProvisioningNetwork is false, continue");
@@ -3991,8 +3975,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         try {
                             addresses = InetAddress.getAllByName(orgUri.getHost());
                         } catch (UnknownHostException e) {
-                            log("isMobileOk: UnknownHostException");
                             result = CMP_RESULT_CODE_NO_DNS;
+                            log("isMobileOk: X UnknownHostException result=" + result);
                             return result;
                         }
                         log("isMobileOk: addresses=" + inetAddressesToString(addresses));
@@ -4070,8 +4054,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
                                 if (responseCode == 204) {
                                     // Return
-                                    log("isMobileOk: expected responseCode=" + responseCode);
                                     result = CMP_RESULT_CODE_CONNECTABLE;
+                                    log("isMobileOk: X expected responseCode=" + responseCode
+                                            + " result=" + result);
                                     return result;
                                 } else {
                                     // Retry to be sure this was redirected, we've gotten
@@ -4089,7 +4074,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                                 }
                             }
                         }
-                        log("isMobileOk: loops|timed out result=" + result);
+                        log("isMobileOk: X loops|timed out result=" + result);
                         return result;
                     } catch (Exception e) {
                         log("isMobileOk: Exception e=" + e);
