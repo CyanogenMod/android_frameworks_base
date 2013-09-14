@@ -1316,7 +1316,7 @@ public class GlowPadView extends View {
         if (mTargetDescriptions == null || mTargetDescriptions.isEmpty() || index >= mTargetDescriptions.size()) {
             mTargetDescriptions = loadDescriptions(mTargetDescriptionsResourceId);
             if (mTargetDrawables.size() != mTargetDescriptions.size()) {
-                Log.w(TAG, "The number of target drawables must be"
+                if (DEBUG) Log.v(TAG, "The number of target drawables must be"
                         + " equal to the number of target descriptions.");
                 return null;
             }
@@ -1328,7 +1328,7 @@ public class GlowPadView extends View {
         if (mDirectionDescriptions == null || mDirectionDescriptions.isEmpty() || index >= mDirectionDescriptions.size()) {
             mDirectionDescriptions = loadDescriptions(mDirectionDescriptionsResourceId);
             if (mTargetDrawables.size() != mDirectionDescriptions.size()) {
-                Log.w(TAG, "The number of target drawables must be"
+                if (DEBUG) Log.v(TAG, "The number of target drawables must be"
                         + " equal to the number of direction descriptions.");
                 return null;
             }
