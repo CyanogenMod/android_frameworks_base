@@ -86,6 +86,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+<<<<<<< HEAD
+=======
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
+>>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
 import android.widget.TextView;
 
 import android.service.notification.StatusBarNotification;
@@ -540,6 +545,40 @@ public class PhoneStatusBar extends BaseStatusBar {
             // no window manager? good luck with that
         }
 
+<<<<<<< HEAD
+=======
+        mStatusBarTrigger = (TriggerView)View.inflate(context, R.layout.trigger_view, null);
+        mWindowManager.addView(mStatusBarTrigger, getStatusBarTriggerViewLayoutParams());
+        if (DEBUG_TRIGGERS)
+            mStatusBarTrigger.setBackgroundColor(0xffff0000);
+
+        // listen for the trigger to show statusbar
+        mStatusBarTrigger.setOnTriggerListener(
+                new TriggerView.OnTriggerListener() {
+                    @Override
+                    public void onTriggered(View v) {
+                        if (v == mStatusBarTrigger) {
+                            try {
+                                if (mWindowManagerService.shouldHideStatusBar()) {
+                                    mWindowManagerService.showStatusBar();
+                                    updateAutoHideTimer(ACTION_STATUSBAR_HIDE);
+                                    mStatusBarView.requestFocus();
+                                }
+                            } catch (RemoteException e) {
+                            }
+                        }
+                    }
+                });
+
+        if (mRecreating) {
+            removeSidebarView();
+        } else {
+            addActiveDisplayView();
+        }
+
+        addSidebarView();
+
+>>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;
 
@@ -2321,7 +2360,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         setAreThereNotifications();
     }
 
-    private boolean areLightsOn() {
+    public boolean areLightsOn() {
         return 0 == (mSystemUiVisibility & View.SYSTEM_UI_FLAG_LOW_PROFILE);
     }
 
@@ -2339,6 +2378,10 @@ public class PhoneStatusBar extends BaseStatusBar {
             mWindowManagerService.statusBarVisibilityChanged(mSystemUiVisibility);
         } catch (RemoteException ex) {
         }
+    }
+
+    public void setNavigationBarLightsOn(boolean on, boolean force) {
+        mNavigationBarView.setLowProfile(!on, true, force);
     }
 
     @Override

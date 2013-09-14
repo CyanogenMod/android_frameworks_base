@@ -207,4 +207,77 @@
         <item name="android:lineSpacingMultiplier">1.1</item>
     </style>
 
+<<<<<<< HEAD
+=======
+    <!-- SystemBar styles -->
+    <style name="SystemBarNotificationText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#ff999999</item>
+    </style>
+
+    <style name="SystemBarPanelSettingsRow">
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">?android:attr/listChoiceBackgroundIndicator</item>
+    </style>
+
+    <style name="SystemBarPanelSettingsIcon">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">64dp</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
+    <style name="SystemBarPanelSettingsContents">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">left|center_vertical</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="SystemBarPanelSettingsPanelSeparator">
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@android:drawable/divider_horizontal_dark</item>
+    </style>
+
+    <style name="TextAppearance.SystemBar.Clock" parent="@*android:style/TextAppearance.StatusBar.Icon">
+        <item name="android:textSize">30dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="TextAppearance.SystemBar.Expanded.Clock" parent="@style/TextAppearance.StatusBar.Expanded.Clock">
+        <item name="android:textSize">48dp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="TextAppearance.SystemBar.Expanded.Date" parent="@style/TextAppearance.StatusBar.Expanded.Date">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextAppearance.StatusBar.NetworkStats"
+           parent="@*android:style/TextAppearance.StatusBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/network_stats_text_size</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
+    </style>
+
+    <style name="Theme.DummyActivity" parent="android:style/Theme.Translucent" >
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+>>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
 </resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.android.systemui.statusbar.policy.activedisplay.ActiveDisplayView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+    <!-- All the actual content will end up being inflated and add
+         to the following layout so that we can handle orientation
+         changes and load the appropriate layout based on that. -->
+    <FrameLayout
+        android:id="@+id/active_view_contents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</com.android.systemui.statusbar.policy.activedisplay.ActiveDisplayView>
