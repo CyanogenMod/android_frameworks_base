@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2013 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -312,6 +313,15 @@ public final class DisplayManagerGlobal {
         } catch (RemoteException ex) {
             Log.e(TAG, "Failed to get Wifi display status.", ex);
             return new WifiDisplayStatus();
+        }
+    }
+
+    public IRemoteDisplayAdapter getRemoteDisplayAdapter() {
+        try {
+            return mDm.getRemoteDisplayAdapter();
+        }
+        catch (RemoteException e) {
+            return null;
         }
     }
 
