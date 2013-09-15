@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2012 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManagerGlobal;
 import android.hardware.display.IDisplayManager;
 import android.hardware.display.IDisplayManagerCallback;
+import android.hardware.display.IRemoteDisplayAdapter;
 import android.hardware.display.WifiDisplayStatus;
 import android.os.Binder;
 import android.os.Handler;
@@ -169,6 +171,8 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
 
     // The Wifi display adapter, or null if not registered.
     private WifiDisplayAdapter mWifiDisplayAdapter;
+
+    private RemoteDisplayAdapter mRemoteDisplayAdapter;
 
     // Viewports of the default display and the display that should receive touch
     // input from an external source.  Used by the input system.
@@ -582,11 +586,30 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
         }
     }
 
+    public void scanRemoteDisplays() {
+        final long token = Binder.clearCallingIdentity();
+        try {
+            synchronized (mSyncRoot) {
+                if (mRemoteDisplayAdapter != null) {
+                    mRemoteDisplayAdapter.mStub.scanRemoteDisplays();
+                }
+            }
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    @Override
+    public IRemoteDisplayAdapter getRemoteDisplayAdapter() {
+        return mRemoteDisplayAdapter.mStub;
+    }
+
     private void registerAdditionalDisplayAdapters() {
         synchronized (mSyncRoot) {
             if (shouldRegisterNonEssentialDisplayAdaptersLocked()) {
                 registerOverlayDisplayAdapterLocked();
                 registerWifiDisplayAdapterLocked();
+                registerRemoteDisplayAdapterLocked();
             }
         }
     }
@@ -604,6 +627,17 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
                     mSyncRoot, mContext, mHandler, mDisplayAdapterListener,
                     mPersistentDataStore);
             registerDisplayAdapterLocked(mWifiDisplayAdapter);
+        }
+    }
+
+    private void registerRemoteDisplayAdapterLocked() {
+        if (mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_enableWifiDisplay)
+                || SystemProperties.getInt(FORCE_WIFI_DISPLAY_ENABLE, -1) == 1) {
+            mRemoteDisplayAdapter = new RemoteDisplayAdapter(
+                    mSyncRoot, mContext, mHandler, mDisplayAdapterListener,
+                    mPersistentDataStore);
+            registerDisplayAdapterLocked(mRemoteDisplayAdapter);
         }
     }
 

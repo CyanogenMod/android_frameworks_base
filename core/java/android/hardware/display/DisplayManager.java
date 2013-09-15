@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2012 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ package android.hardware.display;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.util.SparseArray;
 import android.view.Display;
 
@@ -63,6 +65,12 @@ public final class DisplayManager {
      */
     public static final String EXTRA_WIFI_DISPLAY_STATUS =
             "android.hardware.display.extra.WIFI_DISPLAY_STATUS";
+
+    public static final String ACTION_REMOTE_DISPLAY_STATUS_CHANGED =
+            "android.hardware.display.action.REMOTE_DISPLAY_STATUS_CHANGED";
+
+    public static final String EXTRA_REMOTE_DISPLAY_STATUS =
+            "android.hardware.display.extra.REMOTE_DISPLAY_STATUS";
 
     /**
      * Display category: Presentation displays.
@@ -272,6 +280,13 @@ public final class DisplayManager {
      */
     public WifiDisplayStatus getWifiDisplayStatus() {
         return mGlobal.getWifiDisplayStatus();
+    }
+
+    /**
+     * @hide
+     */
+    public IRemoteDisplayAdapter getRemoteDisplayAdapter() {
+        return mGlobal.getRemoteDisplayAdapter();
     }
 
     /**
