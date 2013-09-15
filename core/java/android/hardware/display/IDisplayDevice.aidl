@@ -16,7 +16,9 @@
 
 package android.hardware.display;
 
-/** @hide */
-interface IDisplayManagerCallback {
-    oneway void onDisplayEvent(int displayId, int event);
+import android.view.Surface;
+
+interface IDisplayDevice {
+    Surface createDisplaySurface();
 }
+

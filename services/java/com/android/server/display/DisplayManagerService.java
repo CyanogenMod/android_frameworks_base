@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2012 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +17,17 @@
 
 package com.android.server.display;
 
-import com.android.internal.util.IndentingPrintWriter;
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.display.DisplayManagerGlobal;
+import android.hardware.display.IDisplayAdapterListener;
+import android.hardware.display.IDisplayDevice;
 import android.hardware.display.IDisplayManager;
 import android.hardware.display.IDisplayManagerCallback;
 import android.hardware.display.WifiDisplayStatus;
@@ -38,10 +44,7 @@ import android.util.SparseArray;
 import android.view.Display;
 import android.view.DisplayInfo;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
+import com.android.internal.util.IndentingPrintWriter;
 
 /**
  * Manages attached displays.
@@ -169,6 +172,8 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
 
     // The Wifi display adapter, or null if not registered.
     private WifiDisplayAdapter mWifiDisplayAdapter;
+
+    private RemoteDisplayAdapter mRemoteDisplayAdapter;
 
     // Viewports of the default display and the display that should receive touch
     // input from an external source.  Used by the input system.
@@ -581,12 +586,62 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
             }
         }
     }
+    
+    public void scanRemoteDisplays() {
+        final long token = Binder.clearCallingIdentity();
+        try {
+            synchronized (mSyncRoot) {
+                if (mRemoteDisplayAdapter != null) {
+                	mRemoteDisplayAdapter.requestScanLocked();
+                }
+            }
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    @Override
+    public void connectRemoteDisplay(String name) throws RemoteException {
+    	synchronized (mSyncRoot) {
+        	mRemoteDisplayAdapter.requestConnectLocked(name);
+		}
+    }
+    
+    @Override
+    public void disconnectRemoteDisplay() throws RemoteException {
+    	synchronized (mSyncRoot) {
+    		mRemoteDisplayAdapter.requestDisconnectLocked();
+    	}
+    }
+    
+    @Override
+    public IDisplayAdapterListener getDisplayAdapterListener()
+    		throws RemoteException {
+    	return mRemoteDisplayAdapter.getRemoteDisplayAdapterListener();
+    }
+    
+    @Override
+    public WifiDisplayStatus getRemoteDisplayStatus() throws RemoteException {
+    	return mRemoteDisplayAdapter.getRemoteDisplayStatus();
+    }
+    
+    @Override
+    public void renameRemoteDisplay(String address, String alias)
+    		throws RemoteException {
+    	mRemoteDisplayAdapter.renameRemoteDisplay(address, alias);
+    }
+    
+    @Override
+    public void forgetRemoteDisplay(String address) throws RemoteException {
+    	mRemoteDisplayAdapter.forgetRemoteDisplay(address);
+    }
 
     private void registerAdditionalDisplayAdapters() {
         synchronized (mSyncRoot) {
             if (shouldRegisterNonEssentialDisplayAdaptersLocked()) {
                 registerOverlayDisplayAdapterLocked();
                 registerWifiDisplayAdapterLocked();
+                registerRemoteDisplayAdapterLocked();
             }
         }
     }
@@ -604,6 +659,17 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
                     mSyncRoot, mContext, mHandler, mDisplayAdapterListener,
                     mPersistentDataStore);
             registerDisplayAdapterLocked(mWifiDisplayAdapter);
+        }
+    }
+    
+    private void registerRemoteDisplayAdapterLocked() {
+        if (mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_enableWifiDisplay)
+                || SystemProperties.getInt(FORCE_WIFI_DISPLAY_ENABLE, -1) == 1) {
+            mRemoteDisplayAdapter = new RemoteDisplayAdapter(
+                    mSyncRoot, mContext, mHandler, mDisplayAdapterListener,
+                    mPersistentDataStore);
+            registerDisplayAdapterLocked(mRemoteDisplayAdapter);
         }
     }
 
