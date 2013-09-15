@@ -314,6 +314,61 @@ public final class DisplayManagerGlobal {
             return new WifiDisplayStatus();
         }
     }
+    
+    public void scanRemoteDisplays() {
+        try {
+            mDm.scanRemoteDisplays();
+        } catch (RemoteException ex) {
+            Log.e(TAG, "Failed to scan for Wifi displays.", ex);
+        }
+    }
+
+    public void forgetRemoteDisplay(String deviceAddress) {
+        if (deviceAddress == null) {
+            throw new IllegalArgumentException("deviceAddress must not be null");
+        }
+
+        try {
+            mDm.forgetRemoteDisplay(deviceAddress);
+        } catch (RemoteException ex) {
+            Log.e(TAG, "Failed to forget Wifi display.", ex);
+        }
+    }
+
+    public void connectRemoteDisplay(String address) {
+        try {
+            mDm.connectRemoteDisplay(address);
+        } catch (RemoteException ex) {
+            Log.e(TAG, "Failed to connect to Remote display.", ex);
+        }
+    }
+    
+    public void disconnectRemoteDisplay() {
+        try {
+            mDm.disconnectRemoteDisplay();
+        } catch (RemoteException ex) {
+            Log.e(TAG, "Failed to disconnect from Remote display.", ex);
+        }
+    }
+    
+    public WifiDisplayStatus getRemoteDisplayStatus() {
+        try {
+            return mDm.getRemoteDisplayStatus();
+        } catch (RemoteException ex) {
+            Log.e(TAG, "Failed to get Remote display status.", ex);
+            return new WifiDisplayStatus();
+        }
+    }
+    
+    public void renameRemoteDisplay(String address, String alias) {
+        try {
+            mDm.renameRemoteDisplay(address, alias);
+        } catch (RemoteException ex) {
+            Log.e(TAG, "Failed to get Remote display status.", ex);
+            Log.e(TAG, "Failed to rename Wifi display " + address
+                    + " with alias " + alias + ".", ex);
+        }
+    }
 
     private final class DisplayManagerCallback extends IDisplayManagerCallback.Stub {
         @Override

@@ -64,6 +64,12 @@ public final class DisplayManager {
     public static final String EXTRA_WIFI_DISPLAY_STATUS =
             "android.hardware.display.extra.WIFI_DISPLAY_STATUS";
 
+    public static final String ACTION_REMOTE_DISPLAY_STATUS_CHANGED =
+            "android.hardware.display.action.REMOTE_DISPLAY_STATUS_CHANGED";
+
+    public static final String EXTRA_REMOTE_DISPLAY_STATUS =
+            "android.hardware.display.extra.REMOTE_DISPLAY_STATUS";
+
     /**
      * Display category: Presentation displays.
      * <p>
@@ -274,6 +280,30 @@ public final class DisplayManager {
         return mGlobal.getWifiDisplayStatus();
     }
 
+    public void scanRemoteDisplays() {
+    	mGlobal.scanRemoteDisplays();
+    }
+    
+    public WifiDisplayStatus getRemoteDisplayStatus() {
+    	return mGlobal.getRemoteDisplayStatus();
+    }
+    
+    public void forgetRemoteDisplay(String address) {
+    	mGlobal.forgetRemoteDisplay(address);
+    }    
+
+    public void renameRemoteDisplay(String address, String alias) {
+    	mGlobal.renameRemoteDisplay(address, alias);
+    }
+    
+    public void connectRemoteDisplay(String address) {
+    	mGlobal.connectRemoteDisplay(address);
+    }
+    
+    public void disconnectRemoteDisplay() {
+    	mGlobal.disconnectRemoteDisplay();
+    }
+    
     /**
      * Listens for changes in available display devices.
      */
