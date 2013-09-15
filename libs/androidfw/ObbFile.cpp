@@ -137,6 +137,7 @@ bool ObbFile::parseObbFile(int fd)
         actual = TEMP_FAILURE_RETRY(read(fd, footer, kFooterTagSize));
         if (actual != kFooterTagSize) {
             ALOGW("couldn't read footer signature: %s\n", strerror(errno));
+            delete[] footer;
             return false;
         }
 
@@ -144,6 +145,7 @@ bool ObbFile::parseObbFile(int fd)
         if (fileSig != kSignature) {
             ALOGW("footer didn't match magic string (expected 0x%08x; got 0x%08x)\n",
                     kSignature, fileSig);
+            delete[] footer;
             return false;
         }
 
@@ -152,14 +154,17 @@ bool ObbFile::parseObbFile(int fd)
                 || footerSize > kMaxBufSize) {
             ALOGW("claimed footer size is too large (0x%08zx; file size is 0x%08llx)\n",
                     footerSize, fileLength);
+            delete[] footer;
             return false;
         }
 
         if (footerSize < (kFooterMinSize - kFooterTagSize)) {
             ALOGW("claimed footer size is too small (0x%zx; minimum size is 0x%x)\n",
                     footerSize, kFooterMinSize - kFooterTagSize);
+            delete[] footer;
             return false;
         }
+        delete[] footer;
     }
 
     off64_t fileOffset = fileLength - footerSize - kFooterTagSize;
