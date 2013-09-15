@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2012 The Android Open Source Project
  * Copyright (C) 2013 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,37 +16,41 @@
 
 package android.hardware.display;
 
-import android.hardware.display.IDisplayManagerCallback;
-import android.hardware.display.WifiDisplay;
 import android.hardware.display.WifiDisplayStatus;
-import android.view.DisplayInfo;
-import android.hardware.display.IRemoteDisplayAdapter;
+import android.hardware.display.IDisplayDevice;
 
-/** @hide */
-interface IDisplayManager {
-    DisplayInfo getDisplayInfo(int displayId);
-    int[] getDisplayIds();
-
-    void registerCallback(in IDisplayManagerCallback callback);
-
+interface IRemoteDisplayAdapter {
     // No permissions required.
-    void scanWifiDisplays();
+    oneway void scanRemoteDisplays();
 
     // Requires CONFIGURE_WIFI_DISPLAY permission to connect to an unknown device.
     // No permissions required to connect to a known device.
-    void connectWifiDisplay(String address);
+    oneway void connectRemoteDisplay(String address);
 
     // No permissions required.
-    void disconnectWifiDisplay();
+    oneway void disconnectRemoteDisplay();
 
     // Requires CONFIGURE_WIFI_DISPLAY permission.
-    void renameWifiDisplay(String address, String alias);
+    oneway void forgetRemoteDisplay(String address);
 
     // Requires CONFIGURE_WIFI_DISPLAY permission.
-    void forgetWifiDisplay(String address);
+    oneway void renameRemoteDisplay(String address, String alias);
 
     // No permissions required.
-    WifiDisplayStatus getWifiDisplayStatus();
+    /**
+    /* @hide
+    */
+    WifiDisplayStatus getRemoteDisplayStatus();
 
-    IRemoteDisplayAdapter getRemoteDisplayAdapter();
+    oneway void registerDisplayDevice(
+                IDisplayDevice device,
+                String name,
+                int width,
+                int height,
+                float refreshRate,
+                int flags,
+                String address,
+                boolean hidden);
+
+    oneway void unregisterDisplayDevice(IDisplayDevice device);
 }
