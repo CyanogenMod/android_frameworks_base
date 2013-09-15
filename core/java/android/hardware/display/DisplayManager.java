@@ -274,6 +274,30 @@ public final class DisplayManager {
         return mGlobal.getWifiDisplayStatus();
     }
 
+    public void scanRemoteDisplays() {
+    	mGlobal.scanRemoteDisplays();
+    }
+    
+    public WifiDisplayStatus getRemoteDisplayStatus() {
+    	return mGlobal.getRemoteDisplayStatus();
+    }
+    
+    public void forgetRemoteDisplay(String address) {
+    	mGlobal.forgetRemoteDisplay(address);
+    }    
+
+    public void renameRemoteDisplay(String address, String alias) {
+    	mGlobal.renameRemoteDisplay(address, alias);
+    }
+    
+    public void connectRemoteDisplay(String address) {
+    	mGlobal.connectRemoteDisplay(address);
+    }
+    
+    public void disconnectRemoteDisplay() {
+    	mGlobal.disconnectRemoteDisplay();
+    }
+    
     /**
      * Listens for changes in available display devices.
      */
