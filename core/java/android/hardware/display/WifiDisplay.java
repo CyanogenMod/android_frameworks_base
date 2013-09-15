@@ -33,6 +33,7 @@ public final class WifiDisplay implements Parcelable {
     private final String mDeviceAddress;
     private final String mDeviceName;
     private final String mDeviceAlias;
+    private final boolean mHidden;
 
     public static final WifiDisplay[] EMPTY_ARRAY = new WifiDisplay[0];
 
@@ -50,6 +51,10 @@ public final class WifiDisplay implements Parcelable {
     };
 
     public WifiDisplay(String deviceAddress, String deviceName, String deviceAlias) {
+        this(deviceAddress, deviceName, deviceAlias, false);
+    }
+
+    public WifiDisplay(String deviceAddress, String deviceName, String deviceAlias, boolean hidden) {
         if (deviceAddress == null) {
             throw new IllegalArgumentException("deviceAddress must not be null");
         }
@@ -60,6 +65,7 @@ public final class WifiDisplay implements Parcelable {
         mDeviceAddress = deviceAddress;
         mDeviceName = deviceName;
         mDeviceAlias = deviceAlias;
+        mHidden = hidden;
     }
 
     /**
@@ -93,6 +99,10 @@ public final class WifiDisplay implements Parcelable {
      */
     public String getFriendlyDisplayName() {
         return mDeviceAlias != null ? mDeviceAlias : mDeviceName;
+    }
+
+    public boolean isHidden() {
+        return mHidden;
     }
 
     @Override
