@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2012 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ import android.hardware.display.IDisplayManagerCallback;
 import android.hardware.display.WifiDisplay;
 import android.hardware.display.WifiDisplayStatus;
 import android.view.DisplayInfo;
+import android.hardware.display.IDisplayAdapterListener;
 
 /** @hide */
 interface IDisplayManager {
@@ -46,4 +48,25 @@ interface IDisplayManager {
 
     // No permissions required.
     WifiDisplayStatus getWifiDisplayStatus();
+
+    // No permissions required.
+    void scanRemoteDisplays();
+
+    // Requires CONFIGURE_WIFI_DISPLAY permission to connect to an unknown device.
+    // No permissions required to connect to a known device.
+    void connectRemoteDisplay(String address);
+
+    // No permissions required.
+    void disconnectRemoteDisplay();
+
+    IDisplayAdapterListener getDisplayAdapterListener();
+
+    // Requires CONFIGURE_WIFI_DISPLAY permission.
+    void forgetRemoteDisplay(String address);
+
+    // Requires CONFIGURE_WIFI_DISPLAY permission.
+    void renameRemoteDisplay(String address, String alias);
+
+    // No permissions required.
+    WifiDisplayStatus getRemoteDisplayStatus();
 }
