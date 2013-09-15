@@ -20,6 +20,7 @@ import android.hardware.display.IDisplayManagerCallback;
 import android.hardware.display.WifiDisplay;
 import android.hardware.display.WifiDisplayStatus;
 import android.view.DisplayInfo;
+import android.hardware.display.IDisplayAdapterListener;
 
 /** @hide */
 interface IDisplayManager {
@@ -46,4 +47,23 @@ interface IDisplayManager {
 
     // No permissions required.
     WifiDisplayStatus getWifiDisplayStatus();
+
+    // No permissions required.
+    void scanRemoteDisplays();
+
+    // Requires CONFIGURE_WIFI_DISPLAY permission to connect to an unknown device.
+    // No permissions required to connect to a known device.
+    void connectRemoteDisplay(String address);
+
+    // No permissions required.
+    void disconnectRemoteDisplay();
+
+    // Requires CONFIGURE_WIFI_DISPLAY permission.
+    void forgetRemoteDisplay(String address);
+
+    // Requires CONFIGURE_WIFI_DISPLAY permission.
+    void renameRemoteDisplay(String address, String alias);
+
+    // No permissions required.
+    WifiDisplayStatus getRemoteDisplayStatus();
 }
