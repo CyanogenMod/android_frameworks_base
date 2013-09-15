@@ -354,12 +354,16 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                          if (currentChannel >= 0 &&
                               (currentChannel < startSafeChannel ||
                                currentChannel > endSafeChannel)) {
-                               Slog.d(TAG, "P2P GO is operating on unsafe channel! Terminate!");
-                               mP2pStateMachine.mWifiNative.p2pGroupRemove(
+                               //currently RIL passes only 2.4G channels so if the current operating
+                               //channel is 5G channel, do not restart P2P GO.
+                               if (currentChannel >= 1 && currentChannel <=14) {
+                                  Slog.d(TAG, "P2P GO is operating on unsafe channel! Terminate!");
+                                  mP2pStateMachine.mWifiNative.p2pGroupRemove(
                                              mP2pStateMachine.mGroup.getInterface());
-                               if (mAutonomousGroup)
-                                   mP2pStateMachine.mWifiNative.p2pGroupAddOnSpecifiedFreq(
+                                  if (mAutonomousGroup)
+                                      mP2pStateMachine.mWifiNative.p2pGroupAddOnSpecifiedFreq(
                                                        channelToFrequency(startSafeChannel));
+                               }
                           }
 
                      }

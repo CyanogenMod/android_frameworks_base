@@ -745,8 +745,12 @@ public class WifiStateMachine extends StateMachine {
                          if (currentChannel >= 0 &&
                             (currentChannel < startSafeChannel ||
                              currentChannel > endSafeChannel)) {
-                             Log.e(TAG, "Operating on restricted channel! Restart SAP");
-                             restartSoftApIfOn();
+                             //currently RIL passes only 2.4G channels so if the current operating
+                             // channel is 5G channel, do not restart SAP.
+                             if (currentChannel >= 1 &&  currentChannel <=14) {
+                                 Log.e(TAG, "Operating on restricted channel! Restart SAP");
+                                 restartSoftApIfOn();
+                             }
                          }
                      }
                  }
