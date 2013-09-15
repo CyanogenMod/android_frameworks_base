@@ -625,9 +625,10 @@ public class KeyguardViewMediator {
             } else if (mShowing) {
                 notifyScreenOffLocked();
                 resetStateLocked(null);
-            } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT
-                   || (why == WindowManagerPolicy.OFF_BECAUSE_OF_USER && !lockImmediately)) {
-                doKeyguardLaterLocked();
+	    } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT) {
+                doKeyguardLaterLockedFromTimeout();
+            } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_USER && !lockImmediately) {
+                doKeyguardLaterLockedFromUser();
             } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_PROX_SENSOR) {
                 // Do not enable the keyguard if the prox sensor forced the screen off.
             } else {
@@ -636,17 +637,25 @@ public class KeyguardViewMediator {
         }
     }
 
-    private void doKeyguardLaterLocked() {
+    private void doKeyguardLaterLockedFromTimeout() {
+	final ContentResolver cr = mContext.getContentResolver();
+	long displayTimeout = Settings.System.getInt(cr, SCREEN_OFF_TIMEOUT,
+		KEYGUARD_DISPLAY_TIMEOUT_DELAY_DEFAULT);
+
+	doKeyguardLaterLocked(displayTimeout);
+    }
+
+    private void doKeyguardLaterLockedFromUser() {
+	doKeyguardLaterLocked(0);
+    }
+
+    private void doKeyguardLaterLocked(long policyTimeAlreadySpentUnlocked) {
         // if the screen turned off because of timeout or the user hit the power button
         // and we don't need to lock immediately, set an alarm
         // to enable it a little bit later (i.e, give the user a chance
         // to turn the screen back on within a certain window without
         // having to unlock the screen)
         final ContentResolver cr = mContext.getContentResolver();
-
-        // From DisplaySettings
-        long displayTimeout = Settings.System.getInt(cr, SCREEN_OFF_TIMEOUT,
-                KEYGUARD_DISPLAY_TIMEOUT_DELAY_DEFAULT);
 
         // From SecuritySettings
         final long lockAfterTimeout = Settings.Secure.getInt(cr,
@@ -672,8 +681,8 @@ public class KeyguardViewMediator {
         long timeout;
         if (policyTimeout > 0) {
             // policy in effect. Make sure we don't go beyond policy limit.
-            displayTimeout = Math.max(displayTimeout, 0); // ignore negative values
-            timeout = Math.min(policyTimeout - displayTimeout, lockAfterTimeout);
+            policyTimeAlreadySpentUnlocked = Math.max(policyTimeAlreadySpentUnlocked, 0); // ignore negative values
+            timeout = Math.min(policyTimeout - policyTimeAlreadySpentUnlocked, lockAfterTimeout);
         } else {
             timeout = separateSlideLockTimeoutEnabled ? slideLockTimeoutDelay : lockAfterTimeout;
         }
@@ -746,7 +755,7 @@ public class KeyguardViewMediator {
     public void onDreamingStarted() {
         synchronized (this) {
             if (mScreenOn && mLockPatternUtils.isSecure()) {
-                doKeyguardLaterLocked();
+                doKeyguardLaterLockedFromTimeout();
             }
         }
     }
