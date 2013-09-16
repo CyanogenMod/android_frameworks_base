@@ -298,7 +298,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     CustomTheme mCurrentTheme;
     private boolean mRecreating = false;
 
-    private boolean mBrightnessControl = true;
+    private boolean mBrightnessControl;
     private float mScreenWidth;
     private int mMinBrightness;
     int mLinger;
@@ -779,8 +779,6 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         mPowerWidget.setupWidget();
         mPowerWidget.updateVisibility();
-
-        mVelocityTracker = VelocityTracker.obtain();
 
         return mStatusBarView;
     }
@@ -2024,47 +2022,46 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
     }
 
-    private void brightnessControl(MotionEvent event)
-    {
-        if (mBrightnessControl)
-        {
-            final int action = event.getAction();
-            final int x = (int)event.getRawX();
-            final int y = (int)event.getRawY();
-            if (action == MotionEvent.ACTION_DOWN) {
-                mLinger = 0;
-                mInitialTouchX = x;
-                mInitialTouchY = y;
-                mHandler.removeCallbacks(mLongPressBrightnessChange);
-                if ((y + mViewDelta) < mNotificationHeaderHeight) {
-                    mHandler.postDelayed(mLongPressBrightnessChange,
-                            BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT);
+    private void brightnessControl(MotionEvent event) {
+        final int action = event.getAction();
+        final int x = (int) event.getRawX();
+        final int y = (int) event.getRawY();
+        if (action == MotionEvent.ACTION_DOWN) {
+            mLinger = 0;
+            mInitialTouchX = x;
+            mInitialTouchY = y;
+            mVelocityTracker = VelocityTracker.obtain();
+            mHandler.removeCallbacks(mLongPressBrightnessChange);
+            if ((y + mViewDelta) < mNotificationHeaderHeight) {
+                mHandler.postDelayed(mLongPressBrightnessChange,
+                        BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT);
+            }
+        } else if (action == MotionEvent.ACTION_MOVE) {
+            if ((y + mViewDelta) < mNotificationHeaderHeight) {
+                mVelocityTracker.computeCurrentVelocity(1000);
+                float yVel = mVelocityTracker.getYVelocity();
+                yVel = Math.abs(yVel);
+                if (yVel < 50.0f) {
+                    if (mLinger > BRIGHTNESS_CONTROL_LINGER_THRESHOLD) {
+                        adjustBrightness(x);
+                    } else {
+                        mLinger++;
+                    }
                 }
-            } else if (action == MotionEvent.ACTION_MOVE) {
-                if ((y + mViewDelta) < mNotificationHeaderHeight) {
-                    mVelocityTracker.computeCurrentVelocity(1000);
-                    float yVel = mVelocityTracker.getYVelocity();
-                    yVel = Math.abs(yVel);
-                    if (yVel < 50.0f) {
-                        if (mLinger > BRIGHTNESS_CONTROL_LINGER_THRESHOLD) {
-                            adjustBrightness(x);
-                        } else {
-                            mLinger++;
-                        }
-                    }
-                    int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
-                    if (Math.abs(x - mInitialTouchX) > touchSlop ||
-                            Math.abs(y - mInitialTouchY) > touchSlop) {
-                        mHandler.removeCallbacks(mLongPressBrightnessChange);
-                    }
-                } else {
+                int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+                if (Math.abs(x - mInitialTouchX) > touchSlop ||
+                        Math.abs(y - mInitialTouchY) > touchSlop) {
                     mHandler.removeCallbacks(mLongPressBrightnessChange);
                 }
-            } else if (action == MotionEvent.ACTION_UP
-                    || action == MotionEvent.ACTION_CANCEL) {
+            } else {
                 mHandler.removeCallbacks(mLongPressBrightnessChange);
-                mLinger = 0;
             }
+        } else if (action == MotionEvent.ACTION_UP
+                || action == MotionEvent.ACTION_CANCEL) {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+            mHandler.removeCallbacks(mLongPressBrightnessChange);
+            mLinger = 0;
         }
     }
 
@@ -2085,8 +2082,6 @@ public class PhoneStatusBar extends BaseStatusBar {
             mGestureRec.add(event);
         }
 
-        brightnessControl(event);
-
         // Cling (first-run help) handling.
         // The cling is supposed to show the first time you drag, or even tap, the status bar.
         // It should show the notification panel, then fade in after half a second, giving you
@@ -2100,6 +2095,13 @@ public class PhoneStatusBar extends BaseStatusBar {
             showCling();
         } else {
             hideCling();
+        }
+
+        if (mBrightnessControl) {
+            brightnessControl(event);
+            if ((mDisabled & StatusBarManager.DISABLE_EXPAND) != 0) {
+                return true;
+            }
         }
 
         return false;
