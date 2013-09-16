@@ -1086,6 +1086,9 @@ public class MSimNetworkController extends NetworkController {
             for (MSimSignalCluster cluster : mSimSignalClusters) {
                 refreshSignalCluster(cluster, subscription);
             }
+            for (NetworkSignalChangedCallback cb : mSignalsChangedCallbacks) {
+                notifySignalsChangedCallbacks(cb);
+            }
         }
 
         if (mLastAirplaneMode != mAirplaneMode) {
