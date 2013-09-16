@@ -1631,6 +1631,17 @@ public class PhoneStatusBar extends BaseStatusBar {
         return a;
     }
 
+    public Animator setVisibilityOnStart(
+            final Animator a, final View v, final int vis) {
+        a.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                v.setVisibility(vis);
+            }
+        });
+        return a;
+    }
+
     public Animator interpolator(TimeInterpolator ti, Animator a) {
         a.setInterpolator(ti);
         return a;
@@ -1699,13 +1710,13 @@ public class PhoneStatusBar extends BaseStatusBar {
                         .setDuration(FLIP_DURATION_IN)
                     )));
         if (mRibbonView != null && mHasQuickAccessSettings) {
-            mRibbonView.setVisibility(View.VISIBLE);
             mRibbonViewAnim = start(
-                    startDelay(FLIP_DURATION_OUT * zeroOutDelays,
-                            interpolator(mDecelerateInterpolator,
-                                    ObjectAnimator.ofFloat(mRibbonView, View.SCALE_X, 1f)
-                                    .setDuration(FLIP_DURATION_IN)
-                                    )));
+                startDelay(FLIP_DURATION_OUT * zeroOutDelays,
+                    setVisibilityOnStart(
+                        interpolator(mDecelerateInterpolator,
+                            ObjectAnimator.ofFloat(mRibbonView, View.SCALE_X, 1f)
+                                .setDuration(FLIP_DURATION_IN)),
+                        mRibbonView, View.VISIBLE)));
         }
         mFlipSettingsViewAnim = start(
             setVisibilityWhenDone(
@@ -1867,12 +1878,12 @@ public class PhoneStatusBar extends BaseStatusBar {
                 mScrollView, View.INVISIBLE));
         if (mRibbonView != null) {
             mRibbonViewAnim = start(
-                    setVisibilityWhenDone(
-                            interpolator(mAccelerateInterpolator,
-                                    ObjectAnimator.ofFloat(mRibbonView, View.SCALE_X, 0f)
-                                    )
-                                    .setDuration(FLIP_DURATION_OUT),
-                                    mRibbonView, View.GONE));
+                setVisibilityWhenDone(
+                    interpolator(mAccelerateInterpolator,
+                            ObjectAnimator.ofFloat(mRibbonView, View.SCALE_X, 0f)
+                            )
+                        .setDuration(FLIP_DURATION_OUT),
+                    mRibbonView, View.GONE));
         }
         mSettingsButtonAnim = start(
             setVisibilityWhenDone(
