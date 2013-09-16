@@ -83,7 +83,7 @@ public class StatusBarWindowView extends FrameLayout
         boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
         switch (event.getKeyCode()) {
         case KeyEvent.KEYCODE_BACK:
-            if (!down) {
+            if (!down && !event.isCanceled()) {
                 mService.animateCollapsePanels();
             }
             return true;
