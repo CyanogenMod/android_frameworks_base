@@ -18,6 +18,7 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.app.AppOpsManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -62,6 +63,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     static final boolean CHATTY = true; // additional diagnostics, but not logspew
 
     private static final int FLIGHT_MODE_ICON = R.drawable.stat_sys_signal_flightmode;
+
+    boolean mAppOpsStrictEnabled = false;
 
     // telephony
     boolean mHspaDataDistinguishable;
@@ -301,7 +304,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         if (mDemoMode) return;
         cluster.setWifiIndicators(
                 // only show wifi in the cluster if connected or if wifi-only
-                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature),
+                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature || mAppOpsStrictEnabled),
                 mWifiIconId,
                 mContentDescriptionWifi);
 
@@ -912,6 +915,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     }
 
     protected void updateWifiIcons() {
+        mAppOpsStrictEnabled = AppOpsManager.isStrictEnable();
         if (mWifiConnected) {
             mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];
             mQSWifiIconId = WifiIcons.QS_WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];
