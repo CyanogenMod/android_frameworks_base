@@ -66,6 +66,10 @@ public class NetworkController extends BroadcastReceiver {
     static final boolean DEBUG = false;
     static final boolean CHATTY = true; // additional diagnostics, but not logspew
 
+
+    static final String STRICT_PERMISSION_PROPERTY = "persist.sys.strict_op_enable";
+    boolean mAppopsStrictEnabled = false;
+
     // telephony
     boolean mHspaDataDistinguishable;
     private TelephonyManager mPhone;
@@ -355,7 +359,7 @@ public class NetworkController extends BroadcastReceiver {
     public void refreshSignalCluster(SignalCluster cluster) {
         cluster.setWifiIndicators(
                 // only show wifi in the cluster if connected or if wifi-only
-                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature),
+                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature || mAppopsStrictEnabled),
                 mWifiIconId,
                 mWifiActivityIconId,
                 mContentDescriptionWifi);
@@ -976,6 +980,7 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     protected void updateWifiIcons() {
+        mAppopsStrictEnabled = SystemProperties.getBoolean(STRICT_PERMISSION_PROPERTY, false);
         if (mWifiConnected) {
             mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];
             mQSWifiIconId = WifiIcons.QS_WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];

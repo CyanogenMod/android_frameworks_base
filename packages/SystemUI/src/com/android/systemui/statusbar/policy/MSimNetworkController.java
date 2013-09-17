@@ -223,7 +223,7 @@ public class MSimNetworkController extends NetworkController {
     public void refreshSignalCluster(MSimSignalCluster cluster, int subscription) {
         cluster.setWifiIndicators(
                 // only show wifi in the cluster if connected or if wifi-only
-                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature),
+                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature || mAppopsStrictEnabled),
                 mWifiIconId,
                 mWifiActivityIconId,
                 mContentDescriptionWifi);
