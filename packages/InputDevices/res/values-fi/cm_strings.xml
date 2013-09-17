@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">Syöttölaitteet</string>
+    <string name="keyboard_layouts_label">Android-näppäimistö</string>
+    <string name="keyboard_layout_english_uk_label">Englantilainen (UK)</string>
+    <string name="keyboard_layout_english_us_label">Englantilainen (US)</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Englantilainen (US), Dvorak-tyyli</string>
+    <string name="keyboard_layout_german_label">Saksalainen</string>
+    <string name="keyboard_layout_french_label">Ranskalainen</string>
+    <string name="keyboard_layout_french_ca_label">Ranskalainen (Kanada)</string>
+    <string name="keyboard_layout_russian_label">Venäläinen</string>
+    <string name="keyboard_layout_russian_mac_label">Venäläinen, Mac-tyyli</string>
+    <string name="keyboard_layout_spanish_label">Espanjalainen</string>
+    <string name="keyboard_layout_swiss_french_label">Sveitsiläinen (Ranska)</string>
+    <string name="keyboard_layout_swiss_german_label">Sveitsiläinen (Saksa)</string>
+    <string name="keyboard_layout_belgian">Belgialainen</string>
+    <string name="keyboard_layout_bulgarian">Bulgarialainen</string>
+    <string name="keyboard_layout_italian">Italialainen</string>
+    <string name="keyboard_layout_danish">Tanskalainen</string>
+    <string name="keyboard_layout_norwegian">Norjalainen</string>
+    <string name="keyboard_layout_swedish">Ruotsalainen</string>
+    <string name="keyboard_layout_finnish">Suomalainen</string>
+    <string name="keyboard_layout_croatian">Kroatialainen</string>
+    <string name="keyboard_layout_czech">Tsekkiläinen</string>
+    <string name="keyboard_layout_estonian">Virolainen</string>
+    <string name="keyboard_layout_hungarian">Unkarilainen</string>
+    <string name="keyboard_layout_icelandic">Islantilainen</string>
+    <string name="keyboard_layout_portuguese">Portugalilainen</string>
+    <string name="keyboard_layout_slovak">Slovakialainen</string>
+    <string name="keyboard_layout_slovenian">Slovenialainen</string>
+    <string name="keyboard_layout_turkish">Turkkilainen</string>
+    <string name="keyboard_layout_ukrainian">Ukrainalainen</string>
+    <string name="keyboard_layout_english_us_colemak_label">Englantilainen (US), Colemak-tyyli</string>
+    <string name="keyboard_layout_armenian_eastern_label">Armenialainen (itä)</string>
+</resources>
