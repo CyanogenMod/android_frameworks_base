@@ -69,4 +69,7 @@
     <string name="policydesc_enforceSelinux">Prepnúť stav zabezpečenia SELinux.</string>
     <string name="policylab_enforceMmac">vynútiť MMAC</string>
     <string name="policydesc_enforceMmac">Prepnúť stav zabezpečenia MMAC.</string>
+    <string name="permlab_sendMockSms">poslať falošné SMS správy</string>
+    <string name="permdesc_sendMockSms">Povolí aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať SMS do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať užívateľa.</string>
+    <string name="progress_nomediapresent" product="default">Nie je dostupné žiadne vymeniteľné médium\u2026</string>
 </resources>
