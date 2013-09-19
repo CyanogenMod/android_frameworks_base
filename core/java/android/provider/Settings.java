@@ -2557,32 +2557,36 @@ public final class Settings {
          * Whether to display notification messages around ring
          * @hide
          */
-        public static final String ACTIVE_DISPLAY_TEXT = "active_displaytext";
+        public static final String ACTIVE_DISPLAY_TEXT = "active_display_text";
 
         /**
          * Time to redisplay notifications on screen from when screen turns off, 0 = never redisplay
          * @hide
          */
-        public static final String ACTIVE_DISPLAY_REDISPLAY = "active_displayredisplay";
+        public static final String ACTIVE_DISPLAY_REDISPLAY = "active_display_redisplay";
 
         /**
          * Brightness of the display when displaying the active display view
          * @hide
          */
-        public static final String ACTIVE_DISPLAY_BRIGHTNESS = "active_displaybrightness";
+        public static final String ACTIVE_DISPLAY_BRIGHTNESS = "active_display_brightness";
 
         /**
          * Display active display view when device comes out of the user's pocket, etc...
          * @hide
          */
-        public static final String ACTIVE_DISPLAY_POCKET_MODE = "active_displaypocket_mode";
+        public static final String ACTIVE_DISPLAY_POCKET_MODE = "active_display_pocket_mode";
 
         /**
          * Whether to include ongoing/non-clearable notifications
          * @hide
          */
+<<<<<<< HEAD
         public static final String ACTIVE_DISPLAY_ALL_NOTIFICATIONS = "active_displayall_notifications";
 >>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
+=======
+        public static final String ACTIVE_DISPLAY_ALL_NOTIFICATIONS = "active_display_all_notifications";
+>>>>>>> 504a336... Correct active display settings naming
 
         /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
