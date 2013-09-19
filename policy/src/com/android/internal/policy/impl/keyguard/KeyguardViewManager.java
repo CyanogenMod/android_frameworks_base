@@ -193,6 +193,9 @@ public class KeyguardViewManager {
                 case KeyEvent.KEYCODE_MENU:
                     action = Settings.System.LOCKSCREEN_LONG_MENU_ACTION;
                     break;
+                case KeyEvent.KEYCODE_CAMERA:
+                    action = "CAMERA"; //TODO: make this rebindable?
+                    break;
             }
 
             if (action != null) {
@@ -255,8 +258,12 @@ public class KeyguardViewManager {
         } else if ("SOUND".equals(uri)) {
             toggleSilentMode(context);
             return true;
+        } else if ("CAMERA".equals(uri)) {
+            Intent intent = new Intent(Intent.ACTION_CAMERA_BUTTON, null);
+            mContext.sendOrderedBroadcastAsUser(intent, UserHandle.CURRENT_OR_SELF,
+                    null, null, null, 0, null, null);
+            return true;
         }
-
         return false;
     }
 
