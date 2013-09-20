@@ -896,11 +896,11 @@ public class Spinner extends AbsSpinner implements OnClickListener {
         }
 
         public int getItemViewType(int position) {
-            return 0;
+            return mAdapter == null ? 0 : mAdapter.getItemViewType(position);
         }
 
         public int getViewTypeCount() {
-            return 1;
+            return mAdapter == null ? 1 : mAdapter.getViewTypeCount();
         }
         
         public boolean isEmpty() {
