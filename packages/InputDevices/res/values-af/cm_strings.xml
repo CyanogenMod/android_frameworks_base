@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_label">Invoertoestelle</string>
+    <string name="keyboard_layouts_label">Android sleutelbord</string>
+    <string name="keyboard_layout_english_uk_label">Engels (VK)</string>
+    <string name="keyboard_layout_english_us_label">Engels (VSA)</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Engels (VSA), Dvorak styl</string>
+    <string name="keyboard_layout_german_label">Duits</string>
+    <string name="keyboard_layout_french_label">Frans</string>
+    <string name="keyboard_layout_french_ca_label">Frans (Kanada)</string>
+    <string name="keyboard_layout_russian_label">Russiese</string>
+    <string name="keyboard_layout_russian_mac_label">Russiese, Mac styl</string>
+    <string name="keyboard_layout_spanish_label">Spaans</string>
+    <string name="keyboard_layout_swiss_french_label">Switserse Frans</string>
+    <string name="keyboard_layout_swiss_german_label">Switserse Duits</string>
+    <string name="keyboard_layout_belgian">Belgiese</string>
+    <string name="keyboard_layout_bulgarian">Bulgaarse</string>
+    <string name="keyboard_layout_italian">Italiaanse</string>
+    <string name="keyboard_layout_danish">Deense</string>
+    <string name="keyboard_layout_norwegian">Noorweegse</string>
+    <string name="keyboard_layout_swedish">Sweedse</string>
+    <string name="keyboard_layout_finnish">Finse</string>
+    <string name="keyboard_layout_croatian">Kroaties</string>
+    <string name="keyboard_layout_czech">Tsjeggiese</string>
+    <string name="keyboard_layout_estonian">Estonian</string>
+    <string name="keyboard_layout_hungarian">Hongaarse</string>
+    <string name="keyboard_layout_icelandic">Yslandse</string>
+    <string name="keyboard_layout_portuguese">Portugees</string>
+    <string name="keyboard_layout_slovak">Slovak</string>
+    <string name="keyboard_layout_slovenian">Slovenia</string>
+    <string name="keyboard_layout_turkish">Turks</string>
+    <string name="keyboard_layout_ukrainian">Oekraïens</string>
+    <string name="keyboard_layout_english_us_colemak_label">Engels (VSA), Colemak styl</string>
+    <string name="keyboard_layout_armenian_eastern_label">Armenian Oosterse</string>
+</resources>
