@@ -1,11 +1,11 @@
 package com.android.systemui.quicksettings;
 
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
+import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -24,11 +24,7 @@ public class AlarmTile extends QuickSettingsTile {
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(
-                        "com.android.deskclock",
-                        "com.android.deskclock.AlarmClock"));
-                startSettingsActivity(intent);
+                startSettingsActivity(new Intent(AlarmClock.ACTION_SET_ALARM));
             }
         };
 
