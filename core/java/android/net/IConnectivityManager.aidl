@@ -46,6 +46,8 @@ interface IConnectivityManager
     NetworkInfo getNetworkInfo(int networkType);
     NetworkInfo[] getAllNetworkInfo();
 
+    NetworkInfo getProvisioningOrActiveNetworkInfo();
+
     boolean isNetworkSupported(int networkType);
 
     LinkProperties getActiveLinkProperties();
@@ -129,11 +131,17 @@ interface IConnectivityManager
 
     void captivePortalCheckComplete(in NetworkInfo info);
 
+    void captivePortalCheckCompleted(in NetworkInfo info, boolean isCaptivePortal);
+
     void supplyMessenger(int networkType, in Messenger messenger);
 
     int findConnectionTypeForIface(in String iface);
 
-    int checkMobileProvisioning(boolean sendNotification, int suggestedTimeOutMs, in ResultReceiver resultReceiver);
+    int checkMobileProvisioning(int suggestedTimeOutMs);
 
     String getMobileProvisioningUrl();
+
+    String getMobileRedirectedProvisioningUrl();
+
+    void setProvisioningNotificationVisible(boolean visible, int networkType, in String extraInfo, in String url);
 }

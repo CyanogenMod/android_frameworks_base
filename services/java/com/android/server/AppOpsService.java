@@ -380,14 +380,12 @@ public class AppOpsService extends IAppOpsService.Stub {
         HashMap<Callback, ArrayList<Pair<String, Integer>>> callbacks = null;
         synchronized (this) {
             boolean changed = false;
-            for (int i=mUidOps.size()-1; i>=0; i--) {
+            for (int i=0; i<mUidOps.size(); i++) {
                 HashMap<String, Ops> packages = mUidOps.valueAt(i);
-                Iterator<Map.Entry<String, Ops>> it = packages.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry<String, Ops> ent = it.next();
+                for (Map.Entry<String, Ops> ent : packages.entrySet()) {
                     String packageName = ent.getKey();
                     Ops pkgOps = ent.getValue();
-                    for (int j=pkgOps.size()-1; j>=0; j--) {
+                    for (int j=0; j<pkgOps.size(); j++) {
                         Op curOp = pkgOps.valueAt(j);
                         if (curOp.mode != AppOpsManager.MODE_ALLOWED) {
                             curOp.mode = AppOpsManager.MODE_ALLOWED;
@@ -396,17 +394,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                                     mOpModeWatchers.get(curOp.op));
                             callbacks = addCallbacks(callbacks, packageName, curOp.op,
                                     mPackageModeWatchers.get(packageName));
-                            if (curOp.time == 0 && curOp.rejectTime == 0) {
-                                pkgOps.removeAt(j);
-                            }
+                            pruneOp(curOp, mUidOps.keyAt(i), packageName);
                         }
                     }
-                    if (pkgOps.size() == 0) {
-                        it.remove();
-                    }
-                }
-                if (packages.size() == 0) {
-                    mUidOps.removeAt(i);
                 }
             }
             if (changed) {
