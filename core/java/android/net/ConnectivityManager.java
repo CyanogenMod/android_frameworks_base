@@ -1396,16 +1396,4 @@ public class ConnectivityManager {
         } catch (RemoteException e) {
         }
     }
-
-    /**
-     * Get the carrier provisioning url.
-     * {@hide}
-     */
-    public String getMobileProvisioningUrl() {
-        try {
-            return mService.getMobileProvisioningUrl();
-        } catch (RemoteException e) {
-        }
-        return null;
-    }
 }
