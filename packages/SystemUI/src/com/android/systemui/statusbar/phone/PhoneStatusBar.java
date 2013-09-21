@@ -361,13 +361,10 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
-<<<<<<< HEAD
-=======
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.AUTO_HIDE_STATUSBAR), false, this, UserHandle.USER_ALL);
 	    resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.APP_SIDEBAR_POSITION), false, this, UserHandle.USER_ALL);
->>>>>>> 0a0fb60... App sidebar [1/2]
             update();
         }
 
@@ -384,8 +381,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                     && Settings.System.getIntForUser(resolver,
                             Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
                             0, UserHandle.USER_CURRENT) == 1;
-<<<<<<< HEAD
-=======
+
 	    int sidebarPosition = Settings.System.getInt(
                     resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
             if (sidebarPosition != mSidebarPosition) {
@@ -397,7 +393,6 @@ public class PhoneStatusBar extends BaseStatusBar {
                 updateStatusBarVisibility();
             }
             showClock(true);
->>>>>>> 0a0fb60... App sidebar [1/2]
         }
     }
 
@@ -571,7 +566,6 @@ public class PhoneStatusBar extends BaseStatusBar {
             // no window manager? good luck with that
         }
 
-<<<<<<< HEAD
 
         mStatusBarTrigger = (TriggerView)View.inflate(context, R.layout.trigger_view, null);
         mWindowManager.addView(mStatusBarTrigger, getStatusBarTriggerViewLayoutParams());
@@ -603,7 +597,6 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
 
         addSidebarView();
-=======
         if (mRecreating) {
             //if (mAppSidebar != null)
             //    mWindowManager.removeView(mAppSidebar);
@@ -612,7 +605,6 @@ public class PhoneStatusBar extends BaseStatusBar {
         //mAppSidebar = (AppSidebar)View.inflate(context, R.layout.app_sidebar, null);
         //mWindowManager.addView(mAppSidebar, getAppSidebarLayoutParams(mSidebarPosition));
 	addSidebarView();
->>>>>>> 0a0fb60... App sidebar [1/2]
 
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;
@@ -1767,11 +1759,8 @@ public class PhoneStatusBar extends BaseStatusBar {
     final int FLIP_DURATION = (FLIP_DURATION_IN + FLIP_DURATION_OUT);
 
     Animator mScrollViewAnim, mFlipSettingsViewAnim, mNotificationButtonAnim,
-<<<<<<< HEAD
         mSettingsButtonAnim, mClearButtonAnim, mRibbonViewAnim;
-=======
         mSettingsButtonAnim, mHaloButtonAnim, mClearButtonAnim; 
->>>>>>> 7897de7... Halo (1/2)
 
     @Override
     public void animateExpandNotificationsPanel() {
@@ -2006,15 +1995,12 @@ public class PhoneStatusBar extends BaseStatusBar {
                 ObjectAnimator.ofFloat(mSettingsButton, View.ALPHA, 0f)
                     .setDuration(FLIP_DURATION),
                     mScrollView, View.INVISIBLE));
-<<<<<<< HEAD
-=======
         mPowerWidget.setVisibility(View.GONE);
 	mHaloButtonAnim = start(
             setVisibilityWhenDone(
                 ObjectAnimator.ofFloat(mHaloButton, View.ALPHA, 0f)
                     .setDuration(FLIP_DURATION),
                     mScrollView, View.INVISIBLE));
->>>>>>> 7897de7... Halo (1/2)
         mNotificationButton.setVisibility(View.VISIBLE);
         mNotificationButtonAnim = start(
             ObjectAnimator.ofFloat(mNotificationButton, View.ALPHA, 1f)
@@ -2547,12 +2533,10 @@ public class PhoneStatusBar extends BaseStatusBar {
         @Override
         public void tickerStarting() {
             mTicking = true;
-<<<<<<< HEAD
             mStatusBarContents.setVisibility(View.GONE);
             mTickerView.setVisibility(View.VISIBLE);
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_up_in, null));
             mStatusBarContents.startAnimation(loadAnim(com.android.internal.R.anim.push_up_out, null));
-=======
             if (!mHaloActive) {
                 mStatusBarContents.setVisibility(View.GONE);
                 mCenterClockLayout.setVisibility(View.GONE);
@@ -2562,18 +2546,15 @@ public class PhoneStatusBar extends BaseStatusBar {
                 mCenterClockLayout.startAnimation(loadAnim(com.android.internal.R.anim.push_up_out,
                         null));
             } 
->>>>>>> 7897de7... Halo (1/2)
         }
 
         @Override
         public void tickerDone() {
-<<<<<<< HEAD
             mStatusBarContents.setVisibility(View.VISIBLE);
             mTickerView.setVisibility(View.GONE);
             mStatusBarContents.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in, null));
             mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_down_out,
                         mTickingDoneListener));
-=======
             if (!mHaloActive) {
                 mStatusBarContents.setVisibility(View.VISIBLE);
                 mCenterClockLayout.setVisibility(View.VISIBLE);
@@ -2584,17 +2565,14 @@ public class PhoneStatusBar extends BaseStatusBar {
                 mCenterClockLayout.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in,
                         null));
             }  
->>>>>>> 7897de7... Halo (1/2)
         }
 
         @Override
         public void tickerHalting() {
-<<<<<<< HEAD
             mStatusBarContents.setVisibility(View.VISIBLE);
             mTickerView.setVisibility(View.GONE);
             mStatusBarContents.startAnimation(loadAnim(com.android.internal.R.anim.fade_in, null));
             // we do not animate the ticker away at this point, just get rid of it (b/6992707)
-=======
             if (!mHaloActive) {
                 mStatusBarContents.setVisibility(View.VISIBLE);
                 mCenterClockLayout.setVisibility(View.VISIBLE);
@@ -2603,7 +2581,6 @@ public class PhoneStatusBar extends BaseStatusBar {
                 mCenterClockLayout.startAnimation(loadAnim(com.android.internal.R.anim.fade_in, null));
                 // we do not animate the ticker away at this point, just get rid of it (b/6992707)
             } 
->>>>>>> 7897de7... Halo (1/2)
         }
     }
 
