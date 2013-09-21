@@ -282,7 +282,6 @@
                 <category android:name="android.intent.category.DESK_DOCK" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
 
         <activity android:name=".statusbar.policy.activedisplay.DummyActivity"
                   android:label=""
