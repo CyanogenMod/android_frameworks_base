@@ -676,21 +676,17 @@ public class TabletStatusBar extends BaseStatusBar implements
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         context.registerReceiver(mBroadcastReceiver, filter);
-<<<<<<< HEAD
         if (mRecreating) {
             removeSidebarView();
         } else {
             addActiveDisplayView();
         }
         addSidebarView();
-=======
 
 	if (mRecreating) {
             removeSidebarView();
         }
         addSidebarView();
-
->>>>>>> 0a0fb60... App sidebar [1/2]
         return sb;
     }
 
