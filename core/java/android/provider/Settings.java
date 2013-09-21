@@ -2545,7 +2545,9 @@ public final class Settings {
         * music player is active.
         * @hide
         */
-        public static final String LOCKSCREEN_MUSIC_CONTROLS = "lockscreen_music_controls";
+        
+    public static final String LOCKSCREEN_MUSIC_CONTROLS = "lockscreen_music_controls";
+        /**
          * Whether to display notifications on screen when screen is off
          * @hide
          */
