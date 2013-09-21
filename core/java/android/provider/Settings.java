@@ -2873,8 +2873,7 @@ public final class Settings {
          */
         public static final String STATUS_BAR_BATTERY = "status_bar_battery";
 
-<<<<<<< HEAD
-=======
+
  	/**
          * HALO, should default to 0 (no, do not show)
          * @hide
@@ -2894,8 +2893,6 @@ public final class Settings {
         public static final String HALO_HIDE = "halo_hide"; 
 
 	/**
-<<<<<<< HEAD
-=======
          * HALO size fraction, default is 1.0f (normal)
          * @hide
          */
@@ -2915,7 +2912,6 @@ public final class Settings {
         public static final String WE_WANT_POPUPS = "we_want_popups"; 
 
 	/**
->>>>>>> ce14c34... Floating window (1/2)
          * Sets transparency of statusbar
          * @hide
          */
@@ -2945,8 +2941,6 @@ public final class Settings {
         public static final String STATUSBAR_TOGGLES_BRIGHTNESS_LOC = "statusbar_toggles_brightness_loc"; 
 
 	/**
-<<<<<<< HEAD
-=======
          * Battery warning preferences
          *
          * 0 = show dialog + play sound (default)
@@ -3023,7 +3017,6 @@ public final class Settings {
         public static final String SCREEN_ON_NOTIFICATION_LED = "screen_on_notification_led";  
 
 	/**
->>>>>>> 0a0fb60... App sidebar [1/2]
          * Notifications Expand Behavior
          * @hide
          */
@@ -3097,7 +3090,6 @@ public final class Settings {
          */
         public static final String STATUSBAR_BATTERY_BAR_ANIMATE = "statusbar_battery_bar_animate"; 
 
->>>>>>> 7897de7... Halo (1/2)
         /**
          * Whether to show the clock in status bar
          * of the stock battery icon
