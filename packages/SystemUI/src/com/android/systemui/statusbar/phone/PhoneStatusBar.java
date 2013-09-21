@@ -86,11 +86,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-<<<<<<< HEAD
-=======
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
->>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
 import android.widget.TextView;
 
 import android.service.notification.StatusBarNotification;
@@ -545,8 +542,7 @@ public class PhoneStatusBar extends BaseStatusBar {
             // no window manager? good luck with that
         }
 
-<<<<<<< HEAD
-=======
+
         mStatusBarTrigger = (TriggerView)View.inflate(context, R.layout.trigger_view, null);
         mWindowManager.addView(mStatusBarTrigger, getStatusBarTriggerViewLayoutParams());
         if (DEBUG_TRIGGERS)
@@ -578,7 +574,6 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         addSidebarView();
 
->>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;
 
