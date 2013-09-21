@@ -99,8 +99,6 @@
     <string name="pie_phone_status_no_service">No service</string>
     <string name="pie_phone_status_airplane_mode">Airplane mode on</string>
     <string name="pie_phone_status_emergency_only">Emergency calls only</string>
-<<<<<<< HEAD
-=======
 
     <!-- Label in drop down to identify brightness slider -->
     <string name="brightness_label">Brightness</string> 
@@ -121,6 +119,4 @@
     <string name="toast_items_saved">Appbar items have been saved.</string>
     <string name="content_setup_instructions">Add items to the Appbar by long pressing any item on the right and drag it over to the Appbar.\n\nCombine items into folders by droping an item onto any existing item in the Appbar.\n\nTo remove an item simply drag it out of the \@appbar.</string>
     <string name="content_setup_dismiss">Continue</string>
-
->>>>>>> 0a0fb60... App sidebar [1/2]
 </resources>
