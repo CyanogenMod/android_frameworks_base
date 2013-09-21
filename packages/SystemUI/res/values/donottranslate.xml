@@ -22,6 +22,5 @@
     <!-- DO NOT TRANSLATE. ICU weekday format for display -->
     <string name="system_ui_weekday_pattern" translatable="false">eeee</string>
     <!-- Date format for display: should match the lockscreen in /policy.  -->
-    <string name="system_ui_date_pattern">@*android:string/system_ui_date_pattern</string>
     <string name="ad_date_pattern">eeeMMMd</string>
 </resources>
