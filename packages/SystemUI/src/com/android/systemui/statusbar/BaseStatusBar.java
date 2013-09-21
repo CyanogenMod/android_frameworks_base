@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2010 The Android Open Source Project
  *
@@ -30,11 +29,8 @@ import com.android.systemui.recent.RecentTasksLoader;
 import com.android.systemui.recent.RecentsActivity;
 import com.android.systemui.recent.TaskDescription;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
-<<<<<<< HEAD
 import com.android.systemui.statusbar.policy.PieController;
-=======
 import com.android.systemui.statusbar.policy.activedisplay.ActiveDisplayView;
->>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
 import com.android.systemui.statusbar.tablet.StatusBarPanel;
 
 import android.app.ActivityManager;
