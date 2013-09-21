@@ -221,9 +221,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     private boolean mDeviceProvisioned = false;
     private int mAutoCollapseBehaviour;
 
-<<<<<<< HEAD
     protected ActiveDisplayView mActiveDisplayView;
-=======
+
     public Ticker getTicker() {
         return mTicker;
     }
@@ -235,7 +234,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     public NotificationData getNotificationData() {
         return mNotificationData;
     } 
->>>>>>> 7897de7... Halo (1/2)
 
     public IStatusBarService getStatusBarService() {
         return mBarService;
@@ -421,9 +419,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
         }, filter);
 
-<<<<<<< HEAD
 	// Listen for HALO state
-=======
 	SidebarObserver observer = new SidebarObserver(mHandler);
         observer.observe();
 
@@ -436,7 +432,6 @@ public abstract class BaseStatusBar extends SystemUI implements
             }});
 
         // Listen for HALO state
->>>>>>> 0a0fb60... App sidebar [1/2]
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.HALO_ACTIVE), false, new ContentObserver(new Handler()) {
             @Override
