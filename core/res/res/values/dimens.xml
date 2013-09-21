@@ -351,7 +351,6 @@
     <!-- Left padding of num pad key on keyguard -->
     <dimen name="kg_num_pad_key_padding_left">10dp</dimen>
 
-<<<<<<< HEAD
     <!-- Pie service: Distance a swipe must travel to be recognized as pie swipe.
          Used by the pie service. -->
     <dimen name="pie_trigger_distance">12dp</dimen>
@@ -363,7 +362,6 @@
 
     <!-- Pie service: Thickness of the active trigger fields around the screen border -->
     <dimen name="pie_trigger_thickness">12dp</dimen>
-=======
     <!-- Font size for notification text -->
     <dimen name="glowpad_notification_font_size">12dp</dimen>
 
@@ -373,5 +371,4 @@
     <!-- Top margin for overflow notifications shown in the P.O.R.N. view -->
     <dimen name="glowpad_overflow_notifications_margin_top">48dp</dimen>
 
->>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
 </resources>
