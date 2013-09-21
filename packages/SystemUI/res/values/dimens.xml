@@ -242,10 +242,9 @@
     <dimen name="pie_navbar_radius">70dp</dimen>
     <dimen name="pie_navbar_height">85dp</dimen>
 
-<<<<<<< HEAD
     <dimen name="pie_sysinfo_radius">165dp</dimen>
     <dimen name="pie_sysinfo_height">85sp</dimen>
-=======
+
     <!-- Network stats text size -->
     <dimen name="network_stats_text_size">10dp</dimen>
 
@@ -267,9 +266,6 @@
     <!-- Active display overflow notification padding -->
     <dimen name="overflow_icon_padding">2dp</dimen>
 
-<<<<<<< HEAD
->>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
-=======
     <!-- Active display clock font size -->
     <dimen name="ad_clock_font_size">75dp</dimen>
 
@@ -278,6 +274,4 @@
 
     <!-- AM/PM size in active display -->
     <dimen name="ad_ampm_font_size">32dp</dimen>
-
->>>>>>> 4d79213... Active display: Add options for date and am/pm [1/2]
 </resources>
