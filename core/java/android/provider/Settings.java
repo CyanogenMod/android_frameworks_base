@@ -2541,13 +2541,11 @@ public final class Settings {
         public static final String LOCKSCREEN_TARGETS = "lockscreen_targets";
 
         /**
-<<<<<<< HEAD
         * Whether music controls should be shown on the lockscreen if a supporting
         * music player is active.
         * @hide
         */
         public static final String LOCKSCREEN_MUSIC_CONTROLS = "lockscreen_music_controls";
-=======
          * Whether to display notifications on screen when screen is off
          * @hide
          */
@@ -2581,12 +2579,8 @@ public final class Settings {
          * Whether to include ongoing/non-clearable notifications
          * @hide
          */
-<<<<<<< HEAD
         public static final String ACTIVE_DISPLAY_ALL_NOTIFICATIONS = "active_displayall_notifications";
->>>>>>> 0e846d1... Add active display to ChameleonOS [1/2]
-=======
         public static final String ACTIVE_DISPLAY_ALL_NOTIFICATIONS = "active_display_all_notifications";
->>>>>>> 504a336... Correct active display settings naming
 
         /**
          * Whether to display AM/PM after time when in 12h format
