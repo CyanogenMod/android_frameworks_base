@@ -280,6 +280,11 @@ public class ActiveDisplayView extends FrameLayout {
         void unobserve() {
             ActiveDisplayView.this.mContext.getContentResolver()
                     .unregisterContentObserver(this);
+            if (mDisplayNotifications) {
+                unregisterSensorListener();
+                unregisterNotificationListener();
+                unregisterBroadcastReceiver();
+            }
         }
 
         @Override
@@ -315,6 +320,16 @@ public class ActiveDisplayView extends FrameLayout {
 
             if (!mDisplayNotifications || mRedisplayTimeout <= 0) {
                 cancelRedisplayTimer();
+            }
+
+            if (mDisplayNotifications) {
+                registerNotificationListener();
+                registerSensorListener();
+                registerBroadcastReceiver();
+            } else {
+                unregisterNotificationListener();
+                unregisterSensorListener();
+                unregisterBroadcastReceiver();
             }
         }
     }
@@ -394,9 +409,6 @@ public class ActiveDisplayView extends FrameLayout {
 
     @Override protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        registerNotificationListener();
-        registerSensorListener();
-        registerBroadcastReceiver();
         mSettingsObserver.observe();
         if (mRedisplayTimeout > 0 && !isScreenOn()) updateRedisplayTimer();
     }
@@ -404,9 +416,6 @@ public class ActiveDisplayView extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        unregisterSensorListener();
-        unregisterNotificationListener();
-        unregisterBroadcastReceiver();
         mSettingsObserver.unobserve();
     }
 
