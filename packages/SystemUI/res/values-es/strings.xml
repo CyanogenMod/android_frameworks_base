@@ -200,16 +200,4 @@
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Brillo"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AUTO"</string>
     <string name="ssl_ca_cert_warning" msgid="9005954106902053641">"La red se\npuede supervisar"</string>
-
-    <string name="quick_settings_screen_sleep">Bloquear</string>
-    <string name="quick_settings_ringer_on">Sonido ON</string>
-    <string name="quick_settings_ringer_off">Sonido OFF</string>
-    <string name="quick_settings_vibration_on">Vibración ON</string>
-    <string name="quick_settings_vibration_off">Vibración OFF</string>
-    <string name="quick_settings_label_enabled">ON</string>
-    <string name="quick_settings_label_disabled">OFF</string>
-    <string name="quick_settings_ringer_normal">Sonido</string>
-    <string name="quick_settings_lockscreen">Pantalla Bloqueo</string>
-    <string name="quick_settings_network_type">Red móvil</string>
-    <string name="quick_settings_report_bug">Informar de error</string>
 </resources>
