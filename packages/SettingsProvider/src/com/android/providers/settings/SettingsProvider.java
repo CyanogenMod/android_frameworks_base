@@ -1171,7 +1171,7 @@ public class SettingsProvider extends ContentProvider {
             if (cache == null) return false;
             synchronized (cache) {
                 Bundle bundle = cache.get(name);
-                if (bundle == null) return false;
+                if (bundle == null || bundle == TOO_LARGE_TO_CACHE_MARKER) return false;
                 String oldValue = bundle.getPairValue();
                 if (oldValue == null && value == null) return true;
                 if ((oldValue == null) != (value == null)) return false;
