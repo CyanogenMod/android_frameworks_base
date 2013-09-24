@@ -1659,6 +1659,12 @@ void OpenGLRenderer::setupDraw(bool clear) {
             setScissorFromClip();
         }
         setStencilFromClip();
+#ifdef QCOM_BSP
+    } else {
+        // Disable stencil test in case setStencilFromClip()
+        // enabled the stencil test but didn't disable it
+        glDisable(GL_STENCIL_TEST);
+#endif
     }
 
     mDescription.reset();
