@@ -1593,16 +1593,6 @@ class ContextImpl extends Context {
     }
 
     @Override
-    public boolean isPrivacyGuardEnabled() {
-        try {
-            return ActivityManagerNative.getDefault().isPrivacyGuardEnabledForProcess(Binder.getCallingPid());
-        } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return false;
-    }
-
-    @Override
     public int checkPermission(String permission, int pid, int uid) {
         if (permission == null) {
             throw new IllegalArgumentException("permission is null");

@@ -2312,16 +2312,6 @@ public abstract class Context {
     public static final String APP_OPS_SERVICE = "appops";
 
     /**
-     * Determine whether the application or calling application has
-     * privacy guard. This is a privacy feature intended to permit the user
-     * to control access to personal data. Applications and content providers
-     * can check this value if they wish to honor privacy guard.
-     *
-     * @hide
-     */
-    public abstract boolean isPrivacyGuardEnabled();
-
-    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *

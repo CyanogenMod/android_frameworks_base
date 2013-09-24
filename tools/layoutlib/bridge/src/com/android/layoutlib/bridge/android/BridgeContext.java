@@ -888,12 +888,6 @@ public final class BridgeContext extends Context {
     }
 
     @Override
-    public boolean isPrivacyGuardEnabled() {
-        // pass
-        return false;
-    }
-
-    @Override
     public int checkPermission(String arg0, int arg1, int arg2) {
         // pass
         return 0;

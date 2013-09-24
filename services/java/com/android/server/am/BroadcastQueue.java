@@ -21,7 +21,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import android.app.ActivityManager;
-import android.app.ActivityManagerNative;
 import android.app.AppGlobals;
 import android.app.AppOpsManager;
 import android.content.ComponentName;
@@ -414,20 +413,6 @@ public class BroadcastQueue {
                         + " (uid " + r.callingUid + ")");
                 skip = true;
             }
-        }
-
-        try {
-            if (!skip && mService.isFilteredByPrivacyGuard(r.intent.getAction()) &&
-                    ActivityManagerNative.getDefault().isPrivacyGuardEnabledForProcess(filter.receiverList.pid)) {
-                Slog.w(TAG, "Skipping broadcast of "
-                        + r.intent.toString()
-                        + " to " + filter.receiverList.app
-                        + " (pid=" + filter.receiverList.pid
-                        + ") due to privacy guard");
-                skip = true;
-            }
-        } catch (RemoteException e) {
-            // nothing
         }
 
         if (r.appOp != AppOpsManager.OP_NONE) {
