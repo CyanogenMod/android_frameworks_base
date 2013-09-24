@@ -48,6 +48,8 @@
     <string name="quick_settings_lte_off">LTE выкл.</string>
     <string name="quick_settings_volume">Громкость</string>
     <string name="quick_settings_camera_label">Камера</string>
+    <string name="quick_settings_network_adb_disabled_label">ADB по сети выкл.</string>
+    <string name="quick_settings_network_adb_enabled_label">ADB по сети</string>
     <string name="quick_settings_expanded_desktop">Расширенный</string>
     <string name="quick_settings_expanded_desktop_off">Обычный</string>
     <string name="navbar_dialog_title">Выберите действие</string>
