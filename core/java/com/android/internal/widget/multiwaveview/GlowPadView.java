@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Modifications Copyright (C) 2013 The NamelessROM Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.UserHandle;
@@ -123,6 +126,10 @@ public class GlowPadView extends View {
     private boolean mDragging;
     private int mNewTargetResources;
     private ArrayList<TargetDrawable> mNewTargetDrawables;
+
+    private Paint mArcPaint;
+    private RectF mArcRect;
+    private float mArcAngle = 0f;
 
     private class AnimationBundle extends ArrayList<Tweener> {
         private static final long serialVersionUID = 0xA84D78726F127468L;
@@ -278,6 +285,14 @@ public class GlowPadView extends View {
         mPointCloud = new PointCloud(pointDrawable);
         mPointCloud.makePointCloud(mInnerRadius, mOuterRadius);
         mPointCloud.glowManager.setRadius(mGlowRadius);
+
+        mArcPaint = new Paint();
+        mArcPaint.setStrokeWidth(10.0f);
+        mArcPaint.setStyle(Paint.Style.STROKE);
+        mArcRect = new RectF(mHandleDrawable.getPositionX() - mHandleDrawable.getWidth()/2,
+                                 mHandleDrawable.getPositionY() - mHandleDrawable.getHeight()/2,
+                                 mHandleDrawable.getPositionX() + mHandleDrawable.getWidth()/2,
+                                 mHandleDrawable.getPositionY() + mHandleDrawable.getHeight()/2);
     }
 
     private int getResourceId(TypedArray a, int id) {
@@ -1253,6 +1268,15 @@ public class GlowPadView extends View {
             }
         }
         mHandleDrawable.draw(canvas);
+
+        if (mArcAngle > 0 && mHandleDrawable.getAlpha() > 0) {
+            mArcRect.set(mHandleDrawable.getPositionX() - mHandleDrawable.getWidth()/3,
+                    mHandleDrawable.getPositionY() - mHandleDrawable.getHeight()/3,
+                    mHandleDrawable.getPositionX() + mHandleDrawable.getWidth()/3,
+                    mHandleDrawable.getPositionY() + mHandleDrawable.getHeight()/3);
+
+            canvas.drawArc(mArcRect, -90, mArcAngle, false, mArcPaint);
+        }
     }
 
     public void setOnTriggerListener(OnTriggerListener listener) {
@@ -1439,5 +1463,10 @@ public class GlowPadView extends View {
             mHandleDrawable = new TargetDrawable(res, 0);
         }
         mHandleDrawable.setState(TargetDrawable.STATE_INACTIVE);
+    }
+
+    public void setArc(float angle, int color) {
+        mArcAngle = angle;
+        mArcPaint.setColor(color);
     }
 }
