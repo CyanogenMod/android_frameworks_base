@@ -1449,6 +1449,13 @@ public class AudioService extends IAudioService.Stub {
         if ((ringerMode == AudioManager.RINGER_MODE_VIBRATE) && !mHasVibrator) {
             ringerMode = AudioManager.RINGER_MODE_SILENT;
         }
+
+        if ((ringerMode == AudioManager.RINGER_MODE_SILENT) ||
+            (ringerMode == AudioManager.RINGER_MODE_VIBRATE))
+            SystemProperties.set("persist.sys.silent", "1");
+        else
+            SystemProperties.set("persist.sys.silent", "0");
+
         if (ringerMode != getRingerMode()) {
             setRingerModeInt(ringerMode, true);
             // Send sticky broadcast
