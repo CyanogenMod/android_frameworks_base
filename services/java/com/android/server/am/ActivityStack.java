@@ -1308,6 +1308,10 @@ final class ActivityStack {
         ActivityRecord r;
         boolean behindFullscreen = false;
         for (; i>=0; i--) {
+            // To make sure index is valid as there might be the case when size of
+            // the history stack gets decremented within this for loop.
+            if (i >= mHistory.size())
+                continue;
             r = mHistory.get(i);
             if (DEBUG_VISBILITY) Slog.v(
                     TAG, "Make visible? " + r + " finishing=" + r.finishing
