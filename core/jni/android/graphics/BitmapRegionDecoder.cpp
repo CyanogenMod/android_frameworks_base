@@ -158,6 +158,11 @@ static jobject nativeNewInstanceFromStream(JNIEnv* env, jobject clazz,
         // for now we don't allow shareable with java inputstreams
         SkMemoryStream *mStream = buildSkMemoryStream(stream);
         largeBitmap = doBuildTileIndex(env, mStream);
+        // release the resources when decoding fails
+        if (largeBitmap == NULL) {
+            delete(mStream);
+            mStream = NULL;
+        }
         stream->unref();
     }
     return largeBitmap;
