@@ -39,4 +39,5 @@
     <color name="batterymeter_low">#FFFF0000</color>
     <color name="batterymeter_full">#FFFFFFFF</color>
     <color name="status_bar_clock_color">#FFFFFFFF</color>
+    <color name="status_bar_traffic_color">#FFFFFFFF</color>
 </resources>

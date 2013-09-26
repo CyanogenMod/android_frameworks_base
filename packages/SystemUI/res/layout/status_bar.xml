@@ -76,7 +76,16 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <LinearLayout android:id="@+id/statusIcons"
+            <com.android.systemui.statusbar.policy.Traffic
+                android:id="@+id/traffic"
+                android:textAppearance="@style/TextAppearance.StatusBar.Traffic"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:layout_marginRight="4dp"
+                android:gravity="left|center_vertical"/>
+
+           <LinearLayout android:id="@+id/statusIcons"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
