@@ -461,6 +461,10 @@ public class DialogFragment extends Fragment
             return;
         }
 
+        if (mDialog == null) {
+            return;
+        }
+
         View view = getView();
         if (view != null) {
             if (view.getParent() != null) {
