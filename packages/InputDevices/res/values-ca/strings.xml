@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_label">Dispositius d\'entrada</string>
+    <string name="keyboard_layouts_label">Teclat Android</string>
+    <string name="keyboard_layout_english_uk_label">Anglès (UK)</string>
+    <string name="keyboard_layout_english_us_label">Anglès (EEUU)</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Anglès (EEUU), estil Dvorak</string>
+    <string name="keyboard_layout_german_label">Alemany</string>
+    <string name="keyboard_layout_french_label">Francès</string>
+    <string name="keyboard_layout_french_ca_label">Francès (Canadà)</string>
+    <string name="keyboard_layout_russian_label">Rus</string>
+    <string name="keyboard_layout_russian_mac_label">Rus, estil Mac</string>
+    <string name="keyboard_layout_spanish_label">Espanyol</string>
+    <string name="keyboard_layout_swiss_french_label">Suís Francès</string>
+    <string name="keyboard_layout_swiss_german_label">Suís Alemany</string>
+    <string name="keyboard_layout_belgian">Belga</string>
+    <string name="keyboard_layout_bulgarian">Búlgar</string>
+    <string name="keyboard_layout_italian">Italià</string>
+    <string name="keyboard_layout_danish">Danès</string>
+    <string name="keyboard_layout_norwegian">Noruec</string>
+    <string name="keyboard_layout_swedish">Suec</string>
+    <string name="keyboard_layout_finnish">Finès</string>
+    <string name="keyboard_layout_croatian">Croat</string>
+    <string name="keyboard_layout_czech">Txec</string>
+    <string name="keyboard_layout_estonian">Estoni</string>
+    <string name="keyboard_layout_hungarian">Hongarès</string>
+    <string name="keyboard_layout_icelandic">Islandès</string>
+    <string name="keyboard_layout_portuguese">Portuguès</string>
+    <string name="keyboard_layout_slovak">Eslovac</string>
+    <string name="keyboard_layout_slovenian">Eslovè</string>
+    <string name="keyboard_layout_turkish">Turc</string>
+    <string name="keyboard_layout_ukrainian">Ucraïnès</string>
+</resources>
