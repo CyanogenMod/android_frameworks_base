@@ -39,8 +39,9 @@ interface ITelephonyRegistryMSim {
     void notifyDataActivity(int state);
     void notifyDataConnection(int state, boolean isDataConnectivityPossible,
             String reason, String apn, String apnType, in LinkProperties linkProperties,
-            in LinkCapabilities linkCapabilities, int networkType, boolean roaming);
-    void notifyDataConnectionFailed(String reason, String apnType);
+            in LinkCapabilities linkCapabilities, int networkType, boolean roaming,
+            int subscription);
+    void notifyDataConnectionFailed(String reason, String apnType, int subscription);
     void notifyCellLocation(in Bundle cellLocation, in int subscription);
     void notifyOtaspChanged(in int otaspMode);
     void notifyCellInfo(in List<CellInfo> cellInfo, in int subscription);
