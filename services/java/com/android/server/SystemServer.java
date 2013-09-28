@@ -851,7 +851,7 @@ class ServerThread extends Thread {
                     com.android.internal.R.bool.config_allowPieService)) {
                 try {
                     Slog.i(TAG, "Pie Delivery Service");
-                    pieService = new PieService(context, wm, inputManager);
+                    pieService = new PieService(context, inputManager);
                     ServiceManager.addService("pieservice", pieService);
                 } catch (Throwable e) {
                     Slog.e(TAG, "Failure starting Pie Delivery Service Service", e);
