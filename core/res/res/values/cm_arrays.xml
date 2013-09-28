@@ -88,5 +88,6 @@
         <item>Trying to turn on/off Wifi</item>
         <item>Trying to turn on/off bluetooth</item>
         <item>Trying to turn on/off mobile data</item>
+        <item>Trying to schedule device wakeup</item>
     </string-array>
 </resources>
