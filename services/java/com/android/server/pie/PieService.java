@@ -103,10 +103,11 @@ public class PieService extends IPieService.Stub {
         private boolean notifyPieActivation(int touchX, int touchY, PiePosition position) {
             if ((positions & position.FLAG) != 0) {
                 try {
-                    listener.onPieActivation(touchX, touchY, position.INDEX, 0);
                     mActive = true;
+                    listener.onPieActivation(touchX, touchY, position.INDEX, 0);
                 } catch (RemoteException e) {
                     Slog.w(TAG, "Failed to notify process, assuming it died.", e);
+                    mActive = false;
                     binderDied();
                 }
             }
