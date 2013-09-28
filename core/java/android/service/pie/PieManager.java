@@ -97,6 +97,16 @@ public class PieManager {
             return false;
         }
 
+        public boolean dropEventsUntilLift() {
+            try {
+                return mCallback.dropEventsUntilLift();
+            } catch (RemoteException e) {
+                Slog.w(TAG, "dropNextEvents failed: " + e.getMessage());
+                /* fall through */
+            }
+            return false;
+        }
+
         /**
          * Turns listening for pie activation gestures on again, after it was disabled during
          * the call to the listener.
