@@ -12,4 +12,9 @@ interface IPieHostCallback {
      * the call to the listener.
      */
     oneway void restoreListenerState();
+
+    /*
+     * Tells pie filter to drop all events till touch up
+     */
+    boolean dropEventsUntilLift();
 }
