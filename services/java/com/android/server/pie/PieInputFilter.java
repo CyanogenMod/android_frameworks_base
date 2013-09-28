@@ -67,6 +67,9 @@ import java.io.PrintWriter;
  *    mSyntheticDownTime != -1
  *    All following events will have the down time set to the synthesized ACTION_DOWN event time
  *    until an ACTION_UP or ACTION_CANCEL is encountered and the state is reset to LISTEN.
+ * 6) DROP:
+ *    All following events will be discarded. If there is an ACTION_UP, _CANCEL
+ *    we go to LISTEN state.
  * <p>
  * If you are reading this within Java Doc, you are doing something wrong ;)
  */
@@ -153,7 +156,7 @@ public class PieInputFilter implements IInputFilter {
 
     private int mDeviceId; // dispatcher only
     private enum State {
-        LISTEN, DETECTING, LOCKED, SYNTHESIZE, POSTSYNTHESIZE;
+        LISTEN, DETECTING, LOCKED, SYNTHESIZE, POSTSYNTHESIZE, DROP;
     }
     private State mState = State.LISTEN; // guarded by mLock
     private PieGestureTracker mTracker; // guarded by mLock
@@ -206,6 +209,16 @@ public class PieInputFilter implements IInputFilter {
         synchronized (mLock) {
             if (mState == State.LOCKED) {
                 mState = State.SYNTHESIZE;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean dropSequence() {
+        synchronized (mLock) {
+            if (mState == State.LOCKED) {
+                mState = State.DROP;
                 return true;
             }
         }
@@ -325,6 +338,12 @@ public class PieInputFilter implements IInputFilter {
                         mSyntheticDownTime = -1;
                     }
                     sendInputEvent(motionEvent, policyFlags);
+                    break;
+                case DROP:
+                    if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                        clearDelayedMotionEventsLocked();
+                        mState = State.LISTEN;
+                    }
                     break;
             }
         }
