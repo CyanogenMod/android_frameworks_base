@@ -54,6 +54,8 @@
     <string name="quick_settings_lte_off">LTE OFF</string>
     <string name="quick_settings_volume">Volume</string>
     <string name="quick_settings_camera_label">Fotocamera</string>
+    <string name="quick_settings_network_adb_disabled_label">Disattivato</string>
+    <string name="quick_settings_network_adb_enabled_label">Attivato</string>
     <string name="quick_settings_expanded_desktop">Esteso</string>
     <string name="quick_settings_expanded_desktop_off">Normale</string>
     <string name="quick_settings_camera_error_connect">Impossibile connettersi alla fotocamera</string>
