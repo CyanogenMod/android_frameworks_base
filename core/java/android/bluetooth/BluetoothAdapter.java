@@ -1202,6 +1202,9 @@ public final class BluetoothAdapter {
         } else if (profile == BluetoothProfile.SAP) {
             BluetoothSap sap = new BluetoothSap(context, listener);
             return true;
+        } else if (profile == BluetoothProfile.DUN) {
+            BluetoothDun dun = new BluetoothDun(context, listener);
+            return true;
         } else if (profile == BluetoothProfile.HEALTH) {
             BluetoothHealth health = new BluetoothHealth(context, listener);
             return true;
@@ -1250,6 +1253,10 @@ public final class BluetoothAdapter {
             case BluetoothProfile.SAP:
                 BluetoothSap sap = (BluetoothSap)proxy;
                 sap.close();
+                break;
+            case BluetoothProfile.DUN:
+                BluetoothDun dun = (BluetoothDun)proxy;
+                dun.close();
                 break;
             case BluetoothProfile.HEALTH:
                 BluetoothHealth health = (BluetoothHealth)proxy;
