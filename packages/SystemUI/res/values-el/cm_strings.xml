@@ -53,6 +53,8 @@
     <string name="quick_settings_lte_off">LTE ανενεργό</string>
     <string name="quick_settings_volume">Ένταση</string>
     <string name="quick_settings_camera_label">Φωτογρ. μηχανή</string>
+    <string name="quick_settings_network_adb_disabled_label">Ανενεργό</string>
+    <string name="quick_settings_network_adb_enabled_label">Ενεργό</string>
     <string name="quick_settings_expanded_desktop">Επεκταμένη</string>
     <string name="quick_settings_expanded_desktop_off">Κανονική</string>
     <string name="quick_settings_camera_error_connect">Δεν είναι δυνατή η σύνδεση με την φωτογραφ. μηχανή</string>
