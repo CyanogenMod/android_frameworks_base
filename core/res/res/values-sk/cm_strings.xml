@@ -16,14 +16,14 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="profileNameDefault">Predvolený</string>
-    <string name="profileNameWork">V práci</string>
+    <string name="profileNameWork">Práca</string>
     <string name="profileNameHome">Doma</string>
     <string name="profileNameSilent">Tichý</string>
-    <string name="profileNameNight">Nočný</string>
+    <string name="profileNameNight">Noc</string>
     <string name="profileGroupPhone">Telefón</string>
     <string name="profileGroupCalendar">Kalendár</string>
     <string name="profileGroupGmail">Gmail</string>
-    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupEmail">E-mail</string>
     <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">Iný</string>
     <string name="reboot_system" product="tablet">Reštart tabletu</string>
@@ -52,8 +52,8 @@
     <string name="app_killed_message">Aplikácia bola ukončená</string>
     <string name="global_action_reboot">Reštartovať</string>
     <string name="global_action_choose_profile">Profil</string>
-    <string name="toast_rotation_unlocked">Otočenie obrazovky odomknuté</string>
-    <string name="toast_rotation_locked">Otočenie obrazovky uzamknuté</string>
+    <string name="toast_rotation_unlocked">Otáčanie obrazovky odomknuté</string>
+    <string name="toast_rotation_locked">Otáčanie obrazovky uzamknuté</string>
     <string name="stylus_app_not_installed">Aplikácia %s nie je nainštalovaná</string>
     <string name="permlab_changePrivacyGuardState">povoliť alebo zakázať ochranu súkromia</string>
     <string name="permdesc_changePrivacyGuardState">Umožňuje aplikácii určiť, či má byť iná aplikácia spustená s ochranou súkromia. Keď je aplikácia spustená s ochranou súkromia, nemá umožnený prístup k osobným údajom ako sú kontakty, denníky hovorov, alebo správy.</string>
@@ -69,7 +69,7 @@
     <string name="policydesc_enforceSelinux">Prepnúť stav zabezpečenia SELinux.</string>
     <string name="policylab_enforceMmac">vynútiť MMAC</string>
     <string name="policydesc_enforceMmac">Prepnúť stav zabezpečenia MMAC.</string>
-    <string name="permlab_sendMockSms">poslať falošné SMS správy</string>
+    <string name="permlab_sendMockSms">posielať falošné SMS správy</string>
     <string name="permdesc_sendMockSms">Povolí aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať SMS do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať užívateľa.</string>
     <string name="progress_nomediapresent" product="default">Nie je dostupné žiadne vymeniteľné médium\u2026</string>
 </resources>
