@@ -267,6 +267,15 @@ public class KeyguardViewManager {
         }
     }
 
+            // We check for Camera key press in handleKeyDown, because
+            // it gives us "instant" unlock, when user depresses
+            // the button.
+            /*if (keyCode == KeyEvent.KEYCODE_CAMERA) {
+                if (mKeyguardView.handleCameraKey()) {
+                    return true;
+                }
+            }*/
+
     SparseArray<Parcelable> mStateContainer = new SparseArray<Parcelable>();
 
     private void maybeCreateKeyguardLocked(boolean enableScreenRotation, boolean force,
