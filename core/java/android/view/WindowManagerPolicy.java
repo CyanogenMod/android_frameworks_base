@@ -1202,4 +1202,6 @@ public interface WindowManagerPolicy {
      * Animating windows has finished
      */
     public void windowAnimationFinished();
+
+    public void toggleStatusBar();
 }
