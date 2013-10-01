@@ -4109,6 +4109,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    @Override
+    public void toggleStatusBar() {
+        if (!mStatusBar.isVisibleLw()) {
+            setStatusBarShownTemporarily(true);
+            mWindowManagerFuncs.reevaluateStatusBarVisibility();
+
+            mHandler.removeMessages(MSG_HIDE_STATUS_BAR);
+            mHandler.sendEmptyMessageDelayed(MSG_HIDE_STATUS_BAR, STATUS_BAR_HIDE_DELAY);
+        }
+    }
+
     public boolean allowAppAnimationsLw() {
         if (mKeyguard != null && mKeyguard.isVisibleLw() && !mKeyguard.isAnimatingLw()) {
             // If keyguard is currently visible, no reason to animate
