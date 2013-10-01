@@ -1327,15 +1327,15 @@
         <item>Trying to post notification</item>
         <item>Trying to access location</item>
         <item>Trying to make phone call</item>
-        <item>Trying to read SMS/MMS</item>
-        <item>Trying to write/modify SMS/MMS</item>
-        <item>Trying to receive SMS/MMS</item>
-        <item>Trying to receive SMS/MMS</item>
-        <item>Trying to receive SMS/MMS</item>
-        <item>Trying to receive SMS/MMS</item>
-        <item>Trying to send SMS/MMS</item>
-        <item>Trying to read SMS/MMS</item>
-        <item>Trying to write/modify SMS/MMS</item>
+        <item>Trying to read SMS</item>
+        <item>Trying to write/modify SMS</item>
+        <item>Trying to receive SMS</item>
+        <item>Trying to receive SMS</item>
+        <item>Trying to receive SMS</item>
+        <item>Trying to receive SMS</item>
+        <item>Trying to send SMS</item>
+        <item>Trying to read SMS</item>
+        <item>Trying to write/modify SMS</item>
         <item>Trying to modify settings</item>
         <item>Trying to draw on top</item>
         <item>Trying to access notifications</item>
@@ -1359,5 +1359,8 @@
         <item>Trying to turn on/off Wifi</item>
         <item>Trying to turn on/off bluetooth</item>
         <item>Trying to turn on/off mobile data</item>
+        <item>Trying to send MMS</item>
+        <item>Trying to read MMS</item>
+        <item>Trying to write MMS</item>
     </string-array>
 </resources>
