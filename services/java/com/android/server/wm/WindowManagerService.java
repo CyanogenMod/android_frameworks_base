@@ -9998,6 +9998,11 @@ public class WindowManagerService extends IWindowManager.Stub
         Binder.restoreCallingIdentity(origId);
     }
 
+    @Override
+    public void toggleStatusBar() throws RemoteException {
+        mPolicy.toggleStatusBar();
+    }
+
     void dumpPolicyLocked(PrintWriter pw, String[] args, boolean dumpAll) {
         pw.println("WINDOW MANAGER POLICY STATE (dumpsys window policy)");
         mPolicy.dump("    ", pw, args);

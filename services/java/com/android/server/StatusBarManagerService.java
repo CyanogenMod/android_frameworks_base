@@ -17,6 +17,8 @@
 package com.android.server;
 
 import android.app.StatusBarManager;
+import android.database.ContentObserver;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -76,6 +78,7 @@ public class StatusBarManagerService extends IStatusBarService.Stub
     int mImeBackDisposition;
     IBinder mImeToken = null;
     int mCurrentUserId;
+    boolean mUnhideStatusBarOnNotification = false;
 
     private class DisableRecord implements IBinder.DeathRecipient {
         int userId;
@@ -100,6 +103,17 @@ public class StatusBarManagerService extends IStatusBarService.Stub
                 int uid, int initialPid, String message);
     }
 
+    private ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    };
+
+    public void updateSettings() {
+        mUnhideStatusBarOnNotification = Settings.System.getInt(mContext.getContentResolver(), Settings.System.STATUS_BAR_UNHIDE_ON_NOTIFICATION, 0) == 1;
+    }
+
     /**
      * Construct the service, add the status bar view to the window manager
      */
@@ -110,6 +124,9 @@ public class StatusBarManagerService extends IStatusBarService.Stub
 
         final Resources res = context.getResources();
         mIcons.defineSlots(res.getStringArray(com.android.internal.R.array.config_statusBarIcons));
+
+        mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_UNHIDE_ON_NOTIFICATION), false, mSettingsObserver);
+        updateSettings();
     }
 
     public void setNotificationCallbacks(NotificationCallbacks listener) {
@@ -493,6 +510,12 @@ public class StatusBarManagerService extends IStatusBarService.Stub
                 try {
                     mBar.addNotification(key, notification);
                 } catch (RemoteException ex) {
+                }
+                if (mUnhideStatusBarOnNotification) {
+                    try {
+                        mWindowManager.toggleStatusBar();
+                    } catch (RemoteException e) {
+                    }
                 }
             }
             return key;
