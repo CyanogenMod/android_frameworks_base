@@ -1937,4 +1937,5 @@
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
 
+  <java-symbol type="bool" name="use_motion_accel" />
 </resources>

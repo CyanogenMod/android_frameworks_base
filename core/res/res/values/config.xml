@@ -1453,4 +1453,7 @@
 
   <!-- Force permanent menu key -->
     <bool name="config_force_permanent_menu_key">false</bool>
+
+    <!-- bool value to for enabling motion accelerometer -->
+    <bool name="use_motion_accel">false</bool>
 </resources>
