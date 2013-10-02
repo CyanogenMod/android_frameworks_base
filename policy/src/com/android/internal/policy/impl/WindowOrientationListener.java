@@ -87,8 +87,17 @@ public abstract class WindowOrientationListener {
         mHandler = handler;
         mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         mRate = rate;
-        mSensor = mSensorManager.getDefaultSensor(USE_GRAVITY_SENSOR
-                ? Sensor.TYPE_GRAVITY : Sensor.TYPE_ACCELEROMETER);
+        mSensor = null;
+
+        if (context.getResources().getBoolean(
+                                com.android.internal.R.bool.use_motion_accel) == true) {
+                mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MOTION_ACCEL);
+        }
+        if (mSensor == null) {
+                mSensor = mSensorManager.getDefaultSensor(USE_GRAVITY_SENSOR
+                                ? Sensor.TYPE_GRAVITY : Sensor.TYPE_ACCELEROMETER);
+        }
+
         if (mSensor != null) {
             // Create listener only if sensors do exist
             mSensorEventListener = new SensorEventListenerImpl();
