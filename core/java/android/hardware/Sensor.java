@@ -503,6 +503,20 @@ public final class Sensor {
     public static final String STRING_TYPE_PICK_UP_GESTURE = "android.sensor.pick_up_gesture";
 
     /**
+     * A constant describing the motion accelerometer sensor.
+     * <p>
+     * This sensor is similar to the accelerometer sensor, however it only
+     * streams data when the device is in motion, and stops streaming data
+     * when the device is stationary.
+     * Generally this kind of sensor would consume less power than the generic
+     * accelerometer sensor, and hence can be used in applications that do not
+     * require accelerometer streaming when device is stationary, such as the
+     * screen auto-rotation.
+     * {@hide}
+     */
+    public static final int TYPE_MOTION_ACCEL = 33171011;
+
+    /**
      * A constant describing all sensor types.
      */
     public static final int TYPE_ALL = -1;
