@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_quick_settings_ringer">ئاۋاز <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">تىترەش <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Cid باش ئىشلەت</string>
+    <string name="bean_dream_settings_cid_summary">بۇjellybean نىڭ ئورنىغا dream نىڭ ئىچىدە Cid باشنى ئىشلىتىدۇ</string>
+    <string name="quick_settings_profile_label">سەپلىمە ھۆججەت</string>
+    <string name="powerwidget_screen_timeout_toast">ئېكران مۆھلىتىنىڭ تەڭشىكى: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS تاقاق</string>
+    <string name="quick_settings_screen_sleep">ئۇخلات</string>
+    <string name="quick_settings_ringer_on">ئاۋاز ئوچۇق</string>
+    <string name="quick_settings_ringer_off">ئاۋاز تاقاق</string>
+    <string name="quick_settings_vibration_on">تىترىتىش ئوچۇق</string>
+    <string name="quick_settings_vibration_off">تىترىتىش تاقاق</string>
+    <string name="quick_settings_label_enabled">ئوچۇق</string>
+    <string name="quick_settings_label_disabled">تاقاق</string>
+    <string name="quick_settings_ringer_normal">ئاۋاز</string>
+    <string name="quick_settings_lockscreen">ئېكراننى قۇلۇپلا</string>
+    <string name="quick_settings_network_type">تور ھالىتى</string>
+    <string name="quick_settings_report_bug">خاتالىق دوكلاتى</string>
+    <string name="quick_settings_sync">قەدەمداش</string>
+    <string name="quick_settings_sync_off">قەدەمداش تاقاق</string>
+    <string name="quick_settings_torch">قول چىراغ</string>
+    <string name="quick_settings_torch_off">قول چىراغ تاقاق</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC تاقاق</string>
+    <string name="quick_settings_screen_timeout">ۋاقىت ھالقىش</string>
+    <string name="quick_settings_usb_tether_off_label">ئۈزۈلدى</string>
+    <string name="quick_settings_usb_tether_connected_label">تور ھەمبەھىر تاقاق</string>
+    <string name="quick_settings_usb_tether_on_label">تور ھەمبەھىر</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP تاقاق</string>
+    <string name="quick_settings_quiethours">ئۈنسىز ۋاقىت</string>
+    <string name="quick_settings_quiethours_off">ئۈنسىز ۋاقىت تاقاق</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE تاقاق</string>
+    <string name="quick_settings_volume">ئاۋاز مىقدارى</string>
+    <string name="quick_settings_camera_label">كامېرا</string>
+    <string name="quick_settings_expanded_desktop">يېيىلغان</string>
+    <string name="quick_settings_expanded_desktop_off">ئادەتتىكى</string>
+    <string name="quick_settings_camera_error_connect">كامېراغا باغلىنالمىدى</string>
+    <string name="navbar_dialog_title">تەقسىمات مەشغۇلاتىنى تاللاڭ</string>
+    <string name="navbar_home_button">باش بەت توپچا</string>
+    <string name="navbar_recent_button">يېقىنقى توپچا</string>
+    <string name="navbar_search_button">ئىزدەش توپچىسى</string>
+    <string name="navbar_back_button">قايتىش توپچىسى</string>
+    <string name="navbar_empty_button">بوش توپچا</string>
+    <string name="navbar_menu_conditional_button">تىزىملىك (ئۆزلۈكىدىن يوشۇر) توپچا</string>
+    <string name="navbar_menu_always_button">تىزىملىك (ھەمىشە كۆرسەت) توپچا</string>
+    <string name="navbar_menu_big_button">تىزىملىك توپچا</string>
+    <string name="pie_battery_status_charging">توكلاۋاتىدۇ <xliff:g id="percent">%d%%</xliff:g></string>
+    <string name="pie_battery_status_full">توكلاندى</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d%%</xliff:g>قالدى</string>
+    <string name="pie_phone_status_no_service">مۇلازىمەت يوق</string>
+    <string name="pie_phone_status_airplane_mode">ئايروپىلان ھالىتى ئوچۇق</string>
+    <string name="pie_phone_status_emergency_only">جىددىي تېلېفونلا ئۇرغىلى بولىدۇ</string>
+</resources>
