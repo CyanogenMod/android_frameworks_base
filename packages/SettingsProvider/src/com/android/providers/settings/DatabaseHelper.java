@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2013 The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +42,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.provider.Settings.Secure;
+import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -60,6 +63,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+
+import static com.android.internal.telephony.MSimConstants.MAX_PHONE_COUNT_TRI_SIM;
 
 /**
  * Database helper class for {@link SettingsProvider}.
@@ -2289,6 +2294,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             SystemProperties.get("ro.com.android.mobiledata",
                                     "true")) ? 1 : 0);
 
+            // SUB specific flags for Multisim devices
+            for (int i = 0; i < MAX_PHONE_COUNT_TRI_SIM; i++) {
+                // Mobile Data default, based on build
+                loadSetting(stmt, Settings.Global.MOBILE_DATA + i,
+                        "true".equalsIgnoreCase(
+                        SystemProperties.get("ro.com.android.mobiledata", "true")) ? 1 : 0);
+
+                // Data roaming default, based on build
+                loadSetting(stmt, Settings.Global.DATA_ROAMING + i,
+                        "true".equalsIgnoreCase(
+                        SystemProperties.get("ro.com.android.dataroaming", "true")) ? 1 : 0);
+            }
+
             loadBooleanSetting(stmt, Settings.Global.NETSTATS_ENABLED,
                     R.bool.def_netstats_enabled);
 
@@ -2349,7 +2367,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int type;
             type = SystemProperties.getInt("ro.telephony.default_network",
                         RILConstants.PREFERRED_NETWORK_MODE);
-            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, type);
+            String val = Integer.toString(type);
+            if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                val = type + "," + type;
+            }
+            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, val);
 
             // Set the preferred cdma subscription source to target desired value or default
             // value defined in CdmaSubscriptionSourceManager
