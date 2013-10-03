@@ -561,7 +561,6 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     private void recordOperationLocked(int code, int uid, String packageName, int mode) {
         int switchCode = AppOpsManager.opToSwitch(code);
-        Op op = getOpLocked(switchCode, uid, packageName, false);
         if (op != null) {
             if (mode == AppOpsManager.MODE_IGNORED) {
                 if (DEBUG) Log.d(TAG, "recordOperation: reject #" + mode + " for code "
@@ -583,25 +582,28 @@ public class AppOpsService extends IAppOpsService.Stub {
         verifyIncomingUid(uid);
         verifyIncomingOp(code);
         ArrayList<Callback> repCbs = null;
-        code = AppOpsManager.opToSwitch(code);
         synchronized (this) {
             Op op = getOpLocked(code, uid, packageName, true);
             if (op != null) {
                 // Record this mode
-                recordOperationLocked(code, uid, packageName, mode);
+                recordOperationLocked(code, uid, packageName, mode, op);
 
                 // Increase nesting for all pending startOperation requests
-                if(mode == AppOpsManager.MODE_ALLOWED) {
-                   if (op.nesting == 0) {
-                        op.time = System.currentTimeMillis();
-                        op.rejectTime = 0;
+                if(mode == AppOpsManager.MODE_ALLOWED && op.tempNesting != 0) {
+                    if (op.nesting == 0) {
                         op.duration = -1;
                     }
                     op.nesting = op.nesting + op.tempNesting;
+                    // Reset tempNesting
+                    op.tempNesting = 0;
                 }
-                // Reset tempNesting
-                op.tempNesting = 0;
+            }
 
+            int switchCode = AppOpsManager.opToSwitch(code);
+            if (switchCode !=  code)
+                op =  getOpLocked(switchCode, uid, packageName, true);
+
+            if (op != null) {
                 // Send result to all waiting client
                 op.dialogResult.notifyAll(mode);
                 op.dialogResult.mDialog = null;
@@ -711,7 +713,7 @@ public class AppOpsService extends IAppOpsService.Stub {
             switchOp = switchCode != code ? getOpLocked(ops, uid, switchCode, true, strict) : op;
             mode = switchOp.mode;
             if (mode != AppOpsManager.MODE_ASK) {
-                recordOperationLocked(code, uid, packageName, switchOp.mode);
+                recordOperationLocked(code, uid, packageName, switchOp.mode, op);
                 return switchOp.mode;
             } else {
                 res = askOperationLocked(code, uid, packageName, switchOp);
@@ -744,11 +746,9 @@ public class AppOpsService extends IAppOpsService.Stub {
             switchOp = switchCode != code ? getOpLocked(ops, uid, switchCode, true, strict) : op;
             mode = switchOp.mode;
             if (mode != AppOpsManager.MODE_ASK) {
-                recordOperationLocked(code, uid, packageName, switchOp.mode);
+                recordOperationLocked(code, uid, packageName, switchOp.mode, op);
                 if (mode == AppOpsManager.MODE_ALLOWED) {
                     if (op.nesting == 0) {
-                        op.time = System.currentTimeMillis();
-                        op.rejectTime = 0;
                         op.duration = -1;
                     }
                     op.nesting++;
