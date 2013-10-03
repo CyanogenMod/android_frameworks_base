@@ -2,6 +2,7 @@
  * Copyright (C) 2006 The Android Open Source Project
  * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  * Copyright (c) 2012, 2013. The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,6 +180,7 @@ class ServerThread {
         CommonTimeManagementService commonTimeMgmtService = null;
         InputManagerService inputManager = null;
         TelephonyRegistry telephonyRegistry = null;
+        MSimTelephonyRegistry msimTelephonyRegistry = null;
         ConsumerIrService consumerIr = null;
 
         // Create a handler thread just for the window manager to enjoy.
@@ -240,6 +242,12 @@ class ServerThread {
             Slog.i(TAG, "Telephony Registry");
             telephonyRegistry = new TelephonyRegistry(context);
             ServiceManager.addService("telephony.registry", telephonyRegistry);
+
+            if (android.telephony.MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                Slog.i(TAG, "MSimTelephony Registry");
+                msimTelephonyRegistry = new MSimTelephonyRegistry(context);
+                ServiceManager.addService("telephony.msim.registry", msimTelephonyRegistry);
+            }
 
             Slog.i(TAG, "Scheduling Policy");
             ServiceManager.addService("scheduling_policy", new SchedulingPolicyService());
@@ -1014,6 +1022,7 @@ class ServerThread {
         final AssetAtlasService atlasF = atlas;
         final InputManagerService inputManagerF = inputManager;
         final TelephonyRegistry telephonyRegistryF = telephonyRegistry;
+        final MSimTelephonyRegistry msimTelephonyRegistryF = msimTelephonyRegistry;
         final PrintManagerService printManagerF = printManager;
 
         // We now tell the activity manager it is okay to run third party
@@ -1158,6 +1167,12 @@ class ServerThread {
 
                 try {
                     if (telephonyRegistryF != null) telephonyRegistryF.systemRunning();
+                } catch (Throwable e) {
+                    reportWtf("Notifying TelephonyRegistry running", e);
+                }
+
+                try {
+                    if (msimTelephonyRegistryF != null) msimTelephonyRegistryF.systemRunning();
                 } catch (Throwable e) {
                     reportWtf("Notifying TelephonyRegistry running", e);
                 }
