@@ -71,12 +71,12 @@ class PermissionDialog extends BasePermissionDialog {
         setCancelable(false);
 
         setButton(DialogInterface.BUTTON_POSITIVE,
-                  "Allow", mHandler.obtainMessage(ACTION_ALLOWED));
+                  res.getString(com.android.internal.R.string.allow), mHandler.obtainMessage(ACTION_ALLOWED));
 
         setButton(DialogInterface.BUTTON_NEGATIVE,
-                  "Denied", mHandler.obtainMessage(ACTION_IGNORED));
+                    res.getString(com.android.internal.R.string.deny), mHandler.obtainMessage(ACTION_IGNORED));
 
-        setTitle("Permission");
+        setTitle(res.getString(com.android.internal.R.string.permission));
         WindowManager.LayoutParams attrs = getWindow().getAttributes();
         attrs.setTitle("Permission info: " + getAppName(mPackageName));
         attrs.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_SYSTEM_ERROR

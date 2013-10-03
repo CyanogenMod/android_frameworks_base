@@ -401,6 +401,7 @@
   <java-symbol type="string" name="activity_chooser_view_see_all" />
   <java-symbol type="string" name="activitychooserview_choose_application" />
   <java-symbol type="string" name="alternate_eri_file" />
+  <java-symbol type="string" name="allow" />
   <java-symbol type="string" name="alwaysUse" />
   <java-symbol type="string" name="autofill_address_line_1_label_re" />
   <java-symbol type="string" name="autofill_address_line_1_re" />
@@ -507,6 +508,7 @@
   <java-symbol type="string" name="db_wal_sync_mode" />
   <java-symbol type="string" name="decline" />
   <java-symbol type="string" name="default_text_encoding" />
+  <java-symbol type="string" name="deny" />
   <java-symbol type="string" name="description_target_unlock_tablet" />
   <java-symbol type="string" name="display_manager_built_in_display_name" />
   <java-symbol type="string" name="display_manager_hdmi_display_name" />
@@ -640,6 +642,7 @@
   <java-symbol type="string" name="orgTypeWork" />
   <java-symbol type="string" name="passwordIncorrect" />
   <java-symbol type="string" name="enablePin" />
+  <java-symbol type="string" name="permission" />
   <java-symbol type="string" name="perms_description_app" />
   <java-symbol type="string" name="perms_new_perm_prefix" />
   <java-symbol type="string" name="petabyteShort" />
