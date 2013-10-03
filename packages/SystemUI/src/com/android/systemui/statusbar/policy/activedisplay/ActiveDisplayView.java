@@ -830,10 +830,20 @@ public class ActiveDisplayView extends FrameLayout {
                                 && mOverflowNotifications.getChildCount() < MAX_OVERFLOW_ICONS) {
                             ImageView iv = new ImageView(mContext);
                             if (mOverflowNotifications.getChildCount() < (MAX_OVERFLOW_ICONS - 1)) {
-                                Context pkgContext = mContext.createPackageContext(
-                                        sbns[i].getPackageName(), Context.CONTEXT_RESTRICTED);
-                                iv.setImageDrawable(pkgContext.getResources()
-                                        .getDrawable(sbns[i].getNotification().icon));
+                                Drawable iconDrawable = null;
+                                try {
+                                    Context pkgContext = mContext.createPackageContext(
+                                            sbns[i].getPackageName(), Context.CONTEXT_RESTRICTED);
+                                    iconDrawable = pkgContext.getResources()
+                                            .getDrawable(sbns[i].getNotification().icon);
+                                } catch (NameNotFoundException nnfe) {
+                                    iconDrawable = mContext.getResources()
+                                            .getDrawable(R.drawable.ic_ad_unknown_icon);
+                                } catch (Resources.NotFoundException nfe) {
+                                    iconDrawable = mContext.getResources()
+                                            .getDrawable(R.drawable.ic_ad_unknown_icon);
+                                }
+                                iv.setImageDrawable(iconDrawable);
                                 iv.setTag(sbns[i]);
                                 if (sbns[i].getPackageName().equals(mNotification.getPackageName())
                                         && sbns[i].getId() == mNotification.getId()) {
@@ -850,7 +860,6 @@ public class ActiveDisplayView extends FrameLayout {
                         }
                     }
                 } catch (RemoteException re) {
-                } catch (NameNotFoundException nnfe) {
                 }
             }
         });
@@ -953,19 +962,22 @@ public class ActiveDisplayView extends FrameLayout {
         try {
             Context pkgContext = mContext.createPackageContext(sbn.getPackageName(), Context.CONTEXT_RESTRICTED);
             mNotificationDrawable = pkgContext.getResources().getDrawable(sbn.getNotification().icon);
-            mCurrentNotificationIcon.setImageDrawable(mNotificationDrawable);
-            setHandleText(sbn);
-            mNotification = sbn;
-            mGlowPadView.post(new Runnable() {
-                @Override
-                public void run() {
-                    updateResources();
-                    mGlowPadView.invalidate();
-                    if (updateOthers) updateOtherNotifications();
-                }
-            });
-        } catch (NameNotFoundException e) {
+        } catch (NameNotFoundException nnfe) {
+            mNotificationDrawable = mContext.getResources().getDrawable(R.drawable.ic_ad_unknown_icon);
+        } catch (Resources.NotFoundException nfe) {
+            mNotificationDrawable = mContext.getResources().getDrawable(R.drawable.ic_ad_unknown_icon);
         }
+        mCurrentNotificationIcon.setImageDrawable(mNotificationDrawable);
+        setHandleText(sbn);
+        mNotification = sbn;
+        mGlowPadView.post(new Runnable() {
+            @Override
+            public void run() {
+                updateResources();
+                mGlowPadView.invalidate();
+                if (updateOthers) updateOtherNotifications();
+            }
+        });
     }
 
     /**
