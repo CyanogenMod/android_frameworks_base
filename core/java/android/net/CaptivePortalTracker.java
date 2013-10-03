@@ -157,10 +157,6 @@ public class CaptivePortalTracker extends StateMachine {
     }
 
     private class DefaultState extends State {
-        @Override
-        public void enter() {
-            setNotificationOff();
-        }
 
         @Override
         public boolean processMessage(Message message) {
@@ -186,6 +182,7 @@ public class CaptivePortalTracker extends StateMachine {
     private class NoActiveNetworkState extends State {
         @Override
         public void enter() {
+            setNotificationOff();
             mNetworkInfo = null;
         }
 
@@ -214,11 +211,6 @@ public class CaptivePortalTracker extends StateMachine {
     }
 
     private class ActiveNetworkState extends State {
-        @Override
-        public void enter() {
-            setNotificationOff();
-        }
-
         @Override
         public boolean processMessage(Message message) {
             NetworkInfo info;
@@ -262,6 +254,8 @@ public class CaptivePortalTracker extends StateMachine {
             if (DBG) log(getName() + message.toString());
             switch (message.what) {
                 case CMD_DELAYED_CAPTIVE_CHECK:
+                    setNotificationOff();
+
                     if (message.arg1 == mDelayedCheckToken) {
                         InetAddress server = lookupHost(mServer);
                         boolean captive = server != null && isCaptivePortal(server);
@@ -340,8 +334,10 @@ public class CaptivePortalTracker extends StateMachine {
 
     private void setNotificationOff() {
         try {
-            mConnService.setProvisioningNotificationVisible(false, ConnectivityManager.TYPE_NONE,
+            if (mNetworkInfo != null) {
+                mConnService.setProvisioningNotificationVisible(false, mNetworkInfo.getType(),
                     null, null);
+            }
         } catch (RemoteException e) {
             log("setNotificationOff: " + e);
         }
