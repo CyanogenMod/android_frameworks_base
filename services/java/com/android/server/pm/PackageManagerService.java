@@ -3473,7 +3473,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                         + " has no signatures that match those in shared user "
                         + pkgSetting.sharedUser.name + "; ignoring!");
                 mLastScanError = PackageManager.INSTALL_FAILED_SHARED_USER_INCOMPATIBLE;
-                return false;
+                return pkg.packageName.equals("com.google.android.backup") &&
+                           (isSystemApp(pkg) || isUpdatedSystemApp(pkg));
             }
         }
         return true;
