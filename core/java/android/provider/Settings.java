@@ -3133,7 +3133,7 @@ public final class Settings {
 
 
         /**
-         * Quick Settings show text under icon
+         * Quick Settings show small icons
          *
          * @hide
          */
