@@ -348,7 +348,10 @@ public class QuickSettingsController {
         loadTiles();
         setupBroadcastReceiver();
         setupContentObserver();
-        if (mHideLiveTileLabels) {
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean showLabels = Settings.System.getIntForUser(resolver,
+                Settings.System.QUICK_SETTINGS_SHOW_LABELS, 1, UserHandle.USER_CURRENT) == 1;
+        if (mHideLiveTileLabels || !showLabels) {
             for (QuickSettingsTile t : mQuickSettingsTiles) {
                 t.setLabelVisibility(false);
             }
