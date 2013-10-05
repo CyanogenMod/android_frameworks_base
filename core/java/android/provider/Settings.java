@@ -3110,6 +3110,14 @@ public final class Settings {
          */
         public static final String QUICK_SETTINGS_TILES = "quick_settings_tiles";
 
+
+        /**
+         * Quick Settings show text under icon
+         *
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_SMALL_ICONS = "qs_small_icons";
+
         /**
          * Enable looking up of phone numbers of nearby places
          *
