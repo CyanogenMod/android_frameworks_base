@@ -388,12 +388,20 @@ public class QuickSettingsController {
         loadTiles();
         setupBroadcastReceiver();
         setupContentObserver();
-        if (mRibbonMode) {
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean smallIcons = Settings.System.getIntForUser(resolver,
+                Settings.System.QUICK_SETTINGS_SMALL_ICONS, 1, UserHandle.USER_CURRENT) == 1;
+        if (mRibbonMode || smallIcons) {
             for (QuickSettingsTile t : mQuickSettingsTiles) {
-                t.switchToRibbonMode();
+                if (mRibbonMode) {
+                    t.switchToRibbonMode();
+                } else {
+                    t.switchToSmallIcons();
+                }
             }
         }
     }
+
 
     void setupContentObserver() {
         ContentResolver resolver = mContext.getContentResolver();
