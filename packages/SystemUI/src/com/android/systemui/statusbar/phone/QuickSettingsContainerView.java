@@ -17,9 +17,12 @@
 package com.android.systemui.statusbar.phone;
 
 import android.animation.LayoutTransition;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +42,15 @@ public class QuickSettingsContainerView extends FrameLayout {
     private float mCellGap;
 
     private boolean mSingleRow;
+    private Context mContext;
+    private boolean mSmallIcons;
 
     public QuickSettingsContainerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.QuickSettingsContainer, 0, 0);
         mSingleRow = a.getBoolean(R.styleable.QuickSettingsContainer_singleRow, false);
         a.recycle();
+        mContext = context;
         updateResources();
     }
 
@@ -58,8 +64,14 @@ public class QuickSettingsContainerView extends FrameLayout {
 
     void updateResources() {
         Resources r = getContext().getResources();
+        ContentResolver resolver = mContext.getContentResolver();
+        mSmallIcons = Settings.System.getIntForUser(resolver,
+                Settings.System.QUICK_SETTINGS_SMALL_ICONS, 1, UserHandle.USER_CURRENT) == 1;
         mCellGap = r.getDimension(R.dimen.quick_settings_cell_gap);
         mNumColumns = r.getInteger(R.integer.quick_settings_num_columns);
+        if (mSmallIcons) {
+            mNumColumns = r.getInteger(R.integer.quick_settings_num_columns_small);
+        }
         requestLayout();
     }
 
