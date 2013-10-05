@@ -80,6 +80,22 @@ public class QuickSettingsTile implements OnClickListener {
         }
     }
 
+    public void switchToSmallIcons() {
+        TextView tv = (TextView) mTile.findViewById(R.id.text);
+        if (tv != null) {
+            tv.setVisibility(View.GONE);
+        }
+        View image = mTile.findViewById(R.id.image);
+        if (image != null) {
+            MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
+            int margin = mContext.getResources().getDimensionPixelSize(
+                    R.dimen.qs_tile_ribbon_icon_margin);
+            params.topMargin = margin + 50;
+            params.bottomMargin = margin;
+            image.setLayoutParams(params);
+        }
+    }
+
     void onPostCreate() {}
 
     public void onDestroy() {}
