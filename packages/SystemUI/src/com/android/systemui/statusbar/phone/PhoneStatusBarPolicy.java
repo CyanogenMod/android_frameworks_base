@@ -1,18 +1,18 @@
 /*
- * Copyright (C) 2008 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright (C) 2008 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 package com.android.systemui.statusbar.phone;
 
@@ -45,21 +45,22 @@ import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.telephony.cdma.TtyIntent;
 import com.android.server.am.BatteryStatsService;
 import com.android.systemui.R;
+import com.android.systemui.R.drawable;
 
 /**
- * This class contains all of the policy about which icons are installed in the status
- * bar at boot time.  It goes through the normal API for icons, even though it probably
- * strictly doesn't need to.
- */
+* This class contains all of the policy about which icons are installed in the status
+* bar at boot time. It goes through the normal API for icons, even though it probably
+* strictly doesn't need to.
+*/
 public class PhoneStatusBarPolicy {
     private static final String TAG = "PhoneStatusBarPolicy";
 
     // message codes for the handler
     private static final int EVENT_BATTERY_CLOSE = 4;
 
-    private static final int AM_PM_STYLE_NORMAL  = 0;
-    private static final int AM_PM_STYLE_SMALL   = 1;
-    private static final int AM_PM_STYLE_GONE    = 2;
+    private static final int AM_PM_STYLE_NORMAL = 0;
+    private static final int AM_PM_STYLE_SMALL = 1;
+    private static final int AM_PM_STYLE_GONE = 2;
 
     private static final int AM_PM_STYLE = AM_PM_STYLE_GONE;
 
@@ -75,7 +76,7 @@ public class PhoneStatusBarPolicy {
     private StorageManager mStorageManager;
 
 
-    // Assume it's all good unless we hear otherwise.  We don't always seem
+    // Assume it's all good unless we hear otherwise. We don't always seem
     // to get broadcasts that it *is* there.
     IccCardConstants.State mSimState = IccCardConstants.State.READY;
 
@@ -132,6 +133,11 @@ public class PhoneStatusBarPolicy {
             else if (action.equals(TtyIntent.TTY_ENABLED_CHANGE_ACTION)) {
                 updateTTY(intent);
             }
+/*add headset icon by cofface.*/
+            else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                updateHeadsetState(intent);
+            }
+//end
         }
     };
 
@@ -146,6 +152,9 @@ public class PhoneStatusBarPolicy {
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
+/*add headset icon by cofface.*/
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
+//end
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TtyIntent.TTY_ENABLED_CHANGE_ACTION);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
@@ -156,7 +165,7 @@ public class PhoneStatusBarPolicy {
                 new com.android.systemui.usb.StorageNotification(context));
 
         // TTY status
-        mService.setIcon("tty",  R.drawable.stat_sys_tty_mode, 0, null);
+        mService.setIcon("tty", R.drawable.stat_sys_tty_mode, 0, null);
         mService.setIconVisibility("tty", false);
 
         // Cdma Roaming Indicator, ERI
@@ -174,6 +183,10 @@ public class PhoneStatusBarPolicy {
         }
         mService.setIcon("bluetooth", bluetoothIcon, 0, null);
         mService.setIconVisibility("bluetooth", mBluetoothEnabled);
+/*add headset icon by cofface.*/
+        mService.setIcon("headset", R.drawable.stat_sys_headset, 0, null);
+        mService.setIconVisibility("headset", false);
+//end
 
         // Alarm clock
         mService.setIcon("alarm_clock", R.drawable.stat_sys_alarm, 0, null);
@@ -190,6 +203,14 @@ public class PhoneStatusBarPolicy {
         mService.setIconVisibility("volume", false);
         updateVolume();
     }
+
+/*add headset icon by cofface.*/
+    private final void updateHeadsetState(Intent intent) {
+        boolean mIsHeadsetOn = (intent.getIntExtra("state", 0) == 1);
+        Slog.v(TAG, "updateHeadsetState: HeadsetState: " + mIsHeadsetOn);
+        mService.setIconVisibility("headset", mIsHeadsetOn);
+    }
+//end
 
     private final void updateAlarm(Intent intent) {
         boolean alarmSet = intent.getBooleanExtra("alarmSet", false);
@@ -242,7 +263,7 @@ public class PhoneStatusBarPolicy {
             iconId = R.drawable.stat_sys_ringer_vibrate;
             contentDescription = mContext.getString(R.string.accessibility_ringer_vibrate);
         } else {
-            iconId =  R.drawable.stat_sys_ringer_silent;
+            iconId = R.drawable.stat_sys_ringer_silent;
             contentDescription = mContext.getString(R.string.accessibility_ringer_silent);
         }
 
