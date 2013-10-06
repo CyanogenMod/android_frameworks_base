@@ -212,6 +212,15 @@ public class KeyguardViewManager {
                     return true;
                 }
             }
+        } else {
+            // We check for Camera key press in handleKeyDown, because
+            // it gives us "instant" unlock, when user depresses
+            // the button.
+            if (keyCode == KeyEvent.KEYCODE_CAMERA) {
+                if (mKeyguardView.handleCameraKey()) {
+                    return true;
+                }
+            }
         }
         return false;
     }
