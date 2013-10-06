@@ -1249,6 +1249,10 @@
          config to 7. -->
     <integer name="config_deviceHardwareKeys">15</integer>
 
+    <!-- Indicates that the device has Single-stage Camera key
+         (without "Focus" state) instead of Dual-stage. -->
+    <bool name="config_singleStageCameraKey">false</bool>
+
     <!-- Maximum wallpaper width for devices with very high-res screen (1920x1200)
          the wallpaper width suggestion by the launcher may be too large for
          the GPU to handle. -->

@@ -181,6 +181,14 @@ public class KeyguardViewManager {
     public boolean handleKeyDown(int keyCode, KeyEvent event) {
         if (event.getRepeatCount() == 0) {
             mUnlockKeyDown = true;
+            // We check for Camera key press in handleKeyDown, because
+            // it gives us "instant" unlock, when user depresses
+            // the button.
+            if (keyCode == KeyEvent.KEYCODE_CAMERA) {
+                if (mKeyguardView.handleCameraKey()) {
+                    return true;
+                }
+            }
         }
         if (event.isLongPress()) {
             String action = null;
