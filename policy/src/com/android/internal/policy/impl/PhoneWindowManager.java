@@ -469,6 +469,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mSearchKeyShortcutPending;
     boolean mConsumeSearchKeyUp;
     boolean mAssistKeyLongPressed;
+    boolean mCameraLongPressed;
 
     // Tracks user-customisable behavior for certain key events
     private int mLongPressOnHomeBehavior = -1;
@@ -478,6 +479,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private int mLongPressOnAssistBehavior = -1;
     private int mPressOnAppSwitchBehavior = -1;
     private int mLongPressOnAppSwitchBehavior = -1;
+    private int mPressOnCameraBehavior = -1;
+    private int mLongPressOnCameraBehavior = -1;
 
     // support for activating the lock screen while the screen is on
     boolean mAllowLockscreenWhenOn;
@@ -652,6 +655,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_CAMERA_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_CAMERA_LONG_PRESS_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HARDWARE_KEY_REBINDING), false, this,
@@ -951,6 +960,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final KeyEvent upEvent = KeyEvent.changeAction(downEvent, KeyEvent.ACTION_UP);
 
         im.injectInputEvent(downEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
+/*        if (keyCode == KeyEvent.KEYCODE_CAMERA) {
+            KeyEvent repeatEvent = KeyEvent.changeTimeRepeat(downEvent,
+                    SystemClock.uptimeMillis(), 1, downEvent.getFlags() | KeyEvent.FLAG_LONG_PRESS);
+            im.injectInputEvent(repeatEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
+        }
+        ^ The code above seem to make the device freeze, launch wrong actions and go totally crazy.
+          It worked fine on CM10.1 codebase, though...
+*/
         im.injectInputEvent(upEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 
@@ -974,7 +991,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_SEARCH);
                 break;
             case KEY_ACTION_LAUNCH_CAMERA:
-                triggerVirtualKeypress(KeyEvent.KEYCODE_CAMERA);
+                //triggerVirtualKeypress(KeyEvent.KEYCODE_CAMERA);
+                launchCameraAction();
+                //doing it this way stops Camera button from firing shutter
+                //but at least allows other buttons to launch the Camera app.
                 break;
             default:
                 break;
@@ -1245,6 +1265,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
             mHasMenuKeyEnabled |= mPressOnAppSwitchBehavior == KEY_ACTION_MENU
                     || mLongPressOnAppSwitchBehavior == KEY_ACTION_MENU;
+        }
+        if (hasCamera) {
+            mPressOnCameraBehavior = Settings.System.getIntForUser(resolver,
+                    Settings.System.KEY_CAMERA_ACTION,
+                    KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
+            mLongPressOnCameraBehavior = Settings.System.getIntForUser(resolver,
+                    Settings.System.KEY_CAMERA_LONG_PRESS_ACTION,
+                    KEY_ACTION_LAUNCH_CAMERA, UserHandle.USER_CURRENT);
+            mHasMenuKeyEnabled |= mPressOnCameraBehavior == KEY_ACTION_MENU
+                    || mLongPressOnCameraBehavior == KEY_ACTION_MENU;
         }
     }
 
@@ -2537,6 +2567,40 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
             return -1;
+        } else if (keyCode == KeyEvent.KEYCODE_CAMERA) {
+            if (down) {
+                if (!mPreloadedRecentApps && (mPressOnCameraBehavior == KEY_ACTION_APP_SWITCH ||
+                        mLongPressOnCameraBehavior == KEY_ACTION_APP_SWITCH)) {
+                    preloadRecentApps();
+                }
+                if (repeatCount == 0) {
+                    mCameraLongPressed = false;
+                } else if (longPress) {
+                    if (!keyguardOn && mLongPressOnCameraBehavior != KEY_ACTION_NOTHING) {
+                        if (mLongPressOnCameraBehavior != KEY_ACTION_APP_SWITCH) {
+                            cancelPreloadRecentApps();
+                        }
+                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                        performKeyAction(mLongPressOnCameraBehavior);
+                        mCameraLongPressed = true;
+                    }
+                }
+                if (mCameraLongPressed) {
+                    return -1;
+                }
+            } else {
+                if (mCameraLongPressed) {
+                    mCameraLongPressed = false;
+                } else {
+                    if (mPressOnCameraBehavior != KEY_ACTION_APP_SWITCH) {
+                        cancelPreloadRecentApps();
+                    }
+                    if (!canceled && !keyguardOn) {
+                        performKeyAction(mPressOnCameraBehavior);
+                    }
+                }
+            }
+            return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (Settings.Secure.getIntForUser(mContext.getContentResolver(),
                     Settings.Secure.KILL_APP_LONGPRESS_BACK, 0, UserHandle.USER_CURRENT) == 1) {
@@ -2776,6 +2840,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 Slog.w(TAG, "No activity to handle assist action.", e);
             }
         }
+    }
+
+    private void launchCameraAction() {
+        sendCloseSystemWindows();
+        Intent intent = new Intent(Intent.ACTION_CAMERA_BUTTON, null);
+        mContext.sendOrderedBroadcastAsUser(intent, UserHandle.CURRENT_OR_SELF,
+                null, null, null, 0, null, null);
     }
 
     private SearchManager getSearchManager() {
