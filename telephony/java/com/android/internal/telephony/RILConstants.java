@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -312,6 +315,7 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_SET_DC_RT_INFO_RATE = 127;
     int RIL_REQUEST_SET_DATA_PROFILE = 128;
     int RIL_REQUEST_SHUTDOWN = 129;
+    int RIL_REQUEST_GET_DATA_CALL_PROFILE = 130;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;
