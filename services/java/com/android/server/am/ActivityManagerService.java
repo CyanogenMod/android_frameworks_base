@@ -11457,6 +11457,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                 callerPackage = null;
                 callingUid = Binder.getCallingUid();
                 callingPid = Binder.getCallingPid();
+                synchronized (mSelf.mPidsSelfLocked) {
+                    callerApp =  mPidsSelfLocked.get(callingPid);
+                }
             }
 
             userId = this.handleIncomingUser(callingPid, callingUid, userId,
