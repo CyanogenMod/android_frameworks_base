@@ -265,6 +265,18 @@ public final class InputDevice implements Parcelable {
     public static final int SOURCE_ROTARY_ENCODER = 0x00400000 | SOURCE_CLASS_NONE;
 
     /**
+     * The input source is a touch device whose motions should be interpreted as gestures.
+     *
+     * For example, an upward swipe should be treated the same as a swipe of the touchscreen.
+     * The same should apply for left, right, down swipes. Complex gestures may also be input.
+     *
+     * @see #SOURCE_CLASS_NONE
+     *
+     * @hide
+     */
+    public static final int SOURCE_GESTURE_SENSOR = 0x00800000 | SOURCE_CLASS_NONE;
+
+    /**
      * The input source is a joystick.
      * (It may also be a {@link #SOURCE_GAMEPAD}).
      *
@@ -975,6 +987,7 @@ public final class InputDevice implements Parcelable {
         appendSourceDescriptionIfApplicable(description, SOURCE_TOUCHPAD, "touchpad");
         appendSourceDescriptionIfApplicable(description, SOURCE_JOYSTICK, "joystick");
         appendSourceDescriptionIfApplicable(description, SOURCE_GAMEPAD, "gamepad");
+        appendSourceDescriptionIfApplicable(description, SOURCE_GESTURE_SENSOR, "gesture");
         description.append(" )\n");
 
         final int numAxes = mMotionRanges.size();

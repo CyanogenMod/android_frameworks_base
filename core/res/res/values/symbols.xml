@@ -2735,4 +2735,7 @@
   <java-symbol type="integer" name="wifi_hotspot_security_type" />
   <java-symbol type="string" name="def_wifi_wifihotspot_pass" />
   <java-symbol type="string" name="def_wifi_direct_name" />
+
+  <!-- Gesture Sensor -->
+  <java-symbol type="bool" name="config_enableGestureService" />
 </resources>
