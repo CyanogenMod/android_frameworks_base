@@ -246,6 +246,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/service/voice/IVoiceInteractionService.aidl \
 	core/java/android/service/voice/IVoiceInteractionSession.aidl \
 	core/java/android/service/voice/IVoiceInteractionSessionService.aidl \
+	core/java/android/service/gesture/IGestureService.aidl \
 	core/java/android/service/wallpaper/IWallpaperConnection.aidl \
 	core/java/android/service/wallpaper/IWallpaperEngine.aidl \
 	core/java/android/service/wallpaper/IWallpaperService.aidl \
