@@ -605,7 +605,8 @@ public class TabletStatusBar extends BaseStatusBar implements
                 mMSimNetworkController.addSignalCluster(mSimSignalCluster, i);
             }
         } else {
-            mSignalCluster = (SignalClusterView)sb.findViewById(R.id.signal_cluster);
+            final SignalClusterView signalCluster =
+                    (SignalClusterView)sb.findViewById(R.id.signal_cluster);
 
             mNetworkController = new NetworkController(mContext);
             mNetworkController.addSignalCluster(signalCluster);
