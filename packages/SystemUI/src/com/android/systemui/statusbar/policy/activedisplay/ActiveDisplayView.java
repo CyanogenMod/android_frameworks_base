@@ -921,7 +921,7 @@ public class ActiveDisplayView extends FrameLayout {
      * @return True if it should be used, false otherwise.
      */
     private boolean isValidNotification(StatusBarNotification sbn) {
-        return ((sbn.isClearable() || mShowAllNotifications)
+        return (!isOnCall() && (sbn.isClearable() || mShowAllNotifications)
                 && !(mHideLowPriorityNotifications && sbn.getNotification().priority < HIDE_NOTIFICATIONS_BELOW_SCORE));
     }
 
