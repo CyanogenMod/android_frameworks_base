@@ -1221,6 +1221,7 @@ protected:
             DEVICE_TYPE_TOUCH_SCREEN,
             DEVICE_TYPE_TOUCH_PAD,
             DEVICE_TYPE_TOUCH_NAVIGATION,
+            DEVICE_TYPE_GESTURE_SENSOR,
             DEVICE_TYPE_POINTER,
         };
 

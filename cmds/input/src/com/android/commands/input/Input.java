@@ -47,6 +47,7 @@ public class Input {
         put("touchpad", InputDevice.SOURCE_TOUCHPAD);
         put("touchnavigation", InputDevice.SOURCE_TOUCH_NAVIGATION);
         put("joystick", InputDevice.SOURCE_JOYSTICK);
+        put("gesture", InputDevice.SOURCE_GESTURE_SENSOR);
     }};
 
 
