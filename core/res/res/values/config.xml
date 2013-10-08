@@ -1400,6 +1400,9 @@
     <!-- Integer to configure panel auto brightness mode when changed -->
     <integer name="config_panelAutoBrightnessValue">-1</integer>
 
+    <!-- True if the gesture service should be started at system start -->
+    <bool name="config_enableGestureService">false</bool>
+
     <!-- The list of components which should be automatically disabled. -->
     <string-array name="config_disabledComponents" translatable="false">
     </string-array>

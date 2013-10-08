@@ -1837,6 +1837,9 @@
   <!-- Panel auto brightness -->
   <java-symbol type="integer" name="config_panelAutoBrightnessValue" />
 
+  <!-- Gesture Sensor -->
+  <java-symbol type="bool" name="config_enableGestureService" />
+
   <!-- Electron Beam -->
   <java-symbol type="bool" name="config_screenOffAnimation" />
 
