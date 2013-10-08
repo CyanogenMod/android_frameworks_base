@@ -78,13 +78,15 @@ public class Input {
                     return;
                 }
             } else if (command.equals("touchscreen") || command.equals("touchpad")
-                    || command.equals("touchnavigation")) {
+                    || command.equals("touchnavigation") || command.equals("gesture")) {
                 // determine input source
                 int inputSource = InputDevice.SOURCE_TOUCHSCREEN;
                 if (command.equals("touchpad")) {
                     inputSource = InputDevice.SOURCE_TOUCHPAD;
                 } else if (command.equals("touchnavigation")) {
                     inputSource = InputDevice.SOURCE_TOUCH_NAVIGATION;
+                } else if (command.equals("gesture")) {
+                    inputSource = InputDevice.SOURCE_GESTURE_SENSOR;
                 }
                 // determine subcommand
                 if (args.length > 1) {
