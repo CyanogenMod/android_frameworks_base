@@ -24,7 +24,7 @@
     <string name="powerwidget_screen_timeout_toast">Časový limit obrazovky bol nastavený na: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS vyp.</string>
-    <string name="quick_settings_screen_sleep">Spánok</string>
+    <string name="quick_settings_screen_sleep">Prejsť do spánku</string>
     <string name="quick_settings_ringer_on">Zvuk zap.</string>
     <string name="quick_settings_ringer_off">Zvuk vyp.</string>
     <string name="quick_settings_vibration_on">Vibrácie zap.</string>
@@ -56,6 +56,8 @@
     <string name="quick_settings_expanded_desktop_off">Normálna</string>
     <string name="navbar_dialog_title">Vyberte akciu na priradenie</string>
     <string name="quick_settings_camera_label">Fotoaparát</string>
+    <string name="quick_settings_network_adb_disabled_label">Zakázané</string>
+    <string name="quick_settings_network_adb_enabled_label">Povolené</string>
     <string name="quick_settings_camera_error_connect">Nemožno sa pripojiť k fotoaparátu</string>
     <string name="navbar_home_button">Tlačidlo Domov</string>
     <string name="navbar_recent_button">Tlačidlo Nedávne</string>
