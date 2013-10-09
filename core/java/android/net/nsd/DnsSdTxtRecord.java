@@ -314,7 +314,7 @@ public class DnsSdTxtRecord implements Parcelable {
         new Creator<DnsSdTxtRecord>() {
             public DnsSdTxtRecord createFromParcel(Parcel in) {
                 DnsSdTxtRecord info = new DnsSdTxtRecord();
-                in.readByteArray(info.mData);
+                info.mData = in.createByteArray();
                 return info;
             }
 

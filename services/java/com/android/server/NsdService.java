@@ -33,6 +33,7 @@ import android.os.Messenger;
 import android.os.IBinder;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Slog;
 import android.util.SparseArray;
 
@@ -656,7 +657,9 @@ public class NsdService extends INsdManager.Stub {
         try {
             //Add txtlen and txtdata
             mNativeConnector.execute("mdnssd", "register", regId, service.getServiceName(),
-                    service.getServiceType(), service.getPort());
+                    service.getServiceType(), service.getPort(),
+                    service.getTxtRecord() == null ? 0 : service.getTxtRecord().keyCount(),
+                    service.getTxtRecord() == null ? "" : Base64.encodeToString(service.getTxtRecord().getRawData(), Base64.DEFAULT));
         } catch(NativeDaemonConnectorException e) {
             Slog.e(TAG, "Failed to execute registerService " + e);
             return false;
