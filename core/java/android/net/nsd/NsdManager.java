@@ -212,15 +212,19 @@ public final class NsdManager {
 
     private Context mContext;
 
-    private static final int INVALID_LISTENER_KEY = 0;
-    private int mListenerKey = 1;
-    private final SparseArray mListenerMap = new SparseArray();
-    private final SparseArray<NsdServiceInfo> mServiceMap = new SparseArray<NsdServiceInfo>();
-    private final Object mMapLock = new Object();
+    private static final Object sThreadRefLock = new Object();
+    private static int sThreadRefCount;
 
-    private final AsyncChannel mAsyncChannel = new AsyncChannel();
-    private ServiceHandler mHandler;
-    private final CountDownLatch mConnected = new CountDownLatch(1);
+    private static final int INVALID_LISTENER_KEY = 0;
+    private static int mListenerKey = 1;
+    private static final SparseArray sListenerMap = new SparseArray();
+    private static final SparseArray<NsdServiceInfo> mServiceMap = new SparseArray<NsdServiceInfo>();
+    private static final Object sMapLock = new Object();
+
+    private static HandlerThread sHandlerThread;
+    private static AsyncChannel sAsyncChannel;
+    private static ServiceHandler sHandler;
+    private static CountDownLatch sConnected;
 
     /**
      * Create a new Nsd instance. Applications use
@@ -302,13 +306,27 @@ public final class NsdManager {
         @Override
         public void handleMessage(Message message) {
             Object listener = getListener(message.arg2);
+
+            if (listener == null) {
+                boolean needsListener = true;
+                switch (message.what) {
+                    case AsyncChannel.CMD_CHANNEL_HALF_CONNECTED:
+                    case AsyncChannel.CMD_CHANNEL_FULLY_CONNECTED:
+                    case AsyncChannel.CMD_CHANNEL_DISCONNECTED:
+                        needsListener = false;
+                        break;
+                }
+                if (needsListener) {
+                    return;
+                }
+            }
             boolean listenerRemove = true;
             switch (message.what) {
                 case AsyncChannel.CMD_CHANNEL_HALF_CONNECTED:
-                    mAsyncChannel.sendMessage(AsyncChannel.CMD_CHANNEL_FULL_CONNECTION);
+                    sAsyncChannel.sendMessage(AsyncChannel.CMD_CHANNEL_FULL_CONNECTION);
                     break;
                 case AsyncChannel.CMD_CHANNEL_FULLY_CONNECTED:
-                    mConnected.countDown();
+                    sConnected.countDown();
                     break;
                 case AsyncChannel.CMD_CHANNEL_DISCONNECTED:
                     Log.e(TAG, "Channel lost");
@@ -379,11 +397,11 @@ public final class NsdManager {
     private int putListener(Object listener, NsdServiceInfo s) {
         if (listener == null) return INVALID_LISTENER_KEY;
         int key;
-        synchronized (mMapLock) {
+        synchronized (sMapLock) {
             do {
                 key = mListenerKey++;
             } while (key == INVALID_LISTENER_KEY);
-            mListenerMap.put(key, listener);
+            sListenerMap.put(key, listener);
             mServiceMap.put(key, s);
         }
         return key;
@@ -391,30 +409,30 @@ public final class NsdManager {
 
     private Object getListener(int key) {
         if (key == INVALID_LISTENER_KEY) return null;
-        synchronized (mMapLock) {
-            return mListenerMap.get(key);
+        synchronized (sMapLock) {
+            return sListenerMap.get(key);
         }
     }
 
     private NsdServiceInfo getNsdService(int key) {
-        synchronized (mMapLock) {
+        synchronized (sMapLock) {
             return mServiceMap.get(key);
         }
     }
 
     private void removeListener(int key) {
         if (key == INVALID_LISTENER_KEY) return;
-        synchronized (mMapLock) {
-            mListenerMap.remove(key);
+        synchronized (sMapLock) {
+            sListenerMap.remove(key);
             mServiceMap.remove(key);
         }
     }
 
     private int getListenerKey(Object listener) {
-        synchronized (mMapLock) {
-            int valueIndex = mListenerMap.indexOfValue(listener);
+        synchronized (sMapLock) {
+            int valueIndex = sListenerMap.indexOfValue(listener);
             if (valueIndex != -1) {
-                return mListenerMap.keyAt(valueIndex);
+                return sListenerMap.keyAt(valueIndex);
             }
         }
         return INVALID_LISTENER_KEY;
@@ -425,16 +443,27 @@ public final class NsdManager {
      * Initialize AsyncChannel
      */
     private void init() {
-        final Messenger messenger = getMessenger();
-        if (messenger == null) throw new RuntimeException("Failed to initialize");
-        HandlerThread t = new HandlerThread("NsdManager");
-        t.start();
-        mHandler = new ServiceHandler(t.getLooper());
-        mAsyncChannel.connect(mContext, mHandler, messenger);
-        try {
-            mConnected.await();
-        } catch (InterruptedException e) {
-            Log.e(TAG, "interrupted wait at init");
+        synchronized (sThreadRefLock) {
+            if (++sThreadRefCount == 1) {
+                final Messenger messenger = getMessenger();
+                if (messenger == null) {
+                    sAsyncChannel = null;
+                    return;
+                }
+
+                sHandlerThread = new HandlerThread("NsdManager");
+                sAsyncChannel = new AsyncChannel();
+                sConnected = new CountDownLatch(1);
+
+                sHandlerThread.start();
+                sHandler = new ServiceHandler(sHandlerThread.getLooper());
+                sAsyncChannel.connect(mContext, sHandler, messenger);
+                try {
+                    sConnected.await();
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "interrupted wait at init");
+                }
+            }
         }
     }
 
@@ -466,7 +495,7 @@ public final class NsdManager {
         if (protocolType != PROTOCOL_DNS_SD) {
             throw new IllegalArgumentException("Unsupported protocol");
         }
-        mAsyncChannel.sendMessage(REGISTER_SERVICE, 0, putListener(listener, serviceInfo),
+        sAsyncChannel.sendMessage(REGISTER_SERVICE, 0, putListener(listener, serviceInfo),
                 serviceInfo);
     }
 
@@ -487,7 +516,7 @@ public final class NsdManager {
         if (listener == null) {
             throw new IllegalArgumentException("listener cannot be null");
         }
-        mAsyncChannel.sendMessage(UNREGISTER_SERVICE, 0, id);
+        sAsyncChannel.sendMessage(UNREGISTER_SERVICE, 0, id);
     }
 
     /**
@@ -528,7 +557,7 @@ public final class NsdManager {
 
         NsdServiceInfo s = new NsdServiceInfo();
         s.setServiceType(serviceType);
-        mAsyncChannel.sendMessage(DISCOVER_SERVICES, 0, putListener(listener, s), s);
+        sAsyncChannel.sendMessage(DISCOVER_SERVICES, 0, putListener(listener, s), s);
     }
 
     /**
@@ -551,7 +580,7 @@ public final class NsdManager {
         if (listener == null) {
             throw new IllegalArgumentException("listener cannot be null");
         }
-        mAsyncChannel.sendMessage(STOP_DISCOVERY, 0, id);
+        sAsyncChannel.sendMessage(STOP_DISCOVERY, 0, id);
     }
 
     /**
@@ -570,7 +599,7 @@ public final class NsdManager {
         if (listener == null) {
             throw new IllegalArgumentException("listener cannot be null");
         }
-        mAsyncChannel.sendMessage(RESOLVE_SERVICE, 0, putListener(listener, serviceInfo),
+        sAsyncChannel.sendMessage(RESOLVE_SERVICE, 0, putListener(listener, serviceInfo),
                 serviceInfo);
     }
 
@@ -592,6 +621,18 @@ public final class NsdManager {
             return mService.getMessenger();
         } catch (RemoteException e) {
             return null;
+        }
+    }
+
+    protected void finalize() throws Throwable {
+        try {
+            synchronized (sThreadRefLock) {
+                if (--sThreadRefCount == 0 && sAsyncChannel != null) {
+                    sAsyncChannel.disconnect();
+                }
+            }
+        } finally {
+            super.finalize();
         }
     }
 }
