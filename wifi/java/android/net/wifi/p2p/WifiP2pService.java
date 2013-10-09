@@ -2578,17 +2578,19 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
         mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.FAILED, null, null);
         sendP2pConnectionChangedBroadcast();
 
-        // Remove only the peer we failed to connect to so that other devices discovered
-        // that have not timed out still remain in list for connection
-        boolean peersChanged = mPeers.remove(mPeersLostDuringConnection);
-        if (mPeers.remove(mSavedPeerConfig.deviceAddress) != null) {
-            peersChanged = true;
-        }
-        if (peersChanged) {
-            sendPeersChangedBroadcast();
-        }
+        if (mAutonomousGroup == false) {
+            // Remove only the peer we failed to connect to so that other devices discovered
+            // that have not timed out still remain in list for connection
+            boolean peersChanged = mPeers.remove(mPeersLostDuringConnection);
+            if (mPeers.remove(mSavedPeerConfig.deviceAddress) != null) {
+                peersChanged = true;
+            }
+            if (peersChanged) {
+                sendPeersChangedBroadcast();
+            }
 
-        mPeersLostDuringConnection.clear();
+            mPeersLostDuringConnection.clear();
+        }
         mServiceDiscReqId = null;
         sendMessage(WifiP2pManager.DISCOVER_PEERS);
     }
