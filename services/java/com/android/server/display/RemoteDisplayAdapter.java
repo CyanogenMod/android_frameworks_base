@@ -155,17 +155,7 @@ public class RemoteDisplayAdapter extends DisplayAdapter {
         @Override
         public void disconnectRemoteDisplay() {
             synchronized (getSyncRoot()) {
-                if (mActiveDisplay != null && mActiveDisplay.remoteDisplayDevice != null) {
-                    try {
-                        mActiveDisplay.displayDevice.stop();
-                    } catch (Exception e) {
-                    }
-                    mActiveDisplay.remoteDisplayDevice.clearSurfaceLocked();
-                    sendDisplayDeviceEventLocked(mActiveDisplay.remoteDisplayDevice,
-                            DisplayAdapter.DISPLAY_DEVICE_EVENT_REMOVED);
-                    mActiveDisplay.remoteDisplayDevice = null;
-                }
-                mActiveDisplay = null;
+                stopActiveDisplayLocked();
                 handleSendStatusChangeBroadcast();
             }
         }
@@ -186,7 +176,14 @@ public class RemoteDisplayAdapter extends DisplayAdapter {
         public WifiDisplayStatus getRemoteDisplayStatus() {
             synchronized (getSyncRoot()) {
                 ArrayList<WifiDisplay> availableDisplays = new ArrayList<WifiDisplay>();
-                for (RemoteDisplay display : mDevices.values()) {
+                ArrayList<RemoteDisplay> list = new ArrayList<RemoteDisplay>(mDevices.values());
+                for (RemoteDisplay display : list) {
+                    if (!display.displayDevice.asBinder().isBinderAlive()) {
+                        mDevices.remove(display.info.address);
+                        if (mActiveDisplay == display) {
+                            stopActiveDisplayLocked();
+                        }
+                    }
                     WifiDisplay add = new WifiDisplay(display.info.address, display.info.name,
                             display.info.name, display.hidden);
                     availableDisplays.add(add);
@@ -207,6 +204,20 @@ public class RemoteDisplayAdapter extends DisplayAdapter {
             }
         }
     };
+
+    private void stopActiveDisplayLocked() {
+        if (mActiveDisplay != null && mActiveDisplay.remoteDisplayDevice != null) {
+            try {
+                mActiveDisplay.displayDevice.stop();
+            } catch (Exception e) {
+            }
+            mActiveDisplay.remoteDisplayDevice.clearSurfaceLocked();
+            sendDisplayDeviceEventLocked(mActiveDisplay.remoteDisplayDevice,
+                    DisplayAdapter.DISPLAY_DEVICE_EVENT_REMOVED);
+            mActiveDisplay.remoteDisplayDevice = null;
+        }
+        mActiveDisplay = null;
+    }
 
     public void stopScan() {
         mScanning = false;
