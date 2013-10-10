@@ -262,4 +262,14 @@
 
     <!-- Active display overflow notification padding -->
     <dimen name="overflow_icon_padding">2dp</dimen>
+	
+	<!-- Active display clock font size -->
+    <dimen name="ad_clock_font_size">75dp</dimen>
+
+    <!-- Active display date font size -->
+    <dimen name="ad_date_font_size">18dp</dimen>
+
+    <!-- AM/PM size in active display -->
+    <dimen name="ad_ampm_font_size">32dp</dimen>
+	
 </resources>

@@ -68,7 +68,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/glowpad_overflow_notifications_margin_top" />
 
-        <com.android.internal.policy.impl.keyguard.ClockView
+        <com.android.systemui.statusbar.policy.activedisplay.ClockView
             android:id="@+id/clock_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,16 +78,38 @@
             android:gravity="center" >
 
             <TextView
-                android:id="@*android:id/clock_text"
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-12dp"
+                android:singleLine="true"
+                android:ellipsize="none"
+                android:textSize="@dimen/ad_date_font_size"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/white"
+                android:textAllCaps="true" />
+            <TextView
+                android:id="@+id/clock_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:ellipsize="none"
-                android:textSize="@*android:dimen/kg_status_clock_font_size"
+                android:textSize="@dimen/ad_clock_font_size"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
-                android:drawablePadding="2dip" />
-        </com.android.internal.policy.impl.keyguard.ClockView>
+                android:layout_below="@id/date" />
+            <TextView
+                android:id="@+id/am_pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="none"
+                android:textSize="@dimen/ad_ampm_font_size"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/white"
+                android:layout_toEndOf="@id/clock_text"
+                android:layout_alignBaseline="@id/clock_text"/>
+        </com.android.systemui.statusbar.policy.activedisplay.ClockView>
     </RelativeLayout>
 
 </FrameLayout>

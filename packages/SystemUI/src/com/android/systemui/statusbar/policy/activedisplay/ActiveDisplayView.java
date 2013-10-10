@@ -242,7 +242,7 @@ public class ActiveDisplayView extends FrameLayout {
     };
 
     /**
-     * Class used to listen for changes to P.O.R.N. related settings
+     * Class used to listen for changes to active display related settings
      */
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
