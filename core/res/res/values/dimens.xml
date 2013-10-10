@@ -362,4 +362,14 @@
 
     <!-- Pie service: Thickness of the active trigger fields around the screen border -->
     <dimen name="pie_trigger_thickness">12dp</dimen>
+	
+	 <!-- Font size for notification text -->
+    <dimen name="glowpad_notification_font_size">12dp</dimen>
+
+    <!-- Radius of notification text -->
+    <dimen name="glowpad_notification_text_radius">60dp</dimen>
+
+    <!-- Top margin for overflow notifications shown in the P.O.R.N. view -->
+    <dimen name="glowpad_overflow_notifications_margin_top">48dp</dimen>
+
 </resources>
