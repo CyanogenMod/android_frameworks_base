@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!-- Copyright (C) 2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="profileNameDefault">預設</string>
     <string name="profileNameWork">工作</string>
@@ -26,12 +25,12 @@
     <string name="profileGroupEmail">電子郵件</string>
     <string name="profileGroupSMS">簡訊</string>
     <string name="wildcardProfile">其他</string>
-    <string name="reboot_system" product="tablet">重新啟動平板</string>
+    <string name="reboot_system" product="tablet">重新啟動平板電腦</string>
     <string name="reboot_system" product="default">重新啟動手機</string>
-    <string name="global_action_screenshot">螢幕截圖</string>
+    <string name="global_action_screenshot">螢幕擷取</string>
     <string name="global_actions_toggle_expanded_desktop_mode">擴展桌面</string>
     <string name="global_actions_expanded_desktop_mode_on_status">啟用</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">禁用</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">停用</string>
     <string name="reboot_reboot">重新啟動</string>
     <string name="reboot_recovery">Recovery</string>
     <string name="reboot_bootloader">Bootloader</string>
@@ -39,22 +38,25 @@
     <string name="reboot_fastboot">Fastboot</string>
     <string name="reboot_download">Download</string>
     <string name="reboot_progress">正在重新啟動\u2026</string>
-    <string name="reboot_confirm" product="tablet">您的平板將會重新啟動。</string>
+    <string name="reboot_confirm" product="tablet">您的平板電腦將會重新啟動。</string>
     <string name="reboot_confirm" product="default">您的手機將會重新啟動。</string>
     <string name="permlab_preventpower">防止使用電源鍵</string>
-    <string name="permdesc_preventpower">允許應用程式覆蓋電源鍵的功能。</string>
-    <string name="permlab_fm_radio_receiver">控制電台接收器</string>
-    <string name="permdesc_fm_radio_receiver">允許應用程式控制電台接收器。</string>
-    <string name="permlab_fm_radio_transmitter">控制電台發送器</string>
-    <string name="permdesc_fm_radio_transmitter">允許應用程式控制電台發送器。</string>
-    <string name="lockscreen_discharging">放電中, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-    <string name="storage_sd_dock_card">底座SD卡</string>
+    <string name="permdesc_preventpower">允許應用程式覆寫電源鍵的功能。</string>
+    <string name="permlab_fm_radio_receiver">控制 FM 接收器</string>
+    <string name="permdesc_fm_radio_receiver">允許應用程式控制 FM 接收器。</string>
+    <string name="permlab_fm_radio_transmitter">控制 FM 發送器</string>
+    <string name="permdesc_fm_radio_transmitter">允許應用程式控制 FM 發送器。</string>
+    <string name="permlab_sendMockSms">傳送模擬簡訊</string>
+    <string name="permdesc_sendMockSms">允許應用程式傳送模擬簡訊，這會允許應用程式傳送簡訊給信任的應用程式。惡意應用程式可能會不斷地傳送訊息，妨礙裝置的通知系統以及干擾使用者。</string>
+    <string name="lockscreen_discharging">非充電中，<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="progress_nomediapresent" product="default">沒有可移除的媒體\u2026</string>
+    <string name="storage_sd_dock_card">座架 SD 卡</string>
     <string name="app_killed_message">應用程式已終止</string>
     <string name="global_action_reboot">重新啟動</string>
     <string name="global_action_choose_profile">設定檔</string>
     <string name="toast_rotation_unlocked">顯示旋轉已解鎖</string>
     <string name="toast_rotation_locked">顯示旋轉已鎖定</string>
-    <string name="stylus_app_not_installed">%s未安裝</string>
+    <string name="stylus_app_not_installed">未安裝 %s</string>
     <string name="symbol_picker_A">\u00C0\u00C1\u00C2\u00C4\u00C6\u00C3\u00C5\u0104\u0100</string>
     <string name="symbol_picker_C">\u00C7\u0106\u010C</string>
     <string name="symbol_picker_D">\u010E</string>
@@ -109,17 +111,17 @@
     <string name="symbol_picker_lt">\u2264\u00ab\u2039</string>
     <string name="symbol_picker_gt">\u2265\u00bb\u203a</string>
     <string name="permlab_changePrivacyGuardState">啟用或停用隱私守衛</string>
-    <string name="permdesc_changePrivacyGuardState">允許此應用程式向另一個與隱私守衛一起運行的應用程式作出更改。當應用程式與隱私守衛一起運行時，應用程式將無法存取個人資料，如聯絡人，通話記錄，或簡訊。</string>
-    <string name="privacy_guard_notification">隱私守衛啟用中</string>
+    <string name="permdesc_changePrivacyGuardState">允許應用程式變更其他應用程式執行時是否啟用隱私守衛。當應用程式執行時啟用了隱私守衛，應用程式將無法存取個人資料，例如聯絡人、通話記錄、或訊息。</string>
+    <string name="privacy_guard_notification">隱私守衛作用中</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 將無法存取個人資料</string>
     <string name="profile_picker_title">設定檔</string>
     <string name="profile_none">無</string>
     <string name="permlab_cancelNotifications">取消應用程式通知</string>
-    <string name="permdesc_cancelNotifications">允許此應用程式取消其他應用程式建立的通知。</string>
-    <string name="permlab_interceptSmsSent">攔截外撥簡訊</string>
-    <string name="permdesc_interceptSmsSent">允許此應用程式攔截外撥簡訊。惡意應用程式可能會利用此去防止發送外撥簡訊。</string>
-    <string name="policylab_enforceSelinux">強制執行 SELinux</string>
-    <string name="policydesc_enforceSelinux">切換 SELinux 政策強制執行模式或許可模式。</string>
-    <string name="policylab_enforceMmac">強制執行 MMAC</string>
-    <string name="policydesc_enforceMmac">切換 MMAC 政策強制執行模式或許可模式。</string>
+    <string name="permdesc_cancelNotifications">允許應用程式取消其他應用程式建立的通知。</string>
+    <string name="permlab_interceptSmsSent">攔截送出簡訊</string>
+    <string name="permdesc_interceptSmsSent">允許應用程式攔截送出簡訊。惡意應用程式可能會利用此去阻止送出簡訊。</string>
+    <string name="policylab_enforceSelinux">執行 SELinux</string>
+    <string name="policydesc_enforceSelinux">切換 SELinux 政策執行模式或許可模式。</string>
+    <string name="policylab_enforceMmac">執行 MMAC</string>
+    <string name="policydesc_enforceMmac">切換 MMAC 政策執行模式或許可模式。</string>
 </resources>
