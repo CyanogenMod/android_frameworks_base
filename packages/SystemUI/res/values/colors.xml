@@ -47,4 +47,7 @@
     <color name="pie_selected_color">@android:color/holo_blue_light</color>
     <color name="pie_long_pressed_color">#ff8ad5f0</color>
     <color name="pie_outline_color">#dd0099cc</color>
+
+    <!-- app sidebar trigger region color -->
+    <color name="trigger_region_color">#8015a0e5</color>
 </resources>

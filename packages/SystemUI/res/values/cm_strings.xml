@@ -101,4 +101,24 @@
     <string name="pie_phone_status_no_service">No service</string>
     <string name="pie_phone_status_airplane_mode">Airplane mode on</string>
     <string name="pie_phone_status_emergency_only">Emergency calls only</string>
+
+    <!-- Label in drop down to identify brightness slider -->
+    <string name="brightness_label">Brightness</string> 
+
+    <!-- Halo -->
+    <string name="halo_dismiss">Dismiss notification</string>
+    <string name="halo_hide">Hide HALO</string>
+    <string name="halo_clear_all">Clear all notifications</string>
+    <string name="halo_silence">Hide and silence HALO until woken</string>
+    <string name="halo_tutorial1">I am HALO.</string>
+    <string name="halo_tutorial2">Double-tap-drag to move me around, drag to task.</string>
+    <string name="halo_tutorial3">Change my behavior in the settings.</string>
+
+    <!-- App sidebar -->
+    <string name="default_folder_text">Folder</string>
+    <string name="title_activity_sidebar_configuration">Appbar content setup</string>
+    <string name="action_save">Save</string>
+    <string name="toast_items_saved">Appbar items have been saved.</string>
+    <string name="content_setup_instructions">Add items to the Appbar by long pressing any item on the right and drag it over to the Appbar.\n\nCombine items into folders by droping an item onto any existing item in the Appbar.\n\nTo remove an item simply drag it out of the \@appbar.</string>
+    <string name="content_setup_dismiss">Continue</string>
 </resources>

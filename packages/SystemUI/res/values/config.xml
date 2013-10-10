@@ -105,5 +105,10 @@
 
     <!-- Should "4G" be shown instead of "LTE" when the network is NETWORK_TYPE_LTE? -->
     <bool name="config_show4GForLTE">true</bool>
-</resources>
 
+    <!-- default Navigation Bar transparency. 0-255 -->
+    <integer name="navigation_bar_transparency">204</integer>
+
+    <!-- configurable width dimension for the app sidebar trigger area -->
+    <dimen name="config_app_sidebar_trigger_width">8dip</dimen> 
+</resources>

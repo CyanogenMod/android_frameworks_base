@@ -1219,6 +1219,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
             case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
             case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
+            case DevicePolicyManager.PASSWORD_QUALITY_GESTURE_WEAK:
                 return;
         }
         throw new IllegalArgumentException("Invalid quality constant: 0x"

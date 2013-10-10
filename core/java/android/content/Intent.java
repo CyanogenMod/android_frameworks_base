@@ -3533,6 +3533,11 @@ public class Intent implements Parcelable, Cloneable {
      */
     public static final int FLAG_ACTIVITY_TASK_ON_HOME = 0X00004000;
     /**
+     * If set, this intent will always match start up as a floating window
+     * in mutil window scenarios.
+     */
+    public static final int FLAG_FLOATING_WINDOW = 0x00002000; 	
+    /**
      * If set, when sending a broadcast only registered receivers will be
      * called -- no BroadcastReceiver components will be launched.
      */

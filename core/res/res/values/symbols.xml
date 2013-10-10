@@ -300,6 +300,7 @@
   <java-symbol type="integer" name="config_lockSoundVolumeDb" />
   <java-symbol type="integer" name="config_multiuserMaximumUsers" />
   <java-symbol type="integer" name="config_safe_media_volume_index" />
+  <java-symbol type="integer" name="min_gesture_prediction_score" />
 
   <java-symbol type="color" name="tab_indicator_text_v4" />
 
@@ -1198,6 +1199,8 @@
   <java-symbol type="style" name="Theme.DeviceDefault.Dialog.NoFrame" />
   <java-symbol type="style" name="Theme.IconMenu" />
   <java-symbol type="style" name="Theme.Panel.Volume" />
+  <java-symbol type="style" name="Theme.DeviceDefault.FloatingWindow" />
+  <java-symbol type="style" name="Theme.DeviceDefault.FloatingWindowLight" /> 
 
   <java-symbol type="attr" name="mediaRouteButtonStyle" />
   <java-symbol type="attr" name="externalRouteEnabledDrawable" />
@@ -1290,6 +1293,9 @@
   <java-symbol type="dimen" name="kg_small_widget_height" />
   <java-symbol type="dimen" name="lockscreen_target_inset" />
   <java-symbol type="dimen" name="lockscreen_target_icon_file_inset" />
+  <java-symbol type="dimen" name="glowpad_notification_font_size" />
+  <java-symbol type="dimen" name="glowpad_notification_text_radius" />
+  <java-symbol type="dimen" name="glowpad_overflow_notifications_margin_top" />
   <java-symbol type="drawable" name="ic_jog_dial_sound_off" />
   <java-symbol type="drawable" name="ic_jog_dial_sound_on" />
   <java-symbol type="drawable" name="ic_jog_dial_unlock" />
@@ -1354,6 +1360,7 @@
   <java-symbol type="id" name="keyguard_click_area" />
   <java-symbol type="id" name="keyguard_selector_view" />
   <java-symbol type="id" name="keyguard_pattern_view" />
+  <java-symbol type="id" name="keyguard_gesture_view" />
   <java-symbol type="id" name="keyguard_password_view" />
   <java-symbol type="id" name="keyguard_pin_view" />
   <java-symbol type="id" name="keyguard_face_unlock_view" />
@@ -1370,6 +1377,7 @@
   <java-symbol type="id" name="keyguard_host_view" />
   <java-symbol type="id" name="delete_button" />
   <java-symbol type="id" name="lockPatternView" />
+  <java-symbol type="id" name="lockGestureView" />
   <java-symbol type="id" name="forgot_password_button" />
   <java-symbol type="id" name="glow_pad_view" />
   <java-symbol type="id" name="delete_button" />
@@ -1403,6 +1411,7 @@
   <java-symbol type="layout" name="global_actions_silent_mode" />
   <java-symbol type="layout" name="keyguard_selector_view" />
   <java-symbol type="layout" name="keyguard_pattern_view" />
+  <java-symbol type="layout" name="keyguard_gesture_view" />
   <java-symbol type="layout" name="keyguard_password_view" />
   <java-symbol type="layout" name="keyguard_pin_view" />
   <java-symbol type="layout" name="keyguard_face_unlock_view" />
@@ -1480,10 +1489,13 @@
   <java-symbol type="string" name="kg_emergency_call_label" />
   <java-symbol type="string" name="kg_forgot_pattern_button_text" />
   <java-symbol type="string" name="kg_wrong_pattern" />
+  <java-symbol type="string" name="kg_forgot_gesture_button_text" />
+  <java-symbol type="string" name="kg_wrong_gesture" />
   <java-symbol type="string" name="kg_wrong_password" />
   <java-symbol type="string" name="kg_wrong_pin" />
   <java-symbol type="string" name="kg_too_many_failed_attempts_countdown" />
   <java-symbol type="string" name="kg_pattern_instructions" />
+  <java-symbol type="string" name="kg_gesture_instructions" />
   <java-symbol type="string" name="kg_sim_pin_instructions" />
   <java-symbol type="string" name="kg_pin_instructions" />
   <java-symbol type="string" name="kg_password_instructions" />
@@ -1504,6 +1516,7 @@
   <java-symbol type="string" name="kg_login_checking_password" />
   <java-symbol type="string" name="kg_too_many_failed_pin_attempts_dialog_message" />
   <java-symbol type="string" name="kg_too_many_failed_pattern_attempts_dialog_message" />
+  <java-symbol type="string" name="kg_too_many_failed_gesture_attempts_dialog_message" />
   <java-symbol type="string" name="kg_too_many_failed_password_attempts_dialog_message" />
   <java-symbol type="string" name="kg_failed_attempts_almost_at_wipe" />
   <java-symbol type="string" name="kg_failed_attempts_now_wiping" />
