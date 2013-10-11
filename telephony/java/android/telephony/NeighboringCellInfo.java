@@ -27,6 +27,7 @@ import static android.telephony.TelephonyManager.NETWORK_TYPE_HSUPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPAP;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_DCHSPAP;
+import static android.telephony.TelephonyManager.NETWORK_TYPE_TDSCDMA;
 
 /**
  * Represents the neighboring cell information, including
@@ -110,6 +111,7 @@ public class NeighboringCellInfo implements Parcelable
      * {@link TelephonyManager#NETWORK_TYPE_HSUPA TelephonyManager.NETWORK_TYPE_HSUPA},
      * {@link TelephonyManager#NETWORK_TYPE_HSPA TelephonyManager.NETWORK_TYPE_HSPA},
      * {@link TelephonyManager#NETWORK_TYPE_HSPAP TelephonyManager.NETWORK_TYPE_HSPAP},
+     * {@link TelephonyManager#NETWORK_TYPE_TDSCDMA TelephonyManager.NETWORK_TYPE_TDSCDMA},
      * and {@link TelephonyManager#NETWORK_TYPE_DCHSPAP TelephonyManager.NETWORK_TYPE_DCHSPAP}.
      */
     public NeighboringCellInfo(int rssi, String location, int radioType) {
@@ -146,6 +148,7 @@ public class NeighboringCellInfo implements Parcelable
             case NETWORK_TYPE_HSUPA:
             case NETWORK_TYPE_HSPA:
             case NETWORK_TYPE_HSPAP:
+            case NETWORK_TYPE_TDSCDMA:
             case NETWORK_TYPE_DCHSPAP:
                 mNetworkType = radioType;
                 mPsc = Integer.valueOf(location, 16);
@@ -224,6 +227,7 @@ public class NeighboringCellInfo implements Parcelable
      * {@link TelephonyManager#NETWORK_TYPE_HSUPA TelephonyManager.NETWORK_TYPE_HSUPA},
      * {@link TelephonyManager#NETWORK_TYPE_HSPA TelephonyManager.NETWORK_TYPE_HSPA},
      * {@link TelephonyManager#NETWORK_TYPE_HSPAP TelephonyManager.NETWORK_TYPE_HSPAP},
+     * {@link TelephonyManager#NETWORK_TYPE_TDSCDMA TelephonyManager.NETWORK_TYPE_TDSCDMA},
      * or {@link TelephonyManager#NETWORK_TYPE_DCHSPAP TelephonyManager.NETWORK_TYPE_DCHSPAP}
      * means that Neighboring Cell information is stored for UMTS network, in
      * which {@link NeighboringCellInfo#getPsc NeighboringCellInfo.getPsc}
