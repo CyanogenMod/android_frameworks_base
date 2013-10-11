@@ -298,6 +298,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         return pointInside(x, y, (View) mRecentsContainer);
     }
 
+    public void dismissContextMenuIfAny() {
+        if(mPopup != null) {
+            mPopup.dismiss();
+        }
+    }
     public void show(boolean show) {
         show(show, null, false, false);
     }
@@ -776,6 +781,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
     public void handleLongPress(
             final View selectedView, final View anchorView, final View thumbnailView) {
+        if(mPopup != null) {
+            mPopup.dismiss();
+        }
         thumbnailView.setSelected(true);
         final PopupMenu popup =
             new PopupMenu(mContext, anchorView == null ? selectedView : anchorView);
