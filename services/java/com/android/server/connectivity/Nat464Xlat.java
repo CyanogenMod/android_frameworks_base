@@ -56,7 +56,7 @@ public class Nat464Xlat extends BaseNetworkObserver {
     private LinkProperties mLP;
 
     // This must match the interface name in clatd.conf.
-    private static final String CLAT_INTERFACE_NAME = "clat4";
+    public static final String CLAT_INTERFACE_NAME = "clat4";
 
     private static final String TAG = "Nat464Xlat";
 
