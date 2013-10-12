@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="aerr_application">"В приложении «<xliff:g id="APPLICATION">%1$s</xliff:g>» произошла ошибка."</string>
+    <string name="aerr_process">"В работе процесса «<xliff:g id="PROCESS">%1$s</xliff:g>» произошла ошибка."</string>
+    <string name="anr_activity_application">"Приложение «<xliff:g id="APPLICATION">%2$s</xliff:g>» не отвечает."\n\n"Закрыть его?"</string>
+    <string name="anr_activity_process">"Приложение «<xliff:g id="ACTIVITY">%1$s</xliff:g>» не отвечает."\n\n"Закрыть его?"</string>
+    <string name="anr_application_process">"Процесс приложения «<xliff:g id="APPLICATION">%1$s</xliff:g>» не отвечает. Закрыть его?"</string>
+    <string name="anr_process">"Процесс «<xliff:g id="PROCESS">%1$s</xliff:g>» не отвечает."\n\n"Завершить его?"</string>
+
+</resources>
