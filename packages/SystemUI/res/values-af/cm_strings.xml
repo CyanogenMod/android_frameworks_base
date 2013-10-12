@@ -46,6 +46,8 @@
     <string name="quick_settings_lte_off">LTE af</string>
     <string name="quick_settings_volume">Volume</string>
     <string name="quick_settings_camera_label">Kamera</string>
+    <string name="quick_settings_network_adb_disabled_label">Gedeaktiveer</string>
+    <string name="quick_settings_network_adb_enabled_label">Aktiveer</string>
     <string name="navbar_dialog_title">Kies \'n aksie om toe te ken</string>
     <string name="navbar_home_button">Tuis-knoppie</string>
     <string name="navbar_recent_button">Onlangse programme knoppie</string>
