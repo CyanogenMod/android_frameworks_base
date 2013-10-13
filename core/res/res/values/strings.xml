@@ -2173,8 +2173,8 @@
     <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
     <!-- When the lock screen is showing and the battery is low, warn user to plug
-         in the phone soon and show current percentage. -->
-    <string name="lockscreen_low_battery">Connect your charger, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+         in the phone soon. -->
+    <string name="lockscreen_low_battery">Connect your charger.</string>
 
     <!-- Shown in the lock screen when there is no SIM card. -->
     <string name="lockscreen_missing_sim_message_short">No SIM card</string>
@@ -3365,16 +3365,16 @@
     <!-- See EXTMEDIA_FORMAT.  EXTMEDIA_FORMAT_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to format the SD card.  This is the title. -->
     <string name="extmedia_format_title" product="default">Format SD card?</string>
     <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
-    <string name="extmedia_format_message" product="nosdcard">All files stored in your USB storage (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <string name="extmedia_format_message" product="nosdcard">All files stored in your USB storage will be erased. This action can\'t be reversed!</string>
     <!-- See EXTMEDIA_FORMAT.   This is the message. -->
-    <string name="extmedia_format_message" product="default">All data on your card (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <string name="extmedia_format_message" product="default">All data on your card will be lost.</string>
     <!-- See EXTMEDIA_FORMAT.    This is the button text to format the sd card. -->
     <string name="extmedia_format_button_format">Format</string>
 
     <!-- Title of notification shown when ADB is actively connected to the phone. -->
-    <string name="adb_active_notification_title">Android debugging enabled</string>
+    <string name="adb_active_notification_title">USB debugging connected</string>
     <!-- Message of notification shown when ADB is actively connected to the phone. -->
-    <string name="adb_active_notification_message">Touch to disable debugging.</string>
+    <string name="adb_active_notification_message">Touch to disable USB debugging.</string>
 
     <!-- Used to replace %s in urls retreived from the signin server with locales.  For Some        -->
     <!-- devices we don't support all the locales we ship to and need to replace the '%s' with a    -->
