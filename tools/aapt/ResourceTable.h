@@ -148,7 +148,7 @@ public:
                     const String16& value,
                     const Vector<StringPool::entry_style_span>* style = NULL,
                     const ResTable_config* params = NULL,
-                    bool replace = false,
+                    bool replace = true,
                     bool isId = false,
                     const int32_t format = ResTable_map::TYPE_ANY);
 
@@ -323,7 +323,7 @@ public:
         status_t addToBag(const SourcePos& pos,
                           const String16& key, const String16& value,
                           const Vector<StringPool::entry_style_span>* style = NULL,
-                          bool replace=false, bool isId = false,
+                          bool replace=true, bool isId = false,
                           int32_t format = ResTable_map::TYPE_ANY);
 
         // Index of the entry's name string in the key pool.
