@@ -22,7 +22,9 @@ LOCAL_CERTIFICATE := platform
 
 # Tell aapt to create "extending (non-application)" resource IDs,
 # since these resources will be used by many apps.
-LOCAL_AAPT_FLAGS := -x
+LOCAL_AAPT_FLAGS := -x --auto-add-overlay
+
+LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, res-override res)
 
 LOCAL_MODULE_TAGS := optional
 
