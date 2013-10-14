@@ -73,4 +73,8 @@
     <string name="policydesc_enforceSelinux">Переключать принудительный и разрешающий режимы политики SELinux.</string>
     <string name="policylab_enforceMmac">Переключение режимов MMAC</string>
     <string name="policydesc_enforceMmac">Переключать принудительный и разрешающий режимы политики MMAC.</string>
+
+    <string name="perf_profile_pwrsv">Экономия энергии</string>
+    <string name="perf_profile_bal">Сбалансированный</string>
+    <string name="perf_profile_perf">Высокая производительность</string>
 </resources>

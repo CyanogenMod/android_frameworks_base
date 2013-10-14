@@ -72,4 +72,7 @@
     <string name="permlab_sendMockSms">posielať falošné SMS správy</string>
     <string name="permdesc_sendMockSms">Povolí aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať SMS do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať užívateľa.</string>
     <string name="progress_nomediapresent" product="default">Nie je dostupné žiadne vymeniteľné médium\u2026</string>
+    <string name="perf_profile_pwrsv">Úsporný</string>
+    <string name="perf_profile_bal">Vyvážený</string>
+    <string name="perf_profile_perf">Výkonný</string>
 </resources>
