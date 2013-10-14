@@ -39,4 +39,17 @@
         <item>com.google.android.gsf|com.google.android.talk</item>
     </string-array>
 
+    <!-- Performance profiles -->
+    <string-array name="perf_profile_entries" translatable="false">
+        <item>@string/perf_profile_pwrsv</item>
+        <item>@string/perf_profile_bal</item>
+        <item>@string/perf_profile_perf</item>
+    </string-array>
+
+    <string-array name="perf_profile_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

@@ -181,4 +181,9 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_cancelNotifications">Allows the app to cancel notifications created by other apps.</string>
 
+    <!-- Performance profile modes -->
+    <string name="perf_profile_pwrsv">Power save</string>
+    <string name="perf_profile_bal">Balanced</string>
+    <string name="perf_profile_perf">Performance</string>
+
 </resources>

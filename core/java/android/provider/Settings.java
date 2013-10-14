@@ -3774,6 +3774,13 @@ public final class Settings {
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
 
         /**
+         * Performance profile
+         * @see config_perf_profile_prop in frameworks/base/core/res/res/values/config.xml
+         * @hide
+         */
+        public static final String PERFORMANCE_PROFILE = "performance_profile";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
