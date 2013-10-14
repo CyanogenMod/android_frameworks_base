@@ -71,4 +71,7 @@
     <string name="policydesc_enforceSelinux">Ermöglicht der App, die Anwendung der SELinux-Richtlinie zwischen strikt und moderat zu wechseln.</string>
     <string name="policylab_enforceMmac">MMAC-Richtlinie wechseln</string>
     <string name="policydesc_enforceMmac">Ermöglicht der App, die Anwendung der MMAC-Richtlinie zwischen strikt und moderat zu wechseln.</string>
+    <string name="perf_profile_pwrsv">Energie sparen</string>
+    <string name="perf_profile_bal">Ausgeglichen</string>
+    <string name="perf_profile_perf">Mehr Leistung</string>
 </resources>

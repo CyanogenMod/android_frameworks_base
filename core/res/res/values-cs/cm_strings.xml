@@ -62,4 +62,8 @@
 
     <string name="permlab_interceptSmsSent">zachytit odchozí SMS</string>
     <string name="permdesc_interceptSmsSent">Umožní odchytit odchozí SMS. Škodlivé aplikace mohou pomocí odchycení SMS zabránit její odeslání příjemci.</string>
+
+    <string name="perf_profile_pwrsv">Úsporný</string>
+    <string name="perf_profile_bal">Vyvážený</string>
+    <string name="perf_profile_perf">Výkonný</string>
 </resources>
