@@ -89,4 +89,7 @@
     <string name="policydesc_enforceSelinux">Alterna tra regole restrittive o permissive di SELinux.</string>
     <string name="policylab_enforceMmac">Forza MMAC</string>
     <string name="policydesc_enforceMmac">Alterna tra regole restrittive o permissive di MMAC.</string>
+    <string name="perf_profile_pwrsv">Risparmio energetico</string>
+    <string name="perf_profile_bal">Bilanciato</string>
+    <string name="perf_profile_perf">Prestazioni</string>
 </resources>

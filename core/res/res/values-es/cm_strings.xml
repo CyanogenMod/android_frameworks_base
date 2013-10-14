@@ -90,4 +90,7 @@
     <string name="policydesc_enforceSelinux">Alternar entre el modo permisivo o restrictivo de SELinux.</string>
     <string name="policylab_enforceMmac">Forzar MMAC</string>
     <string name="policydesc_enforceMmac">Alternar entre el modo permisivo o restrictivo de MMAC.</string>
+    <string name="perf_profile_pwrsv">Ahorro de energía</string>
+    <string name="perf_profile_bal">Equilibrado</string>
+    <string name="perf_profile_perf">Alto rendimiento</string>
 </resources>

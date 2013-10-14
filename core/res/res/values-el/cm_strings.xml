@@ -144,4 +144,7 @@
     <string name="stk_cc_ss_to_ss">Η αίτηση SS τροποποιήθηκε σε νέα αίτηση SS.</string>
     <string name="msim_kg_sim_pin_msg_format">ΣΥΝΔΡ.: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
     <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
+    <string name="perf_profile_pwrsv">Εξοικονόμηση ενέργειας</string>
+    <string name="perf_profile_bal">Ισορροπημένο</string>
+    <string name="perf_profile_perf">Επιδόσεις</string>
 </resources>

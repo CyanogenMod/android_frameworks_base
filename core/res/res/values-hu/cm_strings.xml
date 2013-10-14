@@ -88,4 +88,7 @@
     <string name="stk_cc_ss_to_ss">SS kérés módosítva új SS kérésre.</string>
     <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
     <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
+    <string name="perf_profile_pwrsv">Energiatakarékos</string>
+    <string name="perf_profile_bal">Kiegyensúlyozott</string>
+    <string name="perf_profile_perf">Teljesítménycentrikus</string>
 </resources>

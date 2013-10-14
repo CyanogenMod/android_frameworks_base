@@ -89,4 +89,8 @@
     <string name="policydesc_enforceSelinux">Přepnutí politiky SELinux na vynucující (enforcing) nebo tolerantní (permissive).</string>
     <string name="policylab_enforceMmac">Vynucení MMAC</string>
     <string name="policydesc_enforceMmac">Přepnutí politiky MMAC na vynucující (enforcing) nebo tolerantní (permissive).</string>
+
+    <string name="perf_profile_pwrsv">Úsporný</string>
+    <string name="perf_profile_bal">Vyvážený</string>
+    <string name="perf_profile_perf">Výkonný</string>
 </resources>
