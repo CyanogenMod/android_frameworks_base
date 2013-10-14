@@ -126,4 +126,7 @@
     <string name="policylab_enforceMmac">Εξαναγκασμός MMAC</string>
     <string name="policydesc_enforceMmac">Εναλλαγή πολιτικής MMAC σε εξαναγκασμένη ή επιτρεπόμενη.</string>
     <string name="progress_nomediapresent" product="default">Δεν υπάρχουν αφαιρούμενα μέσα αποθήκευσης\u2026</string>
+    <string name="perf_profile_pwrsv">Εξοικονόμηση ενέργειας</string>
+    <string name="perf_profile_bal">Ισορροπημένο</string>
+    <string name="perf_profile_perf">Επιδόσεις</string>
 </resources>
