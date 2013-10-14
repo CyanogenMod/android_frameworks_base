@@ -124,4 +124,7 @@
     <string name="policydesc_enforceSelinux">切換 SELinux 政策執行模式或許可模式。</string>
     <string name="policylab_enforceMmac">執行 MMAC</string>
     <string name="policydesc_enforceMmac">切換 MMAC 政策執行模式或許可模式。</string>
+    <string name="perf_profile_pwrsv">省電</string>
+    <string name="perf_profile_bal">平衡</string>
+    <string name="perf_profile_perf">效能</string>
 </resources>
