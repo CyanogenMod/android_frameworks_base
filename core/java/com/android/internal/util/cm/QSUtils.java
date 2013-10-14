@@ -44,6 +44,13 @@ public class QSUtils {
             return (Settings.System.getInt(resolver, Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1);
         }
 
+        public static boolean deviceSupportsPerformanceProfiles(Context ctx) {
+            Resources res = ctx.getResources();
+            String perfProfileProp = res.getString(
+                    com.android.internal.R.string.config_perf_profile_prop);
+            return perfProfileProp != null;
+        }
+
         public static boolean expandedDesktopEnabled(ContentResolver resolver) {
             return (Settings.System.getIntForUser(resolver, Settings.System.EXPANDED_DESKTOP_STYLE, 0,
                     UserHandle.USER_CURRENT_OR_SELF) != 0);

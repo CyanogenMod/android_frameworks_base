@@ -107,6 +107,28 @@ class ServerThread extends Thread {
         }
     }
 
+    private class PerformanceProfileObserver extends ContentObserver {
+        private final String mPropName;
+        private final String mPropDef;
+
+        public PerformanceProfileObserver(Context ctx) {
+            super(null);
+            mPropName =
+                    ctx.getString(com.android.internal.R.string.config_perf_profile_prop);
+            mPropDef =
+                    ctx.getString(com.android.internal.R.string.config_perf_profile_default_entry);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            String perfProfile = Settings.System.getString(mContentResolver,
+                Settings.System.PERFORMANCE_PROFILE);
+            if (perfProfile == null) {
+                perfProfile = mPropDef;
+            }
+            SystemProperties.set(mPropName, perfProfile);
+        }
+    }
+
     @Override
     public void run() {
         EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_SYSTEM_RUN,
@@ -862,6 +884,11 @@ class ServerThread extends Thread {
         mContentResolver.registerContentObserver(
             Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
             false, new AdbPortObserver());
+        if (context.getString(com.android.internal.R.string.config_perf_profile_prop) != null) {
+            mContentResolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.PERFORMANCE_PROFILE),
+                    false, new PerformanceProfileObserver(context));
+        }
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
