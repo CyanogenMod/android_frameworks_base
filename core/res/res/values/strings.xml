@@ -2,6 +2,9 @@
 <!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
+** Copyright (c) 2013, The Linux Foundation. All rights reserved.
+** Not a Contribution.
+**
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -4526,4 +4529,6 @@
     <!-- Longer version of toast bar message when hiding the transient navigation bar (if room) -->
     <string name="transient_navigation_confirmation_long">Swipe from edge of screen to reveal system bar</string>
     <add-resource type="bool" name="config_hotswapCapable"></add-resource>
+
+    <string name="permission">Permission</string>
 </resources>
