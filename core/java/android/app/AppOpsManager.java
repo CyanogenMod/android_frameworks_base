@@ -423,7 +423,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
-            AppOpsManager.MODE_IGNORED, // OP_WRITE_SMS
+            AppOpsManager.MODE_ALLOWED, // OP_WRITE_SMS
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
