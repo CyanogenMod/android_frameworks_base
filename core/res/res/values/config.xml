@@ -1489,4 +1489,57 @@
     <!-- Configuration to enable non-default PDP during IWLAN -->
     <bool name="config_feature_iwlan_enabled">false</bool>
 
+    <!-- User display names for app ops codes -->
+    <string-array name="app_ops_labels">
+        <item>Trying to access location</item>
+        <item>Trying to access location</item>
+        <item>Trying to access location</item>
+        <item>Trying to use vibrate</item>
+        <item>Trying to read contacts</item>
+        <item>Trying to modify contacts</item>
+        <item>Trying to read call log</item>
+        <item>Trying to modify call log</item>
+        <item>Trying to read calendar</item>
+        <item>Trying to modify calendar</item>
+        <item>Trying to access location</item>
+        <item>Trying to post notification</item>
+        <item>Trying to access location</item>
+        <item>Trying to make phone call</item>
+        <item>Trying to read SMS</item>
+        <item>Trying to write/modify SMS</item>
+        <item>Trying to receive SMS</item>
+        <item>Trying to receive SMS</item>
+        <item>Trying to receive SMS</item>
+        <item>Trying to receive SMS</item>
+        <item>Trying to send SMS</item>
+        <item>Trying to read SMS</item>
+        <item>Trying to write/modify SMS</item>
+        <item>Trying to modify settings</item>
+        <item>Trying to draw on top</item>
+        <item>Trying to access notifications</item>
+        <item>Trying to access Camera</item>
+        <item>Trying to record audio</item>
+        <item>Trying to play audio</item>
+        <item>Trying to read clipboard</item>
+        <item>Trying to modify clipboard</item>
+        <item>Trying to use media buttons</item>
+        <item>Trying to use audio focus</item>
+        <item>Trying to use master volume</item>
+        <item>Trying to use voice volume</item>
+        <item>Trying to use ring volume</item>
+        <item>Trying to use media volume</item>
+        <item>Trying to use alarm volume</item>
+        <item>Trying to use notification volume</item>
+        <item>Trying to use bluetooth volume</item>
+        <item>Trying to Keep device awake</item>
+        <item>Trying to access location</item>
+        <item>Trying to access location</item>
+        <item>Trying to turn on/off Wifi</item>
+        <item>Trying to turn on/off bluetooth</item>
+        <item>Trying to turn on/off mobile data</item>
+        <item>Trying to send MMS</item>
+        <item>Trying to read MMS</item>
+        <item>Trying to write MMS</item>
+        <item>Trying to start at bootup</item>
+    </string-array>
 </resources>
