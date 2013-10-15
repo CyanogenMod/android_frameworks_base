@@ -18,6 +18,7 @@ package android.net.wifi;
 
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.net.DhcpInfo;
 import android.os.Binder;
@@ -546,6 +547,7 @@ public class WifiManager {
     private static final Object sThreadRefLock = new Object();
     private static int sThreadRefCount;
     private static HandlerThread sHandlerThread;
+    private final AppOpsManager mAppOps;
 
     /**
      * Create a new WifiManager instance.
@@ -561,6 +563,7 @@ public class WifiManager {
         mContext = context;
         mService = service;
         init();
+        mAppOps = (AppOpsManager)context.getSystemService(Context.APP_OPS_SERVICE);
     }
 
     /**
@@ -1048,6 +1051,9 @@ public class WifiManager {
      *         is the same as the requested state).
      */
     public boolean setWifiEnabled(boolean enabled) {
+        if (mAppOps.noteOp(AppOpsManager.OP_WIFI_CHANGE) !=
+            AppOpsManager.MODE_ALLOWED)
+            return false;
         try {
             return mService.setWifiEnabled(mContext.getBasePackageName(), enabled);
         } catch (RemoteException e) {
