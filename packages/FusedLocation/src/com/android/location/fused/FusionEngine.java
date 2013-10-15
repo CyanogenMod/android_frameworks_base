@@ -189,10 +189,12 @@ public class FusionEngine implements LocationListener {
         } else {
             disableProvider(GPS);
         }
-        if (networkInterval < Long.MAX_VALUE) {
-            enableProvider(NETWORK, networkInterval);
-        } else {
-            disableProvider(NETWORK);
+        if (mStats.get(NETWORK).available) {
+            if (networkInterval < Long.MAX_VALUE) {
+                enableProvider(NETWORK, networkInterval);
+            } else {
+                disableProvider(NETWORK);
+            }
         }
     }
 
