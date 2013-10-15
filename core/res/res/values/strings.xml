@@ -2,6 +2,9 @@
 <!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
+** Copyright (c) 2013, The Linux Foundation. All rights reserved.
+** Not a Contribution.
+**
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -4514,4 +4517,6 @@
     <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
     <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
 
+    <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
+    <string name="permission_remember_choice">Remember</string>
 </resources>
