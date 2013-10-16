@@ -246,6 +246,10 @@ public class ActiveDisplayView extends FrameLayout {
 
         }
 
+        public void onTargetChange(View v, int whichHandle) {
+
+        }
+
     };
 
     /**
@@ -446,7 +450,6 @@ public class ActiveDisplayView extends FrameLayout {
 
         mRemoteViewLayout = (FrameLayout) contents.findViewById(R.id.remote_content_parent);
         mClock = contents.findViewById(R.id.clock_view);
-  
 
         mOverflowNotifications = (LinearLayout) contents.findViewById(R.id.keyguard_other_notifications);
         mOverflowNotifications.setOnTouchListener(mOverflowTouchListener);
@@ -600,8 +603,8 @@ public class ActiveDisplayView extends FrameLayout {
             public void run() {
                 mBar.disable(0xffffffff);
             }
-        }, 100); 
-		registerSensorListener(mLightSensor); 
+        }, 100);
+        registerSensorListener(mLightSensor);
     }
 
     private void handleHideNotificationView() {
@@ -964,10 +967,10 @@ public class ActiveDisplayView extends FrameLayout {
         } catch (Resources.NotFoundException nfe) {
             mNotificationDrawable = mContext.getResources().getDrawable(R.drawable.ic_ad_unknown_icon);
         }
-		 TargetDrawable centerDrawable = new TargetDrawable(getResources(),createCenterDrawable(mNotificationDrawable));
+        TargetDrawable centerDrawable = new TargetDrawable(getResources(),createCenterDrawable(mNotificationDrawable));
             centerDrawable.setScaleX(0.9f);
             centerDrawable.setScaleY(0.9f);
-            mGlowPadView.setCenterDrawable(centerDrawable); 
+            mGlowPadView.setCenterDrawable(centerDrawable);
         setHandleText(sbn);
         mNotification = sbn;
         mGlowPadView.post(new Runnable() {
@@ -1033,13 +1036,13 @@ public class ActiveDisplayView extends FrameLayout {
         return stateListDrawable;
     }
 
-	 private Drawable createCenterDrawable(Drawable handle) {
+    private Drawable createCenterDrawable(Drawable handle) {
         StateListDrawable stateListDrawable = new StateListDrawable();
         stateListDrawable.addState(TargetDrawable.STATE_INACTIVE, handle);
         
         return stateListDrawable;
     }
- 
+
     private SensorEventListener mSensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
