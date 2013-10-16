@@ -11,6 +11,10 @@ LOCAL_JAVA_LIBRARIES := services telephony-common
 LOCAL_PACKAGE_NAME := SystemUI
 LOCAL_CERTIFICATE := platform
 
+LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, res-override res)
+
+LOCAL_AAPT_FLAGS := --auto-add-overlay
+
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
 include $(BUILD_PACKAGE)
