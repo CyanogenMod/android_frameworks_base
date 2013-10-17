@@ -100,6 +100,9 @@
     <!-- Record Audio QuickRecord -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- DownloadProvider -->
+    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"
