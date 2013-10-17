@@ -99,6 +99,7 @@ public class AppSidebar extends TriggerOverlayView {
     private boolean mFirstTouch = false;
     private boolean mHideTextLabels = false;
     private boolean mUseTab = false;
+    private boolean mFloatingWindow = false;
     private int mPosition = SIDEBAR_POSITION_RIGHT;
 
     private TranslateAnimation mSlideIn;
@@ -391,6 +392,7 @@ public class AppSidebar extends TriggerOverlayView {
             ItemInfo ai = (ItemInfo)icon.getTag();
             if (ai instanceof AppItemInfo) {
                 icon.setOnClickListener(mItemClickedListener);
+                icon.setOnLongClickListener(mItemLongClickedListener);
                 if (mHideTextLabels)
                     ((TextView)icon).setTextSize(0);
             } else {
@@ -435,9 +437,26 @@ public class AppSidebar extends TriggerOverlayView {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (mFloatingWindow) {
+            intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+            mFloatingWindow = false;
+        }
         intent.setComponent(cn);
         mContext.startActivity(intent);
     }
+
+    private OnLongClickListener mItemLongClickedListener = new OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            if (mState != SIDEBAR_STATE.OPENED || mFirstTouch) {
+                mFirstTouch = false;
+                return false;
+            }
+            mFloatingWindow = true;
+            launchApplication((AppItemInfo)view.getTag());
+            return true;
+        }
+    };
 
     private OnClickListener mItemClickedListener = new OnClickListener() {
         @Override
@@ -596,8 +615,10 @@ public class AppSidebar extends TriggerOverlayView {
             mFolder.setVisibility(View.VISIBLE);
             ArrayList<View> items = folder.getItemsInReadingOrder();
             updateAutoHideTimer(AUTO_HIDE_DELAY);
-            for (View item : items)
+            for (View item : items) {
                 item.setOnClickListener(mItemClickedListener);
+                item.setOnLongClickListener(mItemLongClickedListener);
+            }
             folder.setOnTouchListener(new OnTouchListener() {
 
                 @Override
