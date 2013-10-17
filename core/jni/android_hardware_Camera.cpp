@@ -53,6 +53,7 @@ struct fields_t {
     jfieldID    face_leftEye;
     jfieldID    face_rightEye;
     jfieldID    face_mouth;
+#ifdef QCOM_HARDWARE
     jfieldID    face_sm_degree;
     jfieldID    face_sm_score;
     jfieldID    face_blink_detected;
@@ -64,6 +65,7 @@ struct fields_t {
     jfieldID    face_reye_blink;
     jfieldID    face_left_right_gaze;
     jfieldID    face_top_bottom_gaze;
+#endif
     jfieldID    face_recognised;
     jfieldID    point_x;
     jfieldID    point_y;
@@ -401,6 +403,7 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
 
         env->SetIntField(face, fields.face_id, metadata->faces[i].id);
 
+#ifdef QCOM_HARDWARE
         if (mIsQcFace) {
             env->SetIntField(face, fields.face_sm_degree, metadata->faces[i].smile_degree);
             env->SetIntField(face, fields.face_sm_score, metadata->faces[i].smile_score);
@@ -415,6 +418,7 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
             env->SetIntField(face, fields.face_left_right_gaze, metadata->faces[i].left_right_gaze);
             env->SetIntField(face, fields.face_top_bottom_gaze, metadata->faces[i].top_bottom_gaze);
         }
+#endif
 
         env->DeleteLocalRef(face);
         env->DeleteLocalRef(rect);
@@ -1168,9 +1172,11 @@ int register_android_hardware_Camera(JNIEnv *env)
         { "android/hardware/Camera$Face", "leftEye", "Landroid/graphics/Point;", &fields.face_leftEye },
         { "android/hardware/Camera$Face", "rightEye", "Landroid/graphics/Point;", &fields.face_rightEye },
         { "android/hardware/Camera$Face", "mouth", "Landroid/graphics/Point;", &fields.face_mouth },
+#ifdef QCOM_HARDWARE
         { "android/hardware/Camera$Face", "smileDegree", "I", &fields.face_sm_degree },
         { "android/hardware/Camera$Face", "smileScore", "I", &fields.face_sm_score },
         { "android/hardware/Camera$Face", "blinkDetected", "I", &fields.face_blink_detected },
+#endif
         { "android/hardware/Camera$Face", "faceRecognised", "I", &fields.face_recognised },
     };
 
@@ -1178,6 +1184,7 @@ int register_android_hardware_Camera(JNIEnv *env)
         { "org/codeaurora/camera/QCFace", "rect", "Landroid/graphics/Rect;", &fields.face_rect },
         { "org/codeaurora/camera/QCFace", "score", "I", &fields.face_score },
         { "org/codeaurora/camera/QCFace", "id", "I", &fields.face_id },
+#ifdef QCOM_HARDWARE
         { "org/codeaurora/camera/QCFace", "leftEye", "Landroid/graphics/Point;", &fields.face_leftEye },
         { "org/codeaurora/camera/QCFace", "rightEye", "Landroid/graphics/Point;", &fields.face_rightEye },
         { "org/codeaurora/camera/QCFace", "mouth", "Landroid/graphics/Point;", &fields.face_mouth },
@@ -1193,6 +1200,7 @@ int register_android_hardware_Camera(JNIEnv *env)
         { "org/codeaurora/camera/QCFace", "reyeBlink", "I", &fields.face_reye_blink },
         { "org/codeaurora/camera/QCFace", "leftrightGaze", "I", &fields.face_left_right_gaze },
         { "org/codeaurora/camera/QCFace", "topbottomGaze", "I", &fields.face_top_bottom_gaze },
+#endif
     };
 
     if (find_fields(env, fields_to_find, NELEM(fields_to_find)) < 0)
