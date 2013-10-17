@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -100,6 +102,9 @@ public class CarrierText extends TextView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (KeyguardUpdateMonitor.sIsMultiSimEnabled) {
+            return;
+        }
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mCallback);
     }
 
@@ -118,7 +123,7 @@ public class CarrierText extends TextView {
      * @param spn
      * @return
      */
-    private CharSequence getCarrierTextForSimState(IccCardConstants.State simState,
+    protected CharSequence getCarrierTextForSimState(IccCardConstants.State simState,
             CharSequence plmn, CharSequence spn) {
         CharSequence carrierText = null;
         StatusMode status = getStatusForIccState(simState);
