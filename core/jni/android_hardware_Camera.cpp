@@ -386,6 +386,7 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
         env->SetObjectField(face, fields.face_rect, rect);
         env->SetIntField(face, fields.face_score, metadata->faces[i].score);
 
+#ifdef QCOM_HARDWARE
         jobject point1 = env->NewObject(mPointClass, fields.point_constructor);
         env->SetIntField(point1, fields.point_x, metadata->faces[i].left_eye[0]);
         env->SetIntField(point1, fields.point_y, metadata->faces[i].left_eye[1]);
@@ -403,7 +404,6 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
 
         env->SetIntField(face, fields.face_id, metadata->faces[i].id);
 
-#ifdef QCOM_HARDWARE
         if (mIsQcFace) {
             env->SetIntField(face, fields.face_sm_degree, metadata->faces[i].smile_degree);
             env->SetIntField(face, fields.face_sm_score, metadata->faces[i].smile_score);
@@ -418,14 +418,14 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
             env->SetIntField(face, fields.face_left_right_gaze, metadata->faces[i].left_right_gaze);
             env->SetIntField(face, fields.face_top_bottom_gaze, metadata->faces[i].top_bottom_gaze);
         }
+        env->DeleteLocalRef(point1);
+        env->DeleteLocalRef(point2);
+        env->DeleteLocalRef(point3);
+
 #endif
 
         env->DeleteLocalRef(face);
         env->DeleteLocalRef(rect);
-
-        env->DeleteLocalRef(point1);
-        env->DeleteLocalRef(point2);
-        env->DeleteLocalRef(point3);
     }
     env->CallStaticVoidMethod(mCameraJClass, fields.post_event,
             mCameraJObjectWeak, msgType, 0, 0, obj);
