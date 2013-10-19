@@ -19,13 +19,7 @@
 
 package org.codeaurora.camera;
 
-import android.hardware.Camera;
-
-import java.util.ArrayList;
-
 import android.os.Bundle;
-
-import android.os.SystemProperties;
 
 /**
  * {@hide} Information about a Qaulcomm face identified through camera face
@@ -55,10 +49,6 @@ public class QCFace extends android.hardware.Camera.Face {
     private int reyeBlink = 0;
     private int leftrightGaze = 0;
     private int topbottomGaze = 0;
-
-    private static final String STR_TRUE = "true";
-    private static final String STR_FALSE = "false";
-    private static final String STR_FACIAL_PROCESSING = "ro.qc.sdk.camera.facialproc";
 
     /**
      * The smilie degree for the detection of the face.
