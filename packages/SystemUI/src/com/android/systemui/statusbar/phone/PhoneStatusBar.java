@@ -641,12 +641,10 @@ public class PhoneStatusBar extends BaseStatusBar {
             mDockBatteryController.addStateChangedCallback(callback);
         } else {
             // Remove dock battery icons if device doesn't hava dock battery support
-            View v = mStatusBarView.findViewById(R.id.dock_battery);
-            if (v != null) mStatusBarView.removeView(v);
-            v = mStatusBarView.findViewById(R.id.dock_battery_text);
-            if (v != null) mStatusBarView.removeView(v);
-            v = mStatusBarView.findViewById(R.id.circle_dock_battery);
-            if (v != null) mStatusBarView.removeView(v);
+            ViewGroup cluster = (ViewGroup) mStatusBarView.findViewById(R.id.signal_battery_cluster);
+            cluster.removeView(cluster.findViewById(R.id.dock_battery));
+            cluster.removeView(cluster.findViewById(R.id.dock_battery_text));
+            cluster.removeView(cluster.findViewById(R.id.circle_dock_battery));
             mCircleDockBattery = null;
         }
 
