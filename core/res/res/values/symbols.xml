@@ -2051,4 +2051,6 @@
   <!-- Package Manager -->
   <java-symbol type="array" name="config_disabledComponents" />
 
+  <!-- LED flashlight -->
+  <java-symbol type="bool" name="config_enableTorch" />
 </resources>
