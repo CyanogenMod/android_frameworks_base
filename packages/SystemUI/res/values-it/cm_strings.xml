@@ -25,7 +25,7 @@
     <string name="powerwidget_screen_timeout_toast">Timeout impostato a: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS OFF</string>
-    <string name="quick_settings_screen_sleep">Blocca telefono</string>
+    <string name="quick_settings_screen_sleep">Sospendi dispositivo</string>
     <string name="quick_settings_ringer_on">Suoneria ON</string>
     <string name="quick_settings_ringer_off">Suoneria OFF</string>
     <string name="quick_settings_vibration_on">Vibrazione ON</string>
@@ -54,6 +54,8 @@
     <string name="quick_settings_lte_off">LTE OFF</string>
     <string name="quick_settings_volume">Volume</string>
     <string name="quick_settings_camera_label">Fotocamera</string>
+    <string name="quick_settings_network_adb_disabled_label">Disattivato</string>
+    <string name="quick_settings_network_adb_enabled_label">Attivato</string>
     <string name="quick_settings_network_adb_disabled_label">Disattivato</string>
     <string name="quick_settings_network_adb_enabled_label">Attivato</string>
     <string name="quick_settings_expanded_desktop">Esteso</string>
