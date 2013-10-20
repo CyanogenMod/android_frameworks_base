@@ -158,6 +158,8 @@ public class QuickSettingsController {
         boolean bluetoothSupported = QSUtils.deviceSupportsBluetooth();
         boolean mobileDataSupported = QSUtils.deviceSupportsMobileData(mContext);
         boolean lteSupported = QSUtils.deviceSupportsLte(mContext);
+        boolean gpsSupported = QSUtils.deviceSupportsGps(mContext);
+        boolean torchSupported = QSUtils.deviceSupportsTorch(mContext);
 
         if (!bluetoothSupported) {
             TILES_DEFAULT.remove(TILE_BLUETOOTH);
@@ -171,6 +173,14 @@ public class QuickSettingsController {
 
         if (!lteSupported) {
             TILES_DEFAULT.remove(TILE_LTE);
+        }
+
+        if (!gpsSupported) {
+            TILES_DEFAULT.remove(TILE_GPS);
+        }
+
+        if (!torchSupported) {
+            TILES_DEFAULT.remove(TILE_TORCH);
         }
 
         // Read the stored list of tiles

@@ -1296,4 +1296,7 @@
     <!-- The list of components which should be automatically disabled. -->
     <string-array name="config_disabledComponents" translatable="false">
     </string-array>
+
+    <!-- Device supports LED flashlight -->
+    <bool name="config_enableTorch">false</bool>
 </resources>
