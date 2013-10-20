@@ -640,7 +640,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                     (DockBatteryController.DockBatteryStateChangeCallback) mCircleDockBattery;
             mDockBatteryController.addStateChangedCallback(callback);
         } else {
-            // Remove dock battery icons if device doesn't hava dock battery support
+            // Remove dock battery icons if the device doesn't have dock battery support
             ViewGroup cluster = (ViewGroup) mStatusBarView.findViewById(R.id.signal_battery_cluster);
             View v = cluster.findViewById(R.id.dock_battery);
             if (v != null) cluster.removeView(v);
