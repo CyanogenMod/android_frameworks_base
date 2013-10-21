@@ -304,6 +304,18 @@ public class AppOpsManager {
     }
 
     /**
+     * Map a non-localized name for the operation back to the Op number
+     */
+    public static int nameToOp(String name) {
+        for (int i = 0; i < sOpNames.length; i++) {
+            if (sOpNames[i].equals(name)) {
+                return i;
+            }
+        }
+        return OP_NONE;
+    }
+
+    /**
      * Retrieve the permission associated with an operation, or null if there is not one.
      */
     public static String opToPermission(int op) {

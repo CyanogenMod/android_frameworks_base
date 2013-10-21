@@ -1057,7 +1057,16 @@ public class AppOpsService extends IAppOpsService.Stub {
 
             String tagName = parser.getName();
             if (tagName.equals("op")) {
-                int code = Integer.parseInt(parser.getAttributeValue(null, "n"));
+                int code = AppOpsManager.OP_NONE;
+                String codeStr = parser.getAttributeValue(null, "n");
+                if (codeStr != null) {
+                    code = Integer.parseInt(codeStr);
+                }
+                /* use op name string if it exists */
+                String codeNameStr = parser.getAttributeValue(null, "ns");
+                if (codeNameStr != null) {
+                    code = AppOpsManager.nameToOp(codeNameStr);
+                }
                 boolean strict = isStrict(code, uid, pkgName);
                 Op op = new Op(code, strict);
                 String mode = parser.getAttributeValue(null, "m");
@@ -1140,6 +1149,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                             AppOpsManager.OpEntry op = ops.get(j);
                             out.startTag(null, "op");
                             out.attribute(null, "n", Integer.toString(op.getOp()));
+                            out.attribute(null, "ns", AppOpsManager.opToName(op.getOp()));
                             out.attribute(null, "m", Integer.toString(op.getMode()));
                             long time = op.getTime();
                             if (time != 0) {
