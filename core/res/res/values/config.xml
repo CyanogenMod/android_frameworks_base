@@ -53,6 +53,7 @@
         <item><xliff:g id="id">@string/status_bar_alarm_clock</xliff:g></item>
         <item><xliff:g id="id">@string/status_bar_secure</xliff:g></item>
         <item><xliff:g id="id">@string/status_bar_clock</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_su</xliff:g></item>
     </string-array>
 
     <string translatable="false" name="status_bar_rotate">rotate</string>
@@ -81,6 +82,7 @@
     <string translatable="false" name="status_bar_alarm_clock">alarm_clock</string>
     <string translatable="false" name="status_bar_secure">secure</string>
     <string translatable="false" name="status_bar_clock">clock</string>
+    <string translatable="false" name="status_bar_su">su</string>
 
     <!-- Flag indicating whether the surface flinger has limited
          alpha compositing functionality in hardware.  If set, the window
