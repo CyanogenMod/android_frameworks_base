@@ -60,6 +60,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Matrix;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.Vibrator;
 import android.os.ServiceManager;
@@ -128,6 +129,8 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
 
     private Context mContext;
     private PackageManager mPm;
+    private final PowerManager mBOOST;
+
     private Handler mHandler;
     private BaseStatusBar mBar;
     private WindowManager mWindowManager;
@@ -282,6 +285,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         super(context, attrs, defStyle);
         mContext = context;
         mPm = mContext.getPackageManager();
+        mBOOST = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mWindowManager = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         mInflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
@@ -478,6 +482,9 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         if (mState == STATE_HIDDEN || mState == STATE_SILENT
                 || (mKeyguardManager.isKeyguardLocked() && mKeyguardManager.isKeyguardSecure())) return;
 
+        // warm up boost hints
+        mBOOST.cpuBoost(1500000);
+
         try {
             ActivityManagerNative.getDefault().resumeAppSwitches();
             ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
@@ -522,6 +529,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
             } else {
                 // Move
                 mState = STATE_DRAG;
+                mBOOST.cpuBoost(1500000);
                 mEffect.intro();
             }
             return true;
@@ -730,6 +738,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                         if (initialDistance > mIconSize * 0.7f) {
                             if (mInteractionReversed) {
                                 mState = STATE_GESTURES;
+                                mBOOST.cpuBoost(1500000);
                                 mEffect.wake();
                                 mBar.setHaloTaskerActive(true, true);
                             } else {
