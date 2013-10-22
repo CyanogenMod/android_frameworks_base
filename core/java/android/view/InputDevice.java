@@ -226,6 +226,8 @@ public final class InputDevice implements Parcelable {
      * The same should apply for left, right, down swipes. Complex gestures may also be input.
      *
      * @see #SOURCE_CLASS_NONE
+     *
+     * @hide
      */
     public static final int SOURCE_GESTURE_SENSOR = 0x00400000 | SOURCE_CLASS_NONE;
 
