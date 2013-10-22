@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2012-2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -74,4 +75,23 @@
     <string name="perf_profile_pwrsv">Energie sparen</string>
     <string name="perf_profile_bal">Ausgeglichen</string>
     <string name="perf_profile_perf">Mehr Leistung</string>
+
+    <!-- CAF strings -->
+    <string name="enablePin">Fehlgeschlagen. Aktivieren Sie die SIM-Kartensperre.</string>
+    <string name="keyguard_password_wrong_puk_code">Falscher PUK-Code</string>
+    <string name="keyguard_password_pin_failed">Entsperren mit PIN fehlgeschlagen</string>
+    <string name="keyguard_password_puk_failed">Entsperren mit PUK fehlgeschlagen</string>
+    <string name="keyguard_pin_accepted">Code akzeptiert</string>
+    <string name="pinpuk_attempts">\nVerbleibende Versuche:</string>
+    <string name="lockscreen_sim_error_message_short">Ungültige Karte</string>
+    <string name="lockscreen_sim_error_message">SIM-Karte ist ungültig</string>
+    <string name="lockscreen_perso_locked_message">SIM-Karte ist gesperrt</string>
+    <string name="stk_cc_ussd_to_dial">USSD-Anfrage wurde in DIAL-Anfrage umgewandelt</string>
+    <string name="stk_cc_ussd_to_ss">USSD-Anfrage wurde in SS-Anfrage umgewandelt</string>
+    <string name="stk_cc_ussd_to_ussd">USSD-Anfrage wurde in neue USSD-Anfrage umgewandelt</string>
+    <string name="stk_cc_ss_to_dial">SS-Anfrage wurde in DIAL-Anfrage umgewandelt</string>
+    <string name="stk_cc_ss_to_ussd">SS-Anfrage wurde in USSD-Anfrage umgewandelt</string>
+    <string name="stk_cc_ss_to_ss">SS-Anfrage wurde in neue SS-Anfrage umgewandelt</string>
+    <string name="msim_kg_sim_pin_msg_format">Vertrag:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
