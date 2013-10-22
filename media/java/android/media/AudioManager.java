@@ -42,6 +42,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.VolumePanel;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -1771,6 +1772,10 @@ public class AudioManager {
             return;
         }
 
+        if (inQuietHours()) {
+            return;
+        }
+
         if (!querySoundEffectsEnabled()) {
             return;
         }
@@ -1814,13 +1819,36 @@ public class AudioManager {
         }
     }
 
+    public boolean inQuietHours() {
+        boolean quietHoursEnabled = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QUIET_HOURS_ENABLED, 0) != 0;
+        int quietHoursStart = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QUIET_HOURS_START, 0);
+        int quietHoursEnd = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QUIET_HOURS_END, 0);
+        boolean quietHoursTouch = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QUIET_HOURS_TOUCH, 0) != 0;
+        if (quietHoursEnabled && quietHoursTouch && (quietHoursStart != quietHoursEnd)) {
+            // Get the date in "quiet hours" format.
+            Calendar calendar = Calendar.getInstance();
+            int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
+            if (quietHoursEnd < quietHoursStart) {
+                // Starts at night, ends in the morning.
+                return (minutes > quietHoursStart) || (minutes < quietHoursEnd);
+            } else {
+                return (minutes > quietHoursStart) && (minutes < quietHoursEnd);
+            }
+        }
+        return false;
+    }
+
+
     /**
      * Settings has an in memory cache, so this is fast.
      */
     private boolean querySoundEffectsEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED, 0) != 0;
     }
-
 
     /**
      *  Load Sound effects.
