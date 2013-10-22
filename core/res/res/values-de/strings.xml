@@ -50,6 +50,7 @@
     <string name="invalidPuk" msgid="8761456210898036513">"Geben Sie eine mindestens achtstellige PUK ein."</string>
     <string name="needPuk" msgid="919668385956251611">"Ihre SIM-Karte ist mit einem PUK gesperrt. Geben Sie zum Entsperren den PUK-Code ein."</string>
     <string name="needPuk2" msgid="4526033371987193070">"Geben Sie zum Entsperren der SIM-Karte den PUK2 ein."</string>
+    <string name="enablePin">Fehlgeschlagen. Aktivieren Sie die SIM/RUIM-Sperre.</string>
     <string name="imei" msgid="2625429890869005782">"IMEI"</string>
     <string name="meid" msgid="4841221237681254195">"MEID"</string>
     <string name="ClipMmi" msgid="6952821216480289285">"Anrufer-ID für eingehenden Anruf"</string>
@@ -773,6 +774,11 @@
     <string name="keyguard_password_enter_password_code" msgid="1054721668279049780">"Passwort zum Entsperren eingeben"</string>
     <string name="keyguard_password_enter_pin_password_code" msgid="6391755146112503443">"PIN zum Entsperren eingeben"</string>
     <string name="keyguard_password_wrong_pin_code" msgid="2422225591006134936">"Falscher PIN-Code"</string>
+    <string name="keyguard_password_wrong_puk_code">Falscher PUK-Code</string>
+    <string name="keyguard_password_pin_failed">Entsperren mit PIN fehlgeschlagen</string>
+    <string name="keyguard_password_puk_failed">Entsperren mit PUK fehlgeschlagen</string>
+    <string name="keyguard_pin_accepted">Code akzeptiert</string>
+    <string name="pinpuk_attempts">\nVerbleibende Versuche :</string>
     <string name="keyguard_label_text" msgid="861796461028298424">"Drücken Sie zum Entsperren die Menütaste und dann auf \"0\"."</string>
     <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"Notrufnummer"</string>
     <string name="lockscreen_carrier_default" msgid="8963839242565653192">"Kein Dienst"</string>
@@ -803,7 +809,10 @@
     <string name="lockscreen_transport_play_description" msgid="5888422938351019426">"Schaltfläche für Wiedergabe"</string>
     <string name="lockscreen_transport_stop_description" msgid="4562318378766987601">"Schaltfläche für Stopp"</string>
     <string name="emergency_calls_only" msgid="6733978304386365407">"Nur Notrufe"</string>
+    <string name="lockscreen_sim_error_message_short">Ungültige Karte</string>
+    <string name="lockscreen_sim_error_message">SIM-Karte ist ungültig</string>
     <string name="lockscreen_network_locked_message" msgid="143389224986028501">"Netzwerk gesperrt"</string>
+    <string name="lockscreen_perso_locked_message">SIM/RUIM ist Perso locked</string>
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"PUK-Sperre auf SIM"</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">"Weitere Informationen erhalten Sie im Nutzerhandbuch oder beim Kundendienst."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"PIN eingeben"</string>
@@ -1496,4 +1505,12 @@
     <string name="app_no_restricted_accounts" msgid="4011285085817350390">"Diese App unterstützt keine Konten für eingeschränkte Profile."</string>
     <string name="app_not_found" msgid="3429141853498927379">"Für diese Aktion wurde keine App gefunden."</string>
     <string name="revoke" msgid="5404479185228271586">"Aufheben"</string>
+    <string name="stk_cc_ussd_to_dial">USSD-Anfrage wurde in DIAL-Anfrage umgewandelt</string>
+    <string name="stk_cc_ussd_to_ss">USSD-Anfrage wurde in SS-Anfrage umgewandelt</string>
+    <string name="stk_cc_ussd_to_ussd">USSD-Anfrage wurde in neue USSD-Anfrage umgewandelt</string>
+    <string name="stk_cc_ss_to_dial">SS-Anfrage wurde in DIAL-Anfrage umgewandelt</string>
+    <string name="stk_cc_ss_to_ussd">SS-Anfrage wurde in USSD-Anfrage umgewandelt</string>
+    <string name="stk_cc_ss_to_ss">SS-Anfrage wurde in neue SS-Anfrage umgewandelt</string>
+    <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
