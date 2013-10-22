@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +101,7 @@ public interface TelephonyProperties
     //****** SIM Card
     /**
      * One of <code>"UNKNOWN"</code> <code>"ABSENT"</code> <code>"PIN_REQUIRED"</code>
-     * <code>"PUK_REQUIRED"</code> <code>"NETWORK_LOCKED"</code> or <code>"READY"</code>
+     * <code>"PUK_REQUIRED"</code> <code>"PERSO_LOCKED"</code> or <code>"READY"</code>
      */
     static String PROPERTY_SIM_STATE = "gsm.sim.state";
 
@@ -107,6 +110,12 @@ public interface TelephonyProperties
      *  Availability: SIM state must be "READY"
      */
     static String PROPERTY_ICC_OPERATOR_NUMERIC = "gsm.sim.operator.numeric";
+
+    /** The MCC+MNC (mobile country code+mobile network code) of the
+     *  provider of the SIM to be used for APNs lookup. 5 or 6 decimal digits.
+     *  Availability: SIM state must be "READY"
+     */
+    static String PROPERTY_APN_SIM_OPERATOR_NUMERIC = "gsm.apn.sim.operator.numeric";
 
     /** PROPERTY_ICC_OPERATOR_ALPHA is also known as the SPN, or Service Provider Name.
      *  Availability: SIM state must be "READY"
@@ -189,6 +198,17 @@ public interface TelephonyProperties
     static final String PROPERTY_TEST_CSIM = "persist.radio.test-csim";
 
     /**
+     * Specify if Android supports VoLTE/VT calls on IMS
+     */
+    static final String CALLS_ON_IMS_ENABLED_PROPERTY = "persist.radio.calls.on.ims";
+
+    /**
+     * Specify if Android supports CSVT calls.
+     */
+    static final String PROPERTY_CSVT_ENABLED = "persist.radio.csvt.enabled";
+
+
+    /**
      * Ignore RIL_UNSOL_NITZ_TIME_RECEIVED completely, used for debugging/testing.
      */
     static final String PROPERTY_IGNORE_NITZ = "telephony.test.ignore.nitz";
@@ -203,4 +223,21 @@ public interface TelephonyProperties
      * Type: boolean ( true = alpha display enabled, false = alpha display disabled)
      */
     static final String PROPERTY_ALPHA_USRCNF = "persist.atel.noalpha.usrcnf";
+
+     /**
+     * Property to set multi sim feature.
+     * Type:  String(dsds, dsda)
+     */
+    static final String PROPERTY_MULTI_SIM_CONFIG = "persist.multisim.config";
+
+    /**
+     * Property to store default subscription.
+     */
+    static final String PROPERTY_DEFAULT_SUBSCRIPTION = "persist.radio.default.sub";
+
+    /**
+     * Property to enable MMS Mode.
+     * Type: string ( default = silent, enable to = prompt )
+     */
+    static final String PROPERTY_MMS_TRANSACTION = "mms.transaction";
 }

@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2013 The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +42,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.provider.Settings.Secure;
+import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -2300,9 +2304,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             // Set the preferred network mode to 0 = Global, CDMA default
             int type;
+            if (TelephonyManager.getLteOnCdmaModeStatic() == PhoneConstants.LTE_ON_CDMA_TRUE) {
+                type = Phone.NT_MODE_GLOBAL;
+            } else {
                 type = SystemProperties.getInt("ro.telephony.default_network",
                         RILConstants.PREFERRED_NETWORK_MODE);
-            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, type);
+            }
+
+            String val = Integer.toString(type);
+            if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                val = type + "," + type;
+            }
+            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, val);
 
             // --- New global settings start here
         } finally {

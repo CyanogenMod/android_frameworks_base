@@ -28,6 +28,8 @@ public class IccCardConstants {
     public static final String INTENT_VALUE_ICC_NOT_READY = "NOT_READY";
     /* ABSENT means ICC is missing */
     public static final String INTENT_VALUE_ICC_ABSENT = "ABSENT";
+    /* CARD_IO_ERROR means for three consecutive times there was SIM IO error */
+    static public final String INTENT_VALUE_ICC_CARD_IO_ERROR = "CARD_IO_ERROR";
     /* LOCKED means ICC is locked by pin or by network */
     public static final String INTENT_VALUE_ICC_LOCKED = "LOCKED";
     /* READY means ICC is ready to access */
@@ -42,8 +44,8 @@ public class IccCardConstants {
     public static final String INTENT_VALUE_LOCKED_ON_PIN = "PIN";
     /* PUK means ICC is locked on PUK1 */
     public static final String INTENT_VALUE_LOCKED_ON_PUK = "PUK";
-    /* NETWORK means ICC is locked on NETWORK PERSONALIZATION */
-    public static final String INTENT_VALUE_LOCKED_NETWORK = "NETWORK";
+    /* PERSO means ICC is locked on PERSONALIZATION */
+    public static final String INTENT_VALUE_LOCKED_PERSO = "PERSO";
     /* PERM_DISABLED means ICC is permanently disabled due to puk fails */
     public static final String INTENT_VALUE_ABSENT_ON_PERM_DISABLED = "PERM_DISABLED";
 
@@ -60,10 +62,12 @@ public class IccCardConstants {
         ABSENT,
         PIN_REQUIRED,
         PUK_REQUIRED,
-        NETWORK_LOCKED,
+        PERSO_LOCKED,
         READY,
         NOT_READY,
-        PERM_DISABLED;
+        PERM_DISABLED,
+        CARD_IO_ERROR,
+        DETECTED;
 
         public boolean isPinLocked() {
             return ((this == PIN_REQUIRED) || (this == PUK_REQUIRED));
@@ -71,8 +75,9 @@ public class IccCardConstants {
 
         public boolean iccCardExist() {
             return ((this == PIN_REQUIRED) || (this == PUK_REQUIRED)
-                    || (this == NETWORK_LOCKED) || (this == READY)
-                    || (this == PERM_DISABLED));
+                    || (this == PERSO_LOCKED) || (this == READY)
+                    || (this == PERM_DISABLED) || (this == CARD_IO_ERROR)
+                    || (this == DETECTED));
         }
     }
 }

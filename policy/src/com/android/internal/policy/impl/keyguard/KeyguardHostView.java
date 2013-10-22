@@ -1,6 +1,9 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
  *
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -52,6 +55,7 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+import android.telephony.MSimTelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
@@ -60,9 +64,11 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.RemoteViews.OnClickHandler;
+
 
 import com.android.internal.R;
 import com.android.internal.app.ThemeUtils;
@@ -985,6 +991,12 @@ public class KeyguardHostView extends KeyguardViewBase {
             final LayoutInflater inflater = LayoutInflater.from(ThemeUtils.createUiContext(mContext));
             if (DEBUG) Log.v(TAG, "inflating id = " + layoutId);
             View v = inflater.inflate(layoutId, mSecurityViewContainer, false);
+            if (KeyguardUpdateMonitor.sIsMultiSimEnabled) {
+                ViewStub vStub = (ViewStub) (v.findViewById(R.id.stub_msim_carrier_text));
+                if (vStub != null) {
+                    vStub.inflate();
+                }
+            }
             mSecurityViewContainer.addView(v);
             updateSecurityView(v);
             view = (KeyguardSecurityView)v;
@@ -1170,8 +1182,16 @@ public class KeyguardHostView extends KeyguardViewBase {
             case Password: return R.id.keyguard_password_view;
             case Biometric: return R.id.keyguard_face_unlock_view;
             case Account: return R.id.keyguard_account_view;
-            case SimPin: return R.id.keyguard_sim_pin_view;
-            case SimPuk: return R.id.keyguard_sim_puk_view;
+            case SimPin:
+                if (KeyguardUpdateMonitor.sIsMultiSimEnabled) {
+                    return R.id.msim_keyguard_sim_pin_view;
+                }
+                return R.id.keyguard_sim_pin_view;
+            case SimPuk:
+                if (KeyguardUpdateMonitor.sIsMultiSimEnabled) {
+                    return R.id.msim_keyguard_sim_puk_view;
+                }
+                return R.id.keyguard_sim_puk_view;
         }
         return 0;
     }
@@ -1184,8 +1204,16 @@ public class KeyguardHostView extends KeyguardViewBase {
             case Password: return R.layout.keyguard_password_view;
             case Biometric: return R.layout.keyguard_face_unlock_view;
             case Account: return R.layout.keyguard_account_view;
-            case SimPin: return R.layout.keyguard_sim_pin_view;
-            case SimPuk: return R.layout.keyguard_sim_puk_view;
+            case SimPin:
+                if (KeyguardUpdateMonitor.sIsMultiSimEnabled) {
+                    return R.layout.msim_keyguard_sim_pin_view;
+                }
+                return R.layout.keyguard_sim_pin_view;
+            case SimPuk:
+                if (KeyguardUpdateMonitor.sIsMultiSimEnabled) {
+                    return R.layout.msim_keyguard_sim_puk_view;
+                }
+                return R.layout.keyguard_sim_puk_view;
             default:
                 return 0;
         }

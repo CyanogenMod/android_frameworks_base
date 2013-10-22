@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +38,13 @@ import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
 import android.util.Slog;
 
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccCardConstants;
+import com.android.internal.telephony.MSimConstants;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.telephony.cdma.TtyIntent;
@@ -77,7 +82,7 @@ public class PhoneStatusBarPolicy {
 
     // Assume it's all good unless we hear otherwise.  We don't always seem
     // to get broadcasts that it *is* there.
-    IccCardConstants.State mSimState = IccCardConstants.State.READY;
+    IccCardConstants.State[] mSimState;
 
     // ringer volume
     private boolean mVolumeVisible;
@@ -150,6 +155,11 @@ public class PhoneStatusBarPolicy {
         filter.addAction(TtyIntent.TTY_ENABLED_CHANGE_ACTION);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
 
+        int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
+        mSimState = new IccCardConstants.State[numPhones];
+        for (int i=0; i < numPhones; i++) {
+            mSimState[i] = IccCardConstants.State.READY;
+        }
         // storage
         mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         mStorageManager.registerListener(
@@ -206,28 +216,38 @@ public class PhoneStatusBarPolicy {
     }
 
     private final void updateSimState(Intent intent) {
+        IccCardConstants.State simState;
         String stateExtra = intent.getStringExtra(IccCardConstants.INTENT_KEY_ICC_STATE);
+
+        // Obtain the subscription info from intent
+        int sub = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY, 0);
+        Slog.d(TAG, "updateSimState for subscription :" + sub);
+
         if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
-            mSimState = IccCardConstants.State.ABSENT;
+            simState = IccCardConstants.State.ABSENT;
+        }
+        else if (IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR.equals(stateExtra)) {
+            simState = IccCardConstants.State.CARD_IO_ERROR;
         }
         else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
-            mSimState = IccCardConstants.State.READY;
+            simState = IccCardConstants.State.READY;
         }
         else if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
             final String lockedReason =
                     intent.getStringExtra(IccCardConstants.INTENT_KEY_LOCKED_REASON);
             if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PIN.equals(lockedReason)) {
-                mSimState = IccCardConstants.State.PIN_REQUIRED;
+                simState = IccCardConstants.State.PIN_REQUIRED;
             }
             else if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
-                mSimState = IccCardConstants.State.PUK_REQUIRED;
+                simState = IccCardConstants.State.PUK_REQUIRED;
             }
             else {
-                mSimState = IccCardConstants.State.NETWORK_LOCKED;
+                simState = IccCardConstants.State.PERSO_LOCKED;
             }
         } else {
-            mSimState = IccCardConstants.State.UNKNOWN;
+            simState = IccCardConstants.State.UNKNOWN;
         }
+        mSimState[sub] = simState;
     }
 
     private final void updateVolume() {

@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1475,6 +1478,61 @@ public class AudioManager {
      */
     public static final int MODE_IN_COMMUNICATION   = AudioSystem.MODE_IN_COMMUNICATION;
 
+    /* Calls states for Voice calls */
+    /**
+     * @hide Call state for inactive call state.
+     */
+    public static final int CALL_INACTIVE         = AudioSystem.CALL_INACTIVE;
+    /**
+     * @hide Call state for active call state.
+     */
+    public static final int CALL_ACTIVE           = AudioSystem.CALL_ACTIVE;
+    /**
+     * @hide Call state for hold call state.
+     */
+    public static final int CALL_HOLD             = AudioSystem.CALL_HOLD;
+    /**
+     * @hide Call state for local call hold state.
+     */
+    public static final int CALL_LOCAL_HOLD       = AudioSystem.CALL_LOCAL_HOLD;
+
+
+    /* VSIDS for IMS, Multimode CS call and GSM CS call */
+    /**
+     * @hide VSID for CS call, Multimode.
+     */
+    public static final long VOICE_VSID           = AudioSystem.VOICE_VSID;
+    /**
+     * @hide VSID for CS call, GSM-only.
+     */
+    public static final long VOICE2_VSID          = AudioSystem.VOICE2_VSID;
+    /**
+     * @hide VSID for IMS call, Multimode.
+     */
+    public static final long IMS_VSID             = AudioSystem.IMS_VSID;
+    /**
+     * @hide VSID for QCHAT call.
+     */
+    public static final long QCHAT_VSID           = AudioSystem.QCHAT_VSID;
+
+
+    /* Key used in setParameters for VSID and Call_state */
+    /**
+     * @hide Key for vsid used in setParameters.
+     */
+    public static final String VSID_KEY           = AudioSystem.VSID_KEY;
+
+    /**
+     * @hide Key for call_state used in setParameters.
+     */
+    public static final String CALL_STATE_KEY     = AudioSystem.CALL_STATE_KEY;
+
+    /**
+     * @hide Key for all_call_states used in getParameters.
+     */
+    public static final String ALL_CALL_STATES_KEY     = AudioSystem.ALL_CALL_STATES_KEY;
+
+
     /* Routing bits for setRouting/getRouting API */
     /**
      * Routing audio output to earpiece
@@ -1623,7 +1681,12 @@ public class AudioManager {
      *
      */
     public void setParameters(String keyValuePairs) {
-        AudioSystem.setParameters(keyValuePairs);
+        IAudioService service = getService();
+        try {
+            service.setParameters(keyValuePairs);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error in setParameters due to "+e);
+        }
     }
 
     /**

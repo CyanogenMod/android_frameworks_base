@@ -57,6 +57,7 @@ public class PhoneConstants {
     public static final int PHONE_TYPE_GSM = RILConstants.GSM_PHONE;
     public static final int PHONE_TYPE_CDMA = RILConstants.CDMA_PHONE;
     public static final int PHONE_TYPE_SIP = RILConstants.SIP_PHONE;
+    public static final int PHONE_TYPE_IMS = RILConstants.IMS_PHONE;
 
     // Modes for LTE_ON_CDMA
     public static final int LTE_ON_CDMA_UNKNOWN = RILConstants.LTE_ON_CDMA_UNKNOWN;
@@ -84,6 +85,14 @@ public class PhoneConstants {
     public static final String PHONE_IN_ECM_STATE = "phoneinECMState";
 
     public static final String REASON_LINK_PROPERTIES_CHANGED = "linkPropertiesChanged";
+
+    /**
+     * Return codes for supplyPinReturnResult and
+     * supplyPukReturnResult APIs
+     */
+    public static final int PIN_RESULT_SUCCESS = 0;
+    public static final int PIN_PASSWORD_INCORRECT = 1;
+    public static final int PIN_GENERAL_FAILURE = 2;
 
     /**
      * Return codes for <code>enableApnType()</code>

@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,6 +91,34 @@ public class AudioSystem
     public static final int MODE_IN_COMMUNICATION   = 3;
     public static final int NUM_MODES               = 4;
 
+
+    /* Call states for Voice calls */
+    /* @hide Call state for inactive call state. */
+    public static final int CALL_INACTIVE           = 0x1;
+    /* @hide Call state for active call state. */
+    public static final int CALL_ACTIVE             = 0x2;
+    /* @hide Call state for hold call state. */
+    public static final int CALL_HOLD               = 0x3;
+    /* @hide Call state for local hold call state. */
+    public static final int CALL_LOCAL_HOLD         = 0x4;
+
+    /* @hide VSID for CS voice, Multimode */
+    public static final long VOICE_VSID             = 0x10C01000;
+    /* @hide VSID for CS Voice GSM-Only */
+    public static final long VOICE2_VSID            = 0x10DC1000;
+    /* @hide VSID for IMS Multimode */
+    public static final long IMS_VSID               = 0x10C02000;
+    /* @hide VSID for QCHAT */
+    public static final long QCHAT_VSID             = 0x10803000;
+
+    /* @hide Key for vsid used in setParameters */
+    public static final String VSID_KEY             = "vsid";
+
+    /* @hide Key for call_state used in setParameters */
+    public static final String CALL_STATE_KEY       = "call_state";
+
+    /* @hide Key for all_call_states used in getParameters */
+    public static final String ALL_CALL_STATES_KEY  = "all_call_states";
 
     /* Routing bits for the former setRouting/getRouting API */
     /** @deprecated */

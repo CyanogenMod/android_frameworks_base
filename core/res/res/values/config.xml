@@ -2,6 +2,8 @@
 <!--
 /*
 ** Copyright 2009, The Android Open Source Project
+** Copyright (c) 2013 The Linux Foundation. All rights reserved.
+** Not a Contribution.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -35,6 +37,7 @@
        <item><xliff:g id="id">volume</xliff:g></item>
        <item><xliff:g id="id">wifi</xliff:g></item>
        <item><xliff:g id="id">cdma_eri</xliff:g></item>
+       <item><xliff:g id="id">phone_signal_second_sub</xliff:g></item>
        <item><xliff:g id="id">data_connection</xliff:g></item>
        <item><xliff:g id="id">phone_evdo_signal</xliff:g></item>
        <item><xliff:g id="id">phone_signal</xliff:g></item>
@@ -1067,6 +1070,10 @@
 
     <!-- Set to true to add links to Cell Broadcast app from Settings and MMS app. -->
     <bool name="config_cellBroadcastAppLinks">false</bool>
+
+    <!-- Boolean indicating if RADIO POWER OFF should be skipped on receiving SIM REFRESH with RESET-->
+    <!-- This will be handled by modem if it is true-->
+    <bool translatable="false" name="skip_radio_power_off_on_sim_refresh_reset">true</bool>
 
     <!-- The default value if the SyncStorageEngine should sync automatically or not -->
     <bool name="config_syncstorageengine_masterSyncAutomatically">true</bool>

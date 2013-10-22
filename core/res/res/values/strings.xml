@@ -97,6 +97,8 @@
          the SIM card. -->
     <string name="needPuk">Your SIM card is PUK-locked. Type the PUK code to unlock it.</string>
     <string name="needPuk2">Type PUK2 to unblock SIM card.</string>
+    <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
+    <string name="enablePin">Unsuccessful. Enable SIM/RUIM Lock.</string>
     <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
     <string name="imei">IMEI</string>
 
@@ -2126,6 +2128,25 @@
          to unlock the keyguard.  Displayed in one line in a large font.  -->
     <string name="keyguard_password_wrong_pin_code">Incorrect PIN code.</string>
 
+    <!-- Instructions telling the user that they entered the wrong puk while trying
+         to unlock the keyguard.  Displayed in one line in a large font.  -->
+    <string name="keyguard_password_wrong_puk_code">Incorrect PUK code!</string>
+
+    <!-- Instructions telling the user that the operation to unlock the keyguard
+         with PIN failed. Displayed in one line in a large font.  -->
+    <string name="keyguard_password_pin_failed">PIN operation failed!</string>
+
+    <!-- Instructions telling the user that the operation to unlock the keyguard
+         with PUK failed. Displayed in one line in a large font.  -->
+    <string name="keyguard_password_puk_failed">PUK operation failed!</string>
+
+
+    <!-- Notification telling the user that the PIN1 they entered is valid -->
+    <string name="keyguard_pin_accepted">Code Accepted!</string>
+
+    <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+    <string name="pinpuk_attempts">\nAttempts Remaining :</string>
+
     <!-- Instructions telling the user how to unlock the phone. -->
     <string name="keyguard_label_text">To unlock, press Menu then 0.</string>
 
@@ -2205,20 +2226,27 @@
 
     <!-- Shown in the lock screen when there is emergency calls only mode. -->
     <string name="emergency_calls_only" msgid="2485604591272668370">Emergency calls only</string>
+    <!-- Shown in the lock screen when there is SIM card IO error. -->
+    <string name="lockscreen_sim_error_message_short">Invalid Card.</string>
+    <!-- Shown in the lock screen when there is SIM card error. -->
+    <string name="lockscreen_sim_error_message">SIM card is Invalid.</string>
+
 
     <!-- When the user inserts a sim card from an unsupported network, it becomes network
          locked -->
     <string name="lockscreen_network_locked_message">Network locked</string>
 
+    <!-- When the user inserts a sim card with some personalization enabled -->
+    <string name="lockscreen_perso_locked_message">SIM/RUIM is Perso locked</string>
 
     <!-- When the user enters a wrong sim pin too many times, it becomes
          PUK locked (Pin Unlock Kode) -->
     <string name="lockscreen_sim_puk_locked_message">SIM card is PUK-locked.</string>
     <!-- Shown in the lock screen when the SIM has become PUK locked and the user must call customer care to unlock it. -->
-    <string name="lockscreen_sim_puk_locked_instructions">See the User Guide or contact Customer Care.</string>
+    <string name="lockscreen_sim_puk_locked_instructions">PIN1 Blocked. Enter PUK1.\nor\nPlease see the User Guide or contact Customer Care.</string>
 
-    <!-- Shown in the lock screen to tell the user that their SIM is locked and they must unlock it. -->
-    <string name="lockscreen_sim_locked_message">SIM card is locked.</string>
+    <!-- Shown in the lock screen to tell the user that their SIM/RUIM is locked and they must unlock it. -->
+    <string name="lockscreen_sim_locked_message">SIM/RUIM card is locked.</string>
 
     <!-- For the unlock screen, When the user enters a sim unlock code, it takes a little while to check
          whether it is valid, and to unlock the sim if it is valid.  we display a
@@ -4112,4 +4140,20 @@
     <!-- Message informing user that the requested activity could not be found [CHAR LIMIT=none] -->
     <string name="app_not_found">No application found to handle this action</string>
     <string name="revoke">Revoke</string>
+
+    <!-- Displayed when the USSD/SS request is modified by STK CC to a
+    different request. This will be displayed in a toast. -->
+    <string name="stk_cc_ussd_to_dial">USSD request is modified to DIAL request.</string>
+    <string name="stk_cc_ussd_to_ss">USSD request is modified to SS request.</string>
+    <string name="stk_cc_ussd_to_ussd">USSD request is modified to new USSD request.</string>
+    <string name="stk_cc_ss_to_dial">SS request is modified to DIAL request.</string>
+    <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
+    <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
+
+    <!-- Multi SIM related -->
+    <!-- Message used in Multi SIM enabled SIM PIN view -->
+    <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+
+    <!-- Carrier text used in Multi SIM enabled view -->
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
