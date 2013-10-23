@@ -42,6 +42,12 @@
 
 #include <memory>
 
+#if HAVE_QC_TIME_SERVICES
+extern "C" {
+#include <private/time_genoff.h>
+}
+#endif
+
 namespace android {
 
 static const size_t N_ANDROID_TIMERFDS = ANDROID_ALARM_TYPE_COUNT + 1;
@@ -125,6 +131,25 @@ int AlarmImplAlarmDriver::clear(int type, struct timespec *ts)
     return ioctl(fds[0], ANDROID_ALARM_CLEAR(type), ts);
 }
 
+#if HAVE_QC_TIME_SERVICES
+static int setTimeServicesTime(time_bases_type base, long int secs)
+{
+    int rc = 0;
+    time_genoff_info_type time_set;
+    uint64_t value = secs;
+    time_set.base = base;
+    time_set.unit = TIME_SECS;
+    time_set.operation = T_SET;
+    time_set.ts_val = &value;
+    rc = time_genoff_operation(&time_set);
+    if (rc) {
+        ALOGE("Error setting generic offset: %d. Still setting system time\n", rc);
+        rc = -1;
+    }
+    return rc;
+}
+#endif
+
 int AlarmImplAlarmDriver::setTime(struct timeval *tv)
 {
     struct timespec ts;
@@ -133,6 +158,10 @@ int AlarmImplAlarmDriver::setTime(struct timeval *tv)
     ts.tv_sec = tv->tv_sec;
     ts.tv_nsec = tv->tv_usec * 1000;
     res = ioctl(fds[0], ANDROID_ALARM_SET_RTC, &ts);
+#if HAVE_QC_TIME_SERVICES
+    setTimeServicesTime(ATS_USER, (tv->tv_sec));
+#endif
+
     if (res < 0)
         ALOGV("ANDROID_ALARM_SET_RTC ioctl failed: %s\n", strerror(errno));
     return res;
