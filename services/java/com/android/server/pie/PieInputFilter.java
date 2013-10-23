@@ -226,7 +226,8 @@ public class PieInputFilter implements IInputFilter {
             Trace.traceBegin(Trace.TRACE_TAG_INPUT, "filterInputEvent");
         }
         try {
-            if (event.getSource() != InputDevice.SOURCE_TOUCHSCREEN
+            if (((event.getSource() & InputDevice.SOURCE_TOUCHSCREEN)
+                 != InputDevice.SOURCE_TOUCHSCREEN)
                     || !(event instanceof MotionEvent)) {
                 sendInputEvent(event, policyFlags);
                 return;
