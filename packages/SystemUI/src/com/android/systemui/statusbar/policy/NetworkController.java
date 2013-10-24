@@ -1263,6 +1263,12 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             }
         }
 
+        if (!mAirplaneMode && mSimState == IccCardConstants.State.ABSENT) {
+            // look again; your radios are now sim cards
+            mPhoneSignalIconId = mDataSignalIconId = mDataTypeIconId = mQSDataTypeIconId = 0;
+            mQSPhoneSignalIconId = 0;
+        }
+
         if (DEBUG) {
             Log.d(TAG, "refreshViews connected={"
                     + (mWifiConnected?" wifi":"")
