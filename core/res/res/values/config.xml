@@ -1423,4 +1423,11 @@
     <!-- set to false if we dont need to consider data
          service state to display signal strength bars -->
     <bool name="config_combined_signal">true</bool>
+
+    <!-- Flag indicating whether the RIL_REQUEST_SEND_SMS_EXPECT_MORE
+         API should be used or not. The usage of the API is added
+         by CodeAurora and may not be supported by certain RIL.
+
+         The default value is false which represents AOSP behavior. -->
+    <bool name="config_smsUseExpectMore">false</bool>
 </resources>
