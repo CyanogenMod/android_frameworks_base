@@ -71,4 +71,21 @@
     <string name="policylab_enforceMmac">MMAC</string>
     <string name="policydesc_enforceMmac">Váltás a biztonságos és az engedélyező MMAC mód között.</string>
     <string name="progress_nomediapresent" product="default">Nincs eltávolítható memóriakártya\u2026</string>
+    <string name="enablePin">Sikertelen. Engedélyezze a SIM/RUIM zárat.</string>
+    <string name="keyguard_password_wrong_puk_code">Helytelen PUK kód.</string>
+    <string name="keyguard_password_pin_failed">PIN művelet sikertelen!</string>
+    <string name="keyguard_password_puk_failed">PUK művelet sikertelen!</string>
+    <string name="keyguard_pin_accepted">Kód elfogadva!</string>
+    <string name="pinpuk_attempts">\nHátralévő kisérletek: </string>
+    <string name="lockscreen_sim_error_message_short">Érvénytelen kártya.</string>
+    <string name="lockscreen_sim_error_message">Érvénytelen SIM kártya.</string>
+    <string name="lockscreen_perso_locked_message">SIM/RUIM Perso záras</string>
+    <string name="stk_cc_ussd_to_dial">USSD kérés módosítva DIAL kérésre.</string>
+    <string name="stk_cc_ussd_to_ss">USSD kérés módosítva SS kérésre.</string>
+    <string name="stk_cc_ussd_to_ussd">USSD kérés módosítva új USSD kérésre.</string>
+    <string name="stk_cc_ss_to_dial">SS kérés módosítva DIAL kérésre.</string>
+    <string name="stk_cc_ss_to_ussd">SS kérés módosítva USSD kérésre.</string>
+    <string name="stk_cc_ss_to_ss">SS kérés módosítva új SS kérésre.</string>
+    <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
