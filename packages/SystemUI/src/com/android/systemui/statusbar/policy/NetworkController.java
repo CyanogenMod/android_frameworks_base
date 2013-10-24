@@ -1320,6 +1320,11 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 combinedLabel = customLabel;
             }
             mobileLabel = customLabel;
+
+        if (!mAirplaneMode && mSimState == IccCardConstants.State.ABSENT) {
+            // look again; your radios are now sim cards
+            mPhoneSignalIconId = mDataSignalIconId = mDataTypeIconId = mQSDataTypeIconId = 0;
+            mQSPhoneSignalIconId = 0;
         }
 
         if (DEBUG) {
