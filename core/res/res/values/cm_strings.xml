@@ -88,9 +88,6 @@
 
     <string name="lockscreen_discharging">Discharging, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
-    <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
-    <string name="progress_nomediapresent" product="default">No removable media present\u2026</string>
-
     <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
     <string name="storage_sd_dock_card">Dock SD card</string>
 
