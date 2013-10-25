@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2012-2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -126,4 +127,21 @@
     <string name="policylab_enforceMmac">Εξαναγκασμός MMAC</string>
     <string name="policydesc_enforceMmac">Εναλλαγή πολιτικής MMAC σε εξαναγκασμένη ή επιτρεπόμενη.</string>
     <string name="progress_nomediapresent" product="default">Δεν υπάρχουν αφαιρούμενα μέσα αποθήκευσης\u2026</string>
+    <string name="enablePin">Αποτυχία. Ενεργοποίηση κλειδώματος SIM/RUIM.</string>
+    <string name="keyguard_password_wrong_puk_code">Εσφαλμένος κωδικός PUK.</string>
+    <string name="keyguard_password_pin_failed">Αποτυχία λειτουργίας PIN.</string>
+    <string name="keyguard_password_puk_failed">Αποτυχία λειτουργίας PUK.</string>
+    <string name="keyguard_pin_accepted">Κωδικός αποδεκτός.</string>
+    <string name="pinpuk_attempts">\nΠροσπάθειες που απομένουν:</string>
+    <string name="lockscreen_sim_error_message_short">Μη έγκυρη κάρτα.</string>
+    <string name="lockscreen_sim_error_message">Η κάρτα SIM δεν είναι έγκυρη.</string>
+    <string name="lockscreen_perso_locked_message">Η κάρτα SIM/RUIM είναι κλειδωμένη.</string>
+    <string name="stk_cc_ussd_to_dial">Η αίτηση USSD τροποποιήθηκε σε αίτηση DIAL.</string>
+    <string name="stk_cc_ussd_to_ss">Η αίτηση USSD τροποποιήθηκε σε αίτηση SS.</string>
+    <string name="stk_cc_ussd_to_ussd">Η αίτηση USSD τροποποιήθηκε σε νέα αίτηση USSD.</string>
+    <string name="stk_cc_ss_to_dial">Η αίτηση SS τροποποιήθηκε σε αίτηση DIAL.</string>
+    <string name="stk_cc_ss_to_ussd">Η αίτηση SS τροποποιήθηκε σε αίτηση USSD.</string>
+    <string name="stk_cc_ss_to_ss">Η αίτηση SS τροποποιήθηκε σε νέα αίτηση SS.</string>
+    <string name="msim_kg_sim_pin_msg_format">ΣΥΝΔΡ.: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
