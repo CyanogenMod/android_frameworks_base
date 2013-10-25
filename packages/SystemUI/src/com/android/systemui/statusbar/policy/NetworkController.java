@@ -1271,7 +1271,9 @@ public class NetworkController extends BroadcastReceiver {
                 mDataTypeIconId = R.drawable.stat_sys_data_connected_roam;
                 mQSDataTypeIconId = R.drawable.ic_qs_signal_r;
             }
-        } else if (mSimState == IccCardConstants.State.ABSENT) {
+        }
+
+        if (!mAirplaneMode && mSimState == IccCardConstants.State.ABSENT) {
             // look again; your radios are now sim cards
             mPhoneSignalIconId = mDataSignalIconId = mDataTypeIconId = mQSDataTypeIconId = 0;
             mQSPhoneSignalIconId = 0;

@@ -986,7 +986,9 @@ public class MSimNetworkController extends NetworkController {
             } else if (mPhone.isNetworkRoaming(subscription)) {
                 mMSimDataTypeIconId[subscription] = R.drawable.stat_sys_data_connected_roam;
             }
-        } else if (mMSimState[subscription] == IccCardConstants.State.ABSENT) {
+        }
+
+        if (!mAirplaneMode && mMSimState[subscription] == IccCardConstants.State.ABSENT) {
             mMSimPhoneSignalIconId[subscription] = mMSimDataSignalIconId[subscription]
                     = mMSimDataTypeIconId[subscription] = 0;
         }
