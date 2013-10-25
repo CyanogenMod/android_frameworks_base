@@ -14,7 +14,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="enablePin">Neúspěšné. Povolte zámek SIM/RUIM.</string>
+    <string name="keyguard_password_wrong_puk_code">Nesprávný kód PUK!</string>
+    <string name="keyguard_password_pin_failed">Akce PIN se nezdařila!</string>
+    <string name="keyguard_password_puk_failed">Akce PUK se nezdařila!</string>
+    <string name="keyguard_pin_accepted">Kód přijat!</string>
+    <string name="pinpuk_attempts">\nZbývá pokusů: </string>
+    <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
+    <string name="lockscreen_sim_error_message">Karta SIM je neplatná.</string>
+    <string name="lockscreen_perso_locked_message">Karta SIM/RUIM je zamčená</string>
     <string name="vpn_lockdown_config">Dotykem nastavit</string>
+    <string name="stk_cc_ussd_to_dial">Požadavek USSD je změněn na požadavek DIAL.</string>
+    <string name="stk_cc_ussd_to_ss">Požadavek USSD je změněn na požadavek SS.</string>
+    <string name="stk_cc_ussd_to_ussd">Požadavek USSD je změněn na nový požadavek USSD.</string>
+    <string name="stk_cc_ss_to_dial">Požadavek SS je změněn na požadavek DIAL.</string>
+    <string name="stk_cc_ss_to_ussd">Požadavek SS je změněn na požadavek USSD.</string>
+    <string name="stk_cc_ss_to_ss">Požadavek SS je změněn na nový požadavek SS.</string>
 
     <string name="profileNameDefault">Výchozí</string>
     <string name="profileNameWork">Práce</string>
