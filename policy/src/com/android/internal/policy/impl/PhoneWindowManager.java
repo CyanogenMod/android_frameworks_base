@@ -24,6 +24,8 @@ import android.app.IActivityManager;
 import android.app.IUiModeManager;
 import android.app.KeyguardManager;
 import android.app.AppOpsManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.UiModeManager;
@@ -44,8 +46,13 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.media.IAudioService;
@@ -4249,6 +4256,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
+        // Proximity Lock.
+        ProximityLock mProximityLock;
+
         // Handle special keys.
         switch (keyCode) {
             case KeyEvent.KEYCODE_ENDCALL: {
@@ -4293,17 +4303,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case KeyEvent.KEYCODE_FOCUS:
                 if (down && !isScreenOn && mCameraWakeScreen) {
-                    if (keyguardActive) {
-                        mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode);
-                    } else {
-                        result |= ACTION_WAKE_UP;
-                    }
-                    if (mCameraSleepOnRelease) {
-                        mIsFocusPressed = true;
+                    mProximityLock.startSensing();
+                    if (!mProximityLock.isSensorClosed()) {
+                        if (keyguardActive) {
+                            mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode);
+                        } else {
+                            result |= ACTION_WAKE_UP;
+                        }
+                        if (mCameraSleepOnRelease) {
+                            mIsFocusPressed = true;
+                        }
                     }
                 } else if (!down && isScreenOn && mIsFocusPressed) {
                      result = (result & ~ACTION_WAKE_UP) | ACTION_GO_TO_SLEEP;
+                     mProximityLock.stopSensing();
                      mIsFocusPressed = false;
+                } else {
+                    mProximityLock.stopSensing();
                 }
                 break;
             case KeyEvent.KEYCODE_CAMERA:
@@ -5338,6 +5354,47 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
     }
+
+    class ProximityLock implements SensorEventListener {
+        private SensorManager mSensorManager;
+        private Sensor mSensor;
+        private boolean isProximity = false;
+
+        public void startSensing() {
+            mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        public void stopSensing() {
+            mSensorManager.unregisterListener(this);
+        }
+
+        public boolean isSensorClosed() {
+            return isProximity;
+        }
+
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+
+        public void onSensorChanged(SensorEvent event) {
+            final int NOTIF_ID = 1;
+            NotificationManager notifMgr = (NotificationManager)Context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification proximityClosed = new Notification();
+            proximityClosed.ledARGB = Color.RED;
+            proximityClosed.ledOnMS = 1;
+            proximityClosed.ledOffMS = 0;
+            proximityClosed.flags |= Notification.FLAG_SHOW_LIGHTS;
+            if (event.values[0] == 0) {
+                isProximity = true;
+                notifMgr.notify(NOTIF_ID, proximityClosed);
+            } else {
+                isProximity = false;
+                notifMgr.cancel(NOTIF_ID);
+            }
+        }
+    }
+
 
     /** {@inheritDoc} */
     public void enableScreenAfterBoot() {
