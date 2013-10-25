@@ -145,7 +145,7 @@ interface ISms {
      *  raw pdu of the status report is in the extended data ("pdu").
      * @param priority Priority level of the message
      */
-    void sendTextWithPriority(in String destAddr, in String scAddr, in String text,
+    void sendTextWithPriority(String callingPkg, in String destAddr, in String scAddr, in String text,
             in PendingIntent sentIntent, in PendingIntent deliveryIntent,
             in int priority);
 
