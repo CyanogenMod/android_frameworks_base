@@ -17,6 +17,23 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="imProtocolGoogleTalk">Conversaciones</string>
     <string name="progress_nomediapresent" product="default">No hay medios extraíbles\u2026</string>
+    <string name="enablePin">No realizado. Habilita antes el bloqueo de SIM/RUIM.</string>
+    <string name="keyguard_password_wrong_puk_code">¡Código PUK incorrecto!</string>
+    <string name="keyguard_password_pin_failed">¡Falló la operación de PIN!</string>
+    <string name="keyguard_password_puk_failed">¡Falló la operación de PUK!</string>
+    <string name="keyguard_pin_accepted">¡Código aceptado!</string>
+    <string name="pinpuk_attempts">\nIntentos restantes:</string>
+    <string name="lockscreen_sim_error_message_short">Tarjeta inválida.</string>
+    <string name="lockscreen_sim_error_message">La tarjeta SIM no es válida.</string>
+    <string name="lockscreen_perso_locked_message">SIM/RUIM tiene bloqueo personalizado</string>
+    <string name="stk_cc_ussd_to_dial">Solicitud USSD es modificada a solicitud DIAL.</string>
+    <string name="stk_cc_ussd_to_ss">Solicitud USSD es modificada a solicitud SS.</string>
+    <string name="stk_cc_ussd_to_ussd">Solicitud USSD es modificada a nueva solicitud USSD.</string>
+    <string name="stk_cc_ss_to_dial">Solicitud SS es modificada a solicitud DIAL.</string>
+    <string name="stk_cc_ss_to_ussd">Solicitud SS es modificada a solicitud USSD.</string>
+    <string name="stk_cc_ss_to_ss">Solicitud SS es modificada a nueva solicitud SS.</string>
+    <string name="msim_kg_sim_pin_msg_format">SUS:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
     <string name="profileNameDefault">Predeterminado</string>
     <string name="profileNameWork">Trabajo</string>
     <string name="profileNameHome">Casa</string>
