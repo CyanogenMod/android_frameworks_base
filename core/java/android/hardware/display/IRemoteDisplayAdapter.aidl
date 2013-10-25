@@ -19,6 +19,9 @@ package android.hardware.display;
 import android.hardware.display.WifiDisplayStatus;
 import android.hardware.display.IDisplayDevice;
 
+/**
+ * @hide
+ */
 interface IRemoteDisplayAdapter {
     // No permissions required.
     oneway void scanRemoteDisplays();

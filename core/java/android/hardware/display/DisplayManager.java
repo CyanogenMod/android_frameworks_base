@@ -66,9 +66,15 @@ public final class DisplayManager {
     public static final String EXTRA_WIFI_DISPLAY_STATUS =
             "android.hardware.display.extra.WIFI_DISPLAY_STATUS";
 
+    /**
+     * @hide
+     */
     public static final String ACTION_REMOTE_DISPLAY_STATUS_CHANGED =
             "android.hardware.display.action.REMOTE_DISPLAY_STATUS_CHANGED";
 
+    /**
+     * @hide
+     */
     public static final String EXTRA_REMOTE_DISPLAY_STATUS =
             "android.hardware.display.extra.REMOTE_DISPLAY_STATUS";
 

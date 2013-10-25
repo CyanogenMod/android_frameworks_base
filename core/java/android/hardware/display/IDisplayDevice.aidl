@@ -18,6 +18,9 @@ package android.hardware.display;
 
 import android.view.Surface;
 
+/**
+ * @hide
+ */
 interface IDisplayDevice {
     Surface createDisplaySurface();
     oneway void stop();
