@@ -14,6 +14,25 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="imProtocolGoogleTalk">Conversazioni</string>
+    <string name="progress_nomediapresent" product="default">Non ci sono dispositivi di memoria estraibili\u2026</string>
+    <string name="enablePin">Non eseguito. Abilitare prima il blocco SIM/RUIM.</string>
+    <string name="keyguard_password_wrong_puk_code">Codice PUK errato!</string>
+    <string name="keyguard_password_pin_failed">Errore nell\'operazione PIN!</string>
+    <string name="keyguard_password_puk_failed">Errore nell\'operazione PUK!</string>
+    <string name="keyguard_pin_accepted">Codice valido!</string>
+    <string name="pinpuk_attempts">\nTentativi rimanenti:</string>
+    <string name="lockscreen_sim_error_message_short">Tessera non valida.</string>
+    <string name="lockscreen_sim_error_message">La tessera SIM non è valida.</string>
+    <string name="lockscreen_perso_locked_message">SIM/RUIM con blocco personalizzato</string>
+    <string name="stk_cc_ussd_to_dial">Richiesta USSD modificata in richiesta DIAL.</string>
+    <string name="stk_cc_ussd_to_ss">Richiesta USSD modificata in richiesta SS.</string>
+    <string name="stk_cc_ussd_to_ussd">Richiesta USSD modificata in nuova richiesta USSD.</string>
+    <string name="stk_cc_ss_to_dial">Richiesta SS modificata in richiesta DIAL.</string>
+    <string name="stk_cc_ss_to_ussd">Richiesta SS modificata in richiesta USSD.</string>
+    <string name="stk_cc_ss_to_ss">Richiesta SS modificata in nuova richiesta SS.</string>
+    <string name="msim_kg_sim_pin_msg_format">SUS:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
     <string name="profileNameDefault">Predefinito</string>
     <string name="profileNameWork">Lavoro</string>
     <string name="profileNameHome">Casa</string>
@@ -43,7 +62,6 @@
     <string name="permlab_preventpower">modifica azione tasto spegnimento</string>
     <string name="permdesc_preventpower">Consente a un\'applicazione di cambiare il comportamento del tasto di spegnimento</string>
     <string name="lockscreen_discharging">In uso, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-    <string name="progress_nomediapresent" product="default">Nessun supporto rimovibile presente\u2026</string>
     <string name="app_killed_message">Applicazione terminata</string>
     <string name="global_action_reboot">Riavvia</string>
     <string name="global_action_choose_profile">Profilo</string>
