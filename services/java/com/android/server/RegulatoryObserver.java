@@ -93,6 +93,9 @@ class RegulatoryObserver extends UEventObserver {
                     run_crda();
                 }
             }
+            if (uevent_buf != null) {
+                uevent_buf.close();
+            }
         } catch (Exception e) {
             Slog.e(TAG, "This kernel may not have CRDA support." , e);
         }
