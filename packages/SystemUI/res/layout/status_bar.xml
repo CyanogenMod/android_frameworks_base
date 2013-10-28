@@ -76,6 +76,8 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+	    <include layout="@layout/network_stats" /> 
+
             <LinearLayout android:id="@+id/statusIcons"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

@@ -2907,7 +2907,19 @@ public final class Settings {
          * Sets the alpha (transparency) of notifications
          * @hide
          */
-        public static final String NOTIF_ALPHA = "notif_alpha";   
+        public static final String NOTIF_ALPHA = "notif_alpha";
+
+	/**
+         * Whether to show the network status in the status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_STATS = "status_bar_network_stats";
+ 
+        /**
+         * Frequency at which stats are updated, in milliseconds
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_STATS_UPDATE_INTERVAL = "status_bar_network_stats_update_frequency";   
 
         /**
          * Display style of AM/PM next to clock in status bar
