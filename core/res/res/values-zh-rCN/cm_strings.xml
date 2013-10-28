@@ -14,6 +14,21 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="enablePin">不成功. 开启 SIM/RUIM 锁</string>
+    <string name="keyguard_password_wrong_puk_code">不正确的 PUK 码!</string>
+    <string name="keyguard_password_pin_failed">PIN 操作失败!</string>
+    <string name="keyguard_password_puk_failed">PUK 操作失败!</string>
+    <string name="keyguard_pin_accepted">代码已接受!</string>
+    <string name="pinpuk_attempts">\n剩余尝试次数: </string>
+    <string name="lockscreen_sim_error_message_short">非法的卡</string>
+    <string name="lockscreen_sim_error_message">SIM 卡是非法的</string>
+    <string name="lockscreen_perso_locked_message">SIM/RUIM 卡已被他人锁定</string>
+    <string name="stk_cc_ussd_to_dial">USSD 请求已被修改为拨号请求.</string>
+    <string name="stk_cc_ussd_to_ss">USSD 请求已被修改为 SS 请求.</string>
+    <string name="stk_cc_ussd_to_ussd">USSD 请求已被修改为一个新的 USSD 请求.</string>
+    <string name="stk_cc_ss_to_dial">SS 请求已被修改为拨号请求.</string>
+    <string name="stk_cc_ss_to_ussd">SS 请求已被修改为 UUSD 请求.</string>
+    <string name="stk_cc_ss_to_ss">SS 请求已被修改为一个新的 SS 请求.</string>
     <string name="profileNameDefault">默认</string>
     <string name="profileNameWork">工作</string>
     <string name="profileNameHome">住宅</string>
