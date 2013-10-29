@@ -2919,7 +2919,13 @@ public final class Settings {
          * Frequency at which stats are updated, in milliseconds
          * @hide
          */
-        public static final String STATUS_BAR_NETWORK_STATS_UPDATE_INTERVAL = "status_bar_network_stats_update_frequency";   
+        public static final String STATUS_BAR_NETWORK_STATS_UPDATE_INTERVAL = "status_bar_network_stats_update_frequency";
+
+	/**
+         * Network stats Color style
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_COLOR = "status_bar_network_usage_color";   
 
         /**
          * Display style of AM/PM next to clock in status bar
