@@ -450,10 +450,11 @@ static status_t do_9patch(const char* imageName, image_info* image)
 
     int maxSizeXDivs = W * sizeof(int32_t);
     int maxSizeYDivs = H * sizeof(int32_t);
-    int32_t* xDivs = (int32_t*) malloc(maxSizeXDivs);
-    int32_t* yDivs = (int32_t*) malloc(maxSizeYDivs);
-    uint8_t  numXDivs = 0;
-    uint8_t  numYDivs = 0;
+    int32_t* xDivs = image->info9Patch.xDivs = (int32_t*) malloc(maxSizeXDivs);
+    int32_t* yDivs = image->info9Patch.yDivs = (int32_t*) malloc(maxSizeYDivs);
+    uint8_t numXDivs = 0;
+    uint8_t numYDivs = 0;
+
     int8_t numColors;
     int numRows;
     int numCols;
@@ -508,6 +509,10 @@ static status_t do_9patch(const char* imageName, image_info* image)
         goto getout;
     }
 
+    // Copy patch size data into image...
+    image->info9Patch.numXDivs = numXDivs;
+    image->info9Patch.numYDivs = numYDivs;
+
     // Find left and right of padding area...
     if (get_horizontal_ticks(image->rows[H-1], W, transparent, false, &image->info9Patch.paddingLeft,
                              &image->info9Patch.paddingRight, &errorMsg, NULL, false) != NO_ERROR) {
@@ -542,12 +547,6 @@ static status_t do_9patch(const char* imageName, image_info* image)
         NOISY(printf("layoutBounds=%d %d %d %d\n", image->layoutBoundsLeft, image->layoutBoundsTop,
                 image->layoutBoundsRight, image->layoutBoundsBottom));
     }
-
-    // Copy patch data into image
-    image->info9Patch.numXDivs = numXDivs;
-    image->info9Patch.numYDivs = numYDivs;
-    image->info9Patch.xDivs = xDivs;
-    image->info9Patch.yDivs = yDivs;
 
     // If padding is not yet specified, take values from size.
     if (image->info9Patch.paddingLeft < 0) {
@@ -955,7 +954,7 @@ static void analyze_image(const char *imageName, image_info &imageInfo, int gray
                 gg = *row++;
                 bb = *row++;
                 aa = *row++;
-                
+
                 if (isGrayscale) {
                     *out++ = rr;
                 } else {
