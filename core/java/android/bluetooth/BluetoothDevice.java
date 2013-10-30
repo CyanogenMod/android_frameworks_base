@@ -275,7 +275,6 @@ public final class BluetoothDevice implements Parcelable {
     public static final String EXTRA_SECURE_PAIRING =
             "codeaurora.bluetooth.device.extra.SECURE";
 
-    /** @hide */
     public static final String EXTRA_PAIRING_KEY = "android.bluetooth.device.extra.PAIRING_KEY";
 
     /**
