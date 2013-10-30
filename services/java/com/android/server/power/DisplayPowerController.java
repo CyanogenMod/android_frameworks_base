@@ -816,6 +816,7 @@ final class DisplayPowerController {
                     if (!mElectronBeamOffAnimator.isStarted()) {
                         if (mPowerState.getElectronBeamLevel() == 0.0f) {
                             setScreenOn(false);
+                            unblockScreenOn();
                         } else if (mPowerState.prepareElectronBeam(
                                 //mElectronBeamFadesConfig ?
 				mElectronBeamMode == 0 ?
