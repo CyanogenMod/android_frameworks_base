@@ -636,6 +636,16 @@ public final class PowerManager {
         }
     }
 
+    public String getSeenWakeLocks() {
+        try {
+            if (mService != null) {
+                return mService.getSeenWakeLocks();
+            }
+        } catch (RemoteException e) {
+        }
+        return null;
+    }
+
     /**
      * A wake lock is a mechanism to indicate that your application needs
      * to have the device stay on.
