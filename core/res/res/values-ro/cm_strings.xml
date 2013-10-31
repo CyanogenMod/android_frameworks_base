@@ -14,29 +14,56 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="reboot_system" product="tablet">"Reporniţi tablet PC"</string>
-    <string name="reboot_system" product="default">"Reporniţi telefonul"</string>
-    <string name="reboot_reboot">"Repornire"</string>
-    <string name="reboot_progress">"Repornire..."</string>
-    <string name="reboot_recovery">"Recuperare"</string>
-    <string name="reboot_confirm" product="default">"Telefonul dvs. va reporni."</string>
-    <string name="profileNameDefault">"General"</string>
-    <string name="profileNameWork">"Serviciu"</string>
-    <string name="profileNameHome">"Acasă"</string>
-    <string name="profileNameSilent">"Silenţios"</string>
-    <string name="profileNameNight">"Noapte"</string>
-    <string name="profileGroupPhone">"Telefon"</string>
-    <string name="profileGroupCalendar">"Calendar"</string>
-    <string name="profileGroupGmail">"Gmail"</string>
-    <string name="profileGroupEmail">"Email"</string>
-    <string name="profileGroupSMS">"SMS"</string>
-    <string name="global_actions_toggle_expanded_desktop_mode">"Desktop extins"</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">"Activat"</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">"Dezactivat"</string>
-    <string name="global_action_reboot">"Repornire"</string>
-    <string name="global_action_choose_profile">"Profil"</string>
-    <string name="lockscreen_discharging">"Descărcare, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="toast_rotation_unlocked">"Rotire Ecran Deblocată"</string>
-    <string name="toast_rotation_locked">"Rotire Ecran Blocată"</string>
-    <string name="app_killed_message">"Aplicaţie oprită"</string>
+    <string name="profileNameDefault">Implicit</string>
+    <string name="profileNameWork">Serviciu</string>
+    <string name="profileNameHome">Acasă</string>
+    <string name="profileNameSilent">Silențios</string>
+    <string name="profileNameNight">Noapte</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Calendar</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Altele</string>
+    <string name="reboot_system" product="tablet">Reporniți tableta</string>
+    <string name="reboot_system" product="default">Reporniți telefonul</string>
+    <string name="global_action_screenshot">Captură de ecran</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Suprafață de lucru extinsă</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Pornit</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Oprit</string>
+    <string name="reboot_reboot">Repornire</string>
+    <string name="reboot_recovery">Recuperare</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_download">Descărcare</string>
+    <string name="reboot_progress">Repornire\u2026</string>
+    <string name="reboot_confirm" product="tablet">Tableta va reporni.</string>
+    <string name="reboot_confirm" product="default">Telefonul va reporni.</string>
+    <string name="permlab_preventpower">împiedică butonul pornire/oprire</string>
+    <string name="permdesc_preventpower">Permite aplicației sa modifice butonul pornire/oprire</string>
+    <string name="permlab_fm_radio_receiver">controlează receptorul FM</string>
+    <string name="permdesc_fm_radio_receiver">Permite aplicației să controleze receptorul FM.</string>
+    <string name="permlab_fm_radio_transmitter">controlează transmiţătorul FM </string>
+    <string name="permdesc_fm_radio_transmitter">Permite aplicației să controleze transmiţătorul FM.</string>
+    <string name="permlab_sendMockSms">trimite mesaje SMS de batjocură</string>
+    <string name="permdesc_sendMockSms">Permite aplicației sa trimită mesaje SMS de batjocură. Aceasta permite trimiterea de mesaje SMS către o aplicație de încredere. Aplicațiile rău intenționate pot trimite mesaje in continuu, blocând sistemul de notificare și deranjând utilizatorul.</string>
+    <string name="lockscreen_discharging">Descărcare, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="storage_sd_dock_card">Stand card SD</string>
+    <string name="app_killed_message">Aplicație inchisă</string>
+    <string name="global_action_reboot">Repornire</string>
+    <string name="global_action_choose_profile">Profil</string>
+    <string name="toast_rotation_unlocked">Rotirea ecranului deblocată</string>
+    <string name="toast_rotation_locked">Rotirea ecranului blocată</string>
+    <string name="stylus_app_not_installed">%s nu este instalată</string>
+    <string name="permlab_changePrivacyGuardState">pornește sau oprește protejarea confidenţialitații</string>
+    <string name="permdesc_changePrivacyGuardState">Permite aplicațiilor rularea in modul Protejarea Confidențialității. Când o aplicație ruleaza in modul Protejarea Confidențialității, nu va avea acces la datele personale cum ar fi contactele, jurnalul de apel sau mesajele.</string>
+    <string name="privacy_guard_notification">Protejarea Confidențialității activată</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nu va avea acces la datele personale</string>
+    <string name="profile_picker_title">Profiluri</string>
+    <string name="profile_none">Niciunul</string>
+    <string name="permlab_cancelNotifications">anulează notificările aplicației</string>
+    <string name="permdesc_cancelNotifications">Permite anularea notificărilor create de alte aplicații.</string>
+    <string name="permlab_interceptSmsSent">interceptarea mesajelor SMS trimise</string>
+    <string name="permdesc_interceptSmsSent">Permite interceptarea mesajelor SMS trimise. Aplicațiile rău intenționate pot folosi asta pentru a impiedica trimiterea mesajelor SMS.</string>
+    <string name="policylab_enforceSelinux">Impune SELinux</string>
+    <string name="policydesc_enforceSelinux">Comutare politică SELinux impusă sau permisivă.</string>
+    <string name="policylab_enforceMmac">Impune MMAC</string>
+    <string name="policydesc_enforceMmac">Comutare politică MMAC impusă sau permisivă.</string>
 </resources>
