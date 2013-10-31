@@ -1015,7 +1015,17 @@ void OpenGLRenderer::composeLayer(sp<Snapshot> current, sp<Snapshot> previous) {
         }
     } else if (!rect.isEmpty()) {
         dirtyLayer(rect.left, rect.top, rect.right, rect.bottom);
+
+#ifdef QCOM_BSP
+        save(0);
+        // the layer contains screen buffer content that shouldn't be alpha modulated
+        // (and any necessary alpha modulation was handled drawing into the layer)
+        mSnapshot->alpha = 1.0f;
+#endif
         composeLayerRect(layer, rect, true);
+#ifdef QCOM_BSP
+        restore();
+#endif
     }
 
     dirtyClip();
