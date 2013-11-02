@@ -55,6 +55,8 @@
     <string name="quick_settings_lte_off">LTE apagat</string>
     <string name="quick_settings_volume">Volum</string>
     <string name="quick_settings_camera_label">Càmera</string>
+    <string name="quick_settings_network_adb_disabled_label">Desactivat</string>
+    <string name="quick_settings_network_adb_enabled_label">Activat</string>
     <string name="quick_settings_expanded_desktop">Extés</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_camera_error_connect">No es pot connectar a la càmera</string>
