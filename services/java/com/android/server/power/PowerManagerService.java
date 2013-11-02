@@ -16,6 +16,7 @@
 
 package com.android.server.power;
 
+import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IBatteryStats;
 import com.android.server.BatteryService;
 import com.android.server.EventLogTags;
@@ -27,6 +28,7 @@ import com.android.server.display.DisplayManagerService;
 import com.android.server.dreams.DreamManagerService;
 
 import android.Manifest;
+import android.app.AppOpsManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -175,6 +177,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     private BatteryService mBatteryService;
     private DisplayManagerService mDisplayManagerService;
     private IBatteryStats mBatteryStats;
+    private IAppOpsService mAppOps;
     private HandlerThread mHandlerThread;
     private PowerManagerHandler mHandler;
     private WindowManagerPolicy mPolicy;
@@ -423,11 +426,12 @@ public final class PowerManagerService extends IPowerManager.Stub
      */
     public void init(Context context, LightsService ls,
             ActivityManagerService am, BatteryService bs, IBatteryStats bss,
-            DisplayManagerService dm) {
+            IAppOpsService appOps, DisplayManagerService dm) {
         mContext = context;
         mLightsService = ls;
         mBatteryService = bs;
         mBatteryStats = bss;
+        mAppOps = appOps;
         mDisplayManagerService = dm;
         mHandlerThread = new HandlerThread(TAG);
         mHandlerThread.start();
@@ -471,7 +475,7 @@ public final class PowerManagerService extends IPowerManager.Stub
             // The notifier runs on the system server's main looper so as not to interfere
             // with the animations and other critical functions of the power manager.
             mNotifier = new Notifier(Looper.getMainLooper(), mContext, mBatteryStats,
-                    createSuspendBlockerLocked("PowerManagerService.Broadcasts"),
+                    mAppOps, createSuspendBlockerLocked("PowerManagerService.Broadcasts"),
                     mScreenOnBlocker, mPolicy);
 
             // The display power controller runs on the power manager service's
@@ -650,9 +654,13 @@ public final class PowerManagerService extends IPowerManager.Stub
     }
 
     @Override // Binder call
-    public void acquireWakeLock(IBinder lock, int flags, String tag, WorkSource ws) {
+    public void acquireWakeLock(IBinder lock, int flags, String tag, String packageName,
+            WorkSource ws) {
         if (lock == null) {
             throw new IllegalArgumentException("lock must not be null");
+        }
+        if (packageName == null) {
+            throw new IllegalArgumentException("packageName must not be null");
         }
         PowerManager.validateWakeLockParameters(flags, tag);
 
@@ -666,16 +674,29 @@ public final class PowerManagerService extends IPowerManager.Stub
 
         final int uid = Binder.getCallingUid();
         final int pid = Binder.getCallingPid();
+
+        try {
+            if (mAppOps.checkOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName)
+                    != AppOpsManager.MODE_ALLOWED) {
+                Slog.d(TAG, "acquireWakeLock: ignoring request from " + packageName);
+                // For (ignore) accounting purposes
+                mAppOps.noteOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName);
+                // silent return
+                return;
+            }
+        } catch (RemoteException e) {
+        }
+
         final long ident = Binder.clearCallingIdentity();
         try {
-            acquireWakeLockInternal(lock, flags, tag, ws, uid, pid);
+            acquireWakeLockInternal(lock, flags, tag, packageName, ws, uid, pid);
         } finally {
             Binder.restoreCallingIdentity(ident);
         }
     }
 
-    private void acquireWakeLockInternal(IBinder lock, int flags, String tag, WorkSource ws,
-            int uid, int pid) {
+    private void acquireWakeLockInternal(IBinder lock, int flags, String tag, String packageName,
+            WorkSource ws, int uid, int pid) {
         synchronized (mLock) {
             if (DEBUG_SPEW) {
                 Slog.d(TAG, "acquireWakeLockInternal: lock=" + Objects.hashCode(lock)
@@ -690,11 +711,11 @@ public final class PowerManagerService extends IPowerManager.Stub
                 if (!wakeLock.hasSameProperties(flags, tag, ws, uid, pid)) {
                     // Update existing wake lock.  This shouldn't happen but is harmless.
                     notifyWakeLockReleasedLocked(wakeLock);
-                    wakeLock.updateProperties(flags, tag, ws, uid, pid);
+                    wakeLock.updateProperties(flags, tag, packageName, ws, uid, pid);
                     notifyWakeLockAcquiredLocked(wakeLock);
                 }
             } else {
-                wakeLock = new WakeLock(lock, flags, tag, ws, uid, pid);
+                wakeLock = new WakeLock(lock, flags, tag, packageName, ws, uid, pid);
                 try {
                     lock.linkToDeath(wakeLock, 0);
                 } catch (RemoteException ex) {
@@ -863,14 +884,16 @@ public final class PowerManagerService extends IPowerManager.Stub
 
     private void notifyWakeLockAcquiredLocked(WakeLock wakeLock) {
         if (mSystemReady) {
-            mNotifier.onWakeLockAcquired(wakeLock.mFlags, wakeLock.mTag,
+            wakeLock.mNotifiedAcquired = true;
+            mNotifier.onWakeLockAcquired(wakeLock.mFlags, wakeLock.mTag, wakeLock.mPackageName,
                     wakeLock.mOwnerUid, wakeLock.mOwnerPid, wakeLock.mWorkSource);
         }
     }
 
     private void notifyWakeLockReleasedLocked(WakeLock wakeLock) {
-        if (mSystemReady) {
-            mNotifier.onWakeLockReleased(wakeLock.mFlags, wakeLock.mTag,
+        if (mSystemReady && wakeLock.mNotifiedAcquired) {
+            wakeLock.mNotifiedAcquired = false;
+            mNotifier.onWakeLockReleased(wakeLock.mFlags, wakeLock.mTag, wakeLock.mPackageName,
                     wakeLock.mOwnerUid, wakeLock.mOwnerPid, wakeLock.mWorkSource);
         }
     }
@@ -2592,15 +2615,18 @@ public final class PowerManagerService extends IPowerManager.Stub
         public final IBinder mLock;
         public int mFlags;
         public String mTag;
+        public final String mPackageName;
         public WorkSource mWorkSource;
-        public int mOwnerUid;
-        public int mOwnerPid;
+        public final int mOwnerUid;
+        public final int mOwnerPid;
+        public boolean mNotifiedAcquired;
 
-        public WakeLock(IBinder lock, int flags, String tag, WorkSource workSource,
-                int ownerUid, int ownerPid) {
+        public WakeLock(IBinder lock, int flags, String tag, String packageName,
+                WorkSource workSource, int ownerUid, int ownerPid) {
             mLock = lock;
             mFlags = flags;
             mTag = tag;
+            mPackageName = packageName;
             mWorkSource = copyWorkSource(workSource);
             mOwnerUid = ownerUid;
             mOwnerPid = ownerPid;
@@ -2620,13 +2646,23 @@ public final class PowerManagerService extends IPowerManager.Stub
                     && mOwnerPid == ownerPid;
         }
 
-        public void updateProperties(int flags, String tag, WorkSource workSource,
-                int ownerUid, int ownerPid) {
+        public void updateProperties(int flags, String tag, String packageName,
+                WorkSource workSource, int ownerUid, int ownerPid) {
+            if (!mPackageName.equals(packageName)) {
+                throw new IllegalStateException("Existing wake lock package name changed: "
+                        + mPackageName + " to " + packageName);
+            }
+            if (mOwnerUid != ownerUid) {
+                throw new IllegalStateException("Existing wake lock uid changed: "
+                        + mOwnerUid + " to " + ownerUid);
+            }
+            if (mOwnerPid != ownerPid) {
+                throw new IllegalStateException("Existing wake lock pid changed: "
+                        + mOwnerPid + " to " + ownerPid);
+            }
             mFlags = flags;
             mTag = tag;
             updateWorkSource(workSource);
-            mOwnerUid = ownerUid;
-            mOwnerPid = ownerPid;
         }
 
         public boolean hasSameWorkSource(WorkSource workSource) {

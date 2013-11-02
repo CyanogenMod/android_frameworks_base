@@ -23,6 +23,7 @@ import android.app.AppOpsManager;
 import android.appwidget.AppWidgetManager;
 import com.android.internal.R;
 import com.android.internal.app.ThemeUtils;
+import com.android.internal.app.IAppOpsService;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.ProcessStats;
 import com.android.server.AppOpsService;
@@ -1574,6 +1575,10 @@ public final class ActivityManagerService  extends ActivityManagerNative
 
     public static ActivityManagerService self() {
         return mSelf;
+    }
+
+    public IAppOpsService getAppOpsService() {
+        return mAppOpsService;
     }
     
     static class AThread extends Thread {

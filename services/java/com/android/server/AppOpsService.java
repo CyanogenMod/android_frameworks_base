@@ -41,6 +41,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -49,6 +50,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.util.ArrayMap;
 import android.util.AtomicFile;
 import android.util.Log;
 import android.util.Pair;
@@ -124,6 +126,8 @@ public class AppOpsService extends IAppOpsService.Stub {
     }
 
     public final static class Op {
+        public final int uid;
+        public final String packageName;
         public final int op;
         public int mode;
         public final int defaultMode;
@@ -136,7 +140,9 @@ public class AppOpsService extends IAppOpsService.Stub {
         public int allowedCount;
         public int ignoredCount;
 
-        public Op(int _op, boolean strict) {
+        public Op(int _uid, String _packageName, int _op, boolean strict) {
+            uid = _uid;
+            packageName = _packageName;
             op = _op;
             if (!strict) {
                 mode = AppOpsManager.MODE_ALLOWED;
@@ -173,6 +179,47 @@ public class AppOpsService extends IAppOpsService.Stub {
         @Override
         public void binderDied() {
             stopWatchingMode(mCallback);
+        }
+    }
+
+    final ArrayMap<IBinder, ClientState> mClients = new ArrayMap<IBinder, ClientState>();
+
+    public final class ClientState extends Binder implements DeathRecipient {
+        final IBinder mAppToken;
+        final int mPid;
+        final ArrayList<Op> mStartedOps;
+
+        public ClientState(IBinder appToken) {
+            mAppToken = appToken;
+            mPid = Binder.getCallingPid();
+            if (appToken instanceof Binder) {
+                // For local clients, there is no reason to track them.
+                mStartedOps = null;
+            } else {
+                mStartedOps = new ArrayList<Op>();
+                try {
+                    mAppToken.linkToDeath(this, 0);
+                } catch (RemoteException e) {
+                }
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "ClientState{" +
+                    "mAppToken=" + mAppToken +
+                    ", " + (mStartedOps != null ? ("pid=" + mPid) : "local") +
+                    '}';
+        }
+
+        @Override
+        public void binderDied() {
+            synchronized (AppOpsService.this) {
+                for (int i=mStartedOps.size()-1; i>=0; i--) {
+                    finishOperationLocked(mStartedOps.get(i));
+                }
+                mClients.remove(mAppToken);
+            }
         }
     }
 
@@ -665,6 +712,18 @@ public class AppOpsService extends IAppOpsService.Stub {
     }
 
     @Override
+    public IBinder getToken(IBinder clientToken) {
+        synchronized (this) {
+            ClientState cs = mClients.get(clientToken);
+            if (cs == null) {
+                cs = new ClientState(clientToken);
+                mClients.put(clientToken, cs);
+            }
+            return cs;
+        }
+    }
+
+    @Override
     public int checkOperation(int code, int uid, String packageName) {
         boolean strict;
         verifyIncomingUid(uid);
@@ -722,7 +781,7 @@ public class AppOpsService extends IAppOpsService.Stub {
     }
 
     @Override
-    public int startOperation(int code, int uid, String packageName) {
+    public int startOperation(IBinder token, int code, int uid, String packageName) {
         int mode;
         Ops ops;
         Op op;
@@ -731,6 +790,7 @@ public class AppOpsService extends IAppOpsService.Stub {
         final Result res;
         verifyIncomingUid(uid);
         verifyIncomingOp(code);
+        ClientState client = (ClientState)token;
         synchronized (this) {
             ops = getOpsLocked(uid, packageName, true);
             if (ops == null) {
@@ -752,6 +812,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                         op.duration = -1;
                     }
                     op.nesting++;
+                    if (client.mStartedOps != null) {
+                        client.mStartedOps.add(op);
+                    }
                 }
                 return switchOp.mode;
             } else {
@@ -760,31 +823,48 @@ public class AppOpsService extends IAppOpsService.Stub {
             }
         }
 
+        if (res.get() == AppOpsManager.MODE_ALLOWED) {
+            if (client.mStartedOps != null) {
+                client.mStartedOps.add(op);
+            }
+        }
+
         return res.get();
     }
 
     @Override
-    public void finishOperation(int code, int uid, String packageName) {
+    public void finishOperation(IBinder token, int code, int uid, String packageName) {
         verifyIncomingUid(uid);
         verifyIncomingOp(code);
+        ClientState client = (ClientState)token;
         synchronized (this) {
             Op op = getOpLocked(code, uid, packageName, true);
             if (op == null) {
                 return;
             }
-            if (op.nesting <= 1) {
-                if (op.nesting == 1) {
-                    op.duration = (int)(System.currentTimeMillis() - op.time);
-                    op.time += op.duration;
-                } else {
-                    Slog.w(TAG, "Finishing op nesting under-run: uid " + uid + " pkg " + packageName
-                        + " code " + code + " time=" + op.time + " duration=" + op.duration
-                        + " nesting=" + op.nesting);
+            if (client.mStartedOps != null) {
+                if (!client.mStartedOps.remove(op)) {
+                    throw new IllegalStateException("Operation not started: uid" + op.uid
+                            + " pkg=" + op.packageName + " op=" + op.op);
                 }
-                op.nesting = 0;
-            } else {
-                op.nesting--;
             }
+            finishOperationLocked(op);
+        }
+    }
+
+    void finishOperationLocked(Op op) {
+        if (op.nesting <= 1) {
+            if (op.nesting == 1) {
+                op.duration = (int)(System.currentTimeMillis() - op.time);
+                op.time += op.duration;
+            } else {
+                Slog.w(TAG, "Finishing op nesting under-run: uid " + op.uid + " pkg "
+                        + op.packageName + " code " + op.op + " time=" + op.time
+                        + " duration=" + op.duration + " nesting=" + op.nesting);
+            }
+            op.nesting = 0;
+        } else {
+            op.nesting--;
         }
     }
 
@@ -835,6 +915,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                         pkgUid = mContext.getPackageManager().getPackageUid(packageName,
                                 UserHandle.getUserId(uid));
                     } catch (NameNotFoundException e) {
+                         if ("media".equals(packageName)) {
+                             pkgUid = Process.MEDIA_UID;
+                         }
                     }
                     if (pkgUid != uid) {
                         // Oops!  The package name is not valid for the uid they are calling
@@ -883,7 +966,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                 return null;
             }
 
-            op = new Op(code, strict);
+            op = new Op(ops.uid, ops.packageName, code, strict);
             ops.put(code, op);
         }
         if (edit) {
@@ -1078,7 +1161,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                     code = AppOpsManager.nameToOp(codeNameStr);
                 }
                 boolean strict = isStrict(code, uid, pkgName);
-                Op op = new Op(code, strict);
+                Op op = new Op(uid, pkgName, code, strict);
                 String mode = parser.getAttributeValue(null, "m");
                 if (mode != null) {
                     op.mode = Integer.parseInt(mode);

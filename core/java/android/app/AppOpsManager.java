@@ -21,6 +21,8 @@ package android.app;
 
 import android.Manifest;
 
+import android.os.Binder;
+import android.os.IBinder;
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IAppOpsCallback;
 
@@ -58,6 +60,8 @@ public class AppOpsManager {
     final IAppOpsService mService;
     final HashMap<Callback, IAppOpsCallback> mModeWatchers
             = new HashMap<Callback, IAppOpsCallback>();
+
+    static IBinder sToken;
 
     public static final int MODE_ALLOWED = 0;
     public static final int MODE_IGNORED = 1;
@@ -105,7 +109,8 @@ public class AppOpsManager {
     public static final int OP_BLUETOOTH_CHANGE = 32;
     public static final int OP_DATA_CONNECT_CHANGE = 33;
     public static final int OP_ALARM_WAKEUP = 34;
-    public static final int _NUM_OP = 35;
+    public static final int OP_WAKE_LOCK = 35;
+    public static final int _NUM_OP = 36;
 
     /**
      * Map to check if each operation is strict or not, to determine default
@@ -149,6 +154,7 @@ public class AppOpsManager {
         true,   //OP_BLUETOOTH_CHANGE
         true,   //OP_DATA_CONNECT_CHANGE
         false,  //OP_ALARM_WAKEUP
+        false,  //OP_WAKE_LOCK
     };
 
     /**
@@ -195,6 +201,7 @@ public class AppOpsManager {
             OP_BLUETOOTH_CHANGE,
             OP_DATA_CONNECT_CHANGE,
             OP_ALARM_WAKEUP,
+            OP_WAKE_LOCK,
     };
 
     /**
@@ -237,6 +244,7 @@ public class AppOpsManager {
             "BLUETOOTH_CHANGE",
             "DATA_CONNECT_CHANGE",
             "ALARM_WAKEUP",
+            "WAKE_LOCK",
     };
 
     /**
@@ -279,6 +287,7 @@ public class AppOpsManager {
             android.Manifest.permission.BLUETOOTH,
             android.Manifest.permission.CHANGE_NETWORK_STATE,
             null, // no permission for alarm wakeups
+            android.Manifest.permission.WAKE_LOCK,
     };
 
     /**
@@ -605,9 +614,24 @@ public class AppOpsManager {
         return noteOp(op, Process.myUid(), mContext.getBasePackageName());
     }
 
+    /** @hide */
+    public static IBinder getToken(IAppOpsService service) {
+        synchronized (AppOpsManager.class) {
+            if (sToken != null) {
+                return sToken;
+            }
+            try {
+                sToken = service.getToken(new Binder());
+            } catch (RemoteException e) {
+                // System is dead, whatevs.
+            }
+            return sToken;
+        }
+    }
+
     public int startOp(int op, int uid, String packageName) {
         try {
-            int mode = mService.startOperation(op, uid, packageName);
+            int mode = mService.startOperation(getToken(mService), op, uid, packageName);
             if (mode == MODE_ERRORED) {
                 throw new SecurityException("Operation not allowed");
             }
@@ -619,7 +643,7 @@ public class AppOpsManager {
 
     public int startOpNoThrow(int op, int uid, String packageName) {
         try {
-            return mService.startOperation(op, uid, packageName);
+            return mService.startOperation(getToken(mService), op, uid, packageName);
         } catch (RemoteException e) {
         }
         return MODE_IGNORED;
@@ -631,7 +655,7 @@ public class AppOpsManager {
 
     public void finishOp(int op, int uid, String packageName) {
         try {
-            mService.finishOperation(op, uid, packageName);
+            mService.finishOperation(getToken(mService), op, uid, packageName);
         } catch (RemoteException e) {
         }
     }
