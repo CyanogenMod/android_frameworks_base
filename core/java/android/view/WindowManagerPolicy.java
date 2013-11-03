@@ -34,7 +34,7 @@ import java.io.PrintWriter;
  * instance of it is created by the window manager when it starts up, and allows
  * customization of window layering, special window types, key dispatching, and
  * layout.
- * 
+ *
  * <p>Because this provides deep interaction with the system window manager,
  * specific methods on this interface can be called from a variety of contexts
  * with various restrictions on what they can do.  These are encoded through
@@ -43,9 +43,9 @@ import java.io.PrintWriter;
  * is attached to a method, then it is not called with any locks and may be
  * called from the main window manager thread or another thread calling into
  * the window manager.
- * 
+ *
  * <p>The current suffixes are:
- * 
+ *
  * <dl>
  * <dt> Ti <dd> Called from the input thread.  This is the thread that
  * collects pending input events and dispatches them to the appropriate window.
@@ -67,7 +67,7 @@ import java.io.PrintWriter;
  * acquired by the window manager while it holds the window lock, so this is
  * even more restrictive than <var>Lw</var>.
  * </dl>
- * 
+ *
  * @hide
  */
 public interface WindowManagerPolicy {
@@ -149,7 +149,7 @@ public interface WindowManagerPolicy {
          * Perform standard frame computation.  The result can be obtained with
          * getFrame() if so desired.  Must be called with the window manager
          * lock held.
-         * 
+         *
          * @param parentFrame The frame of the parent container this window
          * is in, used for computing its basic position.
          * @param displayFrame The frame of the overall display in which this
@@ -175,7 +175,7 @@ public interface WindowManagerPolicy {
         /**
          * Retrieve the current frame of the window that has been assigned by
          * the window manager.  Must be called with the window manager lock held.
-         * 
+         *
          * @return Rect The rectangle holding the window frame.
          */
         public Rect getFrameLw();
@@ -183,7 +183,7 @@ public interface WindowManagerPolicy {
         /**
          * Retrieve the current frame of the window that is actually shown.
          * Must be called with the window manager lock held.
-         * 
+         *
          * @return Rect The rectangle holding the shown window frame.
          */
         public RectF getShownFrameLw();
@@ -213,7 +213,7 @@ public interface WindowManagerPolicy {
          * account for screen decorations such as a status bar or soft
          * keyboard.  Must be called with the
          * window manager lock held.
-         * 
+         *
          * @return Rect The rectangle holding the content frame.
          */
         public Rect getContentFrameLw();
@@ -225,7 +225,7 @@ public interface WindowManagerPolicy {
          * content frame to account for transient UI elements blocking it
          * such as an input method's candidates UI.  Must be called with the
          * window manager lock held.
-         * 
+         *
          * @return Rect The rectangle holding the visible frame.
          */
         public Rect getVisibleFrameLw();
@@ -236,12 +236,12 @@ public interface WindowManagerPolicy {
          * layout of other windows.
          */
         public boolean getGivenInsetsPendingLw();
-        
+
         /**
          * Retrieve the insets given by this window's client for the content
          * area of windows behind it.  Must be called with the
          * window manager lock held.
-         * 
+         *
          * @return Rect The left, top, right, and bottom insets, relative
          * to the window's frame, of the actual contents.
          */
@@ -251,7 +251,7 @@ public interface WindowManagerPolicy {
          * Retrieve the insets given by this window's client for the visible
          * area of windows behind it.  Must be called with the
          * window manager lock held.
-         * 
+         *
          * @return Rect The left, top, right, and bottom insets, relative
          * to the window's frame, of the actual visible area.
          */
@@ -259,7 +259,7 @@ public interface WindowManagerPolicy {
 
         /**
          * Retrieve the current LayoutParams of the window.
-         * 
+         *
          * @return WindowManager.LayoutParams The window's internal LayoutParams
          *         instance.
          */
@@ -283,22 +283,22 @@ public interface WindowManagerPolicy {
          * Get the layer at which this window's surface will be Z-ordered.
          */
         public int getSurfaceLayer();
-        
+
         /**
-         * Return the token for the application (actually activity) that owns 
-         * this window.  May return null for system windows. 
-         * 
+         * Return the token for the application (actually activity) that owns
+         * this window.  May return null for system windows.
+         *
          * @return An IApplicationToken identifying the owning activity.
          */
         public IApplicationToken getAppToken();
 
         /**
-         * Return true if, at any point, the application token associated with 
-         * this window has actually displayed any windows.  This is most useful 
-         * with the "starting up" window to determine if any windows were 
-         * displayed when it is closed. 
-         * 
-         * @return Returns true if one or more windows have been displayed, 
+         * Return true if, at any point, the application token associated with
+         * this window has actually displayed any windows.  This is most useful
+         * with the "starting up" window to determine if any windows were
+         * displayed when it is closed.
+         *
+         * @return Returns true if one or more windows have been displayed,
          *         else false.
          */
         public boolean hasAppShownWindows();
@@ -309,17 +309,17 @@ public interface WindowManagerPolicy {
          * that will remove the surface.
          */
         boolean isVisibleLw();
-        
+
         /**
          * Like {@link #isVisibleLw}, but also counts a window that is currently
          * "hidden" behind the keyguard as visible.  This allows us to apply
          * things like window flags that impact the keyguard.
          */
         boolean isVisibleOrBehindKeyguardLw();
-        
+
         /**
-         * Is this window currently visible to the user on-screen?  It is 
-         * displayed either if it is visible or it is currently running an 
+         * Is this window currently visible to the user on-screen?  It is
+         * displayed either if it is visible or it is currently running an
          * animation before no longer being visible.  Must be called with the
          * window manager lock held.
          */
@@ -337,7 +337,7 @@ public interface WindowManagerPolicy {
         boolean isGoneForLayoutLw();
 
         /**
-         * Returns true if this window has been shown on screen at some time in 
+         * Returns true if this window has been shown on screen at some time in
          * the past.  Must be called with the window manager lock held.
          */
         public boolean hasDrawnLw();
@@ -349,7 +349,7 @@ public interface WindowManagerPolicy {
          * Returns true if {@link #showLw} was last called for the window.
          */
         public boolean hideLw(boolean doAnimation);
-        
+
         /**
          * Can be called to undo the effect of {@link #hideLw}, allowing a
          * window to be shown as long as the window manager and client would
@@ -456,7 +456,7 @@ public interface WindowManagerPolicy {
 
     // NOTE: screen off reasons are in order of significance, with more
     // important ones lower than less important ones.
-    
+
     /** Screen turned off because of a device admin */
     public final int OFF_BECAUSE_OF_ADMIN = 1;
     /** Screen turned off because of power button */
@@ -472,10 +472,10 @@ public interface WindowManagerPolicy {
     /** When not otherwise specified by the activity's screenOrientation, rotation is set by
      * the user. */
     public final int USER_ROTATION_LOCKED = 1;
-    
+
     /**
      * Perform initialization of the policy.
-     * 
+     *
      * @param context The system context we are running in.
      */
     public void init(Context context, IWindowManager windowManager,
@@ -500,11 +500,11 @@ public interface WindowManagerPolicy {
 
     /**
      * Check permissions when adding a window.
-     * 
+     *
      * @param attrs The window's LayoutParams.
      * @param outAppOp First element will be filled with the app op corresponding to
      *                 this window, or OP_NONE.
-     *  
+     *
      * @return {@link WindowManagerGlobal#ADD_OKAY} if the add can proceed;
      *      else an error code, usually
      *      {@link WindowManagerGlobal#ADD_PERMISSION_DENIED}, to abort the add.
@@ -525,21 +525,21 @@ public interface WindowManagerPolicy {
      * Sanitize the layout parameters coming from a client.  Allows the policy
      * to do things like ensure that windows of a specific type can't take
      * input focus.
-     * 
+     *
      * @param attrs The window layout parameters to be modified.  These values
      * are modified in-place.
      */
     public void adjustWindowParamsLw(WindowManager.LayoutParams attrs);
-    
+
     /**
      * After the window manager has computed the current configuration based
      * on its knowledge of the display and input devices, it gives the policy
      * a chance to adjust the information contained in it.  If you want to
      * leave it as-is, simply do nothing.
-     * 
+     *
      * <p>This method may be called by any thread in the window manager, but
      * no internal locks in the window manager will be held.
-     * 
+     *
      * @param config The Configuration being computed, for you to change as
      * desired.
      * @param keyboardPresence Flags that indicate whether internal or external
@@ -549,13 +549,13 @@ public interface WindowManagerPolicy {
      */
     public void adjustConfigurationLw(Configuration config, int keyboardPresence,
             int navigationPresence);
-    
+
     /**
      * Assign a window type to a layer.  Allows you to control how different
      * kinds of windows are ordered on-screen.
-     * 
+     *
      * @param type The type of window being assigned.
-     * 
+     *
      * @return int An arbitrary integer used to order windows, with lower
      *         numbers below higher ones.
      */
@@ -565,9 +565,9 @@ public interface WindowManagerPolicy {
      * Return how to Z-order sub-windows in relation to the window they are
      * attached to.  Return positive to have them ordered in front, negative for
      * behind.
-     * 
+     *
      * @param type The sub-window type code.
-     * 
+     *
      * @return int Layer in relation to the attached window, where positive is
      *         above and negative is below.
      */
@@ -621,7 +621,7 @@ public interface WindowManagerPolicy {
      * behind it.  Typically returns true for the keyguard.
      */
     public boolean doesForceHide(WindowState win, WindowManager.LayoutParams attrs);
-    
+
     /**
      * Determine if a window that is behind one that is force hiding
      * (as determined by {@link #doesForceHide}) should actually be hidden.
@@ -630,7 +630,7 @@ public interface WindowManagerPolicy {
      * will conflict with what you set.
      */
     public boolean canBeForceHidden(WindowState win, WindowManager.LayoutParams attrs);
-    
+
     /**
      * Called when the system would like to show a UI to indicate that an
      * application is starting.  You can use this to add a
@@ -638,19 +638,19 @@ public interface WindowManagerPolicy {
      * manager (using the normal window manager APIs) that will be shown until
      * the application displays its own window.  This is called without the
      * window manager locked so that you can call back into it.
-     * 
+     *
      * @param appToken Token of the application being started.
-     * @param packageName The name of the application package being started. 
+     * @param packageName The name of the application package being started.
      * @param theme Resource defining the application's overall visual theme.
      * @param nonLocalizedLabel The default title label of the application if
      *        no data is found in the resource.
      * @param labelRes The resource ID the application would like to use as its name.
      * @param icon The resource ID the application would like to use as its icon.
      * @param windowFlags Window layout flags.
-     * 
+     *
      * @return Optionally you can return the View that was used to create the
      *         window, for easy removal in removeStartingWindow.
-     * 
+     *
      * @see #removeStartingWindow
      */
     public View addStartingWindow(IBinder appToken, String packageName,
@@ -663,15 +663,15 @@ public interface WindowManagerPolicy {
      * that application.  You should at this point remove the window from the
      * window manager.  This is called without the window manager locked so
      * that you can call back into it.
-     * 
+     *
      * <p>Note: due to the nature of these functions not being called with the
      * window manager locked, you must be prepared for this function to be
      * called multiple times and/or an initial time with a null View window
      * even if you previously returned one.
-     * 
+     *
      * @param appToken Token of the application that has started.
      * @param window Window View that was returned by createStartingWindow.
-     * 
+     *
      * @see #addStartingWindow
      */
     public void removeStartingWindow(IBinder appToken, View window);
@@ -680,10 +680,10 @@ public interface WindowManagerPolicy {
      * Prepare for a window being added to the window manager.  You can throw an
      * exception here to prevent the window being added, or do whatever setup
      * you need to keep track of the window.
-     * 
+     *
      * @param win The window being added.
-     * @param attrs The window's LayoutParams. 
-     *  
+     * @param attrs The window's LayoutParams.
+     *
      * @return {@link WindowManagerGlobal#ADD_OKAY} if the add can proceed, else an
      *         error code to abort the add.
      */
@@ -693,7 +693,7 @@ public interface WindowManagerPolicy {
     /**
      * Called when a window is being removed from a window manager.  Must not
      * throw an exception -- clean up as much as possible.
-     * 
+     *
      * @param win The window being removed.
      */
     public void removeWindowLw(WindowState win);
@@ -702,12 +702,12 @@ public interface WindowManagerPolicy {
      * Control the animation to run when a window's state changes.  Return a
      * non-0 number to force the animation to a specific resource ID, or 0
      * to use the default animation.
-     * 
+     *
      * @param win The window that is changing.
      * @param transit What is happening to the window: {@link #TRANSIT_ENTER},
      *                {@link #TRANSIT_EXIT}, {@link #TRANSIT_SHOW}, or
      *                {@link #TRANSIT_HIDE}.
-     * 
+     *
      * @return Resource ID of the actual animation to use, or 0 for none.
      */
     public int selectAnimationLw(WindowState win, int transit);
@@ -716,8 +716,8 @@ public interface WindowManagerPolicy {
      * Determine the animation to run for a rotation transition based on the
      * top fullscreen windows {@link WindowManager.LayoutParams#rotationAnimation}
      * and whether it is currently fullscreen and frontmost.
-     * 
-     * @param anim The exiting animation resource id is stored in anim[0], the 
+     *
+     * @param anim The exiting animation resource id is stored in anim[0], the
      * entering animation resource id is stored in anim[1].
      */
     public void selectRotationAnimationLw(int anim[]);
@@ -741,7 +741,7 @@ public interface WindowManagerPolicy {
      * Create and return an animation to re-display a force hidden window.
      */
     public Animation createForceHideEnterAnimation(boolean onWallpaper);
-    
+
     /**
      * Called from the input reader thread before a key is enqueued.
      *
@@ -778,7 +778,7 @@ public interface WindowManagerPolicy {
      * <p>Allows you to define
      * behavior for keys that can not be overridden by applications.
      * This method is called from the input thread, with no locks held.
-     * 
+     *
      * @param win The window that currently has focus.  This is where the key
      *            event will normally go.
      * @param event The key event.
@@ -796,7 +796,7 @@ public interface WindowManagerPolicy {
      *
      * <p>Allows you to define default global behavior for keys that were not handled
      * by applications.  This method is called from the input thread, with no locks held.
-     * 
+     *
      * @param win The window that currently has focus.  This is where the key
      *            event will normally go.
      * @param event The key event.
@@ -808,7 +808,7 @@ public interface WindowManagerPolicy {
 
     /**
      * Called when layout of the windows is about to start.
-     * 
+     *
      * @param isDefaultDisplay true if window is on {@link Display#DEFAULT_DISPLAY}.
      * @param displayWidth The current full width of the screen.
      * @param displayHeight The current full height of the screen.
@@ -836,7 +836,7 @@ public interface WindowManagerPolicy {
      * Called for each window attached to the window manager as layout is
      * proceeding.  The implementation of this function must take care of
      * setting the window's frame, either here or in finishLayout().
-     * 
+     *
      * @param win The window being positioned.
      * @param attrs The LayoutParams of the window.
      * @param attached For sub-windows, the window it is attached to; this
@@ -846,15 +846,15 @@ public interface WindowManagerPolicy {
     public void layoutWindowLw(WindowState win,
             WindowManager.LayoutParams attrs, WindowState attached);
 
-    
+
     /**
      * Return the insets for the areas covered by system windows. These values
      * are computed on the most recent layout, so they are not guaranteed to
      * be correct.
-     * 
+     *
      * @param attrs The LayoutParams of the window.
      * @param contentInset The areas covered by system windows, expressed as positive insets
-     * 
+     *
      */
     public void getContentInsetHintLw(WindowManager.LayoutParams attrs, Rect contentInset);
 
@@ -873,10 +873,10 @@ public interface WindowManagerPolicy {
     static final int FINISH_LAYOUT_REDO_WALLPAPER = 0x0004;
     /** Need to recompute animations */
     static final int FINISH_LAYOUT_REDO_ANIM = 0x0008;
-    
+
     /**
      * Called following layout of all windows before each window has policy applied.
-     * 
+     *
      * @param displayWidth The current full width of the screen.
      * @param displayHeight The current full height of the screen.
      */
@@ -884,9 +884,9 @@ public interface WindowManagerPolicy {
 
     /**
      * Called following layout of all window to apply policy to each window.
-     * 
+     *
      * @param win The window being positioned.
-     * @param attrs The LayoutParams of the window. 
+     * @param attrs The LayoutParams of the window.
      */
     public void applyPostLayoutPolicyLw(WindowState win,
             WindowManager.LayoutParams attrs);
@@ -896,7 +896,7 @@ public interface WindowManagerPolicy {
      * to each window. If in this function you do
      * something that may have modified the animation state of another window,
      * be sure to return non-zero in order to perform another pass through layout.
-     *  
+     *
      * @return Return any bit set of {@link #FINISH_LAYOUT_REDO_LAYOUT},
      * {@link #FINISH_LAYOUT_REDO_CONFIG}, {@link #FINISH_LAYOUT_REDO_WALLPAPER},
      * or {@link #FINISH_LAYOUT_REDO_ANIM}.
@@ -916,7 +916,7 @@ public interface WindowManagerPolicy {
      * A new window has been focused.
      */
     public int focusChangedLw(WindowState lastFocus, WindowState newFocus);
-    
+
     /**
      * Called after the screen turns off.
      *
@@ -952,7 +952,7 @@ public interface WindowManagerPolicy {
      * @param lidOpen True if the lid is now open.
      */
     public void notifyLidSwitchChanged(long whenNanos, boolean lidOpen);
-    
+
     /**
      * Tell the policy if anyone is requesting that keyguard not come on.
      *
@@ -1059,7 +1059,7 @@ public interface WindowManagerPolicy {
      * the system should go into safe mode.
      */
     public void setSafeMode(boolean safeMode);
-    
+
     /**
      * Called when the system is mostly done booting.
      */
@@ -1093,14 +1093,14 @@ public interface WindowManagerPolicy {
      * this point the display is active.
      */
     public void enableScreenAfterBoot();
-    
+
     public void setCurrentOrientationLw(int newOrientation);
-    
+
     /**
      * Call from application to perform haptic feedback on its window.
      */
     public boolean performHapticFeedbackLw(WindowState win, int effectId, boolean always);
-    
+
     /**
      * Called when we have started keeping the screen on because a window
      * requesting this has become visible.
@@ -1114,20 +1114,20 @@ public interface WindowManagerPolicy {
     public void keepScreenOnStoppedLw();
 
     /**
-     * Gets the current user rotation mode. 
+     * Gets the current user rotation mode.
      *
      * @return The rotation mode.
      *
      * @see WindowManagerPolicy#USER_ROTATION_LOCKED
-     * @see WindowManagerPolicy#USER_ROTATION_FREE 
+     * @see WindowManagerPolicy#USER_ROTATION_FREE
      */
     public int getUserRotationMode();
 
     /**
-     * Inform the policy that the user has chosen a preferred orientation ("rotation lock"). 
+     * Inform the policy that the user has chosen a preferred orientation ("rotation lock").
      *
      * @param mode One of {@link WindowManagerPolicy#USER_ROTATION_LOCKED} or
-     *             {@link WindowManagerPolicy#USER_ROTATION_FREE}. 
+     *             {@link WindowManagerPolicy#USER_ROTATION_FREE}.
      * @param rotation One of {@link Surface#ROTATION_0}, {@link Surface#ROTATION_90},
      *                 {@link Surface#ROTATION_180}, {@link Surface#ROTATION_270}.
      */
