@@ -128,4 +128,21 @@
     <string name="perf_profile_pwrsv">Economia</string>
     <string name="perf_profile_bal">Balanceado</string>
     <string name="perf_profile_perf">Performance</string>
+    <string name="enablePin">Malsucedido. Ativar Bloqueio SIM/RUIM.</string>
+    <string name="keyguard_password_wrong_puk_code">Código PUK incorreto!</string>
+    <string name="keyguard_password_pin_failed">Falha na operação PIN!</string>
+    <string name="keyguard_password_puk_failed">Falha na operação PUK!</string>
+    <string name="keyguard_pin_accepted">Código aceito!</string>
+    <string name="pinpuk_attempts">\nTentativas Restantes :</string>
+    <string name="lockscreen_sim_error_message_short">Cartão inválido.</string>
+    <string name="lockscreen_sim_error_message">Cartão SIM é Inválido.</string>
+    <string name="lockscreen_perso_locked_message">SIM/RUIM é bloqueado por Perso</string>
+    <string name="stk_cc_ussd_to_dial">Requisição USSD foi modificado para requição DIAL.</string>
+    <string name="stk_cc_ussd_to_ss">Requisição USSD foi modificado para requisição SS.</string>
+    <string name="stk_cc_ussd_to_ussd">Requisição USSD foi modificado para uma nova requisição USSD.</string>
+    <string name="stk_cc_ss_to_dial">Requisição SS foi modificado para requisição DIAL.</string>
+    <string name="stk_cc_ss_to_ussd">Requisição SS foi modificado para requisição USSD.</string>
+    <string name="stk_cc_ss_to_ss">Requisição SS foi modificado para uma nova requisição SS.</string>
+    <string name="msim_kg_sim_pin_msg_format">ASS:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
