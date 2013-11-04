@@ -1756,6 +1756,7 @@
   <!-- Config.xml entries -->
   <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
   <java-symbol type="bool" name="config_hasRotationLockSwitch" />
+  <java-symbol type="integer" name="config_backKillTimeout" />
 
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
@@ -1790,5 +1791,8 @@
   <java-symbol type="string" name="minutes" />
   <java-symbol type="string" name="second" />
   <java-symbol type="string" name="seconds" />
+
+  <!-- Developer settings - Kill app back press -->
+  <java-symbol type="string" name="app_killed_message" />
 
 </resources>
