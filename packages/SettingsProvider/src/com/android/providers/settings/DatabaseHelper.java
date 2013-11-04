@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 115;
+    private static final int DATABASE_VERSION = 116;
 
     private Context mContext;
     private int mUserHandle;
@@ -1826,48 +1826,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 114;
         }
 
+        // From here on out, we can assume the user is coming from CM and will have these rows
         if (upgradeVersion < 115) {
-            db.beginTransaction();
-            SQLiteStatement stmt = null;
-            Cursor c = null;
-            try {
-                // The STATS_COLLECTION setting is becoming per-user rather
-                // than device-system.
-                try {
-                    c = db.rawQuery("SELECT stats_collection from " + TABLE_SYSTEM, null);
-                    // if this row exists, then we do work
-                    if (c != null) {
-                        if (c.moveToNext()) {
-                            // The row exists so we can migrate the
-                            // entry from there to the secure table, preserving its value.
-                            String[] settingToSecure = {
-                                    Settings.Secure.STATS_COLLECTION
-                            };
-                            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
-                                    settingToSecure, true);
-                        }
-                    } else {
-                        // Otherwise our dbs don't have STATS_COLLECTION in secure so institute the
-                        // default.
-                        stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
-                                + " VALUES(?,?);");
-                        loadBooleanSetting(stmt, Settings.Secure.STATS_COLLECTION,
-                                R.bool.def_cm_stats_collection);
-                    }
-                } catch (SQLiteException ex) {
-                    // This is bad, just bump the version and add the setting to secure
-                    stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
-                            + " VALUES(?,?);");
-                    loadBooleanSetting(stmt, Settings.Secure.STATS_COLLECTION,
-                            R.bool.def_cm_stats_collection);
-                }
-                db.setTransactionSuccessful();
-            } finally {
-                if (c != null) c.close();
-                db.endTransaction();
-                if (stmt != null) stmt.close();
-            }
+            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                    new String[] { Settings.Secure.STATS_COLLECTION }, true);
             upgradeVersion = 115;
+        }
+
+        if (upgradeVersion < 116) {
+            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                    new String[] { Settings.Secure.VOLUME_LINK_NOTIFICATION }, true);
+            upgradeVersion = 116;
         }
 
         // *** Remember to update DATABASE_VERSION above!
