@@ -2087,44 +2087,4 @@
   <public type="style" name="Theme.DeviceDefault.NoActionBar.TranslucentDecor" id="0x010301e3" />
   <public type="style" name="Theme.DeviceDefault.Light.NoActionBar.TranslucentDecor" id="0x010301e4" />
 
-<!-- ===============================================================
-   Resources added in version 10 of CyanogenMod
-   =============================================================== -->
-  <eat-comment />
-
-  <!-- Config.xml entries -->
-  <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
-  <java-symbol type="bool" name="config_hasRotationLockSwitch" />
-
-  <!-- Notification and battery light -->
-  <java-symbol type="bool" name="config_intrusiveBatteryLed" />
-  <java-symbol type="bool" name="config_multiColorBatteryLed" />
-  <java-symbol type="array" name="notification_light_package_mapping" />
-
-  <!-- Power menu -->
-  <java-symbol type="string" name="global_action_screenshot" />
-  <java-symbol type="string" name="global_action_choose_profile" />
-  <java-symbol type="string" name="global_action_reboot" />
-  <java-symbol type="string" name="global_actions" />
-  <java-symbol type="string" name="reboot_system" />
-  <java-symbol type="string" name="reboot_progress" />
-  <java-symbol type="array" name="shutdown_reboot_options" />
-  <java-symbol type="array" name="shutdown_reboot_actions" />
-  <java-symbol type="drawable" name="ic_lock_screenshot" />
-  <java-symbol type="drawable" name="ic_lock_reboot" />
-  <java-symbol type="drawable" name="ic_lock_profile" />
-  <java-symbol type="drawable" name="ic_lock_expanded_desktop" />
-
-  <!-- Profiles -->
-  <java-symbol type="xml" name="profile_default" />
-  <java-symbol type="string" name="wildcardProfile" />
-
-  <!-- Power widget -->
-  <java-symbol type="string" name="hour" />
-  <java-symbol type="string" name="hours" />
-  <java-symbol type="string" name="minute" />
-  <java-symbol type="string" name="minutes" />
-  <java-symbol type="string" name="second" />
-  <java-symbol type="string" name="seconds" />
-
 </resources>
