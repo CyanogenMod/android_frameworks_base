@@ -5521,6 +5521,12 @@ public final class Settings {
          */
         public static final String STATS_COLLECTION = "stats_collection";
 
+        /**
+         * Boolean value whether to link ringtone and notification volume
+         *
+         * @hide
+         */
+        public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
          * Performance profile
