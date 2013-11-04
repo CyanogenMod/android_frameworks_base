@@ -1760,6 +1760,7 @@
   <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
   <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
   <java-symbol type="bool" name="config_samsung_stk" />
+  <java-symbol type="integer" name="config_wallpaperMaxWidth" />
 
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
