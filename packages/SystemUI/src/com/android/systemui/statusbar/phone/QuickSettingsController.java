@@ -249,7 +249,7 @@ public class QuickSettingsController {
         }
     }
 
-    void setupQuickSettings() {
+    private void setupQuickSettings() {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         // Clear out old receiver
         if (mReceiver != null) {

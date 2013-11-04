@@ -740,7 +740,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 }
                 mQS.setService(this);
                 mQS.setBar(mStatusBarView);
-                mQS.setupQuickSettings();
 
                 // Start observing for changes
                 mTilesChangedObserver = new TilesChangedObserver(mHandler);
@@ -3099,10 +3098,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         @Override
         public void onChange(boolean selfChange) {
             if (mSettingsContainer != null) {
-                // Refresh the container
-                mSettingsContainer.removeAllViews();
-                mQS.setupQuickSettings();
-                mSettingsContainer.requestLayout();
+                mQS.updateResources();
             }
         }
 
