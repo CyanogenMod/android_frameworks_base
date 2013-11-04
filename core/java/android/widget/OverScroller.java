@@ -18,6 +18,7 @@ package android.widget;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.os.PowerManager;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.ViewConfiguration;
@@ -603,19 +604,7 @@ public class OverScroller {
         private static final int CUBIC = 1;
         private static final int BALLISTIC = 2;
 
-        /*
-         * Perf boost related variables
-         * Enabled/Disabled using config_enableCpuBoostForOverScrollerFling
-         * true value turns it on, by default will be turned off
-         */
-        private Performance mPerf = null;
-        private boolean mIsPerfLockAcquired = false;
-        private boolean mIsPerfBoostEnabled = false;
-        private int lBoostTimeOut = 0;
-        private int lBoostCpuBoost = 0;
-        private int lBoostSchedBoost = 0;
-        private int lBoostPcDisblBoost = 0;
-        private int lBoostKsmBoost = 0;
+        private final PowerManager mPm;
 
         static {
             float x_min = 0.0f;
@@ -661,21 +650,7 @@ public class OverScroller {
                     * 39.37f // inch/meter
                     * ppi
                     * 0.84f; // look and feel tuning
-
-            mIsPerfBoostEnabled = context.getResources().getBoolean(
-                   com.android.internal.R.bool.config_enableCpuBoostForOverScrollerFling);
-            if (mIsPerfBoostEnabled) {
-            lBoostSchedBoost = context.getResources().getInteger(
-                   com.android.internal.R.integer.flingboost_schedboost_param);
-            lBoostTimeOut = context.getResources().getInteger(
-                   com.android.internal.R.integer.flingboost_timeout_param);
-            lBoostCpuBoost = context.getResources().getInteger(
-                   com.android.internal.R.integer.flingboost_cpuboost_param);
-            lBoostPcDisblBoost = context.getResources().getInteger(
-                   com.android.internal.R.integer.flingboost_pcdisbl_param);
-            lBoostKsmBoost = context.getResources().getInteger(
-                   com.android.internal.R.integer.flingboost_ksmboost_param);
-            }
+            mPm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         }
 
         void updateScroll(float q) {
@@ -798,19 +773,7 @@ public class OverScroller {
             if (velocity != 0) {
                 mDuration = mSplineDuration = getSplineFlingDuration(velocity);
                 totalDistance = getSplineFlingDistance(velocity);
-                if (mPerf == null && mIsPerfBoostEnabled) {
-                    mPerf = new Performance();
-                }
-
-                if (mPerf != null) {
-                    mIsPerfLockAcquired = true;
-                    if (0 == lBoostTimeOut) {
-                        lBoostTimeOut = mDuration;
-                    }
-                    mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
-                                          lBoostCpuBoost, lBoostKsmBoost);
-
-                }
+                mPm.cpuBoost(mDuration * 1000);
             }
 
             mSplineDistance = (int) (totalDistance * Math.signum(velocity));
