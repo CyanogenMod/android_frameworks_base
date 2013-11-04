@@ -507,4 +507,5 @@
          linebreak to position it correctly.  [CHAR LIMIT=45] -->
     <string name="ssl_ca_cert_warning">Network may\nbe monitored</string>
 
+    <string name="powerwidget_screen_timeout_toast">Screen timeout set to: %1$d %2$s</string>
 </resources>
