@@ -221,4 +221,12 @@
     <string name="app_ops_get_accounts">get device accounts</string>
     <string name="app_ops_wifi_change">change WiFI state</string>
     <string name="app_ops_su">get Superuser access</string>
+
+    <!-- Performance profile modes -->
+    <string name="perf_profile_pwrsv">Power save</string>
+    <string name="perf_profile_bal">Balanced</string>
+    <string name="perf_profile_perf">Performance</string>
+    <string name="perf_profile_bias_power">Efficiency</string>
+    <string name="perf_profile_bias_perf">Quick</string>
+
 </resources>
