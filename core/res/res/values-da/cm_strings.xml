@@ -46,6 +46,8 @@
     <string name="permdesc_fm_radio_receiver">Tillader app\'en at kontrollere FM-modtageren.</string>
     <string name="permlab_fm_radio_transmitter">kontrollér FM-modtager</string>
     <string name="permdesc_fm_radio_transmitter">Tillader app\'en at kontrollere FM-senderen.</string>
+    <string name="permlab_sendMockSms">send imiterede SMS-beskeder</string>
+    <string name="permdesc_sendMockSms">Tillader at appen sender imiterede SMS-beskeder. Dette tillader en app at sende SMS-beskeder til betroede apps. Ondsindede apps kan sende beskeder hele tiden, hvilket blokerer enhedens meddelelsessystem og forstyrrer brugeren.</string>
     <string name="lockscreen_discharging">Aflader, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">Dock SD-kort</string>
     <string name="app_killed_message">App lukket</string>
@@ -123,4 +125,22 @@
     <string name="policydesc_enforceSelinux">Slå håndhævning af SELinux-politikker eller tolerant tilstand til og fra.</string>
     <string name="policylab_enforceMmac">Håndhæv MMAC</string>
     <string name="policydesc_enforceMmac">Slå håndhævning af MMAC-politikker eller tolerant tilstand til og fra.</string>
+    <string name="enablePin">Mislykkedes. Aktivér SIM/RUIM-Lås.</string>
+    <string name="keyguard_password_wrong_puk_code">Forkert PUK-kode!</string>
+    <string name="keyguard_password_pin_failed">PIN-betjening mislykkedes!</string>
+    <string name="keyguard_password_puk_failed">PUK-betjening mislykkedes!</string>
+    <string name="keyguard_pin_accepted">Kode Accepteret!</string>
+    <string name="pinpuk_attempts">\nResterende Forsøg :</string>
+    <string name="lockscreen_sim_error_message_short">Ugyldigt kort.</string>
+    <string name="lockscreen_sim_error_message">SIM-kortet er ugyldigt.</string>
+    <string name="lockscreen_perso_locked_message">SIM/RUIM er Perso-låst</string>
+    <string name="progress_nomediapresent" product="default">Intet flytbart medie tilgængeligt\u2026</string>
+    <string name="stk_cc_ussd_to_dial">USSD-anmodning er ændret til en DIAL-anmodning.</string>
+    <string name="stk_cc_ussd_to_ss">USSD-anmodning er ændret til en SS-anmodning.</string>
+    <string name="stk_cc_ussd_to_ussd">USSD-anmodning er ændret til en ny USSD-anmodning.</string>
+    <string name="stk_cc_ss_to_dial">SS-anmodning er ændret til en DIAL-anmodning.</string>
+    <string name="stk_cc_ss_to_ussd">SS-anmodning er ændret til en USSD-anmodning.</string>
+    <string name="stk_cc_ss_to_ss">SS-anmodning er ændret til en ny SS-anmodning.</string>
+    <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>

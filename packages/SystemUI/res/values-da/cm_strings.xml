@@ -53,6 +53,8 @@
     <string name="quick_settings_lte_off">LTE fra</string>
     <string name="quick_settings_volume">Lydstyrke</string>
     <string name="quick_settings_camera_label">Kamera</string>
+    <string name="quick_settings_network_adb_disabled_label">Deaktiveret</string>
+    <string name="quick_settings_network_adb_enabled_label">Aktiveret</string>
     <string name="quick_settings_expanded_desktop">Udvidet</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_camera_error_connect">Kan ikke forbinde til kameraet</string>
