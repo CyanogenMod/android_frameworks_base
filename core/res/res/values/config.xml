@@ -2059,4 +2059,8 @@
     <!-- set to false if we dont need to consider data
          service state to display signal strength bars -->
     <bool name="config_combined_signal">true</bool>
+
+    <!-- Boolean to enable stk functionality on Samsung phones -->
+    <bool name="config_samsung_stk">false</bool>
+
 </resources>
