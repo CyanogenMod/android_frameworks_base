@@ -18,6 +18,7 @@ package android.widget;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.os.PowerManager;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.ViewConfiguration;
@@ -602,6 +603,8 @@ public class OverScroller {
         private static final int CUBIC = 1;
         private static final int BALLISTIC = 2;
 
+        private final PowerManager mPm;
+
         static {
             float x_min = 0.0f;
             float y_min = 0.0f;
@@ -646,6 +649,7 @@ public class OverScroller {
                     * 39.37f // inch/meter
                     * ppi
                     * 0.84f; // look and feel tuning
+            mPm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         }
 
         void updateScroll(float q) {
@@ -763,6 +767,7 @@ public class OverScroller {
             if (velocity != 0) {
                 mDuration = mSplineDuration = getSplineFlingDuration(velocity);
                 totalDistance = getSplineFlingDistance(velocity);
+                mPm.cpuBoost(mDuration * 1000);
             }
 
             mSplineDistance = (int) (totalDistance * Math.signum(velocity));
