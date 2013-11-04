@@ -572,11 +572,21 @@ public class Notification implements Parcelable
      */
     public static final int HEADS_UP_ALLOWED = 1;
 
+
     /**
      * Value for {@link #EXTRA_AS_HEADS_UP}.
      * @hide
      */
     public static final int HEADS_UP_REQUESTED = 2;
+
+    /**
+     * Bit to be bitwise-ored into the {@link #flags} field that should be
+     * set if this notification should force the led to pulse even if the
+     * screen has been shut off while the notification was active.
+     *
+     * @hide
+     */
+    public static final int FLAG_FORCE_LED_SCREEN_OFF = 0x00000100;
 
     /**
      * Structure to encapsulate a named action that can be shown as part of this notification.
