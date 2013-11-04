@@ -395,6 +395,16 @@ public class VolumeDialogController {
         return stream == AudioManager.STREAM_RING || stream == AudioManager.STREAM_NOTIFICATION;
     }
 
+    private boolean updateLinkNotificationConfigW() {
+        boolean linkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+        if (mState.linkedNotification == linkNotificationWithVolume) {
+            return false;
+        }
+        mState.linkedNotification = linkNotificationWithVolume;
+        return true;
+    }
+
     private boolean updateEffectsSuppressorW(ComponentName effectsSuppressor) {
         if (Objects.equals(mState.effectsSuppressor, effectsSuppressor)) return false;
         mState.effectsSuppressor = effectsSuppressor;
@@ -702,6 +712,8 @@ public class VolumeDialogController {
                 Settings.Global.getUriFor(Settings.Global.ZEN_MODE);
         private final Uri ZEN_MODE_CONFIG_URI =
                 Settings.Global.getUriFor(Settings.Global.ZEN_MODE_CONFIG_ETAG);
+        private final Uri VOLUME_LINK_NOTIFICATION_URI =
+                Settings.Secure.getUriFor(Settings.Secure.VOLUME_LINK_NOTIFICATION);
 
         public SettingObserver(Handler handler) {
             super(handler);
@@ -711,6 +723,8 @@ public class VolumeDialogController {
             mContext.getContentResolver().registerContentObserver(SERVICE_URI, false, this);
             mContext.getContentResolver().registerContentObserver(ZEN_MODE_URI, false, this);
             mContext.getContentResolver().registerContentObserver(ZEN_MODE_CONFIG_URI, false, this);
+            mContext.getContentResolver().registerContentObserver(VOLUME_LINK_NOTIFICATION_URI,
+                    false, this);
             onChange(true, SERVICE_URI);
         }
 
@@ -734,6 +748,9 @@ public class VolumeDialogController {
             }
             if (ZEN_MODE_URI.equals(uri)) {
                 changed = updateZenModeW();
+            }
+            if (VOLUME_LINK_NOTIFICATION_URI.equals(uri)) {
+                changed = updateLinkNotificationConfigW();
             }
             if (changed) {
                 mCallbacks.onStateChanged(mState);
@@ -932,6 +949,7 @@ public class VolumeDialogController {
         public ComponentName effectsSuppressor;
         public String effectsSuppressorName;
         public int activeStream = NO_ACTIVE_STREAM;
+        public boolean linkedNotification;
 
         public State copy() {
             final State rt = new State();
@@ -944,6 +962,7 @@ public class VolumeDialogController {
             if (effectsSuppressor != null) rt.effectsSuppressor = effectsSuppressor.clone();
             rt.effectsSuppressorName = effectsSuppressorName;
             rt.activeStream = activeStream;
+            rt.linkedNotification = linkedNotification;
             return rt;
         }
 
@@ -972,6 +991,7 @@ public class VolumeDialogController {
             sep(sb, indent); sb.append("effectsSuppressor:").append(effectsSuppressor);
             sep(sb, indent); sb.append("effectsSuppressorName:").append(effectsSuppressorName);
             sep(sb, indent); sb.append("activeStream:").append(activeStream);
+            sep(sb, indent); sb.append("linkedNotification:").append(linkedNotification);
             if (indent > 0) sep(sb, indent);
             return sb.append('}').toString();
         }
