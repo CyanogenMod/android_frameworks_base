@@ -282,10 +282,6 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         notifySignalsChangedCallbacks(cb);
     }
 
-    public void removeNetworkSignalChangedCallback(NetworkSignalChangedCallback cb) {
-        mSignalsChangedCallbacks.remove(cb);
-    }
-
     public void refreshSignalCluster(SignalCluster cluster) {
         if (mDemoMode) return;
         cluster.setWifiIndicators(

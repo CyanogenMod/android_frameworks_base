@@ -158,12 +158,6 @@
     <!-- Height of the notification panel header bar -->
     <dimen name="notification_panel_header_height">48dp</dimen>
 
-    <!-- Height of the notification panel widget bar -->
-    <dimen name="notification_panel_widget_height">48dp</dimen>
-
-    <!-- Height of the notification panel header and widget -->
-    <dimen name="notification_panel_header_and_widget">96dp</dimen>
-
     <!-- Extra space above the panel -->
     <dimen name="notification_panel_padding_top">0dp</dimen>
 

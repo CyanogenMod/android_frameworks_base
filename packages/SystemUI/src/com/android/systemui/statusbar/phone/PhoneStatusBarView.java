@@ -94,12 +94,6 @@ public class PhoneStatusBarView extends PanelBar {
     }
 
     @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        mBar.onBarViewDetached();
-    }
- 
-    @Override
     public boolean panelsEnabled() {
         return mBar.panelsEnabled();
     }
