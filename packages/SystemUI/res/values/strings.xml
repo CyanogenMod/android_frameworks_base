@@ -508,4 +508,9 @@
     <string name="ssl_ca_cert_warning">Network may\nbe monitored</string>
 
     <string name="powerwidget_screen_timeout_toast">Screen timeout set to: %1$d %2$s</string>
+
+    <!-- Text to display next to the minimal graphical battery meter.  [CHAR LIMIT=3] -->
+    <string name="status_bar_settings_battery_meter_min_format" translatable="false">
+        <xliff:g id="number">%d</xliff:g>
+    </string>
 </resources>
