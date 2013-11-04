@@ -32,7 +32,6 @@
     <string name="stk_cc_ss_to_ss">SS-verzoek veranderd naar nieuw SS-verzoek.</string>
     <string name="msim_kg_sim_pin_msg_format">ABON.:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
     <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
-
     <string name="profileNameDefault">Standaard</string>
     <string name="profileNameWork">Zakelijk</string>
     <string name="profileNameHome">Thuis</string>
@@ -90,4 +89,7 @@
     <string name="policydesc_enforceSelinux">Wisselen tussen SELinux-beleid afdwingen of tolerante stand.</string>
     <string name="policylab_enforceMmac">MMAC afdwingen</string>
     <string name="policydesc_enforceMmac">Wisselen tussen MMAC-beleid afdwingen of tolerante stand.</string>
+    <string name="perf_profile_pwrsv">Energiebesparing</string>
+    <string name="perf_profile_bal">Gebalanceerd</string>
+    <string name="perf_profile_perf">Prestaties</string>
 </resources>
