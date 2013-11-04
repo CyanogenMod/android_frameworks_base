@@ -87,6 +87,15 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * Needed for takeScreenshot
+ */
+import android.content.ServiceConnection;
+import android.content.ComponentName;
+import android.os.IBinder;
+import android.os.Messenger;
+import android.os.RemoteException;
+
+/**
  * Helper to show the global actions dialog.  Each item is an {@link Action} that
  * may show depending on whether the keyguard is showing, and whether the device
  * is provisioned.
@@ -269,68 +278,168 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         onAirplaneModeChanged();
 
         mItems = new ArrayList<Action>();
-        String[] defaultActions = mContext.getResources().getStringArray(
-                com.android.internal.R.array.config_globalActionsList);
 
-        ArraySet<String> addedKeys = new ArraySet<String>();
-        for (int i = 0; i < defaultActions.length; i++) {
-            String actionKey = defaultActions[i];
-            if (addedKeys.contains(actionKey)) {
-                // If we already have added this, don't add it again.
-                continue;
-            }
-            if (GLOBAL_ACTION_KEY_POWER.equals(actionKey)) {
-                mItems.add(new PowerAction());
-            } else if (GLOBAL_ACTION_KEY_REBOOT.equals(actionKey)) {
-                mItems.add(new RebootAction());
-            } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
-                mItems.add(mAirplaneModeOn);
-            } else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
-                if (Settings.Global.getInt(mContext.getContentResolver(),
-                        Settings.Global.BUGREPORT_IN_POWER_MENU, 0) != 0 && isCurrentUserOwner()) {
-                    mItems.add(getBugReportAction());
+        // first: power off
+        mItems.add(
+            new SinglePressAction(
+                    com.android.internal.R.drawable.ic_lock_power_off,
+                    R.string.global_action_power_off) {
+
+                public void onPress() {
+                    // shutdown by making sure radio and power are handled accordingly.
+                    mWindowManagerFuncs.shutdown(true);
                 }
-            } else if (GLOBAL_ACTION_KEY_SILENT.equals(actionKey)) {
-                if (mShowSilentToggle) {
-                    mItems.add(mSilentModeAction);
+
+                public boolean showDuringKeyguard() {
+                    return true;
                 }
-            } else if (GLOBAL_ACTION_KEY_USERS.equals(actionKey)) {
-                if (SystemProperties.getBoolean("fw.power_user_switcher", false)) {
-                    addUsersToMenu(mItems);
+
+                public boolean showBeforeProvisioning() {
+                    return true;
                 }
-            } else if (GLOBAL_ACTION_KEY_SETTINGS.equals(actionKey)) {
-                mItems.add(getSettingsAction());
-            } else if (GLOBAL_ACTION_KEY_LOCKDOWN.equals(actionKey)) {
-                mItems.add(getLockdownAction());
-            } else if (GLOBAL_ACTION_KEY_PROFILE.equals(actionKey)) {
-                mItems.add(
-                        new ProfileChooseAction() {
-                            public void onPress() {
-                                createProfileDialog();
-                            }
+            });
 
-                            public boolean onLongPress() {
-                                return true;
-                            }
+        // next: reboot
+        // only shown if enabled, enabled by default
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.POWER_MENU_REBOOT_ENABLED, 1) == 1) {
+            mItems.add(
+                new SinglePressAction(R.drawable.ic_lock_reboot, R.string.global_action_reboot) {
+                    public void onPress() {
+                        // mWindowManagerFuncs.reboot();
+                    }
 
-                            public boolean showDuringKeyguard() {
-                                return false;
-                            }
+                    public boolean onLongPress() {
+                        mWindowManagerFuncs.rebootSafeMode(true);
+                        return true;
+                    }
 
-                            public boolean showBeforeProvisioning() {
-                                return false;
-                            }
+                    public boolean showDuringKeyguard() {
+                        return true;
+                    }
 
-                            public CharSequence getLabelForAccessibility(Context context) {
-                                return null;
-                            }
+                    public boolean showBeforeProvisioning() {
+                        return true;
+                    }
+                });
+        }
 
-                        });
-            } else {
-                Log.e(TAG, "Invalid global action key " + actionKey);
-            }
-            // Add here so we don't add more than one.
-            addedKeys.add(actionKey);
+        // next: profile
+        // only shown if both system profiles and the menu item is enabled, enabled by default
+        if ((Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1) &&
+                (Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.POWER_MENU_PROFILES_ENABLED, 1) == 1)) {
+            mItems.add(
+                new ProfileChooseAction() {
+                    public void onPress() {
+                        createProfileDialog();
+                    }
+
+                    public boolean onLongPress() {
+                        return true;
+                    }
+
+                    public boolean showDuringKeyguard() {
+                        return false;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return false;
+                    }
+
+                    public CharSequence getLabelForAccessibility(Context context) {
+                        return null;
+                    }
+
+                });
+        }
+
+        // next: screenshot
+        // only shown if enabled, disabled by default
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.POWER_MENU_SCREENSHOT_ENABLED, 0) == 1) {
+            mItems.add(
+                new SinglePressAction(R.drawable.ic_lock_screenshot, R.string.global_action_screenshot) {
+                    public void onPress() {
+                        takeScreenshot();
+                    }
+
+                    public boolean showDuringKeyguard() {
+                        return true;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return true;
+                    }
+                });
+        }
+
+        // next: airplane mode
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.POWER_MENU_AIRPLANE_ENABLED, 1) == 1) {
+            mItems.add(mAirplaneModeOn);
+        }
+
+        // next: bug report, if enabled
+        if (Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.BUGREPORT_IN_POWER_MENU, 0) != 0 && isCurrentUserOwner()) {
+            mItems.add(
+                new SinglePressAction(com.android.internal.R.drawable.stat_sys_adb,
+                        R.string.global_action_bug_report) {
+
+                    public void onPress() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setTitle(com.android.internal.R.string.bugreport_title);
+                        builder.setMessage(com.android.internal.R.string.bugreport_message);
+                        builder.setNegativeButton(com.android.internal.R.string.cancel, null);
+                        builder.setPositiveButton(com.android.internal.R.string.report,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Add a little delay before executing, to give the
+                                        // dialog a chance to go away before it takes a
+                                        // screenshot.
+                                        mHandler.postDelayed(new Runnable() {
+                                            @Override public void run() {
+                                                try {
+                                                    ActivityManagerNative.getDefault()
+                                                            .requestBugReport();
+                                                } catch (RemoteException e) {
+                                                }
+                                            }
+                                        }, 500);
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+                        dialog.show();
+                    }
+
+                    public boolean onLongPress() {
+                        return true;
+                    }
+
+                    public boolean showDuringKeyguard() {
+                        return false;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return false;
+                    }
+                });
+        }
+
+        // next: optionally add a list of users to switch to
+        if (SystemProperties.getBoolean("fw.power_user_switcher", false)) {
+            addUsersToMenu(mItems);
+        }
+
+        // last: silent mode
+        if ((Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.POWER_MENU_SILENT_ENABLED, 1) == 1) &&
+                (mShowSilentToggle)) {
+            mItems.add(mSilentModeAction);
         }
 
         mAdapter = new MyAdapter();
@@ -357,6 +466,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                         return false;
                     }
         });
+
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
 
         dialog.setOnDismissListener(this);
@@ -407,6 +517,89 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 }).create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
         dialog.show();
+    }
+
+    /**
+     * functions needed for taking screenhots.
+     * This leverages the built in ICS screenshot functionality
+     */
+    final Object mScreenshotLock = new Object();
+    ServiceConnection mScreenshotConnection = null;
+
+    final Runnable mScreenshotTimeout = new Runnable() {
+        @Override public void run() {
+            synchronized (mScreenshotLock) {
+                if (mScreenshotConnection != null) {
+                    mContext.unbindService(mScreenshotConnection);
+                    mScreenshotConnection = null;
+                }
+            }
+        }
+    };
+
+    private void takeScreenshot() {
+        synchronized (mScreenshotLock) {
+            if (mScreenshotConnection != null) {
+                return;
+            }
+            ComponentName cn = new ComponentName("com.android.systemui",
+                    "com.android.systemui.screenshot.TakeScreenshotService");
+            Intent intent = new Intent();
+            intent.setComponent(cn);
+            ServiceConnection conn = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    synchronized (mScreenshotLock) {
+                        if (mScreenshotConnection != this) {
+                            return;
+                        }
+                        Messenger messenger = new Messenger(service);
+                        Message msg = Message.obtain(null, 1);
+                        final ServiceConnection myConn = this;
+                        Handler h = new Handler(mHandler.getLooper()) {
+                            @Override
+                            public void handleMessage(Message msg) {
+                                synchronized (mScreenshotLock) {
+                                    if (mScreenshotConnection == myConn) {
+                                        mContext.unbindService(mScreenshotConnection);
+                                        mScreenshotConnection = null;
+                                        mHandler.removeCallbacks(mScreenshotTimeout);
+                                    }
+                                }
+                            }
+                        };
+                        msg.replyTo = new Messenger(h);
+                        msg.arg1 = msg.arg2 = 0;
+
+                        /*  remove for the time being
+                        if (mStatusBar != null && mStatusBar.isVisibleLw())
+                            msg.arg1 = 1;
+                        if (mNavigationBar != null && mNavigationBar.isVisibleLw())
+                            msg.arg2 = 1;
+                         */
+
+                        /* wait for the dialog box to close */
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ie) {
+                        }
+
+                        /* take the screenshot */
+                        try {
+                            messenger.send(msg);
+                        } catch (RemoteException e) {
+                        }
+                    }
+                }
+                @Override
+                public void onServiceDisconnected(ComponentName name) {}
+            };
+
+            if (mContext.bindServiceAsUser(intent, conn, Context.BIND_AUTO_CREATE, UserHandle.CURRENT)) {
+                mScreenshotConnection = conn;
+                mHandler.postDelayed(mScreenshotTimeout, 10000);
+            }
+        }
     }
 
      /**
