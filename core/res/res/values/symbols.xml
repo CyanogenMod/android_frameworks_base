@@ -2214,6 +2214,7 @@
   <!-- Config.xml entries -->
   <java-symbol type="integer" name="config_backKillTimeout" />
   <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
+  <java-symbol type="bool" name="config_samsung_stk" />
 
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_intrusiveNotificationLed" />

@@ -363,4 +363,5 @@ cat include/telephony/ril.h | \
     int RIL_UNSOL_HARDWARE_CONFIG_CHANGED = 1040;
     int RIL_UNSOL_ON_SS = 1042;
     int RIL_UNSOL_STK_CC_ALPHA_NOTIFY = 1043;
+    int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002; /* Samsung STK */
 }
