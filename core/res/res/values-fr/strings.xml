@@ -1260,9 +1260,9 @@
     <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"Tous les fichiers stockés sur la mémoire de stockage USB vont être effacés. Cette action est irréversible."</string>
     <string name="extmedia_format_message" product="default" msgid="14131895027543830">"Toutes les données stockées sur votre carte seront perdues."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Format"</string>
-    <string name="adb_active_notification_title" msgid="6729044778949189918">"Débogage USB activé"</string>
-    <string name="adb_active_notification_message" msgid="1016654627626476142">"Appuyez pour désactiver le débogage USB."</string>
-    <string name="select_input_method" msgid="4653387336791222978">"Sélectionnez le mode de saisie"</string>
+    <string name="adb_active_notification_title">Débogage android activé</string>
+    <string name="adb_active_notification_message">Désactiver le débogage android (adb).</string>
+    <string name="select_input_method">"Sélectionner le mode de saisie"</string>
     <string name="configure_input_methods" msgid="9091652157722495116">"Configurer les modes de saisie"</string>
     <string name="use_physical_keyboard" msgid="6203112478095117625">"Clavier physique"</string>
     <string name="hardware" msgid="7517821086888990278">"Matériel"</string>
