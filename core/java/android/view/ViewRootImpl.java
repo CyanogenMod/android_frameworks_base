@@ -1552,7 +1552,10 @@ public final class ViewRootImpl implements ViewParent,
                             } catch (OutOfResourcesException e) {
                                 handleOutOfResourcesException(e);
                                 return;
+                            } catch (Exception  excp) {
+                                Log.e(TAG, "mHardwareRenderer.initialize FAILED");
                             }
+
                         }
                     }
                 } else if (!mSurface.isValid()) {
