@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 115;
+    private static final int DATABASE_VERSION = 116;
 
     private Context mContext;
     private int mUserHandle;
@@ -1827,47 +1827,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (upgradeVersion < 115) {
-            db.beginTransaction();
-            SQLiteStatement stmt = null;
-            Cursor c = null;
-            try {
-                // The STATS_COLLECTION setting is becoming per-user rather
-                // than device-system.
+            boolean moved = tryMoveSettingToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                    "stats_collection");
+
+            if (!moved) {
+                db.beginTransaction();
+                SQLiteStatement stmt = null;
                 try {
-                    c = db.rawQuery("SELECT stats_collection from " + TABLE_SYSTEM, null);
-                    // if this row exists, then we do work
-                    if (c != null) {
-                        if (c.moveToNext()) {
-                            // The row exists so we can migrate the
-                            // entry from there to the secure table, preserving its value.
-                            String[] settingToSecure = {
-                                    Settings.Secure.STATS_COLLECTION
-                            };
-                            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
-                                    settingToSecure, true);
-                        }
-                    } else {
-                        // Otherwise our dbs don't have STATS_COLLECTION in secure so institute the
-                        // default.
-                        stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
-                                + " VALUES(?,?);");
-                        loadBooleanSetting(stmt, Settings.Secure.STATS_COLLECTION,
-                                R.bool.def_cm_stats_collection);
-                    }
-                } catch (SQLiteException ex) {
-                    // This is bad, just bump the version and add the setting to secure
                     stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
                             + " VALUES(?,?);");
                     loadBooleanSetting(stmt, Settings.Secure.STATS_COLLECTION,
                             R.bool.def_cm_stats_collection);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                    if (stmt != null) stmt.close();
                 }
-                db.setTransactionSuccessful();
-            } finally {
-                if (c != null) c.close();
-                db.endTransaction();
-                if (stmt != null) stmt.close();
             }
             upgradeVersion = 115;
+        }
+
+        if (upgradeVersion < 116) {
+            boolean moved = tryMoveSettingToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                    "volume_link_notification");
+
+            if (!moved) {
+                db.beginTransaction();
+                SQLiteStatement stmt = null;
+                try {
+                    stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
+                            + " VALUES(?,?);");
+                    loadBooleanSetting(stmt, Settings.Secure.VOLUME_LINK_NOTIFICATION,
+                            false);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                    if (stmt != null) stmt.close();
+                }
+            }
+            upgradeVersion = 116;
         }
 
         // *** Remember to update DATABASE_VERSION above!
@@ -1934,6 +1932,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 deleteStmt.close();
             }
         }
+    }
+
+    /**
+     * Attempt to move a setting which may or may not exist. A simple helper method to handle
+     * cases where a Nexus user could be updating from Stock AOSP, or a previous CM user is updating
+     * from a previous version that may not contain a specific row.
+     *
+     * Call it schrodinger's value. If it doesn't exist when you observe it, it won't get moved,
+     * and you have to manually create and set the default.
+     *
+     * @param db
+     * @param sourceTable
+     * @param destTable
+     * @param settingToMove
+     * @return
+     */
+    private boolean tryMoveSettingToNewTable(SQLiteDatabase db,
+            String sourceTable, String destTable, String settingToMove) {
+        boolean existAndMoved = false;
+        try {
+            Cursor c = null;
+            try {
+                // The setting is moving, but we have to make sure it exists first
+                // (don't break any possible upgrade path)
+                try {
+                    c = db.rawQuery("SELECT " + settingToMove + " from " + sourceTable, null);
+                    // if this row exists, then we do work
+                    if (c != null) {
+                        if (c.moveToNext()) {
+                            // The row exists so we can migrate the
+                            // entry from there to the destination table, preserving its value.
+                            moveSettingsToNewTable(db, sourceTable, destTable,
+                                    new String[]{ settingToMove }, true);
+                            existAndMoved = true;
+                        }
+                    } else {
+                        existAndMoved = false;
+                    }
+                } catch (SQLiteException ex) {
+                    // Item doesnt exist
+                    existAndMoved = false;
+                }
+            } finally {
+                if (c != null) c.close();
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return existAndMoved;
     }
 
     /**
@@ -2697,6 +2745,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void loadBooleanSetting(SQLiteStatement stmt, String key, int resid) {
         loadSetting(stmt, key,
                 mContext.getResources().getBoolean(resid) ? "1" : "0");
+    }
+
+    private void loadBooleanSetting(SQLiteStatement stmt, String key, boolean bool) {
+        loadSetting(stmt, key, bool);
     }
 
     private void loadIntegerSetting(SQLiteStatement stmt, String key, int resid) {
