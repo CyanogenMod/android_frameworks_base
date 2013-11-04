@@ -1348,7 +1348,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
     }
 
-    private SettingsObserver mSettingsObserver;
+    private LEDSettingsObserver mSettingsObserver;
 
     static long[] getLongArray(Resources r, int resid, int maxlen, long[] def) {
         int[] ar = r.getIntArray(resid);
