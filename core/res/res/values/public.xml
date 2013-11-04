@@ -2590,4 +2590,5 @@
     <!-- @hide -->
     <public-padding type="attr" name="private_resource_pad" end="0x01010500" />
 
+  <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
 </resources>
