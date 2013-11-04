@@ -17,25 +17,8 @@
 
 package com.android.internal.policy.impl.keyguard_obsolete;
 
-import com.android.internal.R;
-import com.android.internal.telephony.IccCardConstants;
-import com.android.internal.widget.DigitalClock;
-import com.android.internal.widget.LockPatternUtils;
-import com.android.internal.widget.TransportControlView;
-
-import java.util.ArrayList;
-import java.util.Date;
-
-import libcore.util.MutableInt;
-
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Resources;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -43,22 +26,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.internal.R;
-import com.android.internal.util.weather.HttpRetriever;
-import com.android.internal.util.weather.WeatherInfo;
-import com.android.internal.util.weather.WeatherXmlParser;
-import com.android.internal.util.weather.YahooPlaceFinder;
+import com.android.internal.telephony.IccCardConstants;
+import com.android.internal.widget.DigitalClock;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.TransportControlView;
 
-import org.w3c.dom.Document;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -97,11 +72,6 @@ class KeyguardStatusViewManager implements OnClickListener {
     private TextView mOwnerInfoView;
     private TextView mAlarmStatusView;
     private TransportControlView mTransportView;
-    private RelativeLayout mWeatherPanel, mWeatherTempsPanel;
-    private TextView mWeatherCity, mWeatherCondition, mWeatherLowHigh, mWeatherTemp, mWeatherUpdateTime;
-    private ImageView mWeatherImage;
-    private LinearLayout mCalendarPanel;
-    private TextView mCalendarEventTitle, mCalendarEventDetails;
 
     // Top-level container view for above views
     private View mContainer;
@@ -216,32 +186,6 @@ class KeyguardStatusViewManager implements OnClickListener {
         mEmergencyCallButtonEnabledInScreen = emergencyButtonEnabledInScreen;
         mDigitalClock = (DigitalClock) findViewById(R.id.time);
 
-        // Weather panel
-        mWeatherPanel = (RelativeLayout) findViewById(R.id.weather_panel);
-        mWeatherCity = (TextView) findViewById(R.id.weather_city);
-        mWeatherCondition = (TextView) findViewById(R.id.weather_condition);
-        mWeatherImage = (ImageView) findViewById(R.id.weather_image);
-        mWeatherTemp = (TextView) findViewById(R.id.weather_temp);
-        mWeatherLowHigh = (TextView) findViewById(R.id.weather_low_high);
-        mWeatherUpdateTime = (TextView) findViewById(R.id.update_time);
-        mWeatherTempsPanel = (RelativeLayout) findViewById(R.id.weather_temps_panel);
-
-        // Hide Weather panel view until we know we need to show it.
-        if (mWeatherPanel != null) {
-            mWeatherPanel.setVisibility(View.GONE);
-            mWeatherPanel.setOnClickListener(this);
-        }
-
-        // Calendar panel
-        mCalendarPanel = (LinearLayout) findViewById(R.id.calendar_panel);
-        mCalendarEventTitle = (TextView) findViewById(R.id.calendar_event_title);
-        mCalendarEventDetails = (TextView) findViewById(R.id.calendar_event_details);
-
-        // Hide calendar panel view until we know we need to show it.
-        if (mCalendarPanel != null) {
-            mCalendarPanel.setVisibility(View.GONE);
-        }
-
         // Hide transport control view until we know we need to show it.
         if (mTransportView != null) {
             mTransportView.setVisibility(View.GONE);
@@ -261,297 +205,14 @@ class KeyguardStatusViewManager implements OnClickListener {
         resetStatusInfo();
         refreshDate();
         updateOwnerInfo();
-        refreshWeather();
-        refreshCalendar();
 
         // Required to get Marquee to work.
         final View scrollableViews[] = { mCarrierView, mDateView, mStatus1View, mOwnerInfoView,
-                mAlarmStatusView, mCalendarEventDetails, mWeatherCity, mWeatherCondition };
+                mAlarmStatusView };
         for (View v : scrollableViews) {
             if (v != null) {
                 v.setSelected(true);
             }
-        }
-    }
-
-    /*
-     * CyanogenMod Lock screen Weather related functionality
-     */
-    private static final String URL_YAHOO_API_WEATHER = "http://weather.yahooapis.com/forecastrss?w=%s&u=";
-    private static WeatherInfo mWeatherInfo = new WeatherInfo();
-    private static final int QUERY_WEATHER = 0;
-    private static final int UPDATE_WEATHER = 1;
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-            case QUERY_WEATHER:
-                Thread queryWeather = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        LocationManager locationManager = (LocationManager) getContext().
-                                getSystemService(Context.LOCATION_SERVICE);
-                        final ContentResolver resolver = getContext().getContentResolver();
-                        boolean useCustomLoc = Settings.System.getInt(resolver,
-                                Settings.System.WEATHER_USE_CUSTOM_LOCATION, 0) == 1;
-                        String customLoc = Settings.System.getString(resolver,
-                                    Settings.System.WEATHER_CUSTOM_LOCATION);
-                        String woeid = null;
-
-                        // custom location
-                        if (customLoc != null && useCustomLoc) {
-                            try {
-                                woeid = YahooPlaceFinder.GeoCode(getContext().getApplicationContext(), customLoc);
-                                if (DEBUG)
-                                    Log.d(TAG, "Yahoo location code for " + customLoc + " is " + woeid);
-                            } catch (Exception e) {
-                                Log.e(TAG, "ERROR: Could not get Location code");
-                                e.printStackTrace();
-                            }
-                        // network location
-                        } else {
-                            Criteria crit = new Criteria();
-                            crit.setAccuracy(Criteria.ACCURACY_COARSE);
-                            String bestProvider = locationManager.getBestProvider(crit, true);
-                            Location loc = null;
-                            if (bestProvider != null) {
-                                loc = locationManager.getLastKnownLocation(bestProvider);
-                            } else {
-                                loc = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-                            }
-                            try {
-                                woeid = YahooPlaceFinder.reverseGeoCode(getContext(), loc.getLatitude(),
-                                        loc.getLongitude());
-                                if (DEBUG)
-                                    Log.d(TAG, "Yahoo location code for current geolocation is " + woeid);
-                            } catch (Exception e) {
-                                Log.e(TAG, "ERROR: Could not get Location code");
-                                e.printStackTrace();
-                            }
-                        }
-                        Message msg = Message.obtain();
-                        msg.what = UPDATE_WEATHER;
-                        msg.obj = woeid;
-                        mHandler.sendMessage(msg);
-                    }
-                });
-                queryWeather.setPriority(Thread.MIN_PRIORITY);
-                queryWeather.start();
-                break;
-            case UPDATE_WEATHER:
-                String woeid = (String) msg.obj;
-                if (woeid != null) {
-                    if (DEBUG) {
-                        Log.d(TAG, "Location code is " + woeid);
-                    }
-                    WeatherInfo w = null;
-                    try {
-                        w = parseXml(getDocument(woeid));
-                    } catch (Exception e) {
-                    }
-                    if (w == null) {
-                        setNoWeatherData();
-                    } else {
-                        setWeatherData(w);
-                        mWeatherInfo = w;
-                    }
-                } else {
-                    if (mWeatherInfo.temp.equals(WeatherInfo.NODATA)) {
-                        setNoWeatherData();
-                    } else {
-                        setWeatherData(mWeatherInfo);
-                    }
-                }
-                break;
-            }
-        }
-    };
-
-    /**
-     * Reload the weather forecast
-     */
-    private void refreshWeather() {
-        final ContentResolver resolver = getContext().getContentResolver();
-        boolean showWeather = Settings.System.getInt(resolver,Settings.System.LOCKSCREEN_WEATHER, 0) == 1;
-
-        if (showWeather) {
-            final long interval = Settings.System.getLong(resolver,
-                    Settings.System.WEATHER_UPDATE_INTERVAL, 60); // Default to hourly
-            boolean manualSync = (interval == 0);
-            if (!manualSync && (((System.currentTimeMillis() - mWeatherInfo.last_sync) / 60000) >= interval)) {
-                mHandler.sendEmptyMessage(QUERY_WEATHER);
-            } else if (manualSync && mWeatherInfo.last_sync == 0) {
-                setNoWeatherData();
-            } else {
-                setWeatherData(mWeatherInfo);
-            }
-        } else {
-            // Hide the Weather panel view
-            if (mWeatherPanel != null) {
-                mWeatherPanel.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    /**
-     * Display the weather information
-     * @param w
-     */
-    private void setWeatherData(WeatherInfo w) {
-        final ContentResolver resolver = getContext().getContentResolver();
-        final Resources res = getContext().getResources();
-        boolean showLocation = Settings.System.getInt(resolver,
-                Settings.System.WEATHER_SHOW_LOCATION, 1) == 1;
-        boolean showTimestamp = Settings.System.getInt(resolver,
-                Settings.System.WEATHER_SHOW_TIMESTAMP, 1) == 1;
-        boolean invertLowhigh = Settings.System.getInt(resolver,
-                Settings.System.WEATHER_INVERT_LOWHIGH, 0) == 1;
-
-        if (mWeatherPanel != null) {
-            if (mWeatherImage != null) {
-                String conditionCode = w.condition_code;
-                String condition_filename = "weather_" + conditionCode;
-                int resID = res.getIdentifier(condition_filename, "drawable",
-                        getContext().getPackageName());
-
-                if (DEBUG)
-                    Log.d("Weather", "Condition:" + conditionCode + " ID:" + resID);
-
-                if (resID != 0) {
-                    mWeatherImage.setImageDrawable(res.getDrawable(resID));
-                } else {
-                    mWeatherImage.setImageResource(R.drawable.weather_na);
-                }
-            }
-            if (mWeatherCity != null) {
-                mWeatherCity.setText(w.city);
-                mWeatherCity.setVisibility(showLocation ? View.VISIBLE : View.GONE);
-            }
-            if (mWeatherCondition != null) {
-                mWeatherCondition.setText(w.condition);
-                mWeatherCondition.setVisibility(View.VISIBLE);
-            }
-            if (mWeatherUpdateTime != null) {
-                Date lastTime = new Date(mWeatherInfo.last_sync);
-                String date = DateFormat.getDateFormat(getContext()).format(lastTime);
-                String time = DateFormat.getTimeFormat(getContext()).format(lastTime);
-                mWeatherUpdateTime.setText(date + " " + time);
-                mWeatherUpdateTime.setVisibility(showTimestamp ? View.VISIBLE : View.GONE);
-            }
-            if (mWeatherTempsPanel != null && mWeatherTemp != null && mWeatherLowHigh != null) {
-                mWeatherTemp.setText(w.temp);
-                mWeatherLowHigh.setText(invertLowhigh ? w.high + " | " + w.low : w.low + " | " + w.high);
-                mWeatherTempsPanel.setVisibility(View.VISIBLE);
-            }
-
-            // Show the Weather panel view
-            mWeatherPanel.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * There is no data to display, display 'empty' fields and the
-     * 'Tap to reload' message
-     */
-    private void setNoWeatherData() {
-
-        if (mWeatherPanel != null) {
-            if (mWeatherImage != null) {
-                mWeatherImage.setImageResource(R.drawable.weather_na);
-            }
-            if (mWeatherCity != null) {
-                mWeatherCity.setText(R.string.weather_no_data);
-                mWeatherCity.setVisibility(View.VISIBLE);
-            }
-            if (mWeatherCondition != null) {
-                mWeatherCondition.setText(R.string.weather_tap_to_refresh);
-            }
-            if (mWeatherUpdateTime != null) {
-                mWeatherUpdateTime.setVisibility(View.GONE);
-            }
-            if (mWeatherTempsPanel != null ) {
-                mWeatherTempsPanel.setVisibility(View.GONE);
-            }
-
-            // Show the Weather panel view
-            mWeatherPanel.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * Get the weather forecast XML document for a specific location
-     * @param woeid
-     * @return
-     */
-    private Document getDocument(String woeid) {
-        try {
-            boolean celcius = Settings.System.getInt(getContext().getContentResolver(),
-                    Settings.System.WEATHER_USE_METRIC, 1) == 1;
-            String urlWithDegreeUnit;
-
-            if (celcius) {
-                urlWithDegreeUnit = URL_YAHOO_API_WEATHER + "c";
-            } else {
-                urlWithDegreeUnit = URL_YAHOO_API_WEATHER + "f";
-            }
-
-            return new HttpRetriever().getDocumentFromURL(String.format(urlWithDegreeUnit, woeid));
-        } catch (IOException e) {
-            Log.e(TAG, "Error querying Yahoo weather");
-        }
-
-        return null;
-    }
-
-    /**
-     * Parse the weather XML document
-     * @param wDoc
-     * @return
-     */
-    private WeatherInfo parseXml(Document wDoc) {
-        try {
-            return new WeatherXmlParser(getContext()).parseWeatherResponse(wDoc);
-        } catch (Exception e) {
-            Log.e(TAG, "Error parsing Yahoo weather XML document");
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /*
-     * CyanogenMod Lock screen Calendar related functionality
-     */
-
-    private void refreshCalendar() {
-        if (mCalendarPanel != null) {
-            final ContentResolver resolver = getContext().getContentResolver();
-            String[] nextCalendar = null;
-            boolean visible = false; // Assume we are not showing the view
-
-            // Load the settings
-            boolean lockCalendar = (Settings.System.getInt(resolver,
-                    Settings.System.LOCKSCREEN_CALENDAR, 0) == 1);
-            String[] calendars = parseStoredValue(Settings.System.getString(
-                    resolver, Settings.System.LOCKSCREEN_CALENDARS));
-            boolean lockCalendarRemindersOnly = (Settings.System.getInt(resolver,
-                    Settings.System.LOCKSCREEN_CALENDAR_REMINDERS_ONLY, 0) == 1);
-            long lockCalendarLookahead = Settings.System.getLong(resolver,
-                    Settings.System.LOCKSCREEN_CALENDAR_LOOKAHEAD, 10800000);
-
-            if (lockCalendar) {
-                nextCalendar = mLockPatternUtils.getNextCalendarAlarm(lockCalendarLookahead,
-                        calendars, lockCalendarRemindersOnly);
-                if (nextCalendar[0] != null && mCalendarEventTitle != null) {
-                    mCalendarEventTitle.setText(nextCalendar[0].toString());
-                    if (nextCalendar[1] != null && mCalendarEventDetails != null) {
-                        mCalendarEventDetails.setText(nextCalendar[1]);
-                    }
-                    visible = true;
-                }
-            }
-
-           mCalendarPanel.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -1013,16 +674,6 @@ class KeyguardStatusViewManager implements OnClickListener {
     public void onClick(View v) {
         if (v == mEmergencyCallButton) {
             mCallback.takeEmergencyCallAction();
-        } else if (v == mWeatherPanel) {
-            // Indicate we are refreshing
-            if (mWeatherCondition != null) {
-                mWeatherCondition.setText(R.string.weather_refreshing);
-            }
-
-            mCallback.pokeWakelock();
-            if (!mHandler.hasMessages(QUERY_WEATHER)) {
-                mHandler.sendEmptyMessage(QUERY_WEATHER);
-            }
         }
     }
 
