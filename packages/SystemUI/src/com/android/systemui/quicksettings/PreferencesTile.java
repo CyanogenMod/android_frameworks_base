@@ -14,9 +14,6 @@ public class PreferencesTile extends QuickSettingsTile{
             QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        mDrawable = R.drawable.ic_qs_settings;
-        mLabel = mContext.getString(R.string.quick_settings_settings_label);
-
         mOnClick = new View.OnClickListener() {
 
             @Override
@@ -26,4 +23,20 @@ public class PreferencesTile extends QuickSettingsTile{
         };
     }
 
+    @Override
+    void onPostCreate() {
+        updateTile();
+        super.onPostCreate();
+    }
+
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
+    private synchronized void updateTile() {
+        mDrawable = R.drawable.ic_qs_settings;
+        mLabel = mContext.getString(R.string.quick_settings_settings_label);
+    }
 }

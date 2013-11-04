@@ -2,10 +2,8 @@ package com.android.systemui.quicksettings;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothAdapter.BluetoothStateChangeCallback;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -55,18 +53,24 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        boolean update = false;
         if(intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
             int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                     BluetoothAdapter.ERROR);
             enabled = (state == BluetoothAdapter.STATE_ON);
+            update = true;
         }
 
         if(intent.getAction().equals(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)){
             int state = intent.getIntExtra(BluetoothAdapter.EXTRA_CONNECTION_STATE,
                     BluetoothAdapter.STATE_DISCONNECTED);
             connected = (state == BluetoothAdapter.STATE_CONNECTED);
+            update = true;
         }
-        applyBluetoothChanges();
+
+        if (update) {
+            updateResources();
+        }
     }
 
     void checkBluetoothState() {
@@ -74,7 +78,13 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
         connected = mBluetoothAdapter.getConnectionState() == BluetoothAdapter.STATE_CONNECTED;
     }
 
-    private void applyBluetoothChanges(){
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
+    private synchronized void updateTile() {
         if(enabled){
             if(connected){
                 mDrawable = R.drawable.ic_qs_bluetooth_on;
@@ -86,22 +96,21 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
             mDrawable = R.drawable.ic_qs_bluetooth_off;
             mLabel = mContext.getString(R.string.quick_settings_bluetooth_off_label);
         }
-        updateQuickSettings();
     }
 
     @Override
     void onPostCreate() {
+        checkBluetoothState();
+        updateTile();
         BluetoothController controller = new BluetoothController(mContext);
         controller.addStateChangedCallback(this);
-        checkBluetoothState();
-        applyBluetoothChanges();
         super.onPostCreate();
     }
 
     @Override
     public void onBluetoothStateChange(boolean on) {
         this.enabled = on;
-        applyBluetoothChanges();
+        updateResources();
     }
 
 }

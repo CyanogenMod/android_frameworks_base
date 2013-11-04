@@ -19,11 +19,9 @@ package com.android.systemui.quicksettings;
 import android.app.AlertDialog;
 import android.app.Profile;
 import android.app.ProfileManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -47,9 +45,6 @@ public class ProfileTile extends QuickSettingsTile {
         qsc.registerAction(ProfileManagerService.INTENT_ACTION_PROFILE_SELECTED, this);
 
         mProfileManager = (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
-        mDrawable = R.drawable.ic_qs_profiles;
-
-        mLabel = mProfileManager.getActiveProfile().getName();
 
         mOnClick = new View.OnClickListener() {
             @Override
@@ -68,9 +63,25 @@ public class ProfileTile extends QuickSettingsTile {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    void onPostCreate() {
+        updateTile();
+        super.onPostCreate();
+    }
+
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
+    private synchronized void updateTile() {
+        mDrawable = R.drawable.ic_qs_profiles;
         mLabel = mProfileManager.getActiveProfile().getName();
-        updateQuickSettings();
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        updateResources();
     }
 
     // copied from com.android.internal.policy.impl.GlobalActions

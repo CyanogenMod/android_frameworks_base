@@ -9,7 +9,6 @@ import android.view.View.OnLongClickListener;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
-import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
@@ -22,13 +21,10 @@ public class AirplaneModeTile extends QuickSettingsTile implements NetworkSignal
             QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        mLabel = mContext.getString(R.string.quick_settings_airplane_mode_label);
-
         mOnClick = new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-             // Change the system setting
+                // Change the system setting
                 Settings.Global.putInt(mContext.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON,
                                         !enabled ? 1 : 0);
 
@@ -52,7 +48,19 @@ public class AirplaneModeTile extends QuickSettingsTile implements NetworkSignal
     void onPostCreate() {
         NetworkController controller = new NetworkController(mContext);
         controller.addNetworkSignalChangedCallback(this);
+        updateTile();
         super.onPostCreate();
+    }
+
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
+    private synchronized void updateTile() {
+        mLabel = mContext.getString(R.string.quick_settings_airplane_mode_label);
+        mDrawable = (enabled) ? R.drawable.ic_qs_airplane_on : R.drawable.ic_qs_airplane_off;
     }
 
     @Override
@@ -65,19 +73,12 @@ public class AirplaneModeTile extends QuickSettingsTile implements NetworkSignal
             int mobileSignalIconId, String mobileSignalContentDescriptionId,
             int dataTypeIconId, String dataTypeContentDescriptionId,
             String description) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void onAirplaneModeChanged(boolean enabled) {
         this.enabled = enabled;
-        if(enabled){
-            mDrawable = R.drawable.ic_qs_airplane_on;
-        }else{
-            mDrawable = R.drawable.ic_qs_airplane_off;
-        }
-        updateQuickSettings();
+        updateResources();
     }
 
 }

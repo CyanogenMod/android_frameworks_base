@@ -1,10 +1,8 @@
 package com.android.systemui.quicksettings;
 
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -23,6 +21,8 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
 
     private boolean enabled = false;
     private boolean working = false;
+
+    private String mDescription = null;
 
     ContentResolver mContentResolver;
 
@@ -56,19 +56,22 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
     @Override
     public void onReceive(Context context, Intent intent) {
         enabled = Settings.Secure.isLocationProviderEnabled(mContentResolver, LocationManager.GPS_PROVIDER);
-        mLabel = mContext.getString(R.string.quick_settings_gps);
-        setGenericLabel();
-        applyGPSChanges();
+        updateResources();
     }
 
     @Override
     void onPostCreate() {
-        setGenericLabel();
-        applyGPSChanges();
+        updateTile();
         super.onPostCreate();
     }
 
-    void applyGPSChanges() {
+    @Override
+    public void updateResources() {
+        updateTile();
+        updateQuickSettings();
+    }
+
+    private synchronized void updateTile() {
         if (enabled && working) {
             mDrawable = R.drawable.ic_qs_location;
         } else if (enabled) {
@@ -76,21 +79,21 @@ public class GPSTile extends QuickSettingsTile implements LocationGpsStateChange
         } else {
             mDrawable = R.drawable.ic_qs_gps_off;
         }
-        updateQuickSettings();
+        setGenericLabel();
     }
 
     @Override
     public void onLocationGpsStateChanged(boolean inUse, String description) {
         working = inUse;
-        if (description != null) {
-            mLabel = description;
-        } else {
-            setGenericLabel();
-        }
-        applyGPSChanges();
+        mDescription = description;
+        updateResources();
     }
 
     private void setGenericLabel() {
-        mLabel = (enabled ? mContext.getString(R.string.quick_settings_gps) : mContext.getString(R.string.quick_settings_gps_off));
+        if (mDescription != null) {
+            mLabel = mDescription;
+        } else {
+            mLabel = (enabled ? mContext.getString(R.string.quick_settings_gps) : mContext.getString(R.string.quick_settings_gps_off));
+        }
     }
 }

@@ -15,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
-import android.widget.TextView;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
@@ -23,6 +22,7 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class InputMethodTile extends QuickSettingsTile {
 
+    private InputMethodManager mImm;
     private boolean showTile = false;
     private static final String TAG_TRY_SUPPRESSING_IME_SWITCHER = "TrySuppressingImeSwitcher";
 
@@ -30,7 +30,7 @@ public class InputMethodTile extends QuickSettingsTile {
             QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        mDrawable = R.drawable.ic_qs_ime;
+        mImm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mOnClick = new OnClickListener() {
 
@@ -45,17 +45,6 @@ public class InputMethodTile extends QuickSettingsTile {
             }
         };
 
-    }
-
-    public void toggleVisibility(boolean show) {
-        InputMethodManager imm =
-                (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        List<InputMethodInfo> imis = imm.getInputMethodList();
-
-        showTile = (show && needsToShowImeSwitchOngoingNotification(imm));
-        mLabel = getCurrentInputMethodName(mContext, mContext.getContentResolver(),
-                imm, imis, mContext.getPackageManager());
-        updateQuickSettings();
     }
 
     private static String getCurrentInputMethodName(Context context, ContentResolver resolver,
@@ -122,12 +111,33 @@ public class InputMethodTile extends QuickSettingsTile {
     }
 
     @Override
+    void onPostCreate() {
+        updateTile();
+        super.onPostCreate();
+    }
+
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
+    @Override
     void updateQuickSettings() {
-        TextView tv = (TextView) mTile.findViewById(R.id.tile_textview);
-        tv.setText(mLabel);
-        tv.setCompoundDrawablesWithIntrinsicBounds(0, mDrawable, 0, 0);
         mTile.setVisibility(showTile ? View.VISIBLE : View.GONE);
         super.updateQuickSettings();
+    }
+
+    private synchronized void updateTile() {
+        List<InputMethodInfo> imis = mImm.getInputMethodList();
+        mLabel = getCurrentInputMethodName(mContext, mContext.getContentResolver(),
+                mImm, imis, mContext.getPackageManager());
+        mDrawable = R.drawable.ic_qs_ime;
+    }
+
+    public void toggleVisibility(boolean show) {
+        showTile = (show && needsToShowImeSwitchOngoingNotification(mImm));
+        updateResources();
     }
 
 }

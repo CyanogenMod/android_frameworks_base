@@ -1,10 +1,8 @@
 package com.android.systemui.quicksettings;
 
 import android.app.ActivityManagerNative;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.UserInfo;
 import android.database.Cursor;
@@ -26,7 +24,6 @@ import android.view.WindowManagerGlobal;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.internal.widget.LockPatternUtils;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
@@ -80,6 +77,11 @@ public class UserTile extends QuickSettingsTile {
     }
 
     @Override
+    public void updateResources() {
+        queryForUserInformation();
+    }
+
+    @Override
     void updateQuickSettings() {
         ImageView iv = (ImageView) mTile.findViewById(R.id.user_imageview);
         TextView tv = (TextView) mTile.findViewById(R.id.user_textview);
@@ -111,7 +113,6 @@ public class UserTile extends QuickSettingsTile {
                     // The system needs some time to change the picture, if we try to load it when we receive the broadcast, we will load the old one
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 final UserManager um =

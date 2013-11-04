@@ -14,12 +14,12 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.powerwidget.PowerButton;
 
+@SuppressWarnings("deprecation")
 public class ToggleLockscreenTile extends QuickSettingsTile {
 
     private KeyguardLock mLock = null;
     private static final String KEY_DISABLED = "lockscreen_disabled";
 
-    private final KeyguardManager mKeyguardManager;
     private boolean mDisabledLockscreen;
     private SharedPreferences mPrefs;
 
@@ -27,9 +27,6 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
             LayoutInflater inflater, QuickSettingsContainerView container, QuickSettingsController qsc) {
         super(context, inflater, container, qsc);
 
-        mLabel = mContext.getString(R.string.quick_settings_lockscreen);
-
-        mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         mPrefs = mContext.getSharedPreferences("PowerButton-" + PowerButton.BUTTON_LOCKSCREEN, Context.MODE_PRIVATE);
         mDisabledLockscreen = mPrefs.getBoolean(KEY_DISABLED, false);
 
@@ -43,7 +40,7 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
                 editor.putBoolean(KEY_DISABLED, mDisabledLockscreen);
                 editor.apply();
 
-                applyLockscreenChanges();
+                updateResources();
             }
         };
 
@@ -59,11 +56,18 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
 
     @Override
     void onPostCreate() {
-        applyLockscreenChanges();
+        updateTile();
         super.onPostCreate();
     }
 
-    void applyLockscreenChanges() {
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
+    private synchronized void updateTile() {
+        mLabel = mContext.getString(R.string.quick_settings_lockscreen);
         if (mLock == null) {
             KeyguardManager keyguardManager = (KeyguardManager)
                     mContext.getSystemService(Context.KEYGUARD_SERVICE);
@@ -76,7 +80,6 @@ public class ToggleLockscreenTile extends QuickSettingsTile {
             mDrawable = R.drawable.ic_qs_lock_screen_on;
             mLock.reenableKeyguard();
         }
-        updateQuickSettings();
     }
 
 }
