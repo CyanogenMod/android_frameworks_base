@@ -418,7 +418,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         // last: silent mode
         if ((Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.POWER_MENU_SILENT_ENABLED, 1) == 1) &&
+                Settings.System.POWER_MENU_SOUND_ENABLED, 1) == 1) &&
                 (mShowSilentToggle)) {
             mItems.add(mSilentModeAction);
         }
