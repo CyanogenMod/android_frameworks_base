@@ -29,7 +29,7 @@ import com.android.systemui.R;
 /**
  *
  */
-class QuickSettingsContainerView extends FrameLayout {
+public class QuickSettingsContainerView extends FrameLayout {
 
     // The number of columns in the QuickSettings grid
     private int mNumColumns;

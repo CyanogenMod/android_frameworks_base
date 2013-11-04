@@ -766,7 +766,6 @@ class QuickSettings {
         mContainerView.requestLayout();
     }
 
-
     private void showBrightnessDialog() {
         Intent intent = new Intent(Intent.ACTION_SHOW_BRIGHTNESS_DIALOG);
         mContext.sendBroadcast(intent);
