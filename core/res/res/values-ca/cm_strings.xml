@@ -124,4 +124,21 @@
     <string name="policydesc_enforceSelinux">Commuta la política SELinux entre el mode imposat o permissiu.</string>
     <string name="policylab_enforceMmac">Imposa MMAC</string>
     <string name="policydesc_enforceMmac">Commuta la política MMAC entre el mode imposat o permissiu.</string>
+    <string name="enablePin">Ha fallat. Activa el bloqueig SIM/RUIM.</string>
+    <string name="keyguard_password_wrong_puk_code">Codi PUK incorrecte!</string>
+    <string name="keyguard_password_pin_failed">El PIN ha fallat!</string>
+    <string name="keyguard_password_puk_failed">El PUK ha fallat!</string>
+    <string name="keyguard_pin_accepted">Codi Acceptat!</string>
+    <string name="pinpuk_attempts">\nIntents restants :</string>
+    <string name="lockscreen_sim_error_message_short">Targeta invàlida.</string>
+    <string name="lockscreen_sim_error_message">La targeta SIM és invàlida.</string>
+    <string name="lockscreen_perso_locked_message">La SIM/RUIM té un bloqueig personalitzat</string>
+    <string name="stk_cc_ussd_to_dial">La petició USSD està modificada a una nova petició DIAL.</string>
+    <string name="stk_cc_ussd_to_ss">La petició USSD està modificada a una nova petició SS.</string>
+    <string name="stk_cc_ussd_to_ussd">La petició USSD està modificada a una nova petició USSD.</string>
+    <string name="stk_cc_ss_to_dial">La petició SS està modificada a una nova petició DIAL.</string>
+    <string name="stk_cc_ss_to_ussd">La petició SS està modificada a una nova petició USSD.</string>
+    <string name="stk_cc_ss_to_ss">La petició SS està modificada a una nova petició SS.</string>
+    <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
