@@ -190,8 +190,9 @@
     2. Left -->
     <integer name="def_qs_quick_pulldown">0</integer>
 
-    <!-- Default for Settings.System.LOCKSCREEN_TARGETS. -->
+    <!-- Defaults for Settings.System.LOCKSCREEN_TARGETS. -->
     <string name="def_lockscreen_targets" translatable="false"></string>
+    <string name="def_lockscreen_targets_no_telephony" translatable="false"></string>
 
     <!-- Default for Settings.System.UI_FORCE_OVERFLOW_BUTTON. -->
     <integer name="def_force_overflow_button">0</integer>
