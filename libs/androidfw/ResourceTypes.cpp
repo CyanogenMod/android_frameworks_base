@@ -18,6 +18,7 @@
 #define LOG_TAG "ResourceType"
 //#define LOG_NDEBUG 0
 
+#define char16_t uint16_t
 #include <androidfw/ResourceTypes.h>
 #include <utils/Atomic.h>
 #include <utils/ByteOrder.h>

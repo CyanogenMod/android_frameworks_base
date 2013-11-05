@@ -26,6 +26,8 @@
 #include "android_os_Parcel.h"
 #include "android_view_KeyEvent.h"
 
+#undef char16_t
+
 namespace android {
 
 static struct {
