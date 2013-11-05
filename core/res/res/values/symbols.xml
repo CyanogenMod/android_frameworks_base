@@ -277,6 +277,7 @@
   <java-symbol type="bool" name="config_enableWallpaperService" />
   <java-symbol type="bool" name="config_sendAudioBecomingNoisy" />
   <java-symbol type="bool" name="config_enableScreenshotChord" />
+  <java-symbol type="bool" name="config_enableScreenrecordChord" />
   <java-symbol type="bool" name="config_bluetooth_default_profiles" />
   <java-symbol type="bool" name="config_enableWifiDisplay" />
   <java-symbol type="bool" name="config_useDevInputEventForAudioJack" />
