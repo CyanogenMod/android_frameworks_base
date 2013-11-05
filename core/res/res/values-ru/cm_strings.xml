@@ -45,36 +45,41 @@
     <string name="toast_rotation_unlocked">Поворот экрана разблокирован</string>
     <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
     <string name="stylus_app_not_installed">%s не установлено</string>
-
-    <!-- Privacy Guard -->
     <string name="permlab_changePrivacyGuardState">Включение или выключение режима инкогнито</string>
     <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в режиме инкогнито. Когда приложение запущено в режиме инкогнито, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
     <string name="privacy_guard_notification">Режим инкогнито активен</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> не сможет получать доступ к персональным данным</string>
-
-    <!-- The title of the profile picker dialog. -->
     <string name="profile_picker_title">Профили</string>
-
-    <!-- The item label for the no profile selection item. -->
     <string name="profile_none">Не выбран</string>
-
     <string name="permlab_cancelNotifications">Отключение уведомлений</string>
     <string name="permdesc_cancelNotifications">Разрешить приложению отключать уведомления, созданные другими приложениями.</string>
-
     <string name="permlab_interceptSmsSent">Перехват исходящих SMS</string>
     <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения смогут использовать это, чтобы препятствовать отправке SMS-сообщений.</string>
-
     <string name="permlab_sendMockSms">Показ фиктивных SMS-сообщений</string>
     <string name="permdesc_sendMockSms">Разрешить приложению показывать фиктивные SMS. Вредоносные приложения могут посылать сообщения циклически, блокируя систему уведомлений и раздражая пользователя.</string>
-
     <string name="progress_nomediapresent" product="default">Отсутствует внешний накопитель</string>
-
     <string name="policylab_enforceSelinux">Переключение режимов SELinux</string>
     <string name="policydesc_enforceSelinux">Переключать принудительный и разрешающий режимы политики SELinux.</string>
     <string name="policylab_enforceMmac">Переключение режимов MMAC</string>
     <string name="policydesc_enforceMmac">Переключать принудительный и разрешающий режимы политики MMAC.</string>
-
     <string name="perf_profile_pwrsv">Экономия энергии</string>
     <string name="perf_profile_bal">Сбалансированный</string>
     <string name="perf_profile_perf">Высокая производительность</string>
+    <string name="lockscreen_sim_error_message_short">Карта недействительна.</string>
+    <string name="lockscreen_sim_error_message">SIM-карта недействительна.</string>
+    <string name="enablePin">Неудачно. Включите блокировку SIM/RUIM-карты.</string>
+    <string name="keyguard_password_wrong_puk_code">Неверный PUK-код</string>
+    <string name="keyguard_password_pin_failed">Разблокировка PIN-кодом не удалась</string>
+    <string name="keyguard_password_puk_failed">Разблокировка PUK-кодом не удалась</string>
+    <string name="keyguard_pin_accepted">Код принят</string>
+    <string name="pinpuk_attempts">\nОсталось попыток:</string>
+    <string name="stk_cc_ussd_to_dial">USSD-запрос преобразован в DIAL-запрос.</string>
+    <string name="stk_cc_ussd_to_ss">USSD-запрос преобразован в SS-запрос.</string>
+    <string name="stk_cc_ussd_to_ussd">USSD-запрос преобразован в новый USSD-запрос.</string>
+    <string name="stk_cc_ss_to_dial">SS-запрос преобразован в DIAL-запрос.</string>
+    <string name="stk_cc_ss_to_ussd">SS-запрос преобразован в USSD-запрос.</string>
+    <string name="stk_cc_ss_to_ss">SS-запрос преобразован в новый SS-запрос.</string>
+    <string name="msim_kg_sim_pin_msg_format">ПОДП.:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
+    <string name="lockscreen_perso_locked_message">SIM/RUIM-карта заблокирована</string>
 </resources>
