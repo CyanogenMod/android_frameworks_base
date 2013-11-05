@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="app_ops_labels">
+        <item>Tentando acessar localização</item>
+        <item>Tentando acessar localização</item>
+        <item>Tentando acessar localização</item>
+        <item>Tentando usar vibração</item>
+        <item>Tentando ler contatos</item>
+        <item>Tentando modificar contatos</item>
+        <item>Tentando ler registros de chamadas</item>
+        <item>Tentando modificar registro de chamadas</item>
+        <item>Tentando ler calendário</item>
+        <item>Tentando modificar calendário</item>
+        <item>Tentando acessar localizaçãon</item>
+        <item>Tentando enviar notificação</item>
+        <item>Tentando acessar localização</item>
+        <item>Tentando realizar chamadal</item>
+        <item>Tentando ler SMS/MMS</item>
+        <item>Tentando escrever/modificar SMS/MMS</item>
+        <item>Tentando receber SMS/MMS</item>
+        <item>Tentando receber SMS/MMS</item>
+        <item>Tentando receber SMS/MMS</item>
+        <item>Tentando receber SMS/MMS</item>
+        <item>Tentando enviar SMS/MMS</item>
+        <item>Tentando ler SMS/MMS</item>
+        <item>Tentando escrever/modificar SMS/MMS</item>
+        <item>Tentando modificar configurações</item>
+        <item>Tentando desenhar no topo</item>
+        <item>Tentando acessar notificações</item>
+        <item>Tentando acessar Câmera</item>
+        <item>Tentando gravar áudio</item>
+        <item>Tentando reproduzir áudio</item>
+        <item>Tentando ler área de transferência</item>
+        <item>Tentando modificar área de transferência</item>
+        <item>Tentando desligar/ligar Wi-Fi</item>
+        <item>Tentando ligar/desligar Bluetooth</item>
+        <item>Tentando ligar/desligar dados</item>
+        <item>Tentando agendar despertador do dispositivo</item>
+    </string-array>
+</resources>
