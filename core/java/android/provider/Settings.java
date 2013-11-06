@@ -2276,6 +2276,8 @@ public final class Settings {
          */
         public static final String USER_ROTATION = "user_rotation";
 
+        public static final String FORCE_ROTATION_BY_SENSOR = "force_rotation_by_sensor";
+
         /**
          * Control whether the rotation lock toggle in the System UI should be hidden.
          * Typically this is done for accessibility purposes to make it harder for

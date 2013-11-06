@@ -343,6 +343,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mIsLongPress;
     private boolean mAnimatingWindows;
     private boolean mNeedUpdateSettings;
+    private boolean mForceSensorOrientation;
 
     private static final class PointerLocationInputEventReceiver extends InputEventReceiver {
         private final PointerLocationView mView;
@@ -655,6 +656,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HARDWARE_KEY_REBINDING), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.FORCE_ROTATION_BY_SENSOR), false, this,
                     UserHandle.USER_ALL);
 
             updateSettings();
@@ -1456,6 +1460,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             mUserRotationAngles = Settings.System.getIntForUser(resolver,
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1, UserHandle.USER_CURRENT);
+
+            boolean forceSensorOrientation = Settings.System.getIntForUser(resolver,
+                    Settings.System.FORCE_ROTATION_BY_SENSOR, -1 ,UserHandle.USER_CURRENT) == 1;
+            if (mForceSensorOrientation != forceSensorOrientation) {
+                mForceSensorOrientation = forceSensorOrientation;
+                updateRotation = true;
+            }
 
             if (mSystemReady) {
                 int pointerLocation = Settings.System.getIntForUser(resolver,
@@ -4854,6 +4865,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 sensorRotation = lastRotation;
             }
 
+            if (mForceSensorOrientation
+                    && orientation == ActivityInfo.SCREEN_ORIENTATION_NOSENSOR) {
+                if (mPortraitRotation == Surface.ROTATION_0) {
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
+                } else {
+                    orientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
+                }
+            }
+
+            final boolean useForcedSensor = mForceSensorOrientation
+                    && (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                            || orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                            || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                            || orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+
             final int preferredRotation;
             if ((mLidState == LID_OPEN && mLidOpenRotation >= 0)
                     && !(mHasRemovableLid
@@ -4901,7 +4927,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     || orientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR
                     || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
                     || orientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                    || orientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
+                    || orientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                    || useForcedSensor) {
                 // Otherwise, use sensor only if requested by the application or enabled
                 // by default for USER or UNSPECIFIED modes.  Does not apply to NOSENSOR.
                 if (mAllowAllRotations < 0) {
