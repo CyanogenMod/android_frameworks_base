@@ -517,7 +517,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 if (networkInfo != null &&
                         networkInfo.getDetailedState() != NetworkInfo.DetailedState.FAILED) {
                     if (VDBG) Log.d(TAG, "Tethering got CONNECTIVITY_ACTION");
-                    mTetherMasterSM.sendMessage(TetherMasterSM.CMD_UPSTREAM_CHANGED);
+                    mTetherMasterSM.sendMessage(TetherMasterSM.CMD_UPSTREAM_CHANGED, networkInfo);
                 }
             } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 updateConfiguration();
@@ -735,8 +735,8 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     //      CONNECTIVITY_ACTION. Only to accomodate interface
     //      switch during HO.
     //      @see bug/4455071
-    public void handleTetherIfaceChange() {
-        mTetherMasterSM.sendMessage(TetherMasterSM.CMD_UPSTREAM_CHANGED);
+    public void handleTetherIfaceChange(NetworkInfo info) {
+        mTetherMasterSM.sendMessage(TetherMasterSM.CMD_UPSTREAM_CHANGED, info);
     }
 
     class TetherInterfaceSM extends StateMachine {
@@ -1552,7 +1552,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                         NetworkInfo info = (NetworkInfo) message.obj;
                         mTryCell = !WAIT_FOR_NETWORK_TO_SETTLE;
                         chooseUpstreamType(mTryCell);
-                        if (!info.isConnected()) {
+                        if ((info != null) && (!info.isConnected())) {
                             IBinder b = ServiceManager.getService(Context.CONNECTIVITY_SERVICE);
                             IConnectivityManager cm = IConnectivityManager.Stub.asInterface(b);
                             try {
