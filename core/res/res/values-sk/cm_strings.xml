@@ -72,6 +72,23 @@
     <string name="permlab_sendMockSms">posielať falošné SMS správy</string>
     <string name="permdesc_sendMockSms">Povolí aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať SMS do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať užívateľa.</string>
     <string name="progress_nomediapresent" product="default">Nie je dostupné žiadne vymeniteľné médium\u2026</string>
+    <string name="enablePin">Neúspešné. Povoľte zámok SIM/RUIM.</string>
+    <string name="keyguard_password_wrong_puk_code">Nesprávny kód PUK!</string>
+    <string name="keyguard_password_pin_failed">Operácia PIN zlyhala!</string>
+    <string name="keyguard_password_puk_failed">Operácia PUK zlyhala!</string>
+    <string name="keyguard_pin_accepted">Kód prijatý!</string>
+    <string name="pinpuk_attempts">\nZostáva pokusov:</string>
+    <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
+    <string name="lockscreen_sim_error_message">Karta SIM je neplatná.</string>
+    <string name="lockscreen_perso_locked_message">Karta SIM/RUIM je zamknutá</string>
+    <string name="stk_cc_ussd_to_dial">Požiadavka USSD je upravená na požiadavku DIAL.</string>
+    <string name="stk_cc_ussd_to_ss"> Požiadavka USSD je upravená na požiadavku SS.</string>
+    <string name="stk_cc_ussd_to_ussd">Požiadavka USSD je upravená na novú požiadavku USSD.</string>
+    <string name="stk_cc_ss_to_dial">Požiadavka SS je upravená na požiadavku DIAL.</string>
+    <string name="stk_cc_ss_to_ussd">Požiadavka SS je upravená na požiadavku USSD.</string>
+    <string name="stk_cc_ss_to_ss">Požiadavka SS je upravená na novú požiadavku SS.</string>
+    <string name="msim_kg_sim_pin_msg_format">Odber <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
     <string name="perf_profile_pwrsv">Úsporný</string>
     <string name="perf_profile_bal">Vyvážený</string>
     <string name="perf_profile_perf">Výkonný</string>
