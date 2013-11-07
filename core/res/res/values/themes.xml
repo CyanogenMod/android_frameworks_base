@@ -1868,5 +1868,7 @@ please see themes_device_defaults.xml.
          wallpaper appear behind them and without an action bar. -->
     <style name="Theme.Holo.Wallpaper.NoTitleBar">
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 </resources>
