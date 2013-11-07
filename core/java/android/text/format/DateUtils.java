@@ -49,6 +49,21 @@ public class DateUtils
     public static final long HOUR_IN_MILLIS = MINUTE_IN_MILLIS * 60;
     public static final long DAY_IN_MILLIS = HOUR_IN_MILLIS * 24;
     public static final long WEEK_IN_MILLIS = DAY_IN_MILLIS * 7;
+
+    /**
+     * Exact time display for Chinese
+     */
+    private static final int []sAmPmCN=new int[]{
+    	com.mokee.internal.R.string.lc,
+        com.mokee.internal.R.string.lm,
+        com.mokee.internal.R.string.zc,
+        com.mokee.internal.R.string.sw,
+        com.mokee.internal.R.string.zw,
+        com.mokee.internal.R.string.xw,
+        com.mokee.internal.R.string.bw,
+        com.mokee.internal.R.string.sy
+    };
+
     /**
      * This constant is actually the length of 364 days, not of a year!
      */
@@ -213,6 +228,37 @@ public class DateUtils
     @Deprecated
     public static String getAMPMString(int ampm) {
         return LocaleData.get(Locale.getDefault()).amPm[ampm - Calendar.AM];
+    }
+
+    public static String getAMPMCNString(int hours, int ampm) {
+		Resources r = Resources.getSystem();
+		if (ampm == Calendar.AM) {
+			if (hours < 5) {
+				return r.getString(sAmPmCN[0]);
+			} else if (hours >= 5 && hours < 7) {
+				return r.getString(sAmPmCN[1]);
+			} else if (hours >= 7 && hours < 9) {
+				return r.getString(sAmPmCN[2]);
+			} else if (hours >= 9 && hours < 12) {
+				return r.getString(sAmPmCN[3]);
+			} else {
+				return r.getString(sAmPmCN[0]);
+			}
+		} else {
+			if (hours == 0) {
+				return r.getString(sAmPmCN[4]);
+			} else if (hours < 6) {
+				return r.getString(sAmPmCN[5]);
+			} else if (hours >= 6 && hours <= 9) {
+				return r.getString(sAmPmCN[6]);
+			} else if (hours > 9 && hours < 12) {
+				return r.getString(sAmPmCN[7]);
+			} else if (hours == 12) {
+				return r.getString(sAmPmCN[4]);
+			} else {
+				return r.getString(sAmPmCN[4]);
+			}
+		}
     }
 
     /**

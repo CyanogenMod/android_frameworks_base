@@ -38,4 +38,14 @@
   <java-symbol type="string" name="status_year" />
   <java-symbol type="string" name="status_day" />
 
+  <!-- Exact Time -->
+  <java-symbol type="string" name="lc" />
+  <java-symbol type="string" name="lm" />
+  <java-symbol type="string" name="zc" />
+  <java-symbol type="string" name="sw" />
+  <java-symbol type="string" name="zw" />
+  <java-symbol type="string" name="xw" />
+  <java-symbol type="string" name="bw" />
+  <java-symbol type="string" name="sy" />
+
 </resources>
