@@ -859,6 +859,7 @@
     <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">"请参阅《用户指南》或与客服人员联系。"</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM 卡被锁定"</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"正在解锁 SIM 卡..."</string>
+    <string name="lockscreen_airplane_mode_on">"飞行模式"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="6481623830344107222">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地绘制了解锁图案。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="2725973286239344555">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地输入了密码。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6216672706545696955">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地输入了 PIN。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
