@@ -301,6 +301,8 @@ public class PhoneStatusBar extends BaseStatusBar {
     private boolean mBrightnessControl;
     private float mScreenWidth;
     private int mMinBrightness;
+    private int mPeekHeight;
+    private boolean mJustPeeked;
     int mLinger;
     int mInitialTouchX;
     int mInitialTouchY;
@@ -2200,41 +2202,39 @@ public class PhoneStatusBar extends BaseStatusBar {
         final int x = (int) event.getRawX();
         final int y = (int) event.getRawY();
         if (action == MotionEvent.ACTION_DOWN) {
-            mLinger = 0;
-            mInitialTouchX = x;
-            mInitialTouchY = y;
-            mVelocityTracker = VelocityTracker.obtain();
-            mHandler.removeCallbacks(mLongPressBrightnessChange);
-            if ((y) < mNotificationHeaderHeight) {
+            if (y < mNotificationHeaderHeight) {
+                mLinger = 0;
+                mInitialTouchX = x;
+                mInitialTouchY = y;
+                mJustPeeked = true;
+                mHandler.removeCallbacks(mLongPressBrightnessChange);
                 mHandler.postDelayed(mLongPressBrightnessChange,
                         BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT);
             }
         } else if (action == MotionEvent.ACTION_MOVE) {
-            if ((y) < mNotificationHeaderHeight) {
-                mVelocityTracker.computeCurrentVelocity(1000);
-                float yVel = mVelocityTracker.getYVelocity();
-                yVel = Math.abs(yVel);
-                if (yVel < 50.0f) {
-                    if (mLinger > BRIGHTNESS_CONTROL_LINGER_THRESHOLD) {
-                        adjustBrightness(x);
-                    } else {
+            if (y < mNotificationHeaderHeight && mJustPeeked) {
+                if (mLinger > BRIGHTNESS_CONTROL_LINGER_THRESHOLD) {
+                    adjustBrightness(x);
+                } else {
+                    final int xDiff = Math.abs(x - mInitialTouchX);
+                    final int yDiff = Math.abs(y - mInitialTouchY);
+                    final int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+                    if (xDiff > yDiff) {
                         mLinger++;
                     }
-                }
-                int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
-                if (Math.abs(x - mInitialTouchX) > touchSlop ||
-                        Math.abs(y - mInitialTouchY) > touchSlop) {
-                    mHandler.removeCallbacks(mLongPressBrightnessChange);
+                    if (xDiff > touchSlop || yDiff > touchSlop) {
+                        mHandler.removeCallbacks(mLongPressBrightnessChange);
+                    }
                 }
             } else {
+                if (y > mPeekHeight) {
+                    mJustPeeked = false;
+                }
                 mHandler.removeCallbacks(mLongPressBrightnessChange);
             }
         } else if (action == MotionEvent.ACTION_UP
                 || action == MotionEvent.ACTION_CANCEL) {
-            mVelocityTracker.recycle();
-            mVelocityTracker = null;
             mHandler.removeCallbacks(mLongPressBrightnessChange);
-            mLinger = 0;
         }
     }
 
@@ -3053,6 +3053,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         mCarrierLabelHeight = res.getDimensionPixelSize(R.dimen.carrier_label_height);
         mNotificationHeaderHeight = res.getDimensionPixelSize(R.dimen.notification_panel_header_height);
+        mPeekHeight = res.getDimensionPixelSize(R.dimen.peek_height);
 
         mNotificationPanelMinHeightFrac = res.getFraction(R.dimen.notification_panel_min_height_frac, 1, 1);
         if (mNotificationPanelMinHeightFrac < 0f || mNotificationPanelMinHeightFrac > 1f) {
