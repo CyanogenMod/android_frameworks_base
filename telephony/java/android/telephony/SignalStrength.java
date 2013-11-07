@@ -320,6 +320,9 @@ public class SignalStrength implements Parcelable {
         ss.mLteRsrq = in.readInt();
         ss.mLteRssnr = in.readInt();
         ss.mLteCqi = in.readInt();
+        // ignore the timingAdvance field since
+        // the frameworks is not utilizing this field
+        in.readInt();
         ss.mTdScdmaRscp = in.readInt();
         return ss;
     }
