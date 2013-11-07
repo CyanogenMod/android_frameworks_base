@@ -29,6 +29,11 @@
     android:layout_marginStart="@dimen/notification_panel_margin_left"
     >
 
+    <com.android.systemui.statusbar.phone.NotificationWallpaper
+        android:id="@+id/notification_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />  
+
     <View
         android:id="@+id/handle"
         android:layout_width="match_parent"

@@ -2865,6 +2865,30 @@ public final class Settings {
         */
         public static final String COMBINED_BAR_AUTO_HIDE = "combined_bar_auto_hide";
 
+	/**
+         * Sets the portrait background of notification drawer
+         * @hide
+         */
+        public static final String NOTIFICATION_BACKGROUND = "notification_background";
+
+        /**
+         * Sets the landscape background of notification drawer
+         * @hide
+         */
+        public static final String NOTIFICATION_BACKGROUND_LANDSCAPE = "notification_background_landscape";
+
+        /**
+         * Sets the alpha (transparency) of notification wallpaper
+         * @hide
+         */
+        public static final String NOTIF_WALLPAPER_ALPHA = "notif_wallpaper_alpha"; 
+
+        /**
+         * Sets the alpha (transparency) of notifications
+         * @hide
+         */
+        public static final String NOTIF_ALPHA = "notif_alpha";   
+
         /**
          * Display style of AM/PM next to clock in status bar
          * 0: Normal display (Eclair stock)
