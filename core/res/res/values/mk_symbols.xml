@@ -18,6 +18,9 @@
 
 <resources>
 
+  <!-- Date Format -->
+  <java-symbol type="string" name="abbrev_wday_month_day_year" />
+
   <!-- Lunar Date -->
   <java-symbol type="array" name="animals" />
   <java-symbol type="array" name="chinesenumber" />

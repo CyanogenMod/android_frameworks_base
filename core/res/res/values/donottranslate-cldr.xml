@@ -7,6 +7,7 @@
     <string name="date_and_time">%b %-e, %Y, %-l:%M:%S %p</string>
     <string name="date_time">%1$s, %2$s</string>
 
+    <!-- Exact time Display -->
     <string name="lc">AM</string>
     <string name="lm">AM</string>
     <string name="zc">AM</string>
@@ -15,4 +16,7 @@
     <string name="xw">PM</string>
     <string name="bw">PM</string>
     <string name="sy">PM</string>
+
+    <!-- Lunar string format -->
+    <string name="abbrev_wday_month_day_year">EEE, MMM d, yyyy</string>
 </resources>
