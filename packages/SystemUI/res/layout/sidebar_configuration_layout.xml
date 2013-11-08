@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame_layout"
+    android:baselineAligned="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+    
+        <ScrollView
+            android:id="@+id/sidebar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="2dp"
+            android:background="@drawable/sidebar_drag_exit" >
+        
+            <com.android.systemui.statusbar.sidebar.AppContainer
+                android:id="@+id/contents"
+                android:layout_width="@dimen/setup_sidebar_width"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        
+        </ScrollView>
+    
+        <GridView
+            android:id="@+id/available_apps"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="5dp"
+            android:horizontalSpacing="5dp"
+            android:columnWidth="60dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/first_use"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@android:drawable/screen_background_dark_transparent" >
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="40dp"
+                android:src="@drawable/drag_drop_arrow" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="@string/content_setup_instructions" />
+
+        <Button
+                android:id="@+id/dismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/content_setup_dismiss" />
+
+    </LinearLayout>
+</FrameLayout>
