@@ -512,12 +512,10 @@ class ContextImpl extends Context {
                     return new TelephonyManager(ctx.getOuterContext());
                 }});
 
-        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
-            registerService(MSIM_TELEPHONY_SERVICE, new ServiceFetcher() {
-                    public Object createService(ContextImpl ctx) {
-                        return new MSimTelephonyManager(ctx.getOuterContext());
-                    }});
-        }
+        registerService(MSIM_TELEPHONY_SERVICE, new ServiceFetcher() {
+                public Object createService(ContextImpl ctx) {
+                    return new MSimTelephonyManager(ctx.getOuterContext());
+                }});
 
         registerService(UI_MODE_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
