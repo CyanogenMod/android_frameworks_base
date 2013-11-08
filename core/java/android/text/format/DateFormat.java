@@ -456,7 +456,7 @@ public class DateFormat {
                 case 'A':
                 case 'a':
                     if (MoKeeUtils.isChineseLanguage()) {
-                 		replacement = DateUtils.getAMPMCNString(inDate.get(Calendar.HOUR),inDate.get(Calendar.AM_PM));
+                 		replacement = DateUtils.getAMPMCNString(inDate.get(Calendar.HOUR), inDate.get(Calendar.AM_PM));
                     } else {
                  		replacement = localeData.amPm[inDate.get(Calendar.AM_PM) - Calendar.AM];
                     }
