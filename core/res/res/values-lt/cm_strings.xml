@@ -22,9 +22,9 @@
     <string name="profileGroupPhone">Telefonas</string>
     <string name="profileGroupCalendar">Kalendorius</string>
     <string name="profileGroupGmail">Gmail</string>
-    <string name="profileGroupEmail">Email</string>
-    <string name="profileGroupSMS">SMS</string>
-    <string name="reboot_system" product="tablet">Perkrauti tabletę</string>
+    <string name="profileGroupEmail">El. paštas</string>
+    <string name="profileGroupSMS">Pranešimai</string>
+    <string name="reboot_system" product="tablet">Perkrauti planšetinį kompiuterį</string>
     <string name="reboot_system" product="default">Perkrauti telefoną</string>
     <string name="global_action_screenshot">Ekranvaizdis</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Išplėstas darbalaukis</string>
@@ -32,12 +32,12 @@
     <string name="global_actions_expanded_desktop_mode_off_status">Išjungta</string>
     <string name="reboot_reboot">Perkrauti</string>
     <string name="reboot_recovery">Atkūrimo režimas</string>
-    <string name="reboot_bootloader">"Bootloader"</string>
+    <string name="reboot_bootloader">\'Bootloader\'</string>
     <string name="reboot_bootmenu">Paleidimo meniu</string>
     <string name="reboot_fastboot">Greitasis paleidimas</string>
     <string name="reboot_download">Parsisiuntimo režimas</string>
     <string name="reboot_progress">Perkraunama\u2026</string>
-    <string name="reboot_confirm" product="tablet">Jūsų tabletas persikraus.</string>
+    <string name="reboot_confirm" product="tablet">Jūsų planšetinis kompiuteris persikraus.</string>
     <string name="reboot_confirm" product="default">Jūsų telefonas persikraus.</string>
     <string name="wildcardProfile">Kitas</string>
     <string name="global_action_reboot">Perkrauti</string>
@@ -59,7 +59,7 @@
     <string name="permlab_cancelNotifications">Atšaukti programos įspėjimus</string>
     <string name="permdesc_cancelNotifications">Leidžia programai atšaukti įspėjimus, sukurtus kitų programų.</string>
     <string name="privacy_guard_notification">Privatumo apsauga aktyvi</string>
-    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> Negalės naudtois asmeniniais duomenimis</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> Negalės naudotis asmeniniais duomenimis</string>
     <string name="profile_picker_title">Profiliai</string>
     <string name="profile_none">Nė vienas</string>
     <string name="lockscreen_discharging">Iškraunama, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
