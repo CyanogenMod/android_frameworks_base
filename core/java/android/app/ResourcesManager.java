@@ -189,6 +189,7 @@ public class ResourcesManager {
         //}
 
         AssetManager assets = new AssetManager();
+        assets.setThemeSupport(compatInfo.isThemeable);
         if (assets.addAssetPath(resDir) == 0) {
             return null;
         }
@@ -209,6 +210,18 @@ public class ResourcesManager {
         } else {
             config = getConfiguration();
         }
+
+        /* Attach theme information to the resulting AssetManager when appropriate. */
+        if (compatInfo.isThemeable && config != null) {
+            if (config.customTheme == null) {
+                config.customTheme = CustomTheme.getBootTheme();
+            }
+
+            if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
+                attachThemeAssets(assets, config.customTheme);
+            }
+        }
+
         r = new Resources(assets, dm, config, compatInfo, token);
         if (false) {
             Slog.i(TAG, "Created app resources " + resDir + " " + r + ": "
