@@ -328,6 +328,11 @@ public final class PowerManagerService extends IPowerManager.Stub
     // The screen off timeout setting value in milliseconds.
     private int mScreenOffTimeoutSetting;
 
+    // Override config for ElectronBeam
+    // used here to send values to DispLayPowerController handler
+    // from SettingsObserver
+    private int mElectronBeamMode;
+
     // The maximum allowable screen off timeout according to the device
     // administration policy.  Overrides other settings.
     private int mMaximumScreenOffTimeoutFromDeviceAdmin = Integer.MAX_VALUE;
@@ -556,6 +561,9 @@ public final class PowerManagerService extends IPowerManager.Stub
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.BUTTON_BACKLIGHT_TIMEOUT),
                     false, mSettingsObserver, UserHandle.USER_ALL);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SYSTEM_POWER_CRT_MODE),
+                    false, mSettingsObserver, UserHandle.USER_ALL);
 
             // Go.
             readConfigurationLocked();
@@ -605,6 +613,9 @@ public final class PowerManagerService extends IPowerManager.Stub
         mWakeUpWhenPluggedOrUnpluggedSetting = Settings.Global.getInt(resolver,
                 Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
                 (mWakeUpWhenPluggedOrUnpluggedConfig ? 1 : 0));
+	mElectronBeamMode = Settings.System.getIntForUser(resolver,
+                Settings.System.SYSTEM_POWER_CRT_MODE,
+                1, UserHandle.USER_CURRENT);
 
         final int oldScreenBrightnessSetting = mScreenBrightnessSetting;
         mScreenBrightnessSetting = Settings.System.getIntForUser(resolver,
@@ -1825,6 +1836,8 @@ public final class PowerManagerService extends IPowerManager.Stub
             mDisplayPowerRequest.blockScreenOn = mScreenOnBlocker.isHeld();
 
             mDisplayPowerRequest.responsitivityFactor = mAutoBrightnessResponsitivityFactor;
+
+	    mDisplayPowerRequest.electronBeamMode = mElectronBeamMode;
 
             mDisplayReady = mDisplayPowerController.requestPowerState(mDisplayPowerRequest,
                     mRequestWaitForNegativeProximity);

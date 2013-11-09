@@ -62,6 +62,9 @@ final class DisplayPowerRequest {
     // visible to the user.
     public boolean blockScreenOn;
 
+    // Override config for ElectronBeam mode
+    public int electronBeamMode;
+
     // Multiplication factor for delays used in auto-brightness computations
     // Lower values mean faster reaction to changing light conditions, but
     // potentially higher CPU usage and flicker.
@@ -75,6 +78,7 @@ final class DisplayPowerRequest {
         useAutoBrightness = false;
         blockScreenOn = false;
         responsitivityFactor = 1.0f;
+	electronBeamMode = 0;
     }
 
     public DisplayPowerRequest(DisplayPowerRequest other) {
@@ -89,6 +93,7 @@ final class DisplayPowerRequest {
         useAutoBrightness = other.useAutoBrightness;
         blockScreenOn = other.blockScreenOn;
         responsitivityFactor = other.responsitivityFactor;
+	electronBeamMode = other.electronBeamMode;
     }
 
     @Override
@@ -105,7 +110,8 @@ final class DisplayPowerRequest {
                 && screenAutoBrightnessAdjustment == other.screenAutoBrightnessAdjustment
                 && useAutoBrightness == other.useAutoBrightness
                 && blockScreenOn == other.blockScreenOn
-                && Math.abs(responsitivityFactor - other.responsitivityFactor) < 1E-6;
+                && Math.abs(responsitivityFactor - other.responsitivityFactor) < 1E-6
+		&& electronBeamMode == other.electronBeamMode;
     }
 
     @Override
@@ -121,6 +127,7 @@ final class DisplayPowerRequest {
                 + ", screenAutoBrightnessAdjustment=" + screenAutoBrightnessAdjustment
                 + ", useAutoBrightness=" + useAutoBrightness
                 + ", blockScreenOn=" + blockScreenOn
-                + ", responsitivityFactor=" + responsitivityFactor;
+                + ", responsitivityFactor=" + responsitivityFactor
+		+ ", electronBeamMode=" + electronBeamMode;
     }
 }
