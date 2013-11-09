@@ -118,9 +118,7 @@
     <string name="permlab_cancelNotifications">annuller app-underretninger</string>
     <string name="permdesc_cancelNotifications">Tillader app\'en at annullere underretninger, oprettet af andre apps.</string>
     <string name="permlab_interceptSmsSent">blokér udgående SMS</string>
-    <string name="permdesc_interceptSmsSent">Tillader app\'en at
-        blokere en udgående SMS.
-        Ondsindede apps kan muligvis bruge dette til at forhindre udgående SMS-beskeder.</string>
+    <string name="permdesc_interceptSmsSent">Tillader app\'en at blokere en udgående SMS. Ondsindede apps kan muligvis bruge dette til at forhindre udgående SMS-beskeder.</string>
     <string name="policylab_enforceSelinux">Håndhæv SELinux</string>
     <string name="policydesc_enforceSelinux">Slå håndhævning af SELinux-politikker eller tolerant tilstand til og fra.</string>
     <string name="policylab_enforceMmac">Håndhæv MMAC</string>
@@ -143,4 +141,7 @@
     <string name="stk_cc_ss_to_ss">SS-anmodning er ændret til en ny SS-anmodning.</string>
     <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
     <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
+    <string name="perf_profile_pwrsv">Strømbesparelse</string>
+    <string name="perf_profile_bal">Balanceret</string>
+    <string name="perf_profile_perf">Høj ydeevne</string>
 </resources>
