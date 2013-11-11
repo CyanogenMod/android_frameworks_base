@@ -1,4 +1,6 @@
 /*
+** Copyright (C) 2013 The Linux Foundation. All rights reserved
+** Not a Contribution.
 ** Copyright 2011, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,4 +18,4 @@
 
 package android.bluetooth;
 
-parcelable BluetoothHealthAppConfiguration;
+parcelable BluetoothHidDeviceAppSdpSettings;
