@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 The Android Open Source Project
+ * Modifications Copyright (C) 2013 The OmniROM Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +30,16 @@ import android.provider.DocumentsContract.Document;
 import android.provider.DocumentsContract.Root;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsProvider;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.google.android.collect.Lists;
 import com.google.android.collect.Maps;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,30 +78,81 @@ public class ExternalStorageProvider extends DocumentsProvider {
         mIdToRoot = Maps.newHashMap();
         mIdToPath = Maps.newHashMap();
 
-        // TODO: support multiple storage devices, requiring that volume serial
-        // number be burned into rootId so we can identify files from different
-        // volumes. currently we only use a static rootId for emulated storage,
-        // since that storage never changes.
-        if (!Environment.isExternalStorageEmulated()) return true;
-
+        ArrayList<File> mounts = null;
         try {
-            final String rootId = "primary";
-            final File path = Environment.getExternalStorageDirectory();
-            mIdToPath.put(rootId, path);
+            mounts = getAllMountpoints();
+        } catch (IOException e) {
+            Log.e(TAG, "Cannot get mountpoints", e);
 
-            final RootInfo root = new RootInfo();
-            root.rootId = rootId;
-            root.flags = Root.FLAG_SUPPORTS_CREATE | Root.FLAG_LOCAL_ONLY | Root.FLAG_ADVANCED
-                    | Root.FLAG_SUPPORTS_SEARCH;
-            root.title = getContext().getString(R.string.root_internal_storage);
-            root.docId = getDocIdForFile(path);
-            mRoots.add(root);
-            mIdToRoot.put(rootId, root);
-        } catch (FileNotFoundException e) {
-            throw new IllegalStateException(e);
+            // Generate an empty list for fuse/rootfs
+            mounts = new ArrayList<File>();
+        }
+
+        // Add file system root
+        mounts.add(new File("/"));
+
+        Log.d(TAG, "Found " + mounts.size() + " mountpoints");
+
+        for (File mountpoint : mounts) {
+            try {
+                Log.d(TAG, "Mountpoint: " + mountpoint.getAbsolutePath());
+                final String rootId = mountpoint.getAbsolutePath();
+                final File path = mountpoint;
+                mIdToPath.put(rootId, path);
+
+                final RootInfo root = new RootInfo();
+                root.rootId = rootId;
+                // We assume that all mountpoints are writeable even if it's not the case.
+                // We tell then per-directory what is writeable and what's not.
+                root.flags = Root.FLAG_SUPPORTS_CREATE | Root.FLAG_LOCAL_ONLY | Root.FLAG_ADVANCED
+                        | Root.FLAG_SUPPORTS_SEARCH;
+
+                if (rootId.contains("sdcard0") || rootId.contains("emulated")) {
+                    root.title = getContext().getString(R.string.root_internal_storage);
+                } else if (rootId.equals("/")) {
+                    root.title = getContext().getString(R.string.root_file_system);
+                } else {
+                    root.title = getContext().getString(R.string.root_external_storage);
+                }
+                root.docId = getDocIdForFile(path);
+                mRoots.add(root);
+                mIdToRoot.put(rootId, root);
+            } catch (FileNotFoundException e) {
+                throw new IllegalStateException(e);
+            }
         }
 
         return true;
+    }
+
+    private static ArrayList<File> getAllMountpoints() throws FileNotFoundException, IOException {
+        File voldFile = new File("/proc/mounts");
+
+        ArrayList<File> list = new ArrayList<File>();
+
+        FileReader fr = new FileReader(voldFile);
+        BufferedReader br = new BufferedReader(fr);
+        String line = br.readLine();
+        while (line != null) {
+            // We only take block mounted devices, not tmpfs
+            if (line.startsWith("/")) {
+                String[] tokens = line.split("\\s+");
+
+                // We only take storage mounted devices, not emmc partitions
+                if ((tokens[1].startsWith("/mnt") || tokens[1].startsWith("/storage"))
+                    && !tokens[1].startsWith("/mnt/asec") && !tokens[1].contains("legacy")
+                    && ("vfat".equals(tokens[2]) || "ext4".equals(tokens[2]) || "fuse".equals(tokens[2]))) {
+                    // We show the mount point only if we can read it also
+                    File mountPoint = new File(tokens[1]);
+                    if (mountPoint.isDirectory() && mountPoint.canRead()) {
+                        list.add(mountPoint);
+                    }
+                }
+            }
+            line = br.readLine();
+        }
+
+        return list;
     }
 
     private static String[] resolveRootProjection(String[] projection) {
@@ -208,7 +263,9 @@ public class ExternalStorageProvider extends DocumentsProvider {
             row.add(Root.COLUMN_FLAGS, root.flags);
             row.add(Root.COLUMN_TITLE, root.title);
             row.add(Root.COLUMN_DOCUMENT_ID, root.docId);
-            row.add(Root.COLUMN_AVAILABLE_BYTES, path.getFreeSpace());
+            if (!path.getAbsolutePath().equals("/")) {
+                row.add(Root.COLUMN_AVAILABLE_BYTES, path.getFreeSpace());
+            }
         }
         return result;
     }
@@ -283,7 +340,7 @@ public class ExternalStorageProvider extends DocumentsProvider {
         pending.add(parent);
         while (!pending.isEmpty() && result.getCount() < 24) {
             final File file = pending.removeFirst();
-            if (file.isDirectory()) {
+            if (file.isDirectory() && file.listFiles() != null) {
                 for (File child : file.listFiles()) {
                     pending.add(child);
                 }
