@@ -164,45 +164,45 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ConnectivityService extends IConnectivityManager.Stub {
     private static final String TAG = "ConnectivityService";
 
-    private static final boolean DBG = true;
-    private static final boolean VDBG = false;
+    protected static final boolean DBG = true;
+    protected static final boolean VDBG = false;
 
-    private static final boolean LOGD_RULES = false;
+    protected static final boolean LOGD_RULES = false;
 
     // TODO: create better separation between radio types and network types
 
     // how long to wait before switching back to a radio's default network
-    private static final int RESTORE_DEFAULT_NETWORK_DELAY = 1 * 60 * 1000;
+    protected static final int RESTORE_DEFAULT_NETWORK_DELAY = 1 * 60 * 1000;
     // system property that can override the above value
-    private static final String NETWORK_RESTORE_DELAY_PROP_NAME =
+    protected static final String NETWORK_RESTORE_DELAY_PROP_NAME =
             "android.telephony.apn-restore";
 
     // Default value if FAIL_FAST_TIME_MS is not set
-    private static final int DEFAULT_FAIL_FAST_TIME_MS = 1 * 60 * 1000;
+    protected static final int DEFAULT_FAIL_FAST_TIME_MS = 1 * 60 * 1000;
     // system property that can override DEFAULT_FAIL_FAST_TIME_MS
-    private static final String FAIL_FAST_TIME_MS =
+    protected static final String FAIL_FAST_TIME_MS =
             "persist.radio.fail_fast_time_ms";
 
-    private static final String ACTION_PKT_CNT_SAMPLE_INTERVAL_ELAPSED =
+    protected static final String ACTION_PKT_CNT_SAMPLE_INTERVAL_ELAPSED =
             "android.net.ConnectivityService.action.PKT_CNT_SAMPLE_INTERVAL_ELAPSED";
 
-    private static final int SAMPLE_INTERVAL_ELAPSED_REQUEST_CODE = 0;
+    protected static final int SAMPLE_INTERVAL_ELAPSED_REQUEST_CODE = 0;
 
     private PendingIntent mSampleIntervalElapsedIntent;
 
     // Set network sampling interval at 12 minutes, this way, even if the timers get
     // aggregated, it will fire at around 15 minutes, which should allow us to
     // aggregate this timer with other timers (specially the socket keep alive timers)
-    private static final int DEFAULT_SAMPLING_INTERVAL_IN_SECONDS = (VDBG ? 30 : 12 * 60);
+    protected static final int DEFAULT_SAMPLING_INTERVAL_IN_SECONDS = (VDBG ? 30 : 12 * 60);
 
     // start network sampling a minute after booting ...
-    private static final int DEFAULT_START_SAMPLING_INTERVAL_IN_SECONDS = (VDBG ? 30 : 60);
+    protected static final int DEFAULT_START_SAMPLING_INTERVAL_IN_SECONDS = (VDBG ? 30 : 60);
 
     AlarmManager mAlarmManager;
 
     // used in recursive route setting to add gateways for the host for which
     // a host route was requested.
-    private static final int MAX_HOSTROUTE_CYCLE_COUNT = 10;
+    protected static final int MAX_HOSTROUTE_CYCLE_COUNT = 10;
 
     private Tethering mTethering;
 
@@ -268,17 +268,17 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private INetworkManagementService mNetd;
     private INetworkPolicyManager mPolicyManager;
 
-    private static final int ENABLED  = 1;
-    private static final int DISABLED = 0;
+    protected static final int ENABLED  = 1;
+    protected static final int DISABLED = 0;
 
-    private static final boolean ADD = true;
-    private static final boolean REMOVE = false;
+    protected static final boolean ADD = true;
+    protected static final boolean REMOVE = false;
 
-    private static final boolean TO_DEFAULT_TABLE = true;
-    private static final boolean TO_SECONDARY_TABLE = false;
+    protected static final boolean TO_DEFAULT_TABLE = true;
+    protected static final boolean TO_SECONDARY_TABLE = false;
 
-    private static final boolean EXEMPT = true;
-    private static final boolean UNEXEMPT = false;
+    protected static final boolean EXEMPT = true;
+    protected static final boolean UNEXEMPT = false;
 
     /**
      * used internally as a delayed event to make us switch back to the
@@ -395,7 +395,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private Collection<LinkAddress> mExemptAddresses = new ArrayList<LinkAddress>();
 
     // used in DBG mode to track inet condition reports
-    private static final int INET_CONDITION_LOG_MAX_SIZE = 15;
+    protected static final int INET_CONDITION_LOG_MAX_SIZE = 15;
     private ArrayList mInetLog;
 
     // track the current default http proxy - tell the world if we get a new one (real change)
