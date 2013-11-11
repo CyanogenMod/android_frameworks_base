@@ -15,13 +15,13 @@
  */
 package com.android.server.gesture;
 
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.input.InputManager;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
-import android.os.UserHandle;
 import android.util.Slog;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -30,13 +30,10 @@ import android.view.IInputFilter;
 import android.view.IInputFilterHost;
 import android.view.InputDevice;
 import android.view.InputEvent;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
-
 import java.io.PrintWriter;
 
 /**
@@ -57,6 +54,8 @@ public class GestureInputFilter implements IInputFilter, GestureDetector.OnGestu
     private float mGesturePadWidth, mGesturePadHeight;
     private int mTouchSlop, mOrientation;
     private Context mContext;
+    private PendingIntent mLongPressPendingIntent;
+    private PendingIntent mDoubleClickPendingIntent;
 
     public GestureInputFilter(Context context) {
         mInputManager = InputManager.getInstance();
@@ -285,9 +284,13 @@ public class GestureInputFilter implements IInputFilter, GestureDetector.OnGestu
 
     @Override
     public void onLongPress(MotionEvent e) {
-        Intent intent = new Intent(Intent.ACTION_CAMERA_BUTTON, null);
-        mContext.sendOrderedBroadcastAsUser(intent, UserHandle.CURRENT_OR_SELF,
-                null, null, null, 0, null, null);
+        if (mLongPressPendingIntent != null) {
+            try {
+                mLongPressPendingIntent.send();
+            } catch (CanceledException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -303,17 +306,28 @@ public class GestureInputFilter implements IInputFilter, GestureDetector.OnGestu
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
-        long now = SystemClock.uptimeMillis();
-        sendInputEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
-                KeyEvent.KEYCODE_CAMERA, 0, 0,
-                KeyCharacterMap.VIRTUAL_KEYBOARD, 0, 0, InputDevice.SOURCE_KEYBOARD));
-        sendInputEvent(new KeyEvent(now, now, KeyEvent.ACTION_UP,KeyEvent.KEYCODE_CAMERA,
-                0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0, 0, InputDevice.SOURCE_KEYBOARD));
-        return true;
+        if (mDoubleClickPendingIntent != null) {
+            try {
+                mDoubleClickPendingIntent.send();
+                return true;
+            } catch (CanceledException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean onDoubleTapEvent(MotionEvent e) {
         return false;
+    }
+
+    public void setOnLongPressPendingIntent(PendingIntent pendingIntent) {
+        mLongPressPendingIntent = pendingIntent;
+    }
+
+    public void setOnDoubleClickPendingIntent(PendingIntent pendingIntent) {
+        mDoubleClickPendingIntent = pendingIntent;
     }
 }
