@@ -122,7 +122,7 @@ interface ISms {
             in PendingIntent sentIntent, in PendingIntent deliveryIntent);
 
     /**
-     * Send an SMS.
+     * Send an SMS with priority.
      *
      * @param destAddr the address to send the message to
      * @param smsc the SMSC to send the message through, or NULL for the
@@ -146,8 +146,8 @@ interface ISms {
      *  raw pdu of the status report is in the extended data ("pdu").
      * @param priority Priority level of the message
      */
-    void sendTextWithPriority(in String destAddr, in String scAddr, in String text,
-            in PendingIntent sentIntent, in PendingIntent deliveryIntent,
+    void sendTextWithPriority(String callingPkg, in String destAddr, in String scAddr,
+            in String text, in PendingIntent sentIntent, in PendingIntent deliveryIntent,
             in int priority);
 
     /**
