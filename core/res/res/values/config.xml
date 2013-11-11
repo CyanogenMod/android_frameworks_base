@@ -1185,6 +1185,9 @@
     <!-- Does the battery LED support multiple colors? Used to decide if the user can change the colors -->
     <bool name="config_multiColorBatteryLed">false</bool>
 
+    <!-- Does the notification LED support only a single color? Used to decide if the user can change the colors -->
+    <bool name="config_singleColorNotificationLed">false</bool>
+
     <!-- Is the device capable of hot swapping an UICC Card -->
     <bool name="config_hotswapCapable">false</bool>
 
