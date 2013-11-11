@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">Įvesties įrenginiai</string>
+    <string name="keyboard_layouts_label">Klaviatura Android</string>
+    <string name="keyboard_layout_english_uk_label">Anglų (JK)</string>
+    <string name="keyboard_layout_english_us_label">Anglų (JAV)</string>
+    <string name="keyboard_layout_english_us_colemak_label">Anglų (JAV), Colemak stilius</string>
+    <string name="keyboard_layout_english_us_dvorak_label">Anglų (JAV), Dvorak stilius</string>
+    <string name="keyboard_layout_german_label">Vokiečių</string>
+    <string name="keyboard_layout_french_label">Prancūzų</string>
+    <string name="keyboard_layout_french_ca_label">Prancūzų (Kanada)</string>
+    <string name="keyboard_layout_russian_label">Rusų</string>
+    <string name="keyboard_layout_russian_mac_label">Rusų, Mac stilius</string>
+    <string name="keyboard_layout_spanish_label">Ispanų</string>
+    <string name="keyboard_layout_swiss_french_label">Šveicarijos Prancūzų</string>
+    <string name="keyboard_layout_swiss_german_label">Šveicarijos Vokiečių</string>
+    <string name="keyboard_layout_belgian">Belgų</string>
+    <string name="keyboard_layout_bulgarian">Bulgarų</string>
+    <string name="keyboard_layout_italian">Italų</string>
+    <string name="keyboard_layout_danish">Danų</string>
+    <string name="keyboard_layout_norwegian">Norvegų</string>
+    <string name="keyboard_layout_swedish">Švedų</string>
+    <string name="keyboard_layout_finnish">Suomių</string>
+    <string name="keyboard_layout_croatian">Kroatų</string>
+    <string name="keyboard_layout_czech">Čekų</string>
+    <string name="keyboard_layout_estonian">Estų</string>
+    <string name="keyboard_layout_hungarian">Vengrų</string>
+    <string name="keyboard_layout_icelandic">Islandų</string>
+    <string name="keyboard_layout_portuguese">Portugalų</string>
+    <string name="keyboard_layout_slovak">Slovakų</string>
+    <string name="keyboard_layout_slovenian">Slovėnų</string>
+    <string name="keyboard_layout_turkish">Turkų</string>
+    <string name="keyboard_layout_ukrainian">Ukrainiečių</string>
+    <string name="keyboard_layout_armenian_eastern_label">Armėnų</string>
+</resources>
