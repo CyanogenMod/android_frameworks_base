@@ -119,6 +119,10 @@ final class ElectronBeam {
      */
     public static final int MODE_FADE = 2;
 
+    /**
+     * Animates a scale down of the screen
+     */
+    public static final int MODE_SCALE_DOWN = 3;
 
     public ElectronBeam(DisplayManagerService displayManager, int mode) {
         mDisplayManager = displayManager;
@@ -162,7 +166,7 @@ final class ElectronBeam {
         // times.  The rest of the animation should run smoothly thereafter.
         // The frames we draw here aren't visible because we are essentially just
         // painting the screenshot as-is.
-        if (mode == MODE_COOL_DOWN) {
+        if (mode == MODE_COOL_DOWN || mode == MODE_SCALE_DOWN) {
             for (int i = 0; i < DEJANK_FRAMES; i++) {
                 draw(1.0f);
             }
@@ -239,6 +243,8 @@ final class ElectronBeam {
                 } else {
                     drawVStretch(1.0f - ((level - VSTRETCH_DURATION) / HSTRETCH_DURATION));
                 }
+	    } else if (mElectronBeamMode == 4) {
+                drawScaled(level);
             } else {
                 // Draw the frame horizontal.
                 if (level < HSTRETCH_DURATION) {
@@ -256,6 +262,55 @@ final class ElectronBeam {
             detachEglContext();
         }
         return showSurface(1.0f);
+    }
+
+    private void drawScaled(float scale) {
+        final float curvedScale = scurve(scale, 8.0f);
+
+        // set blending, enable alpha operations
+        GLES10.glEnable(GLES10.GL_BLEND);
+        GLES10.glBlendFunc(GLES10.GL_SRC_ALPHA, GLES10.GL_ONE_MINUS_SRC_ALPHA);
+
+        // bind vertex buffer
+        GLES10.glVertexPointer(2, GLES10.GL_FLOAT, 0, mVertexBuffer);
+        GLES10.glEnableClientState(GLES10.GL_VERTEX_ARRAY);
+
+        // set-up texturing
+        GLES10.glDisable(GLES10.GL_TEXTURE_2D);
+        GLES10.glEnable(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+
+        // bind texture and set blending for drawing planes
+        GLES10.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTexNames[0]);
+        GLES10.glTexEnvx(GLES10.GL_TEXTURE_ENV, GLES10.GL_TEXTURE_ENV_MODE,
+                mMode == MODE_WARM_UP ? GLES10.GL_MODULATE : GLES10.GL_REPLACE);
+        GLES10.glTexParameterx(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES10.GL_TEXTURE_MAG_FILTER, GLES10.GL_LINEAR);
+        GLES10.glTexParameterx(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES10.GL_TEXTURE_MIN_FILTER, GLES10.GL_LINEAR);
+        GLES10.glTexParameterx(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES10.GL_TEXTURE_WRAP_S, GLES10.GL_CLAMP_TO_EDGE);
+        GLES10.glTexParameterx(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES10.GL_TEXTURE_WRAP_T, GLES10.GL_CLAMP_TO_EDGE);
+        GLES10.glEnable(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+        GLES10.glTexCoordPointer(2, GLES10.GL_FLOAT, 0, mTexCoordBuffer);
+        GLES10.glEnableClientState(GLES10.GL_TEXTURE_COORD_ARRAY);
+
+        // Draw the frame
+        setQuad(mVertexBuffer, mDisplayWidth / 2 * (1.0f - curvedScale),
+            mDisplayHeight / 2 * (1.0f - curvedScale),
+            mDisplayWidth * curvedScale, mDisplayHeight * curvedScale);
+        GLES10.glDrawArrays(GLES10.GL_TRIANGLE_FAN, 0, 4);
+
+        // dim progressively, using previous vertexes
+        GLES10.glDisable(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+        GLES10.glDisableClientState(GLES10.GL_TEXTURE_COORD_ARRAY);
+        GLES10.glColorMask(true, true, true, true);
+        GLES10.glColor4f(0.0f, 0.0f, 0.0f, 1.0f - curvedScale);
+        GLES10.glDrawArrays(GLES10.GL_TRIANGLE_FAN, 0, 4);
+
+        // clean up after drawing planes
+        GLES10.glDisableClientState(GLES10.GL_VERTEX_ARRAY);
+        GLES10.glDisable(GLES10.GL_BLEND);
     }
 
     /**
