@@ -341,11 +341,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private final Runnable mAutohide = new Runnable() {
         @Override
         public void run() {
-            int requested = mSystemUiVisibility & ~STATUS_OR_NAV_TRANSIENT;
-            if (mSystemUiVisibility != requested) {
-                notifyUiVisibilityChanged(requested);
-            }
+            doAutoHide();
         }};
+
+    private final Runnable mUserAutohide = new Runnable() {
+        @Override
+        public void run() {
+            doAutoHide();
+        }};
+
+    private void doAutoHide() {
+        int requested = mSystemUiVisibility & ~STATUS_OR_NAV_TRANSIENT;
+        if (mSystemUiVisibility != requested) {
+            notifyUiVisibilityChanged(requested);
+        }
+    }
 
     @Override
     public void start() {
@@ -1993,6 +2003,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     private void suspendAutohide() {
         mHandler.removeCallbacks(mAutohide);
+        mHandler.removeCallbacks(mUserAutohide);
         mHandler.removeCallbacks(mCheckBarModes);
         mAutohideSuspended = (mSystemUiVisibility & STATUS_OR_NAV_TRANSIENT) != 0;
     }
@@ -2018,7 +2029,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     private void userAutohide() {
         cancelAutohide();
-        mHandler.postDelayed(mAutohide, 350); // longer than app gesture -> flag clear
+        mHandler.postDelayed(mUserAutohide, 350); // longer than app gesture -> flag clear
     }
 
     private boolean areLightsOn() {
