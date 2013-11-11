@@ -7,13 +7,19 @@
     <application
         android:name=".DocumentsApplication"
         android:label="@string/app_label"
+        android:icon="@drawable/ic_filemanager"
         android:supportsRtl="true">
 
         <!-- TODO: allow rotation when state saving is in better shape -->
         <activity
             android:name=".DocumentsActivity"
             android:theme="@style/Theme"
-            android:icon="@drawable/ic_doc_text">
+            android:icon="@drawable/ic_filemanager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter android:priority="100">
                 <action android:name="android.intent.action.OPEN_DOCUMENT" />
                 <category android:name="android.intent.category.DEFAULT" />
