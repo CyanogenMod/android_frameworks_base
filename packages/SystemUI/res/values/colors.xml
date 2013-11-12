@@ -40,7 +40,7 @@
     <!-- Notification Shortcuts -->
     <drawable name="notification_shortcut_background_color">#00000000</drawable>
     <drawable name="notification_item_background_color">#ff111111</drawable>
-    <drawable name="notification_item_background_color_pressed">#ff257390</drawable>
+    <drawable name="notification_item_background_color_pressed">#ffaaaaaa</drawable>
     <color name="notification_shortcut_color">#FFFFFFFF</color>
 
 </resources>
