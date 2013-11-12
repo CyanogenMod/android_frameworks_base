@@ -244,6 +244,31 @@ public class PhoneStatusBarView extends PanelBar {
 
         mBar.animateHeadsUp(mNotificationPanel == panel, mPanelExpandedFractionSum);
 
+        updateShortcutsVisibility();
+    }
+
+
+    public void updateShortcutsVisibility() {
+        // Notification Shortcuts check for fully expanded panel
+        if (mBar.mSettingsButton == null || mBar.mNotificationButton == null) {
+            // Tablet
+            if (mFullyOpenedPanel != null) {
+                mBar.updateNotificationShortcutsVisibility(true);
+            } else {
+                mBar.updateNotificationShortcutsVisibility(false);
+            }
+        } else {
+            // Phone
+            if (mFullyOpenedPanel != null
+                    && (mBar.mSettingsButton.getVisibility() == View.VISIBLE &&
+                    !(mBar.mSettingsButton.getVisibility() == View.VISIBLE &&
+                    mBar.mNotificationButton.getVisibility() == View.VISIBLE))) {
+                mBar.updateNotificationShortcutsVisibility(true);
+            } else {
+                mBar.updateNotificationShortcutsVisibility(false);
+            }
+        }
         mBar.updateCarrierAndWifiLabelVisibility(false);
     }
+
 }
