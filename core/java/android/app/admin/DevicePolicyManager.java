@@ -1683,7 +1683,7 @@ public class DevicePolicyManager {
         return null;
     }
 
-    /*
+    /**
      * CM: check if secure keyguard is required
      * @hide
      */
