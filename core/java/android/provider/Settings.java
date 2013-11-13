@@ -3171,6 +3171,17 @@ public final class Settings {
         public static final String NOTIFICATION_VIBRATE_DURING_ALERTS_DISABLED = "vibrate_while_no_alerts";
 
         /**
+         * Custom navring actions
+         *
+         * @hide
+         */
+        public static final String[] NAVIGATION_RING_TARGETS = new String[] {
+            "navigation_ring_targets_0",
+            "navigation_ring_targets_1",
+            "navigation_ring_targets_2",
+        };
+
+        /**
          * Volume key controls ringtone or media sound stream
          *
          * @hide
