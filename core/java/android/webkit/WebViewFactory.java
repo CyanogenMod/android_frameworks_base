@@ -29,6 +29,12 @@ import android.util.Log;
  */
 public final class WebViewFactory {
 
+    private static final String FORCE_PROVIDER_PROPERTY = "persist.webview.provider";
+    private static final String FORCE_PROVIDER_PROPERTY_VALUE_CHROMIUM = "chromium";
+    private static final String FORCE_PROVIDER_PROPERTY_VALUE_CLASSIC = "classic";
+
+    // Default Provider factory class name.
+    private static final String DEFAULT_WEBVIEW_FACTORY = "android.webkit.WebViewClassic$Factory";
     private static final String CHROMIUM_WEBVIEW_FACTORY =
             "com.android.webview.chromium.WebViewChromiumFactoryProvider";
 
@@ -52,32 +58,33 @@ public final class WebViewFactory {
     private static WebViewFactoryProvider sProviderInstance;
     private static final Object sProviderLock = new Object();
 
-    public static boolean isExperimentalWebViewAvailable() {
-        // TODO: Remove callers of this method then remove it.
-        return false;  // Hide the toggle in Developer Settings.
-    }
-
-    /** @hide */
-    public static void setUseExperimentalWebView(boolean enable) {
-        // TODO: Remove callers of this method then remove it.
-    }
-
-    /** @hide */
-    public static boolean useExperimentalWebView() {
-        // TODO: Remove callers of this method then remove it.
+    public static boolean isClassicWebViewAvailable() {
         return true;
     }
 
     /** @hide */
-    public static boolean isUseExperimentalWebViewSet() {
-        // TODO: Remove callers of this method then remove it.
-        return false;  // User has not modifed Developer Settings
+    public static void setUseClassicWebView(boolean enable) {
+        SystemProperties.set(FORCE_PROVIDER_PROPERTY, enable ? FORCE_PROVIDER_PROPERTY_VALUE_CLASSIC : FORCE_PROVIDER_PROPERTY_VALUE_CHROMIUM);
+        Log.i(LOGTAG, "Use Classic WebView changed: "
+                + SystemProperties.get(WebViewFactory.FORCE_PROVIDER_PROPERTY, ""));
+    }
+
+    /** @hide */
+    public static boolean useClassicWebView() {
+        return (SystemProperties.get(FORCE_PROVIDER_PROPERTY,
+             "") == FORCE_PROVIDER_PROPERTY_VALUE_CLASSIC);
+    }
+
+    /** @hide */
+    public static boolean isUseClassicWebViewSet() {
+        return (SystemProperties.get(FORCE_PROVIDER_PROPERTY,
+             "") == FORCE_PROVIDER_PROPERTY_VALUE_CLASSIC);
     }
 
     static WebViewFactoryProvider getProvider() {
         synchronized (sProviderLock) {
             // For now the main purpose of this function (and the factory abstraction) is to keep
-            // us honest and minimize usage of WebView internals when binding the proxy.
+            // us honest and minimize usage of WebViewClassic internals when binding the proxy.
             if (sProviderInstance != null) return sProviderInstance;
 
             Class<WebViewFactoryProvider> providerClass;
@@ -111,7 +118,25 @@ public final class WebViewFactory {
         }
     }
 
+    // We allow a system property to specify that we should use the classic Chromium powered
+    // WebView. This enables us to switch between implementations at runtime.
+    private static boolean isClassicWebViewEnabled() {
+        String forceProviderName = SystemProperties.get(FORCE_PROVIDER_PROPERTY);
+        if (forceProviderName.isEmpty()) return true;
+
+        Log.i(LOGTAG, String.format("Provider overridden by property: %s=%s",
+                FORCE_PROVIDER_PROPERTY, forceProviderName));
+        if (forceProviderName.equals(FORCE_PROVIDER_PROPERTY_VALUE_CHROMIUM)) return false;
+        if (forceProviderName.equals(FORCE_PROVIDER_PROPERTY_VALUE_CLASSIC)) return true;
+        Log.e(LOGTAG, String.format("Unrecognized provider: %s", forceProviderName));
+        return true;
+    }
+
     private static Class<WebViewFactoryProvider> getFactoryClass() throws ClassNotFoundException {
-        return (Class<WebViewFactoryProvider>) Class.forName(CHROMIUM_WEBVIEW_FACTORY);
+        if (isClassicWebViewEnabled()) {
+            return (Class<WebViewFactoryProvider>) Class.forName(DEFAULT_WEBVIEW_FACTORY);
+        } else  {
+            return (Class<WebViewFactoryProvider>) Class.forName(CHROMIUM_WEBVIEW_FACTORY);
+        }
     }
 }
