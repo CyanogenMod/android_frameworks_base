@@ -854,14 +854,14 @@ class ServerThread {
             }
         }
 
-        // make sure the ADB_ENABLED setting value matches the secure property value
-        Settings.Secure.putInt(mContentResolver, Settings.Secure.ADB_PORT,
-                Integer.parseInt(SystemProperties.get("service.adb.tcp.port", "-1")));
+	// make sure the ADB_ENABLED setting value matches the secure property value
+	Settings.Secure.putInt(mContentResolver, Settings.Secure.ADB_PORT,
+		Integer.parseInt(SystemProperties.get("service.adb.tcp.port", "-1")));
 
-        // register observer to listen for settings changes
-        mContentResolver.registerContentObserver(
-            Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
-            false, new AdbPortObserver());
+	// register observer to listen for settings changes
+	mContentResolver.registerContentObserver(
+		Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+		false, new AdbPortObserver());
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
