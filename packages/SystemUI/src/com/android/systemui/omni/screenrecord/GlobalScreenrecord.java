@@ -218,6 +218,13 @@ class GlobalScreenrecord {
             File pictures = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             File screenshots = new File(pictures, "Screenshots");
 
+            if (!screenshots.exists()) {
+                if (!screenshots.mkdir()) {
+                    Log.e(TAG, "Cannot create screenshots directory");
+                    return;
+                }
+            }
+
             File input = new File(TMP_PATH);
             final File output = new File(screenshots, fileName);
 
