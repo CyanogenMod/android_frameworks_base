@@ -395,7 +395,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 && Settings.System.getIntForUser(cr,
                         Settings.System.POWER_MENU_EXPANDED_DESKTOP_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
 
-        if (showExpandedDesktop) {
+        if (true) {
             mItems.add(mExpandDesktopModeOn);
         }
 

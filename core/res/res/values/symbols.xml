@@ -1864,4 +1864,11 @@
   <java-symbol type="drawable" name="ic_navigation_ring_torch_on" />
   <java-symbol type="drawable" name="ic_navigation_ring_torch_off" />
   <java-symbol type="drawable" name="ic_navigation_ring_vibrate" />
+
+
+  <!-- Pie Controls -->
+  <java-symbol type="dimen" name="pie_trigger_thickness" />
+  <java-symbol type="dimen" name="pie_trigger_distance" />
+  <java-symbol type="dimen" name="pie_perpendicular_distance" />
+
 </resources>
