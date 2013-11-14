@@ -68,4 +68,10 @@ public final class PieServiceConstants {
      */
     public static final int SENSITIVITY_HIGHEST = 4;
 
+    /**
+     * This listener does not likes enabling/disabling filter
+     * because it interrupt in motion events.
+     */
+    public static final int LONG_LIVING = 0x10;
+
 }
