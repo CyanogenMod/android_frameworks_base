@@ -3885,6 +3885,11 @@ public final class Settings {
          */
         public static final String HALO_REVERSED = "halo_reversed";
 
+        /** Weather to allow headsethook to launch voice commands
+         * @hide
+         */
+        public static final String HEADSETHOOK_LAUNCH_VOICE = "headsethook_launch_voice";
+
         /**
          * HALO hide?, should default to 0 (no, do not hide)
          * @hide
