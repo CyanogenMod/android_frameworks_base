@@ -53,6 +53,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"/>
+            <include layout="@layout/keyguard_widget_pager_carousel"
+                android:id="@+id/app_widget_container_carousel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"/>
         </FrameLayout>
 
         <View android:layout_width="match_parent"

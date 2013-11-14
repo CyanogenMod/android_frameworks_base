@@ -18,14 +18,14 @@
 -->
 
 <!-- This is the selector widget that allows the user to select an action. -->
-<com.android.keyguard.KeyguardWidgetPager
+<com.android.keyguard.KeyguardWidgetCarousel
     xmlns:androidprv="http://schemas.android.com/apk/res/com.android.keyguard"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/app_widget_container"
+    android:id="@+id/app_widget_container_carousel"
     android:paddingLeft="12dp"
     android:paddingRight="12dp"
     android:paddingTop="12dp"
     android:paddingBottom="@dimen/kg_widget_pager_bottom_padding"
     android:clipToPadding="false"
     androidprv:pageSpacing="0dp">
-</com.android.keyguard.KeyguardWidgetPager>
+</com.android.keyguard.KeyguardWidgetCarousel>
