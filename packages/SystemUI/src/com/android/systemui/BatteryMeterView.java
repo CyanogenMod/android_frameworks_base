@@ -236,13 +236,11 @@ public class BatteryMeterView extends View implements DemoMode {
         mBatteryPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        Typeface font = Typeface.create("sans-serif", Typeface.NORMAL);
-        mTextPaint.setTypeface(font);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
 
         mWarningTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mWarningTextPaint.setColor(mColors[1]);
-        font = Typeface.create("sans-serif", Typeface.BOLD);
+        Typeface font = Typeface.create("sans-serif", Typeface.BOLD);
         mWarningTextPaint.setTypeface(font);
         mWarningTextPaint.setTextAlign(Paint.Align.CENTER);
 
@@ -457,7 +455,7 @@ public class BatteryMeterView extends View implements DemoMode {
             if (mBatteryTypeView.equals("statusbar")) {
                 height = metrics.density * 16f + 0.5f;
                 if (mBatteryStyle == BATTERY_STYLE_PERCENT) {
-                    width = metrics.density * 28f + 0.5f;
+                    width = metrics.density * 35f + 0.5f;
                 } else {
                     width = metrics.density * 10.5f + 0.5f;
                 }
@@ -467,7 +465,7 @@ public class BatteryMeterView extends View implements DemoMode {
             } else if (mBatteryTypeView.equals("quicksettings")) {
                 height = metrics.density * 32f + 0.5f;
                 if (mBatteryStyle == BATTERY_STYLE_PERCENT) {
-                    width = metrics.density * 48f + 0.5f;
+                    width = metrics.density * 52f + 0.5f;
                 } else {
                     width = metrics.density * 22f + 0.5f;
                 }
@@ -485,18 +483,23 @@ public class BatteryMeterView extends View implements DemoMode {
     private void updateBattery() {
         mPercentageOnly = false;
         SHOW_100_PERCENT = false;
+
+        Typeface font = Typeface.create("sans-serif", Typeface.BOLD);
         if (mBatteryStyle == BATTERY_STYLE_NORMAL) {
             mShowIcon = true;
             mShowPercent = false;
         } else if (mBatteryStyle == BATTERY_STYLE_ICON_PERCENT) {
             mShowIcon = true;
             mShowPercent = true;
+            SHOW_100_PERCENT = true;
         } else if (mBatteryStyle == BATTERY_STYLE_PERCENT) {
+            font = Typeface.create("sans-serif", Typeface.NORMAL);
             mShowIcon = false;
             mShowPercent = true;
             mPercentageOnly = true;
             SHOW_100_PERCENT = true;
         }
+        mTextPaint.setTypeface(font);
 
         BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
 
