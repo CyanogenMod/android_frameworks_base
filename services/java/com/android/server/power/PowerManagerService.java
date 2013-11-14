@@ -29,6 +29,7 @@ import com.android.server.display.DisplayManagerService;
 import com.android.server.dreams.DreamManagerService;
 
 import android.Manifest;
+import android.app.AppOpsManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -688,6 +689,19 @@ public final class PowerManagerService extends IPowerManager.Stub
 
         final int uid = Binder.getCallingUid();
         final int pid = Binder.getCallingPid();
+
+        try {
+            if (mAppOps.checkOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName)
+                    != AppOpsManager.MODE_ALLOWED) {
+                Slog.d(TAG, "acquireWakeLock: ignoring request from " + packageName);
+                // For (ignore) accounting purposes
+                mAppOps.noteOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName);
+                // silent return
+                return;
+            }
+        } catch (RemoteException e) {
+        }
+
         final long ident = Binder.clearCallingIdentity();
         try {
             acquireWakeLockInternal(lock, flags, tag, packageName, ws, uid, pid);
