@@ -40,6 +40,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.WifiDisplayStatus;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -112,6 +113,8 @@ class QuickSettings {
 
     private Handler mHandler;
 
+    private ConnectivityManager mCm;
+
     // The set of QuickSettingsTiles that have dynamic spans (and need to be updated on
     // configuration change)
     private final ArrayList<QuickSettingsTileView> mDynamicSpannedTiles =
@@ -127,6 +130,7 @@ class QuickSettings {
         mWifiDisplayStatus = new WifiDisplayStatus();
         mBluetoothState = new QuickSettingsModel.BluetoothState();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mCm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         mHandler = new Handler();
@@ -427,7 +431,7 @@ class QuickSettings {
 
         if (mModel.deviceHasMobileData()) {
             // RSSI
-            QuickSettingsTileView rssiTile = (QuickSettingsTileView)
+            final QuickSettingsTileView rssiTile = (QuickSettingsTileView)
                     inflater.inflate(R.layout.quick_settings_tile, parent, false);
             rssiTile.setContent(R.layout.quick_settings_tile_rssi, inflater);
             rssiTile.setOnClickListener(new View.OnClickListener() {
@@ -440,6 +444,21 @@ class QuickSettings {
                     startSettingsActivity(intent);
                 }
             });
+            if (LONG_PRESS_TOGGLES) {
+                rssiTile.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        //Toggle Data Enabled
+                        if (!mCm.getMobileDataEnabled()) {
+                            mCm.setMobileDataEnabled(true);
+                        }
+                        else {
+                            mCm.setMobileDataEnabled(false);
+			            }
+                        return true;
+                    }
+                } );
+            }
             mModel.addRSSITile(rssiTile, new NetworkActivityCallback() {
                 @Override
                 public void refreshView(QuickSettingsTileView view, State state) {
