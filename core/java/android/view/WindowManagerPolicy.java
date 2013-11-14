@@ -1213,4 +1213,6 @@ public interface WindowManagerPolicy {
      */
     public void windowAnimationFinished();
 
+    public void requestTransientPublic();
+
 }
