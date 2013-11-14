@@ -1202,4 +1202,6 @@ public interface WindowManagerPolicy {
      * @param enabled Whether touch exploration is enabled.
      */
     public void setTouchExplorationEnabled(boolean enabled);
+
+    public void requestTransientPublic();
 }

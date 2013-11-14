@@ -17,6 +17,7 @@
 package com.android.keyguard;
 
 import android.app.PendingIntent;
+import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -40,21 +41,9 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Parcelable;
-import android.os.RemoteException;
-import android.os.SystemProperties;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewManager;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 /**
@@ -85,12 +74,26 @@ public class KeyguardViewManager {
     private boolean mScreenOn = false;
     private LockPatternUtils mLockPatternUtils;
 
+    private int mExpandedDesktopStyle = 0;
+
     private KeyguardUpdateMonitorCallback mBackgroundChanger = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onSetBackground(Bitmap bmp) {
             mKeyguardHost.setCustomBackground(bmp != null ?
                     new BitmapDrawable(mContext.getResources(), bmp) : null);
             updateShowWallpaper(bmp == null);
+        }
+    };
+
+    private ContentObserver mExpandedDesktopObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            mExpandedDesktopStyle = 0;
+            if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) != 0) {
+                mExpandedDesktopStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
+            }
         }
     };
 
@@ -111,6 +114,14 @@ public class KeyguardViewManager {
         mViewManager = viewManager;
         mViewMediatorCallback = callback;
         mLockPatternUtils = lockPatternUtils;
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.EXPANDED_DESKTOP_STATE),false,
+                mExpandedDesktopObserver);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.EXPANDED_DESKTOP_STYLE), false,
+                mExpandedDesktopObserver);
+        mExpandedDesktopObserver.onChange(false);
     }
 
     /**
@@ -533,6 +544,14 @@ public class KeyguardViewManager {
             // start with a fresh state when we return.
             mStateContainer.clear();
 
+            if (mExpandedDesktopStyle != 0) {
+                try {
+                    WindowManagerGlobal.getWindowManagerService().requestTransient();
+                } catch (RemoteException e) {
+                    // Do nothing
+                }
+            }
+
             // Don't do this right away, so we can let the view continue to animate
             // as it goes away.
             if (mKeyguardView != null) {
@@ -586,5 +605,10 @@ public class KeyguardViewManager {
         if (mKeyguardView != null) {
             mKeyguardView.launchCamera();
         }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        mContext.getContentResolver().unregisterContentObserver(mExpandedDesktopObserver);
     }
 }

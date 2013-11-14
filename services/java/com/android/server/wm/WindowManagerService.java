@@ -5219,6 +5219,11 @@ public class WindowManagerService extends IWindowManager.Stub
         mPolicy.setTouchExplorationEnabled(enabled);
     }
 
+    @Override
+    public void requestTransient() throws RemoteException {
+        mPolicy.requestTransientPublic();
+    }
+
     // Called by window manager policy.  Not exposed externally.
     @Override
     public void reboot() {
