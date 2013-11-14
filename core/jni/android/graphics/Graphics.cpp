@@ -541,7 +541,7 @@ jbyteArray GraphicsJNI::allocateJavaPixelRef(JNIEnv* env, SkBitmap* bitmap,
     }
 
     size_t size = size64.get32();
-    jbyteArray arrayObj = env->NewByteArray(size);
+    jbyteArray arrayObj = env->NewByteArray(size + 8);
     if (arrayObj) {
         // TODO: make this work without jniGetNonMovableArrayElements
         jbyte* addr = jniGetNonMovableArrayElements(&env->functions, arrayObj);
