@@ -1,10 +1,11 @@
 package android.service.gesture;
 
+import android.app.PendingIntent;
+
 /** @hide */
 interface IGestureService {
 
-    /**
-     * Register a listener for gesture sensor input. Gesture sensor input
-     * is then converted into input events for system consumption.
-     */
+    void setOnLongPressPendingIntent(in PendingIntent pendingIntent);
+    void setOnDoubleClickPendingIntent(in PendingIntent pendingIntent);
+
 }
