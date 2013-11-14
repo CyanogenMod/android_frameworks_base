@@ -624,7 +624,16 @@ bool BootAnimation::movie()
                     glDeleteTextures(1, &frame.tid);
             }
 
-            usleep(part.pause * ns2us(frameDuration));
+            // part.pause is the number of frames to pause for so total sleep will be
+            // part.pause * frameDuration.  Instead of a single sleep call, sleep for
+            // frameDuration and then check if surface flinger is done.
+            const nsecs_t frameDurationUs = ns2us(frameDuration);
+            for (int k = 0; k < part.pause; k++) {
+                usleep(frameDurationUs);
+                checkExit();
+                if(exitPending())
+                    break;
+            }
 
             // For infinite parts, we've now played them at least once, so perhaps exit
             if(exitPending() && !part.count)
