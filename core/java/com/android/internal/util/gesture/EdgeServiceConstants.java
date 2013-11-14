@@ -73,4 +73,15 @@ public final class EdgeServiceConstants {
      */
     public static final int IME_CONTROL = 0x10;
 
+    /**
+     * Do not cut 10% area on th edges
+     */
+    public static final int UNRESTRICTED = 0x10;
+
+    /**
+     * This listener does not likes enabling/disabling filter
+     * because it interrupt in motion events.
+     */
+    public static final int LONG_LIVING = 0x20;
+
 }
