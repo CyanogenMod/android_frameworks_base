@@ -18,9 +18,7 @@
 package com.android.internal.policy.impl;
 
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManagerNative;
-import android.app.IActivityManager;
 import android.app.IUiModeManager;
 import android.app.KeyguardManager;
 import android.app.AppOpsManager;
@@ -33,7 +31,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -62,7 +59,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.PowerManager;
-import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -72,6 +68,7 @@ import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.Settings;
 
+import android.service.pie.PieManager;
 import com.android.internal.app.ThemeUtils;
 import com.android.internal.util.cm.DevUtils;
 
@@ -107,22 +104,20 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.VolumePanel;
 import android.widget.Toast;
-import android.media.IAudioService;
 import android.media.AudioService;
-import android.media.AudioManager;
 
 import com.android.internal.R;
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.policy.impl.keyguard.KeyguardServiceDelegate;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.util.pie.PiePosition;
 import com.android.internal.widget.PointerLocationView;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import static android.view.WindowManager.LayoutParams.*;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.LID_ABSENT;
@@ -656,6 +651,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HARDWARE_KEY_REBINDING), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.USE_PIE_SERVICE_FOR_GESTURES), false, this,
+                    UserHandle.USER_ALL);
 
             updateSettings();
         }
@@ -702,6 +700,71 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private ImmersiveModeConfirmation mImmersiveModeConfirmation;
 
     private SystemGesturesPointerEventListener mSystemGestures;
+
+    private PieManager.PieActivationListener mPieActivationListener = new PieManager.PieActivationListener() {
+
+        @Override
+        public void onPieActivation(int touchX, int touchY, PiePosition position, int flags) {
+            if (position == PiePosition.TOP) {
+                if (mStatusBar != null) {
+                    requestTransientBars(mStatusBar);
+                    dropEventsUntilLift();
+                    mPieActivated = true;
+                } else {
+                    restoreListenerState();
+                }
+                return;
+            }
+            if (position == PiePosition.BOTTOM) {
+                if (mNavigationBar != null && mNavigationBarOnBottom) {
+                    requestTransientBars(mNavigationBar);
+                    dropEventsUntilLift();
+                    mPieActivated = true;
+                } else {
+                    restoreListenerState();
+                }
+                return;
+            }
+            if (position == PiePosition.RIGHT) {
+                if (mNavigationBar != null && !mNavigationBarOnBottom) {
+                    requestTransientBars(mNavigationBar);
+                    dropEventsUntilLift();
+                    mPieActivated = true;
+                } else {
+                    restoreListenerState();
+                }
+            }
+        }
+    };
+    private PieManager mPieManager = null;
+    private int mLastPiePositions = 0;
+    private boolean mPieActivated = false;
+    private boolean mUsingPieServiceForGestures = false;
+
+    private void updatePieListenerState() {
+        if (!mUsingPieServiceForGestures) {
+            return;
+        }
+        int positions = 0;
+        if (mStatusBar != null && !mStatusBar.isVisibleLw()) {
+            positions |= PiePosition.TOP.FLAG;
+        }
+        if (mNavigationBar != null && !mNavigationBar.isVisibleLw()) {
+            if (mNavigationBarOnBottom) {
+                positions |= PiePosition.BOTTOM.FLAG;
+            } else {
+                positions |= PiePosition.RIGHT.FLAG;
+            }
+        }
+        if (mPieActivated) {
+            mPieActivationListener.restoreListenerState();
+            mPieActivated = false;
+        }
+        if (positions != mLastPiePositions) {
+            mPieManager.updatePieActivationListener(mPieActivationListener, positions);
+            mLastPiePositions = positions;
+        }
+    }
 
     IStatusBarService getStatusBarService() {
         synchronized (mServiceAquireLock) {
@@ -1451,6 +1514,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (Settings.System.getIntForUser(resolver,
                         Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 0) {
                 mExpandedDesktopStyle = 0;
+            }
+
+            final boolean usePie = Settings.System.getIntForUser(resolver,
+                    Settings.System.USE_PIE_SERVICE_FOR_GESTURES, 0, UserHandle.USER_CURRENT) == 1;
+            if (usePie ^ mUsingPieServiceForGestures) {
+                if (!mUsingPieServiceForGestures && usePie) {
+                    mWindowManagerFuncs.unregisterPointerEventListener(mSystemGestures);
+                    mUsingPieServiceForGestures = usePie;
+                    updatePieListenerState();
+                } else if (mUsingPieServiceForGestures && !usePie) {
+                    mUsingPieServiceForGestures = false;
+                    updatePieListenerState();
+                    mWindowManagerFuncs.registerPointerEventListener(mSystemGestures);
+                }
             }
 
             updateKeyAssignments();
@@ -3022,6 +3099,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mStatusBarController.adjustSystemUiVisibilityLw(mLastSystemUiFlags, visibility);
         mNavigationBarController.adjustSystemUiVisibilityLw(mLastSystemUiFlags, visibility);
 
+        updatePieListenerState();
+
         // Reset any bits in mForceClearingStatusBarVisibility that
         // are now clear.
         mResettingSystemUiFlags &= visibility;
@@ -4053,6 +4132,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // update since mAllowLockscreenWhenOn might have changed
         updateLockScreenTimeout();
+        updatePieListenerState();
         return changes;
     }
 
@@ -5220,6 +5300,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mKeyguardDelegate = new KeyguardServiceDelegate(mContext, null);
             mKeyguardDelegate.onSystemReady();
         }
+        mPieManager = PieManager.getInstance();
+        mPieManager.setPieActivationListener(mPieActivationListener);
+        updatePieListenerState();
         synchronized (mLock) {
             updateOrientationListenerLp();
             mSystemReady = true;
