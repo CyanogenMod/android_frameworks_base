@@ -32,7 +32,7 @@ public final class EdgeServiceConstants {
      * <p>
      * Positions are specified by {@code EdgeGesturePosition.FLAG}.
      */
-    public static final int POSITION_MASK = 0x0000000f;
+    public static final int POSITION_MASK = 0x0000001f;
 
     /**
      * Mask for coding sensitivity within the flags of
@@ -67,5 +67,16 @@ public final class EdgeServiceConstants {
      * Highest sensitivity value.
      */
     public static final int SENSITIVITY_HIGHEST = 4;
+
+    /**
+     * Do not cut 10% area on th edges
+     */
+    public static final int UNRESTRICTED = 0x10;
+
+    /**
+     * This listener does not likes enabling/disabling filter
+     * because it interrupt in motion events.
+     */
+    public static final int LONG_LIVING = 0x20;
 
 }
