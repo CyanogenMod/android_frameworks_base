@@ -25,6 +25,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 
 import com.android.internal.util.pie.PiePosition;
+import com.android.internal.util.pie.PieServiceConstants;
 
 /**
  * A simple {@link MotionEvent} tracker class. The main aim of this tracker is to
@@ -112,6 +113,7 @@ public class PieGestureTracker {
     }
 
     public boolean start(MotionEvent motionEvent, int positions, int sensitivity) {
+        final boolean unrestricted = (positions & PieServiceConstants.UNRESTRICTED) != 0;
         final int x = (int) motionEvent.getX();
         final float fx = motionEvent.getX() / mDisplayWidth;
         final int y = (int) motionEvent.getY();
@@ -121,25 +123,25 @@ public class PieGestureTracker {
         setSensitivity(sensitivity);
 
         if ((positions & PiePosition.LEFT.FLAG) != 0) {
-            if (x < mThickness && fy > 0.1f && fy < 0.9f) {
+            if (x < mThickness && (unrestricted || (fy > 0.1f && fy < 0.9f))) {
                 startWithPosition(motionEvent, PiePosition.LEFT);
                 return true;
             }
         }
         if ((positions & PiePosition.BOTTOM.FLAG) != 0) {
-            if (y > mDisplayHeight - mThickness && fx > 0.1f && fx < 0.9f) {
+            if (y > mDisplayHeight - mThickness && (unrestricted || (fx > 0.1f && fx < 0.9f))) {
                 startWithPosition(motionEvent, PiePosition.BOTTOM);
                 return true;
             }
         }
         if ((positions & PiePosition.RIGHT.FLAG) != 0) {
-            if (x > mDisplayWidth - mThickness && fy > 0.1f && fy < 0.9f) {
+            if (x > mDisplayWidth - mThickness && (unrestricted || (fy > 0.1f && fy < 0.9f))) {
                 startWithPosition(motionEvent, PiePosition.RIGHT);
                 return true;
             }
         }
         if ((positions & PiePosition.TOP.FLAG) != 0) {
-            if (y < mThickness && fx > 0.1f && fx < 0.9f) {
+            if (y < mThickness && (unrestricted || (fx > 0.1f && fx < 0.9f))) {
                 startWithPosition(motionEvent, PiePosition.TOP);
                 return true;
             }
