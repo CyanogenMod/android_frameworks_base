@@ -415,4 +415,13 @@
      <item type="dimen" format="float" name="ambient_shadow_alpha">0.075</item>
      <item type="dimen" format="float" name="spot_shadow_alpha">0.15</item>
 
+    <!-- EdgeGesture service: Distance a swipe must travel to be recognized as swipe. -->
+    <dimen name="edge_gesture_trigger_distance">12dp</dimen>
+
+    <!-- EdgeGesture service: This is the distance a swipe can travel orthogonally to its actual swipe
+         direction to be still recognized as swipe. -->
+    <dimen name="edge_gesture_perpendicular_distance">15dp</dimen>
+
+    <!-- EdgeGesture service: Thickness of the active trigger fields around the screen border -->
+    <dimen name="edge_gesture_trigger_thickness">12dp</dimen>
 </resources>
