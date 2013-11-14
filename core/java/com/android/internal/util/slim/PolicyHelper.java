@@ -110,7 +110,7 @@ public class PolicyHelper {
                     dError = systemUiResources.getDrawable(resId);
                     if (colorMode != 3 && colorMode == 0 && colorize) {
                         dError = new BitmapDrawable(
-                            ColorHelper.getColoredBitmap(dError, iconColor));
+                            ImageHelper.getColoredBitmap(dError, iconColor));
                     }
                 }
             } catch (URISyntaxException e) {
@@ -118,6 +118,7 @@ public class PolicyHelper {
             }
         }
 
+        boolean coloring = false;
         if (customIcon != null && customIcon.startsWith(PolicyConstants.SYSTEM_ICON_IDENTIFIER)) {
             Resources systemResources;
             try {
@@ -132,15 +133,18 @@ public class PolicyHelper {
             if (resId > 0) {
                 d = systemResources.getDrawable(resId);
                 if (colorMode != 3 && colorize) {
-                    d = new BitmapDrawable(ColorHelper.getColoredBitmap(d, iconColor));
+                    coloring = true;
                 }
             }
         } else if (customIcon != null && !customIcon.equals(ButtonsConstants.ICON_EMPTY)) {
             File f = new File(Uri.parse(customIcon).getPath());
             if (f.exists()) {
-                d = new BitmapDrawable(context.getResources(), f.getAbsolutePath());
+                d = new BitmapDrawable(context.getResources(),
+                        ImageHelper.getRoundedCornerBitmap(
+                        new BitmapDrawable(context.getResources(),
+                        f.getAbsolutePath()).getBitmap()));
                 if (colorMode != 3 && colorMode != 1 && colorize) {
-                    d = new BitmapDrawable(ColorHelper.getColoredBitmap(d, iconColor));
+                    coloring = true;
                 }
             } else {
                 Log.e("PolicyHelper:", "can't access custom icon image");
@@ -149,17 +153,18 @@ public class PolicyHelper {
         } else if (clickAction.startsWith("**")) {
             d = getPowerMenuSystemIcon(context, clickAction);
             if (colorMode != 3 && colorize) {
-                d = new BitmapDrawable(ColorHelper.getColoredBitmap(d, iconColor));
+                coloring = true;
             }
-        } else {
-            if (colorMode != 3 && colorMode == 0 && colorize) {
-                d = new BitmapDrawable(ColorHelper.getColoredBitmap(d, iconColor));
-            }
+        } else if (colorMode != 3 && colorMode == 0 && colorize) {
+            coloring = true;
         }
         if (dError == null) {
-            return ColorHelper.resize(context, d, 35);
+            if (coloring) {
+                d = new BitmapDrawable(ImageHelper.getColoredBitmap(d, iconColor));
+            }
+            return ImageHelper.resize(context, d, 35);
         } else {
-            return ColorHelper.resize(context, dError, 35);
+            return ImageHelper.resize(context, dError, 35);
         }
     }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Lockscreen target insets -->
+    <item type="dimen" name="lockscreen_target_inset">25dp</item>
+    <!-- Additional inset used for targets with icons loaded from files -->
+    <item type="dimen" name="lockscreen_target_icon_file_inset">2dp</item>
+
+</resources>

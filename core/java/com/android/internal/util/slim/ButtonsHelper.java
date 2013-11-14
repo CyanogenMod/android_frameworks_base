@@ -147,6 +147,32 @@ public class ButtonsHelper {
                     config);
     }
 
+    // get and set the lockcreen shortcut configs from provider and return propper arraylist objects
+    // @ButtonConfig
+    public static ArrayList<ButtonConfig> getLockscreenShortcutConfig(Context context) {
+        String config = Settings.System.getStringForUser(
+                    context.getContentResolver(),
+                    Settings.System.LOCKSCREEN_SHORTCUTS,
+                    UserHandle.USER_CURRENT);
+        if (config == null) {
+            config = "";
+        }
+
+        return (ConfigSplitHelper.getButtonsConfigValues(context, config, null, null, true));
+    }
+
+    public static void setLockscreenShortcutConfig(Context context,
+            ArrayList<ButtonConfig> buttonsConfig, boolean reset) {
+        String config;
+        if (reset) {
+            config = "";
+        } else {
+            config = ConfigSplitHelper.setButtonsConfig(buttonsConfig, true);
+        }
+        Settings.System.putString(context.getContentResolver(),
+                    Settings.System.LOCKSCREEN_SHORTCUTS, config);
+    }
+
     public static Drawable getButtonIconImage(Context context,
             String clickAction, String customIcon) {
         int resId = -1;
@@ -188,7 +214,10 @@ public class ButtonsHelper {
         } else if (customIcon != null && !customIcon.equals(ButtonsConstants.ICON_EMPTY)) {
             File f = new File(Uri.parse(customIcon).getPath());
             if (f.exists()) {
-                return new BitmapDrawable(context.getResources(), f.getAbsolutePath());
+                return new BitmapDrawable(context.getResources(),
+                    ImageHelper.getRoundedCornerBitmap(
+                        new BitmapDrawable(context.getResources(),
+                        f.getAbsolutePath()).getBitmap()));
             } else {
                 Log.e("ButtonsHelper:", "can't access custom icon image");
                 return null;

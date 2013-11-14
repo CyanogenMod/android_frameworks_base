@@ -18,17 +18,22 @@ package com.android.internal.util.slim;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 
-public class ColorHelper {
+public class ImageHelper {
 
     public static Bitmap getColoredBitmap(Drawable d, int color) {
         if (d == null) {
@@ -38,7 +43,7 @@ public class ColorHelper {
         Bitmap grayscaleBitmap = toGrayscale(colorBitmap);
         Paint pp = new Paint();
         PorterDuffColorFilter frontFilter =
-            new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            new PorterDuffColorFilter(color, Mode.MULTIPLY);
         pp.setColorFilter(frontFilter);
         Canvas cc = new Canvas(grayscaleBitmap);
         cc.drawBitmap(grayscaleBitmap, 0, 0, pp);
@@ -72,6 +77,28 @@ public class ColorHelper {
         Bitmap d = ((BitmapDrawable) image).getBitmap();
         Bitmap bitmapOrig = Bitmap.createScaledBitmap(d, px, px, false);
         return new BitmapDrawable(context.getResources(), bitmapOrig);
+    }
+
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+                Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = 24;
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
     }
 
 }
