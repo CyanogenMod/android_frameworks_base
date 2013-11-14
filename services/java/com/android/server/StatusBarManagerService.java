@@ -146,7 +146,7 @@ public class StatusBarManagerService extends IStatusBarService.Stub
 
         if (mBar != null) {
             try {
-                mBar.animateExpandSettingsPanel();
+                mBar.animateExpandSettingsPanel(true);
             } catch (RemoteException ex) {
             }
         }
@@ -404,6 +404,60 @@ public class StatusBarManagerService extends IStatusBarService.Stub
         if (mBar != null) {
             try {
                 mBar.setWindowState(window, state);
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void setAutoRotate(boolean enabled) {
+        if (mBar != null) {
+            try {
+                mBar.setAutoRotate(enabled);
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleNotificationShade() {
+        if (mBar != null) {
+            try {
+                mBar.toggleNotificationShade();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleQSShade() {
+        if (mBar != null) {
+            try {
+                mBar.toggleQSShade();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleScreenshot() {
+        if (mBar != null) {
+            try {
+                mBar.toggleScreenshot();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleLastApp() {
+        if (mBar != null) {
+            try {
+                mBar.toggleLastApp();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleKillApp() {
+        if (mBar != null) {
+            try {
+                mBar.toggleKillApp();
             } catch (RemoteException ex) {}
         }
     }

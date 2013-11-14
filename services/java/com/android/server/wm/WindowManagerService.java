@@ -5063,6 +5063,15 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     @Override
+    public void showCustomIntentOnKeyguard(Intent intent) {
+        if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mPolicy.showCustomIntentOnKeyguard(intent);
+    }
+
+    @Override
     public void dismissKeyguard() {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DISABLE_KEYGUARD)
                 != PackageManager.PERMISSION_GRANTED) {

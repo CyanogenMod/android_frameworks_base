@@ -23,6 +23,8 @@ import android.view.View;
 
 import com.android.systemui.R;
 
+import java.util.List;
+
 public class DelegateViewHelper {
     private View mDelegateView;
     private View mSourceView;
@@ -119,11 +121,11 @@ public class DelegateViewHelper {
      *
      * @param views
      */
-    public void setInitialTouchRegion(View ... views) {
+    public void setInitialTouchRegion(List<View> views) {
         RectF bounds = new RectF();
         int p[] = new int[2];
-        for (int i = 0; i < views.length; i++) {
-            View view = views[i];
+        for (int i = 0; i < views.size(); i++) {
+            View view = views.get(i);
             if (view == null) continue;
             view.getLocationOnScreen(p);
             if (i == 0) {

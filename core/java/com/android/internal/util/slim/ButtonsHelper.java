@@ -41,7 +41,79 @@ public class ButtonsHelper {
     private static final String SYSTEMUI_METADATA_NAME = "com.android.systemui";
     private static final String SETTINGS_METADATA_NAME = "com.android.settings";
 
-    private ButtonsHelper() {
+    // get and set the navbar configs from provider and return propper arraylist objects
+    // @ButtonConfig
+    public static ArrayList<ButtonConfig> getNavBarConfig(Context context) {
+        return (getButtonsConfigValues(context,
+            getNavBarProvider(context), null, null, false));
+    }
+
+    // get @ButtonConfig with description if needed and other then an app description
+    public static ArrayList<ButtonConfig> getNavBarConfigWithDescription(
+            Context context, String values, String entries) {
+        return (getButtonsConfigValues(context,
+            getNavBarProvider(context), values, entries, false));
+    }
+
+    private static String getNavBarProvider(Context context) {
+        String config = Settings.System.getStringForUser(
+                    context.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_CONFIG,
+                    UserHandle.USER_CURRENT);
+        if (config == null) {
+            config = ButtonsConstants.NAVIGATION_CONFIG_DEFAULT;
+        }
+        return config;
+    }
+
+    public static void setNavBarConfig(Context context,
+            ArrayList<ButtonConfig> buttonsConfig, boolean reset) {
+        String config;
+        if (reset) {
+            config = ButtonsConstants.NAVIGATION_CONFIG_DEFAULT;
+        } else {
+            config = setButtonsConfig(buttonsConfig, false);
+        }
+        Settings.System.putString(context.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_CONFIG,
+                    config);
+    }
+
+    // get and set the navring configs from provider and return propper arraylist objects
+    // @ButtonConfig
+    public static ArrayList<ButtonConfig> getNavRingConfig(Context context) {
+        return (getButtonsConfigValues(context,
+            getNavRingProvider(context), null, null, false));
+    }
+
+    public static ArrayList<ButtonConfig> getNavRingConfigWithDescription(
+            Context context, String values, String entries) {
+        return (getButtonsConfigValues(context,
+            getNavRingProvider(context), values, entries, false));
+    }
+
+    private static String getNavRingProvider(Context context) {
+        String config = Settings.System.getStringForUser(
+                    context.getContentResolver(),
+                    Settings.System.NAVRING_CONFIG,
+                    UserHandle.USER_CURRENT);
+        if (config == null) {
+            config = ButtonsConstants.NAV_RING_CONFIG_DEFAULT;
+        }
+        return config;
+    }
+
+    public static void setNavRingConfig(Context context,
+            ArrayList<ButtonConfig> buttonsConfig, boolean reset) {
+        String config;
+        if (reset) {
+            config = ButtonsConstants.NAV_RING_CONFIG_DEFAULT;
+        } else {
+            config = setButtonsConfig(buttonsConfig, false);
+        }
+        Settings.System.putString(context.getContentResolver(),
+                    Settings.System.NAVRING_CONFIG,
+                    config);
     }
 
     // get and set the notification shortcut configs
@@ -144,8 +216,8 @@ public class ButtonsHelper {
         return finalConfig;
     }
 
-    public static Drawable getButtonIconImage(
-            Context context, String clickAction, String customIcon) {
+    public static Drawable getButtonIconImage(Context context,
+            String clickAction, String customIcon) {
         int resId = -1;
         PackageManager pm = context.getPackageManager();
         if (pm == null) {
@@ -174,6 +246,24 @@ public class ButtonsHelper {
                 Log.e("ButtonsHelper:", "can't access custom icon image");
                 return null;
             }
+        } else if (clickAction.startsWith("**")) {
+            Resources systemUiResources;
+            try {
+                systemUiResources = pm.getResourcesForApplication(SYSTEMUI_METADATA_NAME);
+            } catch (Exception e) {
+                Log.e("ButtonsHelper:", "can't access systemui resources",e);
+                return null;
+            }
+
+            resId = getButtonsSystemIcon(systemUiResources, clickAction);
+
+            if (resId > 0) {
+                try {
+                    return systemUiResources.getDrawable(resId);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } else {
             try {
                 return pm.getActivityIcon(Intent.parseUri(clickAction, 0));
@@ -184,6 +274,68 @@ public class ButtonsHelper {
             }
         }
         return null;
+    }
+
+    private static int getButtonsSystemIcon(Resources systemUiResources, String clickAction) {
+        int resId = -1;
+
+        if (clickAction.equals(ButtonsConstants.ACTION_HOME)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_home", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_BACK)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_back", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_RECENTS)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_recent", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_SEARCH)
+                || clickAction.equals(ButtonsConstants.ACTION_ASSIST)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_search", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_SCREENSHOT)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_screenshot", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_MENU)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_menu", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_IME)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_ime_switcher", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_KILL)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_killtask", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_POWER)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_power", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_POWER_MENU)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_power_menu", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_NOTIFICATIONS)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_notifications", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_LAST_APP)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_lastapp", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_QS)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_qs", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_VIB)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_vib", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_SILENT)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_silent", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_VIB_SILENT)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_ring_vib_silent", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_TORCH)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_torch", null, null);
+        } else {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_null", null, null);
+        }
+        return resId;
     }
 
     private static String getProperSummary(PackageManager pm,

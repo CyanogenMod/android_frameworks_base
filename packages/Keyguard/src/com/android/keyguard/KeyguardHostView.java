@@ -1728,10 +1728,17 @@ public class KeyguardHostView extends KeyguardViewBase {
         showNextSecurityScreenOrFinish(false);
     }
 
+    public void showCustomIntent(Intent intent) {
+        startActivity(intent);
+    }
+
     public void showAssistant() {
         final Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
           .getAssistIntent(mContext, true, UserHandle.USER_CURRENT);
+        startActivity(intent);
+    }
 
+    private void startActivity(Intent intent) {
         if (intent == null) return;
 
         final ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,

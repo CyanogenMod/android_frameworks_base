@@ -22,4 +22,7 @@
     <string name="quick_settings_battery_charging">Charging</string>
     <string name="quick_settings_battery_discharging">Discharging</string>
 
+    <!-- Kill app toast -->
+    <string name="app_killed_message">App Killed</string>
+
 </resources>

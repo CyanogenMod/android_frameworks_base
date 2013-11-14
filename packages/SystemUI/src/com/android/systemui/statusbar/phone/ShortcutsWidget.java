@@ -20,23 +20,9 @@ import android.app.ActivityManagerNative;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.content.res.Resources.NotFoundException;
 import android.database.ContentObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.provider.Settings;
 import android.net.Uri;
 import android.os.Bundle;
@@ -60,6 +46,8 @@ import android.widget.LinearLayout;
 import com.android.internal.util.slim.ButtonsHelper;
 import com.android.internal.util.slim.ButtonConfig;
 import com.android.internal.util.slim.ButtonsConstants;
+import com.android.internal.util.slim.ColorHelper;
+
 import com.android.systemui.R;
 
 import java.io.File;
@@ -275,23 +263,6 @@ public class ShortcutsWidget extends LinearLayout {
         requestLayout();
     }
 
-    private Bitmap toGrayscale(Bitmap bmpOriginal) {
-        int width, height;
-        height = bmpOriginal.getHeight();
-        width = bmpOriginal.getWidth();
-
-        Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bmpGrayscale);
-        Paint paint = new Paint();
-        ColorMatrix cm = new ColorMatrix();
-        cm.setSaturation(0);
-
-        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
-        paint.setColorFilter(f);
-        c.drawBitmap(bmpOriginal, 0, 0, paint);
-        return bmpGrayscale;
-    }
-
     public void recreateShortcutLayout() {
         removeAllViews();
         determineMargins();
@@ -310,33 +281,20 @@ public class ShortcutsWidget extends LinearLayout {
 
                 // Draw ImageView
                 ImageView iv = new ImageView(mContext);
-                try {
-                    // colorize system and gallery icons always and app icons only if toggled
-                    if ((buttonConfig.getIcon() != null
-                                && buttonConfig.getIcon()
-                                .startsWith(ButtonsConstants.SYSTEM_ICON_IDENTIFIER))
-                            || mColorizeMode == 0
-                            || (buttonConfig.getIcon() != null
-                                && !buttonConfig.getIcon().equals(ButtonsConstants.ICON_EMPTY)
-                                && mColorizeMode != 1)) {
-                        Bitmap colorBitmap = ((BitmapDrawable) front).getBitmap();
-                        Bitmap grayscaleBitmap = toGrayscale(colorBitmap);
 
-                        Paint pp = new Paint();
-                        PorterDuffColorFilter frontFilter =
-                            new PorterDuffColorFilter(mColor, PorterDuff.Mode.MULTIPLY);
-                        pp.setColorFilter(frontFilter);
-                        Canvas cc = new Canvas(grayscaleBitmap);
-                        cc.drawBitmap(grayscaleBitmap, 0, 0, pp);
-
-                        iv.setImageBitmap(grayscaleBitmap);
+                // colorize system and gallery icons always and app icons only if toggled
+                if (((buttonConfig.getIcon() != null
+                            && buttonConfig.getIcon()
+                            .startsWith(ButtonsConstants.SYSTEM_ICON_IDENTIFIER))
+                        || mColorizeMode == 0
+                        || (buttonConfig.getIcon() != null
+                            && !buttonConfig.getIcon().equals(ButtonsConstants.ICON_EMPTY)
+                            && mColorizeMode != 1))
+                        && mColorizeMode != 3) {
+                        iv.setImageBitmap(ColorHelper.getColoredBitmap(front, mColor));
                     } else {
                         iv.setImageDrawable(front);
                     }
-                } catch (Exception e) {
-                        // will never happen but to be sure show the icon
-                        iv.setImageDrawable(front);
-                }
 
                 mGetPxPadding = (int) convertDpToPixel(5, mContext);
                 iv.setPadding(mGetPxPadding, mGetPxPadding, mGetPxPadding, mGetPxPadding);

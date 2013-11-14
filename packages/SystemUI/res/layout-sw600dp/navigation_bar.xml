@@ -41,11 +41,19 @@
             >
 
             <!-- navigation controls -->
-            <View
+            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/menu_left"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
+                android:src="@drawable/ic_sysbar_menu"
+                systemui:keyCode="82"
                 android:layout_weight="0"
-                android:layout_marginStart="2dp"
+                android:visibility="invisible"
+                android:contentDescription="@string/accessibility_menu"
+                systemui:glowBackground="@drawable/ic_sysbar_highlight" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:visibility="invisible"
                 />
             <Space 

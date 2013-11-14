@@ -24,28 +24,30 @@
     android:id="@+id/search_panel_container"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:paddingBottom="0dip">
+    android:paddingRight="0dip">
 
     <RelativeLayout
         android:id="@+id/search_bg_protect"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_vertical|right"
         android:layout_marginBottom="0dip">
 
         <RelativeLayout
             android:id="@+id/search_panel_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true">
+            android:gravity="center_vertical|right"
+            android:layout_alignParentRight="true">
 
             <com.android.internal.widget.multiwaveview.GlowPadView
                 android:id="@+id/glow_pad_view"
                 android:orientation="vertical"
                 android:layout_width="@dimen/navbar_search_panel_height"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:gravity="start"
-
+                android:layout_gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 prvandroid:targetDrawables="@array/navbar_search_targets"
                 prvandroid:targetDescriptions="@array/navbar_search_target_descriptions"
                 prvandroid:directionDescriptions="@array/navbar_search_direction_descriptions"
