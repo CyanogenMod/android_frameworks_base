@@ -19,6 +19,7 @@ package com.android.systemui.statusbar;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManagerNative;
@@ -297,10 +298,6 @@ public abstract class BaseStatusBar extends SystemUI implements
             updatePieControls(!pieEnabled);
         }
     };
-
-    // last theme that was applied in order to detect theme change (as opposed
-    // to some other configuration change).
-    protected ThemeConfig mCurrentTheme;
 
     private ArrayList<String> mDndList = new ArrayList<String>();
     private ArrayList<String> mBlacklist = new ArrayList<String>();
