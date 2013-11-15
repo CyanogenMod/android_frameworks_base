@@ -21,12 +21,15 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -46,7 +49,7 @@ public class Recents extends SystemUI implements RecentsComponent {
     }
 
     @Override
-    public void toggleRecents(Display display, int layoutDirection, View statusBarView) {
+    public void toggleRecents(Display display, int layoutDirection, View statusBarView, int expadedDesktopStyle) {
         if (DEBUG) Log.d(TAG, "toggle recents panel");
         try {
             TaskDescription firstTask = RecentTasksLoader.getInstance(mContext).getFirstTask();
@@ -129,7 +132,9 @@ public class Recents extends SystemUI implements RecentsComponent {
                         x = dm.widthPixels - x - res.getDimensionPixelSize(
                                 R.dimen.status_bar_recents_thumbnail_width);
                     }
-
+                    if (expadedDesktopStyle == 2) {
+                        y += mContext.getResources().getDimension(R.dimen.navigation_bar_size);
+                    }
                 } else { // if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     float thumbTopMargin = res.getDimensionPixelSize(
                             R.dimen.status_bar_recents_thumbnail_top_margin);
@@ -152,6 +157,9 @@ public class Recents extends SystemUI implements RecentsComponent {
                     float statusBarHeight = res.getDimensionPixelSize(
                             com.android.internal.R.dimen.status_bar_height);
                     float recentsItemTopPadding = statusBarHeight;
+                    if (expadedDesktopStyle != 0) {
+                        statusBarHeight = 0;
+                    }
 
                     float height = thumbTopMargin
                             + thumbHeight
@@ -167,6 +175,10 @@ public class Recents extends SystemUI implements RecentsComponent {
                             - recentsScrollViewRightPadding);
                     y = (int) ((dm.heightPixels - statusBarHeight - height) / 2f + thumbTopMargin
                             + recentsItemTopPadding + thumbBgPadding + statusBarHeight);
+                    if (expadedDesktopStyle == 2) {
+                        x += mContext.getResources().getDimension(R.dimen.navigation_bar_size);
+                    }
+
                 }
 
                 ActivityOptions opts = ActivityOptions.makeThumbnailScaleDownAnimation(
