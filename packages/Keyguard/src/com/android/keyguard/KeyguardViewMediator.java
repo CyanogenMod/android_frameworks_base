@@ -577,7 +577,7 @@ public class KeyguardViewMediator {
             // This also "locks" the device when not secure to provide easy access to the
             // camera while preventing unwanted input.
             final boolean lockImmediately =
-                mLockPatternUtils.getPowerButtonInstantlyLocks() || !mLockPatternUtils.isSecure();
+                mLockPatternUtils.getPowerButtonInstantlyLocks();
 
             if (mExitSecureCallback != null) {
                 if (DEBUG) Log.d(TAG, "pending exit secure callback cancelled");
