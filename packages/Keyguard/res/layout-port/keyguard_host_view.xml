@@ -80,6 +80,7 @@
         </com.android.keyguard.KeyguardSecurityContainer>
 
         <ImageButton
+              android:id="@+id/expand_challenge_handle"
               android:layout_width="match_parent"
               android:layout_height="@dimen/kg_widget_pager_bottom_padding"
               androidprv:layout_childType="expandChallengeHandle"
