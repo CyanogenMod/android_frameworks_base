@@ -119,9 +119,6 @@
     <string name="permlab_cancelNotifications">取消應用程式通知</string>
     <string name="permdesc_cancelNotifications">允許應用程式取消其他應用程式建立的通知。</string>
     <string name="permlab_interceptSmsSent">攔截送出簡訊</string>
-    <string name="permdesc_interceptSmsSent">允許應用程式攔截送出簡訊。惡意應用程式可能會利用此去阻止送出簡訊。</string>
     <string name="policylab_enforceSelinux">執行 SELinux</string>
-    <string name="policydesc_enforceSelinux">切換 SELinux 政策執行模式或許可模式。</string>
-    <string name="policylab_enforceMmac">執行 MMAC</string>
     <string name="policydesc_enforceMmac">切換 MMAC 政策執行模式或許可模式。</string>
 </resources>

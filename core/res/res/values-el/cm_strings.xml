@@ -116,9 +116,6 @@
     <string name="permlab_cancelNotifications">ακύρωση ειδοποιήσεων εφαρμογών</string>
     <string name="permdesc_cancelNotifications">Επιτρέπει σε μια εφαρμογή την ακύρωση ειδοποιήσεων που προέρχονται από άλλες εφαρμογές.</string>
     <string name="permlab_interceptSmsSent">παρεμπόδιση εξερχόμενων SMS</string>
-    <string name="permdesc_interceptSmsSent">Επιτρέπει σε μια εφαρμογή να παρεμποδίσει τα εξερχόμενα SMS. Κακόβουλες εφαρμογές μπορεί να το χρησιμοποιήσουν για να εμποδίσουν τη αποστολή SMS.</string>
     <string name="policylab_enforceSelinux">Εξαναγκασμός SELinux</string>
-    <string name="policydesc_enforceSelinux">Εναλλαγή πολιτικής SELinux σε εξαναγκασμένη ή επιτρεπόμενη.</string>
-    <string name="policylab_enforceMmac">Εξαναγκασμός MMAC</string>
     <string name="policydesc_enforceMmac">Εναλλαγή πολιτικής MMAC σε εξαναγκασμένη ή επιτρεπόμενη.</string>
 </resources>
