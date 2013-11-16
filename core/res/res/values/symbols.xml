@@ -1632,8 +1632,8 @@
   <java-symbol type="dimen" name="status_bar_icon_size" />
   <java-symbol type="dimen" name="system_bar_icon_size" />
   <java-symbol type="drawable" name="list_selector_pressed_holo_dark" />
-  <java-symbol type="drawable" name="scrubber_control_disabled_holo" />
-  <java-symbol type="drawable" name="scrubber_control_selector_holo" />
+  <java-symbol type="drawable" name="scrubber_control_disabled_holo_dark" />
+  <java-symbol type="drawable" name="scrubber_control_selector_holo_dark" />
   <java-symbol type="drawable" name="scrubber_progress_horizontal_holo_dark" />
   <java-symbol type="drawable" name="usb_android" />
   <java-symbol type="drawable" name="usb_android_connected" />

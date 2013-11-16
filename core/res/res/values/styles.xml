@@ -1765,7 +1765,7 @@ please see styles_device_defaults.xml.
         <item name="android:indeterminateDrawable">@android:drawable/scrubber_progress_horizontal_holo_dark</item>
         <item name="android:minHeight">13dip</item>
         <item name="android:maxHeight">13dip</item>
-        <item name="android:thumb">@android:drawable/scrubber_control_selector_holo</item>
+        <item name="android:thumb">@android:drawable/scrubber_control_selector_holo_dark</item>
         <item name="android:thumbOffset">16dip</item>
         <item name="android:focusable">true</item>
         <item name="android:paddingStart">16dip</item>
@@ -2171,6 +2171,7 @@ please see styles_device_defaults.xml.
     <style name="Widget.Holo.Light.SeekBar" parent="Widget.Holo.SeekBar">
         <item name="android:progressDrawable">@android:drawable/scrubber_progress_horizontal_holo_light</item>
         <item name="android:indeterminateDrawable">@android:drawable/scrubber_progress_horizontal_holo_light</item>
+        <item name="android:thumb">@android:drawable/scrubber_control_selector_holo_light</item>
     </style>
 
     <style name="Widget.Holo.Light.RatingBar" parent="Widget.RatingBar">
