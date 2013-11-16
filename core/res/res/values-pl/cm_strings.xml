@@ -54,8 +54,6 @@
     <string name="permdesc_fm_radio_transmitter">Pozwala aplikacji na kontrolowanie transmittera FM</string>
     <string name="permlab_changePrivacyGuardState">aktywowanie/dezaktywowanie ochrony prywatności</string>
     <string name="permdesc_changePrivacyGuardState">Pozwala aplikacji decydować, kiedy inna aplikacja zostanie uruchomiona w trybie ochrony prywatności. W trybie tym aplikacje nie mają dostępu do osobistych danych użytkownika, takich jak kontakty, historia połączeń czy wiadomości.</string>
-    <string name="permlab_interceptSmsSent">przechwytywanie wysyłanych wiadomości SMS</string>
-    <string name="permdesc_interceptSmsSent">Pozwala na przechwytywanie wychodzących wiadomości SMS. Złośliwe aplikacje mogą to wykorzystywać, aby zapobiec wysyłaniu wiadomości SMS.</string>
     <string name="permlab_cancelNotifications">usuwanie powiadomień aplikacji</string>
     <string name="permdesc_cancelNotifications">Pozwala aplikacji na usuwanie powiadomień generowanych przez inne aplikacje.</string>
     <string name="privacy_guard_notification">Ochrona prywatności aktywna</string>
@@ -67,8 +65,4 @@
     <string name="permlab_sendMockSms">wysyłanie pozorowanych wiadomości SMS</string>
     <string name="permdesc_sendMockSms">Pozwala aplikacji na wysyłanie pozorowanych wiadomości SMS. W rezultacie umożliwi to wysyłanie SMS-ów do zaufanych aplikacji. Złośliwe aplikacje mogą wysyłać wiadomości w sposób ciągły, blokując system powiadomień urządzenia i zakłócając spokój użytkownika.</string>
     <string name="progress_nomediapresent" product="default">Brak wymiennego nośnika\u2026</string>
-    <string name="policylab_enforceSelinux">Wymuś SELinux</string>
-    <string name="policydesc_enforceSelinux">Przełącza między wymuszaniem polityki SELinux a trybem pobłażliwym.</string>
-    <string name="policylab_enforceMmac">Wymuś MMAC</string>
-    <string name="policydesc_enforceMmac">Przełącza między wymuszaniem polityki MMAC a trybem pobłażliwym.</string>
 </resources>
