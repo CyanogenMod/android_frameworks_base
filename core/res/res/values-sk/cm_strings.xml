@@ -63,12 +63,6 @@
     <string name="profile_none">Žiadny</string>
     <string name="permlab_cancelNotifications">zrušiť oznámenia aplikácií</string>
     <string name="permdesc_cancelNotifications">Povolí aplikácii zrušiť oznámenia vytvorené inými aplikáciami.</string>
-    <string name="permlab_interceptSmsSent">zachytiť odchádzajúce SMS</string>
-    <string name="permdesc_interceptSmsSent">Povolí aplikácii zachytiť odchádzajúce SMS. Škodlivé aplikácie môžu pomocou odchytenia SMS zabrániť ich odoslaniu.</string>
-    <string name="policylab_enforceSelinux">vynútiť SELinux</string>
-    <string name="policydesc_enforceSelinux">Prepnúť stav zabezpečenia SELinux.</string>
-    <string name="policylab_enforceMmac">vynútiť MMAC</string>
-    <string name="policydesc_enforceMmac">Prepnúť stav zabezpečenia MMAC.</string>
     <string name="permlab_sendMockSms">posielať falošné SMS správy</string>
     <string name="permdesc_sendMockSms">Povolí aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať SMS do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať užívateľa.</string>
     <string name="progress_nomediapresent" product="default">Nie je dostupné žiadne vymeniteľné médium\u2026</string>

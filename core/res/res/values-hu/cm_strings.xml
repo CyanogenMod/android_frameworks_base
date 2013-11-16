@@ -64,12 +64,6 @@
     <string name="profile_none">Nincs</string>
     <string name="permlab_cancelNotifications">alkalmazás értesítések törlése</string>
     <string name="permdesc_cancelNotifications">Lehetővé teszi, hogy más alkalmazások számára törölje az értesítéseket</string>
-    <string name="permlab_interceptSmsSent">kimenő SMS üzenetek elfogása</string>
-    <string name="permdesc_interceptSmsSent">Lehetővé teszi az alkalmazás számára, hogy elfogja a kimenő SMS üzeneteket. A rosszindulatú alkalmazások ezt felhasználhatják az SMS-küldés blokkolására.</string>
-    <string name="policylab_enforceSelinux">SELinux</string>
-    <string name="policydesc_enforceSelinux">Váltás a biztonságos és az engedélyező SELinux mód között.</string>
-    <string name="policylab_enforceMmac">MMAC</string>
-    <string name="policydesc_enforceMmac">Váltás a biztonságos és az engedélyező MMAC mód között.</string>
     <string name="progress_nomediapresent" product="default">Nincs eltávolítható memóriakártya\u2026</string>
     <string name="perf_profile_pwrsv">Energiatakarékos</string>
     <string name="perf_profile_bal">Kiegyensúlyozott</string>

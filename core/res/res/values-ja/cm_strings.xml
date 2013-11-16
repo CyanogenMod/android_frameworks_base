@@ -62,11 +62,4 @@
     <string name="profile_none">なし</string>
     <string name="permlab_cancelNotifications">アプリの通知をキャンセル</string>
     <string name="permdesc_cancelNotifications">アプリに、他のアプリで生成された通知をキャンセルすることを許可します。</string>
-    <string name="permlab_interceptSmsSent">SMS送信への割り込み</string>
-    <string name="permdesc_interceptSmsSent">アプリに送信するSMSを傍受することを許可します。
-        悪意のあるアプリはSMSメッセージの送信を妨害する可能性があります。</string>
-    <string name="policylab_enforceSelinux">SELinuxを強制</string>
-    <string name="policydesc_enforceSelinux">SELinuxポリシーを強制あるいは任意モードに切り替えます。</string>
-    <string name="policylab_enforceMmac">MMACを強制</string>
-    <string name="policydesc_enforceMmac">MMACポリシーを強制あるいは任意モードに切り替えます。</string>
 </resources>

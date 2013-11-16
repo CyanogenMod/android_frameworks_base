@@ -119,11 +119,4 @@
     <string name="profile_none">Nenhum</string>
     <string name="permlab_cancelNotifications">cancelar notificações de aplicações</string>
     <string name="permdesc_cancelNotifications">Permite à aplicação cancelar notificações criadas por outras aplicações.</string>
-    <string name="permlab_interceptSmsSent">interceptar saída de SMS</string>
-    <string name="permdesc_interceptSmsSent">Permite à aplicação interceptar o envio de um SMS.
-        Aplicações maliciosas podem usá-lo para prevenir o envio de SMS.</string>
-    <string name="policylab_enforceSelinux">Forçar SELinux</string>
-    <string name="policydesc_enforceSelinux">ALternar a política SELinux entre o modo forçado e permissivo.</string>
-    <string name="policylab_enforceMmac">Forçar MMAC</string>
-    <string name="policydesc_enforceMmac">ALternar a política MMAC entre o modo forçado e permissivo.</string>
 </resources>

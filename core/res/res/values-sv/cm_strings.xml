@@ -66,12 +66,4 @@
     <string name="profile_none">Ingen</string>
     <string name="permlab_cancelNotifications">stänga appaviseringar</string>
     <string name="permdesc_cancelNotifications">Tillåter appen att stänga aviseringar från andra appar.</string>
-    <string name="permlab_interceptSmsSent">avlyssna utgående SMS</string>
-    <string name="permdesc_interceptSmsSent">Tillåter appen att
-        avlyssna ett utgående SMS.
-        Illasinnade appar kan använda detta för att förhindra utgående SMS.</string>
-    <string name="policylab_enforceSelinux">Genomdriv SELinux</string>
-    <string name="policydesc_enforceSelinux">Växla mellan genomdrivande och tillåtande SELinux-policy.</string>
-    <string name="policylab_enforceMmac">Genomdriv MMAC</string>
-    <string name="policydesc_enforceMmac">Växla mellan genomdrivande och tillåtande MMAC-policy.</string>
 </resources>
