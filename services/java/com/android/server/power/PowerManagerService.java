@@ -1465,29 +1465,22 @@ public final class PowerManagerService extends IPowerManager.Stub
                     nextTimeout = mLastUserActivityTime
                             + screenOffTimeout - screenDimDuration;
                     if (now < nextTimeout) {
-                        int buttonBrightness, keyboardBrightness;
-                        if (mButtonBrightnessOverrideFromWindowManager >= 0) {
-                            buttonBrightness = mButtonBrightnessOverrideFromWindowManager;
-                            keyboardBrightness = mButtonBrightnessOverrideFromWindowManager;
-                        } else {
-                            buttonBrightness = mButtonBrightness;
-                            keyboardBrightness = mKeyboardBrightness;
-                        }
-
-                        mKeyboardLight.setBrightness(mKeyboardVisible ? keyboardBrightness : 0);
-                        if (mButtonTimeout != 0 && now > mLastUserActivityTime + mButtonTimeout) {
+                        int brightness = mButtonBrightnessOverrideFromWindowManager >= 0
+                                ? mButtonBrightnessOverrideFromWindowManager
+                                : mDisplayPowerRequest.screenBrightness;
+                        mKeyboardLight.setBrightness(mKeyboardVisible ? brightness : 0);
+                        if (now > mLastUserActivityTime + DEFAULT_BUTTON_ON_DURATION) {
                             mButtonsLight.setBrightness(0);
                         } else {
-                            mButtonsLight.setBrightness(buttonBrightness);
-                            if (buttonBrightness != 0 && mButtonTimeout != 0) {
-                                nextTimeout = now + mButtonTimeout;
+                            mButtonsLight.setBrightness(brightness);
+                            if (brightness != 0) {
+                                nextTimeout = now + DEFAULT_BUTTON_ON_DURATION;
                             }
                         }
                         mUserActivitySummary |= USER_ACTIVITY_SCREEN_BRIGHT;
                     } else {
                         nextTimeout = mLastUserActivityTime + screenOffTimeout;
                         if (now < nextTimeout) {
-                            mButtonsLight.setBrightness(0);
                             mKeyboardLight.setBrightness(0);
                             mUserActivitySummary |= USER_ACTIVITY_SCREEN_DIM;
                         }
@@ -1521,6 +1514,7 @@ public final class PowerManagerService extends IPowerManager.Stub
             }
         }
     }
+
 
     /**
      * Called when a user activity timeout has occurred.
