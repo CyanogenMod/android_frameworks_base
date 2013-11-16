@@ -2185,7 +2185,6 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
         ViewGroup group = (ViewGroup) textEntryView.findViewById(R.id.info);
         addRowToDialog(group, R.string.wifi_p2p_from_message, getDeviceName(
                 mSavedPeerConfig.deviceAddress));
-
         final EditText pin = (EditText) textEntryView.findViewById(R.id.wifi_p2p_wps_pin);
 
         AlertDialog dialog = new AlertDialog.Builder(mContext)
@@ -2537,6 +2536,10 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
     private String getDeviceName(String deviceAddress) {
         WifiP2pDevice d = mPeers.get(deviceAddress);
         if (d != null) {
+                String deviceName = d.deviceName;
+                if (deviceName.equals("")) {
+                    return deviceAddress;
+                }
                 return d.deviceName;
         }
         //Treat the address as name if there is no match
