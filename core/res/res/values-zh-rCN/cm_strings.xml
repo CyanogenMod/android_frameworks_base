@@ -66,10 +66,4 @@
     <string name="profile_none">无</string>
     <string name="permlab_cancelNotifications">取消应用程序通知</string>
     <string name="permdesc_cancelNotifications">允许应用取消由其他应用创建的通知.</string>
-    <string name="permlab_interceptSmsSent">拦截向外发送短信</string>
-    <string name="permdesc_interceptSmsSent">允许应用拦截发送短信. 恶意应用可能会使用该功能阻止向外发送短信.</string>
-    <string name="policylab_enforceSelinux">强制执行 SELinux</string>
-    <string name="policydesc_enforceSelinux">切换 SELinux 策略为强制执行或许可模式.</string>
-    <string name="policylab_enforceMmac">强制执行 MMAC</string>
-    <string name="policydesc_enforceMmac">切换 MMAC 策略为强制执行或许可模式.</string>
 </resources>

@@ -60,7 +60,5 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> het nie toegang tot persoonlike data nie</string>
     <string name="profile_picker_title">Profiele</string>
     <string name="profile_none">Geen</string>
-    <string name="permlab_interceptSmsSent">onderskep uitgaande SMS</string>
-    <string name="permdesc_interceptSmsSent">Laat \'n program toe om uitgaande SMS boodskappe te onderskep. Kwaadwillige programme kan die reg misbruik om uitgaande SMS boodskappe te verhoed.</string>
 
 </resources>

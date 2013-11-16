@@ -118,10 +118,4 @@
     <string name="profile_none">Cap</string>
     <string name="permlab_cancelNotifications">cancel\U00B7la les notificacions de l\'aplicació</string>
     <string name="permdesc_cancelNotifications">Permet a l\'app cancel\U00B7lar les notificacions creades per altres apps.</string>
-    <string name="permlab_interceptSmsSent">intercepta SMS sortints</string>
-    <string name="permdesc_interceptSmsSent">Permet a l\'app interceptar un SMS sortint. Apps malicioses podrien utilitzar això per evitar que que surtin missatges SMS.</string>
-    <string name="policylab_enforceSelinux">Imposa SELinux</string>
-    <string name="policydesc_enforceSelinux">Commuta la política SELinux entre el mode imposat o permissiu.</string>
-    <string name="policylab_enforceMmac">Imposa MMAC</string>
-    <string name="policydesc_enforceMmac">Commuta la política MMAC entre el mode imposat o permissiu.</string>
 </resources>

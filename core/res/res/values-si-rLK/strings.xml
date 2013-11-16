@@ -655,8 +655,6 @@
     <string name="permdesc_invokeCarrierSetup" msgid="4159549152529111920">"වාහකයා ලබාදුන් සැකසුම් යෙදුම් උත්පාදනයට ධාරකයාට අවසර දෙන්න. සාමාන්‍ය යෙදුම් සඳහා කිසිදා අවශ්‍ය නොවෙයි."</string>
     <string name="permlab_accessNetworkConditions" msgid="8206077447838909516">"ජාල තත්ව මත නිරීක්ෂණ වෙත ඇහුම්කන් දීම"</string>
     <string name="permdesc_accessNetworkConditions" msgid="6899102075825272211">"යෙදුමකට ජාල තත්ව මත නිරීක්ෂණ වෙත ඇහුම්කන් දීමට අවසර දේ. සාමාන්‍ය යෙදුම් සඳහා කිසිදා අවශ්‍ය නොවේ."</string>
-    <string name="permlab_hotwordRecognition" msgid="3225080408746361313">"අණවදන හඳුනාගැනීම ඉල්ලයි"</string>
-    <string name="permdesc_hotwordRecognition" msgid="3716741260195364252">"අණවදන හඳුනාගැනීම සඳහා ඉල්ලීමට යෙදුමට ඉඩ දෙන්න. සාමාන්‍ය යෙදුම් සඳහා කිසිදා අවශ්‍ය නොවෙයි."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"මුරපද නීති සකස් කිරීම"</string>
     <string name="policydesc_limitPassword" msgid="3252114203919510394">"තිරය අගුළු ඇරීමේ මුරපදයට අනුමත අකුරු සහ දිග පාලනය කරන්න."</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"තිරය අගුළු ඇරීමේ උත්සාහයන් නිරීක්ෂණය කරන්න"</string>
@@ -1531,45 +1529,6 @@
     <string name="app_no_restricted_accounts" msgid="5739463249673727736">"සීමා සහිත පැතිකඩ සඳහා වන ගිණුම් වෙත මෙම යෙදුම සහය නොදක්වයි"</string>
     <string name="app_not_found" msgid="3429141853498927379">"මෙම ක්‍රියාව හසුරුවීමට යෙදුමක් සොයාගත්තේ නැත"</string>
     <string name="revoke" msgid="5404479185228271586">"අහෝසි කරන්න"</string>
-    <string name="mediaSize_iso_a0" msgid="7875427489420821793">"ISO A0"</string>
-    <string name="mediaSize_iso_a1" msgid="3760734499050875356">"ISO A1"</string>
-    <string name="mediaSize_iso_a2" msgid="5973266378020144382">"ISO A2"</string>
-    <string name="mediaSize_iso_a3" msgid="1373407105687300884">"ISO A3"</string>
-    <string name="mediaSize_iso_a4" msgid="6689772807982597254">"ISO A4"</string>
-    <string name="mediaSize_iso_a5" msgid="5353549652015741040">"ISO A5"</string>
-    <string name="mediaSize_iso_a6" msgid="8585038048674911907">"ISO A6"</string>
-    <string name="mediaSize_iso_a7" msgid="6641836716963839119">"ISO A7"</string>
-    <string name="mediaSize_iso_a8" msgid="7571139437465693355">"ISO A8"</string>
-    <string name="mediaSize_iso_a9" msgid="1378455891957115079">"ISO A9"</string>
-    <string name="mediaSize_iso_a10" msgid="2480747457429475344">"ISO A10"</string>
-    <string name="mediaSize_iso_b0" msgid="3965935097661108039">"ISO B0"</string>
-    <string name="mediaSize_iso_b1" msgid="2505753285010115437">"ISO B1"</string>
-    <string name="mediaSize_iso_b2" msgid="8763874709859458453">"ISO B2"</string>
-    <string name="mediaSize_iso_b3" msgid="4210506688191764076">"ISO B3"</string>
-    <string name="mediaSize_iso_b4" msgid="5749404165888526034">"ISO B4"</string>
-    <string name="mediaSize_iso_b5" msgid="7640627414621904733">"ISO B5"</string>
-    <string name="mediaSize_iso_b6" msgid="7342988864712748544">"ISO B6"</string>
-    <string name="mediaSize_iso_b7" msgid="5069844065235382429">"ISO B7"</string>
-    <string name="mediaSize_iso_b8" msgid="7316818922278779774">"ISO B8"</string>
-    <string name="mediaSize_iso_b9" msgid="5414727094026532341">"ISO B9"</string>
-    <string name="mediaSize_iso_b10" msgid="5251253731832048185">"ISO B10"</string>
-    <string name="mediaSize_iso_c0" msgid="4003138342671964217">"ISO C0"</string>
-    <string name="mediaSize_iso_c1" msgid="1935188063393553008">"ISO C1"</string>
-    <string name="mediaSize_iso_c2" msgid="3197307969712069904">"ISO C2"</string>
-    <string name="mediaSize_iso_c3" msgid="4335826087321913508">"ISO C3"</string>
-    <string name="mediaSize_iso_c4" msgid="3745639598281015005">"ISO C4"</string>
-    <string name="mediaSize_iso_c5" msgid="8269457765822791013">"ISO C5"</string>
-    <string name="mediaSize_iso_c6" msgid="566666105260346930">"ISO C6"</string>
-    <string name="mediaSize_iso_c7" msgid="8678413180782608498">"ISO C7"</string>
-    <string name="mediaSize_iso_c8" msgid="8392376206627041730">"ISO C8"</string>
-    <string name="mediaSize_iso_c9" msgid="9191613372324845405">"ISO C9"</string>
-    <string name="mediaSize_iso_c10" msgid="7327709699184920822">"ISO C10"</string>
-    <string name="mediaSize_na_letter" msgid="4191805615829472953">"අකුරු"</string>
-    <string name="mediaSize_na_gvrnmt_letter" msgid="7853382192649405507">"රජයේ ලිපිය"</string>
-    <string name="mediaSize_na_legal" msgid="6697982988283823150">"නීත්‍යනුකූල"</string>
-    <string name="mediaSize_na_junior_legal" msgid="3727743969902758948">"ප්‍රාථමික නීතිමය"</string>
-    <string name="mediaSize_na_ledger" msgid="281871464896601236">"ලෙජරය"</string>
-    <string name="mediaSize_na_tabloid" msgid="5775966416333578127">"කුඩා පුවත්පත"</string>
     <string name="write_fail_reason_cancelled" msgid="7091258378121627624">"අවලංගු කරන ලදි"</string>
     <string name="write_fail_reason_cannot_write" msgid="8132505417935337724">"අන්තර්ගතය ලිවීමේදී දෝෂයකි"</string>
     <string name="reason_unknown" msgid="6048913880184628119">"නොදනී"</string>
