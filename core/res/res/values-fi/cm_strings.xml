@@ -62,10 +62,4 @@
     <string name="profile_none">Ei mitään</string>
     <string name="permlab_cancelNotifications">peruuta sovellusten ilmoitukset</string>
     <string name="permdesc_cancelNotifications">Sallii sovelluksen peruuttaa muiden sovellusten luomat ilmoitukset.</string>
-    <string name="permlab_interceptSmsSent">estä lähtevät tekstiviestit</string>
-    <string name="permdesc_interceptSmsSent">Sallii sovelluksen pysäyttää lähtevät tekstiviestit. Haitalliset sovellukset saattavat käyttää tätä estääkseen kaikki lähtevät tekstiviestit.</string>
-    <string name="policylab_enforceSelinux">Pakota SELinux</string>
-    <string name="policydesc_enforceSelinux">Valitse SELinuxin käytännöksi pakotettu tai salliva tila.</string>
-    <string name="policylab_enforceMmac">Pakota MMAC</string>
-    <string name="policydesc_enforceMmac">Valitse MMAC:n käytännöksi pakotettu tai salliva tila.</string>
 </resources>

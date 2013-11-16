@@ -360,8 +360,6 @@
     <string name="permdesc_bindAccessibilityService" msgid="7034615928609331368">"Sahibə giriş xidmətin ən üst səviyyə interfeysi bağlamağa imkan verir. Normal tətbiqlər üçün heç vaxt lazım olmamalıdır."</string>
     <string name="permlab_bindPrintService" msgid="8462815179572748761">"çap servisini qoşma"</string>
     <string name="permdesc_bindPrintService" msgid="7960067623209111135">"Sahibinə bir çap xidmətinin ən üst səviyə araüzünü bağlamağa imkan verir. Normal tətbiqlər üçün heç vaxt lazım olmamalıdır."</string>
-    <string name="permlab_accessAllPrintJobs" msgid="1120792468465711159">"bütün çap işlərinə giriş əldə et"</string>
-    <string name="permdesc_accessAllPrintJobs" msgid="2978185311041864762">"Sahibinə digər tətbiqlər tərəfindən yaradılan çap işlərinə giriş hüququ verir. Normal tətbiqlər üçün tələb olunmamalıdır."</string>
     <string name="permlab_bindNfcService" msgid="2752731300419410724">"NFC xidmətlərinə qoşun"</string>
     <string name="permdesc_bindNfcService" msgid="6120647629174066862">"Sahibinə NFC kartlarını emulyasiya edən tətbiqləri bir-birinə qoşmağa icazə verin. Normal tətbiqlər üçün lazım deyil."</string>
     <string name="permlab_bindTextService" msgid="7358378401915287938">"mətn servisini qoşma"</string>
@@ -1449,7 +1447,6 @@
     <string name="activity_chooser_view_see_all" msgid="4292569383976636200">"Hamısını seçın"</string>
     <string name="activity_chooser_view_dialog_title_default" msgid="4710013864974040615">"Fəaliyyəti seçin"</string>
     <string name="share_action_provider_share_with" msgid="5247684435979149216">"Bununla paylaşın"</string>
-    <string name="status_bar_device_locked" msgid="3092703448690669768">"Cihaz kilidləndi."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
     <string name="sending" msgid="3245653681008218030">"Göndərilir..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Brauzer işə salınsın?"</string>
@@ -1527,45 +1524,6 @@
     <string name="app_no_restricted_accounts" msgid="5739463249673727736">"Bu tətbiq məhdud profillər üçün hesabları dəstəkləmir."</string>
     <string name="app_not_found" msgid="3429141853498927379">"Bu əməliyyatı idarə etmək üçün heç bir tətbiq tapılmadı."</string>
     <string name="revoke" msgid="5404479185228271586">"Ləğv edin"</string>
-    <string name="mediaSize_iso_a0" msgid="7875427489420821793">"ISO A0"</string>
-    <string name="mediaSize_iso_a1" msgid="3760734499050875356">"ISO A1"</string>
-    <string name="mediaSize_iso_a2" msgid="5973266378020144382">"ISO A2"</string>
-    <string name="mediaSize_iso_a3" msgid="1373407105687300884">"ISO A3"</string>
-    <string name="mediaSize_iso_a4" msgid="6689772807982597254">"ISO A4"</string>
-    <string name="mediaSize_iso_a5" msgid="5353549652015741040">"ISO A5"</string>
-    <string name="mediaSize_iso_a6" msgid="8585038048674911907">"ISO A6"</string>
-    <string name="mediaSize_iso_a7" msgid="6641836716963839119">"ISO A7"</string>
-    <string name="mediaSize_iso_a8" msgid="7571139437465693355">"ISO A8"</string>
-    <string name="mediaSize_iso_a9" msgid="1378455891957115079">"ISO A9"</string>
-    <string name="mediaSize_iso_a10" msgid="2480747457429475344">"ISO A10"</string>
-    <string name="mediaSize_iso_b0" msgid="3965935097661108039">"ISO B0"</string>
-    <string name="mediaSize_iso_b1" msgid="2505753285010115437">"ISO B1"</string>
-    <string name="mediaSize_iso_b2" msgid="8763874709859458453">"ISO B2"</string>
-    <string name="mediaSize_iso_b3" msgid="4210506688191764076">"ISO B3"</string>
-    <string name="mediaSize_iso_b4" msgid="5749404165888526034">"B4 ISO"</string>
-    <string name="mediaSize_iso_b5" msgid="7640627414621904733">"ISO B5"</string>
-    <string name="mediaSize_iso_b6" msgid="7342988864712748544">"ISO B6"</string>
-    <string name="mediaSize_iso_b7" msgid="5069844065235382429">"ISO B7"</string>
-    <string name="mediaSize_iso_b8" msgid="7316818922278779774">"ISO B8"</string>
-    <string name="mediaSize_iso_b9" msgid="5414727094026532341">"ISO B9"</string>
-    <string name="mediaSize_iso_b10" msgid="5251253731832048185">"ISO B10"</string>
-    <string name="mediaSize_iso_c0" msgid="4003138342671964217">"ISO C0"</string>
-    <string name="mediaSize_iso_c1" msgid="1935188063393553008">"ISO C1"</string>
-    <string name="mediaSize_iso_c2" msgid="3197307969712069904">"ISO C2"</string>
-    <string name="mediaSize_iso_c3" msgid="4335826087321913508">"ISO C3"</string>
-    <string name="mediaSize_iso_c4" msgid="3745639598281015005">"ISO C4"</string>
-    <string name="mediaSize_iso_c5" msgid="8269457765822791013">"ISO C5"</string>
-    <string name="mediaSize_iso_c6" msgid="566666105260346930">"ISO C6"</string>
-    <string name="mediaSize_iso_c7" msgid="8678413180782608498">"ISO C7"</string>
-    <string name="mediaSize_iso_c8" msgid="8392376206627041730">"ISO C8"</string>
-    <string name="mediaSize_iso_c9" msgid="9191613372324845405">"ISO C9"</string>
-    <string name="mediaSize_iso_c10" msgid="7327709699184920822">"ISO C10"</string>
-    <string name="mediaSize_na_letter" msgid="4191805615829472953">"Məktub"</string>
-    <string name="mediaSize_na_gvrnmt_letter" msgid="7853382192649405507">"Hökumət Məktubu"</string>
-    <string name="mediaSize_na_legal" msgid="6697982988283823150">"Hüquqi"</string>
-    <string name="mediaSize_na_junior_legal" msgid="3727743969902758948">"Kiçik Hüquq"</string>
-    <string name="mediaSize_na_ledger" msgid="281871464896601236">"Qovluq"</string>
-    <string name="mediaSize_na_tabloid" msgid="5775966416333578127">"Qısa"</string>
     <string name="write_fail_reason_cancelled" msgid="7091258378121627624">"Ləğv edildi"</string>
     <string name="write_fail_reason_cannot_write" msgid="8132505417935337724">"Kontent yazmna xətası"</string>
     <string name="restr_pin_enter_pin" msgid="3395953421368476103">"PIN daxil edin"</string>
