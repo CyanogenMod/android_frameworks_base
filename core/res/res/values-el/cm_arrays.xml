@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="app_ops_labels">
+        <item>Προσπάθεια πρόσβασης τοποθεσίας</item>
+        <item>Προσπάθεια πρόσβασης τοποθεσίας</item>
+        <item>Προσπάθεια πρόσβασης τοποθεσίας</item>
+        <item>Προσπάθεια χρήσης δόνησης</item>
+        <item>Προσπάθεια ανάγνωσης επαφών</item>
+        <item>Προσπάθεια τροποποίησης επαφών</item>
+        <item>Προσπάθεια ανάγνωσης αρχείου κλήσεων</item>
+        <item>Προσπάθεια τροποποίησης αρχείου κλήσεων</item>
+        <item>Προσπάθεια ανάγνωσης ημερολογίου</item>
+        <item>Προσπάθεια τροποποίησης ημερολογίου</item>
+        <item>Προσπάθεια πρόσβασης τοποθεσίας</item>
+        <item>Προσπάθεια δημοσίευσης ειδοποίησης</item>
+        <item>Προσπάθεια πρόσβασης τοποθεσίας</item>
+        <item>Προσπάθεια τηλεφωνικής κλήσης</item>
+        <item>Προσπάθεια ανάγνωσης SMS/MMS</item>
+        <item>Προσπάθεια σύνταξης/τροποποίησης SMS/MMS</item>
+        <item>Προσπάθεια λήψης SMS/MMS</item>
+        <item>Προσπάθεια λήψης SMS/MMS</item>
+        <item>Προσπάθεια λήψης SMS/MMS</item>
+        <item>Προσπάθεια λήψης SMS/MMS</item>
+        <item>Προσπάθεια αποστολής SMS/MMS</item>
+        <item>Προσπάθεια ανάγνωσης SMS/MMS</item>
+        <item>Προσπάθεια εγγραφής/τροποποίησης SMS/MMS</item>
+        <item>Προσπάθεια τροποποίησης ρυθμίσεων</item>
+        <item>Προσπάθεια μεταφοράς στην κορυφή</item>
+        <item>Προσπάθεια πρόσβασης ειδοποιήσεων</item>
+        <item>Προσπάθεια πρόσβασης φωτογρ. μηχανής</item>
+        <item>Προσπάθεια ηχογράφησης</item>
+        <item>Προσπάθεια αναπαραγωγής ήχου</item>
+        <item>Προσπάθεια ανάγνωσης πρόχειρου</item>
+        <item>Προσπάθεια τροποποίησης πρόχειρου</item>
+        <item>Προσπάθεια ενεργοποίησης/απενεργοποίησης Wi-Fi</item>
+        <item>Προσπάθεια ενεργοποίησης/απενεργοποίησης Bluetooth</item>
+        <item>Προσπάθεια ενεργοποίησης/απενεργοποίησης δεδομένων</item>
+        <item>Προσπάθεια προγραμματισμού αφύπνισης συσκευής</item>
+    </string-array>
+</resources>
