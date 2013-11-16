@@ -17,6 +17,7 @@ package com.android.internal.util.slim;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.hardware.display.DisplayManager;
@@ -78,16 +79,16 @@ public class DeviceUtils {
 
     public static boolean deviceSupportsTorch(Context context) {
         PackageManager pm = context.getPackageManager();
-        Resources settingsResources = null;
         try {
-            settingsResources = pm.getResourcesForApplication(SETTINGS_METADATA_NAME);
+            List<ApplicationInfo> packages = pm.getInstalledApplications(0);
+                for (ApplicationInfo packageInfo : packages) {
+                    if (packageInfo.packageName.equals(TorchConstants.APP_PACKAGE_NAME)) {
+                        return true;
+                    }
+                }
         } catch (Exception e) {
-            Log.e("DeviceSupportUtils:", "can't access settings resources",e);
-            return false;
         }
-        int resId = settingsResources.getIdentifier(
-                  SETTINGS_METADATA_NAME + ":bool/has_led_flash", null, null);
-        return resId > 0 && settingsResources.getBoolean(resId);
+        return false;
     }
 
     public static FilteredDeviceFeaturesArray filterUnsupportedDeviceFeatures(Context context,
