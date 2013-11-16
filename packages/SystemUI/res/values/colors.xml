@@ -45,5 +45,6 @@
 
     <!-- Navigation bar -->
     <color name="navigationbar_button_default_color">#FFFFFFFF</color>
+    <color name="navigationbar_button_glow_default_color">#FFFFFFFF</color>
 
 </resources>
