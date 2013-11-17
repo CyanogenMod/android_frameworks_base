@@ -1438,7 +1438,7 @@ please see styles_device_defaults.xml.
 
     <style name="TextAppearance.Holo.DialogWindowTitle">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@android:color/holo_blue_light</item>
+        <item name="android:textColor">@android:color/default_dialog_text_holo_dark</item>
     </style>
 
     <style name="TextAppearance.Holo.CalendarViewWeekDayView" parent="TextAppearance.Small.CalendarViewWeekDayView">
@@ -1537,7 +1537,7 @@ please see styles_device_defaults.xml.
 
     <style name="TextAppearance.Holo.Light.DialogWindowTitle">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@android:color/holo_blue_light</item>
+        <item name="android:textColor">@android:color/default_dialog_text_holo_light</item>
     </style>
 
     <style name="TextAppearance.Holo.Light.CalendarViewWeekDayView" parent="TextAppearance.Small.CalendarViewWeekDayView">
@@ -2393,7 +2393,7 @@ please see styles_device_defaults.xml.
         <item name="bottomBright">@android:drawable/dialog_bottom_holo_dark</item>
         <item name="bottomMedium">@android:drawable/dialog_bottom_holo_dark</item>
         <item name="centerMedium">@android:drawable/dialog_middle_holo_dark</item>
-        <item name="layout">@android:layout/alert_dialog_holo</item>
+        <item name="layout">@android:layout/alert_dialog_holo_dark</item>
         <item name="listLayout">@android:layout/select_dialog_holo</item>
         <item name="progressLayout">@android:layout/progress_dialog_holo</item>
         <item name="horizontalProgressLayout">@android:layout/alert_dialog_progress_holo</item>
@@ -2413,6 +2413,7 @@ please see styles_device_defaults.xml.
         <item name="bottomBright">@android:drawable/dialog_bottom_holo_light</item>
         <item name="bottomMedium">@android:drawable/dialog_bottom_holo_light</item>
         <item name="centerMedium">@android:drawable/dialog_middle_holo_light</item>
+        <item name="layout">@android:layout/alert_dialog_holo_light</item>
     </style>
 
     <!-- Window title -->
