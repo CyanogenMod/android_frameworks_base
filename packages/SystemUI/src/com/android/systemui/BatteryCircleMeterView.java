@@ -38,6 +38,7 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -420,9 +421,17 @@ public class BatteryCircleMeterView extends ImageView {
         mPaintFont.getTextBounds("99", 0, "99".length(), bounds);
         mTextLeftX = mCircleSize / 2.0f + getPaddingLeft();
         mTextRightX = mTextLeftX + off;
-        // the +1 at end of formular balances out rounding issues. works out on all resolutions
-        mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f - strokeWidth / 2.0f + 1;
 
+        mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f - strokeWidth / 2.0f;
+
+        // balance out rounding issues. works out on all resolutions
+        if (mCircleBatteryView.equals("quicksettings")) {
+            mTextY = mTextY + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1.5f,
+                    mContext.getResources().getDisplayMetrics());
+        } else if (mCircleBatteryView.equals("statusbar")) {
+            mTextY = mTextY + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0.5f,
+                    mContext.getResources().getDisplayMetrics());
+        }
         // force new measurement for wrap-content xml tag
         onMeasure(0, 0);
     }
