@@ -98,4 +98,10 @@
     <!-- Title of dialog when prompting user to select an app to share documents with [CHAR LIMIT=32] -->
     <string name="share_via">Share via</string>
 
+    <!-- Confirmation dialog text used for document deletion -->
+    <string name="delete_confirm_single">Are you sure you want to delete this document?</string>
+    <string name="delete_confirm">Are you sure you want to delete these documents?</string>
+
+    <string name="cancel">Cancel</string>
+
 </resources>
