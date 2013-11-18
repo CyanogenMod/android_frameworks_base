@@ -108,6 +108,19 @@ public interface WindowManagerPolicy {
      */
     public final static String EXTRA_HDMI_PLUGGED_STATE = "state";
 
+     /**
+      * Sticky broadcast of the current HDMI hw plugged state.
+      */
+    public final static String ACTION_HDMI_HW_PLUGGED = "android.intent.action.HDMI_HW_PLUGGED";
+
+    /**
+      * Extra in {@link #ACTION_HDMI_HW_PLUGGED} indicating the state: true if
+      * plugged in to HDMI hw, false if not.
+      */
+    public final static String EXTRA_HDMI_HW_PLUGGED_STATE = "state";
+
+    /**
+
     /**
      * Pass this event to the user / app.  To be returned from
      * {@link #interceptKeyBeforeQueueing}.

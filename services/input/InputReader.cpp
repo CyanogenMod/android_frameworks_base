@@ -5773,8 +5773,19 @@ void TouchInputMapper::assignPointerIds() {
     if (currentPointerCount == 1 && lastPointerCount == 1
             && mCurrentRawPointerData.pointers[0].toolType
                     == mLastRawPointerData.pointers[0].toolType) {
-        // Only one pointer and no change in count so it must have the same id as before.
-        uint32_t id = mLastRawPointerData.pointers[0].id;
+        uint32_t id;
+#ifdef AML_FT5X_HACK
+        if (!mCurrentRawPointerData.isHovering(0) &&
+                !mLastRawPointerData.hoveringIdBits.isEmpty()) {
+            // 1 finger released and touching again. Should be safe to reset to id 0.
+            id = 0;
+        } else {
+#endif
+            // Only one pointer and no change in count so it must have the same id as before.
+            id = mLastRawPointerData.pointers[0].id;
+#ifdef AML_FT5X_HACK
+        }
+#endif
         mCurrentRawPointerData.pointers[0].id = id;
         mCurrentRawPointerData.idToIndex[id] = 0;
         mCurrentRawPointerData.markIdBit(id, mCurrentRawPointerData.isHovering(0));

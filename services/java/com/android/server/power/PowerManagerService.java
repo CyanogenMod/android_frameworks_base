@@ -282,6 +282,9 @@ public final class PowerManagerService extends IPowerManager.Stub
     // True if the device is plugged into a power source.
     private boolean mIsPowered;
 
+    // WakeLock hold while device is charging
+    private PowerManager.WakeLock mChargeLock;
+
     // The current plug type, such as BatteryManager.BATTERY_PLUGGED_WIRELESS.
     private int mPlugType;
 
@@ -467,6 +470,8 @@ public final class PowerManagerService extends IPowerManager.Stub
             mKeyboardBrightnessSettingDefault = pm.getDefaultKeyboardBrightness();
 
             SensorManager sensorManager = new SystemSensorManager(mContext, mHandler.getLooper());
+
+	    mChargeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ChargeLock");
 
             // The notifier runs on the system server's main looper so as not to interfere
             // with the animations and other critical functions of the power manager.
@@ -1269,6 +1274,16 @@ public final class PowerManagerService extends IPowerManager.Stub
             mIsPowered = mBatteryService.isPowered(BatteryManager.BATTERY_PLUGGED_ANY);
             mPlugType = mBatteryService.getPlugType();
             mBatteryLevel = mBatteryService.getBatteryLevel();
+
+	    if (wasPowered != mIsPowered) {
+		if (!mChargeLock.isHeld()) {
+		    Slog.d(TAG, "Power supply plugged: chargeLock acquired");
+		    mChargeLock.acquire();
+		} else {
+		    Slog.d(TAG, "Power supply un-plugged: chargeLock released");
+		    mChargeLock.release();
+		}
+	    }
 
             if (DEBUG) {
                 Slog.d(TAG, "updateIsPoweredLocked: wasPowered=" + wasPowered

@@ -69,7 +69,7 @@ class WifiController extends StateMachine {
      * being enabled but not active exceeds the battery drain caused by
      * re-establishing a connection to the mobile data network.
      */
-    private static final long DEFAULT_IDLE_MS = 15 * 60 * 1000; /* 15 minutes */
+    private static final long DEFAULT_IDLE_MS = 1 * 30 * 1000; /* 30 seconds */
 
     /**
      * See {@link Settings.Global#WIFI_REENABLE_DELAY_MS}.  This is the default value if a
@@ -310,8 +310,11 @@ class WifiController extends StateMachine {
                     mScreenOff = false;
                     mDeviceIdle = false;
                     updateBatteryWorkSource();
+		    mWifiStateMachine.releaseShutdownLock();
+		    mWifiStateMachine.releaseSodLock();
                     break;
                 case CMD_SCREEN_OFF:
+		    mWifiStateMachine.acquireShutdownLock();
                     mScreenOff = true;
                     /*
                     * Set a timer to put Wi-Fi to sleep, but only if the screen is off
@@ -320,9 +323,10 @@ class WifiController extends StateMachine {
                     * or plugged in to AC).
                     */
                     if (!shouldWifiStayAwake(mPluggedType)) {
+			if (true) {
                         //Delayed shutdown if wifi is connected
-                        if (mNetworkInfo.getDetailedState() ==
-                                NetworkInfo.DetailedState.CONNECTED) {
+                        //if (mNetworkInfo.getDetailedState() ==
+                        //        NetworkInfo.DetailedState.CONNECTED) {
                             if (DBG) Slog.d(TAG, "set idle timer: " + mIdleMillis + " ms");
                             mAlarmManager.set(AlarmManager.RTC_WAKEUP,
                                     System.currentTimeMillis() + mIdleMillis, mIdleIntent);

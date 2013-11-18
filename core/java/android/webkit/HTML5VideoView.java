@@ -380,6 +380,10 @@ public class HTML5VideoView implements MediaPlayer.OnPreparedListener {
             HTML5VideoViewProxy proxy, WebViewClassic webView) {
     }
 
+   public void updateLayout(int x,int y,int width,int height) {
+       return;
+   }
+
     public boolean isFullScreenMode() {
         return false;
     }

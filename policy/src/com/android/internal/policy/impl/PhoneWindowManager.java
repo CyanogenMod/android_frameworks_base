@@ -123,6 +123,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 import java.util.List;
 
 import static android.view.WindowManager.LayoutParams.*;
@@ -194,6 +199,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
      */
     static final int SYSTEM_UI_CHANGING_LAYOUT =
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+
+    public static final String DISPLAY_MODE_PATH = "/sys/class/display/mode";
 
     /* Table of Application Launch keys.  Maps from key codes to intent categories.
      *
@@ -292,6 +299,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     boolean mSystemReady;
     boolean mSystemBooted;
+    boolean mHdmiHwPlugged;
     boolean mHdmiPlugged;
     boolean mWifiDisplayConnected;
     int mUiMode;
@@ -581,9 +589,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private UEventObserver mHDMIObserver = new UEventObserver() {
         @Override
         public void onUEvent(UEventObserver.UEvent event) {
-            setHdmiPlugged("1".equals(event.get("SWITCH_STATE")));
+            setHdmiHwPlugged("1".equals(event.get("SWITCH_STATE")));
         }
     };
+
+    BroadcastReceiver mHdmiPluggedReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            boolean plugged
+                = intent.getBooleanExtra(WindowManagerPolicy.EXTRA_HDMI_PLUGGED_STATE, false);
+            setHdmiPlugged(plugged);
+         }
+     };
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -1159,6 +1175,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // Retrieve current sticky dock event broadcast.
             mDockMode = intent.getIntExtra(Intent.EXTRA_DOCK_STATE,
                     Intent.EXTRA_DOCK_STATE_UNDOCKED);
+        }
+        // register for hdmi plugged events
+        filter = new IntentFilter();
+        filter.addAction(WindowManagerPolicy.ACTION_HDMI_PLUGGED);
+        intent = context.registerReceiver(mHdmiPluggedReceiver, filter);
+        if (intent != null) {
+            // Retrieve current sticky dock event broadcast.
+            boolean plugged = intent.getBooleanExtra(WindowManagerPolicy.EXTRA_HDMI_PLUGGED_STATE, false);
+
+            // This dance forces the code in setHdmiPlugged to run.
+            // Always do this so the sticky intent is stuck (to false) if there is no hdmi.
+            mHdmiPlugged = !plugged;
+            setHdmiPlugged(!mHdmiPlugged);
         }
 
         // register for dream-related broadcasts
@@ -4000,6 +4029,26 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    void setHdmiHwPlugged(boolean plugged) {
+        if (mHdmiHwPlugged != plugged) {
+            Slog.e(TAG, "setHdmiHwPlugged " + plugged);
+            mHdmiHwPlugged = plugged;
+            Intent intent = new Intent(ACTION_HDMI_HW_PLUGGED);
+            intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+            intent.putExtra(EXTRA_HDMI_HW_PLUGGED_STATE, plugged);
+            mContext.sendStickyBroadcast(intent);
+
+            if (SystemProperties.getBoolean("ro.vout.dualdisplay", false)) {
+                setDualDisplay(plugged);
+
+                Intent it = new Intent(WindowManagerPolicy.ACTION_HDMI_PLUGGED);
+                it.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+                it.putExtra(WindowManagerPolicy.EXTRA_HDMI_PLUGGED_STATE, plugged);
+                mContext.sendStickyBroadcast(it);
+            }
+        }
+    }
+
     void setHdmiPlugged(boolean plugged) {
         if (mHdmiPlugged != plugged) {
             mHdmiPlugged = plugged;
@@ -4010,6 +4059,65 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
         }
     }
+
+    private static final String VIDEO2_CTRL_PATH = "/sys/class/video2/clone";
+    private static final String VFM_CTRL_PATH = "/sys/class/vfm/map";
+    private static int writeSysfs(String path, String val) {
+        if (!new File(path).exists()) {
+            Log.e(TAG, "File not found: " + path);
+            return 1;
+        }
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(path), 64);
+            try {
+                writer.write(val);
+            } finally {
+                writer.close();
+            }
+            return 0;
+
+        } catch (IOException e) {
+            Log.e(TAG, "IO Exception when write: " + path, e);
+            return 1;
+        }
+    }
+    private static void setDualDisplay(boolean hdmiPlugged) {
+        String isCameraBusy = SystemProperties.get("camera.busy", "0");
+
+        if (!isCameraBusy.equals("0")) {
+            Log.w(TAG, "setDualDisplay, camera is busy");
+            return;
+        }
+
+        if (hdmiPlugged) {
+            writeSysfs(VIDEO2_CTRL_PATH, "0");
+            writeSysfs(VFM_CTRL_PATH, "rm default_ext");
+            writeSysfs(VFM_CTRL_PATH, "add default_ext vdin amvideo2");
+            writeSysfs(VIDEO2_CTRL_PATH, "1");
+        } else {
+            writeSysfs(VIDEO2_CTRL_PATH, "0");
+            writeSysfs(VFM_CTRL_PATH, "rm default_ext");
+            writeSysfs(VFM_CTRL_PATH, "add default_ext vdin vm amvideo");
+        }
+    }
+
+    public static String getCurDisplayMode() {
+        String modeStr;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(DISPLAY_MODE_PATH), 32);
+            try {
+                modeStr = reader.readLine();
+            } finally {
+                reader.close();
+            }
+            return (modeStr == null)? "panel" : modeStr;
+
+        } catch (IOException e) {
+            Log.e(TAG, "IO Exception when read: " + DISPLAY_MODE_PATH, e);
+            return "panel";
+         }
+     }
 
     void initializeHdmiState() {
         boolean plugged = false;
@@ -4041,8 +4149,28 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         // This dance forces the code in setHdmiPlugged to run.
         // Always do this so the sticky intent is stuck (to false) if there is no hdmi.
-        mHdmiPlugged = !plugged;
-        setHdmiPlugged(!mHdmiPlugged);
+        //mHdmiPlugged = !plugged;
+        //setHdmiPlugged(!mHdmiPlugged);
+        mHdmiHwPlugged =  plugged;
+        if (!SystemProperties.getBoolean("ro.vout.dualdisplay", false)) {
+            if (getCurDisplayMode().equals("panel") || !plugged || SystemProperties.getBoolean("ro.platform.has.mbxuimode", false)) {
+                plugged = false;
+            }
+        }
+
+        if (SystemProperties.getBoolean("ro.vout.dualdisplay", false)) {
+            setDualDisplay(plugged);
+        }
+
+        if (SystemProperties.getBoolean("ro.vout.dualdisplay2", false)) {
+            plugged = false;
+            setDualDisplay(plugged);
+        }
+
+        Intent it = new Intent(WindowManagerPolicy.ACTION_HDMI_PLUGGED);
+        it.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+        it.putExtra(WindowManagerPolicy.EXTRA_HDMI_PLUGGED_STATE, plugged);
+        mContext.sendStickyBroadcast(it);
     }
 
     /**

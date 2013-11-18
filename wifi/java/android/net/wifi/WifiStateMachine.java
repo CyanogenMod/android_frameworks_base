@@ -205,6 +205,10 @@ public class WifiStateMachine extends StateMachine {
 
     // Wakelock held during wifi start/stop and driver load/unload
     private PowerManager.WakeLock mWakeLock;
+    private PowerManager.WakeLock mShutdownLock;
+    private PowerManager.WakeLock mHungLock;
+    private PowerManager.WakeLock mSodLock;
+    private PowerManager mPowerManager;
 
     private Context mContext;
 
@@ -596,8 +600,9 @@ public class WifiStateMachine extends StateMachine {
         mDefaultFrameworkScanIntervalMs = mContext.getResources().getInteger(
                 R.integer.config_wifi_framework_scan_interval);
 
-        mDriverStopDelayMs = mContext.getResources().getInteger(
-                R.integer.config_wifi_driver_stop_delay);
+        //mDriverStopDelayMs = mContext.getResources().getInteger(
+        //        R.integer.config_wifi_driver_stop_delay);
+	mDriverStopDelayMs = 5000;
 
         mBackgroundScanSupported = mContext.getResources().getBoolean(
                 R.bool.config_wifi_background_scan_support);
@@ -681,10 +686,13 @@ public class WifiStateMachine extends StateMachine {
 
         mScanResultCache = new LruCache<String, ScanResult>(SCAN_RESULT_CACHE_SIZE);
 
-        PowerManager powerManager = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getName());
+        mPowerManager = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
+	mWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getName());
+	mShutdownLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WifiShutdownLock");
+	mHungLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WifiHungLock");
+	mSodLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WifiSodLock");
 
-        mSuspendWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WifiSuspend");
+        mSuspendWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WifiSuspend");
         mSuspendWakeLock.setReferenceCounted(false);
 
         addState(mDefaultState);
@@ -761,6 +769,48 @@ public class WifiStateMachine extends StateMachine {
     /*********************************************************
      * Methods exposed for public use
      ********************************************************/
+
+    public void acquireShutdownLock() {
+	loge("wifi : acquireShutdownLock");
+	if (!mShutdownLock.isHeld())
+	    mShutdownLock.acquire();
+    }
+
+    public void releaseShutdownLock() {
+	loge("wifi : releaseShutdownLock");
+	if (mShutdownLock.isHeld())
+	    mShutdownLock.release();
+    }
+
+    private void acquireHungLock() {
+	loge("wifi : acquireHungLock");
+	if (!mHungLock.isHeld())
+	    mHungLock.acquire();
+    }
+
+    private void releaseHungLock() {
+	loge("wifi : releaseHungLock");
+	if (mHungLock.isHeld())
+	    mHungLock.release();
+    }
+
+    private void acquireSodLock() {
+	loge("wifi : acquireSodLock");
+	if (!mSodLock.isHeld())
+	    mSodLock.acquire();
+    }
+
+    public void releaseSodLock() {
+	loge("wifi : releaseSodLock");
+	if (mSodLock.isHeld())
+	    mSodLock.release();
+    }
+
+    private boolean isScreenOn() {
+	if (mPowerManager != null)
+	    return mPowerManager.isScreenOn();
+	return true;
+    }
 
     public Messenger getMessenger() {
         return new Messenger(getHandler());
@@ -1392,6 +1442,12 @@ public class WifiStateMachine extends StateMachine {
     private void setCountryCode() {
         String countryCode = Settings.Global.getString(mContext.getContentResolver(),
                 Settings.Global.WIFI_COUNTRY_CODE);
+	if (countryCode == null) {
+	    countryCode = "JP";
+	    Settings.Global.putString(mContext.getContentResolver(),
+		    Settings.Global.WIFI_COUNTRY_CODE,
+		    countryCode);
+	}
         if (countryCode != null && !countryCode.isEmpty()) {
             setCountryCode(countryCode, false);
         } else {
@@ -2148,8 +2204,14 @@ public class WifiStateMachine extends StateMachine {
                     }
                     break;
                 case WifiMonitor.DRIVER_HUNG_EVENT:
-                    setSupplicantRunning(false);
-                    setSupplicantRunning(true);
+		    if (isScreenOn()) {
+			acquireHungLock();
+			setSupplicantRunning(false);
+			setSupplicantRunning(true);
+			releaseHungLock();
+		    } else {
+			setSupplicantRunning(false);
+		    }
                     break;
                 case WifiManager.CONNECT_NETWORK:
                     replyToMessage(message, WifiManager.CONNECT_NETWORK_FAILED,
@@ -2199,6 +2261,7 @@ public class WifiStateMachine extends StateMachine {
         @Override
         public void enter() {
             mWifiNative.unloadDriver();
+	    releaseSodLock();
 
             if (mWifiP2pChannel == null) {
                 mWifiP2pChannel = new AsyncChannel();
@@ -2218,6 +2281,9 @@ public class WifiStateMachine extends StateMachine {
         public boolean processMessage(Message message) {
             switch (message.what) {
                 case CMD_START_SUPPLICANT:
+		    if (!isScreenOn())
+			acquireSodLock();
+		    mWifiNative.killSupplicant(mP2pSupported);
                     if (mWifiNative.loadDriver()) {
                         try {
                             mNwService.wifiFirmwareReload(mInterfaceName, "STA");
@@ -2249,7 +2315,10 @@ public class WifiStateMachine extends StateMachine {
                         * Avoids issues with drivers that do not handle interface down
                         * on a running supplicant properly.
                         */
-                        mWifiNative.killSupplicant(mP2pSupported);
+			/* CT: BCM 40181/40183 goes crazy if supplicant is not stopped before
+			 * module loading so I move the killSupplicant on top of this function
+			 */
+                        //mWifiNative.killSupplicant(mP2pSupported);
                         if(mWifiNative.startSupplicant(mP2pSupported)) {
                             setWifiState(WIFI_STATE_ENABLING);
                             if (DBG) log("Supplicant start successful");
@@ -2260,6 +2329,7 @@ public class WifiStateMachine extends StateMachine {
                         }
                     } else {
                         loge("Failed to load driver");
+			releaseSodLock();
                     }
                     break;
                 case CMD_START_AP:
@@ -2395,6 +2465,7 @@ public class WifiStateMachine extends StateMachine {
                     break;
                 case WifiMonitor.SUP_DISCONNECTION_EVENT:  /* Supplicant connection lost */
                     loge("Connection lost, restart supplicant");
+		    acquireHungLock();
                     handleSupplicantConnectionLoss();
                     handleNetworkDisconnect();
                     mSupplicantStateTracker.sendMessage(CMD_RESET_SUPPLICANT_STATE);
@@ -2404,6 +2475,7 @@ public class WifiStateMachine extends StateMachine {
                         transitionTo(mInitialState);
                     }
                     sendMessageDelayed(CMD_START_SUPPLICANT, SUPPLICANT_RESTART_INTERVAL_MSECS);
+		    releaseHungLock();
                     break;
                 case WifiMonitor.SCAN_RESULTS_EVENT:
                     setScanResults();
@@ -2702,13 +2774,17 @@ public class WifiStateMachine extends StateMachine {
                         handleNetworkDisconnect();
                     }
                     mWakeLock.acquire();
-                    mWifiNative.stopDriver();
+                    //mWifiNative.stopDriver();
+		    mWifiNative.unloadDriver();
                     mWakeLock.release();
                     if (mP2pSupported) {
                         transitionTo(mWaitForP2pDisableState);
                     } else {
                         transitionTo(mDriverStoppingState);
                     }
+		    //setSupplicantRunning(false);
+		    releaseShutdownLock();
+		    releaseSodLock();
                     break;
                 case CMD_START_PACKET_FILTERING:
                     if (message.arg1 == MULTICAST_V6) {
@@ -2865,7 +2941,10 @@ public class WifiStateMachine extends StateMachine {
                     break;
                 case CMD_START_DRIVER:
                     mWakeLock.acquire();
-                    mWifiNative.startDriver();
+		    setSupplicantRunning(false);
+		    //mWifiNative.loadDriver();
+		    setSupplicantRunning(true);
+                    //mWifiNative.startDriver();
                     mWakeLock.release();
                     transitionTo(mDriverStartingState);
                     break;

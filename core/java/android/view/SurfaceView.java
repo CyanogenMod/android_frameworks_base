@@ -114,6 +114,7 @@ public class SurfaceView extends View {
     int mWindowType = WindowManager.LayoutParams.TYPE_APPLICATION_MEDIA;
     
     boolean mIsCreating = false;
+    boolean mOpaque = false;
 
     final Handler mHandler = new Handler() {
         @Override
@@ -142,6 +143,7 @@ public class SurfaceView extends View {
     boolean mRequestedVisible = false;
     boolean mWindowVisibility = false;
     boolean mViewVisibility = false;
+    boolean mRequestedOpaque = false;
     int mRequestedWidth = -1;
     int mRequestedHeight = -1;
     /* Set SurfaceView's format to 565 by default to maintain backward
@@ -439,10 +441,11 @@ public class SurfaceView extends View {
         final boolean formatChanged = mFormat != mRequestedFormat;
         final boolean sizeChanged = mWidth != myWidth || mHeight != myHeight;
         final boolean visibleChanged = mVisible != mRequestedVisible;
+	final boolean opaqueChanged = mOpaque != mRequestedOpaque;
 
         if (force || creating || formatChanged || sizeChanged || visibleChanged
             || mLeft != mLocation[0] || mTop != mLocation[1]
-            || mUpdateWindowNeeded || mReportDrawNeeded || redrawNeeded) {
+            || mUpdateWindowNeeded || mReportDrawNeeded || redrawNeeded || opaqueChanged) {
 
             if (DEBUG) Log.i(TAG, "Changes: creating=" + creating
                     + " format=" + formatChanged + " size=" + sizeChanged
@@ -457,6 +460,7 @@ public class SurfaceView extends View {
                 mWidth = myWidth;
                 mHeight = myHeight;
                 mFormat = mRequestedFormat;
+		mOpaque = mRequestedOpaque;
 
                 // Scaling/Translate window's layout here because mLayout is not used elsewhere.
                 
@@ -469,7 +473,7 @@ public class SurfaceView extends View {
                     mTranslator.translateLayoutParamsInAppWindowToScreen(mLayout);
                 }
                 
-                mLayout.format = mRequestedFormat;
+                mLayout.format = mOpaque ? PixelFormat.VIDEO_HOLE : mRequestedFormat;
                 mLayout.flags |=WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                               | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                               | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -736,6 +740,12 @@ public class SurfaceView extends View {
             // means 565 for SurfaceView
             if (format == PixelFormat.OPAQUE)
                 format = PixelFormat.RGB_565;
+
+	    mRequestedOpaque = (format == PixelFormat.VIDEO_HOLE);
+
+	    if (format == PixelFormat.VIDEO_HOLE) {
+		format = PixelFormat.RGBA_8888;
+	    }
 
             mRequestedFormat = format;
             if (mWindow != null) {
