@@ -101,6 +101,9 @@ import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.CircleBattery;
+import com.android.systemui.statusbar.policy.CircleDockBattery;
+import com.android.systemui.statusbar.policy.DockBatteryController;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.HeadsUpNotificationView;
@@ -169,9 +172,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     // These are no longer handled by the policy, because we need custom strategies for them
     BluetoothController mBluetoothController;
     BatteryController mBatteryController;
+    DockBatteryController mDockBatteryController;
     LocationController mLocationController;
     NetworkController mNetworkController;
     RotationLockController mRotationLockController;
+
+    private boolean mHasDockBattery;
 
     int mNaturalBarHeight = -1;
     int mIconSize = -1;
@@ -231,6 +237,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private int mCarrierLabelHeight;
     private TextView mEmergencyCallLabel;
     private int mNotificationHeaderHeight;
+
+    private CircleBattery mCircleBattery;
+    private CircleDockBattery mCircleDockBattery;
 
     private boolean mShowCarrierInPanel = false;
 
@@ -608,6 +617,36 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         // Other icons
         mLocationController = new LocationController(mContext); // will post a notification
         mBatteryController = new BatteryController(mContext);
+        mBatteryController.addIconView((ImageView)mStatusBarView.findViewById(R.id.battery));
+        mBatteryController.addLabelView((TextView)mStatusBarView.findViewById(R.id.battery_text));
+
+        mCircleBattery = (CircleBattery) mStatusBarView.findViewById(R.id.circle_battery);
+        mBatteryController.addStateChangedCallback(mCircleBattery);
+
+        // Dock Battery support
+        mHasDockBattery = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_hasDockBattery);
+
+        if (mHasDockBattery) {
+            mDockBatteryController = new DockBatteryController(mContext);
+            mDockBatteryController.addIconView(
+                    (ImageView)mStatusBarView.findViewById(R.id.dock_battery));
+            mDockBatteryController.addLabelView(
+                    (TextView)mStatusBarView.findViewById(R.id.dock_battery_text));
+
+            mCircleDockBattery =
+                    (CircleDockBattery) mStatusBarView.findViewById(R.id.circle_dock_battery);
+            final DockBatteryController.DockBatteryStateChangeCallback callback =
+                    (DockBatteryController.DockBatteryStateChangeCallback) mCircleDockBattery;
+            mDockBatteryController.addStateChangedCallback(callback);
+        } else {
+            // Remove dock battery icons if the device doesn't have dock battery support
+            ViewGroup cluster = (ViewGroup) mStatusBarView.findViewById(R.id.signal_battery_cluster);
+            cluster.removeView(cluster.findViewById(R.id.dock_battery));
+            cluster.removeView(cluster.findViewById(R.id.dock_battery_text));
+            cluster.removeView(cluster.findViewById(R.id.circle_dock_battery));
+            mCircleDockBattery = null;
+        }
         mNetworkController = new NetworkController(mContext);
         mBluetoothController = new BluetoothController(mContext);
         mRotationLockController = new RotationLockController(mContext);
@@ -2655,6 +2694,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         animateCollapsePanels();
         updateNotificationIcons();
         resetUserSetupObserver();
+        if (mBatteryController != null) {
+            mBatteryController.updateSettings();
+        }
+        if (mCircleBattery != null) {
+            mCircleBattery.updateSettings();
+        }
+        if (mCircleDockBattery != null) {
+            mCircleDockBattery.updateSettings();
+        }
     }
 
     private void resetUserSetupObserver() {
