@@ -28,6 +28,9 @@ import static com.android.documentsui.model.DocumentInfo.getCursorLong;
 import static com.android.documentsui.model.DocumentInfo.getCursorString;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -36,6 +39,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -321,6 +325,13 @@ public class DirectoryFragment extends Fragment {
         // Kick off loader at least once
         getLoaderManager().restartLoader(mLoaderId, null, mCallbacks);
 
+        // Reattach deletion dialog
+        DeleteDialogFragment delete = (DeleteDialogFragment) getFragmentManager().
+                findFragmentByTag(DeleteDialogFragment.TAG);
+        if (delete != null) {
+            delete.setTargetFragment(this, 0);
+        }
+
         updateDisplayState();
     }
 
@@ -481,7 +492,7 @@ public class DirectoryFragment extends Fragment {
                 return true;
 
             } else if (id == R.id.menu_delete) {
-                onDeleteDocuments(docs);
+                confirmDeleteDocuments(docs);
                 mode.finish();
                 return true;
 
@@ -567,6 +578,18 @@ public class DirectoryFragment extends Fragment {
 
         intent = Intent.createChooser(intent, getActivity().getText(R.string.share_via));
         startActivity(intent);
+    }
+
+    private void confirmDeleteDocuments(List<DocumentInfo> docs) {
+        DeleteDialogFragment fragment = new DeleteDialogFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putParcelableArrayList(DeleteDialogFragment.ARGS_DOCS,
+                new ArrayList<DocumentInfo>(docs));
+        fragment.setArguments(arguments);
+
+        fragment.setTargetFragment(this, 0);
+        fragment.show(getFragmentManager(), DeleteDialogFragment.TAG);
     }
 
     private void onDeleteDocuments(List<DocumentInfo> docs) {
@@ -1093,6 +1116,42 @@ public class DirectoryFragment extends Fragment {
         }
 
         return commonType[0] + "/" + commonType[1];
+    }
+
+    public static class DeleteDialogFragment extends DialogFragment {
+
+        public static final String ARGS_DOCS = "docs";
+        public static final String TAG = "DeleteDialogFragment";
+
+        private List<DocumentInfo> mDocs;
+
+        public DeleteDialogFragment() { }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            mDocs = getArguments().getParcelableArrayList(ARGS_DOCS);
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setMessage(getText(mDocs.size() > 1 ? R.string.delete_confirm
+                    : R.string.delete_confirm_single));
+            builder.setPositiveButton(getText(R.string.menu_delete),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            ((DirectoryFragment) getTargetFragment()).onDeleteDocuments(mDocs);
+                        }
+                    });
+            builder.setNegativeButton(getText(R.string.cancel), null);
+
+            return builder.create();
+        }
+
     }
 
     private void setEnabledRecursive(View v, boolean enabled) {
