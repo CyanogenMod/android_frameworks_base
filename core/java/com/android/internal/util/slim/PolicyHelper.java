@@ -57,12 +57,6 @@ public class PolicyHelper {
         String config;
         if (reset) {
             config = PolicyConstants.POWER_MENU_CONFIG_DEFAULT;
-            Settings.System.putInt(context.getContentResolver(),
-                Settings.System.POWER_MENU_TEXT_COLOR, -2);
-            Settings.System.putInt(context.getContentResolver(),
-                Settings.System.POWER_MENU_ICON_COLOR, -2);
-            Settings.System.putInt(context.getContentResolver(),
-                Settings.System.POWER_MENU_ICON_COLOR_MODE, 0);
         } else {
             config = ConfigSplitHelper.setButtonsConfig(buttonsConfig, true);
         }
