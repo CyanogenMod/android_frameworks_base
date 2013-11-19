@@ -1711,6 +1711,15 @@ public class PhoneNumberUtils
             numbers = numbers + SystemProperties.get(ecclist);
         }
 
+        // Additional emergency numbers can be set by a system property
+        String additionalEcclist = SystemProperties.get("ro.ril.ext.ecclist", null);
+        if (!TextUtils.isEmpty(additionalEcclist)) {
+            if (!TextUtils.isEmpty(numbers)) {
+                numbers = numbers + ",";
+            }
+            numbers = numbers + additionalEcclist;
+        }
+
         if (TextUtils.isEmpty(numbers)) {
             // then read-only ecclist property since old RIL only uses this
             numbers = SystemProperties.get("ro.ril.ecclist");
