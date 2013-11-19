@@ -272,9 +272,11 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final int checkedPos = mListView.getCheckedItemPosition();
         final boolean hasValidSelection = checkedPos != ListView.INVALID_POSITION;
-        if (mAlwaysUseOption && (!hasValidSelection || mLastSelected != checkedPos)) {
+        if (mAlwaysUseOption && hasValidSelection) {
             mAlwaysButton.setEnabled(hasValidSelection);
             mOnceButton.setEnabled(hasValidSelection);
+        }
+        if (!hasValidSelection || mLastSelected != checkedPos) {
             if (hasValidSelection) {
                 mListView.smoothScrollToPosition(checkedPos);
             }
