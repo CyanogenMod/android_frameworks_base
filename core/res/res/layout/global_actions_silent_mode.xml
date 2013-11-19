@@ -30,6 +30,7 @@
         android:focusable="true"
         >
         <ImageView
+            android:id="@+id/icon1"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -58,6 +59,7 @@
         android:focusable="true"
         >
         <ImageView
+            android:id="@+id/icon2"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -87,6 +89,7 @@
         android:focusable="true"
         >
         <ImageView
+            android:id="@+id/icon3"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"

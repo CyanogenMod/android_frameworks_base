@@ -206,5 +206,10 @@
     <color name="keyguard_avatar_frame_pressed_color">#ff35b5e5</color>
 
     <color name="accessibility_focus_highlight">#80ffff00</color>
+
+    <!-- Power menu colors -->
+    <color name="power_menu_icon_default_color">#ffffffff</color>
+    <color name="power_menu_text_default_color">#ffffffff</color>
+
 </resources>
 

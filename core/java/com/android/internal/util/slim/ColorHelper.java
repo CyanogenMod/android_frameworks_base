@@ -16,6 +16,7 @@
 
 package com.android.internal.util.slim;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
@@ -25,10 +26,14 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 
 public class ColorHelper {
 
     public static Bitmap getColoredBitmap(Drawable d, int color) {
+        if (d == null) {
+            return null;
+        }
         Bitmap colorBitmap = ((BitmapDrawable) d).getBitmap();
         Bitmap grayscaleBitmap = toGrayscale(colorBitmap);
         Paint pp = new Paint();
@@ -55,6 +60,18 @@ public class ColorHelper {
         paint.setColorFilter(f);
         c.drawBitmap(bmpOriginal, 0, 0, paint);
         return bmpGrayscale;
+    }
+
+    public static Drawable resize(Context context, Drawable image, int size) {
+        if (image == null || context == null) {
+            return null;
+        }
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size,
+                context.getResources().getDisplayMetrics());
+
+        Bitmap d = ((BitmapDrawable) image).getBitmap();
+        Bitmap bitmapOrig = Bitmap.createScaledBitmap(d, px, px, false);
+        return new BitmapDrawable(context.getResources(), bitmapOrig);
     }
 
 }
