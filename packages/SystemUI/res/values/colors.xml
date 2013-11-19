@@ -47,4 +47,7 @@
     <color name="navigationbar_button_default_color">#FFFFFFFF</color>
     <color name="navigationbar_button_glow_default_color">#FFFFFFFF</color>
 
+    <!-- Navigation ring -->
+    <color name="navring_system_icon_default_color">#FF000000</color>
+
 </resources>
