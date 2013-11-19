@@ -1758,7 +1758,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
         // don't allow expanding via e.g. service call while status bar is hidden
         // due to expanded desktop
-        if (getExpandedDesktopMode() == 2) {
+        if (getExpandedDesktopMode() == Settings.System.EXPANDED_DESKTOP_STATUS_BAR_HIDDEN
+                && !mExpandedVisible) {
             return;
         }
 
@@ -1837,7 +1838,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
         // don't allow expanding via e.g. service call while status bar is hidden
         // due to expanded desktop
-        if (getExpandedDesktopMode() == 2) {
+        if (getExpandedDesktopMode() == Settings.System.EXPANDED_DESKTOP_STATUS_BAR_HIDDEN
+                && !mExpandedVisible) {
             return;
         }
 
