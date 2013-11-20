@@ -1356,5 +1356,6 @@
         <item>Trying to Keep device awake</item>
         <item>Trying to access location</item>
         <item>Trying to access location</item>
+        <item>Trying to turn on/off Wifi</item>
     </string-array>
 </resources>
