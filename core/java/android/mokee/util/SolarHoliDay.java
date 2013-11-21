@@ -24,7 +24,7 @@ public class SolarHoliDay {
 	public static String getSolarHoliDay(int currentMonth, int currentDayForMonth) {
            Resources res = Resources.getSystem();
            String num_date = String.format("%02d", currentMonth + 1) + "" + String.format("%02d", currentDayForMonth);
-           String[] solarHolidayArray = res.getStringArray(com.mokee.internal.R.array.solar_holiday);
+           String[] solarHolidayArray = res.getStringArray(com.android.internal.R.array.solar_holiday);
            for(int i = 0; i < solarHolidayArray.length; i++) {
                 String[] solarHolidayDateStr = solarHolidayArray[i].split(" ");
                 if (solarHolidayDateStr[0].equals(num_date)) {

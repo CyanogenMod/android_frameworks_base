@@ -107,7 +107,7 @@ public class SolarTerm {
     0xA5,   0xC3,   0xA5,   0xB5,   0xA6,   0xA6,   0x87,   0x88,   0x78,   0x78,   0x87,   0x87};     //2050
    public static String getSolarTermStr (int year, int month, int day) {
        Resources res = Resources.getSystem();
-       String [] solarArrayStr = res.getStringArray(com.mokee.internal.R.array.solar_term);
+       String [] solarArrayStr = res.getStringArray(com.android.internal.R.array.solar_term);
        String SolarTermStr="";
        int temp;
        int result = 0;

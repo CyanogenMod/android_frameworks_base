@@ -26,7 +26,7 @@ public class LunarFestival {
 
     public static String getLunarFestival(String chinadate, Lunar lunar) {
         Resources res = Resources.getSystem();
-        String[] lunarFestivalArray = res.getStringArray(com.mokee.internal.R.array.lunar_festival);
+        String[] lunarFestivalArray = res.getStringArray(com.android.internal.R.array.lunar_festival);
         chinadate = chinadate.substring(chinadate.length() - 4, chinadate.length());
         for (int i = 0; i < lunarFestivalArray.length; i++) {
             String[] lunar_str = lunarFestivalArray[i].split(" ");

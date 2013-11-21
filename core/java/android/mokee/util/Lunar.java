@@ -93,13 +93,13 @@ public class Lunar {
     }
 
     public String animalsYear() {
-        final String[] Animals = res.getStringArray(com.mokee.internal.R.array.animals);
+        final String[] Animals = res.getStringArray(com.android.internal.R.array.animals);
         return Animals[(year - 4) % 12];
     }
 
     private String cyclicalm(int num) {
-        final String[] Gan = res.getStringArray(com.mokee.internal.R.array.gan);
-        final String[] Zhi = res.getStringArray(com.mokee.internal.R.array.zhi);
+        final String[] Gan = res.getStringArray(com.android.internal.R.array.gan);
+        final String[] Zhi = res.getStringArray(com.android.internal.R.array.zhi);
         return (Gan[num % 10] + Zhi[num % 12]);
     }
 
@@ -113,13 +113,13 @@ public class Lunar {
         int leapMonth = 0;
         res = Resources.getSystem();
         mCalendar = cal;
-        chineseNumber = res.getStringArray(com.mokee.internal.R.array.chinesenumber);
-        lunarMonthName = res.getStringArray(com.mokee.internal.R.array.lunar_month_name);
-        String format1 = res.getString(com.mokee.internal.R.string.status_format1);
+        chineseNumber = res.getStringArray(com.android.internal.R.array.chinesenumber);
+        lunarMonthName = res.getStringArray(com.android.internal.R.array.lunar_month_name);
+        String format1 = res.getString(com.android.internal.R.string.status_format1);
         chineseDateFormat = new SimpleDateFormat(format1);
         Date baseDate = null;
         try {
-            String format2 = res.getString(com.mokee.internal.R.string.status_format2);
+            String format2 = res.getString(com.android.internal.R.string.status_format2);
             baseDate = chineseDateFormat.parse(format2);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -175,24 +175,24 @@ public class Lunar {
     }
 
     public String getChinaDayString(int day) {
-        String chineseTen[] = res.getStringArray(com.mokee.internal.R.array.chineseten);
+        String chineseTen[] = res.getStringArray(com.android.internal.R.array.chineseten);
         int n = day % 10 == 0 ? 9 : day % 10 - 1;
         if (day > 30)
             return "";
         else if (day == 10)
-            return res.getString(com.mokee.internal.R.string.status_chushi);
+            return res.getString(com.android.internal.R.string.status_chushi);
         else if (day == 20)
-            return res.getString(com.mokee.internal.R.string.status_ershi);
+            return res.getString(com.android.internal.R.string.status_ershi);
         else if (day == 30)
-            return res.getString(com.mokee.internal.R.string.status_sanshi);
+            return res.getString(com.android.internal.R.string.status_sanshi);
         else
             return chineseTen[day / 10] + chineseNumber[n];
     }
 
     public String toString() {
-        String year1 = res.getString(com.mokee.internal.R.string.status_year);
-        String run1 = res.getString(com.mokee.internal.R.string.status_leap);
-        String month1 = res.getString(com.mokee.internal.R.string.status_month);
+        String year1 = res.getString(com.android.internal.R.string.status_year);
+        String run1 = res.getString(com.android.internal.R.string.status_leap);
+        String month1 = res.getString(com.android.internal.R.string.status_month);
         return cyclical() + animalsYear() + year1 + (leap ? run1 : "") + lunarMonthName[month - 1]
                 + month1
                 + getChinaDayString(day);

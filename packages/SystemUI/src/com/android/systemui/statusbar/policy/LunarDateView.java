@@ -127,7 +127,7 @@ public class LunarDateView extends TextView implements OnClickListener, OnLongCl
     protected void updateClock() {
         Resources res = mContext.getResources();
         if (MoKeeUtils.isChineseLanguage()) {
-            CharSequence mDateFormatString = res.getText(com.mokee.internal.R.string.abbrev_wday_month_day_year);
+            CharSequence mDateFormatString = res.getText(com.android.internal.R.string.abbrev_wday_month_day_year);
             setText(buildLunarDate(DateFormat.format(mDateFormatString, new Date()).toString()));
             setVisibility(View.VISIBLE);
             return;

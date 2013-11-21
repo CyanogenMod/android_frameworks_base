@@ -54,14 +54,14 @@ public class DateUtils
      * Exact time display for Chinese
      */
     private static final int []sAmPmCN = new int[] {
-    	com.mokee.internal.R.string.lc,
-        com.mokee.internal.R.string.lm,
-        com.mokee.internal.R.string.zc,
-        com.mokee.internal.R.string.sw,
-        com.mokee.internal.R.string.zw,
-        com.mokee.internal.R.string.xw,
-        com.mokee.internal.R.string.bw,
-        com.mokee.internal.R.string.sy
+    	com.android.internal.R.string.lc,
+        com.android.internal.R.string.lm,
+        com.android.internal.R.string.zc,
+        com.android.internal.R.string.sw,
+        com.android.internal.R.string.zw,
+        com.android.internal.R.string.xw,
+        com.android.internal.R.string.bw,
+        com.android.internal.R.string.sy
     };
 
     /**
