@@ -17,40 +17,40 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- CAF -->
     <string-array name="app_ops_labels">
-        <item>Probeert toegang te krijgen tot locatie</item>
-        <item>Probeert toegang te krijgen tot locatie</item>
-        <item>Probeert toegang te krijgen tot locatie</item>
-        <item>Probeert trillen te gebruiken</item>
-        <item>Probeert contacten te lezen</item>
-        <item>Probeert contacten aan te passen</item>
-        <item>Probeert oproeplogboek te lezen</item>
-        <item>Probeert oproeplogboek aan te passen</item>
-        <item>Probeert agenda te lezen</item>
-        <item>Probeert agenda aan te passen</item>
-        <item>Probeert toegang te krijgen tot locatie</item>
-        <item>Probeert melding te tonen</item>
-        <item>Probeert toegang te krijgen tot locatie</item>
-        <item>Probeert te bellen</item>
-        <item>Probeert sms/mms te lezen</item>
-        <item>Probeert sms/mms te schrijven/wijzigen</item>
-        <item>Probeert sms/mms te ontvangen</item>
-        <item>Probeert sms/mms te ontvangen</item>
-        <item>Probeert sms/mms te ontvangen</item>
-        <item>Probeert sms/mms te ontvangen</item>
-        <item>Probeert sms/mms te verzenden</item>
-        <item>Probeert sms/mms te lezen</item>
-        <item>Probeert sms/mms te schrijven/wijzigen</item>
-        <item>Probeert instellingen aan te passen</item>
-        <item>Probeert op de voorgrond te komen</item>
-        <item>Probeert toegang te krijgen tot meldingen</item>
-        <item>Probeert toegang te krijgen tot Camera</item>
-        <item>Probeert audio op te nemen</item>
-        <item>Probeert audio af te spelen</item>
-        <item>Probeert klembord te lezen</item>
-        <item>Probeert klembord aan te passen</item>
-        <item>Probeert wifi in/uit te schakelen</item>
-        <item>Probeert Bluetooth in/uit te schakelen</item>
-        <item>Probeert mobiele gegevens in/uit te schakelen</item>
-        <item>Probeert apparaat ontwaken in te plannen</item>
+        <item>probeert toegang te krijgen tot locatie</item>
+        <item>probeert toegang te krijgen tot locatie</item>
+        <item>probeert toegang te krijgen tot locatie</item>
+        <item>probeert trillen te gebruiken</item>
+        <item>probeert contacten te lezen</item>
+        <item>probeert contacten aan te passen</item>
+        <item>probeert oproeplogboek te lezen</item>
+        <item>probeert oproeplogboek aan te passen</item>
+        <item>probeert agenda te lezen</item>
+        <item>probeert agenda aan te passen</item>
+        <item>probeert toegang te krijgen tot locatie</item>
+        <item>probeert melding te tonen</item>
+        <item>probeert toegang te krijgen tot locatie</item>
+        <item>probeert te bellen</item>
+        <item>probeert sms/mms te lezen</item>
+        <item>probeert sms/mms te schrijven/wijzigen</item>
+        <item>probeert sms/mms te ontvangen</item>
+        <item>probeert sms/mms te ontvangen</item>
+        <item>probeert sms/mms te ontvangen</item>
+        <item>probeert sms/mms te ontvangen</item>
+        <item>probeert sms/mms te verzenden</item>
+        <item>probeert sms/mms te lezen</item>
+        <item>probeert sms/mms te schrijven/wijzigen</item>
+        <item>probeert instellingen aan te passen</item>
+        <item>probeert op de voorgrond te komen</item>
+        <item>probeert toegang te krijgen tot meldingen</item>
+        <item>probeert toegang te krijgen tot Camera</item>
+        <item>probeert audio op te nemen</item>
+        <item>probeert audio af te spelen</item>
+        <item>probeert klembord te lezen</item>
+        <item>probeert klembord aan te passen</item>
+        <item>probeert wifi in/uit te schakelen</item>
+        <item>probeert Bluetooth in/uit te schakelen</item>
+        <item>probeert mobiele gegevens in/uit te schakelen</item>
+        <item>probeert apparaat ontwaken in te plannen</item>
     </string-array>
 </resources>
