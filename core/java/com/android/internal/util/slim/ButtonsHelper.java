@@ -150,24 +150,40 @@ public class ButtonsHelper {
     public static Drawable getButtonIconImage(Context context,
             String clickAction, String customIcon) {
         int resId = -1;
+        Drawable d = null;
         PackageManager pm = context.getPackageManager();
         if (pm == null) {
             return null;
         }
 
-        if (customIcon != null && customIcon.startsWith(ButtonsConstants.SYSTEM_ICON_IDENTIFIER)) {
-            Resources systemResources;
-            try {
-                systemResources = pm.getResourcesForApplication(SYSTEM_METADATA_NAME);
-            } catch (Exception e) {
-                Log.e("ButtonsHelper:", "can't access system resources",e);
-                return null;
-            }
+        Resources systemUiResources;
+        try {
+            systemUiResources = pm.getResourcesForApplication(SYSTEMUI_METADATA_NAME);
+        } catch (Exception e) {
+            Log.e("ButtonsHelper:", "can't access systemui resources",e);
+            return null;
+        }
 
-            resId = systemResources.getIdentifier(customIcon.substring(
+        if (!clickAction.startsWith("**")) {
+            try {
+                d = pm.getActivityIcon(Intent.parseUri(clickAction, 0));
+            } catch (NameNotFoundException e) {
+                resId = systemUiResources.getIdentifier(
+                    SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_null", null, null);
+                if (resId > 0) {
+                    d = systemUiResources.getDrawable(resId);
+                    return d;
+                }
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (customIcon != null && customIcon.startsWith(ButtonsConstants.SYSTEM_ICON_IDENTIFIER)) {
+            resId = systemUiResources.getIdentifier(customIcon.substring(
                         ButtonsConstants.SYSTEM_ICON_IDENTIFIER.length()), "drawable", "android");
             if (resId > 0) {
-                return systemResources.getDrawable(resId);
+                return systemUiResources.getDrawable(resId);
             }
         } else if (customIcon != null && !customIcon.equals(ButtonsConstants.ICON_EMPTY)) {
             File f = new File(Uri.parse(customIcon).getPath());
@@ -178,33 +194,13 @@ public class ButtonsHelper {
                 return null;
             }
         } else if (clickAction.startsWith("**")) {
-            Resources systemUiResources;
-            try {
-                systemUiResources = pm.getResourcesForApplication(SYSTEMUI_METADATA_NAME);
-            } catch (Exception e) {
-                Log.e("ButtonsHelper:", "can't access systemui resources",e);
-                return null;
-            }
-
             resId = getButtonsSystemIcon(systemUiResources, clickAction);
 
             if (resId > 0) {
-                try {
-                    return systemUiResources.getDrawable(resId);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            try {
-                return pm.getActivityIcon(Intent.parseUri(clickAction, 0));
-            } catch (NameNotFoundException e) {
-                e.printStackTrace();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
+                return systemUiResources.getDrawable(resId);
             }
         }
-        return null;
+        return d;
     }
 
     private static int getButtonsSystemIcon(Resources systemUiResources, String clickAction) {

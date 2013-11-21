@@ -21,7 +21,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.provider.Settings;
 import android.net.Uri;
@@ -78,7 +77,6 @@ public class ShortcutsWidget extends LinearLayout {
 
     private ArrayList<ButtonConfig> mButtonsConfig;
 
-    private ShortcutsSettingsObserver mObserver = null;
     private View.OnClickListener mExternalClickListener;
     private View.OnLongClickListener mExternalLongClickListener;
 
@@ -106,36 +104,7 @@ public class ShortcutsWidget extends LinearLayout {
         updateShortcuts();
     }
 
-    private class ShortcutsSettingsObserver extends ContentObserver {
-        public ShortcutsSettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        public void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_SHORTCUTS_CONFIG), true,
-                    this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_SHORTCUTS_COLOR), true, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_SHORTCUTS_COLOR_MODE), true, this,
-                    UserHandle.USER_ALL);
-        }
-
-        public void unobserve() {
-            mContext.getContentResolver().unregisterContentObserver(this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            updateShortcuts();
-        }
-    }
-
-    private void updateShortcuts() {
+    public void updateShortcuts() {
         ContentResolver resolver = mContext.getContentResolver();
 
         mButtonsConfig = ButtonsHelper.getNotificationsShortcutConfig(mContext);
@@ -156,6 +125,10 @@ public class ShortcutsWidget extends LinearLayout {
         } else {
             removeAllViews();
         }
+    }
+
+    public boolean hasAppBinded() {
+        return mActive;
     }
 
     private void modifyShortcutLayout() {
@@ -193,10 +166,6 @@ public class ShortcutsWidget extends LinearLayout {
 
     public void setupShortcuts() {
         destroyShortcuts();
-
-        mObserver = new ShortcutsSettingsObserver(mHandler);
-        mObserver.observe();
-
         recreateShortcutLayout();
     }
 
@@ -204,10 +173,6 @@ public class ShortcutsWidget extends LinearLayout {
         try {
             removeAllViews();
         } catch (Exception e) {
-        }
-
-        if (mObserver != null) {
-            mObserver.unobserve();
         }
     }
 

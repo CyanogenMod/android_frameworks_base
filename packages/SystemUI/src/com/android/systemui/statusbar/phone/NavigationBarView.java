@@ -25,6 +25,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -113,7 +115,8 @@ public class NavigationBarView extends LinearLayout {
 
     private int mNavBarButtonColor;
     private int mNavBarButtonColorMode;
-    private boolean mAppIsBinded = false;
+    private boolean mAppIsBinded;
+    private boolean mAppIsMissing;
 
     private FrameLayout mRot0;
     private FrameLayout mRot90;
@@ -326,6 +329,8 @@ public class NavigationBarView extends LinearLayout {
         ((LinearLayout) mRot90.findViewById(R.id.nav_buttons)).removeAllViews();
         ((LinearLayout) mRot90.findViewById(R.id.lights_out)).removeAllViews();
 
+        mAppIsBinded = false;
+
         for (int i = 0; i <= 1; i++) {
             boolean landscape = (i == 1);
 
@@ -342,7 +347,6 @@ public class NavigationBarView extends LinearLayout {
             addButton(navButtonLayout, leftMenuKeyView, landscape);
             addLightsOutButton(lightsOut, leftMenuKeyView, landscape, true);
 
-            mAppIsBinded = false;
             ButtonConfig buttonConfig;
 
             for (int j = 0; j < mButtonsConfig.size(); j++) {
@@ -438,6 +442,10 @@ public class NavigationBarView extends LinearLayout {
             mButtonIdList.add(buttonId);
         }
 
+        if (!clickAction.startsWith("**")) {
+            mAppIsBinded = true;
+        }
+
         boolean colorize = true;
         if (iconUri != null && !iconUri.equals(ButtonsConstants.ICON_EMPTY)
                 && !iconUri.startsWith(ButtonsConstants.SYSTEM_ICON_IDENTIFIER)
@@ -452,10 +460,10 @@ public class NavigationBarView extends LinearLayout {
                 v.setPaddingRelative(appIconPadding[0], appIconPadding[1],
                         appIconPadding[2], appIconPadding[3]);
             }
-            if (mNavBarButtonColorMode != 0) {
+            if (mNavBarButtonColorMode != 0
+                && !iconUri.startsWith(ButtonsConstants.SYSTEM_ICON_IDENTIFIER)) {
                 colorize = false;
             }
-            mAppIsBinded = true;
         }
 
         Drawable d = ButtonsHelper.getButtonIconImage(mContext, clickAction, iconUri);
@@ -470,6 +478,35 @@ public class NavigationBarView extends LinearLayout {
         v.setGlowBackground(landscape ? R.drawable.ic_sysbar_highlight_land
                 : R.drawable.ic_sysbar_highlight);
         return v;
+    }
+
+    public boolean hasAppBinded() {
+        ButtonConfig buttonConfig;
+        if (mAppIsBinded && mButtonsConfig != null) {
+           for (int j = 0; j < mButtonsConfig.size(); j++) {
+               buttonConfig = mButtonsConfig.get(j);
+                if (!buttonConfig.getClickAction().startsWith("**")) {
+                    try {
+                        Intent in = Intent.parseUri(buttonConfig.getClickAction(), 0);
+                        PackageManager pm = mContext.getPackageManager();
+                        ActivityInfo aInfo = in.resolveActivityInfo(
+                            pm, PackageManager.GET_ACTIVITIES);
+                        if (aInfo == null) {
+                            mAppIsMissing = true;
+                            return true;
+                        }
+                    } catch (Exception e) {
+                        mAppIsMissing = true;
+                        return true;
+                    }
+                }
+            }
+        }
+        if (mAppIsMissing) {
+            mAppIsMissing = false;
+            return true;
+        }
+        return false;
     }
 
     private View generateMenuKey(boolean landscape, int keyId) {

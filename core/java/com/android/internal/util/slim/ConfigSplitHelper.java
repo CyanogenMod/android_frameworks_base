@@ -47,7 +47,7 @@ public class ConfigSplitHelper {
             counter++;
             if (counter == 1) {
                 buttonConfig = new ButtonConfig(configValue,
-                            AppHelper.getProperSummary(pm, settingsResources,
+                            AppHelper.getProperSummary(context, pm, settingsResources,
                             configValue, values, entries), null, null, null);
             }
             if (counter == 2) {
@@ -59,7 +59,7 @@ public class ConfigSplitHelper {
                 } else {
                     buttonConfig.setLongpressAction(configValue);
                     buttonConfig.setLongpressActionDescription(
-                            AppHelper.getProperSummary(pm, settingsResources,
+                            AppHelper.getProperSummary(context, pm, settingsResources,
                             configValue, values, entries));
                 }
             }
