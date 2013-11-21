@@ -1648,6 +1648,23 @@ public class Camera {
          * as a set. Either they are all valid, or none of them are.
          */
         public Point mouth = null;
+
+        /**
+         * {@hide}
+         */
+        public int smileDegree = 0;
+        /**
+         * {@hide}
+         */
+        public int smileScore = 0;
+        /**
+         * {@hide}
+         */
+        public int blinkDetected = 0;
+        /**
+         * {@hide}
+         */
+        public int faceRecognised = 0;
     }
 
     // Error codes match the enum in include/ui/Camera.h
@@ -1730,6 +1747,27 @@ public class Camera {
         String s = native_getParameters();
         p.unflatten(s);
         return p;
+    }
+
+    /** @hide
+     * Returns the current cct value of white balance.
+     *
+     * If it's in AWB mode, cct is determined by stats/awb module.
+     *
+     * If it's in Manual WB mode, it actually returns cct value
+     *     set by user via {@link #setParameters(Camera.Parameters)}.
+     */
+    public int getWBCurrentCCT() {
+        Parameters p = new Parameters();
+        String s = native_getParameters();
+        p.unflatten(s);
+
+        int cct = 0;
+        if (p.getWBCurrentCCT() != null) {
+            cct = Integer.parseInt(p.getWBCurrentCCT());
+        }
+
+        return cct;
     }
 
     /**
@@ -1873,6 +1911,27 @@ public class Camera {
         /** y co-ordinate for the touch event */
         public int yCoordinate;
     };
+
+    /** @hide
+     * Returns the current focus position.
+     *
+     * If it's in AF mode, it's the lens position after af is done.
+     *
+     * If it's in Manual Focus mode, it actually returns the value
+     *     set by user via {@link #setParameters(Camera.Parameters)}.
+     */
+    public int getCurrentFocusPosition() {
+        Parameters p = new Parameters();
+        String s = native_getParameters();
+        p.unflatten(s);
+
+        int focus_pos = -1;
+        if (p.getCurrentFocusPosition() != null) {
+            focus_pos = Integer.parseInt(p.getCurrentFocusPosition());
+        }
+        return focus_pos;
+    }
+
     /* ### QC ADD-ONS: END */
     /**
      * Image size (width and height dimensions).
@@ -2093,6 +2152,10 @@ public class Camera {
         public static final String WHITE_BALANCE_CLOUDY_DAYLIGHT = "cloudy-daylight";
         public static final String WHITE_BALANCE_TWILIGHT = "twilight";
         public static final String WHITE_BALANCE_SHADE = "shade";
+        /** @hide
+         * wb manual cct mode.
+         */
+        public static final String WHITE_BALANCE_MANUAL_CCT = "manual-cct";
 
         // Values for color effect settings.
         public static final String EFFECT_NONE = "none";
@@ -2359,6 +2422,11 @@ public class Camera {
          * @see #FOCUS_MODE_CONTINUOUS_VIDEO
          */
         public static final String FOCUS_MODE_CONTINUOUS_PICTURE = "continuous-picture";
+
+        /** @hide
+         *  manual focus mode
+         */
+        public static final String FOCUS_MODE_MANUAL_POSITION = "manual";
 
         // Indices for focus distance array.
         /**
@@ -4267,7 +4335,12 @@ public class Camera {
         private static final String KEY_QC_TOUCH_AF_AEC = "touch-af-aec";
         private static final String KEY_QC_TOUCH_INDEX_AEC = "touch-index-aec";
         private static final String KEY_QC_TOUCH_INDEX_AF = "touch-index-af";
+        private static final String KEY_QC_MANUAL_FOCUS_POSITION = "manual-focus-position";
+        private static final String KEY_QC_MANUAL_FOCUS_POS_TYPE = "manual-focus-pos-type";
         private static final String KEY_QC_SCENE_DETECT = "scene-detect";
+        private static final String KEY_QC_EXPOSURE_TIME = "exposure-time";
+        private static final String KEY_QC_MIN_EXPOSURE_TIME = "min-exposure-time";
+        private static final String KEY_QC_MAX_EXPOSURE_TIME = "max-exposure-time";
         private static final String KEY_QC_LENSSHADE = "lensshade";
         private static final String KEY_QC_HISTOGRAM = "histogram";
         private static final String KEY_QC_SKIN_TONE_ENHANCEMENT = "skinToneEnhancement";
@@ -4288,6 +4361,11 @@ public class Camera {
         private static final String KEY_QC_CAMERA_MODE = "camera-mode";
         private static final String KEY_QC_VIDEO_HIGH_FRAME_RATE = "video-hfr";
         private static final String KEY_QC_VIDEO_HDR = "video-hdr";
+        private static final String KEY_QC_WB_MANUAL_CCT = "wb-manual-cct";
+        private static final String KEY_QC_MIN_WB_CCT = "min-wb-cct";
+        private static final String KEY_QC_MAX_WB_CCT = "max-wb-cct";
+        private static final String KEY_QC_AUTO_HDR_ENABLE = "auto-hdr-enable";
+
         /** @hide
         * KEY_QC_AE_BRACKET_HDR
         **/
@@ -4967,6 +5045,42 @@ public class Camera {
          }
 
          /** @hide
+         * Sets the exposure time.
+         *
+         * @param value exposure time.
+         */
+         public void setExposureTime(int value) {
+            set(KEY_QC_EXPOSURE_TIME, Integer.toString(value));
+         }
+
+         /** @hide
+         * Gets the current exposure time.
+         *
+         * @return exposure time.
+         */
+         public String getExposureTime() {
+            return get(KEY_QC_EXPOSURE_TIME);
+         }
+
+         /** @hide
+         * Gets the min supported exposure time.
+         *
+         * @return min supported exposure time.
+         */
+         public String getMinExposureTime() {
+            return get(KEY_QC_MIN_EXPOSURE_TIME);
+         }
+
+         /** @hide
+         * Gets the max supported exposure time.
+         *
+         * @return max supported exposure time.
+         */
+         public String getMaxExposureTime() {
+            return get(KEY_QC_MAX_EXPOSURE_TIME);
+         }
+
+         /** @hide
          * Gets the current LensShade Mode.
          *
          * @return LensShade Mode
@@ -5022,6 +5136,42 @@ public class Camera {
          }
 
          /** @hide
+         * Set white balance manual cct value.
+         *
+         * @param cct user CCT setting.
+         */
+         public void setWBManualCCT(int cct) {
+            set(KEY_QC_WB_MANUAL_CCT, Integer.toString(cct));
+         }
+
+         /** @hide
+         * Gets the WB min supported CCT.
+         *
+         * @return min cct value.
+         */
+         public String getWBMinCCT() {
+            return get(KEY_QC_MIN_WB_CCT);
+         }
+
+         /** @hide
+         * Gets the WB max supported CCT.
+         *
+         * @return max cct value.
+         */
+         public String getMaxWBCCT() {
+            return get(KEY_QC_MAX_WB_CCT);
+         }
+
+         /** @hide
+         * Gets the current WB CCT.
+         *
+         * @return CCT value
+         */
+         public String getWBCurrentCCT() {
+            return get(KEY_QC_WB_MANUAL_CCT);
+         }
+
+         /** @hide
          * Gets the current ZSL Mode.
          *
          * @return ZSL mode value
@@ -5037,6 +5187,15 @@ public class Camera {
          */
          public void setZSLMode(String zsl) {
             set(KEY_QC_ZSL, zsl);
+         }
+
+         /** @hide
+         * Sets the current Auto HDR Mode.
+         * @ auto_hdr auto hdr string for enable/disable
+         * @return null
+         */
+         public void setAutoHDRMode(String auto_hdr){
+             set(KEY_QC_AUTO_HDR_ENABLE,auto_hdr);
          }
 
          /** @hide
@@ -5058,6 +5217,28 @@ public class Camera {
          public void setCameraMode(int cameraMode) {
            set(KEY_QC_CAMERA_MODE, cameraMode);
          }
+
+         private static final int MANUAL_FOCUS_POS_TYPE_INDEX = 0;
+         private static final int MANUAL_FOCUS_POS_TYPE_DAC = 1;
+         /** @hide
+         * Set focus position.
+         *
+         * @param pos user setting of focus position.
+         */
+         public void setFocusPosition(int type, int pos) {
+           set(KEY_QC_MANUAL_FOCUS_POS_TYPE, Integer.toString(type));
+           set(KEY_QC_MANUAL_FOCUS_POSITION, Integer.toString(pos));
+         }
+
+         /** @hide
+         * Gets the current focus position.
+         *
+         * @return current focus position
+         */
+         public String getCurrentFocusPosition() {
+            return get(KEY_QC_MANUAL_FOCUS_POSITION);
+         }
+
 
          /** @hide
          * Gets the current HFR Mode.
