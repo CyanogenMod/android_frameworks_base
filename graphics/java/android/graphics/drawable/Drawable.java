@@ -969,7 +969,7 @@ public abstract class Drawable {
         // drawn to the screen.
         if (opts == null) opts = new BitmapFactory.Options();
         opts.inScreenDensity = res != null
-                ? res.getDisplayMetrics().noncompatDensityDpi : DisplayMetrics.DENSITY_DEVICE;
+                ? res.getDisplayMetrics().noncompatDensityDpi : DisplayMetrics.getDeviceDensity();
         Bitmap  bm = BitmapFactory.decodeResourceStream(res, value, is, pad, opts);
         if (bm != null) {
             byte[] np = bm.getNinePatchChunk();
