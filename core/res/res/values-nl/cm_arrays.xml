@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- CAF -->
+    <string-array name="app_ops_labels">
+        <item>Probeert toegang te krijgen tot locatie</item>
+        <item>Probeert toegang te krijgen tot locatie</item>
+        <item>Probeert toegang te krijgen tot locatie</item>
+        <item>Probeert trillen te gebruiken</item>
+        <item>Probeert contacten te lezen</item>
+        <item>Probeert contacten aan te passen</item>
+        <item>Probeert oproeplogboek te lezen</item>
+        <item>Probeert oproeplogboek aan te passen</item>
+        <item>Probeert agenda te lezen</item>
+        <item>Probeert agenda aan te passen</item>
+        <item>Probeert toegang te krijgen tot locatie</item>
+        <item>Probeert melding te tonen</item>
+        <item>Probeert toegang te krijgen tot locatie</item>
+        <item>Probeert te bellen</item>
+        <item>Probeert sms/mms te lezen</item>
+        <item>Probeert sms/mms te schrijven/wijzigen</item>
+        <item>Probeert sms/mms te ontvangen</item>
+        <item>Probeert sms/mms te ontvangen</item>
+        <item>Probeert sms/mms te ontvangen</item>
+        <item>Probeert sms/mms te ontvangen</item>
+        <item>Probeert sms/mms te verzenden</item>
+        <item>Probeert sms/mms te lezen</item>
+        <item>Probeert sms/mms te schrijven/wijzigen</item>
+        <item>Probeert instellingen aan te passen</item>
+        <item>Probeert op de voorgrond te komen</item>
+        <item>Probeert toegang te krijgen tot meldingen</item>
+        <item>Probeert toegang te krijgen tot Camera</item>
+        <item>Probeert audio op te nemen</item>
+        <item>Probeert audio af te spelen</item>
+        <item>Probeert klembord te lezen</item>
+        <item>Probeert klembord aan te passen</item>
+        <item>Probeert wifi in/uit te schakelen</item>
+        <item>Probeert Bluetooth in/uit te schakelen</item>
+        <item>Probeert mobiele gegevens in/uit te schakelen</item>
+        <item>Probeert apparaat ontwaken in te plannen</item>
+    </string-array>
+</resources>
