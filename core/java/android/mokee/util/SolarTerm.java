@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 The MoKee Android Open Source Project
+ * Copyright (C) 2013 The MoKee OpenSource Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package android.util;
+package android.mokee.util;
 
-import android.content.Context;
 import android.content.res.Resources;
 
 import com.android.internal.R;
@@ -24,7 +23,7 @@ import com.android.internal.R;
 public class SolarTerm {
    static int START_YEAR = 1970;
 
-   static  int[] arrays=new int[] {
+   static int[] arrays = new int[] {
     0x95,   0xB4,   0x96,   0xA5,   0x96,   0x97,   0x88,   0x78,   0x78,   0x69,   0x78,   0x87,       //1970
     0x96,   0xB4,   0x96,   0xA6,   0x97,   0x97,   0x78,   0x79,   0x79,   0x69,   0x78,   0x77,       //1971
     0x96,   0xA4,   0xA5,   0xA5,   0xA6,   0xA6,   0x88,   0x88,   0x88,   0x78,   0x87,   0x87,       //1972
@@ -106,23 +105,23 @@ public class SolarTerm {
     0x95,   0xB4,   0xA5,   0xB4,   0xA5,   0xA5,   0x97,   0x87,   0x87,   0x88,   0x86,   0x96,       //2048
     0xA4,   0xC3,   0xA5,   0xA5,   0xA5,   0xA6,   0x97,   0x87,   0x87,   0x78,   0x87,   0x86,       //2049
     0xA5,   0xC3,   0xA5,   0xB5,   0xA6,   0xA6,   0x87,   0x88,   0x78,   0x78,   0x87,   0x87};     //2050
-   public static String getSolarTermStr(int year,int month,int day,Context context){
-       Resources res=context.getResources();
-       String [] solarArrayStr=res.getStringArray(com.mokee.internal.R.array.solar_term);
+   public static String getSolarTermStr (int year, int month, int day) {
+       Resources res = Resources.getSystem();
+       String [] solarArrayStr = res.getStringArray(com.mokee.internal.R.array.solar_term);
        String SolarTermStr="";
        int temp;
        int result = 0;
        int index = (year - START_YEAR) * 12 + month;
        String s = Integer.toHexString(arrays[index]);
-       if(day < 15){
-           temp = 15 - Integer.parseInt(s.substring(0, 1), 16);;
-       }else{
+       if (day < 15) {
+           temp = 15 - Integer.parseInt(s.substring(0, 1), 16);
+       } else {
            temp = Integer.parseInt(s.substring(1, 2), 16) + 15;
        }
-       if(temp == day){
-           if(day > 15){
+       if(temp == day) {
+           if (day > 15) {
                result = (month) * 2 + 2 ;
-           }else{
+           } else {
                result = (month) * 2 + 1;
            }
        }

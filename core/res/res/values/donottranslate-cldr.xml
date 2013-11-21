@@ -6,4 +6,13 @@
     <string name="time_of_day">%-l:%M:%S %p</string>
     <string name="date_and_time">%b %-e, %Y, %-l:%M:%S %p</string>
     <string name="date_time">%1$s, %2$s</string>
+
+    <string name="lc">AM</string>
+    <string name="lm">AM</string>
+    <string name="zc">AM</string>
+    <string name="sw">AM</string>
+    <string name="zw">PM</string>
+    <string name="xw">PM</string>
+    <string name="bw">PM</string>
+    <string name="sy">PM</string>
 </resources>

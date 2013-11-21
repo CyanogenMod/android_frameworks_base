@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 The MoKee Android Open Source Project
+ * Copyright (C) 2013 The MoKee OpenSource Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package android.util;
+package android.mokee.util;
 
-import android.content.Context;
+import android.content.res.Resources;
 
 import com.android.internal.R;
 
@@ -24,8 +24,9 @@ import java.util.Calendar;
 
 public class LunarFestival {
 
-    public static String getLunarFestival(String chinadate, Lunar lunar, Context context) {
-        String[] lunarFestivalArray = context.getResources().getStringArray(com.mokee.internal.R.array.lunar_festival);
+    public static String getLunarFestival(String chinadate, Lunar lunar) {
+        Resources res = Resources.getSystem();
+        String[] lunarFestivalArray = res.getStringArray(com.mokee.internal.R.array.lunar_festival);
         chinadate = chinadate.substring(chinadate.length() - 4, chinadate.length());
         for (int i = 0; i < lunarFestivalArray.length; i++) {
             String[] lunar_str = lunarFestivalArray[i].split(" ");

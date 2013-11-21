@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 The MoKee Android Open Source Project
+ * Copyright (C) 2013 The MoKee OpenSource Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package android.util;
+package android.mokee.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.text.TextUtils;
 
 import com.android.internal.R;
@@ -31,7 +31,7 @@ public class Lunar {
     private int month;
     private int day;
     private boolean leap;
-    private Context mContext;
+    private Resources res;
     private Calendar mCalendar;
     private String[] chineseNumber;
     private String[] lunarMonthName;
@@ -93,13 +93,13 @@ public class Lunar {
     }
 
     public String animalsYear() {
-        final String[] Animals = mContext.getResources().getStringArray(com.mokee.internal.R.array.animals);
+        final String[] Animals = res.getStringArray(com.mokee.internal.R.array.animals);
         return Animals[(year - 4) % 12];
     }
 
     private String cyclicalm(int num) {
-        final String[] Gan = mContext.getResources().getStringArray(com.mokee.internal.R.array.gan);
-        final String[] Zhi = mContext.getResources().getStringArray(com.mokee.internal.R.array.zhi);
+        final String[] Gan = res.getStringArray(com.mokee.internal.R.array.gan);
+        final String[] Zhi = res.getStringArray(com.mokee.internal.R.array.zhi);
         return (Gan[num % 10] + Zhi[num % 12]);
     }
 
@@ -108,18 +108,18 @@ public class Lunar {
         return (cyclicalm(num));
     }
 
-    public Lunar(Calendar cal, Context context) {
+    public Lunar(Calendar cal) {
         int yearCyl, monCyl, dayCyl;
         int leapMonth = 0;
-        mContext = context;
+        res = Resources.getSystem();
         mCalendar = cal;
-        chineseNumber = mContext.getResources().getStringArray(com.mokee.internal.R.array.chinesenumber);
-        lunarMonthName = mContext.getResources().getStringArray(com.mokee.internal.R.array.lunar_month_name);
-        String format1 = mContext.getResources().getString(com.mokee.internal.R.string.status_format1);
+        chineseNumber = res.getStringArray(com.mokee.internal.R.array.chinesenumber);
+        lunarMonthName = res.getStringArray(com.mokee.internal.R.array.lunar_month_name);
+        String format1 = res.getString(com.mokee.internal.R.string.status_format1);
         chineseDateFormat = new SimpleDateFormat(format1);
         Date baseDate = null;
         try {
-            String format2 = mContext.getResources().getString(com.mokee.internal.R.string.status_format2);
+            String format2 = res.getString(com.mokee.internal.R.string.status_format2);
             baseDate = chineseDateFormat.parse(format2);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -175,24 +175,24 @@ public class Lunar {
     }
 
     public String getChinaDayString(int day) {
-        String chineseTen[] = mContext.getResources().getStringArray(com.mokee.internal.R.array.chineseten);
+        String chineseTen[] = res.getStringArray(com.mokee.internal.R.array.chineseten);
         int n = day % 10 == 0 ? 9 : day % 10 - 1;
         if (day > 30)
             return "";
         else if (day == 10)
-            return mContext.getResources().getString(com.mokee.internal.R.string.status_chushi);
+            return res.getString(com.mokee.internal.R.string.status_chushi);
         else if (day == 20)
-            return mContext.getResources().getString(com.mokee.internal.R.string.status_ershi);
+            return res.getString(com.mokee.internal.R.string.status_ershi);
         else if (day == 30)
-            return mContext.getResources().getString(com.mokee.internal.R.string.status_sanshi);
+            return res.getString(com.mokee.internal.R.string.status_sanshi);
         else
             return chineseTen[day / 10] + chineseNumber[n];
     }
 
     public String toString() {
-        String year1 = mContext.getResources().getString(com.mokee.internal.R.string.status_year);
-        String run1 = mContext.getResources().getString(com.mokee.internal.R.string.status_leap);
-        String month1 = mContext.getResources().getString(com.mokee.internal.R.string.status_month);
+        String year1 = res.getString(com.mokee.internal.R.string.status_year);
+        String run1 = res.getString(com.mokee.internal.R.string.status_leap);
+        String month1 = res.getString(com.mokee.internal.R.string.status_month);
         return cyclical() + animalsYear() + year1 + (leap ? run1 : "") + lunarMonthName[month - 1]
                 + month1
                 + getChinaDayString(day);
@@ -206,4 +206,3 @@ public class Lunar {
         }
     }
 }
-

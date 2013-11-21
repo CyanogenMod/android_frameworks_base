@@ -53,7 +53,7 @@ public class DateUtils
     /**
      * Exact time display for Chinese
      */
-    private static final int []sAmPmCN=new int[]{
+    private static final int []sAmPmCN = new int[] {
     	com.mokee.internal.R.string.lc,
         com.mokee.internal.R.string.lm,
         com.mokee.internal.R.string.zc,
