@@ -155,7 +155,7 @@ public final class PowerManager {
      * full brightness.
      * <p>
      * If the user presses the power button, then the {@link #FULL_WAKE_LOCK} will be
-     * implicitly released by the system, causing both the screen and the CPU to be turned off.
+     * implicitly ignored by the system, causing both the screen and the CPU to be turned off.
      * Contrast with {@link #PARTIAL_WAKE_LOCK}.
      * </p>
      *
