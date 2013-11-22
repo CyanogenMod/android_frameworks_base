@@ -24,6 +24,7 @@ public class ButtonsConstants {
     public static final String ACTION_BACK                 = "**back**";
     public static final String ACTION_SEARCH               = "**search**";
     public static final String ACTION_MENU                 = "**menu**";
+    public static final String ACTION_MENU_BIG             = "**menu_big**";
     public static final String ACTION_POWER                = "**power**";
     public static final String ACTION_NOTIFICATIONS        = "**notifications**";
     public static final String ACTION_QS                   = "**quicksettings**";
