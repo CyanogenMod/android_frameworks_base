@@ -293,6 +293,7 @@
   <java-symbol type="bool" name="flip_controller_fallback_keys" />
   <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
   <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
+  <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
 
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_extraFreeKbytesAdjust" />
