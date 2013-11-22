@@ -273,6 +273,7 @@ public class SlimActions {
                 || action.equals(ButtonsConstants.ACTION_BACK)
                 || action.equals(ButtonsConstants.ACTION_SEARCH)
                 || action.equals(ButtonsConstants.ACTION_MENU)
+                || action.equals(ButtonsConstants.ACTION_MENU_BIG)
                 || action.equals(ButtonsConstants.ACTION_POWER_MENU)
                 || action.equals(ButtonsConstants.ACTION_NULL)) {
             return true;
