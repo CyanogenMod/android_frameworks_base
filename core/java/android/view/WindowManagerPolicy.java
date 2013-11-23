@@ -1217,4 +1217,25 @@ public interface WindowManagerPolicy {
      */
     public void windowAnimationFinished();
 
+    /*
+     * Get the current navigation bar state when expanded desktop is enabled.
+     *
+     * @hide
+     */
+    public boolean expandedDesktopHidesNavigationBar();
+
+    /**
+     * Get the current statusbar state when expanded desktop is enabled.
+     *
+     * @hide
+     */
+    public boolean expandedDesktopHidesStatusBar();
+
+    /**
+     * Get the current navbar size depended on the user value
+     * and orientation.
+     *
+     * @hide
+     */
+    public int getCurrentNavigationBarSize();
 }
