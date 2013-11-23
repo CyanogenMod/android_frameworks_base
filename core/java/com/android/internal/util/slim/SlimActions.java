@@ -113,6 +113,16 @@ public class SlimActions {
                 }
                 context.sendBroadcast(new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"));
                 return;
+            } else if (action.equals(ButtonsConstants.ACTION_EXPANDED_DESKTOP)) {
+                boolean expandDesktopModeOn = Settings.System.getIntForUser(
+                        context.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STATE,
+                        0, UserHandle.USER_CURRENT) == 1;
+                Settings.System.putIntForUser(
+                        context.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STATE,
+                        expandDesktopModeOn ? 0 : 1, UserHandle.USER_CURRENT);
+                return;
             } else if (action.equals(ButtonsConstants.ACTION_KILL)) {
                 if (isKeyguardShowing) {
                     return;

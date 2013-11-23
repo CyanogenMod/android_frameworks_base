@@ -24,4 +24,9 @@
   <java-symbol type="id" name="icon2" />
   <java-symbol type="id" name="icon3" />
 
+  <!-- Expanded desktop -->
+  <java-symbol type="string" name="global_actions_expanded_desktop_mode_on_status" />
+  <java-symbol type="string" name="global_actions_expanded_desktop_mode_off_status" />
+  <java-symbol type="drawable" name="ic_lock_expanded_desktop" />
+
 </resources>
