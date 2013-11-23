@@ -7351,6 +7351,9 @@ public class PackageManagerService extends IPackageManager.Stub {
             // reader
             synchronized (mPackages) {
                 PackageParser.Package pkg = mPackages.get(packageName);
+                if (pkgLite.isTheme) {
+                    return PackageHelper.RECOMMEND_INSTALL_INTERNAL;
+                }
                 if (pkg != null) {
                     if ((flags & PackageManager.INSTALL_REPLACE_EXISTING) != 0) {
                         // Check for downgrading.
@@ -7523,7 +7526,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                     loc = installLocationPolicy(pkgLite, flags);
                     if (loc == PackageHelper.RECOMMEND_FAILED_VERSION_DOWNGRADE) {
                         ret = PackageManager.INSTALL_FAILED_VERSION_DOWNGRADE;
-                    } else if (!onSd && !onInt) {
+                    } else if ((!onSd && !onInt) || pkgLite.isTheme) {
                         // Override install location with flags
                         if (loc == PackageHelper.RECOMMEND_INSTALL_EXTERNAL) {
                             // Set the flag to install on external media.
@@ -7534,6 +7537,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                             // media is unset
                             flags |= PackageManager.INSTALL_INTERNAL;
                             flags &= ~PackageManager.INSTALL_EXTERNAL;
+                        }
+                        if (pkgLite.isTheme) {
+                            flags &= ~PackageManager.INSTALL_FORWARD_LOCK;
                         }
                     }
                 }

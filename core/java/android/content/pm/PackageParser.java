@@ -210,12 +210,14 @@ public class PackageParser {
         public final int versionCode;
         public final int installLocation;
         public final VerifierInfo[] verifiers;
+        public final boolean isTheme;
 
         public PackageLite(String packageName, int versionCode,
-                int installLocation, List<VerifierInfo> verifiers) {
+                int installLocation, List<VerifierInfo> verifiers, boolean isTheme) {
             this.packageName = packageName;
             this.versionCode = versionCode;
             this.installLocation = installLocation;
+            this.isTheme = isTheme;
             this.verifiers = verifiers.toArray(new VerifierInfo[verifiers.size()]);
         }
     }
@@ -923,6 +925,7 @@ public class PackageParser {
         int installLocation = PARSE_DEFAULT_INSTALL_LOCATION;
         int versionCode = 0;
         int numFound = 0;
+
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
             String attr = attrs.getAttributeName(i);
             if (attr.equals("installLocation")) {
@@ -942,6 +945,8 @@ public class PackageParser {
         final int searchDepth = parser.getDepth() + 1;
 
         final List<VerifierInfo> verifiers = new ArrayList<VerifierInfo>();
+        boolean isTheme = false;
+
         while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
                 && (type != XmlPullParser.END_TAG || parser.getDepth() >= searchDepth)) {
             if (type == XmlPullParser.END_TAG || type == XmlPullParser.TEXT) {
@@ -954,9 +959,14 @@ public class PackageParser {
                     verifiers.add(verifier);
                 }
             }
+
+            if (parser.getDepth() == searchDepth && "theme".equals(parser.getName())) {
+                isTheme = true;
+                installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
+            }
         }
 
-        return new PackageLite(pkgName.intern(), versionCode, installLocation, verifiers);
+        return new PackageLite(pkgName.intern(), versionCode, installLocation, verifiers, isTheme);
     }
 
     /**
