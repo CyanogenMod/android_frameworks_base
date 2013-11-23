@@ -41,6 +41,8 @@
   <java-symbol type="string" name="status_year" />
   <java-symbol type="string" name="status_day" />
   <java-symbol type="string" name="system_ui_date_pattern" />
+  <java-symbol type="string" name="abbrev_wday_month_day_year" />
+  <java-symbol type="string" name="abbrev_wday_month_day_no_year" />
 
   <!-- Exact Time -->
   <java-symbol type="string" name="lc" />

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.mokee.util.MoKeeUtils;
+import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -89,7 +90,7 @@ public class DateView extends TextView {
     }
 
     protected void updateClock() {
-        boolean isCN = MoKeeUtils.isChineseLanguage();
+        /*boolean isCN = MoKeeUtils.isChineseLanguage();
         if (mDateFormat == null) {
             final String weekdayFormat = getContext().getString(R.string.system_ui_weekday_pattern);
             final String dateFormat = getContext().getString(isCN ? com.android.internal.R.string.system_ui_date_pattern : R.string.system_ui_date_pattern);
@@ -125,6 +126,8 @@ public class DateView extends TextView {
                 setText(text);
                 mLastText = text;
             }
-        }
+        }*/
+        final String dateFormat = getContext().getString(R.string.abbrev_wday_month_day_no_year);
+        setText(DateFormat.format(dateFormat, new Date()));
     }
 }
