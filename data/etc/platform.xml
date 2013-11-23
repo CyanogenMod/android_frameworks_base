@@ -64,11 +64,13 @@
 
     <permission name="android.permission.READ_EXTERNAL_STORAGE" >
         <group gid="sdcard_r" />
+        <group gid="media_rw" />
     </permission>
 
     <permission name="android.permission.WRITE_EXTERNAL_STORAGE" >
         <group gid="sdcard_r" />
         <group gid="sdcard_rw" />
+        <group gid="media_rw" />
     </permission>
 
     <permission name="android.permission.ACCESS_ALL_EXTERNAL_STORAGE" >
