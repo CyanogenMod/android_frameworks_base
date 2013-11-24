@@ -147,15 +147,11 @@ public class SearchPanelView extends FrameLayout implements
             if (target == -1) {
                 mHandler.removeCallbacks(SetLongPress);
                 mLongPress = false;
-            } else {
-                if (mLongList.get(target) == null
-                    || mLongList.get(target).equals("")
-                    || mLongList.get(target).equals("none")) {
-                //pretend like nothing happened
-                } else {
-                    mTarget = target;
-                    mHandler.postDelayed(SetLongPress, ViewConfiguration.getLongPressTimeout());
-                }
+            } else if (mLongList.get(target) != null
+                    && !mLongList.get(target).isEmpty()
+                    && !mLongList.get(target).equals(ButtonsConstants.ACTION_NULL)) {
+                mTarget = target;
+                mHandler.postDelayed(SetLongPress, ViewConfiguration.getLongPressTimeout());
             }
         }
 
@@ -406,7 +402,7 @@ public class SearchPanelView extends FrameLayout implements
 
         int endPosOffset;
         int startPosOffset;
-        int middleBlanks = 0;
+        ButtonConfig buttonConfig;
 
         if (isScreenPortrait()
             || Settings.System.getIntForUser(mContext.getContentResolver(),
@@ -423,16 +419,6 @@ public class SearchPanelView extends FrameLayout implements
         mIntentList.clear();
         mLongList.clear();
 
-        int middleStart = mButtonsConfig.size();
-        int tqty = middleStart;
-        int middleFinish = 0;
-        ButtonConfig buttonConfig;
-
-        if (middleBlanks > 0) {
-            middleStart = (tqty/2) + (tqty%2);
-            middleFinish = (tqty/2);
-        }
-
         // Add Initial Place Holder Targets
         for (int i = 0; i < startPosOffset; i++) {
             storedDraw.add(getTargetDrawable("", null));
@@ -441,18 +427,12 @@ public class SearchPanelView extends FrameLayout implements
         }
 
         // Add User Targets
-        for (int i = middleStart - 1; i >= 0; i--) {
+        for (int i = mButtonsConfig.size() - 1; i >= 0; i--) {
             buttonConfig = mButtonsConfig.get(i);
+            storedDraw.add(getTargetDrawable(
+                buttonConfig.getClickAction(), buttonConfig.getIcon()));
             mIntentList.add(buttonConfig.getClickAction());
             mLongList.add(buttonConfig.getLongpressAction());
-            storedDraw.add(getTargetDrawable(buttonConfig.getClickAction(), buttonConfig.getIcon()));
-        }
-
-        // Add middle Place Holder Targets
-        for (int j = 0; j < middleBlanks; j++) {
-            storedDraw.add(getTargetDrawable("", null));
-            mIntentList.add(ButtonsConstants.ACTION_NULL);
-            mLongList.add(ButtonsConstants.ACTION_NULL);
         }
 
         // Add End Place Holder Targets
