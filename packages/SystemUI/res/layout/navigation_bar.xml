@@ -323,6 +323,7 @@
             android:src="@drawable/search_light"
             android:scaleType="center"
             android:visibility="gone"
+            android:rotation="270"
             android:contentDescription="@string/accessibility_search_light"
             />
 
