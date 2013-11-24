@@ -154,7 +154,7 @@ public class NavigationBarView extends LinearLayout {
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    mDelegateHelper.setDisabled(false);
+                    mDelegateHelper.setDisabled(!hasNavringTargets());
                     transitionCameraAndSearchButtonAlpha(1.0f);
                     break;
             }
