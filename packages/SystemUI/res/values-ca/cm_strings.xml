@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_battery_level">Bateria <xliff:g id="number">%d</xliff:g> percent.</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_quick_settings_ringer">So <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibració <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Utilitza l\'icona del Cid</string>
+    <string name="bean_dream_settings_cid_summary">Utilitza l\'icona del Cid com a salvapantalles enlloc de la de jellybean</string>
+    <string name="quick_settings_profile_label">Perfil</string>
+    <string name="powerwidget_screen_timeout_toast">Temps d\'espera de la pantalla en: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS apagat</string>
+    <string name="quick_settings_screen_sleep">Posa en repòs</string>
+    <string name="quick_settings_ringer_on">So encés</string>
+    <string name="quick_settings_ringer_off">So apagat</string>
+    <string name="quick_settings_vibration_on">Vibració encesa</string>
+    <string name="quick_settings_vibration_off">Vibració apagada</string>
+    <string name="quick_settings_label_enabled">Encés</string>
+    <string name="quick_settings_label_disabled">Apagat</string>
+    <string name="quick_settings_ringer_normal">So</string>
+    <string name="quick_settings_lockscreen">Bloqueja pantalla</string>
+    <string name="quick_settings_network_type">Mode xarxa</string>
+    <string name="quick_settings_report_bug">Informa d\'un error</string>
+    <string name="quick_settings_sync">Sinc</string>
+    <string name="quick_settings_sync_off">Sinc off</string>
+    <string name="quick_settings_torch">Torxa</string>
+    <string name="quick_settings_torch_off">Torxa apagada</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC apagat</string>
+    <string name="quick_settings_screen_timeout">Compte enrera</string>
+    <string name="quick_settings_usb_tether_off_label">Desconnectat</string>
+    <string name="quick_settings_usb_tether_connected_label">Ancoratge apagat</string>
+    <string name="quick_settings_usb_tether_on_label">Ancoratge</string>
+    <string name="quick_settings_wifiap">PA Wi-Fi</string>
+    <string name="quick_settings_wifiap_off">PA Wi-Fi apagat</string>
+    <string name="quick_settings_quiethours">Hores tranquil·les</string>
+    <string name="quick_settings_quiethours_off">Hores tranquil·les apagades</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE apagat</string>
+    <string name="quick_settings_volume">Volum</string>
+    <string name="quick_settings_camera_label">Càmera</string>
+    <string name="quick_settings_network_adb_disabled_label">Desactivat</string>
+    <string name="quick_settings_network_adb_enabled_label">Activat</string>
+    <string name="quick_settings_expanded_desktop">Extés</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_camera_error_connect">No es pot connectar a la càmera</string>
+    <string name="navbar_dialog_title">Escull l\'acció a assignar</string>
+    <string name="navbar_home_button">Botó Inici</string>
+    <string name="navbar_recent_button">Botó Recent</string>
+    <string name="navbar_search_button">Botó Cerca</string>
+    <string name="navbar_back_button">Botó Enrera</string>
+    <string name="navbar_empty_button">Botó Buit</string>
+    <string name="navbar_menu_conditional_button">Botó Menú (autoAmaga)</string>
+    <string name="navbar_menu_always_button">Botó Menú (mostraSempre)</string>
+    <string name="navbar_menu_big_button">Botó Menú</string>
+    <string name="pie_battery_status_charging">Carregant (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Carregada</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% restant</string>
+    <string name="pie_phone_status_no_service">Sense servei</string>
+    <string name="pie_phone_status_airplane_mode">Mode avió activat</string>
+    <string name="pie_phone_status_emergency_only">Només trucades d\'emergència</string>
+</resources>
