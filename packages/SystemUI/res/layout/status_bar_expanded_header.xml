@@ -15,128 +15,194 @@
 ** limitations under the License.
 -->
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
     android:id="@+id/header"
     android:layout_width="match_parent"
     android:layout_height="@dimen/notification_panel_header_height"
-    android:background="@drawable/notification_header_bg"
-    android:orientation="horizontal"
-    android:layout_centerVertical="true"
-    android:baselineAligned="false"
     >
-    <RelativeLayout
-        android:id="@+id/datetime"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/header_background_image"
+        android:drawable="@drawable/notification_header_bg"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:enabled="false"
-        android:layout_centerVertical="true"
-        android:background="@drawable/ic_notify_button_bg"
-        android:clickable="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:baselineAligned="false"
         >
-        <com.android.systemui.statusbar.policy.ClockStock
-            android:id="@+id/clock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
-            android:layout_centerVertical="true"
-            android:background="@drawable/ic_notify_button_bg"
-            />
-
-    <RelativeLayout
+        <RelativeLayout
+            android:id="@+id/datetime"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:background="@drawable/ic_notify_button_bg"
+            android:enabled="false"
+            >
+            <com.android.systemui.statusbar.policy.ClockStock
+                android:id="@+id/clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_toEndOf="@id/clock"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:layout_centerVertical="true"
             >
-    <com.android.systemui.statusbar.policy.DateView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
-        />
-    <com.android.systemui.statusbar.policy.LunarDateView
-        android:id="@+id/lunardate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
-        android:layout_below="@id/date"
-        />
+            <com.android.systemui.statusbar.policy.DateView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+                />
+            <com.android.systemui.statusbar.policy.LunarDateView
+                android:id="@+id/lunardate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+                android:layout_below="@id/date"                    
+                />
+            </RelativeLayout>
+
         </RelativeLayout>
 
-    </RelativeLayout>
+        <ImageView
+            android:id="@+id/spacer"
+            android:layout_width="2dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:background="@android:drawable/divider_horizontal_dark"
+            />
 
-    <ImageView
-        android:id="@+id/spacer"
-        android:background="@drawable/ic_notify_button_bg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
+        <LinearLayout
+            android:id="@+id/reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:background="@drawable/ic_notify_button_bg"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/title"
+                android:paddingTop="8dp"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:paddingBottom="1dp"
+                android:textAllCaps="true"
+                android:textSize="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                />
+            <ViewFlipper
+                android:id="@+id/message"
+                android:inAnimation="@anim/reminder_fade_in"
+                android:outAnimation="@anim/reminder_fade_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:paddingBottom="8dp"
+                />
+            <ViewFlipper
+                android:id="@+id/message_land"
+                android:inAnimation="@anim/reminder_fade_in"
+                android:outAnimation="@anim/reminder_fade_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:paddingBottom="8dp"
+                />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/header_debug_info"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="11dp"
-        android:textStyle="bold"
-        android:textColor="#00A040"
-        android:padding="0dp"
-        />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
 
-    <ImageView android:id="@+id/clear_all_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-    	android:layout_marginLeft="5dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_notify_clear"
-        android:background="@drawable/ic_notify_button_bg"
-        android:contentDescription="@string/accessibility_clear_all"
-        />     
+        <TextView
+            android:id="@+id/header_debug_info"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="11dp"
+            android:textStyle="bold"
+            android:textColor="#00A040"
+            android:padding="2dp"
+            />
 
-    <ImageView android:id="@+id/halo_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="4dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_notify_halo"
-        android:contentDescription="@string/accessibility_halo"
-        />
-
-    <FrameLayout android:id="@+id/settings_button_holder"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignRight="@+id/header"
-        >
-        <ImageView android:id="@+id/settings_button"
+        <ImageView android:id="@+id/clear_all_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="center"
-            android:src="@drawable/ic_notify_settings"
+            android:src="@drawable/ic_notify_clear"
             android:background="@drawable/ic_notify_button_bg"
-            android:contentDescription="@string/accessibility_desc_quick_settings"
+            android:contentDescription="@string/accessibility_clear_all"
             />
-        <ImageView android:id="@+id/notification_button"
+
+        <ImageView android:id="@+id/halo_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="4dp"
             android:scaleType="center"
-            android:src="@drawable/ic_notifications"
-            android:background="@drawable/ic_notify_button_bg"
-            android:visibility="gone"
-            android:contentDescription="@string/accessibility_notifications_button"
+            android:src="@drawable/ic_notify_halo"
+            android:contentDescription="@string/accessibility_halo"
             />
-    </FrameLayout>
-</LinearLayout>
+
+        <FrameLayout android:id="@+id/settings_button_holder"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="12dp"
+            >
+            <ImageView android:id="@+id/settings_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_notify_settings"
+                android:background="@drawable/ic_notify_button_bg"
+                android:contentDescription="@string/accessibility_desc_quick_settings"
+                />
+            <ImageView android:id="@+id/notification_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_notifications"
+                android:background="@drawable/ic_notify_button_bg"
+                android:visibility="gone"
+                android:contentDescription="@string/accessibility_notifications_button"
+                />
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>
