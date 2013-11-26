@@ -422,7 +422,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void forceAddNavigationBar() {
         // If we have no Navbar view and we should have one, create it
-        if (mNavigationBarView != null || mRecreating) {
+        if (mNavigationBarView != null) {
             return;
         }
 
