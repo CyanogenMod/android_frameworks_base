@@ -155,7 +155,7 @@ public class ResourcesManager {
      * @param compatInfo the compability info. Must not be null.
      * @param token the application token for determining stack bounds.
      */
-    public Resources getTopLevelResources(String resDir, int displayId,
+    public Resources getTopLevelResources(String resDir, String[] overlayDirs, int displayId,
             Configuration overrideConfiguration, CompatibilityInfo compatInfo, IBinder token) {
         final float scale = compatInfo.applicationScale;
         final boolean isThemeable = compatInfo.isThemeable;
@@ -188,6 +188,12 @@ public class ResourcesManager {
         assets.setThemeSupport(compatInfo.isThemeable);
         if (assets.addAssetPath(resDir) == 0) {
             return null;
+        }
+
+        if (overlayDirs != null) {
+            for (String idmapPath : overlayDirs) {
+                assets.addOverlayPath(idmapPath);
+            }
         }
 
         //Slog.i(TAG, "Resource: key=" + key + ", display metrics=" + metrics);
