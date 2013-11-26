@@ -576,7 +576,7 @@ public class ActiveDisplayView extends FrameLayout {
     /**
      * Launches the pending intent for the currently selected notification
      */
-    private void launchNotificationPendingIntent() {
+    private synchronized void launchNotificationPendingIntent() {
         if (mNotification != null) {
             PendingIntent contentIntent = mNotification.getNotification().contentIntent;
             if (contentIntent != null) {
@@ -722,7 +722,7 @@ public class ActiveDisplayView extends FrameLayout {
         unregisterSensorListener(mLightSensor);
     }
 
-    private void handleShowNotification(boolean ping) {
+    private synchronized void handleShowNotification(boolean ping) {
         if (!mDisplayNotifications
             || mNotification == null
             || inQuietHoursDim()) return;
@@ -735,7 +735,7 @@ public class ActiveDisplayView extends FrameLayout {
         if (ping) mGlowPadView.ping();
     }
 
-    private void handleDismissNotification() {
+    private synchronized void handleDismissNotification() {
         if (mNotification != null && mNotification.isClearable()) {
             try {
                 mNM.cancelNotificationFromSystemListener(mNotificationListener,
@@ -757,7 +757,7 @@ public class ActiveDisplayView extends FrameLayout {
         turnScreenOff();
     }
 
-    private void handleShowTime() {
+    private synchronized void handleShowTime() {
         mCurrentNotificationIcon.setImageResource(R.drawable.ic_ad_unlock);
         mGlowPadView.setHandleText("");
         mNotificationDrawable = null;
@@ -942,7 +942,7 @@ public class ActiveDisplayView extends FrameLayout {
             for (int i = sbns.length - 1; i >= 0; i--) {
                 if (sbns[i] == null)
                     continue;
-                if (shouldShowNotification() && isValidNotification(sbns[i])) {
+                if (isValidNotification(sbns[i])) {
                     return sbns[i];
                 }
             }
@@ -1050,7 +1050,7 @@ public class ActiveDisplayView extends FrameLayout {
      * Swaps the current StatusBarNotification with {@code sbn}
      * @param sbn The StatusBarNotification to swap with the current
      */
-    private void swapNotification(StatusBarNotification sbn) {
+    private synchronized void swapNotification(StatusBarNotification sbn) {
         mNotification = sbn;
         setActiveNotification(sbn, false);
     }
