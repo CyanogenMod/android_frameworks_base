@@ -319,7 +319,7 @@ public class Clock extends TextView implements DemoMode {
         boolean is24hour = DateFormat.is24HourFormat(mContext);
         int amPmStyle = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE,
-                is24hour ? AM_PM_STYLE_GONE : AM_PM_STYLE_NORMAL,
+                AM_PM_STYLE_GONE,
                 UserHandle.USER_CURRENT);
         mAmPmStyle = is24hour ? AM_PM_STYLE_GONE : amPmStyle;
         mClockFormatString = "";
