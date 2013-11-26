@@ -60,4 +60,8 @@
   <java-symbol type="anim" name="slide_in_left_no_fade" />
   <java-symbol type="anim" name="slide_out_left_no_fade" />
 
+  <!-- Halo -->
+  <java-symbol type="style" name="Theme.DeviceDefault.FloatingWindow" />
+  <java-symbol type="style" name="Theme.DeviceDefault.FloatingWindowLight" />
+  
 </resources>
