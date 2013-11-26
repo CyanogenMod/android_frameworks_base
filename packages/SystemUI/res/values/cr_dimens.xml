@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (c) 2006, The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+-->
+<resources>
+
+    <!-- Network stats text size -->
+    <dimen name="network_stats_text_size">9dp</dimen>
+
+    <!-- Notification Shortcuts -->
+    <dimen name="notification_shortcuts_close_handle_height">28dp</dimen>
+    <dimen name="notification_shortcuts_spacing_height">88dp</dimen>
+    <dimen name="notification_shortcuts_drawer_margin">56dp</dimen>
+
+    <!-- Top margin for overflow notifications container shown in the P.O.R.N. view -->
+    <dimen name="glowpad_overflow_notifications_margin_top">64dp</dimen>
+
+    <!-- Top margin for overflow notifications container shown in the active display view -->
+    <dimen name="ad_clock_margin_bottom">60dp</dimen>
+
+    <!-- left/right margin for extra notifications in ActiveDisplayView -->
+    <dimen name="ad_notification_margin">4dp</dimen>
+
+    <!-- Active display overflow notification icon size -->
+    <dimen name="overflow_icon_size">28dp</dimen>
+
+    <!-- Active display Handle notification icon size -->
+    <dimen name="handle_icon_size">32dp</dimen>
+
+    <!-- Active display overflow notification padding -->
+    <dimen name="overflow_icon_padding">2dp</dimen>
+
+    <!-- Active display clock font size -->
+    <dimen name="ad_clock_font_size">75dp</dimen>
+
+    <!-- Active display date font size -->
+    <dimen name="ad_date_font_size">18dp</dimen>
+
+    <!-- AM/PM size in active display -->
+    <dimen name="ad_ampm_font_size">32dp</dimen>  
+
+    <!-- Halo -->
+    <dimen name="halo_bubble_size">75dp</dimen>
+    <dimen name="halo_number_size">24dp</dimen>
+    <dimen name="halo_number_icon_size">18dp</dimen>
+    <dimen name="halo_number_text_size">14sp</dimen>
+    <dimen name="halo_speech_text_size">16sp</dimen>
+    <dimen name="halo_status_text_size">16sp</dimen>
+    <dimen name="halo_speech_hpadding_short">4dp</dimen>
+    <dimen name="halo_speech_hpadding_wide">13dp</dimen>
+    <dimen name="halo_speech_vpadding_top">3dp</dimen>
+    <dimen name="halo_speech_vpadding_bottom">3dp</dimen>
+    <dimen name="halo_content_max_width">250dp</dimen>
+ 
+</resources>

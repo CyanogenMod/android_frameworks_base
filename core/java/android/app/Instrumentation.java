@@ -1469,10 +1469,18 @@ public class Instrumentation {
             }
         }
         try {
+            // we must resolve if the last intent in the stack is floating to give the flag to the previous
+            boolean floating = false;
+            if (intents.length > 0) {
+                floating = (intents[intents.length - 1].getFlags()&Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+            }
             String[] resolvedTypes = new String[intents.length];
             for (int i=0; i<intents.length; i++) {
                 intents[i].migrateExtraStreamToClipData();
                 intents[i].prepareToLeaveProcess();
+                if (floating) {
+                    intents[i].addFlags(Intent.FLAG_FLOATING_WINDOW);
+                }
                 resolvedTypes[i] = intents[i].resolveTypeIfNeeded(who.getContentResolver());
             }
             int result = ActivityManagerNative.getDefault()

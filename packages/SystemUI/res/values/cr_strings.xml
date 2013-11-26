@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!--ScreenShot Trash-->
+    <string name="delete">Delete</string>
+
+    <!-- QS Battery Tile -->
+    <string name="quick_settings_battery_charging">Charging</string>
+    <string name="quick_settings_battery_discharging">Discharging</string>
+
+    <!-- Kill app toast -->
+    <string name="app_killed_message">App Killed</string>
+
+    <!-- Recents Ram Bar -->
+    <string name="memory">RAM</string>
+    <!-- [CHAR LIMIT=10] Running services, summary of background processes -->
+    <string name="service_free_mem"><xliff:g id="memory">%1$s</xliff:g> free</string>
+    <!-- [CHAR LIMIT=10] Running services, summary of foreground processes -->
+    <string name="service_used_mem"><xliff:g id="memory">%1$s</xliff:g> used</string>
+
+    <!-- Content description of the halo button in the notification panel for accessibility (not sho
+         wn on the screen). [CHAR LIMIT=NONE] -->	
+    <string name="accessibility_halo">Create notification halo.</string>	
+				
+    <!-- HALO -->
+    <string name="halo_dismiss">Dismiss notification</string>	
+    <string name="halo_hide">Hide</string>	
+    <string name="halo_clear_all">Dismiss all notifications</string>	
+    <string name="halo_silence">Hide &amp; silence until woken</string>	
+    <string name="halo_tutorial1">This is HALO</string>	
+    <string name="halo_tutorial2">Move me: 2x-tap &amp; drag</string>	
+    <string name="halo_tutorial3">Browse tasks: Horizontal drag</string>	
+    <string name="halo_battery_plugged">CHARGING</string>	
+    <string name="halo_battery_unplugged">REMAINING</string>	
+    <string name="halo_battery_full">FULL</string>	
+    <string name="halo_aeroplane1">AEROPLANE</string>	
+    <string name="halo_aeroplane2">MODE</string>	
+    <string name="halo_wifi_on">WI-FI ON</string>	
+    <string name="halo_wifi_off">WI-FI OFF</string>	
+    <string name="halo_signal_bars_4">FULL</string>	
+    <string name="halo_signal_bars_3">THREE BARS</string>	
+    <string name="halo_signal_bars_2">TWO BARS</string>	
+    <string name="halo_signal_bars_1">ONE BAR</string>	
+    <string name="halo_signal_bars_none">NO BARS</string>
+
+</resources>
