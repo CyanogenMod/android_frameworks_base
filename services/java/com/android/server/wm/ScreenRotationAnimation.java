@@ -218,16 +218,15 @@ class ScreenRotationAnimation {
         mOriginalRotation = originalRotation;
         mOriginalWidth = originalWidth;
         mOriginalHeight = originalHeight;
-	
+
         if (!inTransaction) {
             if (WindowManagerService.SHOW_LIGHT_TRANSACTIONS) Slog.i(WindowManagerService.TAG,
                     ">>> OPEN TRANSACTION ScreenRotationAnimation");
             SurfaceControl.openTransaction();
         }
-	
-        try {/*
+
+        try {
             try {
-            	
                 if (WindowManagerService.DEBUG_SURFACE_TRACE) {
                     mSurfaceControl = new SurfaceTrace(session, "ScreenshotSurface",
                             mWidth, mHeight,
@@ -251,15 +250,14 @@ class ScreenRotationAnimation {
             } catch (SurfaceControl.OutOfResourcesException e) {
                 Slog.w(TAG, "Unable to allocate freeze surface", e);
             }
-		*/
+
             if (WindowManagerService.SHOW_TRANSACTIONS ||
                     WindowManagerService.SHOW_SURFACE_ALLOC) Slog.i(WindowManagerService.TAG,
                             "  FREEZE " + mSurfaceControl + ": CREATE");
-		//VK
-            //setRotationInTransaction(originalRotation);
+
+            setRotationInTransaction(originalRotation);
         } finally {
             if (!inTransaction) {
-            	//VK
                 SurfaceControl.closeTransaction();
                 if (WindowManagerService.SHOW_LIGHT_TRANSACTIONS) Slog.i(WindowManagerService.TAG,
                         "<<< CLOSE TRANSACTION ScreenRotationAnimation");
