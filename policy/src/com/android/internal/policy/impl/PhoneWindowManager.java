@@ -365,9 +365,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of home wake
     boolean mHomeWakeScreen;
 
-    // Behavior of volume wake
-    boolean mVolumeWakeScreen;
-
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
     boolean mIsLongPress;
