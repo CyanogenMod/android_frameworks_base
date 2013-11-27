@@ -82,6 +82,7 @@ import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -690,14 +691,14 @@ public class ActiveDisplayView extends FrameLayout {
         handleForceHideNotificationView();
     }
 
-    private void handleShowNotificationView() {
+    private synchronized void handleShowNotificationView() {
         setVisibility(View.VISIBLE);
         setSystemUIVisibility(false);
         mHandler.postDelayed(runSystemUiVisibilty, 100);
         registerSensorListener(mLightSensor);
     }
 
-    private void handleHideNotificationView() {
+    private synchronized void handleHideNotificationView() {
         mHandler.removeCallbacks(runSystemUiVisibilty);
         setVisibility(View.GONE);
         restoreBrightness();
@@ -934,18 +935,29 @@ public class ActiveDisplayView extends FrameLayout {
     }
 
     private StatusBarNotification getNextAvailableNotification() {
+        // check if other notifications exist and if so display the next one
+        StatusBarNotification[] sbns = getSortedNotifications();
+        if (sbns == null) return null;
+        for (int i = sbns.length - 1; i >= 0; i--) {
+            if (sbns[i] == null)
+                continue;
+            if (isValidNotification(sbns[i])) {
+                return sbns[i];
+            }
+        }
+
+        return null;
+    }
+
+    private StatusBarNotification[] getSortedNotifications() {
+
         try {
             // check if other notifications exist and if so display the next one
             StatusBarNotification[] sbns = mNM
                     .getActiveNotificationsFromSystemListener(mNotificationListener);
             if (sbns == null) return null;
-            for (int i = sbns.length - 1; i >= 0; i--) {
-                if (sbns[i] == null)
-                    continue;
-                if (isValidNotification(sbns[i])) {
-                    return sbns[i];
-                }
-            }
+            Arrays.sort(sbns, sNewestNotificationComparator);
+            return sbns;
         } catch (RemoteException e) {
         }
         return null;
@@ -955,49 +967,41 @@ public class ActiveDisplayView extends FrameLayout {
         mOverflowNotifications.post(new Runnable() {
             @Override
             public void run() {
-                try {
-                    // check if other clearable notifications exist and if so display the next one
-                    StatusBarNotification[] sbns = mNM
-                            .getActiveNotificationsFromSystemListener(mNotificationListener);
-                    mOverflowNotifications.removeAllViews();
-                    for (int i = sbns.length - 1; i >= 0; i--) {
-                        if (isValidNotification(sbns[i])
-                                && mOverflowNotifications.getChildCount() < MAX_OVERFLOW_ICONS) {
-                            boolean updateOther = false;
-                            ImageView iv = new ImageView(mContext);
-                            if (mOverflowNotifications.getChildCount() < (MAX_OVERFLOW_ICONS - 1)) {
-                                Drawable iconDrawable = null;
-                                try {
-                                    Context pkgContext = mContext.createPackageContext(
-                                            sbns[i].getPackageName(), Context.CONTEXT_RESTRICTED);
-                                    iconDrawable = pkgContext.getResources()
-                                            .getDrawable(sbns[i].getNotification().icon);
-                                } catch (NameNotFoundException nnfe) {
-                                    iconDrawable = null;
-                                } catch (Resources.NotFoundException nfe) {
-                                    iconDrawable = null;
-                                }
-                                if (iconDrawable != null) {
-                                    updateOther = true;
-                                    iv.setImageDrawable(iconDrawable);
-                                    iv.setTag(sbns[i]);
-                                    if (sbns[i].getPackageName().equals(mNotification.getPackageName())
-                                           && sbns[i].getId() == mNotification.getId()) {
-                                        iv.setBackgroundResource(R.drawable.ad_active_notification_background);
-                                    } else {
-                                        iv.setBackgroundResource(0);
-                                    }
-                                }
+                // check if other clearable notifications exist and if so display the next one
+                StatusBarNotification[] sbns = getSortedNotifications();
+                mOverflowNotifications.removeAllViews();
+                for (int i = sbns.length - 1; i >= 0; i--) {
+                    if (isValidNotification(sbns[i])
+                            && mOverflowNotifications.getChildCount() < MAX_OVERFLOW_ICONS) {
+                        ImageView iv = new ImageView(mContext);
+                        if (mOverflowNotifications.getChildCount() < (MAX_OVERFLOW_ICONS - 1)) {
+                            Drawable iconDrawable = null;
+                            try {
+                                Context pkgContext = mContext.createPackageContext(
+                                        sbns[i].getPackageName(), Context.CONTEXT_RESTRICTED);
+                                iconDrawable = pkgContext.getResources()
+                                        .getDrawable(sbns[i].getNotification().icon);
+                            } catch (NameNotFoundException nnfe) {
+                                iconDrawable = mContext.getResources()
+                                        .getDrawable(R.drawable.ic_ad_unknown_icon);
+                            } catch (Resources.NotFoundException nfe) {
+                                iconDrawable = mContext.getResources()
+                                        .getDrawable(R.drawable.ic_ad_unknown_icon);
+                            }
+                            iv.setImageDrawable(iconDrawable);
+                            iv.setTag(sbns[i]);
+                            if (sbns[i].getPackageName().equals(mNotification.getPackageName())
+                                    && sbns[i].getId() == mNotification.getId()) {
+                                iv.setBackgroundResource(R.drawable.ad_active_notification_background);
                             } else {
-                                updateOther = true;
-                                iv.setImageResource(R.drawable.ic_ad_morenotifications);
+                                iv.setBackgroundResource(0);
                             }
-                            iv.setPadding(mIconPadding, mIconPadding, mIconPadding, mIconPadding);
-                            iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                            if (updateOther) {
-                                mOverflowNotifications.addView(iv, mOverflowLayoutParams);
-                            }
+                        } else {
+                            iv.setImageResource(R.drawable.ic_ad_morenotifications);
                         }
+                        iv.setPadding(mIconPadding, mIconPadding, mIconPadding, mIconPadding);
+                        iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        mOverflowNotifications.addView(iv, mOverflowLayoutParams);
                     }
                 } catch (RemoteException re) {
                 } catch (NullPointerException npe) {
@@ -1348,4 +1352,12 @@ public class ActiveDisplayView extends FrameLayout {
         utils.setCurrentUser(UserHandle.USER_OWNER);
         return utils.isLockScreenDisabled();
     }
+
+    private static Comparator<StatusBarNotification> sNewestNotificationComparator
+            = new Comparator<StatusBarNotification>() {
+        @Override
+        public int compare(StatusBarNotification a, StatusBarNotification b) {
+            return (int)(a.getNotification().when - b.getNotification().when);
+        }
+    };
 }
