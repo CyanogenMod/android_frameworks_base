@@ -683,13 +683,13 @@ class WindowStateAnimator {
                 final int format = isHwAccelerated ? PixelFormat.TRANSLUCENT : attrs.format;
                 if (!PixelFormat.formatHasAlpha(attrs.format)) {
                     flags |= SurfaceControl.OPAQUE;
-                }
+                }/*
 		if (attrs.format == PixelFormat.VIDEO_HOLE) {
                     mSurfaceControl = new SurfaceTrace(
                         mSession.mSurfaceSession,
                         attrs.getTitle().toString(),
                         w, h, PixelFormat.RGBA_8888, flags|SurfaceControl.OPAQUE);
-                } else if (DEBUG_SURFACE_TRACE) {
+                }*/ if (DEBUG_SURFACE_TRACE) {
                     mSurfaceControl = new SurfaceTrace(
                             mSession.mSurfaceSession,
                             attrs.getTitle().toString(),

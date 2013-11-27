@@ -472,8 +472,8 @@ public class SurfaceView extends View {
                 if (mTranslator != null) {
                     mTranslator.translateLayoutParamsInAppWindowToScreen(mLayout);
                 }
-                
-                mLayout.format = mOpaque ? PixelFormat.VIDEO_HOLE : mRequestedFormat;
+                mLayout.format = mRequestedFormat;
+                //mLayout.format = mOpaque ? PixelFormat.VIDEO_HOLE : mRequestedFormat;
                 mLayout.flags |=WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                               | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                               | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -740,12 +740,13 @@ public class SurfaceView extends View {
             // means 565 for SurfaceView
             if (format == PixelFormat.OPAQUE)
                 format = PixelFormat.RGB_565;
-
+	
+	    /*
 	    mRequestedOpaque = (format == PixelFormat.VIDEO_HOLE);
 
 	    if (format == PixelFormat.VIDEO_HOLE) {
 		format = PixelFormat.RGBA_8888;
-	    }
+	    }*/
 
             mRequestedFormat = format;
             if (mWindow != null) {

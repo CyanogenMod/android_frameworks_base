@@ -2791,12 +2791,12 @@ public class WindowManagerService extends IWindowManager.Stub
                     + " req=" + requestedWidth + "x" + requestedHeight + " " + win.mAttrs);
 
             win.mEnforceSizeCompat = (win.mAttrs.flags & FLAG_COMPATIBLE_WINDOW) != 0;
-
+	    /*
             // Hack: setting Surface to OPAQUE for PixelFormat.VIDEO_HOLE
             if (((attrChanges & WindowManager.LayoutParams.FORMAT_CHANGED) != 0) &&
                 (attrs != null)) {
                 if (attrs.format == PixelFormat.VIDEO_HOLE) {
-                    /* attibute changed to PixelFormat.VIDEO_HOLE */
+                    // attibute changed to PixelFormat.VIDEO_HOLE 
                     if (win.mWinAnimator.mSurfaceControl != null) {
                         SurfaceControl.openTransaction();
                         try {
@@ -2809,7 +2809,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     attrs.format = PixelFormat.RGBA_8888;
                 }
             }
-
+	    */
             if ((attrChanges & WindowManager.LayoutParams.ALPHA_CHANGED) != 0) {
                 winAnimator.mAlpha = attrs.alpha;
             }
@@ -2977,9 +2977,9 @@ public class WindowManagerService extends IWindowManager.Stub
 
             // Restore PixelFormat.VIDEO_HOLE to PixelFormat.RGBA_8888
             // after Surface.OPAQUE is set or a new Surface is created.
-            if (win.mAttrs.format == PixelFormat.VIDEO_HOLE) {
+            /*if (win.mAttrs.format == PixelFormat.VIDEO_HOLE) {
                 win.mAttrs.format = PixelFormat.RGBA_8888;
-            }
+            }*/
 
             if (focusMayChange) {
                 //System.out.println("Focus may change: " + win.mAttrs.getTitle());
