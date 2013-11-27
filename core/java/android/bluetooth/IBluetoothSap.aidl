@@ -37,6 +37,7 @@ import android.bluetooth.BluetoothDevice;
  */
 interface IBluetoothSap {
     // Public API
+    boolean cleanup();
     boolean disconnect(in BluetoothDevice device);
     int getConnectionState(in BluetoothDevice device);
     List<BluetoothDevice> getConnectedDevices();
