@@ -46,6 +46,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.android.internal.telephony.IccCardConstants.State;
+import com.android.internal.util.slim.AppHelper;
 import com.android.internal.util.slim.LockscreenTargetUtils;
 import com.android.internal.util.slim.DeviceUtils;
 import com.android.internal.util.slim.SlimActions;
@@ -335,27 +336,34 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
             mGlowPadView.setMagneticTargets(false);
             mStoredTargets = storedTargets.split("\\|");
             ArrayList<TargetDrawable> storedDrawables = new ArrayList<TargetDrawable>();
+            ArrayList<String> description = new ArrayList<String>();
+            ArrayList<String> directionDescription = new ArrayList<String>();
             final Resources res = getResources();
             final Drawable blankActiveDrawable = res.getDrawable(
                     R.drawable.ic_lockscreen_target_activated);
             final InsetDrawable activeBack = new InsetDrawable(blankActiveDrawable, 0, 0, 0, 0);
 
-            // Shift targets for landscape lockscreen on phones
-            for (int i = 0; i < mTargetOffset; i++) {
-                storedDrawables.add(new TargetDrawable(res, null));
-            }
             // Add unlock target
             storedDrawables.add(new TargetDrawable(res,
                     res.getDrawable(R.drawable.ic_lockscreen_unlock)));
+            description.add(getResources().getString(
+                com.android.internal.R.string.description_target_unlock));
+            directionDescription.add(getResources().getString(
+                com.android.internal.R.string.accessibility_target_direction));
+
             for (int i = 0; i < 8 - mTargetOffset - 1; i++) {
                 if (i >= mStoredTargets.length) {
                     storedDrawables.add(new TargetDrawable(res, 0));
+                    description.add("");
+                    directionDescription.add("");
                     continue;
                 }
 
                 String uri = mStoredTargets[i];
                 if (uri.equals(GlowPadView.EMPTY_TARGET)) {
                     storedDrawables.add(new TargetDrawable(res, 0));
+                    description.add("");
+                    directionDescription.add("");
                     continue;
                 }
 
@@ -401,12 +409,27 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                     }
 
                     storedDrawables.add(targetDrawable);
+                    description.add(AppHelper.getFriendlyNameForUri(
+                            mContext, mContext.getPackageManager(), uri));
+                    directionDescription.add("");
                 } catch (URISyntaxException e) {
                     Log.w(TAG, "Invalid target uri " + uri);
                     storedDrawables.add(new TargetDrawable(res, 0));
+                    description.add("");
+                    directionDescription.add("");
                 }
             }
+
+            // Shift targets for landscape lockscreen on phones
+            for (int i = 0; i < mTargetOffset; i++) {
+                storedDrawables.add(new TargetDrawable(res, null));
+                description.add("");
+                directionDescription.add("");
+            }
+
             mGlowPadView.setTargetResources(storedDrawables);
+            mGlowPadView.setTargetDescriptions(description);
+            mGlowPadView.setDirectionDescriptions(directionDescription);
         }
     }
 

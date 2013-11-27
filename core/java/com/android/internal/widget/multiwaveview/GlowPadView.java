@@ -739,6 +739,17 @@ public class GlowPadView extends View {
     }
 
     /**
+     * Sets the target descriptions for accessibility.
+     *
+     * @param targetDescriptions The target descriptions list.
+     * @hide
+     */
+    public void setTargetDescriptions(ArrayList<String> targetDescriptions) {
+        mTargetDescriptions = targetDescriptions;
+    }
+
+
+    /**
      * Gets the resource id specifying the target descriptions for accessibility.
      *
      * @return The resource id.
@@ -757,6 +768,16 @@ public class GlowPadView extends View {
         if (mDirectionDescriptions != null) {
             mDirectionDescriptions.clear();
         }
+    }
+
+    /**
+     * Sets the target direction descriptions for accessibility.
+     *
+     * @param targetDescriptions The target descriptions list.
+     * @hide
+     */
+    public void setDirectionDescriptions(ArrayList<String> directionDescriptions) {
+        mDirectionDescriptions = directionDescriptions;
     }
 
     /**

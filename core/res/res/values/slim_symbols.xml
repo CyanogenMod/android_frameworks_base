@@ -29,4 +29,9 @@
   <java-symbol type="string" name="global_actions_expanded_desktop_mode_off_status" />
   <java-symbol type="drawable" name="ic_lock_expanded_desktop" />
 
+  <!-- Description of accessibility direction for targets -->
+  <java-symbol type="string" name="accessibility_target_direction" />
+  <!-- Description of accessibility unlock target -->
+  <java-symbol type="string" name="description_target_unlock" />
+
 </resources>
