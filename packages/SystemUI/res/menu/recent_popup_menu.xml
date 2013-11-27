@@ -20,4 +20,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/recent_remove_item" android:title="@string/status_bar_recent_remove_item_title" />
     <item android:id="@+id/recent_inspect_item" android:title="@string/status_bar_recent_inspect_item_title" />
+    <item android:id="@+id/recent_force_stop" android:title="@string/advanced_dev_option_force_stop" />
+    <item android:id="@+id/recent_wipe_app" android:title="@string/advanced_dev_option_wipe_app" />
 </menu>
