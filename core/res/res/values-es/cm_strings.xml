@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2012-2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -62,13 +63,13 @@
     <string name="profile_none">Ninguno</string>
     <string name="permlab_cancelNotifications">cancelar notificaciones de aplicaciones</string>
     <string name="permdesc_cancelNotifications">Permite que la aplicación cancele las notificaciones creadas por otras.</string>
-    <string name="permlab_interceptSmsSent">interceptar mensajes SMS salientes</string>
-    <string name="permdesc_interceptSmsSent">Permite que la aplicación intercepte mensajes SMS salientes. Las aplicaciones maliciosas pueden impedir los mensajes SMS salientes.</string>
-    <string name="policylab_enforceSelinux">Forzar SELinux</string>
-    <string name="policydesc_enforceSelinux">Alternar entre el modo permisivo o restrictivo de SELinux.</string>
-    <string name="policylab_enforceMmac">Forzar MMAC</string>
-    <string name="policydesc_enforceMmac">Alternar entre el modo permisivo o restrictivo de MMAC.</string>
     <string name="perf_profile_pwrsv">Ahorro de energía</string>
     <string name="perf_profile_bal">Equilibrado</string>
     <string name="perf_profile_perf">Alto rendimiento</string>
+
+    <!-- AOSP -->
+    <string name="progress_nomediapresent" product="default">No hay medios extraíbles\u2026</string>
+    <string name="transient_navigation_confirmation_long">Deslizar hacia abajo desde el borde de la pantalla para mostrar la barra de estado</string>
+    <string name="permlab_sendMockSms">enviar mensajes SMS simulados</string>
+    <string name="permdesc_sendMockSms">Permite que la aplicación envíe mensajes SMS simulados a aplicaciones de confianza. Las aplicaciones maliciosas pueden enviar mensajes SMS continuamente, bloqueando la barra de notificaciones e interrumpiendo al usuario.</string>
 </resources>
