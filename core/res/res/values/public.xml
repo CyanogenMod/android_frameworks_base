@@ -733,6 +733,11 @@
   <public type="array" name="phoneTypes" id="0x01070003" />
   <public type="array" name="postalAddressTypes" id="0x01070004" />
 
+  <!-- The CTS android.net tests reference this resource, but fail becase
+       Google didn't declare it as a public resource. This fixes it for
+       the 4.3_r2 CTS release. -->
+  <public type="array" name="networkAttributes" id="0x1070015" />
+
   <public type="drawable" name="alert_dark_frame" id="0x01080000" />
   <public type="drawable" name="alert_light_frame" id="0x01080001" />
   <public type="drawable" name="arrow_down_float" id="0x01080002" />
