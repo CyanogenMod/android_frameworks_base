@@ -28,14 +28,23 @@ import android.widget.TextView;
 
 import com.android.internal.widget.LockPatternUtils;
 
+import static java.util.Arrays.asList;
+import java.util.Collections;
+import java.util.List;
+
 public class NumPadKey extends Button {
     // list of "ABC", etc per digit, starting with '0'
     static String sKlondike[];
-
+    static List<Integer> sDigits = asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    static int sCount = 0;
+    static boolean sShuffled;
     int mDigit = -1;
     int mTextViewResId;
     TextView mTextView = null;
     boolean mEnableHaptics;
+
+    Context mContext;
+    TypedArray mStyleable;
 
     private View.OnClickListener mListener = new View.OnClickListener() {
         @Override
@@ -67,21 +76,36 @@ public class NumPadKey extends Button {
     public NumPadKey(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.NumPadKey);
-        mDigit = a.getInt(R.styleable.NumPadKey_digit, mDigit);
-        setTextViewResId(a.getResourceId(R.styleable.NumPadKey_textView, 0));
+        mContext = context;
+
+        mStyleable = mContext.obtainStyledAttributes(attrs, R.styleable.NumPadKey);
+
+        setTextViewResId(mStyleable.getResourceId(R.styleable.NumPadKey_textView, 0));
 
         setOnClickListener(mListener);
-        setOnHoverListener(new LiftToActivateListener(context));
-        setAccessibilityDelegate(new ObscureSpeechDelegate(context));
+        setOnHoverListener(new LiftToActivateListener(mContext));
+        setAccessibilityDelegate(new ObscureSpeechDelegate(mContext));
 
-        mEnableHaptics = new LockPatternUtils(context).isTactileFeedbackEnabled();
+        mEnableHaptics = new LockPatternUtils(mContext).isTactileFeedbackEnabled();
+        createNumKeyPad(false);
+    }
+
+    public void createNumKeyPad(boolean enableRandom) {
+        if (enableRandom) {
+            if (!sShuffled) {
+                Collections.shuffle(sDigits);
+                sShuffled = true;
+            }
+            mDigit = sDigits.get(sCount);
+        } else {
+            mDigit = mStyleable.getInt(R.styleable.NumPadKey_digit, mDigit);
+        }
 
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(String.valueOf(mDigit));
         if (mDigit >= 0) {
             if (sKlondike == null) {
-                sKlondike = context.getResources().getStringArray(
+                sKlondike = mContext.getResources().getStringArray(
                         R.array.lockscreen_num_pad_klondike);
             }
             if (sKlondike != null && sKlondike.length > mDigit) {
@@ -91,11 +115,12 @@ public class NumPadKey extends Button {
                     builder.append(" ");
                     builder.append(extra);
                     builder.setSpan(
-                        new TextAppearanceSpan(context, R.style.TextAppearance_NumPadKey_Klondike),
+                        new TextAppearanceSpan(mContext, R.style.TextAppearance_NumPadKey_Klondike),
                         builder.length()-extraLen, builder.length(), 0);
                 }
             }
         }
+        sCount++;
         setText(builder);
     }
 
@@ -123,5 +148,10 @@ public class NumPadKey extends Button {
                     HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
                     | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
+    }
+
+    public void initNumKeyPad() {
+        sCount = 0;
+        sShuffled = false;
     }
 }
