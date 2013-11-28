@@ -20,8 +20,8 @@ import android.content.res.Resources;
 
 public class MoKeeUtils {
     public static boolean isChineseLanguage() {
-       Resources res = Resources.getSystem();
-       if (res.getConfiguration().locale.getCountry().equals("CN") || res.getConfiguration().locale.getCountry().equals("TW") || res.getConfiguration().locale.getCountry().equals("HK")) {
+       String country = Resources.getSystem().getConfiguration().locale.getCountry();
+       if (country.equals("CN") || country.equals("TW") || country.equals("HK")) {
             return true;
        } else {
             return false;
