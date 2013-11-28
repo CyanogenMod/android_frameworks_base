@@ -222,4 +222,7 @@
 
     <!-- used by DessertCase -->
     <dimen name="dessert_case_cell_size">192dp</dimen>
+
+    <!-- Padding under status bar battery icon -->
+    <dimen name="status_bar_battery_bottom_padding">1px</dimen>
 </resources>
