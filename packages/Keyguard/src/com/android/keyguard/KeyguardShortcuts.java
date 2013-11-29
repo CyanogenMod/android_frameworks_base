@@ -29,6 +29,7 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -42,6 +43,7 @@ import com.android.internal.util.slim.ButtonConfig;
 import com.android.internal.util.slim.DeviceUtils;
 import com.android.internal.util.slim.LockscreenTargetUtils;
 import com.android.internal.util.slim.SlimActions;
+import com.android.internal.widget.LockPatternUtils;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -50,6 +52,8 @@ public class KeyguardShortcuts extends LinearLayout {
 
     private static final int INNER_PADDING = 20;
     public final static String ICON_FILE = "icon_file";
+
+    private boolean mEnableHaptics;
 
     private KeyguardSecurityCallback mCallback;
     private PackageManager mPackageManager;
@@ -64,6 +68,8 @@ public class KeyguardShortcuts extends LinearLayout {
 
         mContext = context;
         mPackageManager = mContext.getPackageManager();
+
+        mEnableHaptics = new LockPatternUtils(mContext).isTactileFeedbackEnabled();
 
         createShortcuts();
     }
@@ -110,6 +116,7 @@ public class KeyguardShortcuts extends LinearLayout {
                 i.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
+                        doHapticKeyClick(HapticFeedbackConstants.LONG_PRESS);
                         SlimActions.processAction(mContext, action, true);
                         return true;
                     }
@@ -118,6 +125,7 @@ public class KeyguardShortcuts extends LinearLayout {
                 i.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        doHapticKeyClick(HapticFeedbackConstants.VIRTUAL_KEY);
                         SlimActions.processAction(mContext, action, false);
                     }
                 });
@@ -126,6 +134,15 @@ public class KeyguardShortcuts extends LinearLayout {
             if (j+1 < buttonsConfig.size()) {
                 addSeparator();
             }
+        }
+    }
+
+    // Cause a VIRTUAL_KEY vibration
+    public void doHapticKeyClick(int type) {
+        if (mEnableHaptics) {
+            performHapticFeedback(type,
+                    HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
+                    | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
     }
 
