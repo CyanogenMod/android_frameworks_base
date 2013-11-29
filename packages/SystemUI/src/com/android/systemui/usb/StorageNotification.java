@@ -121,6 +121,10 @@ public class StorageNotification extends SystemUI {
              */
             connected = false;
         }
+        //once UMS connected and SD card mounted, enable UMS
+        if (connected && st.equals(Environment.MEDIA_MOUNTED)) {
+            mStorageManager.setUsbMassStorageEnabled(true);
+        }
         updateUsbMassStorageNotification(connected);
     }
 
@@ -140,6 +144,12 @@ public class StorageNotification extends SystemUI {
                 "Media {%s} state changed from {%s} -> {%s} (primary = %b, usb storage = %b)",
                 path, oldState, newState, isPrimary, isUsbStorage));
         if (newState.equals(Environment.MEDIA_SHARED)) {
+            String usbMode = new UsbManager(null, null).getDefaultFunction();
+            final boolean isUmsMode = UsbManager.USB_FUNCTION_MASS_STORAGE.equals(usbMode);
+            if (!isUmsMode) {
+                mStorageManager.disableUsbMassStorage();
+            }
+
             /*
              * Storage is now shared. Modify the UMS notification
              * for stopping UMS.
