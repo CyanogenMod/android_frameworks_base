@@ -122,4 +122,6 @@
     <string name="perf_profile_pwrsv">Economia</string>
     <string name="perf_profile_bal">Balanceado</string>
     <string name="perf_profile_perf">Performance</string>
+    <string name="permlab_interceptSmsSent">interceptar SMS enviadas</string>
+    <string name="permdesc_interceptSmsSent">Permitir o aplicativo a interceptar um SMS enviado. Aplicativos maliciosos podem usar isto para previnir o envio de mensagens SMS.</string>
 </resources>
