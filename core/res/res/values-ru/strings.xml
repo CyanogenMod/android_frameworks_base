@@ -288,7 +288,7 @@
     <string name="permlab_changeConfiguration" msgid="4162092185124234480">"Изменение настроек экрана"</string>
     <string name="permdesc_changeConfiguration" msgid="4372223873154296076">"Приложение сможет изменять текущую конфигурацию, например, региональные настройки или размер шрифта."</string>
     <string name="permlab_enableCarMode" msgid="5684504058192921098">"Включение режима громкой связи"</string>
-    <string name="permdesc_enableCarMode" msgid="4853187425751419467">"Приложение сможет включать режим \"Штурман\"."</string>
+    <string name="permdesc_enableCarMode" msgid="4853187425751419467">"Приложение сможет включать режим «Штурман»."</string>
     <string name="permlab_killBackgroundProcesses" msgid="3914026687420177202">"Закрытие других приложений"</string>
     <string name="permdesc_killBackgroundProcesses" msgid="4593353235959733119">"Приложение сможет завершать фоновые процессы других приложений. Из-за этого другие приложения могут прекратить работу."</string>
     <string name="permlab_forceStopPackages" msgid="2329627428832067700">"Принудительное закрытие других приложений"</string>
@@ -590,7 +590,7 @@
     <string name="permlab_disableKeyguard" msgid="3598496301486439258">"Отключение функции блокировки экрана"</string>
     <string name="permdesc_disableKeyguard" msgid="6034203065077122992">"Приложение сможет отключать блокировку экрана и другие функции защиты. Например, блокировка экрана будет отключаться при получении входящего вызова и включаться после завершения разговора."</string>
     <string name="permlab_readSyncSettings" msgid="6201810008230503052">"Просмотр настроек синхронизации"</string>
-    <string name="permdesc_readSyncSettings" msgid="2706745674569678644">"Приложение сможет просматривать настройки синхронизации аккаунта, например определять, включена ли синхронизация для приложения \"Контакты\"."</string>
+    <string name="permdesc_readSyncSettings" msgid="2706745674569678644">"Приложение сможет просматривать настройки синхронизации аккаунта, например определять, включена ли синхронизация для приложения «Контакты»."</string>
     <string name="permlab_writeSyncSettings" msgid="5408694875793945314">"Включение/выключение синхронизации"</string>
     <string name="permdesc_writeSyncSettings" msgid="8956262591306369868">"Приложение сможет изменять настройки синхронизации аккаунта. Например, с помощью этого разрешения можно включить в аккаунте синхронизацию контактов."</string>
     <string name="permlab_readSyncStats" msgid="7396577451360202448">"Просмотр статистики синхронизации"</string>
@@ -773,12 +773,12 @@
     <string name="keyguard_password_enter_password_code" msgid="1054721668279049780">"Введите пароль"</string>
     <string name="keyguard_password_enter_pin_password_code" msgid="6391755146112503443">"Введите PIN-код"</string>
     <string name="keyguard_password_wrong_pin_code" msgid="2422225591006134936">"Неверный PIN-код."</string>
-    <string name="keyguard_label_text" msgid="861796461028298424">"Для разблокировки нажмите \"Меню\", а затем 0."</string>
+    <string name="keyguard_label_text" msgid="861796461028298424">"Для разблокировки нажмите «Меню», а затем 0."</string>
     <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"Экстренная служба"</string>
     <string name="lockscreen_carrier_default" msgid="8963839242565653192">"Нет сигнала"</string>
     <string name="lockscreen_screen_locked" msgid="7288443074806832904">"Экран заблокирован."</string>
-    <string name="lockscreen_instructions_when_pattern_enabled" msgid="46154051614126049">"Нажмите \"Меню\", чтобы разблокировать экран или вызвать службу экстренной помощи."</string>
-    <string name="lockscreen_instructions_when_pattern_disabled" msgid="686260028797158364">"Для разблокировки нажмите \"Меню\"."</string>
+    <string name="lockscreen_instructions_when_pattern_enabled" msgid="46154051614126049">"Нажмите «Меню», чтобы разблокировать экран или вызвать службу экстренной помощи."</string>
+    <string name="lockscreen_instructions_when_pattern_disabled" msgid="686260028797158364">"Для разблокировки нажмите «Меню»."</string>
     <string name="lockscreen_pattern_instructions" msgid="7478703254964810302">"Введите графический ключ"</string>
     <string name="lockscreen_emergency_call" msgid="5347633784401285225">"Экстренный вызов"</string>
     <string name="lockscreen_return_to_call" msgid="5244259785500040021">"Вернуться к вызову"</string>
@@ -841,7 +841,7 @@
     <string name="keyguard_accessibility_widget_empty_slot" msgid="1281505703307930757">"Пусто"</string>
     <string name="keyguard_accessibility_unlock_area_expanded" msgid="2278106022311170299">"Область разблокировки развернута"</string>
     <string name="keyguard_accessibility_unlock_area_collapsed" msgid="6366992066936076396">"Область разблокировки свернута"</string>
-    <string name="keyguard_accessibility_widget" msgid="6527131039741808240">"Виджет \"<xliff:g id="WIDGET_INDEX">%1$s</xliff:g>\""</string>
+    <string name="keyguard_accessibility_widget" msgid="6527131039741808240">"Виджет «<xliff:g id="WIDGET_INDEX">%1$s</xliff:g>»"</string>
     <string name="keyguard_accessibility_user_selector" msgid="1226798370913698896">"Выбор аккаунта"</string>
     <string name="keyguard_accessibility_status" msgid="8008264603935930611">"Статус"</string>
     <string name="keyguard_accessibility_camera" msgid="8904231194181114603">"Камера"</string>
@@ -904,7 +904,7 @@
     <string name="permlab_setAlarm" msgid="1379294556362091814">"Установка будильника"</string>
     <string name="permdesc_setAlarm" msgid="316392039157473848">"Приложение сможет настраивать будильник. Функция поддерживается не во всех программах."</string>
     <string name="permlab_addVoicemail" msgid="5525660026090959044">"Добавление голосовых сообщений"</string>
-    <string name="permdesc_addVoicemail" msgid="6604508651428252437">"Приложение сможет добавлять голосовые сообщения в папку \"Входящие\"."</string>
+    <string name="permdesc_addVoicemail" msgid="6604508651428252437">"Приложение сможет добавлять голосовые сообщения в папку «Входящие»."</string>
     <string name="permlab_writeGeolocationPermissions" msgid="5962224158955273932">"Изменение прав доступа к геоданным в браузере"</string>
     <string name="permdesc_writeGeolocationPermissions" msgid="1083743234522638747">"Приложение сможет изменять настройки доступа к геоданным в браузере. Вредоносные программы смогут таким образом отправлять информацию о местоположении на любые веб-сайты."</string>
     <string name="permlab_packageVerificationAgent" msgid="5568139100645829117">"Проверка пакетов"</string>
@@ -934,22 +934,25 @@
     <string name="searchview_description_clear" msgid="1330281990951833033">"Удалить запрос"</string>
     <string name="searchview_description_submit" msgid="2688450133297983542">"Отправить запрос"</string>
     <string name="searchview_description_voice" msgid="2453203695674994440">"Голосовой поиск"</string>
-    <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"Включить \"Изучение касанием\"?"</string>
-    <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию \"Изучение касанием\". Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять планшетным ПК с помощью жестов."</string>
-    <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию \"Изучение касанием\". Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять телефоном с помощью жестов."</string>
+    <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"Включить «Изучение касанием»?"</string>
+    <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию «Изучение касанием». Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять планшетным ПК с помощью жестов."</string>
+    <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию «Изучение касанием». Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять телефоном с помощью жестов."</string>
     <string name="oneMonthDurationPast" msgid="7396384508953779925">"1 месяц назад"</string>
     <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Более месяца назад"</string>
   <plurals name="num_seconds_ago">
-    <item quantity="one" msgid="4869870056547896011">"1 секунду назад"</item>
-    <item quantity="other" msgid="3903706804349556379">"<xliff:g id="COUNT">%d</xliff:g> с. назад"</item>
+    <item quantity="one" msgid="4869870056547896011">"<xliff:g id="COUNT">%d</xliff:g> секунду назад"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> секунды назад"</item>
+    <item quantity="other" msgid="3903706804349556379">"<xliff:g id="COUNT">%d</xliff:g> секунд назад"</item>
   </plurals>
   <plurals name="num_minutes_ago">
-    <item quantity="one" msgid="3306787433088810191">"1 минуту назад"</item>
-    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> мин. назад"</item>
+    <item quantity="one" msgid="3306787433088810191">"<xliff:g id="COUNT">%d</xliff:g> минуту назад"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> минуты назад"</item>
+    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> минут назад"</item>
   </plurals>
   <plurals name="num_hours_ago">
-    <item quantity="one" msgid="9150797944610821849">"1 час назад"</item>
-    <item quantity="other" msgid="2467273239587587569">"<xliff:g id="COUNT">%d</xliff:g> ч. назад"</item>
+    <item quantity="one" msgid="9150797944610821849">"<xliff:g id="COUNT">%d</xliff:g> час назад"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> часа назад"</item>
+    <item quantity="other" msgid="2467273239587587569">"<xliff:g id="COUNT">%d</xliff:g> часов назад"</item>
   </plurals>
   <plurals name="last_num_days">
     <item quantity="other" msgid="3069992808164318268">"Последние <xliff:g id="COUNT">%d</xliff:g> дн."</item>
@@ -961,12 +964,14 @@
     <item quantity="other" msgid="2479586466153314633">"<xliff:g id="COUNT">%d</xliff:g> дн. назад"</item>
   </plurals>
   <plurals name="in_num_seconds">
-    <item quantity="one" msgid="2729745560954905102">"через 1 секунду"</item>
-    <item quantity="other" msgid="1241926116443974687">"через <xliff:g id="COUNT">%d</xliff:g> с."</item>
+    <item quantity="one" msgid="2729745560954905102">"через <xliff:g id="COUNT">%d</xliff:g> секунду"</item>
+    <item quantity="few">"через <xliff:g id="COUNT">%d</xliff:g> секунды"</item>
+    <item quantity="other" msgid="1241926116443974687">"через <xliff:g id="COUNT">%d</xliff:g> секунд"</item>
   </plurals>
   <plurals name="in_num_minutes">
-    <item quantity="one" msgid="8793095251325200395">"через 1 минуту"</item>
-    <item quantity="other" msgid="3330713936399448749">"через <xliff:g id="COUNT">%d</xliff:g> мин."</item>
+    <item quantity="one" msgid="8793095251325200395">"через <xliff:g id="COUNT">%d</xliff:g> минуту"</item>
+    <item quantity="few">"через <xliff:g id="COUNT">%d</xliff:g> минуты"</item>
+    <item quantity="other" msgid="3330713936399448749">"через <xliff:g id="COUNT">%d</xliff:g> минут"</item>
   </plurals>
   <plurals name="in_num_hours">
     <item quantity="one" msgid="7164353342477769999">"через 1 час"</item>
@@ -977,15 +982,12 @@
     <item quantity="other" msgid="5109449375100953247">"через <xliff:g id="COUNT">%d</xliff:g> дн."</item>
   </plurals>
   <plurals name="abbrev_num_seconds_ago">
-    <item quantity="one" msgid="1849036840200069118">"1 сек. назад"</item>
     <item quantity="other" msgid="3699169366650930415">"<xliff:g id="COUNT">%d</xliff:g> сек. назад"</item>
   </plurals>
   <plurals name="abbrev_num_minutes_ago">
-    <item quantity="one" msgid="6361490147113871545">"1 мин. назад"</item>
     <item quantity="other" msgid="851164968597150710">"<xliff:g id="COUNT">%d</xliff:g> мин. назад"</item>
   </plurals>
   <plurals name="abbrev_num_hours_ago">
-    <item quantity="one" msgid="4796212039724722116">"1 час назад"</item>
     <item quantity="other" msgid="6889970745748538901">"<xliff:g id="COUNT">%d</xliff:g> ч. назад"</item>
   </plurals>
   <plurals name="abbrev_num_days_ago">
@@ -993,15 +995,12 @@
     <item quantity="other" msgid="3453342639616481191">"<xliff:g id="COUNT">%d</xliff:g> дн. назад"</item>
   </plurals>
   <plurals name="abbrev_in_num_seconds">
-    <item quantity="one" msgid="5842225370795066299">"через 1 с."</item>
     <item quantity="other" msgid="5495880108825805108">"через <xliff:g id="COUNT">%d</xliff:g> с."</item>
   </plurals>
   <plurals name="abbrev_in_num_minutes">
-    <item quantity="one" msgid="562786149928284878">"через 1 мин."</item>
     <item quantity="other" msgid="4216113292706568726">"через <xliff:g id="COUNT">%d</xliff:g> мин."</item>
   </plurals>
   <plurals name="abbrev_in_num_hours">
-    <item quantity="one" msgid="3274708118124045246">"через 1 час"</item>
     <item quantity="other" msgid="3705373766798013406">"через <xliff:g id="COUNT">%d</xliff:g> ч."</item>
   </plurals>
   <plurals name="abbrev_in_num_days">
@@ -1024,16 +1023,19 @@
     <string name="year" msgid="4001118221013892076">"г."</string>
     <string name="years" msgid="6881577717993213522">"г."</string>
   <plurals name="duration_seconds">
-    <item quantity="one" msgid="6962015528372969481">"1 сек."</item>
-    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> сек."</item>
+    <item quantity="one" msgid="6962015528372969481">"<xliff:g id="COUNT">%d</xliff:g> секунда"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> секунды"</item>
+    <item quantity="other" msgid="1886107766577166786">"<xliff:g id="COUNT">%d</xliff:g> секунд"</item>
   </plurals>
   <plurals name="duration_minutes">
-    <item quantity="one" msgid="4915414002546085617">"1 мин."</item>
-    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> мин."</item>
+    <item quantity="one" msgid="4915414002546085617">"<xliff:g id="COUNT">%d</xliff:g> минута"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> минуты"</item>
+    <item quantity="other" msgid="3165187169224908775">"<xliff:g id="COUNT">%d</xliff:g> минут"</item>
   </plurals>
   <plurals name="duration_hours">
-    <item quantity="one" msgid="8917467491248809972">"1 ч."</item>
-    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> ч."</item>
+    <item quantity="one" msgid="8917467491248809972">"<xliff:g id="COUNT">%d</xliff:g> час"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> часы"</item>
+    <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> часов"</item>
   </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Ошибка"</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">"Это видео не предназначено для потокового воспроизведения на данном устройстве."</string>
@@ -1061,7 +1063,7 @@
     <string name="editTextMenuTitle" msgid="4909135564941815494">"Операции с текстом"</string>
     <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Заканчивается свободное место"</string>
     <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Некоторые системные функции могут не работать"</string>
-    <string name="app_running_notification_title" msgid="8718335121060787914">"Приложение \"<xliff:g id="APP_NAME">%1$s</xliff:g>\" выполняется"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"Приложение «<xliff:g id="APP_NAME">%1$s</xliff:g>» выполняется"</string>
     <string name="app_running_notification_text" msgid="4653586947747330058">"Нажмите, чтобы получить дополнительные данные или выключить приложение."</string>
     <string name="ok" msgid="5970060430562524910">"ОК"</string>
     <string name="cancel" msgid="6442560571259935130">"Отмена"</string>
@@ -1069,24 +1071,24 @@
     <string name="no" msgid="5141531044935541497">"Отмена"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Внимание"</string>
     <string name="loading" msgid="7933681260296021180">"Загрузка…"</string>
-    <string name="capital_on" msgid="1544682755514494298">"I"</string>
-    <string name="capital_off" msgid="6815870386972805832">"O"</string>
+    <string name="capital_on" msgid="1544682755514494298">"\u2759"</string>
+<string name="capital_off" msgid="6815870386972805832">"\u3007"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Что использовать?"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"По умолчанию для этого действия"</string>
-    <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Удаляет настройки по умолчанию в меню \"Настройки &gt; Приложения &gt; Загруженные\"."</string>
+    <string name="clearDefaultHintMsg" msgid="3252584689512077257">"Удаляет настройки по умолчанию в меню «Настройки &gt; Приложения &gt; Загруженные»."</string>
     <string name="chooseActivity" msgid="7486876147751803333">"Выберите действие"</string>
     <string name="chooseUsbActivity" msgid="6894748416073583509">"Выбор приложения для USB-устройства"</string>
     <string name="noApplications" msgid="2991814273936504689">"Действие не поддерживается ни в одном приложении."</string>
     <string name="aerr_title" msgid="1905800560317137752"></string>
-    <string name="aerr_application" msgid="932628488013092776">"В приложении \"<xliff:g id="APPLICATION">%1$s</xliff:g>\" произошла ошибка."</string>
-    <string name="aerr_process" msgid="4507058997035697579">"В приложении \"<xliff:g id="PROCESS">%1$s</xliff:g>\" произошла ошибка."</string>
+    <string name="aerr_application" msgid="932628488013092776">"В приложении «<xliff:g id="APPLICATION">%1$s</xliff:g>» произошла ошибка."</string>
+    <string name="aerr_process" msgid="4507058997035697579">"В работе процесса «<xliff:g id="PROCESS">%1$s</xliff:g>» произошла ошибка."</string>
     <string name="anr_title" msgid="4351948481459135709"></string>
-    <string name="anr_activity_application" msgid="1904477189057199066">"Приложение \"<xliff:g id="APPLICATION">%2$s</xliff:g>\" не отвечает."\n\n"Закрыть его?"</string>
-    <string name="anr_activity_process" msgid="5776209883299089767">"Приложение \"<xliff:g id="ACTIVITY">%1$s</xliff:g>\" не отвечает."\n\n"Закрыть его?"</string>
-    <string name="anr_application_process" msgid="8941757607340481057">"Приложение \"<xliff:g id="APPLICATION">%1$s</xliff:g>\" не отвечает. Закрыть его?"</string>
-    <string name="anr_process" msgid="6513209874880517125">"Приложение \"<xliff:g id="PROCESS">%1$s</xliff:g>\" не отвечает."\n\n"Закрыть его?"</string>
+    <string name="anr_activity_application" msgid="1904477189057199066">"Приложение «<xliff:g id="APPLICATION">%2$s</xliff:g>» не отвечает."\n\n"Закрыть его?"</string>
+    <string name="anr_activity_process" msgid="5776209883299089767">"Процесс «<xliff:g id="ACTIVITY">%1$s</xliff:g>» не отвечает."\n\n"Завершить его?"</string>
+    <string name="anr_application_process" msgid="8941757607340481057">"Процесс приложения «<xliff:g id="APPLICATION">%1$s</xliff:g>» не отвечает. Завершить его?"</string>
+    <string name="anr_process" msgid="6513209874880517125">"Процесс «<xliff:g id="PROCESS">%1$s</xliff:g>» не отвечает."\n\n"Завершить его?"</string>
     <string name="force_close" msgid="8346072094521265605">"ОК"</string>
-    <string name="report" msgid="4060218260984795706">"Отзыв"</string>
+    <string name="report" msgid="4060218260984795706">"Сообщить"</string>
     <string name="wait" msgid="7147118217226317732">"Подождать"</string>
     <string name="webpage_unresponsive" msgid="3272758351138122503">"Страница не отвечает."\n\n"Закрыть ее?"</string>
     <string name="launch_warning_title" msgid="1547997780506713581">"Приложение перенаправлено"</string>
@@ -1094,8 +1096,8 @@
     <string name="launch_warning_original" msgid="188102023021668683">"Изначально было запущено приложение <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
     <string name="screen_compat_mode_scale" msgid="3202955667675944499">"Масштаб"</string>
     <string name="screen_compat_mode_show" msgid="4013878876486655892">"Всегда показывать"</string>
-    <string name="screen_compat_mode_hint" msgid="1064524084543304459">"Включить эту функцию можно в меню \"Настройки &gt; Приложения &gt; Загруженные\"."</string>
-    <string name="smv_application" msgid="3307209192155442829">"Приложение \"<xliff:g id="APPLICATION">%1$s</xliff:g>\" (процесс: <xliff:g id="PROCESS">%2$s</xliff:g>) нарушило собственную политику StrictMode."</string>
+    <string name="screen_compat_mode_hint" msgid="1064524084543304459">"Включить эту функцию можно в меню «Настройки &gt; Приложения &gt; Загруженные»."</string>
+    <string name="smv_application" msgid="3307209192155442829">"Приложение «<xliff:g id="APPLICATION">%1$s</xliff:g>» (процесс: <xliff:g id="PROCESS">%2$s</xliff:g>) нарушило собственную политику StrictMode."</string>
     <string name="smv_process" msgid="5120397012047462446">"Процесс <xliff:g id="PROCESS">%1$s</xliff:g> нарушил собственную политику StrictMode."</string>
     <string name="android_upgrading_title" msgid="1584192285441405746">"Обновление Android..."</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"Оптимизация приложения <xliff:g id="NUMBER_0">%1$d</xliff:g> из <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
@@ -1113,7 +1115,7 @@
     <string name="volume_ringtone" msgid="6885421406845734650">"Громкость звонка"</string>
     <string name="volume_music" msgid="5421651157138628171">"Громкость мультимедиа"</string>
     <string name="volume_music_hint_playing_through_bluetooth" msgid="9165984379394601533">"Воспроизведение по каналу Bluetooth"</string>
-    <string name="volume_music_hint_silent_ringtone_selected" msgid="8310739960973156272">"Выбран режим \"Без звука\""</string>
+    <string name="volume_music_hint_silent_ringtone_selected" msgid="8310739960973156272">"Выбран режим «Без звука»"</string>
     <string name="volume_call" msgid="3941680041282788711">"Громкость при разговоре"</string>
     <string name="volume_bluetooth_call" msgid="2002891926351151534">"Громкость при разговоре"</string>
     <string name="volume_alarm" msgid="1985191616042689100">"Громкость сигнала предупреждения"</string>
@@ -1163,19 +1165,19 @@
     <string name="sms_control_message" msgid="3867899169651496433">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; отправляет большое количество SMS. Разрешить приложению и дальше отправлять сообщения?"</string>
     <string name="sms_control_yes" msgid="3663725993855816807">"Разрешить"</string>
     <string name="sms_control_no" msgid="625438561395534982">"Запретить"</string>
-    <string name="sms_short_code_confirm_message" msgid="1645436466285310855">"Приложение &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; собирается отправить сообщение на адрес &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
+    <string name="sms_short_code_confirm_message" msgid="1645436466285310855">"Приложение «&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;» собирается отправить сообщение на номер &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
     <string name="sms_short_code_details" msgid="3492025719868078457">"С вашего мобильного счета "<font fgcolor="#ffffb060">"могут быть списаны средства"</font>"."</string>
     <string name="sms_premium_short_code_details" msgid="5523826349105123687"><font fgcolor="#ffffb060">"С вашего мобильного счета будут списаны средства."</font></string>
     <string name="sms_short_code_confirm_allow" msgid="4458878637111023413">"Отправить"</string>
     <string name="sms_short_code_confirm_deny" msgid="2927389840209170706">"Отмена"</string>
     <string name="sms_short_code_remember_choice" msgid="5289538592272218136">"Запомнить выбранный телефон"</string>
-    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"Это можно изменить позже в разделе настроек \"Приложения\"."</string>
+    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"Это можно изменить позже в разделе настроек «Приложения»."</string>
     <string name="sms_short_code_confirm_always_allow" msgid="3241181154869493368">"Всегда разрешать"</string>
     <string name="sms_short_code_confirm_never_allow" msgid="446992765774269673">"Не разрешать"</string>
-    <string name="sim_removed_title" msgid="6227712319223226185">"SIM-карта удалена"</string>
+    <string name="sim_removed_title" msgid="6227712319223226185">"SIM-карта извлечена"</string>
     <string name="sim_removed_message" msgid="2333164559970958645">"Пока вы не вставите действующую SIM-карту, мобильная сеть будет недоступна."</string>
     <string name="sim_done_button" msgid="827949989369963775">"Готово"</string>
-    <string name="sim_added_title" msgid="3719670512889674693">"SIM-карта добавлена"</string>
+    <string name="sim_added_title" msgid="3719670512889674693">"SIM-карта установлена"</string>
     <string name="sim_added_message" msgid="6599945301141050216">"Перезагрузите устройство для доступа к мобильной сети."</string>
     <string name="sim_restart_button" msgid="4722407842815232347">"Перезапуск"</string>
     <string name="time_picker_dialog_title" msgid="8349362623068819295">"Настройка времени"</string>
@@ -1221,7 +1223,7 @@
     <string name="select_input_method" msgid="4653387336791222978">"Выберите способ ввода"</string>
     <string name="configure_input_methods" msgid="9091652157722495116">"Настройка способов ввода"</string>
     <string name="use_physical_keyboard" msgid="6203112478095117625">"Физическая клавиатура"</string>
-    <string name="hardware" msgid="7517821086888990278">"Аппаратура"</string>
+    <string name="hardware" msgid="7517821086888990278">"Устройство"</string>
     <string name="select_keyboard_layout_notification_title" msgid="1407367017263030773">"Выберите раскладку клавиатуры"</string>
     <string name="select_keyboard_layout_notification_message" msgid="4465907700449257063">"Нажмите, чтобы выбрать раскладку клавиатуры."</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
@@ -1264,7 +1266,7 @@
     <string name="ime_action_send" msgid="2316166556349314424">"Отправить"</string>
     <string name="ime_action_next" msgid="3138843904009813834">"Далее"</string>
     <string name="ime_action_done" msgid="8971516117910934605">"Готово"</string>
-    <string name="ime_action_previous" msgid="1443550039250105948">"Пред."</string>
+    <string name="ime_action_previous" msgid="1443550039250105948">"Назад"</string>
     <string name="ime_action_default" msgid="2840921885558045721">"Выполнить"</string>
     <string name="dial_number_using" msgid="5789176425167573586">"Набрать номер"\n"<xliff:g id="NUMBER">%s</xliff:g>"</string>
     <string name="create_contact_using" msgid="4947405226788104538">"Создать контакт"\n"с номером <xliff:g id="NUMBER">%s</xliff:g>"</string>
@@ -1273,7 +1275,7 @@
     <string name="grant_permissions_header_text" msgid="6874497408201826708">"Запрос доступа"</string>
     <string name="allow" msgid="7225948811296386551">"Разрешить"</string>
     <string name="deny" msgid="2081879885755434506">"Отклонить"</string>
-    <string name="permission_request_notification_title" msgid="6486759795926237907">"Разрешение запрошено"</string>
+    <string name="permission_request_notification_title" msgid="6486759795926237907">"Запрос разрешения"</string>
     <string name="permission_request_notification_with_subtitle" msgid="8530393139639560189">"Требуется разрешение"\n"для аккаунта <xliff:g id="ACCOUNT">%s</xliff:g>."</string>
     <string name="input_method_binding_label" msgid="1283557179944992649">"Способ ввода"</string>
     <string name="sync_binding_label" msgid="3687969138375092423">"Синхр."</string>
@@ -1293,7 +1295,7 @@
     <string name="no_file_chosen" msgid="6363648562170759465">"Не выбран файл"</string>
     <string name="reset" msgid="2448168080964209908">"Сбросить"</string>
     <string name="submit" msgid="1602335572089911941">"Отправить"</string>
-    <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Включен режим \"Штурман\""</string>
+    <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Включен режим «Штурман»"</string>
     <string name="car_mode_disable_notification_message" msgid="8035230537563503262">"Чтобы выйти, нажмите здесь."</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"USB-модем/точка доступа Wi-Fi используется"</string>
     <string name="tethered_notification_message" msgid="6857031760103062982">"Нажмите для настройки."</string>
@@ -1367,7 +1369,7 @@
     <string name="keyboardview_keycode_enter" msgid="2985864015076059467">"Клавиша ввода"</string>
     <string name="activitychooserview_choose_application" msgid="2125168057199941199">"Выберите приложение"</string>
     <string name="shareactionprovider_share_with" msgid="806688056141131819">"Открыть доступ:"</string>
-    <string name="shareactionprovider_share_with_application" msgid="5627411384638389738">"Открыть доступ приложению \"<xliff:g id="APPLICATION_NAME">%s</xliff:g>\""</string>
+    <string name="shareactionprovider_share_with_application" msgid="5627411384638389738">"Открыть доступ приложению «<xliff:g id="APPLICATION_NAME">%s</xliff:g>»"</string>
     <string name="content_description_sliding_handle" msgid="415975056159262248">"Перетаскиваемый значок блокировки. Нажмите и удерживайте."</string>
     <string name="description_direction_up" msgid="7169032478259485180">"Проведите вверх, чтобы <xliff:g id="TARGET_DESCRIPTION">%s</xliff:g>."</string>
     <string name="description_direction_down" msgid="5087739728639014595">"Проведите вниз, чтобы <xliff:g id="TARGET_DESCRIPTION">%s</xliff:g>."</string>
@@ -1394,7 +1396,7 @@
     <string name="data_usage_warning_body" msgid="2814673551471969954">"Проверьте трафик и настройки."</string>
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Передача данных 2G/3G отключена"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Передача данных 4G отключена"</string>
-    <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Моб. Интернет отключен"</string>
+    <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Моб. интернет отключен"</string>
     <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Передача данных через Wi-Fi отключена"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Нажмите, чтобы включить."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Превышен лимита трафика 2G и 3G"</string>
