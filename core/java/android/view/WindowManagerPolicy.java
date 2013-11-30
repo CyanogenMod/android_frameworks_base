@@ -1209,16 +1209,6 @@ public interface WindowManagerPolicy {
      */
     public void setTouchExplorationEnabled(boolean enabled);
 
-    /**
-     * A window animation has been scheduled
-     */
-    public void windowAnimationStarted();
-
-    /**
-     * Animating windows has finished
-     */
-    public void windowAnimationFinished();
-
     /*
      * Get the current navigation bar state when expanded desktop is enabled.
      *
