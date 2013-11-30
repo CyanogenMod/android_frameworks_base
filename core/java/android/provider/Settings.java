@@ -2970,27 +2970,6 @@ public final class Settings {
         */
         public static final String NOTIFICATION_ALPHA = "notification_alpha";
 
-        /**
-         * Enable Menu key
-         *
-         * @hide
-         */
-        public static final String KEY_MENU_ENABLED = "key_menu_enabled";
-
-        /**
-         * Enable Back key
-         *
-         * @hide
-         */
-        public static final String KEY_BACK_ENABLED = "key_back_enabled";
-
-        /**
-         * Enable Home key
-         *
-         * @hide
-         */
-        public static final String KEY_HOME_ENABLED = "key_home_enabled";
-
        /**
         * Sets the portrait background of notification drawer
         * @hide
@@ -4753,6 +4732,36 @@ public final class Settings {
          */
         public static final String LOCK_PATTERN_VISIBLE = "lock_pattern_visible_pattern";
 
+        /**
+         * Colorize custom lock icon true/false
+         * @hide
+         */
+        public static final String LOCKSCREEN_COLORIZE_LOCK = "lockscreen_colorize_lock";
+
+        /**
+         * Lockscreen custom lock icon
+         * @hide
+         */
+        public static final String LOCKSCREEN_LOCK_ICON = "lockscreen_lock_icon";
+
+        /**
+         * Lockscreen lock color (handle and expanded locks)
+         * @hide
+         */
+        public static final String LOCKSCREEN_LOCK_COLOR = "lockscreen_lock_color";
+
+        /**
+         * Lockscreen dots color (glowpad dots)
+         * @hide
+         */
+        public static final String LOCKSCREEN_DOTS_COLOR = "lockscreen_dots_color";
+
+        /**
+         * Lockscreen frame color (widgets/security frame color)
+         * @hide
+         */
+        public static final String LOCKSCREEN_FRAME_COLOR = "lockscreen_frame_color";
+       
         /**
          * Whether lock pattern will vibrate as user enters (0 = false, 1 =
          * true)
