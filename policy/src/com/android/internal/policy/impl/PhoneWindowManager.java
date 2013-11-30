@@ -366,6 +366,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
     boolean mIsLongPress;
+    private boolean mAnimatingWindows;
+    private boolean mNeedUpdateSettings;
 
     private final class PointerLocationPointerEventListener implements PointerEventListener {
         @Override
@@ -700,8 +702,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         @Override public void onChange(boolean selfChange) {
-            updateSettings();
-            updateRotation(false);
+            // A settings update potentially means triggering a configuration change,
+            // which we don't want to do during a window animation
+            if (mAnimatingWindows) {
+                mNeedUpdateSettings = true;
+            } else {
+                updateSettings();
+                updateRotation(false);
+            }
         }
     }
 
@@ -6207,6 +6215,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return (windowType == WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG);
         }
         return true;
+    }
+
+    @Override
+    public void windowAnimationStarted() {
+        mAnimatingWindows = true;
+    }
+
+    @Override
+    public void windowAnimationFinished() {
+        mAnimatingWindows = false;
+        if (mNeedUpdateSettings) {
+            updateSettings();
+            updateRotation(false);
+            mNeedUpdateSettings = false;
+        }
     }
 
     @Override
