@@ -1179,21 +1179,23 @@ public class KeyguardViewMediator {
 
         final ContentResolver cr = mContext.getContentResolver();
         if (Settings.System.getInt(cr, Settings.System.LOCKSCREEN_SOUNDS_ENABLED, 1) == 1) {
-            final int whichSound = locked
-                ? mLockSoundId
-                : mUnlockSoundId;
-            mLockSounds.stop(mLockSoundStreamId);
-            // Init mAudioManager
-            if (mAudioManager == null) {
-                mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-                if (mAudioManager == null) return;
-                mMasterStreamType = mAudioManager.getMasterStreamType();
-            }
-            // If the stream is muted, don't play the sound
-            if (mAudioManager.isStreamMute(mMasterStreamType)) return;
+            mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            if (!mAudioManager.isMusicActive()) {
+                final int whichSound = locked
+                    ? mLockSoundId
+                    : mUnlockSoundId;
+                mLockSounds.stop(mLockSoundStreamId);
+                // Init mAudioManager
+                if (mAudioManager == null) {
+                    if (mAudioManager == null) return;
+                    mMasterStreamType = mAudioManager.getMasterStreamType();
+                }
+                // If the stream is muted, don't play the sound
+                if (mAudioManager.isStreamMute(mMasterStreamType)) return;
 
-            mLockSoundStreamId = mLockSounds.play(whichSound,
-                    mLockSoundVolume, mLockSoundVolume, 1/*priortiy*/, 0/*loop*/, 1.0f/*rate*/);
+                mLockSoundStreamId = mLockSounds.play(whichSound,
+                        mLockSoundVolume, mLockSoundVolume, 1/*priortiy*/, 0/*loop*/, 1.0f/*rate*/);
+            }
         }
     }
 
