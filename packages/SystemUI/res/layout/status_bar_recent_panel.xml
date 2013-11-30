@@ -25,15 +25,15 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:foreground="@drawable/bg_protect"
-    systemui:recentItemLayout="@layout/status_bar_recent_item"
-    >
+    systemui:recentItemLayout="@layout/status_bar_recent_item">
+
     <FrameLayout
         android:id="@+id/recents_bg_protect"
         android:background="@drawable/status_bar_recents_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-	android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true">
 
         <com.android.systemui.recent.RecentsVerticalScrollView
             android:id="@+id/recents_container"
@@ -60,15 +60,24 @@
 
         </com.android.systemui.recent.RecentsVerticalScrollView>
 
-        <ImageView
-            android:id="@+id/recents_clear"
-            android:clickable="true"
+        <com.android.systemui.recent.CircleMemoryMeter
+            android:id="@+id/circle_meter"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:scaleType="center"
-            android:layout_gravity="bottom|left"
-            android:src="@drawable/ic_notify_clear" />
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_gravity="top|left" />
 
+        <ImageView
+            android:id="@+id/recents_clear_all"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_gravity="top|right"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_notify_clear" />
 
     </FrameLayout>
 
