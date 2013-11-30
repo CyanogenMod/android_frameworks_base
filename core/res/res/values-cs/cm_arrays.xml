@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="app_ops_labels">
+        <item>Pokus o získání pozice</item>
+        <item>Pokus o získání pozice</item>
+        <item>Pokus o získání pozice</item>
+        <item>Pokus o rying to use vibrate</item>
+        <item>Pokus o čtení kontaktů</item>
+        <item>Pokus o změnu kontaktů</item>
+        <item>Pokus o čtení seznamu hovorů</item>
+        <item>Pokus o změnu seznamu hovorů</item>
+        <item>Pokus o čtení kalendáře</item>
+        <item>Pokus o změnu kalendáře</item>
+        <item>Pokus o získání pozice</item>
+        <item>Pokus o odeslání upozornění</item>
+        <item>Pokus o získání pozice</item>
+        <item>Pokus o vytvoření telefonního hovoru</item>
+        <item>Pokus o čtení SMS/MMS</item>
+        <item>Pokus o uložení nebo změnu SMS/MMS</item>
+        <item>Pokus o přijmutí SMS/MMS</item>
+        <item>Pokus o přijmutí SMS/MMS</item>
+        <item>Pokus o přijmutí SMS/MMS</item>
+        <item>Pokus o přijmutí SMS/MMS</item>
+        <item>Pokus o odeslání SMS/MMS</item>
+        <item>Pokus o o čtení SMS/MMS</item>
+        <item>Pokus o uložení nebo změnu SMS/MMS</item>
+        <item>Pokus o změnu nastavení</item>
+        <item>Pokus o vykreslování do nejvyšší vrstvy</item>
+        <item>Pokus o přístup k upozorněním</item>
+        <item>Pokus o přístup k fotoaparátu</item>
+        <item>Pokus o nahrávání zvuku</item>
+        <item>Pokus o přehrávání zvuku</item>
+        <item>Pokus o načtení schránky</item>
+        <item>Pokus o změnu schránky</item>
+        <item>Pokus o přepnutí Wifi</item>
+        <item>Pokus o přepnutí Bluetooth</item>
+        <item>Pokus o přepnutí mobilních dat</item>
+        <item>Pokus o naplánování probuzení</item>
+    </string-array>
+</resources>
