@@ -50,6 +50,15 @@
             androidprv:layout_maxWidth="480dp"
             androidprv:layout_maxHeight="480dp" />
 
+        <include layout="@layout/keyguard_widget_pager_carousel"
+            android:id="@+id/app_widget_container_carousel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            androidprv:layout_centerWithinArea="0.5"
+            androidprv:layout_childType="widget"
+            androidprv:layout_maxWidth="480dp"
+            androidprv:layout_maxHeight="480dp" />
+
         <include layout="@layout/keyguard_multi_user_selector"/>
 
         <View android:layout_width="match_parent"

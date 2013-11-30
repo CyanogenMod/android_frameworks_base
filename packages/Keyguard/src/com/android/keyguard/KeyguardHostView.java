@@ -375,7 +375,7 @@ public class KeyguardHostView extends KeyguardViewBase {
                 (KeyguardWidgetPager) findViewById(R.id.app_widget_container);
         }
         mAppWidgetContainer.setVisibility(VISIBLE);
-        mAppWidgetContainerHidden.setVisibility(GONE);
+        removeView(mAppWidgetContainerHidden);
         mAppWidgetContainer.setCallbacks(mWidgetCallbacks);
         mAppWidgetContainer.setDeleteDropTarget(deleteDropTarget);
         mAppWidgetContainer.setMinScale(0.5f);
