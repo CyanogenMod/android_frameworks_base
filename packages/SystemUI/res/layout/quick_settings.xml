@@ -21,6 +21,13 @@
     android:id="@+id/settings_panel"
     android:background="@drawable/notification_panel_bg"
     >
+
+    <ImageView
+        android:id="@+id/notification_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
     <!-- TODO: Put into ScrollView -->
     <com.android.systemui.statusbar.phone.QuickSettingsScrollView
         android:layout_width="match_parent"
