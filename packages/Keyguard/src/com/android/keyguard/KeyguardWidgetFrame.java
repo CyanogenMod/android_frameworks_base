@@ -113,7 +113,9 @@ public class KeyguardWidgetFrame extends FrameLayout {
         // we need to specify a height.
         mSmallWidgetHeight =
                 res.getDimensionPixelSize(R.dimen.kg_small_widget_height);
-        mBackgroundDrawable = res.getDrawable(R.drawable.kg_widget_bg_padded);
+        mBackgroundDrawable =
+                KeyguardSecurityViewHelper.colorizeFrame(context,
+                res.getDrawable(R.drawable.kg_widget_bg_padded));
         mGradientColor = res.getColor(R.color.kg_widget_pager_gradient);
         mGradientPaint.setXfermode(sAddBlendMode);
     }

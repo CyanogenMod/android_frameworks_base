@@ -148,7 +148,9 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
         mEcaView = findViewById(R.id.keyguard_selector_fade_container);
         View bouncerFrameView = findViewById(R.id.keyguard_bouncer_frame);
         if (bouncerFrameView != null) {
-            mBouncerFrame = bouncerFrameView.getBackground();
+            mBouncerFrame =
+                    KeyguardSecurityViewHelper.colorizeFrame(mContext,
+                    bouncerFrameView.getBackground());
         }
     }
 
