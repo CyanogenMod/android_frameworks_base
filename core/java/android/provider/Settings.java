@@ -1910,9 +1910,9 @@ public final class Settings {
         public static final String BUTTON_BACKLIGHT_TIMEOUT = "button_backlight_timeout";
 
         /**
-         * Whether to enable the electron beam animation when turning screen off
-         *
-         * @hide */
+         * Control which animation is shown when turning screen off
+         * @hide
+         */
         public static final String SCREEN_OFF_ANIMATION = "screen_off_animation";
 
         /**
