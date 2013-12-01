@@ -5948,6 +5948,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0) {
             mNavigationBarController.showTransient();
             visibility |= View.NAVIGATION_BAR_TRANSIENT;
+            mWindowManagerFuncs.addSystemUIVisibilityFlag(View.NAVIGATION_BAR_TRANSIENT);
         }
         final int visibility2 = visibility;
         mLastSystemUiFlags = visibility;

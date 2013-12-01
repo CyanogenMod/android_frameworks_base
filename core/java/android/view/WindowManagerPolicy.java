@@ -430,6 +430,13 @@ public interface WindowManagerPolicy {
 
         /** Unregister a system listener for touch events */
         void unregisterPointerEventListener(PointerEventListener listener);
+
+        /**
+         * Fast way to post time-critical systemui flags to window manager
+         *
+         * @hide
+         */
+        void addSystemUIVisibilityFlag(int flag);
     }
 
     public interface PointerEventListener {
