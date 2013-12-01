@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2008 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<com.android.systemui.statusbar.sidebar.Folder
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/portal_container_holo">
+
+    <GridView
+        android:id="@+id/folder_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/folder_padding"
+        android:paddingRight="@dimen/folder_padding"
+        android:paddingTop="@dimen/folder_padding"
+        android:paddingBottom="@dimen/folder_padding"
+        android:cacheColorHint="#ff333333"
+        android:hapticFeedbackEnabled="false"
+        android:layout_margin="5dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="5dp"
+        android:columnWidth="60dp" />
+    
+    <FrameLayout
+        android:id="@+id/folder_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:background="#00000000" >
+
+        <com.android.systemui.statusbar.sidebar.FolderEditText
+            android:id="@+id/folder_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:paddingTop="@dimen/folder_name_padding"
+            android:paddingBottom="@dimen/folder_name_padding"
+            android:textSize="14sp"
+            android:textColor="#ff33b5e5"
+            android:textColorHighlight="#ff333333"
+            android:singleLine="true"
+            android:focusable="true"
+            android:imeOptions="flagNoExtractUi"/>
+<!-- 
+        <ImageView
+            android:id="@+id/btn_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_gravity="right|center_horizontal"
+            android:src="@android:drawable/ic_menu_sort_by_size" />
+-->
+    </FrameLayout>
+
+</com.android.systemui.statusbar.sidebar.Folder>
