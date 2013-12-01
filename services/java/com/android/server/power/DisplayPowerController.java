@@ -80,7 +80,7 @@ final class DisplayPowerController {
     // We might want to turn this off if we cannot get a guarantee that the screen
     // actually turns on and starts showing new content after the call to set the
     // screen state returns.  Playing the animation can also be somewhat slow.
-    private static final boolean USE_ELECTRON_BEAM_ON_ANIMATION = false;
+    private static final boolean USE_ELECTRON_BEAM_ON_ANIMATION = true;
 
     // If true, enables the use of the screen auto-brightness adjustment setting.
     private static final boolean USE_SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT =
@@ -237,7 +237,22 @@ final class DisplayPowerController {
 
     // True if we should fade the screen while turning it off, false if we should play
     // a stylish electron beam animation instead.
-    private boolean mElectronBeamFadesConfig;
+    private boolean mElectronBeamFadesConfig() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_ANIMATION_TYPE, 1) == 1;
+    }
+
+    // True if we should allow showing the screen-on animation
+    private boolean useScreenOnAnimation() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_ON_ANIMATION, 0) == 1;
+    }
+
+    // True if we should allow showing the screen-off animation
+    private boolean useScreenOffAnimation() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_OFF_ANIMATION, 1) == 1;
+    }
 
     // The pending power request.
     // Initially null until the first call to requestPowerState.
@@ -425,9 +440,6 @@ final class DisplayPowerController {
                     com.android.internal.R.integer.config_lightSensorWarmupTime);
             updateAutomaticBrightnessSettings();
         }
-
-        mElectronBeamFadesConfig = resources.getBoolean(
-                com.android.internal.R.bool.config_animateScreenLights);
 
         if (!DEBUG_PRETEND_PROXIMITY_SENSOR_ABSENT) {
             mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -785,9 +797,10 @@ final class DisplayPowerController {
                                 if (mPowerState.getElectronBeamLevel() == 1.0f) {
                                     mPowerState.dismissElectronBeam();
                                 } else if (mPowerState.prepareElectronBeam(
-                                        mElectronBeamFadesConfig ?
+                                        mElectronBeamFadesConfig() ?
                                                 ElectronBeam.MODE_FADE :
-                                                        ElectronBeam.MODE_WARM_UP)) {
+                                                ElectronBeam.MODE_WARM_UP)
+                                        && useScreenOnAnimation()) {
                                     mElectronBeamOnAnimator.start();
                                 } else {
                                     mElectronBeamOnAnimator.end();
@@ -808,7 +821,7 @@ final class DisplayPowerController {
                             setScreenOn(false);
                             unblockScreenOn();
                         } else if (mPowerState.prepareElectronBeam(
-                                mElectronBeamFadesConfig ?
+                                mElectronBeamFadesConfig() ?
                                         ElectronBeam.MODE_FADE :
                                         ElectronBeam.MODE_COOL_DOWN)
                                 && mPowerState.isScreenOn()
@@ -1507,9 +1520,4 @@ final class DisplayPowerController {
             updatePowerState();
         }
     };
-
-    private boolean useScreenOffAnimation() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.SCREEN_OFF_ANIMATION, 1) == 1;
-    }
 }
