@@ -1665,9 +1665,12 @@ public class ActionBarView extends AbsActionBarView {
             removeView(mExpandedActionView);
             mUpGoerFive.removeView(mExpandedHomeLayout);
             mExpandedActionView = null;
-            if ((mDisplayOptions & ActionBar.DISPLAY_SHOW_HOME) != 0) {
-                mHomeLayout.setVisibility(VISIBLE);
-            }
+
+            final boolean showHome = (mDisplayOptions & ActionBar.DISPLAY_SHOW_HOME) != 0;
+            final boolean homeAsUp = (mDisplayOptions & ActionBar.DISPLAY_HOME_AS_UP) != 0;
+            final int homeVis = (showHome || (!showHome && homeAsUp)) ? VISIBLE : GONE;
+            mHomeLayout.setVisibility(homeVis);
+
             if ((mDisplayOptions & ActionBar.DISPLAY_SHOW_TITLE) != 0) {
                 if (mTitleLayout == null) {
                     initTitle();
