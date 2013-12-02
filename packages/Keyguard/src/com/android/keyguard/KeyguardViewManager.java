@@ -18,20 +18,26 @@ package com.android.keyguard;
 
 import android.app.PendingIntent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
+
 import com.android.internal.policy.IKeyguardShowCallback;
 import com.android.internal.widget.LockPatternUtils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
@@ -94,6 +100,20 @@ public class KeyguardViewManager {
 
     private boolean mUnlockKeyDown = false;
 
+    // User lockscreen wallpaper
+    public static final int LOCKSCREEN_STYLE_COLOR = 0;
+    public static final int LOCKSCREEN_STYLE_IMAGE = 1;
+    public static final int LOCKSCREEN_STYLE_DEFAULT = 2;
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED.equals(intent.getAction())) {
+                mKeyguardHost.cacheUserImage();
+            }
+        }
+    };
+
     private KeyguardUpdateMonitorCallback mBackgroundChanger = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onSetBackground(Bitmap bmp) {
@@ -120,6 +140,8 @@ public class KeyguardViewManager {
         mViewManager = viewManager;
         mViewMediatorCallback = callback;
         mLockPatternUtils = lockPatternUtils;
+
+        context.registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED));
     }
 
     /**
@@ -170,6 +192,7 @@ public class KeyguardViewManager {
     class ViewManagerHost extends FrameLayout {
         private static final int BACKGROUND_COLOR = 0x70000000;
 
+        private Drawable mUserBackground;
         private Drawable mCustomBackground;
         private Configuration mLastConfiguration;
 
@@ -199,6 +222,7 @@ public class KeyguardViewManager {
         public ViewManagerHost(Context context) {
             super(context);
             setBackground(mBackgroundDrawable);
+            cacheUserImage();
             mLastConfiguration = new Configuration(context.getResources().getConfiguration());
         }
 
@@ -219,6 +243,9 @@ public class KeyguardViewManager {
         }
 
         public void setCustomBackground(Drawable d) {
+            if(d == null) {
+                d = mUserBackground;
+            }
             if (!ActivityManager.isHighEndGfx() || !mScreenOn) {
                 mCustomBackground = d;
                 if (d != null) {
@@ -322,6 +349,45 @@ public class KeyguardViewManager {
             }
             return super.dispatchKeyEvent(event);
         }
+
+        private void cacheUserImage() {
+            Drawable userDrawable = null;
+            int backgroundStyle = Settings.System.getInt(
+                    mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_BACKGROUND_STYLE, LOCKSCREEN_STYLE_DEFAULT);
+            int backgroundColor = Settings.System.getInt(
+                    mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_BACKGROUND_COLOR, 0x00000000);
+            float wallpaperAlpha = Settings.System.getFloat(
+                    mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_WALLPAPER_ALPHA, 1.0f);
+
+            switch (backgroundStyle) {
+                case LOCKSCREEN_STYLE_COLOR:
+                    userDrawable = new ColorDrawable(backgroundColor);
+                    userDrawable.setColorFilter(BACKGROUND_COLOR, PorterDuff.Mode.SRC_OVER);
+                    break;
+                case LOCKSCREEN_STYLE_IMAGE:
+                    try {
+                        Context settingsCtx = mContext.createPackageContext(
+                                "com.android.settings", 0);
+                        String wallpaper = settingsCtx.getFilesDir()
+                                + "/lockwallpaper";
+                        Bitmap bitmap = BitmapFactory.decodeFile(wallpaper);
+                        userDrawable = new BitmapDrawable(mContext.getResources(), bitmap);
+                        userDrawable.setColorFilter(BACKGROUND_COLOR, PorterDuff.Mode.SRC_OVER);
+                        userDrawable.setAlpha((int) (wallpaperAlpha * 255));
+                    } catch (NameNotFoundException e) {
+                    }
+                    break;
+                case LOCKSCREEN_STYLE_DEFAULT:
+                default:
+                    userDrawable = null;
+                    break;
+            }
+            mUserBackground = userDrawable;
+        }
+
     }
 
     public boolean handleKeyDown(int keyCode, KeyEvent event) {
@@ -721,7 +787,7 @@ public class KeyguardViewManager {
                             lastView.cleanUp();
                             // Let go of any large bitmaps.
                             mKeyguardHost.setCustomBackground(null);
-                            updateShowWallpaper(true);
+                            updateShowWallpaper(mKeyguardHost.mUserBackground == null);
                             mKeyguardHost.removeView(lastView);
                             mViewMediatorCallback.keyguardGone();
                         }
