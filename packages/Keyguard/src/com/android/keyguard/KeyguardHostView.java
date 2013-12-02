@@ -1550,6 +1550,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         final boolean transportAdded = ensureTransportPresentOrRemoved(state);
         final int pageToShow = getAppropriateWidgetPage(state);
         if (!transportAdded) {
+            KeyguardUpdateMonitor.getInstance(getContext()).dispatchSetBackground(null);
             mAppWidgetContainer.setCurrentPage(pageToShow);
         } else if (state == TRANSPORT_VISIBLE) {
             // If the transport was just added, we need to wait for layout to happen before
