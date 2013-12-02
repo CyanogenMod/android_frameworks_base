@@ -38,7 +38,10 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MANAGE_NETWORK_POLICY" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+<<<<<<< HEAD
     <uses-permission android:name="com.android.phone.CHANGE_NETWORK_MODE" />
+=======
+>>>>>>> d85304f... Quicksettings customizations Slim style
 
     <!-- Physical hardware -->
     <uses-permission android:name="android.permission.MANAGE_USB" />
@@ -86,8 +89,13 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+<<<<<<< HEAD
     <!-- Active display -->
     <uses-permission android:name="android.permission.SYSTEM_NOTIFICATION_LISTENER" />
+=======
+    <!-- Reboot -->
+    <uses-permission android:name="android.permission.REBOOT" />
+>>>>>>> d85304f... Quicksettings customizations Slim style
 
     <application
         android:persistent="true"
@@ -277,16 +285,6 @@
                 <category android:name="android.intent.category.DESK_DOCK" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-=======
-
-        <activity android:name=".statusbar.policy.activedisplay.DummyActivity"
-                  android:label=""
-                  android:taskAffinity=""
-                  android:excludeFromRecents="true"
-                  android:exported="true"
-                  android:theme="@style/Theme.DummyActivity">
-        </activity>
 
         <activity android:name=".statusbar.policy.activedisplay.DummyActivity"
                   android:label=""
@@ -299,6 +297,5 @@
         <activity android:name="com.android.systemui.Transparent"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
->>>>>>> 521259e... [2/2] Frameworks: HALO
     </application>
 </manifest>

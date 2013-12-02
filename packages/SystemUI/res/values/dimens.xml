@@ -208,7 +208,7 @@
 
     <!-- Quick Settings tile geometry: top interior margin, above icon -->
     <dimen name="qs_tile_margin_above_icon">27dp</dimen>
-    <!-- Quick Settings tile geometry: gap between icon and text -->
+    <!-- Quick Settings tile geometry: gap between icon and text 3 per row-->
     <dimen name="qs_tile_margin_below_icon">17dp</dimen>
     <!-- Quick Settings tile geometry: icon size -->
     <dimen name="qs_tile_icon_size">32dp</dimen>
@@ -220,4 +220,17 @@
 
     <!-- used by DessertCase -->
     <dimen name="dessert_case_cell_size">192dp</dimen>
+
+    <!-- Quick Settings tile geometry: gap between icon and text 4 per row-->
+    <dimen name="qs_4_column_text_padding">14dp</dimen>
+    <!-- Quick Settings tile geometry: gap between icon and text 5 per row-->
+    <dimen name="qs_5_column_text_padding">12dp</dimen>
+
+    <!-- Quick Settings tile geometry: text size for 3 tile per row-->
+    <dimen name="qs_3_column_text_size">12sp</dimen>
+    <!-- Quick Settings tile geometry: text size for 4 tile per row-->
+    <dimen name="qs_4_column_text_size">10sp</dimen>
+    <!-- Quick Settings tile geometry: text size for 5 tile per row-->
+    <dimen name="qs_5_column_text_size">9sp</dimen>
+
 </resources>

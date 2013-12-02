@@ -233,7 +233,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     TextView mNotificationPanelDebugText;
 
     // settings
-    QuickSettings mQS;
+    QuickSettingsController mQS;
     boolean mHasSettingsPanel, mHasFlipSettings;
     SettingsPanelView mSettingsPanel;
     View mFlipSettingsView;
@@ -446,14 +446,52 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_ALPHA),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUICK_SETTINGS_TILES),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_PER_ROW),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_PER_ROW_DUPLICATE_LANDSCAPE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_TEXT_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_BG_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_BG_PRESSED_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_BG_ALPHA),
+                    false, this, UserHandle.USER_ALL);
+
             update();
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
-
             if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.QUICK_SETTINGS_TILES))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_PER_ROW))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_PER_ROW_DUPLICATE_LANDSCAPE))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_TEXT_COLOR))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_BG_COLOR))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_BG_PRESSED_COLOR))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.QUICK_TILES_BG_ALPHA))) {
+                if (mQS != null) {
+                    mQS.setupQuickSettings();
+                }
+            } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_BACKGROUND))
                 || uri.equals(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_BACKGROUND_LANDSCAPE))
@@ -535,9 +573,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     }
 
     private void updateBatteryIcons() {
-        if (mQS != null) {
-            mQS.updateBattery();
-        }
         if (mBattery != null && mCircleBattery != null) {
             mBattery.updateSettings();
             mCircleBattery.updateSettings();
@@ -989,11 +1024,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 }
             }
 
+            if (mQS != null) {
+                mQS.shutdown();
+                mQS = null;
+            }
+
             // wherever you find it, Quick Settings needs a container to survive
             mSettingsContainer = (QuickSettingsContainerView)
                     mStatusBarWindow.findViewById(R.id.quick_settings_container);
             if (mSettingsContainer != null) {
-                mQS = new QuickSettings(mContext, mSettingsContainer);
+                mQS = new QuickSettingsController(mContext, mSettingsContainer, this,
+                        Settings.System.QUICK_SETTINGS_TILES);
                 if (!mNotificationPanelIsFullScreenWidth) {
                     mSettingsContainer.setSystemUiVisibility(
                             View.STATUS_BAR_DISABLE_NOTIFICATION_TICKER
@@ -1004,13 +1045,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 }
                 mQS.setService(this);
                 mQS.setBar(mStatusBarView);
-                mQS.setup(mNetworkController, mBluetoothController, mBatteryController,
-                        mLocationController, mRotationLockController);
-
-		// Start observing for changes
-                mTilesChangedObserver = new TilesChangedObserver(mHandler);
-                mTilesChangedObserver.startObserving();		
-
+                mQS.setupQuickSettings();
             } else {
                 mQS = null; // fly away, be free
             }

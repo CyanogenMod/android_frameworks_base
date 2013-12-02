@@ -351,6 +351,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         cluster.setIsAirplaneMode(mAirplaneMode, mAirplaneIconId);
     }
 
+    public void removeNetworkSignalChangedCallback(NetworkSignalChangedCallback cb) {
+        mSignalsChangedCallbacks.remove(cb);
+    }
+
     void notifySignalsChangedCallbacks(NetworkSignalChangedCallback cb) {
         // only show wifi in the cluster if connected or if wifi-only
         boolean wifiEnabled = mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature);

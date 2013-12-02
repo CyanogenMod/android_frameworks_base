@@ -50,4 +50,8 @@
     <!-- Navigation ring -->
     <color name="navring_system_icon_default_color">#FF000000</color>
 
+    <!-- Quick Settings -->
+    <color name="qs_background_color">#FF212121</color>
+    <color name="qs_background_pressed_color">#FF161616</color>
+
 </resources>
