@@ -3228,7 +3228,7 @@ public final class Settings {
          * Sets the lockscreen background style
          * @hide
          */
-        public static final String LOCKSCREEN_BACKGROUND = "lockscreen_background";
+        public static final String LOCKSCREEN_BACKGROUND_STYLE = "lockscreen_background_style";
 
          /**
          * Action for long-pressing back button on lock screen
