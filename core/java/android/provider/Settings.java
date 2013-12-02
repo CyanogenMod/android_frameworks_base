@@ -3225,10 +3225,13 @@ public final class Settings {
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
         /**
-         * Sets the lockscreen background style
+         * Sets the lockscreen background style. Integer.
+         * Currently supported styles
+         *    0 : Default
+         *    1 : Custom user image
          * @hide
          */
-        public static final String LOCKSCREEN_BACKGROUND = "lockscreen_background";
+        public static final String LOCKSCREEN_BACKGROUND_STYLE = "lockscreen_background_style";
 
          /**
          * Action for long-pressing back button on lock screen
