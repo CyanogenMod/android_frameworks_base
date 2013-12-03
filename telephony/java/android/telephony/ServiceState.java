@@ -844,6 +844,7 @@ public class ServiceState implements Parcelable {
     }
 
     /** @hide */
+
     public static boolean isGsm(int radioTechnology) {
         return radioTechnology == RIL_RADIO_TECHNOLOGY_GPRS
                 || radioTechnology == RIL_RADIO_TECHNOLOGY_EDGE
