@@ -2307,9 +2307,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.integer.def_low_battery_sound_timeout);
 
             // --- New global settings start here
-            loadIntegerSetting(stmt, Settings.Global.TETHER_DUN_REQUIRED,
-                    R.integer.def_tether_dun_required);
-
         } finally {
             if (stmt != null) stmt.close();
         }
