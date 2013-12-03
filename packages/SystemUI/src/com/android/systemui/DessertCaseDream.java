@@ -16,7 +16,11 @@
 
 package com.android.systemui;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.service.dreams.DreamService;
+
+import com.android.systemui.cm.CMCaseView;
 
 public class DessertCaseDream extends DreamService {
     private DessertCaseView mView;
@@ -27,7 +31,15 @@ public class DessertCaseDream extends DreamService {
         super.onAttachedToWindow();
         setInteractive(false);
 
-        mView = new DessertCaseView(this);
+        SharedPreferences prefs =
+                PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        final boolean isCM = prefs.getBoolean("dessert_case_cm", false);
+
+        if (isCM) {
+            mView = new CMCaseView(this);
+        } else {
+            mView = new DessertCaseView(this);
+        }
 
         mContainer = new DessertCaseView.RescalingContainer(this);
 
