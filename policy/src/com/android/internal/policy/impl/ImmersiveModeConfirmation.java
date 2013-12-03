@@ -69,6 +69,7 @@ public class ImmersiveModeConfirmation {
     private long mPanicTime;
     private String mPanicPackage;
     private WindowManager mWindowManager;
+    private boolean mStatusBarHidden;
 
     public ImmersiveModeConfirmation(Context context) {
         mContext = context;
@@ -116,13 +117,14 @@ public class ImmersiveModeConfirmation {
         }
     }
 
-    public void immersiveModeChanged(String pkg, boolean isImmersiveMode) {
+    public void immersiveModeChanged(String pkg, boolean isImmersiveMode, boolean statusBarHidden) {
         if (pkg == null) {
             return;
         }
         mHandler.removeMessages(H.SHOW);
         if (isImmersiveMode) {
             mLastPackage = pkg;
+            mStatusBarHidden = statusBarHidden;
             if (DEBUG_SHOW_EVERY_TIME || !mConfirmedPackages.contains(pkg)) {
                 mHandler.sendMessageDelayed(mHandler.obtainMessage(H.SHOW, pkg), mShowDelayMs);
             }
@@ -185,11 +187,17 @@ public class ImmersiveModeConfirmation {
     }
 
     public FrameLayout.LayoutParams getBubbleLayoutParams() {
+        int gravity = Gravity.CENTER_HORIZONTAL;
+        if (mStatusBarHidden) {
+            gravity |= Gravity.TOP;
+        } else {
+            gravity |= Gravity.BOTTOM;
+        }
         return new FrameLayout.LayoutParams(
                 mContext.getResources().getDimensionPixelSize(
                         R.dimen.immersive_mode_cling_width),
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+                gravity);
     }
 
     private class ClingWindowView extends FrameLayout {
@@ -235,8 +243,13 @@ public class ImmersiveModeConfirmation {
             float density = metrics.density;
 
             // create the confirmation cling
-            mClingLayout = (ViewGroup)
-                    View.inflate(getContext(), R.layout.immersive_mode_cling, null);
+            if (mStatusBarHidden) {
+                mClingLayout = (ViewGroup)
+                        View.inflate(getContext(), R.layout.immersive_mode_cling, null);
+            } else {
+                mClingLayout = (ViewGroup)
+                        View.inflate(getContext(), R.layout.immersive_mode_cling_bottom, null);
+            }
 
             final Button ok = (Button) mClingLayout.findViewById(R.id.ok);
             ok.setOnClickListener(new OnClickListener() {
@@ -250,7 +263,7 @@ public class ImmersiveModeConfirmation {
             if (ActivityManager.isHighEndGfx()) {
                 final View bubble = mClingLayout.findViewById(R.id.text);
                 bubble.setAlpha(0f);
-                bubble.setTranslationY(-OFFSET_DP*density);
+                bubble.setTranslationY(mStatusBarHidden ? -OFFSET_DP*density : OFFSET_DP*density);
                 bubble.animate()
                         .alpha(1f)
                         .translationY(0)
@@ -259,7 +272,7 @@ public class ImmersiveModeConfirmation {
                         .start();
 
                 ok.setAlpha(0f);
-                ok.setTranslationY(-OFFSET_DP*density);
+                ok.setTranslationY(mStatusBarHidden ? -OFFSET_DP*density : OFFSET_DP*density);
                 ok.animate().alpha(1f)
                         .translationY(0)
                         .setDuration(300)

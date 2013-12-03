@@ -4892,7 +4892,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if(!isScreenOn && mEnableFastTorch) {
                         handleChangeTorchState(true);
                     }
-                    if (mExpandedDesktopMode == 0) {
+                    if (mExpandedDesktopStyle == 0) {
                         mImmersiveModeConfirmation.onPowerKeyDown(isScreenOn, event.getDownTime(),
                                 isImmersiveMode(mLastSystemUiFlags));
                     }
@@ -6193,8 +6193,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         boolean oldImmersiveMode = isImmersiveMode(oldVis);
         boolean newImmersiveMode = isImmersiveMode(vis);
         if (win != null && oldImmersiveMode != newImmersiveMode) {
-            final String pkg = mExpandedDesktopStyle != 0 ? "android" : win.getOwningPackage();
-            mImmersiveModeConfirmation.immersiveModeChanged(pkg, newImmersiveMode);
+        final String pkg = mExpandedDesktopStyle != 0 ? "android" + mExpandedDesktopStyle
+                    : win.getOwningPackage();
+            mImmersiveModeConfirmation.immersiveModeChanged(pkg, newImmersiveMode,
+                    transientStatusBarAllowed);
         }
 
         vis = mNavigationBarController.updateVisibilityLw(transientNavBarAllowed, oldVis, vis);
