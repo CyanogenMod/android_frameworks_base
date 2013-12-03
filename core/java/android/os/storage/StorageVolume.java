@@ -34,6 +34,8 @@ public class StorageVolume implements Parcelable {
     // TODO: switch to more durable token
     private int mStorageId;
 
+    private int mFilesystemId;
+
     private final File mPath;
     private final int mDescriptionId;
     private final boolean mPrimary;
@@ -54,6 +56,7 @@ public class StorageVolume implements Parcelable {
     public StorageVolume(File path, int descriptionId, boolean primary, boolean removable,
             boolean emulated, int mtpReserveSpace, boolean allowMassStorage, long maxFileSize,
             UserHandle owner) {
+        mFilesystemId = -1;
         mPath = path;
         mDescriptionId = descriptionId;
         mPrimary = primary;
@@ -67,6 +70,7 @@ public class StorageVolume implements Parcelable {
 
     private StorageVolume(Parcel in) {
         mStorageId = in.readInt();
+        mFilesystemId = in.readInt();
         mPath = new File(in.readString());
         mDescriptionId = in.readInt();
         mPrimary = in.readInt() != 0;
@@ -151,6 +155,14 @@ public class StorageVolume implements Parcelable {
         mStorageId = ((index + 1) << 16) + 1;
     }
 
+    public int getFilesystemId() {
+        return mFilesystemId;
+    }
+
+    public void setFilesystemId(int id) {
+        mFilesystemId = id;
+    }
+
     /**
      * Number of megabytes of space to leave unallocated by MTP.
      * MTP will subtract this value from the free space it reports back
@@ -207,6 +219,7 @@ public class StorageVolume implements Parcelable {
     public String toString() {
         final StringBuilder builder = new StringBuilder("StorageVolume [");
         builder.append("mStorageId=").append(mStorageId);
+        builder.append("mFilesystemId=").append(mFilesystemId);
         builder.append(" mPath=").append(mPath);
         builder.append(" mDescriptionId=").append(mDescriptionId);
         builder.append(" mPrimary=").append(mPrimary);
@@ -240,6 +253,7 @@ public class StorageVolume implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(mStorageId);
+        parcel.writeInt(mFilesystemId);
         parcel.writeString(mPath.toString());
         parcel.writeInt(mDescriptionId);
         parcel.writeInt(mPrimary ? 1 : 0);

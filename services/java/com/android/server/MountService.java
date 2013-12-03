@@ -551,7 +551,7 @@ class MountService extends IMountService.Stub
                  * the volume is shared (runtime restart while ums enabled)
                  */
                 notifyVolumeStateChange(null, path, VolumeState.NoMedia,
-                        VolumeState.Shared);
+                        VolumeState.Shared, -1);
             }
         }
 
@@ -803,11 +803,11 @@ class MountService extends IMountService.Stub
             /*
              * One of the volumes we're managing has changed state.
              * Format: "NNN Volume <label> <path> state changed
-             * from <old_#> (<old_str>) to <new_#> (<new_str>)"
+             * from <old_#> (<old_str>) to <new_#> (<new_str>) <fsid>"
              */
             notifyVolumeStateChange(
                     cooked[2], cooked[3], Integer.parseInt(cooked[7]),
-                            Integer.parseInt(cooked[10]));
+                            Integer.parseInt(cooked[10]), Integer.parseInt(cooked[12]));
         } else if ((code == VoldResponseCode.VolumeDiskInserted) ||
                    (code == VoldResponseCode.VolumeDiskRemoved) ||
                    (code == VoldResponseCode.VolumeBadRemoval)) {
@@ -890,7 +890,7 @@ class MountService extends IMountService.Stub
         return true;
     }
 
-    private void notifyVolumeStateChange(String label, String path, int oldState, int newState) {
+    private void notifyVolumeStateChange(String label, String path, int oldState, int newState, int fsid) {
         final StorageVolume volume;
         final String state;
         synchronized (mVolumesLock) {
@@ -930,6 +930,7 @@ class MountService extends IMountService.Stub
             action = Intent.ACTION_MEDIA_CHECKING;
         } else if (newState == VolumeState.Mounted) {
             if (DEBUG_EVENTS) Slog.i(TAG, "updating volume state mounted");
+            volume.setFilesystemId(fsid);
             updatePublicVolumeState(volume, Environment.MEDIA_MOUNTED);
             action = Intent.ACTION_MEDIA_MOUNTED;
         } else if (newState == VolumeState.Unmounting) {
