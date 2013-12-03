@@ -88,6 +88,12 @@
         This allows an app send SMS to trusted applications. Malicious apps could send messages
         continuously, blocking the device notification system and disrupting the user.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_cancelNotifications">Cancel Notifications</string>
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_cancelNotifications">Allows the application to cancel the notifications created by others.</string>
+
     <string name="lockscreen_discharging">Discharging, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
     <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
@@ -176,6 +182,14 @@
     <!-- The item label for the no profile selection item. -->
     <string name="profile_none">None</string>
 
+    <!-- Title of Middleware MAC option -->
+    <string name="policylab_enforceMmac">Force MMAC.</string>
+    <!-- Description of Middleware MAC option -->
+    <string name="policydesc_enforceMmac">Switch between a permissive or restrictive mode for MMAC.</string>
+    <!-- Title of SELinux option-->
+    <string name="policylab_enforceSelinux">Force SELinux.</string>
+    <!-- Description SELinux option -->
+    <string name="policydesc_enforceSelinux">Switch between a permissive or restrictive mode for SELinux.</string>
 
     <!-- Performance profile modes -->
     <string name="perf_profile_pwrsv">Power save</string>
