@@ -194,4 +194,6 @@
     <string name="permdesc_resetBatteryStats">Allows an application to reset the current low-level
         battery use data.</string>
 
+    <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
+
 </resources>
