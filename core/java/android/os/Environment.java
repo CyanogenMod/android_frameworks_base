@@ -737,6 +737,22 @@ public class Environment {
         return (primary != null && primary.isRemovable());
     }
 
+    public static int getExternalStorageFilesystemId() {
+        try {
+            IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                    .getService("mount"));
+            StorageVolume[] volumes = mountService.getVolumeList();
+            StorageVolume primary = StorageManager.getPrimaryVolume(volumes);
+            if (primary != null) {
+                return primary.getFilesystemId();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "couldn't talk to MountService", e);
+        }
+
+        return -1;
+    }
+
     /**
      * Returns whether the device has an external storage device which is
      * emulated. If true, the device does not have real external storage, and the directory
