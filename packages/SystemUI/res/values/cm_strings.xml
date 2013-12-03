@@ -14,7 +14,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
@@ -25,8 +24,8 @@
     <string name="accessibility_quick_settings_ringer">Sound <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state" example="Off">%s</xliff:g>.</string>
 
-    <string name="bean_dream_settings_cid_title">Use Cid\'s head</string>
-    <string name="bean_dream_settings_cid_summary">Use Cid\'s head instead of jellybeans inside the dream</string>
+    <string name="dessert_case_settings_cm_title">Show CM\'s mascots</string>
+    <string name="dessert_case_settings_cm_summary">Show CM\'s mascots together with Android\'s desserts inside the dream</string>
 
     <!-- QuickSettings: Profile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_profile_label">Profile</string>
