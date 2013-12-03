@@ -5172,6 +5172,31 @@ public final class ContactsContract {
             public static final String LABEL = DataColumns.DATA3;
         }
 
+        /** @hide */
+        public static final class LocalGroup implements DataColumnsWithJoins {
+            /** @hide */
+            private LocalGroup() {
+            }
+
+            /** @hide */
+            public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/local-groups";
+
+            /** @hide */
+            public static final String GROUP = DATA1;
+
+            /** @hide */
+            public static final Uri CONTENT_URI = Uri.withAppendedPath(Data.CONTENT_URI,
+                    "local-groups");
+
+            /** @hide */
+            public static final Uri CONTENT_LOOKUP_URI = Uri
+                    .withAppendedPath(CONTENT_URI, "lookup");
+
+            /** @hide */
+            public static final Uri CONTENT_FILTER_URI = Uri
+                    .withAppendedPath(CONTENT_URI, "filter");
+        }
+
         /**
          * A data kind representing the contact's proper name. You can use all
          * columns defined for {@link ContactsContract.Data} as well as the following aliases.
