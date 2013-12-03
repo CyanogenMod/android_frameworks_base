@@ -25,6 +25,7 @@ import android.provider.Settings;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemProperties;
 import android.text.method.AllCapsTransformationMethod;
 import android.text.method.TransformationMethod;
 import android.util.DisplayMetrics;
@@ -44,12 +45,14 @@ public class PlatLogoActivity extends Activity {
     FrameLayout mContent;
     int mCount;
     final Handler mHandler = new Handler();
+    private boolean mIsCid;
     static final int BGCOLOR = 0xffed1d24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mIsCid = getIntent().hasExtra("is_cid");
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
@@ -65,7 +68,8 @@ public class PlatLogoActivity extends Activity {
         lp.gravity = Gravity.CENTER;
 
         final ImageView logo = new ImageView(this);
-        logo.setImageResource(com.android.internal.R.drawable.platlogo);
+        logo.setImageResource(mIsCid ? com.android.internal.R.drawable.cidlogo
+                : com.android.internal.R.drawable.platlogo);
         logo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         logo.setVisibility(View.INVISIBLE);
 
@@ -76,10 +80,15 @@ public class PlatLogoActivity extends Activity {
         final TextView letter = new TextView(this);
 
         letter.setTypeface(bold);
-        letter.setTextSize(300);
+        letter.setTextSize(mIsCid ? 150 : 300);
         letter.setTextColor(0xFFFFFFFF);
         letter.setGravity(Gravity.CENTER);
-        letter.setText(String.valueOf(Build.ID).substring(0, 1));
+        letter.setText(mIsCid ? "CM" : "K");
+
+        String cmVersion = SystemProperties.get("ro.cm.version");
+        if (cmVersion != null) {
+            cmVersion = cmVersion.replaceAll("([0-9\\.]+?)-.*", "$1");
+        }
 
         final int p = (int)(4 * metrics.density);
 
@@ -89,8 +98,10 @@ public class PlatLogoActivity extends Activity {
         tv.setPadding(p, p, p, p);
         tv.setTextColor(0xFFFFFFFF);
         tv.setGravity(Gravity.CENTER);
-        tv.setTransformationMethod(new AllCapsTransformationMethod(this));
-        tv.setText("Android " + Build.VERSION.RELEASE);
+        if (!mIsCid) {
+            tv.setTransformationMethod(new AllCapsTransformationMethod(this));
+        }
+        tv.setText(mIsCid ? "CyanogenMod " + cmVersion : "Android " + Build.VERSION.RELEASE);
         tv.setVisibility(View.INVISIBLE);
 
         mContent.addView(bg);
@@ -164,6 +175,7 @@ public class PlatLogoActivity extends Activity {
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                             | Intent.FLAG_ACTIVITY_CLEAR_TASK
                             | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                        .putExtra("is_cid", mIsCid)
                         .addCategory("com.android.internal.category.PLATLOGO"));
                 } catch (ActivityNotFoundException ex) {
                     android.util.Log.e("PlatLogoActivity", "Couldn't catch a break.");
