@@ -265,7 +265,10 @@ public class BatteryMeterView extends View implements DemoMode {
     }
 
     public void setShowPercent(boolean show) {
-        mShowPercent = show;
+        if (ENABLE_PERCENT) {
+            mShowPercent = show;
+            invalidateIfVisible();
+        }
     }
 
     public void setMode(BatteryMeterMode mode) {

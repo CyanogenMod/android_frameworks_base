@@ -22,6 +22,8 @@ import android.os.BatteryManager;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.android.systemui.BatteryMeterView.BatteryMeterMode;
+
 //import com.android.server.BatteryService;
 
 public class DockBatteryMeterView extends BatteryMeterView {
@@ -126,5 +128,14 @@ public class DockBatteryMeterView extends BatteryMeterView {
         super(context, attrs, defStyle);
         mBatteryService = ((BatteryManager) context.getSystemService(Context.BATTERY_SERVICE));
         mTracker = new DockBatteryTracker();
+    }
+
+    @Override
+    public void setMode(BatteryMeterMode mode) {
+        super.setMode(mode);
+        int visibility = getVisibility();
+        if (visibility == View.VISIBLE && !mSupported) {
+            setVisibility(View.GONE);
+        }
     }
 }

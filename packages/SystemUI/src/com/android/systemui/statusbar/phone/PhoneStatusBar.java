@@ -359,6 +359,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_BATTERY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BATTERY_PROGRESS), false, this);
             updateSettings();
         }
 
@@ -2890,7 +2892,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
         int batteryStyle = Settings.System.getInt(resolver, Settings.System.STATUS_BAR_BATTERY, 0);
         BatteryMeterMode mode = BatteryMeterMode.BATTERY_METER_NORMAL;
-        boolean showPercent = true;
         switch (batteryStyle) {
             case 2:
             case 3:
@@ -2904,6 +2905,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             default:
                 break;
         }
+
+        boolean showPercent = Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_BATTERY_PROGRESS, 1) == 1;
 
         mBatteryView.setMode(mode);
         mBatteryView.setShowPercent(showPercent);

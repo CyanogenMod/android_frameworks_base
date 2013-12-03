@@ -2905,14 +2905,19 @@ public final class Settings {
         /**
          * Display style of the status bar battery information
          * 0: Display the stock battery information
-         * 1: Display cm battery percentage implementation / dont show stock icon
-         * 2: Display cm circle battery implementation without percentage
          * 3: Display cm circle battery implementation with percentage
          * 4: Hide the battery information
          * default: 0
          * @hide
          */
         public static final String STATUS_BAR_BATTERY = "status_bar_battery";
+
+        /**
+         * Display progress text on the status bar battery information
+         * default: 1
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_PROGRESS = "status_bar_battery_progress";
 
         /**
          * Whether to show the clock in status bar

@@ -408,7 +408,7 @@ public final class BatteryService extends IBatteryService.Stub {
         } catch (RemoteException e) {
             // Should never happen.
         }
-        if (mDockBatterySupported) {
+        /*if (mDockBatterySupported) {
             try {
                 mBatteryStats.setDockBatteryState(mBatteryProps.dockBatteryStatus,
                         mBatteryProps.dockBatteryHealth, mBatteryProps.dockBatteryLevel,
@@ -416,7 +416,7 @@ public final class BatteryService extends IBatteryService.Stub {
             } catch (RemoteException e) {
                 // Should never happen.
             }
-        }
+        }*/
 
         shutdownIfNoPowerLocked();
         shutdownIfOverTempLocked();
