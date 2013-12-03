@@ -85,8 +85,13 @@ public class DessertCaseView extends FrameLayout {
             R.drawable.dessert_jandycane,   // thx nes
     };
 
+    private static final int[] CM_MASCOTS = {
+            R.drawable.mascot_cid,
+            R.drawable.mascot_andy,
+    };
+
     private static final int NUM_PASTRIES = PASTRIES.length + RARE_PASTRIES.length
-            + XRARE_PASTRIES.length + XXRARE_PASTRIES.length;
+            + XRARE_PASTRIES.length + XXRARE_PASTRIES.length + CM_MASCOTS.length;
 
     private SparseArray<Drawable> mDrawables = new SparseArray<Drawable>(NUM_PASTRIES);
 
@@ -118,6 +123,7 @@ public class DessertCaseView extends FrameLayout {
     private static final float PROB_4X = 0.01f;
 
     private boolean mStarted;
+    private boolean mIsCid;
 
     private int mCellSize;
     private int mWidth, mHeight;
@@ -169,7 +175,8 @@ public class DessertCaseView extends FrameLayout {
         }
         opts.inMutable = true;
         Bitmap loaded = null;
-        for (int[] list : new int[][] { PASTRIES, RARE_PASTRIES, XRARE_PASTRIES, XXRARE_PASTRIES }) {
+        for (int[] list : new int[][] { PASTRIES, RARE_PASTRIES, XRARE_PASTRIES,
+                XXRARE_PASTRIES, CM_MASCOTS }) {
             for (int resid : list) {
                 opts.inBitmap = loaded;
                 loaded = BitmapFactory.decodeResource(res, resid, opts);
@@ -302,6 +309,8 @@ public class DessertCaseView extends FrameLayout {
                 d = mDrawables.get(pick(RARE_PASTRIES));
             } else if (which < 0.7f) {
                 d = mDrawables.get(pick(PASTRIES));
+            } else if ((which < 0.8f) && mIsCid) {
+                d = mDrawables.get(pick(CM_MASCOTS));
             } else {
                 d = null;
             }
