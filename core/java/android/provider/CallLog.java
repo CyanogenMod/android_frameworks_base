@@ -28,6 +28,7 @@ import android.provider.ContactsContract.DataUsageFeedback;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.CallerInfo;
+import com.android.internal.telephony.MSimConstants;
 import com.android.internal.telephony.PhoneConstants;
 
 /**
@@ -287,6 +288,13 @@ public class CallLog {
         public static final String CACHED_FORMATTED_NUMBER = "formatted_number";
 
         /**
+         * The subscription id.
+         * <P>Type: Integer</P>
+         * @hide
+         */
+        public static final String SUBSCRIPTION = MSimConstants.SUBSCRIPTION_KEY;
+
+         /**
          * Adds a call to the call log.
          *
          * @param ci the CallerInfo object to get the target contact from.  Can be null
@@ -304,6 +312,28 @@ public class CallLog {
          */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                 int presentation, int callType, long start, int duration) {
+            return addCall(ci, context, number, presentation,
+                    callType, start, duration, MSimConstants.DEFAULT_SUBSCRIPTION);
+        }
+
+        /**
+         * Add a call to the call log for multi sim, and it can be used in TSTS.
+         *
+         * @param ci the CallerInfo object to get the target contact from.  Can be null
+         * if the contact is unknown.
+         * @param context the context used to get the ContentResolver
+         * @param number the phone number to be added to the calls db
+         * @param presentation the number presenting rules set by the network for
+         *        "allowed", "payphone", "restricted" or "unknown"
+         * @param callType enumerated values for "incoming", "outgoing", or "missed"
+         * @param start time stamp for the call in milliseconds
+         * @param duration call duration in seconds
+         * @param subscription valid value is 0,1 or 2
+         *
+         * {@hide}
+         */
+        public static Uri addCall(CallerInfo ci, Context context, String number,
+                int presentation, int callType, long start, int duration, int subscription) {
             final ContentResolver resolver = context.getContentResolver();
             int numberPresentation = PRESENTATION_ALLOWED;
 
@@ -335,6 +365,7 @@ public class CallLog {
             values.put(DATE, Long.valueOf(start));
             values.put(DURATION, Long.valueOf(duration));
             values.put(NEW, Integer.valueOf(1));
+            values.put(SUBSCRIPTION, Integer.valueOf(subscription));
             if (callType == MISSED_TYPE) {
                 values.put(IS_READ, Integer.valueOf(0));
             }
