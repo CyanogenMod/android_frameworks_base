@@ -149,16 +149,16 @@ class TelephonyIcons {
     };
     
 	// DC-HSPAP
-			static final int[][] DATA_DC = {
-			{ R.drawable.stat_sys_data_connected_dc,
-			R.drawable.stat_sys_data_connected_dc,
-			R.drawable.stat_sys_data_connected_dc,
-			R.drawable.stat_sys_data_connected_dc },
-			{ R.drawable.stat_sys_data_fully_connected_dc,
-			R.drawable.stat_sys_data_fully_connected_dc,
-			R.drawable.stat_sys_data_fully_connected_dc,
-			R.drawable.stat_sys_data_fully_connected_dc }
-			};
+     static final int[][] DATA_DC = {
+	    { R.drawable.stat_sys_data_fully_connected_dc,
+	      R.drawable.stat_sys_data_fully_connected_dc,
+	      R.drawable.stat_sys_data_fully_connected_dc,
+	      R.drawable.stat_sys_data_fully_connected_dc },
+            { R.drawable.stat_sys_data_fully_connected_dc,
+	      R.drawable.stat_sys_data_fully_connected_dc,
+	      R.drawable.stat_sys_data_fully_connected_dc,
+	      R.drawable.stat_sys_data_fully_connected_dc }
+    };
     
     static final int[] QS_DATA_HP = {
                 R.drawable.ic_qs_signal_hp,
