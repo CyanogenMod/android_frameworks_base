@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 The Android Open Source Project
+ * Copyright (C) 2013 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +25,15 @@ import android.os.Handler;
 import android.util.Slog;
 import android.view.animation.DecelerateInterpolator;
 
+import com.android.systemui.cm.CMCaseView;
+
 public class DessertCase extends Activity {
     DessertCaseView mView;
 
     @Override
     public void onStart() {
         super.onStart();
+        final boolean isCM = getIntent().getBooleanExtra("is_cm", false);
 
         PackageManager pm = getPackageManager();
         final ComponentName cn = new ComponentName(this, DessertCaseDream.class);
@@ -40,7 +44,12 @@ public class DessertCase extends Activity {
                     PackageManager.DONT_KILL_APP);
         }
 
-        mView = new DessertCaseView(this);
+        if (isCM) {
+            mView = new CMCaseView(this);
+            Slog.v("DessertCase", "CyanogenMod enabled!");
+        } else {
+            mView = new DessertCaseView(this);
+        }
 
         DessertCaseView.RescalingContainer container = new DessertCaseView.RescalingContainer(this);
 
