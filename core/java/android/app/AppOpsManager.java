@@ -481,7 +481,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED, // OP_NEIGHBORING_CELLS
             AppOpsManager.MODE_ALLOWED, // OP_CALL_PHONE
             AppOpsManager.MODE_ALLOWED, // OP_READ_SMS
-            AppOpsManager.MODE_IGNORED, // OP_WRITE_SMS
+            AppOpsManager.MODE_ALLOWED, // OP_WRITE_SMS
             AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_SMS
             AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_EMERGECY_SMS
             AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_MMS
