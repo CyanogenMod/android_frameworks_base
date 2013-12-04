@@ -755,6 +755,24 @@ public interface IMountService extends IInterface {
                 }
                 return _result;
             }
+
+            @Override
+            public String getVolumeUuid(String path) throws RemoteException {
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
+                String _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeString(path);
+                    mRemote.transact(Stub.TRANSACTION_getVolumeUuid, _data, _reply, 0);
+                    _reply.readException();
+                    _result = _reply.readString();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
         }
 
         private static final String DESCRIPTOR = "IMountService";
@@ -828,6 +846,8 @@ public interface IMountService extends IInterface {
         static final int TRANSACTION_fixPermissionsSecureContainer = IBinder.FIRST_CALL_TRANSACTION + 33;
 
         static final int TRANSACTION_mkdirs = IBinder.FIRST_CALL_TRANSACTION + 34;
+
+        static final int TRANSACTION_getVolumeUuid = IBinder.FIRST_CALL_TRANSACTION + 35;
 
         /**
          * Cast an IBinder object into an IMountService interface, generating a
@@ -1181,6 +1201,14 @@ public interface IMountService extends IInterface {
                     reply.writeInt(result);
                     return true;
                 }
+                case TRANSACTION_getVolumeUuid: {
+                    data.enforceInterface(DESCRIPTOR);
+                    String path = data.readString();
+                    String id = getVolumeUuid(path);
+                    reply.writeNoException();
+                    reply.writeString(id);
+                    return true;
+                }
             }
             return super.onTransact(code, data, reply, flags);
         }
@@ -1412,4 +1440,9 @@ public interface IMountService extends IInterface {
      * external storage data or OBB directory belonging to calling app.
      */
     public int mkdirs(String callingPkg, String path) throws RemoteException;
+
+    /**
+     * Get UUID for volume
+     */
+    public String getVolumeUuid(String path) throws RemoteException;
 }

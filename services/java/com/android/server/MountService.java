@@ -157,11 +157,13 @@ class MountService extends IMountService.Stub
         public static final int ShareStatusResult              = 210;
         public static final int AsecPathResult                 = 211;
         public static final int ShareEnabledResult             = 212;
+        public static final int VolumeUuidResult               = 214;
 
         /*
          * 400 series - Command was accepted, but the requested action
          *              did not take place.
          */
+        public static final int OperationFailed                = 400;
         public static final int OpFailedNoMedia                = 401;
         public static final int OpFailedMediaBlank             = 402;
         public static final int OpFailedMediaCorrupt           = 403;
@@ -2220,6 +2222,27 @@ class MountService extends IMountService.Stub
         }
 
         throw new SecurityException("Invalid mkdirs path: " + appPath);
+    }
+
+    @Override
+    public String getVolumeUuid(String path) {
+        validatePermission(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        waitForReady();
+        warnOnNotMounted();
+
+        final NativeDaemonEvent event;
+        try {
+            event = mConnector.execute("volume", "uuid", path);
+            event.checkCode(VoldResponseCode.VolumeUuidResult);
+            return event.getMessage();
+        } catch (NativeDaemonConnectorException e) {
+            int code = e.getCode();
+            if (code == VoldResponseCode.OperationFailed) {
+                return null;
+            } else {
+                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+            }
+        }
     }
 
     /**
