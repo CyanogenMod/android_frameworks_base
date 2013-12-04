@@ -3568,6 +3568,13 @@ public final class Settings {
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
 
         /**
+         * Quick Settings Quick Pulldown
+         *
+         * @hide
+         */
+        public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
+
+        /**
          * Display style of the status bar battery information
          * default: 0
          * @hide
