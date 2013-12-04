@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.systemui.BatteryMeterView;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
@@ -74,6 +75,9 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
 
     @Override
     void updateQuickSettings() {
+        BatteryMeterView meter = (BatteryMeterView) mTile.findViewById(R.id.image);
+        meter.setShowPercentage(false);
+
         TextView tv = (TextView) mTile.findViewById(R.id.text);
         tv.setText(mLabel);
     }

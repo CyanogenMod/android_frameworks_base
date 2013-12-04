@@ -187,8 +187,6 @@ public class BatteryMeterView extends View implements DemoMode {
         }
         levels.recycle();
         colors.recycle();
-        mShowPercent = ENABLE_PERCENT && 0 != Settings.System.getInt(
-                context.getContentResolver(), "status_bar_show_battery_percent", 0);
 
         mWarningString = context.getString(R.string.battery_meter_very_low_overlay_symbol);
 
@@ -208,6 +206,7 @@ public class BatteryMeterView extends View implements DemoMode {
         mTextPaint.setColor(0xFFFFFFFF);
         Typeface font = Typeface.create("sans-serif-condensed", Typeface.NORMAL);
         mTextPaint.setTypeface(font);
+        mTextPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         mTextPaint.setTextAlign(Paint.Align.CENTER);
 
         mWarningTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -352,11 +351,18 @@ public class BatteryMeterView extends View implements DemoMode {
 
             final String str = String.valueOf(SINGLE_DIGIT_PERCENT ? (level/10) : level);
             final float x = mWidth * 0.5f;
-            final float y = (mHeight + mTextHeight) * 0.47f;
+            final float y = (mHeight + mTextHeight) * 0.5f;
             c.drawText(str,
                     x,
                     y,
                     mTextPaint);
+        }
+    }
+
+    public void setShowPercentage(boolean show) {
+        if (ENABLE_PERCENT) {
+            mShowPercent = show;
+            postInvalidate();
         }
     }
 
