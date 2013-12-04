@@ -240,10 +240,6 @@ public class NavigationBarView extends LinearLayout {
         return mCurrentView;
     }
 
-    public View getRecentsButton() {
-        return mCurrentView.findViewById(R.id.recent_apps);
-    }
-
     public boolean isInEditMode() {
         return mInEditMode;
     }
