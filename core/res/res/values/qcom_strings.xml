@@ -86,5 +86,6 @@
         <item>Trying to get device accounts</item>
         <item>Trying to turn on/off Wi-Fi</item>
         <item>Trying to trun on/off Bluetooth</item>
+        <item>Trying to start at bootup</item>
     </string-array>
 </resources>
