@@ -255,7 +255,9 @@ public class AppOpsManager {
     /** @hide */
     public static final int OP_BLUETOOTH_CHANGE = 64;
     /** @hide */
-    public static final int _NUM_OP = 65;
+    public static final int OP_BOOT_COMPLETED = 65;
+    /** @hide */
+    public static final int _NUM_OP = 66;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -358,6 +360,8 @@ public class AppOpsManager {
             "android:wifi_change";
     private static final String OPSTR_BLUETOOTH_CHANGE =
             "android:bluetooth_change";
+    private static final String OPSTR_BOOT_COMPLETED =
+            "android:boot_completed";
 
     /**
      * This maps each operation to the operation that serves as the
@@ -433,6 +437,7 @@ public class AppOpsManager {
             OP_GET_ACCOUNTS,
             OP_WIFI_CHANGE,
             OP_BLUETOOTH_CHANGE,
+            OP_BOOT_COMPLETED,
     };
 
     /**
@@ -505,6 +510,7 @@ public class AppOpsManager {
             OPSTR_GET_ACCOUNTS,
             OPSTR_WIFI_CHANGE,
             OPSTR_BLUETOOTH_CHANGE,
+            OPSTR_BOOT_COMPLETED,
     };
 
     /**
@@ -577,6 +583,7 @@ public class AppOpsManager {
             "GET_ACCOUNTS",
             "WIFI_CHANGE",
             "BLUETOOTH_CHANGE",
+            "BOOT_COMPLETED",
     };
 
     /**
@@ -649,6 +656,7 @@ public class AppOpsManager {
             Manifest.permission.GET_ACCOUNTS,
             Manifest.permission.CHANGE_WIFI_STATE,
             Manifest.permission.BLUETOOTH,
+            Manifest.permission.RECEIVE_BOOT_COMPLETED,
     };
 
     /**
@@ -722,6 +730,7 @@ public class AppOpsManager {
             null, // GET_ACCOUNTS
             null, //WIFI_CHANGE
             null, //BLUETOOTH_CHANGE
+            null, //BOOT_COMPLETED
     };
 
     /**
@@ -794,6 +803,7 @@ public class AppOpsManager {
             false, // GET_ACCOUNTS
             false, // WIFI_CHANGE
             false, // BLUETOOTH_CHANGE
+            false, // BOOT_COMPLETED
     };
 
     /**
@@ -865,6 +875,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED, // OP_WIFI_CHANGE
             AppOpsManager.MODE_ASK,     // OP_BLUETOOTH_CHANGE
+            AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
     };
 
     /**
@@ -937,6 +948,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED, // OP_GET_ACCOUNTS
             AppOpsManager.MODE_ASK,     // OP_WIFI_CHANGE
             AppOpsManager.MODE_ASK,     // OP_BLUETOOTH_CHANGE
+            AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
     };
 
     /**
@@ -1008,6 +1020,7 @@ public class AppOpsManager {
         false,    // GET_ACCOUNTS
         true,     // OP_WIFI_CHANGE
         true,     // OP_BLUETOOTH_CHANGE
+        false,    // OP_BOOT_COMPLETED
     };
 
     /**
@@ -1083,6 +1096,7 @@ public class AppOpsManager {
             false,
             false,     // OP_WIFI_CHANGE
             false,     // OP_BLUETOOTH_CHANGE
+            false,     // OP_BOOT_COMPLETED
     };
 
     /**
