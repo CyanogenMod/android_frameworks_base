@@ -6399,8 +6399,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                                 },
                                 0, null, null,
                                 android.Manifest.permission.RECEIVE_BOOT_COMPLETED,
-                                AppOpsManager.OP_NONE, true, false, MY_PID, Process.SYSTEM_UID,
-                                userId);
+                                AppOpsManager.OP_BOOT_COMPLETED, true, false,
+                                MY_PID, Process.SYSTEM_UID, userId);
                     }
                 }
                 scheduleStartProfilesLocked();
@@ -18735,8 +18735,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                 intent.addFlags(Intent.FLAG_RECEIVER_NO_ABORT);
                 broadcastIntentLocked(null, null, intent,
                         null, null, 0, null, null,
-                        android.Manifest.permission.RECEIVE_BOOT_COMPLETED, AppOpsManager.OP_NONE,
-                        true, false, MY_PID, Process.SYSTEM_UID, userId);
+                        android.Manifest.permission.RECEIVE_BOOT_COMPLETED,
+                        AppOpsManager.OP_BOOT_COMPLETED, true, false, MY_PID,
+                        Process.SYSTEM_UID, userId);
             }
         }
     }
