@@ -444,16 +444,29 @@ bool BootAnimation::movie()
 
     Animation animation;
 
+    float r = 0.0f;
+    float g = 0.0f;
+    float b = 0.0f;
+
     // Parse the description file
     for (;;) {
         const char* endl = strstr(s, "\n");
         if (!endl) break;
         String8 line(s, endl - s);
         const char* l = line.string();
-        int fps, width, height, count, pause;
+        int fps, width, height, count, pause, red, green, blue;
         char path[256];
         char pathType;
-        if (sscanf(l, "%d %d %d", &width, &height, &fps) == 3) {
+        if (sscanf(l, "%d %d %d %d %d %d", &width, &height, &fps, &red, &green, &blue) == 6) {
+            //ALOGD("> w=%d, h=%d, fps=%d, rgb=(%d, %d, %d)", width, height, fps, red, green, blue);
+            animation.width = width;
+            animation.height = height;
+            animation.fps = fps;
+            r = (float) red / 255.0f;
+            g = (float) green / 255.0f;
+            b = (float) blue / 255.0f;
+        }
+        else if (sscanf(l, "%d %d %d", &width, &height, &fps) == 3) {
             //LOGD("> w=%d, h=%d, fps=%d", width, height, fps);
             animation.width = width;
             animation.height = height;
@@ -509,7 +522,7 @@ bool BootAnimation::movie()
     glDisable(GL_DITHER);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_BLEND);
-    glClearColor(0,0,0,1);
+    glClearColor(r,g,b,1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     eglSwapBuffers(mDisplay, mSurface);
