@@ -1753,6 +1753,10 @@ void OpenGLRenderer::setupDraw(bool clear) {
             setScissorFromClip();
         }
         setStencilFromClip();
+    } else {
+        // Disable stencil test in case setStencilFromClip()
+        // enabled the stencil test but didn't disable it
+        glDisable(GL_STENCIL_TEST);
     }
 
     mDescription.reset();
