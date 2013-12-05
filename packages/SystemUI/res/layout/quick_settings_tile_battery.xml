@@ -23,8 +23,8 @@
         android:orientation="vertical">
     <com.android.systemui.BatteryMeterView
             android:id="@+id/image"
-            android:layout_width="22dp"
-            android:layout_height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:padding="3dp"
             android:layout_gravity="center_horizontal"
             systemui:batteryView="quicksettings"

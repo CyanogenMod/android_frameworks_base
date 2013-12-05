@@ -471,8 +471,6 @@ public class BatteryMeterView extends View implements DemoMode {
                 }
                 lp = new LinearLayout.LayoutParams((int) width, (int) height);
                 lp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-                lp.setMargins(0, res.getDimensionPixelSize(R.dimen.qs_tile_margin_above_icon),
-                    0, res.getDimensionPixelSize(R.dimen.qs_tile_margin_below_icon));
                 setLayoutParams(lp);
             }
 
