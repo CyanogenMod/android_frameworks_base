@@ -60,15 +60,15 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> non sarà in grado di accedere ai dati personali</string>
     <string name="profile_picker_title">Profili</string>
     <string name="profile_none">Nessuno</string>
-    <string name="permlab_cancelNotifications">cancella le notifiche delle applicazioni</string>
-    <string name="permdesc_cancelNotifications">Consente all\'applicazione di cancellare le notifiche create da altre applicazioni.</string>
     <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>
-    <string name="permdesc_interceptSmsSent">Consente all\'applicazione di intercettare un SMS in uscita. Le applicazioni maligne potrebbero usarlo per impedire la spedizione di SMS.</string>
-    <string name="policylab_enforceSelinux">Forza SELinux</string>
-    <string name="policydesc_enforceSelinux">Alterna tra regole restrittive o permissive di SELinux.</string>
-    <string name="policylab_enforceMmac">Forza MMAC</string>
-    <string name="policydesc_enforceMmac">Alterna tra regole restrittive o permissive di MMAC.</string>
+    <string name="permdesc_interceptSmsSent">Consente all\'applicazione di intercettare un SMS in uscita. Le applicazioni dannose potrebbero usarlo per impedire la spedizione di SMS.</string>
     <string name="perf_profile_pwrsv">Risparmio energetico</string>
     <string name="perf_profile_bal">Bilanciato</string>
     <string name="perf_profile_perf">Prestazioni</string>
+    <string name="progress_nomediapresent" product="default">Non ci sono dispositivi di memoria estraibili\u2026</string>
+    <string name="permlab_sendMockSms">invia messaggi SMS fittizi</string>
+    <string name="permdesc_sendMockSms">Consente all\'applicazione di inviare messaggi SMS fittizi. Le applicazioni dannose potrebbero inviare messaggi in modo continuo, bloccando il sistema di notifica del dispositivo e disturbando l\'utente.</string>
+    <string name="transient_navigation_confirmation_long">Scorri dal bordo dello schermo per mostrare la barra di stato</string>
+    <string name="permlab_resetBatteryStats">reimposta statistiche batteria</string>
+    <string name="permdesc_resetBatteryStats">Consente all\'applicazione di reimpostare i dati di utilizzo della batteria a basso livello.</string>
 </resources>

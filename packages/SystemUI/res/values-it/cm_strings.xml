@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_battery_level">Batteria <xliff:g id="number">%d</xliff:g> percento.</string>
+    <string name="accessibility_quick_settings_ringer">Suoneria <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibrazione <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Utilizza testa CID</string>
+    <string name="bean_dream_settings_cid_summary">Utilizza la testa di CID al posto dei jellybean all\'interno di Daydream</string>
+    <string name="quick_settings_profile_label">Profilo</string>
+    <string name="powerwidget_screen_timeout_toast">Timeout impostato a: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS OFF</string>
+    <string name="quick_settings_screen_sleep">Sospendi dispositivo</string>
+    <string name="quick_settings_ringer_on">Suoneria ON</string>
+    <string name="quick_settings_ringer_off">Suoneria OFF</string>
+    <string name="quick_settings_vibration_on">Vibrazione ON</string>
+    <string name="quick_settings_vibration_off">Vibrazione OFF</string>
+    <string name="quick_settings_label_enabled">ON</string>
+    <string name="quick_settings_label_disabled">OFF</string>
+    <string name="quick_settings_ringer_normal">Suoneria</string>
+    <string name="quick_settings_lockscreen">Blocco schermo</string>
+    <string name="quick_settings_network_type">Modalità rete</string>
+    <string name="quick_settings_report_bug">Segnalazione bug</string>
+    <string name="quick_settings_sync">Sincronia ON</string>
+    <string name="quick_settings_sync_off">Sincronia OFF</string>
+    <string name="quick_settings_torch">Torcia</string>
+    <string name="quick_settings_torch_off">Torcia OFF</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC OFF</string>
+    <string name="quick_settings_screen_timeout">Timeout</string>
+    <string name="quick_settings_usb_tether_off_label">Disconnesso</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering OFF</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP OFF</string>
+    <string name="quick_settings_quiethours">Periodo quiete</string>
+    <string name="quick_settings_quiethours_off">Periodo quiete OFF</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE OFF</string>
+    <string name="quick_settings_volume">Volume</string>
+    <string name="quick_settings_camera_label">Fotocamera</string>
+    <string name="quick_settings_network_adb_disabled_label">Disattivato</string>
+    <string name="quick_settings_network_adb_enabled_label">Attivato</string>
+    <string name="quick_settings_expanded_desktop">Esteso</string>
+    <string name="quick_settings_expanded_desktop_off">Normale</string>
+    <string name="quick_settings_camera_error_connect">Impossibile connettersi alla fotocamera</string>
+    <string name="navbar_dialog_title">Azione da associare</string>
+    <string name="navbar_home_button">Pulsante Home</string>
+    <string name="navbar_recent_button">Pulsante Recenti</string>
+    <string name="navbar_search_button">Pulsante Cerca</string>
+    <string name="navbar_back_button">Pulsante Indietro</string>
+    <string name="navbar_empty_button">Pulsante vuoto</string>
+    <string name="navbar_menu_conditional_button">Pulsante Menu (automatico)</string>
+    <string name="navbar_menu_always_button">Pulsante Menu (fisso)</string>
+    <string name="navbar_menu_big_button">Pulsante Menu</string>
+    <string name="pie_battery_status_charging">In carica (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Carica</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% rimanente</string>
+    <string name="pie_phone_status_no_service">Nessun servizio</string>
+    <string name="pie_phone_status_airplane_mode">Modalità aereo</string>
+    <string name="pie_phone_status_emergency_only">Solo chiamate di emergenza</string>
+    <string name="advanced_dev_option_wipe_app">Cancella dati</string>
+    <string name="advanced_dev_option_force_stop">Arresto forzato</string>
+    <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>
+</resources>
