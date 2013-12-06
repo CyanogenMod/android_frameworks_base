@@ -2293,6 +2293,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
             WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
         };
+       
+    private void setHwKeyVib(WindowState win) {
+        WindowManager.LayoutParams attrs;
+        Intent service;
+        ContentResolver res;
+        
+		// If a system window has focus, then it doesn't make sense
+		// right now to interact with applications.
+		attrs = win != null ? win.getAttrs() : null;
+		service = new Intent();
+		res = mContext.getContentResolver();
+		if(1 == Settings.System.getInt(res, Settings.System.HAPTIC_FEEDBACK_ENABLED,0))//when setting feedback enable
+		{
+			performHapticFeedbackLw(null, HapticFeedbackConstants.KEYBOARD_TAP, true); //add by syhost
+		}
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -2401,7 +2417,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             ViewConfiguration.getDoubleTapTimeout());
                     return -1;
                 }
-
+                
+				setHwKeyVib(win);
                 // Go home!
                 launchHomeFromHotKey();
                 return -1;
@@ -2475,6 +2492,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
                 if (repeatCount == 0) {
                     mMenuPressed = true;
+                    setHwKeyVib(win);
                     if (mEnableShiftMenuBugReports && (metaState & chordBug) == chordBug) {
                         Intent intent = new Intent(Intent.ACTION_BUG_REPORT);
                         mContext.sendOrderedBroadcast(intent, null);
@@ -2606,9 +2624,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+        	if (down && repeatCount == 0) {
+        		setHwKeyVib(win);
+        	}
             if (Settings.Secure.getIntForUser(mContext.getContentResolver(),
                     Settings.Secure.KILL_APP_LONGPRESS_BACK, 0, UserHandle.USER_CURRENT) == 1) {
                 if (down && repeatCount == 0) {
+                	setHwKeyVib(win);
                     mHandler.postDelayed(mBackLongPress, mBackKillTimeout);
                 }
             }
