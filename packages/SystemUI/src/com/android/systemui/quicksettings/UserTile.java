@@ -46,13 +46,18 @@ public class UserTile extends QuickSettingsTile {
                 final UserManager um =
                         (UserManager) mContext.getSystemService(Context.USER_SERVICE);
                 int numUsers = um.getUsers(true).size();
-                if (numUsers == 0) {
-                    Intent intent = new Intent(Intent.ACTION_INSERT, Contacts.CONTENT_URI);
-                    intent.putExtra(INTENT_EXTRA_NEW_LOCAL_PROFILE, true);
-                    startSettingsActivity(intent);
-                } else if (numUsers == 1) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, ContactsContract.Profile.CONTENT_URI);
-                    startSettingsActivity(intent);
+                if (numUsers <= 1) {
+                    final Cursor cursor = mContext.getContentResolver().query(
+                            Profile.CONTENT_URI, null, null, null, null);
+                    if (cursor.moveToNext() && !cursor.isNull(0)) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, ContactsContract.Profile.CONTENT_URI);
+                        startSettingsActivity(intent);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_INSERT, Contacts.CONTENT_URI);
+                        intent.putExtra(INTENT_EXTRA_NEW_LOCAL_PROFILE, true);
+                        startSettingsActivity(intent);
+                    }
+                    cursor.close();
                 } else {
                     try {
                         WindowManagerGlobal.getWindowManagerService().lockNow(
