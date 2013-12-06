@@ -3895,7 +3895,11 @@ public class WifiStateMachine extends StateMachine {
                  * cleared
                  */
                 if (!mScanResultIsPending) {
-                    mWifiNative.enableBackgroundScan(true);
+                    if (!mWifiNative.enableBackgroundScan(true)) {
+                        setScanAlarm(true);
+                    } else {
+                        setScanAlarm(false);
+                    }
                 }
             } else {
                 setScanAlarm(true);
@@ -3949,8 +3953,11 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_ENABLE_BACKGROUND_SCAN:
                     mEnableBackgroundScan = (message.arg1 == 1);
                     if (mEnableBackgroundScan) {
-                        mWifiNative.enableBackgroundScan(true);
-                        setScanAlarm(false);
+                        if (!mWifiNative.enableBackgroundScan(true)) {
+                            setScanAlarm(true);
+                        } else {
+                            setScanAlarm(false);
+                        }
                     } else {
                         mWifiNative.enableBackgroundScan(false);
                         setScanAlarm(true);
@@ -3976,7 +3983,11 @@ public class WifiStateMachine extends StateMachine {
                 case WifiMonitor.SCAN_RESULTS_EVENT:
                     /* Re-enable background scan when a pending scan result is received */
                     if (mEnableBackgroundScan && mScanResultIsPending) {
-                        mWifiNative.enableBackgroundScan(true);
+                        if (!mWifiNative.enableBackgroundScan(true)) {
+                            setScanAlarm(true);
+                        } else {
+                            setScanAlarm(false);
+                        }
                     }
                     /* Handled in parent state */
                     ret = NOT_HANDLED;
