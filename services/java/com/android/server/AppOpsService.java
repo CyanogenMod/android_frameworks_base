@@ -225,6 +225,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                                 UserHandle.getUserId(ops.uid));
                     } catch (NameNotFoundException e) {
                         curUid = -1;
+                        if ("com.android.system".equals(ops.packageName)) {
+                            curUid = Process.SYSTEM_UID;
+                        }
                     }
                     if (curUid != ops.uid) {
                         Slog.i(TAG, "Pruning old package " + ops.packageName
@@ -819,6 +822,8 @@ public class AppOpsService extends IAppOpsService.Stub {
             packageName = "root";
         } else if (uid == Process.SHELL_UID) {
             packageName = "com.android.shell";
+        } else if (uid == Process.SYSTEM_UID) {
+            packageName = "com.android.system";
         }
         Ops ops = pkgOps.get(packageName);
         if (ops == null) {
@@ -835,6 +840,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                         pkgUid = mContext.getPackageManager().getPackageUid(packageName,
                                 UserHandle.getUserId(uid));
                     } catch (NameNotFoundException e) {
+                        if ("com.android.system".equals(packageName)) {
+                            pkgUid = Process.SYSTEM_UID;
+                        }
                     }
                     if (pkgUid != uid) {
                         // Oops!  The package name is not valid for the uid they are calling
