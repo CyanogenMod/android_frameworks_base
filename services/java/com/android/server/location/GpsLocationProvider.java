@@ -1747,7 +1747,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
                     || networkType == TelephonyManager.NETWORK_TYPE_HSDPA
                     || networkType == TelephonyManager.NETWORK_TYPE_HSUPA
                     || networkType == TelephonyManager.NETWORK_TYPE_HSPA
-                    || networkType == TelephonyManager.NETWORK_TYPE_HSPAP) {
+                    || networkType == TelephonyManager.NETWORK_TYPE_HSPAP
+                    || networkType == TelephonyManager.NETWORK_TYPE_DCHSPAP) {
                     type = AGPS_REF_LOCATION_TYPE_UMTS_CELLID;
                 } else {
                     type = AGPS_REF_LOCATION_TYPE_GSM_CELLID;
