@@ -187,8 +187,6 @@ public class BatteryMeterView extends View implements DemoMode {
         }
         levels.recycle();
         colors.recycle();
-        mShowPercent = ENABLE_PERCENT && 0 != Settings.System.getInt(
-                context.getContentResolver(), "status_bar_show_battery_percent", 0);
 
         mWarningString = context.getString(R.string.battery_meter_very_low_overlay_symbol);
 
@@ -383,5 +381,10 @@ public class BatteryMeterView extends View implements DemoMode {
            }
            postInvalidate();
         }
+    }
+
+    public void setShowPercent(boolean show) {
+        mShowPercent = show;
+        invalidate();
     }
 }

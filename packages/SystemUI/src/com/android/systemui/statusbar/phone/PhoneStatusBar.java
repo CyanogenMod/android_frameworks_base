@@ -156,6 +156,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private static final int BRIGHTNESS_CONTROL_LINGER_THRESHOLD = 20;
 
     private static final int BATTERY_STYLE_NORMAL = 0;
+    private static final int BATTERY_STYLE_NORMAL_PERCENT = 1;
     private static final int BATTERY_STYLE_CIRCLE = 2;
     private static final int BATTERY_STYLE_CIRCLE_PERCENT = 3;
     private static final int BATTERY_STYLE_GONE = 4;
@@ -2862,11 +2863,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
         int batteryStyle = Settings.System.getInt(resolver,
                 Settings.System.STATUS_BAR_BATTERY, BATTERY_STYLE_NORMAL);
-        boolean meterVisible = batteryStyle == BATTERY_STYLE_NORMAL;
+        boolean meterVisible = batteryStyle == BATTERY_STYLE_NORMAL ||
+                batteryStyle == BATTERY_STYLE_NORMAL_PERCENT;
         boolean circleVisible = batteryStyle == BATTERY_STYLE_CIRCLE
                 || batteryStyle == BATTERY_STYLE_CIRCLE_PERCENT;
 
         mBatteryView.setVisibility(meterVisible ? View.VISIBLE : View.GONE);
+        mBatteryView.setShowPercent(batteryStyle == BATTERY_STYLE_NORMAL_PERCENT);
         mCircleBatteryView.setVisibility(circleVisible ? View.VISIBLE : View.GONE);
         mCircleBatteryView.setShowPercent(batteryStyle == BATTERY_STYLE_CIRCLE_PERCENT);
     }
