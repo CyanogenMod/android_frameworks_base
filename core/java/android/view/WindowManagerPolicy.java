@@ -1202,4 +1202,11 @@ public interface WindowManagerPolicy {
      * @param enabled Whether touch exploration is enabled.
      */
     public void setTouchExplorationEnabled(boolean enabled);
+
+    /**
+     * Check if immersive mode hides navigation bar
+     *
+     * @return True if navbar can be hidden by immersive mode
+     */
+    public boolean isImmersiveMode(int vis);
 }
