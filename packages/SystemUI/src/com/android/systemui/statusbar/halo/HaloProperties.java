@@ -48,11 +48,11 @@ import com.android.systemui.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallback;
+import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallbackHalo;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
 
-public class HaloProperties extends FrameLayout implements BatteryStateChangeCallback, NetworkSignalChangedCallback {
+public class HaloProperties extends FrameLayout implements BatteryStateChangeCallbackHalo, NetworkSignalChangedCallback {
 
     public enum Overlay {
         NONE,
@@ -492,7 +492,7 @@ public class HaloProperties extends FrameLayout implements BatteryStateChangeCal
     }
 
     @Override
-    public void onBatteryLevelChanged(int level, boolean pluggedIn) {
+    public void onBatteryLevelChangedHalo(int level, boolean pluggedIn) {
         mBatteryLevel = level;
         mCharging = pluggedIn;
     }
