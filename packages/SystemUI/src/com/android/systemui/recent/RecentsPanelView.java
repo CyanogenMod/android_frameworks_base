@@ -38,6 +38,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -880,6 +881,17 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             bottom += getBottomPaddingOffset();
         }
         mRecentsContainer.drawFadedEdges(canvas, left, right, top, bottom);
+    }
+
+    @Override
+    protected boolean fitSystemWindows(Rect insets) {
+        View recentClear = findViewById(R.id.recents_clear);
+        MarginLayoutParams lp = (MarginLayoutParams) recentClear.getLayoutParams();
+        lp.topMargin = insets.top;
+        lp.rightMargin = insets.right;
+        recentClear.setLayoutParams(lp);
+
+        return super.fitSystemWindows(insets);
     }
 
     class FakeClearUserDataObserver extends IPackageDataObserver.Stub {
