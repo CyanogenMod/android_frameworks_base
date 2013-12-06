@@ -37,12 +37,13 @@ public class SleepScreenTile extends QuickSettingsTile {
 
     private PowerManager pm;
 
-    public SleepScreenTile(Context context, QuickSettingsController qsc) {
+    public SleepScreenTile(Context context, final QuickSettingsController qsc) {
         super(context, qsc);
         pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mOnClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
+                qsc.mBar.collapseAllPanels(true);
                 pm.goToSleep(SystemClock.uptimeMillis());
             }
         };

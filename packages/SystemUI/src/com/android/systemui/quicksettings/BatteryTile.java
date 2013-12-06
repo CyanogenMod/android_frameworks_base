@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 
 import com.android.systemui.BatteryMeterView;
@@ -52,10 +53,20 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
 
         mController = controller;
 
+        mOnClick = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSettingsActivity(Intent.ACTION_POWER_USAGE_SUMMARY);
+            }
+        };
+
         mOnLongClick = new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startSettingsActivity(Intent.ACTION_POWER_USAGE_SUMMARY);
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setClassName("com.android.settings",
+                    "com.android.settings.Settings$BatteryIconStyleSettingsActivity");
+                startSettingsActivity(intent);
                 return true;
             }
         };
