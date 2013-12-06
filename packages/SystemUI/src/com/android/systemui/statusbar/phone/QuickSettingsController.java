@@ -95,7 +95,7 @@ import com.android.systemui.quicksettings.TorchTile;
 import com.android.systemui.quicksettings.UsbTetherTile;
 import com.android.systemui.quicksettings.UserTile;
 import com.android.systemui.quicksettings.VolumeTile;
-import com.android.systemui.quicksettings.WiFiDisplayTile;
+//import com.android.systemui.quicksettings.WiFiDisplayTile;
 import com.android.systemui.quicksettings.WiFiTile;
 import com.android.systemui.quicksettings.WifiAPTile;
 
@@ -309,12 +309,12 @@ public class QuickSettingsController {
         if (!dockBatteryLoaded) {
             loadDockBatteryTile(resolver, inflater);
         }
-        if (Settings.System.getIntForUser(resolver,
+        /*if (Settings.System.getIntForUser(resolver,
                     Settings.System.QS_DYNAMIC_WIFI, 1, UserHandle.USER_CURRENT) == 1) {
             QuickSettingsTile qs = new WiFiDisplayTile(mContext, this);
             qs.setupQuickSettingsTile(inflater, mContainerView);
             mQuickSettingsTiles.add(qs);
-        }
+        }*/
         if (QSUtils.deviceSupportsImeSwitcher(mContext) && Settings.System.getIntForUser(resolver,
                     Settings.System.QS_DYNAMIC_IME, 1, UserHandle.USER_CURRENT) == 1) {
             mIMETile = new InputMethodTile(mContext, this);
