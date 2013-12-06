@@ -409,8 +409,9 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
 
         AppOpsManager appOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
         int callingUid = Binder.getCallingUid();
-        if (appOps.noteOp(AppOpsManager.OP_BLUETOOTH_CHANGE, callingUid, callingPackage) !=
-                AppOpsManager.MODE_ALLOWED) {
+        if ((Binder.getCallingUid() != Process.SYSTEM_UID) && (appOps.noteOp(AppOpsManager.OP_BLUETOOTH_CHANGE, callingUid, callingPackage) !=
+                AppOpsManager.MODE_ALLOWED)) {
+			Log.w(TAG,"enable(): permission not allowed for " + callingPackage);
             return false;
         }
 
