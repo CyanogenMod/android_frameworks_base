@@ -319,6 +319,10 @@ final class DisplayPowerController {
     // True if mAmbientLux holds a valid value.
     private boolean mAmbientLuxValid;
 
+    // The ambient light level threshold at which to brighten or darken the screen.
+    private float mBrighteningLuxThreshold;
+    private float mDarkeningLuxThreshold;
+
     // The most recent light sample.
     private float mLastObservedLux;
 
@@ -1071,12 +1075,24 @@ final class DisplayPowerController {
         mLastObservedLuxTime = time;
     }
 
+    private void setAmbientLux(float lux) {
+        mAmbientLux = lux;
+        mBrighteningLuxThreshold = mAmbientLux * (1.0f + BRIGHTENING_LIGHT_HYSTERESIS);
+        mDarkeningLuxThreshold = mAmbientLux * (1.0f - DARKENING_LIGHT_HYSTERESIS);
+    }
+
     private void updateAmbientLux(long time) {
         // If the light sensor was just turned on then immediately update our initial
         // estimate of the current ambient light level.
-        if (!mAmbientLuxValid
-                || (time - mLightSensorEnableTime) < mLightSensorWarmUpTimeConfig) {
-            mAmbientLux = mRecentShortTermAverageLux;
+        if (!mAmbientLuxValid) {
+            final long timeWhenSensorWarmedUp =
+                mLightSensorWarmUpTimeConfig + mLightSensorEnableTime;
+            if (time < timeWhenSensorWarmedUp) {
+                mHandler.sendEmptyMessageAtTime(MSG_LIGHT_SENSOR_DEBOUNCED,
+                        timeWhenSensorWarmedUp);
+                return;
+            }
+            setAmbientLux(mRecentShortTermAverageLux);
             mAmbientLuxValid = true;
             mDebounceLuxDirection = 0;
             mDebounceLuxTime = time;
@@ -1102,7 +1118,6 @@ final class DisplayPowerController {
                 debounceDelay = BRIGHTENING_LIGHT_DEBOUNCE;
             }
             debounceDelay = (long) (mPowerRequest.responsitivityFactor * debounceDelay);
-
             if (mDebounceLuxDirection <= 0) {
                 mDebounceLuxDirection = 1;
                 mDebounceLuxTime = time;
@@ -1130,6 +1145,7 @@ final class DisplayPowerController {
                 updateAutoBrightness(true);
             } else {
                 mHandler.sendEmptyMessageAtTime(MSG_LIGHT_SENSOR_DEBOUNCED, debounceTime);
+                return;
             }
             return;
         }
@@ -1167,18 +1183,27 @@ final class DisplayPowerController {
                 updateAutoBrightness(true);
             } else {
                 mHandler.sendEmptyMessageAtTime(MSG_LIGHT_SENSOR_DEBOUNCED, debounceTime);
+                return;
             }
-            return;
-        }
-
-        // No change or change is within the hysteresis thresholds.
-        if (mDebounceLuxDirection != 0) {
+            // Be conservative about reducing the brightness, only reduce it a little bit
+            // at a time to avoid having to bump it up again soon.
+            setAmbientLux(Math.max(mRecentShortTermAverageLux, mRecentLongTermAverageLux));
+            if (DEBUG) {
+                Slog.d(TAG, "updateAmbientLux: Darkened: "
+                        + "mDarkeningLuxThreshold=" + mDarkeningLuxThreshold
+                        + ", mRecentShortTermAverageLux=" + mRecentShortTermAverageLux
+                        + ", mRecentLongTermAverageLux=" + mRecentLongTermAverageLux
+                        + ", mAmbientLux=" + mAmbientLux);
+            }
+            updateAutoBrightness(true);
+        } else if (mDebounceLuxDirection != 0) {
+            // No change or change is within the hysteresis thresholds.
             mDebounceLuxDirection = 0;
             mDebounceLuxTime = time;
             if (DEBUG) {
                 Slog.d(TAG, "updateAmbientLux: Canceled debounce: "
-                        + "brighteningLuxThreshold=" + brighteningLuxThreshold
-                        + ", darkeningLuxThreshold=" + darkeningLuxThreshold
+                        + "mBrighteningLuxThreshold=" + mBrighteningLuxThreshold
+                        + ", mDarkeningLuxThreshold=" + mDarkeningLuxThreshold
                         + ", mRecentShortTermAverageLux=" + mRecentShortTermAverageLux
                         + ", mRecentLongTermAverageLux=" + mRecentLongTermAverageLux
                         + ", mAmbientLux=" + mAmbientLux);

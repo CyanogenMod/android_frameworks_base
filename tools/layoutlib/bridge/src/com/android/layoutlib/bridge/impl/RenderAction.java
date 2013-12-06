@@ -272,8 +272,6 @@ public abstract class RenderAction<T extends RenderParams> extends FrameworkReso
             mContext.getRenderResources().setFrameworkResourceIdProvider(null);
             mContext.getRenderResources().setLogger(null);
         }
-
-        mContext = null;
     }
 
     public static BridgeContext getCurrentContext() {
