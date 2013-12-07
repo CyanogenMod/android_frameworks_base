@@ -7,17 +7,17 @@ import android.widget.TextView;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
-import com.android.systemui.statusbar.policy.BatteryController;
-import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallback;
+import com.android.systemui.statusbar.policy.DockBatteryController;
+import com.android.systemui.statusbar.policy.DockBatteryController.BatteryStateChangeCallback;
 
-public class BatteryTile extends QuickSettingsTile implements BatteryStateChangeCallback{
-    private BatteryController mController;
+public class DockBatteryTile extends QuickSettingsTile implements BatteryStateChangeCallback{
+    private DockBatteryController mController;
 
     private int mBatteryLevel = 0;
     private boolean mPluggedIn;
 
-    public BatteryTile(Context context, QuickSettingsController qsc, BatteryController controller) {
-        super(context, qsc, R.layout.quick_settings_tile_battery); 
+    public DockBatteryTile(Context context, QuickSettingsController qsc, DockBatteryController controller) {
+        super(context, qsc, R.layout.quick_settings_tile_dock_battery); 
 
         mController = controller;
 
