@@ -2467,6 +2467,16 @@ public abstract class Context {
     public static final String CONSUMER_IR_SERVICE = "consumer_ir";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a
+     * {@link android.os.BatteryManager} for access battery information.
+     *
+     * @see #getSystemService
+     * @see android.os.BatteryManager
+     * @hide
+     */
+    public static final String BATTERY_SERVICE = "battery";
+
+    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *
