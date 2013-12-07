@@ -357,7 +357,6 @@ public class ImageView extends View {
     @android.view.RemotableViewMethod
     public void setImageResource(int resId) {
         if (mUri != null || mResource != resId) {
-            updateDrawable(null);
             mResource = resId;
             mUri = null;
 
@@ -389,7 +388,6 @@ public class ImageView extends View {
         if (mResource != 0 ||
                 (mUri != uri &&
                  (uri == null || mUri == null || !uri.equals(mUri)))) {
-            updateDrawable(null);
             mResource = 0;
             mUri = uri;
 
@@ -621,25 +619,26 @@ public class ImageView extends View {
         }
     }
 
+    private void ensureResolvedUri() {
+        if (mDrawable == null) {
+            resolveUri();
+        }
+    }
+
     private void resolveUri() {
-        if (mDrawable != null) {
-            return;
-        }
-
-        Resources rsrc = getResources();
-        if (rsrc == null) {
-            return;
-        }
-
         Drawable d = null;
+        Resources rsrc = getResources();
 
-        if (mResource != 0) {
+        if (rsrc == null) {
+            // Can't resolve any drawable, fall through to clearing the drawable
+        } else if (mResource != 0) {
             try {
                 d = rsrc.getDrawable(mResource);
             } catch (Exception e) {
                 Log.w("ImageView", "Unable to find resource: " + mResource, e);
                 // Don't try again.
                 mUri = null;
+                mResource = 0;
             }
         } else if (mUri != null) {
             String scheme = mUri.getScheme();
@@ -669,7 +668,7 @@ public class ImageView extends View {
                         }
                     }
                 }
-        } else {
+            } else {
                 d = Drawable.createFromPath(mUri.toString());
             }
     
@@ -679,7 +678,7 @@ public class ImageView extends View {
                 mUri = null;
             }
         } else {
-            return;
+            // No drawable to resolve
         }
 
         updateDrawable(d);
@@ -758,7 +757,7 @@ public class ImageView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        resolveUri();
+        ensureResolvedUri();
         int w;
         int h;
         
