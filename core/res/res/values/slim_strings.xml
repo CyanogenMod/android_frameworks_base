@@ -22,4 +22,7 @@
     <!-- Description of accessibility direction for targets [CHAR LIMIT=NONE] -->
     <string name="accessibility_target_direction">Swipe to activate a target</string>
 
+    <!-- stylus gestures support -->
+    <string name="stylus_app_not_installed">%s is not installed</string>
+
 </resources>
