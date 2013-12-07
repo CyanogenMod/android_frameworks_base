@@ -22,20 +22,23 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 
+import com.android.systemui.BatteryMeterView.BatteryMeterMode;
+
 import java.util.ArrayList;
 
 public class BatteryController extends BroadcastReceiver {
-    private static final String TAG = "StatusBar.BatteryController";
 
-    private ArrayList<BatteryStateChangeCallback> mChangeCallbacks =
+    protected ArrayList<BatteryStateChangeCallback> mChangeCallbacks =
             new ArrayList<BatteryStateChangeCallback>();
 
-    private int mBatteryLevel = 0;
-    private int mBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
-    private boolean mBatteryPlugged = false;
+    protected int mBatteryLevel = 0;
+    protected int mBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
+    protected boolean mBatteryPlugged = false;
 
     public interface BatteryStateChangeCallback {
         public void onBatteryLevelChanged(int level, boolean pluggedIn, int status);
+        public void onBatteryMeterModeChanged(BatteryMeterMode mode);
+        public void onBatteryMeterShowPercent(boolean showPercent);
     }
 
     public BatteryController(Context context) {
@@ -65,6 +68,18 @@ public class BatteryController extends BroadcastReceiver {
             for (BatteryStateChangeCallback cb : mChangeCallbacks) {
                 cb.onBatteryLevelChanged(mBatteryLevel, mBatteryPlugged, mBatteryStatus);
             }
+        }
+    }
+
+    public void onBatteryMeterModeChanged(BatteryMeterMode mode) {
+        for (BatteryStateChangeCallback cb : mChangeCallbacks) {
+            cb.onBatteryMeterModeChanged(mode);
+        }
+    }
+
+    public void onBatteryMeterShowPercent(boolean showPercent) {
+        for (BatteryStateChangeCallback cb : mChangeCallbacks) {
+            cb.onBatteryMeterShowPercent(showPercent);
         }
     }
 }
