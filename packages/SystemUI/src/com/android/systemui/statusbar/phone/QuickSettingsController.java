@@ -56,7 +56,6 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -72,7 +71,7 @@ import com.android.systemui.quicksettings.BluetoothTile;
 import com.android.systemui.quicksettings.BrightnessTile;
 import com.android.systemui.quicksettings.BugReportTile;
 import com.android.systemui.quicksettings.CameraTile;
-//import com.android.systemui.quicksettings.DockBatteryTile;
+import com.android.systemui.quicksettings.DockBatteryTile;
 import com.android.systemui.quicksettings.ExpandedDesktopTile;
 import com.android.systemui.quicksettings.GPSTile;
 import com.android.systemui.quicksettings.InputMethodTile;
@@ -102,7 +101,6 @@ import com.android.systemui.quicksettings.WifiAPTile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 public class QuickSettingsController {
     private static String TAG = "QuickSettingsController";
@@ -152,6 +150,10 @@ public class QuickSettingsController {
         mQuickSettingsTiles = new ArrayList<QuickSettingsTile>();
         mSettingsKey = settingsKey;
         mRibbonMode = ribbonMode;
+    }
+
+    public boolean isRibbonMode() {
+        return mRibbonMode;
     }
 
     void loadTiles() {
@@ -280,10 +282,10 @@ public class QuickSettingsController {
                 mQuickSettingsTiles.add(qs);
 
                 // Add dock battery beside main battery when possible
-                /*if (qs instanceof BatteryTile) {
+                if (qs instanceof BatteryTile) {
                     loadDockBatteryTile(resolver, inflater);
                     dockBatteryLoaded = true;
-                }*/
+                }
             }
         }
 
@@ -329,18 +331,20 @@ public class QuickSettingsController {
         }
     }
 
-    private void loadDockBatteryTile(final ContentResolver resolver, final LayoutInflater inflater) {
+    private void loadDockBatteryTile(final ContentResolver resolver,
+            final LayoutInflater inflater) {
         if (!QSUtils.deviceSupportsDockBattery(mContext)) {
             return;
         }
-        /*if (Settings.System.getIntForUser(resolver,
+        if (Settings.System.getIntForUser(resolver,
                     Settings.System.QS_DYNAMIC_DOCK_BATTERY, 1, UserHandle.USER_CURRENT) == 0) {
             return;
-        }*/
+        }
 
-  /*      QuickSettingsTile qs = new DockBatteryTile(mContext, this, mStatusBarService.mDockBatteryController);
+        QuickSettingsTile qs = new DockBatteryTile(mContext, this,
+                mStatusBarService.mDockBatteryController);
         qs.setupQuickSettingsTile(inflater, mContainerView);
-        mQuickSettingsTiles.add(qs);*/
+        mQuickSettingsTiles.add(qs);
     }
 
     public void shutdown() {

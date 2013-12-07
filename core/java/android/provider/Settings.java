@@ -2776,6 +2776,13 @@ public final class Settings {
          *
          * @hide
          */
+        public static final String QS_DYNAMIC_DOCK_BATTERY = "qs_dyanmic_dock_battery";
+
+        /**
+         * Quick Settings Panel Dynamic Tiles
+         *
+         * @hide
+         */
         public static final String QS_DYNAMIC_WIFI = "qs_dyanmic_wifi";
 
         /**
@@ -2904,15 +2911,22 @@ public final class Settings {
 
         /**
          * Display style of the status bar battery information
-         * 0: Display the stock battery information
-         * 1: Display cm battery percentage implementation / dont show stock icon
-         * 2: Display cm circle battery implementation without percentage
-         * 3: Display cm circle battery implementation with percentage
-         * 4: Hide the battery information
+         * 0: Display the battery an icon in portrait mode
+         * 2: Display the battery as a circle
+         * 4: Hide the battery status information
+         * 5: Display the battery an icon  in landscape mode
          * default: 0
          * @hide
          */
         public static final String STATUS_BAR_BATTERY = "status_bar_battery";
+
+        /**
+         * Display percentage in text of the battery level on the status bar
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_SHOW_PERCENT =
+                "status_bar_battery_show_percent";
 
         /**
          * Whether to show the clock in status bar

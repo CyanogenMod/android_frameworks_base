@@ -1838,7 +1838,7 @@
         android:description="@string/permdesc_updateBatteryStats"
         android:protectionLevel="signature|system" />
 
-    <!-- @hide Allows an application to collect battery statistics -->
+    <!-- @hide Allows an application to collect AppOp statistics -->
     <permission android:name="android.permission.GET_APP_OPS_STATS"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:label="@string/permlab_getAppOpsStats"
@@ -2287,6 +2287,13 @@
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:label="@string/permlab_batteryStats"
         android:description="@string/permdesc_batteryStats"
+        android:protectionLevel="signature|system" />
+
+    <!-- @hide Allows an application to reset the device battery statistics -->
+    <permission android:name="android.permission.RESET_BATTERY_STATS"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:label="@string/permlab_resetBatteryStats"
+        android:description="@string/permdesc_resetBatteryStats"
         android:protectionLevel="signature|system" />
 
     <!-- Allows an application to control the backup and restore process.
