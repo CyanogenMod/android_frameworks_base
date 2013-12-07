@@ -18,13 +18,10 @@ package android.mokee.util;
 
 import android.content.res.Resources;
 
+import java.util.Locale;
+
 public class MoKeeUtils {
     public static boolean isChineseLanguage() {
-       String country = Resources.getSystem().getConfiguration().locale.getCountry();
-       if (country.equals("CN") || country.equals("TW") || country.equals("HK")) {
-            return true;
-       } else {
-            return false;
-       }
+       return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(Locale.CHINESE.getLanguage());
     }
 }
