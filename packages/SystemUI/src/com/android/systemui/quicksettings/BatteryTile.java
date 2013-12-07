@@ -2,28 +2,32 @@ package com.android.systemui.quicksettings;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.BatteryManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.systemui.BatteryMeterView;
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
+import com.android.systemui.BatteryMeterView.BatteryMeterMode;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallback;
 
-public class BatteryTile extends QuickSettingsTile implements BatteryStateChangeCallback{
+public class BatteryTile extends QuickSettingsTile implements BatteryStateChangeCallback {
     private BatteryController mController;
 
     private int mBatteryLevel = 0;
     private boolean mPluggedIn;
+    private boolean mPresent;
+    private BatteryMeterView mBatteryView;
 
     public BatteryTile(Context context, QuickSettingsController qsc, BatteryController controller) {
-        super(context, qsc, R.layout.quick_settings_tile_battery); 
-        
+        this(context, qsc, controller, R.layout.quick_settings_tile_battery);
+    }
+
+    protected BatteryTile(Context context, QuickSettingsController qsc,
+            BatteryController controller, int resourceId) {
+        super(context, qsc, resourceId);
+
         mController = controller;
 
         mOnClick = new View.OnClickListener() {
@@ -37,6 +41,9 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     @Override
     void onPostCreate() {
         updateTile();
+        mBatteryView = (BatteryMeterView) getImageView();
+        mBatteryView.setMode(BatteryMeterMode.BATTERY_METER_ICON_PORTRAIT);
+        mBatteryView.setShowPercent(false);
         mController.addStateChangedCallback(this);
         super.onPostCreate();
     }
@@ -48,10 +55,24 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     }
 
     @Override
-    public void onBatteryLevelChanged(int level, boolean pluggedIn, int status) {
+    public void onBatteryLevelChanged(boolean present, int level, boolean pluggedIn, int status) {
+        mPresent = present;
         mBatteryLevel = level;
         mPluggedIn = pluggedIn;
         updateResources();
+    }
+
+    @Override
+    public void onBatteryMeterModeChanged(BatteryMeterMode mode) {
+        // All the battery tiles (qs and ribbon) uses the NORMAL battery mode
+    }
+
+    @Override
+    public void onBatteryMeterShowPercent(boolean showPercent) {
+        // PowerWidget tile uses the same settings that status bar
+        if (mQsc.isRibbonMode()) {
+            mBatteryView.setShowPercent(showPercent);
+        }
     }
 
     @Override
@@ -61,6 +82,7 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     }
 
     private synchronized void updateTile() {
+        mTile.setVisibility(mPresent ? View.VISIBLE : View.GONE);
         if (mBatteryLevel == 100) {
             mLabel = mContext.getString(R.string.quick_settings_battery_charged_label);
         } else {
