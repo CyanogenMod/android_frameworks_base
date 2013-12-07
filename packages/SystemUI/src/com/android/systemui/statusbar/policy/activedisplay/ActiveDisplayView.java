@@ -100,8 +100,6 @@ public class ActiveDisplayView extends FrameLayout {
 
     private static final int MAX_OVERFLOW_ICONS = 8;
 
-    private static final int POCKET_THRESHOLD = 5000;
-
     private static final int HIDE_NOTIFICATIONS_BELOW_SCORE = Notification.PRIORITY_LOW;
 
     // the different pocket mode options
@@ -167,6 +165,8 @@ public class ActiveDisplayView extends FrameLayout {
     private boolean mSunlightModeEnabled = false;
     private Set<String> mExcludedApps = new HashSet<String>();
     private long mDisplayTimeout = 8000L;
+    private long mProximityThreshold = 5000L;
+    private boolean mTurnOffModeEnabled = true;
 
     /**
      * Simple class that listens to changes in notifications
@@ -309,6 +309,10 @@ public class ActiveDisplayView extends FrameLayout {
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_DISPLAY_TIMEOUT), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_DISPLAY_TURNOFF_MODE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_DISPLAY_THRESHOLD), false, this);
             update();
         }
 
@@ -349,6 +353,10 @@ public class ActiveDisplayView extends FrameLayout {
                     Settings.System.ACTIVE_DISPLAY_EXCLUDED_APPS);
             mDisplayTimeout = Settings.System.getLong(
                     resolver, Settings.System.ACTIVE_DISPLAY_TIMEOUT, 8000L);
+            mTurnOffModeEnabled = Settings.System.getInt(
+                    resolver, Settings.System.ACTIVE_DISPLAY_TURNOFF_MODE, 0) == 1;
+            mProximityThreshold = Settings.System.getLong(
+                    resolver, Settings.System.ACTIVE_DISPLAY_THRESHOLD, 8000L);
 
             createExcludedAppsSet(excludedApps);
 
@@ -1101,6 +1109,13 @@ public class ActiveDisplayView extends FrameLayout {
         return stateListDrawable;
     }
 
+    private void updateWakedByPocketMode() {
+        if (mTurnOffModeEnabled == true) {
+            mWakedByPocketMode = true;
+            Log.i(TAG, "ActiveDisplay: waked by Pocketmode");
+        }
+    }
+
     private SensorEventListener mSensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -1110,16 +1125,17 @@ public class ActiveDisplayView extends FrameLayout {
                 if (isFar) {
                     mProximityIsFar = true;
                     if (!isScreenOn() && mPocketMode != POCKET_MODE_OFF && !isOnCall()) {
-                        if (System.currentTimeMillis() >= (mPocketTime + POCKET_THRESHOLD) && mPocketTime != 0){
-                            mWakedByPocketMode = true;
-                            Log.i(TAG, "ActiveDisplay: waked by Pocketmode");
+                        if (System.currentTimeMillis() >= (mPocketTime + mProximityThreshold) && mPocketTime != 0){
 
                             if (mNotification == null) {
                                 mNotification = getNextAvailableNotification();
                             }
+
                             if (mNotification != null) {
+                                updateWakedByPocketMode();
                                 showNotification(mNotification, true);
                             } else if (mPocketMode == POCKET_MODE_ALWAYS) {
+                                updateWakedByPocketMode();
                                 showTime();
                             }
                         }
