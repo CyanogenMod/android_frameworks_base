@@ -58,6 +58,10 @@
     <dimen name="status_bar_recents_app_icon_left_margin">0dp</dimen>
     <dimen name="status_bar_recents_app_icon_top_margin">8dp</dimen>
 
+    <!-- Status bar battery icons dimensions -->
+    <dimen name="status_bar_battery_height">16dp</dimen>
+    <dimen name="status_bar_battery_width">10.5dp</dimen>
+
     <!-- Amount to offset bottom of notification peek window from top of status bar. -->
     <dimen name="peek_window_y_offset">-12dp</dimen>
 

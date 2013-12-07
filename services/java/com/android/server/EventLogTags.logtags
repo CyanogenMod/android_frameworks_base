@@ -11,6 +11,10 @@ option java_package com.android.server
 # It lets us count the total amount of time between charges and the discharge level
 2730 battery_discharge (duration|2|3),(minLevel|1|6),(maxLevel|1|6)
 
+# dock battery
+2738 dock_battery_level (level|1|6),(voltage|1|1),(temperature|1|1)
+2739 dock_battery_status (status|1|5),(health|1|5),(present|1|5),(plugged|1|5),(technology|3)
+
 
 # ---------------------------
 # PowerManagerService.java
@@ -32,6 +36,7 @@ option java_package com.android.server
 
 #
 # Leave IDs through 2739 for more power logs (2730 used by battery_discharge above)
+# (2738-2739 used by dock battery above)
 #
 
 
