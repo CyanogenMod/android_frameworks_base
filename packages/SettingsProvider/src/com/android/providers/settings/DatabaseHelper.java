@@ -2020,6 +2020,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.STATUS_BAR_BATTERY,
                     R.integer.def_battery_style);
 
+            loadIntegerSetting(stmt, Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT,
+                    R.integer.def_battery_show_percent);
+
             loadIntegerSetting(stmt, Settings.System.STATUS_BAR_NOTIF_COUNT,
                     R.integer.def_notif_count);
 

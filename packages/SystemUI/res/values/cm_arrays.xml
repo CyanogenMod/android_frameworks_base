@@ -23,4 +23,55 @@
         <item>@drawable/ic_qs_perf_profile_perf</item>
     </string-array>
 
+    <array name="batterymeter_inverted_bolt_points" translatable="false">
+        <item>743</item><item>73</item>
+        <item>743</item><item>292</item>
+        <item>442</item><item>201</item>
+        <item>442</item><item>400</item>
+        <item>0</item><item>20</item>
+        <item>369</item><item>157</item>
+        <item>369</item><item>0</item>
+    </array>
+
+    <array name="dockbatterymeter_bold_points" translatable="false">
+        <item>129</item><item>0</item>
+        <item>199</item><item>0</item>
+        <item>199</item><item>168</item>
+        <item>240</item><item>168</item>
+        <item>240</item><item>0</item>
+        <item>312</item><item>0</item>
+        <item>312</item><item>168</item>
+        <item>441</item><item>168</item>
+        <item>441</item><item>252</item>
+        <item>312</item><item>400</item>
+        <item>286</item><item>400</item>
+        <item>286</item><item>702</item>
+        <item>157</item><item>702</item>
+        <item>154</item><item>400</item>
+        <item>129</item><item>400</item>
+        <item>0</item><item>251</item>
+        <item>0</item><item>168</item>
+        <item>129</item><item>168</item>
+    </array>
+
+    <array name="dockbatterymeter_inverted_bold_points" translatable="false">
+        <item>0</item><item>154</item>
+        <item>302</item><item>154</item>
+        <item>302</item><item>129</item>
+        <item>451</item><item>0</item>
+        <item>534</item><item>0</item>
+        <item>534</item><item>129</item>
+        <item>702</item><item>129</item>
+        <item>702</item><item>199</item>
+        <item>534</item><item>199</item>
+        <item>534</item><item>265</item>
+        <item>702</item><item>265</item>
+        <item>702</item><item>312</item>
+        <item>534</item><item>312</item>
+        <item>534</item><item>441</item>
+        <item>451</item><item>441</item>
+        <item>302</item><item>312</item>
+        <item>302</item><item>286</item>
+        <item>0</item><item>286</item>
+    </array>
 </resources>

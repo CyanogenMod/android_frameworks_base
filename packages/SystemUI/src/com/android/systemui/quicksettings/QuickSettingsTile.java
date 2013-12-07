@@ -99,9 +99,9 @@ public class QuickSettingsTile implements OnClickListener {
         if (tv != null) {
             tv.setText(mLabel);
         }
-        ImageView image = (ImageView) mTile.findViewById(R.id.image);
-        if (image != null) {
-            image.setImageResource(mDrawable);
+        View image = mTile.findViewById(R.id.image);
+        if (image != null && image instanceof ImageView) {
+            ((ImageView) image).setImageResource(mDrawable);
         }
     }
 
