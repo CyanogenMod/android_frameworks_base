@@ -74,6 +74,37 @@ jint android_os_FileUtils_getVolumeUUID(JNIEnv* env, jobject clazz, jstring path
     } else {
         uuid = blkid_get_tag_value(NULL, "UUID", pathStr);
     }
+
+#define RANDOM "/dev/urandom"
+    char uuidFilePath[256];
+    if (!uuid && findDevice){
+        FILE * fp;
+        snprintf(uuidFilePath,sizeof(uuidFilePath),"%s/.VolumeID",pathStr);
+        if ((fp=fopen(uuidFilePath,"r"))){
+            if(fscanf(fp,"%256s",line) && 5<strlen(line))
+               uuid=line;
+            fclose(fp);
+        }
+        else {
+             char uu[8];
+             int len;
+             int fd;
+             if(!(fd=open(RANDOM, O_RDONLY)))
+                 return false;
+             if(8 != read(fd, uu, 8))
+                 return false;
+             close(fd);
+
+             sprintf(line,"%02x%02x%02x%02x%02x%02x%02x%02x",uu[0],uu[1],uu[2],uu[3],uu[4],uu[5],uu[6],uu[7]);
+             line[8]='\0';
+             uuid=line;
+             if(fp=fopen(uuidFilePath,"w")){
+                      fprintf(fp,"%s",uuid);
+                      fclose(fp);
+             }
+        }
+    }
+
     if (uuid) {
         ALOGD("UUID for %s is %s\n", pathStr, uuid);
 
