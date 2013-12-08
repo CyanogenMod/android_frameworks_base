@@ -48,10 +48,11 @@ public class QSUtils {
         }
 
         public static boolean deviceSupportsPerformanceProfiles(Context ctx) {
-            Resources res = ctx.getResources();
+            /*Resources res = ctx.getResources();
             String perfProfileProp = res.getString(
                     com.android.internal.R.string.config_perf_profile_prop);
-            return !TextUtils.isEmpty(perfProfileProp);
+            return !TextUtils.isEmpty(perfProfileProp);*/
+		return false;
         }
 
         public static boolean expandedDesktopEnabled(ContentResolver resolver) {

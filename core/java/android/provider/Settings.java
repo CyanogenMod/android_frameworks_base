@@ -3883,13 +3883,6 @@ public final class Settings {
         public static final String SCREEN_STATE_MOBILE_DATA = "screen_state_mobile_data";
 
         /**
-         * Performance profile
-         * @see config_perf_profile_prop in frameworks/base/core/res/res/values/config.xml
-         * @hide
-         */
-        public static final String PERFORMANCE_PROFILE = "performance_profile";
-
-        /**
          * Should the non-intrsive incall ui be used
          *
          * @hide
