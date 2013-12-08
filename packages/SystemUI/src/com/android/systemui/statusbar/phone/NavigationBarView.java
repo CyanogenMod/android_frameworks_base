@@ -119,7 +119,8 @@ public class NavigationBarView extends LinearLayout {
                 View view, int transitionType) {
             if (view == findViewWithTag(NavbarEditor.NAVBAR_BACK)) {
                 mBackTransitioning = true;
-            } else if (view ==  findViewWithTag(NavbarEditor.NAVBAR_HOME) && transitionType == LayoutTransition.APPEARING) {
+            } else if (view ==  findViewWithTag(NavbarEditor.NAVBAR_HOME)
+                    && transitionType == LayoutTransition.APPEARING) {
                 mHomeAppearing = true;
                 mStartDelay = transition.getStartDelay(transitionType);
                 mDuration = transition.getDuration(transitionType);
@@ -132,7 +133,8 @@ public class NavigationBarView extends LinearLayout {
                 View view, int transitionType) {
             if (view == findViewWithTag(NavbarEditor.NAVBAR_BACK)) {
                 mBackTransitioning = false;
-            } else if (view ==  findViewWithTag(NavbarEditor.NAVBAR_HOME) && transitionType == LayoutTransition.APPEARING) {
+            } else if (view ==  findViewWithTag(NavbarEditor.NAVBAR_HOME)
+                    && transitionType == LayoutTransition.APPEARING) {
                 mHomeAppearing = false;
             }
         }
@@ -140,10 +142,12 @@ public class NavigationBarView extends LinearLayout {
         public void onBackAltCleared() {
             // When dismissing ime during unlock, force the back button to run the same appearance
             // animation as home (if we catch this condition early enough).
-            if (!mBackTransitioning && findViewWithTag(NavbarEditor.NAVBAR_BACK).getVisibility() == VISIBLE
-                    && mHomeAppearing && findViewWithTag(NavbarEditor.NAVBAR_HOME).getAlpha() == 0) {
+            View backView = findViewWithTag(NavbarEditor.NAVBAR_BACK);
+            View homeView = findViewWithTag(NavbarEditor.NAVBAR_HOME);
+            if (!mBackTransitioning && backView != null && backView.getVisibility() == VISIBLE
+                    && mHomeAppearing && homeView != null && homeView.getAlpha() == 0) {
                 findViewWithTag(NavbarEditor.NAVBAR_BACK).setAlpha(0);
-                ValueAnimator a = ObjectAnimator.ofFloat(findViewWithTag(NavbarEditor.NAVBAR_BACK), "alpha", 0, 1);
+                ValueAnimator a = ObjectAnimator.ofFloat(backView, "alpha", 0, 1);
                 a.setStartDelay(mStartDelay);
                 a.setDuration(mDuration);
                 a.setInterpolator(mInterpolator);
@@ -404,11 +408,18 @@ public class NavigationBarView extends LinearLayout {
 
         mNavigationIconHints = hints;
 
-        ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_BACK)).setImageDrawable(backAlt
-                ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
-                : (mVertical ? mBackLandIcon : mBackIcon));
+        ImageView backView = (ImageView) findViewWithTag(NavbarEditor.NAVBAR_BACK);
+        ImageView recentView = (ImageView) findViewWithTag(NavbarEditor.NAVBAR_RECENT);
 
-        ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_RECENT)).setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
+        if (backView != null) {
+            backView.setImageDrawable(backAlt
+                    ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
+                    : (mVertical ? mBackLandIcon : mBackIcon));
+        }
+
+        if (recentView != null) {
+            recentView.setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
+        }
 
         setDisabledFlags(mDisabledFlags, true);
     }
