@@ -22,6 +22,16 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.content.DialogInterface;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.os.Message;
+import android.telephony.MSimTelephonyManager;
+import android.view.View;
+import android.view.WindowManager;
+import com.android.internal.telephony.PhoneConstants;
 
 import com.android.internal.telephony.msim.ITelephonyMSim;
 
@@ -31,6 +41,7 @@ import com.android.internal.telephony.msim.ITelephonyMSim;
 public class MSimKeyguardSimPukView extends KeyguardSimPukView {
     private final static boolean DEBUG = KeyguardViewMediator.DEBUG;
     private static String TAG = "MSimKeyguardSimPukView";
+    private MSimCheckSimPuk mCheckSimPukThread;
 
     protected class MSimStateMachine extends KeyguardSimPukView.StateMachine {
         public void next() {
@@ -66,27 +77,11 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
         }
 
         void reset() {
-            String  displayMessage = "";
-            try {
-                int attemptsRemaining = ITelephonyMSim.Stub.asInterface(ServiceManager
-                        .checkService("phone_msim")).getIccPin1RetryCount(KeyguardUpdateMonitor
-                        .getInstance(mContext).getPukLockedSubscription());
-                if (attemptsRemaining >= 0) {
-                    displayMessage = getContext().getString(
-                            R.string.keyguard_password_wrong_puk_code)
-                            + getContext().getString(R.string.pinpuk_attempts)
-                            + attemptsRemaining + ". ";
-                }
-            } catch (RemoteException ex) {
-                displayMessage = getContext().getString(
-                        R.string.keyguard_password_puk_failed);
-            }
-            displayMessage = getSecurityMessageDisplay(R.string.kg_puk_enter_puk_hint)
-                    + displayMessage;
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
-            mSecurityMessageDisplay.setMessage(displayMessage, true);
+            mSecurityMessageDisplay.setMessage(
+                    getSecurityMessageDisplay(R.string.kg_puk_enter_puk_hint), true);
             mPasswordEntry.requestFocus();
         }
     }
@@ -114,25 +109,26 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
             mSubscription = sub;
         }
 
-        abstract void onSimLockChangedResponse(boolean success);
+        abstract void onSimLockChangedResponse(final int result, final int attemptsRemaining);
 
         @Override
         public void run() {
             if (DEBUG) Log.d(TAG, "MSimCheckSimPuk:run(), mPuk = " + mPuk
                     + " mPin = " + mPin + " mSubscription = " + mSubscription);
             try {
-                final boolean result = ITelephonyMSim.Stub.asInterface(ServiceManager
-                        .checkService("phone_msim")).supplyPuk(mPuk, mPin, mSubscription);
-
+                final int[] result = ITelephonyMSim.Stub.asInterface(ServiceManager.checkService
+                        ("phone_msim")).supplyPukReportResult(mPuk, mPin, mSubscription);
+                Log.v(TAG, "supplyPukReportResult returned: " + result[0] + " " + result[1]);
                 post(new Runnable() {
                     public void run() {
-                        onSimLockChangedResponse(result);
+                        onSimLockChangedResponse(result[0], result[1]);
                     }
                 });
             } catch (RemoteException e) {
+                Log.e(TAG, "RemoteException for supplyPukReportResult:", e);
                 post(new Runnable() {
                     public void run() {
-                        onSimLockChangedResponse(false);
+                        onSimLockChangedResponse(PhoneConstants.PIN_GENERAL_FAILURE, -1);
                     }
                 });
             }
@@ -140,34 +136,65 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
     }
 
     @Override
+    protected Dialog getPukRemainingAttemptsDialog(int remaining) {
+        String msg = getPukPasswordErrorMessage(remaining);
+        if (mRemainingAttemptsDialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setMessage(getSecurityMessageDisplay(msg));
+            builder.setCancelable(false);
+            builder.setNeutralButton(R.string.ok, null);
+            mRemainingAttemptsDialog = builder.create();
+            mRemainingAttemptsDialog.getWindow().setType(
+                    WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+        } else {
+            mRemainingAttemptsDialog.setMessage(getSecurityMessageDisplay(msg));
+        }
+        return mRemainingAttemptsDialog;
+    }
+    @Override
     protected void updateSim() {
         getSimUnlockProgressDialog().show();
 
         if (DEBUG) Log.d(TAG, "updateSim()");
 
-        if (!mCheckInProgress) {
-            mCheckInProgress = true;
+        if (mCheckSimPukThread == null) {
 
-            new MSimCheckSimPuk(mPukText, mPinText,
+            mCheckSimPukThread = new MSimCheckSimPuk(mPukText, mPinText,
                     KeyguardUpdateMonitor.getInstance(mContext).getPukLockedSubscription()) {
-                void onSimLockChangedResponse(final boolean success) {
+                void onSimLockChangedResponse(final int result, final int attemptsRemaining) {
                     post(new Runnable() {
                         public void run() {
                             if (mSimUnlockProgressDialog != null) {
                                 mSimUnlockProgressDialog.hide();
                             }
-                            if (success) {
+                            if (result == PhoneConstants.PIN_RESULT_SUCCESS) {
+                                KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked();
                                 mCallback.dismiss(true);
                             } else {
+                                if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
+                                    if (attemptsRemaining <= 2) {
+                                        // this is getting critical - show dialog
+                                        getPukRemainingAttemptsDialog(attemptsRemaining).show();
+                                    } else {
+                                        // show message
+                                        mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay
+                                                (getPukPasswordErrorMessage(attemptsRemaining)), true);
+                                    }
+                                } else {
+                                    mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay
+                                            (R.string.kg_password_puk_failed), true);
+                                }
+                                if (DEBUG) Log.d(LOG_TAG, "verifyPasswordAndUnlock "
+                                        + " UpdateSim.onSimCheckResponse: "
+                                        + " attemptsRemaining=" + attemptsRemaining);
                                 mStateMachine.reset();
-                                mSecurityMessageDisplay.setMessage(
-                                    getSecurityMessageDisplay(R.string.kg_invalid_puk), true);
                             }
-                            mCheckInProgress = false;
+                            mCheckSimPukThread = null;
                         }
                     });
                 }
-            }.start();
+            };
+            mCheckSimPukThread.start();
         }
     }
 
@@ -178,5 +205,13 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
                 KeyguardUpdateMonitor.getInstance(mContext).getPukLockedSubscription()+1,
                 getContext().getResources().getText(resId));
     }
+    protected CharSequence getSecurityMessageDisplay(String msg) {
+        // Returns the String in the format
+        // "SUB:%d : %s", sub, msg
+        return getContext().getString(R.string.msim_kg_sim_pin_msg_format,
+                KeyguardUpdateMonitor.getInstance(mContext).getPinLockedSubscription()+1,msg);
+    }
+
+
 }
 
