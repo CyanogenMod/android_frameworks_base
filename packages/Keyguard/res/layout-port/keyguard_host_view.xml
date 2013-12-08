@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false"
-            androidprv:layout_maxHeight="@dimen/keyguard_security_height"
+            androidprv:layout_maxHeight="@dimen/keyguard_security_no_widget_height"
             androidprv:layout_childType="challenge"
             android:padding="0dp"
             android:gravity="bottom|center_horizontal">
