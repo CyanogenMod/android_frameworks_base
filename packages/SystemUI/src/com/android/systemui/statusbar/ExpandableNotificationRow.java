@@ -30,8 +30,6 @@ public class ExpandableNotificationRow extends FrameLayout {
     private boolean mUserExpanded;
     /** is the user touching this row */
     private boolean mUserLocked;
-    /** has the user manually dismissed this row */
-    private boolean mUserDismissed;
 
     public ExpandableNotificationRow(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -67,14 +65,6 @@ public class ExpandableNotificationRow extends FrameLayout {
 
     public void setUserLocked(boolean userLocked) {
         mUserLocked = userLocked;
-    }
-
-    public boolean isUserDismissed() {
-        return mUserDismissed;
-    }
-
-    public void setUserDismissed(boolean userDismissed) {
-        mUserDismissed = userDismissed;
     }
 
     public void setExpanded(boolean expand) {

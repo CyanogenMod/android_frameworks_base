@@ -49,7 +49,7 @@ import java.io.File;
 public class SettingsPanelView extends PanelView {
     public static final boolean DEBUG_GESTURES = true;
 
-    private QuickSettingsController mQS;
+    private QuickSettings mQS;
     private QuickSettingsContainerView mQSContainer;
 
     Drawable mHandleBar;
@@ -76,7 +76,7 @@ public class SettingsPanelView extends PanelView {
         setBackgroundDrawables();
     }
 
-    public void setQuickSettings(QuickSettingsController qs) {
+    public void setQuickSettings(QuickSettings qs) {
         mQS = qs;
     }
 
@@ -99,8 +99,8 @@ public class SettingsPanelView extends PanelView {
             BatteryController batteryController, LocationController locationController,
             RotationLockController rotationLockController) {
         if (mQS != null) {
-            /*mQS.setup(networkController, bluetoothController, batteryController,
-                    locationController, rotationLockController);*/
+            mQS.setup(networkController, bluetoothController, batteryController,
+                    locationController, rotationLockController);
         }
     }
 
