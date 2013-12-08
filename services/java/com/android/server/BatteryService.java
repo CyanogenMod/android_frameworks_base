@@ -732,6 +732,11 @@ public final class BatteryService extends Binder {
          * Synchronize on BatteryService.
          */
         public void updateLightsLocked() {
+            // mBatteryProps could be null on startup (called by SettingsObserver)
+            if (mBatteryProps == null) {
+                Slog.w(TAG, "updateLightsLocked: mBatteryProps is null; skipping");
+            }
+
             final int level = mBatteryProps.batteryLevel;
             final int status = mBatteryProps.batteryStatus;
             if (!mLightEnabled) {
