@@ -2088,17 +2088,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         return a;
     }
 
-    public Animator setVisibilityOnStart(
-            final Animator a, final View v, final int vis) {
-        a.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                v.setVisibility(vis);
-            }
-        });
-        return a;
-    }
-
     public Animator interpolator(TimeInterpolator ti, Animator a) {
         a.setInterpolator(ti);
         return a;
@@ -2169,11 +2158,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         if (mRibbonView != null && mHasQuickAccessSettings) {
             mRibbonViewAnim = start(
                 startDelay(FLIP_DURATION_OUT * zeroOutDelays,
-                    setVisibilityOnStart(
                         interpolator(mDecelerateInterpolator,
                             ObjectAnimator.ofFloat(mRibbonView, View.SCALE_X, 1f)
-                                .setDuration(FLIP_DURATION_IN)),
-                        mRibbonView, View.VISIBLE)));
+                                .setDuration(FLIP_DURATION_IN))));
         }
         mFlipSettingsViewAnim = start(
             setVisibilityWhenDone(
