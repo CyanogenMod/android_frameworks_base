@@ -557,9 +557,9 @@ public class SearchPanelView extends FrameLayout implements
             return null;
         }
         Drawable iconBg = ImageHelper.resize(mContext,
-            mResources.getDrawable(R.drawable.ic_navbar_blank), 50);
+            mResources.getDrawable(R.drawable.ic_navbar_blank), 60);
         Drawable iconBgActivated = ImageHelper.resize(mContext,
-            mResources.getDrawable(R.drawable.ic_navbar_blank_activated), 50);
+            mResources.getDrawable(R.drawable.ic_navbar_blank_activated), 60);
         int margin = (int)(iconBg.getIntrinsicHeight() / 3);
         LayerDrawable icon = new LayerDrawable (new Drawable[] {iconBg, activityIcon});
         icon.setLayerInset(1, margin, margin, margin, margin);
