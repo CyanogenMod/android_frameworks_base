@@ -317,7 +317,7 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
         // calculate Y position for text
         Rect bounds = new Rect();
         mPaintFont.getTextBounds("99", 0, "99".length(), bounds);
-        mTextLeftX = mCircleSize / 2.0f + getPaddingStart();
+        mTextLeftX = mCircleSize / 2.0f + pLeft/2;
         // the +1 at end of formular balances out rounding issues. works out on all resolutions
         mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f - strokeWidth / 2.0f + 1;
 
