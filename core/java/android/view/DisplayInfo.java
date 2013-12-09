@@ -381,6 +381,7 @@ public final class DisplayInfo implements Parcelable {
 
     private void getMetricsWithSize(DisplayMetrics outMetrics, CompatibilityInfo compatInfo,
             IBinder token, int width, int height) {
+        outMetrics.updateDensity();
         outMetrics.densityDpi = outMetrics.noncompatDensityDpi = logicalDensityDpi;
         outMetrics.noncompatWidthPixels  = outMetrics.widthPixels = width;
         outMetrics.noncompatHeightPixels = outMetrics.heightPixels = height;

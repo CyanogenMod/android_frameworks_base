@@ -16,7 +16,11 @@
 
 package android.util;
 
+import android.content.res.Configuration;
 import android.os.SystemProperties;
+import android.util.Log;
+
+import com.android.internal.util.slim.DensityUtils;
 
 
 /**
@@ -200,6 +204,12 @@ public class DisplayMetrics {
      */
     public float noncompatYdpi;
 
+    /**
+     * Cached copy of Configuration.fontScale.
+     * @hide
+     */
+    private float fontScale = 1.0f;
+
     public DisplayMetrics() {
     }
     
@@ -218,6 +228,7 @@ public class DisplayMetrics {
         noncompatScaledDensity = o.noncompatScaledDensity;
         noncompatXdpi = o.noncompatXdpi;
         noncompatYdpi = o.noncompatYdpi;
+        updateDensity();
     }
     
     public void setToDefaults() {
@@ -235,6 +246,28 @@ public class DisplayMetrics {
         noncompatScaledDensity = scaledDensity;
         noncompatXdpi = xdpi;
         noncompatYdpi = ydpi;
+    }
+
+    public void updateDensity() {
+        int newDensity = DensityUtils.getCurrentDensity();
+        density = newDensity / (float) DENSITY_DEFAULT;
+        densityDpi = newDensity;
+        scaledDensity = density * fontScale;
+        xdpi = newDensity;
+        ydpi = newDensity;
+        noncompatDensity = density;
+        noncompatDensityDpi = densityDpi;
+        noncompatScaledDensity = scaledDensity;
+        noncompatXdpi = xdpi;
+        noncompatYdpi = ydpi;
+    }
+
+    /** @hide */
+    public void updateConfiguration(Configuration config) {
+        // Keep a copy of the fontScale variable when the configuration is
+        // changed. This is needed to calculate scaledDensity, otherwise, the
+        // font size will be stuck at the default size.
+        fontScale = config.fontScale;
     }
 
     @Override
@@ -291,7 +324,7 @@ public class DisplayMetrics {
             ", xdpi=" + xdpi + ", ydpi=" + ydpi + "}";
     }
 
-    private static int getDeviceDensity() {
+    public static int getDeviceDensity() {
         // qemu.sf.lcd_density can be used to override ro.sf.lcd_density
         // when running in the emulator, allowing for dynamic configurations.
         // The reason for this is that ro.sf.lcd_density is write-once and is
