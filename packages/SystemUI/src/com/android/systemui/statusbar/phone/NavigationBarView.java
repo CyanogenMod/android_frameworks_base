@@ -260,7 +260,8 @@ public class NavigationBarView extends LinearLayout {
         mCameraDisabledByDpm = isCameraDisabledByDpm();
         watchForDevicePolicyChanges();
 
-        mButtonsConfig = ButtonsHelper.getNavBarConfig(mContext);
+        mButtonsConfig = ButtonsHelper.getNavBarConfigWithDescription(
+                mContext, "shortcut_action_values", "shortcut_action_entries");
         mButtonIdList = new ArrayList<Integer>();
     }
 
@@ -401,7 +402,8 @@ public class NavigationBarView extends LinearLayout {
                 KeyButtonView v = generateKey(landscape,
                         buttonConfig.getClickAction(),
                         buttonConfig.getLongpressAction(),
-                        buttonConfig.getIcon());
+                        buttonConfig.getIcon(),
+                        buttonConfig.getClickActionDescription());
                 v.setTag((landscape ? "key_land_" : "key_") + j);
 
                 addButton(navButtonLayout, v, landscape);
@@ -469,12 +471,12 @@ public class NavigationBarView extends LinearLayout {
     }
 
     private KeyButtonView generateKey(boolean landscape, String clickAction,
-            String longpress,
-            String iconUri) {
+            String longpress, String iconUri, String description) {
 
         KeyButtonView v = new KeyButtonView(mContext, null);
         v.setClickAction(clickAction);
         v.setLongpressAction(longpress);
+        v.setContentDescription(description);
         v.setLayoutParams(getLayoutParams(landscape, 80));
 
         if (clickAction.equals(ButtonsConstants.ACTION_BACK)) {
@@ -559,7 +561,8 @@ public class NavigationBarView extends LinearLayout {
     private View generateMenuKey(boolean landscape, int keyId) {
         KeyButtonView v = new KeyButtonView(mContext, null);
         v.setLayoutParams(getLayoutParams(landscape, 40));
-        v.setCode(KeyEvent.KEYCODE_MENU);
+        v.setClickAction(ButtonsConstants.ACTION_MENU);
+        v.setLongpressAction(ButtonsConstants.ACTION_NULL);
         v.setVisibility(View.INVISIBLE);
         v.setContentDescription(getResources().getString(R.string.accessibility_menu));
         v.setGlowBackground(landscape ? R.drawable.ic_sysbar_highlight_land
@@ -1029,7 +1032,8 @@ public class NavigationBarView extends LinearLayout {
         mNavBarButtonColorMode = Settings.System.getIntForUser(resolver,
                 Settings.System.NAVIGATION_BAR_BUTTON_TINT_MODE, 0, UserHandle.USER_CURRENT);
 
-        mButtonsConfig = ButtonsHelper.getNavBarConfig(mContext);
+        mButtonsConfig = ButtonsHelper.getNavBarConfigWithDescription(
+                mContext, "shortcut_action_values", "shortcut_action_entries");
 
         mMenuSetting = Settings.System.getIntForUser(resolver,
                 Settings.System.MENU_LOCATION, SHOW_RIGHT_MENU,
