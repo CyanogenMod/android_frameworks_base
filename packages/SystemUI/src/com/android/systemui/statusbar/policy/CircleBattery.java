@@ -16,7 +16,6 @@
 
 package com.android.systemui.statusbar.policy;
 
-import android.view.ViewGroup.LayoutParams;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -76,6 +75,14 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
             if (mActivated && mAttached) {
                 invalidate();
             }
+        }
+    };
+
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mRectLeft = null;
+            invalidate();
         }
     };
 
@@ -159,6 +166,9 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
             mAttached = true;
             mObserver.observe();
             mHandler.postDelayed(mInvalidate, 250);
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
+            getContext().registerReceiver(mIntentReceiver, filter);
         }
     }
 
@@ -172,6 +182,7 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
                                 // recalculated on next attach
             mCircleSize = 0;    // makes sure, mCircleSize is reread from icons on
                                 // next attach
+            getContext().unregisterReceiver(mIntentReceiver);
         }
     }
 
@@ -311,13 +322,13 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
 
         // calculate rectangle for drawArc calls
         int pLeft = getPaddingStart();
-        mRectLeft = new RectF(pLeft/2 + strokeWidth / 2.0f, 0 + strokeWidth / 2.0f, mCircleSize
-                - strokeWidth / 2.0f + pLeft/2, mCircleSize - strokeWidth / 2.0f);
+        mRectLeft = new RectF(getPaddingLeft() + strokeWidth / 2.0f, 0 + strokeWidth / 2.0f, mCircleSize
+                - strokeWidth / 2.0f + getPaddingLeft(), mCircleSize - strokeWidth / 2.0f);
 
         // calculate Y position for text
         Rect bounds = new Rect();
         mPaintFont.getTextBounds("99", 0, "99".length(), bounds);
-        mTextLeftX = mCircleSize / 2.0f + getPaddingStart();
+        mTextLeftX = mCircleSize / 2.0f + pLeft;
         // the +1 at end of formular balances out rounding issues. works out on all resolutions
         mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f - strokeWidth / 2.0f + 1;
 
