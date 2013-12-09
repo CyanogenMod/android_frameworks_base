@@ -17,6 +17,8 @@
 
 package com.android.server.power;
 
+import java.io.IOException;
+
 import android.app.ActivityManagerNative;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -150,8 +152,21 @@ public final class ShutdownThread extends Thread {
                         .setPositiveButton(com.android.internal.R.string.yes,
                                 new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                mReboot = true;
-                                beginShutdownSequence(context);
+                                if ("hot".equals(mRebootReason)) {
+                                    mRebootReason = "";
+                                    Log.d(TAG, "starting to kill system_server and cancel reboot thread");
+                                    mReboot = false;
+                                    try {
+                                        Runtime.getRuntime().exec("busybox pkill system_server");
+                                    } catch (IOException e) {
+                                        Log.e(TAG, "an error occured, reboot instead of hot reboot");
+                                        mReboot = true;
+                                        beginShutdownSequence(context);
+                                    }
+                                } else {
+                                    mReboot = true;
+                                    beginShutdownSequence(context);
+                                }
                             }
                         })
                         .setNegativeButton(com.android.internal.R.string.no,

@@ -99,6 +99,9 @@
     <!-- Label for item that reboots the device in phone options dialog -->
     <string name="global_action_reboot">Reboot</string>
 
+    <!-- Button to hot boot the phone, within the Reboot Options dialog -->
+    <string name="hot_reboot">Hot Reboot</string>
+
     <!-- Label for item that opens the profile choosing dialog -->
     <string name="global_action_choose_profile">Profile</string>
 
