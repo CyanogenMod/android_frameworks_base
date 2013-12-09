@@ -17,6 +17,8 @@
 
 package android.content.pm;
 
+import java.util.ArrayList;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -218,7 +220,7 @@ public class PackageInfo implements Parcelable {
      * @hide
      */
     public int installLocation = INSTALL_LOCATION_INTERNAL_ONLY;
-    
+
     // Is Theme Apk
     /**
      * {@hide}
@@ -241,54 +243,6 @@ public class PackageInfo implements Parcelable {
     public String requiredAccountType;
 
     public PackageInfo() {
-    }
-
-    /*
-     * Is Theme Apk is DRM protected (contains DRM-protected resources)
-     *
-     */
-    private boolean drmProtectedThemeApk = false;
-
-    /**
-     * @hide
-     *
-     * @return Is Theme Apk is DRM protected (contains DRM-protected resources)
-     */
-    public boolean isDrmProtectedThemeApk() {
-        return drmProtectedThemeApk;
-    }
-
-    /**
-     * @hide
-     *
-     * @param value if Theme Apk is DRM protected (contains DRM-protected resources)
-     */
-    public void setDrmProtectedThemeApk(boolean value) {
-        drmProtectedThemeApk = value;
-    }
-
-    /*
-     * If isThemeApk and isDrmProtectedThemeApk are true - path to hidden locked zip file
-     *
-     */
-    private String lockedZipFilePath;
-
-    /**
-     * @hide
-     *
-     * @return path for hidden locked zip file
-     */
-    public String getLockedZipFilePath() {
-        return lockedZipFilePath;
-    }
-
-    /**
-     * @hide
-     *
-     * @param value path for hidden locked zip file
-     */
-    public void setLockedZipFilePath(String value) {
-        lockedZipFilePath = value;
     }
 
     public String toString() {
@@ -334,9 +288,8 @@ public class PackageInfo implements Parcelable {
 
         /* Theme-specific. */
         dest.writeInt((isThemeApk)? 1 : 0);
-        dest.writeInt((drmProtectedThemeApk)? 1 : 0);
+        dest.writeStringList(mOverlayTargets);
         dest.writeTypedArray(themeInfos, parcelableFlags);
-        dest.writeString(lockedZipFilePath);
     }
 
     public static final Parcelable.Creator<PackageInfo> CREATOR
@@ -381,8 +334,7 @@ public class PackageInfo implements Parcelable {
 
         /* Theme-specific. */
         isThemeApk = (source.readInt() != 0);
-        drmProtectedThemeApk = (source.readInt() != 0);
+        mOverlayTargets = source.createStringArrayList();
         themeInfos = source.createTypedArray(ThemeInfo.CREATOR);
-        lockedZipFilePath = source.readString();
     }
 }
