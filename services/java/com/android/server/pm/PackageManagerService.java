@@ -32,7 +32,6 @@ import static libcore.io.OsConstants.S_IXGRP;
 import static libcore.io.OsConstants.S_IROTH;
 import static libcore.io.OsConstants.S_IXOTH;
 
-import com.android.internal.app.IAssetRedirectionManager;
 import com.android.internal.app.IMediaContainerService;
 import com.android.internal.app.ResolverActivity;
 import com.android.internal.content.NativeLibraryHelper;
@@ -154,7 +153,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -164,9 +162,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import libcore.io.ErrnoException;
 import libcore.io.IoUtils;
@@ -219,8 +214,6 @@ public class PackageManagerService extends IPackageManager.Stub {
     // Suffix used during package installation when copying/moving
     // package apks to install directory.
     private static final String INSTALL_PACKAGE_SUFFIX = "-";
-
-    private static final int THEME_MAMANER_GUID = 1300;
 
     static final int SCAN_MONITOR = 1<<0;
     static final int SCAN_NO_DEX = 1<<1;
@@ -454,8 +447,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     boolean mResolverReplaced = false;
     private AppOpsManager mAppOps;
-
-    IAssetRedirectionManager mAssetRedirectionManager;
 
     // Set of pending broadcasts for aggregating enable/disable of components.
     static class PendingPackageBroadcasts {
@@ -825,7 +816,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                         PackageInstalledInfo res = data.res;
 
                         if (res.returnCode == PackageManager.INSTALL_SUCCEEDED) {
-                            res.removedInfo.sendBroadcast(false, true, false, false);
+                            res.removedInfo.sendBroadcast(false, true, false);
                             Bundle extras = new Bundle(1);
                             extras.putInt(Intent.EXTRA_UID, res.uid);
                             // Determine the set of users who are adding this
@@ -1130,8 +1121,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         mSettings.addSharedUserLPw("android.uid.bluetooth", BLUETOOTH_UID,
                 ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_PRIVILEGED);
         mSettings.addSharedUserLPw("android.uid.shell", SHELL_UID,
-                ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_PRIVILEGED);
-        mSettings.addSharedUserLPw("com.tmobile.thememanager", THEME_MAMANER_GUID,
                 ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_PRIVILEGED);
 
         mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
@@ -5337,32 +5326,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
-    // NOTE: this method can return null if the SystemServer is still
-    // initializing
-    public IAssetRedirectionManager getAssetRedirectionManager() {
-        if (mAssetRedirectionManager != null) {
-            return mAssetRedirectionManager;
-        }
-        IBinder b = ServiceManager.getService("assetredirection");
-        mAssetRedirectionManager = IAssetRedirectionManager.Stub.asInterface(b);
-        return mAssetRedirectionManager;
-    }
-
-    private void cleanAssetRedirections(PackageParser.Package pkg) {
-        IAssetRedirectionManager rm = getAssetRedirectionManager();
-        if (rm == null) {
-            return;
-        }
-        try {
-            if (pkg.mIsThemeApk) {
-                rm.clearRedirectionMapsByTheme(pkg.packageName, null);
-            } else {
-                rm.clearPackageRedirectionMap(pkg.packageName);
-            }
-        } catch (RemoteException e) {
-        }
-    }
-
     void removePackageLI(PackageSetting ps, boolean chatty) {
         if (DEBUG_INSTALL) {
             if (chatty)
@@ -5391,8 +5354,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         // writer
         synchronized (mPackages) {
-            cleanAssetRedirections(pkg);
-
             mPackages.remove(pkg.applicationInfo.packageName);
             if (pkg.mPath != null) {
                 mAppDirs.remove(pkg.mPath);
@@ -6883,7 +6844,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         info.removedPackage = packageName;
         info.removedUsers = new int[] {userId};
         info.uid = UserHandle.getUid(userId, pkgSetting.appId);
-        info.sendBroadcast(false, false, false, false);
+        info.sendBroadcast(false, false, false);
     }
 
     /**
@@ -9157,24 +9118,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         if (DEBUG_INSTALL) Slog.d(TAG, "New package installed in " + newPackage.mPath);
 
-        cleanAssetRedirections(newPackage);
-
-        if (newPackage.mIsThemeApk) {
-            /* DBS-TODO
-            boolean isThemePackageDrmProtected = false;
-            int N = newPackage.mThemeInfos.size();
-            for (int i = 0; i < N; i++) {
-                if (newPackage.mThemeInfos.get(i).isDrmProtected) {
-                    isThemePackageDrmProtected = true;
-                    break;
-                }
-            }
-            if (isThemePackageDrmProtected) {
-                splitThemePackage(newPackage.mPath);
-            }
-            */
-        }
-
         synchronized (mPackages) {
             updatePermissionsLPw(newPackage.packageName, newPackage,
                     UPDATE_PERMISSIONS_REPLACE_PKG | (newPackage.permissions.size() > 0
@@ -9217,65 +9160,6 @@ public class PackageManagerService extends IPackageManager.Stub {
             res.returnCode = PackageManager.INSTALL_SUCCEEDED;
             //to update install status
             mSettings.writeLPr();
-        }
-    }
-
-    private void deleteLockedZipFileIfExists(String originalPackagePath) {
-        String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
-        File zipFile = new File(lockedZipFilePath);
-        if (zipFile.exists() && zipFile.isFile()) {
-            if (!zipFile.delete()) {
-                Log.w(TAG, "Couldn't delete locked zip file: " + originalPackagePath);
-            }
-        }
-    }
-    private void splitThemePackage(File originalFile) {
-        final String originalPackagePath = originalFile.getPath();
-        final String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
-
-        try {
-            final List<String> drmProtectedEntries = new ArrayList<String>();
-            final ZipFile privateZip = new ZipFile(originalFile.getPath());
-
-            final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
-            while (privateZipEntries.hasMoreElements()) {
-                final ZipEntry zipEntry = privateZipEntries.nextElement();
-                final String zipEntryName = zipEntry.getName();
-                if (zipEntryName.startsWith("assets/") && zipEntryName.contains("/locked/")) {
-                    drmProtectedEntries.add(zipEntryName);
-                }
-            }
-            privateZip.close();
-
-            String [] args = new String[0];
-            args = drmProtectedEntries.toArray(args);
-            int code = mContext.getAssets().splitDrmProtectedThemePackage(
-                    originalPackagePath,
-                    lockedZipFilePath,
-                    args);
-            if (code != 0) {
-                Log.e("PackageManagerService",
-                        "splitDrmProtectedThemePackage returned = " + code);
-            }
-            code = FileUtils.setPermissions(
-                    lockedZipFilePath,
-                    0640,
-                    -1,
-                    THEME_MAMANER_GUID);
-            if (code != 0) {
-                Log.e("PackageManagerService",
-                        "Set permissions for " + lockedZipFilePath + " returned = " + code);
-            }
-            code = FileUtils.setPermissions(
-                    originalPackagePath,
-                    0644,
-                    -1, -1);
-            if (code != 0) {
-                Log.e("PackageManagerService",
-                        "Set permissions for " + originalPackagePath + " returned = " + code);
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Failure to generate new zip files for theme");
         }
     }
 
@@ -9587,18 +9471,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             for (int i = 0; i < allUsers.length; i++) {
                 perUserInstalled[i] = ps != null ? ps.getInstalled(allUsers[i]) : false;
             }
-
-            PackageParser.Package p = mPackages.get(packageName);
-            if (p != null) {
-                info.isThemeApk = p.mIsThemeApk;
-                if (info.isThemeApk &&
-                    !info.isRemovedPackageSystemUpdate) {
-                    deleteLockedZipFileIfExists(p.mPath);
-                }
-            }
         }
 
-        
         synchronized (mInstallLock) {
             if (DEBUG_REMOVE) Slog.d(TAG, "deletePackageX: pkg=" + packageName + " user=" + userId);
             res = deletePackageLI(packageName,
@@ -9615,7 +9489,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         if (res) {
-            info.sendBroadcast(true, systemUpdate, removedForAllUsers, true);
+            info.sendBroadcast(true, systemUpdate, removedForAllUsers);
 
             // If the removed package was a system update, the old system package
             // was re-enabled; we need to broadcast this information
@@ -9661,8 +9535,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         InstallArgs args = null;
         boolean isThemeApk = false;
 
-        void sendBroadcast(boolean fullRemove, boolean replacing, boolean removedForAllUsers,
-                 boolean deleteLockedZipFileIfExists) {
+        void sendBroadcast(boolean fullRemove, boolean replacing, boolean removedForAllUsers) {
             Bundle extras = new Bundle(1);
             extras.putInt(Intent.EXTRA_UID, removedAppId >= 0 ? removedAppId : uid);
             extras.putBoolean(Intent.EXTRA_DATA_REMOVED, fullRemove);
@@ -10381,7 +10254,6 @@ public class PackageManagerService extends IPackageManager.Stub {
                     "replacePreferredActivity expects filter to have no data authorities, " +
                     "paths, or types; and at most one scheme.");
         }
-
         synchronized (mPackages) {
             if (mContext.checkCallingOrSelfPermission(
                     android.Manifest.permission.SET_PREFERRED_APPLICATIONS)

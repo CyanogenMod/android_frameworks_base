@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,19 +104,6 @@ public class Ringtone {
         return mTitle = getTitle(context, mUri, true);
     }
 
-    private static String stringForQuery(Cursor cursor) {
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(0);
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        return null;
-    }
-
     private static String getTitle(Context context, Uri uri, boolean followSettingsUri) {
         Cursor cursor = null;
         ContentResolver res = context.getContentResolver();
@@ -135,14 +121,6 @@ public class Ringtone {
                     title = context
                             .getString(com.android.internal.R.string.ringtone_default_with_actual,
                                     actualTitle);
-                }
-            } else if (RingtoneManager.THEME_AUTHORITY.equals(authority)) {
-                Uri themes = Uri.parse("content://com.tmobile.thememanager.themes/themes");
-                title = stringForQuery(res.query(themes, new String[] { "ringtone_name" },
-                    "ringtone_uri = ?", new String[] { uri.toString() }, null));
-                if (title == null) {
-                    title = stringForQuery(res.query(themes, new String[] { "notif_ringtone_name" },
-                            "notif_ringtone_uri = ?", new String[] { uri.toString() }, null));
                 }
             } else {
                 try {
