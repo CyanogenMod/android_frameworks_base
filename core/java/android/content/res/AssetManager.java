@@ -20,7 +20,6 @@ package android.content.res;
 import android.os.ParcelFileDescriptor;
 import android.os.Trace;
 import android.util.Log;
-import android.util.SparseArray;
 import android.util.TypedValue;
 
 import java.io.FileNotFoundException;
@@ -78,21 +77,14 @@ public final class AssetManager {
     
     private int mNumRefs = 1;
     private boolean mOpen = true;
-    private HashMap<Integer, RuntimeException> mRefStacks; 
- 
+    private HashMap<Integer, RuntimeException> mRefStacks;
+
     private String mAssetDir;
     private String mAppName;
 
     private boolean mThemeSupport;
     private String mThemePackageName;
-    private int mThemeCookie;
-
-    /**
-     * Organize all added redirection maps using Java strong references to keep
-     * the native layer cleanup simple (that is, finalize() in Java will be
-     * responsible for delete in C++).
-     */
-    private SparseArray<PackageRedirectionMap> mRedirections;
+    private ArrayList<Integer> mThemeCookies = new ArrayList<Integer>(2);
 
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -483,18 +475,6 @@ public final class AssetManager {
 
     /**
      * {@hide}
-     * Split a theme package with DRM-protected resources into two files.
-     * 
-     * @param packageFileName Original theme package file name.
-     * @param lockedFileName Name of the new "locked" file with DRM resources.
-     * @param drmProtectedresources Array of names of DRM-protected assets.
-     */
-    public final int splitDrmProtectedThemePackage(String packageFileName, String lockedFileName, String [] drmProtectedresources) {
-        return splitThemePackage(packageFileName, lockedFileName, drmProtectedresources);
-    }
-
-    /**
-     * {@hide}
      * Retrieve a non-asset as a compiled XML file.  Not for use by
      * applications.
      * 
@@ -732,40 +712,16 @@ public final class AssetManager {
      * Get asset cookie for current theme (may return 0).
      * {@hide}
      */
-    public int getThemeCookie() {
-        return mThemeCookie;
+    public ArrayList<Integer> getThemeCookies() {
+        return mThemeCookies;
     }
 
     /**
      * Sets asset cookie for current theme (0 if not a themed asset manager).
      * {@hide}
      */
-    public void setThemeCookie(int cookie) {
-        mThemeCookie = cookie;
-    }
-
-    /**
-     * Add a redirection map to the asset manager. All future resource lookups
-     * will consult this map.
-     * {@hide}
-     */
-    public void addRedirections(PackageRedirectionMap map) {
-        if (mRedirections == null) {
-            mRedirections = new SparseArray<PackageRedirectionMap>(2);
-        }
-        mRedirections.append(map.getPackageId(), map);
-        addRedirectionsNative(map.getNativePointer());
-    }
-
-    /**
-     * Clear redirection map for the asset manager.
-     * {@hide}
-     */
-    public void clearRedirections() {
-        if (mRedirections != null) {
-            mRedirections.clear();
-        }
-        clearRedirectionsNative();
+    public void addThemeCookie(int cookie) {
+        mThemeCookies.add(cookie);
     }
 
     /**
@@ -884,26 +840,6 @@ public final class AssetManager {
     private native final String[] getArrayStringResource(int arrayRes);
     private native final int[] getArrayStringInfo(int arrayRes);
     /*package*/ native final int[] getArrayIntResource(int arrayRes);
-
-    private native final int splitThemePackage(String srcFileName, String dstFileName, String [] drmProtectedAssetNames);
-
-    /**
-     * {@hide}
-     */
-    public native final int getBasePackageCount();
-
-    /**
-     * {@hide}
-     */
-    public native final String getBasePackageName(int index);
-
-    /**
-     * {@hide}
-     */
-    public native final int getBasePackageId(int index);
-
-    private native final void addRedirectionsNative(int redirectionMapNativePointer);
-    private native final void clearRedirectionsNative();
 
     private native final void init();
     private native final void destroy();
