@@ -16,6 +16,7 @@
 
 package android.content.res;
 
+import com.android.internal.util.slim.DensityUtils;
 import com.android.internal.util.XmlUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -194,7 +195,7 @@ public class Resources {
     public Resources(AssetManager assets, DisplayMetrics metrics, Configuration config,
             CompatibilityInfo compatInfo, IBinder token) {
         mAssets = assets;
-        mMetrics.setToDefaults();
+        mMetrics.updateDensity();
         if (compatInfo != null) {
             mCompatibilityInfo = compatInfo;
         }
@@ -1529,6 +1530,7 @@ public class Resources {
             if (metrics != null) {
                 mMetrics.setTo(metrics);
             }
+            mMetrics.updateDensity();
             // NOTE: We should re-arrange this code to create a Display
             // with the CompatibilityInfo that is used everywhere we deal
             // with the display in relation to this app, rather than
@@ -1698,6 +1700,7 @@ public class Resources {
     public DisplayMetrics getDisplayMetrics() {
         if (DEBUG_CONFIG) Slog.v(TAG, "Returning DisplayMetrics: " + mMetrics.widthPixels
                 + "x" + mMetrics.heightPixels + " " + mMetrics.density);
+        mMetrics.updateDensity();
         return mMetrics;
     }
 
@@ -1987,7 +1990,7 @@ public class Resources {
             }
             sPreloaded = true;
             mPreloading = true;
-            sPreloadedDensity = DisplayMetrics.DENSITY_DEVICE;
+            sPreloadedDensity = DensityUtils.getCurrentDensity();
             mConfiguration.densityDpi = sPreloadedDensity;
             updateConfiguration(null, null);
         }
@@ -2434,7 +2437,7 @@ public class Resources {
         // to zero), so that anyone who tries to do something that requires
         // metrics will get a very wrong value.
         mConfiguration.setToDefaults();
-        mMetrics.setToDefaults();
+        mMetrics.updateDensity();
         updateConfiguration(null, null);
         mAssets.ensureStringBlocks();
     }
