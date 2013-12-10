@@ -1102,15 +1102,12 @@ public class LockPatternUtils {
     /**
      * @return the pattern lockscreen size
      */
-    public static byte getLockPatternSize() {
-        return PATTERN_SIZE_DEFAULT;
-        /** needs a rewrite for static use
+    public byte getLockPatternSize() {
         try {
             return getLockSettings().getLockPatternSize(getCurrentOrCallingUserId());
         } catch (RemoteException re) {
             return PATTERN_SIZE_DEFAULT;
         }
-	*/
     }
 
     /**
