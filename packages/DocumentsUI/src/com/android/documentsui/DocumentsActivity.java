@@ -1037,7 +1037,18 @@ public class DocumentsActivity extends Activity {
             try {
                 startActivity(view);
             } catch (ActivityNotFoundException ex2) {
-                Toast.makeText(this, R.string.toast_no_application, Toast.LENGTH_SHORT).show();
+                // Fallback and pass mimetype
+                final Intent viewFallback = new Intent(Intent.ACTION_VIEW);
+                viewFallback.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                String newUri = doc.derivedUri.getPath();
+                //viewFallback.setDataAndType(, doc.mimeType);
+                Log.e("DOCUMENTS", "URI: " + newUri + " | MIME: " + doc.mimeType);
+
+                try {
+                    startActivity(viewFallback);
+                } catch (ActivityNotFoundException ex3) {
+                    Toast.makeText(this, R.string.toast_no_application, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
