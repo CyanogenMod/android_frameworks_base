@@ -75,7 +75,33 @@ public final class QBluetoothAdapter {
     private static final boolean DBG = false;
     private static final boolean VDBG = false;
 
-    private static final String BT_LE_EXTENDED_SCAN_PROP = "ro.qc.bluetooth.le.extendedscan";
+    /** @hide */
+    public static final int ADV_MODE_NONE = 24;
+    /** @hide */
+    public static final int ADV_IND_GENERAL_CONNECTABLE=25;
+    /** @hide */
+    public static final int ADV_IND_LIMITED_CONNECTABLE=26;
+    /** @hide */
+    public static final int ADV_DIR_CONNECTABLE=27;
+   /**
+     * Broadcast Action: The local QBluetooth adapter has changed the adv enable mode
+     *which can be anything from adv_ind_limited, adv_ind_general, adv_directed or adv_none
+     *<p> The adv type determines the way the remote devices can see and connect to the local adapter
+     *<p> Always contains the extra field {@link #EXTRA_ADV_TYPE} containing
+     *the type of adv currently active
+     *<p> Requires {@link android.Manifest.permission#BLUETOOTH} to receive.
+     */
+    /** @hide */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_ADV_ENABLE_CHANGED=
+            "android.bluetooth.adapter.action.ADV_ENABLE_CHANGED";
+    /**
+     * Used as a String extra field in {@link #ACTION_LOCAL_NAME_CHANGED}
+     * intents to request the local Bluetooth name.
+     */
+    /** @hide */
+    public static final String EXTRA_ADV_ENABLE = "android.bluetooth.adapter.extra.ADV_ENABLE";
+    private static final String BT_LE_EXTENDED_SCAN_PROP = "ro.q.bluetooth.le.extendedscan";
     private boolean mLeExtendedScanFlag = false;
     private static final int MAX_LE_EXTENDED_SCAN_FILTER_ENTRIES = 0x80;
 
@@ -131,7 +157,138 @@ public final class QBluetoothAdapter {
             mLeExtendedScanFlag = true;
         }
     }
+    /**
+    * gets the adv mode of LE adapter
+    * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+    * permission
+    * @return returns the LE adv mode
+    /** @hide */
+    public int getLEAdvMode() {
+        if (mAdapter.getState() != BluetoothAdapter.STATE_ON) return ADV_MODE_NONE;
+        try {
+            synchronized(mManagerCallback) {
+                if (mService != null && mQService!=null) return mQService.getLEAdvMode();
+            }
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return ADV_MODE_NONE;
+    }
+    /**
+    * sets the adv mode of LE adapter
+    * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+    * permission
+    * @return returns true if operation successful
+    /** @hide */
+    public boolean setLEAdvMode(int mode) {
+        if (mAdapter.getState() != BluetoothAdapter.STATE_ON) return false;
+        try {
+            synchronized(mManagerCallback) {
+                if (mService != null && mQService!=null)
+                {
+                    Log.v(TAG,"setLEAdvMode gng to call set LE adv mode Q");
+                    return mQService.setLEAdvMode(mode);
+                }
+            }
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return false;
+    }
+    /**
+    * sets the adv parameters of LE adapter
+    * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+    * permission
+    * @return returns true if operation successful
+    /** @hide */
+    public boolean setLEAdvParams(int min_int, int max_int, String address, int ad_type){
+        if (mAdapter.getState() != BluetoothAdapter.STATE_ON) return false;
+        Log.v(TAG, "QBluetooth adapter, setLEAdvParams calling service method min_int"
+           + min_int +" max int:"+max_int + "address:" +address + " ad_type="+ ad_type);
+        try {
+            synchronized(mManagerCallback) {
+                if (mService!=null && mQService != null) return mQService.setLEAdvParams(min_int, max_int, address, ad_type);
+            }
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return false;
+    }
 
+    /**
+    * sets the adv params of LE adapter
+    * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+    * permission
+    * @return returns true if operation successful
+    /** @hide */
+    public boolean setLEAdvParams(int min_int, int max_int){
+        if (mAdapter.getState() != BluetoothAdapter.STATE_ON) return false;
+        int ad_type=0;
+        String address="00:00:00:00:00:00"; //null address
+        Log.v(TAG, "QBluetooth adapter, setLEAdvParams min_int" + min_int +" max int:"+max_int + "address:" +address + " ad_type="+ ad_type);
+        return setLEAdvParams(min_int, max_int, address, ad_type);
+    }
+
+    /**
+    * sets the manufacturing data for advertisements of LE adapter
+    * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+    * permission
+    * @return returns true if operation successful
+    /** @hide */
+    public boolean setLEManuData(byte[] manuData){
+        if (mAdapter.getState() != BluetoothAdapter.STATE_ON) return false;
+        Log.v(TAG, "QBluetooth adapter, setLEManuData calling service method manu_data:" + manuData);
+        try {
+            synchronized(mManagerCallback) {
+                if (mQService != null) return mQService.setLEManuData(manuData);
+            }
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return false;
+    }
+    /**
+    * sets the service data for advertisements of LE adapter
+    * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+    * permission
+    * @return returns true if operation successful
+    /** @hide */
+    public boolean setLEServiceData(byte[] serviceData){
+        if (mAdapter.getState() != BluetoothAdapter.STATE_ON) return false;
+        Log.v(TAG, "QBluetooth adapter, setLEServiceData calling service method setLEServiceData:" + serviceData);
+        try {
+            synchronized(mManagerCallback) {
+                if (mQService != null) return mQService.setLEServiceData(serviceData);
+            }
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return false;
+    }
+
+    /**
+    * sets the adv mask for advertisements of LE adapter
+    * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+    * permission
+    * @return returns true if operation successful
+    /** @hide */
+    public boolean setLEAdvMask(boolean bLocalName, boolean bServices, boolean bTxPower,boolean bManuData, boolean ServiceData){
+        if (mAdapter.getState() != BluetoothAdapter.STATE_ON) return false;
+        Log.v(TAG, "QBluetooth adapter, setLEAdvMask calling service method blocalname:" + bLocalName + " bServices:" + bServices + " bTxPower:"+bTxPower + " bManuData:" + bManuData);
+        try {
+            synchronized(mManagerCallback) {
+                if (mQService != null) return mQService.setLEAdvMask(bLocalName,bServices,bTxPower,bManuData, ServiceData);
+            }
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return false;
+    }
+
+    /**
+    * sets the adv mask for scan response of LE adapter
+    * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+    * permission
+    * @return returns true if operation successful
+    /** @hide */
+    public boolean setLEScanRespMask(boolean bLocalName, boolean bServices, boolean bTxPower,boolean bManuData){
+        if (mAdapter.getState() != BluetoothAdapter.STATE_ON) return false;
+        Log.v(TAG, "QBluetooth adapter, setLEScanRespMask calling service method blocalname:" + bLocalName + " bServices:" + bServices + " bTxPower:"+bTxPower+ " bManuData:" + bManuData);
+        try {
+            synchronized(mManagerCallback) {
+                if (mQService != null) return mQService.setLEScanRespMask(bLocalName,bServices,bTxPower,bManuData);
+            }
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return false;
+    }
     /**
      * Starts a scan for Bluetooth LE devices, looking for devices that
      * advertise given services.It is the most optimal way to filter scan
@@ -156,7 +313,7 @@ public final class QBluetoothAdapter {
      *         false,if parameter is bad or chipset doesn't support filtering scan results in controller
      */
     public boolean startLeScanEx(BluetoothLEServiceUuid[] serviceUuids, BluetoothAdapter.LeScanCallback callback) {
-        if (VDBG) Log.d(TAG, "startLeScanEx(): " + serviceUuids);
+        if (VDBG) Log.v(TAG, "startLeScanEx(): " + serviceUuids);
         if (!mLeExtendedScanFlag) {
             if (DBG) Log.e(TAG, "startLeScanEx: function is diabled since chipset doesn't support filtering" +
                                  "scan results in controller, use startLeScan instead");
@@ -179,9 +336,9 @@ public final class QBluetoothAdapter {
 
         synchronized(mScanLock) {
             if (mLeScanClient != null) {
-                if (VDBG) Log.e(TAG, "LE Scan in progress");
+                if (VDBG) Log.v(TAG, "LE Scan in progress");
                 if (mLeScanClient.first == callback)
-                    if (DBG) Log.e(TAG, "duplicate scan request");
+                    if (DBG) Log.v(TAG, "duplicate scan request");
                 return false;
             }
 
@@ -581,11 +738,11 @@ public final class QBluetoothAdapter {
 
     final private IQBluetoothManagerCallback mManagerCallback =
         new IQBluetoothManagerCallback.Stub() {
-            public void onQBluetoothServiceUp(IQBluetooth qcbluetoothService) {
-                if (VDBG) Log.i(TAG, "on QBluetoothServiceUp: " + qcbluetoothService);
+            public void onQBluetoothServiceUp(IQBluetooth qbluetoothService) {
+                if (VDBG) Log.i(TAG, "on QBluetoothServiceUp: " + qbluetoothService);
                 synchronized (mManagerCallback) {
                     //initialize the global params again
-                    mQService = qcbluetoothService;
+                    mQService = qbluetoothService;
                     Log.i(TAG,"onQBluetoothServiceUp: Adapter ON: mService: "+ mService + " mQService: " + mQService+ " ManagerService:" + mManagerService);
                 }
             }
