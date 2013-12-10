@@ -161,6 +161,9 @@ public class SettingsPanelView extends PanelView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (mQS == null) {
+            return false;
+        }
         if (DEBUG_GESTURES) {
             if (event.getActionMasked() != MotionEvent.ACTION_MOVE) {
                 EventLog.writeEvent(EventLogTags.SYSUI_QUICKPANEL_TOUCH,
