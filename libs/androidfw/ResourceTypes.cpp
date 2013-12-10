@@ -5375,8 +5375,18 @@ status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, ui
                 continue;
             }
 
-            const String16 overlayType(resName.type, resName.typeLen);
-            const String16 overlayName(resName.name, resName.nameLen);
+            String16 overlayType, overlayName;
+            if (resName.type8 != NULL) {
+                overlayType = String16(resName.type8, resName.typeLen);
+            } else {
+                overlayType = String16(resName.type, resName.typeLen);
+            }
+            if (resName.name8 != NULL) {
+                overlayName = String16(resName.name8, resName.nameLen);
+            } else {
+                overlayName = String16(resName.name, resName.nameLen);
+            }
+
             uint32_t overlayResID = overlay.identifierForName(overlayName.string(),
                                                               overlayName.size(),
                                                               overlayType.string(),
