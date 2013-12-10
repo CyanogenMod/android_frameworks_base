@@ -168,7 +168,6 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Ekran avtomatik döndəriləcək."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Ekran landşaft orientasiyasında kilidlənib."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Ekran portret orientasiyasında kilidlənib."</string>
-    <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
     <string name="start_dreams" msgid="7219575858348719790">"Xəyal"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Uçuş rejimi"</string>
@@ -193,16 +192,7 @@
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"Bağlantı yoxdur"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"Şəbəkə yoxdur"</string>
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi sönülüdür"</string>
-    <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Wi-Fi Ekran"</string>
-    <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Simsiz Ekran"</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Parlaqlıq"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"AVTO"</string>
-    <string name="status_bar_help_title" msgid="1199237744086469217">"Bildirişlər burada görünür"</string>
-    <string name="status_bar_help_text" msgid="7874607155052076323">"Aşağı sürüşdürməklə istənilən vaxt onları əldə edin.\nSistemi nəzarəti üçün yenə də aşağı sürüşdürün."</string>
     <string name="ssl_ca_cert_warning" msgid="5848402127455021714">"Şəbəkə monitor edilə bilər"</string>
-    <string name="done_button" msgid="1759387181766603361">"Hazırdır"</string>
-    <string name="ssl_ca_cert_dialog_title" msgid="1273796967092027291">"Şəbəkə Monitorinqi"</string>
-    <string name="ssl_ca_cert_info_message" msgid="5430320539555358452">"Bu cihaz <xliff:g id="MANAGING_DOMAIN">%s</xliff:g> tərəfindən idarə edilir . \n \n Sizin administrator şəbəkə fəaliyyətinizin, həmçinin e-poçt, tətbiqlər və təhlükəsiz veb saytlarınızın monitorinqini etməyə qadirdir. \n \n Ətraflı məlumat üçün administrator ilə əlaqə saxlayın."</string>
-    <string name="ssl_ca_cert_warning_message" msgid="2033091656129963669">"Üçüncü tərəf \n şəbəkə fəaliyyətinizin, həmçinin e-poçt, tətbiqlər və təhlükəsiz veb saytlarınızın monitorinqini etməyə qadirdir. . \n \nCihanzınıza yüklənmiş etibarlı etimad bunu mümkün edir."</string>
-    <string name="ssl_ca_cert_settings_button" msgid="7946956977377166709">"Etibarlı etimadları yoxlayın"</string>
 </resources>

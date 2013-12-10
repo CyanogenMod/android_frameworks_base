@@ -168,7 +168,6 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Дэлгэц автоматаар эргэнэ."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Дэлгэц хэвтээ чиглэлд түгжигдсэн."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Дэлгэц босоо чиглэлээр түгжигдсэн."</string>
-    <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
     <string name="start_dreams" msgid="7219575858348719790">"Daydream"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Этернет"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Нислэгийн горим"</string>
@@ -193,16 +192,7 @@
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"Холбогдоогүй"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"Сүлжээгүй"</string>
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi унтарсан"</string>
-    <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Wi-Fi Дэлгэц"</string>
-    <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"Утасгүй дэлгэц"</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"Тодрол"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"АВТОМАТ"</string>
-    <string name="status_bar_help_title" msgid="1199237744086469217">"Мэдэгдэл энд харагдана"</string>
-    <string name="status_bar_help_text" msgid="7874607155052076323">"Доош татаад тэдгээрт хандана уу.\nДахин доош татаад систем контролд хандана уу."</string>
     <string name="ssl_ca_cert_warning" msgid="5848402127455021714">"Сүлжээ хянагдаж байж болзошгүй"</string>
-    <string name="done_button" msgid="1759387181766603361">"Дууссан"</string>
-    <string name="ssl_ca_cert_dialog_title" msgid="1273796967092027291">"Сүлжээний Хяналт"</string>
-    <string name="ssl_ca_cert_info_message" msgid="5430320539555358452">"Энэ төхөөрөмжийг удирдагч: <xliff:g id="MANAGING_DOMAIN">%s</xliff:g>.\n\nТаны админ имэйл, апп-ууд болон аюулгүй вебсайтуудыг оруулан таны сүлжээний үйл ажиллагааг хянах боломжтой.\n\nДэлгэрэнгүй мэдээллийг өөрийн админтай холбогдож авна уу."</string>
-    <string name="ssl_ca_cert_warning_message" msgid="2033091656129963669">"Гуравдагч талын этгээд таны сүлжээг хянаж байж болзошгүй\nүүнд имэйл, апп-ууд болон аюулгүй вебсайтууд багтана.\n\nТаны төхөөрөмж дээр суулгасан итгэмжлэгдсэн жуух энэ боломжоор хангаж байна."</string>
-    <string name="ssl_ca_cert_settings_button" msgid="7946956977377166709">"Итгэмжлэгдсэн жуухуудыг шалгах"</string>
 </resources>

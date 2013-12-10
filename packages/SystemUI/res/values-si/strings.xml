@@ -61,8 +61,6 @@
     <string name="usb_debugging_always" msgid="303335496705863070">"සැම විටම මෙම පරිගණකයෙන් ඉඩ ලබා දෙන්න"</string>
     <string name="compat_mode_on" msgid="6623839244840638213">"තිරය පිරවීමට විශාලනය කරන්න"</string>
     <string name="compat_mode_off" msgid="4434467572461327898">"තිරය පිරවීමට අදින්න"</string>
-    <string name="compat_mode_help_header" msgid="7969493989397529910">"ගැළපෙන විශාලනය"</string>
-    <string name="compat_mode_help_body" msgid="4946726776359270040">"කුඩා තිරයක් සඳහා යෙදුමක් නිර්මාණය කළ විට, විශාලනය පාලකය ඔරලෝසුව ළඟින් පෙන්වයි."</string>
     <string name="screenshot_saving_ticker" msgid="7403652894056693515">"තිර රුව සුරකිමින්…"</string>
     <string name="screenshot_saving_title" msgid="8242282144535555697">"තිර රුව සුරැකෙමින් පවතී…"</string>
     <string name="screenshot_saving_text" msgid="2419718443411738818">"තිර රුව සුරැකෙමින් පවතී."</string>
@@ -170,7 +168,6 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"තිරය ස්වයංක්‍රීයව කරකැවේ."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"තිරය තිරස් දිශානතියෙහි අගුළු දමා ඇත."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"තිරය සිරස් දිශානතිය තුළ අගුළු වැටී ඇත."</string>
-    <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
     <string name="start_dreams" msgid="7219575858348719790">"දවල් හීනය"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"ඊතර නෙට්"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"අහස්යානා ආකාරය"</string>
@@ -195,10 +192,6 @@
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"සම්බන්ධ වී නොමැත"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"ජාලයක් නැත"</string>
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi අක්‍රියයි"</string>
-    <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Wi-Fi සංදර්ශකය"</string>
-    <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"නොරැහැන් සංදර්ශකය"</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"දීප්තිමත් බව"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"ස්වයංක්‍රීය"</string>
-    <string name="status_bar_help_title" msgid="1199237744086469217">"දැනුම්දීම් මෙතන පෙන්නුම් කරයි"</string>
-    <string name="status_bar_help_text" msgid="7874607155052076323">"පහලට සර්පණය කිරීමෙන් ඕනෑම වෙලාවක ඒවා වෙත පිවිසෙන්න.\nපද්ධති පාලක සඳහා නැවත පහළට සර්පණය කරන්න."</string>
 </resources>

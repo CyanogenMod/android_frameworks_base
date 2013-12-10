@@ -168,7 +168,6 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"තිරය ස්වයංක්‍රීයව කරකැවේ."</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"තිරය තිරස් දිශානතියෙහි අගුළු දමා ඇත."</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"තිරය සිරස් දිශානතිය තුළ අගුළු වැටී ඇත."</string>
-    <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
     <string name="start_dreams" msgid="7219575858348719790">"දවල් හීනය"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"ඊතර නෙට්"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"අහස්යානා ආකාරය"</string>
@@ -193,14 +192,7 @@
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"සම්බන්ධ වී නොමැත"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"ජාලයක් නැත"</string>
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"Wi-Fi අක්‍රියයි"</string>
-    <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"Wi-Fi සංදර්ශකය"</string>
-    <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"නොරැහැන් සංදර්ශකය"</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"දීප්තිමත් බව"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"ස්වයංක්‍රීය"</string>
     <string name="ssl_ca_cert_warning" msgid="5848402127455021714">"ඇතැම් විට ජාලය නිරීක්ෂණය විය හැක"</string>
-    <string name="done_button" msgid="1759387181766603361">"හරි"</string>
-    <string name="ssl_ca_cert_dialog_title" msgid="1273796967092027291">"ජාල නිරීක්ෂණය කිරීම"</string>
-    <string name="ssl_ca_cert_info_message" msgid="5430320539555358452">"මෙම උපාංගය කළමනාකරණය කරනුයේ: <xliff:g id="MANAGING_DOMAIN">%s</xliff:g>.\n\nඔබගේ පරිපාලකයා ඊ-තැපැල්, යෙදුම්, සහ ආරක්‍ෂිත වෙබ් අඩවි ඇතුළුව ඔබගේ ජාල ක්‍රියාකාරකම් නිරීක්ෂණය කිරීමට හැකියාව ඇත.\n\nවැඩි විස්තර සඳහා, ඔබේ පරිපාලකයා සම්බන්ධ කරගන්න."</string>
-    <string name="ssl_ca_cert_warning_message" msgid="2033091656129963669">"තුන්වන පාර්ශවයකට ඔබගේ ජාලය නිරීක්ෂණය කිරීමට හැකියාව ඇත\nක්‍රියාකාරකම්, ඊ-තැපැල්, යෙදුම් සහ ආරක්‍ෂිත වෙබ් අඩවි ඇතුළුව.\n\nඔබගේ උපාංගය මත ස්ථාපිත විශ්වාසදයී අක්තපත්‍ර මෙය සිදුවීමේ හැකියාව ඇතිකරයි."</string>
-    <string name="ssl_ca_cert_settings_button" msgid="7946956977377166709">"විශ්වාසදායී අක්තපත්‍ර පරික්ෂා කරන්න"</string>
 </resources>

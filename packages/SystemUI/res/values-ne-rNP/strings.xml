@@ -168,7 +168,6 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"स्क्रिन स्वतः घुम्ने छ।"</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"स्क्रिनलाई ल्यान्डस्केप अवस्थामा बन्द गरिएको छ।"</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"स्क्रिन पोर्टेट अभिमूखमा लक गरिएको छ।"</string>
-    <string name="jelly_bean_dream_name" msgid="5992026543636816792">"BeanFlinger"</string>
     <string name="start_dreams" msgid="7219575858348719790">"दिवासपना"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"हवाइजहाज मोड"</string>
@@ -193,14 +192,7 @@
     <string name="quick_settings_wifi_not_connected" msgid="7171904845345573431">"जोडिएको छैन"</string>
     <string name="quick_settings_wifi_no_network" msgid="2221993077220856376">"नेटवर्क छैन"</string>
     <string name="quick_settings_wifi_off_label" msgid="7558778100843885864">"वाइफाइ बन्द"</string>
-    <string name="quick_settings_wifi_display_label" msgid="6893592964463624333">"वाइफाइ प्रदर्शन"</string>
-    <string name="quick_settings_wifi_display_no_connection_label" msgid="2355298740765736918">"ताररहित प्रदर्शन"</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"उज्यालपन"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"स्वतः"</string>
     <string name="ssl_ca_cert_warning" msgid="5848402127455021714">"सञ्जाल अनुगमित हुन सक्छ"</string>
-    <string name="done_button" msgid="1759387181766603361">"भयो"</string>
-    <string name="ssl_ca_cert_dialog_title" msgid="1273796967092027291">"सञ्जाल निगरानी"</string>
-    <string name="ssl_ca_cert_info_message" msgid="5430320539555358452">"यो उपकरण <xliff:g id="MANAGING_DOMAIN">%s</xliff:g>द्वारा प्रबन्धित छ। \n \n तपाईँको प्रशासक तपाईँको अनुप्रयोग र सुरक्षित वेब साइट लगायत सञ्जाल गतिविधि अनुगमन गर्न सक्षम छ। \n \n थप जानकारीको लागि तपाईँको प्रशासकसँग सम्पर्क राख्नुहोस्।"</string>
-    <string name="ssl_ca_cert_warning_message" msgid="2033091656129963669">"एक तेस्रो पक्ष तपाईँको सञ्जाल\n गतिविधि, इमेल, अनुप्रयोग र सुरक्षित वेबसाइट अनुगमन गर्न सक्षम छ। \n \n तपाईँको उपकरणमा स्थापित एक विश्वसनीय प्रामाणिक डेटाले सम्भव तुल्याइरहेको छ।"</string>
-    <string name="ssl_ca_cert_settings_button" msgid="7946956977377166709">"विश्वसनीय प्रामाणिक डेटा जाँच गर्नुहोस्"</string>
 </resources>
