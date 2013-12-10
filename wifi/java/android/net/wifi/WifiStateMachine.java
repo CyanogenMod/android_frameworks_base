@@ -1570,13 +1570,6 @@ public class WifiStateMachine extends StateMachine {
     }
 
     /**
-     * Returns the operational country code
-     */
-    public String getCountryCode() {
-        return mLastSetCountryCode;
-    }
-
-    /**
      * Set the operational frequency band
      * @param band
      * @param persist {@code true} if the setting should be remembered.
