@@ -20,8 +20,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.WifiDisplayStatus;
 import android.net.ConnectivityManager;
 import android.nfc.NfcAdapter;
 import android.telephony.TelephonyManager;
@@ -48,12 +46,6 @@ public class DeviceUtils {
         ConnectivityManager cm =
             (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return (cm.getTetherableUsbRegexs().length != 0);
-    }
-
-    public static boolean deviceSupportsWifiDisplay(Context context) {
-        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
-        return (dm.getWifiDisplayStatus().getFeatureState()
-                    != WifiDisplayStatus.FEATURE_STATE_UNAVAILABLE);
     }
 
     public static boolean deviceSupportsMobileData(Context context) {

@@ -88,7 +88,6 @@ import com.android.systemui.quicksettings.TorchTile;
 import com.android.systemui.quicksettings.UsbTetherTile;
 import com.android.systemui.quicksettings.UserTile;
 import com.android.systemui.quicksettings.VolumeTile;
-import com.android.systemui.quicksettings.WiFiDisplayTile;
 import com.android.systemui.quicksettings.WiFiTile;
 import com.android.systemui.quicksettings.WifiAPTile;
 import com.android.systemui.quicksettings.RebootTile;
@@ -259,12 +258,6 @@ public class QuickSettingsController {
         qs = new BugReportTile(mContext, this, mHandler);
         qs.setupQuickSettingsTile(inflater, mContainerView);
         mQuickSettingsTiles.add(qs);
-
-        if (DeviceUtils.deviceSupportsWifiDisplay(mContext)) {
-            qs = new WiFiDisplayTile(mContext, this);
-            qs.setupQuickSettingsTile(inflater, mContainerView);
-            mQuickSettingsTiles.add(qs);
-        }
 
         if (DeviceUtils.deviceSupportsImeSwitcher(mContext)) {
             mIMETile = new InputMethodTile(mContext, this);
