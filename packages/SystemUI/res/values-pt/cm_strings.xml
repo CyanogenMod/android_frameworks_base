@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="powerwidget_screen_timeout_toast">Tempo limite da tela ajustado para: %1$d %2$s</string>
-    <string name="quick_settings_profile_label">Perfil</string>
+    <!--<string name="quick_settings_profile_label">Perfil</string>
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS desligado</string>
     <string name="quick_settings_screen_sleep">Dormir</string>
@@ -46,8 +46,6 @@
     <string name="quick_settings_screen_timeout">Tempo limite</string>
     <string name="accessibility_quick_settings_ringer">Sound <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibração <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Usar cabeça CID</string>
-    <string name="bean_dream_settings_cid_summary">Usar cabeça CID em vez de jujuba dentro do sonho</string>
     <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="navbar_dialog_title">Escolha uma ação para atribuir</string>
     <string name="navbar_home_button">Botão de início</string>
@@ -70,7 +68,7 @@
     <string name="quick_settings_wifiap">Wi-Fi AP</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_volume">Volume</string>
-    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>-->
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="quick_settings_network_adb_disabled_label">Desativado</string>
     <string name="quick_settings_network_adb_enabled_label">Ativado</string>
@@ -78,4 +76,8 @@
     <string name="advanced_dev_option_force_stop">Forçar fechamento</string>
     <string name="accessibility_dock_battery_level">Bateria do Dock <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g> porcento.</string>
     <string name="screenshot_delete_action">Apagar</string>
+    <string name="screenshot_delete_confirmation">A captura de tela foi apagada.</string>
+    <string name="dessert_case_settings_cm_title">Exibir mascote do CM</string>
+    <string name="dessert_case_settings_cm_summary">Exibir mascote do CM junto com as sobremesas do Android dentro do sonho</string>
+    <string name="accessibility_desc_add_quick_settings">Adicionar configurações rápidas.</string>
 </resources>
