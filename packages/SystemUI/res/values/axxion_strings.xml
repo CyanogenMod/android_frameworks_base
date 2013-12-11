@@ -46,4 +46,7 @@
     <!-- Long-press back kill application -->
     <string name="app_killed_message">App killed</string>
    
+    <!-- Power menu -->
+    <string name="quick_settings_powermenu_label">Power Menu</string> 
+
 </resources>

@@ -673,6 +673,22 @@ public class Intent implements Parcelable, Cloneable {
     public static final String ACTION_PICK = "android.intent.action.PICK";
 
     /**
+     * Global Action: Shows power menu dialog
+     * <p>Input: nothing
+     * <p>Output: nothing
+     * @hide
+     */
+    public static final String ACTION_POWERMENU = "android.intent.action.POWERMENU";
+
+    /**
+     * Global Action: Shows power menu reboot dialog
+     * <p>Input: nothing
+     * <p>Output: nothing
+     * @hide
+     */
+    public static final String ACTION_POWERMENU_REBOOT = "android.intent.action.POWERMENU_REBOOT";
+
+    /**
      * Activity Action: Creates a shortcut.
      * <p>Input: Nothing.</p>
      * <p>Output: An Intent representing the shortcut. The intent must contain three
