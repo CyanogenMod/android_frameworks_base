@@ -18,4 +18,7 @@
   <java-symbol type="anim" name="recent_screen_enter_left" />
   <java-symbol type="anim" name="recent_screen_fade_out" />
 
+  <!-- Navigation ring power menu -->
+  <java-symbol type="drawable" name="ic_navigation_ring_power_menu" />
+  
 </resources>

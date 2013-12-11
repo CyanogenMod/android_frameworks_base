@@ -24,6 +24,7 @@ public class NavigationRingConstants {
     public static final String ACTION_MENU                 = "**menu**";
     public static final String ACTION_MENU_BIG             = "**menu_big**";
     public static final String ACTION_POWER                = "**power**";
+    public static final String ACTION_POWER_MENU           = "**powerMenu**";	
     public static final String ACTION_NOTIFICATIONS        = "**notifications**";
     public static final String ACTION_RECENTS              = "**recents**";
     public static final String ACTION_SCREENSHOT           = "**screenshot**";
