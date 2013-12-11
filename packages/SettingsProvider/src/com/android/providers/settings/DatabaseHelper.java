@@ -2360,6 +2360,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.Global.LOW_BATTERY_SOUND_TIMEOUT,
                     R.integer.def_low_battery_sound_timeout);
 
+            loadIntegerSetting(stmt, Settings.Global.WIFI_SCAN_ALWAYS_AVAILABLE,
+                    R.integer.def_wifi_scan_always_available);
+
             // --- New global settings start here
             loadIntegerSetting(stmt, Settings.Global.TETHER_DUN_REQUIRED,
                     R.integer.def_tether_dun_required);
