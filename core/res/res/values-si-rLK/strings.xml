@@ -1466,7 +1466,6 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"පද්ධතිය"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"බ්ලූටූත් ශ්‍රව්‍ය"</string>
     <string name="wireless_display_route_description" msgid="9070346425023979651">"රැහැන් රහිත දර්ශනය"</string>
-    <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"හරි"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"මාධ්‍ය ප්‍රතිදානය"</string>
     <string name="media_route_status_scanning" msgid="7279908761758293783">"පරිලෝකනය කරමින්…"</string>
     <string name="media_route_status_connecting" msgid="6422571716007825440">"සම්බන්ධ වෙමින්…"</string>
@@ -1478,8 +1477,6 @@
     <string name="display_manager_overlay_display_name" msgid="5142365982271620716">"උඩැතිරිය #<xliff:g id="ID">%1$d</xliff:g>"</string>
     <string name="display_manager_overlay_display_title" msgid="652124517672257172">"<xliff:g id="NAME">%1$s</xliff:g>: <xliff:g id="WIDTH">%2$d</xliff:g>x<xliff:g id="HEIGHT">%3$d</xliff:g>, <xliff:g id="DPI">%4$d</xliff:g> dpi"</string>
     <string name="display_manager_overlay_display_secure_suffix" msgid="6022119702628572080">", ආරක්‍ෂිත"</string>
-    <string name="wifi_display_notification_title" msgid="2223050649240326557">"නොරැහැන් සංදර්ශකය සම්බන්ධිතයි"</string>
-    <string name="wifi_display_notification_message" msgid="4498802012464170685">"වෙනත් උපාංගයක් මත මෙම තිරය පෙන්වයි"</string>
     <string name="wifi_display_notification_disconnect" msgid="6183754463561153372">"විසන්ධි කරන්න"</string>
     <string name="kg_emergency_call_label" msgid="684946192523830531">"හදිසි ඇමතුම"</string>
     <string name="kg_forgot_pattern_button_text" msgid="8852021467868220608">"රටාව අමතකයි"</string>
