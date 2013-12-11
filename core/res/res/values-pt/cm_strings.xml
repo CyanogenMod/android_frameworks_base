@@ -124,4 +124,5 @@
     <string name="permlab_resetBatteryStats">redefinir estatísticas da bateria</string>
     <string name="permdesc_resetBatteryStats">Permite uma aplicação redefinir o nível baixo atual dos dados de uso da bateria.</string>
     <string name="immersive_mode_confirmation_bottom">Deslize para cima a partir de baixo para sair da tela cheia.</string>
+    <string name="profileNameAutomobile">Automóvel</string>
 </resources>
