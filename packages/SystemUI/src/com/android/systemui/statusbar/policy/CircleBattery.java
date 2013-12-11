@@ -315,9 +315,9 @@ public class CircleBattery extends ImageView implements BatteryController.Batter
         mPaintGray.setStrokeWidth(strokeWidth / 3.5f);
 
         // calculate rectangle for drawArc calls
-        int pLeft = getPaddingStart();
-        mRectLeft = new RectF(getPaddingLeft() + strokeWidth / 2.0f, 0 + strokeWidth / 2.0f, mCircleSize
-                - strokeWidth / 2.0f + getPaddingLeft(), mCircleSize - strokeWidth / 2.0f);
+        int pLeft = getPaddingLeft();
+        mRectLeft = new RectF(pLeft + strokeWidth / 2.0f, 0 + strokeWidth / 2.0f, mCircleSize
+                - strokeWidth / 2.0f + pLeft, mCircleSize - strokeWidth / 2.0f);
 
         // calculate Y position for text
         Rect bounds = new Rect();
