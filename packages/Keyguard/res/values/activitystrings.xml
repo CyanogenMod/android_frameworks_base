@@ -20,5 +20,5 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name" msgid="3352888186674981593">"Keyguard 測試活動"</string>
+    <string name="app_name">"KeyguardTestActivity"</string>
 </resources>

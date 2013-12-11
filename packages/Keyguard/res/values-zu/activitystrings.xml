@@ -21,16 +21,4 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name" msgid="3352888186674981593">"I-KeyguardTestActivity"</string>
-    <string name="secure_app_name" msgid="7955498742816868049">"I-UnifiedCamera"</string>
-    <string name="none_menu_item" msgid="6156747285687551424">"Akukho ukuphepha"</string>
-    <string name="pin_menu_item" msgid="1179756433268962311">"I-PIN"</string>
-    <string name="password_menu_item" msgid="1959980499662153160">"Iphasiwedi"</string>
-    <string name="pattern_menu_item" msgid="2987798152175140249">"Iphethini"</string>
-    <string name="sim_pin_menu_item" msgid="3962286639645084880">"I-PIN ye-SIM"</string>
-    <string name="sim_puk_menu_item" msgid="6190044133008392974">"I-PUK YE-SIM"</string>
-    <string name="add_widget_item" msgid="279702152366857415">"Khetha iwijethi..."</string>
-    <string name="on_screen_turned_off" msgid="8761396329770508367">"I-onScreenTurnedOff"</string>
-    <string name="on_screen_turned_on" msgid="9222926818030728999">"I-onScreenTurnedOn"</string>
-    <string name="do_keyguard" msgid="9210936977823118796">"I-doKeyguard"</string>
-    <string name="verify_unlock" msgid="8508722273329306968">"I-verifyUnlock"</string>
 </resources>

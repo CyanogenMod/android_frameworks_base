@@ -105,7 +105,6 @@
     <string name="kg_puk_enter_pin_hint" msgid="7871604527429602024">"Sisestage soovitud PIN-kood"</string>
     <string name="kg_enter_confirm_pin_hint" msgid="325676184762529976">"Kinnitage soovitud PIN-kood"</string>
     <string name="kg_sim_unlock_progress_dialog_message" msgid="8950398016976865762">"SIM-kaardi avamine ..."</string>
-    <string name="kg_password_wrong_pin_code" msgid="1139324887413846912">"Vale PIN-kood."</string>
     <string name="kg_invalid_sim_pin_hint" msgid="8795159358110620001">"Sisestage 4–8-numbriline PIN-kood."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="7553388325654369575">"PUK-koodi pikkus peab olema vähemalt 8 numbrit."</string>
     <string name="kg_invalid_puk" msgid="3638289409676051243">"Sisestage uuesti õige PUK-kood. Korduvkatsete korral keelatakse SIM jäädavalt."</string>
