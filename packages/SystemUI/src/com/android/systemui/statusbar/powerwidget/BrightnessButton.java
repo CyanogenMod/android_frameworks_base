@@ -1,9 +1,6 @@
 
 package com.android.systemui.statusbar.powerwidget;
 
-import com.android.server.power.PowerManagerService;
-import com.android.systemui.R;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +13,8 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+
+import com.android.systemui.R;
 
 import java.util.ArrayList;
 import java.util.List;

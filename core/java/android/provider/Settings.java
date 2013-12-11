@@ -2882,6 +2882,13 @@ public final class Settings {
          */
         public static final String POINTER_SPEED = "pointer_speed";
 
+       /**
+	* Use the Notification Power Widget? (Who wouldn't!)
+	*
+	* @hide
+	*/
+        public static final String EXPANDED_VIEW_WIDGET = "expanded_view_widget";
+
         /**
          * I am the lolrus.
          * <p>
