@@ -96,6 +96,37 @@ interface ISms {
             in byte[] data, in PendingIntent sentIntent, in PendingIntent deliveryIntent);
 
     /**
+     * Send a data SMS with orig port.
+     *
+     * @param destAddr the address to send the message to
+     * @param scAddr is the service center address or null to use
+     *  the current default SMSC
+     * @param destPort the port to deliver the message to
+     * @param origPort the port set by the sender
+     * @param data the body of the message to send
+     * @param sentIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is sucessfully sent, or failed.
+     *  The result code will be <code>Activity.RESULT_OK<code> for success,
+     *  or one of these errors:<br>
+     *  <code>RESULT_ERROR_GENERIC_FAILURE</code><br>
+     *  <code>RESULT_ERROR_RADIO_OFF</code><br>
+     *  <code>RESULT_ERROR_NULL_PDU</code><br>
+     *  For <code>RESULT_ERROR_GENERIC_FAILURE</code> the sentIntent may include
+     *  the extra "errorCode" containing a radio technology specific value,
+     *  generally only useful for troubleshooting.<br>
+     *  The per-application based SMS control checks sentIntent. If sentIntent
+     *  is NULL the caller will be checked against all unknown applicaitons,
+     *  which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is delivered to the recipient.  The
+     *  raw pdu of the status report is in the extended data ("pdu").
+     */
+    void sendDataWithOrigPort(String callingPkg, in String destAddr, in String scAddr,
+        in int destPort, in int origPort, in byte[] data, in PendingIntent sentIntent,
+        in PendingIntent deliveryIntent);
+
+
+    /**
      * Send an SMS.
      *
      * @param smsc the SMSC to send the message through, or NULL for the
