@@ -12,6 +12,7 @@ import android.os.IPowerManager;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -51,8 +52,6 @@ public class BrightnessButton extends PowerButton {
     static {
         OBSERVED_URIS.add(BRIGHTNESS_URI);
         OBSERVED_URIS.add(BRIGHTNESS_MODE_URI);
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.LIGHT_SENSOR_CUSTOM));
-        OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.LIGHT_SCREEN_DIM));
         OBSERVED_URIS.add(Settings.System.getUriFor(Settings.System.EXPANDED_BRIGHTNESS_MODE));
     }
 
@@ -114,17 +113,18 @@ public class BrightnessButton extends PowerButton {
         int brightness = BACKLIGHTS[backlightIndex];
 
         if (brightness == AUTO_BACKLIGHT) {
-            Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
-                    Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+            Settings.System.putIntForUser(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC, UserHandle.USER_CURRENT);
         } else {
             if (mAutoBrightnessSupported) {
-                Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
-                        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                Settings.System.putIntForUser(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
+                        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL, UserHandle.USER_CURRENT);
             }
             if (power != null) {
                 power.setBacklightBrightness(brightness);
             }
-            Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
+            Settings.System.putIntForUser(resolver, Settings.System.SCREEN_BRIGHTNESS,
+                    brightness, UserHandle.USER_CURRENT);
         }
     }
 
@@ -145,28 +145,20 @@ public class BrightnessButton extends PowerButton {
     @Override
     protected void onChangeUri(ContentResolver resolver, Uri uri) {
         if (BRIGHTNESS_URI.equals(uri)) {
-            mCurrentBrightness = Settings.System.getInt(resolver,
-                    Settings.System.SCREEN_BRIGHTNESS, 0);
+            mCurrentBrightness = Settings.System.getIntForUser(resolver,
+                    Settings.System.SCREEN_BRIGHTNESS, 0, UserHandle.USER_CURRENT);
         } else if (BRIGHTNESS_MODE_URI.equals(uri)) {
-            mAutoBrightness = (Settings.System.getInt(resolver,
-                    Settings.System.SCREEN_BRIGHTNESS_MODE, 0) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+            mAutoBrightness = (Settings.System.getIntForUser(resolver,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE, 0, UserHandle.USER_CURRENT)
+                    == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
         } else {
             updateSettings(resolver);
         }
     }
 
     private void updateSettings(ContentResolver resolver) {
-        boolean lightSensorCustom = (Settings.System.getInt(resolver,
-                Settings.System.LIGHT_SENSOR_CUSTOM, 0) != 0);
-        if (lightSensorCustom) {
-            BACKLIGHTS[1] = Settings.System.getInt(resolver, Settings.System.LIGHT_SCREEN_DIM,
-                    MIN_BACKLIGHT);
-        } else {
-            BACKLIGHTS[1] = MIN_BACKLIGHT;
-        }
-
-        String[] modes = parseStoredValue(Settings.System.getString(
-                resolver, Settings.System.EXPANDED_BRIGHTNESS_MODE));
+        String[] modes = parseStoredValue(Settings.System.getStringForUser(
+                resolver, Settings.System.EXPANDED_BRIGHTNESS_MODE, UserHandle.USER_CURRENT));
         if (modes == null || modes.length == 0) {
             mBacklightValues = new int[] {
                     0, 1, 2, 3, 4, 5
@@ -178,13 +170,13 @@ public class BrightnessButton extends PowerButton {
             }
         }
 
-        mAutoBrightness = (Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
-                0) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+        mAutoBrightness = (Settings.System.getIntForUser(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
+                0, UserHandle.USER_CURRENT) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
         if (mAutoBrightness) {
             mCurrentBrightness = AUTO_BACKLIGHT;
         } else {
-            mCurrentBrightness = Settings.System.getInt(resolver,
-                    Settings.System.SCREEN_BRIGHTNESS, -1);
+            mCurrentBrightness = Settings.System.getIntForUser(resolver,
+                    Settings.System.SCREEN_BRIGHTNESS, -1, UserHandle.USER_CURRENT);
             for (int i = 0; i < BACKLIGHTS.length; i++) {
                 if (mCurrentBrightness == BACKLIGHTS[i]) {
                     mCurrentBacklightIndex = i;
@@ -194,3 +186,4 @@ public class BrightnessButton extends PowerButton {
         }
     }
 }
+

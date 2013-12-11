@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.UserHandle;
 import android.provider.Settings.SettingNotFoundException;
 import android.provider.Settings;
 import android.util.Log;
@@ -187,8 +188,8 @@ public class NetworkModeButton extends PowerButton{
     }
 
     private static int getCurrentCMMode(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
+        return Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.EXPANDED_NETWORK_MODE,
-                CM_MODE_3G2G);
+                CM_MODE_3G2G, UserHandle.USER_CURRENT);
     }
 }

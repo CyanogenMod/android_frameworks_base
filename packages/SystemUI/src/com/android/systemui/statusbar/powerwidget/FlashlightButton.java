@@ -5,6 +5,7 @@ import com.android.systemui.R;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.UserHandle;
 import android.provider.Settings;
 
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ public class FlashlightButton extends PowerButton {
 
     @Override
     protected void updateState(Context context) {
-        boolean enabled = Settings.System.getInt(context.getContentResolver(), Settings.System.TORCH_STATE, 0) == 1;
+        boolean enabled = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.TORCH_STATE, 0, UserHandle.USER_CURRENT) == 1;
         if(enabled) {
             mIcon = R.drawable.stat_flashlight_on;
             mState = STATE_ENABLED;
@@ -33,8 +35,8 @@ public class FlashlightButton extends PowerButton {
 
     @Override
     protected void toggleState(Context context) {
-        boolean bright = Settings.System.getInt(context.getContentResolver(),
-                Settings.System.EXPANDED_FLASH_MODE, 0) == 1;
+        boolean bright = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.EXPANDED_FLASH_MODE, 0, UserHandle.USER_CURRENT) == 1;
         Intent i = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
         i.putExtra("bright", bright);
         context.sendBroadcast(i);
