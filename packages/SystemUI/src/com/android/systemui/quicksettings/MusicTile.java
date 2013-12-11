@@ -17,6 +17,7 @@
 
 package com.android.systemui.quicksettings;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ import android.media.MediaMetadataEditor;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.media.RemoteController;
+import android.net.Uri;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -93,6 +95,11 @@ public class MusicTile extends QuickSettingsTile {
     public void updateResources() {
         updateTile();
         super.updateResources();
+    }
+
+    @Override
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        updateResources();
     }
 
     private void updateTile() {
