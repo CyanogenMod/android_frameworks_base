@@ -402,13 +402,21 @@ public class BluetoothTetheringDataTracker extends BaseNetworkStateTracker {
                         } else {
                             ac.sendMessage(
                                     AsyncChannel.CMD_CHANNEL_FULL_CONNECTION);
+                            mStackChannel = ac;
+                            if (VDBG) Log.d(TAG, "CMD_CHANNEL_HALF_CONNECTED: " + mStackChannel);
                         }
                     }
                     break;
                 case AsyncChannel.CMD_CHANNEL_DISCONNECTED:
                     if (VDBG) Log.d(TAG, "got CMD_CHANNEL_DISCONNECTED");
-                    mBtdt.stopReverseTether();
-                    mBtdt.mAsyncChannel.set(null);
+                    if (mStackChannel != null) {
+                        mBtdt.stopReverseTether();
+                        mBtdt.mAsyncChannel.set(null);
+
+                        Log.d(TAG, "Disconnect CMD_CHANNEL_HALF_CONNECTED: " + mStackChannel);
+                        mStackChannel.disconnect();
+                        mStackChannel = null;
+                    }
                     break;
                 case NetworkStateTracker.EVENT_NETWORK_CONNECTED:
                     LinkProperties linkProperties = (LinkProperties)(msg.obj);
