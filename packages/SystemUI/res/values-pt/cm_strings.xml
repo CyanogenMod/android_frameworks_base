@@ -77,4 +77,7 @@
     <string name="accessibility_dock_battery_level">Bateria do Dock <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g> porcento.</string>
     <string name="screenshot_delete_action">Apagar</string>
     <string name="screenshot_delete_confirmation">A captura de tela foi apagada.</string>
+    <string name="dessert_case_settings_cm_title">Exibir mascote do CM</string>
+    <string name="dessert_case_settings_cm_summary">Exibir mascote do CM junto com as sobremesas do Android dentro do sonho</string>
+    <string name="accessibility_desc_add_quick_settings">Adicionar configurações rápidas.</string>
 </resources>
