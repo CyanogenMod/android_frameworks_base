@@ -283,7 +283,7 @@ public final class ContentService extends IContentService.Stub {
                 SyncManager syncManager = getSyncManager();
                 if (syncManager != null) {
                     syncManager.scheduleLocalSync(null /* all accounts */, callingUserHandle, uid,
-                            uri.getAuthority());
+                            uri != null ? uri.getAuthority() : null);
                 }
             }
         } finally {
