@@ -30,7 +30,6 @@ import android.os.RemoteCallback;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
-import android.security.KeyStore;
 import android.util.Log;
 
 import com.android.org.conscrypt.TrustedCertificateStore;
@@ -1688,14 +1687,18 @@ public class DevicePolicyManager {
      * @hide
      */
     public boolean requireSecureKeyguard() {
-        int encryptionStatus = getStorageEncryptionStatus();
-        if (getPasswordQuality(null) > PASSWORD_QUALITY_UNSPECIFIED ||
-                !KeyStore.getInstance().isEmpty() ||
-                encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE ||
-                encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
-            // Require secure keyguard
-            return true;
+        return requireSecureKeyguard(UserHandle.myUserId());
+    }
+
+    /** @hide */
+    public boolean requireSecureKeyguard(int userHandle) {
+        if (mService != null) {
+            try {
+                return mService.requireSecureKeyguard(userHandle);
+            } catch (RemoteException re) {
+                Log.w(TAG, "Failed to get secure keyguard requirement");
+            }
         }
-        return false;
+        return true;
     }
 }
