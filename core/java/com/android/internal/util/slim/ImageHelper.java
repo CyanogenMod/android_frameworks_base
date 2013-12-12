@@ -46,7 +46,8 @@ public class ImageHelper {
             new PorterDuffColorFilter(color, Mode.MULTIPLY);
         pp.setColorFilter(frontFilter);
         Canvas cc = new Canvas(grayscaleBitmap);
-        cc.drawBitmap(grayscaleBitmap, 0, 0, pp);
+        final Rect rect = new Rect(0, 0, grayscaleBitmap.getWidth(), grayscaleBitmap.getHeight());
+        cc.drawBitmap(grayscaleBitmap, rect, rect, pp);
         return grayscaleBitmap;
     }
 
@@ -59,11 +60,12 @@ public class ImageHelper {
         Canvas c = new Canvas(bmpGrayscale);
         Paint paint = new Paint();
         ColorMatrix cm = new ColorMatrix();
+        final Rect rect = new Rect(0, 0, width, height);
         cm.setSaturation(0);
 
         ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
         paint.setColorFilter(f);
-        c.drawBitmap(bmpOriginal, 0, 0, paint);
+        c.drawBitmap(bmpOriginal, rect, rect, paint);
         return bmpGrayscale;
     }
 
@@ -75,7 +77,7 @@ public class ImageHelper {
                 context.getResources().getDisplayMetrics());
 
         Bitmap d = ((BitmapDrawable) image).getBitmap();
-        Bitmap bitmapOrig = Bitmap.createScaledBitmap(d, px, px, false);
+        Bitmap bitmapOrig = Bitmap.createScaledBitmap(d, px, px, true);
         return new BitmapDrawable(context.getResources(), bitmapOrig);
     }
 
