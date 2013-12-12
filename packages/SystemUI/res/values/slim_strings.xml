@@ -28,6 +28,16 @@
     <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
 
+    <!-- Slim Shortcut Actions -->
+    <string name="shortcut_picker">Slim Shortcuts</string>
+    <string name="shortcut_immersive">Immersive Mode Toggle</string>
+    <string name="shortcut_quiethours">Quiethours Toggle</string>
+    <string name="shortcut_rotation">Rotation Lock Toggle</string>
+    <string name="shortcut_torch">Torch Toggle</string>
+    <string name="shortcut_reboot">Reboot (instant)</string>
+    <string name="shortcut_last_app">Last App</string>
+    <string name="shortcut_screenshot">Screenshot</string>
+
     <!-- Quick Settings -->
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS off</string>
