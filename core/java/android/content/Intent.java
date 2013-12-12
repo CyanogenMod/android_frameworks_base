@@ -3656,6 +3656,11 @@ public class Intent implements Parcelable, Cloneable {
      * If set, when sending a broadcast only registered receivers will be
      * called -- no BroadcastReceiver components will be launched.
      */
+     public static final int FLAG_ACTIVITY_SPLIT_VIEW = 0x00002000;
+    /**
+     * If set, when sending a broadcast only registered receivers will be
+     * called -- no BroadcastReceiver components will be launched.
+     */
     public static final int FLAG_RECEIVER_REGISTERED_ONLY = 0x40000000;
     /**
      * If set, when sending a broadcast the new broadcast will replace
