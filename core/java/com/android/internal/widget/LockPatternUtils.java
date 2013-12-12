@@ -1444,12 +1444,26 @@ public class LockPatternUtils {
                 || mode == DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC
                 || mode == DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC
                 || mode == DevicePolicyManager.PASSWORD_QUALITY_COMPLEX;
-        final boolean isProfileSecure = mProfileManager.getActiveProfile()
-                .getScreenLockModeWithDPM(mContext) == Profile.LockMode.DEFAULT;
-        final boolean secure = isPattern && isLockPatternEnabled() && savedPatternExists()
-                || isPassword && savedPasswordExists() && isProfileSecure
-                || isGesture && isLockGestureEnabled() && savedGestureExists();
-        return secure;
+        final boolean hasPattern = isPattern && isLockPatternEnabled() && savedPatternExists();
+        final boolean hasPassword = isPassword && savedPasswordExists();
+        final boolean hasGesture = isGesture && isLockGestureEnabled() && savedGestureExists();
+
+        return (hasPattern || hasPassword || hasGesture) &&
+                getActiveProfileLockMode() == Profile.LockMode.DEFAULT;
+    }
+
+    public int getActiveProfileLockMode() {
+        // Check device policy
+        DevicePolicyManager dpm = (DevicePolicyManager)
+                mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
+
+        if (dpm.requireSecureKeyguard(getCurrentOrCallingUserId())) {
+            // Always enforce lock screen
+            return Profile.LockMode.DEFAULT;
+        }
+
+        final Profile profile = mProfileManager.getActiveProfile();
+        return profile.getScreenLockMode();
     }
 
     /**
