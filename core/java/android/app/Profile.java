@@ -16,7 +16,6 @@
 
 package android.app;
 
-import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Parcel;
@@ -452,18 +451,6 @@ public final class Profile implements Parcelable, Comparable {
     public void setRingMode(RingModeSettings descriptor) {
         mRingMode = descriptor;
         mDirty = true;
-    }
-
-    public int getScreenLockModeWithDPM(Context context) {
-        // Check device policy
-        DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-
-        if (dpm.requireSecureKeyguard()) {
-            // Always enforce lock screen
-            return LockMode.DEFAULT;
-        }
-
-        return mScreenLockMode;
     }
 
     public int getScreenLockMode() {
