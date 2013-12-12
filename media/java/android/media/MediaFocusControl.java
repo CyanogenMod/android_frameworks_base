@@ -455,7 +455,7 @@ public class MediaFocusControl implements OnFinished {
     private void notifyTopOfAudioFocusStack() {
         // notify the top of the stack it gained focus
         if (!mFocusStack.empty()) {
-            if (canReassignAudioFocus()) {
+            if (canReassignAudioFocus(mFocusStack.peek().getClientId())) {
                 mFocusStack.peek().handleFocusGain(AudioManager.AUDIOFOCUS_GAIN);
             }
         }
@@ -554,14 +554,37 @@ public class MediaFocusControl implements OnFinished {
         }
     }
 
+    /* Constant to identify focus stack entry clientid for QCHAT client */
+    private static final String CLIENT_ID_QCHAT = "QCHAT";
+
     /**
      * Helper function:
      * Returns true if the system is in a state where the focus can be reevaluated, false otherwise.
      */
-    private boolean canReassignAudioFocus() {
+    private boolean canReassignAudioFocus(String clientId) {
         // focus requests are rejected during a phone call or when the phone is ringing
         // this is equivalent to IN_VOICE_COMM_FOCUS_ID having the focus
+        // Also focus request is granted to QCHAT client even when voice call is active. QCHAT
+        // client will first check if any voice calls are in CALL_INACTIVE/CALL_HOLD state
         if (!mFocusStack.isEmpty() && mFocusStack.peek().hasSameClient(IN_VOICE_COMM_FOCUS_ID)) {
+            if (clientId.contains(CLIENT_ID_QCHAT))
+                return true;
+            else
+                return false;
+        }
+        return true;
+    }
+
+     /**
+     * Helper function:
+     * Returns true if the system is in a state where the focus can be reevaluated , false otherwise.
+     */
+    private boolean canReassignAudioFocusFromQchat(int streamType, String clientId) {
+        // Focus request is rejected for Music Player and for QChat client if the focus is already
+        // acquired by a QChat client
+        if (!mFocusStack.isEmpty() &&
+            mFocusStack.peek().getClientId().contains(CLIENT_ID_QCHAT) &&
+            (clientId.contains(CLIENT_ID_QCHAT) || (streamType == AudioManager.STREAM_MUSIC))) {
             return false;
         }
         return true;
@@ -616,7 +639,11 @@ public class MediaFocusControl implements OnFinished {
         }
 
         synchronized(mAudioFocusLock) {
-            if (!canReassignAudioFocus()) {
+            if (!canReassignAudioFocus(clientId)) {
+                return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
+            }
+
+            if (!canReassignAudioFocusFromQchat(mainStreamType, clientId)) {
                 return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
             }
 

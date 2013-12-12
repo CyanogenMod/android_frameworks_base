@@ -102,6 +102,10 @@ class FocusRequester {
         return mStreamType;
     }
 
+    String getClientId() {
+        return mClientId;
+    }
+
 
     private static String focusChangeToString(int focus) {
         switch(focus) {
