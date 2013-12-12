@@ -19,6 +19,7 @@ package com.android.internal.util.slim;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -29,6 +30,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
@@ -42,6 +44,7 @@ public class ImageHelper {
         Bitmap colorBitmap = ((BitmapDrawable) d).getBitmap();
         Bitmap grayscaleBitmap = toGrayscale(colorBitmap);
         Paint pp = new Paint();
+        pp.setAntiAlias(true);
         PorterDuffColorFilter frontFilter =
             new PorterDuffColorFilter(color, Mode.MULTIPLY);
         pp.setColorFilter(frontFilter);
@@ -59,6 +62,7 @@ public class ImageHelper {
         Bitmap bmpGrayscale = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bmpGrayscale);
         Paint paint = new Paint();
+        paint.setAntiAlias(true);
         ColorMatrix cm = new ColorMatrix();
         final Rect rect = new Rect(0, 0, width, height);
         cm.setSaturation(0);
@@ -100,6 +104,27 @@ public class ImageHelper {
         canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+
+    public static Bitmap getCircleBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(width, height,
+                Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        BitmapShader shader = new BitmapShader(bitmap,  TileMode.CLAMP, TileMode.CLAMP);
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(shader);
+
+        canvas.drawCircle(width/2, height/2, width/2, paint);
+
         return output;
     }
 

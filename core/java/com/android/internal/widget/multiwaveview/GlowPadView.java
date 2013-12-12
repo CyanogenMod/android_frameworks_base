@@ -28,15 +28,15 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.Vibrator;
@@ -52,6 +52,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 
 import com.android.internal.R;
+import com.android.internal.util.slim.ImageHelper;
 
 import java.lang.Math;
 import java.util.ArrayList;
@@ -481,13 +482,16 @@ public class GlowPadView extends View {
         }
     }
 
-    public void setColoredIcons(int lockColor, int dotColor, Drawable custom) {
+    public void setColoredIcons(int lockColor, int dotColor, Bitmap custom) {
         if (custom != null) {
+            Drawable handleDrawable = ImageHelper.resize(mContext,
+                new BitmapDrawable(mContext.getResources(),
+                    ImageHelper.getCircleBitmap(custom)), 68);
             if (lockColor != -2) {
-                custom.setColorFilter(null);
-                custom.setColorFilter(lockColor, PorterDuff.Mode.SRC_ATOP);
+                handleDrawable = new BitmapDrawable(mContext.getResources(),
+                        ImageHelper.getColoredBitmap(handleDrawable, lockColor));
             }
-            setHandleDrawable(custom);
+            setHandleDrawable(handleDrawable);
         } else {
             if (lockColor != -2 && mPadDrawable != null) {
                 mPadDrawable.setColorFilter(null);
