@@ -55,6 +55,9 @@ public class LocationTile extends QuickSettingsTile implements LocationSettingsC
                 if (!mLocationEnabled) {
                     qsc.mBar.collapseAllPanels(true);
                 }
+                if (isFlipTilesEnabled()) {
+                    flipTile(0);
+		}
             }
         };
 

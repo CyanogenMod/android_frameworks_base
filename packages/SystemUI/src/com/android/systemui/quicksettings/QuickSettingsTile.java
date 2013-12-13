@@ -18,12 +18,17 @@
 
 package com.android.systemui.quicksettings;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.animation.Animator.AnimatorListener;
 import android.app.ActivityManagerNative;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -60,6 +65,8 @@ public class QuickSettingsTile implements OnClickListener {
     protected PhoneStatusBar mStatusbarService;
     protected QuickSettingsController mQsc;
     protected SharedPreferences mPrefs;
+
+    private Handler mHandler = new Handler();
 
     public QuickSettingsTile(Context context, QuickSettingsController qsc) {
         this(context, qsc, R.layout.quick_settings_tile_basic);
@@ -121,6 +128,39 @@ public class QuickSettingsTile implements OnClickListener {
         if (image != null) {
             image.setImageResource(mDrawable);
         }
+    }
+
+    public boolean isFlipTilesEnabled() {
+        return (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QUICK_SETTINGS_TILES_FLIP, 1) == 1);
+    }
+
+    public void flipTile(int delay){
+        final AnimatorSet anim = (AnimatorSet) AnimatorInflater.loadAnimator(
+                mContext, R.anim.flip_right);
+        anim.setTarget(mTile);
+        anim.setDuration(200);
+        anim.addListener(new AnimatorListener(){
+
+            @Override
+            public void onAnimationEnd(Animator animation) {}
+            @Override
+            public void onAnimationStart(Animator animation) {}
+            @Override
+            public void onAnimationCancel(Animator animation) {}
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+
+        });
+
+        Runnable doAnimation = new Runnable(){
+            @Override
+            public void run() {
+                anim.start();
+            }
+        };
+
+        mHandler.postDelayed(doAnimation, delay);
     }
 
     void startSettingsActivity(String action) {
