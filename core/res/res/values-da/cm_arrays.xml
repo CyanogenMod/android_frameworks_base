@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="app_ops_labels">
+        <item>Forsøger at få adgang til placering</item>
+        <item>Forsøger at få adgang til placering</item>
+        <item>Forsøger at få adgang til placering</item>
+        <item>Forsøger at bruge vibration</item>
+        <item>Forsøger at læse kontaktpersoner</item>
+        <item>Forsøger at ændre kontaktpersoner</item>
+        <item>Forsøger at læse opkaldsloggen</item>
+        <item>Forsøger at ændre opkaldsloggen</item>
+        <item>Forsøger at læse kalenderen</item>
+        <item>Forsøger at ændre kalenderen</item>
+        <item>Forsøger at få adgang til placering</item>
+        <item>Forsøger at skrive notifikationen</item>
+        <item>Forsøger at få adgang til placering</item>
+        <item>Forsøger at lave et telefonopkald</item>
+        <item>Forsøger at læse SMS/MMS</item>
+        <item>Forsøger at skrive/ændre SMS/MMS</item>
+        <item>Forsøger at modtage SMS/MMS</item>
+        <item>Forsøger at modtage SMS/MMS</item>
+        <item>Forsøger at modtage SMS/MMS</item>
+        <item>Forsøger at modtage SMS/MMS</item>
+        <item>Forsøger at sende SMS/MMS</item>
+        <item>Forsøger at læse SMS/MMS</item>
+        <item>Forsøger at skrive/ændre SMS/MMS</item>
+        <item>Forsøger at ændre indstillinger</item>
+        <item>Forsøger at trække på toppen</item>
+        <item>Forsøger at få adgang til notifikationer</item>
+        <item>Forsøger at få adgang til Kamera</item>
+        <item>Forsøger at optage lyd</item>
+        <item>Forsøger at afspille lyd</item>
+        <item>Forsøger at læse udklipsholderen</item>
+        <item>Forsøger at ændre udklipsholderen</item>
+        <item>Forsøger at slå Wifi til/fra</item>
+        <item>Forsøger at slå bluetooth til/fra</item>
+        <item>Forsøger at slå mobildata til/fra</item>
+        <item>Forsøger at planlægge opvågning af enheden</item>
+    </string-array>
+</resources>

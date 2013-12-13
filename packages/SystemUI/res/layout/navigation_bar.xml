@@ -39,7 +39,7 @@
             android:clipToPadding="false"
             android:id="@+id/container"
             >
-        <include layout="@layout/mid_navigation_bar_port"/>
+            <include layout="@layout/mid_navigation_bar_port"/>
         </LinearLayout>
 
         <!-- lights out layout to match exactly -->

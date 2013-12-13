@@ -45,14 +45,14 @@
     <string name="toast_rotation_unlocked">Поворот экрана разблокирован</string>
     <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
     <string name="stylus_app_not_installed">%s не установлено</string>
-    <string name="permlab_changePrivacyGuardState">Включение или выключение режима инкогнито</string>
-    <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в режиме инкогнито. Когда приложение запущено в режиме инкогнито, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
-    <string name="privacy_guard_notification">Режим инкогнито активен</string>
-    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> не сможет получать доступ к персональным данным</string>
+    <string name="permlab_changePrivacyGuardState">Включение или выключение защищённого режима</string>
+    <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в защищённом режиме. Когда приложение запущено в защищённом режиме, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
+    <string name="privacy_guard_notification">Защищённый режим включён</string>
+    <string name="privacy_guard_notification_detail">«<xliff:g id="app">%1$s</xliff:g>» не имеет доступа к персональным данным</string>
     <string name="profile_picker_title">Профили</string>
     <string name="profile_none">Не выбран</string>
-    <string name="permlab_cancelNotifications">Отключение уведомлений</string>
-    <string name="permdesc_cancelNotifications">Разрешить приложению отключать уведомления, созданные другими приложениями.</string>
+    <string name="permlab_cancelNotifications">Удаление уведомлений</string>
+    <string name="permdesc_cancelNotifications">Разрешить приложению удалять уведомления, созданные другими приложениями.</string>
     <string name="permlab_interceptSmsSent">Перехват исходящих SMS</string>
     <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения смогут использовать это, чтобы препятствовать отправке SMS-сообщений.</string>
     <string name="permlab_sendMockSms">Показ фиктивных SMS-сообщений</string>

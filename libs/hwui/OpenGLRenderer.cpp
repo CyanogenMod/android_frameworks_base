@@ -1015,7 +1015,17 @@ void OpenGLRenderer::composeLayer(sp<Snapshot> current, sp<Snapshot> previous) {
         }
     } else if (!rect.isEmpty()) {
         dirtyLayer(rect.left, rect.top, rect.right, rect.bottom);
+
+#ifdef QCOM_BSP
+        save(0);
+        // the layer contains screen buffer content that shouldn't be alpha modulated
+        // (and any necessary alpha modulation was handled drawing into the layer)
+        mSnapshot->alpha = 1.0f;
+#endif
         composeLayerRect(layer, rect, true);
+#ifdef QCOM_BSP
+        restore();
+#endif
     }
 
     dirtyClip();
@@ -1659,6 +1669,12 @@ void OpenGLRenderer::setupDraw(bool clear) {
             setScissorFromClip();
         }
         setStencilFromClip();
+#ifdef QCOM_BSP
+    } else {
+        // Disable stencil test in case setStencilFromClip()
+        // enabled the stencil test but didn't disable it
+        glDisable(GL_STENCIL_TEST);
+#endif
     }
 
     mDescription.reset();

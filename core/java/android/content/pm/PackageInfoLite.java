@@ -45,6 +45,7 @@ public class PackageInfoLite implements Parcelable {
      */
     public int recommendedInstallLocation;
     public int installLocation;
+    public boolean isTheme;
 
     public VerifierInfo[] verifiers;
 
@@ -66,6 +67,7 @@ public class PackageInfoLite implements Parcelable {
         dest.writeInt(versionCode);
         dest.writeInt(recommendedInstallLocation);
         dest.writeInt(installLocation);
+        dest.writeInt(isTheme ? 1 : 0);
 
         if (verifiers == null || verifiers.length == 0) {
             dest.writeInt(0);
@@ -91,6 +93,7 @@ public class PackageInfoLite implements Parcelable {
         versionCode = source.readInt();
         recommendedInstallLocation = source.readInt();
         installLocation = source.readInt();
+        isTheme = source.readInt() == 1 ? true : false;
 
         final int verifiersLength = source.readInt();
         if (verifiersLength == 0) {

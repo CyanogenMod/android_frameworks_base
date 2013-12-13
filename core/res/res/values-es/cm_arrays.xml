@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string-array name="app_ops_labels">
+        <item>Intenta acceder a la ubicación</item>
+        <item>Intenta acceder a la ubicación</item>
+        <item>Intenta acceder a la ubicación</item>
+        <item>Intenta utilizar la vibración</item>
+        <item>Intenta consultar tus contactos</item>
+        <item>Intenta modificar tus contactos</item>
+        <item>Intenta leer el registro de llamadas</item>
+        <item>Intenta modificar el registro de llamadas</item>
+        <item>Intenta leer eventos de calendario</item>
+        <item>Intenta añadir o modificar eventos de calendario</item>
+        <item>Intenta acceder a la ubicación</item>
+        <item>Intenta publicar una notificación</item>
+        <item>Intenta acceder a la ubicación</item>
+        <item>Intenta llamar directamente a un número de teléfono</item>
+        <item>Intenta leer tus mensajes SMS/MMS</item>
+        <item>Intenta editar tus mensajes SMS/MMS</item>
+        <item>Intenta recibir mensajes SMS/MMS</item>
+        <item>Intenta recibir mensajes SMS/MMS</item>
+        <item>Intenta recibir mensajes SMS/MMS</item>
+        <item>Intenta recibir mensajes SMS/MMS</item>
+        <item>Intenta enviar mensajes SMS/MMS</item>
+        <item>Intenta leer tus mensajes SMS/MMS</item>
+        <item>Intenta editar tus mensajes SMS/MMS</item>
+        <item>Intenta modificar los ajustes del sistema</item>
+        <item>Intenta mostrarse sobre otras aplicaciones</item>
+        <item>Intenta acceder a las notificaciones</item>
+        <item>Intenta realizar fotografías y vídeo</item>
+        <item>Intenta grabar sonido</item>
+        <item>Intenta reproducir sonido</item>
+        <item>Intenta consultar el portapapeles</item>
+        <item>Intenta modificar el portapapeles</item>
+        <item>Intenta cambiar el estado de Wi-Fi</item>
+        <item>Intenta cambiar el estado de Bluetooth</item>
+        <item>Intenta cambiar el estado de la conexión de red</item>
+        <item>Intenta programar un encendido del dispositivo</item>
+    </string-array>
+</resources>

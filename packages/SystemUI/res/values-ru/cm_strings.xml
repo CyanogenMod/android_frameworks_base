@@ -21,7 +21,7 @@
     <string name="quick_settings_battery_charged_label">Заряжено</string>
     <string name="quick_settings_profile_label">Профиль</string>
     <string name="quick_settings_gps_off">GPS выкл.</string>
-    <string name="quick_settings_screen_sleep">Сон</string>
+    <string name="quick_settings_screen_sleep">Выключить экран</string>
     <string name="quick_settings_ringer_on">Вкл. звук</string>
     <string name="quick_settings_ringer_off">Выкл. звук</string>
     <string name="quick_settings_vibration_on">Вкл. вибро</string>
@@ -30,7 +30,7 @@
     <string name="quick_settings_label_disabled">Выкл.</string>
     <string name="quick_settings_ringer_normal">Звук</string>
     <string name="quick_settings_lockscreen">Экран блокировки</string>
-    <string name="quick_settings_network_type">Тип сети</string>
+    <string name="quick_settings_network_type">Режим сети</string>
     <string name="quick_settings_report_bug">Отчёт об ошибке</string>
     <string name="quick_settings_sync">Синхронизация</string>
     <string name="quick_settings_sync_off">Синхронизация выкл.</string>
@@ -48,8 +48,8 @@
     <string name="quick_settings_lte_off">LTE выкл.</string>
     <string name="quick_settings_volume">Громкость</string>
     <string name="quick_settings_camera_label">Камера</string>
-    <string name="quick_settings_network_adb_disabled_label">ADB по сети выкл.</string>
-    <string name="quick_settings_network_adb_enabled_label">ADB по сети</string>
+    <string name="quick_settings_network_adb_disabled_label">Отладка выкл.</string>
+    <string name="quick_settings_network_adb_enabled_label">Отладка по сети</string>
     <string name="quick_settings_expanded_desktop">Расширенный</string>
     <string name="quick_settings_expanded_desktop_off">Обычный</string>
     <string name="navbar_dialog_title">Выберите действие</string>
