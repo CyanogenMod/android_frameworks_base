@@ -45,6 +45,7 @@ public class NfcTile extends QuickSettingsTile {
                 updateResources();
                 if (isFlipTilesEnabled()) {
                     flipTile(0);
+                }
             }
         };
 

@@ -57,7 +57,7 @@ public class LocationTile extends QuickSettingsTile implements LocationSettingsC
                 }
                 if (isFlipTilesEnabled()) {
                     flipTile(0);
-		}
+                }
             }
         };
 

@@ -50,7 +50,7 @@ public class QuietHoursTile extends QuickSettingsTile {
                 autoSmsIntentBroadcast(mContext);
                 if (isFlipTilesEnabled()) {
                     flipTile(0);
-		}
+                }
             }
         };
         mOnLongClick = new View.OnLongClickListener() {

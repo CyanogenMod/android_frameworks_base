@@ -54,6 +54,7 @@ public class ToggleLockscreenTile extends QuickSettingsTile
                 updateLockscreenState();
                 if (isFlipTilesEnabled()) {
                     flipTile(0);
+                }
             }
         };
 

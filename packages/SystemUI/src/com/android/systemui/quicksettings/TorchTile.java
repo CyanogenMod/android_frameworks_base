@@ -47,6 +47,7 @@ public class TorchTile extends QuickSettingsTile {
                 mContext.sendBroadcast(i);
                 if (isFlipTilesEnabled()) {
                     flipTile(0);
+                }
             }
         };
 
