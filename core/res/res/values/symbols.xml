@@ -1981,4 +1981,5 @@
   <java-symbol type="dimen" name="edge_gesture_trigger_thickness" />
 
   <java-symbol type="bool" name="use_motion_accel" />
+  <java-symbol type="bool" name="config_setup_mms_data" />
 </resources>
