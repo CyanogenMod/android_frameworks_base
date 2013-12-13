@@ -39,12 +39,17 @@ public class QSConstants {
         public static final String TILE_SLEEP = "toggleSleepMode";
         public static final String TILE_LTE = "toggleLte";
         public static final String TILE_NFC = "toggleNfc";
-        public static final String TILE_USBTETHER = "toggleUsbTether";
         public static final String TILE_QUIETHOURS = "toggleQuietHours";
         public static final String TILE_VOLUME = "toggleVolume";
         public static final String TILE_EXPANDEDDESKTOP = "toggleExpandedDesktop";
         public static final String TILE_MUSIC = "toggleMusic";
         public static final String TILE_REBOOT = "toggleReboot";
+
+        // dynamic tiles
+        public static final String TILE_ALARM = "toggleAlarm";
+        public static final String TILE_BUGREPORT = "toggleBugReport";
+        public static final String TILE_IMESWITCHER = "toggleImeSwitcher";
+        public static final String TILE_USBTETHER = "toggleUsbTether";
 
         public static final String TILE_DELIMITER = "|";
         public static ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
@@ -59,5 +64,14 @@ public class QSConstants {
             TILES_DEFAULT.add(TILE_AIRPLANE);
             TILES_DEFAULT.add(TILE_BLUETOOTH);
             TILES_DEFAULT.add(TILE_LOCATION);
+        }
+
+        public static ArrayList<String> DYNAMIC_TILES_DEFAULT = new ArrayList<String>();
+
+        static {
+            DYNAMIC_TILES_DEFAULT.add(TILE_ALARM);
+            DYNAMIC_TILES_DEFAULT.add(TILE_BUGREPORT);
+            DYNAMIC_TILES_DEFAULT.add(TILE_IMESWITCHER);
+            DYNAMIC_TILES_DEFAULT.add(TILE_USBTETHER);
         }
 }

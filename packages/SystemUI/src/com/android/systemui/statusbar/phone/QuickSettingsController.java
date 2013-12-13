@@ -17,13 +17,17 @@
 package com.android.systemui.statusbar.phone;
 
 import static com.android.internal.util.slim.QSConstants.TILES_DEFAULT;
+import static com.android.internal.util.slim.QSConstants.DYNAMIC_TILES_DEFAULT;
 import static com.android.internal.util.slim.QSConstants.TILE_AIRPLANE;
+import static com.android.internal.util.slim.QSConstants.TILE_ALARM;
 import static com.android.internal.util.slim.QSConstants.TILE_AUTOROTATE;
 import static com.android.internal.util.slim.QSConstants.TILE_BATTERY;
 import static com.android.internal.util.slim.QSConstants.TILE_BLUETOOTH;
 import static com.android.internal.util.slim.QSConstants.TILE_BRIGHTNESS;
+import static com.android.internal.util.slim.QSConstants.TILE_BUGREPORT;
 import static com.android.internal.util.slim.QSConstants.TILE_DELIMITER;
 import static com.android.internal.util.slim.QSConstants.TILE_EXPANDEDDESKTOP;
+import static com.android.internal.util.slim.QSConstants.TILE_IMESWITCHER;
 import static com.android.internal.util.slim.QSConstants.TILE_LOCATION;
 import static com.android.internal.util.slim.QSConstants.TILE_LOCKSCREEN;
 import static com.android.internal.util.slim.QSConstants.TILE_LTE;
@@ -38,6 +42,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_SETTINGS;
 import static com.android.internal.util.slim.QSConstants.TILE_SLEEP;
 import static com.android.internal.util.slim.QSConstants.TILE_SYNC;
 import static com.android.internal.util.slim.QSConstants.TILE_TORCH;
+import static com.android.internal.util.slim.QSConstants.TILE_USBTETHER;
 import static com.android.internal.util.slim.QSConstants.TILE_USER;
 import static com.android.internal.util.slim.QSConstants.TILE_VOLUME;
 import static com.android.internal.util.slim.QSConstants.TILE_WIFI;
@@ -179,14 +184,10 @@ public class QuickSettingsController {
         String tiles = Settings.System.getStringForUser(resolver,
                 mSettingsKey, UserHandle.USER_CURRENT);
         if (tiles == null) {
-            Log.i(TAG, "Default tiles being loaded");
             tiles = TextUtils.join(TILE_DELIMITER, TILES_DEFAULT);
         }
 
-        Log.i(TAG, "Tiles list: " + tiles);
-
         // Split out the tile names and add to the list
-        boolean dockBatteryLoaded = false;
         for (String tile : tiles.split("\\|")) {
             QuickSettingsTile qs = null;
             if (tile.equals(TILE_USER)) {
@@ -251,24 +252,35 @@ public class QuickSettingsController {
         // Load the dynamic tiles
         // These toggles must be the last ones added to the view, as they will show
         // only when they are needed
-        QuickSettingsTile qs = new AlarmTile(mContext, this, mHandler);
-        qs.setupQuickSettingsTile(inflater, mContainerView);
-        mQuickSettingsTiles.add(qs);
-
-        qs = new BugReportTile(mContext, this, mHandler);
-        qs.setupQuickSettingsTile(inflater, mContainerView);
-        mQuickSettingsTiles.add(qs);
-
-        if (DeviceUtils.deviceSupportsImeSwitcher(mContext)) {
-            mIMETile = new InputMethodTile(mContext, this);
-            mIMETile.setupQuickSettingsTile(inflater, mContainerView);
-            mQuickSettingsTiles.add(mIMETile);
+        // Read the stored list of dynamic tiles
+        String dynamicTiles = Settings.System.getStringForUser(resolver,
+                Settings.System.QUICK_SETTINGS_DYNAMIC_TILES,
+                UserHandle.USER_CURRENT);
+        if (dynamicTiles == null) {
+            dynamicTiles = TextUtils.join(TILE_DELIMITER, DYNAMIC_TILES_DEFAULT);
         }
-        if (DeviceUtils.deviceSupportsUsbTether(mContext)) {
-            qs = new UsbTetherTile(mContext, this);
-            qs.setupQuickSettingsTile(inflater, mContainerView);
-            mQuickSettingsTiles.add(qs);
+
+        // Split out the tile names and add to the list
+        for (String tile : dynamicTiles.split("\\|")) {
+            QuickSettingsTile qs = null;
+            if (tile.equals(TILE_ALARM)) {
+                qs = new AlarmTile(mContext, this, mHandler);
+            } else if (tile.equals(TILE_BUGREPORT)) {
+                qs = new BugReportTile(mContext, this, mHandler);
+            } else if (tile.equals(TILE_IMESWITCHER)
+                    && DeviceUtils.deviceSupportsImeSwitcher(mContext)) {
+                qs = new InputMethodTile(mContext, this);
+            } else if (tile.equals(TILE_USBTETHER)
+                    && DeviceUtils.deviceSupportsUsbTether(mContext)) {
+                qs = new UsbTetherTile(mContext, this);
+            }
+
+            if (qs != null) {
+                qs.setupQuickSettingsTile(inflater, mContainerView);
+                mQuickSettingsTiles.add(qs);
+            }
         }
+
     }
 
     public void shutdown() {
