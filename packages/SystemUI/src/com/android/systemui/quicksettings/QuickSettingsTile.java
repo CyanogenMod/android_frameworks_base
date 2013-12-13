@@ -33,6 +33,7 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.TypedValue;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -188,6 +189,7 @@ public class QuickSettingsTile implements OnClickListener {
     public void onClick(View v) {
         if (mOnClick != null) {
             mOnClick.onClick(v);
+            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         }
     }
 }

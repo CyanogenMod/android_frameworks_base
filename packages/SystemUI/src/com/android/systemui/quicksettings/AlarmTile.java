@@ -29,7 +29,6 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
@@ -41,11 +40,10 @@ public class AlarmTile extends QuickSettingsTile {
             QuickSettingsController qsc, Handler handler) {
         super(context, qsc);
 
-        mOnLongClick = new OnLongClickListener() {
+        mOnClick = new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 startSettingsActivity(new Intent(AlarmClock.ACTION_SET_ALARM));
-                return true;
             }
         };
 
