@@ -448,7 +448,7 @@ public class ActivityManager {
 
     /** @hide */
     public static boolean isLowRamDeviceStatic() {
-        return "true".equals(SystemProperties.get("ro.config.low_ram", "false"));
+        return "true".equals(SystemProperties.get("persist.config.low_ram", "false"));
     }
 
     /**
