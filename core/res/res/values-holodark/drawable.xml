@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+** Copyright 2013, SlimRoms Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources>
+    <item type="drawable" name="alert_dark_frame">@drawable/popup_full_dark</item>
+    <item type="drawable" name="alert_light_frame">@drawable/popup_full_bright</item>
+    <item type="drawable" name="dialog_frame">@drawable/panel_background</item>
+    <item type="drawable" name="editbox_dropdown_dark_frame">@drawable/editbox_dropdown_background_dark</item>
+    <item type="drawable" name="editbox_dropdown_light_frame">@drawable/editbox_dropdown_background</item>
+    <item type="drawable" name="menu_frame">@drawable/menu_background</item>
+    <item type="drawable" name="menu_full_frame">@drawable/menu_background_fill_parent_width</item>
+    <item type="drawable" name="stat_notify_sync_noanim">@drawable/stat_notify_sync_anim0</item>
+    <item type="drawable" name="stat_sys_download_done">@drawable/stat_sys_download_done_static</item>
+    <item type="drawable" name="stat_sys_upload_done">@drawable/stat_sys_upload_anim0</item>
+    <item type="drawable" name="screen_background_dark">#ff000000</item>
+    <item type="drawable" name="screen_background_light">#ffffffff</item>
+    <item type="drawable" name="screen_background_dark_transparent">#80000000</item>
+    <item type="drawable" name="screen_background_light_transparent">#80ffffff</item>
+    <item type="drawable" name="dialog_holo_dark_frame">@drawable/dialog_full_holo_dark</item>
+    <item type="drawable" name="dialog_holo_light_frame">@drawable/dialog_full_holo_light</item>
+    <item type="drawable" name="status_bar_closed_default_background">#ff000000</item>
+    <item type="drawable" name="status_bar_opened_default_background">#ff000000</item>
+    <item type="drawable" name="notification_item_background_color">#ff111111</item>
+    <item type="drawable" name="notification_item_background_color_pressed">#ff454545</item>
+    <item type="drawable" name="search_bar_default_color">#ff000000</item>
+    <item type="drawable" name="safe_mode_background">#60000000</item>
+    <item type="drawable" name="input_method_fullscreen_background">#fff9f9f9</item>
+    <item type="drawable" name="input_method_fullscreen_background_holo">@drawable/screen_background_holo_dark</item>
+    <item type="drawable" name="selected_day_background">#ff0092f4</item>
+    <item type="drawable" name="screen_background_holo_light">#fff3f3f3</item>
+    <item type="drawable" name="screen_background_holo_dark">#ff000000</item>
+    <item type="drawable" name="notification_template_icon_bg">#00000000</item>
+    <item type="drawable" name="notification_template_icon_low_bg">#0cffffff</item>
+</resources>
