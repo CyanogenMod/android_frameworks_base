@@ -1947,4 +1947,6 @@
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
 
+  <!-- UI theme mode -->
+  <java-symbol type="integer" name="config_uiThemeMode" />
 </resources>
