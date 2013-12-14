@@ -74,4 +74,7 @@
   <!-- Statusbar double tap gesture -->
   <java-symbol type="bool" name="config_disableDoubleTapSleepGesture" />
 
+  <!-- UI theme mode -->
+  <java-symbol type="integer" name="config_uiThemeMode" />
+
 </resources>

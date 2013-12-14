@@ -1008,6 +1008,15 @@ struct ResTable_config
         uint32_t screenSizeDp;
     };
 
+    enum {
+        // uiThemeMode bits for system theme mode.
+        UI_THEME_MODE_ANY = ACONFIGURATION_UI_THEME_MODE_ANY,
+        UI_THEME_MODE_NORMAL = ACONFIGURATION_UI_THEME_MODE_NORMAL,
+        UI_THEME_MODE_HOLO_DARK = ACONFIGURATION_UI_THEME_MODE_HOLO_DARK,
+        UI_THEME_MODE_HOLO_LIGHT = ACONFIGURATION_UI_THEME_MODE_HOLO_LIGHT,
+    };
+    uint8_t uiThemeMode;
+
     void copyFromDeviceNoSwap(const ResTable_config& o);
     
     void copyFromDtoH(const ResTable_config& o);
@@ -1034,6 +1043,7 @@ struct ResTable_config
         CONFIG_SMALLEST_SCREEN_SIZE = ACONFIGURATION_SMALLEST_SCREEN_SIZE,
         CONFIG_VERSION = ACONFIGURATION_VERSION,
         CONFIG_SCREEN_LAYOUT = ACONFIGURATION_SCREEN_LAYOUT,
+        CONFIG_UI_THEME_MODE = ACONFIGURATION_UI_THEME_MODE,
         CONFIG_UI_MODE = ACONFIGURATION_UI_MODE,
         CONFIG_LAYOUTDIR = ACONFIGURATION_LAYOUTDIR,
     };

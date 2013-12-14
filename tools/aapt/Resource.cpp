@@ -124,13 +124,13 @@ public:
             String8 leaf(group->getLeaf());
             mLeafName = String8(leaf);
             mParams = file->getGroupEntry().toParams();
-            NOISY(printf("Dir %s: mcc=%d mnc=%d lang=%c%c cnt=%c%c orient=%d ui=%d density=%d touch=%d key=%d inp=%d nav=%d\n",
+            NOISY(printf("Dir %s: mcc=%d mnc=%d lang=%c%c cnt=%c%c orient=%d uiTheme=%d ui=%d density=%d touch=%d key=%d inp=%d nav=%d\n",
                    group->getPath().string(), mParams.mcc, mParams.mnc,
                    mParams.language[0] ? mParams.language[0] : '-',
                    mParams.language[1] ? mParams.language[1] : '-',
                    mParams.country[0] ? mParams.country[0] : '-',
                    mParams.country[1] ? mParams.country[1] : '-',
-                   mParams.orientation, mParams.uiMode,
+                   mParams.orientation, mParams.uiThemeMode, mParams.uiMode,
                    mParams.density, mParams.touchscreen, mParams.keyboard,
                    mParams.inputFlags, mParams.navigation));
             mPath = "res";

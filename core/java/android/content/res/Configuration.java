@@ -435,6 +435,45 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      */
     public int orientation;
 
+    /** Constant for {@link #uiThemeMode}
+     * value that corresponds to the
+     * ui theme mode framework
+     * resource qualifier.
+     * value indicating that no mode has been set.
+     * @hide
+    */
+    public static final int UI_THEME_MODE_UNDEFINED = 0;
+    /** Constant for {@link #uiThemeMode}
+     * value that corresponds to the
+     * stock themed framework
+     * resource qualifier.
+     * @hide
+    */
+    public static final int UI_THEME_MODE_NORMAL = 1;
+    /** Constant for {@link #uiThemeMode}
+     * value that corresponds to the
+     * dark themed framework
+     * resource qualifier.
+     * @hide
+    */
+    public static final int UI_THEME_MODE_HOLO_DARK = 2;
+    /** Constant for {@link #uiThemeMode}
+     * value that corresponds to the
+     * light themed framework
+     * resource qualifier.
+     * @hide
+    */
+    public static final int UI_THEME_MODE_HOLO_LIGHT = 3;
+
+    /**
+     * Bit for the ui theme mode.
+     * This may be one of {@link #UI_THEME_MODE_UNDEFINED},
+     * {@link #UI_THEME_MODE_NORMAL},
+     * {@link #UI_THEME_MODE_HOLO_DARK}, {@link #UI_THEME_MODE_HOLO_LIGHT},
+     * @hide
+     */
+    public int uiThemeMode;
+
     /** Constant for {@link #uiMode}: bits that encode the mode type. */
     public static final int UI_MODE_TYPE_MASK = 0x0f;
     /** Constant for {@link #uiMode}: a {@link #UI_MODE_TYPE_MASK}
@@ -595,6 +634,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int NATIVE_CONFIG_VERSION = 0x0400;
     /** @hide Native-specific bit mask for SCREEN_LAYOUT config; DO NOT USE UNLESS YOU ARE SURE. */
     public static final int NATIVE_CONFIG_SCREEN_LAYOUT = 0x0800;
+    /** @hide Native-specific bit mask for UI_THEME_MODE config; DO NOT USE UNLESS YOU ARE SURE. */
+    public static final int NATIVE_CONFIG_UI_THEME_MODE = 0x0900;
     /** @hide Native-specific bit mask for UI_MODE config; DO NOT USE UNLESS YOU ARE SURE. */
     public static final int NATIVE_CONFIG_UI_MODE = 0x1000;
     /** @hide Native-specific bit mask for SMALLEST_SCREEN_SIZE config; DO NOT USE UNLESS YOU
@@ -634,6 +675,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         navigationHidden = o.navigationHidden;
         orientation = o.orientation;
         screenLayout = o.screenLayout;
+        uiThemeMode = o.uiThemeMode;
         uiMode = o.uiMode;
         screenWidthDp = o.screenWidthDp;
         screenHeightDp = o.screenHeightDp;
@@ -721,6 +763,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             case ORIENTATION_PORTRAIT: sb.append(" port"); break;
             default: sb.append(" orien="); sb.append(orientation); break;
         }
+        switch (uiThemeMode) {
+            case UI_THEME_MODE_UNDEFINED: sb.append(" ?uithememode"); break;
+            /* normal is not interesting to print it is default behaviour*/
+            case UI_THEME_MODE_NORMAL: break;
+            case UI_THEME_MODE_HOLO_DARK: sb.append(" holodark"); break;
+            case UI_THEME_MODE_HOLO_LIGHT: sb.append(" hololight"); break;
+            default: sb.append(" uiThemeMode="); sb.append(uiThemeMode); break;
+        }
         switch ((uiMode&UI_MODE_TYPE_MASK)) {
             case UI_MODE_TYPE_UNDEFINED: sb.append(" ?uimode"); break;
             case UI_MODE_TYPE_NORMAL: /* normal is not interesting to print */ break;
@@ -803,6 +853,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         navigationHidden = NAVIGATIONHIDDEN_UNDEFINED;
         orientation = ORIENTATION_UNDEFINED;
         screenLayout = SCREENLAYOUT_UNDEFINED;
+        uiThemeMode = UI_THEME_MODE_UNDEFINED;
         uiMode = UI_MODE_TYPE_UNDEFINED;
         screenWidthDp = compatScreenWidthDp = SCREEN_WIDTH_DP_UNDEFINED;
         screenHeightDp = compatScreenHeightDp = SCREEN_HEIGHT_DP_UNDEFINED;
@@ -907,6 +958,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             } else {
                 screenLayout = delta.screenLayout;
             }
+        }
+        if (delta.uiThemeMode != UI_THEME_MODE_UNDEFINED
+                && uiThemeMode != delta.uiThemeMode) {
+            changed |= ActivityInfo.CONFIG_UI_THEME_MODE;
+            uiThemeMode = delta.uiThemeMode;
         }
         if (delta.uiMode != (UI_MODE_TYPE_UNDEFINED|UI_MODE_NIGHT_UNDEFINED)
                 && uiMode != delta.uiMode) {
@@ -1048,6 +1104,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                     getScreenLayoutNoDirection(delta.screenLayout)) {
             changed |= ActivityInfo.CONFIG_SCREEN_LAYOUT;
         }
+        if (delta.uiThemeMode != UI_THEME_MODE_UNDEFINED
+                && uiThemeMode != delta.uiThemeMode) {
+            changed |= ActivityInfo.CONFIG_UI_THEME_MODE;
+        }
         if (delta.uiMode != (UI_MODE_TYPE_UNDEFINED|UI_MODE_NIGHT_UNDEFINED)
                 && uiMode != delta.uiMode) {
             changed |= ActivityInfo.CONFIG_UI_MODE;
@@ -1153,6 +1213,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         dest.writeInt(navigationHidden);
         dest.writeInt(orientation);
         dest.writeInt(screenLayout);
+        dest.writeInt(uiThemeMode);
         dest.writeInt(uiMode);
         dest.writeInt(screenWidthDp);
         dest.writeInt(screenHeightDp);
@@ -1189,6 +1250,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         navigationHidden = source.readInt();
         orientation = source.readInt();
         screenLayout = source.readInt();
+        uiThemeMode = source.readInt();
         uiMode = source.readInt();
         screenWidthDp = source.readInt();
         screenHeightDp = source.readInt();
@@ -1262,6 +1324,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (n != 0) return n;
         n = this.screenLayout - that.screenLayout;
         if (n != 0) return n;
+        n = this.uiThemeMode - that.uiThemeMode;
+        if (n != 0) return n;
         n = this.uiMode - that.uiMode;
         if (n != 0) return n;
         n = this.screenWidthDp - that.screenWidthDp;
@@ -1314,6 +1378,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         result = 31 * result + navigationHidden;
         result = 31 * result + orientation;
         result = 31 * result + screenLayout;
+        result = 31 * result + uiThemeMode;
         result = 31 * result + uiMode;
         result = 31 * result + screenWidthDp;
         result = 31 * result + screenHeightDp;

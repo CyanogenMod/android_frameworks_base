@@ -797,7 +797,7 @@ public final class AssetManager {
             int orientation, int touchscreen, int density, int keyboard,
             int keyboardHidden, int navigation, int screenWidth, int screenHeight,
             int smallestScreenWidthDp, int screenWidthDp, int screenHeightDp,
-            int screenLayout, int uiMode, int majorVersion);
+            int screenLayout, int uiThemeMode, int uiMode, int majorVersion);
 
     /**
      * Retrieve the resource identifier for the given resource name.
