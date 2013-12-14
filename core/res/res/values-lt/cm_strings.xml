@@ -27,9 +27,9 @@
     <string name="reboot_system" product="tablet">Perkrauti planšetinį kompiuterį</string>
     <string name="reboot_system" product="default">Perkrauti telefoną</string>
     <string name="global_action_screenshot">Ekranvaizdis</string>
-    <string name="global_actions_toggle_expanded_desktop_mode">Išplėstas darbalaukis</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">Įjungta</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">Išjungta</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">Išplėstas darbastalis</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">Įjungtas</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">Išjungtas</string>
     <string name="reboot_reboot">Perkrauti</string>
     <string name="reboot_recovery">Atkūrimo režimas</string>
     <string name="reboot_bootloader">\'Bootloader\'</string>
@@ -79,7 +79,7 @@
     <string name="keyguard_password_pin_failed">PIN operacija nepavyko!</string>
     <string name="keyguard_password_puk_failed">PUK operacija nepavyko!</string>
     <string name="keyguard_pin_accepted">Kodas priimtas!</string>
-    <string name="pinpuk_attempts">\nLikę bandymai :</string>
+    <string name="pinpuk_attempts">\nLikę bandymai:</string>
     <string name="lockscreen_sim_error_message_short">Negaliojanti kortelė.</string>
     <string name="lockscreen_sim_error_message">Negaliojanti SIM kortelė.</string>
     <string name="lockscreen_perso_locked_message">SIM/RUIM kortelė yra užrakinta.</string>
@@ -89,6 +89,6 @@
     <string name="stk_cc_ss_to_dial">SS užklausa pakeista į naują DIAL prašymą.</string>
     <string name="stk_cc_ss_to_ussd">SS užklausa pakeista į naują USSD prašymą.</string>
     <string name="stk_cc_ss_to_ss">SS užklausa pakeista į naują.</string>
-    <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_kg_sim_pin_msg_format">PREN.:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
     <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
