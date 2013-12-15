@@ -665,6 +665,10 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     public void checkDunRequired() {
         int secureSetting = Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.TETHER_DUN_REQUIRED, 2);
+        // Allow override of TETHER_DUN_REQUIRED via prop
+        int prop = SystemProperties.getInt("persist.cm.dun.override", 3);
+        secureSetting = ((prop < 3) && (prop >= 0)) ? prop : secureSetting;
+
         synchronized (mPublicSync) {
             // 2 = not set, 0 = DUN not required, 1 = DUN required
             if (secureSetting != 2) {
