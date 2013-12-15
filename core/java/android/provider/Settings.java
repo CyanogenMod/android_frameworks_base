@@ -5494,6 +5494,12 @@ public final class Settings {
          public static final String PRIVACY_GUARD_DEFAULT = "privacy_guard_default";
 
         /**
+         * Whether a notification should be shown if privacy guard is enabled
+         * @hide
+         */
+         public static final String PRIVACY_GUARD_NOTIFICATION = "privacy_guard_notification";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -5545,7 +5551,8 @@ public final class Settings {
             UI_NIGHT_MODE,
             ADVANCED_REBOOT,
             PRIVACY_GUARD_DEFAULT,
-            DEVELOPMENT_SHORTCUT
+            DEVELOPMENT_SHORTCUT,
+            PRIVACY_GUARD_NOTIFICATION
         };
 
         /**
