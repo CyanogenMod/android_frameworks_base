@@ -76,4 +76,5 @@
     <string name="quick_settings_network_adb_enabled_label">Ativado</string>
     <string name="advanced_dev_option_wipe_app">Limpar dados de aplicativos</string>
     <string name="advanced_dev_option_force_stop">Forçar fechamento</string>
+    <string name="accessibility_dock_battery_level">Bateria do Dock <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g> porcento.</string>
 </resources>
