@@ -179,6 +179,8 @@
     <integer name="def_low_battery_sound_timeout">0</integer>
     <!-- Default for Settings.System.STATUS_BAR_BATTERY -->
     <integer name="def_battery_style">0</integer>
+    <!-- Default for Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT -->
+    <integer name="def_battery_show_percent">0</integer>
 
     <!-- Default for Settings.Global.TETHER_DUN_REQUIRED -->
     <integer name="def_tether_dun_required">0</integer>
