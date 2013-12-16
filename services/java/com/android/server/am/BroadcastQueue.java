@@ -37,6 +37,7 @@ import android.os.Message;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.util.EventLog;
 import android.util.Log;
@@ -134,6 +135,7 @@ public final class BroadcastQueue {
      */
     int mPendingBroadcastRecvIndex;
 
+    static ArrayList<String> quickbootWhiteList = null;
     static final int BROADCAST_INTENT_MSG = ActivityManagerService.FIRST_BROADCAST_QUEUE_MSG;
     static final int BROADCAST_TIMEOUT_MSG = ActivityManagerService.FIRST_BROADCAST_QUEUE_MSG + 1;
 
@@ -919,7 +921,10 @@ public final class BroadcastQueue {
             if (DEBUG_BROADCAST)  Slog.v(TAG,
                     "Need to start app ["
                     + mQueueName + "] " + targetProcess + " for broadcast " + r);
-            if ((r.curApp=mService.startProcessLocked(targetProcess,
+            if ((SystemProperties.getInt("sys.quickboot.enable", 0) == 1 &&
+                        SystemProperties.getInt("sys.quickboot.poweron", 0) == 0 &&
+                       !getWhiteList().contains(info.activityInfo.applicationInfo.packageName))
+                || (r.curApp=mService.startProcessLocked(targetProcess,
                     info.activityInfo.applicationInfo, true,
                     r.intent.getFlags() | Intent.FLAG_FROM_BACKGROUND,
                     "broadcast", r.curComponent,
@@ -942,6 +947,16 @@ public final class BroadcastQueue {
             mPendingBroadcast = r;
             mPendingBroadcastRecvIndex = recIdx;
         }
+    }
+
+    private ArrayList<String> getWhiteList() {
+        if (quickbootWhiteList == null) {
+            quickbootWhiteList = new ArrayList();
+            // allow legacy alarm app to be launched
+            quickbootWhiteList.add("com.android.deskclock");
+            quickbootWhiteList.add("com.qapp.quickboot");
+        }
+        return quickbootWhiteList;
     }
 
     final void setBroadcastTimeoutLocked(long timeoutTime) {
