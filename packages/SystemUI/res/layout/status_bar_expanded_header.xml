@@ -23,7 +23,7 @@
     android:layout_height="@dimen/notification_panel_header_height"
     android:background="@drawable/notification_header_bg"
     android:orientation="horizontal"
-    android:gravity="center_vertical"
+    android:layout_centerVertical="true"
     android:baselineAligned="false"
     >
     <RelativeLayout
@@ -32,7 +32,6 @@
         android:layout_height="match_parent"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:background="@drawable/ic_notify_button_bg"
         android:enabled="false"
         >
         <com.android.systemui.statusbar.policy.ClockStock
@@ -43,12 +42,14 @@
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
             android:layout_centerVertical="true"
+            android:background="@drawable/ic_notify_button_bg"
             />
 
     <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:background="@drawable/ic_notify_button_bg"
+            android:layout_centerVertical="true"
             android:layout_toEndOf="@id/clock"
             >
     <com.android.systemui.statusbar.policy.DateView
