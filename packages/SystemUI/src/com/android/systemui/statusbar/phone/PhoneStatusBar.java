@@ -1106,13 +1106,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(ACTION_DEMO);
+        context.registerReceiver(mBroadcastReceiver, filter);
+
+        // receive broadcasts for app actions
+        filter = new IntentFilter();
         filter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
         filter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE);
         filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
         filter.addDataScheme("package");
-        context.registerReceiver(mBroadcastReceiver, filter);
+        context.registerReceiver(mAppBroadcastReceiver, filter);
 
         // listen for USER_SETUP_COMPLETE setting (per-user)
         resetUserSetupObserver();
@@ -3370,7 +3374,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                         }
                     }
                 }
-            } else if (Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE.equals(action)
+            }
+        }
+    };
+
+    private BroadcastReceiver mAppBroadcastReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE.equals(action)
                 || Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE.equals(action)
                 || Intent.ACTION_PACKAGE_REMOVED.equals(action)
                 || Intent.ACTION_PACKAGE_CHANGED.equals(action)
@@ -3729,6 +3740,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             mWindowManager.removeViewImmediate(mNavigationBarView);
         }
         mContext.unregisterReceiver(mBroadcastReceiver);
+        mContext.unregisterReceiver(mAppBroadcastReceiver);
     }
 
     private boolean mDemoModeAllowed;
