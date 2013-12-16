@@ -639,14 +639,11 @@ public class BatteryMeterView extends View implements DemoMode {
                 initSizeBasedStuff();
             }
 
-            final int status = mTracker.status;
-            final int level = mTracker.level;
-            updateChargeAnim(status);
+            BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
 
-            boolean charging = mTracker.status == BatteryManager.BATTERY_STATUS_CHARGING;
-            int offset = charging ? mAnimOffset : 0;
-
-            drawCircle(c, status, level, offset, mTextX, mRectLeft);
+            int offset = tracker.plugged ? mAnimOffset : 0;
+            updateChargeAnim(tracker);
+            drawCircle(c, tracker, offset, mTextX, mRectLeft);
         }
 
         @Override
@@ -679,18 +676,19 @@ public class BatteryMeterView extends View implements DemoMode {
             return R.array.batterymeter_bolt_points;
         }
 
-        private void drawCircle(Canvas canvas, int status, int level, int animOffset,
+        private void drawCircle(Canvas canvas, BatteryTracker tracker, int animOffset,
                 float textX, RectF drawRect) {
-            boolean unknownStatus = status == BatteryManager.BATTERY_STATUS_UNKNOWN;
+            boolean unknownStatus = tracker.status == BatteryManager.BATTERY_STATUS_UNKNOWN;
             Paint paint;
 
+            int level = tracker.level;
             if (unknownStatus) {
                 paint = mBackPaint;
                 level = 100; // Draw all the circle;
             } else {
                 paint = mFrontPaint;
                 paint.setColor(getColorForLevel(level));
-                if (status == BatteryManager.BATTERY_STATUS_FULL) {
+                if (tracker.status == BatteryManager.BATTERY_STATUS_FULL) {
                     level = 100;
                 }
             }
@@ -739,9 +737,11 @@ public class BatteryMeterView extends View implements DemoMode {
          * updates the animation counter
          * cares for timed callbacks to continue animation cycles
          * uses mInvalidate for delayed invalidate() callbacks
+         *
+         * @param tracker The battery information
          */
-        private void updateChargeAnim(int status) {
-            if (status != BatteryManager.BATTERY_STATUS_CHARGING) {
+        private void updateChargeAnim(BatteryTracker tracker) {
+            if (!tracker.plugged) {
                 if (mIsAnimating) {
                     mIsAnimating = false;
                     mAnimOffset = 0;
