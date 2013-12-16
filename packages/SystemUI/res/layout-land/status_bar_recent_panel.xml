@@ -86,7 +86,7 @@
                 android:id="@+id/recents_bg_protect"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-		android:layout_alignParentBottom="true"
+        		android:layout_alignParentBottom="true"
                 android:clipToPadding="false"
                 android:clipChildren="false">
 
@@ -114,15 +114,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:visibility="invisible" />
-
-                <ImageView
-                    android:id="@+id/recents_clear"
-                    android:clickable="true"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:scaleType="center"
-                    android:layout_gravity="bottom|left"
-                    android:src="@drawable/ic_notify_clear" />
 
             </FrameLayout>
 

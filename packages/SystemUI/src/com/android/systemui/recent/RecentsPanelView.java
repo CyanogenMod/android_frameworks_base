@@ -108,7 +108,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private int mRecentItemLayoutId;
     private boolean mHighEndGfx;
 
-    private ImageView mClearRecents;
     private LinearColorBar mRamUsageBar;
 
     private long mFreeMemory;
@@ -478,16 +477,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mRecentsScrim = findViewById(R.id.recents_bg_protect);
         mRecentsNoApps = findViewById(R.id.recents_no_apps);
 	//mRecentsRamBar = findViewById(R.id.recents_ram_bar);
-
-        mClearRecents = (ImageView) findViewById(R.id.recents_clear);
-        if (mClearRecents != null){
-            mClearRecents.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((ViewGroup) mRecentsContainer).removeAllViewsInLayout();
-                }
-            });
-        }
 
         if (mRecentsScrim != null) {
             mHighEndGfx = ActivityManager.isHighEndGfx();
