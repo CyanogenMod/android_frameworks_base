@@ -371,6 +371,11 @@
         android:label="@string/permlab_receiveWapPush"
         android:description="@string/permdesc_receiveWapPush" />
 
+    <!-- Internal permission protecting access to internal notification listener
+        @hide -->
+    <permission android:name="android.permission.SYSTEM_NOTIFICATION_LISTENER"
+        android:protectionLevel="signature|system" />
+
     <!-- =============================================================== -->
     <!-- Permissions for accessing social info (contacts and social) -->
     <!-- =============================================================== -->
