@@ -81,50 +81,49 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     OnTriggerListener mOnTriggerListener = new OnTriggerListener() {
 
         public void onTrigger(View v, int target) {
-if (mStoredTargets == null) {
-            final int resId = mGlowPadView.getResourceIdForTarget(target);
+            if (mStoredTargets == null) {
+                final int resId = mGlowPadView.getResourceIdForTarget(target);
 
-            switch (resId) {
-                case R.drawable.ic_action_assist_generic:
-                    Intent assistIntent =
-                            ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-                            .getAssistIntent(mContext, true, UserHandle.USER_CURRENT);
-                    if (assistIntent != null) {
-                        mActivityLauncher.launchActivity(assistIntent, false, true, null, null);
-                    } else {
-                        Log.w(TAG, "Failed to get intent for assist activity");
-                    }
-                    mCallback.userActivity(0);
+                switch (resId) {
+                    case R.drawable.ic_action_assist_generic:
+                        Intent assistIntent =
+                                ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
+                                .getAssistIntent(mContext, true, UserHandle.USER_CURRENT);
+                        if (assistIntent != null) {
+                            mActivityLauncher.launchActivity(assistIntent,
+                                    false, true, null, null);
+                        } else {
+                            Log.w(TAG, "Failed to get intent for assist activity");
+                        }
+                        mCallback.userActivity(0);
+                        break;
+
+                    case R.drawable.ic_lockscreen_camera:
+                        mActivityLauncher.launchCamera(null, null);
+                        mCallback.userActivity(0);
+                        break;
+
+                    case R.drawable.ic_lockscreen_unlock_phantom:
+                    case R.drawable.ic_lockscreen_unlock:
+                        mCallback.userActivity(0);
+                        mCallback.dismiss(false);
                     break;
-
-                case R.drawable.ic_lockscreen_camera:
-                    mActivityLauncher.launchCamera(null, null);
-                    mCallback.userActivity(0);
-                    break;
-
-                case R.drawable.ic_lockscreen_unlock_phantom:
-                case R.drawable.ic_lockscreen_unlock:
-                    mCallback.userActivity(0);
-                    mCallback.dismiss(false);
-                break;
-            }
+                }
+            } else if (target == mTargetOffset) {
+                mCallback.dismiss(false);
             } else {
-                if (target == mTargetOffset) {
+                int realTarget = target - mTargetOffset - 1;
+                String targetUri = realTarget < mStoredTargets.length
+                        ? mStoredTargets[realTarget] : null;
+
+                if (LockscreenTargetUtils.EMPTY_TARGET.equals(targetUri)) {
                     mCallback.dismiss(false);
                 } else {
-                    int realTarget = target - mTargetOffset - 1;
-                    String targetUri = realTarget < mStoredTargets.length
-                            ? mStoredTargets[realTarget] : null;
-
-                    if (LockscreenTargetUtils.EMPTY_TARGET.equals(targetUri)) {
-                        mCallback.dismiss(false);
-                    } else {
-                        try {
-                            Intent intent = Intent.parseUri(targetUri, 0);
-                            mActivityLauncher.launchActivity(intent, false, true, null, null);
-                        } catch (URISyntaxException e) {
-                            Log.w(TAG, "Invalid lockscreen target " + targetUri);
-                        }
+                    try {
+                        Intent intent = Intent.parseUri(targetUri, 0);
+                        mActivityLauncher.launchActivity(intent, false, true, null, null);
+                    } catch (URISyntaxException e) {
+                        Log.w(TAG, "Invalid lockscreen target " + targetUri);
                     }
                 }
             }
