@@ -62,6 +62,10 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+
+        boolean fromQuickBoot = intent.getBooleanExtra("from_quickboot", false);
+        if (fromQuickBoot) return;
+
         // Log boot events in the background to avoid blocking the main thread with I/O
         new Thread() {
             @Override
