@@ -335,8 +335,10 @@ public class PanelView extends FrameLayout {
                 post(mStopAnimator);
             }
         } else {
-            Log.v(TAG, "animationTick called with dtms=" + dtms + "; nothing to do (h="
-                    + mExpandedHeight + " v=" + mVel + ")");
+            if (DEBUG) {
+                Log.v(TAG, "animationTick called with dtms=" + dtms + "; nothing to do (h="
+                        + mExpandedHeight + " v=" + mVel + ")");
+            }
         }
     }
 
