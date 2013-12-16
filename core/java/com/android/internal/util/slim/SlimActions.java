@@ -22,6 +22,7 @@ import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -125,6 +126,29 @@ public class SlimActions {
                         context.getContentResolver(),
                         Settings.System.EXPANDED_DESKTOP_STATE,
                         expandDesktopModeOn ? 0 : 1, UserHandle.USER_CURRENT);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_THEME_SWITCH)) {
+                boolean enabled = Settings.Secure.getIntForUser(
+                        context.getContentResolver(),
+                        Settings.Secure.UI_THEME_AUTO_MODE, 0,
+                        UserHandle.USER_CURRENT) != 1;
+                boolean state = context.getResources().getConfiguration().uiThemeMode
+                        == Configuration.UI_THEME_MODE_HOLO_DARK;
+                if (!enabled) {
+                    Toast.makeText(context,
+                            com.android.internal.R.string.theme_auto_switch_mode_error,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Handle a switch change
+                // we currently switch between holodark and hololight till either
+                // theme engine is ready or lightheme is ready. Currently due of
+                // missing light themeing hololight = system base theme
+                Settings.Secure.putIntForUser(context.getContentResolver(),
+                        Settings.Secure.UI_THEME_MODE, state
+                            ? Configuration.UI_THEME_MODE_HOLO_LIGHT
+                            : Configuration.UI_THEME_MODE_HOLO_DARK,
+                        UserHandle.USER_CURRENT);
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_KILL)) {
                 if (isKeyguardShowing) {

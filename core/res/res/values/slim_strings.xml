@@ -25,4 +25,7 @@
     <!-- stylus gestures support -->
     <string name="stylus_app_not_installed">%s is not installed</string>
 
+    <!-- Error description on theme switch with ligtsensor mode enabled -->
+    <string name="theme_auto_switch_mode_error">Automatic light condition change mode is enabled. Manual switching is not possible.</string>
+
 </resources>
