@@ -22,6 +22,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.nfc.NfcAdapter;
+import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.DisplayInfo;
@@ -78,6 +79,11 @@ public class DeviceUtils {
         return res.getBoolean(com.android.internal.R.bool.config_show_IMESwitcher);
     }
 
+    public static boolean deviceSupportsVibrator(Context ctx) {
+        Vibrator vibrator = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
+        return vibrator.hasVibrator();
+    }
+
     public static boolean deviceSupportsTorch(Context context) {
         PackageManager pm = context.getPackageManager();
         try {
@@ -116,7 +122,12 @@ public class DeviceUtils {
     }
 
     private static boolean isSupportedFeature(Context context, String action) {
-        if (action.equals(ButtonsConstants.ACTION_TORCH) && !deviceSupportsTorch(context)) {
+        if (action.equals(ButtonsConstants.ACTION_TORCH)
+                        && !deviceSupportsTorch(context)
+                || action.equals(ButtonsConstants.ACTION_VIB)
+                        && !deviceSupportsVibrator(context)
+                || action.equals(ButtonsConstants.ACTION_VIB_SILENT)
+                        && !deviceSupportsVibrator(context)) {
             return false;
         }
         return true;
