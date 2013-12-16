@@ -57,6 +57,14 @@ public class LightsService {
 
     private final Light mLights[] = new Light[LIGHT_ID_COUNT];
 
+    private static final int MSG_BBL_TIMEOUT = 1;
+
+    private int mButtonLightTimeout;
+
+    private int mButtonBrightness;
+
+    private Handler mLightHandler = null;
+
     public final class Light {
 
         private Light(int id) {
@@ -170,12 +178,49 @@ public class LightsService {
                 // fail silently
             }
         }
+
+        public void setButtonLightEnabled(boolean on) {
+            if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.HARDWARE_TEST)
+                    != PackageManager.PERMISSION_GRANTED) {
+                throw new SecurityException("Requires FLASHLIGHT permission");
+            }
+
+            mLightHandler.removeMessages(MSG_BBL_TIMEOUT);
+
+            if (on) {
+                getLight(LIGHT_ID_BUTTONS).setBrightness(mButtonBrightness);
+
+                mLightHandler.sendMessageDelayed(
+                        mLightHandler.obtainMessage(MSG_BBL_TIMEOUT),
+                        mButtonLightTimeout);
+            } else {
+                getLight(LIGHT_ID_BUTTONS).setBrightness(0);
+            }
+        }
     };
 
     LightsService(Context context) {
 
         mNativePointer = init_native();
         mContext = context;
+
+        mButtonLightTimeout = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_button_light_timeout_msec);
+
+        mButtonBrightness = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_button_light_bright_level);
+
+        mLightHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                synchronized(this) {
+                    switch(msg.what) {
+                    case MSG_BBL_TIMEOUT:
+                        getLight(LIGHT_ID_BUTTONS).setBrightness(0);
+                        break;
+                    }
+                }
+            }
+        };
 
         ServiceManager.addService("hardware", mLegacyFlashlightHack);
 
