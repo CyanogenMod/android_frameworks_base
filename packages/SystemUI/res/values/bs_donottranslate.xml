@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Active display -->
+    <string name="ad_date_pattern">eeeMMMd</string>
+
+</resources>

@@ -85,6 +85,9 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <!-- Active display -->
+    <uses-permission android:name="android.permission.SYSTEM_NOTIFICATION_LISTENER" />
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"
@@ -275,6 +278,14 @@
         </activity>
 <<<<<<< HEAD
 =======
+
+        <activity android:name=".statusbar.policy.activedisplay.DummyActivity"
+                  android:label=""
+                  android:taskAffinity=""
+                  android:excludeFromRecents="true"
+                  android:exported="true"
+                  android:theme="@style/Theme.DummyActivity">
+        </activity>
 
         <activity android:name=".statusbar.policy.activedisplay.DummyActivity"
                   android:label=""

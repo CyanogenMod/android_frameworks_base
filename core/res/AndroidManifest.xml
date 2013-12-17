@@ -2398,6 +2398,26 @@
         android:description="@string/permlab_copyProtectedData"
         android:protectionLevel="signature" />
 
+    <!-- Permission for reading writing revoked permissions
+         @hide -->
+    <permission android:name="android.permission.REVOKE_PERMISSIONS"
+        android:label="@string/permlab_revokePermissions"
+        android:description="@string/permdesc_revokePermissions"
+        android:protectionLevel="signature" />
+
+    <!-- Permission for reading writing revoked permissions
+         @hide -->
+    <permission android:name="android.permission.ACCESS_THEME_SERVICE"
+        android:label="@string/permlab_accessThemeService"
+        android:description="@string/permdesc_accessThemeService"
+        android:protectionLevel="signature" />
+
+    <!-- Internal permission protecting access to internal notification listener
+        @hide
+    -->
+    <permission android:name="android.permission.SYSTEM_NOTIFICATION_LISTENER"
+        android:protectionLevel="signature|system" />
+
     <!-- Internal permission protecting access to the encryption methods
         @hide
     -->
