@@ -317,6 +317,7 @@
   <java-symbol type="integer" name="config_lockSoundVolumeDb" />
   <java-symbol type="integer" name="config_multiuserMaximumUsers" />
   <java-symbol type="integer" name="config_safe_media_volume_index" />
+  <java-symbol type="integer" name="min_gesture_prediction_score" />
   <java-symbol type="integer" name="config_mobile_mtu" />
   <java-symbol type="integer" name="config_volte_replacement_rat"/>
   <java-symbol type="integer" name="config_valid_wappush_index" />
@@ -1375,7 +1376,11 @@
   <java-symbol type="string" name="system_ui_date_pattern" />
   <java-symbol type="string" name="android_upgrading_title" />
   <java-symbol type="string" name="bugreport_title" />
+  <java-symbol type="string" name="kg_gesture_instructions" />
+  <java-symbol type="string" name="kg_too_many_failed_gesture_attempts_dialog_message" />
   <java-symbol type="string" name="bugreport_message" />
+  <java-symbol type="string" name="kg_forgot_gesture_button_text" />
+  <java-symbol type="string" name="kg_wrong_gesture" />
   <java-symbol type="string" name="faceunlock_multiple_failures" />
   <java-symbol type="string" name="global_action_power_off" />
   <java-symbol type="string" name="global_actions_airplane_mode_off_status" />

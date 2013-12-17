@@ -87,6 +87,8 @@ public class GestureOverlayView extends FrameLayout {
     private final Rect mInvalidRect = new Rect();
     private final Path mPath = new Path();
     private boolean mGestureVisible = true;
+    protected boolean mClearPerformedGesture = true;
+    protected boolean mInputEnabled = true;
 
     private float mX;
     private float mY;
@@ -201,6 +203,7 @@ public class GestureOverlayView extends FrameLayout {
 
     public void setGestureColor(int color) {
         mCertainGestureColor = color;
+        setCurrentColor(color);
     }
 
     public void setUncertainGestureColor(int color) {
@@ -492,7 +495,7 @@ public class GestureOverlayView extends FrameLayout {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (isEnabled()) {
+        if (isEnabled() && mInputEnabled) {
             final boolean cancelDispatch = (mIsGesturing || (mCurrentGesture != null &&
                     mCurrentGesture.getStrokesCount() > 0 && mPreviousWasGesturing)) &&
                     mInterceptEvents;
@@ -568,7 +571,7 @@ public class GestureOverlayView extends FrameLayout {
         // if there is fading out going on, stop it.
         if (mFadingHasStarted) {
             cancelClearAnimation();
-        } else if (mIsFadingOut) {
+        } else if (mIsFadingOut || !mClearPerformedGesture) {
             setPaintAlpha(255);
             mIsFadingOut = false;
             mFadingHasStarted = false;
@@ -690,8 +693,13 @@ public class GestureOverlayView extends FrameLayout {
                     listeners.get(i).onGestureEnded(this, event);
                 }
 
-                clear(mHandleGestureActions && mFadeEnabled, mHandleGestureActions && mIsGesturing,
-                        false);
+                if (mClearPerformedGesture)
+                    clear(mHandleGestureActions && mFadeEnabled, mHandleGestureActions && mIsGesturing,
+                            false);
+                else if (mHandleGestureActions && mIsGesturing) {
+                    mIsFadingOut = false;
+                    postDelayed(mFadingOut, mFadeOffset);
+                }
             } else {
                 cancelGesture(event);
 
@@ -764,9 +772,12 @@ public class GestureOverlayView extends FrameLayout {
                 fireOnGesturePerformed();
 
                 mFadingHasStarted = false;
-                mPath.rewind();
-                mCurrentGesture = null;
-                mPreviousWasGesturing = false;
+                if (mClearPerformedGesture) {
+                    mPath.rewind();
+                    mCurrentGesture = null;
+                    mPreviousWasGesturing = false;
+                } else
+                    mResetGesture = true;
                 setPaintAlpha(255);
             }
 

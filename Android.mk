@@ -310,7 +310,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := framework-base
 LOCAL_DX_FLAGS := --core-library
 
 # Packages to include, use \* wildcard to include descendants.
-LOCAL_JAR_PACKAGES := android\*
+LOCAL_JAR_PACKAGES := android\* cos\*
 
 # List of classes and interfaces which should be loaded by the Zygote.
 LOCAL_JAVA_RESOURCE_FILES += $(LOCAL_PATH)/preloaded-classes

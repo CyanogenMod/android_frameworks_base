@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
-** Copyright 2012, The Android Open Source Project
+** Copyright 2013, The ChameleonOS Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
 ** limitations under the License.
 */
 -->
-<resources>
-    <integer name="kg_carousel_angle">75</integer>
-    <integer name="kg_glowpad_rotation_offset">0</integer>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Minimum prediction score required to pass a gesture as recognized -->
     <integer name="min_gesture_prediction_score">2</integer>
+
 </resources>

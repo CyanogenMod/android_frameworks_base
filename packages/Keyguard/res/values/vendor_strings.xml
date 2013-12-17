@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+** Copyright 2013, The ChameleonOS Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- On the unlock gesture screen, shown at the top of the unlock screen to tell the user what to do. Below this text is the place for the user to draw the gesture. -->
+    <string name="lockscreen_gesture_instructions">Draw gesture to unlock</string>
+    <!-- Shown to confirm that the user entered their lock gesture correctly. -->
+    <string name="lockscreen_gesture_correct">Correct!</string>
+    <!-- On the unlock gesture screen, shown when the user enters the wrong lock gesture and must try again. -->
+    <string name="lockscreen_gesture_wrong">Try again</string>
+    <!-- Accessibility description of the gesture unlock. [CHAR_LIMIT=none] -->
+    <string name="keyguard_accessibility_gesture_unlock">Gesture unlock.</string>
+    <!-- Accessibility description of the unlock gesture area. [CHAR_LIMIT=none] -->
+    <string name="keyguard_accessibility_gesture_area">Gesture area.</string>
+    <!-- Message shown in gesture unlock after some number of unsuccessful attempts -->
+    <string name="kg_forgot_gesture_button_text">Forgot Gesture</string>
+    <!-- Message shown when user enters wrong pattern -->
+    <string name="kg_wrong_gesture">Wrong Gesture</string>
+    <!-- Instructions for using the gesture unlock screen -->
+    <string name="kg_gesture_instructions">Draw your gesture</string>
+    <string name="kg_too_many_failed_gesture_attempts_dialog_message">
+        You have incorrectly drawn your unlock gesture <xliff:g id="number">%d</xliff:g> times.
+        \n\nTry again in <xliff:g id="number">%d</xliff:g> seconds.
+    </string>
+
+</resources>
