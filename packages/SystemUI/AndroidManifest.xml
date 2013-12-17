@@ -277,6 +277,16 @@
                 <category android:name="android.intent.category.DESK_DOCK" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+
+        <activity android:name=".statusbar.policy.activedisplay.DummyActivity"
+                  android:label=""
+                  android:taskAffinity=""
+                  android:excludeFromRecents="true"
+                  android:exported="true"
+                  android:theme="@style/Theme.DummyActivity">
+        </activity>
 
         <activity android:name=".statusbar.policy.activedisplay.DummyActivity"
                   android:label=""
@@ -289,20 +299,6 @@
         <activity android:name="com.android.systemui.Transparent"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <activity android:name=".statusbar.sidebar.SidebarConfigurationActivity"
-                  android:label="@string/title_activity_sidebar_configuration"
-                  android:taskAffinity=""
-                  android:excludeFromRecents="true"
-                  android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <provider
-            android:name=".statusbar.sidebar.SidebarContentProvider"
-            android:authorities="org.chameleonos.sidebar.contentprovider" >
-        </provider>
-
+>>>>>>> 521259e... [2/2] Frameworks: HALO
     </application>
 </manifest>

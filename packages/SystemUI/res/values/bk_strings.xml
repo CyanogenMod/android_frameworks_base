@@ -49,12 +49,4 @@
     <string name="halo_signal_bars_1">ONE BAR</string>	
     <string name="halo_signal_bars_none">NO BARS</string>
 
-    <!-- App sidebar -->
-    <string name="default_folder_text">Folder</string>
-    <string name="title_activity_sidebar_configuration">Appbar content setup</string>
-    <string name="action_save">Save</string>
-    <string name="toast_items_saved">Appbar items have been saved.</string>
-    <string name="content_setup_instructions">Add items to the Appbar by long pressing any item on the right and drag it over to the Appbar.\n\nCombine items into folders by droping an item onto any existing item in the Appbar.\n\nTo remove an item simply drag it out of the \@appbar.</string>
-    <string name="content_setup_dismiss">Continue</string>
-
 </resources>
