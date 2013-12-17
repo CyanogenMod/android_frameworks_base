@@ -784,9 +784,9 @@ public class BatteryMeterView extends View implements DemoMode {
             Rect bounds = new Rect();
             mTextPaint.getTextBounds("99", 0, "99".length(), bounds);
             mTextX = mCircleSize / 2.0f + getPaddingLeft();
-            // the +1 at end of formula balances out rounding issues. works out on all resolutions
-            mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f + bounds.bottom
-                    - strokeWidth / 2.0f + 1;
+            // the +1dp at end of formula balances out rounding issues.works out on all resolutions
+            mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f
+                    - strokeWidth / 2.0f + getResources().getDisplayMetrics().density;
         }
     }
 }
