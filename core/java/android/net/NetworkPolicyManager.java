@@ -18,6 +18,9 @@ package android.net;
 
 import static android.content.pm.PackageManager.GET_SIGNATURES;
 import static android.net.NetworkPolicy.CYCLE_NONE;
+import static android.net.NetworkPolicy.CYCLE_DAILY;
+import static android.net.NetworkPolicy.CYCLE_MONTHLY;
+import static android.net.NetworkPolicy.CYCLE_WEEKLY;
 import static android.text.format.Time.MONTH_DAY;
 
 import android.content.Context;
@@ -161,22 +164,30 @@ public class NetworkPolicyManager {
         final Time now = new Time(policy.cycleTimezone);
         now.set(currentTime);
 
-        // first, find cycle boundary for current month
+        // first, find cycle boundary for current cycle
         final Time cycle = new Time(now);
         cycle.hour = cycle.minute = cycle.second = 0;
-        snapToCycleDay(cycle, policy.cycleDay);
+        snapToCycleDay(cycle, policy.cycleDay, policy.cycleLength);
 
         if (Time.compare(cycle, now) >= 0) {
             // cycle boundary is beyond now, use last cycle boundary; start by
-            // pushing ourselves squarely into last month.
-            final Time lastMonth = new Time(now);
-            lastMonth.hour = lastMonth.minute = lastMonth.second = 0;
-            lastMonth.monthDay = 1;
-            lastMonth.month -= 1;
-            lastMonth.normalize(true);
+            // pushing ourselves squarely into last month, week or day
+            final Time last = new Time(now);
+            last.hour = last.minute = last.second = 0;
 
-            cycle.set(lastMonth);
-            snapToCycleDay(cycle, policy.cycleDay);
+            if (policy.cycleLength == CYCLE_MONTHLY) {
+                last.monthDay = 1;
+                last.month -= 1;
+            } else if (policy.cycleLength == CYCLE_WEEKLY) {
+                last.monthDay -= 7;
+            } else if (policy.cycleLength == CYCLE_DAILY) {
+                last.monthDay -= 1;
+            }
+
+            last.normalize(true);
+
+            cycle.set(last);
+            snapToCycleDay(cycle, policy.cycleDay, policy.cycleLength);
         }
 
         return cycle.toMillis(true);
@@ -191,22 +202,30 @@ public class NetworkPolicyManager {
         final Time now = new Time(policy.cycleTimezone);
         now.set(currentTime);
 
-        // first, find cycle boundary for current month
+        // first, find cycle boundary for current cycle
         final Time cycle = new Time(now);
         cycle.hour = cycle.minute = cycle.second = 0;
-        snapToCycleDay(cycle, policy.cycleDay);
+        snapToCycleDay(cycle, policy.cycleDay, policy.cycleLength);
 
         if (Time.compare(cycle, now) <= 0) {
             // cycle boundary is before now, use next cycle boundary; start by
-            // pushing ourselves squarely into next month.
-            final Time nextMonth = new Time(now);
-            nextMonth.hour = nextMonth.minute = nextMonth.second = 0;
-            nextMonth.monthDay = 1;
-            nextMonth.month += 1;
-            nextMonth.normalize(true);
+            // pushing ourselves squarely into next month, week or day
+            final Time next = new Time(now);
+            next.hour = next.minute = next.second = 0;
 
-            cycle.set(nextMonth);
-            snapToCycleDay(cycle, policy.cycleDay);
+            if (policy.cycleLength == CYCLE_MONTHLY) {
+                next.monthDay = 1;
+                next.month += 1;
+            } else if (policy.cycleLength == CYCLE_WEEKLY) {
+                next.monthDay += 7;
+            } else if (policy.cycleLength == CYCLE_DAILY) {
+                next.monthDay += 1;
+            }
+
+            next.normalize(true);
+
+            cycle.set(next);
+            snapToCycleDay(cycle, policy.cycleDay, policy.cycleLength);
         }
 
         return cycle.toMillis(true);
@@ -226,6 +245,28 @@ public class NetworkPolicyManager {
             time.second = -1;
         } else {
             time.monthDay = cycleDay;
+        }
+        time.normalize(true);
+    }
+
+    /**
+     * Snap to the cycle day for the current cycle length
+     *
+     * @hide
+     */
+    public static void snapToCycleDay(Time time, int cycleDay, int cycleLength) {
+        if (cycleLength == CYCLE_MONTHLY) {
+            // when cycle day doesn't exist, it snaps to last second of current month
+            if (cycleDay > time.getActualMaximum(MONTH_DAY)) {
+                // cycle day isn't valid this month; snap to last second of month
+                time.month += 1;
+                time.monthDay = 1;
+                time.second = -1;
+            } else {
+                time.monthDay = cycleDay;
+            }
+        } else if (cycleLength == CYCLE_WEEKLY) {
+            time.monthDay += (cycleDay - time.weekDay);
         }
         time.normalize(true);
     }
