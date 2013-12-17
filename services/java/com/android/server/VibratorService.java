@@ -44,7 +44,7 @@ import android.view.InputDevice;
 
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IBatteryStats;
-import com.android.internal.util.beanstalk.QuietHoursHelper;
+import com.android.internal.util.slim.QuietHoursHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -59,4 +59,20 @@
     <dimen name="halo_speech_vpadding_top">3dp</dimen>
     <dimen name="halo_speech_vpadding_bottom">3dp</dimen>
     <dimen name="halo_content_max_width">250dp</dimen>
+
+    <!-- App sidebar -->
+    <dimen name="app_sidebar_item_size">60dp</dimen>
+    <dimen name="app_sidebar_item_padding">2dp</dimen>
+    <dimen name="tab_width">20dp</dimen>
+    <dimen name="tab_height">32dp</dimen>
+
+    <dimen name="drag_item_size">80dp</dimen>
+    <dimen name="icon_size">48dp</dimen>
+    <dimen name="item_title_text_size">12sp</dimen>
+    <dimen name="item_above_below_delta">16dp</dimen>
+    <dimen name="folder_padding">0dp</dimen>
+    <dimen name="folder_name_padding">10dp</dimen>
+    <dimen name="folder_width">290dp</dimen>
+    <dimen name="folder_height">480dp</dimen>
+    <dimen name="setup_sidebar_width">90dp</dimen>
 </resources>

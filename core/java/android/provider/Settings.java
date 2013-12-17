@@ -3044,24 +3044,6 @@ public final class Settings {
         */
         public static final String EXPANDED_BRIGHTNESS_MODE = "expanded_brightness_mode";
 
-        /**
-        * Notification Power Widget - Custom Network Mode
-        * @hide
-        */
-        public static final String EXPANDED_NETWORK_MODE = "expanded_network_mode";
-
-        /**
-        * Notification Power Widget - Custom Screen Timeout
-        * @hide
-        */
-        public static final String EXPANDED_SCREENTIMEOUT_MODE = "expanded_screentimeout_mode";
-
-        /**
-        * Notification Power Widget - Custom Ring Mode
-        * @hide
-        */
-        public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
-
        /**
          * HALO enabled, should default to 0 (HALO is disabled)
          * @hide
@@ -3113,18 +3095,6 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_AM_PM = "status_bar_am_pm";
-
-        /**
-         * Display style of the status bar battery information
-         * 0: Display the stock battery information
-         * 1: Display cm battery percentage implementation / dont show stock icon
-         * 2: Display cm circle battery implementation without percentage
-         * 3: Display cm circle battery implementation with percentage
-         * 4: Hide the battery information
-         * default: 0
-         * @hide
-         */
-        public static final String STATUS_BAR_BATTERY = "status_bar_battery";
 
         /**
          * Whether to show the signal text or signal bars.
@@ -3440,12 +3410,6 @@ public final class Settings {
           */
          public static final String KEY_APP_SWITCH_ACTION = "key_app_switch_action";
 
-        /**
-         * Weather to minimize lockscreen challenge on screen turned on
-         * @hide
-         */
-        public static final String LOCKSCREEN_MAXIMIZE_WIDGETS = "lockscreen_maximize_widgets";
-
          /**
           * Action to perform when the app switch key is long-pressed. (Default is 0)
           * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
@@ -3555,12 +3519,6 @@ public final class Settings {
         public static final String SYSTEM_POWER_CRT_MODE = "system_power_crt_mode";
 
         /**
-         * QuickSettings configuration
-         * @hide
-         */
-        public static final String QUICK_SETTINGS_TILES = "quick_settings_tiles";
-
-        /**
          * QuickSettings dynamic tiles configuration
          * @hide
          */
@@ -3630,13 +3588,6 @@ public final class Settings {
          * @hide
          */
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
-
-        /**
-         * Quick Settings Quick Pulldown
-         *
-         * @hide
-         */
-        public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
 
         /**
          * Display style of the status bar battery information

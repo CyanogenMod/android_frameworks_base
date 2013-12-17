@@ -38,10 +38,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MANAGE_NETWORK_POLICY" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-<<<<<<< HEAD
     <uses-permission android:name="com.android.phone.CHANGE_NETWORK_MODE" />
-=======
->>>>>>> d85304f... Quicksettings customizations Slim style
 
     <!-- Physical hardware -->
     <uses-permission android:name="android.permission.MANAGE_USB" />
@@ -93,13 +90,11 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.REBOOT" />
 
-<<<<<<< HEAD
     <!-- Active display -->
     <uses-permission android:name="android.permission.SYSTEM_NOTIFICATION_LISTENER" />
-=======
+
     <!-- Reboot -->
     <uses-permission android:name="android.permission.REBOOT" />
->>>>>>> d85304f... Quicksettings customizations Slim style
 
     <!-- Development shortcut -->
     <uses-permission android:name="android.permission.CLEAR_APP_USER_DATA" />
