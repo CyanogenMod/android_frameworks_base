@@ -55,6 +55,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private static final String SECURE_SETTINGS_BLUETOOTH_ADDR_VALID="bluetooth_addr_valid";
     private static final String SECURE_SETTINGS_BLUETOOTH_ADDRESS="bluetooth_address";
     private static final String SECURE_SETTINGS_BLUETOOTH_NAME="bluetooth_name";
+    private static final String SYSTEMUI_PACKAGE_NAME="com.android.systemui";
     private static final int TIMEOUT_BIND_MS = 3000; //Maximum msec to wait for a bind
     private static final int TIMEOUT_SAVE_MS = 500; //Maximum msec to wait for a save
     //Maximum msec to wait for service restart
@@ -1118,11 +1119,20 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         int callingUid = Binder.getCallingUid();
         long callingIdentity = Binder.clearCallingIdentity();
         int callingAppId = UserHandle.getAppId(callingUid);
+        String[] packages = mContext.getPackageManager().getPackagesForUid(callingUid);
+        boolean isSystemUi = false;
+        for (String p : packages) {
+            if (SYSTEMUI_PACKAGE_NAME.equals(p)) {
+                isSystemUi = true;
+                break;
+            }
+        }
         boolean valid = false;
         try {
             foregroundUser = ActivityManager.getCurrentUser();
-            valid = (callingUser == foregroundUser) ||
-                    callingAppId == Process.NFC_UID;
+            valid = (callingUser == foregroundUser)
+                    || callingAppId == Process.NFC_UID
+                    || isSystemUi;
             if (DBG) {
                 Log.d(TAG, "checkIfCallerIsForegroundUser: valid=" + valid
                     + " callingUser=" + callingUser
