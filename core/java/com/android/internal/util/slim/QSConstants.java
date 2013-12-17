@@ -44,6 +44,7 @@ public class QSConstants {
         public static final String TILE_EXPANDEDDESKTOP = "toggleExpandedDesktop";
         public static final String TILE_MUSIC = "toggleMusic";
         public static final String TILE_REBOOT = "toggleReboot";
+        public static final String TILE_THEME = "toggleTheme";
 
         // dynamic tiles
         public static final String TILE_ALARM = "toggleAlarm";
