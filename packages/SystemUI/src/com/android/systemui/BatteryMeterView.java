@@ -851,8 +851,10 @@ public class BatteryMeterView extends View implements DemoMode {
             DisplayMetrics dm = res.getDisplayMetrics();
 
             mBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
             Typeface font = Typeface.create("sans-serif-light", Typeface.NORMAL);
             mBackPaint.setTypeface(font);
+
             mBackPaint.setTextAlign(Paint.Align.RIGHT);
             mBackPaint.setColor(res.getColor(R.color.batterymeter_frame_color));
             mBackPaint.setTextSize(16.0f * dm.density);
@@ -931,7 +933,7 @@ public class BatteryMeterView extends View implements DemoMode {
         public void onSizeChanged(int w, int h, int oldw, int oldh) {
             BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
             Rect bounds = getBounds(tracker, tracker.level);
-            float onedp = mContext.getResources().getDisplayMetrics().density;
+            float onedp = mContext.getResources().getDisplayMetrics().density * 0.5f;
             float height = h - getPaddingBottom() - getPaddingTop();
 
             mTextX = w;
