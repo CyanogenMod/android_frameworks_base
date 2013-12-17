@@ -141,7 +141,7 @@ public class NavigationBarView extends LinearLayout {
 
     private class NavTransitionListener implements TransitionListener {
         private boolean mBackTransitioning;
-        private boolean mHomeAppearing;
+        private boolean mAppearing;
         private long mStartDelay;
         private long mDuration;
         private TimeInterpolator mInterpolator;
@@ -151,8 +151,9 @@ public class NavigationBarView extends LinearLayout {
                 View view, int transitionType) {
             if (view.getId() == R.id.back) {
                 mBackTransitioning = true;
-            } else if (view.getId() == R.id.home && transitionType == LayoutTransition.APPEARING) {
-                mHomeAppearing = true;
+            } else if (view.getId() != R.id.recent_apps
+                    && transitionType == LayoutTransition.APPEARING) {
+                mAppearing = true;
                 mStartDelay = transition.getStartDelay(transitionType);
                 mDuration = transition.getDuration(transitionType);
                 mInterpolator = transition.getInterpolator(transitionType);
@@ -164,8 +165,9 @@ public class NavigationBarView extends LinearLayout {
                 View view, int transitionType) {
             if (view.getId() == R.id.back) {
                 mBackTransitioning = false;
-            } else if (view.getId() == R.id.home && transitionType == LayoutTransition.APPEARING) {
-                mHomeAppearing = false;
+            } else if (view.getId() != R.id.recent_apps
+                    && transitionType == LayoutTransition.APPEARING) {
+                mAppearing = false;
             }
         }
 
@@ -176,8 +178,8 @@ public class NavigationBarView extends LinearLayout {
             final View home = getHomeButton();
             if (!mBackTransitioning
                     && back != null && back.getVisibility() == VISIBLE
-                    && mHomeAppearing
-                    && home != null && home.getAlpha() == 0) {
+                    && mAppearing
+                    && (mDisabledFlags & View.STATUS_BAR_DISABLE_HOME) == 0) {
                 back.setAlpha(0);
                 ValueAnimator a = ObjectAnimator.ofFloat(back, "alpha", 0, 1);
                 a.setStartDelay(mStartDelay);
@@ -679,8 +681,6 @@ public class NavigationBarView extends LinearLayout {
         final boolean disableBack = ((disabledFlags & View.STATUS_BAR_DISABLE_BACK) != 0)
                 && ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) == 0);
         final boolean disableSearch = !hasNavringTargets();
-        final boolean keyguardProbablyEnabled =
-                (mDisabledFlags & View.STATUS_BAR_DISABLE_HOME) != 0 && !disableSearch;
 
         mDelegateHelper.setDisabled(disableSearch);
 
@@ -723,7 +723,7 @@ public class NavigationBarView extends LinearLayout {
 
         View searchLight = getSearchLight();
         if (searchLight != null) {
-            setVisibleOrGone(searchLight, keyguardProbablyEnabled);
+            setVisibleOrGone(searchLight, disableHome && !disableSearch);
         }
 
         final boolean shouldShowCamera = disableHome
@@ -733,6 +733,9 @@ public class NavigationBarView extends LinearLayout {
             setVisibleOrGone(cameraButton, shouldShowCamera && !mCameraDisabledByDpm
                     && !mCameraDisabledByUser);
         }
+
+        mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
+
         setMenuVisibility(mShowMenu, true);
     }
 
