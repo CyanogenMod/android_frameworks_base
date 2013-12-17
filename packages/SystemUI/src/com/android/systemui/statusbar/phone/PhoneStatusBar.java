@@ -2930,6 +2930,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     @Override
     protected void tick(IBinder key, StatusBarNotification n, boolean firstTime) {
+        // we are in the process of recreating the statusbar
+        // so nothing to do right now
+        if (mRecreating) {
+            return;
+        }
         // no ticking in lights-out mode, except if halo is active
         if (!areLightsOn() && !mHaloActive) return;
 
