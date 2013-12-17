@@ -1426,9 +1426,6 @@
     <string-array name="config_disabledComponents" translatable="false">
     </string-array>
 
-    <!-- Sets whether IME switcher on statusbar should be shown or not. -->
-    <bool name="config_show_IMESwitcher">true</bool>
-
     <!-- Device supports LED flashlight -->
     <bool name="config_enableTorch">false</bool>
 

@@ -243,10 +243,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     View mFlipSettingsView;
     QuickSettingsContainerView mSettingsContainer;
     int mSettingsPanelGravity;
-    // This came from CM but for now is used for
-    // Notification drawer custom background and notification rows transparency
-    // Thats why i keepd the original name 
-    private TilesChangedObserver mTilesChangedObserver;
 
     // top bar
     View mNotificationPanelHeader;
