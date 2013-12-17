@@ -106,9 +106,6 @@
     <string name="toast_rotation_unlocked">Display rotation unlocked</string>
     <string name="toast_rotation_locked">Display rotation locked</string>
 
-    <!-- Stylus gestures support -->
-    <string name="stylus_app_not_installed">%s is not installed</string>
-
     <!-- Options that show upon long-pressing a key on the physical keyboard -->
     <string name="symbol_picker_A">\u00C0\u00C1\u00C2\u00C4\u00C6\u00C3\u00C5\u0104\u0100</string>
     <string name="symbol_picker_C">\u00C7\u0106\u010C</string>

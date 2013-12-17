@@ -1849,10 +1849,6 @@
   <java-symbol type="bool" name="config_wifiApStartInterface" />
   <java-symbol type="bool" name="config_wifiApFirmwareReload" />
 
-  <!-- Stylus gestures -->
-  <java-symbol type="bool" name="config_stylusGestures" />
-  <java-symbol type="string" name="stylus_app_not_installed" />
-
   <!-- Panel auto brightness -->
   <java-symbol type="integer" name="config_panelAutoBrightnessValue" />
 
