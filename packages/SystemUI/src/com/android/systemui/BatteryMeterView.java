@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 public class BatteryMeterView extends View implements DemoMode {
@@ -47,7 +48,8 @@ public class BatteryMeterView extends View implements DemoMode {
         BATTERY_METER_GONE,
         BATTERY_METER_ICON_PORTRAIT,
         BATTERY_METER_ICON_LANDSCAPE,
-        BATTERY_METER_CIRCLE
+        BATTERY_METER_CIRCLE,
+        BATTERY_METER_TEXT
     }
 
     protected class BatteryTracker extends BroadcastReceiver {
@@ -219,6 +221,9 @@ public class BatteryMeterView extends View implements DemoMode {
             case BATTERY_METER_CIRCLE:
                 return new CircleBatteryMeterDrawable(mContext);
 
+            case BATTERY_METER_TEXT:
+                return new TextBatteryMeterDrawable(mContext);
+
             case BATTERY_METER_ICON_LANDSCAPE:
                 return new NormalBatteryMeterDrawable(mContext, true);
 
@@ -234,6 +239,8 @@ public class BatteryMeterView extends View implements DemoMode {
         if (mMeterMode == BatteryMeterMode.BATTERY_METER_CIRCLE) {
             height += (CircleBatteryMeterDrawable.STROKE_WITH / 3);
             width = height;
+        } else if (mMeterMode == BatteryMeterMode.BATTERY_METER_TEXT) {
+            width = (int)((TextBatteryMeterDrawable) mBatteryMeterDrawable).calculateMeasureWidth();
         } else if (mMeterMode.compareTo(BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE) == 0) {
             width = (int)(height * 1.2f);
         }
@@ -787,6 +794,171 @@ public class BatteryMeterView extends View implements DemoMode {
             // the +1 at end of formula balances out rounding issues. works out on all resolutions
             mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f + bounds.bottom
                     - strokeWidth / 2.0f + 1;
+        }
+    }
+
+    protected class TextBatteryMeterDrawable implements BatteryMeterDrawable {
+
+        private static final boolean DRAW_LEVEL = false;
+
+        public static final int FULL = 96;
+        public static final int EMPTY = 4;
+
+        private Context mContext;
+        private boolean mDisposed;
+
+        private float mTextX;
+        private float mTextY;
+
+        private boolean mOldPlugged = false;
+        private int mOldLevel = -1;
+
+        private boolean mIsAnimating;
+        private int mAnimOffset;
+
+        private Paint mBackPaint;
+        private Paint mFrontPaint;
+
+        public TextBatteryMeterDrawable(Context ctx) {
+            super();
+            mContext = ctx;
+            mDisposed = false;
+            mIsAnimating = false;
+
+            Resources res = ctx.getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+
+            mBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            Typeface font = Typeface.create("sans-serif-light", Typeface.NORMAL);
+            mBackPaint.setTypeface(font);
+            mBackPaint.setTextAlign(Paint.Align.RIGHT);
+            mBackPaint.setColor(res.getColor(R.color.batterymeter_frame_color));
+            mBackPaint.setTextSize(16.0f * dm.density);
+
+            mFrontPaint = new Paint(mBackPaint);
+        }
+
+        @Override
+        public void onDraw(Canvas c) {
+            if (mDisposed) return;
+
+            int level = mTracker.level;
+            boolean plugged = mTracker.plugged;
+            boolean unknownStatus = mTracker.status == BatteryManager.BATTERY_STATUS_UNKNOWN;
+            int status = mTracker.status;
+
+            if (mOldLevel != level || mOldPlugged != plugged) {
+                mOldLevel = level;
+                mOldPlugged = plugged;
+
+                postInvalidate();
+                requestLayout();
+                return;
+            }
+
+            if (unknownStatus) {
+                c.drawText("?", mTextX, mTextY, mBackPaint);
+                Resources res = mContext.getResources();
+                mFrontPaint.setColor(res.getColor(R.color.batterymeter_frame_color));
+                drawWithoutLevel(c, 0, "?");
+                return;
+            }
+
+            mFrontPaint.setColor(getColorForLevel(level));
+
+            // Is plugged? Then use the animation status
+            if (mTracker.plugged && level != 100) {
+                updateChargeAnimation(status);
+                drawWithLevel(c, mAnimOffset, getLevel(level));
+            } else {
+                resetChargeAnimation();
+                if (DRAW_LEVEL) {
+                    drawWithLevel(c, level, getLevel(level));
+                } else {
+                    drawWithoutLevel(c, level, getLevel(level));
+                }
+            }
+
+        }
+
+        private void drawWithLevel(Canvas c, int level, String levelTxt) {
+            Rect bounds = getBounds(level);
+
+            // Draw the background
+            c.drawText(levelTxt, mTextX, mTextY, mBackPaint);
+
+            // Draw the foreground
+            c.save();
+            c.clipRect(0.0f, mTextY - ((level * bounds.height()) / 100.0f), mTextX, mTextY);
+            c.drawText(levelTxt, mTextX, mTextY, mFrontPaint);
+            c.restore();
+        }
+
+        private void drawWithoutLevel(Canvas c, int level, String levelTxt) {
+            c.drawText(levelTxt, mTextX, mTextY, mFrontPaint);
+        }
+
+        @Override
+        public void onDispose() {
+            mHandler.removeCallbacks(mInvalidate);
+            mDisposed = true;
+        }
+
+        @Override
+        public void onSizeChanged(int w, int h, int oldw, int oldh) {
+            Rect bounds = getBounds(mTracker.level);
+            float onedp = mContext.getResources().getDisplayMetrics().density;
+            float height = h - getPaddingBottom() - getPaddingTop();
+
+            mTextX = w;
+            mTextY = h - getPaddingBottom() - (height / 2 - bounds.height() /2) + onedp;
+        }
+
+        protected float calculateMeasureWidth() {
+            Rect bounds = getBounds(mTracker.level);
+            float onedp = mContext.getResources().getDisplayMetrics().density;
+            return bounds.width() + getPaddingStart() + getPaddingEnd() + onedp;
+        }
+
+        private Rect getBounds(int level) {
+            Rect bounds = new Rect();
+            boolean unknownStatus = mTracker.status == BatteryManager.BATTERY_STATUS_UNKNOWN;
+            String levelTxt = getLevel(unknownStatus ? -1 : level);
+            mBackPaint.getTextBounds(levelTxt, 0, levelTxt.length(), bounds);
+            return bounds;
+        }
+
+        private String getLevel(int level) {
+            if (level == -1) {
+                return String.format("?", level);
+            }
+            return String.format("%s%%", level);
+        }
+
+        private void updateChargeAnimation(int status) {
+            if (status != BatteryManager.BATTERY_STATUS_CHARGING) {
+                resetChargeAnimation();
+                return;
+            }
+
+            mIsAnimating = true;
+
+            if (mAnimOffset > 100) {
+                mAnimOffset = 0;
+            } else {
+                mAnimOffset += 5;
+            }
+
+            mHandler.removeCallbacks(mInvalidate);
+            mHandler.postDelayed(mInvalidate, 100);
+        }
+
+        private void resetChargeAnimation() {
+            if (mIsAnimating) {
+                mIsAnimating = false;
+                mAnimOffset = 0;
+                mHandler.removeCallbacks(mInvalidate);
+            }
         }
     }
 }
