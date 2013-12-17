@@ -154,6 +154,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final boolean ENABLE_CAR_DOCK_HOME_CAPTURE = true;
     static final boolean ENABLE_DESK_DOCK_HOME_CAPTURE = false;
 
+    // QuickBoot time settings
+    static final int DEFAULT_LONG_PRESS_POWERON_TIME = 500;
+    static final int QUICKBOOT_LAUNCH_TIMEOUT = 2000;
+
     static final int LONG_PRESS_POWER_NOTHING = 0;
     static final int LONG_PRESS_POWER_GLOBAL_ACTIONS = 1;
     static final int LONG_PRESS_POWER_SHUT_OFF = 2;
@@ -236,6 +240,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
      * where the window manager is calling in with its own lock held.)
      */
     private final Object mLock = new Object();
+    private final Object mQuickBootLock = new Object();
 
     Context mContext;
     Context mUiContext;
@@ -344,6 +349,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHasMenuKeyEnabled;
 
     int mCurrentUser = 0;
+
+    int mLongPressPoweronTime = DEFAULT_LONG_PRESS_POWERON_TIME;
 
     // The last window we were told about in focusChanged.
     WindowState mFocusedWindow;
@@ -539,6 +546,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     SettingsObserver mSettingsObserver;
     ShortcutManager mShortcutManager;
     PowerManager.WakeLock mBroadcastWakeLock;
+    PowerManager.WakeLock mQuickBootWakeLock;
     boolean mHavePendingMediaKeyRepeatWithWakeLock;
 
     private int mCurrentUserId;
@@ -1190,6 +1198,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mPowerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         mBroadcastWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "PhoneWindowManager.mBroadcastWakeLock");
+        mQuickBootWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "PhoneWindowManager.mQuickBootWakeLock");
+        mLongPressPoweronTime = SystemProperties.getInt("ro.quickboot.press_duration",
+                DEFAULT_LONG_PRESS_POWERON_TIME);
         mEnableShiftMenuBugReports = "1".equals(SystemProperties.get("ro.debuggable"));
         mLidOpenRotation = readRotation(
                 com.android.internal.R.integer.config_lidOpenRotation);
@@ -4457,6 +4469,58 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    private final Runnable mQuickBootPowerLongPress = new Runnable() {
+
+        public void run() {
+
+            Intent intent = new Intent("qualcomm.intent.action.QUICKBOOT");
+            intent.putExtra("mode", 1);
+            try {
+                mContext.startActivityAsUser(intent,UserHandle.CURRENT);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                releaseQuickBootWakeLock();
+                return;
+            }
+
+            BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
+                public void onReceive(Context context, Intent intent) {
+
+                    synchronized (mQuickBootLock) {
+                        mQuickBootLock.notifyAll();
+                    }
+                }
+            };
+
+            IntentFilter filter = new IntentFilter("qualcomm.intent.QUICKBOOT.START");
+            mContext.registerReceiver(broadcastReceiver,filter,
+                    "android.permission.DEVICE_POWER",null);
+
+            synchronized (mQuickBootLock) {
+                try {
+                    mQuickBootLock.wait(QUICKBOOT_LAUNCH_TIMEOUT);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            releaseQuickBootWakeLock();
+        }
+    };
+
+    private void acquireQuickBootWakeLock() {
+        if (!mQuickBootWakeLock.isHeld())  {
+            mQuickBootWakeLock.acquire();
+        }
+    }
+
+    private void releaseQuickBootWakeLock() {
+        if (mQuickBootWakeLock.isHeld()) {
+            mQuickBootWakeLock.release();
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     public int interceptKeyBeforeQueueing(KeyEvent event, int policyFlags, boolean isScreenOn) {
@@ -4468,6 +4532,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
         final boolean canceled = event.isCanceled();
         int keyCode = event.getKeyCode();
+
+        if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
+
+            if (keyCode == KeyEvent.KEYCODE_POWER && !isScreenOn) {
+                if(down){
+                    acquireQuickBootWakeLock();
+                    mHandler.postDelayed(mQuickBootPowerLongPress, mLongPressPoweronTime);
+                } else {
+                    releaseQuickBootWakeLock();
+                    mHandler.removeCallbacks(mQuickBootPowerLongPress);
+                }
+            }
+            // ignore this event
+            return 0;
+        }
 
         final boolean isInjected = (policyFlags & WindowManagerPolicy.FLAG_INJECTED) != 0;
 
