@@ -24,16 +24,15 @@
     android:id="@+id/recents_root"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_marginTop="-25dp"
-    android:layout_marginBottom="-75dp"
     android:foreground="@drawable/bg_protect"
     systemui:recentItemLayout="@layout/status_bar_recent_item"
     android:fitsSystemWindows="true"
     >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-	    android:background="@drawable/status_bar_recents_background"
+            android:background="@drawable/status_bar_recents_background"
             android:orientation="vertical">
 
             <view class="com.android.systemui.recent.LinearColorBar"
@@ -86,7 +85,7 @@
                 android:id="@+id/recents_bg_protect"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-		android:layout_marginBottom="75dp"
+                android:layout_marginBottom="75dp"
                 android:layout_alignParentBottom="true">
 
                 <com.android.systemui.recent.RecentsVerticalScrollView
@@ -120,7 +119,17 @@
                     android:layout_gravity="center"
                     android:visibility="invisible" />
 
+                <ImageView
+                    android:id="@+id/recents_clear"
+                    android:clickable="true"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="center"
+                    android:layout_gravity="bottom|left"
+                    android:src="@drawable/ic_notify_clear" />
+
         </FrameLayout>
 
     </LinearLayout>
+
 </com.android.systemui.recent.RecentsPanelView>
