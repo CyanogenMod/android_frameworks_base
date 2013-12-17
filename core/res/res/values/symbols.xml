@@ -1873,23 +1873,6 @@
   <!-- LED flashlight -->
   <java-symbol type="bool" name="config_enableTorch" />
 
-  <!-- Boot message dialog -->
-  <java-symbol type="drawable" name="busy_dlg_animation" />
-  <java-symbol type="drawable" name="busy_dlg_animation_0" />
-  <java-symbol type="drawable" name="busy_dlg_animation_1" />
-  <java-symbol type="drawable" name="busy_dlg_animation_2" />
-  <java-symbol type="drawable" name="busy_dlg_animation_3" />
-  <java-symbol type="drawable" name="busy_dlg_animation_4" />
-  <java-symbol type="drawable" name="busy_dlg_animation_5" />
-  <java-symbol type="drawable" name="busy_dlg_animation_6" />
-  <java-symbol type="drawable" name="busy_dlg_animation_7" />
-  <java-symbol type="drawable" name="busy_dlg_animation_8" />
-  <java-symbol type="drawable" name="busy_dlg_animation_9" />
-  <java-symbol type="drawable" name="busy_dlg_icon" />
-  <java-symbol type="id" name="busy_dlg_animation" />
-  <java-symbol type="id" name="busy_dlg_title" />
-  <java-symbol type="layout" name="busy_dlg" />
-
   <!-- Options that show upon long-pressing a key on the physical keyboard -->
   <java-symbol type="string" name="symbol_picker_0" />
   <java-symbol type="string" name="symbol_picker_1" />
