@@ -93,7 +93,7 @@
            android:layout_weight="1"
            android:orientation="horizontal"
            >
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key1"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -102,7 +102,7 @@
                androidprv:textView="@+id/pinEntry"
                androidprv:digit="1"
                />
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key2"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -111,7 +111,7 @@
                androidprv:textView="@+id/pinEntry"
                androidprv:digit="2"
                />
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key3"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -127,7 +127,7 @@
            android:layout_weight="1"
            android:orientation="horizontal"
            >
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key4"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -136,7 +136,7 @@
                androidprv:textView="@+id/pinEntry"
                androidprv:digit="4"
                />
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key5"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -145,7 +145,7 @@
                androidprv:textView="@+id/pinEntry"
                androidprv:digit="5"
                />
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key6"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -161,7 +161,7 @@
            android:orientation="horizontal"
            android:layout_weight="1"
            >
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key7"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -170,7 +170,7 @@
                androidprv:textView="@+id/pinEntry"
                androidprv:digit="7"
                />
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key8"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -179,7 +179,7 @@
                androidprv:textView="@+id/pinEntry"
                androidprv:digit="8"
                />
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key9"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
@@ -200,7 +200,7 @@
                android:layout_height="match_parent"
                android:layout_weight="1"
                />
-           <view class="com.android.internal.policy.impl.keyguard.NumPadKey"
+           <view class="com.android.keyguard.NumPadKey"
                android:id="@+id/key0"
                style="@style/Widget.Button.NumPadKey"
                android:layout_width="0px"
