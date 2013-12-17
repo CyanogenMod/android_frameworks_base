@@ -1487,6 +1487,10 @@ public final class PowerManagerService extends IPowerManager.Stub
             return false;
         }
 
+       if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
+            return false;
+        }
+
         // Don't wake when undocked from wireless charger.
         // See WirelessChargerDetector for justification.
         if (wasPowered && !mIsPowered
