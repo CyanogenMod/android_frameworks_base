@@ -2193,10 +2193,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     return;
             }
 
-            if (setting == null) {
-                return;
-            }
-
             try {
                 int value = Integer.valueOf(setting);
                 if (value == StylusGestureFilter.KEY_NO_ACTION) {
