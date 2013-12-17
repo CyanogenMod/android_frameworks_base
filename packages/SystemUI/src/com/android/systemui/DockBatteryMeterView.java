@@ -124,6 +124,7 @@ public class DockBatteryMeterView extends BatteryMeterView {
     public DockBatteryMeterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mBatteryService = ((BatteryManager) context.getSystemService(Context.BATTERY_SERVICE));
+        mDemoTracker = new DockBatteryTracker();
         mTracker = new DockBatteryTracker();
     }
 
@@ -142,6 +143,9 @@ public class DockBatteryMeterView extends BatteryMeterView {
         switch (mode) {
             case BATTERY_METER_CIRCLE:
                 return new DockCircleBatteryMeterDrawable(res);
+
+            case BATTERY_METER_TEXT:
+                return new DockTextBatteryMeterDrawable(res);
 
             case BATTERY_METER_ICON_LANDSCAPE:
                 return new DockNormalBatteryMeterDrawable(res, true);
@@ -173,6 +177,12 @@ public class DockBatteryMeterView extends BatteryMeterView {
         @Override
         protected int getBoltPointsArrayResource() {
             return R.array.dockbatterymeter_bold_points;
+        }
+    }
+
+    protected class DockTextBatteryMeterDrawable extends TextBatteryMeterDrawable {
+        public DockTextBatteryMeterDrawable(Resources res) {
+            super(res);
         }
     }
 }

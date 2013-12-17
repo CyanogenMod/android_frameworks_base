@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 public class BatteryMeterView extends View implements DemoMode {
@@ -47,7 +48,8 @@ public class BatteryMeterView extends View implements DemoMode {
         BATTERY_METER_GONE,
         BATTERY_METER_ICON_PORTRAIT,
         BATTERY_METER_ICON_LANDSCAPE,
-        BATTERY_METER_CIRCLE
+        BATTERY_METER_CIRCLE,
+        BATTERY_METER_TEXT
     }
 
     protected class BatteryTracker extends BroadcastReceiver {
@@ -165,6 +167,11 @@ public class BatteryMeterView extends View implements DemoMode {
     private BatteryMeterDrawable mBatteryMeterDrawable;
     private final Object mLock = new Object();
 
+    // This shared the anim status offset between all the views
+    // and only master view should update its value
+    private static int sSharedAnimOffset;
+    private boolean mIsMasterView;
+
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -200,6 +207,7 @@ public class BatteryMeterView extends View implements DemoMode {
     public BatteryMeterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mHandler = new Handler();
+        mIsMasterView = false;
 
         final Resources res = context.getResources();
         TypedArray levels = res.obtainTypedArray(R.array.batterymeter_color_levels);
@@ -232,6 +240,9 @@ public class BatteryMeterView extends View implements DemoMode {
             case BATTERY_METER_CIRCLE:
                 return new CircleBatteryMeterDrawable(res);
 
+            case BATTERY_METER_TEXT:
+                return new TextBatteryMeterDrawable(res);
+
             case BATTERY_METER_ICON_LANDSCAPE:
                 return new NormalBatteryMeterDrawable(res, true);
 
@@ -247,6 +258,8 @@ public class BatteryMeterView extends View implements DemoMode {
         if (mMeterMode == BatteryMeterMode.BATTERY_METER_CIRCLE) {
             height += (CircleBatteryMeterDrawable.STROKE_WITH / 3);
             width = height;
+        } else if (mMeterMode == BatteryMeterMode.BATTERY_METER_TEXT) {
+            width = (int)((TextBatteryMeterDrawable) mBatteryMeterDrawable).calculateMeasureWidth();
         } else if (mMeterMode.compareTo(BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE) == 0) {
             width = (int)(height * 1.2f);
         }
@@ -272,6 +285,15 @@ public class BatteryMeterView extends View implements DemoMode {
                 invalidate();
             }
         }
+    }
+
+    /**
+     * Identifies the current view as the battery master view (master view will update
+     * the current anim status). Only should be called by the main battery view of the
+     * status bar (derived views or qs tile views shouldn't call this method)
+     */
+    public void setMasterView() {
+        mIsMasterView = true;
     }
 
     public int getColorForLevel(int percent) {
@@ -597,8 +619,6 @@ public class BatteryMeterView extends View implements DemoMode {
 
         private boolean mDisposed;
 
-        // state variables
-        private int     mAnimOffset;    // current level of charging animation
         private boolean mIsAnimating;   // stores charge-animation status to reliably
                                         //remove callbacks
 
@@ -692,7 +712,7 @@ public class BatteryMeterView extends View implements DemoMode {
         private void drawCircle(Canvas canvas, BatteryTracker tracker,
                 float textX, RectF drawRect) {
             boolean unknownStatus = tracker.status == BatteryManager.BATTERY_STATUS_UNKNOWN;
-            int animOffset = tracker.shouldIndicateCharging() ? mAnimOffset : 0;
+            int animOffset = tracker.shouldIndicateCharging() ? sSharedAnimOffset : 0;
             int level = tracker.level;
             Paint paint;
 
@@ -756,7 +776,9 @@ public class BatteryMeterView extends View implements DemoMode {
             if (!tracker.shouldIndicateCharging()) {
                 if (mIsAnimating) {
                     mIsAnimating = false;
-                    mAnimOffset = 0;
+                    if (mIsMasterView) {
+                        sSharedAnimOffset = 0;
+                    }
                     mHandler.removeCallbacks(mInvalidate);
                 }
                 return;
@@ -764,10 +786,12 @@ public class BatteryMeterView extends View implements DemoMode {
 
             mIsAnimating = true;
 
-            if (mAnimOffset > 360) {
-                mAnimOffset = 0;
-            } else {
-                mAnimOffset += 3;
+            if (mIsMasterView) {
+                if (sSharedAnimOffset > 360) {
+                    sSharedAnimOffset = 0;
+                } else {
+                    sSharedAnimOffset += 3;
+                }
             }
 
             mHandler.removeCallbacks(mInvalidate);
@@ -799,6 +823,172 @@ public class BatteryMeterView extends View implements DemoMode {
             // the +1dp at end of formula balances out rounding issues.works out on all resolutions
             mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f
                     - strokeWidth / 2.0f + getResources().getDisplayMetrics().density;
+        }
+    }
+
+    protected class TextBatteryMeterDrawable implements BatteryMeterDrawable {
+
+        private static final boolean DRAW_LEVEL = false;
+
+        public static final int FULL = 96;
+        public static final int EMPTY = 4;
+
+        private boolean mDisposed;
+
+        private float mTextX;
+        private float mTextY;
+
+        private boolean mOldPlugged = false;
+        private int mOldLevel = -1;
+
+        private boolean mIsAnimating;
+
+        private Paint mBackPaint;
+        private Paint mFrontPaint;
+
+        public TextBatteryMeterDrawable(Resources res) {
+            super();
+            mDisposed = false;
+            mIsAnimating = false;
+
+            DisplayMetrics dm = res.getDisplayMetrics();
+
+            mBackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            Typeface font = Typeface.create("sans-serif-light", Typeface.NORMAL);
+            mBackPaint.setTypeface(font);
+            mBackPaint.setTextAlign(Paint.Align.RIGHT);
+            mBackPaint.setColor(res.getColor(R.color.batterymeter_frame_color));
+            mBackPaint.setTextSize(16.0f * dm.density);
+
+            mFrontPaint = new Paint(mBackPaint);
+        }
+
+        @Override
+        public void onDraw(Canvas c, BatteryTracker tracker) {
+            if (mDisposed) return;
+
+            int level = tracker.level;
+            boolean plugged = tracker.plugged;
+            boolean unknownStatus = tracker.status == BatteryManager.BATTERY_STATUS_UNKNOWN;
+
+            if (mOldLevel != level || mOldPlugged != plugged) {
+                mOldLevel = level;
+                mOldPlugged = plugged;
+
+                postInvalidate();
+                requestLayout();
+                return;
+            }
+
+            if (unknownStatus) {
+                c.drawText("?", mTextX, mTextY, mBackPaint);
+                Resources res = mContext.getResources();
+                mFrontPaint.setColor(res.getColor(R.color.batterymeter_frame_color));
+                drawWithoutLevel(c, "?");
+                return;
+            }
+
+            mFrontPaint.setColor(getColorForLevel(level));
+
+            // Is plugged? Then use the animation status
+            if (tracker.shouldIndicateCharging() && level != 100) {
+                updateChargeAnimation(tracker);
+                drawWithLevel(c, tracker, sSharedAnimOffset, getLevel(level));
+            } else {
+                resetChargeAnimation();
+                if (DRAW_LEVEL) {
+                    drawWithLevel(c, tracker, level, getLevel(level));
+                } else {
+                    drawWithoutLevel(c, getLevel(level));
+                }
+            }
+
+        }
+
+        private void drawWithLevel(Canvas c, BatteryTracker tracker, int level, String levelTxt) {
+            Rect bounds = getBounds(tracker, level);
+
+            // Draw the background
+            c.drawText(levelTxt, mTextX, mTextY, mBackPaint);
+
+            // Draw the foreground
+            c.save();
+            c.clipRect(0.0f, mTextY - ((level * bounds.height()) / 100.0f), mTextX, mTextY);
+            c.drawText(levelTxt, mTextX, mTextY, mFrontPaint);
+            c.restore();
+        }
+
+        private void drawWithoutLevel(Canvas c, String levelTxt) {
+            c.drawText(levelTxt, mTextX, mTextY, mFrontPaint);
+        }
+
+        @Override
+        public void onDispose() {
+            mHandler.removeCallbacks(mInvalidate);
+            mDisposed = true;
+        }
+
+        @Override
+        public void onSizeChanged(int w, int h, int oldw, int oldh) {
+            BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
+            Rect bounds = getBounds(tracker, tracker.level);
+            float onedp = mContext.getResources().getDisplayMetrics().density;
+            float height = h - getPaddingBottom() - getPaddingTop();
+
+            mTextX = w;
+            mTextY = h - getPaddingBottom() - (height / 2 - bounds.height() /2) + onedp;
+        }
+
+        protected float calculateMeasureWidth() {
+            BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
+            Rect bounds = getBounds(tracker, tracker.level);
+            float onedp = mContext.getResources().getDisplayMetrics().density;
+            return bounds.width() + getPaddingStart() + getPaddingEnd() + onedp;
+        }
+
+        private Rect getBounds(BatteryTracker tracker, int level) {
+            Rect bounds = new Rect();
+            boolean unknownStatus = tracker.status == BatteryManager.BATTERY_STATUS_UNKNOWN;
+            String levelTxt = getLevel(unknownStatus ? -1 : level);
+            mBackPaint.getTextBounds(levelTxt, 0, levelTxt.length(), bounds);
+            return bounds;
+        }
+
+        private String getLevel(int level) {
+            if (level == -1) {
+                return String.format("?", level);
+            }
+            return String.format("%s%%", level);
+        }
+
+        private void updateChargeAnimation(BatteryTracker tracker) {
+            if (!tracker.shouldIndicateCharging()) {
+                resetChargeAnimation();
+                return;
+            }
+
+            mIsAnimating = true;
+
+            if (mIsMasterView) {
+                if (sSharedAnimOffset > 100) {
+                    sSharedAnimOffset = 0;
+                } else {
+                    sSharedAnimOffset += 5;
+                }
+            }
+
+            mHandler.removeCallbacks(mInvalidate);
+            mHandler.postDelayed(mInvalidate, 100);
+        }
+
+        private void resetChargeAnimation() {
+            if (mIsAnimating) {
+                mIsAnimating = false;
+                if (mIsMasterView) {
+                    sSharedAnimOffset = 0;
+                }
+                mHandler.removeCallbacks(mInvalidate);
+            }
         }
     }
 }

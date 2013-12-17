@@ -682,6 +682,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 (SignalClusterView)mStatusBarView.findViewById(R.id.signal_cluster);
 
         mBatteryView = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
+        mBatteryView.setMasterView();
         mDockBatteryView = (DockBatteryMeterView) mStatusBarView.findViewById(R.id.dock_battery);
 
         mNetworkController.addSignalCluster(signalCluster);
@@ -2877,6 +2878,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
             case 5:
                 mode = BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE;
+                break;
+
+            case 6:
+                mode = BatteryMeterMode.BATTERY_METER_TEXT;
                 break;
 
             default:
