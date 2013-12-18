@@ -18,6 +18,7 @@ package com.android.systemui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.util.AttributeSet;
 import android.view.View;
@@ -137,22 +138,23 @@ public class DockBatteryMeterView extends BatteryMeterView {
 
     @Override
     protected BatteryMeterDrawable createBatteryMeterDrawable(BatteryMeterMode mode) {
+        Resources res = mContext.getResources();
         switch (mode) {
             case BATTERY_METER_CIRCLE:
-                return new DockCircleBatteryMeterDrawable(mContext);
+                return new DockCircleBatteryMeterDrawable(res);
 
             case BATTERY_METER_ICON_LANDSCAPE:
-                return new DockNormalBatteryMeterDrawable(mContext, true);
+                return new DockNormalBatteryMeterDrawable(res, true);
 
             default:
-                return new DockNormalBatteryMeterDrawable(mContext, false);
+                return new DockNormalBatteryMeterDrawable(res, false);
         }
     }
 
     protected class DockNormalBatteryMeterDrawable extends NormalBatteryMeterDrawable {
 
-        public DockNormalBatteryMeterDrawable(Context ctx, boolean inverted) {
-            super(ctx, inverted);
+        public DockNormalBatteryMeterDrawable(Resources res, boolean horizontal) {
+            super(res, horizontal);
         }
 
         @Override
@@ -164,8 +166,8 @@ public class DockBatteryMeterView extends BatteryMeterView {
     }
 
     protected class DockCircleBatteryMeterDrawable extends CircleBatteryMeterDrawable {
-        public DockCircleBatteryMeterDrawable(Context ctx) {
-            super(ctx);
+        public DockCircleBatteryMeterDrawable(Resources res) {
+            super(res);
         }
 
         @Override
