@@ -15,4 +15,8 @@ LOCAL_JAVA_LIBRARIES := android.policy conscrypt telephony-common
 
 include $(BUILD_JAVA_LIBRARY)
 
+#Include the vendor-jars.mk to add dependency frameworks
+#core packages by vendor to  LOCAL_JAVA_LIBRARIES
+-include frameworks/base/core/vendor-jars.mk
+
 include $(BUILD_DROIDDOC)

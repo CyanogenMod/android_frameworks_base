@@ -73,7 +73,7 @@ public class MSimCarrierText extends CarrierText {
         CharSequence text = "";
         for (int i = 0; i < simState.length; i++) {
             CharSequence displayText = getCarrierTextForSimState(simState[i], plmn[i], spn[i]);
-            if (KeyguardViewManager.USE_UPPER_CASE) {
+            if (mContext.getResources().getBoolean(R.bool.kg_use_all_caps)) {
                 displayText = (displayText != null ? displayText.toString().toUpperCase() : "");
             }
             text = (TextUtils.isEmpty(text)
