@@ -97,26 +97,10 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         }
 
         void reset() {
-            String  displayMessage = "";
-            try {
-                int attemptsRemaining = ITelephony.Stub.asInterface(ServiceManager
-                        .checkService("phone")).getIccPin1RetryCount();
-                if (attemptsRemaining >= 0) {
-                    displayMessage = getContext().getString(
-                            R.string.keyguard_password_wrong_puk_code)
-                            + getContext().getString(R.string.pinpuk_attempts)
-                            + attemptsRemaining + ". ";
-                }
-            } catch (RemoteException ex) {
-                displayMessage = getContext().getString(
-                        R.string.keyguard_password_puk_failed);
-            }
-            displayMessage = displayMessage
-                    + getContext().getString(R.string.kg_puk_enter_puk_hint);
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
-            mSecurityMessageDisplay.setMessage(displayMessage, true);
+            mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint, true);
             mPasswordEntry.requestFocus();
         }
     }
