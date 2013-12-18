@@ -363,7 +363,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
     };
 
-    // status bra brightness control
+    // status bar brightness control
     Runnable mLongPressBrightnessChange = new Runnable() {
         @Override
         public void run() {
