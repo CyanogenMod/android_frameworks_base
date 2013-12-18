@@ -3538,7 +3538,7 @@ public final class Settings {
          */
         public static final String UI_FORCE_OVERFLOW_BUTTON = "ui_force_overflow_button";
 
-	/**
+    	/**
          * use Alt Activity Resolver Grid
          * boolean
          *
@@ -3546,19 +3546,25 @@ public final class Settings {
          */
         public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt"; 
 
-	/**
+        /**
+         * Automatic keyboard rotation timeout.  0 to disable completely.
+         * @hide
+         */
+        public static final String KEYBOARD_ROTATION_TIMEOUT = "keyboard_rotation_timeout";
+
+    	/**
          * Override and forcefully disable the fullscreen keyboard
          * @hide
          */
         public static final String DISABLE_FULLSCREEN_KEYBOARD = "disable_fullscreen_keyboard";
 
-	/**
+        /**
          * Forces formal text input.  1 to replace emoticon key with enter key.
          * @hide
          */
         public static final String FORMAL_TEXT_INPUT = "formal_text_input";
 
-	/**
+        /**
          * Electronic beam animation mode
          * 0 = off,
          * 1 = always horizontal,
@@ -3966,12 +3972,6 @@ public final class Settings {
          * @hide
          */
         public static final String RECENTS_RAM_BAR_ACTIVE_APPS_COLOR = "recents_ram_bar_active_apps_color";
-
-        /**
-         * Show the pending notification counts as overlays on the status bar
-         * @hide
-         */
-        public static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
 
         /**
          * @hide
