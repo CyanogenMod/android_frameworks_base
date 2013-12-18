@@ -1389,4 +1389,8 @@
     <!-- Configuration to restart radio upon PDP_DEACTIVATE with
          error cause as Regular deactivation(36). -->
     <bool name="config_radio_reset_on_regular_deactivation">true</bool>
+
+    <!-- bool value to for enabling motion accelerometer -->
+    <bool name="use_motion_accel">false</bool>
+
 </resources>
