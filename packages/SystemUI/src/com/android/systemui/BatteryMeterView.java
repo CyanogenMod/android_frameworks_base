@@ -89,8 +89,10 @@ public class BatteryMeterView extends View implements DemoMode {
 
                 setContentDescription(
                         context.getString(R.string.accessibility_battery_level, level));
-                setVisibility(View.VISIBLE);
-                invalidateIfVisible();
+                if (mBatteryMeterDrawable != null) {
+                    setVisibility(View.VISIBLE);
+                    invalidateIfVisible();
+                }
             } else if (action.equals(ACTION_LEVEL_TEST)) {
                 testmode = true;
                 post(new Runnable() {
@@ -245,7 +247,9 @@ public class BatteryMeterView extends View implements DemoMode {
         mHeight = h;
         mWidth = w;
         synchronized (mLock) {
-            mBatteryMeterDrawable.onSizeChanged(w, h, oldw, oldh);
+            if (mBatteryMeterDrawable != null) {
+                mBatteryMeterDrawable.onSizeChanged(w, h, oldw, oldh);
+            }
         }
     }
 
@@ -284,6 +288,9 @@ public class BatteryMeterView extends View implements DemoMode {
         mMeterMode = mode;
         if (mode == BatteryMeterMode.BATTERY_METER_GONE) {
             setVisibility(View.GONE);
+            synchronized (mLock) {
+                mBatteryMeterDrawable = null;
+            }
         } else {
             synchronized (mLock) {
                 if (mBatteryMeterDrawable != null) {
@@ -305,7 +312,9 @@ public class BatteryMeterView extends View implements DemoMode {
     @Override
     public void draw(Canvas c) {
         synchronized (mLock) {
-            mBatteryMeterDrawable.onDraw(c);
+            if (mBatteryMeterDrawable != null) {
+                mBatteryMeterDrawable.onDraw(c);
+            }
         }
     }
 
