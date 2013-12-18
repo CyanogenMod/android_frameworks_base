@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set android:zAdjustment="top"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator android:interpolator="@interpolator/decelerate_cubic" android:duration="@integer/config_activityDefaultDur" android:valueFrom="0" android:valueTo="1" android:valueType="floatType" android:propertyName="alpha" />
+</set>

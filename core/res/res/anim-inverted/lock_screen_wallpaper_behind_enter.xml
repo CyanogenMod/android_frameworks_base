@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set android:shareInterpolator="false" android:detachWallpaper="true"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <alpha android:interpolator="@interpolator/decelerate_quad" android:duration="@integer/config_shortAnimTime" android:fillBefore="true" android:startOffset="@integer/config_shortAnimTime" android:fromAlpha="0.0" android:toAlpha="1.0" android:fillEnabled="true" />
+</set>
