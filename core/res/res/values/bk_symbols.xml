@@ -79,7 +79,5 @@
   <!-- Halo -->
   <java-symbol type="style" name="Theme.DeviceDefault.FloatingWindow" />
   <java-symbol type="style" name="Theme.DeviceDefault.FloatingWindowLight" />
-
-  <java-symbol type="bool" name="config_multiColorNotificationLed" />
   
 </resources>

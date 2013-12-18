@@ -97,7 +97,6 @@ public class KeyguardHostView extends KeyguardViewBase {
     private KeyguardSelectorView mKeyguardSelectorView;
     private KeyguardTransportControlView mTransportControl;
     private boolean mIsVerifyUnlockOnly;
-    private View mExpandChallengeView;
     private boolean mEnableFallback; // TODO: This should get the value from KeyguardPatternView
     private SecurityMode mCurrentSecuritySelection = SecurityMode.Invalid;
     private int mAppWidgetToShow;

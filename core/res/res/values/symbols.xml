@@ -1819,8 +1819,6 @@
   <java-symbol type="string" name="global_action_choose_profile" />
   <java-symbol type="string" name="global_action_reboot" />
   <java-symbol type="string" name="global_actions_toggle_expanded_desktop_mode" />
-  <java-symbol type="string" name="global_actions_expanded_desktop_mode_off_status" />
-  <java-symbol type="string" name="global_actions_expanded_desktop_mode_on_status" />
   <java-symbol type="string" name="global_actions" />
   <java-symbol type="string" name="reboot_system" />
   <java-symbol type="string" name="reboot_progress" />
