@@ -2240,7 +2240,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                                 (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
 
                         if (!(QuietHoursHelper.inQuietHours(
-                                    mContext, Settings.System.QUIET_HOURS_MUTE))
+                                    mContext, Settings.System.QUIET_HOURS_STILL))
                                 && (useDefaultVibrate || convertSoundToVibration || hasCustomVibrate)
                                 && !(audioManager.getRingerMode()
                                         == AudioManager.RINGER_MODE_SILENT)) {
