@@ -492,7 +492,7 @@ public class TelephonyManager {
         SystemProperties.get(TelephonyProperties.PROPERTY_LTE_ON_CDMA_PRODUCT_TYPE, "");
 
     public int getPreferredNetworkMode() {
-	try {
+        try {
             return getITelephony().getPreferredNetworkMode();
         } catch (RemoteException ex) {
             return -1;

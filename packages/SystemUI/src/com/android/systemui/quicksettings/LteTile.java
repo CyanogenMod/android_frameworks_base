@@ -79,8 +79,8 @@ public class LteTile extends QuickSettingsTile {
 
     private void toggleLteState() {
         TelephonyManager tm = (TelephonyManager)
-            mContext.getSystemService(Context.TELEPHONY_SERVICE);
-	tm.toggleLTE();
+                mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        tm.toggleLTE();
     }
 
 }
