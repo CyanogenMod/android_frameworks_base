@@ -66,46 +66,21 @@ public class LteTile extends QuickSettingsTile {
     }
 
     private synchronized void updateTile() {
-        int network = getCurrentPreferredNetworkMode(mContext);
-        switch(network) {
-            case Phone.NT_MODE_GLOBAL:
-            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
-            case Phone.NT_MODE_LTE_GSM_WCDMA:
-            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
-            case Phone.NT_MODE_LTE_ONLY:
-            case Phone.NT_MODE_LTE_WCDMA:
-                mDrawable = R.drawable.ic_qs_lte_on;
-                mLabel = mContext.getString(R.string.quick_settings_lte);
-                break;
-            default:
-                mDrawable = R.drawable.ic_qs_lte_off;
-                mLabel = mContext.getString(R.string.quick_settings_lte_off);
-                break;
+        TelephonyManager tm = (TelephonyManager)
+            mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        if (tm.getLteState() == 1) {
+            mDrawable = R.drawable.ic_qs_lte_on;
+            mLabel = mContext.getString(R.string.quick_settings_lte);
+        } else {
+            mDrawable = R.drawable.ic_qs_lte_off;
+            mLabel = mContext.getString(R.string.quick_settings_lte_off);
         }
     }
 
     private void toggleLteState() {
         TelephonyManager tm = (TelephonyManager)
-            mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        int network = getCurrentPreferredNetworkMode(mContext);
-        switch(network) {
-            case Phone.NT_MODE_GLOBAL:
-            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
-            case Phone.NT_MODE_LTE_GSM_WCDMA:
-            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
-            case Phone.NT_MODE_LTE_ONLY:
-            case Phone.NT_MODE_LTE_WCDMA:
-                tm.toggleLTE(false);
-                break;
-            default:
-                tm.toggleLTE(true);
-                break;
-        }
+                mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        tm.toggleLTE();
     }
 
-    private static int getCurrentPreferredNetworkMode(Context context) {
-        int network = Settings.Global.getInt(context.getContentResolver(),
-                    Settings.Global.PREFERRED_NETWORK_MODE, -1);
-        return network;
-    }
 }
