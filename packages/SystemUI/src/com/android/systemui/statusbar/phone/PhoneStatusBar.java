@@ -622,10 +622,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mHasFlipSettings = res.getBoolean(R.bool.config_hasFlipSettingsPanel);
 
         mDateTimeView = mNotificationPanelHeader.findViewById(R.id.datetime);
-        if (mDateTimeView != null) {
-            mDateTimeView.setOnClickListener(mClockClickListener);
-            mDateTimeView.setEnabled(true);
-        }
 
         mSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.settings_button);
         if (mSettingsButton != null) {
@@ -2777,13 +2773,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 startActivityDismissingKeyguard(
                         new Intent(android.provider.Settings.ACTION_SETTINGS), true);
             }
-        }
-    };
-
-    private View.OnClickListener mClockClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            startActivityDismissingKeyguard(
-                    new Intent(Intent.ACTION_QUICK_CLOCK), true); // have fun, everyone
         }
     };
 
