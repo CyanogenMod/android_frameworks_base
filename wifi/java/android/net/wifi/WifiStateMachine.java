@@ -3938,9 +3938,12 @@ public class WifiStateMachine extends StateMachine {
         }
         @Override
         public void exit() {
-            /* Request a CS wakelock during transition to mobile */
-            checkAndSetConnectivityInstance();
-            mCm.requestNetworkTransitionWakelock(getName());
+            if (Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.AIRPLANE_MODE_ON, 0) != 1) {
+                /* Request a CS wakelock during transition to mobile */
+                checkAndSetConnectivityInstance();
+                mCm.requestNetworkTransitionWakelock(getName());
+            }
         }
     }
 
