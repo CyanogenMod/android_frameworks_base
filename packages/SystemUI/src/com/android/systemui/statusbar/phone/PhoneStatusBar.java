@@ -1873,7 +1873,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         if (DEBUG) {
             Log.d(TAG, String.format("disable: 0x%08x -> 0x%08x (diff: 0x%08x)",
                 old, state, diff));
-        }
 
         StringBuilder flagdbg = new StringBuilder();
         flagdbg.append("disable: < ");
@@ -1899,6 +1898,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         flagdbg.append(((diff  & StatusBarManager.DISABLE_SEARCH) != 0) ? "* " : " ");
         flagdbg.append(">");
         Log.d(TAG, flagdbg.toString());
+
+        }
 
         if ((diff & StatusBarManager.DISABLE_SYSTEM_INFO) != 0) {
             mSystemIconArea.animate().cancel();
