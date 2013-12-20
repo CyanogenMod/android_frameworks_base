@@ -1389,6 +1389,7 @@
         <item>Trying to send MMS</item>
         <item>Trying to read MMS</item>
         <item>Trying to write MMS</item>
+        <item>Trying to start at bootup</item>
     </string-array>
 
     <!-- Configuration to restart radio upon PDP_DEACTIVATE with
