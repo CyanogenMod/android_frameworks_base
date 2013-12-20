@@ -2071,8 +2071,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.QS_QUICK_PULLDOWN,
                     R.integer.def_qs_quick_pulldown);
 
-            loadStringSetting(stmt, Settings.System.LOCKSCREEN_TARGETS,
-                    R.string.def_lockscreen_targets);
+            if (mContext.getResources()
+                    .getBoolean(com.android.internal.R.bool.config_voice_capable)) {
+                loadStringSetting(stmt, Settings.System.LOCKSCREEN_TARGETS,
+                        R.string.def_lockscreen_targets);
+            } else {
+                loadStringSetting(stmt, Settings.System.LOCKSCREEN_TARGETS,
+                        R.string.def_lockscreen_targets_no_telephony);
+            }
         } finally {
             if (stmt != null) stmt.close();
         }
