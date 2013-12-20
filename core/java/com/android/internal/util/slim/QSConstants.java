@@ -47,12 +47,17 @@ public class QSConstants {
         public static final String TILE_MUSIC = "toggleMusic";
         public static final String TILE_REBOOT = "toggleReboot";
         public static final String TILE_THEME = "toggleTheme";
+        public static final String TILE_CUSTOM = "toggleCustom";
 
         // dynamic tiles
         public static final String TILE_ALARM = "toggleAlarm";
         public static final String TILE_BUGREPORT = "toggleBugReport";
         public static final String TILE_IMESWITCHER = "toggleImeSwitcher";
         public static final String TILE_USBTETHER = "toggleUsbTether";
+
+        //Key for custom tile additive
+        public static final String TILE_CUSTOM_KEY = " Key=";
+        public static final String TILE_CUSTOM_DELIMITER = " =action= ";
 
         public static final String TILE_DELIMITER = "|";
         public static ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
