@@ -44,9 +44,11 @@ import android.provider.Settings;
 import android.sax.Element;
 import android.sax.ElementListener;
 import android.sax.RootElement;
+import android.telephony.MSimTelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
+import com.android.internal.telephony.MSimConstants;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1004,6 +1006,13 @@ public class MediaScanner
                     mDefaultNotificationSet = true;
                 } else if (ringtones) {
                     setSettingIfNotSet(Settings.System.RINGTONE, tableUri, rowId);
+                    if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                        int phoneCount = MSimTelephonyManager.getDefault().getPhoneCount();
+                        for (int i = MSimConstants.SUB2; i < phoneCount; i++) {
+                            // Set the default setting to the given URI for multi SIMs
+                            setSettingIfNotSet((Settings.System.RINGTONE + (i+1)), tableUri, rowId);
+                        }
+                    }
                     mDefaultRingtoneSet = true;
                 } else if (alarms) {
                     setSettingIfNotSet(Settings.System.ALARM_ALERT, tableUri, rowId);
