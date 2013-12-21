@@ -24,14 +24,21 @@ public class LTEButton extends PowerButton{
 
     @Override
     protected void updateState(Context context) {
-        TelephonyManager tm = (TelephonyManager)
-            context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (tm.getLteState() == 1) {
-            mIcon = R.drawable.ic_qs_lte_on;
-            mState = STATE_ENABLED;
-        } else {
-            mIcon = R.drawable.ic_qs_lte_off;
-            mState = STATE_DISABLED;
+        int network = getCurrentPreferredNetworkMode(context);
+        switch(network) {
+            case Phone.NT_MODE_GLOBAL:
+            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
+            case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_ONLY:
+            case Phone.NT_MODE_LTE_WCDMA:
+                mIcon = R.drawable.stat_lte_on;
+                mState = STATE_ENABLED;
+                break;
+            default:
+                mIcon = R.drawable.stat_lte_off;
+                mState = STATE_DISABLED;
+                break;
         }
     }
 
@@ -39,7 +46,20 @@ public class LTEButton extends PowerButton{
     protected void toggleState(Context context) {
         TelephonyManager tm = (TelephonyManager)
             context.getSystemService(Context.TELEPHONY_SERVICE);
-        tm.toggleLTE();
+        int network = getCurrentPreferredNetworkMode(context);
+        switch(network) {
+            case Phone.NT_MODE_GLOBAL:
+            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
+            case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_ONLY:
+            case Phone.NT_MODE_LTE_WCDMA:
+                tm.toggleLTE(false);
+                break;
+            default:
+                tm.toggleLTE(true);
+                break;
+        }
     }
 
     @Override
@@ -54,5 +74,16 @@ public class LTEButton extends PowerButton{
     @Override
     protected List<Uri> getObservedUris() {
         return OBSERVED_URIS;
+    }
+
+    private static int getCurrentPreferredNetworkMode(Context context) {
+        int network = -1;
+        try {
+            network = Settings.Global.getInt(context.getContentResolver(),
+                    Settings.Global.PREFERRED_NETWORK_MODE);
+        } catch (SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        return network;
     }
 }
