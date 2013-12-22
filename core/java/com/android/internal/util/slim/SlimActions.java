@@ -76,7 +76,8 @@ public class SlimActions {
             }
 
             if (!action.equals(ButtonsConstants.ACTION_QS)
-                    && !action.equals(ButtonsConstants.ACTION_NOTIFICATIONS)) {
+                    && !action.equals(ButtonsConstants.ACTION_NOTIFICATIONS)
+                    && !action.equals(ButtonsConstants.ACTION_TORCH)) {
                 try {
                     barService.collapsePanels();
                 } catch (RemoteException ex) {
@@ -105,13 +106,15 @@ public class SlimActions {
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_TORCH)) {
                 Intent i = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
-                context.sendBroadcast(i);
+                context.sendBroadcastAsUser(i, new UserHandle(UserHandle.USER_CURRENT));
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_IME)) {
                 if (isKeyguardShowing) {
                     return;
                 }
-                context.sendBroadcast(new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"));
+                context.sendBroadcastAsUser(
+                        new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"),
+                        new UserHandle(UserHandle.USER_CURRENT));
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_EXPANDED_DESKTOP)) {
                 boolean expandDesktopModeOn = Settings.System.getIntForUser(
