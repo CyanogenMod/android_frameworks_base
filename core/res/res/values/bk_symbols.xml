@@ -79,5 +79,8 @@
   <!-- Halo -->
   <java-symbol type="style" name="Theme.DeviceDefault.FloatingWindow" />
   <java-symbol type="style" name="Theme.DeviceDefault.FloatingWindowLight" />
-  
+
+  <!-- new Immerse Mode -->
+  <java-symbol type="drawable" name="ic_lock_immersive_mode_on" />
+  <java-symbol type="drawable" name="ic_lock_immersive_mode_off" />  
 </resources>

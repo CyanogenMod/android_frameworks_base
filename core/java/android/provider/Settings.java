@@ -3867,6 +3867,12 @@ public final class Settings {
          */
         public static final String EXPANDED_DESKTOP_STATE = "expanded_desktop_state";
 
+        /**
+         * Expanded desktop style (with status bar or without status bar)
+         * @hide
+         */
+        public static final String EXPANDED_DESKTOP_STYLE = "expanded_desktop_style";
+
     	/**
          * Whether or not to show circle battery around the lockscreen ring
          * @hide

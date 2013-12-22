@@ -183,7 +183,7 @@ public class PolicyHelper {
                 com.android.internal.R.drawable.ic_lock_airplane_mode_off);
         } else if (clickAction.equals(PolicyConstants.ACTION_EXPANDED_DESKTOP)) {
             return context.getResources().getDrawable(
-                com.android.internal.R.drawable.ic_lock_expanded_desktop);
+                com.android.internal.R.drawable.ic_lock_immersive_mode_on);
         }
         return null;
     }

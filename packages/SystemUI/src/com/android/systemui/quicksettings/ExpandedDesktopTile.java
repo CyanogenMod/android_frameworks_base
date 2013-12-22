@@ -73,10 +73,10 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
                 Settings.System.EXPANDED_DESKTOP_STATE, 0,
                 UserHandle.USER_CURRENT) == 1;
         if (mEnabled) {
-            mDrawable = R.drawable.ic_qs_expanded_desktop_on;
+            mDrawable = R.drawable.ic_lock_immersive_mode_on;
             mLabel = mContext.getString(R.string.quick_settings_expanded_desktop);
         } else {
-            mDrawable = R.drawable.ic_qs_expanded_desktop_off;
+            mDrawable = R.drawable.ic_lock_immersive_mode_off;
             mLabel = mContext.getString(R.string.quick_settings_expanded_desktop_off);
         }
     }

@@ -638,6 +638,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STYLE), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.IMMERSIVE_MODE_CONFIRMATIONS), false, this,
                     UserHandle.USER_ALL);
@@ -1525,6 +1528,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mVolBtnMusicControls = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1);
+
+            mExpandedDesktopStyle = Settings.System.getIntForUser(resolver,
+                    Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
+            if (Settings.System.getIntForUser(resolver,
+                    Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 0) {
+                mExpandedDesktopStyle = 0;
+            }
 
             updateKeyAssignments();
 
@@ -3988,6 +3998,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return vis;
     }
 
+    public boolean expandedDesktopHidesNavigationBar() {
+        return mExpandedDesktopStyle != 0;
+    }
+
+    public boolean expandedDesktopHidesStatusBar() {
+        return mExpandedDesktopStyle == 2;
+    }
+
     /** {@inheritDoc} */
     public int getCurrentNavigationBarSize() {
         boolean landscape = mContext.getResources().getConfiguration()
@@ -3998,23 +4016,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return mNavigationBarWidth;
         }
         return mNavigationBarHeight;
-    }
-
-    /** {@inheritDoc} */
-    public boolean expandedDesktopHidesNavigationBar() {
-        boolean landscape = mContext.getResources().getConfiguration()
-            .orientation == Configuration.ORIENTATION_LANDSCAPE;
-        if (mExpandedDesktopMode == 1) {
-            return landscape && !mNavigationBarCanMove && mNavigationBarHeightLandscape > 0
-                    || landscape && mNavigationBarCanMove && mNavigationBarWidth > 0
-                    || !landscape && mNavigationBarHeight > 0;
-        }
-        return false;
-    }
-
-    /** {@inheritDoc} */
-    public boolean expandedDesktopHidesStatusBar() {
-        return mExpandedDesktopMode != 0;
     }
 
     private void offsetInputMethodWindowLw(WindowState win) {
@@ -5974,7 +5975,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && mFocusedApp == win.getAppToken()) {
             return 0;
         }
-
         final int visibility2 = visibility;
         mLastSystemUiFlags = visibility;
         mLastFocusNeedsMenu = needsMenu;
@@ -6062,7 +6062,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         boolean oldImmersiveMode = isImmersiveMode(oldVis);
         boolean newImmersiveMode = isImmersiveMode(vis);
         if (win != null && oldImmersiveMode != newImmersiveMode) {
-            final String pkg = mExpandedDesktopMode != 0 ? "android" : win.getOwningPackage();
+            final String pkg = mExpandedDesktopStyle != 0 ? "android" : win.getOwningPackage();
             mImmersiveModeConfirmation.immersiveModeChanged(pkg, newImmersiveMode);
         }
 
