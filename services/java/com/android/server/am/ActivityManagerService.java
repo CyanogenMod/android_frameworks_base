@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2006-2008 The Android Open Source Project
- * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +34,7 @@ import com.android.internal.R;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.ProcessStats;
-import com.android.internal.app.ThemeUtils;
+import com.android.internal.app.ResolverActivity;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.ProcessCpuTracker;
@@ -126,7 +125,6 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
 import android.net.Proxy;
 import android.net.ProxyProperties;
@@ -202,7 +200,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-import dalvik.system.Zygote;
 
 public final class ActivityManagerService extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -814,7 +811,6 @@ public final class ActivityManagerService extends ActivityManagerNative
     boolean mLaunchWarningShown = false;
 
     Context mContext;
-    Context mUiContext;
 
     int mFactoryTest;
 
@@ -1114,7 +1110,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         return;
                     }
                     if (mShowDialogs && !mSleeping && !mShuttingDown) {
-                        Dialog d = new AppErrorDialog(getUiContext(),
+                        Dialog d = new AppErrorDialog(mContext,
                                 ActivityManagerService.this, res, proc);
                         d.show();
                         proc.crashDialog = d;
@@ -1149,7 +1145,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                     if (mShowDialogs) {
                         Dialog d = new AppNotRespondingDialog(ActivityManagerService.this,
-                                getUiContext(), proc, (ActivityRecord)data.get("activity"),
+                                mContext, proc, (ActivityRecord)data.get("activity"),
                                 msg.arg1 != 0);
                         d.show();
                         proc.anrDialog = d;
@@ -1175,7 +1171,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     }
                     AppErrorResult res = (AppErrorResult) data.get("result");
                     if (mShowDialogs && !mSleeping && !mShuttingDown) {
-                        Dialog d = new StrictModeViolationDialog(getUiContext(),
+                        Dialog d = new StrictModeViolationDialog(mContext,
                                 ActivityManagerService.this, res, proc);
                         d.show();
                         proc.crashDialog = d;
@@ -1189,7 +1185,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             } break;
             case SHOW_FACTORY_ERROR_MSG: {
                 Dialog d = new FactoryErrorDialog(
-                    getUiContext(), msg.getData().getCharSequence("msg"));
+                    mContext, msg.getData().getCharSequence("msg"));
                 d.show();
                 ensureBootCompleted();
             } break;
@@ -1209,7 +1205,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         if (!app.waitedForDebugger) {
                             Dialog d = new AppWaitingForDebuggerDialog(
                                     ActivityManagerService.this,
-                                    getUiContext(), app);
+                                    mContext, app);
                             app.waitDialog = d;
                             app.waitedForDebugger = true;
                             d.show();
@@ -1297,7 +1293,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Log.e(TAG, title + ": " + text);
                 if (mShowDialogs) {
                     // XXX This is a temporary dialog, no need to localize.
-                    AlertDialog d = new BaseErrorDialog(getUiContext());
+                    AlertDialog d = new BaseErrorDialog(mContext);
                     d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
                     d.setCancelable(false);
                     d.setTitle(title);
@@ -1370,7 +1366,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     notification.defaults = 0; // please be quiet
                     notification.sound = null;
                     notification.vibrate = null;
-                    notification.setLatestEventInfo(getUiContext(), text,
+                    notification.setLatestEventInfo(context, text,
                             mContext.getText(R.string.heavy_weight_notification_detail),
                             PendingIntent.getActivityAsUser(mContext, 0, root.intent,
                                     PendingIntent.FLAG_CANCEL_CURRENT, null,
@@ -1709,7 +1705,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     notification.defaults = 0;
                     notification.sound = null;
                     notification.vibrate = null;
-                    notification.setLatestEventInfo(getUiContext(),
+                    notification.setLatestEventInfo(context,
                             title, text,
                             PendingIntent.getActivityAsUser(mContext, 0, infoIntent,
                                     PendingIntent.FLAG_CANCEL_CURRENT, null,
@@ -2278,15 +2274,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             synchronized(mPidsSelfLocked) {
                 mOnBattery = DEBUG_POWER ? true : onBattery;
             }
-        }
-    }
-
-    private Context getUiContext() {
-        synchronized (this) {
-            if (mUiContext == null && mBooted) {
-                mUiContext = ThemeUtils.createUiContext(mContext);
-            }
-            return mUiContext != null ? mUiContext : mContext;
         }
     }
 
@@ -4226,7 +4213,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 @Override
                 public void run() {
                     synchronized (ActivityManagerService.this) {
-                        final Dialog d = new LaunchWarningWindow(getUiContext(), cur, next);
+                        final Dialog d = new LaunchWarningWindow(mContext, cur, next);
                         d.show();
                         mHandler.postDelayed(new Runnable() {
                             @Override
@@ -5245,13 +5232,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }, pkgFilter);
 
-        ThemeUtils.registerThemeChangeReceiver(mContext, new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mUiContext = null;
-            }
-        });
-        
         synchronized (this) {
             // Ensure that any processes we had put on hold are now started
             // up.
@@ -14191,11 +14171,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                                      values.userSetLocale);
                 }
 
-                if (values.customTheme != null) {
-                    saveThemeResourceLocked(values.customTheme,
-                            !values.customTheme.equals(mConfiguration.customTheme));
-                }
-
                 mConfigurationSeq++;
                 if (mConfigurationSeq <= 0) {
                     mConfigurationSeq = 1;
@@ -14343,13 +14318,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             return null;
         }
         return srec.launchedFromPackage;
-    }
-
-    private void saveThemeResourceLocked(CustomTheme t, boolean isDiff){
-        if(isDiff){
-            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, t.getThemeId());
-            SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getThemePackageName());  
-        }
     }
 
     // =========================================================

@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +22,9 @@ import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.IContentProvider;
-import android.content.IIntentReceiver;
 import android.content.Intent;
+import android.content.IIntentReceiver;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
@@ -39,8 +37,6 @@ import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
-import android.content.res.PackageRedirectionMap;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDebug;
@@ -53,7 +49,6 @@ import android.net.Proxy;
 import android.net.ProxyProperties;
 import android.opengl.GLUtils;
 import android.os.AsyncTask;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Debug;
@@ -73,7 +68,6 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Trace;
 import android.os.UserHandle;
-import android.text.TextUtils;
 import android.util.AndroidRuntimeException;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
@@ -85,7 +79,6 @@ import android.util.Slog;
 import android.util.SuperNotCalledException;
 import android.view.Display;
 import android.view.HardwareRenderer;
-import android.view.InflateException;
 import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewManager;
@@ -2202,16 +2195,6 @@ public final class ActivityThread {
 
         } catch (Exception e) {
             if (!mInstrumentation.onException(activity, e)) {
-                if (e instanceof InflateException) {
-                    Log.e(TAG, "Failed to inflate", e);
-                    String pkg = null;
-                    if (r.packageInfo != null && !TextUtils.isEmpty(r.packageInfo.getPackageName())) {
-                        pkg = r.packageInfo.getPackageName();
-                    }
-                    Intent intent = new Intent(Intent.ACTION_APP_LAUNCH_FAILURE,
-                            (pkg != null)? Uri.fromParts("package", pkg, null) : null);
-                    getSystemContext().sendBroadcast(intent);
-                }
                 throw new RuntimeException(
                     "Unable to start activity " + component
                     + ": " + e.toString(), e);
@@ -3898,7 +3881,6 @@ public final class ActivityThread {
 
         int configDiff = 0;
 
-        int diff = 0;
         synchronized (mResourcesManager) {
             if (mPendingConfiguration != null) {
                 if (!mPendingConfiguration.isOtherSeqNewer(config)) {
@@ -3916,7 +3898,7 @@ public final class ActivityThread {
             if (DEBUG_CONFIGURATION) Slog.v(TAG, "Handle configuration changed: "
                     + config);
 
-            diff = mResourcesManager.applyConfigurationToResourcesLocked(config, compat);
+            mResourcesManager.applyConfigurationToResourcesLocked(config, compat);
 
             if (mConfiguration == null) {
                 mConfiguration = new Configuration();
@@ -3939,20 +3921,7 @@ public final class ActivityThread {
         if (callbacks != null) {
             final int N = callbacks.size();
             for (int i=0; i<N; i++) {
-                ComponentCallbacks2 cb = callbacks.get(i);
-
-                // We removed the old resources object from the mActiveResources
-                // cache, now we need to trigger an update for each application.
-                if ((diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
-                    if (cb instanceof ContextWrapper) {
-                        Context context = ((ContextWrapper)cb).getBaseContext();
-                        if (context instanceof ContextImpl) {
-                            ((ContextImpl)context).refreshResourcesIfNecessary();
-                        }
-                    }
-                }
-
-                performConfigurationChanged(cb, config);
+                performConfigurationChanged(callbacks.get(i), config);
             }
         }
     }
@@ -4976,7 +4945,7 @@ public final class ActivityThread {
                     // We need to apply this change to the resources
                     // immediately, because upon returning the view
                     // hierarchy will be informed about it.
-                    if (mResourcesManager.applyConfigurationToResourcesLocked(newConfig, null) != 0) {
+                    if (mResourcesManager.applyConfigurationToResourcesLocked(newConfig, null)) {
                         // This actually changed the resources!  Tell
                         // everyone about it.
                         if (mPendingConfiguration == null ||
