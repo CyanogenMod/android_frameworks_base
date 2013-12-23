@@ -224,10 +224,6 @@
   <java-symbol type="id" name="pin_confirm_text" />
   <java-symbol type="id" name="pin_error_message" />
   <java-symbol type="id" name="timePickerLayout" />
-  <java-symbol type="id" name="permission_text" />
-  <java-symbol type="id" name="permission_remember_layout" />
-  <java-symbol type="id" name="permission_remember_choice_checkbox" />
-  <java-symbol type="id" name="permission_remember_choice_text" />
 
   <java-symbol type="attr" name="actionModeShareDrawable" />
   <java-symbol type="attr" name="alertDialogCenterButtons" />
@@ -299,6 +295,7 @@
   <java-symbol type="bool" name="flip_controller_fallback_keys" />
   <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
   <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
+  <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
 
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_extraFreeKbytesAdjust" />
@@ -1188,7 +1185,6 @@
   <java-symbol type="layout" name="locale_picker_item" />
   <java-symbol type="layout" name="media_controller" />
   <java-symbol type="layout" name="overlay_display_window" />
-  <java-symbol type="layout" name="permission_confirmation_dialog" />
   <java-symbol type="layout" name="preference" />
   <java-symbol type="layout" name="preference_header_item" />
   <java-symbol type="layout" name="preference_list_content" />
