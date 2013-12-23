@@ -59,7 +59,7 @@ public final class  BluetoothLwPwrProximityMonitor implements QBluetoothAdapter.
     private final Object mStateLock = new Object();
     /* This timer is triggered in case that BluetoothGatt does not callback when we perform connect/disconnect */
     private Timer     mTimer = null;
-    private final int mTimeOutValue = 10*1000;
+    private final int mTimeOutValue = 30*1000;
     private final class ConnectTimeOutTask extends TimerTask {
         public void run() {
             if (DBG) Log.d(TAG, "connect timer triggered!");
@@ -147,6 +147,7 @@ public final class  BluetoothLwPwrProximityMonitor implements QBluetoothAdapter.
                                 setTimer(BluetoothLwPwrProximityMonitor.this.new DisconnectTimeOutTask(), mTimeOutValue);
                             }
                         } else {
+                            mState = MONITOR_STATE_IDLE;
                             stop = true;
                         }
                     }
