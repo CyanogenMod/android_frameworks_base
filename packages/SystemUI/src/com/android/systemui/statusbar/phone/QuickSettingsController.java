@@ -35,6 +35,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_MOBILEDATA;
 import static com.android.internal.util.slim.QSConstants.TILE_MUSIC;
 import static com.android.internal.util.slim.QSConstants.TILE_NETWORKMODE;
 import static com.android.internal.util.slim.QSConstants.TILE_NFC;
+import static com.android.internal.util.slim.QSConstants.TILE_QUICKRECORD;
 import static com.android.internal.util.slim.QSConstants.TILE_QUIETHOURS;
 import static com.android.internal.util.slim.QSConstants.TILE_RINGER;
 import static com.android.internal.util.slim.QSConstants.TILE_SCREENTIMEOUT;
@@ -84,6 +85,7 @@ import com.android.systemui.quicksettings.MusicTile;
 import com.android.systemui.quicksettings.NfcTile;
 import com.android.systemui.quicksettings.PreferencesTile;
 import com.android.systemui.quicksettings.QuickSettingsTile;
+import com.android.systemui.quicksettings.QuickRecordTile;
 import com.android.systemui.quicksettings.QuietHoursTile;
 import com.android.systemui.quicksettings.RingerModeTile;
 import com.android.systemui.quicksettings.ScreenTimeoutTile;
@@ -245,6 +247,8 @@ public class QuickSettingsController {
                 qs = new RebootTile(mContext, this);
             } else if (tile.equals(TILE_THEME)) {
                 qs = new ThemeTile(mContext, this);
+            } else if (tile.equals(TILE_QUICKRECORD)) {
+                qs = new QuickRecordTile(mContext, this);
             }
 
             if (qs != null) {
