@@ -89,11 +89,17 @@ private:
     bool android();
     bool movie();
 
+    enum ImageID { IMG_DATA = 0, IMG_SYS = 1, IMG_ENC = 2 };
+    char *getAnimationFileName(ImageID image);
+    char *getBootRingtoneFileName(ImageID image);
+    void playBackgroundMusic();
+    bool checkBootState();
     void checkExit();
+    void checkShowAndroid();
 
     sp<SurfaceComposerClient>       mSession;
     AssetManager mAssets;
-    Texture     mAndroid[2];
+    Texture     mAndroid[3];
     int         mWidth;
     int         mHeight;
     EGLDisplay  mDisplay;
@@ -105,6 +111,7 @@ private:
     ZipFileRO   mZip;
 };
 
+static void* playMusic(void* arg);
 // ---------------------------------------------------------------------------
 
 }; // namespace android
