@@ -114,5 +114,6 @@
     <!-- Show emergency call label only without carrier label on expanded notification area -->
     <bool name="config_showEmergencyCallLabelOnly">true</bool>
     <bool name="config_showDataConnectionView">true</bool>
+    <bool name="config_disableWifiAndBluetooth">false</bool>
 </resources>
 

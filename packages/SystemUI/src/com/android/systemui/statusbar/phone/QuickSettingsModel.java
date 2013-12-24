@@ -865,4 +865,12 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         mSslCaCertWarningState.label = r.getString(R.string.ssl_ca_cert_warning);
         mSslCaCertWarningCallback.refreshView(mSslCaCertWarningTile, mSslCaCertWarningState);
     }
+
+    public boolean isRadioProhibited() {
+        boolean airModeOn = (android.provider.Settings.System.getInt(
+                mContext.getContentResolver(),
+                android.provider.Settings.System.AIRPLANE_MODE_ON, 0) != 0);
+        boolean disable = mContext.getResources().getBoolean(R.bool.config_disableWifiAndBluetooth);
+        return disable && airModeOn;
+    }
 }
