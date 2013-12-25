@@ -2053,13 +2053,6 @@ public class Resources {
             mAssets.recreateStringBlocks();
         }
     }
-
-    /** @hide */
-    public final void updateStringCache() {
-        synchronized (mTmpValue) {
-            mAssets.recreateStringBlocks();
-        }
-    }
  
     /*package*/ Drawable loadDrawable(TypedValue value, int id)
             throws NotFoundException {
