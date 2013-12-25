@@ -20,11 +20,14 @@ import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.android.systemui.R;
@@ -46,6 +49,8 @@ public class QuickSettingsContainerView extends FrameLayout {
 
     private Context mContext;
     private Resources mResources;
+
+    private boolean mFirstStartUp = true;
 
     public QuickSettingsContainerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -141,6 +146,10 @@ public class QuickSettingsContainerView extends FrameLayout {
             mNumFinalColumns = mNumColumns;
         }
 
+        // onMeasure is done onLayout called last time isLandscape()
+        // so first bootup is done, set it to false
+        mFirstStartUp = false;
+
         for (int i = 0; i < N; ++i) {
             QuickSettingsTileView v = (QuickSettingsTileView) getChildAt(i);
             ViewGroup.LayoutParams lp = v.getLayoutParams();
@@ -173,10 +182,17 @@ public class QuickSettingsContainerView extends FrameLayout {
     }
 
     private boolean isLandscape() {
-        final boolean isLandscape =
-            Resources.getSystem().getConfiguration().orientation
+        if (mFirstStartUp) {
+            WindowManager wm =
+                ((WindowManager) mContext.getSystemService(mContext.WINDOW_SERVICE));
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            return size.x > size.y;
+        } else {
+            return Resources.getSystem().getConfiguration().orientation
                     == Configuration.ORIENTATION_LANDSCAPE;
-        return isLandscape;
+        }
     }
 
     public int getTileTextSize() {
