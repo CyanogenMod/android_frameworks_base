@@ -2660,9 +2660,10 @@ public class AudioService extends IAudioService.Stub {
                  (1 << AudioSystem.STREAM_SYSTEM)|(1 << AudioSystem.STREAM_SYSTEM_ENFORCED)),
                  UserHandle.USER_CURRENT);
 
-        // ringtone and system streams are always affected by ringer mode
+        // ringtone, system and dtmf streams are always affected by ringer mode
         ringerModeAffectedStreams |= (1 << AudioSystem.STREAM_RING)|
-                                        (1 << AudioSystem.STREAM_SYSTEM);
+                                        (1 << AudioSystem.STREAM_SYSTEM)|
+                                        (1 << AudioSystem.STREAM_DTMF);
 
         if (mVoiceCapable) {
             ringerModeAffectedStreams &= ~(1 << AudioSystem.STREAM_MUSIC);
