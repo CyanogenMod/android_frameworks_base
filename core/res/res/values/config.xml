@@ -1469,6 +1469,10 @@
          error cause as Regular deactivation(36). -->
     <bool name="config_radio_reset_on_regular_deactivation">true</bool>
 
+    <!-- Configuartion to support 7bit Ascii encoding and decoding
+         for long messages. -->
+    <bool name="config_ascii_7bit_support_for_long_message">false</bool>
+
     <!-- bool value to for enabling motion accelerometer -->
     <bool name="use_motion_accel">false</bool>
 
