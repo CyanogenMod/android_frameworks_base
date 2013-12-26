@@ -273,7 +273,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     };
 
-    private ContentObserver mProvisioningObserver = new ContentObserver(new Handler()) {
+     private ContentObserver mProvisioningObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
             final boolean provisioned = 0 != Settings.Global.getInt(
@@ -1901,17 +1901,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     }
 
-    protected static void setSystemUIVisibility(View v, int visibility) {
-        v.setSystemUiVisibility(visibility);
-    }
-
     protected void addActiveDisplayView() {
         mActiveDisplayView = (ActiveDisplayView)View.inflate(mContext, R.layout.active_display, null);
-        int activeDisplayVis = View.SYSTEM_UI_FLAG_LOW_PROFILE
-                             | View.SYSTEM_UI_FLAG_FULLSCREEN
-                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-        setSystemUIVisibility(mActiveDisplayView, activeDisplayVis);
         mActiveDisplayView.setStatusBar(this);
         mWindowManager.addView(mActiveDisplayView, getActiveDisplayViewLayoutParams());
     }
@@ -1927,12 +1918,18 @@ public abstract class BaseStatusBar extends SystemUI implements
                 LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
                 0
+                | WindowManager.LayoutParams.FLAG_FULLSCREEN
                 | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
                 PixelFormat.OPAQUE);
+        if (ActivityManager.isHighEndGfx()) {
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        }
         lp.gravity = Gravity.TOP | Gravity.FILL_VERTICAL | Gravity.FILL_HORIZONTAL;
         lp.setTitle("ActiveDisplayView");
 
