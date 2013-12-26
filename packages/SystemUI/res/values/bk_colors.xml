@@ -27,4 +27,29 @@
     <!-- app sidebar item text shadow color -->
     <color name="sidebar_item_text_shadow_color">#ff000000</color>
 
+   <!-- Quick Nav Panel -->
+    <color name="qcMenuBackground">#C0000000</color>
+    <color name="qc_tab_nr">#F033B5E5</color>
+
+    <!-- THEMEABLE PIE PIE PIE PIE PIE? -->
+
+    <color name="pie_menu_background">#C0000000</color>
+
+    <color name="alpha_mask">#aa000000</color>
+    <color name="opaque_mask">#ff000000</color>
+    <color name="snap_background">#ffffffff</color>
+    <color name="pie_background">#aa000000</color>
+    <color name="pie_button">#b2ffffff</color>
+    <color name="pie_select">#aaffffff</color>
+    <color name="pie_outlines">#ffffffff</color>
+    <color name="chevron_left">#0999cc</color>
+    <color name="chevron_right">#53d5e5</color>
+    <color name="battery_juice">#33b5e5</color>
+    <color name="battery_juice_low">#ffbb33</color>
+    <color name="battery_juice_critical">#ff4444</color>
+    <color name="battery_background">#ffffff</color>
+    <color name="status">#ffffff</color>
+
+    <!-- THEMEABLE PIE PIE PIE PIE PIE? -->
+
 </resources>

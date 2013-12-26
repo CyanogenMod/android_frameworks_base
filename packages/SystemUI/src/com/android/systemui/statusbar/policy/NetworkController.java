@@ -897,7 +897,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                     info = mWifiManager.getConnectionInfo();
                 }
                 if (info != null) {
-                    mWifiSsid = huntForSsid(info);
+                    mWifiSsid = huntForSsid(mWifiManager, info);
                 } else {
                     mWifiSsid = null;
                 }
@@ -931,13 +931,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         }
     }
 
-    private String huntForSsid(WifiInfo info) {
+    protected static String huntForSsid(WifiManager manager, WifiInfo info) {
         String ssid = info.getSSID();
         if (ssid != null) {
             return ssid;
         }
         // OK, it's not in the connectionInfo; we have to go hunting for it
-        List<WifiConfiguration> networks = mWifiManager.getConfiguredNetworks();
+        List<WifiConfiguration> networks = manager.getConfiguredNetworks();
         for (WifiConfiguration net : networks) {
             if (net.networkId == info.getNetworkId()) {
                 return net.SSID;

@@ -2,4 +2,7 @@
 
 <resources>
     <dimen name="halo_content_max_width">350dp</dimen>
+
+    <!--PA PIE-->
+    <dimen name="pie_panel_padding">100dp</dimen>
 </resources>

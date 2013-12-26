@@ -1,0 +1,126 @@
+<!-- Copyright (C) 2013 ParanoidAndroid Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<com.android.systemui.statusbar.view.PieExpandPanel
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
+    android:id="@+id/content_frame"
+    android:background="#AA000000"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+
+        <RelativeLayout
+            android:id="@+id/content_header"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip">
+
+            <RelativeLayout
+                android:id="@+id/datetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="8dp"
+                android:enabled="false"
+                >
+                <com.android.systemui.statusbar.policy.Clock
+                    android:id="@+id/clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
+                    android:layout_centerVertical="true"
+                    />
+
+                <com.android.systemui.statusbar.policy.DateView android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+                    android:layout_toRightOf="@id/clock"
+                    android:layout_centerVertical="true"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/toggle_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:enabled="false"
+                >
+
+
+                <ImageView android:id="@+id/halo_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_notify_halo_normal"
+                    android:contentDescription="@string/accessibility_halo"
+                    />
+
+                <ImageView android:id="@+id/clear_all_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/halo_button"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_notify_clear"
+                    android:contentDescription="@string/accessibility_clear_all"
+                    />
+
+                <ImageView android:id="@+id/quicksettings_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/clear_all_button"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/ic_notify_quicksettings"
+                    android:contentDescription="@string/accessibility_desc_quick_settings"
+                    />
+
+                <ImageView android:id="@+id/notification_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/quicksettings_button"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/ic_notifications"
+                    android:visibility="gone"
+                    android:contentDescription="@string/accessibility_notifications_button"
+                    />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/content_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip"
+            android:fadingEdge="none"
+            android:overScrollMode="ifContentScrolls"/>
+
+</com.android.systemui.statusbar.view.PieExpandPanel>
