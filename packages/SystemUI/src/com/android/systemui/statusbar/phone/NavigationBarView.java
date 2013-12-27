@@ -489,10 +489,9 @@ public class NavigationBarView extends LinearLayout {
             try {
                 final int userId = ActivityManagerNative.getDefault().getCurrentUser().id;
                 final int disabledFlags = dpm.getKeyguardDisabledFeatures(null, userId);
-                final  boolean disabledBecauseKeyguardSecure =
-                        (disabledFlags & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA) != 0
-                        && KeyguardTouchDelegate.getInstance(getContext()).isSecure();
-                return dpm.getCameraDisabled(null) || disabledBecauseKeyguardSecure;
+                final boolean disabledInKeyguard =
+                        (disabledFlags & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA) != 0;
+                return dpm.getCameraDisabled(null) || disabledInKeyguard;
             } catch (RemoteException e) {
                 Log.e(TAG, "Can't get userId", e);
             }
