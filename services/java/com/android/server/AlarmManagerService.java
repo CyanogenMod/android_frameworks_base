@@ -118,6 +118,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private final AlarmHandler mHandler = new AlarmHandler();
     private ClockReceiver mClockReceiver;
     private UninstallReceiver mUninstallReceiver;
+    private QuickBootReceiver mQuickBootReceiver;
     private final ResultReceiver mResultReceiver = new ResultReceiver();
     private final PendingIntent mTimeTickSender;
     private final PendingIntent mDateChangeSender;
@@ -527,6 +528,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
         mClockReceiver.scheduleTimeTickEvent();
         mClockReceiver.scheduleDateChangedEvent();
         mUninstallReceiver = new UninstallReceiver();
+        mQuickBootReceiver = new QuickBootReceiver();
         
         if (mDescriptor != -1) {
             mWaitThread.start();
@@ -1475,7 +1477,32 @@ class AlarmManagerService extends IAlarmManager.Stub {
             }
         }
     }
-    
+
+    private class QuickBootReceiver extends BroadcastReceiver {
+
+        public QuickBootReceiver() {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("intent.quickboot.appkilled");
+            mContext.registerReceiver(this, filter,
+                    "android.permission.DEVICE_POWER", null);
+        }
+
+        @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                String pkgList[] = null;
+                if ("intent.quickboot.appkilled".equals(action)) {
+                    pkgList = intent.getStringArrayExtra(Intent.EXTRA_PACKAGES);
+                    if (pkgList != null && (pkgList.length > 0)) {
+                        for (String pkg : pkgList) {
+                            removeLocked(pkg);
+                            mBroadcastStats.remove(pkg);
+                        }
+                    }
+                }
+            }
+    }
+
     class ClockReceiver extends BroadcastReceiver {
         public ClockReceiver() {
             IntentFilter filter = new IntentFilter();
