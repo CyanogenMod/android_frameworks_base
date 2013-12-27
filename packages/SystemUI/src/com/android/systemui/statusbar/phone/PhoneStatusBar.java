@@ -274,8 +274,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private boolean mShowStatusBarCarrier;
 
     private boolean mRecreating = false;
-    private boolean mTickerInProgress = false;
-    private final Object mLock = new Object();
 
     // position
     int[] mPositionTmp = new int[2];
@@ -2953,11 +2951,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     @Override
     protected void tick(IBinder key, StatusBarNotification n, boolean firstTime) {
-        // we are in the process of recreating the statusbar
-        // so nothing to do right now
-        if (mRecreating) {
-            return;
-        }
         // no ticking in lights-out mode, except if halo is active
         if (!areLightsOn() && !mHaloActive) return;
 
@@ -2967,21 +2960,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         // not for you
         if (!notificationIsForCurrentUser(n)) return;
 
-        mTickerInProgress = true;
-        synchronized(mLock) {
-            // Show the ticker if one is requested. Also don't do this
-            // until status bar window is attached to the window manager,
-            // because...  well, what's the point otherwise?  And trying to
-            // run a ticker without being attached will crash!
-            if (n.getNotification().tickerText != null
-                        && mStatusBarWindow.getWindowToken() != null) {
-                if (0 == (mDisabled & (StatusBarManager.DISABLE_NOTIFICATION_ICONS
-                                | StatusBarManager.DISABLE_NOTIFICATION_TICKER))) {
-                    mTicker.addEntry(n);
-                }
+        // Show the ticker if one is requested. Also don't do this
+        // until status bar window is attached to the window manager,
+        // because...  well, what's the point otherwise?  And trying to
+        // run a ticker without being attached will crash!
+        if (n.getNotification().tickerText != null
+                    && mStatusBarWindow.getWindowToken() != null) {
+            if (0 == (mDisabled & (StatusBarManager.DISABLE_NOTIFICATION_ICONS
+                            | StatusBarManager.DISABLE_NOTIFICATION_TICKER))) {
+                mTicker.addEntry(n);
             }
-            mTickerInProgress = false;
-            mLock.notifyAll();
         }
     }
 
@@ -3615,15 +3603,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     private void recreateStatusBar(boolean recreateNavigationBar) {
         mRecreating = true;
-        synchronized(mLock){
-            while (mTickerInProgress){
-                try {
-                    mLock.wait();
-                } catch (InterruptedException e) {
-                    // bad bad
-                }
-            }
-        }
+
         mStatusBarContainer.removeAllViews();
 
         // extract icons from the soon-to-be recreated viewgroup.
