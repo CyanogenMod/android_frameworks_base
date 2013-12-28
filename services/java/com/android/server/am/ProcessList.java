@@ -473,6 +473,23 @@ final class ProcessList {
         PSS_SAME_CACHED_INTERVAL,       // ActivityManager.PROCESS_STATE_CACHED_EMPTY
     };
 
+    private static final long[] sSameSleepingPssTimes = new long[] {
+        PSS_SAME_IMPORTANT_INTERVAL,    // ActivityManager.PROCESS_STATE_PERSISTENT
+        PSS_SAME_IMPORTANT_INTERVAL,    // ActivityManager.PROCESS_STATE_PERSISTENT_UI
+        PSS_SAME_IMPORTANT_INTERVAL,    // ActivityManager.PROCESS_STATE_TOP
+        PSS_SAME_IMPORTANT_INTERVAL,    // ActivityManager.PROCESS_STATE_IMPORTANT_FOREGROUND
+        PSS_SAME_IMPORTANT_INTERVAL,    // ActivityManager.PROCESS_STATE_IMPORTANT_BACKGROUND
+        PSS_SAME_IMPORTANT_INTERVAL,    // ActivityManager.PROCESS_STATE_BACKUP
+        PSS_SAME_IMPORTANT_INTERVAL,    // ActivityManager.PROCESS_STATE_HEAVY_WEIGHT
+        PSS_SAME_SERVICE_INTERVAL,      // ActivityManager.PROCESS_STATE_SERVICE
+        PSS_SAME_SERVICE_INTERVAL,      // ActivityManager.PROCESS_STATE_RECEIVER
+        PSS_SAME_CACHED_INTERVAL,       // ActivityManager.PROCESS_STATE_HOME
+        PSS_SAME_CACHED_INTERVAL,       // ActivityManager.PROCESS_STATE_LAST_ACTIVITY
+        PSS_SAME_CACHED_INTERVAL,       // ActivityManager.PROCESS_STATE_CACHED_ACTIVITY
+        PSS_SAME_CACHED_INTERVAL,       // ActivityManager.PROCESS_STATE_CACHED_ACTIVITY_CLIENT
+        PSS_SAME_CACHED_INTERVAL,       // ActivityManager.PROCESS_STATE_CACHED_EMPTY
+    };
+
     public static boolean procStatesDifferForMem(int procState1, int procState2) {
         return sProcStateToProcMem[procState1] != sProcStateToProcMem[procState2];
     }
@@ -482,7 +499,7 @@ final class ProcessList {
         final long[] table = sleeping
                 ? (first
                         ? sFirstAwakePssTimes
-                        : sSameAwakePssTimes)
+                        : sSameSleepingPssTimes)
                 : (first
                         ? sFirstAwakePssTimes
                         : sSameAwakePssTimes);
