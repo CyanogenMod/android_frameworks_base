@@ -888,6 +888,8 @@
         HSP_AG, ObexObjectPush, Audio, NAP -->
     <bool name="config_bluetooth_default_profiles">true</bool>
 
+    <bool name="config_bluetooth_adapter_quick_switch">false</bool>
+
     <!-- IP address of the dns server to use if nobody else suggests one -->
     <string name="config_default_dns_server" translatable="false">8.8.8.8</string>
 
