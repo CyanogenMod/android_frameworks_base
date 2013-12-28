@@ -19,6 +19,7 @@ package com.android.internal.util.slim;
 import android.app.Activity;
 import android.app.ActivityManagerNative;
 import android.app.SearchManager;
+import android.app.IUiModeManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -144,11 +145,14 @@ public class SlimActions {
                 // we currently switch between holodark and hololight till either
                 // theme engine is ready or lightheme is ready. Currently due of
                 // missing light themeing hololight = system base theme
-                Settings.Secure.putIntForUser(context.getContentResolver(),
-                        Settings.Secure.UI_THEME_MODE, state
+                final IUiModeManager uiModeManagerService = IUiModeManager.Stub.asInterface(
+                        ServiceManager.getService(Context.UI_MODE_SERVICE));
+                try {
+                    uiModeManagerService.setUiThemeMode(state
                             ? Configuration.UI_THEME_MODE_HOLO_LIGHT
-                            : Configuration.UI_THEME_MODE_HOLO_DARK,
-                        UserHandle.USER_CURRENT);
+                            : Configuration.UI_THEME_MODE_HOLO_DARK);
+                } catch (RemoteException e) {
+                }
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_KILL)) {
                 if (isKeyguardShowing) {
