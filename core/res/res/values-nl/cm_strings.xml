@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2012-2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,10 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="profileNameDefault">Standaard</string>
-    <string name="profileNameWork">Zakelijk</string>
+    <string name="profileNameWork">Werk</string>
     <string name="profileNameHome">Thuis</string>
     <string name="profileNameSilent">Stil</string>
-    <string name="profileNameNight">\'s Nachts</string>
+    <string name="profileNameNight">Nacht</string>
     <string name="profileGroupPhone">Telefoon</string>
     <string name="profileGroupCalendar">Agenda</string>
     <string name="profileGroupGmail">Gmail</string>
@@ -53,6 +54,8 @@
     <string name="permdesc_fm_radio_receiver">Hiermee kan de app de FM-ontvanger beheren.</string>
     <string name="permlab_fm_radio_transmitter">FM-zender beheren</string>
     <string name="permdesc_fm_radio_transmitter">Hiermee kan de app de FM-zender beheren.</string>
+    <string name="permlab_sendMockSms">nep-sms verzenden</string>
+    <string name="permdesc_sendMockSms">Hiermee kan de app nep-sms-berichten verzenden. Met deze machtiging kan een app sms-berichten verzenden naar vertrouwde apps. Schadelijke apps zouden continu berichten kunnen verzenden, waardoor het meldingensysteem wordt geblokkeerd en de gebruiker wordt verstoord.</string>
     <string name="stylus_app_not_installed">%s is niet geïnstalleerd</string>
     <string name="permlab_changePrivacyGuardState">Privacybescherming in- of uitschakelen</string>
     <string name="permdesc_changePrivacyGuardState">Hiermee kan de app bepalen of een andere app start met Privacybescherming. Als een app start met Privacybescherming, zal het geen toegang hebben tot persoonsgegevens zoals contacten, berichten of gespreksstatistieken.</string>
@@ -60,6 +63,16 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> zal geen toegang hebben tot persoonsgegevens</string>
     <string name="profile_picker_title">Profielen</string>
     <string name="profile_none">Geen</string>
-    <string name="permlab_cancelNotifications">app-meldingen sluiten</string>
-    <string name="permdesc_cancelNotifications">Hiermee kan de app meldingen gecreeërd door andere apps sluiten.</string>
+    <string name="perf_profile_pwrsv">Energiebesparing</string>
+    <string name="perf_profile_bal">Gebalanceerd</string>
+    <string name="perf_profile_perf">Prestaties</string>
+    <string name="permlab_interceptSmsSent">uitgaande sms-berichten onderscheppen</string>
+    <string name="permdesc_interceptSmsSent">Hiermee kan de app een uitgaand sms-bericht onderscheppen. Schadelijke apps kunnen dit gebruiken om uitgaande sms-berichten te blokkeren</string>
+    <string name="transient_navigation_confirmation_long">Veeg vanaf de rand van het scherm om de systeembalk weer te geven</string>
+    <string name="permlab_resetBatteryStats">accustatistieken resetten</string>
+    <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
+    <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>
+
+    <!-- CAF -->
+    <string name="progress_nomediapresent" product="default">Geen verwijderbare media aanwezig\u2026</string>
 </resources>

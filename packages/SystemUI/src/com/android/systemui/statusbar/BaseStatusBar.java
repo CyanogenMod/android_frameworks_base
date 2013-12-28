@@ -18,16 +18,18 @@ package com.android.systemui.statusbar;
 
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
-import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.IPackageDataObserver;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
@@ -47,6 +49,7 @@ import android.service.dreams.IDreamManager;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Slog;
 import android.view.Display;
 import android.view.IWindowManager;
 import android.view.LayoutInflater;
@@ -72,6 +75,7 @@ import com.android.systemui.R;
 import com.android.systemui.RecentsComponent;
 import com.android.systemui.SearchPanelView;
 import com.android.systemui.SystemUI;
+import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 
 import java.util.ArrayList;
@@ -134,7 +138,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected boolean mUseHeadsUp = false;
 
     protected IDreamManager mDreamManager;
-    KeyguardManager mKeyguardManager;
     PowerManager mPowerManager;
     protected int mRowHeight;
 
@@ -276,7 +279,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         mDreamManager = IDreamManager.Stub.asInterface(
                 ServiceManager.checkService(DreamService.DREAM_SERVICE));
-        mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
         mProvisioningObserver.onChange(false); // set up
@@ -457,11 +459,47 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mNotificationBlamePopup.getMenuInflater().inflate(
                         R.menu.notification_popup_menu,
                         mNotificationBlamePopup.getMenu());
-                mNotificationBlamePopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                final ContentResolver cr = mContext.getContentResolver();
+                if (Settings.Secure.getInt(cr,
+                        Settings.Secure.DEVELOPMENT_SHORTCUT, 0) == 0) {
+                    mNotificationBlamePopup.getMenu()
+                            .findItem(R.id.notification_inspect_item_force_stop).setVisible(false);
+                    mNotificationBlamePopup.getMenu()
+                            .findItem(R.id.notification_inspect_item_wipe_app).setVisible(false);
+                } else {
+                    try {
+                        PackageManager pm = (PackageManager) mContext.getPackageManager();
+                        ApplicationInfo mAppInfo = pm.getApplicationInfo(packageNameF, 0);
+                        DevicePolicyManager mDpm = (DevicePolicyManager) mContext.
+                                getSystemService(Context.DEVICE_POLICY_SERVICE);
+                        if ((mAppInfo.flags&(ApplicationInfo.FLAG_SYSTEM
+                              | ApplicationInfo.FLAG_ALLOW_CLEAR_USER_DATA))
+                              == ApplicationInfo.FLAG_SYSTEM
+                              || mDpm.packageHasActiveAdmins(packageNameF)) {
+                            mNotificationBlamePopup.getMenu()
+                            .findItem(R.id.notification_inspect_item_wipe_app).setEnabled(false);
+                        }
+                    } catch (NameNotFoundException ex) {
+                        Slog.e(TAG, "Failed looking up ApplicationInfo for " + packageNameF, ex);
+                    }
+                }
+
+                mNotificationBlamePopup
+                .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.notification_inspect_item) {
                             startApplicationDetailsActivity(packageNameF);
                             animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+                        } else if (item.getItemId() == R.id.notification_inspect_item_force_stop) {
+                            ActivityManager am = (ActivityManager) mContext
+                                    .getSystemService(
+                                    Context.ACTIVITY_SERVICE);
+                            am.forceStopPackage(packageNameF);
+                        } else if (item.getItemId() == R.id.notification_inspect_item_wipe_app) {
+                            ActivityManager am = (ActivityManager) mContext
+                                    .getSystemService(Context.ACTIVITY_SERVICE);
+                            am.clearApplicationUserData(packageNameF,
+                                    new FakeClearUserDataObserver());
                         } else {
                             return false;
                         }
@@ -473,6 +511,11 @@ public abstract class BaseStatusBar extends SystemUI implements
                 return true;
             }
         };
+    }
+
+    class FakeClearUserDataObserver extends IPackageDataObserver.Stub {
+        public void onRemoveCompleted(final String packageName, final boolean succeeded) {
+        }
     }
 
     public void dismissPopups() {
@@ -809,9 +852,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     Log.w(TAG, "Sending contentIntent failed: " + e);
                 }
 
-                KeyguardManager kgm =
-                    (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
-                if (kgm != null) kgm.exitKeyguardSecurely(null);
+                KeyguardTouchDelegate.getInstance(mContext).dismiss();
             }
 
             try {
@@ -1144,10 +1185,12 @@ public abstract class BaseStatusBar extends SystemUI implements
         boolean isAllowed = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
                 Notification.HEADS_UP_ALLOWED) != Notification.HEADS_UP_NEVER;
 
+        final KeyguardTouchDelegate keyguard = KeyguardTouchDelegate.getInstance(mContext);
         boolean interrupt = (isFullscreen || (isHighPriority && isNoisy))
                 && isAllowed
                 && mPowerManager.isScreenOn()
-                && !mKeyguardManager.isKeyguardLocked();
+                && !keyguard.isShowingAndNotHidden()
+                && !keyguard.isInputRestricted();
         try {
             interrupt = interrupt && !mDreamManager.isDreaming();
         } catch (RemoteException e) {
@@ -1175,8 +1218,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     public boolean inKeyguardRestrictedInputMode() {
-        KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
-        return km.inKeyguardRestrictedInputMode();
+        return KeyguardTouchDelegate.getInstance(mContext).isInputRestricted();
     }
 
     public void setInteracting(int barWindow, boolean interacting) {

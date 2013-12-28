@@ -56,6 +56,7 @@ import android.content.pm.Signature;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.pm.UserInfo;
+import android.net.ProxyProperties;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Binder;
@@ -79,6 +80,7 @@ import android.security.Credentials;
 import android.security.IKeyChainService;
 import android.security.KeyChain;
 import android.security.KeyChain.KeyChainConnection;
+import android.security.KeyStore;
 import android.util.AtomicFile;
 import android.util.Log;
 import android.util.PrintWriterPrinter;
@@ -522,6 +524,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                         || pm.getReceiverInfo(aa.info.getComponent(), 0, userHandle) == null) {
                     removed = true;
                     policy.mAdminList.remove(i);
+                    policy.mAdminMap.remove(aa.info.getComponent());
                 }
             } catch (RemoteException re) {
                 // Shouldn't happen
@@ -2463,6 +2466,12 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
         exclusionList = exclusionList.trim();
         ContentResolver res = mContext.getContentResolver();
+
+        ProxyProperties proxyProperties = new ProxyProperties(data[0], proxyPort, exclusionList);
+        if (!proxyProperties.isValid()) {
+            Slog.e(TAG, "Invalid proxy properties, ignoring: " + proxyProperties.toString());
+            return;
+        }
         Settings.Global.putString(res, Settings.Global.GLOBAL_HTTP_PROXY_HOST, data[0]);
         Settings.Global.putInt(res, Settings.Global.GLOBAL_HTTP_PROXY_PORT, proxyPort);
         Settings.Global.putString(res, Settings.Global.GLOBAL_HTTP_PROXY_EXCLUSION_LIST,
@@ -2761,6 +2770,36 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean requireSecureKeyguard(int userHandle) {
+        if (!mHasFeature) {
+            return false;
+        }
+
+        int passwordQuality = getPasswordQuality(null, userHandle);
+        if (passwordQuality > DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
+            return true;
+        }
+
+        int encryptionStatus = getStorageEncryptionStatus(userHandle);
+        if (encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE
+                || encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
+            return true;
+        }
+
+        // Keystore.isEmpty() requires system UID
+        long token = Binder.clearCallingIdentity();
+        try {
+            if (!KeyStore.getInstance().isEmpty()) {
+                return true;
+            }
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+
+        return false;
     }
 
     private boolean isDeviceProvisioned() {

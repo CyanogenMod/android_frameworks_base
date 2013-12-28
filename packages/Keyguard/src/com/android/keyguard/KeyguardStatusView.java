@@ -16,8 +16,14 @@
 
 package com.android.keyguard;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -50,14 +56,6 @@ public class KeyguardStatusView extends GridLayout {
         }
 
         @Override
-        void onKeyguardVisibilityChanged(boolean showing) {
-            if (showing) {
-                if (DEBUG) Slog.v(TAG, "refresh statusview showing:" + showing);
-                refresh();
-            }
-        };
-
-        @Override
         public void onScreenTurnedOn() {
             setEnableMarquee(true);
         };
@@ -66,6 +64,20 @@ public class KeyguardStatusView extends GridLayout {
         public void onScreenTurnedOff(int why) {
             setEnableMarquee(false);
         };
+    };
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refresh();
+        }
+    };
+
+    private ContentObserver mContentObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            refresh();
+        }
     };
 
     public KeyguardStatusView(Context context) {
@@ -98,26 +110,13 @@ public class KeyguardStatusView extends GridLayout {
     }
 
     protected void refresh() {
-        Resources res = mContext.getResources();
-        Locale locale = Locale.getDefault();
-        final String dateFormat = DateFormat.getBestDateTimePattern(locale,
-                res.getString(R.string.abbrev_wday_month_day_no_year));
+        Patterns.update(mContext);
 
-        mDateView.setFormat24Hour(dateFormat);
-        mDateView.setFormat12Hour(dateFormat);
+        mDateView.setFormat24Hour(Patterns.dateView);
+        mDateView.setFormat12Hour(Patterns.dateView);
 
-        // 12-hour clock.
-        // CLDR insists on adding an AM/PM indicator even though it wasn't in the skeleton
-        // format.  The following code removes the AM/PM indicator if we didn't want it.
-        final String clock12skel = res.getString(R.string.clock_12hr_format);
-        String clock12hr = DateFormat.getBestDateTimePattern(locale, clock12skel);
-        clock12hr = clock12skel.contains("a") ? clock12hr : clock12hr.replaceAll("a", "").trim();
-        mClockView.setFormat12Hour(clock12hr);
-
-        // 24-hour clock
-        final String clock24skel = res.getString(R.string.clock_24hr_format);
-        final String clock24hr = DateFormat.getBestDateTimePattern(locale, clock24skel);
-        mClockView.setFormat24Hour(clock24hr);
+        mClockView.setFormat12Hour(Patterns.clockView12);
+        mClockView.setFormat24Hour(Patterns.clockView24);
 
         refreshAlarmStatus();
     }
@@ -137,16 +136,60 @@ public class KeyguardStatusView extends GridLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
+
+        IntentFilter f = new IntentFilter();
+        f.addAction(Intent.ACTION_LOCALE_CHANGED);
+        mContext.registerReceiver(mBroadcastReceiver, f);
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.TIME_12_24), false, mContentObserver);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.NEXT_ALARM_FORMATTED),
+                false, mContentObserver);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
+
+        mContext.unregisterReceiver(mBroadcastReceiver);
+        mContext.getContentResolver().unregisterContentObserver(mContentObserver);
     }
 
     public int getAppWidgetId() {
         return LockPatternUtils.ID_DEFAULT_STATUS_WIDGET;
     }
 
+    // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
+    // This is an optimization to ensure we only recompute the patterns when the inputs change.
+    private static final class Patterns {
+        static String dateView;
+        static String clockView12;
+        static String clockView24;
+        static String cacheKey;
+
+        static void update(Context context) {
+            final Locale locale = Locale.getDefault();
+            final Resources res = context.getResources();
+            final String dateViewSkel = res.getString(R.string.abbrev_wday_month_day_no_year);
+            final String clockView12Skel = res.getString(R.string.clock_12hr_format);
+            final String clockView24Skel = res.getString(R.string.clock_24hr_format);
+            final String key = locale.toString() + dateViewSkel + clockView12Skel + clockView24Skel;
+            if (key.equals(cacheKey)) return;
+
+            dateView = DateFormat.getBestDateTimePattern(locale, dateViewSkel);
+
+            clockView12 = DateFormat.getBestDateTimePattern(locale, clockView12Skel);
+            // CLDR insists on adding an AM/PM indicator even though it wasn't in the skeleton
+            // format.  The following code removes the AM/PM indicator if we didn't want it.
+            if (!clockView12Skel.contains("a")) {
+                clockView12 = clockView12.replaceAll("a", "").trim();
+            }
+
+            clockView24 = DateFormat.getBestDateTimePattern(locale, clockView24Skel);
+
+            cacheKey = key;
+        }
+    }
 }

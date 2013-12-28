@@ -23,6 +23,10 @@ import android.telephony.SignalStrength;
 
 interface IBatteryStats {
     byte[] getStatistics();
+    /** @hide **/
+    byte[] getDockStatistics();
+    /** @hide **/
+    void resetStatistics();
     void noteStartWakelock(int uid, int pid, String name, int type);
     void noteStopWakelock(int uid, int pid, String name, int type);
     
@@ -68,11 +72,14 @@ interface IBatteryStats {
     void noteFullWifiLockReleasedFromSource(in WorkSource ws);
     void noteWifiScanStartedFromSource(in WorkSource ws);
     void noteWifiScanStoppedFromSource(in WorkSource ws);
+    void noteWifiBatchedScanStartedFromSource(in WorkSource ws, int csph);
+    void noteWifiBatchedScanStoppedFromSource(in WorkSource ws);
     void noteWifiMulticastEnabledFromSource(in WorkSource ws);
     void noteWifiMulticastDisabledFromSource(in WorkSource ws);
     void noteNetworkInterfaceType(String iface, int type);
     void noteNetworkStatsEnabled();
     void setBatteryState(int status, int health, int plugType, int level, int temp, int volt);
+    void setDockBatteryState(int status, int health, int plugType, int level, int temp, int volt);
     long getAwakeTimeBattery();
     long getAwakeTimePlugged();
 }

@@ -106,30 +106,8 @@ jint android_os_FileUtils_getVolumeUUID(JNIEnv* env, jobject clazz, jstring path
     return -1;
 }
 
-jint android_os_FileUtils_getFatVolumeId(JNIEnv* env, jobject clazz, jstring path)
-{
-    if (path == NULL) {
-        jniThrowException(env, "java/lang/IllegalArgumentException", NULL);
-        return -1;
-    }
-    const char *pathStr = env->GetStringUTFChars(path, NULL);
-    int result = -1;
-    // only if our system supports this ioctl
-    #ifdef VFAT_IOCTL_GET_VOLUME_ID
-    int fd = open(pathStr, O_RDONLY);
-    if (fd >= 0) {
-        result = ioctl(fd, VFAT_IOCTL_GET_VOLUME_ID);
-        close(fd);
-    }
-    #endif
-
-    env->ReleaseStringUTFChars(path, pathStr);
-    return result;
-}
-
 static const JNINativeMethod methods[] = {
     {"getVolumeUUID",  "(Ljava/lang/String;)I", (void*)android_os_FileUtils_getVolumeUUID},
-    {"getFatVolumeId",  "(Ljava/lang/String;)I", (void*)android_os_FileUtils_getFatVolumeId},
 };
 
 static const char* const kFileUtilsPathName = "android/os/FileUtils";

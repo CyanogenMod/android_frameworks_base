@@ -113,8 +113,6 @@
     <string name="symbol_picker_equal">\u2260\u2248\u221e</string>
     <string name="symbol_picker_lt">\u2264\u00ab\u2039</string>
     <string name="symbol_picker_gt">\u2265\u00bb\u203a</string>
-    <string name="permlab_cancelNotifications">cancelar notificações da aplicação</string>
-    <string name="permdesc_cancelNotifications">Permite ao aplicativo cancelar notificações criadas por outros aplicativos.</string>
     <string name="permlab_sendMockSms">Simular envio de mensagens SMS</string>
     <string name="permdesc_sendMockSms">Permite ao aplicativo simular envio de mensagens SMS.
         Isto permite um aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
@@ -122,4 +120,8 @@
     <string name="perf_profile_pwrsv">Economia</string>
     <string name="perf_profile_bal">Balanceado</string>
     <string name="perf_profile_perf">Performance</string>
+    <string name="permlab_interceptSmsSent">interceptar SMS enviadas</string>
+    <string name="permdesc_interceptSmsSent">Permitir o aplicativo a interceptar um SMS enviado. Aplicativos maliciosos podem usar isto para previnir o envio de mensagens SMS.</string>
+    <string name="permlab_resetBatteryStats">redefinir estatísticas da bateria</string>
+    <string name="permdesc_resetBatteryStats">Permite uma aplicação redefinir o nível baixo atual dos dados de uso da bateria.</string>
 </resources>

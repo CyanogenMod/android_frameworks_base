@@ -283,7 +283,7 @@ public final class ContentService extends IContentService.Stub {
                 SyncManager syncManager = getSyncManager();
                 if (syncManager != null) {
                     syncManager.scheduleLocalSync(null /* all accounts */, callingUserHandle, uid,
-                            uri.getAuthority());
+                            uri != null ? uri.getAuthority() : null);
                 }
             }
         } finally {
@@ -660,7 +660,7 @@ public final class ContentService extends IContentService.Stub {
         int userId = UserHandle.getCallingUserId();
         long identityToken = clearCallingIdentity();
         try {
-            return getSyncManager().getSyncStorageEngine().getCurrentSyncs(userId);
+            return getSyncManager().getSyncStorageEngine().getCurrentSyncsCopy(userId);
         } finally {
             restoreCallingIdentity(identityToken);
         }

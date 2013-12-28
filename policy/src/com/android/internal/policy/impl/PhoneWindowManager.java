@@ -2765,18 +2765,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         }
 
-        // Specific device key handling
-        if (mDeviceKeyHandler != null) {
-            try {
-                // The device only should consume known keys.
-                if (mDeviceKeyHandler.handleKeyEvent(event)) {
-                    return -1;
-                }
-            } catch (Exception e) {
-                Slog.w(TAG, "Could not dispatch event to device key handler", e);
-            }
-        }
-
         // Let the application handle the key.
         return 0;
     }
@@ -3996,6 +3984,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 if (mStatusBarController.setBarShowingLw(true)) {
                     changes |= FINISH_LAYOUT_REDO_LAYOUT;
                 }
+                // Maintain fullscreen layout until incoming animation is complete.
+                topIsFullscreen = mTopIsFullscreen && mStatusBar.isAnimatingLw();
+                // Transient status bar on the lockscreen is not allowed
+                if (mForceStatusBarFromKeyguard && mStatusBarController.isTransientShowing()) {
+                    mStatusBarController.updateVisibilityLw(false /*transientAllowed*/,
+                            mLastSystemUiFlags, mLastSystemUiFlags);
+                }
             } else if (mTopFullscreenOpaqueWindowState != null) {
                 if (localLOGV) {
                     Slog.d(TAG, "frame: " + mTopFullscreenOpaqueWindowState.getFrameLw()
@@ -4029,7 +4024,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
-        mTopIsFullscreen = topIsFullscreen;
+        if (mTopIsFullscreen != topIsFullscreen) {
+            if (!topIsFullscreen) {
+                // Force another layout when status bar becomes fully shown.
+                changes |= FINISH_LAYOUT_REDO_LAYOUT;
+            }
+            mTopIsFullscreen = topIsFullscreen;
+        }
 
         // Hide the key guard if a visible window explicitly specifies that it wants to be
         // displayed when the screen is locked.
@@ -4538,8 +4539,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
                 result &= ~ACTION_PASS_TO_USER;
                 if (down) {
-                    mImmersiveModeConfirmation.onPowerKeyDown(isScreenOn, event.getDownTime(),
-                            isImmersiveMode(mLastSystemUiFlags));
+                    if (mExpandedDesktopStyle == 0) {
+                        mImmersiveModeConfirmation.onPowerKeyDown(isScreenOn, event.getDownTime(),
+                                isImmersiveMode(mLastSystemUiFlags));
+                    }
                     if (isScreenOn && !mPowerKeyTriggered
                             && (event.getFlags() & KeyEvent.FLAG_FALLBACK) == 0) {
                         mPowerKeyTriggered = true;
@@ -5717,6 +5720,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         } else {
             mClearedBecauseOfForceShow = false;
         }
+        // The window who requested navbar force showing disappeared and next window wants
+        // to hide navbar. Instead of hiding we will make it transient. SystemUI will take care
+        // about hiding after timeout. This should not happen if next window is keyguard because
+        // transient state have more priority than translucent (why?) and cause bad UX
+        if (wasCleared && !mClearedBecauseOfForceShow
+                && (tmpVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0) {
+            mNavigationBarController.showTransient();
+            tmpVisibility |= View.NAVIGATION_BAR_TRANSIENT;
+            mWindowManagerFuncs.addSystemUIVisibilityFlag(View.NAVIGATION_BAR_TRANSIENT);
+        }
         int visibility = updateSystemBarsLw(win, mLastSystemUiFlags, tmpVisibility);
         final int diff = visibility ^ mLastSystemUiFlags;
         final boolean needsMenu = win.getNeedsMenuLw(mTopFullscreenOpaqueWindowState);
@@ -5724,12 +5737,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && mFocusedApp == win.getAppToken()) {
             return 0;
         }
-        if (wasCleared && !mClearedBecauseOfForceShow
-                && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0) {
-            mNavigationBarController.showTransient();
-            visibility |= View.NAVIGATION_BAR_TRANSIENT;
-            mWindowManagerFuncs.addSystemUIVisibilityFlag(View.NAVIGATION_BAR_TRANSIENT);
-        }
+
         final int visibility2 = visibility;
         mLastSystemUiFlags = visibility;
         mLastFocusNeedsMenu = needsMenu;
@@ -5802,9 +5810,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mNavigationBar != null &&
                 hideNavBarSysui && immersiveSticky;
 
-        boolean denyTransientStatus = mStatusBarController.isTransientShowing()
+        boolean denyTransientStatus = mStatusBarController.isTransientShowRequested()
                 && !transientStatusBarAllowed && hideStatusBarSysui;
-        boolean denyTransientNav = mNavigationBarController.isTransientShowing()
+        boolean denyTransientNav = mNavigationBarController.isTransientShowRequested()
                 && !transientNavBarAllowed;
         if (denyTransientStatus || denyTransientNav) {
             // clear the clearable flags instead
@@ -5817,8 +5825,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         boolean oldImmersiveMode = isImmersiveMode(oldVis);
         boolean newImmersiveMode = isImmersiveMode(vis);
         if (win != null && oldImmersiveMode != newImmersiveMode) {
-            final String pkg = mExpandedDesktopStyle != 0 ? "android" : win.getOwningPackage();
-            mImmersiveModeConfirmation.immersiveModeChanged(pkg, newImmersiveMode);
+            final String pkg = mExpandedDesktopStyle != 0 ? "android" + mExpandedDesktopStyle
+                    : win.getOwningPackage();
+            mImmersiveModeConfirmation.immersiveModeChanged(pkg, newImmersiveMode,
+                    transientStatusBarAllowed);
         }
 
         vis = mNavigationBarController.updateVisibilityLw(transientNavBarAllowed, oldVis, vis);
@@ -5834,7 +5844,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private boolean isImmersiveMode(int vis) {
+    public boolean isImmersiveMode(int vis) {
         final int flags = View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         return mNavigationBar != null
                 && (vis & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0

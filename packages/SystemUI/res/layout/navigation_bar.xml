@@ -39,7 +39,7 @@
             android:clipToPadding="false"
             android:id="@+id/container"
             >
-        <include layout="@layout/mid_navigation_bar_port"/>
+            <include layout="@layout/mid_navigation_bar_port"/>
         </LinearLayout>
 
         <!-- lights out layout to match exactly -->
@@ -219,7 +219,7 @@
             android:layout_height="80dp"
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/search_light"
+            android:src="@drawable/search_light_land"
             android:scaleType="center"
             android:visibility="gone"
             android:rotation="270"

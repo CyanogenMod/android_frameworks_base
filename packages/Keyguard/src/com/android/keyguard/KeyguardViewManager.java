@@ -40,6 +40,7 @@ import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
@@ -61,8 +62,10 @@ import android.widget.FrameLayout;
 public class KeyguardViewManager {
     private final static boolean DEBUG = KeyguardViewMediator.DEBUG;
     private static String TAG = "KeyguardViewManager";
-    public static boolean USE_UPPER_CASE = true;
     public final static String IS_SWITCHING_USER = "is_switching_user";
+
+    // Delay dismissing keyguard to allow animations to complete.
+    private static final int HIDE_KEYGUARD_DELAY = 500;
 
     // Timeout used for keypresses
     static final int DIGIT_PRESS_WAKE_MILLIS = 5000;
@@ -140,8 +143,12 @@ public class KeyguardViewManager {
 
     private boolean shouldEnableScreenRotation() {
         Resources res = mContext.getResources();
+        boolean enableLockScreenRotation = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_ROTATION, 0) != 0;
+        boolean enableAccelerometerRotation = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION, 1) != 0;
         return SystemProperties.getBoolean("lockscreen.rot_override",false)
-                || res.getBoolean(R.bool.config_enableLockScreenRotation);
+                || (enableLockScreenRotation && enableAccelerometerRotation);
     }
 
     private boolean shouldEnableTranslucentDecor() {
@@ -246,6 +253,8 @@ public class KeyguardViewManager {
                     if (keyCode == KeyEvent.KEYCODE_BACK && mKeyguardView.handleBackKey()) {
                         return true;
                     } else if (keyCode == KeyEvent.KEYCODE_MENU && mKeyguardView.handleMenuKey()) {
+                        return true;
+                    } else if (keyCode == KeyEvent.KEYCODE_HOME && mKeyguardView.handleHomeKey()) {
                         return true;
                     }
                 }
@@ -509,9 +518,10 @@ public class KeyguardViewManager {
                             mKeyguardHost.setCustomBackground(null);
                             updateShowWallpaper(true);
                             mKeyguardHost.removeView(lastView);
+                            mViewMediatorCallback.keyguardGone();
                         }
                     }
-                }, 500);
+                }, HIDE_KEYGUARD_DELAY);
             }
         }
     }

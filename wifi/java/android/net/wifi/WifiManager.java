@@ -799,7 +799,13 @@ public class WifiManager {
      */
     public boolean requestBatchedScan(BatchedScanSettings requested) {
         try {
-            return mService.requestBatchedScan(requested, new Binder());
+            return mService.requestBatchedScan(requested, new Binder(), null);
+        } catch (RemoteException e) { return false; }
+    }
+    /** @hide */
+    public boolean requestBatchedScan(BatchedScanSettings requested, WorkSource workSource) {
+        try {
+            return mService.requestBatchedScan(requested, new Binder(), workSource);
         } catch (RemoteException e) { return false; }
     }
 
@@ -937,6 +943,18 @@ public class WifiManager {
         try {
             mService.setCountryCode(country, persist);
         } catch (RemoteException e) { }
+    }
+
+    /**
+     * Get the operational country code.
+     * @hide
+     */
+    public String getCountryCode() {
+        try {
+            return mService.getCountryCode();
+        } catch (RemoteException e) {
+            return null;
+        }
     }
 
     /**

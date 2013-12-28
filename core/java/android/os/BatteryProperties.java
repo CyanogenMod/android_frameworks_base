@@ -25,6 +25,7 @@ public class BatteryProperties implements Parcelable {
     public boolean chargerAcOnline;
     public boolean chargerUsbOnline;
     public boolean chargerWirelessOnline;
+
     public int batteryStatus;
     public int batteryHealth;
     public boolean batteryPresent;
@@ -35,6 +36,19 @@ public class BatteryProperties implements Parcelable {
     public int batteryTemperature;
     public String batteryTechnology;
 
+    /* Do NOT change the order of the standard parcel fields */
+    public boolean chargerDockAcOnline;
+    public boolean dockBatterySupported;
+    public int dockBatteryStatus;
+    public int dockBatteryHealth;
+    public boolean dockBatteryPresent;
+    public int dockBatteryLevel;
+    public int dockBatteryVoltage;
+    public int dockBatteryCurrentNow;
+    public int dockBatteryChargeCounter;
+    public int dockBatteryTemperature;
+    public String dockBatteryTechnology;
+
     /*
      * Parcel read/write code must be kept in sync with
      * frameworks/native/services/batteryservice/BatteryProperties.cpp
@@ -44,6 +58,7 @@ public class BatteryProperties implements Parcelable {
         chargerAcOnline = p.readInt() == 1 ? true : false;
         chargerUsbOnline = p.readInt() == 1 ? true : false;
         chargerWirelessOnline = p.readInt() == 1 ? true : false;
+
         batteryStatus = p.readInt();
         batteryHealth = p.readInt();
         batteryPresent = p.readInt() == 1 ? true : false;
@@ -53,12 +68,25 @@ public class BatteryProperties implements Parcelable {
         batteryChargeCounter = p.readInt();
         batteryTemperature = p.readInt();
         batteryTechnology = p.readString();
+
+        chargerDockAcOnline = p.readInt() == 1 ? true : false;
+        dockBatterySupported = p.readInt() == 1 ? true : false;
+        dockBatteryStatus = p.readInt();
+        dockBatteryHealth = p.readInt();
+        dockBatteryPresent = p.readInt() == 1 ? true : false;
+        dockBatteryLevel = p.readInt();
+        dockBatteryVoltage = p.readInt();
+        dockBatteryCurrentNow = p.readInt();
+        dockBatteryChargeCounter = p.readInt();
+        dockBatteryTemperature = p.readInt();
+        dockBatteryTechnology = p.readString();
     }
 
     public void writeToParcel(Parcel p, int flags) {
         p.writeInt(chargerAcOnline ? 1 : 0);
         p.writeInt(chargerUsbOnline ? 1 : 0);
         p.writeInt(chargerWirelessOnline ? 1 : 0);
+
         p.writeInt(batteryStatus);
         p.writeInt(batteryHealth);
         p.writeInt(batteryPresent ? 1 : 0);
@@ -68,6 +96,18 @@ public class BatteryProperties implements Parcelable {
         p.writeInt(batteryChargeCounter);
         p.writeInt(batteryTemperature);
         p.writeString(batteryTechnology);
+
+        p.writeInt(chargerDockAcOnline ? 1 : 0);
+        p.writeInt(dockBatterySupported ? 1 : 0);
+        p.writeInt(dockBatteryStatus);
+        p.writeInt(dockBatteryHealth);
+        p.writeInt(dockBatteryPresent ? 1 : 0);
+        p.writeInt(dockBatteryLevel);
+        p.writeInt(dockBatteryVoltage);
+        p.writeInt(dockBatteryCurrentNow);
+        p.writeInt(dockBatteryChargeCounter);
+        p.writeInt(dockBatteryTemperature);
+        p.writeString(dockBatteryTechnology);
     }
 
     public static final Parcelable.Creator<BatteryProperties> CREATOR
