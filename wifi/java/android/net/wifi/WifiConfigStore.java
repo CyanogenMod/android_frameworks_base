@@ -338,6 +338,13 @@ class WifiConfigStore {
     boolean forgetNetwork(int netId) {
         if (VDBG) localLog("forgetNetwork", netId);
         if (mWifiNative.removeNetwork(netId)) {
+            for(WifiConfiguration config : mConfiguredNetworks.values()) {
+                if(config != null && config.status == Status.DISABLED) {
+                       config.status = Status.ENABLED;
+                  } else {
+                       loge("Enable network failed on " + config.networkId);
+                  }
+            }
             mWifiNative.saveConfig();
             removeConfigAndSendBroadcastIfNeeded(netId);
             return true;
