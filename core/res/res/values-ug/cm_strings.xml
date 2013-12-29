@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="profileNameDefault">كۆڭۈلدىكى</string>
+    <string name="profileNameWork">ئىش</string>
+    <string name="profileNameHome">ئۆي</string>
+    <string name="profileNameSilent">ئۈنسىز</string>
+    <string name="profileNameNight">كېچە</string>
+    <string name="profileGroupPhone">تېلېفون</string>
+    <string name="profileGroupCalendar">يىلنامە</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">تورخەت</string>
+    <string name="profileGroupSMS">قىسقا ئۇچۇر</string>
+    <string name="wildcardProfile">باشقا</string>
+    <string name="reboot_system" product="tablet">تاختا كومپيۇتېرنى قايتا قوزغات</string>
+    <string name="reboot_system" product="default">تېلېفوننى قايتا قوزغات</string>
+     <string name="global_action_screenshot">ئېكراندىن تۇتۇلغان سۈرەت</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">كېڭەيتىلگەن ئۈستەلئۈستى</string>
+     <string name="global_actions_expanded_desktop_mode_on_status"> قوزغىتىلغان</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">چەكلەنگەن</string>
+    <string name="reboot_reboot">قايتا قوزغات</string>
+     <string name="reboot_recovery">ئەسلىگە كەلتۈر</string>
+    <string name="reboot_bootloader">قوزغىتىش يۈكلىگۈچ</string>
+    <string name="reboot_bootmenu">قوزغىتىش تىزىملىكى</string>
+    <string name="reboot_fastboot">تېز قوزغىتىش</string>
+    <string name="reboot_download">چۈشۈر</string>
+    <string name="reboot_progress">قايتا قوزغىتىۋاتىدۇ\u2026</string>
+    <string name="reboot_confirm" product="tablet">تاختا كومپيۇتېرىڭىز قايتا قوزغىلىدۇ.</string>
+    <string name="reboot_confirm" product="default">تېلېفونىڭىز قايتا قوزغىلىدۇ.</string>
+    <string name="permlab_preventpower">توك مەنبە توپچىنى چەكلەيدۇ</string>
+    <string name="permdesc_preventpower">پىروگراممىنىڭ توك مەنبە توپچىسىنى قاپلىشىغا يول قويىدۇ</string>
+    <string name="permlab_fm_radio_receiver">FM قوبۇللىغۇچ تىزگىنى</string>
+    <string name="permdesc_fm_radio_receiver">ئەپنىڭ FM قوبۇللىغۇچنى تىزگىنلىشىگە يول قويىدۇ.</string>
+    <string name="permlab_fm_radio_transmitter">FM تارقاتقۇچ تىزگىنى</string>
+    <string name="permdesc_fm_radio_transmitter">ئەپنىڭ FM تارقاتقۇچنى تىزگىنلىشىگە يول قويىدۇ.</string>
+    <string name="permlab_sendMockSms">&quot;تەقلىدىي قىسقا ئۇچۇر يوللايدۇ&quot;</string>
+    <string name="permdesc_sendMockSms">&quot;ئەپنىڭ تەقلىدىي قىسقا ئۇچۇر يوللىشىغا يول قويىدۇ. بۇنداق بولغاندا ئەپنىڭ ئىشەنچلىك ئەپلەرگە قىسقا ئۇچۇر يوللىشىغا يول قويىدۇ. زەھەرخەندە ئەپلەر ئارقىمۇ-ئارقا ئۇچۇر يوللىيالايدۇ، ئۈسكۈنە ئۇقتۇرۇش سىستېمىسىنى توسىدۇ ۋە ئىشلەتكۈچىگە كاشىلا قىلىدۇ.&quot;</string>
+    <string name="lockscreen_discharging">توك سەرپ قىلىۋاتىدۇ، <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="storage_sd_dock_card">لەڭگەرلىك SD كارتا </string>
+    <string name="app_killed_message">ئەپ ئاخىرلاشتۇرۇلدى</string>
+    <string name="global_action_reboot">قايتا قوزغات</string>
+    <string name="global_action_choose_profile">سەپلىمە ھۆججەت</string>
+    <string name="toast_rotation_unlocked">ئېكران يۆنىلىش قۇلۇپى ئېچىلدى</string>
+    <string name="toast_rotation_locked">ئېكران يۆنىلىش قۇلۇپلاندى</string>
+    <string name="stylus_app_not_installed">%s تېخى ئورنىتىلمىغان</string>
+    <string name="permlab_changePrivacyGuardState">شەخسىيەت قوغداشنى قوزغات ياكى چەكلە</string>
+    <string name="permdesc_changePrivacyGuardState">ئەپنىڭ باشقا ئەپنى شەخسىيەت قوغداش ھالىتىدە ئىجرا قىلىشىغا يول قويىدۇ. ئەپ شەخسىيەت قوغداش ھالىتىدە ئىجرا قىلىنسا، ئۇ ئالاقەداشلار، چاقىرىش خاتىرىسى ياكى ئۇچۇرلارغا ئوخشاش شەخسىي سانلىق مەلۇماتلارنى زىيارەت قىلىش ھوقۇقى بولمايدۇ.</string>
+    <string name="privacy_guard_notification">شەخسىيەت قوغداش ئاكتىپ </string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> شەخسىي سانلىق مەلۇماتلارنى زىيارەت قىلالمايدۇ</string>
+    <string name="profile_picker_title">سەپلىمە ھۆججەتلەر</string>
+    <string name="profile_none">يوق</string>
+    <string name="permlab_cancelNotifications">پروگرامما ئۇقتۇرۇشلىرىنى بىكار قىل</string>
+    <string name="permdesc_cancelNotifications">ئەپنىڭ باشقا ئەپلەر قۇرغان ئۇقتۇرۇشلارنى مەجبۇرىي توختىتىشىغا يول قويىدۇ.</string>
+</resources>
