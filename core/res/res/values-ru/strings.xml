@@ -984,9 +984,9 @@
     <string name="searchview_description_clear" msgid="1330281990951833033">"Удалить запрос"</string>
     <string name="searchview_description_submit" msgid="2688450133297983542">"Отправить запрос"</string>
     <string name="searchview_description_voice" msgid="2453203695674994440">"Голосовой поиск"</string>
-    <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"Включить «Изучение касанием»?"</string>
-    <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию «Изучение касанием». Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять планшетным ПК с помощью жестов."</string>
-    <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию «Изучение касанием». Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять телефоном с помощью жестов."</string>
+    <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"Включить \"Изучение касанием\"?"</string>
+    <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию \"Изучение касанием\". Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять планшетным ПК с помощью жестов."</string>
+    <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию \"Изучение касанием\". Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять телефоном с помощью жестов."</string>
     <string name="oneMonthDurationPast" msgid="7396384508953779925">"1 месяц назад"</string>
     <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Более месяца назад"</string>
   <plurals name="num_seconds_ago">
@@ -1117,8 +1117,8 @@
     <string name="app_running_notification_text" msgid="4653586947747330058">"Нажмите, чтобы получить дополнительные сведения или завершить приложение."</string>
     <string name="ok" msgid="5970060430562524910">"ОК"</string>
     <string name="cancel" msgid="6442560571259935130">"Отмена"</string>
-    <string name="yes" msgid="5362982303337969312">"Да"</string>
-    <string name="no" msgid="5141531044935541497">"Нет"</string>
+    <string name="yes" msgid="5362982303337969312">"ОК"</string>
+    <string name="no" msgid="5141531044935541497">"Отмена"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Внимание"</string>
     <string name="loading" msgid="7933681260296021180">"Загрузка…"</string>
     <string name="capital_on" msgid="1544682755514494298">"\u2759"</string>
@@ -1147,8 +1147,8 @@
     <string name="launch_warning_original" msgid="188102023021668683">"Изначально было запущено приложение <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
     <string name="screen_compat_mode_scale" msgid="3202955667675944499">"Масштаб"</string>
     <string name="screen_compat_mode_show" msgid="4013878876486655892">"Всегда показывать"</string>
-    <string name="screen_compat_mode_hint" msgid="1064524084543304459">"Включить эту функцию можно в меню «Настройки &gt; Приложения &gt; Загруженные»."</string>
-    <string name="smv_application" msgid="3307209192155442829">"Приложение «<xliff:g id="APPLICATION">%1$s</xliff:g>» (процесс: <xliff:g id="PROCESS">%2$s</xliff:g>) нарушило собственную политику StrictMode."</string>
+    <string name="screen_compat_mode_hint" msgid="1064524084543304459">"Включить эту функцию можно в меню \"Настройки &gt; Приложения &gt; Загруженные\"."</string>
+    <string name="smv_application" msgid="3307209192155442829">"Приложение \"<xliff:g id="APPLICATION">%1$s</xliff:g>\" (процесс: <xliff:g id="PROCESS">%2$s</xliff:g>) нарушило собственную политику StrictMode."</string>
     <string name="smv_process" msgid="5120397012047462446">"Процесс <xliff:g id="PROCESS">%1$s</xliff:g> нарушил собственную политику StrictMode."</string>
     <string name="android_upgrading_title" msgid="1584192285441405746">"Обновление Android..."</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"Оптимизация приложения <xliff:g id="NUMBER_0">%1$d</xliff:g> из <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
