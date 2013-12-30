@@ -282,8 +282,12 @@ public class NotificationHostView extends FrameLayout {
         mScrollView.setHostView(this);
         mScrollView.setY(mDisplayHeight * OFFSET_TOP);
         int maxHeight = Math.round(mDisplayHeight - mDisplayHeight * OFFSET_TOP);
-        mScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                Math.min(maxHeight, NotificationViewManager.config.notificationsHeight * mNotificationMinRowHeight)));
+        try {
+            mScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                    Math.min(maxHeight, NotificationViewManager.config.notificationsHeight * mNotificationMinRowHeight)));
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to inflate view!");
+        }
     }
 
     public void addNotifications() {
