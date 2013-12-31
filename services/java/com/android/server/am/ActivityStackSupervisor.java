@@ -83,6 +83,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import org.codeaurora.Performance;
+
+
 public final class ActivityStackSupervisor {
     static final boolean DEBUG = ActivityManagerService.DEBUG || false;
     static final boolean DEBUG_ADD_REMOVE = DEBUG || false;
@@ -107,7 +111,8 @@ public final class ActivityStackSupervisor {
     static final int RESUME_TOP_ACTIVITY_MSG = FIRST_SUPERVISOR_STACK_MSG + 2;
     static final int SLEEP_TIMEOUT_MSG = FIRST_SUPERVISOR_STACK_MSG + 3;
     static final int LAUNCH_TIMEOUT_MSG = FIRST_SUPERVISOR_STACK_MSG + 4;
-
+    public Performance mPerf = null;
+    public boolean mIsPerfLockAcquired = false;
     // For debugging to make sure the caller when acquiring/releasing our
     // wake lock is the system process.
     static final boolean VALIDATE_WAKE_LOCK_CALLER = false;
@@ -2101,6 +2106,14 @@ public final class ActivityStackSupervisor {
             if (ar != null) {
                 return ar;
             }
+        }
+        /* Acquire perf lock during new app launch */
+        if (mPerf == null) {
+            mPerf = new Performance();
+        }
+        if (mPerf != null && mIsPerfLockAcquired == false) {
+            mPerf.perfLockAcquire(2000,0x1B00);
+            mIsPerfLockAcquired = true;
         }
         if (DEBUG_TASKS) Slog.d(TAG, "No task found");
         return null;
