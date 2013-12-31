@@ -184,6 +184,9 @@ public class PolicyHelper {
         } else if (clickAction.equals(PolicyConstants.ACTION_EXPANDED_DESKTOP)) {
             return context.getResources().getDrawable(
                 com.android.internal.R.drawable.ic_lock_immersive_mode_on);
+        } else if (clickAction.equals(PolicyConstants.ACTION_PROFILE)) {
+            return context.getResources().getDrawable(
+                com.android.internal.R.drawable.ic_lock_profile);
         }
         return null;
     }
