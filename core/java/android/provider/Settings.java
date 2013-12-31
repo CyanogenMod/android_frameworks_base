@@ -4162,21 +4162,6 @@ public final class Settings {
         public static final String APP_SIDEBAR_SHOW_TRIGGER = "app_sidebar_show_trigger";
 
         /**
-         * Whether to enable Swipe Back Layout Gesture
-         * Default: 0
-         *
-         * @hide
-         */
-        public static final String SWIPE_BACK_GESTURE_ENABLED = "swipe_back_gesture_enabled";
-
-        /**
-         * Swipe edge of the swipe back layout gesture
-         *
-         * @hide
-         */
-        public static final String SWIPE_BACK_GESTURE_EDGE = "swipe_back_gesture_edge";
-
-        /**
          * Whether to unlock the screen with the home key.  The value is boolean (1 or 0).
          * @hide
          */
