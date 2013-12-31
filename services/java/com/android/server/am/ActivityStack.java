@@ -1159,14 +1159,17 @@ final class ActivityStack {
                     // Aggregate current change flags.
                     configChanges |= r.configChangeFlags;
 
+		    int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
                     boolean isSplitView = false;
 
-                    try {
-                        IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-                        isSplitView = wm.isTaskSplitView(r.task.taskId);
-                    } catch (RemoteException e) {
-                        Slog.e(TAG, "Cannot get split view status", e);
-                    }
+		    if(mHaloEnabled != 1){
+		            try {
+		                IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+		                isSplitView = wm.isTaskSplitView(r.task.taskId);
+		            } catch (RemoteException e) {
+		                Slog.e(TAG, "Cannot get split view status", e);
+		            }
+		    }
 
                     if (r.fullscreen && !isSplitView) {
                         // At this point, nothing else needs to be shown
