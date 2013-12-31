@@ -71,11 +71,7 @@
   <java-symbol type="bool" name="config_stylusGestures" />
   <java-symbol type="string" name="stylus_app_not_installed" />
 
-  <!-- Statusbar double tap gesture -->
-  <java-symbol type="bool" name="config_disableDoubleTapSleepGesture" />
-
   <!-- UI theme mode -->
   <java-symbol type="integer" name="config_uiThemeMode" />
   <java-symbol type="string" name="theme_auto_switch_mode_error" />
-
 </resources>
