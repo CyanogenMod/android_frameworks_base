@@ -711,7 +711,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
         addNavigationBar();
 
-	// status bar brightness control observer
+    	// status bar brightness control observer
         SettingsObserver observer = new SettingsObserver(mHandler);
         observer.observe();
 
@@ -3452,6 +3452,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     }
                 } catch (RemoteException e) {
                 }
+                if (mRecreating) {
+                    removeSidebarView();
+                } else {
+                    addActiveDisplayView();
+                }
+                addSidebarView();
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 mScreenOn = true;
                 // work around problem where mDisplay.getRotation() is not stable while screen is off (bug 7086018)
