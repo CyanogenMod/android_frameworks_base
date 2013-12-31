@@ -65,6 +65,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.Manifest;
 import android.view.WindowManagerPolicy.WindowManagerFuncs;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -369,20 +370,36 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                         new SinglePressAction(PolicyHelper.getPowerMenuIconImage(mContext,
                                 config.getClickAction(), config.getIcon(), true),
                                 config.getClickActionDescription()) {
-                            public void onPress() {
-                                createProfileDialog();
-                            }
+                        public void onPress() {
+                            createProfileDialog();
+                        }
 
-                            public boolean onLongPress() {
-                                return true;
-                            }
+                        public boolean onLongPress() {
+                            return true;
+                        }
 
-                            public boolean showDuringKeyguard() {
-                                return false;
-                            }
+                        public boolean showDuringKeyguard() {
+                            return false;
+                        }
 
-                            public boolean showBeforeProvisioning() {
-                                return false;
+                        public boolean showBeforeProvisioning() {
+                            return false;
+                        }
+                });
+            // next: screenrecord
+            } else if (config.getClickAction().equals(PolicyConstants.ACTION_SCREENRECORD)) {
+                mItems.add(
+                    new SinglePressAction(R.drawable.ic_lock_screenrecord, R.string.global_action_screenrecord) {
+                        public void onPress() {
+                            toggleScreenRecord();
+                        }
+
+                        public boolean showDuringKeyguard() {
+                            return true;
+                        }
+
+                        public boolean showBeforeProvisioning() {
+                            return true;
                         }
                 });
             // airplane mode
@@ -604,6 +621,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 }).create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
         dialog.show();
+    }
+
+    private void toggleScreenRecord() {
+        final Intent recordIntent = new Intent("org.chameleonos.action.NOTIFY_RECORD_SERVICE");
+        mContext.sendBroadcast(recordIntent, Manifest.permission.RECORD_SCREEN);
     }
 
     private void prepareDialog() {
