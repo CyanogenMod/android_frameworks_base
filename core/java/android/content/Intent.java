@@ -3672,6 +3672,8 @@ public class Intent implements Parcelable, Cloneable {
      * in mutil window scenarios.
      */
     public static final int FLAG_FLOATING_WINDOW = 0x00002000;
+
+    public static final int FLAG_ACTIVITY_SPLIT_VIEW = 0x00001000;
     /**
      * If set, when sending a broadcast only registered receivers will be
      * called -- no BroadcastReceiver components will be launched.
