@@ -2382,10 +2382,20 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
         }
 
+        boolean forceShowLights = false;
+        if (mLedNotification != null) {
+             final Notification n = mLedNotification.sbn.getNotification();
+             if (n.extras != null) {
+                  forceShowLights = n.extras.getBoolean(Notification.EXTRA_FORCE_SHOW_LIGHTS, false);
+             }
+        }
+
         // Don't flash while we are in a call, screen is on or we are
         // in quiet hours with light dimmed
-        if (mLedNotification == null || mInCall || (mScreenOn && !mDreaming)
-                || (QuietHoursUtils.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM))) {
+        // (unless Notification has EXTRA_FORCE_SHOW_LGHTS)
+        if (mLedNotification == null || ((mInCall || (mScreenOn && !mDreaming)
+                || (QuietHoursUtils.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM)))
+                        && !forceShowLights)) {
             mNotificationLight.turnOff();
         } else if (mNotificationPulseEnabled) {
             final Notification ledno = mLedNotification.sbn.getNotification();
