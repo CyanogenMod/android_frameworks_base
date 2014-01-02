@@ -149,7 +149,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         }
     }
 
-    /* package */ final static class ViewHolder {
+    /* package */ public final static class ViewHolder {
         View thumbnailView;
         ImageView thumbnailViewImage;
         Drawable thumbnailViewDrawable;
@@ -158,7 +158,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         TextView labelView;
         TextView descriptionView;
         View calloutLine;
-        TaskDescription taskDescription;
+        public TaskDescription taskDescription;
         boolean loadedThumbnailAndIcon;
     }
 

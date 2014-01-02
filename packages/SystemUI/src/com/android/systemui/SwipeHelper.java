@@ -30,6 +30,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.LinearInterpolator;
+import com.android.systemui.recent.TaskDescription;
+import com.android.systemui.recent.RecentsPanelView.ViewHolder;
 
 public class SwipeHelper implements Gefingerpoken {
     static final String TAG = "com.android.systemui.SwipeHelper";
@@ -341,6 +343,11 @@ public class SwipeHelper implements Gefingerpoken {
 
         mVelocityTracker.addMovement(ev);
         final int action = ev.getAction();
+        TaskDescription ad = null;
+        boolean isRecent = mCurrView.getTag() instanceof ViewHolder;
+        if (isRecent) {
+            ad = ((ViewHolder) mCurrView.getTag()).taskDescription;
+        }
         switch (action) {
             case MotionEvent.ACTION_OUTSIDE:
             case MotionEvent.ACTION_MOVE:
@@ -357,7 +364,19 @@ public class SwipeHelper implements Gefingerpoken {
                             delta = maxScrollDistance * (float) Math.sin((delta/size)*(Math.PI/2));
                         }
                     }
-                    setTranslation(mCurrAnimView, delta);
+                    if (isRecent) {
+                        if (ad != null && ad.isLocked()) {
+                            if (delta < 0 && delta > -100) {
+                                setTranslation(mCurrAnimView, delta);
+                            } else if (delta > 0 && delta < 100) {
+                                setTranslation(mCurrAnimView, delta);
+                            }
+                        } else {
+                            setTranslation(mCurrAnimView, delta);
+                        }
+                    } else {
+                        setTranslation(mCurrAnimView, delta);
+                    }
 
                     updateAlphaFromOffset(mCurrAnimView, mCanCurrViewBeDimissed);
                 }
@@ -378,14 +397,29 @@ public class SwipeHelper implements Gefingerpoken {
                             (Math.abs(velocity) > Math.abs(perpendicularVelocity)) &&
                             (velocity > 0) == (getTranslation(mCurrAnimView) > 0);
 
-                    boolean dismissChild = mCallback.canChildBeDismissed(mCurrView) &&
-                            (childSwipedFastEnough || childSwipedFarEnough);
+                    boolean dismissChild;
+                    if (isRecent) {// recent
+                        if (ad != null && !ad.isLocked()) {
+                            dismissChild = mCallback.canChildBeDismissed(mCurrView)
+                                    && (childSwipedFastEnough || childSwipedFarEnough);
 
-                    if (dismissChild) {
-                        // flingadingy
-                        dismissChild(mCurrView, childSwipedFastEnough ? velocity : 0f);
+                            if (dismissChild) {
+                                // flingadingy
+                                dismissChild(mCurrView, childSwipedFastEnough ? velocity : 0f);
+                            }
+                        } else {
+                            dismissChild = false;
+                        }
                     } else {
-                        // snappity
+                        dismissChild = mCallback.canChildBeDismissed(mCurrView)
+                                && (childSwipedFastEnough || childSwipedFarEnough);
+
+                        if (dismissChild) {
+                            // flingadingy
+                            dismissChild(mCurrView, childSwipedFastEnough ? velocity : 0f);
+                        }
+                    }
+                    if (!dismissChild) {
                         mCallback.onDragCancelled(mCurrView);
                         snapChild(mCurrView, velocity);
                     }
