@@ -30,32 +30,30 @@
         android:id="@+id/datetime"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:background="@drawable/ic_notify_button_bg"
         android:enabled="false"
         >
         <com.android.systemui.statusbar.policy.Clock
             android:id="@+id/clock"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="4dp"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
             android:background="@drawable/ic_notify_button_bg"
-            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
             android:clickable="true"
             />
 
         <com.android.systemui.statusbar.policy.DateView android:id="@+id/date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
             android:layout_toEndOf="@id/clock"
             android:background="@drawable/ic_notify_button_bg"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingStart="4dp"
+            android:paddingEnd="8dp"
             />
     </RelativeLayout>
 
