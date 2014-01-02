@@ -918,8 +918,6 @@ public class InputMethodService extends AbstractInputMethodService {
             isFullscreen = false;
         } else {
 
-        //mHaloEnabled = Settings.System.getInt(getContentResolver(),Settings.System.HALO_ENABLED, 0);
-	//mHaloEnabled = Settings.System.getInt(getContentResolver(), Settings.System.HALO_ENABLED, 0) == 1;
 
         int mHaloEnabled = (Settings.System.getInt(getContentResolver(), Settings.System.HALO_ENABLED, 0));
 
