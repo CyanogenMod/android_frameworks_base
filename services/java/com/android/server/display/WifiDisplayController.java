@@ -42,7 +42,6 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.GroupInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Handler;
-import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Slog;
 import android.view.Surface;
@@ -76,7 +75,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
     private static final int DEFAULT_CONTROL_PORT = 7236;
     private static final int MAX_THROUGHPUT = 50;
     private static final int CONNECTION_TIMEOUT_SECONDS = 30;
-    private static final int RTSP_TIMEOUT_SECONDS = 15;
+    private static final int RTSP_TIMEOUT_SECONDS = 30;
     private static final int RTSP_TIMEOUT_SECONDS_CERT_MODE = 120;
 
     // We repeatedly issue calls to discover peers every so often for a few reasons.
@@ -285,8 +284,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
 
                 WifiP2pWfdInfo wfdInfo = new WifiP2pWfdInfo();
                 wfdInfo.setWfdEnabled(true);
-                //wfdInfo.setDeviceType(WifiP2pWfdInfo.WFD_SOURCE);
-                wfdInfo.setDeviceType(WifiP2pWfdInfo.SOURCE_OR_PRIMARY_SINK);
+                wfdInfo.setDeviceType(WifiP2pWfdInfo.WFD_SOURCE);
                 wfdInfo.setSessionAvailable(true);
                 wfdInfo.setControlPort(DEFAULT_CONTROL_PORT);
                 wfdInfo.setMaxThroughput(MAX_THROUGHPUT);
@@ -783,16 +781,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
             int rtspTimeout = mWifiDisplayCertMode ?
                     RTSP_TIMEOUT_SECONDS_CERT_MODE : RTSP_TIMEOUT_SECONDS;
 
-            // Timeout extended, unofficial way
-            int ext = 1;
-            if (!mWifiDisplayCertMode) {
-                boolean to = Integer.parseInt( SystemProperties.get("persist.sys.wfd.longtimeout", "0") ) == 1;
-                ext = to ? 2 : 1;
-            }
-            Slog.i(TAG, "updateConnection() RTSP Timeout["+(rtspTimeout * ext)+"] seconds");
-
-            //mHandler.postDelayed(mRtspTimeout, rtspTimeout * 1000);
-            mHandler.postDelayed(mRtspTimeout, rtspTimeout * 1000 * ext);
+            mHandler.postDelayed(mRtspTimeout, rtspTimeout * 1000);
         }
     }
 
