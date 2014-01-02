@@ -24,10 +24,10 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
     private static final int SCREEN_TIMEOUT_NORMAL =  60000;
     private static final int SCREEN_TIMEOUT_HIGH   = 120000;
     private static final int SCREEN_TIMEOUT_MAX    = 300000;
+    private static final int SCREEN_TIMEOUT_NEVER  = Integer.MAX_VALUE;
 
-    // cm modes
-    private static final int CM_MODE_15_60_300 = 0;
-    private static final int CM_MODE_30_120_300 = 1;
+    private static final int MODE_15_60_300_NEVER = 0;
+    private static final int MODE_30_120_300_NEVER = 1;
 
     public ScreenTimeoutTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
@@ -76,99 +76,96 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
     private synchronized void updateTile() {
         int timeout = getScreenTimeout();
         mLabel = makeTimeoutSummaryString(mContext, timeout);
-        mDrawable = R.drawable.ic_qs_screen_timeout_off;
-
-        /* TODO: Determine if we need an on and off state
-        if (timeout <= SCREEN_TIMEOUT_LOW) {
-            mDrawable = R.drawable.ic_qs_screen_timeout_off;
-        } else if (timeout <= SCREEN_TIMEOUT_HIGH) {
-            mDrawable = R.drawable.ic_qs_screen_timeout_off;
-        } else {
-            mDrawable = R.drawable.ic_qs_screen_timeout_on;
-        }
-        */
+        mDrawable = R.drawable.ic_qs_screen_timeout_on;
     }
 
     protected void toggleState() {
         int screenTimeout = getScreenTimeout();
-        int currentMode = getCurrentCMMode();
+        int currentMode = getCurrentMode();
 
         if (screenTimeout < SCREEN_TIMEOUT_MIN) {
-            if (currentMode == CM_MODE_15_60_300) {
+            if (currentMode == MODE_15_60_300_NEVER) {
                 screenTimeout = SCREEN_TIMEOUT_MIN;
             } else {
                 screenTimeout = SCREEN_TIMEOUT_LOW;
             }
         } else if (screenTimeout < SCREEN_TIMEOUT_LOW) {
-            if (currentMode == CM_MODE_15_60_300) {
+            if (currentMode == MODE_15_60_300_NEVER) {
                 screenTimeout = SCREEN_TIMEOUT_NORMAL;
             } else {
                 screenTimeout = SCREEN_TIMEOUT_LOW;
             }
         } else if (screenTimeout < SCREEN_TIMEOUT_NORMAL) {
-            if (currentMode == CM_MODE_15_60_300) {
+            if (currentMode == MODE_15_60_300_NEVER) {
                 screenTimeout = SCREEN_TIMEOUT_NORMAL;
             } else {
                 screenTimeout = SCREEN_TIMEOUT_HIGH;
             }
         } else if (screenTimeout < SCREEN_TIMEOUT_HIGH) {
-            if (currentMode == CM_MODE_15_60_300) {
+            if (currentMode == MODE_15_60_300_NEVER) {
                 screenTimeout = SCREEN_TIMEOUT_MAX;
             } else {
                 screenTimeout = SCREEN_TIMEOUT_HIGH;
             }
         } else if (screenTimeout < SCREEN_TIMEOUT_MAX) {
             screenTimeout = SCREEN_TIMEOUT_MAX;
-        } else if (currentMode == CM_MODE_30_120_300) {
+        } else if (screenTimeout < SCREEN_TIMEOUT_NEVER) {
+            screenTimeout = SCREEN_TIMEOUT_NEVER;
+        } else if (currentMode == MODE_30_120_300_NEVER) {
             screenTimeout = SCREEN_TIMEOUT_LOW;
         } else {
             screenTimeout = SCREEN_TIMEOUT_MIN;
         }
 
-        Settings.System.putIntForUser(
+        Settings.System.putInt(
                 mContext.getContentResolver(),
-                Settings.System.SCREEN_OFF_TIMEOUT, screenTimeout, UserHandle.USER_CURRENT);
+                Settings.System.SCREEN_OFF_TIMEOUT, screenTimeout);
     }
 
     private String makeTimeoutSummaryString(Context context, int timeout) {
         Resources res = context.getResources();
         int resId;
+        String timeoutSummary = null;
 
-        /* ms -> seconds */
-        timeout /= 1000;
+        if (timeout == SCREEN_TIMEOUT_NEVER) {
+            timeoutSummary = res.getString(R.string.quick_settings_screen_timeout_summary_never);
+        } else {
+            /* ms -> seconds */
+            timeout /= 1000;
 
-        if (timeout >= 60 && timeout % 60 == 0) {
-            /* seconds -> minutes */
-            timeout /= 60;
             if (timeout >= 60 && timeout % 60 == 0) {
-                /* minutes -> hours */
+                /* seconds -> minutes */
                 timeout /= 60;
-                resId = timeout == 1
-                        ? com.android.internal.R.string.hour
-                        : com.android.internal.R.string.hours;
+                if (timeout >= 60 && timeout % 60 == 0) {
+                    /* minutes -> hours */
+                    timeout /= 60;
+                    resId = timeout == 1
+                            ? com.android.internal.R.string.hour
+                            : com.android.internal.R.string.hours;
+                } else {
+                    resId = timeout == 1
+                            ? com.android.internal.R.string.minute
+                            : com.android.internal.R.string.minutes;
+                }
             } else {
                 resId = timeout == 1
-                        ? com.android.internal.R.string.minute
-                        : com.android.internal.R.string.minutes;
+                        ? com.android.internal.R.string.second
+                        : com.android.internal.R.string.seconds;
             }
-        } else {
-            resId = timeout == 1
-                    ? com.android.internal.R.string.second
-                    : com.android.internal.R.string.seconds;
-        }
 
-        return res.getString(R.string.quick_settings_screen_timeout_summary,
-                timeout, res.getString(resId));
+            timeoutSummary = res.getString(R.string.quick_settings_screen_timeout_summary,
+                    timeout, res.getString(resId));
+        }
+        return timeoutSummary;
     }
 
     private int getScreenTimeout() {
-        return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SCREEN_OFF_TIMEOUT, 0, UserHandle.USER_CURRENT);
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_OFF_TIMEOUT, 0);
     }
 
-    private int getCurrentCMMode() {
-        return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.EXPANDED_SCREENTIMEOUT_MODE, CM_MODE_15_60_300,
-                UserHandle.USER_CURRENT);
+    private int getCurrentMode() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.EXPANDED_SCREENTIMEOUT_MODE, MODE_15_60_300_NEVER);
     }
 }
