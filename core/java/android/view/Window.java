@@ -607,6 +607,17 @@ public abstract class Window {
         }
     }
 
+    public void setLayout(int x, int y, int width, int height) {
+        final WindowManager.LayoutParams attrs = getAttributes();
+        attrs.x = x;
+        attrs.y = y;
+        attrs.width = width;
+        attrs.height = height;
+        if (mCallback != null) {
+            mCallback.onWindowAttributesChanged(attrs);
+        }
+    }
+
     /**
      * Set the gravity of the window, as per the Gravity constants.  This
      * controls how the window manager is positioned in the overall window; it
