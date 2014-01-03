@@ -1704,7 +1704,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     Notification notification = new Notification();
                     notification.icon = com.android.internal.R.drawable.stat_notify_privacy_guard;
                     notification.when = 0;
-                    notification.flags = Notification.FLAG_ONGOING_EVENT;
+                    notification.flags = Notification.FLAG_AUTO_CANCEL;
                     notification.priority = Notification.PRIORITY_LOW;
                     notification.defaults = 0;
                     notification.sound = null;
