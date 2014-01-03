@@ -384,6 +384,22 @@ public class WebChromeClient {
     }
 
     /**
+     * Tell the client to show a file chooser.
+     * @param uploadFilePaths A ValueCallback to set paths of the files to upload.
+     *      onReceiveValue must be called to wake up the thread.a
+     * @param acceptType The value of the 'accept' attribute of the input tag
+     *         associated with this file picker.
+     * @param capture Whether the 'capture' attribute exists in the input tag
+     *         associated with this file picker.
+     * @hide
+     */
+    public void showFileChooser(ValueCallback<String[]> uploadFilePaths,
+                                String acceptTypes,
+                                boolean capture) {
+        uploadFilePaths.onReceiveValue(null);
+    }
+
+    /**
      * Tell the client that the page being viewed has an autofillable
      * form and the user would like to set a profile up.
      * @param msg A Message to send once the user has successfully
