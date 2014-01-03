@@ -77,4 +77,5 @@
     <string name="advanced_dev_option_wipe_app">App-gegevens wissen</string>
     <string name="advanced_dev_option_force_stop">Nu stoppen</string>
     <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
+    <string name="screenshot_delete_action">Verwijderen</string>
 </resources>
