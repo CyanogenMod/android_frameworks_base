@@ -92,6 +92,7 @@ public class RecentsActivity extends Activity {
                 R.anim.recents_return_to_launcher_enter,
                 R.anim.recents_return_to_launcher_exit);
         mForeground = false;
+        mRecentsPanel.saveLockedTasks();
         super.onPause();
     }
 

@@ -33,7 +33,7 @@ public final class TaskDescription {
     private Drawable mIcon; // application package icon
     private CharSequence mLabel; // application package label
     private boolean mLoaded;
-
+    private boolean mLocked;
     public TaskDescription(int _taskId, int _persistentTaskId,
             ResolveInfo _resolveInfo, Intent _intent,
             String _packageName, CharSequence _description) {
@@ -62,6 +62,13 @@ public final class TaskDescription {
 
     public boolean isLoaded() {
         return mLoaded;
+    }
+    public void setLocked(boolean locked) {
+        mLocked = locked;
+    }
+
+    public boolean isLocked() {
+        return mLocked;
     }
 
     public boolean isNull() {
