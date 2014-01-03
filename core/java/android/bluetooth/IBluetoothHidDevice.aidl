@@ -32,7 +32,7 @@ interface IBluetoothHidDevice {
     boolean unregisterApp(in BluetoothHidDeviceAppConfiguration config);
     boolean sendReport(in int id, in byte[] data);
     boolean replyReport(in byte type, in byte id, in byte[] data);
-    boolean reportError();
+    boolean reportError(byte error);
     boolean unplug();
     boolean connect();
     boolean disconnect();
