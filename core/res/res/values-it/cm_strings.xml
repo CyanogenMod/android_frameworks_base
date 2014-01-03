@@ -71,4 +71,5 @@
     <string name="transient_navigation_confirmation_long">Scorri dal bordo dello schermo per mostrare la barra di stato</string>
     <string name="permlab_resetBatteryStats">reimposta statistiche batteria</string>
     <string name="permdesc_resetBatteryStats">Consente all\'applicazione di reimpostare i dati di utilizzo della batteria a basso livello.</string>
+    <string name="immersive_mode_confirmation_bottom">Scorrere dal basso verso l\'alto per uscire dalla modalità schermo intero.</string>
 </resources>
