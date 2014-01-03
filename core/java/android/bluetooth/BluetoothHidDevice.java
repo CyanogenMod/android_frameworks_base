@@ -70,6 +70,18 @@ public final class BluetoothHidDevice implements BluetoothProfile {
     public static final byte REPORT_TYPE_FEATURE = (byte) 3;
 
     /**
+     * Constants representing error response for Set Report.
+     *
+     * @see BluetoothHidDeviceCallback#onSetReport(byte, byte, byte[])
+     */
+    public static final byte ERROR_RSP_SUCCESS = (byte) 0;
+    public static final byte ERROR_RSP_NOT_READY = (byte) 1;
+    public static final byte ERROR_RSP_INVALID_RPT_ID = (byte) 2;
+    public static final byte ERROR_RSP_UNSUPPORTED_REQ = (byte) 3;
+    public static final byte ERROR_RSP_INVALID_PARAM = (byte) 4;
+    public static final byte ERROR_RSP_UNKNOWN = (byte) 14;
+
+    /**
      * Constants representing protocol mode used set by host. Default is always
      * {@link #PROTOCOL_REPORT_MODE} unless notified otherwise.
      *
@@ -386,16 +398,17 @@ public final class BluetoothHidDevice implements BluetoothProfile {
      * Sends error handshake message as reply for invalid SET_REPORT request
      * from {@link BluetoothHidDeviceCallback#onSetReport(byte, byte, byte[])}.
      *
+     * @param error Error to be sent for SET_REPORT via HANDSHAKE.
      * @return
      */
-    public boolean reportError() {
-        Log.v(TAG, "reportError()");
+    public boolean reportError(byte error) {
+        Log.v(TAG, "reportError(): error = " + error);
 
         boolean result = false;
 
         if (mService != null) {
             try {
-                result = mService.reportError();
+                result = mService.reportError(error);
             } catch (RemoteException e) {
                 Log.e(TAG, e.toString());
             }
