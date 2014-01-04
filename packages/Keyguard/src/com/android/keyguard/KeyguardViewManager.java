@@ -106,12 +106,13 @@ public class KeyguardViewManager {
     private NotificationHostView mNotificationView;
     private NotificationViewManager mNotificationViewManager;
     private boolean mLockscreenNotifications = true;
+    private boolean mIsCoverflow = false;
 
     private KeyguardUpdateMonitorCallback mBackgroundChanger = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onSetBackground(Bitmap bmp) {
             mKeyguardHost.setCustomBackground(bmp != null ?
-                    new BitmapDrawable(mContext.getResources(), bmp) : null);
+                    new BitmapDrawable(mContext.getResources(), bmp) : mCustomBackground);
             updateShowWallpaper(bmp == null);
         }
     };
@@ -221,7 +222,8 @@ public class KeyguardViewManager {
         if (mSeeThrough) {
                 bmp = blurBitmap(bmp, mBlurRadius);
         }
-            mCustomBackground = new BitmapDrawable(mContext.getResources(), bmp);
+        mIsCoverflow = false;
+        mCustomBackground = new BitmapDrawable(mContext.getResources(), bmp);
     }
 
     private Bitmap blurBitmap(Bitmap bmp, int radius) {
@@ -341,14 +343,17 @@ public class KeyguardViewManager {
             final int bgHeight = background.getIntrinsicHeight();
             final int vWidth = getWidth();
             final int vHeight = getHeight();
-
-            final float bgAspect = (float) bgWidth / bgHeight;
-            final float vAspect = (float) vWidth / vHeight;
+            if (mIsCoverflow) {
+                final float bgAspect = (float) bgWidth / bgHeight;
+                final float vAspect = (float) vWidth / vHeight;
 
             if (bgAspect > vAspect) {
-                background.setBounds(0, 0, (int) (vHeight * bgAspect), vHeight);
+                    background.setBounds(0, 0, (int) (vHeight * bgAspect), vHeight);
+                } else {
+                    background.setBounds(0, 0, vWidth, (int) (vWidth / bgAspect));
+                }
             } else {
-                mCustomBackground.setBounds(0, 0, vWidth, (int) (vWidth * (vAspect >= 1 ? bgAspect : (1 / bgAspect))));
+                mCustomBackground.setBounds(0, 0, vWidth, vHeight);
             }
         }
 
@@ -408,7 +413,12 @@ public class KeyguardViewManager {
             int flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                     | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
                     | WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-                    | WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+                    | WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER
+                    | WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
+
+            if (!mSeeThrough) {
+                flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+            }
 
             if (!mNeedsInput) {
                 flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
@@ -534,18 +544,14 @@ public class KeyguardViewManager {
     }
 
     void updateShowWallpaper(boolean show) {
-        if (mSeeThrough) {
-            return;
-        } else {
-            if (show) {
+        if (mSeeThrough) show =false;
+           if (show) {
                 mWindowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             } else {
                 mWindowLayoutParams.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             }
 
             mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
-        }
-        mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
     }
 
     public void setNeedsInput(boolean needsInput) {
