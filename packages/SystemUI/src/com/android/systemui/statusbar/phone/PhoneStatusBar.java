@@ -164,6 +164,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private static final int MSG_OPEN_QS_PANEL = 1003;
     private static final int MSG_FLIP_TO_NOTIFICATION_PANEL = 1004;
     private static final int MSG_FLIP_TO_QS_PANEL = 1005;
+    private static final int MSG_STATUSBAR_BRIGHTNESS = 1006;
     // 1020-1030 reserved for BaseStatusBar
 
     private static final boolean CLOSE_PANEL_WHEN_EMPTIED = true;
@@ -354,6 +355,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         ? new GestureRecorder("/sdcard/statusbar_gestures.dat")
         : null;
 
+    // brightness slider
+    private int mIsBrightNessMode = 0;
+    private int mIsStatusBarBrightNess;
+    private boolean mIsAutoBrightNess;
+    private Float mPropFactor;
+
     private int mNavigationIconHints = 0;
     private final Animator.AnimatorListener mMakeIconsInvisible = new AnimatorListenerAdapter() {
         @Override
@@ -419,6 +426,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_GLOW_TINT),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SCREEN_BRIGHTNESS_MODE), false, this, mCurrentUserId);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_CONFIG),
                     false, this, UserHandle.USER_ALL);
@@ -580,8 +589,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
             boolean autoBrightness = Settings.System.getIntForUser(
-                    resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
-                    0, UserHandle.USER_CURRENT) ==
+                    resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, 0, mCurrentUserId) ==
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
             mBrightnessControl = !autoBrightness && Settings.System.getIntForUser(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
@@ -1169,6 +1177,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         updateBatteryIcons();
         mPowerWidget.setupWidget();
         mPowerWidget.updateVisibility();
+
+        mIsAutoBrightNess = checkAutoBrightNess();
 
         return mStatusBarView;
     }
@@ -2025,6 +2035,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     escalateHeadsUp();
                     setHeadsUpVisibility(false);
                     break;
+                case MSG_STATUSBAR_BRIGHTNESS:
+                    if (mIsStatusBarBrightNess == 1) {
+                        mIsBrightNessMode = 1;
+                        // don't collapse the statusbar to see %
+                        // updateExpandedViewPos(0);
+                        // performCollapse();
+                    }
+                    break;
             }
         }
     }
@@ -2601,7 +2619,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     mJustPeeked = false;
                 }
                 mHandler.removeCallbacks(mLongPressBrightnessChange);
-            }
+            	// remove brightness events from being posted, change mode
+                    if (mIsStatusBarBrightNess == 1) {
+                        if (mIsBrightNessMode == 1) {
+                            mIsBrightNessMode = 2;
+                        }
+                    }
+              }
         } else if (action == MotionEvent.ACTION_UP
                 || action == MotionEvent.ACTION_CANCEL) {
             mHandler.removeCallbacks(mLongPressBrightnessChange);
@@ -2648,6 +2672,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             if ((mDisabled & StatusBarManager.DISABLE_EXPAND) != 0) {
                 return true;
             }
+        }
+
+	if (mIsStatusBarBrightNess == 1) {
+             mIsBrightNessMode = 0;
+             if (!mIsAutoBrightNess) {
+                 mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_STATUSBAR_BRIGHTNESS),
+                 ViewConfiguration.getGlobalActionKeyTimeout());
+                 }
         }
 
         return false;
@@ -3950,4 +3982,44 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             }
         }
     }
+
+    private boolean checkAutoBrightNess() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREEN_BRIGHTNESS_MODE,
+                Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL,
+                mCurrentUserId) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+    }
+
+    private void updatePropFactorValue() {
+        mPropFactor = Float.valueOf((float) android.os.PowerManager.BRIGHTNESS_ON
+                / Integer.valueOf(mDisplay.getWidth()).floatValue());
+    }
+
+    private void doBrightNess(MotionEvent e) {
+        int screenBrightness;
+        try {
+            screenBrightness = checkMinMax(Float.valueOf((e.getRawX() * mPropFactor.floatValue()))
+                    .intValue());
+            Settings.System.putInt(mContext.getContentResolver(), "screen_brightness",
+                    screenBrightness);
+        } catch (NullPointerException e2) {
+            return;
+        }
+        double percent = ((screenBrightness / (double) 255) * 100) + 0.5;
+
+    }
+
+    private int checkMinMax(int brightness) {
+        int min = 0;
+        int max = 255;
+
+        if (min > brightness) // brightness < 0x1E
+            return min;
+        else if (max < brightness) { // brightness > 0xFF
+            return max;
+        }
+
+        return brightness;
+    }
+
 }
