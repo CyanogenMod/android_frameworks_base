@@ -171,6 +171,26 @@ public class Environment {
 
             mExternalDirsForVold = externalForVold.toArray(new File[externalForVold.size()]);
             mExternalDirsForApp = externalForApp.toArray(new File[externalForApp.size()]);
+
+            if (mExternalDirsForVold.length > 1 && SystemProperties
+                    .get("persist.sys.env.switchexternal").equals("1")) {
+                int dirIndexForSwap = 0;
+                for (int i = 0; i < mExternalDirsForVold.length; i++) {
+                    if (TextUtils.equals(mExternalDirsForVold[i].getName(), "sdcard1")) {
+                        dirIndexForSwap = i;
+                    }
+                }
+                if (dirIndexForSwap > 0) {
+                    File tempDirForSwap = mExternalDirsForVold[0];
+                    mExternalDirsForVold[0] = mExternalDirsForVold[dirIndexForSwap];
+                    mExternalDirsForVold[dirIndexForSwap] = tempDirForSwap;
+                    tempDirForSwap = mExternalDirsForApp[0];
+                    mExternalDirsForApp[0] = mExternalDirsForApp[dirIndexForSwap];
+                    mExternalDirsForApp[dirIndexForSwap] = tempDirForSwap;
+                } else {
+                    Log.e(TAG, "Could not find sdcard1 for primary storage swap");
+                }
+            }
         }
 
         @Deprecated
