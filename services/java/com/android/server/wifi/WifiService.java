@@ -332,7 +332,7 @@ public final class WifiService extends IWifiManager.Stub {
 
         // If we are already disabled (could be due to airplane mode), avoid changing persist
         // state here
-        if (wifiEnabled) setWifiEnabled(wifiEnabled);
+        if (wifiEnabled) setWifiEnabled(mContext.getBasePackageName(), wifiEnabled);
 
         mWifiWatchdogStateMachine = WifiWatchdogStateMachine.
                makeWifiWatchdogStateMachine(mContext);
@@ -589,8 +589,15 @@ public final class WifiService extends IWifiManager.Stub {
      * @return {@code true} if the enable/disable operation was
      *         started or is already in the queue.
      */
-    public synchronized boolean setWifiEnabled(boolean enable) {
+    public synchronized boolean setWifiEnabled(String callingPackage, boolean enable) {
         enforceChangePermission();
+
+        int uid = Binder.getCallingUid();
+        if (mAppOps.noteOp(AppOpsManager.OP_WIFI_CHANGE, uid, callingPackage)
+                != AppOpsManager.MODE_ALLOWED) {
+            return false;
+        }
+
         Slog.d(TAG, "setWifiEnabled: " + enable + " pid=" + Binder.getCallingPid()
                     + ", uid=" + Binder.getCallingUid());
         if (DBG) {
