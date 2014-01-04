@@ -35,7 +35,8 @@ import android.provider.Settings;
 import android.service.notification.INotificationListener;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
-import java.util.Calendar;
+
+import com.android.internal.util.slim.QuietHoursHelper;
 
 public class NotificationViewManager {
     private final static String TAG = "Keyguard:NotificationViewManager";
@@ -148,7 +149,8 @@ public class NotificationViewManager {
                 if (!mIsScreenOn) {
                     if (event.values[0] >= ProximitySensor.getMaximumRange()) {
                         if (config.pocketMode && mTimeCovered != 0 && (config.showAlways || mHostView.getNotificationCount() > 0) &&
-                                System.currentTimeMillis() - mTimeCovered > MIN_TIME_COVERED && !inQuietHours()) {
+                                System.currentTimeMillis() - mTimeCovered > MIN_TIME_COVERED
+                                && !QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM)) {
                             wakeDevice();
                             mWokenByPocketMode = true;
                             mHostView.showAllNotifications();
@@ -175,7 +177,7 @@ public class NotificationViewManager {
             boolean ongoingAndReposted = sbn.isOngoing() && mHostView.containsNotification(sbn);
             if (mHostView.addNotification(sbn, (screenOffAndNotCovered || mIsScreenOn) && !ongoingAndReposted,
                         config.forceExpandedView) && config.wakeOnNotification && screenOffAndNotCovered
-                        && (!ongoingAndReposted && !inQuietHours()) {
+                        && !ongoingAndReposted && !QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM) {
                 wakeDevice();
                 mHostView.showAllNotifications();
             }
@@ -284,28 +286,4 @@ public class NotificationViewManager {
         }, ANIMATION_MAX_DURATION);
     }
 
-    /**
-     * Check if device is in Quiet Hours in the moment.
-     */
-    private boolean inQuietHours() {
-        boolean quietHoursEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
-        int quietHoursStart = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT_OR_SELF);
-        int quietHoursEnd = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT_OR_SELF);
-        boolean quietHoursDim = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.QUIET_HOURS_DIM, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
-
-        if (quietHoursEnabled && quietHoursDim && (quietHoursStart != quietHoursEnd)) {
-            Calendar calendar = Calendar.getInstance();
-            int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
-            if (quietHoursEnd < quietHoursStart) {
-                return (minutes > quietHoursStart) || (minutes < quietHoursEnd);
-            } else {
-                return (minutes > quietHoursStart) && (minutes < quietHoursEnd);
-            }
-        }
-        return false;
-    }
 }
