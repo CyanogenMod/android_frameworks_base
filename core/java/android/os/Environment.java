@@ -171,6 +171,18 @@ public class Environment {
 
             mExternalDirsForVold = externalForVold.toArray(new File[externalForVold.size()]);
             mExternalDirsForApp = externalForApp.toArray(new File[externalForApp.size()]);
+
+            if (mExternalDirsForApp.length > 1 && SystemProperties
+                    .get("persist.sys.env.switchexternal").equals("1")) {
+                for (int i = 0; i < mExternalDirsForApp.length; i++) {
+                    if (TextUtils.equals(mExternalDirsForApp[i].getName(),
+                                "sdcard1") && i > 0) {
+                        File tempDirForSwap = mExternalDirsForApp[0];
+                        mExternalDirsForApp[0] = mExternalDirsForApp[i];
+                        mExternalDirsForApp[i] = tempDirForSwap;
+                    }
+                }
+            }
         }
 
         @Deprecated
