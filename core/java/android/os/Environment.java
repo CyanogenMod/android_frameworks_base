@@ -171,6 +171,16 @@ public class Environment {
 
             mExternalDirsForVold = externalForVold.toArray(new File[externalForVold.size()]);
             mExternalDirsForApp = externalForApp.toArray(new File[externalForApp.size()]);
+
+            if (mExternalDirsForVold.length >= 2 && SystemProperties
+                    .get("persist.sys.env.switchexternal").equals("1")) {
+                File tempDirForSwap = mExternalDirsForVold[0];
+                mExternalDirsForVold[0] = mExternalDirsForVold[1];
+                mExternalDirsForVold[1] = tempDirForSwap;
+                tempDirForSwap = mExternalDirsForApp[0];
+                mExternalDirsForApp[0] = mExternalDirsForApp[1];
+                mExternalDirsForApp[1] = tempDirForSwap;
+            }
         }
 
         @Deprecated
