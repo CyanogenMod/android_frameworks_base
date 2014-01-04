@@ -20,6 +20,7 @@ package com.android.server;
 import android.app.Activity;
 import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
+import android.app.AppOpsManager;
 import android.app.IAlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -120,6 +121,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private final ResultReceiver mResultReceiver = new ResultReceiver();
     private final PendingIntent mTimeTickSender;
     private final PendingIntent mDateChangeSender;
+
+    private final AppOpsManager mAppOps;
 
     class WakeupEvent {
         public long when;
@@ -427,7 +430,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
                             : maxTriggerTime(nowElapsed, whenElapsed, a.repeatInterval);
                 }
                 setImplLocked(a.type, a.when, whenElapsed, a.windowLength, maxElapsed,
-                        a.repeatInterval, a.operation, batch.standalone, doValidate, a.workSource);
+                        a.repeatInterval, a.operation, batch.standalone, doValidate, a.workSource, false);
             }
         }
     }
@@ -530,6 +533,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
         } else {
             Slog.w(TAG, "Failed to open alarm driver. Falling back to a handler.");
         }
+
+        mAppOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
     }
     
     protected void finalize() throws Throwable {
@@ -590,6 +595,23 @@ class AlarmManagerService extends IAlarmManager.Stub {
             maxElapsed = triggerElapsed + windowLength;
         }
 
+        boolean wakeupFiltered = false;
+        if ((type == AlarmManager.RTC_WAKEUP
+                        || type == AlarmManager.ELAPSED_REALTIME_WAKEUP)
+                && mAppOps.checkOpNoThrow(AppOpsManager.OP_ALARM_WAKEUP,
+                        operation.getCreatorUid(),
+                        operation.getCreatorPackage())
+                != AppOpsManager.MODE_ALLOWED) {
+
+            if (type == AlarmManager.RTC_WAKEUP) {
+                type = AlarmManager.RTC;
+            } else {
+                type = AlarmManager.ELAPSED_REALTIME;
+            }
+
+            wakeupFiltered = true;
+        }
+
         synchronized (mLock) {
             if (DEBUG_BATCH) {
                 Slog.v(TAG, "set(" + operation + ") : type=" + type
@@ -598,16 +620,26 @@ class AlarmManagerService extends IAlarmManager.Stub {
                         + " interval=" + interval + " standalone=" + isStandalone);
             }
             setImplLocked(type, triggerAtTime, triggerElapsed, windowLength, maxElapsed,
-                    interval, operation, isStandalone, true, workSource);
+                    interval, operation, isStandalone, true, workSource, wakeupFiltered);
         }
-    }
+   }
 
     private void setImplLocked(int type, long when, long whenElapsed, long windowLength,
             long maxWhen, long interval, PendingIntent operation, boolean isStandalone,
-            boolean doValidate, WorkSource workSource) {
+            boolean doValidate, WorkSource workSource, boolean wakeupFiltered) {
         Alarm a = new Alarm(type, when, whenElapsed, windowLength, maxWhen, interval,
                 operation, workSource);
-        removeLocked(operation);
+
+        // Remove this alarm if already scheduled.
+        final boolean foundExistingWakeup = removeWithReportLocked(operation);
+
+        // note AppOp for accounting purposes
+        // skip if the alarm already existed
+        if (!foundExistingWakeup && wakeupFiltered) {
+            mAppOps.noteOpNoThrow(AppOpsManager.OP_ALARM_WAKEUP,
+                    operation.getCreatorUid(),
+                    operation.getCreatorPackage());
+        }
 
         int whichBatch = (isStandalone) ? -1 : attemptCoalesceLocked(whenElapsed, maxWhen);
         if (whichBatch < 0) {
@@ -825,6 +857,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
     }
 
     public void removeLocked(PendingIntent operation) {
+        removeWithReportLocked(operation);
+    }
+
+    private boolean removeWithReportLocked(PendingIntent operation) {
         boolean didRemove = false;
         for (int i = mAlarmBatches.size() - 1; i >= 0; i--) {
             Batch b = mAlarmBatches.get(i);
@@ -855,6 +891,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
             rebatchAllAlarmsLocked(true);
             rescheduleKernelAlarmsLocked();
         }
+
+        return didRemove;
     }
 
     public void removeLocked(String packageName) {
@@ -1167,7 +1205,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
                     setImplLocked(alarm.type, alarm.when + delta, nextElapsed, alarm.windowLength,
                             maxTriggerTime(nowELAPSED, nextElapsed, alarm.repeatInterval),
                             alarm.repeatInterval, alarm.operation, batch.standalone, true,
-                            alarm.workSource);
+                            alarm.workSource, false);
                 }
 
             }
@@ -1360,6 +1398,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
                                 fs.numWakeup++;
                                 ActivityManagerNative.noteWakeupAlarm(
                                         alarm.operation);
+                                // AppOps accounting
+                                mAppOps.noteOpNoThrow(AppOpsManager.OP_ALARM_WAKEUP,
+                                        alarm.operation.getCreatorUid(),
+                                        alarm.operation.getCreatorPackage());
                             }
                         } catch (PendingIntent.CanceledException e) {
                             if (alarm.repeatInterval > 0) {
