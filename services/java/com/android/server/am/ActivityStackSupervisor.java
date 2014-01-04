@@ -206,6 +206,11 @@ public final class ActivityStackSupervisor {
     /** Stack id of the front stack when user switched, indexed by userId. */
     SparseIntArray mUserStackInFront = new SparseIntArray(2);
 
+    /**
+     * Is the privacy guard currently enabled? Shared between ActivityStacks
+     */
+    String mPrivacyGuardPackageName = null;
+
     public ActivityStackSupervisor(ActivityManagerService service, Context context,
             Looper looper) {
         mService = service;
