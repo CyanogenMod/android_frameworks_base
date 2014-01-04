@@ -23,10 +23,11 @@ public class ScreenTimeoutButton extends PowerButton {
     private static final int SCREEN_TIMEOUT_NORMAL =  60000;
     private static final int SCREEN_TIMEOUT_HIGH   = 120000;
     private static final int SCREEN_TIMEOUT_MAX    = 300000;
+    private static final int SCREEN_TIMEOUT_NEVER  = Integer.MAX_VALUE;
 
     // cm modes
-    private static final int CM_MODE_15_60_300 = 0;
-    private static final int CM_MODE_30_120_300 = 1;
+    private static final int CM_MODE_15_60_300_NEVER = 0;
+    private static final int CM_MODE_30_120_300_NEVER = 1;
 
     private Toast mToast = null;
 
@@ -53,7 +54,7 @@ public class ScreenTimeoutButton extends PowerButton {
         if (timeout <= SCREEN_TIMEOUT_LOW) {
             mIcon = R.drawable.stat_screen_timeout_off;
             mState = STATE_DISABLED;
-        } else if (timeout <= SCREEN_TIMEOUT_HIGH) {
+        } else if (timeout <= SCREEN_TIMEOUT_MAX) {
             mIcon = R.drawable.stat_screen_timeout_off;
             mState = STATE_INTERMEDIATE;
         } else {
@@ -68,32 +69,34 @@ public class ScreenTimeoutButton extends PowerButton {
         int currentMode = getCurrentCMMode(context);
 
         if (screenTimeout < SCREEN_TIMEOUT_MIN) {
-            if (currentMode == CM_MODE_15_60_300) {
+            if (currentMode == CM_MODE_15_60_300_NEVER) {
                 screenTimeout = SCREEN_TIMEOUT_MIN;
             } else {
                 screenTimeout = SCREEN_TIMEOUT_LOW;
             }
         } else if (screenTimeout < SCREEN_TIMEOUT_LOW) {
-            if (currentMode == CM_MODE_15_60_300) {
+            if (currentMode == CM_MODE_15_60_300_NEVER) {
                 screenTimeout = SCREEN_TIMEOUT_NORMAL;
             } else {
                 screenTimeout = SCREEN_TIMEOUT_LOW;
             }
         } else if (screenTimeout < SCREEN_TIMEOUT_NORMAL) {
-            if (currentMode == CM_MODE_15_60_300) {
+            if (currentMode == CM_MODE_15_60_300_NEVER) {
                 screenTimeout = SCREEN_TIMEOUT_NORMAL;
             } else {
                 screenTimeout = SCREEN_TIMEOUT_HIGH;
             }
         } else if (screenTimeout < SCREEN_TIMEOUT_HIGH) {
-            if (currentMode == CM_MODE_15_60_300) {
+            if (currentMode == CM_MODE_15_60_300_NEVER) {
                 screenTimeout = SCREEN_TIMEOUT_MAX;
             } else {
                 screenTimeout = SCREEN_TIMEOUT_HIGH;
             }
         } else if (screenTimeout < SCREEN_TIMEOUT_MAX) {
             screenTimeout = SCREEN_TIMEOUT_MAX;
-        } else if (currentMode == CM_MODE_30_120_300) {
+        } else if (screenTimeout < SCREEN_TIMEOUT_NEVER) {
+            screenTimeout = SCREEN_TIMEOUT_NEVER;
+        } else if (currentMode == CM_MODE_30_120_300_NEVER) {
             screenTimeout = SCREEN_TIMEOUT_LOW;
         } else {
             screenTimeout = SCREEN_TIMEOUT_MIN;
@@ -132,32 +135,38 @@ public class ScreenTimeoutButton extends PowerButton {
     private String makeTimeoutToastString(Context context, int timeout) {
         Resources res = context.getResources();
         int resId;
+        String timeoutSummary = null;
 
-        /* ms -> seconds */
-        timeout /= 1000;
+        if (timeout == SCREEN_TIMEOUT_NEVER) {
+            timeoutSummary = res.getString(R.string.powerwidget_screen_timeout_never_toast);
+        } else {
+            /* ms -> seconds */
+            timeout /= 1000;
 
-        if (timeout >= 60 && timeout % 60 == 0) {
-            /* seconds -> minutes */
-            timeout /= 60;
             if (timeout >= 60 && timeout % 60 == 0) {
-                /* minutes -> hours */
+                /* seconds -> minutes */
                 timeout /= 60;
-                resId = timeout == 1
-                        ? com.android.internal.R.string.hour
-                        : com.android.internal.R.string.hours;
+                if (timeout >= 60 && timeout % 60 == 0) {
+                    /* minutes -> hours */
+                    timeout /= 60;
+                    resId = timeout == 1
+                            ? com.android.internal.R.string.hour
+                            : com.android.internal.R.string.hours;
+                } else {
+                    resId = timeout == 1
+                            ? com.android.internal.R.string.minute
+                            : com.android.internal.R.string.minutes;
+                }
             } else {
                 resId = timeout == 1
-                        ? com.android.internal.R.string.minute
-                        : com.android.internal.R.string.minutes;
+                        ? com.android.internal.R.string.second
+                        : com.android.internal.R.string.seconds;
             }
-        } else {
-            resId = timeout == 1
-                    ? com.android.internal.R.string.second
-                    : com.android.internal.R.string.seconds;
-        }
 
-        return res.getString(R.string.powerwidget_screen_timeout_toast,
-                timeout, res.getString(resId));
+            timeoutSummary = res.getString(R.string.powerwidget_screen_timeout_toast,
+                    timeout, res.getString(resId));
+        }
+        return timeoutSummary;
     }
 
     private static int getScreenTimeout(Context context) {
@@ -169,6 +178,6 @@ public class ScreenTimeoutButton extends PowerButton {
     private static int getCurrentCMMode(Context context) {
         return Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.EXPANDED_SCREENTIMEOUT_MODE,
-                CM_MODE_15_60_300, UserHandle.USER_CURRENT);
+                CM_MODE_15_60_300_NEVER, UserHandle.USER_CURRENT);
     }
 }

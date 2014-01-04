@@ -102,4 +102,5 @@
 
     <!-- Label in drop down to identify brightness slider -->
     <string name="brightness_label">Brightness</string>
+    <string name="powerwidget_screen_timeout_never_toast">Screen set to always on</string>
 </resources>
