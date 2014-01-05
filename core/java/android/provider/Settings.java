@@ -2922,6 +2922,16 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_BATTERY = "status_bar_battery";
+	/**
+         * Display Double tap to something
+         * 0: None
+         * 1: Sleep
+         * 2: Full Brightness
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_DOUBLETAP = "status_bar_doubletap";
+	public static final String GESTURES_DOUBLE_TAP = "gestures_double_tap";
 
         /**
          * Display percentage in text of the battery level on the status bar
@@ -3191,12 +3201,6 @@ public final class Settings {
          */
         public static final String GESTURES_LONG_PRESS = "gestures_long_press";
 
-        /**
-         * double tap Action
-         *
-         * @hide
-         */
-        public static final String GESTURES_DOUBLE_TAP = "gestures_double_tap";
 
         /**
          * Whether power menu airplane toggle is enabled

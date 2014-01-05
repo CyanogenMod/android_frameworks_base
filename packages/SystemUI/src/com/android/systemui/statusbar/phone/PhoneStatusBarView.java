@@ -49,7 +49,8 @@ public class PhoneStatusBarView extends PanelBar {
     PanelView mNotificationPanel, mSettingsPanel;
     private boolean mShouldFade;
     private final PhoneStatusBarTransitions mBarTransitions;
-    private GestureDetector mDoubleTapGesture;
+    private GestureDetector mDoubleTapSleepGesture;
+    private GestureDetector mDoubleTapFullBrightnessGesture;
 
     public PhoneStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -65,16 +66,23 @@ public class PhoneStatusBarView extends PanelBar {
         mFullWidthNotifications = mSettingsPanelDragzoneFrac <= 0f;
         mBarTransitions = new PhoneStatusBarTransitions(this);
 
-        mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
+        mDoubleTapSleepGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
                 PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-                Log.d(TAG, "Gesture!!");
+                Log.d(TAG, "Double tap sleep Gesture!!");
                 if(pm != null)
                     pm.goToSleep(e.getEventTime());
                 else
                     Log.d(TAG, "getSystemService returned null PowerManager");
 
+                return true;
+            }
+        });
+	mDoubleTapFullBrightnessGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+		Settings.System.putInt(mContext.getContentResolver(),Settings.System.SCREEN_BRIGHTNESS, 255);
                 return true;
             }
         });
@@ -216,9 +224,22 @@ public class PhoneStatusBarView extends PanelBar {
             }
         }
 
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0) == 1)
-            mDoubleTapGesture.onTouchEvent(event);
+	
+	int statusbarDoubletapStyle=Settings.System.getInt(mContext.getContentResolver(),Settings.System.STATUS_BAR_DOUBLETAP,0);
+	switch(statusbarDoubletapStyle){
+		case 0:
+			break;
+		case 1:
+			
+			mDoubleTapSleepGesture.onTouchEvent(event);
+			break;
+		case 2:
+			mDoubleTapFullBrightnessGesture.onTouchEvent(event);
+			break;
+		default:
+                	break;
+	}
+
 
         return barConsumedEvent || super.onTouchEvent(event);
     }
