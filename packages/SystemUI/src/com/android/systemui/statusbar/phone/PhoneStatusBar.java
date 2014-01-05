@@ -1199,7 +1199,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 }
                 public void onTextChanged(CharSequence s, int start, int before,
                         int count) {
-                    if (count > 0) {
+                    if (Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.NOTIFICATION_SHOW_WIFI_SSID, 0) == 1 &&
+                        count > 0) {
                         mWifiView.setVisibility(View.VISIBLE);
                     } else {
                         mWifiView.setVisibility(View.GONE);

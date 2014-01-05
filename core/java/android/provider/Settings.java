@@ -4222,6 +4222,14 @@ public final class Settings {
         public static final String KEY_HOME_ENABLED = "key_home_enabled";
 
         /**
+	     * @hide
+	     * Show Wifi network name in notification drawer
+	     * 0 - don't show
+	     * 1 - show
+	     */
+        public static final String NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
+
+        /**
          * Whether to unlock the screen with the home key.  The value is boolean (1 or 0).
          * @hide
          */
