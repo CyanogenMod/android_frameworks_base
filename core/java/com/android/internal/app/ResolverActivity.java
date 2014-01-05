@@ -17,6 +17,7 @@
 package com.android.internal.app;
 
 import android.os.AsyncTask;
+
 import com.android.internal.R;
 import com.android.internal.content.PackageMonitor;
 
@@ -24,6 +25,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AppGlobals;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -34,14 +36,18 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PatternMatcher;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -71,6 +77,7 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
     private ResolveListAdapter mAdapter;
     private PackageManager mPm;
     private boolean mAlwaysUseOption;
+    private int mReverseBehaviour;
     private boolean mShowExtended;
     private ListView mListView;
     private Button mAlwaysButton;
@@ -87,6 +94,24 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
         }
     };
 
+    private class Observer extends ContentObserver {
+        public Observer(Handler mHandler) {
+            super(mHandler);
+        }
+
+        public void startObserving() {
+            final ContentResolver cr = getContentResolver();
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.REVERSE_DEFAULT_APP_PICKER), false, this,
+                    UserHandle.USER_ALL);
+        }
+
+        public void onChange(boolean selfChange) {
+            mReverseBehaviour = Settings.System.getInt(getContentResolver(),
+                    Settings.System.REVERSE_DEFAULT_APP_PICKER, 0);
+        }
+    }
+
     private Intent makeMyIntent() {
         Intent intent = new Intent(getIntent());
         intent.setComponent(null);
@@ -97,6 +122,10 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
         // and we can live with this.
         intent.setFlags(intent.getFlags()&~Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         return intent;
+    }
+
+    private boolean isReversed() {
+        return mReverseBehaviour != 0;
     }
 
     @Override
@@ -128,6 +157,9 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
               setTheme(R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         }
         super.onCreate(savedInstanceState);
+        Observer observer = new Observer(new Handler());
+        observer.startObserving();
+        observer.onChange(false);
         try {
             mLaunchedFromUid = ActivityManagerNative.getDefault().getLaunchedFromUid(
                     getActivityToken());
@@ -184,14 +216,35 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
                 buttonLayout.setVisibility(View.VISIBLE);
                 mAlwaysButton = (Button) buttonLayout.findViewById(R.id.button_always);
                 mOnceButton = (Button) buttonLayout.findViewById(R.id.button_once);
+                if (isReversed()) {
+                    mAlwaysButton.setEnabled(true);
+                    mOnceButton.setEnabled(true);
+                    mOnceButton.setPressed(mReverseBehaviour == 1);
+                    mAlwaysButton.setPressed(mReverseBehaviour == 2);
+                    View.OnTouchListener otl = new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                boolean always = (v.getId() == R.id.button_always);
+                                mAlwaysButton.setPressed(always);
+                                mOnceButton.setPressed(!always);
+                            }
+                            return true;
+                        }
+                    };
+                    mAlwaysButton.setOnTouchListener(otl);
+                    mOnceButton.setOnTouchListener(otl);
+                }
             } else {
                 mAlwaysUseOption = false;
             }
-            // Set the initial highlight if there was a preferred or last used choice
-            final int initialHighlight = mAdapter.getInitialHighlight();
-            if (initialHighlight >= 0) {
-                mListView.setItemChecked(initialHighlight, true);
-                onItemClick(null, null, initialHighlight, 0); // Other entries are not used
+            if (!isReversed()) {
+                // Set the initial highlight if there was a preferred or last used choice
+                final int initialHighlight = mAdapter.getInitialHighlight();
+                if (initialHighlight >= 0) {
+                    mListView.setItemChecked(initialHighlight, true);
+                    onItemClick(null, null, initialHighlight, 0); // Other entries are not used
+                }
             }
         }
     }
@@ -277,17 +330,23 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final int checkedPos = mListView.getCheckedItemPosition();
-        final boolean hasValidSelection = checkedPos != ListView.INVALID_POSITION;
-        if (mAlwaysUseOption && (!hasValidSelection || mLastSelected != checkedPos)) {
-            mAlwaysButton.setEnabled(hasValidSelection);
-            mOnceButton.setEnabled(hasValidSelection);
-            if (hasValidSelection) {
-                mListView.smoothScrollToPosition(checkedPos);
-            }
-            mLastSelected = checkedPos;
+        if (isReversed()) {
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.REVERSE_DEFAULT_APP_PICKER, mAlwaysButton.isPressed() ? 2 : 1);
+            startSelected(position, mAlwaysButton.isPressed());
         } else {
-            startSelected(position, false);
+            final int checkedPos = mListView.getCheckedItemPosition();
+            final boolean hasValidSelection = checkedPos != ListView.INVALID_POSITION;
+            if (mAlwaysUseOption && (!hasValidSelection || mLastSelected != checkedPos)) {
+                mAlwaysButton.setEnabled(hasValidSelection);
+                mOnceButton.setEnabled(hasValidSelection);
+                if (hasValidSelection) {
+                    mListView.smoothScrollToPosition(checkedPos);
+                }
+                mLastSelected = checkedPos;
+            } else {
+                startSelected(position, false);
+            }
         }
     }
 
@@ -667,7 +726,7 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
 
         public Intent intentForPosition(int position) {
             DisplayResolveInfo dri = mList.get(position);
-            
+
             Intent intent = new Intent(dri.origIntent != null
                     ? dri.origIntent : mIntent);
             intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT

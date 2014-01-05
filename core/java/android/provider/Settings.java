@@ -2659,6 +2659,12 @@ public final class Settings {
         public static final String STYLUS_ICON_ENABLED = "stylus_icon_enabled";
 
         /**
+         * Reverse default app picker behaviour
+         * @hide
+         */
+        public static final String REVERSE_DEFAULT_APP_PICKER = "reverse_default_app_picker";
+
+        /**
          * Show touch positions on screen?
          * 0 = no
          * 1 = yes
