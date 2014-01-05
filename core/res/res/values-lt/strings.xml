@@ -151,10 +151,10 @@
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Vibracija skambinant"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Skambutis įjungtas"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Išsijungia..."</string>
-    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Jūsų planšetinis k
-ompiuteris išsijungs."</string>
-    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Jūsų telefonas išs
-ijungs."</string>
+    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Jūsų planšetinis kompiuteris išsijungs."</string>
+
+    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Jūsų telefonas išsijungs."</string>
+
     <string name="shutdown_confirm_question" msgid="2906544768881136183">"Ar norite išjungti?"</string>
     <string name="reboot_safemode_title" msgid="7054509914500140361">"Iš naujo įkelti operacinę sistemą saugos režimu"</string>
     <string name="reboot_safemode_confirm" msgid="55293944502784668">"Ar norite iš naujo įkelti operacinę sistemą saugos režimu? Dėl to bus neleidžiamos visos įdiegtos trečiųjų šalių programos. Jos bus atkurtos dar kartą iš naujo įkėlus operacinę sistemą."</string>
