@@ -51,7 +51,7 @@
     <string name="quick_settings_quiethours_off">Tylos laikas išjungtas</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE išjungtas</string>
-    <string name="quick_settings_volume">Garsas</string>
+    <string name="quick_settings_volume">Garsumas</string>
     <string name="quick_settings_camera_label">Fotoaparatas</string>
     <string name="quick_settings_network_adb_disabled_label">Išjungta</string>
     <string name="quick_settings_network_adb_enabled_label">Įjungta</string>
