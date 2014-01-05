@@ -25,15 +25,15 @@
     <string name="profileGroupEmail">El. paštas</string>
     <string name="profileGroupSMS">Pranešimai</string>
     <string name="wildcardProfile">Kitas</string>
-    <string name="reboot_system" product="tablet">Perkrauti planšetinį kompiuterį</string>
-    <string name="reboot_system" product="default">Perkrauti telefoną</string>
+    <string name="reboot_system" product="tablet">Perkrauti</string>
+    <string name="reboot_system" product="default">Perkrauti</string>
     <string name="global_action_screenshot">Ekranvaizdis</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Išplėstas darbastalis</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Įjungtas</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Išjungtas</string>
     <string name="reboot_reboot">Perkrauti</string>
     <string name="reboot_recovery">Atkūrimo režimas</string>
-    <string name="reboot_bootloader">\'Bootloader\'</string>
+    <string name="reboot_bootloader">\„Bootloader\“</string>
     <string name="reboot_bootmenu">Įjungimo meniu</string>
     <string name="reboot_fastboot">Greitasis įjungimas</string>
     <string name="reboot_download">Parsisiuntimo režimas</string>
