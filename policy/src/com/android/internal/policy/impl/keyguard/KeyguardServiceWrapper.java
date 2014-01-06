@@ -16,6 +16,7 @@
 
 package com.android.internal.policy.impl.keyguard;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -185,6 +186,14 @@ public class KeyguardServiceWrapper implements IKeyguardService {
             mService.onBootCompleted();
         } catch (RemoteException e) {
             Slog.w(TAG , "Remote Exception", e);
+        }
+    }
+
+    public void setBackgroundBitmap(Bitmap bmp) {
+        try {
+            mService.setBackgroundBitmap(bmp);
+        } catch (RemoteException e) {
+            Slog.w(TAG, "Remote Exception", e);
         }
     }
 
