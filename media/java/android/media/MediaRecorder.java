@@ -741,6 +741,10 @@ public class MediaRecorder
      */
     public native void start() throws IllegalStateException;
 
+    /** @hide
+    */
+    public native void pause() throws IllegalStateException;
+
     /**
      * Stops recording. Call this after start(). Once recording is stopped,
      * you will have to configure it again as if it has just been constructed.
