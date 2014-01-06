@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_quick_settings_ringer">Hang <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Rezgés <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">CID fej használata</string>
+    <string name="bean_dream_settings_cid_summary">A képernyővédőn űrlényfejek jelennek meg a zselés cukorkák helyett</string>
+    <string name="quick_settings_profile_label">Profil</string>
+    <string name="powerwidget_screen_timeout_toast">Képernyő időkorlátja: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS ki</string>
+    <string name="quick_settings_screen_sleep">Alvó mód</string>
+    <string name="quick_settings_ringer_on">Hang</string>
+    <string name="quick_settings_ringer_off">Hang ki</string>
+    <string name="quick_settings_vibration_on">Rezgés</string>
+    <string name="quick_settings_vibration_off">Rezgés ki</string>
+    <string name="quick_settings_label_enabled">Be</string>
+    <string name="quick_settings_label_disabled">Ki</string>
+    <string name="quick_settings_ringer_normal">Hang</string>
+    <string name="quick_settings_lockscreen">Képernyőzár</string>
+    <string name="quick_settings_network_type">Hálózat típusa</string>
+    <string name="quick_settings_report_bug">Hibajelentés</string>
+    <string name="quick_settings_sync">Szinkronizálás</string>
+    <string name="quick_settings_sync_off">Szinkronizálás ki</string>
+    <string name="quick_settings_torch">Zseblámpa</string>
+    <string name="quick_settings_torch_off">Zseblámpa ki</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC ki</string>
+    <string name="quick_settings_screen_timeout">Időkorlát: </string>
+    <string name="quick_settings_usb_tether_off_label">Lecsatlakoztatva</string>
+    <string name="quick_settings_usb_tether_connected_label">Megosztás ki</string>
+    <string name="quick_settings_usb_tether_on_label">Megosztás</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP ki</string>
+    <string name="quick_settings_quiethours">Csendes órák</string>
+    <string name="quick_settings_quiethours_off">Csendes órák ki</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE ki</string>
+    <string name="quick_settings_volume">Hangerő</string>
+    <string name="quick_settings_camera_label">Kamera</string>
+    <string name="quick_settings_network_adb_disabled_label">Letiltva</string>
+    <string name="quick_settings_network_adb_enabled_label">Engedélyezve</string>
+    <string name="quick_settings_expanded_desktop">Kiterjesztett</string>
+    <string name="quick_settings_expanded_desktop_off">Normál</string>
+    <string name="quick_settings_camera_error_connect">Nem lehet csatlakozni a kamerához</string>
+    <string name="navbar_dialog_title">Válasszon eseményt</string>
+    <string name="navbar_home_button">Kezdőgomb</string>
+    <string name="navbar_recent_button">Alkalmazás előzmények gomb</string>
+    <string name="navbar_search_button">Keresés gomb</string>
+    <string name="navbar_back_button">Vissza gomb</string>
+    <string name="navbar_empty_button">Gomb törlése</string>
+    <string name="navbar_menu_conditional_button">Menü (auto elrejtés)</string>
+    <string name="navbar_menu_always_button">Menü (mindig látszik)</string>
+    <string name="navbar_menu_big_button">Menü gomb</string>
+    <string name="pie_battery_status_charging">Töltés (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Feltöltve</string>
+    <string name="pie_battery_status_discharging">Akkumulátor: <xliff:g id="percent">%d</xliff:g>%%</string>
+    <string name="pie_phone_status_no_service">Nincs szolgáltatás</string>
+    <string name="pie_phone_status_airplane_mode">Replülőgép üzemmmód</string>
+    <string name="pie_phone_status_emergency_only">Csak segélyhívás</string>
+    <string name="advanced_dev_option_wipe_app">Alkalmazások adatok törlése</string>
+    <string name="advanced_dev_option_force_stop">Kényszerített leállítás</string>
+    <string name="accessibility_dock_battery_level">Dokkoló akkumulátor: <xliff:g id="number">%d</xliff:g> percent.</string>
+    <string name="screenshot_delete_action">Törlés</string>
+</resources>
