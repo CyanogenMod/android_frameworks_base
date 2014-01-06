@@ -196,6 +196,20 @@ public class AudioService extends IAudioService.Stub {
     // Maximum volume adjust steps allowed in a single batch call.
     private static final int MAX_BATCH_VOLUME_ADJUST_STEPS = 4;
 
+    // Volume reduction adjustment factors
+    private static final float[] VOLUME_REDUCTION_FACTOR = new float[] {
+        1.0f, // STREAM_VOICE_CALL
+        2.0f, // STREAM_SYSTEM
+        2.0f, // STREAM_RING
+        2.0f, // STREAM_MUSIC
+        2.0f, // STREAM_ALARM
+        2.0f, // STREAM_NOTIFICATION
+        1.0f, // STREAM_BLUETOOTH_SCO
+        1.0f, // STREAM_SYSTEM_ENFORCED
+        1.0f, // STREAM_DTMF
+        1.0f  // STREAM_TTS
+    };
+
     /* Sound effect file names  */
     private static final String SOUND_EFFECTS_PATH = "/media/audio/ui/";
     private static final List<String> SOUND_EFFECT_FILES = new ArrayList<String>();
@@ -209,15 +223,16 @@ public class AudioService extends IAudioService.Stub {
     private static final int[] MAX_STREAM_VOLUME = new int[] {
         5,  // STREAM_VOICE_CALL
         7,  // STREAM_SYSTEM
-        7,  // STREAM_RING
+        10, // STREAM_RING
         15, // STREAM_MUSIC
-        7,  // STREAM_ALARM
-        7,  // STREAM_NOTIFICATION
+        10, // STREAM_ALARM
+        10, // STREAM_NOTIFICATION
         15, // STREAM_BLUETOOTH_SCO
         7,  // STREAM_SYSTEM_ENFORCED
         15, // STREAM_DTMF
         15  // STREAM_TTS
     };
+
     /* mStreamVolumeAlias[] indicates for each stream if it uses the volume settings
      * of another stream: This avoids multiplying the volume settings for hidden
      * stream types that follow other stream behavior for volume settings
@@ -286,6 +301,8 @@ public class AudioService extends IAudioService.Stub {
     };
 
     private boolean mLinkNotificationWithVolume;
+
+    private boolean mVolumeReduction;
 
     private final AudioSystem.ErrorCallback mAudioSystemCallback = new AudioSystem.ErrorCallback() {
         public void onError(int error) {
@@ -764,6 +781,9 @@ public class AudioService extends IAudioService.Stub {
             mVolumeKeysControlRingStream = Settings.System.getIntForUser(cr,
                     Settings.System.VOLUME_KEYS_CONTROL_RING_STREAM, 1, UserHandle.USER_CURRENT) == 1;
         }
+
+        mVolumeReduction = Settings.System.getIntForUser(cr,
+                Settings.System.VOLUME_REDUCTION, 0, UserHandle.USER_CURRENT) == 1;
 
         mLinkNotificationWithVolume = Settings.System.getIntForUser(cr,
                 Settings.System.VOLUME_LINK_NOTIFICATION, 1, UserHandle.USER_CURRENT) == 1;
@@ -2926,7 +2946,7 @@ public class AudioService extends IAudioService.Stub {
 
             mStreamType = streamType;
             mIndexMax = MAX_STREAM_VOLUME[streamType];
-            AudioSystem.initStreamVolume(streamType, 0, mIndexMax);
+            AudioSystem.initStreamVolume(streamType, 0, applyVolumeReductionToMaxIndex(mStreamType, mIndexMax));
             mIndexMax *= 10;
 
             // mDeathHandlers must be created before calling readSettings()
@@ -3006,6 +3026,7 @@ public class AudioService extends IAudioService.Stub {
             } else {
                 index = (getIndex(device) + 5)/10;
             }
+            index = applyVolumeReductionToDevice(mStreamType, index, device);
             AudioSystem.setStreamVolumeIndex(mStreamType, index, device);
         }
 
@@ -3016,8 +3037,9 @@ public class AudioService extends IAudioService.Stub {
             if (isMuted()) {
                 index = 0;
             } else {
-                index = (getIndex(AudioSystem.DEVICE_OUT_DEFAULT) + 5)/10;
+                index = ((getIndex(AudioSystem.DEVICE_OUT_DEFAULT) + 5)/10);
             }
+            index = applyVolumeReductionToDevice(mStreamType, index, AudioSystem.DEVICE_OUT_DEFAULT);
             AudioSystem.setStreamVolumeIndex(mStreamType, index, AudioSystem.DEVICE_OUT_DEFAULT);
             // then apply device specific volumes
             Set set = mIndex.entrySet();
@@ -3034,6 +3056,7 @@ public class AudioService extends IAudioService.Stub {
                     } else {
                         index = ((Integer)entry.getValue() + 5)/10;
                     }
+                    index = applyVolumeReductionToDevice(mStreamType, index, device);
                     AudioSystem.setStreamVolumeIndex(mStreamType, index, device);
                 }
             }
@@ -3663,7 +3686,7 @@ public class AudioService extends IAudioService.Stub {
                     int numStreamTypes = AudioSystem.getNumStreamTypes();
                     for (int streamType = numStreamTypes - 1; streamType >= 0; streamType--) {
                         VolumeStreamState streamState = mStreamStates[streamType];
-                        AudioSystem.initStreamVolume(streamType, 0, (streamState.mIndexMax + 5) / 10);
+                        AudioSystem.initStreamVolume(streamType, 0, applyVolumeReductionToMaxIndex(streamType, (streamState.mIndexMax + 5) / 10));
 
                         streamState.applyAllVolumes();
                     }
@@ -3797,6 +3820,8 @@ public class AudioService extends IAudioService.Stub {
             mContentResolver.registerContentObserver(Settings.Global.getUriFor(
                 Settings.Global.DOCK_AUDIO_MEDIA_ENABLED), false, this);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                Settings.System.VOLUME_REDUCTION), false, this);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
                 Settings.System.VOLUME_LINK_NOTIFICATION), false, this);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                 Settings.System.SAFE_HEADSET_VOLUME), false, this);
@@ -3844,6 +3869,11 @@ public class AudioService extends IAudioService.Stub {
 
                 } else if (uri.equals(Settings.Global.getUriFor(Settings.Global.DOCK_AUDIO_MEDIA_ENABLED))) {
                     readDockAudioSettings(mContentResolver);
+
+                } else if (uri.equals(Settings.System.getUriFor(Settings.System.VOLUME_REDUCTION))) {
+                    mVolumeReduction = Settings.System.getInt(mContentResolver,
+                            Settings.System.VOLUME_REDUCTION, 0) == 1;
+                    reloadAudioSettings();
 
                 } else if (uri.equals(Settings.System.getUriFor(Settings.System.VOLUME_LINK_NOTIFICATION))) {
                     mLinkNotificationWithVolume = Settings.System.getInt(mContentResolver,
@@ -4835,6 +4865,32 @@ public class AudioService extends IAudioService.Stub {
         }
     }
 
+    //==========================================================================================
+    // Speaker volume reduction feature.
+    // A mechanism for reducing the speaker volume loudness range to provide a more fine-grained
+    // volume adjustment in the lower range. Volume reduction factors are set per stream.
+    //==========================================================================================
+
+    // applies volume reduction to stream max index
+    private int applyVolumeReductionToMaxIndex(int streamType, int index) {
+        return Math.round(index * VOLUME_REDUCTION_FACTOR[streamType]);
+    }
+
+    // applies volume reduction to specific speaker streams
+    private int applyVolumeReductionToDevice(int streamType, int index, int device) {
+        if (mVolumeReduction && (device & AudioSystem.DEVICE_OUT_SPEAKER) != 0) {
+            switch (streamType) {
+                case AudioSystem.STREAM_ALARM:
+                case AudioSystem.STREAM_MUSIC:
+                case AudioSystem.STREAM_NOTIFICATION:
+                case AudioSystem.STREAM_RING:
+                case AudioSystem.STREAM_SYSTEM:
+                    return index;
+            }
+        }
+
+        return Math.round(index * VOLUME_REDUCTION_FACTOR[streamType]);
+    }
 
     //==========================================================================================
     // Camera shutter sound policy.
