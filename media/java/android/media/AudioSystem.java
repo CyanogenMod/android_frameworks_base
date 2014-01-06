@@ -92,6 +92,23 @@ public class AudioSystem
     public static final int NUM_MODES               = 4;
 
 
+    /* Call states for Voice calls */
+    /* @hide Call state for inactive call state. */
+    public static final int CALL_INACTIVE           = 0x1;
+    /* @hide Call state for active call state. */
+    public static final int CALL_ACTIVE             = 0x2;
+    /* @hide Call state for hold call state. */
+    public static final int CALL_HOLD               = 0x3;
+    /* @hide Call state for local hold call state. */
+    public static final int CALL_LOCAL_HOLD         = 0x4;
+    /* @hide Key for vsid used in setParameters */
+    public static final String VSID_KEY             = "vsid";
+
+    /* @hide Key for call_state used in setParameters */
+    public static final String CALL_STATE_KEY       = "call_state";
+
+    /* @hide Key for all_call_states used in getParameters */
+    public static final String ALL_CALL_STATES_KEY  = "all_call_states";
     /* Routing bits for the former setRouting/getRouting API */
     /** @deprecated */
     @Deprecated public static final int ROUTE_EARPIECE          = (1 << 0);
