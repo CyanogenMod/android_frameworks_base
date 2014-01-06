@@ -50,6 +50,7 @@ import android.view.accessibility.AccessibilityManager.TouchExplorationStateChan
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.android.internal.widget.LockPatternUtils;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.DelegateViewHelper;
@@ -73,6 +74,7 @@ public class NavigationBarView extends LinearLayout {
     private boolean mInEditMode;
     private NavbarEditor mEditBar;
     private NavBarReceiver mNavBarReceiver;
+    private LockPatternUtils mLockUtils;
     private OnClickListener mRecentsClickListener;
     private OnTouchListener mRecentsPreloadListener;
     private OnTouchListener mHomeSearchActionListener;
@@ -232,6 +234,8 @@ public class NavigationBarView extends LinearLayout {
         mNavBarReceiver = new NavBarReceiver();
         mContext.registerReceiverAsUser(mNavBarReceiver, UserHandle.ALL,
                 new IntentFilter(NAVBAR_EDIT_ACTION), null, null);
+
+        mLockUtils = new LockPatternUtils(context);
     }
 
     private void watchForDevicePolicyChanges() {
@@ -469,7 +473,8 @@ public class NavigationBarView extends LinearLayout {
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_SEARCH, !disableRecent);
 
         final boolean showSearch = disableHome && !disableSearch;
-        final boolean showCamera = showSearch && !mCameraDisabledByDpm;
+        final boolean showCamera = showSearch && !mCameraDisabledByDpm
+                && mLockUtils.getCameraEnabled();
         setVisibleOrGone(getSearchLight(), showSearch);
         setVisibleOrGone(getCameraButton(), showCamera);
 
