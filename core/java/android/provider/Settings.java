@@ -3269,6 +3269,13 @@ public final class Settings {
         public static final String VOLUME_KEYS_CONTROL_RING_STREAM = "volume_keys_control_ring_stream";
 
         /**
+         * Volume reduction for ringtone and notifications
+         *
+         * @hide
+         */
+        public static final String VOLUME_REDUCTION = "volume_reduction";
+
+        /**
          * Whether to enable custom rebindings of the actions performed on
          * certain key press events.
          * @hide
