@@ -16863,7 +16863,7 @@ private ArrayList<Integer> mIgnoreSplitViewUpdate = new ArrayList<Integer>();
                 ActivityRecord second = getFocusedStack().topRunningActivityLocked(starting);
 
                 // Is that second task split as well?
-                if (mWindowManager.isTaskSplitView(second.task.taskId)) {
+                if (second != null && mWindowManager.isTaskSplitView(second.task.taskId)) {
                     // Don't restore me again
                     //mIgnoreSplitViewUpdateResume.add((Integer) second.task.taskId);
                     Log.e("XPLOD", "[rAL] There is a second task that I should be ignoring next: " + second.task.taskId);
