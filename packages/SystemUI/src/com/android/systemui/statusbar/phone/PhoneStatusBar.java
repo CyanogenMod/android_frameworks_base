@@ -919,6 +919,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.settings_button);
         if (mSettingsButton != null) {
             mSettingsButton.setOnClickListener(mSettingsButtonListener);
+            mSettingsButton.setOnLongClickListener(mSettingsButtonLongListener);
             if (mHasSettingsPanel) {
                 if (mStatusBarView.hasFullWidthNotifications()) {
                     // the settings panel is hiding behind this button
@@ -950,6 +951,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             mNotificationButton = (ImageView) mStatusBarWindow.findViewById(R.id.notification_button);
             if (mNotificationButton != null) {
                 mNotificationButton.setOnClickListener(mNotificationButtonListener);
+                mNotificationButton.setOnLongClickListener(mNotificationButtonLongListener);
             }
         }
 
@@ -3466,6 +3468,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
     };
 
+    private View.OnLongClickListener mSettingsButtonLongListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setClassName("com.android.settings",
+                    "com.android.settings.Settings$NotificationStationActivity");
+            startActivityDismissingKeyguard(intent, true);
+            return true;
+        }
+    };
+
     private View.OnClickListener mClockClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             startActivityDismissingKeyguard(
@@ -3482,6 +3495,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private View.OnClickListener mNotificationButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
             animateExpandNotificationsPanel();
+        }
+    };
+
+    private View.OnLongClickListener mNotificationButtonLongListener =
+            new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setClassName("com.android.settings",
+                    "com.android.settings.Settings$QuickSettingsTilesSettingsActivity");
+            startActivityDismissingKeyguard(intent, true);
+            return true;
         }
     };
 
