@@ -29,6 +29,7 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import android.util.Log;
 
 public class CircleMemoryMeter extends ImageView {
     private final Handler mHandler;
@@ -40,7 +41,6 @@ public class CircleMemoryMeter extends ImageView {
 
     private int mCircleSize;        // draw size of circle.
     private RectF mRectLeft;        // contains the precalculated rect used in drawArc(),
-    // derived from mCircleSize
 
     // quiet a lot of paint variables.
     // helps to move cpu-usage from actual drawing to initialization
@@ -60,15 +60,6 @@ public class CircleMemoryMeter extends ImageView {
     private String mAvailableMemory;
     private String mTotalMemory;
 
-
-    // runnable to invalidate view via mHandler.postDelayed() call
-    private final Runnable mInvalidate = new Runnable() {
-        public void run() {
-            if (mAttached) {
-                update();
-            }
-        }
-    };
 
     public CircleMemoryMeter(Context context) {
         this(context, null);
@@ -133,7 +124,6 @@ public class CircleMemoryMeter extends ImageView {
         super.onAttachedToWindow();
         if (!mAttached) {
             mAttached = true;
-            mHandler.postDelayed(mInvalidate, 250);
         }
     }
 
@@ -142,10 +132,8 @@ public class CircleMemoryMeter extends ImageView {
         super.onDetachedFromWindow();
         if (mAttached) {
             mAttached = false;
-            mRectLeft = null;   // makes sure, size based variables get
-            // recalculated on next attach
-            mCircleSize = 0;    // makes sure, mCircleSize is reread from icons on
-            // next attach
+            mRectLeft = null;
+            mCircleSize = 0;
         }
     }
 
@@ -166,23 +154,13 @@ public class CircleMemoryMeter extends ImageView {
         setCurrentLevel(free);
     }
 
-    private void update() {
-        postDelayed(new Runnable() {
-            public void run() {
-                updateMemoryInfo();
-                invalidate();
-            }
-        }, 500);
-    }
-
-    private void updateMemoryInfo() {
+    public void updateMemoryInfo() {
         MemoryInfo mi = new MemoryInfo();
         ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         am.getMemoryInfo(mi);
         long free = mi.availMem;
         setCurrentLevel(free);
-        mHandler.removeCallbacks(mInvalidate);
-        mHandler.postDelayed(mInvalidate, 100);
+        invalidate();
     }
 
     void drawCircle(Canvas canvas, long level, RectF drawRect) {
@@ -210,8 +188,6 @@ public class CircleMemoryMeter extends ImageView {
         if (mRectLeft == null) {
             init();
         }
-
-        updateMemoryInfo();
         drawCircle(canvas, getLevel(), mRectLeft);
     }
 
