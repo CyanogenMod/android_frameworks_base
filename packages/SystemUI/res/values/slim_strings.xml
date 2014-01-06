@@ -43,6 +43,7 @@
     <string name="shortcut_reboot">Reboot (instant)</string>
     <string name="shortcut_last_app">Last App</string>
     <string name="shortcut_screenshot">Screenshot</string>
+    <string name="shortcut_screensleep">Sleep Screen</string>
     <string name="shortcut_chamber">Chamber of Secrets</string>
     <string name="chamber_disabled">Chamber of secrets is closed</string>
     <string name="chamber_title">Input Settings string</string>

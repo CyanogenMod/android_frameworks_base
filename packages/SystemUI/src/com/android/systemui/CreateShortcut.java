@@ -114,6 +114,8 @@ public class CreateShortcut extends LauncherActivity {
             return R.drawable.ic_qs_reboot;
         } else if (c.equals("Screenshot")) {
             return R.drawable.ic_sysbar_screenshot;
+        } else if (c.equals("SleepScreen")) {
+            return R.drawable.ic_qs_sleep;
         } else if (c.equals("ChamberOfSecrets")) {
             return R.drawable.ic_qs_reboot_recovery;
         } else {

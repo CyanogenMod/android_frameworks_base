@@ -322,6 +322,19 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.android.systemui.shortcuts.SleepScreen"
+            android:label="@string/shortcut_screensleep"
+            android:icon="@drawable/ic_qs_sleep"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_EXTRA" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.android.systemui.shortcuts.Torch"
             android:label="@string/shortcut_torch"
             android:icon="@drawable/ic_qs_torch_on"
