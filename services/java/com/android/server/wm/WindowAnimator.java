@@ -14,6 +14,7 @@ import static com.android.server.wm.WindowManagerService.LayoutFields.SET_WALLPA
 import android.content.Context;
 import android.os.Debug;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
@@ -119,6 +120,12 @@ public class WindowAnimator {
         }
 
         mDisplayContentsAnimators.delete(displayId);
+    }
+
+    AppWindowAnimator getWallpaperAppAnimator() {
+        return mService.mWallpaperTarget == null
+                ? null : mService.mWallpaperTarget.mAppToken == null
+                        ? null : mService.mWallpaperTarget.mAppToken.mAppAnimator;
     }
 
     void hideWallpapersLocked(final WindowState w) {
@@ -238,14 +245,19 @@ public class WindowAnimator {
                         mService.mFocusMayChange = true;
                     }
                     if (win.isReadyForDisplay()) {
-                        if (nowAnimating) {
-                            if (winAnimator.mAnimationIsEntrance) {
-                                mForceHiding = KEYGUARD_ANIMATING_IN;
+                        if (Settings.System.getInt(mContext.getContentResolver(),
+                                Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 0) {
+                            if (nowAnimating) {
+                                if (winAnimator.mAnimationIsEntrance) {
+                                    mForceHiding = KEYGUARD_ANIMATING_IN;
+                                } else {
+                                    mForceHiding = KEYGUARD_ANIMATING_OUT;
+                                }
                             } else {
-                                mForceHiding = KEYGUARD_ANIMATING_OUT;
+                                mForceHiding = KEYGUARD_SHOWN;
                             }
                         } else {
-                            mForceHiding = win.isDrawnLw() ? KEYGUARD_SHOWN : KEYGUARD_NOT_SHOWN;
+                            mForceHiding = KEYGUARD_NOT_SHOWN;
                         }
                     }
                     if (WindowManagerService.DEBUG_VISIBILITY) Slog.v(TAG,
