@@ -887,7 +887,7 @@ public class ActiveDisplayView extends FrameLayout {
     }
 
     private void registerNotificationListener() {
-        ComponentName cn = new ComponentName(mContext, getClass().getName());
+        ComponentName cn = new ComponentName("ActiveDisplayComponent", getClass().getName());
         try {
             mNM.registerListener(mNotificationListener, cn, UserHandle.USER_ALL);
         } catch (RemoteException e) {
