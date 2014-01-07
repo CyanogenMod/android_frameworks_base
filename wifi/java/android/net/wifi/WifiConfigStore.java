@@ -15,11 +15,14 @@
  */
 
 package android.net.wifi;
+import com.android.internal.R;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.LinkAddress;
 import android.net.LinkProperties;
+import android.net.NetworkInfo;
 import android.net.NetworkUtils;
 import android.net.NetworkInfo.DetailedState;
 import android.net.ProxyProperties;
@@ -36,6 +39,7 @@ import android.os.Message;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.security.KeyStore;
 import android.text.TextUtils;
 import android.util.LocalLog;
@@ -161,6 +165,9 @@ class WifiConfigStore {
     private WifiNative mWifiNative;
     private final KeyStore mKeyStore = KeyStore.getInstance();
 
+    private static final int WIFI_AUTO_CONNECT_TYPE_AUTO = 0;
+    private static final int DATA_TO_WIFI_CONNECT_TYPE_AUTO = 0;
+
     WifiConfigStore(Context c, WifiNative wn) {
         mContext = c;
         mWifiNative = wn;
@@ -213,11 +220,64 @@ class WifiConfigStore {
         return networks;
     }
 
+    boolean isWifiAuto() {
+        int autoConnectPolicy = Settings.System
+                .getInt(mContext.getContentResolver(), Settings.System.WIFI_AUTO_CONNECT_TYPE,
+                        WIFI_AUTO_CONNECT_TYPE_AUTO);
+        return (autoConnectPolicy == WIFI_AUTO_CONNECT_TYPE_AUTO);
+    }
+
+    boolean isDataToWifiAuto() {
+        int gsmToWifiPolicy = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.DATA_TO_WIFI_CONNECT_TYPE, DATA_TO_WIFI_CONNECT_TYPE_AUTO);
+        return (gsmToWifiPolicy == DATA_TO_WIFI_CONNECT_TYPE_AUTO);
+    }
+
+    int existActiveNetwork() {
+        ConnectivityManager cm = (ConnectivityManager) mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info == null)
+            return -1;
+        return info.getType();
+    }
+
+    boolean isWifiAutoConn() {
+        // If no active network(info == null) and wifi connection type is auto
+        // connect, auto connect to wifi.
+        return isWifiAuto() && (existActiveNetwork() == -1);
+    }
+
+    boolean isDataToWifiAutoConn() {
+        // If the active network type is mobile, wifi connection type is auto
+        // connect and GSM to WLAN connection type is auto connect,
+        // auto connect to wifi.
+        return isWifiAuto()
+                && ((existActiveNetwork()
+                    == ConnectivityManager.TYPE_MOBILE) &&
+                isDataToWifiAuto());
+
+    }
+
+    boolean shouldAutoConnect() {
+        if(isWifiAutoConn() || isDataToWifiAutoConn()){
+            Log.d(TAG, " wifi or gsm to wlan conn type is auto , should auto connect");
+            return true;
+        }
+        Log.d(TAG, "Shouldn't auto connect");
+        return false;
+    }
+
     /**
      * enable all networks and save config. This will be a no-op if the list
      * of configured networks indicates all networks as being enabled
      */
     void enableAllNetworks() {
+        if (mContext.getResources().getBoolean(R.bool.wifi_autocon)
+                && !(isWifiAuto() && isDataToWifiAuto())) {
+            return;
+        }
+
         boolean networkEnabledStateChanged = false;
         for(WifiConfiguration config : mConfiguredNetworks.values()) {
             if(config != null && config.status == Status.DISABLED) {
