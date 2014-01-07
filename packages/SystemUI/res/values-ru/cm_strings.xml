@@ -79,5 +79,7 @@
     <string name="advanced_dev_option_wipe_app">Стереть данные</string>
     <string name="advanced_dev_option_force_stop">Остановить</string>
 
+    <string name="screenshot_delete_action">Удалить</string>
+    <string name="screenshot_delete_confirmation">Скриншот удалён.</string>
 
 </resources>
