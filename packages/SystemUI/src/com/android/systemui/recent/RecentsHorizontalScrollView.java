@@ -181,19 +181,16 @@ public class RecentsHorizontalScrollView extends HorizontalScrollView
 
     @Override
     public void removeAllViewsInLayout() {
+        smoothScrollTo(0, 0);
         int count = mLinearLayout.getChildCount();
-        int scrollX = getScrollX();
-        for (int i = 0, delayCounter = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             final View child = mLinearLayout.getChildAt(i);
-            if (child.getRight() > scrollX) {
-                delayCounter++;
-            }
             postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     dismissChild(child);
                 }
-            }, delayCounter * 150);
+            }, i * 150);
         }
     }
 
