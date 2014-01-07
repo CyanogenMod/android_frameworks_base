@@ -944,6 +944,14 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                     Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
                 }
             }
+
+	    /** notify split view layout changes **/
+            try {
+                ActivityManagerNative.getDefault().notifySplitViewLayoutChanged();
+            } catch (RemoteException e) {
+                Log.e(TAG, "Could not notify split view layout", e);
+            }
+
         } else {
             throw new IllegalStateException("Oops, no tag on view to split!");
         }

@@ -3666,9 +3666,10 @@ public class Intent implements Parcelable, Cloneable {
     public static final int FLAG_FLOATING_WINDOW = 0x00002000;
 
      /**
-	 * set in an Intent passed to {@link Context#startActivity Context.startActivity()},
+     * set in an Intent passed to {@link Context#startActivity Context.startActivity()},
      * this flag will cause a newly launching task to be resized according to the split
      * view metrics, making it running alongside another app.
+     * @hide
      */
     public static final int FLAG_ACTIVITY_SPLIT_VIEW = 0x00002000;
 
