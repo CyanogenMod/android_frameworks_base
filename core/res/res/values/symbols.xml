@@ -2021,4 +2021,7 @@
   <!-- Wifi tethering-->
   <java-symbol type="plurals" name="tethered_clients_connected" />
   <java-symbol type="xml" name="vendors" />
+
+  <!-- for wifi auto connection -->
+  <java-symbol type="bool" name="wifi_autocon" />
 </resources>
