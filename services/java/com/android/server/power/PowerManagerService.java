@@ -913,11 +913,13 @@ public final class PowerManagerService extends IPowerManager.Stub
             if (DEBUG_SPEW) Slog.v(TAG, "updateBlockedUids: uid = "+uid +"isBlocked = "+isBlocked);
             if(isBlocked) {
                 mBlockedUids.add(new Integer(uid));
-                for (WakeLock wl : mWakeLocks) {
+                for (int index = 0; index < mWakeLocks.size(); index++) {
+                    WakeLock wl = mWakeLocks.get(index);
                     if(wl != null) {
                         // release the wakelock for the blocked uid
                         if (wl.mOwnerUid == uid || checkWorkSourceObjectId(uid, wl)) {
                             releaseWakeLockInternal(wl.mLock, wl.mFlags);
+                            index--;
                             if (DEBUG_SPEW) Slog.v(TAG, "Internally releasing it");
                         }
                     }
