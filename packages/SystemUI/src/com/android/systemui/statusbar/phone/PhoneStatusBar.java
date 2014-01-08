@@ -3129,6 +3129,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     void updateResources() {
         final Context context = mContext;
         final Resources res = context.getResources();
+        boolean clearButtonFlag = false;
 
         // detect theme change.
         CustomTheme newTheme = res.getConfiguration().customTheme;
@@ -3137,11 +3138,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             mCurrentTheme = (CustomTheme)newTheme.clone();
             recreateStatusBar(false);
         } else {
-
-            if (mClearButton instanceof TextView) {
-                ((TextView)mClearButton).setText(context.getText(R.string.status_bar_clear_all_button));
-            }
-            loadDimens();
+            clearButtonFlag = true;
         }
 
         // detect theme ui mode change
@@ -3149,6 +3146,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         if (uiThemeMode != mCurrUiThemeMode) {
             mCurrUiThemeMode = uiThemeMode;
             recreateStatusBar(false);
+        } else {
+            clearButtonFlag = true;
+        }
+
+        if (clearButtonFlag) {
+            if (mClearButton instanceof TextView) {
+                ((TextView)mClearButton).setText(
+                        context.getText(R.string.status_bar_clear_all_button));
+            }
+            loadDimens();
         }
 
         // Update the QuickSettings container

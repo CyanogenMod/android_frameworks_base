@@ -221,4 +221,23 @@ public class UiModeManager {
         }
         return -1;
     }
+
+    /**
+     * Set system ui theme mode.
+     *
+     * possible theme modes @link Configuration
+     * {@link #UI_THEME_MODE_NORMAL},
+     * {@link #UI_THEME_MODE_HOLO_DARK}, {@link #UI_THEME_MODE_HOLO_LIGHT}
+     *
+     * @hide
+     */
+    public void setUiThemeMode(int mode) {
+        if (mService != null) {
+            try {
+                mService.setUiThemeMode(mode);
+            } catch (RemoteException e) {
+                Log.e(TAG, "setUiThemeMode: RemoteException", e);
+            }
+        }
+    }
 }
