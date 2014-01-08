@@ -3658,6 +3658,12 @@ public final class Settings {
         public static final String CUSTOM_TOGGLE_ACTIONS = "custom_toggle_actions";
 
         /**
+         * Contact strings for infinite toggles
+         * @hide
+         */
+        public static final String TILE_CONTACT_ACTIONS = "tile_contact_actions";
+
+        /**
          * Parsed booleans from string for infinite toggles (unlock/collapse-shade/match-icon)
          * @hide
          */
