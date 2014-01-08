@@ -470,6 +470,14 @@ public final class BluetoothAdapter {
      * @return current state of Bluetooth adapter
      */
     public int getState() {
+        if (mService == null) {
+            if (DBG) Log.d(TAG, "" + hashCode() + ": getState() :  mService = null");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ie) {
+                if (DBG) Log.d(TAG, ": getState() :  Exception in thread sleep");
+            }
+        }
         try {
             synchronized(mManagerCallback) {
                 if (mService != null)
@@ -478,8 +486,6 @@ public final class BluetoothAdapter {
                     if (VDBG) Log.d(TAG, "" + hashCode() + ": getState(). Returning " + state);
                     return state;
                 }
-                // TODO(BT) there might be a small gap during STATE_TURNING_ON that
-                //          mService is null, handle that case
             }
         } catch (RemoteException e) {Log.e(TAG, "", e);}
         if (DBG) Log.d(TAG, "" + hashCode() + ": getState() :  mService = null. Returning STATE_OFF");
