@@ -1832,8 +1832,13 @@ public class NotificationManagerService extends INotificationManager.Stub
                                 + n.getPackageName());
                     }
 
+                    // Have ring tone when received SMS when the device is CT mode
+                    boolean smsRingtone = mContext.getResources().getBoolean(
+                            com.android.internal.R.bool.config_sms_ringtone_incall);
+
                     // If we're not supposed to beep, vibrate, etc. then don't.
-                    if (((mDisabledNotifications & StatusBarManager.DISABLE_NOTIFICATION_ALERTS) == 0)
+                    if (((mDisabledNotifications & StatusBarManager.DISABLE_NOTIFICATION_ALERTS)
+                            == 0 || (smsRingtone && mInCall))
                             && (!(old != null
                                 && (notification.flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0 ))
                             && (r.getUserId() == UserHandle.USER_ALL ||

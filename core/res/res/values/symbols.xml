@@ -1794,4 +1794,7 @@
   <java-symbol type="bool" name="config_enableCpuBoostForOverScrollerFling" />
   <java-symbol type="bool" name="use_motion_accel" />
   <java-symbol type="bool" name="config_setup_mms_data" />
+
+  <!-- Configuration to play sms ringtone during MO/MT call -->
+  <java-symbol type="bool" name="config_sms_ringtone_incall" />
 </resources>
