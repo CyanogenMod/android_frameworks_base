@@ -347,19 +347,19 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
         if (show) {
             // if there are no apps, bring up a "No recent apps" message
-            boolean noApps = mRecentTaskDescriptions != null
+            final boolean noApps = mRecentTaskDescriptions != null
                     && (mRecentTaskDescriptions.size() == 0);
             mRecentsNoApps.setAlpha(1f);
             mRecentsNoApps.setVisibility(noApps ? View.VISIBLE : View.INVISIBLE);
 
-            boolean showClearAllButton = Settings.System.getInt(mContext.getContentResolver(),
+            final boolean showClearAllButton = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.SHOW_CLEAR_RECENTS_BUTTON, 0) == 1;
-            boolean showMemoryIndicator = Settings.System.getInt(mContext.getContentResolver(),
+            final boolean showMemoryIndicator = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.SHOW_RECENTS_MEMORY_INDICATOR, 0) == 1;
 
             if (showMemoryIndicator) {
 
-                int recentsMemoryIndicatorLocation = Settings.System.getInt(
+                final int recentsMemoryIndicatorLocation = Settings.System.getInt(
                         mContext.getContentResolver(),
                         Settings.System.RECENTS_MEMORY_INDICATOR_LOCATION,
                         Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT);
@@ -394,30 +394,33 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
                 mClearAllRecents.setVisibility(noApps ? View.GONE : View.VISIBLE);
 
-                int clearAllButtonLocation = Settings.System.getInt(
-                        mContext.getContentResolver(),
-                        Settings.System.CLEAR_RECENTS_BUTTON_LOCATION,
-                        Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT);
+                if (!noApps) {
+                    final int clearAllButtonLocation = Settings.System.getInt(
+                            mContext.getContentResolver(),
+                            Settings.System.CLEAR_RECENTS_BUTTON_LOCATION,
+                            Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT);
 
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams)
-                        mClearAllRecents.getLayoutParams();
+                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams)
+                            mClearAllRecents.getLayoutParams();
 
-                switch (clearAllButtonLocation) {
-                    case Constants.CLEAR_ALL_BUTTON_TOP_LEFT:
-                        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-                        break;
-                    case Constants.CLEAR_ALL_BUTTON_TOP_RIGHT:
-                        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-                        break;
-                    case Constants.CLEAR_ALL_BUTTON_BOTTOM_RIGHT:
-                        layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                        break;
-                    case Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT:
-                    default:
-                        layoutParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                        break;
+                    switch (clearAllButtonLocation) {
+                        case Constants.CLEAR_ALL_BUTTON_TOP_LEFT:
+                            layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+                            break;
+                        case Constants.CLEAR_ALL_BUTTON_TOP_RIGHT:
+                            layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+                            break;
+                        case Constants.CLEAR_ALL_BUTTON_BOTTOM_RIGHT:
+                            layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                            break;
+                        case Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT:
+                        default:
+                            layoutParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                            break;
+                    }
+
+                    mClearAllRecents.setLayoutParams(layoutParams);
                 }
-                mClearAllRecents.setLayoutParams(layoutParams);
             } else {
                 mClearAllRecents.setVisibility(View.GONE);
             }
