@@ -1,32 +1,29 @@
-/*
- * Copyright (C) 2012 - 2014 The MoKee OpenSource Project
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/* Copyright (C) 2013 The MoKee Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 #include <string.h>
 #include <stdio.h>
 #include <jni.h>
 #include <assert.h>
 #include "androidjni.h"
-#include "utils.h"
 
 //#define DEBUG
 
 #ifdef DEBUG
-#include <android/log.h>
-#define TAG_JNI = "mokee-phoneloc"
+    #include <android/log.h>
+    #define TAG_JNI = "jnireg"
 #endif
 
 
@@ -34,7 +31,8 @@
  * Register several native methods for one class.
  */
 static int registerNativeMethods(JNIEnv* env, const char* className,
-                                 JNINativeMethod* gMethods, int numMethods) {
+    JNINativeMethod* gMethods, int numMethods)
+{
     jclass clazz;
 
     clazz = (*env)->FindClass(env, className);
@@ -58,10 +56,11 @@ static int registerNativeMethods(JNIEnv* env, const char* className,
 /*
  * Register native methods for all classes we know about.
  */
-static int registerNatives(JNIEnv* env) {
+static int registerNatives(JNIEnv* env)
+{
     if (!registerNativeMethods(env,
-                               JNIREG_CLASS,
-                               gMethods, sizeof(gMethods) / sizeof(gMethods[0])))
+            JNIREG_CLASS,
+            gMethods, sizeof(gMethods) / sizeof(gMethods[0])))
         return JNI_FALSE;
 
     return JNI_TRUE;
@@ -72,7 +71,8 @@ static int registerNatives(JNIEnv* env) {
  *
  * Returns the JNI version on success, -1 on failure.
  */
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
+{
     JNIEnv* env = NULL;
     jint result = -1;
 
@@ -80,13 +80,13 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
         return -1;
     }
     assert(env != NULL);
-
+    
     if (!registerNatives(env)) {
         return -1;
     }
     /* success -- return valid version number */
     result = JNI_VERSION_1_4;
-
+ 
     return result;
 }
 

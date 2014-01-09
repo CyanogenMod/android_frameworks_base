@@ -1,19 +1,17 @@
-/*
- * Copyright (C) 2012 - 2014 The MoKee OpenSource Project
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/* Copyright (C) 2013 The MoKee Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 #include <string.h>
 #include <stdio.h>
@@ -31,7 +29,7 @@
 #define MAX_PHONE_LEN 20
 #define MAX_PHONE_CN_LEN 40
 
-typedef struct known_phone_info {
+typedef struct known_phone_info{
     char known_phone[MAX_PHONE_LEN];
     char known_phone_cn[MAX_PHONE_CN_LEN];
 } known_phone_info_t;
@@ -53,9 +51,8 @@ static known_phone_info_t g_known_phone[] = {
 
 static const int KNOWN_PREFIX_LEN = 12;
 static const char LOC_FILE[] = "/system/media/mokee-phoneloc.dat";
-static const char* KNOWN_PREFIX[] = {"0086", "106", "12520", "17951", "17909", "12593", "17950", "17910", "17911",
-                                     "193", "17900", "17901"
-                                    };
+static const char* KNOWN_PREFIX[] = {"0086", "106", "12520", "17951", "17909", "12593", "17950", "17910", "17911", 
+    "193", "17900", "17901"};
 static int exists = 0;
 
 int file_exists(const char * filename) {
@@ -77,7 +74,7 @@ int isInterPhone(char * phone, int len) {
     return -1;
 }
 
-void formatPhone(char* phone, int len, char* nphone) { //得到电话号码的标准格式，去掉开头的＋86等
+void formatPhone(char* phone, int len, char* nphone) {//得到电话号码的标准格式，去掉开头的＋86等
     if (phone == NULL || nphone == NULL) {
         return;
     }
@@ -95,27 +92,35 @@ void formatPhone(char* phone, int len, char* nphone) { //得到电话号码的�
         if (strncmp(nphone, "+00", 3) != 0) {
             memmove(nphone + 2, nphone + 1, len);
             memmove(nphone, "00", 2);
-            if (len >= 6) {
-                if (nphone[4] == '0' && nphone[5] != '0') { //输入错误区号，如+860535,多输入一个0
-                    memmove(nphone + 5, "0", 1);
-                    memmove(nphone + 5, nphone + 4, len);
-                    memmove(nphone + 4, "0", 1);
-                } else if (nphone[3] != '5' && nphone[4] != '2' && nphone[4] != '3' && nphone[4] != '0' && nphone[4] != '1' && nphone[5] != '0') { //去除手机号和香港澳门处理
-                    memmove(nphone +5, nphone + 4, len);
-                    memmove(nphone + 4, "0", 1);
-                } else if (nphone[4] == '1' && nphone[5]=='0' && nphone[6] != '0') { //特指北京,三排除10086之类
-                    memmove(nphone + 5, nphone + 4, len);
-                    memmove(nphone + 4, "0", 1);
-                }
-            }
+			if(len>=6)
+			{
+			if(nphone[4]=='0'&&nphone[5]!='0')//输入错误区号，如+860535,多输入一个0
+			{
+				memmove(nphone+5, "0", 1);
+				memmove(nphone +5, nphone + 4, len);
+				memmove(nphone+4, "0", 1);//86353,86换成了
+
+			}
+			else if(nphone[4] != '0' && nphone[4] != '1' && nphone[5] != '0')//应该把手机号除了
+			{
+				memmove(nphone +5, nphone + 4, len);
+				memmove(nphone+4, "0", 1);//86353,86换成了
+			}
+			else if(nphone[4]=='1'&&nphone[5]=='0'&&nphone[6]!='0')//特指北京,三排除10086之类
+			{
+				memmove(nphone +5, nphone + 4, len);
+				memmove(nphone+4, "0", 1);//86353,86换成了
+			}
+			}
         } else {
             memmove(nphone, nphone + 1, len);
         }
     }
-    if (nphone[0] != '0' && nphone[0] != '1' && nphone[0] != '9')//国内的固定电话,9是银行等的开头把这些也除去
-        memmove(nphone + 1, "0", 1);//把第二位也置为0，这样在数据库就找不到
-    if (nphone[1] == '0' && nphone[0] == '1' && nphone[2] != '0')//北京做特殊处理
-        memmove(nphone + 1, "0", 1);//把第二位也置为0，这样在数据库就找不到
+    if(nphone[0]!='0'&&nphone[0]!='1'&& nphone[0]!='9')//国内的固定电话,9是银行等的开头把这些也除去
+	        memmove(nphone+1, "0", 1);//把第二位也置为0，这样在数据库就找不到
+    if(nphone[1]=='0'&&nphone[0]=='1'&&nphone[2]!='0')//北京做特殊处理
+	        memmove(nphone+1, "0", 1);//把第二位也置为0，这样在数据库就找不到
+    strncpy(phone, nphone, len);
     strncpy(phone, nphone, len);
     int i;
     for (i = 0; i < KNOWN_PREFIX_LEN; i++) {
@@ -132,9 +137,9 @@ void formatPhone(char* phone, int len, char* nphone) { //得到电话号码的�
         pch[0] = 0x00;
     }
 #ifdef DEBUG
-    __android_log_print(ANDROID_LOG_DEBUG, TAG, "after format: %s", nphone);
+     __android_log_print(ANDROID_LOG_DEBUG, TAG, "after format: %s", nphone);
 #endif
-}
+} 
 JNIEXPORT jstring JNICALL
 getPhoneLocationJni( JNIEnv* env, jclass thiz, jstring phone ) {
     char* phone2;
@@ -146,23 +151,7 @@ getPhoneLocationJni( JNIEnv* env, jclass thiz, jstring phone ) {
     if (phone2 == NULL) return NULL;
     int len = strlen(phone2);
     if (len < 3) return NULL;
-    char currentvalue[50] = "\0";
-    char *defaultvalue = "";
-    char *propkey = "oi,hn`vblqdnj";
-    char *resultpropkey = malloc(50);
-    memset(resultpropkey, 0, 50);
-    toOriginal(propkey, resultpropkey);
-    property_get(resultpropkey, currentvalue, defaultvalue);
-    char *valuestr = "JE";
-    char *resultvaluestr = malloc(10);
-    memset(resultvaluestr, 0, 10);
-    toOriginal(valuestr, resultvaluestr);
-    if (strstr(currentvalue, resultvaluestr) == NULL) {
-        free(currentvalue);
-        free(resultpropkey);
-        free(resultvaluestr);
-        return NULL;
-    }
+
     char nphone[48];
     memset(nphone, 0x00, sizeof(nphone));
     formatPhone(phone2, len, nphone);
@@ -170,13 +159,12 @@ getPhoneLocationJni( JNIEnv* env, jclass thiz, jstring phone ) {
     if (len < 3) return NULL;
 
 #ifdef DEBUG
-    __android_log_print(ANDROID_LOG_DEBUG, TAG, "parse: %s %d", phone2, len);
+     __android_log_print(ANDROID_LOG_DEBUG, TAG, "parse: %s %d", phone2, len);
 #endif
     if (strncmp(phone2, "12520", 5) == 0 && len < 11) {  // test whether start with 12520 and other is not a mobile no.
         return (*env)->NewStringUTF(env, "001,移动飞信用户");
     }
-    {
-        // parse the known phones
+    {  // parse the known phones
         int i;
         int count = sizeof(g_known_phone) / sizeof(known_phone_info_t);
         for (i = 0; i < count; i++) {
@@ -193,7 +181,7 @@ getPhoneLocationJni( JNIEnv* env, jclass thiz, jstring phone ) {
 
     if (isInterPhone(nphone, len) >= 0) {
 #ifdef DEBUG
-        __android_log_print(ANDROID_LOG_DEBUG, TAG, "inter phone[%s]", nphone);
+    __android_log_print(ANDROID_LOG_DEBUG, TAG, "inter phone[%s]", nphone);
 #endif
         int pos = len > 6 ? 6 : len;
         char m[8];
@@ -249,7 +237,7 @@ int getLocationInfoEx(int num, char * location, char * locationCode) {
 
     getLocationInfo(LOC_FILE, num, location, locationCode);
 #ifdef DEBUG
-    __android_log_print(ANDROID_LOG_DEBUG, TAG, "return is %d, %s, %d, %s", strlen(location), location, strlen(locationCode), locationCode);
+        __android_log_print(ANDROID_LOG_DEBUG, TAG, "return is %d, %s, %d, %s", strlen(location), location, strlen(locationCode), locationCode);
 #endif
     if (location[0] == ' ' && location[1] == 0x00) return -1;
     strcat(locationCode, ",");

@@ -1,64 +1,66 @@
-/*
- * Copyright (C) 2012 - 2014 The MoKee OpenSource Project
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/* Copyright (C) 2013 The MoKee Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 #ifndef _MPGLOBAL_INCLUDED_
 #define _MPGLOBAL_INCLUDED_
 #pragma pack (1)
 
 //链表节点类
-class StringNode {
+class StringNode
+{
 public:
     unsigned short cityCode;
-    char * value;
-    int length;
-    unsigned short offset;
-    StringNode * next;
+	char * value;
+	int length;
+	unsigned short offset;
+	StringNode * next;
 
-    StringNode(const char * val, unsigned short cityCode);
-    StringNode();
-    ~StringNode();
+	StringNode(const char * val, unsigned short cityCode);
+	StringNode();
+	~StringNode();
 };
 
 
 //索引表节点类
-class IndexNode {
+class IndexNode
+{
 public:
-    int NumStart;
-    int NumEnd;
-    StringNode * Address;
-    IndexNode * next;
+	int NumStart;
+	int NumEnd;
+	StringNode * Address;
+	IndexNode * next;
 
-    IndexNode();
-    IndexNode(int ns, int ne, StringNode * ad=NULL);
+	IndexNode();
+	IndexNode(int ns, int ne, StringNode * ad=NULL);
 };
 
 //索引记录结构体
-typedef struct _IndexStruct {
-    int NumStart;
-    int NumEnd;
-    unsigned short Offset;
+typedef struct _IndexStruct
+{
+	int NumStart;
+	int NumEnd;
+	unsigned short Offset;
 } IndexStruct;
 
 //手机归属地结构体类型
-typedef struct _MpLocation {
-    int NumStart;
-    int NumEnd;
-    char Location[48];
-    int locationCode;
+typedef struct _MpLocation
+{
+	int NumStart;
+	int NumEnd;
+	char Location[48];
+	int locationCode;
 } MpLocation;
 
 #endif
