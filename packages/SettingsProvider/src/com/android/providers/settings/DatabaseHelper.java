@@ -47,6 +47,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.content.PackageHelper;
+import com.android.internal.telephony.MSimConstants;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.RILConstants;
@@ -1960,9 +1961,73 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void loadSettings(SQLiteDatabase db) {
         loadSystemSettings(db);
         loadSecureSettings(db);
+        loadEnhancedSystemSettings(db);
         // The global table only exists for the 'owner' user
         if (mUserHandle == UserHandle.USER_OWNER) {
             loadGlobalSettings(db);
+            loadEnhancedGlobalSettings(db);
+        }
+    }
+
+    private void loadEnhancedGlobalSettings(SQLiteDatabase db) {
+        SQLiteStatement stmt = null;
+        try {
+            stmt = db.compileStatement("INSERT OR IGNORE INTO global(name,value)"
+                    + " VALUES(?,?);");
+
+            loadSetting(stmt,
+                    Settings.Global.MULTI_SIM_SMS_SUBSCRIPTION, MSimConstants.SUB1);
+
+            loadSetting(stmt,
+                    Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION, MSimConstants.SUB1);
+
+            loadSetting(stmt,
+                    Settings.Global.MULTI_SIM_VOICE_CALL_SUBSCRIPTION, MSimConstants.SUB1);
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
+    private void loadEnhancedSystemSettings(SQLiteDatabase db) {
+        SQLiteStatement stmt = null;
+        try {
+            stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
+                    + " VALUES(?,?);");
+
+            loadSetting(stmt, "cabl_enabled", 0);
+            loadSetting(stmt, "proximity_sensor", 1);
+            loadSetting(stmt, "show_call_duration", 1);
+            loadSetting(stmt, "vibrate_on_accepted", 1);
+
+            if (mContext.getResources().getBoolean(R.bool.carrier_sim_name_enabled)) {
+                for (int i = 0; i < MSimConstants.MAX_PHONE_COUNT_TRI_SIM; i++) {
+                    if (i == 0) {
+                        loadSetting(stmt, "perferred_name_sub" + (i + 1),
+                                mContext.getString(R.string.carrier_name_cdma));
+                    } else {
+                        loadSetting(stmt, "perferred_name_sub" + (i + 1),
+                                mContext.getString(R.string.carrier_name_gsm));
+                    }
+                }
+            } else {
+                for (int i = 0; i < MSimConstants.MAX_PHONE_COUNT_TRI_SIM; i++) {
+                    loadSetting(stmt, "perferred_name_sub" + (i + 1),
+                            mContext.getString(R.string.name_sim) + (i + 1));
+                }
+            }
+            String iconsIndex = null;
+            for (int i = 0; i < MSimConstants.MAX_PHONE_COUNT_TRI_SIM; i++) {
+                if (i == 0) {
+                    iconsIndex = String.valueOf(i);
+                } else {
+                    iconsIndex += "," + i;
+                }
+            }
+            loadSetting(stmt, "preferred_sim_icon_index", iconsIndex);
+        } finally {
+            if (stmt != null)
+                stmt.close();
         }
     }
 
