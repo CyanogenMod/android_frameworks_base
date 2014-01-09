@@ -702,6 +702,7 @@ public class ActiveDisplayView extends FrameLayout {
         mHandler.removeCallbacks(runSystemUiVisibilty);
         setVisibility(View.GONE);
         restoreBrightness();
+        mBar.disable(0);
         mWakedByPocketMode = false;
         cancelTimeoutTimer();
         if (isLockScreenDisabled()) {
@@ -1003,8 +1004,6 @@ public class ActiveDisplayView extends FrameLayout {
                         iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         mOverflowNotifications.addView(iv, mOverflowLayoutParams);
                     }
-                } catch (RemoteException re) {
-                } catch (NullPointerException npe) {
                 }
             }
         });
