@@ -16824,7 +16824,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         ActivityRecord starting = getFocusedStack().topRunningActivityLocked(null);
 
-        if (mWindowManager != null && starting != null && mWindowManager.isTaskSplitView(starting.task.taskId)) {
+        if (mWindowManager != null && starting != null &&
+                mWindowManager.isTaskSplitView(starting.task.taskId)) {
             Log.e("XPLOD", "[rAL] The current resumed task " + starting.task.taskId + " is split. Checking second");
 
             // This task was split, we resume the second task if this task wasn't already a resumed task
@@ -16835,7 +16836,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 ActivityRecord second = getFocusedStack().topRunningActivityLocked(starting);
 
                 // Is that second task split as well?
-                if (mWindowManager.isTaskSplitView(second.task.taskId)) {
+                if (second != null && mWindowManager.isTaskSplitView(second.task.taskId)) {
                     // Don't restore me again
                     Log.e("XPLOD", "[rAL] There is a second task that I should be ignoring next: " + second.task.taskId);
                     mSecondTaskToResume = second.task.taskId;
