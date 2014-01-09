@@ -4638,6 +4638,111 @@ public final class Settings {
         public static final String WEATHER_SHOW_LOCATION = "weather_show_location";
 
         /**
+         * @hide
+         */
+        public static final String GESTURE_ONE = "gesture_one";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_TWO = "gesture_two";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_THREE = "gesture_three";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_FOUR = "gesture_four";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_TYPE_ONE = "gesture_type_one";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_TYPE_TWO = "gesture_type_two";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_TYPE_THREE = "gesture_type_three";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_TYPE_FOUR = "gesture_type_four";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_APP_ONE = "gesture_app_one";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_APP_TWO = "gesture_app_two";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_APP_THREE = "gesture_app_three";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_APP_FOUR = "gesture_app_four";
+
+        /**
+         * @hide
+         */
+        public static final String TOUCH_ZONE_ONE = "touch_zone_one";
+
+        /**
+         * @hide
+         */
+        public static final String TOUCH_ZONE_TWO = "touch_zone_two";
+
+        /**
+         * @hide
+         */
+        public static final String TOUCH_ZONE_THREE = "touch_zone_three";
+
+        /**
+         * @hide
+         */
+        public static final String TOUCH_ZONE_FOUR = "touch_zone_four";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_SWIPE_CAPTURE = "gesture_swipe_capture";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_SWIPE_DISTANCE = "gesture_swipe_distance";
+
+        /**
+         * @hide
+         */
+        public static final String SHOW_GESTURES = "show_gestures";
+
+        /**
+         * @hide
+         */
+        public static final String GESTURE_BLACKLIST = "gesture_blacklist";
+
+        /**
+         * @hide
+         */
+        public static final String LARGE_RECENTS = "large_recents";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *

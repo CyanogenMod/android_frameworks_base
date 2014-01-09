@@ -38,6 +38,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManagerNative;
+import android.app.ActivityOptions;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -149,6 +150,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_TOGGLE_SCREENSHOT = 1029;
     protected static final int MSG_TOGGLE_LAST_APP = 1030;
     protected static final int MSG_TOGGLE_KILL_APP = 1031;
+    protected static final int MSG_SWITCH_APPS = 1032;
 
     protected static final boolean ENABLE_HEADS_UP = true;
     // scores above this threshold should be displayed in heads up mode.
@@ -249,6 +251,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     public NotificationData getNotificationData() {
         return mNotificationData;
     }
+
+    private ActivityManager mActivityManager;
 
     public IStatusBarService getStatusBarService() {
         return mBarService;
@@ -528,6 +532,17 @@ public abstract class BaseStatusBar extends SystemUI implements
                 updateHalo();
             }});
 
+        IntentFilter switchFilter = new IntentFilter();
+        switchFilter.addAction("com.android.systemui.APP_SWITCH");
+        mContext.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int msg = MSG_SWITCH_APPS;
+                mHandler.removeMessages(msg);
+                mHandler.sendEmptyMessage(msg);
+            }
+        }, switchFilter);
+
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.HALO_SIZE), false, new ContentObserver(new Handler()) {
             @Override
@@ -611,6 +626,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mHalo = null;
             }
         }
+
+        mActivityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
     }
 
     private boolean showPie() {
@@ -1152,6 +1169,25 @@ public abstract class BaseStatusBar extends SystemUI implements
                  if (DEBUG) Slog.d(TAG, "toggle kill app");
                  mHandler.post(mKillTask);
                  break;
+            case MSG_SWITCH_APPS:
+                final List<ActivityManager.RecentTaskInfo> recentTasks = mActivityManager.getRecentTasksForUser(
+                        99, ActivityManager.RECENT_IGNORE_UNAVAILABLE, UserHandle.CURRENT.getIdentifier());
+                if (recentTasks.size() > 1) {
+                    ActivityManager.RecentTaskInfo recentInfo = recentTasks.get(recentTasks.size() - 1);
+                    Intent switchIntent = new Intent(recentInfo.baseIntent);
+                    if (recentInfo.origActivity != null) {
+                        switchIntent.setComponent(recentInfo.origActivity);
+                    }
+                    // Don't load ourselves
+                    if (switchIntent.getComponent().getPackageName().equals(mContext.getPackageName())) {
+                        return;
+                    }
+                    ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
+                            com.android.internal.R.anim.slide_in_right,
+                            com.android.internal.R.anim.slide_out_left);
+                    mContext.startActivityAsUser(switchIntent, opts.toBundle(), new UserHandle(
+                            UserHandle.USER_CURRENT));
+                }
             }
         }
     }

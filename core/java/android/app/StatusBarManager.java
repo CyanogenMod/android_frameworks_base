@@ -191,4 +191,19 @@ public class StatusBarManager {
         if (state == WINDOW_STATE_SHOWING) return "WINDOW_STATE_SHOWING";
         return "WINDOW_STATE_UNKNOWN";
     }
+
+    /**
+     * Expand the recents panel.
+     */
+    public void toggleRecentApps() {
+        try {
+            final IStatusBarService svc = getService();
+            if (svc != null) {
+                svc.toggleRecentApps();
+            }
+        } catch (RemoteException ex) {
+            // system process is dead anyway.
+            throw new RuntimeException(ex);
+        }
+    }
 }
