@@ -25,7 +25,6 @@ LOCAL_PATH := $(call my-dir)
 # R.java file as a prerequisite.
 # TODO: find a more appropriate way to do this.
 framework_res_source_path := APPS/framework-res_intermediates/src
-mokee_res_source_path := APPS/mokee-res_intermediates/src
 
 # Build the master framework library.
 # The framework contains too many method references (>64K) for poor old DEX.
@@ -293,9 +292,7 @@ LOCAL_AIDL_INCLUDES += $(FRAMEWORKS_BASE_JAVA_SRC_DIRS)
 LOCAL_INTERMEDIATE_SOURCES := \
 			$(framework_res_source_path)/android/R.java \
 			$(framework_res_source_path)/android/Manifest.java \
-			$(framework_res_source_path)/com/android/internal/R.java \
-                        $(mokee_res_source_path)/mokee/R.java \
-                        $(mokee_res_source_path)/com/mokee/internal/R.java
+			$(framework_res_source_path)/com/android/internal/R.java
 
 LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_JAVA_LIBRARIES := bouncycastle conscrypt core core-junit ext okhttp
@@ -311,10 +308,6 @@ include $(BUILD_STATIC_JAVA_LIBRARY)
 framework_res_R_stamp := \
 	$(call intermediates-dir-for,APPS,framework-res,,COMMON)/src/R.stamp
 $(full_classes_compiled_jar): $(framework_res_R_stamp)
-
-mokee_res_R_stamp := \
-        $(call intermediates-dir-for,APPS,mokee-res,,COMMON)/src/R.stamp
-$(full_classes_compiled_jar): $(mokee_res_R_stamp)
 
 # Build part 1 of the framework library.
 # ============================================================
@@ -354,7 +347,6 @@ framework2_module := $(LOCAL_INSTALLED_MODULE)
 # Make sure that all framework modules are installed when framework is.
 # ============================================================
 $(framework_module): | $(dir $(framework_module))framework-res.apk
-$(framework_module): | $(dir $(framework_module))mokee-res.apk
 $(framework_module): | $(dir $(framework_module))framework2.jar
 
 framework_built := $(call java-lib-deps,framework framework2)
