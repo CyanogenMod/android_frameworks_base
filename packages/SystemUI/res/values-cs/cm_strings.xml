@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- AOSP specific translation - from strings.xml-->
+    <string name="accessibility_battery_level">Úroveň baterie: <xliff:g id="number">%d</xliff:g>\u0025.</string>
+
+    <!-- CM specific translation -->
+    <string name="accessibility_quick_settings_ringer">Zvuk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibrace <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Použít hlavu CIDa</string>
+    <string name="bean_dream_settings_cid_summary">Použít hlavu CIDa místo sladkých želé fazolí</string>
+    <string name="quick_settings_profile_label">Profil</string>
+    <string name="powerwidget_screen_timeout_toast">Vypnutí obrazovky nastaveno na: %1$d %2$s</string>
+    <string name="quick_settings_gps_off">GPS vyp.</string>
+    <string name="quick_settings_screen_sleep">Uspat</string>
+    <string name="quick_settings_ringer_on">Zvuk zap.</string>
+    <string name="quick_settings_ringer_off">Zvuk vyp.</string>
+    <string name="quick_settings_vibration_on">Vibrace zap.</string>
+    <string name="quick_settings_vibration_off">Vibrace vyp.</string>
+    <string name="quick_settings_label_enabled">Zap.</string>
+    <string name="quick_settings_label_disabled">Vyp.</string>
+    <string name="quick_settings_ringer_normal">Zvuk</string>
+    <string name="quick_settings_lockscreen">Zámek obrazovky</string>
+    <string name="quick_settings_network_type">Režim sítě</string>
+    <string name="quick_settings_report_bug">Ohlásit chybu</string>
+    <string name="quick_settings_sync">Synch.</string>
+    <string name="quick_settings_sync_off">Synch. vyp.</string>
+    <string name="quick_settings_torch">Svítilna</string>
+    <string name="quick_settings_torch_off">Svítilna vyp.</string>
+    <string name="quick_settings_nfc_off">NFC vyp.</string>
+    <string name="quick_settings_screen_timeout">Režim spánku</string>
+    <string name="quick_settings_usb_tether_off_label">Odpojeno</string>
+    <string name="quick_settings_usb_tether_connected_label">USB sdíl. vyp.</string>
+    <string name="quick_settings_usb_tether_on_label">USB sdíl.</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP vyp.</string>
+    <string name="quick_settings_quiethours">Čas klidu</string>
+    <string name="quick_settings_quiethours_off">Čas klidu vyp.</string>
+    <string name="quick_settings_lte_off">LTE vyp.</string>
+    <string name="quick_settings_volume">Hlasitost</string>
+    <string name="quick_settings_camera_label">Fotoaparát</string>
+    <string name="quick_settings_network_adb_disabled_label">Zakázáno</string>
+    <string name="quick_settings_network_adb_enabled_label">Povoleno</string>
+    <string name="quick_settings_expanded_desktop">Rozšířený</string>
+    <string name="quick_settings_expanded_desktop_off">Normální</string>
+    <string name="quick_settings_camera_error_connect">Fotoaparát nelze spustit</string>
+    <string name="navbar_dialog_title">Vybrat akci k přiřazení</string>
+    <string name="navbar_home_button">Tlačítko Domů</string>
+    <string name="navbar_recent_button">Tlačítko Nedávné</string>
+    <string name="navbar_search_button">Tlačítko Hledat</string>
+    <string name="navbar_back_button">Tlačítko Zpět</string>
+    <string name="navbar_empty_button">Prázdné tlačítko</string>
+    <string name="navbar_menu_conditional_button">Tlačítko (skrývat) Nabídka</string>
+    <string name="navbar_menu_always_button">Tlačítko (vždy zobrazit) Nabídka</string>
+    <string name="navbar_menu_big_button">Tlačítko Nabídka</string>
+    <string name="pie_battery_status_charging">Nabíjení (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Nabito</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% zbývá</string>
+    <string name="pie_phone_status_no_service">Žádné připojení</string>
+    <string name="pie_phone_status_airplane_mode">Režim V letadle aktivovaný</string>
+    <string name="pie_phone_status_emergency_only">Pouze tísňová volání</string>
+
+    <string name="advanced_dev_option_wipe_app">Vymazat data aplikací</string>
+    <string name="advanced_dev_option_force_stop">Vynutit ukončení</string>
+
+    <string name="accessibility_dock_battery_level">Baterie doku: <xliff:g id="number">%d</xliff:g>\u0025.</string>
+
+    <string name="screenshot_delete_action">Smazat</string>
+    <string name="screenshot_delete_confirmation">Snímek obrazovky smazán.</string>
+</resources>
