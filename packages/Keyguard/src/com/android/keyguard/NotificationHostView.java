@@ -331,6 +331,7 @@ public class NotificationHostView extends FrameLayout {
 
     public boolean addNotification(StatusBarNotification sbn, boolean showNotification, boolean forceBigContentView) {
         if ((!NotificationViewManager.config.hideLowPriority || sbn.getNotification().priority > Notification.PRIORITY_LOW)
+                && NotificationViewManager.NotificationListener.isValidNotification(sbn)
                 && (!NotificationViewManager.config.hideNonClearable || sbn.isClearable())) {
             mNotificationsToAdd.add(new NotificationView(mContext, sbn));
             Message msg = new Message();
