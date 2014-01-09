@@ -111,4 +111,7 @@
     <dimen name="pie_panel_padding">20dp</dimen>
     <!-- PA PIE-->
 
+    <!-- Height of carrier label + close handle -->
+    <dimen name="weather_text_margin">56dp</dimen>
+
 </resources>

@@ -117,6 +117,7 @@ import com.android.systemui.DemoMode;
 import com.android.systemui.EventLogTags;
 
 import com.android.systemui.statusbar.powerwidget.PowerWidget;
+import com.android.systemui.statusbar.policy.WeatherPanel;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
@@ -260,6 +261,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     View mDateViewExpanded;
     View mClearButton;
     ImageView mSettingsButton, mNotificationButton;
+
+    // Weatherpanel
+    boolean mWeatherPanelEnabled;
+    WeatherPanel mWeatherPanel;
 
     // carrier/wifi label
     private TextView mCarrierLabel;
@@ -495,6 +500,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     Settings.System.APP_SIDEBAR_POSITION), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CARRIER), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUSBAR_WEATHER_STYLE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.USE_WEATHER), false, this);
             update();
         }
 
@@ -610,6 +619,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             mShowStatusBarCarrier = Settings.System.getInt(
                 resolver, Settings.System.STATUS_BAR_CARRIER, 0) == 1;
             showStatusBarCarrierLabel(mShowStatusBarCarrier);
+
+            mWeatherPanelEnabled = (Settings.System.getInt(resolver,
+                    Settings.System.STATUSBAR_WEATHER_STYLE, 2) == 1)
+                    && (Settings.System.getBoolean(resolver, Settings.System.USE_WEATHER, false));
+            mWeatherPanel.setVisibility(mWeatherPanelEnabled ? View.VISIBLE : View.GONE);
 
             mNotificationHideCarrier = Settings.System.getIntForUser(resolver,
                     Settings.System.NOTIFICATION_HIDE_CARRIER, 0, UserHandle.USER_CURRENT) != 0;
@@ -773,6 +787,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mStatusBarView = (PhoneStatusBarView) mStatusBarWindow.findViewById(R.id.status_bar);
         mStatusBarView.setStatusBar(this);
         mStatusBarView.setBar(this);
+
+        // Weather
+        final ContentResolver cr = mContext.getContentResolver();
+        mWeatherPanel = (WeatherPanel) mStatusBarWindow.findViewById(R.id.weatherpanel);
+        mWeatherPanel.setOnClickListener(mWeatherPanelListener);
+        mWeatherPanelEnabled = (Settings.System.getInt(cr,
+                Settings.System.STATUSBAR_WEATHER_STYLE, 2) == 1)
+                && (Settings.System.getBoolean(cr, Settings.System.USE_WEATHER, false));
+        mWeatherPanel.setVisibility(mWeatherPanelEnabled ? View.VISIBLE : View.GONE);
 
         PanelHolder holder = (PanelHolder) mStatusBarWindow.findViewById(R.id.panel_holder);
         mStatusBarView.setPanelHolder(holder);
@@ -3378,6 +3401,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
         animateCollapsePanels();
     }
+
+    private View.OnClickListener mWeatherPanelListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            vibrate();
+            animateCollapsePanels();
+            Intent weatherintent = new Intent("com.aokp.romcontrol.INTENT_WEATHER_REQUEST");
+            weatherintent.putExtra("com.aokp.romcontrol.INTENT_EXTRA_TYPE", "updateweather");
+            weatherintent.putExtra("com.aokp.romcontrol.INTENT_EXTRA_ISMANUAL", true);
+            mContext.sendBroadcast(weatherintent);
+        }
+    };
 
     private View.OnClickListener mSettingsButtonListener = new View.OnClickListener() {
         public void onClick(View v) {

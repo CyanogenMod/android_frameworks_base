@@ -19,4 +19,7 @@
     <!-- ScreenShort Trash -->
     <string name="trash">"放棄"</string>
 
+    <!--  Weather -->
+    <string name="weatherpanel_slash">/</string>
+
 </resources>
