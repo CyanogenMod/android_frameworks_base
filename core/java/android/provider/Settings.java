@@ -2943,11 +2943,11 @@ public final class Settings {
          */
         public static final String POINTER_SPEED = "pointer_speed";
 
-       /**
-	* Use the Notification Power Widget? (Who wouldn't!)
-	*
-	* @hide
-	*/
+        /**
+         * Use the Notification Power Widget? (Who wouldn't!)
+         *
+         * @hide
+         */
         public static final String EXPANDED_VIEW_WIDGET = "expanded_view_widget";
 
         /**
@@ -2959,7 +2959,7 @@ public final class Settings {
          */
         public static final String EGG_MODE = "egg_mode";
 
-	/**
+        /**
          * Enable Notification Toggles Icon Color
          *
          * @hide
@@ -2973,7 +2973,7 @@ public final class Settings {
          */
         public static final String ENABLE_TOGGLE_BAR = "enable_toggle_bar";
 
-	/**
+        /**
          * Notification Toggles Icon Color (On)
          *
          * @hide
@@ -3123,7 +3123,7 @@ public final class Settings {
         */
         public static final String COMBINED_BAR_AUTO_HIDE = "combined_bar_auto_hide";
 
-	/**
+        /**
          * Whether to show the network status in the status bar
          * @hide
          */
@@ -3135,13 +3135,13 @@ public final class Settings {
          */
         public static final String STATUS_BAR_NETWORK_STATS_UPDATE_INTERVAL = "status_bar_network_stats_update_frequency";
 
-	/**
+        /**
          * Network stats Color style
          * @hide
          */
         public static final String STATUS_BAR_NETWORK_COLOR = "status_bar_network_usage_color"; 
 
-	/**
+        /**
          * Network stats hide if there's no traffic
          * @hide
          */
@@ -3350,7 +3350,7 @@ public final class Settings {
          */
         public static final String POWER_MENU_PROFILES_ENABLED = "power_menu_profiles_enabled";
 
-	/**
+        /**
          * Whether power menu screen record is enabled
          * @hide
          */
@@ -3362,8 +3362,8 @@ public final class Settings {
          */
         public static final String POWER_MENU_AIRPLANE_ENABLED = "power_menu_airplane_enabled";
 
-       /**
-          * Changes the offset of the notifications to the top of the screen
+        /**
+         * Changes the offset of the notifications to the top of the screen
          * @hide
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_OFFSET_TOP = "lockscreen_notifications_offset_top";
@@ -3373,7 +3373,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE = "lockscreen_notifications_privacy_mode";
-  
+
+        /**
+         * Enables dynamic with for shown notifications
+         * @hide
+         */
+        public static final String LOCKSCREEN_NOTIFICATIONS_DYNAMIC_WIDTH = "lockscreen_notifications_dynamic_width";
 
         /**
          * Whether power menu user switcher is enabled
