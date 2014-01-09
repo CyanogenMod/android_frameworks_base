@@ -111,5 +111,6 @@
 
     <!-- Screenshot delete -->
     <string name="screenshot_delete_action">Delete</string>
+    <string name="screenshot_delete_confirmation">Screenshot deleted.</string>
 
 </resources>
