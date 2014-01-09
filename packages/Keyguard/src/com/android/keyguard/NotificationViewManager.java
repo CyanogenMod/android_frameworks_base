@@ -176,6 +176,7 @@ public class NotificationViewManager {
                         config.forceExpandedView) && config.wakeOnNotification && screenOffAndNotCovered
                         && !ongoingAndReposted) {
                 wakeDevice();
+                mHostView.showAllNotifications();
             }
         }
         @Override
