@@ -499,6 +499,10 @@ public final class BluetoothGattServer implements BluetoothProfile {
         BluetoothGattService service = characteristic.getService();
         if (service == null) return false;
 
+        if (characteristic == null || characteristic.getValue() == null) {
+            return false;
+        }
+
         try {
             mService.sendNotification(mServerIf, device.getAddress(),
                     service.getType(), service.getInstanceId(),

@@ -1982,10 +1982,19 @@ public class AudioService extends IAudioService.Stub {
     /** @see AudioManager#setBluetoothA2dpOn(boolean) */
     public void setBluetoothA2dpOn(boolean on) {
         synchronized (mBluetoothA2dpEnabledLock) {
-            mBluetoothA2dpEnabled = on;
+           int config = AudioSystem.FORCE_NONE;
+           mBluetoothA2dpEnabled = on;
+           config = AudioSystem.getForceUse(AudioSystem.FOR_MEDIA);
+           if((config == AudioSystem.FORCE_BT_A2DP) && (!mBluetoothA2dpEnabled)) {
+               config = AudioSystem.FORCE_NO_BT_A2DP;
+           } else if(mBluetoothA2dpEnabled) {
+               config = AudioSystem.FORCE_NONE;
+           }
+           Log.d(TAG, "BTEnabled "+mBluetoothA2dpEnabled+" config "+config);
+
             sendMsg(mAudioHandler, MSG_SET_FORCE_BT_A2DP_USE, SENDMSG_QUEUE,
                     AudioSystem.FOR_MEDIA,
-                    mBluetoothA2dpEnabled ? AudioSystem.FORCE_NONE : AudioSystem.FORCE_NO_BT_A2DP,
+                    config,
                     null, 0);
         }
     }
@@ -2569,10 +2578,11 @@ public class AudioService extends IAudioService.Stub {
                  (1 << AudioSystem.STREAM_SYSTEM)|(1 << AudioSystem.STREAM_SYSTEM_ENFORCED)),
                  UserHandle.USER_CURRENT);
 
-        // ringtone, notification and system streams are always affected by ringer mode
+        // ringtone, notification, system and dtmf streams are always affected by ringer mode
         ringerModeAffectedStreams |= (1 << AudioSystem.STREAM_RING)|
                                         (1 << AudioSystem.STREAM_NOTIFICATION)|
-                                        (1 << AudioSystem.STREAM_SYSTEM);
+                                        (1 << AudioSystem.STREAM_SYSTEM)|
+                                        (1 << AudioSystem.STREAM_DTMF);
 
         if (mVoiceCapable) {
             ringerModeAffectedStreams &= ~(1 << AudioSystem.STREAM_MUSIC);
