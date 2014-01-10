@@ -484,7 +484,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_DISABLE_POINTER_LOCATION = 2;
     private static final int MSG_DISPATCH_MEDIA_KEY_WITH_WAKE_LOCK = 3;
     private static final int MSG_DISPATCH_MEDIA_KEY_REPEAT_WITH_WAKE_LOCK = 4;
-    boolean mWifiDisplayConnected;
+    boolean mWifiDisplayConnected = false;
+    int     mWifiDisplayUIBCRotation = -1;
 
     private class PolicyHandler extends Handler {
         @Override
@@ -4357,6 +4358,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 } else {
                     mWifiDisplayConnected = false;
                 }
+                mWifiDisplayUIBCRotation =
+                        intent.getIntExtra("wfd_UIBC_rot", -1);
                 updateRotation(true);
             }
         }
@@ -4576,10 +4579,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // enable 180 degree rotation while docked.
                 preferredRotation = mDeskDockEnablesAccelerometer
                         ? sensorRotation : mDeskDockRotation;
-            } else if ((mHdmiPlugged || mWifiDisplayConnected) && mDemoHdmiRotationLock) {
+            } else if ((mHdmiPlugged || mWifiDisplayConnected) &&
+                    mDemoHdmiRotationLock) {
                 // Ignore sensor when plugged into HDMI when demo HDMI rotation lock enabled.
-                // Note that the dock orientation overrides the HDMI orientation.
+                // Note that the dock orientation overrides the HDMI orientation
                 preferredRotation = mDemoHdmiRotation;
+            } else if ( mWifiDisplayConnected && (mWifiDisplayUIBCRotation > -1)) {
+                // Ignore sensor when WFD is active and UIBC rotation is enabled
+                preferredRotation = mWifiDisplayUIBCRotation;
             } else if (mHdmiPlugged && mDockMode == Intent.EXTRA_DOCK_STATE_UNDOCKED
                     && mUndockedHdmiRotation >= 0) {
                 // Ignore sensor when plugged into HDMI and an undocked orientation has
