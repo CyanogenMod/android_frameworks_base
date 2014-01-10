@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!-- 
+     Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">Email</string>
     <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Inny</string>
     <string name="reboot_system" product="tablet">Uruchom ponownie tablet</string>
     <string name="reboot_system" product="default">Uruchom ponownie telefon</string>
     <string name="global_action_screenshot">Zrzut ekranu</string>
@@ -39,30 +41,34 @@
     <string name="reboot_progress">Ponowne uruchamianie\u2026</string>
     <string name="reboot_confirm" product="tablet">Tablet zostanie uruchomiony ponownie.</string>
     <string name="reboot_confirm" product="default">Telefon zostanie uruchomiony ponownie.</string>
-    <string name="wildcardProfile">Inny</string>
-    <string name="global_action_reboot">Uruchom ponownie</string>
-    <string name="global_action_choose_profile">Profil</string>
-    <string name="toast_rotation_unlocked">Obracanie ekranu odblokowane</string>
-    <string name="toast_rotation_locked">Obracanie ekranu zablokowane</string>
-    <string name="app_killed_message">Aplikacja została zabita</string>
-    <string name="stylus_app_not_installed">Nie zainstalowano aplikacji %s</string>
     <string name="permlab_preventpower">zastępowanie przycisku zasilania</string>
     <string name="permdesc_preventpower">Pozwala aplikacji na zastępowanie przycisku zasilania</string>
     <string name="permlab_fm_radio_receiver">kontrola odbiornika FM</string>
     <string name="permdesc_fm_radio_receiver">Zezwala aplikacji na kontrolowanie odbiornika FM</string>
     <string name="permlab_fm_radio_transmitter">kontrola transmittera FM</string>
     <string name="permdesc_fm_radio_transmitter">Pozwala aplikacji na kontrolowanie transmittera FM</string>
+    <string name="permlab_sendMockSms">wysyłanie pozorowanych wiadomości SMS</string>
+    <string name="permdesc_sendMockSms">Pozwala aplikacji na wysyłanie pozorowanych wiadomości SMS. W rezultacie umożliwi to wysyłanie SMS-ów do zaufanych aplikacji. Złośliwe aplikacje mogą wysyłać wiadomości w sposób ciągły, blokując system powiadomień urządzenia i zakłócając spokój użytkownika.</string>
+    <string name="lockscreen_discharging">Rozładowywanie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="storage_sd_dock_card">Karta pamięci stacji dokującej</string>
+    <string name="app_killed_message">Aplikacja została zabita</string>
+    <string name="global_action_reboot">Uruchom ponownie</string>
+    <string name="global_action_choose_profile">Profil</string>
+    <string name="toast_rotation_unlocked">Obracanie ekranu odblokowane</string>
+    <string name="toast_rotation_locked">Obracanie ekranu zablokowane</string>
+    <string name="stylus_app_not_installed">Nie zainstalowano aplikacji %s</string>
     <string name="permlab_changePrivacyGuardState">aktywowanie/dezaktywowanie ochrony prywatności</string>
     <string name="permdesc_changePrivacyGuardState">Pozwala aplikacji decydować, kiedy inna aplikacja zostanie uruchomiona w trybie ochrony prywatności. W trybie tym aplikacje nie mają dostępu do osobistych danych użytkownika, takich jak kontakty, historia połączeń czy wiadomości.</string>
-    <string name="permlab_cancelNotifications">usuwanie powiadomień aplikacji</string>
-    <string name="permdesc_cancelNotifications">Pozwala aplikacji na usuwanie powiadomień generowanych przez inne aplikacje.</string>
     <string name="privacy_guard_notification">Ochrona prywatności aktywna</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nie będzie mieć dostępu do osobistych danych</string>
     <string name="profile_picker_title">Profile</string>
     <string name="profile_none">Brak</string>
-    <string name="lockscreen_discharging">Rozładowywanie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-    <string name="storage_sd_dock_card">Karta pamięci stacji dokującej</string>
-    <string name="permlab_sendMockSms">wysyłanie pozorowanych wiadomości SMS</string>
-    <string name="permdesc_sendMockSms">Pozwala aplikacji na wysyłanie pozorowanych wiadomości SMS. W rezultacie umożliwi to wysyłanie SMS-ów do zaufanych aplikacji. Złośliwe aplikacje mogą wysyłać wiadomości w sposób ciągły, blokując system powiadomień urządzenia i zakłócając spokój użytkownika.</string>
-    <string name="progress_nomediapresent" product="default">Brak wymiennego nośnika\u2026</string>
+    <string name="perf_profile_pwrsv">Profil zasilania</string>
+    <string name="perf_profile_bal">Zbalansowany</string>
+    <string name="perf_profile_perf">Wydajny</string>
+    <string name="permlab_interceptSmsSent">przechwytywanie wiadomości wychodzących</string>
+    <string name="permdesc_interceptSmsSent">Pozwala aplikacji przechwytywać wychodzące wiadomości. Złośliwe aplikacje mogą używać tego do zablokowania wychodzących wiadomości.</string>
+    <string name="permlab_resetBatteryStats">resetowanie statystyk baterii</string>
+    <string name="permdesc_resetBatteryStats">Pozwala aplikacji na resetowanie aktualnych niskopoziomowych statystyk baterii.</string>
+    <string name="immersive_mode_confirmation_bottom">Przeciągnij palcem w górę od spodu ekranu, aby wyjść z trybu maksymalizacji.</string>
 </resources>
