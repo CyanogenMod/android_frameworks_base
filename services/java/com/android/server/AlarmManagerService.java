@@ -162,6 +162,15 @@ class AlarmManagerService extends IAlarmManager.Stub {
             return alarms.get(index);
         }
 
+        long getWhenByElapsedTime(long whenElapsed) {
+            for(int i=0;i< alarms.size();i++) {
+                if(alarms.get(i).whenElapsed == whenElapsed)
+                    return alarms.get(i).when;
+            }
+
+            return 0;
+        }
+
         boolean canHold(long whenElapsed, long maxWhen) {
             return (end >= whenElapsed) && (start <= maxWhen);
         }
@@ -700,7 +709,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
             }
             if (firstRtcWakeup != null && mNextRtcWakeup != firstRtcWakeup.start) {
                 mNextRtcWakeup = firstRtcWakeup.start;
-                setLocked(RTC_POWEROFF_WAKEUP, firstRtcWakeup.start - SystemClock.elapsedRealtime());
+                long when = firstRtcWakeup.getWhenByElapsedTime(mNextRtcWakeup);
+                if (when != 0) {
+                    setLocked(RTC_POWEROFF_WAKEUP, when);
+                }
             }
 
         }
@@ -813,6 +825,20 @@ class AlarmManagerService extends IAlarmManager.Stub {
         boolean didRemove = false;
         for (int i = mAlarmBatches.size() - 1; i >= 0; i--) {
             Batch b = mAlarmBatches.get(i);
+            ArrayList<Alarm> alarmList = b.alarms;
+            Alarm alarm = null;
+            for (int j = alarmList.size() - 1; j >= 0; j--) {
+                alarm = alarmList.get(j);
+                if (alarm.type == RTC_POWEROFF_WAKEUP && alarm.operation.equals(operation)) {
+                    long alarmSeconds, alarmNanoseconds;
+                    alarmSeconds = alarm.when / 1000;
+                    alarmNanoseconds = (alarm.when % 1000) * 1000 * 1000;
+                    Slog.w(TAG,"Clear alarm type=" + alarm.type + ",alarmSeconds=" +
+                       alarmSeconds);
+                    clear(mDescriptor, alarm.type, alarmSeconds, alarmNanoseconds);
+                    mNextRtcWakeup = 0;
+                }
+            }
             didRemove |= b.remove(operation);
             if (b.size() == 0) {
                 mAlarmBatches.remove(i);
@@ -1100,6 +1126,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private native int init();
     private native void close(int fd);
     private native void set(int fd, int type, long seconds, long nanoseconds);
+    private native void clear(int fd, int type, long seconds, long nanoseconds);
     private native int waitForAlarm(int fd);
     private native int setKernelTimezone(int fd, int minuteswest);
 
