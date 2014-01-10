@@ -78,4 +78,5 @@
     <string name="advanced_dev_option_force_stop">Wymuś zamknięcie</string>
     <string name="accessibility_dock_battery_level">Bateria stacji dokującej <xliff:g id="number">%d</xliff:g> procent.</string>
     <string name="screenshot_delete_action">Usuń</string>
+    <string name="screenshot_delete_confirmation">Zrzut ekranu został usunięty.</string>
 </resources>
