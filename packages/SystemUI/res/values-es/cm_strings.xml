@@ -76,6 +76,7 @@
     <string name="pie_phone_status_emergency_only">Solo llamadas de emergencia</string>
     <string name="advanced_dev_option_wipe_app">Borrar datos</string>
     <string name="advanced_dev_option_force_stop">Forzar detención</string>
-    <string name="accessibility_dock_battery_level">Batería de la base al &lt;xliff:g id="number"&gt;%d&lt;/xliff:g&gt; por ciento.</string>
+    <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g>%%.</string>
     <string name="screenshot_delete_action">Eliminar</string>
+    <string name="screenshot_delete_confirmation">Captura eliminada.</string>
 </resources>
