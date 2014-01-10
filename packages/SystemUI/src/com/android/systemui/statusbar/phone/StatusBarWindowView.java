@@ -71,6 +71,12 @@ public class StatusBarWindowView extends FrameLayout
             root.setDrawDuringWindowsAnimating(true);
         }
     }
+    
+    @Override
+    public void dispatchWindowFocusChanged(boolean hasFocus) {
+        this.setFocusableInTouchMode(hasFocus);
+        this.requestFocus();
+    }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
