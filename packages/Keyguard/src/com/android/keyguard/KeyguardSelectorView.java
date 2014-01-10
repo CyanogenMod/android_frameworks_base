@@ -48,6 +48,8 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -77,6 +79,7 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     private String[] mStoredTargets;
     private int mTargetOffset;
     private boolean mIsScreenLarge;
+    private GestureDetector mDoubleTapGesture;
 
     OnTriggerListener mOnTriggerListener = new OnTriggerListener() {
 
@@ -206,6 +209,26 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
         mSecurityMessageDisplay = new KeyguardMessageArea.Helper(this);
         View bouncerFrameView = findViewById(R.id.keyguard_selector_view_frame);
         mBouncerFrame = bouncerFrameView.getBackground();
+
+        mDoubleTapGesture = new GestureDetector(mContext,
+                new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                if (pm != null) pm.goToSleep(e.getEventTime());
+                return true;
+            }
+        });
+
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0) == 1) {
+            mGlowPadView.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return mDoubleTapGesture.onTouchEvent(event);
+                }
+            });
+        }
     }
 
     public void setCarrierArea(View carrierArea) {
