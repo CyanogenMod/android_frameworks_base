@@ -63,6 +63,7 @@ import static android.app.AlarmManager.RTC_WAKEUP;
 import static android.app.AlarmManager.RTC;
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.app.AlarmManager.ELAPSED_REALTIME;
+import static android.app.AlarmManager.RTC_POWEROFF_WAKEUP;
 
 import com.android.internal.util.LocalLog;
 
@@ -75,6 +76,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private static final int RTC_MASK = 1 << RTC;
     private static final int ELAPSED_REALTIME_WAKEUP_MASK = 1 << ELAPSED_REALTIME_WAKEUP; 
     private static final int ELAPSED_REALTIME_MASK = 1 << ELAPSED_REALTIME;
+    private static final int RTC_POWEROFF_WAKEUP_MASK = 1 << RTC_POWEROFF_WAKEUP;
     private static final int TIME_CHANGED_MASK = 1 << 16;
     private static final int IS_WAKEUP_MASK = RTC_WAKEUP_MASK|ELAPSED_REALTIME_WAKEUP_MASK;
 
@@ -106,6 +108,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
 
     private int mDescriptor;
     private long mNextWakeup;
+    private long mNextRtcWakeup;
     private long mNextNonWakeup;
     private int mBroadcastRefCount = 0;
     private PowerManager.WakeLock mWakeLock;
@@ -157,6 +160,15 @@ class AlarmManagerService extends IAlarmManager.Stub {
 
         Alarm get(int index) {
             return alarms.get(index);
+        }
+
+        long getWhenByElapsedTime(long whenElapsed) {
+            for(int i=0;i< alarms.size();i++) {
+                if(alarms.get(i).whenElapsed == whenElapsed)
+                    return alarms.get(i).when;
+            }
+
+            return 0;
         }
 
         boolean canHold(long whenElapsed, long maxWhen) {
@@ -292,6 +304,18 @@ class AlarmManagerService extends IAlarmManager.Stub {
             return false;
         }
 
+        boolean isRtcPowerOffWakeup() {
+            final int N = alarms.size();
+            for (int i = 0; i < N; i++) {
+                Alarm a = alarms.get(i);
+                // non-wakeup alarms are types 1 and 3, i.e. have the low bit set
+                if (a.type == RTC_POWEROFF_WAKEUP) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         @Override
         public String toString() {
             StringBuilder b = new StringBuilder(40);
@@ -327,7 +351,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private final ArrayList<Batch> mAlarmBatches = new ArrayList<Batch>();
 
     static long convertToElapsed(long when, int type) {
-        final boolean isRtc = (type == RTC || type == RTC_WAKEUP);
+        final boolean isRtc = (type == RTC || type == RTC_WAKEUP || type == RTC_POWEROFF_WAKEUP);
         if (isRtc) {
             when -= System.currentTimeMillis() - SystemClock.elapsedRealtime();
         }
@@ -470,7 +494,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     public AlarmManagerService(Context context) {
         mContext = context;
         mDescriptor = init();
-        mNextWakeup = mNextNonWakeup = 0;
+        mNextWakeup = mNextRtcWakeup = mNextNonWakeup = 0;
 
         // We have to set current TimeZone info to kernel
         // because kernel doesn't keep this after reboot
@@ -540,7 +564,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
             windowLength = AlarmManager.INTERVAL_HOUR;
         }
 
-        if (type < RTC_WAKEUP || type > ELAPSED_REALTIME) {
+        if (type < RTC_WAKEUP || type > RTC_POWEROFF_WAKEUP) {
             throw new IllegalArgumentException("Invalid alarm type " + type);
         }
 
@@ -656,6 +680,17 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
         return null;
     }
+    private Batch findFirstRtcWakeupBatchLocked() {
+        final int N = mAlarmBatches.size();
+        for (int i = 0; i < N; i++) {
+            Batch b = mAlarmBatches.get(i);
+            if (b.isRtcPowerOffWakeup()) {
+                return b;
+            }
+        }
+        return null;
+    }
+
 
     private void rescheduleKernelAlarmsLocked() {
         // Schedule the next upcoming wakeup alarm.  If there is a deliverable batch
@@ -663,6 +698,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
         if (mAlarmBatches.size() > 0) {
             final Batch firstWakeup = findFirstWakeupBatchLocked();
             final Batch firstBatch = mAlarmBatches.get(0);
+            final Batch firstRtcWakeup = findFirstRtcWakeupBatchLocked();
             if (firstWakeup != null && mNextWakeup != firstWakeup.start) {
                 mNextWakeup = firstWakeup.start;
                 setLocked(ELAPSED_REALTIME_WAKEUP, firstWakeup.start);
@@ -671,6 +707,14 @@ class AlarmManagerService extends IAlarmManager.Stub {
                 mNextNonWakeup = firstBatch.start;
                 setLocked(ELAPSED_REALTIME, firstBatch.start);
             }
+            if (firstRtcWakeup != null && mNextRtcWakeup != firstRtcWakeup.start) {
+                mNextRtcWakeup = firstRtcWakeup.start;
+                long when = firstRtcWakeup.getWhenByElapsedTime(mNextRtcWakeup);
+                if (when != 0) {
+                    setLocked(RTC_POWEROFF_WAKEUP, when);
+                }
+            }
+
         }
     }
 
@@ -781,6 +825,20 @@ class AlarmManagerService extends IAlarmManager.Stub {
         boolean didRemove = false;
         for (int i = mAlarmBatches.size() - 1; i >= 0; i--) {
             Batch b = mAlarmBatches.get(i);
+            ArrayList<Alarm> alarmList = b.alarms;
+            Alarm alarm = null;
+            for (int j = alarmList.size() - 1; j >= 0; j--) {
+                alarm = alarmList.get(j);
+                if (alarm.type == RTC_POWEROFF_WAKEUP && alarm.operation.equals(operation)) {
+                    long alarmSeconds, alarmNanoseconds;
+                    alarmSeconds = alarm.when / 1000;
+                    alarmNanoseconds = (alarm.when % 1000) * 1000 * 1000;
+                    Slog.w(TAG,"Clear alarm type=" + alarm.type + ",alarmSeconds=" +
+                       alarmSeconds);
+                    clear(mDescriptor, alarm.type, alarmSeconds, alarmNanoseconds);
+                    mNextRtcWakeup = 0;
+                }
+            }
             didRemove |= b.remove(operation);
             if (b.size() == 0) {
                 mAlarmBatches.remove(i);
@@ -1046,6 +1104,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
         case RTC_WAKEUP : return "RTC_WAKEUP";
         case ELAPSED_REALTIME : return "ELAPSED";
         case ELAPSED_REALTIME_WAKEUP: return "ELAPSED_WAKEUP";
+        case RTC_POWEROFF_WAKEUP : return "RTC_POWEROFF_WAKEUP";
         default:
             break;
         }
@@ -1067,6 +1126,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private native int init();
     private native void close(int fd);
     private native void set(int fd, int type, long seconds, long nanoseconds);
+    private native void clear(int fd, int type, long seconds, long nanoseconds);
     private native int waitForAlarm(int fd);
     private native int setKernelTimezone(int fd, int minuteswest);
 
@@ -1252,7 +1312,6 @@ class AlarmManagerService extends IAlarmManager.Stub {
                             recordWakeupAlarms(mAlarmBatches, nowELAPSED, nowRTC);
                         }
                     }
-
                     triggerAlarmsLocked(triggerList, nowELAPSED, nowRTC);
                     rescheduleKernelAlarmsLocked();
 
@@ -1293,7 +1352,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
                                 fs.nesting++;
                             }
                             if (alarm.type == ELAPSED_REALTIME_WAKEUP
-                                    || alarm.type == RTC_WAKEUP) {
+                                    || alarm.type == RTC_WAKEUP
+                                    || alarm.type == RTC_POWEROFF_WAKEUP) {
                                 bs.numWakeup++;
                                 fs.numWakeup++;
                                 ActivityManagerNative.noteWakeupAlarm(
