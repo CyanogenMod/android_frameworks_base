@@ -221,5 +221,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/effects/ogg/VideoRecord_48k.ogg:system/media/audio/ui/VideoRecord.ogg \
     $(LOCAL_PATH)/effects/ogg/WirelessChargingStarted.ogg:system/media/audio/ui/WirelessChargingStarted.ogg \
     $(LOCAL_PATH)/effects/ogg/camera_click_48k.ogg:system/media/audio/ui/camera_click.ogg \
+  	$(LOCAL_PATH)/effects/ogg/camera_click_realistic.ogg:system/media/audio/ui/camera_click_realistic.ogg \
     $(LOCAL_PATH)/effects/ogg/camera_focus.ogg:system/media/audio/ui/camera_focus.ogg \
 
