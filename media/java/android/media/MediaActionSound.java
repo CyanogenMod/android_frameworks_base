@@ -18,6 +18,7 @@ package android.media;
 
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.SystemProperties;
 import android.util.Log;
 
 /**
@@ -50,7 +51,8 @@ public class MediaActionSound {
         "/system/media/audio/ui/camera_click.ogg",
         "/system/media/audio/ui/camera_focus.ogg",
         "/system/media/audio/ui/VideoRecord.ogg",
-        "/system/media/audio/ui/VideoRecord.ogg"
+        "/system/media/audio/ui/VideoRecord.ogg",
+        "/system/media/audio/ui/camera_click_realistic.ogg"
     };
 
     private static final String TAG = "MediaActionSound";
@@ -86,7 +88,15 @@ public class MediaActionSound {
      */
     public static final int STOP_VIDEO_RECORDING  = 3;
 
+    /*
+     * A "shutter click" that sounds like a shutter click.
+     * @hide
+     */
+    public static final int SHUTTER_CLICK_REALISTIC = 4;
+
     private static final int SOUND_NOT_LOADED = -1;
+
+    private static final String PROP_CAMERA_SOUND = "persist.sys.camera-sound";
 
     /**
      * Construct a new MediaActionSound instance. Only a single instance is
@@ -156,15 +166,23 @@ public class MediaActionSound {
      * @see #STOP_VIDEO_RECORDING
      */
     public synchronized void play(int soundName) {
-        if (soundName < 0 || soundName >= SOUND_FILES.length) {
-            throw new RuntimeException("Unknown sound requested: " + soundName);
-        }
-        if (mSoundIds[soundName] == SOUND_NOT_LOADED) {
-            mSoundIdToPlay =
-                    mSoundPool.load(SOUND_FILES[soundName], 1);
-            mSoundIds[soundName] = mSoundIdToPlay;
-        } else {
-            mSoundPool.play(mSoundIds[soundName], 1.0f, 1.0f, 0, 0, 1.0f);
+        final int propValue = SystemProperties.getInt(PROP_CAMERA_SOUND, 1);
+        if (propValue != 0) {
+            // handle additional 3rd option, and use the realistic click if we see it
+            if (propValue == 2 && soundName == SHUTTER_CLICK) {
+                soundName = SHUTTER_CLICK_REALISTIC;
+            }
+
+            if (soundName < 0 || soundName >= SOUND_FILES.length) {
+                throw new RuntimeException("Unknown sound requested: " + soundName);
+            }
+            if (mSoundIds[soundName] == SOUND_NOT_LOADED) {
+                mSoundIdToPlay =
+                        mSoundPool.load(SOUND_FILES[soundName], 1);
+                mSoundIds[soundName] = mSoundIdToPlay;
+            } else {
+                mSoundPool.play(mSoundIds[soundName], 1.0f, 1.0f, 0, 0, 1.0f);
+            }
         }
     }
 
