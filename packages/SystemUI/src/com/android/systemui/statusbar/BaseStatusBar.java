@@ -116,6 +116,7 @@ import com.android.systemui.SearchPanelView;
 import com.android.systemui.SystemUI;
 import com.android.systemui.statusbar.halo.Halo;
 import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
+import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.activedisplay.ActiveDisplayView;
 
@@ -907,12 +908,25 @@ public abstract class BaseStatusBar extends SystemUI implements
                     }
                 }
 
+                MenuItem hideIconCheck = mNotificationBlamePopup.getMenu().findItem(R.id.notification_hide_icon_packages);
+                if(hideIconCheck != null) {
+                    hideIconCheck.setChecked(isIconHiddenByUser(packageNameF));
+                    if (packageNameF.equals("android")) {
+                        // cannot set it, no one likes a liar
+                        hideIconCheck.setVisible(false);
+                    }
+                }
+
                 mNotificationBlamePopup
                 .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.notification_inspect_item) {
                             startApplicationDetailsActivity(packageNameF);
                             animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+                        } else if (item.getItemId() == R.id.notification_hide_icon_packages) {
+                            item.setChecked(!item.isChecked());
+                            setIconHiddenByUser(packageNameF, item.isChecked());
+                            updateNotificationIcons();
                         } else if (item.getItemId() == R.id.notification_inspect_item_force_stop) {
                             ActivityManager am = (ActivityManager) mContext
                                     .getSystemService(
@@ -2104,5 +2118,29 @@ public abstract class BaseStatusBar extends SystemUI implements
         lp.setTitle("GestureAnywhereView");
 
         return lp;
+    }
+
+    protected void setIconHiddenByUser(String iconPackage, boolean hide) {
+        if (iconPackage == null
+                || iconPackage.isEmpty()
+                || iconPackage.equals("android")) {
+            return;
+        }
+        mContext.getSharedPreferences("hidden_statusbar_icon_packages", 0)
+                .edit()
+                .putBoolean(iconPackage, hide)
+                .apply();
+    }
+
+    protected boolean isIconHiddenByUser(String iconPackage) {
+        if (iconPackage == null
+                || iconPackage.isEmpty()
+                || iconPackage.equals("android")) {
+            return false;
+
+        }
+        final boolean hide = mContext.getSharedPreferences("hidden_statusbar_icon_packages", 0)
+                .getBoolean(iconPackage, false);
+        return hide;
     }
 }

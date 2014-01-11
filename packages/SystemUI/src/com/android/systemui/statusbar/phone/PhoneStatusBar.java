@@ -1686,6 +1686,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             if (!((provisioned && ent.notification.getScore() >= HIDE_ICONS_BELOW_SCORE)
                     || showNotificationEvenIfUnprovisioned(ent.notification) || mHaloTaskerActive)) continue;
             if (!notificationIsForCurrentUser(ent.notification)) continue;
+            if (isIconHiddenByUser(ent.notification.getPackageName())) continue;
             toShow.add(ent.icon);
         }
 
