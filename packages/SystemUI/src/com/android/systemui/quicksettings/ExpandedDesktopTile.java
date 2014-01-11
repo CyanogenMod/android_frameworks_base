@@ -29,10 +29,12 @@ import android.view.View;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
+import com.vanir.util.Helpers;
 
 public class ExpandedDesktopTile extends QuickSettingsTile {
 
     private boolean mEnabled = false;
+    private int mExpandDesktopMode = 2;
 
     public ExpandedDesktopTile(Context context, final QuickSettingsController qsc) {
         super(context, qsc);
@@ -44,11 +46,31 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
                 Settings.System.putInt(mContext.getContentResolver(),
                     Settings.System.EXPANDED_DESKTOP_STATE,
                     !mEnabled ? 1 : 0);
+                if (isFlipTilesEnabled()) {
+                    flipTile(0);
+                }
+                Helpers.restartSystemUI();
             }
         };
-
+        mOnLongClick = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int expanded = getExpandDesktopMode();
+                if (expanded == 1) { 
+                    Settings.System.putInt(mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STYLE, mExpandDesktopMode);
+                } else {
+                    mExpandDesktopMode = mExpandDesktopMode == 2 ? 1 : 2;
+                    Settings.System.putInt(mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STYLE, mExpandDesktopMode);
+                }
+                return true;
+            }
+        };
         qsc.registerObservedContent(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), this);
+        qsc.registerObservedContent(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STYLE), this);
     }
 
     @Override
@@ -67,6 +89,11 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
     public void onChangeUri(ContentResolver resolver, Uri uri) {
         updateResources();
     }
+
+    private int getExpandDesktopMode() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.EXPANDED_DESKTOP_STYLE, 2);
+     }
 
     private synchronized void updateTile() {
         mEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
