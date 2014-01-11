@@ -4724,6 +4724,12 @@ public final class Settings {
         public static final String TOUCH_ZONE_FOUR = "touch_zone_four";
 
         /**
+          * Always show the battery status on the lockscreen
+          * @hide
+          */
+        public static final String LOCKSCREEN_ALWAYS_SHOW_BATTERY = "lockscreen_always_show_battery";
+
+        /**
          * @hide
          */
         public static final String GESTURE_SWIPE_CAPTURE = "gesture_swipe_capture";
@@ -4869,6 +4875,7 @@ public final class Settings {
             PHONE_BLACKLIST_PRIVATE_NUMBER_MODE,
             PHONE_BLACKLIST_UNKNOWN_NUMBER_MODE,
             PHONE_BLACKLIST_REGEX_ENABLED,
+            LOCKSCREEN_ALWAYS_SHOW_BATTERY,
         };
 
         // Settings moved to Settings.Secure
