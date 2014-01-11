@@ -197,6 +197,11 @@ public class QuickSettingsTile implements OnClickListener {
         if (mOnClick != null) {
             mOnClick.onClick(v);
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            boolean shouldCollapse = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.QS_COLLAPSE_PANEL, 0) == 1;
+            if (shouldCollapse) {
+                mQsc.mBar.collapseAllPanels(true);
+            }
         }
     }
 }
