@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.content.ContentResolver;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
@@ -671,6 +672,18 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         }
     }
 
+    public static boolean getBoolean(ContentResolver cr, String name, boolean def) {
+         String v = Settings.System.getString(cr, name);
+         try {
+                if(v != null)
+                 return "1".equals(v);
+                else
+                 return def;
+         } catch (NumberFormatException e) {
+                return def;
+         }
+    }
+
     private final void updateDataNetType() {
         if (mIsWimaxEnabled && mWimaxConnected) {
             // wimax is a special 4g network not handled by telephony
@@ -788,8 +801,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                     break;
                 case TelephonyManager.NETWORK_TYPE_LTE:
                     boolean defValue = mContext.getResources().getBoolean(R.bool.config_show4GForLTE);
-                    boolean show4GforLTE = Settings.System.getBoolean(mContext.getContentResolver(),
-+                    Settings.System.SHOW_LTE_OR_FOURGEE, defValue);
+                    boolean show4GforLTE = getBoolean(mContext.getContentResolver(),
+                    Settings.System.SHOW_LTE_OR_FOURGEE, defValue);
                     if (show4GforLTE) {
                         mDataIconList = TelephonyIcons.DATA_4G[mInetCondition];
                         mDataTypeIconId = R.drawable.stat_sys_data_fully_connected_4g;
