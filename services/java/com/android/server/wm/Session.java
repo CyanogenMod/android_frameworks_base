@@ -392,9 +392,11 @@ final class Session extends IWindowSession.Stub
         synchronized(mService.mWindowMap) {
             long ident = Binder.clearCallingIdentity();
             try {
-                mService.setWindowWallpaperPositionLocked(
-                        mService.windowForClientLocked(this, window, true),
-                        x, y, xStep, yStep);
+                if (window != null) {
+                    mService.setWindowWallpaperPositionLocked(
+                            mService.windowForClientLocked(this, window, true),
+                            x, y, xStep, yStep);
+                }
             } finally {
                 Binder.restoreCallingIdentity(ident);
             }
