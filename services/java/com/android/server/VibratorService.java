@@ -237,10 +237,10 @@ public class VibratorService extends IVibratorService.Stub
     }
 
     private long userDuration(long millis) {
-        int userMillis = Settings.System.getIntForUser(
+        int userMillis = Settings.System.getInt(
                 mContext.getContentResolver(),
                 Settings.System.MINIMUM_VIBRATION_DURATION,
-                0, UserHandle.USER_CURRENT);
+                0);
         // Set length if <= userMillis && not default
         if (userMillis != 0 && millis <= userMillis) {
             millis = userMillis;
