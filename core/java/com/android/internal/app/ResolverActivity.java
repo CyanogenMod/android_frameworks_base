@@ -311,9 +311,10 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (isReversed()) {
-            Settings.System.putInt(getContentResolver(),
-                    Settings.System.REVERSE_DEFAULT_APP_PICKER, mAlwaysButton.isPressed() ? 2 : 1);
-            startSelected(position, mAlwaysButton.isPressed());
+            if (mAlwaysButton != null)
+                Settings.System.putInt(getContentResolver(),
+                        Settings.System.REVERSE_DEFAULT_APP_PICKER, mAlwaysButton.isPressed() ? 2 : 1);
+            startSelected(position, mAlwaysButton != null && mAlwaysButton.isPressed());
         } else {
             final int checkedPos = mListView.getCheckedItemPosition();
             final boolean hasValidSelection = checkedPos != ListView.INVALID_POSITION;
