@@ -4413,6 +4413,18 @@ public final class Settings {
         public static final String GESTURES_DOUBLE_TAP = "gestures_double_tap";
 
         /**
+         * What application to launch when the user click the clock in the notification bar
+         * @hide
+         */
+        public static final String CLOCK_SHORTCUT = "clock_shortcut";
+
+        /**
+         * What application to launch when the user click the calendar in the notification bar
+         * @hide
+         */
+        public static final String CALENDAR_SHORTCUT = "calendar_shortcut";
+
+        /**
          * show clear all recents button
          *  @hide
          */
