@@ -23,7 +23,6 @@ import android.os.Parcelable;
  */
 public class BatteryProperties implements Parcelable {
     public boolean chargerAcOnline;
-    public boolean chargerDockAcOnline;
     public boolean chargerUsbOnline;
     public boolean chargerWirelessOnline;
 
@@ -37,6 +36,8 @@ public class BatteryProperties implements Parcelable {
     public int batteryTemperature;
     public String batteryTechnology;
 
+    /* Do NOT change the order of the standard parcel fields */
+    public boolean chargerDockAcOnline;
     public boolean dockBatterySupported;
     public int dockBatteryStatus;
     public int dockBatteryHealth;
@@ -55,7 +56,6 @@ public class BatteryProperties implements Parcelable {
 
     private BatteryProperties(Parcel p) {
         chargerAcOnline = p.readInt() == 1 ? true : false;
-        chargerDockAcOnline = p.readInt() == 1 ? true : false;
         chargerUsbOnline = p.readInt() == 1 ? true : false;
         chargerWirelessOnline = p.readInt() == 1 ? true : false;
 
@@ -69,6 +69,7 @@ public class BatteryProperties implements Parcelable {
         batteryTemperature = p.readInt();
         batteryTechnology = p.readString();
 
+        chargerDockAcOnline = p.readInt() == 1 ? true : false;
         dockBatterySupported = p.readInt() == 1 ? true : false;
         dockBatteryStatus = p.readInt();
         dockBatteryHealth = p.readInt();
@@ -83,7 +84,6 @@ public class BatteryProperties implements Parcelable {
 
     public void writeToParcel(Parcel p, int flags) {
         p.writeInt(chargerAcOnline ? 1 : 0);
-        p.writeInt(chargerDockAcOnline ? 1 : 0);
         p.writeInt(chargerUsbOnline ? 1 : 0);
         p.writeInt(chargerWirelessOnline ? 1 : 0);
 
@@ -97,6 +97,7 @@ public class BatteryProperties implements Parcelable {
         p.writeInt(batteryTemperature);
         p.writeString(batteryTechnology);
 
+        p.writeInt(chargerDockAcOnline ? 1 : 0);
         p.writeInt(dockBatterySupported ? 1 : 0);
         p.writeInt(dockBatteryStatus);
         p.writeInt(dockBatteryHealth);

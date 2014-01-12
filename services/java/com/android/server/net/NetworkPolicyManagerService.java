@@ -1435,6 +1435,12 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     public void setNetworkPolicies(NetworkPolicy[] policies) {
         mContext.enforceCallingOrSelfPermission(MANAGE_NETWORK_POLICY, TAG);
 
+        // Before clear and refresh mNetworkPolicy, we need to ensure all the
+        // policies to be added are validated, otherwise this service will throw
+        // IllegalArgumentException and cause system crash when updating network
+        // template after receiving ACTION_NETWORK_STATS_UPDATED.
+        validatePoliciesToSet(policies);
+
         maybeRefreshTrustedTime();
         synchronized (mRulesLock) {
             mNetworkPolicy.clear();
@@ -1446,6 +1452,27 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             updateNetworkRulesLocked();
             updateNotificationsLocked();
             writePolicyLocked();
+        }
+    }
+
+    /**
+     * ensure the policies have valid template
+     *
+     * @param policies
+     */
+    private void validatePoliciesToSet(NetworkPolicy[] policies) {
+        for (NetworkPolicy policy : policies) {
+            switch (policy.template.getMatchRule()) {
+                case MATCH_MOBILE_3G_LOWER:
+                case MATCH_MOBILE_4G:
+                case MATCH_MOBILE_ALL:
+                case MATCH_WIFI:
+                case MATCH_ETHERNET:
+                    break;
+                default:
+                    throw new IllegalArgumentException("unexpected template "
+                            + policy.template.getMatchRule());
+            }
         }
     }
 

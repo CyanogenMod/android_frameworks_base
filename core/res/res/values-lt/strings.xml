@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -146,13 +146,15 @@
     <string name="turn_on_radio" msgid="3912793092339962371">"Įjungti bevielį"</string>
     <string name="turn_off_radio" msgid="8198784949987062346">"Išjungti bevielį"</string>
     <string name="screen_lock" msgid="799094655496098153">"Ekrano užraktas"</string>
-    <string name="power_off" msgid="4266614107412865048">"Išjungiamas maitinimas"</string>
+    <string name="power_off" msgid="4266614107412865048">"Išjungti maitinimą"</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"Skambutis išjungtas"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Vibracija skambinant"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Skambutis įjungtas"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Išsijungia..."</string>
-    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Planšetinio kompiuterio veikimas bus sustabdytas."</string>
-    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Telefonas bus išjungtas."</string>
+    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Jūsų planšetinis k
+ompiuteris išsijungs."</string>
+    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Jūsų telefonas išs
+ijungs."</string>
     <string name="shutdown_confirm_question" msgid="2906544768881136183">"Ar norite išjungti?"</string>
     <string name="reboot_safemode_title" msgid="7054509914500140361">"Iš naujo įkelti operacinę sistemą saugos režimu"</string>
     <string name="reboot_safemode_confirm" msgid="55293944502784668">"Ar norite iš naujo įkelti operacinę sistemą saugos režimu? Dėl to bus neleidžiamos visos įdiegtos trečiųjų šalių programos. Jos bus atkurtos dar kartą iš naujo įkėlus operacinę sistemą."</string>
@@ -161,16 +163,16 @@
     <string name="global_actions" product="tablet" msgid="408477140088053665">"Planšetinio kompiuterio parinktys"</string>
     <string name="global_actions" product="default" msgid="2406416831541615258">"Telefono parinktys"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Ekrano užraktas"</string>
-    <string name="global_action_power_off" msgid="4471879440839879722">"Išjungiamas maitinimas"</string>
+    <string name="global_action_power_off" msgid="4471879440839879722">"Išjungti maitinimą"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Pranešimas apie triktį"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Pranešti apie triktį"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Bus surinkta informacija apie dabartinę įrenginio būseną ir išsiųsta el. pašto pranešimu. Šiek tiek užtruks, kol pranešimas apie triktį bus paruoštas siųsti; būkite kantrūs."</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Tylus režimas"</string>
-    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Garsas IŠJUNGTAS"</string>
-    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Garsas ĮJUNGTAS"</string>
+    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Išjungtas"</string>
+    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Įjungtas"</string>
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Lėktuvo režimas"</string>
-    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"ĮJUNGTAS lėktuvo režimas"</string>
-    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"lėktuvo režimas IŠJUNGTAS"</string>
+    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Įjungtas"</string>
+    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Išjungtas"</string>
     <string name="status_bar_notification_info_overflow" msgid="5301981741705354993">"999+"</string>
     <string name="safeMode" msgid="2788228061547930246">"Saugos režimas"</string>
     <string name="android_system_label" msgid="6577375335728551336">"„Android“ sistema"</string>

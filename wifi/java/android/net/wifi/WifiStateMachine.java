@@ -1968,6 +1968,7 @@ public class WifiStateMachine extends StateMachine {
 
         scanResults = scanResultsBuf.toString();
         if (TextUtils.isEmpty(scanResults)) {
+           mScanResults.clear();
            return;
         }
 
@@ -2335,6 +2336,7 @@ public class WifiStateMachine extends StateMachine {
         * or when the driver is hung. Ensure supplicant is stopped here.
         */
         mWifiMonitor.killSupplicant(mP2pSupported);
+        mWifiNative.closeSupplicantConnection();
         sendSupplicantConnectionChangedBroadcast(false);
         setWifiState(WIFI_STATE_DISABLED);
     }
@@ -3936,9 +3938,12 @@ public class WifiStateMachine extends StateMachine {
         }
         @Override
         public void exit() {
-            /* Request a CS wakelock during transition to mobile */
-            checkAndSetConnectivityInstance();
-            mCm.requestNetworkTransitionWakelock(getName());
+            if (Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.AIRPLANE_MODE_ON, 0) != 1) {
+                /* Request a CS wakelock during transition to mobile */
+                checkAndSetConnectivityInstance();
+                mCm.requestNetworkTransitionWakelock(getName());
+            }
         }
     }
 
@@ -4015,7 +4020,11 @@ public class WifiStateMachine extends StateMachine {
                  * cleared
                  */
                 if (!mScanResultIsPending) {
-                    mWifiNative.enableBackgroundScan(true);
+                    if (!mWifiNative.enableBackgroundScan(true)) {
+                        setScanAlarm(true);
+                    } else {
+                        setScanAlarm(false);
+                    }
                 }
             } else {
                 setScanAlarm(true);
@@ -4069,8 +4078,11 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_ENABLE_BACKGROUND_SCAN:
                     mEnableBackgroundScan = (message.arg1 == 1);
                     if (mEnableBackgroundScan) {
-                        mWifiNative.enableBackgroundScan(true);
-                        setScanAlarm(false);
+                        if (!mWifiNative.enableBackgroundScan(true)) {
+                            setScanAlarm(true);
+                        } else {
+                            setScanAlarm(false);
+                        }
                     } else {
                         mWifiNative.enableBackgroundScan(false);
                         setScanAlarm(true);
@@ -4096,7 +4108,11 @@ public class WifiStateMachine extends StateMachine {
                 case WifiMonitor.SCAN_RESULTS_EVENT:
                     /* Re-enable background scan when a pending scan result is received */
                     if (mEnableBackgroundScan && mScanResultIsPending) {
-                        mWifiNative.enableBackgroundScan(true);
+                        if (!mWifiNative.enableBackgroundScan(true)) {
+                            setScanAlarm(true);
+                        } else {
+                            setScanAlarm(false);
+                        }
                     }
                     /* Handled in parent state */
                     ret = NOT_HANDLED;
@@ -4115,6 +4131,13 @@ public class WifiStateMachine extends StateMachine {
                         if (DBG) log("Turn on scanning after p2p disconnected");
                         sendMessageDelayed(obtainMessage(CMD_NO_NETWORKS_PERIODIC_SCAN,
                                     ++mPeriodicScanToken, 0), mSupplicantScanIntervalMs);
+                    } else if (mEnableBackgroundScan && !mP2pConnected.get() &&
+                               (mWifiConfigStore.getConfiguredNetworks().size() != 0)) {
+                        if (!mWifiNative.enableBackgroundScan(true)) {
+                            setScanAlarm(true);
+                        } else {
+                            setScanAlarm(false);
+                        }
                     }
                 case CMD_RECONNECT:
                 case CMD_REASSOCIATE:
