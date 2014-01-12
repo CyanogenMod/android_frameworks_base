@@ -16,17 +16,20 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="reboot_system" product="tablet">Перезагрузка планшета</string>
     <string name="reboot_system" product="default">Перезагрузка телефона</string>
+    <string name="reboot_confirm" product="tablet">Ваш планшет будет перезагружен.</string>
+    <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
+    <string name="reboot_reboot">Перезагрузка</string>
+    <string name="reboot_progress">Перезагрузка\u2026</string>
+
     <string name="global_action_screenshot">Скриншот</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Расширенный экран</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Включён</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Выключен</string>
-    <string name="reboot_reboot">Перезагрузка</string>
-    <string name="reboot_progress">Перезагрузка\u2026</string>
-    <string name="reboot_confirm" product="tablet">Ваш планшет будет перезагружен.</string>
-    <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
     <string name="global_action_reboot">Перезагрузка</string>
-    <string name="global_action_choose_profile">Выбрать профиль</string>
-    <string name="app_killed_message">Приложение закрыто</string>
+    <string name="global_action_choose_profile">Профиль</string>
+
+    <string name="profile_picker_title">Профили</string>
+    <string name="profile_none">Не выбран</string>
     <string name="profileNameDefault">Стандартный</string>
     <string name="profileNameWork">Работа</string>
     <string name="profileNameHome">Дом</string>
@@ -34,45 +37,41 @@
     <string name="profileNameNight">Ночь</string>
     <string name="profileGroupPhone">Телефон</string>
     <string name="profileGroupCalendar">Календарь</string>
+    <string name="profileGroupEmail">Почта</string>
+    <string name="profileGroupSMS">Сообщения</string>
     <string name="wildcardProfile">Другой</string>
-    <string name="permlab_preventpower">блокировать кнопку питания</string>
-    <string name="permdesc_preventpower">Приложение сможет переопределять кнопку питания.</string>
-    <string name="permlab_fm_radio_receiver">управлять приёмником FM</string>
-    <string name="permdesc_fm_radio_receiver">Приложение сможет управлять FM-приёмником.</string>
-    <string name="permlab_fm_radio_transmitter">управлять передатчиком FM</string>
-    <string name="permdesc_fm_radio_transmitter">Приложение сможет управлять FM-передатчиком.</string>
+
+    <string name="app_killed_message">Приложение закрыто</string>
+    <string name="lockscreen_discharging">Заряд батареи: <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">SD-карта док-станции</string>
+    <string name="stylus_app_not_installed">«%s» не установлено</string>
+    <string name="progress_nomediapresent" product="default">Отсутствует внешний накопитель</string>
     <string name="toast_rotation_unlocked">Поворот экрана разблокирован</string>
     <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
-    <string name="stylus_app_not_installed">%s не установлено</string>
 
-    <!-- Privacy Guard -->
-    <string name="permlab_changePrivacyGuardState">включать или выключать режим инкогнито</string>
-    <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в режиме инкогнито. Когда приложение запущено в режиме инкогнито, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
-    <string name="privacy_guard_notification">Режим инкогнито активен</string>
-    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> не сможет получать доступ к персональным данным</string>
+    <string name="privacy_guard_notification">Защищённый режим включён</string>
+    <string name="privacy_guard_notification_detail">«<xliff:g id="app">%1$s</xliff:g>» заблокирован доступ к персональным данным</string>
 
-    <!-- The title of the profile picker dialog. -->
-    <string name="profile_picker_title">Профили</string>
-
-    <!-- The item label for the no profile selection item. -->
-    <string name="profile_none">Не выбран</string>
-
-    <string name="permlab_cancelNotifications">отключать уведомления</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_cancelNotifications">Разрешить приложению отключать уведомления, созданные другими приложениями.</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_interceptSmsSent">перехват исходящих SMS</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения смогут использовать это, чтобы препятствовать отправке SMS-сообщений.</string>
-
-    <string name="policylab_enforceSelinux">Переключение режимов SELinux</string>
-    <string name="policydesc_enforceSelinux">Переключать принудительный и разрешающий режимы политики SELinux.</string>
-    <string name="policylab_enforceMmac">Переключение режимов MMAC</string>
-    <string name="policydesc_enforceMmac">Переключать принудительный и разрешающий режимы политики MMAC.</string>
+    <string name="permlab_changePrivacyGuardState">Включение или выключение защищённого режима</string>
+    <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в защищённом режиме. Когда приложение запущено в защищённом режиме, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
+    <string name="permlab_fm_radio_receiver">Управление приёмником FM</string>
+    <string name="permdesc_fm_radio_receiver">Приложение сможет управлять FM-приёмником.</string>
+    <string name="permlab_fm_radio_transmitter">Управление передатчиком FM</string>
+    <string name="permdesc_fm_radio_transmitter">Приложение сможет управлять FM-передатчиком.</string>
+    <string name="permlab_interceptSmsSent">Перехват исходящих SMS</string>
+    <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения могут использовать это разрешение, чтобы препятствовать отправке SMS-сообщений.</string>
+    <string name="permlab_preventpower">Блокировка кнопки питания</string>
+    <string name="permdesc_preventpower">Приложение сможет переопределять кнопку питания.</string>
+    <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
+    <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
+    <string name="permlab_sendMockSms">Показ фиктивных SMS-сообщений</string>
+    <string name="permdesc_sendMockSms">Разрешить приложению показывать фиктивные SMS. Вредоносные приложения могут посылать сообщения циклически, блокируя систему уведомлений и раздражая пользователя.</string>
 
     <string name="perf_profile_pwrsv">Экономия энергии</string>
     <string name="perf_profile_bal">Сбалансированный</string>
     <string name="perf_profile_perf">Высокая производительность</string>
+
+    <string name="transient_navigation_confirmation_long">Проведите пальцем от края экрана, чтобы показать панель навигации.</string>
+    <string name="immersive_mode_confirmation_bottom">Чтобы вернуться в обычный режим, проведите пальцем вверх.</string>
+
 </resources>

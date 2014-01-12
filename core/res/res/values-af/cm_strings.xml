@@ -60,5 +60,16 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> het nie toegang tot persoonlike data nie</string>
     <string name="profile_picker_title">Profiele</string>
     <string name="profile_none">Geen</string>
-
+    <string name="progress_nomediapresent" product="default">Geen verwyderbare media beskikbaar nie\u2026</string>
+    <string name="permlab_sendMockSms">Stuur skyn-SMS boodskappe</string>
+    <string name="permdesc_sendMockSms">Laat die program skyn-SMS boodskappe stuur. Dit laat \'n program toe om SMS te stuur na betroubare programme. Kwaadwillige programme kan boodskappe voortdurend stuur, dan dit sal die kennisgewings stelsel blokkeer en die gebruiker ontwrig.</string>
+    <string name="perf_profile_pwrsv">Bespaar krag</string>
+    <string name="perf_profile_bal">Gebalanseerd</string>
+    <string name="perf_profile_perf">Werkverrigting</string>
+    <string name="permlab_interceptSmsSent">Onderskep uitgaande SMS</string>
+    <string name="permdesc_interceptSmsSent">Laat \'n program toe om uitgaande SMS boodskappe te onderskep. Kwaadwillige programme kan die reg misbruik om uitgaande SMS boodskappe te verhoed.</string>
+    <string name="transient_navigation_confirmation_long">Skyf van die rand van die skerm om sisteem balk te openbaar</string>
+    <string name="permlab_resetBatteryStats">battery statistieke terugstel</string>
+    <string name="permdesc_resetBatteryStats">Laat \'n program om die huidige lae-vlak battery gebruik data terugtestel.</string>
+    <string name="immersive_mode_confirmation_bottom">Skyf van die onderkant om vol skerm toe te maak.</string>
 </resources>

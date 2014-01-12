@@ -21,6 +21,7 @@ package android.app;
  *
  * {@hide}
  */
+
 interface IBatteryService {
     boolean isDockBatterySupported();
 }

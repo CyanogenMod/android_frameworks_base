@@ -211,7 +211,11 @@ public class BatteryManager {
     public static final int BATTERY_DOCK_PLUGGED_ANY =
             BATTERY_DOCK_PLUGGED_AC | BATTERY_DOCK_PLUGGED_USB;
 
-    private final IBatteryService mService;
+    private static IBatteryService mService = null;
+
+    public BatteryManager() {
+        super();
+    }
 
     /**
      * @hide
@@ -226,7 +230,7 @@ public class BatteryManager {
      */
     public boolean isDockBatterySupported() {
         try {
-            return mService.isDockBatterySupported();
+            return mService != null && mService.isDockBatterySupported();
         } catch (RemoteException ex) {
             // Ignore
         }
