@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_HP">HSPA+</string>
+  <string name="accessibility_data_connection_DC">DCHSPAP</string>
+  <string name="accessibility_quick_settings_ringer">קול <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_vibration">רטט <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="bean_dream_settings_cid_title">Use Cid\'s head</string>
+  <string name="bean_dream_settings_cid_summary">Use Cid\'s head instead of jellybeans inside the dream</string>
+  <string name="quick_settings_profile_label">פרופיל</string>
+  <string name="powerwidget_screen_timeout_toast">השהיית כיבוי מסך מוגדר ל-%1$d %2$s</string>
+  <string name="quick_settings_gps">GPS</string>
+  <string name="quick_settings_gps_off">GPS מכובה</string>
+  <string name="quick_settings_screen_sleep">לך לישון</string>
+  <string name="quick_settings_ringer_on">קול מופעל</string>
+  <string name="quick_settings_ringer_off">ללא קול</string>
+  <string name="quick_settings_vibration_on">רטט מופעל</string>
+  <string name="quick_settings_vibration_off">רטט מכובה</string>
+  <string name="quick_settings_label_enabled">פועל</string>
+  <string name="quick_settings_label_disabled">כבוי</string>
+  <string name="quick_settings_ringer_normal">קול</string>
+  <string name="quick_settings_lockscreen">מסך נעילה</string>
+  <string name="quick_settings_network_type">מצב רשת</string>
+  <string name="quick_settings_report_bug">דווח על באג</string>
+  <string name="quick_settings_sync">סנכרון</string>
+  <string name="quick_settings_sync_off">סינכרון כבוי</string>
+  <string name="quick_settings_torch">אור</string>
+  <string name="quick_settings_torch_off">אור כבוי</string>
+  <string name="quick_settings_nfc">NFC</string>
+  <string name="quick_settings_nfc_off">NFC כבוי</string>
+  <string name="quick_settings_screen_timeout">משך זמן</string>
+  <string name="quick_settings_usb_tether_off_label">מנותק</string>
+  <string name="quick_settings_usb_tether_connected_label">Tethering off</string>
+  <string name="quick_settings_usb_tether_on_label">Tethering</string>
+  <string name="quick_settings_wifiap">נקודת גישת Wi-Fi</string>
+  <string name="quick_settings_wifiap_off">נקודת גישת Wi-Fi מכובה</string>
+  <string name="quick_settings_quiethours">שעות שקט</string>
+  <string name="quick_settings_quiethours_off">כיבוי שעות שקט</string>
+  <string name="quick_settings_lte">LTE</string>
+  <string name="quick_settings_lte_off">LTE מכובה</string>
+  <string name="quick_settings_volume">עוצמת קול</string>
+  <string name="quick_settings_camera_label">מצלמה</string>
+  <string name="quick_settings_network_adb_disabled_label">לא פעיל</string>
+  <string name="quick_settings_network_adb_enabled_label">פועל</string>
+  <string name="quick_settings_expanded_desktop">מורחב</string>
+  <string name="quick_settings_expanded_desktop_off">רגיל</string>
+  <string name="quick_settings_camera_error_connect">אין אפשרות להתחבר אל המצלמה</string>
+  <string name="navbar_dialog_title">בחר את הפעולה להקצה</string>
+  <string name="navbar_home_button">כפתור הבית</string>
+  <string name="navbar_recent_button">לחצן יישומים אחרונים</string>
+  <string name="navbar_search_button">לחצן חיפוש</string>
+  <string name="navbar_back_button">לחצן הקודם</string>
+  <string name="navbar_empty_button">לחצן ריק</string>
+  <string name="navbar_menu_conditional_button">לחצן התפריט (הסתר אוטומטית)</string>
+  <string name="navbar_menu_always_button">לחצן התפריט (נראה תמיד)</string>
+  <string name="navbar_menu_big_button">לחצן התפריט</string>
+  <string name="pie_battery_status_charging">טוען (<xliff:g id="percent">%d</xliff:g>%%)</string>
+  <string name="pie_battery_status_full">טעון</string>
+  <string name="pie_battery_status_discharging">נשארו <xliff:g id="percent">%d</xliff:g>%%</string>
+  <string name="pie_phone_status_no_service">אין קליטה</string>
+  <string name="pie_phone_status_airplane_mode">מצב טיסה מופעל</string>
+  <string name="pie_phone_status_emergency_only">שיחות חירום בלבד</string>
+  <string name="advanced_dev_option_wipe_app">מחק נתוני יישום</string>
+  <string name="advanced_dev_option_force_stop">אלץ עצירה</string>
+  <string name="accessibility_dock_battery_level">סוללה מחוברת - <xliff:g id="number">%d</xliff:g> אחוז.</string>
+  <string name="screenshot_delete_action">מחק</string>
+  <string name="screenshot_delete_confirmation">תמונת מסך נמחקה.</string>
+</resources>
