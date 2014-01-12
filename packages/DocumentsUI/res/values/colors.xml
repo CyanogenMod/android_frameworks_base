@@ -18,4 +18,8 @@
     <color name="chip">#ddd</color>
     <color name="item_root_pressed">#33cccccc</color>
     <color name="item_root_focused">#66cccccc</color>
+    <color name="background">#ffffffff</color>
+    <color name="text_color">#ff808080</color>
+    <color name="fragment_background">#ffcccccc</color>
+    <color name="fragment_background_2">#ffdddddd</color>
 </resources>
