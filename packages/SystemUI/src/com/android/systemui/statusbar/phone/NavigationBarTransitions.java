@@ -93,9 +93,11 @@ public final class NavigationBarTransitions extends BarTransitions {
     }
 
     private void setKeyButtonViewQuiescentAlpha(ButtonInfo info, float alpha, boolean animate) {
-        View button = mView.findViewWithTag(info);
-        if (button != null) {
-            setKeyButtonViewQuiescentAlpha(button, alpha, animate);
+        for (View v : mView.mRotatedViews) {
+            View button = v == null ? null : v.findViewWithTag(info);
+            if (button != null) {
+                setKeyButtonViewQuiescentAlpha(button, alpha, animate);
+            }
         }
     }
 

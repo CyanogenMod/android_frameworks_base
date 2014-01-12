@@ -58,7 +58,7 @@
     <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state">%s</xliff:g>.</string>
     <string name="navbar_dialog_title">Funktion zuweisen</string>
     <string name="navbar_home_button">Home</string>
-    <string name="navbar_recent_button">Zuletzt verwendet</string>
+    <string name="navbar_recent_button">Anwendungsverlauf</string>
     <string name="navbar_search_button">Suche</string>
     <string name="navbar_back_button">Zurück</string>
     <string name="navbar_empty_button">Nicht belegt</string>
@@ -74,8 +74,9 @@
     <string name="pie_phone_status_no_service">Kein Dienst</string>
     <string name="pie_phone_status_airplane_mode">Flugmodus</string>
     <string name="pie_phone_status_emergency_only">Nur Notrufe</string>
-    <string name="advanced_dev_option_wipe_app">Appdaten löschen</string>
+    <string name="advanced_dev_option_wipe_app">Anwendungsdaten löschen</string>
     <string name="advanced_dev_option_force_stop">Beenden erzwingen</string>
+    <string name="accessibility_dock_battery_level">Dock-Akku <xliff:g id="number">%d</xliff:g> Prozent</string>
 
     <!-- Untranslated AOSP strings -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>

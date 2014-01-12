@@ -68,6 +68,9 @@
     <string name="perf_profile_pwrsv">Energie sparen</string>
     <string name="perf_profile_bal">Ausgeglichen</string>
     <string name="perf_profile_perf">Mehr Leistung</string>
+    <string name="permlab_resetBatteryStats">Akku-Verlaufsdetails zurücksetzen</string>
+    <string name="permdesc_resetBatteryStats">Ermöglicht der App, die Akku-Verlaufsdetails zurückzusetzen</string>
+    <string name="immersive_mode_confirmation_bottom">Von unten nach oben wischen, um den Vollbildmodus zu verlassen</string>
 
     <!-- Untranslated AOSP strings -->
     <string name="transient_navigation_confirmation_long">Von der Seite des Displays aus wischen, um die Navigationsleiste einzublenden</string>

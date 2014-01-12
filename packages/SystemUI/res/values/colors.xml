@@ -17,7 +17,7 @@
  */
 -->
 <resources>
-    <drawable name="notification_number_text_color">#ffffffff</drawable>
+    <drawable name="notification_number_text_color">#ff000000</drawable>
     <drawable name="ticker_background_color">#ff1d1d1d</drawable>
     <drawable name="system_bar_background">@color/system_bar_background_opaque</drawable>
     <color name="system_bar_background_opaque">#ff000000</color>
@@ -35,5 +35,8 @@
     <color name="batterymeter_frame_color">#66FFFFFF</color><!-- 40% white -->
     <color name="batterymeter_charge_color">#FFFFFFFF</color>
     <color name="batterymeter_bolt_color">#B2000000</color><!-- 70% black -->
+    <color name="batterymeter_critical">#FFFF3300</color>
+    <color name="batterymeter_low">#FFFF3300</color>
+    <color name="batterymeter_full">#FFFFFFFF</color>
     <color name="status_bar_clock_color">#FFFFFFFF</color>
 </resources>
