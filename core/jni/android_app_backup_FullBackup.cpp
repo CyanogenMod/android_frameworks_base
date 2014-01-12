@@ -122,7 +122,7 @@ int register_android_app_backup_FullBackup(JNIEnv* env)
     LOG_FATAL_IF(clazz == NULL, "Unable to find class android.app.backup.BackupDataOutput");
 
     sBackupDataOutput.mBackupWriter = env->GetFieldID(clazz, "mBackupWriter", "I");
-    LOG_FATAL_IF(sBackupDataOutput.mBackupwriter == NULL,
+    LOG_FATAL_IF(sBackupDataOutput.mBackupWriter == NULL,
             "Unable to find mBackupWriter field in android.app.backup.BackupDataOutput");
 
     return AndroidRuntime::registerNativeMethods(env, "android/app/backup/FullBackup",
