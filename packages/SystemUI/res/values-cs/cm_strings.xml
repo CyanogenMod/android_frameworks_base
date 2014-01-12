@@ -14,10 +14,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- AOSP specific translation - from strings.xml-->
-    <string name="accessibility_battery_level">Úroveň baterie: <xliff:g id="number">%d</xliff:g>\u0025.</string>
-
-    <!-- CM specific translation -->
     <string name="accessibility_quick_settings_ringer">Zvuk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibrace <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="bean_dream_settings_cid_title">Použít hlavu CIDa</string>
