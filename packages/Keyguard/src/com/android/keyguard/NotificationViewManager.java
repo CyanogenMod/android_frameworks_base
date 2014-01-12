@@ -133,7 +133,7 @@ public class NotificationViewManager {
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_FORCE_EXPANDED_VIEW, forceExpandedView ? 1 : 0) == 1
                     && !privacyMode;
             wakeOnNotification = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_WAKE_ON_NOTIFICATION, forceExpandedView ? 1 : 0) == 1;
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS_WAKE_ON_NOTIFICATION, wakeOnNotification ? 1 : 0) == 1;
             notificationsHeight = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_HEIGHT, notificationsHeight);
             offsetTop = Settings.System.getFloat(mContext.getContentResolver(),
