@@ -43,6 +43,7 @@ public class QuickSettingsContainerView extends FrameLayout {
 
     // Duplicate number of columns in the QuickSettings grid on landscape view
     private boolean mDuplicateColumnsLandscape;
+    private boolean mHasFlipSettingsPanel;
 
     // The gap between tiles in the QuickSettings grid
     private float mCellGap;
@@ -73,12 +74,14 @@ public class QuickSettingsContainerView extends FrameLayout {
         mCellGap = mResources.getDimension(R.dimen.quick_settings_cell_gap);
         mNumColumns = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QUICK_TILES_PER_ROW, 3, UserHandle.USER_CURRENT);
-        // do not allow duplication on tablets or any device which do not have
+
+        // do not allow duplication on tablets or any device which does not have
         // flipsettings
+        mHasFlipSettingsPanel = mResources.getBoolean(R.bool.config_hasFlipSettingsPanel);
         mDuplicateColumnsLandscape = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QUICK_TILES_PER_ROW_DUPLICATE_LANDSCAPE,
                 1, UserHandle.USER_CURRENT) == 1
-                        && mResources.getBoolean(R.bool.config_hasFlipSettingsPanel);
+                        && mHasFlipSettingsPanel;
         requestLayout();
     }
 
@@ -108,7 +111,7 @@ public class QuickSettingsContainerView extends FrameLayout {
                 int colSpan = v.getColumnSpan();
                 lp.width = (int) ((colSpan * cellWidth) + (colSpan - 1) * mCellGap);
 
-                if (mNumFinalColumns > 3 && !isLandscape()) {
+                if (mNumFinalColumns > 3 && (!isLandscape() || !mHasFlipSettingsPanel)) {
                     lp.height = (lp.width * mNumFinalColumns - 1) / mNumFinalColumns;
                 }
 
