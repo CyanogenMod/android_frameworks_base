@@ -174,7 +174,7 @@ public class CustomTile extends QuickSettingsTile {
 
     private String returnFriendlyName(String uri) {
         if (uri != null) {
-            return AppHelper.getFriendlyNameForUri(
+            return AppHelper.getShortcutPreferred(
                     mContext, mContext.getPackageManager(), uri);
         }
         return null;

@@ -62,6 +62,9 @@
     <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
     <string name="chamber_int">Input values</string>
     <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
+    <string name="chamber_name_title">Shortcut name</string>
+    <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
+    <string name="chamber_name_toast">Using default name</string>
 
     <!-- Quick Settings -->
     <string name="quick_settings_gps">GPS</string>

@@ -46,10 +46,10 @@ import java.lang.NumberFormatException;
 
 public class CreateShortcut extends LauncherActivity {
 
-
     private static final int DLG_SECRET = 0;
     private static final int DLG_SECRET_CHK = 1;
     private static final int DLG_SECRET_INT = 2;
+    private static final int DLG_SECRET_NAME = 3;
     private static final int DLG_TOGGLE = 4;
 
     private static final int SYSTEM_INT = 0;
@@ -156,7 +156,7 @@ public class CreateShortcut extends LauncherActivity {
         if (isCheck) {
             String check = "0,1";
             mShortcutIntent.putExtra("array", check);
-            finalizeIntent();
+            showDialogSetting(DLG_SECRET_NAME);
         } else {
             showDialogSetting(DLG_SECRET_INT);
         }
@@ -164,6 +164,17 @@ public class CreateShortcut extends LauncherActivity {
 
     private void setSettingArray(String array) {
         mShortcutIntent.putExtra("array", array);
+        showDialogSetting(DLG_SECRET_NAME);
+    }
+
+    private void checkIntentName(String name) {
+        if (name != null && name.length() > 0) {
+            mIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+        } else {
+            Toast.makeText(CreateShortcut.this,
+                    R.string.chamber_name_toast,
+                    Toast.LENGTH_LONG).show();
+        }
         finalizeIntent();
     }
 
@@ -340,6 +351,28 @@ public class CreateShortcut extends LauncherActivity {
                     }
                 });
                 alertInt.show();
+                break;
+            case DLG_SECRET_NAME:
+                final EditText inputName = new EditText(this);
+
+                AlertDialog.Builder alertName = new AlertDialog.Builder(this);
+                alertName.setTitle(R.string.chamber_name_title)
+                .setMessage(R.string.chamber_name_message)
+                .setView(inputName)
+                .setNegativeButton(R.string.cancel,
+                    new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        checkIntentName(null);
+                    }
+                })
+                .setPositiveButton(R.string.dlg_ok,
+                    new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String name = inputName.getText().toString();
+                        checkIntentName(name);
+                    }
+                });
+                alertName.show();
                 break;
             case DLG_TOGGLE:
                 final CharSequence[] items = {
