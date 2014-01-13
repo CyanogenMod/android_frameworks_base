@@ -24,7 +24,7 @@ import android.telephony.SignalStrength;
 import android.telephony.CellLocation;
 import android.telephony.CellInfo;
 import android.telephony.Rlog;
-import android.os.Looper;
+
 import com.android.internal.telephony.IPhoneStateListener;
 
 import java.util.List;
@@ -346,7 +346,7 @@ public class PhoneStateListener {
         }
     };
 
-    Handler mHandler = new Handler(Looper.getMainLooper() ) {
+    Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             //Rlog.d("TelephonyRegistry", "what=0x" + Integer.toHexString(msg.what) + " msg=" + msg);
             switch (msg.what) {
