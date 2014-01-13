@@ -193,9 +193,6 @@ final class DisplayPowerController {
     // The display blanker.
     private final DisplayBlanker mDisplayBlanker;
 
-    // Our context
-    private final Context mContext;
-
     // Our handler.
     private final DisplayControllerHandler mHandler;
 
@@ -406,7 +403,6 @@ final class DisplayPowerController {
             DisplayManagerService displayManager,
             SuspendBlocker displaySuspendBlocker, DisplayBlanker displayBlanker,
             Callbacks callbacks, Handler callbackHandler) {
-        mContext = context;
         mHandler = new DisplayControllerHandler(looper);
         mNotifier = notifier;
         mDisplaySuspendBlocker = displaySuspendBlocker;
