@@ -1239,6 +1239,18 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                     + " mBluetoothTetherIconId=0x" + Integer.toHexString(mBluetoothTetherIconId));
         }
 
+        int hideLabels = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.NOTIFICATION_HIDE_LABELS, 0, UserHandle.USER_CURRENT);
+
+        switch (hideLabels) {
+            case 1 : mobileLabel = "";
+                combinedLabel = wifiLabel;
+                break;
+            case 2 : wifiLabel = "";
+                combinedLabel = mobileLabel;
+                break;
+        }
+
         // update QS
         for (NetworkSignalChangedCallback cb : mSignalsChangedCallbacks) {
             notifySignalsChangedCallbacks(cb);

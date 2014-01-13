@@ -3830,10 +3830,10 @@ public final class Settings {
         public static final String MENU_VISIBILITY = "menu_visibility";
 
         /**
-         * Hide carrier information on notification drawer
+         * Hide network labels in the notification drawer
          * @hide
          */
-        public static final String NOTIFICATION_HIDE_CARRIER = "notification_hide_carrier";
+        public static final String NOTIFICATION_HIDE_LABELS = "notification_hide_labels";
 
         /**
           * Stores values for notification shortcut targets
