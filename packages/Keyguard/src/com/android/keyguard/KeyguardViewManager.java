@@ -81,7 +81,7 @@ public class KeyguardViewManager {
 
     // Delay dismissing keyguard to allow animations to complete.
     private static final int HIDE_KEYGUARD_DELAY = 500;
-    private int mBlurRadius = 12;
+    private int mBlurRadius = 1;
     private final int MAX_BLUR_WIDTH = 900;
     private final int MAX_BLUR_HEIGHT = 1600;
 
