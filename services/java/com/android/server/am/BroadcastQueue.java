@@ -37,6 +37,7 @@ import android.os.Message;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.util.EventLog;
 import android.util.Log;
@@ -906,7 +907,9 @@ public final class BroadcastQueue {
             if (DEBUG_BROADCAST)  Slog.v(TAG,
                     "Need to start app ["
                     + mQueueName + "] " + targetProcess + " for broadcast " + r);
-            if ((r.curApp=mService.startProcessLocked(targetProcess,
+            if ((SystemProperties.getInt("sys.quickboot.enable", 0) == 1 &&
+                        SystemProperties.getInt("sys.quickboot.poweron", 0) == 0)
+                || (r.curApp=mService.startProcessLocked(targetProcess,
                     info.activityInfo.applicationInfo, true,
                     r.intent.getFlags() | Intent.FLAG_FROM_BACKGROUND,
                     "broadcast", r.curComponent,
