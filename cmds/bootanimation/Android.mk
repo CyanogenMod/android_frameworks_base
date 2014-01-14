@@ -27,6 +27,22 @@ LOCAL_SHARED_LIBRARIES := \
     libregionalization \
     libmedia
 
+ifeq ($(TARGET_BOOTANIMATION_PRELOAD),true)
+    LOCAL_CFLAGS += -DPRELOAD_BOOTANIMATION
+endif
+
+ifeq ($(TARGET_BOOTANIMATION_TEXTURE_CACHE),true)
+    LOCAL_CFLAGS += -DNO_TEXTURE_CACHE=0
+endif
+
+ifeq ($(TARGET_BOOTANIMATION_TEXTURE_CACHE),false)
+    LOCAL_CFLAGS += -DNO_TEXTURE_CACHE=1
+endif
+
+ifeq ($(TARGET_BOOTANIMATION_USE_RGB565),true)
+    LOCAL_CFLAGS += -DUSE_565
+endif
+
 LOCAL_MODULE:= bootanimation
 
 LOCAL_INIT_RC := bootanim.rc
