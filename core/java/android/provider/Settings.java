@@ -3424,6 +3424,12 @@ public final class Settings {
         public static final String STATUSBAR_HIDE_SIGNAL_BARS = "statusbar_hide_signal_bars";
 
         /**
+         * Show when WiFi or data mobile is sending/receiving data
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_ACTIVITY = "status_bar_network_activity";
+
+        /**
          * Network traffic indicator, goes from least to greatest significant bitwise
          * 0 = Display up-stream traffic if set
          * 1 = Display down-stream traffic if set

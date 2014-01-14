@@ -177,6 +177,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
 
     boolean mDataAndWifiStacked = false;
 
+    // Whether the direction arrows are enabled by the user
+    boolean mDirectionArrowsEnabled = false;
+
     private UpdateUIListener mUpdateUIListener = null;
 
     public interface SignalCluster {
@@ -1131,19 +1134,23 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             // Now for things that should only be shown when actually using mobile data.
             if (mDataConnected) {
                 combinedSignalIconId = mDataSignalIconId;
-                switch (mDataActivity) {
-                    case TelephonyManager.DATA_ACTIVITY_IN:
-                        mMobileActivityIconId = R.drawable.stat_sys_signal_in;
-                        break;
-                    case TelephonyManager.DATA_ACTIVITY_OUT:
-                        mMobileActivityIconId = R.drawable.stat_sys_signal_out;
-                        break;
-                    case TelephonyManager.DATA_ACTIVITY_INOUT:
-                        mMobileActivityIconId = R.drawable.stat_sys_signal_inout;
-                        break;
-                    default:
-                        mMobileActivityIconId = 0;
-                        break;
+                if (mDirectionArrowsEnabled) {
+                    switch (mDataActivity) {
+                        case TelephonyManager.DATA_ACTIVITY_IN:
+                            mMobileActivityIconId = R.drawable.stat_sys_signal_in;
+                            break;
+                        case TelephonyManager.DATA_ACTIVITY_OUT:
+                            mMobileActivityIconId = R.drawable.stat_sys_signal_out;
+                            break;
+                        case TelephonyManager.DATA_ACTIVITY_INOUT:
+                            mMobileActivityIconId = R.drawable.stat_sys_signal_inout;
+                            break;
+                        default:
+                            mMobileActivityIconId = 0;
+                            break;
+                    }
+                } else {
+                    mMobileActivityIconId = 0;
                 }
 
                 combinedLabel = mobileLabel;
@@ -1164,19 +1171,23 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 if (DEBUG) {
                     wifiLabel += "xxxxXXXXxxxxXXXX";
                 }
-                switch (mWifiActivity) {
-                    case WifiManager.DATA_ACTIVITY_IN:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_in;
-                        break;
-                    case WifiManager.DATA_ACTIVITY_OUT:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_out;
-                        break;
-                    case WifiManager.DATA_ACTIVITY_INOUT:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_inout;
-                        break;
-                    case WifiManager.DATA_ACTIVITY_NONE:
-                        mWifiActivityIconId = 0;
-                        break;
+                if (mDirectionArrowsEnabled) {
+                    switch (mWifiActivity) {
+                        case WifiManager.DATA_ACTIVITY_IN:
+                            mWifiActivityIconId = R.drawable.stat_sys_wifi_in;
+                            break;
+                        case WifiManager.DATA_ACTIVITY_OUT:
+                            mWifiActivityIconId = R.drawable.stat_sys_wifi_out;
+                            break;
+                        case WifiManager.DATA_ACTIVITY_INOUT:
+                            mWifiActivityIconId = R.drawable.stat_sys_wifi_inout;
+                            break;
+                        case WifiManager.DATA_ACTIVITY_NONE:
+                            mWifiActivityIconId = 0;
+                            break;
+                    }
+                } else {
+                    mWifiActivityIconId = 0;
                 }
             }
 
@@ -1740,12 +1751,17 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.STATUSBAR_SIGNAL_SHOW_4G_FOR_LTE), false,
                     this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_NETWORK_ACTIVITY),
+                    false, this, UserHandle.USER_ALL);
             updateSettings();
         }
 
         @Override
         public void onChange(boolean selfChange) {
             updateSettings();
+            updateTelephonySignalStrength();
+            refreshViews();
         }
     }
 
@@ -1755,7 +1771,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         mShow4gForLte = (Settings.System.getBoolean(mContext.getContentResolver(),
                 Settings.System.STATUSBAR_SIGNAL_SHOW_4G_FOR_LTE,
                 mContext.getResources().getBoolean(R.bool.config_show4GForLTE)));
-        updateTelephonySignalStrength();
+        mDirectionArrowsEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_NETWORK_ACTIVITY,
+                0, UserHandle.USER_CURRENT) == 0 ? false : true;
     }
-
 }
