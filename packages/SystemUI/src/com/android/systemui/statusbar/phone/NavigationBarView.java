@@ -86,6 +86,7 @@ public class NavigationBarView extends LinearLayout {
     int mBarSize;
     boolean mVertical;
     boolean mScreenOn;
+    boolean mLeft;
 
     boolean mShowMenu;
     int mDisabledFlags = 0;
@@ -222,6 +223,7 @@ public class NavigationBarView extends LinearLayout {
         mBarSize = res.getDimensionPixelSize(R.dimen.navigation_bar_size);
         mVertical = false;
         mShowMenu = false;
+        mLeft = false;
         mDelegateHelper = new DelegateViewHelper(this);
 
         getIcons(res);
@@ -610,6 +612,7 @@ public class NavigationBarView extends LinearLayout {
         updateSettings();
 
         mDeadZone = (DeadZone) mCurrentView.findViewById(R.id.deadzone);
+        mDeadZone.setLeftHandedMode(mLeft);
 
         // force the low profile & disabled states into compliance
         mBarTransitions.init(mVertical);
@@ -754,6 +757,12 @@ public class NavigationBarView extends LinearLayout {
             }
         }
         pw.println();
+    }
+
+    public void setLeftHandedMode(boolean leftHandedNav) {
+        Log.i(TAG, "Setting Navbar Left Handed Mode: " + leftHandedNav);
+        mLeft = leftHandedNav;
+        mDeadZone.setLeftHandedMode(leftHandedNav);
     }
 
 }
