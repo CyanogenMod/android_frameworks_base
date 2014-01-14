@@ -104,6 +104,7 @@ public class DctConstants {
     public static final int EVENT_DATA_RAT_CHANGED = BASE + 41;
     public static final int CMD_CLEAR_PROVISIONING_SPINNER = BASE + 42;
     public static final int EVENT_MODEM_DATA_PROFILE_READY = BASE + 43;
+    public static final int EVENT_GET_WWAN_IWLAN_COEXISTENCE_DONE = BASE + 44;
 
     /***** Constants *****/
 
