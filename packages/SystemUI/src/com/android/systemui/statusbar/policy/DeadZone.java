@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.MotionEvent;
@@ -46,6 +47,7 @@ public class DeadZone extends View {
     // mHold ms, then move back over the course of mDecay ms
     private int mHold, mDecay;
     private boolean mVertical;
+    private boolean mLeft;
     private long mLastPokeTime;
 
     private final Runnable mDebugFlash = new Runnable() {
@@ -73,6 +75,8 @@ public class DeadZone extends View {
 
         int index = a.getInt(R.styleable.DeadZone_orientation, -1);
         mVertical = (index == VERTICAL);
+        mLeft = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.NAVBAR_LEFT_HANDED, 0) == 1;
 
         if (DEBUG)
             Slog.v(TAG, this + " size=[" + mSizeMin + "-" + mSizeMax + "] hold=" + mHold
@@ -98,7 +102,7 @@ public class DeadZone extends View {
 
     public void setFlashOnTouchCapture(boolean dbg) {
         mShouldFlash = dbg;
-        mFlashFrac = 0f;
+        mFlashFrac = dbg ? 1f : 0f;
         postInvalidate();
     }
 
@@ -117,7 +121,12 @@ public class DeadZone extends View {
                 Slog.v(TAG, this + " ACTION_DOWN: " + event.getX() + "," + event.getY());
             }
             int size = (int) getSize(event.getEventTime());
-            if ((mVertical && event.getX() < size) || event.getY() < size) {
+            int left = 0;
+            if (mLeft && mVertical) {
+                left = getWidth() - size;
+                size = getWidth();
+            }
+            if ((mVertical && left < event.getX() && event.getX() < size) || event.getY() < size) {
                 if (CHATTY) {
                     Slog.v(TAG, "consuming errant click: (" + event.getX() + "," + event.getY() + ")");
                 }
@@ -153,8 +162,13 @@ public class DeadZone extends View {
             return;
         }
 
-        final int size = (int) getSize(SystemClock.uptimeMillis());
-        can.clipRect(0, 0, mVertical ? size : can.getWidth(), mVertical ? can.getHeight() : size);
+        int size = (int) getSize(SystemClock.uptimeMillis());
+        int left = 0;
+        if (mLeft && mVertical) {
+            left = getWidth() - size;
+            size = getWidth();
+        }
+        can.clipRect(left, 0, mVertical ? size : can.getWidth(), mVertical ? can.getHeight() : size);
         final float frac = DEBUG ? (mFlashFrac - 0.5f) + 0.5f : mFlashFrac;
         can.drawARGB((int) (frac * 0xFF), 0xDD, 0xEE, 0xAA);
 
