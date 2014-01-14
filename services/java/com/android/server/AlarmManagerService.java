@@ -1262,6 +1262,19 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
     }
 
+    private void filtQuickBootAlarms(ArrayList<Alarm> triggerList) {
+
+        for (int i = triggerList.size() - 1; i >= 0; i--) {
+            Alarm alarm = triggerList.get(i);
+
+            // bypass system alarms
+            if (!"android".equals(alarm.operation.getTargetPackage())) {
+                triggerList.remove(i);
+                Slog.v(TAG, "ignore -> " + alarm.operation.getTargetPackage());
+            }
+        }
+    }
+
     private class AlarmThread extends Thread
     {
         public AlarmThread()
@@ -1316,6 +1329,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
                     }
                     triggerAlarmsLocked(triggerList, nowELAPSED, nowRTC);
                     rescheduleKernelAlarmsLocked();
+
+                    if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
+                        filtQuickBootAlarms(triggerList);
+                    }
 
                     // now deliver the alarm intents
                     for (int i=0; i<triggerList.size(); i++) {
