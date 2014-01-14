@@ -374,6 +374,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.STATUS_BAR_CLOCK), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_SIGNAL_TEXT), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAVBAR_LEFT_HANDED), false, this);
             updateSettings();
         }
 
@@ -2932,6 +2934,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         boolean showPercent = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT, 0, mCurrentUserId) == 1;
 
+        boolean leftHandedNav = Settings.System.getInt(resolver,
+                Settings.System.NAVBAR_LEFT_HANDED, 0) == 1;
+
         mBatteryView.setMode(mode);
         mBatteryController.onBatteryMeterModeChanged(mode);
         mBatteryView.setShowPercent(showPercent);
@@ -2941,6 +2946,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mDockBatteryController.onBatteryMeterModeChanged(mode);
         mDockBatteryView.setShowPercent(showPercent);
         mDockBatteryController.onBatteryMeterShowPercent(showPercent);
+
+        mNavigationBarView.setLeftHandedMode(leftHandedNav);
 
         mClockEnabled = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_CLOCK, 1, mCurrentUserId) != 0;
