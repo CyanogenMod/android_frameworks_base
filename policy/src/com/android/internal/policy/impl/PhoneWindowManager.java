@@ -2167,7 +2167,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return R.anim.dock_top_enter;
             }
         } else if (win == mNavigationBar) {
-            // This can be on either the bottom or the right.
+            // This can be on either the bottom, left, or the right.
             if (mNavigationBarOnBottom) {
                 if (transit == TRANSIT_EXIT
                         || transit == TRANSIT_HIDE) {
@@ -2177,12 +2177,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     return R.anim.dock_bottom_enter;
                 }
             } else {
+                boolean left = isNavbarLeft();
                 if (transit == TRANSIT_EXIT
                         || transit == TRANSIT_HIDE) {
-                    return R.anim.dock_right_exit;
+                    return left ? R.anim.dock_left_exit : R.anim.dock_right_exit;
                 } else if (transit == TRANSIT_ENTER
                         || transit == TRANSIT_SHOW) {
-                    return R.anim.dock_right_enter;
+                    return left ? R.anim.dock_left_enter : R.anim.dock_right_enter;
                 }
             }
         }
@@ -3100,6 +3101,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         contentInset.setEmpty();
     }
 
+    private boolean isNavbarLeft() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.NAVBAR_LEFT_HANDED, 0) == 1;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void beginLayoutLw(boolean isDefaultDisplay, int displayWidth, int displayHeight,
@@ -3246,31 +3252,63 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         mSystemBottom = mTmpNavigationFrame.top;
                     }
                 } else {
-                    // Landscape screen; nav bar goes to the right.
-                    int left = displayWidth - overscanRight - mNavigationBarWidthForRotation[displayRotation];
-                    mTmpNavigationFrame.set(left, 0, displayWidth - overscanRight, displayHeight);
-                    mStableRight = mTmpNavigationFrame.left;
-                    if (!expandedDesktopHidesNavigationBar()) {
-                        mStableFullscreenRight = mTmpNavigationFrame.left;
-                    }
-                    if (transientNavBarShowing
-                            || (navVisible && expandedDesktopHidesNavigationBar())) {
-                        mNavigationBarController.setBarShowingLw(true);
-                    } else if (navVisible) {
-                        mNavigationBarController.setBarShowingLw(true);
-                        mDockRight = mTmpNavigationFrame.left;
-                        mRestrictedScreenWidth = mDockRight - mRestrictedScreenLeft;
-                        mRestrictedOverscanScreenWidth = mDockRight - mRestrictedOverscanScreenLeft;
+                    if (isNavbarLeft()) {
+                        // Landscape screen; nav bar goes to the left.
+                        int right = overscanLeft + mNavigationBarWidthForRotation[displayRotation];
+                        mTmpNavigationFrame.set(0, 0, right, displayHeight);
+                        mStableLeft = mTmpNavigationFrame.right;
+                        if (!expandedDesktopHidesNavigationBar()) {
+                            mStableFullscreenLeft = mTmpNavigationFrame.right;
+                        }
+                        if (transientNavBarShowing
+                                || (navVisible && expandedDesktopHidesNavigationBar())) {
+                            mNavigationBarController.setBarShowingLw(true);
+                        } else if (navVisible) {
+                            mNavigationBarController.setBarShowingLw(true);
+                            mDockLeft = mTmpNavigationFrame.right;
+                            mRestrictedScreenLeft = mDockLeft;
+                            mRestrictedScreenWidth = mDockRight - mRestrictedScreenLeft;
+                            mRestrictedOverscanScreenLeft = mRestrictedScreenLeft;
+                            mRestrictedOverscanScreenWidth = mDockRight - mRestrictedOverscanScreenLeft;
+                        } else {
+                            // We currently want to hide the navigation UI.
+                            mNavigationBarController.setBarShowingLw(false);
+                        }
+
+                        if (navVisible && !navTranslucent && !mNavigationBar.isAnimatingLw()
+                                && !mNavigationBarController.wasRecentlyTranslucent()) {
+                            // If the nav bar is currently requested to be visible,
+                            // and not in the process of animating on or off, then
+                            // we can tell the app that it is covered by it.
+                            mSystemLeft = mTmpNavigationFrame.right;
+                        }
                     } else {
-                        // We currently want to hide the navigation UI.
-                        mNavigationBarController.setBarShowingLw(false);
-                    }
-                    if (navVisible && !navTranslucent && !mNavigationBar.isAnimatingLw()
-                            && !mNavigationBarController.wasRecentlyTranslucent()) {
-                        // If the nav bar is currently requested to be visible,
-                        // and not in the process of animating on or off, then
-                        // we can tell the app that it is covered by it.
-                        mSystemRight = mTmpNavigationFrame.left;
+                        // Landscape screen; nav bar goes to the right.
+                        int left = displayWidth - overscanRight - mNavigationBarWidthForRotation[displayRotation];
+                        mTmpNavigationFrame.set(left, 0, displayWidth - overscanRight, displayHeight);
+                        mStableRight = mTmpNavigationFrame.left;
+                        if (!expandedDesktopHidesNavigationBar()) {
+                            mStableFullscreenRight = mTmpNavigationFrame.left;
+                        }
+                        if (transientNavBarShowing
+                                || (navVisible && expandedDesktopHidesNavigationBar())) {
+                            mNavigationBarController.setBarShowingLw(true);
+                        } else if (navVisible) {
+                            mNavigationBarController.setBarShowingLw(true);
+                            mDockRight = mTmpNavigationFrame.left;
+                            mRestrictedScreenWidth = mDockRight - mRestrictedScreenLeft;
+                            mRestrictedOverscanScreenWidth = mDockRight - mRestrictedOverscanScreenLeft;
+                        } else {
+                            // We currently want to hide the navigation UI.
+                            mNavigationBarController.setBarShowingLw(false);
+                        }
+                        if (navVisible && !navTranslucent && !mNavigationBar.isAnimatingLw()
+                                && !mNavigationBarController.wasRecentlyTranslucent()) {
+                            // If the nav bar is currently requested to be visible,
+                            // and not in the process of animating on or off, then
+                            // we can tell the app that it is covered by it.
+                            mSystemRight = mTmpNavigationFrame.left;
+                        }
                     }
                 }
                 // Make sure the content and current rectangles are updated to
