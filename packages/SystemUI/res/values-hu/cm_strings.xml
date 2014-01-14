@@ -78,4 +78,5 @@
     <string name="advanced_dev_option_force_stop">Kényszerített leállítás</string>
     <string name="accessibility_dock_battery_level">Dokkoló akkumulátor: <xliff:g id="number">%d</xliff:g> percent.</string>
     <string name="screenshot_delete_action">Törlés</string>
+    <string name="screenshot_delete_confirmation">Képernyőmentés törölve.</string>
 </resources>
