@@ -103,6 +103,7 @@ public class DctConstants {
     public static final int EVENT_DATA_RAT_CHANGED = BASE + 40;
     public static final int EVENT_MODEM_DATA_PROFILE_READY= BASE + 41;
     public static final int CMD_NET_STAT_POLL = BASE + 42;
+    public static final int EVENT_RADIO_IWLAN_AVAILABLE= BASE + 43;
 
     /***** Constants *****/
 
