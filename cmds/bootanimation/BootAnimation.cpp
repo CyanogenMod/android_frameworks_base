@@ -114,6 +114,57 @@ class MPlayerListener : public MediaPlayerListener
     }
 };
 
+static long getFreeMemory(void)
+{
+    int fd = open("/proc/meminfo", O_RDONLY);
+    const char* const sums[] = { "MemFree:", "Cached:", NULL };
+    const int sumsLen[] = { strlen("MemFree:"), strlen("Cached:"), 0 };
+    int num = 2;
+
+    if (fd < 0) {
+        ALOGW("Unable to open /proc/meminfo");
+        return -1;
+    }
+
+    char buffer[256];
+    const int len = read(fd, buffer, sizeof(buffer)-1);
+    close(fd);
+
+    if (len < 0) {
+        ALOGW("Unable to read /proc/meminfo");
+        return -1;
+    }
+    buffer[len] = 0;
+
+    size_t numFound = 0;
+    long mem = 0;
+
+    char* p = buffer;
+    while (*p && numFound < num) {
+        int i = 0;
+        while (sums[i]) {
+            if (strncmp(p, sums[i], sumsLen[i]) == 0) {
+                p += sumsLen[i];
+                while (*p == ' ') p++;
+                char* num = p;
+                while (*p >= '0' && *p <= '9') p++;
+                if (*p != 0) {
+                    *p = 0;
+                    p++;
+                    if (*p == 0) p--;
+                }
+                mem += atoll(num);
+                numFound++;
+                break;
+            }
+            i++;
+        }
+        p++;
+    }
+
+    return numFound > 0 ? mem : -1;
+}
+
 BootAnimation::BootAnimation() : Thread(false), mZip(NULL)
 {
     mSession = new SurfaceComposerClient();
@@ -638,6 +689,25 @@ bool BootAnimation::movie()
         const size_t fcount = part.frames.size();
         glBindTexture(GL_TEXTURE_2D, 0);
 
+        /*calculate if we need to runtime save memory
+        * condition: runtime free memory is less than the textures that will used.
+        * needSaveMem default to be false
+        */
+        GLint mMaxTextureSize;
+        bool needSaveMem = false;
+        GLuint mTextureid;
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &mMaxTextureSize);
+        //ALOGD("freemem:%ld, %d", getFreeMemory(), mMaxTextureSize);
+        if(getFreeMemory() < mMaxTextureSize * mMaxTextureSize * fcount / 1024) {
+            ALOGD("Use save memory method, maybe small fps in actual.");
+            needSaveMem = true;
+            glGenTextures(1, &mTextureid);
+            glBindTexture(GL_TEXTURE_2D, mTextureid);
+            glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        }
+
         for (int r=0 ; !part.count || r<part.count ; r++) {
             // Exit any non playuntil complete parts immediately
             if(exitPending() && !part.playUntilComplete)
@@ -658,10 +728,10 @@ bool BootAnimation::movie()
                 const Animation::Frame& frame(part.frames[j]);
                 nsecs_t lastFrame = systemTime();
 
-                if (r > 0) {
+                if (r > 0 && !needSaveMem) {
                     glBindTexture(GL_TEXTURE_2D, frame.tid);
                 } else {
-                    if (part.count != 1) {
+                    if (!needSaveMem && part.count != 1) {
                         glGenTextures(1, &frame.tid);
                         glBindTexture(GL_TEXTURE_2D, frame.tid);
                         glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -713,12 +783,17 @@ bool BootAnimation::movie()
         }
 
         // free the textures for this part
-        if (part.count != 1) {
+        if (!needSaveMem && part.count != 1) {
             for (size_t j=0 ; j<fcount ; j++) {
                 const Animation::Frame& frame(part.frames[j]);
                 glDeleteTextures(1, &frame.tid);
             }
         }
+
+        if (needSaveMem) {
+            glDeleteTextures(1, &mTextureid);
+        }
+
     }
 
     ALOGD("waiting for media player to complete.");
