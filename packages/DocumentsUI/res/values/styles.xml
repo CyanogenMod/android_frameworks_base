@@ -37,4 +37,7 @@
         <item name="android:src">@drawable/ic_menu_overflow</item>
     </style>
 
+    <style name="SettingsTheme" parent="@android:style/Theme.Holo.Light.DialogWhenLarge">
+    </style>
+
 </resources>
