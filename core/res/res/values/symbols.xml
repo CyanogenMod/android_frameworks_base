@@ -350,6 +350,7 @@
 
   <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
 
+  <java-symbol type="bool" name="config_feature_iwlan_enabled" />
   <java-symbol type="integer" name="config_bluetooth_max_advertisers" />
   <java-symbol type="integer" name="config_bluetooth_max_scan_filters" />
   <java-symbol type="integer" name="config_cursorWindowSize" />
