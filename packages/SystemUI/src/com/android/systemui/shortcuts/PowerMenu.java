@@ -17,12 +17,12 @@
 package com.android.systemui.shortcuts;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
-import com.android.internal.view.RotationPolicy;
+import com.android.internal.util.slim.ButtonsConstants;
+import com.android.internal.util.slim.SlimActions;
 
-public class Rotation extends Activity  {
+public class PowerMenu extends Activity  {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,16 +32,7 @@ public class Rotation extends Activity  {
     @Override
     public void onResume() {
         super.onResume();
-        int value = getIntent().getIntExtra("value", 2);
-
-        boolean userRotation;
-        if (value == 2) {
-            userRotation = RotationPolicy.isRotationLocked(this);
-        } else {
-            userRotation = value == 1;
-        }
-
-        RotationPolicy.setRotationLock(this, !userRotation);
+        SlimActions.processAction(this, ButtonsConstants.ACTION_POWER_MENU, false);
         this.finish();
     }
 }

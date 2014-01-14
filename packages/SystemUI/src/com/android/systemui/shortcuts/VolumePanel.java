@@ -17,12 +17,16 @@
 package com.android.systemui.shortcuts;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 
-import com.android.internal.view.RotationPolicy;
+import com.android.internal.statusbar.IStatusBarService;
 
-public class Rotation extends Activity  {
+public class VolumePanel extends Activity  {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,16 +36,15 @@ public class Rotation extends Activity  {
     @Override
     public void onResume() {
         super.onResume();
-        int value = getIntent().getIntExtra("value", 2);
-
-        boolean userRotation;
-        if (value == 2) {
-            userRotation = RotationPolicy.isRotationLocked(this);
-        } else {
-            userRotation = value == 1;
+        try {
+            IStatusBarService sb = IStatusBarService.Stub.asInterface(ServiceManager
+                    .getService(Context.STATUS_BAR_SERVICE));
+            sb.collapsePanels();
+        } catch (RemoteException e) {
+            // Oh no
         }
-
-        RotationPolicy.setRotationLock(this, !userRotation);
+        AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
         this.finish();
     }
 }

@@ -270,6 +270,19 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.android.systemui.shortcuts.PowerMenu"
+            android:label="@string/shortcut_power_menu"
+            android:icon="@drawable/ic_sysbar_power_menu"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_EXTRA" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.android.systemui.shortcuts.QuietHours"
             android:label="@string/shortcut_quiethours"
             android:icon="@drawable/ic_qs_quiet_hours_on"
@@ -286,6 +299,19 @@
             android:name="com.android.systemui.shortcuts.Reboot"
             android:label="@string/shortcut_reboot"
             android:icon="@drawable/ic_qs_reboot"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_EXTRA" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.android.systemui.shortcuts.Recovery"
+            android:label="@string/shortcut_recovery"
+            android:icon="@drawable/ic_qs_reboot_recovery"
             android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance" >
@@ -338,6 +364,19 @@
             android:name="com.android.systemui.shortcuts.Torch"
             android:label="@string/shortcut_torch"
             android:icon="@drawable/ic_qs_torch_on"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_EXTRA" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.android.systemui.shortcuts.VolumePanel"
+            android:label="@string/shortcut_volume"
+            android:icon="@drawable/ic_qs_volume"
             android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance" >

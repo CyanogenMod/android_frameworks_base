@@ -18,12 +18,9 @@ package com.android.systemui.shortcuts;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
-
-import com.android.internal.util.slim.PolicyConstants;
-import com.android.internal.util.slim.SlimActions;
 
 public class Reboot extends Activity  {
 
@@ -35,9 +32,16 @@ public class Reboot extends Activity  {
     @Override
     public void onResume() {
         super.onResume();
-        PowerManager pm =
-                (PowerManager) this.getSystemService(Context.POWER_SERVICE);
-        pm.reboot("");
-        this.finish();
+        Handler handle = new Handler();
+        // Allow statusbar to collapse if desired
+        handle.postDelayed(new Runnable() {
+            public void run() {
+                PowerManager pm =
+                        (PowerManager) Reboot.this.getSystemService(
+                        Context.POWER_SERVICE);
+                pm.reboot("");
+                Reboot.this.finish();
+            }
+        }, 500);
     }
 }

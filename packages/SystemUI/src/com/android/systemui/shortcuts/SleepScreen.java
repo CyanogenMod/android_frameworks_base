@@ -17,7 +17,7 @@
 package com.android.systemui.shortcuts;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -32,7 +32,7 @@ public class SleepScreen extends Activity  {
     @Override
     public void onResume() {
         super.onResume();
-        PowerManager pm = (PowerManager) this.getSystemService(this.POWER_SERVICE);
+        PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
         pm.goToSleep(SystemClock.uptimeMillis());
         this.finish();
     }

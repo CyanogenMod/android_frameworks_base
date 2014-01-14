@@ -17,12 +17,12 @@
 package com.android.systemui.shortcuts;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.PowerManager;
 
-import com.android.internal.view.RotationPolicy;
-
-public class Rotation extends Activity  {
+public class Recovery extends Activity  {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,16 +32,16 @@ public class Rotation extends Activity  {
     @Override
     public void onResume() {
         super.onResume();
-        int value = getIntent().getIntExtra("value", 2);
-
-        boolean userRotation;
-        if (value == 2) {
-            userRotation = RotationPolicy.isRotationLocked(this);
-        } else {
-            userRotation = value == 1;
-        }
-
-        RotationPolicy.setRotationLock(this, !userRotation);
-        this.finish();
+        Handler handle = new Handler();
+        // Allow statusbar to collapse if desired
+        handle.postDelayed(new Runnable() {
+            public void run() {
+                PowerManager pm =
+                        (PowerManager) Recovery.this.getSystemService(
+                        Context.POWER_SERVICE);
+                pm.reboot("recovery");
+                Recovery.this.finish();
+            }
+        }, 500);
     }
 }

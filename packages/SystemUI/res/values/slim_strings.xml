@@ -34,16 +34,25 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <!-- Off/On/Toggle -->
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="toggle">Toggle</string>
+
     <!-- Slim Shortcut Actions -->
     <string name="shortcut_picker">Slim Shortcuts</string>
-    <string name="shortcut_immersive">Immersive Mode Toggle</string>
-    <string name="shortcut_quiethours">Quiethours Toggle</string>
-    <string name="shortcut_rotation">Rotation Lock Toggle</string>
+    <string name="shortcut_immersive">Immersive Mode</string>
+    <string name="shortcut_quiethours">Quiethours</string>
+    <string name="shortcut_rotation">Rotation</string>
     <string name="shortcut_torch">Torch Toggle</string>
-    <string name="shortcut_reboot">Reboot (instant)</string>
+    <string name="shortcut_reboot">Reboot</string>
+    <string name="shortcut_recovery">Recovery</string>
     <string name="shortcut_last_app">Last App</string>
+    <string name="shortcut_power_menu">Power Menu</string>
     <string name="shortcut_screenshot">Screenshot</string>
-    <string name="shortcut_screensleep">Sleep Screen</string>
+    <string name="shortcut_screensleep">Go to Sleep</string>
+    <string name="shortcut_volume">Volume</string>
+    <string name="shortcut_toggle_title">Action to perform</string>
     <string name="shortcut_chamber">Chamber of Secrets</string>
     <string name="chamber_disabled">Chamber of secrets is closed</string>
     <string name="chamber_title">Input Settings string</string>

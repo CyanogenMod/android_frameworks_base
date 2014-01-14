@@ -35,11 +35,17 @@ public class QuietHours extends Activity  {
     @Override
     public void onResume() {
         super.onResume();
-        boolean quietHoursEnabled = Settings.System.getIntForUser(getContentResolver(),
-                Settings.System.QUIET_HOURS_ENABLED, 0,
-                UserHandle.USER_CURRENT_OR_SELF) != 0;
+        int value = getIntent().getIntExtra("value", 2);
+
+        if (value == 2) {
+            value = Settings.System.getIntForUser(
+                    getContentResolver(),
+                    Settings.System.QUIET_HOURS_ENABLED,
+                    0, UserHandle.USER_CURRENT_OR_SELF) == 1 ? 0 : 1;
+        }
+
         Settings.System.putIntForUser(getContentResolver(),
-                Settings.System.QUIET_HOURS_ENABLED, quietHoursEnabled ? 0 : 1,
+                Settings.System.QUIET_HOURS_ENABLED, value,
                 UserHandle.USER_CURRENT_OR_SELF);
         autoSmsIntentBroadcast();
         this.finish();
