@@ -363,9 +363,16 @@ public class MSimNetworkController extends NetworkController {
     private void setCarrierText() {
         String carrierName = mCarrierTextSub[MSimConstants.SUB1]
                   + "    " + mCarrierTextSub[MSimConstants.SUB2];
-        for (int i = 0; i < mSubsLabelViews.size(); i++) {
-            TextView v = mSubsLabelViews.get(i);
-            v.setText(carrierName);
+        if (mContext.getResources().getBoolean(R.bool.config_showDataConnectionView)) {
+            for (int i = 0; i < mSubsLabelViews.size(); i++) {
+                TextView v = mSubsLabelViews.get(i);
+                v.setText(carrierName);
+            }
+        } else {
+            for (int i = 0; i < mMobileLabelViews.size(); i++) {
+                TextView v = mMobileLabelViews.get(i);
+                v.setText(carrierName);
+            }
         }
     }
 
@@ -491,7 +498,9 @@ public class MSimNetworkController extends NetworkController {
         if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
             simState = IccCardConstants.State.ABSENT;
         }
-        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
+        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)
+            || IccCardConstants.INTENT_VALUE_ICC_IMSI.equals(stateExtra)
+            || IccCardConstants.INTENT_VALUE_ICC_LOADED.equals(stateExtra)) {
             simState = IccCardConstants.State.READY;
         }
         else if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
@@ -1156,7 +1165,6 @@ public class MSimNetworkController extends NetworkController {
         }
 
         // mobile label
-        setCarrierText();
         N = mMobileLabelViews.size();
         for (int i=0; i<N; i++) {
             TextView v = mMobileLabelViews.get(i);
@@ -1167,6 +1175,7 @@ public class MSimNetworkController extends NetworkController {
                 v.setVisibility(View.VISIBLE);
             }
         }
+        setCarrierText();
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args, int subscription) {
