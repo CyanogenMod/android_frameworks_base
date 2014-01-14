@@ -2274,6 +2274,9 @@ public final class PowerManagerService extends IPowerManager.Stub
     @Override // Binder call
     public void reboot(boolean confirm, String reason, boolean wait) {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.REBOOT, null);
+        if (PowerManager.REBOOT_RECOVERY.equals(reason)) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.RECOVERY, null);
+        }
 
         final long ident = Binder.clearCallingIdentity();
         try {
@@ -2652,9 +2655,10 @@ public final class PowerManagerService extends IPowerManager.Stub
     }
 
     /**
-     * Low-level function to reboot the device. On success, this function
-     * doesn't return. If more than 5 seconds passes from the time,
-     * a reboot is requested, this method returns.
+     * Low-level function to reboot the device. On success, this
+     * function doesn't return. If more than 20 seconds passes from
+     * the time a reboot is requested (120 seconds for reboot to
+     * recovery), this method returns.
      *
      * @param reason code to pass to the kernel (e.g. "recovery"), or null.
      */
@@ -2662,9 +2666,24 @@ public final class PowerManagerService extends IPowerManager.Stub
         if (reason == null) {
             reason = "";
         }
-        SystemProperties.set("sys.powerctl", "reboot," + reason);
+        long duration;
+        if (reason.equals(PowerManager.REBOOT_RECOVERY)) {
+            // If we are rebooting to go into recovery, instead of
+            // setting sys.powerctl directly we'll start the
+            // pre-recovery service which will do some preparation for
+            // recovery and then reboot for us.
+            //
+            // This preparation can take more than 20 seconds if
+            // there's a very large update package, so lengthen the
+            // timeout.
+            SystemProperties.set("ctl.start", "pre-recovery");
+            duration = 120 * 1000L;
+        } else {
+            SystemProperties.set("sys.powerctl", "reboot," + reason);
+            duration = 20 * 1000L;
+        }
         try {
-            Thread.sleep(20000);
+            Thread.sleep(duration);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
