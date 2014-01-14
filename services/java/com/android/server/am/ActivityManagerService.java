@@ -1359,7 +1359,10 @@ public final class ActivityManagerService extends ActivityManagerNative
                     String text = mContext.getString(R.string.heavy_weight_notification,
                             context.getApplicationInfo().loadLabel(context.getPackageManager()));
                     Notification notification = new Notification();
-                    notification.icon = com.android.internal.R.drawable.stat_sys_adb; //context.getApplicationInfo().icon;
+                    //context.getApplicationInfo().icon;
+                    notification.icon = ((SystemProperties.getInt("ro.nameless.secret", 0) == 1) ?
+                            com.android.internal.R.drawable.stat_sys_adb_egg :
+                            com.android.internal.R.drawable.stat_sys_adb);
                     notification.when = 0;
                     notification.flags = Notification.FLAG_ONGOING_EVENT;
                     notification.tickerText = text;

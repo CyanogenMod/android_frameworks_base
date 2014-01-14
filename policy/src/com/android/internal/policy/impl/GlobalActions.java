@@ -441,8 +441,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         boolean showBugReport = (Settings.Global.getInt(cr,
                 Settings.Global.BUGREPORT_IN_POWER_MENU, 0) != 0 && isCurrentUserOwner());
         if (showBugReport) {
+            final int adbIcon = ((SystemProperties.getInt("ro.nameless.secret", 0) == 1) ?
+                    com.android.internal.R.drawable.stat_sys_adb_egg :
+                    com.android.internal.R.drawable.stat_sys_adb);
             mItems.add(
-                new SinglePressAction(com.android.internal.R.drawable.stat_sys_adb,
+                new SinglePressAction(adbIcon,
                         R.string.global_action_bug_report) {
 
                     public void onPress() {
