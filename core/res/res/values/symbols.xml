@@ -1809,4 +1809,5 @@
 
   <!-- sim refresh for dual mode card -->
   <java-symbol type="bool" name="config_sim_refresh_for_dual_mode_card" />
+  <java-symbol type="bool" name="config_global_phone_enabled" />
 </resources>
