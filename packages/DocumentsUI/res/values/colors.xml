@@ -18,4 +18,8 @@
     <color name="chip">#ddd</color>
     <color name="item_root_pressed">#33cccccc</color>
     <color name="item_root_focused">#66cccccc</color>
+    <color name="drawer_background">#fff</color>
+    <color name="title_background">#ccc</color>
+    <color name="save_background">#ddd</color>
+    <color name="grid_item_background">#fff</color>
 </resources>
