@@ -141,8 +141,7 @@ public class KeyguardWidgetFrame extends FrameLayout {
         boolean disabledByDpm =
                 (disabledFeatures & DevicePolicyManager.KEYGUARD_DISABLE_WIDGETS_ALL) != 0;
         boolean disabledByUser = !lockPatternUtils.getWidgetsEnabled();
-        boolean disabledByLowRamDevice = ActivityManager.isLowRamDeviceStatic();
-        return disabledByLowRamDevice || disabledByDpm || disabledByUser;
+        return disabledByDpm || disabledByUser;
     }
 
     private int getDisabledFeatures(DevicePolicyManager dpm, LockPatternUtils lockPatternUtils) {
