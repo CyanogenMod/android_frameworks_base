@@ -1264,6 +1264,11 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             }
         }
 
+        // Cleanup the double quotes
+        if (wifiLabel.length() > 0) {
+            wifiLabel = wifiLabel.replaceAll("^\"|\"$", "");
+        }
+
         final String customLabel = Settings.System.getString(mContext.getContentResolver(),
                 Settings.System.NOTIFICATION_CUSTOM_CARRIER_LABEL);
         if (customLabel != null && customLabel.length() > 0) {
