@@ -1405,4 +1405,6 @@
 
     <!-- Configuration to sending and receiving Mms when mobile data is disable.-->
     <bool name="config_setup_mms_data">false</bool>
+    <!-- Configuration to play sms ringtone during MO/MT call -->
+    <bool name="config_sms_ringtone_incall">false</bool>
 </resources>
