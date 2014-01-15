@@ -663,7 +663,7 @@ public class SpellChecker implements SpellCheckerSessionListener {
                         addSpellCheckSpan(editable, spellCheckStart, spellCheckEnd);
                     }
                 } while (false);
-                wordStart = spellCheckEnd;
+                wordStart = Math.min(end, spellCheckEnd);
             } else {
                 while (wordStart <= end) {
                     if (wordEnd >= start && wordEnd > wordStart) {
