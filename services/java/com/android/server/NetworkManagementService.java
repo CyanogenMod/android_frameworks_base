@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- * Copyright (c) 2010-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2010-2014, The Linux Foundation. All rights reserved.
  *
  * Not a Contribution. Apache license notifications and license are
  * retained for attribution purposes only.
@@ -1940,7 +1940,9 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         cmd.appendArg(iface);
         cmd.appendArg(metric);
 
-        if (route.isHostRoute()) {
+        // If route is not default then
+        // implicitly treat it as a host route
+        if (!route.isDefaultRoute()) {
             cmd.appendArg(route.getDestination().getAddress().getHostAddress());
         }
 
