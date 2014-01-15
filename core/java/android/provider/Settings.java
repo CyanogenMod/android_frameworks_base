@@ -3555,14 +3555,6 @@ public final class Settings {
          */
         public static final String UI_FORCE_OVERFLOW_BUTTON = "ui_force_overflow_button";
 
-    	/**
-         * use Alt Activity Resolver Grid
-         * boolean
-         *
-         * @hide
-         */
-        public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt"; 
-
         /**
          * Automatic keyboard rotation timeout.  0 to disable completely.
          * @hide
