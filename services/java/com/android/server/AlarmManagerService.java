@@ -74,6 +74,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
     // warning message.  The time duration is in milliseconds.
     private static final long LATE_ALARM_THRESHOLD = 10 * 1000;
 
+    // The threshold for the power off alarm time can be set. The time
+    // duration is in milliseconds.
+    private static final long POWER_OFF_ALARM_THRESHOLD = 120 * 1000;
+
     private static final int RTC_WAKEUP_MASK = 1 << RTC_WAKEUP;
     private static final int RTC_MASK = 1 << RTC;
     private static final int ELAPSED_REALTIME_WAKEUP_MASK = 1 << ELAPSED_REALTIME_WAKEUP; 
@@ -721,7 +725,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
         final int N = mAlarmBatches.size();
         for (int i = 0; i < N; i++) {
             Batch b = mAlarmBatches.get(i);
-            if (b.isRtcPowerOffWakeup()) {
+            long intervalTime  = b.start - SystemClock.elapsedRealtime();
+            if (b.isRtcPowerOffWakeup() && intervalTime > POWER_OFF_ALARM_THRESHOLD) {
                 return b;
             }
         }
