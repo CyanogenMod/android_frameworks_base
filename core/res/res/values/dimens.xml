@@ -348,6 +348,9 @@
     security mode. -->
     <dimen name="kg_small_widget_height">160dp</dimen>
 
+    <!-- Bottom padding of num pad key on keyguard -->
+    <dimen name="kg_num_pad_key_padding_bottom">10dp</dimen>
+
     <!-- Left padding of num pad key on keyguard -->
     <dimen name="kg_num_pad_key_padding_left">10dp</dimen>
 
