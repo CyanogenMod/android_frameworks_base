@@ -28,8 +28,8 @@
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#ffffff</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">@dimen/kg_num_pad_key_padding_top</item>
+        <item name="android:paddingBottom">@dimen/kg_num_pad_key_padding_bottom</item>
         <item name="android:paddingLeft">@dimen/kg_num_pad_key_padding_left</item>
         <item name="android:paddingRight">6dp</item>
     </style>
