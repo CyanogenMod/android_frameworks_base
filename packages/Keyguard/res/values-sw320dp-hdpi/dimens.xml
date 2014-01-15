@@ -23,4 +23,10 @@
 
     <!-- Height of the sliding KeyguardSecurityContainer with hidden widget (includes 2x keyguard_security_view_margin) -->
     <dimen name="keyguard_security_no_widget_height">450dp</dimen>
+
+    <!-- Top padding of num pad key on keyguard -->
+    <dimen name="kg_num_pad_key_padding_top">6dp</dimen>
+
+    <!-- Bottom padding of num pad key on keyguard -->
+    <dimen name="kg_num_pad_key_padding_bottom">8dp</dimen>
 </resources>
