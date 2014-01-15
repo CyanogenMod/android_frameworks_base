@@ -30,6 +30,16 @@ public class TorchConstants {
     public static final String ACTION_TOGGLE_STATE = APP_PACKAGE_NAME + ".TOGGLE_FLASHLIGHT";
 
     /**
+     * Intent broadcast action for turning the torch off
+     */
+    public static final String ACTION_OFF = APP_PACKAGE_NAME + ".FLASHLIGHT_OFF";
+
+    /**
+     * Intent broadcast action for turning the torch on
+     */
+    public static final String ACTION_ON = APP_PACKAGE_NAME + ".FLASHLIGHT_ON";
+
+    /**
      * Extra for {@link ACTION_TOGGLE_STATE}:
      * When toggling to on, use the bright brightness setting
      * Type: boolean

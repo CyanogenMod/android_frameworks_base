@@ -2849,6 +2849,12 @@ public final class Settings {
                 "lockscreen_use_widget_container_carousel";
 
         /**
+         * Whether double-tap and hold on the lock glowpad starts the torch
+         * @hide
+         */
+        public static final String LOCKSCREEN_GLOWPAD_TORCH = "lockscreen_glowpad_torch";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
          * instead
          * @hide
