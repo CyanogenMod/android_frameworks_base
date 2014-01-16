@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="app_ops_labels">
+        <item>Bando pasiekti vietovę</item>
+        <item>Bando pasiekti vietovę</item>
+        <item>Bando pasiekti vietovę</item>
+        <item>Bando naudotis vibracija</item>
+        <item>Bando skaityti kontaktus</item>
+        <item>Bando keisti kontaktus</item>
+        <item>Bando skaityti skambučių žurnalą</item>
+        <item>Bando keisti skambučių žurnalą</item>
+        <item>Bando skaityti kalendorių</item>
+        <item>Bando keisti kalendorių</item>
+        <item>Bando pasiekti vietovę</item>
+        <item>Bando rašyti pranešimą</item>
+        <item>Bando pasiekti vietovę</item>
+        <item>Bando skambinti telefonu</item>
+        <item>Bando skaityti SMS/MMS</item>
+        <item>Bando rašyti/keisti SMS/MMS</item>
+        <item>Bando gauti SMS/MMS</item>
+        <item>Bando gauti SMS/MMS</item>
+        <item>Bando gauti SMS/MMS</item>
+        <item>Bando gauti SMS/MMS</item>
+        <item>Bando siųsti SMS/MMS</item>
+        <item>Bando skaityti SMS/MMS</item>
+        <item>Bando rašyti/keisti SMS/MMS</item>
+        <item>Bando keisti nustatymus</item>
+        <item>Bando piešti viršuje</item>
+        <item>Bando pasiekti pranešimus</item>
+        <item>Bando pasiekti kamera</item>
+        <item>Bando įrašyti garso įrašą</item>
+        <item>Bando groti garso įrašą</item>
+        <item>Bando skaityti iškarpinę</item>
+        <item>Bando keisti iškarpinę</item>
+        <item>Bando įjungti/išjungti Wifi</item>
+        <item>Bando įjungti/išjungti bluetooth</item>
+        <item>Bando įjungti/išjungti mobiliuosius duomenis</item>
+        <item>Bando planuoti kada įrenginys pabus</item>
+    </string-array>
+</resources>

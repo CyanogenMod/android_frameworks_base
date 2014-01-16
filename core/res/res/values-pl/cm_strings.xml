@@ -71,4 +71,24 @@
     <string name="policydesc_enforceSelinux">Przełącza między wymuszaniem polityki SELinux a trybem pobłażliwym.</string>
     <string name="policylab_enforceMmac">Wymuś MMAC</string>
     <string name="policydesc_enforceMmac">Przełącza między wymuszaniem polityki MMAC a trybem pobłażliwym.</string>
+    <string name="perf_profile_pwrsv">Oszczędzanie energii</string>
+    <string name="perf_profile_bal">Zrównoważony</string>
+    <string name="perf_profile_perf">Wydajność</string>
+    <string name="stk_cc_ussd_to_dial">Żądanie USSD jest modyfikowane na żądanie DIAL.</string>
+    <string name="stk_cc_ussd_to_ss">Żądanie USSD jest modyfikowane na żądanie SS.</string>
+    <string name="stk_cc_ussd_to_ussd">Żądanie USSD jest modyfikowane na nowe żądanie USSD.</string>
+    <string name="stk_cc_ss_to_dial">Żądanie SS jest modyfikowane na żądanie DIAL.</string>
+    <string name="stk_cc_ss_to_ussd">Żądanie SS jest modyfikowane na żądanie USSD.</string>
+    <string name="stk_cc_ss_to_ss">Żądanie SS jest modyfikowane na nowe żądanie SS.</string>
+    <string name="msim_kg_sim_pin_msg_format">USŁUGA:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
+    <string name="lockscreen_sim_error_message_short">Niepoprawna karta.</string>
+    <string name="lockscreen_sim_error_message">Niepoprawna karta SIM.</string>
+    <string name="lockscreen_perso_locked_message">Karta SIM/RUIM jest zablokowana</string>
+    <string name="pinpuk_attempts">\nPozostałe próby:</string>
+    <string name="keyguard_password_wrong_puk_code">Niepoprawny kod PUK!</string>
+    <string name="keyguard_password_pin_failed">Operacja PIN nie powiodła się!</string>
+    <string name="keyguard_password_puk_failed">Operacja PUK nie powiodła się!</string>
+    <string name="keyguard_pin_accepted">Kod zaakceptowany!</string>
+    <string name="enablePin">Niepowodzenie. Włącz blokadę SIM/RUIM.</string>
 </resources>
