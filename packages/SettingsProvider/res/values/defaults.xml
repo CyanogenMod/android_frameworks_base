@@ -173,6 +173,9 @@
     <!-- Default for Settings.Secure.USER_SETUP_COMPLETE -->
     <bool name="def_user_setup_complete">false</bool>
 
+    <!-- Default for Settings.Global.WIFI_SUSPEND_OPTIMIZATIONS_ENABLED -->
+    <integer name="def_wifi_suspend_optimizations_enabled">1</integer>
+
     <!-- Default for Settings.Global.LOW_BATTERY_SOUND_TIMEOUT.
          0 means no timeout; battery sounds will always play
          >0 is milliseconds of screen-off time after which battery sounds will not play -->
