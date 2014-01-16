@@ -357,7 +357,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     }
 
                     public boolean showDuringKeyguard() {
-                        return false;
+                        return true;
                     }
 
                     public boolean showBeforeProvisioning() {
