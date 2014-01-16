@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1482,7 +1482,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
 
         public QuickBootReceiver() {
             IntentFilter filter = new IntentFilter();
-            filter.addAction("intent.quickboot.appkilled");
+            filter.addAction("org.codeaurora.quickboot.appkilled");
             mContext.registerReceiver(this, filter,
                     "android.permission.DEVICE_POWER", null);
         }
@@ -1491,7 +1491,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 String pkgList[] = null;
-                if ("intent.quickboot.appkilled".equals(action)) {
+                if ("org.codeaurora.quickboot.appkilled".equals(action)) {
                     pkgList = intent.getStringArrayExtra(Intent.EXTRA_PACKAGES);
                     if (pkgList != null && (pkgList.length > 0)) {
                         for (String pkg : pkgList) {

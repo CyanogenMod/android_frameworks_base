@@ -1273,6 +1273,16 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 on ? 1 : 0, UserHandle.USER_CURRENT);
     }
 
+    private void startQuickBoot() {
+
+        Intent intent = new Intent("org.codeaurora.action.QUICKBOOT");
+        intent.putExtra("mode", 0);
+        try {
+            mContext.startActivityAsUser(intent,UserHandle.CURRENT);
+        } catch (ActivityNotFoundException e) {
+        }
+    }
+
     private static final class GlobalActionsDialog extends Dialog implements DialogInterface {
         private final Context mContext;
         private final int mWindowTouchSlop;
