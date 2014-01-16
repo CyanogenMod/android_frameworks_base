@@ -56,6 +56,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_REBOOT;
 import static com.android.internal.util.slim.QSConstants.TILE_FCHARGE;
 import static com.android.internal.util.slim.QSConstants.TILE_PROFILE;
 import static com.android.internal.util.slim.QSConstants.TILE_CAMERA;
+import static com.android.internal.util.slim.QSConstants.TILE_INTERNALMEMORY;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -84,8 +85,9 @@ import com.android.systemui.quicksettings.BugReportTile;
 import com.android.systemui.quicksettings.ContactTile;
 import com.android.systemui.quicksettings.CustomTile;
 import com.android.systemui.quicksettings.ExpandedDesktopTile;
-import com.android.systemui.quicksettings.LocationTile;
 import com.android.systemui.quicksettings.InputMethodTile;
+import com.android.systemui.quicksettings.InternalMemory;
+import com.android.systemui.quicksettings.LocationTile;
 import com.android.systemui.quicksettings.LteTile;
 import com.android.systemui.quicksettings.MobileNetworkTile;
 import com.android.systemui.quicksettings.MobileNetworkTypeTile;
@@ -264,6 +266,8 @@ public class QuickSettingsController {
                 qs = new QuickRecordTile(mContext, this);
             } else if (tile.equals(TILE_FCHARGE)) {
                 qs = new FChargeTile(mContext, this);
+            } else if (tile.equals(TILE_INTERNALMEMORY)) {
+                qs = new InternalMemory(mContext, this);
             } else if (tile.equals(TILE_PROFILE)) {
                 mTileStatusUris.add(Settings.System.getUriFor(Settings.System.SYSTEM_PROFILES_ENABLED));
                 if (DeviceUtils.systemProfilesEnabled(resolver)) {
