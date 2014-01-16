@@ -682,6 +682,7 @@ static void android_hardware_Camera_setPreviewDisplay(JNIEnv *env, jobject thiz,
         surface = android_view_Surface_getSurface(env, jSurface);
         if (surface != NULL) {
             gbp = surface->getIGraphicBufferProducer();
+            env->NewGlobalRef(jSurface);
         }
     }
 
@@ -703,6 +704,7 @@ static void android_hardware_Camera_setPreviewTexture(JNIEnv *env,
             SurfaceTexture_getSurfaceTexture(env, jSurfaceTexture);
         if (surfaceTexture != NULL) {
             bufferQueue = surfaceTexture->getBufferQueue();
+            env->NewGlobalRef(jSurfaceTexture);
         }
         else {
             jniThrowException(env, "java/lang/IllegalArgumentException",
