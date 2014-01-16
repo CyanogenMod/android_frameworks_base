@@ -50,9 +50,6 @@ interface ITelephony {
      */
     void toggleLTE();
 
-    int getPreferredNetworkMode();
-    int getLteState();
-
     /**
      * If there is currently a call in progress, show the call screen.
      * The DTMF dialpad may or may not be visible initially, depending on

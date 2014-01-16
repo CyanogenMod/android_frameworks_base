@@ -491,22 +491,6 @@ public class TelephonyManager {
     private static final String sLteOnCdmaProductType =
         SystemProperties.get(TelephonyProperties.PROPERTY_LTE_ON_CDMA_PRODUCT_TYPE, "");
 
-    public int getPreferredNetworkMode() {
-        try {
-            return getITelephony().getPreferredNetworkMode();
-        } catch (RemoteException ex) {
-            return -1;
-        }
-    }
-
-    public int getLteState() {
-	try {
-	    return getITelephony().getLteState();
-        } catch (RemoteException ex) {
-            return -1;
-        }
-    }
-
     /**
      * Return if the current radio is LTE on CDMA. This
      * is a tri-state return value as for a period of time
