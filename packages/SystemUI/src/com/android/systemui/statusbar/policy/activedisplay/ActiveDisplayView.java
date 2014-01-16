@@ -19,6 +19,8 @@ import android.animation.ObjectAnimator;
 import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
 import android.app.INotificationManager;
+import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
@@ -77,7 +79,6 @@ import com.android.internal.widget.LockPatternUtils;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
-import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -149,6 +150,8 @@ public class ActiveDisplayView extends FrameLayout {
     private int mIconPadding;
     private long mPocketTime = 0;
     private LinearLayout.LayoutParams mOverflowLayoutParams;
+    private KeyguardManager mKeyguardManager;
+    private KeyguardLock mKeyguardLock;
     private boolean mCallbacksRegistered = false;
 
     // user customizable settings
@@ -188,7 +191,7 @@ public class ActiveDisplayView extends FrameLayout {
                     mNotification = getNextAvailableNotification();
                     if (mNotification != null) {
                         setActiveNotification(mNotification, true);
-                        isUserActivity();
+                        userActivity();
                         return;
                     }
                 } else {
@@ -403,6 +406,8 @@ public class ActiveDisplayView extends FrameLayout {
         mIconMargin = getResources().getDimensionPixelSize(R.dimen.ad_notification_margin);
         mIconPadding = getResources().getDimensionPixelSize(R.dimen.overflow_icon_padding);
 
+        mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+
         mSettingsObserver = new SettingsObserver(new Handler());
         mCreationOrientation = Resources.getSystem().getConfiguration().orientation;
         mInvertedPaint = makeInvertedPaint();
@@ -577,22 +582,15 @@ public class ActiveDisplayView extends FrameLayout {
             if (contentIntent != null) {
                 try {
                     contentIntent.send();
+                    mNM.cancelNotificationFromSystemListener(mNotificationListener,
+                            mNotification.getPackageName(), mNotification.getTag(),
+                            mNotification.getId());
+                } catch (RemoteException re) {
                 } catch (CanceledException ce) {
-                }
-                KeyguardTouchDelegate.getInstance(mContext).dismiss();
-            }
-            if (mNotification.isClearable()) {
-                try {
-                     mNM.cancelNotificationFromSystemListener(mNotificationListener,
-                             mNotification.getPackageName(), mNotification.getTag(),
-                             mNotification.getId());
-                } catch (RemoteException e) {
-                } catch (NullPointerException npe) {
                 }
             }
             mNotification = null;
         }
-        handleForceHideNotificationView();
     }
 
     private void showNotificationView() {
@@ -624,90 +622,69 @@ public class ActiveDisplayView extends FrameLayout {
         mHandler.sendEmptyMessage(MSG_DISMISS_NOTIFICATION);
     }
 
+    private final Runnable runSystemUiVis = new Runnable() {
+        public void run() {
+            mBar.disable(0xffffffff);
+        }
+    };
+
     private void sendUnlockBroadcast() {
         Intent u = new Intent();
         u.setAction("com.android.lockscreen.ACTION_UNLOCK_RECEIVER");
         mContext.sendBroadcastAsUser(u, UserHandle.ALL);
     }
 
-    private final Runnable runSystemUiVisibilty = new Runnable() {
-        public void run() {
-            adjustStatusBarLocked(1);
+    private void disabledKeyguard() {
+        if (mKeyguardLock == null) {
+            mKeyguardLock = mKeyguardManager.newKeyguardLock("active_display");
+            mKeyguardLock.disableKeyguard();
         }
-    };
-
-    private void adjustStatusBarLocked(int show) {
-        int flags = 0x00000000;
-        if (show == 1) {
-            flags = getSystemUiVisibility() | STATUS_BAR_DISABLE_BACK
-                    | STATUS_BAR_DISABLE_HOME | STATUS_BAR_DISABLE_RECENT
-                    | STATUS_BAR_DISABLE_SEARCH | STATUS_BAR_DISABLE_CLOCK;
-        } else if (show == 2) {
-            flags = getSystemUiVisibility() | STATUS_BAR_DISABLE_BACK
-                    | STATUS_BAR_DISABLE_HOME | STATUS_BAR_DISABLE_RECENT
-                    | STATUS_BAR_DISABLE_CLOCK;
-        }
-        mBar.disable(flags);
     }
 
-    private void setSystemUIVisibility(boolean visible) {
-        int newVis = SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        if (!visible) {
-            newVis |= SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                   | SYSTEM_UI_FLAG_FULLSCREEN
-                   | SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+    private void enabledKeyguard() {
+        if (mKeyguardLock != null) {
+            mKeyguardLock.reenableKeyguard();
+            mKeyguardLock = null;
         }
-
-        // Set the new desired visibility.
-        setSystemUiVisibility(newVis);
     }
 
     private void unlockKeyguardActivity() {
-        try {
-             // The intent we are sending is for the application, which
-             // won't have permission to immediately start an activity after
-             // the user switches to home.  We know it is safe to do at this
-             // point, so make sure new activity switches are now allowed.
-             ActivityManagerNative.getDefault().resumeAppSwitches();
-             // Also, notifications can be launched from the lock screen,
-             // so dismiss the lock screen when the activity starts.
-             ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-        } catch (RemoteException e) {
+        if (!mKeyguardManager.isKeyguardSecure()) {
+            sendUnlockBroadcast();
+            try {
+                 // Dismiss the lock screen when Settings starts.
+                 ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+            } catch (RemoteException e) {
+            }
         }
-        handleForceHideNotificationView();
+    }
+
+    private static void setSystemUIVisibility(View v, int visibility) {
+        v.setSystemUiVisibility(visibility);
     }
 
     private void handleShowNotificationView() {
+        disabledKeyguard();
+        int activeDisplayVis = View.SYSTEM_UI_FLAG_LOW_PROFILE
+                             | View.SYSTEM_UI_FLAG_FULLSCREEN
+                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        setSystemUIVisibility(ActiveDisplayView.this, activeDisplayVis);
         setVisibility(View.VISIBLE);
-        setSystemUIVisibility(false);
-        mHandler.postDelayed(runSystemUiVisibilty, 100);
+        mHandler.removeCallbacks(runSystemUiVis);
+        mHandler.postDelayed(runSystemUiVis, 100);
         registerSensorListener(mLightSensor);
     }
 
     private void handleHideNotificationView() {
-        mHandler.removeCallbacks(runSystemUiVisibilty);
-        setVisibility(View.GONE);
-        restoreBrightness();
-        mWakedByPocketMode = false;
-        cancelTimeoutTimer();
-        if (isLockScreenDisabled()) {
-            adjustStatusBarLocked(0);
-        } else {
-            adjustStatusBarLocked(2);
-        }
-        unregisterSensorListener(mLightSensor);
-    }
-
-    private void handleForceHideNotificationView() {
-        mHandler.removeCallbacks(runSystemUiVisibilty);
+        mHandler.removeCallbacks(runSystemUiVis);
+        enabledKeyguard();
         setVisibility(View.GONE);
         restoreBrightness();
         mBar.disable(0);
         mWakedByPocketMode = false;
         cancelTimeoutTimer();
-        adjustStatusBarLocked(0);
+        mBar.disable(0);
         unregisterSensorListener(mLightSensor);
     }
 
@@ -738,7 +715,7 @@ public class ActiveDisplayView extends FrameLayout {
                 setActiveNotification(mNotification, true);
                 invalidate();
                 mGlowPadView.ping();
-                isUserActivity();
+                userActivity();
                 return;
             }
         }
@@ -856,7 +833,7 @@ public class ActiveDisplayView extends FrameLayout {
                 mBrightnessMode);
     }
 
-    private void isUserActivity() {
+    private void userActivity() {
         restoreBrightness();
         updateTimeoutTimer();
     }
@@ -1025,7 +1002,7 @@ public class ActiveDisplayView extends FrameLayout {
                     inflateRemoteView(mNotification);
                     break;
             }
-            isUserActivity();
+            userActivity();
             return true;
         }
     };
