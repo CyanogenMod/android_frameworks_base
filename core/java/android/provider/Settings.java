@@ -4921,6 +4921,20 @@ public final class Settings {
         public static final String TELO_RADIO_HIGH_POWER = "telo_radio_high_power";
 
         /**
+         * Should Dialer suggest nearby phone numbers
+         *
+         * @hide
+         */
+        public static final String ENABLE_DIALER_SUGGESTIONS = "enable_dialer_suggestions";
+
+        /**
+         * Should Dialer reverse look up names for unknown phone numbers
+         *
+         * @hide
+         */
+        public static final String ENABLE_DIALER_REVERSE_LOOKUP = "enable_dialer_reverse_lookup";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5262,7 +5276,7 @@ public final class Settings {
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
 
-	/**
+    	/**
          * @hide
          */
         public static final String STATUS_BAR_BRIGHTNESS_SLIDER = "statusbar_brightness_slider";
