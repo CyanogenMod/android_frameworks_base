@@ -274,9 +274,7 @@ public class NotificationViewManager {
     }
 
     private void wakeDevice() {
-        if (mTimeCovered == 0) {
-            mPowerManager.wakeUp(SystemClock.uptimeMillis());
-        }
+        mPowerManager.wakeUp(SystemClock.uptimeMillis());
     }
 
     public void onScreenTurnedOff() {
