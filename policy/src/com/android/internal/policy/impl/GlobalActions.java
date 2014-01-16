@@ -944,7 +944,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private void startQuickBoot() {
 
-        Intent intent = new Intent("qualcomm.intent.action.QUICKBOOT");
+        Intent intent = new Intent("org.codeaurora.action.QUICKBOOT");
         intent.putExtra("mode", 0);
         try {
             mContext.startActivityAsUser(intent,UserHandle.CURRENT);
