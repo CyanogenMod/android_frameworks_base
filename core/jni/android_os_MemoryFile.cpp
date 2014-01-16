@@ -47,15 +47,16 @@ static jint android_os_MemoryFile_mmap(JNIEnv* env, jobject clazz, jobject fileD
         jint length, jint prot)
 {
     int fd = jniGetFDFromFileDescriptor(env, fileDescriptor);
-    jint result = (jint)mmap(NULL, length, prot, MAP_SHARED, fd, 0);
-    if (!result)
+    void* result = mmap(NULL, length, prot, MAP_SHARED, fd, 0);
+    if (result == MAP_FAILED) {
         jniThrowException(env, "java/io/IOException", "mmap failed");
-    return result;
+    }
+    return reinterpret_cast<jlong>(result);
 }
 
 static void android_os_MemoryFile_munmap(JNIEnv* env, jobject clazz, jint addr, jint length)
 {
-    int result = munmap((void *)addr, length);
+    int result = munmap(reinterpret_cast<void *>(addr), length);
     if (result < 0)
         jniThrowException(env, "java/io/IOException", "munmap failed");
 }
