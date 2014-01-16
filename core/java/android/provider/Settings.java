@@ -3890,12 +3890,6 @@ public final class Settings {
         public static final String CAMERA_UNLOCK_SCREEN = "camera_unlock_screen";
 
         /**
-         * Whether the lockscreen vibrate should be enabled.
-         * @hide
-         */
-        public static final String LOCKSCREEN_VIBRATE_ENABLED = "lockscreen.vibrate_enabled";
-
-        /**
          * Enable statusbar double tap gesture on to put device to sleep
          * @hide
          */
@@ -4053,7 +4047,6 @@ public final class Settings {
             POWER_MENU_AIRPLANE_ENABLED,
             POWER_MENU_SOUND_ENABLED,
             POWER_MENU_USER_ENABLED,
-            LOCKSCREEN_VIBRATE_ENABLED,
             LOCKSCREEN_BATTERY_VISIBILITY,
             PHONE_BLACKLIST_ENABLED,
             PHONE_BLACKLIST_NOTIFY_ENABLED,
