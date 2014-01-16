@@ -181,6 +181,9 @@
     <!-- Default for Settings.Global.WIFI_SCAN_ALWAYS_AVAILABLE -->
     <integer name="def_wifi_scan_always_available">0</integer>
 
+    <!-- Default for Settings.Global.WIFI_SUSPEND_OPTIMIZATIONS_ENABLED -->
+    <integer name="def_wifi_suspend_optimizations_enabled">1</integer>
+
     <!-- Default for Settings.System.STATUS_BAR_BATTERY -->
     <integer name="def_battery_style">0</integer>
     <!-- Default for Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT -->
