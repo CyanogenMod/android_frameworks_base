@@ -5557,6 +5557,12 @@ public final class Settings {
         public static final String PROGRESSBAR_COLOR_4 = "progressbar_color_4";
 
         /**
+         * OverScroll Glow Color
+         * @hide
+         */
+        public static final String OVERSCROLL_GLOW_COLOR = "overscroll_glow_color";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *

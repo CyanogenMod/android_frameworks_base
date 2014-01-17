@@ -20,9 +20,15 @@ import android.graphics.Rect;
 import com.android.internal.R;
 
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff.Mode;
+import android.os.Handler;
+import android.provider.Settings;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -138,6 +144,11 @@ public class EdgeEffect {
         final Resources res = context.getResources();
         mEdge = res.getDrawable(R.drawable.overscroll_edge);
         mGlow = res.getDrawable(R.drawable.overscroll_glow);
+
+        ContentResolver resolver = context.getContentResolver();
+        int mOverscrollGlowColor = Settings.System.getInt(resolver, Settings.System.OVERSCROLL_GLOW_COLOR, -2);
+        mGlow.setColorFilter(mOverscrollGlowColor, Mode.MULTIPLY);
+        mEdge.setColorFilter(mOverscrollGlowColor, Mode.MULTIPLY);
 
         mEdgeHeight = mEdge.getIntrinsicHeight();
         mGlowHeight = mGlow.getIntrinsicHeight();
