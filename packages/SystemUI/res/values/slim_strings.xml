@@ -116,6 +116,7 @@
     <string name="quick_settings_quick_record_play">Playing...</string>
     <string name="quick_settings_custom_toggle">Custom</string>
     <string name="quick_settings_contact_toggle">Contact</string>
+    <string name="quick_settings_fcharge">Fast charge</string>
 
     <!-- Label in drop down to identify brightness slider -->
     <string name="brightness_label">Brightness</string>

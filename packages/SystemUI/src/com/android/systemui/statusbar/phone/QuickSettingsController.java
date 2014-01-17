@@ -54,6 +54,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_VOLUME;
 import static com.android.internal.util.slim.QSConstants.TILE_WIFI;
 import static com.android.internal.util.slim.QSConstants.TILE_WIFIAP;
 import static com.android.internal.util.slim.QSConstants.TILE_REBOOT;
+import static com.android.internal.util.slim.QSConstants.TILE_FCHARGE;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -107,6 +108,7 @@ import com.android.systemui.quicksettings.VolumeTile;
 import com.android.systemui.quicksettings.WiFiTile;
 import com.android.systemui.quicksettings.WifiAPTile;
 import com.android.systemui.quicksettings.RebootTile;
+import com.android.systemui.quicksettings.FChargeTile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -255,6 +257,8 @@ public class QuickSettingsController {
                 qs = new ThemeTile(mContext, this);
             } else if (tile.equals(TILE_QUICKRECORD)) {
                 qs = new QuickRecordTile(mContext, this);
+            } else if (tile.equals(TILE_FCHARGE)) {
+                qs = new FChargeTile(mContext, this);
             } else if (tile.contains(TILE_CUSTOM)) {
                 qs = new CustomTile(mContext, this, findCustomKey(tile));
             } else if (tile.contains(TILE_CONTACT)) {
