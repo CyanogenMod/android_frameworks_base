@@ -77,6 +77,8 @@
     <string name="advanced_dev_option_wipe_app">Anwendungsdaten löschen</string>
     <string name="advanced_dev_option_force_stop">Beenden erzwingen</string>
     <string name="accessibility_dock_battery_level">Dock-Akku <xliff:g id="number">%d</xliff:g> Prozent</string>
+    <string name="screenshot_delete_action">Löschen</string>
+    <string name="screenshot_delete_confirmation">Bildschirmfoto wurde gelöscht</string>
 
     <!-- Untranslated AOSP strings -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>
