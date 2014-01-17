@@ -785,6 +785,9 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
     private BroadcastReceiver mShutdownReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            boolean fromQuickBoot = intent.getBooleanExtra("from_quickboot", false);
+            if (fromQuickBoot) return;
+
             // SHUTDOWN is protected broadcast.
             synchronized (mStatsLock) {
                 shutdownLocked();
