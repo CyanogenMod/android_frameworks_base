@@ -133,7 +133,6 @@ final class DisplayMagnifier {
             Slog.i(LOG_TAG, "Rotaton: " + Surface.rotationToString(rotation)
                     + " displayId: " + displayContent.getDisplayId());
         }
-        mMagnifedViewport.onRotationChangedLocked();
         mHandler.sendEmptyMessage(MyHandler.MESSAGE_NOTIFY_ROTATION_CHANGED);
     }
 
@@ -736,6 +735,8 @@ final class DisplayMagnifier {
                 } break;
                 case MESSAGE_NOTIFY_ROTATION_CHANGED: {
                     final int rotation = message.arg1;
+
+                    mMagnifedViewport.onRotationChangedLocked();
                     try {
                         mCallbacks.onRotationChanged(rotation);
                     } catch (RemoteException re) {

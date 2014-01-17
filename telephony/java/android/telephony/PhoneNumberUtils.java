@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.SystemProperties;
 import android.provider.Contacts;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -39,6 +40,7 @@ import android.telephony.Rlog;
 import android.util.SparseIntArray;
 
 import static com.android.internal.telephony.MSimConstants.SUBSCRIPTION_KEY;
+import static com.android.internal.telephony.PhoneConstants.IP_CALL;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_IDP_STRING;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY;
@@ -80,6 +82,11 @@ public class PhoneNumberUtils
 
     static final String LOG_TAG = "PhoneNumberUtils";
     private static final boolean DBG = false;
+
+    /**
+     * Used for multi Sim IP Call Prefix Setting.
+     */
+    private static final String IP_CALL_PREFIX = "ip_call_prefix_sub";
 
     /*
      * global-phone-number = ["+"] 1*( DIGIT / written-sep )
@@ -143,6 +150,20 @@ public class PhoneNumberUtils
         return !isDialable(ch) && !(('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z'));
     }
 
+    private static String checkAndAppendPrefix(Intent intent, int subscription, String number,
+            Context context) {
+        boolean isIPPrefix = intent.getBooleanExtra(IP_CALL, false);
+        if (isIPPrefix && number != null
+                && subscription < MSimTelephonyManager.getDefault().getPhoneCount()) {
+            String IPPrefix = Settings.System.getString(context.getContentResolver(),
+                    IP_CALL_PREFIX + (subscription + 1));
+            if (!TextUtils.isEmpty(IPPrefix)) {
+                return IPPrefix + number;
+            }
+        }
+        return number;
+    }
+
     /** Extracts the phone number from an Intent.
      *
      * @param intent the intent to get the number of
@@ -161,17 +182,21 @@ public class PhoneNumberUtils
         }
 
         String scheme = uri.getScheme();
+        int subscription = 0;
+
+        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+            subscription = intent.getIntExtra(SUBSCRIPTION_KEY,
+                    MSimTelephonyManager.getDefault().getPreferredVoiceSubscription());
+        }
 
         if (scheme.equals("tel") || scheme.equals("sip")) {
-            return uri.getSchemeSpecificPart();
+            return checkAndAppendPrefix(intent, subscription, uri.getSchemeSpecificPart(), context);
         }
 
         // TODO: We don't check for SecurityException here (requires
         // CALL_PRIVILEGED permission).
         if (scheme.equals("voicemail")) {
             if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
-                int subscription = intent.getIntExtra(SUBSCRIPTION_KEY,
-                        MSimTelephonyManager.getDefault().getPreferredVoiceSubscription());
                 return MSimTelephonyManager.getDefault()
                         .getCompleteVoiceMailNumber(subscription);
             }
@@ -206,7 +231,7 @@ public class PhoneNumberUtils
             }
         }
 
-        return number;
+        return checkAndAppendPrefix(intent, subscription, number, context);
     }
 
     /** Extracts the network address portion and canonicalizes
@@ -1075,6 +1100,11 @@ public class PhoneNumberUtils
      */
     private static byte[]
     numberToCalledPartyBCDHelper(String number, boolean includeLength) {
+        // returns null if number is empty
+        if (TextUtils.isEmpty(number)) {
+            return null;
+        }
+
         int numberLenReal = number.length();
         int numberLenEffective = numberLenReal;
         boolean hasPlus = number.indexOf('+') != -1;
@@ -1554,7 +1584,8 @@ public class PhoneNumberUtils
     //
     // However, in order to loose match 650-555-1212 and 555-1212, we need to set the min match
     // to 7.
-    static final int MIN_MATCH = 7;
+    // For CTA and some carrier requirement, we need to change it to 11, it can be set dynamically.
+    static final int MIN_MATCH = SystemProperties.getInt("persist.env.c.phone.matchnum", 7);
 
     /**
      * Checks a given number against the list of

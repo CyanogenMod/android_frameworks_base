@@ -1192,7 +1192,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     mPile.getHeight(), mScrollView.getHeight(), mCarrierLabelHeight));
         }
 
-        final boolean emergencyCallsShownElsewhere = mEmergencyCallLabel != null;
+        final boolean showEmergencyCallLabelOnly = mContext.getResources().getBoolean(
+                R.bool.config_showEmergencyCallLabelOnly);
+        final boolean emergencyCallsShownElsewhere
+                = showEmergencyCallLabelOnly && (mEmergencyCallLabel != null);
+
         final boolean makeVisible;
         if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
             makeVisible =
