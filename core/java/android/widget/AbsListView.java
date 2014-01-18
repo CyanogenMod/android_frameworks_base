@@ -2785,7 +2785,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 removeCallbacks(mFlingRunnable);
                 // let the fling runnable report it's new state which
                 // should be idle
-                endFling(false); // Don't disable the scrolling cache right after it was enabled
+                mFlingRunnable.endFling();
                 if (mPositionScroller != null) {
                     mPositionScroller.stop();
                 }
@@ -4082,7 +4082,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                     // Keep the fling alive a little longer
                     postDelayed(this, FLYWHEEL_TIMEOUT);
                 } else {
-                    endFling();
+                    endFling(false); // Don't disable the scrolling cache right after it was enabled
                     mTouchMode = TOUCH_MODE_SCROLL;
                     reportScrollStateChange(OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
                 }
