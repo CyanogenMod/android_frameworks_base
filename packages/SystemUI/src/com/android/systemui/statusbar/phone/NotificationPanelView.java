@@ -27,13 +27,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+<<<<<<< HEAD
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.provider.Settings;
 import android.os.UserHandle;
+=======
+>>>>>>> 177a89d... [1/2] Frameworks: Add in-the-spot user preference dialog
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.EventLog;
+import android.util.SettingConfirmationHelper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Display;
@@ -51,6 +55,7 @@ import java.io.File;
 public class NotificationPanelView extends PanelView {
     public static final boolean DEBUG_GESTURES = true;
 
+<<<<<<< HEAD
     private static final float STATUS_BAR_SETTINGS_LEFT_PERCENTAGE = 0.8f;
     private static final float STATUS_BAR_SETTINGS_RIGHT_PERCENTAGE = 0.2f;
     private static final float STATUS_BAR_SWIPE_TRIGGER_PERCENTAGE = 0.05f;
@@ -73,6 +78,15 @@ public class NotificationPanelView extends PanelView {
     private float mSwipeDirection;
     private boolean mTrackingSwipe;
     private boolean mSwipeTriggered;
+=======
+    private Drawable mHandleBar;
+    private int mHandleBarHeight;
+    private View mHandleView;
+    private int mFingers;
+    private PhoneStatusBar mStatusBar;
+    private boolean mOkToFlip;
+    private static final float QUICK_PULL_DOWN_PERCENTAGE = 0.8f;
+>>>>>>> 177a89d... [1/2] Frameworks: Add in-the-spot user preference dialog
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -156,6 +170,7 @@ public class NotificationPanelView extends PanelView {
                     mGestureStartY = event.getY(0);
                     mTrackingSwipe = isFullyExpanded();
                     mOkToFlip = getExpandedHeight() == 0;
+<<<<<<< HEAD
                     if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_SETTINGS_RIGHT_PERCENTAGE) &&
                             Settings.System.getIntForUser(getContext().getContentResolver(),
                                     Settings.System.QS_QUICK_PULLDOWN, 0, UserHandle.USER_CURRENT) == 1) {
@@ -163,6 +178,9 @@ public class NotificationPanelView extends PanelView {
                     } else if (event.getX(0) < getWidth() * (1.0f - STATUS_BAR_SETTINGS_LEFT_PERCENTAGE) &&
                             Settings.System.getIntForUser(getContext().getContentResolver(),
                                     Settings.System.QS_QUICK_PULLDOWN, 0, UserHandle.USER_CURRENT) == 2) {
+=======
+                    if (event.getX(0) > getWidth() * QUICK_PULL_DOWN_PERCENTAGE) {
+>>>>>>> 177a89d... [1/2] Frameworks: Add in-the-spot user preference dialog
                         flip = true;
                     }
                     break;
@@ -217,7 +235,16 @@ public class NotificationPanelView extends PanelView {
                 }
                 if (maxy - miny < mHandleBarHeight) {
                     if (mJustPeeked || getExpandedHeight() < mHandleBarHeight) {
-                        mStatusBar.switchToSettings();
+                        SettingConfirmationHelper helper = new SettingConfirmationHelper(mContext);
+                        helper.showConfirmationDialogForSetting(
+                                mContext.getString(R.string.quick_settings_quick_pull_down_title),
+                                mContext.getString(R.string.quick_settings_quick_pull_down_message),
+                                mContext.getResources().getDrawable(R.drawable.quick_pull_down),
+                                Settings.System.QUICK_SETTINGS_QUICK_PULL_DOWN);
+                        if(Settings.System.getInt(mContext.getContentResolver(),
+                                    Settings.System.QUICK_SETTINGS_QUICK_PULL_DOWN, 0) != 2) {
+                            mStatusBar.switchToSettings();
+                        }
                     } else {
                         mStatusBar.flipToSettings();
                     }
