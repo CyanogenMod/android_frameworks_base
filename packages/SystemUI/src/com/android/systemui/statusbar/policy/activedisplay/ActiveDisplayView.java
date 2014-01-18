@@ -206,7 +206,6 @@ public class ActiveDisplayView extends FrameLayout {
         public void onTrigger(final View v, final int target) {
             if (target == UNLOCK_TARGET) {
                 mWakedByPocketMode = false;
-                disableProximitySensor();
                 mNotification = null;
                 hideNotificationView();
                 unlockKeyguardActivity();
@@ -215,7 +214,6 @@ public class ActiveDisplayView extends FrameLayout {
                 mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
             } else if (target == OPEN_APP_TARGET) {
                 mWakedByPocketMode = false;
-                disableProximitySensor();
                 hideNotificationView();
                 unlockKeyguardActivity();
                 launchNotificationPendingIntent();
@@ -739,6 +737,7 @@ public class ActiveDisplayView extends FrameLayout {
 
     private void onScreenTurnedOn() {
         cancelRedisplayTimer();
+        disableProximitySensor();
     }
 
     private void onScreenTurnedOff() {
