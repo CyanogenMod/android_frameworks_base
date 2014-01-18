@@ -1,9 +1,5 @@
 package com.android.systemui.quicksettings;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.content.Intent;
@@ -11,17 +7,13 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.UserInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.Contacts;
-import android.provider.ContactsContract.RawContacts;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Profile;
 import android.util.Log;
@@ -39,7 +31,6 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 public class UserTile extends QuickSettingsTile {
 
     private static final String TAG = "UserTile";
-    private static final String INTENT_EXTRA_NEW_LOCAL_PROFILE = "newLocalProfile";
     private Drawable userAvatar;
     private AsyncTask<Void, Void, Pair<String, Drawable>> mUserInfoTask;
 
@@ -52,26 +43,16 @@ public class UserTile extends QuickSettingsTile {
                 mQsc.mBar.collapseAllPanels(true);
                 final UserManager um =
                         (UserManager) mContext.getSystemService(Context.USER_SERVICE);
-                int numUsers = um.getUsers(true).size();
-                if (numUsers <= 1) {
-                    final Cursor cursor = mContext.getContentResolver().query(
-                            Profile.CONTENT_URI, null, null, null, null);
-                    if (cursor.moveToNext() && !cursor.isNull(0)) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, ContactsContract.Profile.CONTENT_URI);
-                        startSettingsActivity(intent);
-                    } else {
-                        Intent intent = new Intent(Intent.ACTION_INSERT, Contacts.CONTENT_URI);
-                        intent.putExtra(INTENT_EXTRA_NEW_LOCAL_PROFILE, true);
-                        startSettingsActivity(intent);
-                    }
-                    cursor.close();
-                } else {
+                if (um.getUsers(true).size() > 1) {
                     try {
                         WindowManagerGlobal.getWindowManagerService().lockNow(
                                 null);
                     } catch (RemoteException e) {
                         Log.e(TAG, "Couldn't show user switcher", e);
                     }
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, ContactsContract.Profile.CONTENT_URI);
+                    startSettingsActivity(intent);
                 }
             }
         };
@@ -132,9 +113,17 @@ public class UserTile extends QuickSettingsTile {
                 final UserManager um =
                         (UserManager) mContext.getSystemService(Context.USER_SERVICE);
 
-                String name = null;
+                // Fall back to the UserManager nickname if we can't read the name from the local
+                // profile below.
+                String name = userName;
                 Drawable avatar = null;
-                String id = null;
+                Bitmap rawAvatar = um.getUserIcon(userId);
+                if (rawAvatar != null) {
+                    avatar = new BitmapDrawable(mContext.getResources(), rawAvatar);
+                } else {
+                    avatar = mContext.getResources().getDrawable(R.drawable.ic_qs_default_user);
+                }
+
                 // If it's a single-user device, get the profile name, since the nickname is not
                 // usually valid
                 if (um.getUsers().size() <= 1) {
@@ -146,36 +135,9 @@ public class UserTile extends QuickSettingsTile {
                         try {
                             if (cursor.moveToFirst()) {
                                 name = cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME));
-                                id = cursor.getString(cursor.getColumnIndex(Phone._ID));
                             }
                         } finally {
                             cursor.close();
-                        }
-                        // Fall back to the UserManager nickname if we can't read the name from the local
-                        // profile below.
-                        if (name == null) {
-                            avatar = mContext.getResources().getDrawable(R.drawable.ic_qs_default_user);
-                            name = mContext.getResources().getString(com.android.internal.R.string.owner_name);
-                        } else {
-                            Bitmap rawAvatar = null;
-                            InputStream is = null;
-                            try {
-                                Uri.Builder uriBuilder = ContactsContract.RawContacts.CONTENT_URI.buildUpon();
-                                uriBuilder.appendPath(id);
-                                uriBuilder.appendPath(Contacts.Photo.DISPLAY_PHOTO);
-                                is = mContext.getContentResolver().openInputStream(uriBuilder.build());
-                                rawAvatar = BitmapFactory.decodeStream(is);
-                                avatar = new BitmapDrawable(mContext.getResources(), rawAvatar);
-                            } catch (FileNotFoundException e) {
-                                avatar = mContext.getResources().getDrawable(R.drawable.ic_qs_default_user);
-                            } finally {
-                                if (is != null) {
-                                    try {
-                                        is.close();
-                                    } catch (IOException e) {
-                                    }
-                                }
-                            }
                         }
                     }
                 }
