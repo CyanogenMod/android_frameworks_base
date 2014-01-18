@@ -50,7 +50,22 @@ public class CustomTile extends QuickSettingsTile {
 
     private static final String KEY_TOGGLE_STATE = "custom_toggle_state";
 
+    private static final int SYSTEM_INT = 0;
+    private static final int SECURE_INT = 1;
+    private static final int SYSTEM_LONG = 2;
+    private static final int SECURE_LONG = 3;
+    private static final int SYSTEM_FLOAT = 4;
+    private static final int SECURE_FLOAT = 5;
+
+    private QuickSettingsController mQsc;
+
+    private Uri mResolverSetting = null;
+
     private String mKey;
+    private String mWatchedSetting = null;
+    private String mResolverIcon = null;
+    private String mResolverName = null;
+    private String mResolverValues = null;
 
     private String[] mClickActions = new String[5];
     private String[] mLongActions = new String[5];
@@ -63,6 +78,7 @@ public class CustomTile extends QuickSettingsTile {
     private int mNumberOfActions = 0;
     private int mState = 0;
     private int mStateMatched = 0;
+    private int mTypeResolved = -1;
 
     SharedPreferences mShared;
 
@@ -71,6 +87,7 @@ public class CustomTile extends QuickSettingsTile {
 
         mKey = key;
         mGenericCollapse = false;
+        mQsc = qsc;
         mShared = mContext.getSharedPreferences(KEY_TOGGLE_STATE, Context.MODE_PRIVATE);
         // This will naver change and will filter itself out if an action exists
         mDrawable = R.drawable.ic_qs_settings;
@@ -84,15 +101,17 @@ public class CustomTile extends QuickSettingsTile {
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                SlimActions.processActionWithOptions(
-                        mContext, mLongActions[mState], false, mCollapse);
+                if (mState != -1) {
+                    SlimActions.processActionWithOptions(
+                            mContext, mLongActions[mState], false, mCollapse);
+                }
                 return true;
             }
         };
 
-        qsc.registerObservedContent(Settings.System.getUriFor(
+        mQsc.registerObservedContent(Settings.System.getUriFor(
                 Settings.System.CUSTOM_TOGGLE_ACTIONS), this);
-        qsc.registerObservedContent(Settings.System.getUriFor(
+        mQsc.registerObservedContent(Settings.System.getUriFor(
                 Settings.System.CUSTOM_TOGGLE_EXTRAS), this);
     }
 
@@ -103,15 +122,6 @@ public class CustomTile extends QuickSettingsTile {
         int actions = 0;
         String setting = Settings.System.getStringForUser(mContext.getContentResolver(),
                     Settings.System.CUSTOM_TOGGLE_ACTIONS, UserHandle.USER_CURRENT);
-
-        String extras = extractActionFromString(
-                Settings.System.getStringForUser(mContext.getContentResolver(),
-                Settings.System.CUSTOM_TOGGLE_EXTRAS, UserHandle.USER_CURRENT));
-        int extraValue = 0;
-        if (extras != null) {
-            extraValue = Integer.parseInt(extras);
-        }
-        saveExtras(extraValue);
 
         if (setting != null) {
             for (int i = 0; i < 5; i++) {
@@ -148,9 +158,9 @@ public class CustomTile extends QuickSettingsTile {
         // User deleted the state they're currently in
         if (mState > mNumberOfActions - 1) {
             mState = 0;
-            mShared.edit().putInt("state" + mKey, mState).commit();
         }
 
+        extractActionsFromString();
         updateResources();
     }
 
@@ -183,15 +193,13 @@ public class CustomTile extends QuickSettingsTile {
     }
 
     private void performClickAction() {
-        if (mState < mNumberOfActions - 1) {
+        if (mState < mNumberOfActions - 1 && mState > -1) {
             mState++;
             mStateMatched = mState - 1;
         } else {
             mState = 0;
             mStateMatched = mNumberOfActions - 1;
         }
-
-        mShared.edit().putInt("state" + mKey, mState).commit();
 
         if (mMatchState && mNumberOfActions >= 1) {
             SlimActions.processActionWithOptions(
@@ -201,42 +209,156 @@ public class CustomTile extends QuickSettingsTile {
                     mContext, mClickActions[mState], false, mCollapse);
         }
 
-        updateResources();
+        // Let the tile update itself on resolve otherwise
+        if (mWatchedSetting == null) {
+            updateResources();
+        }
     }
 
     private synchronized void updateTile() {
         mRealDrawable = null;
-        if (mNumberOfActions != 0) {
-            if (mCustomIcon[mState] != null && mCustomIcon[mState].length() > 0) {
-                File f = new File(Uri.parse(mCustomIcon[mState]).getPath());
+        if (mState != -1) {
+            if (mNumberOfActions != 0) {
+                if (mCustomIcon[mState] != null && mCustomIcon[mState].length() > 0) {
+                    File f = new File(Uri.parse(mCustomIcon[mState]).getPath());
+                    if (f.exists()) {
+                        mRealDrawable = new BitmapDrawable(
+                                mContext.getResources(), f.getAbsolutePath());
+                    }
+                } else {
+                    try {
+                        if (mClickActions[mState] != null) {
+                            mRealDrawable = mContext.getPackageManager().getActivityIcon(
+                                    Intent.parseUri(mClickActions[mState], 0));
+                        } else if (mLongActions[mState] != null) {
+                            mRealDrawable = mContext.getPackageManager().getActivityIcon(
+                                    Intent.parseUri(mLongActions[mState], 0));
+                        }
+                    } catch (NameNotFoundException e) {
+                        mRealDrawable = null;
+                        Log.e(TAG, "Invalid Package", e);
+                    } catch (URISyntaxException ex) {
+                        mRealDrawable = null;
+                        Log.e(TAG, "Invalid Package", ex);
+                    }
+                }
+            }
+            mLabel = mActionStrings[mState] != null
+                    ? mActionStrings[mState]
+                    : mContext.getString(R.string.quick_settings_custom_toggle);
+        } else {
+            if (mResolverIcon != null && mResolverIcon.length() > 0) {
+                File f = new File(Uri.parse(mResolverIcon).getPath());
                 if (f.exists()) {
                     mRealDrawable = new BitmapDrawable(
                             mContext.getResources(), f.getAbsolutePath());
                 }
-            } else {
-                try {
-                    if (mClickActions[mState] != null) {
-                        mRealDrawable = mContext.getPackageManager().getActivityIcon(
-                                Intent.parseUri(mClickActions[mState], 0));
-                    } else if (mLongActions[mState] != null) {
-                        mRealDrawable = mContext.getPackageManager().getActivityIcon(
-                                Intent.parseUri(mLongActions[mState], 0));
-                    }
-                } catch (NameNotFoundException e) {
-                    mRealDrawable = null;
-                    Log.e(TAG, "Invalid Package", e);
-                } catch (URISyntaxException ex) {
-                    mRealDrawable = null;
-                    Log.e(TAG, "Invalid Package", ex);
-                }
             }
+            mLabel = mResolverName != null ? mResolverName
+                    : mContext.getString(R.string.quick_settings_custom_toggle);
         }
-        mLabel = mActionStrings[mState] != null
-                ? mActionStrings[mState]
-                : mContext.getString(R.string.quick_settings_custom_toggle);
+        mShared.edit().putInt("state" + mKey, mState).commit();
     }
 
-    private String extractActionFromString(String actions) {
+    private void updateResolver() {
+        int current = 0;
+        long curLong = 0;
+        float curFloat = 0;
+
+        switch (mTypeResolved) {
+            case SYSTEM_INT:
+                current= Settings.System.getIntForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0, UserHandle.USER_CURRENT);
+                matchIntState(current);
+                break;
+            case SECURE_INT:
+                current = Settings.Secure.getIntForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0, UserHandle.USER_CURRENT);
+                matchIntState(current);
+                break;
+            case SYSTEM_LONG:
+                curLong= Settings.System.getIntForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0, UserHandle.USER_CURRENT);
+                matchLongState(curLong);
+                break;
+            case SECURE_LONG:
+                curLong = Settings.Secure.getLongForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0, UserHandle.USER_CURRENT);
+                matchLongState(curLong);
+                break;
+            case SYSTEM_FLOAT:
+                curFloat= Settings.System.getLongForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0, UserHandle.USER_CURRENT);
+                matchFloatState(curFloat);
+                break;
+            case SECURE_FLOAT:
+                curFloat = Settings.Secure.getFloatForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0, UserHandle.USER_CURRENT);
+                matchFloatState(curFloat);
+                break;
+            default:
+                updateResources();
+                break;
+        }
+    }
+
+    private void matchIntState(int current) {
+        mState = -1;
+        String[] strArray = mResolverValues.split(",");
+        for (int i = 0; i < strArray.length; i++) {
+            try {
+                if (current == Integer.parseInt(strArray[i])) {
+                    mState = i;
+                }
+            } catch (NumberFormatException e) {
+                // We already checked this string
+                // parse won't fail
+            }
+        }
+        updateResources();
+    }
+
+    private void matchLongState(long current) {
+        mState = -1;
+        String[] strArray = mResolverValues.split(",");
+        for (int i = 0; i < strArray.length; i++) {
+            try {
+                if (current == Long.parseLong(strArray[i])) {
+                    mState = i;
+                }
+            } catch (NumberFormatException e) {
+                // We already checked this string
+                // parse won't fail
+            }
+        }
+        updateResources();
+    }
+
+    private void matchFloatState(float current) {
+        mState = -1;
+        String[] strArray = mResolverValues.split(",");
+        for (int i = 0; i < strArray.length; i++) {
+            try {
+                if (current == Float.parseFloat(strArray[i])) {
+                    mState = i;
+                }
+            } catch (NumberFormatException e) {
+                // We already checked this string
+                // parse won't fail
+            }
+        }
+        updateResources();
+    }
+
+    private void extractActionsFromString() {
+        String actions = Settings.System.getStringForUser(mContext.getContentResolver(),
+                Settings.System.CUSTOM_TOGGLE_EXTRAS, UserHandle.USER_CURRENT);
         String returnAction = null;
         if (actions != null && actions.contains(mKey)) {
             for (String action : actions.split("\\|")) {
@@ -246,7 +368,50 @@ public class CustomTile extends QuickSettingsTile {
                 }
             }
         }
-        return returnAction;
+
+        if (returnAction == null) {
+            returnAction = "0";
+        }
+
+        String[] settingSplit = returnAction.split(TILE_CUSTOM_DELIMITER);
+        try {
+            saveExtras(Integer.parseInt(settingSplit[0]));
+        } catch (NumberFormatException e) {
+            saveExtras(Integer.parseInt("1"));
+        }
+
+        if (settingSplit.length != 6) {
+            mResolverSetting = null;
+            mTypeResolved = -1;
+            return;
+        }
+
+        mWatchedSetting = settingSplit[4].equals(" ") ? null : settingSplit[4];
+
+        if (mWatchedSetting != null) {
+            mTypeResolved = Integer.parseInt(settingSplit[5]);
+            switch (mTypeResolved) {
+                case SYSTEM_INT:
+                case SYSTEM_LONG:
+                case SYSTEM_FLOAT:
+                    mResolverSetting = Settings.System.getUriFor(mWatchedSetting);
+                    mQsc.addtoInstantObserverMap(mResolverSetting, this);
+                    break;
+                case SECURE_INT:
+                case SECURE_LONG:
+                case SECURE_FLOAT:
+                    mResolverSetting = Settings.Secure.getUriFor(mWatchedSetting);
+                    mQsc.addtoInstantObserverMap(mResolverSetting, this);
+                    break;
+            }
+            mResolverIcon = settingSplit[1].equals(" ") ? null : settingSplit[1];
+            mResolverName = settingSplit[2].equals(" ") ? null : settingSplit[2];
+            mResolverValues = settingSplit[3].equals(" ") ? null : settingSplit[3];
+            updateResolver();
+        } else {
+            mResolverSetting = null;
+            mTypeResolved = -1;
+        }
     }
 
     @Override
@@ -263,7 +428,11 @@ public class CustomTile extends QuickSettingsTile {
 
     @Override
     public void onChangeUri(ContentResolver resolver, Uri uri) {
-        updateSettings();
+        if (uri.equals(mResolverSetting) && mWatchedSetting != null) {
+            updateResolver();
+        } else {
+            updateSettings();
+        }
     }
 
 }

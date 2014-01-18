@@ -43,6 +43,7 @@ import java.lang.Character;
 import java.lang.CharSequence;
 import java.lang.IllegalArgumentException;
 import java.lang.NumberFormatException;
+import java.lang.StringBuilder;
 
 public class CreateShortcut extends LauncherActivity {
 
@@ -297,48 +298,60 @@ public class CreateShortcut extends LauncherActivity {
                         str = str.replaceAll("\\s+", "");
                         String[] strArray = str.split(",");
                         boolean resultOk = true;
-
-                        switch (mSettingType) {
-                            case SYSTEM_INT:
-                            case SECURE_INT:
-                                int[] intArray = new int[strArray.length];
-                                for (int i = 0; i < strArray.length; i++) {
-                                    try {
-                                        intArray[i] = Integer.parseInt(strArray[i]);
-                                    } catch (NumberFormatException e) {
+                        if (strArray.length >= 1 && str.length() > 0) {
+                            switch (mSettingType) {
+                                case SYSTEM_INT:
+                                case SECURE_INT:
+                                    int[] intArray = new int[strArray.length];
+                                    for (int i = 0; i < strArray.length; i++) {
                                         try {
-                                            intArray[i] = Color.parseColor(strArray[i]);
-                                        } catch (IllegalArgumentException ex) {
+                                            intArray[i] = Integer.parseInt(strArray[i]);
+                                        } catch (NumberFormatException e) {
+                                            try {
+                                                intArray[i] = Color.parseColor(strArray[i]);
+                                                // Let's avoid color parsing a seond time.
+                                                strArray[i] = Integer.toString(
+                                                        Color.parseColor(strArray[i]));
+                                            } catch (IllegalArgumentException ex) {
+                                                resultOk = false;
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case SYSTEM_LONG:
+                                case SECURE_LONG:
+                                    long[] longArray = new long[strArray.length];
+                                    for (int i = 0; i < strArray.length; i++) {
+                                        try {
+                                            longArray[i] = Long.parseLong(strArray[i]);
+                                        } catch (NumberFormatException e) {
                                             resultOk = false;
                                         }
                                     }
-                                }
-                                break;
-                            case SYSTEM_LONG:
-                            case SECURE_LONG:
-                                long[] longArray = new long[strArray.length];
-                                for (int i = 0; i < strArray.length; i++) {
-                                    try {
-                                        longArray[i] = Long.parseLong(strArray[i]);
-                                    } catch (NumberFormatException e) {
-                                        resultOk = false;
+                                    break;
+                                case SYSTEM_FLOAT:
+                                case SECURE_FLOAT:
+                                    float[] floatArray = new float[strArray.length];
+                                    for (int i = 0; i < strArray.length; i++) {
+                                        try {
+                                            floatArray[i] = Float.parseFloat(strArray[i]);
+                                        } catch (NumberFormatException ex) {
+                                            resultOk = false;
+                                        }
                                     }
-                                }
-                                break;
-                            case SYSTEM_FLOAT:
-                            case SECURE_FLOAT:
-                                float[] floatArray = new float[strArray.length];
-                                for (int i = 0; i < strArray.length; i++) {
-                                    try {
-                                        floatArray[i] = Float.parseFloat(strArray[i]);
-                                    } catch (NumberFormatException ex) {
-                                        resultOk = false;
-                                    }
-                                }
-                                break;
+                                    break;
+                            }
+                        } else {
+                            resultOk = false;
                         }
 
                         if (resultOk) {
+                            // Rebuild string with ints needed if color values are used.
+                            StringBuilder builder = new StringBuilder();
+                            for(String st : strArray) {
+                                builder.append(st + ",");
+                            }
+                            str = builder.toString();
                             // Set to string.  Launcher doesn't persist array
                             // extras after a reboot.
                             setSettingArray(str);

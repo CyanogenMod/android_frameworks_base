@@ -401,6 +401,14 @@ public class QuickSettingsController {
         registerInMap(uri, tile, mObserverMap);
     }
 
+    // Add to map and don't requre a race to post update methods
+    // to do so.  Can register at any point in a tile's lifetime.
+    public void addtoInstantObserverMap(Uri uri, QuickSettingsTile tile) {
+        ContentResolver resolver = mContext.getContentResolver();
+        resolver.registerContentObserver(uri, false, mObserver);
+        registerInMap(uri, tile, mObserverMap);
+    }
+
     private class QSBroadcastReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
