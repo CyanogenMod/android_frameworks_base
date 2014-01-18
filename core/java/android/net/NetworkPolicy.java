@@ -31,12 +31,16 @@ import com.android.internal.util.Objects;
  */
 public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
     public static final int CYCLE_NONE = -1;
+    public static final int CYCLE_DAILY = 0;
+    public static final int CYCLE_WEEKLY = 1;
+    public static final int CYCLE_MONTHLY = 2;
     public static final long WARNING_DISABLED = -1;
     public static final long LIMIT_DISABLED = -1;
     public static final long SNOOZE_NEVER = -1;
 
     public final NetworkTemplate template;
     public int cycleDay;
+    public int cycleLength;
     public String cycleTimezone;
     public long warningBytes;
     public long limitBytes;
@@ -54,11 +58,26 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
                 SNOOZE_NEVER, metered, false);
     }
 
+    @Deprecated
+    public NetworkPolicy(NetworkTemplate template, int cycleDay, int cycleLength,
+            String cycleTimezone, long warningBytes, long limitBytes, boolean metered) {
+        this(template, cycleDay, cycleLength, cycleTimezone, warningBytes, limitBytes, SNOOZE_NEVER,
+                SNOOZE_NEVER, metered, false);
+    }
+
     public NetworkPolicy(NetworkTemplate template, int cycleDay, String cycleTimezone,
             long warningBytes, long limitBytes, long lastWarningSnooze, long lastLimitSnooze,
             boolean metered, boolean inferred) {
+        this(template, cycleDay, CYCLE_MONTHLY, cycleTimezone, warningBytes, limitBytes,
+                SNOOZE_NEVER, SNOOZE_NEVER, metered, false);
+    }
+
+    public NetworkPolicy(NetworkTemplate template, int cycleDay, int cycleLength,
+            String cycleTimezone, long warningBytes, long limitBytes, long lastWarningSnooze,
+            long lastLimitSnooze, boolean metered, boolean inferred) {
         this.template = checkNotNull(template, "missing NetworkTemplate");
         this.cycleDay = cycleDay;
+        this.cycleLength = cycleLength;
         this.cycleTimezone = checkNotNull(cycleTimezone, "missing cycleTimezone");
         this.warningBytes = warningBytes;
         this.limitBytes = limitBytes;
@@ -71,6 +90,7 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
     public NetworkPolicy(Parcel in) {
         template = in.readParcelable(null);
         cycleDay = in.readInt();
+        cycleLength = in.readInt();
         cycleTimezone = in.readString();
         warningBytes = in.readLong();
         limitBytes = in.readLong();
@@ -84,6 +104,7 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(template, flags);
         dest.writeInt(cycleDay);
+        dest.writeInt(cycleLength);
         dest.writeString(cycleTimezone);
         dest.writeLong(warningBytes);
         dest.writeLong(limitBytes);
@@ -146,7 +167,7 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(template, cycleDay, cycleTimezone, warningBytes, limitBytes,
+        return Objects.hashCode(template, cycleDay, cycleLength, cycleTimezone, warningBytes, limitBytes,
                 lastWarningSnooze, lastLimitSnooze, metered, inferred);
     }
 
@@ -154,7 +175,8 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
     public boolean equals(Object obj) {
         if (obj instanceof NetworkPolicy) {
             final NetworkPolicy other = (NetworkPolicy) obj;
-            return cycleDay == other.cycleDay && warningBytes == other.warningBytes
+            return cycleDay == other.cycleDay && cycleLength == other.cycleLength
+                    && warningBytes == other.warningBytes
                     && limitBytes == other.limitBytes
                     && lastWarningSnooze == other.lastWarningSnooze
                     && lastLimitSnooze == other.lastLimitSnooze && metered == other.metered
@@ -170,6 +192,7 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
         final StringBuilder builder = new StringBuilder("NetworkPolicy");
         builder.append("[").append(template).append("]:");
         builder.append(" cycleDay=").append(cycleDay);
+        builder.append(", cycleLength=").append(cycleLength);
         builder.append(", cycleTimezone=").append(cycleTimezone);
         builder.append(", warningBytes=").append(warningBytes);
         builder.append(", limitBytes=").append(limitBytes);
