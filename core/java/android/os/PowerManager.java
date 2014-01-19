@@ -618,6 +618,17 @@ public final class PowerManager {
         }
     }
 
+    public String getSeenWakeLocks()
+    {
+        try {
+            if (mService != null) {
+                return mService.getSeenWakeLocks();
+            }
+        } catch (RemoteException e) {
+        }
+        return null;
+    }
+
     /**
      * Boost the CPU. Boosts the cpu for the given duration in microseconds.
      * Requires the {@link android.Manifest.permission#CPU_BOOST} permission.
