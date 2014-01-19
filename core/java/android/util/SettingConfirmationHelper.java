@@ -59,7 +59,6 @@ public class SettingConfirmationHelper {
             public void onClick(DialogInterface dialog, int which) {
                 mCurrentStatus = ENABLED;
                 Settings.System.putInt(mContext.getContentResolver(), setting, mCurrentStatus);
-                return;
             }
         });
         builder.setNeutralButton(R.string.setting_confirmation_ask_me_later,
@@ -67,7 +66,6 @@ public class SettingConfirmationHelper {
             public void onClick(DialogInterface dialog, int which) {
                 mCurrentStatus = ASK_LATER;
                 Settings.System.putInt(mContext.getContentResolver(), setting, mCurrentStatus);
-                return;
             }
         });
         builder.setNegativeButton(R.string.setting_confirmation_no,
@@ -75,7 +73,6 @@ public class SettingConfirmationHelper {
             public void onClick(DialogInterface dialog, int which) {
                 mCurrentStatus = DISABLED;
                 Settings.System.putInt(mContext.getContentResolver(), setting, mCurrentStatus);
-                return;
             }
         });
         builder.setCancelable(false);
