@@ -758,11 +758,19 @@ public class NavigationBarView extends LinearLayout {
         final boolean cameraDefault = keyguardResources.getBoolean(
                 keyguardResources.getIdentifier(
                 "com.android.keyguard:bool/kg_enable_camera_default_widget", null, null));
-        mCameraDisabledByUser = Settings.System.getIntForUser(
+
+        final boolean widgetCarousel = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_USE_WIDGET_CONTAINER_CAROUSEL, 0,
+                UserHandle.USER_CURRENT) == 1;
+
+        final boolean cameraWidget = Settings.System.getIntForUser(
                 mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_CAMERA_WIDGET,
                 cameraDefault ? 1 : 0,
-                UserHandle.USER_CURRENT) == 0;
+                UserHandle.USER_CURRENT) == 1;
+
+        mCameraDisabledByUser = !cameraWidget || widgetCarousel;
     }
 
     private boolean isCameraDisabledByDpm() {
