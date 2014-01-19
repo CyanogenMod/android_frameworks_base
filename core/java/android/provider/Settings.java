@@ -3422,19 +3422,6 @@ public final class Settings {
         public static final String CLEAR_RECENTS_BUTTON_LOCATION = "clear_recents_button_location";
 
         /**
-         * Show circle memory indicator in recents panel view
-         *  @hide
-         */
-        public static final String SHOW_RECENTS_MEMORY_INDICATOR = "show_recents_memory_indicator";
-
-        /**
-         * Location of the memory indicator
-         * @hide
-         */
-        public static final String RECENTS_MEMORY_INDICATOR_LOCATION =
-                "recents_memory_indicator_location";
-
-        /**
          * Whether or not to show circle battery around the lockscreen ring
          * @hide
          */

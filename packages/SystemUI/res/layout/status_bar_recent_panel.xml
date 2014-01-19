@@ -60,20 +60,11 @@
 
         </com.android.systemui.recent.RecentsVerticalScrollView>
 
-        <com.android.systemui.recent.CircleMemoryMeter
-            android:id="@+id/circle_meter"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_gravity="top|left" />
-
         <ImageView
-            android:id="@+id/recents_clear_all"
+            android:id="@+id/recents_clear"
+            android:clickable="true"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="2dp"
             android:layout_gravity="top|right"
             android:padding="10dp"
             android:scaleType="fitCenter"
