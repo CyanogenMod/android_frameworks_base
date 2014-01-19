@@ -65,7 +65,7 @@
             android:clickable="true"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_gravity="top|right"
+            android:layout_gravity="bottom|left"
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_recents_clear" />
