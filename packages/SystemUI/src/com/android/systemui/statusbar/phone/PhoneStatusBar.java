@@ -1191,6 +1191,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mIsAutoBrightNess = checkAutoBrightNess();
 
         mNetworkController.setListener(this);
+        updateCarrierAndWifiLabelVisibility(true);
 
         return mStatusBarView;
     }
