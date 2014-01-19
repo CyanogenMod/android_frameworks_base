@@ -346,7 +346,7 @@ public class LocalActivityManager {
     }
 
     private Window performDestroy(LocalActivityRecord r, boolean finish) {
-        Window win = null;
+        Window win;
         win = r.window;
         if (r.curState == RESUMED && !finish) {
             performPause(r, finish);
@@ -381,6 +381,7 @@ public class LocalActivityManager {
             win = performDestroy(r, finish);
             if (finish) {
                 mActivities.remove(id);
+                mActivityArray.remove(r);
             }
         }
         return win;
@@ -441,10 +442,8 @@ public class LocalActivityManager {
      */
     public void dispatchCreate(Bundle state) {
         if (state != null) {
-            final Iterator<String> i = state.keySet().iterator();
-            while (i.hasNext()) {
+            for (String id : state.keySet()) {
                 try {
-                    final String id = i.next();
                     final Bundle astate = state.getBundle(id);
                     LocalActivityRecord r = mActivities.get(id);
                     if (r != null) {
@@ -457,9 +456,7 @@ public class LocalActivityManager {
                     }
                 } catch (Exception e) {
                     // Recover from -all- app errors.
-                    Log.e(TAG,
-                          "Exception thrown when restoring LocalActivityManager state",
-                          e);
+                    Log.e(TAG, "Exception thrown when restoring LocalActivityManager state", e);
                 }
             }
         }
@@ -493,7 +490,7 @@ public class LocalActivityManager {
                 // We need to save the state now, if we don't currently
                 // already have it or the activity is currently resumed.
                 final Bundle childState = new Bundle();
-                r.activity.onSaveInstanceState(childState);
+                r.activity.performSaveInstanceState(childState);
                 r.instanceState = childState;
             }
             if (r.instanceState != null) {
