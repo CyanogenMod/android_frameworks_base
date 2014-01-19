@@ -614,14 +614,20 @@ public class SlidingChallengeLayout extends ViewGroup implements ChallengeLayout
     }
 
     private void resetTouch() {
-        mVelocityTracker.recycle();
-        mVelocityTracker = null;
+        if (mVelocityTracker != null) {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
         mActivePointerId = INVALID_POINTER;
         mDragging = mBlockDrag = false;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        if (!mEnableChallengeDragging) {
+            resetTouch();
+            return false;
+        }
         if (mVelocityTracker == null) {
             mVelocityTracker = VelocityTracker.obtain();
         }
