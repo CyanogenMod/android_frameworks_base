@@ -370,6 +370,7 @@ public class PanelView extends FrameLayout {
         updateMode();
         updateUseSlider();
         mSettingsObserver = new SettingsObserver(mHandler);
+        mSettingsObserver.startObserving();
     }
 
     private void loadDimens() {
@@ -577,14 +578,7 @@ public class PanelView extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mSettingsObserver.startObserving();
         mViewName = getResources().getResourceName(getId());
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        mSettingsObserver.stopObserving();
     }
 
     public String getName() {
