@@ -1885,4 +1885,6 @@
     <!-- Is the device capable of supporting digital pen -->
     <bool name="config_digitalPenCapable">false</bool>
 
+    <!-- Configuartion to support SIM refresh in STK command for dual mode card.-->
+    <bool name="config_sim_refresh_for_dual_mode_card">true</bool>
 </resources>
