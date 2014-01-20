@@ -394,11 +394,6 @@ public class NavigationBarView extends LinearLayout {
         setDisabledFlags(mDisabledFlags, true);
     }
 
-
-    public void recreateNavigationBar() {
-        updateSettings();
-    }
-
     public void setNavigationIconHints(int hints) {
         setNavigationIconHints(hints, false);
     }

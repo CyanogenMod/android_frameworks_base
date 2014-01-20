@@ -3097,7 +3097,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
-    private void recreateStatusBar(boolean recreateNavigationBar) {
+    private void recreateStatusBar() {
         mRecreating = true;
         mStatusBarContainer.removeAllViews();
 
@@ -3119,12 +3119,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mNotificationData.clear();
 
         makeStatusBarView();
-
-        if (mNavigationBarView != null && recreateNavigationBar) {
-            // recreate and reposition navigationbar
-            mNavigationBarView.recreateNavigationBar();
-        }
-        repositionNavigationBar();
 
         // recreate StatusBarIconViews.
         for (int i = 0; i < nIcons; i++) {
@@ -3167,7 +3161,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (newTheme != null &&
                 (mCurrentTheme == null || !mCurrentTheme.equals(newTheme))) {
             mCurrentTheme = (CustomTheme)newTheme.clone();
-            recreateStatusBar(false);
+            recreateStatusBar();
         } else {
             clearButtonFlag = true;
         }
@@ -3176,7 +3170,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         int uiThemeMode = res.getConfiguration().uiThemeMode;
         if (uiThemeMode != mCurrUiThemeMode) {
             mCurrUiThemeMode = uiThemeMode;
-            recreateStatusBar(false);
+            recreateStatusBar();
         } else {
             clearButtonFlag = true;
         }
