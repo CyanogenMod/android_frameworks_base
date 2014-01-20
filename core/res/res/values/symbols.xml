@@ -1806,4 +1806,7 @@
 
   <!-- for wifi auto connection -->
   <java-symbol type="bool" name="wifi_autocon" />
+
+  <!-- sim refresh for dual mode card -->
+  <java-symbol type="bool" name="config_sim_refresh_for_dual_mode_card" />
 </resources>
