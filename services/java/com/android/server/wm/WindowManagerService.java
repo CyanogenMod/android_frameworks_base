@@ -5393,7 +5393,7 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     private void checkQuickBootException() {
-        Intent intent = new Intent("qualcomm.intent.action.QUICKBOOT");
+        Intent intent = new Intent("org.codeaurora.action.QUICKBOOT");
         intent.putExtra("mode", 2);
         try {
             mContext.startActivityAsUser(intent,UserHandle.CURRENT);

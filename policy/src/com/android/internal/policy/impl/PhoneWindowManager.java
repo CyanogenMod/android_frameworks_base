@@ -3888,7 +3888,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         public void run() {
 
-            Intent intent = new Intent("qualcomm.intent.action.QUICKBOOT");
+            Intent intent = new Intent("org.codeaurora.action.QUICKBOOT");
             intent.putExtra("mode", 1);
             try {
                 mContext.startActivityAsUser(intent,UserHandle.CURRENT);
@@ -3908,7 +3908,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             };
 
-            IntentFilter filter = new IntentFilter("qualcomm.intent.QUICKBOOT.START");
+            IntentFilter filter = new IntentFilter("org.codeaurora.quickboot.poweron_start");
             mContext.registerReceiver(broadcastReceiver,filter,
                     "android.permission.DEVICE_POWER",null);
 
