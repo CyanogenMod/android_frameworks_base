@@ -31,6 +31,12 @@
                 android:src="@drawable/halo_bg"/>
 
             <ImageView
+                android:id="@+id/halo_bg_custom"
+                android:layout_width="@dimen/halo_bubble_size"
+                android:layout_height="@dimen/halo_bubble_size"
+                android:src="@drawable/halo_bg_custom"/>
+
+            <ImageView
                 android:id="@+id/app_icon"
                 android:layout_width="@dimen/halo_bubble_size"
                 android:layout_height="@dimen/halo_bubble_size"

@@ -188,6 +188,8 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
     private float mHaloSize = 1.0f;
     private float mStatusTextSize = 0f;
 
+    private int mHaloColor = 0xff33b5e5;
+
     // Halo dock position
     SharedPreferences preferences;
     private String KEY_HALO_POSITION_Y = "halo_position_y";
@@ -296,6 +298,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         mNinjaMode =
                 Settings.System.getInt(resolver, Settings.System.HALO_NINJA, 0) == 1;
         mHaloSize = Settings.System.getFloat(resolver, Settings.System.HALO_SIZE, 1.0f);
+        mHaloColor = Settings.System.getInt(resolver, Settings.System.HALO_COLOR, 0xff33b5e5);
         mHapticFeedback = Settings.System.getInt(resolver,
                     Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) != 0;
         mIconSize = (int)(mContext.getResources().getDimensionPixelSize(R.dimen.halo_bubble_size) * mHaloSize);
@@ -304,7 +307,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
 
         // Init colors
         mPaintHoloBlue.setAntiAlias(true);
-        mPaintHoloBlue.setColor(0xff33b5e5);
+        mPaintHoloBlue.setColor(mHaloColor);
         mPaintWhite.setAntiAlias(true);
         mPaintWhite.setColor(0xfff0f0f0);
         mPaintHoloRed.setAntiAlias(true);
