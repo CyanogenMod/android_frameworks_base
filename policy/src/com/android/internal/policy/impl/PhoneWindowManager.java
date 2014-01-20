@@ -467,7 +467,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mForcingShowNavBar;
     int mForcingShowNavBarLayer;
 
-    int mExpandedDesktopStyle = -1;
+    int mExpandedDesktopStyle = 2;
 
     // States of keyguard dismiss.
     private static final int DISMISS_KEYGUARD_NONE = 0; // Keyguard not being dismissed.
@@ -1611,7 +1611,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     && !mCameraWakeScreen);
 
             mExpandedDesktopStyle = Settings.System.getIntForUser(resolver,
-                    Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
+                    Settings.System.EXPANDED_DESKTOP_STYLE, 2, UserHandle.USER_CURRENT);
             if (Settings.System.getIntForUser(resolver,
                     Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 0) {
                 mExpandedDesktopStyle = 0;
