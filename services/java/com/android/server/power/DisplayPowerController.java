@@ -237,7 +237,16 @@ final class DisplayPowerController {
 
     // True if we should fade the screen while turning it off, false if we should play
     // a stylish electron beam animation instead.
-    private boolean mElectronBeamFadesConfig;
+    private boolean mElectronBeamFadesConfig() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_ANIMATION_STYLE, 0) == 1;
+    }
+
+    // True if we should allow showing the screen-off animation
+    private boolean useScreenOffAnimation() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREEN_OFF_ANIMATION, 1) == 1;
+    }
 
     // The pending power request.
     // Initially null until the first call to requestPowerState.
@@ -429,9 +438,6 @@ final class DisplayPowerController {
                     com.android.internal.R.integer.config_lightSensorWarmupTime);
             updateAutomaticBrightnessSettings();
         }
-
-        mElectronBeamFadesConfig = resources.getBoolean(
-                com.android.internal.R.bool.config_animateScreenLights);
 
         if (!DEBUG_PRETEND_PROXIMITY_SENSOR_ABSENT) {
             mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -789,9 +795,9 @@ final class DisplayPowerController {
                                 if (mPowerState.getElectronBeamLevel() == 1.0f) {
                                     mPowerState.dismissElectronBeam();
                                 } else if (mPowerState.prepareElectronBeam(
-                                        mElectronBeamFadesConfig ?
+                                        mElectronBeamFadesConfig() ?
                                                 ElectronBeam.MODE_FADE :
-                                                        ElectronBeam.MODE_WARM_UP)) {
+                                                ElectronBeam.MODE_WARM_UP)) {
                                     mElectronBeamOnAnimator.start();
                                 } else {
                                     mElectronBeamOnAnimator.end();
@@ -812,7 +818,7 @@ final class DisplayPowerController {
                             setScreenOn(false);
                             unblockScreenOn();
                         } else if (mPowerState.prepareElectronBeam(
-                                mElectronBeamFadesConfig ?
+                                mElectronBeamFadesConfig() ?
                                         ElectronBeam.MODE_FADE :
                                         ElectronBeam.MODE_COOL_DOWN)
                                 && mPowerState.isScreenOn()
@@ -1514,9 +1520,4 @@ final class DisplayPowerController {
             updatePowerState();
         }
     };
-
-    private boolean useScreenOffAnimation() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.SCREEN_OFF_ANIMATION, 1) == 1;
-    }
 }

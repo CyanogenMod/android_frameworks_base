@@ -1855,7 +1855,7 @@
   <!-- Gesture Sensor -->
   <java-symbol type="bool" name="config_enableGestureService" />
 
-  <!-- Electron Beam -->
+  <!-- Screen off animation -->
   <java-symbol type="bool" name="config_screenOffAnimation" />
 
   <!-- Privacy Guard -->
