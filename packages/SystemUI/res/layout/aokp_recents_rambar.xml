@@ -63,10 +63,5 @@
             android:textColor="#000"
             android:singleLine="true" />
     </view>
-    <View
-        android:id="@+id/aokp_rambar_shadow"
-        android:background="@drawable/aokp_rambar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="10sp" />
 </LinearLayout>
 
