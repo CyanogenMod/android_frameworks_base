@@ -345,7 +345,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := framework-base
 LOCAL_DX_FLAGS := --core-library
 
 # Packages to include, use \* wildcard to include descendants.
-LOCAL_JAR_PACKAGES := com\* javax\*
+LOCAL_JAR_PACKAGES := com\* javax\* org\*
 
 include $(BUILD_JAVA_LIBRARY)
 framework2_module := $(LOCAL_INSTALLED_MODULE)
