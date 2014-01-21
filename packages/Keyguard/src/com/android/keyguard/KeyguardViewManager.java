@@ -562,11 +562,14 @@ public class KeyguardViewManager {
     }
 
     void updateShowWallpaper(boolean show) {
+        if (isSeeThroughEnabled()) show = false;
+
         if (show) {
             mWindowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
         } else {
             mWindowLayoutParams.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
         }
+
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
     }
 
