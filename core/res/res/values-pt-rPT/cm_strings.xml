@@ -49,7 +49,6 @@
     <string name="permlab_sendMockSms">Enviar falsos SMS</string>
     <string name="permdesc_sendMockSms">Permite à aplicação enviar falsos SMS.
         Permite à aplicação enviar SMS a aplicações de confiança. Aplicações maliciosas poderão enviar mensagens continuamente, bloqueando o sistema de notificações e perturbando o utilizador.</string>
-    <string name="lockscreen_discharging">A descarregar, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="progress_nomediapresent" product="default">Nenhum media removível presente\u2026</string>
     <string name="storage_sd_dock_card">Cartão SD da Dock</string>
     <string name="app_killed_message">Aplicação morta</string>

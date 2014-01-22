@@ -1947,7 +1947,4 @@
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
 
-  <!-- Lock screen always show battery -->
-  <java-symbol type="string" name="lockscreen_discharging" />
-
 </resources>
