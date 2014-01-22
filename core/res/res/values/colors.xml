@@ -92,7 +92,7 @@
     <color name="perms_dangerous_perm_color">#33b5e5</color>
     <color name="shadow">#cc222222</color>
     <color name="perms_costs_money">#ffffbb33</color>
-    
+
     <!-- For search-related UIs -->
     <color name="search_url_text_normal">#7fa87f</color>
     <color name="search_url_text_selected">@android:color/black</color>
@@ -151,8 +151,8 @@
     <color name="link_text_holo_light">#0000ee</color>
     <color name="default_dialog_text_holo_dark">@android:color/background_holo_light</color>
     <color name="default_dialog_text_holo_light">@android:color/background_holo_dark</color>
-    <color name="default_dialog_divider_holo_dark">@android:color/background_holo_light</color>
-    <color name="default_dialog_divider_holo_light">#ffacacac</color>
+    <color name="default_dialog_divider_holo_dark">@android:color/holo_gray_bright</color>
+    <color name="default_dialog_divider_holo_light">@android:color/holo_gray_light</color>
 
     <!-- Group buttons -->
     <eat-comment />
@@ -196,8 +196,8 @@
     <!-- A really bright Holo shade of gray -->
     <color name="holo_gray_bright">#33CCCCCC</color>
 
-    <drawable name="notification_template_icon_bg">#3333B5E5</drawable>
-    <drawable name="notification_template_icon_low_bg">#0cffffff</drawable>
+    <drawable name="notification_template_icon_bg">#1033B5E5</drawable>
+    <drawable name="notification_template_icon_low_bg">#10000000</drawable>
 
     <!-- Keyguard colors -->
     <color name="keyguard_avatar_frame_color">#ffffffff</color>
@@ -212,4 +212,3 @@
     <color name="power_menu_text_default_color">#ffffffff</color>
 
 </resources>
-
