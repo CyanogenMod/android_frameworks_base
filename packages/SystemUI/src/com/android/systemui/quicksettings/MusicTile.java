@@ -17,8 +17,12 @@
 
 package com.android.systemui.quicksettings;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,6 +33,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.media.RemoteController;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -38,6 +43,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
@@ -50,10 +56,18 @@ public class MusicTile extends QuickSettingsTile {
     private final String TAG = "MusicTile";
     private final boolean DBG = false;
 
+    private static final String SCHEDULE_MEDIA_SLEEP =
+            "com.android.systemui.quicksettings.SCHEDULE_MEDIA_SLEEP";
+    private static final String KEY_MUSIC_TIMER =
+            "key_music_timer";
+
     private boolean mActive = false;
     private boolean mClientIdLost = true;
     private int mMusicTileMode;
+    private int mTaps = 0;
+
     private Metadata mMetadata = new Metadata();
+    private Handler mHandler = new Handler();
 
     private RemoteController mRemoteController;
     private IAudioService mAudioService = null;
@@ -61,6 +75,7 @@ public class MusicTile extends QuickSettingsTile {
     public MusicTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
 
+        mGenericCollapse = false;
         mRemoteController = new RemoteController(context, mRCClientUpdateListener);
         AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         manager.registerRemoteController(mRemoteController);
@@ -69,7 +84,11 @@ public class MusicTile extends QuickSettingsTile {
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMediaButtonClick(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                if (mActive) {
+                    checkDoubleClick();
+                } else {
+                    sendMediaButtonClick(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                }
             }
         };
 
@@ -83,6 +102,7 @@ public class MusicTile extends QuickSettingsTile {
 
         qsc.registerObservedContent(Settings.System.getUriFor(
                 Settings.System.MUSIC_TILE_MODE), this);
+        qsc.registerAction(SCHEDULE_MEDIA_SLEEP, this);
     }
 
     @Override
@@ -95,6 +115,18 @@ public class MusicTile extends QuickSettingsTile {
     public void updateResources() {
         updateTile();
         super.updateResources();
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        SharedPreferences shared = context.getSharedPreferences(
+                KEY_MUSIC_TIMER, Context.MODE_PRIVATE);
+        shared.edit().putBoolean("scheduled", false).commit();
+        shared.edit().putInt("hour", -1).commit();
+        shared.edit().putInt("minutes", -1).commit();
+        if (mActive) {
+            sendMediaButtonClick(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        }
     }
 
     @Override
@@ -146,6 +178,21 @@ public class MusicTile extends QuickSettingsTile {
         }
     }
 
+    private void checkDoubleClick() {
+        mHandler.removeCallbacks(checkDouble);
+        if (mTaps > 0) {
+            // Music sleep timer
+            Intent intent = new Intent(
+                    "com.android.systemui.timedialog.MusicTileTimeDialog");
+            startSettingsActivity(intent);
+            mTaps = 0;
+        } else {
+            mTaps += 1;
+            mHandler.postDelayed(checkDouble,
+                    ViewConfiguration.getDoubleTapTimeout());
+        }
+    }
+
     private void sendMediaButtonClick(int keyCode) {
         if (!mClientIdLost) {
             mRemoteController.sendMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
@@ -180,6 +227,13 @@ public class MusicTile extends QuickSettingsTile {
         }
         return mAudioService;
     }
+
+    final Runnable checkDouble = new Runnable () {
+        public void run() {
+            mTaps = 0;
+            sendMediaButtonClick(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        }
+    };
 
     private RemoteController.OnClientUpdateListener mRCClientUpdateListener =
             new RemoteController.OnClientUpdateListener() {

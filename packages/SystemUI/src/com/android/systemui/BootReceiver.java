@@ -20,6 +20,8 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -30,8 +32,17 @@ import android.util.Log;
 public class BootReceiver extends BroadcastReceiver {
     private static final String TAG = "SystemUIBootReceiver";
 
+    private static final String KEY_MUSIC_TIMER =
+            "key_music_timer";
+
     @Override
     public void onReceive(final Context context, Intent intent) {
+        final SharedPreferences shared = context.getSharedPreferences(
+                KEY_MUSIC_TIMER, Context.MODE_PRIVATE);
+        shared.edit().putBoolean("scheduled", false).commit();
+        shared.edit().putInt("hour", -1).commit();
+        shared.edit().putInt("minutes", -1).commit();
+
         try {
             // Start the load average overlay, if activated
             ContentResolver res = context.getContentResolver();
