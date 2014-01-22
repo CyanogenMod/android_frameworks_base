@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -46,7 +47,8 @@
     <string name="permdesc_fm_radio_receiver">Επιτρέπει σε μια εφαρμογή τον έλεγχο του δέκτη FM.</string>
     <string name="permlab_fm_radio_transmitter">έλεγχος πομπού FM</string>
     <string name="permdesc_fm_radio_transmitter">Επιτρέπει σε μια εφαρμογή τον έλεγχο του πομπού FM.</string>
-    <string name="lockscreen_discharging">Αποφόρτιση, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="permlab_sendMockSms">αποστολή ψευδών SMS</string>
+    <string name="permdesc_sendMockSms">Επιτρέπει σε μια εφαρμογή την αποστολή ψευδών μηνυμάτων SMS. Επιτρέπει σε μια εφαρμογή να στέλνει SMS σε αξιόπιστες εφαρμογές. Κακόβουλες εφαρμογές θα μπορούσαν να στέλνουν μηνύματα συνεχώς, μπλοκάροντας το σύστημα ειδοποιήσεων της συσκευής και διαταράσσοντας τον χρήστη.</string>
     <string name="storage_sd_dock_card">Κάρτα SD βάσης σύνδεσης</string>
     <string name="app_killed_message">Η εφαρμογή τερματίστηκε</string>
     <string name="global_action_reboot">Επανεκκίνηση</string>
@@ -113,15 +115,14 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> δεν θα μπορεί να έχει πρόσβαση στα προσωπικά σας δεδομένα</string>
     <string name="profile_picker_title">Προφίλ</string>
     <string name="profile_none">Κανένα</string>
-    <string name="permlab_cancelNotifications">ακύρωση ειδοποιήσεων εφαρμογών</string>
-    <string name="permdesc_cancelNotifications">Επιτρέπει σε μια εφαρμογή την ακύρωση ειδοποιήσεων που προέρχονται από άλλες εφαρμογές.</string>
-    <string name="permlab_interceptSmsSent">παρεμπόδιση εξερχόμενων SMS</string>
-    <string name="permdesc_interceptSmsSent">Επιτρέπει σε μια εφαρμογή να παρεμποδίσει τα εξερχόμενα SMS. Κακόβουλες εφαρμογές μπορεί να το χρησιμοποιήσουν για να εμποδίσουν τη αποστολή SMS.</string>
-    <string name="policylab_enforceSelinux">Εξαναγκασμός SELinux</string>
-    <string name="policydesc_enforceSelinux">Εναλλαγή πολιτικής SELinux σε εξαναγκασμένη ή επιτρεπόμενη.</string>
-    <string name="policylab_enforceMmac">Εξαναγκασμός MMAC</string>
-    <string name="policydesc_enforceMmac">Εναλλαγή πολιτικής MMAC σε εξαναγκασμένη ή επιτρεπόμενη.</string>
     <string name="perf_profile_pwrsv">Εξοικονόμηση ενέργειας</string>
     <string name="perf_profile_bal">Ισορροπημένο</string>
     <string name="perf_profile_perf">Επιδόσεις</string>
+    <string name="permlab_interceptSmsSent">παρεμπόδιση εξερχόμενων SMS</string>
+    <string name="permdesc_interceptSmsSent">Επιτρέπει σε μια εφαρμογή να παρεμποδίσει τα εξερχόμενα SMS. Κακόβουλες εφαρμογές μπορεί να το χρησιμοποιήσουν για να εμποδίσουν τη αποστολή SMS.</string>
+    <string name="permlab_resetBatteryStats">επαναφορά στατιστικών μπαταρίας</string>
+    <string name="permdesc_resetBatteryStats">Επιτρέπει σε μια εφαρμογή να κάνει επαναφορά τα χαμηλού επιπέδου δεδομένα χρήσης μπαταρίας.</string>
+    <string name="immersive_mode_confirmation_bottom">Σύρετε από το κάτω μέρος προς τα πάνω για να βγείτε από την πλήρη οθόνη</string>
+    <string name="transient_navigation_confirmation_long">Σύρετε απο την άκρη της οθόνης για να εμφανίσετε την μπάρα συστήματος</string>
+    <string name="progress_nomediapresent" product="default">Δεν υπάρχουν αφαιρούμενα μέσα αποθήκευσης\u2026</string>
 </resources>

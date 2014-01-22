@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2012-2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_quick_settings_ringer">Ήχος <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Δόνηση <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="bean_dream_settings_cid_title">Χρήση κεφαλιού του Cid</string>
+    <string name="bean_dream_settings_cid_summary">Χρήση του κεφαλιού του Cid στη θέση των jellybean στο dream</string>
+    <string name="quick_settings_profile_label">Προφίλ</string>
+    <string name="powerwidget_screen_timeout_toast">Λήξη χρον. ορίου οθόνης: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS ανενεργό</string>
+    <string name="quick_settings_screen_sleep">Αναστολή λειτουργίας</string>
+    <string name="quick_settings_ringer_on">Ήχος ενεργός</string>
+    <string name="quick_settings_ringer_off">Ήχος ανενεργός</string>
+    <string name="quick_settings_vibration_on">Δόνηση ενεργή</string>
+    <string name="quick_settings_vibration_off">Δόνηση ανενεργή</string>
+    <string name="quick_settings_label_enabled">Ενεργό</string>
+    <string name="quick_settings_label_disabled">Ανενεργό</string>
+    <string name="quick_settings_ringer_normal">Ήχος</string>
+    <string name="quick_settings_lockscreen">Οθόνη κλειδώματος</string>
+    <string name="quick_settings_network_type">Δίκτυο</string>
+    <string name="quick_settings_report_bug">Αναφορά σφάλματος</string>
+    <string name="quick_settings_sync">Συγχρονισμός</string>
+    <string name="quick_settings_sync_off">Συγχρονισμός ανενεργός</string>
+    <string name="quick_settings_torch">Φακός</string>
+    <string name="quick_settings_torch_off">Φακός ανενεργός</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC ανενεργό</string>
+    <string name="quick_settings_screen_timeout">Χρ. όριο οθόνης</string>
+    <string name="quick_settings_usb_tether_off_label">Αποσυνδεμένο</string>
+    <string name="quick_settings_usb_tether_connected_label">Πρόσδεση ανενεργή</string>
+    <string name="quick_settings_usb_tether_on_label">Πρόσδεση</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP ανενεργό</string>
+    <string name="quick_settings_quiethours">Ώρες ησυχίας</string>
+    <string name="quick_settings_quiethours_off">Ώρες ησυχίας ανενεργές</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE ανενεργό</string>
+    <string name="quick_settings_volume">Ένταση</string>
+    <string name="quick_settings_camera_label">Φωτογρ. μηχανή</string>
+    <string name="quick_settings_network_adb_disabled_label">Ανενεργό</string>
+    <string name="quick_settings_network_adb_enabled_label">Ενεργό</string>
+    <string name="quick_settings_expanded_desktop">Επεκταμένη</string>
+    <string name="quick_settings_expanded_desktop_off">Κανονική</string>
+    <string name="quick_settings_camera_error_connect">Δεν είναι δυνατή η σύνδεση με την φωτογραφ. μηχανή</string>
+    <string name="navbar_dialog_title">Επιλέξτε λειτουργία για εκχώρηση</string>
+    <string name="navbar_home_button">Πλήκτρο Home</string>
+    <string name="navbar_recent_button">Πλήκτρο Recent</string>
+    <string name="navbar_search_button">Πλήκτρο Search</string>
+    <string name="navbar_back_button">Πλήκτρο Back</string>
+    <string name="navbar_empty_button">Άδειο πλήκτρο</string>
+    <string name="navbar_menu_conditional_button">Πλήκτρο Menu (αυτόματη απόκρυψη)</string>
+    <string name="navbar_menu_always_button">Πλήκτρο Menu (εμφάνιση πάντα)</string>
+    <string name="navbar_menu_big_button">Πλήκτρο Menu</string>
+    <string name="pie_battery_status_charging">Φόρτιση (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Μπαταρία πλήρης</string>
+    <string name="pie_battery_status_discharging">Απομένει <xliff:g id="percent">%d</xliff:g>%%</string>
+    <string name="pie_phone_status_no_service">Καμία υπηρεσία</string>
+    <string name="pie_phone_status_airplane_mode">Λειτουργία πτήσης ενεργή</string>
+    <string name="pie_phone_status_emergency_only">Μόνο κλήσεις έκτακτης ανάγκης</string>
+    <string name="advanced_dev_option_wipe_app">Εκκαθάριση δεδομένων</string>
+    <string name="advanced_dev_option_force_stop">Αναγκαστική διακοπή</string>
+    <string name="accessibility_dock_battery_level">Μπαταρία βάσης σύνδεσης <xliff:g id="number">%d</xliff:g> τοις εκατό.</string>
+    <string name="screenshot_delete_action">Διαγραφή</string>
+    <string name="screenshot_delete_confirmation">Το στιγμιότυπο οθόνης διαγράφηκε.</string>
+    <string name="accessibility_battery_level">Μπαταρία <xliff:g id="NUMBER">%d</xliff:g> τοις εκατό.</string>
+</resources>
