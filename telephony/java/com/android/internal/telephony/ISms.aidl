@@ -178,7 +178,7 @@ interface ISms {
      */
     void sendTextWithOptions(String callingPkg, in String destAddr, in String scAddr,
             in String text, in PendingIntent sentIntent, in PendingIntent deliveryIntent,
-            in int priority);
+            in int priority, in boolean isExpectMore);
 
     /**
      * Send a multi-part text based SMS.
@@ -231,7 +231,7 @@ interface ISms {
      */
     void sendMultipartTextWithOptions(String callingPkg, in String destinationAddress,
             in String scAddress, in List<String> parts, in List<PendingIntent> sentIntents,
-            in List<PendingIntent> deliveryIntents, in int priority);
+            in List<PendingIntent> deliveryIntents, in int priority, in boolean isExpectMore);
 
     /**
      * Enable reception of cell broadcast (SMS-CB) messages with the given
