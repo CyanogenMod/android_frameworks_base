@@ -77,4 +77,5 @@
     <string name="advanced_dev_option_force_stop">Dwing stop</string>
     <string name="accessibility_dock_battery_level">Dok Batery <xliff:g id="number">%d</xliff:g> persent.</string>
     <string name="screenshot_delete_action">Verwyder</string>
+    <string name="screenshot_delete_confirmation">Skermkiekie geskrap</string>
 </resources>
