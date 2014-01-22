@@ -22,4 +22,8 @@ public class Constants {
     static final int ESCAPE_VELOCITY = 100; // speed of item required to "curate" it in dp/s
     public static float ALPHA_FADE_START = 0.8f; // fraction of thumbnail width where fade starts
     static final float ALPHA_FADE_END = 0.5f; // fraction of thumbnail width beyond which alpha->0
+    public static final int CLEAR_ALL_BUTTON_TOP_LEFT = 0;
+    public static final int CLEAR_ALL_BUTTON_TOP_RIGHT = 1;
+    public static final int CLEAR_ALL_BUTTON_BOTTOM_LEFT = 2;
+    public static final int CLEAR_ALL_BUTTON_BOTTOM_RIGHT = 3;
 }
