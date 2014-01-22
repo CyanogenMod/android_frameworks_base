@@ -3083,6 +3083,7 @@ public class WifiStateMachine extends StateMachine {
 
             if (mP2pSupported) {
                 if (mOperationalMode == CONNECT_MODE) {
+                    log("enabling p2p from driver started state");
                     mWifiP2pChannel.sendMessage(WifiStateMachine.CMD_ENABLE_P2P);
                 } else {
                     // P2P statemachine starts in disabled state, and is not enabled until

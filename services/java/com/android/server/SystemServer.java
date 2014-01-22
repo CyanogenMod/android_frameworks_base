@@ -560,7 +560,11 @@ class ServerThread {
                        networkStats.bindConnectivityManager(connectivity);
                        networkPolicy.bindConnectivityManager(connectivity);
                        wifi.checkAndStartWifi();
-                       wifiP2p.connectivityServiceReady();
+                       try {
+                           wifiP2p.connectivityServiceReady();
+                       } catch (NullPointerException np){
+                          Slog.i(TAG,"Exception while initialsing connectivity service ",np);
+                       }
                    }
                } catch (Throwable e) {
                    reportWtf("starting Connectivity Service", e);
