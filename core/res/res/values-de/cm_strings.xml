@@ -48,7 +48,6 @@
     <string name="permdesc_fm_radio_transmitter">Ermöglicht der App, den UKW-Sender zu steuern.</string>
     <string name="permlab_sendMockSms">Simulierte SMS senden</string>
     <string name="permdesc_sendMockSms">Ermöglicht der App, simulierte SMS zu vertrauenswürdigen Apps zu senden. Schädliche Apps könnten kontinuierlich SMS versenden, was das Benachrichtigungssystem blockieren oder anderweitig störend sein könnte.</string>
-    <string name="lockscreen_discharging">"Entlädt\u2026 (<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>)"</string>
     <string name="progress_nomediapresent" product="default">Keine entfernbaren Medien vorhanden\u2026</string>
     <string name="storage_sd_dock_card">SD-Karte des Docks</string>
     <string name="global_action_reboot">Neu starten</string>

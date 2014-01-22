@@ -46,7 +46,6 @@
     <string name="permdesc_fm_radio_receiver">Laat die program toe om die FM-ontvanger te beheer.</string>
     <string name="permlab_fm_radio_transmitter">Beheer FM-sender</string>
     <string name="permdesc_fm_radio_transmitter">Laat die program toe om die FM-sender te beheer.</string>
-    <string name="lockscreen_discharging"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g> ontlaai</string>
     <string name="storage_sd_dock_card">Dok SD-kaart</string>
     <string name="app_killed_message">Program beëindig</string>
     <string name="global_action_reboot">Herlaai</string>

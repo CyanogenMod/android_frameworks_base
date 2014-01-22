@@ -50,7 +50,6 @@
     <string name="permdesc_sendMockSms">Tillåter appen att skicka sken-SMS.
         Detta tillåter en app att skicka SMS till betrodda applikationer. Illasinnade appar kan skicka meddelanden
         oavbrutet och därmed blockera enhetens aviseringssystem samt störa användaren.</string>
-    <string name="lockscreen_discharging">Laddar ur, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">SD-kort i docka</string>
     <string name="app_killed_message">App tvångsavslutad</string>
     <string name="global_action_reboot">Omstart</string>

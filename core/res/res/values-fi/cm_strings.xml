@@ -40,7 +40,6 @@
     <string name="reboot_progress">Käynnistetään uudelleen\u2026</string>
     <string name="reboot_confirm" product="tablet">Tablet käynnistyy uudelleen.</string>
     <string name="reboot_confirm" product="default">Puhelin käynnistyy uudelleen.</string>
-    <string name="lockscreen_discharging">Puretaan latausta, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="app_killed_message">Sovellus tapettu</string>
     <string name="global_action_reboot">Käynnistä uudelleen</string>
     <string name="global_action_choose_profile">Profiili</string>

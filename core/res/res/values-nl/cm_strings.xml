@@ -43,7 +43,6 @@
     <string name="reboot_confirm" product="default">Uw telefoon wordt herstart.</string>
     <string name="permlab_preventpower">aan/uit-knop beheren</string>
     <string name="permdesc_preventpower">Hiermee kan de app het gedrag van de aan/uit-knop wijzigen</string>
-    <string name="lockscreen_discharging">Ontladen, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="app_killed_message">App afgesloten</string>
     <string name="global_action_reboot">Herstarten</string>
     <string name="global_action_choose_profile">Profiel</string>

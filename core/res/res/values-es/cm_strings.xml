@@ -52,7 +52,6 @@
     <string name="permdesc_fm_radio_transmitter">Permite que la aplicación controle el transmisor FM.</string>
     <string name="permlab_sendMockSms">enviar mensajes SMS simulados</string>
     <string name="permdesc_sendMockSms">Permite que la aplicación envíe mensajes SMS simulados a aplicaciones de confianza. Las aplicaciones maliciosas pueden enviar mensajes SMS continuamente, bloqueando la barra de notificaciones e interrumpiendo al usuario.</string>
-    <string name="lockscreen_discharging">Descargando, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">Tarjeta SD de la base</string>
     <string name="toast_rotation_unlocked">Rotación de pantalla desbloqueada</string>
     <string name="toast_rotation_locked">Rotación de pantalla bloqueada</string>

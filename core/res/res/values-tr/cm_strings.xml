@@ -46,7 +46,6 @@
     <string name="permdesc_fm_radio_receiver">Uygulamanın FM alıcıyı kontrol etmesine izin verir.</string>
     <string name="permlab_fm_radio_transmitter">FM vericiyi kontrol et</string>
     <string name="permdesc_fm_radio_transmitter">Uygulamanın FM vericiyi kontrol etmesine izin verir.</string>
-    <string name="lockscreen_discharging">Şarj olmuyor, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">SD kart genişletmesi</string>
     <string name="app_killed_message">Uygulama zorla sonlandırıldı</string>
     <string name="global_action_reboot">Yeniden başlat</string>

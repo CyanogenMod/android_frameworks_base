@@ -47,7 +47,6 @@
     <string name="permdesc_sendMockSms">Umožní zasílat falešné SMS zprávy.
         Umožňuje zasílat SMS zprávy důvěryhodným aplikacím. Škodlivé aplikace mohou průběžně zasílat veliké množství
         zpráv a tím blokovat systém upozorňování a obtěžovat uživatele.</string>
-    <string name="lockscreen_discharging">Vybíjení - <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">SD karta doku</string>
     <string name="app_killed_message">Aplikace ukončena</string>
     <string name="global_action_reboot">Restartovat</string>

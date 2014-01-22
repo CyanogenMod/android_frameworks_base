@@ -46,7 +46,6 @@
     <string name="permdesc_fm_radio_receiver">Tillader app\'en at kontrollere FM-modtageren.</string>
     <string name="permlab_fm_radio_transmitter">kontrollér FM-modtager</string>
     <string name="permdesc_fm_radio_transmitter">Tillader app\'en at kontrollere FM-senderen.</string>
-    <string name="lockscreen_discharging">Aflader, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">Dock SD-kort</string>
     <string name="app_killed_message">App lukket</string>
     <string name="global_action_reboot">Genstart</string>

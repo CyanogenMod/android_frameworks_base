@@ -18,7 +18,6 @@
     <string name="global_action_choose_profile">프로파일</string>
     <string name="toast_rotation_unlocked">방향 전환 잠김</string>
     <string name="toast_rotation_locked">방향 전환 잠금 풀림</string>
-    <string name="lockscreen_discharging">방전 중, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="reboot_system" product="tablet">태블릿 다시 시작</string>
     <string name="reboot_system" product="default">휴대전화 다시 시작</string>
     <string name="global_action_screenshot">스크린샷</string>

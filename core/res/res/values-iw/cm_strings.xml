@@ -44,7 +44,6 @@
     <string name="reboot_confirm" product="default">הטלפון יופעל מחדש.</string>
     <string name="permlab_preventpower">מניעת כפתור הכיבוי</string>
     <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור הכיבוי.</string>
-    <string name="lockscreen_discharging">פורק(<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="app_killed_message">התהליך נסגר</string>
     <string name="storage_sd_dock_card">כרטיס SD של תחנת עגינה</string>
     <string name="toast_rotation_unlocked">סיבוב אוטומטי</string>
