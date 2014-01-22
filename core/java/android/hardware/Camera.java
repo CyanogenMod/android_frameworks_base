@@ -4483,7 +4483,6 @@ public class Camera {
         private static final String KEY_QC_TOUCH_INDEX_AF = "touch-index-af";
         private static final String KEY_QC_MANUAL_FOCUS_POSITION = "manual-focus-position";
         private static final String KEY_QC_MANUAL_FOCUS_POS_TYPE = "manual-focus-pos-type";
-        private static final String KEY_QC_CURRENT_FOCUS_POSITION = "current-focus-position";
         private static final String KEY_QC_SCENE_DETECT = "scene-detect";
         private static final String KEY_QC_ISO_MODE = "iso";
         private static final String KEY_QC_EXPOSURE_TIME = "exposure-time";
@@ -4512,7 +4511,6 @@ public class Camera {
         private static final String KEY_QC_POWER_MODE = "power-mode";
         private static final String KEY_QC_POWER_MODE_SUPPORTED = "power-mode-supported";
         private static final String KEY_QC_WB_MANUAL_CCT = "wb-manual-cct";
-        private static final String KEY_QC_WB_CURRENT_CCT = "wb-current-cct";
         private static final String KEY_QC_MIN_WB_CCT = "min-wb-cct";
         private static final String KEY_QC_MAX_WB_CCT = "max-wb-cct";
         private static final String KEY_QC_AUTO_HDR_ENABLE = "auto-hdr-enable";
@@ -5421,14 +5419,10 @@ public class Camera {
          /** @hide
          * Gets the current WB CCT.
          *
-         * Pay attention to KEY_QC_WB_MANUAL_CCT and KEY_QC_WB_CURRENT_CCT.
-         * The former is set by APK.
-         * The latter is updated from HAL, usually in AWB mode.
-         *
          * @return CCT value
          */
          public String getWBCurrentCCT() {
-            return get(KEY_QC_WB_CURRENT_CCT);
+            return get(KEY_QC_WB_MANUAL_CCT);
          }
 
          /** @hide
@@ -5496,7 +5490,7 @@ public class Camera {
          * @return current focus position
          */
          public String getCurrentFocusPosition() {
-            return get(KEY_QC_CURRENT_FOCUS_POSITION);
+            return get(KEY_QC_MANUAL_FOCUS_POSITION);
          }
 
 
