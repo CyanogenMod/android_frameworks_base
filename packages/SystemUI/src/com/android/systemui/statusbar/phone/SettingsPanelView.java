@@ -116,11 +116,13 @@ public class SettingsPanelView extends PanelView {
 
     @Override
     public void fling(float vel, boolean always) {
-        GestureRecorder gr = ((PhoneStatusBarView) mBar).mBar.getGestureRecorder();
-        if (gr != null) {
-            gr.tag(
-                "fling " + ((vel > 0) ? "open" : "closed"),
-                "settings,v=" + vel);
+        if (DEBUG_GESTURES) {
+            GestureRecorder gr = ((PhoneStatusBarView) mBar).mBar.getGestureRecorder();
+            if (gr != null) {
+                gr.tag(
+                    "fling " + ((vel > 0) ? "open" : "closed"),
+                    "settings,v=" + vel);
+            }
         }
         super.fling(vel, always);
     }

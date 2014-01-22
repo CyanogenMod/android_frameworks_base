@@ -70,6 +70,11 @@
             android:layout_height="@dimen/notification_min_height"
             />
 
+        <ViewStub android:id="@+id/notification_brightness_slider"
+            android:layout="@layout/quick_settings_brightness_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/notification_row_min_height"/>
+
         <TextView
             android:id="@+id/emergency_calls_only"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network.EmergencyOnly"
