@@ -30,7 +30,6 @@
     <string name="global_action_choose_profile">Profils</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Bureau étendu</string>
     <string name="app_killed_message">Application arrêtée</string>
-    <string name="lockscreen_discharging">Déchargement, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="progress_nomediapresent" product="default">Aucun support amovible disponible\u2026</string>
     <string name="storage_sd_dock_card">Dock carte SD</string>
     <string name="permlab_preventpower">outrepasser le bouton d\'alimentation</string>

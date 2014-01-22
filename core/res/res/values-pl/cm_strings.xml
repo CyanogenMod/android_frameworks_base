@@ -49,7 +49,6 @@
     <string name="permdesc_fm_radio_transmitter">Pozwala aplikacji na kontrolowanie transmittera FM</string>
     <string name="permlab_sendMockSms">wysyłanie pozorowanych wiadomości SMS</string>
     <string name="permdesc_sendMockSms">Pozwala aplikacji na wysyłanie pozorowanych wiadomości SMS. W rezultacie umożliwi to wysyłanie SMS-ów do zaufanych aplikacji. Złośliwe aplikacje mogą wysyłać wiadomości w sposób ciągły, blokując system powiadomień urządzenia i zakłócając spokój użytkownika.</string>
-    <string name="lockscreen_discharging">Rozładowywanie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">Karta pamięci stacji dokującej</string>
     <string name="app_killed_message">Aplikacja została zabita</string>
     <string name="global_action_reboot">Uruchom ponownie</string>

@@ -89,8 +89,6 @@
         This allows an app send SMS to trusted applications. Malicious apps could send messages
         continuously, blocking the device notification system and disrupting the user.</string>
 
-    <string name="lockscreen_discharging">Discharging, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-
     <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
     <string name="storage_sd_dock_card">Dock SD card</string>
 
@@ -179,9 +177,12 @@
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_cancelNotifications">cancel application notifications</string>
+
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_cancelNotifications">Allows the app to cancel notifications created by other apps.</string>
+    <string name="permlab_interceptSmsSent">intercept outgoing SMS</string>
 
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
 
     <!-- ColorPicker -->

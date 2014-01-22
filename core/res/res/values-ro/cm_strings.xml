@@ -35,7 +35,6 @@
     <string name="global_actions_expanded_desktop_mode_off_status">"Dezactivat"</string>
     <string name="global_action_reboot">"Repornire"</string>
     <string name="global_action_choose_profile">"Profil"</string>
-    <string name="lockscreen_discharging">"Descărcare, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="toast_rotation_unlocked">"Rotire Ecran Deblocată"</string>
     <string name="toast_rotation_locked">"Rotire Ecran Blocată"</string>
     <string name="app_killed_message">"Aplicaţie oprită"</string>

@@ -49,7 +49,6 @@
     <string name="permlab_sendMockSms">发送模拟短信</string>
     <string name="permdesc_sendMockSms">允许应用发送模拟短信.
         这允许应用发送短信到受信任的应用. 恶意应用可能连续发送短信, 阻断设备通知系统并扰乱用户.</string>
-    <string name="lockscreen_discharging">正在放电, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="progress_nomediapresent" product="default">没有可移动媒体\u2026</string>
     <string name="storage_sd_dock_card">底座 SD 卡</string>
     <string name="app_killed_message">应用程序已被终止</string>

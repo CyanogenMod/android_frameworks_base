@@ -48,7 +48,6 @@
     <string name="permdesc_fm_radio_transmitter">Permet a l\'app controlar el transmissor FM.</string>
     <string name="permlab_sendMockSms">envia missatges SMS simulats</string>
     <string name="permdesc_sendMockSms">Permet a l\'app enviar missatges SMS simulats. Això permet a una app enviar missatges SMS a pps de confiança. Apps malicioses podrien enviar missatges continuament, bloquejant el sistema de notificacions del dispositiu, molestant l\'usuari.</string>
-    <string name="lockscreen_discharging">Descarregant, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="progress_nomediapresent" product="default">No hi ha present cap dispositiu extraïble\u2026</string>
     <string name="storage_sd_dock_card">Acopla targeta SD</string>
     <string name="app_killed_message">App matada</string>

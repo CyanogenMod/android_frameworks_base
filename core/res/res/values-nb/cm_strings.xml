@@ -46,7 +46,6 @@
     <string name="permdesc_fm_radio_receiver">Lar appen kontrollere FM-mottakeren.</string>
     <string name="permlab_fm_radio_transmitter">kontrollere FM-sender</string>
     <string name="permdesc_fm_radio_transmitter">Lar appen kontrollere FM-senderen.</string>
-    <string name="lockscreen_discharging">Lader ut, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">SD-kort i dokkingstasjon</string>
     <string name="app_killed_message">Appen ble drept</string>
     <string name="global_action_reboot">Start på nytt</string>
