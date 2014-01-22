@@ -2813,6 +2813,13 @@ public final class Settings {
         public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
 
         /**
+         * Quick Settings Smart Pulldown
+         *
+         * @hide
+         */	
+        public static final String QS_SMART_PULLDOWN = "qs_smart_pulldown";
+
+        /**
          * Quick Settings Collapse Pane
          *
          * @hide
