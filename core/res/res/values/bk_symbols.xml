@@ -180,4 +180,42 @@
     <java-symbol type="drawable" name="ic_lock_wifi_off" />
 
     <java-symbol type="string" name="gesture_actions" />
+
+  <!-- launcher support -->
+  <public type="drawable" name="launcher_clock" id="0x010800b4" />
+  <public type="drawable" name="launcher_clock_hour" id="0x010800b5" />
+  <public type="drawable" name="launcher_clock_min" id="0x010800b6" />
+  <public type="drawable" name="launcher_clock_sec" id="0x010800b7" />
+  <public type="drawable" name="launcher_calendar" id="0x010800b8" />
+  <public type="drawable" name="launcher_calendar_num1" id="0x010800b9" />
+  <public type="drawable" name="launcher_calendar_num2" id="0x010800ba" />
+  <public type="drawable" name="launcher_calendar_num3" id="0x010800bb" />
+  <public type="drawable" name="launcher_calendar_num4" id="0x010800bc" />
+  <public type="drawable" name="launcher_calendar_num5" id="0x010800bd" />
+  <public type="drawable" name="launcher_calendar_num6" id="0x010800be" />
+  <public type="drawable" name="launcher_calendar_num7" id="0x010800bf" />
+  <public type="drawable" name="launcher_calendar_num8" id="0x010800c0" />
+  <public type="drawable" name="launcher_calendar_num9" id="0x010800c1" />
+  <public type="drawable" name="launcher_calendar_num10" id="0x010800c2" />
+  <public type="drawable" name="launcher_calendar_num11" id="0x010800c3" />
+  <public type="drawable" name="launcher_calendar_num12" id="0x010800c4" />
+  <public type="drawable" name="launcher_calendar_num13" id="0x010800c5" />
+  <public type="drawable" name="launcher_calendar_num14" id="0x010800c6" />
+  <public type="drawable" name="launcher_calendar_num15" id="0x010800c7" />
+  <public type="drawable" name="launcher_calendar_num16" id="0x010800c8" />
+  <public type="drawable" name="launcher_calendar_num17" id="0x010800c9" />
+  <public type="drawable" name="launcher_calendar_num18" id="0x010800ca" />
+  <public type="drawable" name="launcher_calendar_num19" id="0x010800cb" />
+  <public type="drawable" name="launcher_calendar_num20" id="0x010800cc" />
+  <public type="drawable" name="launcher_calendar_num21" id="0x010800cd" />
+  <public type="drawable" name="launcher_calendar_num22" id="0x010800ce" />
+  <public type="drawable" name="launcher_calendar_num23" id="0x010800cf" />
+  <public type="drawable" name="launcher_calendar_num24" id="0x010800d0" />
+  <public type="drawable" name="launcher_calendar_num25" id="0x010800d1" />
+  <public type="drawable" name="launcher_calendar_num26" id="0x010800d2" />
+  <public type="drawable" name="launcher_calendar_num27" id="0x010800d3" />
+  <public type="drawable" name="launcher_calendar_num28" id="0x010800d4" />
+  <public type="drawable" name="launcher_calendar_num29" id="0x010800d5" />
+  <public type="drawable" name="launcher_calendar_num30" id="0x010800d6" />
+  <public type="drawable" name="launcher_calendar_num31" id="0x010800d7" />
 </resources>
