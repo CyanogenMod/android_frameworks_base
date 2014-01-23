@@ -5346,7 +5346,7 @@ status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, ui
     }
 
     Vector<Vector<uint32_t> > map;
-    const PackageGroup* pg = mPackageGroups[0];
+    const PackageGroup* pg = mPackageGroups[mPackageGroups.size() - 1];
     const Package* pkg = pg->packages[0];
     size_t typeCount = pkg->types.size();
     // starting size is header + first item (number of types in map)
