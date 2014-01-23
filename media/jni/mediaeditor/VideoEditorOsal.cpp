@@ -40,7 +40,7 @@ extern "C" {
 
 #define VIDEOEDIT_OSAL_RESULT_STRING_MAX     (32)
 
-#define VIDEOEDIT_OSAL_RESULT_INIT(m_result) { m_result, #m_result }
+#define VIDEOEDIT_OSAL_RESULT_INIT(m_result) { static_cast<M4OSA_ERR>(m_result), #m_result }
 
 
 typedef struct
