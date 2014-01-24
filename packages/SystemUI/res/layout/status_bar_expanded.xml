@@ -71,7 +71,7 @@
             />
 
         <ViewStub android:id="@+id/notification_brightness_slider"
-            android:layout="@layout/quick_settings_brightness_dialog"
+            android:layout="@layout/status_bar_brightness_slider"
             android:layout_width="match_parent"
             android:layout_height="@dimen/notification_row_min_height"/>
 
