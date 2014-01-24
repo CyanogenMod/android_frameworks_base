@@ -21,6 +21,7 @@
 <FrameLayout
     xmlns:prvandroid="http://schemas.android.com/apk/prv/res/android"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
     android:id="@+id/porn_notification_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -46,12 +47,14 @@
 
         <include layout="@layout/glow_pad_view" />
 
-        <ImageView
+        <com.android.systemui.widget.RoundedImageView
             android:id="@+id/current_notification_icon"
             android:layout_width="@dimen/handle_icon_size"
             android:layout_height="@dimen/handle_icon_size"
             android:layout_centerInParent="true"
             android:scaleType="fitCenter"
+            systemui:corner_radius="30dip"
+            systemui:is_oval="true"
             android:src="@drawable/ic_ad_unlock" />
 
         <View

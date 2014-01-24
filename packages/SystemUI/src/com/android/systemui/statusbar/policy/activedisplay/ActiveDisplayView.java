@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 The ChameleonOS Project
+ * This code has been modified. Portions copyright (C) 2013, OmniRom Project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +20,10 @@ import android.animation.ObjectAnimator;
 import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
 import android.app.INotificationManager;
-import android.app.KeyguardManager;
-import android.app.KeyguardManager.KeyguardLock;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
+import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -34,6 +34,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
@@ -42,15 +43,12 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.IPowerManager;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -67,19 +65,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
+import com.android.internal.util.slim.DeviceUtils;
 import com.android.internal.util.slim.QuietHoursHelper;
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.GlowPadView.OnTriggerListener;
 import com.android.internal.widget.multiwaveview.TargetDrawable;
-import com.android.internal.widget.LockPatternUtils;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
+import com.android.systemui.widget.RoundedDrawable;
+import com.android.systemui.widget.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,28 +87,50 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ActiveDisplayView extends FrameLayout {
+public class ActiveDisplayView extends FrameLayout
+               implements ProximitySensorManager.ProximityListener, LightSensorManager.LightListener {
+
     private static final boolean DEBUG = false;
     private static final String TAG = "ActiveDisplayView";
-
-    // the following is used for testing purposes
-    private static final String ACTION_FORCE_DISPLAY
-            = "com.android.systemui.action.FORCE_DISPLAY";
 
     private static final String ACTION_REDISPLAY_NOTIFICATION
             = "com.android.systemui.action.REDISPLAY_NOTIFICATION";
 
+    private static final String ACTION_PHONE_STATE
+            = "android.intent.action.PHONE_STATE";
+
     private static final String ACTION_DISPLAY_TIMEOUT
             = "com.android.systemui.action.DISPLAY_TIMEOUT";
+
+    private static final String ACTION_UNLOCK_DEVICE
+            = "com.android.systemui.action.UNLOCK_DEVICE";
+
+    private static final String[] AUTO_BANNED_PACKAGES = new String[] {
+        "com.android.music",
+        "com.andrew.apollo",
+        "com.google.android.music",
+        "com.android.providers.downloads"
+    };
 
     private static final int MAX_OVERFLOW_ICONS = 8;
 
     private static final int HIDE_NOTIFICATIONS_BELOW_SCORE = Notification.PRIORITY_LOW;
 
+    private final int GO_TO_SLEEP_REASON_USER = 0;
+    private final int GO_TO_SLEEP_REASON_TIMEOUT = 2;
+
     // the different pocket mode options
-    private static final int POCKET_MODE_OFF = 0;
-    private static final int POCKET_MODE_NOTIFICATIONS_ONLY = 1;
-    private static final int POCKET_MODE_ACTIVE_DISPLAY = 2;
+    private final int POCKET_MODE_OFF = 0;
+    private final int POCKET_MODE_LOCK_NOTIFICATION = 1;
+    private final int POCKET_MODE_NOTIFICATIONS_ONLY = 2;
+    private final int POCKET_MODE_ALWAYS = 3;
+
+    /** Screen turned off because of power button */
+    private final int OFF_BECAUSE_OF_USER = 2;
+    /** Screen turned off because of timeout */
+    private final int OFF_BECAUSE_OF_TIMEOUT = 3;
+    /** Screen turned off because of proximity sensor */
+    private final int OFF_BECAUSE_OF_PROX_SENSOR = 4;
 
     // Targets
     private static final int UNLOCK_TARGET = 0;
@@ -121,58 +143,80 @@ public class ActiveDisplayView extends FrameLayout {
     private static final int MSG_SHOW_NOTIFICATION      = 1002;
     private static final int MSG_SHOW_TIME              = 1003;
     private static final int MSG_DISMISS_NOTIFICATION   = 1004;
+    private static final int MSG_HIDE_NOTIFICATION_CALL = 1005;
+    private static final int MSG_SHOW_NOTHING           = 1006;
 
-    private BaseStatusBar mBar;
     private GlowPadView mGlowPadView;
     private View mRemoteView;
     private View mClock;
-    private ImageView mCurrentNotificationIcon;
+    private RoundedImageView mCurrentNotificationIcon;
     private FrameLayout mRemoteViewLayout;
     private FrameLayout mContents;
     private ObjectAnimator mAnim;
     private Drawable mNotificationDrawable;
     private Paint mInvertedPaint;
     private int mCreationOrientation;
-    private SettingsObserver mSettingsObserver;
-    private IPowerManager mPM;
-    private INotificationManager mNM;
-    private INotificationListenerWrapper mNotificationListener;
-    private StatusBarNotification mNotification;
-    private SensorManager mSensorManager;
-    private Sensor mLightSensor;
-    private Sensor mProximitySensor;
-    private boolean mProximityIsFar = true;
-    private boolean mIsInBrightLight = false;
-    private boolean mWakedByPocketMode = false;
     private LinearLayout mOverflowNotifications;
     private LayoutParams mRemoteViewLayoutParams;
     private int mIconSize;
     private int mIconMargin;
     private int mIconPadding;
-    private long mPocketTime = 0;
     private LinearLayout.LayoutParams mOverflowLayoutParams;
-    private KeyguardManager mKeyguardManager;
-    private KeyguardLock mKeyguardLock;
+
+    private SettingsObserver mSettingsObserver;
+
+    // service
+    private StatusBarManager mStatusBarManager;
+    private AlarmManager mAM;
+    private IPowerManager mPM;
+    private TelephonyManager mTM;
+    private BaseStatusBar mBaseStatusBar;
+
+    private Context mContext;
+
+    // notification
+    private INotificationManager mNM;
+    private INotificationListenerWrapper mNotificationListener;
+    private StatusBarNotification mNotification;
+
+    // sensor
+    private ProximitySensorManager mProximitySensorManager;
+    private LightSensorManager mLightSensorManager;
+
+    private boolean mProximityIsFar = true;
+    private boolean mIsInBrightLight = false;
+    private boolean mWakedByPocketMode = false;
+    private long mPocketTime = 0;
+    private long mTurnOffTime = 0;
+    private long mTurnOffTimeThreshold = 200L;
     private boolean mCallbacksRegistered = false;
+    private int mCancelRedisplaySequence;
+    private int mCancelTimeoutSequence;
+    private boolean mIsActive = false;
+    private boolean mIsUnlockByUser = false;
+    private boolean mIsTurnOffBySensor = false;
 
     // user customizable settings
     private boolean mDisplayNotifications = false;
     private boolean mDisplayNotificationText = false;
-    private boolean hideNonClearable = true;
+    private boolean mShowAllNotifications = false;
     private boolean mHideLowPriorityNotifications = false;
+    private boolean mSunlightModeEnabled = false;
+    private boolean mTurnOffModeEnabled = false;
+    private boolean mUseActiveDisplayContent = false;
+    private boolean mBypassActiveDisplay = false;
     private int mPocketMode = POCKET_MODE_OFF;
-    private boolean privacyMode = false;
     private boolean mQuietTime;
-    private long mRedisplayTimeout = 0;
-    private float mInitialBrightness = 1f;
     private int mBrightnessMode = -1;
     private int mUserBrightnessLevel = -1;
-    private boolean mSunlightModeEnabled = false;
-    private Set<String> mExcludedApps = new HashSet<String>();
+    private int mMinimumBacklight;
+    private int mMaximumBacklight;
+    private long mRedisplayTimeout = 0;
     private long mDisplayTimeout = 8000L;
     private long mProximityThreshold = 5000L;
-    private boolean mTurnOffModeEnabled = false;
-    private boolean mAttached;
+    private int mInitialBrightness = 0;
+    private Set<String> mExcludedApps = new HashSet<String>();
+    private Set<String> mPrivacyApps = new HashSet<String>();
 
     /**
      * Simple class that listens to changes in notifications
@@ -184,9 +228,9 @@ public class ActiveDisplayView extends FrameLayout {
             if (shouldShowNotification() && isValidNotification(sbn)) {
                 // need to make sure either the screen is off or the user is currently
                 // viewing the notifications
-                if (ActiveDisplayView.this.getVisibility() == View.VISIBLE
-                        || !isScreenOn())
+                if (getVisibility() == View.VISIBLE || !isScreenOn()) {
                     showNotification(sbn, true);
+                }
             }
         }
         @Override
@@ -196,7 +240,7 @@ public class ActiveDisplayView extends FrameLayout {
                     mNotification = getNextAvailableNotification();
                     if (mNotification != null) {
                         setActiveNotification(mNotification, true);
-                        userActivity();
+                        isUserActivity();
                         return;
                     }
                 } else {
@@ -210,16 +254,13 @@ public class ActiveDisplayView extends FrameLayout {
 
         public void onTrigger(final View v, final int target) {
             if (target == UNLOCK_TARGET) {
-                mWakedByPocketMode = false;
-                mNotification = null;
-                hideNotificationView();
+                mIsUnlockByUser = true;
+                disableProximitySensor();
                 unlockKeyguardActivity();
-                Intent intent = new Intent(mContext, DummyActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+                launchFakeActivityIntent();
             } else if (target == OPEN_APP_TARGET) {
-                mWakedByPocketMode = false;
-                hideNotificationView();
+                mIsUnlockByUser = true;
+                disableProximitySensor();
                 unlockKeyguardActivity();
                 launchNotificationPendingIntent();
             } else if (target == DISMISS_TARGET) {
@@ -241,6 +282,7 @@ public class ActiveDisplayView extends FrameLayout {
         public void onGrabbed(final View v, final int handle) {
             // prevent the ActiveDisplayView from turning off while user is interacting with it
             cancelTimeoutTimer();
+            setUserActivity();
             restoreBrightness();
             ObjectAnimator.ofFloat(mCurrentNotificationIcon, "alpha", 0f).start();
             doTransition(mOverflowNotifications, 0.0f, 0);
@@ -253,8 +295,8 @@ public class ActiveDisplayView extends FrameLayout {
         public void onGrabbedStateChange(final View v, final int handle) {
         }
 
-	public void onTargetChange(View v, int target) {
-	}
+    	public void onTargetChange(View v, int target) {
+        }
 
         public void onFinishFinalAnimation() {
         }
@@ -263,28 +305,25 @@ public class ActiveDisplayView extends FrameLayout {
     /**
      * Class used to listen for changes to active display related settings
      */
-    class SettingsObserver extends ContentObserver {
+    private class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
         }
 
         void observe() {
-            ContentResolver resolver =
-                    ActiveDisplayView.this.mContext.getContentResolver();
+            ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ENABLE_ACTIVE_DISPLAY), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_NOTIFICATIONS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE), false, this);
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS_HIDE_NON_CLEARABLE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_NOTIFICATIONS_QUIET_HOURS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_DISPLAY_TEXT), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_HIDE_NON_CLEARABLE), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ACTIVE_NOTIFICATIONS_HIDE_LOW_PRIORITY), false, this);
+                    Settings.System.ACTIVE_DISPLAY_ALL_NOTIFICATIONS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_NOTIFICATIONS_POCKET_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -296,6 +335,8 @@ public class ActiveDisplayView extends FrameLayout {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_DISPLAY_EXCLUDED_APPS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_DISPLAY_PRIVACY_APPS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_DISPLAY_TIMEOUT), false, this);
@@ -303,12 +344,15 @@ public class ActiveDisplayView extends FrameLayout {
                     Settings.System.ACTIVE_DISPLAY_TURNOFF_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_DISPLAY_THRESHOLD), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_DISPLAY_CONTENT), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_DISPLAY_BYPASS), false, this);
             update();
         }
 
         void unobserve() {
-            ActiveDisplayView.this.mContext.getContentResolver()
-                    .unregisterContentObserver(this);
+            mContext.getContentResolver().unregisterContentObserver(this);
             if (mDisplayNotifications) {
                 unregisterCallbacks();
             }
@@ -320,48 +364,68 @@ public class ActiveDisplayView extends FrameLayout {
         }
 
         public void update() {
-            ContentResolver resolver =
-                    ActiveDisplayView.this.mContext.getContentResolver();
+            final ContentResolver resolver = mContext.getContentResolver();
             boolean mNotOverridden;
 
             mNotOverridden = Settings.System.getInt(
                     resolver, Settings.System.ACTIVE_NOTIFICATIONS, 0) == 1;
-            privacyMode = Settings.System.getInt(
-                    resolver, Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE, 0) == 1;
-            mDisplayNotifications = Settings.System.getInt(
-                    resolver, Settings.System.ENABLE_ACTIVE_DISPLAY, 0) == 1;
             mQuietTime = Settings.System.getInt(
                     resolver, Settings.System.ACTIVE_NOTIFICATIONS_QUIET_HOURS, 0) == 1;
-            mDisplayNotificationText = Settings.System.getInt(
-                    resolver, Settings.System.ACTIVE_DISPLAY_TEXT, 0) == 1;
-            hideNonClearable = Settings.System.getInt(
-                    resolver, Settings.System.LOCKSCREEN_NOTIFICATIONS_HIDE_NON_CLEARABLE, 1) == 0;
-            mHideLowPriorityNotifications = Settings.System.getInt(
-                    resolver, Settings.System.ACTIVE_NOTIFICATIONS_HIDE_LOW_PRIORITY, 0) == 1;
-            mPocketMode = Settings.System.getInt(
-                    resolver, Settings.System.ACTIVE_NOTIFICATIONS_POCKET_MODE, POCKET_MODE_ACTIVE_DISPLAY);
-            mRedisplayTimeout = Settings.System.getLong(
-                    resolver, Settings.System.ACTIVE_DISPLAY_REDISPLAY, 0L);
-            mInitialBrightness = Settings.System.getInt(
-                    resolver, Settings.System.ACTIVE_DISPLAY_BRIGHTNESS, 100) / 100f;
-            mSunlightModeEnabled = Settings.System.getInt(
-                    resolver, Settings.System.ACTIVE_DISPLAY_SUNLIGHT_MODE, 0) == 1;
-            String excludedApps = Settings.System.getString(resolver,
-                    Settings.System.ACTIVE_DISPLAY_EXCLUDED_APPS);
-            mDisplayTimeout = Settings.System.getLong(
-                    resolver, Settings.System.ACTIVE_DISPLAY_TIMEOUT, 8000L);
-            mTurnOffModeEnabled = Settings.System.getInt(
-                    resolver, Settings.System.ACTIVE_DISPLAY_TURNOFF_MODE, 0) == 1;
-            mProximityThreshold = Settings.System.getLong(
-                    resolver, Settings.System.ACTIVE_DISPLAY_THRESHOLD, 8000L);
+            mDisplayNotifications = Settings.System.getIntForUser(
+                    resolver, Settings.System.ENABLE_ACTIVE_DISPLAY, 0,
+                    UserHandle.USER_CURRENT_OR_SELF) == 1;
+            mDisplayNotificationText = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_TEXT, 0,
+                    UserHandle.USER_CURRENT_OR_SELF) == 1;
+            mShowAllNotifications = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_ALL_NOTIFICATIONS, 0,
+                    UserHandle.USER_CURRENT_OR_SELF) == 1;
+            mHideLowPriorityNotifications = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_NOTIFICATIONS_HIDE_LOW_PRIORITY, 0,
+                    UserHandle.USER_CURRENT_OR_SELF) == 1;
+            mPocketMode = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_NOTIFICATIONS_POCKET_MODE, POCKET_MODE_OFF,
+                    UserHandle.USER_CURRENT_OR_SELF);
+            mRedisplayTimeout = Settings.System.getLongForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_REDISPLAY, 0L,
+                    UserHandle.USER_CURRENT_OR_SELF);
+            mInitialBrightness = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_BRIGHTNESS, mMaximumBacklight,
+                    UserHandle.USER_CURRENT_OR_SELF);
+            mSunlightModeEnabled = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_SUNLIGHT_MODE, 0,
+                    UserHandle.USER_CURRENT_OR_SELF) == 1;
+            String excludedApps = Settings.System.getStringForUser(resolver,
+                    Settings.System.ACTIVE_DISPLAY_EXCLUDED_APPS,
+                    UserHandle.USER_CURRENT_OR_SELF);
+            String privacyApps = Settings.System.getStringForUser(resolver,
+                    Settings.System.ACTIVE_DISPLAY_PRIVACY_APPS,
+                    UserHandle.USER_CURRENT_OR_SELF);
+            mDisplayTimeout = Settings.System.getLongForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_TIMEOUT, 8000L,
+                    UserHandle.USER_CURRENT_OR_SELF);
+            mTurnOffModeEnabled = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_TURNOFF_MODE, 0,
+                    UserHandle.USER_CURRENT_OR_SELF) == 1;
+            mProximityThreshold = Settings.System.getLongForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_THRESHOLD, 8000L,
+                    UserHandle.USER_CURRENT_OR_SELF);
+            mUseActiveDisplayContent = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_CONTENT, 1,
+                    UserHandle.USER_CURRENT_OR_SELF) != 0;
+            mBypassActiveDisplay = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_BYPASS, 1,
+                    UserHandle.USER_CURRENT_OR_SELF) != 0;
 
             if (!mNotOverridden) {
                 mDisplayNotifications = false;
             } else {
                 createExcludedAppsSet(excludedApps);
+                createPrivacyAppsSet(privacyApps);
 
-                int brightnessMode = Settings.System.getInt(
-                        resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, -1);
+               int brightnessMode = Settings.System.getIntForUser(
+                        resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, -1,
+                        UserHandle.USER_CURRENT_OR_SELF);
                 if (mBrightnessMode != brightnessMode) {
                     mBrightnessMode = brightnessMode;
                     mUserBrightnessLevel = -1;
@@ -370,11 +434,12 @@ public class ActiveDisplayView extends FrameLayout {
                 if (!mDisplayNotifications || mRedisplayTimeout <= 0) {
                     cancelRedisplayTimer();
                 }
-                registerCallbacks();
 
-            }
-            if (!mDisplayNotifications || !mNotOverridden) {
-                unregisterCallbacks();
+                if (mDisplayNotifications || mNotOverridden) {
+                    registerCallbacks();
+                } else {
+                    unregisterCallbacks();
+                }
             }
         }
     }
@@ -393,11 +458,17 @@ public class ActiveDisplayView extends FrameLayout {
                     boolean ping = msg.arg1 == 1;
                     handleShowNotification(ping);
                     break;
+                case MSG_SHOW_TIME:
+                    handleShowTime();
+                    break;
                 case MSG_DISMISS_NOTIFICATION:
                     handleDismissNotification();
                     break;
-                case MSG_SHOW_TIME:
-                    handleShowTime();
+                case MSG_HIDE_NOTIFICATION_CALL:
+                    handleHideNotificationViewOnCall();
+                    break;
+                case MSG_SHOW_NOTHING:
+                    handleShowNothing();
                     break;
                 default:
                     break;
@@ -412,24 +483,82 @@ public class ActiveDisplayView extends FrameLayout {
     public ActiveDisplayView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
-        mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-
+        mContext = context;
         mPM = IPowerManager.Stub.asInterface(ServiceManager.getService(Context.POWER_SERVICE));
+        mAM = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        mTM = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         mNM = INotificationManager.Stub.asInterface(
                 ServiceManager.getService(Context.NOTIFICATION_SERVICE));
         mNotificationListener = new INotificationListenerWrapper();
+        mProximitySensorManager = new ProximitySensorManager(context, this);
+        mLightSensorManager = new LightSensorManager(context, this);
+
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        mMinimumBacklight = pm.getMinimumScreenBrightnessSetting();
+        mMaximumBacklight = pm.getMaximumScreenBrightnessSetting();
 
         mIconSize = getResources().getDimensionPixelSize(R.dimen.overflow_icon_size);
         mIconMargin = getResources().getDimensionPixelSize(R.dimen.ad_notification_margin);
         mIconPadding = getResources().getDimensionPixelSize(R.dimen.overflow_icon_padding);
 
-        mKeyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-
         mSettingsObserver = new SettingsObserver(new Handler());
         mCreationOrientation = Resources.getSystem().getConfiguration().orientation;
         mInvertedPaint = makeInvertedPaint();
+    }
+
+    public void setBar(BaseStatusBar bar) {
+        mBaseStatusBar = bar;
+    }
+
+    @Override
+    public synchronized void onNear() {
+        if (mProximityIsFar) {
+            mPocketTime = System.currentTimeMillis();
+            mProximityIsFar = false;
+        }
+        if (isScreenOn() && mPocketMode != POCKET_MODE_OFF && !isOnCall() && mWakedByPocketMode) {
+            mWakedByPocketMode = false;
+            Log.i(TAG, "ActiveDisplay: sent to sleep by Pocketmode");
+            turnScreenOffbySensor();
+        }
+    }
+
+    @Override
+    public synchronized void onFar() {
+        mProximityIsFar = true;
+        if (!isScreenOn() && mPocketMode != POCKET_MODE_OFF
+            && !isOnCall() && mDisplayNotifications && (!inQuietHoursDim() && !mQuietTime)) {
+            if ((System.currentTimeMillis() >= (mPocketTime + mProximityThreshold)) && (mPocketTime != 0)) {
+                if (mNotification == null) {
+                    mNotification = getNextAvailableNotification();
+                }
+                if (mNotification != null) {
+                    turnScreenOnbySensor();
+                    showNotification(mNotification, true);
+                } else if (mPocketMode == POCKET_MODE_ALWAYS) {
+                    turnScreenOnbySensor();
+                    if (isKeyguardSecure()) {
+                        showNothing();
+                    } else {
+                        showTime();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public synchronized void onDarker() {
+        if (mIsInBrightLight) {
+            mIsInBrightLight = false;
+        }
+        invalidate();
+    }
+
+    @Override
+    public synchronized void onBrighter() {
+        mIsInBrightLight = true;
+        invalidate();
     }
 
     private Paint makeInvertedPaint() {
@@ -444,10 +573,6 @@ public class ActiveDisplayView extends FrameLayout {
         return p;
     }
 
-    public void setStatusBar(BaseStatusBar bar) {
-        mBar = bar;
-    }
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -459,7 +584,9 @@ public class ActiveDisplayView extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mSettingsObserver.observe();
-        if (mRedisplayTimeout > 0 && !isScreenOn()) updateRedisplayTimer();
+        if (mRedisplayTimeout > 0 && !isScreenOn()) {
+            updateRedisplayTimer();
+        }
     }
 
     @Override
@@ -496,7 +623,7 @@ public class ActiveDisplayView extends FrameLayout {
 
         mRemoteViewLayout = (FrameLayout) contents.findViewById(R.id.remote_content_parent);
         mClock = contents.findViewById(R.id.clock_view);
-        mCurrentNotificationIcon = (ImageView) contents.findViewById(R.id.current_notification_icon);
+        mCurrentNotificationIcon = (RoundedImageView) contents.findViewById(R.id.current_notification_icon);
 
         mOverflowNotifications = (LinearLayout) contents.findViewById(R.id.keyguard_other_notifications);
         mOverflowNotifications.setOnTouchListener(mOverflowTouchListener);
@@ -592,39 +719,38 @@ public class ActiveDisplayView extends FrameLayout {
         mAnim.start();
     }
 
+    private void launchFakeActivityIntent() {
+        mPocketTime = 0;
+        mNotification = null;
+        Intent intent = new Intent(mContext, DummyActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+    }
+
     /**
      * Launches the pending intent for the currently selected notification
      */
-    private synchronized void launchNotificationPendingIntent() {
+    private void launchNotificationPendingIntent() {
         if (mNotification != null) {
-            PendingIntent i = mNotification.getNotification().contentIntent;
-            if (i != null) {
+            PendingIntent contentIntent = mNotification.getNotification().contentIntent;
+            if (contentIntent != null) {
                 try {
-                    Intent intent = i.getIntent();
-                    intent.setFlags(
-                        intent.getFlags()
-                        | Intent.FLAG_ACTIVITY_NEW_TASK
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    if (i.isActivity()) ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-                    i.send();
-                    KeyguardTouchDelegate.getInstance(mContext).dismiss();
-                } catch (CanceledException ex) {
-                } catch (RemoteException ex) {
+                    contentIntent.send();
+                } catch (CanceledException ce) {
                 }
+                KeyguardTouchDelegate.getInstance(mContext).dismiss();
             }
-            if (mNotification.isClearable()) {
-                try {
+            try {
+                 if (mNotification.isClearable()) {
                      mNM.cancelNotificationFromSystemListener(mNotificationListener,
-                             mNotification.getPackageName(), mNotification.getTag(),
-                             mNotification.getId());
-                } catch (RemoteException e) {
-                } catch (NullPointerException npe) {
-                }
+                         mNotification.getPackageName(), mNotification.getTag(),
+                         mNotification.getId());
+                 }
+            } catch (RemoteException e) {
+            } catch (NullPointerException npe) {
             }
             mNotification = null;
         }
-        handleForceHideNotificationView();
     }
 
     private void showNotificationView() {
@@ -635,6 +761,11 @@ public class ActiveDisplayView extends FrameLayout {
     private void hideNotificationView() {
         mHandler.removeMessages(MSG_HIDE_NOTIFICATION_VIEW);
         mHandler.sendEmptyMessage(MSG_HIDE_NOTIFICATION_VIEW);
+    }
+
+    private void hideNotificationViewOnCall() {
+        mHandler.removeMessages(MSG_HIDE_NOTIFICATION_CALL);
+        mHandler.sendEmptyMessage(MSG_HIDE_NOTIFICATION_CALL);
     }
 
     private void showNotification(StatusBarNotification sbn, boolean ping) {
@@ -651,94 +782,100 @@ public class ActiveDisplayView extends FrameLayout {
         mHandler.sendEmptyMessage(MSG_SHOW_TIME);
     }
 
+    private void showNothing() {
+        mHandler.removeMessages(MSG_SHOW_NOTHING);
+        mHandler.sendEmptyMessage(MSG_SHOW_NOTHING);
+    }
+
     private void dismissNotification() {
         mHandler.removeMessages(MSG_DISMISS_NOTIFICATION);
         mHandler.sendEmptyMessage(MSG_DISMISS_NOTIFICATION);
     }
 
-    private final Runnable runSystemUiVis = new Runnable() {
-        public void run() {
-            mBar.disable(0xffffffff);
-        }
-    };
-
-    private void sendUnlockBroadcast() {
-        Intent u = new Intent();
-        u.setAction("com.android.lockscreen.ACTION_UNLOCK_RECEIVER");
-        mContext.sendBroadcastAsUser(u, UserHandle.ALL);
-    }
-
-    private void disabledKeyguard() {
-        if (mKeyguardLock == null) {
-            mKeyguardLock = mKeyguardManager.newKeyguardLock("active_display");
-            mKeyguardLock.disableKeyguard();
-        }
-    }
-
-    private void enabledKeyguard() {
-        if (mKeyguardLock != null) {
-            mKeyguardLock.reenableKeyguard();
-            mKeyguardLock = null;
-        }
+    private boolean isKeyguardSecure() {
+        boolean isSecure = KeyguardTouchDelegate.getInstance(mContext).isSecure();
+        return mBypassActiveDisplay && isSecure;
     }
 
     private void unlockKeyguardActivity() {
-        if (!mKeyguardManager.isKeyguardSecure()) {
-            sendUnlockBroadcast();
-            try {
-                 // Dismiss the lock screen when Settings starts.
-                 ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-            } catch (RemoteException e) {
-            }
+        hideNotificationView();
+        sendUnlockBroadcast();
+        try {
+             // The intent we are sending is for the application, which
+             // won't have permission to immediately start an activity after
+             // the user switches to home.  We know it is safe to do at this
+             // point, so make sure new activity switches are now allowed.
+             ActivityManagerNative.getDefault().resumeAppSwitches();
+             // Also, notifications can be launched from the lock screen,
+             // so dismiss the lock screen when the activity starts.
+             ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+        } catch (RemoteException e) {
         }
     }
 
-    private static void setSystemUIVisibility(View v, int visibility) {
-        v.setSystemUiVisibility(visibility);
+    private void sendUnlockBroadcast() {
+        Intent u = new Intent();
+        u.setAction(ACTION_UNLOCK_DEVICE);
+        mContext.sendBroadcastAsUser(u, UserHandle.ALL);
+    }
+
+    private void adjustStatusBarLocked(boolean hiding) {
+        if (mStatusBarManager == null) {
+            mStatusBarManager = (StatusBarManager)
+                    mContext.getSystemService(Context.STATUS_BAR_SERVICE);
+        }
+        if (mStatusBarManager == null) {
+            Log.w(TAG, "Could not get status bar manager");
+        } else {
+            // Disable aspects of the system/status/navigation bars that must not be re-enabled by
+            // windows that appear on top, ever
+            int flags = StatusBarManager.DISABLE_NONE;
+            if (hiding) {
+                flags |= StatusBarManager.DISABLE_BACK | StatusBarManager.DISABLE_HOME
+                      | StatusBarManager.DISABLE_RECENT | StatusBarManager.DISABLE_SEARCH;
+            }
+            mStatusBarManager.disable(flags);
+        }
     }
 
     private void handleShowNotificationView() {
-        disabledKeyguard();
-        int activeDisplayVis = View.SYSTEM_UI_FLAG_LOW_PROFILE
-                             | View.SYSTEM_UI_FLAG_FULLSCREEN
-                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-        setSystemUIVisibility(ActiveDisplayView.this, activeDisplayVis);
+        mIsActive = true;
         setVisibility(View.VISIBLE);
-        mHandler.removeCallbacks(runSystemUiVis);
-        mHandler.postDelayed(runSystemUiVis, 100);
-        registerSensorListener(mLightSensor);
+        if (hasLightSensor()) {
+            Log.i(TAG, "ActiveDisplay: enable LightSensor");
+            mLightSensorManager.enable();
+        }
+        adjustStatusBarLocked(true);
+        // Warm up KeyguardTouchDelegate so it's ready by the time
+        KeyguardTouchDelegate.getInstance(mContext);
     }
 
     private void handleHideNotificationView() {
-        mHandler.removeCallbacks(runSystemUiVis);
-        enabledKeyguard();
-        setVisibility(View.GONE);
+        mIsActive = false;
         restoreBrightness();
-        mBar.disable(0);
-
-        // noone is taking care of reenable the bars in this case
-        if (isLockscreenDisabled()) {
-            mBar.disable(0);
-        }
         mWakedByPocketMode = false;
-
-        // noone is taking care of reenable the bars in this case
-        if (isLockscreenDisabled()) {
-            mBar.disable(0);
+        cancelTimeoutTimer();
+        if (hasLightSensor()) {
+            Log.i(TAG, "ActiveDisplay: disable LightSensor");
+            mLightSensorManager.disable(true);
         }
-        cancelTimeoutTimer();
-        unregisterSensorListener(mLightSensor);
-    }
-
-    private void handleForceHideNotificationView() {
-        mHandler.removeCallbacks(runSystemUiVis);
+        adjustStatusBarLocked(false);
         setVisibility(View.GONE);
-        restoreBrightness();
-        cancelTimeoutTimer();
     }
 
-    private synchronized void handleShowNotification(boolean ping) {
+    private void handleHideNotificationViewOnCall() {
+        mIsActive = false;
+        restoreBrightness();
+        mWakedByPocketMode = false;
+        cancelTimeoutTimer();
+        if (hasLightSensor()) {
+            Log.i(TAG, "ActiveDisplay: disable LightSensor");
+            mLightSensorManager.disable(true);
+        }
+        setVisibility(View.GONE);
+    }
+
+    private void handleShowNotification(boolean ping) {
         if (!mDisplayNotifications
             || mNotification == null
             || inQuietHoursDim() && mQuietTime) return;
@@ -751,7 +888,7 @@ public class ActiveDisplayView extends FrameLayout {
         if (ping) mGlowPadView.ping();
     }
 
-    private synchronized void handleDismissNotification() {
+    private void handleDismissNotification() {
         if (mNotification != null && mNotification.isClearable()) {
             try {
                 mNM.cancelNotificationFromSystemListener(mNotificationListener,
@@ -759,13 +896,16 @@ public class ActiveDisplayView extends FrameLayout {
                         mNotification.getId());
             } catch (RemoteException e) {
             } catch (NullPointerException npe) {
+            } finally {
+                if (mRemoteView != null) mRemoteViewLayout.removeView(mRemoteView);
             }
             mNotification = getNextAvailableNotification();
             if (mNotification != null) {
                 setActiveNotification(mNotification, true);
+                inflateRemoteView(mNotification);
                 invalidate();
                 mGlowPadView.ping();
-                userActivity();
+                isUserActivity();
                 return;
             }
         }
@@ -773,10 +913,13 @@ public class ActiveDisplayView extends FrameLayout {
         turnScreenOff();
     }
 
-    private synchronized void handleShowTime() {
+    private void handleShowTime() {
         mCurrentNotificationIcon.setImageResource(R.drawable.ic_ad_unlock);
         mGlowPadView.setHandleText("");
         mNotificationDrawable = null;
+        if (mRemoteView != null) {
+            mRemoteViewLayout.removeView(mRemoteView);
+        }
         mRemoteView = null;
         mOverflowNotifications.removeAllViews();
         updateTargets();
@@ -785,44 +928,107 @@ public class ActiveDisplayView extends FrameLayout {
         if (!isScreenOn()) {
             turnScreenOn();
         }
+        // Warm up KeyguardTouchDelegate so it's ready by the time
+        KeyguardTouchDelegate.getInstance(mContext);
+    }
+
+    private void handleShowNothing() {
+        mIsActive = false;
+        restoreBrightness();
+        if (!isScreenOn()) {
+            turnScreenOn();
+        }
+        setVisibility(View.GONE);
+    }
+
+    private boolean inQuietHoursDim() {
+        return QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM);
     }
 
     private void onScreenTurnedOn() {
         cancelRedisplayTimer();
-        disableProximitySensor();
+        if (!mIsActive) {
+            cancelTimeoutTimer();
+        }
+        if (!mWakedByPocketMode) {
+            disableProximitySensor();
+        }
     }
 
     private void onScreenTurnedOff() {
+        enableProximitySensor();
+        mTurnOffTime = System.currentTimeMillis();
         mWakedByPocketMode = false;
         hideNotificationView();
         cancelTimeoutTimer();
         if (mRedisplayTimeout > 0) updateRedisplayTimer();
-        enableProximitySensor();
     }
 
     private void turnScreenOff() {
         mHandler.removeCallbacks(runWakeDevice);
+        Log.i(TAG, "ActiveDisplay: Screen Off");
         mWakedByPocketMode = false;
-        Log.i(TAG, "ActiveDisplay: turn screen off");
         try {
-            mPM.goToSleep(SystemClock.uptimeMillis(), 0);
+            mPM.goToSleep(SystemClock.uptimeMillis(), GO_TO_SLEEP_REASON_USER);
         } catch (RemoteException e) {
         }
     }
 
+    private void turnScreenOffTimeOut() {
+        if (getVisibility() != View.VISIBLE || mIsUnlockByUser) {
+            return;
+        }
+        Log.i(TAG, "ActiveDisplay: Screen Timeout");
+        mWakedByPocketMode = false;
+        try {
+            mPM.goToSleep(SystemClock.uptimeMillis(), GO_TO_SLEEP_REASON_TIMEOUT);
+        } catch (RemoteException e) {
+        }
+    }
+
+    private void turnScreenOffbySensor() {
+        mIsTurnOffBySensor = true;
+        KeyguardTouchDelegate.getInstance(mContext).onScreenTurnedOff(OFF_BECAUSE_OF_PROX_SENSOR);
+        turnScreenOff();
+    }
+
+    private void turnScreenOnbySensor() {
+        if (mTurnOffModeEnabled && mDisplayNotifications) {
+            mWakedByPocketMode = true;
+        }
+    }
+
     private void turnScreenOn() {
-        if (mPocketMode == 2 && !mProximityIsFar) return;
-        // to avoid flicker and showing any other screen than the ActiveDisplayView
-        // we use a runnable posted with a 250ms delay to turn wake the device
+        if ((System.currentTimeMillis() <= (mTurnOffTime + mTurnOffTimeThreshold))
+             && (mTurnOffTime != 0) && !mIsUnlockByUser) {
+            mHandler.removeCallbacks(runWakeDevice);
+            return;
+        }
+        if (mIsTurnOffBySensor) {
+            mIsTurnOffBySensor = false;
+            mHandler.removeCallbacks(runWakeDevice);
+            return;
+        }
         mHandler.removeCallbacks(runWakeDevice);
         mHandler.postDelayed(runWakeDevice, 250);
     }
 
     private final Runnable runWakeDevice = new Runnable() {
+        @Override
         public void run() {
             setBrightness(mInitialBrightness);
             wakeDevice();
             doTransition(ActiveDisplayView.this, 1f, 1000);
+        }
+    };
+
+    private final Runnable runScreenOn = new Runnable() {
+        @Override
+        public void run() {
+            if (!isScreenOn()) {
+                wakeDevice();
+            }
+            KeyguardTouchDelegate.getInstance(mContext).dismiss();
         }
     };
 
@@ -839,27 +1045,25 @@ public class ActiveDisplayView extends FrameLayout {
             Log.i(TAG, "ActiveDisplay: enable ProximitySensor");
             mProximityIsFar = true;
             mPocketTime = 0;
-            registerSensorListener(mProximitySensor);
+            mProximitySensorManager.enable();
         }
     }
 
     private void disableProximitySensor() {
         if (mPocketMode != POCKET_MODE_OFF) {
             Log.i(TAG, "ActiveDisplay: disable ProximitySensor");
-            unregisterSensorListener(mProximitySensor);
+            mProximitySensorManager.disable(true);
         }
     }
 
-    private void setBrightness(float brightness) {
+    private void setBrightness(int brightness) {
         final ContentResolver resolver = mContext.getContentResolver();
-        mBrightnessMode = Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
-                Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+        mBrightnessMode = Settings.System.getIntForUser(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
+                Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC, UserHandle.USER_CURRENT_OR_SELF);
         if (mBrightnessMode != Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
-            mUserBrightnessLevel = Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS,
-                    android.os.PowerManager.BRIGHTNESS_ON);
-            final int dim = getResources().getInteger(
-                    com.android.internal.R.integer.config_screenBrightnessDim);
-            int level = (int)((android.os.PowerManager.BRIGHTNESS_ON - dim) * brightness) + dim;
+            mUserBrightnessLevel = Settings.System.getIntForUser(resolver, Settings.System.SCREEN_BRIGHTNESS,
+                    mMaximumBacklight, UserHandle.USER_CURRENT_OR_SELF);
+            final int level = brightness + mMinimumBacklight;
             Settings.System.putInt(resolver,
                     Settings.System.SCREEN_BRIGHTNESS_MODE,
                     Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
@@ -885,19 +1089,28 @@ public class ActiveDisplayView extends FrameLayout {
                 mBrightnessMode);
     }
 
-    private void userActivity() {
+    private void setUserActivity() {
+        try {
+            mPM.userActivity(SystemClock.uptimeMillis(), 0, 0);
+        } catch (RemoteException e) {
+        }
+    }
+
+    private void isUserActivity() {
         restoreBrightness();
         updateTimeoutTimer();
+        setUserActivity();
     }
 
     private void registerBroadcastReceiver() {
-        IntentFilter filter = new IntentFilter(ACTION_REDISPLAY_NOTIFICATION);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_REDISPLAY_NOTIFICATION);
         filter.addAction(ACTION_DISPLAY_TIMEOUT);
+        filter.addAction(ACTION_PHONE_STATE);
+        filter.addAction(ACTION_UNLOCK_DEVICE);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_KEYGUARD_TARGET);
-        /* uncomment the line below for testing */
-        filter.addAction(ACTION_FORCE_DISPLAY);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
         mContext.registerReceiver(mBroadcastReceiver, filter);
     }
 
@@ -906,7 +1119,7 @@ public class ActiveDisplayView extends FrameLayout {
     }
 
     private void registerNotificationListener() {
-        ComponentName cn = new ComponentName("ActiveDisplayComponent", getClass().getName());
+        ComponentName cn = new ComponentName(mContext, getClass().getName());
         try {
             mNM.registerListener(mNotificationListener, cn, UserHandle.USER_ALL);
         } catch (RemoteException e) {
@@ -922,16 +1135,6 @@ public class ActiveDisplayView extends FrameLayout {
                 Log.e(TAG, "registerNotificationListener()", e);
             }
         }
-    }
-
-    private void registerSensorListener(Sensor sensor) {
-        if (sensor != null)
-            mSensorManager.registerListener(mSensorListener, sensor, SensorManager.SENSOR_DELAY_UI);
-    }
-
-    private void unregisterSensorListener(Sensor sensor) {
-        if (sensor != null)
-            mSensorManager.unregisterListener(mSensorListener, sensor);
     }
 
     private void registerCallbacks() {
@@ -961,7 +1164,7 @@ public class ActiveDisplayView extends FrameLayout {
             for (int i = sbns.length - 1; i >= 0; i--) {
                 if (sbns[i] == null)
                     continue;
-                if (isValidNotification(sbns[i])) {
+                if (shouldShowNotification() && isValidNotification(sbns[i])) {
                     return sbns[i];
                 }
             }
@@ -982,35 +1185,30 @@ public class ActiveDisplayView extends FrameLayout {
                     for (int i = sbns.length - 1; i >= 0; i--) {
                         if (isValidNotification(sbns[i])
                                 && mOverflowNotifications.getChildCount() < MAX_OVERFLOW_ICONS) {
-                            ImageView iv = new ImageView(mContext);
+                            boolean updateOther = false;
+                            RoundedImageView iv = new RoundedImageView(mContext);
                             if (mOverflowNotifications.getChildCount() < (MAX_OVERFLOW_ICONS - 1)) {
-                                Drawable iconDrawable = null;
-                                try {
-                                    Context pkgContext = mContext.createPackageContext(
-                                            sbns[i].getPackageName(), Context.CONTEXT_RESTRICTED);
-                                    iconDrawable = pkgContext.getResources()
-                                            .getDrawable(sbns[i].getNotification().icon);
-                                } catch (NameNotFoundException nnfe) {
-                                    iconDrawable = mContext.getResources()
-                                            .getDrawable(R.drawable.ic_ad_unknown_icon);
-                                } catch (Resources.NotFoundException nfe) {
-                                    iconDrawable = mContext.getResources()
-                                            .getDrawable(R.drawable.ic_ad_unknown_icon);
-                                }
-                                iv.setImageDrawable(iconDrawable);
-                                iv.setTag(sbns[i]);
-                                if (sbns[i].getPackageName().equals(mNotification.getPackageName())
-                                        && sbns[i].getId() == mNotification.getId()) {
-                                    iv.setBackgroundResource(R.drawable.ad_active_notification_background);
-                                } else {
-                                    iv.setBackgroundResource(0);
+                                Drawable iconDrawable = getIconDrawable(sbns[i]);
+                                if (iconDrawable != null) {
+                                    updateOther = true;
+                                    iv.setImageDrawable(iconDrawable);
+                                    iv.setTag(sbns[i]);
+                                    if (sbns[i].getPackageName().equals(mNotification.getPackageName())
+                                           && sbns[i].getId() == mNotification.getId()) {
+                                        iv.setBackgroundResource(R.drawable.ad_active_notification_background);
+                                    } else {
+                                        iv.setBackgroundResource(0);
+                                    }
                                 }
                             } else {
+                                updateOther = true;
                                 iv.setImageResource(R.drawable.ic_ad_morenotifications);
                             }
                             iv.setPadding(mIconPadding, mIconPadding, mIconPadding, mIconPadding);
-                            iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                            mOverflowNotifications.addView(iv, mOverflowLayoutParams);
+                            iv.setScaleType(RoundedImageView.ScaleType.FIT_CENTER);
+                            if (updateOther) {
+                                mOverflowNotifications.addView(iv, mOverflowLayoutParams);
+                            }
                         }
                     }
                 } catch (RemoteException re) {
@@ -1034,7 +1232,7 @@ public class ActiveDisplayView extends FrameLayout {
                     final int childCount = mOverflowNotifications.getChildCount();
                     Rect hitRect = new Rect();
                     for (int i = 0; i < childCount; i++) {
-                        final ImageView iv = (ImageView) mOverflowNotifications.getChildAt(i);
+                        final RoundedImageView iv = (RoundedImageView) mOverflowNotifications.getChildAt(i);
                         final StatusBarNotification sbn = (StatusBarNotification) iv.getTag();
                         iv.getHitRect(hitRect);
                         if (i != mLastChildPosition ) {
@@ -1055,7 +1253,7 @@ public class ActiveDisplayView extends FrameLayout {
                     inflateRemoteView(mNotification);
                     break;
             }
-            userActivity();
+            isUserActivity();
             return true;
         }
     };
@@ -1064,7 +1262,7 @@ public class ActiveDisplayView extends FrameLayout {
      * Swaps the current StatusBarNotification with {@code sbn}
      * @param sbn The StatusBarNotification to swap with the current
      */
-    private synchronized void swapNotification(StatusBarNotification sbn) {
+    private void swapNotification(StatusBarNotification sbn) {
         mNotification = sbn;
         setActiveNotification(sbn, false);
     }
@@ -1074,10 +1272,64 @@ public class ActiveDisplayView extends FrameLayout {
      * @param sbn StatusBarNotification to check.
      * @return True if it should be used, false otherwise.
      */
-    private boolean isValidNotification(StatusBarNotification sbn) {
-        return (!mExcludedApps.contains(sbn.getPackageName()) && !isOnCall()
-                && sbn.getNotification().icon != 0 && (sbn.isClearable() || !hideNonClearable)
-                && !(mHideLowPriorityNotifications && sbn.getNotification().priority < HIDE_NOTIFICATIONS_BELOW_SCORE));
+    private boolean isValidNotification(final StatusBarNotification sbn) {
+        return (!isExcludeApp(sbn) && isNotAppBanned(sbn.getPackageName()) && !isOnCall()
+                && (sbn.getNotification().icon != 0) && (sbn.isClearable() || mShowAllNotifications)
+                && !(mHideLowPriorityNotifications && sbn.getNotification().priority < HIDE_NOTIFICATIONS_BELOW_SCORE)
+                && isNotificationForUser(sbn));
+    }
+
+    /**
+     * Determine if a given notification is for user current.
+     * @param sbn StatusBarNotification to check.
+     * @param BaseStatusBar notificationIsForCurrentUser to check.
+     * @return True if this for current, false otherwise.
+     */
+    private boolean isNotificationForUser(final StatusBarNotification sbn) {
+        if (mBaseStatusBar != null) {
+            return mBaseStatusBar.notificationIsForCurrentUser(sbn);
+        }
+        // if BaseStatusBar is null, always return true
+        return true;
+    }
+
+    /**
+     * Determine if a given notification is not came from auto banned app.
+     * @return True if not, false otherwise.
+     */
+    private boolean isNotAppBanned(String getPackageName) {
+        boolean showingApp = true;
+        for (String packageName : AUTO_BANNED_PACKAGES) {
+             if (packageName.equals(getPackageName)) {
+                 showingApp = false;
+                 break;
+             }
+        }
+        return showingApp;
+    }
+
+    /**
+     * Determine if a given notification from exclude apps.
+     * @param sbn StatusBarNotification to check.
+     * @return True if has privacy mode, false otherwise.
+     */
+    private boolean isExcludeApp(final StatusBarNotification sbn) {
+        if (mExcludedApps != null) {
+            return mExcludedApps.contains(sbn.getPackageName());
+        }
+        return false;
+    }
+
+    /**
+     * Determine if a given notification not from app that has privacy mode.
+     * @param sbn StatusBarNotification to check.
+     * @return True if has privacy mode, false otherwise.
+     */
+    private boolean isPrivacyApp(final StatusBarNotification sbn) {
+        if (mPrivacyApps != null) {
+            return mPrivacyApps.contains(sbn.getPackageName());
+        }
+        return false;
     }
 
     /**
@@ -1085,8 +1337,18 @@ public class ActiveDisplayView extends FrameLayout {
      * @return True if we should show this view.
      */
     private boolean shouldShowNotification() {
-        if (mPocketMode != 2) return true;
+        if (!hasProximitySensor()) {
+            return true;
+        }
         return mProximityIsFar;
+    }
+
+    private boolean hasProximitySensor() {
+        return DeviceUtils.deviceSupportsProximitySensor(mContext);
+    }
+
+    private boolean hasLightSensor() {
+        return DeviceUtils.deviceSupportsLightSensor(mContext);
     }
 
     /**
@@ -1106,8 +1368,7 @@ public class ActiveDisplayView extends FrameLayout {
      * @return True if a call is in progress.
      */
     private boolean isOnCall() {
-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getCallState() != TelephonyManager.CALL_STATE_IDLE;
+        return mTM.getCallState() != TelephonyManager.CALL_STATE_IDLE;
     }
 
     /**
@@ -1116,24 +1377,23 @@ public class ActiveDisplayView extends FrameLayout {
      * @param updateOthers Set to true to update the overflow notifications.
      */
     private void setActiveNotification(final StatusBarNotification sbn, final boolean updateOthers) {
-        try {
-            Context pkgContext = mContext.createPackageContext(sbn.getPackageName(), Context.CONTEXT_RESTRICTED);
-            mNotificationDrawable = pkgContext.getResources().getDrawable(sbn.getNotification().icon);
-        } catch (NameNotFoundException nnfe) {
-            mNotificationDrawable = mContext.getResources().getDrawable(R.drawable.ic_ad_unknown_icon);
-        } catch (Resources.NotFoundException nfe) {
-            mNotificationDrawable = mContext.getResources().getDrawable(R.drawable.ic_ad_unknown_icon);
-        }
+        mNotificationDrawable = getIconDrawable(sbn);
         post(new Runnable() {
-            @Override
-            public void run() {
-                mCurrentNotificationIcon.setImageDrawable(mNotificationDrawable);
-                setHandleText(sbn);
-                mNotification = sbn;
-                updateResources();
-                mGlowPadView.invalidate();
-                if (updateOthers) updateOtherNotifications();
-            }
+             @Override
+             public void run() {
+                 if (mNotificationDrawable != null) {
+                     mCurrentNotificationIcon.setImageDrawable(mNotificationDrawable);
+                     setHandleText(sbn);
+                     mNotification = sbn;
+                 } else {
+                     mCurrentNotificationIcon.setImageDrawable(null);
+                     mCurrentNotificationIcon.setImageResource(R.drawable.ic_ad_unlock);
+                     mNotification = null;
+                 }
+                 updateResources();
+                 mGlowPadView.invalidate();
+                 if (updateOthers) updateOtherNotifications();
+             }
         });
     }
 
@@ -1142,15 +1402,22 @@ public class ActiveDisplayView extends FrameLayout {
      * used otherwise the standard contentView will be inflated.
      * @param sbn The StatusBarNotification to inflate content from.
      */
-    private void inflateRemoteView(StatusBarNotification sbn) {
+    private void inflateRemoteView(final StatusBarNotification sbn) {
         final Notification notification = sbn.getNotification();
         boolean useBigContent = notification.bigContentView != null;
         RemoteViews rv = useBigContent ? notification.bigContentView : notification.contentView;
+        if (mUseActiveDisplayContent) {
+            rv = applyStandardTemplate(notification, sbn);
+        }
         if (rv != null) {
-            if (mRemoteView != null) mRemoteViewLayout.removeView(mRemoteView);
+            if (mRemoteView != null) {
+                mRemoteViewLayout.removeView(mRemoteView);
+            }
             if (useBigContent) {
-                rv.removeAllViews(com.android.internal.R.id.actions);
-                rv.setViewVisibility(com.android.internal.R.id.action_divider, View.GONE);
+                if (!mUseActiveDisplayContent) {
+                    rv.removeAllViews(com.android.internal.R.id.actions);
+                    rv.setViewVisibility(com.android.internal.R.id.action_divider, View.GONE);
+                }
                 mRemoteViewLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             } else {
                 mRemoteViewLayoutParams.height = getResources().getDimensionPixelSize(R.dimen.notification_min_height);
@@ -1161,20 +1428,77 @@ public class ActiveDisplayView extends FrameLayout {
         }
     }
 
+    private Drawable getIconDrawable(StatusBarNotification sbn) {
+        return NotificationUtils.getIconDrawable(mContext, sbn);
+    }
+
+    private RemoteViews applyStandardTemplate(final Notification notification, final StatusBarNotification sbn) {
+        RemoteViews contentView = new RemoteViews(mContext.getPackageName(), R.layout.active_display_notification);
+        NotificationData nd = NotificationUtils.getNotificationData(mContext, sbn);
+        if (nd == null) {
+            return null;
+        }
+        long when = notification.when;
+        int notificationIconResource = notification.icon;
+        String privacyApps = getResources().getString(R.string.active_display_privacy_content);
+        boolean isPrivacy = isPrivacyApp(sbn);
+        if (nd.iconApp != null) {
+            contentView.setImageViewBitmap(R.id.notificationicon, nd.iconApp);
+        } else {
+            contentView.setImageViewResource(R.id.notificationicon, notificationIconResource);
+        }
+        if (nd.titleText != null) {
+            contentView.setTextViewText(R.id.notificationtitle, nd.titleText);
+        }
+        if (nd.getLargeMessage() != null) {
+            if (isPrivacy) {
+                contentView.setTextViewText(R.id.notificationtext, privacyApps);
+            } else {
+                contentView.setTextViewText(R.id.notificationtext, nd.getLargeMessage());
+            }
+        } else {
+            if (nd.tickerText != null) {
+                if (isPrivacy) {
+                    contentView.setTextViewText(R.id.notificationtext, privacyApps);
+                } else {
+                    contentView.setTextViewText(R.id.notificationtext, nd.tickerText);
+                }
+            }
+        }
+        if (nd.iconAppSmall != null) {
+            contentView.setImageViewBitmap(R.id.notificationiconsmall, nd.iconAppSmall);
+        } else {
+            contentView.setImageViewResource(R.id.notificationiconsmall, notificationIconResource);
+        }
+        if (nd.infoText != null) {
+            contentView.setTextViewText(R.id.notificationinfo, nd.infoText);
+        }
+        if (when != 0) {
+            contentView.setLong(R.id.notificationtime, "setTime", when);
+        }
+        return contentView;
+    }
+
     /**
      * Sets the text to be displayed around the outside of the ring.
      * @param sbn The StatusBarNotification to get the text from.
      */
     private void setHandleText(StatusBarNotification sbn) {
-        final Notification notificiation = sbn.getNotification();
-        CharSequence tickerText = mDisplayNotificationText ? notificiation.tickerText
+        final Notification notification = sbn.getNotification();
+        final boolean isPrivacy = isPrivacyApp(sbn);
+        CharSequence tickerText = mDisplayNotificationText ? notification.tickerText
                 : "";
         if (tickerText == null) {
-            Bundle extras = notificiation.extras;
-            if (extras != null)
+            Bundle extras = notification.extras;
+            if (extras != null) {
                 tickerText = extras.getCharSequence(Notification.EXTRA_TITLE, null);
+            }
         }
-        mGlowPadView.setHandleText(tickerText != null ? tickerText.toString() : "");
+        if (isPrivacy) {
+            mGlowPadView.setHandleText("");
+        } else {
+            mGlowPadView.setHandleText(tickerText != null ? tickerText.toString() : "");
+        }
     }
 
     /**
@@ -1190,170 +1514,101 @@ public class ActiveDisplayView extends FrameLayout {
         return stateListDrawable;
     }
 
-    private void updateWakedByPocketMode() {
-        if (mTurnOffModeEnabled && mDisplayNotifications) {
-            mWakedByPocketMode = true;
-            Log.i(TAG, "ActiveDisplay: waked by Pocketmode");
-        }
-    }
-
-    private boolean inQuietHoursDim() {
-        return QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM);
-    }
-
-    private SensorEventListener mSensorListener = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (mPocketMode == 2) {
-                // continue
-            } else {
-                return;
-            }
-            if (isOnCall()) return;
-
-            float value = event.values[0];
-            if (event.sensor.equals(mProximitySensor)) {
-                boolean isFar = value >= mProximitySensor.getMaximumRange();
-                if (isFar) {
-                    mProximityIsFar = true;
-                    if (inQuietHoursDim() && mQuietTime) return;
-                    if (!isScreenOn() && mPocketMode != POCKET_MODE_OFF
-                        && !isOnCall() && mDisplayNotifications) {
-                        if (System.currentTimeMillis() >= (mPocketTime + mProximityThreshold) && mPocketTime != 0){
-
-                            if (mNotification == null) {
-                                mNotification = getNextAvailableNotification();
-                            }
-
-                            if (mNotification != null) {
-                                updateWakedByPocketMode();
-                                showNotification(mNotification, true);
-                            } else if (mPocketMode == POCKET_MODE_ACTIVE_DISPLAY) {
-                                updateWakedByPocketMode();
-                                showTime();
-                            }
-                        }
-                    }
-                } else {
-                    if (mProximityIsFar) {
-                        mPocketTime = System.currentTimeMillis();
-                        mProximityIsFar = false;
-                    }
-                    if (isScreenOn() && mPocketMode != POCKET_MODE_OFF && !isOnCall() && mWakedByPocketMode) {
-                        mWakedByPocketMode = false;
-                        Log.i(TAG, "ActiveDisplay: sent to sleep by Pocketmode");
-                        restoreBrightness();
-                        cancelTimeoutTimer();
-                        turnScreenOff();
-                    }
-                }
-            } else if (event.sensor.equals(mLightSensor)) {
-                boolean isBright = mIsInBrightLight;
-                final float max = mLightSensor.getMaximumRange();
-                // we don't want the display switching back and forth so there is a region
-                // between 50% and 80% max that we will not toggle the bright light condition
-                if (value > (max * 0.8f)) {
-                    isBright = true;
-                } else if (value < (max * 0.5f)) {
-                    isBright = false;
-                }
-
-                if (mIsInBrightLight != isBright) {
-                    mIsInBrightLight = isBright;
-                    ActiveDisplayView.this.invalidate();
-                }
-            }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        }
-    };
-
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (ACTION_REDISPLAY_NOTIFICATION.equals(action)) {
-                if (mNotification == null) {
-                    mNotification = getNextAvailableNotification();
+            if (action.equals(ACTION_REDISPLAY_NOTIFICATION)) {
+                final int sequence = intent.getIntExtra("disp", 0);
+                synchronized (ActiveDisplayView.this) {
+                    if (mCancelRedisplaySequence == sequence) {
+                        if (mNotification == null) {
+                            mNotification = getNextAvailableNotification();
+                        }
+                        if (mNotification != null) {
+                            showNotification(mNotification, true);
+                        }
+                    }
                 }
-                if (mNotification != null) showNotification(mNotification, true);
-            } else if (ACTION_DISPLAY_TIMEOUT.equals(action)) {
-                turnScreenOff();
-            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+            } else if (action.equals(ACTION_DISPLAY_TIMEOUT)) {
+                final int sequence = intent.getIntExtra("seq", 0);
+                synchronized (ActiveDisplayView.this) {
+                    if (mCancelTimeoutSequence == sequence) {
+                        turnScreenOffTimeOut();
+                    }
+                }
+            } else if (action.equals(ACTION_PHONE_STATE)) {
+                if (isOnCall() && (getVisibility() == View.VISIBLE)) {
+                    hideNotificationViewOnCall();
+                }
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 onScreenTurnedOff();
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 onScreenTurnedOn();
-            } else if (ACTION_FORCE_DISPLAY.equals(action)) {
-                if (mNotification == null) {
-                    mNotification = getNextAvailableNotification();
-                }
-                if (mNotification != null) showNotification(mNotification, true);
-                restoreBrightness();
-            } else if (Intent.ACTION_KEYGUARD_TARGET.equals(action)) {
-                Log.i(TAG, "HEY DICKBAG, DISABLING PROXIMITY SENSOR BECAUSE YOU UNLOCKED THE KEYGUARD!!!!!!!!!");
+            } else if (action.equals(Intent.ACTION_USER_PRESENT)
+                       || action.equals(ACTION_UNLOCK_DEVICE)) {
+                cancelAllTimer();
+                setUserActivity();
                 disableProximitySensor();
+                mWakedByPocketMode = false;
+                if (mIsUnlockByUser) {
+                    mIsUnlockByUser = false;
+                    if (!isScreenOn()) {
+                        turnScreenOn();
+                    }
+                    KeyguardTouchDelegate.getInstance(mContext).dismiss();
+                } else {
+                    mHandler.removeCallbacks(runScreenOn);
+                    mHandler.postDelayed(runScreenOn, 250);
+                }
             }
         }
     };
 
     /**
+     * Cancels the All timer.
+     */
+    private void cancelAllTimer() {
+        cancelRedisplayTimer();
+        cancelTimeoutTimer();
+    }
+
+    /**
      * Restarts the timer for re-displaying notifications.
      */
     private void updateRedisplayTimer() {
-        AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(ACTION_REDISPLAY_NOTIFICATION);
-        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-        try {
-            am.cancel(pi);
-        } catch (Exception e) {
-        }
-        Calendar time = Calendar.getInstance();
-        time.setTimeInMillis(System.currentTimeMillis() + mRedisplayTimeout);
-        am.set(AlarmManager.RTC, time.getTimeInMillis(), pi);
+        long when = SystemClock.elapsedRealtime() + mRedisplayTimeout;
+        Intent intent = new Intent(ACTION_REDISPLAY_NOTIFICATION);
+        intent.putExtra("disp", mCancelRedisplaySequence);
+        PendingIntent sender = PendingIntent.getBroadcast(mContext,
+                    0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        mAM.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, when, sender);
     }
 
     /**
      * Cancels the timer for re-displaying notifications.
      */
     private void cancelRedisplayTimer() {
-        AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(ACTION_REDISPLAY_NOTIFICATION);
-        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-        try {
-            am.cancel(pi);
-        } catch (Exception e) {
-        }
+        mCancelRedisplaySequence++;
     }
 
     /**
      * Restarts the timeout timer used to turn the screen off.
      */
     private void updateTimeoutTimer() {
-        AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(ACTION_DISPLAY_TIMEOUT);
-        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-        try {
-            am.cancel(pi);
-        } catch (Exception e) {
-        }
-        Calendar time = Calendar.getInstance();
-        time.setTimeInMillis(System.currentTimeMillis() + mDisplayTimeout);
-        am.set(AlarmManager.RTC, time.getTimeInMillis(), pi);
+        long when = SystemClock.elapsedRealtime() + mDisplayTimeout;
+        Intent intent = new Intent(ACTION_DISPLAY_TIMEOUT);
+        intent.putExtra("seq", mCancelTimeoutSequence);
+        PendingIntent sender = PendingIntent.getBroadcast(mContext,
+                    0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        mAM.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, when, sender);
     }
 
     /**
      * Cancels the timeout timer used to turn the screen off.
      */
     private void cancelTimeoutTimer() {
-        AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(ACTION_DISPLAY_TIMEOUT);
-        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-        try {
-            am.cancel(pi);
-        } catch (Exception e) {
-        }
+        mCancelTimeoutSequence++;
     }
 
     /**
@@ -1361,16 +1616,25 @@ public class ActiveDisplayView extends FrameLayout {
      * @param excludedApps
      */
     private void createExcludedAppsSet(String excludedApps) {
-        if (TextUtils.isEmpty(excludedApps))
+        if (TextUtils.isEmpty(excludedApps)) {
+            mExcludedApps = null;
             return;
+        }
         String[] appsToExclude = excludedApps.split("\\|");
         mExcludedApps = new HashSet<String>(Arrays.asList(appsToExclude));
     }
 
-    // copied from KeyguardViewMediator
-    private boolean isLockscreenDisabled() {
-        LockPatternUtils utils = new LockPatternUtils(mContext);
-        utils.setCurrentUser(UserHandle.USER_OWNER);
-        return utils.isLockScreenDisabled();
+    /**
+     * Create the set of privacy apps given a string of packages delimited with '|'.
+     * @param privacyApps
+     */
+    private void createPrivacyAppsSet(String privacyApps) {
+        if (TextUtils.isEmpty(privacyApps)) {
+            mPrivacyApps = null;
+            return;
+        }
+        String[] appsToExclude = privacyApps.split("\\|");
+        mPrivacyApps = new HashSet<String>(Arrays.asList(appsToExclude));
     }
 }
+
