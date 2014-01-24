@@ -25,15 +25,15 @@
     <string name="profileGroupEmail">El. paštas</string>
     <string name="profileGroupSMS">Pranešimai</string>
     <string name="wildcardProfile">Kitas</string>
-    <string name="reboot_system" product="tablet">Perkrauti planšetinį kompiuterį</string>
-    <string name="reboot_system" product="default">Perkrauti telefoną</string>
+    <string name="reboot_system" product="tablet">Perkrauti</string>
+    <string name="reboot_system" product="default">Perkrauti</string>
     <string name="global_action_screenshot">Ekranvaizdis</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Išplėstas darbastalis</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Įjungtas</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Išjungtas</string>
     <string name="reboot_reboot">Perkrauti</string>
     <string name="reboot_recovery">Atkūrimo režimas</string>
-    <string name="reboot_bootloader">\'Bootloader\'</string>
+    <string name="reboot_bootloader">"„Bootloader“"</string>
     <string name="reboot_bootmenu">Įjungimo meniu</string>
     <string name="reboot_fastboot">Greitasis įjungimas</string>
     <string name="reboot_download">Parsisiuntimo režimas</string>
@@ -48,7 +48,6 @@
     <string name="permdesc_fm_radio_transmitter">Leidžia programai valdyti FM siųstuvą</string>
     <string name="permlab_sendMockSms">Siųsti netikrus pranešimus</string>
     <string name="permdesc_sendMockSms">Leidžia programai siųsti netikrus pranešimus. Tai leidžia programai siųsti pranešimus patikimoms programoms. Kenkėjiškos programos gali siųsti pranešimus nuolat, blokuodamos įrenginio įspėjimų sistemą ir sutrikdant vartotoją</string>
-    <string name="lockscreen_discharging">Iškraunama, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="storage_sd_dock_card">Atminties kortelės dokas</string>
     <string name="app_killed_message">Programa priverstinai uždaryta</string>
     <string name="global_action_reboot">Perkrauti</string>
@@ -67,8 +66,8 @@
     <string name="perf_profile_perf">Našumas</string>
     <string name="permlab_interceptSmsSent">Perimti siunčiamus SMS</string>
     <string name="permdesc_interceptSmsSent">Leisti programai perimti siunčiamus SMS. Kenkėjiškos programos gali tuo pasinaudoti, kad būtų užkirstas kelias siunčiamiems SMS.</string>
-    <string name="permlab_resetBatteryStats">Atkurti baterijos statistiką</string>
-    <string name="permdesc_resetBatteryStats">Leidžia programai atkurti dabartinio žemo lygio baterijos naudojimo duomenis.</string>
+    <string name="permlab_resetBatteryStats">Atkurti akumuliatoriaus statistiką</string>
+    <string name="permdesc_resetBatteryStats">Leidžia programai atkurti dabartinio žemo lygio akumuliatoriaus naudojimo duomenis.</string>
     <string name="immersive_mode_confirmation_bottom">Braukite aukštyn iš apačios norėdami išeiti iš viso ekrano.</string>
     <string name="progress_nomediapresent" product="default">Nėra laikmenos\u2026</string>
     <string name="transient_navigation_confirmation_long">Braukite iš ekrano krašto norėdami atskleisti sistemos juostą</string>

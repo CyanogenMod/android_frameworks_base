@@ -24,7 +24,7 @@
     <string name="powerwidget_screen_timeout_toast">Ekrano delsimas po: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS išjungta</string>
-    <string name="quick_settings_screen_sleep">Užmigti</string>
+    <string name="quick_settings_screen_sleep">Užmigdyti</string>
     <string name="quick_settings_ringer_on">Garsas įjungtas</string>
     <string name="quick_settings_ringer_off">Garsas išjungtas</string>
     <string name="quick_settings_vibration_on">Vibracija įjungta</string>
@@ -39,19 +39,19 @@
     <string name="quick_settings_sync_off">Sinchronizavimas išjungtas</string>
     <string name="quick_settings_torch">Žibintuvėlis</string>
     <string name="quick_settings_torch_off">Žibintuvėlis išjungtas</string>
-    <string name="quick_settings_nfc">NFC</string>
-    <string name="quick_settings_nfc_off">NFC išjungtas</string>
+    <string name="quick_settings_nfc">ALR</string>
+    <string name="quick_settings_nfc_off">ALR išjungtas</string>
     <string name="quick_settings_screen_timeout">Ekrano delsimo laikas</string>
     <string name="quick_settings_usb_tether_off_label">Atjungtas</string>
     <string name="quick_settings_usb_tether_connected_label">Dalijimasis išjungtas</string>
     <string name="quick_settings_usb_tether_on_label">Dalijimasis</string>
-    <string name="quick_settings_wifiap">Wi-Fi AP</string>
-    <string name="quick_settings_wifiap_off">Wi-Fi AP išjungtas</string>
+    <string name="quick_settings_wifiap">"„Wi-Fi“ AP"</string>
+    <string name="quick_settings_wifiap_off">"„Wi-Fi“ AP išjungtas"</string>
     <string name="quick_settings_quiethours">Tylos laikas</string>
     <string name="quick_settings_quiethours_off">Tylos laikas išjungtas</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE išjungtas</string>
-    <string name="quick_settings_volume">Garsas</string>
+    <string name="quick_settings_volume">Garsumas</string>
     <string name="quick_settings_camera_label">Fotoaparatas</string>
     <string name="quick_settings_network_adb_disabled_label">Išjungta</string>
     <string name="quick_settings_network_adb_enabled_label">Įjungta</string>
@@ -60,14 +60,14 @@
     <string name="quick_settings_camera_error_connect">Nepavyksta prisijungti prie fotoaparato</string>
     <string name="navbar_dialog_title">Pasirinkite veiksmą norėdami jį priskirti</string>
     <string name="navbar_home_button">Pagrindinis mygtukas</string>
-    <string name="navbar_recent_button">\'Naujų\' mygtukas</string>
+    <string name="navbar_recent_button">"„Naujų“ mygtukas"</string>
     <string name="navbar_search_button">Paieškos mygtukas</string>
     <string name="navbar_back_button">Mygtukas atgal</string>
     <string name="navbar_empty_button">Tuščias mygtukas</string>
     <string name="navbar_menu_conditional_button">Meniu mygtukas (automatiškai slepiamas)</string>
     <string name="navbar_menu_always_button">Meniu mygtukas (visada rodomas)</string>
     <string name="navbar_menu_big_button">Meniu mygtukas</string>
-    <string name="pie_battery_status_charging">Įkraunama (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_charging">Įkraunama, (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">Įkrauta</string>
     <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% Likę</string>
     <string name="pie_phone_status_no_service">Nėra ryšio</string>
@@ -75,6 +75,6 @@
     <string name="pie_phone_status_emergency_only">Tik pagalbos skambučiai</string>
     <string name="advanced_dev_option_wipe_app">Ištrinti programos duomenis</string>
     <string name="advanced_dev_option_force_stop">Priverstinai sustabdyti</string>
-    <string name="accessibility_dock_battery_level">Doko baterija <xliff:g id="number">%d</xliff:g> proc.</string>
+    <string name="accessibility_dock_battery_level">Doko akumuliatorius <xliff:g id="number">%d</xliff:g> proc.</string>
     <string name="screenshot_delete_action">Ištrinti</string>
 </resources>
