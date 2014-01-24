@@ -54,7 +54,7 @@ import android.os.SystemProperties;
 public final class WipowerManager {
     private static final String TAG = "WipowerManager";
     private static final boolean DBG = true;
-    private static final boolean VDBG = true;
+    private static final boolean VDBG = false;
 
     private static IWipower mService;
     private static ArrayList<WipowerManagerCallback> mCallbacks;
@@ -100,6 +100,15 @@ public final class WipowerManager {
         ON
     };
 
+   /**
+    * Wipower power applied event
+    * {@hide}
+    */
+    public enum PowerApplyEvent {
+        OFF,
+        ON
+    };
+
     /* helper function to invoke callbacks to application layer*/
     void updateWipowerState(WipowerState state){
        if (mCallbacks != null) {
@@ -133,11 +142,22 @@ public final class WipowerManager {
         }
     }
 
+    void updatePowerApplyAlert(PowerApplyEvent alert){
+       if (mCallbacks != null) {
+           int n = mCallbacks.size();
+           if (VDBG) Log.v(TAG,"Broadcasting updatePowerApplyAlert() to " + n + " receivers.");
+           for (int i = 0; i < n; i++) {
+                  mCallbacks.get(i).onPowerApply(alert);
+           }
+        }
+    }
+
+
     /* helper function to invoke callbacks to application layer*/
     void updateWipowerReady(){
        if (mCallbacks != null) {
            int n = mCallbacks.size();
-           Log.v(TAG,"Broadcasting updateWipowerReady " + n + " receivers.");
+           if (VDBG) Log.v(TAG,"Broadcasting updateWipowerReady " + n + " receivers.");
            for (int i = 0; i < n; i++) {
                   mCallbacks.get(i).onWipowerReady();
            }
@@ -169,11 +189,24 @@ public final class WipowerManager {
 
         }
 
+        public void onPowerApply(byte alert) {
+            PowerApplyEvent s;
+
+            if (alert == 0x1) {
+                s = PowerApplyEvent.ON;
+            } else {
+                s = PowerApplyEvent.OFF;
+            }
+
+            if (VDBG) Log.v(TAG, "onPowerApply: alert" + alert);
+            updatePowerApplyAlert(s);
+
+        }
+
         public void onWipowerData(byte[] value) {
             Log.v(TAG, "onWipowerData: " + value);
             if (mPruData != null) {
                  mPruData.setValue(value);
-                 mPruData.print();
                  updateWipowerData(mPruData);
             } else {
                  Log.e(TAG, "mPruData is null");
@@ -241,7 +274,6 @@ public final class WipowerManager {
        Log.v(TAG, "Bound to Wipower Service");
        mPruData = new WipowerDynamicParam();
        mCallbacks = new ArrayList<WipowerManagerCallback>();
-       mCallbacks.add(callback);
     }
 
     static boolean isWipowerSupported() {
@@ -340,9 +372,9 @@ public final class WipowerManager {
             Log.e(TAG, " Wipower Service not available");
         } else {
             byte level = 0;
-            if( powerlevel == PowerLevel.POWER_LEVEL_MINIMUM) level = 0;
-            else if(  powerlevel == PowerLevel.POWER_LEVEL_MEDIUM) level = 1;
-            else if(  powerlevel == PowerLevel.POWER_LEVEL_MAXIMUM) level = 2;
+            if( powerlevel == PowerLevel.POWER_LEVEL_MINIMUM) level = (31/3);
+            else if(  powerlevel == PowerLevel.POWER_LEVEL_MEDIUM) level = ((31/3) * 2);
+            else if(  powerlevel == PowerLevel.POWER_LEVEL_MAXIMUM) level = 31;
             try {
                 ret = mService.setCurrentLimit(level);
             } catch (android.os.RemoteException e) {
@@ -451,6 +483,7 @@ public final class WipowerManager {
     * {@hide}
     */
     public void registerCallback(WipowerManagerCallback callback) {
+        if (VDBG) Log.v(TAG, "registerCallback:Service called");
         if (mService == null) {
             Log.e(TAG, "registerCallback:Service  not available");
         }
