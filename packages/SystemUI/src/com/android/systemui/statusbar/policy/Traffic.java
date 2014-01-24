@@ -67,13 +67,13 @@ public class Traffic extends TextView {
             }
             long speed = (long)(newData / (td / 1000F));
             if (speed < KB) {
-                setText(speed + symbol);
+                setText(speed + " " + symbol);
             } else if (speed < MB) {
-                setText(decimalFormat.format(speed / (float)KB) + 'k' + symbol);
+                setText(decimalFormat.format(speed / (float)KB) + " k" + symbol);
             } else if (speed < GB) {
-                setText(decimalFormat.format(speed / (float)MB) + 'M' + symbol);
+                setText(decimalFormat.format(speed / (float)MB) + " M" + symbol);
             } else {
-                setText(decimalFormat.format(speed / (float)GB) + 'G' + symbol);
+                setText(decimalFormat.format(speed / (float)GB) + " G" + symbol);
             }
 
             // Post delayed message to refresh in ~1000ms
