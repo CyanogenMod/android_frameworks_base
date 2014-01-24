@@ -34,6 +34,7 @@
 
 #include <dlfcn.h>
 #include <limits.h>
+#include <pthread.h>
 #include <string.h>
 
 #include <cutils/properties.h>
@@ -49,6 +50,7 @@ static int  (*cpu_setoptions)(int, int)             = NULL;
 static int  (*perf_lock_acq)(int, int, int[], int)  = NULL;
 static int  (*perf_lock_rel)(int)                   = NULL;
 static void *dlhandle                               = NULL;
+static pthread_mutex_t dl_mutex                     = PTHREAD_MUTEX_INITIALIZER;
 
 // ----------------------------------------------------------------------------
 
@@ -117,6 +119,7 @@ org_codeaurora_performance_native_deinit(JNIEnv *env, jobject clazz)
 {
     void (*deinit)(void);
 
+    pthread_mutex_lock(&dl_mutex);
     if (dlhandle) {
         cpu_setoptions = NULL;
         perf_lock_acq  = NULL;
@@ -130,6 +133,7 @@ org_codeaurora_performance_native_deinit(JNIEnv *env, jobject clazz)
         dlclose(dlhandle);
         dlhandle       = NULL;
     }
+    pthread_mutex_unlock(&dl_mutex);
 }
 
 static jint
@@ -148,27 +152,29 @@ org_codeaurora_performance_native_perf_lock_acq(JNIEnv *env, jobject clazz, jint
     jint listlen = env->GetArrayLength(list);
     jint buf[listlen];
     int i=0;
+    int ret = 0;
     env->GetIntArrayRegion(list, 0, listlen, buf);
 
-    if (dlhandle == NULL) {
+    pthread_mutex_lock(&dl_mutex);
+    if (perf_lock_acq == NULL) {
         org_codeaurora_performance_native_init();
     }
-    if (perf_lock_acq) {
-        return (*perf_lock_acq)(handle, duration, buf, listlen);
-    }
-    return 0;
+    ret = (*perf_lock_acq)(handle, duration, buf, listlen);
+    pthread_mutex_unlock(&dl_mutex);
+    return ret;
 }
 
 static jint
 org_codeaurora_performance_native_perf_lock_rel(JNIEnv *env, jobject clazz, jint handle)
 {
-    if (dlhandle == NULL) {
+    int ret = 0;
+    pthread_mutex_lock(&dl_mutex);
+    if (perf_lock_rel == NULL) {
         org_codeaurora_performance_native_init();
     }
-    if (perf_lock_rel) {
-        return (*perf_lock_rel)(handle);
-    }
-    return 0;
+    ret = (*perf_lock_rel)(handle);
+    pthread_mutex_unlock(&dl_mutex);
+    return ret;
 }
 // ----------------------------------------------------------------------------
 
@@ -182,7 +188,9 @@ static JNINativeMethod gMethods[] = {
 
 int register_org_codeaurora_Performance(JNIEnv *env)
 {
+    pthread_mutex_lock(&dl_mutex);
     org_codeaurora_performance_native_init();
+    pthread_mutex_unlock(&dl_mutex);
 
     return AndroidRuntime::registerNativeMethods(env,
             "org/codeaurora/Performance", gMethods, NELEM(gMethods));
