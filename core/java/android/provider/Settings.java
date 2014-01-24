@@ -4232,6 +4232,12 @@ public final class Settings {
         public static final String STATUS_BAR_CARRIER = "status_bar_carrier";
 
         /**
+         * Carrier Label Custom Color
+         * @hide
+         */
+        public static final String STATUS_BAR_CARRIER_COLOR = "status_bar_carrier_color";
+
+        /**
          * custom carrier label. The value is
          * String.
          */
