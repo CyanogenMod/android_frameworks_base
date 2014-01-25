@@ -642,6 +642,12 @@ public class MediaFocusControl implements OnFinished {
             return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
         }
 
+        AudioManager am = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
+        if (am.getStreamVolume(AudioManager.STREAM_NOTIFICATION) == 0
+                && mainStreamType == AudioManager.STREAM_NOTIFICATION) {
+            return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
+        }
+
         synchronized(mAudioFocusLock) {
             if (!canReassignAudioFocus()) {
                 return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
