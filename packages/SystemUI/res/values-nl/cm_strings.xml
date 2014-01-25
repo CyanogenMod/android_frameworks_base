@@ -78,5 +78,5 @@
     <string name="advanced_dev_option_force_stop">Nu stoppen</string>
     <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
     <string name="screenshot_delete_action">Verwijderen</string>
-    <string name="screenshot_delete_confirmation">Schermafdruk verwijderd.</string>
+    <string name="screenshot_delete_confirmation">Screenshot verwijderd.</string>
 </resources>
