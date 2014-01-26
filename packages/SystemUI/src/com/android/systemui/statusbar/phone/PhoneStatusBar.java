@@ -318,7 +318,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private StatusHeaderMachine mStatusHeaderMachine;
     private Runnable mStatusHeaderUpdater;
     private ImageView mStatusHeaderImage;
-    private Drawable mHeaderOverlay;
 
     private boolean mBrightnessControl;
     private float mScreenWidth;
@@ -739,7 +738,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mStatusHeaderMachine = new StatusHeaderMachine(mContext);
         mStatusHeaderImage = (ImageView) mNotificationPanelHeader.findViewById(R.id.header_background_image);
-        mHeaderOverlay = res.getDrawable(R.drawable.bg_custom_header_overlay);
         updateCustomHeaderStatus();
 
         mClearButton = mStatusBarWindow.findViewById(R.id.clear_all_button);
@@ -1001,13 +999,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
-    private void setNotificationPanelHeaderBackground(Drawable dwSrc) {
+    private void setNotificationPanelHeaderBackground(final Drawable dw) {
         Drawable[] arrayDrawable = new Drawable[2];
-
-        // Overlay a dark gradient
-        arrayDrawable[0] = dwSrc;
-        arrayDrawable[1] = mHeaderOverlay;
-        final Drawable dw = new LayerDrawable(arrayDrawable);
 
         // Transition animation
         arrayDrawable[0] = mStatusHeaderImage.getDrawable();
