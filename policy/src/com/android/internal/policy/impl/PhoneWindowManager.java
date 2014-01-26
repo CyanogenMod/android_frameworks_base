@@ -4489,7 +4489,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // to wake the device but don't pass the key to the application.
             result = 0;
             if (down && isWakeKey && isWakeKeyWhenScreenOff(keyCode)) {
-                result |= ACTION_WAKE_UP;
+                mPowerManager.wakeUp(SystemClock.uptimeMillis());
             }
         }
 
