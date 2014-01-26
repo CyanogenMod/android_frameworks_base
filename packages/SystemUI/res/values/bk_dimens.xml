@@ -24,13 +24,13 @@
     <dimen name="glowpad_overflow_notifications_margin_top">64dp</dimen>
 
     <!-- Top margin for overflow notifications container shown in the active display view -->
-    <dimen name="ad_clock_margin_bottom">60dp</dimen>
+    <dimen name="ad_clock_margin_bottom">160dp</dimen>
 
     <!-- left/right margin for extra notifications in ActiveDisplayView -->
     <dimen name="ad_notification_margin">4dp</dimen>
 
     <!-- Active display overflow notification icon size -->
-    <dimen name="overflow_icon_size">28dp</dimen>
+    <dimen name="overflow_icon_size">32dp</dimen>
 
     <!-- Active display Handle notification icon size -->
     <dimen name="handle_icon_size">32dp</dimen>

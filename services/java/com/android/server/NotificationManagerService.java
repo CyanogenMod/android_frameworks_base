@@ -794,12 +794,15 @@ public class NotificationManagerService extends INotificationManager.Stub
         for (NotificationListenerInfo info : toRemove) {
             final ComponentName component = info.component;
             final int oldUser = info.userid;
-    	    if (!info.isSystem) {
-                Slog.v(TAG, "disabling notification listener for user " + oldUser + ": " + component);
-                // Do not un-register HALO and ActiveDisplay, we un-register only when HALO is closed
-                if (!component.getPackageName().equals("HaloComponent") && !component.getPackageName().equals("ActiveDisplayComponent")) unregisterListenerService(component, info.userid);
+            Slog.v(TAG, "disabling notification listener for user " + oldUser + ": " + component);                        
+            // Active display
+            if (!info.isSystem) {                
+                unregisterListenerService(component, info.userid);
+            // Halo
+            // Do not un-register HALO and ActiveDisplay, we un-register only when HALO is closed
+            if (!component.getPackageName().equals("HaloComponent") && !component.getPackageName().equals("ActiveDisplayComponent")) unregisterListenerService(component, info.userid);
             }
-	}
+	    }
 
         final int N = toAdd.size();
         for (int i=0; i<N; i++) {
@@ -818,14 +821,15 @@ public class NotificationManagerService extends INotificationManager.Stub
      */
     @Override
     public void registerListener(final INotificationListener listener,
-            final ComponentName component, final int userid) {
-	
-	    final int permission = mContext.checkCallingPermission(
+        final ComponentName component, final int userid) {               
+        // Active notifications        
+        final int permission = mContext.checkCallingPermission(
                 android.Manifest.permission.SYSTEM_NOTIFICATION_LISTENER);
         if (permission == PackageManager.PERMISSION_DENIED) {
-            if (!component.getPackageName().equals("HaloComponent") && !component.getPackageName().equals("ActiveDisplayComponent")) 
             checkCallerIsSystem();
-	    }
+        // Halo
+        if (!component.getPackageName().equals("HaloComponent")) checkCallerIsSystem(); 
+        }
         
         synchronized (mNotificationList) {
             try {

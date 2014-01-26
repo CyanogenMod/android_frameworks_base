@@ -41,7 +41,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.android.internal.util.slim.QuietHoursHelper;
+import java.util.Calendar;
 
 public class NotificationViewManager {
     private final static String TAG = "Keyguard:NotificationViewManager";
@@ -56,6 +56,8 @@ public class NotificationViewManager {
     private boolean mWokenByPocketMode = false;
     private boolean mIsScreenOn = false;
     private long mTimeCovered = 0;
+    private boolean mQuietTime;
+    private boolean activeD;
 
     private Context mContext;
     private KeyguardViewManager mKeyguardViewManager;
@@ -69,32 +71,33 @@ public class NotificationViewManager {
 
     class Configuration extends ContentObserver {
         //User configurable values, set defaults here
-        public boolean showAlways = true;
-        public boolean pocketMode = true;
+        public int pocketMode = 0;
         public boolean hideLowPriority = false;
         public boolean hideNonClearable = false;
         public boolean dismissAll = true;
         public boolean expandedView = true;
         public boolean forceExpandedView = false;
-        public boolean wakeOnNotification = false;
         public int notificationsHeight = 4;
         public float offsetTop = 0.3f;
         public boolean privacyMode = false;
-        public boolean dynamicWidth = true;
+        public boolean mQuietTime;
 
         public Configuration(Handler handler) {
             super(handler);
-            updateSettings();
         }
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_SHOW_ALWAYS), false, this);
+                    Settings.System.ENABLE_ACTIVE_DISPLAY), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_POCKET_MODE), false, this);
+                    Settings.System.ACTIVE_NOTIFICATIONS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_HIDE_LOW_PRIORITY), false, this);
+                    Settings.System.ACTIVE_NOTIFICATIONS_POCKET_MODE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_NOTIFICATIONS_HIDE_LOW_PRIORITY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_NOTIFICATIONS_QUIET_HOURS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_HIDE_NON_CLEARABLE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -104,17 +107,14 @@ public class NotificationViewManager {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_FORCE_EXPANDED_VIEW), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_WAKE_ON_NOTIFICATION), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_HEIGHT), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_OFFSET_TOP), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE), false, this);
+                    Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_DYNAMIC_WIDTH), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_EXCLUDED_APPS), false, this);
+			        Settings.System.LOCKSCREEN_NOTIFICATIONS_EXCLUDED_APPS), false, this);
+            updateSettings();
         }
 
         @Override
@@ -123,47 +123,49 @@ public class NotificationViewManager {
         }
 
         private void updateSettings() {
-            showAlways = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_SHOW_ALWAYS, showAlways ? 1 : 0) == 1;
+            activeD = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.ENABLE_ACTIVE_DISPLAY, 0) == 1;
             pocketMode = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_POCKET_MODE, pocketMode ? 1 : 0) == 1;
+                    Settings.System.ACTIVE_NOTIFICATIONS_POCKET_MODE, 2);
             hideLowPriority = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_HIDE_LOW_PRIORITY, hideLowPriority ? 1 : 0) == 1;
+                    Settings.System.ACTIVE_NOTIFICATIONS_HIDE_LOW_PRIORITY, hideLowPriority ? 1 : 0) == 1;
             hideNonClearable = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_HIDE_NON_CLEARABLE, hideNonClearable ? 1 : 0) == 1;
             dismissAll = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_DISMISS_ALL, dismissAll ? 1 : 0) == 1;
             privacyMode = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE, privacyMode ? 1 : 0) == 1;
+                    Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE, privacyMode ? 1 : 0) == 1;
             expandedView = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_EXPANDED_VIEW, expandedView ? 1 : 0) == 1
                     && !privacyMode;
             forceExpandedView = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_FORCE_EXPANDED_VIEW, forceExpandedView ? 1 : 0) == 1
                     && !privacyMode;
-            wakeOnNotification = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_WAKE_ON_NOTIFICATION, wakeOnNotification ? 1 : 0) == 1;
             notificationsHeight = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_HEIGHT, notificationsHeight);
             offsetTop = Settings.System.getFloat(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_OFFSET_TOP, offsetTop);
-            dynamicWidth = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_DYNAMIC_WIDTH, dynamicWidth ? 1 : 0) == 1;
+            mQuietTime = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.ACTIVE_NOTIFICATIONS_QUIET_HOURS, 0) == 1;
             String excludedApps = Settings.System.getString(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_EXCLUDED_APPS);
+			        Settings.System.LOCKSCREEN_NOTIFICATIONS_EXCLUDED_APPS);
 
-            createExcludedAppsSet(excludedApps);
+			createExcludedAppsSet(excludedApps);
         }
     }
 
     private class ProximityListener implements SensorEventListener {
         public void onSensorChanged(SensorEvent event) {
+            if (config.pocketMode == 1) {
+                // continue
+            } else {
+                return;
+            }
             if (event.sensor.equals(ProximitySensor)) {
                 if (!mIsScreenOn) {
                     if (event.values[0] >= ProximitySensor.getMaximumRange()) {
-                        if (config.pocketMode && mTimeCovered != 0 && (config.showAlways || mHostView.getNotificationCount() > 0)
-                                && System.currentTimeMillis() - mTimeCovered > MIN_TIME_COVERED
-                                && !QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM)) {
+                        if (mTimeCovered != 0 && (mHostView.getNotificationCount() > 0) &&
+                                System.currentTimeMillis() - mTimeCovered > MIN_TIME_COVERED && !inQuietHours()) {
                             wakeDevice();
                             mWokenByPocketMode = true;
                             mHostView.showAllNotifications();
@@ -172,7 +174,7 @@ public class NotificationViewManager {
                     } else if (mTimeCovered == 0) {
                         mTimeCovered = System.currentTimeMillis();
                     }
-                } else if (config.pocketMode && mWokenByPocketMode &&
+                } else if (mWokenByPocketMode &&
                         mKeyguardViewManager.isShowing() && event.values[0] < 0.2f){
                     mPowerManager.goToSleep(SystemClock.uptimeMillis());
                     mTimeCovered = System.currentTimeMillis();
@@ -186,13 +188,17 @@ public class NotificationViewManager {
     public class NotificationListenerWrapper extends INotificationListener.Stub {
         @Override
         public void onNotificationPosted(final StatusBarNotification sbn) {
+            if (inQuietHours()) {
+                return;
+            }
             boolean screenOffAndNotCovered = !mIsScreenOn && mTimeCovered == 0;
             boolean ongoingAndReposted = sbn.isOngoing() && mHostView.containsNotification(sbn);
-            if (mHostView.addNotification(sbn, (screenOffAndNotCovered || mIsScreenOn) && !ongoingAndReposted,
-                        config.forceExpandedView) && config.wakeOnNotification && screenOffAndNotCovered
-                        && !ongoingAndReposted && !QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM)) {
+            if (ongoingAndReposted) {
+                return;
+            }
+            if (mHostView.addNotification(sbn, (screenOffAndNotCovered || mIsScreenOn),
+                        config.forceExpandedView) && screenOffAndNotCovered) {
                 wakeDevice();
-                mHostView.showAllNotifications();
             }
         }
         @Override
@@ -201,9 +207,8 @@ public class NotificationViewManager {
         }
 
         public boolean isValidNotification(final StatusBarNotification sbn) {
-            return (!mExcludedApps.contains(sbn.getPackageName()));
+			return (!mExcludedApps.contains(sbn.getPackageName()));
         }
-
     }
 
     public NotificationViewManager(Context context, KeyguardViewManager viewManager) {
@@ -230,11 +235,16 @@ public class NotificationViewManager {
     }
 
     private void registerProximityListener() {
-        if (ProximityListener == null && (config.pocketMode || config.wakeOnNotification)) {
+        if (config.pocketMode == 1) {
+            // continue
+        } else {
+            return;
+        }
+        if (ProximityListener == null) {
             SensorManager sensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
             ProximityListener = new ProximityListener();
             ProximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-            sensorManager.registerListener(ProximityListener, ProximitySensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(ProximityListener, ProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -274,7 +284,13 @@ public class NotificationViewManager {
     }
 
     private void wakeDevice() {
-        mPowerManager.wakeUp(SystemClock.uptimeMillis());
+        if (!activeD) {
+            mPowerManager.wakeUp(SystemClock.uptimeMillis());
+        } else {
+            if (config.pocketMode == 1) {
+                mPowerManager.wakeUp(SystemClock.uptimeMillis());
+            }
+        }
     }
 
     public void onScreenTurnedOff() {
@@ -289,7 +305,7 @@ public class NotificationViewManager {
     public void onScreenTurnedOn() {
         mIsScreenOn = true;
         mTimeCovered = 0;
-        mHostView.bringToFront();
+        if (mHostView != null) mHostView.bringToFront();
     }
 
     public void onDismiss() {
@@ -303,16 +319,40 @@ public class NotificationViewManager {
             }
         }, ANIMATION_MAX_DURATION);
     }
+    /**
+     * Check if device is in Quiet Hours in the moment.
+     */
+    private boolean inQuietHours() {
+        if (!mQuietTime) {
+            boolean quietHoursEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
+            int quietHoursStart = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT_OR_SELF);
+            int quietHoursEnd = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT_OR_SELF);
+            boolean quietHoursDim = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.QUIET_HOURS_DIM, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
+
+            if (quietHoursEnabled && quietHoursDim && (quietHoursStart != quietHoursEnd)) {
+                Calendar calendar = Calendar.getInstance();
+                int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
+                if (quietHoursEnd < quietHoursStart) {
+                    return (minutes > quietHoursStart) || (minutes < quietHoursEnd);
+                } else {
+                    return (minutes > quietHoursStart) && (minutes < quietHoursEnd);
+                }
+            }
+        }
+        return false;
+    }
 
     /**
-     * Create the set of excluded apps given a string of packages delimited with '|'.
-     * @param excludedApps
-     */
+    * Create the set of excluded apps given a string of packages delimited with '|'.
+    * @param excludedApps
+    */
     private void createExcludedAppsSet(String excludedApps) {
-        if (TextUtils.isEmpty(excludedApps))
-            return;
+			if (TextUtils.isEmpty(excludedApps)) return;
         String[] appsToExclude = excludedApps.split("\\|");
         mExcludedApps = new HashSet<String>(Arrays.asList(appsToExclude));
     }
-
 }

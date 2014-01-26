@@ -74,7 +74,8 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:ellipsize="none"
-                    android:textSize="@dimen/ad_ampm_font_size"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="@dimen/ad_clock_font_size"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@android:color/white"
                     android:layout_toEndOf="@id/clock_text"
@@ -93,14 +94,6 @@
             android:layout_weight="1" >
 
             <include layout="@layout/glow_pad_view" />
-
-            <ImageView
-                android:id="@+id/current_notification_icon"
-                android:layout_width="@dimen/handle_icon_size"
-                android:layout_height="@dimen/handle_icon_size"
-                android:layout_centerInParent="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_ad_unlock" />
 
             <View
                 android:id="@+id/anchor"

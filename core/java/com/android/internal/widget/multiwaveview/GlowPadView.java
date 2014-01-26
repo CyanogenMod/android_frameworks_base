@@ -22,8 +22,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
@@ -152,6 +154,8 @@ public class GlowPadView extends View {
     private TargetDrawable mHandleDrawable;
     private TargetDrawable mOuterRing;
     private Vibrator mVibrator;
+
+    private TargetDrawable mCenterDrawable;
 
     private int mFeedbackCount = 3;
     private int mVibrationDuration = 0;
@@ -292,6 +296,8 @@ public class GlowPadView extends View {
         mPadDrawable = a.getDrawable(R.styleable.GlowPadView_handleDrawable);
         mHandleDrawable = new TargetDrawable(res, handle != null ? handle.resourceId : 0);
         mHandleDrawable.setState(TargetDrawable.STATE_INACTIVE);
+        mCenterDrawable = new TargetDrawable(res, 0);
+        mCenterDrawable.setState(TargetDrawable.STATE_INACTIVE);
         mOuterRing = new TargetDrawable(res,
                 getResourceId(a, R.styleable.GlowPadView_outerRingDrawable));
 
@@ -444,6 +450,8 @@ public class GlowPadView extends View {
                 startBackgroundAnimation(0, 0.0f);
                 mHandleDrawable.setState(TargetDrawable.STATE_INACTIVE);
                 mHandleDrawable.setAlpha(1.0f);
+                mCenterDrawable.setState(TargetDrawable.STATE_INACTIVE);
+                mCenterDrawable.setAlpha(1.0f);
                 mPaintText.setAlpha(255);
                 break;
 
@@ -454,6 +462,7 @@ public class GlowPadView extends View {
             case STATE_FIRST_TOUCH:
                 mPaintText.setAlpha(0);
                 mHandleDrawable.setAlpha(0.0f);
+                mCenterDrawable.setAlpha(0.0f);
                 deactivateTargets();
                 showTargets(true);
                 startBackgroundAnimation(INITIAL_SHOW_HANDLE_DURATION, 1.0f);
@@ -466,6 +475,7 @@ public class GlowPadView extends View {
             case STATE_TRACKING:
                 mPaintText.setAlpha(0);
                 mHandleDrawable.setAlpha(0.0f);
+                mCenterDrawable.setAlpha(0.0f);
                 showGlow(REVEAL_GLOW_DURATION , REVEAL_GLOW_DELAY, 1.0f, null);
                 break;
 
@@ -473,6 +483,7 @@ public class GlowPadView extends View {
                 // TODO: Add transition states (see list_selector_background_transition.xml)
                 mPaintText.setAlpha(0);
                 mHandleDrawable.setAlpha(0.0f);
+                mCenterDrawable.setAlpha(0.0f);
                 showGlow(REVEAL_GLOW_DURATION , REVEAL_GLOW_DELAY, 0.0f, null);
                 break;
 
@@ -581,6 +592,10 @@ public class GlowPadView extends View {
                 mTargetAnimations.stop();
             }
             hideTargets(false, false);
+
+            Intent intent = new Intent(Intent.ACTION_KEYGUARD_TARGET);
+			mContext.sendBroadcast(intent);
+
         } else {
             // Animate handle back to the center based on current state.
             hideGlow(HIDE_ANIMATION_DURATION, 0, 0.0f, mResetListenerWithPing);
@@ -1323,6 +1338,8 @@ public class GlowPadView extends View {
 
         mHandleDrawable.setPositionX(newWaveCenterX);
         mHandleDrawable.setPositionY(newWaveCenterY);
+        mCenterDrawable.setPositionX(newWaveCenterX);
+        mCenterDrawable.setPositionY(newWaveCenterY);
 
         updateTargetPositions(newWaveCenterX, newWaveCenterY);
         updatePointCloudPosition(newWaveCenterX, newWaveCenterY);
@@ -1390,6 +1407,7 @@ public class GlowPadView extends View {
                 target.draw(canvas);
             }
         }
+        mCenterDrawable.draw(canvas);
         mHandleDrawable.draw(canvas);
 
         if (mArcAngle > 0 && mHandleDrawable.getAlpha() > 0) {
@@ -1422,6 +1440,12 @@ public class GlowPadView extends View {
         mHandleText = TextUtils.ellipsize(
                 text, new TextPaint(mPaintText), mMaxTextArcLength,
                 TextUtils.TruncateAt.END).toString();
+    }
+
+    public void setCenterDrawable(TargetDrawable d) {
+        mCenterDrawable = new TargetDrawable(d);
+        mCenterDrawable.setPositionX(mWaveCenterX);
+        mCenterDrawable.setPositionY(mWaveCenterY);
     }
 
     public void setDrawOuterRing(boolean drawOuterRing) {

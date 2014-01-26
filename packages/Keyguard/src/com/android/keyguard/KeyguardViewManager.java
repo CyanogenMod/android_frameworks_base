@@ -22,9 +22,10 @@ import com.android.internal.widget.LockPatternUtils;
 
 import android.app.ActivityManager;
 import android.appwidget.AppWidgetManager;
-
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -137,6 +138,8 @@ public class KeyguardViewManager {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_SEE_THROUGH), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_NOTIFICATIONS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_BLUR_RADIUS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS), false, this);
@@ -154,18 +157,25 @@ public class KeyguardViewManager {
      }
 
     private void updateSettings() {
+        boolean mNotOverridden;
         mSeeThrough = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
         mBlurRadius = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_BLUR_RADIUS, mBlurRadius);
+        mNotOverridden = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.ACTIVE_NOTIFICATIONS, 0) == 1;
         mLockscreenNotifications = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_NOTIFICATIONS, mLockscreenNotifications ? 1 : 0) == 1;
-        if(!mSeeThrough) mCustomBackground = null;
-        if(mLockscreenNotifications && mNotificationViewManager == null) {
+        if (!mSeeThrough) mCustomBackground = null;
+        if (!mNotOverridden) mLockscreenNotifications = false;
+        if (mLockscreenNotifications && mNotificationViewManager == null) {
             mNotificationViewManager = new NotificationViewManager(mContext, this);
-        } else if(!mLockscreenNotifications && mNotificationViewManager != null) {
-            mNotificationViewManager.unregisterListeners();
-            mNotificationViewManager = null;
+        }
+        if (!mLockscreenNotifications) {
+            if (mNotificationViewManager != null) {
+                mNotificationViewManager.unregisterListeners();
+                mNotificationViewManager = null;
+            }
         }
     }
 
@@ -674,8 +684,9 @@ public class KeyguardViewManager {
         // The keyguard view will have set up window flags in onFinishInflate before we set
         // the view mediator callback. Make sure it knows the correct IME state.
         if (mViewMediatorCallback != null) {
-            if (mLockscreenNotifications)
+            if (mLockscreenNotifications) {
                 mNotificationView.setViewMediator(mViewMediatorCallback);
+            }
 
             KeyguardPasswordView kpv = (KeyguardPasswordView) mKeyguardView.findViewById(
                     R.id.keyguard_password_view);
@@ -814,17 +825,17 @@ public class KeyguardViewManager {
                         Slog.w(TAG, "Exception calling onShown():", e);
                     }
                 }
-
-            if (mLockscreenNotifications) {
-                mNotificationViewManager.onScreenTurnedOn();
             }
-          }
         } else if (callback != null) {
             try {
                 callback.onShown(token);
             } catch (RemoteException e) {
                 Slog.w(TAG, "Exception calling onShown():", e);
             }
+        }
+
+        if (mLockscreenNotifications) {
+            mNotificationViewManager.onScreenTurnedOn();
         }
     }
 
@@ -841,7 +852,9 @@ public class KeyguardViewManager {
         if (DEBUG) Log.d(TAG, "hide()");
 
         if (mLockscreenNotifications) {
-            mNotificationViewManager.onDismiss();
+            if (mNotificationViewManager != null) {
+                mNotificationViewManager.onDismiss();
+            }
         }
 
         if (mKeyguardHost != null) {
@@ -912,5 +925,10 @@ public class KeyguardViewManager {
         if (mKeyguardView != null) {
             mKeyguardView.launchCamera();
         }
+    }
+
+    private boolean isKeyguardSecure() {
+        boolean isSecure = mLockPatternUtils.isSecure();
+        return isSecure;
     }
 }

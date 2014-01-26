@@ -1432,6 +1432,12 @@ public class Intent implements Parcelable, Cloneable {
     public static final String ACTION_SCREEN_ON = "android.intent.action.SCREEN_ON";
 
     /**
+     * Action unlock keyguard for active display proximity listener
+     * @hide
+     */
+    public static final String ACTION_KEYGUARD_TARGET = "android.intent.action.KEYGUARD_TARGET";
+
+    /**
      * Broadcast Action: Sent after the system stops dreaming.
      *
      * <p class="note">This is a protected intent that can only be sent by the system.
