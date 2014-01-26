@@ -29,6 +29,12 @@
     android:layout_marginStart="@dimen/notification_panel_margin_left"
     >
 
+    <ImageView
+        android:id="@+id/notification_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
     <View
         android:id="@+id/handle"
         android:layout_width="match_parent"
