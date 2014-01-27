@@ -45,7 +45,7 @@ public class WifiStateTracker extends BaseNetworkStateTracker {
     private static final String NETWORKTYPE = "WIFI";
     private static final String TAG = "WifiStateTracker";
 
-    private static final boolean LOGV = true;
+    private static final boolean LOGV = false;
 
     private AtomicBoolean mTeardownRequested = new AtomicBoolean(false);
     private AtomicBoolean mPrivateDnsRouteSet = new AtomicBoolean(false);
