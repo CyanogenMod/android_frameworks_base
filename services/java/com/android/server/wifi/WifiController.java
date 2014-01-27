@@ -30,6 +30,8 @@ import android.net.wifi.WifiManager;
 import static android.net.wifi.WifiManager.WIFI_MODE_FULL;
 import static android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF;
 import static android.net.wifi.WifiManager.WIFI_MODE_SCAN_ONLY;
+import static android.net.wifi.WifiManager.WIFI_STATE_ENABLED;
+import static android.net.wifi.WifiManager.WIFI_STATE_ENABLING;
 import android.net.wifi.WifiStateMachine;
 import android.os.Handler;
 import android.os.Looper;
@@ -477,12 +479,20 @@ class WifiController extends StateMachine {
         public boolean processMessage(Message msg) {
             switch (msg.what) {
                 case CMD_WIFI_TOGGLED:
+                    int mWifiState = mWifiStateMachine.syncGetWifiState();
                     if (! mSettingsStore.isWifiToggleEnabled()) {
                         if (mSettingsStore.isScanAlwaysAvailable()) {
                             transitionTo(mStaDisabledWithScanState);
                         } else {
                             transitionTo(mApStaDisabledState);
                         }
+                    }
+                    if ((mWifiState != WIFI_STATE_ENABLING) &&
+                        (mWifiState != WIFI_STATE_ENABLED)) {
+                        if (DBG) {
+                            Slog.d(TAG, "Mismatch in the state " + mWifiState);
+                        }
+                        mWifiStateMachine.setSupplicantRunning(true);
                     }
                     break;
                 case CMD_AIRPLANE_TOGGLED:
