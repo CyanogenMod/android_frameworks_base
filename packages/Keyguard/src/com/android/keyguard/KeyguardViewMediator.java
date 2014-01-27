@@ -631,7 +631,7 @@ public class KeyguardViewMediator {
             } else if (mShowing) {
                 notifyScreenOffLocked();
                 // It doesn't make sense to me to reset the lockscreen when screen is turned off on lockscreen
-                resetStateLocked(null);
+                // resetStateLocked(null);
             } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT
                    || (why == WindowManagerPolicy.OFF_BECAUSE_OF_USER && !lockImmediately)) {
                 doKeyguardLaterLocked();

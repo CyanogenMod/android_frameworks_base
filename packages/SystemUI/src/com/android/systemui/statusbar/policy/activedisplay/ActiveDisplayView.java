@@ -626,9 +626,9 @@ public class ActiveDisplayView extends FrameLayout {
     private void adjustStatusBarLocked(int show) {
         int flags = 0x00000000;
         if (show == 1) {
-            flags = getSystemUiVisibility() | STATUS_BAR_DISABLE_BACK
+            flags = getSystemUiVisibility() /*| STATUS_BAR_DISABLE_BACK
                     | STATUS_BAR_DISABLE_HOME | STATUS_BAR_DISABLE_RECENT
-                    | STATUS_BAR_DISABLE_SEARCH | STATUS_BAR_DISABLE_CLOCK;
+                    | STATUS_BAR_DISABLE_SEARCH | STATUS_BAR_DISABLE_CLOCK*/;
         } else if (show == 2) {
             flags = getSystemUiVisibility() /*| STATUS_BAR_DISABLE_BACK
                     | STATUS_BAR_DISABLE_HOME | STATUS_BAR_DISABLE_RECENT
