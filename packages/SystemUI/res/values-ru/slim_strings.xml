@@ -17,6 +17,11 @@
     <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="quick_settings_music_play">Играть</string>
     <string name="quick_settings_music_pause">Пауза</string>
+    <string name="quick_settings_music_schedule_title">Таймер сна</string>
+    <string name="quick_settings_music_schedule_in_progress">Таймер запущен</string>
+    <string name="quick_settings_music_schedule_start">Запустить таймер</string>
+    <string name="quick_settings_music_schedule_cancel">Сбросить таймер</string>
+    <string name="quick_settings_music_schedule_update">Обновить таймер</string>
     <string name="quick_settings_reboot">Перезагрузить</string>
     <string name="quick_settings_reboot_recovery">В рекавери</string>
     <string name="quick_settings_nfc">NFC</string>
