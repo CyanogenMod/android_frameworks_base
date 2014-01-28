@@ -1223,6 +1223,7 @@ public class AppOpsManager {
         }
     }
 
+    /** @hide */
     public void resetCounters() {
         try {
             mService.resetCounters();
