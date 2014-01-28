@@ -39,5 +39,26 @@
 
   <!-- new Immerse Mode -->
   <java-symbol type="drawable" name="ic_lock_immersive_mode_on" />
-  <java-symbol type="drawable" name="ic_lock_immersive_mode_off" />  
+  <java-symbol type="drawable" name="ic_lock_immersive_mode_off" />
+
+    <!-- ColorPickerPreference -->
+    <java-symbol type="id" name="color_picker_view" />
+    <java-symbol type="id" name="old_color_panel" />
+    <java-symbol type="id" name="new_color_panel" />
+    <java-symbol type="id" name="hex_val" />
+    <java-symbol type="id" name="white_panel" />
+    <java-symbol type="id" name="black_panel" />
+    <java-symbol type="id" name="cyan_panel" />
+    <java-symbol type="id" name="red_panel" />
+    <java-symbol type="id" name="green_panel" />
+    <java-symbol type="id" name="yellow_panel" />
+    <java-symbol type="layout" name="dialog_color_picker" />
+    <java-symbol type="string" name="dialog_color_picker" />
+
+    <!-- DJSeekBarPreference -->
+    <java-symbol type="layout" name="preference_widget_textsize_seekbar" />
+    <java-symbol type="id" name="min_value" />
+    <java-symbol type="id" name="current_value" />
+    <java-symbol type="id" name="max_value" />
+    <java-symbol type="id" name="textsize_seekbar" />
 </resources>

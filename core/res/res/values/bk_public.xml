@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file defines the base public resources exported by the
+   platform, which must always exist. -->
+
+<!-- ***************************************************************
+   ***************************************************************
+   IMPORTANT NOTE FOR ANYONE MODIFYING THIS FILE
+   READ THIS BEFORE YOU MAKE ANY CHANGES
+
+   This file defines the binary compatibility for resources.  As such,
+   you must be very careful when making changes here, or you will
+   completely break backwards compatibility with old applications.
+
+   To avoid breaking compatibility, all new resources must be placed
+   at the end of the list of resources of the same type.  Placing a resource
+   in the middle of type will cause all following resources to be
+   assigned new resource numbers, breaking compatibility.
+
+   ***************************************************************
+   *************************************************************** -->
+<resources>
+<!-- ===============================================================
+    Resources added in for BakedRom (KitKat)
+    =============================================================== -->
+  <eat-comment />
+  <public type="attr" name="inputEnabled" id="0x10103f2" />
+  <public type="attr" name="alphaSlider" id="0x10103f3" />
+  <public type="attr" name="enableDefaultColorPanels" id="0x10103f4" />
+  <public type="attr" name="searchViewTextField" id="0x10103f5" />
+</resources>

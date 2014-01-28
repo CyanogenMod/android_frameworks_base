@@ -183,4 +183,12 @@
 
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
 
+    <!-- ColorPicker -->
+    <string name="dialog_color_picker">Color Picker</string>
+    <string name="press_color_to_apply">Press on Color to apply</string>
+    <string name="arrow_right">→</string>
+    <string name="arrow_down">↓</string>
+    <string name="hex_hint">#ff000000</string>
+    <string name="set">Set</string>
+
 </resources>
