@@ -27,35 +27,53 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package android.bluetooth;
+package android.wipower;
 
-import android.bluetooth.IBluetoothCallback;
-import android.bluetooth.IQBluetoothAdapterCallback;
-import android.bluetooth.BluetoothLEServiceUuid;
-import android.bluetooth.IBluetooth;
-import android.bluetooth.IBluetoothStateChangeCallback;
-import android.bluetooth.BluetoothDevice;
-import android.os.ParcelUuid;
-import android.os.ParcelFileDescriptor;
+import android.wipower.WipowerManager.WipowerState;
+import android.wipower.WipowerManager.WipowerAlert;
 
 /**
- * System private API for talking with the Bluetooth service.
+ * Application level callback for Wipower manager APIs.
  *
  * {@hide}
  */
-interface IQBluetooth
+public interface WipowerManagerCallback
 {
-    int getLEAdvMode();
-    boolean setLEAdvParams(int min_int, int max_int, String address, int ad_type);
-    boolean setLEAdvMode(int mode);
-    boolean setLEManuData(in byte[] manuData);
-    boolean setLEServiceData(in byte[] serviceData);
-    boolean setLEAdvMask(boolean bLocalName, boolean bServices, boolean bTxPower,boolean bManuData, boolean ServiceData);
-    boolean setLEScanRespMask(boolean bLocalName, boolean bServices, boolean bTxPower,boolean bManuData );
-    int     startLeScanEx(in BluetoothLEServiceUuid[] services, in IQBluetoothAdapterCallback callback);
-    void    stopLeScanEx(in int token);
-    boolean registerLeLppRssiMonitorClient(in String address, in IQBluetoothAdapterCallback client, in boolean add);
-    void writeLeLppRssiThreshold(in String address, in byte min, in byte max);
-    void readLeLppRssiThreshold(in String address);
-    void enableLeLppRssiMonitor(in String address, in boolean enable);
+
+   /**
+    *  Clients should wait till  onWipowerReady notification
+    * before initiating Wipower charging or using any other
+    * WipowerManager related APIs
+    * Clients should create the instance of WipowerManger and starts
+    * Wipower charging on onWipowerReady callback
+    * {@hide}
+    */
+    void onWipowerReady();
+
+   /**
+    * Indicates the Wipower state
+    *
+    * @param {@link WipowerState}
+    *
+    * {@hide}
+    */
+    void onWipowerStateChange(WipowerState state);
+
+   /**
+    * Indicates the Wipower Alert
+    *
+    * @param {@link WipowerAlert}
+    *
+    * {@hide}
+    */
+    void onWipowerAlert(WipowerAlert alert);
+
+   /**
+    * Indicates the Wipower PRU Data notifications
+    *
+    * @param {@link WipowerDynamicParam}
+    *
+    * {@hide}
+    */
+    void onWipowerData(WipowerDynamicParam value);
 }

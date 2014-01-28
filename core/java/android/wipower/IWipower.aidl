@@ -27,35 +27,31 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package android.bluetooth;
+package android.wipower;
 
-import android.bluetooth.IBluetoothCallback;
-import android.bluetooth.IQBluetoothAdapterCallback;
-import android.bluetooth.BluetoothLEServiceUuid;
-import android.bluetooth.IBluetooth;
-import android.bluetooth.IBluetoothStateChangeCallback;
-import android.bluetooth.BluetoothDevice;
+
+import android.wipower.IWipowerManagerCallback;
 import android.os.ParcelUuid;
 import android.os.ParcelFileDescriptor;
 
 /**
- * System private API for talking with the Bluetooth service.
+ * System private API for talking with the WiPower Manger.
  *
  * {@hide}
  */
-interface IQBluetooth
+interface IWipower
 {
-    int getLEAdvMode();
-    boolean setLEAdvParams(int min_int, int max_int, String address, int ad_type);
-    boolean setLEAdvMode(int mode);
-    boolean setLEManuData(in byte[] manuData);
-    boolean setLEServiceData(in byte[] serviceData);
-    boolean setLEAdvMask(boolean bLocalName, boolean bServices, boolean bTxPower,boolean bManuData, boolean ServiceData);
-    boolean setLEScanRespMask(boolean bLocalName, boolean bServices, boolean bTxPower,boolean bManuData );
-    int     startLeScanEx(in BluetoothLEServiceUuid[] services, in IQBluetoothAdapterCallback callback);
-    void    stopLeScanEx(in int token);
-    boolean registerLeLppRssiMonitorClient(in String address, in IQBluetoothAdapterCallback client, in boolean add);
-    void writeLeLppRssiThreshold(in String address, in byte min, in byte max);
-    void readLeLppRssiThreshold(in String address);
-    void enableLeLppRssiMonitor(in String address, in boolean enable);
+    int getState();
+    boolean startCharging();
+    boolean stopCharging();
+
+    boolean setCurrentLimit(in byte value);
+    byte getCurrentLimit();
+
+    boolean enableAlert(boolean enable);
+    boolean enableData(boolean enable);
+
+    void registerCallback(in IWipowerManagerCallback callback);
+    void unregisterCallback(in IWipowerManagerCallback callback);
+
 }
