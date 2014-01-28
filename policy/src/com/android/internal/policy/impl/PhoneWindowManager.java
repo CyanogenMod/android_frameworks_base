@@ -4274,6 +4274,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return mNavigationBarHeight;
     }
 
+    /** {@inheritDoc} */
+    public void toggleGlobalMenu() {
+        mHandler.post(mGlobalMenu);
+    }
+
     private void offsetInputMethodWindowLw(WindowState win) {
         int top = win.getContentFrameLw().top;
         top += win.getGivenContentInsetsLw().top;
@@ -4956,15 +4961,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             case KeyEvent.KEYCODE_POWER: {
-                // If we send a power key event just to show up the global menu
-                // show it up immediatelly and return.
-                // The virtual keypress event can only be called by the system
-                // (in our case navigation bar, navigation ring, quicksettings shorcuts)
-                // so we are safe here and we will not break 3rd party apps.
-                if (down && event.getDeviceId() == KeyCharacterMap.VIRTUAL_KEYBOARD) {
-                    mHandler.post(mGlobalMenu);
-                    return result;
-                }
                 if ((mTopFullscreenOpaqueWindowState != null &&
                         (mTopFullscreenOpaqueWindowState.getAttrs().flags
                         & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0)) {

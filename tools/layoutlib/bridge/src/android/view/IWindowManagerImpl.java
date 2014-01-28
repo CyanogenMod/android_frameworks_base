@@ -523,4 +523,9 @@ public class IWindowManagerImpl implements IWindowManager {
     @Override
     public int getCurrentNavigationBarSize() {
     }
+
+    /* @hide */
+    @Override
+    public void toggleGlobalMenu() {
+    }
 }

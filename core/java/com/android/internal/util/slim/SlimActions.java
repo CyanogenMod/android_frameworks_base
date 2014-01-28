@@ -95,20 +95,23 @@ public class SlimActions {
 
             // process the actions
             if (action.equals(ButtonsConstants.ACTION_HOME)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_HOME, isLongpress, false);
+                triggerVirtualKeypress(KeyEvent.KEYCODE_HOME, isLongpress);
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_BACK)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_BACK, isLongpress, false);
+                triggerVirtualKeypress(KeyEvent.KEYCODE_BACK, isLongpress);
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_SEARCH)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_SEARCH, isLongpress, false);
+                triggerVirtualKeypress(KeyEvent.KEYCODE_SEARCH, isLongpress);
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_MENU)
                     || action.equals(ButtonsConstants.ACTION_MENU_BIG)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_MENU, isLongpress, false);
+                triggerVirtualKeypress(KeyEvent.KEYCODE_MENU, isLongpress);
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_POWER_MENU)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_POWER, isLongpress, true);
+                try {
+                    windowManagerService.toggleGlobalMenu();
+                } catch (RemoteException e) {
+                }
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_POWER)) {
                 PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -340,15 +343,13 @@ public class SlimActions {
                 || action.equals(ButtonsConstants.ACTION_SEARCH)
                 || action.equals(ButtonsConstants.ACTION_MENU)
                 || action.equals(ButtonsConstants.ACTION_MENU_BIG)
-                || action.equals(ButtonsConstants.ACTION_POWER_MENU)
                 || action.equals(ButtonsConstants.ACTION_NULL)) {
             return true;
         }
         return false;
     }
 
-    private static void triggerVirtualKeypress(final int keyCode,
-            boolean longpress, boolean sendOnlyDownMessage) {
+    private static void triggerVirtualKeypress(final int keyCode, boolean longpress) {
         InputManager im = InputManager.getInstance();
         long now = SystemClock.uptimeMillis();
 
@@ -363,9 +364,6 @@ public class SlimActions {
                 InputDevice.SOURCE_KEYBOARD);
         im.injectInputEvent(downEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
 
-        if (sendOnlyDownMessage) {
-            return;
-        }
         final KeyEvent upEvent = new KeyEvent(now, now, KeyEvent.ACTION_UP,
                 keyCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
                 KeyEvent.FLAG_FROM_SYSTEM | KeyEvent.FLAG_VIRTUAL_HARD_KEY,

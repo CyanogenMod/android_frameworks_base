@@ -313,6 +313,13 @@ interface IWindowManager
      */
     int getCurrentNavigationBarSize();
 
+    /**
+     * Toggle global menu
+     *
+     * @hide
+     */
+    void toggleGlobalMenu();
+
     /** SPLIT VIEW **/
     boolean isTaskSplitView(int taskId);
     void setTaskSplitView(int taskId, boolean split);

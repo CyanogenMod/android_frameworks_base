@@ -1247,4 +1247,11 @@ public interface WindowManagerPolicy {
      * @return True if navbar can be hidden by immersive mode
      */
     public boolean isImmersiveMode(int vis);
+
+    /**
+     * Toggle global menu
+     *
+     * @hide
+     */
+    public void toggleGlobalMenu();
 }
