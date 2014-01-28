@@ -55,7 +55,7 @@ class Children {
             // Add a new child to the bucket.
             current = new Child(parent, uri, localName, parent.depth + 1, hash);
             previous.next = current;
-            return current;         
+            return current;
         }
     }
 

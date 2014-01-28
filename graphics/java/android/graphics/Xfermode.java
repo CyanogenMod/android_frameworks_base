@@ -16,7 +16,7 @@
 
 // This file was generated from the C++ include file: SkXfermode.h
 // Any changes made to this file will be discarded by the build.
-// To change this file, either edit the include, or device/tools/gluemaker/main.cpp, 
+// To change this file, either edit the include, or device/tools/gluemaker/main.cpp,
 // or one of the auxilary file specifications in device/tools/gluemaker.
 
 package android.graphics;

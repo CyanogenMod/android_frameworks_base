@@ -78,7 +78,7 @@ public class TransparentListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient));
         setContentView(R.layout.list_activity);
 

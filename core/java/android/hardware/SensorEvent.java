@@ -394,7 +394,7 @@ public class SensorEvent {
      * dv = 216.7 *
      * (rh / 100.0 * 6.112 * Math.exp(17.62 * t / (243.12 + t)) / (273.15 + t));
      * </pre>
-     * 
+     *
      * <h4>{@link android.hardware.Sensor#TYPE_AMBIENT_TEMPERATURE Sensor.TYPE_AMBIENT_TEMPERATURE}:
      * </h4>
      *

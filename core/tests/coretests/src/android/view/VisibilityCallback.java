@@ -29,13 +29,13 @@ import android.app.Activity;
 
 /**
  * Exercise View's ability to change their visibility: GONE, INVISIBLE and
- * VISIBLE. 
+ * VISIBLE.
  */
 public class VisibilityCallback extends Activity {
     private static final boolean DEBUG = false;
 
     private MonitoredTextView mVictim;
-    
+
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);

@@ -48,7 +48,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires the READ_PHONE_STATE permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -69,7 +69,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires no permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -88,7 +88,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires no permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -114,7 +114,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires the READ_PHONE_STATE permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -138,7 +138,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires the READ_PHONE_STATE permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -181,7 +181,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires the READ_PHONE_STATE permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -205,7 +205,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires the READ_PHONE_STATE permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -223,7 +223,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires the READ_PHONE_STATE permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -241,7 +241,7 @@ public class TelephonyIntents {
      *
      * <p class="note">
      * Requires the READ_PHONE_STATE permission.
-     * 
+     *
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */

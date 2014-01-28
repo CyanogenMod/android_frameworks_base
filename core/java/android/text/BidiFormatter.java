@@ -25,7 +25,7 @@ import java.util.Locale;
 /**
  * Utility class for formatting text for display in a potentially opposite-directionality context
  * without garbling. The directionality of the context is set at formatter creation and the
- * directionality of the text can be either estimated or passed in when known. 
+ * directionality of the text can be either estimated or passed in when known.
  *
  * <p>To support versions lower than {@link android.os.Build.VERSION_CODES#JELLY_BEAN_MR2},
  * you can use the support library's {@link android.support.v4.text.BidiFormatter} class.

@@ -69,7 +69,7 @@ public class Broadcaster
                     if (r == mReg && r.senderWhat > reg.senderWhat) {
                         mReg = reg;
                     }
-                    
+
                     r = reg;
                     n = 0;
                 } else {
@@ -92,7 +92,7 @@ public class Broadcaster
             }
         }
     }
-    
+
     /**
      * Unregister for notifications for this senderWhat/target/targetWhat tuple.
      */
@@ -101,18 +101,18 @@ public class Broadcaster
         synchronized (this) {
             Registration start = mReg;
             Registration r = start;
-            
+
             if (r == null) {
                 return;
             }
-            
+
             do {
                 if (r.senderWhat >= senderWhat) {
                     break;
                 }
                 r = r.next;
             } while (r != start);
-            
+
             if (r.senderWhat == senderWhat) {
                 Handler[] targets = r.targets;
                 int[] whats = r.targetWhats;
@@ -171,10 +171,10 @@ public class Broadcaster
     public void broadcast(Message msg)
     {
         synchronized (this) {
-        	if (mReg == null) {
-        		return;
-        	}
-        	
+            if (mReg == null) {
+                return;
+            }
+
             int senderWhat = msg.what;
             Registration start = mReg;
             Registration r = start;

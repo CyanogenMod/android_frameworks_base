@@ -36,15 +36,15 @@ final class AppNotRespondingDialog extends BaseErrorDialog {
 
     private final ActivityManagerService mService;
     private final ProcessRecord mProc;
-    
+
     public AppNotRespondingDialog(ActivityManagerService service, Context context,
             ProcessRecord app, ActivityRecord activity, boolean aboveSystem) {
         super(context);
-        
+
         mService = service;
         mProc = app;
         Resources res = context.getResources();
-        
+
         setCancelable(false);
 
         int resid;

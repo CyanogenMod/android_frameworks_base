@@ -23,10 +23,10 @@ LOCAL_PATH := $(call my-dir)
 # should be used with eval: $(eval $(call ...))
 define create-font-symlink
 $(PRODUCT_OUT)/system/fonts/$(1) : $(PRODUCT_OUT)/system/fonts/$(2)
-	@echo "Symlink: $$@ -> $$<"
-	@mkdir -p $$(dir $$@)
-	@rm -rf $$@
-	$(hide) ln -sf $$(notdir $$<) $$@
+    @echo "Symlink: $$@ -> $$<"
+    @mkdir -p $$(dir $$@)
+    @rm -rf $$@
+    $(hide) ln -sf $$(notdir $$<) $$@
 # this magic makes LOCAL_REQUIRED_MODULES work
 ALL_MODULES.$(1).INSTALLED := \
     $(ALL_MODULES.$(1).INSTALLED) $(PRODUCT_OUT)/system/fonts/$(1)
@@ -62,10 +62,10 @@ include $(BUILD_PREBUILT)
 
 droidsans_fallback_src := DroidSansFallbackFull.ttf
 extra_font_files := \
-	DroidSans.ttf \
-	DroidSans-Bold.ttf \
-	DroidSansEthiopic-Regular.ttf \
-	MTLmr3m.ttf
+    DroidSans.ttf \
+    DroidSans-Bold.ttf \
+    DroidSansEthiopic-Regular.ttf \
+    MTLmr3m.ttf
 endif  # SMALLER_FONT_FOOTPRINT
 
 ################################

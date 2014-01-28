@@ -17,7 +17,7 @@
 package android.drm;
 
 /**
- * An entity class that wraps the result of a 
+ * An entity class that wraps the result of a
  * {@link DrmManagerClient#processDrmInfo(DrmInfo) processDrmInfo()}
  * transaction between a device and a DRM server.
  *

@@ -39,7 +39,7 @@ import android.widget.TextView;
  * A base class for {@link Preference} objects that are
  * dialog-based. These preferences will, when clicked, open a dialog showing the
  * actual preference controls.
- * 
+ *
  * @attr ref android.R.styleable#DialogPreference_dialogTitle
  * @attr ref android.R.styleable#DialogPreference_dialogMessage
  * @attr ref android.R.styleable#DialogPreference_dialogIcon
@@ -51,7 +51,7 @@ public abstract class DialogPreference extends Preference implements
         DialogInterface.OnClickListener, DialogInterface.OnDismissListener,
         PreferenceManager.OnActivityDestroyListener {
     private AlertDialog.Builder mBuilder;
-    
+
     private CharSequence mDialogTitle;
     private CharSequence mDialogMessage;
     private Drawable mDialogIcon;
@@ -64,10 +64,10 @@ public abstract class DialogPreference extends Preference implements
 
     /** Which button was clicked. */
     private int mWhichButtonClicked;
-    
+
     public DialogPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        
+
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.DialogPreference, defStyle, 0);
         mDialogTitle = a.getString(com.android.internal.R.styleable.DialogPreference_dialogTitle);
@@ -83,16 +83,16 @@ public abstract class DialogPreference extends Preference implements
         mDialogLayoutResId = a.getResourceId(com.android.internal.R.styleable.DialogPreference_dialogLayout,
                 mDialogLayoutResId);
         a.recycle();
-        
+
     }
 
     public DialogPreference(Context context, AttributeSet attrs) {
         this(context, attrs, com.android.internal.R.attr.dialogPreferenceStyle);
     }
-    
+
     /**
      * Sets the title of the dialog. This will be shown on subsequent dialogs.
-     * 
+     *
      * @param dialogTitle The title.
      */
     public void setDialogTitle(CharSequence dialogTitle) {
@@ -106,7 +106,7 @@ public abstract class DialogPreference extends Preference implements
     public void setDialogTitle(int dialogTitleResId) {
         setDialogTitle(getContext().getString(dialogTitleResId));
     }
-    
+
     /**
      * Returns the title to be shown on subsequent dialogs.
      * @return The title.
@@ -114,7 +114,7 @@ public abstract class DialogPreference extends Preference implements
     public CharSequence getDialogTitle() {
         return mDialogTitle;
     }
-    
+
     /**
      * Sets the message of the dialog. This will be shown on subsequent dialogs.
      * <p>
@@ -122,7 +122,7 @@ public abstract class DialogPreference extends Preference implements
      * list-based dialogs, for example. If setting a custom View on a dialog via
      * {@link #setDialogLayoutResource(int)}, include a text View with ID
      * {@link android.R.id#message} and it will be populated with this message.
-     * 
+     *
      * @param dialogMessage The message.
      */
     public void setDialogMessage(CharSequence dialogMessage) {
@@ -136,7 +136,7 @@ public abstract class DialogPreference extends Preference implements
     public void setDialogMessage(int dialogMessageResId) {
         setDialogMessage(getContext().getString(dialogMessageResId));
     }
-    
+
     /**
      * Returns the message to be shown on subsequent dialogs.
      * @return The message.
@@ -144,26 +144,26 @@ public abstract class DialogPreference extends Preference implements
     public CharSequence getDialogMessage() {
         return mDialogMessage;
     }
-    
+
     /**
      * Sets the icon of the dialog. This will be shown on subsequent dialogs.
-     * 
+     *
      * @param dialogIcon The icon, as a {@link Drawable}.
      */
     public void setDialogIcon(Drawable dialogIcon) {
         mDialogIcon = dialogIcon;
     }
-    
+
     /**
      * Sets the icon (resource ID) of the dialog. This will be shown on
      * subsequent dialogs.
-     * 
+     *
      * @param dialogIconRes The icon, as a resource ID.
      */
     public void setDialogIcon(int dialogIconRes) {
         mDialogIcon = getContext().getResources().getDrawable(dialogIconRes);
     }
-    
+
     /**
      * Returns the icon to be shown on subsequent dialogs.
      * @return The icon, as a {@link Drawable}.
@@ -171,11 +171,11 @@ public abstract class DialogPreference extends Preference implements
     public Drawable getDialogIcon() {
         return mDialogIcon;
     }
-    
+
     /**
      * Sets the text of the positive button of the dialog. This will be shown on
      * subsequent dialogs.
-     * 
+     *
      * @param positiveButtonText The text of the positive button.
      */
     public void setPositiveButtonText(CharSequence positiveButtonText) {
@@ -189,27 +189,27 @@ public abstract class DialogPreference extends Preference implements
     public void setPositiveButtonText(int positiveButtonTextResId) {
         setPositiveButtonText(getContext().getString(positiveButtonTextResId));
     }
-    
+
     /**
      * Returns the text of the positive button to be shown on subsequent
      * dialogs.
-     * 
+     *
      * @return The text of the positive button.
      */
     public CharSequence getPositiveButtonText() {
         return mPositiveButtonText;
     }
-    
+
     /**
      * Sets the text of the negative button of the dialog. This will be shown on
      * subsequent dialogs.
-     * 
+     *
      * @param negativeButtonText The text of the negative button.
      */
     public void setNegativeButtonText(CharSequence negativeButtonText) {
         mNegativeButtonText = negativeButtonText;
     }
-    
+
     /**
      * @see #setNegativeButtonText(CharSequence)
      * @param negativeButtonTextResId The negative button text as a resource.
@@ -217,38 +217,38 @@ public abstract class DialogPreference extends Preference implements
     public void setNegativeButtonText(int negativeButtonTextResId) {
         setNegativeButtonText(getContext().getString(negativeButtonTextResId));
     }
-    
+
     /**
      * Returns the text of the negative button to be shown on subsequent
      * dialogs.
-     * 
+     *
      * @return The text of the negative button.
      */
     public CharSequence getNegativeButtonText() {
         return mNegativeButtonText;
     }
-    
+
     /**
      * Sets the layout resource that is inflated as the {@link View} to be shown
      * as the content View of subsequent dialogs.
-     * 
+     *
      * @param dialogLayoutResId The layout resource ID to be inflated.
      * @see #setDialogMessage(CharSequence)
      */
     public void setDialogLayoutResource(int dialogLayoutResId) {
         mDialogLayoutResId = dialogLayoutResId;
     }
-    
+
     /**
      * Returns the layout resource that is used as the content View for
      * subsequent dialogs.
-     * 
+     *
      * @return The layout resource.
      */
     public int getDialogLayoutResource() {
         return mDialogLayoutResId;
     }
-    
+
     /**
      * Prepares the dialog builder to be shown when the preference is clicked.
      * Use this to set custom properties on the dialog.
@@ -258,7 +258,7 @@ public abstract class DialogPreference extends Preference implements
      */
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
     }
-    
+
     @Override
     protected void onClick() {
         if (mDialog != null && mDialog.isShowing()) return;
@@ -270,7 +270,7 @@ public abstract class DialogPreference extends Preference implements
      * Shows the dialog associated with this Preference. This is normally initiated
      * automatically on clicking on the preference. Call this method if you need to
      * show the dialog on some other event.
-     * 
+     *
      * @param state Optional instance state to restore on the dialog
      */
     protected void showDialog(Bundle state) {
@@ -337,7 +337,7 @@ public abstract class DialogPreference extends Preference implements
      * Creates the content view for the dialog (if a custom content view is
      * required). By default, it inflates the dialog layout resource if it is
      * set.
-     * 
+     *
      * @return The content View for the dialog.
      * @see #setLayoutResource(int)
      */
@@ -345,47 +345,47 @@ public abstract class DialogPreference extends Preference implements
         if (mDialogLayoutResId == 0) {
             return null;
         }
-        
+
         LayoutInflater inflater = LayoutInflater.from(mBuilder.getContext());
         return inflater.inflate(mDialogLayoutResId, null);
     }
-    
+
     /**
      * Binds views in the content View of the dialog to data.
      * <p>
      * Make sure to call through to the superclass implementation.
-     * 
+     *
      * @param view The content View of the dialog, if it is custom.
      */
     protected void onBindDialogView(View view) {
         View dialogMessageView = view.findViewById(com.android.internal.R.id.message);
-        
+
         if (dialogMessageView != null) {
             final CharSequence message = getDialogMessage();
             int newVisibility = View.GONE;
-            
+
             if (!TextUtils.isEmpty(message)) {
                 if (dialogMessageView instanceof TextView) {
                     ((TextView) dialogMessageView).setText(message);
                 }
-                
+
                 newVisibility = View.VISIBLE;
             }
-            
+
             if (dialogMessageView.getVisibility() != newVisibility) {
                 dialogMessageView.setVisibility(newVisibility);
             }
         }
     }
-    
+
     public void onClick(DialogInterface dialog, int which) {
         mWhichButtonClicked = which;
     }
-    
+
     public void onDismiss(DialogInterface dialog) {
-        
+
         getPreferenceManager().unregisterOnActivityDestroyListener(this);
-        
+
         mDialog = null;
         onDialogClosed(mWhichButtonClicked == DialogInterface.BUTTON_POSITIVE);
     }
@@ -393,7 +393,7 @@ public abstract class DialogPreference extends Preference implements
     /**
      * Called when the dialog is dismissed and should be used to save data to
      * the {@link SharedPreferences}.
-     * 
+     *
      * @param positiveResult Whether the positive button was clicked (true), or
      *            the negative button was clicked or the dialog was canceled (false).
      */
@@ -402,7 +402,7 @@ public abstract class DialogPreference extends Preference implements
 
     /**
      * Gets the dialog that is shown by this preference.
-     * 
+     *
      * @return The dialog, or null if a dialog is not being shown.
      */
     public Dialog getDialog() {
@@ -413,11 +413,11 @@ public abstract class DialogPreference extends Preference implements
      * {@inheritDoc}
      */
     public void onActivityDestroy() {
-        
+
         if (mDialog == null || !mDialog.isShowing()) {
             return;
         }
-        
+
         mDialog.dismiss();
     }
 
@@ -452,7 +452,7 @@ public abstract class DialogPreference extends Preference implements
     private static class SavedState extends BaseSavedState {
         boolean isDialogShowing;
         Bundle dialogBundle;
-        
+
         public SavedState(Parcel source) {
             super(source);
             isDialogShowing = source.readInt() == 1;
@@ -481,5 +481,5 @@ public abstract class DialogPreference extends Preference implements
             }
         };
     }
-    
+
 }

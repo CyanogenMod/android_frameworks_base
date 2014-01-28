@@ -32,7 +32,7 @@ public class PathMeasure {
         mPath = null;
         native_instance = native_create(0, false);
     }
-    
+
     /**
      * Create a PathMeasure object associated with the specified path object
      * (already created and specified). The meansure object can now return the

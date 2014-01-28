@@ -27,30 +27,30 @@ import java.io.IOException;
  * @hide
  */
 public final class ResampleInputStream extends InputStream
-{    
+{
     static {
         System.loadLibrary("media_jni");
     }
-    
+
     private final static String TAG = "ResampleInputStream";
-    
+
     // pcm input stream
     private InputStream mInputStream;
 
     // sample rates, assumed to be normalized
     private final int mRateIn;
     private final int mRateOut;
-    
+
     // input pcm data
     private byte[] mBuf;
     private int mBufCount;
-    
+
     // length of 2:1 fir
     private static final int mFirLength = 29;
-    
+
     // helper for bytewise read()
     private final byte[] mOneByte = new byte[1];
-    
+
     /**
      * Create a new ResampleInputStream, which converts the sample rate
      * @param inputStream InputStream containing 16 bit PCM.
@@ -74,7 +74,7 @@ public final class ResampleInputStream extends InputStream
         int rtn = read(mOneByte, 0, 1);
         return rtn == 1 ? (0xff & mOneByte[0]) : -1;
     }
-    
+
     @Override
     public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
@@ -93,7 +93,7 @@ public final class ResampleInputStream extends InputStream
             System.arraycopy(mBuf, 0, bf, 0, mBufCount);
             mBuf = bf;
         }
-        
+
         // read until we have enough data for at least one output sample
         while (true) {
             int len = ((mBufCount / 2 - mFirLength) * mRateOut / mRateIn) * 2;
@@ -109,12 +109,12 @@ public final class ResampleInputStream extends InputStream
 
         // resample input data
         fir21(mBuf, 0, b, offset, length / 2);
-        
+
         // move any unused bytes to front of mBuf
         int nFwd = length * mRateIn / mRateOut;
         mBufCount -= nFwd;
         if (mBufCount > 0) System.arraycopy(mBuf, nFwd, mBuf, 0, mBufCount);
-        
+
         return length;
     }
 

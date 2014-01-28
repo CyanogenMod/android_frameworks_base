@@ -20,13 +20,14 @@
     android:layout_height="match_parent">
     
 
-	<ScrollView 
-		android:orientation="vertical"
+    <ScrollView 
+        android:orientation="vertical"
         android:layout_width="match_parent" 
         android:layout_height="0dip"
         android:layout_weight="1">
         
-        <view class="android.view.PreDrawListener$MyLinearLayout" android:id="@+id/frame"
+        <view class="android.view.PreDrawListener$MyLinearLayout"
+            android:id="@+id/frame"
             android:orientation="vertical"
             android:layout_width="match_parent" 
             android:layout_height="match_parent" />

@@ -27,7 +27,7 @@ import android.view.WindowManager;
 
 /**
  * Helper for menus that appear as Dialogs (context and submenus).
- * 
+ *
  * @hide
  */
 public class MenuDialogHelper implements DialogInterface.OnKeyListener,
@@ -38,20 +38,20 @@ public class MenuDialogHelper implements DialogInterface.OnKeyListener,
     private AlertDialog mDialog;
     ListMenuPresenter mPresenter;
     private MenuPresenter.Callback mPresenterCallback;
-    
+
     public MenuDialogHelper(MenuBuilder menu) {
         mMenu = menu;
     }
 
     /**
-     * Shows menu as a dialog. 
-     * 
+     * Shows menu as a dialog.
+     *
      * @param windowToken Optional token to assign to the window.
      */
     public void show(IBinder windowToken) {
         // Many references to mMenu, create local reference
         final MenuBuilder menu = mMenu;
-        
+
         // Get the builder for the dialog
         final AlertDialog.Builder builder = new AlertDialog.Builder(menu.getContext());
 
@@ -71,24 +71,24 @@ public class MenuDialogHelper implements DialogInterface.OnKeyListener,
             // Otherwise use the (text) title and icon
             builder.setIcon(menu.getHeaderIcon()).setTitle(menu.getHeaderTitle());
         }
-        
+
         // Set the key listener
         builder.setOnKeyListener(this);
-        
+
         // Show the menu
         mDialog = builder.create();
         mDialog.setOnDismissListener(this);
-        
+
         WindowManager.LayoutParams lp = mDialog.getWindow().getAttributes();
         lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
         if (windowToken != null) {
             lp.token = windowToken;
         }
         lp.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
-        
+
         mDialog.show();
     }
-    
+
     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_BACK) {
             if (event.getAction() == KeyEvent.ACTION_DOWN
@@ -131,7 +131,7 @@ public class MenuDialogHelper implements DialogInterface.OnKeyListener,
 
     /**
      * Dismisses the menu's dialog.
-     * 
+     *
      * @see Dialog#dismiss()
      */
     public void dismiss() {

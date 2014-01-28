@@ -29,7 +29,7 @@ import java.io.PrintWriter;
 class WindowToken {
     // The window manager!
     final WindowManagerService service;
-    
+
     // The actual token.
     final IBinder token;
 

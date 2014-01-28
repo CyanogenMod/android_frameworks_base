@@ -502,7 +502,7 @@ final class ContentProviderProxy implements IContentProvider
         }
     }
 
-    public ContentProviderResult[] applyBatch(String callingPkg, 
+    public ContentProviderResult[] applyBatch(String callingPkg,
             ArrayList<ContentProviderOperation> operations)
                     throws RemoteException, OperationApplicationException {
         Parcel data = Parcel.obtain();

@@ -70,14 +70,14 @@ public class ColorFiltersActivity extends Activity {
             super.onDraw(canvas);
 
             canvas.drawARGB(255, 255, 255, 255);
-            
+
             canvas.save();
             canvas.translate(120.0f, 50.0f);
             canvas.drawBitmap(mBitmap1, 0.0f, 0.0f, mColorMatrixPaint);
 
             canvas.translate(0.0f, 50.0f + mBitmap1.getHeight());
             canvas.drawBitmap(mBitmap1, 0.0f, 0.0f, mLightingPaint);
-            
+
             canvas.translate(0.0f, 50.0f + mBitmap1.getHeight());
             canvas.drawBitmap(mBitmap1, 0.0f, 0.0f, mBlendPaint);
             canvas.restore();
@@ -88,10 +88,10 @@ public class ColorFiltersActivity extends Activity {
 
             canvas.translate(0.0f, 50.0f + mBitmap2.getHeight());
             canvas.drawBitmap(mBitmap2, 0.0f, 0.0f, mLightingPaint);
-            
+
             canvas.translate(0.0f, 50.0f + mBitmap2.getHeight());
             canvas.drawBitmap(mBitmap2, 0.0f, 0.0f, mBlendPaint);
-            canvas.restore();            
+            canvas.restore();
         }
     }
 }

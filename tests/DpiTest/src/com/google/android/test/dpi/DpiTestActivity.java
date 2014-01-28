@@ -42,12 +42,12 @@ public class DpiTestActivity extends Activity {
         super();
         init(false);
     }
-    
+
     public DpiTestActivity(boolean noCompat) {
         super();
         init(noCompat);
     }
-    
+
     public void init(boolean noCompat) {
         try {
             // This is all a dirty hack.  Don't think a real application should
@@ -70,14 +70,14 @@ public class DpiTestActivity extends Activity {
             throw new RuntimeException("ouch", e);
         }
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final LayoutInflater li = (LayoutInflater)getSystemService(
                 LAYOUT_INFLATER_SERVICE);
-        
+
         this.setTitle(R.string.act_title);
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -106,11 +106,11 @@ public class DpiTestActivity extends Activity {
         layout = (LinearLayout)li.inflate(R.layout.image_views, null);
         addLabelToRoot(root, "Inflated layout");
         addChildToRoot(root, layout);
-        
+
         layout = (LinearLayout)li.inflate(R.layout.styled_image_views, null);
         addLabelToRoot(root, "Inflated styled layout");
         addChildToRoot(root, layout);
-        
+
         layout = new LinearLayout(this);
         addCanvasBitmap(layout, R.drawable.logo120dpi, true);
         addCanvasBitmap(layout, R.drawable.logo160dpi, true);

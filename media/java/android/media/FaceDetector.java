@@ -23,7 +23,7 @@ import android.util.Log;
 import java.lang.IllegalArgumentException;
 
 /**
- * Identifies the faces of people in a 
+ * Identifies the faces of people in a
  * {@link android.graphics.Bitmap} graphic object.
  */
 public class FaceDetector {
@@ -42,7 +42,7 @@ public class FaceDetector {
         /** The z-axis Euler angle of a face. */
         public static final int EULER_Z = 2;
 
-        /** 
+        /**
          * Returns a confidence factor between 0 and 1. This indicates how
          * certain what has been found is actually a face. A confidence
          * factor above 0.3 is usually good enough.
@@ -52,7 +52,7 @@ public class FaceDetector {
         }
         /**
          * Sets the position of the mid-point between the eyes.
-         * @param point the PointF coordinates (float values) of the 
+         * @param point the PointF coordinates (float values) of the
          *              face's mid-point
          */
         public void getMidPoint(PointF point) {
@@ -66,11 +66,11 @@ public class FaceDetector {
             return mEyesDist;
         }
         /**
-         * Returns the face's pose. That is, the rotations around either 
+         * Returns the face's pose. That is, the rotations around either
          * the X, Y or Z axis (the positions in 3-dimensional Euclidean space).
-         * 
-         * @param euler the Euler axis to retrieve an angle from 
-         *              (<var>EULER_X</var>, <var>EULER_Y</var> or 
+         *
+         * @param euler the Euler axis to retrieve an angle from
+         *              (<var>EULER_X</var>, <var>EULER_Y</var> or
          *              <var>EULER_Z</var>)
          * @return the Euler angle of the of the face, for the given axis
          */
@@ -103,7 +103,7 @@ public class FaceDetector {
      * be analysed and the maximum number of faces that can be detected.
      * These parameters cannot be changed once the object is constructed.
      * Note that the width of the image must be even.
-     * 
+     *
      * @param width  the width of the image
      * @param height the height of the image
      * @param maxFaces the maximum number of faces to identify
@@ -122,17 +122,17 @@ public class FaceDetector {
     }
 
     /**
-     * Finds all the faces found in a given {@link android.graphics.Bitmap}. 
+     * Finds all the faces found in a given {@link android.graphics.Bitmap}.
      * The supplied array is populated with {@link FaceDetector.Face}s for each
      * face found. The bitmap must be in 565 format (for now).
-     * 
+     *
      * @param bitmap the {@link android.graphics.Bitmap} graphic to be analyzed
-     * @param faces  an array in which to place all found 
+     * @param faces  an array in which to place all found
      *               {@link FaceDetector.Face}s. The array must be sized equal
      *               to the <var>maxFaces</var> value set at initialization
      * @return the number of faces found
      * @throws IllegalArgumentException if the Bitmap dimensions don't match
-     *               the dimensions defined at initialization or the given array 
+     *               the dimensions defined at initialization or the given array
      *               is not sized equal to the <var>maxFaces</var> value defined
      *               at initialization
      */
@@ -149,7 +149,7 @@ public class FaceDetector {
             throw new IllegalArgumentException(
                     "faces[] smaller than maxFaces");
         }
-        
+
         int numFaces = fft_detect(bitmap);
         if (numFaces >= mMaxFaces)
             numFaces = mMaxFaces;
@@ -196,7 +196,7 @@ public class FaceDetector {
     private int     mDCR;
     private int     mWidth;
     private int     mHeight;
-    private int     mMaxFaces;    
+    private int     mMaxFaces;
     private byte    mBWBuffer[];
 }
 

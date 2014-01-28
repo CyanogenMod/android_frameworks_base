@@ -303,7 +303,7 @@ public class StorageManager {
     /**
      * Constructs a StorageManager object through which an application can
      * can communicate with the systems mount service.
-     * 
+     *
      * @param tgtLooper The {@link android.os.Looper} which events will be received on.
      *
      * <p>Applications can get instance of this class by calling
@@ -450,7 +450,7 @@ public class StorageManager {
      * file matches a package ID that is owned by the calling program's UID.
      * That is, shared UID applications can attempt to mount any other
      * application's OBB that shares its UID.
-     * 
+     *
      * @param rawPath the path to the OBB file
      * @param key secret used to encrypt the OBB; may be <code>null</code> if no
      *            encryption was used on the OBB.
@@ -488,7 +488,7 @@ public class StorageManager {
      * That is, shared UID applications can obtain access to any other
      * application's OBB that shares its UID.
      * <p>
-     * 
+     *
      * @param rawPath path to the OBB file
      * @param force whether to kill any programs using this in order to unmount
      *            it
@@ -512,7 +512,7 @@ public class StorageManager {
 
     /**
      * Check whether an Opaque Binary Blob (OBB) is mounted or not.
-     * 
+     *
      * @param rawPath path to OBB image
      * @return true if OBB is mounted; false if not mounted or on error
      */
@@ -532,7 +532,7 @@ public class StorageManager {
      * Check the mounted path of an Opaque Binary Blob (OBB) file. This will
      * give you the path to where you can obtain access to the internals of the
      * OBB.
-     * 
+     *
      * @param rawPath path to OBB image
      * @return absolute path to mounted OBB image data or <code>null</code> if
      *         not mounted or exception encountered trying to read status

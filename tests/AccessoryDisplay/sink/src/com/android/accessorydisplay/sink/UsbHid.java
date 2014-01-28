@@ -63,7 +63,7 @@ final class UsbHid {
             byte maxXMsb = (byte)((mWidth - 1) >> 8);
             byte maxYLsb = (byte)(mHeight - 1);
             byte maxYMsb = (byte)((mHeight - 1) >> 8);
-            byte[] collection = new byte[] { 
+            byte[] collection = new byte[] {
                 0x05, 0x0d,                         //     USAGE_PAGE (Digitizers)
                 0x09, 0x22,                         //     USAGE (Finger)
                 (byte)0xa1, 0x02,                   //     COLLECTION (Logical)

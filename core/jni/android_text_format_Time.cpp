@@ -1,16 +1,16 @@
 /*
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -163,7 +163,7 @@ static jstring android_text_format_Time_format2445(JNIEnv* env, jobject This)
     Time t;
     if (!java2time(env, &t, This)) return env->NewStringUTF("");
     bool allDay = env->GetBooleanField(This, g_allDayField);
-    
+
     if (!allDay) {
         ACQUIRE_TIMEZONE(This, t)
         bool inUtc = strcmp("UTC", t.timezone) == 0;
@@ -473,8 +473,8 @@ static jboolean android_text_format_Time_parse(JNIEnv* env, jobject This, jstrin
     return inUtc;
 }
 
-static jboolean android_text_format_Time_parse3339(JNIEnv* env, 
-                                           jobject This, 
+static jboolean android_text_format_Time_parse3339(JNIEnv* env,
+                                           jobject This,
                                            jstring strObj)
 {
     jsize len = env->GetStringLength(strObj);
@@ -491,16 +491,16 @@ static jboolean android_text_format_Time_parse3339(JNIEnv* env,
     // year
     int n;
     bool thrown = false;
-    n = get_char(env, s, 0, 1000, &thrown);    
+    n = get_char(env, s, 0, 1000, &thrown);
     n += get_char(env, s, 1, 100, &thrown);
     n += get_char(env, s, 2, 10, &thrown);
     n += get_char(env, s, 3, 1, &thrown);
     if (thrown) return false;
     env->SetIntField(This, g_yearField, n);
-    
+
     // -
     if (!check_char(env, s, 4, '-')) return false;
-    
+
     // month
     n = get_char(env, s, 5, 10, &thrown);
     n += get_char(env, s, 6, 1, &thrown);
@@ -569,10 +569,10 @@ static jboolean android_text_format_Time_parse3339(JNIEnv* env,
                 // Zulu time -- UTC
                 offset = 0;
                 break;
-            case '-': 
+            case '-':
                 offset = 1;
                 break;
-            case '+': 
+            case '+':
                 offset = -1;
                 break;
             default:
@@ -600,7 +600,7 @@ static jboolean android_text_format_Time_parse3339(JNIEnv* env,
 
                 // :
                 if (!check_char(env, s, tz_index + 3, ':')) return false;
-            
+
                 // minute
                 n = get_char(env, s, tz_index + 4, 10, &thrown);
                 n += get_char(env, s, tz_index + 5, 1, &thrown);

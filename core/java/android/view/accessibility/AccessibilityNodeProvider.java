@@ -117,7 +117,7 @@ public abstract class AccessibilityNodeProvider {
     /**
      * Finds {@link AccessibilityNodeInfo}s by text. The match is case insensitive
      * containment. The search is relative to the virtual view, i.e. a descendant of the
-     * host View, with the given <code>virtualViewId</code> or the host View itself 
+     * host View, with the given <code>virtualViewId</code> or the host View itself
      * <code>virtualViewId</code> equals to {@link View#NO_ID}.
      *
      * @param virtualViewId A client defined virtual view id which defined

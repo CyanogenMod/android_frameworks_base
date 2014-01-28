@@ -28,11 +28,11 @@ public class ConfigurationInfo implements Parcelable {
     /**
      * The kind of touch screen attached to the device.
      * One of: {@link android.content.res.Configuration#TOUCHSCREEN_NOTOUCH},
-     * {@link android.content.res.Configuration#TOUCHSCREEN_STYLUS}, 
-     * {@link android.content.res.Configuration#TOUCHSCREEN_FINGER}. 
+     * {@link android.content.res.Configuration#TOUCHSCREEN_STYLUS},
+     * {@link android.content.res.Configuration#TOUCHSCREEN_FINGER}.
      */
     public int reqTouchScreen;
-    
+
     /**
      * Application's input method preference.
      * One of: {@link android.content.res.Configuration#KEYBOARD_UNDEFINED},
@@ -41,28 +41,28 @@ public class ConfigurationInfo implements Parcelable {
      * {@link android.content.res.Configuration#KEYBOARD_12KEY}
      */
     public int reqKeyboardType;
-    
+
     /**
      * A flag indicating whether any keyboard is available.
      * one of: {@link android.content.res.Configuration#NAVIGATION_UNDEFINED},
-     * {@link android.content.res.Configuration#NAVIGATION_DPAD}, 
+     * {@link android.content.res.Configuration#NAVIGATION_DPAD},
      * {@link android.content.res.Configuration#NAVIGATION_TRACKBALL},
      * {@link android.content.res.Configuration#NAVIGATION_WHEEL}
      */
     public int reqNavigation;
-    
+
     /**
      * Value for {@link #reqInputFeatures}: if set, indicates that the application
      * requires a hard keyboard
      */
     public static final int INPUT_FEATURE_HARD_KEYBOARD = 0x00000001;
-    
+
     /**
      * Value for {@link #reqInputFeatures}: if set, indicates that the application
      * requires a five way navigation device
      */
     public static final int INPUT_FEATURE_FIVE_WAY_NAV = 0x00000002;
-    
+
     /**
      * Flags associated with the input features.  Any combination of
      * {@link #INPUT_FEATURE_HARD_KEYBOARD},

@@ -17,7 +17,7 @@
 package android.os;
 
 /**
- * Handy class for starting a new thread that has a looper. The looper can then be 
+ * Handy class for starting a new thread that has a looper. The looper can then be
  * used to create handler classes. Note that start() must still be called.
  */
 public class HandlerThread extends Thread {
@@ -29,18 +29,18 @@ public class HandlerThread extends Thread {
         super(name);
         mPriority = Process.THREAD_PRIORITY_DEFAULT;
     }
-    
+
     /**
      * Constructs a HandlerThread.
      * @param name
-     * @param priority The priority to run the thread at. The value supplied must be from 
+     * @param priority The priority to run the thread at. The value supplied must be from
      * {@link android.os.Process} and not from java.lang.Thread.
      */
     public HandlerThread(String name, int priority) {
         super(name);
         mPriority = priority;
     }
-    
+
     /**
      * Call back method that can be explicitly overridden if needed to execute some
      * setup before Looper loops.
@@ -61,18 +61,18 @@ public class HandlerThread extends Thread {
         Looper.loop();
         mTid = -1;
     }
-    
+
     /**
      * This method returns the Looper associated with this thread. If this thread not been started
-     * or for any reason is isAlive() returns false, this method will return null. If this thread 
-     * has been started, this method will block until the looper has been initialized.  
+     * or for any reason is isAlive() returns false, this method will return null. If this thread
+     * has been started, this method will block until the looper has been initialized.
      * @return The looper.
      */
     public Looper getLooper() {
         if (!isAlive()) {
             return null;
         }
-        
+
         // If the thread has been started, wait until the looper has been created.
         synchronized (this) {
             while (isAlive() && mLooper == null) {

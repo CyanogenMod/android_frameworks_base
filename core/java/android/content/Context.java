@@ -1798,7 +1798,7 @@ public abstract class Context {
      * @hide like {@link #stopService(Intent)} but for a specific user.
      */
     public abstract boolean stopServiceAsUser(Intent service, UserHandle user);
-    
+
     /**
      * Connect to an application service, creating it if needed.  This defines
      * a dependency between your application and the service.  The given

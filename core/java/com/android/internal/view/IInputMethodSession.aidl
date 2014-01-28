@@ -31,7 +31,7 @@ oneway interface IInputMethodSession {
     void finishInput();
 
     void updateExtractedText(int token, in ExtractedText text);
-    
+
     void updateSelection(int oldSelStart, int oldSelEnd,
             int newSelStart, int newSelEnd,
             int candidatesStart, int candidatesEnd);

@@ -26,9 +26,9 @@ import com.android.mediaframeworktest.MediaProfileReader;
 import android.test.suitebuilder.annotation.*;
 
 public class MediaMetadataRetrieverTest extends AndroidTestCase {
-    
+
     private static final String TAG         = "MediaMetadataRetrieverTest";
-   
+
     // Test album art extraction.
     @MediumTest
     public static void testGetEmbeddedPicture() throws Exception {
@@ -108,7 +108,7 @@ public class MediaMetadataRetrieverTest extends AndroidTestCase {
         assertTrue(!hasFailed);
         Log.v(TAG, "Average processing time per thumbnail: " + (endedAt - startedAt)/MediaNames.THUMBNAIL_METADATA_TEST_FILES.length + " ms");
     }
-    
+
     @LargeTest
     public static void testMetadataRetrieval() throws Exception {
         boolean supportWMA = MediaProfileReader.getWMAEnable();
@@ -234,7 +234,7 @@ public class MediaMetadataRetrieverTest extends AndroidTestCase {
                 hasFailed = true;
             }
         }
-        
+
         retriever.release();
         assertTrue(!hasFailed);
     }

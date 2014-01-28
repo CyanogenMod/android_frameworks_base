@@ -1,11 +1,11 @@
 <ul id="nav">
-  
+
 <li class="nav-section">
     <div class="nav-section-header"><a href="<?cs var:toroot?>about/index.html">Welcome</a></div>
     <ul>
       <li><a href="<?cs var:toroot?>about/start.html">Get Started</a></li>
     </ul>
-  </li> 
+  </li>
   <li class="nav-section">
     <div class="nav-section-header"><a href="<?cs var:toroot ?>about/versions/kitkat.html">
       <span class="en">KitKat</span></a></div>

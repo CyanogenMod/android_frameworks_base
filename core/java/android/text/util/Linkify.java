@@ -402,7 +402,7 @@ public class Linkify {
         }
 
         boolean hasPrefix = false;
-        
+
         for (int i = 0; i < prefixes.length; i++) {
             if (url.regionMatches(true, 0, prefixes[i], 0,
                                   prefixes[i].length())) {
@@ -475,7 +475,7 @@ public class Linkify {
             LinkSpec spec = new LinkSpec();
             int length = address.length();
             int end = start + length;
-            
+
             spec.start = base + start;
             spec.end = base + end;
             string = string.substring(end);

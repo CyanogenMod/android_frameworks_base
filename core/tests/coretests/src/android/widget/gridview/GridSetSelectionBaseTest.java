@@ -84,7 +84,7 @@ public class GridSetSelectionBaseTest<T extends GridScenario> extends ActivityIn
 
         ViewAsserts.assertOnScreen(mGridView, mGridView.getSelectedView());
     }
-    
+
     @MediumTest
     public void testSetSelectionToTheTop() {
         mActivity.runOnUiThread(new Runnable() {

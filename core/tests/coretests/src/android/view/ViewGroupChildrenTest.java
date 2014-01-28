@@ -253,7 +253,7 @@ public class ViewGroupChildrenTest extends ActivityInstrumentationTestCase<ViewG
         ViewAsserts.assertGroupNotContains(mGroup, views[12]);
         assertNull(views[12].getParent());
 
-        assertEquals(views.length - 1, mGroup.getChildCount());        
+        assertEquals(views.length - 1, mGroup.getChildCount());
     }
 
     private TextView createView(String text) {

@@ -84,13 +84,13 @@ public class ListActivity extends Activity {
 
         final ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
-        
+
         registerForContextMenu(list);
     }
-    
+
     public void startProfiling(View v) {
     }
-    
+
     public void stopProfiling(View v) {
     }
 

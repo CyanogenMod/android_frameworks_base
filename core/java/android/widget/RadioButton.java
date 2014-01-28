@@ -42,19 +42,19 @@ import com.android.internal.R;
  * guide.</p>
  *
  * <p><strong>XML attributes</strong></p>
- * <p> 
- * See {@link android.R.styleable#CompoundButton CompoundButton Attributes}, 
- * {@link android.R.styleable#Button Button Attributes}, 
- * {@link android.R.styleable#TextView TextView Attributes}, 
+ * <p>
+ * See {@link android.R.styleable#CompoundButton CompoundButton Attributes},
+ * {@link android.R.styleable#Button Button Attributes},
+ * {@link android.R.styleable#TextView TextView Attributes},
  * {@link android.R.styleable#View View Attributes}
  * </p>
  */
 public class RadioButton extends CompoundButton {
-    
+
     public RadioButton(Context context) {
         this(context, null);
     }
-    
+
     public RadioButton(Context context, AttributeSet attrs) {
         this(context, attrs, com.android.internal.R.attr.radioButtonStyle);
     }

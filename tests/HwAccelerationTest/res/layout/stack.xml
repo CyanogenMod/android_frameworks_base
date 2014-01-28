@@ -23,8 +23,8 @@
     android:paddingRight="12dp"
     android:focusable="true">
     <StackView
-        android:id="@+id/stack_view" 
-        android:layout_width="348px" 
+        android:id="@+id/stack_view"
+        android:layout_width="348px"
         android:layout_height="374px"
         android:layout_gravity="center"
         android:background="#00000000"

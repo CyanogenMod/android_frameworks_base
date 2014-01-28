@@ -921,7 +921,7 @@ public class StaticLayout extends Layout {
     void prepare() {
         mMeasured = MeasuredText.obtain();
     }
-    
+
     void finish() {
         mMeasured = MeasuredText.recycle(mMeasured);
     }

@@ -34,38 +34,38 @@
  * Reserved bases to be supported later.
  */
 typedef enum time_bases {
-	ATS_RTC = 0,
-	ATS_TOD,
-	ATS_USER,
-	ATS_SECURE,
-	ATS_RESERVED_1,
-	ATS_RESERVED_2,
-	ATS_RESERVED_3,
-	ATS_GPS,
-	ATS_1X,
-	ATS_RESERVED_4,
-	ATS_WCDMA,
-	ATS_SNTP,
-	ATS_UTC,
-	ATS_MFLO,
-	ATS_INVALID
+    ATS_RTC = 0,
+    ATS_TOD,
+    ATS_USER,
+    ATS_SECURE,
+    ATS_RESERVED_1,
+    ATS_RESERVED_2,
+    ATS_RESERVED_3,
+    ATS_GPS,
+    ATS_1X,
+    ATS_RESERVED_4,
+    ATS_WCDMA,
+    ATS_SNTP,
+    ATS_UTC,
+    ATS_MFLO,
+    ATS_INVALID
 } time_bases_type;
 
 /* Time unit -- Unit in which time is set/get */
 typedef enum time_unit {
-	TIME_STAMP,		/* Not supported */
-	TIME_MSEC,
-	TIME_SECS,
-	TIME_JULIAN,
-	TIME_20MS_FRAME,	/* Not supported */
-	TIME_INVALID
+    TIME_STAMP, /* Not supported */
+    TIME_MSEC,
+    TIME_SECS,
+    TIME_JULIAN,
+    TIME_20MS_FRAME, /* Not supported */
+    TIME_INVALID
 } time_unit_type;
 
 /* Operation to be done */
 typedef enum time_genoff_opr {
-	T_SET,
-	T_GET,
-	T_MAX
+    T_SET,
+    T_GET,
+    T_MAX
 } time_genoff_opr_type;
 
 /* Structure to be passed as argument to time_genoff_operation() */
@@ -75,10 +75,10 @@ typedef enum time_genoff_opr {
  * if time_unit = TIME_JULIAN then ts_val = (struct tm *)
  */
 typedef struct time_genoff_info {
-	time_bases_type base;		/* Genoff in consideration */
-	void *ts_val;			/* Time to be set/get */
-	time_unit_type unit;		/* Time unit */
-	time_genoff_opr_type operation; /* Time operation to be done */
+    time_bases_type base; /* Genoff in consideration */
+    void *ts_val; /* Time to be set/get */
+    time_unit_type unit; /* Time unit */
+    time_genoff_opr_type operation; /* Time operation to be done */
 }time_genoff_info_type;
 
 /* API to be called for time get/set operation */

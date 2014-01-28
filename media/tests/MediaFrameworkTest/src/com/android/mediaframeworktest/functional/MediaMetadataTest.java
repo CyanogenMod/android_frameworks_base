@@ -25,12 +25,12 @@ import android.util.Log;
 import com.android.mediaframeworktest.MediaNames;
 import com.android.mediaframeworktest.MediaProfileReader;
 /**
- * This metadata test suite test the basic functionality of the 
+ * This metadata test suite test the basic functionality of the
  * MediaMetadataRetriever
- * 
+ *
  */
 public class MediaMetadataTest extends AndroidTestCase {
-    
+
     private static final String TAG = "MediaMetadataTest";
 
     public static enum METADATA_EXPECTEDRESULT{
@@ -39,24 +39,24 @@ public class MediaMetadataTest extends AndroidTestCase {
         DATE, GENRE, TITLE,
         YEAR, DURATION, NUM_TRACKS, WRITER
     }
-    
+
     public static enum MP3_TEST_FILE{
         ID3V1V2, ID3V2, ID3V1
     }
-    
+
     public static METADATA_EXPECTEDRESULT meta;
     public static MP3_TEST_FILE mp3_test_file;
-   
+
     @MediumTest
     public static void testID3V1V2Metadata() throws Exception {
         validateMetatData(mp3_test_file.ID3V1V2.ordinal(), MediaNames.META_DATA_MP3);
     }
-    
+
     @MediumTest
     public static void testID3V2Metadata() throws Exception {
         validateMetatData(mp3_test_file.ID3V2.ordinal(), MediaNames.META_DATA_MP3);
     }
-    
+
     @MediumTest
     public static void testID3V1Metadata() throws Exception {
         validateMetatData(mp3_test_file.ID3V1.ordinal(), MediaNames.META_DATA_MP3);
@@ -77,44 +77,44 @@ public class MediaMetadataTest extends AndroidTestCase {
             //Set the test case failure whenever it failed to setDataSource
             assertTrue("Failed to setDataSource ", false);
         }
-        
+
         //METADATA_KEY_CD_TRACK_NUMBER should return the TCRK value
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER);
         Log.v(TAG, "CD_TRACK_NUMBER : " + value);
         assertEquals(TAG, meta_data_file[fileIndex][meta.CD_TRACK.ordinal()], value);
-       
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
         Log.v(TAG, "Album : "+ value);
-        assertEquals(TAG, meta_data_file[fileIndex][meta.ALBUM.ordinal()], value); 
-        
+        assertEquals(TAG, meta_data_file[fileIndex][meta.ALBUM.ordinal()], value);
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
         Log.v(TAG, "Artist : "+ value);
         assertEquals(TAG, meta_data_file[fileIndex][meta.ARTIST.ordinal()], value);
-        
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR);
         Log.v(TAG, "Author : "+ value);
         assertEquals(TAG, meta_data_file[fileIndex][meta.AUTHOR.ordinal()], value);
-        
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_COMPOSER);
         Log.v(TAG, "Composer : "+ value);
         assertEquals(TAG, meta_data_file[fileIndex][meta.COMPOSER.ordinal()], value);
-        
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE);
         Log.v(TAG, "Date : "+ value);
         assertEquals(TAG, meta_data_file[fileIndex][meta.DATE.ordinal()], value);
-        
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE);
         Log.v(TAG, "Genre : "+ value);
         assertEquals(TAG, meta_data_file[fileIndex][meta.GENRE.ordinal()], value);
-        
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
         Log.v(TAG, "Title : "+ value);
         assertEquals(TAG, meta_data_file[fileIndex][meta.TITLE.ordinal()], value);
-        
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
         Log.v(TAG, "Year : "+ value);
         assertEquals(TAG, meta_data_file[fileIndex][meta.YEAR.ordinal()], value);
-        
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         Log.v(TAG, "Expected = " + meta_data_file[fileIndex][meta.DURATION.ordinal()] + "reult = " + value);
         // Only require that the returned duration is within 100ms of the expected
@@ -122,17 +122,17 @@ public class MediaMetadataTest extends AndroidTestCase {
         assertTrue(TAG, Math.abs(Integer.parseInt(
                         meta_data_file[fileIndex][meta.DURATION.ordinal()])
                             - Integer.parseInt(value)) < 100);
-        
+
         //METADATA_KEY_NUM_TRACKS should return the total number of tracks in the media
         //include the video and audio
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_NUM_TRACKS);
         Log.v(TAG, "Track : "+ value);
         assertEquals(TAG,meta_data_file[fileIndex][meta.NUM_TRACKS.ordinal()], value);
-     
+
         value = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_WRITER);
         Log.v(TAG, "Writer : "+ value);
         assertEquals(TAG,meta_data_file[fileIndex][meta.WRITER.ordinal()], value);
 
-        retriever.release();        
+        retriever.release();
     }
 }

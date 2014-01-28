@@ -35,24 +35,24 @@ public class ViewFlipperActivity extends Activity {
         final LayoutInflater inflater = getLayoutInflater();
         final View widget = inflater.inflate(R.layout.widget, null);
         widget.setLayoutParams(new FrameLayout.LayoutParams(180, 180, Gravity.CENTER));
-        
+
         ViewFlipper flipper = (ViewFlipper) widget.findViewById(R.id.flipper);
-        
+
         View view = inflater.inflate(R.layout.flipper_item, flipper, false);
         flipper.addView(view);
         ((ImageView) view.findViewById(R.id.widget_image)).setImageResource(R.drawable.sunset1);
-        ((TextView) view.findViewById(R.id.widget_text)).setText("This is a long line of text, " 
+        ((TextView) view.findViewById(R.id.widget_text)).setText("This is a long line of text, "
                 + "enjoy the wrapping and drawing");
 
         view = inflater.inflate(R.layout.flipper_item, flipper, false);
         flipper.addView(view);
         ((ImageView) view.findViewById(R.id.widget_image)).setImageResource(R.drawable.sunset3);
-        ((TextView) view.findViewById(R.id.widget_text)).setText("Another very long line of text, " 
+        ((TextView) view.findViewById(R.id.widget_text)).setText("Another very long line of text, "
                 + "enjoy the wrapping and drawing");
 
         FrameLayout layout = new FrameLayout(this);
         layout.addView(widget);
-        
+
         setContentView(layout);
     }
 }

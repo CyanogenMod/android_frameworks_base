@@ -2,14 +2,14 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	app_main.cpp
+    app_main.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils \
-	libutils \
-	liblog \
-	libbinder \
-	libandroid_runtime
+    libcutils \
+    libutils \
+    liblog \
+    libbinder \
+    libandroid_runtime
 
 LOCAL_MODULE:= app_process
 
@@ -23,14 +23,14 @@ ifeq ($(TARGET_ARCH),arm)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	app_main.cpp
+    app_main.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils \
-	libutils \
-	liblog \
-	libbinder \
-	libandroid_runtime
+    libcutils \
+    libutils \
+    liblog \
+    libbinder \
+    libandroid_runtime
 
 LOCAL_MODULE := app_process__asan
 LOCAL_MODULE_TAGS := eng

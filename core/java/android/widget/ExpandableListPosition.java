@@ -26,11 +26,11 @@ import java.util.ArrayList;
  * {@link #obtainGroupPosition(int)}.
  */
 class ExpandableListPosition {
-    
+
     private static final int MAX_POOL_SIZE = 5;
     private static ArrayList<ExpandableListPosition> sPool =
         new ArrayList<ExpandableListPosition>(MAX_POOL_SIZE);
-    
+
     /**
      * This data type represents a child position
      */
@@ -48,7 +48,7 @@ class ExpandableListPosition {
     public int groupPos;
 
     /**
-     * The position of the child within its parent group 
+     * The position of the child within its parent group
      */
     public int childPos;
 
@@ -57,22 +57,22 @@ class ExpandableListPosition {
      * the corresponding flat list position for the group or child is known)
      */
     int flatListPos;
-    
+
     /**
      * What type of position this ExpandableListPosition represents
      */
     public int type;
-    
+
     private void resetState() {
         groupPos = 0;
         childPos = 0;
         flatListPos = 0;
         type = 0;
     }
-    
+
     private ExpandableListPosition() {
     }
-    
+
     long getPackedPosition() {
         if (type == CHILD) return ExpandableListView.getPackedPositionForChild(groupPos, childPos);
         else return ExpandableListView.getPackedPositionForGroup(groupPos);
@@ -81,7 +81,7 @@ class ExpandableListPosition {
     static ExpandableListPosition obtainGroupPosition(int groupPosition) {
         return obtain(GROUP, groupPosition, 0, 0);
     }
-    
+
     static ExpandableListPosition obtainChildPosition(int groupPosition, int childPosition) {
         return obtain(CHILD, groupPosition, childPosition, 0);
     }
@@ -90,8 +90,8 @@ class ExpandableListPosition {
         if (packedPosition == ExpandableListView.PACKED_POSITION_VALUE_NULL) {
             return null;
         }
-        
-        ExpandableListPosition elp = getRecycledOrCreate(); 
+
+        ExpandableListPosition elp = getRecycledOrCreate();
         elp.groupPos = ExpandableListView.getPackedPositionGroup(packedPosition);
         if (ExpandableListView.getPackedPositionType(packedPosition) ==
                 ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
@@ -102,16 +102,16 @@ class ExpandableListPosition {
         }
         return elp;
     }
-    
+
     static ExpandableListPosition obtain(int type, int groupPos, int childPos, int flatListPos) {
-        ExpandableListPosition elp = getRecycledOrCreate(); 
+        ExpandableListPosition elp = getRecycledOrCreate();
         elp.type = type;
         elp.groupPos = groupPos;
         elp.childPos = childPos;
         elp.flatListPos = flatListPos;
         return elp;
     }
-    
+
     private static ExpandableListPosition getRecycledOrCreate() {
         ExpandableListPosition elp;
         synchronized (sPool) {
@@ -124,7 +124,7 @@ class ExpandableListPosition {
         elp.resetState();
         return elp;
     }
-    
+
     /**
      * Do not call this unless you obtained this via ExpandableListPosition.obtain().
      * PositionMetadata will handle recycling its own children.

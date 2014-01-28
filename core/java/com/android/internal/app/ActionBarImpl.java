@@ -87,20 +87,20 @@ public class ActionBarImpl extends ActionBar {
 
     private TabImpl mSelectedTab;
     private int mSavedTabPosition = INVALID_POSITION;
-    
+
     private boolean mDisplayHomeAsUpSet;
 
     ActionModeImpl mActionMode;
     ActionMode mDeferredDestroyActionMode;
     ActionMode.Callback mDeferredModeDestroyCallback;
-    
+
     private boolean mLastMenuVisibility;
     private ArrayList<OnMenuVisibilityListener> mMenuVisibilityListeners =
             new ArrayList<OnMenuVisibilityListener>();
 
     private static final int CONTEXT_DISPLAY_NORMAL = 0;
     private static final int CONTEXT_DISPLAY_SPLIT = 1;
-    
+
     private static final int INVALID_POSITION = -1;
 
     private int mContextDisplayMode;
@@ -402,7 +402,7 @@ public class ActionBarImpl extends ActionBar {
     }
 
     public void setDisplayOptions(int options, int mask) {
-        final int current = mActionView.getDisplayOptions(); 
+        final int current = mActionView.getDisplayOptions();
         if ((mask & DISPLAY_HOME_AS_UP) != 0) {
             mDisplayHomeAsUpSet = true;
         }
@@ -804,7 +804,7 @@ public class ActionBarImpl extends ActionBar {
             currentTheme.resolveAttribute(com.android.internal.R.attr.actionBarWidgetTheme,
                     outValue, true);
             final int targetThemeRes = outValue.resourceId;
-            
+
             if (targetThemeRes != 0 && mContext.getThemeResId() != targetThemeRes) {
                 mThemedContext = new ContextThemeWrapper(mContext, targetThemeRes);
             } else {
@@ -813,7 +813,7 @@ public class ActionBarImpl extends ActionBar {
         }
         return mThemedContext;
     }
-    
+
     @Override
     public boolean isTitleTruncated() {
         return mActionView != null && mActionView.isTitleTruncated();
@@ -840,13 +840,13 @@ public class ActionBarImpl extends ActionBar {
     }
 
     /**
-     * @hide 
+     * @hide
      */
     public class ActionModeImpl extends ActionMode implements MenuBuilder.Callback {
         private ActionMode.Callback mCallback;
         private MenuBuilder mMenu;
         private WeakReference<View> mCustomView;
-        
+
         public ActionModeImpl(ActionMode.Callback callback) {
             mCallback = callback;
             mMenu = new MenuBuilder(getThemedContext())
@@ -947,7 +947,7 @@ public class ActionBarImpl extends ActionBar {
         public CharSequence getSubtitle() {
             return mContextView.getSubtitle();
         }
-        
+
         @Override
         public void setTitleOptionalHint(boolean titleOptional) {
             super.setTitleOptionalHint(titleOptional);

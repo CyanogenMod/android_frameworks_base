@@ -395,7 +395,7 @@ public class TableRow extends LinearLayout {
      * <p>Set of layout parameters used in table rows.</p>
      *
      * @see android.widget.TableLayout.LayoutParams
-     * 
+     *
      * @attr ref android.R.styleable#TableRow_Cell_layout_column
      * @attr ref android.R.styleable#TableRow_Cell_layout_span
      */

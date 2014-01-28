@@ -65,7 +65,7 @@ public class LinkMovementMethod extends ScrollingMovementMethod {
 
         return super.up(widget, buffer);
     }
-        
+
     @Override
     protected boolean down(TextView widget, Spannable buffer) {
         if (action(DOWN, widget, buffer)) {

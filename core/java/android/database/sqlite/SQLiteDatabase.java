@@ -1722,7 +1722,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * Returns true if the new version code is greater than the current database version.
      *
      * @param newVersion The new version code.
-     * @return True if the new version code is greater than the current database version. 
+     * @return True if the new version code is greater than the current database version.
      */
     public boolean needUpgrade(int newVersion) {
         return newVersion > getVersion();

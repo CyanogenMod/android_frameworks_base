@@ -11,5 +11,5 @@ include $(BUILD_JAVA_LIBRARY)
 include $(CLEAR_VARS)
 ALL_PREBUILT += $(TARGET_OUT)/bin/bmgr
 $(TARGET_OUT)/bin/bmgr : $(LOCAL_PATH)/bmgr | $(ACP)
-	$(transform-prebuilt-to-target)
+    $(transform-prebuilt-to-target)
 

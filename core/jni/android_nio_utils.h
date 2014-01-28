@@ -20,7 +20,7 @@
 #include <android_runtime/AndroidRuntime.h>
 
 namespace android {
-    
+
 /**
  * Given an nio.Buffer, return a pointer to it, beginning at its current
  * position. The returned pointer is only valid for the current JNI stack-frame.
@@ -58,9 +58,9 @@ class AutoBufferPointer {
 public:
     AutoBufferPointer(JNIEnv* env, jobject nioBuffer, jboolean commit);
     ~AutoBufferPointer();
-    
+
     void* pointer() const { return fPointer; }
-    
+
 private:
     JNIEnv* fEnv;
     void*   fPointer;

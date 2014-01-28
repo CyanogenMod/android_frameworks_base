@@ -29,23 +29,23 @@ interface IWallpaperManager {
      * Set the wallpaper.
      */
     ParcelFileDescriptor setWallpaper(String name);
-    
+
     /**
      * Set the live wallpaper.
      */
     void setWallpaperComponent(in ComponentName name);
-    
+
     /**
      * Get the wallpaper.
      */
     ParcelFileDescriptor getWallpaper(IWallpaperManagerCallback cb,
             out Bundle outParams);
-    
+
     /**
      * Get information about a live wallpaper.
      */
     WallpaperInfo getWallpaperInfo();
-    
+
     /**
      * Clear the wallpaper.
      */

@@ -86,7 +86,7 @@ public class RequestRectangleVisible extends Activity {
                 bottomBlob.requestRectangleOnScreen(rect, true);
             }
         });
-        
+
     }
 
 

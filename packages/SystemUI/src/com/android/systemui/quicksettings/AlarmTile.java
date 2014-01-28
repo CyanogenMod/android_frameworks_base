@@ -18,7 +18,7 @@ import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 
 public class AlarmTile extends QuickSettingsTile {
 
-    public AlarmTile(Context context, 
+    public AlarmTile(Context context,
             QuickSettingsController qsc, Handler handler) {
         super(context, qsc);
 

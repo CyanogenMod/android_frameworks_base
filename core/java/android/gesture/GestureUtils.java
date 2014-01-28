@@ -28,7 +28,7 @@ import static android.gesture.GestureConstants.*;
 
 /**
  * Utility functions for gesture processing & analysis, including methods for:
- * <ul> 
+ * <ul>
  * <li>feature extraction (e.g., samplers and those for calculating bounding
  * boxes and gesture path lengths);
  * <li>geometric transformation (e.g., translation, rotation and scaling);
@@ -37,10 +37,10 @@ import static android.gesture.GestureConstants.*;
  * </ul>
  */
 public final class GestureUtils {
-  
+
     private static final float SCALING_THRESHOLD = 0.26f;
     private static final float NONUNIFORM_SCALE = (float) Math.sqrt(2);
-    
+
     private GestureUtils() {
     }
 
@@ -58,47 +58,47 @@ public final class GestureUtils {
             }
         }
     }
-    
+
     /**
-     * Samples the gesture spatially by rendering the gesture into a 2D 
-     * grayscale bitmap. Scales the gesture to fit the size of the bitmap. 
-     * The scaling does not necessarily keep the aspect ratio of the gesture. 
-     * 
+     * Samples the gesture spatially by rendering the gesture into a 2D
+     * grayscale bitmap. Scales the gesture to fit the size of the bitmap.
+     * The scaling does not necessarily keep the aspect ratio of the gesture.
+     *
      * @param gesture the gesture to be sampled
      * @param bitmapSize the size of the bitmap
-     * @return a bitmapSize x bitmapSize grayscale bitmap that is represented 
-     *         as a 1D array. The float at index i represents the grayscale 
-     *         value at pixel [i%bitmapSize, i/bitmapSize] 
+     * @return a bitmapSize x bitmapSize grayscale bitmap that is represented
+     *         as a 1D array. The float at index i represents the grayscale
+     *         value at pixel [i%bitmapSize, i/bitmapSize]
      */
     public static float[] spatialSampling(Gesture gesture, int bitmapSize) {
         return spatialSampling(gesture, bitmapSize, false);
     }
 
     /**
-     * Samples the gesture spatially by rendering the gesture into a 2D 
-     * grayscale bitmap. Scales the gesture to fit the size of the bitmap. 
-     * 
+     * Samples the gesture spatially by rendering the gesture into a 2D
+     * grayscale bitmap. Scales the gesture to fit the size of the bitmap.
+     *
      * @param gesture the gesture to be sampled
      * @param bitmapSize the size of the bitmap
-     * @param keepAspectRatio if the scaling should keep the gesture's 
+     * @param keepAspectRatio if the scaling should keep the gesture's
      *        aspect ratio
-     * 
-     * @return a bitmapSize x bitmapSize grayscale bitmap that is represented 
-     *         as a 1D array. The float at index i represents the grayscale 
-     *         value at pixel [i%bitmapSize, i/bitmapSize] 
+     *
+     * @return a bitmapSize x bitmapSize grayscale bitmap that is represented
+     *         as a 1D array. The float at index i represents the grayscale
+     *         value at pixel [i%bitmapSize, i/bitmapSize]
      */
-    public static float[] spatialSampling(Gesture gesture, int bitmapSize, 
+    public static float[] spatialSampling(Gesture gesture, int bitmapSize,
             boolean keepAspectRatio) {
-        final float targetPatchSize = bitmapSize - 1; 
+        final float targetPatchSize = bitmapSize - 1;
         float[] sample = new float[bitmapSize * bitmapSize];
         Arrays.fill(sample, 0);
-  
+
         RectF rect = gesture.getBoundingBox();
         final float gestureWidth = rect.width();
         final float gestureHeight = rect.height();
         float sx = targetPatchSize / gestureWidth;
         float sy = targetPatchSize / gestureHeight;
-        
+
         if (keepAspectRatio) {
             float scale = sx < sy ? sx : sy;
             sx = scale;
@@ -120,7 +120,7 @@ public final class GestureUtils {
                         sx = scale;
                     }
                 } else {
-                    float scale = sx * NONUNIFORM_SCALE; 
+                    float scale = sx * NONUNIFORM_SCALE;
                     if (scale < sy) {
                         sy = scale;
                     }
@@ -152,7 +152,7 @@ public final class GestureUtils {
                 float segmentStartY = pts[i + 1] < 0 ? 0 : pts[i + 1];
                 if (segmentStartX > targetPatchSize) {
                     segmentStartX = targetPatchSize;
-                } 
+                }
                 if (segmentStartY > targetPatchSize) {
                     segmentStartY = targetPatchSize;
                 }
@@ -161,51 +161,51 @@ public final class GestureUtils {
                     // Evaluate horizontally
                     if (segmentEndX > segmentStartX) {
                         xpos = (float) Math.ceil(segmentStartX);
-                        float slope = (segmentEndY - segmentStartY) / 
+                        float slope = (segmentEndY - segmentStartY) /
                                       (segmentEndX - segmentStartX);
                         while (xpos < segmentEndX) {
                             ypos = slope * (xpos - segmentStartX) + segmentStartY;
-                            plot(xpos, ypos, sample, bitmapSize); 
+                            plot(xpos, ypos, sample, bitmapSize);
                             xpos++;
                         }
                     } else if (segmentEndX < segmentStartX){
                         xpos = (float) Math.ceil(segmentEndX);
-                        float slope = (segmentEndY - segmentStartY) / 
+                        float slope = (segmentEndY - segmentStartY) /
                                       (segmentEndX - segmentStartX);
                         while (xpos < segmentStartX) {
                             ypos = slope * (xpos - segmentStartX) + segmentStartY;
-                            plot(xpos, ypos, sample, bitmapSize); 
+                            plot(xpos, ypos, sample, bitmapSize);
                             xpos++;
                         }
                     }
                     // Evaluate vertically
                     if (segmentEndY > segmentStartY) {
                         ypos = (float) Math.ceil(segmentStartY);
-                        float invertSlope = (segmentEndX - segmentStartX) / 
+                        float invertSlope = (segmentEndX - segmentStartX) /
                                             (segmentEndY - segmentStartY);
                         while (ypos < segmentEndY) {
                             xpos = invertSlope * (ypos - segmentStartY) + segmentStartX;
-                            plot(xpos, ypos, sample, bitmapSize); 
+                            plot(xpos, ypos, sample, bitmapSize);
                             ypos++;
                         }
                     } else if (segmentEndY < segmentStartY) {
                         ypos = (float) Math.ceil(segmentEndY);
-                        float invertSlope = (segmentEndX - segmentStartX) / 
+                        float invertSlope = (segmentEndX - segmentStartX) /
                                             (segmentEndY - segmentStartY);
                         while (ypos < segmentStartY) {
-                            xpos = invertSlope * (ypos - segmentStartY) + segmentStartX; 
-                            plot(xpos, ypos, sample, bitmapSize); 
+                            xpos = invertSlope * (ypos - segmentStartY) + segmentStartX;
+                            plot(xpos, ypos, sample, bitmapSize);
                             ypos++;
                         }
                     }
-                } 
+                }
                 segmentEndX = segmentStartX;
                 segmentEndY = segmentStartY;
             }
         }
         return sample;
     }
-  
+
     private static void plot(float x, float y, float[] sample, int sampleSize) {
         x = x < 0 ? 0 : x;
         y = y < 0 ? 0 : y;
@@ -213,7 +213,7 @@ public final class GestureUtils {
         int xCeiling = (int) Math.ceil(x);
         int yFloor = (int) Math.floor(y);
         int yCeiling = (int) Math.ceil(y);
-        
+
         // if it's an integer
         if (x == xFloor && y == yFloor) {
             int index = yCeiling * sampleSize + xCeiling;
@@ -230,25 +230,25 @@ public final class GestureUtils {
             float btmLeft = (float) Math.sqrt(xFloorSq + yCeilingSq);
             float btmRight = (float) Math.sqrt(xCeilingSq + yCeilingSq);
             float sum = topLeft + topRight + btmLeft + btmRight;
-            
+
             float value = topLeft / sum;
             int index = yFloor * sampleSize + xFloor;
             if (value > sample[index]){
                 sample[index] = value;
             }
-            
+
             value = topRight / sum;
             index = yFloor * sampleSize + xCeiling;
             if (value > sample[index]){
                 sample[index] = value;
             }
-            
+
             value = btmLeft / sum;
             index = yCeiling * sampleSize + xFloor;
             if (value > sample[index]){
                 sample[index] = value;
             }
-            
+
             value = btmRight / sum;
             index = yCeiling * sampleSize + xCeiling;
             if (value > sample[index]){
@@ -258,9 +258,9 @@ public final class GestureUtils {
     }
 
     /**
-     * Samples a stroke temporally into a given number of evenly-distributed 
+     * Samples a stroke temporally into a given number of evenly-distributed
      * points.
-     * 
+     *
      * @param stroke the gesture stroke to be sampled
      * @param numPoints the number of points
      * @return the sampled points in the form of [x1, y1, x2, y2, ..., xn, yn]
@@ -323,7 +323,7 @@ public final class GestureUtils {
 
     /**
      * Calculates the centroid of a set of points.
-     * 
+     *
      * @param points the points in the form of [x1, y1, x2, y2, ..., xn, yn]
      * @return the centroid
      */
@@ -345,7 +345,7 @@ public final class GestureUtils {
 
     /**
      * Calculates the variance-covariance matrix of a set of points.
-     * 
+     *
      * @param points the points in the form of [x1, y1, x2, y2, ..., xn, yn]
      * @return the variance-covariance matrix
      */
@@ -399,7 +399,7 @@ public final class GestureUtils {
 
     /**
      * Calculates the squared Euclidean distance between two vectors.
-     * 
+     *
      * @param vector1
      * @param vector2
      * @return the distance
@@ -416,7 +416,7 @@ public final class GestureUtils {
 
     /**
      * Calculates the cosine distance between two instances.
-     * 
+     *
      * @param vector1
      * @param vector2
      * @return the distance between 0 and Math.PI
@@ -429,10 +429,10 @@ public final class GestureUtils {
         }
         return (float) Math.acos(sum);
     }
-    
+
     /**
      * Calculates the "minimum" cosine distance between two instances.
-     * 
+     *
      * @param vector1
      * @param vector2
      * @param numOrientations the maximum number of orientation allowed
@@ -453,7 +453,7 @@ public final class GestureUtils {
                 return (float) Math.acos(a);
             } else {
                 final double cosine = Math.cos(angle);
-                final double sine = cosine * tan; 
+                final double sine = cosine * tan;
                 return (float) Math.acos(a * cosine + b * sine);
             }
         } else {
@@ -463,7 +463,7 @@ public final class GestureUtils {
 
     /**
      * Computes an oriented, minimum bounding box of a set of points.
-     * 
+     *
      * @param originalPoints
      * @return an oriented bounding box
      */
@@ -482,7 +482,7 @@ public final class GestureUtils {
 
     /**
      * Computes an oriented, minimum bounding box of a set of points.
-     * 
+     *
      * @param originalPoints
      * @return an oriented bounding box
      */
@@ -558,8 +558,8 @@ public final class GestureUtils {
         }
         return targetVector;
     }
-    
-    
+
+
     static float[] rotate(float[] points, float angle) {
         float cos = (float) Math.cos(angle);
         float sin = (float) Math.sin(angle);
@@ -572,7 +572,7 @@ public final class GestureUtils {
         }
         return points;
     }
-    
+
     static float[] translate(float[] points, float dx, float dy) {
         int size = points.length;
         for (int i = 0; i < size; i += 2) {
@@ -581,7 +581,7 @@ public final class GestureUtils {
         }
         return points;
     }
-    
+
     static float[] scale(float[] points, float sx, float sy) {
         int size = points.length;
         for (int i = 0; i < size; i += 2) {

@@ -129,7 +129,7 @@ public class GestureDetector {
          * @return true if the event is consumed, else false
          */
         boolean onSingleTapConfirmed(MotionEvent e);
- 
+
         /**
          * Notified when a double-tap occurs.
          *
@@ -261,11 +261,11 @@ public class GestureDetector {
             case SHOW_PRESS:
                 mListener.onShowPress(mCurrentDownEvent);
                 break;
-                
+
             case LONG_PRESS:
                 dispatchLongPress();
                 break;
-                
+
             case TAP:
                 // If the user's finger is still down, do not count it as a tap
                 if (mDoubleTapListener != null) {
@@ -285,9 +285,9 @@ public class GestureDetector {
 
     /**
      * Creates a GestureDetector with the supplied listener.
-     * This variant of the constructor should be used from a non-UI thread 
+     * This variant of the constructor should be used from a non-UI thread
      * (as it allows specifying the Handler).
-     * 
+     *
      * @param listener the listener invoked for all the callbacks, this must
      * not be null.
      * @param handler the handler to use
@@ -307,10 +307,10 @@ public class GestureDetector {
      * Creates a GestureDetector with the supplied listener.
      * You may only use this constructor from a UI thread (this is the usual situation).
      * @see android.os.Handler#Handler()
-     * 
+     *
      * @param listener the listener invoked for all the callbacks, this must
      * not be null.
-     * 
+     *
      * @throws NullPointerException if {@code listener} is null.
      *
      * @deprecated Use {@link #GestureDetector(android.content.Context,
@@ -360,7 +360,7 @@ public class GestureDetector {
         }
         init(context);
     }
-    
+
     /**
      * Creates a GestureDetector with the supplied listener that runs deferred events on the
      * thread associated with the supplied {@link android.os.Handler}.
@@ -411,7 +411,7 @@ public class GestureDetector {
     /**
      * Sets the listener which will be called for double-tap and related
      * gestures.
-     * 
+     *
      * @param onDoubleTapListener the listener invoked for all the callbacks, or
      *        null to stop listening for double-tap gestures.
      */
@@ -540,7 +540,7 @@ public class GestureDetector {
             mStillDown = true;
             mInLongPress = false;
             mDeferConfirmSingleTap = false;
-            
+
             if (mIsLongpressEnabled) {
                 mHandler.removeMessages(LONG_PRESS);
                 mHandler.sendEmptyMessageAtTime(LONG_PRESS, mCurrentDownEvent.getDownTime()

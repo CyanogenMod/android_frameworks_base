@@ -271,7 +271,7 @@ public class GradientsActivity extends Activity {
             mMatrix.postTranslate(right, top);
             mGradientStops.setLocalMatrix(mMatrix);
             canvas.drawRect(left, top, right, bottom, mPaint);
-            
+
             canvas.restore();
         }
     }

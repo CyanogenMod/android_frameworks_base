@@ -74,7 +74,7 @@ import android.widget.ListView;
  * and "WiFi settings". The "WiFi settings" is the "second_preferencescreen" and when
  * clicked will show another screen of preferences such as "Prefer WiFi" (and
  * the other preferences that are children of the "second_preferencescreen" tag).
- * 
+ *
  * <div class="special reference">
  * <h3>Developer Guides</h3>
  * <p>For information about building a settings UI with Preferences,
@@ -88,11 +88,11 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
         DialogInterface.OnDismissListener {
 
     private ListAdapter mRootAdapter;
-    
+
     private Dialog mDialog;
 
     private ListView mListView;
-    
+
     /**
      * Do NOT use this constructor, use {@link PreferenceManager#createPreferenceScreen(Context)}.
      * @hide-
@@ -111,7 +111,7 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
      * <p>
      * This adapter's {@link Adapter#getItem(int)} should always return a
      * subclass of {@link Preference}.
-     * 
+     *
      * @return An adapter that provides the {@link Preference} contained in this
      *         {@link PreferenceScreen}.
      */
@@ -119,13 +119,13 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
         if (mRootAdapter == null) {
             mRootAdapter = onCreateRootAdapter();
         }
-        
+
         return mRootAdapter;
     }
-    
+
     /**
      * Creates the root adapter.
-     * 
+     *
      * @return An adapter that contains the preferences contained in this {@link PreferenceScreen}.
      * @see #getRootAdapter()
      */
@@ -137,25 +137,25 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
      * Binds a {@link ListView} to the preferences contained in this {@link PreferenceScreen} via
      * {@link #getRootAdapter()}. It also handles passing list item clicks to the corresponding
      * {@link Preference} contained by this {@link PreferenceScreen}.
-     * 
+     *
      * @param listView The list view to attach to.
      */
     public void bind(ListView listView) {
         listView.setOnItemClickListener(this);
         listView.setAdapter(getRootAdapter());
-        
+
         onAttachedToActivity();
     }
-    
+
     @Override
     protected void onClick() {
         if (getIntent() != null || getFragment() != null || getPreferenceCount() == 0) {
             return;
         }
-        
+
         showDialog(null);
     }
-    
+
     private void showDialog(Bundle state) {
         Context context = getContext();
         if (mListView != null) {
@@ -185,17 +185,17 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
 
         // Add the screen to the list of preferences screens opened as dialogs
         getPreferenceManager().addPreferencesScreen(dialog);
-        
+
         dialog.show();
     }
-    
+
     public void onDismiss(DialogInterface dialog) {
         mDialog = null;
         getPreferenceManager().removePreferencesScreen(dialog);
     }
-    
+
     /**
-     * Used to get a handle to the dialog. 
+     * Used to get a handle to the dialog.
      * This is useful for cases where we want to manipulate the dialog
      * as we would with any other activity or view.
      */
@@ -211,7 +211,7 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
         Object item = getRootAdapter().getItem(position);
         if (!(item instanceof Preference)) return;
 
-        final Preference preference = (Preference) item; 
+        final Preference preference = (Preference) item;
         preference.performClick(this);
     }
 
@@ -219,7 +219,7 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
     protected boolean isOnSameScreenAsChildren() {
         return false;
     }
-    
+
     @Override
     protected Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
@@ -227,7 +227,7 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
         if (dialog == null || !dialog.isShowing()) {
             return superState;
         }
-        
+
         final SavedState myState = new SavedState(superState);
         myState.isDialogShowing = true;
         myState.dialogBundle = dialog.onSaveInstanceState();
@@ -241,18 +241,18 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
             super.onRestoreInstanceState(state);
             return;
         }
-         
+
         SavedState myState = (SavedState) state;
         super.onRestoreInstanceState(myState.getSuperState());
         if (myState.isDialogShowing) {
             showDialog(myState.dialogBundle);
         }
     }
-    
+
     private static class SavedState extends BaseSavedState {
         boolean isDialogShowing;
         Bundle dialogBundle;
-        
+
         public SavedState(Parcel source) {
             super(source);
             isDialogShowing = source.readInt() == 1;
@@ -281,5 +281,5 @@ public final class PreferenceScreen extends PreferenceGroup implements AdapterVi
             }
         };
     }
-    
+
 }

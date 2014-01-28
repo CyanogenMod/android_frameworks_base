@@ -16,7 +16,7 @@ public class NfcTile extends QuickSettingsTile {
     private static NfcAdapter mNfcAdapter;
     private static final int NFC_ADAPTER_UNKNOWN = -100;
 
-    public NfcTile(Context context, 
+    public NfcTile(Context context,
             QuickSettingsController qsc) {
         super(context, qsc);
 

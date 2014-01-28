@@ -127,7 +127,7 @@ final class WifiDisplayAdapter extends DisplayAdapter {
         pw.println("mPendingStatusChangeBroadcast=" + mPendingStatusChangeBroadcast);
         pw.println("mPendingNotificationUpdate=" + mPendingNotificationUpdate);
         pw.println("mSupportsProtectedBuffers=" + mSupportsProtectedBuffers);
- 
+
         // Try to dump the controller state.
         if (mDisplayController == null) {
             pw.println("mDisplayController=null");

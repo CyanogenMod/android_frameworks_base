@@ -1477,7 +1477,7 @@ public class WapPushTest extends ServiceTestCase<WapPushManager> {
         System.arraycopy(mWspHeader, 0, array,
                 mGsmHeader.length + mUserDataHeader.length, mWspHeader.length);
         System.arraycopy(mMessageBody, 0, array,
-                mGsmHeader.length + mUserDataHeader.length + mWspHeader.length, 
+                mGsmHeader.length + mUserDataHeader.length + mWspHeader.length,
                 mMessageBody.length);
         return array;
 

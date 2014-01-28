@@ -32,7 +32,7 @@ import java.util.Random;
 
 /**
  * Database Performance Tests
- * 
+ *
  */
 
 @SuppressWarnings("deprecation")
@@ -74,7 +74,7 @@ public class DatabasePerformanceTests {
             Perf31Test.class.getName(),
             };
     }
-       
+
     public static abstract class PerformanceBase implements TestCase,
             PerformanceTestCase {
         protected static final int CURRENT_DATABASE_VERSION = 42;
@@ -162,7 +162,7 @@ public class DatabasePerformanceTests {
             mCursor = c.getContentResolver().query(People.CONTENT_URI, PEOPLE_PROJECTION, null,
                     null, People.DEFAULT_SORT_ORDER);
         }
-        
+
         public void tearDown() {
             mCursor.close();
         }
@@ -189,11 +189,11 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
      * Test 1000 inserts
      */
-    
+
     public static class Perf1Test extends PerformanceBase {
         private static final int SIZE = 1000;
 
@@ -226,7 +226,7 @@ public class DatabasePerformanceTests {
     /**
      * Test 1000 inserts into and indexed table
      */
-    
+
     public static class Perf2Test extends PerformanceBase {
         private static final int SIZE = 1000;
 
@@ -260,7 +260,7 @@ public class DatabasePerformanceTests {
     /**
      * 100 SELECTs without an index
      */
-      
+
     public static class Perf3Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"count(*)", "avg(b)"};
@@ -300,7 +300,7 @@ public class DatabasePerformanceTests {
     /**
      * 100 SELECTs on a string comparison
      */
-    
+
     public static class Perf4Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"count(*)", "avg(b)"};
@@ -338,7 +338,7 @@ public class DatabasePerformanceTests {
     /**
      * 100 SELECTs with an index
      */
-    
+
     public static class Perf5Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"count(*)", "avg(b)"};
@@ -379,7 +379,7 @@ public class DatabasePerformanceTests {
     /**
      *  INNER JOIN without an index
      */
-    
+
     public static class Perf6Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"t1.a"};
@@ -417,7 +417,7 @@ public class DatabasePerformanceTests {
     /**
      *  INNER JOIN without an index on one side
      */
-    
+
     public static class Perf7Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"t1.a"};
@@ -457,7 +457,7 @@ public class DatabasePerformanceTests {
     /**
      *  INNER JOIN without an index on one side
      */
-    
+
     public static class Perf8Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"t1.a"};
@@ -497,7 +497,7 @@ public class DatabasePerformanceTests {
     /**
      *  100 SELECTs with subqueries. Subquery is using an index
      */
-    
+
     public static class Perf9Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"t1.a"};
@@ -586,9 +586,9 @@ public class DatabasePerformanceTests {
     }
 
     /**
-     *  100 SELECTs on integer 
+     *  100 SELECTs on integer
      */
-    
+
     public static class Perf11Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"b"};
@@ -656,7 +656,7 @@ public class DatabasePerformanceTests {
     /**
      *  100 SELECTs on integer with index
      */
-    
+
     public static class Perf13Test extends PerformanceBase {
         private static final int SIZE = 100;
         private static final String[] COLUMNS = {"b"};
@@ -692,7 +692,7 @@ public class DatabasePerformanceTests {
 
     public static class Perf14Test extends PerformanceBase {
         private static final int SIZE = 100;
-        private static final String[] COLUMNS = {"c"};      
+        private static final String[] COLUMNS = {"c"};
 
         @Override
         public void setUp(Context c) {
@@ -763,11 +763,11 @@ public class DatabasePerformanceTests {
     /**
      *  1000  Deletes on an indexed table
      */
-    
+
     public static class Perf16Test extends PerformanceBase {
         private static final int SIZE = 1000;
         private static final String[] COLUMNS = {"c"};
-        
+
         @Override
         public void setUp(Context c) {
             super.setUp(c);
@@ -796,10 +796,10 @@ public class DatabasePerformanceTests {
     /**
      *  1000  Deletes
      */
-    
+
     public static class Perf17Test extends PerformanceBase {
         private static final int SIZE = 1000;
-        private static final String[] COLUMNS = {"c"};       
+        private static final String[] COLUMNS = {"c"};
 
         @Override
         public void setUp(Context c) {
@@ -826,9 +826,9 @@ public class DatabasePerformanceTests {
     }
 
     /**
-     *  1000 DELETE's without an index with where clause 
+     *  1000 DELETE's without an index with where clause
      */
-    
+
     public static class Perf18Test extends PerformanceBase {
         private static final int SIZE = 1000;
         private String[] where = new String[SIZE];
@@ -863,9 +863,9 @@ public class DatabasePerformanceTests {
     }
 
     /**
-     *  1000 DELETE's with an index with where clause 
+     *  1000 DELETE's with an index with where clause
      */
-    
+
     public static class Perf19Test extends PerformanceBase {
         private static final int SIZE = 1000;
         private String[] where = new String[SIZE];
@@ -901,9 +901,9 @@ public class DatabasePerformanceTests {
     }
 
     /**
-     *  1000 update's with an index with where clause 
+     *  1000 update's with an index with where clause
      */
-    
+
     public static class Perf20Test extends PerformanceBase {
         private static final int SIZE = 1000;
         private String[] where = new String[SIZE];
@@ -932,7 +932,7 @@ public class DatabasePerformanceTests {
                 ContentValues b = new ContentValues(1);
                 b.put("b", upper);
                 mValues[i] = b;
-               
+
             }
         }
 
@@ -945,11 +945,11 @@ public class DatabasePerformanceTests {
     }
 
     /**
-     *  1000 update's without an index with where clause 
+     *  1000 update's without an index with where clause
      */
-    
+
     public static class Perf21Test extends PerformanceBase {
-        private static final int SIZE = 1000;       
+        private static final int SIZE = 1000;
         private String[] where = new String[SIZE];
         ContentValues[] mValues = new ContentValues[SIZE];
 
@@ -960,7 +960,7 @@ public class DatabasePerformanceTests {
 
             mDatabase
               .execSQL("CREATE TABLE t1(a INTEGER, b INTEGER, c VARCHAR(100))");
-           
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 mDatabase.execSQL("INSERT INTO t1 VALUES(" + i + "," + r + ",'"
@@ -985,11 +985,11 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
-     *  10000 inserts for an integer 
+     *  10000 inserts for an integer
      */
-    
+
     public static class Perf22Test extends PerformanceBase {
         private static final int SIZE = 10000;
         ContentValues[] mValues = new ContentValues[SIZE];
@@ -1001,14 +1001,14 @@ public class DatabasePerformanceTests {
 
             mDatabase
               .execSQL("CREATE TABLE t1(a INTEGER)");
-           
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 ContentValues b = new ContentValues(1);
                 b.put("a", r);
                 mValues[i] = b;
             }
-        }        
+        }
 
         @Override
         public void run() {
@@ -1017,11 +1017,11 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
      *  10000 inserts for an integer -indexed table
      */
-    
+
     public static class Perf23Test extends PerformanceBase {
         private static final int SIZE = 10000;
         ContentValues[] mValues = new ContentValues[SIZE];
@@ -1034,14 +1034,14 @@ public class DatabasePerformanceTests {
             mDatabase
               .execSQL("CREATE TABLE t1(a INTEGER)");
             mDatabase.execSQL("CREATE INDEX i1a ON t1(a)");
-           
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 ContentValues b = new ContentValues(1);
                 b.put("a", r);
                 mValues[i] = b;
             }
-        }        
+        }
 
         @Override
         public void run() {
@@ -1050,11 +1050,11 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
-     *  10000 inserts for a String 
+     *  10000 inserts for a String
      */
-    
+
     public static class Perf24Test extends PerformanceBase {
         private static final int SIZE = 10000;
         ContentValues[] mValues = new ContentValues[SIZE];
@@ -1066,14 +1066,14 @@ public class DatabasePerformanceTests {
 
             mDatabase
               .execSQL("CREATE TABLE t1(a VARCHAR(100))");
-           
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 ContentValues b = new ContentValues(1);
                 b.put("a", numberName(r));
                 mValues[i] = b;
             }
-        }        
+        }
 
         @Override
         public void run() {
@@ -1082,13 +1082,13 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
-     *  10000 inserts for a String - indexed table 
+     *  10000 inserts for a String - indexed table
      */
-    
+
     public static class Perf25Test extends PerformanceBase {
-        private static final int SIZE = 10000;       
+        private static final int SIZE = 10000;
         ContentValues[] mValues = new ContentValues[SIZE];
 
         @Override
@@ -1099,12 +1099,12 @@ public class DatabasePerformanceTests {
             mDatabase
               .execSQL("CREATE TABLE t1(a VARCHAR(100))");
             mDatabase.execSQL("CREATE INDEX i1a ON t1(a)");
-                       
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 ContentValues b = new ContentValues(1);
                 b.put("a", numberName(r));
-                mValues[i] = b; 
+                mValues[i] = b;
             }
         }
 
@@ -1115,17 +1115,17 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
-    
+
+
     /**
      *  10000 selects for a String -starts with
      */
-    
+
     public static class Perf26Test extends PerformanceBase {
         private static final int SIZE = 10000;
         private static final String[] COLUMNS = {"t3.a"};
         private String[] where = new String[SIZE];
-        
+
         @Override
         public void setUp(Context c) {
             super.setUp(c);
@@ -1133,7 +1133,7 @@ public class DatabasePerformanceTests {
 
             mDatabase
               .execSQL("CREATE TABLE t3(a VARCHAR(100))");
-                                  
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 mDatabase.execSQL("INSERT INTO t3 VALUES('"
@@ -1145,7 +1145,7 @@ public class DatabasePerformanceTests {
                 where[i] = "a LIKE '" + numberName(r).substring(0, 1) + "*'";
 
             }
-        }        
+        }
 
         @Override
         public void run() {
@@ -1154,16 +1154,16 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
      *  10000 selects for a String - indexed table -starts with
      */
-    
+
     public static class Perf27Test extends PerformanceBase {
         private static final int SIZE = 10000;
         private static final String[] COLUMNS = {"t3.a"};
         private String[] where = new String[SIZE];
-        
+
         @Override
         public void setUp(Context c) {
             super.setUp(c);
@@ -1172,7 +1172,7 @@ public class DatabasePerformanceTests {
             mDatabase
               .execSQL("CREATE TABLE t3(a VARCHAR(100))");
             mDatabase.execSQL("CREATE INDEX i3a ON t3(a)");
-                       
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 mDatabase.execSQL("INSERT INTO t3 VALUES('"
@@ -1183,8 +1183,8 @@ public class DatabasePerformanceTests {
                 int r = random.nextInt(100000);
                 where[i] = "a LIKE '" + numberName(r).substring(0, 1) + "*'";
 
-            }                              
-           }        
+            }
+           }
 
         @Override
         public void run() {
@@ -1193,16 +1193,16 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
      *  10000 selects for an integer -
      */
-    
+
     public static class Perf28Test extends PerformanceBase {
         private static final int SIZE = 10000;
         private static final String[] COLUMNS = {"t4.a"};
         private String[] where = new String[SIZE];
-        
+
         @Override
         public void setUp(Context c) {
             super.setUp(c);
@@ -1210,7 +1210,7 @@ public class DatabasePerformanceTests {
 
             mDatabase
               .execSQL("CREATE TABLE t4(a INTEGER)");
-           
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 mDatabase.execSQL("INSERT INTO t4 VALUES(" + r + ")");
@@ -1218,7 +1218,7 @@ public class DatabasePerformanceTests {
                 int upper = (i + 10) * 100;
                 where[i] = "a >= " + lower + " AND a < " + upper;
             }
-           }        
+           }
 
         @Override
         public void run() {
@@ -1227,16 +1227,16 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
      *  10000 selects for an integer -indexed table
      */
-    
+
     public static class Perf29Test extends PerformanceBase {
         private static final int SIZE = 10000;
         private static final String[] COLUMNS = {"t4.a"};
         private String[] where = new String[SIZE];
-       
+
         @Override
         public void setUp(Context c) {
             super.setUp(c);
@@ -1245,17 +1245,17 @@ public class DatabasePerformanceTests {
             mDatabase
               .execSQL("CREATE TABLE t4(a INTEGER)");
            mDatabase.execSQL("CREATE INDEX i4a ON t4(a)");
-           
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 mDatabase.execSQL("INSERT INTO t4 VALUES(" + r + ")");
-                
+
                 int lower = i * 100;
                 int upper = (i + 10) * 100;
                 where[i] = "a >= " + lower + " AND a < " + upper;
             }
-           
-           }        
+
+           }
 
         @Override
         public void run() {
@@ -1264,17 +1264,17 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
-    
+
+
     /**
      *  10000 selects for a String - contains 'e'
      */
-    
+
     public static class Perf30Test extends PerformanceBase {
         private static final int SIZE = 10000;
         private static final String[] COLUMNS = {"t3.a"};
         private String[] where = new String[SIZE];
-        
+
         @Override
         public void setUp(Context c) {
             super.setUp(c);
@@ -1282,7 +1282,7 @@ public class DatabasePerformanceTests {
 
             mDatabase
               .execSQL("CREATE TABLE t3(a VARCHAR(100))");
-            
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 mDatabase.execSQL("INSERT INTO t3 VALUES('"
@@ -1292,8 +1292,8 @@ public class DatabasePerformanceTests {
             for (int i = 0; i < SIZE; i++) {
                  where[i] = "a LIKE '*e*'";
 
-            }                              
-           }        
+            }
+           }
 
         @Override
         public void run() {
@@ -1302,16 +1302,16 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     /**
      *  10000 selects for a String - contains 'e'-indexed table
      */
-    
+
     public static class Perf31Test extends PerformanceBase {
         private static final int SIZE = 10000;
         private static final String[] COLUMNS = {"t3.a"};
         private String[] where = new String[SIZE];
-        
+
         @Override
         public void setUp(Context c) {
             super.setUp(c);
@@ -1320,7 +1320,7 @@ public class DatabasePerformanceTests {
             mDatabase
               .execSQL("CREATE TABLE t3(a VARCHAR(100))");
             mDatabase.execSQL("CREATE INDEX i3a ON t3(a)");
-            
+
             for (int i = 0; i < SIZE; i++) {
                 int r = random.nextInt(100000);
                 mDatabase.execSQL("INSERT INTO t3 VALUES('"
@@ -1330,9 +1330,9 @@ public class DatabasePerformanceTests {
             for (int i = 0; i < SIZE; i++) {
                 where[i] = "a LIKE '*e*'";
 
-            }                              
-            
-           }        
+            }
+
+           }
 
         @Override
         public void run() {
@@ -1341,7 +1341,7 @@ public class DatabasePerformanceTests {
             }
         }
     }
-    
+
     public static final String[] ONES =
             {"zero", "one", "two", "three", "four", "five", "six", "seven",
                 "eight", "nine", "ten", "eleven", "twelve", "thirteen",

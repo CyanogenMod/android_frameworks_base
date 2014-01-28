@@ -175,7 +175,7 @@ ssize_t StringPool::add(const String16& value,
 
     NOISY(printf("Adding string %s to pool: pos=%d eidx=%d vidx=%d\n",
             String8(value).string(), pos, eidx, vidx));
-    
+
     return pos;
 }
 
@@ -376,7 +376,7 @@ status_t StringPool::writeStringBlock(const sp<AaptFile>& pool)
     // We do this now (instead of when the span is added) so that these
     // will appear at the end of the pool, not disrupting the order
     // our client placed their own strings in it.
-    
+
     const size_t STYLES = mEntryStyleArray.size();
     size_t i;
 

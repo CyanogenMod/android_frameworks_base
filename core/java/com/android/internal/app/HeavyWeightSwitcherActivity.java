@@ -52,55 +52,55 @@ public class HeavyWeightSwitcherActivity extends Activity {
     public static final String KEY_CUR_TASK = "cur_task";
     /** Package of newly requested heavy-weight app. */
     public static final String KEY_NEW_APP = "new_app";
-    
+
     IntentSender mStartIntent;
     boolean mHasResult;
     String mCurApp;
     int mCurTask;
     String mNewApp;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
-        
+
         mStartIntent = (IntentSender)getIntent().getParcelableExtra(KEY_INTENT);
         mHasResult = getIntent().getBooleanExtra(KEY_HAS_RESULT, false);
         mCurApp = getIntent().getStringExtra(KEY_CUR_APP);
         mCurTask = getIntent().getIntExtra(KEY_CUR_TASK, 0);
         mNewApp = getIntent().getStringExtra(KEY_NEW_APP);
-        
+
         setContentView(com.android.internal.R.layout.heavy_weight_switcher);
-        
+
         setIconAndText(R.id.old_app_icon, R.id.old_app_action, R.id.old_app_description,
                 mCurApp, R.string.old_app_action, R.string.old_app_description);
         setIconAndText(R.id.new_app_icon, R.id.new_app_action, R.id.new_app_description,
                 mNewApp, R.string.new_app_action, R.string.new_app_description);
-            
+
         View button = findViewById((R.id.switch_old));
         button.setOnClickListener(mSwitchOldListener);
         button = findViewById((R.id.switch_new));
         button.setOnClickListener(mSwitchNewListener);
         button = findViewById((R.id.cancel));
         button.setOnClickListener(mCancelListener);
-        
+
         TypedValue out = new TypedValue();
         getTheme().resolveAttribute(android.R.attr.alertDialogIcon, out, true);
-        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, 
+        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
                 out.resourceId);
     }
 
     void setText(int id, CharSequence text) {
         ((TextView)findViewById(id)).setText(text);
     }
-    
+
     void setDrawable(int id, Drawable dr) {
         if (dr != null) {
             ((ImageView)findViewById(id)).setImageDrawable(dr);
         }
     }
-    
+
     void setIconAndText(int iconId, int actionId, int descriptionId,
             String packageName, int actionStr, int descriptionStr) {
         CharSequence appName = "";
@@ -114,12 +114,12 @@ public class HeavyWeightSwitcherActivity extends Activity {
             } catch (PackageManager.NameNotFoundException e) {
             }
         }
-        
+
         setDrawable(iconId, appIcon);
         setText(actionId, getString(actionStr, appName));
         setText(descriptionId, getText(descriptionStr));
     }
-    
+
     private OnClickListener mSwitchOldListener = new OnClickListener() {
         public void onClick(View v) {
             try {
@@ -129,7 +129,7 @@ public class HeavyWeightSwitcherActivity extends Activity {
             finish();
         }
     };
-    
+
     private OnClickListener mSwitchNewListener = new OnClickListener() {
         public void onClick(View v) {
             try {
@@ -150,7 +150,7 @@ public class HeavyWeightSwitcherActivity extends Activity {
             finish();
         }
     };
-    
+
     private OnClickListener mCancelListener = new OnClickListener() {
         public void onClick(View v) {
             finish();

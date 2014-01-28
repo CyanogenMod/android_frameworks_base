@@ -35,7 +35,7 @@ import android.view.LayoutInflater;
 /**
  * Generic XML inflater. This has been adapted from {@link LayoutInflater} and
  * quickly passed over to use generics.
- * 
+ *
  * @hide
  * @param T The type of the items to inflate
  * @param P The type of parents (that is those items that contain other items).
@@ -62,7 +62,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
     public interface Parent<T> {
         public void addItemFromInflater(T child);
     }
-    
+
     public interface Factory<T> {
         /**
          * Hook you can supply that is called when inflating from a
@@ -72,7 +72,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
          * Note that it is good practice to prefix these custom names with your
          * package (i.e., com.coolcompany.apps) to avoid conflicts with system
          * names.
-         * 
+         *
          * @param name Tag name to be inflated.
          * @param context The context the item is being created in.
          * @param attrs Inflation attributes as specified in XML file.
@@ -83,23 +83,23 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
 
     private static class FactoryMerger<T> implements Factory<T> {
         private final Factory<T> mF1, mF2;
-        
+
         FactoryMerger(Factory<T> f1, Factory<T> f2) {
             mF1 = f1;
             mF2 = f2;
         }
-        
+
         public T onCreateItem(String name, Context context, AttributeSet attrs) {
             T v = mF1.onCreateItem(name, context, attrs);
             if (v != null) return v;
             return mF2.onCreateItem(name, context, attrs);
         }
     }
-    
+
     /**
      * Create a new inflater instance associated with a
      * particular Context.
-     * 
+     *
      * @param context The Context in which this inflater will
      *            create its items; most importantly, this supplies the theme
      *            from which the default values for their attributes are
@@ -113,7 +113,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
      * Create a new inflater instance that is a copy of an
      * existing inflater, optionally with its Context
      * changed. For use in implementing {@link #cloneInContext}.
-     * 
+     *
      * @param original The original inflater to copy.
      * @param newContext The new Context to use.
      */
@@ -121,42 +121,42 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
         mContext = newContext;
         mFactory = original.mFactory;
     }
-    
+
     /**
      * Create a copy of the existing inflater object, with the copy
      * pointing to a different Context than the original.  This is used by
      * {@link ContextThemeWrapper} to create a new inflater to go along
      * with the new Context theme.
-     * 
+     *
      * @param newContext The new Context to associate with the new inflater.
      * May be the same as the original Context if desired.
-     * 
+     *
      * @return Returns a brand spanking new inflater object associated with
      * the given Context.
      */
     public abstract GenericInflater cloneInContext(Context newContext);
-    
+
     /**
      * Sets the default package that will be searched for classes to construct
      * for tag names that have no explicit package.
-     * 
+     *
      * @param defaultPackage The default package. This will be prepended to the
      *            tag name, so it should end with a period.
      */
     public void setDefaultPackage(String defaultPackage) {
         mDefaultPackage = defaultPackage;
     }
-    
+
     /**
      * Returns the default package, or null if it is not set.
-     * 
+     *
      * @see #setDefaultPackage(String)
      * @return The default package.
      */
     public String getDefaultPackage() {
         return mDefaultPackage;
     }
-    
+
     /**
      * Return the context we are running in, for access to resources, class
      * loader, etc.
@@ -191,7 +191,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
     public void setFactory(Factory<T> factory) {
         if (mFactorySet) {
             throw new IllegalStateException("" +
-            		"A factory has already been set on this inflater");
+                    "A factory has already been set on this inflater");
         }
         if (factory == null) {
             throw new NullPointerException("Given factory can not be null");
@@ -208,7 +208,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
     /**
      * Inflate a new item hierarchy from the specified xml resource. Throws
      * InflaterException if there is an error.
-     * 
+     *
      * @param resource ID for an XML resource to load (e.g.,
      *        <code>R.layout.main_page</code>)
      * @param root Optional parent of the generated hierarchy.
@@ -228,7 +228,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
      * reasons, inflation relies heavily on pre-processing of XML files
      * that is done at build time. Therefore, it is not currently possible to
      * use inflater with an XmlPullParser over a plain XML file at runtime.
-     * 
+     *
      * @param parser XML dom node containing the description of the
      *        hierarchy.
      * @param root Optional parent of the generated hierarchy.
@@ -243,7 +243,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
     /**
      * Inflate a new hierarchy from the specified xml resource. Throws
      * InflaterException if there is an error.
-     * 
+     *
      * @param resource ID for an XML resource to load (e.g.,
      *        <code>R.layout.main_page</code>)
      * @param root Optional root to be the parent of the generated hierarchy (if
@@ -274,7 +274,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
      * reasons, inflation relies heavily on pre-processing of XML files
      * that is done at build time. Therefore, it is not currently possible to
      * use inflater with an XmlPullParser over a plain XML file at runtime.
-     * 
+     *
      * @param parser XML dom node containing the description of the
      *        hierarchy.
      * @param root Optional to be the parent of the generated hierarchy (if
@@ -318,7 +318,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
                         attrs);
 
                 result = (T) onMergeRoots(root, attachToRoot, (P) xmlRoot);
-                
+
                 if (DEBUG) {
                     System.out.println("-----> start inflating children");
                 }
@@ -351,17 +351,17 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
      * Low-level function for instantiating by name. This attempts to
      * instantiate class of the given <var>name</var> found in this
      * inflater's ClassLoader.
-     * 
+     *
      * <p>
      * There are two things that can happen in an error case: either the
      * exception describing the error will be thrown, or a null will be
      * returned. You must deal with both possibilities -- the former will happen
      * the first time createItem() is called for a class of a particular name,
      * the latter every time there-after for that class name.
-     * 
+     *
      * @param name The full name of the class to be instantiated.
      * @param attrs The XML attributes supplied for this instance.
-     * 
+     *
      * @return The newly instantied item, or null.
      */
     public final T createItem(String name, String prefix, AttributeSet attrs)
@@ -408,7 +408,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
      * given the xml element name. Override it to handle custom item objects. If
      * you override this in your subclass be sure to call through to
      * super.onCreateItem(name) for names you do not recognize.
-     * 
+     *
      * @param name The fully qualified class name of the item to be create.
      * @param attrs An AttributeSet of attributes to apply to the item.
      * @return The item created.
@@ -462,7 +462,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
         final int depth = parser.getDepth();
 
         int type;
-        while (((type = parser.next()) != parser.END_TAG || 
+        while (((type = parser.next()) != parser.END_TAG ||
                 parser.getDepth() > depth) && type != parser.END_DOCUMENT) {
 
             if (type != parser.START_TAG) {
@@ -497,12 +497,12 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
         }
 
     }
-    
+
     /**
      * Before this inflater tries to create an item from the tag, this method
      * will be called. The parser will be pointing to the start of a tag, you
      * must stop parsing and return when you reach the end of this element!
-     * 
+     *
      * @param parser XML dom node containing the description of the hierarchy.
      * @param parent The item that should be the parent of whatever you create.
      * @param attrs An AttributeSet of attributes to apply to the item.
@@ -513,7 +513,7 @@ abstract class GenericInflater<T, P extends GenericInflater.Parent> {
             final AttributeSet attrs) throws XmlPullParserException {
         return false;
     }
-    
+
     protected P onMergeRoots(P givenRoot, boolean attachToGivenRoot, P xmlRoot) {
         return xmlRoot;
     }

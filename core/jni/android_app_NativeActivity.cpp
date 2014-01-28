@@ -73,7 +73,7 @@ static void write_work(int fd, int32_t cmd, int32_t arg1=0, int32_t arg2=0) {
     work.cmd = cmd;
     work.arg1 = arg1;
     work.arg2 = arg2;
-    
+
     LOG_TRACE("write_work: cmd=%d", cmd);
 
 restart:
@@ -81,9 +81,9 @@ restart:
     if (res < 0 && errno == EINTR) {
         goto restart;
     }
-    
+
     if (res == sizeof(work)) return;
-    
+
     if (res < 0) ALOGW("Failed writing to work fd: %s", strerror(errno));
     else ALOGW("Truncated writing to work fd: %d", res);
 }
@@ -92,7 +92,7 @@ static bool read_work(int fd, ActivityWork* outWork) {
     int res = read(fd, outWork, sizeof(ActivityWork));
     // no need to worry about EINTR, poll loop will just come back again.
     if (res == sizeof(ActivityWork)) return true;
-    
+
     if (res < 0) ALOGW("Failed reading work fd: %s", strerror(errno));
     else ALOGW("Truncated reading work fd: %d", res);
     return false;
@@ -110,7 +110,7 @@ struct NativeCode : public ANativeActivity {
         nativeWindow = NULL;
         mainWorkRead = mainWorkWrite = -1;
     }
-    
+
     ~NativeCode() {
         if (callbacks.onDestroy != NULL) {
             callbacks.onDestroy(this);
@@ -131,7 +131,7 @@ struct NativeCode : public ANativeActivity {
             //dlclose(dlhandle);
         }
     }
-    
+
     void setSurface(jobject _surface) {
         if (_surface != NULL) {
             nativeWindow = android_view_Surface_getNativeWindow(env, _surface);
@@ -139,16 +139,16 @@ struct NativeCode : public ANativeActivity {
             nativeWindow = NULL;
         }
     }
-    
+
     ANativeActivityCallbacks callbacks;
-    
+
     void* dlhandle;
     ANativeActivity_createFunc* createActivityFunc;
-    
+
     String8 internalDataPathObj;
     String8 externalDataPathObj;
     String8 obbPathObj;
-    
+
     sp<ANativeWindow> nativeWindow;
     int32_t lastWindowWidth;
     int32_t lastWindowHeight;
@@ -198,7 +198,7 @@ static int mainWorkCallback(int fd, int events, void* data) {
     if ((events & POLLIN) == 0) {
         return 1;
     }
-    
+
     ActivityWork work;
     if (!read_work(code->mainWorkRead, &work)) {
         return 1;
@@ -235,7 +235,7 @@ static int mainWorkCallback(int fd, int events, void* data) {
             ALOGW("Unknown work command: %d", work.cmd);
             break;
     }
-    
+
     return 1;
 }
 
@@ -251,30 +251,30 @@ loadNativeCode_native(JNIEnv* env, jobject clazz, jstring path, jstring funcName
 
     const char* pathStr = env->GetStringUTFChars(path, NULL);
     NativeCode* code = NULL;
-    
+
     void* handle = dlopen(pathStr, RTLD_LAZY);
-    
+
     env->ReleaseStringUTFChars(path, pathStr);
-    
+
     if (handle != NULL) {
         const char* funcStr = env->GetStringUTFChars(funcName, NULL);
         code = new NativeCode(handle, (ANativeActivity_createFunc*)
                 dlsym(handle, funcStr));
         env->ReleaseStringUTFChars(funcName, funcStr);
-        
+
         if (code->createActivityFunc == NULL) {
             ALOGW("ANativeActivity_onCreate not found");
             delete code;
             return 0;
         }
-        
+
         code->messageQueue = android_os_MessageQueue_getMessageQueue(env, messageQueue);
         if (code->messageQueue == NULL) {
             ALOGW("Unable to retrieve native MessageQueue");
             delete code;
             return 0;
         }
-        
+
         int msgpipe[2];
         if (pipe(msgpipe)) {
             ALOGW("could not create pipe: %s", strerror(errno));
@@ -291,7 +291,7 @@ loadNativeCode_native(JNIEnv* env, jobject clazz, jstring path, jstring funcName
                 "non-blocking: %s", strerror(errno));
         code->messageQueue->getLooper()->addFd(
                 code->mainWorkRead, 0, ALOOPER_EVENT_INPUT, mainWorkCallback, code);
-        
+
         code->ANativeActivity::callbacks = &code->callbacks;
         if (env->GetJavaVM(&code->vm) < 0) {
             ALOGW("NativeActivity GetJavaVM failed");
@@ -305,7 +305,7 @@ loadNativeCode_native(JNIEnv* env, jobject clazz, jstring path, jstring funcName
         code->internalDataPathObj = dirStr;
         code->internalDataPath = code->internalDataPathObj.string();
         env->ReleaseStringUTFChars(internalDataDir, dirStr);
-    
+
         if (externalDataDir != NULL) {
             dirStr = env->GetStringUTFChars(externalDataDir, NULL);
             code->externalDataPathObj = dirStr;
@@ -314,7 +314,7 @@ loadNativeCode_native(JNIEnv* env, jobject clazz, jstring path, jstring funcName
         code->externalDataPath = code->externalDataPathObj.string();
 
         code->sdkVersion = sdkVersion;
-        
+
         code->assetManager = assetManagerForJavaObject(env, jAssetMgr);
 
         if (obbDir != NULL) {
@@ -337,7 +337,7 @@ loadNativeCode_native(JNIEnv* env, jobject clazz, jstring path, jstring funcName
             env->ReleaseByteArrayElements(savedState, rawSavedState, 0);
         }
     }
-    
+
     return (jint)code;
 }
 
@@ -625,7 +625,7 @@ static const char* const kNativeActivityPathName = "android/app/NativeActivity";
 #define GET_METHOD_ID(var, clazz, methodName, fieldDescriptor) \
         var = env->GetMethodID(clazz, methodName, fieldDescriptor); \
         LOG_FATAL_IF(! var, "Unable to find method" methodName);
-        
+
 int register_android_app_NativeActivity(JNIEnv* env)
 {
     //ALOGD("register_android_app_NativeActivity");

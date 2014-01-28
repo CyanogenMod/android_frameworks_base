@@ -1306,7 +1306,7 @@ public class SyncManager {
                     continue;
                 }
                 int row = table.getNumRows();
-                Pair<AuthorityInfo, SyncStatusInfo> syncAuthoritySyncStatus = 
+                Pair<AuthorityInfo, SyncStatusInfo> syncAuthoritySyncStatus =
                         mSyncStorageEngine.getCopyOfAuthorityWithSyncStatus(
                                 account.account, account.userId, syncAdapterType.type.authority);
                 SyncStorageEngine.AuthorityInfo settings = syncAuthoritySyncStatus.first;
@@ -2099,7 +2099,7 @@ public class SyncManager {
                             || lastPollTimeAbsolute > nowAbsolute // Case 2
                             || timeSinceLastRunMillis >= periodInMillis) { // Case 3
                         // Sync now
-                        
+
                         final Pair<Long, Long> backoff = mSyncStorageEngine.getBackoff(
                                 authorityInfo.account, authorityInfo.userId,
                                 authorityInfo.authority);
@@ -2124,7 +2124,7 @@ public class SyncManager {
                                                 authorityInfo.account, authorityInfo.userId,
                                                 authorityInfo.authority),
                                         syncAdapterInfo.type.allowParallelSyncs()));
-                        
+
                     }
                     // Compute when this periodic sync should next run.
                     long nextPollTimeAbsolute;

@@ -29,31 +29,31 @@ interface IBackupTransport {
      */
     String name();
 
-	/**
-	 * Ask the transport for an Intent that can be used to launch any internal
-	 * configuration Activity that it wishes to present.  For example, the transport
-	 * may offer a UI for allowing the user to supply login credentials for the
-	 * transport's off-device backend.
-	 *
-	 * If the transport does not supply any user-facing configuration UI, it should
-	 * return null from this method.
-	 *
-	 * @return An Intent that can be passed to Context.startActivity() in order to
-	 *         launch the transport's configuration UI.  This method will return null
-	 *         if the transport does not offer any user-facing configuration UI.
-	 */
-	Intent configurationIntent();
+    /**
+     * Ask the transport for an Intent that can be used to launch any internal
+     * configuration Activity that it wishes to present.  For example, the transport
+     * may offer a UI for allowing the user to supply login credentials for the
+     * transport's off-device backend.
+     *
+     * If the transport does not supply any user-facing configuration UI, it should
+     * return null from this method.
+     *
+     * @return An Intent that can be passed to Context.startActivity() in order to
+     *         launch the transport's configuration UI.  This method will return null
+     *         if the transport does not offer any user-facing configuration UI.
+     */
+    Intent configurationIntent();
 
-	/**
-	 * On demand, supply a one-line string that can be shown to the user that
-	 * describes the current backend destination.  For example, a transport that
-	 * can potentially associate backup data with arbitrary user accounts should
-	 * include the name of the currently-active account here.
-	 *
-	 * @return A string describing the destination to which the transport is currently
-	 *         sending data.  This method should not return null.
-	 */
-	String currentDestinationString();
+    /**
+     * On demand, supply a one-line string that can be shown to the user that
+     * describes the current backend destination.  For example, a transport that
+     * can potentially associate backup data with arbitrary user accounts should
+     * include the name of the currently-active account here.
+     *
+     * @return A string describing the destination to which the transport is currently
+     *         sending data.  This method should not return null.
+     */
+    String currentDestinationString();
 
     /**
      * Ask the transport where, on local device storage, to keep backup state blobs.

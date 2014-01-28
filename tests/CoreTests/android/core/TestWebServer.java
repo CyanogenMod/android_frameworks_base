@@ -233,7 +233,7 @@ class TestWebServer implements HttpConstants {
                     ss.bind(ia);
                     break;
                 } catch (IOException e) {
-                    log("IOException in AcceptThread.init()");                    
+                    log("IOException in AcceptThread.init()");
                     e.printStackTrace();
                     // wait and retry
                     try {

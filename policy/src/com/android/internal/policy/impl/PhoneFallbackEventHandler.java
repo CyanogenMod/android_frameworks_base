@@ -70,14 +70,14 @@ public class PhoneFallbackEventHandler implements FallbackEventHandler {
             return onKeyUp(keyCode, event);
         }
     }
-    
+
     boolean onKeyDown(int keyCode, KeyEvent event) {
         /* ****************************************************************************
          * HOW TO DECIDE WHERE YOUR KEY HANDLING GOES.
          * See the comment in PhoneWindow.onKeyDown
          * ****************************************************************************/
         final KeyEvent.DispatcherState dispatcher = mView.getKeyDispatcherState();
-        
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -156,7 +156,7 @@ public class PhoneFallbackEventHandler implements FallbackEventHandler {
                 if (event.getRepeatCount() == 0) {
                     dispatcher.startTracking(event, this);
                 } else if (event.isLongPress() && dispatcher.isTracking(event)) {
-                    Configuration config = mContext.getResources().getConfiguration(); 
+                    Configuration config = mContext.getResources().getConfiguration();
                     if (config.keyboard == Configuration.KEYBOARD_NOKEYS
                             || config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
                         // launch the search activity
@@ -191,7 +191,7 @@ public class PhoneFallbackEventHandler implements FallbackEventHandler {
         if (dispatcher != null) {
             dispatcher.handleUpEvent(event);
         }
-        
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -277,14 +277,14 @@ public class PhoneFallbackEventHandler implements FallbackEventHandler {
         }
         return mKeyguardManager;
     }
-    
+
     AudioManager getAudioManager() {
         if (mAudioManager == null) {
             mAudioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
         }
         return mAudioManager;
     }
-    
+
     void sendCloseSystemWindows() {
         PhoneWindowManager.sendCloseSystemWindows(mContext, null);
     }

@@ -109,7 +109,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         mProviderContext = mSearchable.getProviderContext(mContext, activityContext);
 
         mOutsideDrawablesCache = outsideDrawablesCache;
-        
+
         // mStartSpinnerRunnable = new Runnable() {
         // public void run() {
         // // mSearchView.setWorking(true); // TODO:

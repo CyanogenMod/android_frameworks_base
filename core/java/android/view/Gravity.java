@@ -25,7 +25,7 @@ public class Gravity
 {
     /** Constant indicating that no gravity has been set **/
     public static final int NO_GRAVITY = 0x0000;
-    
+
     /** Raw bit indicating the gravity for an axis has been specified. */
     public static final int AXIS_SPECIFIED = 0x0001;
 
@@ -76,7 +76,7 @@ public class Gravity
     /** Flag to clip the edges of the object to its container along the
      *  vertical axis. */
     public static final int CLIP_VERTICAL = AXIS_CLIP<<AXIS_Y_SHIFT;
-    
+
     /** Flag to clip the edges of the object to its container along the
      *  horizontal axis. */
     public static final int CLIP_HORIZONTAL = AXIS_CLIP<<AXIS_X_SHIFT;
@@ -103,14 +103,14 @@ public class Gravity
      *  yourself by calling {@link #applyDisplay}.
      */
     public static final int DISPLAY_CLIP_VERTICAL = 0x10000000;
-    
+
     /** Special constant to enable clipping to an overall display along the
      *  horizontal dimension.  This is not applied by default by
      *  {@link #apply(int, int, int, Rect, int, int, Rect)}; you must do so
      *  yourself by calling {@link #applyDisplay}.
      */
     public static final int DISPLAY_CLIP_HORIZONTAL = 0x01000000;
-    
+
     /** Push object to x-axis position at the start of its container, not changing its size. */
     public static final int START = RELATIVE_LAYOUT_DIRECTION | LEFT;
 
@@ -124,7 +124,7 @@ public class Gravity
 
     /**
      * Apply a gravity constant to an object. This suppose that the layout direction is LTR.
-     * 
+     *
      * @param gravity The desired placement of the object, as defined by the
      *                constants in this class.
      * @param w The horizontal size of the object.
@@ -164,7 +164,7 @@ public class Gravity
 
     /**
      * Apply a gravity constant to an object.
-     * 
+     *
      * @param gravity The desired placement of the object, as defined by the
      *                constants in this class.
      * @param w The horizontal size of the object.
@@ -225,7 +225,7 @@ public class Gravity
                 outRect.right = container.right + xAdj;
                 break;
         }
-        
+
         switch (gravity&((AXIS_PULL_BEFORE|AXIS_PULL_AFTER)<<AXIS_Y_SHIFT)) {
             case 0:
                 outRect.top = container.top
@@ -307,7 +307,7 @@ public class Gravity
      * to be visible in the display; the gravity flags
      * {@link #DISPLAY_CLIP_HORIZONTAL} and {@link #DISPLAY_CLIP_VERTICAL}
      * can be used to change this behavior.
-     * 
+     *
      * @param gravity Gravity constants to modify the placement within the
      * display.
      * @param display The rectangle of the display in which the object is
@@ -333,7 +333,7 @@ public class Gravity
                 }
             }
         }
-        
+
         if ((gravity&DISPLAY_CLIP_HORIZONTAL) != 0) {
             if (inoutObj.left < display.left) inoutObj.left = display.left;
             if (inoutObj.right > display.right) inoutObj.right = display.right;

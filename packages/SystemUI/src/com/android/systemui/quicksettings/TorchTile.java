@@ -18,7 +18,7 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 public class TorchTile extends QuickSettingsTile {
     private boolean mActive = false;
 
-    public TorchTile(Context context, 
+    public TorchTile(Context context,
             QuickSettingsController qsc, Handler handler) {
         super(context, qsc);
 

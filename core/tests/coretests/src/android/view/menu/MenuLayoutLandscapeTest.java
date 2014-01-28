@@ -28,11 +28,11 @@ public class MenuLayoutLandscapeTest extends ActivityInstrumentationTestCase<Men
     private static final String SHORT_TITLE = "Item";
 
     private MenuLayout mActivity;
-    
+
     public MenuLayoutLandscapeTest() {
         super("com.android.frameworks.coretests", MenuLayoutLandscape.class);
     }
-    
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -51,30 +51,30 @@ public class MenuLayoutLandscapeTest extends ActivityInstrumentationTestCase<Men
 
     /**
      * Asserts the layout of the menu.
-     * 
+     *
      * @param expectedLayout The number of parameters is the number of rows, and
      *            each parameter is how many items on that row (the first
      *            parameter is the top-most row).
      */
     private void assertLayout(Integer... expectedLayout) {
         toggleMenu();
-        
+
         /* TODO These need to be rewritten to account for presenters that an activity
          * does not have access to.
         IconMenuView iconMenuView = ((IconMenuView) mActivity.getMenuView(MenuBuilder.TYPE_ICON));
         int[] layout = iconMenuView.getLayout();
-        int layoutNumRows = iconMenuView.getLayoutNumRows(); 
-        
+        int layoutNumRows = iconMenuView.getLayoutNumRows();
+
         int expectedRows = expectedLayout.length;
         assertEquals("Row mismatch", expectedRows, layoutNumRows);
-        
+
         for (int row = 0; row < expectedRows; row++) {
             assertEquals("Col mismatch on row " + row, expectedLayout[row].intValue(),
                     layout[row]);
         }
          */
     }
-    
+
     public void test1ShortItem() {
         mActivity.setParams(new MenuScenario.Params()
                 .setNumItems(1)
@@ -113,7 +113,7 @@ public class MenuLayoutLandscapeTest extends ActivityInstrumentationTestCase<Men
                 .setItemTitle(2, SHORT_TITLE));
         assertLayout(3);
     }
-    
+
     public void test3VarietyItems() {
         mActivity.setParams(new MenuScenario.Params()
                 .setNumItems(3)
@@ -151,7 +151,7 @@ public class MenuLayoutLandscapeTest extends ActivityInstrumentationTestCase<Men
                 .setItemTitle(3, SHORT_TITLE));
         assertLayout(4);
     }
-    
+
     public void test4VarietyItems() {
         mActivity.setParams(new MenuScenario.Params()
                 .setNumItems(4)

@@ -30,12 +30,12 @@ public class InstrumentationInfo extends PackageItemInfo implements Parcelable {
      * "package" attribute.
      */
     public String targetPackage;
-    
+
     /**
      * Full path to the location of this package.
      */
     public String sourceDir;
-    
+
     /**
      * Full path to the location of the publicly available parts of this package (i.e. the resources
      * and manifest).  For non-forward-locked apps this will be the same as {@link #sourceDir).
@@ -49,7 +49,7 @@ public class InstrumentationInfo extends PackageItemInfo implements Parcelable {
 
     /**
      * Full path to the directory where the native JNI libraries are stored.
-     * 
+     *
      * {@hide}
      */
     public String nativeLibraryDir;
@@ -58,7 +58,7 @@ public class InstrumentationInfo extends PackageItemInfo implements Parcelable {
      * Specifies whether or not this instrumentation will handle profiling.
      */
     public boolean handleProfiling;
-    
+
     /** Specifies whether or not to run this instrumentation as a functional test */
     public boolean functionalTest;
 

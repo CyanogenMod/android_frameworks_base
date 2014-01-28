@@ -22,12 +22,12 @@ import java.util.ArrayList;
 
 /**
  * Constants for intents related to showing speech recognition results.
- * 
+ *
  * These constants should not be needed for normal utilization of speech recognition. They
  * would only be called if you wanted to trigger a view of voice search results in your
  * application, or implemented if you wanted to offer a different view for voice search results
  * with your application.
- * 
+ *
  * The standard behavior here for someone receiving an {@link #ACTION_VOICE_SEARCH_RESULTS} is to
  * first retrieve the list of {@link #EXTRA_VOICE_SEARCH_RESULT_STRINGS}, and use any provided
  * HTML for that result in {@link #EXTRA_VOICE_SEARCH_RESULT_HTML}, if available, to display
@@ -43,13 +43,13 @@ public class RecognizerResultsIntent {
     /**
      * Intent that can be sent by implementations of voice search to display the results of
      * a search in, for example, a web browser.
-     * 
+     *
      * This intent should always be accompanied by at least
      * {@link #EXTRA_VOICE_SEARCH_RESULT_STRINGS}, and optionally but recommended,
      * {@link #EXTRA_VOICE_SEARCH_RESULT_URLS}, and sometimes
      * {@link #EXTRA_VOICE_SEARCH_RESULT_HTML} and
      * {@link #EXTRA_VOICE_SEARCH_RESULT_HTML_BASE_URLS}.
-     * 
+     *
      * These are parallel arrays, where a recognition result string at index N of
      * {@link #EXTRA_VOICE_SEARCH_RESULT_STRINGS} should be accompanied by a url to use for
      * searching based on that string at index N of {@link #EXTRA_VOICE_SEARCH_RESULT_URLS},
@@ -59,14 +59,14 @@ public class RecognizerResultsIntent {
      */
     public static final String ACTION_VOICE_SEARCH_RESULTS =
             "android.speech.action.VOICE_SEARCH_RESULTS";
-    
+
     /**
      * The key to an extra {@link ArrayList} of {@link String}s that contains the list of
      * recognition alternates from voice search, in order from highest to lowest confidence.
      */
     public static final String EXTRA_VOICE_SEARCH_RESULT_STRINGS =
             "android.speech.extras.VOICE_SEARCH_RESULT_STRINGS";
-    
+
     /**
      * The key to an extra {@link ArrayList} of {@link String}s that contains the search urls
      * to use, if available, for the recognition alternates provided in
@@ -78,7 +78,7 @@ public class RecognizerResultsIntent {
      */
     public static final String EXTRA_VOICE_SEARCH_RESULT_URLS =
             "android.speech.extras.VOICE_SEARCH_RESULT_URLS";
-    
+
     /**
      * The key to an extra {@link ArrayList} of {@link String}s that contains the html content to
      * use, if available, for the recognition alternates provided in
@@ -88,7 +88,7 @@ public class RecognizerResultsIntent {
      * {@link #ACTION_VOICE_SEARCH_RESULTS} should back off to the corresponding url provided in
      * {@link #EXTRA_VOICE_SEARCH_RESULT_URLS}, if available, or else should execute a search of
      * its own choosing, based on the recognition result string.
-     * 
+     *
      * Currently this html content should be expected in the form of a uri with scheme
      * {@link #URI_SCHEME_INLINE} for the Browser. In the future this may change to a "content://"
      * uri or some other identifier. Anyone who reads this extra should confirm that a result is
@@ -97,11 +97,11 @@ public class RecognizerResultsIntent {
      */
     public static final String EXTRA_VOICE_SEARCH_RESULT_HTML =
             "android.speech.extras.VOICE_SEARCH_RESULT_HTML";
-    
+
     /**
      * The key to an extra {@link ArrayList} of {@link String}s that contains the base url to
      * assume when interpreting html provided in {@link #EXTRA_VOICE_SEARCH_RESULT_HTML}.
-     * 
+     *
      * A list of size 1 may be provided to apply the same base url to all html results.
      * A list of the same size as {@link #EXTRA_VOICE_SEARCH_RESULT_STRINGS} may be provided
      * to apply different base urls to each different html result in the

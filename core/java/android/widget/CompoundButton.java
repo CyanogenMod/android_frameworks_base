@@ -130,7 +130,7 @@ public abstract class CompoundButton extends Button implements Checkable {
                 mOnCheckedChangeWidgetListener.onCheckedChanged(this, mChecked);
             }
 
-            mBroadcasting = false;            
+            mBroadcasting = false;
         }
     }
 
@@ -172,7 +172,7 @@ public abstract class CompoundButton extends Button implements Checkable {
     /**
      * Set the background to a given Drawable, identified by its resource id.
      *
-     * @param resid the resource id of the drawable to use as the background 
+     * @param resid the resource id of the drawable to use as the background
      */
     public void setButtonDrawable(int resid) {
         if (resid != 0 && resid == mButtonResource) {
@@ -296,13 +296,13 @@ public abstract class CompoundButton extends Button implements Checkable {
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
-        
+
         if (mButtonDrawable != null) {
             int[] myDrawableState = getDrawableState();
-            
+
             // Set the state of the Drawable
             mButtonDrawable.setState(myDrawableState);
-            
+
             invalidate();
         }
     }
@@ -327,7 +327,7 @@ public abstract class CompoundButton extends Button implements Checkable {
         SavedState(Parcelable superState) {
             super(superState);
         }
-        
+
         /**
          * Constructor called from {@link #CREATOR}
          */
@@ -376,7 +376,7 @@ public abstract class CompoundButton extends Button implements Checkable {
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
-  
+
         super.onRestoreInstanceState(ss.getSuperState());
         setChecked(ss.checked);
         requestLayout();

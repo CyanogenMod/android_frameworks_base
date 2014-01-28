@@ -55,7 +55,7 @@ import java.util.Set;
  * extended information consisting of all groups and permissions.
  * To use this view define a LinearLayout or any ViewGroup and add this
  * view by instantiating AppSecurityPermissions and invoking getPermissionsView.
- * 
+ *
  * {@hide}
  */
 public class AppSecurityPermissions {
@@ -327,7 +327,7 @@ public class AppSecurityPermissions {
         return getPermissionItemViewOld(context, inflater, grpName,
                 description, dangerous, icon);
     }
-    
+
     private void getAllUsedPermissions(int sharedUid, Set<MyPermissionInfo> permSet) {
         String sharedPkgList[] = mPm.getPackagesForUid(sharedUid);
         if(sharedPkgList == null || (sharedPkgList.length == 0)) {
@@ -337,7 +337,7 @@ public class AppSecurityPermissions {
             getPermissionsForPackage(sharedPkg, permSet);
         }
     }
-    
+
     private void getPermissionsForPackage(String packageName, Set<MyPermissionInfo> permSet) {
         try {
             PackageInfo pkgInfo = mPm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
@@ -427,7 +427,7 @@ public class AppSecurityPermissions {
             }
         }
     }
-    
+
     public int getPermissionCount() {
         return getPermissionCount(WHICH_ALL);
     }
@@ -577,7 +577,7 @@ public class AppSecurityPermissions {
         }
         return false;
     }
-    
+
     private static class PermissionGroupInfoComparator implements Comparator<MyPermissionGroupInfo> {
         private final Collator sCollator = Collator.getInstance();
         PermissionGroupInfoComparator() {
@@ -592,7 +592,7 @@ public class AppSecurityPermissions {
             return sCollator.compare(a.mLabel, b.mLabel);
         }
     }
-    
+
     private static class PermissionInfoComparator implements Comparator<MyPermissionInfo> {
         private final Collator sCollator = Collator.getInstance();
         PermissionInfoComparator() {

@@ -221,14 +221,14 @@ public interface IActivityManager extends IInterface {
 
     public void showWaitingForDebugger(IApplicationThread who, boolean waiting)
             throws RemoteException;
-    
+
     public void getMemoryInfo(ActivityManager.MemoryInfo outInfo) throws RemoteException;
-    
+
     public void killBackgroundProcesses(final String packageName, int userId)
             throws RemoteException;
     public void killAllBackgroundProcesses() throws RemoteException;
     public void forceStopPackage(final String packageName, int userId) throws RemoteException;
-    
+
     // Note: probably don't want to allow applications access to these.
     public void goingToSleep() throws RemoteException;
     public void wakingUp() throws RemoteException;
@@ -244,7 +244,7 @@ public interface IActivityManager extends IInterface {
         throws RemoteException;
 
     public void enterSafeMode() throws RemoteException;
-    
+
     public void noteWakeupAlarm(IIntentSender sender) throws RemoteException;
 
     public boolean killPids(int[] pids, String reason, boolean secure) throws RemoteException;
@@ -282,27 +282,27 @@ public interface IActivityManager extends IInterface {
             throws RemoteException;
     // Get device configuration
     public ConfigurationInfo getDeviceConfigurationInfo() throws RemoteException;
-    
+
     // Turn on/off profiling in a particular process.
     public boolean profileControl(String process, int userId, boolean start,
             String path, ParcelFileDescriptor fd, int profileType) throws RemoteException;
-    
+
     public boolean shutdown(int timeout) throws RemoteException;
-    
+
     public void stopAppSwitches() throws RemoteException;
     public void resumeAppSwitches() throws RemoteException;
-    
+
     public void killApplicationWithAppId(String pkg, int appid, String reason)
             throws RemoteException;
-    
+
     public void closeSystemDialogs(String reason) throws RemoteException;
-    
+
     public Debug.MemoryInfo[] getProcessMemoryInfo(int[] pids)
             throws RemoteException;
-    
+
     public void overridePendingTransition(IBinder token, String packageName,
             int enterAnim, int exitAnim) throws RemoteException;
-    
+
     public boolean isUserAMonkey() throws RemoteException;
 
     public void setUserIsMonkey(boolean monkey) throws RemoteException;
@@ -316,12 +316,12 @@ public interface IActivityManager extends IInterface {
     public void setImmersive(IBinder token, boolean immersive) throws RemoteException;
     public boolean isImmersive(IBinder token) throws RemoteException;
     public boolean isTopActivityImmersive() throws RemoteException;
-    
+
     public void crashApplication(int uid, int initialPid, String packageName,
             String message) throws RemoteException;
 
     public String getProviderMimeType(Uri uri, int userId) throws RemoteException;
-    
+
     public IBinder newUriPermissionOwner(String name) throws RemoteException;
     public void grantUriPermissionFromOwner(IBinder owner, int fromUid, String targetPkg,
             Uri uri, int mode) throws RemoteException;
@@ -413,7 +413,7 @@ public interface IActivityManager extends IInterface {
      * Private non-Binder interfaces
      */
     /* package */ boolean testIsSystemReady();
-    
+
     /** Information you can retrieve about a particular application. */
     public static class ContentProviderHolder implements Parcelable {
         public final ProviderInfo info;

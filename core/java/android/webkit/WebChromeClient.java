@@ -92,7 +92,7 @@ public class WebChromeClient {
     @Deprecated
     public void onShowCustomView(View view, int requestedOrientation,
             CustomViewCallback callback) {};
-    
+
     /**
      * Notify the host application that the current page would
      * like to hide its custom view.

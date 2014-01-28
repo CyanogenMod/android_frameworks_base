@@ -42,7 +42,7 @@ public final class ServiceManager {
 
     /**
      * Returns a reference to a service with the given name.
-     * 
+     *
      * @param name the name of the service to get
      * @return a reference to the service, or <code>null</code> if the service doesn't exist
      */
@@ -63,7 +63,7 @@ public final class ServiceManager {
     /**
      * Place a new @a service called @a name into the service
      * manager.
-     * 
+     *
      * @param name the name of the new service
      * @param service the service object
      */
@@ -78,7 +78,7 @@ public final class ServiceManager {
     /**
      * Place a new @a service called @a name into the service
      * manager.
-     * 
+     *
      * @param name the name of the new service
      * @param service the service object
      * @param allowIsolated set to true to allow isolated sandboxed processes
@@ -91,7 +91,7 @@ public final class ServiceManager {
             Log.e(TAG, "error in addService", e);
         }
     }
-    
+
     /**
      * Retrieve an existing service called @a name from the
      * service manager.  Non-blocking.
@@ -126,7 +126,7 @@ public final class ServiceManager {
      * This is only intended to be called when the process is first being brought
      * up and bound by the activity manager. There is only one thread in the process
      * at that time, so no locking is done.
-     * 
+     *
      * @param cache the cache of service references
      * @hide
      */

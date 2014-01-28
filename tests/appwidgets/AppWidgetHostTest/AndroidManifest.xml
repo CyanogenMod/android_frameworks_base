@@ -31,6 +31,6 @@
                         />
         </receiver>
         <!-- END_INCLUDE(AppWidgetProvider) -->
-        
+
     </application>
 </manifest>

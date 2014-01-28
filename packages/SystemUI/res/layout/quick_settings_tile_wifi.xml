@@ -52,6 +52,6 @@
         android:layout_gravity="top|center_horizontal"
         android:gravity="top|center_horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/image" 
+        android:layout_below="@id/image"
         />
 </RelativeLayout>

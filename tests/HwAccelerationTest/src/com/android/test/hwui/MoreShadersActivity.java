@@ -73,7 +73,7 @@ public class MoreShadersActivity extends Activity {
             Matrix m2 = new Matrix();
             m2.setScale(0.1f, 0.1f);
             mScaledShader.setLocalMatrix(m2);
-            
+
             mScaled2Shader = new BitmapShader(texture, Shader.TileMode.MIRROR,
                     Shader.TileMode.MIRROR);
             Matrix m3 = new Matrix();
@@ -100,7 +100,7 @@ public class MoreShadersActivity extends Activity {
                     PorterDuff.Mode.SRC_OUT);
 
             mColorFilter = new LightingColorFilter(0x0060ffff, 0x00101030);
- 
+
             mLargePaint = new Paint();
             mLargePaint.setAntiAlias(true);
             mLargePaint.setTextSize(36.0f);
@@ -120,7 +120,7 @@ public class MoreShadersActivity extends Activity {
 
             mPaint.setShader(mComposeShader);
             canvas.drawRect(0.0f, 0.0f, mDrawWidth, mDrawHeight, mPaint);
-            
+
             canvas.translate(0.0f, 40.0f + mDrawHeight);
             mPaint.setShader(mCompose2Shader);
             canvas.drawRect(0.0f, 0.0f, mDrawWidth, mDrawHeight, mPaint);

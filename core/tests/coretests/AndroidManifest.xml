@@ -799,14 +799,14 @@
             </intent-filter>
         </activity>
 
-	    <activity android:name="android.widget.listview.ListManagedCursor" android:label="ListManagedCursor">
+        <activity android:name="android.widget.listview.ListManagedCursor" android:label="ListManagedCursor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.FRAMEWORK_INSTRUMENTATION_TEST" />
             </intent-filter>
         </activity>
 
-	    <activity android:name="android.widget.listview.ListWithEmptyView" android:label="ListWithEmptyView">
+        <activity android:name="android.widget.listview.ListWithEmptyView" android:label="ListWithEmptyView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.FRAMEWORK_INSTRUMENTATION_TEST" />

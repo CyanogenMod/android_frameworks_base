@@ -32,7 +32,7 @@ class MemoryUsage implements Serializable {
     private static final long serialVersionUID = 0;
 
     static final MemoryUsage NOT_AVAILABLE = new MemoryUsage();
-    
+
     static int errorCount = 0;
 
     // These values are in 1kB increments (not 4kB like you'd expect).
@@ -255,12 +255,12 @@ class MemoryUsage implements Serializable {
 
                 in.close();
                 err.close();
-                process.destroy();                
+                process.destroy();
 
                 return new MemoryUsage(line);
             } catch (IOException e) {
                 System.err.println("Error getting stats for "
-                        + className + ".");                
+                        + className + ".");
                 e.printStackTrace();
                 return NOT_AVAILABLE;
             }

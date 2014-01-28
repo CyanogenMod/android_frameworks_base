@@ -47,11 +47,11 @@ public class AbsoluteSizeSpan extends MetricAffectingSpan implements ParcelableS
         mSize = src.readInt();
         mDip = src.readInt() != 0;
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.ABSOLUTE_SIZE_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }

@@ -456,7 +456,7 @@ public class TimeTest extends TestCase {
         t.set(1, 2, 3, 4, 5, 6);
         // System.out.println("t=" + t);
     }
-    
+
     // Timezones that cover the world.  Some GMT offsets occur more than
     // once in case some cities decide to change their GMT offset.
     private static final String[] mTimeZones = {
@@ -519,7 +519,7 @@ public class TimeTest extends TestCase {
         "Pacific/Honolulu",
         "Pacific/Midway",
     };
-    
+
     @Suppress
     public void disableTestGetJulianDay() throws Exception {
         Time time = new Time();
@@ -538,7 +538,7 @@ public class TimeTest extends TestCase {
                 if (zoneIndex == 0) {
                     Log.i("TimeTest", time.format("%B %d, %Y"));
                 }
-                
+
                 // This is the Julian day for 12am for this day of the year
                 int julianDay = Time.getJulianDay(millis, time.gmtoff);
 
@@ -561,11 +561,11 @@ public class TimeTest extends TestCase {
             }
         }
     }
-    
+
     @Suppress
     public void disableTestSetJulianDay() throws Exception {
         Time time = new Time();
-        
+
         // For each day of the year in 2008, and for each timezone,
         // test that we can set the Julian day correctly.
         for (int monthDay = 1; monthDay <= 366; monthDay++) {
@@ -580,9 +580,9 @@ public class TimeTest extends TestCase {
                     Log.i("TimeTest", time.format("%B %d, %Y"));
                 }
                 int julianDay = Time.getJulianDay(millis, time.gmtoff);
-                
+
                 time.setJulianDay(julianDay);
-                
+
                 // Some places change daylight saving time at 12am and so there
                 // is no 12am on some days in some timezones.  In those cases,
                 // the time is set to 1am.

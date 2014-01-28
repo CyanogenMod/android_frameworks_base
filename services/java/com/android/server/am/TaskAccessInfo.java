@@ -26,9 +26,9 @@ final class TaskAccessInfo extends TaskThumbnails {
         ActivityRecord activity;
         int index;
     }
-    
+
     public ActivityRecord root;
     public int rootIndex;
-    
+
     public ArrayList<SubTask> subtasks;
 }

@@ -166,7 +166,7 @@ public class DialerFilter extends RelativeLayout
                         // Only check to see if the digit is valid if the key is a printing key
                         // in the TextKeyListener. This prevents us from hiding the digits
                         // line when keys like UP and DOWN are hit.
-                        // XXX note that KEYCODE_TAB is special-cased here for 
+                        // XXX note that KEYCODE_TAB is special-cased here for
                         // devices that share tab and 0 on a single key.
                         boolean isPrint = event.isPrintingKey();
                         if (isPrint || keyCode == KeyEvent.KEYCODE_SPACE

@@ -16,9 +16,9 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true" android:state_pressed="false"
-    	android:drawable="@drawable/menuitem_background_solid_focused" />
+        android:drawable="@drawable/menuitem_background_solid_focused" />
     <item android:state_focused="true" android:state_pressed="true"
-    	android:drawable="@drawable/menuitem_background_solid_pressed" />
+        android:drawable="@drawable/menuitem_background_solid_pressed" />
     <item android:state_focused="false" android:state_pressed="true"
-    	android:drawable="@drawable/menuitem_background_solid_pressed" />
+        android:drawable="@drawable/menuitem_background_solid_pressed" />
 </selector>

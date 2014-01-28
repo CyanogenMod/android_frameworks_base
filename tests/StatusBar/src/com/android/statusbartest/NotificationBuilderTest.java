@@ -486,7 +486,7 @@ public class NotificationBuilderTest extends Activity
         final CompoundButton b = (CompoundButton)findViewById(id);
         return b.isChecked();
     }
-    
+
     private Bitmap loadBitmap(int id) {
         final BitmapDrawable bd = (BitmapDrawable)getResources().getDrawable(id);
         return Bitmap.createBitmap(bd.getBitmap());

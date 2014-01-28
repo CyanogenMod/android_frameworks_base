@@ -477,7 +477,7 @@ public class SlidingTab extends ViewGroup {
         int heightSpecSize =  MeasureSpec.getSize(heightMeasureSpec);
 
         if (DBG) {
-            if (widthSpecMode == MeasureSpec.UNSPECIFIED 
+            if (widthSpecMode == MeasureSpec.UNSPECIFIED
                     || heightSpecMode == MeasureSpec.UNSPECIFIED) {
                 Log.e("SlidingTab", "SlidingTab cannot have UNSPECIFIED MeasureSpec"
                         +"(wspec=" + widthSpecMode + ", hspec=" + heightSpecMode + ")",

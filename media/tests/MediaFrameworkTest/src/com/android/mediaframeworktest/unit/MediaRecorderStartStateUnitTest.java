@@ -33,13 +33,13 @@ public class MediaRecorderStartStateUnitTest extends AndroidTestCase implements 
      *    {Prepared}.
      * 2. It is invalid to call start() in the following states:
      *    {Initial, Initialized, DataSourceConfigured, Recording, Error}
-     *    
+     *
      * @param stateErrors the MediaRecorderStateErrors to check against.
      */
     public void checkStateErrors(MediaRecorderStateErrors stateErrors) {
         // Valid states.
         assertTrue(!stateErrors.errorInPreparedState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInRecordingState);
         assertTrue(stateErrors.errorInInitialState);
@@ -58,7 +58,7 @@ public class MediaRecorderStartStateUnitTest extends AndroidTestCase implements 
     public void testStart() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "start()";

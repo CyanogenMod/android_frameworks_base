@@ -25,8 +25,8 @@ package android.graphics;
 public class Shader {
     /**
      * This is set by subclasses, but don't make it public.
-     * 
-     * @hide 
+     *
+     * @hide
      */
     public int native_instance;
     /**
@@ -51,7 +51,7 @@ public class Shader {
          * mirror images so that adjacent images always seam
          */
         MIRROR  (2);
-    
+
         TileMode(int nativeInt) {
             this.nativeInt = nativeInt;
         }

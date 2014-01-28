@@ -37,7 +37,7 @@ public abstract class AbsSavedState implements Parcelable {
 
     /**
      * Constructor called by derived classes when creating their SavedState objects
-     * 
+     *
      * @param superState The state of the superclass of this view
      */
     protected AbsSavedState(Parcelable superState) {
@@ -49,13 +49,13 @@ public abstract class AbsSavedState implements Parcelable {
 
     /**
      * Constructor used when reading from a parcel. Reads the state of the superclass.
-     * 
+     *
      * @param source
      */
     protected AbsSavedState(Parcel source) {
         // FIXME need class loader
         Parcelable superState = source.readParcelable(null);
-         
+
         mSuperState = superState != null ? superState : EMPTY_STATE;
     }
 
@@ -71,9 +71,9 @@ public abstract class AbsSavedState implements Parcelable {
          dest.writeParcelable(mSuperState, flags);
     }
 
-    public static final Parcelable.Creator<AbsSavedState> CREATOR 
+    public static final Parcelable.Creator<AbsSavedState> CREATOR
         = new Parcelable.Creator<AbsSavedState>() {
-        
+
         public AbsSavedState createFromParcel(Parcel in) {
             Parcelable superState = in.readParcelable(null);
             if (superState != null) {

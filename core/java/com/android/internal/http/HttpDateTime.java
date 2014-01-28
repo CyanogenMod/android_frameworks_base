@@ -49,9 +49,9 @@ public final class HttpDateTime {
      * Wdy, DD Mon YYYY HH:MM:SS
      * Wdy Mon (SP)D HH:MM:SS YYYY
      * Wdy Mon DD HH:MM:SS YYYY GMT
-     * 
+     *
      * HH can be H if the first digit is zero.
-     * 
+     *
      * Mon can be the full name of the month.
      */
     private static final String HTTP_DATE_RFC_REGEXP =
@@ -76,7 +76,7 @@ public final class HttpDateTime {
             this.minute = m;
             this.second = s;
         }
-        
+
         int hour;
         int minute;
         int second;
@@ -211,15 +211,15 @@ public final class HttpDateTime {
             hour = hour * 10 + (timeString.charAt(i++) - '0');
         // Skip ':'
         i++;
-        
+
         int minute = (timeString.charAt(i++) - '0') * 10
                     + (timeString.charAt(i++) - '0');
         // Skip ':'
         i++;
-        
+
         int second = (timeString.charAt(i++) - '0') * 10
                   + (timeString.charAt(i++) - '0');
 
-        return new TimeOfDay(hour, minute, second);        
+        return new TimeOfDay(hour, minute, second);
     }
 }

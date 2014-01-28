@@ -178,15 +178,15 @@ static jchar getMirror(JNIEnv* env, jobject obj, jchar c)
 }
 
 static JNINativeMethod gMethods[] = {
-	{ "getDirectionalities", "([C[BI)V",
+    { "getDirectionalities", "([C[BI)V",
         (void*) getDirectionalities },
-	{ "getEastAsianWidth", "(C)I",
+    { "getEastAsianWidth", "(C)I",
         (void*) getEastAsianWidth },
-	{ "getEastAsianWidths", "([CII[B)V",
+    { "getEastAsianWidths", "([CII[B)V",
         (void*) getEastAsianWidths },
-	{ "mirror", "([CII)Z",
+    { "mirror", "([CII)Z",
         (void*) mirror },
-	{ "getMirror", "(C)C",
+    { "getMirror", "(C)C",
         (void*) getMirror }
 };
 

@@ -27,13 +27,13 @@ public class AvoidXfermode extends Xfermode {
     public enum Mode {
         AVOID   (0),    //!< draw everywhere except on the opColor
         TARGET  (1);    //!< draw only on top of the opColor
-        
+
         Mode(int nativeInt) {
             this.nativeInt = nativeInt;
         }
         final int nativeInt;
     }
-    
+
     /** This xfermode draws, or doesn't draw, based on the destination's
      * distance from an op-color.
      *
@@ -43,7 +43,7 @@ public class AvoidXfermode extends Xfermode {
      * are different from the op-color.
      * Tolerance near 0: avoid any colors even remotely similar to the op-color
      * Tolerance near 255: avoid only colors nearly identical to the op-color
-     
+
      * Target: In this mode, drawing only occurs on destination pixels that
      * are similar to the op-color
      * Tolerance near 0: draw only on colors that are nearly identical to the op-color

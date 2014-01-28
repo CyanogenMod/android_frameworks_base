@@ -31,14 +31,14 @@ public class MoreNinePatchesActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         FrameLayout layout = new FrameLayout(this);
         PatchView b = new PatchView (this);
         b.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT, Gravity.CENTER));
         layout.addView(b);
         layout.setBackgroundColor(0xffffffff);
-        
+
         setContentView(layout);
     }
 
@@ -71,7 +71,7 @@ public class MoreNinePatchesActivity extends Activity {
 
             canvas.translate(20, 0);
             mDrawable3.setBounds(0, 0, 33, 120);
-            mDrawable3.draw(canvas);            
+            mDrawable3.draw(canvas);
         }
     }
 }

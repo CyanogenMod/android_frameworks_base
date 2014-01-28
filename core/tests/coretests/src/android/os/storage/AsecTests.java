@@ -679,7 +679,7 @@ public class AsecTests extends AndroidTestCase {
             this.statusCode = statusCode;
             action();
         }
-        
+
     }
 
     void invokeShutdown() throws Exception {

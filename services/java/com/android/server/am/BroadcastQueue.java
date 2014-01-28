@@ -601,7 +601,7 @@ public final class BroadcastQueue {
             }
 
             boolean looped = false;
-            
+
             do {
                 if (mOrderedBroadcasts.size() == 0) {
                     // No more broadcasts pending, so all done!

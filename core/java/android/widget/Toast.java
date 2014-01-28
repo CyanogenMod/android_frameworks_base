@@ -56,7 +56,7 @@ import android.view.accessibility.AccessibilityManager;
  * <a href="{@docRoot}guide/topics/ui/notifiers/toasts.html">Toast Notifications</a> developer
  * guide.</p>
  * </div>
- */ 
+ */
 public class Toast {
     static final String TAG = "Toast";
     static final boolean localLOGV = false;
@@ -95,7 +95,7 @@ public class Toast {
         mTN.mGravity = context.getResources().getInteger(
                 com.android.internal.R.integer.config_toastDefaultGravity);
     }
-    
+
     /**
      * Show the view for the specified duration.
      */
@@ -130,7 +130,7 @@ public class Toast {
             // Empty
         }
     }
-    
+
     /**
      * Set the view to show.
      * @see #getView
@@ -163,7 +163,7 @@ public class Toast {
     public int getDuration() {
         return mDuration;
     }
-    
+
     /**
      * Set the margins of the view.
      *
@@ -219,14 +219,14 @@ public class Toast {
     public int getXOffset() {
         return mTN.mX;
     }
-    
+
     /**
      * Return the Y offset in pixels to apply to the gravity's location.
      */
     public int getYOffset() {
         return mTN.mY;
     }
-    
+
     /**
      * Make a standard toast that just contains a text view.
      *
@@ -245,7 +245,7 @@ public class Toast {
         View v = inflate.inflate(com.android.internal.R.layout.transient_notification, null);
         TextView tv = (TextView)v.findViewById(com.android.internal.R.id.message);
         tv.setText(text);
-        
+
         result.mNextView = v;
         result.mDuration = duration;
 
@@ -275,7 +275,7 @@ public class Toast {
     public void setText(int resId) {
         setText(mContext.getText(resId));
     }
-    
+
     /**
      * Update the text in a Toast that was previously created using one of the makeText() methods.
      * @param s The new text for the Toast.
@@ -324,7 +324,7 @@ public class Toast {
         };
 
         private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
-        final Handler mHandler = new Handler();    
+        final Handler mHandler = new Handler();
 
         int mGravity;
         int mX, mY;
@@ -421,7 +421,7 @@ public class Toast {
             event.setPackageName(mView.getContext().getPackageName());
             mView.dispatchPopulateAccessibilityEvent(event);
             accessibilityManager.sendAccessibilityEvent(event);
-        }        
+        }
 
         public void handleHide() {
             if (localLOGV) Log.v(TAG, "HANDLE HIDE: " + this + " mView=" + mView);

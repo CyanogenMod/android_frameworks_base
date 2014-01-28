@@ -150,7 +150,7 @@ class ViewServer implements Runnable {
      *
      * @see #start()
      * @see #stop()
-     * @see WindowManagerService#isViewServerRunning()  
+     * @see WindowManagerService#isViewServerRunning()
      */
     boolean isRunning() {
         return mThread != null && mThread.isAlive();

@@ -44,7 +44,7 @@ final class ReceiverList extends ArrayList<BroadcastFilter>
     boolean linkedToDeath = false;
 
     String stringName;
-    
+
     ReceiverList(ActivityManagerService _owner, ProcessRecord _app,
             int _pid, int _uid, int _userId, IIntentReceiver _receiver) {
         owner = _owner;
@@ -62,12 +62,12 @@ final class ReceiverList extends ArrayList<BroadcastFilter>
     public int hashCode() {
         return System.identityHashCode(this);
     }
-    
+
     public void binderDied() {
         linkedToDeath = false;
         owner.unregisterReceiver(receiver);
     }
-    
+
     void dumpLocal(PrintWriter pw, String prefix) {
         pw.print(prefix); pw.print("app="); pw.print(app != null ? app.toShortString() : null);
             pw.print(" pid="); pw.print(pid); pw.print(" uid="); pw.print(uid);
@@ -77,7 +77,7 @@ final class ReceiverList extends ArrayList<BroadcastFilter>
                 pw.print(" linkedToDeath="); pw.println(linkedToDeath);
         }
     }
-    
+
     void dump(PrintWriter pw, String prefix) {
         Printer pr = new PrintWriterPrinter(pw);
         dumpLocal(pw, prefix);
@@ -92,7 +92,7 @@ final class ReceiverList extends ArrayList<BroadcastFilter>
             bf.dumpInReceiverList(pw, pr, p2);
         }
     }
-    
+
     public String toString() {
         if (stringName != null) {
             return stringName;

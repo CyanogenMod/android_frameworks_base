@@ -150,7 +150,7 @@ static SkiaShader* LinearGradient_postCreate1(JNIEnv* env, jobject o, SkShader* 
     jfloat* storedBounds = new jfloat[4];
     storedBounds[0] = x0; storedBounds[1] = y0;
     storedBounds[2] = x1; storedBounds[3] = y1;
-    
+
     bool missFirst = false;
     bool missLast = false;
     size_t stopCount = count;

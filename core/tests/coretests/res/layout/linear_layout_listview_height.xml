@@ -22,45 +22,45 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
     <!-- Outer linear layout providing vertical layout -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-        
+
         <!-- The control buttons -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
-            
+
             <Button
                 android:id="@+id/button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/linear_listheight_fixed"/>
-        
+
             <Button
                 android:id="@+id/button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/linear_listheight_fill"/>
-        
+
             <Button
                 android:id="@+id/button3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/linear_listheight_hide"/>
         </LinearLayout>
-        
+
         <!-- The list view -->
-        <ListView 
+        <ListView
             android:id="@+id/inner_list"
             android:layout_width="200dip"
             android:layout_height="match_parent"
             android:background="@android:drawable/spinner_dropdown_background"
             android:divider="@android:drawable/divider_horizontal_bright" />
- 
+
     </LinearLayout>
 </LinearLayout>

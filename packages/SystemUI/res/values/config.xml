@@ -72,7 +72,7 @@
     <!-- decay duration (from size_max -> size), in ms -->
     <integer name="navigation_bar_deadzone_hold">333</integer>
     <integer name="navigation_bar_deadzone_decay">333</integer>
-    
+
     <bool name="config_dead_zone_flash">false</bool>
 
     <!-- Min alpha % that recent items will fade to while being dismissed -->

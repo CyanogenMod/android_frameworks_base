@@ -47,14 +47,14 @@ public class AppCacheTest extends AndroidTestCase {
     public final long WAIT_TIME_INCR=10*1000;
     private static final long THRESHOLD=5;
     private static final long ACTUAL_THRESHOLD=10;
-    
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         if(localLOGV) Log.i(TAG, "Cleaning up cache directory first");
         cleanUpCacheDirectory();
     }
-    
+
     void cleanUpDirectory(File pDir, String dirName) {
        File testDir = new File(pDir,  dirName);
        if(!testDir.exists()) {
@@ -71,13 +71,13 @@ public class AppCacheTest extends AndroidTestCase {
         }
         testDir.delete();
     }
-    
+
     void cleanUpCacheDirectory() {
         File testDir = mContext.getCacheDir();
         if(!testDir.exists()) {
             return;
         }
-        
+
          String fList[] = testDir.list();
          if(fList == null) {
              testDir.delete();
@@ -92,7 +92,7 @@ public class AppCacheTest extends AndroidTestCase {
              }
          }
      }
-    
+
     @SmallTest
     public void testDeleteAllCacheFiles() {
         String testName="testDeleteAllCacheFiles";
@@ -158,9 +158,9 @@ public class AppCacheTest extends AndroidTestCase {
                     +(blks1-blks3));
         }
     }
-    
+
     /**
-     * This method opens an output file writes to it, opens the same file as an input 
+     * This method opens an output file writes to it, opens the same file as an input
      * stream, reads the contents and verifies the data that was written earlier can be read
      */
     public void openOutFileInAppFilesDir(File pFile, String pFileOut) {
@@ -178,7 +178,7 @@ public class AppCacheTest extends AndroidTestCase {
             failStr(e.getMessage());
         } catch (IOException e) {
             failStr(e.getMessage());
-        } 
+        }
         int count = pFileOut.getBytes().length;
         byte[] buffer = new byte[count];
         try {
@@ -192,8 +192,8 @@ public class AppCacheTest extends AndroidTestCase {
         }
         String str = new String(buffer);
         assertEquals(str, pFileOut);
-    } 
-    
+    }
+
     /*
      * This test case verifies that output written to a file
      * using Context.openFileOutput has executed successfully.
@@ -213,7 +213,7 @@ public class AppCacheTest extends AndroidTestCase {
             failStr(e);
         }
     }
-    
+
     @SmallTest
     public void testAppCacheCreateFile() {
         String fileName = "testFile1.txt";
@@ -223,7 +223,7 @@ public class AppCacheTest extends AndroidTestCase {
         openOutFileInAppFilesDir(file, fileOut);
         cleanUpCacheDirectory();
     }
-    
+
     @MediumTest
     public void testAppCreateCacheFiles() {
         File cacheDir = mContext.getCacheDir();
@@ -259,7 +259,7 @@ public class AppCacheTest extends AndroidTestCase {
             }
         }
     }
-    
+
     byte[] getBuffer() {
         String sbuffer = "a";
         for(int i = 0; i < 10; i++) {
@@ -358,7 +358,7 @@ public class AppCacheTest extends AndroidTestCase {
         }
         assertTrue("Files should have been removed", removedFlag);
     }
-    
+
     //createTestFiles(new File(super.getContext().getCacheDir(), "testtmp", "dir", 3)
     void createTestFiles1(File cacheDir, String testFilePrefix, int numTestFiles) {
         byte buffer[] = getBuffer();
@@ -437,7 +437,7 @@ public class AppCacheTest extends AndroidTestCase {
             }
         }
     }
-    
+
     class PackageDataObserver extends IPackageDataObserver.Stub {
         public boolean retValue = false;
         private boolean doneFlag = false;
@@ -453,11 +453,11 @@ public class AppCacheTest extends AndroidTestCase {
             return doneFlag;
         }
     }
-    
+
     IPackageManager getPm() {
         return  IPackageManager.Stub.asInterface(ServiceManager.getService("package"));
     }
-    
+
     boolean invokePMDeleteAppCacheFiles() throws Exception {
         try {
             String packageName = mContext.getPackageName();
@@ -483,7 +483,7 @@ public class AppCacheTest extends AndroidTestCase {
             return false;
         }
     }
-    
+
     boolean invokePMFreeApplicationCache(long idealStorageSize) throws Exception {
         try {
             String packageName = mContext.getPackageName();
@@ -510,7 +510,7 @@ public class AppCacheTest extends AndroidTestCase {
         }
     }
 
-    boolean invokePMFreeStorage(long idealStorageSize, FreeStorageReceiver r, 
+    boolean invokePMFreeStorage(long idealStorageSize, FreeStorageReceiver r,
             PendingIntent pi) throws Exception {
         try {
             // Spin lock waiting for call back
@@ -534,7 +534,7 @@ public class AppCacheTest extends AndroidTestCase {
             return false;
         }
     }
-    
+
     @LargeTest
     public void testDeleteAppCacheFiles() throws Exception {
         String testName="testDeleteAppCacheFiles";
@@ -549,7 +549,7 @@ public class AppCacheTest extends AndroidTestCase {
         public boolean retValue = false;
         public PackageStats stats;
         private boolean doneFlag = false;
-        
+
         public void onGetStatsCompleted(PackageStats pStats, boolean succeeded)
                 throws RemoteException {
             synchronized(this) {
@@ -563,7 +563,7 @@ public class AppCacheTest extends AndroidTestCase {
             return doneFlag;
         }
     }
-    
+
     public PackageStats invokePMGetPackageSizeInfo() throws Exception {
         try {
             String packageName = mContext.getPackageName();
@@ -591,7 +591,7 @@ public class AppCacheTest extends AndroidTestCase {
             return null;
         }
     }
-    
+
     @SmallTest
     public void testGetPackageSizeInfo() throws Exception {
         String testName="testGetPackageSizeInfo";
@@ -601,7 +601,7 @@ public class AppCacheTest extends AndroidTestCase {
         if(localLOGV) Log.i(TAG, "code="+stats.codeSize+", data="+stats.dataSize+
                 ", cache="+stats.cacheSize);
     }
-    
+
     @SmallTest
     public void testGetSystemSharedLibraryNames() throws Exception {
         try {
@@ -613,17 +613,17 @@ public class AppCacheTest extends AndroidTestCase {
             }
         } catch (RemoteException e) {
             fail("Failed invoking getSystemSharedLibraryNames with exception:" + e);
-        }   
+        }
     }
-    
+
     class FreeStorageReceiver extends BroadcastReceiver {
         public static final String ACTION_FREE = "com.android.unit_tests.testcallback";
         private boolean doneFlag = false;
-        
+
         public boolean isDone() {
             return doneFlag;
         }
-        
+
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equalsIgnoreCase(ACTION_FREE)) {
@@ -635,7 +635,7 @@ public class AppCacheTest extends AndroidTestCase {
             }
         }
     }
-    
+
     // TODO: flaky test, omit from LargeTest for now
     //@LargeTest
     public void testFreeStorage() throws Exception {
@@ -662,10 +662,10 @@ public class AppCacheTest extends AndroidTestCase {
         if(localLOGV || TRACKING) Log.i(TAG, "Available blocks after freeing cache"+blks3);
         assertEquals(receiver.getResultCode(), 1);
         mContext.unregisterReceiver(receiver);
-        // Verify result  
+        // Verify result
         verifyTestFiles1(cacheDir, "testtmpdir", 5);
     }
-    
+
     /* utility method used to create observer and check async call back from PackageManager.
      * ClearApplicationUserData
      */
@@ -694,7 +694,7 @@ public class AppCacheTest extends AndroidTestCase {
             return false;
         }
     }
-    
+
     void verifyUserDataCleared(File pDir) {
         if(localLOGV) Log.i(TAG, "Verifying "+pDir);
         if(pDir == null) {
@@ -715,7 +715,7 @@ public class AppCacheTest extends AndroidTestCase {
             fail(pDir+" should be empty or contain only lib subdirectory. Found "+fileList[i]);
         }
     }
-    
+
     File getDataDir() {
         try {
             ApplicationInfo appInfo = getPm().getApplicationInfo(mContext.getPackageName(), 0,
@@ -725,7 +725,7 @@ public class AppCacheTest extends AndroidTestCase {
             throw new RuntimeException("Pacakge manager dead", e);
         }
     }
-    
+
     @LargeTest
     public void testClearApplicationUserDataWithTestData() throws Exception {
         File cacheDir = mContext.getCacheDir();
@@ -738,14 +738,14 @@ public class AppCacheTest extends AndroidTestCase {
         //confirm files dont exist
         verifyUserDataCleared(getDataDir());
     }
-    
+
     @SmallTest
     public void testClearApplicationUserDataWithNoTestData() throws Exception {
         assertTrue(invokePMClearApplicationUserData());
         //confirm files dont exist
         verifyUserDataCleared(getDataDir());
     }
-    
+
     @LargeTest
     public void testClearApplicationUserDataNoObserver() throws Exception {
         getPm().clearApplicationUserData(mContext.getPackageName(), null, UserHandle.myUserId());
@@ -754,5 +754,5 @@ public class AppCacheTest extends AndroidTestCase {
         //confirm files dont exist
         verifyUserDataCleared(getDataDir());
     }
-    
+
 }

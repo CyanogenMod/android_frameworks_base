@@ -32,7 +32,7 @@ import android.widget.RemoteViews.RemoteView;
  * <p><strong>XML attributes</strong></p> <p> See {@link
  * android.R.styleable#ViewGroup ViewGroup Attributes}, {@link
  * android.R.styleable#View View Attributes}</p>
- * 
+ *
  * @deprecated Use {@link android.widget.FrameLayout}, {@link android.widget.RelativeLayout}
  *             or a custom layout instead.
  */
@@ -87,7 +87,7 @@ public class AbsoluteLayout extends ViewGroup {
         // Check against minimum height and width
         maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
         maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
-        
+
         setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
                 resolveSizeAndState(maxHeight, heightMeasureSpec, 0));
     }
@@ -130,7 +130,7 @@ public class AbsoluteLayout extends ViewGroup {
         return new AbsoluteLayout.LayoutParams(getContext(), attrs);
     }
 
-    // Override to allow type-checking of LayoutParams. 
+    // Override to allow type-checking of LayoutParams.
     @Override
     protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
         return p instanceof AbsoluteLayout.LayoutParams;

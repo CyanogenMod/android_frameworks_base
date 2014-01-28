@@ -245,7 +245,7 @@ final class ContentProviderRecord {
                 if (hasExternalProcessHandles() &&
                         externalProcessTokenToHandle.get(mToken) != null) {
                     removeExternalProcessHandleInternalLocked(mToken);
-                }                        
+                }
             }
         }
     }

@@ -25,25 +25,25 @@ import com.android.imftest.R;
 public class BottomEditTextActivityResizeTests extends ImfBaseTestCase<BottomEditTextActivityResize> {
 
     public final String TAG = "BottomEditTextActivityResizeTests";
-    
+
     public BottomEditTextActivityResizeTests() {
         super(BottomEditTextActivityResize.class);
     }
-    
+
     @LargeTest
     public void testAppAdjustmentResize() {
         // Give the IME 2 seconds to appear.
         pause(2000);
-        
+
         View rootView = ((BottomEditTextActivityResize) mTargetActivity).getRootView();
         View servedView = ((BottomEditTextActivityResize) mTargetActivity).getDefaultFocusedView();
-        
+
         assertNotNull(rootView);
         assertNotNull(servedView);
-        
+
         destructiveCheckImeInitialState(rootView, servedView);
-        
+
         verifyEditTextAdjustment(servedView, rootView.getMeasuredHeight());
     }
-    
+
 }

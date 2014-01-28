@@ -449,7 +449,7 @@ public class AccessibilityServiceInfo implements Parcelable {
                     com.android.internal.R.styleable.AccessibilityService_accessibilityFeedbackType,
                     0);
             notificationTimeout = asAttributes.getInt(
-                    com.android.internal.R.styleable.AccessibilityService_notificationTimeout, 
+                    com.android.internal.R.styleable.AccessibilityService_notificationTimeout,
                     0);
             flags = asAttributes.getInt(
                     com.android.internal.R.styleable.AccessibilityService_accessibilityFlags, 0);

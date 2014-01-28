@@ -51,7 +51,7 @@ public class RecognizerIntent {
      * {@link Activity#onActivityResult}, if you start the intent using
      * {@link Activity#startActivityForResult(Intent, int)}), or forwarded via a PendingIntent
      * if one is provided.
-     * 
+     *
      * <p>Starting this intent with just {@link Activity#startActivity(Intent)} is not supported.
      * You must either use {@link Activity#startActivityForResult(Intent, int)}, or provide a
      * PendingIntent, to receive recognition results.
@@ -63,7 +63,7 @@ public class RecognizerIntent {
      * <ul>
      *   <li>{@link #EXTRA_LANGUAGE_MODEL}
      * </ul>
-     * 
+     *
      * <p>Optional extras:
      * <ul>
      *   <li>{@link #EXTRA_PROMPT}
@@ -72,12 +72,12 @@ public class RecognizerIntent {
      *   <li>{@link #EXTRA_RESULTS_PENDINGINTENT}
      *   <li>{@link #EXTRA_RESULTS_PENDINGINTENT_BUNDLE}
      * </ul>
-     * 
+     *
      * <p> Result extras (returned in the result, not to be specified in the request):
      * <ul>
      *   <li>{@link #EXTRA_RESULTS}
      * </ul>
-     * 
+     *
      * <p>NOTE: There may not be any applications installed to handle this action, so you should
      * make sure to catch {@link ActivityNotFoundException}.
      */
@@ -90,12 +90,12 @@ public class RecognizerIntent {
      *
      * <p>If you want to avoid triggering any type of action besides web search, you can use
      * the {@link #EXTRA_WEB_SEARCH_ONLY} extra.
-     * 
+     *
      * <p>Required extras:
      * <ul>
      *   <li>{@link #EXTRA_LANGUAGE_MODEL}
      * </ul>
-     * 
+     *
      * <p>Optional extras:
      * <ul>
      *   <li>{@link #EXTRA_PROMPT}
@@ -105,13 +105,13 @@ public class RecognizerIntent {
      *   <li>{@link #EXTRA_WEB_SEARCH_ONLY}
      *   <li>{@link #EXTRA_ORIGIN}
      * </ul>
-     * 
+     *
      * <p> Result extras (returned in the result, not to be specified in the request):
      * <ul>
      *   <li>{@link #EXTRA_RESULTS}
      *   <li>{@link #EXTRA_CONFIDENCE_SCORES} (optional)
      * </ul>
-     * 
+     *
      * <p>NOTE: There may not be any applications installed to handle this action, so you should
      * make sure to catch {@link ActivityNotFoundException}.
      */
@@ -158,7 +158,7 @@ public class RecognizerIntent {
 
     /**
      * The minimum length of an utterance. We will not stop recording before this amount of time.
-     * 
+     *
      * Note that it is extremely rare you'd want to specify this value in an intent. If you don't
      * have a very good reason to change these, you should leave them as they are. Note also that
      * certain values may cause undesired or unexpected results - use judiciously! Additionally,
@@ -169,8 +169,8 @@ public class RecognizerIntent {
 
     /**
      * The amount of time that it should take after we stop hearing speech to consider the input
-     * complete. 
-     * 
+     * complete.
+     *
      * Note that it is extremely rare you'd want to specify this value in an intent. If
      * you don't have a very good reason to change these, you should leave them as they are. Note
      * also that certain values may cause undesired or unexpected results - use judiciously!
@@ -182,8 +182,8 @@ public class RecognizerIntent {
     /**
      * The amount of time that it should take after we stop hearing speech to consider the input
      * possibly complete. This is used to prevent the endpointer cutting off during very short
-     * mid-speech pauses. 
-     * 
+     * mid-speech pauses.
+     *
      * Note that it is extremely rare you'd want to specify this value in an intent. If
      * you don't have a very good reason to change these, you should leave them as they are. Note
      * also that certain values may cause undesired or unexpected results - use judiciously!
@@ -197,21 +197,21 @@ public class RecognizerIntent {
      * {@link #ACTION_RECOGNIZE_SPEECH}. The recognizer uses this
      * information to fine tune the results. This extra is required. Activities implementing
      * {@link #ACTION_RECOGNIZE_SPEECH} may interpret the values as they see fit.
-     * 
+     *
      *  @see #LANGUAGE_MODEL_FREE_FORM
      *  @see #LANGUAGE_MODEL_WEB_SEARCH
      */
     public static final String EXTRA_LANGUAGE_MODEL = "android.speech.extra.LANGUAGE_MODEL";
 
-    /** 
-     * Use a language model based on free-form speech recognition.  This is a value to use for 
-     * {@link #EXTRA_LANGUAGE_MODEL}. 
+    /**
+     * Use a language model based on free-form speech recognition.  This is a value to use for
+     * {@link #EXTRA_LANGUAGE_MODEL}.
      * @see #EXTRA_LANGUAGE_MODEL
      */
     public static final String LANGUAGE_MODEL_FREE_FORM = "free_form";
-    /** 
-     * Use a language model based on web search terms.  This is a value to use for 
-     * {@link #EXTRA_LANGUAGE_MODEL}. 
+    /**
+     * Use a language model based on web search terms.  This is a value to use for
+     * {@link #EXTRA_LANGUAGE_MODEL}.
      * @see #EXTRA_LANGUAGE_MODEL
      */
     public static final String LANGUAGE_MODEL_WEB_SEARCH = "web_search";
@@ -225,7 +225,7 @@ public class RecognizerIntent {
      * {@link java.util.Locale#getDefault()}.
      */
     public static final String EXTRA_LANGUAGE = "android.speech.extra.LANGUAGE";
-    
+
     /**
      * Optional value which can be used to indicate the referer url of a page in which
      * speech was requested. For example, a web browser may choose to provide this for
@@ -233,12 +233,12 @@ public class RecognizerIntent {
      */
     public static final String EXTRA_ORIGIN = "android.speech.extra.ORIGIN";
 
-    /** 
+    /**
      * Optional limit on the maximum number of results to return. If omitted the recognizer
      * will choose how many results to return. Must be an integer.
      */
     public static final String EXTRA_MAX_RESULTS = "android.speech.extra.MAX_RESULTS";
-    
+
     /**
      * Optional boolean, to be used with {@link #ACTION_WEB_SEARCH}, to indicate whether to
      * only fire web searches in response to a user's speech. The default is false, meaning
@@ -256,18 +256,18 @@ public class RecognizerIntent {
     /**
      * When the intent is {@link #ACTION_RECOGNIZE_SPEECH}, the speech input activity will
      * return results to you via the activity results mechanism.  Alternatively, if you use this
-     * extra to supply a PendingIntent, the results will be added to its bundle and the 
+     * extra to supply a PendingIntent, the results will be added to its bundle and the
      * PendingIntent will be sent to its target.
      */
-    public static final String EXTRA_RESULTS_PENDINGINTENT = 
+    public static final String EXTRA_RESULTS_PENDINGINTENT =
             "android.speech.extra.RESULTS_PENDINGINTENT";
-    
+
     /**
      * If you use {@link #EXTRA_RESULTS_PENDINGINTENT} to supply a forwarding intent, you can
      * also use this extra to supply additional extras for the final intent.  The search results
      * will be added to this bundle, and the combined bundle will be sent to the target.
      */
-    public static final String EXTRA_RESULTS_PENDINGINTENT_BUNDLE = 
+    public static final String EXTRA_RESULTS_PENDINGINTENT_BUNDLE =
             "android.speech.extra.RESULTS_PENDINGINTENT_BUNDLE";
 
     /** Result code returned when no matches are found for the given speech */
@@ -290,7 +290,7 @@ public class RecognizerIntent {
      * the lack of this extra indicates failure.
      */
     public static final String EXTRA_RESULTS = "android.speech.extra.RESULTS";
-    
+
     /**
      * A float array of confidence scores of the recognition results when performing
      * {@link #ACTION_RECOGNIZE_SPEECH}. The array should be the same size as the ArrayList
@@ -306,7 +306,7 @@ public class RecognizerIntent {
      * returned in an activity result.
      */
     public static final String EXTRA_CONFIDENCE_SCORES = "android.speech.extra.CONFIDENCE_SCORES";
-    
+
     /**
      * Returns the broadcast intent to fire with
      * {@link Context#sendOrderedBroadcast(Intent, String, BroadcastReceiver, android.os.Handler, int, String, Bundle)}
@@ -323,7 +323,7 @@ public class RecognizerIntent {
      * (Whether these are actually provided is up to the particular implementation. It is
      * recommended that {@link Activity}s implementing {@link #ACTION_WEB_SEARCH} provide this
      * information, but it is not required.)
-     * 
+     *
      * @param context a context object
      * @return the broadcast intent to fire or null if not available
      */
@@ -332,15 +332,15 @@ public class RecognizerIntent {
         ResolveInfo ri = context.getPackageManager().resolveActivity(
                 voiceSearchIntent, PackageManager.GET_META_DATA);
         if (ri == null || ri.activityInfo == null || ri.activityInfo.metaData == null) return null;
-        
+
         String className = ri.activityInfo.metaData.getString(DETAILS_META_DATA);
         if (className == null) return null;
-        
+
         Intent detailsIntent = new Intent(ACTION_GET_LANGUAGE_DETAILS);
         detailsIntent.setComponent(new ComponentName(ri.activityInfo.packageName, className));
         return detailsIntent;
     }
-    
+
     /**
      * Meta-data name under which an {@link Activity} implementing {@link #ACTION_WEB_SEARCH} can
      * use to expose the class name of a {@link BroadcastReceiver} which can respond to request for
@@ -359,7 +359,7 @@ public class RecognizerIntent {
      * are required to implement this. Thus retrieving this meta-data may be null.
      */
     public static final String DETAILS_META_DATA = "android.speech.DETAILS";
-    
+
     /**
      * A broadcast intent which can be fired to the {@link BroadcastReceiver} component specified
      * in the meta-data defined in the {@link #DETAILS_META_DATA} meta-data of an
@@ -377,7 +377,7 @@ public class RecognizerIntent {
      */
     public static final String ACTION_GET_LANGUAGE_DETAILS =
             "android.speech.action.GET_LANGUAGE_DETAILS";
-    
+
     /**
      * Specify this boolean extra in a broadcast of {@link #ACTION_GET_LANGUAGE_DETAILS} to
      * indicate that only the current language preference is needed in the response. This
@@ -386,7 +386,7 @@ public class RecognizerIntent {
      */
     public static final String EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE =
             "android.speech.extra.ONLY_RETURN_LANGUAGE_PREFERENCE";
-    
+
     /**
      * The key to the extra in the {@link Bundle} returned by {@link #ACTION_GET_LANGUAGE_DETAILS}
      * which is a {@link String} that represents the current language preference this user has
@@ -394,7 +394,7 @@ public class RecognizerIntent {
      */
     public static final String EXTRA_LANGUAGE_PREFERENCE =
             "android.speech.extra.LANGUAGE_PREFERENCE";
-    
+
     /**
      * The key to the extra in the {@link Bundle} returned by {@link #ACTION_GET_LANGUAGE_DETAILS}
      * which is an {@link ArrayList} of {@link String}s that represents the languages supported by

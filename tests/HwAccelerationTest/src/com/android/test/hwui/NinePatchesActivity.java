@@ -27,7 +27,7 @@ public class NinePatchesActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         FrameLayout layout = new FrameLayout(this);
         Button b = new Button(this);
         b.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -35,7 +35,7 @@ public class NinePatchesActivity extends Activity {
         b.setText("9 patches");
         layout.addView(b);
         layout.setBackgroundColor(0xffffffff);
-        
+
         setContentView(layout);
     }
 }

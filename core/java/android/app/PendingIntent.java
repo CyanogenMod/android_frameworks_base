@@ -891,7 +891,7 @@ public final class PendingIntent implements Parcelable {
         sb.append('}');
         return sb.toString();
     }
-    
+
     public int describeContents() {
         return 0;
     }

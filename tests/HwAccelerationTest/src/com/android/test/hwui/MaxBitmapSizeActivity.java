@@ -29,7 +29,7 @@ public class MaxBitmapSizeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         final LinearLayout layout = new LinearLayout(this);
 
         CanvasView view = new CanvasView(this);

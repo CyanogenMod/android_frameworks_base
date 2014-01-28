@@ -23,7 +23,7 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextUtils;
-import android.view.View; 
+import android.view.View;
 
 /**
  * This transformation method causes the characters in the {@link #getOriginal}

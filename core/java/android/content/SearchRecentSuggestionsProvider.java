@@ -27,17 +27,17 @@ import android.util.Log;
 /**
  * This superclass can be used to create a simple search suggestions provider for your application.
  * It creates suggestions (as the user types) based on recent queries and/or recent views.
- * 
+ *
  * <p>In order to use this class, you must do the following.
- * 
+ *
  * <ul>
  * <li>Implement and test query search, as described in {@link android.app.SearchManager}.  (This
- * provider will send any suggested queries via the standard 
+ * provider will send any suggested queries via the standard
  * {@link android.content.Intent#ACTION_SEARCH ACTION_SEARCH} Intent, which you'll already
  * support once you have implemented and tested basic searchability.)</li>
- * <li>Create a Content Provider within your application by extending 
+ * <li>Create a Content Provider within your application by extending
  * {@link android.content.SearchRecentSuggestionsProvider}.  The class you create will be
- * very simple - typically, it will have only a constructor.  But the constructor has a very 
+ * very simple - typically, it will have only a constructor.  But the constructor has a very
  * important responsibility:  When it calls {@link #setupSuggestions(String, int)}, it
  * <i>configures</i> the provider to match the requirements of your searchable activity.</li>
  * <li>Create a manifest entry describing your provider.  Typically this would be as simple
@@ -50,8 +50,8 @@ import android.util.Log;
  * <li>Please note that you <i>do not</i> instantiate this content provider directly from within
  * your code.  This is done automatically by the system Content Resolver, when the search dialog
  * looks for suggestions.</li>
- * <li>In order for the Content Resolver to do this, you must update your searchable activity's 
- * XML configuration file with information about your content provider.  The following additions 
+ * <li>In order for the Content Resolver to do this, you must update your searchable activity's
+ * XML configuration file with information about your content provider.  The following additions
  * are usually sufficient:
  * <pre class="prettyprint">
  *     android:searchSuggestAuthority="your.suggestion.authority"
@@ -67,13 +67,13 @@ import android.util.Log;
  * <p>For information about using search suggestions in your application, read the
  * <a href="{@docRoot}guide/topics/search/index.html">Search</a> developer guide.</p>
  * </div>
- * 
+ *
  * @see android.provider.SearchRecentSuggestions
  */
 public class SearchRecentSuggestionsProvider extends ContentProvider {
     // debugging support
     private static final String TAG = "SuggestionsProvider";
-    
+
     // client-provided configuration values
     private String mAuthority;
     private int mMode;
@@ -85,7 +85,7 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
     private static final String sSuggestions = "suggestions";
     private static final String ORDER_BY = "date DESC";
     private static final String NULL_COLUMN = "query";
-    
+
     // Table of database versions.  Don't forget to update!
     // NOTE:  These version values are shifted left 8 bits (x 256) in order to create space for
     // a small set of mode bitflags in the version int.
@@ -93,27 +93,27 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
     // 1      original implementation with queries, and 1 or 2 display columns
     // 1->2   added UNIQUE constraint to display1 column
     private static final int DATABASE_VERSION = 2 * 256;
-    
+
     /**
      * This mode bit configures the database to record recent queries.  <i>required</i>
-     * 
+     *
      * @see #setupSuggestions(String, int)
      */
     public static final int DATABASE_MODE_QUERIES = 1;
     /**
      * This mode bit configures the database to include a 2nd annotation line with each entry.
      * <i>optional</i>
-     * 
+     *
      * @see #setupSuggestions(String, int)
      */
     public static final int DATABASE_MODE_2LINES = 2;
 
     // Uri and query support
     private static final int URI_MATCH_SUGGEST = 1;
-    
+
     private Uri mSuggestionsUri;
     private UriMatcher mUriMatcher;
-    
+
     private String mSuggestSuggestionClause;
     private String[] mSuggestionProjection;
 
@@ -121,18 +121,18 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
      * Builds the database.  This version has extra support for using the version field
      * as a mode flags field, and configures the database columns depending on the mode bits
      * (features) requested by the extending class.
-     * 
+     *
      * @hide
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
-        
+
         private int mNewVersion;
-        
+
         public DatabaseHelper(Context context, int newVersion) {
             super(context, sDatabaseName, null, newVersion);
             mNewVersion = newVersion;
         }
-        
+
         @Override
         public void onCreate(SQLiteDatabase db) {
             StringBuilder builder = new StringBuilder();
@@ -156,37 +156,37 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
             onCreate(db);
         }
     }
-    
+
     /**
      * In order to use this class, you must extend it, and call this setup function from your
-     * constructor.  In your application or activities, you must provide the same values when 
+     * constructor.  In your application or activities, you must provide the same values when
      * you create the {@link android.provider.SearchRecentSuggestions} helper.
-     * 
+     *
      * @param authority This must match the authority that you've declared in your manifest.
      * @param mode You can use mode flags here to determine certain functional aspects of your
      * database.  Note, this value should not change from run to run, because when it does change,
      * your suggestions database may be wiped.
-     * 
+     *
      * @see #DATABASE_MODE_QUERIES
      * @see #DATABASE_MODE_2LINES
      */
     protected void setupSuggestions(String authority, int mode) {
-        if (TextUtils.isEmpty(authority) || 
+        if (TextUtils.isEmpty(authority) ||
                 ((mode & DATABASE_MODE_QUERIES) == 0)) {
             throw new IllegalArgumentException();
         }
         // unpack mode flags
         mTwoLineDisplay = (0 != (mode & DATABASE_MODE_2LINES));
-            
+
         // saved values
         mAuthority = new String(authority);
         mMode = mode;
-        
+
         // derived values
         mSuggestionsUri = Uri.parse("content://" + mAuthority + "/suggestions");
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mUriMatcher.addURI(mAuthority, SearchManager.SUGGEST_URI_PATH_QUERY, URI_MATCH_SUGGEST);
-        
+
         if (mTwoLineDisplay) {
             mSuggestSuggestionClause = "display1 LIKE ? OR display2 LIKE ?";
 
@@ -216,7 +216,7 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
 
 
     }
-    
+
     /**
      * This method is provided for use by the ContentResolver.  Do not override, or directly
      * call from your own code.
@@ -260,7 +260,7 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
                     return "vnd.android.cursor.item/suggestion";
                 }
             }
-        }            
+        }
         throw new IllegalArgumentException("Unknown Uri");
     }
 
@@ -306,7 +306,7 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
         }
         int mWorkingDbVersion = DATABASE_VERSION + mMode;
         mOpenHelper = new DatabaseHelper(getContext(), mWorkingDbVersion);
-        
+
         return true;
     }
 
@@ -316,10 +316,10 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
      */
     // TODO: Confirm no injection attacks here, or rewrite.
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, 
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        
+
         // special case for actual suggestions (from search manager)
         if (mUriMatcher.match(uri) == URI_MATCH_SUGGEST) {
             String suggestSelection;
@@ -376,7 +376,7 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
             whereClause.append(selection);
             whereClause.append(')');
         }
-        
+
         // And perform the generic query as requested
         Cursor c = db.query(base, useProjection, whereClause.toString(),
                 selectionArgs, null, null, sortOrder,

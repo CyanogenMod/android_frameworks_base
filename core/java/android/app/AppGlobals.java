@@ -30,7 +30,7 @@ public class AppGlobals {
     public static Application getInitialApplication() {
         return ActivityThread.currentApplication();
     }
-    
+
     /**
      * Return the package name of the first .apk loaded into the process.
      * NOTE: Only works on the main thread.

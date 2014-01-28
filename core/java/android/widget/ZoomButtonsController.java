@@ -491,7 +491,7 @@ public class ZoomButtonsController implements View.OnTouchListener {
                     setVisible(false);
                     return true;
                 }
-                
+
             } else {
                 dismissControlsDelayed(ZOOM_CONTROLS_TIMEOUT);
             }

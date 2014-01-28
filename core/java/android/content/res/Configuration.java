@@ -54,7 +54,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * resource qualifier.  0 if undefined.
      */
     public int mcc;
-    
+
     /**
      * IMSI MNC (Mobile Network Code), corresponding to
      * <a href="{@docRoot}guide/topics/resources/providing-resources.html#MccQualifier">mnc</a>
@@ -167,7 +167,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * @hide
      */
     public static final int SCREENLAYOUT_COMPAT_NEEDED = 0x10000000;
-    
+
     /**
      * Bit mask of overall layout of the screen.  Currently there are two
      * fields:
@@ -175,11 +175,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * of the screen.  They may be one of
      * {@link #SCREENLAYOUT_SIZE_SMALL}, {@link #SCREENLAYOUT_SIZE_NORMAL},
      * {@link #SCREENLAYOUT_SIZE_LARGE}, or {@link #SCREENLAYOUT_SIZE_XLARGE}.
-     * 
+     *
      * <p>The {@link #SCREENLAYOUT_LONG_MASK} defines whether the screen
      * is wider/taller than normal.  They may be one of
      * {@link #SCREENLAYOUT_LONG_NO} or {@link #SCREENLAYOUT_LONG_YES}.
-     * 
+     *
      * <p>The {@link #SCREENLAYOUT_LAYOUTDIR_MASK} defines whether the screen layout
      * is either LTR or RTL.  They may be one of
      * {@link #SCREENLAYOUT_LAYOUTDIR_LTR} or {@link #SCREENLAYOUT_LAYOUTDIR_RTL}.
@@ -287,7 +287,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * <a href="{@docRoot}guide/topics/resources/providing-resources.html#TouchscreenQualifier">finger</a>
      * resource qualifier. */
     public static final int TOUCHSCREEN_FINGER = 3;
-    
+
     /**
      * The kind of touch screen attached to the device.
      * One of: {@link #TOUCHSCREEN_NOTOUCH}, {@link #TOUCHSCREEN_FINGER}.
@@ -308,7 +308,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * <a href="{@docRoot}guide/topics/resources/providing-resources.html#ImeQualifier">12key</a>
      * resource qualifier. */
     public static final int KEYBOARD_12KEY = 3;
-    
+
     /**
      * The kind of keyboard attached to the device.
      * One of: {@link #KEYBOARD_NOKEYS}, {@link #KEYBOARD_QWERTY},
@@ -328,7 +328,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int KEYBOARDHIDDEN_YES = 2;
     /** Constant matching actual resource implementation. {@hide} */
     public static final int KEYBOARDHIDDEN_SOFT = 3;
-    
+
     /**
      * A flag indicating whether any keyboard is available.  Unlike
      * {@link #hardKeyboardHidden}, this also takes into account a soft
@@ -337,7 +337,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * {@link #KEYBOARDHIDDEN_NO}, {@link #KEYBOARDHIDDEN_YES}.
      */
     public int keyboardHidden;
-    
+
     /** Constant for {@link #hardKeyboardHidden}: a value indicating that no value has been set. */
     public static final int HARDKEYBOARDHIDDEN_UNDEFINED = 0;
     /** Constant for {@link #hardKeyboardHidden}, value corresponding to the
@@ -346,7 +346,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     /** Constant for {@link #hardKeyboardHidden}, value corresponding to the
      * physical keyboard being hidden. */
     public static final int HARDKEYBOARDHIDDEN_YES = 2;
-    
+
     /**
      * A flag indicating whether the hard keyboard has been hidden.  This will
      * be set on a device with a mechanism to hide the keyboard from the
@@ -354,7 +354,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * {@link #HARDKEYBOARDHIDDEN_NO}, {@link #HARDKEYBOARDHIDDEN_YES}.
      */
     public int hardKeyboardHidden;
-    
+
     /** Constant for {@link #navigation}: a value indicating that no value has been set. */
     public static final int NAVIGATION_UNDEFINED = 0;
     /** Constant for {@link #navigation}, value corresponding to the
@@ -373,14 +373,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * <a href="{@docRoot}guide/topics/resources/providing-resources.html#NavigationQualifier">wheel</a>
      * resource qualifier. */
     public static final int NAVIGATION_WHEEL = 4;
-    
+
     /**
      * The kind of navigation method available on the device.
      * One of: {@link #NAVIGATION_NONAV}, {@link #NAVIGATION_DPAD},
      * {@link #NAVIGATION_TRACKBALL}, {@link #NAVIGATION_WHEEL}.
      */
     public int navigation;
-    
+
     /** Constant for {@link #navigationHidden}: a value indicating that no value has been set. */
     public static final int NAVIGATIONHIDDEN_UNDEFINED = 0;
     /** Constant for {@link #navigationHidden}, value corresponding to the
@@ -391,7 +391,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * <a href="{@docRoot}guide/topics/resources/providing-resources.html#NavAvailQualifier">navhidden</a>
      * resource qualifier. */
     public static final int NAVIGATIONHIDDEN_YES = 2;
-    
+
     /**
      * A flag indicating whether any 5-way or DPAD navigation available.
      * This will be set on a device with a mechanism to hide the navigation
@@ -399,7 +399,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * {@link #NAVIGATIONHIDDEN_NO}, {@link #NAVIGATIONHIDDEN_YES}.
      */
     public int navigationHidden;
-    
+
     /** Constant for {@link #orientation}: a value indicating that no value has been set. */
     public static final int ORIENTATION_UNDEFINED = 0;
     /** Constant for {@link #orientation}, value corresponding to the
@@ -428,7 +428,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * @hide
      */
     public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
-    
+
     /**
      * Overall orientation of the screen.  May be one of
      * {@link #ORIENTATION_LANDSCAPE}, {@link #ORIENTATION_PORTRAIT}.
@@ -647,7 +647,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             customTheme = (CustomTheme) o.customTheme.clone();
         }
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder(128);
         sb.append("{");
@@ -816,7 +816,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     @Deprecated public void makeDefault() {
         setToDefaults();
     }
-    
+
     /**
      * Copy the fields from delta into this Configuration object, keeping
      * track of which ones have changed.  Any undefined fields in
@@ -1078,12 +1078,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     /**
      * Determine if a new resource needs to be loaded from the bit set of
      * configuration changes returned by {@link #updateFrom(Configuration)}.
-     * 
+     *
      * @param configChanges The mask of changes configurations as returned by
      * {@link #updateFrom(Configuration)}.
      * @param interestingChanges The configuration changes that the resource
      * can handled, as given in {@link android.util.TypedValue#changingConfigurations}.
-     * 
+     *
      * @return Return true if the resource needs to be loaded, else false.
      */
     public static boolean needNewResources(int configChanges, int interestingChanges) {
@@ -1120,7 +1120,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         }
         return diff > 0;
     }
-    
+
     /**
      * Parcelable methods
      */
@@ -1205,7 +1205,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             customTheme = new CustomTheme(themeId, themePackage);
         }
     }
-    
+
     public static final Parcelable.Creator<Configuration> CREATOR
             = new Parcelable.Creator<Configuration>() {
         public Configuration createFromParcel(Parcel source) {
@@ -1299,7 +1299,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         }
         return false;
     }
-    
+
     public int hashCode() {
         int result = 17;
         result = 31 * result + Float.floatToIntBits(fontScale);

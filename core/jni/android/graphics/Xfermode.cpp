@@ -30,13 +30,13 @@ public:
     {
         SkSafeUnref(obj);
     }
-    
+
     static SkXfermode* avoid_create(JNIEnv* env, jobject, SkColor opColor,
                                 U8CPU tolerance, SkAvoidXfermode::Mode mode)
     {
         return new SkAvoidXfermode(opColor, tolerance, mode);
     }
-    
+
     static SkXfermode* pixelxor_create(JNIEnv* env, jobject, SkColor opColor)
     {
         return new SkPixelXorXfermode(opColor);
@@ -66,7 +66,7 @@ static JNINativeMethod gPixelXorMethods[] = {
 
 int register_android_graphics_Xfermode(JNIEnv* env) {
     int result;
-    
+
     REG(env, "android/graphics/Xfermode", gXfermodeMethods);
     REG(env, "android/graphics/AvoidXfermode", gAvoidMethods);
     REG(env, "android/graphics/PixelXorXfermode", gPixelXorMethods);

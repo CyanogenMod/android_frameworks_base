@@ -128,16 +128,16 @@ public class SpannedTest extends TestCase {
 
         mExpect = 0;
 
-        s.setSpan(new Watcher(2), 0, s.length(), 
+        s.setSpan(new Watcher(2), 0, s.length(),
                   Spannable.SPAN_INCLUSIVE_INCLUSIVE |
                   (2 << Spannable.SPAN_PRIORITY_SHIFT));
-        s.setSpan(new Watcher(4), 0, s.length(), 
+        s.setSpan(new Watcher(4), 0, s.length(),
                   Spannable.SPAN_INCLUSIVE_INCLUSIVE |
                   (4 << Spannable.SPAN_PRIORITY_SHIFT));
-        s.setSpan(new Watcher(1), 0, s.length(), 
+        s.setSpan(new Watcher(1), 0, s.length(),
                   Spannable.SPAN_INCLUSIVE_INCLUSIVE |
                   (1 << Spannable.SPAN_PRIORITY_SHIFT));
-        s.setSpan(new Watcher(3), 0, s.length(), 
+        s.setSpan(new Watcher(3), 0, s.length(),
                   Spannable.SPAN_INCLUSIVE_INCLUSIVE |
                   (3 << Spannable.SPAN_PRIORITY_SHIFT));
 

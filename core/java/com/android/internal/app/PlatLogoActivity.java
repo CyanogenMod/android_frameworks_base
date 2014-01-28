@@ -58,7 +58,7 @@ public class PlatLogoActivity extends Activity {
 
         mContent = new FrameLayout(this);
         mContent.setBackgroundColor(0xC0000000);
-        
+
         final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -172,7 +172,7 @@ public class PlatLogoActivity extends Activity {
                 return true;
             }
         });
-        
+
         setContentView(mContent);
     }
 }

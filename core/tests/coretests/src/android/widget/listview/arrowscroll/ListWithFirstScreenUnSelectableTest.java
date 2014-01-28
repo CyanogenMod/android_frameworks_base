@@ -44,7 +44,7 @@ public class ListWithFirstScreenUnSelectableTest
         assertFalse(mListView.getAdapter().isEnabled(0));
         assertEquals(AdapterView.INVALID_POSITION, mListView.getSelectedItemPosition());
     }
-    
+
     public void testRessurectSelection() {
         sendKeys(KeyEvent.KEYCODE_SPACE);
         assertEquals(AdapterView.INVALID_POSITION, mListView.getSelectedItemPosition());

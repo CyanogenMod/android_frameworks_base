@@ -26,7 +26,7 @@ public class GridInVerticalTest extends ActivityInstrumentationTestCase<GridInVe
 
     private GridInVertical mActivity;
     private GridView mGridView;
-    
+
     public GridInVerticalTest() {
         super("com.android.frameworks.coretests", GridInVertical.class);
     }

@@ -106,7 +106,7 @@ public final class GpsStatus {
          * <li> {@link GpsStatus#GPS_EVENT_SATELLITE_STATUS}
          * </ul>
          *
-         * When this method is called, the client should call 
+         * When this method is called, the client should call
          * {@link LocationManager#getGpsStatus} to get additional
          * status information.
          *
@@ -146,13 +146,13 @@ public final class GpsStatus {
         for (i = 0; i < mSatellites.length; i++) {
             mSatellites[i].mValid = false;
         }
-        
+
         for (i = 0; i < svCount; i++) {
             int prn = prns[i] - 1;
             int prnShift = (1 << prn);
             if (prn >= 0 && prn < mSatellites.length) {
                 GpsSatellite satellite = mSatellites[prn];
-    
+
                 satellite.mValid = true;
                 satellite.mSnr = snrs[i];
                 satellite.mElevation = elevations[i];
@@ -175,7 +175,7 @@ public final class GpsStatus {
 
         for (int i = 0; i < mSatellites.length; i++) {
             mSatellites[i].setStatus(status.mSatellites[i]);
-        } 
+        }
     }
 
     void setTimeToFirstFix(int ttff) {
@@ -183,7 +183,7 @@ public final class GpsStatus {
     }
 
     /**
-     * Returns the time required to receive the first fix since the most recent 
+     * Returns the time required to receive the first fix since the most recent
      * restart of the GPS engine.
      *
      * @return time to first fix in milliseconds

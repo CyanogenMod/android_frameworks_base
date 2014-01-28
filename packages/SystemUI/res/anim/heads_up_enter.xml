@@ -5,7 +5,7 @@
         android:interpolator="@android:interpolator/overshoot"
         android:fromYDelta="-50%" android:toYDelta="0"
         android:duration="@android:integer/config_shortAnimTime" />
-    <alpha 
+    <alpha
         android:interpolator="@android:interpolator/decelerate_quad"
         android:fromAlpha="0.0" android:toAlpha="1.0"
         android:duration="@android:integer/config_shortAnimTime" />

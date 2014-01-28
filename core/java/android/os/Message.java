@@ -19,10 +19,10 @@ package android.os;
 import android.util.TimeUtils;
 
 /**
- * 
+ *
  * Defines a message containing a description and arbitrary data object that can be
  * sent to a {@link Handler}.  This object contains two extra int fields and an
- * extra object field that allow you to not do allocations in many cases.  
+ * extra object field that allow you to not do allocations in many cases.
  *
  * <p class="note">While the constructor of Message is public, the best way to get
  * one of these is to call {@link #obtain Message.obtain()} or one of the
@@ -31,7 +31,7 @@ import android.util.TimeUtils;
  */
 public final class Message implements Parcelable {
     /**
-     * User-defined message code so that the recipient can identify 
+     * User-defined message code so that the recipient can identify
      * what this message is about. Each {@link Handler} has its own name-space
      * for message codes, so you do not need to worry about yours conflicting
      * with other handlers.
@@ -43,7 +43,7 @@ public final class Message implements Parcelable {
      * {@link #setData(Bundle) setData()} if you only need to store a
      * few integer values.
      */
-    public int arg1; 
+    public int arg1;
 
     /**
      * arg1 and arg2 are lower-cost alternatives to using
@@ -58,7 +58,7 @@ public final class Message implements Parcelable {
      * be non-null if it contains a Parcelable of a framework class (not one
      * implemented by the application).   For other data transfer use
      * {@link #setData}.
-     * 
+     *
      * <p>Note that Parcelable objects here are not supported prior to
      * the {@link android.os.Build.VERSION_CODES#FROYO} release.
      */
@@ -83,13 +83,13 @@ public final class Message implements Parcelable {
     /*package*/ int flags;
 
     /*package*/ long when;
-    
+
     /*package*/ Bundle data;
-    
-    /*package*/ Handler target;     
-    
-    /*package*/ Runnable callback;   
-    
+
+    /*package*/ Handler target;
+
+    /*package*/ Runnable callback;
+
     // sometimes we store linked lists of these things
     /*package*/ Message next;
 
@@ -198,9 +198,9 @@ public final class Message implements Parcelable {
     }
 
     /**
-     * Same as {@link #obtain()}, but sets the values of the <em>target</em>, <em>what</em>, 
+     * Same as {@link #obtain()}, but sets the values of the <em>target</em>, <em>what</em>,
      * <em>arg1</em>, and <em>arg2</em> members.
-     * 
+     *
      * @param h  The <em>target</em> value to set.
      * @param what  The <em>what</em> value to set.
      * @param arg1  The <em>arg1</em> value to set.
@@ -218,9 +218,9 @@ public final class Message implements Parcelable {
     }
 
     /**
-     * Same as {@link #obtain()}, but sets the values of the <em>target</em>, <em>what</em>, 
+     * Same as {@link #obtain()}, but sets the values of the <em>target</em>, <em>what</em>,
      * <em>arg1</em>, <em>arg2</em>, and <em>obj</em> members.
-     * 
+     *
      * @param h  The <em>target</em> value to set.
      * @param what  The <em>what</em> value to set.
      * @param arg1  The <em>arg1</em> value to set.
@@ -228,7 +228,7 @@ public final class Message implements Parcelable {
      * @param obj  The <em>obj</em> value to set.
      * @return  A Message object from the global pool.
      */
-    public static Message obtain(Handler h, int what, 
+    public static Message obtain(Handler h, int what,
             int arg1, int arg2, Object obj) {
         Message m = obtain();
         m.target = h;
@@ -283,7 +283,7 @@ public final class Message implements Parcelable {
     public long getWhen() {
         return when;
     }
-    
+
     public void setTarget(Handler target) {
         this.target = target;
     }
@@ -311,8 +311,8 @@ public final class Message implements Parcelable {
     public Runnable getCallback() {
         return callback;
     }
-    
-    /** 
+
+    /**
      * Obtains a Bundle of arbitrary data associated with this
      * event, lazily creating it if necessary. Set this value by calling
      * {@link #setData(Bundle)}.  Note that when transferring data across
@@ -327,11 +327,11 @@ public final class Message implements Parcelable {
         if (data == null) {
             data = new Bundle();
         }
-        
+
         return data;
     }
 
-    /** 
+    /**
      * Like getData(), but does not lazily create the Bundle.  A null
      * is returned if the Bundle does not already exist.  See
      * {@link #getData} for further information on this.
@@ -343,9 +343,9 @@ public final class Message implements Parcelable {
     }
 
     /**
-     * Sets a Bundle of arbitrary data values. Use arg1 and arg1 members 
+     * Sets a Bundle of arbitrary data values. Use arg1 and arg1 members
      * as a lower cost way to send a few simple integer values, if you can.
-     * @see #getData() 
+     * @see #getData()
      * @see #peekData()
      */
     public void setData(Bundle data) {
@@ -480,12 +480,12 @@ public final class Message implements Parcelable {
             msg.readFromParcel(source);
             return msg;
         }
-        
+
         public Message[] newArray(int size) {
             return new Message[size];
         }
     };
-        
+
     public int describeContents() {
         return 0;
     }

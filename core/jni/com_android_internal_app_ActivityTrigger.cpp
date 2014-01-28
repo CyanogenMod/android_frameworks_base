@@ -39,7 +39,7 @@
 #include <cutils/properties.h>
 #include <utils/Log.h>
 
-#define LIBRARY_PATH_PREFIX	"/vendor/lib/"
+#define LIBRARY_PATH_PREFIX "/vendor/lib/"
 
 namespace android
 {

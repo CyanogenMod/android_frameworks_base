@@ -118,7 +118,7 @@ public class SharedPreferencesBackupHelper extends FileBackupHelperBase implemen
      */
     public void restoreEntity(BackupDataInputStream data) {
         Context context = mContext;
-        
+
         String key = data.getKey();
         if (DEBUG) Log.d(TAG, "got entity '" + key + "' size=" + data.size());
 

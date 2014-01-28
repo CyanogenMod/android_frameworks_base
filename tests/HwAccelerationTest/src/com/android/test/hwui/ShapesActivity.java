@@ -59,7 +59,7 @@ public class ShapesActivity extends Activity {
             mStrokePaint.setColor(0xff0000ff);
             mStrokePaint.setStrokeWidth(6.0f);
             mStrokePaint.setStyle(Paint.Style.STROKE);
-            
+
             mFillPaint = new Paint();
             mFillPaint.setAntiAlias(true);
             mFillPaint.setColor(0xff0000ff);
@@ -133,7 +133,7 @@ public class ShapesActivity extends Activity {
             canvas.translate(0.0f, 110.0f);
             canvas.drawArc(mArc, -30.0f, 70.0f, true, mFillPaint);
             canvas.restore();
-            
+
             canvas.save();
             canvas.translate(950.0f, 50.0f);
             canvas.drawArc(mArc, 30.0f, 100.0f, false, mNormalPaint);

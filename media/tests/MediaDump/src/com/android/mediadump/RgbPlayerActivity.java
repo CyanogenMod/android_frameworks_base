@@ -200,7 +200,7 @@ public class RgbPlayerActivity extends Activity {
             mHandler.sendEmptyMessage(0);
         }
 
-        @Override 
+        @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawBitmap(mBitmap, mStartX, mStartY, null);
         }

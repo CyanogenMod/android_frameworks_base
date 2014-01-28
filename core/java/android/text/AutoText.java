@@ -97,10 +97,10 @@ public class AutoText {
                 sInstance = instance;
             }
         }
-        
+
         return instance;
     }
-    
+
     /**
      * Retrieves a possible spelling correction for the specified range
      * of text.  Returns null if no correction can be found.
@@ -119,7 +119,7 @@ public class AutoText {
      */
     public static int getSize(View view) {
 
-        return getInstance(view).getSize(); 
+        return getInstance(view).getSize();
     }
 
     /**
@@ -137,7 +137,7 @@ public class AutoText {
 
             for (; here != TRIE_NULL; here = mTrie[here + TRIE_NEXT]) {
                 if (c == mTrie[here + TRIE_C]) {
-                    if ((i == end - 1) 
+                    if ((i == end - 1)
                             && (mTrie[here + TRIE_OFF] != TRIE_NULL)) {
                         int off = mTrie[here + TRIE_OFF];
                         int len = mText.charAt(off);
@@ -174,7 +174,7 @@ public class AutoText {
             while (true) {
                 XmlUtils.nextElement(parser);
 
-                String element = parser.getName(); 
+                String element = parser.getName();
                 if (element == null || !(element.equals("word"))) {
                     break;
                 }
@@ -214,7 +214,7 @@ public class AutoText {
         int herep = TRIE_ROOT;
         // Keep track of the size of the dictionary
         mSize++;
-        
+
         for (int i = 0; i < slen; i++) {
             char c = src.charAt(i);
             boolean found = false;

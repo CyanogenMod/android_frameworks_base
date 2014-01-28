@@ -135,10 +135,10 @@ public final class ViewTreeObserver {
         /**
          * <p>Callback method to be invoked when the view tree is about to be drawn. At this point,
          * views cannot be modified in any way.</p>
-         * 
+         *
          * <p>Unlike with {@link OnPreDrawListener}, this method cannot be used to cancel the
          * current drawing pass.</p>
-         * 
+         *
          * <p>An {@link OnDrawListener} listener <strong>cannot be added or removed</strong>
          * from this method.</p>
          *
@@ -175,7 +175,7 @@ public final class ViewTreeObserver {
 
     /**
      * Parameters used with OnComputeInternalInsetsListener.
-     * 
+     *
      * We are not yet ready to commit to this API and support it, so
      * @hide
      */
@@ -280,7 +280,7 @@ public final class ViewTreeObserver {
     /**
      * Interface definition for a callback to be invoked when layout has
      * completed and the client can compute its interior insets.
-     * 
+     *
      * We are not yet ready to commit to this API and support it, so
      * @hide
      */
@@ -506,7 +506,7 @@ public final class ViewTreeObserver {
      * @param victim The callback to remove
      *
      * @throws IllegalStateException If {@link #isAlive()} returns false
-     * 
+     *
      * @deprecated Use #removeOnGlobalLayoutListener instead
      *
      * @see #addOnGlobalLayoutListener(OnGlobalLayoutListener)
@@ -522,7 +522,7 @@ public final class ViewTreeObserver {
      * @param victim The callback to remove
      *
      * @throws IllegalStateException If {@link #isAlive()} returns false
-     * 
+     *
      * @see #addOnGlobalLayoutListener(OnGlobalLayoutListener)
      */
     public void removeOnGlobalLayoutListener(OnGlobalLayoutListener victim) {
@@ -680,7 +680,7 @@ public final class ViewTreeObserver {
      * @param listener The callback to add
      *
      * @throws IllegalStateException If {@link #isAlive()} returns false
-     * 
+     *
      * We are not yet ready to commit to this API and support it, so
      * @hide
      */
@@ -703,7 +703,7 @@ public final class ViewTreeObserver {
      * @throws IllegalStateException If {@link #isAlive()} returns false
      *
      * @see #addOnComputeInternalInsetsListener(OnComputeInternalInsetsListener)
-     * 
+     *
      * We are not yet ready to commit to this API and support it, so
      * @hide
      */
@@ -939,9 +939,9 @@ public final class ViewTreeObserver {
      * Copy on write array. This array is not thread safe, and only one loop can
      * iterate over this array at any given time. This class avoids allocations
      * until a concurrent modification happens.
-     * 
+     *
      * Usage:
-     * 
+     *
      * CopyOnWriteArray.Access<MyData> access = array.start();
      * try {
      *     for (int i = 0; i < access.size(); i++) {

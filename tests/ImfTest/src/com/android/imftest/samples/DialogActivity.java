@@ -39,7 +39,7 @@ public class DialogActivity extends Activity {
 
 
     @Override
-    protected void onCreate(Bundle icicle) 
+    protected void onCreate(Bundle icicle)
     {
         super.onCreate(icicle);
 
@@ -51,9 +51,9 @@ public class DialogActivity extends Activity {
 
         mButton1 = new Button(this);
         mButton1.setText("Dialog WITHOUT EditText");//(R.string.open_dialog_scrollable);
-        mButton1.setOnClickListener(new View.OnClickListener() 
+        mButton1.setOnClickListener(new View.OnClickListener()
         {
-            public void onClick(View v) 
+            public void onClick(View v)
             {
                 showDialog(DIALOG_WITHOUT_EDITTEXT);
             }
@@ -61,9 +61,9 @@ public class DialogActivity extends Activity {
 
         mButton2 = new Button(this);
         mButton2.setText("Dialog WITH EditText");//(R.string.open_dialog_nonscrollable);
-        mButton2.setOnClickListener(new View.OnClickListener() 
+        mButton2.setOnClickListener(new View.OnClickListener()
         {
-            public void onClick(View v) 
+            public void onClick(View v)
             {
                 showDialog(DIALOG_WITH_EDITTEXT);
             }
@@ -78,9 +78,9 @@ public class DialogActivity extends Activity {
     }
 
     @Override
-    protected Dialog onCreateDialog(int id) 
+    protected Dialog onCreateDialog(int id)
     {
-        switch (id) 
+        switch (id)
         {
             case DIALOG_WITHOUT_EDITTEXT:
                 return createDialog(false);
@@ -91,19 +91,19 @@ public class DialogActivity extends Activity {
         return super.onCreateDialog(id);
     }
 
-    protected Dialog createDialog(boolean bEditText) 
+    protected Dialog createDialog(boolean bEditText)
     {
-        LinearLayout layout;        
+        LinearLayout layout;
         layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        
+
         if(bEditText)
         {
             EditText editText;
             editText = new EditText(this);
             layout.addView(editText);
         }
-        
+
         Dialog d = new Dialog(this);
         d.setTitle("The DIALOG!!!");
         d.setCancelable(true);

@@ -147,7 +147,7 @@ static void
 releasePointer(JNIEnv *_env, jarray array, void *data, jboolean commit)
 {
     _env->ReleasePrimitiveArrayCritical(array, data,
-					   commit ? 0 : JNI_ABORT);
+            commit ? 0 : JNI_ABORT);
 }
 
 extern "C" {

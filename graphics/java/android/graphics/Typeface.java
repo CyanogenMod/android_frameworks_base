@@ -100,7 +100,7 @@ public class Typeface {
      * @return The best matching typeface.
      */
     public static Typeface create(Typeface family, int style) {
-        int ni = 0;        
+        int ni = 0;
         if (family != null) {
             // Return early if we're asked for the same face/style
             if (family.mStyle == style) {
@@ -138,7 +138,7 @@ public class Typeface {
     public static Typeface defaultFromStyle(int style) {
         return sDefaults[style];
     }
-    
+
     /**
      * Create a new typeface from the specified font data.
      * @param mgr The application's asset manager
@@ -152,7 +152,7 @@ public class Typeface {
     /**
      * Create a new typeface from the specified font file.
      *
-     * @param path The path to the font data. 
+     * @param path The path to the font data.
      * @return The new typeface.
      */
     public static Typeface createFromFile(File path) {
@@ -162,7 +162,7 @@ public class Typeface {
     /**
      * Create a new typeface from the specified font file.
      *
-     * @param path The full path to the font data. 
+     * @param path The full path to the font data.
      * @return The new typeface.
      */
     public static Typeface createFromFile(String path) {
@@ -178,14 +178,14 @@ public class Typeface {
         native_instance = ni;
         mStyle = nativeGetStyle(ni);
     }
-    
+
     static {
         DEFAULT         = create((String) null, 0);
         DEFAULT_BOLD    = create((String) null, Typeface.BOLD);
         SANS_SERIF      = create("sans-serif", 0);
         SERIF           = create("serif", 0);
         MONOSPACE       = create("monospace", 0);
-        
+
         sDefaults = new Typeface[] {
             DEFAULT,
             DEFAULT_BOLD,
@@ -220,7 +220,7 @@ public class Typeface {
     }
 
     private static native int  nativeCreate(String familyName, int style);
-    private static native int  nativeCreateFromTypeface(int native_instance, int style); 
+    private static native int  nativeCreateFromTypeface(int native_instance, int style);
     private static native void nativeUnref(int native_instance);
     private static native int  nativeGetStyle(int native_instance);
     private static native int  nativeCreateFromAsset(AssetManager mgr, String path);

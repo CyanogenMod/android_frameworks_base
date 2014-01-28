@@ -28,8 +28,8 @@ LOCAL_C_INCLUDES += \
     external/skia/include/core \
     libcore/include \
     libcore/include/libsuspend \
-	$(call include-path-for, libhardware)/hardware \
-	$(call include-path-for, libhardware_legacy)/hardware_legacy \
+    $(call include-path-for, libhardware)/hardware \
+    $(call include-path-for, libhardware_legacy)/hardware_legacy \
 
 LOCAL_SHARED_LIBRARIES := \
     libandroid_runtime \
@@ -59,7 +59,7 @@ ifeq ($(BOARD_HAVE_NEW_QC_GPS),true)
 endif
 
 ifeq ($(BOARD_HAVE_SAMSUNG_GPS),true)
-	LOCAL_CFLAGS += -DSAMSUNG_GPS
+    LOCAL_CFLAGS += -DSAMSUNG_GPS
 endif
 
 ifeq ($(WITH_MALLOC_LEAK_CHECK),true)

@@ -24,7 +24,7 @@ import android.test.suitebuilder.annotation.Suppress;
 public class LifecycleTest extends ActivityTestsBase {
     private Intent mTopIntent;
     private Intent mTabIntent;
-    
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -96,7 +96,7 @@ public class LifecycleTest extends ActivityTestsBase {
         mIntent = mTopIntent;
         runLaunchpad(LaunchpadActivity.LIFECYCLE_FINISH_START);
     }
-    
+
     //Suppressing until 1285425 is fixed.
     @Suppress
     public void testTabFinishStart() throws Exception {

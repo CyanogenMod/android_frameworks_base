@@ -38,7 +38,7 @@ import android.util.Log;
  */
 public abstract class Filter {
     private static final String LOG_TAG = "Filter";
-    
+
     private static final String THREAD_NAME = "Filter";
     private static final int FILTER_TOKEN = 0xD0D0F00D;
     private static final int FINISH_TOKEN = 0xDEADBEEF;
@@ -108,16 +108,16 @@ public abstract class Filter {
             }
 
             final long delay = (mDelayer == null) ? 0 : mDelayer.getPostingDelay(constraint);
-            
+
             Message message = mThreadHandler.obtainMessage(FILTER_TOKEN);
-    
+
             RequestArguments args = new RequestArguments();
             // make sure we use an immutable copy of the constraint, so that
             // it doesn't change while the filter operation is in progress
             args.constraint = constraint != null ? constraint.toString() : null;
             args.listener = listener;
             message.obj = args;
-    
+
             mThreadHandler.removeMessages(FILTER_TOKEN);
             mThreadHandler.removeMessages(FINISH_TOKEN);
             mThreadHandler.sendMessageDelayed(message, delay);
@@ -216,7 +216,7 @@ public abstract class Filter {
         public RequestHandler(Looper looper) {
             super(looper);
         }
-        
+
         /**
          * <p>Handles filtering requests by calling
          * {@link Filter#performFiltering} and then sending a message
@@ -271,7 +271,7 @@ public abstract class Filter {
          * {@link Filter#publishResults(CharSequence,
          * android.widget.Filter.FilterResults)}
          * to post the results back in the UI and then notifying the listener,
-         * if any.</p> 
+         * if any.</p>
          *
          * @param msg the filtering results
          */

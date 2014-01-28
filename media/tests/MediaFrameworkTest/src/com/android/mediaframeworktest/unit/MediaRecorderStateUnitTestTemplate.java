@@ -23,17 +23,17 @@ import android.test.AndroidTestCase;
 /**
  * A template class for running a method under test in all possible
  * states of a MediaRecorder object.
- * 
+ *
  * @see com.android.mediaframeworktest.unit.MediaRecorderStopStateUnitTest
  * for an example of using this class.
- * 
- * A typical concrete unit test class would implement the 
+ *
+ * A typical concrete unit test class would implement the
  * MediaRecorderMethodUnderTest interface and have a reference to an object of
  * this class. Then it calls runTestOnMethod() to actually perform the unit
  * tests. It is recommended that the toString() method of the concrete unit test
- * class be overridden to use the actual method name under test for logging 
+ * class be overridden to use the actual method name under test for logging
  * purpose.
- * 
+ *
  */
 class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
     public static final String RECORD_OUTPUT_PATH = "/sdcard/recording.3gp";
@@ -45,11 +45,11 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
     private MediaRecorder mMediaRecorder = new MediaRecorder();
     private MediaRecorderStateErrors.MediaRecorderState mMediaRecorderState = null;
     private MediaRecorderMethodUnderTest mMethodUnderTest = null;
-    
+
     /**
      * Runs the given method under test in all possible states of a MediaRecorder
      * object.
-     * 
+     *
      * @param testMethod the method under test.
      */
     public void runTestOnMethod(MediaRecorderMethodUnderTest testMethod) {
@@ -60,10 +60,10 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
             cleanUp();
         }
     }
-    
+
     /*
      * Calls method under test in the given state of the MediaRecorder object.
-     * 
+     *
      * @param state the MediaRecorder state in which the method under test is called.
      */
     private void callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState state) {
@@ -80,7 +80,7 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
     /*
      * The following setMediaRecorderToXXXStateXXX methods sets the MediaRecorder
      * object to the corresponding state, given the assumption that reset()
-     * always resets the MediaRecorder object to Initial (after reset) state. 
+     * always resets the MediaRecorder object to Initial (after reset) state.
      */
     private void setMediaRecorderToInitialStateAfterReset() {
         try {
@@ -94,7 +94,7 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
     // In the past, stop() == reset().
     // However, this is no longer true. The plan is to have a STOPPED state.
     // and from STOPPED state, start can be called without the need to
-    // do the recording configuration again. 
+    // do the recording configuration again.
     private void setMediaRecorderToInitialStateAfterStop() {
         try {
             mMediaRecorder.reset();
@@ -111,7 +111,7 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
             fail("setMediaRecorderToInitialStateAfterReset: Exception " + e.getClass().getName() + " was thrown.");
         }
     }
-    
+
     private void setMediaRecorderToInitializedState() {
         try {
             mMediaRecorder.reset();
@@ -122,7 +122,7 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
             fail("setMediaRecorderToInitializedState: Exception " + e.getClass().getName() + " was thrown.");
         }
     }
-    
+
     private void setMediaRecorderToPreparedState() {
         try {
             mMediaRecorder.reset();
@@ -135,7 +135,7 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
             fail("setMediaRecorderToPreparedState: Exception " + e.getClass().getName() + " was thrown.");
         }
     }
-    
+
     private void setMediaRecorderToRecordingState() {
         try {
             mMediaRecorder.reset();
@@ -149,13 +149,13 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
             fail("setMediaRecorderToRecordingState: Exception " + e.getClass().getName() + " was thrown.");
         }
     }
-    
+
     private void setMediaRecorderToDataSourceConfiguredState() {
         try {
             mMediaRecorder.reset();
             mMediaRecorder.setAudioSource(AUDIO_SOURCE);
             mMediaRecorder.setOutputFormat(OUTPUT_FORMAT);
-            
+
             /* Skip setAudioEncoder() and setOutputFile() calls if
              * the method under test is setAudioEncoder() since this
              * method can only be called once even in the DATASOURCECONFIGURED state
@@ -163,7 +163,7 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
             if (mMethodUnderTest.toString() != "setAudioEncoder()") {
                 mMediaRecorder.setAudioEncoder(AUDIO_ENCODER);
             }
-            
+
             if (mMethodUnderTest.toString() != "setOutputFile()") {
                 mMediaRecorder.setOutputFile(RECORD_OUTPUT_PATH);
             }
@@ -171,7 +171,7 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
             fail("setMediaRecorderToDataSourceConfiguredState: Exception " + e.getClass().getName() + " was thrown.");
         }
     }
-    
+
     /*
      * There are a lot of ways to force the MediaRecorder object to enter
      * the Error state. We arbitrary choose one here.
@@ -179,25 +179,25 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
     private void setMediaRecorderToErrorState() {
         try {
             mMediaRecorder.reset();
-            
+
             /* Skip setAudioSource() if the method under test is setAudioEncoder()
              * Because, otherwise, it is valid to call setAudioEncoder() after
-             * start() since start() will fail, and then the mMediaRecorder 
+             * start() since start() will fail, and then the mMediaRecorder
              * won't be set to the Error state
-             */ 
+             */
             if (mMethodUnderTest.toString() != "setAudioEncoder()") {
                 mMediaRecorder.setAudioSource(AUDIO_SOURCE);
             }
-            
+
             /* Skip setOutputFormat if the method under test is setOutputFile()
              *  Because, otherwise, it is valid to call setOutputFile() after
-             * start() since start() will fail, and then the mMediaRecorder 
+             * start() since start() will fail, and then the mMediaRecorder
              * won't be set to the Error state
-             */ 
+             */
             if (mMethodUnderTest.toString() != "setOutputFile()") {
                 mMediaRecorder.setOutputFormat(OUTPUT_FORMAT);
             }
-            
+
             mMediaRecorder.start();
         } catch(Exception e) {
             if (!(e instanceof IllegalStateException)) {
@@ -206,10 +206,10 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
         }
         Log.v(TAG, "setMediaRecorderToErrorState: done.");
     }
-    
+
     /*
      * Sets the state of the MediaRecorder object to the specified one.
-     * 
+     *
      * @param state the state of the MediaRecorder object.
      */
     private void setMediaRecorderToState(MediaRecorderStateErrors.MediaRecorderState state) {
@@ -241,10 +241,10 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
                 break;
         }
     }
-    
+
     /*
      * Sets the error value of the corresponding state to the given error.
-     * 
+     *
      * @param state the state of the MediaRecorder object.
      * @param error the value of the state error to be set.
      */
@@ -280,11 +280,11 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
     private void checkInitialState() {
         callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState.INITIAL);
     }
-    
+
     private void checkInitialStateAfterReset() {
         callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState.INITIAL_AFTER_RESET);
     }
-    
+
     private void checkInitialStateAfterStop() {
         callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState.INITIAL_AFTER_STOP);
     }
@@ -292,19 +292,19 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
     private void checkInitializedState() {
         callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState.INITIALIZED);
     }
-    
+
     private void checkPreparedState() {
         callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState.PREPARED);
     }
-    
+
     private void checkRecordingState() {
         callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState.RECORDING);
     }
-    
+
     private void checkDataSourceConfiguredState() {
         callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState.DATASOURCECONFIGURED);
     }
-    
+
     private void checkErrorState() {
         callMediaRecorderMethodUnderTestInState(MediaRecorderStateErrors.MediaRecorderState.ERROR);
     }
@@ -314,9 +314,9 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
      */
     private void checkMethodUnderTestInAllPossibleStates() {
         // Must be called first.
-        checkInitialState(); 
-        
-        // The sequence of the following method calls should not 
+        checkInitialState();
+
+        // The sequence of the following method calls should not
         // affect the test results.
         checkErrorState();
         checkInitialStateAfterReset();
@@ -326,7 +326,7 @@ class MediaRecorderStateUnitTestTemplate extends AndroidTestCase {
         checkDataSourceConfiguredState();
         checkPreparedState();
     }
-    
+
     /*
      * Cleans up all the internal object references.
      */

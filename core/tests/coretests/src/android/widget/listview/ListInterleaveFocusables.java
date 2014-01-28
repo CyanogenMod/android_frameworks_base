@@ -58,6 +58,6 @@ public class ListInterleaveFocusables extends ListScenario {
     public int getViewTypeCount() {
         return 2;
     }
-    
-    
+
+
 }

@@ -28,7 +28,7 @@ import java.io.Reader;
 
 /**
  * Wrapper around a compiled XML file.
- * 
+ *
  * {@hide}
  */
 final class XmlBlock {
@@ -301,16 +301,16 @@ final class XmlBlock {
             }
             if (eventType != START_TAG && eventType != END_TAG) {
                throw new XmlPullParserException(
-                   getPositionDescription() 
+                   getPositionDescription()
                    + ": expected start or end tag", this, null);
             }
             return eventType;
         }
-    
+
         public int getAttributeNameResource(int index) {
             return nativeGetAttributeResource(mParseState, index);
         }
-    
+
         public int getAttributeListValue(String namespace, String attribute,
                 String[] options, int defaultValue) {
             int idx = nativeGetAttributeIndex(mParseState, namespace, attribute);
@@ -449,7 +449,7 @@ final class XmlBlock {
                 }
             }
         }
-        
+
         protected void finalize() throws Throwable {
             close();
         }

@@ -48,7 +48,7 @@ public:
 
     static int32_t getGlobalCount();
     static String8 getAssetAllocations();
-    
+
     /* used when opening an asset */
     typedef enum AccessMode {
         ACCESS_UNKNOWN = 0,
@@ -195,11 +195,11 @@ private:
      */
     // TODO
 
-    AccessMode  mAccessMode;        // how the asset was opened
+    AccessMode  mAccessMode;       // how the asset was opened
     String8    mAssetSource;       // debug string
-    
-    Asset*		mNext;				// linked list.
-    Asset*		mPrev;
+
+    Asset* mNext;                  // linked list.
+    Asset* mPrev;
 };
 
 
@@ -260,7 +260,7 @@ private:
 
     FileMap*    mMap;           // for memory map
     unsigned char* mBuf;        // for read
-    
+
     const void* ensureAlignment(FileMap* map);
 };
 

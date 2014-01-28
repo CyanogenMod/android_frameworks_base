@@ -11,5 +11,5 @@ include $(BUILD_JAVA_LIBRARY)
 include $(CLEAR_VARS)
 ALL_PREBUILT += $(TARGET_OUT)/bin/svc
 $(TARGET_OUT)/bin/svc : $(LOCAL_PATH)/svc | $(ACP)
-	$(transform-prebuilt-to-target)
+    $(transform-prebuilt-to-target)
 

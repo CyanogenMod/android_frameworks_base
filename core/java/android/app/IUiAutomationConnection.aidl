@@ -26,7 +26,7 @@ import android.os.ParcelFileDescriptor;
  * on behalf of an instrumentation that it runs. These operations require
  * special permissions which the shell user has but the instrumentation does
  * not. Running privileged operations by the shell user on behalf of an
- * instrumentation is needed for running UiTestCases. 
+ * instrumentation is needed for running UiTestCases.
  *
  * {@hide}
  */

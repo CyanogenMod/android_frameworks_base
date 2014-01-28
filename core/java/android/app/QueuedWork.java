@@ -88,7 +88,7 @@ public class QueuedWork {
             toFinish.run();
         }
     }
-    
+
     /**
      * Returns true if there is pending work to be done.  Note that the
      * result is out of data as soon as you receive it, so be careful how you
@@ -97,5 +97,5 @@ public class QueuedWork {
     public static boolean hasPendingWork() {
         return !sPendingWorkFinishers.isEmpty();
     }
-    
+
 }

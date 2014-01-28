@@ -87,7 +87,7 @@ abstract class CustomBar extends LinearLayout {
         }
     }
 
-    private InputStream getIcon(String iconName, Density[] densityInOut, LayoutDirection direction, 
+    private InputStream getIcon(String iconName, Density[] densityInOut, LayoutDirection direction,
             String[] pathOut, boolean tryOtherDensities) {
         // current density
         Density density = densityInOut[0];

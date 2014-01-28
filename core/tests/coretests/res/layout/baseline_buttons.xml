@@ -18,13 +18,13 @@
 */
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/layout"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <TextView android:id="@+id/currenttime"
-    	android:text="@string/time"
+        android:text="@string/time"
         android:textSize="12sp"
         android:textStyle="bold"
         android:layout_gravity="bottom"

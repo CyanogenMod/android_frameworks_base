@@ -59,7 +59,7 @@ public class Bitmaps3dActivity extends Activity {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            
+
             canvas.drawColor(0xffffffff);
 
             canvas.save();
@@ -67,7 +67,7 @@ public class Bitmaps3dActivity extends Activity {
 
             canvas.concat(mMatrix);
             canvas.drawBitmap(mBitmap1, 0.0f, 0.0f, mBitmapPaint);
-            
+
             canvas.restore();
         }
     }

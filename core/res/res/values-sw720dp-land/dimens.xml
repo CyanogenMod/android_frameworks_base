@@ -18,7 +18,7 @@
 */
 -->
 <resources>
-    <!-- Top margin for the clock view --> 
+    <!-- Top margin for the clock view -->
     <dimen name="kg_clock_top_margin">174dp</dimen>
 
     <!-- Size of margin on the right of keyguard's status view -->

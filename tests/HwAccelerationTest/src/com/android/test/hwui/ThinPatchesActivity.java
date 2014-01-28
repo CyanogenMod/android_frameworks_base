@@ -32,14 +32,14 @@ public class ThinPatchesActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         FrameLayout layout = new FrameLayout(this);
         PatchView b = new PatchView(this);
         b.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
         layout.addView(b);
         layout.setBackgroundColor(0xffffffff);
-        
+
         setContentView(layout);
     }
 
@@ -83,15 +83,15 @@ public class ThinPatchesActivity extends Activity {
 
             mPatch3.setBounds(left, top, left + height, top + width);
             mPatch3.draw(canvas);
-            
+
             canvas.restore();
-            
+
             mPatch1.setBounds(left, top, left + width, top + height);
             mPatch1.draw(canvas);
 
             canvas.save();
             canvas.translate(0.0f, height + 20.0f);
-            
+
             mPatch2.setBounds(left, top, left + width, top + height);
             mPatch2.draw(canvas);
 

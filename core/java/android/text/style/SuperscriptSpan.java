@@ -24,14 +24,14 @@ import android.text.TextUtils;
 public class SuperscriptSpan extends MetricAffectingSpan implements ParcelableSpan {
     public SuperscriptSpan() {
     }
-    
+
     public SuperscriptSpan(Parcel src) {
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.SUPERSCRIPT_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }

@@ -63,7 +63,7 @@ oneway interface IAccountAuthenticator {
      * returns a Bundle where the boolean value BOOLEAN_RESULT_KEY is set if the account has the
      * specified features
      */
-    void hasFeatures(in IAccountAuthenticatorResponse response, in Account account, 
+    void hasFeatures(in IAccountAuthenticatorResponse response, in Account account,
         in String[] features);
 
     /**

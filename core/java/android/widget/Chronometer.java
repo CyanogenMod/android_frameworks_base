@@ -73,9 +73,9 @@ public class Chronometer extends TextView {
     private StringBuilder mFormatBuilder;
     private OnChronometerTickListener mOnChronometerTickListener;
     private StringBuilder mRecycle = new StringBuilder(8);
-    
+
     private static final int TICK_WHAT = 2;
-    
+
     /**
      * Initialize this Chronometer object.
      * Sets the base to the current time.
@@ -160,7 +160,7 @@ public class Chronometer extends TextView {
 
     /**
      * Sets the listener to be called when the chronometer changes.
-     * 
+     *
      * @param listener The listener.
      */
     public void setOnChronometerTickListener(OnChronometerTickListener listener) {
@@ -178,10 +178,10 @@ public class Chronometer extends TextView {
     /**
      * Start counting up.  This does not affect the base as set from {@link #setBase}, just
      * the view display.
-     * 
-     * Chronometer works by regularly scheduling messages to the handler, even when the 
-     * Widget is not visible.  To make sure resource leaks do not occur, the user should 
-     * make sure that each start() call has a reciprocal call to {@link #stop}. 
+     *
+     * Chronometer works by regularly scheduling messages to the handler, even when the
+     * Widget is not visible.  To make sure resource leaks do not occur, the user should
+     * make sure that each start() call has a reciprocal call to {@link #stop}.
      */
     public void start() {
         mStarted = true;
@@ -191,9 +191,9 @@ public class Chronometer extends TextView {
     /**
      * Stop counting up.  This does not affect the base as set from {@link #setBase}, just
      * the view display.
-     * 
+     *
      * This stops the messages to the handler, effectively releasing resources that would
-     * be held as the chronometer is running, via {@link #start}. 
+     * be held as the chronometer is running, via {@link #start}.
      */
     public void stop() {
         mStarted = false;
@@ -263,7 +263,7 @@ public class Chronometer extends TextView {
             mRunning = running;
         }
     }
-    
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message m) {
             if (mRunning) {

@@ -27,22 +27,22 @@ import com.android.mediaframeworktest.MediaNames;
 /**
  * A template class for running a method under test in all possible
  * states of a MediaPlayer object.
- * 
+ *
  * @see com.android.mediaframeworktest.unit.MediaPlayerSeekToStateUnitTest
  * for an example of using this class.
- * 
- * A typical concrete unit test class would implement the 
+ *
+ * A typical concrete unit test class would implement the
  * MediaPlayerMethodUnderTest interface and have a reference to an object of
  * this class. Then it calls runTestOnMethod() to actually perform the unit
  * tests.
- * 
+ *
  */
 class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
     private static final String TEST_PATH = MediaNames.TEST_PATH_1;
     private static final String TAG = "MediaPlayerStateUnitTestTemplate";
     private static final int SEEK_TO_END  = 135110;  // Milliseconds.
     private static int WAIT_FOR_COMMAND_TO_COMPLETE = 1000;  // Milliseconds.
-    
+
     private MediaPlayerStateErrors mStateErrors = new MediaPlayerStateErrors();
     private MediaPlayer mMediaPlayer = null;
     private boolean mInitialized = false;
@@ -51,8 +51,8 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
     private Looper mLooper = null;
     private final Object lock = new Object();
     private MediaPlayerMethodUnderTest mMethodUnderTest = null;
-    
-    // An Handler object is absolutely necessary for receiving callback 
+
+    // An Handler object is absolutely necessary for receiving callback
     // messages from MediaPlayer objects.
     private Handler mHandler = new Handler() {
         @Override
@@ -69,11 +69,11 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             */
         }
     };
-    
+
     /**
      * Runs the given method under test in all possible states of a MediaPlayer
      * object.
-     * 
+     *
      * @param testMethod the method under test.
      */
     public void runTestOnMethod(MediaPlayerMethodUnderTest testMethod) {
@@ -95,9 +95,9 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             cleanUp();
         }
     }
-    
+
     /*
-     * Initializes the message looper so that the MediaPlayer object can 
+     * Initializes the message looper so that the MediaPlayer object can
      * receive the callback messages.
      */
     private void initializeMessageLooper() {
@@ -107,11 +107,11 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
                 // Set up a looper to be used by mMediaPlayer.
                 Looper.prepare();
 
-                // Save the looper so that we can terminate this thread 
+                // Save the looper so that we can terminate this thread
                 // after we are done with it.
                 mLooper = Looper.myLooper();
-                
-                mMediaPlayer = new MediaPlayer();                
+
+                mMediaPlayer = new MediaPlayer();
                 mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                     public boolean onError(MediaPlayer player, int what, int extra) {
                         Log.v(TAG, "onError has been called.");
@@ -146,10 +146,10 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             }
         }.start();
     }
-    
+
     /*
      * Calls method under test in the given state of the MediaPlayer object.
-     * 
+     *
      * @param state the MediaPlayer state in which the method under test is called.
      */
     private void callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState state) {
@@ -169,7 +169,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
     /*
      * The following setMediaPlayerToXXXStateXXX methods sets the MediaPlayer
      * object to the corresponding state, given the assumption that reset()
-     * always resets the MediaPlayer object to Idle (after reset) state. 
+     * always resets the MediaPlayer object to Idle (after reset) state.
      */
     private void setMediaPlayerToIdleStateAfterReset() {
         try {
@@ -182,7 +182,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             assertTrue(false);
         }
     }
-    
+
     private void setMediaPlayerToInitializedState() {
         try {
             mMediaPlayer.reset();
@@ -192,7 +192,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             assertTrue(false);
         }
     }
-    
+
     private void setMediaPlayerToPreparedState() {
         try {
             mMediaPlayer.reset();
@@ -203,7 +203,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             assertTrue(false);
         }
     }
-    
+
     private void setMediaPlayerToPreparedStateAfterStop() {
         try {
             mMediaPlayer.reset();
@@ -217,7 +217,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             assertTrue(false);
         }
     }
-    
+
     private void setMediaPlayerToStartedState() {
         try {
             mMediaPlayer.reset();
@@ -229,7 +229,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             assertTrue(false);
         }
     }
-    
+
     private void setMediaPlayerToStartedStateAfterPause() {
         try {
             mMediaPlayer.reset();
@@ -238,9 +238,9 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             mMediaPlayer.start();
             mMediaPlayer.pause();
 
-            // pause() is an asynchronous call and returns immediately, but 
-            // PV player engine may take quite a while to actually set the 
-            // player state to Paused; if we call start() right after pause() 
+            // pause() is an asynchronous call and returns immediately, but
+            // PV player engine may take quite a while to actually set the
+            // player state to Paused; if we call start() right after pause()
             // without waiting, start() may fail.
             try {
                 Thread.sleep(MediaNames.PAUSE_WAIT_TIME);
@@ -254,7 +254,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             assertTrue(false);
         }
     }
-    
+
     private void setMediaPlayerToPausedState() {
         try {
             mMediaPlayer.reset();
@@ -267,7 +267,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             assertTrue(false);
         }
     }
-    
+
     private void setMediaPlayerToStoppedState() {
         try {
             mMediaPlayer.reset();
@@ -280,7 +280,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
             assertTrue(false);
         }
     }
-    
+
     private void setMediaPlayerToPlaybackCompletedState() {
         try {
             mMediaPlayer.reset();
@@ -301,10 +301,10 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
         }
         Log.v(TAG, "setMediaPlayerToPlaybackCompletedState: done.");
     }
-    
+
     /*
      * There are a lot of ways to force the MediaPlayer object to enter
-     * the Error state. The impact (such as onError is called or not) highly 
+     * the Error state. The impact (such as onError is called or not) highly
      * depends on how the Error state is entered.
      */
     private void setMediaPlayerToErrorState() {
@@ -325,10 +325,10 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
         }
         Log.v(TAG, "setMediaPlayerToErrorState: done.");
     }
-    
+
     /*
      * Sets the state of the MediaPlayer object to the specified one.
-     * 
+     *
      * @param state the state of the MediaPlayer object.
      */
     private void setMediaPlayerToState(MediaPlayerStateErrors.MediaPlayerState state) {
@@ -369,10 +369,10 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
                 break;
         }
     }
-    
+
     /*
      * Sets the error value of the corresponding state to the given error.
-     * 
+     *
      * @param state the state of the MediaPlayer object.
      * @param error the value of the state error to be set.
      */
@@ -413,7 +413,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
                 break;
         }
     }
-    
+
     private void notifyStateError() {
         mHandler.sendMessage(mHandler.obtainMessage(MediaPlayerStateErrors.MEDIA_PLAYER_ERROR));
     }
@@ -421,43 +421,43 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
     private void checkIdleState() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.IDLE);
     }
-    
+
     private void checkIdleStateAfterReset() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.IDLE_AFTER_RESET);
     }
-    
+
     private void checkInitializedState() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.INITIALIZED);
     }
-    
+
     private void checkPreparedState() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.PREPARED);
     }
-    
+
     private void checkPreparedStateAfterStop() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.PREPARED_AFTER_STOP);
     }
-    
+
     private void checkStartedState() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.STARTED);
     }
-    
+
     private void checkPausedState() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.PAUSED);
     }
-    
+
     private void checkStartedStateAfterPause() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.STARTED_AFTER_PAUSE);
     }
-    
+
     private void checkStoppedState() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.STOPPED);
     }
-    
+
     private void checkPlaybackCompletedState() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.PLAYBACK_COMPLETED);
     }
-    
+
     private void checkErrorState() {
         callMediaPlayerMethodUnderTestInState(MediaPlayerStateErrors.MediaPlayerState.ERROR);
     }
@@ -467,9 +467,9 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
      */
     private void checkMethodUnderTestInAllPossibleStates() {
         // Must be called first.
-        checkIdleState(); 
-        
-        // The sequence of the following method calls should not 
+        checkIdleState();
+
+        // The sequence of the following method calls should not
         // affect the test results.
         checkErrorState();
         checkIdleStateAfterReset();
@@ -478,13 +478,13 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
         checkStartedStateAfterPause();
         checkPausedState();
         checkPreparedState();
-        
+
         checkPreparedStateAfterStop();
-        
+
         checkPlaybackCompletedState();
         checkStoppedState();
     }
-    
+
     /*
      * Terminates the message looper thread.
      */
@@ -492,7 +492,7 @@ class MediaPlayerStateUnitTestTemplate extends AndroidTestCase {
         mLooper.quit();
         mMediaPlayer.release();
     }
-    
+
     /*
      * Cleans up all the internal object references.
      */

@@ -120,7 +120,7 @@ public class PathsCacheActivity extends Activity {
                     path = makeLargePath();
                     mPathList.add(path);
                 }
-    
+
                 canvas.save();
                 canvas.translate(450.0f + mRandom.nextInt(200), mRandom.nextInt(200));
                 canvas.drawPath(path, mMediumPaint);

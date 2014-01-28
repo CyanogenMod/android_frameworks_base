@@ -178,19 +178,19 @@ public class SntpClient
     }
 
     /**
-     * Reads the NTP time stamp at the given offset in the buffer and returns 
+     * Reads the NTP time stamp at the given offset in the buffer and returns
      * it as a system time (milliseconds since January 1, 1970).
-     */    
+     */
     private long readTimeStamp(byte[] buffer, int offset) {
         long seconds = read32(buffer, offset);
         long fraction = read32(buffer, offset + 4);
-        return ((seconds - OFFSET_1900_TO_1970) * 1000) + ((fraction * 1000L) / 0x100000000L);        
+        return ((seconds - OFFSET_1900_TO_1970) * 1000) + ((fraction * 1000L) / 0x100000000L);
     }
 
     /**
-     * Writes system time (milliseconds since January 1, 1970) as an NTP time stamp 
+     * Writes system time (milliseconds since January 1, 1970) as an NTP time stamp
      * at the given offset in the buffer.
-     */    
+     */
     private void writeTimeStamp(byte[] buffer, int offset, long time) {
         long seconds = time / 1000L;
         long milliseconds = time - seconds * 1000L;

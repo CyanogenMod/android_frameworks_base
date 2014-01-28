@@ -109,14 +109,14 @@ public final class VelocityTracker {
     public void clear() {
         nativeClear(mPtr);
     }
-    
+
     /**
      * Add a user's movement to the tracker.  You should call this for the
      * initial {@link MotionEvent#ACTION_DOWN}, the following
      * {@link MotionEvent#ACTION_MOVE} events that you receive, and the
      * final {@link MotionEvent#ACTION_UP}.  You can, however, call this
      * for whichever events you desire.
-     * 
+     *
      * @param event The MotionEvent you received and would like to track.
      */
     public void addMovement(MotionEvent event) {
@@ -129,8 +129,8 @@ public final class VelocityTracker {
     /**
      * Equivalent to invoking {@link #computeCurrentVelocity(int, float)} with a maximum
      * velocity of Float.MAX_VALUE.
-     * 
-     * @see #computeCurrentVelocity(int, float) 
+     *
+     * @see #computeCurrentVelocity(int, float)
      */
     public void computeCurrentVelocity(int units) {
         nativeComputeCurrentVelocity(mPtr, units, Float.MAX_VALUE);
@@ -142,7 +142,7 @@ public final class VelocityTracker {
      * information, as it is relatively expensive.  You can then retrieve
      * the velocity with {@link #getXVelocity()} and
      * {@link #getYVelocity()}.
-     * 
+     *
      * @param units The units you would like the velocity in.  A value of 1
      * provides pixels per millisecond, 1000 provides pixels per second, etc.
      * @param maxVelocity The maximum velocity that can be computed by this method.
@@ -152,42 +152,42 @@ public final class VelocityTracker {
     public void computeCurrentVelocity(int units, float maxVelocity) {
         nativeComputeCurrentVelocity(mPtr, units, maxVelocity);
     }
-    
+
     /**
      * Retrieve the last computed X velocity.  You must first call
      * {@link #computeCurrentVelocity(int)} before calling this function.
-     * 
+     *
      * @return The previously computed X velocity.
      */
     public float getXVelocity() {
         return nativeGetXVelocity(mPtr, ACTIVE_POINTER_ID);
     }
-    
+
     /**
      * Retrieve the last computed Y velocity.  You must first call
      * {@link #computeCurrentVelocity(int)} before calling this function.
-     * 
+     *
      * @return The previously computed Y velocity.
      */
     public float getYVelocity() {
         return nativeGetYVelocity(mPtr, ACTIVE_POINTER_ID);
     }
-    
+
     /**
      * Retrieve the last computed X velocity.  You must first call
      * {@link #computeCurrentVelocity(int)} before calling this function.
-     * 
+     *
      * @param id Which pointer's velocity to return.
      * @return The previously computed X velocity.
      */
     public float getXVelocity(int id) {
         return nativeGetXVelocity(mPtr, id);
     }
-    
+
     /**
      * Retrieve the last computed Y velocity.  You must first call
      * {@link #computeCurrentVelocity(int)} before calling this function.
-     * 
+     *
      * @param id Which pointer's velocity to return.
      * @return The previously computed Y velocity.
      */

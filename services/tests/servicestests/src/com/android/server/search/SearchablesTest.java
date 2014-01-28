@@ -43,14 +43,14 @@ import java.util.List;
 
 /**
  * To launch this test from the command line:
- * 
+ *
  * adb shell am instrument -w \
  *   -e class com.android.unit_tests.SearchablesTest \
  *   com.android.unit_tests/android.test.InstrumentationTestRunner
  */
 @SmallTest
 public class SearchablesTest extends AndroidTestCase {
-    
+
     /*
      * SearchableInfo tests
      *  Mock the context so I can provide very specific input data
@@ -130,14 +130,14 @@ public class SearchablesTest extends AndroidTestCase {
         ArrayList<SearchableInfo> global = searchables.getSearchablesInGlobalSearchList();
         MoreAsserts.assertEmpty(global);
     }
-    
+
     /**
      * Generic health checker for an array of searchables.
-     * 
+     *
      * This is designed to pass for any semi-legal searchable, without knowing much about
      * the format of the underlying data.  It's fairly easy for a non-compliant application
      * to provide meta-data that will pass here (e.g. a non-existent suggestions authority).
-     * 
+     *
      * @param searchables The list of searchables to examine.
      */
     private void checkSearchables(ArrayList<SearchableInfo> searchablesList) {
@@ -148,7 +148,7 @@ public class SearchablesTest extends AndroidTestCase {
             checkSearchable(si);
         }
     }
-    
+
     private void checkSearchable(SearchableInfo si) {
         assertNotNull(si);
         assertTrue(si.getLabelId() != 0);        // This must be a useable string
@@ -170,32 +170,32 @@ public class SearchablesTest extends AndroidTestCase {
             // one of these three fields must be non-null & non-empty
             boolean m1 = (ai.getQueryActionMsg() != null) && (ai.getQueryActionMsg().length() > 0);
             boolean m2 = (ai.getSuggestActionMsg() != null) && (ai.getSuggestActionMsg().length() > 0);
-            boolean m3 = (ai.getSuggestActionMsgColumn() != null) && 
+            boolean m3 = (ai.getSuggestActionMsgColumn() != null) &&
                             (ai.getSuggestActionMsgColumn().length() > 0);
             assertTrue(m1 || m2 || m3);
         }
-        
-        /* 
+
+        /*
          * Find ways to test these:
-         * 
+         *
          * private int mSearchMode
          * private Drawable mIcon
          */
-        
+
         /*
          * Explicitly not tested here:
-         * 
+         *
          * Can be null, so not much to see:
          * public String mSearchHint
          * private String mZeroQueryBanner
-         * 
+         *
          * To be deprecated/removed, so don't bother:
          * public boolean mFilterMode
          * public boolean mQuickStart
          * private boolean mIconResized
          * private int mIconResizeWidth
          * private int mIconResizeHeight
-         * 
+         *
          * All of these are "internal" working variables, not part of any contract
          * private ActivityInfo mActivityInfo
          * private Rect mTempRect
@@ -203,7 +203,7 @@ public class SearchablesTest extends AndroidTestCase {
          * private String mCacheActivityContext
          */
     }
-    
+
     /**
      * Combo assert for "string not null and not empty"
      */
@@ -211,7 +211,7 @@ public class SearchablesTest extends AndroidTestCase {
         assertNotNull(s);
         MoreAsserts.assertNotEqual(s, "");
     }
-    
+
     /**
      * Combo assert for "string null or (not null and not empty)"
      */
@@ -219,27 +219,27 @@ public class SearchablesTest extends AndroidTestCase {
         if (s != null) {
             MoreAsserts.assertNotEqual(s, "");
         }
-    }    
-    
+    }
+
     /**
      * This is a mock for context.  Used to perform a true unit test on SearchableInfo.
-     * 
+     *
      */
     private class MyMockContext extends MockContext {
-        
+
         protected Context mRealContext;
         protected PackageManager mPackageManager;
-        
+
         /**
          * Constructor.
-         * 
+         *
          * @param realContext Please pass in a real context for some pass-throughs to function.
          */
         MyMockContext(Context realContext, PackageManager packageManager) {
             mRealContext = realContext;
             mPackageManager = packageManager;
         }
-        
+
         /**
          * Resources.  Pass through for now.
          */
@@ -276,15 +276,15 @@ public class SearchablesTest extends AndroidTestCase {
 
 /**
  * This is a mock for package manager.  Used to perform a true unit test on SearchableInfo.
- * 
+ *
  */
     private class MyMockPackageManager extends MockPackageManager {
-        
+
         public final static int SEARCHABLES_PASSTHROUGH = 0;
         public final static int SEARCHABLES_MOCK_ZERO = 1;
         public final static int SEARCHABLES_MOCK_ONEGOOD = 2;
         public final static int SEARCHABLES_MOCK_ONEGOOD_ONEBAD = 3;
-        
+
         protected PackageManager mRealPackageManager;
         protected int mSearchablesMode;
 
@@ -302,29 +302,29 @@ public class SearchablesTest extends AndroidTestCase {
             case SEARCHABLES_MOCK_ZERO:
                 mSearchablesMode = newMode;
                 break;
-                
+
             default:
-                throw new UnsupportedOperationException();       
+                throw new UnsupportedOperationException();
             }
         }
-        
+
         /**
          * Find activities that support a given intent.
-         * 
+         *
          * Retrieve all activities that can be performed for the given intent.
-         * 
+         *
          * @param intent The desired intent as per resolveActivity().
          * @param flags Additional option flags.  The most important is
          *                    MATCH_DEFAULT_ONLY, to limit the resolution to only
          *                    those activities that support the CATEGORY_DEFAULT.
-         * 
+         *
          * @return A List<ResolveInfo> containing one entry for each matching
          *         Activity. These are ordered from best to worst match -- that
          *         is, the first item in the list is what is returned by
          *         resolveActivity().  If there are no matching activities, an empty
          *         list is returned.
          */
-        @Override 
+        @Override
         public List<ResolveInfo> queryIntentActivities(Intent intent, int flags) {
             assertNotNull(intent);
             assertTrue(intent.getAction().equals(Intent.ACTION_SEARCH)
@@ -339,7 +339,7 @@ public class SearchablesTest extends AndroidTestCase {
                 throw new UnsupportedOperationException();
             }
         }
-        
+
         @Override
         public ResolveInfo resolveActivity(Intent intent, int flags) {
             assertNotNull(intent);
@@ -358,7 +358,7 @@ public class SearchablesTest extends AndroidTestCase {
         /**
          * Retrieve an XML file from a package.  This is a low-level API used to
          * retrieve XML meta data.
-         * 
+         *
          * @param packageName The name of the package that this xml is coming from.
          * Can not be null.
          * @param resid The resource identifier of the desired xml.  Can not be 0.
@@ -366,12 +366,12 @@ public class SearchablesTest extends AndroidTestCase {
          * may be null, in which case the application information will be retrieved
          * for you if needed; if you already have this information around, it can
          * be much more efficient to supply it here.
-         * 
+         *
          * @return Returns an XmlPullParser allowing you to parse out the XML
          * data.  Returns null if the xml resource could not be found for any
          * reason.
          */
-        @Override 
+        @Override
         public XmlResourceParser getXml(String packageName, int resid, ApplicationInfo appInfo) {
             assertNotNull(packageName);
             MoreAsserts.assertNotEqual(packageName, "");
@@ -384,17 +384,17 @@ public class SearchablesTest extends AndroidTestCase {
                 throw new UnsupportedOperationException();
             }
         }
-        
+
         /**
          * Find a single content provider by its base path name.
-         * 
+         *
          * @param name The name of the provider to find.
          * @param flags Additional option flags.  Currently should always be 0.
-         * 
+         *
          * @return ContentProviderInfo Information about the provider, if found,
          *         else null.
          */
-        @Override 
+        @Override
         public ProviderInfo resolveContentProvider(String name, int flags) {
             assertNotNull(name);
             MoreAsserts.assertNotEqual(name, "");

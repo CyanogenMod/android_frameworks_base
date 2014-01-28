@@ -56,14 +56,14 @@ public abstract class ApplicationThreadNative extends Binder
         if (in != null) {
             return in;
         }
-        
+
         return new ApplicationThreadProxy(obj);
     }
-    
+
     public ApplicationThreadNative() {
         attachInterface(this, descriptor);
     }
-    
+
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags)
             throws RemoteException {
@@ -88,7 +88,7 @@ public abstract class ApplicationThreadNative extends Binder
             scheduleStopActivity(b, show, configChanges);
             return true;
         }
-        
+
         case SCHEDULE_WINDOW_VISIBILITY_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -116,7 +116,7 @@ public abstract class ApplicationThreadNative extends Binder
             scheduleResumeActivity(b, procState, isForward);
             return true;
         }
-        
+
         case SCHEDULE_SEND_RESULT_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -125,7 +125,7 @@ public abstract class ApplicationThreadNative extends Binder
             scheduleSendResult(b, ri);
             return true;
         }
-        
+
         case SCHEDULE_LAUNCH_ACTIVITY_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -149,7 +149,7 @@ public abstract class ApplicationThreadNative extends Binder
                     ri, pi, notResumed, isForward, profileName, profileFd, autoStopProfiler);
             return true;
         }
-        
+
         case SCHEDULE_RELAUNCH_ACTIVITY_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -165,7 +165,7 @@ public abstract class ApplicationThreadNative extends Binder
             scheduleRelaunchActivity(b, ri, pi, configChanges, notResumed, config);
             return true;
         }
-        
+
         case SCHEDULE_NEW_INTENT_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -184,7 +184,7 @@ public abstract class ApplicationThreadNative extends Binder
             scheduleDestroyActivity(b, finishing, configChanges);
             return true;
         }
-        
+
         case SCHEDULE_RECEIVER_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -363,7 +363,7 @@ public abstract class ApplicationThreadNative extends Binder
             }
             return true;
         }
-        
+
         case DUMP_PROVIDER_TRANSACTION: {
             data.enforceInterface(IApplicationThread.descriptor);
             ParcelFileDescriptor fd = data.readFileDescriptor();
@@ -402,7 +402,7 @@ public abstract class ApplicationThreadNative extends Binder
             scheduleLowMemory();
             return true;
         }
-        
+
         case SCHEDULE_ACTIVITY_CONFIGURATION_CHANGED_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -410,7 +410,7 @@ public abstract class ApplicationThreadNative extends Binder
             scheduleActivityConfigurationChanged(b);
             return true;
         }
-        
+
         case PROFILER_CONTROL_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -422,7 +422,7 @@ public abstract class ApplicationThreadNative extends Binder
             profilerControl(start, path, fd, profileType);
             return true;
         }
-        
+
         case SET_SCHEDULING_GROUP_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -640,15 +640,15 @@ public abstract class ApplicationThreadNative extends Binder
 
 class ApplicationThreadProxy implements IApplicationThread {
     private final IBinder mRemote;
-    
+
     public ApplicationThreadProxy(IBinder remote) {
         mRemote = remote;
     }
-    
+
     public final IBinder asBinder() {
         return mRemote;
     }
-    
+
     public final void schedulePauseActivity(IBinder token, boolean finished,
             boolean userLeaving, int configChanges) throws RemoteException {
         Parcel data = Parcel.obtain();
@@ -709,7 +709,7 @@ class ApplicationThreadProxy implements IApplicationThread {
     }
 
     public final void scheduleSendResult(IBinder token, List<ResultInfo> results)
-    		throws RemoteException {
+            throws RemoteException {
         Parcel data = Parcel.obtain();
         data.writeInterfaceToken(IApplicationThread.descriptor);
         data.writeStrongBinder(token);
@@ -722,9 +722,9 @@ class ApplicationThreadProxy implements IApplicationThread {
     public final void scheduleLaunchActivity(Intent intent, IBinder token, int ident,
             ActivityInfo info, Configuration curConfig, CompatibilityInfo compatInfo,
             int procState, Bundle state, List<ResultInfo> pendingResults,
-    		List<Intent> pendingNewIntents, boolean notResumed, boolean isForward,
-    		String profileName, ParcelFileDescriptor profileFd, boolean autoStopProfiler)
-    		throws RemoteException {
+            List<Intent> pendingNewIntents, boolean notResumed, boolean isForward,
+            String profileName, ParcelFileDescriptor profileFd, boolean autoStopProfiler)
+            throws RemoteException {
         Parcel data = Parcel.obtain();
         data.writeInterfaceToken(IApplicationThread.descriptor);
         intent.writeToParcel(data, 0);
@@ -796,7 +796,7 @@ class ApplicationThreadProxy implements IApplicationThread {
                 IBinder.FLAG_ONEWAY);
         data.recycle();
     }
-    
+
     public final void scheduleReceiver(Intent intent, ActivityInfo info,
             CompatibilityInfo compatInfo, int resultCode, String resultData,
             Bundle map, boolean sync, int sendingUser, int processState) throws RemoteException {
@@ -838,7 +838,7 @@ class ApplicationThreadProxy implements IApplicationThread {
                 IBinder.FLAG_ONEWAY);
         data.recycle();
     }
-    
+
     public final void scheduleCreateService(IBinder token, ServiceInfo info,
             CompatibilityInfo compatInfo, int processState) throws RemoteException {
         Parcel data = Parcel.obtain();
@@ -877,7 +877,7 @@ class ApplicationThreadProxy implements IApplicationThread {
     }
 
     public final void scheduleServiceArgs(IBinder token, boolean taskRemoved, int startId,
-	    int flags, Intent args) throws RemoteException {
+        int flags, Intent args) throws RemoteException {
         Parcel data = Parcel.obtain();
         data.writeInterfaceToken(IApplicationThread.descriptor);
         data.writeStrongBinder(token);
@@ -947,7 +947,7 @@ class ApplicationThreadProxy implements IApplicationThread {
                 IBinder.FLAG_ONEWAY);
         data.recycle();
     }
-    
+
     public final void scheduleExit() throws RemoteException {
         Parcel data = Parcel.obtain();
         data.writeInterfaceToken(IApplicationThread.descriptor);
@@ -1030,7 +1030,7 @@ class ApplicationThreadProxy implements IApplicationThread {
         mRemote.transact(DUMP_SERVICE_TRANSACTION, data, null, IBinder.FLAG_ONEWAY);
         data.recycle();
     }
-    
+
     public void dumpProvider(FileDescriptor fd, IBinder token, String[] args)
             throws RemoteException {
         Parcel data = Parcel.obtain();
@@ -1068,7 +1068,7 @@ class ApplicationThreadProxy implements IApplicationThread {
                 IBinder.FLAG_ONEWAY);
         data.recycle();
     }
-    
+
     public final void scheduleActivityConfigurationChanged(
             IBinder token) throws RemoteException {
         Parcel data = Parcel.obtain();
@@ -1078,7 +1078,7 @@ class ApplicationThreadProxy implements IApplicationThread {
                 IBinder.FLAG_ONEWAY);
         data.recycle();
     }
-    
+
     public void profilerControl(boolean start, String path,
             ParcelFileDescriptor fd, int profileType) throws RemoteException {
         Parcel data = Parcel.obtain();
@@ -1096,7 +1096,7 @@ class ApplicationThreadProxy implements IApplicationThread {
                 IBinder.FLAG_ONEWAY);
         data.recycle();
     }
-    
+
     public void setSchedulingGroup(int group) throws RemoteException {
         Parcel data = Parcel.obtain();
         data.writeInterfaceToken(IApplicationThread.descriptor);
@@ -1105,7 +1105,7 @@ class ApplicationThreadProxy implements IApplicationThread {
                 IBinder.FLAG_ONEWAY);
         data.recycle();
     }
-    
+
     public void dispatchPackageBroadcast(int cmd, String[] packages) throws RemoteException {
         Parcel data = Parcel.obtain();
         data.writeInterfaceToken(IApplicationThread.descriptor);
@@ -1114,9 +1114,9 @@ class ApplicationThreadProxy implements IApplicationThread {
         mRemote.transact(DISPATCH_PACKAGE_BROADCAST_TRANSACTION, data, null,
                 IBinder.FLAG_ONEWAY);
         data.recycle();
-        
+
     }
-    
+
     public void scheduleCrash(String msg) throws RemoteException {
         Parcel data = Parcel.obtain();
         data.writeInterfaceToken(IApplicationThread.descriptor);
@@ -1124,7 +1124,7 @@ class ApplicationThreadProxy implements IApplicationThread {
         mRemote.transact(SCHEDULE_CRASH_TRANSACTION, data, null,
                 IBinder.FLAG_ONEWAY);
         data.recycle();
-        
+
     }
 
     public void dumpHeap(boolean managed, String path,

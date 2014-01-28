@@ -85,7 +85,7 @@ public:
 private:
     explicit BackupDataWriter();
     status_t write_padding_for(int n);
-    
+
     int m_fd;
     status_t m_status;
     ssize_t m_pos;
@@ -117,7 +117,7 @@ public:
 private:
     explicit BackupDataReader();
     status_t skip_padding();
-    
+
     int m_fd;
     bool m_done;
     status_t m_status;

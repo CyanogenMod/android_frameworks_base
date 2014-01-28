@@ -85,7 +85,7 @@ public class TextActivity extends Activity {
             canvas.drawRGB(255, 255, 255);
 
             canvas.drawText("Hello OpenGL renderer!", 300, 20, mEventPaint);
-            
+
             mMediumPaint.setStyle(Paint.Style.FILL_AND_STROKE);
             mMediumPaint.setStrokeWidth(2.0f);
             canvas.drawText("Hello OpenGL renderer!", 100, 20, mMediumPaint);

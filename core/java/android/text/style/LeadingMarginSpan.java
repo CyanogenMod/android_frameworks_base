@@ -36,7 +36,7 @@ extends ParagraphStyle
      * Returns the amount by which to adjust the leading margin. Positive values
      * move away from the leading edge of the paragraph, negative values move
      * towards it.
-     * 
+     *
      * @param first true if the request is for the first line of a paragraph,
      * false for subsequent lines
      * @return the offset for the margin.
@@ -46,7 +46,7 @@ extends ParagraphStyle
     /**
      * Renders the leading margin.  This is called before the margin has been
      * adjusted by the value returned by {@link #getLeadingMargin(boolean)}.
-     * 
+     *
      * @param c the canvas
      * @param p the paint. The this should be left unchanged on exit.
      * @param x the current position of the margin
@@ -91,11 +91,11 @@ extends ParagraphStyle
      */
     public static class Standard implements LeadingMarginSpan, ParcelableSpan {
         private final int mFirst, mRest;
-        
+
         /**
          * Constructor taking separate indents for the first and subsequent
          * lines.
-         * 
+         *
          * @param first the indent for the first line of the paragraph
          * @param rest the indent for the remaining lines of the paragraph
          */
@@ -116,11 +116,11 @@ extends ParagraphStyle
             mFirst = src.readInt();
             mRest = src.readInt();
         }
-        
+
         public int getSpanTypeId() {
             return TextUtils.LEADING_MARGIN_SPAN;
         }
-        
+
         public int describeContents() {
             return 0;
         }

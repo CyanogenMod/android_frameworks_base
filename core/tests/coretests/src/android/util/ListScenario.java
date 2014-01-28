@@ -60,18 +60,18 @@ public abstract class ListScenario extends Activity {
 
     // separators
     private Set<Integer> mUnselectableItems = new HashSet<Integer>();
-    
+
     private boolean mStackFromBottom;
 
     private int mClickedPosition = -1;
-    
+
     private int mLongClickedPosition = -1;
-    
+
     private int mConvertMisses = 0;
-    
+
     private int mHeaderViewCount;
     private boolean mHeadersFocusable;
-    
+
     private int mFooterViewCount;
     private LinearLayout mLinearLayout;
 
@@ -193,7 +193,7 @@ public abstract class ListScenario extends Activity {
             mIncludeHeader = includeHeader;
             return this;
         }
-        
+
         /**
          * Sets the stacking direction
          * @param stackFromBottom
@@ -203,7 +203,7 @@ public abstract class ListScenario extends Activity {
             mStackFromBottom = stackFromBottom;
             return this;
         }
-        
+
         /**
          * Sets whether the sum of the height of the list items must be at least the
          * height of the list view.
@@ -220,7 +220,7 @@ public abstract class ListScenario extends Activity {
             mFadingEdgeScreenSizeFactor = fadingEdgeScreenSizeFactor;
             return this;
         }
-        
+
         /**
          * Set the number of header views to appear within the list
          */
@@ -246,7 +246,7 @@ public abstract class ListScenario extends Activity {
             mFooterViewCount = footerViewCount;
             return this;
         }
-        
+
         /**
          * Sets whether the {@link ListScenario} will automatically set the
          * adapter on the list view. If this is false, the client MUST set it
@@ -278,7 +278,7 @@ public abstract class ListScenario extends Activity {
      */
     protected void nothingSelected() {
     }
-    
+
     /**
      * Override this if you want to know when something has been clicked (perhaps
      * more importantly, that {@link android.widget.AdapterView.OnItemClickListener} has
@@ -287,7 +287,7 @@ public abstract class ListScenario extends Activity {
     protected void positionClicked(int position) {
         setClickedPosition(position);
     }
-    
+
     /**
      * Override this if you want to know when something has been long clicked (perhaps
      * more importantly, that {@link android.widget.AdapterView.OnItemLongClickListener} has
@@ -303,7 +303,7 @@ public abstract class ListScenario extends Activity {
 
         // for test stability, turn off title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
+
 
         mScreenHeight = getWindowManager().getDefaultDisplay().getHeight();
 
@@ -326,7 +326,7 @@ public abstract class ListScenario extends Activity {
             header.setText("Header: " + i);
             mListView.addHeaderView(header);
         }
-        
+
         for (int i=0; i<mFooterViewCount; i++) {
             TextView header = new TextView(this);
             header.setText("Footer: " + i);
@@ -336,7 +336,7 @@ public abstract class ListScenario extends Activity {
         if (params.mConnectAdapter) {
             setAdapter(mListView);
         }
-        
+
         mListView.setItemsCanFocus(mItemsFocusable);
         if (mStartingSelectionPosition >= 0) {
             mListView.setSelection(mStartingSelectionPosition);
@@ -360,11 +360,11 @@ public abstract class ListScenario extends Activity {
                 positionClicked(position);
             }
         });
-        
+
         // set the fading edge length porportionally to the screen
         // height for test stability
         if (params.mFadingEdgeScreenSizeFactor != null) {
-            mListView.setFadingEdgeLength((int) (params.mFadingEdgeScreenSizeFactor * mScreenHeight));            
+            mListView.setFadingEdgeLength((int) (params.mFadingEdgeScreenSizeFactor * mScreenHeight));
         } else {
             mListView.setFadingEdgeLength((int) ((64.0 / 480) * mScreenHeight));
         }
@@ -426,7 +426,7 @@ public abstract class ListScenario extends Activity {
             }
         });
     }
-    
+
     /**
      * @return The newly created ListView widget.
      */
@@ -440,16 +440,16 @@ public abstract class ListScenario extends Activity {
     protected Params createParams() {
         return new Params();
     }
-    
+
     /**
      * Sets an adapter on a ListView.
-     * 
+     *
      * @param listView The ListView to set the adapter on.
      */
     protected void setAdapter(ListView listView) {
         listView.setAdapter(new MyAdapter());
     }
-    
+
     /**
      * Read in and validate all of the params passed in by the scenario.
      * @param params
@@ -525,7 +525,7 @@ public abstract class ListScenario extends Activity {
         if (!mIncludeHeader) {
             throw new IllegalArgumentException("no header above list");
         }
-        mHeaderTextView.setText(value);        
+        mHeaderTextView.setText(value);
     }
 
     /**
@@ -543,12 +543,12 @@ public abstract class ListScenario extends Activity {
     }
 
     /**
-     * Convert a non-null view. 
+     * Convert a non-null view.
      */
     public View convertView(int position, View convertView, ViewGroup parent) {
         return ListItemFactory.convertText(convertView, getValueAtPosition(position), position);
     }
-    
+
     public void setClickedPosition(int clickedPosition) {
         mClickedPosition = clickedPosition;
     }
@@ -580,7 +580,7 @@ public abstract class ListScenario extends Activity {
             }
         });
     }
-    
+
     /**
      * Return an item type for the specified position in the adapter. Override if your
      * adapter creates more than one type.
@@ -596,7 +596,7 @@ public abstract class ListScenario extends Activity {
     public int getViewTypeCount() {
         return 1;
     }
-    
+
     /**
      * @return The number of times convertView failed
      */
@@ -647,7 +647,7 @@ public abstract class ListScenario extends Activity {
             }
             return result;
         }
-        
+
         @Override
         public int getItemViewType(int position) {
             return ListScenario.this.getItemViewType(position);

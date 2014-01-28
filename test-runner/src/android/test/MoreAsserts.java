@@ -349,7 +349,7 @@ public final class MoreAsserts {
                 failWithMessage(message, "Extra object in actual: (" + actualObj.toString() + ")");
             }
         }
-        
+
         if (expectedMap.size() > 0) {
             failWithMessage(message, "Extra objects in expected.");
         }

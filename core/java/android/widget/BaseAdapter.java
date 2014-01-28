@@ -33,7 +33,7 @@ public abstract class BaseAdapter implements ListAdapter, SpinnerAdapter {
     public boolean hasStableIds() {
         return false;
     }
-    
+
     public void registerDataSetObserver(DataSetObserver observer) {
         mDataSetObservable.registerObserver(observer);
     }
@@ -41,7 +41,7 @@ public abstract class BaseAdapter implements ListAdapter, SpinnerAdapter {
     public void unregisterDataSetObserver(DataSetObserver observer) {
         mDataSetObservable.unregisterObserver(observer);
     }
-    
+
     /**
      * Notifies the attached observers that the underlying data has been changed
      * and any View reflecting the data set should refresh itself.
@@ -78,7 +78,7 @@ public abstract class BaseAdapter implements ListAdapter, SpinnerAdapter {
     public int getViewTypeCount() {
         return 1;
     }
-    
+
     public boolean isEmpty() {
         return getCount() == 0;
     }

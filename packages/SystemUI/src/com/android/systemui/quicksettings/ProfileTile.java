@@ -38,7 +38,7 @@ public class ProfileTile extends QuickSettingsTile {
     private Profile mChosenProfile;
     private ProfileManager mProfileManager;
 
-    public ProfileTile(Context context, 
+    public ProfileTile(Context context,
             QuickSettingsController qsc) {
         super(context, qsc);
 

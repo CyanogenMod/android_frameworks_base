@@ -25,7 +25,7 @@ import android.util.AttributeSet;
  * place in the X-Y plane. You can specify the point to use for the center of
  * the rotation, where (0,0) is the top left point. If not specified, (0,0) is
  * the default rotation point.
- * 
+ *
  */
 public class RotateAnimation extends Animation {
     private float mFromDegrees;
@@ -41,7 +41,7 @@ public class RotateAnimation extends Animation {
 
     /**
      * Constructor used when a RotateAnimation is loaded from a resource.
-     * 
+     *
      * @param context Application context to use
      * @param attrs Attribute set from which to read values
      */
@@ -73,10 +73,10 @@ public class RotateAnimation extends Animation {
     /**
      * Constructor to use when building a RotateAnimation from code.
      * Default pivotX/pivotY point is (0,0).
-     * 
+     *
      * @param fromDegrees Rotation offset to apply at the start of the
      *        animation.
-     * 
+     *
      * @param toDegrees Rotation offset to apply at the end of the animation.
      */
     public RotateAnimation(float fromDegrees, float toDegrees) {
@@ -88,12 +88,12 @@ public class RotateAnimation extends Animation {
 
     /**
      * Constructor to use when building a RotateAnimation from code
-     * 
+     *
      * @param fromDegrees Rotation offset to apply at the start of the
      *        animation.
-     * 
+     *
      * @param toDegrees Rotation offset to apply at the end of the animation.
-     * 
+     *
      * @param pivotX The X coordinate of the point about which the object is
      *        being rotated, specified as an absolute number where 0 is the left
      *        edge.
@@ -114,12 +114,12 @@ public class RotateAnimation extends Animation {
 
     /**
      * Constructor to use when building a RotateAnimation from code
-     * 
+     *
      * @param fromDegrees Rotation offset to apply at the start of the
      *        animation.
-     * 
+     *
      * @param toDegrees Rotation offset to apply at the end of the animation.
-     * 
+     *
      * @param pivotXType Specifies how pivotXValue should be interpreted. One of
      *        Animation.ABSOLUTE, Animation.RELATIVE_TO_SELF, or
      *        Animation.RELATIVE_TO_PARENT.
@@ -166,7 +166,7 @@ public class RotateAnimation extends Animation {
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         float degrees = mFromDegrees + ((mToDegrees - mFromDegrees) * interpolatedTime);
         float scale = getScaleFactor();
-        
+
         if (mPivotX == 0.0f && mPivotY == 0.0f) {
             t.getMatrix().setRotate(degrees);
         } else {

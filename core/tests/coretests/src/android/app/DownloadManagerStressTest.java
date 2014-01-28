@@ -144,7 +144,7 @@ public class DownloadManagerStressTest extends DownloadManagerBaseTest {
 
 
     /**
-     * Tests downloading a file to system cache when there isn't enough space in the system cache 
+     * Tests downloading a file to system cache when there isn't enough space in the system cache
      * to hold the entire file. DownloadManager deletes enough files to make space for the
      * new download.
      */
@@ -186,7 +186,7 @@ public class DownloadManagerStressTest extends DownloadManagerBaseTest {
                 }
             }
 
-            // /cache should now be almost full. 
+            // /cache should now be almost full.
             long spaceAvailable = fs.getAvailableBlocks() * blockSize;
             Log.i(TAG, "BEFORE download, available space in /cache: " + spaceAvailable);
             assertTrue(DOWNLOAD_FILE_SIZE > spaceAvailable);

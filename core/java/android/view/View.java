@@ -5908,7 +5908,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * @return {@code true} if this view applied the insets and it should not
      * continue propagating further down the hierarchy, {@code false} otherwise.
      * @see #getFitsSystemWindows()
-     * @see #setFitsSystemWindows(boolean) 
+     * @see #setFitsSystemWindows(boolean)
      * @see #setSystemUiVisibility(int)
      */
     protected boolean fitSystemWindows(Rect insets) {

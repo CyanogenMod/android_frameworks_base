@@ -314,7 +314,7 @@ class EGLLogWrapper implements EGL11 {
         checkError();
         return result;
     }
-    
+
     /** @hide **/
     public boolean eglReleaseThread() {
         begin("eglReleaseThread");

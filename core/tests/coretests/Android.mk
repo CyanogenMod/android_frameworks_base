@@ -16,10 +16,10 @@ LOCAL_MODULE_TAGS := tests
 
 # Include all test java files.
 LOCAL_SRC_FILES := \
-	$(call all-java-files-under, src) \
-	$(call all-Iaidl-files-under, src) \
-	$(call all-java-files-under, DisabledTestApp/src) \
-	$(call all-java-files-under, EnabledTestApp/src)
+    $(call all-java-files-under, src) \
+    $(call all-Iaidl-files-under, src) \
+    $(call all-java-files-under, DisabledTestApp/src) \
+    $(call all-java-files-under, EnabledTestApp/src)
 
 LOCAL_DX_FLAGS := --core-library
 LOCAL_STATIC_JAVA_LIBRARIES := core-tests-support android-common frameworks-core-util-lib mockwebserver guava littlemock
@@ -38,7 +38,7 @@ FrameworkCoreTests_all_apks_res := $(addprefix $(FrameworkCoreTests_intermediate
     $(foreach a, $(FrameworkCoreTests_all_apks), $(patsubst FrameworkCoreTests_%,%,$(a))))
 
 $(FrameworkCoreTests_all_apks_res): $(FrameworkCoreTests_intermediates)/raw/%: $(call intermediates-dir-for,APPS,FrameworkCoreTests_%)/package.apk | $(ACP)
-	$(call copy-file-to-new-target)
+    $(call copy-file-to-new-target)
 
 # Use R_file_stamp as dependency because we want the test apks in place before the R.java is generated.
 $(R_file_stamp) : $(FrameworkCoreTests_all_apks_res)

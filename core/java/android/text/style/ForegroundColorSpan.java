@@ -26,18 +26,18 @@ public class ForegroundColorSpan extends CharacterStyle
 
     private final int mColor;
 
-	public ForegroundColorSpan(int color) {
-		mColor = color;
-	}
+    public ForegroundColorSpan(int color) {
+        mColor = color;
+    }
 
     public ForegroundColorSpan(Parcel src) {
         mColor = src.readInt();
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.FOREGROUND_COLOR_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }
@@ -46,12 +46,12 @@ public class ForegroundColorSpan extends CharacterStyle
         dest.writeInt(mColor);
     }
 
-	public int getForegroundColor() {
-		return mColor;
-	}
+    public int getForegroundColor() {
+        return mColor;
+    }
 
-	@Override
-	public void updateDrawState(TextPaint ds) {
-		ds.setColor(mColor);
-	}
+    @Override
+    public void updateDrawState(TextPaint ds) {
+        ds.setColor(mColor);
+    }
 }

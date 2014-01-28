@@ -89,21 +89,21 @@ public interface ComponentCallbacks2 extends ComponentCallbacks {
      * be killed.
      */
     static final int TRIM_MEMORY_COMPLETE = 80;
-    
+
     /**
      * Level for {@link #onTrimMemory(int)}: the process is around the middle
      * of the background LRU list; freeing memory can help the system keep
      * other processes running later in the list for better overall performance.
      */
     static final int TRIM_MEMORY_MODERATE = 60;
-    
+
     /**
      * Level for {@link #onTrimMemory(int)}: the process has gone on to the
      * LRU list.  This is a good opportunity to clean up resources that can
      * efficiently and quickly be re-built if the user returns to the app.
      */
     static final int TRIM_MEMORY_BACKGROUND = 40;
-    
+
     /**
      * Level for {@link #onTrimMemory(int)}: the process had been showing
      * a user interface, and is no longer doing so.  Large allocations with

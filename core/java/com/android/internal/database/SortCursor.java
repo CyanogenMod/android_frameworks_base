@@ -51,7 +51,7 @@ public class SortCursor extends AbstractCursor
             mPos = -1;
         }
     };
-    
+
     public SortCursor(Cursor[] cursors, String sortcolumn)
     {
         mCursors = cursors;
@@ -60,10 +60,10 @@ public class SortCursor extends AbstractCursor
         mSortColumns = new int[length];
         for (int i = 0 ; i < length ; i++) {
             if (mCursors[i] == null) continue;
-            
+
             // Register ourself as a data set observer
             mCursors[i].registerDataSetObserver(mObserver);
-            
+
             mCursors[i].moveToFirst();
 
             // We don't catch the exception
@@ -231,9 +231,9 @@ public class SortCursor extends AbstractCursor
     @Override
     public byte[] getBlob(int column)
     {
-        return mCursor.getBlob(column);   
+        return mCursor.getBlob(column);
     }
-    
+
     @Override
     public String[] getColumnNames()
     {
@@ -280,7 +280,7 @@ public class SortCursor extends AbstractCursor
             }
         }
     }
-    
+
     @Override
     public void unregisterDataSetObserver(DataSetObserver observer) {
         int length = mCursors.length;
@@ -290,14 +290,14 @@ public class SortCursor extends AbstractCursor
             }
         }
     }
-    
+
     @Override
     public boolean requery()
     {
         int length = mCursors.length;
         for (int i = 0 ; i < length ; i++) {
             if (mCursors[i] == null) continue;
-            
+
             if (mCursors[i].requery() == false) {
                 return false;
             }

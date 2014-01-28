@@ -36,7 +36,7 @@ public class GridInHorizontal extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        
+
         setContentView(R.layout.grid_in_horizontal);
 
         String values[] = new String[1000];
@@ -44,14 +44,14 @@ public class GridInHorizontal extends Activity {
         for(i=0; i<1000; i++) {
             values[i] = ((Integer)i).toString();
         }
-        
+
         mText = (TextView) findViewById(R.id.text);
         mGridView = (GridView) findViewById(R.id.grid);
         mGridView.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, values));
 
     }
-    
+
     public GridView getGridView() {
         return mGridView;
     }

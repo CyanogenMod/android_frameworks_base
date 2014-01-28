@@ -50,12 +50,12 @@ import java.util.Map;
  * <p>
  * To obtain a handle to the print manager do the following:
  * </p>
- * 
+ *
  * <pre>
  * PrintManager printManager =
  *         (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
  * </pre>
- * 
+ *
  * <h3>Print mechanics</h3>
  * <p>
  * The key idea behind printing on the platform is that the content to be printed
@@ -167,7 +167,7 @@ public final class PrintManager {
 
         /**
          * Callback notifying that a print job state changed.
-         * 
+         *
          * @param printJobId The print job id.
          */
         public void onPrintJobStateChanged(PrintJobId printJobId);
@@ -175,7 +175,7 @@ public final class PrintManager {
 
     /**
      * Creates a new instance.
-     * 
+     *
      * @param context The current context in which to operate.
      * @param service The backing system service.
      * @hide
@@ -207,7 +207,7 @@ public final class PrintManager {
 
     /**
      * Creates an instance that can access all print jobs.
-     * 
+     *
      * @param userId The user id for which to get all print jobs.
      * @return An instance if the caller has the permission to access all print
      *         jobs, null otherwise.
@@ -228,7 +228,7 @@ public final class PrintManager {
 
     /**
      * Adds a listener for observing the state of print jobs.
-     * 
+     *
      * @param listener The listener to add.
      * @hide
      */
@@ -249,7 +249,7 @@ public final class PrintManager {
 
     /**
      * Removes a listener for observing the state of print jobs.
-     * 
+     *
      * @param listener The listener to remove.
      * @hide
      */
@@ -275,7 +275,7 @@ public final class PrintManager {
 
     /**
      * Gets a print job given its id.
-     * 
+     *
      * @return The print job list.
      * @see PrintJob
      * @hide
@@ -294,7 +294,7 @@ public final class PrintManager {
 
     /**
      * Gets the print jobs for this application.
-     * 
+     *
      * @return The print job list.
      * @see PrintJob
      */
@@ -407,7 +407,7 @@ public final class PrintManager {
 
     /**
      * Gets the list of enabled print services.
-     * 
+     *
      * @return The enabled service list or an empty list.
      * @hide
      */
@@ -425,7 +425,7 @@ public final class PrintManager {
 
     /**
      * Gets the list of installed print services.
-     * 
+     *
      * @return The installed service list or an empty list.
      * @hide
      */

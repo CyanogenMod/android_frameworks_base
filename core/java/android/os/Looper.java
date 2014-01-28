@@ -25,10 +25,10 @@ import android.util.PrefixPrinter;
   * not have a message loop associated with them; to create one, call
   * {@link #prepare} in the thread that is to run the loop, and then
   * {@link #loop} to have it process messages until the loop is stopped.
-  * 
+  *
   * <p>Most interaction with a message loop is through the
   * {@link Handler} class.
-  * 
+  *
   * <p>This is a typical example of the implementation of a Looper thread,
   * using the separation of {@link #prepare} and {@link #loop} to create an
   * initial Handler to communicate with the Looper.
@@ -164,17 +164,17 @@ public final class Looper {
 
     /**
      * Control logging of messages as they are processed by this Looper.  If
-     * enabled, a log message will be written to <var>printer</var> 
+     * enabled, a log message will be written to <var>printer</var>
      * at the beginning and ending of each message dispatch, identifying the
      * target Handler and message contents.
-     * 
+     *
      * @param printer A Printer object that will receive log messages, or
      * null to disable message logging.
      */
     public void setMessageLogging(Printer printer) {
         mLogging = printer;
     }
-    
+
     /**
      * Return the {@link MessageQueue} object associated with the current
      * thread.  This must be called from a thread running a Looper, or a

@@ -29,14 +29,14 @@ import android.view.Window;
 
 /**
  * This class provides isolated testing of a single activity.  The activity under test will
- * be created with minimal connection to the system infrastructure, and you can inject mocked or 
+ * be created with minimal connection to the system infrastructure, and you can inject mocked or
  * wrappered versions of many of Activity's dependencies.  Most of the work is handled
  * automatically here by {@link #setUp} and {@link #tearDown}.
- * 
+ *
  * <p>If you prefer a functional test, see {@link android.test.ActivityInstrumentationTestCase}.
- * 
+ *
  * <p>It must be noted that, as a true unit test, your Activity will not be running in the
- * normal system and will not participate in the normal interactions with other Activities.  
+ * normal system and will not participate in the normal interactions with other Activities.
  * The following methods should not be called in this configuration - most of them will throw
  * exceptions:
  * <ul>
@@ -51,17 +51,17 @@ import android.view.Window;
  * <li>{@link android.app.Activity#isTaskRoot()}</li>
  * <li>{@link android.app.Activity#moveTaskToBack(boolean)}</li>
  * </ul>
- * 
- * <p>The following methods may be called but will not do anything.  For test purposes, you can use 
- * the methods {@link #getStartedActivityIntent()} and {@link #getStartedActivityRequest()} to 
+ *
+ * <p>The following methods may be called but will not do anything.  For test purposes, you can use
+ * the methods {@link #getStartedActivityIntent()} and {@link #getStartedActivityRequest()} to
  * inspect the parameters that they were called with.
  * <ul>
  * <li>{@link android.app.Activity#startActivity(Intent)}</li>
  * <li>{@link android.app.Activity#startActivityForResult(Intent, int)}</li>
  * </ul>
  *
- * <p>The following methods may be called but will not do anything.  For test purposes, you can use 
- * the methods {@link #isFinishCalled()} and {@link #getFinishedActivityRequest()} to inspect the 
+ * <p>The following methods may be called but will not do anything.  For test purposes, you can use
+ * the methods {@link #isFinishCalled()} and {@link #getFinishedActivityRequest()} to inspect the
  * parameters that they were called with.
  * <ul>
  * <li>{@link android.app.Activity#finish()}</li>
@@ -70,7 +70,7 @@ import android.view.Window;
  * </ul>
  *
  */
-public abstract class ActivityUnitTestCase<T extends Activity> 
+public abstract class ActivityUnitTestCase<T extends Activity>
         extends ActivityTestCase {
 
     private Class<T> mActivityClass;
@@ -98,31 +98,31 @@ public abstract class ActivityUnitTestCase<T extends Activity>
         // default value for target context, as a default
       mActivityContext = getInstrumentation().getTargetContext();
     }
-    
+
     /**
      * Start the activity under test, in the same way as if it was started by
-     * {@link android.content.Context#startActivity Context.startActivity()}, providing the 
+     * {@link android.content.Context#startActivity Context.startActivity()}, providing the
      * arguments it supplied.  When you use this method to start the activity, it will automatically
      * be stopped by {@link #tearDown}.
-     * 
-     * <p>This method will call onCreate(), but if you wish to further exercise Activity life 
+     *
+     * <p>This method will call onCreate(), but if you wish to further exercise Activity life
      * cycle methods, you must call them yourself from your test case.
-     * 
+     *
      * <p><i>Do not call from your setUp() method.  You must call this method from each of your
      * test methods.</i>
-     *  
+     *
      * @param intent The Intent as if supplied to {@link android.content.Context#startActivity}.
      * @param savedInstanceState The instance state, if you are simulating this part of the life
      * cycle.  Typically null.
-     * @param lastNonConfigurationInstance This Object will be available to the 
-     * Activity if it calls {@link android.app.Activity#getLastNonConfigurationInstance()}.  
+     * @param lastNonConfigurationInstance This Object will be available to the
+     * Activity if it calls {@link android.app.Activity#getLastNonConfigurationInstance()}.
      * Typically null.
      * @return Returns the Activity that was created
      */
     protected T startActivity(Intent intent, Bundle savedInstanceState,
             Object lastNonConfigurationInstance) {
         assertFalse("Activity already created", mCreated);
-        
+
         if (!mAttached) {
             assertNotNull(mActivityClass);
             setActivity(null);
@@ -132,27 +132,27 @@ public abstract class ActivityUnitTestCase<T extends Activity>
                 if (mApplication == null) {
                     setApplication(new MockApplication());
                 }
-                ComponentName cn = new ComponentName(mActivityClass.getPackage().getName(), 
+                ComponentName cn = new ComponentName(mActivityClass.getPackage().getName(),
                         mActivityClass.getName());
                 intent.setComponent(cn);
                 ActivityInfo info = new ActivityInfo();
                 CharSequence title = mActivityClass.getName();
                 mMockParent = new MockParent();
                 String id = null;
-                        
+
                 newActivity = (T) getInstrumentation().newActivity(mActivityClass, mActivityContext,
                         token, mApplication, intent, info, title, mMockParent, id,
                         lastNonConfigurationInstance);
             } catch (Exception e) {
                 assertNotNull(newActivity);
             }
-            
+
             assertNotNull(newActivity);
             setActivity(newActivity);
-            
+
             mAttached = true;
         }
-        
+
         T result = getActivity();
         if (result != null) {
             getInstrumentation().callActivityOnCreate(getActivity(), savedInstanceState);
@@ -160,22 +160,22 @@ public abstract class ActivityUnitTestCase<T extends Activity>
         }
         return result;
     }
-    
+
     @Override
     protected void tearDown() throws Exception {
-        
+
         setActivity(null);
-        
-        // Scrub out members - protects against memory leaks in the case where someone 
+
+        // Scrub out members - protects against memory leaks in the case where someone
         // creates a non-static inner class (thus referencing the test case) and gives it to
         // someone else to hold onto
         scrubClass(ActivityInstrumentationTestCase.class);
 
         super.tearDown();
     }
-    
+
     /**
-     * Set the application for use during the test.  You must call this function before calling 
+     * Set the application for use during the test.  You must call this function before calling
      * {@link #startActivity}.  If your test does not call this method,
      * @param application The Application object that will be injected into the Activity under test.
      */
@@ -193,7 +193,7 @@ public abstract class ActivityUnitTestCase<T extends Activity>
     }
 
     /**
-     * This method will return the value if your Activity under test calls 
+     * This method will return the value if your Activity under test calls
      * {@link android.app.Activity#setRequestedOrientation}.
      */
     public int getRequestedOrientation() {
@@ -202,10 +202,10 @@ public abstract class ActivityUnitTestCase<T extends Activity>
         }
         return 0;
     }
-    
+
     /**
-     * This method will return the launch intent if your Activity under test calls 
-     * {@link android.app.Activity#startActivity(Intent)} or 
+     * This method will return the launch intent if your Activity under test calls
+     * {@link android.app.Activity#startActivity(Intent)} or
      * {@link android.app.Activity#startActivityForResult(Intent, int)}.
      * @return The Intent provided in the start call, or null if no start call was made.
      */
@@ -215,9 +215,9 @@ public abstract class ActivityUnitTestCase<T extends Activity>
         }
         return null;
     }
-    
+
     /**
-     * This method will return the launch request code if your Activity under test calls 
+     * This method will return the launch request code if your Activity under test calls
      * {@link android.app.Activity#startActivityForResult(Intent, int)}.
      * @return The request code provided in the start call, or -1 if no start call was made.
      */
@@ -229,9 +229,9 @@ public abstract class ActivityUnitTestCase<T extends Activity>
     }
 
     /**
-     * This method will notify you if the Activity under test called 
-     * {@link android.app.Activity#finish()}, 
-     * {@link android.app.Activity#finishFromChild(Activity)}, or 
+     * This method will notify you if the Activity under test called
+     * {@link android.app.Activity#finish()},
+     * {@link android.app.Activity#finishFromChild(Activity)}, or
      * {@link android.app.Activity#finishActivity(int)}.
      * @return Returns true if one of the listed finish methods was called.
      */
@@ -241,9 +241,9 @@ public abstract class ActivityUnitTestCase<T extends Activity>
         }
         return false;
     }
-    
+
     /**
-     * This method will return the request code if the Activity under test called 
+     * This method will return the request code if the Activity under test called
      * {@link android.app.Activity#finishActivity(int)}.
      * @return The request code provided in the start call, or -1 if no finish call was made.
      */
@@ -253,7 +253,7 @@ public abstract class ActivityUnitTestCase<T extends Activity>
         }
         return 0;
     }
-    
+
     /**
      * This mock Activity represents the "parent" activity.  By injecting this, we allow the user
      * to call a few more Activity methods, including:
@@ -264,7 +264,7 @@ public abstract class ActivityUnitTestCase<T extends Activity>
      * <li>{@link android.app.Activity#finishActivity(int requestCode)}</li>
      * <li>{@link android.app.Activity#finishFromChild(Activity child)}</li>
      * </ul>
-     * 
+     *
      * TODO: Make this overrideable, and the unit test can look for calls to other methods
      */
     private static class MockParent extends Activity {
@@ -298,7 +298,7 @@ public abstract class ActivityUnitTestCase<T extends Activity>
         public Window getWindow() {
             return null;
         }
-        
+
         /**
          * By defining this in the parent, we allow the tested activity to call
          * <ul>
@@ -311,7 +311,7 @@ public abstract class ActivityUnitTestCase<T extends Activity>
             mStartedActivityIntent = intent;
             mStartedActivityRequest = requestCode;
         }
-        
+
         /**
          * By defining this in the parent, we allow the tested activity to call
          * <ul>

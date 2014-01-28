@@ -20,7 +20,7 @@ import android.animation.TimeInterpolator;
 
 /**
  * An interpolator defines the rate of change of an animation. This allows
- * the basic animation effects (alpha, scale, translate, rotate) to be 
+ * the basic animation effects (alpha, scale, translate, rotate) to be
  * accelerated, decelerated, repeated, etc.
  */
 public interface Interpolator extends TimeInterpolator {

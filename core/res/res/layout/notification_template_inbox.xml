@@ -193,7 +193,7 @@
                 android:layout_weight="1"
                 android:text="@android:string/ellipsis"
                 />
-            <FrameLayout 
+            <FrameLayout
                 android:id="@+id/inbox_end_pad"
                 android:layout_width="match_parent"
                 android:layout_height="8dip"

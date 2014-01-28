@@ -37,7 +37,7 @@ public class LocationTest extends TestCase {
                 String.valueOf(result);
         assertEquals(message, -80.075, result);
     }
-    
+
     public void testConvert_MinutesToDouble(){
         String testMinutesCoord = "-80:05.10000";
         String message;
@@ -48,7 +48,7 @@ public class LocationTest extends TestCase {
                 String.valueOf(result);
         assertEquals(message, -80.085, result);
     }
-    
+
     public void testConvert_SecondsToDouble(){
         String testSecondsCoord = "-80:04:03.00000";
         String message;
@@ -59,7 +59,7 @@ public class LocationTest extends TestCase {
                 String.valueOf(result);
         assertEquals(message, -80.0675, result);
     }
-    
+
     public void testConvert_SecondsToDouble2(){
         String testSecondsCoord = "-80:4:3";
         String message;
@@ -80,7 +80,7 @@ public class LocationTest extends TestCase {
         message = "coordinateToDegreesTest: Should return a string -80.075, but returned " + result;
         assertEquals(message, "-80.075", result);
     }
-    
+
     public void testConvert_CoordinateToDegrees2(){
         String message;
         String result;
@@ -88,7 +88,7 @@ public class LocationTest extends TestCase {
         message = "coordinateToDegrees2Test: Should return a string -80, but returned " + result;
         assertEquals(message, "-80", result);
     }
-    
+
     public void testConvert_CoordinateToMinutes(){
         String message;
         String result;
@@ -98,7 +98,7 @@ public class LocationTest extends TestCase {
                 result;
         assertEquals(message, "-80:5.1", result);
     }
-    
+
     public void testConvert_CoordinateToMinutes2(){
         String message;
         String result;
@@ -108,7 +108,7 @@ public class LocationTest extends TestCase {
                 result;
         assertEquals(message, "-80:0", result);
     }
-    
+
     public void testConvert_CoordinateToSeconds(){
         String message;
         String result;
@@ -150,7 +150,7 @@ public class LocationTest extends TestCase {
 
         //TODO: Test a Random Middle Value
     }
-    
+
     public void testDistanceTo() {
         String message;
         boolean result = true;
@@ -173,7 +173,7 @@ public class LocationTest extends TestCase {
         String.valueOf(distance);
         assertEquals(message, distance, 8885140.0, 1);
     }
-    
+
     public void testAltitude() {
         String message;
         Location loc = new Location("");

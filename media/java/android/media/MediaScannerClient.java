@@ -20,7 +20,7 @@ package android.media;
  * {@hide}
  */
 public interface MediaScannerClient
-{    
+{
     public void scanFile(String path, long lastModified, long fileSize,
             boolean isDirectory, boolean noMedia);
 

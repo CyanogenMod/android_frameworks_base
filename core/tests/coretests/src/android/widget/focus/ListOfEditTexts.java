@@ -86,7 +86,7 @@ public class ListOfEditTexts extends Activity {
                         ViewGroup.LayoutParams.WRAP_CONTENT));
         buttonBelow.setText("button below list");
         mLinearLayout.addView(buttonBelow);
-        
+
         setContentView(mLinearLayout);
     }
 
@@ -114,7 +114,7 @@ public class ListOfEditTexts extends Activity {
 
             if (convertView != null) {
                 ((EditText) convertView).setText(body);
-                return convertView;                
+                return convertView;
             }
 
             EditText editText = new EditText(getContext());

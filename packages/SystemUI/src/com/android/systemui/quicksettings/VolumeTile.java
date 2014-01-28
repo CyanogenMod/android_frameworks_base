@@ -13,7 +13,7 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class VolumeTile extends QuickSettingsTile {
 
-    public VolumeTile(Context context, 
+    public VolumeTile(Context context,
             final QuickSettingsController qsc, Handler handler) {
         super(context, qsc);
 

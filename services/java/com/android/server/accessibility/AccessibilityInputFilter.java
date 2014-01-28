@@ -142,7 +142,7 @@ class AccessibilityInputFilter extends InputFilter implements EventStreamTransfo
     @Override
     public void onInputEvent(InputEvent event, int policyFlags) {
         if (DEBUG) {
-            Slog.d(TAG, "Received event: " + event + ", policyFlags=0x" 
+            Slog.d(TAG, "Received event: " + event + ", policyFlags=0x"
                     + Integer.toHexString(policyFlags));
         }
         if (event instanceof MotionEvent

@@ -115,7 +115,7 @@ void NinePatch_Draw(SkCanvas* canvas, const SkRect& bounds,
         defaultPaint.setDither(true);
         paint = &defaultPaint;
     }
-    
+
     // if our SkCanvas were back by GL we should enable this and draw this as
     // a mesh, which will be faster in most cases.
     if (false) {
@@ -159,8 +159,8 @@ void NinePatch_Draw(SkCanvas* canvas, const SkRect& bounds,
 #endif
         return;
     }
-    
-    // should try a quick-reject test before calling lockPixels 
+
+    // should try a quick-reject test before calling lockPixels
 
     SkAutoLockPixels alp(bitmap);
     // after the lock, it is valid to check getPixels()

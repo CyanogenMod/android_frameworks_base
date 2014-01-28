@@ -778,7 +778,7 @@ RestoreHelperBase::WriteFile(const String8& filename, BackupDataReader* in)
         ALOGW("Could not open file %s -- %s", filename.string(), strerror(errno));
         return errno;
     }
-    
+
     while ((amt = in->ReadEntityData(buf, RESTORE_BUF_SIZE)) > 0) {
         err = write(fd, buf, amt);
         if (err != amt) {

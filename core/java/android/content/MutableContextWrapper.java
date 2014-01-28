@@ -24,12 +24,12 @@ public class MutableContextWrapper extends ContextWrapper {
     public MutableContextWrapper(Context base) {
         super(base);
     }
-    
+
     /**
      * Change the base context for this ContextWrapper. All calls will then be
      * delegated to the base context.  Unlike ContextWrapper, the base context
      * can be changed even after one is already set.
-     * 
+     *
      * @param base The new base context for this wrapper.
      */
     public void setBaseContext(Context base) {

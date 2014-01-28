@@ -34,11 +34,11 @@ public final class Bitmap implements Parcelable {
      * @see Bitmap#setDensity(int)
      */
     public static final int DENSITY_NONE = 0;
-    
+
     /**
      * Note:  mNativeBitmap is used by FaceDetector_jni.cpp
      * Don't change/rename without updating FaceDetector_jni.cpp
-     * 
+     *
      * @hide
      */
     public final int mNativeBitmap;
@@ -329,13 +329,13 @@ public final class Bitmap implements Parcelable {
      * Returns the generation ID of this bitmap. The generation ID changes
      * whenever the bitmap is modified. This can be used as an efficient way to
      * check if a bitmap has changed.
-     * 
+     *
      * @return The current generation ID for this bitmap.
      */
     public int getGenerationId() {
         return nativeGenerationId(mNativeBitmap);
     }
-    
+
     /**
      * This is called by methods that want to throw an exception if the bitmap
      * has already been recycled.
@@ -397,12 +397,12 @@ public final class Bitmap implements Parcelable {
          * encoded: red is stored with 5 bits of precision (32 possible
          * values), green is stored with 6 bits of precision (64 possible
          * values) and blue is stored with 5 bits of precision.
-         * 
+         *
          * This configuration can produce slight visual artifacts depending
          * on the configuration of the source. For instance, without
          * dithering, the result might show a greenish tint. To get better
          * results dithering should be applied.
-         * 
+         *
          * This configuration may be useful when using opaque bitmaps
          * that do not require high color fidelity.
          */
@@ -412,18 +412,18 @@ public final class Bitmap implements Parcelable {
          * Each pixel is stored on 2 bytes. The three RGB color channels
          * and the alpha channel (translucency) are stored with a 4 bits
          * precision (16 possible values.)
-         * 
+         *
          * This configuration is mostly useful if the application needs
          * to store translucency information but also needs to save
          * memory.
-         * 
+         *
          * It is recommended to use {@link #ARGB_8888} instead of this
          * configuration.
          *
          * Note: as of {@link android.os.Build.VERSION_CODES#KITKAT},
          * any bitmap created with this configuration will be created
          * using {@link #ARGB_8888} instead.
-         * 
+         *
          * @deprecated Because of the poor quality of this configuration,
          *             it is advised to use {@link #ARGB_8888} instead.
          */
@@ -434,7 +434,7 @@ public final class Bitmap implements Parcelable {
          * Each pixel is stored on 4 bytes. Each channel (RGB and alpha
          * for translucency) is stored with 8 bits of precision (256
          * possible values.)
-         * 
+         *
          * This configuration is very flexible and offers the best
          * quality. It should be used whenever possible.
          */
@@ -446,7 +446,7 @@ public final class Bitmap implements Parcelable {
         private static Config sConfigs[] = {
             null, null, ALPHA_8, null, RGB_565, ARGB_4444, ARGB_8888
         };
-        
+
         Config(int ni) {
             this.nativeInt = ni;
         }
@@ -562,7 +562,7 @@ public final class Bitmap implements Parcelable {
 
     /**
      * Creates a new bitmap, scaled from an existing bitmap, when possible. If the
-     * specified width and height are the same as the current width and height of 
+     * specified width and height are the same as the current width and height of
      * the source bitmap, the source bitmap is returned and no new bitmap is
      * created.
      *
@@ -637,7 +637,7 @@ public final class Bitmap implements Parcelable {
      * transformed by the optional matrix. The new bitmap may be the
      * same object as source, or a copy may have been made. It is
      * initialized with the same density as the original bitmap.
-     * 
+     *
      * If the source bitmap is immutable and the requested subset is the
      * same as the source bitmap itself, then the source bitmap is
      * returned and no new bitmap is created.
@@ -727,12 +727,12 @@ public final class Bitmap implements Parcelable {
                 paint.setAntiAlias(true);
             }
         }
-        
+
         // The new bitmap was created from a known bitmap source so assume that
         // they use the same density
         bitmap.mDensity = source.mDensity;
         bitmap.mIsPremultiplied = source.mIsPremultiplied;
-        
+
         canvas.setBitmap(bitmap);
         canvas.drawBitmap(source, srcR, dstR, paint);
         canvas.setBitmap(null);
@@ -778,8 +778,8 @@ public final class Bitmap implements Parcelable {
      * @param config   The bitmap config to create.
      * @param hasAlpha If the bitmap is ARGB_8888 this flag can be used to mark the
      *                 bitmap as opaque. Doing so will clear the bitmap in black
-     *                 instead of transparent.  
-     * 
+     *                 instead of transparent.
+     *
      * @throws IllegalArgumentException if the width or height are <= 0
      */
     private static Bitmap createBitmap(int width, int height, Config config, boolean hasAlpha) {
@@ -797,8 +797,8 @@ public final class Bitmap implements Parcelable {
      * @param config   The bitmap config to create.
      * @param hasAlpha If the bitmap is ARGB_8888 this flag can be used to mark the
      *                 bitmap as opaque. Doing so will clear the bitmap in black
-     *                 instead of transparent.  
-     * 
+     *                 instead of transparent.
+     *
      * @throws IllegalArgumentException if the width or height are <= 0
      */
     private static Bitmap createBitmap(DisplayMetrics display, int width, int height,
@@ -1005,12 +1005,12 @@ public final class Bitmap implements Parcelable {
      * <p>Indicates whether pixels stored in this bitmaps are stored pre-multiplied.
      * When a pixel is pre-multiplied, the RGB components have been multiplied by
      * the alpha component. For instance, if the original color is a 50%
-     * translucent red <code>(128, 255, 0, 0)</code>, the pre-multiplied form is 
+     * translucent red <code>(128, 255, 0, 0)</code>, the pre-multiplied form is
      * <code>(128, 128, 0, 0)</code>.</p>
-     * 
+     *
      * <p>This method always returns false if {@link #getConfig()} is
      * {@link Bitmap.Config#RGB_565}.</p>
-     * 
+     *
      * <p>This method only returns true if {@link #hasAlpha()} returns true.
      * A bitmap with no alpha channel can be used both as a pre-multiplied and
      * as a non pre-multiplied bitmap.</p>
@@ -1111,7 +1111,7 @@ public final class Bitmap implements Parcelable {
     public int getScaledHeight(int targetDensity) {
         return scaleFromDensity(getHeight(), mDensity, targetDensity);
     }
-    
+
     /**
      * @hide
      */
@@ -1119,11 +1119,11 @@ public final class Bitmap implements Parcelable {
         if (sdensity == DENSITY_NONE || tdensity == DENSITY_NONE || sdensity == tdensity) {
             return size;
         }
-        
+
         // Scale by tdensity / sdensity, rounding up.
         return ((size * tdensity) + (sdensity >> 1)) / sdensity;
     }
-    
+
     /**
      * Return the number of bytes between rows in the bitmap's pixels. Note that
      * this refers to the pixels as stored natively by the bitmap. If you call
@@ -1213,17 +1213,17 @@ public final class Bitmap implements Parcelable {
      * Indicates whether the renderer responsible for drawing this
      * bitmap should attempt to use mipmaps when this bitmap is drawn
      * scaled down.
-     * 
+     *
      * If you know that you are going to draw this bitmap at less than
      * 50% of its original size, you may be able to obtain a higher
      * quality
-     * 
+     *
      * This property is only a suggestion that can be ignored by the
      * renderer. It is not guaranteed to have any effect.
-     * 
+     *
      * @return true if the renderer should attempt to use mipmaps,
      *         false otherwise
-     * 
+     *
      * @see #setHasMipMap(boolean)
      */
     public final boolean hasMipMap() {
@@ -1238,7 +1238,7 @@ public final class Bitmap implements Parcelable {
      * If you know that you are going to draw this bitmap at less than
      * 50% of its original size, you may be able to obtain a higher
      * quality by turning this property on.
-     * 
+     *
      * Note that if the renderer respects this hint it might have to
      * allocate extra memory to hold the mipmap levels for this bitmap.
      *
@@ -1320,7 +1320,7 @@ public final class Bitmap implements Parcelable {
     /**
      * Shared code to check for illegal arguments passed to getPixel()
      * or setPixel()
-     * 
+     *
      * @param x x coordinate of the pixel
      * @param y y coordinate of the pixel
      */
@@ -1496,9 +1496,9 @@ public final class Bitmap implements Parcelable {
      * -2, -2, so that drawing the alpha bitmap offset by (-2, -2) and then
      * drawing the original would result in the blur visually aligning with
      * the original.
-     * 
+     *
      * <p>The initial density of the returned bitmap is the same as the original's.
-     * 
+     *
      * @param paint Optional paint used to modify the alpha values in the
      *              resulting bitmap. Pass null for default behavior.
      * @param offsetXY Optional array that returns the X (index 0) and Y
@@ -1615,7 +1615,7 @@ public final class Bitmap implements Parcelable {
     private static native boolean nativeHasMipMap(int nativeBitmap);
     private static native void nativeSetHasMipMap(int nBitmap, boolean hasMipMap);
     private static native boolean nativeSameAs(int nb0, int nb1);
-    
+
     /* package */ final int ni() {
         return mNativeBitmap;
     }

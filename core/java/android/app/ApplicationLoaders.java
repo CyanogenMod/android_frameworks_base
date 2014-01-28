@@ -52,7 +52,7 @@ class ApplicationLoaders
                 if (loader != null) {
                     return loader;
                 }
-    
+
                 Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, zip);
                 PathClassLoader pathClassloader =
                     new PathClassLoader(zip, libPath, parent);

@@ -18,10 +18,10 @@
 */
 -->
 <LinearLayout id="@+id/content" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
-	<TextView id="@+id/text" android:text="S" android:layout_width="match_parent" android:layout_height="wrap_content" />
-	<TextView id="@+id/text" android:text="M" android:layout_width="match_parent" android:layout_height="wrap_content" />
-	<TextView id="@+id/text" android:text="T" android:layout_width="match_parent" android:layout_height="wrap_content" />
-	<TextView id="@+id/text" android:text="W" android:layout_width="match_parent" android:layout_height="wrap_content" />
-	<TextView id="@+id/text" android:text="H" android:layout_width="match_parent" android:layout_height="wrap_content" />
-	<TextView id="@+id/text" android:text="F" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView id="@+id/text" android:text="S" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView id="@+id/text" android:text="M" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView id="@+id/text" android:text="T" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView id="@+id/text" android:text="W" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView id="@+id/text" android:text="H" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <TextView id="@+id/text" android:text="F" android:layout_width="match_parent" android:layout_height="wrap_content" />
 </LinearLayout>

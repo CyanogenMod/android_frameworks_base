@@ -61,11 +61,11 @@ public class RecognitionManagerService extends Binder {
                 return;
             }
 
-            int change = isPackageDisappearing(comp.getPackageName()); 
+            int change = isPackageDisappearing(comp.getPackageName());
             if (change == PACKAGE_PERMANENT_CHANGE
                     || change == PACKAGE_TEMPORARY_CHANGE) {
                 setCurRecognizer(findAvailRecognizer(null, userHandle), userHandle);
-                
+
             } else if (isPackageModified(comp.getPackageName())) {
                 setCurRecognizer(findAvailRecognizer(comp.getPackageName(), userHandle),
                         userHandle);

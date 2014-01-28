@@ -61,19 +61,19 @@ public class GridTouchVerticalSpacingStackFromBottomTest extends ActivityInstrum
     public void testNoScroll() {
         View firstChild = mGridView.getChildAt(0);
         View lastChild = mGridView.getChildAt(mGridView.getChildCount() - 1);
-        
+
         int lastTop = lastChild.getTop();
-        
+
         TouchUtils.dragViewBy(this, firstChild, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
                 ViewConfiguration.getTouchSlop());
-        
+
         View newLastChild = mGridView.getChildAt(mGridView.getChildCount() - 1);
-        
+
         assertEquals("View scrolled too early", lastTop, newLastChild.getTop());
-        assertEquals("Wrong view in last position", mGridView.getAdapter().getCount() - 1, 
+        assertEquals("Wrong view in last position", mGridView.getAdapter().getCount() - 1,
                 newLastChild.getId());
     }
-    
+
     // TODO: needs to be adjusted to pass on non-HVGA displays
     // @LargeTest
     public void testShortScroll() {
@@ -81,21 +81,21 @@ public class GridTouchVerticalSpacingStackFromBottomTest extends ActivityInstrum
         if (firstChild.getTop() < this.mGridView.getListPaddingTop()) {
             firstChild = mGridView.getChildAt(1);
         }
-            
+
         View lastChild = mGridView.getChildAt(mGridView.getChildCount() - 1);
-        
+
         int lastTop = lastChild.getTop();
-        
+
         TouchUtils.dragViewBy(this, firstChild, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
                 mViewConfig.getScaledTouchSlop() + 1 + 10);
-        
+
         View newLastChild = mGridView.getChildAt(mGridView.getChildCount() - 1);
-        
+
         assertEquals("View scrolled to wrong position", lastTop, newLastChild.getTop() - 10);
         assertEquals("Wrong view in last position", mGridView.getAdapter().getCount() - 1,
                 newLastChild.getId());
     }
-    
+
     // TODO: needs to be adjusted to pass on non-HVGA displays
     // @LargeTest
     public void testLongScroll() {
@@ -106,55 +106,55 @@ public class GridTouchVerticalSpacingStackFromBottomTest extends ActivityInstrum
 
         int firstTop = firstChild.getTop();
 
-        int distance = TouchUtils.dragViewBy(this, firstChild, 
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 
+        int distance = TouchUtils.dragViewBy(this, firstChild,
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
                 (int) (mActivity.getWindowManager().getDefaultDisplay().getHeight() * 0.75f));
-        
+
         assertEquals("View scrolled to wrong position", firstTop
                 + (distance - mViewConfig.getScaledTouchSlop() - 1), firstChild.getTop());
-    } 
-    
+    }
+
     @LargeTest
     public void testManyScrolls() {
         int originalCount = mGridView.getChildCount();
-        
+
         View firstChild;
         int firstId = Integer.MIN_VALUE;
-        int firstTop = Integer.MIN_VALUE; 
+        int firstTop = Integer.MIN_VALUE;
         int prevId;
-        int prevTop; 
+        int prevTop;
         do {
             prevId = firstId;
             prevTop = firstTop;
             TouchUtils.dragQuarterScreenDown(this);
-            assertTrue(String.format("Too many children created: %d expected no more than %d", 
-                    mGridView.getChildCount(), originalCount + 4), 
+            assertTrue(String.format("Too many children created: %d expected no more than %d",
+                    mGridView.getChildCount(), originalCount + 4),
                     mGridView.getChildCount() <= originalCount + 4);
             firstChild = mGridView.getChildAt(0);
             firstId = firstChild.getId();
-            firstTop = firstChild.getTop(); 
+            firstTop = firstChild.getTop();
         } while ((prevId != firstId) || (prevTop != firstTop));
-        
-        
+
+
         firstChild = mGridView.getChildAt(0);
         assertEquals("View scrolled to wrong position", 0, firstChild.getId());
-        
+
         firstId = Integer.MIN_VALUE;
-        firstTop = Integer.MIN_VALUE; 
+        firstTop = Integer.MIN_VALUE;
         do {
             prevId = firstId;
             prevTop = firstTop;
             TouchUtils.dragQuarterScreenUp(this);
-            assertTrue(String.format("Too many children created: %d expected no more than %d", 
-                    mGridView.getChildCount(), originalCount + 4), 
+            assertTrue(String.format("Too many children created: %d expected no more than %d",
+                    mGridView.getChildCount(), originalCount + 4),
                     mGridView.getChildCount() <= originalCount + 4);
             firstChild = mGridView.getChildAt(0);
             firstId = firstChild.getId();
-            firstTop = firstChild.getTop(); 
+            firstTop = firstChild.getTop();
         } while ((prevId != firstId) || (prevTop != firstTop));
-        
+
         View lastChild = mGridView.getChildAt(mGridView.getChildCount() - 1);
         assertEquals("Grid is not scrolled to the bottom", mGridView.getAdapter().getCount() - 1,
                 lastChild.getId());
-    } 
+    }
 }

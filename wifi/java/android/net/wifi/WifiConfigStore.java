@@ -1043,7 +1043,7 @@ class WifiConfigStore {
                                 break;
                             case PAC:
                                 config.proxySettings = proxySettings;
-                                ProxyProperties proxyPacProperties = 
+                                ProxyProperties proxyPacProperties =
                                         new ProxyProperties(pacFileUrl);
                                 linkProperties.setHttpProxy(proxyPacProperties);
                                 break;

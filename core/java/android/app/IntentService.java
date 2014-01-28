@@ -138,7 +138,7 @@ public abstract class IntentService extends Service {
 
     /**
      * Unless you provide binding for your service, you don't need to implement this
-     * method, because the default implementation returns null. 
+     * method, because the default implementation returns null.
      * @see android.app.Service#onBind
      */
     @Override

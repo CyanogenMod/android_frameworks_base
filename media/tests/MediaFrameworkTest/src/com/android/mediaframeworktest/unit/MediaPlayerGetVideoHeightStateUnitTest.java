@@ -32,7 +32,7 @@ public class MediaPlayerGetVideoHeightStateUnitTest extends AndroidTestCase impl
      *    {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}.
      * 2. It is invalid to call getVideoHeight() in the following states:
      *    {Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -47,7 +47,7 @@ public class MediaPlayerGetVideoHeightStateUnitTest extends AndroidTestCase impl
         assertTrue(!stateErrors.errorInIdleStateAfterReset);
         assertTrue(!stateErrors.errorInInitializedState);
         assertTrue(!stateErrors.errorInStoppedState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInErrorState);
     }

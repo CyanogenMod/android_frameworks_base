@@ -52,7 +52,7 @@ public class ContentQueryMap extends Observable {
      *
      * @param cursor the cursor whose contents should be cached
      * @param columnNameOfKey the column that is to be used as the key of the values map
-     * @param keepUpdated true if the cursor's ContentProvider should be monitored for changes and 
+     * @param keepUpdated true if the cursor's ContentProvider should be monitored for changes and
      * the map updated when changes do occur
      * @param handlerForUpdateNotifications the Handler that should be used to receive
      *  notifications of changes (if requested). Normally you pass null here, but if
@@ -67,8 +67,8 @@ public class ContentQueryMap extends Observable {
         mHandlerForUpdateNotifications = handlerForUpdateNotifications;
         setKeepUpdated(keepUpdated);
 
-        // If we aren't keeping the cache updated with the current state of the cursor's 
-        // ContentProvider then read it once into the cache. Otherwise the cache will be filled 
+        // If we aren't keeping the cache updated with the current state of the cursor's
+        // ContentProvider then read it once into the cache. Otherwise the cache will be filled
         // automatically.
         if (!keepUpdated) {
             readCursorIntoCache(cursor);
@@ -76,7 +76,7 @@ public class ContentQueryMap extends Observable {
     }
 
     /**
-     * Change whether or not the ContentQueryMap will register with the cursor's ContentProvider 
+     * Change whether or not the ContentQueryMap will register with the cursor's ContentProvider
      * for change notifications. If you use a ContentQueryMap in an activity you should call this
      * with false in onPause(), which means you need to call it with true in onResume()
      * if want it to be kept updated.
@@ -110,7 +110,7 @@ public class ContentQueryMap extends Observable {
                 };
             }
             mCursor.registerContentObserver(mContentObserver);
-            // mark dirty, since it is possible the cursor's backing data had changed before we 
+            // mark dirty, since it is possible the cursor's backing data had changed before we
             // registered for changes
             mDirty = true;
         }

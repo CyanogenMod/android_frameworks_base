@@ -21,7 +21,7 @@
     <string name="keypad_zero">0</string>
     <string name="keypad_star">*</string>
     <string name="keypad_pound">"#"</string>
-    
+
 
     <!-- HorizontalGravity -->
     <string name="table_layout_open">Open\u2026</string>
@@ -40,7 +40,7 @@
     <string name="table_layout_f">F</string>
     <string name="table_layout_g">G</string>
     <string name="table_layout_h">H</string>
-    
+
     <!-- scroll_to_rectangle -->
     <string name="scroll_top_button">Click to make "hi!" on screen</string>
     <string name="scroll_top_button2">Click to make blob on screen</string>
@@ -63,10 +63,10 @@
 
     <!-- List with button above -->
     <string name="button_above_list_label">Button above list</string>
-    
+
     <!-- List take focus from side -->
     <string name="side_button_label">X</string>
-    
+
     <!-- Linear Layout show/hide & sizing -->
     <string name="linear_listheight_fixed">Fixed Size</string>
     <string name="linear_listheight_fill">Fill Screen</string>
@@ -75,7 +75,7 @@
     <!-- Baseline -->
     <string name="show">Show</string>
     <string name="time">00:00:00</string>
-    
+
     <!-- Drawable -->
     <string name="minimal_text">a</string>
     <string name="change_backgrounds">Change backgrounds</string>
@@ -92,8 +92,8 @@
             activity have a translucent background, compositing over
             whatever is behind it.</string>
     <string name="text">Lorem ipsum datum carat casus belli honorare</string>
-    
-	<string name="hide">Hide</string>
+
+    <string name="hide">Hide</string>
     <string name="go">Go</string>
 
     <string name="include_label">Included views below:</string>

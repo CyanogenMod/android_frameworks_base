@@ -27,19 +27,19 @@ import android.test.suitebuilder.annotation.Suppress;
  */
 public class MediaRecorderSetAudioEncoderStateUnitTest extends AndroidTestCase implements MediaRecorderMethodUnderTest {
     private MediaRecorderStateUnitTestTemplate mTestTemplate = new MediaRecorderStateUnitTestTemplate();
-    
+
     /**
      * 1. It is valid to call setAudioEncoder() in the following states:
      *    {DataSourceConfigured}.
      * 2. It is invalid to call setAudioEncoder() in the following states:
      *    {Initial, Initialized, Prepared, Recording, Error}
-     *    
+     *
      * @param stateErrors the MediaRecorderStateErrors to check against.
      */
     public void checkStateErrors(MediaRecorderStateErrors stateErrors) {
         // Valid states.
         assertTrue(!stateErrors.errorInDataSourceConfiguredState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInPreparedState);
         assertTrue(stateErrors.errorInRecordingState);
@@ -58,7 +58,7 @@ public class MediaRecorderSetAudioEncoderStateUnitTest extends AndroidTestCase i
     public void testSetAudioEncoder() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "setAudioEncoder()";

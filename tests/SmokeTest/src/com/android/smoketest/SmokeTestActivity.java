@@ -22,7 +22,7 @@ import android.content.Intent;
 /**
  * Initial launcher for UI access to smoke tests.  This does not actually launch the tests,
  * it simply provides manual access to the various UI activities that are used by the tests.
- * 
+ *
  * To run all of the tests in this suite:
  * adb shell am instrument \
  *   -w com.android.smoketest/.tests.SmokeTestInstrumentationTestRunner

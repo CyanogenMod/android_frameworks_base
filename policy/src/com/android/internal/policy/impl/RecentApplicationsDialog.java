@@ -261,7 +261,7 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
         final List<ActivityManager.RecentTaskInfo> recentTasks =
                 am.getRecentTasks(MAX_RECENT_TASKS, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
 
-        ActivityInfo homeInfo = 
+        ActivityInfo homeInfo =
             new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
                     .resolveActivityInfo(pm, 0);
 

@@ -33,7 +33,7 @@ public class MarqueeActivity extends Activity {
 
         final LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        
+
         final TextView text1 = new TextView(this);
         text1.setText("This is a marquee inside a TextView");
         text1.setSingleLine(true);
@@ -52,7 +52,7 @@ public class MarqueeActivity extends Activity {
         linearLayout.addView(text2, params);
 
         setContentView(linearLayout);
-        
+
         getWindow().getDecorView().postDelayed(new Runnable() {
             @Override
             public void run() {

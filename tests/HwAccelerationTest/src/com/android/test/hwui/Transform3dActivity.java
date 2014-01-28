@@ -57,7 +57,7 @@ public class Transform3dActivity extends Activity {
             final float centerX = getWidth() / 2.0f - mBitmap1.getWidth() / 2.0f;
             final float centerY = getHeight() / 2.0f - mBitmap1.getHeight() / 2.0f;
             final Camera camera = mCamera;
-            
+
             final Matrix matrix = mMatrix;
 
             rotate(centerX, centerY, camera, matrix, 32.0f);
@@ -65,13 +65,13 @@ public class Transform3dActivity extends Activity {
 
             rotate(centerX, centerY, camera, matrix, 12.0f);
             drawBitmap(canvas, centerX, centerY, -mBitmap1.getWidth(), matrix);
-            
+
             rotate(centerX, centerY, camera, matrix, 52.0f);
             drawBitmap(canvas, centerX, centerY, mBitmap1.getWidth(), matrix);
-            
+
             rotate(centerX, centerY, camera, matrix, 122.0f);
             drawBitmap(canvas, centerX, centerY, mBitmap1.getWidth() * 2.0f, matrix);
-            
+
         }
 
         private void drawBitmap(Canvas canvas, float centerX, float centerY, float offset,

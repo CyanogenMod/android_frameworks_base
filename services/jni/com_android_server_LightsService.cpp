@@ -68,7 +68,7 @@ static jint init_native(JNIEnv *env, jobject clazz)
     int err;
     hw_module_t* module;
     Devices* devices;
-    
+
     devices = (Devices*)malloc(sizeof(Devices));
 
     err = hw_get_module(LIGHTS_HARDWARE_MODULE_ID, (hw_module_t const**)&module);

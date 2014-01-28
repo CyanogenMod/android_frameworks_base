@@ -130,7 +130,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *     computation finishes. The result of the background computation is passed to
  *     this step as a parameter.</li>
  * </ol>
- * 
+ *
  * <h2>Cancelling a task</h2>
  * <p>A task can be cancelled at any time by invoking {@link #cancel(boolean)}. Invoking
  * this method will cause subsequent calls to {@link #isCancelled()} to return true.
@@ -216,7 +216,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
     private final FutureTask<Result> mFuture;
 
     private volatile Status mStatus = Status.PENDING;
-    
+
     private final AtomicBoolean mCancelled = new AtomicBoolean();
     private final AtomicBoolean mTaskInvoked = new AtomicBoolean();
 
@@ -360,14 +360,14 @@ public abstract class AsyncTask<Params, Progress, Result> {
     /**
      * <p>Runs on the UI thread after {@link #doInBackground}. The
      * specified result is the value returned by {@link #doInBackground}.</p>
-     * 
+     *
      * <p>This method won't be invoked if the task was cancelled.</p>
      *
      * @param result The result of the operation computed by {@link #doInBackground}.
      *
      * @see #onPreExecute
      * @see #doInBackground
-     * @see #onCancelled(Object) 
+     * @see #onCancelled(Object)
      */
     @SuppressWarnings({"UnusedDeclaration"})
     protected void onPostExecute(Result result) {
@@ -389,31 +389,31 @@ public abstract class AsyncTask<Params, Progress, Result> {
     /**
      * <p>Runs on the UI thread after {@link #cancel(boolean)} is invoked and
      * {@link #doInBackground(Object[])} has finished.</p>
-     * 
+     *
      * <p>The default implementation simply invokes {@link #onCancelled()} and
      * ignores the result. If you write your own implementation, do not call
      * <code>super.onCancelled(result)</code>.</p>
      *
      * @param result The result, if any, computed in
      *               {@link #doInBackground(Object[])}, can be null
-     * 
+     *
      * @see #cancel(boolean)
      * @see #isCancelled()
      */
     @SuppressWarnings({"UnusedParameters"})
     protected void onCancelled(Result result) {
         onCancelled();
-    }    
-    
+    }
+
     /**
      * <p>Applications should preferably override {@link #onCancelled(Object)}.
      * This method is invoked by the default implementation of
      * {@link #onCancelled(Object)}.</p>
-     * 
+     *
      * <p>Runs on the UI thread after {@link #cancel(boolean)} is invoked and
      * {@link #doInBackground(Object[])} has finished.</p>
      *
-     * @see #onCancelled(Object) 
+     * @see #onCancelled(Object)
      * @see #cancel(boolean)
      * @see #isCancelled()
      */
@@ -443,7 +443,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
      * then the <tt>mayInterruptIfRunning</tt> parameter determines
      * whether the thread executing this task should be interrupted in
      * an attempt to stop the task.</p>
-     * 
+     *
      * <p>Calling this method will result in {@link #onCancelled(Object)} being
      * invoked on the UI thread after {@link #doInBackground(Object[])}
      * returns. Calling this method guarantees that {@link #onPostExecute(Object)}
@@ -506,7 +506,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
     /**
      * Executes the task with the specified parameters. The task returns
      * itself (this) so that the caller can keep a reference to it.
-     * 
+     *
      * <p>Note: this function schedules the task on a queue for a single background
      * thread or pool of threads depending on the platform version.  When first
      * introduced, AsyncTasks were executed serially on a single background thread.
@@ -538,12 +538,12 @@ public abstract class AsyncTask<Params, Progress, Result> {
     /**
      * Executes the task with the specified parameters. The task returns
      * itself (this) so that the caller can keep a reference to it.
-     * 
+     *
      * <p>This method is typically used with {@link #THREAD_POOL_EXECUTOR} to
      * allow multiple tasks to run in parallel on a pool of threads managed by
      * AsyncTask, however you can also use your own {@link Executor} for custom
      * behavior.
-     * 
+     *
      * <p><em>Warning:</em> Allowing multiple tasks to run in parallel from
      * a thread pool is generally <em>not</em> what one wants, because the order
      * of their operation is not defined.  For example, if these tasks are used

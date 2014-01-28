@@ -45,7 +45,7 @@ public class PowerTest extends TestActivity
         mPowerManager = IPowerManager.Stub.asInterface(ServiceManager.getService("power"));
         mPm = (PowerManager)getSystemService("power");
         mProx = mPm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "PowerTest-prox");
-        
+
         return mTests;
     }
     private Test[] mTests = new Test[] {

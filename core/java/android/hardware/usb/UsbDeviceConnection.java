@@ -197,7 +197,7 @@ public class UsbDeviceConnection {
 
     /**
      * Waits for the result of a {@link android.hardware.usb.UsbRequest#queue} operation
-     * Note that this may return requests queued on multiple 
+     * Note that this may return requests queued on multiple
      * {@link android.hardware.usb.UsbEndpoint}s.
      * When multiple endpoints are in use, {@link android.hardware.usb.UsbRequest#getEndpoint} and
      * {@link android.hardware.usb.UsbRequest#getClientData} can be useful in determining

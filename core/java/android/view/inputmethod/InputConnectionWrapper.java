@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2007-2008 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -26,7 +26,7 @@ import android.view.KeyEvent;
 public class InputConnectionWrapper implements InputConnection {
     private InputConnection mTarget;
     final boolean mMutable;
-    
+
     public InputConnectionWrapper(InputConnection target, boolean mutable) {
         mMutable = mutable;
         mTarget = target;
@@ -41,11 +41,11 @@ public class InputConnectionWrapper implements InputConnection {
         }
         mTarget = target;
     }
-    
+
     public CharSequence getTextBeforeCursor(int n, int flags) {
         return mTarget.getTextBeforeCursor(n, flags);
     }
-    
+
     public CharSequence getTextAfterCursor(int n, int flags) {
         return mTarget.getTextAfterCursor(n, flags);
     }
@@ -57,7 +57,7 @@ public class InputConnectionWrapper implements InputConnection {
     public int getCursorCapsMode(int reqModes) {
         return mTarget.getCursorCapsMode(reqModes);
     }
-    
+
     public ExtractedText getExtractedText(ExtractedTextRequest request, int flags) {
         return mTarget.getExtractedText(request, flags);
     }
@@ -77,7 +77,7 @@ public class InputConnectionWrapper implements InputConnection {
     public boolean finishComposingText() {
         return mTarget.finishComposingText();
     }
-    
+
     public boolean commitText(CharSequence text, int newCursorPosition) {
         return mTarget.commitText(text, newCursorPosition);
     }
@@ -93,23 +93,23 @@ public class InputConnectionWrapper implements InputConnection {
     public boolean setSelection(int start, int end) {
         return mTarget.setSelection(start, end);
     }
-    
+
     public boolean performEditorAction(int editorAction) {
         return mTarget.performEditorAction(editorAction);
     }
-    
+
     public boolean performContextMenuAction(int id) {
         return mTarget.performContextMenuAction(id);
     }
-    
+
     public boolean beginBatchEdit() {
         return mTarget.beginBatchEdit();
     }
-    
+
     public boolean endBatchEdit() {
         return mTarget.endBatchEdit();
     }
-    
+
     public boolean sendKeyEvent(KeyEvent event) {
         return mTarget.sendKeyEvent(event);
     }
@@ -117,11 +117,11 @@ public class InputConnectionWrapper implements InputConnection {
     public boolean clearMetaKeyStates(int states) {
         return mTarget.clearMetaKeyStates(states);
     }
-    
+
     public boolean reportFullscreenMode(boolean enabled) {
         return mTarget.reportFullscreenMode(enabled);
     }
-    
+
     public boolean performPrivateCommand(String action, Bundle data) {
         return mTarget.performPrivateCommand(action, data);
     }

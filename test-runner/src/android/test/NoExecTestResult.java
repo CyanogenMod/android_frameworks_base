@@ -19,9 +19,9 @@ import junit.framework.TestCase;
 import junit.framework.TestResult;
 
 /**
- * A benign test result that does no actually test execution, just runs 
+ * A benign test result that does no actually test execution, just runs
  * through the motions
- * 
+ *
  * {@hide} Not needed for SDK.
  */
 class NoExecTestResult extends TestResult {

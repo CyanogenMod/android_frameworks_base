@@ -1203,7 +1203,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
      * no file associated with the given URI or the mode is invalid.
      * @throws SecurityException Throws SecurityException if the caller does
      * not have permission to access the file.
-     * 
+     *
      * @see #openFile(Uri, String)
      * @see #openFileHelper(Uri, String)
      * @see #getType(android.net.Uri)
@@ -1644,7 +1644,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
     /**
      * Implement this to shut down the ContentProvider instance. You can then
      * invoke this method in unit tests.
-     * 
+     *
      * <p>
      * Android normally handles ContentProvider startup and shutdown
      * automatically. You do not need to start up or shut down a

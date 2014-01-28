@@ -191,7 +191,7 @@ public abstract class BackupAgent extends ContextWrapper {
      * the key supplied as part of the entity.  Writing an entity with a negative
      * data size instructs the transport to delete whatever entity currently exists
      * under that key from the remote data set.
-     * 
+     *
      * @param oldState An open, read-only ParcelFileDescriptor pointing to the
      *            last backup state provided by the application. May be
      *            <code>null</code>, in which case no prior state is being
@@ -222,7 +222,7 @@ public abstract class BackupAgent extends ContextWrapper {
      * onRestore() throws an exception, the OS will assume that the
      * application's data may now be in an incoherent state, and will clear it
      * before proceeding.
-     * 
+     *
      * @param data A structured wrapper around an open, read-only
      *            file descriptor pointing to a full snapshot of the
      *            application's data.  The application should consume every

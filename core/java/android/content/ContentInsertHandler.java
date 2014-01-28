@@ -35,16 +35,16 @@ public interface ContentInsertHandler extends ContentHandler {
      * @throws IOException
      * @throws SAXException
      */
-    public void insert(ContentResolver contentResolver, InputStream in) 
+    public void insert(ContentResolver contentResolver, InputStream in)
         throws IOException, SAXException;
-    
+
     /**
      * insert data from String to ContentResolver
      * @param contentResolver
      * @param in input string
      * @throws SAXException
      */
-    public void insert(ContentResolver contentResolver, String in) 
+    public void insert(ContentResolver contentResolver, String in)
         throws SAXException;
-    
+
 }

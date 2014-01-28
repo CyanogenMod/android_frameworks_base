@@ -69,7 +69,7 @@ public class TouchModeFlexibleAsserts {
                 throw new RuntimeException(e);
             }
         }
-        Assert.assertFalse("even after waiting " + MAX_DELAY_MILLIS + " millis after " 
+        Assert.assertFalse("even after waiting " + MAX_DELAY_MILLIS + " millis after "
                 + "pressing key event, still in touch mode", checkForTouchMode.isInTouchMode());
     }
 }

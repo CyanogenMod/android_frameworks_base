@@ -100,7 +100,7 @@ public final class GeofenceHardwareRequestParcelable implements Parcelable {
     /**
      * Method definitions to support Parcelable operations.
      */
-    public static final Parcelable.Creator<GeofenceHardwareRequestParcelable> CREATOR = 
+    public static final Parcelable.Creator<GeofenceHardwareRequestParcelable> CREATOR =
             new Parcelable.Creator<GeofenceHardwareRequestParcelable>() {
         @Override
         public GeofenceHardwareRequestParcelable createFromParcel(Parcel parcel) {
@@ -120,7 +120,7 @@ public final class GeofenceHardwareRequestParcelable implements Parcelable {
             request.setMonitorTransitions(parcel.readInt());
             request.setUnknownTimer(parcel.readInt());
             request.setNotificationResponsiveness(parcel.readInt());
-            
+
             int id = parcel.readInt();
             return new GeofenceHardwareRequestParcelable(id, request);
         }

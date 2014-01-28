@@ -21,12 +21,12 @@ package android.graphics;
  * The NinePatch class permits drawing a bitmap in nine or more sections.
  * Essentially, it allows the creation of custom graphics that will scale the
  * way that you define, when content added within the image exceeds the normal
- * bounds of the graphic. For a thorough explanation of a NinePatch image, 
- * read the discussion in the 
+ * bounds of the graphic. For a thorough explanation of a NinePatch image,
+ * read the discussion in the
  * <a href="{@docRoot}guide/topics/graphics/2d-graphics.html#nine-patch">2D
  * Graphics</a> document.
  * <p>
- * The <a href="{@docRoot}guide/developing/tools/draw9patch.html">Draw 9-Patch</a> 
+ * The <a href="{@docRoot}guide/developing/tools/draw9patch.html">Draw 9-Patch</a>
  * tool offers an extremely handy way to create your NinePatch images,
  * using a WYSIWYG graphics editor.
  * </p>
@@ -55,7 +55,7 @@ public class NinePatch {
         this(bitmap, chunk, null);
     }
 
-    /** 
+    /**
      * Create a drawable projection from a bitmap to nine patches.
      *
      * @param bitmap The bitmap describing the patches.
@@ -130,8 +130,8 @@ public class NinePatch {
     public Bitmap getBitmap() {
         return mBitmap;
     }
-    
-    /** 
+
+    /**
      * Draws the NinePatch. This method will use the paint returned by {@link #getPaint()}.
      *
      * @param canvas A container for the current matrix and clip used to draw the NinePatch.
@@ -141,7 +141,7 @@ public class NinePatch {
         canvas.drawPatch(this, location, mPaint);
     }
 
-    /** 
+    /**
      * Draws the NinePatch. This method will use the paint returned by {@link #getPaint()}.
      *
      * @param canvas A container for the current matrix and clip used to draw the NinePatch.
@@ -151,7 +151,7 @@ public class NinePatch {
         canvas.drawPatch(this, location, mPaint);
     }
 
-    /** 
+    /**
      * Draws the NinePatch. This method will ignore the paint returned
      * by {@link #getPaint()} and use the specified paint instead.
      *

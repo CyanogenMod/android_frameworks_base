@@ -202,7 +202,7 @@ public abstract class IntentResolver<F extends IntentFilter, R extends Object> {
         return Collections.unmodifiableSet(mFilters);
     }
 
-    public List<R> queryIntentFromList(Intent intent, String resolvedType, 
+    public List<R> queryIntentFromList(Intent intent, String resolvedType,
             boolean defaultOnly, ArrayList<F[]> listCut, int userId) {
         ArrayList<R> resultList = new ArrayList<R>();
 

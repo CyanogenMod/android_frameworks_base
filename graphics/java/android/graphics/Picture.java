@@ -21,7 +21,7 @@ import java.io.OutputStream;
 
 /**
  * A Picture records drawing calls (via the canvas returned by beginRecording)
- * and can then play them back into Canvas (via {@link Picture#draw(Canvas)} or 
+ * and can then play them back into Canvas (via {@link Picture#draw(Canvas)} or
  * {@link Canvas#drawPicture(Picture)}).For most content (e.g. text, lines, rectangles),
  * drawing a sequence from a picture can be faster than the equivalent API
  * calls, since the picture performs its playback without incurring any
@@ -53,7 +53,7 @@ public class Picture {
     public Picture(Picture src) {
         this(nativeConstructor(src != null ? src.mNativePicture : 0), false);
     }
-    
+
     /**
      * To record a picture, call beginRecording() and then draw into the Canvas
      * that is returned. Nothing we appear on screen, but all of the draw
@@ -67,7 +67,7 @@ public class Picture {
         mRecordingCanvas = new RecordingCanvas(this, ni);
         return mRecordingCanvas;
     }
-    
+
     /**
      * Call endRecording when the picture is built. After this call, the picture
      * may be drawn, but the canvas that was returned by beginRecording must not
@@ -92,16 +92,16 @@ public class Picture {
      * does not reflect (per se) the content of the picture.
      */
     public native int getHeight();
-    
+
     /**
      * Draw this picture on the canvas. The picture may have the side effect
      * of changing the matrix and clip of the canvas.
-     * 
+     *
      * <p>
      * <strong>Note:</strong> This forces the picture to internally call
      * {@link Picture#endRecording()} in order to prepare for playback.
      *
-     * @param canvas  The picture is drawn to this canvas 
+     * @param canvas  The picture is drawn to this canvas
      */
     public void draw(Canvas canvas) {
         if (mRecordingCanvas != null) {
@@ -119,7 +119,7 @@ public class Picture {
      * <p>
      * <strong>Note:</strong> a picture created from an input stream cannot be
      * replayed on a hardware accelerated canvas.
-     * 
+     *
      * @see #writeToStream(java.io.OutputStream)
      * @deprecated The recommended alternative is to not use writeToStream and
      * instead draw the picture into a Bitmap from which you can persist it as
@@ -167,7 +167,7 @@ public class Picture {
     final int ni() {
         return mNativePicture;
     }
-    
+
     private Picture(int nativePicture, boolean fromStream) {
         if (nativePicture == 0) {
             throw new RuntimeException();
@@ -187,7 +187,7 @@ public class Picture {
     private static native boolean nativeWriteToStream(int nativePicture,
                                            OutputStream stream, byte[] storage);
     private static native void nativeDestructor(int nativePicture);
-    
+
     private static class RecordingCanvas extends Canvas {
         private final Picture mPicture;
 
@@ -195,7 +195,7 @@ public class Picture {
             super(nativeCanvas);
             mPicture = pict;
         }
-        
+
         @Override
         public void setBitmap(Bitmap bitmap) {
             throw new RuntimeException(

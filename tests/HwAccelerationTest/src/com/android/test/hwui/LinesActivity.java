@@ -105,7 +105,7 @@ public class LinesActivity extends Activity {
                     352.0f, 400.0f, 352.0f, 500.0f
             };
         }
-        
+
         public void setOffset(float offset) {
             mOffset = offset;
             invalidate();
@@ -114,7 +114,7 @@ public class LinesActivity extends Activity {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            
+
             canvas.save();
             canvas.translate(100.0f, 20.0f);
 

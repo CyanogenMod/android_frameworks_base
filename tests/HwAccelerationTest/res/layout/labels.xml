@@ -41,5 +41,5 @@
         android:ellipsize="marquee"
         android:gravity="right"
         android:text="This is a very long text view for ellipsizing" />
-   
+
 </LinearLayout>

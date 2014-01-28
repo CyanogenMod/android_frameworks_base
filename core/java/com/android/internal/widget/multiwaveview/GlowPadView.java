@@ -882,7 +882,7 @@ public class GlowPadView extends View {
         if (DEBUG && mDragging) Log.v(TAG, "** Handle CANCEL");
 
         // Drop the active target if canceled.
-        mActiveTarget = -1; 
+        mActiveTarget = -1;
 
         int actionIndex = event.findPointerIndex(mPointerId);
         actionIndex = actionIndex == -1 ? 0 : actionIndex;

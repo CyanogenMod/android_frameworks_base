@@ -28,19 +28,19 @@ import java.io.IOException;
  */
 public class MediaRecorderPrepareStateUnitTest extends AndroidTestCase implements MediaRecorderMethodUnderTest {
     private MediaRecorderStateUnitTestTemplate mTestTemplate = new MediaRecorderStateUnitTestTemplate();
-    
+
     /**
      * 1. It is valid to call prepare() in the following states:
      *    {DataSourceConfigured}.
      * 2. It is invalid to call prepare() in the following states:
      *    {Prepared, Initial, Initialized, Recording, Error}
-     *    
+     *
      * @param stateErrors the MediaRecorderStateErrors to check against.
      */
     public void checkStateErrors(MediaRecorderStateErrors stateErrors) {
         // Valid states.
         assertTrue(!stateErrors.errorInDataSourceConfiguredState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInPreparedState);
         assertTrue(stateErrors.errorInRecordingState);
@@ -63,7 +63,7 @@ public class MediaRecorderPrepareStateUnitTest extends AndroidTestCase implement
     public void testPrepare() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "prepare()";

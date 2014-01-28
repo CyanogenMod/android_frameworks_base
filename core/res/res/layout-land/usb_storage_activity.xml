@@ -16,7 +16,7 @@
         android:layout_weight="1"
         android:src="@drawable/usb_android" />
 
-    <RelativeLayout 
+    <RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="0dip"
         android:layout_weight="1"
@@ -49,7 +49,7 @@
             android:layout_marginBottom="20dip"
             >
 
-            <Button android:id="@+id/mount_button" 
+            <Button android:id="@+id/mount_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="18dip"

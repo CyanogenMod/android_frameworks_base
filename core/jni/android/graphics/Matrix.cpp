@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -43,29 +43,29 @@ public:
             obj->reset();
         return obj;
     }
- 
+
     static jboolean isIdentity(JNIEnv* env, jobject clazz, SkMatrix* obj) {
         return obj->isIdentity();
     }
- 
+
     static jboolean rectStaysRect(JNIEnv* env, jobject clazz, SkMatrix* obj) {
         return obj->rectStaysRect();
     }
- 
+
     static void reset(JNIEnv* env, jobject clazz, SkMatrix* obj) {
         obj->reset();
     }
- 
+
     static void set(JNIEnv* env, jobject clazz, SkMatrix* obj, SkMatrix* other) {
         *obj = *other;
     }
- 
+
     static void setTranslate(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat dx, jfloat dy) {
         SkScalar dx_ = SkFloatToScalar(dx);
         SkScalar dy_ = SkFloatToScalar(dy);
         obj->setTranslate(dx_, dy_);
     }
- 
+
     static void setScale__FFFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat sx, jfloat sy, jfloat px, jfloat py) {
         SkScalar sx_ = SkFloatToScalar(sx);
         SkScalar sy_ = SkFloatToScalar(sy);
@@ -73,25 +73,25 @@ public:
         SkScalar py_ = SkFloatToScalar(py);
         obj->setScale(sx_, sy_, px_, py_);
     }
- 
+
     static void setScale__FF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat sx, jfloat sy) {
         SkScalar sx_ = SkFloatToScalar(sx);
         SkScalar sy_ = SkFloatToScalar(sy);
         obj->setScale(sx_, sy_);
     }
- 
+
     static void setRotate__FFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat degrees, jfloat px, jfloat py) {
         SkScalar degrees_ = SkFloatToScalar(degrees);
         SkScalar px_ = SkFloatToScalar(px);
         SkScalar py_ = SkFloatToScalar(py);
         obj->setRotate(degrees_, px_, py_);
     }
- 
+
     static void setRotate__F(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat degrees) {
         SkScalar degrees_ = SkFloatToScalar(degrees);
         obj->setRotate(degrees_);
     }
- 
+
     static void setSinCos__FFFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat sinValue, jfloat cosValue, jfloat px, jfloat py) {
         SkScalar sinValue_ = SkFloatToScalar(sinValue);
         SkScalar cosValue_ = SkFloatToScalar(cosValue);
@@ -99,13 +99,13 @@ public:
         SkScalar py_ = SkFloatToScalar(py);
         obj->setSinCos(sinValue_, cosValue_, px_, py_);
     }
- 
+
     static void setSinCos__FF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat sinValue, jfloat cosValue) {
         SkScalar sinValue_ = SkFloatToScalar(sinValue);
         SkScalar cosValue_ = SkFloatToScalar(cosValue);
         obj->setSinCos(sinValue_, cosValue_);
     }
- 
+
     static void setSkew__FFFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat kx, jfloat ky, jfloat px, jfloat py) {
         SkScalar kx_ = SkFloatToScalar(kx);
         SkScalar ky_ = SkFloatToScalar(ky);
@@ -113,23 +113,23 @@ public:
         SkScalar py_ = SkFloatToScalar(py);
         obj->setSkew(kx_, ky_, px_, py_);
     }
- 
+
     static void setSkew__FF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat kx, jfloat ky) {
         SkScalar kx_ = SkFloatToScalar(kx);
         SkScalar ky_ = SkFloatToScalar(ky);
         obj->setSkew(kx_, ky_);
     }
- 
+
     static jboolean setConcat(JNIEnv* env, jobject clazz, SkMatrix* obj, SkMatrix* a, SkMatrix* b) {
         return obj->setConcat(*a, *b);
     }
- 
+
     static jboolean preTranslate(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat dx, jfloat dy) {
         SkScalar dx_ = SkFloatToScalar(dx);
         SkScalar dy_ = SkFloatToScalar(dy);
         return obj->preTranslate(dx_, dy_);
     }
- 
+
     static jboolean preScale__FFFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat sx, jfloat sy, jfloat px, jfloat py) {
         SkScalar sx_ = SkFloatToScalar(sx);
         SkScalar sy_ = SkFloatToScalar(sy);
@@ -137,25 +137,25 @@ public:
         SkScalar py_ = SkFloatToScalar(py);
         return obj->preScale(sx_, sy_, px_, py_);
     }
- 
+
     static jboolean preScale__FF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat sx, jfloat sy) {
         SkScalar sx_ = SkFloatToScalar(sx);
         SkScalar sy_ = SkFloatToScalar(sy);
         return obj->preScale(sx_, sy_);
     }
- 
+
     static jboolean preRotate__FFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat degrees, jfloat px, jfloat py) {
         SkScalar degrees_ = SkFloatToScalar(degrees);
         SkScalar px_ = SkFloatToScalar(px);
         SkScalar py_ = SkFloatToScalar(py);
         return obj->preRotate(degrees_, px_, py_);
     }
- 
+
     static jboolean preRotate__F(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat degrees) {
         SkScalar degrees_ = SkFloatToScalar(degrees);
         return obj->preRotate(degrees_);
     }
- 
+
     static jboolean preSkew__FFFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat kx, jfloat ky, jfloat px, jfloat py) {
         SkScalar kx_ = SkFloatToScalar(kx);
         SkScalar ky_ = SkFloatToScalar(ky);
@@ -163,23 +163,23 @@ public:
         SkScalar py_ = SkFloatToScalar(py);
         return obj->preSkew(kx_, ky_, px_, py_);
     }
- 
+
     static jboolean preSkew__FF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat kx, jfloat ky) {
         SkScalar kx_ = SkFloatToScalar(kx);
         SkScalar ky_ = SkFloatToScalar(ky);
         return obj->preSkew(kx_, ky_);
     }
- 
+
     static jboolean preConcat(JNIEnv* env, jobject clazz, SkMatrix* obj, SkMatrix* other) {
         return obj->preConcat(*other);
     }
- 
+
     static jboolean postTranslate(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat dx, jfloat dy) {
         SkScalar dx_ = SkFloatToScalar(dx);
         SkScalar dy_ = SkFloatToScalar(dy);
         return obj->postTranslate(dx_, dy_);
     }
- 
+
     static jboolean postScale__FFFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat sx, jfloat sy, jfloat px, jfloat py) {
         SkScalar sx_ = SkFloatToScalar(sx);
         SkScalar sy_ = SkFloatToScalar(sy);
@@ -187,25 +187,25 @@ public:
         SkScalar py_ = SkFloatToScalar(py);
         return obj->postScale(sx_, sy_, px_, py_);
     }
- 
+
     static jboolean postScale__FF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat sx, jfloat sy) {
         SkScalar sx_ = SkFloatToScalar(sx);
         SkScalar sy_ = SkFloatToScalar(sy);
         return obj->postScale(sx_, sy_);
     }
- 
+
     static jboolean postRotate__FFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat degrees, jfloat px, jfloat py) {
         SkScalar degrees_ = SkFloatToScalar(degrees);
         SkScalar px_ = SkFloatToScalar(px);
         SkScalar py_ = SkFloatToScalar(py);
         return obj->postRotate(degrees_, px_, py_);
     }
- 
+
     static jboolean postRotate__F(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat degrees) {
         SkScalar degrees_ = SkFloatToScalar(degrees);
         return obj->postRotate(degrees_);
     }
- 
+
     static jboolean postSkew__FFFF(JNIEnv* env, jobject clazz, SkMatrix* obj, jfloat kx, jfloat ky, jfloat px, jfloat py) {
         SkScalar kx_ = SkFloatToScalar(kx);
         SkScalar ky_ = SkFloatToScalar(ky);
@@ -213,17 +213,17 @@ public:
         SkScalar py_ = SkFloatToScalar(py);
         return obj->postSkew(kx_, ky_, px_, py_);
     }
- 
+
     static jboolean postSkew__FF(JNIEnv* env, jobject clazz, SkMatrix* matrix, jfloat kx, jfloat ky) {
         SkScalar kx_ = SkFloatToScalar(kx);
         SkScalar ky_ = SkFloatToScalar(ky);
         return matrix->postSkew(kx_, ky_);
     }
- 
+
     static jboolean postConcat(JNIEnv* env, jobject clazz, SkMatrix* matrix, SkMatrix* other) {
         return matrix->postConcat(*other);
     }
- 
+
     static jboolean setRectToRect(JNIEnv* env, jobject clazz, SkMatrix* matrix, jobject src, jobject dst, SkMatrix::ScaleToFit stf) {
         SkRect src_;
         GraphicsJNI::jrectf_to_rect(env, src, &src_);
@@ -231,7 +231,7 @@ public:
         GraphicsJNI::jrectf_to_rect(env, dst, &dst_);
         return matrix->setRectToRect(src_, dst_, stf);
     }
- 
+
     static jboolean setPolyToPoly(JNIEnv* env, jobject clazz, SkMatrix* matrix,
                                   jfloatArray jsrc, int srcIndex,
                                   jfloatArray jdst, int dstIndex, int ptCount) {
@@ -244,7 +244,7 @@ public:
         float* src = autoSrc.ptr() + srcIndex;
         float* dst = autoDst.ptr() + dstIndex;
 
-#ifdef SK_SCALAR_IS_FIXED        
+#ifdef SK_SCALAR_IS_FIXED
         SkPoint srcPt[4], dstPt[4];
         for (int i = 0; i < ptCount; i++) {
             int x = i << 1;
@@ -258,11 +258,11 @@ public:
                                      ptCount);
 #endif
     }
- 
+
     static jboolean invert(JNIEnv* env, jobject clazz, SkMatrix* matrix, SkMatrix* inverse) {
         return matrix->invert(inverse);
     }
- 
+
     static void mapPoints(JNIEnv* env, jobject clazz, SkMatrix* matrix,
                               jfloatArray dst, int dstIndex,
                               jfloatArray src, int srcIndex,
@@ -272,25 +272,25 @@ public:
         AutoJavaFloatArray autoDst(env, dst, dstIndex + (ptCount << 1));
         float* srcArray = autoSrc.ptr() + srcIndex;
         float* dstArray = autoDst.ptr() + dstIndex;
-        
-#ifdef SK_SCALAR_IS_FIXED        
+
+#ifdef SK_SCALAR_IS_FIXED
         // we allocate twice the count, 1 set for src, 1 for dst
         SkAutoSTMalloc<32, SkPoint> storage(ptCount * 2);
         SkPoint* pts = storage.get();
         SkPoint* srcPt = pts;
         SkPoint* dstPt = pts + ptCount;
-        
+
         int i;
         for (i = 0; i < ptCount; i++) {
             srcPt[i].set(SkFloatToScalar(srcArray[i << 1]),
                          SkFloatToScalar(srcArray[(i << 1) + 1]));
         }
-        
+
         if (isPts)
             matrix->mapPoints(dstPt, srcPt, ptCount);
         else
             matrix->mapVectors(dstPt, srcPt, ptCount);
-        
+
         for (i = 0; i < ptCount; i++) {
             dstArray[i << 1]  = SkScalarToFloat(dstPt[i].fX);
             dstArray[(i << 1) + 1]  = SkScalarToFloat(dstPt[i].fY);
@@ -304,7 +304,7 @@ public:
                                ptCount);
 #endif
     }
- 
+
     static jboolean mapRect__RectFRectF(JNIEnv* env, jobject clazz, SkMatrix* matrix, jobjectArray dst, jobject src) {
         SkRect dst_, src_;
         GraphicsJNI::jrectf_to_rect(env, src, &src_);
@@ -312,11 +312,11 @@ public:
         GraphicsJNI::rect_to_jrectf(dst_, env, dst);
         return rectStaysRect;
     }
- 
+
     static jfloat mapRadius(JNIEnv* env, jobject clazz, SkMatrix* matrix, jfloat radius) {
         return SkScalarToFloat(matrix->mapRadius(SkFloatToScalar(radius)));
     }
- 
+
     static void getValues(JNIEnv* env, jobject clazz, SkMatrix* matrix, jfloatArray values) {
         AutoJavaFloatArray autoValues(env, values, 9);
         float* dst = autoValues.ptr();
@@ -334,7 +334,7 @@ public:
         }
 #endif
     }
- 
+
     static void setValues(JNIEnv* env, jobject clazz, SkMatrix* matrix, jfloatArray values) {
         AutoJavaFloatArray autoValues(env, values, 9);
         const float* src = autoValues.ptr();

@@ -18,17 +18,17 @@ package android.test;
 
 /**
  * Thrown when an assertion failed.
- * 
+ *
  * @deprecated use junit.framework.AssertionFailedError
  */
 public class AssertionFailedError extends Error {
-    
+
     /**
      * It is more typical to call {@link #AssertionFailedError(String)}.
      */
     public AssertionFailedError() {
     }
-    
+
     public AssertionFailedError(String errorMessage) {
         super(errorMessage);
     }

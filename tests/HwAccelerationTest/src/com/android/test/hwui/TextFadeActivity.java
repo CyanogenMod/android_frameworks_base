@@ -32,7 +32,7 @@ public class TextFadeActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.text_fade);
-        
+
         findViewById(R.id.contact_tile_name).setHorizontalFadingEdgeEnabled(true);
         ((TextView) findViewById(R.id.contact_tile_name)).setEllipsize(TextUtils.TruncateAt.MARQUEE);
     }

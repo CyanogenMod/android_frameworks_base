@@ -33,7 +33,7 @@ import android.view.View.OnLongClickListener;
 public class LongpressTest extends ActivityInstrumentationTestCase<Longpress> {
     private View mSimpleView;
     private boolean mLongClicked;
-    
+
     public LongpressTest() {
         super("com.android.frameworks.coretests", Longpress.class);
     }
@@ -71,7 +71,7 @@ public class LongpressTest extends ActivityInstrumentationTestCase<Longpress> {
         mSimpleView.requestFocus();
         getInstrumentation().waitForIdleSync();
         KeyUtils.longClick(this);
-        
+
         getInstrumentation().waitForIdleSync();
         assertTrue(mLongClicked);
     }

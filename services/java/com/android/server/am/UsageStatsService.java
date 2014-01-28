@@ -75,25 +75,25 @@ public final class UsageStatsService extends IUsageStats.Stub {
     private static final boolean localLOGV = false;
     private static final boolean REPORT_UNEXPECTED = false;
     private static final String TAG = "UsageStats";
-    
+
     // Current on-disk Parcel version
     private static final int VERSION = 1008;
 
     private static final int CHECKIN_VERSION = 4;
-    
+
     private static final String FILE_PREFIX = "usage-";
 
     private static final String FILE_HISTORY = FILE_PREFIX + "history.xml";
 
     private static final int FILE_WRITE_INTERVAL = 30*60*1000; //ms
-    
+
     private static final int MAX_NUM_FILES = 5;
-    
+
     private static final int NUM_LAUNCH_TIME_BINS = 10;
     private static final int[] LAUNCH_TIME_BINS = {
         250, 500, 750, 1000, 1500, 2000, 3000, 4000, 5000
     };
-    
+
     static IUsageStats sService;
     private Context mContext;
     // structure used to maintain statistics since the last checkin.
@@ -125,18 +125,18 @@ public final class UsageStatsService extends IUsageStats.Stub {
     private final AtomicInteger mLastWriteDay = new AtomicInteger(-1);
     private final AtomicLong mLastWriteElapsedTime = new AtomicLong(0);
     private final AtomicBoolean mUnforcedDiskWriteRunning = new AtomicBoolean(false);
-    
+
     static class TimeStats {
         int count;
         int[] times = new int[NUM_LAUNCH_TIME_BINS];
-        
+
         TimeStats() {
         }
-        
+
         void incCount() {
             count++;
         }
-        
+
         void add(int val) {
             final int[] bins = LAUNCH_TIME_BINS;
             for (int i=0; i<NUM_LAUNCH_TIME_BINS-1; i++) {
@@ -147,7 +147,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
             times[NUM_LAUNCH_TIME_BINS-1]++;
         }
-        
+
         TimeStats(Parcel in) {
             count = in.readInt();
             final int[] localTimes = times;
@@ -155,7 +155,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 localTimes[i] = in.readInt();
             }
         }
-        
+
         void writeToParcel(Parcel out) {
             out.writeInt(count);
             final int[] localTimes = times;
@@ -164,7 +164,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
         }
     }
-    
+
     private class PkgUsageStatsExtended {
         final ArrayMap<String, TimeStats> mLaunchTimes
                 = new ArrayMap<String, TimeStats>();
@@ -174,18 +174,18 @@ public final class UsageStatsService extends IUsageStats.Stub {
         long mUsageTime;
         long mPausedTime;
         long mResumedTime;
-        
+
         PkgUsageStatsExtended() {
             mLaunchCount = 0;
             mUsageTime = 0;
         }
-        
+
         PkgUsageStatsExtended(Parcel in) {
             mLaunchCount = in.readInt();
             mUsageTime = in.readLong();
             if (localLOGV) Slog.v(TAG, "Launch count: " + mLaunchCount
                     + ", Usage time:" + mUsageTime);
-            
+
             final int numLaunchTimeStats = in.readInt();
             if (localLOGV) Slog.v(TAG, "Reading launch times: " + numLaunchTimeStats);
             mLaunchTimes.ensureCapacity(numLaunchTimeStats);
@@ -213,12 +213,12 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
             mResumedTime = SystemClock.elapsedRealtime();
         }
-        
+
         void updatePause() {
             mPausedTime =  SystemClock.elapsedRealtime();
             mUsageTime += (mPausedTime - mResumedTime);
         }
-        
+
         void addLaunchCount(String comp) {
             TimeStats times = mLaunchTimes.get(comp);
             if (times == null) {
@@ -227,7 +227,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
             times.incCount();
         }
-        
+
         void addLaunchTime(String comp, int millis) {
             TimeStats times = mLaunchTimes.get(comp);
             if (times == null) {
@@ -262,7 +262,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 mFullyDrawnTimes.valueAt(i).writeToParcel(out);
             }
         }
-        
+
         void clear() {
             mLaunchTimes.clear();
             mFullyDrawnTimes.clear();
@@ -270,7 +270,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             mUsageTime = 0;
         }
     }
-    
+
     UsageStatsService(String dir) {
         mStats = new ArrayMap<String, PkgUsageStatsExtended>();
         mLastResumeTimes = new ArrayMap<String, ArrayMap<String, Long>>();
@@ -278,9 +278,9 @@ public final class UsageStatsService extends IUsageStats.Stub {
         mFileLock = new Object();
         mDir = new File(dir);
         mCal = Calendar.getInstance(TimeZone.getTimeZone("GMT+0"));
-        
+
         mDir.mkdir();
-        
+
         // Remove any old usage files from previous versions.
         File parentDir = mDir.getParentFile();
         String fList[] = parentDir.list();
@@ -295,7 +295,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 }
             }
         }
-        
+
         // Update current stats which are binned by date
         mFileLeaf = getCurrentDateStr(FILE_PREFIX);
         mFile = new File(mDir, mFileLeaf);
@@ -331,7 +331,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         }
         return sb.toString();
     }
-    
+
     private Parcel getParcelForFile(File file) throws IOException {
         FileInputStream stream = new FileInputStream(file);
         byte[] raw = readFully(stream);
@@ -341,7 +341,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         stream.close();
         return in;
     }
-    
+
     private void readStatsFromFile() {
         File newFile = mFile;
         synchronized (mFileLock) {
@@ -358,7 +358,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
         }
     }
-    
+
     private void readStatsFLOCK(File file) throws IOException {
         Parcel in = getParcelForFile(file);
         int vers = in.readInt();
@@ -472,7 +472,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         }
         return fileList;
     }
-    
+
     private void checkFileLimitFLOCK() {
         // Get all usage stats output files
         ArrayList<String> fileList = getUsageStatsFileListFLOCK();
@@ -713,7 +713,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         sService = asInterface(b);
         return sService;
     }
-    
+
     public void noteResumeComponent(ComponentName componentName) {
         enforceCallingPermission();
         String pkgName;
@@ -722,7 +722,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
                     ((pkgName = componentName.getPackageName()) == null)) {
                 return;
             }
-            
+
             final boolean samePackage = pkgName.equals(mLastResumedPkg);
             if (mIsResumed) {
                 if (mLastResumedPkg != null) {
@@ -736,14 +736,14 @@ public final class UsageStatsService extends IUsageStats.Stub {
                     }
                 }
             }
-            
+
             final boolean sameComp = samePackage
                     && componentName.getClassName().equals(mLastResumedComp);
-            
+
             mIsResumed = true;
             mLastResumedPkg = pkgName;
             mLastResumedComp = componentName.getClassName();
-            
+
             if (localLOGV) Slog.i(TAG, "started component:" + pkgName);
             PkgUsageStatsExtended pus = mStats.get(pkgName);
             if (pus == null) {
@@ -766,7 +766,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
 
     public void notePauseComponent(ComponentName componentName) {
         enforceCallingPermission();
-        
+
         synchronized (mStatsLock) {
             String pkgName;
             if ((componentName == null) ||
@@ -779,9 +779,9 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 return;
             }
             mIsResumed = false;
-            
+
             if (localLOGV) Slog.i(TAG, "paused component:"+pkgName);
-        
+
             PkgUsageStatsExtended pus = mStats.get(pkgName);
             if (pus == null) {
                 // Weird some error here
@@ -790,11 +790,11 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
             pus.updatePause();
         }
-        
+
         // Persist current data to file if needed.
         writeStatsToFile(false, false);
     }
-    
+
     public void noteLaunchTime(ComponentName componentName, int millis) {
         enforceCallingPermission();
         String pkgName;
@@ -802,10 +802,10 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 ((pkgName = componentName.getPackageName()) == null)) {
             return;
         }
-        
+
         // Persist current data to file if needed.
         writeStatsToFile(false, false);
-        
+
         synchronized (mStatsLock) {
             PkgUsageStatsExtended pus = mStats.get(pkgName);
             if (pus != null) {
@@ -813,7 +813,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
         }
     }
-    
+
     public void noteFullyDrawnTime(ComponentName componentName, int millis) {
         enforceCallingPermission();
         String pkgName;
@@ -840,7 +840,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         mContext.enforcePermission(android.Manifest.permission.UPDATE_DEVICE_STATS,
                 Binder.getCallingPid(), Binder.getCallingUid(), null);
     }
-    
+
     public PkgUsageStats getPkgUsageStats(ComponentName componentName) {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.PACKAGE_USAGE_STATS, null);
@@ -860,7 +860,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             return new PkgUsageStats(pkgName, launchCount, usageTime, lastResumeTimes);
         }
     }
-    
+
     public PkgUsageStats[] getAllPkgUsageStats() {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.PACKAGE_USAGE_STATS, null);
@@ -886,7 +886,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             return retArr;
         }
     }
-    
+
     static byte[] readFully(FileInputStream stream) throws java.io.IOException {
         int pos = 0;
         int avail = stream.available();
@@ -905,7 +905,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
         }
     }
-    
+
     private void collectDumpInfoFLOCK(PrintWriter pw, boolean isCompactOutput,
             boolean deleteAfterPrint, HashSet<String> packages) {
         List<String> fileList = getUsageStatsFileListFLOCK();
@@ -939,10 +939,10 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 return;
             } catch (IOException e) {
                 Slog.w(TAG, "Failed with "+e+" when collecting dump info from file : "+file);
-            }      
+            }
         }
     }
-    
+
     private void collectDumpInfoFromParcelFLOCK(Parcel in, PrintWriter pw,
             String date, boolean isCompactOutput, HashSet<String> packages) {
         StringBuilder sb = new StringBuilder(512);
@@ -953,19 +953,19 @@ public final class UsageStatsService extends IUsageStats.Stub {
         } else {
             sb.append("Date: ");
         }
-        
+
         sb.append(date);
-        
+
         int vers = in.readInt();
         if (vers != VERSION) {
             sb.append(" (old data version)");
             pw.println(sb.toString());
             return;
         }
-        
+
         pw.println(sb.toString());
         int N = in.readInt();
-        
+
         while (N > 0) {
             N--;
             String pkgName = in.readString();
@@ -1085,11 +1085,11 @@ public final class UsageStatsService extends IUsageStats.Stub {
                     sb.append('\n');
                 }
             }
-            
+
             pw.write(sb.toString());
         }
     }
-    
+
     /**
      * Searches array of arguments for the specified string
      * @param args array of argument strings
@@ -1106,7 +1106,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         }
         return false;
     }
-    
+
     /**
      * Searches array of arguments for the specified string's data
      * @param args array of argument strings
@@ -1125,10 +1125,10 @@ public final class UsageStatsService extends IUsageStats.Stub {
         }
         return null;
     }
-    
+
     @Override
     /*
-     * The data persisted to file is parsed and the stats are computed. 
+     * The data persisted to file is parsed and the stats are computed.
      */
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         if (mContext.checkCallingPermission(android.Manifest.permission.DUMP)
@@ -1143,14 +1143,14 @@ public final class UsageStatsService extends IUsageStats.Stub {
         final boolean isCompactOutput = isCheckinRequest || scanArgs(args, "-c");
         final boolean deleteAfterPrint = isCheckinRequest || scanArgs(args, "-d");
         final String rawPackages = scanArgsData(args, "--packages");
-        
+
         // Make sure the current stats are written to the file.  This
         // doesn't need to be done if we are deleting files after printing,
         // since it that case we won't print the current stats.
         if (!deleteAfterPrint) {
             writeStatsToFile(true, false);
         }
-        
+
         HashSet<String> packages = null;
         if (rawPackages != null) {
             if (!"*".equals(rawPackages)) {
@@ -1169,7 +1169,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             Slog.w(TAG, "Checkin without packages");
             return;
         }
-        
+
         synchronized (mFileLock) {
             collectDumpInfoFLOCK(pw, isCompactOutput, deleteAfterPrint, packages);
         }

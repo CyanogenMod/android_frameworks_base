@@ -30,7 +30,7 @@ import android.util.AttributeSet;
  * @hide
  * A {@link Preference} that displays a list of entries as
  * a dialog which allow the user to toggle each individually on and off.
- * 
+ *
  * @attr ref android.R.styleable#ListPreference_entries
  * @attr ref android.R.styleable#ListPreference_entryValues
  */
@@ -40,10 +40,10 @@ public class MultiCheckPreference extends DialogPreference {
     private boolean[] mSetValues;
     private boolean[] mOrigValues;
     private String mSummary;
-    
+
     public MultiCheckPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
+
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.ListPreference, 0, 0);
         mEntries = a.getTextArray(com.android.internal.R.styleable.ListPreference_entries);
@@ -73,7 +73,7 @@ public class MultiCheckPreference extends DialogPreference {
      * <p>
      * Each entry must have a corresponding index in
      * {@link #setEntryValues(CharSequence[])}.
-     * 
+     *
      * @param entries The entries.
      * @see #setEntryValues(CharSequence[])
      */
@@ -82,7 +82,7 @@ public class MultiCheckPreference extends DialogPreference {
         mSetValues = new boolean[entries.length];
         mOrigValues = new boolean[entries.length];
     }
-    
+
     /**
      * @see #setEntries(CharSequence[])
      * @param entriesResId The entries array as a resource.
@@ -90,21 +90,21 @@ public class MultiCheckPreference extends DialogPreference {
     public void setEntries(int entriesResId) {
         setEntries(getContext().getResources().getTextArray(entriesResId));
     }
-    
+
     /**
      * The list of entries to be shown in the list in subsequent dialogs.
-     * 
+     *
      * @return The list as an array.
      */
     public CharSequence[] getEntries() {
         return mEntries;
     }
-    
+
     /**
      * The array to find the value to save for a preference when an entry from
      * entries is selected. If a user clicks on the second item in entries, the
      * second item in this array will be saved to the preference.
-     * 
+     *
      * @param entryValues The array to be used as values to save for the preference.
      */
     public void setEntryValues(String[] entryValues) {
@@ -133,7 +133,7 @@ public class MultiCheckPreference extends DialogPreference {
 
     /**
      * Returns the array of values to be saved for the preference.
-     * 
+     *
      * @return The array of values.
      */
     public String[] getEntryValues() {
@@ -203,17 +203,17 @@ public class MultiCheckPreference extends DialogPreference {
             mSummary = summary.toString();
         }
     }
-    
+
     /**
      * Returns the currently selected values.
      */
     public boolean[] getValues() {
         return mSetValues;
     }
-    
+
     /**
      * Returns the index of the given value (in the entry values array).
-     * 
+     *
      * @param value The value whose index should be returned.
      * @return The index of the value, or -1 if not found.
      */
@@ -227,11 +227,11 @@ public class MultiCheckPreference extends DialogPreference {
         }
         return -1;
     }
-    
+
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        
+
         if (mEntries == null || mEntryValues == null) {
             throw new IllegalStateException(
                     "ListPreference requires an entries array and an entryValues array.");
@@ -275,7 +275,7 @@ public class MultiCheckPreference extends DialogPreference {
             // No need to save instance state since it's persistent
             return superState;
         }
-        
+
         final SavedState myState = new SavedState(superState);
         myState.values = getValues();
         return myState;
@@ -288,15 +288,15 @@ public class MultiCheckPreference extends DialogPreference {
             super.onRestoreInstanceState(state);
             return;
         }
-         
+
         SavedState myState = (SavedState) state;
         super.onRestoreInstanceState(myState.getSuperState());
         setValues(myState.values);
     }
-    
+
     private static class SavedState extends BaseSavedState {
         boolean[] values;
-        
+
         public SavedState(Parcel source) {
             super(source);
             values = source.createBooleanArray();
@@ -323,5 +323,5 @@ public class MultiCheckPreference extends DialogPreference {
             }
         };
     }
-    
+
 }

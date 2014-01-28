@@ -206,7 +206,7 @@ public class MiniThumbFile {
     /**
     * Get the index of thumbnail, which is the real saving location.
     * @param id the raw id in Mediaprovider database.
-    * @param create when you want to create a new thumbnail, set to true; when generally query 
+    * @param create when you want to create a new thumbnail, set to true; when generally query
     * thumbnail saved index, set to false.
     */
     private long getIndex(long id, boolean create){
@@ -216,7 +216,7 @@ public class MiniThumbFile {
         if (r != null) {
             long pos = 0;
             //first 8 bytes are for saving next create thumbnail block number!
-            //so if create set, then begin from 0, others begin from real index 
+            //so if create set, then begin from 0, others begin from real index
             // (id+1)*BYTES_PER_MINTHUMB_INDEX.
             if (!create) {
                 pos = (id + 1) * BYTES_PER_MINTHUMB_INDEX;
@@ -251,7 +251,7 @@ public class MiniThumbFile {
                             lock = mIndexChannel.lock(pos, BYTES_PER_MINTHUMB_INDEX, false);
                             buf.flip();
                             write = mIndexChannel.write(buf, pos);
-                            if(debug) Log.d(TAG, "getIndex with create. index: " + now + 
+                            if(debug) Log.d(TAG, "getIndex with create. index: " + now +
                                                "corresponding id: " + id + ", index is: " + pos);
                         }
                         return now;
@@ -277,7 +277,7 @@ public class MiniThumbFile {
             } catch (RuntimeException ex) {
                 // Other NIO related exception like disk full, read only channel..etc
                 Log.e(TAG, "Got exception when reading index, id = " + id +
-		                 ", disk full or mount read-only? " + ex.getClass());
+                         ", disk full or mount read-only? " + ex.getClass());
             } finally {
                 try {
                     if (lock != null) lock.release();

@@ -201,7 +201,7 @@ int parse_aidl(char const *filename)
 
         free((void*)g_currentFilename);
         g_currentFilename = oldFilename;
-        
+
         if (g_currentPackage) free((void*)g_currentPackage);
         g_currentPackage = oldPackage;
 

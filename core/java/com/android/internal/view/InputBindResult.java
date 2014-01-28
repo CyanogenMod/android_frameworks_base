@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2007-2008 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -26,7 +26,7 @@ import android.view.InputChannel;
  */
 public final class InputBindResult implements Parcelable {
     static final String TAG = "InputBindResult";
-    
+
     /**
      * The input method service.
      */
@@ -42,12 +42,12 @@ public final class InputBindResult implements Parcelable {
      * no input method will be bound.
      */
     public final String id;
-    
+
     /**
      * Sequence number of this binding.
      */
     public final int sequence;
-    
+
     public InputBindResult(IInputMethodSession _method, InputChannel _channel,
             String _id, int _sequence) {
         method = _method;
@@ -55,7 +55,7 @@ public final class InputBindResult implements Parcelable {
         id = _id;
         sequence = _sequence;
     }
-    
+
     InputBindResult(Parcel source) {
         method = IInputMethodSession.Stub.asInterface(source.readStrongBinder());
         if (source.readInt() != 0) {

@@ -26,29 +26,29 @@ import java.io.InputStream;
 
 /**
  * InputStream which transforms 16 bit pcm data to ulaw data.
- * 
+ *
  * Not yet ready to be supported, so
  * @hide
  */
 public final class UlawEncoderInputStream extends InputStream {
     private final static String TAG = "UlawEncoderInputStream";
-    
+
     private final static int MAX_ULAW = 8192;
     private final static int SCALE_BITS = 16;
-    
+
     private InputStream mIn;
-    
+
     private int mMax = 0;
-    
+
     private final byte[] mBuf = new byte[1024];
     private int mBufCount = 0; // should be 0 or 1
-    
+
     private final byte[] mOneByte = new byte[1];
 
-    
+
     public static void encode(byte[] pcmBuf, int pcmOffset,
             byte[] ulawBuf, int ulawOffset, int length, int max) {
-        
+
         // from  'ulaw' in wikipedia
         // +8191 to +8159                          0x80
         // +8158 to +4063 in 16 intervals of 256   0x80 + interval number
@@ -60,7 +60,7 @@ public final class UlawEncoderInputStream extends InputStream {
         //   +94 to   +31 in 16 intervals of   4   0xE0 + interval number
         //   +30 to    +1 in 15 intervals of   2   0xF0 + interval number
         //     0                                   0xFF
-        
+
         //    -1                                   0x7F
         //   -31 to    -2 in 15 intervals of   2   0x70 + interval number
         //   -95 to   -32 in 16 intervals of   4   0x60 + interval number
@@ -71,16 +71,16 @@ public final class UlawEncoderInputStream extends InputStream {
         // -4063 to -2016 in 16 intervals of 128   0x10 + interval number
         // -8159 to -4064 in 16 intervals of 256   0x00 + interval number
         // -8192 to -8160                          0x00
-        
+
         // set scale factors
         if (max <= 0) max = MAX_ULAW;
-        
+
         int coef = MAX_ULAW * (1 << SCALE_BITS) / max;
-        
+
         for (int i = 0; i < length; i++) {
             int pcm = (0xff & pcmBuf[pcmOffset++]) + (pcmBuf[pcmOffset++] << 8);
             pcm = (pcm * coef) >> SCALE_BITS;
-            
+
             int ulaw;
             if (pcm >= 0) {
                 ulaw = pcm <= 0 ? 0xff :
@@ -108,7 +108,7 @@ public final class UlawEncoderInputStream extends InputStream {
             ulawBuf[ulawOffset++] = (byte)ulaw;
         }
     }
-    
+
     /**
      * Compute the maximum of the absolute value of the pcm samples.
      * The return value can be used to set ulaw encoder scaling.
@@ -136,7 +136,7 @@ public final class UlawEncoderInputStream extends InputStream {
         mIn = in;
         mMax = max;
     }
-    
+
     @Override
     public int read(byte[] buf, int offset, int length) throws IOException {
         if (mIn == null) throw new IllegalStateException("not open");
@@ -147,30 +147,30 @@ public final class UlawEncoderInputStream extends InputStream {
             if (n == -1) return -1;
             mBufCount += n;
         }
-        
+
         // compand data
         int n = Math.min(mBufCount / 2, length);
         encode(mBuf, 0, buf, offset, n, mMax);
-        
+
         // move data to bottom of mBuf
         mBufCount -= n * 2;
         for (int i = 0; i < mBufCount; i++) mBuf[i] = mBuf[i + n * 2];
-        
+
         return n;
     }
-    
+
     @Override
     public int read(byte[] buf) throws IOException {
         return read(buf, 0, buf.length);
     }
-    
+
     @Override
     public int read() throws IOException {
         int n = read(mOneByte, 0, 1);
         if (n == -1) return -1;
         return 0xff & (int)mOneByte[0];
     }
-    
+
     @Override
     public void close() throws IOException {
         if (mIn != null) {
@@ -179,7 +179,7 @@ public final class UlawEncoderInputStream extends InputStream {
             in.close();
         }
     }
-    
+
     @Override
     public int available() throws IOException {
         return (mIn.available() + mBufCount) / 2;

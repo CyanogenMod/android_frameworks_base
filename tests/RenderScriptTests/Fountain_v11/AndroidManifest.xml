@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.fountain_v11">
     <uses-sdk android:minSdkVersion="11" />
-    <application 
+    <application
         android:label="Fountain_v11"
         android:icon="@drawable/test_pattern">
         <activity android:name="Fountain_v11">

@@ -32,7 +32,7 @@ import android.widget.TextView;
  */
 public class ListTakeFocusFromSide extends ListActivity {
 
-    
+
     private class ThrashListAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
 
@@ -73,7 +73,7 @@ public class ListTakeFocusFromSide extends ListActivity {
         }
 
     }
-  
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);

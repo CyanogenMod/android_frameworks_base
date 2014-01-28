@@ -130,7 +130,7 @@ public class PrintHtmlDiff {
                 out.println("<td>" + subtracted.totalPages() + "</td>");
             } else {
                 for (int i = 0; i < 2; i++) {
-                    out.println("<td>n/a</td>");                    
+                    out.println("<td>n/a</td>");
                 }
             }
 

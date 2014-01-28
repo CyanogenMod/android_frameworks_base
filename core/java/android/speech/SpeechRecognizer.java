@@ -39,7 +39,7 @@ import java.util.Queue;
  * This class provides access to the speech recognition service. This service allows access to the
  * speech recognizer. Do not instantiate this class directly, instead, call
  * {@link SpeechRecognizer#createSpeechRecognizer(Context)}. This class's methods must be
- * invoked only from the main application thread. 
+ * invoked only from the main application thread.
  *
  * <p>The implementation of this API is likely to stream audio to remote servers to perform speech
  * recognition. As such this API is not intended to be used for continuous recognition, which would
@@ -62,7 +62,7 @@ public class SpeechRecognizer {
      * recognition results, where the first element is the most likely candidate.
      */
     public static final String RESULTS_RECOGNITION = "results_recognition";
-    
+
     /**
      * Key used to retrieve a float array from the {@link Bundle} passed to the
      * {@link RecognitionListener#onResults(Bundle)} and
@@ -118,7 +118,7 @@ public class SpeechRecognizer {
 
     /** Context with which the manager was created */
     private final Context mContext;
-    
+
     /** Component to direct service intent to */
     private final ComponentName mServiceComponent;
 
@@ -189,7 +189,7 @@ public class SpeechRecognizer {
      * Checks whether a speech recognition service is available on the system. If this method
      * returns {@code false}, {@link SpeechRecognizer#createSpeechRecognizer(Context)} will
      * fail.
-     * 
+     *
      * @param context with which {@code SpeechRecognizer} will be created
      * @return {@code true} if recognition is available, {@code false} otherwise
      */
@@ -222,7 +222,7 @@ public class SpeechRecognizer {
      * {@link SpeechRecognizer} to. Normally you would not use this; use
      * {@link #createSpeechRecognizer(Context)} instead to use the system default recognition
      * service.
-     * 
+     *
      * @param context in which to create {@code SpeechRecognizer}
      * @param serviceComponent the {@link ComponentName} of a specific service to direct this
      *        {@code SpeechRecognizer} to
@@ -241,7 +241,7 @@ public class SpeechRecognizer {
      * Sets the listener that will receive all the callbacks. The previous unfinished commands will
      * be executed with the old listener, while any following command will be executed with the new
      * listener.
-     * 
+     *
      * @param listener listener that will receive all the callbacks from the created
      *        {@link SpeechRecognizer}, this must not be null.
      */
@@ -266,24 +266,24 @@ public class SpeechRecognizer {
         checkIsCalledFromMainThread();
         if (mConnection == null) { // first time connection
             mConnection = new Connection();
-            
+
             Intent serviceIntent = new Intent(RecognitionService.SERVICE_INTERFACE);
-            
+
             if (mServiceComponent == null) {
                 String serviceComponent = Settings.Secure.getString(mContext.getContentResolver(),
                         Settings.Secure.VOICE_RECOGNITION_SERVICE);
-                
+
                 if (TextUtils.isEmpty(serviceComponent)) {
                     Log.e(TAG, "no selected voice recognition service");
                     mListener.onError(ERROR_CLIENT);
                     return;
                 }
-                
-                serviceIntent.setComponent(ComponentName.unflattenFromString(serviceComponent));                
+
+                serviceIntent.setComponent(ComponentName.unflattenFromString(serviceComponent));
             } else {
                 serviceIntent.setComponent(mServiceComponent);
             }
-            
+
             if (!mContext.bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE)) {
                 Log.e(TAG, "bind to recognition service failed");
                 mConnection = null;
@@ -376,7 +376,7 @@ public class SpeechRecognizer {
             mListener.onError(ERROR_CLIENT);
         }
     }
-    
+
     private boolean checkOpenConnection() {
         if (mService != null) {
             return true;

@@ -27,7 +27,7 @@ import android.view.View;
  * Mock version of the MapView.
  * Only non override public methods from the real MapView have been added in there.
  * Methods that take an unknown class as parameter or as return object, have been removed for now.
- * 
+ *
  * TODO: generate automatically.
  *
  */
@@ -59,9 +59,9 @@ public class MapView extends MockView {
     public MapView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-    
+
     // START FAKE PUBLIC METHODS
-    
+
     public void displayZoomControls(boolean takeFocus) {
     }
 

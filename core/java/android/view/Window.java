@@ -112,7 +112,7 @@ public abstract class Window {
     public static final int PROGRESS_SECONDARY_START = 20000;
     /** Highest possible value for the secondary progress */
     public static final int PROGRESS_SECONDARY_END = 30000;
-    
+
     /** The default features enabled */
     @SuppressWarnings({"PointlessBitwiseExpression"})
     protected static final int DEFAULT_FEATURES = (1 << FEATURE_OPTIONS_PANEL) |
@@ -126,7 +126,7 @@ public abstract class Window {
     private static final String PROPERTY_HARDWARE_UI = "persist.sys.ui.hw";
 
     private final Context mContext;
-    
+
     private TypedArray mWindowStyle;
     private Callback mCallback;
     private WindowManager mWindowManager;
@@ -149,7 +149,7 @@ public abstract class Window {
     private int mDefaultWindowFormat = PixelFormat.OPAQUE;
 
     private boolean mHasSoftInputMode = false;
-    
+
     private boolean mDestroyed;
 
     // The current window attributes.
@@ -195,7 +195,7 @@ public abstract class Window {
          * @return boolean Return true if this event was consumed.
          */
         public boolean dispatchTouchEvent(MotionEvent event);
-        
+
         /**
          * Called to process trackball events.  At the very least your
          * implementation must call
@@ -280,14 +280,14 @@ public abstract class Window {
          * Called when a panel's menu is opened by the user. This may also be
          * called when the menu is changing from one type to another (for
          * example, from the icon menu to the expanded menu).
-         * 
+         *
          * @param featureId The panel that the menu is in.
          * @param menu The menu that is opened.
          * @return Return true to allow the menu to open, or false to prevent
          *         the menu from opening.
          */
         public boolean onMenuOpened(int featureId, Menu menu);
-        
+
         /**
          * Called when a panel's menu item has been selected by the user.
          *
@@ -331,31 +331,31 @@ public abstract class Window {
          * for more information.
          */
         public void onAttachedToWindow();
-        
+
         /**
          * Called when the window has been attached to the window manager.
          * See {@link View#onDetachedFromWindow() View.onDetachedFromWindow()}
          * for more information.
          */
         public void onDetachedFromWindow();
-        
+
         /**
          * Called when a panel is being closed.  If another logical subsequent
          * panel is being opened (and this panel is being closed to make room for the subsequent
          * panel), this method will NOT be called.
-         * 
+         *
          * @param featureId The panel that is being displayed.
          * @param menu If onCreatePanelView() returned null, this is the Menu
          *            being displayed in the panel.
          */
         public void onPanelClosed(int featureId, Menu menu);
-        
+
         /**
          * Called when the user signals the desire to start a search.
-         * 
+         *
          * @return true if search launched, false if activity refuses (blocks)
-         * 
-         * @see android.app.Activity#onSearchRequested() 
+         *
+         * @see android.app.Activity#onSearchRequested()
          */
         public boolean onSearchRequested();
 
@@ -414,7 +414,7 @@ public abstract class Window {
             return mWindowStyle;
         }
     }
-    
+
     /**
      * Set the container for this window.  If not set, the DecorWindow
      * operates as a top-level window; otherwise, it negotiates with the
@@ -445,7 +445,7 @@ public abstract class Window {
     public final boolean hasChildren() {
         return mHasChildren;
     }
-    
+
     /** @hide */
     public final void destroy() {
         mDestroyed = true;
@@ -567,14 +567,14 @@ public abstract class Window {
      * callback will be used to tell you about state changes to the surface.
      */
     public abstract void takeSurface(SurfaceHolder.Callback2 callback);
-    
+
     /**
      * Take ownership of this window's InputQueue.  The window will no
      * longer read and dispatch input events from the queue; it is your
      * responsibility to do so.
      */
     public abstract void takeInputQueue(InputQueue.Callback callback);
-    
+
     /**
      * Return whether this window is being displayed with a floating style
      * (based on the {@link android.R.attr#windowIsFloating} attribute in
@@ -697,7 +697,7 @@ public abstract class Window {
             mCallback.onWindowAttributesChanged(attrs);
         }
     }
-    
+
     /**
      * Convenience function to set the flag bits as specified in flags, as
      * per {@link #setFlags}.
@@ -713,7 +713,7 @@ public abstract class Window {
     public void addPrivateFlags(int flags) {
         setPrivateFlags(flags, flags);
     }
-    
+
     /**
      * Convenience function to clear the flag bits as specified in flags, as
      * per {@link #setFlags}.
@@ -729,7 +729,7 @@ public abstract class Window {
      * Set the flags of the window, as per the
      * {@link WindowManager.LayoutParams WindowManager.LayoutParams}
      * flags.
-     * 
+     *
      * <p>Note that some flags must be set before the window decoration is
      * created (by the first call to
      * {@link #setContentView(View, android.view.ViewGroup.LayoutParams)} or
@@ -823,20 +823,20 @@ public abstract class Window {
     protected final int getForcedWindowFlags() {
         return mForcedWindowFlags;
     }
-    
+
     /**
      * Has the app specified their own soft input mode?
      */
     protected final boolean hasSoftInputMode() {
         return mHasSoftInputMode;
     }
-    
+
     /** @hide */
     public void setCloseOnTouchOutside(boolean close) {
         mCloseOnTouchOutside = close;
         mSetCloseOnTouchOutside = true;
     }
-    
+
     /** @hide */
     public void setCloseOnTouchOutsideIfNotSet(boolean close) {
         if (!mSetCloseOnTouchOutside) {
@@ -844,10 +844,10 @@ public abstract class Window {
             mSetCloseOnTouchOutside = true;
         }
     }
-    
+
     /** @hide */
     public abstract void alwaysReadCloseOnTouchAttr();
-    
+
     /** @hide */
     public boolean shouldCloseOnTouch(Context context, MotionEvent event) {
         if (mCloseOnTouchOutside && event.getAction() == MotionEvent.ACTION_DOWN
@@ -856,7 +856,7 @@ public abstract class Window {
         }
         return false;
     }
-    
+
     private boolean isOutOfBounds(Context context, MotionEvent event) {
         final int x = (int) event.getX();
         final int y = (int) event.getY();
@@ -866,7 +866,7 @@ public abstract class Window {
                 || (x > (decorView.getWidth()+slop))
                 || (y > (decorView.getHeight()+slop));
     }
-    
+
     /**
      * Enable extended screen features.  This must be called before
      * setContentView().  May be called as many times as desired as long as it
@@ -953,7 +953,7 @@ public abstract class Window {
      * of the window that can not, from this point forward, be changed: the
      * features that have been requested with {@link #requestFeature(int)},
      * and certain window flags as described in {@link #setFlags(int, int)}.
-     * 
+     *
      * @param view The desired content to display.
      * @param params Layout parameters for the view.
      */
@@ -998,7 +998,7 @@ public abstract class Window {
     public abstract void togglePanel(int featureId, KeyEvent event);
 
     public abstract void invalidatePanelMenu(int featureId);
-    
+
     public abstract boolean performPanelShortcut(int featureId,
                                                  int keyCode,
                                                  KeyEvent event,
@@ -1013,17 +1013,17 @@ public abstract class Window {
 
     /**
      * Should be called when the configuration is changed.
-     * 
+     *
      * @param newConfig The new configuration.
      */
     public abstract void onConfigurationChanged(Configuration newConfig);
-    
+
     /**
      * Change the background of this window to a Drawable resource. Setting the
      * background to null will make the window be opaque. To make the window
      * transparent, you can use an empty drawable (for instance a ColorDrawable
      * with the color 0 or the system drawable android:drawable/empty.)
-     * 
+     *
      * @param resid The resource identifier of a drawable resource which will be
      *              installed as the new background.
      */
@@ -1134,7 +1134,7 @@ public abstract class Window {
      *
      */
     public abstract boolean superDispatchTouchEvent(MotionEvent event);
-    
+
     /**
      * Used by custom windows, such as Dialog, to pass the trackball event
      * further down the view hierarchy. Application developers should
@@ -1142,7 +1142,7 @@ public abstract class Window {
      *
      */
     public abstract boolean superDispatchTrackballEvent(MotionEvent event);
-    
+
     /**
      * Used by custom windows, such as Dialog, to pass the generic motion event
      * further down the view hierarchy. Application developers should
@@ -1155,11 +1155,11 @@ public abstract class Window {
      * Retrieve the top-level window decor view (containing the standard
      * window frame/decorations and the client's content inside of that), which
      * can be added as a window to the window manager.
-     * 
+     *
      * <p><em>Note that calling this function for the first time "locks in"
      * various window characteristics as described in
      * {@link #setContentView(View, android.view.ViewGroup.LayoutParams)}.</em></p>
-     * 
+     *
      * @return Returns the top-level window decor view.
      */
     public abstract View getDecorView();
@@ -1167,16 +1167,16 @@ public abstract class Window {
     /**
      * Retrieve the current decor view, but only if it has already been created;
      * otherwise returns null.
-     * 
+     *
      * @return Returns the top-level window decor or null.
      * @see #getDecorView
      */
     public abstract View peekDecorView();
 
     public abstract Bundle saveHierarchyState();
-    
+
     public abstract void restoreHierarchyState(Bundle savedInstanceState);
-    
+
     protected abstract void onActive();
 
     /**
@@ -1194,10 +1194,10 @@ public abstract class Window {
     {
         return mFeatures;
     }
-    
+
     /**
      * Query for the availability of a certain feature.
-     * 
+     *
      * @param feature The feature ID to check
      * @return true if the feature is enabled, false otherwise.
      */
@@ -1253,9 +1253,9 @@ public abstract class Window {
      * @param event the {@link android.view.KeyEvent} to use to help check.
      */
     public abstract boolean isShortcutKey(int keyCode, KeyEvent event);
-    
+
     /**
-     * @see android.app.Activity#setVolumeControlStream(int) 
+     * @see android.app.Activity#setVolumeControlStream(int)
      */
     public abstract void setVolumeControlStream(int streamType);
 

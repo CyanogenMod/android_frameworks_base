@@ -30,7 +30,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
  *
  * A TextSwitcher is useful to animate a label on screen. Whenever
  * {@link #setText(CharSequence)} is called, TextSwitcher animates the current text
- * out and animates the new text in. 
+ * out and animates the new text in.
  */
 public class TextSwitcher extends ViewSwitcher {
     /**

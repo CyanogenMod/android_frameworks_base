@@ -29,7 +29,7 @@ public interface MethodListener {
      * A stub method is being invoked.
      * <p/>
      * Known limitation: caller arguments are not available.
-     *  
+     *
      * @param signature The signature of the method being invoked, composed of the
      *                  binary class name followed by the method descriptor (aka argument
      *                  types). Example: "com/foo/MyClass/InnerClass/printInt(I)V".
@@ -73,4 +73,4 @@ public interface MethodListener {
      */
     public Object onInvokeA(String signature, boolean isNative, Object caller);
 }
-    
+

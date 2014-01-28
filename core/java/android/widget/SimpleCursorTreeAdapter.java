@@ -38,10 +38,10 @@ import android.view.View;
  * binding can be found, an {@link IllegalStateException} is thrown.
  */
 public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter {
-    
+
     /** The name of the columns that contain the data to display for a group. */
     private String[] mGroupFromNames;
-    
+
     /** The indices of columns that contain data to display for a group. */
     private int[] mGroupFrom;
     /**
@@ -52,7 +52,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
 
     /** The name of the columns that contain the data to display for a child. */
     private String[] mChildFromNames;
-    
+
     /** The indices of columns that contain data to display for a child. */
     private int[] mChildFrom;
     /**
@@ -60,7 +60,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
      * corresponding column.
      */
     private int[] mChildTo;
-    
+
     /**
      * View binder, if supplied
      */
@@ -68,7 +68,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
 
     /**
      * Constructor.
-     * 
+     *
      * @param context The context where the {@link ExpandableListView}
      *            associated with this {@link SimpleCursorTreeAdapter} is
      *            running
@@ -109,7 +109,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
 
     /**
      * Constructor.
-     * 
+     *
      * @param context The context where the {@link ExpandableListView}
      *            associated with this {@link SimpleCursorTreeAdapter} is
      *            running
@@ -145,7 +145,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
 
     /**
      * Constructor.
-     * 
+     *
      * @param context The context where the {@link ExpandableListView}
      *            associated with this {@link SimpleCursorTreeAdapter} is
      *            running
@@ -178,14 +178,14 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
 
     private void init(String[] groupFromNames, int[] groupTo, String[] childFromNames,
             int[] childTo) {
-        
+
         mGroupFromNames = groupFromNames;
         mGroupTo = groupTo;
-        
+
         mChildFromNames = childFromNames;
         mChildTo = childTo;
     }
-    
+
     /**
      * Returns the {@link ViewBinder} used to bind data to views.
      *
@@ -211,7 +211,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
 
     private void bindView(View view, Context context, Cursor cursor, int[] from, int[] to) {
         final ViewBinder binder = mViewBinder;
-        
+
         for (int i = 0; i < to.length; i++) {
             View v = view.findViewById(to[i]);
             if (v != null) {
@@ -219,7 +219,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
                 if (binder != null) {
                     bound = binder.setViewValue(v, cursor, from[i]);
                 }
-                
+
                 if (!bound) {
                     String text = cursor.getString(from[i]);
                     if (text == null) {
@@ -237,20 +237,20 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
             }
         }
     }
-    
+
     private void initFromColumns(Cursor cursor, String[] fromColumnNames, int[] fromColumns) {
         for (int i = fromColumnNames.length - 1; i >= 0; i--) {
             fromColumns[i] = cursor.getColumnIndexOrThrow(fromColumnNames[i]);
         }
     }
-    
+
     @Override
     protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild) {
         if (mChildFrom == null) {
             mChildFrom = new int[mChildFromNames.length];
             initFromColumns(cursor, mChildFromNames, mChildFrom);
         }
-        
+
         bindView(view, context, cursor, mChildFrom, mChildTo);
     }
 
@@ -260,7 +260,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
             mGroupFrom = new int[mGroupFromNames.length];
             initFromColumns(cursor, mGroupFromNames, mGroupFrom);
         }
-        
+
         bindView(view, context, cursor, mGroupFrom, mGroupTo);
     }
 
@@ -268,7 +268,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
      * Called by bindView() to set the image for an ImageView. By default, the
      * value will be treated as a Uri. Intended to be overridden by Adapters
      * that need to filter strings retrieved from the database.
-     * 
+     *
      * @param v ImageView to receive an image
      * @param value the value retrieved from the cursor
      */
@@ -287,7 +287,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
      *
      * Intended to be overridden by Adapters that need to filter strings
      * retrieved from the database.
-     * 
+     *
      * @param v TextView to receive text
      * @param text the text to be set for the TextView
      */
@@ -304,7 +304,7 @@ public abstract class SimpleCursorTreeAdapter extends ResourceCursorTreeAdapter 
      * change the way binding occurs for views supported by
      * SimpleCursorTreeAdapter.
      *
-     * @see SimpleCursorTreeAdapter#setViewImage(ImageView, String) 
+     * @see SimpleCursorTreeAdapter#setViewImage(ImageView, String)
      * @see SimpleCursorTreeAdapter#setViewText(TextView, String)
      */
     public static interface ViewBinder {

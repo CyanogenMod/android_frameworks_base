@@ -32,7 +32,7 @@ final class IntentBindRecord {
     /** The running service. */
     final ServiceRecord service;
     /** The intent that is bound.*/
-    final Intent.FilterComparison intent; // 
+    final Intent.FilterComparison intent; //
     /** All apps that have bound to this Intent. */
     final ArrayMap<ProcessRecord, AppBindRecord> apps
             = new ArrayMap<ProcessRecord, AppBindRecord>();
@@ -46,9 +46,9 @@ final class IntentBindRecord {
     boolean hasBound;
     /** Set when the service's onUnbind() has asked to be told about new clients. */
     boolean doRebind;
-    
+
     String stringName;      // caching of toString
-    
+
     void dump(PrintWriter pw, String prefix) {
         pw.print(prefix); pw.print("service="); pw.println(service);
         dumpInService(pw, prefix);

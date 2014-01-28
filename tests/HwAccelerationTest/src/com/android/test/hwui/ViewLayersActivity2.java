@@ -32,13 +32,13 @@ public class ViewLayersActivity2 extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.view_layers);
 
         setupList(R.id.list1);
         setupList(R.id.list2);
         setupList(R.id.list3);
-        
+
         findViewById(R.id.list1).setAlpha(0.7f);
     }
 

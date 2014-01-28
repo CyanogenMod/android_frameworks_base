@@ -214,7 +214,7 @@ public class UriMatcher
      *
      * @param uri       The url whose path we will match against.
      *
-     * @return  The code for the matched node (added using addURI), 
+     * @return  The code for the matched node (added using addURI),
      * or -1 if there is no matched node.
      */
     public int match(Uri uri)

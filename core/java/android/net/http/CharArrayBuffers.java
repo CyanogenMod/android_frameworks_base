@@ -21,7 +21,7 @@ import org.apache.http.protocol.HTTP;
 
 /**
  * Utility methods for working on CharArrayBuffers.
- * 
+ *
  * {@hide}
  */
 class CharArrayBuffers {

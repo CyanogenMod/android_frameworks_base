@@ -162,7 +162,7 @@ import android.annotation.SdkConstant;
  *     </tr>
  *     </tbody>
  * </table>
- * 
+ *
  * @deprecated Live folders are no longer supported by Android.  These have been
  * replaced by the new
  * <a href="{@docRoot}guide/topics/appwidgets/index.html#collections">AppWidget Collection</a>

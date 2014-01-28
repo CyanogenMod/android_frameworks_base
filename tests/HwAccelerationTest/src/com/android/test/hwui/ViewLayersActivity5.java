@@ -101,7 +101,7 @@ public class ViewLayersActivity5 extends Activity {
     public void disableLayer(View v) {
         findViewById(R.id.container).setLayerType(View.LAYER_TYPE_NONE, null);
     }
-    
+
     public void growLayer(View v) {
         findViewById(R.id.container).getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         findViewById(R.id.container).requestLayout();
@@ -111,7 +111,7 @@ public class ViewLayersActivity5 extends Activity {
         findViewById(R.id.container).getLayoutParams().height = 300;
         findViewById(R.id.container).requestLayout();
     }
-    
+
     private void setupList(int listId) {
         final ListView list = (ListView) findViewById(listId);
         list.setAdapter(new SimpleListAdapter(this));

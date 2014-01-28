@@ -135,7 +135,7 @@ DispatcherClass::generate_process()
     this->processMethod->parameters.push_back(this->requestParam);
 
     this->rpcContextParam = new Variable(RPC_CONTEXT_TYPE, "context", 0);
-    this->processMethod->parameters.push_back(this->rpcContextParam);    
+    this->processMethod->parameters.push_back(this->rpcContextParam);
 
     this->errorParam = new Variable(RPC_ERROR_TYPE, "errorParam", 0);
     this->processMethod->parameters.push_back(this->errorParam);
@@ -166,7 +166,7 @@ DispatcherClass::AddMethod(const method_type* method)
         this->dispatchIfStatement->elseif = ifs;
         this->dispatchIfStatement = ifs;
     }
-    
+
     // The call to decl (from above)
     MethodCall* realCall = new MethodCall(this->targetExpression, method->name.data);
 
@@ -211,7 +211,7 @@ DispatcherClass::AddMethod(const method_type* method)
     if (returnType == EVENT_FAKE_TYPE) {
         returnType = VOID_TYPE;
     }
-    
+
     // the real call
     bool first = true;
     Variable* _result = NULL;
@@ -268,8 +268,8 @@ DispatcherClass::DoneWithMethods()
     IfStatement* fallthrough = new IfStatement();
         fallthrough->statements = new StatementBlock;
         fallthrough->statements->Add(new ReturnStatement(
-                    new MethodCall(SUPER_VALUE, "process", 4, 
-                    this->actionParam, this->requestParam, 
+                    new MethodCall(SUPER_VALUE, "process", 4,
+                    this->actionParam, this->requestParam,
                     this->rpcContextParam,
                     this->errorParam)));
     this->dispatchIfStatement->elseif = fallthrough;
@@ -477,7 +477,7 @@ EndpointBaseClass::generate_ctor()
 {
     Variable* container = new Variable(RPC_CONTAINER_TYPE, "container");
     Variable* broker = new Variable(RPC_BROKER_TYPE, "broker");
-	Variable* place = new Variable(PLACE_INFO_TYPE, "placeInfo");
+    Variable* place = new Variable(PLACE_INFO_TYPE, "placeInfo");
     Method* ctor = new Method;
         ctor->modifiers = PUBLIC;
         ctor->name = class_name_leaf(this->type->Name());
@@ -667,7 +667,7 @@ generate_results_method(const method_type* method, RpcProxyClass* proxyClass)
         if (resultMethod->parameters.size() > 0) {
             proxyClass->elements.push_back(resultsClass);
             return resultsInterfaceType;
-        } 
+        }
     }
     //delete resultsInterfaceType;
     return NULL;
@@ -802,7 +802,7 @@ generate_regular_method(const method_type* method, RpcProxyClass* proxyClass,
     // == the callback interface for results ================================
     // the service base class
     Type* resultsInterfaceType = generate_results_method(method, proxyClass);
-    
+
     // == the method in the proxy class =====================================
     generate_proxy_method(method, proxyClass, resultsDispatcherClass, resultsInterfaceType, index);
 
@@ -829,9 +829,9 @@ generate_regular_method(const method_type* method, RpcProxyClass* proxyClass,
 
     // Add the default RpcContext param to all methods
     decl->parameters.push_back(new Variable(RPC_CONTEXT_TYPE, "context", 0));
-	
+
     serviceBaseClass->elements.push_back(decl);
-    
+
 
     // == the dispatch method in the service base class ======================
     serviceBaseClass->AddMethod(method);

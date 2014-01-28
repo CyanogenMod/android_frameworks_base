@@ -57,7 +57,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="@dimen/kg_status_line_font_size"
             android:textColor="?android:attr/textColorSecondary"
-            android:drawablePadding="8dip" 
+            android:drawablePadding="8dip"
             android:textAllCaps="@bool/kg_use_all_caps" />
 
         <Button android:id="@+id/forgot_password_button"

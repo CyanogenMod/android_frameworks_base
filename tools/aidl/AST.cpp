@@ -23,7 +23,7 @@ WriteModifiers(FILE* to, int mod, int mask)
     if (m & STATIC) {
         fprintf(to, "static ");
     }
-    
+
     if (m & FINAL) {
         fprintf(to, "final ");
     }
@@ -746,7 +746,7 @@ Method::Write(FILE* to)
         fprintf(to, "%s%s ", this->returnType->QualifiedName().c_str(),
                 dim.c_str());
     }
-   
+
     fprintf(to, "%s(", this->name.c_str());
 
     N = this->parameters.size();

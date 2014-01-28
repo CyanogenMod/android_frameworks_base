@@ -212,7 +212,7 @@
                     android:layout_height="wrap_content"
                     android:text="Ten notifications"
                     />
-                    
+
         </LinearLayout>
 
         <LinearLayout
@@ -229,31 +229,31 @@
                         style="@style/FieldTitle"
                         android:text="setWhen"
                         />
-	            <RadioGroup
-	                    android:id="@+id/group_when"
-	                    style="@style/FieldChoices"
-	                    >
-	                <RadioButton
-	                        android:id="@+id/when_midnight"
-	                        style="@style/FieldContents"
-	                        android:text="midnight"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/when_now"
-	                        style="@style/FieldContents"
-	                        android:text="now"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/when_now_plus_1h"
-	                        style="@style/FieldContents.Disabled"
-	                        android:text="now + 1h"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/when_tomorrow"
-	                        style="@style/FieldContents.Disabled"
-	                        android:text="tomorrow"
-	                        />
-	            </RadioGroup>
+                <RadioGroup
+                        android:id="@+id/group_when"
+                        style="@style/FieldChoices"
+                        >
+                    <RadioButton
+                            android:id="@+id/when_midnight"
+                            style="@style/FieldContents"
+                            android:text="midnight"
+                            />
+                    <RadioButton
+                            android:id="@+id/when_now"
+                            style="@style/FieldContents"
+                            android:text="now"
+                            />
+                    <RadioButton
+                            android:id="@+id/when_now_plus_1h"
+                            style="@style/FieldContents.Disabled"
+                            android:text="now + 1h"
+                            />
+                    <RadioButton
+                            android:id="@+id/when_tomorrow"
+                            style="@style/FieldContents.Disabled"
+                            android:text="tomorrow"
+                            />
+                </RadioGroup>
             </LinearLayout>
 
             <!-- icon -->
@@ -553,7 +553,7 @@
                         android:text="full screen"
                         />
             </RadioGroup>
-            
+
 
             <!-- setTicker -->
             <LinearLayout
@@ -656,7 +656,7 @@
                         android:text="none"
                         />
             </RadioGroup>
-            
+
 
             <!-- setVibrate -->
             <LinearLayout
@@ -666,37 +666,37 @@
                         style="@style/FieldTitle"
                         android:text="setVibrate"
                         />
-	            <RadioGroup
-	                    android:id="@+id/group_vibrate"
-	                    style="@style/FieldChoices"
-	                    >
-	                <RadioButton
-	                        android:id="@+id/vibrate_none"
-	                        style="@style/FieldContents"
-	                        android:text="none"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/vibrate_zero"
-	                        style="@style/FieldContents"
-	                        android:text="0"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/vibrate_short"
-	                        style="@style/FieldContents"
-	                        android:text="100"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/vibrate_long"
-	                        style="@style/FieldContents"
-	                        android:text="1000"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/vibrate_pattern"
-	                        style="@style/FieldContents"
-	                        android:text="...---..."
-	                        />
-	            </RadioGroup>
-			</LinearLayout>            
+                <RadioGroup
+                        android:id="@+id/group_vibrate"
+                        style="@style/FieldChoices"
+                        >
+                    <RadioButton
+                            android:id="@+id/vibrate_none"
+                            style="@style/FieldContents"
+                            android:text="none"
+                            />
+                    <RadioButton
+                            android:id="@+id/vibrate_zero"
+                            style="@style/FieldContents"
+                            android:text="0"
+                            />
+                    <RadioButton
+                            android:id="@+id/vibrate_short"
+                            style="@style/FieldContents"
+                            android:text="100"
+                            />
+                    <RadioButton
+                            android:id="@+id/vibrate_long"
+                            style="@style/FieldContents"
+                            android:text="1000"
+                            />
+                    <RadioButton
+                            android:id="@+id/vibrate_pattern"
+                            style="@style/FieldContents"
+                            android:text="...---..."
+                            />
+                </RadioGroup>
+            </LinearLayout>
 
             <!-- setLights -->
             <LinearLayout
@@ -763,37 +763,37 @@
                         style="@style/FieldTitle"
                         android:text="setPriority"
                         />
-	            <RadioGroup
-	                    android:id="@+id/group_priority"
-	                    style="@style/FieldChoices"
-	                    >
-	                <RadioButton
-	                        android:id="@+id/pri_max"
-	                        style="@style/FieldContents"
-	                        android:text="MAX"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/pri_high"
-	                        style="@style/FieldContents"
-	                        android:text="HIGH"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/pri_default"
-	                        style="@style/FieldContents"
-	                        android:text="DEFAULT"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/pri_low"
-	                        style="@style/FieldContents"
-	                        android:text="LOW"
-	                        />
-	                <RadioButton
-	                        android:id="@+id/pri_min"
-	                        style="@style/FieldContents"
-	                        android:text="MIN"
-	                        />
-	            </RadioGroup>
-			</LinearLayout>            
+                <RadioGroup
+                        android:id="@+id/group_priority"
+                        style="@style/FieldChoices"
+                        >
+                    <RadioButton
+                            android:id="@+id/pri_max"
+                            style="@style/FieldContents"
+                            android:text="MAX"
+                            />
+                    <RadioButton
+                            android:id="@+id/pri_high"
+                            style="@style/FieldContents"
+                            android:text="HIGH"
+                            />
+                    <RadioButton
+                            android:id="@+id/pri_default"
+                            style="@style/FieldContents"
+                            android:text="DEFAULT"
+                            />
+                    <RadioButton
+                            android:id="@+id/pri_low"
+                            style="@style/FieldContents"
+                            android:text="LOW"
+                            />
+                    <RadioButton
+                            android:id="@+id/pri_min"
+                            style="@style/FieldContents"
+                            android:text="MIN"
+                            />
+                </RadioGroup>
+            </LinearLayout>
 
             <!-- setLights -->
             <LinearLayout

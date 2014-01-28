@@ -30,41 +30,41 @@ import java.io.OutputStream;
  * <li> bitsPerSample - usually 16 for PCM, 8 for ALAW, or 8 for ULAW.
  * <li> numBytes - size of audio data after this header, in bytes.
  * </ul>
- * 
+ *
  * Not yet ready to be supported, so
  * @hide
  */
 public class WaveHeader {
-    
+
     // follows WAVE format in http://ccrma.stanford.edu/courses/422/projects/WaveFormat
 
     private static final String TAG = "WaveHeader";
-    
+
     private static final int HEADER_LENGTH = 44;
-    
+
     /** Indicates PCM format. */
     public static final short FORMAT_PCM = 1;
     /** Indicates ALAW format. */
     public static final short FORMAT_ALAW = 6;
     /** Indicates ULAW format. */
     public static final short FORMAT_ULAW = 7;
-    
+
     private short mFormat;
     private short mNumChannels;
     private int mSampleRate;
     private short mBitsPerSample;
     private int mNumBytes;
-    
+
     /**
      * Construct a WaveHeader, with all fields defaulting to zero.
      */
     public WaveHeader() {
     }
-    
+
     /**
      * Construct a WaveHeader, with fields initialized.
      * @param format format of audio data,
-     * one of {@link #FORMAT_PCM}, {@link #FORMAT_ULAW}, or {@link #FORMAT_ALAW}. 
+     * one of {@link #FORMAT_PCM}, {@link #FORMAT_ULAW}, or {@link #FORMAT_ALAW}.
      * @param numChannels 1 for mono, 2 for stereo.
      * @param sampleRate typically 8000, 11025, 16000, 22050, or 44100 hz.
      * @param bitsPerSample usually 16 for PCM, 8 for ULAW or 8 for ALAW.
@@ -77,7 +77,7 @@ public class WaveHeader {
         mBitsPerSample = bitsPerSample;
         mNumBytes = numBytes;
     }
-    
+
     /**
      * Get the format field.
      * @return format field,
@@ -86,7 +86,7 @@ public class WaveHeader {
     public short getFormat() {
         return mFormat;
     }
-    
+
     /**
      * Set the format field.
      * @param format
@@ -97,7 +97,7 @@ public class WaveHeader {
         mFormat = format;
         return this;
     }
-    
+
     /**
      * Get the number of channels.
      * @return number of channels, 1 for mono, 2 for stereo.
@@ -105,7 +105,7 @@ public class WaveHeader {
     public short getNumChannels() {
         return mNumChannels;
     }
-    
+
     /**
      * Set the number of channels.
      * @param numChannels 1 for mono, 2 for stereo.
@@ -115,7 +115,7 @@ public class WaveHeader {
         mNumChannels = numChannels;
         return this;
     }
-    
+
     /**
      * Get the sample rate.
      * @return sample rate, typically 8000, 11025, 16000, 22050, or 44100 hz.
@@ -123,7 +123,7 @@ public class WaveHeader {
     public int getSampleRate() {
         return mSampleRate;
     }
-    
+
     /**
      * Set the sample rate.
      * @param sampleRate sample rate, typically 8000, 11025, 16000, 22050, or 44100 hz.
@@ -133,7 +133,7 @@ public class WaveHeader {
         mSampleRate = sampleRate;
         return this;
     }
-    
+
     /**
      * Get the number of bits per sample.
      * @return number of bits per sample,
@@ -142,7 +142,7 @@ public class WaveHeader {
     public short getBitsPerSample() {
         return mBitsPerSample;
     }
-    
+
     /**
      * Set the number of bits per sample.
      * @param bitsPerSample number of bits per sample,
@@ -153,7 +153,7 @@ public class WaveHeader {
         mBitsPerSample = bitsPerSample;
         return this;
     }
-    
+
     /**
      * Get the size of audio data after this header, in bytes.
      * @return size of audio data after this header, in bytes.
@@ -161,7 +161,7 @@ public class WaveHeader {
     public int getNumBytes() {
         return mNumBytes;
     }
-    
+
     /**
      * Set the size of audio data after this header, in bytes.
      * @param numBytes size of audio data after this header, in bytes.
@@ -171,7 +171,7 @@ public class WaveHeader {
         mNumBytes = numBytes;
         return this;
     }
-    
+
     /**
      * Read and initialize a WaveHeader.
      * @param in {@link java.io.InputStream} to read from.
@@ -203,7 +203,7 @@ public class WaveHeader {
         /* data chunk */
         readId(in, "data");
         mNumBytes = readInt(in);
-        
+
         return HEADER_LENGTH;
     }
 
@@ -246,7 +246,7 @@ public class WaveHeader {
         /* data chunk */
         writeId(out, "data");
         writeInt(out, mNumBytes);
-        
+
         return HEADER_LENGTH;
     }
 
@@ -265,7 +265,7 @@ public class WaveHeader {
         out.write(val >> 0);
         out.write(val >> 8);
     }
-    
+
     @Override
     public String toString() {
         return String.format(

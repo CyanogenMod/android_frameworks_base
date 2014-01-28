@@ -11,7 +11,7 @@
 ** Unless required by applicable law or agreed to in writing, software
 ** distributed under the License is distributed on an "AS IS" BASIS,
 ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and 
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -132,14 +132,14 @@ public class GLES11Ext {
 
     native private static void _nativeClassInit();
     static {
-	    _nativeClassInit();
+        _nativeClassInit();
     }
-    
+
     private static final int GL_BYTE = GLES10.GL_BYTE;
     private static final int GL_FIXED = GLES10.GL_FIXED;
     private static final int GL_FLOAT = GLES10.GL_FLOAT;
     private static final int GL_SHORT = GLES10.GL_SHORT;
-    
+
     private static Buffer _matrixIndexPointerOES;
     // C function void glBlendEquationSeparateOES ( GLenum modeRGB, GLenum modeAlpha )
 

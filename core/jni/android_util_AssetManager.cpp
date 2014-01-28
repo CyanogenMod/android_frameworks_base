@@ -1644,7 +1644,7 @@ static jintArray android_content_AssetManager_getArrayIntResource(JNIEnv* env, j
 }
 
 static jint android_content_AssetManager_splitThemePackage(JNIEnv* env, jobject clazz,
-		jstring srcFileName, jstring dstFileName, jobjectArray drmProtectedAssetNames)
+        jstring srcFileName, jstring dstFileName, jobjectArray drmProtectedAssetNames)
 {
     AssetManager* am = assetManagerForJavaObject(env, clazz);
     if (am == NULL) {

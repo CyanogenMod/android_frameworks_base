@@ -296,7 +296,7 @@ public class WorkSource implements Parcelable {
                 break;
             }
             if (mUids[i] == uid) {
-                int diff = mNames[i].compareTo(name); 
+                int diff = mNames[i].compareTo(name);
                 if (diff > 0) {
                     break;
                 }

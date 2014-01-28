@@ -69,7 +69,7 @@ public final class CookieSyncManager extends WebSyncManager {
      * Singleton access to a {@link CookieSyncManager}. An
      * IllegalStateException will be thrown if
      * {@link CookieSyncManager#createInstance(Context)} is not called before.
-     * 
+     *
      * @return CookieSyncManager
      */
     public static synchronized CookieSyncManager getInstance() {

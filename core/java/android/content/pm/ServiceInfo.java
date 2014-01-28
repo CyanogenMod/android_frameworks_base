@@ -78,7 +78,7 @@ public class ServiceInfo extends ComponentInfo
         pw.println(prefix + "permission=" + permission);
         pw.println(prefix + "flags=0x" + Integer.toHexString(flags));
     }
-    
+
     public String toString() {
         return "ServiceInfo{"
             + Integer.toHexString(System.identityHashCode(this))

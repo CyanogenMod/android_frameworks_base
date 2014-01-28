@@ -22,13 +22,13 @@ import android.util.SparseArray;
 public class ProcessMap<E> {
     final ArrayMap<String, SparseArray<E>> mMap
             = new ArrayMap<String, SparseArray<E>>();
-    
+
     public E get(String name, int uid) {
         SparseArray<E> uids = mMap.get(name);
         if (uids == null) return null;
         return uids.get(uid);
     }
-    
+
     public E put(String name, int uid, E value) {
         SparseArray<E> uids = mMap.get(name);
         if (uids == null) {
@@ -38,7 +38,7 @@ public class ProcessMap<E> {
         uids.put(uid, value);
         return value;
     }
-    
+
     public void remove(String name, int uid) {
         SparseArray<E> uids = mMap.get(name);
         if (uids != null) {
@@ -48,7 +48,7 @@ public class ProcessMap<E> {
             }
         }
     }
-    
+
     public ArrayMap<String, SparseArray<E>> getMap() {
         return mMap;
     }

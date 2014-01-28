@@ -78,7 +78,7 @@ public class PowerMeasurement extends ActivityInstrumentationTestCase2<PowerTest
                 clearCacheSuccess = true;
             }
         } catch ( Exception e){
-            assertTrue("Fails to clear the cahche", false);   
+            assertTrue("Fails to clear the cahche", false);
         }
         assertTrue("Fails to clear the cahche", clearCacheSuccess);
         activity.finish();

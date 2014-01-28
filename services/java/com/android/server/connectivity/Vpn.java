@@ -92,7 +92,7 @@ import libcore.io.IoUtils;
 public class Vpn extends BaseNetworkStateTracker {
     private static final String TAG = "Vpn";
     private static final boolean LOGD = true;
-    
+
     // TODO: create separate trackers for each unique VPN to support
     // automated reconnection
 

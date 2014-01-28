@@ -64,7 +64,7 @@ public class BitmapsAlphaActivity extends Activity {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            
+
             Log.d("OpenGLRenderer", "================= Draw");
 
             canvas.translate(120.0f, 50.0f);
@@ -73,7 +73,7 @@ public class BitmapsAlphaActivity extends Activity {
             canvas.translate(0.0f, mBitmap1.getHeight());
             canvas.translate(0.0f, 25.0f);
             canvas.drawBitmap(mBitmap2, 0.0f, 0.0f, null);
-            
+
             canvas.translate(0.0f, mBitmap2.getHeight());
             canvas.translate(0.0f, 25.0f);
             canvas.drawBitmap(mBitmap3, 0.0f, 0.0f, null);

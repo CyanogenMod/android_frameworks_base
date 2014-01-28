@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -68,8 +68,8 @@ nonvoidThrowsException (Class *clazz, MethodBlock *mb, uintptr_t *ostack)
     if (1) {
         signalException("java/lang/NullPointerException", NULL);
         goto exception;
-    } 
-    
+    }
+
     RETURN_OBJ (NULL);
 exception:
     RETURN_VOID;
@@ -80,7 +80,7 @@ static uintptr_t *
 setInstanceString (Class *clazz, MethodBlock *mb, uintptr_t *ostack)
 {
     Object *jthis = (Object *) ostack[0];
-    
+
     JOBJ_set_obj(jthis, offset_instanceString, ostack[1]);
 
     RETURN_VOID;
@@ -112,7 +112,7 @@ makeStringFromThreeChars (Class *clazz, MethodBlock *mb, uintptr_t *ostack)
     str[1] = b;
     str[2] = c;
     str[3] = 0;
-    
+
     RETURN_OBJ(createString(str));
 }
 
@@ -128,7 +128,7 @@ makeReturnedObject (Class *clazz, MethodBlock *mb, uintptr_t *ostack)
     ret = allocObject(class_ReturnedObject);
 
     executeMethod(ret, mb_ReturnedObject_setReturnedString, a);
-    
+
     RETURN_OBJ (ret);
 }
 
@@ -136,7 +136,7 @@ makeReturnedObject (Class *clazz, MethodBlock *mb, uintptr_t *ostack)
 static uintptr_t *
 addDoubles (Class *clazz, MethodBlock *mb, uintptr_t *ostack)
 {
-    //Object *jthis = (Object*)ostack[0];        
+    //Object *jthis = (Object*)ostack[0];
     double a = JARG_get_double(1);
     double b = JARG_get_double(3);
 
@@ -188,8 +188,8 @@ compareAll  (Class *clazz, MethodBlock *mb, uintptr_t *ostack)
     Object *mStringObj = JOBJ_get_obj(jthis, offset_mString);
 
     char *s = JARG_get_cstr_strdup(4);
-    
-    result = executeMethod (strObj, lookupVirtualMethod(strObj,mb_Java_Lang_Object_Equals), 
+
+    result = executeMethod (strObj, lookupVirtualMethod(strObj,mb_Java_Lang_Object_Equals),
                 JOBJ_get_obj(jthis, offset_mString));
 
     if (exceptionOccurred()) {
@@ -215,7 +215,7 @@ static VMMethod methods[] = {
     {"nonvoidThrowsException", nonvoidThrowsException},
     {"setInstanceString",     setInstanceString},
     {"setClassString",     setClassString},
-    {"makeStringFromThreeChars", makeStringFromThreeChars}, 
+    {"makeStringFromThreeChars", makeStringFromThreeChars},
     {"makeReturnedObject", makeReturnedObject},
     {"addDoubles", addDoubles},
     {"setAll", setAll},
@@ -234,41 +234,41 @@ void register_BindTest()
 
     if (clazz == NULL) {
         fprintf(stderr, "Error: BindTest not found\n");
-	clearException();
+    clearException();
         return;
     }
-    
+
     FieldBlock *fb;
 
     fb = findField(clazz, "instanceString", "Ljava/lang/String;");
 
     if (fb == NULL || ((fb->access_flags & ACC_STATIC) == ACC_STATIC)) {
-        fprintf(stderr, "Error: BindTest.instanceString not found or error\n");        
+        fprintf(stderr, "Error: BindTest.instanceString not found or error\n");
         return;
-    }  
+    }
 
     offset_instanceString = fb->offset;
 
     fb_classString = findField(clazz, "classString", "Ljava/lang/String;");
 
     if (fb_classString == NULL || ((fb_classString->access_flags & ACC_STATIC) != ACC_STATIC)) {
-        fprintf(stderr, "Error: BindTest.classString not found or error\n");        
+        fprintf(stderr, "Error: BindTest.classString not found or error\n");
         return;
-    }  
+    }
 
 
     class_ReturnedObject = findClassFromClassLoader("ReturnedObject", getSystemClassLoader());
 
     if (class_ReturnedObject == NULL) {
-        fprintf(stderr, "Error: ReturnedObject class not found or error\n");        
+        fprintf(stderr, "Error: ReturnedObject class not found or error\n");
         return;
     }
-    
+
     mb_ReturnedObject_setReturnedString=
            findMethod (class_ReturnedObject, "setReturnedString", "(Ljava/lang/String;)V");
 
     if (mb_ReturnedObject_setReturnedString == NULL) {
-        fprintf(stderr, "Error: ReturnedObject.setReturnedString class not found or error\n");        
+        fprintf(stderr, "Error: ReturnedObject.setReturnedString class not found or error\n");
         return;
     }
 

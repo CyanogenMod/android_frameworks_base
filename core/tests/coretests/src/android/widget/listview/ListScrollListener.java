@@ -45,7 +45,7 @@ public class ListScrollListener extends ListActivity implements AbsListView.OnSc
         for(i=0; i<1000; i++) {
             values[i] = ((Integer)i).toString();
         }
-        
+
         mText = (TextView) findViewById(R.id.text);
         setListAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, values));
@@ -67,6 +67,6 @@ public class ListScrollListener extends ListActivity implements AbsListView.OnSc
         mText.setText("Showing " + firstCell + "-" + last + "/" + itemCount);
     }
 
-    public void onScrollStateChanged(AbsListView view, int scrollState) {        
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 }

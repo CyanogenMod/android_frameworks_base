@@ -34,7 +34,7 @@ import android.util.Log;
  *
  * {@hide}
  */
-public final class CursorToBulkCursorAdaptor extends BulkCursorNative 
+public final class CursorToBulkCursorAdaptor extends BulkCursorNative
         implements IBinder.DeathRecipient {
     private static final String TAG = "Cursor";
 
@@ -67,7 +67,7 @@ public final class CursorToBulkCursorAdaptor extends BulkCursorNative
                 // Do nothing, the far side is dead
             }
         }
-        
+
         public boolean unlinkToDeath(DeathRecipient recipient) {
             return mRemote.asBinder().unlinkToDeath(recipient, 0);
         }

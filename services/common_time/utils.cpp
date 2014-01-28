@@ -150,7 +150,7 @@ void LogRing::dumpLog(int fd) {
 
         localtime_r(&mRingBuffer[ndx].first_ts.tv_sec, &t);
         strftime(timebuf, sizeof(timebuf), kTimeFmt, &t);
-        res = snprintf(buf, sizeof(buf), "[%2d] %s.%03ld :: %s%s\n", 
+        res = snprintf(buf, sizeof(buf), "[%2d] %s.%03ld :: %s%s\n",
                        i, timebuf,
                        mRingBuffer[ndx].first_ts.tv_usec / 1000,
                        mRingBuffer[ndx].s.string(),

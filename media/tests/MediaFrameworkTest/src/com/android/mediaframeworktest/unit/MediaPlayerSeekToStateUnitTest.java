@@ -26,13 +26,13 @@ import android.test.suitebuilder.annotation.LargeTest;
  */
 public class MediaPlayerSeekToStateUnitTest extends AndroidTestCase implements MediaPlayerMethodUnderTest {
     private MediaPlayerStateUnitTestTemplate mTestTemplate = new MediaPlayerStateUnitTestTemplate();
- 
+
     /**
      * 1. It is valid to call seekTo() in the following states:
      *    {Prepared, Started, Paused, PlaybackComplted}.
      * 2. It is invalid to call seekTo() in the following states:
      *    {Idle, Initialized, Stopped, Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -60,7 +60,7 @@ public class MediaPlayerSeekToStateUnitTest extends AndroidTestCase implements M
     public void testSeekTo() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "seekTo()";

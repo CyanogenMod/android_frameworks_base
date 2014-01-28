@@ -90,17 +90,17 @@
                         android:background="#FF000000"
                         android:padding="10px"
                         android:layoutDirection="inherit">
-    
+
             <TextView android:id="@+id/label_3"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:text="Type here:"/>
-    
+
             <EditText android:id="@+id/entry_3"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:layout_below="@id/label_3"/>
-    
+
             <Button android:id="@+id/ok_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10px"
                     android:text="OK"/>
-    
+
             <Button android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@id/ok_3"
@@ -152,12 +152,12 @@
                         android:background="#FF000000"
                         android:padding="10px"
                         android:layoutDirection="locale">
-    
+
             <TextView android:id="@+id/label_4"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:text="Type here:"/>
-    
+
             <EditText android:id="@+id/entry_4"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="10px"
                     android:text="OK"/>
-    
+
             <Button android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@id/ok_4"

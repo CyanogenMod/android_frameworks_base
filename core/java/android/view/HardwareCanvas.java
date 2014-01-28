@@ -23,7 +23,7 @@ import android.graphics.Rect;
 
 /**
  * Hardware accelerated canvas.
- * 
+ *
  * @hide
  */
 public abstract class HardwareCanvas extends Canvas {
@@ -68,7 +68,7 @@ public abstract class HardwareCanvas extends Canvas {
 
     /**
      * Invoked before any drawing operation is performed in this canvas.
-     * 
+     *
      * @param dirty The dirty rectangle to update, can be null.
      * @return {@link DisplayList#STATUS_DREW} if anything was drawn (such as a call to clear
      *         the canvas).
@@ -139,7 +139,7 @@ public abstract class HardwareCanvas extends Canvas {
      * This function may return true if an invalidation is needed after the call.
      *
      * @param drawGLFunction A native function pointer
-     *                       
+     *
      * @return One of {@link DisplayList#STATUS_DONE}, {@link DisplayList#STATUS_DRAW} or
      *         {@link DisplayList#STATUS_INVOKE}
      *
@@ -152,9 +152,9 @@ public abstract class HardwareCanvas extends Canvas {
 
     /**
      * Invoke all the functors who requested to be invoked during the previous frame.
-     * 
+     *
      * @param dirty The region to redraw when the functors return {@link DisplayList#STATUS_DRAW}
-     *              
+     *
      * @return One of {@link DisplayList#STATUS_DONE}, {@link DisplayList#STATUS_DRAW} or
      *         {@link DisplayList#STATUS_INVOKE}
      *
@@ -192,7 +192,7 @@ public abstract class HardwareCanvas extends Canvas {
 
     /**
      * Indicates that the specified layer must be updated as soon as possible.
-     * 
+     *
      * @param layer The layer to update
      *
      * @see #clearLayerUpdates()
@@ -225,7 +225,7 @@ public abstract class HardwareCanvas extends Canvas {
 
     /**
      * Removes all enqueued layer updates.
-     * 
+     *
      * @see #pushLayerUpdate(HardwareLayer)
      *
      * @hide

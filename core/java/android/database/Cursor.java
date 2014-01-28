@@ -91,7 +91,7 @@ public interface Cursor extends Closeable {
      * Move the cursor to an absolute position. The valid
      * range of values is -1 &lt;= position &lt;= count.
      *
-     * <p>This method will return true if the request destination was reachable, 
+     * <p>This method will return true if the request destination was reachable,
      * otherwise, it returns false.
      *
      * @param position the zero-based position to move to.
@@ -210,10 +210,10 @@ public interface Cursor extends Closeable {
 
     /**
      * Return total number of columns
-     * @return number of columns 
+     * @return number of columns
      */
     int getColumnCount();
-    
+
     /**
      * Returns the value of the requested column as a byte array.
      *
@@ -237,17 +237,17 @@ public interface Cursor extends Closeable {
      * @return the value of that column as a String.
      */
     String getString(int columnIndex);
-    
+
     /**
      * Retrieves the requested column text and stores it in the buffer provided.
-     * If the buffer size is not sufficient, a new char buffer will be allocated 
+     * If the buffer size is not sufficient, a new char buffer will be allocated
      * and assigned to CharArrayBuffer.data
      * @param columnIndex the zero-based index of the target column.
      *        if the target column is null, return buffer
-     * @param buffer the buffer to copy the text into. 
+     * @param buffer the buffer to copy the text into.
      */
     void copyStringToBuffer(int columnIndex, CharArrayBuffer buffer);
-    
+
     /**
      * Returns the value of the requested column as a short.
      *
@@ -351,7 +351,7 @@ public interface Cursor extends Closeable {
     void deactivate();
 
     /**
-     * Performs the query that created the cursor again, refreshing its 
+     * Performs the query that created the cursor again, refreshing its
      * contents. This may be done at any time, including after a call to {@link
      * #deactivate}.
      *
@@ -379,7 +379,7 @@ public interface Cursor extends Closeable {
      * @return true if the cursor is closed.
      */
     boolean isClosed();
-    
+
     /**
      * Register an observer that is called when changes happen to the content backing this cursor.
      * Typically the data set won't change until {@link #requery()} is called.
@@ -397,7 +397,7 @@ public interface Cursor extends Closeable {
      * @see #registerContentObserver(ContentObserver)
      */
     void unregisterContentObserver(ContentObserver observer);
-    
+
     /**
      * Register an observer that is called when changes happen to the contents
      * of the this cursors data set, for example, when the data set is changed via
@@ -418,10 +418,10 @@ public interface Cursor extends Closeable {
     void unregisterDataSetObserver(DataSetObserver observer);
 
     /**
-     * Register to watch a content URI for changes. This can be the URI of a specific data row (for 
+     * Register to watch a content URI for changes. This can be the URI of a specific data row (for
      * example, "content://my_provider_type/23"), or a a generic URI for a content type.
-     * 
-     * @param cr The content resolver from the caller's context. The listener attached to 
+     *
+     * @param cr The content resolver from the caller's context. The listener attached to
      * this resolver will be notified.
      * @param uri The content URI to watch.
      */

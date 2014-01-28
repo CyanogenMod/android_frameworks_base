@@ -48,14 +48,14 @@ public class PointerLocationView extends View implements InputDeviceListener {
         private float[] mTraceY = new float[32];
         private boolean[] mTraceCurrent = new boolean[32];
         private int mTraceCount;
-        
+
         // True if the pointer is down.
         private boolean mCurDown;
-        
+
         // Most recent coordinates.
         private PointerCoords mCoords = new PointerCoords();
         private int mToolType;
-        
+
         // Most recent velocity.
         private float mXVelocity;
         private float mYVelocity;
@@ -76,7 +76,7 @@ public class PointerLocationView extends View implements InputDeviceListener {
         public void clearTrace() {
             mTraceCount = 0;
         }
-        
+
         public void addTrace(float x, float y, boolean current) {
             int traceCapacity = mTraceX.length;
             if (mTraceCount == traceCapacity) {
@@ -84,7 +84,7 @@ public class PointerLocationView extends View implements InputDeviceListener {
                 float[] newTraceX = new float[traceCapacity];
                 System.arraycopy(mTraceX, 0, newTraceX, 0, mTraceCount);
                 mTraceX = newTraceX;
-                
+
                 float[] newTraceY = new float[traceCapacity];
                 System.arraycopy(mTraceY, 0, newTraceY, 0, mTraceCount);
                 mTraceY = newTraceY;
@@ -93,7 +93,7 @@ public class PointerLocationView extends View implements InputDeviceListener {
                 System.arraycopy(mTraceCurrent, 0, newTraceCurrent, 0, mTraceCount);
                 mTraceCurrent= newTraceCurrent;
             }
-            
+
             mTraceX[mTraceCount] = x;
             mTraceY[mTraceCount] = y;
             mTraceCurrent[mTraceCount] = current;
@@ -123,14 +123,14 @@ public class PointerLocationView extends View implements InputDeviceListener {
     private int mActivePointerId;
     private final ArrayList<PointerState> mPointers = new ArrayList<PointerState>();
     private final PointerCoords mTempCoords = new PointerCoords();
-    
+
     private final VelocityTracker mVelocity;
     private final VelocityTracker mAltVelocity;
 
     private final FasterStringBuilder mText = new FasterStringBuilder();
-    
+
     private boolean mPrintCoords = true;
-    
+
     public PointerLocationView(Context c) {
         super(c);
         setFocusableInTouchMode(true);
@@ -167,11 +167,11 @@ public class PointerLocationView extends View implements InputDeviceListener {
         mPathPaint.setARGB(255, 0, 96, 255);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(1);
-        
+
         PointerState ps = new PointerState();
         mPointers.add(ps);
         mActivePointerId = 0;
-        
+
         mVelocity = VelocityTracker.obtain();
 
         String altStrategy = SystemProperties.get(ALT_STRATEGY_PROPERY_KEY);
@@ -186,7 +186,7 @@ public class PointerLocationView extends View implements InputDeviceListener {
     public void setPrintCoords(boolean state) {
         mPrintCoords = state;
     }
-    
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -200,7 +200,7 @@ public class PointerLocationView extends View implements InputDeviceListener {
                     + " bottom=" + mTextMetrics.bottom);
         }
     }
-    
+
     // Draw an oval.  When angle is 0 radians, orients the major axis vertically,
     // angles less than or greater than 0 radians rotate the major axis left or right.
     private RectF mReusableOvalRect = new RectF();
@@ -228,7 +228,7 @@ public class PointerLocationView extends View implements InputDeviceListener {
         // Labels
         if (mActivePointerId >= 0) {
             final PointerState ps = mPointers.get(mActivePointerId);
-            
+
             canvas.drawRect(0, 0, itemW-1, bottom,mTextBackgroundPaint);
             canvas.drawText(mText.clear()
                     .append("P: ").append(mCurNumPointers)
@@ -645,7 +645,7 @@ public class PointerLocationView extends View implements InputDeviceListener {
 
         invalidate();
     }
-    
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         addPointerEvent(event);
@@ -768,16 +768,16 @@ public class PointerLocationView extends View implements InputDeviceListener {
     private static final class FasterStringBuilder {
         private char[] mChars;
         private int mLength;
-        
+
         public FasterStringBuilder() {
             mChars = new char[64];
         }
-        
+
         public FasterStringBuilder clear() {
             mLength = 0;
             return this;
         }
-        
+
         public FasterStringBuilder append(String value) {
             final int valueLength = value.length();
             final int index = reserve(valueLength);
@@ -785,11 +785,11 @@ public class PointerLocationView extends View implements InputDeviceListener {
             mLength += valueLength;
             return this;
         }
-        
+
         public FasterStringBuilder append(int value) {
             return append(value, 0);
         }
-        
+
         public FasterStringBuilder append(int value, int zeroPadWidth) {
             final boolean negative = value < 0;
             if (negative) {
@@ -799,16 +799,16 @@ public class PointerLocationView extends View implements InputDeviceListener {
                     return this;
                 }
             }
-            
+
             int index = reserve(11);
             final char[] chars = mChars;
-            
+
             if (value == 0) {
                 chars[index++] = '0';
                 mLength += 1;
                 return this;
             }
-            
+
             if (negative) {
                 chars[index++] = '-';
             }
@@ -822,25 +822,25 @@ public class PointerLocationView extends View implements InputDeviceListener {
                     chars[index++] = '0';
                 }
             }
-            
+
             do {
                 int digit = value / divisor;
                 value -= digit * divisor;
                 divisor /= 10;
                 chars[index++] = (char) (digit + '0');
             } while (divisor != 0);
-            
+
             mLength = index;
             return this;
         }
-        
+
         public FasterStringBuilder append(float value, int precision) {
             int scale = 1;
             for (int i = 0; i < precision; i++) {
                 scale *= 10;
             }
             value = (float) (Math.rint(value * scale) / scale);
-            
+
             append((int) value);
 
             if (precision != 0) {
@@ -849,15 +849,15 @@ public class PointerLocationView extends View implements InputDeviceListener {
                 value -= Math.floor(value);
                 append((int) (value * scale), precision);
             }
-            
+
             return this;
         }
-        
+
         @Override
         public String toString() {
             return new String(mChars, 0, mLength);
         }
-        
+
         private int reserve(int length) {
             final int oldLength = mLength;
             final int newLength = mLength + length;

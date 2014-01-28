@@ -85,7 +85,7 @@ public class DatabaseErrorHandlerTest extends AndroidTestCase {
                 mDatabaseFile.delete();
             }
         } catch (SQLiteException e) {
-            
+
         }
         // database file should be gone
         assertFalse(mDatabaseFile.exists());

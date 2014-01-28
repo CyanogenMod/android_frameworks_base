@@ -27,13 +27,13 @@ import android.test.suitebuilder.annotation.Suppress;
  */
 public class MediaRecorderSetAudioSourceStateUnitTest extends AndroidTestCase implements MediaRecorderMethodUnderTest {
     private MediaRecorderStateUnitTestTemplate mTestTemplate = new MediaRecorderStateUnitTestTemplate();
-    
+
     /**
      * 1. It is valid to call setAudioSource() in the following states:
      *    {Initial, Initialized}.
      * 2. It is invalid to call setAudioSource() in the following states:
      *    {Prepared, DataSourceConfigured, Recording, Error}
-     *    
+     *
      * @param stateErrors the MediaRecorderStateErrors to check against.
      */
     public void checkStateErrors(MediaRecorderStateErrors stateErrors) {
@@ -42,7 +42,7 @@ public class MediaRecorderSetAudioSourceStateUnitTest extends AndroidTestCase im
         assertTrue(!stateErrors.errorInInitialStateAfterReset);
         assertTrue(!stateErrors.errorInInitialStateAfterStop);
         assertTrue(!stateErrors.errorInInitializedState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInPreparedState);
         assertTrue(stateErrors.errorInRecordingState);
@@ -58,7 +58,7 @@ public class MediaRecorderSetAudioSourceStateUnitTest extends AndroidTestCase im
     public void testSetAudioSource() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "setAudioSource()";

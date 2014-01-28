@@ -48,7 +48,7 @@ public class AppWidgetProvider extends BroadcastReceiver {
 
     /**
      * Implements {@link BroadcastReceiver#onReceive} to dispatch calls to the various
-     * other methods on AppWidgetProvider.  
+     * other methods on AppWidgetProvider.
      *
      * @param context The Context in which the receiver is running.
      * @param intent The Intent being received.
@@ -99,7 +99,7 @@ public class AppWidgetProvider extends BroadcastReceiver {
      * for a set of AppWidgets.  Override this method to implement your own AppWidget functionality.
      *
      * {@more}
-     * 
+     *
      * @param context   The {@link android.content.Context Context} in which this receiver is
      *                  running.
      * @param appWidgetManager A {@link AppWidgetManager} object you can call {@link
@@ -138,7 +138,7 @@ public class AppWidgetProvider extends BroadcastReceiver {
      * your own AppWidget functionality.
      *
      * {@more}
-     * 
+     *
      * @param context   The {@link android.content.Context Context} in which this receiver is
      *                  running.
      * @param appWidgetIds The appWidgetIds that have been deleted from their host.
@@ -173,7 +173,7 @@ public class AppWidgetProvider extends BroadcastReceiver {
      * to implement your own AppWidget functionality.
      *
      * {@more}
-     * 
+     *
      * @param context   The {@link android.content.Context Context} in which this receiver is
      *                  running.
      *

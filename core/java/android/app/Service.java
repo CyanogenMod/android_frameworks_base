@@ -40,7 +40,7 @@ import java.io.PrintWriter;
  * can be started with
  * {@link android.content.Context#startService Context.startService()} and
  * {@link android.content.Context#bindService Context.bindService()}.
- * 
+ *
  * <p>Note that services, like other application objects, run in the main
  * thread of their hosting process.  This means that, if your service is going
  * to do any CPU intensive (such as MP3 playback) or blocking (such as
@@ -50,7 +50,7 @@ import java.io.PrintWriter;
  * Threads</a>.  The {@link IntentService} class is available
  * as a standard implementation of Service that has its own thread where it
  * schedules its work to be done.</p>
- * 
+ *
  * <p>Topics covered here:
  * <ol>
  * <li><a href="#WhatIsAService">What is a Service?</a>
@@ -69,10 +69,10 @@ import java.io.PrintWriter;
  *
  * <a name="WhatIsAService"></a>
  * <h3>What is a Service?</h3>
- * 
+ *
  * <p>Most confusion about the Service class actually revolves around what
  * it is <em>not</em>:</p>
- * 
+ *
  * <ul>
  * <li> A Service is <b>not</b> a separate process.  The Service object itself
  * does not imply it is running in its own process; unless otherwise specified,
@@ -80,9 +80,9 @@ import java.io.PrintWriter;
  * <li> A Service is <b>not</b> a thread.  It is not a means itself to do work off
  * of the main thread (to avoid Application Not Responding errors).
  * </ul>
- * 
+ *
  * <p>Thus a Service itself is actually very simple, providing two main features:</p>
- * 
+ *
  * <ul>
  * <li>A facility for the application to tell the system <em>about</em>
  * something it wants to be doing in the background (even when the user is not
@@ -96,22 +96,22 @@ import java.io.PrintWriter;
  * allows a long-standing connection to be made to the service in order to
  * interact with it.
  * </ul>
- * 
+ *
  * <p>When a Service component is actually created, for either of these reasons,
  * all that the system actually does is instantiate the component
  * and call its {@link #onCreate} and any other appropriate callbacks on the
  * main thread.  It is up to the Service to implement these with the appropriate
  * behavior, such as creating a secondary thread in which it does its work.</p>
- * 
+ *
  * <p>Note that because Service itself is so simple, you can make your
  * interaction with it as simple or complicated as you want: from treating it
  * as a local Java object that you make direct method calls on (as illustrated
  * by <a href="#LocalServiceSample">Local Service Sample</a>), to providing
  * a full remoteable interface using AIDL.</p>
- * 
+ *
  * <a name="ServiceLifecycle"></a>
  * <h3>Service Lifecycle</h3>
- * 
+ *
  * <p>There are two reasons that a service can be run by the system.  If someone
  * calls {@link android.content.Context#startService Context.startService()} then the system will
  * retrieve the service (creating it and calling its {@link #onCreate} method
@@ -124,7 +124,7 @@ import java.io.PrintWriter;
  * will be stopped once Context.stopService() or stopSelf() is called; however,
  * services can use their {@link #stopSelf(int)} method to ensure the service is
  * not stopped until started intents have been processed.
- * 
+ *
  * <p>For started services, there are two additional major modes of operation
  * they can decide to run in, depending on the value they return from
  * onStartCommand(): {@link #START_STICKY} is used for services that are
@@ -132,7 +132,7 @@ import java.io.PrintWriter;
  * or {@link #START_REDELIVER_INTENT} are used for services that should only
  * remain running while processing any commands sent to them.  See the linked
  * documentation for more detail on the semantics.
- * 
+ *
  * <p>Clients can also use {@link android.content.Context#bindService Context.bindService()} to
  * obtain a persistent connection to a service.  This likewise creates the
  * service if it is not already running (calling {@link #onCreate} while
@@ -144,7 +144,7 @@ import java.io.PrintWriter;
  * service's IBinder).  Usually the IBinder returned is for a complex
  * interface that has been <a href="{@docRoot}guide/components/aidl.html">written
  * in aidl</a>.
- * 
+ *
  * <p>A service can be both started and have connections bound to it.  In such
  * a case, the system will keep the service running as long as either it is
  * started <em>or</em> there are one or more connections to it with the
@@ -153,10 +153,10 @@ import java.io.PrintWriter;
  * of these situations hold, the service's {@link #onDestroy} method is called
  * and the service is effectively terminated.  All cleanup (stopping threads,
  * unregistering receivers) should be complete upon returning from onDestroy().
- * 
+ *
  * <a name="Permissions"></a>
  * <h3>Permissions</h3>
- * 
+ *
  * <p>Global access to a service can be enforced when it is declared in its
  * manifest's {@link android.R.styleable#AndroidManifestService &lt;service&gt;}
  * tag.  By doing so, other applications will need to declare a corresponding
@@ -180,19 +180,19 @@ import java.io.PrintWriter;
  * permissions, by calling the
  * {@link #checkCallingPermission}
  * method before executing the implementation of that call.
- * 
+ *
  * <p>See the <a href="{@docRoot}guide/topics/security/security.html">Security and Permissions</a>
  * document for more information on permissions and security in general.
- * 
+ *
  * <a name="ProcessLifecycle"></a>
  * <h3>Process Lifecycle</h3>
- * 
+ *
  * <p>The Android system will attempt to keep the process hosting a service
  * around as long as the service has been started or has clients bound to it.
  * When running low on memory and needing to kill existing processes, the
  * priority of a process hosting the service will be the higher of the
  * following possibilities:
- * 
+ *
  * <ul>
  * <li><p>If the service is currently executing code in its
  * {@link #onCreate onCreate()}, {@link #onStartCommand onStartCommand()},
@@ -215,7 +215,7 @@ import java.io.PrintWriter;
  * the service to be killed under extreme memory pressure from the current
  * foreground application, but in practice this should not be a concern.)
  * </ul>
- * 
+ *
  * <p>Note this means that most of the time your service is running, it may
  * be killed by the system if it is under heavy memory pressure.  If this
  * happens, the system will later try to restart the service.  An important
@@ -224,67 +224,67 @@ import java.io.PrintWriter;
  * may want to use {@link #START_FLAG_REDELIVERY} to have the system
  * re-deliver an Intent for you so that it does not get lost if your service
  * is killed while processing it.
- * 
+ *
  * <p>Other application components running in the same process as the service
  * (such as an {@link android.app.Activity}) can, of course, increase the
  * importance of the overall
  * process beyond just the importance of the service itself.
- * 
+ *
  * <a name="LocalServiceSample"></a>
  * <h3>Local Service Sample</h3>
- * 
+ *
  * <p>One of the most common uses of a Service is as a secondary component
  * running alongside other parts of an application, in the same process as
  * the rest of the components.  All components of an .apk run in the same
  * process unless explicitly stated otherwise, so this is a typical situation.
- * 
+ *
  * <p>When used in this way, by assuming the
  * components are in the same process, you can greatly simplify the interaction
  * between them: clients of the service can simply cast the IBinder they
  * receive from it to a concrete class published by the service.
- * 
+ *
  * <p>An example of this use of a Service is shown here.  First is the Service
  * itself, publishing a custom class when bound:
- * 
+ *
  * {@sample development/samples/ApiDemos/src/com/example/android/apis/app/LocalService.java
  *      service}
- * 
+ *
  * <p>With that done, one can now write client code that directly accesses the
  * running service, such as:
- * 
+ *
  * {@sample development/samples/ApiDemos/src/com/example/android/apis/app/LocalServiceActivities.java
  *      bind}
- * 
+ *
  * <a name="RemoteMessengerServiceSample"></a>
  * <h3>Remote Messenger Service Sample</h3>
- * 
+ *
  * <p>If you need to be able to write a Service that can perform complicated
  * communication with clients in remote processes (beyond simply the use of
  * {@link Context#startService(Intent) Context.startService} to send
  * commands to it), then you can use the {@link android.os.Messenger} class
  * instead of writing full AIDL files.
- * 
+ *
  * <p>An example of a Service that uses Messenger as its client interface
  * is shown here.  First is the Service itself, publishing a Messenger to
  * an internal Handler when bound:
- * 
+ *
  * {@sample development/samples/ApiDemos/src/com/example/android/apis/app/MessengerService.java
  *      service}
- * 
+ *
  * <p>If we want to make this service run in a remote process (instead of the
  * standard one for its .apk), we can use <code>android:process</code> in its
  * manifest tag to specify one:
- * 
+ *
  * {@sample development/samples/ApiDemos/AndroidManifest.xml remote_service_declaration}
- * 
+ *
  * <p>Note that the name "remote" chosen here is arbitrary, and you can use
  * other names if you want additional processes.  The ':' prefix appends the
  * name to your package's standard process name.
- * 
+ *
  * <p>With that done, clients can now bind to the service and send messages
  * to it.  Note that this allows clients to register with it to receive
  * messages back as well:
- * 
+ *
  * {@sample development/samples/ApiDemos/src/com/example/android/apis/app/MessengerServiceActivities.java
  *      bind}
  */
@@ -320,14 +320,14 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * or {@link #START_STICKY_COMPATIBILITY}.
      */
     public static final int START_CONTINUATION_MASK = 0xf;
-    
+
     /**
      * Constant to return from {@link #onStartCommand}: compatibility
      * version of {@link #START_STICKY} that does not guarantee that
      * {@link #onStartCommand} will be called again after being killed.
      */
     public static final int START_STICKY_COMPATIBILITY = 0;
-    
+
     /**
      * Constant to return from {@link #onStartCommand}: if this service's
      * process is killed while it is started (after returning from
@@ -338,13 +338,13 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * service instance; if there are not any pending start commands to be
      * delivered to the service, it will be called with a null intent
      * object, so you must take care to check for this.
-     * 
+     *
      * <p>This mode makes sense for things that will be explicitly started
      * and stopped to run for arbitrary periods of time, such as a service
      * performing background music playback.
      */
     public static final int START_STICKY = 1;
-    
+
     /**
      * Constant to return from {@link #onStartCommand}: if this service's
      * process is killed while it is started (after returning from
@@ -355,7 +355,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * service will not receive a {@link #onStartCommand(Intent, int, int)}
      * call with a null Intent because it will not be re-started if there
      * are no pending Intents to deliver.
-     * 
+     *
      * <p>This mode makes sense for things that want to do some work as a
      * result of being started, but can be stopped when under memory pressure
      * and will explicit start themselves again later to do more work.  An
@@ -368,7 +368,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * alarm goes off.
      */
     public static final int START_NOT_STICKY = 2;
-    
+
     /**
      * Constant to return from {@link #onStartCommand}: if this service's
      * process is killed while it is started (after returning from
@@ -383,7 +383,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * pending events will be delivered at the point of restart).
      */
     public static final int START_REDELIVER_INTENT = 3;
-    
+
     /**
      * Special constant for reporting that we are done processing
      * {@link #onTaskRemoved(Intent)}.
@@ -398,28 +398,28 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * killed before calling {@link #stopSelf(int)} for that Intent.
      */
     public static final int START_FLAG_REDELIVERY = 0x0001;
-    
+
     /**
      * This flag is set in {@link #onStartCommand} if the Intent is a
      * a retry because the original attempt never got to or returned from
      * {@link #onStartCommand(Intent, int, int)}.
      */
     public static final int START_FLAG_RETRY = 0x0002;
-    
+
     /**
-     * Called by the system every time a client explicitly starts the service by calling 
-     * {@link android.content.Context#startService}, providing the arguments it supplied and a 
+     * Called by the system every time a client explicitly starts the service by calling
+     * {@link android.content.Context#startService}, providing the arguments it supplied and a
      * unique integer token representing the start request.  Do not call this method directly.
-     * 
+     *
      * <p>For backwards compatibility, the default implementation calls
      * {@link #onStart} and returns either {@link #START_STICKY}
      * or {@link #START_STICKY_COMPATIBILITY}.
-     * 
+     *
      * <p>If you need your application to run on platform versions prior to API
      * level 5, you can use the following model to handle the older {@link #onStart}
      * callback in that case.  The <code>handleCommand</code> method is implemented by
      * you as appropriate:
-     * 
+     *
      * {@sample development/samples/ApiDemos/src/com/example/android/apis/app/ForegroundService.java
      *   start_compatibility}
      *
@@ -431,26 +431,26 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * network calls, or heavy disk I/O, you should kick off a new
      * thread, or use {@link android.os.AsyncTask}.</p>
      *
-     * @param intent The Intent supplied to {@link android.content.Context#startService}, 
+     * @param intent The Intent supplied to {@link android.content.Context#startService},
      * as given.  This may be null if the service is being restarted after
      * its process has gone away, and it had previously returned anything
      * except {@link #START_STICKY_COMPATIBILITY}.
      * @param flags Additional data about this start request.  Currently either
      * 0, {@link #START_FLAG_REDELIVERY}, or {@link #START_FLAG_RETRY}.
-     * @param startId A unique integer representing this specific request to 
+     * @param startId A unique integer representing this specific request to
      * start.  Use with {@link #stopSelfResult(int)}.
-     * 
+     *
      * @return The return value indicates what semantics the system should
      * use for the service's current started state.  It may be one of the
      * constants associated with the {@link #START_CONTINUATION_MASK} bits.
-     * 
+     *
      * @see #stopSelfResult(int)
      */
     public int onStartCommand(Intent intent, int flags, int startId) {
         onStart(intent, startId);
         return mStartCompatibility ? START_STICKY_COMPATIBILITY : START_STICKY;
     }
-    
+
     /**
      * Called by the system to notify a Service that it is no longer used and is being removed.  The
      * service should clean up any resources it holds (threads, registered
@@ -462,7 +462,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
 
     public void onConfigurationChanged(Configuration newConfig) {
     }
-    
+
     public void onLowMemory() {
     }
 
@@ -470,24 +470,24 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
     }
 
     /**
-     * Return the communication channel to the service.  May return null if 
+     * Return the communication channel to the service.  May return null if
      * clients can not bind to the service.  The returned
      * {@link android.os.IBinder} is usually for a complex interface
      * that has been <a href="{@docRoot}guide/components/aidl.html">described using
      * aidl</a>.
-     * 
+     *
      * <p><em>Note that unlike other application components, calls on to the
      * IBinder interface returned here may not happen on the main thread
      * of the process</em>.  More information about the main thread can be found in
      * <a href="{@docRoot}guide/topics/fundamentals/processes-and-threads.html">Processes and
      * Threads</a>.</p>
-     * 
+     *
      * @param intent The Intent that was used to bind to this service,
      * as given to {@link android.content.Context#bindService
      * Context.bindService}.  Note that any extras that were included with
      * the Intent at that point will <em>not</em> be seen here.
-     * 
-     * @return Return an IBinder through which clients can call on to the 
+     *
+     * @return Return an IBinder through which clients can call on to the
      *         service.
      */
     public abstract IBinder onBind(Intent intent);
@@ -496,25 +496,25 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * Called when all clients have disconnected from a particular interface
      * published by the service.  The default implementation does nothing and
      * returns false.
-     * 
+     *
      * @param intent The Intent that was used to bind to this service,
      * as given to {@link android.content.Context#bindService
      * Context.bindService}.  Note that any extras that were included with
      * the Intent at that point will <em>not</em> be seen here.
-     * 
+     *
      * @return Return true if you would like to have the service's
      * {@link #onRebind} method later called when new clients bind to it.
      */
     public boolean onUnbind(Intent intent) {
         return false;
     }
-    
+
     /**
      * Called when new clients have connected to the service, after it had
      * previously been notified that all had disconnected in its
      * {@link #onUnbind}.  This will only be called if the implementation
      * of {@link #onUnbind} was overridden to return true.
-     * 
+     *
      * @param intent The Intent that was used to bind to this service,
      * as given to {@link android.content.Context#bindService
      * Context.bindService}.  Note that any extras that were included with
@@ -522,7 +522,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      */
     public void onRebind(Intent intent) {
     }
-    
+
     /**
      * This is called if the service is currently running and the user has
      * removed a task that comes from the service's application.  If you have
@@ -539,7 +539,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
     /**
      * Stop the service, if it was previously started.  This is the same as
      * calling {@link android.content.Context#stopService} for this particular service.
-     *  
+     *
      * @see #stopSelfResult(int)
      */
     public final void stopSelf() {
@@ -548,7 +548,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
 
     /**
      * Old version of {@link #stopSelfResult} that doesn't return a result.
-     *  
+     *
      * @see #stopSelfResult
      */
     public final void stopSelf(int startId) {
@@ -561,26 +561,26 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
         } catch (RemoteException ex) {
         }
     }
-    
+
     /**
-     * Stop the service if the most recent time it was started was 
-     * <var>startId</var>.  This is the same as calling {@link 
-     * android.content.Context#stopService} for this particular service but allows you to 
-     * safely avoid stopping if there is a start request from a client that you 
-     * haven't yet seen in {@link #onStart}. 
-     * 
+     * Stop the service if the most recent time it was started was
+     * <var>startId</var>.  This is the same as calling {@link
+     * android.content.Context#stopService} for this particular service but allows you to
+     * safely avoid stopping if there is a start request from a client that you
+     * haven't yet seen in {@link #onStart}.
+     *
      * <p><em>Be careful about ordering of your calls to this function.</em>.
      * If you call this function with the most-recently received ID before
      * you have called it for previously received IDs, the service will be
      * immediately stopped anyway.  If you may end up processing IDs out
      * of order (such as by dispatching them on separate threads), then you
      * are responsible for stopping them in the same order you received them.</p>
-     * 
-     * @param startId The most recent start identifier received in {@link 
+     *
+     * @param startId The most recent start identifier received in {@link
      *                #onStart}.
      * @return Returns true if the startId matches the last start request
      * and the service will be stopped, else false.
-     *  
+     *
      * @see #stopSelf()
      */
     public final boolean stopSelfResult(int startId) {
@@ -594,7 +594,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
         }
         return false;
     }
-    
+
     /**
      * @deprecated This is a now a no-op, use
      * {@link #startForeground(int, Notification)} instead.  This method
@@ -606,14 +606,14 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * be killed when they would like to avoid it), vs allowing the performance
      * of the entire system to be decreased, this method was deemed less
      * important.
-     * 
+     *
      * @hide
      */
     @Deprecated
     public final void setForeground(boolean isForeground) {
         Log.w(TAG, "setForeground: ignoring old API call on " + getClass().getName());
     }
-    
+
     /**
      * Make this service run in the foreground, supplying the ongoing
      * notification to be shown to the user while in this state.
@@ -623,19 +623,19 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      * flag if killing your service would be disruptive to the user, such as
      * if your service is performing background music playback, so the user
      * would notice if their music stopped playing.
-     * 
+     *
      * <p>If you need your application to run on platform versions prior to API
      * level 5, you can use the following model to call the the older setForeground()
      * or this modern method as appropriate:
-     * 
+     *
      * {@sample development/samples/ApiDemos/src/com/example/android/apis/app/ForegroundService.java
      *   foreground_compatibility}
-     * 
+     *
      * @param id The identifier for this notification as per
      * {@link NotificationManager#notify(int, Notification)
      * NotificationManager.notify(int, Notification)}; must not be 0.
      * @param notification The Notification to be displayed.
-     * 
+     *
      * @see #stopForeground(boolean)
      */
     public final void startForeground(int id, Notification notification) {
@@ -646,7 +646,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
         } catch (RemoteException ex) {
         }
     }
-    
+
     /**
      * Remove this service from foreground state, allowing it to be killed if
      * more memory is needed.
@@ -663,7 +663,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
         } catch (RemoteException ex) {
         }
     }
-    
+
     /**
      * Print the Service's state into the given stream.  This gets invoked if
      * you run "adb shell dumpsys activity service &lt;yourservicename&gt;"
@@ -683,7 +683,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
     }
 
     // ------------------ Internal API ------------------
-    
+
     /**
      * @hide
      */
@@ -700,7 +700,7 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
         mStartCompatibility = getApplicationInfo().targetSdkVersion
                 < Build.VERSION_CODES.ECLAIR;
     }
-    
+
     final String getClassName() {
         return mClassName;
     }

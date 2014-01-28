@@ -838,7 +838,7 @@ public class OverScroller {
         }
 
         void notifyEdgeReached(int start, int end, int over) {
-            // mState is used to detect successive notifications 
+            // mState is used to detect successive notifications
             if (mState == SPLINE) {
                 mOver = over;
                 mStartTime = AnimationUtils.currentAnimationTimeMillis();
@@ -939,8 +939,8 @@ public class OverScroller {
                     final float t = (float) (currentTime) / mDuration;
                     final float t2 = t * t;
                     final float sign = Math.signum(mVelocity);
-                    distance = sign * mOver * (3.0f * t2 - 2.0f * t * t2); 
-                    mCurrVelocity = sign * mOver * 6.0f * (- t + t2); 
+                    distance = sign * mOver * (3.0f * t2 - 2.0f * t * t2);
+                    mCurrVelocity = sign * mOver * 6.0f * (- t + t2);
                     break;
                 }
             }

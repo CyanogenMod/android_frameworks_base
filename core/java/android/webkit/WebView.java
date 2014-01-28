@@ -464,7 +464,7 @@ public class WebView extends AbsoluteLayout
      * @param privateBrowsing whether this WebView will be initialized in
      *                        private mode
      *
-     * @deprecated Private browsing is no longer supported directly via 
+     * @deprecated Private browsing is no longer supported directly via
      * WebView and will be removed in a future release. Prefer using
      * {@link WebSettings}, {@link WebViewDatabase}, {@link CookieManager}
      * and {@link WebStorage} for fine-grained control of privacy data.

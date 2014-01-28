@@ -46,55 +46,55 @@ public class GpsNetInitiatedHandler {
 
     // NI verify activity for bringing up UI (not used yet)
     public static final String ACTION_NI_VERIFY = "android.intent.action.NETWORK_INITIATED_VERIFY";
-    
+
     // string constants for defining data fields in NI Intent
     public static final String NI_INTENT_KEY_NOTIF_ID = "notif_id";
     public static final String NI_INTENT_KEY_TITLE = "title";
     public static final String NI_INTENT_KEY_MESSAGE = "message";
     public static final String NI_INTENT_KEY_TIMEOUT = "timeout";
     public static final String NI_INTENT_KEY_DEFAULT_RESPONSE = "default_resp";
-    
+
     // the extra command to send NI response to GpsLocationProvider
     public static final String NI_RESPONSE_EXTRA_CMD = "send_ni_response";
-    
+
     // the extra command parameter names in the Bundle
     public static final String NI_EXTRA_CMD_NOTIF_ID = "notif_id";
     public static final String NI_EXTRA_CMD_RESPONSE = "response";
-    
+
     // these need to match GpsNiType constants in gps_ni.h
     public static final int GPS_NI_TYPE_VOICE = 1;
     public static final int GPS_NI_TYPE_UMTS_SUPL = 2;
     public static final int GPS_NI_TYPE_UMTS_CTRL_PLANE = 3;
-    
-    // these need to match GpsUserResponseType constants in gps_ni.h    
+
+    // these need to match GpsUserResponseType constants in gps_ni.h
     public static final int GPS_NI_RESPONSE_ACCEPT = 1;
     public static final int GPS_NI_RESPONSE_DENY = 2;
-    public static final int GPS_NI_RESPONSE_NORESP = 3;    
-    
+    public static final int GPS_NI_RESPONSE_NORESP = 3;
+
     // these need to match GpsNiNotifyFlags constants in gps_ni.h
     public static final int GPS_NI_NEED_NOTIFY = 0x0001;
     public static final int GPS_NI_NEED_VERIFY = 0x0002;
     public static final int GPS_NI_PRIVACY_OVERRIDE = 0x0004;
-    
+
     // these need to match GpsNiEncodingType in gps_ni.h
     public static final int GPS_ENC_NONE = 0;
     public static final int GPS_ENC_SUPL_GSM_DEFAULT = 1;
     public static final int GPS_ENC_SUPL_UTF8 = 2;
     public static final int GPS_ENC_SUPL_UCS2 = 3;
     public static final int GPS_ENC_UNKNOWN = -1;
-    
+
     private final Context mContext;
-    
+
     // parent gps location provider
     private final LocationManager mLocationManager;
-    
+
     // configuration of notificaiton behavior
     private boolean mPlaySounds = false;
     private boolean mPopupImmediately = true;
-    
-    // Set to true if string from HAL is encoded as Hex, e.g., "3F0039"    
+
+    // Set to true if string from HAL is encoded as Hex, e.g., "3F0039"
     static private boolean mIsHexInput = true;
-        
+
     public static class GpsNiNotification
     {
         public int notificationId;
@@ -110,27 +110,27 @@ public class GpsNetInitiatedHandler {
         public int textEncoding;
         public Bundle extras;
     };
-    
+
     public static class GpsNiResponse {
         /* User reponse, one of the values in GpsUserResponseType */
         int userResponse;
         /* Optional extra data to pass with the user response */
         Bundle extras;
     };
-    
+
     /**
      * The notification that is shown when a network-initiated notification
-     * (and verification) event is received. 
+     * (and verification) event is received.
      * <p>
      * This is lazily created, so use {@link #setNINotification()}.
      */
     private Notification mNiNotification;
-    
+
     public GpsNetInitiatedHandler(Context context) {
         mContext = context;
         mLocationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
     }
-    
+
     // Handles NI events from HAL
     public void handleNiNotification(GpsNiNotification notif)
     {
@@ -203,14 +203,14 @@ public class GpsNetInitiatedHandler {
             mNiNotification.defaults |= Notification.DEFAULT_SOUND;
         } else {
             mNiNotification.defaults &= ~Notification.DEFAULT_SOUND;
-        }        
+        }
 
         mNiNotification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_AUTO_CANCEL;
         mNiNotification.tickerText = getNotifTicker(notif, mContext);
 
         // if not to popup dialog immediately, pending intent will open the dialog
         Intent intent = !mPopupImmediately ? getDlgIntent(notif) : new Intent();
-        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, intent, 0);                
+        PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, intent, 0);
         mNiNotification.setLatestEventInfo(mContext, title, message, pi);
 
         notificationManager.notifyAsUser(null, notif.notificationId, mNiNotification,
@@ -229,7 +229,7 @@ public class GpsNetInitiatedHandler {
         mContext.startActivity(intent);
     }
 
-    // Construct the intent for bringing up the dialog activity, which shows the 
+    // Construct the intent for bringing up the dialog activity, which shows the
     // notification and takes user input
     private Intent getDlgIntent(GpsNiNotification notif)
     {
@@ -408,7 +408,7 @@ public class GpsNetInitiatedHandler {
                 decodeString(notif.requestorId, mIsHexInput, notif.requestorIdEncoding),
                 decodeString(notif.text, mIsHexInput, notif.textEncoding));
         return message;
-    }       
+    }
 
     // change this to configure dialog display (for verification)
     static public String getDialogTitle(GpsNiNotification notif, Context context)

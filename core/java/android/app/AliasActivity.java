@@ -35,7 +35,7 @@ import java.io.IOException;
  * Stub activity that launches another activity (and then finishes itself)
  * based on information in its component's manifest meta-data.  This is a
  * simple way to implement an alias-like mechanism.
- * 
+ *
  * To use this activity, you should include in the manifest for the associated
  * component an entry named "android.app.alias".  It is a reference to an XML
  * resource describing an intent that launches the real application.
@@ -48,11 +48,11 @@ public class AliasActivity extends Activity {
      * {@hide}
      */
     public final String ALIAS_META_DATA = "android.app.alias";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         XmlResourceParser parser = null;
         try {
             ActivityInfo ai = getPackageManager().getActivityInfo(
@@ -63,16 +63,16 @@ public class AliasActivity extends Activity {
                 throw new RuntimeException("Alias requires a meta-data field "
                         + ALIAS_META_DATA);
             }
-            
+
             Intent intent = parseAlias(parser);
             if (intent == null) {
                 throw new RuntimeException(
                         "No <intent> tag found in alias description");
             }
-            
+
             startActivity(intent);
             finish();
-            
+
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException("Error parsing alias", e);
         } catch (XmlPullParserException e) {
@@ -87,21 +87,21 @@ public class AliasActivity extends Activity {
     private Intent parseAlias(XmlPullParser parser)
             throws XmlPullParserException, IOException {
         AttributeSet attrs = Xml.asAttributeSet(parser);
-        
+
         Intent intent = null;
-        
+
         int type;
         while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
                 && type != XmlPullParser.START_TAG) {
         }
-        
+
         String nodeName = parser.getName();
         if (!"alias".equals(nodeName)) {
             throw new RuntimeException(
                     "Alias meta-data must start with <alias> tag; found"
                     + nodeName + " at " + parser.getPositionDescription());
         }
-        
+
         int outerDepth = parser.getDepth();
         while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
                && (type != XmlPullParser.END_TAG || parser.getDepth() > outerDepth)) {
@@ -117,8 +117,8 @@ public class AliasActivity extends Activity {
                 XmlUtils.skipCurrentTag(parser);
             }
         }
-        
+
         return intent;
     }
-    
+
 }

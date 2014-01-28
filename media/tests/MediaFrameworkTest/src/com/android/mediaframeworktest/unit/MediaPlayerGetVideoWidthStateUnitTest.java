@@ -32,7 +32,7 @@ public class MediaPlayerGetVideoWidthStateUnitTest extends AndroidTestCase imple
      *    {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}.
      * 2. It is invalid to call getVideoWidth() in the following states:
      *    {Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {

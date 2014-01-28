@@ -31,7 +31,7 @@ public abstract class ClickableSpan extends CharacterStyle implements UpdateAppe
      * Performs the click action associated with this span.
      */
     public abstract void onClick(View widget);
-   
+
     /**
      * Makes the text underlined and in the link color.
      */

@@ -25,6 +25,6 @@ import android.content.pm.PackageStats;
  * {@hide}
  */
 oneway interface IPackageStatsObserver {
-    
+
     void onGetStatsCompleted(in PackageStats pStats, boolean succeeded);
 }

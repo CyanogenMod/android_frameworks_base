@@ -20,12 +20,12 @@
     android:layout_height="fill_parent">
 
     <ListView android:id="@+id/testlist"
-        android:layout_width="0px" 
+        android:layout_width="0px"
         android:layout_height="fill_parent"
         android:layout_weight="1"/>
 
     <FrameLayout android:id="@+id/testframe"
-        android:layout_width="0px" 
+        android:layout_width="0px"
         android:layout_height="fill_parent"
         android:layout_weight="6">
     </FrameLayout>

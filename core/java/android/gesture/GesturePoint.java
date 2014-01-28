@@ -43,7 +43,7 @@ public class GesturePoint {
         final long timeStamp = in.readLong();
         return new GesturePoint(x, y, timeStamp);
     }
-    
+
     @Override
     public Object clone() {
         return new GesturePoint(x, y, timestamp);

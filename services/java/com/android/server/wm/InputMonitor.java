@@ -34,13 +34,13 @@ import java.util.Arrays;
 
 final class InputMonitor implements InputManagerService.WindowManagerCallbacks {
     private final WindowManagerService mService;
-    
+
     // Current window with input focus for keys and other non-touch events.  May be null.
     private WindowState mInputFocus;
-    
+
     // When true, prevents input dispatch from proceeding until set to false again.
     private boolean mInputDispatchFrozen;
-    
+
     // When true, input dispatch proceeds normally.  Otherwise all events are dropped.
     // Initially false, so that input does not get dispatched until boot is finished at
     // which point the ActivityManager will enable dispatching.
@@ -61,9 +61,9 @@ final class InputMonitor implements InputManagerService.WindowManagerCallbacks {
     public InputMonitor(WindowManagerService service) {
         mService = service;
     }
-    
+
     /* Notifies the window manager about a broken input channel.
-     * 
+     *
      * Called by the InputManager.
      */
     @Override
@@ -80,10 +80,10 @@ final class InputMonitor implements InputManagerService.WindowManagerCallbacks {
             }
         }
     }
-    
+
     /* Notifies the window manager about an application that is not responding.
      * Returns a new timeout to continue waiting in nanoseconds, or 0 to abort dispatch.
-     * 
+     *
      * Called by the InputManager.
      */
     @Override
@@ -434,56 +434,56 @@ final class InputMonitor implements InputManagerService.WindowManagerCallbacks {
             if (WindowManagerService.DEBUG_INPUT) {
                 Slog.v(WindowManagerService.TAG, "Pausing WindowToken " + window);
             }
-            
+
             window.paused = true;
             updateInputWindowsLw(true /*force*/);
         }
     }
-    
+
     public void resumeDispatchingLw(WindowToken window) {
         if (window.paused) {
             if (WindowManagerService.DEBUG_INPUT) {
                 Slog.v(WindowManagerService.TAG, "Resuming WindowToken " + window);
             }
-            
+
             window.paused = false;
             updateInputWindowsLw(true /*force*/);
         }
     }
-    
+
     public void freezeInputDispatchingLw() {
         if (! mInputDispatchFrozen) {
             if (WindowManagerService.DEBUG_INPUT) {
                 Slog.v(WindowManagerService.TAG, "Freezing input dispatching");
             }
-            
+
             mInputDispatchFrozen = true;
             updateInputDispatchModeLw();
         }
     }
-    
+
     public void thawInputDispatchingLw() {
         if (mInputDispatchFrozen) {
             if (WindowManagerService.DEBUG_INPUT) {
                 Slog.v(WindowManagerService.TAG, "Thawing input dispatching");
             }
-            
+
             mInputDispatchFrozen = false;
             updateInputDispatchModeLw();
         }
     }
-    
+
     public void setEventDispatchingLw(boolean enabled) {
         if (mInputDispatchEnabled != enabled) {
             if (WindowManagerService.DEBUG_INPUT) {
                 Slog.v(WindowManagerService.TAG, "Setting event dispatching to " + enabled);
             }
-            
+
             mInputDispatchEnabled = enabled;
             updateInputDispatchModeLw();
         }
     }
-    
+
     private void updateInputDispatchModeLw() {
         mService.mInputManager.setInputDispatchMode(mInputDispatchEnabled, mInputDispatchFrozen);
     }

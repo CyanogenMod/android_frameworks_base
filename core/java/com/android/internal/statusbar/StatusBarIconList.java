@@ -31,7 +31,7 @@ public class StatusBarIconList implements Parcelable {
     public StatusBarIconList(Parcel in) {
         readFromParcel(in);
     }
-    
+
     public void readFromParcel(Parcel in) {
         this.mSlots = in.readStringArray();
         final int N = in.readInt();

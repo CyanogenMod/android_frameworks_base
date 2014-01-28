@@ -34,7 +34,7 @@ final class ConnectionRecord {
     final PendingIntent clientIntent; // How to launch the client.
     String stringName;              // Caching of toString.
     boolean serviceDead;            // Well is it?
-    
+
     void dump(PrintWriter pw, String prefix) {
         pw.println(prefix + "binding=" + binding);
         if (activity != null) {
@@ -43,7 +43,7 @@ final class ConnectionRecord {
         pw.println(prefix + "conn=" + conn.asBinder()
                 + " flags=0x" + Integer.toHexString(flags));
     }
-    
+
     ConnectionRecord(AppBindRecord _binding, ActivityRecord _activity,
                IServiceConnection _conn, int _flags,
                int _clientLabel, PendingIntent _clientIntent) {

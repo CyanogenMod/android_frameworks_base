@@ -40,7 +40,7 @@ public abstract class Vibrator {
      * @return True if the hardware has a vibrator, else false.
      */
     public abstract boolean hasVibrator();
-    
+
     /**
      * Vibrate constantly for the specified period of time.
      * <p>This method requires the caller to hold the permission

@@ -34,20 +34,20 @@ import com.android.internal.R;
 /*
  * Activity with EditText selected initially
  */
-public class OneEditTextActivitySelected extends Activity 
+public class OneEditTextActivitySelected extends Activity
 {
     private View mRootView;
     private View mDefaultFocusedView;
-    
+
     @Override
-    public void onCreate(Bundle savedInstanceState) 
+    public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         mRootView = new ScrollView(this);
-        
+
         EditText editText = new EditText(this);
         editText.requestFocus();
         mDefaultFocusedView = editText;
@@ -55,7 +55,7 @@ public class OneEditTextActivitySelected extends Activity
 
         ((ScrollView) mRootView).addView(layout);
         setContentView(mRootView);
-        
+
         // set to resize so IME is always shown (and also so
         // ImfBaseTestCase#destructiveCheckImeInitialState thinks it should always be shown
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -64,7 +64,7 @@ public class OneEditTextActivitySelected extends Activity
     public View getRootView() {
         return mRootView;
     }
-    
+
     public View getDefaultFocusedView() {
         return mDefaultFocusedView;
     }

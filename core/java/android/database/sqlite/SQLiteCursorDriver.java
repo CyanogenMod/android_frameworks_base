@@ -26,7 +26,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 public interface SQLiteCursorDriver {
     /**
      * Executes the query returning a Cursor over the result set.
-     * 
+     *
      * @param factory The CursorFactory to use when creating the Cursors, or
      *         null if standard SQLiteCursors should be returned.
      * @return a Cursor over the result set

@@ -120,7 +120,7 @@ public class ChangeTouchModeTest extends ActivityInstrumentationTestCase<LLOfBut
 
         // need to wait for async update back to window to occur
         Thread.sleep(200);
-        
+
         assertTrue("touch mode", getActivity().isInTouchMode());
     }
 

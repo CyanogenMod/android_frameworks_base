@@ -43,34 +43,34 @@ public:
     sp<XMLNode> newNamespace(const String8& filename, const String16& prefix, const String16& uri) {
         return new XMLNode(filename, prefix, uri, true);
     }
-    
+
     static inline
     sp<XMLNode> newElement(const String8& filename, const String16& ns, const String16& name) {
         return new XMLNode(filename, ns, name, false);
     }
-    
+
     static inline
     sp<XMLNode> newCData(const String8& filename) {
         return new XMLNode(filename);
     }
-    
+
     enum type {
         TYPE_NAMESPACE,
         TYPE_ELEMENT,
         TYPE_CDATA
     };
-    
+
     type getType() const;
-    
+
     const String16& getNamespacePrefix() const;
     const String16& getNamespaceUri() const;
-    
+
     const String16& getElementNamespace() const;
     const String16& getElementName() const;
     const Vector<sp<XMLNode> >& getChildren() const;
 
     const String8& getFilename() const;
-    
+
     struct attribute_entry {
         attribute_entry() : index(~(uint32_t)0), nameResId(0)
         {
@@ -82,7 +82,7 @@ public:
                 || value.dataType == Res_value::TYPE_NULL
                 || value.dataType == Res_value::TYPE_STRING;
         }
-        
+
         String16 ns;
         String16 name;
         String16 string;
@@ -95,7 +95,7 @@ public:
     const Vector<attribute_entry>& getAttributes() const;
 
     const attribute_entry* getAttribute(const String16& ns, const String16& name) const;
-    
+
     attribute_entry* editAttribute(const String16& ns, const String16& name);
 
     const String16& getCData() const;
@@ -106,9 +106,9 @@ public:
     int32_t getEndLineNumber() const;
 
     sp<XMLNode> searchElement(const String16& tagNamespace, const String16& tagName);
-    
+
     sp<XMLNode> getChildElement(const String16& tagNamespace, const String16& tagName);
-    
+
     status_t addChild(const sp<XMLNode>& child);
 
     status_t insertChildAt(const sp<XMLNode>& child, size_t index);
@@ -159,22 +159,22 @@ private:
     endElement(void *userData, const char *name);
     static void XMLCALL
     endNamespace(void *userData, const char *prefix);
-    
+
     static void XMLCALL
     commentData(void *userData, const char *comment);
-    
+
     // Creating an element node.
     XMLNode(const String8& filename, const String16& s1, const String16& s2, bool isNamespace);
-    
+
     // Creating a CDATA node.
     XMLNode(const String8& filename);
-    
+
     status_t collect_strings(StringPool* dest, Vector<uint32_t>* outResIds,
             bool stripComments, bool stripRawValues) const;
 
     status_t collect_attr_strings(StringPool* outPool,
         Vector<uint32_t>* outResIds, bool allAttrs) const;
-        
+
     status_t collect_resid_strings(StringPool* outPool,
             Vector<uint32_t>* outResIds) const;
 

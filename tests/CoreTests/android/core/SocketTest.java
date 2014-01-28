@@ -44,7 +44,7 @@ public class SocketTest extends TestCase {
     private static final String KNOW_GOOD_ADDRESS = "209.85.129.147";
 
     private static final String PACKAGE_DROPPING_ADDRESS = "191.167.0.1";
-    
+
     // Test for basic bind/connect/accept behavior.
     @SmallTest
     public void testSocketSimple() throws Exception {
@@ -81,7 +81,7 @@ public class SocketTest extends TestCase {
         s1.getOutputStream().write(0x5a);
         assertEquals(0x5a, s.getInputStream().read());
     }
-    
+
     // Regression test for #820068: Wildcard address
     @SmallTest
     public void testWildcardAddress() throws Exception {
@@ -92,7 +92,7 @@ public class SocketTest extends TestCase {
             assertEquals("Not the wildcard address", 0, addr[i]);
         }
     }
-    
+
     // Regression test for #865753: server sockets not closing properly
     @SmallTest
     public void testServerSocketClose() throws Exception {
@@ -101,11 +101,11 @@ public class SocketTest extends TestCase {
         ServerSocket s4 = new ServerSocket(23456);
         s4.close();
     }
-    
+
     // Regression test for #876985: SO_REUSEADDR not working properly
-    
+
     private Exception serverError = null;
-    
+
     @LargeTest
     public void testSetReuseAddress() throws IOException {
         InetSocketAddress addr = new InetSocketAddress(8383);
@@ -135,7 +135,7 @@ public class SocketTest extends TestCase {
         } catch (InterruptedException ex) {
             // Ignored.
         }
-        
+
         Socket client = new Socket("localhost", 8383);
         client.getOutputStream().write(1);
         // Just leave this connection open from the client side. It will be
@@ -153,7 +153,7 @@ public class SocketTest extends TestCase {
         serverSock2.setReuseAddress(true);
         serverSock2.bind(addr);
         serverSock2.close();
-        
+
         if (serverError != null) {
             throw new RuntimeException("Server must complete without error", serverError);
         }
@@ -207,11 +207,11 @@ public class SocketTest extends TestCase {
 //            }
 //        }
 //    }
-    
+
     /**
      * Regression test for 1062928: Dotted IP addresses (e.g., 192.168.100.1)
      * appear to be broken in the M5 SDK.
-     * 
+     *
      * Tests that a connection given a ip-addressv4 such as 192.168.100.100 does
      * not fail - sdk m5 seems only to accept dns names instead of ip numbers.
      * ip 209.85.129.147 (one address of www.google.com) on port 80 (http) is
@@ -240,13 +240,13 @@ public class SocketTest extends TestCase {
         }
     }
 
-    
+
     // Regression test for #1058962: Socket.close() does not cause
     // socket.connect() to return immediately.
     private Socket client;
-    
+
     private Exception error;
-    
+
     private boolean connected;
 
 // This test isn't working now, but really should work.
@@ -256,7 +256,7 @@ public class SocketTest extends TestCase {
     public void disable_testSocketConnectClose() {
         try {
             client = new Socket();
-            
+
             new Thread() {
                 @Override
                 public void run() {
@@ -265,18 +265,18 @@ public class SocketTest extends TestCase {
                     } catch (Exception ex) {
                         error = ex;
                     }
-                    
+
                     connected = true;
                 }
             }.start();
-            
+
             Thread.sleep(1000);
-            
+
             Assert.assertNull("Connect must not fail immediately. Maybe try different address.", error);
             Assert.assertFalse("Connect must not succeed. Maybe try different address.", connected);
-            
+
             client.close();
-            
+
             Thread.sleep(1000);
 
             if (error == null) {
@@ -284,11 +284,11 @@ public class SocketTest extends TestCase {
             } else if (!(error instanceof SocketException)) {
                 fail("Socket connect interrupted with wrong error: " + error.toString());
             }
-            
+
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-            
+
     }
-    
+
 }

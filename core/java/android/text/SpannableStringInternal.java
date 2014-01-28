@@ -199,7 +199,7 @@ import java.lang.reflect.Array;
             }
         }
 
-        return 0; 
+        return 0;
     }
 
     public <T> T[] getSpans(int queryStart, int queryEnd, Class<T> kind) {

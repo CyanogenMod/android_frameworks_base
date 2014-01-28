@@ -42,7 +42,7 @@ public class SyncStatusInfo implements Parcelable {
     public long initialFailureTime;
     public boolean pending;
     public boolean initialize;
-    
+
   // Warning: It is up to the external caller to ensure there are
   // no race conditions when accessing this list
   private ArrayList<Long> periodicSyncTimes;

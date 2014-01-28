@@ -21,7 +21,7 @@ import java.util.Collections;
 
 /**
  * Provides static methods for creating {@code List} instances easily, and other
- * utility methods for working with lists. 
+ * utility methods for working with lists.
  */
 public class Lists {
 

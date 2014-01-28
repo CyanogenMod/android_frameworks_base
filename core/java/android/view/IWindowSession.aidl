@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -46,14 +46,14 @@ interface IWindowSession {
     int addToDisplayWithoutInputChannel(IWindow window, int seq, in WindowManager.LayoutParams attrs,
             in int viewVisibility, in int layerStackId, out Rect outContentInsets);
     void remove(IWindow window);
-    
+
     /**
      * Change the parameters of a window.  You supply the
      * new parameters, it returns the new frame of the window on screen (the
      * position should be ignored) and surface of the window.  The surface
      * will be invalid if the window is currently hidden, else you can use it
      * to draw the window's contents.
-     * 
+     *
      * @param window The window being modified.
      * @param seq Ordering sequence number.
      * @param attrs If non-null, new attributes to apply to the window.
@@ -82,7 +82,7 @@ interface IWindowSession {
      * becoming visible and the global configuration has changed since it
      * was last displayed.
      * @param outSurface Object in which is placed the new display surface.
-     * 
+     *
      * @return int Result flags: {@link WindowManagerGlobal#RELAYOUT_SHOW_FOCUS},
      * {@link WindowManagerGlobal#RELAYOUT_FIRST_TIME}.
      */
@@ -109,7 +109,7 @@ interface IWindowSession {
      * to optimize compositing of this part of the window.
      */
     void setTransparentRegion(IWindow window, in Region region);
-    
+
     /**
      * Tell the window manager about the content and visible insets of the
      * given window, which can be used to adjust the <var>outContentInsets</var>
@@ -122,20 +122,20 @@ interface IWindowSession {
      */
     void setInsets(IWindow window, int touchableInsets, in Rect contentInsets,
             in Rect visibleInsets, in Region touchableRegion);
-    
+
     /**
      * Return the current display size in which the window is being laid out,
      * accounting for screen decorations around it.
      */
     void getDisplayFrame(IWindow window, out Rect outDisplayFrame);
-    
+
     void finishDrawing(IWindow window);
-    
+
     void setInTouchMode(boolean showFocus);
     boolean getInTouchMode();
-    
+
     boolean performHapticFeedback(IWindow window, int effectId, boolean always);
-    
+
     /**
      * Allocate the drag's thumbnail surface.  Also assigns a token that identifies
      * the drag to the OS and passes that as the return value.  A return value of
@@ -150,12 +150,12 @@ interface IWindowSession {
     boolean performDrag(IWindow window, IBinder dragToken, float touchX, float touchY,
             float thumbCenterX, float thumbCenterY, in ClipData data);
 
-	/**
-	 * Report the result of a drop action targeted to the given window.
-	 * consumed is 'true' when the drop was accepted by a valid recipient,
-	 * 'false' otherwise.
-	 */
-	void reportDropResult(IWindow window, boolean consumed);
+    /**
+     * Report the result of a drop action targeted to the given window.
+     * consumed is 'true' when the drop was accepted by a valid recipient,
+     * 'false' otherwise.
+     */
+    void reportDropResult(IWindow window, boolean consumed);
 
     /**
      * Tell the OS that we've just dragged into a View that is willing to accept the drop
@@ -174,12 +174,12 @@ interface IWindowSession {
      * how big the increment is from one screen to another.
      */
     void setWallpaperPosition(IBinder windowToken, float x, float y, float xstep, float ystep);
-    
+
     void wallpaperOffsetsComplete(IBinder window);
-    
+
     Bundle sendWallpaperCommand(IBinder window, String action, int x, int y,
             int z, in Bundle extras, boolean sync);
-    
+
     void wallpaperCommandComplete(IBinder window, in Bundle result);
 
     void setUniverseTransform(IBinder window, float alpha, float offx, float offy,

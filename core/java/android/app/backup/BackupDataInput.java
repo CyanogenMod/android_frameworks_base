@@ -174,7 +174,7 @@ public class BackupDataInput {
      * for further processing.  This allows a {@link android.app.backup.BackupAgent} to
      * efficiently discard obsolete or otherwise uninteresting records during the
      * restore operation.
-     * 
+     *
      * @throws IOException if an error occurred when trying to read the restore data stream
      */
     public void skipEntityData() throws IOException {

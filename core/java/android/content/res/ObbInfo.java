@@ -50,7 +50,7 @@ public class ObbInfo implements Parcelable {
 
     /**
      * The salt for the encryption algorithm.
-     * 
+     *
      * @hide
      */
     public byte[] salt;

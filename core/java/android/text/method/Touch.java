@@ -157,7 +157,7 @@ public class Touch {
 
                     ny = Math.min(ny, layout.getHeight() - (widget.getHeight() - padding));
                     ny = Math.max(ny, 0);
-        
+
                     int oldX = widget.getScrollX();
                     int oldY = widget.getScrollY();
 

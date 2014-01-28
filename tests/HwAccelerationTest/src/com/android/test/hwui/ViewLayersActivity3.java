@@ -32,7 +32,7 @@ public class ViewLayersActivity3 extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.view_layers_3);
 
         setupList(R.id.list1);

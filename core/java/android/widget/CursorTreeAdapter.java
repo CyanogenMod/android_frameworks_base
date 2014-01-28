@@ -43,7 +43,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
 
     /** The cursor helper that is used to get the groups */
     MyCursorHelper mGroupCursorHelper;
-    
+
     /**
      * The map of a group position to the group's children cursor helper (the
      * cursor helper that is used to get the children for that group)
@@ -53,7 +53,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
     // Filter related
     CursorFilter mCursorFilter;
     FilterQueryProvider mFilterQueryProvider;
-    
+
     /**
      * Constructor. The adapter will call {@link Cursor#requery()} on the cursor whenever
      * it changes so that the most recent data is always displayed.
@@ -66,7 +66,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
 
     /**
      * Constructor.
-     * 
+     *
      * @param cursor The cursor from which to get the data for the groups.
      * @param context The context
      * @param autoRequery If true the adapter will call {@link Cursor#requery()}
@@ -76,19 +76,19 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
     public CursorTreeAdapter(Cursor cursor, Context context, boolean autoRequery) {
         init(cursor, context, autoRequery);
     }
-    
+
     private void init(Cursor cursor, Context context, boolean autoRequery) {
         mContext = context;
         mHandler = new Handler();
         mAutoRequery = autoRequery;
-        
+
         mGroupCursorHelper = new MyCursorHelper(cursor);
         mChildrenCursorHelpers = new SparseArray<MyCursorHelper>();
     }
 
     /**
      * Gets the cursor helper for the children in the given group.
-     * 
+     *
      * @param groupPosition The group whose children will be returned
      * @param requestCursor Whether to request a Cursor via
      *            {@link #getChildrenCursor(Cursor)} (true), or to assume a call
@@ -98,15 +98,15 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
      */
     synchronized MyCursorHelper getChildrenCursorHelper(int groupPosition, boolean requestCursor) {
         MyCursorHelper cursorHelper = mChildrenCursorHelpers.get(groupPosition);
-        
+
         if (cursorHelper == null) {
             if (mGroupCursorHelper.moveTo(groupPosition) == null) return null;
-            
+
             final Cursor cursor = getChildrenCursor(mGroupCursorHelper.getCursor());
             cursorHelper = new MyCursorHelper(cursor);
             mChildrenCursorHelpers.put(groupPosition, cursorHelper);
         }
-        
+
         return cursorHelper;
     }
 
@@ -123,34 +123,34 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
      * will handle this for you. In some situations, the adapter will deactivate
      * the Cursor on its own, but this will not always be the case, so please
      * ensure the Cursor is properly managed.
-     * 
+     *
      * @param groupCursor The cursor pointing to the group whose children cursor
      *            should be returned
      * @return The cursor for the children of a particular group, or null.
      */
     abstract protected Cursor getChildrenCursor(Cursor groupCursor);
-    
+
     /**
      * Sets the group Cursor.
-     * 
-     * @param cursor The Cursor to set for the group. If there is an existing cursor 
+     *
+     * @param cursor The Cursor to set for the group. If there is an existing cursor
      * it will be closed.
      */
     public void setGroupCursor(Cursor cursor) {
         mGroupCursorHelper.changeCursor(cursor, false);
     }
-    
+
     /**
      * Sets the children Cursor for a particular group. If there is an existing cursor
      * it will be closed.
      * <p>
      * This is useful when asynchronously querying to prevent blocking the UI.
-     * 
+     *
      * @param groupPosition The group whose children are being set via this Cursor.
      * @param childrenCursor The Cursor that contains the children of the group.
      */
     public void setChildrenCursor(int groupPosition, Cursor childrenCursor) {
-        
+
         /*
          * Don't request a cursor from the subclass, instead we will be setting
          * the cursor ourselves.
@@ -163,7 +163,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
          */
         childrenCursorHelper.changeCursor(childrenCursor, false);
     }
-    
+
     public Cursor getChild(int groupPosition, int childPosition) {
         // Return this group's children Cursor pointing to the particular child
         return getChildrenCursorHelper(groupPosition, true).moveTo(childPosition);
@@ -197,7 +197,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
         if (cursor == null) {
             throw new IllegalStateException("this should only be called when the cursor is valid");
         }
-        
+
         View v;
         if (convertView == null) {
             v = newGroupView(mContext, cursor, isExpanded, parent);
@@ -210,7 +210,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
 
     /**
      * Makes a new group view to hold the group data pointed to by cursor.
-     * 
+     *
      * @param context Interface to application's global information
      * @param cursor The group cursor from which to get the data. The cursor is
      *            already moved to the correct position.
@@ -223,7 +223,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
 
     /**
      * Bind an existing view to the group data pointed to by cursor.
-     * 
+     *
      * @param view Existing view, returned earlier by newGroupView.
      * @param context Interface to application's global information
      * @param cursor The cursor from which to get the data. The cursor is
@@ -236,12 +236,12 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
             View convertView, ViewGroup parent) {
         MyCursorHelper cursorHelper = getChildrenCursorHelper(groupPosition, true);
-        
+
         Cursor cursor = cursorHelper.moveTo(childPosition);
         if (cursor == null) {
             throw new IllegalStateException("this should only be called when the cursor is valid");
         }
-        
+
         View v;
         if (convertView == null) {
             v = newChildView(mContext, cursor, isLastChild, parent);
@@ -254,7 +254,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
 
     /**
      * Makes a new child view to hold the data pointed to by cursor.
-     * 
+     *
      * @param context Interface to application's global information
      * @param cursor The cursor from which to get the data. The cursor is
      *            already moved to the correct position.
@@ -267,7 +267,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
 
     /**
      * Bind an existing view to the child data pointed to by cursor
-     * 
+     *
      * @param view Existing view, returned earlier by newChildView
      * @param context Interface to application's global information
      * @param cursor The cursor from which to get the data. The cursor is
@@ -276,7 +276,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
      */
     protected abstract void bindChildView(View view, Context context, Cursor cursor,
             boolean isLastChild);
-    
+
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
@@ -289,10 +289,10 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
         for (int pos = mChildrenCursorHelpers.size() - 1; pos >= 0; pos--) {
             mChildrenCursorHelpers.valueAt(pos).deactivate();
         }
-        
+
         mChildrenCursorHelpers.clear();
     }
-    
+
     @Override
     public void notifyDataSetChanged() {
         notifyDataSetChanged(true);
@@ -301,19 +301,19 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
     /**
      * Notifies a data set change, but with the option of not releasing any
      * cached cursors.
-     * 
+     *
      * @param releaseCursors Whether to release and deactivate any cached
      *            cursors.
      */
     public void notifyDataSetChanged(boolean releaseCursors) {
-        
+
         if (releaseCursors) {
             releaseCursorHelpers();
         }
-        
+
         super.notifyDataSetChanged();
     }
-    
+
     @Override
     public void notifyDataSetInvalidated() {
         releaseCursorHelpers();
@@ -327,7 +327,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
 
     /**
      * Deactivates the Cursor and removes the helper from cache.
-     * 
+     *
      * @param groupPosition The group whose children Cursor and helper should be
      *            deactivated.
      */
@@ -354,7 +354,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
 
         return mGroupCursorHelper.getCursor();
     }
-    
+
     public Filter getFilter() {
         if (mCursorFilter == null) {
             mCursorFilter = new CursorFilter(this);
@@ -375,7 +375,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
     public void setFilterQueryProvider(FilterQueryProvider filterQueryProvider) {
         mFilterQueryProvider = filterQueryProvider;
     }
-    
+
     /**
      * @see CursorAdapter#changeCursor(Cursor)
      */
@@ -404,7 +404,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
         private int mRowIDColumn;
         private MyContentObserver mContentObserver;
         private MyDataSetObserver mDataSetObserver;
-        
+
         MyCursorHelper(Cursor cursor) {
             final boolean cursorPresent = cursor != null;
             mCursor = cursor;
@@ -417,7 +417,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
                 cursor.registerDataSetObserver(mDataSetObserver);
             }
         }
-        
+
         Cursor getCursor() {
             return mCursor;
         }
@@ -429,7 +429,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
                 return 0;
             }
         }
-        
+
         long getId(int position) {
             if (mDataValid && mCursor != null) {
                 if (mCursor.moveToPosition(position)) {
@@ -441,7 +441,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
                 return 0;
             }
         }
-        
+
         Cursor moveTo(int position) {
             if (mDataValid && (mCursor != null) && mCursor.moveToPosition(position)) {
                 return mCursor;
@@ -449,7 +449,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
                 return null;
             }
         }
-        
+
         void changeCursor(Cursor cursor, boolean releaseCursors) {
             if (cursor == mCursor) return;
 
@@ -474,17 +474,17 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
             if (mCursor == null) {
                 return;
             }
-            
+
             mCursor.unregisterContentObserver(mContentObserver);
             mCursor.unregisterDataSetObserver(mDataSetObserver);
             mCursor.close();
             mCursor = null;
         }
-        
+
         boolean isValid() {
             return mDataValid && mCursor != null;
         }
-        
+
         private class MyContentObserver extends ContentObserver {
             public MyContentObserver() {
                 super(mHandler);

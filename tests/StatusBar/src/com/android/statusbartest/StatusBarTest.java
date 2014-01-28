@@ -53,7 +53,7 @@ public class StatusBarTest extends TestActivity
     protected Test[] tests() {
         mStatusBarManager = (StatusBarManager)getSystemService(STATUS_BAR_SERVICE);
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        
+
         return mTests;
     }
 

@@ -35,10 +35,10 @@ public class Movie {
     public native boolean isOpaque();
     public native int duration();
 
-    public native boolean setTime(int relativeMilliseconds);    
+    public native boolean setTime(int relativeMilliseconds);
 
     public native void draw(Canvas canvas, float x, float y, Paint paint);
-    
+
     public void draw(Canvas canvas, float x, float y) {
         draw(canvas, x, y, null);
     }

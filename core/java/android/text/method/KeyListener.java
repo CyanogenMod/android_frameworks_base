@@ -39,13 +39,13 @@ public interface KeyListener {
      * Return the type of text that this key listener is manipulating,
      * as per {@link android.text.InputType}.  This is used to
      * determine the mode of the soft keyboard that is shown for the editor.
-     * 
+     *
      * <p>If you return
      * {@link android.text.InputType#TYPE_NULL}
      * then <em>no</em> soft keyboard will provided.  In other words, you
      * must be providing your own key pad for on-screen input and the key
      * listener will be used to handle input from a hard keyboard.
-     * 
+     *
      * <p>If you
      * return any other value, a soft input method will be created when the
      * user puts focus in the editor, which will provide a keypad and also
@@ -54,7 +54,7 @@ public interface KeyListener {
      * key input as per the content type returned here.
      */
     public int getInputType();
-    
+
     /**
      * If the key listener wants to handle this key, return true,
      * otherwise return false and the caller (i.e. the widget host)
@@ -70,14 +70,14 @@ public interface KeyListener {
      */
     public boolean onKeyUp(View view, Editable text,
                            int keyCode, KeyEvent event);
-    
+
     /**
      * If the key listener wants to other kinds of key events, return true,
      * otherwise return false and the caller (i.e. the widget host)
      * will handle the key.
      */
     public boolean onKeyOther(View view, Editable text, KeyEvent event);
-    
+
     /**
      * Remove the given shift states from the edited text.
      */

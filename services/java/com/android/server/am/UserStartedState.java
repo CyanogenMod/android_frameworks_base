@@ -51,7 +51,7 @@ public final class UserStartedState {
             case STATE_RUNNING: pw.print("RUNNING"); break;
             case STATE_STOPPING: pw.print("STOPPING"); break;
             case STATE_SHUTDOWN: pw.print("SHUTDOWN"); break;
-            default: pw.print(mState); break; 
+            default: pw.print(mState); break;
         }
         if (switching) pw.print(" SWITCHING");
         if (initializing) pw.print(" INITIALIZING");

@@ -43,7 +43,7 @@ public class DateSorter {
 
     private long [] mBins = new long[DAY_COUNT-1];
     private String [] mLabels = new String[DAY_COUNT];
-    
+
     private static final int NUM_DAYS_AGO = 7;
 
     /**
@@ -54,7 +54,7 @@ public class DateSorter {
 
         Calendar c = Calendar.getInstance();
         beginningOfDay(c);
-        
+
         // Create the bins
         mBins[0] = c.getTimeInMillis(); // Today
         c.add(Calendar.DAY_OF_YEAR, -1);

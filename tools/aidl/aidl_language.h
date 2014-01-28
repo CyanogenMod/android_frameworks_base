@@ -13,7 +13,7 @@ typedef enum {
 typedef struct extra_text_type {
     unsigned lineno;
     which_extra_text which;
-    char* data; 
+    char* data;
     unsigned len;
     struct extra_text_type* next;
 } extra_text_type;

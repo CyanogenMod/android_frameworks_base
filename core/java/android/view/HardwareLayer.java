@@ -34,7 +34,7 @@ abstract class HardwareLayer {
      * Indicates an unknown dimension (width or height.)
      */
     static final int DIMENSION_UNDEFINED = -1;
-    
+
     int mWidth;
     int mHeight;
     DisplayList mDisplayList;
@@ -51,7 +51,7 @@ abstract class HardwareLayer {
     /**
      * Creates a new hardware layer at least as large as the supplied
      * dimensions.
-     * 
+     *
      * @param width The minimum width of the layer
      * @param height The minimum height of the layer
      * @param isOpaque Whether the layer should be opaque or not
@@ -72,8 +72,8 @@ abstract class HardwareLayer {
 
     /**
      * Returns the minimum width of the layer.
-     * 
-     * @return The minimum desired width of the hardware layer 
+     *
+     * @return The minimum desired width of the hardware layer
      */
     int getWidth() {
         return mWidth;
@@ -81,8 +81,8 @@ abstract class HardwareLayer {
 
     /**
      * Returns the minimum height of the layer.
-     * 
-     * @return The minimum desired height of the hardware layer 
+     *
+     * @return The minimum desired height of the hardware layer
      */
     int getHeight() {
         return mHeight;
@@ -108,7 +108,7 @@ abstract class HardwareLayer {
 
     /**
      * Returns whether or not this layer is opaque.
-     * 
+     *
      * @return True if the layer is opaque, false otherwise
      */
     boolean isOpaque() {
@@ -117,14 +117,14 @@ abstract class HardwareLayer {
 
     /**
      * Sets whether or not this layer should be considered opaque.
-     * 
+     *
      * @param isOpaque True if the layer is opaque, false otherwise
      */
     abstract void setOpaque(boolean isOpaque);
 
     /**
      * Indicates whether this layer can be rendered.
-     * 
+     *
      * @return True if the layer can be rendered into, false otherwise
      */
     abstract boolean isValid();
@@ -132,7 +132,7 @@ abstract class HardwareLayer {
     /**
      * Resize the layer, if necessary, to be at least as large
      * as the supplied dimensions.
-     * 
+     *
      * @param width The new desired minimum width for this layer
      * @param height The new desired minimum height for this layer
      * @return True if the resulting layer is valid, false otherwise
@@ -142,7 +142,7 @@ abstract class HardwareLayer {
     /**
      * Returns a hardware canvas that can be used to render onto
      * this layer.
-     * 
+     *
      * @return A hardware canvas, or null if a canvas cannot be created
      *
      * @see #start(android.graphics.Canvas)
@@ -151,7 +151,7 @@ abstract class HardwareLayer {
     abstract HardwareCanvas getCanvas();
 
     /**
-     * Destroys resources without waiting for a GC. 
+     * Destroys resources without waiting for a GC.
      */
     abstract void destroy();
 
@@ -179,9 +179,9 @@ abstract class HardwareLayer {
 
     /**
      * Copies this layer into the specified bitmap.
-     * 
+     *
      * @param bitmap The bitmap to copy they layer into
-     * 
+     *
      * @return True if the copy was successful, false otherwise
      */
     abstract boolean copyInto(Bitmap bitmap);
@@ -191,7 +191,7 @@ abstract class HardwareLayer {
      * when the underlying storage is modified by an external entity.
      * To change the underlying storage, use the {@link #resize(int, int)}
      * method instead.
-     * 
+     *
      * @param width The new width of this layer
      * @param height The new height of this layer
      * @param isOpaque Whether this layer is opaque
@@ -204,7 +204,7 @@ abstract class HardwareLayer {
 
     /**
      * Sets an optional transform on this layer.
-     * 
+     *
      * @param matrix The transform to apply to the layer.
      */
     abstract void setTransform(Matrix matrix);

@@ -157,7 +157,7 @@ public class AsyncPlayer {
      *
      * @param context Your application's context.
      * @param uri The URI to play.  (see {@link MediaPlayer#setDataSource(Context, Uri)})
-     * @param looping Whether the audio should loop forever.  
+     * @param looping Whether the audio should loop forever.
      *          (see {@link MediaPlayer#setLooping(boolean)})
      * @param stream the AudioStream to use.
      *          (see {@link MediaPlayer#setAudioStreamType(int)})
@@ -175,7 +175,7 @@ public class AsyncPlayer {
             mState = PLAY;
         }
     }
-    
+
     /**
      * Stop a previously played sound.  It can't be played again or unpaused
      * at this point.  Calling this multiple times has no ill effects.

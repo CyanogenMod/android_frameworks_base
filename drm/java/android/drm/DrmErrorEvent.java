@@ -41,7 +41,7 @@ public class DrmErrorEvent extends DrmEvent {
      */
     public static final int TYPE_NOT_SUPPORTED = 2003;
     /**
-     * Memory allocation failed during renewal. Can in the future perhaps be used to trigger 
+     * Memory allocation failed during renewal. Can in the future perhaps be used to trigger
      * garbage collector.
      */
     public static final int TYPE_OUT_OF_MEMORY = 2004;

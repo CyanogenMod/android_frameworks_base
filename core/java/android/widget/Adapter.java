@@ -25,7 +25,7 @@ import android.view.ViewGroup;
  * underlying data for that view. The Adapter provides access to the data items.
  * The Adapter is also responsible for making a {@link android.view.View} for
  * each item in the data set.
- * 
+ *
  * @see android.widget.ArrayAdapter
  * @see android.widget.CursorAdapter
  * @see android.widget.SimpleCursorAdapter
@@ -48,43 +48,43 @@ public interface Adapter {
 
     /**
      * How many items are in the data set represented by this Adapter.
-     * 
+     *
      * @return Count of items.
      */
-    int getCount();   
-    
+    int getCount();
+
     /**
      * Get the data item associated with the specified position in the data set.
-     * 
-     * @param position Position of the item whose data we want within the adapter's 
+     *
+     * @param position Position of the item whose data we want within the adapter's
      * data set.
      * @return The data at the specified position.
      */
     Object getItem(int position);
-    
+
     /**
      * Get the row id associated with the specified position in the list.
-     * 
+     *
      * @param position The position of the item within the adapter's data set whose row id we want.
      * @return The id of the item at the specified position.
      */
     long getItemId(int position);
-    
+
     /**
      * Indicates whether the item ids are stable across changes to the
      * underlying data.
-     * 
+     *
      * @return True if the same id always refers to the same object.
      */
     boolean hasStableIds();
-    
+
     /**
      * Get a View that displays the data at the specified position in the data set. You can either
      * create a View manually or inflate it from an XML layout file. When the View is inflated, the
      * parent View (GridView, ListView...) will apply default layout parameters unless you use
      * {@link android.view.LayoutInflater#inflate(int, android.view.ViewGroup, boolean)}
      * to specify a root view and to prevent attachment to the root.
-     * 
+     *
      * @param position The position of the item within the adapter's data set of the item whose view
      *        we want.
      * @param convertView The old view to reuse, if possible. Note: You should check that this view
@@ -103,15 +103,15 @@ public interface Adapter {
      * view. For example, this can be used if the client does not want a
      * particular view to be given for conversion in
      * {@link #getView(int, View, ViewGroup)}.
-     * 
+     *
      * @see #getItemViewType(int)
      * @see #getViewTypeCount()
      */
     static final int IGNORE_ITEM_VIEW_TYPE = AdapterView.ITEM_VIEW_TYPE_IGNORE;
-    
+
     /**
      * Get the type of View that will be created by {@link #getView} for the specified item.
-     * 
+     *
      * @param position The position of the item within the adapter's data set whose view type we
      *        want.
      * @return An integer representing the type of View. Two views should share the same type if one
@@ -121,7 +121,7 @@ public interface Adapter {
      * @see #IGNORE_ITEM_VIEW_TYPE
      */
     int getItemViewType(int position);
-    
+
     /**
      * <p>
      * Returns the number of types of Views that will be created by
@@ -133,13 +133,13 @@ public interface Adapter {
      * This method will only be called when when the adapter is set on the
      * the {@link AdapterView}.
      * </p>
-     * 
+     *
      * @return The number of types of Views that will be created by this adapter
      */
     int getViewTypeCount();
-    
+
     static final int NO_SELECTION = Integer.MIN_VALUE;
- 
+
      /**
       * @return true if this adapter doesn't contain any data.  This is used to determine
       * whether the empty view should be displayed.  A typical implementation will return

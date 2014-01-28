@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2007-2008 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -63,7 +63,7 @@ import java.util.concurrent.TimeUnit;
  * which arbitrates interaction between applications and the current input method.
  * You can retrieve an instance of this interface with
  * {@link Context#getSystemService(String) Context.getSystemService()}.
- * 
+ *
  * <p>Topics covered here:
  * <ol>
  * <li><a href="#ArchitectureOverview">Architecture Overview</a>
@@ -71,13 +71,13 @@ import java.util.concurrent.TimeUnit;
  * <li><a href="#InputMethods">Input Methods</a>
  * <li><a href="#Security">Security</a>
  * </ol>
- * 
+ *
  * <a name="ArchitectureOverview"></a>
  * <h3>Architecture Overview</h3>
- * 
+ *
  * <p>There are three primary parties involved in the input method
  * framework (IMF) architecture:</p>
- * 
+ *
  * <ul>
  * <li> The <strong>input method manager</strong> as expressed by this class
  * is the central point of the system that manages interaction between all
@@ -92,16 +92,16 @@ import java.util.concurrent.TimeUnit;
  * method manager for input focus and control over the state of the IME.  Only
  * one such client is ever active (working with the IME) at a time.
  * </ul>
- * 
- * 
+ *
+ *
  * <a name="Applications"></a>
  * <h3>Applications</h3>
- * 
+ *
  * <p>In most cases, applications that are using the standard
  * {@link android.widget.TextView} or its subclasses will have little they need
  * to do to work well with soft input methods.  The main things you need to
  * be aware of are:</p>
- * 
+ *
  * <ul>
  * <li> Properly set the {@link android.R.attr#inputType} in your editable
  * text views, so that the input method will have enough context to help the
@@ -117,43 +117,43 @@ import java.util.concurrent.TimeUnit;
  * for your window using the same {@link android.R.attr#windowSoftInputMode}
  * attribute.
  * </ul>
- * 
+ *
  * <p>More finer-grained control is available through the APIs here to directly
  * interact with the IMF and its IME -- either showing or hiding the input
  * area, letting the user pick an input method, etc.</p>
- * 
+ *
  * <p>For the rare people amongst us writing their own text editors, you
  * will need to implement {@link android.view.View#onCreateInputConnection}
  * to return a new instance of your own {@link InputConnection} interface
  * allowing the IME to interact with your editor.</p>
- * 
- * 
+ *
+ *
  * <a name="InputMethods"></a>
  * <h3>Input Methods</h3>
- * 
+ *
  * <p>An input method (IME) is implemented
  * as a {@link android.app.Service}, typically deriving from
  * {@link android.inputmethodservice.InputMethodService}.  It must provide
  * the core {@link InputMethod} interface, though this is normally handled by
  * {@link android.inputmethodservice.InputMethodService} and implementors will
  * only need to deal with the higher-level API there.</p>
- * 
+ *
  * See the {@link android.inputmethodservice.InputMethodService} class for
  * more information on implementing IMEs.
- * 
- * 
+ *
+ *
  * <a name="Security"></a>
  * <h3>Security</h3>
- * 
+ *
  * <p>There are a lot of security issues associated with input methods,
  * since they essentially have freedom to completely drive the UI and monitor
  * everything the user enters.  The Android input method framework also allows
  * arbitrary third party IMEs, so care must be taken to restrict their
  * selection and interactions.</p>
- * 
+ *
  * <p>Here are some key points about the security architecture behind the
  * IMF:</p>
- * 
+ *
  * <ul>
  * <li> <p>Only the system is allowed to directly access an IME's
  * {@link InputMethod} interface, via the
@@ -161,11 +161,11 @@ import java.util.concurrent.TimeUnit;
  * enforced in the system by not binding to an input method service that does
  * not require this permission, so the system can guarantee no other untrusted
  * clients are accessing the current input method outside of its control.</p>
- * 
+ *
  * <li> <p>There may be many client processes of the IMF, but only one may
  * be active at a time.  The inactive clients can not interact with key
  * parts of the IMF through the mechanisms described below.</p>
- * 
+ *
  * <li> <p>Clients of an input method are only given access to its
  * {@link InputMethodSession} interface.  One instance of this interface is
  * created for each client, and only calls from the session associated with
@@ -173,19 +173,19 @@ import java.util.concurrent.TimeUnit;
  * by {@link android.inputmethodservice.AbstractInputMethodService} for normal
  * IMEs, but must be explicitly handled by an IME that is customizing the
  * raw {@link InputMethodSession} implementation.</p>
- * 
+ *
  * <li> <p>Only the active client's {@link InputConnection} will accept
  * operations.  The IMF tells each client process whether it is active, and
  * the framework enforces that in inactive processes calls on to the current
  * InputConnection will be ignored.  This ensures that the current IME can
  * only deliver events and text edits to the UI that the user sees as
  * being in focus.</p>
- * 
+ *
  * <li> <p>An IME can never interact with an {@link InputConnection} while
  * the screen is off.  This is enforced by making all clients inactive while
  * the screen is off, and prevents bad IMEs from driving the UI when the user
  * can not be aware of its behavior.</p>
- * 
+ *
  * <li> <p>A client application can ask that the system let the user pick a
  * new IME, but can not programmatically switch to one itself.  This avoids
  * malicious applications from switching the user to their own IME, which
@@ -193,7 +193,7 @@ import java.util.concurrent.TimeUnit;
  * IME, on the other hand, <em>is</em> allowed to programmatically switch
  * the system to another IME, since it already has full control of user
  * input.</p>
- * 
+ *
  * <li> <p>The user must explicitly enable a new IME in settings before
  * they can switch to it, to confirm with the system that they know about it
  * and want to make it available for use.</p>
@@ -247,11 +247,11 @@ public final class InputMethodManager {
 
     final IInputMethodManager mService;
     final Looper mMainLooper;
-    
+
     // For scheduling work on the main thread.  This also serves as our
     // global lock.
     final H mH;
-    
+
     // Our generic input connection if the current target does not have its own.
     final IInputContext mIInputContext;
 
@@ -259,20 +259,20 @@ public final class InputMethodManager {
      * True if this input method client is active, initially false.
      */
     boolean mActive = false;
-    
+
     /**
      * Set whenever this client becomes inactive, to know we need to reset
      * state with the IME the next time we receive focus.
      */
     boolean mHasBeenInactive = true;
-    
+
     /**
      * As reported by IME through InputConnection.
      */
     boolean mFullscreenMode;
-    
+
     // -----------------------------------------------------------
-    
+
     /**
      * This is the root view of the overall window that currently has input
      * method focus.
@@ -308,7 +308,7 @@ public final class InputMethodManager {
      * The completions that were last provided by the served view.
      */
     CompletionInfo[] mCompletions;
-    
+
     // Cursor position on the screen.
     Rect mTmpCursorRect = new Rect();
     Rect mCursorRect = new Rect();
@@ -318,7 +318,7 @@ public final class InputMethodManager {
     int mCursorCandEnd;
 
     // -----------------------------------------------------------
-    
+
     /**
      * Sequence number of this binding, as returned by the server.
      */
@@ -338,7 +338,7 @@ public final class InputMethodManager {
     final SparseArray<PendingEvent> mPendingEvents = new SparseArray<PendingEvent>(20);
 
     // -----------------------------------------------------------
-    
+
     static final int MSG_DUMP = 1;
     static final int MSG_BIND = 2;
     static final int MSG_UNBIND = 3;
@@ -351,7 +351,7 @@ public final class InputMethodManager {
         H(Looper looper) {
             super(looper, null, true);
         }
-        
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -411,7 +411,7 @@ public final class InputMethodManager {
                                 }
                             }
                             clearBindingLocked();
-                            
+
                             // If we were actively using the last input method, then
                             // we would like to re-connect to the next input method.
                             if (mServedView != null && mServedView.isFocused()) {
@@ -479,7 +479,7 @@ public final class InputMethodManager {
             }
         }
     }
-    
+
     private static class ControlledInputConnectionWrapper extends IInputConnectionWrapper {
         private final InputMethodManager mParentInputMethodManager;
         private boolean mActive;
@@ -500,7 +500,7 @@ public final class InputMethodManager {
             mActive = false;
         }
     }
-    
+
     final IInputMethodClient.Stub mClient = new IInputMethodClient.Stub() {
         @Override
         protected void dump(FileDescriptor fd, PrintWriter fout, String[] args) {
@@ -567,7 +567,7 @@ public final class InputMethodManager {
             return sInstance;
         }
     }
-    
+
     /**
      * Private optimization: retrieve the global InputMethodManager instance,
      * if it exists.
@@ -576,17 +576,17 @@ public final class InputMethodManager {
     public static InputMethodManager peekInstance() {
         return sInstance;
     }
-    
+
     /** @hide */
     public IInputMethodClient getClient() {
         return mClient;
     }
-    
+
     /** @hide */
     public IInputContext getInputContext() {
         return mIInputContext;
     }
-    
+
     public List<InputMethodInfo> getInputMethodList() {
         try {
             return mService.getInputMethodList();
@@ -676,7 +676,7 @@ public final class InputMethodManager {
     public boolean isFullscreenMode() {
         return mFullscreenMode;
     }
-    
+
     /**
      * Return true if the given view is the currently active view for the
      * input method.
@@ -690,7 +690,7 @@ public final class InputMethodManager {
                     && mCurrentTextBoxAttribute != null;
         }
     }
-    
+
     /**
      * Return true if any view is currently active in the input method.
      */
@@ -700,7 +700,7 @@ public final class InputMethodManager {
             return mServedView != null && mCurrentTextBoxAttribute != null;
         }
     }
-    
+
     /**
      * Return true if the currently served view is accepting full text edits.
      * If false, it has no input connection, so can only handle raw key events.
@@ -747,7 +747,7 @@ public final class InputMethodManager {
             mServedInputConnectionWrapper = null;
         }
     }
-    
+
     /**
      * Disconnect any existing input connection, clearing the served view.
      */
@@ -756,16 +756,16 @@ public final class InputMethodManager {
         mNextServedView = null;
         if (mServedView != null) {
             if (DEBUG) Log.v(TAG, "FINISH INPUT: " + mServedView);
-            
+
             if (mCurrentTextBoxAttribute != null) {
                 try {
                     mService.finishInput(mClient);
                 } catch (RemoteException e) {
                 }
             }
-            
+
             notifyInputConnectionFinished();
-            
+
             mServedView = null;
             mCompletions = null;
             mServedConnecting = false;
@@ -811,7 +811,7 @@ public final class InputMethodManager {
                             || !mServedView.checkInputConnectionProxy(view))) {
                 return;
             }
-            
+
             mCompletions = completions;
             if (mCurMethod != null) {
                 try {
@@ -821,7 +821,7 @@ public final class InputMethodManager {
             }
         }
     }
-    
+
     public void updateExtractedText(View view, int token, ExtractedText text) {
         checkFocus();
         synchronized (mH) {
@@ -829,7 +829,7 @@ public final class InputMethodManager {
                     || !mServedView.checkInputConnectionProxy(view))) {
                 return;
             }
-            
+
             if (mCurMethod != null) {
                 try {
                     mCurMethod.updateExtractedText(token, text);
@@ -838,26 +838,26 @@ public final class InputMethodManager {
             }
         }
     }
-    
+
     /**
      * Flag for {@link #showSoftInput} to indicate that this is an implicit
      * request to show the input window, not as the result of a direct request
      * by the user.  The window may not be shown in this case.
      */
     public static final int SHOW_IMPLICIT = 0x0001;
-    
+
     /**
      * Flag for {@link #showSoftInput} to indicate that the user has forced
      * the input method open (such as by long-pressing menu) so it should
      * not be closed until they explicitly do so.
      */
     public static final int SHOW_FORCED = 0x0002;
-    
+
     /**
      * Synonym for {@link #showSoftInput(View, int, ResultReceiver)} without
      * a result receiver: explicitly request that the current input method's
      * soft input area be shown to the user, if needed.
-     * 
+     *
      * @param view The currently focused view, which would like to receive
      * soft keyboard input.
      * @param flags Provides additional operating flags.  Currently may be
@@ -866,7 +866,7 @@ public final class InputMethodManager {
     public boolean showSoftInput(View view, int flags) {
         return showSoftInput(view, flags, null);
     }
-    
+
     /**
      * Flag for the {@link ResultReceiver} result code from
      * {@link #showSoftInput(View, int, ResultReceiver)} and
@@ -874,7 +874,7 @@ public final class InputMethodManager {
      * state of the soft input window was unchanged and remains shown.
      */
     public static final int RESULT_UNCHANGED_SHOWN = 0;
-    
+
     /**
      * Flag for the {@link ResultReceiver} result code from
      * {@link #showSoftInput(View, int, ResultReceiver)} and
@@ -882,7 +882,7 @@ public final class InputMethodManager {
      * state of the soft input window was unchanged and remains hidden.
      */
     public static final int RESULT_UNCHANGED_HIDDEN = 1;
-    
+
     /**
      * Flag for the {@link ResultReceiver} result code from
      * {@link #showSoftInput(View, int, ResultReceiver)} and
@@ -890,7 +890,7 @@ public final class InputMethodManager {
      * state of the soft input window changed from hidden to shown.
      */
     public static final int RESULT_SHOWN = 2;
-    
+
     /**
      * Flag for the {@link ResultReceiver} result code from
      * {@link #showSoftInput(View, int, ResultReceiver)} and
@@ -898,13 +898,13 @@ public final class InputMethodManager {
      * state of the soft input window changed from shown to hidden.
      */
     public static final int RESULT_HIDDEN = 3;
-    
+
     /**
      * Explicitly request that the current input method's soft input area be
      * shown to the user, if needed.  Call this if the user interacts with
      * your view in such a way that they have expressed they would like to
      * start performing input into it.
-     * 
+     *
      * @param view The currently focused view, which would like to receive
      * soft keyboard input.
      * @param flags Provides additional operating flags.  Currently may be
@@ -927,11 +927,11 @@ public final class InputMethodManager {
                 return mService.showSoftInput(mClient, flags, resultReceiver);
             } catch (RemoteException e) {
             }
-            
+
             return false;
         }
     }
-    
+
     /** @hide */
     public void showSoftInputUnchecked(int flags, ResultReceiver resultReceiver) {
         try {
@@ -939,14 +939,14 @@ public final class InputMethodManager {
         } catch (RemoteException e) {
         }
     }
-    
+
     /**
      * Flag for {@link #hideSoftInputFromWindow} to indicate that the soft
      * input window should only be hidden if it was not explicitly shown
      * by the user.
      */
     public static final int HIDE_IMPLICIT_ONLY = 0x0001;
-    
+
     /**
      * Flag for {@link #hideSoftInputFromWindow} to indicate that the soft
      * input window should normally be hidden, unless it was originally
@@ -958,7 +958,7 @@ public final class InputMethodManager {
      * Synonym for {@link #hideSoftInputFromWindow(IBinder, int, ResultReceiver)}
      * without a result: request to hide the soft input window from the
      * context of the window that is currently accepting input.
-     * 
+     *
      * @param windowToken The token of the window that is making the request,
      * as returned by {@link View#getWindowToken() View.getWindowToken()}.
      * @param flags Provides additional operating flags.  Currently may be
@@ -967,13 +967,13 @@ public final class InputMethodManager {
     public boolean hideSoftInputFromWindow(IBinder windowToken, int flags) {
         return hideSoftInputFromWindow(windowToken, flags, null);
     }
-    
+
     /**
      * Request to hide the soft input window from the context of the window
      * that is currently accepting input.  This should be called as a result
      * of the user doing some actually than fairly explicitly requests to
      * have the input window hidden.
-     * 
+     *
      * @param windowToken The token of the window that is making the request,
      * as returned by {@link View#getWindowToken() View.getWindowToken()}.
      * @param flags Provides additional operating flags.  Currently may be
@@ -999,11 +999,11 @@ public final class InputMethodManager {
             return false;
         }
     }
-    
+
 
     /**
      * This method toggles the input method window display.
-     * If the input window is already displayed, it gets hidden. 
+     * If the input window is already displayed, it gets hidden.
      * If not the input window will be displayed.
      * @param windowToken The token of the window that is making the request,
      * as returned by {@link View#getWindowToken() View.getWindowToken()}.
@@ -1030,7 +1030,7 @@ public final class InputMethodManager {
 
     /*
      * This method toggles the input method window display.
-     * If the input window is already displayed, it gets hidden. 
+     * If the input window is already displayed, it gets hidden.
      * If not the input window will be displayed.
      * @param showFlags Provides additional operating flags.  May be
      * 0 or have the {@link #SHOW_IMPLICIT},
@@ -1054,7 +1054,7 @@ public final class InputMethodManager {
      * restart it with its new contents.  You should call this when the text
      * within your view changes outside of the normal input method or key
      * input flow, such as when an application calls TextView.setText().
-     * 
+     *
      * @param view The view whose text has changed.
      */
     public void restartInput(View view) {
@@ -1064,19 +1064,19 @@ public final class InputMethodManager {
                     || !mServedView.checkInputConnectionProxy(view))) {
                 return;
             }
-            
+
             mServedConnecting = true;
         }
-        
+
         startInputInner(null, 0, 0, 0);
     }
-    
+
     boolean startInputInner(IBinder windowGainingFocus, int controlFlags, int softInputMode,
             int windowFlags) {
         final View view;
         synchronized (mH) {
             view = mServedView;
-            
+
             // Make sure we have a window token for the served view.
             if (DEBUG) Log.v(TAG, "Starting input: view=" + view);
             if (view == null) {
@@ -1084,7 +1084,7 @@ public final class InputMethodManager {
                 return false;
             }
         }
-        
+
         // Now we need to get an input connection from the served view.
         // This is complicated in a couple ways: we can't be holding our lock
         // when calling out to the view, and we need to make sure we call into
@@ -1111,7 +1111,7 @@ public final class InputMethodManager {
             });
             return false;
         }
-        
+
         // Okay we are now ready to call into the served view and have it
         // do its stuff.
         // Life is good: let's hook everything up!
@@ -1126,7 +1126,7 @@ public final class InputMethodManager {
             // changed.
             if (mServedView != view || !mServedConnecting) {
                 // Something else happened, so abort.
-                if (DEBUG) Log.v(TAG, 
+                if (DEBUG) Log.v(TAG,
                         "Starting input: finished by someone else (view="
                         + mServedView + " conn=" + mServedConnecting + ")");
                 return false;
@@ -1137,7 +1137,7 @@ public final class InputMethodManager {
             if (mCurrentTextBoxAttribute == null) {
                 controlFlags |= CONTROL_START_INITIAL;
             }
-            
+
             // Hook 'em up and let 'er rip.
             mCurrentTextBoxAttribute = tba;
             mServedConnecting = false;
@@ -1159,7 +1159,7 @@ public final class InputMethodManager {
                 mServedInputConnectionWrapper.deactivate();
             }
             mServedInputConnectionWrapper = servedContext;
-            
+
             try {
                 if (DEBUG) Log.v(TAG, "START INPUT: " + view + " ic="
                         + ic + " tba=" + tba + " controlFlags=#"
@@ -1232,14 +1232,14 @@ public final class InputMethodManager {
 
     void focusInLocked(View view) {
         if (DEBUG) Log.v(TAG, "focusIn: " + view);
-        
+
         if (mCurRootView != view.getRootView()) {
             // This is a request from a window that isn't in the window with
             // IME focus, so ignore it.
             if (DEBUG) Log.v(TAG, "Not IME target window, ignoring");
             return;
         }
-        
+
         mNextServedView = view;
         scheduleCheckFocusLocked(view);
     }
@@ -1323,7 +1323,7 @@ public final class InputMethodManager {
 
         return true;
     }
-    
+
     void closeCurrentInput() {
         try {
             mService.hideSoftInput(mClient, HIDE_NOT_ALWAYS, null);
@@ -1361,7 +1361,7 @@ public final class InputMethodManager {
         if (first) {
             controlFlags |= CONTROL_WINDOW_FIRST;
         }
-        
+
         if (checkFocusNoStartInput(forceNewFocus, true)) {
             // We need to restart input on the current focus view.  This
             // should be done in conjunction with telling the system service
@@ -1372,7 +1372,7 @@ public final class InputMethodManager {
                 return;
             }
         }
-        
+
         // For some reason we didn't do a startInput + windowFocusGain, so
         // we'll just do a window focus gain and call it a day.
         synchronized (mH) {
@@ -1384,14 +1384,14 @@ public final class InputMethodManager {
             }
         }
     }
-    
+
     /** @hide */
     public void startGettingWindowFocus(View rootView) {
         synchronized (mH) {
             mCurRootView = rootView;
         }
     }
-    
+
     /**
      * Report the current selection range.
      */
@@ -1404,7 +1404,7 @@ public final class InputMethodManager {
                     || mCurrentTextBoxAttribute == null || mCurMethod == null) {
                 return;
             }
-            
+
             if (mCursorSelStart != selStart || mCursorSelEnd != selEnd
                     || mCursorCandStart != candidatesStart
                     || mCursorCandEnd != candidatesEnd) {
@@ -1458,7 +1458,7 @@ public final class InputMethodManager {
     public boolean isWatchingCursor(View view) {
         return false;
     }
-    
+
     /**
      * Report the current cursor location in its window.
      */
@@ -1470,7 +1470,7 @@ public final class InputMethodManager {
                     || mCurrentTextBoxAttribute == null || mCurMethod == null) {
                 return;
             }
-            
+
             mTmpCursorRect.set(left, top, right, bottom);
             if (!mCursorRect.equals(mTmpCursorRect)) {
                 if (DEBUG) Log.d(TAG, "updateCursor");
@@ -1551,7 +1551,7 @@ public final class InputMethodManager {
      * Close/hide the input method's soft input area, so the user no longer
      * sees it or can interact with it.  This can only be called
      * from the currently active input method, as validated by the given token.
-     * 
+     *
      * @param token Supplies the identifying token given to an input method
      * when it was started, which allows it to perform this operation on
      * itself.
@@ -1566,13 +1566,13 @@ public final class InputMethodManager {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
-     * Show the input method's soft input area, so the user 
+     * Show the input method's soft input area, so the user
      * sees the input method window and can interact with it.
      * This can only be called from the currently active input method,
      * as validated by the given token.
-     * 
+     *
      * @param token Supplies the identifying token given to an input method
      * when it was started, which allows it to perform this operation on
      * itself.
@@ -1940,7 +1940,7 @@ public final class InputMethodManager {
     void doDump(FileDescriptor fd, PrintWriter fout, String[] args) {
         final Printer p = new PrintWriterPrinter(fout);
         p.println("Input method client state for " + this + ":");
-        
+
         p.println("  mService=" + mService);
         p.println("  mMainLooper=" + mMainLooper);
         p.println("  mIInputContext=" + mIInputContext);

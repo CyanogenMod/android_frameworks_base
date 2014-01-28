@@ -33,7 +33,7 @@ public class DatabaseStatementTest extends AndroidTestCase implements Performanc
     private static final String sString1 = "this is a test";
     private static final String sString2 = "and yet another test";
     private static final String sString3 = "this string is a little longer, but still a test";
-    
+
     private static final int CURRENT_DATABASE_VERSION = 42;
     private SQLiteDatabase mDatabase;
     private File mDatabaseFile;
@@ -41,8 +41,8 @@ public class DatabaseStatementTest extends AndroidTestCase implements Performanc
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-	File dbDir = getContext().getDir("tests", Context.MODE_PRIVATE);
-	mDatabaseFile = new File(dbDir, "database_test.db");
+    File dbDir = getContext().getDir("tests", Context.MODE_PRIVATE);
+    mDatabaseFile = new File(dbDir, "database_test.db");
 
         if (mDatabaseFile.exists()) {
             mDatabaseFile.delete();

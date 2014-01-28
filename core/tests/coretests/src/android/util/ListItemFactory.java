@@ -164,10 +164,10 @@ public class ListItemFactory {
         result.setTag("button");
         return result;
     }
-    
+
     /**
      * Convert an existing button view to display the data at a new position.
-     * 
+     *
      * @param convertView Non-null Button created by {@link #button}
      * @param text The text of the button
      * @param position The position withion the list
@@ -182,7 +182,7 @@ public class ListItemFactory {
             return null;
         }
     }
-    
+
     /**
      * Create a text view ready to be a list item.
      *
@@ -204,10 +204,10 @@ public class ListItemFactory {
         result.setTag("text");
         return result;
     }
-    
+
     /**
      * Convert an existing text view to display the data at a new position.
-     * 
+     *
      * @param convertView Non-null TextView created by {@link #text}
      * @param text The text to display
      * @param position The position withion the list
@@ -223,7 +223,7 @@ public class ListItemFactory {
             return null;
         }
     }
-    
+
     /**
      * Create a text view ready to be a list item.
      *
@@ -243,7 +243,7 @@ public class ListItemFactory {
                         desiredHeight);
         ll.setLayoutParams(lp);
         ll.setId(position);
-        
+
         TextView t1 = new TextView(context);
         t1.setHeight(desiredHeight);
         t1.setText(text);
@@ -252,7 +252,7 @@ public class ListItemFactory {
                 0,
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         ll.addView(t1, lp1);
-        
+
         TextView t2 = new TextView(context);
         t2.setHeight(desiredHeight);
         t2.setText(text);
@@ -267,10 +267,10 @@ public class ListItemFactory {
         return ll;
     }
 
-    
+
     /**
      * Convert an existing button view to display the data at a new position.
-     * 
+     *
      * @param convertView Non-null view created by {@link #doubleText}
      * @param text The text of the button
      * @param position The position withion the list

@@ -165,13 +165,13 @@ final class Settings {
     // Packages that have been uninstalled and still need their external
     // storage data deleted.
     final ArrayList<PackageCleanItem> mPackagesToBeCleaned = new ArrayList<PackageCleanItem>();
-    
+
     // Packages that have been renamed since they were first installed.
     // Keys are the new names of the packages, values are the original
     // names.  The packages appear everwhere else under their original
     // names.
     final HashMap<String, String> mRenamedPackages = new HashMap<String, String>();
-    
+
     final StringBuilder mReadMessages = new StringBuilder();
 
     /**
@@ -1358,7 +1358,7 @@ final class Settings {
                     serializer.endTag(null, "cleaning-package");
                 }
             }
-            
+
             if (mRenamedPackages.size() > 0) {
                 for (Map.Entry<String, String> e : mRenamedPackages.entrySet()) {
                     serializer.startTag(null, "renamed-package");
@@ -1367,7 +1367,7 @@ final class Settings {
                     serializer.endTag(null, "renamed-package");
                 }
             }
-            
+
             mKeySetManager.writeKeySetManagerLPr(serializer);
 
             serializer.endTag(null, "packages");
@@ -2498,7 +2498,7 @@ final class Settings {
                 }
 
                 String tagName = parser.getName();
-                // Legacy 
+                // Legacy
                 if (tagName.equals(TAG_DISABLED_COMPONENTS)) {
                     readDisabledComponentsLPw(packageSetting, parser, 0);
                 } else if (tagName.equals(TAG_ENABLED_COMPONENTS)) {
@@ -2748,7 +2748,7 @@ final class Settings {
     private String compToString(HashSet<String> cmp) {
         return cmp != null ? Arrays.toString(cmp.toArray()) : "[]";
     }
- 
+
     boolean isEnabledLPr(ComponentInfo componentInfo, int flags, int userId) {
         if ((flags&PackageManager.GET_DISABLED_COMPONENTS) != 0) {
             return true;

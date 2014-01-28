@@ -39,7 +39,7 @@ public abstract class RecognitionService extends Service {
      */
     @SdkConstant(SdkConstantType.SERVICE_ACTION)
     public static final String SERVICE_INTERFACE = "android.speech.RecognitionService";
-    
+
     /**
      * Name under which a RecognitionService component publishes information about itself.
      * This meta-data should reference an XML resource containing a
@@ -151,7 +151,7 @@ public abstract class RecognitionService extends Service {
 
     /**
      * Checks whether the caller has sufficient permissions
-     * 
+     *
      * @param listener to send the error message to in case of error
      * @return {@code true} if the caller has enough permissions, {@code false} otherwise
      */
@@ -172,7 +172,7 @@ public abstract class RecognitionService extends Service {
 
     /**
      * Notifies the service that it should start listening for speech.
-     * 
+     *
      * @param recognizerIntent contains parameters for the recognition to be performed. The intent
      *        may also contain optional extras, see {@link RecognizerIntent}. If these values are
      *        not set explicitly, default values should be used by the recognizer.
@@ -230,7 +230,7 @@ public abstract class RecognitionService extends Service {
         /**
          * The service should call this method when sound has been received. The purpose of this
          * function is to allow giving feedback to the user regarding the captured audio.
-         * 
+         *
          * @param buffer a buffer containing a sequence of big-endian 16-bit integers representing a
          *        single channel audio stream. The sample rate is implementation dependent.
          */
@@ -247,7 +247,7 @@ public abstract class RecognitionService extends Service {
 
         /**
          * The service should call this method when a network or recognition error occurred.
-         * 
+         *
          * @param error code is defined in {@link SpeechRecognizer}
          */
         public void error(int error) throws RemoteException {
@@ -261,7 +261,7 @@ public abstract class RecognitionService extends Service {
          * {@link #results(Bundle)} when partial results are ready. This method may be called zero,
          * one or multiple times for each call to {@link SpeechRecognizer#startListening(Intent)},
          * depending on the speech recognition service implementation.
-         * 
+         *
          * @param partialResults the returned results. To retrieve the results in
          *        ArrayList&lt;String&gt; format use {@link Bundle#getStringArrayList(String)} with
          *        {@link SpeechRecognizer#RESULTS_RECOGNITION} as a parameter
@@ -273,7 +273,7 @@ public abstract class RecognitionService extends Service {
         /**
          * The service should call this method when the endpointer is ready for the user to start
          * speaking.
-         * 
+         *
          * @param params parameters set by the recognition service. Reserved for future use.
          */
         public void readyForSpeech(Bundle params) throws RemoteException {
@@ -282,7 +282,7 @@ public abstract class RecognitionService extends Service {
 
         /**
          * The service should call this method when recognition results are ready.
-         * 
+         *
          * @param results the recognition results. To retrieve the results in {@code
          *        ArrayList&lt;String&gt;} format use {@link Bundle#getStringArrayList(String)} with
          *        {@link SpeechRecognizer#RESULTS_RECOGNITION} as a parameter
@@ -295,7 +295,7 @@ public abstract class RecognitionService extends Service {
         /**
          * The service should call this method when the sound level in the audio stream has changed.
          * There is no guarantee that this method will be called.
-         * 
+         *
          * @param rmsdB the new RMS dB value
          */
         public void rmsChanged(float rmsdB) throws RemoteException {

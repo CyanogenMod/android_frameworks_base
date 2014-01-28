@@ -59,14 +59,14 @@ public class WebHistoryItem implements Cloneable {
 
     /**
      * Return the original url of this history item. This was the requested
-     * url, the final url may be different as there might have been 
+     * url, the final url may be different as there might have been
      * redirects while loading the site.
      * @return The original url of this history item.
      */
     public String getOriginalUrl() {
         throw new MustOverrideException();
     }
-    
+
     /**
      * Return the document title of this history item.
      * @return The document title of this history item.

@@ -664,10 +664,10 @@ public class StackView extends AdapterViewAnimator {
                 activeIndex = (swipeGestureType == GESTURE_SLIDE_DOWN) ? 1 : 0;
             }
 
-            boolean endOfStack = mLoopViews && adapterCount == 1 && 
+            boolean endOfStack = mLoopViews && adapterCount == 1 &&
                 ((mStackMode == ITEMS_SLIDE_UP && swipeGestureType == GESTURE_SLIDE_UP) ||
                  (mStackMode == ITEMS_SLIDE_DOWN && swipeGestureType == GESTURE_SLIDE_DOWN));
-            boolean beginningOfStack = mLoopViews && adapterCount == 1 && 
+            boolean beginningOfStack = mLoopViews && adapterCount == 1 &&
                 ((mStackMode == ITEMS_SLIDE_DOWN && swipeGestureType == GESTURE_SLIDE_UP) ||
                  (mStackMode == ITEMS_SLIDE_UP && swipeGestureType == GESTURE_SLIDE_DOWN));
 

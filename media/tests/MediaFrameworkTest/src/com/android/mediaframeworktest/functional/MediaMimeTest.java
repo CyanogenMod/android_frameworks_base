@@ -45,7 +45,7 @@ import com.android.mediaframeworktest.MediaFrameworkTest;
      -w com.android.mediaframeworktest/.MediaFrameworkTestRunner
  *
  */
-public class MediaMimeTest extends ActivityInstrumentationTestCase2<MediaFrameworkTest> {    
+public class MediaMimeTest extends ActivityInstrumentationTestCase2<MediaFrameworkTest> {
     private final String TAG = "MediaMimeTest";
     private Context mContext;
     private final String MP3_FILE = "/sdcard/media_api/music/SHORTMP3.mp3";
@@ -61,10 +61,10 @@ public class MediaMimeTest extends ActivityInstrumentationTestCase2<MediaFramewo
       // Checks you have all the test files on your SDCARD.
       assertTrue(new File(MP3_FILE).exists());
     }
-    
-    @Override 
-    protected void tearDown() throws Exception {     
-        super.tearDown();              
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
     }
 
     // ----------------------------------------------------------------------
@@ -82,7 +82,7 @@ public class MediaMimeTest extends ActivityInstrumentationTestCase2<MediaFramewo
         assertMediaPlaybackActivityHandles("audio/*");
     }
 
-    // TODO: temporarily remove from medium suite because it hangs whole suite 
+    // TODO: temporarily remove from medium suite because it hangs whole suite
     // @MediumTest
     // Checks the MediaPlaybackActivity handles application/itunes. Some servers
     // set the Content-type hadb ieader to application/iTunes (with capital T, but

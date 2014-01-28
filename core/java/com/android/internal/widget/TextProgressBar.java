@@ -46,20 +46,20 @@ import android.widget.RemoteViews.RemoteView;
  */
 @RemoteView
 public class TextProgressBar extends RelativeLayout implements OnChronometerTickListener {
-    public static final String TAG = "TextProgressBar"; 
-    
+    public static final String TAG = "TextProgressBar";
+
     static final int CHRONOMETER_ID = android.R.id.text1;
     static final int PROGRESSBAR_ID = android.R.id.progress;
-    
+
     Chronometer mChronometer = null;
     ProgressBar mProgressBar = null;
-    
+
     long mDurationBase = -1;
     int mDuration = -1;
 
     boolean mChronometerFollow = false;
     int mChronometerGravity = Gravity.NO_GRAVITY;
-    
+
     public TextProgressBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -78,17 +78,17 @@ public class TextProgressBar extends RelativeLayout implements OnChronometerTick
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         super.addView(child, index, params);
-        
+
         int childId = child.getId();
         if (childId == CHRONOMETER_ID && child instanceof Chronometer) {
             mChronometer = (Chronometer) child;
             mChronometer.setOnChronometerTickListener(this);
-            
-            // Check if Chronometer should move with with ProgressBar 
+
+            // Check if Chronometer should move with with ProgressBar
             mChronometerFollow = (params.width == ViewGroup.LayoutParams.WRAP_CONTENT);
             mChronometerGravity = (mChronometer.getGravity() &
                     Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK);
-            
+
         } else if (childId == PROGRESSBAR_ID && child instanceof ProgressBar) {
             mProgressBar = (ProgressBar) child;
         }
@@ -101,19 +101,19 @@ public class TextProgressBar extends RelativeLayout implements OnChronometerTick
      * <p>
      * Call this <b>after</b> adjusting the {@link Chronometer} base, if
      * necessary.
-     * 
+     *
      * @param durationBase Use the {@link SystemClock#elapsedRealtime} time
      *            base.
      */
     @android.view.RemotableViewMethod
     public void setDurationBase(long durationBase) {
         mDurationBase = durationBase;
-        
+
         if (mProgressBar == null || mChronometer == null) {
             throw new RuntimeException("Expecting child ProgressBar with id " +
                     "'android.R.id.progress' and Chronometer id 'android.R.id.text1'");
         }
-        
+
         // Update the ProgressBar maximum relative to Chronometer base
         mDuration = (int) (durationBase - mChronometer.getBase());
         if (mDuration <= 0) {
@@ -121,7 +121,7 @@ public class TextProgressBar extends RelativeLayout implements OnChronometerTick
         }
         mProgressBar.setMax(mDuration);
     }
-    
+
     /**
      * Callback when {@link Chronometer} changes, indicating that we should
      * update the {@link ProgressBar} and change the layout if necessary.
@@ -131,7 +131,7 @@ public class TextProgressBar extends RelativeLayout implements OnChronometerTick
             throw new RuntimeException(
                 "Expecting child ProgressBar with id 'android.R.id.progress'");
         }
-        
+
         // Stop Chronometer if we're past duration
         long now = SystemClock.elapsedRealtime();
         if (now >= mDurationBase) {
@@ -141,17 +141,17 @@ public class TextProgressBar extends RelativeLayout implements OnChronometerTick
         // Update the ProgressBar status
         int remaining = (int) (mDurationBase - now);
         mProgressBar.setProgress(mDuration - remaining);
-        
+
         // Move the Chronometer if gravity is set correctly
         if (mChronometerFollow) {
             RelativeLayout.LayoutParams params;
-            
+
             // Calculate estimate of ProgressBar leading edge position
             params = (RelativeLayout.LayoutParams) mProgressBar.getLayoutParams();
             int contentWidth = mProgressBar.getWidth() - (params.leftMargin + params.rightMargin);
             int leadingEdge = ((contentWidth * mProgressBar.getProgress()) /
                     mProgressBar.getMax()) + params.leftMargin;
-            
+
             // Calculate any adjustment based on gravity
             int adjustLeft = 0;
             int textWidth = mChronometer.getWidth();
@@ -160,7 +160,7 @@ public class TextProgressBar extends RelativeLayout implements OnChronometerTick
             } else if (mChronometerGravity == Gravity.CENTER_HORIZONTAL) {
                 adjustLeft = -(textWidth / 2);
             }
-            
+
             // Limit margin to keep text inside ProgressBar bounds
             leadingEdge += adjustLeft;
             int rightLimit = contentWidth - params.rightMargin - textWidth;
@@ -169,13 +169,13 @@ public class TextProgressBar extends RelativeLayout implements OnChronometerTick
             } else if (leadingEdge > rightLimit) {
                 leadingEdge = rightLimit;
             }
-            
+
             params = (RelativeLayout.LayoutParams) mChronometer.getLayoutParams();
             params.leftMargin = leadingEdge;
-            
+
             // Request layout to move Chronometer
             mChronometer.requestLayout();
-            
+
         }
     }
 }

@@ -40,15 +40,15 @@ public abstract class ServiceManagerNative extends Binder implements IServiceMan
         if (in != null) {
             return in;
         }
-        
+
         return new ServiceManagerProxy(obj);
     }
-    
+
     public ServiceManagerNative()
     {
         attachInterface(this, descriptor);
     }
-    
+
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags)
     {
         try {
@@ -60,7 +60,7 @@ public abstract class ServiceManagerNative extends Binder implements IServiceMan
                 reply.writeStrongBinder(service);
                 return true;
             }
-    
+
             case IServiceManager.CHECK_SERVICE_TRANSACTION: {
                 data.enforceInterface(IServiceManager.descriptor);
                 String name = data.readString();
@@ -68,7 +68,7 @@ public abstract class ServiceManagerNative extends Binder implements IServiceMan
                 reply.writeStrongBinder(service);
                 return true;
             }
-    
+
             case IServiceManager.ADD_SERVICE_TRANSACTION: {
                 data.enforceInterface(IServiceManager.descriptor);
                 String name = data.readString();
@@ -77,14 +77,14 @@ public abstract class ServiceManagerNative extends Binder implements IServiceMan
                 addService(name, service, allowIsolated);
                 return true;
             }
-    
+
             case IServiceManager.LIST_SERVICES_TRANSACTION: {
                 data.enforceInterface(IServiceManager.descriptor);
                 String[] list = listServices();
                 reply.writeStringArray(list);
                 return true;
             }
-            
+
             case IServiceManager.SET_PERMISSION_CONTROLLER_TRANSACTION: {
                 data.enforceInterface(IServiceManager.descriptor);
                 IPermissionController controller
@@ -96,7 +96,7 @@ public abstract class ServiceManagerNative extends Binder implements IServiceMan
             }
         } catch (RemoteException e) {
         }
-        
+
         return false;
     }
 
@@ -110,11 +110,11 @@ class ServiceManagerProxy implements IServiceManager {
     public ServiceManagerProxy(IBinder remote) {
         mRemote = remote;
     }
-    
+
     public IBinder asBinder() {
         return mRemote;
     }
-    
+
     public IBinder getService(String name) throws RemoteException {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
@@ -151,7 +151,7 @@ class ServiceManagerProxy implements IServiceManager {
         reply.recycle();
         data.recycle();
     }
-    
+
     public String[] listServices() throws RemoteException {
         ArrayList<String> services = new ArrayList<String>();
         int n = 0;

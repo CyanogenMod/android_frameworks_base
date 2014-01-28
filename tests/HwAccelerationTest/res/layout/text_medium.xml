@@ -20,4 +20,4 @@
     android:layout_marginTop="6dip"
     android:layout_marginLeft="6dip"
     android:textAppearance="?android:attr/textAppearanceMediumInverse"
-    android:text="Widget "/> 
+    android:text="Widget "/>

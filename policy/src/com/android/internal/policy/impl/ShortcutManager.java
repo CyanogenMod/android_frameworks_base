@@ -35,9 +35,9 @@ import java.net.URISyntaxException;
  * <li> Returning a shortcut-matching intent to clients
  */
 class ShortcutManager extends ContentObserver {
-    
+
     private static final String TAG = "ShortcutManager";
-    
+
     private static final int COLUMN_SHORTCUT = 0;
     private static final int COLUMN_INTENT = 1;
     private static final String[] sProjection = new String[] {
@@ -48,10 +48,10 @@ class ShortcutManager extends ContentObserver {
     private Cursor mCursor;
     /** Map of a shortcut to its intent. */
     private SparseArray<Intent> mShortcutIntents;
-    
+
     public ShortcutManager(Context context, Handler handler) {
         super(handler);
-        
+
         mContext = context;
         mShortcutIntents = new SparseArray<Intent>();
     }
@@ -68,7 +68,7 @@ class ShortcutManager extends ContentObserver {
     public void onChange(boolean selfChange) {
         updateShortcuts();
     }
-    
+
     private void updateShortcuts() {
         Cursor c = mCursor;
         if (!c.requery()) {
@@ -91,7 +91,7 @@ class ShortcutManager extends ContentObserver {
             mShortcutIntents.put(shortcut, intent);
         }
     }
-    
+
     /**
      * Gets the shortcut intent for a given keycode+modifier. Make sure you
      * strip whatever modifier is used for invoking shortcuts (for example,
@@ -100,7 +100,7 @@ class ShortcutManager extends ContentObserver {
      * <p>
      * This will first try an exact match (with modifiers), and then try a
      * match without modifiers (primary character on a key).
-     * 
+     *
      * @param kcm The key character map of the device on which the key was pressed.
      * @param keyCode The key code.
      * @param metaState The meta state, omitting any modifiers that were used

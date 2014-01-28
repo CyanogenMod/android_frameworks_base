@@ -6,7 +6,7 @@
       <li><a href="<?cs var:toroot ?>distribute/googleplay/about/visibility.html">Visibility</a></li>
       <li><a href="<?cs var:toroot ?>distribute/googleplay/about/monetizing.html">Monetizing</a></li>
       <li><a href="<?cs var:toroot ?>distribute/googleplay/about/distribution.html">Distribution</a></li>
-    </ul>  
+    </ul>
   </li>
 
   <li class="nav-section">
@@ -18,7 +18,7 @@
       <li><a href="<?cs var:toroot ?>distribute/googleplay/publish/preparing.html">Launch Checklist</a></li>
     </ul>
   </li>
-  
+
 <!--  <li class="nav-section">
     <div class="nav-section-header">
       <a href="<?cs var:toroot ?>distribute/googleplay/developer-console.html">The Developer Console</a>
@@ -52,18 +52,18 @@
        <li><a href="<?cs var:toroot ?>distribute/googleplay/quality/tablet.html">Tablet App Quality</a></li>
        <li><a href="<?cs var:toroot ?>distribute/googleplay/strategies/app-quality.html">Improving App Quality</a></li>
     </ul>
-  </li> 
+  </li>
 
    <li class="nav-section">
      <div class="nav-section-header"><a href="<?cs var:toroot ?>distribute/googleplay/policies/index.html">Policies</a></div>
      <ul>
        <li><a href="<?cs var:toroot ?>distribute/googleplay/policies/spam.html">Spam</a></li>
-       <li><a href="<?cs var:toroot ?>distribute/googleplay/policies/ip.html">Intellectual<br />Property</a></li> 
+       <li><a href="<?cs var:toroot ?>distribute/googleplay/policies/ip.html">Intellectual<br />Property</a></li>
        <li><a href="<?cs var:toroot ?>distribute/googleplay/policies/ads.html">Ads</a></li>
      </ul>
    </li>
 
-<!--    
+<!--
    <li class="nav-section">
     <div class="nav-section-header"><a href="<?cs var:toroot ?>distribute/googleplay/after.html">
       After Launch</a>
@@ -73,7 +73,7 @@
        <li><a href="<?cs var:toroot ?>distribute/googleplay/reviews.html">Tracking User Reviews</a></li>
        <li><a href="<?cs var:toroot ?>distribute/googleplay/supporting-users.html">Supporting Users</a></li>
     </ul>
-  </li> 
+  </li>
 -->
 
   <li class="nav-section">
@@ -82,7 +82,7 @@
        <li><a href="<?cs var:toroot ?>distribute/googleplay/spotlight/tablets.html">Tablet Stories</a></li>
        <li><a href="<?cs var:toroot ?>distribute/googleplay/spotlight/games.html">Game Stories</a></li>
     </ul>
-  </li> 
+  </li>
 
   <li class="nav-section">
     <div class="nav-section-header"><a href="<?cs var:toroot ?>distribute/googleplay/edu/index.html">Google Play for Education</a></div>
@@ -91,11 +91,10 @@
       <li><a href="<?cs var:toroot ?>distribute/googleplay/edu/start.html">Get Started</a></li>
       <li><a href="<?cs var:toroot ?>distribute/googleplay/edu/guidelines.html">Guidelines</a></li>
       <li><a href="<?cs var:toroot ?>distribute/googleplay/edu/contact.html">Sign Up</a></li>
-    </ul>  
+    </ul>
   </li>
 
   <li class="nav-section">
     <div class="nav-section-header empty"><a href="<?cs var:toroot ?>distribute/open.html">Open Distribution</a></div>
   </li>
 </ul>
-  

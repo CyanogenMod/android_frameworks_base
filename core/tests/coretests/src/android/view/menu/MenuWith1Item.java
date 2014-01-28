@@ -26,7 +26,7 @@ public class MenuWith1Item extends MenuScenario {
     @Override
     protected void onInitParams(Params params) {
         super.onInitParams(params);
-        
+
         params.setNumItems(1);
     }
 

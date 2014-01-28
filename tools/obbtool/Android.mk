@@ -11,17 +11,17 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-	Main.cpp
+    Main.cpp
 
 LOCAL_CFLAGS := -Wall -Werror
 
 #LOCAL_C_INCLUDES +=
 
 LOCAL_STATIC_LIBRARIES := \
-	libandroidfw \
-	libutils \
-	libcutils \
-	liblog
+    libandroidfw \
+    libutils \
+    libcutils \
+    liblog
 
 ifeq ($(HOST_OS),linux)
 LOCAL_LDLIBS += -ldl -lpthread

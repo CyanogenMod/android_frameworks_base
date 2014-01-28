@@ -24,9 +24,9 @@ import android.speech.IRecognitionListener;
 * A Service interface to speech recognition. Call startListening when
 * you want to begin capturing audio; RecognitionService will automatically
 * determine when the user has finished speaking, stream the audio to the
-* recognition servers, and notify you when results are ready. In most of the cases, 
+* recognition servers, and notify you when results are ready. In most of the cases,
 * this class should not be used directly, instead use {@link SpeechRecognizer} for
-* accessing recognition service. 
+* accessing recognition service.
 * {@hide}
 */
 oneway interface IRecognitionService {

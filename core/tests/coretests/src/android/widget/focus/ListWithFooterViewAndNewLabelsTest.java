@@ -59,7 +59,7 @@ public class ListWithFooterViewAndNewLabelsTest
         assertTrue(mButton.hasFocus());
         assertEquals("expected list adapter to have 1 item",
                 1, mAdapter.getCount());
-        assertEquals("expected list view to have 2 items (1 in adapter, plus " 
+        assertEquals("expected list view to have 2 items (1 in adapter, plus "
                 + "the footer view).",
                 2, mListView.getCount());
 

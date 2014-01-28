@@ -74,5 +74,5 @@ public interface CrossProcessCursor extends Cursor {
      * @param newPosition The position that we're moving to.
      * @return True if the move is successful, false otherwise.
      */
-    boolean onMove(int oldPosition, int newPosition); 
+    boolean onMove(int oldPosition, int newPosition);
 }

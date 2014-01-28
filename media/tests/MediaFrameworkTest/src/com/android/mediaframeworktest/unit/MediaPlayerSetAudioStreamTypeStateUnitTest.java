@@ -24,16 +24,16 @@ import android.test.suitebuilder.annotation.LargeTest;
 /**
  * Unit test class to test the set of valid and invalid states that
  * MediaPlayer.setAudioStreamType() method can be called.
- */          
+ */
 public class MediaPlayerSetAudioStreamTypeStateUnitTest extends AndroidTestCase implements MediaPlayerMethodUnderTest {
     private MediaPlayerStateUnitTestTemplate mTestTemplate = new MediaPlayerStateUnitTestTemplate();
-    
+
     /**
      * 1. It is valid to call setAudioStreamType() in the following states:
      *    {Idle, Initialized, Stopped, Prepared, Started, Paused, PlaybackComplted}.
      * 2. It is invalid to call setAudioStreamType() in the following states:
      *    {Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -48,7 +48,7 @@ public class MediaPlayerSetAudioStreamTypeStateUnitTest extends AndroidTestCase 
         assertTrue(!stateErrors.errorInPlaybackCompletedState);
         assertTrue(!stateErrors.errorInInitializedState);
         assertTrue(!stateErrors.errorInStoppedState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInErrorState);
     }
@@ -61,7 +61,7 @@ public class MediaPlayerSetAudioStreamTypeStateUnitTest extends AndroidTestCase 
     public void testSetAudioStreamType() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "setAudioStreamType()";

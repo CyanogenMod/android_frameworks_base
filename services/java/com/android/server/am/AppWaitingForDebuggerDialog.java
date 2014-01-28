@@ -26,7 +26,7 @@ final class AppWaitingForDebuggerDialog extends BaseErrorDialog {
     final ActivityManagerService mService;
     final ProcessRecord mProc;
     private CharSequence mAppName;
-    
+
     public AppWaitingForDebuggerDialog(ActivityManagerService service,
             Context context, ProcessRecord app) {
         super(context);
@@ -57,7 +57,7 @@ final class AppWaitingForDebuggerDialog extends BaseErrorDialog {
         attrs.setTitle("Waiting For Debugger: " + app.info.processName);
         getWindow().setAttributes(attrs);
     }
-    
+
     public void onStop() {
     }
 

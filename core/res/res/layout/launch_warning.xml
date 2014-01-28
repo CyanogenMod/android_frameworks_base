@@ -30,7 +30,7 @@
         android:scaleType="fitXY"
         android:gravity="fill_horizontal"
         android:src="@android:drawable/divider_horizontal_dark" />
-            
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

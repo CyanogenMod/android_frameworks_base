@@ -160,7 +160,7 @@ public class ListView extends AbsListView {
             // If a divider is specified use its intrinsic height for divider height
             setDivider(d);
         }
-        
+
         final Drawable osHeader = a.getDrawable(
                 com.android.internal.R.styleable.ListView_overScrollHeader);
         if (osHeader != null) {
@@ -451,7 +451,7 @@ public class ListView extends AbsListView {
      *        data backing this list and for producing a view to represent an
      *        item in that data set.
      *
-     * @see #getAdapter() 
+     * @see #getAdapter()
      */
     @Override
     public void setAdapter(ListAdapter adapter) {
@@ -1097,18 +1097,18 @@ public class ListView extends AbsListView {
     private class FocusSelector implements Runnable {
         private int mPosition;
         private int mPositionTop;
-        
+
         public FocusSelector setup(int position, int top) {
             mPosition = position;
             mPositionTop = top;
             return this;
         }
-        
+
         public void run() {
             setSelectionFromTop(mPosition, mPositionTop);
         }
     }
-    
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         if (getChildCount() > 0) {
@@ -1176,7 +1176,7 @@ public class ListView extends AbsListView {
         }
 
         setMeasuredDimension(widthSize , heightSize);
-        mWidthMeasureSpec = widthMeasureSpec;        
+        mWidthMeasureSpec = widthMeasureSpec;
     }
 
     private void measureScrapChild(View child, int position, int widthMeasureSpec) {
@@ -1469,7 +1469,7 @@ public class ListView extends AbsListView {
                         adjustViewsUpOrDown();
                     }
                 } else if (lastPosition == mItemCount - 1) {
-                    adjustViewsUpOrDown();                    
+                    adjustViewsUpOrDown();
                 }
             }
         }
@@ -1704,7 +1704,7 @@ public class ListView extends AbsListView {
             if (focusedChild != null) {
                 focusedChild.setHasTransientState(false);
             }
-            
+
             mLayoutMode = LAYOUT_NORMAL;
             mDataChanged = false;
             if (mPositionScrollAfterLayout != null) {
@@ -1955,7 +1955,7 @@ public class ListView extends AbsListView {
 
     /**
      * Makes the item at the supplied position selected.
-     * 
+     *
      * @param position the position of the item to select
      */
     @Override
@@ -2816,7 +2816,7 @@ public class ListView extends AbsListView {
             if (startPos < firstPosition) {
                 startPos = firstPosition;
             }
-            
+
             final int lastVisiblePos = getLastVisiblePosition();
             final ListAdapter adapter = getAdapter();
             for (int pos = startPos; pos <= lastVisiblePos; pos++) {
@@ -2985,7 +2985,7 @@ public class ListView extends AbsListView {
     /**
      * Determine the distance to the nearest edge of a view in a particular
      * direction.
-     * 
+     *
      * @param descendant A descendant of this list.
      * @return The distance, or 0 if the nearest edge is already on screen.
      */
@@ -3239,7 +3239,7 @@ public class ListView extends AbsListView {
             final int listBottom = mBottom - mTop - effectivePaddingBottom + mScrollY;
             if (!mStackFromBottom) {
                 int bottom = 0;
-                
+
                 // Draw top divider or header for overscroll
                 final int scrollY = mScrollY;
                 if (count > 0 && scrollY < 0) {
@@ -3338,7 +3338,7 @@ public class ListView extends AbsListView {
                         }
                     }
                 }
-                
+
                 if (count > 0 && scrollY > 0) {
                     if (drawOverscrollFooter) {
                         final int absListBottom = mBottom;
@@ -3417,7 +3417,7 @@ public class ListView extends AbsListView {
     public int getDividerHeight() {
         return mDividerHeight;
     }
-    
+
     /**
      * Sets the height of the divider that will be drawn between each item in the list. Calling
      * this will override the intrinsic height as set by {@link #setDivider(Drawable)}
@@ -3475,7 +3475,7 @@ public class ListView extends AbsListView {
     public boolean areFooterDividersEnabled() {
         return mFooterDividersEnabled;
     }
-    
+
     /**
      * Sets the drawable that will be drawn above all other list content.
      * This area can become visible when the user overscrolls the list.
@@ -3728,10 +3728,10 @@ public class ListView extends AbsListView {
     /**
      * Returns the set of checked items ids. The result is only valid if the
      * choice mode has not been set to {@link #CHOICE_MODE_NONE}.
-     * 
+     *
      * @return A new array which contains the id of each checked item in the
      *         list.
-     *         
+     *
      * @deprecated Use {@link #getCheckedItemIds()} instead.
      */
     @Deprecated

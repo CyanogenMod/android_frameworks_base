@@ -44,10 +44,10 @@ public class SyncStorageEngineTest extends AndroidTestCase {
     protected String authority1 = "testprovider";
     protected Bundle defaultBundle;
     protected final int DEFAULT_USER = 0;
-    
+
     MockContentResolver mockResolver;
     SyncStorageEngine engine;
-    
+
     private File getSyncDir() {
         return new File(new File(getContext().getFilesDir(), "system"), "sync");
     }
@@ -98,7 +98,7 @@ public class SyncStorageEngineTest extends AndroidTestCase {
                 new SyncStorageEngine.PendingOperation(account1, DEFAULT_USER,
                         SyncOperation.REASON_PERIODIC, SyncStorageEngine.SOURCE_LOCAL,
                         authority1, defaultBundle, false);
-        
+
         engine.insertIntoPending(pop);
         // Force engine to read from disk.
         engine.clearAndReadState();
@@ -138,7 +138,7 @@ public class SyncStorageEngineTest extends AndroidTestCase {
         PeriodicSync sync3 = new PeriodicSync(account1, authority, extras2, period2);
         PeriodicSync sync4 = new PeriodicSync(account2, authority, extras2, period2);
 
-        
+
 
         removePeriodicSyncs(engine, account1, 0, authority);
         removePeriodicSyncs(engine, account2, 0, authority);

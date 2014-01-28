@@ -69,7 +69,7 @@ public class ListOfButtonsTest extends ActivityInstrumentationTestCase2<ListOfBu
     public void testNavigateToButtonAbove() {
         sendKeys(KeyEvent.KEYCODE_DPAD_UP);
 
-        assertTrue(mButtonAtTop.hasFocus());        
+        assertTrue(mButtonAtTop.hasFocus());
         assertFalse(mListView.hasFocus());
     }
 
@@ -107,7 +107,7 @@ public class ListOfButtonsTest extends ActivityInstrumentationTestCase2<ListOfBu
             String indexInfo = "index: " + i + ", label: " + label;
 
             assertTrue(indexInfo, mListView.hasFocus());
-            
+
             Button button = (Button) mListView.getSelectedView();
             assertNotNull(indexInfo, button);
             assertEquals(indexInfo, label, button.getText().toString());

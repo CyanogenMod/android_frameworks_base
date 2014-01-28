@@ -35,7 +35,7 @@ built_ext_dep := $(call java-lib-deps,ext)
 built_ext_classes := $(call java-lib-files,ext)
 
 built_layoutlib_create_jar := $(call intermediates-dir-for, \
-			JAVA_LIBRARIES,layoutlib_create,HOST)/javalib.jar
+            JAVA_LIBRARIES,layoutlib_create,HOST)/javalib.jar
 
 # This is mostly a copy of config/host_java_library.mk
 LOCAL_MODULE := temp_layoutlib
@@ -52,16 +52,16 @@ $(LOCAL_BUILT_MODULE): $(built_core_dep) \
                        $(built_framework_dep) \
                        $(built_ext_dep) \
                        $(built_layoutlib_create_jar)
-	$(hide) echo "host layoutlib_create: $@"
-	$(hide) mkdir -p $(dir $@)
-	$(hide) rm -f $@
-	$(hide) ls -l $(built_framework_classes)
-	$(hide) java -jar $(built_layoutlib_create_jar) \
-	             $@ \
-	             $(built_core_classes) \
-	             $(built_framework_classes) \
-	             $(built_ext_classes)
-	$(hide) ls -l $(built_framework_classes)
+    $(hide) echo "host layoutlib_create: $@"
+    $(hide) mkdir -p $(dir $@)
+    $(hide) rm -f $@
+    $(hide) ls -l $(built_framework_classes)
+    $(hide) java -jar $(built_layoutlib_create_jar) \
+                 $@ \
+                 $(built_core_classes) \
+                 $(built_framework_classes) \
+                 $(built_ext_classes)
+    $(hide) ls -l $(built_framework_classes)
 
 
 #

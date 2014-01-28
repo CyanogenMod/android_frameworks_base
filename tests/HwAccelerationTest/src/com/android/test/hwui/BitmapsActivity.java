@@ -41,7 +41,7 @@ public class BitmapsActivity extends Activity {
         final FrameLayout layout = new FrameLayout(this);
         layout.addView(view, new FrameLayout.LayoutParams(480, 800, Gravity.CENTER));
         setContentView(layout);
-        
+
         ScaleAnimation a = new ScaleAnimation(1.0f, 2.0f, 1.0f, 2.0f,
                 ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
                 ScaleAnimation.RELATIVE_TO_SELF,0.5f);
@@ -62,7 +62,7 @@ public class BitmapsActivity extends Activity {
 
             mBitmap1 = BitmapFactory.decodeResource(c.getResources(), R.drawable.sunset1);
             mBitmap2 = BitmapFactory.decodeResource(c.getResources(), R.drawable.sunset2);
-            
+
             Log.d("Bitmap", "mBitmap1.isMutable() = " + mBitmap1.isMutable());
             Log.d("Bitmap", "mBitmap2.isMutable() = " + mBitmap2.isMutable());
 
@@ -70,7 +70,7 @@ public class BitmapsActivity extends Activity {
             opts.inMutable = true;
             Bitmap bitmap = BitmapFactory.decodeResource(c.getResources(), R.drawable.sunset1, opts);
             Log.d("Bitmap", "bitmap.isMutable() = " + bitmap.isMutable());
-            
+
             mBitmapPaint = new Paint();
             mDstIn = new PorterDuffXfermode(PorterDuff.Mode.DST_IN);
         }
@@ -85,12 +85,12 @@ public class BitmapsActivity extends Activity {
             canvas.translate(0.0f, mBitmap1.getHeight());
             canvas.translate(0.0f, 25.0f);
             canvas.drawBitmap(mBitmap2, 0.0f, 0.0f, null);
-            
+
             mBitmapPaint.setAlpha(127);
             canvas.translate(0.0f, mBitmap2.getHeight());
             canvas.translate(0.0f, 25.0f);
             canvas.drawBitmap(mBitmap1, 0.0f, 0.0f, mBitmapPaint);
-            
+
             mBitmapPaint.setAlpha(255);
             canvas.translate(0.0f, mBitmap1.getHeight());
             canvas.translate(0.0f, 25.0f);

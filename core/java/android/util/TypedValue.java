@@ -116,8 +116,8 @@ public class TypedValue {
      *  place appears in the mantissa. */
     public static final int COMPLEX_RADIX_SHIFT = 4;
     /** Complex data: mask to extract radix information (after shifting by
-     * {@link #COMPLEX_RADIX_SHIFT}). This give us 4 possible fixed point 
-     * representations as defined below. */ 
+     * {@link #COMPLEX_RADIX_SHIFT}). This give us 4 possible fixed point
+     * representations as defined below. */
     public static final int COMPLEX_RADIX_MASK = 0x3;
 
     /** Complex data: the mantissa is an integral number -- i.e., 0xnnnnnn.0 */
@@ -194,13 +194,13 @@ public class TypedValue {
     };
 
     /**
-     * Retrieve the base value from a complex data integer.  This uses the 
-     * {@link #COMPLEX_MANTISSA_MASK} and {@link #COMPLEX_RADIX_MASK} fields of 
-     * the data to compute a floating point representation of the number they 
-     * describe.  The units are ignored. 
-     *  
+     * Retrieve the base value from a complex data integer.  This uses the
+     * {@link #COMPLEX_MANTISSA_MASK} and {@link #COMPLEX_RADIX_MASK} fields of
+     * the data to compute a floating point representation of the number they
+     * describe.  The units are ignored.
+     *
      * @param complex A complex data value.
-     * 
+     *
      * @return A floating point value corresponding to the complex data.
      */
     public static float complexToFloat(int complex)
@@ -212,17 +212,17 @@ public class TypedValue {
     }
 
     /**
-     * Converts a complex data value holding a dimension to its final floating 
-     * point value. The given <var>data</var> must be structured as a 
+     * Converts a complex data value holding a dimension to its final floating
+     * point value. The given <var>data</var> must be structured as a
      * {@link #TYPE_DIMENSION}.
-     *  
-     * @param data A complex data value holding a unit, magnitude, and 
+     *
+     * @param data A complex data value holding a unit, magnitude, and
      *             mantissa.
-     * @param metrics Current display metrics to use in the conversion -- 
+     * @param metrics Current display metrics to use in the conversion --
      *                supplies display density and scaling information.
-     * 
-     * @return The complex floating point value multiplied by the appropriate 
-     * metrics depending on its unit. 
+     *
+     * @return The complex floating point value multiplied by the appropriate
+     * metrics depending on its unit.
      */
     public static float complexToDimension(int data, DisplayMetrics metrics)
     {
@@ -237,14 +237,14 @@ public class TypedValue {
      * as an integer pixel offset.  This is the same as
      * {@link #complexToDimension}, except the raw floating point value is
      * truncated to an integer (pixel) value.
-     * The given <var>data</var> must be structured as a 
+     * The given <var>data</var> must be structured as a
      * {@link #TYPE_DIMENSION}.
-     *  
-     * @param data A complex data value holding a unit, magnitude, and 
+     *
+     * @param data A complex data value holding a unit, magnitude, and
      *             mantissa.
-     * @param metrics Current display metrics to use in the conversion -- 
+     * @param metrics Current display metrics to use in the conversion --
      *                supplies display density and scaling information.
-     * 
+     *
      * @return The number of pixels specified by the data and its desired
      * multiplier and units.
      */
@@ -264,14 +264,14 @@ public class TypedValue {
      * converted to an integer (pixel) value for use as a size.  A size
      * conversion involves rounding the base value, and ensuring that a
      * non-zero base value is at least one pixel in size.
-     * The given <var>data</var> must be structured as a 
+     * The given <var>data</var> must be structured as a
      * {@link #TYPE_DIMENSION}.
-     *  
-     * @param data A complex data value holding a unit, magnitude, and 
+     *
+     * @param data A complex data value holding a unit, magnitude, and
      *             mantissa.
-     * @param metrics Current display metrics to use in the conversion -- 
+     * @param metrics Current display metrics to use in the conversion --
      *                supplies display density and scaling information.
-     * 
+     *
      * @return The number of pixels specified by the data and its desired
      * multiplier and units.
      */
@@ -305,17 +305,17 @@ public class TypedValue {
     }
 
     /**
-     * Converts an unpacked complex data value holding a dimension to its final floating 
+     * Converts an unpacked complex data value holding a dimension to its final floating
      * point value. The two parameters <var>unit</var> and <var>value</var>
      * are as in {@link #TYPE_DIMENSION}.
-     *  
+     *
      * @param unit The unit to convert from.
      * @param value The value to apply the unit to.
-     * @param metrics Current display metrics to use in the conversion -- 
+     * @param metrics Current display metrics to use in the conversion --
      *                supplies display density and scaling information.
-     * 
-     * @return The complex floating point value multiplied by the appropriate 
-     * metrics depending on its unit. 
+     *
+     * @return The complex floating point value multiplied by the appropriate
+     * metrics depending on its unit.
      */
     public static float applyDimension(int unit, float value,
                                        DisplayMetrics metrics)
@@ -338,14 +338,14 @@ public class TypedValue {
     }
 
     /**
-     * Return the data for this value as a dimension.  Only use for values 
-     * whose type is {@link #TYPE_DIMENSION}. 
-     * 
-     * @param metrics Current display metrics to use in the conversion -- 
+     * Return the data for this value as a dimension.  Only use for values
+     * whose type is {@link #TYPE_DIMENSION}.
+     *
+     * @param metrics Current display metrics to use in the conversion --
      *                supplies display density and scaling information.
-     * 
-     * @return The complex floating point value multiplied by the appropriate 
-     * metrics depending on its unit. 
+     *
+     * @return The complex floating point value multiplied by the appropriate
+     * metrics depending on its unit.
      */
     public float getDimension(DisplayMetrics metrics)
     {
@@ -353,20 +353,20 @@ public class TypedValue {
     }
 
     /**
-     * Converts a complex data value holding a fraction to its final floating 
-     * point value. The given <var>data</var> must be structured as a 
+     * Converts a complex data value holding a fraction to its final floating
+     * point value. The given <var>data</var> must be structured as a
      * {@link #TYPE_FRACTION}.
-     * 
-     * @param data A complex data value holding a unit, magnitude, and 
+     *
+     * @param data A complex data value holding a unit, magnitude, and
      *             mantissa.
-     * @param base The base value of this fraction.  In other words, a 
+     * @param base The base value of this fraction.  In other words, a
      *             standard fraction is multiplied by this value.
-     * @param pbase The parent base value of this fraction.  In other 
+     * @param pbase The parent base value of this fraction.  In other
      *             words, a parent fraction (nn%p) is multiplied by this
      *             value.
-     * 
-     * @return The complex floating point value multiplied by the appropriate 
-     * base value depending on its unit. 
+     *
+     * @return The complex floating point value multiplied by the appropriate
+     * base value depending on its unit.
      */
     public static float complexToFraction(int data, float base, float pbase)
     {
@@ -380,17 +380,17 @@ public class TypedValue {
     }
 
     /**
-     * Return the data for this value as a fraction.  Only use for values whose 
-     * type is {@link #TYPE_FRACTION}. 
-     * 
-     * @param base The base value of this fraction.  In other words, a 
+     * Return the data for this value as a fraction.  Only use for values whose
+     * type is {@link #TYPE_FRACTION}.
+     *
+     * @param base The base value of this fraction.  In other words, a
      *             standard fraction is multiplied by this value.
-     * @param pbase The parent base value of this fraction.  In other 
+     * @param pbase The parent base value of this fraction.  In other
      *             words, a parent fraction (nn%p) is multiplied by this
      *             value.
-     * 
-     * @return The complex floating point value multiplied by the appropriate 
-     * base value depending on its unit. 
+     *
+     * @return The complex floating point value multiplied by the appropriate
+     * base value depending on its unit.
      */
     public float getFraction(float base, float pbase)
     {
@@ -401,7 +401,7 @@ public class TypedValue {
      * Regardless of the actual type of the value, try to convert it to a
      * string value.  For example, a color type will be converted to a
      * string of the form #aarrggbb.
-     * 
+     *
      * @return CharSequence The coerced string value.  If the value is
      *         null or the type is not known, null is returned.
      */
@@ -424,10 +424,10 @@ public class TypedValue {
     /**
      * Perform type conversion as per {@link #coerceToString()} on an
      * explicitly supplied type and data.
-     * 
+     *
      * @param type The data type identifier.
      * @param data The data value.
-     * 
+     *
      * @return String The coerced string value.  If the value is
      *         null or the type is not known, null is returned.
      */

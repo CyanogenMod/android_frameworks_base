@@ -643,12 +643,12 @@ public class ViewDebug {
             } catch (RemoteException e) {
                 // Ignore
             }
-    
+
             clientStream.writeInt(outRect.width());
             clientStream.writeInt(outRect.height());
-    
+
             captureViewLayer(root, clientStream, true);
-            
+
             clientStream.write(2);
         } finally {
             clientStream.close();
@@ -666,19 +666,19 @@ public class ViewDebug {
             if (id != View.NO_ID) {
                 name = resolveId(view.getContext(), id).toString();
             }
-    
+
             clientStream.write(1);
             clientStream.writeUTF(name);
             clientStream.writeByte(localVisible ? 1 : 0);
-    
+
             int[] position = new int[2];
             // XXX: Should happen on the UI thread
             view.getLocationInWindow(position);
-    
+
             clientStream.writeInt(position[0]);
             clientStream.writeInt(position[1]);
             clientStream.flush();
-    
+
             Bitmap b = performViewCapture(view, true);
             if (b != null) {
                 ByteArrayOutputStream arrayOut = new ByteArrayOutputStream(b.getWidth() *
@@ -774,7 +774,7 @@ public class ViewDebug {
                 Thread.currentThread().interrupt();
             }
         }
-        
+
         return null;
     }
 

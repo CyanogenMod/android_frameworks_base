@@ -33,11 +33,11 @@ public interface AlignmentSpan extends ParagraphStyle {
         public Standard(Parcel src) {
             mAlignment = Layout.Alignment.valueOf(src.readString());
         }
-        
+
         public int getSpanTypeId() {
             return TextUtils.ALIGNMENT_SPAN;
         }
-        
+
         public int describeContents() {
             return 0;
         }

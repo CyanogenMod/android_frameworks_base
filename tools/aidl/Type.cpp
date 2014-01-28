@@ -400,7 +400,7 @@ BooleanType::BooleanType()
 void
 BooleanType::WriteToParcel(StatementBlock* addTo, Variable* v, Variable* parcel, int flags)
 {
-    addTo->Add(new MethodCall(parcel, "writeInt", 1, 
+    addTo->Add(new MethodCall(parcel, "writeInt", 1,
                 new Ternary(v, new LiteralExpression("1"),
                     new LiteralExpression("0"))));
 }
@@ -461,7 +461,7 @@ CharType::CharType()
 void
 CharType::WriteToParcel(StatementBlock* addTo, Variable* v, Variable* parcel, int flags)
 {
-    addTo->Add(new MethodCall(parcel, "writeInt", 1, 
+    addTo->Add(new MethodCall(parcel, "writeInt", 1,
                     new Cast(INT_TYPE, v)));
 }
 
@@ -1050,7 +1050,7 @@ void
 InterfaceType::WriteToParcel(StatementBlock* addTo, Variable* v, Variable* parcel, int flags)
 {
     // parcel.writeStrongBinder(v != null ? v.asBinder() : null);
-    addTo->Add(new MethodCall(parcel, "writeStrongBinder", 1, 
+    addTo->Add(new MethodCall(parcel, "writeStrongBinder", 1,
                 new Ternary(
                     new Comparison(v, "!=", NULL_VALUE),
                     new MethodCall(v, "asBinder"),
@@ -1220,7 +1220,7 @@ GenericListType::CreateFromRpcData(StatementBlock* addTo, Expression* k, Variabl
     if (generic == RPC_DATA_TYPE) {
         addTo->Add(new Assignment(v, new MethodCall(data, "getRpcDataList", 2, k)));
     } else if (generic->RpcCreatorName() != "") {
-        addTo->Add(new Assignment(v, new MethodCall(data, "getFlattenableList", 2, k, 
+        addTo->Add(new Assignment(v, new MethodCall(data, "getFlattenableList", 2, k,
                         new LiteralExpression(generic->RpcCreatorName()))));
     } else {
         string classArg = GenericArgumentTypes()[0]->QualifiedName();

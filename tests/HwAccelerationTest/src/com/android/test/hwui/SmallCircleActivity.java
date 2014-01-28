@@ -54,7 +54,7 @@ public class SmallCircleActivity extends Activity {
             mPath = new Path();
             mPath.addCircle(SIZE * 0.5f, SIZE * 0.5f, SIZE * 0.275f, Path.Direction.CW);
             mPath.addCircle(SIZE * 0.5f, SIZE * 0.5f, SIZE * 0.225f, Path.Direction.CCW);
-            
+
             mPaint = new Paint();
             mPaint.setAntiAlias(true);
             mPaint.setColor(0xffffffff);

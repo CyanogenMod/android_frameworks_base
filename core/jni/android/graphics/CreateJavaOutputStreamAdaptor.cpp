@@ -174,7 +174,7 @@ public:
         fCapacity = env->GetArrayLength(storage);
     }
 
-	virtual bool write(const void* buffer, size_t size) {
+    virtual bool write(const void* buffer, size_t size) {
         JNIEnv* env = fEnv;
         jbyteArray storage = fJavaByteArray;
 

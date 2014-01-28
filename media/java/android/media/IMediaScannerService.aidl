@@ -28,7 +28,7 @@ interface IMediaScannerService
      * @param path the path to the file to be scanned.
      * @param mimeType  an optional mimeType for the file.
      * If mimeType is null, then the mimeType will be inferred from the file extension.
-     * @param listener an optional IMediaScannerListener. 
+     * @param listener an optional IMediaScannerListener.
      * If specified, the caller will be notified when scanning is complete via the listener.
      */
     void requestScanFile(String path, String mimeType, in IMediaScannerListener listener);

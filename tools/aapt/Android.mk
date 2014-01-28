@@ -1,4 +1,4 @@
-# 
+#
 # Copyright 2006 The Android Open Source Project
 #
 # Android Asset Packaging Tool
@@ -9,25 +9,25 @@ ifeq ($(TARGET_BUILD_APPS),)
 
 
 aapt_src_files := \
-	AaptAssets.cpp \
-	Command.cpp \
-	CrunchCache.cpp \
-	FileFinder.cpp \
-	Main.cpp \
-	Package.cpp \
-	StringPool.cpp \
-	XMLNode.cpp \
-	ResourceFilter.cpp \
-	ResourceIdCache.cpp \
-	ResourceTable.cpp \
-	Images.cpp \
-	Resource.cpp \
+    AaptAssets.cpp \
+    Command.cpp \
+    CrunchCache.cpp \
+    FileFinder.cpp \
+    Main.cpp \
+    Package.cpp \
+    StringPool.cpp \
+    XMLNode.cpp \
+    ResourceFilter.cpp \
+    ResourceIdCache.cpp \
+    ResourceTable.cpp \
+    Images.cpp \
+    Resource.cpp \
     pseudolocalize.cpp \
     SourcePos.cpp \
-	WorkQueue.cpp \
+    WorkQueue.cpp \
     ZipEntry.cpp \
     ZipFile.cpp \
-	qsort_r_compat.c
+    qsort_r_compat.c
 
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
@@ -45,12 +45,12 @@ LOCAL_C_INCLUDES += external/libpng
 LOCAL_C_INCLUDES += external/zlib
 
 LOCAL_STATIC_LIBRARIES := \
-	libandroidfw \
-	libutils \
-	libcutils \
-	libexpat \
-	libpng \
-	liblog
+    libandroidfw \
+    libutils \
+    libcutils \
+    libexpat \
+    libpng \
+    liblog
 
 ifeq ($(HOST_OS),linux)
 LOCAL_LDLIBS += -lrt -ldl -lpthread

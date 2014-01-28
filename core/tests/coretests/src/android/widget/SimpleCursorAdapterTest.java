@@ -30,27 +30,27 @@ import java.util.Random;
 /**
  * This is a series of tests of basic API contracts for SimpleCursorAdapter.  It is
  * incomplete and can use work.
- * 
+ *
  * NOTE:  This contract holds for underlying cursor types too and these should
  * be extracted into a set of tests that can be run on any descendant of CursorAdapter.
  */
 public class SimpleCursorAdapterTest extends AndroidTestCase {
-    
+
     String[] mFrom;
     int[] mTo;
     int mLayout;
     Context mContext;
-    
+
     ArrayList<ArrayList> mData2x2;
     Cursor mCursor2x2;
-    
+
     /**
      * Set up basic columns and cursor for the tests
      */
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        
+
         // all the pieces needed for the various tests
         mFrom = new String[]{"Column1", "Column2", "_id"};
         mTo = new int[]{com.android.internal.R.id.text1, com.android.internal.R.id.text2};
@@ -61,7 +61,7 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
         mData2x2 = createTestList(2, 2);
         mCursor2x2 = createCursor(mFrom, mData2x2);
     }
-    
+
     /**
      * Borrowed from CursorWindowTest.java
      */
@@ -88,58 +88,58 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
     @SmallTest
     public void testCreateLive() {
         SimpleCursorAdapter ca = new SimpleCursorAdapter(mContext, mLayout, mCursor2x2, mFrom, mTo);
-        
+
         // Now see if we can pull 2 rows from the adapter
         assertEquals(2, ca.getCount());
     }
-    
+
     /**
      * Test creating with a null cursor
      */
     @SmallTest
     public void testCreateNull() {
         SimpleCursorAdapter ca = new SimpleCursorAdapter(mContext, mLayout, null, mFrom, mTo);
-        
+
         // The adapter should report zero rows
         assertEquals(0, ca.getCount());
     }
-    
+
     /**
      * Test changeCursor() with live cursor
      */
     @SmallTest
     public void testChangeCursorLive() {
         SimpleCursorAdapter ca = new SimpleCursorAdapter(mContext, mLayout, mCursor2x2, mFrom, mTo);
-        
+
         // Now see if we can pull 2 rows from the adapter
         assertEquals(2, ca.getCount());
-        
+
         // now put in a different cursor (5 rows)
         ArrayList<ArrayList> data2 = createTestList(5, 2);
         Cursor c2 = createCursor(mFrom, data2);
         ca.changeCursor(c2);
-        
+
         // Now see if we can pull 5 rows from the adapter
         assertEquals(5, ca.getCount());
     }
-    
+
     /**
      * Test changeCursor() with null cursor
      */
     @SmallTest
     public void testChangeCursorNull() {
         SimpleCursorAdapter ca = new SimpleCursorAdapter(mContext, mLayout, mCursor2x2, mFrom, mTo);
-        
+
         // Now see if we can pull 2 rows from the adapter
         assertEquals(2, ca.getCount());
-        
+
         // now put in null
         ca.changeCursor(null);
-        
+
         // The adapter should report zero rows
         assertEquals(0, ca.getCount());
     }
-    
+
     /**
      * Test changeCursor() with differing column layout.  This confirms that the Adapter can
      * deal with cursors that have the same essential data (as defined by the original mFrom
@@ -147,9 +147,9 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
      */
     @SmallTest
     public void testChangeCursorColumns() {
-        TestSimpleCursorAdapter ca = new TestSimpleCursorAdapter(mContext, mLayout, mCursor2x2, 
+        TestSimpleCursorAdapter ca = new TestSimpleCursorAdapter(mContext, mLayout, mCursor2x2,
                 mFrom, mTo);
-        
+
         // check columns of original - mFrom and mTo should line up
         int[] columns = ca.getConvertedFrom();
         assertEquals(columns[0], 0);
@@ -166,7 +166,7 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
         assertEquals(columns[0], 1);
         assertEquals(columns[1], 0);
     }
-    
+
     /**
      * Test that you can safely construct with a null cursor *and* null to/from arrays.
      * This is new functionality added in 12/2008.
@@ -176,7 +176,7 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
         SimpleCursorAdapter ca = new SimpleCursorAdapter(mContext, mLayout, null, null, null);
         assertEquals(0, ca.getCount());
     }
-    
+
     /**
      * Test going from a null cursor to a non-null cursor *and* setting the to/from arrays
      * This is new functionality added in 12/2008.
@@ -188,7 +188,7 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
 
         ca.changeCursorAndColumns(mCursor2x2, mFrom, mTo);
         assertEquals(2, ca.getCount());
-        
+
         // check columns of original - mFrom and mTo should line up
         int[] columns = ca.getConvertedFrom();
         assertEquals(2, columns.length);
@@ -199,14 +199,14 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
         assertEquals(com.android.internal.R.id.text1, viewIds[0]);
         assertEquals(com.android.internal.R.id.text2, viewIds[1]);
     }
-    
+
     /**
      * Test going from one mapping to a different mapping
      * This is new functionality added in 12/2008.
      */
     @SmallTest
     public void testChangeMapping() {
-        TestSimpleCursorAdapter ca = new TestSimpleCursorAdapter(mContext, mLayout, mCursor2x2, 
+        TestSimpleCursorAdapter ca = new TestSimpleCursorAdapter(mContext, mLayout, mCursor2x2,
                 mFrom, mTo);
         assertEquals(2, ca.getCount());
 
@@ -222,7 +222,7 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
         int[] viewIds = ca.getTo();
         assertEquals(1, viewIds.length);
         assertEquals(com.android.internal.R.id.text1, viewIds[0]);
-        
+
         // And again, same cursor, different map
         singleFrom = new String[]{"Column2"};
         singleTo = new int[]{com.android.internal.R.id.text2};
@@ -251,7 +251,7 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
      * it via those seams.
      */
     private static class TestSimpleCursorAdapter extends SimpleCursorAdapter {
-        
+
         public TestSimpleCursorAdapter(Context context, int layout, Cursor c,
                 String[] from, int[] to) {
             super(context, layout, c, from, to);
@@ -260,7 +260,7 @@ public class SimpleCursorAdapterTest extends AndroidTestCase {
         int[] getConvertedFrom() {
             return mFrom;
         }
-        
+
         int[] getTo() {
             return mTo;
         }

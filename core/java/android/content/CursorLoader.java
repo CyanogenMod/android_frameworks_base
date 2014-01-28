@@ -31,7 +31,7 @@ import java.util.Arrays;
  * This class implements the {@link Loader} protocol in a standard way for
  * querying cursors, building on {@link AsyncTaskLoader} to perform the cursor
  * query on a background thread so that it does not block the application's UI.
- * 
+ *
  * <p>A CursorLoader must be built with the full information for the query to
  * perform, either through the
  * {@link #CursorLoader(Context, Uri, String[], String, String[], String)} or
@@ -178,7 +178,7 @@ public class CursorLoader extends AsyncTaskLoader<Cursor> {
     @Override
     protected void onReset() {
         super.onReset();
-        
+
         // Ensure the loader is stopped
         onStopLoading();
 

@@ -27,30 +27,30 @@ import java.io.IOException;
  * @hide
  */
 public final class AmrInputStream extends InputStream
-{    
+{
     static {
         System.loadLibrary("media_jni");
     }
-    
+
     private final static String TAG = "AmrInputStream";
-    
+
     // frame is 20 msec at 8.000 khz
     private final static int SAMPLES_PER_FRAME = 8000 * 20 / 1000;
-    
+
     // pcm input stream
     private InputStream mInputStream;
-    
+
     // native handle
     private int mGae;
-    
+
     // result amr stream
     private final byte[] mBuf = new byte[SAMPLES_PER_FRAME * 2];
     private int mBufIn = 0;
     private int mBufOut = 0;
-    
+
     // helper for bytewise read()
     private byte[] mOneByte = new byte[1];
-    
+
     /**
      * Create a new AmrInputStream, which converts 16 bit PCM to AMR
      * @param inputStream InputStream containing 16 bit PCM.
@@ -66,7 +66,7 @@ public final class AmrInputStream extends InputStream
         int rtn = read(mOneByte, 0, 1);
         return rtn == 1 ? (0xff & mOneByte[0]) : -1;
     }
-    
+
     @Override
     public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
@@ -75,29 +75,29 @@ public final class AmrInputStream extends InputStream
     @Override
     public int read(byte[] b, int offset, int length) throws IOException {
         if (mGae == 0) throw new IllegalStateException("not open");
-        
+
         // local buffer of amr encoded audio empty
         if (mBufOut >= mBufIn) {
             // reset the buffer
             mBufOut = 0;
             mBufIn = 0;
-            
+
             // fetch a 20 msec frame of pcm
             for (int i = 0; i < SAMPLES_PER_FRAME * 2; ) {
                 int n = mInputStream.read(mBuf, i, SAMPLES_PER_FRAME * 2 - i);
                 if (n == -1) return -1;
                 i += n;
             }
-            
+
             // encode it
             mBufIn = GsmAmrEncoderEncode(mGae, mBuf, 0, mBuf, 0);
         }
-        
+
         // return encoded audio to user
         if (length > mBufIn - mBufOut) length = mBufIn - mBufOut;
         System.arraycopy(mBuf, mBufOut, b, offset, length);
         mBufOut += length;
-        
+
         return length;
     }
 
@@ -126,7 +126,7 @@ public final class AmrInputStream extends InputStream
             throw new IllegalStateException("someone forgot to close AmrInputStream");
         }
     }
-    
+
     //
     // AudioRecord JNI interface
     //

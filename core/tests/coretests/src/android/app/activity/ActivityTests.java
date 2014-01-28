@@ -20,7 +20,7 @@ import junit.framework.TestSuite;
 
 public class ActivityTests {
     public static final boolean DEBUG_LIFECYCLE = false;
-    
+
     public static TestSuite suite() {
         TestSuite suite = new TestSuite(ActivityTests.class.getName());
 
@@ -34,7 +34,7 @@ public class ActivityTests {
         // Remove temporarily until bug 1171309 is fixed.
         //suite.addTestSuite(SubActivityTest.class);
         suite.addTestSuite(SetTimeZonePermissionsTest.class);
-        
+
         return suite;
     }
 }

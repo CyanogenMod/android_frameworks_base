@@ -35,7 +35,7 @@ public class ListSimple extends ListScenario {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-    
+
         getListView().setVerticalScrollBarEnabled(true);
         getListView().setFadingEdgeLength(12);
         getListView().setVerticalFadingEdgeEnabled(true);

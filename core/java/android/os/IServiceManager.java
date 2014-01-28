@@ -18,12 +18,12 @@ package android.os;
 
 /**
  * Basic interface for finding and publishing system services.
- * 
+ *
  * An implementation of this interface is usually published as the
  * global context object, which can be retrieved via
  * BinderNative.getContextObject().  An easy way to retrieve this
  * is with the static method BnServiceManager.getDefault().
- * 
+ *
  * @hide
  */
 public interface IServiceManager extends IInterface
@@ -34,7 +34,7 @@ public interface IServiceManager extends IInterface
      * published if it does not already exist.
      */
     public IBinder getService(String name) throws RemoteException;
-    
+
     /**
      * Retrieve an existing service called @a name from the
      * service manager.  Non-blocking.
@@ -59,7 +59,7 @@ public interface IServiceManager extends IInterface
      */
     public void setPermissionController(IPermissionController controller)
             throws RemoteException;
-    
+
     static final String descriptor = "android.os.IServiceManager";
 
     int GET_SERVICE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION;

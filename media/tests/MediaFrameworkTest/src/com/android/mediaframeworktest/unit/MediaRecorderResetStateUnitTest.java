@@ -27,13 +27,13 @@ import android.test.suitebuilder.annotation.Suppress;
  */
 public class MediaRecorderResetStateUnitTest extends AndroidTestCase implements MediaRecorderMethodUnderTest {
     private MediaRecorderStateUnitTestTemplate mTestTemplate = new MediaRecorderStateUnitTestTemplate();
-    
+
     /**
      * 1. It is valid to call reset() in the following states:
      *    {Prepared, Initial, Initialized, DataSourceConfigured, Recording, Error}.
      * 2. It is invalid to call reset() in the following states:
      *    {}
-     *    
+     *
      * @param stateErrors the MediaRecorderStateErrors to check against.
      */
     public void checkStateErrors(MediaRecorderStateErrors stateErrors) {
@@ -46,7 +46,7 @@ public class MediaRecorderResetStateUnitTest extends AndroidTestCase implements 
         assertTrue(!stateErrors.errorInInitializedState);
         assertTrue(!stateErrors.errorInErrorState);
         assertTrue(!stateErrors.errorInDataSourceConfiguredState);
-        
+
         // Invalid states.
     }
 
@@ -58,7 +58,7 @@ public class MediaRecorderResetStateUnitTest extends AndroidTestCase implements 
     public void testReset() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "reset()";

@@ -30,7 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 
 public class ListManagedCursor extends ListActivity implements OnItemClickListener {
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,22 +39,22 @@ public class ListManagedCursor extends ListActivity implements OnItemClickListen
         Cursor c = getContentResolver().query(Settings.System.CONTENT_URI, null, null, null, null);
         startManagingCursor(c);
 
-        ListAdapter adapter = new SimpleCursorAdapter(this, 
+        ListAdapter adapter = new SimpleCursorAdapter(this,
                 // Use a template that displays a text view
-                android.R.layout.simple_list_item_1, 
+                android.R.layout.simple_list_item_1,
                 // Give the cursor to the list adatper
-                c, 
+                c,
                 // Map the NAME column in the people database to...
                 new String[] {People.NAME} ,
                 // The "text1" view defined in the XML template
-                new int[] {android.R.id.text1}); 
+                new int[] {android.R.id.text1});
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
-    
+
     public void onItemClick(AdapterView parent, View view, int position, long id) {
         Intent dummyIntent = new Intent(this, ListSimple.class);
         startActivity(dummyIntent);
     }
 }
-             
+

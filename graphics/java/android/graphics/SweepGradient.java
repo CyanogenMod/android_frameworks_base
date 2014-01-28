@@ -110,7 +110,7 @@ public class SweepGradient extends Shader {
     private static native int nativeCreate2(float x, float y, int color0, int color1);
 
     private static native int nativePostCreate1(int native_shader, float cx, float cy,
-            int[] colors, float[] positions);    
+            int[] colors, float[] positions);
     private static native int nativePostCreate2(int native_shader, float cx, float cy,
             int color0, int color1);
 }

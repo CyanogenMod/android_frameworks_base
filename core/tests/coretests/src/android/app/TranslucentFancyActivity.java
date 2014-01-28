@@ -25,14 +25,14 @@ import android.view.WindowManager;
 
 /**
  * <h3>Fancy Translucent Activity</h3>
- * 
+ *
  * <p>This demonstrates the how to write an activity that is translucent,
  * allowing windows underneath to show through, with a fancy
  * compositing effect.</p>
- * 
+ *
  * <h4>Demo</h4>
  * App/Activity/Translucent Fancy
- * 
+ *
  * <h4>Source files</h4>
  * <table class="LinkTable">
  *         <tr>
@@ -43,7 +43,7 @@ import android.view.WindowManager;
  *             <td >/res/any/layout/translucent_background.xml</td>
  *             <td >Defines contents of the screen</td>
  *         </tr>
- * </table> 
+ * </table>
  */
 public class TranslucentFancyActivity extends Activity
 {
@@ -53,7 +53,7 @@ public class TranslucentFancyActivity extends Activity
      * describe what is to be displayed in the screen.
      */
     @Override
-	protected void onCreate(Bundle icicle)
+    protected void onCreate(Bundle icicle)
     {
         // Be sure to call the super class.
         super.onCreate(icicle);
@@ -61,7 +61,7 @@ public class TranslucentFancyActivity extends Activity
         // Have the system blur any windows behind this one.
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
                 WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-        
+
         // See assets/res/any/layout/translucent_background.xml for this
         // view layout definition, which is being set here as
         // the content of our screen.

@@ -1,21 +1,21 @@
 /*
  * ---------------------------------------------------------------------------
  * Recognizer.java
- * 
+ *
  * Copyright 2007 Nuance Communciations, Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the 'License'); you may not
  * use this file except in compliance with the License.
- * 
+ *
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * ---------------------------------------------------------------------------
  */
 
@@ -32,7 +32,7 @@ import java.util.Locale;
 /**
  * Simple, synchronous speech recognizer, using the Nuance SREC package.
  * Usages proceeds as follows:
- * 
+ *
  * <ul>
  * <li>Create a <code>Recognizer</code>.
  * <li>Create a <code>Recognizer.Grammar</code>.
@@ -47,11 +47,11 @@ import java.util.Locale;
  * <li>Stop the <code>Recognizer</code>.
  * <li>Destroy the <code>Recognizer</code>.
  * </ul>
- * 
+ *
  * <p>Below is example code</p>
- * 
+ *
  * <pre class="prettyprint">
- * 
+ *
  * // create and start audio input
  * InputStream audio = new MicrophoneInputStream(11025, 11025*5);
  * // create a Recognizer
@@ -99,7 +99,7 @@ import java.util.Locale;
  * recognizer.destroy();
  * // stop the audio device
  * audio.close();
- * 
+ *
  * </pre>
  */
 public final class Recognizer {
@@ -108,17 +108,17 @@ public final class Recognizer {
     }
 
     private static String TAG = "Recognizer";
-    
+
     /**
      * Result key corresponding to confidence score.
      */
     public static final String KEY_CONFIDENCE = "conf";
-    
+
     /**
      * Result key corresponding to literal text.
      */
     public static final String KEY_LITERAL = "literal";
-    
+
     /**
      * Result key corresponding to semantic meaning text.
      */
@@ -126,13 +126,13 @@ public final class Recognizer {
 
     // handle to SR_Vocabulary object
     private int mVocabulary = 0;
-    
+
     // handle to SR_Recognizer object
     private int mRecognizer = 0;
-    
+
     // Grammar currently associated with Recognizer via SR_GrammarSetupRecognizer
     private Grammar mActiveGrammar = null;
-    
+
     /**
      * Get the pathname of the SREC configuration directory corresponding to the
      * language indicated by the Locale.
@@ -152,7 +152,7 @@ public final class Recognizer {
 
     /**
      * Create an instance of a SREC speech recognizer.
-     * 
+     *
      * @param configFile pathname of the baseline*.par configuration file,
      * which in turn contains references to dictionaries, speech models,
      * and other data needed to configure and operate the recognizer.
@@ -194,7 +194,7 @@ public final class Recognizer {
 
         /**
          * Add a word to a slot.
-         * 
+         *
          * @param slot slot name.
          * @param word word to insert.
          * @param pron pronunciation, or null to derive from word.
@@ -202,7 +202,7 @@ public final class Recognizer {
          * @param tag semantic meaning tag string.
          */
         public void addWordToSlot(String slot, String word, String pron, int weight, String tag) {
-            SR_GrammarAddWordToSlot(mGrammar, slot, word, pron, weight, tag); 
+            SR_GrammarAddWordToSlot(mGrammar, slot, word, pron, weight, tag);
         }
 
         /**
@@ -222,7 +222,7 @@ public final class Recognizer {
 
         /**
          * Save <code>Grammar</code> to g2g file.
-         * 
+         *
          * @param g2gFileName
          * @throws IOException
          */
@@ -260,7 +260,7 @@ public final class Recognizer {
         SR_RecognizerActivateRule(mRecognizer, mActiveGrammar.mGrammar, "trash", 1);
         SR_RecognizerStart(mRecognizer);
     }
-    
+
     /**
      * Process some audio and return the current status.
      * @return recognition event, one of:
@@ -283,7 +283,7 @@ public final class Recognizer {
     public int advance() {
         return SR_RecognizerAdvance(mRecognizer);
     }
-    
+
     /**
      * Put audio samples into the <code>Recognizer</code>.
      * @param buf holds the audio samples.
@@ -295,7 +295,7 @@ public final class Recognizer {
     public int putAudio(byte[] buf, int offset, int length, boolean isLast) {
         return SR_RecognizerPutAudio(mRecognizer, buf, offset, length, isLast);
     }
-    
+
     /**
      * Read audio samples from an <code>InputStream</code> and put them in the
      * <code>Recognizer</code>.
@@ -315,7 +315,7 @@ public final class Recognizer {
             throw new IOException("SR_RecognizerPutAudio failed nbytes=" + nbytes);
         }
     }
-    
+
     // audio buffer for putAudio(InputStream)
     private byte[] mPutAudioBuffer = null;
 
@@ -323,7 +323,7 @@ public final class Recognizer {
      * Get the number of recognition results.  Must be called after
      * <code>EVENT_RECOGNITION_RESULT</code> is returned by
      * <code>advance</code>, but before <code>stop</code>.
-     * 
+     *
      * @return number of results in nbest list.
      */
     public int getResultCount() {
@@ -334,7 +334,7 @@ public final class Recognizer {
      * Get a set of keys for the result.  Must be called after
      * <code>EVENT_RECOGNITION_RESULT</code> is returned by
      * <code>advance</code>, but before <code>stop</code>.
-     * 
+     *
      * @param index index of result.
      * @return array of keys.
      */
@@ -346,7 +346,7 @@ public final class Recognizer {
      * Get a result value.  Must be called after
      * <code>EVENT_RECOGNITION_RESULT</code> is returned by
      * <code>advance</code>, but before <code>stop</code>.
-     * 
+     *
      * @param index index of the result.
      * @param key key of the result.  This is typically one of
      * <code>KEY_CONFIDENCE</code>, <code>KEY_LITERAL</code>, or
@@ -366,30 +366,30 @@ public final class Recognizer {
         SR_RecognizerStop(mRecognizer);
         SR_RecognizerDeactivateRule(mRecognizer, mActiveGrammar.mGrammar, "trash");
     }
-    
+
     /**
      * Reset the acoustic state vectorto it's default value.
-     * 
+     *
      * @hide
      */
     public void resetAcousticState() {
         SR_AcousticStateReset(mRecognizer);
     }
-    
+
     /**
      * Set the acoustic state vector.
      * @param state String containing the acoustic state vector.
-     * 
+     *
      * @hide
      */
     public void setAcousticState(String state) {
         SR_AcousticStateSet(mRecognizer, state);
     }
-    
+
     /**
      * Get the acoustic state vector.
      * @return String containing the acoustic state vector.
-     * 
+     *
      * @hide
      */
     public String getAcousticState() {
@@ -430,7 +430,7 @@ public final class Recognizer {
             throw new IllegalStateException("someone forgot to destroy Recognizer");
         }
     }
-    
+
     /* an example session captured, for reference
     void doall() {
         if (PMemInit ( )
@@ -497,67 +497,67 @@ public final class Recognizer {
     //
     // SR_Recognizer native methods
     //
-    
+
     /**
      * Reserved value.
      */
     public final static int EVENT_INVALID = 0;
-    
+
     /**
      * <code>Recognizer</code> could not find a match for the utterance.
      */
     public final static int EVENT_NO_MATCH = 1;
-    
+
     /**
      * <code>Recognizer</code> processed one frame of audio.
      */
     public final static int EVENT_INCOMPLETE = 2;
-    
+
     /**
      * <code>Recognizer</code> has just been started.
      */
     public final static int EVENT_STARTED = 3;
-    
+
     /**
      * <code>Recognizer</code> is stopped.
      */
     public final static int EVENT_STOPPED = 4;
-    
+
     /**
      * Beginning of speech detected.
      */
     public final static int EVENT_START_OF_VOICING = 5;
-    
+
     /**
      * End of speech detected.
      */
     public final static int EVENT_END_OF_VOICING = 6;
-    
+
     /**
      * Beginning of utterance occured too soon.
      */
     public final static int EVENT_SPOKE_TOO_SOON = 7;
-    
+
     /**
      * Recognition match detected.
      */
     public final static int EVENT_RECOGNITION_RESULT = 8;
-    
+
     /**
      * Timeout occured before beginning of utterance.
      */
     public final static int EVENT_START_OF_UTTERANCE_TIMEOUT = 9;
-    
+
     /**
      * Timeout occured before speech recognition could complete.
      */
     public final static int EVENT_RECOGNITION_TIMEOUT = 10;
-    
+
     /**
      * Not enough samples to process one frame.
      */
     public final static int EVENT_NEED_MORE_AUDIO = 11;
-    
+
     /**
      * More audio encountered than is allowed by 'swirec_max_speech_duration'.
      */
@@ -646,8 +646,8 @@ public final class Recognizer {
     private static native boolean SR_RecognizerIsSignalTooFewSamples(int recognizer);
     private static native boolean SR_RecognizerIsSignalTooManySamples(int recognizer);
     // private static native void SR_Recognizer_Change_Sample_Rate (size_t new_sample_rate);
-    
-    
+
+
     //
     // SR_AcousticState native methods
     //

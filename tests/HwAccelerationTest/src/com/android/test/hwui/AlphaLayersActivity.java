@@ -50,7 +50,7 @@ public class AlphaLayersActivity extends Activity {
 
         setContentView(container);
     }
-    
+
     @SuppressWarnings({"UnusedDeclaration"})
     static int dipToPx(Context c, int dip) {
         return (int) (c.getResources().getDisplayMetrics().density * dip + 0.5f);
@@ -91,7 +91,7 @@ public class AlphaLayersActivity extends Activity {
             Log.d(LOG_TAG, "rejected = " + canvas.quickReject(25.0f, 5.0f, 30.0f, 10.0f,
                     Canvas.EdgeType.BW));
             canvas.restore();
-            
+
             canvas.save();
             canvas.scale(2.0f, 2.0f);
             canvas.clipRect(20.0f, 0.0f, 40.0f, 20.0f);
@@ -113,15 +113,15 @@ public class AlphaLayersActivity extends Activity {
             canvas.restore();
 
             canvas.save();
-            canvas.scale(2.0f, 2.0f);            
+            canvas.scale(2.0f, 2.0f);
             canvas.clipRect(20.0f, 0.0f, 40.0f, 20.0f);
 
             mPaint.setColor(0xff00ff00);
             canvas.drawRect(0.0f, 0.0f, 20.0f, 20.0f, mPaint);
-            
+
             mPaint.setColor(0xff0000ff);
             canvas.drawRect(20.0f, 0.0f, 40.0f, 20.0f, mPaint);
-            
+
             canvas.restore();
 
             final int restoreTo = canvas.save();

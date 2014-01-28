@@ -98,7 +98,7 @@ public class TestEventHandler implements EventHandler {
         public String name;
         public String value;
     }
-    
+
     private ArrayList<TestHeader> expectHeaders = new ArrayList<TestHeader>();
 
     /* Holds failure details */
@@ -232,8 +232,8 @@ public class TestEventHandler implements EventHandler {
          * headers */
         if (expectHeaders.isEmpty()) {
             return;
-        }      
-        
+        }
+
         for (int i = expectHeaders.size() - 1; i >= 0; i--) {
             TestHeader h =  expectHeaders.get(i);
             System.out.println("Expected header name: " + h.name);
@@ -285,13 +285,13 @@ public class TestEventHandler implements EventHandler {
                 break;
             default:
                 s = null;
-                
+
             }
             if (evaluateHeader(h, s)) {
                 expectHeaders.remove(i);
             }
         }
-            
+
     }
 
     public boolean evaluateHeader(TestHeader h, String value) {
@@ -308,7 +308,7 @@ public class TestEventHandler implements EventHandler {
         System.out.println("Expect value = " +
                 (h.value.toLowerCase()) + " got " +
                 value.toLowerCase());
-        
+
         if (!h.value.equalsIgnoreCase(value)) {
             expectDetails.append("expect header value " + h.value +
                     " got " + value);

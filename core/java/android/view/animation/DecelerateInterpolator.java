@@ -21,7 +21,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 /**
- * An interpolator where the rate of change starts out quickly and 
+ * An interpolator where the rate of change starts out quickly and
  * and then decelerates.
  *
  */
@@ -31,7 +31,7 @@ public class DecelerateInterpolator implements Interpolator {
 
     /**
      * Constructor
-     * 
+     *
      * @param factor Degree to which the animation should be eased. Setting factor to 1.0f produces
      *        an upside-down y=x^2 parabola. Increasing factor above 1.0f makes exaggerates the
      *        ease-out effect (i.e., it starts even faster and ends evens slower)
@@ -39,16 +39,16 @@ public class DecelerateInterpolator implements Interpolator {
     public DecelerateInterpolator(float factor) {
         mFactor = factor;
     }
-    
+
     public DecelerateInterpolator(Context context, AttributeSet attrs) {
         TypedArray a =
             context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.DecelerateInterpolator);
-        
+
         mFactor = a.getFloat(com.android.internal.R.styleable.DecelerateInterpolator_factor, 1.0f);
-        
+
         a.recycle();
     }
-    
+
     public float getInterpolation(float input) {
         float result;
         if (mFactor == 1.0f) {
@@ -58,6 +58,6 @@ public class DecelerateInterpolator implements Interpolator {
         }
         return result;
     }
-    
+
     private float mFactor = 1.0f;
 }

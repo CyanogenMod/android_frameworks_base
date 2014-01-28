@@ -73,7 +73,7 @@ public class HtmlTest extends TestCase {
         String spanned = Html.fromHtml("&copy; &gt; &lt").toString();
         assertEquals("\u00a9 > <", spanned);
     }
-    
+
     @SmallTest
     public void testColor() throws Exception {
         Spanned s;

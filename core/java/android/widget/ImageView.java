@@ -143,10 +143,10 @@ public class ImageView extends View {
 
         setMaxWidth(a.getDimensionPixelSize(
                 com.android.internal.R.styleable.ImageView_maxWidth, Integer.MAX_VALUE));
-        
+
         setMaxHeight(a.getDimensionPixelSize(
                 com.android.internal.R.styleable.ImageView_maxHeight, Integer.MAX_VALUE));
-        
+
         int index = a.getInt(com.android.internal.R.styleable.ImageView_scaleType, -1);
         if (index >= 0) {
             setScaleType(sScaleTypeArray[index]);
@@ -156,7 +156,7 @@ public class ImageView extends View {
         if (tint != 0) {
             setColorFilter(tint);
         }
-        
+
         int alpha = a.getInt(com.android.internal.R.styleable.ImageView_drawableAlpha, 255);
         if (alpha != 255) {
             setAlpha(alpha);
@@ -164,7 +164,7 @@ public class ImageView extends View {
 
         mCropToPadding = a.getBoolean(
                 com.android.internal.R.styleable.ImageView_cropToPadding, false);
-        
+
         a.recycle();
 
         //need inflate syntax/reader for matrix
@@ -181,7 +181,7 @@ public class ImageView extends View {
     protected boolean verifyDrawable(Drawable dr) {
         return mDrawable == dr || super.verifyDrawable(dr);
     }
-    
+
     @Override
     public void jumpDrawablesToCurrentState() {
         super.jumpDrawablesToCurrentState();
@@ -245,7 +245,7 @@ public class ImageView extends View {
      *
      * @param adjustViewBounds Whether to adjust the bounds of this view
      * to preserve the original aspect ratio of the drawable.
-     * 
+     *
      * @see #getAdjustViewBounds()
      *
      * @attr ref android.R.styleable#ImageView_adjustViewBounds
@@ -277,14 +277,14 @@ public class ImageView extends View {
      * of 100 x 100 while preserving the original aspect ratio, do the following: 1) set
      * adjustViewBounds to true 2) set maxWidth and maxHeight to 100 3) set the height and width
      * layout params to WRAP_CONTENT.
-     * 
+     *
      * <p>
      * Note that this view could be still smaller than 100 x 100 using this approach if the original
      * image is small. To set an image to a fixed size, specify that size in the layout params and
      * then use {@link #setScaleType(android.widget.ImageView.ScaleType)} to determine how to fit
      * the image within the bounds.
      * </p>
-     * 
+     *
      * @param maxWidth maximum width for this view
      *
      * @see #getMaxWidth()
@@ -315,14 +315,14 @@ public class ImageView extends View {
      * maximum of 100 x 100 while preserving the original aspect ratio, do the following: 1) set
      * adjustViewBounds to true 2) set maxWidth and maxHeight to 100 3) set the height and width
      * layout params to WRAP_CONTENT.
-     * 
+     *
      * <p>
      * Note that this view could be still smaller than 100 x 100 using this approach if the original
      * image is small. To set an image to a fixed size, specify that size in the layout params and
      * then use {@link #setScaleType(android.widget.ImageView.ScaleType)} to determine how to fit
      * the image within the bounds.
      * </p>
-     * 
+     *
      * @param maxHeight maximum height for this view
      *
      * @see #getMaxHeight()
@@ -405,7 +405,7 @@ public class ImageView extends View {
 
     /**
      * Sets a drawable as the content of this ImageView.
-     * 
+     *
      * @param drawable The drawable to set
      */
     public void setImageDrawable(Drawable drawable) {
@@ -427,7 +427,7 @@ public class ImageView extends View {
 
     /**
      * Sets a Bitmap as the content of this ImageView.
-     * 
+     *
      * @param bm The bitmap to set
      */
     @android.view.RemotableViewMethod
@@ -453,7 +453,7 @@ public class ImageView extends View {
     }
 
     /**
-     * Sets the image level, when it is constructed from a 
+     * Sets the image level, when it is constructed from a
      * {@link android.graphics.drawable.LevelListDrawable}.
      *
      * @param level The new level for the image.
@@ -519,7 +519,7 @@ public class ImageView extends View {
          * From XML, use this syntax: <code>android:scaleType="centerInside"</code>.
          */
         CENTER_INSIDE (7);
-        
+
         ScaleType(int ni) {
             nativeInt = ni;
         }
@@ -529,9 +529,9 @@ public class ImageView extends View {
     /**
      * Controls how the image should be resized or moved to match the size
      * of this ImageView.
-     * 
+     *
      * @param scaleType The desired scaling mode.
-     * 
+     *
      * @attr ref android.R.styleable#ImageView_scaleType
      */
     public void setScaleType(ScaleType scaleType) {
@@ -542,13 +542,13 @@ public class ImageView extends View {
         if (mScaleType != scaleType) {
             mScaleType = scaleType;
 
-            setWillNotCacheDrawing(mScaleType == ScaleType.CENTER);            
+            setWillNotCacheDrawing(mScaleType == ScaleType.CENTER);
 
             requestLayout();
             invalidate();
         }
     }
-    
+
     /**
      * Return the current scale type in use by this ImageView.
      *
@@ -579,7 +579,7 @@ public class ImageView extends View {
         if (matrix != null && matrix.isIdentity()) {
             matrix = null;
         }
-        
+
         // don't invalidate unless we're actually changing our matrix
         if (matrix == null && !mMatrix.isIdentity() ||
                 matrix != null && !mMatrix.equals(matrix)) {
@@ -671,7 +671,7 @@ public class ImageView extends View {
             } else {
                 d = Drawable.createFromPath(mUri.toString());
             }
-    
+
             if (d == null) {
                 System.out.println("resolveUri failed on bad bitmap uri: " + mUri);
                 // Don't try again.
@@ -753,23 +753,23 @@ public class ImageView extends View {
     private static Matrix.ScaleToFit scaleTypeToScaleToFit(ScaleType st)  {
         // ScaleToFit enum to their corresponding Matrix.ScaleToFit values
         return sS2FArray[st.nativeInt - 1];
-    }    
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         ensureResolvedUri();
         int w;
         int h;
-        
+
         // Desired aspect ratio of the view's contents (not including padding)
         float desiredAspect = 0.0f;
-        
+
         // We are allowed to change the view's width
         boolean resizeWidth = false;
-        
+
         // We are allowed to change the view's height
         boolean resizeHeight = false;
-        
+
         final int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
         final int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
 
@@ -789,11 +789,11 @@ public class ImageView extends View {
             if (mAdjustViewBounds) {
                 resizeWidth = widthSpecMode != MeasureSpec.EXACTLY;
                 resizeHeight = heightSpecMode != MeasureSpec.EXACTLY;
-                
+
                 desiredAspect = (float) w / (float) h;
             }
         }
-        
+
         int pleft = mPaddingLeft;
         int pright = mPaddingRight;
         int ptop = mPaddingTop;
@@ -805,7 +805,7 @@ public class ImageView extends View {
         if (resizeWidth || resizeHeight) {
             /* If we get here, it means we want to resize to match the
                 drawables aspect ratio, and we have the freedom to change at
-                least one dimension. 
+                least one dimension.
             */
 
             // Get the max possible width given our constraints
@@ -818,11 +818,11 @@ public class ImageView extends View {
                 // See what our actual aspect ratio is
                 float actualAspect = (float)(widthSize - pleft - pright) /
                                         (heightSize - ptop - pbottom);
-                
+
                 if (Math.abs(actualAspect - desiredAspect) > 0.0000001) {
-                    
+
                     boolean done = false;
-                    
+
                     // Try adjusting width to be proportional to height
                     if (resizeWidth) {
                         int newWidth = (int)(desiredAspect * (heightSize - ptop - pbottom)) +
@@ -836,9 +836,9 @@ public class ImageView extends View {
                         if (newWidth <= widthSize) {
                             widthSize = newWidth;
                             done = true;
-                        } 
+                        }
                     }
-                    
+
                     // Try adjusting height to be proportional to width
                     if (!done && resizeHeight) {
                         int newHeight = (int)((widthSize - pleft - pright) / desiredAspect) +
@@ -863,7 +863,7 @@ public class ImageView extends View {
             */
             w += pleft + pright;
             h += ptop + pbottom;
-                
+
             w = Math.max(w, getSuggestedMinimumWidth());
             h = Math.max(h, getSuggestedMinimumHeight());
 
@@ -887,8 +887,8 @@ public class ImageView extends View {
                 result = Math.min(desiredSize, maxSize);
                 break;
             case MeasureSpec.AT_MOST:
-                // Parent says we can be as big as we want, up to specSize. 
-                // Don't be larger than specSize, and don't be larger than 
+                // Parent says we can be as big as we want, up to specSize.
+                // Don't be larger than specSize, and don't be larger than
                 // the max size imposed on ourselves.
                 result = Math.min(Math.min(desiredSize, specSize), maxSize);
                 break;
@@ -955,7 +955,7 @@ public class ImageView extends View {
                 float dx = 0, dy = 0;
 
                 if (dwidth * vheight > vwidth * dheight) {
-                    scale = (float) vheight / (float) dheight; 
+                    scale = (float) vheight / (float) dheight;
                     dx = (vwidth - dwidth * scale) * 0.5f;
                 } else {
                     scale = (float) vwidth / (float) dwidth;
@@ -969,14 +969,14 @@ public class ImageView extends View {
                 float scale;
                 float dx;
                 float dy;
-                
+
                 if (dwidth <= vwidth && dheight <= vheight) {
                     scale = 1.0f;
                 } else {
                     scale = Math.min((float) vwidth / (float) dwidth,
                             (float) vheight / (float) dheight);
                 }
-                
+
                 dx = (int) ((vwidth - dwidth * scale) * 0.5f + 0.5f);
                 dy = (int) ((vheight - dheight * scale) * 0.5f + 0.5f);
 
@@ -986,7 +986,7 @@ public class ImageView extends View {
                 // Generate the required transform.
                 mTempSrc.set(0, 0, dwidth, dheight);
                 mTempDst.set(0, 0, vwidth, vheight);
-                
+
                 mDrawMatrix = mMatrix;
                 mDrawMatrix.setRectToRect(mTempSrc, mTempDst, scaleTypeToScaleToFit(mScaleType));
             }
@@ -1002,7 +1002,7 @@ public class ImageView extends View {
         }
     }
 
-    @Override 
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
@@ -1019,7 +1019,7 @@ public class ImageView extends View {
         } else {
             int saveCount = canvas.getSaveCount();
             canvas.save();
-            
+
             if (mCropToPadding) {
                 final int scrollX = mScrollX;
                 final int scrollY = mScrollY;
@@ -1027,7 +1027,7 @@ public class ImageView extends View {
                         scrollX + mRight - mLeft - mPaddingRight,
                         scrollY + mBottom - mTop - mPaddingBottom);
             }
-            
+
             canvas.translate(mPaddingLeft, mPaddingTop);
 
             if (mDrawMatrix != null) {
@@ -1062,7 +1062,7 @@ public class ImageView extends View {
      *
      * @param baseline The baseline to use, or -1 if none is to be provided.
      *
-     * @see #setBaseline(int) 
+     * @see #setBaseline(int)
      * @attr ref android.R.styleable#ImageView_baseline
      */
     public void setBaseline(int baseline) {
@@ -1099,11 +1099,11 @@ public class ImageView extends View {
 
     /**
      * Set a tinting option for the image.
-     * 
+     *
      * @param color Color tint to apply.
      * @param mode How to apply the color.  The standard mode is
      * {@link PorterDuff.Mode#SRC_ATOP}
-     * 
+     *
      * @attr ref android.R.styleable#ImageView_tint
      */
     public final void setColorFilter(int color, PorterDuff.Mode mode) {

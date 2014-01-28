@@ -56,7 +56,7 @@ public class RemoteCallbackList<E extends IInterface> {
     private final class Callback implements IBinder.DeathRecipient {
         final E mCallback;
         final Object mCookie;
-        
+
         Callback(E callback, Object cookie) {
             mCallback = callback;
             mCookie = cookie;
@@ -77,7 +77,7 @@ public class RemoteCallbackList<E extends IInterface> {
     public boolean register(E callback) {
         return register(callback, null);
     }
-    
+
     /**
      * Add a new callback to the list.  This callback will remain in the list
      * until a corresponding call to {@link #unregister} or its hosting process
@@ -95,7 +95,7 @@ public class RemoteCallbackList<E extends IInterface> {
      *
      * @param cookie Optional additional data to be associated with this
      * callback.
-     * 
+     *
      * @return Returns true if the callback was successfully added to the list.
      * Returns false if it was not added, either because {@link #kill} had
      * previously been called or the callback's process has gone away.
@@ -174,19 +174,19 @@ public class RemoteCallbackList<E extends IInterface> {
      */
     public void onCallbackDied(E callback) {
     }
-    
+
     /**
      * Called when the process hosting a callback in the list has gone away.
      * The default implementation calls {@link #onCallbackDied(E)}
      * for backwards compatibility.
-     * 
+     *
      * @param callback The callback whose process has died.  Note that, since
      * its process has died, you can not make any calls on to this interface.
      * You can, however, retrieve its IBinder and compare it with another
      * IBinder to see if it is the same object.
      * @param cookie The cookie object original provided to
      * {@link #register(E, Object)}.
-     * 
+     *
      * @see #register
      */
     public void onCallbackDied(E callback, Object cookie) {
@@ -230,7 +230,7 @@ public class RemoteCallbackList<E extends IInterface> {
                 throw new IllegalStateException(
                         "beginBroadcast() called while already in a broadcast");
             }
-            
+
             final int N = mBroadcastCount = mCallbacks.size();
             if (N <= 0) {
                 return 0;
@@ -270,11 +270,11 @@ public class RemoteCallbackList<E extends IInterface> {
     public E getBroadcastItem(int index) {
         return ((Callback)mActiveBroadcast[index]).mCallback;
     }
-    
+
     /**
      * Retrieve the cookie associated with the item
      * returned by {@link #getBroadcastItem(int)}.
-     * 
+     *
      * @see #getBroadcastItem
      */
     public Object getBroadcastCookie(int index) {
@@ -293,7 +293,7 @@ public class RemoteCallbackList<E extends IInterface> {
             throw new IllegalStateException(
                     "finishBroadcast() called outside of a broadcast");
         }
-        
+
         Object[] active = mActiveBroadcast;
         if (active != null) {
             final int N = mBroadcastCount;
@@ -301,7 +301,7 @@ public class RemoteCallbackList<E extends IInterface> {
                 active[i] = null;
             }
         }
-        
+
         mBroadcastCount = -1;
     }
 

@@ -29,7 +29,7 @@ public class TimeDialogActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         FrameLayout layout = new FrameLayout(this);
         Button b = new Button(this);
         b.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -42,7 +42,7 @@ public class TimeDialogActivity extends Activity {
             }
         });
         layout.addView(b);
-        
+
         setContentView(layout);
     }
 }

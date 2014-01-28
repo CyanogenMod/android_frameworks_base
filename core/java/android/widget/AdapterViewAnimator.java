@@ -995,9 +995,9 @@ public abstract class AdapterViewAnimator extends AdapterView<Adapter>
 
     /**
      * Sets up the onClickHandler to be used by the RemoteViewsAdapter when inflating RemoteViews
-     * 
+     *
      * @param handler The OnClickHandler to use when inflating RemoteViews.
-     * 
+     *
      * @hide
      */
     public void setRemoteViewsOnClickHandler(OnClickHandler handler) {

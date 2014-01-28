@@ -25,7 +25,7 @@ public class LogAbortException extends Exception {
         mFormat = format;
         mArgs = args;
     }
-    
+
     public void error(Log log) {
         log.error(mFormat, mArgs);
     }

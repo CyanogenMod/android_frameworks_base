@@ -297,7 +297,7 @@ int register_android_view_InputChannel(JNIEnv* env) {
 
     GET_FIELD_ID(gInputChannelClassInfo.mPtr, gInputChannelClassInfo.clazz,
             "mPtr", "I");
-    
+
     GET_METHOD_ID(gInputChannelClassInfo.ctor, gInputChannelClassInfo.clazz,
             "<init>", "()V");
 

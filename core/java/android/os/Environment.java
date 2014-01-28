@@ -421,7 +421,7 @@ public class Environment {
      * type.
      */
     public static String DIRECTORY_MUSIC = "Music";
-    
+
     /**
      * Standard directory in which to place any audio files that should be
      * in the list of podcasts that the user can select (not as regular
@@ -433,7 +433,7 @@ public class Environment {
      * type.
      */
     public static String DIRECTORY_PODCASTS = "Podcasts";
-    
+
     /**
      * Standard directory in which to place any audio files that should be
      * in the list of ringtones that the user can select (not as regular
@@ -445,7 +445,7 @@ public class Environment {
      * type.
      */
     public static String DIRECTORY_RINGTONES = "Ringtones";
-    
+
     /**
      * Standard directory in which to place any audio files that should be
      * in the list of alarms that the user can select (not as regular
@@ -457,7 +457,7 @@ public class Environment {
      * type.
      */
     public static String DIRECTORY_ALARMS = "Alarms";
-    
+
     /**
      * Standard directory in which to place any audio files that should be
      * in the list of notifications that the user can select (not as regular
@@ -469,7 +469,7 @@ public class Environment {
      * type.
      */
     public static String DIRECTORY_NOTIFICATIONS = "Notifications";
-    
+
     /**
      * Standard directory in which to place pictures that are available to
      * the user.  Note that this is primarily a convention for the top-level
@@ -477,7 +477,7 @@ public class Environment {
      * in any directory.
      */
     public static String DIRECTORY_PICTURES = "Pictures";
-    
+
     /**
      * Standard directory in which to place movies that are available to
      * the user.  Note that this is primarily a convention for the top-level
@@ -485,7 +485,7 @@ public class Environment {
      * in any directory.
      */
     public static String DIRECTORY_MOVIES = "Movies";
-    
+
     /**
      * Standard directory in which to place files that have been downloaded by
      * the user.  Note that this is primarily a convention for the top-level
@@ -495,7 +495,7 @@ public class Environment {
      * backwards compatibility reasons.
      */
     public static String DIRECTORY_DOWNLOADS = "Download";
-    
+
     /**
      * The traditional location for pictures and videos when mounting the
      * device as a camera.  Note that this is primarily a convention for the
@@ -515,24 +515,24 @@ public class Environment {
      * manage their own files, so you should be careful about what you put here
      * to ensure you don't erase their files or get in the way of their own
      * organization.
-     * 
+     *
      * <p>On devices with multiple users (as described by {@link UserManager}),
      * each user has their own isolated external storage. Applications only
      * have access to the external storage for the user they're running as.</p>
      *
      * <p>Here is an example of typical code to manipulate a picture on
      * the public external storage:</p>
-     * 
+     *
      * {@sample development/samples/ApiDemos/src/com/example/android/apis/content/ExternalStorage.java
      * public_picture}
-     * 
+     *
      * @param type The type of storage directory to return.  Should be one of
      * {@link #DIRECTORY_MUSIC}, {@link #DIRECTORY_PODCASTS},
      * {@link #DIRECTORY_RINGTONES}, {@link #DIRECTORY_ALARMS},
      * {@link #DIRECTORY_NOTIFICATIONS}, {@link #DIRECTORY_PICTURES},
      * {@link #DIRECTORY_MOVIES}, {@link #DIRECTORY_DOWNLOADS}, or
      * {@link #DIRECTORY_DCIM}.  May not be null.
-     * 
+     *
      * @return Returns the File path for the directory.  Note that this
      * directory may not yet exist, so you must make sure it exists before
      * using it such as with {@link File#mkdirs File.mkdirs()}.
@@ -559,7 +559,7 @@ public class Environment {
         throwIfUserRequired();
         return sCurrentUser.buildExternalStorageAppDataDirs(packageName);
     }
-    
+
     /**
      * Generates the raw path to an application's media
      * @hide
@@ -568,7 +568,7 @@ public class Environment {
         throwIfUserRequired();
         return sCurrentUser.buildExternalStorageAppMediaDirs(packageName);
     }
-    
+
     /**
      * Generates the raw path to an application's OBB files
      * @hide
@@ -577,7 +577,7 @@ public class Environment {
         throwIfUserRequired();
         return sCurrentUser.buildExternalStorageAppObbDirs(packageName);
     }
-    
+
     /**
      * Generates the path to an application's files.
      * @hide
@@ -595,7 +595,7 @@ public class Environment {
         throwIfUserRequired();
         return sCurrentUser.buildExternalStorageAppCacheDirs(packageName);
     }
-    
+
     /**
      * Return the download/cache content directory.
      */
@@ -681,7 +681,7 @@ public class Environment {
 
     /**
      * Returns the current state of the primary "external" storage device.
-     * 
+     *
      * @see #getExternalStorageDirectory()
      * @return one of {@link #MEDIA_UNKNOWN}, {@link #MEDIA_REMOVED},
      *         {@link #MEDIA_UNMOUNTED}, {@link #MEDIA_CHECKING},

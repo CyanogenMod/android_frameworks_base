@@ -17,7 +17,7 @@
 */
 -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-	android:zAdjustment="normal">
+    android:zAdjustment="normal">
     <objectAnimator
         android:interpolator="@interpolator/decelerate_cubic"
         android:valueFrom="1"

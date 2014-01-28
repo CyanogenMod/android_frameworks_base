@@ -15,7 +15,7 @@
 -->
 
 <resources>
-    <!-- Carriers in this locale are sensitive to capitalization of carrier text. 
+    <!-- Carriers in this locale are sensitive to capitalization of carrier text.
          This makes the entire interface consistent by switching back to normal case. -->
     <bool name="kg_use_all_caps">false</bool>
 </resources>

@@ -46,7 +46,7 @@ public abstract class RemoteViewsService extends Service {
      * An interface for an adapter between a remote collection view (ListView, GridView, etc) and
      * the underlying data for that view.  The implementor is responsible for making a RemoteView
      * for each item in the data set. This interface is a thin wrapper around {@link Adapter}.
-     * 
+     *
      * @see android.widget.Adapter
      * @see android.appwidget.AppWidgetManager
      */

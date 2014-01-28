@@ -38,7 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ViewPropertyAlphaActivity extends Activity {
-    
+
     MyView myViewAlphaDefault, myViewAlphaHandled;
 
     @Override
@@ -64,7 +64,7 @@ public class ViewPropertyAlphaActivity extends Activity {
                 selectedText.setSelection(3, 8);
             }
         }, 2000);
-        
+
         Button invalidator = (Button) findViewById(R.id.invalidateButton);
         invalidator.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +92,7 @@ public class ViewPropertyAlphaActivity extends Activity {
 
             textView.setText(text);
         }
-        
+
         LinearLayout container = (LinearLayout) findViewById(R.id.container);
         myViewAlphaDefault = new MyView(this, false);
         myViewAlphaDefault.setLayoutParams(new LinearLayout.LayoutParams(75, 75));
@@ -112,12 +112,12 @@ public class ViewPropertyAlphaActivity extends Activity {
     private void startAnim(int id) {
         startAnim(findViewById(id));
     }
-    
+
     private static class MyView extends View {
         private int mMyAlpha = 255;
         private boolean mHandleAlpha;
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        
+
         private MyView(Context context, boolean handleAlpha) {
             super(context);
             mHandleAlpha = handleAlpha;

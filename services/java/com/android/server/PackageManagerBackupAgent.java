@@ -115,7 +115,7 @@ public class PackageManagerBackupAgent extends BackupAgent {
         // additional involvement by the transport to obtain.
         return mRestoredSignatures.keySet();
     }
-    
+
     // The backed up data is the signature block for each app, keyed by
     // the package name.
     public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data,
@@ -187,7 +187,7 @@ public class PackageManagerBackupAgent extends BackupAgent {
                             continue;
                         }
                     }
-                    
+
                     if (info.signatures == null || info.signatures.length == 0)
                     {
                         Slog.w(TAG, "Not backing up package " + packName
@@ -213,7 +213,7 @@ public class PackageManagerBackupAgent extends BackupAgent {
                                 + " version=" + info.versionCode
                                 + " entityLen=" + outputBuffer.size());
                     }
-                    
+
                     // Now we can write the backup entity for this package
                     writeEntity(data, packName, outputBuffer.toByteArray());
                 }
@@ -240,7 +240,7 @@ public class PackageManagerBackupAgent extends BackupAgent {
         // Finally, write the new state blob -- just the list of all apps we handled
         writeStateFile(mAllPackages, newState);
     }
-    
+
     private static void writeEntity(BackupDataOutput data, String key, byte[] bytes)
             throws IOException {
         data.writeEntityHeader(key, bytes.length);
@@ -295,7 +295,7 @@ public class PackageManagerBackupAgent extends BackupAgent {
                             + " dataSize=" + dataSize
                             + " versionCode=" + versionCode + " sigs=" + sigs);
                 }
-                
+
                 if (sigs == null || sigs.length == 0) {
                     Slog.w(TAG, "Not restoring package " + key
                             + " since it appears to have no signatures.");
@@ -336,15 +336,15 @@ public class PackageManagerBackupAgent extends BackupAgent {
                 Slog.w(TAG, "Read empty signature block");
                 return null;
             }
-            
+
             if (DEBUG) Slog.v(TAG, " ... unflatten read " + num);
-            
+
             // Sensical?
             if (num > 20) {
                 Slog.e(TAG, "Suspiciously large sig count in restore data; aborting");
                 throw new IllegalStateException("Bad restore state");
             }
-            
+
             Signature[] sigs = new Signature[num];
             for (int i = 0; i < num; i++) {
                 int len = in.readInt();

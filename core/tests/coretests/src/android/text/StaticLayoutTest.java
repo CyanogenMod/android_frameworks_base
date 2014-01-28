@@ -26,10 +26,10 @@ import junit.framework.TestCase;
 
 /**
  * Tests StaticLayout vertical metrics behavior.
- * 
+ *
  * Requires disabling access checks in the vm since this calls package-private
  * APIs.
- * 
+ *
  * @Suppress
  */
 public class StaticLayoutTest extends TestCase {

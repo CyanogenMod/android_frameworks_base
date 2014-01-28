@@ -28,18 +28,18 @@ import java.util.List;
 
 public final class Ime {
     IInputMethodManager mImm;
-    
+
     private String[] mArgs;
     private int mNextArg;
     private String mCurArgData;
-    
-    private static final String IMM_NOT_RUNNING_ERR = 
+
+    private static final String IMM_NOT_RUNNING_ERR =
         "Error: Could not access the Input Method Manager.  Is the system running?";
-    
+
     public static void main(String[] args) {
         new Ime().run(args);
     }
-    
+
     public void run(String[] args) {
         if (args.length < 1) {
             showUsage();
@@ -55,33 +55,33 @@ public final class Ime {
         mArgs = args;
         String op = args[0];
         mNextArg = 1;
-        
+
         if ("list".equals(op)) {
             runList();
             return;
         }
-        
+
         if ("enable".equals(op)) {
             runSetEnabled(true);
             return;
         }
-        
+
         if ("disable".equals(op)) {
             runSetEnabled(false);
             return;
         }
-        
+
         if ("set".equals(op)) {
             runSet();
             return;
         }
-        
+
         if (op != null) {
             System.err.println("Error: unknown command '" + op + "'");
         }
         showUsage();
     }
-    
+
     /**
      * Execute the list sub-command.
      */
@@ -101,7 +101,7 @@ public final class Ime {
             }
         }
 
-        
+
         List<InputMethodInfo> methods;
         if (!all) {
             try {
@@ -120,7 +120,7 @@ public final class Ime {
                 return;
             }
         }
-        
+
         if (methods != null) {
             Printer pr = new PrintStreamPrinter(System.out);
             for (int i=0; i<methods.size(); i++) {
@@ -134,7 +134,7 @@ public final class Ime {
             }
         }
     }
-    
+
     private void runSetEnabled(boolean state) {
         String id = nextArg();
         if (id == null) {
@@ -142,7 +142,7 @@ public final class Ime {
             showUsage();
             return;
         }
-        
+
         try {
             boolean res = mImm.setInputMethodEnabled(id, state);
             if (state) {
@@ -161,7 +161,7 @@ public final class Ime {
             return;
         }
     }
-    
+
     private void runSet() {
         String id = nextArg();
         if (id == null) {
@@ -169,7 +169,7 @@ public final class Ime {
             showUsage();
             return;
         }
-        
+
         try {
             mImm.setInputMethod(null, id);
             System.out.println("Input method " + id + " selected");
@@ -182,7 +182,7 @@ public final class Ime {
             return;
         }
     }
-    
+
     private String nextOption() {
         if (mNextArg >= mArgs.length) {
             return null;

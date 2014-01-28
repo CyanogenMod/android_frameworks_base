@@ -41,15 +41,15 @@ public class WeightedLinearLayout extends LinearLayout {
 
     public WeightedLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
-        TypedArray a = 
+
+        TypedArray a =
             context.obtainStyledAttributes(attrs, styleable.WeightedLinearLayout);
 
         mMajorWeightMin = a.getFloat(styleable.WeightedLinearLayout_majorWeightMin, 0.0f);
         mMinorWeightMin = a.getFloat(styleable.WeightedLinearLayout_minorWeightMin, 0.0f);
         mMajorWeightMax = a.getFloat(styleable.WeightedLinearLayout_majorWeightMax, 0.0f);
         mMinorWeightMax = a.getFloat(styleable.WeightedLinearLayout_minorWeightMax, 0.0f);
-        
+
         a.recycle();
     }
 

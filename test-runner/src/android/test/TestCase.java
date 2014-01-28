@@ -23,7 +23,7 @@ import android.content.Context;
  * More complex interface for test cases.
  *
  * <p>Just implementing Runnable is enough for many test cases.  If you
- * have additional setup or teardown, this interface might be for you, 
+ * have additional setup or teardown, this interface might be for you,
  * especially if you need to share it between different test cases, or your
  * teardown code must execute regardless of whether your test passed.
  *

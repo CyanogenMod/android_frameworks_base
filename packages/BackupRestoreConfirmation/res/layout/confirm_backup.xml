@@ -19,7 +19,7 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" 
+              android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical" >
 
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent">
 
     <TextView android:id="@+id/confirm_text"
-              android:layout_width="match_parent" 
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginBottom="30dp"
               android:text="@string/backup_confirm_text" />
@@ -85,7 +85,7 @@
 
     <!-- button bar -->
     <LinearLayout android:orientation="horizontal"
-                  style="?android:attr/buttonBarStyle"                 
+                  style="?android:attr/buttonBarStyle"
                   android:layout_height="wrap_content"
                   android:layout_width="match_parent"
                   android:layout_gravity="bottom">

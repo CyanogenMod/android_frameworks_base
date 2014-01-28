@@ -26,7 +26,7 @@ enum {
     XML_COMPILE_STRIP_WHITESPACE = 1<<3,
     XML_COMPILE_STRIP_RAW_VALUES = 1<<4,
     XML_COMPILE_UTF8 = 1<<5,
-    
+
     XML_COMPILE_STANDARD_RESOURCE =
             XML_COMPILE_STRIP_COMMENTS | XML_COMPILE_ASSIGN_ATTRIBUTE_IDS
             | XML_COMPILE_STRIP_WHITESPACE | XML_COMPILE_STRIP_RAW_VALUES
@@ -138,7 +138,7 @@ public:
                     bool overlay = false,
                     bool replace = false,
                     bool isId = false);
-    
+
     status_t addBag(const SourcePos& pos,
                     const String16& package,
                     const String16& type,
@@ -175,10 +175,10 @@ public:
                            const String16& type,
                            const String16& name,
                            const String16& comment);
-    
+
     void canAddEntry(const SourcePos& pos,
         const String16& package, const String16& type, const String16& name);
-        
+
     size_t size() const;
     size_t numLocalResources() const;
     bool hasResources() const;
@@ -208,7 +208,7 @@ public:
                       bool onlyPublic = true) const;
 
     static bool isValidResourceName(const String16& s);
-    
+
     bool stringToValue(Res_value* outValue, StringPool* pool,
                        const String16& str,
                        bool preserveSpaces, bool coerceType,
@@ -303,7 +303,7 @@ public:
             TYPE_ITEM,
             TYPE_BAG
         };
-        
+
         String16 getName() const { return mName; }
         type getType() const { return mType; }
 
@@ -313,7 +313,7 @@ public:
         status_t makeItABag(const SourcePos& sourcePos);
 
         status_t emptyBag(const SourcePos& sourcePos);
- 
+
         status_t setItem(const SourcePos& pos,
                          const String16& value,
                          const Vector<StringPool::entry_style_span>* style = NULL,
@@ -359,35 +359,35 @@ public:
         uint32_t mParentId;
         SourcePos mPos;
     };
-    
+
     class ConfigList : public RefBase {
     public:
         ConfigList(const String16& name, const SourcePos& pos)
             : mName(name), mPos(pos), mPublic(false), mEntryIndex(-1) { }
         virtual ~ConfigList() { }
-        
+
         String16 getName() const { return mName; }
         const SourcePos& getPos() const { return mPos; }
-        
+
         void appendComment(const String16& comment, bool onlyIfEmpty = false);
         const String16& getComment() const { return mComment; }
-        
+
         void appendTypeComment(const String16& comment);
         const String16& getTypeComment() const { return mTypeComment; }
-        
+
         // Index of this entry in its Type.
         int32_t getEntryIndex() const { return mEntryIndex; }
         void setEntryIndex(int32_t index) { mEntryIndex = index; }
-        
+
         void setPublic(bool pub) { mPublic = pub; }
         bool getPublic() const { return mPublic; }
         void setPublicSourcePos(const SourcePos& pos) { mPublicSourcePos = pos; }
         const SourcePos& getPublicSourcePos() { return mPublicSourcePos; }
-        
+
         void addEntry(const ResTable_config& config, const sp<Entry>& entry) {
             mEntries.add(config, entry);
         }
-        
+
         const DefaultKeyedVector<ConfigDescription, sp<Entry> >& getEntries() const { return mEntries; }
     private:
         const String16 mName;
@@ -399,7 +399,7 @@ public:
         int32_t mEntryIndex;
         DefaultKeyedVector<ConfigDescription, sp<Entry> > mEntries;
     };
-    
+
     class Public {
     public:
         Public() : sourcePos(), ident(0) { }
@@ -411,19 +411,19 @@ public:
         Public(const Public& o) : sourcePos(o.sourcePos),
             comment(o.comment), ident(o.ident) { }
         ~Public() { }
-        
+
         Public& operator=(const Public& o) {
             sourcePos = o.sourcePos;
             comment = o.comment;
             ident = o.ident;
             return *this;
         }
-        
+
         SourcePos   sourcePos;
         String16    comment;
         uint32_t    ident;
     };
-    
+
     class Type : public RefBase {
     public:
         Type(const String16& name, const SourcePos& pos)
@@ -434,9 +434,9 @@ public:
         status_t addPublic(const SourcePos& pos,
                            const String16& name,
                            const uint32_t ident);
-                           
+
         void canAddEntry(const String16& name);
-        
+
         String16 getName() const { return mName; }
         sp<Entry> getEntry(const String16& entry,
                            const SourcePos& pos,
@@ -455,12 +455,12 @@ public:
         status_t applyPublicEntryOrder();
 
         const SortedVector<ConfigDescription>& getUniqueConfigs() const { return mUniqueConfigs; }
-        
+
         const DefaultKeyedVector<String16, sp<ConfigList> >& getConfigs() const { return mConfigs; }
         const Vector<sp<ConfigList> >& getOrderedConfigs() const { return mOrderedConfigs; }
 
         const SortedVector<String16>& getCanAddEntries() const { return mCanAddEntries; }
-        
+
         const SourcePos& getPos() const { return mPos; }
     private:
         String16 mName;
@@ -550,7 +550,7 @@ private:
     size_t mNumLocal;
     SourcePos mCurrentXmlPos;
     Bundle* mBundle;
-    
+
     // key = string resource name, value = set of locales in which that name is defined
     map<String16, set<String8> > mLocalizations;
 };

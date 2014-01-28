@@ -90,13 +90,13 @@ public:
         return fMemoryBase;
     }
 
-	virtual bool rewind()
+    virtual bool rewind()
     {
         off64_t pos = fAsset->seek(0, SEEK_SET);
         return pos != (off64_t)-1;
     }
 
-	virtual size_t read(void* buffer, size_t size)
+    virtual size_t read(void* buffer, size_t size)
     {
         ssize_t amount;
 

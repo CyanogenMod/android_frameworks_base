@@ -1152,27 +1152,27 @@ bool AaptGroupEntry::getDensityName(const char* name,
         if (out) out->density = ResTable_config::DENSITY_DEFAULT;
         return true;
     }
-    
+
     if (strcmp(name, "nodpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_NONE;
         return true;
     }
-    
+
     if (strcmp(name, "ldpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_LOW;
         return true;
     }
-    
+
     if (strcmp(name, "mdpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_MEDIUM;
         return true;
     }
-    
+
     if (strcmp(name, "tvdpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_TV;
         return true;
     }
-    
+
     if (strcmp(name, "hdpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_HIGH;
         return true;
@@ -1525,7 +1525,7 @@ const ResTable_config& AaptGroupEntry::toParams() const
     getNavigationName(navigation.string(), &params);
     getScreenSizeName(screenSize.string(), &params);
     getVersionName(version.string(), &params);
-    
+
     // Fix up version number based on specified parameters.
     int minSdk = 0;
     if (params.smallestScreenWidthDp != ResTable_config::SCREENWIDTH_ANY
@@ -1544,11 +1544,11 @@ const ResTable_config& AaptGroupEntry::toParams() const
             || params.density != ResTable_config::DENSITY_DEFAULT) {
         minSdk = SDK_DONUT;
     }
-    
+
     if (minSdk > params.sdkVersion) {
         params.sdkVersion = minSdk;
     }
-    
+
     return params;
 }
 
@@ -1653,7 +1653,7 @@ status_t AaptGroup::addFile(const sp<AaptFile>& file)
 
 void AaptGroup::removeFile(size_t index)
 {
-	mFiles.removeItemsAt(index);
+    mFiles.removeItemsAt(index);
 }
 
 void AaptGroup::print(const String8& prefix) const
@@ -2152,7 +2152,7 @@ ssize_t AaptAssets::slurpFromArgs(Bundle* bundle)
                 return UNKNOWN_ERROR;
             }
         }
-        
+
     }
     /*
      * Now do any additional raw files.

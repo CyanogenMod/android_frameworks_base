@@ -29,25 +29,25 @@ import android.util.Printer;
  */
 public final class ProviderInfo extends ComponentInfo
         implements Parcelable {
-    
+
     /** The name provider is published under content:// */
     public String authority = null;
-    
+
     /** Optional permission required for read-only access this content
      * provider. */
     public String readPermission = null;
-    
+
     /** Optional permission required for read/write access this content
      * provider. */
     public String writePermission = null;
-    
+
     /** If true, additional permissions to specific Uris in this content
      * provider can be granted, as per the
      * {@link android.R.styleable#AndroidManifestProvider_grantUriPermissions
      * grantUriPermissions} attribute.
      */
     public boolean grantUriPermissions = false;
-    
+
     /**
      * If non-null, these are the patterns that are allowed for granting URI
      * permissions.  Any URI that does not match one of these patterns will not
@@ -57,7 +57,7 @@ public final class ProviderInfo extends ComponentInfo
      * this field to be filled in.
      */
     public PatternMatcher[] uriPermissionPatterns = null;
-    
+
     /**
      * If non-null, these are path-specific permissions that are allowed for
      * accessing the provider.  Any permissions listed here will allow a
@@ -65,12 +65,12 @@ public final class ProviderInfo extends ComponentInfo
      * the URI it provides when making calls against the patterns here.
      */
     public PathPermission[] pathPermissions = null;
-    
+
     /** If true, this content provider allows multiple instances of itself
      *  to run in different process.  If false, a single instances is always
      *  run in {@link #processName}. */
     public boolean multiprocess = false;
-    
+
     /** Used to control initialization order of single-process providers
      *  running in the same process.  Higher goes first. */
     public int initOrder = 0;
@@ -92,7 +92,7 @@ public final class ProviderInfo extends ComponentInfo
     /**
      * Whether or not this provider is syncable.
      * @deprecated This flag is now being ignored. The current way to make a provider
-     * syncable is to provide a SyncAdapter service for a given provider/account type. 
+     * syncable is to provide a SyncAdapter service for a given provider/account type.
      */
     @Deprecated
     public boolean isSyncable = false;

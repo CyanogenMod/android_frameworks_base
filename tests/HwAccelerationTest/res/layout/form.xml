@@ -23,44 +23,44 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="First name" />
-        
+
         <EditText
             android:layout_width="0dip"
             android:layout_weight="1.0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dip"
             android:hint="Enter your first name" />
-        
+
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Last name" />
-        
+
         <EditText
             android:layout_width="0dip"
             android:layout_weight="1.0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dip"
             android:hint="Enter your last name" />
-        
+
     </LinearLayout>
-    
+
     <EditText
         android:layout_width="match_parent"
         android:layout_weight="1.0"
         android:layout_height="0dip"
         android:background="#ff7f0000" />
-    
+
 </LinearLayout>

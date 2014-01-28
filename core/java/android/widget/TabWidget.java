@@ -42,7 +42,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
  * handler, and manage callbacks. You might call this object to iterate the list
  * of tabs, or to tweak the layout of the tab list, but most methods should be
  * called on the containing TabHost object.
- * 
+ *
  * @attr ref android.R.styleable#TabWidget_divider
  * @attr ref android.R.styleable#TabWidget_tabStripEnabled
  * @attr ref android.R.styleable#TabWidget_tabStripLeft
@@ -244,7 +244,7 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
     public void setDividerDrawable(int resId) {
         setDividerDrawable(getResources().getDrawable(resId));
     }
-    
+
     /**
      * Sets the drawable to use as the left part of the strip below the
      * tab indicators.

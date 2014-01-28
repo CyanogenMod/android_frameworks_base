@@ -40,7 +40,7 @@ public class InstrumentationTestCase extends TestCase {
     /**
      * Injects instrumentation into this test case. This method is
      * called by the test runner during test setup.
-     * 
+     *
      * @param instrumentation the instrumentation to use with this instance
      */
     public void injectInstrumentation(Instrumentation instrumentation) {
@@ -70,13 +70,13 @@ public class InstrumentationTestCase extends TestCase {
     }
 
     /**
-     * Utility method for launching an activity.  
-     * 
+     * Utility method for launching an activity.
+     *
      * <p>The {@link Intent} used to launch the Activity is:
      *  action = {@link Intent#ACTION_MAIN}
      *  extras = null, unless a custom bundle is provided here
      * All other fields are null or empty.
-     * 
+     *
      * <p><b>NOTE:</b> The parameter <i>pkg</i> must refer to the package identifier of the
      * package hosting the activity to be launched, which is specified in the AndroidManifest.xml
      * file.  This is not necessarily the same as the java package name.
@@ -99,7 +99,7 @@ public class InstrumentationTestCase extends TestCase {
 
     /**
      * Utility method for launching an activity with a specific Intent.
-     * 
+     *
      * <p><b>NOTE:</b> The parameter <i>pkg</i> must refer to the package identifier of the
      * package hosting the activity to be launched, which is specified in the AndroidManifest.xml
      * file.  This is not necessarily the same as the java package name.
@@ -120,14 +120,14 @@ public class InstrumentationTestCase extends TestCase {
         getInstrumentation().waitForIdleSync();
         return activity;
     }
-    
+
     /**
      * Helper for running portions of a test on the UI thread.
-     * 
-     * Note, in most cases it is simpler to annotate the test method with 
+     *
+     * Note, in most cases it is simpler to annotate the test method with
      * {@link android.test.UiThreadTest}, which will run the entire test method on the UI thread.
      * Use this method if you need to switch in and out of the UI thread to perform your test.
-     * 
+     *
      * @param r runnable containing test code in the {@link Runnable#run()} method
      */
     public void runTestOnUiThread(final Runnable r) throws Throwable {
@@ -345,12 +345,12 @@ public class InstrumentationTestCase extends TestCase {
 
         instrumentation.waitForIdleSync();
     }
-    
+
     /**
      * Make sure all resources are cleaned up and garbage collected before moving on to the next
      * test. Subclasses that override this method should make sure they call super.tearDown()
      * at the end of the overriding method.
-     * 
+     *
      * @throws Exception
      */
     @Override

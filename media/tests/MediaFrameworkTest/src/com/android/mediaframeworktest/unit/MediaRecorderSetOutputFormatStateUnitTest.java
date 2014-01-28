@@ -27,19 +27,19 @@ import android.test.suitebuilder.annotation.Suppress;
  */
 public class MediaRecorderSetOutputFormatStateUnitTest extends AndroidTestCase implements MediaRecorderMethodUnderTest {
     private MediaRecorderStateUnitTestTemplate mTestTemplate = new MediaRecorderStateUnitTestTemplate();
-    
+
     /**
      * 1. It is valid to call setOutputFormat() in the following states:
      *    {Initialized}.
      * 2. It is invalid to call setOutputFormat() in the following states:
      *    {Initial, Prepared, DataSourceConfigured, Recording, Error}
-     *    
+     *
      * @param stateErrors the MediaRecorderStateErrors to check against.
      */
     public void checkStateErrors(MediaRecorderStateErrors stateErrors) {
         // Valid states.
         assertTrue(!stateErrors.errorInInitializedState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInInitialState);
         assertTrue(stateErrors.errorInInitialStateAfterReset);
@@ -58,7 +58,7 @@ public class MediaRecorderSetOutputFormatStateUnitTest extends AndroidTestCase i
     public void testSetOutputFormat() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "setOutputFormat()";

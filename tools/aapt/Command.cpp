@@ -1478,7 +1478,7 @@ int doDump(Bundle* bundle)
                     printf("uses-implied-feature:'android.hardware.camera'," \
                             "'requested android.hardware.camera.autofocus feature'\n");
                 } else if (hasCameraPermission) {
-                    // if app wants to use camera but didn't request the feature, we infer 
+                    // if app wants to use camera but didn't request the feature, we infer
                     // that it meant to, and further that it wants autofocus
                     // (which was the 1.0 - 1.5 behavior)
                     printf("uses-feature:'android.hardware.camera'\n");
@@ -2068,7 +2068,7 @@ bail:
  *
  * POSTCONDITIONS
  *  Destination directory will be updated to match the PNG files in
- *  the source directory. 
+ *  the source directory.
  */
 int doCrunch(Bundle* bundle)
 {

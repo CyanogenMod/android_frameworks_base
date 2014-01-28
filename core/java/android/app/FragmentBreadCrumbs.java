@@ -64,18 +64,18 @@ public class FragmentBreadCrumbs extends ViewGroup
     public interface OnBreadCrumbClickListener {
         /**
          * Called when a bread crumb is clicked.
-         * 
+         *
          * @param backStack The BackStackEntry whose bread crumb was clicked.
          * May be null, if this bread crumb is for the root of the back stack.
          * @param flags Additional information about the entry.  Currently
          * always 0.
-         * 
+         *
          * @return Return true to consume this click.  Return to false to allow
          * the default action (popping back stack to this entry) to occur.
          */
         public boolean onBreadCrumbClick(BackStackEntry backStack, int flags);
     }
-    
+
     public FragmentBreadCrumbs(Context context) {
         this(context, null);
     }
@@ -125,7 +125,7 @@ public class FragmentBreadCrumbs extends ViewGroup
 
     /**
      * Inserts an optional parent entry at the first position in the breadcrumbs. Selecting this
-     * entry will result in a call to the specified listener's 
+     * entry will result in a call to the specified listener's
      * {@link android.view.View.OnClickListener#onClick(View)}
      * method.
      *
@@ -144,13 +144,13 @@ public class FragmentBreadCrumbs extends ViewGroup
     /**
      * Sets a listener for clicks on the bread crumbs.  This will be called before
      * the default click action is performed.
-     * 
+     *
      * @param listener The new listener to set.  Replaces any existing listener.
      */
     public void setOnBreadCrumbClickListener(OnBreadCrumbClickListener listener) {
         mOnBreadCrumbClickListener = listener;
     }
-    
+
     private BackStackRecord createBackStackEntry(CharSequence title, CharSequence shortTitle) {
         if (title == null) return null;
 

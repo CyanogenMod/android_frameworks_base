@@ -200,7 +200,7 @@ public class BackupTestActivity extends ListActivity
         Log.d(TAG, "Test: " + t.name);
         t.run();
     }
-    
+
     void writeFile(String name, String contents, int mode) {
         try {
             PrintStream out = new PrintStream(openFileOutput(name, mode));

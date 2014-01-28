@@ -23,7 +23,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 /**
  * Unit test class to test the set of valid and invalid states that
  * MediaPlayer.stop() method can be called.
- */          
+ */
 public class MediaPlayerStopStateUnitTest extends AndroidTestCase implements MediaPlayerMethodUnderTest {
     private MediaPlayerStateUnitTestTemplate mTestTemplate = new MediaPlayerStateUnitTestTemplate();
 
@@ -32,7 +32,7 @@ public class MediaPlayerStopStateUnitTest extends AndroidTestCase implements Med
      *    {Prepared, Started, Stopped, Paused, PlaybackCompleted}.
      * 2. It is invalid to call stop() in the following states:
      *    {Idle, Initialized, Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -44,7 +44,7 @@ public class MediaPlayerStopStateUnitTest extends AndroidTestCase implements Med
         assertTrue(!stateErrors.errorInPreparedStateAfterStop);
         assertTrue(!stateErrors.errorInPlaybackCompletedState);
         assertTrue(!stateErrors.errorInPausedState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInIdleState);
         assertTrue(stateErrors.errorInIdleStateAfterReset);

@@ -28,7 +28,7 @@ public class SetTimeZonePermissionsTest extends AndroidTestCase {
     private String[] mZones;
     private String mCurrentZone;
     private AlarmManager mAlarm;
-    
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();

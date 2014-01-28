@@ -24,16 +24,16 @@ import java.io.PrintStream;
  */
 public class PrintStreamPrinter implements Printer {
     private final PrintStream mPS;
-    
+
     /**
      * Create a new Printer that sends to a PrintWriter object.
-     * 
+     *
      * @param pw The PrintWriter where you would like output to go.
      */
     public PrintStreamPrinter(PrintStream pw) {
         mPS = pw;
     }
-    
+
     public void println(String x) {
         mPS.println(x);
     }

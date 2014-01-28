@@ -35,7 +35,7 @@ public:
             return new SkPicture;
         }
     }
-    
+
     static SkPicture* deserialize(JNIEnv* env, jobject, jobject jstream,
                                   jbyteArray jstorage) {
         SkPicture* picture = NULL;
@@ -46,23 +46,23 @@ public:
         }
         return picture;
     }
-    
+
     static void killPicture(JNIEnv* env, jobject, SkPicture* picture) {
         SkASSERT(picture);
         picture->unref();
     }
-    
+
     static void draw(JNIEnv* env, jobject, SkCanvas* canvas,
                             SkPicture* picture) {
         SkASSERT(canvas);
         SkASSERT(picture);
         picture->draw(canvas);
     }
-    
+
     static bool serialize(JNIEnv* env, jobject, SkPicture* picture,
                           jobject jstream, jbyteArray jstorage) {
         SkWStream* strm = CreateJavaOutputStreamAdaptor(env, jstream, jstorage);
-        
+
         if (NULL != strm) {
             picture->serialize(strm);
             delete strm;
@@ -70,17 +70,17 @@ public:
         }
         return false;
     }
-        
+
     static int getWidth(JNIEnv* env, jobject jpic) {
         NPE_CHECK_RETURN_ZERO(env, jpic);
         return GraphicsJNI::getNativePicture(env, jpic)->width();
     }
-    
+
     static int getHeight(JNIEnv* env, jobject jpic) {
         NPE_CHECK_RETURN_ZERO(env, jpic);
         return GraphicsJNI::getNativePicture(env, jpic)->height();
     }
-    
+
     static SkCanvas* beginRecording(JNIEnv* env, jobject, SkPicture* pict,
                                     int w, int h) {
         // beginRecording does not ref its return value, it just returns it.
@@ -91,7 +91,7 @@ public:
         canvas->ref();
         return canvas;
     }
-    
+
     static void endRecording(JNIEnv* env, jobject, SkPicture* pict) {
         pict->endRecording();
     }
@@ -110,20 +110,20 @@ static JNINativeMethod gPictureMethods[] = {
 };
 
 #include <android_runtime/AndroidRuntime.h>
-    
+
 #define REG(env, name, array) \
     result = android::AndroidRuntime::registerNativeMethods(env, name, array, \
     SK_ARRAY_COUNT(array));  \
     if (result < 0) return result
-    
+
 int register_android_graphics_Picture(JNIEnv* env) {
     int result;
-    
+
     REG(env, "android/graphics/Picture", gPictureMethods);
-    
+
     return result;
 }
-    
+
 }
 
 

@@ -73,6 +73,6 @@ public class TallTextAboveButtonTest extends ActivityInstrumentationTestCase<Tal
         assertTrue("scroll view should have focus, but " + getActivity().getScrollView().findFocus() + " does instead",
                 getActivity().getScrollView().isFocused());
     }
-    
+
 
 }

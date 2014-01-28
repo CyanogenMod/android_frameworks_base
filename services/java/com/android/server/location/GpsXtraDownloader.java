@@ -44,7 +44,7 @@ public class GpsXtraDownloader {
 
     private static final String TAG = "GpsXtraDownloader";
     static final boolean DEBUG = false;
-    
+
     private Context mContext;
     private String[] mXtraServers;
     // to load balance our server requests
@@ -61,7 +61,7 @@ public class GpsXtraDownloader {
         if (server1 != null) count++;
         if (server2 != null) count++;
         if (server3 != null) count++;
-        
+
         if (count == 0) {
             Log.e(TAG, "No XTRA servers were specified in the GPS configuration");
             return;
@@ -75,7 +75,7 @@ public class GpsXtraDownloader {
             // randomize first server
             Random random = new Random();
             mNextServerIndex = random.nextInt(count);
-        }       
+        }
     }
 
     byte[] downloadXtraData() {
@@ -92,7 +92,7 @@ public class GpsXtraDownloader {
         // load balance our requests among the available servers
         while (result == null) {
             result = doDownload(mXtraServers[mNextServerIndex], useProxy, proxyHost, proxyPort);
-            
+
             // increment mNextServerIndex and wrap around if necessary
             mNextServerIndex++;
             if (mNextServerIndex == mXtraServers.length) {
@@ -101,11 +101,11 @@ public class GpsXtraDownloader {
             // break if we have tried all the servers
             if (mNextServerIndex == startIndex) break;
         }
-    
+
         return result;
     }
 
-    protected static byte[] doDownload(String url, boolean isProxySet, 
+    protected static byte[] doDownload(String url, boolean isProxySet,
             String proxyHost, int proxyPort) {
         if (DEBUG) Log.d(TAG, "Downloading XTRA data from " + url);
 

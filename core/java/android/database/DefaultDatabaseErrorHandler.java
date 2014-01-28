@@ -57,7 +57,7 @@ public final class DefaultDatabaseErrorHandler implements DatabaseErrorHandler {
         if (!dbObj.isOpen()) {
             // database files are not even openable. delete this database file.
             // NOTE if the database has attached databases, then any of them could be corrupt.
-            // and not deleting all of them could cause corrupted database file to remain and 
+            // and not deleting all of them could cause corrupted database file to remain and
             // make the application crash on database open operation. To avoid this problem,
             // the application should provide its own {@link DatabaseErrorHandler} impl class
             // to delete ALL files of the database (including the attached databases).

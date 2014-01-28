@@ -7,7 +7,7 @@
         android:fromYScale="1.0" android:toYScale="0.7"
         android:pivotX="50%" android:pivotY="50%"
         android:duration="@android:integer/config_shortAnimTime" />
-    <alpha 
+    <alpha
         android:interpolator="@android:interpolator/accelerate_quad"
         android:fromAlpha="1.0" android:toAlpha="0.0"
         android:duration="@android:integer/config_shortAnimTime" />

@@ -32,7 +32,7 @@ public class DateTimeKeyListener extends NumberKeyListener
         return InputType.TYPE_CLASS_DATETIME
                 | InputType.TYPE_DATETIME_VARIATION_NORMAL;
     }
-    
+
     @Override
     protected char[] getAcceptedChars()
     {

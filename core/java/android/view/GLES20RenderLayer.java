@@ -59,7 +59,7 @@ class GLES20RenderLayer extends GLES20Layer {
 
         mWidth = width;
         mHeight = height;
-        
+
         if (width != mLayerWidth || height != mLayerHeight) {
             int[] layerInfo = new int[2];
 

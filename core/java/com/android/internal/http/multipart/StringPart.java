@@ -63,7 +63,7 @@ public class StringPart extends PartBase {
 
     /** Contents of this StringPart. */
     private byte[] content;
-    
+
     /** The String value of this part. */
     private String value;
 
@@ -72,11 +72,11 @@ public class StringPart extends PartBase {
      *
      * @param name The name of the part
      * @param value the string to post
-     * @param charset the charset to be used to encode the string, if <code>null</code> 
+     * @param charset the charset to be used to encode the string, if <code>null</code>
      * the {@link #DEFAULT_CHARSET default} is used
      */
     public StringPart(String name, String value, String charset) {
-        
+
         super(
             name,
             DEFAULT_CONTENT_TYPE,
@@ -102,11 +102,11 @@ public class StringPart extends PartBase {
     public StringPart(String name, String value) {
         this(name, value, null);
     }
-    
+
     /**
      * Gets the content in bytes.  Bytes are lazily created to allow the charset to be changed
      * after the part is created.
-     * 
+     *
      * @return the content in bytes
      */
     private byte[] getContent() {
@@ -115,7 +115,7 @@ public class StringPart extends PartBase {
         }
         return content;
     }
-    
+
     /**
      * Writes the data to the given OutputStream.
      * @param out the OutputStream to write to
@@ -126,7 +126,7 @@ public class StringPart extends PartBase {
         LOG.trace("enter sendData(OutputStream)");
         out.write(getContent());
     }
-    
+
     /**
      * Return the length of the data.
      * @return The length of the data.
@@ -137,7 +137,7 @@ public class StringPart extends PartBase {
         LOG.trace("enter lengthOfData()");
         return getContent().length;
     }
-    
+
     /* (non-Javadoc)
      * @see org.apache.commons.httpclient.methods.multipart.BasePart#setCharSet(java.lang.String)
      */

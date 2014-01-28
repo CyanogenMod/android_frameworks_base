@@ -31,7 +31,7 @@ public class GradientStopsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(new GradientView(this));
     }
 
@@ -46,7 +46,7 @@ public class GradientStopsActivity extends Activity {
             float[] positions = new float[] { 0.3f, 0.6f };
             LinearGradient gradient = new LinearGradient(0.0f, 0.0f, 256.0f, 0.0f,
                     colors, positions, Shader.TileMode.CLAMP);
-            
+
             Paint paint = new Paint();
             paint.setShader(gradient);
 
@@ -83,7 +83,7 @@ public class GradientStopsActivity extends Activity {
 
             gradient = new LinearGradient(0.0f, 0.0f, 256.0f, 0.0f,
                     colors, null, Shader.TileMode.REPEAT);
-            
+
             paint.setShader(gradient);
 
             canvas.translate(0.0f, 75.0f);

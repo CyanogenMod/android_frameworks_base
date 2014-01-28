@@ -225,7 +225,7 @@ public final class BatteryStatsImpl extends BatteryStats {
 
     int mPhoneSignalStrengthBin = -1;
     int mPhoneSignalStrengthBinRaw = -1;
-    final StopwatchTimer[] mPhoneSignalStrengthsTimer = 
+    final StopwatchTimer[] mPhoneSignalStrengthsTimer =
             new StopwatchTimer[SignalStrength.NUM_SIGNAL_STRENGTH_BINS];
 
     StopwatchTimer mPhoneSignalScanningTimer;
@@ -1927,7 +1927,7 @@ public final class BatteryStatsImpl extends BatteryStats {
             // Fake a wake lock, so we consider the device waked as long
             // as the screen is on.
             noteStartWakeLocked(-1, -1, "dummy", WAKE_TYPE_PARTIAL);
-            
+
             // Update discharge amounts.
             if (mOnBatteryInternal) {
                 updateDischargeScreenLevelsLocked(false, true);
@@ -1948,7 +1948,7 @@ public final class BatteryStatsImpl extends BatteryStats {
             }
 
             noteStopWakeLocked(-1, -1, "dummy", WAKE_TYPE_PARTIAL);
-            
+
             // Update discharge amounts.
             if (mOnBatteryInternal) {
                 updateDischargeScreenLevelsLocked(true, false);
@@ -3744,7 +3744,7 @@ public final class BatteryStatsImpl extends BatteryStats {
                     Slog.w(TAG, "File corrupt: too many excessive power entries " + N);
                     return false;
                 }
-                
+
                 mExcessivePower = new ArrayList<ExcessivePower>();
                 for (int i=0; i<N; i++) {
                     ExcessivePower ew = new ExcessivePower();
@@ -4668,7 +4668,7 @@ public final class BatteryStatsImpl extends BatteryStats {
         mDischargeAmountScreenOff = 0;
         mDischargeAmountScreenOffSinceCharge = 0;
     }
-    
+
     public void resetAllStatsLocked() {
         mStartCount = 0;
         initTimes();
@@ -4707,7 +4707,7 @@ public final class BatteryStatsImpl extends BatteryStats {
             }
             mKernelWakelockStats.clear();
         }
-        
+
         initDischarge();
 
         clearHistoryLocked();
@@ -4735,7 +4735,7 @@ public final class BatteryStatsImpl extends BatteryStats {
             mDischargeScreenOffUnplugLevel = mDischargeCurrentLevel;
         }
     }
-    
+
     void setOnBattery(boolean onBattery, int oldStatus, int level) {
         synchronized(this) {
             setOnBatteryLocked(onBattery, oldStatus, level);
@@ -5105,7 +5105,7 @@ public final class BatteryStatsImpl extends BatteryStats {
             return val;
         }
     }
-    
+
     public int getDischargeAmountScreenOn() {
         synchronized(this) {
             int val = mDischargeAmountScreenOn;
@@ -5747,7 +5747,7 @@ public final class BatteryStatsImpl extends BatteryStats {
         out.writeInt(getHighDischargeAmountSinceCharge());
         out.writeInt(getDischargeAmountScreenOnSinceCharge());
         out.writeInt(getDischargeAmountScreenOffSinceCharge());
-        
+
         mScreenOnTimer.writeSummaryFromParcelLocked(out, NOWREAL);
         for (int i=0; i<NUM_SCREEN_BRIGHTNESS_BINS; i++) {
             mScreenBrightnessTimer[i].writeSummaryFromParcelLocked(out, NOWREAL);

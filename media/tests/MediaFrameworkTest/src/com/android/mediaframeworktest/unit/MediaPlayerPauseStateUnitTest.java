@@ -23,7 +23,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 /**
  * Unit test class to test the set of valid and invalid states that
  * MediaPlayer.pause() method can be called.
- */          
+ */
 public class MediaPlayerPauseStateUnitTest extends AndroidTestCase implements MediaPlayerMethodUnderTest {
     private MediaPlayerStateUnitTestTemplate mTestTemplate = new MediaPlayerStateUnitTestTemplate();
 
@@ -32,7 +32,7 @@ public class MediaPlayerPauseStateUnitTest extends AndroidTestCase implements Me
      *    {Started, Paused, PlaybackCompleted}.
      * 2. It is invalid to call pause() in the following states:
      *    {Idle, Initialized, Prepared, Stopped, Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -60,7 +60,7 @@ public class MediaPlayerPauseStateUnitTest extends AndroidTestCase implements Me
     public void testPause() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "pause()";

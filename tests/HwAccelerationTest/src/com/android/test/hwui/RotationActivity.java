@@ -33,7 +33,7 @@ public class RotationActivity extends Activity {
 
         setContentView(container);
     }
-    
+
     @SuppressWarnings({"UnusedDeclaration"})
     static int dipToPx(Context c, int dip) {
         return (int) (c.getResources().getDisplayMetrics().density * dip + 0.5f);
@@ -56,7 +56,7 @@ public class RotationActivity extends Activity {
             canvas.drawRGB(255, 255, 255);
             mPaint.setColor(0xffff0000);
             canvas.drawRect(-80.0f, -80.0f, 80.0f, 80.0f, mPaint);
-            canvas.drawRect(0.0f, 0.0f, 220.0f, 220.0f, mPaint);            
+            canvas.drawRect(0.0f, 0.0f, 220.0f, 220.0f, mPaint);
             canvas.restore();
         }
     }

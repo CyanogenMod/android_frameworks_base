@@ -41,7 +41,7 @@ import java.util.TreeSet;
  * or entire packages. By default sub-packages are included recursively, but methods are
  * provided to allow for arbitrary inclusion or exclusion of sub-packages. Typically a
  * {@link TestGrouping} will have only one root package, but this is not a requirement.
- * 
+ *
  * {@hide} Not needed for 1.0 SDK.
  */
 public class TestGrouping {

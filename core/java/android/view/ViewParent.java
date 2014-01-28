@@ -22,7 +22,7 @@ import android.view.accessibility.AccessibilityEvent;
 /**
  * Defines the responsibilities for a class that will be a parent of a View.
  * This is the API that a view sees when it wants to interact with its parent.
- * 
+ *
  */
 public interface ViewParent {
     /**
@@ -46,15 +46,15 @@ public interface ViewParent {
      * performance of the system. When no such a view is present in the
      * hierarchy, this optimization in unnecessary and might slightly reduce the
      * view hierarchy performance.
-     * 
+     *
      * @param child the view requesting the transparent region computation
-     * 
+     *
      */
     public void requestTransparentRegion(View child);
 
     /**
      * All or part of a child is dirty and needs to be redrawn.
-     * 
+     *
      * @param child The child which is dirty
      * @param r The area within the child that is invalid
      */
@@ -91,7 +91,7 @@ public interface ViewParent {
 
     /**
      * Called when a child of this parent wants focus
-     * 
+     *
      * @param child The child of this ViewParent that wants focus. This view
      *        will contain the focused view. It is not necessarily the view that
      *        actually has focus.
@@ -103,14 +103,14 @@ public interface ViewParent {
     /**
      * Tell view hierarchy that the global view attributes need to be
      * re-evaluated.
-     * 
+     *
      * @param child View whose attributes have changed.
      */
     public void recomputeViewAttributes(View child);
-    
+
     /**
      * Called when a child of this parent is giving up focus
-     * 
+     *
      * @param child The view that is giving up focus
      */
     public void clearChildFocus(View child);
@@ -139,7 +139,7 @@ public interface ViewParent {
 
     /**
      * Find the nearest view in the specified direction that wants to take focus
-     * 
+     *
      * @param v The view that currently has focus
      * @param direction One of FOCUS_UP, FOCUS_DOWN, FOCUS_LEFT, and FOCUS_RIGHT
      */
@@ -153,7 +153,7 @@ public interface ViewParent {
      * method should be followed by calls to {@link #requestLayout()} and
      * {@link View#invalidate()} on this parent to force the parent to redraw
      * with the new child ordering.
-     * 
+     *
      * @param child The child to bring to the top of the z order
      */
     public void bringChildToFront(View child);
@@ -162,7 +162,7 @@ public interface ViewParent {
      * Tells the parent that a new focusable view has become available. This is
      * to handle transitions from the case where there are no focusable views to
      * the case where the first focusable view appears.
-     * 
+     *
      * @param v The view that has become newly focusable
      */
     public void focusableViewAvailable(View v);
@@ -174,7 +174,7 @@ public interface ViewParent {
      * the subclass is added directly to the window manager (for example,
      * {@link ViewManager#addView(View, android.view.ViewGroup.LayoutParams)})
      * then it should override this and show the context menu.</p>
-     * 
+     *
      * @param originalView The source view where the context menu was first invoked
      * @return true if a context menu was displayed
      */
@@ -183,7 +183,7 @@ public interface ViewParent {
     /**
      * Have the parent populate the specified context menu if it has anything to
      * add (and then recurse on its parent).
-     * 
+     *
      * @param menu The menu to populate
      */
     public void createContextMenu(ContextMenu menu);
@@ -209,7 +209,7 @@ public interface ViewParent {
      * @param child The child whose drawable state has changed.
      */
     public void childDrawableStateChanged(View child);
-    
+
     /**
      * Called when a child does not want this parent and its ancestors to
      * intercept touch events with
@@ -218,12 +218,12 @@ public interface ViewParent {
      * <p>This parent should pass this call onto its parents. This parent must obey
      * this request for the duration of the touch (that is, only clear the flag
      * after this parent has received an up or a cancel.</p>
-     * 
+     *
      * @param disallowIntercept True if the child does not want the parent to
      *            intercept touch events.
      */
     public void requestDisallowInterceptTouchEvent(boolean disallowIntercept);
-    
+
     /**
      * Called when a child of this group wants a particular rectangle to be
      * positioned onto the screen.  {@link ViewGroup}s overriding this can trust

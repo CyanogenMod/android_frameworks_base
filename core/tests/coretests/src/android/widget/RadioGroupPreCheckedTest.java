@@ -42,14 +42,14 @@ public class RadioGroupPreCheckedTest extends ActivityInstrumentationTestCase2<R
         assertEquals("The first radio button should be checked", R.id.value_one,
                 group.getCheckedRadioButtonId());
     }
-    
+
     @LargeTest
     public void testRadioButtonChangePreChecked() throws Exception {
         final RadioGroupActivity activity = getActivity();
 
         RadioButton radio = (RadioButton) activity.findViewById(R.id.value_two);
         TouchUtils.clickView(this, radio);
-        
+
         RadioButton old = (RadioButton) activity.findViewById(R.id.value_one);
 
         assertFalse("The first radio button should not be checked", old.isChecked());

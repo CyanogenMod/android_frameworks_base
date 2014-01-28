@@ -32,7 +32,7 @@ import java.util.Arrays;
  * {@link Resources.Theme#obtainStyledAttributes(AttributeSet, int[], int, int)}
  * or {@link Resources#obtainAttributes}.  Be
  * sure to call {@link #recycle} when done with them.
- * 
+ *
  * The indices used to retrieve values from this structure correspond to
  * the positions of the attributes given to obtainStyledAttributes.
  */
@@ -44,47 +44,47 @@ public class TypedArray {
     /*package*/ int[] mIndices;
     /*package*/ int mLength;
     /*package*/ TypedValue mValue = new TypedValue();
-   
+
     /**
      * Return the number of values in this array.
      */
     public int length() {
         return mLength;
     }
-    
+
     /**
      * Return the number of indices in the array that actually have data.
      */
     public int getIndexCount() {
         return mIndices[0];
     }
-    
+
     /**
      * Return an index in the array that has data.
-     * 
+     *
      * @param at The index you would like to returned, ranging from 0 to
      * {@link #getIndexCount()}.
-     * 
+     *
      * @return The index at the given offset, which can be used with
      * {@link #getValue} and related APIs.
      */
     public int getIndex(int at) {
         return mIndices[1+at];
     }
-    
+
     /**
      * Return the Resources object this array was loaded from.
      */
     public Resources getResources() {
         return mResources;
     }
-    
+
     /**
      * Retrieve the styled string value for the attribute at <var>index</var>.
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
-     * @return CharSequence holding string data.  May be styled.  Returns 
+     *
+     * @return CharSequence holding string data.  May be styled.  Returns
      *         null if the attribute is not defined.
      */
     public CharSequence getText(int index) {
@@ -109,9 +109,9 @@ public class TypedArray {
 
     /**
      * Retrieve the string value for the attribute at <var>index</var>.
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
+     *
      * @return String holding string data.  Any styling information is
      * removed.  Returns null if the attribute is not defined.
      */
@@ -143,9 +143,9 @@ public class TypedArray {
      * attributes, or conversions from other types.  As such, this method
      * will only return strings for TypedArray objects that come from
      * attributes in an XML file.
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
+     *
      * @return String holding string data.  Any styling information is
      * removed.  Returns null if the attribute is not defined or is not
      * an immediate string value.
@@ -163,12 +163,12 @@ public class TypedArray {
         }
         return null;
     }
-    
+
     /**
      * @hide
      * Retrieve the string value for the attribute at <var>index</var> that is
      * not allowed to change with the given configurations.
-     * 
+     *
      * @param index Index of attribute to retrieve.
      * @param allowedChangingConfigs Bit mask of configurations from
      * {@link Configuration}.NATIVE_CONFIG_* that are allowed to change.
@@ -202,10 +202,10 @@ public class TypedArray {
 
     /**
      * Retrieve the boolean value for the attribute at <var>index</var>.
-     * 
+     *
      * @param index Index of attribute to retrieve.
      * @param defValue Value to return if the attribute is not defined.
-     * 
+     *
      * @return Attribute boolean value, or defValue if not defined.
      */
     public boolean getBoolean(int index, boolean defValue) {
@@ -232,10 +232,10 @@ public class TypedArray {
 
     /**
      * Retrieve the integer value for the attribute at <var>index</var>.
-     * 
+     *
      * @param index Index of attribute to retrieve.
      * @param defValue Value to return if the attribute is not defined.
-     * 
+     *
      * @return Attribute int value, or defValue if not defined.
      */
     public int getInt(int index, int defValue) {
@@ -262,9 +262,9 @@ public class TypedArray {
 
     /**
      * Retrieve the float value for the attribute at <var>index</var>.
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
+     *
      * @return Attribute float value, or defValue if not defined..
      */
     public float getFloat(int index, float defValue) {
@@ -292,17 +292,17 @@ public class TypedArray {
               + Integer.toHexString(type));
         return defValue;
     }
-    
+
     /**
      * Retrieve the color value for the attribute at <var>index</var>.  If
      * the attribute references a color resource holding a complex
      * {@link android.content.res.ColorStateList}, then the default color from
      * the set is returned.
-     * 
+     *
      * @param index Index of attribute to retrieve.
      * @param defValue Value to return if the attribute is not defined or
      *                 not a resource.
-     * 
+     *
      * @return Attribute color value, or defValue if not defined.
      */
     public int getColor(int index, int defValue) {
@@ -332,9 +332,9 @@ public class TypedArray {
      * Retrieve the ColorStateList for the attribute at <var>index</var>.
      * The value may be either a single solid color or a reference to
      * a color or complex {@link android.content.res.ColorStateList} description.
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
+     *
      * @return ColorStateList for the attribute, or null if not defined.
      */
     public ColorStateList getColorStateList(int index) {
@@ -347,11 +347,11 @@ public class TypedArray {
 
     /**
      * Retrieve the integer value for the attribute at <var>index</var>.
-     * 
+     *
      * @param index Index of attribute to retrieve.
      * @param defValue Value to return if the attribute is not defined or
      *                 not a resource.
-     * 
+     *
      * @return Attribute integer value, or defValue if not defined.
      */
     public int getInteger(int index, int defValue) {
@@ -370,18 +370,18 @@ public class TypedArray {
     }
 
     /**
-     * Retrieve a dimensional unit attribute at <var>index</var>.  Unit 
-     * conversions are based on the current {@link DisplayMetrics} 
-     * associated with the resources this {@link TypedArray} object 
-     * came from. 
-     * 
+     * Retrieve a dimensional unit attribute at <var>index</var>.  Unit
+     * conversions are based on the current {@link DisplayMetrics}
+     * associated with the resources this {@link TypedArray} object
+     * came from.
+     *
      * @param index Index of attribute to retrieve.
      * @param defValue Value to return if the attribute is not defined or
      *                 not a resource.
-     * 
-     * @return Attribute dimension value multiplied by the appropriate 
+     *
+     * @return Attribute dimension value multiplied by the appropriate
      * metric, or defValue if not defined.
-     * 
+     *
      * @see #getDimensionPixelOffset
      * @see #getDimensionPixelSize
      */
@@ -406,14 +406,14 @@ public class TypedArray {
      * {@link #getDimension}, except the returned value is converted to
      * integer pixels for you.  An offset conversion involves simply
      * truncating the base value to an integer.
-     * 
+     *
      * @param index Index of attribute to retrieve.
      * @param defValue Value to return if the attribute is not defined or
      *                 not a resource.
-     * 
-     * @return Attribute dimension value multiplied by the appropriate 
+     *
+     * @return Attribute dimension value multiplied by the appropriate
      * metric and truncated to integer pixels, or defValue if not defined.
-     * 
+     *
      * @see #getDimension
      * @see #getDimensionPixelSize
      */
@@ -439,14 +439,14 @@ public class TypedArray {
      * integer pixels for use as a size.  A size conversion involves
      * rounding the base value, and ensuring that a non-zero base value
      * is at least one pixel in size.
-     * 
+     *
      * @param index Index of attribute to retrieve.
      * @param defValue Value to return if the attribute is not defined or
      *                 not a resource.
-     * 
-     * @return Attribute dimension value multiplied by the appropriate 
+     *
+     * @return Attribute dimension value multiplied by the appropriate
      * metric and truncated to integer pixels, or defValue if not defined.
-     *  
+     *
      * @see #getDimension
      * @see #getDimensionPixelOffset
      */
@@ -470,11 +470,11 @@ public class TypedArray {
      * {@link android.view.ViewGroup}'s layout_width and layout_height
      * attributes.  This is only here for performance reasons; applications
      * should use {@link #getDimensionPixelSize}.
-     * 
+     *
      * @param index Index of the attribute to retrieve.
      * @param name Textual name of attribute for error reporting.
-     * 
-     * @return Attribute dimension value multiplied by the appropriate 
+     *
+     * @return Attribute dimension value multiplied by the appropriate
      * metric and truncated to integer pixels.
      */
     public int getLayoutDimension(int index, String name) {
@@ -492,18 +492,18 @@ public class TypedArray {
         throw new RuntimeException(getPositionDescription()
                 + ": You must supply a " + name + " attribute.");
     }
-    
+
     /**
      * Special version of {@link #getDimensionPixelSize} for retrieving
      * {@link android.view.ViewGroup}'s layout_width and layout_height
      * attributes.  This is only here for performance reasons; applications
      * should use {@link #getDimensionPixelSize}.
-     * 
+     *
      * @param index Index of the attribute to retrieve.
      * @param defValue The default value to return if this attribute is not
      * default or contains the wrong type of data.
-     * 
-     * @return Attribute dimension value multiplied by the appropriate 
+     *
+     * @return Attribute dimension value multiplied by the appropriate
      * metric and truncated to integer pixels.
      */
     public int getLayoutDimension(int index, int defValue) {
@@ -523,18 +523,18 @@ public class TypedArray {
 
     /**
      * Retrieve a fractional unit attribute at <var>index</var>.
-     * 
-     * @param index Index of attribute to retrieve. 
-     * @param base The base value of this fraction.  In other words, a 
+     *
+     * @param index Index of attribute to retrieve.
+     * @param base The base value of this fraction.  In other words, a
      *             standard fraction is multiplied by this value.
-     * @param pbase The parent base value of this fraction.  In other 
+     * @param pbase The parent base value of this fraction.  In other
      *             words, a parent fraction (nn%p) is multiplied by this
      *             value.
      * @param defValue Value to return if the attribute is not defined or
      *                 not a resource.
-     * 
-     * @return Attribute fractional value multiplied by the appropriate 
-     * base value, or defValue if not defined. 
+     *
+     * @return Attribute fractional value multiplied by the appropriate
+     * base value, or defValue if not defined.
      */
     public float getFraction(int index, int base, int pbase, float defValue) {
         index *= AssetManager.STYLE_NUM_ENTRIES;
@@ -553,16 +553,16 @@ public class TypedArray {
 
     /**
      * Retrieve the resource identifier for the attribute at
-     * <var>index</var>.  Note that attribute resource as resolved when 
-     * the overall {@link TypedArray} object is retrieved.  As a 
-     * result, this function will return the resource identifier of the 
-     * final resource value that was found, <em>not</em> necessarily the 
-     * original resource that was specified by the attribute. 
-     * 
+     * <var>index</var>.  Note that attribute resource as resolved when
+     * the overall {@link TypedArray} object is retrieved.  As a
+     * result, this function will return the resource identifier of the
+     * final resource value that was found, <em>not</em> necessarily the
+     * original resource that was specified by the attribute.
+     *
      * @param index Index of attribute to retrieve.
      * @param defValue Value to return if the attribute is not defined or
      *                 not a resource.
-     * 
+     *
      * @return Attribute resource identifier, or defValue if not defined.
      */
     public int getResourceId(int index, int defValue) {
@@ -582,9 +582,9 @@ public class TypedArray {
      * gets the resource ID of the selected attribute, and uses
      * {@link Resources#getDrawable Resources.getDrawable} of the owning
      * Resources object to retrieve its Drawable.
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
+     *
      * @return Drawable for the attribute, or null if not defined.
      */
     public Drawable getDrawable(int index) {
@@ -609,9 +609,9 @@ public class TypedArray {
      * This gets the resource ID of the selected attribute, and uses
      * {@link Resources#getTextArray Resources.getTextArray} of the owning
      * Resources object to retrieve its String[].
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
+     *
      * @return CharSequence[] for the attribute, or null if not defined.
      */
     public CharSequence[] getTextArray(int index) {
@@ -633,12 +633,12 @@ public class TypedArray {
 
     /**
      * Retrieve the raw TypedValue for the attribute at <var>index</var>.
-     * 
+     *
      * @param index Index of attribute to retrieve.
      * @param outValue TypedValue object in which to place the attribute's
      *                 data.
-     * 
-     * @return Returns true if the value was retrieved, else false. 
+     *
+     * @return Returns true if the value was retrieved, else false.
      */
     public boolean getValue(int index, TypedValue outValue) {
         return getValueAt(index*AssetManager.STYLE_NUM_ENTRIES, outValue);
@@ -646,9 +646,9 @@ public class TypedArray {
 
     /**
      * Determines whether there is an attribute at <var>index</var>.
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
+     *
      * @return True if the attribute has a value, false otherwise.
      */
     public boolean hasValue(int index) {
@@ -657,15 +657,15 @@ public class TypedArray {
         final int type = data[index+AssetManager.STYLE_TYPE];
         return type != TypedValue.TYPE_NULL;
     }
-    
+
     /**
-     * Retrieve the raw TypedValue for the attribute at <var>index</var> 
-     * and return a temporary object holding its data.  This object is only 
-     * valid until the next call on to {@link TypedArray}. 
-     * 
+     * Retrieve the raw TypedValue for the attribute at <var>index</var>
+     * and return a temporary object holding its data.  This object is only
+     * valid until the next call on to {@link TypedArray}.
+     *
      * @param index Index of attribute to retrieve.
-     * 
-     * @return Returns a TypedValue object if the attribute is defined, 
+     *
+     * @return Returns a TypedValue object if the attribute is defined,
      *         containing its data; otherwise returns null.  (You will not
      *         receive a TypedValue whose type is TYPE_NULL.)
      */

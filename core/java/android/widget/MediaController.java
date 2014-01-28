@@ -55,7 +55,7 @@ import java.util.Locale;
  * <p>
  * Functions like show() and hide() have no effect when MediaController
  * is created in an xml layout.
- * 
+ *
  * MediaController will hide and
  * show the buttons according to these rules:
  * <ul>
@@ -132,7 +132,7 @@ public class MediaController extends FrameLayout {
         mDecor.setOnTouchListener(mTouchListener);
         mWindow.setContentView(this);
         mWindow.setBackgroundDrawableResource(android.R.color.transparent);
-        
+
         // While the media controller is up, the volume control keys should
         // affect the media stream type
         mWindow.setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -201,7 +201,7 @@ public class MediaController extends FrameLayout {
             return false;
         }
     };
-    
+
     public void setMediaPlayer(MediaPlayerControl player) {
         mPlayer = player;
         updatePausePlay();
@@ -271,7 +271,7 @@ public class MediaController extends FrameLayout {
             }
         }
 
-        // By default these are hidden. They will be enabled when setPrevNextListeners() is called 
+        // By default these are hidden. They will be enabled when setPrevNextListeners() is called
         mNextButton = (ImageButton) v.findViewById(com.android.internal.R.id.next);
         if (mNextButton != null && !mFromXml && !mListenersSet) {
             mNextButton.setVisibility(View.GONE);
@@ -328,7 +328,7 @@ public class MediaController extends FrameLayout {
             // the buttons.
         }
     }
-    
+
     /**
      * Show the controller on screen. It will go away
      * automatically after 'timeout' milliseconds of inactivity.
@@ -347,7 +347,7 @@ public class MediaController extends FrameLayout {
             mShowing = true;
         }
         updatePausePlay();
-        
+
         // cause the progress bar to be updated even if mShowing
         // was already true.  This happens, for example, if we're
         // paused with the progress bar showing the user hits play.
@@ -359,7 +359,7 @@ public class MediaController extends FrameLayout {
             mHandler.sendMessageDelayed(msg, timeout);
         }
     }
-    
+
     public boolean isShowing() {
         return mShowing;
     }
@@ -656,7 +656,7 @@ public class MediaController extends FrameLayout {
 
         if (mRoot != null) {
             installPrevNextListeners();
-            
+
             if (mNextButton != null && !mFromXml) {
                 mNextButton.setVisibility(View.VISIBLE);
             }

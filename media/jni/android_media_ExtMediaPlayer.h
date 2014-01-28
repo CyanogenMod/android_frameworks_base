@@ -58,8 +58,8 @@ class JNIExtMediaPlayerListener: public MediaPlayerListener
     static bool checkExtMedia(JNIEnv *env, jobject thiz);
   private:
     JNIExtMediaPlayerListener();
-    jclass     mClass;	 // Reference to MediaPlayer class
-    jobject    mObject;	 // Weak ref to MediaPlayer Java object to call on
+    jclass     mClass;   // Reference to MediaPlayer class
+    jobject    mObject;  // Weak ref to MediaPlayer Java object to call on
     jobject    mParcel;
     jobject    mParcelArray[MAX_NUM_PARCELS];
     int        mParcelIndex;

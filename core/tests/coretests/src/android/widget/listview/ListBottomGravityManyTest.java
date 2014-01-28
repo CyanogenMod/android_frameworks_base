@@ -42,7 +42,7 @@ public class ListBottomGravityManyTest extends ActivityInstrumentationTestCase<L
     public void testPreconditions() {
         assertNotNull(mActivity);
         assertNotNull(mListView);
-        
+
         // Last item should be selected
         assertEquals(mListView.getAdapter().getCount() - 1, mListView.getSelectedItemPosition());
     }

@@ -337,7 +337,7 @@ public class FocusFinder {
         // for horizontal directions, being exclusively in beam always wins
         if ((direction == View.FOCUS_LEFT || direction == View.FOCUS_RIGHT)) {
             return true;
-        }        
+        }
 
         // for vertical directions, beams only beat up to a point:
         // now, as long as rect2 isn't completely closer, rect1 wins
@@ -368,7 +368,7 @@ public class FocusFinder {
     boolean isCandidate(Rect srcRect, Rect destRect, int direction) {
         switch (direction) {
             case View.FOCUS_LEFT:
-                return (srcRect.right > destRect.right || srcRect.left >= destRect.right) 
+                return (srcRect.right > destRect.right || srcRect.left >= destRect.right)
                         && srcRect.left > destRect.left;
             case View.FOCUS_RIGHT:
                 return (srcRect.left < destRect.left || srcRect.right <= destRect.left)
@@ -501,7 +501,7 @@ public class FocusFinder {
 
     /**
      * Find the nearest touchable view to the specified view.
-     * 
+     *
      * @param root The root of the tree in which to search
      * @param x X coordinate from which to start the search
      * @param y Y coordinate from which to start the search
@@ -516,18 +516,18 @@ public class FocusFinder {
         View closest = null;
 
         int numTouchables = touchables.size();
-        
+
         int edgeSlop = ViewConfiguration.get(root.mContext).getScaledEdgeSlop();
-        
+
         Rect closestBounds = new Rect();
         Rect touchableBounds = mOtherRect;
-        
+
         for (int i = 0; i < numTouchables; i++) {
             View touchable = touchables.get(i);
 
             // get visible bounds of other view in same coordinate system
             touchable.getDrawingRect(touchableBounds);
-            
+
             root.offsetRectBetweenParentAndChild(touchable, touchableBounds, true, true);
 
             if (!isTouchCandidate(x, y, touchableBounds, direction)) {

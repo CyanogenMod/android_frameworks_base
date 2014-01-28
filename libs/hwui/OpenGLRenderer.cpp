@@ -272,7 +272,7 @@ status_t OpenGLRenderer::clear(float left, float top, float right, float bottom,
         mCaches.resetScissor();
         return DrawGlInfo::kStatusDone;
     }
-    return DrawGlInfo::kStatusDrew;  
+    return DrawGlInfo::kStatusDrew;
 #else
     if (!opaque || mCountOverdraw) {
         mCaches.enableScissor();

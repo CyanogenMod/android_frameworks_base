@@ -42,7 +42,7 @@ public class LabelView extends View {
      * Construct object, initializing with any attributes we understand from a
      * layout file. These attributes are defined in
      * SDK/assets/res/any/classes.xml.
-     * 
+     *
      * @see android.view.View#View(android.content.Context, android.util.AttributeSet)
     public LabelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -176,7 +176,7 @@ public class LabelView extends View {
 
     /**
      * Render the text
-     * 
+     *
      * @see android.view.View#onDraw(android.graphics.Canvas)
      */
     @Override

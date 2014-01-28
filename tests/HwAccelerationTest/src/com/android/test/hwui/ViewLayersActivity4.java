@@ -32,7 +32,7 @@ public class ViewLayersActivity4 extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.view_layers_4);
 
         setupList(R.id.list1);
@@ -41,11 +41,11 @@ public class ViewLayersActivity4 extends Activity {
     public void setListTranslucent(View v) {
         findViewById(R.id.list1).setAlpha(0.5f);
     }
-    
+
     public void setListOpaque(View v) {
         findViewById(R.id.list1).setAlpha(1.0f);
     }
-    
+
     private void setupList(int listId) {
         final ListView list = (ListView) findViewById(listId);
         list.setAdapter(new SimpleListAdapter(this));

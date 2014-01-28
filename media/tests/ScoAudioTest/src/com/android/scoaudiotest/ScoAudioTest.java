@@ -57,7 +57,7 @@ import java.util.Locale;
 public class ScoAudioTest extends Activity {
 
     final static String TAG = "ScoAudioTest";
-    
+
     AudioManager mAudioManager;
     AudioManager mAudioManager2;
     boolean mForceScoOn;
@@ -83,18 +83,18 @@ public class ScoAudioTest extends Activity {
     private BluetoothDevice mBluetoothHeadsetDevice;
     TextView mScoStateTxt;
     TextView mVdStateTxt;
-    
+
     private final BroadcastReceiver mReceiver = new ScoBroadcastReceiver();
 
     public ScoAudioTest() {
         Log.e(TAG, "contructor");
     }
-        
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        
+
         setContentView(R.layout.scoaudiotest);
 
         mScoStateTxt = (TextView) findViewById(R.id.scoStateTxt);
@@ -109,12 +109,12 @@ public class ScoAudioTest extends Activity {
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mAudioManager2 = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         mHandler = new Handler();
-        
+
         mMediaControllers[0] = new SimplePlayerController(this, R.id.playPause1, R.id.stop1,
                 R.raw.sine440_mo_16b_16k, AudioManager.STREAM_BLUETOOTH_SCO);
         TextView name = (TextView) findViewById(R.id.playPause1Text);
         name.setText("VOICE_CALL stream");
-        
+
         mScoButton = (ToggleButton)findViewById(R.id.ForceScoButton);
         mScoButton.setOnCheckedChangeListener(mForceScoChanged);
         mForceScoOn = false;
@@ -125,7 +125,7 @@ public class ScoAudioTest extends Activity {
         mVoiceDialerOn = false;
         mVoiceDialerButton.setChecked(mVoiceDialerOn);
 
-        
+
         mMediaControllers[1] = new SimpleRecordController(this, R.id.recStop1, 0, "Sco_record_");
         mTtsInited = false;
         mTts = new TextToSpeech(this, new TtsInitListener());
@@ -135,7 +135,7 @@ public class ScoAudioTest extends Activity {
         mTtsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
                 UTTERANCE);
 
-        mSpeakText = (EditText) findViewById(R.id.speakTextEdit);        
+        mSpeakText = (EditText) findViewById(R.id.speakTextEdit);
         mSpeakText.setOnKeyListener(mSpeakKeyListener);
         mSpeakText.setText("sco audio test sentence");
         mTtsToFileButton = (ToggleButton)findViewById(R.id.TtsToFileButton);
@@ -175,13 +175,13 @@ public class ScoAudioTest extends Activity {
             }
         }
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
 //        mForceScoOn = false;
 //        mScoButton.setChecked(mForceScoOn);
-        mMediaControllers[0].stop();        
+        mMediaControllers[0].stop();
         mMediaControllers[1].stop();
         mAudioManager.setStreamVolume(AudioManager.STREAM_BLUETOOTH_SCO,
                 mOriginalVoiceVolume, 0);
@@ -237,7 +237,7 @@ public class ScoAudioTest extends Activity {
                     if (mVoiceDialerOn) {
                         mBluetoothHeadset.startVoiceRecognition(mBluetoothHeadsetDevice);
                     } else {
-                        mBluetoothHeadset.stopVoiceRecognition(mBluetoothHeadsetDevice);                        
+                        mBluetoothHeadset.stopVoiceRecognition(mBluetoothHeadsetDevice);
                     }
                 }
             }
@@ -263,7 +263,7 @@ public class ScoAudioTest extends Activity {
         String mFileNameBase;
         String mFileName;
         int mFileResId;
-        
+
         SimpleMediaController(Context context, int playPausebuttonId, int stopButtonId, String fileName) {
             mContext = context;
             mPlayPauseButtonId = playPausebuttonId;
@@ -303,10 +303,10 @@ public class ScoAudioTest extends Activity {
                 stop();
             }
         }
-        
+
         public void playOrPause() {
         }
-        
+
         public void stop() {
         }
 
@@ -318,13 +318,13 @@ public class ScoAudioTest extends Activity {
             mPlayPauseButton.setImageResource(isPlaying() ? mPauseImageResource : mPlayImageResource);
         }
     }
-    
+
     private class SimplePlayerController extends SimpleMediaController {
         private MediaPlayer mMediaPlayer;
         private int mStreamType;
         SimplePlayerController(Context context, int playPausebuttonId, int stopButtonId, String fileName, int stream) {
             super(context, playPausebuttonId, stopButtonId, fileName);
-            
+
             mPlayImageResource = android.R.drawable.ic_media_play;
             mPauseImageResource = android.R.drawable.ic_media_pause;
             mStreamType = stream;
@@ -334,7 +334,7 @@ public class ScoAudioTest extends Activity {
 
         SimplePlayerController(Context context, int playPausebuttonId, int stopButtonId, int fileResId, int stream) {
             super(context, playPausebuttonId, stopButtonId, fileResId);
-            
+
             mPlayImageResource = android.R.drawable.ic_media_play;
             mPauseImageResource = android.R.drawable.ic_media_pause;
             mStreamType = stream;
@@ -399,17 +399,17 @@ public class ScoAudioTest extends Activity {
             }
             updatePlayPauseButton();
         }
-        
+
         @Override
         public boolean isPlaying() {
             if (mMediaPlayer != null) {
                 return mMediaPlayer.isPlaying();
             } else {
-                return false;                
+                return false;
             }
         }
     }
-    
+
     private class SimpleRecordController extends SimpleMediaController {
         private MediaRecorder mMediaRecorder;
         private int mFileCount = 0;
@@ -420,7 +420,7 @@ public class ScoAudioTest extends Activity {
             mPlayImageResource = R.drawable.record;
             mPauseImageResource = R.drawable.stop;
         }
-       
+
         @Override
         public void playOrPause() {
             if (mState == 0) {
@@ -471,7 +471,7 @@ public class ScoAudioTest extends Activity {
                 mMediaRecorder = null;
             }
         }
-        
+
         @Override
         public void stop() {
             if (mMediaRecorder != null) {
@@ -492,11 +492,11 @@ public class ScoAudioTest extends Activity {
             if (mState == 1) {
                 return true;
             } else {
-                return false;                
+                return false;
             }
         }
     }
-    
+
     class TtsInitListener implements TextToSpeech.OnInitListener {
         @Override
         public void onInit(int status) {
@@ -527,11 +527,11 @@ public class ScoAudioTest extends Activity {
 
     class MyUtteranceCompletedListener implements OnUtteranceCompletedListener {
         private final String mExpectedUtterance;
-        
+
         public MyUtteranceCompletedListener(String expectedUtteranceId) {
             mExpectedUtterance = expectedUtteranceId;
         }
-        
+
         @Override
         public void onUtteranceCompleted(String utteranceId) {
             Log.e(TAG, "onUtteranceCompleted " + utteranceId);
@@ -547,7 +547,7 @@ public class ScoAudioTest extends Activity {
                         mediaPlayer.release();
                         mediaPlayer = null;
                     }
-    
+
                     if (mediaPlayer != null) {
                         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
@@ -572,12 +572,12 @@ public class ScoAudioTest extends Activity {
                         mOriginalVoiceVolume, 0);
 //                Debug.stopMethodTracing();
             }
-            
+
             Log.e(TAG, "end speak, volume: "+mOriginalVoiceVolume);
         }
     }
 
-    
+
     private View.OnKeyListener mSpeakKeyListener
     = new View.OnKeyListener() {
         @Override
@@ -622,11 +622,11 @@ public class ScoAudioTest extends Activity {
             return false;
         }
     };
-    
+
     private static final String[] mModeStrings = {
         "NORMAL", "RINGTONE", "IN_CALL", "IN_COMMUNICATION"
     };
-    
+
     private Spinner.OnItemSelectedListener mModeChanged
         = new Spinner.OnItemSelectedListener() {
         @Override
@@ -637,7 +637,7 @@ public class ScoAudioTest extends Activity {
                 mAudioManager.setMode(mCurrentMode);
             }
         }
-        
+
         @Override
         public void onNothingSelected(android.widget.AdapterView av) {
         }
@@ -670,7 +670,7 @@ public class ScoAudioTest extends Activity {
     private int mChangedState = -1;
     private int mUpdatedState = -1;
     private int mUpdatedPrevState = -1;
-    
+
     private class ScoBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -683,14 +683,14 @@ public class ScoAudioTest extends Activity {
             } else if (action.equals(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED)) {
                 mChangedState = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, -1);
                 Log.e(TAG, "ACTION_SCO_AUDIO_STATE_CHANGED: "+mChangedState);
-                mScoStateTxt.setText("changed: "+Integer.toString(mChangedState)+ 
+                mScoStateTxt.setText("changed: "+Integer.toString(mChangedState)+
                         " updated: "+Integer.toString(mUpdatedState)+
                         " prev updated: "+Integer.toString(mUpdatedPrevState));
             } else if (action.equals(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED)) {
                 mUpdatedState = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, -1);
                 mUpdatedPrevState = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_PREVIOUS_STATE, -1);
                 Log.e(TAG, "ACTION_SCO_AUDIO_STATE_UPDATED, state: "+mUpdatedState+" prev state: "+mUpdatedPrevState);
-                mScoStateTxt.setText("changed: "+Integer.toString(mChangedState)+ 
+                mScoStateTxt.setText("changed: "+Integer.toString(mChangedState)+
                         " updated: "+Integer.toString(mUpdatedState)+
                         " prev updated: "+Integer.toString(mUpdatedPrevState));
                 if (mForceScoOn && mUpdatedState == AudioManager.SCO_AUDIO_STATE_DISCONNECTED) {

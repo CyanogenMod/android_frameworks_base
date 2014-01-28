@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2008 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ import android.widget.TextView;
  * the text to the available space.
  */
 public class DialogTitle extends TextView {
-    
+
     public DialogTitle(Context context, AttributeSet attrs,
             int defStyle) {
         super(context, attrs, defStyle);
@@ -41,7 +41,7 @@ public class DialogTitle extends TextView {
     public DialogTitle(Context context) {
         super(context);
     }
-    
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -66,7 +66,7 @@ public class DialogTitle extends TextView {
                     }
                     a.recycle();
 
-                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);      
+                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 }
             }
         }

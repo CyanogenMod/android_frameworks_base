@@ -62,7 +62,7 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
      * "main" is used.
      */
     public static final String META_DATA_LIB_NAME = "android.app.lib_name";
-    
+
     /**
      * Optional meta-that can be in the manifest for this component, specifying
      * the name of the main entry point for this native activity in the
@@ -70,17 +70,17 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
      * "ANativeActivity_onCreate" is used.
      */
     public static final String META_DATA_FUNC_NAME = "android.app.func_name";
-    
+
     private static final String KEY_NATIVE_SAVED_STATE = "android:native_state";
 
     private NativeContentView mNativeContentView;
     private InputMethodManager mIMM;
 
     private int mNativeHandle;
-    
+
     private InputQueue mCurInputQueue;
     private SurfaceHolder mCurSurfaceHolder;
-    
+
     final int[] mLocation = new int[2];
     int mLastContentX;
     int mLastContentY;
@@ -90,12 +90,12 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
     private boolean mDispatchingUnhandledKey;
 
     private boolean mDestroyed;
-    
+
     private native int loadNativeCode(String path, String funcname, MessageQueue queue,
             String internalDataPath, String obbPath, String externalDataPath, int sdkVersion,
             AssetManager assetMgr, byte[] savedState);
     private native void unloadNativeCode(int handle);
-    
+
     private native void onStartNative(int handle);
     private native void onResumeNative(int handle);
     private native byte[] onSaveInstanceStateNative(int handle);
@@ -130,7 +130,7 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
         String libname = "main";
         String funcname = "ANativeActivity_onCreate";
         ActivityInfo ai;
-        
+
         mIMM = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
         getWindow().takeSurface(this);
@@ -145,7 +145,7 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
         setContentView(mNativeContentView);
         mNativeContentView.requestFocus();
         mNativeContentView.getViewTreeObserver().addOnGlobalLayoutListener(this);
-        
+
         try {
             ai = getPackageManager().getActivityInfo(
                     getIntent().getComponent(), PackageManager.GET_META_DATA);
@@ -158,19 +158,19 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException("Error getting activity info", e);
         }
-        
+
         String path = null;
-        
+
         File libraryFile = new File(ai.applicationInfo.nativeLibraryDir,
                 System.mapLibraryName(libname));
         if (libraryFile.exists()) {
             path = libraryFile.getPath();
         }
-        
+
         if (path == null) {
             throw new IllegalArgumentException("Unable to find native library: " + libname);
         }
-        
+
         byte[] nativeSavedState = savedInstanceState != null
                 ? savedInstanceState.getByteArray(KEY_NATIVE_SAVED_STATE) : null;
 
@@ -260,21 +260,21 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
             onWindowFocusChangedNative(mNativeHandle, hasFocus);
         }
     }
-    
+
     public void surfaceCreated(SurfaceHolder holder) {
         if (!mDestroyed) {
             mCurSurfaceHolder = holder;
             onSurfaceCreatedNative(mNativeHandle, holder.getSurface());
         }
     }
-    
+
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         if (!mDestroyed) {
             mCurSurfaceHolder = holder;
             onSurfaceChangedNative(mNativeHandle, holder.getSurface(), format, width, height);
         }
     }
-    
+
     public void surfaceRedrawNeeded(SurfaceHolder holder) {
         if (!mDestroyed) {
             mCurSurfaceHolder = holder;
@@ -288,21 +288,21 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
             onSurfaceDestroyedNative(mNativeHandle);
         }
     }
-    
+
     public void onInputQueueCreated(InputQueue queue) {
         if (!mDestroyed) {
             mCurInputQueue = queue;
             onInputQueueCreatedNative(mNativeHandle, queue.getNativePtr());
         }
     }
-    
+
     public void onInputQueueDestroyed(InputQueue queue) {
         if (!mDestroyed) {
             onInputQueueDestroyedNative(mNativeHandle, queue.getNativePtr());
             mCurInputQueue = null;
         }
     }
-    
+
     public void onGlobalLayout() {
         mNativeContentView.getLocationInWindow(mLocation);
         int w = mNativeContentView.getWidth();
@@ -323,7 +323,7 @@ public class NativeActivity extends Activity implements SurfaceHolder.Callback2,
     void setWindowFlags(int flags, int mask) {
         getWindow().setFlags(flags, mask);
     }
-    
+
     void setWindowFormat(int format) {
         getWindow().setFormat(format);
     }

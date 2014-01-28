@@ -31,7 +31,7 @@ class MediaPlayerStateErrors {
         PLAYBACK_COMPLETED,
         ERROR,
     }
-    
+
     // Error occurs in the states below?
     public boolean errorInIdleState = false;
     public boolean errorInIdleStateAfterReset = false;

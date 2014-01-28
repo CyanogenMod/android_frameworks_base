@@ -970,7 +970,7 @@ bool CommonTimeServer::handleSyncResponse(
         // threshold, we should simply discard it.  Its better to do nothing
         // than to take cues from a packet like that.
         int rttCommon = mCommonClock.localDurationToCommonDuration(rtt);
-        if (rttCommon > (static_cast<int64_t>(mPanicThresholdUsec) * 
+        if (rttCommon > (static_cast<int64_t>(mPanicThresholdUsec) *
                          kRTTDiscardPanicThreshMultiplier)) {
             ALOGV("Dropping sync response with RTT of %lld uSec", rttCommon);
             mClient_ExpiredSyncRespsRXedFromCurMaster++;

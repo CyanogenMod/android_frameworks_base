@@ -31,8 +31,8 @@ import android.view.WindowManager.LayoutParams;
 /**
  * CompatibilityInfo class keeps the information about compatibility mode that the application is
  * running under.
- * 
- *  {@hide} 
+ *
+ *  {@hide}
  */
 public class CompatibilityInfo implements Parcelable {
     /** default compatibility info object for compatible applications */
@@ -55,12 +55,12 @@ public class CompatibilityInfo implements Parcelable {
      *  A compatibility flags
      */
     private final int mCompatibilityFlags;
-    
+
     /**
      * A flag mask to tell if the application needs scaling (when mApplicationScale != 1.0f)
      * {@see compatibilityFlag}
      */
-    private static final int SCALING_REQUIRED = 1; 
+    private static final int SCALING_REQUIRED = 1;
 
     /**
      * Application must always run in compatibility mode?
@@ -81,7 +81,7 @@ public class CompatibilityInfo implements Parcelable {
      * The effective screen density we have selected for this application.
      */
     public final int applicationDensity;
-    
+
     /**
      * Application's scale.
      */
@@ -269,11 +269,11 @@ public class CompatibilityInfo implements Parcelable {
     public boolean isScalingRequired() {
         return (mCompatibilityFlags&SCALING_REQUIRED) != 0;
     }
-    
+
     public boolean supportsScreen() {
         return (mCompatibilityFlags&NEEDS_SCREEN_COMPAT) == 0;
     }
-    
+
     public boolean neverSupportsScreen() {
         return (mCompatibilityFlags&ALWAYS_NEEDS_COMPAT) != 0;
     }
@@ -297,11 +297,11 @@ public class CompatibilityInfo implements Parcelable {
     public class Translator {
         final public float applicationScale;
         final public float applicationInvertedScale;
-        
+
         private Rect mContentInsetsBuffer = null;
         private Rect mVisibleInsetsBuffer = null;
         private Region mTouchableAreaBuffer = null;
-        
+
         Translator(float applicationScale, float applicationInvertedScale) {
             this.applicationScale = applicationScale;
             this.applicationInvertedScale = applicationInvertedScale;
@@ -320,7 +320,7 @@ public class CompatibilityInfo implements Parcelable {
         }
 
         /**
-         * Translate the region in window to screen. 
+         * Translate the region in window to screen.
          */
         public void translateRegionInWindowToScreen(Region transparentRegion) {
             transparentRegion.scale(applicationScale);
@@ -335,11 +335,11 @@ public class CompatibilityInfo implements Parcelable {
                     bitmaps and ninepatches on exacty 1/2 pixel boundaries,
                     which can give us inconsistent drawing due to imperfect
                     float precision in the graphics engine's inverse matrix.
-                 
+
                     As a work-around, we translate by a tiny amount to avoid
                     landing on exact pixel centers and boundaries, giving us
                     the slop we need to draw consistently.
-                 
+
                     This constant is meant to resolve to 1/255 after it is
                     scaled by 1.5 (applicationScale). Note, this is just a guess
                     as to what is small enough not to create its own artifacts,
@@ -366,14 +366,14 @@ public class CompatibilityInfo implements Parcelable {
         public void translateWindowLayout(WindowManager.LayoutParams params) {
             params.scale(applicationScale);
         }
-        
+
         /**
          * Translate a Rect in application's window to screen.
          */
         public void translateRectInAppWindowToScreen(Rect rect) {
             rect.scale(applicationScale);
         }
- 
+
         /**
          * Translate a Rect in screen coordinates into the app window's coordinates.
          */

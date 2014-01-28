@@ -128,7 +128,7 @@ public abstract class DisplayList {
 
     /**
      * Flag used when calling
-     * {@link HardwareCanvas#drawDisplayList(DisplayList, android.graphics.Rect, int)} 
+     * {@link HardwareCanvas#drawDisplayList(DisplayList, android.graphics.Rect, int)}
      * When this flag is set, draw operations lying outside of the bounds of the
      * display list will be culled early. It is recommeneded to always set this
      * flag.
@@ -141,7 +141,7 @@ public abstract class DisplayList {
 
     /**
      * Indicates that the display list is done drawing.
-     * 
+     *
      * @see HardwareCanvas#drawDisplayList(DisplayList, android.graphics.Rect, int)
      *
      * @hide
@@ -150,7 +150,7 @@ public abstract class DisplayList {
 
     /**
      * Indicates that the display list needs another drawing pass.
-     * 
+     *
      * @see HardwareCanvas#drawDisplayList(DisplayList, android.graphics.Rect, int)
      *
      * @hide
@@ -159,8 +159,8 @@ public abstract class DisplayList {
 
     /**
      * Indicates that the display list needs to re-execute its GL functors.
-     * 
-     * @see HardwareCanvas#drawDisplayList(DisplayList, android.graphics.Rect, int) 
+     *
+     * @see HardwareCanvas#drawDisplayList(DisplayList, android.graphics.Rect, int)
      * @see HardwareCanvas#callDrawGLFunction(int)
      *
      * @hide
@@ -272,7 +272,7 @@ public abstract class DisplayList {
 
     /**
      * Return the amount of memory used by this display list.
-     * 
+     *
      * @return The size of this display list in bytes
      *
      * @hide

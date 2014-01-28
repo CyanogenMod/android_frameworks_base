@@ -97,7 +97,7 @@ public class TextOnPathActivity extends Activity {
 
             mMeasure = new PathMeasure(mPath, false);
             mLength = mMeasure.getLength();
-            
+
             mLines = new float[100 * 4];
             mPos = new float[2];
             mTan = new float[2];
@@ -114,7 +114,7 @@ public class TextOnPathActivity extends Activity {
             mPaint.setTextAlign(Paint.Align.LEFT);
             canvas.drawTextOnPath(mText + mText, mPath, 0.0f, 0.0f, mPaint);
             canvas.drawPath(mPath, mPathPaint);
-            
+
             for (int i = 0; i < 100; i++) {
                 mMeasure.getPosTan(i * mLength / 100.0f, mPos, mTan);
                 mLines[i * 4    ] = mPos[0];
@@ -123,7 +123,7 @@ public class TextOnPathActivity extends Activity {
                 mLines[i * 4 + 3] = mPos[1] - mTan[0] * 15;
             }
             canvas.drawLines(mLines, mPathPaint);
-            
+
             canvas.translate(200.0f, 0.0f);
             canvas.drawTextOnPath(mText + mText, mStraightPath, 0.0f, 0.0f, mPaint);
             canvas.drawPath(mStraightPath, mPathPaint);

@@ -48,7 +48,7 @@ import java.util.List;
  */
 public final class BatteryStatsService extends IBatteryStats.Stub {
     static IBatteryStats sService;
-    
+
     final BatteryStatsImpl mStats;
     // The dock stats only collect statistics about battery (no wakelocks, no counters, ...),
     // just the dock battery history
@@ -61,7 +61,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         mStats = new BatteryStatsImpl(filename);
         mDockStats = new BatteryStatsImpl(dockfilename);
     }
-    
+
     public void publish(Context context) {
         mContext = context;
         ServiceManager.addService(BatteryStats.SERVICE_NAME, asBinder());
@@ -70,7 +70,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
                 com.android.internal.R.integer.config_radioScanningTimeout)
                 * 1000L);
     }
-    
+
     public void shutdown() {
         Slog.w("BatteryStats", "Writing battery stats before shutdown...");
         synchronized (mStats) {
@@ -80,7 +80,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
             mDockStats.shutdownLocked();
         }
     }
-    
+
     public static IBatteryStats getService() {
         if (sService != null) {
             return sService;
@@ -89,7 +89,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         sService = asInterface(b);
         return sService;
     }
-    
+
     /**
      * @return the current statistics object, which may be modified
      * to reflect events that affect battery usage.  You must lock the
@@ -98,7 +98,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
     public BatteryStatsImpl getActiveStatistics() {
         return mStats;
     }
-    
+
     public byte[] getStatistics() {
         mContext.enforceCallingPermission(
                 android.Manifest.permission.BATTERY_STATS, null);
@@ -110,7 +110,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         out.recycle();
         return data;
     }
-    
+
     /**
      * @hide
      */
@@ -176,14 +176,14 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
             mStats.noteStartSensorLocked(uid, sensor);
         }
     }
-    
+
     public void noteStopSensor(int uid, int sensor) {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.noteStopSensorLocked(uid, sensor);
         }
     }
-    
+
     public void noteVibratorOn(int uid, long durationMillis) {
         enforceCallingPermission();
         synchronized (mStats) {
@@ -204,28 +204,28 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
             mStats.noteStartGpsLocked(uid);
         }
     }
-    
+
     public void noteStopGps(int uid) {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.noteStopGpsLocked(uid);
         }
     }
-        
+
     public void noteScreenOn() {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.noteScreenOnLocked();
         }
     }
-    
+
     public void noteScreenBrightness(int brightness) {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.noteScreenBrightnessLocked(brightness);
         }
     }
-    
+
     public void noteScreenOff() {
         enforceCallingPermission();
         synchronized (mStats) {
@@ -237,35 +237,35 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         enforceCallingPermission();
         mStats.noteInputEventAtomic();
     }
-    
+
     public void noteUserActivity(int uid, int event) {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.noteUserActivityLocked(uid, event);
         }
     }
-    
+
     public void notePhoneOn() {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.notePhoneOnLocked();
         }
     }
-    
+
     public void notePhoneOff() {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.notePhoneOffLocked();
         }
     }
-    
+
     public void notePhoneSignalStrength(SignalStrength signalStrength) {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.notePhoneSignalStrengthLocked(signalStrength);
         }
     }
-    
+
     public void notePhoneDataConnectionState(int dataType, boolean hasData) {
         enforceCallingPermission();
         synchronized (mStats) {
@@ -287,7 +287,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
             mStats.noteWifiOnLocked();
         }
     }
-    
+
     public void noteWifiOff() {
         enforceCallingPermission();
         synchronized (mStats) {
@@ -393,14 +393,14 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
             mBluetoothHeadset = null;
         }
     }
-    
+
     public void noteFullWifiLockAcquired(int uid) {
         enforceCallingPermission();
         synchronized (mStats) {
             mStats.noteFullWifiLockAcquiredLocked(uid);
         }
     }
-    
+
     public void noteFullWifiLockReleased(int uid) {
         enforceCallingPermission();
         synchronized (mStats) {
@@ -511,13 +511,13 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
     public boolean isOnBattery() {
         return mStats.isOnBattery();
     }
-    
+
     public void setBatteryState(int status, int health, int plugType, int level,
             int temp, int volt) {
         enforceCallingPermission();
         mStats.setBatteryState(status, health, plugType, level, temp, volt);
     }
-    
+
     public long getAwakeTimeBattery() {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.BATTERY_STATS, null);
@@ -563,7 +563,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         mContext.enforcePermission(android.Manifest.permission.UPDATE_DEVICE_STATS,
                 Binder.getCallingPid(), Binder.getCallingUid(), null);
     }
-    
+
     private void dumpHelp(PrintWriter pw) {
         pw.println("Battery stats (batterystats) dump options:");
         pw.println("  [--checkin] [-c] [--unplugged] [--reset] [--write] [-h] [<package.name>]");

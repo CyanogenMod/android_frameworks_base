@@ -29,7 +29,7 @@ import junit.framework.TestCase;
  */
 public class ActivityManagerPermissionTests extends TestCase {
     IActivityManager mAm;
-    
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -37,7 +37,7 @@ public class ActivityManagerPermissionTests extends TestCase {
     }
 
     @SmallTest
-	public void testREORDER_TASKS() {
+    public void testREORDER_TASKS() {
         try {
             mAm.moveTaskToFront(0, 0, null);
             fail("IActivityManager.moveTaskToFront did not throw SecurityException as"
@@ -47,7 +47,7 @@ public class ActivityManagerPermissionTests extends TestCase {
         } catch (RemoteException e) {
             fail("Unexpected remote exception");
         }
-        
+
         try {
             mAm.moveTaskToBack(-1);
             fail("IActivityManager.moveTaskToBack did not throw SecurityException as"
@@ -57,7 +57,7 @@ public class ActivityManagerPermissionTests extends TestCase {
         } catch (RemoteException e) {
             fail("Unexpected remote exception");
         }
-        
+
         try {
             mAm.moveTaskBackwards(-1);
             fail("IActivityManager.moveTaskToFront did not throw SecurityException as"
@@ -67,7 +67,7 @@ public class ActivityManagerPermissionTests extends TestCase {
         } catch (RemoteException e) {
             fail("Unexpected remote exception");
         }
-	}
+    }
 
     @SmallTest
     public void testCHANGE_CONFIGURATION() {
@@ -184,7 +184,7 @@ public class ActivityManagerPermissionTests extends TestCase {
         } catch (RemoteException e) {
             fail("Unexpected remote exception");
         }
-        
+
         try {
             mAm.resumeAppSwitches();
             fail("IActivityManager.resumeAppSwitches did not throw SecurityException as"

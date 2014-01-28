@@ -45,7 +45,7 @@ public class AndroidCharacter
      * {@link #EAST_ASIAN_WIDTH_AMBIGUOUS}, {@link #EAST_ASIAN_WIDTH_HALF_WIDTH},
      * {@link #EAST_ASIAN_WIDTH_FULL_WIDTH}, {@link #EAST_ASIAN_WIDTH_NARROW},
      * or {@link #EAST_ASIAN_WIDTH_WIDE}.
-     * 
+     *
      * @param input the character to measure
      * @return the East Asian Width for input
      */
@@ -60,7 +60,7 @@ public class AndroidCharacter
      * {@link #EAST_ASIAN_WIDTH_AMBIGUOUS}, {@link #EAST_ASIAN_WIDTH_HALF_WIDTH},
      * {@link #EAST_ASIAN_WIDTH_FULL_WIDTH}, {@link #EAST_ASIAN_WIDTH_NARROW},
      * or {@link #EAST_ASIAN_WIDTH_WIDE}.
-     * 
+     *
      * @param src character array of input to measure
      * @param start first character in array to measure
      * @param count maximum number of characters to measure

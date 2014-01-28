@@ -2,16 +2,16 @@
 **
 ** Copyright 2007, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -24,7 +24,7 @@
 /* Based on the public domain code:
  * poly_clip.c: homogeneous 3-D convex polygon clipper
  *
- * Paul Heckbert	1985, Dec 1989
+ * Paul Heckbert 1985, Dec 1989
  */
 
 #include "poly.h"
@@ -35,7 +35,7 @@
 
 namespace android {
 
-#define SWAP(a, b, temp)	{temp = a; a = b; b = temp;}
+#define SWAP(a, b, temp) {temp = a; a = b; b = temp;}
 #define COORD(vert, i) ((float *)(vert))[i]
 
 #define CLIP_AND_SWAP(elem, sign, k, p, q, r) { \
@@ -51,9 +51,9 @@ namespace android {
  * index is an index into the array of floats at each vertex, such that
  * s[index] is sx, sy, or sz (screen space x, y, or z).
  * Thus, to clip against xmin, use
- *	poly_clip_to_halfspace(p, q, XINDEX, -1., -xmin);
+ * poly_clip_to_halfspace(p, q, XINDEX, -1., -xmin);
  * and to clip against xmax, use
- *	poly_clip_to_halfspace(p, q, XINDEX,  1.,  xmax);
+ * poly_clip_to_halfspace(p, q, XINDEX,  1.,  xmax);
  */
 
 void poly_clip_to_halfspace(Poly* p, Poly* q, int index, float sign, float k)
@@ -71,22 +71,22 @@ void poly_clip_to_halfspace(Poly* p, Poly* q, int index, float sign, float k)
     u = &p->vert[p->n-1];
     tu = sign*COORD(u, index) - u->sw*k;
     for (v= &p->vert[0], i=p->n; i>0; i--, u=v, tu=tv, v++) {
-	/* on old polygon (p), u is previous vertex, v is current vertex */
-	/* tv is negative if vertex v is in */
-	tv = sign*COORD(v, index) - v->sw*k;
-	if ((tu <= 0.0f) ^ (tv <= 0.0f)) {
-	    /* edge crosses plane; add intersection point to q */
-	    t = tu/(tu-tv);
-	    up = (float *)u;
-	    vp = (float *)v;
-	    wp = (float *)&q->vert[q->n].sx;
-		for(int i = 0; i < 4; i++, wp++, up++, vp++) {
-			*wp = *up+t*(*vp-*up);
-		}
-	    q->n++;
-	}
-	if (tv<=0.0f)		/* vertex v is in, copy it to q */
-	    q->vert[q->n++] = *v;
+    /* on old polygon (p), u is previous vertex, v is current vertex */
+    /* tv is negative if vertex v is in */
+    tv = sign*COORD(v, index) - v->sw*k;
+    if ((tu <= 0.0f) ^ (tv <= 0.0f)) {
+        /* edge crosses plane; add intersection point to q */
+        t = tu/(tu-tv);
+        up = (float *)u;
+        vp = (float *)v;
+        wp = (float *)&q->vert[q->n].sx;
+        for(int i = 0; i < 4; i++, wp++, up++, vp++) {
+            *wp = *up+t*(*vp-*up);
+        }
+        q->n++;
+    }
+    if (tv<=0.0f) /* vertex v is in, copy it to q */
+        q->vert[q->n++] = *v;
     }
 }
 
@@ -113,25 +113,25 @@ int poly_clip_to_frustum(Poly *p1)
 
     /* count vertices "outside" with respect to each of the six planes */
     for (v=p1->vert, i=p1->n; i>0; i--, v++) {
-		float sw = v->sw;
-		if (v->sx < -sw) x0out++;	/* out on left */
-		if (v->sx > sw) x1out++;	/* out on right */
-		if (v->sy < -sw) y0out++;	/* out on top */
-		if (v->sy > sw) y1out++;	/* out on bottom */
-		if (v->sz < -sw) z0out++;	/* out on near */
-		if (v->sz > sw) z1out++;	/* out on far */
+        float sw = v->sw;
+        if (v->sx < -sw) x0out++; /* out on left */
+        if (v->sx > sw) x1out++;  /* out on right */
+        if (v->sy < -sw) y0out++; /* out on top */
+        if (v->sy > sw) y1out++;  /* out on bottom */
+        if (v->sz < -sw) z0out++; /* out on near */
+        if (v->sz > sw) z1out++;  /* out on far */
     }
 
     /* check if all vertices inside */
     if (x0out+x1out+y0out+y1out+z0out+z1out == 0)
-    	return POLY_CLIP_IN;
+        return POLY_CLIP_IN;
 
     /* check if all vertices are "outside" any of the six planes */
     if (x0out==p1->n || x1out==p1->n || y0out==p1->n ||
-	y1out==p1->n || z0out==p1->n || z1out==p1->n) {
-	    p1->n = 0;
-	    return POLY_CLIP_OUT;
-	}
+    y1out==p1->n || z0out==p1->n || z1out==p1->n) {
+        p1->n = 0;
+        return POLY_CLIP_OUT;
+    }
 
     /*
      * now clip against each of the planes that might cut the polygon,
@@ -148,7 +148,7 @@ int poly_clip_to_frustum(Poly *p1)
 
     /* if result ended up in p2 then copy it to p1 */
     if (p==&p2)
-	memcpy(p1, &p2, sizeof(Poly)-(POLY_NMAX-p2.n)*sizeof(Poly_vert));
+    memcpy(p1, &p2, sizeof(Poly)-(POLY_NMAX-p2.n)*sizeof(Poly_vert));
     return POLY_CLIP_PARTIAL;
 }
 

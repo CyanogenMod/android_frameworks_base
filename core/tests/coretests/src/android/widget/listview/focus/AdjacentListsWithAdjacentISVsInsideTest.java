@@ -85,6 +85,6 @@ public class AdjacentListsWithAdjacentISVsInsideTest extends ActivityInstrumenta
         sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
         assertTrue("mRightListView.hasFocus()", mRightListView.hasFocus());
         assertTrue("mRightMiddleIsv.isFocused()", mRightMiddleIsv.isFocused());
-        assertEquals("mRightMiddleIsv.getSelectedRow()", 2, mRightMiddleIsv.getSelectedRow());  
-    }    
+        assertEquals("mRightMiddleIsv.getSelectedRow()", 2, mRightMiddleIsv.getSelectedRow());
+    }
 }

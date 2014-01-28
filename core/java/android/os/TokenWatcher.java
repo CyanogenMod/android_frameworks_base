@@ -59,7 +59,7 @@ public abstract class TokenWatcher
      * Record that this token has been acquired.  When acquire is called, and
      * the current count is 0, the acquired method is called on the given
      * handler.
-     * 
+     *
      * @param token An IBinder object.  If this token has already been acquired,
      *              no action is taken.
      * @param tag   A string used by the {@link #dump} method for debugging,

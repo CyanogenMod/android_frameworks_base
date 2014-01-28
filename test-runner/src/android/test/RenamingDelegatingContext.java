@@ -168,7 +168,7 @@ public class RenamingDelegatingContext extends ContextWrapper {
             return false;
         }
     }
-    
+
     @Override
     public File getDatabasePath(String name) {
         return mFileContext.getDatabasePath(renamedFileName(name));
@@ -216,7 +216,7 @@ public class RenamingDelegatingContext extends ContextWrapper {
     public String[] fileList() {
         return mFileNames.toArray(new String[]{});
     }
-    
+
     /**
      * In order to support calls to getCacheDir(), we create a temp cache dir (inside the real
      * one) and return it instead.  This code is basically getCacheDir(), except it uses the real

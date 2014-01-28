@@ -4,9 +4,9 @@
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
-  
+
           http://www.apache.org/licenses/LICENSE-2.0
-  
+
      Unless required by applicable law or agreed to in writing, software
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-sdk android:minSdkVersion="11" />
-    
+
     <application
         android:label="HwUi"
         android:hardwareAccelerated="true">
@@ -178,7 +178,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="DatePickerActivity"
                 android:label="View/DatePicker">
@@ -232,7 +232,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="TextFadeActivity"
                 android:label="Text/Fade">
@@ -259,7 +259,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="OpaqueActivity"
                 android:label="Window/Opaque">
@@ -277,7 +277,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="SmallCircleActivity"
                 android:label="Draw/Small Circle">
@@ -322,7 +322,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="GLTextureViewActivity"
                 android:label="TextureView/OpenGL">
@@ -331,7 +331,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="BitmapMeshActivity"
                 android:label="Bitmaps/Mesh">
@@ -358,7 +358,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-                
+
         <activity
                 android:name="MarqueeActivity"
                 android:label="Text/Marquee">
@@ -376,7 +376,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="ColoredRectsActivity"
                 android:label="Draw/Rects">
@@ -404,7 +404,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="ViewLayersActivity2"
                 android:label="Layers/Views 2">
@@ -413,7 +413,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="ViewLayersActivity3"
                 android:label="Layers/Views 3">
@@ -431,7 +431,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="ViewLayersActivity5"
                 android:label="Layers/Views 5">
@@ -449,7 +449,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="AdvancedGradientsActivity"
                 android:label="Gradients/Advanced">
@@ -458,7 +458,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="Bitmaps3dActivity"
                 android:label="Bitmaps/3D Rotation">
@@ -467,7 +467,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="LabelsActivity"
                 android:label="View/TextView">
@@ -496,7 +496,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="TextGammaActivity"
                 android:label="Text/Gamma"
@@ -516,7 +516,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="LayersActivity"
                 android:label="Layers/Canvas Layers"
@@ -535,7 +535,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="XfermodeActivity"
                 android:label="Draw/Xfermodes"
@@ -545,7 +545,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="BitmapsActivity"
                 android:label="Bitmaps/Draw Bitmaps"
@@ -555,7 +555,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="BitmapsSkewActivity"
                 android:label="Bitmaps/Skew">
@@ -574,7 +574,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="BitmapsRectActivity"
                 android:label="Bitmaps/Rect"
@@ -594,7 +594,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="NinePatchesActivity"
                 android:label="Draw/9-Patch Drawable">
@@ -612,7 +612,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="QuickRejectActivity"
                 android:label="Clip/QuickReject">
@@ -621,7 +621,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="RotationActivity"
                 android:label="View/Rotation">
@@ -630,7 +630,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="GradientsActivity"
                 android:label="Gradients/Gradients">
@@ -648,7 +648,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="TextActivity"
                 android:label="Text/Simple Text"
@@ -686,7 +686,7 @@
                 <category android:name="com.android.test.hwui.TEST" />
             </intent-filter>
         </activity>
-        
+
         <activity
                 android:name="MoreShadersActivity"
                 android:label="Shaders/Compose Shaders">

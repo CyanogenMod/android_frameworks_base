@@ -35,7 +35,7 @@ public class ActivityInfo extends ComponentInfo
      * activity's theme.  From the "theme" attribute or, if not set, 0.
      */
     public int theme;
-    
+
     /**
      * Constant corresponding to <code>standard</code> in
      * the {@link android.R.attr#launchMode} attribute.
@@ -60,17 +60,17 @@ public class ActivityInfo extends ComponentInfo
      * The launch mode style requested by the activity.  From the
      * {@link android.R.attr#launchMode} attribute, one of
      * {@link #LAUNCH_MULTIPLE},
-     * {@link #LAUNCH_SINGLE_TOP}, {@link #LAUNCH_SINGLE_TASK}, or 
+     * {@link #LAUNCH_SINGLE_TOP}, {@link #LAUNCH_SINGLE_TASK}, or
      * {@link #LAUNCH_SINGLE_INSTANCE}.
      */
     public int launchMode;
-    
+
     /**
      * Optional name of a permission required to be able to access this
      * Activity.  From the "permission" attribute.
      */
     public String permission;
-    
+
     /**
      * The affinity this activity has for another task in the system.  The
      * string here is the name of the task, often the package name of the
@@ -78,13 +78,13 @@ public class ActivityInfo extends ComponentInfo
      * {@link android.R.attr#taskAffinity} attribute.
      */
     public String taskAffinity;
-    
+
     /**
      * If this is an activity alias, this is the real activity class to run
      * for it.  Otherwise, this is null.
      */
     public String targetActivity;
-    
+
     /**
      * Bit in {@link #flags} indicating whether this activity is able to
      * run in multiple processes.  If
@@ -243,7 +243,7 @@ public class ActivityInfo extends ComponentInfo
      * the {@link android.R.attr#screenOrientation} attribute.
      */
     public static final int SCREEN_ORIENTATION_SENSOR = 4;
-  
+
     /**
      * Constant corresponding to <code>nosensor</code> in
      * the {@link android.R.attr#screenOrientation} attribute.
@@ -308,7 +308,7 @@ public class ActivityInfo extends ComponentInfo
      * The preferred screen orientation this activity would like to run in.
      * From the {@link android.R.attr#screenOrientation} attribute, one of
      * {@link #SCREEN_ORIENTATION_UNSPECIFIED},
-     * {@link #SCREEN_ORIENTATION_LANDSCAPE}, 
+     * {@link #SCREEN_ORIENTATION_LANDSCAPE},
      * {@link #SCREEN_ORIENTATION_PORTRAIT},
      * {@link #SCREEN_ORIENTATION_USER},
      * {@link #SCREEN_ORIENTATION_BEHIND},
@@ -325,7 +325,7 @@ public class ActivityInfo extends ComponentInfo
      * {@link #SCREEN_ORIENTATION_LOCKED},
      */
     public int screenOrientation = SCREEN_ORIENTATION_UNSPECIFIED;
-    
+
     /**
      * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle changes to the IMSI MCC.  Set from the
@@ -436,7 +436,7 @@ public class ActivityInfo extends ComponentInfo
      * constant starts at the high bits.
      */
     public static final int CONFIG_FONT_SCALE = 0x40000000;
-    
+
     /** @hide
      * Unfortunately the constants for config changes in native code are
      * different from ActivityInfo. :(  Here are the values we should use for the
@@ -498,7 +498,7 @@ public class ActivityInfo extends ComponentInfo
      * attribute.
      */
     public int configChanges;
-    
+
     /**
      * The desired soft input mode for this activity's main window.
      * Set from the {@link android.R.attr#windowSoftInputMode} attribute
@@ -547,12 +547,12 @@ public class ActivityInfo extends ComponentInfo
         uiOptions = orig.uiOptions;
         parentActivityName = orig.parentActivityName;
     }
-    
+
     /**
      * Return the theme resource identifier to use for this activity.  If
      * the activity defines a theme, that is used; else, the application
      * theme is used.
-     * 
+     *
      * @return The theme associated with this activity.
      */
     public final int getThemeResource() {
@@ -582,7 +582,7 @@ public class ActivityInfo extends ComponentInfo
         }
         super.dumpBack(pw, prefix);
     }
-    
+
     public String toString() {
         return "ActivityInfo{"
             + Integer.toHexString(System.identityHashCode(this))

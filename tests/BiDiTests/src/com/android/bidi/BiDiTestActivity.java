@@ -37,10 +37,10 @@ public class BiDiTestActivity extends Activity {
     private static final String KEY_CLASS = "class";
     private static final String KEY_TITLE = "title";
     private static final String KEY_FRAGMENT_ID = "id";
-    
+
     private ListView mList;
-    
-    private AdapterView.OnItemClickListener mOnClickListener = 
+
+    private AdapterView.OnItemClickListener mOnClickListener =
             new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                     onListItemClick((ListView)parent, v, position, id);
@@ -55,9 +55,9 @@ public class BiDiTestActivity extends Activity {
         if (fragment == null) {
             try {
                 // Create an instance of the test
-                Class<? extends Fragment> clazz = (Class<? extends Fragment>) map.get(KEY_CLASS);  
+                Class<? extends Fragment> clazz = (Class<? extends Fragment>) map.get(KEY_CLASS);
                 fragment = clazz.newInstance();
-                
+
                 // Replace the old test fragment with the new one
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.testframe, fragment);
@@ -78,12 +78,12 @@ public class BiDiTestActivity extends Activity {
         mList = (ListView) findViewById(R.id.testlist);
         mList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mList.setFocusableInTouchMode(true);
-        
+
         final SimpleAdapter adapter = new SimpleAdapter(this, getTests(),
                 R.layout.custom_list_item, new String[]{"title"},
                 new int[]{android.R.id.text1});
         mList.setAdapter(adapter);
-        
+
         mList.setOnItemClickListener(mOnClickListener);
     }
 

@@ -197,7 +197,7 @@ interface IWindowManager
     void thawRotation();
 
     /**
-     * Gets whether the rotation is frozen. 
+     * Gets whether the rotation is frozen.
      *
      * @return Whether the rotation is frozen.
      */

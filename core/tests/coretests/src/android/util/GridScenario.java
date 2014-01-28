@@ -52,9 +52,9 @@ public abstract class GridScenario extends Activity {
     private boolean mStackFromBottom;
 
     private int mColumnWidth;
-    
+
     private int mNumColumns;
-    
+
     private int mStretchMode;
 
     private int mVerticalSpacing;
@@ -66,7 +66,7 @@ public abstract class GridScenario extends Activity {
     protected int getScreenHeight() {
         return mScreenHeight;
     }
-    
+
     /**
      * @return The initial number of items in the grid as specified by the scenario.
      * This number may change over time.
@@ -74,7 +74,7 @@ public abstract class GridScenario extends Activity {
     protected int getInitialNumItems() {
         return mNumItems;
     }
-    
+
     /**
      * @return The desired height of 1 item, ignoring overrides
      */
@@ -177,7 +177,7 @@ public abstract class GridScenario extends Activity {
             mNumColumns = numColumns;
             return this;
         }
-        
+
         /**
          * Sets the stretch mode.
          */
@@ -185,7 +185,7 @@ public abstract class GridScenario extends Activity {
             mStretchMode = stretchMode;
             return this;
         }
-        
+
         /**
          * Sets the spacing between rows in the grid
          */
@@ -200,7 +200,7 @@ public abstract class GridScenario extends Activity {
      * @param params
      */
     protected abstract void init(Params params);
-    
+
     /**
      * Override this to provide an different adapter for your scenario
      * @return The adapter that this scenario will use
@@ -274,8 +274,8 @@ public abstract class GridScenario extends Activity {
 
         setContentView(mGridView);
     }
-    
-    
+
+
 
     /**
      * Read in and validate all of the params passed in by the scenario.

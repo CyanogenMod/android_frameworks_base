@@ -28,7 +28,7 @@ class LoadClass {
         System.loadLibrary("android_runtime");
 
         if (registerNatives() < 0) {
-            throw new RuntimeException("Error registering natives.");    
+            throw new RuntimeException("Error registering natives.");
         }
 
         Debug.startAllocCounting();
@@ -73,7 +73,7 @@ class LoadClass {
         response.append(',').append(freedCount);
         response.append(',').append(freedSize);
         response.append(',').append(nativeHeapSize);
-        
+
         System.out.println(response.toString());
     }
 

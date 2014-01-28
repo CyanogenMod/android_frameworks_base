@@ -37,13 +37,13 @@ import com.google.android.gles_jni.EGLImpl;
  * reclaimed can significant improve the overall behavior of the device.  This
  * class helps app developers participate in releasing their EGL context
  * when appropriate and possible.
- * 
+ *
  * <p>To use, simple instantiate this class with the EGLContext you create.
  * When you have done this, if the device is getting low on memory and all
  * of the currently created EGL contexts in the process are being managed
  * through this class, then they will all be asked to terminate through the
  * call to {@link #onTerminate}.
- * 
+ *
  * @hide
  */
 public abstract class ManagedEGLContext {

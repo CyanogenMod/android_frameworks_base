@@ -41,7 +41,7 @@ import android.view.inputmethod.InputMethodSession;
 class IInputMethodSessionWrapper extends IInputMethodSession.Stub
         implements HandlerCaller.Callback {
     private static final String TAG = "InputMethodWrapper";
-    
+
     private static final int DO_FINISH_INPUT = 60;
     private static final int DO_DISPLAY_COMPLETIONS = 65;
     private static final int DO_UPDATE_EXTRACTED_TEXT = 67;

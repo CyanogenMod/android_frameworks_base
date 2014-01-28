@@ -23,7 +23,7 @@ import android.graphics.Rect;
  * @hide
  */
 public class FocusFinderHelper {
-    
+
     private FocusFinder mFocusFinder;
 
     /**
@@ -32,11 +32,11 @@ public class FocusFinderHelper {
     public FocusFinderHelper(FocusFinder focusFinder) {
         mFocusFinder = focusFinder;
     }
-    
+
     public boolean isBetterCandidate(int direction, Rect source, Rect rect1, Rect rect2) {
         return mFocusFinder.isBetterCandidate(direction, source, rect1, rect2);
     }
-    
+
     public boolean beamBeats(int direction, Rect source, Rect rect1, Rect rect2) {
         return mFocusFinder.beamBeats(direction, source, rect1, rect2);
     }
@@ -44,15 +44,15 @@ public class FocusFinderHelper {
     public boolean isCandidate(Rect srcRect, Rect destRect, int direction) {
         return mFocusFinder.isCandidate(srcRect, destRect, direction);
     }
-    
+
     public boolean beamsOverlap(int direction, Rect rect1, Rect rect2) {
         return mFocusFinder.beamsOverlap(direction, rect1, rect2);
     }
-    
+
     public static int majorAxisDistance(int direction, Rect source, Rect dest) {
         return FocusFinder.majorAxisDistance(direction, source, dest);
     }
-    
+
     public static int majorAxisDistanceToFarEdge(int direction, Rect source, Rect dest) {
         return FocusFinder.majorAxisDistanceToFarEdge(direction, source, dest);
     }

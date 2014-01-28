@@ -59,7 +59,7 @@ public class Contacts {
     @Deprecated
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
-    /** 
+    /**
      * Signifies an email address row that is stored in the ContactMethods table
      * @deprecated see {@link android.provider.ContactsContract}
      */
@@ -2200,7 +2200,7 @@ public class Contacts {
             }
 
             /** The action code to use when adding a contact
-             * @deprecated see {@link android.provider.ContactsContract} 
+             * @deprecated see {@link android.provider.ContactsContract}
              */
             @Deprecated
             public static final String ACTION = ContactsContract.Intents.Insert.ACTION;

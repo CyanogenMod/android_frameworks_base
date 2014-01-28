@@ -26,18 +26,18 @@ void ANativeActivity_finish(ANativeActivity* activity) {
 }
 
 void ANativeActivity_setWindowFormat(ANativeActivity* activity, int32_t format) {
-	android_NativeActivity_setWindowFormat(activity, format);
+    android_NativeActivity_setWindowFormat(activity, format);
 }
 
 void ANativeActivity_setWindowFlags(ANativeActivity* activity,
-		uint32_t addFlags, uint32_t removeFlags) {
-	android_NativeActivity_setWindowFlags(activity, addFlags, addFlags|removeFlags);
+        uint32_t addFlags, uint32_t removeFlags) {
+    android_NativeActivity_setWindowFlags(activity, addFlags, addFlags|removeFlags);
 }
 
 void ANativeActivity_showSoftInput(ANativeActivity* activity, uint32_t flags) {
-	android_NativeActivity_showSoftInput(activity, flags);
+    android_NativeActivity_showSoftInput(activity, flags);
 }
 
 void ANativeActivity_hideSoftInput(ANativeActivity* activity, uint32_t flags) {
-	android_NativeActivity_hideSoftInput(activity, flags);
+    android_NativeActivity_hideSoftInput(activity, flags);
 }

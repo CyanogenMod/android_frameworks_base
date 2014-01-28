@@ -661,7 +661,7 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
 
         public Intent intentForPosition(int position) {
             DisplayResolveInfo dri = mList.get(position);
-            
+
             Intent intent = new Intent(dri.origIntent != null
                     ? dri.origIntent : mIntent);
             intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT

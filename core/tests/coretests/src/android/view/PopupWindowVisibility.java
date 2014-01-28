@@ -31,32 +31,32 @@ import com.android.frameworks.coretests.R;
  * Tests views with popupWindows becoming invisible
  */
 public class PopupWindowVisibility extends Activity implements OnClickListener {
-    
+
     private View mFrame;
     private Button mHide;
     private Button mShow;
-    
 
-    
+
+
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.popup_window_visibility);
 
         mFrame = findViewById(R.id.frame);
-        
+
         mHide = (Button) findViewById(R.id.hide);
         mHide.setOnClickListener(this);
-        
+
         mShow = (Button) findViewById(R.id.show);
         mShow.setOnClickListener(this);
-        
+
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, mStrings);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-        
+
         ArrayAdapter<String> autoAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.auto);
@@ -70,7 +70,7 @@ public class PopupWindowVisibility extends Activity implements OnClickListener {
     private static final String[] mStrings = {
         "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"
         };
-    
+
     static final String[] COUNTRIES = new String[] {
         "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra",
         "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina",

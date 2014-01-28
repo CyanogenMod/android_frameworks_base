@@ -42,7 +42,7 @@ import org.xml.sax.Locator;
  * static final String ATOM_NAMESPACE = "http://www.w3.org/2005/Atom";
  *
  * ...
- * 
+ *
  * RootElement root = new RootElement(ATOM_NAMESPACE, "feed");
  * Element entry = root.getChild(ATOM_NAMESPACE, "entry");
  * entry.getChild(ATOM_NAMESPACE, "id").setEndTextElementListener(
@@ -161,7 +161,7 @@ public class RootElement extends Element {
             if (e.endTextElementListener != null) {
                 this.bodyBuilder = new StringBuilder();
             }
-            
+
             e.resetRequiredChildren();
             e.visited = true;
         }

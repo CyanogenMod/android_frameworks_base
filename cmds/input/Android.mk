@@ -10,4 +10,4 @@ include $(BUILD_JAVA_LIBRARY)
 include $(CLEAR_VARS)
 ALL_PREBUILT += $(TARGET_OUT)/bin/input
 $(TARGET_OUT)/bin/input : $(LOCAL_PATH)/input | $(ACP)
-	$(transform-prebuilt-to-target)
+    $(transform-prebuilt-to-target)

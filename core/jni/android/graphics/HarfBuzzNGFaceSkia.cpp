@@ -162,11 +162,11 @@ static void destroyHarfBuzzFontData(void* data) {
 
 hb_font_t* createFont(hb_face_t* face, SkPaint* paint, float sizeX, float sizeY) {
     hb_font_t* font = hb_font_create(face);
-    
+
     // Note: this needs to be reworked when we do subpixels
     int x_ppem = floor(sizeX + 0.5);
     int y_ppem = floor(sizeY + 0.5);
-    hb_font_set_ppem(font, x_ppem, y_ppem); 
+    hb_font_set_ppem(font, x_ppem, y_ppem);
     hb_font_set_scale(font, HBFloatToFixed(sizeX), HBFloatToFixed(sizeY));
 
     HarfBuzzFontData* data = new HarfBuzzFontData(paint);

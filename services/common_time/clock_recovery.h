@@ -146,7 +146,7 @@ class ClockRecoveryLoop {
     // we get in trouble with certain HDMI sinks.
     static const uint32_t kMinFullRangeSlewChange_mSec;
 
-    // How much time (in msec) to wait 
+    // How much time (in msec) to wait
     static const int kSlewChangeStepPeriod_mSec;
 
 #ifdef TIME_SERVICE_DEBUG

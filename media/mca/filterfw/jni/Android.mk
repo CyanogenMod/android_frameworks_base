@@ -38,8 +38,8 @@ include $(LOCAL_PATH)/../native/libfilterfw.mk
 
 # Also need the JNI headers.
 LOCAL_C_INCLUDES += \
-	$(JNI_H_INCLUDE) \
-	$(LOCAL_PATH)/..
+    $(JNI_H_INCLUDE) \
+    $(LOCAL_PATH)/..
 
 # Don't prelink this library.  For more efficient code, you may want
 # to add this library to the prelink map and set this to true. However,

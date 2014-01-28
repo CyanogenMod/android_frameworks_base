@@ -33,60 +33,60 @@ import java.util.Comparator;
  * &lt;application&gt; tag.
  */
 public class ApplicationInfo extends PackageItemInfo implements Parcelable {
-    
+
     /**
-     * Default task affinity of all activities in this application. See 
-     * {@link ActivityInfo#taskAffinity} for more information.  This comes 
-     * from the "taskAffinity" attribute. 
+     * Default task affinity of all activities in this application. See
+     * {@link ActivityInfo#taskAffinity} for more information.  This comes
+     * from the "taskAffinity" attribute.
      */
     public String taskAffinity;
-    
+
     /**
      * Optional name of a permission required to be able to access this
      * application's components.  From the "permission" attribute.
      */
     public String permission;
-    
+
     /**
      * The name of the process this application should run in.  From the
      * "process" attribute or, if not set, the same as
      * <var>packageName</var>.
      */
     public String processName;
-    
+
     /**
      * Class implementing the Application object.  From the "class"
      * attribute.
      */
     public String className;
-    
+
     /**
      * A style resource identifier (in the package's resources) of the
      * description of an application.  From the "description" attribute
      * or, if not set, 0.
      */
-    public int descriptionRes;    
-    
+    public int descriptionRes;
+
     /**
      * A style resource identifier (in the package's resources) of the
      * default visual theme of the application.  From the "theme" attribute
      * or, if not set, 0.
      */
     public int theme;
-    
+
     /**
      * Class implementing the Application's manage space
      * functionality.  From the "manageSpaceActivity"
      * attribute. This is an optional attribute and will be null if
      * applications don't specify it in their manifest
      */
-    public String manageSpaceActivityName;    
-    
+    public String manageSpaceActivityName;
+
     /**
      * Class implementing the Application's backup functionality.  From
      * the "backupAgent" attribute.  This is an optional attribute and
      * will be null if the application does not specify it in its manifest.
-     * 
+     *
      * <p>If android:allowBackup is set to false, this attribute is ignored.
      */
     public String backupAgentName;
@@ -103,7 +103,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * device's system image.
      */
     public static final int FLAG_SYSTEM = 1<<0;
-    
+
     /**
      * Value for {@link #flags}: set to true if this application would like to
      * allow debugging of its
@@ -112,7 +112,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * android:debuggable} of the &lt;application&gt; tag.
      */
     public static final int FLAG_DEBUGGABLE = 1<<1;
-    
+
     /**
      * Value for {@link #flags}: set to true if this application has code
      * associated with it.  Comes
@@ -120,7 +120,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * android:hasCode} of the &lt;application&gt; tag.
      */
     public static final int FLAG_HAS_CODE = 1<<2;
-    
+
     /**
      * Value for {@link #flags}: set to true if this application is persistent.
      * Comes from {@link android.R.styleable#AndroidManifestApplication_persistent
@@ -141,20 +141,20 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * android:allowTaskReparenting} of the &lt;application&gt; tag.
      */
     public static final int FLAG_ALLOW_TASK_REPARENTING = 1<<5;
-    
+
     /**
      * Value for {@link #flags}: default value for the corresponding ActivityInfo flag.
      * Comes from {@link android.R.styleable#AndroidManifestApplication_allowClearUserData
      * android:allowClearUserData} of the &lt;application&gt; tag.
      */
     public static final int FLAG_ALLOW_CLEAR_USER_DATA = 1<<6;
-    
+
     /**
      * Value for {@link #flags}: this is set if this application has been
      * install as an update to a built-in system application.
      */
     public static final int FLAG_UPDATED_SYSTEM_APP = 1<<7;
-    
+
     /**
      * Value for {@link #flags}: this is set of the application has specified
      * {@link android.R.styleable#AndroidManifestApplication_testOnly
@@ -169,15 +169,15 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * android:smallScreens}.
      */
     public static final int FLAG_SUPPORTS_SMALL_SCREENS = 1<<9;
-    
+
     /**
      * Value for {@link #flags}: true when the application's window can be
      * displayed on normal screens.  Corresponds to
      * {@link android.R.styleable#AndroidManifestSupportsScreens_normalScreens
      * android:normalScreens}.
      */
-    public static final int FLAG_SUPPORTS_NORMAL_SCREENS = 1<<10; 
-    
+    public static final int FLAG_SUPPORTS_NORMAL_SCREENS = 1<<10;
+
     /**
      * Value for {@link #flags}: true when the application's window can be
      * increased in size for larger screens.  Corresponds to
@@ -185,7 +185,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * android:largeScreens}.
      */
     public static final int FLAG_SUPPORTS_LARGE_SCREENS = 1<<11;
-    
+
     /**
      * Value for {@link #flags}: true when the application knows how to adjust
      * its UI for different screen sizes.  Corresponds to
@@ -193,7 +193,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * android:resizeable}.
      */
     public static final int FLAG_RESIZEABLE_FOR_SCREENS = 1<<12;
-    
+
     /**
      * Value for {@link #flags}: true when the application knows how to
      * accomodate different screen densities.  Corresponds to
@@ -201,7 +201,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * android:anyDensity}.
      */
     public static final int FLAG_SUPPORTS_SCREEN_DENSITIES = 1<<13;
-    
+
     /**
      * Value for {@link #flags}: set to true if this application would like to
      * request the VM to operate under the safe mode. Comes from
@@ -213,7 +213,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     /**
      * Value for {@link #flags}: set to <code>false</code> if the application does not wish
      * to permit any OS-driven backups of its data; <code>true</code> otherwise.
-     * 
+     *
      * <p>Comes from the
      * {@link android.R.styleable#AndroidManifestApplication_allowBackup android:allowBackup}
      * attribute of the &lt;application&gt; tag.
@@ -276,7 +276,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * android:xlargeScreens}.
      */
     public static final int FLAG_SUPPORTS_XLARGE_SCREENS = 1<<19;
-    
+
     /**
      * Value for {@link #flags}: true when the application has requested a
      * large heap for its processes.  Corresponds to
@@ -328,7 +328,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * installed using the forward lock option.
      *
      * NOTE: DO NOT CHANGE THIS VALUE!  It is saved in packages.xml.
-     * 
+     *
      * {@hide}
      */
     public static final int FLAG_FORWARD_LOCK = 1<<29;
@@ -403,12 +403,12 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * non-forward-locked apps this will be the same as {@link #sourceDir).
      */
     public String publicSourceDir;
-    
+
     /**
      * Full paths to the locations of extra resource packages this application
      * uses. This field is only used if there are extra resource packages,
      * otherwise it is null.
-     * 
+     *
      * {@hide}
      */
     public String[] resourceDirs;
@@ -429,7 +429,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * the structure.
      */
     public String[] sharedLibraryFiles;
-    
+
     /**
      * Full path to a directory assigned to the package for its persistent
      * data.
@@ -447,7 +447,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * the same uid).
      */
     public int uid;
-    
+
     /**
      * The minimum SDK version this application targets.  It may run on earlier
      * versions, but it knows how to work with any new behavior added at this
@@ -457,7 +457,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * behavior was introduced.
      */
     public int targetSdkVersion;
-    
+
     /**
      * When false, indicates that all components within this application are
      * considered disabled, regardless of their individually set enabled status.
@@ -499,7 +499,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * @hide
      */
     public int installLocation = PackageInfo.INSTALL_LOCATION_UNSPECIFIED;
-    
+
     public void dump(Printer pw, String prefix) {
         super.dumpFront(pw, prefix);
         if (className != null) {
@@ -554,7 +554,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public boolean hasRtlSupport() {
         return (flags & FLAG_SUPPORTS_RTL) == FLAG_SUPPORTS_RTL;
     }
-    
+
     public static class DisplayNameComparator
             implements Comparator<ApplicationInfo> {
         public DisplayNameComparator(PackageManager pm) {
@@ -570,7 +570,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
             if (sb == null) {
                 sb = ab.packageName;
             }
-            
+
             return sCollator.compare(sa.toString(), sb.toString());
         }
 
@@ -580,7 +580,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
 
     public ApplicationInfo() {
     }
-    
+
     public ApplicationInfo(ApplicationInfo orig) {
         super(orig);
         taskAffinity = orig.taskAffinity;
@@ -715,7 +715,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
 
     /**
      * Disable compatibility mode
-     * 
+     *
      * @hide
      */
     public void disableCompatibilityMode() {
@@ -723,7 +723,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
                 FLAG_SUPPORTS_SMALL_SCREENS | FLAG_RESIZEABLE_FOR_SCREENS |
                 FLAG_SUPPORTS_SCREEN_DENSITIES | FLAG_SUPPORTS_XLARGE_SCREENS);
     }
-    
+
     /**
      * @hide
      */
@@ -735,7 +735,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         }
         return pm.getDefaultActivityIcon();
     }
-    
+
     private boolean isPackageUnavailable(PackageManager pm) {
         try {
             return pm.getPackageInfo(packageName, 0) == null;
@@ -743,7 +743,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
             return true;
         }
     }
-    
+
     /**
      * @hide
      */

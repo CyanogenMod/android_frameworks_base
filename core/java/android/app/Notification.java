@@ -608,7 +608,7 @@ public class Notification implements Parcelable
          * may be rendered in a disabled presentation by the system UI.
          */
         public PendingIntent actionIntent;
- 
+
         private Action() { }
         private Action(Parcel in) {
             icon = in.readInt();

@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2007-2008 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -34,16 +34,16 @@ import android.view.WindowManager;
 class SoftInputWindow extends Dialog {
     final KeyEvent.DispatcherState mDispatcherState;
     private final Rect mBounds = new Rect();
-    
+
     public void setToken(IBinder token) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.token = token;
         getWindow().setAttributes(lp);
     }
-    
+
     /**
      * Create a SoftInputWindow that uses a custom style.
-     * 
+     *
      * @param context The Context in which the DockWindow should run. In
      *        particular, it uses the window manager and theme from this context
      *        to present its UI.
@@ -84,7 +84,7 @@ class SoftInputWindow extends Dialog {
 
     /**
      * Get the size of the DockWindow.
-     * 
+     *
      * @return If the DockWindow sticks to the top or bottom of the screen, the
      *         return value is the height of the DockWindow, and its width is
      *         equal to the width of the screen; If the DockWindow sticks to the
@@ -103,7 +103,7 @@ class SoftInputWindow extends Dialog {
 
     /**
      * Set the size of the DockWindow.
-     * 
+     *
      * @param size If the DockWindow sticks to the top or bottom of the screen,
      *        <var>size</var> is the height of the DockWindow, and its width is
      *        equal to the width of the screen; If the DockWindow sticks to the
@@ -125,7 +125,7 @@ class SoftInputWindow extends Dialog {
 
     /**
      * Set which boundary of the screen the DockWindow sticks to.
-     * 
+     *
      * @param gravity The boundary of the screen to stick. See {#link
      *        android.view.Gravity.LEFT}, {#link android.view.Gravity.TOP},
      *        {#link android.view.Gravity.BOTTOM}, {#link

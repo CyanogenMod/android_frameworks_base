@@ -163,7 +163,7 @@ int root(void) {
     rsMatrixMultiply(&matrix, &gPostureMatrix);
     rsMatrixRotate(&matrix, gRotateX, 1.0f, 0.0f, 0.0f);
     rsMatrixRotate(&matrix, gRotateY, 0.0f, 1.0f, 0.0f);
-    
+
     rsgProgramVertexLoadModelMatrix(&matrix);
 
     renderAllMeshes();

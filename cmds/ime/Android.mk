@@ -11,5 +11,5 @@ include $(BUILD_JAVA_LIBRARY)
 include $(CLEAR_VARS)
 ALL_PREBUILT += $(TARGET_OUT)/bin/ime
 $(TARGET_OUT)/bin/ime : $(LOCAL_PATH)/ime | $(ACP)
-	$(transform-prebuilt-to-target)
+    $(transform-prebuilt-to-target)
 

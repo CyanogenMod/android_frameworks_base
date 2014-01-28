@@ -43,7 +43,7 @@ interface IInputMethodManager {
     void addClient(in IInputMethodClient client,
             in IInputContext inputContext, int uid, int pid);
     void removeClient(in IInputMethodClient client);
-            
+
     InputBindResult startInput(in IInputMethodClient client,
             IInputContext inputContext, in EditorInfo attribute, int controlFlags);
     void finishInput(in IInputMethodClient client);

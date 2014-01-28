@@ -87,7 +87,7 @@ public class SerialChat extends Activity implements Runnable, TextView.OnEditorA
     @Override
     public void onPause() {
         super.onPause();
-    
+
     }
 
     @Override

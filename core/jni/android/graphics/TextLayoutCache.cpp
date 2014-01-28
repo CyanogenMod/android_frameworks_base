@@ -718,7 +718,7 @@ void TextLayoutShaper::computeRunValues(const SkPaint* paint, const UChar* conte
 
         hb_buffer_reset(mBuffer);
         // Note: if we want to set unicode functions, etc., this is the place.
-        
+
         hb_buffer_set_direction(mBuffer, isRTL ? HB_DIRECTION_RTL : HB_DIRECTION_LTR);
         hb_buffer_set_script(mBuffer, run.script);
         SkString langString = paint->getPaintOptionsAndroid().getLanguage().getTag();

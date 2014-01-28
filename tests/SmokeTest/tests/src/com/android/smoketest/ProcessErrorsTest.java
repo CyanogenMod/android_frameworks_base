@@ -264,7 +264,7 @@ public class ProcessErrorsTest extends AndroidTestCase {
 
     /**
      * This helper function will dump the actual error reports.
-     * 
+     *
      * @param errList The error report containing one or more error records.
      * @return Returns a string containing all of the errors.
      */

@@ -28,7 +28,7 @@ echo "logfile is $LOGFILE"
 
 (while (sleep 10); do
     failed=0
-    
+
     echo
     echo "Iteration $i at `date`"
     echo
@@ -40,7 +40,7 @@ echo "logfile is $LOGFILE"
     echo
 
     ./test_restore.sh "$@" 2>&1 || failed=1
-    
+
     if [ "$failed" -ne 0 ]; then
         failures=$(($failures+1))
         # Long and verbose so it sticks out
@@ -52,7 +52,7 @@ echo "logfile is $LOGFILE"
     fi
 
     echo "End $i at `date`"
-    
+
     i=$(($i+1))
     if [ $i -eq $iterations ]; then
         echo "DONE: $iterations iterations with $failures failures."

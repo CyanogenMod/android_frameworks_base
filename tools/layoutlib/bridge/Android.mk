@@ -21,14 +21,14 @@ LOCAL_JAVA_RESOURCE_DIRS := resources
 
 
 LOCAL_JAVA_LIBRARIES := \
-	kxml2-2.3.0 \
-	icu4j \
-	layoutlib_api-prebuilt \
-	tools-common-prebuilt
+    kxml2-2.3.0 \
+    icu4j \
+    layoutlib_api-prebuilt \
+    tools-common-prebuilt
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
-	temp_layoutlib \
-	ninepatch-prebuilt
+    temp_layoutlib \
+    ninepatch-prebuilt
 
 LOCAL_MODULE := layoutlib
 

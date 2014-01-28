@@ -46,7 +46,7 @@ public class StackActivity extends Activity {
                 View item = convertView;
                 if (item == null) {
                     item = LayoutInflater.from(getContext()).inflate(
-                            R.layout.stack_item, null, false);                    
+                            R.layout.stack_item, null, false);
                 }
                 ((ImageView) item.findViewById(R.id.textview_icon)).setImageDrawable(
                         getItem(position % getCount()));

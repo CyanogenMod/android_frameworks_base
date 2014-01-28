@@ -462,7 +462,7 @@ public final class ScreenMagnifier extends IMagnificationCallbacks.Stub
         }
         return mTempPointerProperties;
     }
-    
+
     private void transitionToState(int state) {
         if (DEBUG_STATE_TRANSITIONS) {
             switch (state) {

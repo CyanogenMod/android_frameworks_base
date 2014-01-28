@@ -62,7 +62,7 @@ public class ListItemRequestRectAboveThinFirstItemTest
         rect.offset(0, -2 * second.getBottom());
 
         getActivity().requestRectangleOnScreen(1, rect);
-        getInstrumentation().waitForIdleSync();        
+        getInstrumentation().waitForIdleSync();
 
         assertEquals("top of first item",
                 mListView.getListPaddingTop(), mListView.getChildAt(0).getTop());

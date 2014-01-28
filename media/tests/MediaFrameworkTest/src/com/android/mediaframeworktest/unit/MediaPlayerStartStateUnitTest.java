@@ -32,7 +32,7 @@ public class MediaPlayerStartStateUnitTest extends AndroidTestCase implements Me
      *    {Prepared, Started, Paused, PlaybackComplted}.
      * 2. It is invalid to call start() in the following states:
      *    {Idle, Initialized, Stopped, Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -43,7 +43,7 @@ public class MediaPlayerStartStateUnitTest extends AndroidTestCase implements Me
         assertTrue(!stateErrors.errorInStartedStateAfterPause);
         assertTrue(!stateErrors.errorInPausedState);
         assertTrue(!stateErrors.errorInPlaybackCompletedState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInIdleState);
         assertTrue(stateErrors.errorInErrorState);

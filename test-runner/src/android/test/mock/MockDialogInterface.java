@@ -5,8 +5,8 @@ package android.test.mock;
 import android.content.DialogInterface;
 
 /**
- * A mock {@link android.content.DialogInterface} class.  All methods are non-functional and throw 
- * {@link java.lang.UnsupportedOperationException}. Override it to provide the operations that you 
+ * A mock {@link android.content.DialogInterface} class.  All methods are non-functional and throw
+ * {@link java.lang.UnsupportedOperationException}. Override it to provide the operations that you
  * need.
  */
 public class MockDialogInterface implements DialogInterface {

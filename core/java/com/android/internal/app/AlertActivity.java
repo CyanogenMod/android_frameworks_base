@@ -23,7 +23,7 @@ import android.view.KeyEvent;
 
 /**
  * An activity that follows the visual style of an AlertDialog.
- * 
+ *
  * @see #mAlert
  * @see #mAlertParams
  * @see #setupAlert()
@@ -32,7 +32,7 @@ public abstract class AlertActivity extends Activity implements DialogInterface 
 
     /**
      * The model for the alert.
-     * 
+     *
      * @see #mAlertParams
      */
     protected AlertController mAlert;

@@ -101,5 +101,5 @@ public class ListButtonsDiagonalAcrossItemsTest extends ActivityInstrumentationT
                 mListView.getSelectedItemPosition());
         assertTrue("center should still be focused", mCenterButton.isFocused());
     }
-    
+
 }

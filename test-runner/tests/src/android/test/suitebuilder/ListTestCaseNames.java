@@ -38,9 +38,9 @@ public class ListTestCaseNames {
         }
         return testCaseNames;
     }
-    
-    /** 
-     * Returns a list of test class and method names for each TestCase in suite.  
+
+    /**
+     * Returns a list of test class and method names for each TestCase in suite.
      */
     public static List<TestDescriptor> getTestNames(TestSuite suite) {
         List<Test> tests = Collections.<Test>list(suite.tests());
@@ -56,27 +56,27 @@ public class ListTestCaseNames {
         }
         return testNames;
     }
-    
+
     /**
      * Data holder for test case info
      */
     public static class TestDescriptor {
        private String mClassName;
        private String mTestName;
-      
+
        public TestDescriptor(String className, String testName) {
            mClassName = className;
            mTestName = testName;
        }
-       
+
        public String getClassName() {
            return mClassName;
        }
-       
+
        public String getTestName() {
            return mTestName;
        }
-       
+
        /**
         * Override parent to do string-based class and test name comparison
         */
@@ -84,13 +84,13 @@ public class ListTestCaseNames {
        public boolean equals(Object otherObj) {
            if (otherObj instanceof TestDescriptor) {
                TestDescriptor otherDesc = (TestDescriptor)otherObj;
-               return otherDesc.getClassName().equals(this.getClassName()) && 
+               return otherDesc.getClassName().equals(this.getClassName()) &&
                       otherDesc.getTestName().equals(this.getTestName());
-               
+
            }
            return false;
        }
-       
+
        /**
         * Override parent to return a more user-friendly display string
         */

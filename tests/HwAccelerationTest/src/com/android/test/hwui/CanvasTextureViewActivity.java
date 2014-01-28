@@ -82,7 +82,7 @@ public class CanvasTextureViewActivity extends Activity
             float y = 0.0f;
             float speedX = 5.0f;
             float speedY = 3.0f;
-            
+
             Paint paint = new Paint();
             paint.setColor(0xff00ff00);
 
@@ -112,7 +112,7 @@ public class CanvasTextureViewActivity extends Activity
                 }
             }
         }
-        
+
         void stopRendering() {
             interrupt();
             mRunning = false;

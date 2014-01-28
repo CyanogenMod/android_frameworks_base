@@ -31,10 +31,10 @@ import android.view.InflateException;
 public class SimpleInflater {
     /** Menu tag name in XML. */
     private static final String XML_MENU = "menu";
-    
+
     /** Group tag name in XML. */
     private static final String XML_GROUP = "group";
-    
+
     /** Item tag name in XML. */
     private static final String XML_ITEM = "item";
 
@@ -49,7 +49,7 @@ public class SimpleInflater {
         try {
             parser = mContext.getResources().getLayout(menuRes);
             AttributeSet attrs = Xml.asAttributeSet(parser);
-            
+
             parseMenu(parser, attrs);
         } catch (XmlPullParserException e) {
             throw new InflateException("Error inflating menu XML", e);
@@ -76,12 +76,12 @@ public class SimpleInflater {
                     eventType = parser.next();
                     break;
                 }
-                
+
                 throw new RuntimeException("Expecting menu, got " + tagName);
             }
             eventType = parser.next();
         } while (eventType != XmlPullParser.END_DOCUMENT);
-        
+
         boolean reachedEndOfMenu = false;
         while (!reachedEndOfMenu) {
             switch (eventType) {
@@ -89,7 +89,7 @@ public class SimpleInflater {
                     if (lookingForEndOfUnknownTag) {
                         break;
                     }
-                    
+
                     tagName = parser.getName();
                     if (tagName.equals(XML_ITEM)) {
                         readItem(attrs);
@@ -100,7 +100,7 @@ public class SimpleInflater {
                         unknownTagName = tagName;
                     }
                     break;
-                    
+
                 case XmlPullParser.END_TAG:
                     tagName = parser.getName();
                     if (lookingForEndOfUnknownTag && tagName.equals(unknownTagName)) {
@@ -111,11 +111,11 @@ public class SimpleInflater {
                         reachedEndOfMenu = true;
                     }
                     break;
-                    
+
                 case XmlPullParser.END_DOCUMENT:
                     throw new RuntimeException("Unexpected end of document");
             }
-            
+
             eventType = parser.next();
         }
     }

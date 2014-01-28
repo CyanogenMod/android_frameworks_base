@@ -42,41 +42,41 @@ import java.io.*;
  * adb shell am instrument \
  *   -e class com.android.mediaframeworktest.functional.CameraTest \
  *   -w  com.android.mediaframeworktest/.MediaFrameworkTestRunner
- */  
-public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTest> {    
+ */
+public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTest> {
     private String TAG = "CameraTest";
-    
+
     private boolean rawPreviewCallbackResult = false;
     private boolean shutterCallbackResult = false;
     private boolean rawPictureCallbackResult = false;
     private boolean jpegPictureCallbackResult = false;
-    
+
     private static int WAIT_FOR_COMMAND_TO_COMPLETE = 10000;  // Milliseconds.
     private static final int CAMERA_ID = 0;
-    
+
     private RawPreviewCallback mRawPreviewCallback = new RawPreviewCallback();
     private TestShutterCallback mShutterCallback = new TestShutterCallback();
     private RawPictureCallback mRawPictureCallback = new RawPictureCallback();
     private JpegPictureCallback mJpegPictureCallback = new JpegPictureCallback();
-    
+
     private boolean mInitialized = false;
     private Looper mLooper = null;
     private final ConditionVariable mPreviewDone = new ConditionVariable();
     private final ConditionVariable mSnapshotDone = new ConditionVariable();
-    
+
     Camera mCamera;
     Context mContext;
-  
+
     public CameraTest() {
         super("com.android.mediaframeworktest", MediaFrameworkTest.class);
     }
 
     protected void setUp() throws Exception {
-        super.setUp(); 
+        super.setUp();
     }
-   
+
     /*
-     * Initializes the message looper so that the Camera object can 
+     * Initializes the message looper so that the Camera object can
      * receive the callback messages.
      */
     private void initializeMessageLooper() {
@@ -88,7 +88,7 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
                 // Set up a looper to be used by camera.
                 Looper.prepare();
                 Log.v(TAG, "start loopRun");
-                // Save the looper so that we can terminate this thread 
+                // Save the looper so that we can terminate this thread
                 // after we are done with it.
                 mLooper = Looper.myLooper();
                 mCamera = Camera.open(CAMERA_ID);
@@ -102,7 +102,7 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
             fail("initializeMessageLooper: start timeout");
         }
     }
-    
+
     /*
      * Terminates the message looper thread.
      */
@@ -116,11 +116,11 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
         mLooper.getThread().join();
         mCamera.release();
     }
-    
+
     //Implement the previewCallback
-    private final class RawPreviewCallback implements PreviewCallback { 
-        public void onPreviewFrame(byte [] rawData, Camera camera) {         
-            Log.v(TAG, "Preview callback start");            
+    private final class RawPreviewCallback implements PreviewCallback {
+        public void onPreviewFrame(byte [] rawData, Camera camera) {
+            Log.v(TAG, "Preview callback start");
             int rawDataLength = 0;
             if (rawData != null) {
                 rawDataLength = rawData.length;
@@ -134,7 +134,7 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
             Log.v(TAG, "Preview callback stop");
         }
     };
-    
+
     //Implement the shutterCallback
     private final class TestShutterCallback implements ShutterCallback {
         public void onShutter() {
@@ -142,26 +142,26 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
             Log.v(TAG, "onShutter called");
         }
     };
-    
+
     //Implement the RawPictureCallback
-    private final class RawPictureCallback implements PictureCallback { 
+    private final class RawPictureCallback implements PictureCallback {
         public void onPictureTaken(byte [] rawData, Camera camera) {
             // no support for raw data - success if we get the callback
             rawPictureCallbackResult = true;
             Log.v(TAG, "RawPictureCallback callback");
         }
     };
-    
+
     //Implement the JpegPictureCallback
-    private final class JpegPictureCallback implements PictureCallback {   
-        public void onPictureTaken(byte [] rawData, Camera camera) {           
-            try {         
+    private final class JpegPictureCallback implements PictureCallback {
+        public void onPictureTaken(byte [] rawData, Camera camera) {
+            try {
                 if (rawData != null) {
                     int rawDataLength = rawData.length;
                     File rawoutput = new File(
                             Environment.getExternalStorageDirectory().toString(), "/test.bmp");
                     FileOutputStream outstream = new FileOutputStream(rawoutput);
-                    outstream.write(rawData);                   
+                    outstream.write(rawData);
                     Log.v(TAG, "JpegPictureCallback rawDataLength = " + rawDataLength);
                     jpegPictureCallbackResult = true;
                 } else {
@@ -174,7 +174,7 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
             }
         }
     };
-   
+
     private void waitForPreviewDone() {
         if (!mPreviewDone.block(WAIT_FOR_COMMAND_TO_COMPLETE)) {
             Log.v(TAG, "waitForPreviewDone: timeout");
@@ -191,7 +191,7 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
     }
 
 
-    private void checkTakePicture() { 
+    private void checkTakePicture() {
         SurfaceHolder mSurfaceHolder;
         try {
             mSurfaceHolder = MediaFrameworkTest.mSurfaceView.getHolder();
@@ -204,10 +204,10 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
             waitForSnapshotDone();
         } catch (Exception e) {
             Log.v(TAG, e.toString());
-        }      
+        }
     }
-    
-    private void checkPreviewCallback() { 
+
+    private void checkPreviewCallback() {
         SurfaceHolder mSurfaceHolder;
         try {
             mSurfaceHolder = MediaFrameworkTest.mSurfaceView.getHolder();
@@ -218,18 +218,18 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
             mCamera.setPreviewCallback(null);
         } catch (Exception e) {
             Log.v(TAG, e.toString());
-        }      
+        }
     }
-    
+
     /*
-     * TODO(yslau): Need to setup the golden rawData and compare the 
-     * the new captured rawData with the golden one.       
-     * 
+     * TODO(yslau): Need to setup the golden rawData and compare the
+     * the new captured rawData with the golden one.
+     *
      * Test case 1: Take a picture and verify all the callback
      * functions are called properly.
      */
     @LargeTest
-    public void testTakePicture() throws Exception {  
+    public void testTakePicture() throws Exception {
         initializeMessageLooper();
         mCamera.setPreviewCallback(mRawPreviewCallback);
         checkTakePicture();
@@ -238,16 +238,16 @@ public class CameraTest extends ActivityInstrumentationTestCase<MediaFrameworkTe
         assertTrue("rawPictureCallbackResult", rawPictureCallbackResult);
         assertTrue("jpegPictureCallbackResult", jpegPictureCallbackResult);
     }
-    
+
     /*
-     * Test case 2: Set the preview and 
+     * Test case 2: Set the preview and
      * verify the RawPreviewCallback is called
      */
     @LargeTest
-    public void testCheckPreview() throws Exception {  
+    public void testCheckPreview() throws Exception {
         initializeMessageLooper();
         mCamera.setPreviewCallback(mRawPreviewCallback);
-        checkPreviewCallback();     
+        checkPreviewCallback();
         terminateMessageLooper();
         assertTrue("RawPreviewCallbackResult", rawPreviewCallbackResult);
     }

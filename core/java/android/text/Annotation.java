@@ -36,11 +36,11 @@ public class Annotation implements ParcelableSpan {
         mKey = src.readString();
         mValue = src.readString();
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.ANNOTATION;
     }
-    
+
     public int describeContents() {
         return 0;
     }

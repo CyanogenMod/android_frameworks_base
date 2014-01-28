@@ -32,7 +32,7 @@ public class XfermodeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(new XfermodesView(this));
     }
 
@@ -45,7 +45,7 @@ public class XfermodeActivity extends Activity {
 
             mBluePaint = new Paint();
             mBluePaint.setColor(0xff0000ff);
-            
+
             mRedPaint = new Paint();
             mRedPaint.setColor(0x7fff0000);
         }
@@ -56,7 +56,7 @@ public class XfermodeActivity extends Activity {
             //canvas.drawRGB(255, 255, 255);
 
             canvas.translate(100.0f, 100.0f);
-            
+
             // SRC modes
             canvas.save();
 
@@ -64,20 +64,20 @@ public class XfermodeActivity extends Activity {
             canvas.translate(0.0f, 100.0f);
 
             drawRects(canvas, Mode.SRC_IN);
-            canvas.translate(0.0f, 100.0f);            
+            canvas.translate(0.0f, 100.0f);
 
             drawRects(canvas, Mode.SRC_OUT);
             canvas.translate(0.0f, 100.0f);
 
             drawRects(canvas, Mode.SRC_ATOP);
             canvas.translate(0.0f, 100.0f);
-            
+
             drawRects(canvas, Mode.SRC);
 
             canvas.restore();
-            
+
             canvas.translate(100.0f, 0.0f);
-            
+
             // DST modes
             canvas.save();
 
@@ -85,20 +85,20 @@ public class XfermodeActivity extends Activity {
             canvas.translate(0.0f, 100.0f);
 
             drawRects(canvas, Mode.DST_IN);
-            canvas.translate(0.0f, 100.0f);            
+            canvas.translate(0.0f, 100.0f);
 
             drawRects(canvas, Mode.DST_OUT);
             canvas.translate(0.0f, 100.0f);
 
             drawRects(canvas, Mode.DST_ATOP);
             canvas.translate(0.0f, 100.0f);
-            
+
             drawRects(canvas, Mode.DST);
 
             canvas.restore();
-            
+
             canvas.translate(100.0f, 0.0f);
-            
+
             // Other modes
             canvas.save();
 
@@ -106,18 +106,18 @@ public class XfermodeActivity extends Activity {
             canvas.translate(0.0f, 100.0f);
 
             drawRects(canvas, Mode.XOR);
-            
+
             canvas.translate(0.0f, 100.0f);
-            
+
             mBluePaint.setAlpha(127);
             canvas.drawRect(0.0f, 0.0f, 50.0f, 50.0f, mBluePaint);
-            
+
             canvas.translate(0.0f, 100.0f);
-            
+
             mBluePaint.setAlpha(10);
             mBluePaint.setColor(0x7f0000ff);
             canvas.drawRect(0.0f, 0.0f, 50.0f, 50.0f, mBluePaint);
-            
+
             mBluePaint.setColor(0xff0000ff);
             mBluePaint.setAlpha(255);
 

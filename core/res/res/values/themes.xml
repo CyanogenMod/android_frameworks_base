@@ -4,9 +4,9 @@
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
-  
+
           http://www.apache.org/licenses/LICENSE-2.0
-  
+
      Unless required by applicable law or agreed to in writing, software
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -95,12 +95,12 @@ please see themes_device_defaults.xml.
         <item name="textAppearanceAutoCorrectionSuggestion">@android:style/TextAppearance.AutoCorrectionSuggestion</item>
 
         <item name="textAppearanceButton">@android:style/TextAppearance.Widget.Button</item>
-        
+
         <item name="editTextColor">@android:color/primary_text_light</item>
         <item name="editTextBackground">@android:drawable/edit_text</item>
-        
+
         <item name="candidatesTextStyleSpans">@android:string/candidates_style</item>
-        
+
         <item name="textCheckMark">@android:drawable/indicator_check_mark_dark</item>
         <item name="textCheckMarkInverse">@android:drawable/indicator_check_mark_light</item>
 
@@ -134,7 +134,7 @@ please see themes_device_defaults.xml.
         <!-- @hide -->
         <item name="searchResultListItemHeight">58dip</item>
         <item name="listDivider">@drawable/divider_horizontal_dark</item>
-        <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator</item>   
+        <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator</item>
 
         <item name="listChoiceIndicatorSingle">@android:drawable/btn_radio</item>
         <item name="listChoiceIndicatorMultiple">@android:drawable/btn_check</item>
@@ -160,7 +160,7 @@ please see themes_device_defaults.xml.
 
         <!-- Gallery attributes -->
         <item name="galleryItemBackground">@android:drawable/gallery_item_background</item>
-        
+
         <!-- Window attributes -->
         <item name="windowBackground">@android:drawable/screen_background_selector_dark</item>
         <item name="windowFrame">@null</item>
@@ -220,7 +220,7 @@ please see themes_device_defaults.xml.
 
         <!-- Scrollbar attributes -->
         <item name="scrollbarFadeDuration">250</item>
-        <item name="scrollbarDefaultDelayBeforeFade">300</item> 
+        <item name="scrollbarDefaultDelayBeforeFade">300</item>
         <item name="scrollbarSize">10dip</item>
         <item name="scrollbarThumbHorizontal">@android:drawable/scrollbar_handle_horizontal</item>
         <item name="scrollbarThumbVertical">@android:drawable/scrollbar_handle_vertical</item>
@@ -242,7 +242,7 @@ please see themes_device_defaults.xml.
 
         <!-- Widget styles -->
         <item name="absListViewStyle">@android:style/Widget.AbsListView</item>
-        <item name="autoCompleteTextViewStyle">@android:style/Widget.AutoCompleteTextView</item>        
+        <item name="autoCompleteTextViewStyle">@android:style/Widget.AutoCompleteTextView</item>
         <item name="checkboxStyle">@android:style/Widget.CompoundButton.CheckBox</item>
         <item name="checkedTextViewStyle">@android:style/Widget.CheckedTextView</item>
         <item name="dropDownListViewStyle">@android:style/Widget.ListView.DropDown</item>
@@ -410,7 +410,7 @@ please see themes_device_defaults.xml.
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-    
+
     <!-- Theme for a light background with dark text on top.  Set your activity
          to this theme if you would like such an appearance.  As with the
          default theme, you should try to assume little more than that the
@@ -421,7 +421,7 @@ please see themes_device_defaults.xml.
         <item name="colorBackground">@android:color/background_light</item>
         <item name="colorForeground">@color/bright_foreground_light</item>
         <item name="colorForegroundInverse">@android:color/bright_foreground_light_inverse</item>
-        
+
         <item name="textColorPrimary">@android:color/primary_text_light</item>
         <item name="textColorSecondary">@android:color/secondary_text_light</item>
         <item name="textColorTertiary">@android:color/tertiary_text_light</item>
@@ -435,12 +435,12 @@ please see themes_device_defaults.xml.
         <item name="textColorPrimaryInverseNoDisable">@android:color/primary_text_dark_nodisable</item>
         <item name="textColorSecondaryInverseNoDisable">@android:color/secondary_text_dark_nodisable</item>
         <item name="textColorHint">@android:color/hint_foreground_light</item>
-        <item name="textColorHintInverse">@android:color/hint_foreground_dark</item>        
+        <item name="textColorHintInverse">@android:color/hint_foreground_dark</item>
         <item name="textColorHighlight">@android:color/highlighted_text_light</item>
         <item name="textColorHighlightInverse">@android:color/highlighted_text_dark</item>
         <item name="textColorLink">@android:color/link_text_light</item>
         <item name="textColorLinkInverse">@android:color/link_text_dark</item>
-        
+
         <item name="editTextColor">@android:color/primary_text_light</item>
         <item name="listChoiceBackgroundIndicator">@android:drawable/list_selector_background</item>
 
@@ -448,7 +448,7 @@ please see themes_device_defaults.xml.
         <item name="quickContactBadgeOverlay">@android:drawable/quickcontact_badge_overlay_light</item>
 
         <item name="popupWindowStyle">@android:style/Widget.PopupWindow</item>
-        
+
         <item name="textCheckMark">@android:drawable/indicator_check_mark_light</item>
         <item name="textCheckMarkInverse">@android:drawable/indicator_check_mark_dark</item>
 
@@ -503,7 +503,7 @@ please see themes_device_defaults.xml.
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-    
+
     <!-- Variant on {@link #Theme} that ensures the background is
          completely black.  This is useful for things like image viewers and
          media players.   If you want the normal (dark background) theme
@@ -512,7 +512,7 @@ please see themes_device_defaults.xml.
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackground">@android:color/black</item>
     </style>
-    
+
     <!-- Variant of {@link #Theme_Black} with no title bar -->
     <style name="Theme.Black.NoTitleBar">
         <item name="android:windowNoTitle">true</item>
@@ -568,12 +568,12 @@ please see themes_device_defaults.xml.
          shown on top of the real wallpaper -->
     <style name="ActiveWallpaperSettings">
     </style>
-    
+
     <!-- Style to apply on top of a wallpaper settings theme when it is being
          shown on top of the real wallpaper -->
     <style name="PreviewWallpaperSettings">
     </style>
-    
+
     <!-- Theme for translucent activities (on API level 10 and lower). That is, windows
          that allow you to see through them to the windows behind.  This sets up the translucent
          flag and appropriate animations for your windows.  -->
@@ -598,7 +598,7 @@ please see themes_device_defaults.xml.
     <style name="Theme.Translucent.NoTitleBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
     </style>
-    
+
     <!-- Default theme for activities that don't actually display a UI; that
          is, they finish themselves before being resumed.  -->
     <style name="Theme.NoDisplay">
@@ -628,7 +628,7 @@ please see themes_device_defaults.xml.
         <item name="android:windowActionModeOverlay">true</item>
 
         <item name="android:colorBackgroundCacheHint">@null</item>
-        
+
         <item name="textAppearance">@android:style/TextAppearance</item>
         <item name="textAppearanceInverse">@android:style/TextAppearance.Inverse</item>
 
@@ -688,7 +688,7 @@ please see themes_device_defaults.xml.
         <item name="textAppearanceListItem">@android:style/TextAppearance.Large.Inverse</item>
         <item name="textAppearanceListItemSmall">@android:style/TextAppearance.Large.Inverse</item>
     </style>
-    
+
     <!-- Default dark theme for panel windows (on API level 10 and lower).  This removes all
          extraneous window decorations, so you basically have an empty rectangle in which
          to place your content.  It makes the window floating, with a transparent
@@ -848,7 +848,7 @@ please see themes_device_defaults.xml.
         <item name="textAppearance">@style/TextAppearance.Theme.Dialog.AppError</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
-    
+
     <!-- Special theme for the recent apps dialog, to allow customization
          with overlays. -->
     <style name="Theme.Dialog.RecentApplications" parent="Theme.DeviceDefault.Dialog">
@@ -882,7 +882,7 @@ please see themes_device_defaults.xml.
     <style name="Theme.NoTitleBar.OverlayActionModes">
         <item name="android:windowActionModeOverlay">true</item>
     </style>
-    
+
     <!-- Honeycomb holographic theme (dark version).
          <p>This is the default system theme for apps that target API level 11 - 13. Starting
          with API level 14, the default system theme is supplied by {@link #Theme_DeviceDefault},
@@ -950,14 +950,14 @@ please see themes_device_defaults.xml.
         <item name="textAppearanceSmallInverse">@android:style/TextAppearance.Holo.Small.Inverse</item>
         <item name="textAppearanceSearchResultTitle">@android:style/TextAppearance.Holo.SearchResult.Title</item>
         <item name="textAppearanceSearchResultSubtitle">@android:style/TextAppearance.Holo.SearchResult.Subtitle</item>
-        
+
         <item name="textAppearanceButton">@android:style/TextAppearance.Holo.Widget.Button</item>
-        
+
         <item name="editTextColor">?android:attr/textColorPrimary</item>
         <item name="editTextBackground">@android:drawable/edit_text_holo_dark</item>
-        
+
         <item name="candidatesTextStyleSpans">@android:string/candidates_style</item>
-        
+
         <item name="textCheckMark">@android:drawable/indicator_check_mark_dark</item>
         <item name="textCheckMarkInverse">@android:drawable/indicator_check_mark_light</item>
 
@@ -992,7 +992,7 @@ please see themes_device_defaults.xml.
         <!-- @hide -->
         <item name="searchResultListItemHeight">58dip</item>
         <item name="listDivider">@drawable/list_divider_holo_dark</item>
-        <item name="listSeparatorTextViewStyle">@android:style/Widget.Holo.TextView.ListSeparator</item>   
+        <item name="listSeparatorTextViewStyle">@android:style/Widget.Holo.TextView.ListSeparator</item>
 
         <item name="listChoiceIndicatorSingle">@android:drawable/btn_radio_holo_dark</item>
         <item name="listChoiceIndicatorMultiple">@android:drawable/btn_check_holo_dark</item>
@@ -1015,7 +1015,7 @@ please see themes_device_defaults.xml.
 
         <!-- Gallery attributes -->
         <item name="galleryItemBackground">@android:drawable/gallery_item_background</item>
-        
+
         <!-- Window attributes -->
         <item name="windowFrame">@null</item>
         <item name="windowNoTitle">false</item>
@@ -1064,7 +1064,7 @@ please see themes_device_defaults.xml.
 
         <!-- Scrollbar attributes -->
         <item name="scrollbarFadeDuration">250</item>
-        <item name="scrollbarDefaultDelayBeforeFade">300</item> 
+        <item name="scrollbarDefaultDelayBeforeFade">300</item>
         <item name="scrollbarSize">10dip</item>
         <item name="scrollbarThumbHorizontal">@android:drawable/scrollbar_handle_holo_dark</item>
         <item name="scrollbarThumbVertical">@android:drawable/scrollbar_handle_holo_dark</item>
@@ -1265,14 +1265,14 @@ please see themes_device_defaults.xml.
         <item name="textAppearanceSmallInverse">@android:style/TextAppearance.Holo.Light.Small.Inverse</item>
         <item name="textAppearanceSearchResultTitle">@android:style/TextAppearance.Holo.Light.SearchResult.Title</item>
         <item name="textAppearanceSearchResultSubtitle">@android:style/TextAppearance.Holo.Light.SearchResult.Subtitle</item>
-        
+
         <item name="textAppearanceButton">@android:style/TextAppearance.Holo.Light.Widget.Button</item>
 
         <item name="editTextColor">?android:attr/textColorPrimary</item>
         <item name="editTextBackground">@android:drawable/edit_text_holo_light</item>
 
         <item name="candidatesTextStyleSpans">@android:string/candidates_style</item>
-        
+
         <item name="textCheckMark">@android:drawable/indicator_check_mark_light</item>
         <item name="textCheckMarkInverse">@android:drawable/indicator_check_mark_dark</item>
 
@@ -1307,7 +1307,7 @@ please see themes_device_defaults.xml.
         <!-- @hide -->
         <item name="searchResultListItemHeight">58dip</item>
         <item name="listDivider">@drawable/list_divider_holo_light</item>
-        <item name="listSeparatorTextViewStyle">@android:style/Widget.Holo.Light.TextView.ListSeparator</item>   
+        <item name="listSeparatorTextViewStyle">@android:style/Widget.Holo.Light.TextView.ListSeparator</item>
 
         <item name="listChoiceIndicatorSingle">@android:drawable/btn_radio_holo_light</item>
         <item name="listChoiceIndicatorMultiple">@android:drawable/btn_check_holo_light</item>
@@ -1330,7 +1330,7 @@ please see themes_device_defaults.xml.
 
         <!-- Gallery attributes -->
         <item name="galleryItemBackground">@android:drawable/gallery_item_background</item>
-        
+
         <!-- Window attributes -->
         <item name="windowFrame">@null</item>
         <item name="windowNoTitle">false</item>
@@ -1567,7 +1567,7 @@ please see themes_device_defaults.xml.
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
-    
+
     <!-- Variant of the holographic (dark) theme that has no title bar and fills
          the entire screen.  This theme
          sets {@link android.R.attr#windowFullscreen} to true.  -->
@@ -1608,7 +1608,7 @@ please see themes_device_defaults.xml.
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
- 
+
     <!-- Variant of the holographic (light) theme that has no title bar and fills
          the entire screen and extends into the display overscan region.  This theme
          sets {@link android.R.attr#windowFullscreen} and {@link android.R.attr#windowOverscan}
@@ -1654,7 +1654,7 @@ please see themes_device_defaults.xml.
 
         <item name="android:buttonBarStyle">@android:style/Holo.ButtonBar.AlertDialog</item>
         <item name="borderlessButtonStyle">@android:style/Widget.Holo.Button.Borderless.Small</item>
-        
+
         <item name="textAppearance">@android:style/TextAppearance.Holo</item>
         <item name="textAppearanceInverse">@android:style/TextAppearance.Holo.Inverse</item>
 

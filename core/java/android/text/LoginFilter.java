@@ -18,7 +18,7 @@ package android.text;
 
 /**
  * Abstract class for filtering login-related text (user names and passwords)
- * 
+ *
  */
 public abstract class LoginFilter implements InputFilter {
     private boolean mAppendInvalid;  // whether to append or ignore invalid characters
@@ -29,14 +29,14 @@ public abstract class LoginFilter implements InputFilter {
     LoginFilter(boolean appendInvalid) {
         mAppendInvalid = appendInvalid;
     }
-    
+
     /**
      * Default constructor for LoginFilter doesn't append invalid characters.
      */
     LoginFilter() {
         mAppendInvalid = false;
     }
-    
+
     /**
      * This method is called when the buffer is going to replace the
      * range <code>dstart &hellip; dend</code> of <code>dest</code>
@@ -50,8 +50,8 @@ public abstract class LoginFilter implements InputFilter {
     public CharSequence filter(CharSequence source, int start, int end,
             Spanned dest, int dstart, int dend) {
         onStart();
-        
-        // Scan through beginning characters in dest, calling onInvalidCharacter() 
+
+        // Scan through beginning characters in dest, calling onInvalidCharacter()
         // for each invalid character.
         for (int i = 0; i < dstart; i++) {
             char c = dest.charAt(i);
@@ -82,65 +82,65 @@ public abstract class LoginFilter implements InputFilter {
                 onInvalidCharacter(c);
             }
         }
-        
-        // Scan through remaining characters in dest, calling onInvalidCharacter() 
+
+        // Scan through remaining characters in dest, calling onInvalidCharacter()
         // for each invalid character.
         for (int i = dend; i < dest.length(); i++) {
             char c = dest.charAt(i);
             if (!isAllowed(c)) onInvalidCharacter(c);
         }
-        
+
         onStop();
 
         // Either returns null if we made no changes,
         // or what we wanted to change it to if there were changes.
         return modification;
     }
-    
+
     /**
      * Called when we start processing filter.
      */
     public void onStart() {
-        
+
     }
-    
+
     /**
      * Called whenever we encounter an invalid character.
      * @param c the invalid character
      */
     public void onInvalidCharacter(char c) {
-        
+
     }
-    
+
     /**
      * Called when we're done processing filter
      */
     public void onStop() {
-        
+
     }
-    
+
     /**
-     * Returns whether or not we allow character c. 
+     * Returns whether or not we allow character c.
      * Subclasses must override this method.
      */
     public abstract boolean isAllowed(char c);
 
     /**
-     * This filter rejects characters in the user name that are not compatible with GMail 
-     * account creation. It prevents the user from entering user names with characters other than 
-     * [a-zA-Z0-9.]. 
-     * 
+     * This filter rejects characters in the user name that are not compatible with GMail
+     * account creation. It prevents the user from entering user names with characters other than
+     * [a-zA-Z0-9.].
+     *
      */
     public static class UsernameFilterGMail extends LoginFilter {
-        
+
         public UsernameFilterGMail() {
             super(false);
         }
-        
+
         public UsernameFilterGMail(boolean appendInvalid) {
             super(appendInvalid);
         }
-        
+
         @Override
         public boolean isAllowed(char c) {
             // Allow [a-zA-Z0-9@.]
@@ -158,20 +158,20 @@ public abstract class LoginFilter implements InputFilter {
 
     /**
      * This filter rejects characters in the user name that are not compatible with Google login.
-     * It is slightly less restrictive than the above filter in that it allows [a-zA-Z0-9._-+]. 
-     * 
+     * It is slightly less restrictive than the above filter in that it allows [a-zA-Z0-9._-+].
+     *
      */
     public static class UsernameFilterGeneric extends LoginFilter {
         private static final String mAllowed = "@_-+."; // Additional characters
-        
+
         public UsernameFilterGeneric() {
             super(false);
         }
-        
+
         public UsernameFilterGeneric(boolean appendInvalid) {
             super(appendInvalid);
         }
-        
+
         @Override
         public boolean isAllowed(char c) {
             // Allow [a-zA-Z0-9@.]
@@ -188,20 +188,20 @@ public abstract class LoginFilter implements InputFilter {
     }
 
     /**
-     * This filter is compatible with GMail passwords which restricts characters to 
+     * This filter is compatible with GMail passwords which restricts characters to
      * the Latin-1 (ISO8859-1) char set.
-     * 
+     *
      */
     public static class PasswordFilterGMail extends LoginFilter {
-        
+
         public PasswordFilterGMail() {
             super(false);
         }
-        
+
         public PasswordFilterGMail(boolean appendInvalid) {
             super(appendInvalid);
         }
-        
+
         // We should reject anything not in the Latin-1 (ISO8859-1) charset
         @Override
         public boolean isAllowed(char c) {

@@ -52,7 +52,7 @@ public abstract class BulkCursorNative extends Binder implements IBulkCursor
 
         return new BulkCursorProxy(obj);
     }
-    
+
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags)
             throws RemoteException {
@@ -78,7 +78,7 @@ public abstract class BulkCursorNative extends Binder implements IBulkCursor
                     reply.writeNoException();
                     return true;
                 }
-                
+
                 case CLOSE_TRANSACTION: {
                     data.enforceInterface(IBulkCursor.descriptor);
                     close();
@@ -218,7 +218,7 @@ final class BulkCursorProxy implements IBulkCursor {
             reply.recycle();
         }
     }
-    
+
     public int requery(IContentObserver observer) throws RemoteException {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();

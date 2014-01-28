@@ -99,7 +99,7 @@ interface ITextToSpeechService {
      *         be empty too.
      */
     String[] getLanguage();
-    
+
     /**
      * Returns a default TTS language, country and variant as set by the user.
      *
@@ -111,7 +111,7 @@ interface ITextToSpeechService {
      *         be empty too.
      */
     String[] getClientDefaultLanguage();
-    
+
     /**
      * Checks whether the engine supports a given language.
      *
@@ -137,7 +137,7 @@ interface ITextToSpeechService {
      * @param country ISO-3 country code. May be empty or null.
      * @param variant Language variant. May be empty or null.
      * @return An array of strings containing the set of features supported for
-     *         the supplied locale. The array of strings must not contain 
+     *         the supplied locale. The array of strings must not contain
      *         duplicates.
      */
     String[] getFeaturesForLanguage(in String lang, in String country, in String variant);

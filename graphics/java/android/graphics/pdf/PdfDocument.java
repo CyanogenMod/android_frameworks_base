@@ -378,7 +378,7 @@ public class PdfDocument {
      * a canvas on which you can draw content and is acquired by a
      * call to {@link #getCanvas()}. It also has associated a
      * {@link PageInfo} instance that describes its attributes. Also
-     * a page has 
+     * a page has
      */
     public static final class Page {
         private final PageInfo mPageInfo;

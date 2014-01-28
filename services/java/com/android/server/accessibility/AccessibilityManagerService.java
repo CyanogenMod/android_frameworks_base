@@ -688,7 +688,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
      * @param outBounds The output to which to write the focus bounds.
      * @return Whether accessibility focus was found and the bounds are populated.
      */
-    // TODO: (multi-display) Make sure this works for multiple displays. 
+    // TODO: (multi-display) Make sure this works for multiple displays.
     boolean getAccessibilityFocusBoundsInActiveWindow(Rect outBounds) {
         // Instead of keeping track of accessibility focus events per
         // window to be able to find the focus in the active window,
@@ -2495,7 +2495,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 IBinder windowToken = mGlobalWindowTokens.get(windowId);
                 if (windowToken == null) {
                     windowToken = getCurrentUserStateLocked().mWindowTokens.get(windowId);
-                }                    
+                }
                 if (windowToken != null) {
                     return mWindowManagerService.getCompatibleMagnificationSpecForWindow(
                             windowToken);

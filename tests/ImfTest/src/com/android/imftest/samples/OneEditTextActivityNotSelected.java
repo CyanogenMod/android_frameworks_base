@@ -35,13 +35,13 @@ import com.android.internal.R;
 /*
  * Activity with non-EditText view selected initially
  */
-public class OneEditTextActivityNotSelected extends Activity 
+public class OneEditTextActivityNotSelected extends Activity
 {
     private View mRootView;
     private View mDefaultFocusedView;
-    
+
     @Override
-    public void onCreate(Bundle savedInstanceState) 
+    public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
@@ -60,12 +60,12 @@ public class OneEditTextActivityNotSelected extends Activity
 
         ((ScrollView) mRootView).addView(layout);
         setContentView(mRootView);
-    }  
+    }
 
     public View getRootView() {
         return mRootView;
     }
-    
+
     public View getDefaultFocusedView() {
         return mDefaultFocusedView;
     }

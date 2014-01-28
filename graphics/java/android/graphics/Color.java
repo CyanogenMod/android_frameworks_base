@@ -110,9 +110,9 @@ public class Color {
 
     /**
      * Returns the hue component of a color int.
-     * 
+     *
      * @return A value between 0.0f and 1.0f
-     * 
+     *
      * @hide Pending API council
      */
     public static float hue(int color) {
@@ -152,9 +152,9 @@ public class Color {
 
     /**
      * Returns the saturation component of a color int.
-     * 
+     *
      * @return A value between 0.0f and 1.0f
-     * 
+     *
      * @hide Pending API council
      */
     public static float saturation(int color) {
@@ -233,13 +233,13 @@ public class Color {
      * If hsv values are out of range, they are pinned.
      * @param hsb  3 element array which holds the input HSB components.
      * @return the resulting argb color
-     * 
+     *
      * @hide Pending API council
      */
     public static int HSBtoColor(float[] hsb) {
         return HSBtoColor(hsb[0], hsb[1], hsb[2]);
     }
-    
+
     /**
      * Convert HSB components to an ARGB color. Alpha set to 0xFF.
      *     hsv[0] is Hue [0 .. 1)
@@ -250,18 +250,18 @@ public class Color {
      * @param s Saturation component
      * @param b Brightness component
      * @return the resulting argb color
-     * 
+     *
      * @hide Pending API council
      */
     public static int HSBtoColor(float h, float s, float b) {
         h = MathUtils.constrain(h, 0.0f, 1.0f);
         s = MathUtils.constrain(s, 0.0f, 1.0f);
         b = MathUtils.constrain(b, 0.0f, 1.0f);
-        
+
         float red = 0.0f;
         float green = 0.0f;
         float blue = 0.0f;
-        
+
         final float hf = (h - (int) h) * 6.0f;
         final int ihf = (int) hf;
         final float f = hf - ihf;

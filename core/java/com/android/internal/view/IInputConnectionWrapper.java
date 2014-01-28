@@ -66,18 +66,18 @@ public class IInputConnectionWrapper extends IInputContext.Stub {
         IInputContextCallback callback;
         int seq;
     }
-    
+
     class MyHandler extends Handler {
         MyHandler(Looper looper) {
             super(looper);
         }
-        
+
         @Override
         public void handleMessage(Message msg) {
             executeMessage(msg);
         }
     }
-    
+
     public IInputConnectionWrapper(Looper mainLooper, InputConnection conn) {
         mInputConnection = new WeakReference<InputConnection>(conn);
         mMainLooper = mainLooper;
@@ -87,11 +87,11 @@ public class IInputConnectionWrapper extends IInputContext.Stub {
     public boolean isActive() {
         return true;
     }
-    
+
     public void getTextAfterCursor(int length, int flags, int seq, IInputContextCallback callback) {
         dispatchMessage(obtainMessageIISC(DO_GET_TEXT_AFTER_CURSOR, length, flags, seq, callback));
     }
-    
+
     public void getTextBeforeCursor(int length, int flags, int seq, IInputContextCallback callback) {
         dispatchMessage(obtainMessageIISC(DO_GET_TEXT_BEFORE_CURSOR, length, flags, seq, callback));
     }
@@ -109,7 +109,7 @@ public class IInputConnectionWrapper extends IInputContext.Stub {
         dispatchMessage(obtainMessageIOSC(DO_GET_EXTRACTED_TEXT, flags,
                 request, seq, callback));
     }
-    
+
     public void commitText(CharSequence text, int newCursorPosition) {
         dispatchMessage(obtainMessageIO(DO_COMMIT_TEXT, newCursorPosition, text));
     }
@@ -129,11 +129,11 @@ public class IInputConnectionWrapper extends IInputContext.Stub {
     public void performEditorAction(int id) {
         dispatchMessage(obtainMessageII(DO_PERFORM_EDITOR_ACTION, id, 0));
     }
-    
+
     public void performContextMenuAction(int id) {
         dispatchMessage(obtainMessageII(DO_PERFORM_CONTEXT_MENU_ACTION, id, 0));
     }
-    
+
     public void setComposingRegion(int start, int end) {
         dispatchMessage(obtainMessageII(DO_SET_COMPOSING_REGION, start, end));
     }
@@ -184,10 +184,10 @@ public class IInputConnectionWrapper extends IInputContext.Stub {
             msg.recycle();
             return;
         }
-        
+
         mH.sendMessage(msg);
     }
-    
+
     void executeMessage(Message msg) {
         switch (msg.what) {
             case DO_GET_TEXT_AFTER_CURSOR: {
@@ -423,33 +423,33 @@ public class IInputConnectionWrapper extends IInputContext.Stub {
         }
         Log.w(TAG, "Unhandled message code: " + msg.what);
     }
-    
+
     Message obtainMessage(int what) {
         return mH.obtainMessage(what);
     }
-    
+
     Message obtainMessageII(int what, int arg1, int arg2) {
         return mH.obtainMessage(what, arg1, arg2);
     }
-    
+
     Message obtainMessageO(int what, Object arg1) {
         return mH.obtainMessage(what, 0, 0, arg1);
     }
-    
+
     Message obtainMessageISC(int what, int arg1, int seq, IInputContextCallback callback) {
         SomeArgs args = new SomeArgs();
         args.callback = callback;
         args.seq = seq;
         return mH.obtainMessage(what, arg1, 0, args);
     }
-    
+
     Message obtainMessageIISC(int what, int arg1, int arg2, int seq, IInputContextCallback callback) {
         SomeArgs args = new SomeArgs();
         args.callback = callback;
         args.seq = seq;
         return mH.obtainMessage(what, arg1, arg2, args);
     }
-    
+
     Message obtainMessageIOSC(int what, int arg1, Object arg2, int seq,
             IInputContextCallback callback) {
         SomeArgs args = new SomeArgs();
@@ -458,11 +458,11 @@ public class IInputConnectionWrapper extends IInputContext.Stub {
         args.seq = seq;
         return mH.obtainMessage(what, arg1, 0, args);
     }
-    
+
     Message obtainMessageIO(int what, int arg1, Object arg2) {
         return mH.obtainMessage(what, arg1, 0, arg2);
     }
-    
+
     Message obtainMessageOO(int what, Object arg1, Object arg2) {
         SomeArgs args = new SomeArgs();
         args.arg1 = arg1;

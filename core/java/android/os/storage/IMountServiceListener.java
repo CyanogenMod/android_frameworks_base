@@ -24,7 +24,7 @@ import android.os.RemoteException;
 
 /**
  * Callback class for receiving events from MountService.
- * 
+ *
  * @hide - Applications should use IStorageEventListener for storage event
  *       callbacks.
  */
@@ -106,7 +106,7 @@ public interface IMountServiceListener extends IInterface {
 
             /**
              * Detection state of USB Mass Storage has changed
-             * 
+             *
              * @param available true if a UMS host is connected.
              */
             public void onUsbMassStorageConnectionChanged(boolean connected) throws RemoteException {
@@ -126,7 +126,7 @@ public interface IMountServiceListener extends IInterface {
 
             /**
              * Storage state has changed.
-             * 
+             *
              * @param path The volume mount path.
              * @param oldState The old state of the volume.
              * @param newState The new state of the volume. Note: State is one
@@ -158,14 +158,14 @@ public interface IMountServiceListener extends IInterface {
 
     /**
      * Detection state of USB Mass Storage has changed
-     * 
+     *
      * @param available true if a UMS host is connected.
      */
     public void onUsbMassStorageConnectionChanged(boolean connected) throws RemoteException;
 
     /**
      * Storage state has changed.
-     * 
+     *
      * @param path The volume mount path.
      * @param oldState The old state of the volume.
      * @param newState The new state of the volume. Note: State is one of the

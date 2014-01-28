@@ -158,7 +158,7 @@ public class ClipData implements Parcelable {
         ClipDescription.MIMETYPE_TEXT_INTENT };
 
     final ClipDescription mClipDescription;
-    
+
     final Bitmap mIcon;
 
     final ArrayList<Item> mItems;
@@ -760,7 +760,7 @@ public class ClipData implements Parcelable {
     public ClipDescription getDescription() {
         return mClipDescription;
     }
-    
+
     /**
      * Add a new Item to the overall ClipData container.
      */

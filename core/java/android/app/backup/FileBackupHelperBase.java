@@ -32,7 +32,7 @@ class FileBackupHelperBase {
     int mPtr;
     Context mContext;
     boolean mExceptionLogged;
-    
+
     FileBackupHelperBase(Context context) {
         mPtr = ctor();
         mContext = context;
@@ -120,7 +120,7 @@ class FileBackupHelperBase {
 
     native private static int performBackup_native(FileDescriptor oldState,
             int data, FileDescriptor newState, String[] files, String[] keys);
-    
+
     private static native int writeFile_native(int ptr, String filename, int backupReader);
     private static native int writeSnapshot_native(int ptr, FileDescriptor fd);
 }

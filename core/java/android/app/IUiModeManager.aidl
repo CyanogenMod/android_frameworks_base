@@ -36,7 +36,7 @@ interface IUiModeManager {
      * Return the current running mode.
      */
     int getCurrentModeType();
-    
+
     /**
      * Sets the night mode.
      * The mode can be one of:

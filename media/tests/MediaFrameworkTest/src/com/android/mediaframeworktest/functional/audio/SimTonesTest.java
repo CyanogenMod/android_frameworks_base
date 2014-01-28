@@ -26,11 +26,11 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 /**
  * Junit / Instrumentation test case for the SIM tone generator
- * 
- */  
-public class SimTonesTest extends ActivityInstrumentationTestCase<MediaFrameworkTest> {    
+ *
+ */
+public class SimTonesTest extends ActivityInstrumentationTestCase<MediaFrameworkTest> {
     private String TAG = "SimTonesTest";
-    
+
     Context mContext;
 
     public SimTonesTest() {
@@ -40,34 +40,34 @@ public class SimTonesTest extends ActivityInstrumentationTestCase<MediaFramework
        protected void setUp() throws Exception {
          super.setUp();
      }
-   
-   @LargeTest    
+
+   @LargeTest
    public void testDtmfTones() throws Exception {
        boolean result = TonesAutoTest.tonesDtmfTest();
-     assertTrue("DTMF Tones", result);  
+     assertTrue("DTMF Tones", result);
    }
 
    @LargeTest
    public void testSupervisoryTones() throws Exception {
        boolean result = TonesAutoTest.tonesSupervisoryTest();
-     assertTrue("Supervisory Tones", result);  
+     assertTrue("Supervisory Tones", result);
    }
 
    @LargeTest
    public void testProprietaryTones() throws Exception {
        boolean result = TonesAutoTest.tonesProprietaryTest();
-     assertTrue("Proprietary Tones", result);  
+     assertTrue("Proprietary Tones", result);
    }
 
    @LargeTest
    public void testSimultaneousTones() throws Exception {
        boolean result = TonesAutoTest.tonesSimultaneousTest();
-     assertTrue("Simultaneous Tones", result);  
+     assertTrue("Simultaneous Tones", result);
    }
 
    @LargeTest
    public void testStressTones() throws Exception {
        boolean result = TonesAutoTest.tonesStressTest();
-     assertTrue("Stress Tones", result);  
+     assertTrue("Stress Tones", result);
    }
 }

@@ -52,9 +52,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 /**
- * Search dialog. This is controlled by the 
+ * Search dialog. This is controlled by the
  * SearchManager and runs in the current foreground process.
- * 
+ *
  * @hide
  */
 public class SearchDialog extends Dialog {
@@ -118,7 +118,7 @@ public class SearchDialog extends Dialog {
 
     /**
      * Constructor - fires it up and makes it look like the search UI.
-     * 
+     *
      * @param context Application Context we can use for system acess
      */
     public SearchDialog(Context context, SearchManager searchManager) {
@@ -154,7 +154,7 @@ public class SearchDialog extends Dialog {
         theWindow.setAttributes(lp);
 
         // Touching outside of the search dialog will dismiss it
-        setCanceledOnTouchOutside(true);        
+        setCanceledOnTouchOutside(true);
     }
 
     /**
@@ -204,7 +204,7 @@ public class SearchDialog extends Dialog {
 
     /**
      * Set up the search dialog
-     * 
+     *
      * @return true if search dialog launched, false if not
      */
     public boolean show(String initialQuery, boolean selectInitialQuery,
@@ -242,16 +242,16 @@ public class SearchDialog extends Dialog {
 
     /**
      * Sets up the search dialog and shows it.
-     * 
+     *
      * @return <code>true</code> if search dialog launched
      */
     private boolean show(ComponentName componentName, Bundle appSearchData) {
-        
-        if (DBG) { 
-            Log.d(LOG_TAG, "show(" + componentName + ", " 
+
+        if (DBG) {
+            Log.d(LOG_TAG, "show(" + componentName + ", "
                     + appSearchData + ")");
         }
-        
+
         SearchManager searchManager = (SearchManager)
                 mContext.getSystemService(Context.SEARCH_SERVICE);
         // Try to get the searchable info for the provided component.
@@ -292,7 +292,7 @@ public class SearchDialog extends Dialog {
 
     /**
      * The search dialog is being dismissed, so handle all of the local shutdown operations.
-     * 
+     *
      * This function is designed to be idempotent so that dismiss() can be safely called at any time
      * (even if already closed) and more likely to really dump any memory.  No leaks!
      */
@@ -312,7 +312,7 @@ public class SearchDialog extends Dialog {
     /**
      * Sets the search dialog to the 'working' state, which shows a working spinner in the
      * right hand size of the text field.
-     * 
+     *
      * @param working true to show spinner, false to hide spinner
      */
     public void setWorking(boolean working) {
@@ -323,7 +323,7 @@ public class SearchDialog extends Dialog {
 
     /**
      * Save the minimal set of data necessary to recreate the search
-     * 
+     *
      * @return A bundle with the state of the dialog, or {@code null} if the search
      *         dialog is not showing.
      */
@@ -333,7 +333,7 @@ public class SearchDialog extends Dialog {
 
         Bundle bundle = new Bundle();
 
-        // setup info so I can recreate this particular search       
+        // setup info so I can recreate this particular search
         bundle.putParcelable(INSTANCE_KEY_COMPONENT, mLaunchComponent);
         bundle.putBundle(INSTANCE_KEY_APPDATA, mAppSearchData);
         bundle.putString(INSTANCE_KEY_USER_QUERY, mUserQuery);
@@ -343,7 +343,7 @@ public class SearchDialog extends Dialog {
 
     /**
      * Restore the state of the dialog from a previously saved bundle.
-     * 
+     *
      * @param savedInstanceState The state of the dialog previously saved by
      *     {@link #onSaveInstanceState()}.
      */
@@ -390,17 +390,17 @@ public class SearchDialog extends Dialog {
             updateSearchAutoComplete();
             updateSearchAppIcon();
             updateSearchBadge();
-            
+
             // In order to properly configure the input method (if one is being used), we
             // need to let it know if we'll be providing suggestions.  Although it would be
-            // difficult/expensive to know if every last detail has been configured properly, we 
+            // difficult/expensive to know if every last detail has been configured properly, we
             // can at least see if a suggestions provider has been configured, and use that
             // as our trigger.
             int inputType = mSearchable.getInputType();
             // We only touch this if the input type is set up for text (which it almost certainly
             // should be, in the case of search!)
             if ((inputType & InputType.TYPE_MASK_CLASS) == InputType.TYPE_CLASS_TEXT) {
-                // The existence of a suggestions authority is the proxy for "suggestions 
+                // The existence of a suggestions authority is the proxy for "suggestions
                 // are available here"
                 inputType &= ~InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE;
                 if (mSearchable.getSuggestAuthority() != null) {
@@ -410,7 +410,7 @@ public class SearchDialog extends Dialog {
             mSearchAutoComplete.setInputType(inputType);
             mSearchAutoCompleteImeOptions = mSearchable.getImeOptions();
             mSearchAutoComplete.setImeOptions(mSearchAutoCompleteImeOptions);
-            
+
             // If the search dialog is going to show a voice search button, then don't let
             // the soft keyboard display a microphone button if it would have otherwise.
             if (mSearchable.getVoiceSearchEnabled()) {
@@ -420,7 +420,7 @@ public class SearchDialog extends Dialog {
             }
         }
     }
-    
+
     /**
      * Updates the auto-complete text view.
      */
@@ -429,7 +429,7 @@ public class SearchDialog extends Dialog {
         mSearchAutoComplete.setDropDownDismissedOnCompletion(false);
         mSearchAutoComplete.setForceIgnoreOutsideTouch(false);
     }
-    
+
     private void updateSearchAppIcon() {
         PackageManager pm = getContext().getPackageManager();
         Drawable icon;
@@ -517,7 +517,7 @@ public class SearchDialog extends Dialog {
 
         super.hide();
     }
-    
+
     /**
      * Launch a search for the text in the query text field.
      */
@@ -571,7 +571,7 @@ public class SearchDialog extends Dialog {
 
     /**
      * Constructs an intent from the given information and the search dialog state.
-     * 
+     *
      * @param action Intent action.
      * @param data Intent data, or <code>null</code>.
      * @param extraData Data for {@link SearchManager#EXTRA_DATA_KEY} or <code>null</code>.

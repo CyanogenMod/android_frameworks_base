@@ -440,13 +440,13 @@ public class FocusFinderTest extends AndroidTestCase {
                 //       L    T    R    B
                 new Rect(0,   0,   50,  50),   // src
                 new Rect(150, 0,   200, 50),   // better, (way further, but in beam)
-                new Rect(60,  51,  110, 101)); // worse, even though it is closer 
+                new Rect(60,  51,  110, 101)); // worse, even though it is closer
 
         assertBetterCandidate(View.FOCUS_LEFT,
                 //       L    T    R    B
                 new Rect(150, 0,   200,  50),   // src
                 new Rect(0,   50,  50,   50),   // better, (way further, but in beam)
-                new Rect(49,  99,  149,  101)); // worse, even though it is closer 
+                new Rect(49,  99,  149,  101)); // worse, even though it is closer
     }
 
     @SmallTest

@@ -36,7 +36,7 @@ public class ViewLayersActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.view_layers);
 
         setupList(R.id.list1);
@@ -70,13 +70,13 @@ public class ViewLayersActivity extends Activity {
 
                 Paint p = new Paint();
                 p.setColorFilter(new PorterDuffColorFilter(0xffff0000, PorterDuff.Mode.MULTIPLY));
-                
+
                 Paint p2 = new Paint();
                 p2.setAlpha(127);
 
                 Paint p3 = new Paint();
                 p3.setColorFilter(new PorterDuffColorFilter(0xff00ff00, PorterDuff.Mode.MULTIPLY));
-                
+
                 leftList.setLayerType(View.LAYER_TYPE_SOFTWARE, p);
                 leftList.setAlpha(0.5f);
                 middleList.setLayerType(View.LAYER_TYPE_HARDWARE, p3);

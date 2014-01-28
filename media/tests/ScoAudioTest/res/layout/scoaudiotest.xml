@@ -18,7 +18,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-            
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -90,12 +90,12 @@
         </LinearLayout>
 
     </LinearLayout>
-        
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    
+
         <LinearLayout android:id="@+id/forceFrame"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -104,7 +104,7 @@
             android:layout_marginTop="3dip"
             android:layout_marginRight="10dip"
             android:layout_marginBottom="3dip" >
-                       
+
             <ToggleButton android:id="@+id/ForceScoButton"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
@@ -112,7 +112,7 @@
                     android:layout_weight="0.0"
                     android:textOff="@string/force_sco_off"
                     android:textOn="@string/force_sco_on" />
-                     
+
             <TextView android:id="@+id/scoStateTxt"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -125,7 +125,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/audiomanagertwo" />
-            
+
     </LinearLayout>
 
     <LinearLayout
@@ -141,7 +141,7 @@
               android:layout_marginTop="3dip"
               android:layout_marginRight="10dip"
               android:layout_marginBottom="3dip" >
-                       
+
                <ToggleButton android:id="@+id/VoiceDialerButton"
                      android:layout_width="wrap_content"
                      android:layout_height="fill_parent"
@@ -149,14 +149,14 @@
                      android:layout_weight="0.0"
                      android:textOff="@string/vd_off"
                      android:textOn="@string/vd_on" />
-                     
+
               <TextView android:id="@+id/vdStateTxt"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
                       android:layout_weight="1.0"
                       android:layout_gravity="center_vertical|right"
                       style="@android:style/TextAppearance.Medium" />
-                     
+
         </LinearLayout>
 
     </LinearLayout>
@@ -164,18 +164,18 @@
     <EditText android:id="@+id/speakTextEdit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
-        
+
     <ToggleButton android:id="@+id/TtsToFileButton"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:textOff="@string/tts_speak"
        android:textOn="@string/tts_to_file" />
-        
-        
+
+
   <Spinner android:id="@+id/modeSpinner"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:drawSelectorOnTop="true"
    />
-        
+
 </LinearLayout>

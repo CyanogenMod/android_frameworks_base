@@ -178,18 +178,18 @@ public class AndroidTestRunnerTest extends TestCase {
             // expected
         }
     }
-    
+
     public void testRunSkipExecution() throws Exception {
         String testMethodName = "testFail";
         mAndroidTestRunner.setTestClassName(
                 OnePassOneErrorOneFailTestCase.class.getName(), testMethodName);
-        
+
         TestListenerStub testListenerStub = new TestListenerStub();
         mAndroidTestRunner.addTestListener(testListenerStub);
-        
+
         // running the failing test should pass - ie as if its not run
         mAndroidTestRunner.runTest();
-        
+
         assertTrue(testListenerStub.saw("testFail"));
     }
 

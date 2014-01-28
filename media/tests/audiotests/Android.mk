@@ -6,14 +6,14 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE:= shared_mem_test
 LOCAL_SRC_FILES := \
-		   shared_mem_test.cpp
+           shared_mem_test.cpp
 LOCAL_SHARED_LIBRARIES :=  \
-		libc \
+        libc \
         libcutils \
         libutils \
         libbinder \
         libhardware_legacy \
-		libmedia
+        libmedia
 LOCAL_MODULE_TAGS := tests
 
 include $(BUILD_EXECUTABLE)

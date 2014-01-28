@@ -41,7 +41,7 @@ public class Credentials {
     public int getUid() {
         return uid;
     }
-    
+
     public int getGid() {
         return gid;
     }

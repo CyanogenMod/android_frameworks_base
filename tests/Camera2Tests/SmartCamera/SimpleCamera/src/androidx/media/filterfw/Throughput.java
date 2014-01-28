@@ -22,7 +22,7 @@ public class Throughput {
     private final int mTotalFrames;
     private final int mPeriodFrames;
     private final long mPeriodTime;
-    
+
     public Throughput(int totalFrames, int periodFrames, long periodTime, int size) {
         mTotalFrames = totalFrames;
         mPeriodFrames = periodFrames;

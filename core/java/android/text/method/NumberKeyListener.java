@@ -91,7 +91,7 @@ public abstract class NumberKeyListener extends BaseKeyListener
 
         return false;
     }
-    
+
     @Override
     public boolean onKeyDown(View view, Editable content,
                              int keyCode, KeyEvent event) {

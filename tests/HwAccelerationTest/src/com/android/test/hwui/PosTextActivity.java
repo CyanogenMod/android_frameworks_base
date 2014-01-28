@@ -56,11 +56,11 @@ public class PosTextActivity extends Activity {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             canvas.drawRGB(255, 255, 255);
-            
+
             canvas.save();
 
             canvas.drawLine(100.0f, 0.0f, 100.0f, getHeight(), mLargePaint);
-            
+
             canvas.translate(100.0f, 100.0f);
             mLargePaint.setTextAlign(Paint.Align.LEFT);
             canvas.drawPosText(mText, mPos, mLargePaint);

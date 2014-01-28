@@ -122,7 +122,7 @@ public class TransformsAndAnimationsActivity extends Activity {
         transAnim.setDuration(1000);
         transAnim.setRepeatCount(Animation.INFINITE);
         transAnim.setRepeatMode(Animation.REVERSE);
-        
+
         getWindow().getDecorView().postDelayed(new Runnable() {
             @Override
             public void run() {

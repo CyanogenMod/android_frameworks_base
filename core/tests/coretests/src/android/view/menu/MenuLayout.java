@@ -27,7 +27,7 @@ public class MenuLayout extends MenuScenario {
     private static final String SHORT_TITLE = "Item";
 
     private Button mButton;
-    
+
     @Override
     protected void onInitParams(Params params) {
         super.onInitParams(params);
@@ -43,10 +43,10 @@ public class MenuLayout extends MenuScenario {
         /*
          * This activity is meant to try a bunch of different menu layouts. So,
          * we recreate the menu every time it is prepared.
-         */ 
+         */
         menu.clear();
         onCreateOptionsMenu(menu);
-        
+
         return true;
     }
 
@@ -61,5 +61,5 @@ public class MenuLayout extends MenuScenario {
         mButton  = new Button(this);
         setContentView(mButton);
     }
-    
+
 }

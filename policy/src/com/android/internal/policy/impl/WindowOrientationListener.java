@@ -60,22 +60,22 @@ public abstract class WindowOrientationListener {
 
     /**
      * Creates a new WindowOrientationListener.
-     * 
+     *
      * @param context for the WindowOrientationListener.
      * @param handler Provides the Looper for receiving sensor updates.
      */
     public WindowOrientationListener(Context context, Handler handler) {
         this(context, handler, SensorManager.SENSOR_DELAY_UI);
     }
-    
+
     /**
      * Creates a new WindowOrientationListener.
-     * 
+     *
      * @param context for the WindowOrientationListener.
      * @param handler Provides the Looper for receiving sensor updates.
      * @param rate at which sensor events are processed (see also
      * {@link android.hardware.SensorManager SensorManager}). Use the default
-     * value of {@link android.hardware.SensorManager#SENSOR_DELAY_NORMAL 
+     * value of {@link android.hardware.SensorManager#SENSOR_DELAY_NORMAL
      * SENSOR_DELAY_NORMAL} for simple screen orientation change detection.
      *
      * This constructor is private since no one uses it.

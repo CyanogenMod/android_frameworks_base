@@ -219,7 +219,7 @@ public class ActivityTestMain extends Activity {
             @Override public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ActivityTestMain.this, UserTarget.class);
                 sendOrderedBroadcastAsUser(intent, new UserHandle(mSecondUser), null,
-                        new BroadcastResultReceiver(), 
+                        new BroadcastResultReceiver(),
                         null, Activity.RESULT_OK, null, null);
                 return true;
             }

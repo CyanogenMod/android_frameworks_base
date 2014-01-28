@@ -59,7 +59,7 @@ public class Smileys {
     public static int LIPS_ARE_SEALED = 14;
     public static int LAUGHING = 15;
     public static int WTF = 16;
-    
+
     public static int getSmileyResource(int which) {
         return sIconIds[which];
     }

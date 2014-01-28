@@ -19,7 +19,7 @@ package android.drm;
 import java.util.HashMap;
 
 /**
- * An entity class that is passed to the 
+ * An entity class that is passed to the
  * {@link DrmManagerClient.OnInfoListener#onInfo onInfo()} callback.
  *
  */

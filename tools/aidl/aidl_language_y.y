@@ -164,7 +164,7 @@ interface_keywords:
     ;
 
 interface_decl:
-        interface_header IDENTIFIER '{' interface_items '}' { 
+        interface_header IDENTIFIER '{' interface_items '}' {
                                                         interface_type* c = $1.interface_obj;
                                                         c->name = $2.buffer;
                                                         c->package = g_currentPackage ? strdup(g_currentPackage) : NULL;

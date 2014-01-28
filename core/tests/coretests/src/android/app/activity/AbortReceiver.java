@@ -32,7 +32,7 @@ public class AbortReceiver extends BroadcastReceiver
 
     public void onReceive(Context context, Intent intent)
     {
-	//Log.i("AbortReceiver", "onReceiveIntent!");
+    //Log.i("AbortReceiver", "onReceiveIntent!");
         try {
             IBinder caller = intent.getIBinderExtra("caller");
             Parcel data = Parcel.obtain();
@@ -42,7 +42,7 @@ public class AbortReceiver extends BroadcastReceiver
             data.recycle();
         } catch (RemoteException ex) {
         }
-        
+
         // abort the broadcast!!!
         abortBroadcast();
     }

@@ -49,25 +49,25 @@ public class GridTouchSetSelectionTest extends ActivityInstrumentationTestCase<G
         assertNotNull(mActivity);
         assertNotNull(mGridView);
     }
-    
+
     @LargeTest
     public void testSetSelection() {
         TouchUtils.dragQuarterScreenDown(this);
         TouchUtils.dragQuarterScreenUp(this);
-        
+
         // Nothing should be selected
-        assertEquals("Selection still available after touch", -1, 
+        assertEquals("Selection still available after touch", -1,
                 mGridView.getSelectedItemPosition());
-        
+
         final int targetPosition = mGridView.getAdapter().getCount() / 2;
-        
+
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 mGridView.setSelection(targetPosition);
             }
         });
         getInstrumentation().waitForIdleSync();
-        
+
         boolean found = false;
         int childCount = mGridView.getChildCount();
         for (int i=0; i<childCount; i++) {

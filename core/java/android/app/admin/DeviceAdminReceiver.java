@@ -29,25 +29,25 @@ import android.os.Bundle;
  * Base class for implementing a device administration component.  This
  * class provides a convenience for interpreting the raw intent actions
  * that are sent by the system.
- * 
+ *
  * <p>The callback methods, like the base
  * {@link BroadcastReceiver#onReceive(Context, Intent) BroadcastReceiver.onReceive()}
  * method, happen on the main thread of the process.  Thus long running
  * operations must be done on another thread.  Note that because a receiver
  * is done once returning from its receive function, such long-running operations
  * should probably be done in a {@link Service}.
- * 
+ *
  * <p>When publishing your DeviceAdmin subclass as a receiver, it must
  * handle {@link #ACTION_DEVICE_ADMIN_ENABLED} and require the
  * {@link android.Manifest.permission#BIND_DEVICE_ADMIN} permission.  A typical
  * manifest entry would look like:</p>
- * 
+ *
  * {@sample development/samples/ApiDemos/AndroidManifest.xml device_admin_declaration}
- *   
+ *
  * <p>The meta-data referenced here provides addition information specific
  * to the device administrator, as parsed by the {@link DeviceAdminInfo} class.
  * A typical file would be:</p>
- * 
+ *
  * {@sample development/samples/ApiDemos/res/xml/device_admin_sample.xml meta_data}
  *
  * <div class="special reference">
@@ -86,7 +86,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_DEVICE_ADMIN_DISABLE_REQUESTED
             = "android.app.action.DEVICE_ADMIN_DISABLE_REQUESTED";
-    
+
     /**
      * A CharSequence that can be shown to the user informing them of the
      * impact of disabling your admin.
@@ -94,7 +94,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
      * @see #ACTION_DEVICE_ADMIN_DISABLE_REQUESTED
      */
     public static final String EXTRA_DISABLE_WARNING = "android.app.extra.DISABLE_WARNING";
-    
+
     /**
      * Action sent to a device administrator when the user has disabled
      * it.  Upon return, the application no longer has access to the
@@ -107,7 +107,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_DEVICE_ADMIN_DISABLED
             = "android.app.action.DEVICE_ADMIN_DISABLED";
-    
+
     /**
      * Action sent to a device administrator when the user has changed the
      * password of their device.  You can at this point check the characteristics
@@ -115,7 +115,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
      * DevicePolicyManager.isActivePasswordSufficient()}.
      * You will generally
      * handle this in {@link DeviceAdminReceiver#onPasswordChanged}.
-     * 
+     *
      * <p>The calling device admin must have requested
      * {@link DeviceAdminInfo#USES_POLICY_LIMIT_PASSWORD} to receive
      * this broadcast.
@@ -123,7 +123,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_PASSWORD_CHANGED
             = "android.app.action.ACTION_PASSWORD_CHANGED";
-    
+
     /**
      * Action sent to a device administrator when the user has failed at
      * attempted to enter the password.  You can at this point check the
@@ -131,7 +131,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
      * {@link DevicePolicyManager#getCurrentFailedPasswordAttempts
      * DevicePolicyManager.getCurrentFailedPasswordAttempts()}.  You will generally
      * handle this in {@link DeviceAdminReceiver#onPasswordFailed}.
-     * 
+     *
      * <p>The calling device admin must have requested
      * {@link DeviceAdminInfo#USES_POLICY_WATCH_LOGIN} to receive
      * this broadcast.
@@ -139,11 +139,11 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_PASSWORD_FAILED
             = "android.app.action.ACTION_PASSWORD_FAILED";
-    
+
     /**
      * Action sent to a device administrator when the user has successfully
      * entered their password, after failing one or more times.
-     * 
+     *
      * <p>The calling device admin must have requested
      * {@link DeviceAdminInfo#USES_POLICY_WATCH_LOGIN} to receive
      * this broadcast.
@@ -170,10 +170,10 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
      * a device-admin tag.  XXX TO DO: describe syntax.
      */
     public static final String DEVICE_ADMIN_META_DATA = "android.app.device_admin";
-    
+
     private DevicePolicyManager mManager;
     private ComponentName mWho;
-    
+
     /**
      * Retrieve the DevicePolicyManager interface for this administrator to work
      * with the system.
@@ -186,7 +186,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
                 Context.DEVICE_POLICY_SERVICE);
         return mManager;
     }
-    
+
     /**
      * Retrieve the ComponentName describing who this device administrator is, for
      * use in {@link DevicePolicyManager} APIs that require the administrator to
@@ -199,7 +199,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
         mWho = new ComponentName(context, getClass());
         return mWho;
     }
-    
+
     /**
      * Called after the administrator is first enabled, as a result of
      * receiving {@link #ACTION_DEVICE_ADMIN_ENABLED}.  At this point you
@@ -209,7 +209,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
      */
     public void onEnabled(Context context, Intent intent) {
     }
-    
+
     /**
      * Called when the user has asked to disable the administrator, as a result of
      * receiving {@link #ACTION_DEVICE_ADMIN_DISABLE_REQUESTED}, giving you
@@ -224,7 +224,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
     public CharSequence onDisableRequested(Context context, Intent intent) {
         return null;
     }
-    
+
     /**
      * Called prior to the administrator being disabled, as a result of
      * receiving {@link #ACTION_DEVICE_ADMIN_DISABLED}.  Upon return, you
@@ -235,7 +235,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
      */
     public void onDisabled(Context context, Intent intent) {
     }
-    
+
     /**
      * Called after the user has changed their password, as a result of
      * receiving {@link #ACTION_PASSWORD_CHANGED}.  At this point you
@@ -247,7 +247,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
      */
     public void onPasswordChanged(Context context, Intent intent) {
     }
-    
+
     /**
      * Called after the user has failed at entering their current password, as a result of
      * receiving {@link #ACTION_PASSWORD_FAILED}.  At this point you
@@ -258,7 +258,7 @@ public class DeviceAdminReceiver extends BroadcastReceiver {
      */
     public void onPasswordFailed(Context context, Intent intent) {
     }
-    
+
     /**
      * Called after the user has succeeded at entering their current password,
      * as a result of receiving {@link #ACTION_PASSWORD_SUCCEEDED}.  This will

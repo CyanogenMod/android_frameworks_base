@@ -114,7 +114,7 @@ public class DescendantFocusabilityTest extends ActivityInstrumentationTestCase<
 
         TouchUtils.clickView(this, a.beforeDescendantsChild);
         assertTrue(a.beforeDescendantsChild.isInTouchMode());
-        assertFalse(a.beforeDescendants.isFocused());        
+        assertFalse(a.beforeDescendants.isFocused());
     }
 
     @LargeTest

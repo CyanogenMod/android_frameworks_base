@@ -27,7 +27,7 @@ status_t compileXmlFile(const sp<AaptAssets>& assets,
     if (root == NULL) {
         return UNKNOWN_ERROR;
     }
-    
+
     return compileXmlFile(assets, root, target, table, options);
 }
 
@@ -41,7 +41,7 @@ status_t compileXmlFile(const sp<AaptAssets>& assets,
     if (root == NULL) {
         return UNKNOWN_ERROR;
     }
-    
+
     return compileXmlFile(assets, root, outTarget, table, options);
 }
 
@@ -62,7 +62,7 @@ status_t compileXmlFile(const sp<AaptAssets>& assets,
     }
 
     bool hasErrors = false;
-    
+
     if ((options&XML_COMPILE_ASSIGN_ATTRIBUTE_IDS) != 0) {
         status_t err = root->assignResourceIds(assets, table);
         if (err != NO_ERROR) {
@@ -78,7 +78,7 @@ status_t compileXmlFile(const sp<AaptAssets>& assets,
     if (hasErrors) {
         return UNKNOWN_ERROR;
     }
-    
+
     NOISY(printf("Input XML Resource:\n"));
     NOISY(root->print());
     err = root->flatten(target,
@@ -94,7 +94,7 @@ status_t compileXmlFile(const sp<AaptAssets>& assets,
         printXMLBlock(&tree));
 
     target->setCompressionMethod(ZipEntry::kCompressDeflated);
-    
+
     return err;
 }
 
@@ -213,7 +213,7 @@ static String16 mayOrMust(int type, int flags)
     if ((type&(~flags)) == 0) {
         return String16("<p>Must");
     }
-    
+
     return String16("<p>May");
 }
 
@@ -252,7 +252,7 @@ struct PendingAttribute
     String16 comment;
     bool hasErrors;
     bool added;
-    
+
     PendingAttribute(String16 _package, const sp<AaptFile>& in,
             ResXMLTree& block, bool _appendComment)
         : myPackage(_package)
@@ -263,7 +263,7 @@ struct PendingAttribute
         , added(false)
     {
     }
-    
+
     status_t createIfNeeded(ResourceTable* outTable)
     {
         if (added || hasErrors) {
@@ -272,14 +272,14 @@ struct PendingAttribute
         added = true;
 
         String16 attr16("attr");
-        
+
         if (outTable->hasBagOrEntry(myPackage, attr16, ident)) {
             sourcePos.error("Attribute \"%s\" has already been defined\n",
                     String8(ident).string());
             hasErrors = true;
             return UNKNOWN_ERROR;
         }
-        
+
         char numberStr[16];
         sprintf(numberStr, "%d", type);
         status_t err = outTable->addBag(sourcePos, myPackage,
@@ -305,7 +305,7 @@ static status_t compileAttribute(const sp<AaptFile>& in,
                                  bool inStyleable = false)
 {
     PendingAttribute attr(myPackage, in, block, inStyleable);
-    
+
     const String16 attr16("attr");
     const String16 id16("id");
 
@@ -316,7 +316,7 @@ static status_t compileAttribute(const sp<AaptFile>& in,
     ResXMLTree::event_code_t code;
     size_t len;
     status_t err;
-    
+
     ssize_t identIdx = block.indexOfAttribute(NULL, "name");
     if (identIdx >= 0) {
         attr.ident = String16(block.getAttributeStringValue(identIdx, &len));
@@ -411,7 +411,7 @@ static status_t compileAttribute(const sp<AaptFile>& in,
     }
 
     String16 enumOrFlagsComment;
-    
+
     while ((code=block.next()) != ResXMLTree::END_DOCUMENT && code != ResXMLTree::BAD_DOCUMENT) {
         if (code == ResXMLTree::START_TAG) {
             uint32_t localType = 0;
@@ -427,7 +427,7 @@ static status_t compileAttribute(const sp<AaptFile>& in,
             }
 
             attr.createIfNeeded(outTable);
-            
+
             if (attr.type == ResTable_map::TYPE_ANY) {
                 // No type was explicitly stated, so supplying enum tags
                 // implicitly creates an enum or flag.
@@ -508,7 +508,7 @@ static status_t compileAttribute(const sp<AaptFile>& in,
                                                 "<colgroup align=\"left\" />\n"
                                                 "<tr><th>Constant</th><th>Value</th><th>Description</th></tr>"));
                 }
-                
+
                 enumOrFlagsComment.append(String16("\n<tr><td><code>"));
                 enumOrFlagsComment.append(itemIdent);
                 enumOrFlagsComment.append(String16("</code></td><td>"));
@@ -518,7 +518,7 @@ static status_t compileAttribute(const sp<AaptFile>& in,
                     enumOrFlagsComment.append(String16(block.getComment(&len)));
                 }
                 enumOrFlagsComment.append(String16("</td></tr>"));
-                
+
                 err = outTable->addBag(SourcePos(in->getPrintableSource(), block.getLineNumber()),
                                        myPackage,
                                        attr16, attr.ident, String16(""),
@@ -548,11 +548,11 @@ static status_t compileAttribute(const sp<AaptFile>& in,
             }
         }
     }
-    
+
     if (!attr.hasErrors && attr.added) {
         appendTypeInfo(outTable, myPackage, attr16, attr.ident, attr.type, gFormatFlags);
     }
-    
+
     if (!attr.hasErrors && enumOrFlagsComment.size() > 0) {
         enumOrFlagsComment.append(String16("\n</table>"));
         outTable->appendTypeComment(myPackage, attr16, attr.ident, enumOrFlagsComment);
@@ -585,7 +585,7 @@ status_t parseAndAddBag(Bundle* bundle,
 {
     status_t err;
     const String16 item16("item");
-    
+
     String16 str;
     Vector<StringPool::entry_style_span> spans;
     err = parseStyledString(bundle, in->getPrintableSource().string(),
@@ -594,7 +594,7 @@ status_t parseAndAddBag(Bundle* bundle,
     if (err != NO_ERROR) {
         return err;
     }
-    
+
     NOISY(printf("Adding resource bag entry l=%c%c c=%c%c orien=%d d=%d "
                  " pid=%s, bag=%s, id=%s: %s\n",
                  config.language[0], config.language[1],
@@ -687,7 +687,7 @@ status_t parseAndAddEntry(Bundle* bundle,
                             curTag, &str, curIsStyled ? &spans : NULL,
                             isFormatted, pseudolocalize);
 
-    if (err < NO_ERROR) { 
+    if (err < NO_ERROR) {
         return err;
     }
 
@@ -898,7 +898,7 @@ status_t compileResourceFile(Bundle* bundle,
 
             } else if (strcmp16(block.getElementName(&len), public16.string()) == 0) {
                 SourcePos srcPos(in->getPrintableSource(), block.getLineNumber());
-            
+
                 String16 type;
                 ssize_t typeIdx = block.indexOfAttribute(NULL, "type");
                 if (typeIdx < 0) {
@@ -970,7 +970,7 @@ status_t compileResourceFile(Bundle* bundle,
 
             } else if (strcmp16(block.getElementName(&len), public_padding16.string()) == 0) {
                 SourcePos srcPos(in->getPrintableSource(), block.getLineNumber());
-            
+
                 String16 type;
                 ssize_t typeIdx = block.indexOfAttribute(NULL, "type");
                 if (typeIdx < 0) {
@@ -1031,7 +1031,7 @@ status_t compileResourceFile(Bundle* bundle,
                             start, end);
                     hasErrors = localHasErrors = true;
                 }
-                
+
                 String16 comment(
                     block.getComment(&len) ? block.getComment(&len) : nulStr);
                 for (uint32_t curIdent=start; curIdent<=end; curIdent++) {
@@ -1042,7 +1042,7 @@ status_t compileResourceFile(Bundle* bundle,
                     char buf[64];
                     sprintf(buf, "%d", (int)(end-curIdent+1));
                     curName.append(String16(buf));
-                    
+
                     err = outTable->addEntry(srcPos, myPackage, type, curName,
                                              String16("padding"), NULL, &curParams, false,
                                              ResTable_map::TYPE_STRING, overwrite);
@@ -1102,7 +1102,7 @@ status_t compileResourceFile(Bundle* bundle,
 
             } else if (strcmp16(block.getElementName(&len), java_symbol16.string()) == 0) {
                 SourcePos srcPos(in->getPrintableSource(), block.getLineNumber());
-            
+
                 String16 type;
                 ssize_t typeIdx = block.indexOfAttribute(NULL, "type");
                 if (typeIdx < 0) {
@@ -1145,7 +1145,7 @@ status_t compileResourceFile(Bundle* bundle,
 
             } else if (strcmp16(block.getElementName(&len), add_resource16.string()) == 0) {
                 SourcePos srcPos(in->getPrintableSource(), block.getLineNumber());
-            
+
                 String16 typeName;
                 ssize_t typeIdx = block.indexOfAttribute(NULL, "type");
                 if (typeIdx < 0) {
@@ -1172,10 +1172,10 @@ status_t compileResourceFile(Bundle* bundle,
                     }
                 }
                 continue;
-                
+
             } else if (strcmp16(block.getElementName(&len), declare_styleable16.string()) == 0) {
                 SourcePos srcPos(in->getPrintableSource(), block.getLineNumber());
-                                
+
                 String16 ident;
                 ssize_t identIdx = block.indexOfAttribute(NULL, "name");
                 if (identIdx < 0) {
@@ -1197,7 +1197,7 @@ status_t compileResourceFile(Bundle* bundle,
                         srcPos.error("Unable to create symbols!\n");
                         return UNKNOWN_ERROR;
                     }
-                    
+
                     String16 comment(
                         block.getComment(&len) ? block.getComment(&len) : nulStr);
                     styleSymbols->appendComment(String8(ident), comment, srcPos);
@@ -1314,7 +1314,7 @@ status_t compileResourceFile(Bundle* bundle,
                         formatted.setTo(block.getAttributeStringValue(i, &length));
                     }
                 }
-                
+
                 if (name.size() > 0) {
                     if (translatable == false16) {
                         curIsFormatted = false;
@@ -1480,7 +1480,7 @@ status_t compileResourceFile(Bundle* bundle,
             }
 
             String16 comment(block.getComment(&len) ? block.getComment(&len) : nulStr);
-            
+
             if (curIsBag) {
                 // Figure out the parent of this bag...
                 String16 parentIdent;
@@ -1503,7 +1503,7 @@ status_t compileResourceFile(Bundle* bundle,
                         hasErrors = localHasErrors = true;
                     }
                 }
-                
+
                 ssize_t elmIndex = 0;
                 char elmIndexStr[14];
                 while ((code=block.next()) != ResXMLTree::END_DOCUMENT
@@ -1582,7 +1582,7 @@ status_t compileResourceFile(Bundle* bundle,
                                         curIsFormatted, product, true, overwrite, outTable);
 #endif
                             }
-                        } 
+                        }
                         if (err != NO_ERROR) {
                             hasErrors = localHasErrors = true;
                         }
@@ -1797,7 +1797,7 @@ status_t ResourceTable::addEntry(const SourcePos& sourcePos,
     if (rid != 0) {
         return NO_ERROR;
     }
-    
+
 #if 0
     if (name == String16("left")) {
         printf("Adding entry left: file=%s, line=%d, type=%s, value=%s\n",
@@ -1838,7 +1838,7 @@ status_t ResourceTable::startBag(const SourcePos& sourcePos,
     if (rid != 0) {
         return NO_ERROR;
     }
-    
+
 #if 0
     if (name == String16("left")) {
         printf("Adding bag left: file=%s, line=%d, type=%s\n",
@@ -1866,7 +1866,7 @@ status_t ResourceTable::startBag(const SourcePos& sourcePos,
     if (e == NULL) {
         return UNKNOWN_ERROR;
     }
-    
+
     // If a parent is explicitly specified, set it.
     if (bagParent.size() > 0) {
         e->setParent(bagParent);
@@ -1876,7 +1876,7 @@ status_t ResourceTable::startBag(const SourcePos& sourcePos,
         return result;
     }
 
-    if (overlay && replace) { 
+    if (overlay && replace) {
         return e->emptyBag(sourcePos);
     }
     return result;
@@ -2027,7 +2027,7 @@ bool ResourceTable::appendTypeComment(const String16& package,
     if (comment.size() <= 0) {
         return true;
     }
-    
+
     sp<Package> p = mPackages.valueFor(package);
     if (p != NULL) {
         sp<Type> t = p->getTypes().valueFor(type);
@@ -2101,7 +2101,7 @@ uint32_t ResourceTable::getResId(const String16& package,
                 return 0;
             }
         }
-        
+
         if (Res_INTERNALID(rid)) {
             return ResourceIdCache::store(package, type, name, onlyPublic, rid);
         }
@@ -2226,7 +2226,7 @@ bool ResourceTable::stringToValue(Res_value* outValue, StringPool* pool,
             // Caller will fill this in later.
             outValue->data = 0;
         }
-    
+
         if (outStr) {
             *outStr = finalStr;
         }
@@ -2563,7 +2563,7 @@ status_t ResourceTable::addSymbols(const sp<AaptSymbols>& outSymbols) {
                 }
                 if (Res_GETPACKAGE(rid) == (size_t)(p->getAssignedId()-1)) {
                     typeSymbols->addSymbol(String8(c->getName()), rid, c->getPos());
-                    
+
                     String16 comment(c->getComment());
                     typeSymbols->appendComment(String8(c->getName()), comment, c->getPos());
                     //printf("Type symbol [%08x] %s comment: %s\n", rid,
@@ -2632,7 +2632,7 @@ ResourceTable::validateLocalizations(void)
             const char* allConfigs = mBundle->getConfigurations();
             const char* start = allConfigs;
             const char* comma;
-            
+
             do {
                 String8 config;
                 comma = strchr(start, ',');
@@ -2778,7 +2778,7 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
     }
 
     ssize_t strAmt = 0;
-    
+
     // Now build the array of package chunks.
     Vector<sp<AaptFile> > flatPackages;
     for (pi=0; pi<N; pi++) {
@@ -2846,7 +2846,7 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
             // the item at t->getOrderedConfigs().itemAt(i).
             Vector<bool> validResources;
             validResources.insertAt(false, 0, N);
-            
+
             // First write the typeSpec chunk, containing information about
             // each resource entry in this type.
             {
@@ -2864,7 +2864,7 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
                 tsHeader->header.size = htodl(typeSpecSize);
                 tsHeader->id = ti+1;
                 tsHeader->entryCount = htodl(N);
-                
+
                 uint32_t* typeSpecFlags = (uint32_t*)
                     (((uint8_t*)data->editData())
                         + typeSpecStart + sizeof(ResTable_typeSpec));
@@ -2890,13 +2890,13 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
                     }
                 }
             }
-            
+
             // We need to write one type chunk for each configuration for
             // which we have entries in this type.
             const size_t NC = t->getUniqueConfigs().size();
-            
+
             const size_t typeSize = sizeof(ResTable_type) + sizeof(uint32_t)*N;
-            
+
             for (size_t ci=0; ci<NC; ci++) {
                 ConfigDescription config = t->getUniqueConfigs().itemAt(ci);
 
@@ -2922,11 +2922,11 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
                       config.screenWidthDp,
                       config.screenHeightDp,
                       config.layoutDirection));
-                      
+
                 if (filterable && !filter.match(config)) {
                     continue;
                 }
-                
+
                 const size_t typeStart = data->getSize();
 
                 ResTable_type* tHeader = (ResTable_type*)
@@ -3032,7 +3032,7 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
             return err;
         }
     }
-    
+
     ssize_t strStart = dest->getSize();
     err = valueStrings.writeStringBlock(dest);
     if (err != NO_ERROR) {
@@ -3045,7 +3045,7 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
     fprintf(stderr, "**** value strings: %d\n", amt);
     fprintf(stderr, "**** total strings: %d\n", strAmt);
     #endif
-    
+
     for (pi=0; pi<flatPackages.size(); pi++) {
         err = dest->writeData(flatPackages[pi]->getData(),
                               flatPackages[pi]->getSize());
@@ -3066,7 +3066,7 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
     fprintf(stderr, "**** total resource table size: %d / %d%% strings\n",
         dest->getSize(), (strAmt*100)/dest->getSize());
     #endif
-    
+
     return NO_ERROR;
 }
 
@@ -3219,7 +3219,7 @@ status_t ResourceTable::Entry::addToBag(const SourcePos& sourcePos,
     }
 
     Item item(sourcePos, isId, value, style, format);
-    
+
     // XXX NOTE: there is an error if you try to have a bag with two keys,
     // one an attr and one an id, with the same name.  Not something we
     // currently ever have to worry about.
@@ -3300,7 +3300,7 @@ status_t ResourceTable::Entry::assignResourceIds(ResourceTable* table,
                                                  const String16& package)
 {
     bool hasErrors = false;
-    
+
     if (mType == TYPE_BAG) {
         const char* errorMsg;
         const String16 style16("style");
@@ -3440,7 +3440,7 @@ ssize_t ResourceTable::Entry::flatten(Bundle* bundle, const sp<AaptFile>& data, 
             items.add(it.bagKeyId, &it);
         }
         N = items.size();
-        
+
         ResTable_map_entry mapHeader;
         memcpy(&mapHeader, &header, sizeof(header));
         mapHeader.size = htods(sizeof(mapHeader));
@@ -3573,10 +3573,10 @@ sp<ResourceTable::Entry> ResourceTable::Type::getEntry(const String16& entry,
             c->setEntryIndex(pos);
         }
     }
-    
+
     ConfigDescription cdesc;
     if (config) cdesc = *config;
-    
+
     sp<Entry> e = c->getEntries().valueFor(cdesc);
     if (e == NULL) {
         if (config != NULL) {
@@ -3624,9 +3624,9 @@ sp<ResourceTable::Entry> ResourceTable::Type::getEntry(const String16& entry,
         }
         */
     }
-    
+
     mUniqueConfigs.add(cdesc);
-    
+
     return e;
 }
 
@@ -3692,12 +3692,12 @@ status_t ResourceTable::Type::applyPublicEntryOrder()
     }
 
     //printf("Copying back in %d non-public configs, have %d\n", N, origOrder.size());
-    
+
     if (N != origOrder.size()) {
         printf("Internal error: remaining private symbol count mismatch\n");
         N = origOrder.size();
     }
-    
+
     j = 0;
     for (i=0; i<N; i++) {
         sp<ConfigList> e = origOrder.itemAt(i);
@@ -3926,7 +3926,7 @@ sp<const ResourceTable::Entry> ResourceTable::getEntry(uint32_t resID,
         fprintf(stderr, "warning: Entry not found for resource #%08x\n", resID);
         return NULL;
     }
-    
+
     ConfigDescription cdesc;
     if (config) cdesc = *config;
     sp<Entry> e = c->getEntries().valueFor(cdesc);
@@ -3934,7 +3934,7 @@ sp<const ResourceTable::Entry> ResourceTable::getEntry(uint32_t resID,
         fprintf(stderr, "warning: Entry configuration not found for resource #%08x\n", resID);
         return NULL;
     }
-    
+
     return e;
 }
 

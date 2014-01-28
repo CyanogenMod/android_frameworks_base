@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package android.location;
 
 import android.hardware.location.GeofenceHardwareRequestParcelable;
@@ -52,7 +52,7 @@ interface IFusedGeofenceHardware {
 
     /**
      * Pauses monitoring a particular geofence.
-     * 
+     *
      * @param geofenceId    The geofence to pause monitoring.
      */
     void pauseMonitoringGeofence(in int geofenceId);
@@ -71,7 +71,7 @@ interface IFusedGeofenceHardware {
     /**
      * Modifies the request options if a geofence that is already known by the
      * system.
-     *  
+     *
      * @param geofenceId                    The geofence to modify.
      * @param lastTransition                The last known transition state of
      *                                      the geofence.

@@ -112,7 +112,7 @@ public class DownloadManagerFunctionalTest extends DownloadManagerBaseTest {
         verifyDownload(dlRequest, blobData);
         mDownloadManager.remove(dlRequest);
     }
-    
+
     /**
      * Helper to verify a standard single-file download from the mock server, and clean up after
      * verification

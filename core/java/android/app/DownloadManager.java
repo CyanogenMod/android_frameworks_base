@@ -969,7 +969,7 @@ public class DownloadManager {
         if (ids.length == 1) {
             return mResolver.update(ContentUris.withAppendedId(mBaseUri, ids[0]), values,
                     null, null);
-        } 
+        }
         return mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
                 getWhereArgsForIds(ids));
     }

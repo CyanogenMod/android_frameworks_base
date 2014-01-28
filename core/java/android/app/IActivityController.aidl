@@ -2,16 +2,16 @@
 **
 ** Copyright 2009, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -31,13 +31,13 @@ interface IActivityController
      * it to be started as normal, or false to cancel/reject this activity.
      */
     boolean activityStarting(in Intent intent, String pkg);
-    
+
     /**
      * The system is trying to return to an activity.  Return true to allow
      * it to be resumed as normal, or false to cancel/reject this activity.
      */
     boolean activityResuming(String pkg);
-    
+
     /**
      * An application process has crashed (in Java).  Return true for the
      * normal error recovery (app crash dialog) to occur, false to kill
@@ -46,7 +46,7 @@ interface IActivityController
     boolean appCrashed(String processName, int pid,
             String shortMsg, String longMsg,
             long timeMillis, String stackTrace);
-    
+
     /**
      * Early call as soon as an ANR is detected.
      */

@@ -43,7 +43,7 @@ public class MediaMetadataRetriever
     // The field below is accessed by native methods
     @SuppressWarnings("unused")
     private int mNativeContext;
- 
+
     private static final int EMBEDDED_PICTURE_TYPE_ANY = 0xFFFF;
 
     public MediaMetadataRetriever() {
@@ -54,7 +54,7 @@ public class MediaMetadataRetriever
      * Sets the data source (file pathname) to use. Call this
      * method before the rest of the methods in this class. This method may be
      * time-consuming.
-     * 
+     *
      * @param path The path of the input media file.
      * @throws IllegalArgumentException If the path is invalid.
      */
@@ -112,7 +112,7 @@ public class MediaMetadataRetriever
      * responsibility to close the file descriptor. It is safe to do so as soon
      * as this call returns. Call this method before the rest of the methods in
      * this class. This method may be time-consuming.
-     * 
+     *
      * @param fd the FileDescriptor for the file you want to play
      * @param offset the offset into the file where the data to be played starts,
      * in bytes. It must be non-negative
@@ -122,13 +122,13 @@ public class MediaMetadataRetriever
      */
     public native void setDataSource(FileDescriptor fd, long offset, long length)
             throws IllegalArgumentException;
-    
+
     /**
      * Sets the data source (FileDescriptor) to use. It is the caller's
      * responsibility to close the file descriptor. It is safe to do so as soon
      * as this call returns. Call this method before the rest of the methods in
      * this class. This method may be time-consuming.
-     * 
+     *
      * @param fd the FileDescriptor for the file you want to play
      * @throws IllegalArgumentException if the FileDescriptor is invalid
      */
@@ -137,11 +137,11 @@ public class MediaMetadataRetriever
         // intentionally less than LONG_MAX
         setDataSource(fd, 0, 0x7ffffffffffffffL);
     }
-    
+
     /**
-     * Sets the data source as a content Uri. Call this method before 
+     * Sets the data source as a content Uri. Call this method before
      * the rest of the methods in this class. This method may be time-consuming.
-     * 
+     *
      * @param context the Context to use when resolving the Uri
      * @param uri the Content URI of the data you want to play
      * @throws IllegalArgumentException if the Uri is invalid
@@ -153,7 +153,7 @@ public class MediaMetadataRetriever
         if (uri == null) {
             throw new IllegalArgumentException();
         }
-        
+
         String scheme = uri.getScheme();
         if(scheme == null || scheme.equals("file")) {
             setDataSource(uri.getPath());
@@ -197,14 +197,14 @@ public class MediaMetadataRetriever
     }
 
     /**
-     * Call this method after setDataSource(). This method retrieves the 
+     * Call this method after setDataSource(). This method retrieves the
      * meta data value associated with the keyCode.
-     * 
+     *
      * The keyCode currently supported is listed below as METADATA_XXX
      * constants. With any other value, it returns a null pointer.
-     * 
+     *
      * @param keyCode One of the constants listed below at the end of the class.
-     * @return The meta data value associate with the given keyCode on success; 
+     * @return The meta data value associate with the given keyCode on success;
      * null on failure.
      */
     public native String extractMetadata(int keyCode);
@@ -235,7 +235,7 @@ public class MediaMetadataRetriever
      * {@link #OPTION_CLOSEST} often has larger performance overhead compared
      * to the other options if there is no sync frame located at timeUs.
      *
-     * @return A Bitmap containing a representative video frame, which 
+     * @return A Bitmap containing a representative video frame, which
      *         can be null, if such a frame cannot be retrieved.
      */
     public Bitmap getFrameAtTime(long timeUs, int option) {
@@ -291,12 +291,12 @@ public class MediaMetadataRetriever
 
     private native Bitmap _getFrameAtTime(long timeUs, int option);
 
-    
+
     /**
      * Call this method after setDataSource(). This method finds the optional
      * graphic or album/cover art associated associated with the data source. If
      * there are more than one pictures, (any) one of them is returned.
-     * 
+     *
      * @return null if no such graphic is found.
      */
     public byte[] getEmbeddedPicture() {
