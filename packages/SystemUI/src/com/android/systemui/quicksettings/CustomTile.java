@@ -68,7 +68,9 @@ public class CustomTile extends QuickSettingsTile {
 
     public CustomTile(Context context, QuickSettingsController qsc, String key) {
         super(context, qsc);
+
         mKey = key;
+        mGenericCollapse = false;
         mShared = mContext.getSharedPreferences(KEY_TOGGLE_STATE, Context.MODE_PRIVATE);
         // This will naver change and will filter itself out if an action exists
         mDrawable = R.drawable.ic_qs_settings;

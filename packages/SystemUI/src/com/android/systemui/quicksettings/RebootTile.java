@@ -33,6 +33,7 @@ public class RebootTile extends QuickSettingsTile {
 
     public RebootTile(Context context, final QuickSettingsController qsc) {
         super(context, qsc);
+        mGenericCollapse = false;
 
         mOnClick = new View.OnClickListener() {
             @Override
