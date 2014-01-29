@@ -26,13 +26,17 @@ import android.gesture.Gesture;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -61,6 +65,7 @@ public class KeyguardGestureView extends LinearLayout implements KeyguardSecurit
     private Button mForgotGestureButton;
     private KeyguardSecurityCallback mCallback;
     private boolean mEnableFallback;
+    private GestureDetector mDoubleTapGesture;
 
     /**
      * Keeps track of the last time we poked the wake lock during dispatching of the touch event.
@@ -138,6 +143,26 @@ public class KeyguardGestureView extends LinearLayout implements KeyguardSecurit
         View bouncerFrameView = findViewById(R.id.keyguard_bouncer_frame);
         if (bouncerFrameView != null) {
             mBouncerFrame = bouncerFrameView.getBackground();
+        }
+
+        mDoubleTapGesture = new GestureDetector(mContext,
+                new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                if (pm != null) pm.goToSleep(e.getEventTime());
+                return true;
+            }
+        });
+
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_DOUBLE_TAP_SLEEP_GESTURE, 0) == 1) {
+            mLockGestureView.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return mDoubleTapGesture.onTouchEvent(event);
+                }
+            });
         }
     }
 

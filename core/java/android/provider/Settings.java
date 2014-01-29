@@ -4578,6 +4578,12 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
 
         /**
+         *  Enable statusbar double tap gesture on to put device to sleep
+         * @hide
+         */
+        public static final String LOCKSCREEN_DOUBLE_TAP_SLEEP_GESTURE = "lockscreen_double_tap_sleep_gesture";
+
+        /**
          * Allows to show the background activity back the lockscreen
          * @hide
          */
