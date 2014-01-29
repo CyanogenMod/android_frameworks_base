@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2012-2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -24,15 +25,15 @@
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">El. paštas</string>
     <string name="profileGroupSMS">Pranešimai</string>
-    <string name="reboot_system" product="tablet">Perkrauti planšetinį kompiuterį</string>
-    <string name="reboot_system" product="default">Perkrauti telefoną</string>
+    <string name="reboot_system" product="tablet">Perkrauti</string>
+    <string name="reboot_system" product="default">Perkrauti</string>
     <string name="global_action_screenshot">Ekranvaizdis</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Išplėstas darbastalis</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Įjungtas</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Išjungtas</string>
     <string name="reboot_reboot">Perkrauti</string>
     <string name="reboot_recovery">Atkūrimo režimas</string>
-    <string name="reboot_bootloader">\'Bootloader\'</string>
+    <string name="reboot_bootloader">Bootloader</string>
     <string name="reboot_bootmenu">Įjungimo meniu</string>
     <string name="reboot_fastboot">Greitasis įjungimas</string>
     <string name="reboot_download">Parsisiuntimo režimas</string>
@@ -67,14 +68,14 @@
     <string name="permlab_sendMockSms">Siųsti netikrus pranešimus</string>
     <string name="permdesc_sendMockSms">Leidžia programai siųsti netikrus pranešimus. Tai leidžia programai siųsti pranešimus patikimoms programoms. Kenkėjiškos programos gali siųsti pranešimus nuolat, blokuodamos įrenginio įspėjimų sistemą ir sutrikdant vartotoją</string>
     <string name="progress_nomediapresent" product="default">Laikmenos nėra\u2026</string>
-    <string name="policylab_enforceSelinux">Užtikrinti SELinux</string>
-    <string name="policydesc_enforceSelinux">Perjungti SELinux politiką tarp vykdančiojo arba liberalaus.</string>
+    <string name="policylab_enforceSelinux">"Užtikrinti „SELinux“"</string>
+    <string name="policydesc_enforceSelinux">"Perjungti „SELinux“ politiką tarp vykdančiojo arba liberalaus."</string>
     <string name="policylab_enforceMmac">Užtikrinti MMAC</string>
     <string name="policydesc_enforceMmac">Perjungti MMAC politiką tarp vykdančiojo arba liberalaus.</string>
     <string name="perf_profile_pwrsv">Energijos taupymas</string>
     <string name="perf_profile_bal">Subalansuotas</string>
     <string name="perf_profile_perf">Našumas</string>
-    <string name="enablePin">Nesėkmingas. Įjunkite SIM/RUIM Užraktą.</string>
+    <string name="enablePin">Nesėkmingas. Įjunkite SIM / RUIM Užraktą.</string>
     <string name="keyguard_password_wrong_puk_code">Neteisingas PUK kodas!</string>
     <string name="keyguard_password_pin_failed">PIN operacija nepavyko!</string>
     <string name="keyguard_password_puk_failed">PUK operacija nepavyko!</string>
@@ -82,7 +83,7 @@
     <string name="pinpuk_attempts">\nLikę bandymai:</string>
     <string name="lockscreen_sim_error_message_short">Negaliojanti kortelė.</string>
     <string name="lockscreen_sim_error_message">Negaliojanti SIM kortelė.</string>
-    <string name="lockscreen_perso_locked_message">SIM/RUIM kortelė yra užrakinta.</string>
+    <string name="lockscreen_perso_locked_message">SIM / RUIM kortelė yra užrakinta.</string>
     <string name="stk_cc_ussd_to_dial">USSD užklausa pakeista dėl DIAL prašymo.</string>
     <string name="stk_cc_ussd_to_ss">USSD užklausa pakeista dėl SS prašymo.</string>
     <string name="stk_cc_ussd_to_ussd">USSD užklausa pakeista į naują.</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2013 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -29,15 +30,15 @@
         <item>Bando rašyti pranešimą</item>
         <item>Bando pasiekti vietovę</item>
         <item>Bando skambinti telefonu</item>
-        <item>Bando skaityti SMS/MMS</item>
-        <item>Bando rašyti/keisti SMS/MMS</item>
-        <item>Bando gauti SMS/MMS</item>
-        <item>Bando gauti SMS/MMS</item>
-        <item>Bando gauti SMS/MMS</item>
-        <item>Bando gauti SMS/MMS</item>
-        <item>Bando siųsti SMS/MMS</item>
-        <item>Bando skaityti SMS/MMS</item>
-        <item>Bando rašyti/keisti SMS/MMS</item>
+        <item>Bando skaityti SMS / MMS</item>
+        <item>Bando rašyti / keisti SMS / MMS</item>
+        <item>Bando gauti SMS / MMS</item>
+        <item>Bando gauti SMS / MMS</item>
+        <item>Bando gauti SMS / MMS</item>
+        <item>Bando gauti SMS / MMS</item>
+        <item>Bando siųsti SMS / MMS</item>
+        <item>Bando skaityti SMS / MMS</item>
+        <item>Bando rašyti / keisti SMS / MMS</item>
         <item>Bando keisti nustatymus</item>
         <item>Bando piešti viršuje</item>
         <item>Bando pasiekti pranešimus</item>
@@ -46,9 +47,9 @@
         <item>Bando groti garso įrašą</item>
         <item>Bando skaityti iškarpinę</item>
         <item>Bando keisti iškarpinę</item>
-        <item>Bando įjungti/išjungti Wifi</item>
-        <item>Bando įjungti/išjungti bluetooth</item>
-        <item>Bando įjungti/išjungti mobiliuosius duomenis</item>
+        <item>"Bando įjungti / išjungti „Wifi“"</item>
+        <item>"Bando įjungti / išjungti „bluetooth“"</item>
+        <item>Bando įjungti / išjungti mobiliuosius duomenis</item>
         <item>Bando planuoti kada įrenginys pabus</item>
     </string-array>
 </resources>
