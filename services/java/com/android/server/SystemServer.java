@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2013. The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012, 2013, 2014. The Linux Foundation. All rights reserved.
  * Not a Contribution.
  * Copyright (C) 2006 The Android Open Source Project
  *
@@ -537,7 +537,7 @@ class ServerThread {
                    int cneFeature = (enableCne == 1) ?
                        SystemProperties.getInt("persist.cne.feature", 0) : 0;
 
-                   if ( cneFeature > 0 && cneFeature < 7 ) {
+                   if ( cneFeature > 0 && cneFeature < 10 ) {
                        Slog.i(TAG, "QcConnectivity Service");
                        PathClassLoader qcsClassLoader =
                            new PathClassLoader("/system/framework/services-ext.jar",
