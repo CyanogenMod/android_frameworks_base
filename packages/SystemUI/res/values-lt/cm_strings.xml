@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!-- Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Garsas <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibracija <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="dessert_case_settings_cm_title">Rodyti CM talismanus</string>
+    <string name="dessert_case_settings_cm_summary">"Rodyti CM talismanus kartu su „Android“ desertais svajonėje"</string>
     <string name="quick_settings_profile_label">Profilis</string>
     <string name="powerwidget_screen_timeout_toast">Ekrano delsimas po: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
@@ -32,7 +34,7 @@
     <string name="quick_settings_ringer_normal">Garsas</string>
     <string name="quick_settings_lockscreen">Užrakinti ekraną</string>
     <string name="quick_settings_network_type">Tinklo režimas</string>
-    <string name="quick_settings_report_bug">Pranešti apie klaidą</string>
+    <string name="quick_settings_report_bug">Pranešti apie triktį</string>
     <string name="quick_settings_sync">Sinchronizuoti</string>
     <string name="quick_settings_sync_off">Sinchronizavimas išjungtas</string>
     <string name="quick_settings_torch">Žibintuvėlis</string>
@@ -43,16 +45,16 @@
     <string name="quick_settings_usb_tether_off_label">Atjungtas</string>
     <string name="quick_settings_usb_tether_connected_label">Dalijimasis išjungtas</string>
     <string name="quick_settings_usb_tether_on_label">Dalijimasis</string>
-    <string name="quick_settings_wifiap">"„Wi-Fi“ AP"</string>
-    <string name="quick_settings_wifiap_off">"„Wi-Fi“ AP išjungtas"</string>
+    <string name="quick_settings_wifiap">"„Wi-Fi“ PT"</string>
+    <string name="quick_settings_wifiap_off">"„Wi-Fi“ PT išjungtas"</string>
     <string name="quick_settings_quiethours">Tylos laikas</string>
     <string name="quick_settings_quiethours_off">Tylos laikas išjungtas</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE išjungtas</string>
     <string name="quick_settings_volume">Garsumas</string>
     <string name="quick_settings_camera_label">Fotoaparatas</string>
-    <string name="quick_settings_network_adb_disabled_label">Išjungta</string>
-    <string name="quick_settings_network_adb_enabled_label">Įjungta</string>
+    <string name="quick_settings_network_adb_disabled_label">Išjungtas</string>
+    <string name="quick_settings_network_adb_enabled_label">Įjungtas</string>
     <string name="quick_settings_expanded_desktop">Išplėstas</string>
     <string name="quick_settings_expanded_desktop_off">Normalus</string>
     <string name="quick_settings_camera_error_connect">Nepavyksta prisijungti prie fotoaparato</string>
@@ -60,7 +62,7 @@
     <string name="navbar_home_button">Pagrindinis mygtukas</string>
     <string name="navbar_recent_button">"„Naujų“ mygtukas"</string>
     <string name="navbar_search_button">Paieškos mygtukas</string>
-    <string name="navbar_back_button">Mygtukas atgal</string>
+    <string name="navbar_back_button">Atgal mygtukas</string>
     <string name="navbar_empty_button">Tuščias mygtukas</string>
     <string name="navbar_menu_conditional_button">Meniu mygtukas (automatiškai slepiamas)</string>
     <string name="navbar_menu_always_button">Meniu mygtukas (visada rodomas)</string>
@@ -69,4 +71,6 @@
     <string name="advanced_dev_option_force_stop">Priverstinai sustabdyti</string>
     <string name="accessibility_dock_battery_level">Doko akumuliatorius <xliff:g id="number">%d</xliff:g> proc.</string>
     <string name="screenshot_delete_action">Ištrinti</string>
+    <string name="screenshot_delete_confirmation">Ekranvaizdis ištrintas.</string>
+    <string name="accessibility_desc_add_quick_settings">Pridėti greituosius nustatymus.</string>
 </resources>
