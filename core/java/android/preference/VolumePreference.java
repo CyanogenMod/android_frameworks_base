@@ -232,6 +232,7 @@ public class VolumePreference extends SeekBarDialogPreference implements
 
         private Context mContext;
         private Handler mHandler;
+        private HandlerThread mThread;
 
         private AudioManager mAudioManager;
         private int mStreamType;
@@ -268,9 +269,9 @@ public class VolumePreference extends SeekBarDialogPreference implements
             mStreamType = streamType;
             mSeekBar = seekBar;
 
-            HandlerThread thread = new HandlerThread(TAG + ".CallbackHandler");
-            thread.start();
-            mHandler = new Handler(thread.getLooper(), this);
+            mThread = new HandlerThread(TAG + ".CallbackHandler");
+            mThread.start();
+            mHandler = new Handler(mThread.getLooper(), this);
 
             initSeekBar(seekBar, defaultUri);
         }
@@ -352,6 +353,7 @@ public class VolumePreference extends SeekBarDialogPreference implements
             postStopSample();
             mContext.getContentResolver().unregisterContentObserver(mVolumeObserver);
             mSeekBar.setOnSeekBarChangeListener(null);
+            mThread.quitSafely();
         }
 
         public void revertVolume() {
