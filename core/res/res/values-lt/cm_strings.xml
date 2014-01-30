@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!-- Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@
     <string name="global_actions_expanded_desktop_mode_off_status">Išjungtas</string>
     <string name="reboot_reboot">Perkrauti</string>
     <string name="reboot_recovery">Atkūrimo režimas</string>
-    <string name="reboot_bootloader">"„Bootloader“"</string>
+    <string name="reboot_bootloader">Bootloader</string>
     <string name="reboot_bootmenu">Įjungimo meniu</string>
     <string name="reboot_fastboot">Greitasis įjungimas</string>
     <string name="reboot_download">Parsisiuntimo režimas</string>
