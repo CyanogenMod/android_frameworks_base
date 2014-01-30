@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!-- Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
     <string name="profileNameHome">Namai</string>
     <string name="profileNameSilent">Tylus</string>
     <string name="profileNameNight">Naktis</string>
+    <string name="profileNameAutomobile">Automobilis</string>
     <string name="profileGroupPhone">Telefonas</string>
     <string name="profileGroupCalendar">Kalendorius</string>
     <string name="profileGroupGmail">Gmail</string>
@@ -33,7 +34,7 @@
     <string name="global_actions_expanded_desktop_mode_off_status">Išjungtas</string>
     <string name="reboot_reboot">Perkrauti</string>
     <string name="reboot_recovery">Atkūrimo režimas</string>
-    <string name="reboot_bootloader">"„Bootloader“"</string>
+    <string name="reboot_bootloader">Bootloader</string>
     <string name="reboot_bootmenu">Įjungimo meniu</string>
     <string name="reboot_fastboot">Greitasis įjungimas</string>
     <string name="reboot_download">Parsisiuntimo režimas</string>
@@ -50,7 +51,7 @@
     <string name="global_action_choose_profile">Profilis</string>
     <string name="toast_rotation_unlocked">Ekrano sukimas atrakintas</string>
     <string name="toast_rotation_locked">Ekrano sukimas užrakintas</string>
-    <string name="stylus_app_not_installed">%s nėra įdiegta</string>
+    <string name="stylus_app_not_installed">%s neįdiegta</string>
     <string name="permlab_changePrivacyGuardState">Įjungti arba išjungti privatumo apsaugą</string>
     <string name="permdesc_changePrivacyGuardState">Leisti programai keisti, kai kita programa veikia su privatumo apsauga. Kai programa veikia su privatumo apsauga ji neturės prieigos prie asmeninių duomenų, pavyzdžiui, kontaktų, skambučių žurnalų ar pranešimų.</string>
     <string name="privacy_guard_notification">Privatumo apsauga aktyvi</string>
