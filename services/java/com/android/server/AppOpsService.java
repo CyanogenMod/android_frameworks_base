@@ -740,7 +740,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                         // under.  Abort.
                         Slog.w(TAG, "Bad call: specified package " + packageName
                                 + " under uid " + uid + " but it is really " + pkgUid);
-                        return null;
+                        //return null;
                     }
                 } finally {
                     Binder.restoreCallingIdentity(ident);
