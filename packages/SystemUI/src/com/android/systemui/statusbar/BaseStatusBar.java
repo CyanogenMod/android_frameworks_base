@@ -1041,6 +1041,9 @@ public abstract class BaseStatusBar extends SystemUI implements
         mHandler.sendEmptyMessage(msg);
     }
 
+    @Override
+    public void setButtonDrawable(int buttonId, int iconId) {}
+
     protected abstract WindowManager.LayoutParams getSearchLayoutParams(
             LayoutParams layoutParams);
 

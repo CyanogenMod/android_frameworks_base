@@ -912,9 +912,9 @@ public class KeyguardViewManager {
             mKeyguardView.dispatch(event);
         }
     }
-    
+
     public void dispatchButtonClick(int buttonId) {
-        mNotificationView.showAllNotifications();
+        mNotificationView.onButtonClick(buttonId);
     }
 
     public void launchCamera() {

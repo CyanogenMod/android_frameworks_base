@@ -110,6 +110,7 @@ public class CommandQueue extends IStatusBar.Stub {
         public void toggleScreenshot();
         public void toggleLastApp();
         public void toggleKillApp();
+        public void setButtonDrawable(int buttonId, int iconId);
     }
 
     public CommandQueue(Callbacks callbacks, StatusBarIconList list) {
@@ -131,6 +132,10 @@ public class CommandQueue extends IStatusBar.Stub {
             mHandler.removeMessages(what);
             mHandler.obtainMessage(what, OP_REMOVE_ICON, 0, null).sendToTarget();
         }
+    }
+
+    public void setButtonDrawable(int buttonId, int iconId) {
+        mCallbacks.setButtonDrawable(buttonId, iconId);
     }
 
     public void addNotification(IBinder key, StatusBarNotification notification) {

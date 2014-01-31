@@ -683,6 +683,16 @@ public class NavigationBarView extends LinearLayout {
         setDisabledFlags(disabledFlags, false);
     }
 
+    public void setButtonDrawable(int buttonId, final int iconId) {
+        final ImageView iv = (ImageView)getNotifsButton();
+        mHandler.post(new Runnable() {
+            public void run() {
+                if (iconId == 1) iv.setImageResource(R.drawable.search_light_land);
+                setVisibleOrGone(getNotifsButton(), iconId != 0);
+            }
+        });
+    }
+
     public void setDisabledFlags(int disabledFlags, boolean force) {
         if (!force && mDisabledFlags == disabledFlags) return;
 
